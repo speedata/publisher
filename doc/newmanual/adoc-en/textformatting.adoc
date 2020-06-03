@@ -1,27 +1,28 @@
-[[ch-textformatierung]]
+[[ch-textformatting]]
 = Text formatting
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 
-<Text Block> and <Text> contain one or more paragraphs (command <Paragraph>). The actual texts are encapsulated there within <Value>. There are numerous possibilities to influence the formatting of the texts. The switches for the font styles were introduced in Include Fonts. With a similar functionality there are the following commands:
+`<Textblock>` and `<Text>` contain one or more paragraphs (command `<Paragraph>`). The actual texts are encapsulated there within `<Value>`. There are numerous possibilities to influence the formatting of the texts. The switches for the font styles were introduced in Include Fonts. With a similar functionality there are the following commands:
 
-<Sub> and <Sup>::
+
+`<Sub>` and `<Sup>`::
   Subscript and superscript text.
 
-<Fontface>::
+`<Fontface>`::
   Temporarily switches to a different font.
 
-<Color>::
+`<Color>`::
   Outputs the enclosed text in a different color.
 
-<A>::
+`<A>`::
   Creates a hyperlink.
 
-<HSpace>::
+`<HSpace>`::
   Inserts an expandable blank space (with or without dots).
 
-<U>::
+`<U>`::
   Underline.
 
 
@@ -53,9 +54,10 @@ _This page was automatically translated. Stay tuned for a manual translation..._
 .Various text markups
 image::textauszeichnungen.png[width=100%]
 
+[[ch-textformatting-enumerationlists]]
 == Enumeration lists
 
-Instead of a paragraph, an enumeration list can also appear. This is specified with <Ol> or <Ul> for an ordered list and an unordered list. The individual points must be marked with <Li>.
+Instead of a paragraph, an enumeration list can also appear. This is specified with `<Ol>` or `<Ul>` for an ordered list and an unordered list. The individual points must be marked with `<Li>`.
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -77,10 +79,10 @@ image::olul.png[width=20%,scaledwidth=30%]
 
 TIP: This feature is not really robust yet. The lists cannot (currently) be nested. It is recommended to check if the lists are output correctly.
 
-
+[[ch-textformatting-nobreak]]
 == Prevent text wrapping
 
-Some headings and proper names should not be broken. There is a command <NoBreak> for this purpose, which suppresses wrapping in various ways. A somewhat exaggerated example is:
+Some headings and proper names should not be broken. There is a command `<NoBreak>` for this purpose, which suppresses wrapping in various ways. A somewhat exaggerated example is:
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -114,9 +116,10 @@ Alternatively, you can reduce the font size by specifying the maximum width or s
 .Here the text is cut off and filled with the specified text.
 image::nobreak2.png[width=100%]
 
+[[ch-textformatting-url]]
 == Break URLs
 
-The command <URL> is used to make it easier to break URLs. You may wrap mainly at slashes (/), in addition no hyphens are inserted. No hyperlink is created, the command <A> is responsible for this.
+The command `<URL>` is used to make it easier to break URLs. You may wrap mainly at slashes (/), in addition no hyphens are inserted. No hyperlink is created, the command `<A>` is responsible for this.
 
 [source, xml]
 -------------------------------------------------------------------------------

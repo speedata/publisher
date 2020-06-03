@@ -1,5 +1,4 @@
 [[ch-directoriesxml]]
-
 = Create directories (XML structure)
 
 In the previous chapter, directories were created about the markers.
@@ -12,7 +11,7 @@ The next time the Publisher is run, this data is read in and is available.
 
 == Step 1: Collecting the information
 
-The two commands <<cmd-element,`<element>`>> and <<cmd-attributes,`<attributes>`>> are used to structure data that is read during processing.
+The two commands <<cmd-element,`<Element>`>> and <<cmd-attribute,`<Attribute>`>> are used to structure data that is read during processing.
 This has already been described in the chapter <<ch-elementattribute>>.
 These commands can be used to create new XML data set files.
 The following structure could be useful for an article list:

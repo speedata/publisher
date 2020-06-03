@@ -21,7 +21,7 @@ In der Regel reicht eine Angabe bei dem Objekt, das ausgegeben werden soll:
 .Nicht jede Farbkombination ist schön
 image::kreismitfarbe.png[width=20%,scaledwidth=50%]
 
-Die Farben können auch als Hexadezimalwert angegeben werden, wie bei HTML.
+Die Farben können auch als Hexadezimalwert oder als `rgb(...)`, z.B. `rgb(255, 19, 147)` angegeben werden, wie bei HTML.
 Dem drei oder sechsstelligen Wert muss ein Doppelkreuz vorangestellt sein, zum Beispiel: `...color="{hexcolor}"`.
 
 Möchte man Farben in einem anderen Farbraum (CMYK, Grau, Sonderfarben) ausgeben, müssen diese vorher definiert werden:

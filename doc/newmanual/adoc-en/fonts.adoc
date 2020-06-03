@@ -1,7 +1,7 @@
 [[ch-fonts,Using fonts]]
 = Using fonts
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 Embedding fonts in the common formats is very easy. The formats Type1 (files .pfb and .afm) as well as TrueType and OpenType (files .ttf and .otf) are supported.
 
@@ -29,7 +29,7 @@ The last three cuts (bold, italic and bold italic) do not have to be specified i
 .Font size and line spacing
 image::14-fontsize-leading.png[width=100%]
 
-The font is used in different ways: in the commands <Text Block>, <Text>, <Paragraph>, <Table>, <NoBreak> and <Barcode>, a font can be specified with the attribute fontface, e.g. <Paragraph fontface="text font">. Temporarily you can switch to another family with the command <Fontface fontfamily="...">:
+The font is used in different ways: in the commands `<Textblock>`, `<Text>`, `<Paragraph>`, `<Table>`, `<NoBreak>` and `<Barcode>`, a font can be specified with the attribute fontface, e.g. `<Paragraph fontface="text font">`. Temporarily you can switch to another family with the command `<Fontface fontfamily="...">`:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ The font is used in different ways: in the commands <Text Block>, <Text>, <Parag
 
 == Text labeling in the layout rules
 
-There are several ways to switch to the cuts fat, italic and fat-italic. The most direct one is to switch with the commands B and I, these can also be nested within each other:
+There are several ways to switch to the cuts fat, italic and fat-italic. The most direct one is to switch with the commands `<B>` and `<I>`, these can also be nested within each other:
 
 [source,xml]
 -------
@@ -63,7 +63,7 @@ There are several ways to switch to the cuts fat, italic and fat-italic. The mos
 </PlaceObject>
 -------
 
-.Text markup in layout. Underline (not shown) is possible with the command <U>.
+.Text markup in layout. Underline (not shown) is possible with the command `<U>`.
 image::14-fonts.png[width=100%]
 
 == Text markup in the data
@@ -73,7 +73,7 @@ If there are markups in the data (e.g. as HTML tags), then this works in princip
 [source,xml]
 -------
 <PlaceObject>
-  <Textblock fontface="textschrift">
+  <Textblock fontface="textfont">
     <Paragraph>
       <Value select="."/>
     </Paragraph>
@@ -90,13 +90,13 @@ with the corresponding data:
   mornings.</data>
 -------
 
-The result is the same as above. The tags can also be written in capital letters in the data: <B> instead of <b>. Nesting is also allowed and again <u> is underlined.
+The result is the same as above. The tags can also be written in capital letters in the data: `<B>` instead of `<b>. Nesting is also allowed and again `<u>` is underlined.
 
-TIP: If the data is not in well-formed XML but in HTML format for example, you can use the layout function sd:decode-html() to interpret it.
+TIP: If the data is not in well-formed XML but in HTML format for example, you can use the layout function `sd:decode-html()` to interpret it.
 
 == OpenType Features
 
-The OpenType format knows so-called OpenType features, such as old style figures or small caps. Some of these features can be activated at <LoadFontfile>.
+The OpenType format knows so-called OpenType features, such as old style figures or small caps. Some of these features can be activated at `<LoadFontfile>`.
 
 [source,xml]
 -------
@@ -142,9 +142,10 @@ The OpenType format knows so-called OpenType features, such as old style figures
 .Text figures (above) often make reading the numbers more pleasant. Real small caps (below) differ significantly from mathematically reduced capital letters. The line width and proportions must be adjusted. Depending on the font used, smallcaps also switches to "old style figures".
 image::osfsmcp.png[width=100%]
 
+[[ch-marginprotrusion]]
 == Optical margin alignment
 
-With the parameter marginprotrusion (percentage) at the command <LoadFontfile> you can determine how far certain characters (comma, dot and hyphen) protrude into the right margin. This can be used to achieve an optically smoother margin in justified text:
+With the parameter marginprotrusion (percentage) at the command `<LoadFontfile>` you can determine how far certain characters (comma, dot and hyphen) protrude into the right margin. This can be used to achieve an optically smoother margin in justified text:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -233,7 +234,7 @@ This error can be suppressed with the command <Options>:
 <Options reportmissingglyphs="no"/>
 -------
 
-Alternatively, you can also specify a replacement font at <LoadFontfile>, which will be searched as soon as a character is not found:
+Alternatively, you can also specify a replacement font at `<LoadFontfile>`, which will be searched as soon as a character is not found:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -243,7 +244,7 @@ Alternatively, you can also specify a replacement font at <LoadFontfile>, which 
 </LoadFontfile>
 -------------------------------------------------------------------------------
 
-First the font texgyreheros-regular.otf is searched, then fontawesome-webfont.ttf and finally line-awesome.ttf.
+First the font `texgyreheros-regular.otf` is searched, then `fontawesome-webfont.ttf` and finally `line-awesome.ttf`.
 
 == Aliases
 
@@ -286,7 +287,7 @@ now allow to define font families in general as follows:
 </DefineFontfamily>
 -------
 
-i.e. independent of the font actually used. With the options described in the section Splitting Layout Rules into Separate Files, you can now swap the font definition into a separate file and, if necessary, quickly choose between different fonts by including the desired files.
+i.e. independent of the font actually used. With the options described in the section <<ch-splitlayout>>, you can now swap the font definition into a separate file and, if necessary, quickly choose between different fonts by including the desired files.
 
 
 // EOF

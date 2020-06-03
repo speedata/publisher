@@ -3,9 +3,10 @@
 [[ch-outputtingobjects]]
 = Outputting objects
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
-There are two commands to output objects. One is called <Output> and is only used for text that is to wrap to multiple pages. All other objects (images, tables, barcodes, ...) are output using the command <PlaceObject>. The parameters are listed in detail in the command reference (see command <PlaceObject>). Here are some examples and possible applications.
+There are two commands to output objects. One is called `<Output>` and is only used for text that is to wrap to multiple pages. All other objects (images, tables, barcodes, ...) are output using the command `<PlaceObject>`.
+The parameters are listed in detail in the command reference (see command <<cmd-placeobject,`<PlaceObject>`>>). Here are some examples and possible applications.
 
 In the simplest case, the command can be used as follows:
 
@@ -19,14 +20,14 @@ In the simplest case, the command can be used as follows:
 -------------------------------------------------------------------------------
 
 
-Here an image is integrated with the specified file name and a specified width. The image _samplea.pdf (with underscore at the beginning) is included in the distribution and can be used as a placeholder.
+Here an image is loaded with the specified file name and a specified width. The image `{samplea}` (with underscore at the beginning) is included in the distribution and can be used as a placeholder.
 
 [discrete]
-== Raster based placement of objects
+== Grid based placement of objects
 
-The Raster section provides a detailed description of the design grid. Only so much should be mentioned here: The grid helps on the one hand to position the objects (easy arrangement of the objects) and on the other hand to find the right place. Raster cells are not occupied by two objects at the same time, unless you explicitly allow this.
+The <<ch-grid,section aboud grids>> provides a detailed description of the design grid. Only so much should be mentioned here: The grid helps on the one hand to position the objects (easy arrangement of the objects) and on the other hand to find the right place. Grid cells are not occupied by two objects at the same time, unless you explicitly allow this.
 
-This is an example of raster-based output. The specifications for row and column are coordinates in the page grid, where the upper left corner is position 1,1.
+This is an example of grid-based output. The specifications for `row` and `column` are coordinates in the page grid, where the upper left corner is position 1,1.
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -39,7 +40,7 @@ This is an example of raster-based output. The specifications for row and column
 [discrete]
 == Order of the objects
 
-The order in which the individual objects are output is important: the objects are drawn on top of each other. This means that objects that are output later overlap the previous objects. This can be useful for background images. In <AtPageCreation> you can output a stationery or page header, which is then overwritten with real content in the actual data processing. Or you can include a ready-made page and provide it with the correct page number:
+The order in which the individual objects are output is important: the objects are drawn on top of each other. This means that objects that are output later overlap the previous objects. This can be useful for background images. In `<AtPageCreation>` you can output a stationery or page header, which is then overwritten with real content in the actual data processing. Or you can include a ready-made page and provide it with the correct page number:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -48,7 +49,7 @@ The order in which the individual objects are output is important: the objects a
 
   <Record element="data">
     <PlaceObject row="1" column="1">
-      <Image file="agb.pdf" width="180mm" height="280mm"/>
+      <Image file="termsofservice.pdf" width="180mm" height="280mm"/>
     </PlaceObject>
     <PlaceObject
       column="1"
@@ -68,11 +69,13 @@ Here the page is first integrated and then the current page number is "printed" 
 [discrete]
 == Height and width of the objects
 
-Images, barcodes, boxes etc. have fixed widths and heights. Texts and tables use the remaining width. That is, the width is the difference between the number of grid cells and the start column plus 1. For an example width of 15 grid boxes and a start column of 6, the text width is 10, unless otherwise specified.
+Images, barcodes, boxes etc. have fixed widths and heights. Texts and tables use the available width.
+That is, the width is the difference between the number of grid cells and the start column plus 1. For an example width of 15 grid boxes and a start column of 6, the text width is 10, unless otherwise specified.
 
 If an object (such as images) requires a width or height specification, this can be given either as an absolute value (e.g. 5cm) or in grid cells.
 
-Text block
+[[ch-outputtingobjects-textblock]]
+== Text block
 This is a rectangular text area that is not wrapped over multiple pages. Text blocks are ideal for page numbers, short descriptions, column titles and all other units where page breaks are not desired.
 
 A <text block> can contain one or more paragraphs (<paragraph>). Both the text block itself and paragraphs can contain information about the font, colors and text formats used. If these are declared in the paragraphs, they take precedence over those specified in the text block.
@@ -99,8 +102,9 @@ Further formatting options are described in the section Including Fonts and Text
 .Specifications in the paragraphs overwrite the values in the text block
 image::textblock-paragraph.png[]
 
-The complete description of `<Textblock>` can be found in the reference (section Text block). For texts that may wrap across page boundaries, there is the command <Text> as a child element of <Output>, described in the next section.
+The complete description of `<Textblock>` can be found in the reference (section Text block). For texts that may wrap across page boundaries, there is the command `<Text>` as a child element of `<Output>`, described in the next section.
 
+[[ch-outputobjects-output]]
 == Texts with page break
 
 Texts with a page break are not output with <PlaceObject> like the other objects, but with <Output>. The syntax for this is
@@ -121,6 +125,7 @@ Texts with a page break are not output with <PlaceObject> like the other objects
 
 Besides the special feature that this text can wrap around several pages, it is also able to wrap around objects. A detailed description of this property is given in the section Flowing around images.
 
+[[ch-intro-tables]]
 == Introduction to tables
 
 The table model used in the Publisher corresponds approximately to the model known from HTML.
@@ -166,7 +171,7 @@ Individual cells are never wrapped to multiple pages, i.e. they are set as a rec
 
 A separate chapter is devoted to the topic of tables <<ch-tables2,a separate chapter>>.
 
-
+[[ch-outputtingobjects-images]]
 == Images
 
 Including images is, as already shown at the beginning, very easy. The command for this is `<Image>':
@@ -181,9 +186,10 @@ Including images is, as already shown at the beginning, very easy. The command f
 
 Images can be in the formats PDF, JPEG and PNG and can be integrated. All other formats such as Tiff or SVG must be converted first.
 
-The command for embedding images is very powerful and is described in detail in a separate section (chapter Embedding Images). The reference contains a short description of all possibilities.
+The command for embedding images is very powerful and is described in detail in a separate section (<<ch-images>>). The <<cmd-image,reference>> contains a short description of all possibilities.
 
-== Rectangular areas (`<Box>``)
+[[ch-outputtingobjects-box]]
+== Rectangular areas (`<Box>`)
 
 Rectangular surfaces are created with the command <Box>.
 ifdef::backend-docbook99[]
@@ -201,13 +207,13 @@ endif::[]
 .A colored box, output with `<Box>`
 image::zitronengruen.png[width=30%]
 
-Boxes are often used for colored areas behind a text or table. In this case the allocation of the raster cells must be switched off (allocate="no" at <PlaceObject>), otherwise a warning will be issued because of the double allocation of the area in the PDF (see section Raster). An example for the use of boxes as background can be found in the section about grip marks. There, the parameter bleed is also explained, which is used to enlarge the box in one or more directions, if they are located at the page margin.
+Boxes are often used for colored areas behind a text or table. In this case the allocation of the raster cells must be switched off (`allocate="no"` at `<PlaceObject>`), otherwise a warning will be issued because of the double allocation of the area in the PDF (see section <<ch-grid>>). An example for the use of boxes as background can be found in the section about grip marks. There, the parameter bleed is also explained, which is used to enlarge the box in one or more directions, if they are located at the page margin.
 
+[[ch-outputtingobjects-circle]]
 == Circle
 
-Circles are output with the command <Circle>:
+Circles are output with the command `<Circle>`:
 
-Kreise werden mit dem Befehl `<Circle>` ausgegeben:
 [source, xml]
 -------------------------------------------------------------------------------
 <Record element="data">
@@ -221,10 +227,6 @@ Kreise werden mit dem Befehl `<Circle>` ausgegeben:
 -------------------------------------------------------------------------------
 
 In this example the radius of the large circle is 3 grid boxes and the center of the circle is in the upper left corner of the box (5.5). So it starts in the second column and the second row and extends to the seventh column and row. Circles have the special property that no grid cells are marked as allocated.
-ifdef::backend-docbook99[]
-Das Ergebnis ist Abb.~<<abb-kreismitmittelpunkt>> zu sehen.
-endif::[]
-
 
 
 [[abb-kreismitmittelpunkt]]
@@ -233,6 +235,7 @@ image::kreismitmittelpunkt.png[width=30%,scaledwidth=50%]
 //~
 
 
+[[ch-outputtingobjects-rules]]
 == Rules
 
 There are horizontal and vertical rules. These can have a thickness, a color and a length. Rules can be solid and dashed:
@@ -245,17 +248,12 @@ There are horizontal and vertical rules. These can have a thickness, a color and
 -------------------------------------------------------------------------------
 
 Rules are always aligned in the upper left corner of the box.
-ifdef::backend-docbook99[]
-See figure~<<abb-gestricheltelinie>>.
-endif::[]
-//~
-
 
 [[abb-gestricheltelinie]]
-.A dotted line.
+.A dashed rule.
 image::gestricheltelinie.png[width=80%]
 
-
+[[ch-outputtingobjects-frame]]
 == Frame
 
 The frame (like the transformation below) is a special object that you place over another object. A frame (`<Frame>`) always contains another object, for example a picture.
@@ -286,7 +284,7 @@ image::eagle-frame.png[width=50%]
 
 
 
-[[ch-output-transformation]]
+[[ch-outputtingobjects-transformation]]
 == Transformation
 
 [[abb-transformationen]]
@@ -325,6 +323,7 @@ There are the following basic transformation types (see figure The four basic tr
 image::eagle-transform.png[width=50%,scaledwidth=100%]
 //~
 
+[[ch-barcodes]]
 == Barcodes, QR Codes
 
 Barcodes or QR codes are integrated via the command <Barcode>:

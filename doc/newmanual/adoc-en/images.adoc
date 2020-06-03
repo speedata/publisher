@@ -2,10 +2,10 @@
 :sampleb: _sampleb.pdf
 :padding: padding-*
 
-[[ch-bildereinbinden]]
+[[ch-images]]
 = Image inclusion
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 
 Inserting images into the PDF is very easy, a short command is enough:
@@ -27,9 +27,9 @@ The images are not changed during processing in the Publisher, i.e. they retain 
 
 If you include images, it is always useful to include a size specification. Otherwise the natural size of the image is taken. What the natural size is, is not always clear. Usually there is a DPI specification in the image file. This is often set arbitrarily by the image processing program. For example, if it says 72 DPI, a 720 pixel wide image is 10 inches wide; at 300 DPI, it is only 2.4 inches wide.
 
-Since the specification cannot be relied upon, size specifications are required for the output. This can be either the desired height or width of the image, or both together. In the example above, the image has a width of five centimeters. The specification can also be made as a number of raster cells. Specifying width="100%" means that the entire available width should be used (currently other percentages are not supported). The specification auto is like omitting the specification and is only available for CSS compatibility.
+Since the specification cannot be relied upon, size specifications are required for the output. This can be either the desired height or width of the image, or both together. In the example above, the image has a width of five centimeters. The specification can also be made as a number of grid cells. Specifying `width="100%"` means that the entire available width should be used (currently other percentages are not supported). The specification auto is like omitting the specification and is only available for CSS compatibility.
 
-If both proportions are specified (width and height), there are two modes: keep aspect ratio (clip="yes") or stretch or compress (clip="no") the output.
+If both proportions are specified (width and height), there are two modes: keep aspect ratio (`clip="yes"`) or stretch or shrink (`clip="no"`) the output.
 
 .The image is stretched horizontally.
 [source, xml]
@@ -42,7 +42,7 @@ If both proportions are specified (width and height), there are two modes: keep 
 .If clip is set to 'no', the image is distorted.
 image::18-clip-no.png[]
 
-With clip="yes" the image is cropped so that the maximum dimensions are taken on one side
+With `clip="yes"` the image is cropped so that the maximum dimensions are taken on one side.
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -56,11 +56,11 @@ With clip="yes" the image is cropped so that the maximum dimensions are taken on
 image::18-clip-yes.png[]
 
 
-The size of images can be determined with the two XPath functions sd:imagewidth(<filename>) and sd:imageheight(<filename>). The result is in raster cells. Caution, here the natural size is taken, which may be without significance (see above).
+The size of images can be determined with the two XPath functions `sd:imagewidth(<filename>)` and `sd:imageheight(<filename>)`. The result is in grid cells. Caution, here the natural size is taken, which may be without significance (see above).
 
 == Maximum height and width, minimum height and width
 
-To use the natural size, but specify restrictions, there are four combinations of min/max and width/height. The image in the following example will be no wider than 10 raster cells and no higher than 3. The aspect ratio is preserved:
+To use the natural size, but specify restrictions, there are four combinations of min/max and width/height. The image in the following example will be no wider than 10 grid cells and no higher than 3. The aspect ratio is preserved:
 
 
 [source, xml]
@@ -76,7 +76,7 @@ image::18-maxheight.png[width=50%,scaledwidth=100%]
 
 ==  Rotating images
 
-With the rotate attribute you can rotate images in 90 degree steps (positive values: clockwise). The following example rotates an image 90 degrees counterclockwise if it is a portrait image. With the XPath command sd:aspectratio(<filename>) you can determine the aspect ratio of an image. If it is greater than 1, then it is a landscape image.
+With the rotate attribute you can rotate images in 90 degree steps (positive values: clockwise). The following example rotates an image 90 degrees counterclockwise if it is a portrait image. With the XPath command `sd:aspectratio(<filename>)` you can determine the aspect ratio of an image. If it is greater than 1, then it is a landscape image.
 
 
 [[lst-samplea-sampleb-data]]
@@ -110,9 +110,9 @@ With the rotate attribute you can rotate images in 90 degree steps (positive val
 image::drehungaspectratio.png[width=50%,scaledwidth=100%]
 
 
-TIP: The curly brackets at file and rotate mean that the system jumps to XPath mode to evaluate the XPath expressions (access to the file attribute and the if-then query). See the XPath and layout functions section for more information.
+TIP: The curly brackets at file and rotate mean that the system jumps to XPath mode to evaluate the XPath expressions (access to the file attribute and the if-then query). See the <<ch-xpathfunctions>> for more information.
 
-_Note: if the image in the argument of sd:aspectratio() is not available in the filesystem, the value is taken from the placeholder image (chapter Image not found?). To check if an image is available at all, you can use the command sd:file-exists(<filename>)._
+_Note: if the image in the argument of `sd:aspectratio()` is not available in the filesystem, the value is taken from the placeholder image (chapter <<ch-imagenotfound>>). To check if an image is available at all, you can use the command `sd:file-exists(<filename>)`._
 
 == Location of the image files
 
@@ -123,8 +123,7 @@ Usually the images are stored in the file system or in a DAM (digital asset mana
 <Image file="file:///path/to/the/image.pdf"  />
 -------------------------------------------------------------------------------
 
-
-or as a file in one of the subdirectories of the search path, as in the examples above. For example, the images can be located in the subdirectory images. See the section on file organization.
+or as a file in one of the subdirectories of the search path, as in the examples above. For example, the images can be located in the subdirectory images. See the section on <<ch-fileorganization>>.
 
 The images can also be loaded from a web server using http(s) protocol. The syntax is analogous to the absolute path, for example:
 
@@ -143,14 +142,15 @@ The images can also be loaded from a web server using http(s) protocol. The synt
 [discrete]
 == Caching
 
-The images that are loaded via http and https are cached on the hard disk. With each request, the system checks whether the image is still current and, if necessary, does not download it. If the image is deleted on the server, it is also deleted in the local system.
+The images that are loaded via http and https are cached on the hard disk. With each request, the system checks whether the image is still up-to-date and, if necessary, does not download it. If the image is deleted on the server, it is also deleted in the local system.
 
-With sp --cache=fast you can use the fast caching method, which downloads the image from the server only once and then does not check if it is still up-to-date.
+With `sp --cache=fast` you can use the fast caching method, which downloads the image from the server only once and then does not check if it is still up-to-date.
 
-The sp clearcache command deletes the cache.
+The `sp clearcache` command deletes the cache.
 
 The location of the image cache can be controlled either by tempdir (command line and configuration file) or by the imagecache key in the configuration file (not on the command line).
 
+[[ch-imagenotfound]]
 == Image not found?
 
 What happens if an image is not found? The normal behavior is to output an error message and a placeholder image indicating the missing image:
@@ -189,12 +189,12 @@ PDF files have some peculiarities: they can contain several pages and the indivi
 
 [source, xml]
 -------------------------------------------------------------------------------
-<Image file="seite.pdf" visiblebox="artbox" width="210mm" height="297mm" />
+<Image file="page.pdf" visiblebox="artbox" width="210mm" height="297mm" />
 -------------------------------------------------------------------------------
 
 means that the "artbox" is displayed in the size 210mm × 297mm
 
-The page attribute is also described in the section Including Multipage PDF Files. It is used to select the page when a PDF file is embedded. With sd:number-of-pages('filename') it can be determined how many pages a PDF file contains.
+The `page` attribute is also described in the section <<ch-multipagepdf>>. It is used to select the page when a PDF file is embedded. With `sd:number-of-pages('filename')` it can be determined how many pages a PDF file contains.
 
 == External Conversion Tools
 
@@ -222,11 +222,11 @@ imagehandler="tiffimage:(convert %%input%% %%output%%.pdf)"
 extensionhandler="tiff:tiffimage"
 -------------------------------------------------------------------------------
 
-The file name extension `.tiff` is assigned to the handler tiffimage (line 2). In the first line, the handler tiffimage is assigned to the program convert %%input%% %%output%%%.pdf, whereby the file names are replaced at runtime.
+The file name extension `.tiff` is assigned to the handler `tiffimage` (line 2). In the first line, the handler `tiffimage` is assigned to the program `convert %%input%% %%output%%%.pdf`, whereby the file names are replaced at runtime.
 
 == Images from textual descriptions
 
-There are countless picture description languages in which pictures are not drawn or painted with an external program, but are described textually. For example "draw a square with an edge length of 4cm" or "create a pie chart with the following values: ...". These graphics are then converted from the description language into various formats, usually as PNG or PDF. With the Publisher it is possible to embed such descriptions since version 3.9.1:
+There are countless picture description languages in which pictures are not drawn or painted with an external program, but are described textually. For example “draw a square with an edge length of 4cm” or “create a pie chart with the following values: ...”. These graphics are then converted from the description language into various formats, usually as PNG or PDF. With the Publisher it is possible to embed such descriptions since version 3.9.1:
 
 [source, xml]
 -------------------------------------------------------------------------------

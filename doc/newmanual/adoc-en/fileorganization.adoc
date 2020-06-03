@@ -1,7 +1,7 @@
-[[ch-organisationdaten]]
+[[ch-fileorganization]]
 = File organization
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 This section describes how the necessary files (layout, data, images and font files) must be organized, where they are stored, what they must be called, and so on.
 
@@ -20,20 +20,20 @@ There are exceptions to the rule:
 . With `sp --systemfonts`, font files are also searched in directories that are predefined by the system.
 . With `sp --wd DIR` the publisher changes to this directory before starting.
 
-For a description of the parameters see the appendix Starting the Publisher from the Command Line.
+For a description of the parameters see the appendix <<ch-commandline>>.
 
 == What names must the data file and the layout file have?
 
-The speedata Publisher looks for the layout with the name layout.xml and the data file with the name data.xml. Both can be adjusted on the command line (--layout=XYZ and --data=XYZ) and in the configuration file (layout=XYZ and data=XYZ). See the appendices Starting the Publisher from the Command Line and Configuring the Publisher.
+The speedata Publisher looks for the layout with the name layout.xml and the data file with the name data.xml. Both can be adjusted on the command line (`--layout=XYZ` and `--data=XYZ`) and in the configuration file (`layout=XYZ` and `data=XYZ`). See the appendices <<ch-commandline>> and <<ch-configuration>>.
 
 [[abb-19-dateisystem]]
 .Possible file organization in a directory. The name of the subdirectories (folders) is arbitrary.
 image::18-dateisystem.png[width=100%]
 
-
+[[ch-splitlayout]]
 == Splitting layout sets of rules into individual files
 
-You can split the layout ruleset into several files. There are two ways to merge the files. On the command line, you can use --extra-xml to specify one or more layout rulesets, which are also read in. Alternatively, you can use the mechanism via XInclude, here in the case of a font definition:
+You can split the layout ruleset into several files. There are two ways to merge the files. On the command line, you can use `--extra-xml` to specify one or more layout rulesets, which are also read in. Alternatively, you can use the mechanism via XInclude, here in the case of a font definition:
 
 [source,xml]
 -------

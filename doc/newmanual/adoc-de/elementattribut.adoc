@@ -4,7 +4,7 @@
 Der speedata Publisher kann XML-Dateien erzeugen, speichern und wieder einlesen.
 Damit kann man Inhaltsverzeichnisse, Querverweise und weitere andere Anwendungen realisieren.
 
-Die XML-Struktur wird nicht direkt, sondern indirekt über die beiden Befehle `<Element>` und `<Attribute>` erzeugt.
+Die XML-Struktur wird nicht direkt, sondern indirekt über die beiden Befehle  <<cmd-element,`<Element>`>> und <<cmd-attribute,`<Attributes>`>> erzeugt.
 So kann die folgende XML-Datei
 
 

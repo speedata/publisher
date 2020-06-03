@@ -124,7 +124,7 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) string {
 	}
 	atttypesEn := map[string]string{
 		"boolean":            "yes or no",
-		"xpath":              `<<ch-xpathfunktionen,XPath expression>>`,
+		"xpath":              `<<ch-xpathfunctions,XPath expression>>`,
 		"numberorlength":     "number or length",
 		"numberlengthorstar": "Number, length or *-numbers",
 		"yesnolength":        "yes, no or length",

@@ -154,7 +154,7 @@ Die für die Verarbeitung notwendige Struktur ist folgende:(((`Record`)))(((`Pro
     <!--3-->
   </Record>
 
-  <Record element="artikel">
+  <Record element="article">
     <!--4-->
   </Record>
 

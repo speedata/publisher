@@ -114,13 +114,13 @@ include::ref/a.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-textformatierung,Textformatierung>>.
+The section <<ch-textformatting>>.
 
 include::ref/action.adoc[]
 
 == See also
 
-// Den Befehl <<cmd-mark,`Mark`>> und das Kapitel <<ch-verzeichnisseerstellen-marker,Verzeichnisse erstellen (Marker)>>
+The command <<cmd-mark,`<Mark>`>> and the section <<ch-directories-marker>>
 
 
 include::ref/addsearchpath.adoc[]
@@ -132,14 +132,14 @@ include::ref/atpagecreation.adoc[]
 
 == See also
 
-// Befehle <<cmd-atpageshipout,`AtPageShipout`>> und <<cmd-pagetype,`Pagetype`>> sowie das Kapitel <<ch-seitentypen,Seitentypen>>.
+Commands <<cmd-atpageshipout,`<AtPageShipout>`>> and <<cmd-pagetype,`<Pagetype>`>> as well as the section <<ch-pagetypes>>.
 
 
 include::ref/atpageshipout.adoc[]
 
 == See also
 
-// Befehle <<cmd-atpagecreation,`AtPageCreation`>> und <<cmd-pagetype,`Pagetype`>> sowie das Kapitel <<ch-seitentypen,Seitentypen>>.
+Commands <<cmd-atpagecreation,`<AtPageCreation>`>> and <<cmd-pagetype,`<Pagetype>`>> as well as the section <<ch-pagetypes>>.
 
 include::ref/attachfile.adoc[]
 
@@ -150,84 +150,84 @@ include::ref/attribute.adoc[]
 
 == See also
 
-// Befehle <<cmd-element,`Element`>>, <<cmd-loaddataset,`LoadDataset`>> und <<cmd-savedataset,`SaveDataset`>> sowie den Abschnitt <<ch-elementattribute,Erzeugen von XML-Strukturen>>.
+Commands <<cmd-element,`<Element>`>>, <<cmd-loaddataset,`<LoadDataset>`>> and <<cmd-savedataset,`<SaveDataset>`>> as well as the section <<ch-elementattribute>>.
 
 
 include::ref/b.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-textformatierung,Textformatierung>> sowie die Befehle <<cmd-i,`<I>`>> und <<cmd-u,`<U>`>>.
+The section <<ch-textformatting,text formatting>> as well as the commands <<cmd-i,`<I>`>> and <<cmd-u,`<U>`>>.
 
 include::ref/barcode.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-objekteausgeben-barcode,`<Barcode>` im Grundlagenkapitel>>.
+The section about <<ch-barcodes,`<Barcodes>` in the basics chapter>>.
 
 
 include::ref/bold.adoc[]
 
 == See also
 
-// Befehl <<cmd-definefontfamily,`DefineFontfamily`>>, Kapitel <<ch-einbindungschriftarten>>.
+Command <<cmd-definefontfamily,`<DefineFontfamily>`>>, chapter <<ch-fonts>>.
 
 
 include::ref/bolditalic.adoc[]
 
 == See also
 
-// Befehl <<cmd-definefontfamily,`DefineFontfamily`>>, Kapitel <<ch-einbindungschriftarten>>.
+Command <<cmd-definefontfamily,`<DefineFontfamily>`>>, chapter <<ch-fonts>>.
 
 include::ref/bookmark.adoc[]
 
 == See also
 
-// Kapitel <<ch-bookmarks,über Lesezeichen>>.
+Chapter <<ch-bookmarks,about bookmarks>>.
 
 include::ref/box.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-objekteausgeben-box,`<Box>` im Grundlagenkapitel>>.
+The section about <<ch-outputtingobjects-box,`<Box>` in the basics chapter>>.
 
 include::ref/br.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-textformatierung,Textformatierung>>.
+The section <<ch-textformatting,text formatting>>.
 
 include::ref/case.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-fallunterscheidungen,Programmierung>>.
+The section <<ch-programming-case,programming>>.
 
 
 include::ref/circle.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-objekteausgeben-circle,`<Circle>` im Grundlagenkapitel>>.
+The section about <<ch-outputtingobjects-circle,`<Circle>` in the basics chapter>>.
 
 include::ref/color.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-textformatierung,Textformatierung>>, das Kapitel <<ch-farben,über Farben>> und den Befehl <<cmd-definecolor,`<DefineColor>`>>.
+The section <<ch-textformatting,text formatting>>, the section <<ch-colors,about colors>> and the command <<cmd-definecolor,`<DefineColor>`>>.
 
 include::ref/column.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-tab-spaltenbreiten,Spaltenangaben>> im Kapitel Tabellen.
+The section about <<ch-tables-columnwidths,Columns>> in chapter <<ch-tables2>>.
 
 
 include::ref/columns.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-tab-spaltenbreiten,Spaltenangaben>> im Kapitel Tabellen.
+The section about <<ch-tables-columnwidths,Columns>> in chapter <<ch-tables2>>.
 
 
 include::ref/compatibility.adoc[]
@@ -235,132 +235,132 @@ include::ref/contents.adoc[]
 
 == See also
 
-// Den Befehl <<cmd-group,Group>> und das Kapitel über <<ch-gruppen,Gruppen>>.
+The command <<cmd-group,<Group>>> and the section about <<ch-groups>>.
 
 include::ref/copy-of.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-copyof,`<Copy-of>`>>.
+The section about <<ch-copyof,`<Copy-of>`>>.
 
 include::ref/definecolor.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-farben,Farben>>.
+The section about <<ch-colors,colors>>.
 
 include::ref/definecolorprofile.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-farben,Farben>>.
+The section about <<ch-colors,colors>>.
 
 include::ref/definefontalias.adoc[]
 
 == See also
 
-// Das Kapitel über <<ch-einbindungschriftarten>> und den Befehl <<cmd-definefontfamily,`<DefineFontfamily>`>> sowie <<cmd-loadfontfile,`<LoadFontfile>`>>.
+The section about <<ch-fonts>> and the command <<cmd-definefontfamily,`<DefineFontfamily>`>> as well as <<cmd-loadfontfile,`<LoadFontfile>`>>.
 
 include::ref/definefontfamily.adoc[]
 
 == See also
 
-// Das Kapitel über <<ch-einbindungschriftarten>> und den Befehl <<cmd-definefontalias,`<DefineFontalias>`>> sowie <<cmd-loadfontfile,`<LoadFontfile>`>>.
+The section about <<ch-fonts>> and the command <<cmd-definefontalias,`<DefineFontalias>`>> as well as <<cmd-loadfontfile,`<LoadFontfile>`>>.
 
 include::ref/definetextformat.adoc[]
 
 == See also
 
-// Das Kapitel über <<ch-textformate,Textformate>>.
+The section about <<ch-textformats>>.
 
 include::ref/element.adoc[]
 
 == See also
 
-// Befehle <<cmd-attribute,`Attribute`>>, <<cmd-loaddataset,`LoadDataset`>> und <<cmd-savedataset,`SaveDataset`>> sowie den Abschnitt <<ch-elementattribute,Erzeugen von XML-Strukturen>>.
+Commands <<cmd-attribute,`<Attribute>`>>, <<cmd-loaddataset,`<LoadDataset>`>> and <<cmd-savedataset,`SaveDataset`>> as well as the section <<ch-elementattribute>>.
 
 include::ref/fallback.adoc[]
 
 == See also
 
-// Befehl <<cmd-loadfontfile,`LoadFontfile`>>, Kapitel <<ch-einbindungschriftarten>>.
+Command <<cmd-loadfontfile,`<LoadFontfile>`>>, chapter <<ch-fonts>>.
 
 
 include::ref/fontface.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-textformatierung,Textformatierung>>.
+The section <<ch-textformatting,text formatting>>.
 
 
 include::ref/forall.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-datenstrukturierung,Datenstrukturierung>>.
+The section about <<ch-structuredatafile>>.
 
 include::ref/frame.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-objekteausgeben-frame,Rahmen im Grundlagenkapitel>>.
+The section about <<ch-outputtingobjects-frame,frames in the basics chapter>>.
 
 include::ref/grid.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-raster,Raster>> und das Kapitel über <<ch-gruppen,Gruppen>>.
+The section about <<ch-grid,grids>> and the section about <<ch-groups>>.
 
 
 include::ref/group.adoc[]
 
 == See also
 
-// Das Kapitel über <<ch-gruppen,Gruppen>>.
+The section about <<ch-groups>>.
 
 include::ref/groupcontents.adoc[]
 
 == See also
 
-// Das Kapitel über <<ch-gruppen,Gruppen>>.
+The section about <<ch-groups>>.
 
 
 include::ref/hspace.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-textformatierung,Textformatierung>>.
+The section <<ch-textformatting,text formatting>>.
 
 include::ref/html.adoc[]
 
 == See also
 
-// das Beispiele-Repository unter https://github.com/speedata/examples/tree/master/technical/html
+The examples repository at https://github.com/speedata/examples/tree/master/technical/html
 
 include::ref/hyphenation.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-silbentrennung-sprache,Silbentrennung und Sprache>>.
+The section <<ch-hyphenation-language>>.
 
 include::ref/i.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-textformatierung,Textformatierung>> sowie die Befehle <<cmd-b,`<B>`>> und <<cmd-u,`<U>`>>.
+The section <<ch-textformatting,text formatting>> as well as the commands <<cmd-b,`<B>`>> and <<cmd-u,`<U>`>>.
 
 include::ref/image.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-objekteausgeben-bilder,`<Image>` im Grundlagenkapitel>>, <<ch-dateinamen,Dateinamen im Publisher>>
+The section about <<ch-outputtingobjects-images,`<Image>` in the basics chapter>>, <<ch-fileorganization>>
 
 
 include::ref/include.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-include,Regelwerke in einzelne Dateien teilen>>.
+The section about <<ch-splitlayout>>.
 
 
 include::ref/initial.adoc[]
@@ -375,90 +375,95 @@ include::ref/insertpages.adoc[]
 
 == See also
 
-// Den Befehl <<cmd-savepages,`<SavePages>`>> und den Abschnitt <<ch-savepages,Virtuelle Seiten>>.
+The command <<cmd-savepages,`<SavePages>`>> and the section <<ch-savepages>>.
 
 
 include::ref/italic.adoc[]
 
 == See also
 
-// Befehl <<cmd-definefontfamily,`DefineFontfamily`>>, Kapitel <<ch-einbindungschriftarten>>.
-
+Command <<cmd-definefontfamily,`<DefineFontfamily>`>>, chapter <<ch-fonts>>.
 
 include::ref/layout.adoc[]
+
+== See also
+
 include::ref/li.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-aufzaehlungslisten,Aufzählungslisten>> sowie die Befehle <<cmd-ol,`<Ol>`>> und <<cmd-ul,`<Ul>`>>.
+The section <<ch-textformatting-enumerationlists>> as well as the commands <<cmd-ol,`<Ol>`>> and <<cmd-ul,`<Ul>`>>.
 
 include::ref/loaddataset.adoc[]
 
 == See also
 
-// Befehle <<cmd-element,`Element`>>, <<cmd-attribute,`Attribute`>> und <<cmd-savedataset,`SaveDataset`>> sowie den Abschnitt <<ch-elementattribute,Erzeugen von XML-Strukturen>>.
+Commands <<cmd-element,`<Element>`>>, <<cmd-attribute,`<Attribute>`>> and <<cmd-savedataset,`<SaveDataset>`>> as well as the section <<ch-elementattribute>>.
 
 include::ref/loadfontfile.adoc[]
 
 == See also
 
-// Befehl <<cmd-definefontfamily,`DefineFontfamily`>>, Kapitel <<ch-einbindungschriftarten>>.
+Command <<cmd-definefontfamily,`<DefineFontfamily>`>>, chapter <<ch-fonts>>.
 
 
 include::ref/loop.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-programmierung-schleifen,Programmierung>>.
+The section <<ch-programming-loops,programming>>.
 
 include::ref/makeindex.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-indexerstellen,Stichwortverzeichnisse>>.
+The section <<ch-indexcreation>>.
 
 
 include::ref/margin.adoc[]
 
 == See also
 
-// Den Befehl <<cmd-pagetype,`Pagetype`>>, das Kapitel <<ch-seitentypen,Seitentypen>>.
+The command <<cmd-pagetype,`<Pagetype>`>>, the section <<ch-pagetypes>>.
 
 include::ref/mark.adoc[]
 
 == See also
 
-// Den Befehl <<cmd-action,`Action`>> und das Kapitel <<ch-verzeichnisseerstellen-marker,Verzeichnisse erstellen (Marker)>>.
+The command <<cmd-action,`<Action>`>> and the section <<ch-directories-marker>>.
 
 include::ref/message.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-tracing,Fehlersuche>>.
+The section <<ch-troubleshooting>>.
 
 include::ref/newpage.adoc[]
 
+== See also
+
+<<ch-pagetypes-newpage>>
 
 
 include::ref/nextframe.adoc[]
 
 == See also
 
-// Den Abschnitt <<ch-naechster-rahmen,Überlauf in den nächsten Rahmen>> im Kapitel über Seitenbereiche.
+The section <<ch-positioningframe-nextframe>> in chapter about positioning frames.
 
 
 include::ref/nextrow.adoc[]
 
 == See also
 
-// Den Abschnitt <<ch-cursor,Cursor>> im Kapitel über Seitenbereiche.
+The section <<ch-cursor,Cursor>> in chapter about positioning frames.
 
 
 include::ref/nobreak.adoc[]
 
 == See also
 
-// Den Abschnitt <<ch-nobreak,Verhindern von Textumbruch>> im Grundlagenkapitel.
+The section <<ch-textformatting-nobreak>> in the basics chapter.
 
 
 
@@ -466,264 +471,262 @@ include::ref/ol.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-aufzaehlungslisten,Aufzählungslisten>> sowie die Befehle <<cmd-li,`<Li>`>> und <<cmd-ol,`<Ol>`>>.
+The section <<ch-textformatting-enumerationlists>> as well as the commands <<cmd-li,`<Li>`>> and <<cmd-ul,`<Ul>`>>.
 
 
 include::ref/options.adoc[]
 == See also
 
-// <<ch-kommandozeile,Starten des Publishers über Kommandozeile>>, <<ch-konfiguration,Konfigurieren des Publishers>>
+<<ch-commandline>>, <<ch-configuration>>.
 
 include::ref/otherwise.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-fallunterscheidungen,Programmierung>>.
+The section <<ch-programming-case,programming>>.
 
 
 include::ref/output.adoc[]
 
 == See also
 
-// Den Befehl <<ch-objekteausgebentext,`<Text>` im Grundlagenkapitel>>.
+The command <<ch-outputobjects-output,`<Text>` in the basics chapter>>.
 
 
 
 include::ref/overlay.adoc[]
 == See also
 
-// Den Abschnitt <<ch-bildhintertext,Bild hinter dem Text>> im Kapitel über Tabellen.
+The section <<ch-tables-imagebehindtext>> in chapter about tables.
 
 
 include::ref/pageformat.adoc[]
 
 == See also
 
-// Den Abschnitt <<ch-druckausgabe,Druckausgabe>>.
+The section <<ch-outputforprinter>>.
 
 
 include::ref/pagetype.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-seitentypen,Seitentypen>>.
+The section <<ch-pagetypes>>.
 
 
 include::ref/paragraph.adoc[]
 == See also
 
-// Das Kapitel <<ch-textformatierung,Textformatierung>>.
-
+The section <<ch-textformatting,text formatting>>.
 
 
 include::ref/pdfoptions.adoc[]
 
 == See also
 
-// Den Abschnitt <<ch-druckausgabe,Druckausgabe>>.
+The section <<ch-outputforprinter>>.
 
 
 include::ref/placeobject.adoc[]
 
 == See also
 
-// Die ausführliche Beschreibung in <<ch-objekteausgeben,Objekte ausgeben>>.
+The detailed description in <<ch-outputtingobjects>>.
 
 
 include::ref/position.adoc[]
 
 == See also
 
-// Den Abschnitt <<ch-bildhintertext,Bild hinter dem Text>> im Kapitel über Tabellen.
+The section <<ch-tables-imagebehindtext>> in chapter about tables.
 
 include::ref/positioningarea.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-positioningarea,Bereiche auf der Seite>>.
+The section <<ch-positioningarea>>.
 
 
 include::ref/positioningframe.adoc[]
 == See also
 
-// Das Kapitel <<ch-positioningarea,Bereiche auf der Seite>>.
+The section <<ch-positioningarea>>.
 
 
 include::ref/processnode.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-datenstrukturierung,Datenstrukturierung>>.
+The section about <<ch-structuredatafile>>.
 
 include::ref/record.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-datenstrukturierung,Datenstrukturierung>>.
+The section about <<ch-structuredatafile>>.
 
 include::ref/regular.adoc[]
 
 == See also
 
-// Befehl <<cmd-definefontfamily,`DefineFontfamily`>>, Kapitel <<ch-einbindungschriftarten>>.
+Command <<cmd-definefontfamily,`<DefineFontfamily>`>>, chapter <<ch-fonts>>.
 
 
 include::ref/rule.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-objekteausgeben-rule,Linien im Grundlagenkapitel>>.
+The section about <<ch-outputtingobjects-rules,rules in the basics chapter>>.
 
 include::ref/savedataset.adoc[]
 
 == See also
 
-// Befehle <<cmd-attribute,`<Attribute>`>>, <<cmd-element,`<Element>`>> und <<cmd-loaddataset,`<LoadDataset>`>> sowie den Abschnitt <<ch-elementattribute,Erzeugen von XML-Strukturen>>.
+Commands <<cmd-attribute,`<Attribute>`>>, <<cmd-element,`<Element>`>> and <<cmd-loaddataset,`<LoadDataset>`>> as well as the section <<ch-elementattribute>>.
 
 
 include::ref/savepages.adoc[]
 == See also
 
-// Den Befehl <<cmd-insertpages,`<InsertPages>`>> und den Abschnitt <<ch-savepages,Virtuelle Seiten>>.
+The command <<cmd-insertpages,`<InsertPages>`>> and the section <<ch-savepages>>.
 
 include::ref/setgrid.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-raster,Raster>>.
+The section about <<ch-grid,page grids>>.
 
 include::ref/setvariable.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-programmierung,Programmierung>>.
+The section <<ch-programming>>
 
 
 include::ref/sortsequence.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-sortierenvondaten,Sortieren von Daten>>.
+The section <<ch-sortingdata>>.
 
 include::ref/stylesheet.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-css,über CSS>>.
+The section <<ch-css,about CSS>>.
 
 include::ref/span.adoc[]
 
 == See also
 
 
-
-// include::ref/sub.adoc[]
+include::ref/sub.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-textformatierung,Textformatierung>> sowie den Befehl <<cmd-sup,`<Sup>`>>
+The section <<ch-textformatting,text formatting>> as well as the command <<cmd-sup,`<Sup>`>>
 
 include::ref/sup.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-textformatierung,Textformatierung>> sowie den Befehl <<cmd-sub,`<Sub>`>>
+The section <<ch-textformatting,text formatting>> as well as the command <<cmd-sub,`<Sub>`>>
 
 include::ref/switch.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-fallunterscheidungen,Programmierung>>.
+The section <<ch-programming-case,programming>>.
 
 
 include::ref/table.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-tables2,Tabellen>>.
+The section <<ch-tables2,tables>>.
 
 include::ref/tablenewpage.adoc[]
 == See also
 
-// Befehl <<cmd-table,`<Table>`>>, <<ch-tables2, Kapitel über Tabellen>>.
+Command <<cmd-table,`<Table>`>>, <<ch-tables2,chapter about tables>>.
 
 
 include::ref/tablefoot.adoc[]
 == See also
 
-// Befehl <<cmd-table,`<Table>`>>, <<ch-tables2, Kapitel über Tabellen>>.
+Command <<cmd-table,`<Table>`>>, <<ch-tables2,chapter about tables>>.
 
 include::ref/tablehead.adoc[]
 == See also
 
-// Befehl <<cmd-table,`<Table>`>>, <<ch-tables2, Kapitel über Tabellen>>.
+Command <<cmd-table,`<Table>`>>, <<ch-tables2,chapter about tables>>.
 
 include::ref/tablerule.adoc[]
 == See also
 
-// Befehl <<cmd-table,`<Table>`>>, <<ch-tables2, Kapitel über Tabellen>>.
+Command <<cmd-table,`<Table>`>>, <<ch-tables2,chapter about tables>>.
 
 include::ref/td.adoc[]
 == See also
 
-// Befehl <<cmd-table,`<Table>`>>, <<ch-tables2, Kapitel über Tabellen>>.
+Command <<cmd-table,`<Table>`>>, <<ch-tables2,chapter about tables>>.
 
 include::ref/text.adoc[]
 
 == See also
 
-// Den Befehl <<ch-objekteausgebentext,`<Text>` im Grundlagenkapitel>>.
+The command <<ch-outputobjects-output,`<Text>` in the basics chapter>>.
 
 include::ref/textblock.adoc[]
 
 == See also
 
-// Den Befehl <<ch-objekteausgebentextblock,`<Textblock>` im Grundlagenkapitel>>.
+The command <<ch-outputtingobjects-textblock,`<Textblock>` in the basics chapter>>.
 
 include::ref/tr.adoc[]
 
 == See also
 
-// Befehl <<cmd-table,Table>>, Kapitel über Tabellen.
+Command <<cmd-table,<Table>>>, <<ch-tables2,chapter about tables>>.
 
 include::ref/trace.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-tracing,Fehlersuche>>.
+The section <<ch-troubleshooting>>.
 
 
 include::ref/transformation.adoc[]
 
 == See also
 
-// Den Abschnitt über <<ch-objekteausgeben-transformation,`<Transformation>` im Grundlagenkapitel>>.
+The section about <<ch-outputtingobjects-transformation,`<Transformation>` in the basics chapter>>.
 
 include::ref/u.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-textformatierung,Textformatierung>> sowie die Befehle <<cmd-b,`<B>`>> und <<cmd-i,`<I>`>>.
+The section <<ch-textformatting,text formatting>> as well as the commands <<cmd-b,`<B>`>> and <<cmd-i,`<I>`>>.
 
 include::ref/ul.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-aufzaehlungslisten,Aufzählungslisten>> sowie die Befehle <<cmd-li,`<Li>`>> und <<cmd-ol,`<Ol>`>>.
+The section <<ch-textformatting-enumerationlists>> as well as the commands <<cmd-li,`<Li>`>> and <<cmd-ol,`<Ol>`>>.
 
 
 include::ref/until.adoc[]
 
 == See also
 
-// Das Kapitel <<ch-programmierung-schleifen,Schleifen>> im Kapitel Programmierung.
+The section <<ch-programming-loops,loops>> in chapter programming.
 
 include::ref/url.adoc[]
 
 
 == See also
 
-// Den Abschnitt über <<ch-umbrechenurl,Umbrechen von URLs>> im Kapitel über Textformatierung.
+The section about <<ch-textformatting-url>> in chapter about text formatting.
 
 
 include::ref/value.adoc[]
@@ -731,14 +734,14 @@ include::ref/vspace.adoc[]
 
 == See also
 
-// Den Abschnitt <<ch-tab-zellen-und-zeilen,Tabellenzellen und Tabellenzeilen>> im Kapitel Tabellen.
+The section <<ch-tables2-cellsandrows,table cells and rows>> in chapter tables.
 
 
 include::ref/while.adoc[]
 
 == See also
 
-// Den Abschnitt <<ch-programmierung-schleifen,Schleifen>> im Kapitel Programmierung.
+The section <<ch-programming-loops,loops>> in chapter programming.
 
 
 :leveloffset: -1

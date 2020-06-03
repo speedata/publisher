@@ -3,14 +3,14 @@
 = Hello, world!
 
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 
-The classic: "Hello, world!" Or: what does a simple document look like? As already described, the input for the Publisher consists of two files: the data file and the layout file. Both must be in XML format and must always be available. The data file is saved under the name data.xml and the layout file under layout.xml. These two files are best created with an XML editor, a simple text editor like  https://atom.io/[Atom] or https://macromates.com/[Textmate] is sufficient for the first steps.
+The classic: “Hello, world!” Or: what does a simple document look like? As already described, the input for the Publisher consists of two files: the data file and the layout file. Both must be in XML format and must always be available. The data file is saved under the name data.xml and the layout file under layout.xml. These two files are best created with an XML editor, a simple text editor like  https://atom.io/[Atom] or https://macromates.com/[Textmate] is sufficient for the first steps.
 
-TIP: If you want to try the "Hello World" example yourself, you can simply call `sp new helloworld`. This creates a directory with the two necessary files. So you can start immediately and create a PDF in this directory with the `sp` command.
+TIP: If you want to try the “Hello World” example yourself, you can simply call `sp new helloworld`. This creates a directory with the two necessary files. So you can start immediately and create a PDF in this directory with the `sp` command.
 
-The data file for the "Hello World" example is named `data.xml`:
+The data file for the “Hello World” example is named `data.xml`:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -37,21 +37,21 @@ That is enough for the simple example. The layout file is a bit more extensive (
 </Layout>
 -------------------------------------------------------------------------------
 
-These two files are stored in an otherwise empty directory. On the command line, change to this directory (with cd <directory name>) and call the Publisher with the command
+These two files are stored in an otherwise empty directory. On the command line, change to this directory (with `cd <directory name>`) and call the Publisher with the command
 
 [source,shell,subs="verbatim,quotes"]
 -------------------------------------------------------------------------------
 $ sp
 -------------------------------------------------------------------------------
 
-on. The $ character is intended to represent the prompt and is not entered. If everything goes smoothly, the result is a PDF file named publisher.pdf in the same directory.
+on. The `$` character is intended to represent the prompt and is not entered. If everything goes smoothly, the result is a PDF file named `publisher.pdf` in the same directory.
 
 TIP: For Windows users: if the publisher cannot create the PDF, this is sometimes because the same file is still open in a window. This can be Adobe Reader, but also Windows Explorer.
 
 [[ch-helloworld-explained]]
-== The "Hello World!" example explained
+== The “Hello World!” example explained
 
-Here follows a short explanation of the two files. The data file can be structured as you wish, as long as the content is well-formed XML (see glossary).
+Here follows a short explanation of the two files. The data file can be structured as you wish, as long as the content is well-formed XML (see <<app-glossary,glossary>>).
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -78,9 +78,9 @@ The layout file is a bit more complicated, at least at first sight.
 </Layout>
 -------------------------------------------------------------------------------
 
-<1> The root element is called layout and has the `namespace urn:speedata.de:2009/publisher/en`. The second namespace is necessary for the built-in functions, but is not used in the example. (Tip: nevertheless always specify it in the layout, so that there are no surprises later).
-<2> Here the data processing starts. The root element of the data file is specified in the attribute element.
+<1> The root element is called `Layout` and has the namespace `urn:speedata.de:2009/publisher/en`. The second namespace is necessary for the built-in functions, but is not used in the example. (Tip: nevertheless always specify it in the layout, so that there are no surprises later).
+<2> Here the data processing starts. The root element of the data file is specified in the attribute `element`.
 <3> `<PlaceObject>` is the command to output things (texts, images, boxes, ...) into the PDF.
-<4> The dot at the select attribute means "the current element", in this case the root element. The text value of the element is output here, i.e. the string `Hello world!`
+<4> The dot at the select attribute means “the current element”, in this case the root element. The text value of the element is output here, i.e. the string `Hello world!`
 
-We will not discuss more at this point. Rather, there is a reference to the corresponding chapters in this manual: Under Organization of Data for Data Processing is described how the data file and the layout file are to be structured, and under Output of Objects the command PlaceObject is described.
+We will not discuss more at this point. Rather, there is a reference to the corresponding chapters in this manual: Under <<ch-fileorganization>> is described how the data file and the layout file are to be structured, and under <<ch-outputtingobjects>> the command `<PlaceObject>` is described.

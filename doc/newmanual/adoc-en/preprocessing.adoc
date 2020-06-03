@@ -1,7 +1,7 @@
 [[luafilter]]
 = Lua-Filter / pre-processing
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 
 Sometimes you may want to convert the data into another format or check for correctness before the actual PDF creation.
@@ -33,7 +33,7 @@ The application options are described below, and at the very end there is anothe
 
 == Validate input data
 
-There are several ways to validate RELAX NG files. Beside a variant to validate the schema directly in the XML editor (see the corresponding <<ch-schema validation, section in the manual>>) there is the possibility to use an external program for this.
+There are several ways to validate RELAX NG files. Beside a variant to validate the schema directly in the XML editor (see the corresponding <<ch-schemavalidation, section in the manual>>) there is the possibility to use an external program for this.
 One of these is Jing. It is delivered with the Publisher.
 
 In the Lua preprocessing there is a function that does the validation:
@@ -42,7 +42,7 @@ In the Lua preprocessing there is a function that does the validation:
 [source, lua]
 -------------------------------------------------------------------------------
 runtime = require("runtime")
-runtime.validate_relaxng(`xmlfile`, `schemafile`)
+runtime.validate_relaxng(‹xmlfile›, ‹schemafile›)
 -------------------------------------------------------------------------------
 
 The function returns `false` and the error message in case of an error. Example:
@@ -81,13 +81,13 @@ XSLT is a programming language designed for processing XML data.
 Often data from PIM systems or databases is not in the form that is optimal for the publisher.
 With XSLT you can process and modify such output data.
 
-The program `Saxon` (supplied with the speedata Publisher) can execute an XSLT script.
+The program `saxon` (supplied with the speedata Publisher) can execute an XSLT script.
 The call is the following:
 
 [source, lua]
 -------------------------------------------------------------------------------
 runtime = require("runtime")
-runtime.run_saxon(`XSL`, `source`, `outfile`, `parameter`)
+runtime.run_saxon(‹XSL›, ‹source›, ‹outfile›, ‹parameter›)
 -------------------------------------------------------------------------------
 
 The parameters have the form `keyword=value` and are separated by spaces.
@@ -131,9 +131,9 @@ Example:
 [source,lua]
 ----
 runtime = require("runtime")
-ok, msg = runtime.run_saxon({stylesheet = `json2xml.xsl`,
-                             out = `data.xml`,
-                             initialtemplate = `main`})
+ok, msg = runtime.run_saxon({stylesheet = 'json2xml.xsl',
+                             out = 'data.xml',
+                             initialtemplate = 'main'})
 ----
 
 See also the example in https://github.com/speedata/examples/tree/master/technical/jsonreader[examples repository].
@@ -228,7 +228,7 @@ name = ws.name
 == Read CSV files
 
 Similar to Excel files, CSV files can also be read in directly.
-However, the structure is simpler because there is only one "worksheet".
+However, the structure is simpler because there is only one “worksheet”.
 
 
 [source, lua]
@@ -278,12 +278,12 @@ end
 runtime.finalizer = finished
 -------------------------------------------------------------------------------
 
-`validate_relaxng(`xml file`, `schema file`)`::
+`validate_relaxng(‹xml file›, ‹schema file›)`::
 
 This function validates the specified XML file with the RELAX NG (XML syntax) schema specified in the second parameter.
 The return is a boolean value that is true if the command was executed without errors. Otherwise a second return value (string) is returned, which contains the error message.
 
-`run_saxon(`XSL`, `Source file`, `Output file`, `Parameters`)`::
+`run_saxon(‹XSL›, ‹Source file›, ‹Output file›, ‹Parameters›)`::
 This function calls the `saxon` program supplied with the Publisher. It expects three string arguments (the stylesheet, the input file and the output file) and an optional argument that is passed as a parameter to saxon. The return is a boolean value which is true if the command was executed without errors. Otherwise a second return value (string) is returned, which contains the error message. The parameters have the form `keyword1=value1 keyword2=value2` (separated by spaces).
 
 

@@ -2,7 +2,7 @@
 
 = Print output / crop marks
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 A printable PDF usually differs little or not at all from a PDF that is only read on screen. A few points that should be considered for output to a printer:
 
@@ -11,9 +11,9 @@ Format::
   In the command `<Pageformat>` you should specify the desired size (final format).
   Bleed marks and bleeding can be controlled separately (see below or the command <<cmd-options,`<Options>`>>)
 
-Colours::
+Colors::
   Since printing inks are almost always applied to white paper, they must be indicated differently than on the screen, which makes LEDs light up on a dark background.
-  Care should be taken to define all colours either in CMYK colour space or in greyscale mode.
+  Care should be taken to define all colors either in CMYK color space or in greyscale mode.
   It is possible to convert RGB values into CMYK by calculation, but in practice this only works moderately well.
 
 Images::
@@ -25,11 +25,10 @@ Quality (pixel number) of the images::
   Sometimes it is said that only images with at least 300 DPI (dots per inch) should be included.
   The specification of the DPI number is often nonsensical, as it can be arbitrarily defined in the image.
   It depends on the actual number of pixels per inch according to the scaling in the Publisher.
-  The Publisher can issue a warning if this is below a certain value (attribute 'dpiwarn', see <<cmd-image,`<image>`>).
+  The Publisher can issue a warning if this is below a certain value (attribute “dpiwarn” see <<cmd-image,`<Image>`>>).
 
 Fonts::
   The Publisher automatically embeds all used fonts in the PDF (subsetting - only the actually used letters and characters are embedded).
-
 
 
 == Crop marks
@@ -60,20 +59,16 @@ If no trim marks are created, the *MediaBox* coincides with the *TrimBox*, so th
 [discrete]
 == Example
 
-In the example
-ifdef::backend-docbook99[]
-in figure <<abb-cropmarks>>.
-endif::[]
-the crop marks go up to the blue line that marks the bleed.
+In the example the crop marks go up to the blue line that marks the bleed.
 The green line shows the final format of the page (screenshot from Adobe Acrobat).
 
 
 [[abb-cropmarks]]
-.crop marks and bleed in Adobe Acrobat
+.Crop marks and bleed in Adobe Acrobat
 image::schnittmarken.png[width=40%,scaledwidth=80%]
 
 
-TIP: The command '`<PDFOptions>' offers the possibility to set preferences for the print dialog in the PDF viewer.
+TIP: The command <<cmd-pdfoptions,`<PDFOptions>`>> offers the possibility to set preferences for the print dialog in the PDF viewer.
 These are only supported by some programs (mainly Adobe Acrobat Reader) and are platform dependent.
 
 // EOF

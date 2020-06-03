@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 	"sort"
@@ -43,10 +44,10 @@ func init() {
 }
 
 const (
-	VARIABLELIST = iota
-	ITEMIZEDLIST
-	CALLOUTLIST
-	ORDEREDLIST
+	cVARIABLELIST = iota
+	cITEMIZEDLIST
+	cCALLOUTLIST
+	cORDEREDLIST
 )
 
 func getIds(r io.ReadSeeker) error {
@@ -71,7 +72,7 @@ gatherid:
 			switch elt.Name.Local {
 			case "preface", "chapter", "appendix":
 				id = attr(elt, "id")
-				headerlevel += 1
+				headerlevel++
 				filename = getFilename()
 				if err != nil {
 					return err
@@ -92,7 +93,7 @@ gatherid:
 		case xml.EndElement:
 			switch elt.Name.Local {
 			case "preface", "chapter", "appendix":
-				headerlevel -= 1
+				headerlevel--
 			case "title":
 				saveChardata = true
 				idNameMapping[id] = chardata
@@ -258,7 +259,7 @@ func secondPass(r io.Reader, outdir string) error {
 				}
 			case "preface", "chapter", "appendix":
 				saveid = attr(elt, "id")
-				headerlevel += 1
+				headerlevel++
 				title = ""
 				wc, filename, err = newEncoder(outdir)
 				if err != nil {
@@ -295,7 +296,7 @@ func secondPass(r io.Reader, outdir string) error {
 				// saveCharData = true
 			case "calloutlist":
 				enc.EncodeToken(calloutlist)
-				listtype = append(listtype, CALLOUTLIST)
+				listtype = append(listtype, cCALLOUTLIST)
 			case "co":
 				for _, attr := range elt.Attr {
 					switch attr.Name.Local {
@@ -334,7 +335,7 @@ func secondPass(r io.Reader, outdir string) error {
 				divStart(attributes...)
 				divStart("content")
 			case "itemizedlist":
-				listtype = append(listtype, ITEMIZEDLIST)
+				listtype = append(listtype, cITEMIZEDLIST)
 				enc.EncodeToken(itemize)
 			case "imagedata":
 				img := imagedata.Copy()
@@ -346,7 +347,9 @@ func secondPass(r io.Reader, outdir string) error {
 				// case cwd != "":
 				// 	setAttr(&img, "width", cwd)
 				// }
-				setAttr(&img, "src", strings.Replace(attr(elt, "fileref"), "img/", "../images/", 1))
+				source := attr(elt, "fileref")
+				source = path.Base(source)
+				setAttr(&img, "src", filepath.Join("..", "images", source))
 				enc.EncodeToken(img)
 				enc.EncodeToken(img.End())
 			case "indexterm":
@@ -372,7 +375,7 @@ func secondPass(r io.Reader, outdir string) error {
 				enc.EncodeToken(literal)
 				inLiteral = true
 			case "listitem", "callout":
-				if listtype[len(listtype)-1] == VARIABLELIST {
+				if listtype[len(listtype)-1] == cVARIABLELIST {
 					enc.EncodeToken(varlistitem)
 				} else {
 					enc.EncodeToken(listitem)
@@ -380,8 +383,9 @@ func secondPass(r io.Reader, outdir string) error {
 					writeCharData = true
 				}
 			case "orderedlist":
-				listtype = append(listtype, ORDEREDLIST)
+				listtype = append(listtype, cORDEREDLIST)
 				enc.EncodeToken(orderedlist)
+			case "phrase":
 			case "programlisting", "screen":
 				newline()
 				enc.EncodeToken(programlisting)
@@ -411,7 +415,7 @@ func secondPass(r io.Reader, outdir string) error {
 				writeCharData = true
 			case "section":
 				saveid = attr(elt, "id")
-				headerlevel += 1
+				headerlevel++
 			case "simpara", "para":
 				if !inFormalPara && !omitPara {
 					enc.EncodeToken(p)
@@ -424,7 +428,7 @@ func secondPass(r io.Reader, outdir string) error {
 				writeCharData = true
 			case "variablelist":
 				enc.EncodeToken(variablelist)
-				listtype = append(listtype, VARIABLELIST)
+				listtype = append(listtype, cVARIABLELIST)
 			case "varlistentry":
 			case "xref":
 				anchor := a.Copy()
@@ -464,7 +468,7 @@ func secondPass(r io.Reader, outdir string) error {
 				t := filenameTitle[filename]
 				t.subsections = subsections
 				filenameTitle[filename] = t
-				headerlevel -= 1
+				headerlevel--
 				if writeHead {
 					enc.EncodeToken(xml.EndElement{Name: xml.Name{Local: "body"}})
 					enc.EncodeToken(xml.EndElement{Name: xml.Name{Local: "html", Space: "http://www.w3.org/1999/xhtml"}})
@@ -472,7 +476,7 @@ func secondPass(r io.Reader, outdir string) error {
 				enc.Flush()
 				wc.Close()
 			case "section":
-				headerlevel -= 1
+				headerlevel--
 				newline()
 			case "attribution":
 				writeCharData = false
@@ -498,7 +502,7 @@ func secondPass(r io.Reader, outdir string) error {
 				newline()
 			case "calloutlist":
 				enc.EncodeToken(calloutlist.End())
-				if listtype[len(listtype)-1] != CALLOUTLIST {
+				if listtype[len(listtype)-1] != cCALLOUTLIST {
 					panic("calloutlist not closed")
 				}
 				listtype = listtype[:len(listtype)-1]
@@ -526,7 +530,7 @@ func secondPass(r io.Reader, outdir string) error {
 			case "informaltable":
 				elementEnd(informaltable)
 			case "itemizedlist":
-				if listtype[len(listtype)-1] != ITEMIZEDLIST {
+				if listtype[len(listtype)-1] != cITEMIZEDLIST {
 					panic("itemizedlist not closed")
 				}
 				listtype = listtype[:len(listtype)-1]
@@ -540,7 +544,7 @@ func secondPass(r io.Reader, outdir string) error {
 				enc.EncodeToken(literal.End())
 				inLiteral = false
 			case "orderedlist":
-				if listtype[len(listtype)-1] != ORDEREDLIST {
+				if listtype[len(listtype)-1] != cORDEREDLIST {
 					panic("orderedlist not closed")
 				}
 
@@ -582,7 +586,7 @@ func secondPass(r io.Reader, outdir string) error {
 				writeString(str.String(), wc)
 				enc.EncodeToken(programlisting.End())
 				enc.EncodeToken(xml.CharData("\n\n"))
-				writeCharData = false
+				writeCharData = true
 			case "row":
 				elementEnd(row)
 			case "simpara", "para":
@@ -596,7 +600,7 @@ func secondPass(r io.Reader, outdir string) error {
 			case "subscript":
 				enc.EncodeToken(subscript.End())
 			case "listitem", "callout":
-				if listtype[len(listtype)-1] == VARIABLELIST {
+				if listtype[len(listtype)-1] == cVARIABLELIST {
 					enc.EncodeToken(varlistitem.End())
 				} else {
 					enc.EncodeToken(listitem.End())
@@ -632,7 +636,7 @@ func secondPass(r io.Reader, outdir string) error {
 					newline()
 				}
 			case "variablelist":
-				if listtype[len(listtype)-1] != VARIABLELIST {
+				if listtype[len(listtype)-1] != cVARIABLELIST {
 					panic("variablelist not closed")
 				}
 				enc.EncodeToken(variablelist.End())

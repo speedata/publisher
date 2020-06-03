@@ -109,6 +109,7 @@ endif::[]
 .Seite mit Fußzeile
 image::fusszeileseitentyp.png[width=100%]
 
+[[ch-seitentypen-newpage]]
 == NewPage
 
 Bei dem Befehl `<NewPage>` kann angegeben werden, welcher Seitentyp für die nächste Seite ausgewählt werden soll, auch wenn die Bedingung (`test`) bei `<Pagetype>` nicht _wahr_ ergibt.

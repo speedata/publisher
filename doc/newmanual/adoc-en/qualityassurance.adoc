@@ -91,7 +91,7 @@ qa/
     └── reference.pdf
 ----------------------------
 
-When you run sp compare qa all subdirectories are visited and checked. In the best case the output is:
+When you run `sp compare qa` all subdirectories are visited and checked. In the best case the output is:
 
 ----------------------------
 $ sp compare qa/

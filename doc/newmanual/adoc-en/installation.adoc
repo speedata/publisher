@@ -3,19 +3,18 @@
 = Installation instructions
 (((Installation)))
 
-TIP: Den speedata Publisher kann man in zwei Versionen herunterladen: `stable` und `development`.
-Beide Versionen sind problemlos zu benutzen.
-Eine umfangreiche Qualitätssicherung verhindert, dass sich unentdeckt Fehler einschleichen.
-In der Entwicklungsversion kann die Dokumentation dem aktuellen Stand hinterher sein.
-Zum Ausprobieren lädt man sich in der Regel die Development-Version herunter.
+TIP: The speedata Publisher can be downloaded in two versions: `stable` and `development`. Both versions are easy to use. Extensive quality assurance prevents errors from creeping in undetected. In the development version, the documentation may be behind the current status. To try it out, you can usually download the development version.
+
 
 There are three ways to install speedata Publisher:
 
-. **Binary packages (The recommended way)**: Go to our download page and download the latest package for your operating system. You can unzip the file anywhere in the filesystem you want. You don't need root/administrator rights to use the Publisher this way. There are extra installer packages for windows, if you don't want to set the PATH variable yourself.
+. **Binary packages (The recommended way)**: Go to our https://download.speedata.de/[download page] and download the latest package for your operating system. You can unzip the file anywhere in the filesystem you want. You don't need root/administrator rights to use the Publisher this way. There are extra installer packages for windows, if you don't want to set the `PATH` variable yourself.
 +
 On macOS 10.15 (Catalina) the securitiy feature »Gatekeeper« asks for special permissions to run the speedata Publisher. This happens when you download the software from a browser. You can use curl to circumvent this (on the command line):
 +
-    curl -O https://download.speedata.de/dl/speedata-publisher-darwin-amd64-latest.zip
+-------------------------------------------------------------------------------
+curl -O https://download.speedata.de/dl/speedata-publisher-darwin-amd64-latest.zip
+-------------------------------------------------------------------------------
 +
 This loads the ZIP file into the current directory.
 
@@ -44,7 +43,7 @@ Now you can run sudo apt update and apt get install speedata-publisher and have 
     rake build
     rake doc
 +
-If you are building speedata Publisher from source, you will also need to install LuaTeX manually. The recommended way is to download a binary from https://download.speedata.de/#extra and copy it into the bin/ directory of the Publisher. For example, to download and install LuajitTeX 1.10 on a Linux amd64 system, you could use the commands:
+If you are building speedata Publisher from source, you will also need to install [.nowrap]#LuaTeX# manually. The recommended way is to download a binary from https://download.speedata.de/#extra and copy it into the bin/ directory of the Publisher. For example, to download and install LuajitTeX 1.10 on a Linux amd64 system, you could use the commands:
 +
     wget https://download.speedata.de/files/extra/luatex_110-win-mac-linux.zip
     unzip luatex_110-win-mac-linux.zip

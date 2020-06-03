@@ -1,7 +1,7 @@
 [[ch-thumbindex]]
 = Thumb index
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 [[abb-25-marke]]
 .Left: thumb indexes in the phone book (that still exists!). Right: Lines are less obtrusive, yet practical..
@@ -9,7 +9,7 @@ image::25-griffmarken.jpg[width=100%]
 
 Thumb indexes are marks on the outer edge of a catalog or reference book that indicate the current chapter. A characteristic of the thumb index is that it extends beyond the right or left edge of the paper. This means that the cut edge of the paper is in the colored area, so that the color can be seen even when the paper is closed.
 
-There is nothing special about thumb indexes at first, they are either created with boxes or lines in a certain colour. An example of chapter numbers in a square box follows.
+There is nothing special about thumb indexes at first, they are either created with boxes or lines in a certain color. An example of chapter numbers in a square box follows.
 
 
 

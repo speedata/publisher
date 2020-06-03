@@ -2,15 +2,15 @@
 
 = Creation of a set of layout rules
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 == XML Editor
 
 By using standard XML (UTF-8), the layout rules can be edited with any text editor.
 
-The supplied XML schemas (RELAX NG and XML Schema (XSD)) make it easy to enter the layout ruleset. Such a schema can be thought of as a computer-readable instruction as to which commands may appear at which position in the layout. The instructions also contain information about the parameters that are permitted in each case. In addition, the scheme also provides help by briefly explaining each command and parameter. In short: if the editor can integrate this schema and also "understands" it, it is an input help that should not be underestimated. You reduce the number of errors and the input time significantly, editing the layout rules starts to be really fun (believe me).
+The supplied XML schemas (https://en.wikipedia.org/wiki/RELAX_NG[RELAX NG] and https://en.wikipedia.org/wiki/XML_Schema_(W3C)[XML Schema (XSD)]) make it easy to enter the layout ruleset. Such a schema can be thought of as a computer-readable instruction as to which commands may appear at which position in the layout. The instructions also contain information about the parameters that are permitted in each case. In addition, the scheme also provides help by briefly explaining each command and parameter. In short: if the editor can integrate this schema and also "understands" it, it is an input help that should not be underestimated. You reduce the number of errors and the input time significantly, editing the layout rules starts to be really fun (believe me).
 
-To include this schema, you need to use a suitable XML editor that can process RELAX NG or XML schemas, e.g:
+To include this schema, you need to use a suitable XML editor that can process RELAX NG or XML Schemas, e.g:
 
 -   https://www.oxygenxml.com[OxygenXML] (Mac, Windows, Linux)
 -   https://code.visualstudio.com[Visual Studio Code] (Mac, Windows, Linux, free)
@@ -20,7 +20,7 @@ The first two editors provide excellent cross-platform support for the schema.
 -   https://atom.io/[Atom] (Mac, Windows, Linux, free)
 -   https://www.altova.com/xml-editor/[XMLSpy] (Windows)
 -   https://www.xmlblueprint.com/[XML Blueprint] (Windows)
--   https://www.gnu.org/software/emacs/[GNU Emacs] mit http://www.thaiopensource.com/nxml-mode/[nxml-mode] (cross platform, free)
+-   https://www.gnu.org/software/emacs/[GNU Emacs] with http://www.thaiopensource.com/nxml-mode/[nxml-mode] (cross platform, free)
 -   http://www.jedit.org[jEdit] (Mac, Windows, Linux, free)
 
 
@@ -42,11 +42,11 @@ layoutschema-en.xsd
 
 for XSD, depending on the desired language of the documentation.
 
-For Visual Studio code, the required package is XML (Red Hat), installation instructions are available at https://blog.speedata.de/2019/09/11/xsd-schema/. For the Atom editor, the package is called language-speedata-publisher. The installation instructions can be found on the github page at https://github.com/speedata/atom-schema-speedata.
+For Visual Studio code, the required package is XML (Red Hat), installation instructions are available at https://blog.speedata.de/2019/09/11/xsd-schema/ (German only). For the Atom editor, the package is called `language-speedata-publisher`. The installation instructions can be found on the github page at https://github.com/speedata/atom-schema-speedata.
 
 ==  Namespace of the layout ruleset
 
-The XML namespace of the layout ruleset is urn:speedata.de:2009/publisher/s. The additional XPath functions are in the namespace urn:speedata:2009/publisher/functions/en. A layout set should therefore always have this frame:
+The XML namespace of the layout ruleset is `urn:speedata.de:2009/publisher/en`. The additional XPath functions are in the namespace `urn:speedata:2009/publisher/functions/en`. A layout set should therefore always have this frame:
 
 [source, xml]
 -------------------------------------------------------------------------------

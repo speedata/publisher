@@ -1,11 +1,13 @@
 [[ch-hotfolder,Hotfolder]]
 = Starting the Publisher via the Hotfolder
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
-The speedata Publisher can monitor a directory as a "watchdog" in order to start automatically when changes are made. Such a directory is also called hotfolder. You can specify rules about what happens when a certain file is written to this directory.
+The speedata Publisher can monitor a directory as a “watchdog” in order to start automatically when changes are made.
+Such a directory is also called hotfolder.
+You can specify rules about what happens when a certain file is written to this directory.
 
-The Publisher deletes the XML file from the directory as soon as it is processed.
+WARNING: The Publisher deletes the XML file from the directory as soon as it is processed.
 The hotfolder is configured in the same way as the Publisher using the publisher.cfg file.
 
 
@@ -23,7 +25,7 @@ The configuration consists of two parts: The hotfolder entry points to the (empt
 
 Several entries are separated by semicolon.
 
-In the example, if one of the files layout.xml or data.xml is written to the /Users/speedata/tmp/hotfolder directory, the runpublisher program is triggered. The runpublisher program could be a shell script that calls the Publisher:
+In the example, if one of the files `layout.xml` or `data.xml` is written to the `/Users/speedata/tmp/hotfolder` directory, the `runpublisher` program is triggered. The `runpublisher` program could be a shell script that calls the Publisher:
 
 [source, shell]
 -------------------------------------------------------------------------------
@@ -36,7 +38,7 @@ In the example, if one of the files layout.xml or data.xml is written to the /Us
 } > /tmp/publisher.log 2> /tmp/publisher.err
 -------------------------------------------------------------------------------
 
-Usually this is of course somewhat more extensive, for simple applications this is sufficient. The program configured in run() gets the full path to the file in the hotfolder as the only argument.
+Usually this is of course somewhat more extensive, for simple applications this is sufficient. The program configured in `run()` gets the full path to the file in the hotfolder as the only argument.
 
 It doesn't have to be just XML files to which the Publisher's watchdog reacts. They can be any files specified using the regular expression.
 

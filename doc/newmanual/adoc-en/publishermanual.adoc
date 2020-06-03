@@ -28,24 +28,24 @@ ifdef::backend-docbook5[]
 
 == In depth descriptions
 
--  <<ch-programmierung,Programmierung>>
--  <<ch-bildereinbinden,Bilder einbinden>>
--  <<ch-tables2,Tabellen>>
+-  <<ch-programming,Programming>>
+-  <<ch-images,Images>>
+-  <<ch-tables2,Tables>>
 -  <<ch-advancedtopics,Advanced topics>>
 -  <<ch-cookbook,Cookbook>>
 
 == Reference
 
 - <<ch-installation,Installation instructions>>
-- <<ch-dateinamen,Dateinamen im Publisher>>
+- <<ch-filenames,Filenames>>
 - <<app-defaults,speedata Publisher defaults>>
 - <<ch-commandline,Running the speedata publisher on the command line>>
 - <<ch-configuration,How to configure the speedata publisher>>
 - <<app-lengthsunits,Lenghts and units>>
 - <<ch-xpathfunctions,XPath- and layoutfunctions>>
-- <<ch-internevariablen,Interne Variablen>>
+- <<ch-internalvariables,Internal variables>>
 - <<ch-changelog,Changelog>>
-- <<app-glossar,Glossar>>
+- <<app-glossary,Glossary>>
 - <<ch-commandreference,Command reference>>
 
 
@@ -61,11 +61,9 @@ include::advancedtopics.adoc[]
 include::cookbook.adoc[]
 
 
-// // Anhang
-
 // :sectnums!:
 include::installation.adoc[]
-// include::filenames.adoc[]
+include::filenames.adoc[]
 include::defaults.adoc[]
 include::commandline.adoc[]
 include::configuration.adoc[]

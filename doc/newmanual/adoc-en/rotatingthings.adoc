@@ -1,7 +1,7 @@
 [[ch-rotation]]
 = Rotation of contents
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 Objects that are output with `<PlaceObject>` can be rotated.
 For this purpose, there is the attribute `rotate`, which expects an angle (in degrees), whereas positive values cause a clockwise rotation.
@@ -16,7 +16,7 @@ For this purpose, there is the attribute `rotate`, which expects an angle (in de
 When an object is rotated, you need to specify the point around which it should rotate.
 The default setting is the upper left corner.
 With the attributes `origin-x` (`left`, `center` and `right`) and `origin-y` (`top`, `center`, `bottom`) you can define the axis of rotation.
-In addition to these values, numbers from 0 to 100 are also possible, the upper left corner is 0.0 and the lower right corner is 100, 100.
+In addition to these values, numbers from 0 to 100 are also possible, the upper left corner is 0, 0 and the lower right corner is 100, 100.
 
 
 [[fig-rotateimages]]
@@ -34,8 +34,8 @@ The attribute `rotate` is available for both `<PlaceObject>` and `<Image>`. The 
 [discrete]
 == Rotate via transformation
 
-Using the command `<transformation>` (see section <<ch-output-transformation>> and in the appendix the <<cmd-transformation,command description>>) you can also rotate contents.
+Using the command `<Transformation>` (see section <<ch-outputtingobjects-transformation>> and in the appendix the <<cmd-transformation,command description>>) you can also rotate contents.
 The matrix has the form "cos θ sin θ -sin θ cos θ 0 0", for a rotation of 90 degrees thus "0 1 -1 0 0 0".
-This is shown in the section <<ch-imagebehindtext>>.
+This is shown in the section <<ch-tables-imagebehindtext>>.
 
 // EOF

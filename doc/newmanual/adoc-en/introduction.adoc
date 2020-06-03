@@ -1,7 +1,7 @@
 [[ch-introduction]]
 = Introduction
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 
 The speedata Publisher is software for creating PDF files fully automatically from XML data. The data can be product data, structured texts or other content, for example.
@@ -20,7 +20,7 @@ Many different documents can be created with the speedata Publisher. Classical u
 * Price lists
 * Data sheets
 
-and many other documents, where it is important to obtain a result that is reproducible, fast and reliable and also "beautiful".
+and many other documents, where it is important to obtain a result that is reproducible, fast and reliable and also “beautiful”.
 
 == Beautiful and fully automatic
 
@@ -28,18 +28,18 @@ The speedata Publisher is a non-interactive publishing software. This means ther
 
 == Where can I get the software and how is it run?
 
-The software can be downloaded for free (see chapter <<ch-installation,Installation>>) and is started via the console or shell. The command to start the Publisher is called sp. Therewith, all functionality can be used. Parameters can be specified via the command line or a configuration file.
+The software can be downloaded for free (see chapter <<ch-installation,Installation>>) and is started via the console or shell. The command to start the Publisher is called `sp`. Therewith, all functionality can be used. Parameters can be specified via the command line or a configuration file.
 
 [source,shell,subs="verbatim,quotes"]
 -------------------------------------------------------------------------------
 $ sp
 -------------------------------------------------------------------------------
 
-See the command line section for explanations on how to start the Publisher.
+See the <<ch-commandline,command line section>> for explanations on how to start the Publisher.
 
 == Examples
 
-There is a separate repository with examples on Github (https://github.com/speedata/examples). There you can find complete documents, which you can use to try out different functions.
+There is a separate repository with examples on Github (https://github.com/speedata/examples). There you can find complete documents, which you can use to try out different functionality.
 
 
 .Examples from the repository

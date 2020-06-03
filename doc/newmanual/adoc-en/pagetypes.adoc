@@ -1,7 +1,7 @@
 [[ch-pagetypes]]
 = Page types
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 Page types (or master pages, page templates) are used to define margins for pages, create page frames and perform actions when a page is created or written to the PDF file.
 Classically, there is a page template for left pages and for right pages.
@@ -26,9 +26,9 @@ Examples:
 
 
 What happens if there are multiple conditions that are _true_ at the same time?
-Page types are evaluated from 'bottom to top'.
+Page types are evaluated from “bottom to top”.
 This means that special page templates must be defined later than the general ones.
-The default template is defined first and has as condition 'true()`.
+The default template is defined first and has as condition `true()`.
 So it is evaluated last according to this logic and is always used if no other page type in the test returns _true_ (fallback).
 
 .Here, the page type for the first page after the page type for right pages must be defined, otherwise it would not be considered (sd:odd(1) returns true).
@@ -106,11 +106,12 @@ The following is an example of a page footer.
 .Page with footer
 image::fusszeileseitentyp.png[width=100%]
 
+[[ch-pagetypes-newpage]]
 == NewPage
 
-With the command `<NewPage>' you can specify which page type should be selected for the next page, even if the condition (`test') for `<Pagetype>' does not return _true_.
+With the command `<NewPage>` you can specify which page type should be selected for the next page, even if the condition (`test`) for `<Pagetype>' does not return _true_.
 
-The following example defines two page types, a template "Standard", which is always used and a template "Special", which is explicitly selected with `<NewPage>`.
+The following example defines two page types, a template “Standard”, which is always used and a template “Special”, which is explicitly selected with `<NewPage>`.
 
 
 [source, xml]
@@ -132,7 +133,7 @@ The following example defines two page types, a template "Standard", which is al
     <PlaceObject>
       <Textblock>
         <Paragraph>
-          <Value>Seite 1</Value>
+          <Value>Page 1</Value>
         </Paragraph>
       </Textblock>
     </PlaceObject>
@@ -140,7 +141,7 @@ The following example defines two page types, a template "Standard", which is al
     <PlaceObject>
       <Textblock>
         <Paragraph>
-          <Value>Seite 3</Value>
+          <Value>Page 3</Value>
         </Paragraph>
       </Textblock>
     </PlaceObject>
@@ -148,7 +149,7 @@ The following example defines two page types, a template "Standard", which is al
 </Layout>
 -------------------------------------------------------------------------------
 
-In the ((log file)) (`publisher.log') you can see which page types are selected:
+In the ((log file)) (`publisher.log`) you can see which page types are selected:
 
 --------
 ...

@@ -239,7 +239,7 @@ Der Befehl zum Einbinden der Bilder ist sehr mächtig und wird ausführlich in e
 
 [[ch-objekteausgeben-box]]
 == Rechteckige Flächen (`<Box>`)
-(((Boxen)))
+
 Rechteckige Flächen werden mit dem Befehl `<Box>` erzeugt.
 ifdef::backend-docbook99[]
 (Ausgabe siehe~<<abb-buntebox>>)

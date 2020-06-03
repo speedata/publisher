@@ -1,10 +1,12 @@
 :loopcounter: _loopcounter
-[[ch-programmierung]]
+[[ch-programming]]
 = Programming
+
+_This page was automatically translated. Stay tuned for a human translation..._
 
 Certainly the most important feature of the Publisher is the ability to implement very flexible layout requirements. This is mainly achieved by the built-in programming language in connection with the query options of the Publisher.
 
-The program execution runs simultaneously with the creation of the PDF. Therefore, the speedata Publisher can react very flexibly to the input data. Queries such as "Is there still enough space for this object?" are thus possible. This distinguishes the Publisher from other software for creating PDF files.
+TIP: The program execution runs simultaneously with the creation of the PDF. Therefore, the speedata Publisher can react very flexibly to the input data. Queries such as “Is there still enough space for this object?” are thus possible. This distinguishes the Publisher from other software for creating PDF files.
 Basic programming knowledge is required to use the full functionality of the Publisher. The programming language has been kept as simple as possible to maintain the readability of the layout.
 
 == Variables
@@ -41,7 +43,7 @@ All variables are globally visible. This means that a variable never becomes inv
 -------------------------------------------------------------------------------
 
 
-The global visibility is necessary because the program execution in the layout sometimes "jumps back and forth". At the end of the page the content of <AtPageShipout> is executed in the current page type. It must also be possible to access the variables there.
+The global visibility is necessary because the program execution in the layout sometimes “jumps back and forth”. At the end of the page the content of `<AtPageShipout>` is executed in the current page type. It must also be possible to access the variables there.
 
 In variables not only simple values can be stored, but also complex XML sections:
 
@@ -94,7 +96,7 @@ The one-time definition and reuse saves typing work and reduces the sources of e
 
 [[ch-copyof]]
 == Copy of
-<Copy-of> was already used upstairs. This copies the contents of the variable to the current position. The contents of the variables remain unchanged during copying.
+<Copy-of> was already used before. This copies the contents of the variable to the current position. The contents of the variables remain unchanged during copying.
 
 .Pseudo code. With Copy-of you insert the content of the variable at this position. The content can also be complex XML structures like paragraphs.
 -------------------------------------------------------------------------------
@@ -105,7 +107,7 @@ variable =
 
 This appends the new value to the previous ones.
 
-.An example of copy of in practice is the assembly of XML structures with which information can be stored. This example is described in detail in the cookbook (chapter 8), there in the section Creating directories (XML structure).
+.An example of copy of in practice is the assembly of XML structures with which information can be stored. This example is described in detail in the <<ch-cookbook>>, there in the section <<ch-directoriesxml>>.
 [source, xml]
 -------------------------------------------------------------------------------
 <SetVariable variable="chapter">
@@ -118,7 +120,7 @@ This appends the new value to the previous ones.
 -------------------------------------------------------------------------------
 
 == If-then-else
-In XPath you can perform simple if-then queries. The syntax for this is if (condition) then ... else ...
+In XPath you can perform simple if-then queries. The syntax for this is `if (condition) then ... else ...`:
 
 .In XPath simple if-then queries can be used.
 [source, xml]
@@ -126,12 +128,15 @@ In XPath you can perform simple if-then queries. The syntax for this is if (cond
 <PlaceObject>
   <Textblock>
     <Paragraph>
-      <Value select="if (sd:odd(sd:current-page())) then 'recto' else 'verso'"/>
+      <Value select="
+        if (sd:odd(sd:current-page()))
+           then 'recto' else 'verso'"/>
     </Paragraph>
   </Textblock>
 </PlaceObject>
 -------------------------------------------------------------------------------
 
+[[ch-programming-case]]
 == Case distinctions
 
 Case distinctions correspond to the construction switch/case from C-like programming languages. They are applied in the Publisher as follows:
@@ -153,10 +158,11 @@ Case distinctions correspond to the construction switch/case from C-like program
 </Switch>
 -------------------------------------------------------------------------------
 
-All commands within the first possible <Case> case are processed if the condition in test applies there. In test, an XPath expression is expected that returns true() or false(), like $i = 1, and if no case occurs, the contents of the optional <Otherwise> section will be executed.
+All commands within the first possible <Case> case are processed if the condition in test applies there. In test, an XPath expression is expected that returns `true()` or `false()`, like `$i = 1`, and if no case occurs, the contents of the optional `<Otherwise>` section will be executed.
 
+[[ch-programming-loops]]
 == Loops
-There are various loops in the speedata Publisher. The simple variant is <Loop>:
+There are various loops in the speedata Publisher. The simple variant is `<Loop>`:
 
 
 .This loop is run through 10 times.
@@ -167,7 +173,7 @@ There are various loops in the speedata Publisher. The simple variant is <Loop>:
 </Loop>
 -------------------------------------------------------------------------------
 
-This command executes the enclosed commands as many times as the expression in select results in. The loop counter is stored in the variable _loopcounter, unless otherwise set by variable="...".
+This command executes the enclosed commands as many times as the expression in select results in. The loop counter is stored in the variable {loopcounter}, unless otherwise set by `variable="..."`.
 
 Besides the simple loop there are also loops with conditions:
 
@@ -190,7 +196,7 @@ Besides the simple loop there are also loops with conditions:
 -------------------------------------------------------------------------------
 
 
-The expression `$i \&lt;= 4` must be read as `$i \<= 4`, because the opening angle bracket at this point in the XML is a syntax error. The loop above is executed as often as the content of the variable i is less than or equal to 4. Don't forget to increase the variable as well, otherwise an endless loop is created.
+The expression `$i &amp;lt;= 4` must be read as `$i \<= 4`, because the opening angle bracket at this point in the XML is a syntax error. The loop above is executed as often as the content of the variable i is less than or equal to 4. Don't forget to increase the variable as well, otherwise an endless loop is created.
 
 In addition to the while loop, there is also the until loop, which works in the same way:
 
@@ -233,7 +239,7 @@ Of course, a1 could also be specified directly as the variable name. In this exa
 ...
 -------------------------------------------------------------------------------
 
-The read access goes via sd:variable(...):
+The read access goes via `sd:variable(...)`:
 
 [source, xml]
 -------------------------------------------------------------------------------

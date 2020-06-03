@@ -1,13 +1,13 @@
 [[ch-groups]]
 = Groups (virtual objects)
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
-One of the most important features of the Publisher is the ability to place objects on a virtual surface (Group) in order to subsequently measure them or place them together.
-This virtual surface initially has no width and no height.
-The surface adapts to the dimensions of the content.
+One of the most important features of the Publisher is the ability to place objects on a virtual area (Group) in order to subsequently measure them or place them together.
+This virtual area initially has no width and no height.
+The area adapts to the dimensions of the content.
 This allows you to answer questions such as "Does the article (with picture and description) still fit on the page?" or "How much do you need to
-Reduce font size so that all the text fits on an A4 page?".
+reduce font size so that all the text fits on an A4 page?".
 
 It is also possible to provide this virtual area with its own page grid.
 This allows, for example, to position objects more finely than is possible with a coarser side grid of the main page.
@@ -47,19 +47,19 @@ There are a few things to consider when using the groups:
 -------------------------------------------------------------------------------
 
 
-The group takes up the minimum space.
+.The group takes up the minimum space.
 image::24-einfachegruppe.png[width=50%,scaledwidth=80%]
 
 
 If the group has been created but not yet placed, you can use various layout functions to measure the dimensions of the group: `sd:group-width('group name')` and `sd:group-height('group name')` output the width and height in whole grid cells.
-The `<Message>' command in the example above prints the number 6, even though the group has only the height of about 5.2 cells.
+The `<Message>` command in the example above prints the number 6, even though the group has only the height of about 5.2 cells.
 The Publisher always calculates with whole grid cells.
 
 
 This says it all about groups.
 The applications are very diverse.
 In principle, the question is always: how large are these objects?
-Do they still fit on the page? Do I have to insert a pagination here? And so on.
+Do they still fit on the page? Do I have to insert a page break here? And so on.
 It's best to play a little with the virtual areas to get familiar with them.
 Used correctly, they are a powerful tool.
 

@@ -9188,7 +9188,7 @@
     </remark>
     <example xml:lang="en">
       <listing><![CDATA[
-        <Record element="data">
+<Record element="data">
   <PlaceObject>
     <Textblock>
       <Paragraph>

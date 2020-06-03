@@ -1,7 +1,7 @@
 [[ch-savepages]]
 = Virtual pages
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 With the Virtual Pages you can create and discard pages, similar to the Virtual Areas (Groups).
 For this purpose there are the commands `<SavePages>` and `<InsertPages>` and the layout function `sd:count-saved-pages()`.
@@ -67,7 +67,7 @@ The layout file is somewhat more extensive and is explained in several stages:
     </PositioningArea>
   </Pagetype>
 -------------------------------------------------------------------------------
-<1> The head is back to normal. The `ignoreeol`(((ignoreeol)) option says that the line breaks in the data should be ignored.
+<1> The head is back to normal. The `ignoreeol` option says that the line breaks in the data should be ignored.
 <2> Then the font size for the header is set. The body text will use the default font size of 10/12 point.
 <3> If you set the grid height equal to the normal line spacing, you can easily achieve register-true typesetting. The page type defines two page areas (see section <<ch-positioningarea>>)
 <4> The header area covers the first 8 lines and is independent of the text area.
@@ -83,15 +83,15 @@ The variable 'i' then selects the default 1, 2 or 3.
 -------------------------------------------------------------------------------
   <Record element="Journal">
 
-    <!-- Variante 1: Das Bild geht über die ganze Breite -->
+    <!-- Variant 1: The picture goes over the whole width -->
     <SetVariable variable="imagewidth1" select="38"/>
     <SetVariable variable="imagecolumn1" select="1"/>
 
-    <!-- Variante 2: Das Bild fängt in der zweiten Spalte an -->
+    <!-- Variant 2: The picture starts in the second column -->
     <SetVariable variable="imagewidth2" select="24"/>
     <SetVariable variable="imagecolumn2" select="15"/>
 
-    <!-- Variante 3: Das Bild erscheint am rechten Rand -->
+    <!-- Variant 3: The picture appears on the right side -->
     <SetVariable variable="imagewidth3" select="10"/>
     <SetVariable variable="imagecolumn3" select="29"/>
 -------------------------------------------------------------------------------

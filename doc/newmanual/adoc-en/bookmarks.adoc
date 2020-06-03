@@ -1,11 +1,11 @@
 [[ch-bookmarks,Bookmarks]]
 = Bookmarks
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
-PDF Bookmarks can be used as an alternative table of contents for the PDF viewer (e.g. Adobe Reader). Almost all of these programs can display bookmarks. You can use them to jump directly to certain places in the document. A special feature of bookmarks is that they are arranged hierarchically (level). For each bookmark you can use the attribute open to determine whether it should be displayed "open" or "closed".
+PDF Bookmarks can be used as an alternative table of contents for the PDF viewer (e.g. Adobe Reader). Almost all of these programs can display bookmarks. You can use them to jump directly to certain places in the document. A special feature of bookmarks is that they are arranged hierarchically (level). For each bookmark you can use the attribute open to determine whether it should be displayed “open” or “closed”.
 
-Bookmarks are displayed in texts or on the level of <Record>.
+Bookmarks are displayed in texts or on the level of `<Record>`.
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -35,4 +35,5 @@ image::bookmarks.png[width=80%,scaledwidth=100%]
 
 Important: The layers must be consecutive. A Level 1 bookmark may only be followed by another Level 1 bookmark (for the next section) or one on Level 2 (subsection).
 
+A detailed example is shown in <<ch-directoriesxml>>.
 // EOF

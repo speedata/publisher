@@ -2,14 +2,14 @@
 [[ch-filenames,File names with speedata]]
 = File name in the Publisher
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 External files are referenced at various points in the layout, mainly in the images.
 These can have the following formats:
 
 * Absolute path in the file system: `/path/to/file.png`.
 * Relative path in the file system: `../directory/file.png`.
-* File within the search tree: `file.png`. Before starting, the current directory is searched recursively (see <<ch-organisation data>>).
+* File within the search tree: `file.png`. Before starting, the current directory is searched recursively (see <<ch-fileorganization>>).
 * Absolute paths under Windows like `c:\Users\...\file.png`.
 * file scheme: `file://c/Users/Joe%20User/file.png` or `file:///home/user/file.png`.
 * http-scheme: `http://placekitten.com/g/400/300` or https: `https://placekitten.com/g/400/300`.

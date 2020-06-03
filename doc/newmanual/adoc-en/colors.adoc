@@ -2,7 +2,7 @@
 [[ch-colors]]
 = Colors
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 
 The output of colors in speedata Publisher is very simple. Usually one specification for the object to be output is sufficient:
@@ -18,10 +18,10 @@ The output of colors in speedata Publisher is very simple. Usually one specifica
     </PlaceObject>
 -------------------------------------------------------------------------------
 
-.Not every colour combination is beautiful
+.Not every color combination is beautiful
 image::kreismitfarbe.png[width=20%,scaledwidth=50%]
 
-The colors can also be specified as hexadecimal values, as with HTML. The three or six digit value must be preceded by a double cross, for example: ...color="#FF1393".
+The colors can also be specified as hexadecimal or `rgb()` values (e.g. `rgb(255, 19, 147)`), as with HTML. The three or six digit value must be preceded by a double cross, for example: `color="{hexcolor}"`.
 
 If you want to output colors in a different color space (CMYK, gray, spot colors), they must be defined first:
 
@@ -52,7 +52,7 @@ If a separate spot color is defined that is not yet included in the Publisher, C
     c="56" m="7" y="98" k="21" />
 -------------------------------------------------------------------------------
 
-Here a color is defined which is addressed in the Publisher with the output commands under the name mycolor. In the PDF this colour is called speedatagreen and in the output it appears in a dark green.
+Here a color is defined which is addressed in the Publisher with the output commands under the name mycolor. In the PDF this color is called speedatagreen and in the output it appears in a dark green.
 
 .The new color appears in the PDF as a separate color channel
 image::speedatagruen.png[width=90%,scaledwidth=100%]

@@ -82,7 +82,7 @@ sudo snap install hugo
 rake doc
 -------------------------------------------------------------------------------
 +
-Falls der speedata Publisher aus den Quellen gebaut wird, muss noch LuaTeX hinzugefügt werden.
+Falls der speedata Publisher aus den Quellen gebaut wird, muss noch [.nowrap]#LuaTeX# hinzugefügt werden.
 Der vorgeschlagene Weg ist, unter <https://download.speedata.de/#extra> die Binärpakete zu laden und das passende Paket in das bin-Verzeichnis zu kopieren.
 Beispielsweise um LuajitTeX 1.10 auf einem Linux AMD64 System zu nutzen, kann man die folgenden Befehle ausführen:
 +

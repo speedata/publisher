@@ -76,28 +76,24 @@ img {
   font-style: normal;
   src: url("../sana-webfont/sansregular.eot");
   src: url("../sana-webfont/sansregular.eot?#iefix") format("embedded-opentype"), url("../sana-webfont/sansregular.woff2") format("woff2"), url("../sana-webfont/sansregular.woff") format("woff"), url("../sana-webfont/sansregular.ttf") format("truetype"); }
-
 @font-face {
   font-family: 'sana';
   font-weight: 700;
   font-style: normal;
   src: url("../sana-webfont/sansbold.eot");
   src: url("../sana-webfont/sansbold.eot?#iefix") format("embedded-opentype"), url("../sana-webfont/sansbold.woff2") format("woff2"), url("../sana-webfont/sansbold.woff") format("woff"), url("../sana-webfont/sansbold.ttf") format("truetype"); }
-
 @font-face {
   font-family: 'sana';
   font-weight: bold;
   font-style: italic;
   src: url("../sana-webfont/sansbolditalic.eot");
   src: url("../sana-webfont/sansbolditalic.eot?#iefix") format("embedded-opentype"), url("../sana-webfont/sansbolditalic.woff2") format("woff2"), url("../sana-webfont/sansbolditalic.woff") format("woff"), url("../sana-webfont/sansbolditalic.ttf") format("truetype"); }
-
 @font-face {
   font-family: 'sana';
   font-weight: normal;
   font-style: italic;
   src: url("../sana-webfont/sansitalic.eot");
   src: url("../sana-webfont/sansitalic.eot?#iefix") format("embedded-opentype"), url("../sana-webfont/sansitalic.woff2") format("woff2"), url("../sana-webfont/sansitalic.woff") format("woff"), url("../sana-webfont/sansitalic.ttf") format("truetype"); }
-
 /*Sana Sans Alt*/
 @font-face {
   font-family: 'sanaAlt';
@@ -105,38 +101,33 @@ img {
   font-style: normal;
   src: url("../sana-webfont/altregular.eot");
   src: url("../sana-webfont/altregular.eot?#iefix") format("embedded-opentype"), url("../sana-webfont/altregular.woff2") format("woff2"), url("../sana-webfont/altregular.woff") format("woff"), url("../sana-webfont/altregular.ttf") format("truetype"); }
-
 @font-face {
   font-family: 'sanaAlt';
   font-weight: bold;
   font-style: normal;
   src: url("../sana-webfont/altbold.eot");
   src: url("../sana-webfont/altbold.eot?#iefix") format("embedded-opentype"), url("../sana-webfont/altbold.woff2") format("woff2"), url("../sana-webfont/altbold.woff") format("woff"), url("../sana-webfont/altbold.ttf") format("truetype"); }
-
 @font-face {
   font-family: 'sanaAlt';
   font-weight: bold;
   font-style: italic;
   src: url("../sana-webfont/altbolditalic.eot");
   src: url("../sana-webfont/altbolditalic.eot?#iefix") format("embedded-opentype"), url("../sana-webfont/altbolditalic.woff2") format("woff2"), url("../sana-webfont/altbolditalic.woff") format("woff"), url("../sana-webfont/altbolditalic.ttf") format("truetype"); }
-
 @font-face {
   font-family: 'sanaAlt';
   font-weight: normal;
   font-style: italic;
   src: url("../sana-webfont/altitalic.eot");
   src: url("../sana-webfont/altitalic.eot?#iefix") format("embedded-opentype"), url("../sana-webfont/altitalic.woff2") format("woff2"), url("../sana-webfont/altitalic.woff") format("woff"), url("../sana-webfont/altitalic.ttf") format("truetype"); }
-
 @font-face {
   font-family: 'sanaAlt';
   font-weight: 500;
   font-style: normal;
   src: url("../sana-webfont/altmedium.eot");
   src: url("../sana-webfont/altmedium.eot?#iefix") format("embedded-opentype"), url("../sana-webfont/altmedium.woff2") format("woff2"), url("../sana-webfont/altmedium.woff") format("woff"), url("../sana-webfont/altmedium.ttf") format("truetype"); }
-
-.dialog, #main ol li span, #main p,
+.caption, #plans li, table td, table th, table thead th, #main p,
 #main ul,
-#main ol, table thead th, table td, table th, #plans li, .caption {
+#main ol, #main ol li span, .dialog {
   font-size: 17px;
   line-height: 1.5;
   font-family: "sana", sans-serif;
@@ -146,11 +137,11 @@ img {
   -ms-hyphens: auto;
   -webkit-hyphens: auto;
   hyphens: auto; }
-  .handbuch .dialog, .handbuch #main ol li span, #main ol li .handbuch span, .handbuch #main p, #main .handbuch p,
+  .handbuch .caption, .handbuch #plans li, #plans .handbuch li, .handbuch table td, table .handbuch td, .handbuch table th, table .handbuch th, .handbuch #main p, #main .handbuch p,
   .handbuch #main ul,
   #main .handbuch ul,
   .handbuch #main ol,
-  #main .handbuch ol, .handbuch table td, table .handbuch td, .handbuch table th, table .handbuch th, .handbuch #plans li, #plans .handbuch li, .handbuch .caption {
+  #main .handbuch ol, .handbuch #main ol li span, #main ol li .handbuch span, .handbuch .dialog {
     font-family: "Roboto", sans-serif;
     font-weight: 300; }
 
@@ -159,7 +150,7 @@ img {
   .handbuch #header #navi, #header .handbuch #navi {
     font-family: "Roboto", sans-serif; }
 
-.headline-4, h4, .headline-5, h5, .headline-6, h6, .headline-3, h3, .headline-2, h2, .headline-1, h1 {
+.headline-1, h1, .headline-2, h2, .headline-3, h3, .headline-4, h4, .headline-5, h5, .headline-6, h6 {
   position: relative;
   text-align: left;
   line-height: 1.2;
@@ -172,11 +163,11 @@ img {
   -webkit-hyphens: auto;
   hyphens: auto; }
   @media screen and (min-width: 600px) {
-    .website .headline-4, .website h4, .website .headline-5, .website h5, .website .headline-6, .website h6, .website .headline-3, .website h3, .website .headline-2, .website h2, .website .headline-1, .website h1 {
+    .website .headline-1, .website h1, .website .headline-2, .website h2, .website .headline-3, .website h3, .website .headline-4, .website h4, .website .headline-5, .website h5, .website .headline-6, .website h6 {
       text-align: center; } }
-  .handbuch .headline-4, .handbuch h4, .handbuch .headline-5, .handbuch h5, .handbuch .headline-6, .handbuch h6, .handbuch .headline-3, .handbuch h3, .handbuch .headline-2, .handbuch h2, .handbuch .headline-1, .handbuch h1 {
+  .handbuch .headline-1, .handbuch h1, .handbuch .headline-2, .handbuch h2, .handbuch .headline-3, .handbuch h3, .handbuch .headline-4, .handbuch h4, .handbuch .headline-5, .handbuch h5, .handbuch .headline-6, .handbuch h6 {
     font-family: "Roboto", sans-serif; }
-  .box .headline-4, .box h4, .box .headline-5, .box h5, .box .headline-6, .box h6, .box .headline-3, .box h3, .box .headline-2, .box h2, .box .headline-1, .box h1, .intro .headline-4, .intro h4, .intro .headline-5, .intro h5, .intro .headline-6, .intro h6, .intro .headline-3, .intro h3, .intro .headline-2, .intro h2, .intro .headline-1, .intro h1 {
+  .box .headline-1, .box h1, .box .headline-2, .box h2, .box .headline-3, .box h3, .box .headline-4, .box h4, .box .headline-5, .box h5, .box .headline-6, .box h6, .intro .headline-1, .intro h1, .intro .headline-2, .intro h2, .intro .headline-3, .intro h3, .intro .headline-4, .intro h4, .intro .headline-5, .intro h5, .intro .headline-6, .intro h6 {
     margin-top: 0px; }
 
 .headline-1, h1 {
@@ -222,7 +213,9 @@ pre, code {
 
 pre {
   font-weight: 300;
-  background-color: #f0f3f3; }
+  background-color: #f0f3f3;
+  margin-top: 10px;
+  margin-bottom: 10px; }
 
 .caption {
   font-size: 90%;
@@ -249,6 +242,7 @@ pre {
       .centeredParagraph .button {
         padding-left: 0 !important;
         padding-right: 0 !important; } }
+
 /* ASPECT RATIOS */
 @media screen and (min-width: 600px) {
   .aspectRatio_1_1 {
@@ -258,6 +252,7 @@ pre {
       content: "";
       display: block;
       padding-top: 100%; }
+
   .aspectRatio_16_9 {
     position: relative;
     display: block; }
@@ -265,6 +260,7 @@ pre {
       content: "";
       display: block;
       padding-top: 56.25%; }
+
   .aspectRatioContent {
     position: absolute;
     top: 0;
@@ -278,10 +274,10 @@ pre {
     text-align: center;
     vertical-align: middle;
     overflow: hidden; }
+
   .aspectRatioContent img {
     max-height: 101%;
     max-width: 101%; } }
-
 /*!
  * Bootstrap v3.3.0 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
@@ -819,26 +815,22 @@ pre {
 
 #plans .item {
   margin-bottom: 0; }
-
 @media screen and (max-width: 1023px) {
   #plans {
     padding: 0px 10px; }
     #plans .item {
       margin-top: 30px; } }
-
 #plans ul {
   margin: 0; }
-
 #plans h3, #plans p {
   margin: 0; }
-
 #plans li {
   padding: 5px;
   margin: 0;
   text-align: left;
   padding-left: 36px !important;
   text-indent: -16px !important; }
-  #plans li.list-group-item.panel-body.text-center, #plans .panel-body.text-center {
+  #plans li.list-group-item.panel-body.text-center {
     padding-left: 0 !important;
     text-indent: 0 !important; }
 
@@ -994,7 +986,7 @@ pre {
 
 .quoteblock > .title {
   margin-left: -1.5em;
-  margin-bottom: .75em; }
+  margin-bottom: 0.75em; }
 
 .quoteblock blockquote, .quoteblock blockquote p {
   color: rgba(0, 0, 0, 0.85);
@@ -1035,7 +1027,7 @@ pre {
   border-left: 3px solid rgba(0, 0, 0, 0.6); }
 
 .quoteblock .quoteblock blockquote {
-  padding: 0 0 0 .75em; }
+  padding: 0 0 0 0.75em; }
 
 .quoteblock .quoteblock blockquote:before {
   display: none; }
@@ -1408,6 +1400,7 @@ body {
       width: -o-calc(100% - 300px);
       width: calc(100% - 300px);
       margin: 0 0 0 300px !important; } }
+
 .wrapper {
   width: 95%;
   width: -moz-calc(100% - 20px);
@@ -1422,7 +1415,7 @@ body {
   .wrapper2 {
     padding: 0px 10px; } }
 
-.clearfix:after, .iconList .item:after, .fourColumn:after, .threeColumn:after, .twoColumn:after, ul.prevnext:after {
+.clearfix:after, ul.prevnext:after, .twoColumn:after, .threeColumn:after, .fourColumn:after, .iconList .item:after {
   content: "";
   display: table;
   clear: both; }
@@ -1435,11 +1428,13 @@ body {
   @media screen and (min-width: 1024px) {
     .hideDesktop {
       display: none; } }
+
 .hideMobile, #sidebar {
   display: none; }
   @media screen and (min-width: 1024px) {
     .hideMobile, #sidebar {
       display: block; } }
+
 .btn {
   font-weight: 500;
   white-space: normal;
@@ -1612,6 +1607,7 @@ table {
       #header #navi #searchmobil,
       #header #navi ul#navi2mobile {
         display: none; } }
+
 ul#breadcrumb li, ul.prevnext li {
   margin-bottom: 3px;
   margin-right: 3px;
@@ -1632,7 +1628,6 @@ ul.prevnext li.prev {
   float: left; }
   ul.prevnext li.prev:before {
     content: "\f053" !important; }
-
 ul.prevnext li.next {
   float: right; }
   ul.prevnext li.next:before {
@@ -1823,7 +1818,6 @@ ul.prevnext li.next {
 @media screen and (max-width: 479px) {
   .twoColumn.auto-clear .item:nth-child(1n+1) {
     clear: left; } }
-
 @media screen and (min-width: 480px) and (max-width: 767px) {
   .twoColumn.auto-clear .item:nth-child(1n+1) {
     clear: left; } }
@@ -1876,13 +1870,14 @@ ul.prevnext li.next {
     width: calc(50% - 15px); }
     .twoColumn .item:nth-child(2n + 0) {
       margin-right: 0; } }
+
     @media screen and (min-width: 1024px) {
       .twoColumn .item:nth-child(2n + 0) {
         margin-right: 0; } }
+
 @media screen and (max-width: 479px) {
   .threeColumn.auto-clear .item:nth-child(1n+1) {
     clear: left; } }
-
 @media screen and (min-width: 480px) and (max-width: 767px) {
   .threeColumn.auto-clear .item:nth-child(2n+1) {
     clear: left; } }
@@ -1935,13 +1930,14 @@ ul.prevnext li.next {
     width: calc(33.3333333333% - 20px); }
     .threeColumn .item:nth-child(3n + 0) {
       margin-right: 0; } }
+
     @media screen and (min-width: 1024px) {
       .threeColumn .item:nth-child(3n + 0) {
         margin-right: 0; } }
+
 @media screen and (max-width: 479px) {
   .fourColumn.auto-clear .item:nth-child(1n+1) {
     clear: left; } }
-
 @media screen and (min-width: 480px) and (max-width: 767px) {
   .fourColumn.auto-clear .item:nth-child(1n+1) {
     clear: left; } }
@@ -1994,9 +1990,11 @@ ul.prevnext li.next {
     width: calc(25% - 22.5px); }
     .fourColumn .item:nth-child(4n + 0) {
       margin-right: 0; } }
+
     @media screen and (min-width: 1024px) {
       .fourColumn .item:nth-child(4n + 0) {
         margin-right: 0; } }
+
 .twoTextColumn {
   -webkit-column-count: 2;
   -moz-column-count: 2;
@@ -2015,6 +2013,7 @@ ul.prevnext li.next {
       -webkit-column-count: 1;
       -moz-column-count: 1;
       column-count: 1; } }
+
 .threeTextColumn {
   -webkit-column-count: 3;
   -moz-column-count: 3;
@@ -2033,6 +2032,7 @@ ul.prevnext li.next {
       -webkit-column-count: 1;
       -moz-column-count: 1;
       column-count: 1; } }
+
 .noColumnBreak {
   -webkit-column-break-inside: avoid !important;
   page-break-inside: avoid !important;
@@ -2050,6 +2050,7 @@ ul.prevnext li.next {
     .masonry .item,
     .masonry .grid-sizer {
       width: 100%; } }
+
 .intro {
   background-color: #ffc800;
   border-radius: 30px;
@@ -2065,6 +2066,7 @@ ul.prevnext li.next {
       margin: 0px 10px; }
       .wrapper .intro {
         margin: 0; } }
+
 .kleingedrucktes {
   font-size: 15px !important; }
 
@@ -2080,14 +2082,12 @@ ul.prevnext li.next {
   margin: 0; }
   #tabs ul .ui-tabs-tab:first-child {
     margin-left: 20px; }
-
 #tabs .ui-tabs-anchor:hover {
   color: #000; }
 
 .box .mainIcon {
   text-align: center;
   margin-top: 20px; }
-
 @media screen and (max-width: 1023px) {
   .box.aspectRatio_1_1 {
     position: relative;
@@ -2108,11 +2108,10 @@ ul.prevnext li.next {
       display: block;
       vertical-align: top;
       overflow: inherit; } }
-
 @media screen and (max-width: 767px) {
   .box .aspectRatioContent {
     text-align: left; }
-  .box .headline-1, .box .headline-2, .box .headline-3, .box .headline-4, .box .headline-5, .box .headline-6, .box h1, .box h2, .box h3, .box h4, .box h5, .box h6 {
+  .box .headline-1, .box h1, .box .headline-2, .box h2, .box .headline-3, .box h3, .box .headline-4, .box h4, .box .headline-5, .box h5, .box .headline-6, .box h6 {
     text-align: left; }
   .box .mainIcon {
     display: block;
@@ -2165,6 +2164,7 @@ ul.prevnext li.next {
       bottom: 10px;
       left: 50px;
       font-size: 100%; } }
+
 #sprachwahl {
   position: absolute;
   bottom: 5px;
@@ -2180,6 +2180,7 @@ ul.prevnext li.next {
       bottom: 10px;
       left: 50px;
       font-size: 100%; } }
+
 .screen-reader-text {
   display: none; }
 
@@ -2288,11 +2289,10 @@ div.jx-image.jx-right div.jx-label {
     position: absolute;
     margin: 25px;
     text-align: center; }
-
 .iconList .item .text {
   margin: 0;
   width: 100%; }
-  .iconList .item .text .headline-1, .iconList .item .text .headline-2, .iconList .item .text .headline-3, .iconList .item .text .headline-4, .iconList .item .text .headline-5, .iconList .item .text .headline-6, .iconList .item .text h1, .iconList .item .text h2, .iconList .item .text h3, .iconList .item .text h4, .iconList .item .text h5, .iconList .item .text h6 {
+  .iconList .item .text .headline-1, .iconList .item .text h1, .iconList .item .text .headline-2, .iconList .item .text h2, .iconList .item .text .headline-3, .iconList .item .text h3, .iconList .item .text .headline-4, .iconList .item .text h4, .iconList .item .text .headline-5, .iconList .item .text h5, .iconList .item .text .headline-6, .iconList .item .text h6 {
     text-align: center; }
   @media screen and (min-width: 600px) {
     .iconList .item .text {
@@ -2303,8 +2303,9 @@ div.jx-image.jx-right div.jx-label {
       width: -webkit-calc(100% - 130px);
       width: -o-calc(100% - 130px);
       width: calc(100% - 130px); }
-      .iconList .item .text .headline-1, .iconList .item .text .headline-2, .iconList .item .text .headline-3, .iconList .item .text .headline-4, .iconList .item .text .headline-5, .iconList .item .text .headline-6, .iconList .item .text h1, .iconList .item .text h2, .iconList .item .text h3, .iconList .item .text h4, .iconList .item .text h5, .iconList .item .text h6 {
+      .iconList .item .text .headline-1, .iconList .item .text h1, .iconList .item .text .headline-2, .iconList .item .text h2, .iconList .item .text .headline-3, .iconList .item .text h3, .iconList .item .text .headline-4, .iconList .item .text h4, .iconList .item .text .headline-5, .iconList .item .text h5, .iconList .item .text .headline-6, .iconList .item .text h6 {
         text-align: left; } }
+
 body.blog * #content * h2 {
   text-align: left; }
 
@@ -2323,6 +2324,7 @@ body.blog * #content * h2 {
       #blogTitle a {
         color: #fff;
         text-decoration: none; } }
+
 .headerimage {
   margin-bottom: 35px; }
 
@@ -2428,6 +2430,7 @@ body.blog * #content * h2 {
     @media screen and (min-width: 1024px) {
       .spacer:after {
         display: none; } }
+
 .width50 {
   width: 50%; }
 

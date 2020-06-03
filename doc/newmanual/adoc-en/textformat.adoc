@@ -1,7 +1,7 @@
-[[ch-textformate]]
+[[ch-textformats]]
 = Text formats
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 Text formats are used to control the paragraphs. You can use them to control various things like text indents, text alignment, whore children and cobbler boys, pagination and more.
 
@@ -24,6 +24,7 @@ This will output all texts in justified text and with hyphenation, without inden
 Page breaks, for example after a heading, are undesirable. To prevent page breaks at these points, the text format property break-below can be switched off:
 
 .To prevent a page break from being inserted between the heading and the text, you need to adjust the text format of the heading.
+[source, xml]
 -------------------------------------------------------------------------------
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">

@@ -96,11 +96,13 @@ Mittels `halign` und `valign` kann man das Objekt auch rechts bzw. unten ausrich
 
 [source, xml]
 -------------------------------------------------------------------------------
-<PlaceObject column="{sd:number-of-columns()}" row="1" hreference="right">
+<PlaceObject column="{sd:number-of-columns()}" row="1"
+    hreference="right">
   <Image file="logo.pdf" width="2.5"/>
 </PlaceObject>
 
-<PlaceObject column="{sd:number-of-columns()}" row="4" hreference="right" halign="right">
+<PlaceObject column="{sd:number-of-columns()}" row="4"
+    hreference="right" halign="right">
   <Image file="logo.pdf" width="2.5"/>
 </PlaceObject>
 -------------------------------------------------------------------------------
@@ -133,7 +135,7 @@ ergibt
 endif::[]
 
 [[abb-hreferenz-halign]]
-.Durch die Angabe von hreference="right" wird die Spaltenangabe nicht für den linken Rand des Bildes benutzt, sondern für den rechten Rand. Wenn die Breite des Bildes nicht einem Vielfachen der Rasterbreite entspricht, wie in diesem Beispiel, muss zusätzlich mit halign="right" noch die Ausrichtung innerhalb der Rasterzelle korrigiert werden (rechtes Logo).
+.Durch die Angabe von `hreference="right"` wird die Spaltenangabe nicht für den linken Rand des Bildes benutzt, sondern für den rechten Rand. Wenn die Breite des Bildes nicht einem Vielfachen der Rasterbreite entspricht, wie in diesem Beispiel, muss zusätzlich mit `halign="right"` noch die Ausrichtung innerhalb der Rasterzelle korrigiert werden (rechtes Logo).
 image::hreferenz.png[width=100%]
 
 

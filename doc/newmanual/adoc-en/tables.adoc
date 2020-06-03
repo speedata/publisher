@@ -9,7 +9,7 @@
 [[ch-tables2]]
 = Tables
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 
 The table model used in the Publisher is basically the same as that of HTML.
@@ -35,7 +35,7 @@ The structure of a table looks like this:
 
 <Tr> stands for tablerow and <Td> for tabledata. Tables are always structured line by line. Each row must contain the same number of columns, otherwise the Publisher issues an error message. The number of rows, however, is arbitrary.
 
-The width of the table is determined by the contents. If stretch="no" (default) is specified for the <Table> command, the table will only take up the minimum width. If stretch="max" is specified, the full specified width (or the maximum available space) is used.
+The width of the table is determined by the contents. If `stretch="no"` (default) is specified for the `<Table>` command, the table will only take up the minimum width. If `stretch="max"` is specified, the full specified width (or the maximum available space) is used.
 
 .A complete layout for a table.
 [source, xml]
@@ -69,17 +69,18 @@ The width of the table is determined by the contents. If stretch="no" (default) 
 </Layout>
 -------------------------------------------------------------------------------
 
-.If stretch="no" (or omit the stretch attribute), the table is only as wide as necessary (above). If you specify stretch="max" for the table, the entire width specified is used. The default setting for the width is the page width (bottom).
+.If `stretch="no"` (or omit the stretch attribute), the table is only as wide as necessary (above). If you specify `stretch="max"` for the table, the entire width specified is used. The default setting for the width is the page width (bottom).
 image::tablestretchmaxno.png[width=100%]
 
-There are some settings that apply to the entire table, such as the font, inner spacing, line and column spacing. These are described in the appendix in the reference for the <Table> command.
+There are some settings that apply to the entire table, such as the font, inner spacing, line and column spacing. These are described in the appendix in the reference <<cmd-table,for the `<Table>` command>>.
 
+[[ch-tables2-cellsandrows]]
 == Table cells and table rows, lines in tables
 
 [discrete]
 === Table rows
 
-Statements in table rows (<Tr>) determine properties for all cells in that row, provided they are not overwritten in the cell itself. For example, align and valign specify the horizontal and vertical alignment of cells. That is, in the line
+Statements in table rows (`<Tr>`) determine properties for all cells in that row, provided they are not overwritten in the cell itself. For example, align and valign specify the horizontal and vertical alignment of cells. That is, in the line
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -97,18 +98,18 @@ You can also specify the background color for the individual columns in the line
 [discrete]
 === Cells
 
-The table cells (<Td>) have extensive formatting options. For example, the padding for each of the four sides can be defined individually. The cell border on each page can also differ in thickness and color. The cell border always lies within a table, with the exception that the borders "overlap" with adjacent cells and the border-collapse option activated in <Table>. The alignment of the table contents can be defined using the parameters valign (vertical) and align (horizontal).
+The table cells (`<Td>`) have extensive formatting options. For example, the padding for each of the four sides can be defined individually. The cell border on each page can also differ in thickness and color. The cell border always lies within a table, with the exception that the borders "overlap" with adjacent cells and the border-collapse option activated in <Table>. The alignment of the table contents can be defined using the parameters valign (vertical) and align (horizontal).
 
 Cells can have different contents, even mixed:
 
 * paragraphs (paragraph, block element)
-* Tables (table, block element)
-* Images (Image, Inline Element)
-* Barcodes (barcode, inline element)
-* Box (box, block element)
-* Multiple objects (overlay, see below, inline element)
-* Vertical distances (Vspace, see below, block element)
-* Frame (frame, block element)
+* tables (table, block element)
+* images (Image, Inline Element)
+* barcodes (barcode, inline element)
+* box (box, block element)
+* multiple objects (overlay, see below, inline element)
+* vertical distances (Vspace, see below, block element)
+* frame (frame, block element)
 
 Table cells contain horizontal objects (inline elements) and vertical objects (block elements). This refers to the arrangement within the table cell:
 
@@ -160,10 +161,10 @@ Unlike the text formats in texts (see the section on text formats), the default 
 [options="header"]
 |=======
 | Alignment for <Td> | Text | Format Description
-| left | __leftaligned | Left-aligned, flutter set right
-| right | __rightaligned | Right-aligned, flutter set left
-| center | __centered | Centered, flutter set on both sides
-| justify | __justified | Justified justified justified right and left
+| `left` | `__leftaligned` | Left-aligned, flutter set right
+| `right` | `__rightaligned` | Right-aligned, flutter set left
+| `center` | `__centered` | Centered, flutter set on both sides
+| `justify` | `__justified` | Justified justified justified right and left
 |=======
 
 This means that the two examples are identical:
@@ -184,11 +185,11 @@ This means that the two examples are identical:
 
 -------------------------------------------------------------------------------
 
-For example, by changing the text format __leftaligned, all table cells can be formatted with left alignment.
+For example, by changing the text format `__leftaligned`, all table cells can be formatted with left alignment.
 
 == Colspan and Rowspan
 
-The natural property of a table is that all cells in a row are the same height and all cells in a column are the same width. However, cells can extend over several columns and rows. The number of overlapping columns is specified with colspan, the default here is 1. The number of rows is specified with rowspan, the default here is 1 as well. Here, you must ensure that the sum of the columns in a row equals the total number. In the following example, the second row contains only two cells, but it extends over two columns. The third row even has only one cell definition, the rest of the row is occupied by the two cell wide image from the row above (rowspan="2").
+The natural property of a table is that all cells in a row are the same height and all cells in a column are the same width. However, cells can extend over several columns and rows. The number of overlapping columns is specified with `colspan`, the default here is 1. The number of rows is specified with `rowspan`, the default here is 1 as well. Here, you must ensure that the sum of the columns in a row equals the total number. In the following example, the second row contains only two cells, but it extends over two columns. The third row even has only one cell definition, the rest of the row is occupied by the two cell wide image from the row above (`rowspan="2"`).
 
 .A somewhat more complex example. The background color of the image is determined by the second line.
 [source, xml,indent=0]
@@ -228,6 +229,7 @@ The natural property of a table is that all cells in a row are the same height a
 .Effect of rowspan and colspan
 image::tab-colspan-rowspan.png[width=50%,scaledwidth=100%]
 
+[[ch-tables-columnwidths]]
 == Specifying the column widths
 
 In the previous examples the widths of the cells are automatically determined by the content. You can also specify fixed column widths. The command for this is called Columns and is listed directly as the first command within Table:
@@ -284,7 +286,7 @@ The starting point is a simple table:
 </Layout>
 -------------------------------------------------------------------------------
 
-The header line is defined in the table as follows (as child element of the element <Table>):
+The header line is defined in the table as follows (as child element of the element `<Table>`):
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -312,9 +314,9 @@ You can define the header for the first page separately by specifying the page a
 </Tablehead>
 -------------------------------------------------------------------------------
 <1> Table header for all pages
-<2> If page="first" is defined as here, the above definition (1) applies to all pages, but not to the first page, because here (2) applies.
+<2> If `page="first"` is defined as here, the above definition (1) applies to all pages, but not to the first page, because here (2) applies.
 
-With this variant you can not only define the (repeating) table header, but also the table footer. This works in the same way as <Tablehead>, except that page selection is allowed instead of first last.
+With this variant you can not only define the (repeating) table header, but also the table footer. This works in the same way as `<Tablehead>`, except that page selection is allowed instead of first last.
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -341,7 +343,7 @@ With this variant you can not only define the (repeating) table header, but also
 Table headers and footers do not have to consist of only one line. They can also contain lines and multiple lines.
 
 == Headers and footers (dynamic)
-In the previous section, the table header is created using <Tablehead> (and its counterpart <Tablefoot>). In contrast, this section shows how to create a dynamic table header. Both variants can be combined.
+In the previous section, the table header is created using `<Tablehead>` (and its counterpart `<Tablefoot>`). In contrast, this section shows how to create a dynamic table header. Both variants can be combined.
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -354,12 +356,12 @@ In the previous section, the table header is created using <Tablehead> (and its 
 </Tr>
 -------------------------------------------------------------------------------
 
-The "magic" is in sethead="yes" in the table row. This automatically repeats this line at the top of the next page, just below any static table header. This is very suitable for subheadings or sections in tables.
+The “magic” is in `sethead="yes"` in the table row. This automatically repeats this line at the top of the next page, just below any static table header. This is very suitable for subheadings or sections in tables.
 
 [discrete]
 == Example
 
-A somewhat constructed example. There are two sections in the table with two and eight lines. The file data.xml:
+A somewhat constructed example. There are two sections in the table with two and eight lines. The file `data.xml`:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -407,8 +409,11 @@ The layout outputs a table, for each section the heading is displayed as a line 
 .The sections are marked with sethead="yes" and are repeated in the table header.
 image::03-dyntabellenkopf.png[width=80%,scaledwidth=100%]
 
+[[ch-tab-runningsum]]
 == Headers and footers with running sum
-Sometimes you may want to display a subtotal or carryover in headers or footers of tables. The problem here is that this is dynamic information, which is determined by the space available. If the page is shorter, the sum is different. This means that you cannot define the number in advance as a header or footer.
+
+Sometimes you may want to display a subtotal or carryover in headers or footers of tables.
+The problem here is that this is dynamic information, which is determined by the space available. If the page is shorter, the sum is different. This means that you cannot define the number in advance as a header or footer.
 
 Instead, there is the possibility to store data in a table row:
 
@@ -417,7 +422,7 @@ Instead, there is the possibility to store data in a table row:
 <Tr data="..." >
 -------------------------------------------------------------------------------
 
-This data can later be retrieved in headers and footers with the special variable $_last_tr_data. The variable is overwritten each time data="..." is used. To illustrate this, there is a complete set of layout rules that uses this mechanism:
+This data can later be retrieved in headers and footers with the special variable `{lasttrdata}`. The variable is overwritten each time `data="..."` is used. To illustrate this, there is a complete set of layout rules that uses this mechanism:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -462,9 +467,9 @@ This data can later be retrieved in headers and footers with the special variabl
 .The calculated subtotals
 image::22-runningsum.png[width=70%,scaledwidth=100%]
 
-Here first the header line is defined, then 100 lines are generated (<Loop select="100">), the loop number is stored and then the calculated value is stored in each line with data="$sum", which is later output in the header line.
+Here first the header line is defined, then 100 lines are generated (`<Loop select="100">`), the loop number is stored and then the calculated value is stored in each line with `data="$sum"`, which is later output in the header line.
 
-TIP: The width of the dynamic header and footer is calculated without $_last_tr_data. This can lead to problems if the newly calculated header or footer has a different format.
+TIP: The width of the dynamic header and footer is calculated without `{lasttrdata}`. This can lead to problems if the newly calculated header or footer has a different format.
 
 == Assembling tables
 
@@ -478,7 +483,7 @@ Sometimes tables are not created in one piece. A common pattern when creating ta
 </SetVariable>
 -------------------------------------------------------------------------------
 
-Where $this line is a table line with start and end tag <Tr> . </Tr> and $table lines are empty or contain several lines of the same form.
+Where `$this` line is a table line with start and end tag `<Tr> .. </Tr>` and `$table` lines are empty or contain several lines of the same form.
 
 The check now takes place by creating the table in a group and then checking the height of the group, for example:
 
@@ -489,7 +494,7 @@ The check now takes place by creating the table in a group and then checking the
       <Contents>
         <PlaceObject>
           <Table width="...">
-            <Copy-of select="$tabellenzeilenneu"/>
+            <Copy-of select="$tablerowsnew"/>
           </Table>
         </PlaceObject>
       </Contents>
@@ -500,29 +505,29 @@ The check now takes place by creating the table in a group and then checking the
         <!-- too large, print table without the last row -->
         <PlaceObject>
           <Table width="...">
-            <Copy-of select="$tabellenzeilen"/>
+            <Copy-of select="$tablerows"/>
           </Table>
         </PlaceObject>
         <!-- last line is now as carry forward for the next table -->
-        <SetVariable variable="tabellenzeilen">
-          <Copy-of select="$diesezeile"/>
+        <SetVariable variable="tablerows">
+          <Copy-of select="$thisrow"/>
         </SetVariable>
       </Case>
       <Otherwise>
         <!-- fits, output table, set variable -->
         <PlaceObject groupname="tbl"/>
-        <SetVariable variable="tabellenzeilen">
-            <Copy-of select="$tabellenzeilenneu"/>
+        <SetVariable variable="tablerows">
+            <Copy-of select="$tablerowsnew"/>
         </SetVariable>
       </Otherwise>
     </Switch>
 -------------------------------------------------------------------------------
 
 
-A more detailed description can be found in the section Layout Optimization Using Groups.
+A more detailed description can be found in the section <<ch-layoutoptimizationusinggroups>>.
 
 == Alternating line colors
-Changing row colors are often used in tables with many columns to help the eye read the table. The row color can be specified by backgroundcolor="..." at <Tr>.
+Changing row colors are often used in tables with many columns to help the eye read the table. The row color can be specified by `backgroundcolor="..."` at `<Tr>`.
 
 .Changing line colors. The first argument of the function sd:alternating() is an identifier to distinguish different alternations in a document.
 [source, xml, indent=0]
@@ -545,9 +550,9 @@ Changing row colors are often used in tables with many columns to help the eye r
 .Alternating background colors
 image::tab-wechselnde-zeilenfarben.png[width=20%,scaledwidth=50%]
 
-The trick here is to use the layout function sd:alternating(), which switches between arguments. Since the attribute backgroundcolor expects a fixed value, the curly brackets must be used to jump to "XPath mode".
+The trick here is to use the layout function `sd:alternating()`, which switches between arguments. Since the attribute backgroundcolor expects a fixed value, the curly brackets must be used to jump to “XPath mode”.
 
-After the table has been output, there is no guarantee that the next call to sd:alternating() with the identification tab will start with the first value again. This depends on which value was used last. To ensure that the table starts with the first value again, you can use the attribute eval="..." for Table:
+After the table has been output, there is no guarantee that the next call to `sd:alternating()` with the identification tab will start with the first value again. This depends on which value was used last. To ensure that the table starts with the first value again, you can use the attribute `eval="..."` for `<Table>`:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -582,10 +587,10 @@ With the attributes background-... you can put text in the background.
 .Text in the background of a cell
 image::21-bgtext.png[width=50%,scaledwidth=100%]
 
-[[ch-imagebehindtext]]
+[[ch-tables-imagebehindtext]]
 === Image behind the text
 
-With the command <Overlay> you can overlay elements. In table cells, this can be used to overlay text (like references to the author of an image) over an image. But you can also put whole texts on top of each other. Whether it makes sense or not, may be put there.
+With the command `<Overlay>` you can overlay elements. In table cells, this can be used to overlay text (like references to the author of an image) over an image. But you can also put whole texts on top of each other. Whether it makes sense or not, may be put there.
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -629,7 +634,7 @@ Usually, a table uses first the first positioning frame of an area, then the nex
 
 image::ch-tab-tables-notbalanced.png[width=50%,scaledwidth=100%]
 
-If you now switch to <Table balance="yes">, the table is output as follows:
+If you now switch to `<Table balance="yes">`, the table is output as follows:
 
 image::ch-tab-tables-balanced.png[width=50%,scaledwidth=100%]
 
@@ -664,11 +669,14 @@ For this to work, the table must be output in a placement area, not on a page. T
 </Layout>
 -------------------------------------------------------------------------------
 
-.With balance="no" as in the example there is a full first column:
+With `balance="no"` as in the example there is a full first column:
+
 image::ch-tab-balanceno.png[width=50%,scaledwidth=100%]
 
 
-.If, on the other hand, you set balance="yes", the result is
+
+If, on the other hand, you set `balance="yes"`, the result is
+
 image::ch-tab-balanceyes.png[width=50%,scaledwidth=100%]
 
 
@@ -676,7 +684,8 @@ The specification is always observed on the last page of a table, since the prev
 
 == Page change in tables
 
-If a table is larger than the available space on the page, the table is continued on the next page or in the next placement frame. The <TableNewPage> command is used to force such a page change.
+If a table is larger than the available space on the page, the table is continued on the next page or in the next placement frame.
+<<cmd-tablenewpage,The command `<TableNewPage>`>> is used to force such a page change.
 
 
 // EOF

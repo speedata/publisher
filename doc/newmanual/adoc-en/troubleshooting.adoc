@@ -1,7 +1,7 @@
 [[ch-troubleshooting]]
 = Troubleshooting / Debugging
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 The output does not always work as it should. Sometimes objects are too wide, sometimes the wrong text format is used and sometimes the table does not look as it should. In order to prevent troubleshooting from becoming too difficult, the speedata Publisher provides various aids. For this there is the command <Trace>, which offers different switches. These are (by default):
 

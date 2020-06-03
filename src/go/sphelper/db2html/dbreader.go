@@ -22,8 +22,8 @@ import (
 )
 
 var (
-	repl       = strings.NewReplacer("&lt;", "<", "&gt;", ">")
-	sanitizer  = strings.NewReplacer("<", "&lt;", ">", "&gt;")
+	sanitizer  = strings.NewReplacer("<", "&lt;", "LuaTeX", `LuaT<span class="TeX-e">e</span><span class="TeX-x">X</span>`)
+	escaper    = strings.NewReplacer("&", "&amp;", "<", "&lt;")
 	sectH      = strings.NewReplacer("sect", "h")
 	coReplace  *regexp.Regexp
 	assetsTrim *regexp.Regexp
@@ -65,9 +65,7 @@ func formatSource(source, lang string) (string, error) {
 	}
 
 	formatter := html.New(html.WithClasses())
-	// err := formatter.WriteCSS(os.Stdout, style)
 	var str strings.Builder
-	source = repl.Replace(source)
 	iterator, err := xmllexer.Tokenise(nil, source)
 	if err != nil {
 		return "", err
@@ -89,15 +87,6 @@ func attr(s xml.StartElement, attrname string) string {
 func sanitizeInput(input string) string {
 	return sanitizer.Replace(input)
 }
-
-type toutputMode int
-
-const (
-	outputDiscard toutputMode = iota
-	outputSave
-	outputWrite
-	outputPause
-)
 
 type section struct {
 	Sectionlevel int
@@ -184,13 +173,9 @@ func (d *DocBook) getIds() error {
 	sectionlevel := 0
 	var sectionChain []*section
 	var err error
-	var outputMode toutputMode
 	var chardata strings.Builder
 	oStartRecording := func() {
-		if outputMode != outputPause {
-			chardata.Reset()
-		}
-		outputMode = outputSave
+		chardata.Reset()
 	}
 
 	dec := xml.NewDecoder(d.r)
@@ -278,16 +263,9 @@ gatherid:
 				oStartRecording()
 			}
 		case xml.CharData:
-			switch outputMode {
-			case outputDiscard:
-				// ignore
-			case outputWrite:
-				panic("outputWrite not allowed in the first phase.")
-			case outputSave:
-				_, err = chardata.WriteString(sanitizeInput(string(elt.Copy())))
-				if err != nil {
-					panic(err)
-				}
+			_, err = chardata.WriteString(sanitizeInput(string(elt.Copy())))
+			if err != nil {
+				panic(err)
 			}
 		case xml.EndElement:
 			switch elt.Name.Local {
@@ -381,28 +359,32 @@ func (d *DocBook) collectContents() error {
 	var contentwidth string
 	var brideheadLevel string
 	var calloutcounter int
-	var writeCalloutItem bool
 	var inFigure bool
 	var inThead bool
+	var verbatim bool
+	var literal bool
 
 	var curpage *section
 	var attribution string
-	var simpara []string
+	var phraserole string
 	var sectionid string
 	var headinglevel int
 	var titlecounter int
-	var collectSimPara bool
 	var omitP bool
 	var programlistingLanguage string
 	var chardata strings.Builder
-	var outputMode toutputMode
-	oStartRecording := func() {
-		if outputMode != outputPause {
-			chardata.Reset()
-		}
-		outputMode = outputSave
+	var curOutput io.StringWriter
+	switchOutputGetString := func() string {
+		curChardata := chardata.String()
+		curOutput = &curpage.Contents
+		chardata.Reset()
+		return curChardata
 	}
-
+	oStartRecording := func() {
+		chardata.Reset()
+		curOutput = &chardata
+	}
+	oStartRecording()
 	dec := xml.NewDecoder(d.r)
 getContents:
 	for {
@@ -422,14 +404,15 @@ getContents:
 			case "attribution":
 				oStartRecording()
 			case "blockquote":
-				collectSimPara = true
+				curOutput.WriteString(`<div class="quoteblock"><blockquote>`)
+				omitP = true
 			case "bridgehead":
 				brideheadLevel = sectH.Replace(attr(elt, "renderas"))
 				oStartRecording()
 			case "callout":
 				calloutcounter++
-				curpage.writeString("\n")
-				writeCalloutItem = true
+				omitP = true
+				curOutput.WriteString(`<p>` + string('①'+calloutcounter-1) + ` `)
 			case "calloutlist":
 				calloutcounter = 0
 			case "co":
@@ -439,22 +422,20 @@ getContents:
 				if err != nil {
 					return err
 				}
-				chardata.WriteRune(rune('①' + conum - 1))
+				curOutput.WriteString(string('①' + conum - 1))
 			case "emphasis":
 				class := ""
 				if attr(elt, "role") == "strong" {
 					class = ` class="strong"`
 				}
-				chardata.WriteString(fmt.Sprintf(`<em%s>`, class))
+				curOutput.WriteString(fmt.Sprintf(`<em%s>`, class))
 			case "entry":
-				oStartRecording()
-				collectSimPara = true
-				simpara = simpara[:0]
 				if inThead {
 					curpage.writeString(`<th>`)
 				} else {
 					curpage.writeString(`<td>`)
 				}
+				omitP = true
 			case "figure":
 				figureid = attr(elt, "id")
 				inFigure = true
@@ -464,16 +445,16 @@ getContents:
 					thisid = fmt.Sprintf(" id=%q", id)
 				}
 				omitP = true
-				curpage.writeString(fmt.Sprintf(`<div%s class="imageblock"><div class="content">`, thisid))
+				curOutput.WriteString(fmt.Sprintf(`<div%s class="imageblock"><div class="content">`, thisid))
 				inFigure = true
 			case "info":
 				dec.Skip()
 			case "informaltable":
-				curpage.writeString("\n")
-				curpage.writeString(`<table>`)
+				curOutput.WriteString("\n")
+				curOutput.WriteString(`<table>`)
 			case "itemizedlist":
 				listlevel = append(listlevel, lItemize)
-				curpage.writeString("\n<ul>")
+				curOutput.WriteString("\n<ul>")
 				omitP = true
 			case "chapter", "appendix", "preface":
 				id := attr(elt, "id")
@@ -481,6 +462,7 @@ getContents:
 				if cp, ok := idIndex[id]; ok {
 					curpage = cp
 					titlecounter = 0
+					switchOutputGetString()
 				}
 				if attr(elt, "role") == "split" {
 					headinglevel = 0
@@ -508,51 +490,54 @@ getContents:
 				linkend := attr(elt, "linkend")
 				if linkend != "" {
 					page := d.idfilemapping[linkend]
-					page = "/" + d.Lang + "/" + page
+					page = "/" + d.Lang + "/" + page + "#" + linkend
 
 					href = d.linkToPage(page, *curpage)
 				} else {
 					href = attr(elt, "href")
 				}
 
-				chardata.WriteString(fmt.Sprintf(`<a href="%s">`, href))
+				curOutput.WriteString(fmt.Sprintf(`<a href="%s">`, href))
 			case "literal":
-				if outputMode == outputSave {
-					chardata.WriteString(`<code>`)
-				} else {
-					curpage.writeString(`<code>`)
-				}
+				verbatim = true
+				literal = true
+				curOutput.WriteString(`<code>`)
+				// oStartRecording()
 			case "listitem":
-				curpage.writeString("\n")
+				curOutput.WriteString("\n")
 				curlist := listlevel[len(listlevel)-1]
 				switch curlist {
 				case lVarlist:
-					collectSimPara = false
-					curpage.writeString(`<dd>`)
-				case lItemize:
-					curpage.writeString(`<li>`)
+					curOutput.WriteString(`<dd>`)
+				case lItemize, lEnumerate:
+					curOutput.WriteString(`<li>`)
 				}
 			case "mediaobject":
 				// ignore
 			case "orderedlist":
 				listlevel = append(listlevel, lEnumerate)
-				curpage.writeString("\n<ol>")
+				curOutput.WriteString("\n<ol>")
 				omitP = true
 			case "phrase":
-				oStartRecording()
+				if phraserole = attr(elt, "role"); phraserole != "" {
+					curOutput.WriteString(fmt.Sprintf(`<span class="%s">`, phraserole))
+				} else {
+					oStartRecording()
+				}
+
 			case "programlisting":
+				verbatim = true
 				programlistingLanguage = attr(elt, "language")
 				// we need to pass the listing through the formatter
 				oStartRecording()
+			case "quote":
+				curOutput.WriteString(`“`)
 			case "row":
-				curpage.writeString("\n")
-				curpage.writeString(`<tr>`)
+				curOutput.WriteString("\n")
+				curOutput.WriteString(`<tr>`)
 			case "para", "simpara":
-				oStartRecording()
-				if writeCalloutItem {
-					chardata.WriteString(string('①' + calloutcounter - 1))
-					chardata.WriteString("\n")
-					writeCalloutItem = false
+				if !omitP {
+					curOutput.WriteString(`<p>`)
 				}
 			case "section":
 				id := attr(elt, "id")
@@ -563,40 +548,40 @@ getContents:
 				}
 				headinglevel++
 			case "subscript":
-				chardata.WriteString(`<sub>`)
+				curOutput.WriteString(`<sub>`)
 			case "superscript":
-				chardata.WriteString(`<sup>`)
+				curOutput.WriteString(`<sup>`)
 			case "thead":
 				inThead = true
-				curpage.writeString(`<thead>`)
+				curOutput.WriteString(`<thead>`)
 			case "tbody":
 				inThead = false
-				curpage.writeString(`<tbody>`)
+				curOutput.WriteString(`<tbody>`)
 			case "term":
-				curpage.writeString("\n")
-				curpage.writeString(`<dt>`)
-				outputMode = outputWrite
+				curOutput.WriteString("\n")
+				curOutput.WriteString(`<dt>`)
 			case "tip", "warning":
-				collectSimPara = true
-				curpage.writeString(`<div class="admonitionblock tip">
+				curOutput.WriteString(`<div class="admonitionblock tip">
 				<table>
 				<tbody>
 					<tr><td class="icon"><i class="fa fa-2x fa-lightbulb-o" aria-hidden="true"></i></td>
 				<td class="content">`)
+				omitP = true
 			case "screen", "literallayout":
-				curpage.writeString("\n")
-				curpage.writeString(`<pre><code>`)
-				outputMode = outputWrite
+				verbatim = true
+				curOutput.WriteString("\n")
+				curOutput.WriteString(`<pre><code>`)
+				oStartRecording()
 			case "title":
 				oStartRecording()
 			case "variablelist":
-				curpage.writeString("\n")
-				curpage.writeString(`<dl>`)
+				curOutput.WriteString("\n")
+				curOutput.WriteString(`<dl>`)
 				listlevel = append(listlevel, lVarlist)
 			case "xref":
 				linkend := attr(elt, "linkend")
 				if page, ok := idIndex[linkend]; ok {
-					chardata.WriteString(fmt.Sprintf(`<a href="%s">%s</a>`, d.linkToPage(page.Link, *curpage), page.Title))
+					curOutput.WriteString(fmt.Sprintf(`<a href="%s">%s</a>`, d.linkToPage(page.Link, *curpage), page.Title))
 				} else {
 					if fn, ok := d.idfilemapping[linkend]; ok {
 						if page, ok := filenamePagemap[fn]; ok {
@@ -604,7 +589,7 @@ getContents:
 							if t, ok := d.idTitlemapping[linkend]; ok {
 								title = t
 							}
-							chardata.WriteString(fmt.Sprintf(`<a href="%s#%s">%s</a>`, d.linkToPage(page.Link, *curpage), linkend, title))
+							curOutput.WriteString(fmt.Sprintf(`<a href="%s#%s">%s</a>`, d.linkToPage(page.Link, *curpage), linkend, title))
 						} else {
 							panic("could not get filename mapping for " + fn)
 						}
@@ -617,40 +602,39 @@ getContents:
 				fmt.Println(elt.Name.Local)
 			}
 		case xml.CharData:
-			switch outputMode {
-			case outputDiscard:
-				// ignore
-			case outputWrite:
-				curpage.writeString(sanitizeInput(string(elt.Copy())))
-			case outputSave:
-				_, err = chardata.WriteString(sanitizeInput(string(elt.Copy())))
-				if err != nil {
-					panic(err)
-				}
+			input := string(elt.Copy())
+			if !verbatim {
+				input = sanitizeInput(input)
 			}
+			if literal {
+				input = escaper.Replace(input)
+			}
+			curOutput.WriteString(input)
 		case xml.EndElement:
 			switch elt.Name.Local {
 			case "attribution":
-				attribution = chardata.String()
+				attribution = switchOutputGetString()
 			case "blockquote":
-				curpage.writeString(fmt.Sprintf(`<div class="quoteblock"><blockquote>%s</blockquote><div class="attribution">— %s</div></div>`, strings.Join(simpara, ""), attribution))
-				collectSimPara = false
+				curOutput.WriteString(fmt.Sprintf(`</blockquote><div class="attribution">— %s</div></div>`, attribution))
+				omitP = false
 			case "bridgehead":
-				curpage.writeString("\n")
-				curpage.writeString(fmt.Sprintf(`<%s>%s</%s>`, brideheadLevel, chardata.String(), brideheadLevel))
-				curpage.writeString("\n")
-				chardata.Reset()
+				src := switchOutputGetString()
+				curOutput.WriteString("\n")
+				curOutput.WriteString(fmt.Sprintf(`<%s>%s</%s>`, brideheadLevel, src, brideheadLevel))
+				curOutput.WriteString("\n")
+			case "callout":
+				curOutput.WriteString("</p>\n")
+			case "calloutlist":
+				omitP = false
 			case "emphasis":
-				chardata.WriteString(`</em>`)
+				curOutput.WriteString(`</em>`)
 			case "entry":
-				curpage.writeString(chardata.String())
-				// curpage.writeString(strings.Join(simpara, ""))
+				omitP = false
 				if inThead {
-					curpage.writeString(`</th>`)
+					curOutput.WriteString(`</th>`)
 				} else {
-					curpage.writeString(`</td>`)
+					curOutput.WriteString(`</td>`)
 				}
-				collectSimPara = false
 			case "figure":
 				var wd string
 				if contentwidth != "" {
@@ -663,7 +647,7 @@ getContents:
 				imagedata = assetsTrim.ReplaceAllString(imagedata, "$2")
 				src := d.linkToPage("/static/"+imagedata, *curpage)
 
-				curpage.writeString(fmt.Sprintf(`<div id="%s" class="imageblock">
+				curOutput.WriteString(fmt.Sprintf(`<div id="%s" class="imageblock">
 				<div class="content">
 				<img src="%s" %s%s>
 				</div>
@@ -671,7 +655,7 @@ getContents:
 				</div>`, figureid, src, alt, wd, figuretitle))
 				inFigure = false
 			case "formalpara":
-				curpage.writeString(fmt.Sprintf(`</div><div class="caption">%s</div></div>`, figuretitle))
+				curOutput.WriteString(fmt.Sprintf(`</div><div class="caption">%s</div></div>`, figuretitle))
 				inFigure = false
 				omitP = false
 			case "informalfigure":
@@ -685,121 +669,121 @@ getContents:
 				}
 				imagedata = assetsTrim.ReplaceAllString(imagedata, "$2")
 				src := d.linkToPage("/static/"+imagedata, *curpage)
-				curpage.writeString(fmt.Sprintf("\n<img src='%s'%s%s>", src, wd, alt))
+				curOutput.WriteString(fmt.Sprintf("\n<img src='%s'%s%s>", src, wd, alt))
 			case "itemizedlist":
 				curlist := listlevel[len(listlevel)-1]
 				listlevel = listlevel[:len(listlevel)-1]
 				if curlist != lItemize {
 					panic("stack top is not itemize list")
 				}
-				curpage.writeString("\n</ul>")
+				curOutput.WriteString("\n</ul>")
 				omitP = false
 			case "link":
-				chardata.WriteString(`</a>`)
+				curOutput.WriteString(`</a>`)
 			case "literal":
-				if outputMode == outputSave {
-					chardata.WriteString(`</code>`)
-				} else {
-					curpage.writeString(`</code>`)
-				}
+				// out := switchOutputGetString()
+				// out = escaper.Replace(out)
+				// curOutput.WriteString(out)
+				curOutput.WriteString(`</code>`)
+				verbatim = false
+				literal = false
 			case "listitem":
 				curlist := listlevel[len(listlevel)-1]
 				switch curlist {
 				case lVarlist:
-					curpage.writeString(`</dd>`)
-				case lItemize:
-					chardata.WriteString(`</li>`)
-					curpage.writeString(chardata.String())
+					curOutput.WriteString(`</dd>`)
+				case lItemize, lEnumerate:
+					curOutput.WriteString(`</li>`)
 				}
-				curpage.writeString("\n")
+				curOutput.WriteString("\n")
 			case "orderedlist":
 				curlist := listlevel[len(listlevel)-1]
 				listlevel = listlevel[:len(listlevel)-1]
 				if curlist != lEnumerate {
 					panic("stack top is not ordered list")
 				}
-				curpage.writeString("\n</ol>")
+				curOutput.WriteString("\n</ol>")
 				omitP = false
 			case "phrase":
-				phrase = chardata.String()
-				chardata.Reset()
+				if phraserole != "" {
+					curOutput.WriteString(`</span>`)
+				} else {
+					phrase = switchOutputGetString()
+				}
 			case "programlisting":
-				src, err := formatSource(chardata.String(), programlistingLanguage)
+				verbatim = false
+				cd := switchOutputGetString()
+				src, err := formatSource(cd, programlistingLanguage)
 				if err != nil {
 					return err
 				}
-				curpage.writeString(fmt.Sprintf(`<div class="highlight"><pre class="chroma"><code class="language-%s">%s</code></pre></div>`, programlistingLanguage, src))
-				chardata.Reset()
+				curOutput.WriteString(fmt.Sprintf(`<div class="highlight"><pre class="chroma"><code class="language-%s">%s</code></pre></div>`, programlistingLanguage, src))
+			case "quote":
+				curOutput.WriteString(`”`)
 			case "row":
-				curpage.writeString(`</tr>`)
+				curOutput.WriteString(`</tr>`)
 			case "para", "simpara":
-				if collectSimPara {
-					simpara = append(simpara, chardata.String())
-				} else {
-					if omitP {
-						curpage.writeString(chardata.String())
-					} else {
-						curpage.writeString("\n")
-						curpage.writeString(fmt.Sprintf("<p>%s</p>", chardata.String()))
-					}
-					simpara = simpara[:0]
-					chardata.Reset()
+				if !omitP {
+					curOutput.WriteString(`</p>`)
 				}
 			case "screen", "literallayout":
-				curpage.writeString(`</code></pre>`)
-				curpage.writeString("\n")
+				verbatim = false
+				cd := switchOutputGetString()
+				curOutput.WriteString(escaper.Replace(cd))
+				curOutput.WriteString(`</code></pre>`)
+				curOutput.WriteString("\n")
 			case "section":
 				headinglevel--
 			case "subscript":
-				chardata.WriteString(`</sub>`)
+				curOutput.WriteString(`</sub>`)
 			case "superscript":
-				chardata.WriteString(`</sup>`)
+				curOutput.WriteString(`</sup>`)
 			case "informaltable":
-				curpage.writeString(`</table>`)
-				curpage.writeString("\n")
+				curOutput.WriteString(`</table>`)
+				curOutput.WriteString("\n")
 			case "tip", "warning":
-				curpage.writeString(strings.Join(simpara, ""))
-				curpage.writeString(`</td>
+				curOutput.WriteString(`</td>
 				</tr>
 				</tbody></table>
 				</div>`)
-				collectSimPara = false
+				omitP = false
 			case "tbody":
-				curpage.writeString(`<tbody>`)
+				curOutput.WriteString(`<tbody>`)
 				inThead = false
 			case "thead":
-				curpage.writeString(`<thead>`)
+				curOutput.WriteString(`<thead>`)
 				inThead = false
 			case "term":
-				curpage.writeString("\n")
-				curpage.writeString(`</dt>`)
+				curOutput.WriteString("\n")
+				curOutput.WriteString(`</dt>`)
 			case "title":
+				title := switchOutputGetString()
 				if inFigure {
-					figuretitle = chardata.String()
+					figuretitle = title
 				} else {
 					var thisid string
 					if sectionid != "" {
 						thisid = fmt.Sprintf(" id=%q", sectionid)
 						sectionid = ""
 					}
-					curpage.writeString("\n")
+					curOutput.WriteString("\n")
 					lvl := headinglevel
 					if headinglevel == 0 {
 						lvl = 1
 					}
-					curpage.writeString(fmt.Sprintf(`<h%d%s>%s</h%d>`, lvl, thisid, chardata.String(), lvl))
-					curpage.writeString("\n")
+					curOutput.WriteString(fmt.Sprintf(`<h%d%s>%s</h%d>`, lvl, thisid, title, lvl))
+					curOutput.WriteString("\n")
 					if curpage.Index == 0 && titlecounter == 0 && d.Lang == "de" {
-						curpage.writeString(`<div class="epub"><p>Neu! Jetzt auch als ebook</p><a href="https://doc.speedata.de/publisher/de/publisherhandbuch.epub">Download</a></div>`)
-						curpage.writeString("\n")
+						curOutput.WriteString(`<div class="epub"><p>Neu! Jetzt auch als ebook</p><a href="https://doc.speedata.de/publisher/de/publisherhandbuch.epub">Download</a></div>`)
+						curOutput.WriteString("\n")
 					}
 					titlecounter++
 
 				}
 				chardata.Reset()
 			case "variablelist":
-				curpage.writeString("\n")
-				curpage.writeString(`</dl>`)
+				curOutput.WriteString("\n")
+				curOutput.WriteString(`</dl>`)
 				listlevel = listlevel[:len(listlevel)-1]
 			}
 		}

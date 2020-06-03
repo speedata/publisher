@@ -2,10 +2,10 @@
 = Structure of the data file and the layout rules
 
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 [quote, Freely adapted from Henry Ford]
-You can use any data format as long as it is XML.
+You can use any data format so long as it is XML.
 
 == Data source: XML - well-formed and structured
 
@@ -52,13 +52,13 @@ A simple example for the arrangement:
 </productdata>
 -------------------------------------------------------------------------------
 
-Redundancy does not hurt here, on the contrary. Since the article group in the example has a clear sequence of digits (123 or 124), the last five digits would be sufficient for the articles. You can assemble the number from articlegroup/@number, - and article/@number yourself. To save yourself the step, simply save the complete number on the article.
+Redundancy does not hurt here, on the contrary. Since the article group in the example has a clear sequence of digits (123 or 124), the last five digits would be sufficient for the articles. You can assemble the number from `articlegroup/@number`, - and `article/@number` yourself. To save yourself the step, simply save the complete number on the article.
 
 To summarize it: If you have the possibility to influence the structure of the data: better save too much information than too little. Experiment with the order of the data, sometimes the right structure makes layout creation much easier.
 
 == How do you access the data from the layout?
 
-Since the data file can be structured as you like, special commands are needed to access the data. These are described below and in the appendix under XPath functions. In the following we will start from this simple data file:
+Since the data file can be structured as you like, special commands are needed to access the data. These are described below and in the appendix under <<ch-xpathfunctions>>. In the following we will start from this simple data file:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ Since the data file can be structured as you like, special commands are needed t
 
 This data file is stored under the name `data.xml` so that the Publisher can find it.
 
-The layout file (name: layout.xml) is executed during the import: all commands with the name <Record> are saved for later processing, all other commands have immediate effect. This means that if a command like <DefineColor> is included at the top level in the layout rules, it will be executed before the actual data processing starts.
+The layout file (name: `layout.xml`) is executed during the import: all commands with the name `<Record>` are saved for later processing, all other commands have immediate effect. This means that if a command like `<DefineColor>` is included at the top level in the layout rules, it will be executed before the actual data processing starts.
 
 A minimum layout file for the data structuring shown above is
 
@@ -127,7 +127,7 @@ The structure required for processing is as follows:
     <!--3-->
   </Record>
 
-  <Record element="artikel">
+  <Record element="article">
     <!--4-->
   </Record>
 
@@ -138,7 +138,7 @@ The structure required for processing is as follows:
 <3> Commands for closing the PDF file
 <4> For each child item these commands are executed. The "focus" is now on an article, so you can access the attributes and child elements of articles.
 
-Within the lower `<Record>` command you can now access child elements and attributes. Examples:
+Within the second `<Record>` command (④) you can now access child elements and attributes. Examples:
 
 * `@nr` results in the string 12345 in the first call and 56789 in the second pass.
 * `description` results in a sequence with one element, the content text (first article).
@@ -183,9 +183,9 @@ Alternatively to the procedure with `<ProcessNode>` and its counterpart `<Record
 -------------------------------------------------------------------------------
 <1> A table is output that covers the entire width.
 <2> A table header has the property that it is repeated on every page.
-<3> Within the <ForAll>, the attributes and child elements of each article can be accessed, just like in the example above.
+<3> Within the `<ForAll>`, the attributes and child elements of each article can be accessed, just like in the example above.
 
-Tables are covered in the basics (chapter Introduction to Tables) and in more detail in chapter 6.
+Tables are covered in the basics (chapter <<ch-intro-tables>>) and in more detail in <<ch-tables2,chapter 6>>.
 
 
 // EOF

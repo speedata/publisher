@@ -2,7 +2,7 @@
 
 = Using CSS with the speedata Publisher
 
-_This page was automatically translated. Stay tuned for a manual translation..._
+_This page was automatically translated. Stay tuned for a human translation..._
 
 CSS (Cascading Stylesheets) is a language mainly used on the web to determine the appearance of objects.
 The idea is to separate formatting from content.
@@ -14,7 +14,7 @@ The speedata Publisher relies exclusively on the built-in language when formatti
 Some elements can be designed using CSS.
 In the Publisher this is only rudimentary:
 Currently the commands `<Box>`, `<Circle>`, `<Frame>`, `<Paragraph>`, `<Rule>`, `<Td>`, `<Tablerule>` and `<U>` can be formatted via CSS.
-<<ch-command reference,The Command Reference>> lists the commands with the associated attributes that can be accessed via CSS functionality.
+<<ch-commandreference,The Command Reference>> lists the commands with the associated attributes that can be accessed via CSS functionality.
 
 
 TIP: The CSS implementation in the speedata Publisher has more the character of a "proof of concept" or prototype. The commands and properties that can be controlled via CSS are very limited.
@@ -173,6 +173,6 @@ you can use CSS to color the element:
 .Elements in data can now be colored
 image::32-hellogreenworld.png[]
 
-Currently, only the attributes underline and color (text-decoration: underline; and color: ...) can be set via CSS.
+Currently, only the attributes underline and color (`text-decoration: underline;` and `color: ...`) can be set via CSS.
 
 // EOF
