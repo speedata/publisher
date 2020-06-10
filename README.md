@@ -1,4 +1,4 @@
-[![Join the chat at https://gitter.im/speedata/publisher](https://img.shields.io/gitter/room/speedata/publisher?color=yellow)](https://gitter.im/speedata/publisher)&nbsp;[![Fund the development](https://img.shields.io/badge/Sponsor-Fund%20development-yellow)](https://github.com/sponsors/speedata)&nbsp;[![Platforms](https://img.shields.io/badge/Platform-Mac%2FLinux%2FWindows-lightgrey)](https://doc.speedata.de/publisher/en/description-en/installation.html)
+[![Join the chat at https://gitter.im/speedata/publisher](https://img.shields.io/gitter/room/speedata/publisher?color=yellow)](https://gitter.im/speedata/publisher)&nbsp;[![Fund the development](https://img.shields.io/badge/Sponsor-Fund%20development-yellow)](https://github.com/sponsors/speedata)&nbsp;[![Platforms](https://img.shields.io/badge/Platform-Mac%2FLinux%2FWindows-lightgrey)](https://doc.speedata.de/publisher/en/installation/)
 
 speedata Publisher
 ==================
@@ -30,7 +30,7 @@ Yes. Absolutely. We release stable (long term support) versions once in a while 
 Installation
 ------------
 
-Just get one of the ready-to-run packages from <https://download.speedata.de/> and follow the directions inside the ZIP file (=just extract and set the PATH variable). See the [installation instructions in the manual](https://doc.speedata.de/publisher/en/description-en/installation.html).
+Just get one of the ready-to-run packages from <https://download.speedata.de/> and follow the directions inside the ZIP file (=just extract and set the PATH variable). See the [installation instructions in the manual](https://doc.speedata.de/publisher/en/installation/).
 
 
 Manual
@@ -49,7 +49,7 @@ License / Contributing
 
 The license is AGPLv3, see the file COPYING in the root directory.
 
-We welcome contributions. Just [follow the github procedure (fork, pull requests)](https://help.github.com/articles/using-pull-requests/). The [installation manual](https://doc.speedata.de/publisher/en/description-en/installation.html) has a section on building the binary from the source code.
+We welcome contributions. Just [follow the github procedure (fork, pull requests)](https://help.github.com/articles/using-pull-requests/). The [installation manual](https://doc.speedata.de/publisher/en/installation/) has a section on building the binary from the source code.
 
 Contact / Support
 -----------------
