@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.15" date="2020-06-10">
+      <en>Update to new LuaTeX 1.12 (without visible changes).</en>
+      <de>Update auf LuaTeX 1.12 (ohne sichtbare Änderungen).</de>
+    </entry>
+    <entry version="3.9.15" date="2020-06-10">
+      <en>New Englisch manual.</en>
+      <de>Neues Handbuch Englisch.</de>
+    </entry>
     <entry version="3.9.14" date="2020-05-19">
       <en>Various bugfixes introduced in recent development version.</en>
       <de>Verschiedene Korrekturen, die in den letzten Entwicklungsversionen eingebaut wurden.</de>
