@@ -1,0 +1,173 @@
+[[ch-cookbook-toinonerun]]
+= Create table of contents in one go
+
+_This page was automatically translated. Stay tuned for a human translation..._
+
+Often enough you have documents with a table of contents that should be somewhere at the beginning of the document. The normal way with the speedata Publisher is to collect the data for the table of contents during a run-through (which sections are there? On which page do they start?). In the next run this data is then used to create the table of contents. This method was necessary until now because this information is needed before it is available.
+
+But now PDF has a very nice feature: you can display the pages in any order.
+
+.In the simplest case, the page tree in a PDF file consists of a list of the existing pages.
+image::pagetree.png[width=100%]
+
+
+It is possible to change the order of the pages afterwards by changing the list of pages.
+
+.The page tree does not have to correspond to the order of the written pages.
+image::pagetree-insert.png[width=100%]
+
+
+The interface to the speedata Publisher runs via the existing commands `<InsertPages>` and `<SavePages>`:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="data">
+    <InsertPages name="table of contents" pages="1" />
+
+    <ProcessNode select="chapter" />
+
+    <SavePages name="table of contents">
+      <PlaceObject>
+        ...
+      </PlaceObject>
+    </SavePages>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+The destination of the pages created later is marked with `<InsertPages>` and the actual pages are created with `<SavePages>`. The speedata Publisher takes care that the internal number of pages after `<InsertPages>` is increased by the number specified and that the number of pages in the content of `<SavePages>` is again adjusted.
+
+To ensure that the page numbering is correct, the number of pages to be inserted must be known in advance. This is almost always the case with data sheets and product catalogs (the actual use case for the speedata Publisher), so in practice this is only a small limitation.
+
+== Example
+
+This example is from the https://github.com/speedata/examples/tree/master/technical/singlepasstoc[sample repository] and is explained in three steps
+
+First, a page type is defined which is the same for all pages (condition is `true()`, so this page is always selected).
+This page type defines a text frame (`text') and displays the page number in the outer margin of the page footer.
+This is only used here to check that the pages are counted correctly, because a page is moved from the end to the beginning.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pageformat height="228pt" width="12cm" />
+  <SetGrid height="12pt" nx="10"/>
+
+  <Pagetype name="allPages" test="true()">
+    <Margin left="1cm" right="1cm" top="24pt" bottom="24pt"/>
+    <!--1-->
+    <PositioningArea name="text">
+      <PositioningFrame
+        height="{sd:number-of-rows() - 2}"
+        width="{sd:number-of-columns() }"
+        column="1"
+        row="1" />
+    </PositioningArea>
+    <AtPageShipout>
+      <!--2-->
+      <PlaceObject
+              column="1"
+              row="{sd:number-of-rows()}"
+              valign="bottom"
+              allocate="no">
+        <Table  stretch="max">
+          <Tr>
+            <Td align="{if (sd:even(sd:current-page()))
+                   then 'left' else 'right'}">
+              <Paragraph>
+                <Value select="sd:current-page()" />
+              </Paragraph>
+            </Td>
+          </Tr>
+        </Table>
+      </PlaceObject>
+    </AtPageShipout>
+  </Pagetype>
+-------------------------------------------------------------------------------
+<1> The 'text' area is slightly shorter than the page so that the page number can be printed in the page footer.
+<2> The page number is output in a table. Depending on whether it is an even or odd page, the attribute 'align' is set to 'left' or 'right'.
+
+The `chapter` section stores the page number and title of the chapter and prints the title and a few paragraphs of a dummy text.
+
+[source, xml]
+-------------------------------------------------------------------------------
+  <Record element="chapter">
+    <!--1-->
+    <SetVariable variable="chapter{position()}title" select="@title" />
+    <SetVariable variable="chapter{position()}page" select="sd:current-page()" />
+
+    <Output area="text" row="1">
+      <Text>
+        <Paragraph>
+          <B>
+            <Value select="@title" />
+          </B>
+          <Action>
+            <!--2-->
+            <Mark select="concat('chapter',position())" pdftarget="yes" />
+          </Action>
+        </Paragraph>
+        <Loop select="@paragraphs">
+          <Paragraph>
+            <Value select="sd:dummytext()" />
+          </Paragraph>
+        </Loop>
+      </Text>
+    </Output>
+    <NewPage />
+  </Record>
+-------------------------------------------------------------------------------
+<1> The variable `chapterXtitle' behaves like an array by changing X in the variable name.
+<2> By `pdftarget="yes"` a target for internal hyperlinks is created.
+
+Here follows the core and entry point for data processing.
+After a page is reserved for the table of contents, the chapters are output and finally the table of contents is generated. The speedata Publisher inserts the directory in the correct position.
+
+[source, xml]
+-------------------------------------------------------------------------------
+  <Record element="data">
+    <!--1-->
+    <InsertPages name="table of contents" pages="1" />
+
+    <!--2-->
+    <ProcessNode select="chapter" />
+
+    <!--3-->
+    <SavePages name="table of contents">
+      <PlaceObject>
+        <Table padding="4pt">
+          <Columns>
+            <Column width="7cm" />
+          </Columns>
+          <Loop select="count(chapter)" variable="n">
+            <Tr>
+              <Td>
+                <Paragraph>
+                  <A link="chapter{$n}">
+                    <Value select="concat($n,' ' , sd:variable('chapter',$n,'title')" />
+                    <HSpace leader="." />
+                    <Value select="sd:variable('chapter',$n,'page')" />
+                  </A>
+                </Paragraph>
+              </Td>
+            </Tr>
+          </Loop>
+        </Table>
+      </PlaceObject>
+    </SavePages>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+<1> Here a page is reserved for the table of contents. The name must be identical to that of `<SavePages>'.
+<2> First all chapters are output
+<3> Now all pages of the chapter beginnings and the chapter names are known and can be output. `<SavePages>` creates virtual pages (in this case only one), which will be inserted at the front.
+
+.The table of contents is created in one pass and inserted at the front.
+image::singlepasstoc.png[width=100%]
+
+// EOF

@@ -1,0 +1,171 @@
+[[ch-kochbuch-verzeichnisseeindurchlauf]]
+= Inhaltsverzeichnis in einem Durchlauf erstellen
+
+Oft genug hat man Dokumente mit einem Inhaltsverzeichnis, das irgendwo am Anfang des Dokuments stehen soll. Der normale Weg beim speedata Publisher ist es, die Daten für das Inhaltsverzeichnis während eines Durchlaufs zu sammeln (welche Abschnitte gibt es? auf welcher Seite fangen diese an?). Im nächsten Durchlauf werden diese Daten dann benutzt, um das Inhaltsverzeichnis zu erstellen. Diese Methode war bisher notwendig, weil diese Informationen benötigt werden, bevor sie zur Verfügung stehen.
+
+Nun hat PDF aber eine ganz nette Eigenschaft: man kann die Seiten in einer beliebigen Reihenfolge anzeigen lassen.
+
+.Der Seitenbaum in einer PDF-Datei besteht im einfachsten Fall aus einer Liste der vorhandenen Seiten.
+image::pagetree.png[width=100%]
+
+
+Es ist möglich, die Reihenfolge der Seiten nachträglich zu ändern, in dem die Liste der Seiten geändert wird.
+
+.Der Seitenbaum muss nicht in der Reihenfolge der geschriebenen Seiten entsprechen.
+image::pagetree-insert.png[width=100%]
+
+
+Die Schnittstelle zum speedata Publisher läuft über die schon vorhandenen Befehle `<InsertPages>` und `<SavePages>`:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="data">
+    <InsertPages name="table of contents" pages="1" />
+
+    <ProcessNode select="chapter" />
+
+    <SavePages name="table of contents">
+      <PlaceObject>
+        ...
+      </PlaceObject>
+    </SavePages>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+Das Ziel der später erstellten Seiten wird mit `<InsertPages>` markiert und die eigentlichen Seiten mit `<SavePages>` erzeugt. Der speedata Publisher kümmert sich darum, dass die interne Seitenzahl nach `<InsertPages>` um die angegebene Zahl erhöht wird und dass im Inhalt von `<SavePages>` wiederum die Seitenzahl angepasst wird.
+
+Damit die Seitennummerierung auch richtig ist, muss man die Anzahl der einzufügenden Seiten vorab kennen. Das ist bei Datenblättern und Produktkatalogen (dem eigentlichen Anwendungsfall für den speedata Publisher) fast immer gegeben, so dass das in der Praxis nur eine kleine Einschränkung ist.
+
+== Beispiel
+
+Dieses Beispiel ist aus dem https://github.com/speedata/examples/tree/master/technical/singlepasstoc[Beispiel-Repository] und wird in drei Schritten erläutert.
+
+Zuerst wird ein Seitentyp definiert, der für alle Seiten gleich ist (Bedingung ist `true()`, diese Seite wird also immer ausgewählt).
+Dieser Seitentyp definiert einen Textrahmen (`text`) und gibt im Seitenfuß die Seitenzahl im äußeren Rand aus.
+Das dient hier nur zur Kontrolle, dass die Seiten auch richtig gezählt werden, denn es wird eine Seite vom Schluss an den Anfang geschoben.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pageformat height="228pt" width="12cm" />
+  <SetGrid height="12pt" nx="10"/>
+
+  <Pagetype name="allPages" test="true()">
+    <Margin left="1cm" right="1cm" top="24pt" bottom="24pt"/>
+    <!--1-->
+    <PositioningArea name="text">
+      <PositioningFrame
+        height="{sd:number-of-rows() - 2}"
+        width="{sd:number-of-columns() }"
+        column="1"
+        row="1" />
+    </PositioningArea>
+    <AtPageShipout>
+      <!--2-->
+      <PlaceObject
+              column="1"
+              row="{sd:number-of-rows()}"
+              valign="bottom"
+              allocate="no">
+        <Table  stretch="max">
+          <Tr>
+            <Td align="{if (sd:even(sd:current-page()))
+                   then 'left' else 'right'}">
+              <Paragraph>
+                <Value select="sd:current-page()" />
+              </Paragraph>
+            </Td>
+          </Tr>
+        </Table>
+      </PlaceObject>
+    </AtPageShipout>
+  </Pagetype>
+-------------------------------------------------------------------------------
+<1> Der Bereich `text` ist etwas kürzer als die Seite, damit im Seitenfuß die Seitenzahl ausgegeben werden kann.
+<2> Die Seitenzahl wird in einer Tabelle ausgegeben. Je nachdem ob es eine gerade oder ungerade Seite ist, wird das Attribut `align` auf `left` oder `right` gesetzt.
+
+Der Abschnitt `chapter` speichert die Seitenzahl und den Titel des Kapitels und gibt den Titel sowie ein paar Absätze eines Blindtexts aus.
+
+[source, xml]
+-------------------------------------------------------------------------------
+  <Record element="chapter">
+    <!--1-->
+    <SetVariable variable="chapter{position()}title" select="@title" />
+    <SetVariable variable="chapter{position()}page" select="sd:current-page()" />
+
+    <Output area="text" row="1">
+      <Text>
+        <Paragraph>
+          <B>
+            <Value select="@title" />
+          </B>
+          <Action>
+            <!--2-->
+            <Mark select="concat('chapter',position())" pdftarget="yes" />
+          </Action>
+        </Paragraph>
+        <Loop select="@paragraphs">
+          <Paragraph>
+            <Value select="sd:dummytext()" />
+          </Paragraph>
+        </Loop>
+      </Text>
+    </Output>
+    <NewPage />
+  </Record>
+-------------------------------------------------------------------------------
+<1> Die Variable `chapterXtitle` verhält sich wie ein array durch die Veränderung von X im Variablennamen.
+<2> Durch `pdftarget="yes"` wird ein Ziel für interne Hyperlinks erzeugt.
+
+Hier folgt das Herzstück und die Einsprungstelle für die Datenverarbeitung.
+Nachdem eine Seite für das Inhaltsverzeichnis reserviert wurde, werden die Kapitel ausgegeben und zum Schluss das Inhaltsverzeichnis erzeugt. Der speedata Publisher fügt das Verzeichnis an die richtige Stelle ein.
+
+[source, xml]
+-------------------------------------------------------------------------------
+  <Record element="data">
+    <!--1-->
+    <InsertPages name="table of contents" pages="1" />
+
+    <!--2-->
+    <ProcessNode select="chapter" />
+
+    <!--3-->
+    <SavePages name="table of contents">
+      <PlaceObject>
+        <Table padding="4pt">
+          <Columns>
+            <Column width="7cm" />
+          </Columns>
+          <Loop select="count(chapter)" variable="n">
+            <Tr>
+              <Td>
+                <Paragraph>
+                  <A link="chapter{$n}">
+                    <Value select="concat($n,' ' , sd:variable('chapter',$n,'title')" />
+                    <HSpace leader="." />
+                    <Value select="sd:variable('chapter',$n,'page')" />
+                  </A>
+                </Paragraph>
+              </Td>
+            </Tr>
+          </Loop>
+        </Table>
+      </PlaceObject>
+    </SavePages>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+<1> Hier wird eine Seite für das Inhaltsverzeichnis reserviert. Der Name muss identisch sein mit dem von `<SavePages>`.
+<2> Erst werden alle Kapitel ausgegeben
+<3> Nun sind alle Seiten der Kapitelanfänge und die Namen der Kapitel bekannt und können ausgegeben werden. `<SavePages>` erzeugt virtuelle Seiten (in diesem Fall nur eine), die vorne eingefügt wird.
+
+.Das Inhaltsverzeichnis wird in einem Durchlauf erzeugt und vorne eingefügt.
+image::singlepasstoc.png[width=100%]
+
+// EOF

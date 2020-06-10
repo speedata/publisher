@@ -4,7 +4,7 @@
 
 _This page was automatically translated. Stay tuned for a human translation..._
 
-In this section concrete applications are shown, with designed data, but with requirements occurring in practice. The last three chapters (Table of Contents, Index, and Page X of Y) are implemented using the same mechanism with the XML element structure (chapter Creating XML Structures).
+In this section concrete applications are shown, with designed data, but with requirements occurring in practice. Three chapters (Table of Contents, Index, and Page X of Y) are implemented using the same mechanism with the XML element structure (chapter Creating XML Structures).
 
 
 include::thumbindex.adoc[leveloffset=+1]
@@ -15,6 +15,8 @@ include::multipagepdf.adoc[leveloffset=+1]
 
 include::optimizingwithgroups.adoc[leveloffset=+1]
 
+include::fakinglists.adoc[leveloffset=+1]
+
 
 [[ch-directories-marker]]
 == Automatically generated directories
@@ -23,8 +25,7 @@ This chapter is dedicated to the creation of directories.
 There are basically two ways to create a directory.
 Therefore, the next section is about the built-in mechanism of markers (`<Mark>`), the following sections are about the way via `<Element>` and `<Attributes>` and manually saving the data for another pass.
 
-TIP: In order for the Publisher to run through several times, the `runs` parameter must be set on the command line or in the configuration file, for example with `sp --runs=2` (command line) or `runs = 2` (configuration file).
-
+TIP: In order for the Publisher to run through several times, the `runs` parameter must be set on the command line or in the configuration file, for example with `sp --runs=2` (command line) or `runs = 2` (configuration file). In the section <<ch-cookbook-toinonerun>> a mechanism is shown how in some cases a directory can be created in only one run.
 
 
 include::directoriesmarker.adoc[leveloffset=+2]
@@ -33,8 +34,8 @@ include::directoriesxml.adoc[leveloffset=+2]
 
 include::indexcreation.adoc[leveloffset=+2]
 
-include::pagexofy.adoc[leveloffset=+1]
+include::tocinonerun.adoc[leveloffset=+1]
 
-include::fakinglists.adoc[leveloffset=+1]
+include::pagexofy.adoc[leveloffset=+1]
 
 
