@@ -54,6 +54,8 @@ layout::
    Name of the layout rule set (XML). The default name is layout.xml.
 luatex::
    Path to the Lua(jit)TeX binary. Experimental! This is provided for your experiments, not for production use.
+mode::
+   Set the layout mode. See <<ch-advanced-cotrollayout>>.
 opencommand::
    Command that will be run to open the documentation and the PDF file. For MacOS X this should be open, for Linux xdg-open or exo-open (xfce).
 pathrewrite::

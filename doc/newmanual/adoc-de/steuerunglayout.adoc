@@ -1,0 +1,104 @@
+[[ch-fortgeschrittenethemen-steuerunglayout]]
+= Steuerung des Layouts beim Aufruf des Publishers
+
+Wenn man das Verhalten des speedata Publishers steuern möchte, ohne eine der Dateien (`data.xml` bzw. `layout.xml`) zu ändern, kann man das über zwei verschiedene Wege machen.
+Beispiel ist ein PDF, das in verschiedenen Seitenformaten ausgegeben werden soll (Hochformat und Querformat) oder dass man ein Druck-PDF (mit Beschnittzugabe) und ein Online-PDF (mit kleineren Bildern) zur Verfügung stellt.
+
+
+== Steuerung über Variablen
+
+Die Idee hierbei ist, dass man vor dem Aufruf Variablen auf einen bestimmten Wert setzt. Das geschieht in der Konfigurationsdatei oder auf der Kommandozeile. Beispiel ist folgendes Layout (Ausschnitt):
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+   <Options bleed="0mm" cutmarks="no" />
+   <Switch>
+      <Case test="sd:variable-exists('output')">
+         <Switch>
+            <Case test="$output = 'print'">
+               <Options bleed="3mm" cutmarks="yes" />
+            </Case>
+         </Switch>
+      </Case>
+   </Switch>
+   ...
+</Layout>
+-------------------------------------------------------------------------------
+
+Mit
+
+---------
+sp --var output=print
+---------
+
+wird die Variable `output` auf den Wert `print` gesetzt.
+In der Konfigurationsdatei sieht der Eintrag wie folgt aus:
+
+----------------------
+vars=output=print
+----------------------
+
+Beide Angaben bewirken, dass der zweite Befehl `<Options>` ausgeführt wird und Beschnittzugabe und Beschnittmarken erzeugt.
+
+
+== Steuerung über `--mode`
+
+Alternativ zu der Steuerung über Variablen kann man auch über den _Modus_ steuern.
+Das Layout oben würde so aussehen:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+   <Options bleed="0mm" cutmarks="no" />
+   <Switch>
+      <Case test="sd:mode('print')">
+         <Options bleed="3mm" cutmarks="yes" />
+      </Case>
+   </Switch>
+   ....
+</Layout>
+-------------------------------------------------------------------------------
+
+Auf der Kommandozeile wird der Publisher so gestartet:
+
+-------------------------------------------------------------------------------
+sp --mode print
+-------------------------------------------------------------------------------
+
+Die Angabe in der Konfigurationsdatei ist:
+-------------------------------------------------------------------------------
+mode=online
+-------------------------------------------------------------------------------
+
+Die Namen des Modus ist frei wählbar, sollte aber keine Leerzeichen oder Komma enthalten.
+
+Mehrere Modi kann man mit Komma separiert angeben:
+
+-------------------------------------------------------------------------------
+sp --mode a,b,c
+-------------------------------------------------------------------------------
+
+aktiviert diese drei Modi.
+
+Die Interne Variable `_mode` hat ebenfalls eine kommaseparierte List der Modi, genau wie auf der Kommandozeile angegeben.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+    <Textblock>
+        <Paragraph>
+            <Value select="$_mode"></Value>
+        </Paragraph>
+    </Textblock>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+gibt z.B. `a,b,c` aus. Die Reihenfolge der Modi in dieser Variable muss nicht der Reihenfolge der Angabe beim Aufruf des Publishers entsprechen.
+
+// EOF

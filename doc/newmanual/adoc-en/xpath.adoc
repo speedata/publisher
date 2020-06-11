@@ -9,14 +9,6 @@
 The speedata Publisher accepts XPath expressions in some attributes. These attributes are called test or select or documented as such. In all other attributes XPath expressions can be used via curly braces (`{` and `}`). In the following example XPath expressions are used in the attribute width and in the element Value. The width of the textblock is taken from the variable `$width`, the contents of the paragraph is the string value of the current node.
 
 
-// Der Publisher akzeptiert in den den entsprechend markierten Attributen (zumeist `select` und `test`) XPath Ausdrücke.
-// In allen anderen Attributen kann durch die geschweiften Klammern (`{` und `}`) ein XPath Ausdruck erzwungen werden.
-// Siehe https://github.com/speedata/examples/blob/master/technical/fontshrinking/layout.xml#L16[z.B. das Layout im examples-Repository für Optimierung mit Gruppen].
-// In diesem Beispiel werden im Attribut `width` und im Element `Value` die Werte dynamisch erzeugt, d. h. für die
-// Angabe der Breite wird auf den Inhalt der Variablen `breite` zurückgegriffen, der Inhalt des Absatzes ist der Inhalt (Textwert) des gerade aktuellen Datenknotens.
-
-
-
 [source, xml]
 -------------------------------------------------------------------------------
 <Textblock width="{$width}">
@@ -79,6 +71,8 @@ There are two classes of XPath functions: standard XPath functions and speedata 
   Change text such as &lt;i&gt;italic&lt;/i&gt; into HTML markup.
 `sd:merge-pagenumbers(<pagenumbers>,<separator for range>,<separator for space>)`::
   Merge page numbers. For example the numbers "1, 3, 4, 5" are merged into 1, 3–5. Defaults for the separator for the range is an en-dash (–), default for the spacing separator is ', ' (comma, space). This function sorts the page numbers and removes duplicates. When the separator for range is empty, the page numbers are separated each with the separator for the space.
+`sd:mode(<string>[,<string>...])`::
+  Returns true (`true()`) if one of the specified modes is set. A mode can be set from the command line or from the configuration file. See  <<ch-advanced-cotrollayout>>
 `sd:number-of-datasets(<Sequence>)`::
   Return the number of records of the sequence.
 `sd:number-of-pages(<filename or URI schema>)`::

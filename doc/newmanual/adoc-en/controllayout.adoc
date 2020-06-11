@@ -1,0 +1,107 @@
+[[ch-advanced-cotrollayout]]
+= Control of the layout when calling the Publisher
+
+_This page was automatically translated. Stay tuned for a human translation..._
+
+If you want to control the behavior of the speedata Publisher without changing any of the files (`data.xml` or `layout.xml`), you can do this in two different ways.
+An example is a PDF that is to be output in different page formats (portrait and landscape) or that you provide a print PDF (with bleed) and an online PDF (with smaller images).
+
+
+== Control via variables
+
+The idea here is to set variables to a certain value before calling them. This is done in the configuration file or on the command line. Example is the following layout (excerpt):
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+   <Options bleed="0mm" cutmarks="no" />
+   <Switch>
+      <Case test="sd:variable-exists('output')">
+         <Switch>
+            <Case test="$output = 'print'">
+               <Options bleed="3mm" cutmarks="yes" />
+            </Case>
+         </Switch>
+      </Case>
+   </Switch>
+   ...
+</Layout>
+-------------------------------------------------------------------------------
+
+With
+
+---------
+sp --var output=print
+---------
+
+the variable `output` is set to the value `print`.
+In the configuration file, the entry looks like this:
+
+----------------------
+vars=output=print
+----------------------
+
+Both specifications cause the second command `<Options>` to be executed and create bleed and crop marks.
+
+== Control via `--mode`
+
+As an alternative to control via variables, it is also possible to control via the _mode_.
+The layout above would look like this:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+   <Options bleed="0mm" cutmarks="no" />
+   <Switch>
+      <Case test="sd:mode('print')">
+         <Options bleed="3mm" cutmarks="yes" />
+      </Case>
+   </Switch>
+   ....
+</Layout>
+-------------------------------------------------------------------------------
+
+On the command line, the Publisher is started like this:
+
+-------------------------------------------------------------------------------
+sp --mode print
+-------------------------------------------------------------------------------
+
+The specification in the configuration file is:
+
+-------------------------------------------------------------------------------
+mode=online
+-------------------------------------------------------------------------------
+
+The names of the mode can be chosen freely, but should not contain spaces or commas.
+
+Several modes can be specified separated by commas:
+
+-------------------------------------------------------------------------------
+sp --mode a,b,c
+-------------------------------------------------------------------------------
+
+activates these three modes.
+
+The internal variable `_mode` also has a comma-separated list of modes, just as specified on the command line.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+    <Textblock>
+        <Paragraph>
+            <Value select="$_mode"></Value>
+        </Paragraph>
+    </Textblock>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+outputs `a,b,c` for example. The order of the modes in this variable does not have to be in the order in which they were specified when the Publisher was started.
+
+
+// EOF

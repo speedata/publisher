@@ -37,5 +37,6 @@ include::troubleshooting.adoc[leveloffset=+1]
 
 include::servermode.adoc[leveloffset=+1]
 
+include::controllayout.adoc[leveloffset=+1]
 
 // EOF

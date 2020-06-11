@@ -127,7 +127,7 @@ Bei leerem Trenner für Bereiche werden Zahlen
 nicht zusammengeführt, sondern einzeln mit dem Trenner für Leerraum verbunden.
 
 `sd:mode(<string>[,<string>...])`::
-Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein Modus kann über die Kommandozeile oder über die Konfigurationsdatei gesetzt werden.
+Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein Modus kann über die Kommandozeile oder über die Konfigurationsdatei gesetzt werden. Siehe <<ch-fortgeschrittenethemen-steuerunglayout>>.
 
 `sd:number-of-columns([<area>])`::
    Gibt die Anzahl der Spalten auf der Seite bzw. im angegebenen Bereich.
