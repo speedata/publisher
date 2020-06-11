@@ -4,32 +4,30 @@ import (
 	"bufio"
 	"fmt"
 	"html/template"
-	"io"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 	"strings"
 
+	"sphelper/config"
+	"sphelper/fileutils"
+
 	"github.com/russross/blackfriday"
-	"github.com/speedata/decorate"
 )
 
 var (
-	srcpath, outpath, csspath, jspath      string
-	htmltemplate                           *template.Template
-	luafiles                               []string
 	linemarker, functionmarker, linkmarker *regexp.Regexp
+	escaper                                *strings.Replacer
 )
 
-type collection struct {
-	Luafile  string
-	HTMLFile string
-}
+func init() {
+	linemarker = regexp.MustCompile(`^\s*?--- ?(.*)$`)
+	functionmarker = regexp.MustCompile(`(function\s+)([^ (]*)`)
+	linkmarker = regexp.MustCompile(`(\w+\.)?(\w+)#(\w+)(\(\))?`)
 
-type section struct {
-	Doc  template.HTML
-	Code template.HTML
+	escaper = strings.NewReplacer("<", "&lt;", "&", "&amp;")
 }
 
 func toMarkdown(input string) string {
@@ -54,39 +52,37 @@ func toMarkdown(input string) string {
 
 }
 
-func genHTML(srcfile, destpath string) {
+type collection struct {
+	Luafile  string
+	HTMLFile string
+}
+
+type section struct {
+	Doc  template.HTML
+	Code template.HTML
+}
+
+type sourcedoc struct {
+	cfg          *config.Config
+	htmltemplate *template.Template
+	srcpath      string
+	outpath      string
+	luafiles     []string
+}
+
+func (s *sourcedoc) genHTML(srcfile, destpath string) {
 	var jumpTo []collection
-	for _, v := range luafiles {
-		rel, err := filepath.Rel(filepath.Dir(srcfile), v)
-		if err != nil {
-			log.Fatal(err)
+	htmlnamesource := s.htmlPathFromLua(srcfile)
+	for _, v := range s.luafiles {
+		c := collection{
+			Luafile:  strings.TrimPrefix(v, s.srcpath+"/"),
+			HTMLFile: s.relLink(htmlnamesource, s.htmlPathFromLua(v)),
 		}
-		if rel != "." {
-			c := collection{}
-			luafile, err := filepath.Rel(srcpath, v)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			c.Luafile = luafile
-			c.HTMLFile = strings.TrimSuffix(rel, ".lua") + ".html"
-			jumpTo = append(jumpTo, c)
-		}
+		jumpTo = append(jumpTo, c)
 	}
-
 	os.MkdirAll(filepath.Dir(destpath), 0755)
 
-	csslink, err := filepath.Rel(filepath.Dir(destpath), csspath)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	jslink, err := filepath.Rel(filepath.Dir(destpath), jspath)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	out, err := os.OpenFile(destpath, os.O_CREATE|os.O_WRONLY, 0644)
+	out, err := os.Create(destpath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -97,7 +93,7 @@ func genHTML(srcfile, destpath string) {
 		log.Fatal(err)
 	}
 	defer in.Close()
-	s := bufio.NewScanner(in)
+	scanner := bufio.NewScanner(in)
 	var document []section
 
 	var doc []string
@@ -110,36 +106,33 @@ func genHTML(srcfile, destpath string) {
 		if len(x[1]) > 0 {
 			// subdirectory
 			return fmt.Sprintf(`[%s#%s%s](%s/%s.html#%s)`, x[2], x[3], x[4], strings.TrimSuffix(x[1], "."), x[2], x[3])
-		} else {
-			if x[2] == filebase {
-				// this file
-				return fmt.Sprintf(`[%s%s](#%s)`, x[3], x[4], x[3])
-			} else {
-				return fmt.Sprintf(`[%s#%s%s](%s.html#%s)`, x[2], x[3], x[4], x[2], x[3])
-			}
 		}
-		return in
+		if x[2] == filebase {
+			// this file
+			return fmt.Sprintf(`[%s%s](#%s)`, x[3], x[4], x[3])
+		}
+		return fmt.Sprintf(`[%s#%s%s](%s.html#%s)`, x[2], x[3], x[4], x[2], x[3])
+	}
+	inner := func(doc []string) {
+		sec := section{}
+		txt := strings.Join(doc, "\n")
+		// autolink function foo#bar to foo.html#bar
+		txt = linkmarker.ReplaceAllStringFunc(txt, replace)
+		sec.Doc = template.HTML(toMarkdown(txt))
+		codelines := strings.Join(code, "\n")
+		codelines = escaper.Replace(codelines)
+		codelines = functionmarker.ReplaceAllString(codelines, `<a id="${2}">${1}${2}`)
+		sec.Code = template.HTML(codelines)
+		document = append(document, sec)
 	}
 
 	inCode := true
-	for s.Scan() {
-		line := s.Text()
+	for scanner.Scan() {
+		line := scanner.Text()
 		if linemarker.MatchString(line) {
 			if inCode {
 				if len(doc) > 0 || len(code) > 0 {
-					sec := section{}
-					txt := strings.Join(doc, "\n")
-					// autolink function foo#bar to foo.html#bar
-					txt = linkmarker.ReplaceAllStringFunc(txt, replace)
-					sec.Doc = template.HTML(toMarkdown(txt))
-					codelines := strings.Join(code, "\n")
-					c, err := decorate.Highlight([]byte(codelines), "lua", "html")
-					if err != nil {
-						log.Fatal(err)
-					}
-					c = functionmarker.ReplaceAllString(c, `${1}<a name="${2}">${2}`)
-					sec.Code = template.HTML(c)
-					document = append(document, sec)
+					inner(doc)
 					doc = doc[0:0]
 					code = code[0:0]
 				}
@@ -150,37 +143,24 @@ func genHTML(srcfile, destpath string) {
 			doc = append(doc, line)
 		} else {
 			inCode = true
+
 			code = append(code, line)
 		}
 	}
-	sec := section{}
-	txt := strings.Join(doc, "\n")
-	// autolink function foo#bar to foo.html#bar
-	txt = linkmarker.ReplaceAllStringFunc(txt, replace)
-	sec.Doc = template.HTML(toMarkdown(txt))
-	codelines := strings.Join(code, "\n")
-	c, err := decorate.Highlight([]byte(codelines), "lua", "html")
-	if err != nil {
-		log.Fatal(err)
-	}
-	c = functionmarker.ReplaceAllString(c, `${1}<a name="${2}">${2}`)
-	sec.Code = template.HTML(c)
-	document = append(document, sec)
+	inner(doc)
 
 	data := struct {
 		Title    string
 		Document []section
-		Csslink  string
-		JSlink   string
+		Destpath string
 		JumpTo   []collection
 	}{
-		filepath.Base(srcfile),
-		document,
-		csslink,
-		jslink,
-		jumpTo,
+		Title:    filepath.Base(srcfile),
+		Document: document,
+		Destpath: filepath.Dir(destpath),
+		JumpTo:   jumpTo,
 	}
-	err = htmltemplate.Execute(out, data)
+	err = s.htmltemplate.Execute(out, data)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -188,122 +168,99 @@ func genHTML(srcfile, destpath string) {
 
 // Add all lua files to the collection list. This will be the base
 // for the 'jump to' list in each HTML file
-func collectJumpTo(path string, info os.FileInfo, err error) error {
-	if !info.IsDir() && strings.HasSuffix(path, ".lua") {
-		luafiles = append(luafiles, path)
+func (s *sourcedoc) preprocess(srcfile string, info os.FileInfo, err error) error {
+	if !info.IsDir() && strings.HasSuffix(srcfile, ".lua") {
+		s.luafiles = append(s.luafiles, srcfile)
 	}
 	return nil
 }
 
+func (s *sourcedoc) htmlPathFromLua(src string) string {
+	dest := strings.Replace(src, s.srcpath, s.outpath, 1)
+	dest = strings.TrimSuffix(dest, ".lua") + ".html"
+	return dest
+}
+
 // Convert Lua file to HTML file
-func convertLuaFile(path string, info os.FileInfo, err error) error {
+func (s *sourcedoc) convertLuaFile(path string, info os.FileInfo, err error) error {
 	if err != nil {
 		log.Fatal(err)
 	}
 	if !info.IsDir() && strings.HasSuffix(path, ".lua") {
-		outpath := strings.Replace(path, srcpath, outpath, 1)
-		outpath = strings.TrimSuffix(outpath, ".lua") + ".html"
-		genHTML(path, outpath)
+		dest := s.htmlPathFromLua(path)
+		s.genHTML(path, dest)
 	}
 	return nil
 }
 
-func copyFile(src, dest string) error {
-	r, err := os.Open(src)
+func (s *sourcedoc) relLink(src, dest string) string {
+	srcdir := filepath.Dir(src)
+	destdir := filepath.Dir(dest)
+	destbase := filepath.Base(dest)
+	rel, err := filepath.Rel(srcdir, destdir)
 	if err != nil {
-		return err
+		panic(err)
 	}
-	defer r.Close()
-
-	w, err := os.Create(dest)
-	if err != nil {
-		return err
-	}
-	defer w.Close()
-
-	_, err = io.Copy(w, r)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return path.Join(rel, destbase)
 }
 
-func copyDir(dir ...string) error {
-	for _, v := range dir {
-		indir, err := filepath.Abs(v)
-		if err != nil {
-			return err
-		}
-		outdir := filepath.Join(outpath, filepath.Base(v))
-
-		err = filepath.Walk(indir, func(path string, info os.FileInfo, err error) error {
-			rel, err := filepath.Rel(indir, path)
-			if err != nil {
-				return err
-			}
-			if info.IsDir() {
-				os.Mkdir(filepath.Join(outdir, rel), 0755)
-			} else {
-				err = copyFile(path, filepath.Join(outdir, rel))
-				if err != nil {
-					return err
-				}
-			}
-			return nil
-		})
-		if err != nil {
-			return err
-		}
+func (s *sourcedoc) linkToPage(src, dest string) string {
+	sourcedir := filepath.Dir(filepath.Join(s.outpath, src))
+	base := filepath.Base(src)
+	rel, err := filepath.Rel(dest, sourcedir)
+	if err != nil {
+		panic(err)
 	}
-
-	return nil
+	return path.Join(rel, base)
 }
 
-func GenSourcedoc(_srcpath, _outpath, _assets, _images string) error {
-	linemarker = regexp.MustCompile(`^.*?--- ?(.*)$`)
-	functionmarker = regexp.MustCompile(`(span class="kw">function</span>\s+)([^ (]*)`)
-	linkmarker = regexp.MustCompile(`(\w+\.)?(\w+)#(\w+)(\(\))?`)
+func (s *sourcedoc) prepareDirectories() error {
+	sources := filepath.Join(s.cfg.Basedir(), "doc", "sourcedoc")
+	assets := filepath.Join(sources, "assets")
+	images := filepath.Join(sources, "img")
+
+	fmt.Println("Removing all files from", s.outpath)
+	os.RemoveAll(s.outpath)
+
 	var err error
-
-	srcpath, err = filepath.Abs(_srcpath)
-	if err != nil {
-		return err
-	}
-	outpath, err = filepath.Abs(_outpath)
-	if err != nil {
-		return err
-	}
-	csspath, err = filepath.Abs(filepath.Join(_outpath, "css", "gocco.css"))
-	if err != nil {
-		return err
-	}
-	jspath, err = filepath.Abs(filepath.Join(_outpath, "js", "MathJax.js"))
-	if err != nil {
+	if err = fileutils.CpR(assets, s.outpath); err != nil {
 		return err
 	}
 
-	htmltemplate, err = template.New("HTML").Parse(tmplatesrc)
-	if err != nil {
+	if err = fileutils.CpR(images, filepath.Join(s.outpath, "img")); err != nil {
 		return err
 	}
-	fmt.Println("Removing all files from", outpath)
-	os.RemoveAll(outpath)
+	return nil
+}
+
+// GenSourcedoc reads all source files from the source dir and generate HTML files
+// in outdir
+func GenSourcedoc(cfg *config.Config) error {
+	s := sourcedoc{
+		cfg:     cfg,
+		srcpath: filepath.Join(cfg.Srcdir, "lua"),
+		outpath: filepath.Join(cfg.Builddir, "sourcedoc"),
+	}
+	var err error
+	if err = s.prepareDirectories(); err != nil {
+		return err
+	}
+
+	funcMap := template.FuncMap{
+		"linkTo": func(dest string, page string) string { return s.linkToPage(dest, page) },
+	}
+	s.htmltemplate = template.Must(template.New("dummy").Funcs(funcMap).Parse(tmplatesrc))
 
 	// First collect info about all lua files
-	err = filepath.Walk(srcpath, collectJumpTo)
-	if err != nil {
+	if err = filepath.Walk(s.srcpath, s.preprocess); err != nil {
 		return err
 	}
 
 	// Then convert all the files
-	err = filepath.Walk(srcpath, convertLuaFile)
-	if err != nil {
+	if err = filepath.Walk(s.srcpath, s.convertLuaFile); err != nil {
 		return err
 	}
-
-	err = copyDir(filepath.Join(_assets, "css"), filepath.Join(_assets, "js"), _images)
-	return err
+	return nil
 }
 
 var tmplatesrc string = `<!DOCTYPE html>
@@ -311,8 +268,10 @@ var tmplatesrc string = `<!DOCTYPE html>
 <head>
     <title>{{.Title}}</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" media="all" href="{{ .Csslink}}" >
-    <script type="text/javascript" src="{{.JSlink}}?config=TeX-AMS_HTML"></script>
+    <link rel="stylesheet" href="{{ linkTo "css/vs.css" .Destpath }}" >
+    <link rel="stylesheet" href="{{ linkTo "css/gocco.css" .Destpath }}" >
+    <script type="text/javascript" src="{{ linkTo "js/highlight.pack.js" .Destpath }}"></script>
+    <script type="text/javascript" src="{{ linkTo "js/MathJax.js" .Destpath }}?config=TeX-AMS_HTML"></script>
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({
         extensions: ["tex2jax.js"],
@@ -339,7 +298,8 @@ var tmplatesrc string = `<!DOCTYPE html>
 </div>
 <table>
 <tr><td class="docs"><h1>{{.Title}}</h1></td><td class="code"></td></tr>
-{{ range .Document}}<tr><td class="docs">{{ .Doc }}</td><td class="code"><pre>{{.Code}}</pre></td></tr>{{end}}</table>
+{{ range .Document}}<tr><td class="docs">{{ .Doc }}</td><td class="code"><pre><code class="lua">{{.Code}}</code></pre></td></tr>{{end}}</table>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
 `

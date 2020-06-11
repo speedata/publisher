@@ -257,8 +257,7 @@ func main() {
 		}
 
 	case "sourcedoc":
-		// 1 = srcpath, 2 = outpath, 3 = assets, 4 = images
-		err := sourcedoc.GenSourcedoc(filepath.Join(cfg.Srcdir, "lua"), filepath.Join(cfg.Builddir, "sourcedoc"), filepath.Join(cfg.Basedir(), "doc", "sourcedoc", "assets"), filepath.Join(cfg.Basedir(), "doc", "sourcedoc", "img"))
+		err := sourcedoc.GenSourcedoc(cfg)
 		if err != nil {
 			log.Fatal(err)
 		}
