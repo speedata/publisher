@@ -3414,7 +3414,7 @@
         <para>Setze die Farbe der Initiale. Voreingestellt ist Schwarz.</para>
       </description>
     </attribute>
-    <attribute en="fontface" optional="no">
+    <attribute en="fontface" optional="no" type="text">
       <description xml:lang="en">
         <para>Choose the font family. Only »Regular« shape is used at the moment.</para>
       </description>
@@ -3422,7 +3422,7 @@
         <para>Wähle die Fontfamilie. Derzeit wird nur der Schnitt Regular verwendet.</para>
       </description>
     </attribute>
-    <attribute en="padding-left" optional="yes">
+    <attribute en="padding-left" type="length" optional="yes">
       <description xml:lang="en">
         <para>Insert space left of the initial.</para>
       </description>
@@ -3430,7 +3430,7 @@
         <para>Fügt Leerraum links der Initiale ein.</para>
       </description>
     </attribute>
-    <attribute en="padding-right" optional="yes">
+    <attribute en="padding-right" type="length" optional="yes">
       <description xml:lang="en">
         <para>Insert space right of the initial.</para>
       </description>

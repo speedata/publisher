@@ -14,6 +14,7 @@
 	<meta name="googlebot" content="index,follow" />
 	<link rel="icon" href="{{ linkTo "/static/favicon.png" .Section }}" type="image/png">
 
+	<link rel="stylesheet" href="{{ linkTo "/static/css/glightbox.min.css" .Section }}" />
 	<link rel="stylesheet" href="{{ linkTo "/static/css/style.css" .Section }}" />
 	<link rel="stylesheet" href="{{ linkTo "/static/font-awesome-4.7.0/css/font-awesome.min.css" .Section }}" />
 	<link rel="stylesheet" href="{{ linkTo "/static/css/roboto.css" .Section }}" />
@@ -199,6 +200,10 @@ function getSource() {
 
 	<script type="text/javascript" src="{{linkTo "/static/js/jquery.min.js" .Section}}"></script>
 	<script type="text/javascript" src="{{linkTo "/static/js/handbuch.js" .Section}}"></script>
+	<script src="{{ linkTo "/static/js/glightbox.min.js" .Section}}"></script>
+	<script type="text/javascript">
+	const lightbox = GLightbox({});
+	</script>
 
 	<div id="topButton"></div>
 </body>

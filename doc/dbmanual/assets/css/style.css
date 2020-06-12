@@ -2436,3 +2436,7 @@ body.blog * #content * h2 {
 
 .width75 {
   width: 75%; }
+
+a.glightbox {
+  border-bottom: none !important;
+}

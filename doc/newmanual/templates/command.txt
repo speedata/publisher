@@ -2,6 +2,8 @@
 [[{{.Command.CmdLink}}]]
 = {{ .Command.Name }}
 
+{{with .Command.Since}}_{{translate $.Lang "since version"}} {{.}}_{{end}}
+
 {{  .Command.DescriptionAdoc .Lang }}
 
 
@@ -20,7 +22,7 @@
 == {{ translate $.Lang "Attributes" }}
 {{ with .Command.Attributes }}
 {{ range $.Command.Attributes }}
-[[{{.Attlink $.Command}}]]`{{.Name}}` ({{atttypeinfo . $.Lang}}{{ with .Css }}, {{ translate $.Lang "CSS property"}}: {{.}}{{end}})::
+[[{{.Attlink $.Command}}]]`{{.Name}}` ({{atttypeinfo . $.Lang}}{{ with .Css }}, {{ translate $.Lang "CSS property"}}: {{.}}{{end}}{{with .Since}}, _{{translate $.Lang "since version"}} {{.}}_{{end}})::
   {{.DescriptionAdoc $.Lang }}
 {{ end }}{{else}}(keine){{ end }}
 

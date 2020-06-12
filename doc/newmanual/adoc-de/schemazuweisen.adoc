@@ -1,0 +1,23 @@
+[appendix]
+[.split]
+[[ch-anhang-schemazuweisen]]
+= XML Editor mit Schema verbinden
+
+Die meisten XML-Editoren können mit RELAX NG Schema oder mit XML Schema eine sinnvolle Eingabeunterstützung bieten (siehe <<ch-schemavalidierung>>).
+
+Die Idee ist im Prinzip immer dasselbe: entweder weist man dem speedata Namensraum (`urn:speedata.de:2009/publisher/en`)  grundsätzlich eine Schemadatei zu, oder man verknüpft jede Datei separat mit dem Schema.
+
+
+
+
+include::vscodeschema.adoc[leveloffset=+1]
+include::oxygenxmlschema.adoc[leveloffset=+1]
+// include::atom.adoc[]
+
+== Atom
+
+Für den ((Atom))-Editor heißt das Paket `language-speedata-publisher`. Die Installationsanleitung ist auf der Github-Seite unter https://github.com/speedata/atom-schema-speedata zu finden.
+
+// EOF
+
+

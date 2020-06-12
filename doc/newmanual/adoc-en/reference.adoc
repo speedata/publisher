@@ -1,4 +1,4 @@
-:idprefix: xxx-
+:idprefix: ref-
 :leveloffset: +1
 
 
@@ -375,7 +375,7 @@ include::ref/insertpages.adoc[]
 
 == See also
 
-The command <<cmd-savepages,`<SavePages>`>> and the section <<ch-savepages>>.
+The command <<cmd-savepages,`<SavePages>`>>, the section <<ch-savepages>> and <<ch-cookbook-toinonerun>>.
 
 
 include::ref/italic.adoc[]
@@ -588,7 +588,7 @@ Commands <<cmd-attribute,`<Attribute>`>>, <<cmd-element,`<Element>`>> and <<cmd-
 include::ref/savepages.adoc[]
 == See also
 
-The command <<cmd-insertpages,`<InsertPages>`>> and the section <<ch-savepages>>.
+The command <<cmd-insertpages,`<InsertPages>`>>, the section <<ch-savepages>> and <<ch-cookbook-toinonerun>>.
 
 include::ref/setgrid.adoc[]
 

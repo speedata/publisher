@@ -26,8 +26,6 @@ Daher ist die Hauptanwendung dieses Pre-Processing die Transformation von Daten 
 
 Im Folgenden werden die Anwendungsmöglichkeiten beschrieben, ganz zum Schluss gibt es nochmals eine Übersicht über die eingebauten Funktionen und Methoden.
 
-
-
 == Validieren von Eingabedaten
 
 Um RELAX NG-Dateien zu validieren gibt es mehrere Möglichkeiten. Neben einen Variante, direkt im XML Editor das Schema zu validieren (siehe den entsprechenden <<ch-schemavalidierung, Abschnitt im Handbuch>>) gibt es die Möglichkeit,  ein externes Programm dafür zu nutzen.

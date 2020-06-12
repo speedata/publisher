@@ -44,28 +44,9 @@ image::29-autocomplete1.png[width=90%,scaledwidth=100%]
 .Allowed attributes for text block
 image::29-autocomplete2.png[width=90%,scaledwidth=100%]
 
-== Integration of the RELAX NG schema
+== Integration of the schemata
 
-How the schema is included depends on the editor. For oXygen XML, for example, you can create a new document type assignment in the settings. You have to define for which namespace the schema should be used.
-
-.Link rules in the oXygen XML configuration
-image::29-doczuordnung1.png[width=80%,scaledwidth=100%]
-
-Then you have to define which schema should be loaded for these link rules. This is defined in the second tab of the setting.
-
-.Set RELAX NG + Schematron as schema in the oXygen XML configuration
-image::29-doczuordnung2.png[width=80%,scaledwidth=100%]
-
-From now on, for every layout in the namespace
-
-[source, xml]
--------------------------------------------------------------------------------
-xmlns="urn:speedata.de:2009/publisher/en"
--------------------------------------------------------------------------------
-
-the schema should be associated. This can be recognized by the fact that a selection of commands now appears when you enter an opening angle bracket (<).
-
-.If the schema is correctly integrated, a selection list appears as soon as you enter a command.
-image::29-liste.png[width=90%,scaledwidth=100%]
-
+How the schema is included depends on the editor.
+The appendix contains step-by-step instructions for various editors (<<ch-schema-oxygenxml,oXygen XML Editor>> or <<ch-schema-vscode,Visual Studio Code>>).
+Further information is available in the chapter <<ch-appendix-schema-assigning>>.
 // EOF

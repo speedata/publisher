@@ -54,39 +54,10 @@ image::29-autocomplete2.png[width=90%,scaledwidth=100%]
 
 
 
-== Einbinden des RELAX NG-Schemas
+== Einbinden der Schemata
 
 Wie das Schema eingebunden wird, ist abhängig vom Editor.
-Für oXygen XML kann z. B. man in den Einstellungen eine neue Dokumenttypen-Zuordnung erstellen.
-Es muss festgelegt werden, für welchem Namensraum das Schema benutzt werden soll.
+Im Anhang finden sich für verschiedene Editoren (<<ch-schema-oxygenxml,oXygen XML Editor>> bzw. <<ch-schema-vscode,Visual Studio Code>>) Schritt für Schritt Anleitungen.
+Weitere Informationen gibt es im Kapitel <<ch-anhang-schemazuweisen>>.
 
-.Verknüpfungsregeln in der oXygen XML-Konfiguration
-image::29-doczuordnung1.png[width=80%,scaledwidth=100%]
-
-Dann muss man noch definieren, welches Schema für diese Verknüpfungsregeln geladen werden soll.
-Das wird im zweiten Reiter der Einstellung festgelegt.
-ifdef::backend-docbook99[]
-Siehe Abbildung <<abb-29-doczuordnung2>>.
-endif::[]
-
-
-[[abb-29-doczuordnung2]]
-.Als Schema RELAX NG + Schematron einstellen in der oXygen XML-Konfiguration
-image::29-doczuordnung2.png[width=80%,scaledwidth=100%]
-
-
-Ab sofort sollte zu jedem Layout im Namensraum
-
-[source, xml]
--------------------------------------------------------------------------------
-xmlns="urn:speedata.de:2009/publisher/en"
--------------------------------------------------------------------------------
-
-
-das Schema hinterlegt sein.
-Das erkennt man daran, dass nun bei Eingabe einer öffnenden spitzen Klammer (<) eine Auswahl der Befehle erscheint.
-
-.Ist das Schema richtig eingebunden, dann erscheint eine Auswahlliste sobald man einen Befehl eingibt.
-image::29-liste.png[width=90%,scaledwidth=100%]
-
-
+// EOF

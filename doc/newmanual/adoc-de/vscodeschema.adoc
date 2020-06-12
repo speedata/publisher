@@ -1,0 +1,27 @@
+[[ch-schema-vscode]]
+= Visual Studio Code
+
+Der kostenlose (und unter einer freien Lizenz stehende) Texteditor https://code.visualstudio.com[Visual Studio Code] (kurz: VS Code) kann dank zahlreicher Extensions für sehr viele Programmiersprachen benutzt werden. Um das speedata Layout-Schema zu benutzen, wird die XML Erweiterung von Red Hat benötigt:
+
+.Den Marktplatz für Erweiterungen öffnen und nach `xml` suchen. Die Erweiterung von Red Hat ist die richtige.
+image::vscode-xml-redhat.png[width=50%]
+
+Diese Erweiterung wird über sogenannte https://de.wikipedia.org/wiki/XML_Catalogs[XML Kataloge] gesteuert.
+In diesen wird eine Zuordnung von Namensraum zu einem Schema erstellt.
+Zwei vorgefertigte Kataloge werden mit dem speedata Publisher geliefert, die den speedata Namensraum mit den entsprechenden Schemadateien verknüpfen.
+So muss man nur den Katalog einbinden:
+
+.In den Einstellungen kann die Variable `xml.catalogs` geändert werden. Dieser muss auf `catalog-schema-en.xml` bzw. `catalog-schema-de.xml` gesetzt werden. Der Pfad muss natürlich angepasst werden.
+image::vscode-xml-catalog.png[]
+
+Es gibt zwei verschiedene Schemadateien, die in je zwei Sprachen dokumentiert sind. Für die englischsprachige Dokumentation muss `catalog-schema-en.xml` benutzt werden, für die deutschsprachige Dokumentation `catalog-schema-de.xml`.
+
+Hat alles geklappt, kommt bei einem Layout mit dem Namensraum `urn:speedata.de:2009/publisher/en` die Autovervollständigung mit Beschreibung:
+
+.Autovervollständigung mit Kurzbeschreibung im Visual Studio Code.
+image::vscode-sample-layout.png[]
+
+
+
+
+// EOF

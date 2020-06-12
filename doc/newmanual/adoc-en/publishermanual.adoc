@@ -44,6 +44,7 @@ ifdef::backend-docbook5[]
 - <<app-lengthsunits,Lenghts and units>>
 - <<ch-xpathfunctions,XPath- and layoutfunctions>>
 - <<ch-internalvariables,Internal variables>>
+- <<ch-appendix-schema-assigning>>
 - <<ch-changelog,Changelog>>
 - <<app-glossary,Glossary>>
 - <<ch-commandreference,Command reference>>
@@ -70,6 +71,7 @@ include::configuration.adoc[]
 include::lengthsunits.adoc[]
 include::xpath.adoc[]
 include::internalvariables.adoc[]
+include::associateschema.adoc[]
 include::changelog.adoc[]
 include::glossary.adoc[]
 

@@ -1,4 +1,4 @@
-:idprefix: xxx-
+:idprefix: ref-
 :leveloffset: +1
 
 
@@ -375,7 +375,7 @@ include::ref/insertpages.adoc[]
 
 == Siehe auch
 
-Den Befehl <<cmd-savepages,`<SavePages>`>> und den Abschnitt <<ch-savepages,Virtuelle Seiten>>.
+Den Befehl <<cmd-savepages,`<SavePages>`>>, den Abschnitt <<ch-savepages,Virtuelle Seiten>> sowie <<ch-kochbuch-verzeichnisseeindurchlauf>>.
 
 
 include::ref/italic.adoc[]
@@ -584,7 +584,7 @@ Befehle <<cmd-attribute,`<Attribute>`>>, <<cmd-element,`<Element>`>> und <<cmd-l
 include::ref/savepages.adoc[]
 == Siehe auch
 
-Den Befehl <<cmd-insertpages,`<InsertPages>`>> und den Abschnitt <<ch-savepages,Virtuelle Seiten>>.
+Den Befehl <<cmd-insertpages,`<InsertPages>`>>, die Abschnitte <<ch-savepages,Virtuelle Seiten>> und <<ch-kochbuch-verzeichnisseeindurchlauf>>.
 
 include::ref/setgrid.adoc[]
 

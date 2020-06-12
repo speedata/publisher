@@ -40,9 +40,7 @@ layoutschema-de.xsd
 layoutschema-en.xsd
 ----
 
-for XSD, depending on the desired language of the documentation.
-
-For Visual Studio code, the required package is XML (Red Hat), installation instructions are available at https://blog.speedata.de/2019/09/11/xsd-schema/ (German only). For the Atom editor, the package is called `language-speedata-publisher`. The installation instructions can be found on the github page at https://github.com/speedata/atom-schema-speedata.
+for XSD, depending on the desired language of the documentation. Further information on the schema can be found in the chapter <<ch-schemavalidation>> and in the appendix <<ch-appendix-schema-assigning>>.
 
 ==  Namespace of the layout ruleset
 

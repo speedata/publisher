@@ -79,6 +79,7 @@ include::konfigurationsdatei.adoc[]
 include::massangaben.adoc[]
 include::xpathfunktionen.adoc[]
 include::variablen.adoc[]
+include::schemazuweisen.adoc[]
 include::changelog.adoc[]
 include::glossar.adoc[]
 

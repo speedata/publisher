@@ -101,9 +101,10 @@ type section struct {
 	IsSearch     bool
 }
 
-func (s *section) writeString(input string) {
+func (s *section) WriteString(input string) (int, error) {
 	s.Contents.WriteString(input)
-	s.RawContents.WriteString(tagRemover.ReplaceAllString(input, ""))
+	return s.RawContents.WriteString(tagRemover.ReplaceAllString(input, ""))
+
 }
 
 // DocBook is the main structure for basic docbook 5 files
@@ -376,7 +377,7 @@ func (d *DocBook) collectContents() error {
 	var curOutput io.StringWriter
 	switchOutputGetString := func() string {
 		curChardata := chardata.String()
-		curOutput = &curpage.Contents
+		curOutput = curpage
 		chardata.Reset()
 		return curChardata
 	}
@@ -431,9 +432,9 @@ getContents:
 				curOutput.WriteString(fmt.Sprintf(`<em%s>`, class))
 			case "entry":
 				if inThead {
-					curpage.writeString(`<th>`)
+					curpage.WriteString(`<th>`)
 				} else {
-					curpage.writeString(`<td>`)
+					curpage.WriteString(`<td>`)
 				}
 				omitP = true
 			case "figure":
@@ -486,7 +487,6 @@ getContents:
 				dec.Skip()
 			case "link":
 				var href string
-				// href := attr(elt, "href")
 				linkend := attr(elt, "linkend")
 				if linkend != "" {
 					page := d.idfilemapping[linkend]
@@ -594,7 +594,7 @@ getContents:
 							panic("could not get filename mapping for " + fn)
 						}
 					} else {
-						panic("could not resolve " + linkend)
+						panic("could not resolve " + linkend + " " + curpage.Pagename)
 					}
 
 				}
@@ -649,10 +649,10 @@ getContents:
 
 				curOutput.WriteString(fmt.Sprintf(`<div id="%s" class="imageblock">
 				<div class="content">
-				<img src="%s" %s%s>
+				<a href="%s" class="glightbox"><img src="%s" %s%s></a>
 				</div>
 				<div class="caption">%s</div>
-				</div>`, figureid, src, alt, wd, figuretitle))
+				</div>`, figureid, src, src, alt, wd, figuretitle))
 				inFigure = false
 			case "formalpara":
 				curOutput.WriteString(fmt.Sprintf(`</div><div class="caption">%s</div></div>`, figuretitle))
@@ -669,7 +669,7 @@ getContents:
 				}
 				imagedata = assetsTrim.ReplaceAllString(imagedata, "$2")
 				src := d.linkToPage("/static/"+imagedata, *curpage)
-				curOutput.WriteString(fmt.Sprintf("\n<img src='%s'%s%s>", src, wd, alt))
+				curOutput.WriteString(fmt.Sprintf("\n<a href='%s' class='glightbox'><img src='%s'%s%s></a>", src, src, wd, alt))
 			case "itemizedlist":
 				curlist := listlevel[len(listlevel)-1]
 				listlevel = listlevel[:len(listlevel)-1]
@@ -681,9 +681,6 @@ getContents:
 			case "link":
 				curOutput.WriteString(`</a>`)
 			case "literal":
-				// out := switchOutputGetString()
-				// out = escaper.Replace(out)
-				// curOutput.WriteString(out)
 				curOutput.WriteString(`</code>`)
 				verbatim = false
 				literal = false

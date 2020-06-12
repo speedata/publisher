@@ -1,0 +1,37 @@
+[[ch-schema-oxygenxml]]
+= OxygenXML
+
+Der Editor https://www.oxygenxml.com[oXygen XML] ist ein spezieller XML Editor, der eine hervorragende Unterstützung für die Bearbeitung des Layoutregelwerks bietet.
+Um diese Unterstützung zu erhalten, muss dem speedata Layout-Namensraum (`urn:speedata.de:2009/publisher/en`) das Schema zugeordnet werden.
+
+.In den Einstellungen wählt man die Zuordnung der Dokumenttypen (Document Type Association). Anschließend klickt man auf »New«, um eine neue Zuordnung zu erstellen
+image::oxygen-schema-doctypeassociation.png[]
+
+.Im ersten Reiter muss man auf das `+` klicken, um eine Zuordnung zu erstellen.
+image::oxygen-schema-doctypeassociation-1.png[]
+
+.In diesem Fenster trägt man den Namensraum des Layouts (`urn:speedata.de:2009/publisher/en`) ein.
+image::29-doczuordnung1.png[width=50%,scaledwidth=100%]
+
+
+[[abb-29-doczuordnung2]]
+.Nun kann man als Schema RELAX NG + Schematron einstellen und das Schema auswählen. In der ZIP-Datei liegt es unter `share/schema/layoutschema-en.rng` bzw. `...-de.rng`, je nach gewünschter Sprache für die Kurzbeschreibung.
+image::29-doczuordnung2.png[width=80%,scaledwidth=100%]
+
+Ab sofort sollte zu jedem Layout im Namensraum
+
+[source, xml]
+-------------------------------------------------------------------------------
+xmlns="urn:speedata.de:2009/publisher/en"
+-------------------------------------------------------------------------------
+
+das Schema hinterlegt sein.
+Das erkennt man daran, dass nun bei Eingabe einer öffnenden spitzen Klammer (<) eine Auswahl der Befehle erscheint.
+
+.Ist das Schema richtig eingebunden, dann erscheint eine Auswahlliste sobald man einen Befehl eingibt.
+image::29-liste.png[width=90%,scaledwidth=100%]
+
+
+
+
+// EOF

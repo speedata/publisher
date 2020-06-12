@@ -41,19 +41,14 @@ layoutschema-de.xsd
 layoutschema-en.xsd
 ----
 
-für XSD, je nach gewünschter Sprache der Dokumentation.
-
-
-Für Visual Studio Code ist das benötigte Paket `XML` (Red Hat), die Installationsanleitung steht unter https://blog.speedata.de/2019/09/11/xsd-schema/.  Für den ((Atom))-Editor heißt das Paket `language-speedata-publisher`. Die Installationsanleitung ist auf der Github-Seite unter https://github.com/speedata/atom-schema-speedata zu finden.
+für XSD, je nach gewünschter Sprache der Dokumentation. Weitere Informationen zum Schema gibt es im Kapitel <<ch-schemavalidierung>> und im Anhang <<ch-anhang-schemazuweisen,Installatinsanleitungen für verschiedene Editoren (z.B. oXygen, Visual Studio Code)>>.
 
 
 == Namensraum des Layoutregelwerks
 
-
 Der XML-Namensraum des Layoutregelwerks ist `urn:speedata.de:2009/publisher/en`.
 Die zusätzlichen XPath-Funktionen liegen im Namensraum `urn:speedata:2009/publisher/functions/en`.
 Daher sollte ein Layoutregelwerk immer diesen Rahmen haben:
-
 
 
 [source, xml]
