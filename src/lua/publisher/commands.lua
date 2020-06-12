@@ -4035,6 +4035,9 @@ function commands.textblock( layoutxml,dataxml )
         end
     end
 
+    -- for HTML processing
+    objects = publisher.flatten_boxes(objects)
+
     if columns > 1 then
         width_sp = math.floor(  (width_sp - columndistance * ( columns - 1 ) )   / columns)
     end
@@ -4045,7 +4048,7 @@ function commands.textblock( layoutxml,dataxml )
             nodes[#nodes + 1] = paragraph
         else
             nodelist = paragraph.nodelist
-            assert(nodelist)
+            assert(nodelist,"No nodelist found in objects (Text)")
             local tmp = node.has_attribute(nodelist,publisher.att_dont_format)
             if tmp ~= 1 then
                 publisher.set_fontfamily_if_necessary(nodelist,fontfamily)

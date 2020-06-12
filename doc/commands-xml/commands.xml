@@ -3238,7 +3238,7 @@
     </example>
     <seealso><cmd name="Paragraph"/></seealso>
   </command>
-  <command en="HTML">
+  <command en="HTML" since="3.9.9">
     <description xml:lang="en">
       <para>Collect HTML from data.</para>
     </description>
@@ -3272,6 +3272,12 @@
 </Record>
 ]]></listing>
     </example>
+    <info xml:lang="en">
+      <para>This is experimental. Don't rely on this command to exist in future versions of the publisher.</para>
+    </info>
+    <info xml:lang="de">
+      <para>Dieser Befehl ist experimentell. Nicht darauf verlassen, dass dieser Befehl in Zukunft existiert.</para>
+    </info>
     <seealso></seealso>
   </command>
   <command en="I">
@@ -8460,16 +8466,17 @@
     <childelements>
       <oneOrMore>
         <choice>
-          <cmd name="Switch"/>
-          <cmd name="Loop"/>
-          <cmd name="Paragraph"/>
-          <cmd name="Ol"/>
-          <cmd name="Ul"/>
-          <cmd name="Copy-of"/>
           <cmd name="Action"/>
           <cmd name="Bookmark"/>
-          <cmd name="Value"/>
+          <cmd name="Copy-of"/>
           <cmd name="ForAll"/>
+          <cmd name="HTML"/>
+          <cmd name="Loop"/>
+          <cmd name="Ol"/>
+          <cmd name="Paragraph"/>
+          <cmd name="Switch"/>
+          <cmd name="Ul"/>
+          <cmd name="Value"/>
         </choice>
       </oneOrMore>
     </childelements>
