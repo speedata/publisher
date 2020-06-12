@@ -770,8 +770,13 @@ getContents:
 					}
 					curOutput.WriteString(fmt.Sprintf(`<h%d%s>%s</h%d>`, lvl, thisid, title, lvl))
 					curOutput.WriteString("\n")
-					if curpage.Index == 0 && titlecounter == 0 && d.Lang == "de" {
-						curOutput.WriteString(`<div class="epub"><p>Neu! Jetzt auch als ebook</p><a href="https://doc.speedata.de/publisher/de/publisherhandbuch.epub">Download</a></div>`)
+					if curpage.Index == 0 && titlecounter == 0 {
+						switch d.Lang {
+						case "en":
+							curOutput.WriteString(`<div class="epub"><p>New! Now also as ebook</p><a href="https://doc.speedata.de/publisher/en/publishermanual.epub">Download</a></div>`)
+						case "de":
+							curOutput.WriteString(`<div class="epub"><p>Neu! Jetzt auch als ebook</p><a href="https://doc.speedata.de/publisher/de/publisherhandbuch.epub">Download</a></div>`)
+						}
 						curOutput.WriteString("\n")
 					}
 					titlecounter++

@@ -1,6 +1,6 @@
 [[ch-writelayoutfile]]
 
-= Creation of a set of layout rules
+= How to write the layout
 
 _This page was automatically translated. Stay tuned for a human translation..._
 
@@ -54,7 +54,7 @@ The XML namespace of the layout ruleset is `urn:speedata.de:2009/publisher/en`. 
 </Layout>
 -------------------------------------------------------------------------------
 
-Then you can call speedata's own functions with the prefix sd:, for example: `sd:current-page()` to determine the current page number.
+Then you can call speedata's own functions with the prefix `sd:`, for example: `sd:current-page()` to determine the current page number.
 
 
 // EOF

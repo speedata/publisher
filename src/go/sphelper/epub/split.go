@@ -189,7 +189,7 @@ func newBytesEncoder(b *bytes.Buffer) *xml.Encoder {
 	return be
 }
 
-func secondPass(r io.Reader, outdir string) error {
+func secondPass(r io.Reader, outdir, lang string) error {
 	var wc io.WriteCloser
 	var b bytes.Buffer
 
@@ -386,12 +386,19 @@ func secondPass(r io.Reader, outdir string) error {
 				listtype = append(listtype, cORDEREDLIST)
 				enc.EncodeToken(orderedlist)
 			case "phrase":
-			case "programlisting", "screen":
+			case "programlisting", "screen", "literallayout":
 				newline()
 				enc.EncodeToken(programlisting)
 				programListingLang = attr(elt, "language")
 				enc = newBytesEncoder(&b)
 				writeCharData = true
+			case "quote":
+				switch lang {
+				case "en":
+					writeString("“", wc)
+				case "de":
+					writeString("»", wc)
+				}
 			case "row":
 				elementStart(row)
 			case "tbody":
@@ -436,7 +443,7 @@ func secondPass(r io.Reader, outdir string) error {
 					switch attr.Name.Local {
 					case "linkend":
 						if fn, ok := idfilemapping[attr.Value]; !ok {
-							fmt.Println("mapping", attr.Value, "nicht gefunden")
+							fmt.Println("mapping", attr.Value, "not found")
 						} else {
 							setAttr(&anchor, "href", fn+"#"+attr.Value)
 						}
@@ -551,7 +558,7 @@ func secondPass(r io.Reader, outdir string) error {
 				listtype = listtype[:len(listtype)-1]
 				enc.EncodeToken(orderedlist.End())
 				newline()
-			case "programlisting", "screen":
+			case "programlisting", "screen", "literallayout":
 				enc.Flush()
 				enc = fileEnc
 
@@ -587,6 +594,13 @@ func secondPass(r io.Reader, outdir string) error {
 				enc.EncodeToken(programlisting.End())
 				enc.EncodeToken(xml.CharData("\n\n"))
 				writeCharData = true
+			case "quote":
+				switch lang {
+				case "en":
+					writeString("”", wc)
+				case "de":
+					writeString("«", wc)
+				}
 			case "row":
 				elementEnd(row)
 			case "simpara", "para":
@@ -657,7 +671,7 @@ func splitDocBookChapters(r io.ReadSeeker, outdir string, conf *ebpubconf) error
 		return err
 	}
 
-	err = secondPass(r, outdir)
+	err = secondPass(r, outdir, conf.Language)
 	if err != nil {
 		return err
 	}

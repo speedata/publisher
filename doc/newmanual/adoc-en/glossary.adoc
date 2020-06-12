@@ -19,7 +19,7 @@ Layout function::
   Functions that are structured like XPath functions and are related to layout issues. For example, these functions can be used to determine the width of groups or output the current page number.
 
 Layout set of rules::
-  An XML file with the root element `<Layout>' that contains layout instructions. Set of rules because this is where the rules are defined according to which the data is arranged in the PDF.
+  An XML file with the root element `<Layout>` that contains layout instructions. Set of rules because this is where the rules are defined according to which the data is arranged in the PDF.
 
 Placement area::
   Also `<PositioningArea>`. Contains one or more rectangular areas (text frames) that are addressed under the same name. Will be redefined for each page. The whole page has the name `{page}`.

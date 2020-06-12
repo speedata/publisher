@@ -52,6 +52,7 @@ endif::[]
 - <<ch-xpathfunktionen,XPath- und Layoutfunktionen>>
 - <<ch-internevariablen,Interne Variablen>>
 - <<ch-changelog,Liste der Änderungen>>
+- <<ch-anhang-schemazuweisen>>
 - <<app-glossar,Glossar>>
 - <<ch-befehlsreferenz,Befehlsreferenz>>
 

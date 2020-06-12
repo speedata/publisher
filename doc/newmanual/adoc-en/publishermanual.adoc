@@ -20,6 +20,13 @@ ifdef::backend-docbook5[]
 [preface]
 = speedata Publisher: The manual
 
+ifdef::epub[]
+This manual describes the speedata Publisher in the version {version}. The current ebook can always be found at https://doc.speedata.de/publisher/en/.
+endif::[]
+
+[.epub]
+
+
 == Introduction and basics
 
 -  <<ch-introduction,Introduction>>
