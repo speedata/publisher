@@ -2,7 +2,7 @@
 --- To get in contact with the author, mail to <gundlach@speedata.de>.
 ---
 --- Please report bugs on the [github project page](http://speedata.github.com/luaqrcode/).
--- Copyright (c) 2012, Patrick Gundlach
+-- Copyright (c) 2012-2020, Patrick Gundlach and contributors, see https://github.com/speedata/luaqrcode
 -- All rights reserved.
 --
 -- Redistribution and use in source and binary forms, with or without
@@ -433,8 +433,9 @@ end
 
 --- ### Reed Solomon error correction
 --- Now this is the slightly ugly part of the error correction. We start with log/antilog tables
+-- https://codyplanteen.com/assets/rs/gf256_log_antilog.pdf
 local alpha_int = {
-	[0] = 0,
+	[0] = 1,
 	  2,   4,   8,  16,  32,  64, 128,  29,  58, 116, 232, 205, 135,  19,  38,  76,
 	152,  45,  90, 180, 117, 234, 201, 143,   3,   6,  12,  24,  48,  96, 192, 157,
 	 39,  78, 156,  37,  74, 148,  53, 106, 212, 181, 119, 238, 193, 159,  35,  70,
@@ -450,12 +451,12 @@ local alpha_int = {
 	 25,  50, 100, 200, 141,   7,  14,  28,  56, 112, 224, 221, 167,  83, 166,  81,
 	162,  89, 178, 121, 242, 249, 239, 195, 155,  43,  86, 172,  69, 138,   9,  18,
 	 36,  72, 144,  61, 122, 244, 245, 247, 243, 251, 235, 203, 139,  11,  22,  44,
-	 88, 176, 125, 250, 233, 207, 131,  27,  54, 108, 216, 173,  71, 142,   1
+	 88, 176, 125, 250, 233, 207, 131,  27,  54, 108, 216, 173,  71, 142,   0,   0
 }
 
 local int_alpha = {
-	[0] = 0,
-	255,   1,  25,   2,  50,  26, 198,   3, 223,  51, 238,  27, 104, 199,  75,   4,
+	[0] = 256, -- special value
+	0,   1,  25,   2,  50,  26, 198,   3, 223,  51, 238,  27, 104, 199,  75,   4,
 	100, 224,  14,  52, 141, 239, 129,  28, 193, 105, 248, 200,   8,  76, 113,   5,
 	138, 101,  47, 225,  36,  15,  33,  53, 147, 142, 218, 240,  18, 130,  69,  29,
 	181, 194, 125, 106,  39, 249, 185, 201, 154,   9, 120,  77, 228, 114, 166,   6,
@@ -571,14 +572,18 @@ local function calculate_error_correction(data,num_ec_codewords)
 		-- it to the generator polynom
 		local exp = mp_alpha[highest_exponent]
 		for i=highest_exponent,highest_exponent - num_ec_codewords,-1 do
-			if gp_alpha[i] + exp > 255 then
-				gp_alpha[i] = math.fmod(gp_alpha[i] + exp,255)
+			if exp ~= 256 then
+				if gp_alpha[i] + exp >= 255 then
+					gp_alpha[i] = math.fmod(gp_alpha[i] + exp,255)
+				else
+					gp_alpha[i] = gp_alpha[i] + exp
+				end
 			else
-				gp_alpha[i] = gp_alpha[i] + exp
+				gp_alpha[i] = 256
 			end
 		end
 		for i=highest_exponent - num_ec_codewords - 1,0,-1 do
-			gp_alpha[i] = 0
+			gp_alpha[i] = 256
 		end
 
 		gp_int = convert_to_int(gp_alpha)
