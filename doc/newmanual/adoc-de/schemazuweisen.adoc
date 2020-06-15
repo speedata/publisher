@@ -18,6 +18,8 @@ include::oxygenxmlschema.adoc[leveloffset=+1]
 
 Für den ((Atom))-Editor heißt das Paket `language-speedata-publisher`. Die Installationsanleitung ist auf der Github-Seite unter https://github.com/speedata/atom-schema-speedata zu finden.
 
+image::atom-autocompletion.png[]
+
 // EOF
 
 
