@@ -839,6 +839,29 @@ func (d *DocBook) linkToPage(dest string, page section) string {
 	return ret
 }
 
+func (d *DocBook) genNavi(thissection *section, navi bool) string {
+	prevSecLevel := 0
+	var nav strings.Builder
+	for _, page := range d.chain {
+		if page.Sectionlevel < prevSecLevel {
+			nav.WriteString("</li></ul>")
+		}
+		if page.Sectionlevel > prevSecLevel {
+			if prevSecLevel == 0 && navi {
+				nav.WriteString("<ul class='navi2mobile'>")
+			} else {
+				nav.WriteString("<ul>")
+			}
+		} else {
+			nav.WriteString("</li>\n")
+		}
+		nav.WriteString(fmt.Sprintf(`<li><a href="%s">%s</a>`, d.linkToPage("/"+d.Lang+"/"+page.Pagename, *thissection), page.Title))
+		prevSecLevel = page.Sectionlevel
+	}
+	nav.WriteString("</li></ul></li></ul>")
+	return nav.String()
+}
+
 // WriteHTMLFiles creates a directory and writes all HTML and static
 // files used for the documentation
 func (d *DocBook) WriteHTMLFiles(basedir string) error {
@@ -933,6 +956,8 @@ func (d *DocBook) WriteHTMLFiles(basedir string) error {
 			}
 		}
 		data := struct {
+			Navi          template.HTML
+			NaviMobile    template.HTML
 			Contents      template.HTML
 			Section       *section
 			Searchpage    *section
@@ -945,6 +970,8 @@ func (d *DocBook) WriteHTMLFiles(basedir string) error {
 			Children      []int
 			SearchContent template.JS
 		}{
+			Navi:        template.HTML(d.genNavi(page, false)),
+			NaviMobile:  template.HTML(d.genNavi(page, true)),
 			Contents:    template.HTML(page.Contents.String()),
 			Section:     page,
 			Searchpage:  searchpage,
@@ -974,6 +1001,8 @@ func (d *DocBook) WriteHTMLFiles(basedir string) error {
 	}
 
 	data := struct {
+		Navi          template.HTML
+		NaviMobile    template.HTML
 		Contents      template.HTML
 		Section       *section
 		Searchpage    *section
@@ -986,6 +1015,8 @@ func (d *DocBook) WriteHTMLFiles(basedir string) error {
 		Children      []int
 		SearchContent template.JS
 	}{
+		Navi:          template.HTML(d.genNavi(searchpage, false)),
+		NaviMobile:    template.HTML(d.genNavi(searchpage, true)),
 		Contents:      template.HTML("foo"),
 		Section:       searchpage,
 		Searchpage:    searchpage,

@@ -29,14 +29,7 @@
 				</label>
 				<input class="search-submit" value="{{translate .Language "Search"}}" type="submit">
 			</form>
-				{{ $prevseclevel := 0 -}}
-				{{ range .Chain -}}
-				{{- if lt .Sectionlevel $prevseclevel}}</li></ul>{{end -}}
-				{{ if gt .Sectionlevel $prevseclevel  }}<ul>{{else}}</li>{{end -}}
-				<li><a href="{{ linkTo ( printf "/%s/%s" $.Language .Pagename ) $.Section}}">{{.Title}}</a>
-				{{ $prevseclevel = .Sectionlevel -}}
-				{{end}}
-			</li></ul></li></ul>
+			{{ $.Navi}}
 			<br />
 		</div>
 		<div id="page" class="inhalt">
@@ -55,15 +48,7 @@
 							</label>
 							<input class="search-submit" value="{{translate .Language "Search"}}" type="submit">
 						</form>
-						<ul id="navi2mobile">
-						{{ $prevseclevel := 1 -}}
-							{{ range .Chain -}}
-							{{ if lt .Sectionlevel $prevseclevel}}</li></ul>{{end -}}
-							{{ if gt .Sectionlevel $prevseclevel}}<ul>{{end -}}
-							<li><a href="{{ linkTo ( printf "/%s/%s" $.Language .Pagename ) $.Section}}">{{.Title}}</a>
-							{{ $prevseclevel = .Sectionlevel -}}
-							{{- end}}
-						</li></ul></li></ul>
+						{{ $.NaviMobile}}
 					<ul><li>{{ if eq .Language "en"}}<a href="{{linkTo "/de/index.html" .Section}}">This manual in German</a>{{else}}<a href="{{linkTo "/en/index.html" .Section}}">Dieses Handbuch auf Englisch</a>{{end}}</li></ul>
 					</div>
 				</div>
