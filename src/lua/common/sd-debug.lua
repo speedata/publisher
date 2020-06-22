@@ -128,8 +128,10 @@ function nodelist_tostring( head )
                 head = head.next
                 head = head.next
             end
-        elseif head.id == publisher.glue_node then
+          elseif head.id == publisher.glue_node then
             ret[#ret + 1] = "·"
+          elseif head.id == publisher.kern_node then
+            ret[#ret + 1] = "◊"
         elseif head.id == publisher.whatsit_node then
             if head.subtype == publisher.pdf_refximage_whatsit then
                 ret[#ret + 1] = string.format("⊡")

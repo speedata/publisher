@@ -195,7 +195,7 @@ end
 --- We do that because in the dtp world when we say 12pt, we always mean 12*1/72 inch.
 local orig_texsp = tex.sp
 function tex.sp( number_or_string )
-    if number_or_string == "0" or number_or_string == 0 then
+    if number_or_string == "0" or number_or_string == 0 or number_or_string == "" then
         return 0
     end
 
@@ -209,6 +209,11 @@ function tex.sp( number_or_string )
         return unpack(ret,2)
     end
     return orig_texsp(number_or_string)
+end
+
+-- return rounded number of dtp points
+function tex.bp(number_or_string)
+    return sp_to_bp(tex.sp(number_or_string))
 end
 
 local _assert = assert

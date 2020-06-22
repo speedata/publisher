@@ -195,13 +195,13 @@ function calculate_height( attribute_height, original_size )
     end
 end
 
-function draw_border(nodelists, attributes, lineheight)
+function draw_border(nodelists, attributes,styles)
     if not attributes then
         return nodelists
     end
     if not attributes.has_border then return nodelists end
     local ret = {}
-
+    lineheight = styles.fontsize_sp * 1.2
     local factor = publisher.factor
 
     local padding_top = attributes["padding-top"] or 0
@@ -238,6 +238,12 @@ function draw_border(nodelists, attributes, lineheight)
     local border_right_color = attributes["border-right-color"]
     local border_bottom_color = attributes["border-bottom-color"]
     local border_left_color = attributes["border-left-color"]
+
+    local border_bottom_right_radius = attributes["border-bottom-right-radius"] or 0
+    local border_bottom_left_radius = attributes["border-bottom-left-radius"] or 0
+    local border_top_right_radius = attributes["border-top-right-radius"] or 0
+    local border_top_left_radius = attributes["border-top-left-radius"] or 0
+
 
     local rule_width_top, rule_width_right, rule_width_bottom, rule_width_left = 0, 0, 0, 0
     if border_top_style ~= "none" then
@@ -285,20 +291,26 @@ function draw_border(nodelists, attributes, lineheight)
         border_right_color = border_right_color,
         border_bottom_color = border_bottom_color,
         border_left_color = border_left_color,
+        border_bottom_right_radius = tex.sp(border_bottom_right_radius),
+        border_bottom_left_radius = tex.sp(border_bottom_left_radius),
+        border_top_right_radius = tex.sp(border_top_right_radius),
+        border_top_left_radius = tex.sp(border_top_left_radius),
         margin_top = margin_top,
         margin_right = margin_right,
         margin_bottom = margin_bottom,
         margin_left = margin_left,
         height = lineheight * 0.75,
         depth = lineheight * 0.25,
+        lineheight = lineheight,
     })
 
     node.setproperty(kernright,{
         borderend = true,
     })
-
     nodelists[1] = firstlist
-    nodelists[#nodelists] = lastlist
+    if #nodelists > 1 then
+        nodelists[#nodelists] = lastlist
+    end
     return nodelists
 end
 
@@ -468,7 +480,7 @@ function collect_horizontal_nodes( elt,parameter )
             end
         end
         if attributes.has_border then
-            local tmp = draw_border(thisret,attributes,styles.fontsize_sp)
+            local tmp = draw_border(thisret,attributes,styles)
             thisret = {}
             for i=1,#tmp do
                 thisret[#thisret + 1] = tmp[i]

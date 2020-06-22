@@ -443,6 +443,22 @@ function post_linebreak( head, list_head)
                 -- hyphenation does not start right at the beginning of the list...
                 node.insert_before(list_head,head,n)
             end
+        elseif head.id == kern_node then
+            local att_underline = node.has_attribute(head, publisher.att_underline)
+            local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)
+            -- at rightskip we must underline (if start exists)
+            if att_underline == nil then
+                if start_underline then
+                    insert_underline(list_head, head, start_underline,underlinetype)
+                    start_underline = nil
+                end
+            end
+            if att_bgcolor == nil then
+                if start_bgcolor then
+                    insert_backgroundcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom)
+                    start_bgcolor = nil
+                end
+            end
         elseif head.id == glue_node then -- glue
             local att_underline = node.has_attribute(head, publisher.att_underline)
             local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)

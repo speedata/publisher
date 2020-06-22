@@ -676,6 +676,40 @@ function dispatch(layoutxml,dataxml,options)
     return ret
 end
 
+
+local function pdf_draw_pos(x,y)
+    x = sp_to_bp(x)
+    y = sp_to_bp(y)
+    local wd = 0.1
+    return string.format("q 0 g 0.2 w %g %g m %g %g l %g %g l %g %g l h f Q ",x - wd,y - wd,x - wd,y + wd,x + wd,y + wd,x + wd,y - wd)
+end
+local function pdf_circle_pos(x,y)
+    return circle_pdfstring(x,y,10000,10000,"0G 0g","0G 0g",0)
+end
+local function pdf_circle_pos_big(x,y)
+    return circle_pdfstring(x,y,100000,100000,"0G 0g","0G 0g",0)
+end
+local function pdf_curveto(x1,y1,x2,y2,x3,y3)
+    x1 = sp_to_bp(x1)
+    y1 = sp_to_bp(y1)
+    x2 = sp_to_bp(x2)
+    y2 = sp_to_bp(y2)
+    x3 = sp_to_bp(x3)
+    y3 = sp_to_bp(y3)
+    return string.format("%g %g %g %g %g %g c",x1,y1,x2,y2,x3,y3)
+end
+local function pdf_moveto( x,y )
+    x = sp_to_bp(x)
+    y = sp_to_bp(y)
+    return string.format("%g %g m",x,y)
+end
+local function pdf_lineto( x,y )
+    x = sp_to_bp(x)
+    y = sp_to_bp(y)
+    return string.format("%g %g l",x,y)
+end
+
+
 --- Bookmarks are collected and later processed. This function (recursively)
 --- creates TeX code from the generated tables.
 function bookmarkstotex( tbl )
@@ -885,7 +919,11 @@ function initialize_luatex_and_generate_pdf()
             htmlfilename = v
             htmlblocks = {}
             options.htmlignoreeol = false
-            local tmp = splib.parse_html(publisher.htmlfilename)
+            local tmp = splib.parse_html(htmlfilename)
+            if tmp == "" then
+                err("Could not read HTML file %q",tostring(htmlfilename))
+                exit(false)
+            end
             if type(tmp) == "string" then
                 local a,b = load(tmp)
                 if a then a() else err(b) return end
@@ -1956,9 +1994,16 @@ function background( box, colorname )
     end
 end
 
---- Draw a frame around the given TeX box with color `obj.colorname`.
+--- Draw a colored frame around a given TeX box
 --- The control points of the frame are
 --- ![control points](img/roundedcorners.svg)
+-- obj is a table with the keys
+--   box: the TeX box
+--   colorname: the name of a color (defaults to "black")
+--   width: the width of the border (defaults to 0)
+--   clip: should the outside be clipped?
+--   b_x_y_radius, where x = b or t and y = r or l: the radius of the corners
+-- The function returns a hbox
 function frame(obj)
     local  box, colorname, width
     box          = obj.box
@@ -2061,6 +2106,7 @@ function frame(obj)
     xx16, yy16 = math.round(xx16,3), math.round(yy16,3)
 
     local n_clip, rule_clip
+
     if obj.clip then
         n_clip = node.new("whatsit","pdf_literal")
         rule_clip = {}
@@ -2108,9 +2154,10 @@ function frame(obj)
     end
     rule[#rule + 1] = "Q"
 
-    n.data      = table.concat(rule,      " ")
+    n.data = table.concat(rule," ")
     if (obj.clip==true) then
         n_clip.data = table.concat(rule_clip, " ")
+        node.setproperty(n_clip,{origin = "frame/clip"})
     end
 
     local pdf_save    = node.new("whatsit","pdf_save")
@@ -2164,17 +2211,63 @@ function fill_stroke_color( pdfcolor )
     return a,b
 end
 
---- Draw a circle
+--- Get PDF string for circle
 ---
 --- ![Control points in the circle](img/circlepoints.svg)
 ---
+function circle_pdfstring(center_x, center_y, radiusx_sp, radiusy_sp, stroke_colorstring, fill_colorstring, rulewidth_sp )
+    local circle_bezier = 0.551915024494
+
+    local shift_dn, shift_rt = -radiusy_sp + center_y, -radiusx_sp + center_x
+    local dx = radiusx_sp * (1 - circle_bezier)
+    local dy = radiusy_sp * (1 - circle_bezier)
+
+    local x1 = shift_rt
+    local y1 = shift_dn + radiusy_sp
+    local x2 = x1
+    local y2 = shift_dn + radiusy_sp * 2 - dy
+    local x3 = shift_rt + dx
+    local y3 = shift_dn + radiusy_sp * 2
+    local x4 = shift_rt + radiusx_sp
+    local y4 = shift_dn + radiusy_sp * 2
+    local x5 = shift_rt + radiusx_sp * 2 - dx
+    local y5 = y3
+    local x6 = shift_rt + radiusx_sp * 2
+    local y6 = y2
+    local x7 = x6
+    local y7 = y1
+    local x8 = x6
+    local y8 = shift_dn + dy
+    local x9 = x5
+    local y9 = shift_dn
+    local x10 = x4
+    local y10 = y9
+    local x11 = x3
+    local y11 = y9
+    local x12 = x1
+    local y12 = y8
+    local circle = {}
+    circle[#circle + 1] = "q"
+    circle[#circle + 1] = string.format("%g w %s %s", sp_to_bp(rulewidth_sp), stroke_colorstring, fill_colorstring)
+    circle[#circle + 1] = pdf_moveto(x1,y1)
+    circle[#circle + 1] = pdf_curveto(x2,y2,x3,y3,x4,y4)
+    circle[#circle + 1] = pdf_curveto(x5,y5,x6,y6,x7,y7)
+    circle[#circle + 1] = pdf_curveto(x8,y8,x9,y9,x10,y10)
+    circle[#circle + 1] = pdf_curveto(x11,y11,x12,y12,x1,y1)
+    if fill_colorstring == "" then
+        circle[#circle + 1] = "s"
+    else
+        circle[#circle + 1] = "b"
+    end
+    circle[#circle + 1] = "Q"
+    return table.concat(circle, " ")
+end
+
+--- Draw a circle
 function circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp)
     if rulewidth_sp < 5 then
         framecolorname = colorname
     end
-    radiusx_sp, radiusy_sp = sp_to_bp(radiusx_sp), sp_to_bp(radiusy_sp)
-    rulewidth_sp = sp_to_bp(rulewidth_sp)
-    local paint = node.new("whatsit","pdf_literal")
     local colentry = colors[colorname]
     if not colentry then
         err("Color %q unknown, reverting to black",colorname or "(no color name given)")
@@ -2188,44 +2281,9 @@ function circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp)
 
     local fillcolor, _    =  fill_stroke_color(colentry.pdfstring)
     local  _, bordercolor =  fill_stroke_color(framecolentry.pdfstring)
-    local circle_bezier = 0.551915024494
 
-    local shift_dn, shift_rt = math.round(-radiusy_sp, 3), math.round(-radiusx_sp, 3)
-    local dx = radiusx_sp * (1 - circle_bezier)
-    local dy = radiusy_sp * (1 - circle_bezier)
-
-    local x1 = shift_rt
-    local y1 = shift_dn + math.round(radiusy_sp,3)
-    local x2 = x1
-    local y2 = shift_dn + math.round(radiusy_sp * 2 - dy, 3)
-    local x3 = shift_rt + math.round(dx, 3)
-    local y3 = shift_dn + math.round(radiusy_sp * 2, 3)
-    local x4 = shift_rt + math.round(radiusx_sp, 3)
-    local y4 = shift_dn + math.round(radiusy_sp * 2, 3)
-    local x5 = shift_rt + math.round(radiusx_sp * 2 - dx, 3)
-    local y5 = y3
-    local x6 = shift_rt + math.round(radiusx_sp * 2, 3)
-    local y6 = y2
-    local x7 = x6
-    local y7 = y1
-    local x8 = x6
-    local y8 = shift_dn + math.round(dy, 3)
-    local x9 = x5
-    local y9 = shift_dn;
-    local x10 = x4
-    local y10 = y9
-    local x11 = x3
-    local y11 = y9
-    local x12 = x1
-    local y12 = y8
-    local circle = {}
-    circle[#circle + 1] = string.format("q %g w %s %s %g %g m", math.round(rulewidth_sp,3), bordercolor, fillcolor, x1, y1)
-    circle[#circle + 1] = string.format("%g %g %g %g %g %g c",x2, y2, x3, y3, x4, y4)
-    circle[#circle + 1] = string.format("%g %g %g %g %g %g c",x5, y5, x6, y6, x7, y7)
-    circle[#circle + 1] = string.format("%g %g %g %g %g %g c",x8, y8, x9, y9, x10, y10)
-    circle[#circle + 1] = string.format("%g %g %g %g %g %g c",x11, y11, x12, y12, x1, y1)
-    circle[#circle + 1] = "b Q"
-    paint.data = table.concat(circle, " ")
+    local paint = node.new("whatsit","pdf_literal")
+    paint.data = circle_pdfstring(0,0,radiusx_sp, radiusy_sp, bordercolor, fillcolor, rulewidth_sp)
     local v = node.vpack(paint)
     return v
 end
@@ -2259,8 +2317,10 @@ function box( width_sp,height_sp,colorname )
     return v
 end
 
+
 -- Draw a box with HTML properties given at head
 function htmlbox( head, tail, width_sp, height_sp, depth_sp)
+    local debug_htmlbox = 0
     local properties = node.getproperty(head)
     if not properties then
         err("Internal error: htmlbox() - no properties given")
@@ -2268,7 +2328,7 @@ function htmlbox( head, tail, width_sp, height_sp, depth_sp)
     end
     local rules = {}
     rules[#rules + 1] = "q"
-    --- 4 trapezoids (1 for each border)
+    --- We start with 4 trapezoids (1 for each border). Later on clip paths are added.
     ---
     ---      4    4------------------------------3   3  y0
     ---      |\    \                            /   /|
@@ -2297,43 +2357,219 @@ function htmlbox( head, tail, width_sp, height_sp, depth_sp)
         local _x2, _y2 = sp_to_bp(x2), sp_to_bp(y2)
         local _x3, _y3 = sp_to_bp(x3), sp_to_bp(y3)
         local _x4, _y4 = sp_to_bp(x4), sp_to_bp(y4)
-        local ret = string.format("%s 0 w %g %g m %g %g l %g %g l %g %g l h f", colorstring, _x1, _y1, _x2, _y2, _x3, _y3, _x4, _y4)
+        local ret = string.format("%s 0 w %g %g m %g %g l %g %g l %g %g l b", colorstring, _x1, _y1, _x2, _y2, _x3, _y3, _x4, _y4)
         return ret
     end
 
-    local shift_down = properties.rule_width_bottom + depth_sp + properties.padding_bottom
-    local y1 = height_sp + properties.padding_bottom + properties.padding_top + properties.margin_bottom
-    local y0 = y1 + properties.rule_width_top
-    local y3 = properties.margin_bottom - shift_down
-    local y2 = y3 + properties.rule_width_bottom
-    local x0 = properties.margin_left
-    local x1 = x0 + properties.rule_width_left
-    local x2 = width_sp + properties.padding_left + properties.padding_right
-    local x3 = x2 + properties.rule_width_right
 
-    if properties.rule_width_top > 0 then
+    local b_b_r_radius = properties.border_bottom_right_radius
+    local b_b_l_radius = properties.border_bottom_left_radius
+    local b_t_r_radius = properties.border_top_right_radius
+    local b_t_l_radius = properties.border_top_left_radius
+
+    local border_top_width = properties.rule_width_top
+    local border_right_width = properties.rule_width_right
+    local border_bottom_width = properties.rule_width_bottom
+    local border_left_width = properties.rule_width_left
+
+    -- ht == y3, wd == x3
+
+    depth_sp = math.max(depth_sp,properties.depth)
+    height_sp = math.max(properties.lineheight - depth_sp)
+    -- local padding_top = math.max(properties.padding_top,height_sp )
+    local padding_top = properties.padding_top
+    local shift_down = border_bottom_width + depth_sp + properties.padding_bottom
+    local sp_y1 = height_sp + properties.padding_bottom + padding_top + properties.margin_bottom
+    local sp_y0 = sp_y1 + border_top_width
+    local ht = properties.margin_bottom - shift_down
+    local sp_y2 = ht + border_bottom_width
+    local sp_x0 = properties.margin_left
+    local sp_x1 = sp_x0 + border_left_width
+    local sp_x2 = width_sp + properties.padding_left
+    local wd = sp_x2 + border_right_width
+
+    --- The trapezoids must extend closer to the center of the border, because if the border
+    --- radius is larger than the border width, the border goes "into" the surrounding object.
+    -- 3 might not be correct. TODO: what is the correct factor? Should depend on the radius
+    local extend = 3
+    local inner_top = sp_y1 - extend *  border_top_width
+    local inner_left = sp_x1 + extend * border_left_width
+    local inner_bottom = sp_y2 + extend * border_bottom_width
+    local inner_right = sp_x2  - extend * border_right_width
+
+    if border_top_width > 0 then
         colorstring = colors[properties.border_top_color].pdfstring
-        rules[#rules + 1] = get_rule(x1, y1, x2, y1, x3, y0, x0, y0)
+        rules[#rules + 1] = get_rule(inner_left,inner_top, inner_right, inner_top, wd, sp_y0, sp_x0, sp_y0)
     end
     if properties.border_right_style ~= "none" then
         colorstring = colors[properties.border_right_color].pdfstring
-        rules[#rules + 1] = get_rule(x2, y2, x3, y3, x3, y0, x2, y1)
+        rules[#rules + 1] = get_rule(inner_right,inner_bottom, wd, ht, wd, sp_y0, inner_right,inner_top)
     end
     if properties.border_bottom_style ~= "none" then
         colorstring = colors[properties.border_bottom_color].pdfstring
-        rules[#rules + 1] = get_rule(x0, y3, x3, y3, x2, y2, x1, y2)
+        rules[#rules + 1] = get_rule(sp_x0, ht, wd, ht,inner_right,inner_bottom , inner_left,inner_bottom)
     end
     if properties.border_left_style ~= "none" then
         colorstring = colors[properties.border_left_color].pdfstring
-        rules[#rules + 1] = get_rule(x0, y3, x1, y2, x1, y1, x0, y0)
+        rules[#rules + 1] = get_rule(sp_x0, ht, inner_left, inner_bottom, inner_left, inner_top, sp_x0, sp_y0)
     end
-    -- debug:
-    -- rules[#rules + 1] = "0 g 1 w -1 -1 m -1 1 l 1 1 l 1 -1 l h f"
     rules[#rules + 1] = "Q"
 
-    local borderbox = node.new("whatsit","pdf_literal")
-    borderbox.data = table.concat(rules," ")
-    return borderbox
+    -- Let's calculate the outer boundary first.
+    local circle_bezier = 0.551915024494
+
+    -- xn, yn = outer path, xin, yin = inner path used for clipping
+    local x1, y1   = sp_x0 + b_b_l_radius   , ht
+    local x2, y2   = wd - b_b_r_radius                , y1
+    local x3, y3   = x2 + circle_bezier * b_b_r_radius, y1
+    local x5, y5   = wd                               , ht + b_b_r_radius
+    local x4, y4   = wd                               , y5 - circle_bezier * b_b_r_radius
+    local x6, y6   = wd                               , sp_y0 - b_t_r_radius
+    local x7, y7   = wd                               , y6 + b_t_r_radius * circle_bezier
+    local x9, y9   = wd - b_t_r_radius                , sp_y0
+    local x8, y8   = x9 + circle_bezier * b_t_r_radius, y9
+    local x10, y10 = sp_x0 + b_t_l_radius   , y9
+    local x11, y11 = x10 - circle_bezier * b_t_l_radius, y9
+    local x13, y13 = 0                                 ,y9 - b_t_l_radius
+    local x12, y12 = 0                                ,y13 + circle_bezier * b_t_l_radius
+    local x14, y14 = 0                                , y1 + b_b_l_radius
+    local x15, y15 = 0                                , y14 - b_b_l_radius * circle_bezier
+    local x16, y16 = x1 - circle_bezier * b_b_l_radius, y1
+
+    local b_b_r_inner_radius_x = math.max(0, b_b_r_radius - border_right_width )
+    local b_b_r_inner_radius_y = math.max(0, b_b_r_radius - border_bottom_width )
+    local b_b_l_inner_radius_x = math.max(0, b_b_l_radius - border_left_width )
+    local b_b_l_inner_radius_y = math.max(0, b_b_l_radius - border_bottom_width )
+    local b_t_r_inner_radius_x = math.max(0, b_t_r_radius - border_right_width )
+    local b_t_r_inner_radius_y = math.max(0, b_t_r_radius - border_top_width )
+    local b_t_l_inner_radius_x = math.max(0, b_t_l_radius - border_left_width)
+    local b_t_l_inner_radius_y = math.max(0, b_t_l_radius - border_top_width)
+
+    -- bottom left
+    local xi14, yi14 = border_left_width                     ,math.max(ht + border_bottom_width, y14)
+    local xi1, yi1   = math.max(x1,sp_x0 + border_left_width),ht + border_bottom_width
+
+    -- bottom right
+    local xi2, yi2   = math.min(x2,wd - border_right_width), yi1
+    local xi5, yi5   = wd - border_right_width             ,  math.max(y5,ht + border_bottom_width)
+
+    -- top right
+    local xi6, yi6   = xi5,math.min(y6, sp_y0 - border_top_width)
+    local xi9, yi9   = math.min(x9,wd - border_right_width), math.min(y9, sp_y0 - border_top_width)
+
+    -- top left
+    local xi10, yi10 = math.max(sp_x0 + border_left_width,x10),math.min(sp_y0 - border_top_width,y10)
+    local xi13, yi13 = math.max(sp_x0 + border_left_width,x13),math.min(sp_y0 - border_top_width,y13 )
+
+    -- control points
+    -- bottom left
+    local xi16, yi16 = xi1 - circle_bezier * b_b_l_inner_radius_x,yi1
+    local xi15, yi15 = xi14, yi14 - circle_bezier * b_b_l_inner_radius_y
+
+    -- bottom right
+    local xi3, yi3   = xi2 + circle_bezier * b_b_r_inner_radius_x ,  yi2
+    local xi4, yi4   = xi5, yi5 - circle_bezier * b_b_r_inner_radius_y
+
+    -- top right
+    local xi7, yi7   = xi6,yi6 + circle_bezier * b_t_r_inner_radius_y
+    local xi8, yi8   = xi9 + circle_bezier * b_t_r_inner_radius_x ,yi9
+
+    -- top left
+    local xi11, yi11 = xi10 - circle_bezier * b_t_l_inner_radius_x ,yi10
+    local xi12, yi12 = xi13 ,yi13 + circle_bezier *  b_t_l_inner_radius_y
+
+    if debug_htmlbox > 1 then
+        rules[#rules + 1] = circle_pdfstring(x1 ,y14,b_b_l_radius,b_b_l_radius,"0 G ","",1000 )
+        rules[#rules + 1] = circle_pdfstring(x2 ,y5,b_b_r_radius,b_b_r_radius,"0 G ","",1000 )
+        rules[#rules + 1] = circle_pdfstring(x9 ,y6,b_t_r_radius,b_t_r_radius,"0 G ","",1000 )
+        rules[#rules + 1] = circle_pdfstring(x10 ,y13,b_t_l_radius,b_t_l_radius,"0 G ","",1000 )
+
+        rules[#rules + 1] = circle_pdfstring(xi1 ,yi14,b_b_l_inner_radius_x,b_b_l_inner_radius_y,"0 G ","",1000 )
+        rules[#rules + 1] = circle_pdfstring(xi2 ,yi5,b_b_r_inner_radius_x,b_b_r_inner_radius_y,"0 G ","",1000 )
+        rules[#rules + 1] = circle_pdfstring(xi9 ,yi6,b_t_r_inner_radius_x,b_t_r_inner_radius_y,"0 G ","",1000 )
+        rules[#rules + 1] = circle_pdfstring(xi10 ,yi13,b_t_l_inner_radius_x,b_t_l_inner_radius_y,"0 G ","",1000 )
+    end
+
+
+    local rules_clip = {}
+
+    rules_clip[#rules_clip + 1] = pdf_moveto(x1,y1)
+    rules_clip[#rules_clip + 1] = pdf_lineto(x2,y2)
+    rules_clip[#rules_clip + 1] = pdf_curveto(x3,y3,x4,y4,x5,y5)
+    rules_clip[#rules_clip + 1] = pdf_lineto(x6,y6)
+    rules_clip[#rules_clip + 1] = pdf_curveto(x7,y7,x8,y8,x9,y9)
+    rules_clip[#rules_clip + 1] = pdf_lineto(x10,y10)
+    rules_clip[#rules_clip + 1] = pdf_curveto(x11,y11,x12,y12,x13,y13)
+    rules_clip[#rules_clip + 1] = pdf_lineto(x14,y14)
+    rules_clip[#rules_clip + 1] = pdf_curveto(x15,y15,x16,y16,x1,y1)
+
+    rules_clip[#rules_clip + 1] = pdf_moveto(xi1,yi1)
+    rules_clip[#rules_clip + 1] = pdf_lineto(xi2,yi2)
+    rules_clip[#rules_clip + 1] = pdf_curveto(xi3,yi3,xi4,yi4,xi5,yi5)
+    rules_clip[#rules_clip + 1] = pdf_lineto(xi6,yi6)
+    rules_clip[#rules_clip + 1] = pdf_curveto(xi7,yi7,xi8,yi8,xi9,yi9)
+    rules_clip[#rules_clip + 1] = pdf_lineto(xi10,yi10)
+    rules_clip[#rules_clip + 1] = pdf_curveto(xi11,yi11,xi12,yi12,xi13,yi13)
+    rules_clip[#rules_clip + 1] = pdf_lineto(xi14,yi14)
+    rules_clip[#rules_clip + 1] = pdf_curveto(xi15,yi15,xi16,yi16,xi1,yi1)
+
+    if debug_htmlbox > 2 then
+        rules[#rules + 1] = "q 0.3 w"
+        rules[#rules + 1] = pdf_moveto(0,0)
+        rules[#rules + 1] = pdf_lineto(wd,0)
+        rules[#rules + 1] = "S"
+        rules[#rules + 1] = pdf_moveto(0,-depth_sp)
+        rules[#rules + 1] = pdf_lineto(wd,-depth_sp)
+        rules[#rules + 1] = "S"
+        rules[#rules + 1] = pdf_moveto(0,height_sp)
+        rules[#rules + 1] = pdf_lineto(wd,height_sp)
+        rules[#rules + 1] = "S"
+        rules[#rules + 1] = "Q"
+    end
+
+    if debug_htmlbox > 2 then
+        rules[#rules + 1] = "q 0.3 w"
+        rules[#rules + 1] = pdf_moveto(x1,y1)
+        rules[#rules + 1] = pdf_lineto(x2,y2)
+        rules[#rules + 1] = pdf_curveto(x3,y3,x4,y4,x5,y5)
+        rules[#rules + 1] = pdf_lineto(x6,y6)
+        rules[#rules + 1] = pdf_curveto(x7,y7,x8,y8,x9,y9)
+        rules[#rules + 1] = pdf_lineto(x10,y10)
+        rules[#rules + 1] = pdf_curveto(x11,y11,x12,y12,x13,y13)
+        rules[#rules + 1] = pdf_lineto(x14,y14)
+        rules[#rules + 1] = pdf_curveto(x15,y15,x16,y16,x1,y1)
+        rules[#rules + 1] = "S"
+
+        rules[#rules + 1] = pdf_moveto(xi1,yi1)
+        rules[#rules + 1] = pdf_lineto(xi2,yi2)
+        rules[#rules + 1] = pdf_curveto(xi3,yi3,xi4,yi4,xi5,yi5)
+        rules[#rules + 1] = pdf_lineto(xi6,yi6)
+        rules[#rules + 1] = pdf_curveto(xi7,yi7,xi8,yi8,xi9,yi9)
+        rules[#rules + 1] = pdf_lineto(xi10,yi10)
+        rules[#rules + 1] = pdf_curveto(xi11,yi11,xi12,yi12,xi13,yi13)
+        rules[#rules + 1] = pdf_lineto(xi14,yi14)
+        rules[#rules + 1] = pdf_curveto(xi15,yi15,xi16,yi16,xi1,yi1)
+        rules[#rules + 1] = "S Q"
+    end
+
+    rules_clip[#rules_clip + 1] = "h W* n"
+
+    local n_clip = node.new("whatsit","pdf_literal")
+    local n_clip_data = table.concat(rules_clip," ")
+    n_clip_data = n_clip_data .. " " .. table.concat(rules," ")
+    n_clip.data = n_clip_data
+
+    local pdf_save    = node.new("whatsit","pdf_save")
+    local pdf_restore = node.new("whatsit","pdf_restore")
+
+    node.insert_after(pdf_save,pdf_save,n_clip)
+
+    local hvbox = node.hpack(pdf_save)
+    hvbox.depth = 0
+    node.insert_after(hvbox,node.tail(hvbox),pdf_restore)
+    hvbox = node.vpack(hvbox)
+    node.setproperty(hvbox,{origin="hvbox"})
+    return hvbox
 end
 
 --- After everything is ready for page ship-out, we add debug output and crop marks if necessary
@@ -3002,9 +3238,9 @@ function find_user_defined_whatsits( head, parent )
                         end
                         cur = cur.next
                     end
-                    local wd,hd,dp = node.dimensions(head,cur)
-                    local boxnode = htmlbox(head,cur,wd,hd,dp)
-                    node.insert_before(parent.head,head,boxnode)
+                    local wd,ht,dp = node.dimensions(head,cur)
+                    local boxnode = htmlbox(head,cur,wd,ht,dp)
+                    parent.head = node.insert_before(parent.head,head,boxnode)
                 end
             end
             -- Now let's look at user defined whatsits, that are ment

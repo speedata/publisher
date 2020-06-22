@@ -232,6 +232,12 @@ func resolveAttributes(attrs []html.Attribute) map[string]string {
 					}
 				}
 			}
+		case "border-radius":
+			for _, lr := range []string{"left", "right"} {
+				for _, tb := range []string{"top", "bottom"} {
+					resolved["border-"+tb+"-"+lr+"-radius"] = attr.Val
+				}
+			}
 		case "border-top", "border-right", "border-bottom", "border-left":
 			resolved[attr.Key+"-width"] = "1pt"
 			resolved[attr.Key+"-style"] = "none"

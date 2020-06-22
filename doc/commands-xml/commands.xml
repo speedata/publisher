@@ -2944,7 +2944,7 @@
       <listing><![CDATA[<Record element="data">
   <PlaceObject>
     <Frame framecolor="red" border-bottom-left-radius="10pt">
-      <Image width="20" file="_samplea.pdf"></Bild>
+      <Image width="20" file="_samplea.pdf"></Image>
     </Frame>
   </PlaceObject>
 </Record>
