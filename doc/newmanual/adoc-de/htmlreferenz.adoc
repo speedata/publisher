@@ -1,0 +1,965 @@
+[[ch-htmlreferenz]]
+= HTML Referenz
+
+Die HTML-Unterstützung wird in der Version 3.9 stark erweitert. Hier werden die unterstützten HTML Elemente aufgelistet. Siehe auch das Kapitel über <<ch-html>>.
+
+TIP: Die HTML-Unterstützung im Publisher befindet sich gerade in stetiger Entwicklung. Bitte nicht bzw. nur auf Anfrage in Produktiv-Umgebungen nutzen.
+
+
+== Das Wurzelelement
+
+[options="header"]
+|=======
+| Tag | Unterstützung | Beschreibung
+| `<html>`  | Ja | Steht für den Wurzelknoten eines HTML- oder XHTML-Dokuments. Alle weiteren Elemente müssen Nachkommen dieses Elements sein.
+|=======
+
+== Metadaten des Dokuments
+
+
+[options="header"]
+|=======
+| Tag | Unterstützung | Beschreibung
+| `<head>`  | Ja | Bezeichnet eine Sammlung von Metadaten des Dokuments. Hierzu gehören auch Links zu oder Definitionen von Skripts und Stylesheets.
+| `<title>`  | Nein | Definiert den Titel eines Dokuments, der in der Titelzeile des Browsers im Tab der betreffenden Seite angezeigt wird. Darf ausschließlich Text enthalten. Eventuell enthaltene Tags werden nicht interpretiert.
+| `<base>`  | Nein | Definiert den Basis-URL für in der Seite verwendete relative URLs.
+| `<link>`  | Ja, für CSS | Wird verwendet, um externe JavaScript- und CSS-Dateien in das aktuelle HTML-Dokument einzubinden.
+| `<meta>`  | Nein | Wird für die Definition von Metadaten verwenden, die mit keinem anderen HTML-Element definiert werden können.
+| `<style>`  | Nein | Tag für die Definition eines internen CSS-Stylesheets.
+|=======
+
+== Skripting
+
+
+[options="header"]
+|=======
+| Tag | Unterstützung | Beschreibung
+| `<script>` | Nein | Definiert entweder ein internes Skript oder einen Link auf ein externes Skript. Als Programmiersprache wird JavaScript verwendet.
+| `<noscript>` | Nein | Definiert alternative Inhalte, die angezeigt werden sollen, wenn der Browser kein Skripting unterstützt.
+|=======
+
+
+== Abschnitte (Sections)
+
+
+[options="header"]
+|=======
+| Tag | Unterstützung | Beschreibung
+| `<body>` | Ja | Steht für den Hauptinhalt eines HTML-Dokuments. Jedes Dokument kann nur ein `<body>`-Element enthalten.
+| `<section>` | Teilweise | Beschreibt einen Abschnitt eines Dokuments.
+| `<nav>`  | ??? | Beschreibt einen Abschnitt der ausschließlich Navigationslinks enthält.
+| `<article>`  | ??? | Beschreibt eigenständigen Inhalt, der unabhängig von den übrigen Inhalten sein kann.
+| `<aside>`  | ??? | Steht für eine Randbemerkung. Der übrige Inhalt sollte auch verständlich sein, wenn dieses Element entfernt wird.
+| `<h1>`,`<h2>`,`<h3>`,`<h4>`,`<h5>`,`<h6>` | Ja | Hiermit werden Überschriften definiert. Es gibt sechs verschiedene Hierarchieebenen, wobei `<h1>` für die Hauptüberschrift steht und `<h6>` für eine Überschrift der untersten Ebene. Eine Überschrift beschreibt knapp das Thema des Abschnitts, dem sie voransteht.
+| `<header>`  | ??? | Definiert den Kopfteil ("header") einer Seite oder eines Abschnitts. Er enthält oft ein Logo, den Titel der Website und die Seitennavigation.
+| `<footer>`  | ??? | Definiert den Fußteil ("footer") einer Seite oder eines Abschnitts. Er enthält oft Copyright-Hinweise, einen Link auf das Impressum oder Kontaktadressen.
+| `<address>` | ??? |  Definiert einen Abschnitt mit Kontaktinformationen.
+| `<main>`  | ??? | Definiert den Hauptinhalt der Seite. Es ist nur ein `<main>` Element pro Seite zulässig.
+|=======
+
+== Inhalte gruppieren
+
+
+[options="header"]
+|=======
+| Tag | Unterstützung | Beschreibung
+| `<p>` | Ja | Der Inhalt dieses Elements soll als Absatz dargestellt werden.
+| `<hr>` | Nein | Bezeichnet einen thematischen Bruch zwischen Absätzen eines Abschnitts, Artikels oder anderem längeren Inhalt.
+| `<pre>` | Ja | Zeigt an, das der Inhalt dieses Elements vorformatiert ist und das dieses Format erhalten bleiben soll.
+| `<blockquote>` | Nein | Kennzeichnet ein Zitat.
+| `<ol>` | Ja | Definiert eine geordnete Liste, bei der die Einträge eine bestimmte Reihenfolge haben müssen.
+| `<ul>` | Ja | Definiert eine Liste ungeordneter Einträge.
+| `<li>` | Ja | Kennzeichnet einen Listeneintrag. Diesem wird oftmals ein Aufzählungszeichen ("bullet") vorangestellt.
+| `<dl>` | Ja | Kennzeichnet eine Definitionsliste aus Begriffen und den dazugehörigen Definitionen.
+| `<dt>` | Ja | Kennzeichnet einen Begriff der im folgenden `<dd>`-Element beschrieben wird.
+| `<dd>` | Ja | Markiert die Definition des oder der Begriffe, die in den direkt vorangehenden `<dt>`-Element angegeben wurden.
+| `<figure>`  | Nein | Kennzeichnet eine Abbildung, die einen Teil des Dokuments illustriert.
+| `<figcaption>`  | Nein | Bezeichnet die Beschriftung einer Abbildung.
+| `<div>` | Ja | Bezeichnet ein allgemeines Container-Element ohne spezielle semantische Bedeutung. Wird oft zusammen mit class- oder id-Attributen verwendet, um es in Skripts oder Stylesheets auswählen zu können.
+|=======
+
+
+== Semantische Text-Elemente
+
+
+[options="header"]
+|=======
+| Tag | Unterstützung | Beschreibung
+| `<a>` | Ja | Bezeichnet einen Hyperlink , der auf eine andere Ressource verweist (angegeben durch das href-Attribut).
+| `<em>` | Ja | Steht für hervorgehobenen Text.
+| `<strong>` | Ja | Markiert besonderswichtigen  (stark hervorgehobenen) Text.
+| `<small>` | Ja | Steht für das »Kleingedruckte« eines Dokuments, wie Ausschlussklauseln, Copyright-Hinweise oder andere Dinge, die für das Verständnis des Dokuments nicht unbedingt nötig sind.
+| `<s>` | Ja | Wird für Inhalte verwendet, dienicht länger relevant oder akkurat sind. Wird meist durchgestrichen dargestellt.
+| `<cite>` | Nein | Steht für den Titel eines Werks.
+| `<q>` | Nein | Bezeichnet ein Kurzzitat. Für längere Zitate sollte `<blockquote>` verwendet werden.
+| `<dfn>` | Nein | Steht für einen Begriff, dessen Definition im nächstgelegenen Nachkommen-Element enthalten ist.
+| `<abbr>` | Ja | Bezeichnet eine Abkürzung oder einAkronym.
+| `<data>` | Nein | Verbindet seinen Inhalt mit einemmaschinenlesbaren Equivalent, angegeben im value-Attribut. (Dieses Element wird nur in der WHATWG-Version des HTML-Standards definiert, nicht aber in der W3C-Version von HTML5).
+| `<time>` | Ja | Steht für einen Wert, der Datum und Uhrzeit angibt .
+| `<code>` | Ja | Wird verwendet, um Programmiercode zu markieren.
+| `<var>` | Ja | Steht für eine Variable. Dies kann ein tatsächlicher mathematischer Ausdruck oder Programmierungskontext sein, ein Identifier für eine Konstante, ein Symbol für eine physikalische Größe, ein Funktionsparameter oder einfach ein Platzhalter.
+| `<samp>` | ??? | Markiert die Ausgabe eines Programms oder eines Computers.
+| `<kbd>` | Ja | Steht für eine Benutzereingabe, oftmals, aber nicht unbedingt, auf der Tastatur. Kann auch für andere Eingaben, beispielsweise transkribierte Sprachbefehle stehen.
+| `<sub>`,`<sup>` | Nein | Markierttiefgestellten , bzw. hochgestellten Text.
+| `<i>` | Ja | Steht für einen Textabschnitt, der vom übrigen Inhalt abgesetzt und üblicherweise kursiv dargestellt wird, ohne für eine spezielle Betonung oder Wichtigkeit zu stehen. Dies kann beispielsweise eine taxonomische Bezeichnung, ein technischer Begriff, ein idiomatischer Ausdruck, ein Gedanke oder der Name eines Schiffes sein.
+| `<b>` | Ja | Steht für einen Textabschnitt, der vom übrigen Inhalt abgesetzt und üblicherweise fettgedruckt dargestellt wird, ohne für eine spezielle Betonung oder Wichtigkeit zu stehen. Dies kann beispielsweise ein Schlüsselwort oder ein Produktname in einer Produktbewertung sein.
+| `<u>` | Ja | Steht für einen Textabschnitt, der vom übrigen Inhalt abgesetzt und üblicherweise unterstrichen dargestellt wird, ohne für eine spezielle Betonung oder Wichtigkeit zu stehen. Dies könnte beispielsweise ein Eigenname auf in chinesischer Sprache sein oder ein Textabschnitt, der häufig falsch buchstabiert wird.
+| `<mark>`  | Nein |  Steht für Text, der aus Referenzgründen hervorgehoben wird, d.h. der in anderem Kontext von Bedeutung ist.
+| `<ruby>` | Nein | Bezeichnet einen Textteil mit Ruby-Annotationen. Dies sind kurze Aussprachetipps und andere Hinweise, die hauptsächlich für ostasiatische Typografie verwendet werden.
+| `<rt>` | Nein | Bezeichnet den Text einer Ruby-Annotation.
+| `<rp>` | Nein | Wird zusammen mit dem Element `<ruby>` verwendet, um Ruby-Text mit Klammern zu umgeben, die angezeigt werden, wenn das Benutzerprogramm (Browser) keine Ruby-Annotationen unterstützt.
+| `<bdi>` | Nein | Markiert Text, der vom umgebenden Inhalt zum Zweck der bidirektionalen Formatierung (z.B. arabischer Text innerhalb von deutschsprachigen Inhalten) isoliert werden soll. Hiermit kann ein Textabschnitt mit einer unterschiedlichen oder unbekannten Textrichtung gekennzeichnet werden.
+| `<bdo>` | Nein | Kann verwendet werden, um die Textrichtung der enthaltenen Kindelemente zu steuern. Hiermit kann der Unicode BiDi-Algorithmus explizit überschrieben werden.
+| `<span>` | Ja | Markiert einen allgemeinen Textabschnitt. Das `<span>`-Element erhält seine Bedeutung meistens durch ein class- oder ein id-Attribut, wodurch es außerdem für Skripte zugänglich ist und von Stylesheets ausgewählt werden kann.
+| `<br>` | Nein | Bezeichnet einen Zeilenumbruch .
+| `<wbr>` | Ja  | Hiermit kann die Gelegenheit für einen Zeilenumbruch gekennzeichnet werden, mit dem die Lesbarkeit verbessert werden kann, wenn der Text auf mehrere Zeilen verteilt wird.
+|=======
+
+== Änderungen am Dokument
+
+
+[options="header"]
+|=======
+| Tag | Unterstützung | Beschreibung
+| `<ins>` | Ja | Markiert einen zum Dokument hinzugefügten Teil.
+| `<del>` | Ja | Markiert einen aus dem Dokument entfernten Teil.
+|=======
+
+== Eingebettete Inhalte (Ersetzte Elemente)
+
+
+[options="header"]
+|=======
+| Tag | Unterstützung | Beschreibung
+| `<img>` | Ja | Steht für ein Bild.
+| `<iframe>` | Nein | Definiert einen so genannten Iframe, mit dem ein HTML-Dokument in seinem eigenen Kontext in das aktuelle Dokument eingebettet werden kann.
+| `<embed>` | Nein  | Steht für einen Einbindungspunkt für externe Ressourcen. Dies sind typischerweise keine HTML-Inhalte, sondern beispielsweise eine Applikation oder interaktiver Inhalt, der mit Hilfe eines Plugins (anstatt nativ durch das Benutzerprogramms) dargestellt wird.
+| `<object>` | Nein | Steht für allgemeinen externen Inhalt, der je nach Kontext als Bild, "verschachtelter Browsing-Kontext" (s. iframe), oder externer Inhalt (der mit Hilfe eines Plugins darsgestellt wird) betrachtet wird.
+| `<param>` | Nein | Definiert Parameter für ein Plugin, das für die Darstellung eines mit `<object>` eingebundenen Elements verwendet werden.
+| `<video>` | Nein  | Steht für eine Videodatei und die dazugehörigen Audiodateien, sowie die für das Abspielen nötigen Kontrollelemente.
+| `<audio>` | Nein | Markiert eine Tondatei oder einen Audiostream.
+| `<source>` | Nein | Ermöglicht es Autoren, alternative Medienressourcen (z.B. verschiedene Audio- oder Videoformate) für Medienelemente wie `<video>` oder `<audio>` anzugeben.
+| `<track>` | Nein | Hiermit können zusätzliche Medienspuren (z.B. Untertitel) für Elemente wie `<video>` oder`<audio>` angegeben werden.
+| `<canvas>` | Nein | Steht für einen Bitmap-Bereich, der von Skripts verwendet werden kann, um beispielsweise Diagramme, Spielegraphiken oder andere visuellen Effekte dynamisch darzustellen.
+| `<map>` | Nein | Definiert in Verbindung mit dem `<area>`-Element eine Image Map.
+| `<area>` | Nein | Definiert in Verbindung mit dem `<map>`-Element eine Image Map.
+| `<svg>`  | Nein | Definiert eine eingebettete Vektorgrafik.
+| `<math>`  | Nein | Markiert eine mathematische Formel.
+|=======
+
+== Tabellarische Daten
+
+
+[options="header"]
+|=======
+| Tag | Unterstützung | Beschreibung
+| `<table>` | Ja | Markiert eine Tabelle, d.h. Daten mit mehr als einer Dimension.
+| `<caption>` | Nein | Kennzeichnet die Beschriftung (Titel) einer Tabelle.
+| `<colgroup>` | Nein | Steht für eine Gruppe aus einer oder mehreren Tabellenspalten.
+| `<col>` | Nein | Steht für eine Tabellenspalte.
+| `<tbody>` | Ja | Steht für die Spalten, die die eigentlichen Daten einer Tabelle enthalten.
+| `<thead>` | Ja | Markiert die Gruppe der Tabellenzeilen, die die Beschriftungen der Tabellenspalten enthalten.
+| `<tfoot>` | Ja | Markiert die Gruppe der Tabellenzeilen, die die Zusammenfassungen der Tabellenspalten enthalten.
+| `<tr>` | Ja | Steht für eine Zeile mit Tabellenzellen.
+| `<td>` | Ja | Kennzeichnet eine einzelne Tabellenzelle.
+| `<th>` | Ja | Kennzeichnet eine Tabellenzelle mit einer Beschriftung.
+|=======
+
+== Formulare
+
+
+[options="header"]
+|=======
+| Tag | Unterstützung | Beschreibung
+| `<form>` | Nein | Markiert einFormular. Formulare bestehen typischerweise aus einer Reihe von Kontrollelementen, deren Werte zur weiteren Verarbeitung an einen Server übertragen werden.
+| `<fieldset>` | Nein | Steht für eineGruppe von Kontrollelementen.
+| `<legend>` | Nein | Kennzeichnet eine Beschriftung für ein `<fieldset>`-Element.
+| `<label>` | Nein | Kennzeichnet die Beschriftung für ein Formular-Kontrollelement (z.B. Texteingabefelder).
+| `<input>` | Nein | Steht für ein Feld für Benutzereingaben eines bestimmten Typs. Der Typ (Radiobutton, Ankreuzfeld, Texteingabe, etc.) wird anhand des type-Attributs angegeben.
+| `<button>` | Nein | Markiert einenButton .
+| `<select>` | Nein | Kennzeichnet ein Kontrollelement, mit dem aus einer Reihe von Optionen ausgewählt werden kann.
+| `<datalist>` | Nein | Steht für eine Sammlung vordefinierter Optionen für andere Kontrollelemente.
+| `<optgroup>` | Nein | Steht für eine Reihe logisch gruppierter Auswahloptionen.
+| `<option>` | Nein | Steht für eine Auswahloption innerhalb eines `<select>`-Elements, oder einen Vorschlag innerhalb eines `<datalist>`-Elements.
+| `<textarea>` | Nein | Markiert ein Element fürmehrzeilige Texteingaben.
+| `<keygen>` | Nein | Steht für ein Kontrollelement zur Erzeugung einesPaares aus öffentlichem und privaten Schlüssel und zum Versenden des öffentlichen Schlüssels.
+| `<output>` | Nein | Markiert dasErgebnis einer Berechnung.
+| `<progress>` | Nein | Ein Element zurFortschrittsanzeige einer bestimmten Aufgabe.
+| `<meter>` | Nein | Steht für eineMessskala (oder deren Teilwerte) innerhalb eines bekannten Bereichs.
+|=======
+
+== Interaktive Elemente
+
+
+[options="header"]
+|=======
+| Tag | Unterstützung | Beschreibung
+| `<details>`  | Nein | Markiert ein Kontrollelement, mit dem der Benutzerzusätzliche Informationen oder Kontrolle erhalten kann.
+| `<summary>`  | Nein | Kennzeichnet eineZusammenfassung oder eineLegende für ein bestimmte `<details>`-Element.
+| `<command>`  | Nein | Kennzeichnet einenBefehl , der vom Benutzer aufgerufen werden kann.
+| `<menu>`  | Nein | Markiert eineListe mit Befehlen .
+|=======
+
+https://developer.mozilla.org/de/docs/Web/HTML/HTML5/HTML5_element_list[Die ursprüngliche Liste der HTML5-Elemente] von https://wiki.developer.mozilla.org/de/docs/Web/HTML/HTML5/HTML5_element_list$history[MDN-Mitwirkenden] steht unter der https://creativecommons.org/licenses/by-sa/2.5/[Lizenz CC-BY-SA 2.5].
+
+= CSS Eigenschaften
+
+Diese Tabellen sind noch im Aufbau. Alles wird geprüft....
+
+== Längenangaben
+
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| cm | Ja |
+| in | Ja |
+| mm | Ja |
+| pc | Ja |
+| pt | Ja | DTP-Punkt (1/72 Zoll)
+| px | Ja | Identisch zu pt. Eigentlich sollte 1px 1/96 Zoll sein. Wird in einer der nächsten Versionen auf 72/96 pt geändert
+| em | Ja |
+| ex | Ja |
+| rem | Nein |
+| vmax | Nein | Viewport
+| vmin | Nein |Viewport
+| vh | Nein |Viewport
+| vw | Nein |Viewport
+| dpcm | Nein | Auflösung
+| dpi | Nein |Auflösung
+| dppx | Nein |Auflösung
+| x | Nein |Auflösung
+|=======
+
+== Sonstige Maßeinheiten
+
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| Hz | Nein | Frequenz
+| kHz | Nein | Frequenz
+|=======
+
+== Seitenbereiche
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| @page | Ja |
+| @bottom-center | Nein |
+| @top-center | Nein |
+| @left-bottom | Nein |
+| @right-bottom | Nein |
+|=======
+
+== Viewport
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| user-zoom (@viewport) | Nein |
+| orientation (@viewport) | Nein |
+| min-height (@viewport) | Nein |
+| max-height (@viewport) | Nein |
+| max-width (@viewport) | Nein |
+| max-zoom (@viewport) | Nein |
+| height (@viewport) | Nein |
+| zoom (@viewport) | Nein |
+| width (@viewport) | Nein |
+| @viewport | Nein |
+| min-width (@viewport) | Nein |
+| min-zoom (@viewport) | Nein |
+|=======
+
+== Schriftdefinition
+
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| src (@font-face) | Ja | `url()` und `local()`
+| unicode-range (@font-face) | Nein |
+| font-family (@font-face) | Ja |
+| font-feature-settings (@font-face) | Nein |
+| font-stretch (@font-face) | Nein |
+| font-style (@font-face) | Ja |
+| font-variant (@font-face) | Nein |
+| font-variation-settings (@font-face) | Nein |
+| font-weight (@font-face) | Nein |
+| format() | Wird ignoriert |
+|=======
+
+
+== A
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| :active | Nein |
+| additive-symbols (@counter-style) | Nein |
+| ::after (:after) | Nein |
+| align-content | Nein |
+| align-items | Nein |
+| align-self | Nein |
+| all | Nein |
+| <angle> | Nein |
+| animation | Nein |
+| animation-delay | Nein |
+| animation-direction | Nein |
+| animation-duration | Nein |
+| animation-fill-mode | Nein |
+| animation-iteration-count | Nein |
+| animation-name | Nein |
+| animation-play-state | Nein |
+| animation-timing-function | Nein |
+| @annotation | Nein |
+| annotation() | Nein |
+| attr() | Nein |
+|=======
+
+== B
+
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| ::backdrop | Nein |
+| backface-visibility | Nein |
+| background | Nein |
+| background-attachment | Nein |
+| background-blend-mode | Nein |
+| background-clip | Nein |
+| background-color | Teilweise | Bei Text
+| background-image | Nein |
+| background-origin | Nein |
+| background-position | Nein |
+| background-repeat | Nein |
+| background-size | Nein |
+| <basic-shape> | Nein |
+| ::before (:before) | Nein |
+| <blend-mode> | Nein |
+| block-size | Nein |
+| blur() | Nein |
+| border | Teilweise | Nur inline-Elemente
+| border-block | Nein |
+| border-block-color | Nein |
+| border-block-end | Nein |
+| border-block-end-color | Nein |
+| border-block-end-style | Nein |
+| border-block-end-width | Nein |
+| border-block-start | Nein |
+| border-block-start-color | Nein |
+| border-block-start-style | Nein |
+| border-block-start-width | Nein |
+| border-block-style | Nein |
+| border-block-width | Nein |
+| border-bottom | Ja |
+| border-bottom-color | Ja |
+| border-bottom-left-radius | Ja |
+| border-bottom-right-radius | Ja |
+| border-bottom-style | Ja |
+| border-bottom-width | Ja |
+| border-collapse | Nein |
+| border-color | Ja |
+| border-end-end-radius | Nein |
+| border-end-start-radius | Nein |
+| border-image | Nein |
+| border-image-outset | Nein |
+| border-image-repeat | Nein |
+| border-image-slice | Nein |
+| border-image-source | Nein |
+| border-image-width | Nein |
+| border-inline | Nein |
+| border-inline-color | Nein |
+| border-inline-end | Nein |
+| border-inline-end-color | Nein |
+| border-inline-end-style | Nein |
+| border-inline-end-width | Nein |
+| border-inline-start | Nein |
+| border-inline-start-color | Nein |
+| border-inline-start-style | Nein |
+| border-inline-start-width | Nein |
+| border-inline-style | Nein |
+| border-inline-width | Nein |
+| border-left | Ja |
+| border-left-color | Ja |
+| border-left-style | Ja |
+| border-left-width | Ja |
+| border-radius | Ja |
+| border-right | Ja |
+| border-right-color | Ja |
+| border-right-style | Ja |
+| border-right-width | Ja |
+| border-spacing | Nein |
+| border-start-end-radius | Nein |
+| border-start-start-radius | Nein |
+| border-style | Nein |
+| border-top | Ja |
+| border-top-color | Ja |
+| border-top-left-radius | Ja |
+| border-top-right-radius | Ja |
+| border-top-style | Nein |
+| border-top-width | Ja |
+| border-width | Ja |
+| bottom | Nein |
+| box-decoration-break | Nein |
+| box-shadow | Nein |
+| box-sizing | Nein |
+| break-after | Nein |
+| break-before | Nein |
+| break-inside | Nein |
+| brightness() | Nein |
+|=======
+
+== C
+
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| calc() | Nein |
+| caption-side | Nein |
+| caret-color | Nein |
+| ch | Nein |
+| @character-variant | Nein |
+| character-variant() | Nein |
+| @charset | Nein |
+| :checked | Nein |
+| circle() | Nein |
+| clamp() | Nein |
+| clear | Nein |
+| clip | Nein |
+| clip-path | Nein |
+| <color> | Nein |
+| color | Ja | Bei Text
+| color-adjust | Nein |
+| column-count | Nein |
+| column-fill | Nein |
+| column-gap | Nein |
+| column-rule | Nein |
+| column-rule-color | Nein |
+| column-rule-style | Nein |
+| column-rule-width | Nein |
+| column-span | Nein |
+| column-width | Nein |
+| columns | Nein |
+| conic-gradient() | Nein |
+| content | Nein |
+| contrast() | Nein |
+| <counter> | Nein |
+| counter-increment | Nein |
+| counter-reset | Nein |
+| @counter-style | Nein |
+| cross-fade() | Nein |
+| cubic-bezier() | Nein |
+| ::cue | Nein |
+| cursor | Nein |
+| <custom-ident> | Nein |
+|=======
+
+== D
+
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| :default | Nein |
+| deg | Nein |
+| :dir | Nein |
+| direction | Nein |
+| :disabled | Nein |
+| display | Nein |
+| <display-box> | Nein |
+| <display-inside> | Nein |
+| <display-internal> | Nein |
+| <display-legacy> | Nein |
+| <display-listitem> | Nein |
+| <display-outside> | Nein |
+| drop-shadow() | Nein |
+|=======
+
+== E
+
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| element() | Nein |
+| ellipse() | Nein |
+| :empty | Nein |
+| empty-cells | Nein |
+| :enabled | Nein |
+| env() | Nein |
+|=======
+
+
+== F
+
+
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| fallback (@counter-style) | Nein |
+| filter | Nein |
+| <filter-function> | Nein |
+| :first | Nein |
+| :first-child | Nein |
+| ::first-letter (:first-letter) | Nein |
+| ::first-line (:first-line) | Nein |
+| :first-of-type | Nein |
+| fit-content() | Nein |
+| <flex> | Nein |
+| flex | Nein |
+| flex-basis | Nein |
+| flex-direction | Nein |
+| flex-flow | Nein |
+| flex-grow | Nein |
+| flex-shrink | Nein |
+| flex-wrap | Nein |
+| float | Nein |
+| :focus | Nein |
+| font | Nein |
+| @font-face | Ja |
+| font-family | Teilweise |
+| font-feature-settings | Nein |
+| @font-feature-values | Nein |
+| font-kerning | Nein |
+| font-language-override | Nein |
+| font-optical-sizing | Nein |
+| font-size | Ja |
+| font-size-adjust | Nein |
+| font-stretch | Nein |
+| font-style | Ja |
+| font-synthesis | Nein |
+| font-variant | Nein |
+| font-variant-alternates | Nein |
+| font-variant-caps | Nein |
+| font-variant-east-asian | Nein |
+| font-variant-ligatures | Nein |
+| font-variant-numeric | Nein |
+| font-variant-position | Nein |
+| font-weight | Teilweise |
+| fr | Nein |
+| frames() | Nein |
+| <frequency> | Nein |
+| :fullscreen | Nein |
+== G
+|=======
+
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| gap | Nein |
+| grad | Nein |
+| <gradient> | Nein |
+| grayscale() | Nein |
+| grid | Nein |
+| grid-area | Nein |
+| grid-auto-columns | Nein |
+| grid-auto-flow | Nein |
+| grid-auto-rows | Nein |
+| grid-column | Nein |
+| grid-column-end | Nein |
+| grid-column-start | Nein |
+| grid-row | Nein |
+| grid-row-end | Nein |
+| grid-row-start | Nein |
+| grid-template | Nein |
+| grid-template-areas | Nein |
+| grid-template-columns | Nein |
+| grid-template-rows | Nein |
+|=======
+
+== H
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| hanging-punctuation | Nein |
+| height | Nein |
+| @historical-forms | Nein |
+| :hover | Nein |
+| hsl() | Nein |
+| hsla() | Nein |
+| hue-rotate() | Nein |
+| hyphens | Nein |
+|=======
+
+== I
+
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| <ident> | Nein |
+| <image> | Nein |
+| image() | Nein |
+| image-orientation | Nein |
+| image-rendering | Nein |
+| image-set() | Nein |
+| @import | Nein |
+| :in-range | Nein |
+| :indeterminate | Nein |
+| inherit | Nein |
+| initial | Nein |
+| inline-size | Nein |
+| inset | Nein |
+| inset() | Nein |
+| inset-block | Nein |
+| inset-block-end | Nein |
+| inset-block-start | Nein |
+| inset-inline | Nein |
+| inset-inline-end | Nein |
+| inset-inline-start | Nein |
+| <integer> | Nein |
+| :invalid | Nein |
+| invert() | Nein |
+| isolation | Nein |
+|=======
+
+== J
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| justify-content | Nein |
+| justify-items | Nein |
+| justify-self | Nein |
+|=======
+
+== K
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| @keyframes | Nein |
+|=======
+
+
+== L
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| :lang | Nein |
+| :last-child | Nein |
+| :last-of-type | Nein |
+| leader() | Nein |
+| :left | Nein |
+| left | Nein |
+| <length> | Nein |
+| letter-spacing | Nein |
+| line-break | Nein |
+| line-height | Ja |
+| linear-gradient() | Nein |
+| :link | Nein |
+| list-style | Nein |
+| list-style-image | Nein |
+| list-style-position | Nein |
+| list-style-type | Nein |
+| local() | Teilweise | Bei @font-face
+|=======
+
+
+== M
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| margin | Nein |
+| margin-block | Nein |
+| margin-block-end | Nein |
+| margin-block-start | Nein |
+| margin-bottom | Nein |
+| margin-inline | Nein |
+| margin-inline-end | Nein |
+| margin-inline-start | Nein |
+| margin-left | Nein |
+| margin-right | Nein |
+| margin-top | Nein |
+| mask | Nein |
+| mask-clip | Nein |
+| mask-composite | Nein |
+| mask-image | Nein |
+| mask-mode | Nein |
+| mask-origin | Nein |
+| mask-position | Nein |
+| mask-repeat | Nein |
+| mask-size | Nein |
+| mask-type | Nein |
+| matrix() | Nein |
+| matrix3d() | Nein |
+| max() | Nein |
+| max-height | Nein |
+| max-width | Nein |
+| @media | Nein |
+| min() | Nein |
+| min-block-size | Nein |
+| min-height | Nein |
+| min-inline-size | Nein |
+| min-width | Nein |
+| minmax() | Nein |
+| mix-blend-mode | Nein |
+| ms | Nein |
+|=======
+
+
+
+== N
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| @namespace | Nein |
+| negative (@counter-style) | Nein |
+| :not | Nein |
+| :nth-child | Nein |
+| :nth-last-child | Nein |
+| :nth-last-of-type | Nein |
+| :nth-of-type | Nein |
+| <number> | Nein |
+|=======
+
+== O
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| object-fit | Nein |
+| object-position | Nein |
+| :only-child | Nein |
+| :only-of-type | Nein |
+| opacity | Nein |
+| opacity() | Nein |
+| :optional | Nein |
+| order | Nein |
+| @ornaments | Nein |
+| ornaments() | Nein |
+| orphans | Nein |
+| :out-of-range | Nein |
+| outline | Nein |
+| outline-color | Nein |
+| outline-offset | Nein |
+| outline-style | Nein |
+| outline-width | Nein |
+| overflow | Nein |
+| overflow-wrap | Nein |
+| overflow-x | Nein |
+| overflow-y | Nein |
+|=======
+
+== P
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| pad (@counter-style) | Nein |
+| padding | Nein |
+| padding-block | Nein |
+| padding-block-end | Nein |
+| padding-block-start | Nein |
+| padding-bottom | Nein |
+| padding-inline | Nein |
+| padding-inline-end | Nein |
+| padding-inline-start | Nein |
+| padding-left | Nein |
+| padding-right | Nein |
+| padding-top | Nein |
+| page-break-after | Nein |
+| page-break-before | Nein |
+| page-break-inside | Nein |
+| <percentage> | Nein |
+| perspective | Nein |
+| perspective() | Nein |
+| perspective-origin | Nein |
+| place-content | Nein |
+| place-items | Nein |
+| ::placeholder | Nein |
+| pointer-events | Nein |
+| polygon() | Nein |
+| <position> | Nein |
+| position | Nein |
+| prefix (@counter-style) | Nein |
+|=======
+
+== Q
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| quotes | Nein |
+|=======
+
+== R
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| rad | Nein |
+| radial-gradient() | Nein |
+| range (@counter-style) | Nein |
+| <ratio> | Nein |
+| :read-only | Nein |
+| :read-write | Nein |
+| rect() | Nein |
+| repeat() | Nein |
+| repeating-linear-gradient() | Nein |
+| repeating-radial-gradient() | Nein |
+| :required | Nein |
+| resize | Nein |
+| <resolution> | Nein |
+| revert | Nein |
+| rgb() | Nein |
+| rgba() | Nein |
+| :right | Nein |
+| right | Nein |
+| :root | Nein |
+| rotate | Nein |
+| rotate() | Nein |
+| rotate3d() | Nein |
+| rotateX() | Nein |
+| rotateY() | Nein |
+| rotateZ() | Nein |
+| row-gap | Nein |
+|=======
+
+== S
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| saturate() | Nein |
+| scale | Nein |
+| scale() | Nein |
+| scale3d() | Nein |
+| scaleX() | Nein |
+| scaleY() | Nein |
+| scaleZ() | Nein |
+| :scope | Nein |
+| scroll-behavior | Nein |
+| scroll-margin | Nein |
+| scroll-margin-block | Nein |
+| scroll-margin-block-end | Nein |
+| scroll-margin-block-start | Nein |
+| scroll-margin-bottom | Nein |
+| scroll-margin-inline | Nein |
+| scroll-margin-inline-end | Nein |
+| scroll-margin-inline-start | Nein |
+| scroll-margin-left | Nein |
+| scroll-margin-right | Nein |
+| scroll-margin-top | Nein |
+| scroll-padding | Nein |
+| scroll-padding-block | Nein |
+| scroll-padding-block-end | Nein |
+| scroll-padding-block-start | Nein |
+| scroll-padding-bottom | Nein |
+| scroll-padding-inline | Nein |
+| scroll-padding-inline-end | Nein |
+| scroll-padding-inline-start | Nein |
+| scroll-padding-left | Nein |
+| scroll-padding-right | Nein |
+| scroll-padding-top | Nein |
+| scroll-snap-align | Nein |
+| scroll-snap-stop | Nein |
+| scroll-snap-type | Nein |
+| scrollbar-color | Nein |
+| scrollbar-width | Nein |
+| ::selection | Nein |
+| sepia() | Nein |
+| <shape> | Nein |
+| shape-image-threshold | Nein |
+| shape-margin | Nein |
+| shape-outside | Nein |
+| skew() | Nein |
+| skewX() | Nein |
+| skewY() | Nein |
+| ::slotted | Nein |
+| speak-as (@counter-style) | Nein |
+| steps() | Nein |
+| <string> | Nein |
+| @styleset | Nein |
+| styleset() | Nein |
+| @stylistic | Nein |
+| stylistic() | Nein |
+| suffix (@counter-style) | Nein |
+| @supports | Nein |
+| @swash | Nein |
+| swash() | Nein |
+| symbols (@counter-style) | Nein |
+| symbols() | Nein |
+| system (@counter-style) | Nein |
+|=======
+
+== T
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| tab-size | Nein |
+| table-layout | Nein |
+| :target | Nein |
+| target-counter() | Nein |
+| target-counters() | Nein |
+| target-text() | Nein |
+| text-align | Nein |
+| text-align-last | Nein |
+| text-combine-upright | Nein |
+| text-decoration | Nein |
+| text-decoration-color | Nein |
+| text-decoration-line | Nein |
+| text-decoration-style | Nein |
+| text-emphasis | Nein |
+| text-emphasis-color | Nein |
+| text-emphasis-position | Nein |
+| text-emphasis-style | Nein |
+| text-indent | Nein |
+| text-justify | Nein |
+| text-orientation | Nein |
+| text-overflow | Nein |
+| text-rendering | Nein |
+| text-shadow | Nein |
+| text-transform | Nein |
+| text-underline-position | Nein |
+| <time> | Nein |
+| <timing-function> | Nein |
+| top | Nein |
+| touch-action | Nein |
+| transform | Nein |
+| transform-box | Nein |
+| <transform-function> | Nein |
+| transform-origin | Nein |
+| transform-style | Nein |
+| transition | Nein |
+| transition-delay | Nein |
+| transition-duration | Nein |
+| transition-property | Nein |
+| transition-timing-function | Nein |
+| translate | Nein |
+| translate() | Nein |
+| translate3d() | Nein |
+| translateX() | Nein |
+| translateY() | Nein |
+| translateZ() | Nein |
+| turn | Nein |
+|=======
+
+== U
+
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| unicode-bidi | Nein |
+| unset | Nein |
+| <url> | Nein |
+| url() | Teilweise | bei `@font-face`
+|=======
+
+== V
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| :valid | Nein |
+| var() | Nein |
+| vertical-align | Nein |
+| visibility | Nein |
+| :visited | Nein |
+|=======
+
+== W
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| white-space | Nein |
+| widows | Nein |
+| width | Nein |
+| will-change | Nein |
+| word-break | Nein |
+| word-spacing | Nein |
+| word-wrap | Nein |
+| writing-mode | Nein |
+|=======
+
+== Z
+
+[options="header"]
+|=======
+| Eigenschaft | Unterstützung | Bemerkung
+| z-index | Nein |
+|=======
+

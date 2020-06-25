@@ -470,6 +470,7 @@ lowercase = false
 --- indentation in sp. alignment is one of "leftaligned", "rightaligned",
 --- "centered" and "justified"
 textformats = {
+
     text           = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2},
     __centered     = { indent = 0, alignment="centered",    rows = 1, orphan = 2, widow = 2},
     __leftaligned  = { indent = 0, alignment="leftaligned", rows = 1, orphan = 2, widow = 2},
@@ -482,6 +483,21 @@ textformats = {
     right          = { indent = 0, alignment="rightaligned",rows = 1, orphan = 2, widow = 2},
 }
 
+function new_textformat(name, base,options )
+    if name == "" then name = string_random(10) end
+    local baseformat = textformats[base] or textformats.text
+    options = options or {}
+    local tf = {}
+    for k,v in pairs(baseformat) do
+        tf[k] = v
+    end
+    for k,v in pairs(options) do
+        tf[k] = v
+    end
+    tf.name = name
+    textformats[name] = tf
+    return tf
+end
 
 --- The bookmarks table has the format
 ---
@@ -879,6 +895,10 @@ do
                 end
                 if box.width then
                     box[i].width = box.width
+                end
+                if box.draw_border then
+                    box[i].draw_border = true
+                    box[i].border = box.border
                 end
                 if i == 1 then
                     box[i].margin_top = box.margintop
@@ -2319,12 +2339,16 @@ end
 
 
 -- Draw a box with HTML properties given at head
-function htmlbox( head, tail, width_sp, height_sp, depth_sp)
+function htmlbox( head, width_sp, height_sp, depth_sp)
     local debug_htmlbox = 0
     local properties = node.getproperty(head)
     if not properties then
         err("Internal error: htmlbox() - no properties given")
         return
+    end
+    local dirmode = "horizontal"
+    if head.id == vlist_node then
+        dirmode = "vertical"
     end
     local rules = {}
     rules[#rules + 1] = "q"
@@ -2375,19 +2399,32 @@ function htmlbox( head, tail, width_sp, height_sp, depth_sp)
     -- ht == y3, wd == x3
 
     depth_sp = math.max(depth_sp,properties.depth)
-    height_sp = math.max(properties.lineheight - depth_sp)
-    -- local padding_top = math.max(properties.padding_top,height_sp )
-    local padding_top = properties.padding_top
-    local shift_down = border_bottom_width + depth_sp + properties.padding_bottom
-    local sp_y1 = height_sp + properties.padding_bottom + padding_top + properties.margin_bottom
-    local sp_y0 = sp_y1 + border_top_width
-    local ht = properties.margin_bottom - shift_down
-    local sp_y2 = ht + border_bottom_width
-    local sp_x0 = properties.margin_left
-    local sp_x1 = sp_x0 + border_left_width
-    local sp_x2 = width_sp + properties.padding_left
-    local wd = sp_x2 + border_right_width
+    height_sp = properties.lineheight - depth_sp
+    local sp_x0, sp_x1, sp_x2, wd
+    local sp_y0, sp_y1, sp_y2, ht
 
+    local padding_top = properties.padding_top
+    if dirmode == "horizontal" then
+        local shift_down = border_bottom_width + depth_sp + properties.padding_bottom
+        sp_y1 = height_sp + properties.padding_bottom + padding_top + properties.margin_bottom
+        sp_y0 = sp_y1 + border_top_width
+        ht = properties.margin_bottom - shift_down
+        sp_y2 = ht + border_bottom_width
+        sp_x0 = properties.margin_left
+        sp_x1 = sp_x0 + border_left_width
+        sp_x2 = width_sp + properties.padding_left
+        wd = sp_x2 + border_right_width
+    else
+        local shift_down = properties.lineheight
+        sp_y1 = properties.padding_bottom + padding_top + properties.margin_bottom
+        sp_y0 = sp_y1 + border_top_width
+        ht = properties.margin_bottom - shift_down
+        sp_y2 = ht + border_bottom_width
+        sp_x0 = properties.margin_left
+        sp_x1 = sp_x0 + border_left_width
+        sp_x2 = width_sp + properties.padding_left
+        wd = sp_x2 + border_right_width
+    end
     --- The trapezoids must extend closer to the center of the border, because if the border
     --- radius is larger than the border width, the border goes "into" the surrounding object.
     -- 3 might not be correct. TODO: what is the correct factor? Should depend on the radius
@@ -2988,8 +3025,9 @@ function parse_html( elt, parameter )
         elseif eltname=="br" then
             a:append("\n",{})
         elseif #elt == 0 then
-            -- dummy: insert U+200B ZERO WIDTH SPACE which results in a strut
-            a:append("\xE2\x80\x8B")
+            -- dummy: insert U+200B ZERO WIDTH SPACE which results in a penalty
+            -- a:append("\xE2\x80\x8B")
+            a:append(addstrut())
         else
             local css_rules = css:matches({element = eltname, class=elt.class}) or {}
             local has_css = false
@@ -3239,7 +3277,7 @@ function find_user_defined_whatsits( head, parent )
                         cur = cur.next
                     end
                     local wd,ht,dp = node.dimensions(head,cur)
-                    local boxnode = htmlbox(head,cur,wd,ht,dp)
+                    local boxnode = htmlbox(head,wd,ht,dp)
                     parent.head = node.insert_before(parent.head,head,boxnode)
                 end
             end
@@ -3549,8 +3587,10 @@ function mknodes(str,fontfamily,parameter)
             local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
             head, last = node.insert_after(head,last,n)
         elseif s == 8203 then
-            -- U+200B ZERO WIDTH SPACE inserted in parse_html
-            head = addstrut(head)
+            -- U+200B ZERO WIDTH SPACE
+            p = node.new("penalty")
+            p.penalty = -10
+            head = p
             last = node.tail(head)
         -- anchor is necessary. Otherwise à (C3A0) would match A0 - %s
         elseif match(char,"^%s$") then -- Space
@@ -4662,6 +4702,7 @@ languages_id_lang = {}
 
 --- Return a lang object
 function get_language(id_or_locale_or_name)
+    local orig_id_or_locale_or_name = id_or_locale_or_name
     local num = tonumber(id_or_locale_or_name)
     if num then
         return languages_id_lang[num]
@@ -4679,13 +4720,17 @@ function get_language(id_or_locale_or_name)
     if language_filename[locale] then
         filename_part = language_filename[locale]
     else
-        local lang, _ = unpack(string.explode(locale,"_"))
+        local sep = "_"
+        if string.match( locale ,"%-" ) then
+            sep = "-"
+        end
+        local lang, _ = unpack(string.explode(locale,sep))
         if language_filename[lang] then
             filename_part = language_filename[lang]
         end
     end
     if not filename_part then
-        err("Can't find hyphenation patterns for language %s",tostring(locale))
+        err("Can't find hyphenation patterns for language %s",tostring(orig_id_or_locale_or_name))
         return 0
     end
 

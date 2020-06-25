@@ -24,9 +24,11 @@ local stylesstackmetatable = {
 inherited = {
     width = false,
     fontsize_sp = true,
+    lineheight_sp = true,
     calculated_width = true,
     ollevel = true,
     ullevel = true,
+    hyphens = true,
     ["border-collapse"] = true,
     ["border-spacing"] = true,
     ["caption-side"] = true,
@@ -201,7 +203,8 @@ function draw_border(nodelists, attributes,styles)
     end
     if not attributes.has_border then return nodelists end
     local ret = {}
-    lineheight = styles.fontsize_sp * 1.2
+
+    lineheight = styles.lineheight_sp
     local factor = publisher.factor
 
     local padding_top = attributes["padding-top"] or 0
@@ -379,6 +382,16 @@ function copy_attributes( styles,attributes )
         end
         styles[k] = v
     end
+    if attributes["line-height"] then
+        lineheight = attributes["line-height"]
+        if lineheight == "normal" then
+            styles.lineheight_sp = 1.2 * styles.fontsize_sp
+        elseif tonumber(lineheight) then
+            styles.lineheight_sp = styles.fontsize_sp * tonumber(lineheight)
+        else
+            styles.lineheight_sp = tex.sp(lineheight)
+        end
+    end
 end
 
 function collect_horizontal_nodes( elt,parameter )
@@ -421,7 +434,11 @@ function collect_horizontal_nodes( elt,parameter )
         if fontweight == "bold" then options.bold = 1 end
         if fontstyle == "italic" then options.italic = 1 end
         if whitespace == "pre" then options.whitespace = "pre" end
-        if textdecoration == "underline" then options.underline = 1 end
+        if textdecoration == "underline" then
+            options.underline = 1
+        elseif textdecoration == "line-through" then
+            options.underline = 3
+        end
         if verticalalign == "super" then
             options.script = 2
         elseif verticalalign == "sub" then
@@ -473,6 +490,8 @@ function collect_horizontal_nodes( elt,parameter )
                 node.set_attribute(box,publisher.att_ignore_orphan_widowsetting,1)
                 box.head = node.insert_before(box.head,box.head,img.node(it))
                 thisret[#thisret + 1] = box
+            elseif eltname == "wbr" then
+                thisret[#thisret + 1] = "\xE2\x80\x8B"
             end
             local n = collect_horizontal_nodes(thiselt,options)
             for i=1,#n do
@@ -643,6 +662,62 @@ function build_nodelist( elt )
         local attributes = thiselt.attributes or {}
         copy_attributes(styles,attributes)
 
+
+        local padding_top = attributes["padding-top"] or 0
+        local padding_right = attributes["padding-right"] or 0
+        local padding_bottom = attributes["padding-bottom"] or 0
+        local padding_left = attributes["padding-left"] or 0
+
+        local margin_top = attributes["margin-top"] or 0
+        local margin_right = attributes["margin-right"] or 0
+        local margin_bottom = attributes["margin-bottom"] or 0
+        local margin_left = attributes["margin-left"] or 0
+
+        padding_top = tex.sp(padding_top)
+        padding_right = tex.sp(padding_right)
+        padding_bottom = tex.sp(padding_bottom)
+        padding_left = tex.sp(padding_left)
+
+        margin_top = tex.sp(margin_top)
+        margin_right = tex.sp(margin_right)
+        margin_bottom = tex.sp(margin_bottom)
+        margin_left = tex.sp(margin_left)
+
+        local border_top_style = attributes["border-top-style"] or "none"
+        local border_right_style = attributes["border-right-style"] or "none"
+        local border_bottom_style = attributes["border-bottom-style"] or "none"
+        local border_left_style = attributes["border-left-style"] or "none"
+
+        local border_top_width = attributes["border-top-width"] or 0
+        local border_right_width = attributes["border-right-width"] or 0
+        local border_bottom_width = attributes["border-bottom-width"] or 0
+        local border_left_width = attributes["border-left-width"] or 0
+
+        local border_top_color = attributes["border-top-color"]
+        local border_right_color = attributes["border-right-color"]
+        local border_bottom_color = attributes["border-bottom-color"]
+        local border_left_color = attributes["border-left-color"]
+
+        local border_bottom_right_radius = attributes["border-bottom-right-radius"] or 0
+        local border_bottom_left_radius = attributes["border-bottom-left-radius"] or 0
+        local border_top_right_radius = attributes["border-top-right-radius"] or 0
+        local border_top_left_radius = attributes["border-top-left-radius"] or 0
+
+
+        local rule_width_top, rule_width_right, rule_width_bottom, rule_width_left = 0, 0, 0, 0
+        if border_top_style ~= "none" then
+            rule_width_top = tex.sp(border_top_width)
+        end
+        if border_right_style ~= "none" then
+            rule_width_right = tex.sp(border_right_width)
+        end
+        if border_left_style ~= "none" then
+            rule_width_left = tex.sp(border_left_width)
+        end
+        if border_bottom_style ~= "none" then
+            rule_width_bottom = tex.sp(border_bottom_width)
+        end
+
         local fontfamily = styles["font-family"]
         local fontsize = styles["font-size"]
         local fontname = fontsize
@@ -652,17 +727,24 @@ function build_nodelist( elt )
         local margintop = getsize(styles["margin-top"],styles.fontsize_sp)
 
         local textalign = styles["text-align"]
-        local textformat = "left"
+        local hyphens = styles.hyphens
+        local textformat = "leftaligned"
         if textalign == "right" then
-            textformat = "right"
+            textformat = "rightaligned"
         elseif textalign == "center" then
             textformat = "centered"
         elseif textalign == "justify" then
             textformat = "justified"
         end
+
         if thiselt.mode == "horizontal" then
+            local tf = publisher.new_textformat("","text",{alignment = textformat})
+            if hyphens == "none" or hyphens == "manual" then
+                tf.disable_hyphenation = true
+            end
+
             local n = collect_horizontal_nodes(thiselt)
-            local a = paragraph:new(textformat)
+            local a = paragraph:new(tf.name)
 
             for i=1,#n do
                 local thisn = n[i]
@@ -721,9 +803,43 @@ function build_nodelist( elt )
                     ret[#ret + 1] = a
                 end
             else
+                local marginleft = tex.sp(styles["margin-left"] or 0)
+                local marginright = tex.sp(styles["margin-right"] or 0)
                 local n = build_nodelist(thiselt)
                 local box = Box:new()
-                box.width = styles.calculated_width
+                if marginleft > 0 then
+                    box.indent = marginleft
+                end
+                box.draw_border = attributes.has_border
+                box.border = {
+                    borderstart = true,
+                    border_top_style = border_top_style,
+                    border_right_style = border_right_style,
+                    border_bottom_style = border_bottom_style,
+                    border_left_style = border_left_style,
+                    padding_top = padding_top,
+                    padding_right = padding_right,
+                    padding_bottom = padding_bottom,
+                    padding_left = padding_left,
+                    rule_width_top = rule_width_top,
+                    rule_width_right = rule_width_right,
+                    rule_width_bottom = rule_width_bottom,
+                    rule_width_left = rule_width_left,
+                    border_top_color = border_top_color,
+                    border_right_color = border_right_color,
+                    border_bottom_color = border_bottom_color,
+                    border_left_color = border_left_color,
+                    border_bottom_right_radius = tex.sp(border_bottom_right_radius),
+                    border_bottom_left_radius = tex.sp(border_bottom_left_radius),
+                    border_top_right_radius = tex.sp(border_top_right_radius),
+                    border_top_left_radius = tex.sp(border_top_left_radius),
+                    margin_top = margin_top,
+                    margin_right = margin_right,
+                    margin_bottom = margin_bottom,
+                    margin_left = margin_left,
+                }
+
+                box.width = styles.calculated_width - marginleft
                 for i=1,#n do
                     box[#box + 1] = n[i]
                 end
@@ -822,6 +938,10 @@ function parse_html_new( elt )
         if string.match(trace,"textformat") then publisher.options.showtextformat = true end
     end
     elt[1].attributes.calculated_width = xpath.get_variable("__maxwidth")
+    local lang = elt.lang
+    if lang then
+        publisher.set_mainlanguage(lang)
+    end
     parse_html_inner(elt[1])
     local block = build_nodelist(elt)
     return block

@@ -677,7 +677,9 @@ getContents:
 					panic("stack top is not itemize list")
 				}
 				curOutput.WriteString("\n</ul>")
-				omitP = false
+				if len(listlevel) == 0 {
+					omitP = false
+				}
 			case "link":
 				curOutput.WriteString(`</a>`)
 			case "literal":
@@ -700,7 +702,9 @@ getContents:
 					panic("stack top is not ordered list")
 				}
 				curOutput.WriteString("\n</ol>")
-				omitP = false
+				if len(listlevel) == 0 {
+					omitP = false
+				}
 			case "phrase":
 				if phraserole != "" {
 					curOutput.WriteString(`</span>`)

@@ -38,6 +38,7 @@ endif::[]
 -  <<ch-programmierung,Programmierung>>
 -  <<ch-bildereinbinden,Bilder einbinden>>
 -  <<ch-tabellen2,Tabellen>>
+- <<ch-html,HTML im speedata Publisher>>
 -  <<ch-fortgeschrittenethemen,Fortgeschrittene Themen>>
 -  <<ch-kochbuch,Kochbuch>>
 
@@ -51,6 +52,7 @@ endif::[]
 - <<app-massangaben,Längenangaben und Maßeinheiten>>
 - <<ch-xpathfunktionen,XPath- und Layoutfunktionen>>
 - <<ch-internevariablen,Interne Variablen>>
+- <<ch-htmlreferenz,HTML Referenz>>
 - <<ch-changelog,Liste der Änderungen>>
 - <<ch-anhang-schemazuweisen>>
 - <<app-glossar,Glossar>>
@@ -65,6 +67,7 @@ include::grundlagen.adoc[]
 include::programmierung.adoc[]
 include::bilder.adoc[]
 include::tabellen.adoc[]
+include::kaphtml.adoc[]
 include::fortgeschrittenethemen.adoc[]
 include::kochbuch.adoc[]
 
@@ -81,6 +84,7 @@ include::massangaben.adoc[]
 include::xpathfunktionen.adoc[]
 include::variablen.adoc[]
 include::schemazuweisen.adoc[]
+include::htmlreferenz.adoc[]
 include::changelog.adoc[]
 include::glossar.adoc[]
 
@@ -91,3 +95,4 @@ include::glossar.adoc[]
 include::referenz.adoc[]
 
 
+// ENDE

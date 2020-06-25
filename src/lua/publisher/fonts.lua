@@ -409,6 +409,10 @@ function insert_underline( parent, head, start, typ)
     end
 
     local shift_down = ( dp - rule_width ) / 1.5
+    if typ == 3 then
+        -- line-through
+        shift_down = - 1.6 * shift_down
+    end
     rule.data = string.format("q 0 g 0 G %g w %s  0 %g m %g %g l S Q", rule_width, dashpattern, -1 * shift_down, -wd, -1 * shift_down )
     rule.mode = 0
     parent.head = node.insert_before(parent.head,head,rule)

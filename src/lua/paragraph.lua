@@ -621,6 +621,18 @@ function Paragraph:format(width_sp, default_textformat_name,options)
     end
 
     nodelist = node.vpack(objects[1])
+    if self.border then
+        local wd,ht,dp = node.dimensions(nodelist)
+        local border = self.border
+        border.depth = dp
+        border.height = ht
+        border.lineheight = dp + ht
+        node.setproperty(nodelist,border)
+        nodelist.height = 0
+        local boxnode = publisher.htmlbox(nodelist,wd,ht,dp)
+        local tail = node.tail(nodelist)
+        nodelist.head = node.insert_before(nodelist.head,nodelist.head,boxnode)
+    end
     node.set_attribute(nodelist,publisher.att_origin,publisher.origin_vsplit)
 
     if self.initial then

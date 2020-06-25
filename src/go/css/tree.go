@@ -396,8 +396,14 @@ func (c *CSS) dumpTree(outfile io.Writer) {
 			}
 		}
 	}
+	html := c.document.Find(":root")
+	var lang string
+	if langattr, ok := html.Attr("lang"); ok {
+		lang = fmt.Sprintf("lang='%s',", langattr)
+	}
+
 	elt := c.document.Find(":root > body").Nodes[0]
-	fmt.Fprintf(out, "csshtmltree = { typ = 'csshtmltree',\n")
+	fmt.Fprintf(out, "csshtmltree = { typ = 'csshtmltree', %s\n", lang)
 	c.dumpFonts()
 	c.dumpPages()
 
