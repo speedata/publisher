@@ -29,6 +29,7 @@ inherited = {
     ollevel = true,
     ullevel = true,
     hyphens = true,
+    currentcolor = true,
     ["border-collapse"] = true,
     ["border-spacing"] = true,
     ["caption-side"] = true,
@@ -84,11 +85,6 @@ local function familyname( fontfamily )
     else
         return publisher.fontgroup["sans-serif"]
     end
-end
-
-local function color_pdf_string( colorname )
-    local colorstring = publisher.colors[colorname].pdfstring
-    return colorstring
 end
 
 local function get_fontfamily( family, size_sp , name )
@@ -237,10 +233,10 @@ function draw_border(nodelists, attributes,styles)
     local border_bottom_width = attributes["border-bottom-width"] or 0
     local border_left_width = attributes["border-left-width"] or 0
 
-    local border_top_color = attributes["border-top-color"]
-    local border_right_color = attributes["border-right-color"]
-    local border_bottom_color = attributes["border-bottom-color"]
-    local border_left_color = attributes["border-left-color"]
+    local border_top_color = styles["border-top-color"]
+    local border_right_color = styles["border-right-color"]
+    local border_bottom_color = styles["border-bottom-color"]
+    local border_left_color = styles["border-left-color"]
 
     local border_bottom_right_radius = attributes["border-bottom-right-radius"] or 0
     local border_bottom_left_radius = attributes["border-bottom-left-radius"] or 0
@@ -366,7 +362,9 @@ function set_calculated_width(styles)
 end
 
 function copy_attributes( styles,attributes )
+    local remember_currentcolor = {}
     for k, v in pairs(attributes) do
+        v = string.lower( tostring(v))
         if k == "font-size" then
             local fontsize
             if string.match(v, "em$") then
@@ -380,8 +378,16 @@ function copy_attributes( styles,attributes )
             styles.width = v
             set_calculated_width(styles)
         end
+        if v == "currentcolor" then
+            remember_currentcolor[#remember_currentcolor + 1] = k
+        end
         styles[k] = v
     end
+
+    for i=1,#remember_currentcolor do
+        styles[remember_currentcolor[i]] = styles.color
+    end
+
     if attributes["line-height"] then
         lineheight = attributes["line-height"]
         if lineheight == "normal" then
@@ -421,6 +427,7 @@ function collect_horizontal_nodes( elt,parameter )
         if styles.color then
             fg_colorindex = publisher.colors[styles.color].index
             options.add_attributes = { { publisher.att_fgcolor, fg_colorindex }}
+            styles.currentcolor = styles.color
         end
         if backgroundcolor then
             bg_colorindex = publisher.colors[backgroundcolor].index
@@ -662,26 +669,15 @@ function build_nodelist( elt )
         local attributes = thiselt.attributes or {}
         copy_attributes(styles,attributes)
 
+        local margin_top = getsize(styles["margin-top"],styles.fontsize_sp)
+        local margin_right = getsize(styles["margin-right"],styles.fontsize_sp)
+        local margin_bottom = getsize(styles["margin-bottom"],styles.fontsize_sp)
+        local margin_left = getsize(styles["margin-left"],styles.fontsize_sp)
 
-        local padding_top = attributes["padding-top"] or 0
-        local padding_right = attributes["padding-right"] or 0
-        local padding_bottom = attributes["padding-bottom"] or 0
-        local padding_left = attributes["padding-left"] or 0
-
-        local margin_top = attributes["margin-top"] or 0
-        local margin_right = attributes["margin-right"] or 0
-        local margin_bottom = attributes["margin-bottom"] or 0
-        local margin_left = attributes["margin-left"] or 0
-
-        padding_top = tex.sp(padding_top)
-        padding_right = tex.sp(padding_right)
-        padding_bottom = tex.sp(padding_bottom)
-        padding_left = tex.sp(padding_left)
-
-        margin_top = tex.sp(margin_top)
-        margin_right = tex.sp(margin_right)
-        margin_bottom = tex.sp(margin_bottom)
-        margin_left = tex.sp(margin_left)
+        local padding_top = getsize(styles["padding-top"],styles.fontsize_sp)
+        local padding_right = getsize(styles["padding-right"],styles.fontsize_sp)
+        local padding_bottom = getsize(styles["padding-bottom"],styles.fontsize_sp)
+        local padding_left = getsize(styles["padding-left"],styles.fontsize_sp)
 
         local border_top_style = attributes["border-top-style"] or "none"
         local border_right_style = attributes["border-right-style"] or "none"
@@ -693,10 +689,10 @@ function build_nodelist( elt )
         local border_bottom_width = attributes["border-bottom-width"] or 0
         local border_left_width = attributes["border-left-width"] or 0
 
-        local border_top_color = attributes["border-top-color"]
-        local border_right_color = attributes["border-right-color"]
-        local border_bottom_color = attributes["border-bottom-color"]
-        local border_left_color = attributes["border-left-color"]
+        local border_top_color = styles["border-top-color"]
+        local border_right_color = styles["border-right-color"]
+        local border_bottom_color = styles["border-bottom-color"]
+        local border_left_color = styles["border-left-color"]
 
         local border_bottom_right_radius = attributes["border-bottom-right-radius"] or 0
         local border_bottom_left_radius = attributes["border-bottom-left-radius"] or 0
@@ -724,7 +720,6 @@ function build_nodelist( elt )
         local fam = get_fontfamily(fontfamily,styles.fontsize_sp,fontname)
 
 
-        local margintop = getsize(styles["margin-top"],styles.fontsize_sp)
 
         local textalign = styles["text-align"]
         local hyphens = styles.hyphens
@@ -762,14 +757,19 @@ function build_nodelist( elt )
                 ret[#ret + 1] = a
             end
         else
+            local box = Box:new()
+            box.margintop = margin_top or 0
+            box.marginbottom = margin_bottom or 0
+            box.indent = margin_left + padding_left
+            box.width = styles.calculated_width - margin_left - margin_right - padding_left - padding_right
+
             if thiseltname == "table" then
                 local nl = build_html_table(thiselt)
-                local box = Box:new()
                 local tabpar = paragraph:new()
+                tabpar.margin_top = margin_top
                 box[#box + 1] = tabpar
                 node.set_attribute(nl,publisher.att_lineheight,nl.height)
                 tabpar:append(nl)
-                box.margintop = margintop
                 ret[#ret + 1] = box
             elseif thiseltname == "ol" or thiseltname == "ul" then
                 if thiseltname == "ol" then
@@ -784,7 +784,6 @@ function build_nodelist( elt )
                 else
                     styles.ullevel = styles.ullevel - 1
                 end
-                local box = Box:new()
                 for i=1,#n do
                     box[#box + 1] = n[i]
                 end
@@ -803,13 +802,7 @@ function build_nodelist( elt )
                     ret[#ret + 1] = a
                 end
             else
-                local marginleft = tex.sp(styles["margin-left"] or 0)
-                local marginright = tex.sp(styles["margin-right"] or 0)
                 local n = build_nodelist(thiselt)
-                local box = Box:new()
-                if marginleft > 0 then
-                    box.indent = marginleft
-                end
                 box.draw_border = attributes.has_border
                 box.border = {
                     borderstart = true,
@@ -839,16 +832,21 @@ function build_nodelist( elt )
                     margin_left = margin_left,
                 }
 
-                box.width = styles.calculated_width - marginleft
                 for i=1,#n do
                     box[#box + 1] = n[i]
                 end
-
-                box.margintop = margintop
                 ret[#ret + 1] = box
             end
         end
         table.remove(stylesstack)
+    end
+    -- two adjacent box elements collapse their margin
+    -- https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Mastering_margin_collapsing
+    -- This simple implementation is not enough, but a start
+    for i=1,#ret - 1 do
+        local max = math.max(ret[i].marginbottom or 0,ret[i + 1].margintop or 0)
+        ret[i].marginbottom = max / 2
+        ret[i + 1].margintop = max / 2
     end
     return ret
 end

@@ -411,6 +411,10 @@ colors  = {
 colortable = {"black","aliceblue", "orange", "rebeccapurple", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "blanchedalmond", "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkgrey", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange", "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkslategrey", "darkturquoise", "darkviolet", "deeppink", "deepskyblue", "dimgray", "dimgrey", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold", "goldenrod", "gray", "green", "greenyellow", "grey", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush", "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgray", "lightgreen", "lightgrey", "lightpink", "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightslategrey", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue", "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy", "oldlace", "olive", "olivedrab", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred", "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon", "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "slategrey", "snow", "springgreen", "steelblue", "tan", "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen"}
 
 setmetatable(colors,{  __index = function (tbl,key)
+    if not key then
+        err("Empty color")
+        return tbl["black"]
+    end
     if string.sub(key,1,1) ~= "#" and string.sub(key,1,3) ~= "rgb" then
         return nil
     end
@@ -878,7 +882,7 @@ do
         local new_parameter = {
             indent = indent
         }
-        if box.prependbox then
+        if box.prependbox and #box.prependbox > 0 then
             for i=1,#box.prependbox do
                 local pp = box.prependbox[i]
                 local a = paragraph:new()
@@ -902,6 +906,9 @@ do
                 end
                 if i == 1 then
                     box[i].margin_top = box.margintop
+                end
+                if i == #box then
+                    box[i].margin_bottom = box.marginbottom
                 end
 
                 ret[#ret + 1] = box[i]
@@ -2428,25 +2435,40 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
     --- The trapezoids must extend closer to the center of the border, because if the border
     --- radius is larger than the border width, the border goes "into" the surrounding object.
     -- 3 might not be correct. TODO: what is the correct factor? Should depend on the radius
-    local extend = 3
-    local inner_top = sp_y1 - extend *  border_top_width
-    local inner_left = sp_x1 + extend * border_left_width
-    local inner_bottom = sp_y2 + extend * border_bottom_width
-    local inner_right = sp_x2  - extend * border_right_width
+    local extend_top = 0
+    local extend_right = 0
+    local extend_bottom = 0
+    local extend_left = 0
+    if b_t_l_radius > 0 or b_t_r_radius > 0 then
+        local extend_top = 3
+    end
+    if b_t_r_radius > 0 or b_b_r_radius > 0 then
+        local extend_right = 3
+    end
+    if b_b_l_radius > 0 or b_b_r_radius > 0 then
+        local extend_bottom = 3
+    end
+    if b_t_l_radius > 0 or b_b_l_radius > 0 then
+        local extend_left = 3
+    end
+    local inner_top = sp_y1 - extend_top *  border_top_width
+    local inner_right = sp_x2  - extend_right * border_right_width
+    local inner_bottom = sp_y2 + extend_bottom * border_bottom_width
+    local inner_left = sp_x1 + extend_left * border_left_width
 
-    if border_top_width > 0 then
+    if properties.border_top_style ~= "none" and border_top_width > 0 then
         colorstring = colors[properties.border_top_color].pdfstring
         rules[#rules + 1] = get_rule(inner_left,inner_top, inner_right, inner_top, wd, sp_y0, sp_x0, sp_y0)
     end
-    if properties.border_right_style ~= "none" then
+    if properties.border_right_style ~= "none" and border_right_width > 0 then
         colorstring = colors[properties.border_right_color].pdfstring
         rules[#rules + 1] = get_rule(inner_right,inner_bottom, wd, ht, wd, sp_y0, inner_right,inner_top)
     end
-    if properties.border_bottom_style ~= "none" then
+    if properties.border_bottom_style ~= "none" and border_bottom_width > 0 then
         colorstring = colors[properties.border_bottom_color].pdfstring
         rules[#rules + 1] = get_rule(sp_x0, ht, wd, ht,inner_right,inner_bottom , inner_left,inner_bottom)
     end
-    if properties.border_left_style ~= "none" then
+    if properties.border_left_style ~= "none" and border_left_width > 0 then
         colorstring = colors[properties.border_left_color].pdfstring
         rules[#rules + 1] = get_rule(sp_x0, ht, inner_left, inner_bottom, inner_left, inner_top, sp_x0, sp_y0)
     end
@@ -3183,7 +3205,6 @@ end
 function find_user_defined_whatsits( head, parent )
     local fun
     local prev_hyperlink, prev_fgcolor
-    local savehead = head
     while head do
         if head.id == vlist_node or head.id==hlist_node then
             find_user_defined_whatsits(head.list,head)
@@ -3191,17 +3212,39 @@ function find_user_defined_whatsits( head, parent )
             local fgcolor = node.has_attribute(head,att_fgcolor)
             local insert_startcolor = false
             local insert_endcolor = false
+
             if fgcolor and head.next == nil then
+                -- at end insert endcolor if in color mode
                 insert_endcolor = true
                 prev_fgcolor = nil
             elseif fgcolor ~= prev_fgcolor then
-                if fgcolor ~= nil then
-                    insert_startcolor = true
-                    prev_fgcolor = fgcolor
-                else
+                -- 1: fgcolor nil and prev_fgcolor != nil
+                -- 2: fgcolor val and prev_fgcolor diff val
+                -- 3: fgcolor val and prev_fgcolor nil
+                if fgcolor == nil and prev_fgcolor then
+                    -- 1
                     insert_endcolor = true
-                    prev_fgcolor = nil
+                elseif fgcolor and prev_fgcolor then
+                    -- 2
+                    insert_endcolor = true
+                    insert_startcolor = true
+                else
+                    -- 3
+                    insert_startcolor = true
                 end
+                prev_fgcolor = fgcolor
+            end
+            if insert_endcolor then
+                local colstop  = node.new("whatsit","pdf_colorstack")
+                colstop.data  = ""
+                colstop.command = 2
+                colstop.stack = 0
+                local dontformat = node.has_attribute(head,att_dont_format)
+                if dontformat then
+                    node.set_attribute(colstop,att_dont_format,dontformat)
+                end
+                node.set_attribute(colstop,att_origin,origin_setcolor)
+                parent.head = node.insert_before(parent.head,head,colstop)
             end
             if insert_startcolor then
                 local colstart = node.new("whatsit","pdf_colorstack")
@@ -3218,15 +3261,6 @@ function find_user_defined_whatsits( head, parent )
                 node.set_attribute(colstart,att_origin,origin_setcolor)
                 parent.head = node.insert_before(parent.head,head,colstart)
             end
-            if insert_endcolor then
-                local colstop  = node.new("whatsit","pdf_colorstack")
-                colstop.data  = ""
-                colstop.command = 2
-                colstop.stack = 0
-                node.set_attribute(colstop,att_origin,origin_setcolor)
-                head = node.insert_after(head,head,colstop)
-            end
-
 
             -- First, let's look at hyperlinks from HTML <a href="...">
             -- Hyperlinks are inserted as attributes
@@ -4199,19 +4233,14 @@ function set_color_if_necessary( nodelist,color )
     -- process is much slower. See #143
     if colorname == "black" then return nodelist end
     local colstart, colstop
-    if colorname == "black" then
-        colstart = node.new("whatsit","pdf_literal")
-        colstop  = node.new("whatsit","pdf_literal")
-    else
-        colstart = node.new("whatsit","pdf_colorstack")
-        colstop  = node.new("whatsit","pdf_colorstack")
-        colstart.data = colors[colorname].pdfstring
-        colstop.data  = ""
-        colstart.command = 1
-        colstop.command  = 2
-        colstart.stack = 0
-        colstop.stack  = 0
-    end
+    colstart = node.new("whatsit","pdf_colorstack")
+    colstop  = node.new("whatsit","pdf_colorstack")
+    colstart.data = colors[colorname].pdfstring
+    colstop.data  = ""
+    colstart.command = 1
+    colstop.command  = 2
+    colstart.stack = 0
+    colstop.stack  = 0
 
     if dontformat then
         node.set_attribute(colstart,att_dont_format,dontformat)

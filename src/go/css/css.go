@@ -97,7 +97,7 @@ i, cite, em,
 var, address    { font-style: italic }
 pre, tt, code,
 kbd, samp       { font-family: monospace }
-pre             { white-space: pre }
+pre             { white-space: pre; margin: 1em 0px; }
 button, textarea,
 input, select   { display: inline-block }
 big             { font-size: 1.17em }

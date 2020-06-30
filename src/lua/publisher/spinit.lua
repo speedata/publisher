@@ -198,6 +198,15 @@ function tex.sp( number_or_string )
     if number_or_string == "0" or number_or_string == 0 or number_or_string == "" then
         return 0
     end
+    if string.match( number_or_string,"px$") then
+        local val = string.gsub( number_or_string,"px$","" )
+        local num = tonumber(val)
+        if not num then
+            err("Could not resolve dimension %q",number_or_string)
+            return 0
+        end
+        return num * 72 / 96 * publisher.factor
+    end
 
     if type(number_or_string) == "string" then
         local tmp = string.gsub(number_or_string,"(%d)pt","%1bp"):gsub("(%d)pp","%1pt")

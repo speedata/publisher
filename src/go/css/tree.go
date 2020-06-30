@@ -251,6 +251,21 @@ func resolveAttributes(attrs []html.Attribute) map[string]string {
 					resolved[attr.Key+"-color"] = str
 				}
 			}
+		case "border-color":
+			values := getFourValues(attr.Val)
+			for _, loc := range toprightbottomleft {
+				resolved["border-"+loc+"-color"] = values[loc]
+			}
+		case "border-style":
+			values := getFourValues(attr.Val)
+			for _, loc := range toprightbottomleft {
+				resolved["border-"+loc+"-style"] = values[loc]
+			}
+		case "border-width":
+			values := getFourValues(attr.Val)
+			for _, loc := range toprightbottomleft {
+				resolved["border-"+loc+"-width"] = values[loc]
+			}
 		case "background":
 			// background-clip, background-color, background-image, background-origin, background-position, background-repeat, background-size, and background-attachment
 			for _, part := range strings.Split(attr.Val, " ") {
@@ -267,7 +282,7 @@ var preserveWhitespace = []bool{false}
 
 func hasBorder(attrs map[string]string) bool {
 	var borderwidthKey, borderstyleKey string
-	for _, loc := range []string{"top", "right", "bottom", "left"} {
+	for _, loc := range toprightbottomleft {
 		borderwidthKey = "border-" + loc + "-width"
 		borderstyleKey = "border-" + loc + "-style"
 		if wd, ok := attrs[borderwidthKey]; ok {

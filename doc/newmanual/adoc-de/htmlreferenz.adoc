@@ -216,7 +216,7 @@ Diese Tabellen sind noch im Aufbau. Alles wird geprüft....
 | mm | Ja |
 | pc | Ja |
 | pt | Ja | DTP-Punkt (1/72 Zoll)
-| px | Ja | Identisch zu pt. Eigentlich sollte 1px 1/96 Zoll sein. Wird in einer der nächsten Versionen auf 72/96 pt geändert
+| px | Ja | 1px = 1/96 Zoll
 | em | Ja |
 | ex | Ja |
 | rem | Nein |
@@ -385,7 +385,7 @@ Diese Tabellen sind noch im Aufbau. Alles wird geprüft....
 | border-spacing | Nein |
 | border-start-end-radius | Nein |
 | border-start-start-radius | Nein |
-| border-style | Nein |
+| border-style | Ja |
 | border-top | Ja |
 | border-top-color | Ja |
 | border-top-left-radius | Ja |

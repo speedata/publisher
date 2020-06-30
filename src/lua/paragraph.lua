@@ -593,6 +593,10 @@ function Paragraph:format(width_sp, default_textformat_name,options)
             nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = current_textformat.marginbottom})
             node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
         end
+        if self.margin_bottom and self.margin_bottom > 0 then
+            nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = self.margin_bottom})
+            node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
+        end
 
         node.set_attribute(nodelist.list,publisher.att_margin_newcolumn, current_textformat.colpaddingtop or 0)
 
