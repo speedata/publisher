@@ -1,12 +1,16 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.19" date="2020-07-01">
+      <en>Enhance HTML support (margin-top, margin-bottom and other).</en>
+      <de>HTML Support verbessert (margin-top, margin-bottom und andere).</de>
+    </entry>
     <entry version="3.9.18" date="2020-06-25">
-      <en>Enhance HTML support</en>
-      <de>HTML Support verbessert</de>
+      <en>Enhance HTML support.</en>
+      <de>HTML Support verbessert.</de>
     </entry>
     <entry version="3.9.17" date="2020-06-22">
       <en>Bugfix qrcode (from upstream).</en>
-      <de>Fehlerkorrektur QR-Code (aus dem master-Repository)</de>
+      <de>Fehlerkorrektur QR-Code (aus dem master-Repository).</de>
     </entry>
     <entry version="3.9.17" date="2020-06-22">
       <en>CSS border-radius.</en>
