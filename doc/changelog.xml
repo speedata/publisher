@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.20" date="2020-07-02">
+      <en>Server mode: specify modes in the URL.</en>
+      <de>Servermodus: Modi in der URL angeben.</de>
+    </entry>
     <entry version="3.9.19" date="2020-07-01">
       <en>Enhance HTML support (margin-top, margin-bottom and other).</en>
       <de>HTML Support verbessert (margin-top, margin-bottom und andere).</de>
