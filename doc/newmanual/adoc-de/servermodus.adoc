@@ -74,6 +74,20 @@ Folgende URL-Parameter können beim POST-Request angegeben werden:
 `vars`::
   Setzt Variablen für den Publisher-Lauf. Angabe in der Form `var1=wert1,var2=wert2,var3=wert3...`, jedoch URL-kodiert.
 
+`mode`::
+  Setzt den Modus für den Lauf. Angabe in der Form `mode1,mode2,mode3...`, aber URL-kodiert.
+
+
+=== Beispiel
+
+Ein Request auf
+
+----
+http://127.0.0.1:5266/v0/publish?vars=myvar%3D12345&mode=a4paper%2Cprint
+----
+
+setzt `myvar` auf `1234` und schaltet die Modi `a4paper` und `print` ein.
+
 
 == `/v0/publish/<id>`
 

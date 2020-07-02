@@ -8,11 +8,13 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 )
 
 // WorkRequest contains an ID
 type WorkRequest struct {
-	ID string
+	ID    string
+	Modes []string
 }
 
 var (
@@ -78,6 +80,10 @@ func (w worker) Start() {
 				if _, err := os.Stat(filepath.Join(dir, "extravars")); err == nil {
 					params = append(params, "--varsfile")
 					params = append(params, "extravars")
+				}
+				if len(work.Modes) > 0 {
+					params = append(params, "--mode")
+					params = append(params, strings.Join(work.Modes, ","))
 				}
 				cmd := exec.Command(filepath.Join(bindir, "sp"+exeSuffix), params...)
 				cmd.Dir = dir

@@ -72,9 +72,9 @@ func encodeFileToBase64(filename string) (string, error) {
 	return layoutbase64.String(), nil
 }
 
-func addPublishrequestToQueue(id string) {
+func addPublishrequestToQueue(id string, modes []string) {
 	fmt.Fprintf(protocolFile, "Add request %s to queue.\n", id)
-	workQueue <- WorkRequest{ID: id}
+	workQueue <- WorkRequest{ID: id, Modes: modes}
 }
 
 // Wait until filename in dir exists and is complete
@@ -543,8 +543,12 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		f.Close()
 	}
+	var modes []string
+	if mode := r.FormValue("mode"); mode != "" {
+		modes = strings.Split(mode, ",")
+	}
 
-	addPublishrequestToQueue(id)
+	addPublishrequestToQueue(id, modes)
 
 	jsonid := struct {
 		ID string `json:"id"`
