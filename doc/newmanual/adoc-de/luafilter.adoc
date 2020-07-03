@@ -21,7 +21,7 @@ oder über die Konfigurationsdatei, die folgenden Eintrag enthalten muss:
 filter=myfile.lua
 ```
 
-Das angegebene Lua-Skript wird ausgeführt, bevor die Erzeugung der PDF-Datei beginnt.
+Das angegebene Lua-Skript wird ausgeführt, bevor die Erzeugung der PDF-Datei beginnt. Das Skript muss im <<ch-organisationdaten,Publisher-Suchpfad>> liegen.
 Daher ist die Hauptanwendung dieses Pre-Processing die Transformation von Daten in ein Format, das für den speedata Publisher geeignet ist. So können CSV oder Excel-Dateien nach XML konvertiert und anschließend die PDF-Erzeugung gestartet werden. Daneben ist es auch möglich, Daten zu validieren.
 
 Im Folgenden werden die Anwendungsmöglichkeiten beschrieben, ganz zum Schluss gibt es nochmals eine Übersicht über die eingebauten Funktionen und Methoden.
@@ -281,6 +281,8 @@ Die Rückgabe ist ein boolean-Wert, der true ist, wenn der Befehl fehlerfrei aus
 `run_saxon(‹XSL›,‹Quelldatei›,‹Ausgabedatei›,‹Parameter›)`::
 Diese Funktion ruft das zum Publisher mitgelieferte Programm `saxon` auf. Sie erwartet drei string-Argumente (das Stylesheet, die Eingabe- und die Ausgabedatei) und ein optionales Argument das als Parameter an saxon übergeben wird. Die Rückgabe ist ein boolean-Wert, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurück gegeben, der die Fehlermeldung enthält. Die Parameter haben die Form `keyword1=value1 keyword2=value2` (mit Leerzeichen getrennt).
 
+`find_file(‹Dateiname oder URL›)`::
+Findet die angegebene Datei im Publisher-Suchpfad und gibt den absoluten Pfad zurück. Bei nicht gefunden: nil bzw. false und eine Fehlermeldung.
 
 === `xml`
 

@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"splibaux"
 	"strings"
 
 	"sp/sp/luacsv"
@@ -112,9 +113,31 @@ func runSaxon(l *lua.LState) int {
 	return 2
 }
 
+func findFile(l *lua.LState) int {
+	numberArguments := l.GetTop()
+	if numberArguments != 1 {
+		return lerr("find_file requires 1 argument: the file to find")
+	}
+	fn := l.CheckString(1)
+	if abspath, err := splibaux.GetFullPath(fn); abspath == "" {
+		if err != nil {
+			l.Push(lua.LNil)
+			l.Push(lua.LString(err.Error()))
+			return 2
+		} else {
+			l.Push(lua.LNil)
+			return 1
+		}
+	} else {
+		l.Push(lua.LString(abspath))
+		return 1
+	}
+}
+
 var exports = map[string]lua.LGFunction{
 	"validate_relaxng": validateRelaxNG,
 	"run_saxon":        runSaxon,
+	"find_file":        findFile,
 }
 
 func runtimeLoader(l *lua.LState) int {

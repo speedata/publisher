@@ -16,6 +16,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
+	"splibaux"
 	"strconv"
 	"strings"
 	"syscall"
@@ -392,6 +393,9 @@ func saveVariables() {
 
 // add the command line argument (extra-dir) into the slice
 func extradir(arg string) {
+	if verbose {
+		fmt.Println("Add directory to search path", arg)
+	}
 	extraDir = append(extraDir, arg)
 }
 
@@ -845,9 +849,13 @@ func main() {
 			cfg.ReadFile(filepath.Join(pwd, configfilename))
 		}
 	}
+	if getOption("verbose") != "" {
+		verbose = true
+		os.Setenv("SP_VERBOSITY", "1")
+	}
 
 	if addLocalPath {
-		extraDir = append(extraDir, pwd)
+		extradir(pwd)
 	}
 
 	// if the user sets systemfonts=true in the config file, we should honor this.
@@ -894,11 +902,13 @@ func main() {
 	os.Setenv("CACHEMETHOD", cachemethod)
 
 	if ed := cfg.String("DEFAULT", "extra-dir"); ed != "" {
-		abspath, err := filepath.Abs(ed)
-		if err != nil {
-			log.Fatal("Cannot find directory", ed)
+		for _, p := range strings.Split(ed, string(filepath.ListSeparator)) {
+			if abspath, err := filepath.Abs(p); err != nil {
+				log.Fatalf("Failed to make %q into an absolute path", p)
+			} else {
+				extradir(abspath)
+			}
 		}
-		extraDir = append(extraDir, abspath)
 	}
 	os.Setenv("SD_EXTRA_DIRS", strings.Join(extraDir, string(filepath.ListSeparator)))
 
@@ -917,9 +927,7 @@ func main() {
 	os.Setenv("SD_EXTRA_XML", strings.Join(extraxml, ","))
 	os.Setenv("SD_PREPEND_XML", strings.Join(prependxml, ","))
 
-	if getOption("verbose") != "" {
-		verbose = true
-		os.Setenv("SP_VERBOSITY", "1")
+	if verbose {
 		fmt.Println("SD_EXTRA_DIRS:", os.Getenv("SD_EXTRA_DIRS"))
 		fmt.Println("SD_EXTRA_XML:", os.Getenv("SD_EXTRA_XML"))
 		fmt.Println("SD_PREPEND_XML:", os.Getenv("SD_PREPEND_XML"))
@@ -956,28 +964,23 @@ func main() {
 		if filter := getOption("filter"); filter != "" {
 			filterext := filepath.Ext(filter)
 			switch filterext {
-			case ".lua":
-				if !fileExists(filter) {
-					fmt.Printf("Lua file %q not found\n", filter)
-					exitstatus = 1
-				} else {
-					filterfile = filter
-					if !runLuaScript(filter) {
-						exitstatus = 1
-					}
-				}
 			case ".xpl":
 				fmt.Println("XProc filter not supported anymore.")
 				exitstatus = 1
 			default:
-				if fileExists(filter + ".lua") {
-					filterfile = filter
-					if !runLuaScript(filter + ".lua") {
-						exitstatus = 1
-					}
-				} else {
+				if filterext != ".lua" {
+					filter = filter + ".lua"
+				}
+				splibaux.BuildFilelist(extraDir)
+
+				if fn := splibaux.LookupFile(filter); fn == "" {
 					fmt.Printf("Cannot find filter %q\n", filter)
 					exitstatus = 1
+				} else {
+					filterfile = fn
+					if !runLuaScript(fn) {
+						exitstatus = 1
+					}
 				}
 			}
 		}
