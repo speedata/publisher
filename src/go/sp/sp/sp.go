@@ -204,8 +204,8 @@ func init() {
 			filepath.Join(srcdir, "tex"),
 			filepath.Join(srcdir, "hyphenation")}, string(os.PathListSeparator)))
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
-		extraDir = append(extraDir, filepath.Join(installdir, "fonts"))
-		extraDir = append(extraDir, filepath.Join(installdir, "img"))
+		extradir(filepath.Join(installdir, "fonts"))
+		extradir(filepath.Join(installdir, "img"))
 		pathToDocumentation = filepath.Join(installdir, "/build/manual/"+indexpage)
 	}
 	inifile = filepath.Join(srcdir, "lua/sdini.lua")
@@ -225,6 +225,20 @@ func getOptionSection(optionname string, section string) string {
 		return defaults[optionname]
 	}
 	return ""
+}
+
+func getSectionOptionWithWarning(optionname string, section string) string {
+	if o := options[optionname]; o != "" {
+		return o
+	}
+	if val := cfg.String("DEFAULT", optionname); val != "" {
+		fmt.Printf("** Warning: please put the option %q in section %q\n", optionname, section)
+		return val
+	}
+	if val := cfg.String(section, optionname); val != "" {
+		return val
+	}
+	return defaults[optionname]
 }
 
 func getOption(optionname string) string {
@@ -393,10 +407,12 @@ func saveVariables() {
 
 // add the command line argument (extra-dir) into the slice
 func extradir(arg string) {
-	if verbose {
-		fmt.Println("Add directory to search path", arg)
+	for _, p := range strings.Split(arg, string(filepath.ListSeparator)) {
+		if verbose {
+			fmt.Println("Add directory to search path", p)
+		}
+		extraDir = append(extraDir, p)
 	}
-	extraDir = append(extraDir, arg)
 }
 
 // Add the command line argument to the list of additional XML files for the layout
@@ -1089,7 +1105,11 @@ func main() {
 			log.Fatal("Problem with watch dir in section [hotfolder].")
 		}
 	case cmdServer:
-		runServer(getOption("port"), getOption("address"), getOption("tempdir"))
+		serverextradir := strings.Split(getOptionSection("extra-dir", "server"), string(filepath.ListSeparator))
+		serverfilter := getOptionSection("filter", "server")
+		serverPort := getSectionOptionWithWarning("port", "server")
+		serverAddress := getSectionOptionWithWarning("address", "server")
+		runServer(serverPort, serverAddress, getOption("tempdir"), serverextradir, serverfilter)
 	default:
 		log.Fatal("unknown command:", command)
 	}

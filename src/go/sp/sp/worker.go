@@ -85,6 +85,13 @@ func (w worker) Start() {
 					params = append(params, "--mode")
 					params = append(params, strings.Join(work.Modes, ","))
 				}
+				for _, p := range serverExtraDir {
+					params = append(params, "--extra-dir")
+					params = append(params, p)
+				}
+				if serverFilter != "" {
+					params = append(params, "--filter", serverFilter)
+				}
 				cmd := exec.Command(filepath.Join(bindir, "sp"+exeSuffix), params...)
 				cmd.Dir = dir
 				cmd.Run()

@@ -19,6 +19,17 @@ WARNING: Der Server-Modus ist für eine nicht-öffentliche Umgebung gedacht. Es 
 Der Server baut die Verbindung auf der IP-Adresse `127.0.0.1` und dem Port `5266` auf.
 Die Adresse kann mit den Parameter `address` und `port` in der Konfigurationsdatei bzw. auf der Kommandozeile geändert werden, siehe <<ch-konfiguration,den Anhang über die Konfiguration>>.
 
+Beispiel für eine Konfigurationsdatei:
+
+-------------------------------------------------------------------------------
+[server]
+port = 9999
+address = 0.0.0.0
+extra-dir = /var/projects/fonts:/var/projects/images
+filter = convertdata.lua
+-------------------------------------------------------------------------------
+
+
 Es folgt ein Überblick über alle API Methoden.
 Die aktuelle Versionsnummer der API ist 0, also werden alle Methoden über `https://127.0.0.1:5266/v0/..`  angesprochen.
 Falls es zukünftig inkompatible Änderungen gibt, sind diese in der Versionsnummer `/v1/...` erreichbar, die vorhandenen Methoden werden weiterhin über `/v0` aufrufbar sein.

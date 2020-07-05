@@ -14,72 +14,113 @@ The speedata publisher can be configured in several ways:
 The file publisher.cfg (/etc/speedata/publisher.cfg, $HOME/.publisher.cfg and in the current working directory) is a text file, that is read at the beginning of the publisher run. The default file looks like this:
 
 ------------------------------
-# This is a comment
 data      = data.xml
 layout    = layout.xml
 autoopen  = false
+# This is a comment
+# And this is not a comment
+# ^^^ of course the line above is also a comment
+#
+
+# section specific values
+[section]
+key = value
 ------------------------------
+
+You can access the base directory of the project with `%(projectdir)s`. This is the directory with the file `publisher.cfg`.
+
+All entries in the configuration file are optional.
+The configuration files are read in the following order: `/etc/speedata/publisher.cfg`, `~/.publisher.cfg` and in the current directory `publisher.cfg`.
+The current directory can be changed on the command line with the switch `--wd=....`.
+
 
 The format of the file is important, otherwise it won’t be recognized. The following options are supported:
 
-autoopen::
+`autoopen`::
    if true, the publisher opens the PDF file. Default: false. The same effect can be achieved if you run sp --autoopen.
-cache::
-   Caching-strategy for http* image requests. Use fast for file system lookup only or optimal for http checking on each request. https requests are currently always checked with the optimal strategy.
-data::
-   Name of the data file (XML). If not given, the system uses data.xml.
-dummy::
-   If true, the system won’t read the data file, instead it uses the single element <data /> as its input.
-extra-dir::
-   A list of directories in the file system separated by ; (Windows) or : (Mac, Linux). These directories contain the images, fonts, source files and other assets that are used during the publisher run. Example for windows: extra-dir=c:\myfonts.
-extraxml::
-   Add this XML file to the layout instructions. List of comma separated file names (extraxml=file1.xml,file2.xml).
-prependxml::
-   Add this XML file in front of the layout instructions. List of comma separated file names (prependxml=file1.xml,file2.xml).
-filter::
-   Run the given file as an Lua-Filter.
-fontpath::
-   Set the path for system fonts. On Windows this is %WINDIR%\Fonts, on Mac OS X it defaults to /Library/Fonts:/System/Library/Fonts. Currently dysfunctional on Windows XP.
-grid::
+`cache`::
+   Caching-strategy for http(s) image requests and external image processors. Use `fast` for file system lookup only or `optimal` for checking on each request. Use `none` for no caching.
+`data`::
+   Name of the data file (XML). If not given, the system uses `data.xml`.
+`dummy`::
+   If true, the system won’t read the data file, instead it uses the single element `<data />` as its input.
+`extra-dir`::
+   A list of directories in the file system separated by `;` (Windows) or `:` (Mac, Linux). These directories contain the images, fonts, source files and other assets that are used during the publisher run. Example for windows: `extra-dir=c:\myfonts`.
+`extensionhandler`::
+   Assignment of file extensions to converters defined in 'imagehandler'. To convert graphics on-the-fly. Example: `extensionhandler="mmd:mermaid"`. Multiple entries are separated by semicolon. See also `imagehandler`. (Since version 3.9.1.)
+`extraxml`::
+   Add this XML file to the layout instructions. List of comma separated file names (`extraxml=file1.xml,file2.xml`).
+`prependxml`::
+   Add this XML file in front of the layout instructions. List of comma separated file names (`prependxml=file1.xml,file2.xml`).
+`filter`::
+   Run the given file as an Lua-Filter. See the section <<ch-preprocessing>>.
+`fontpath`::
+   Set the path for system fonts. On Windows this is `%WINDIR%\Fonts`, on Mac OS X it defaults to `/Library/Fonts:/System/Library/Fonts`.
+`grid`::
    If true, the underlying grid is shown in the PDF file. For debugging purpose only.
-imagecache::
-   Folder for cached images (href="http://..." only). Defaults to $TMPDIR/sp/images.
-ignore-case::
+`imagecache`::
+   Folder for cached images (`href="http://..."` and image processors). Defaults to `$TMPDIR/sp/images`.
+`imagehandler`::
+   Assignments of screen type to external converters. For example, `imagehandler="mermaid:(/usr/bin/mmdc -i %%input%% -o %%output%%%.pdf)"`. The image type _mermaid_ is converted with the program `/usr/bin/mmdc` and receives as input parameter `-i`, the input file, `-o` and the output file with attached file extension `.pdf`. The file names are replaced at runtime and generated randomly. Multiple entries are separated by semicolons.
+`ignore-case`::
    Ignore case when accessing files (on a case-insensitive file system).
-inkscape::
+`inkscape`::
    The path to the program inkscape when you need on the fly SVG to PDF conversion.
-jobname::
-   Name of the output file. Default is publisher.
-layout::
-   Name of the layout rule set (XML). The default name is layout.xml.
-luatex::
+`jobname`::
+   Name of the output file. Default is `publisher`.
+`layout`::
+   Name of the layout rule set (XML). The default name is `layout.xml`.
+`luatex`::
    Path to the Lua(jit)TeX binary. Experimental! This is provided for your experiments, not for production use.
-mode::
+`mode`::
    Set the layout mode. See <<ch-advanced-cotrollayout>>.
-opencommand::
-   Command that will be run to open the documentation and the PDF file. For MacOS X this should be open, for Linux xdg-open or exo-open (xfce).
-pathrewrite::
+`opencommand`::
+   Command that will be run to open the documentation and the PDF file. For MacOS X this should be `open`, for Linux `xdg-open` or `exo-open` (xfce).
+`pathrewrite`::
    Comma separated list of entries of the form A=B which replace parts in `file:///media/XYZ` to `file:///path/to/project/myfiles/XYZ`. Useful when you have absolute paths in the data which must be changed during the publishing process.
-runs::
+`runs`::
    Set the number of runs.
-startpage::
+`startpage`::
    Number of the first page.
-systemfonts::
+`systemfonts`::
    If set to 'true', then the publisher searches for fonts in the system directory.
-tempdir::
+`tempdir`::
    Name of the temporary directory. Default is the system's temp.
-timeout::
+`timeout`::
    Maximum time of the publishing run. If time is exceeded, the publisher exits with status 1.
-vars::
+`vars`::
    Comma separated list of variables and values in the form var=value to set additional variables.
-You can access the base directory of the project with %(projectdir)s. This is the directory with the file publisher.cfg.
+`wd`::
+   Set the current directory.
 
-All entries in the configuration file are optional. The configuration files are read in the following order: /etc/speedata/publisher.cfg, ~/.publisher.cfg and in the current directory publisher.cfg. The current directory can be changed on the command line with the switch --wd=.....
+=== Section server (`server')
+
+`address`::
+  IP address to which the server should open the port. Default is 127.0.0.1.
+`extra-dir`::
+  Extra directories for the publishing runs to be includes.
+`filter`::
+  Lua script to run before processing the publishing runs (like a call to `sp --filter ...`).
+`logfile`::
+  File name for the log. `STDOUT` for standard output and `STDERR` for standard error.
+`port`::
+  Port to which a connection can be established.
+
+=== Section Hotfolder (`hotfolder`)
+
+``hotfolder``::
+  Directory to be “watched”.
+`events`::
+  Rules which programs to run on which files.
+
+A detailed description can be found in the <<ch-hotfolder>> section.
+
 
 == Command line parameters
-The valid command line parameters are written on a separate page.
+The valid command line parameters are written on a <<ch-commandline,separate page>>.
 
 == Options given in the layout file
-The XML layout file has a command called Options that allows to set some parameters (tracing, default language, …)
+The XML layout file has a command called <<cmd-options,`<Options>`>> that allows to set some parameters (tracing, default language, …)
 
 
+// EOF

@@ -28,9 +28,11 @@ const (
 )
 
 var (
-	daemonStarted bool
-	serverTemp    string
-	protocolFile  *os.File
+	daemonStarted  bool
+	serverTemp     string
+	serverExtraDir []string
+	serverFilter   string
+	protocolFile   *os.File
 )
 
 func makePublisherTemp() error {
@@ -753,11 +755,13 @@ func available(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func runServer(port string, address string, tempdir string) {
+func runServer(port string, address string, tempdir string, extraDir []string, filter string) {
 	var err error
 	serverTemp = filepath.Join(tempdir, "publisher-server")
+	serverFilter = filter
+	serverExtraDir = extraDir
 	logfilename := "publisher.protocol"
-	if fn := getOption("logfile"); fn != "" {
+	if fn := getSectionOptionWithWarning("logfile", "server"); fn != "" {
 		logfilename = fn
 	}
 	if logfilename == "STDOUT" {
