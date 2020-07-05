@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.22" date="2020-07-05">
+      <en>Server mode: add configurable filter and extra-dir, move entries to section <tt>server</tt>.</en>
+      <de>Servermodus: konfigurierbarer Filter und extra Verzeichnisse, neuer Konfigurationsabschnitt <tt>server</tt>.</de>
+    </entry>
     <entry version="3.9.21" date="2020-07-03">
       <en>Lua filter <tt>runtime.find_file</tt> to get the absolute path of a resource.</en>
       <de>Lua Filter: <tt>runtime.find_file</tt> gibt den absoluten Pfad einer Ressource zurück (Datei oder URL).</de>
