@@ -143,6 +143,7 @@ Ein GET-Request mit der id aus dem POST-Request von `/v0/publish`. Es wird im Er
 406  Not Acceptable::
    PDF wurde fehlerhaft generiert
 
+Das Verzeichnis mit der PDF-Datei wird nach diesem Request gelöscht, es sei denn, die URL enthält den Parameter `delete` mit dem Wert `false`.
 
 == `/v0/data/<id>`
 

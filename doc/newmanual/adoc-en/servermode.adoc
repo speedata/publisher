@@ -146,6 +146,8 @@ A GET request with the id from the POST request of `/v0/publish`. If successful,
    PDF was generated incorrectly
 
 
+The directory containing the PDF file will be deleted after this request, unless the URL contains the `delete` parameter with the value `false`.
+
 == `/v0/data/<id>`
 
 Returns the data file that was previously copied to the server. The format can be specified using the URL parameter `format`, for example `\http://127.0.0.1:5266/v0/data/1347678770?format=base64`:
@@ -239,3 +241,5 @@ The returned JSON file has the following keys:
 == `/v0/delete/<id>`
 
 GET: Deletes the directory with this id. Returns 200 if the id exists, 404 if not.
+
+// EOF

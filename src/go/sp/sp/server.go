@@ -79,42 +79,6 @@ func addPublishrequestToQueue(id string, modes []string) {
 	workQueue <- WorkRequest{ID: id, Modes: modes}
 }
 
-// Wait until filename in dir exists and is complete
-// func waitForAllFiles(dir string) error {
-// 	watcher, err := fsnotify.NewWatcher()
-// 	if err != nil {
-// 		return err
-// 	}
-// 	defer watcher.Close()
-// 	done := make(chan bool)
-// 	var goerr error
-// 	go func() {
-// 		for {
-// 			timer := time.NewTimer(100 * time.Millisecond)
-// 			select {
-// 			case event := <-watcher.Events:
-// 				if event.Op&fsnotify.Write == fsnotify.Write || event.Op&fsnotify.Create == fsnotify.Create {
-// 				}
-// 			case <-timer.C:
-// 				done <- true
-// 				return
-// 			case nerr := <-watcher.Errors:
-// 				goerr = nerr
-// 				done <- true
-// 			}
-// 			timer.Stop()
-// 		}
-
-// 	}()
-
-// 	err = watcher.Add(dir)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	<-done
-// 	return goerr
-// }
-
 // Wait until the file filename gets created in directory dir
 func waitForFile(dir string, filename string) error {
 	watcher, err := fsnotify.NewWatcher()
@@ -313,6 +277,11 @@ func v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintln(protocolFile, err)
 		return
+	}
+
+	// Only if the PDF is finished, we may remove the directory
+	if r.FormValue("delete") != "false" {
+		defer os.RemoveAll(publishdir)
 	}
 
 	finishedPath := filepath.Join(publishdir, "publisher.finished")
