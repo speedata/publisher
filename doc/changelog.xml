@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.23" date="2020-07-05">
+      <en>Server mode: <tt>/v0/pdf/‹id›</tt> deletes the PDF file on the server after the request.</en>
+      <de>Servermodus: <tt>/v0/pdf/‹id›</tt> löscht die PDF-Datei auf dem server nach dem Request.</de>
+    </entry>
     <entry version="3.9.22" date="2020-07-05">
       <en>Server mode: add configurable filter and extra-dir, move entries to section <tt>server</tt>.</en>
       <de>Servermodus: konfigurierbarer Filter und extra Verzeichnisse, neuer Konfigurationsabschnitt <tt>server</tt>.</de>
