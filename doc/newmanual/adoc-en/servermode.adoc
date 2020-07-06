@@ -34,15 +34,32 @@ filter = convertdata.lua
 
 
 An overview of all API methods follows.
-The current version number of the API is 0, so all methods are addressed via `\https://127.0.0.1:5266/v0/..`.
+The current version number of the API is 0, so all methods are addressed via `\http://127.0.0.1:5266/v0/..`.
 If there will be incompatible changes in the future, these can be reached in the version number `/v1/...`, the existing methods will still be accessible via `/v0`.
 
+[options="header"]
+|=======
+| Method | URL | Short description
+| GET | <<api-method-available,`/available`>> | Return 200 to check if the server is running.
+| POST | <<api-method-v0-publish-post,`/v0/publish`>> |Send data to the server to start a publishing run.
+| GET | <<api-method-v0-publish-get,`/v0/publish/<id>`>> | Check if a publishing run is finished.
+| GET | <<api-method-v0-pdf,`/v0/pdf/<id>`>> | Wait for the completion of a PDF.
+| GET | <<api-method-v0-data,`/v0/data/<id>`>> | Load the `data.xml` from the publishing run.
+| GET | <<api-method-v0-layout,`/v0/layout/<id>`>> | Load the `layout.xml` from the publishing run
+| GET | <<api-method-v0-statusfile,`/v0/statusfile/<id>`>> | Load the status file (`publisher.status`) from the publishing run.
+| GET | <<api-method-v0-status,`/v0/status`>> | Overview of the current publishing processes.
+| GET | <<api-method-v0-statusid,`/v0/status/<id>`>> | Overview of a publishing process.
+| GET | <<api-method-v0-delete,`/v0/delete/<id>`>> | Delete a publishing run.
+|=======
 
+
+[[api-method-available]]
 == `/available`
 
 Without version number.
 Returns the HTTP status 200.
 
+[[api-method-v0-publish-post]]
 == `/v0/publish`
 
 If the URL is called with a POST request, the speedata Publisher expects a JSON file in the following format
@@ -101,6 +118,7 @@ http://127.0.0.1:5266/v0/publish?vars=myvar%3D12345&mode=a4paper%2Cprint
 
 sets `myvar` to `1234` and enables the modes `a4paper` and `print`.
 
+[[api-method-v0-publish-get]]
 == `/v0/publish/<id>`
 
 A GET request to this URL with an id from the POST request described above returns a JSON file with the content:
@@ -132,6 +150,7 @@ If the PDF file has not yet been written:
 
 The directory containing the PDF file will be deleted after this request, unless the URL contains the `delete` parameter with the value `false`.
 
+[[api-method-v0-pdf]]
 == `/v0/pdf/<id>`
 
 A GET request with the id from the POST request of `/v0/publish`. If successful, the PDF file with status code 200 and the file name `publisher.pdf` is returned. The request is waiting for the publishing process to be completed. In case of an error only an error code is returned (return value and description):
@@ -148,6 +167,7 @@ A GET request with the id from the POST request of `/v0/publish`. If successful,
 
 The directory containing the PDF file will be deleted after this request, unless the URL contains the `delete` parameter with the value `false`.
 
+[[api-method-v0-data]]
 == `/v0/data/<id>`
 
 Returns the data file that was previously copied to the server. The format can be specified using the URL parameter `format`, for example `\http://127.0.0.1:5266/v0/data/1347678770?format=base64`:
@@ -165,6 +185,7 @@ Returns the data file that was previously copied to the server. The format can b
 
 
 
+[[api-method-v0-layout]]
 == `/v0/layout/<id>`
 Returns the layout XML that was previously copied to the server. The format can be specified using the URL parameter `format`. Example as above.
 
@@ -179,6 +200,7 @@ Returns the layout XML that was previously copied to the server. The format can 
 
 
 
+[[api-method-v0-statusfile]]
 == `/v0/statusfile/<id>`
 
 Returns the `publisher.status` file created by the run. The format can be specified using the URL parameter `format`, (example as in `/v0/data/<id>`).
@@ -193,6 +215,7 @@ Returns the `publisher.status` file created by the run. The format can be specif
    Writes an XML file (`<Status>...</Status>`)
 
 
+[[api-method-v0-status]]
 == `/v0/status`
 
 Returns the status of all publishing runs started with `/v0/publish`.
@@ -220,6 +243,7 @@ The returned JSON file has the following format
 
 The individual fields have the same meaning as described under `/v0/status/<id>`.
 
+[[api-method-v0-statusid]]
 == `/v0/status/<id>`
 
 Determines the status of the publisher run that was sent to `/v0/publish` via POST request.
@@ -238,6 +262,7 @@ The returned JSON file has the following keys:
 `finished`::
    Contains the timestamp when the PDF was finished. Format corresponds to RFC3339, for example `2015-12-25T12:03:04+01:00`.
 
+[[api-method-v0-delete]]
 == `/v0/delete/<id>`
 
 GET: Deletes the directory with this id. Returns 200 if the id exists, 404 if not.

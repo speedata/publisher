@@ -31,15 +31,33 @@ filter = convertdata.lua
 
 
 Es folgt ein Überblick über alle API Methoden.
-Die aktuelle Versionsnummer der API ist 0, also werden alle Methoden über `https://127.0.0.1:5266/v0/..`  angesprochen.
+Die aktuelle Versionsnummer der API ist 0, also werden alle Methoden über `http://127.0.0.1:5266/v0/..`  angesprochen.
 Falls es zukünftig inkompatible Änderungen gibt, sind diese in der Versionsnummer `/v1/...` erreichbar, die vorhandenen Methoden werden weiterhin über `/v0` aufrufbar sein.
 
+[options="header"]
+|=======
+| Methode | URL | Kurzbeschreibung
+| GET | <<api-method-available,`/available`>> | Gib 200 zurück, um zu prüfen, ob der Server läuft.
+| POST | <<api-method-v0-publish-post,`/v0/publish`>> | Sende Daten an den Server, um einen Publishing-Lauf zu starten.
+| GET | <<api-method-v0-publish-get,`/v0/publish/<id>`>> | Prüfe, ob ein Publishing-Lauf beendet ist.
+| GET | <<api-method-v0-pdf,`/v0/pdf/<id>`>> | Warte auf die Fertigstellung eines PDF.
+| GET | <<api-method-v0-data,`/v0/data/<id>`>> | Lade die `data.xml` aus dem Pubishing-Lauf.
+| GET | <<api-method-v0-layout,`/v0/layout/<id>`>> | Lade die `layout.xml` aus dem Pubishing-Lauf.
+| GET | <<api-method-v0-statusfile,`/v0/statusfile/<id>`>> | Lade die Statusdatei (`publisher.status`) aus dem Publishing-Lauf.
+| GET | <<api-method-v0-status,`/v0/status`>> | Übersicht über die laufenden Publishing-Prozesse.
+| GET | <<api-method-v0-statusid,`/v0/status/<id>`>> | Übersicht über einen Publishing-Prozess.
+| GET | <<api-method-v0-delete,`/v0/delete/<id>`>> | Lösche einen Publishing-Lauf.
+|=======
 
+
+
+[[api-method-available]]
 == `/available`
 
 Ohne Versionsnummer.
 Gibt den HTTP-Status 200 zurück.
 
+[[api-method-v0-publish-post]]
 == `/v0/publish`
 
 Wird die URL mit einem POST-Request aufgerufen, erwartet der speedata Publisher eine JSON-Datei im folgenden Format:
@@ -100,6 +118,7 @@ http://127.0.0.1:5266/v0/publish?vars=myvar%3D12345&mode=a4paper%2Cprint
 setzt `myvar` auf `1234` und schaltet die Modi `a4paper` und `print` ein.
 
 
+[[api-method-v0-publish-get]]
 == `/v0/publish/<id>`
 
 Ein GET-Request an diese URL mit einer id aus dem oben beschriebenen POST-Request liefert eine JSON-Datei, mit dem Inhalt:
@@ -130,6 +149,7 @@ Falls die PDF-Datei noch nicht fertig geschrieben wurde:
 
 Das Verzeichnis mit der PDF-Datei wird nach diesem Request gelöscht, es sei denn, die URL enthält den Parameter `delete` mit dem Wert `false`.
 
+[[api-method-v0-pdf]]
 == `/v0/pdf/<id>`
 
 Ein GET-Request mit der id aus dem POST-Request von `/v0/publish`. Es wird im Erfolgsfall die PDF-Datei mit dem Statuscode 200 und dem Dateinamen `publisher.pdf` zurückgegeben. Der Request wartet auf die Fertigstellung des Publishing Prozesses. Im Fehlerfall wird nur ein Fehlercode zurück gegeben (Rückgabewert und Beschreibung):
@@ -145,6 +165,7 @@ Ein GET-Request mit der id aus dem POST-Request von `/v0/publish`. Es wird im Er
 
 Das Verzeichnis mit der PDF-Datei wird nach diesem Request gelöscht, es sei denn, die URL enthält den Parameter `delete` mit dem Wert `false`.
 
+[[api-method-v0-data]]
 == `/v0/data/<id>`
 
 Liefert die Daten-Datei, die vorab auf den Server kopiert wurde. Das Format kann über den URL-Parameter `format` angegeben werden, zum Beispiel `\http://127.0.0.1:5266/v0/data/1347678770?format=base64`:
@@ -162,6 +183,7 @@ Liefert die Daten-Datei, die vorab auf den Server kopiert wurde. Das Format kann
 
 
 
+[[api-method-v0-layout]]
 == `/v0/layout/<id>`
 Liefert das Layout XML, die vorab auf den Server kopiert wurde. Das Format kann über den URL-Parameter `format` angegeben werden. Beispiel wie oben.
 
@@ -176,6 +198,7 @@ Liefert das Layout XML, die vorab auf den Server kopiert wurde. Das Format kann 
 
 
 
+[[api-method-v0-statusfile]]
 == `/v0/statusfile/<id>`
 
 Liefert die Datei `publisher.status`, die durch den Lauf erzeugt wurde. Das Format kann über den URL-Parameter `format` angegeben werden, (Beispiel wie unter `/v0/data/<id>`).
@@ -190,6 +213,7 @@ Liefert die Datei `publisher.status`, die durch den Lauf erzeugt wurde. Das Form
    Schreibt eine XML Datei (`<Status>...</Status>`)
 
 
+[[api-method-v0-status]]
 == `/v0/status`
 
 Liefert den Status aller Publishing-Läufe zurück, die mit `/v0/publish` gestartet wurden.
@@ -217,6 +241,7 @@ Die zurückgegebene JSON-Datei hat das folgende Format:
 
 Die einzelnen Felder haben dieselbe Bedeutung wie unter `/v0/status/<id>` beschrieben.
 
+[[api-method-v0-statusid]]
 == `/v0/status/<id>`
 
 Ermittelt den Status des Publisher-Laufs, der per POST-Request an `/v0/publish` gesendet wurde.
@@ -235,6 +260,7 @@ Die zurückgegebene JSON Datei hat folgende Schlüssel:
 `finished`::
    Enthält den Zeitstempel, zu dem das PDF fertig gestellt wurde. Format entspricht RFC3339, zum Beispiel `2015-12-25T12:03:04+01:00`.
 
+[[api-method-v0-delete]]
 == `/v0/delete/<id>`
 
 GET: Löscht das Verzeichnis mit dieser id. Gibt 200 zurück, wenn die id vorhanden ist, 404 falls nicht.
