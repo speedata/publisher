@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.24" date="2020-07-10">
+      <en>New <tt>&lt;Option></tt> randomseed.</en>
+      <de>Neue Option randomseed.</de>
+    </entry>
+    <entry version="3.9.24" date="2020-07-10">
+      <en>Bugfix for hyperlinks at the end of a line starting with space (#255).</en>
+      <de>Fehlerkorrektur für Hyperlinks am Ende der Zeile (#255).</de>
+    </entry>
     <entry version="3.9.23" date="2020-07-05">
       <en>Server mode: <tt>/v0/pdf/‹id›</tt> deletes the PDF file on the server after the request.</en>
       <de>Servermodus: <tt>/v0/pdf/‹id›</tt> löscht die PDF-Datei auf dem server nach dem Request.</de>
