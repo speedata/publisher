@@ -2960,6 +2960,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="randomseed">
+               <a:documentation>Set the seed for the random number generator (a positive integer).</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="resetmarks">
                <a:documentation>Yes: ignore the marks file from previous run.</a:documentation>
                <choice>

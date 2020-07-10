@@ -2001,6 +2001,7 @@ function commands.options( layoutxml,dataxml )
     publisher.options.resetmarks          = publisher.read_attribute(layoutxml,dataxml,"resetmarks",  "boolean",publisher.options.resetmarks or false)
     publisher.options.colorprofile        = publisher.read_attribute(layoutxml,dataxml,"colorprofile","rawstring",publisher.options.colorprofile)
     publisher.options.crop                = publisher.read_attribute(layoutxml,dataxml,"crop",        "booleanorlength",publisher.options.crop or false)
+    local randomseed                      = publisher.read_attribute(layoutxml,dataxml,"randomseed",  "number")
     publisher.options.reportmissingglyphs = publisher.read_attribute(layoutxml,dataxml,"reportmissingglyphs", "boolean",publisher.options.reportmissingglyphs or true)
     publisher.options.interaction         = publisher.read_attribute(layoutxml,dataxml,"interaction", "boolean", publisher.options.interaction)
     local imagenotfound                   = publisher.read_attribute(layoutxml,dataxml,"imagenotfound", "string","error")
@@ -2018,6 +2019,10 @@ function commands.options( layoutxml,dataxml )
     if publisher.options.trim then
         xpath.set_variable("_bleed",publisher.options.trim)
         publisher.options.trim = tex.sp(publisher.options.trim)
+    end
+    if randomseed then
+        local uuid = require "uuid"
+        uuid.randomseed(randomseed)
     end
 end
 

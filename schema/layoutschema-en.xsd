@@ -2882,6 +2882,11 @@
           </xs:union>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="randomseed">
+        <xs:annotation>
+          <xs:documentation>Set the seed for the random number generator (a positive integer).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="resetmarks">
         <xs:annotation>
           <xs:documentation>Yes: ignore the marks file from previous run.</xs:documentation>

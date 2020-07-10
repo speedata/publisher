@@ -5091,6 +5091,14 @@
       </description>
       <referenceattribute name="languages" />
     </attribute>
+    <attribute en="randomseed" optional="yes" allowxpath="yes" since="3.9.24" type="number">
+      <description xml:lang="en">
+        <para>Set the seed for the random number generator (a positive integer).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze die Startzahl (seed) für den Zufallszahlengenerator (eine positive Ganzzahl).</para>
+      </description>
+    </attribute>
     <attribute en="resetmarks" optional="yes">
       <description xml:lang="en">
         <para>Yes: ignore the marks file from previous run.</para>

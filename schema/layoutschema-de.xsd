@@ -2882,6 +2882,11 @@
           </xs:union>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="randomseed">
+        <xs:annotation>
+          <xs:documentation>Setze die Startzahl (seed) für den Zufallszahlengenerator (eine positive Ganzzahl).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="resetmarks">
         <xs:annotation>
           <xs:documentation>Wenn 'yes', werden die Marker des letzten Laufs ignoriert.</xs:documentation>

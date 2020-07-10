@@ -2960,6 +2960,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="randomseed">
+               <a:documentation>Setze die Startzahl (seed) für den Zufallszahlengenerator (eine positive Ganzzahl).</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="resetmarks">
                <a:documentation>Wenn &#39;yes&#39;, werden die Marker des letzten Laufs ignoriert.</a:documentation>
                <choice>
