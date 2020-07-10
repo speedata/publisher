@@ -509,6 +509,7 @@ getContents:
 				switch curlist {
 				case lVarlist:
 					curOutput.WriteString(`<dd>`)
+					omitP = false
 				case lItemize, lEnumerate:
 					curOutput.WriteString(`<li>`)
 				}
