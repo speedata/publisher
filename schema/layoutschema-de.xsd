@@ -8,7 +8,7 @@
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="en:Value"/>
+        <xs:element maxOccurs="unbounded" ref="en:Value"/>
       </xs:sequence>
       <xs:attribute name="href">
         <xs:annotation>
@@ -529,6 +529,7 @@
         <xs:element minOccurs="0" ref="en:NextRow"/>
         <xs:element minOccurs="0" ref="en:Options"/>
         <xs:element minOccurs="0" ref="en:Output"/>
+        <xs:element minOccurs="0" ref="en:Pagetype"/>
         <xs:element minOccurs="0" ref="en:Pageformat"/>
         <xs:element minOccurs="0" ref="en:Paragraph"/>
         <xs:element minOccurs="0" ref="en:PlaceObject"/>
@@ -1289,6 +1290,7 @@
         <xs:element ref="en:NextRow"/>
         <xs:element ref="en:Options"/>
         <xs:element ref="en:Output"/>
+        <xs:element ref="en:Pagetype"/>
         <xs:element ref="en:Pageformat"/>
         <xs:element ref="en:Paragraph"/>
         <xs:element ref="en:PlaceObject"/>
@@ -2015,6 +2017,7 @@
         <xs:element ref="en:NextRow"/>
         <xs:element ref="en:Options"/>
         <xs:element ref="en:Output"/>
+        <xs:element ref="en:Pagetype"/>
         <xs:element ref="en:Pageformat"/>
         <xs:element ref="en:Paragraph"/>
         <xs:element ref="en:PlaceObject"/>
@@ -2967,6 +2970,7 @@
         <xs:element minOccurs="0" ref="en:NextRow"/>
         <xs:element minOccurs="0" ref="en:Options"/>
         <xs:element minOccurs="0" ref="en:Output"/>
+        <xs:element minOccurs="0" ref="en:Pagetype"/>
         <xs:element minOccurs="0" ref="en:Pageformat"/>
         <xs:element minOccurs="0" ref="en:Paragraph"/>
         <xs:element minOccurs="0" ref="en:PlaceObject"/>
@@ -5553,6 +5557,7 @@
         <xs:element ref="en:NextRow"/>
         <xs:element ref="en:Options"/>
         <xs:element ref="en:Output"/>
+        <xs:element ref="en:Pagetype"/>
         <xs:element ref="en:Pageformat"/>
         <xs:element ref="en:Paragraph"/>
         <xs:element ref="en:PlaceObject"/>
@@ -5683,6 +5688,7 @@
         <xs:element ref="en:NextRow"/>
         <xs:element ref="en:Options"/>
         <xs:element ref="en:Output"/>
+        <xs:element ref="en:Pagetype"/>
         <xs:element ref="en:Pageformat"/>
         <xs:element ref="en:Paragraph"/>
         <xs:element ref="en:PlaceObject"/>

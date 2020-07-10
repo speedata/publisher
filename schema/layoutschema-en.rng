@@ -22,7 +22,9 @@
                      <a:documentation>The target of the document link (a Mark). Example: article123</a:documentation>
                   </attribute>
                </optional>
-               <ref name="e_Value"></ref>
+               <oneOrMore>
+                  <ref name="e_Value"></ref>
+               </oneOrMore>
             </group>
             <ref name="foreign-nodes"></ref>
          </interleave>
@@ -651,6 +653,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Output"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Pagetype"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Pageformat"></ref>
@@ -1525,6 +1530,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Output"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Pagetype"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Pageformat"></ref>
@@ -2437,6 +2445,9 @@
                         <ref name="e_Output"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Pagetype"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Pageformat"></ref>
                      </optional>
                      <optional>
@@ -3094,6 +3105,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Output"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Pagetype"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Pageformat"></ref>
@@ -5567,6 +5581,9 @@
                         <ref name="e_Output"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Pagetype"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Pageformat"></ref>
                      </optional>
                      <optional>
@@ -5836,6 +5853,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Output"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Pagetype"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Pageformat"></ref>

@@ -41,6 +41,7 @@
     <optional><cmd name="NextRow"/></optional>
     <optional><cmd name="Options"/></optional>
     <optional><cmd name="Output"/></optional>
+    <optional><cmd name="Pagetype"/></optional>
     <optional><cmd name="Pageformat"/></optional>
     <optional><cmd name="Paragraph"/></optional>
     <optional><cmd name="PlaceObject"/></optional>
@@ -538,7 +539,9 @@
       <para>Hyperlink auf eine URL einfügen.</para>
     </description>
     <childelements>
-      <cmd name="Value"/>
+      <oneOrMore>
+        <cmd name="Value"/>
+      </oneOrMore>
     </childelements>
     <attribute en="href" type="text" optional="yes">
       <description xml:lang="en">
