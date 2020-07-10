@@ -3205,6 +3205,7 @@ end
 function find_user_defined_whatsits( head, parent )
     local fun
     local prev_hyperlink, prev_fgcolor
+    local linklevel = 0
     while head do
         if head.id == vlist_node or head.id==hlist_node then
             find_user_defined_whatsits(head.list,head)
@@ -3272,7 +3273,7 @@ function find_user_defined_whatsits( head, parent )
             --         => end link
             --  case 2: hyperlink value of the node changes
             --         either insert a start link or an end link marker
-            if hl and head.next == nil then
+            if hl and head.next == nil and linklevel > 0 then
                 insert_endlink = true
                 prev_hyperlink = nil
             elseif hl ~= prev_hyperlink then
@@ -3284,7 +3285,16 @@ function find_user_defined_whatsits( head, parent )
                     prev_hyperlink = nil
                 end
             end
+            if head.next == nil then
+                insert_startlink = false
+            end
+            if insert_endlink then
+                linklevel = linklevel - 1
+                local enl = node.new("whatsit","pdf_end_link")
+                parent.head = node.insert_before(parent.head,head,enl)
+            end
             if insert_startlink then
+                linklevel = linklevel + 1
                 local ai = get_action_node(3)
                 ai.data = hyperlinks[hl]
                 local stl = node.new("whatsit","pdf_start_link")
@@ -3293,10 +3303,6 @@ function find_user_defined_whatsits( head, parent )
                 stl.height = -1073741824
                 stl.depth = -1073741824
                 parent.head = node.insert_before(parent.head,head,stl)
-            end
-            if insert_endlink then
-                local enl = node.new("whatsit","pdf_end_link")
-                head = node.insert_after(head,head,enl)
             end
             -- HTML inline border
             local properties = node.getproperty(head)

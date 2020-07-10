@@ -1,0 +1,18 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pageformat height="210mm" width="148mm"/>
+  <Options crop="2mm"/>
+
+  <Record element="data">
+    <Output>
+      <Text>
+        <Paragraph>
+          <Value select="."/>
+        </Paragraph>
+      </Text>
+    </Output>
+  </Record>
+
+
+</Layout>
