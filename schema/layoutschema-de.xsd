@@ -7,8 +7,9 @@
       <xs:documentation>Hyperlink auf eine URL einfügen.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="en:Value"/>
+      <xs:sequence maxOccurs="unbounded">
+        <xs:element ref="en:HSpace"/>
+        <xs:element ref="en:Value"/>
       </xs:sequence>
       <xs:attribute name="href">
         <xs:annotation>
@@ -499,6 +500,7 @@
         <xs:element minOccurs="0" ref="en:Barcode"/>
         <xs:element minOccurs="0" ref="en:Bookmark"/>
         <xs:element minOccurs="0" ref="en:Br"/>
+        <xs:element minOccurs="0" ref="en:Color"/>
         <xs:element minOccurs="0" ref="en:Column"/>
         <xs:element minOccurs="0" ref="en:Columns"/>
         <xs:element minOccurs="0" ref="en:Copy-of"/>
@@ -1260,6 +1262,7 @@
         <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>
         <xs:element ref="en:Copy-of"/>
@@ -1987,6 +1990,7 @@
         <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>
         <xs:element ref="en:Copy-of"/>
@@ -2945,6 +2949,7 @@
         <xs:element minOccurs="0" ref="en:Barcode"/>
         <xs:element minOccurs="0" ref="en:Bookmark"/>
         <xs:element minOccurs="0" ref="en:Br"/>
+        <xs:element minOccurs="0" ref="en:Color"/>
         <xs:element minOccurs="0" ref="en:Column"/>
         <xs:element minOccurs="0" ref="en:Columns"/>
         <xs:element minOccurs="0" ref="en:Copy-of"/>
@@ -4675,10 +4680,11 @@
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="en:Tablerule"/>
         <xs:element ref="en:Copy-of"/>
-        <xs:element ref="en:Tr"/>
+        <xs:element ref="en:ForAll"/>
         <xs:element ref="en:Switch"/>
+        <xs:element ref="en:Tablerule"/>
+        <xs:element ref="en:Tr"/>
       </xs:choice>
       <xs:attribute name="page">
         <xs:annotation>
@@ -5532,6 +5538,7 @@
         <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>
         <xs:element ref="en:Copy-of"/>
@@ -5663,6 +5670,7 @@
         <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>
         <xs:element ref="en:Copy-of"/>

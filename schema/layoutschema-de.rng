@@ -23,6 +23,7 @@
                   </attribute>
                </optional>
                <oneOrMore>
+                  <ref name="e_HSpace"></ref>
                   <ref name="e_Value"></ref>
                </oneOrMore>
             </group>
@@ -563,6 +564,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Br"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Color"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Column"></ref>
@@ -1440,6 +1444,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Br"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Color"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Column"></ref>
@@ -2355,6 +2362,9 @@
                         <ref name="e_Br"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Color"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Column"></ref>
                      </optional>
                      <optional>
@@ -3020,6 +3030,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Br"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Color"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Column"></ref>
@@ -4781,16 +4794,19 @@
                <oneOrMore>
                   <interleave>
                      <optional>
-                        <ref name="e_Tablerule"></ref>
-                     </optional>
-                     <optional>
                         <ref name="e_Copy-of"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_Tr"></ref>
+                        <ref name="e_ForAll"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Switch"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Tablerule"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Tr"></ref>
                      </optional>
                   </interleave>
                </oneOrMore>
@@ -5496,6 +5512,9 @@
                         <ref name="e_Br"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Color"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Column"></ref>
                      </optional>
                      <optional>
@@ -5768,6 +5787,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Br"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Color"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Column"></ref>

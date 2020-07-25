@@ -11,6 +11,7 @@
     <optional><cmd name="Barcode"/></optional>
     <optional><cmd name="Bookmark"/></optional>
     <optional><cmd name="Br"/></optional>
+    <optional><cmd name="Color"/></optional>
     <optional><cmd name="Column"/></optional>
     <optional><cmd name="Columns"/></optional>
     <optional><cmd name="Copy-of"/></optional>
@@ -540,6 +541,7 @@
     </description>
     <childelements>
       <oneOrMore>
+        <cmd name="HSpace"/>
         <cmd name="Value"/>
       </oneOrMore>
     </childelements>
@@ -7918,10 +7920,11 @@
     <childelements>
       <oneOrMore>
         <interleave>
-          <optional><cmd name="Tablerule"/></optional>
           <optional><cmd name="Copy-of"/></optional>
-          <optional><cmd name="Tr"/></optional>
+          <optional><cmd name="ForAll"/></optional>
           <optional><cmd name="Switch"/></optional>
+          <optional><cmd name="Tablerule"/></optional>
+          <optional><cmd name="Tr"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>
