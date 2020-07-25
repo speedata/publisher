@@ -201,6 +201,7 @@ func init() {
 		srcdir = filepath.Join(installdir, "src")
 		os.Setenv("PUBLISHER_BASE_PATH", strings.Join([]string{
 			filepath.Join(srcdir, "lua"),
+			filepath.Join(srcdir, "other"),
 			filepath.Join(srcdir, "tex"),
 			filepath.Join(srcdir, "hyphenation")}, string(os.PathListSeparator)))
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
@@ -695,7 +696,8 @@ func scaffold(extra ...string) error {
 		return fmt.Errorf("layout.xml already exists")
 	}
 
-	dataTxt := `<data>Hello, world!</data>`
+	dataTxt := `<data>Hello, world!</data>
+`
 	layoutTxt := `<Layout
 	xmlns="urn:speedata.de:2009/publisher/en"
 	xmlns:sd="urn:speedata:2009/publisher/functions/en">
@@ -709,7 +711,7 @@ func scaffold(extra ...string) error {
 		</Textblock>
 	  </PlaceObject>
 	</Record>
-  </Layout>
+</Layout>
 `
 
 	err = ioutil.WriteFile("data.xml", []byte(dataTxt), 0644)
