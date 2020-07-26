@@ -33,6 +33,7 @@ function Paragraph:add_italic_bold( nodelist,parameter )
         end
         if parameter.underline then
             node.set_attribute(i,publisher.att_underline,parameter.underline)
+            node.set_attribute(i,publisher.att_underline_color,publisher.current_fgcolor)
         end
     end
 end

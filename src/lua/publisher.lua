@@ -74,6 +74,7 @@ att_fgcolor        = 9 -- similar to underline
 att_bgpaddingtop   = 10
 att_bgpaddingbottom  = 11
 att_hyperlink      = 12
+att_underline_color = 13
 
 -- for debugging purpose
 att_origin         = 98
@@ -256,6 +257,9 @@ hyperlinks = {}
 
 -- The spot colors used in the document (even when discarded)
 used_spotcolors = {}
+
+-- The current foreground color (used in underline)
+current_fgcolor = nil
 
 -- The predefined colors. index = 1 because we "know" that black will be the first registered color.
 colors  = {
@@ -727,6 +731,20 @@ local function pdf_lineto( x,y )
     x = sp_to_bp(x)
     y = sp_to_bp(y)
     return string.format("%g %g l",x,y)
+end
+
+function pdfstring_from_color(colorname_or_number)
+    local colno = tonumber(colorname_or_number)
+    local colorname
+    if colno then
+        colorname = colortable[colno]
+    end
+    local colentry = colors[colorname]
+    if not colentry then
+        colentry = colors.black
+        err("Color %q not found",tostring(colorname_or_number))
+    end
+    return colentry.pdfstring
 end
 
 
@@ -3599,6 +3617,7 @@ function mknodes(str,fontfamily,parameter)
             -- can be 1 == solid or 2 == dashed
             if parameter.underline then
                 node.set_attribute(n,att_underline,parameter.underline)
+                node.set_attribute(n,att_underline_color,current_fgcolor)
             end
 
             if parameter.backgroundcolor then
@@ -3656,6 +3675,7 @@ function mknodes(str,fontfamily,parameter)
 
             if parameter.underline then
                 node.set_attribute(n,att_underline,parameter.underline)
+                node.set_attribute(n,att_underline_color,current_fgcolor)
             end
             if parameter.backgroundcolor then
                 node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
@@ -3684,6 +3704,7 @@ function mknodes(str,fontfamily,parameter)
             end
             if parameter.underline then
                 node.set_attribute(n,att_underline,parameter.underline)
+                node.set_attribute(n,att_underline_color,current_fgcolor)
             end
             if parameter.backgroundcolor then
                 node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)

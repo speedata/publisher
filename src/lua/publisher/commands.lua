@@ -436,19 +436,22 @@ end
 --- Set the color of the enclosed text.
 function commands.color( layoutxml, dataxml )
     local colorname = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
-    local colortable
+    local colorindex
     if colorname then
         if not publisher.colors[colorname] then
             err("Color %q is not defined yet.",colorname)
         else
-            colortable = publisher.colors[colorname].index
+            colorindex = publisher.colors[colorname].index
         end
     end
 
     local a = paragraph:new()
 
     local objects = {}
+    local prev_fgcolor = publisher.current_fgcolor
+    publisher.current_fgcolor = colorindex
     local tab = publisher.dispatch(layoutxml,dataxml)
+    publisher.current_fgcolor = prev_fgcolor
 
     for i,j in ipairs(tab) do
         if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
@@ -461,7 +464,7 @@ function commands.color( layoutxml, dataxml )
         a:append(j,{allowbreak=publisher.allowbreak})
     end
 
-    a:set_color(colortable)
+    a:set_color(colorindex)
     return a
 end
 
@@ -1406,9 +1409,9 @@ function commands.initial( layoutxml,dataxml)
         if not publisher.colors[colorname] then
             err("Color %q is not defined yet.",colorname)
         else
-            local colortable
-            colortable = publisher.colors[colorname].index
-            box = publisher.set_color_if_necessary(box,colortable)
+            local colorindex
+            colorindex = publisher.colors[colorname].index
+            box = publisher.set_color_if_necessary(box,colorindex)
         end
     end
     box = node.hpack(box)
@@ -2263,20 +2266,30 @@ function commands.paragraph( layoutxml,dataxml )
         languagecode = publisher.defaultlanguage
     end
 
-    local colortable
+    local colorindex
     if colorname then
         if not publisher.colors[colorname] then
             err("Color %q is not defined yet.",colorname)
         else
-            colortable = publisher.colors[colorname].index
+            colorindex = publisher.colors[colorname].index
         end
     end
-
 
     publisher.intextblockcontext = publisher.intextblockcontext + 1
     local a = paragraph:new(textformat)
     local objects = {}
+    local save_color
+    if colorname then
+        save_color = publisher.current_fgcolor
+        publisher.current_fgcolor = colorindex
+    end
+
     local tab = publisher.dispatch(layoutxml,dataxml)
+
+    if colorname then
+        publisher.current_fgcolor = save_color
+    end
+
     for i,j in ipairs(tab) do
         -- w("Paragraph Elementname = %q",tostring(publisher.elementname(j)))
         local contents = publisher.element_contents(j)
@@ -2345,7 +2358,7 @@ function commands.paragraph( layoutxml,dataxml )
         a:append("",{fontfamily = fontfamily,languagecode = languagecode})
     end
 
-    a:set_color(colortable)
+    a:set_color(colorindex)
     publisher.intextblockcontext = publisher.intextblockcontext - 1
     publisher.current_fontfamily = save_fontfamily
     -- We used to set a strut (an invisible rule) at the beginning of each paragraph
@@ -2870,7 +2883,6 @@ function commands.positioning_area( layoutxml,dataxml )
     -- might depend on values on the _current_ page, which is not set!
     local colorname = publisher.read_attribute(layoutxml,dataxml,"framecolor", "rawstring")
     local name      = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
-    local colorindex
     local tab = {}
     tab.colorname = colorname
     tab.layoutxml = layoutxml
@@ -3833,7 +3845,18 @@ function commands.text(layoutxml,dataxml)
     local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",   "rawstring", "black")
     local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
 
+    local colorindex
+    if colorname then
+        if not publisher.colors[colorname] then
+            err("Color %q is not defined.",colorname)
+        else
+            colorindex = publisher.colors[colorname].index
+        end
+    end
+    local save_color = publisher.current_fgcolor
+    publisher.current_fgcolor = colorindex
     local tab = publisher.dispatch(layoutxml,dataxml)
+    publisher.current_fgcolor = save_color
 
     if not fontname then fontname = "text" end
     fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
@@ -3844,16 +3867,6 @@ function commands.text(layoutxml,dataxml)
 
     local save_fontfamily = publisher.current_fontfamily
     publisher.current_fontfamily = fontfamily
-
-
-    local colortable
-    if colorname then
-        if not publisher.colors[colorname] then
-            err("Color %q is not defined.",colorname)
-        else
-            colortable = publisher.colors[colorname].index
-        end
-    end
 
     local objects = {}
     for i,j in ipairs(tab) do
@@ -3915,7 +3928,7 @@ function commands.text(layoutxml,dataxml)
                     if dont_format == 1 then
                         obj = node.vpack(contents.nodelist)
                     else
-                        contents.nodelist = publisher.set_color_if_necessary(contents.nodelist,colortable)
+                        contents.nodelist = publisher.set_color_if_necessary(contents.nodelist,colorindex)
                         publisher.set_fontfamily_if_necessary(contents.nodelist,fontfamily)
                         obj,startpage,startrow = contents:format(parameter.width,textformat,parameter,startpage,startrow)
                     end
@@ -4002,12 +4015,12 @@ function commands.textblock( layoutxml,dataxml )
     local save_fontfamily = publisher.current_fontfamily
     publisher.current_fontfamily = fontfamily
 
-    local colortable
+    local colorindex
     if colorname then
         if not publisher.colors[colorname] then
             err("Color %q is not defined.",colorname)
         else
-            colortable = publisher.colors[colorname].index
+            colorindex = publisher.colors[colorname].index
         end
     end
 
@@ -4017,7 +4030,15 @@ function commands.textblock( layoutxml,dataxml )
     local objects, nodes = {},{}
     local nodelist,parameter
 
+    if colorname then
+        save_color = publisher.current_fgcolor
+        publisher.current_fgcolor = colorindex
+    end
+
     local tab = publisher.dispatch(layoutxml,dataxml)
+    if colorname then
+        publisher.current_fgcolor = save_color
+    end
 
     for i,j in ipairs(tab) do
         local eltname = publisher.elementname(j)
@@ -4057,7 +4078,7 @@ function commands.textblock( layoutxml,dataxml )
             local tmp = node.has_attribute(nodelist,publisher.att_dont_format)
             if tmp ~= 1 then
                 publisher.set_fontfamily_if_necessary(nodelist,fontfamily)
-                paragraph.nodelist = publisher.set_color_if_necessary(nodelist,colortable)
+                paragraph.nodelist = publisher.set_color_if_necessary(nodelist,colorindex)
                 node.slide(nodelist)
                 nodelist = paragraph:format(width_sp,textformat)
             end

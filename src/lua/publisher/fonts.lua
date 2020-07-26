@@ -388,11 +388,14 @@ function insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding_t
 end
 
 --- Insert a horizontal rule in the nodelist that is used for underlining. typ is 1 (solid) or 2 (dashed)
-function insert_underline( parent, head, start, typ)
+function insert_underline( parent, head, start, typ, colornumber)
+    colornumber = colornumber or 1
+    if colornumber == 0 then colornumber = 1 end
     local wd = node.dimensions(parent.glue_set,parent.glue_sign, parent.glue_order,start,head)
     local ht = parent.height
     local dp = parent.depth
     local dashpattern = ""
+    local pdfstring = publisher.pdfstring_from_color(colornumber)
 
     -- wd, ht and dp are now in pdf points
     wd = wd / publisher.factor
@@ -413,7 +416,7 @@ function insert_underline( parent, head, start, typ)
         -- line-through
         shift_down = - 1.6 * shift_down
     end
-    rule.data = string.format("q 0 g 0 G %g w %s  0 %g m %g %g l S Q", rule_width, dashpattern, -1 * shift_down, -wd, -1 * shift_down )
+    rule.data = string.format("q %s %g w %s  0 %g m %g %g l S Q", pdfstring, rule_width, dashpattern, -1 * shift_down, -wd, -1 * shift_down )
     rule.mode = 0
     parent.head = node.insert_before(parent.head,head,rule)
     return rule
@@ -426,7 +429,7 @@ end
 function post_linebreak( head, list_head)
     local underlinetype = nil
     local start_underline = nil
-
+    local underline_color = nil
     local bgcolorindex = nil
     local start_bgcolor = nil
     local bg_padding_top = 0
@@ -453,7 +456,7 @@ function post_linebreak( head, list_head)
             -- at rightskip we must underline (if start exists)
             if att_underline == nil then
                 if start_underline then
-                    insert_underline(list_head, head, start_underline,underlinetype)
+                    insert_underline(list_head, head, start_underline,underlinetype,underline_color)
                     start_underline = nil
                 end
             end
@@ -469,7 +472,7 @@ function post_linebreak( head, list_head)
             -- at rightskip we must underline (if start exists)
             if att_underline == nil or head.subtype == 9 then
                 if start_underline then
-                    insert_underline(list_head, head, start_underline,underlinetype)
+                    insert_underline(list_head, head, start_underline,underlinetype,underline_color)
                     start_underline = nil
                 end
             end
@@ -488,16 +491,18 @@ function post_linebreak( head, list_head)
             end
             local att_underline = node.has_attribute(head, publisher.att_underline)
             local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)
+            local att_underline_color   = node.has_attribute(head, publisher.att_underline_color)
             local att_bgpaddingtop    = node.has_attribute(head, publisher.att_bgpaddingtop)
             local att_bgpaddingbottom = node.has_attribute(head, publisher.att_bgpaddingbottom)
             if att_underline and att_underline > 0 then
                 if not start_underline then
                     underlinetype = att_underline
                     start_underline = head
+                    underline_color = att_underline_color
                 end
             else
                 if start_underline then
-                    insert_underline(list_head, head, start_underline, underlinetype)
+                    insert_underline(list_head, head, start_underline, underlinetype,underline_color)
                     start_underline = nil
                 end
             end
