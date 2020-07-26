@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.25" date="2020-07-26">
+      <en>Bugfix for underline color (#256).</en>
+      <de>Fehlerkorrektur für Farbe bei Unterstreichen (#256).</de>
+    </entry>
+    <entry version="3.9.25" date="2020-07-26">
+      <en>Enhance schema (#257).</en>
+      <de>Schemaverbesserungen (#257).</de>
+    </entry>
     <entry version="3.9.24" date="2020-07-10">
       <en>New <tt>&lt;Option></tt> randomseed.</en>
       <de>Neue Option randomseed.</de>
