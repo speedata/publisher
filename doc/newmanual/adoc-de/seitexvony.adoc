@@ -1,8 +1,21 @@
 [[ch-seitexvony]]
 = Seitenzahlen: Seite x von y
 
-Um die Länge des Dokuments in Seiten anzugeben, ist ein zweiter Durchlauf des Publishers
-notwendig:
+Es gibt zwei Wege, die letzte Seitenzahl zu ermitteln.
+Der erste Weg ist einfach und empfohlen.
+Der zweite Weg führt über selbst gespeicherte Daten und war die einzige Möglichkeit bis Version 3.9.26.
+Er wird hier weiterhin beschrieben, weil er aufzeigt, wie Daten gespeichert und für den nächsten Durchlauf bereitgestellt werden.
+
+Um die Länge des Dokuments in Seiten anzugeben, ist in beiden Fällen ein zweiter Durchlauf des Publishers
+notwendig, da erst am Ende des ersten Durchlaufs klar ist, wie lang das Dokument wird.
+
+== Der einfache Weg: `$_lastpage`
+
+Die <<ch-internevariablen,interne Variable>> `$_lastpage` enthält die Anzahl der Seiten im vorherigen Durchlauf.
+Diese Variable ist seit Version 3.9.26 verfügbar.
+
+== Der etwas kompliziertere Weg
+
 Am Ende des ersten Durchlaufs wird die aktuelle (= letzte)
 Seitennummer gespeichert, die man anschließend in den folgenden Durchläufen
 nutzen kann.

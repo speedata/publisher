@@ -1125,6 +1125,8 @@ function initialize_luatex_and_generate_pdf()
     end
 
     local auxfilename = tex.jobname .. "-aux.xml"
+    xpath.set_variable("_lastpage", 1)
+
     -- load help file if it exists
     if kpse.find_file(auxfilename) and options.resetmarks == false then
         local mark_tab = load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeol = true })
@@ -1149,6 +1151,8 @@ function initialize_luatex_and_generate_pdf()
                             marker_max[pagenumber] = id
                         end
                     end
+                elseif mt[".__local_name"] == "lastpage" then
+                    xpath.set_variable("_lastpage", mt.page )
                 end
             end
         end
@@ -1359,6 +1363,7 @@ function initialize_luatex_and_generate_pdf()
     local file = io.open(auxfilename,"wb")
     file:write("<marker>\n")
     file:write(table.concat(tab,"\n"))
+    file:write(string.format("\n <lastpage page='%d' />",current_pagenumber))
     file:write("\n</marker>")
     file:close()
 end

@@ -1,6 +1,18 @@
 [[ch-seitexvony]]
 = Page numbers: Page x of y
 
+There are two ways to get the last page number.
+The first is the simple way and is recommended.
+The second one was the way to go until version 3.9.26 and can be used as a reference to store other data needed for subsequent runs.
+
+== The simple way: `$_lastpage`
+
+Just use the <<ch-internalvariables,internal variable>> `$_lastpage` to get the pagenumber of the last page of the previous run.
+That means that you have to use at least two runs to get the correct value for the variable.
+This works since version 3.9.26.
+
+== The more complicated way
+
 To specify the length of the document in pages, a second pass of the Publisher is necessary: At the end of the first pass, the current (= last) page number is stored, which can then be used in subsequent passes.
 
 The following example creates some pages with output in the form Page 1 of ??. This serves as a basis for the additions.

@@ -12,6 +12,9 @@ Otherwise there could be collisions when assigning names.
 `_jobname`::
   The value specified on the command line.
 
+`_lastpage`::
+  The number of the last page. Available after the first run. (Since version 3.9.26.)
+
 `_last_tr_data`::
   The last value (`data="..."`) in a table line.  See section <<ch-tab-runningsum,Headers and footers with running sum>>.
 

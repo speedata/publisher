@@ -12,6 +12,9 @@ Sonst könnten Kollisionen bei der Namensvergabe entstehen.
 `_jobname`::
   Der Wert der auf der Kommandozeile angegeben ist.
 
+`_lastpage`::
+   Die Seitenzahl der letzten Seite. Verfügbar ab dem zweiten Durchlauf. (Seit Version 3.9.26.)
+
 `_last_tr_data`::
   Der letzte Wert (`data="..."`) in einer Tabellenzeile.  Siehe Abschnitt <<ch-tab-kopf_fuss_uebertrag,Kopf- und Fußzeilen mit Übertrag>>.
 
