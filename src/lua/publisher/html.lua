@@ -364,7 +364,9 @@ end
 function copy_attributes( styles,attributes )
     local remember_currentcolor = {}
     for k, v in pairs(attributes) do
-        v = string.lower( tostring(v))
+        if type(v) == "string" then
+            v = string.lower( tostring(v))
+        end
         if k == "font-size" then
             local fontsize
             if string.match(v, "em$") then
