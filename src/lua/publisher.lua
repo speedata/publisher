@@ -255,6 +255,14 @@ viewerpreferences = {}
 -- to be inserted later on in pre shipout filter
 hyperlinks = {}
 
+-- marker counter. Each mark will get its unique counter, so we can determine the
+-- order in which markers appear.
+markercount = 0
+marker_min = {}
+marker_max = {}
+marker_id_value = {}
+
+
 -- The spot colors used in the document (even when discarded)
 used_spotcolors = {}
 
@@ -1122,8 +1130,26 @@ function initialize_luatex_and_generate_pdf()
         local mark_tab = load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeol = true })
         for i=1,#mark_tab do
             local mt = mark_tab[i]
-            if type(mt) == "table" and mt[".__local_name"] == "mark" then
-                markers[mt.name] = { page = mt.page}
+            if type(mt) == "table" then
+                if mt[".__local_name"] == "mark" then
+                    markers[mt.name] = { page = mt.page}
+                    local id = tonumber(mt.id)
+                    if id then
+                        marker_id_value[id] = { page = mt.page, name = mt.name}
+
+                        local pagenumber = tonumber(mt.page)
+                        if not marker_min[pagenumber] then
+                            marker_min[pagenumber] = id
+                        elseif marker_min[pagenumber] > id then
+                            marker_min[pagenumber] = id
+                        end
+                        if not marker_max[pagenumber] then
+                            marker_max[pagenumber] = id
+                        elseif marker_max[pagenumber] < id then
+                            marker_max[pagenumber] = id
+                        end
+                    end
+                end
             end
         end
     end
@@ -1328,15 +1354,13 @@ function initialize_luatex_and_generate_pdf()
     end
     local tab = {}
     for k,v in pairs(markers) do
-        tab[#tab + 1] = string.format("  <mark name=%q page=%q />",xml_escape(tostring(k)),xml_escape(tostring(v.page)))
+        tab[#tab + 1] = string.format("  <mark name=%q page=%q id=%q />",xml_escape(tostring(k)),xml_escape(tostring(v.page)), tostring(v.count))
     end
-    if #tab > 0 then
-        local file = io.open(auxfilename,"wb")
-        file:write("<marker>\n")
-        file:write(table.concat(tab,"\n"))
-        file:write("\n</marker>")
-        file:close()
-    end
+    local file = io.open(auxfilename,"wb")
+    file:write("<marker>\n")
+    file:write(table.concat(tab,"\n"))
+    file:write("\n</marker>")
+    file:close()
 end
 
 
@@ -3375,7 +3399,8 @@ function find_user_defined_whatsits( head, parent )
                         current_bookmark_table[#current_bookmark_table + 1] = {name = str, destination = dest, open = open_p}
                     elseif head.user_id == user_defined_mark then
                         local marker = head.value
-                        markers[marker] = { page = current_pagenumber }
+                        markercount = markercount + 1
+                        markers[marker] = { page = current_pagenumber, count = markercount }
                     elseif head.user_id == user_defined_mark_append then
                         local marker = head.value
                         if markers[marker] == nil then

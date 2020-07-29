@@ -45,10 +45,6 @@ Es gibt zwei Klassen von Funktionen: standardkonforme (XPath-) und speedata Publ
 Die Layout-Funktionen sind im Namensraum `urn:speedata:2009/publisher/functions/de` (im Folgenden mit `sd:` gekennzeichnet) definiert. Optionale Parameter werden durch eckige Klammern markiert.
 Beispiel: die Funktion `sd:current-row()`  kann auch mit Parameter `sd:current-row('name')` aufgerufen werden. Die Auslassungspunkte `...` bedeuten, dass der letzte Wert beliebig oft wiederholt werden kann.
 
-// Todo: document:
-// dimexpr
-// first-free-row
-
 
 `sd:allocated(x,y,<Bereichsname>,<Rahmennummer>)`::
    Gibt wahr zurück, wenn die Zelle belegt ist (seit 2.3.71).
@@ -83,6 +79,9 @@ Beispiel: die Funktion `sd:current-row()`  kann auch mit Parameter `sd:current-r
 `sd:decode-html(<Node>)`::
    Wandelt Texte wie `\&lt;i\&gt;Kursiv\&lt;/i\&gt;` in entsprechendes HTML-Markup.
 
+`sd:dimexpr(<string>)`::
+  Werte die Zeichnkette aus. Hilfreich, wenn man zwei Längen addieren oder multiplizieren möchte. Beispiel: "2mm + 5cm".
+
 `sd:dummytext([<Anzahl>])`::
    Gibt den Blindtext "Lorem ipsum..." mit über 50 Wörtern zurück. Mit dem optionalen Parameter kann man festlegen, wie oft der Text wiederholt wird.
 
@@ -94,6 +93,12 @@ Beispiel: die Funktion `sd:current-row()`  kann auch mit Parameter `sd:current-r
 
 `sd:filecontents(<binarycontent>)`::
    Speichert den Inhalt in eine temporäre Datei und gibt den Namen zurück.
+
+`sd:firstmark(<pagenumber>)`::
+   Der erste Marker der angegebenen Seitenzahl. Hilfreich z.B. in Wörterbüchern, wo der erste und der letzte Begriff einer Seite ausgegeben werden.
+
+`sd:first-free-row(<name>)`::
+  Gib die erste freie Zeile des Bereichs zurück (experimentell).
 
 `sd:format-number(<Zahl oder String>, <Tausenderzeichen>, <Kommazeichen>)`::
    Formatiert die übergebene Zahl und fügt Tausender-Trennzeichen hinzu und ändert den Kommatrenner. Beispiel: `sd:format-number(12345.67, '.',',')` ergibt die Zeichenkette `12.345,67`.
@@ -115,6 +120,9 @@ Beispiel: die Funktion `sd:current-row()`  kann auch mit Parameter `sd:current-r
 
 `sd:keep-alternating(<typ>)`::
    Benutzt den aktuellen Wert von `sd:alternating(<typ>)`, ohne diesen zu verändern.
+
+`sd:lastmark(<pagenumber>)`::
+   Der letzte Marker der angegebenen Seitenzahl. Hilfreich z.B. in Wörterbüchern, wo der erste und der letzte Begriff einer Seite ausgegeben werden.
 
 `sd:loremipsum()`::
    Alias für `sd:dummytext()`
@@ -201,14 +209,14 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `lower-case(<text>)`::
    Gibt den Text als Kleinbuchstaben zurück. `lower-case('Text')` ergibt `text`.
 
-`normalize-space(<text>)`::
-   Gibt den Text ohne führende und nachstehende Leerzeichen zurück. Alle Zeilenvorschübe werden durch Leerzeichen ersetzt. Mehrfach hintereinander auftretende Leerzeichen/Zeilenvorschübe werden durch ein einzelnes Leerzeichen ersetzt.
-
 `max(<Zahl>[, <Zahl>, ...])`::
 	Liefert das Maximum der Werte zurück: `max(1.1,2.2,3.3,4.4)` ergibt `4.4`.
 
 `min(<Zahl>[, <Zahl>, ...])`::
-	Liefert das Minimum der Werte zurück: `max(1.1,2.2,3.3,4.4)` ergibt `1.1`.
+	Liefert das Minimum der Werte zurück: `min(1.1,2.2,3.3,4.4)` ergibt `1.1`.
+
+`normalize-space(<text>)`::
+   Gibt den Text ohne führende und nachstehende Leerzeichen zurück. Alle Zeilenvorschübe werden durch Leerzeichen ersetzt. Mehrfach hintereinander auftretende Leerzeichen/Zeilenvorschübe werden durch ein einzelnes Leerzeichen ersetzt.
 
 `not()`::
    Negiert den Wahrheitswert des Arguments. Beispiel: `not(true())` ergibt `false()`.
@@ -231,11 +239,11 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `substring(<input>,<start>[,<length>])`::
    Gibt einen Teil der Zeichenkette aus `input` zurück, die bei `start` anfängt und (optional) die Länge `length` hat. `substring('Goldfarb', 5, 3)` gibt `far` zurück. `start` kann auch (entgegen der XPath-Spezifikation) auch negativ sein, dann wird vom Ende der Eingabe gezählt.
 
-`true()`::
-   Gibt „Wahr“ zurück.
-
 `tokenize(<Eingabe>,<Regexp>)`::
    Die Rückgabe ist eine Sequenz von Zeichenketten. Die Eingabe wird von links nach rechts gelesen. Sobald eine Stelle gefunden wird, auf die der Reguläre Ausdruck passt, wird die bisherige Eingabe zurück gegeben. Beispiel (aus M. Kays XPath / XSLT-Buch): `tokenize("Go home, Jack!", "\W+")` ergibt die Sequenz `"Go", "home", "Jack", ""`.
+
+`true()`::
+   Gibt „Wahr“ zurück.
 
 `upper-case()`::
 	Wandelt den Text in Großbuchstaben: `upper-case('Text')` ergibt `TEXT`.

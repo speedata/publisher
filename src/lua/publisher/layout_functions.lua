@@ -78,6 +78,24 @@ local function first_free_row( dataxml, arg )
   return ret
 end
 
+-- Get the first mark of a page (for example used in the head of dictionaires)
+local function firstmark(dataxml,arg)
+    local pagenumber = arg[1]
+    if not tonumber(pagenumber) then err("firstmark: cannot get page number") end
+    local minid = publisher.marker_min[pagenumber]
+    if not minid then return "" end
+    return publisher.marker_id_value[minid].name
+end
+
+-- Get the last mark of a page (for example used in the head of dictionaires)
+local function lastmark(dataxml,arg)
+    local pagenumber = arg[1]
+    if not tonumber(pagenumber) then err("lasttmark: cannot get page number") end
+    local maxid = publisher.marker_max[pagenumber]
+    if not maxid then return "" end
+    return publisher.marker_id_value[maxid].name
+end
+
 -- Read the contents given in arg[1] and write it to a temporary file.
 -- Return the name of the file. Useful in conjunction with sd:decode-base64()
 -- and Image to read an image from the data.
@@ -530,6 +548,9 @@ register("urn:speedata:2009/publisher/functions/en","loremipsum",loremipsum)
 register("urn:speedata:2009/publisher/functions/en","even",even)
 
 register("urn:speedata:2009/publisher/functions/en","first-free-row",first_free_row)
+
+register("urn:speedata:2009/publisher/functions/en","firstmark",firstmark)
+register("urn:speedata:2009/publisher/functions/en","lastmark",lastmark)
 
 register("urn:speedata:2009/publisher/functions/en","filecontents",filecontents)
 
