@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.26" date="2020-07-29">
+      <en>New xpath functions firstmark and lastmark to get the first and the last marker on a page.</en>
+      <de>Neue XPath-Funktionen firstmark und lastmark um die ersten und letzten Marker einer Seite zu bekommen.</de>
+    </entry>
+    <entry version="3.9.26" date="2020-07-29">
+      <en>New internal variable <tt>$_lastpage</tt> that holds the page number of the previous run.</en>
+      <de>Neue interne Variable <tt>$_lastpage</tt>, die die letzte Seitenzahl des vorherigen Laufs enthält.</de>
+    </entry>
     <entry version="3.9.25" date="2020-07-26">
       <en>Bugfix for underline color (#256).</en>
       <de>Fehlerkorrektur für Farbe bei Unterstreichen (#256).</de>
