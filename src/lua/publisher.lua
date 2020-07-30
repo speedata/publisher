@@ -209,9 +209,6 @@ default_area     = "_page"
 -- The name of the next requested page
 nextpage = nil
 
--- the language of the layout instructions ('en' or 'de')
-current_layoutlanguage = nil
-
 -- The document language
 defaultlanguage = 0
 
@@ -1004,7 +1001,7 @@ function initialize_luatex_and_generate_pdf()
     end
 
     --- The currently active layout language. One of `de` or `en`.
-    current_layoutlanguage = string.gsub(ns,"urn:speedata.de:2009/publisher/","")
+    local current_layoutlanguage = string.gsub(ns,"urn:speedata.de:2009/publisher/","")
     if not (current_layoutlanguage=='de' or current_layoutlanguage=='en') then
         err("Cannot determine the language of the layout file.")
         exit()
