@@ -3347,6 +3347,16 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="padding-left">
+                     <a:documentation>Stelle das padding links ein, also der Innenabstand des Textblocks.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-right">
+                     <a:documentation>Stelle das padding rechts ein, also der Innenabstand des Textblocks.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="role">
                      <a:documentation>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</a:documentation>
                      <choice>

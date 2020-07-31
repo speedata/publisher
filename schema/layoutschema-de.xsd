@@ -3181,6 +3181,16 @@
           <xs:documentation>Name der Schriftart. Voreinstellung ist »text« (mit kleinem t).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="padding-left">
+        <xs:annotation>
+          <xs:documentation>Stelle das padding links ein, also der Innenabstand des Textblocks.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="padding-right">
+        <xs:annotation>
+          <xs:documentation>Stelle das padding rechts ein, also der Innenabstand des Textblocks.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="role">
         <xs:annotation>
           <xs:documentation>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</xs:documentation>

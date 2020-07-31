@@ -3181,6 +3181,16 @@
           <xs:documentation>The name of the fontface for the paragraph. The default is »text« (lowercase t).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="padding-left">
+        <xs:annotation>
+          <xs:documentation>Set the left padding, i.e. the inner distance to the allocated area.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="padding-right">
+        <xs:annotation>
+          <xs:documentation>Set the right padding, i.e. the inner distance to the allocated area.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="role">
         <xs:annotation>
           <xs:documentation>The role for PDF/UA (accessibility, tagged PDF)</xs:documentation>

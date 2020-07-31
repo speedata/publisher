@@ -216,6 +216,10 @@ function Paragraph:format(width_sp, default_textformat_name,options)
         width_sp = width_sp - self.padding_left
     end
 
+    if self.padding_right and self.padding_right > 0 then
+        width_sp = width_sp - self.padding_right
+    end
+
     if self.width then
         width_sp = self.width
     end

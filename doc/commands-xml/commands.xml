@@ -5464,6 +5464,22 @@
         <para>Name der Schriftart. Voreinstellung ist »text« (mit kleinem t).</para>
       </description>
     </attribute>
+    <attribute en="padding-left" optional="yes" since="3.9.27" allowxpath="yes" type="length">
+      <description xml:lang="en">
+        <para>Set the left padding, i.e. the inner distance to the allocated area.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Stelle das padding links ein, also der Innenabstand des Textblocks.</para>
+      </description>
+    </attribute>
+    <attribute en="padding-right" optional="yes" since="3.9.27" allowxpath="yes" type="length">
+      <description xml:lang="en">
+        <para>Set the right padding, i.e. the inner distance to the allocated area.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Stelle das padding rechts ein, also der Innenabstand des Textblocks.</para>
+      </description>
+    </attribute>
     <attribute en="role" optional="yes" since="3.5.7">
       <description xml:lang="en">
         <para>The role for PDF/UA (accessibility, tagged PDF)</para>

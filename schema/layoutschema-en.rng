@@ -3347,6 +3347,16 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="padding-left">
+                     <a:documentation>Set the left padding, i.e. the inner distance to the allocated area.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-right">
+                     <a:documentation>Set the right padding, i.e. the inner distance to the allocated area.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="role">
                      <a:documentation>The role for PDF/UA (accessibility, tagged PDF)</a:documentation>
                      <choice>

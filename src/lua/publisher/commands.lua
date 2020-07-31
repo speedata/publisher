@@ -2238,6 +2238,8 @@ function commands.paragraph( layoutxml,dataxml )
     local colorname     = publisher.read_attribute(layoutxml,dataxml,"color",     "rawstring")
     local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
     local role          = publisher.read_attribute(layoutxml,dataxml,"role",      "string")
+    local paddingleft   = publisher.read_attribute(layoutxml,dataxml,"padding-left","width_sp")
+    local paddingright   = publisher.read_attribute(layoutxml,dataxml,"padding-right","width_sp")
 
     if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
 
@@ -2277,6 +2279,8 @@ function commands.paragraph( layoutxml,dataxml )
 
     publisher.intextblockcontext = publisher.intextblockcontext + 1
     local a = paragraph:new(textformat)
+    a.padding_left = paddingleft
+    a.padding_right = paddingright
     local objects = {}
     local save_color
     if colorname then
