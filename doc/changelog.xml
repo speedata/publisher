@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.27" date="2020-07-31">
+      <en>padding-left and padding-right on Paragraph.</en>
+      <de>padding-left und padding-right bei Paragraph.</de>
+    </entry>
     <entry version="3.9.26" date="2020-07-29">
       <en>New xpath functions firstmark and lastmark to get the first and the last marker on a page.</en>
       <de>Neue XPath-Funktionen firstmark und lastmark um die ersten und letzten Marker einer Seite zu bekommen.</de>
