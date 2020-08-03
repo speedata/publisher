@@ -1800,14 +1800,16 @@ end
 function set_skip_table( self )
     local rowspan
     local colspan
+    local current_column
     local current_row = 0
     for _,tr in ipairs(self.tab) do
-        local current_column = 0
+
         local tr_contents = publisher.element_contents(tr)
         local eltname = publisher.elementname(tr)
 
         if eltname == "Tr" then
             current_row = current_row + 1
+            current_column = 0
             for _,td in ipairs(tr_contents) do
                 current_column = current_column + 1
                 local td_contents = publisher.element_contents(td)
@@ -1821,11 +1823,10 @@ function set_skip_table( self )
                         self.skip[z][y] = true
                     end
                 end
-
                 while self.skip[current_row] and self.skip[current_row][current_column] do
                     current_column = current_column + 1
                 end
-
+                current_column = current_column + colspan - 1
             end
         end
     end

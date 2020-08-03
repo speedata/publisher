@@ -1,0 +1,31 @@
+<Layout
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en" >
+
+  <SetGrid nx="9" height="12pt" />
+
+  <Pageformat height="4cm" width="15cm" />
+
+  <Record element="data">
+    <PlaceObject column="1">
+      <Table stretch="max" >
+        <Columns>
+          <Loop select="9">
+            <Column width="1*"/>
+          </Loop>
+        </Columns>
+        <ForAll select="tr">
+          <Tr break-below="yes">
+            <ForAll select="td">
+              <Td padding="2pt" rowspan="{ @rowspan }" colspan="{ @colspan }" border-right="0.5pt" border-bottom="0.5pt">
+                <Paragraph>
+                  <Value select="."/>
+                </Paragraph>
+              </Td>
+            </ForAll>
+          </Tr>
+        </ForAll>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
