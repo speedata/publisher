@@ -723,10 +723,11 @@
     </xs:annotation>
     <xs:complexType>
       <xs:choice maxOccurs="unbounded">
+        <xs:element ref="en:Column"/>
+        <xs:element ref="en:Copy-of"/>
+        <xs:element ref="en:ForAll"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Switch"/>
-        <xs:element ref="en:ForAll"/>
-        <xs:element ref="en:Column"/>
       </xs:choice>
     </xs:complexType>
   </xs:element>
