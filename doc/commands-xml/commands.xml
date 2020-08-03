@@ -1761,10 +1761,11 @@
     <childelements>
       <oneOrMore>
         <choice>
+          <cmd name="Column"/>
+          <cmd name="Copy-of"/>
+          <cmd name="ForAll"/>
           <cmd name="Loop"/>
           <cmd name="Switch"/>
-          <cmd name="ForAll"/>
-          <cmd name="Column"/>
         </choice>
       </oneOrMore>
     </childelements>
