@@ -836,7 +836,11 @@ function calculate_rowheights(self)
     for i,rowspan in pairs(rowspans) do
         local sum_ht = 0
         for j=rowspan.start,rowspan.stop do
-            sum_ht = sum_ht + self.rowheights[j]
+            if not self.rowheights[j] then
+                err("Rowspan exceeds the number of rows in the table")
+            else
+                sum_ht = sum_ht + self.rowheights[j]
+            end
         end
         sum_ht = sum_ht + self.rowsep * ( rowspan.stop - rowspan.start )
         if rowspan.ht > sum_ht then
