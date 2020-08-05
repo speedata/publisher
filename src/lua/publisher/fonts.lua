@@ -8,6 +8,7 @@
 --
 --- Loading a font is only one part of the story. Proper dealing with fonts
 --- requires post processing at various stages.
+file_start("fonts.lua")
 
 require("fonts.fontloader")
 module(...,package.seeall)
@@ -15,7 +16,7 @@ module(...,package.seeall)
 local lookup_fontname_filename={}
 local font_instances={}
 
-local used_fonts={}
+used_fonts={}
 
 
 local att_fontfamily     = 1
@@ -66,7 +67,7 @@ lookup_fontfamily_name_number={}
 lookup_fontfamily_number_instance={}
 
 
-function load_fontfile( name, filename,parameter_tab)
+function load_fontfile(name, filename, parameter_tab)
     assert(filename)
     assert(name)
     lookup_fontname_filename[name]={filename,parameter_tab or {}}
@@ -109,8 +110,7 @@ end
 function make_font_instance( name,size )
     -- Name is something like "TeXGyreHeros-Regular", the visible name of the font file
     assert(name)
-    assert(size)
-    assert(    type(size)=="number" )
+    assert(tonumber(size))
     if not lookup_fontname_filename[name] then
         local msg = string.format("Font instance '%s' is not defined!", name)
         err(msg)
@@ -118,7 +118,7 @@ function make_font_instance( name,size )
     end
     local filename,parameter = unpack(lookup_fontname_filename[name])
     assert(filename)
-    local k = {filename = filename, fontsize = size, space = parameter.space}
+    local k = {filename = filename, fontsize = size, space = parameter.space, mode = parameter.mode or "fontforge"}
 
     if parameter.otfeatures then
         for fea,enabled in pairs(parameter.otfeatures) do
@@ -131,9 +131,15 @@ function make_font_instance( name,size )
     if fontnumber then
         return true,fontnumber
     else
-        local ok,f = fonts.fontloader.define_font(filename,size,parameter)
+        local ok, f
+        if parameter.mode == "harfbuzz" then
+            ok,f = fonts.fontloader.define_font_hb(filename,size,parameter)
+        else
+            ok,f = fonts.fontloader.define_font(filename,size,parameter)
+        end
         if ok then
             local num = font.define(f)
+            log("Create font metrics for %s at %.2gpt (id: %d)",filename,size / publisher.factor,num)
             font_instances[k]=num
             used_fonts[num]=f
             return true, num
@@ -317,7 +323,7 @@ function pre_linebreak( head )
                 end
                 -- check for font features
                 local f = used_fonts[tmp_fontnum]
-                if f and f.otfeatures then
+                if f and f.mode == "fontforge" and f.otfeatures then
                     for _,featuretable in ipairs(f.otfeatures) do
                         local glyphno,lookups
                         local glyph_lookuptable
@@ -557,3 +563,4 @@ function clone_family( fam, params )
     end
 end
 
+file_end("fonts.lua")

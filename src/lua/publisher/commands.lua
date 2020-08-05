@@ -1525,7 +1525,8 @@ end
 
 --- Load Fontfile
 --- -------------
---- Load a given font file (`name`). Actually the font file is not loaded yet, only stored in a table. See `publisher.font#load_fontfile()`.
+--- Load a given font file (`name`).
+--- Actually the font file is not loaded yet, only stored in a table. See `publisher.font#load_fontfile()`.
 function commands.load_fontfile( layoutxml,dataxml )
     local marginprotrusion = publisher.read_attribute(layoutxml,dataxml,"marginprotrusion","number")
     local space            = publisher.read_attribute(layoutxml,dataxml,"space",           "number")
@@ -1534,6 +1535,7 @@ function commands.load_fontfile( layoutxml,dataxml )
     local name             = publisher.read_attribute(layoutxml,dataxml,"name",            "rawstring")
     local osf              = publisher.read_attribute(layoutxml,dataxml,"oldstylefigures", "boolean")
     local features         = publisher.read_attribute(layoutxml,dataxml,"features",        "rawstring")
+    local mode             = publisher.read_attribute(layoutxml,dataxml,"mode",            "rawstring", "fontforge")
 
     local fallbacks = {}
     for _,v in ipairs(layoutxml) do
@@ -1549,14 +1551,24 @@ function commands.load_fontfile( layoutxml,dataxml )
         space            = space or 25,
         marginprotrusion = marginprotrusion or 0,
         fallbacks        = fallbacks,
+        mode             = mode,
         otfeatures       = {
             smcp = smcp == "yes",
             onum = osf == true,
         },
     }
     if features then
-        for i,v in ipairs(string.explode(features,",")) do
-            extra_parameter.otfeatures[v] = true
+        for _,fea in ipairs(string.explode(features,",")) do
+            local firstletter = string.sub( fea, 1, 1 )
+            if firstletter == "+" then
+                local fname = string.sub(fea,2,5)
+                extra_parameter.otfeatures[fname] = true
+            elseif firstletter == "-" then
+                local fname = string.sub(fea,2,5)
+                extra_parameter.otfeatures[fname] = false
+            else
+                extra_parameter.otfeatures[fea] = true
+            end
         end
     end
 

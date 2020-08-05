@@ -1868,6 +1868,11 @@
           <xs:documentation>The internal name of the font file. To be used within DefineFontfamily.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="features">
+        <xs:annotation>
+          <xs:documentation>A comma separated list of OpenType features, such as +liga,-kern</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="filename" use="required">
         <xs:annotation>
           <xs:documentation>The name (with extension) of the font file.</xs:documentation>
@@ -1877,6 +1882,25 @@
         <xs:annotation>
           <xs:documentation>The amount of protrusion glyphs like -, . and - stick into the right margin. Highly font dependent. Defaults to 0.</xs:documentation>
         </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="mode">
+        <xs:annotation>
+          <xs:documentation>Set the shaping mode of the font. Defaults to fontforge.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="fontforge">
+              <xs:annotation>
+                <xs:documentation>The old and well tested font hanlder. Renders western scripts well, but no right-to-left or other complex scripts.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="harfbuzz">
+              <xs:annotation>
+                <xs:documentation>The experimental new renderer that will eventually handle all scripts including right-to-left.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="oldstylefigures">
         <xs:annotation>

@@ -5,9 +5,10 @@
 --  fontloader.lua
 --  speedata publisher
 --
---  Copyright 2010-2011 Patrick Gundlach.
+--  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 
+file_start("fontloader.lua")
 
 module(...,package.seeall)
 
@@ -87,7 +88,102 @@ end
 --- requests the same font in a different size. We also cache  the `to_unicode` mapping.
 --- Only the size dependent values are computed.
 local lookup_fonttable_from_filename = {}
+local harfbuzz = require('luaharfbuzz')
 
+-- The harfbuzz version of the fontloader.
+function define_font_hb( name, size, extra_parameter )
+    local fonttable
+    local filename_with_path
+        filename_with_path = kpse.find_file(name)
+        if not filename_with_path then return false, string.format("Fontfile '%s' not found.", name) end
+        local face = harfbuzz.Face.new(filename_with_path)
+        local font = harfbuzz.Font.new(face)
+        fonttable = {
+            face = face,
+            font = font
+        }
+        lookup_fonttable_from_filename[name] = fonttable
+    local face = fonttable.face
+    local font = fonttable.font
+
+    if (size < 0) then size = (- 655.36) * size end
+
+    -- Some fonts have `units_per_em` set to 0. I am not sure if setting this to
+    -- 1000 in that case has any drawbacks.
+    local upem = face:get_upem()
+    local mag = math.floor(size / upem)
+    local backmap = {}
+    local f = {}
+    f.mag = mag
+    f.mode          = "harfbuzz"
+    f.face          = face
+    f.font          = font
+    f.characters    = {}
+    f.otfeatures    = {}
+    f.name          = face:get_name(6)
+    f.fullname      = face:get_name(6)
+    f.designsize    = size
+    f.size          = size
+    f.direction     = 0
+    f.filename      = filename_with_path
+    f.type          = 'real'
+    f.encodingbytes = 2
+    f.tounicode     = 1
+    f.stretch       = 40
+    f.shrink        = 30
+    f.step          = 10
+    f.auto_expand   = true
+    f.embedding     = "subset"
+    f.format        = guess_fonttype(name)
+    f.parameters    = {
+        slant         = 0,
+        space         = ( extra_parameter.space or 25 ) / 100  * size,
+        space_stretch = 0.3  * size,
+        space_shrink  = 0.1  * size,
+        x_height      = 0.4  * size,
+        quad          = 1.0  * size,
+        extra_space   = 0
+    }
+    local features = {}
+    if extra_parameter.otfeatures then
+        for fea,enabled in pairs(extra_parameter.otfeatures) do
+            local firstletter
+            if enabled then firstletter = "+" else firstletter = "-" end
+            table.insert(features,harfbuzz.Feature.new(firstletter .. fea))
+        end
+    end
+    f.otfeatures = features
+    local unicodes = face:collect_unicodes()
+    local characters = {}
+    local glyph_uni = {}
+    for _, uni in next, unicodes do
+        characters[uni] = font:get_nominal_glyph(uni)
+        glyph_uni[characters[uni]] = uni
+    end
+
+    for gid = 0, face:get_glyph_count() - 1 do
+        local touni = glyph_uni[gid]
+        local uni = touni or 0x110000 + gid
+        local ge = font:get_glyph_extents(gid)
+        f.characters[uni] = {
+            index = gid,
+            width = font:get_glyph_h_advance(gid) * mag,
+            hadvance = font:get_glyph_h_advance(gid),
+            name  = font:get_glyph_name(gid),
+            expansion_factor = 1000,
+        }
+        backmap[gid] = uni
+        if touni then
+            f.characters[uni].tounicode = touni
+        end
+        if ge then
+            f.characters[uni].height = ge.y_bearing * mag
+            f.characters[uni].depth = (ge.height + ge.y_bearing) * -1 * mag
+        end
+    end
+    f.backmap = backmap
+    return true,f
+end
 
 --- Return a TeX usable font table, or _nil_ plus an error message.
 --- The parameter `name` is the filename (without path), `size` is
@@ -194,7 +290,7 @@ function define_font(name, size,extra_parameter)
     f.characters    = { }
     f.fontloader    = fonttable
     f.otfeatures    = {}
-
+    f.mode          = "fontforge"
     f.name          = fonttable.fontname
     f.fullname      = fonttable.fontname
     f.designsize    = size
@@ -225,12 +321,10 @@ function define_font(name, size,extra_parameter)
     f.embedding = "subset"
     f.cidinfo = fonttable.cidinfo
 
-
     for i=1,#fonttable.glyphtable do
         local glyph     = fonttable.glyphtable[i]
         local glyphno   = glyph.glyphno
         local codepoint = fonttable.lookup_codepoint_by_number[glyphno]
-
         -- TeX uses U+002D HYPHEN-MINUS for hyphen, correct would be U+2012 HYPHEN.
         -- Because font vendors all have different ideas of hyphen, we just map all
         -- occurrences of *HYPHEN* to 0x2D (decimal 45)
@@ -425,4 +519,5 @@ function define_font(name, size,extra_parameter)
     return true,f
 end
 
+file_end("fontloader.lua")
 -- End of file

@@ -2170,12 +2170,28 @@
                <attribute name="name">
                   <a:documentation>The internal name of the font file. To be used within DefineFontfamily.</a:documentation>
                </attribute>
+               <optional>
+                  <attribute name="features">
+                     <a:documentation>A comma separated list of OpenType features, such as +liga,-kern</a:documentation>
+                  </attribute>
+               </optional>
                <attribute name="filename">
                   <a:documentation>The name (with extension) of the font file.</a:documentation>
                </attribute>
                <optional>
                   <attribute name="marginprotrusion">
                      <a:documentation>The amount of protrusion glyphs like -, . and - stick into the right margin. Highly font dependent. Defaults to 0.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="mode">
+                     <a:documentation>Set the shaping mode of the font. Defaults to fontforge.</a:documentation>
+                     <choice>
+                        <value>fontforge</value>
+                        <a:documentation>The old and well tested font hanlder. Renders western scripts well, but no right-to-left or other complex scripts.</a:documentation>
+                        <value>harfbuzz</value>
+                        <a:documentation>The experimental new renderer that will eventually handle all scripts including right-to-left.</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <optional>

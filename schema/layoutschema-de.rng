@@ -2170,12 +2170,28 @@
                <attribute name="name">
                   <a:documentation>Der interne Name, unter dem die Schriftart im Element DefineFontfamily angesprochen wird.</a:documentation>
                </attribute>
+               <optional>
+                  <attribute name="features">
+                     <a:documentation>Eine Kommaseparierte Liste von OpenType features, z.B. +liga,-kern</a:documentation>
+                  </attribute>
+               </optional>
                <attribute name="filename">
                   <a:documentation>Der Dateiname mit Endung, ohne Pfad.</a:documentation>
                </attribute>
                <optional>
                   <attribute name="marginprotrusion">
                      <a:documentation>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark abhängig von der benutzten Schriftart.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="mode">
+                     <a:documentation>Setzt den Fonthandler. Voreinstellung ist fontforge.</a:documentation>
+                     <choice>
+                        <value>fontforge</value>
+                        <a:documentation>Der alte und gut funktionierende Fonthandler. Funktioniert gut mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen.</a:documentation>
+                        <value>harfbuzz</value>
+                        <a:documentation>Der experimentelle neue Fonthandler der arabisch und andere komplexen Schreibsysteme verarbeiten kann.</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <optional>

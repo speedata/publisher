@@ -9,12 +9,11 @@
 --  See file COPYING in the root directory for license info.
 
 file_start("publisher.lua")
-
 barcodes = do_luafile("barcodes.lua")
 local luxor = do_luafile("luxor.lua")
 
 local http = require("socket.http")
-local url = require("socket_url")
+local url  = require("socket_url")
 local spotcolors = require("spotcolors")
 
 xpath = do_luafile("xpath.lua")
@@ -25,6 +24,7 @@ local fontloader   = require("fonts.fontloader")
 local html         = require("publisher.html")
 local fonts        = require("publisher.fonts")
 local uuid         = require("uuid")
+
 paragraph    = require("paragraph")
 uuid.randomseed(tex.randomseed)
 
@@ -836,6 +836,7 @@ function dothings()
     fonts.load_fontfile("TeXGyreHeros-Italic",    "texgyreheros-italic.otf")
     fonts.load_fontfile("TeXGyreHeros-BoldItalic","texgyreheros-bolditalic.otf")
 
+    -- These are used in HTML mode when the user switches to monospace or serif
     fonts.load_fontfile("CrimsonText-Regular","CrimsonText-Regular.ttf")
     fonts.load_fontfile("CrimsonText-Bold","CrimsonText-Bold.ttf")
     fonts.load_fontfile("CrimsonText-Italic","CrimsonText-Italic.ttf")
@@ -845,13 +846,8 @@ function dothings()
     fonts.load_fontfile("CamingoCode-Bold","CamingoCode-Bold.ttf")
     fonts.load_fontfile("CamingoCode-Italic","CamingoCode-Italic.ttf")
     fonts.load_fontfile("CamingoCode-BoldItalic","CamingoCode-BoldItalic.ttf")
-    -- CrimsonText-Bold.ttf                     CrimsonText-Bold
-    -- CrimsonText-BoldItalic.ttf               CrimsonText-BoldItalic
-    -- CrimsonText-Italic.ttf                   CrimsonText-Italic
-    -- CrimsonText-Regular.ttf                  CrimsonText-Regular
-    -- CrimsonText-SemiBold.ttf                 CrimsonText-SemiBold
-    -- CrimsonText-SemiBoldItalic.ttf           CrimsonText-SemiBoldItalic
-        --- Define a basic font family with name `text`:
+
+    --- Define a basic font family with name `text`:
     define_default_fontfamily()
 
     --- The server mode is quite interesting: we don't generate a PDF, but wait for requests and try to answer
@@ -3526,7 +3522,7 @@ function remove_last_whitespace ( tbl )
         end
     end
 end
-
+local harfbuzz = require('luaharfbuzz')
 
 --- Create a `\hbox`. Return a nodelist. Parameter is one of
 ---
@@ -3565,12 +3561,47 @@ function mknodes(str,fontfamily,parameter)
         allow_newline = false
     end
 
-    local tbl = font.getfont(instance)
+    local tbl = publisher.fonts.used_fonts[instance]
     local space   = tbl.parameters.space
     local shrink  = tbl.parameters.space_shrink
     local stretch = tbl.parameters.space_stretch
     local match = unicode.utf8.match
 
+    if tbl.face then
+        local buf = harfbuzz.Buffer.new()
+        buf:add_utf8(str)
+        -- shape(tbl.font,buf, { language = "deu", script = "latn", direction = "ltr" })
+        shape(tbl,buf)
+
+        local glyphs = buf:get_glyphs()
+        local list, cur
+        local n,k
+        for i=1,#glyphs do
+            local cp = glyphs[i].codepoint
+            local uc = tbl.backmap[cp] or cp
+            if uc == 32 then
+                n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch})
+                list,cur = node.insert_after(list,cur,n)
+            else
+                n = node.new("glyph")
+                n.font = instance
+                n.subtype = 1
+                n.char = uc
+                n.uchyph = 1
+                n.left = parameter.left or tex.lefthyphenmin
+                n.right = parameter.right or tex.righthyphenmin
+                node.set_attribute(n,att_fontfamily,fontfamily)
+                list,cur = node.insert_after(list,cur,n)
+                -- local diff = glyphs[i].x_advance - tbl.characters[uc].hadvance
+                -- if diff ~= 0 then
+                --     k = node.new("kern")
+                --     k.kern = diff * tbl.mag
+                --     list,cur = node.insert_after(list,cur,k)
+                -- end
+            end
+        end
+        return list
+    end
     local head, last, n
     local char
 
@@ -5792,6 +5823,30 @@ function utf8_to_utf16_string_pdf( str )
     end
     local utf16str = "<feff" .. table.concat(ret) .. ">"
     return utf16str
+end
+
+local opts, ftrs = {}, {}
+
+shape = function(tbl, buf, options)
+    local font = tbl.font
+    options = options or { }
+    local lang, script, dir
+
+    if options.language then
+        lang = harfbuzz.Language.new(options.language)
+        buf:set_language(lang)
+    end
+    if options.script then
+        script = harfbuzz.Script.new(options.script)
+        buf:set_script(script)
+    end
+    if options.direction then
+        dir = harfbuzz.Direction.new(options.direction)
+        buf:set_direction(dir)
+    end
+    buf:guess_segment_properties()
+
+    harfbuzz.shape_full(font, buf, tbl.otfeatures, {})
 end
 
 file_end("publisher.lua")

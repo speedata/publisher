@@ -3977,6 +3977,14 @@
         <para>Der interne Name, unter dem die Schriftart im Element <cmd name="DefineFontfamily"/> angesprochen wird.</para>
       </description>
     </attribute>
+    <attribute en="features" optional="yes" type="text" since="3.9.29">
+      <description xml:lang="en">
+        <para>A comma separated list of OpenType features, such as <tt>+liga,-kern</tt></para>
+      </description>
+      <description xml:lang="de">
+        <para>Eine Kommaseparierte Liste von OpenType features, z.B. <tt>+liga,-kern</tt></para>
+      </description>
+    </attribute>
     <attribute en="filename" type="text" optional="no">
       <description xml:lang="en">
         <para>The name (with extension) of the font file.</para>
@@ -3992,6 +4000,30 @@
       <description xml:lang="de">
         <para>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark abhängig von der benutzten Schriftart.</para>
       </description>
+    </attribute>
+    <attribute en="mode" optional="yes" since="3.9.29">
+      <description xml:lang="en">
+        <para>Set the shaping mode of the font. Defaults to <tt>fontforge</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setzt den Fonthandler. Voreinstellung ist <tt>fontforge</tt>.</para>
+      </description>
+      <choice en="fontforge">
+        <description xml:lang="en">
+          <para>The old and well tested font hanlder. Renders western scripts well, but no right-to-left or other complex scripts.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der alte und gut funktionierende Fonthandler. Funktioniert gut mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen.</para>
+        </description>
+      </choice>
+      <choice en="harfbuzz">
+        <description xml:lang="en">
+          <para>The experimental new renderer that will eventually handle all scripts including right-to-left.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der experimentelle neue Fonthandler der arabisch und andere komplexen Schreibsysteme verarbeiten kann.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="oldstylefigures" optional="yes">
       <description xml:lang="en">

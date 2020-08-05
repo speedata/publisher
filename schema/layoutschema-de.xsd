@@ -1868,6 +1868,11 @@
           <xs:documentation>Der interne Name, unter dem die Schriftart im Element DefineFontfamily angesprochen wird.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="features">
+        <xs:annotation>
+          <xs:documentation>Eine Kommaseparierte Liste von OpenType features, z.B. +liga,-kern</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="filename" use="required">
         <xs:annotation>
           <xs:documentation>Der Dateiname mit Endung, ohne Pfad.</xs:documentation>
@@ -1877,6 +1882,25 @@
         <xs:annotation>
           <xs:documentation>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark abhängig von der benutzten Schriftart.</xs:documentation>
         </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="mode">
+        <xs:annotation>
+          <xs:documentation>Setzt den Fonthandler. Voreinstellung ist fontforge.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="fontforge">
+              <xs:annotation>
+                <xs:documentation>Der alte und gut funktionierende Fonthandler. Funktioniert gut mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="harfbuzz">
+              <xs:annotation>
+                <xs:documentation>Der experimentelle neue Fonthandler der arabisch und andere komplexen Schreibsysteme verarbeiten kann.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="oldstylefigures">
         <xs:annotation>
