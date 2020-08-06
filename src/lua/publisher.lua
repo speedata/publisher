@@ -3149,10 +3149,12 @@ function parse_html_table(elt)
         if type(thiselt) == "table" then
             if thiselt[".__local_name"] == "tbody" then
                 tbl = parse_html_tbody(thiselt)
+            else
+                tbl = {}
+                table.insert(tbl,parse_html_tr(thiselt))
             end
         end
     end
-
     local tabular = publisher.tabular:new()
     tabular.width = xpath.get_variable("__maxwidth")
     local class = elt.class
@@ -3162,7 +3164,6 @@ function parse_html_table(elt)
     if css_rules and css_rules.width == "100%" then
         tabular.autostretch = "max"
     end
-
     tabular.tab = tbl
     local fontname = "text"
     local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]

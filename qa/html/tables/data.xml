@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-  <table><tbody><tr><td>foo</td></tr></tbody></table>
+  <elt>
+    <table><tbody><tr><td>foo</td></tr></tbody></table>
+  </elt>
+  <elt>
+    <table><tr><td>bar</td></tr></table>
+  </elt>
 </data>
