@@ -540,10 +540,7 @@
       <para>Hyperlink auf eine URL einfügen.</para>
     </description>
     <childelements>
-      <oneOrMore>
-        <cmd name="HSpace"/>
-        <cmd name="Value"/>
-      </oneOrMore>
+      <reference name="Textvalues"/>
     </childelements>
     <attribute en="href" type="text" optional="yes">
       <description xml:lang="en">
