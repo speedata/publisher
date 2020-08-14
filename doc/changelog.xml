@@ -1,12 +1,16 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.29" date="2020-08-14">
+      <en>Bugfix for ForAll and reduced result set (#261).</en>
+      <de>Fehlerkorrektur für ForAll und gefilterten Werten (#261).</de>
+    </entry>
     <entry version="3.9.28" date="2020-08-03">
-      <en>Bugfix for rowspan/colspan calculation.</en>
-      <de>Fehlerkorrektur für rowspan/colspan-Berechnung.</de>
+      <en>Bugfix for rowspan/colspan calculation. (#259)</en>
+      <de>Fehlerkorrektur für rowspan/colspan-Berechnung. (#259)</de>
     </entry>
     <entry version="3.9.27" date="2020-07-31">
-      <en>padding-left and padding-right on Paragraph.</en>
-      <de>padding-left und padding-right bei Paragraph.</de>
+      <en>padding-left and padding-right on Paragraph. (#258)</en>
+      <de>padding-left und padding-right bei Paragraph. (#258)</de>
     </entry>
     <entry version="3.9.26" date="2020-07-29">
       <en>New xpath functions firstmark and lastmark to get the first and the last marker on a page.</en>
