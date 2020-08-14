@@ -31,7 +31,7 @@ function commands.a( layoutxml,dataxml )
         if link then
             an.data = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D(mark%s)>>",link)
         else
-            an.data = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",href)
+            an.data = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/URI/URI(%s)>>",href)
         end
         local stl = node.new("whatsit","pdf_start_link")
         stl.action = an

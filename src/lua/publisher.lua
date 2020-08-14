@@ -1065,6 +1065,12 @@ function initialize_luatex_and_generate_pdf()
         options.verbosity = tonumber(os.getenv("SP_VERBOSITY"))
     end
 
+    if options.interaction == "false" then
+        options.interaction = false
+    elseif options.interaction == "true" then
+        options.interaction = true
+    end
+
     if options.showgrid == "false" then
         options.showgrid = false
     elseif options.showgrid == "true" then
