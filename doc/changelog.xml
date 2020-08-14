@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.30" date="2020-08-14">
+      <en>Fix hyperlinks (no border in acrobat, make them work).</en>
+      <de>Korrigiere Hyperinks (kein Rahmen im Acrobat, interaktion ist Voreinstellung).</de>
+    </entry>
     <entry version="3.9.29" date="2020-08-14">
       <en>Bugfix for ForAll and reduced result set (#261).</en>
       <de>Fehlerkorrektur für ForAll und gefilterten Werten (#261).</de>
