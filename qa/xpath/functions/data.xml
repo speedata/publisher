@@ -2,4 +2,11 @@
     <bar>  Text  </bar>
     <upper>upper-case</upper>
     <lower>LOWER-case</lower>
+    <tosort>
+        <elt value="one" />
+        <elt value="two" />
+        <elt value="three" />
+        <elt value="three" />
+        <elt value="three" />
+    </tosort>
 </data>

@@ -6,6 +6,11 @@
   <DefineColor name="red" value="#f00"/>
 
   <Record element="data">
+
+    <SetVariable variable="unsorted" select="tosort/*"/>
+    <SetVariable variable="sorted">
+      <SortSequence select="$unsorted" criterion="value" removeduplicates="value"/>
+    </SetVariable>
     <PlaceObject>
       <Textblock>
         <ForAll select='tokenize(replace("#bar #baz Some other text", "(#ba.)\s*","$1x!x"), "x!x")'>
@@ -21,6 +26,11 @@
             </Otherwise>
           </Switch>
         </ForAll>
+
+        <ForAll select="$sorted">
+          <Paragraph><Value select="concat('elt: ', @value,', pos: ', position(), ', last(): ', last())"/></Paragraph>
+        </ForAll>
+
         <!-- foo does not exist -->
         <Paragraph><Value select="foo = ''"/></Paragraph>
         <Paragraph><Value select="count(foo)"/></Paragraph>

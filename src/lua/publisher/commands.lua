@@ -863,6 +863,9 @@ function commands.forall( layoutxml,dataxml )
 
     for i = start,limit do
         publisher.xpath.set_variable("__position",i)
+        if type(selection[i]) == "table" then
+            selection[i][".__context"] = selection
+        end
         tmp_tab = publisher.dispatch(layoutxml,selection[i])
         for j=1,#tmp_tab do
             tab[#tab + 1] = tmp_tab[j]
