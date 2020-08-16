@@ -21,7 +21,7 @@ commands = {}
 --- -----
 --- Insert a hyperlink into the PDF.
 function commands.a( layoutxml,dataxml )
-    local interaction = publisher.options.interaction
+    local interaction = ( publisher.options.interaction ~= false )
     p = paragraph:new()
 
     if interaction then
