@@ -1,5 +1,3 @@
-[[ch-htmlreferenz]]
-= HTML Referenz
 
 Die HTML-Unterstützung wird in der Version 3.9 stark erweitert. Hier werden die unterstützten HTML Elemente aufgelistet. Siehe auch das Kapitel über <<ch-html>>.
 

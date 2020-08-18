@@ -9,3 +9,5 @@ publisher.protocol
 compare-report.html
 /.vscode
 /publisher.code-workspace
+src/lua/nodetree.lua
+TODO

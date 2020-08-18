@@ -67,7 +67,7 @@ include::grundlagen.adoc[]
 include::programmierung.adoc[]
 include::bilder.adoc[]
 include::tabellen.adoc[]
-include::kaphtml.adoc[]
+// include::kaphtml.adoc[]
 include::fortgeschrittenethemen.adoc[]
 include::kochbuch.adoc[]
 
@@ -84,7 +84,11 @@ include::massangaben.adoc[]
 include::xpathfunktionen.adoc[]
 include::variablen.adoc[]
 include::schemazuweisen.adoc[]
-include::htmlreferenz.adoc[]
+
+// [[ch-htmlreferenz]]
+// = HTML Referenz
+// include::htmlreferenz.adoc[leveloffset=+1]
+
 include::changelog.adoc[]
 include::glossar.adoc[]
 
