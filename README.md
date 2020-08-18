@@ -27,6 +27,19 @@ Can I use this in production?
 
 Yes. Absolutely. We release stable (long term support) versions once in a while which are heavily tested in commercial environments and we release development versions often. Note that these development are still safe to use, they just might contain some experimental new features.
 
+Funding
+-------
+
+This project heavily depends on business and user funding.
+Every bug report is welcome and every feature request is carefully considered.
+But without time to spend, this is very hard for me to work on.
+I might add the “needs funding” label on a bug report or feature request once in a while if I think that I can't implement this while doing other things.
+
+To support the sustainable development of the speedata Publisher, please consider clicking on the [“sponsor” button](https://github.com/sponsors/speedata) or request a support and maintenance pack by contacting [speedata](https://www.speedata.de/imprint/).
+
+Next features I am working on are “Print CSS” support and i18n (typesetting Arabic and other non-trivial writing scripts), so please help to speed up development.
+
+
 Installation
 ------------
 
