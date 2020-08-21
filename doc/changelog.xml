@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.32" date="2020-08-21">
+        <en>Experimental (unsupported) inclusion of harfbuzz renderer.</en>
+        <de>Experimenteller (nicht unterstützter) harfbuzz shaper.</de>
+    </entry>
     <entry version="3.9.31" date="2020-08-16">
       <en>Allow interactions (hyperlinks) as a default.</en>
       <de>Interaktionen (Hyperlinks) als Voreinstellung.</de>
