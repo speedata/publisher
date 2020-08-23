@@ -88,7 +88,6 @@ end
 --- requests the same font in a different size. We also cache  the `to_unicode` mapping.
 --- Only the size dependent values are computed.
 local lookup_fonttable_from_filename = {}
-local harfbuzz = require('luaharfbuzz')
 
 -- The harfbuzz version of the fontloader.
 function define_font_hb( name, size, extra_parameter )

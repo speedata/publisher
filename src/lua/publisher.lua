@@ -17,6 +17,10 @@ local url  = require("socket_url")
 local spotcolors = require("spotcolors")
 
 xpath = do_luafile("xpath.lua")
+if os.type ~= "windows" then
+    harfbuzz = require('luaharfbuzz')
+end
+
 
 local commands     = require("publisher.commands")
 local page         = require("publisher.page")
@@ -3522,7 +3526,6 @@ function remove_last_whitespace ( tbl )
         end
     end
 end
-local harfbuzz = require('luaharfbuzz')
 
 --- Create a `\hbox`. Return a nodelist. Parameter is one of
 ---
