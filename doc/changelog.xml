@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.33" date="2020-08-23">
+        <en>Disable harfbuzz on windows.</en>
+        <de>harfbuzz auf Windows deaktivieren.</de>
+    </entry>
     <entry version="3.9.32" date="2020-08-21">
         <en>Experimental (unsupported) inclusion of harfbuzz renderer.</en>
         <de>Experimenteller (nicht unterstützter) harfbuzz shaper.</de>
