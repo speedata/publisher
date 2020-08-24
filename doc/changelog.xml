@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.34" date="2020-08-24">
+        <en>Safe require harfbuzz library, new binaries for Windows/Mac/Linux.</en>
+        <de>Sicheres Laden von harfbuzz, neue Binaries für Windows/Mac/Linux.</de>
+    </entry>
     <entry version="3.9.33" date="2020-08-23">
         <en>Disable harfbuzz on windows.</en>
         <de>harfbuzz auf Windows deaktivieren.</de>
