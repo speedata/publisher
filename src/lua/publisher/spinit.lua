@@ -18,8 +18,13 @@ unpack = unpack or table.unpack
 
 function warning(...)
     local text = { ... }
-    local unpacked = string.format( "[page %d] ",publisher.current_pagenumber ) .. string.format(unpack(text))
-    publisher.messages[#publisher.messages + 1] = { unpacked , "warning" }
+    local unpacked
+    if publisher then
+        unpacked = string.format( "[page %d] ",publisher.current_pagenumber ) .. string.format(unpack(text))
+        publisher.messages[#publisher.messages + 1] = { unpacked , "warning" }
+    else
+        unpacked = string.format( "%s",string.format(unpack(text)))
+    end
     errorlog:write("Warning: " .. unpacked .. "\n")
     texio.write("Warning: " .. unpacked .. "\n")
 end
@@ -32,8 +37,13 @@ function err(...)
     if type(text[1]) == "number" then
         errorcode = table.remove(text,1)
     end
-    local unpacked = string.format( "[page %d] ",publisher.current_pagenumber ) .. string.format(unpack(text))
-    publisher.messages[#publisher.messages + 1] = { unpacked , "error", errorcode }
+    local unpacked
+    if publisher then
+        unpacked = string.format( "[page %d] ",publisher.current_pagenumber ) .. string.format(unpack(text))
+        publisher.messages[#publisher.messages + 1] = { unpacked , "error", errorcode }
+    else
+        unpacked = string.format( "%s",string.format(unpack(text)))
+    end
     errcount =  errcount + 1
     errorlog:write("Error: " .. unpacked .. "\n")
     texio.write("Error: " .. unpacked .. "\n")
@@ -367,8 +377,12 @@ local function setup()
     end
 end
 
+errorlog = io.open(string.format("%s.protocol",tex.jobname),"ab")
+errorlog:write("---------------------------------------------\n")
+
 --- This is the entry point in the publishing run and called from the TeX file (`publisher.tex`).
 require("publisher")
+
 
 function main_loop()
     log("Start processing")
@@ -377,8 +391,6 @@ function main_loop()
     exit(true)
 end
 
-errorlog = io.open(string.format("%s.protocol",tex.jobname),"ab")
-errorlog:write("---------------------------------------------\n")
 
 starttime = os.gettimeofday()
 

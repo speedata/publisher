@@ -91,6 +91,10 @@ local lookup_fonttable_from_filename = {}
 
 -- The harfbuzz version of the fontloader.
 function define_font_hb( name, size, extra_parameter )
+    if not hasharfbuzz then
+        err("Can't use mode=\"harfbuzz\" on LoadFontfile without harfbuzz library")
+        return define_font(name,size,extra_parameter)
+    end
     local fonttable
     local filename_with_path
         filename_with_path = kpse.find_file(name)

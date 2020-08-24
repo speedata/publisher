@@ -17,8 +17,10 @@ local url  = require("socket_url")
 local spotcolors = require("spotcolors")
 
 xpath = do_luafile("xpath.lua")
-if os.type ~= "windows" then
-    harfbuzz = require('luaharfbuzz')
+
+hasharfbuzz, harfbuzz = pcall(require,'luaharfbuzz')
+if not hasharfbuzz then
+    warning("harfbuzz library not found")
 end
 
 
