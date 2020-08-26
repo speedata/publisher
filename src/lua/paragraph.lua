@@ -39,6 +39,7 @@ function Paragraph:add_italic_bold( nodelist,parameter )
 end
 
 function Paragraph:add_to_nodelist( new_nodes )
+    if not new_nodes then return nil end
     if self.nodelist == nil then
         self.nodelist = new_nodes
     else
