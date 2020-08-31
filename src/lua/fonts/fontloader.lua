@@ -280,6 +280,9 @@ function define_font(name, size,extra_parameter)
     if (size < 0) then size = (- 655.36) * size end
     -- Some fonts have `units_per_em` set to 0. I am not sure if setting this to
     -- 1000 in that case has any drawbacks.
+    if not fonttable.units_per_em then
+        err("something went wrong defining %s. Perhaps you have combined harfbuzz with fallback? Please file a bug report.",name)
+    end
     if fonttable.units_per_em == 0 then fonttable.units_per_em = 1000 end
     local mag = size / fonttable.units_per_em
 
