@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="3.9">
+    <entry version="3.9.36" date="2020-09-07">
+        <en>New Option reportmissingglyphs="warning".</en>
+        <de>Neue Option reportmissingglyphs="warning".</de>
+    </entry>
     <entry version="3.9.35" date="2020-08-26">
         <en>Bugfix for empty Value tag.</en>
         <de>Fehlerkorrektur bei leerem Value-Element.</de>
