@@ -4840,6 +4840,7 @@ function get_language(id_or_locale_or_name)
     if language_mapping[id_or_locale_or_name] then
         locale = language_mapping[id_or_locale_or_name]
     end
+    locale = string.lower(locale)
     if languages[locale] then
         return languages[locale]
     end
