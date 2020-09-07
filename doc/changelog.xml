@@ -1,5 +1,11 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="3.9">
+  <chapter version="4.0">
+    <entry version="4.0.0" date="2020-09-07">
+        <en>Release stable version 4.0.0.</en>
+        <de>Veröffentliche stabile Version 4.0.0.</de>
+    </entry>
+  </chapter>
+  <chapter version="3.9" date="2020-09-07">
     <entry version="3.9.36" date="2020-09-07">
         <en>New Option reportmissingglyphs="warning".</en>
         <de>Neue Option reportmissingglyphs="warning".</de>
