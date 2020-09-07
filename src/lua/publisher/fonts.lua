@@ -492,7 +492,11 @@ function post_linebreak( head, list_head)
             if reportmissingglyphs then
                 local thisfont = used_fonts[head.font]
                 if thisfont and not thisfont.characters[head.char] then
-                    err("Glyph %x (hex) is missing from the font %q",head.char,thisfont.name)
+                    if reportmissingglyphs == "warning" then
+                        warning("Glyph %x (hex) is missing from the font %q",head.char,thisfont.name)
+                    else
+                        err("Glyph %x (hex) is missing from the font %q",head.char,thisfont.name)
+                    end
                 end
             end
             local att_underline = node.has_attribute(head, publisher.att_underline)

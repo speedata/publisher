@@ -2969,6 +2969,11 @@
                 <xs:documentation>Zeige keine Fehlermeldung</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="warning">
+              <xs:annotation>
+                <xs:documentation>Zeige eine Warnung</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>

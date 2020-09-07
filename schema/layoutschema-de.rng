@@ -3030,6 +3030,8 @@
                   <a:documentation>Zeige Fehlermeldung (Voreinstellung)</a:documentation>
                   <value>no</value>
                   <a:documentation>Zeige keine Fehlermeldung</a:documentation>
+                  <value>warning</value>
+                  <a:documentation>Zeige eine Warnung</a:documentation>
                </choice>
             </attribute>
          </optional>

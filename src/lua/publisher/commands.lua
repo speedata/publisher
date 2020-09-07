@@ -2020,7 +2020,7 @@ function commands.options( layoutxml,dataxml )
     publisher.options.colorprofile        = publisher.read_attribute(layoutxml,dataxml,"colorprofile","rawstring",publisher.options.colorprofile)
     publisher.options.crop                = publisher.read_attribute(layoutxml,dataxml,"crop",        "booleanorlength",publisher.options.crop or false)
     local randomseed                      = publisher.read_attribute(layoutxml,dataxml,"randomseed",  "number")
-    publisher.options.reportmissingglyphs = publisher.read_attribute(layoutxml,dataxml,"reportmissingglyphs", "boolean",publisher.options.reportmissingglyphs or true)
+    local reportmissingglyphs             = publisher.read_attribute(layoutxml,dataxml,"reportmissingglyphs", rawstring)
     publisher.options.interaction         = publisher.read_attribute(layoutxml,dataxml,"interaction", "boolean", publisher.options.interaction)
     local imagenotfound                   = publisher.read_attribute(layoutxml,dataxml,"imagenotfound", "string","error")
     local mainlanguage                    = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","")
@@ -2029,6 +2029,7 @@ function commands.options( layoutxml,dataxml )
     if default_area then
         publisher.default_area = default_area
     end
+
 
     publisher.options.imagenotfounderror = imagenotfound == "error"
     if mainlanguage ~= "" then
@@ -2042,6 +2043,15 @@ function commands.options( layoutxml,dataxml )
         local uuid = require "uuid"
         uuid.randomseed(randomseed)
     end
+    if reportmissingglyphs == true or reportmissingglyphs == "yes" then
+        publisher.options.reportmissingglyphs = true
+    elseif reportmissingglyphs == false or reportmissingglyphs == "no" then
+        publisher.options.reportmissingglyphs = false
+    elseif reportmissingglyphs == "warning" then
+        publisher.options.reportmissingglyphs = "warning"
+    end
+
+
 end
 
 --- Output

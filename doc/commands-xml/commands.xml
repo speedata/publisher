@@ -5170,6 +5170,10 @@
         <description xml:lang="en"><para>Do not show an error message</para></description>
         <description xml:lang="de"><para>Zeige keine Fehlermeldung</para></description>
       </choice>
+      <choice en="warning" since="3.9.36">
+        <description xml:lang="en"><para>Show a warning</para></description>
+        <description xml:lang="de"><para>Zeige eine Warnung</para></description>
+      </choice>
     </attribute>
     <attribute en="startpage" type="number" optional="yes">
       <description xml:lang="en">

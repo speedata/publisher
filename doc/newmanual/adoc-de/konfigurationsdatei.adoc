@@ -84,6 +84,8 @@ erkannt. Folgende Optionen werden unterstützt:
   Kommando für das automatische Öffnen der Dokumentation bzw. PDF-Datei. Für MacOS X sollte das `open` sein, für Linux `xdg-open` oder `exo-open` (xfce).
 `pathrewrite`::
   Kommaseparierte Liste der Form Pfadteil=Pfadteil. Beispiel: `/media/=%(projectdir)s/myfiles/`. Das würde absolute Pfadangaben wie `file:///media/XYZ` in `file:///Pfad/zum/Projekt/myfiles/XYZ` ändern.
+`reportmissingglyphs`::
+   Sollen angeforderte aber fehlende Zeichen als Fehler oder als Warnung gemeldet werden? Die erlaubten Werte sind `true`, `false`, und `warning`. `false` schaltet die Ausgabe aus.
 `runs`::
   Setzt die Anzahl der Durchläufe fest.
 `startpage`::

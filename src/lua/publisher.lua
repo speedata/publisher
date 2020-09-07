@@ -1097,10 +1097,12 @@ function initialize_luatex_and_generate_pdf()
         options.showgridallocation = true
     end
 
-    if options.reportmissingglyphs == "false" then
+    if options.reportmissingglyphs == "false" or options.reportmissingglyphs == "no" then
         options.reportmissingglyphs = false
-    elseif options.reportmissingglyphs == "true" then
+    elseif options.reportmissingglyphs == "true" or options.reportmissingglyphs == "yes" then
         options.reportmissingglyphs = true
+    elseif options.reportmissingglyphs == "warning" then
+        options.reportmissingglyphs = "warning"
     end
 
     if options.imagehandler then

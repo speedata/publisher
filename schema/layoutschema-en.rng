@@ -3030,6 +3030,8 @@
                   <a:documentation>Show error message (default)</a:documentation>
                   <value>no</value>
                   <a:documentation>Do not show an error message</a:documentation>
+                  <value>warning</value>
+                  <a:documentation>Show a warning</a:documentation>
                </choice>
             </attribute>
          </optional>

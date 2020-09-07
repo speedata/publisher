@@ -78,6 +78,8 @@ The format of the file is important, otherwise it won’t be recognized. The fol
    Command that will be run to open the documentation and the PDF file. For MacOS X this should be `open`, for Linux `xdg-open` or `exo-open` (xfce).
 `pathrewrite`::
    Comma separated list of entries of the form A=B which replace parts in `file:///media/XYZ` to `file:///path/to/project/myfiles/XYZ`. Useful when you have absolute paths in the data which must be changed during the publishing process.
+`reportmissingglyphs`::
+   Should requested but missing glyphs be reported as an error or as a warning? The allowed values are `true`, `false`, or `warning`. `false` disables the reporting.
 `runs`::
    Set the number of runs.
 `startpage`::
