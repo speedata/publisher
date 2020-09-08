@@ -1,4 +1,10 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="4.2">
+    <entry version="4.1.0" date="2020-09-08">
+        <en>Bugfix for locale setting.</en>
+        <de>Fehlerkorrektur für Spracheinstellungen.</de>
+    </entry>
+  </chapter>
   <chapter version="4.0">
     <entry version="4.0.0" date="2020-09-07">
         <en>Release stable version 4.0.0.</en>
