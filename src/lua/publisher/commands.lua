@@ -11,7 +11,6 @@ file_start("commands.lua")
 require("publisher.fonts")
 require("publisher.tabular")
 local spotcolors = require("spotcolors")
-local paragraph  = require("paragraph")
 local par  = require("par")
 do_luafile("css.lua")
 
@@ -2185,8 +2184,12 @@ function commands.pagetype(layoutxml,dataxml)
     publisher.masterpages[#publisher.masterpages + 1] = { is_pagetype = test, res = tmp_tab, name = pagetypename,ns=layoutxml[".__ns"]}
 end
 
---- Par
-function commands.par( layoutxml, dataxml )
+--- Paragraph
+--- ---------
+--- A paragraph is just a bunch of text that is not yet typeset.
+--- It can have a font face, color,... but these can be also given
+--- On the surrounding element (`Textblock`).
+function commands.paragraph( layoutxml, dataxml )
     local allowbreak    = publisher.read_attribute(layoutxml,dataxml,"allowbreak","rawstring")
     local fontname  = publisher.read_attribute(layoutxml,dataxml,"fontface",  "rawstring")
     local colorname = publisher.read_attribute(layoutxml,dataxml,"color",     "rawstring")
@@ -2245,159 +2248,6 @@ function commands.par( layoutxml, dataxml )
     end
 
     return p
-end
-
---- Paragraph
---- ---------
---- A paragraph is just a bunch of text that is not yet typeset.
---- It can have a font face, color,... but these can be also given
---- On the surrounding element (`Textblock`).
-function commands.paragraph( layoutxml,dataxml )
-    local class = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
-    local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
-
-    local css_rules = publisher.css:matches({element = 'p', class=class,id=id}) or {}
-
-    local textformat    = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
-    local allowbreak    = publisher.read_attribute(layoutxml,dataxml,"allowbreak","rawstring")
-    local fontname      = publisher.read_attribute(layoutxml,dataxml,"fontface",  "rawstring")
-    local colorname     = publisher.read_attribute(layoutxml,dataxml,"color",     "rawstring")
-    local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
-    local role          = publisher.read_attribute(layoutxml,dataxml,"role",      "string")
-    local paddingleft   = publisher.read_attribute(layoutxml,dataxml,"padding-left","width_sp")
-    local paddingright  = publisher.read_attribute(layoutxml,dataxml,"padding-right","width_sp")
-
-    if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
-
-    publisher.allowbreak = allowbreak
-    colorname = colorname or css_rules["color"]
-    fontname  = fontname  or css_rules["font-family"]
-
-    local save_fontfamily = publisher.current_fontfamily
-    local fontfamily
-    if fontname then
-        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
-        if fontfamily == nil then
-            err("Fontfamily %q not found.",fontname)
-            fontfamily = 0
-        end
-        publisher.current_fontfamily = fontfamily
-    else
-        fontfamily = 0
-    end
-
-    local languagecode
-
-    if language_name then
-        languagecode = publisher.get_languagecode(language_name)
-    else
-        languagecode = publisher.defaultlanguage
-    end
-
-    local colorindex
-    if colorname then
-        if not publisher.colors[colorname] then
-            err("Color %q is not defined yet.",colorname)
-        else
-            colorindex = publisher.colors[colorname].index
-        end
-    end
-
-    publisher.intextblockcontext = publisher.intextblockcontext + 1
-    local a = paragraph:new(textformat)
-    a.padding_left = paddingleft
-    a.padding_right = paddingright
-    local objects = {}
-    local save_color
-    if colorname then
-        save_color = publisher.current_fgcolor
-        publisher.current_fgcolor = colorindex
-    end
-
-    local tab = publisher.dispatch(layoutxml,dataxml)
-
-    if colorname then
-        publisher.current_fgcolor = save_color
-    end
-
-    for i,j in ipairs(tab) do
-        -- w("Paragraph Elementname = %q",tostring(publisher.elementname(j)))
-        local contents = publisher.element_contents(j)
-        -- w("Paragraph type(contents) %q", type(contents))
-        if publisher.elementname(j) == "Value" and type(contents) == "table" and #contents == 1 and type(contents[1]) == "string"  then
-            objects[#objects + 1] = contents[1]
-        elseif publisher.elementname(j) == "Value" and type(contents) == "table" then
-            if i == 1 then publisher.remove_first_whitespace(contents) end
-            if i == #tab then publisher.remove_last_whitespace(contents) end
-            for i=1,#contents do
-                if type(contents[i]) == "table" then
-                    objects[#objects + 1] = publisher.parse_html(contents[i],{allowbreak = allowbreak})
-                    if contents[i][".__local_name"] == "p" and i < #contents then
-                        objects[#objects + 1] = "\n"
-                    end
-                else
-                    objects[#objects + 1] = contents[i]
-                end
-            end
-            publisher.remove_last_whitespace(objects)
-        elseif publisher.elementname(j) == "Initial" then
-            a.initial = contents
-        else
-            objects[#objects + 1] = contents
-        end
-    end
-
-    publisher.allowbreak = nil
-    -- let's check if the start of the nodelist is penalty / hlist / penalty from
-    -- a leading hspace (see #226)
-    -- Not sure that this is the proper fix, but it seems to work.
-    if objects and objects[1] and type(objects[1]) == "table" and node.is_node(objects[1].nodelist) then
-        local nl = objects[1].nodelist
-        if nl.id == publisher.penalty_node and nl.next and nl.next.id == publisher.hlist_node and nl.next.next and nl.next.next.id == publisher.penalty_node and nl.next.next.next then
-            for i=1,3 do
-                nl = node.free(nl)
-            end
-            nl.prev = nil
-            objects[1].nodelist = nl
-        end
-    end
-
-    for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = fontfamily, languagecode = languagecode, allowbreak = allowbreak})
-    end
-
-    -- PDF/UA
-    if publisher.options.format == "PDF/UA" then
-        local bdc = node.new("whatsit","pdf_literal")
-        node.set_attribute(bdc,publisher.att_role, publisher.get_rolenum(role))
-
-        local emc = node.new("whatsit","pdf_literal")
-        bdc.data = ""
-        emc.data = "EMC"
-        bdc.mode = 1
-        emc.mode = 1
-        a.nodelist = node.insert_before(a.nodelist,a.nodelist,bdc)
-
-        local tail = node.tail(a.nodelist)
-        node.insert_after(a.nodelist,tail, emc)
-    end
-
-    if #objects == 0 then
-        -- nothing got through, why?? check
-        -- warning("No contents found in paragraph.")
-        a:append("",{fontfamily = fontfamily,languagecode = languagecode})
-    end
-
-    a:set_color(colorindex)
-    publisher.intextblockcontext = publisher.intextblockcontext - 1
-    publisher.current_fontfamily = save_fontfamily
-    -- We used to set a strut (an invisible rule) at the beginning of each paragraph
-    -- to maintain a certain line height.
-    -- This is problematic because sometimes the font is not set when we collect
-    -- material for a paragraph (when fontface is not given).
-    -- So how high should the rule be?
-    a.nodelist = publisher.addstrut(a.nodelist)
-    return a
 end
 
 --- PDFOptions
@@ -3985,7 +3835,7 @@ function commands.text(layoutxml,dataxml)
             end
 
             if #state.objects > 0 then
-                local obj1, obj2 = paragraph.vsplit(state.objects,parameter)
+                local obj1, obj2 = publisher.vsplit(state.objects,parameter)
                 -- if state.prevobj1 == obj1 then
                 --     err("Internal error vsplit / objects too high. Some objects are discarded from the output.")
                 --     state.objects = {}

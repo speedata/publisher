@@ -31,7 +31,6 @@ local html         = require("publisher.html")
 local fonts        = require("publisher.fonts")
 local uuid         = require("uuid")
 
-paragraph  = require("paragraph")
 par        = require("par")
 uuid.randomseed(tex.randomseed)
 
@@ -615,8 +614,7 @@ local dispatch_table = {
     Overlay                 = commands.overlay,
     Pageformat              = commands.page_format,
     Pagetype                = commands.pagetype,
-    Par                     = commands.par,
-    Paragraph               = commands.par,
+    Paragraph               = commands.paragraph,
     PDFOptions              = commands.pdfoptions,
     PlaceObject             = commands.place_object,
     Position                = commands.position,
@@ -2939,263 +2937,10 @@ function parse_html( elt, parameter )
     parameter = parameter or {}
     if elt.typ == "csshtmltree" then
         return html.parse_html_new(elt, parameter.maxwidth_sp)
+    else
+        err("This should not happen (parse_html)")
     end
-    local a = par:new(nil,"parse_html",parameter)
-    parameter = parameter or {}
-    local bold,italic,underline,allowbreak
-    local backgroundcolor   = parameter.backgroundcolor
-    local bg_padding_top    = parameter.bg_padding_top
-    local bg_padding_bottom = parameter.bg_padding_bottom
-
-    if parameter.underline then
-        underline = 1
-    end
-    if parameter.bold or elt["font-weight"] == "bold" then
-        bold = 1
-    end
-    if parameter.italic then
-        italic = 1
-    end
-    allowbreak = parameter.allowbreak
-
-    local defaults = {
-       fontfamily = 0,
-       bold = bold,
-       italic = italic,
-       underline = underline,
-       allowbreak = allowbreak,
-       backgroundcolor=backgroundcolor,
-       bg_padding_top = bg_padding_top,
-       bg_padding_bottom = bg_padding_bottom,
-       letterspacing = parameter.letterspacing
-    }
-    local options = setmetatable({}, {__index = defaults})
-
-    if elt[".__local_name"] then
-        local eltname = string.lower(elt[".__local_name"])
-        if eltname == "table" then
-            -- Evil. Build a table in Publisher-mode and send it to the output
-            local x = parse_html_table(elt)
-            x = node.vpack(x)
-            x.shift = x.height * 0.25
-            a:append({x})
-            return a
-        elseif eltname == "b" or eltname == "strong" then
-            options.bold = 1
-        elseif eltname == "i" or eltname == "em" then
-            options.italic = 1
-        elseif eltname == "u" then
-            options.underline = 1
-            if elt.class then
-                local css_rules = css:matches({element = 'u', class=elt.class}) or {}
-                if css_rules["border-style"] == "dashed" then
-                    options.underline = 2
-                end
-            end
-        elseif eltname == "sub" then
-            options.subscript = 1
-        elseif eltname == "sup" then
-            options.subscript = 2
-        elseif eltname == "li" then
-            options.prepend = "•"
-        elseif eltname == "ul" then
-            options.indent = tex.sp("5mm")
-        elseif eltname == "ol" then
-            local counter = 0
-            for i=1,#elt do
-                if type(elt[i]) == "string" then
-                    -- ignore
-                elseif type(elt[i]) == "table" then
-                    -- remove last br in the list
-                    if elt[i][#elt[i]] and elt[i][#elt[i]][".__name"] == "br" then
-                        elt[i][#elt[i]] = nil
-                    end
-                    counter = counter + 1
-                    a:append(node.copy(marker))
-                    local num = number_hbox(counter,tex.sp("4mm"))
-                    a:append(num)
-                    a:append(parse_html(elt[i]),options)
-                    a:append("\n",{})
-                end
-            end
-            a:append(node.copy(marker))
-            a:append(node.new(glue_node))
-            return a
-        elseif eltname == "a" then
-            if elt.href == nil then
-                warning("html a link has no href")
-                for i=1,#elt do
-                    if type(elt[i]) == "string" then
-                        a:append(elt[i],options)
-                    elseif type(elt[i]) == "table" then
-                        a:append(parse_html(elt[i]),options)
-                    end
-                end
-            else
-                hyperlinks[#hyperlinks + 1] = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",elt.href)
-                options.hyperlink = #hyperlinks
-            end
-        elseif eltname=="br" then
-            options.newline = true
-            a:append("\n",options)
-        elseif eltname == "p" then
-            -- ignore now, append \n after the end tag
-        elseif #elt == 0 then
-            -- dummy: insert U+200B ZERO WIDTH SPACE which results in a penalty
-            -- a:append("\xE2\x80\x8B")
-            -- a:append(addstrut())
-        else
-            local css_rules = css:matches({element = eltname, class=elt.class}) or {}
-            if css_rules["color"] then
-                options.color = colors[css_rules["color"]].index
-            end
-            local bgcolor = css_rules["background-color"]
-            if bgcolor then
-                options.backgroundcolor = colors[bgcolor].index
-            end
-            local bg_padding_top = css_rules["background-padding-top"]
-            if bg_padding_top then
-                options.bg_padding_top = bg_padding_top
-            end
-            local bg_padding_bottom = css_rules["background-padding-bottom"]
-            if bg_padding_bottom then
-                options.bg_padding_bottom = bg_padding_bottom
-            end
-            local td = css_rules["text-decoration"]
-            if td and string.match(td,"underline") then
-                options.underline = 1
-            end
-            local ff = css_rules["font-family"]
-            if ff then
-                local tmp = publisher.fonts.lookup_fontfamily_name_number[ff]
-                if tmp then
-                    options.fontfamily = tmp
-                end
-            end
-        end
-    end
-    -- Recurse into the children...
-    for i=1,#elt do
-        local typ = type(elt[i])
-        if typ == "string" or typ == "number" or typ == "boolean" then
-            a:append({elt[i]},options)
-        elseif typ == "table" then
-            local tmp = parse_html(elt[i],options)
-            a:append(tmp,options)
-        end
-    end
-    if elt[".__local_name"] then
-        local eltname = string.lower(elt[".__local_name"])
-        if eltname == "p"  then
-            a:append("\n",{discardallowed = true})
-        end
-    end
-    return a
 end
-
-function parse_html_table(elt)
-    local tbl
-    for i=1,#elt do
-        local thiselt = elt[i]
-        if type(thiselt) == "table" then
-            if thiselt[".__local_name"] == "tbody" then
-                tbl = parse_html_tbody(thiselt)
-            else
-                tbl = {}
-                table.insert(tbl,parse_html_tr(thiselt))
-            end
-        end
-    end
-    local tabular = publisher.tabular:new()
-    tabular.width = xpath.get_variable("__maxwidth")
-    local class = elt.class
-    local id = elt.id
-    local css_rules = publisher.css:matches({element = "table", class=class,id=id}) or {}
-
-    if css_rules and css_rules.width == "100%" then
-        tabular.autostretch = "max"
-    end
-    tabular.tab = tbl
-    local fontname = "text"
-    local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
-    local save_fontfamily = publisher.current_fontfamily
-    publisher.current_fontfamily = fontfamily
-
-    if fontfamily == nil then
-        err("Fontfamily %q not found.",fontname or "???")
-        fontfamily = 1
-    end
-
-    tabular.fontfamily = fontfamily
-    tabular.options ={ ht_max=99999*2^16 }
-    tabular.padding_left   = 0
-    tabular.padding_top    = 0
-    tabular.padding_right  = 0
-    tabular.padding_bottom = 0
-    tabular.colsep         = tex.sp("2pt")
-    tabular.rowsep         = 0
-
-    local n = tabular:make_table()
-    return n[1]
-end
-
-function parse_html_tbody(body)
-    local ret = {}
-    for j=1,#body do
-        local tr = body[j]
-        if type(tr) == "table" then
-            if tr[".__local_name"] ~= "tr" then
-                err("not a table row")
-                return
-            end
-            ret[#ret + 1] = parse_html_tr(tr)
-        end
-    end
-    return ret
-end
-
-function parse_html_tr(tr)
-    local ret = {}
-    for j=1,#tr do
-        local td = tr[j]
-        if type(td) == "table" then
-            if td[".__local_name"] ~= "td" and td[".__local_name"] ~= "th" then
-                err("not a table cell")
-                return
-            end
-            local tmp = {}
-            for i=1,#td do
-                local class = td.class
-                local id = td.id
-                local css_rules = publisher.css:matches({element = "td", class=class,id=id}) or {}
-                local textalign
-                if css_rules then
-                    textalign = css_rules["text-align"]
-                end
-
-                if type(td[i]) == "table" then
-                    local a = parse_html(td[i])
-                    set_fontfamily_if_necessary(a.nodelist,current_fontfamily)
-                    if td[".__local_name"] == "th" then
-                        a.textformat = "__centered"
-                        a:add_italic_bold(a.nodelist, {bold = 1})
-                    else
-                        if textalign == "right" then a.textformat = "__rightaligned" end
-                    end
-                    tmp[#tmp + 1] = { elementname = "Paragraph" , contents = a }
-                elseif type(td[i]) == "string" then
-                    local a = par:new()
-                    if textalign == "right" then a.textformat = "__rightaligned" end
-                    a:append(td[i])
-                    tmp[#tmp + 1] = { elementname = "Paragraph" , contents = a }
-                end
-            end
-            ret[#ret + 1] = { elementname = "Td", contents = tmp}
-        end
-    end
-    return { elementname = "Tr", contents = ret}
-end
-
 
 --- Look for `user_defined` at end of page (ship-out) and runs actions encoded in them.
 function find_user_defined_whatsits( head, parent )
@@ -5335,6 +5080,267 @@ function getheight( relative_framenumber )
 end
 
 
+-- Return true iff the paragraph has at lines or less text
+-- lines left over and is not at the last line.
+function less_or_equal_than_n_lines( nodelist, lines )
+    if lines == 0 then return false end
+    local has_n_lines = false
+    for i=1,lines - 1 do
+        if nodelist.id == publisher.hlist_node and nodelist.next then
+            nodelist = nodelist.next
+        else
+            if i == 1 then
+                return false
+            end
+        end
+    end
+    return nodelist.next == nil
+end
+
+function join_table_to_box(objects)
+    for i=1,#objects - 1 do
+        objects[i].next = objects[i+1]
+    end
+    if objects[1] == nil then
+        return nil
+    end
+    node.slide(objects[1])
+
+    local vbox = node.vpack(objects[1])
+    node.set_attribute(vbox,publisher.att_origin,publisher.origin_join_table_box)
+    return vbox
+end
+
+
+--- vsplit
+--- ======
+--- The idea of vsplit is to take a long paragraph and break it into small pieces of text
+--- ![Idea of vsplit](img/vsplit.png)
+--- Of course its not without things to take care of.
+---
+---  1. Orphans and widows
+---  1. The size of the destination area
+---
+--- Input
+--- -----
+--- The table `objects_t` is an array of vboxes, containing material for the current frame of height
+--- `frameheight`. It is not defined if the height of the vboxes is larger than the height of the frame.
+--- Therefore we dissect all the paragraphs and place them into one large list, the `hlist`.
+---
+--- Output
+--- ------
+--- The return value is a vbox that should be placed in the PDF and has a height <= frameheight. If there
+--- is material left over for a next area, the `objects_t` table is changed and vsplit gets called again.
+--- Making `objects_t` empty is a signal for the function calling vsplit (commands/text) that all
+--- text has been put into the PDF.
+function vsplit( objects_t, parameter )
+    --- Step 1: collect all the objects in one big table.
+    --- ------------------------------------------------
+    --- The objects that are not allowed to break are temporarily
+    --- collected in a special vertical list that gets vpacked to
+    --- disallow an "area" break.
+    ---
+    --- ![Step 1](img/vsplit2.png)
+    --- (assuming that there is a `break-below="no"` for the text format of the header).
+    local balance = parameter.balance
+    local valignlast = parameter.valignlast
+    local frameheight = parameter.maxheight
+    local lastpaddingbottommax = parameter.lastpaddingbottommax
+
+
+    local hlist = {}
+    local ht_hlist = 0
+
+    -- We need the height for the decision to balance the text
+    local ht_hlist = 0
+
+
+    -- a list for hboxes with break_below = true
+    local tmplist = {}
+    local count_lists = #objects_t
+    local vlist = table.remove(objects_t,1)
+    local i = 1
+    local margin_newcolumn
+    while vlist do
+        local head = vlist.head
+        while head do
+            local tmp_margin_newcolumn = node.has_attribute(head, publisher.att_margin_newcolumn)
+
+            if tmp_margin_newcolumn then
+                margin_newcolumn = tmp_margin_newcolumn
+            end
+            node.set_attribute(head,publisher.att_margin_newcolumn,margin_newcolumn)
+
+            if i == count_lists and head.next == nil then
+                -- the last object must not be in the tmplist
+                node.unset_attribute(head,publisher.att_break_below_forbidden)
+            end
+            head.prev = nil
+            local break_below_forbidden = node.has_attribute(head,publisher.att_break_below_forbidden)
+            if break_below_forbidden then
+                node.unset_attribute(head,publisher.att_margin_newcolumn)
+                tmplist[#tmplist + 1] = head
+                local tmp = head.next
+                head.next = nil
+                head = tmp
+            else
+                -- break allowed
+                -- if there is anything in the tmplist, we vpack it and add it to the current hlist.
+                if #tmplist > 0 then
+                    tmplist[#tmplist + 1] = head
+
+                    local tmp = head.next
+                    head.next = nil
+                    head = tmp
+
+                    local margin_newcolumn_tmplist = node.has_attribute(tmplist[1], publisher.att_margin_newcolumn)
+                    local vbox = join_table_to_box(tmplist)
+                    node.set_attribute(vbox,publisher.att_margin_newcolumn,margin_newcolumn_tmplist)
+
+                    hlist[#hlist + 1] = vbox
+                    ht_hlist = ht_hlist + vbox.height + vbox.depth
+                    tmplist = {}
+                else
+                    hlist[#hlist + 1] = head
+                    if head.id == publisher.glue_node then
+                        ht_hlist = publisher.get_glue_size(head)
+                    else
+                        ht_hlist = ht_hlist + ( head.height or 0 ) + ( head.depth or 0 )
+                    end
+                    local tmp = head.next
+                    head.next = nil
+                    head = tmp
+                end
+            end
+        end
+        vlist = table.remove(objects_t,1)
+        i = i + 1
+    end
+    -- the hlist now has lot's of rows. Widows/orphans are packed together in a vbox with n hboxes.
+
+    if balance > 1 and ht_hlist < balance * frameheight then
+        -- TODO: splitpos should be based on the actual height
+        local splitpos = math.ceil(#hlist / balance)
+
+        local margin_newcolumn_obj1 = node.has_attribute(hlist[1], publisher.att_margin_newcolumn)
+        if margin_newcolumn_obj1 and margin_newcolumn_obj1 > 0 then
+            table.insert(hlist,1,publisher.add_glue(nil,"head",{width=margin_newcolumn_obj1}))
+            splitpos = splitpos + 1
+        end
+        local obj1 = join_table_to_box({table.unpack(hlist,1,splitpos)})
+        if hlist[splitpos + 1] then
+            local margin_newcolumn_obj2 = node.has_attribute(hlist[splitpos + 1], publisher.att_margin_newcolumn)
+            if margin_newcolumn_obj2 and margin_newcolumn_obj2 > 0 then
+                table.insert(hlist,splitpos + 1,publisher.add_glue(nil,"head",{width=margin_newcolumn_obj2}))
+            end
+            local obj2 = join_table_to_box({table.unpack(hlist,splitpos + 1)})
+            if valignlast == "bottom" then
+                local remaining_height = frameheight - math.max(obj1.height, obj2.height)
+
+                if remaining_height > lastpaddingbottommax then
+                    remaining_height = remaining_height - lastpaddingbottommax
+                end
+                obj1.head = publisher.add_glue(obj1.head,"head",{width = remaining_height} )
+                obj2.head = publisher.add_glue(obj2.head,"head",{width = remaining_height} )
+            end
+            return obj1, obj2
+        else
+            if valignlast == "bottom" then
+                local remaining_height = frameheight - obj1.height
+                if remaining_height > lastpaddingbottommax then
+                    remaining_height = remaining_height - lastpaddingbottommax
+                end
+                obj1.head = publisher.add_glue(obj1.head,"head",{width = remaining_height} )
+            end
+            return obj1
+        end
+    end
+    --- Step 2: Fill vbox (the return value)
+    --- ------------------------------------
+    --- Two cases: the objects have enough material to fill up the area (a)
+    --- or we have no objects left for the area and return the final vbox for this area. (b)
+    --- The task is to go though collection of h/vboxes (the hlist) and create one big vbox.
+    --- This is done by filling the table `thisarea`.
+    ---
+    --- ![final step for area](img/vsplit3.png)
+    local goal = frameheight
+    local accumulated_height = 0
+    local thisarea = {}
+    local remaining_objects = {}
+    local area_filled = false
+    local lineheight = 0
+    while not area_filled do
+        for i=1,#hlist do
+            local hbox = table.remove(hlist,1)
+            if #thisarea == 0 then
+                -- This is for a different margin-top at the beginning of a new column.
+                if hbox.id == publisher.vlist_node then
+                    local vbox = hbox
+                    if vbox.list and vbox.list.id == publisher.glue_node then
+                        local margin_top_boxstart = node.has_attribute(vbox.list, publisher.att_margin_top_boxstart)
+                        vbox.list.width = margin_top_boxstart
+                        hbox = node.vpack(vbox.list)
+                    end
+                end
+            end
+
+            if #thisarea == 0 and node.has_attribute(hbox, publisher.att_omit_at_top) then
+                -- When the margin-below appears at the top of the new frame, we just ignore
+                -- it. Too bad Lua doesn't have a 'next' in for-loops
+            else
+                local margin_newcolumn = node.has_attribute(hbox, publisher.att_margin_newcolumn)
+                if margin_newcolumn and margin_newcolumn > 0 and #thisarea == 0 then
+                    thisarea[#thisarea + 1] = publisher.add_glue(nil,"head",{width=margin_newcolumn})
+                    lineheight = margin_newcolumn
+                end
+
+                if hbox.id == publisher.hlist_node or hbox.id == publisher.vlist_node then
+                    lineheight = lineheight +  hbox.height + hbox.depth
+                elseif hbox.id == publisher.glue_node then
+                    lineheight = lineheight + get_glue_value(hbox,"width")
+                elseif hbox.id == publisher.rule_node then
+                    lineheight = lineheight + hbox.height + hbox.depth
+                elseif hbox.id == publisher.whatsit_node then
+                    -- ignore
+                else
+                    w("unknown node 1: %d",hbox.id)
+                end
+                -- 20 is some rounding error
+                if accumulated_height + lineheight <= goal + 20 then
+                    thisarea[#thisarea + 1] = hbox
+                    accumulated_height = accumulated_height + lineheight
+                    lineheight = 0
+                else
+                    -- objects > goal
+                    -- This is case (a)
+                    remaining_objects[1] = hbox
+                    area_filled = true
+                    break
+                end
+            end
+        end
+        area_filled = true
+    end
+
+    if #hlist > 0 then
+        for i=1,#hlist do
+            remaining_objects[#remaining_objects + 1] = hlist[i]
+        end
+    end
+    -- Sometimes there is a single glue (margin-bottom) left, we should ignore it
+    if #remaining_objects == 1 and node.has_attribute(remaining_objects[1], publisher.att_omit_at_top)  then
+        -- ignore!?
+    else
+        objects_t[1] = join_table_to_box(remaining_objects)
+    end
+
+    --- It's a common situation where there is a single free row but the next material is
+    --- too high for the row. So we return an empty list and hope that the calling function
+    --- is clever enough to detect this case. (Well, it's not too difficult to detect, as
+    --- the `objects_t` table is not empty yet.)
+    return join_table_to_box(thisarea) or publisher.empty_block()
+end
+
 --- Image handling
 --- --------------
 
@@ -5951,6 +5957,7 @@ shape = function(tbl, buf, options)
 
     harfbuzz.shape_full(font, buf, tbl.otfeatures, {})
 end
+
 
 file_end("publisher.lua")
 

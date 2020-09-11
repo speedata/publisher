@@ -1,6 +1,6 @@
 -- experimental / testing
 
-file_start("paragraph.lua")
+file_start("par.lua")
 
 local Par = {}
 
@@ -592,7 +592,7 @@ function Par:format( width_sp, options )
                         node.set_attribute(line,publisher.att_break_below_forbidden,1)
                     end
                 end
-                if less_or_equal_than_n_lines(line, current_textformat.widow) then
+                if publisher.less_or_equal_than_n_lines(line, current_textformat.widow) then
                     if line.head and not node.has_attribute(line.head,publisher.att_ignore_orphan_widowsetting) then
                         node.set_attribute(line,publisher.att_break_below_forbidden,2)
                     end
@@ -685,6 +685,6 @@ function Par:append( whatever, options )
 end
 
 
-file_end("paragraph.lua")
+file_end("par.lua")
 
 return Par
