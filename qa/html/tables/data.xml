@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
   <elt>
-    <table><tbody><tr><td>foo</td></tr></tbody></table>
+    <table><tbody><tr>
+      <td>A wonderful serenity has taken</td>
+      <td>possession of my entire soul.</td>
+    </tr></tbody></table>
   </elt>
   <elt>
-    <table><tr><td>bar</td></tr></table>
+    <table><tbody><tr>
+      <td>A wonderful serenity has taken</td>
+      <td>possession of my entire soul.</td>
+    </tr></tbody></table>
   </elt>
 </data>

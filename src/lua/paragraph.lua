@@ -86,7 +86,7 @@ end
 -- Return the width of the longest word (breakable part)
 function Paragraph:min_width(textfomat_name)
     local nl = node.copy_list(self.nodelist)
-    local box = self:format(1,textfomat_name)
+    local box = self:format(1,{textfomat = textfomat_name} )
     local head = box.head
     -- See bug #46: a text format margin-top has a glue as its first item in the vlist
     while head.id ~= publisher.hlist_node do
@@ -135,7 +135,7 @@ end
 function Paragraph:script( whatever,scr,parameter )
     local nl
     if type(whatever)=="string" or type(whatever)=="number" or type(whatever) == "table" then
-        nl = publisher.mknodes(table_textvalue(whatever),parameter.fontfamily,parameter)
+        nl = publisher.mknodes(table_textvalue(whatever),parameter)
     else
         assert(false,string.format("superscript, type()=%s",type(whatever)))
     end
@@ -161,19 +161,19 @@ function Paragraph:append( whatever,parameter )
     parameter.tab = ( tab and tab.tab ) or {}
 
     if type(whatever)=="string" or type(whatever)=="number" then
-        self:add_to_nodelist(publisher.mknodes(whatever,parameter.fontfamily,parameter))
+        self:add_to_nodelist(publisher.mknodes(whatever,parameter))
     elseif type(whatever)=="table" and whatever.nodelist then
         self:add_italic_bold(whatever.nodelist,parameter)
         self:add_to_nodelist(whatever.nodelist)
-        publisher.set_fontfamily_if_necessary(whatever.nodelist,parameter.fontfamily)
+        publisher.set_fontfamily_if_necessary(whatever.nodelist,{fontfamily = parameter.fontfamily})
     elseif type(whatever)=="boolean" then
-        self:add_to_nodelist(publisher.mknodes(tostring(whatever),parameter.fontfamily,parameter))
+        self:add_to_nodelist(publisher.mknodes(tostring(whatever),parameter))
     elseif type(whatever)=="function" then
-        self:add_to_nodelist(publisher.mknodes(whatever(),parameter.fontfamily,parameter))
+        self:add_to_nodelist(publisher.mknodes(whatever(),parameter))
     elseif node.is_node(whatever) then
         self:add_to_nodelist(whatever)
     elseif type(whatever)=="table" and #whatever == 0 then
-        self:add_to_nodelist(publisher.mknodes("",parameter.fontfamily,parameter))
+        self:add_to_nodelist(publisher.mknodes("",parameter))
     elseif type(whatever)=="table" then
         for i=1,#whatever do
             if type(whatever[i]) == "userdata" then
@@ -209,8 +209,9 @@ end
 
 --- Turn a node list into a shaped block of text.
 -- FIXME: document why splitting is needed (ul/li in data)
-function Paragraph:format(width_sp, default_textformat_name,options)
+function Paragraph:format(width_sp,options)
     options = options or {}
+    default_textformat_name = options.textformat
     local parameter = {}
 
     if self.padding_left and self.padding_left > 0 then
@@ -506,7 +507,6 @@ function Paragraph:format(width_sp, default_textformat_name,options)
             tail = node.tail(nodelist)
         end
         if nodelist == nil then return node.new("vlist") end
-
 
         -- If there is ragged shape (i.e. not a rectangle of text) then we should turn off
         -- font expansion. This is done by setting tex.(pdf)adjustspacing to 0 temporarily
@@ -927,6 +927,74 @@ function Paragraph.vsplit( objects_t, parameter )
     --- the `objects_t` table is not empty yet.)
     return join_table_to_box(thisarea) or publisher.empty_block()
 end
+
+function Paragraph.minimal_width_nodelist(nodelist,textformat)
+    local ragged_shape
+    if textformat.alignment == "leftaligned" or textformat.alignment == "rightaligned" or textformat.alignment == "centered" then
+        ragged_shape = true
+    else
+        ragged_shape = false
+    end
+
+
+    -- -- if the last items are newline nodes, clear them (see #142)
+    -- local tail = node.slide(nodelist)
+    -- while tail and node.has_attribute(tail,publisher.att_newline) do
+    --     nodelist = node.remove(nodelist,tail)
+    --     tail = node.tail(nodelist)
+    -- end
+    -- if nodelist == nil then return node.new("vlist") end
+
+
+    -- If there is ragged shape (i.e. not a rectangle of text) then we should turn off
+    -- font expansion. This is done by setting tex.(pdf)adjustspacing to 0 temporarily
+    local parameter = {}
+    local tempnodelist = node.copy_list(nodelist)
+
+    if ragged_shape then
+        local save_tolerance     = parameter.tolerance
+        local save_hyphenpenalty = parameter.hyphenpenalty
+        parameter.tolerance     = 5000
+        parameter.hyphenpenalty = 200
+
+        local adjspace
+        adjspace = tex.adjustspacing
+        tex.pdfadjustspacing = 0
+        tex.adjustspacing = 0
+        tempnodelist = publisher.do_linebreak(tempnodelist,1,parameter)
+
+        parameter.tolerance     = save_tolerance
+        parameter.hyphenpenalty = save_hyphenpenalty
+
+        tex.pdfadjustspacing = adjspace
+        tex.adjustspacing = adjspace
+        publisher.fix_justification(tempnodelist,current_textformat.alignment)
+    else
+        tempnodelist = publisher.do_linebreak(tempnodelist,1,parameter)
+    end
+
+    local head = tempnodelist.head
+    -- See bug #46: a text format margin-top has a glue as its first item in the vlist
+    while head.id ~= publisher.hlist_node do
+        head = head.next
+    end
+    local _w,_h,_d
+    local max = 0
+    while head do
+        -- there are some situations, where a list has no head (a bullet point)
+        -- we should not bother checking them.
+        -- LuaTeX 0.71 needs the extra 'node.has_field(head,"head")' check.
+        if node.has_field(head,"head") and head.head ~= nil then
+            _w,_h,_d = node.dimensions(tempnodelist.glue_set, tempnodelist.glue_sign, tempnodelist.glue_order,head.head)
+            max = math.max(max,_w)
+        end
+        head = head.next
+    end
+
+    node.flush_list(tempnodelist)
+    return max
+end
+
 
 file_end("paragraph.lua")
 

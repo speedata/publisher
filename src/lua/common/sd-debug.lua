@@ -76,7 +76,7 @@ do
         local k = keys[i]
         local l = tbl_to_print[k]
         if type(l) == "userdata" and node.is_node(l) then
-            l = nodelist_tostring(l)
+            l = "⬖".. nodelist_tostring(l) .. "⬗"
         end
       if type(l)=="table" then
         if k ~= ".__parent" then
@@ -117,7 +117,9 @@ function nodelist_tostring( head )
         if head.id == publisher.hlist_node or head.id == publisher.vlist_node then
             ret[#ret + 1] = nodelist_tostring(head.head)
         elseif head.id == publisher.glyph_node then
-            ret[#ret + 1] = unicode.utf8.char(head.char)
+            local c = head.char
+            if c > 0x110000 then c = c - 0x110000 end
+            ret[#ret + 1] = unicode.utf8.char(c)
         elseif head.id == publisher.rule_node then
             if  head.width > 0 then
                 ret[#ret + 1] = "|"

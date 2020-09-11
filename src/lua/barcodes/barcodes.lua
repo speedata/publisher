@@ -317,7 +317,7 @@ end
 local function code128(width,height,fontfamily,text,showtext)
   local textnodelist
   if showtext then
-    textnodelist = publisher.mknodes(text,fontfamily,{})
+    textnodelist = publisher.mknodes(text,{fontfamily = fontfamily})
   end
   local pattern = {}
 	local mode,output

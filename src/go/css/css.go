@@ -116,8 +116,9 @@ ol ul, ul ol,
 ul ul, ol ol    { margin-top: 0; margin-bottom: 0 }
 u, ins          { text-decoration: underline }
 center          { text-align: center }
-:link           { text-decoration: underline }
 `
+
+// :link           { text-decoration: underline }
 
 // Return the position of th matching closing brace "}"
 func findClosingBrace(toks tokenstream) int {

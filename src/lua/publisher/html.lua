@@ -37,6 +37,7 @@ inherited = {
     ["direction"] = true,
     ["empty-cells"] = true,
     ["font-family"] = true,
+    ["font-family-number"] = true, -- for internal html mode
     ["font-size"] = true,
     ["font-style"] = true,
     ["font-variant"] = true,
@@ -87,7 +88,10 @@ local function familyname( fontfamily )
     end
 end
 
-local function get_fontfamily( family, size_sp , name )
+local function get_fontfamily( family, size_sp , name, styles )
+    local fontfamilynumber = tonumber(styles["font-family-number"])
+    if fontfamilynumber then return fontfamilynumber end
+
     local fontname = family .. "/" .. name
     local predefined_fam = publisher.fonts.lookup_fontfamily_name_number[fontname]
     if predefined_fam then
@@ -420,8 +424,7 @@ function collect_horizontal_nodes( elt,parameter )
         copy_attributes(styles,attributes)
         local fontfamily = styles["font-family"]
         local fontsize = styles["font-size"]
-        local fontname = fontsize
-        options.fontfamily = get_fontfamily(fontfamily,styles.fontsize_sp, fontname)
+        options.fontfamily = get_fontfamily(fontfamily,styles.fontsize_sp, fontname,styles)
         local fontstyle = styles["font-style"]
         local fontweight = styles["font-weight"]
         local fg_colorindex, bg_colorindex
@@ -434,6 +437,15 @@ function collect_horizontal_nodes( elt,parameter )
         if backgroundcolor then
             bg_colorindex = publisher.colors[backgroundcolor].index
             options.backgroundcolor = bg_colorindex
+        end
+
+        local bg_padding_top = styles["background-padding-top"]
+        if bg_padding_top then
+            options.bg_padding_top = bg_padding_top
+        end
+        local bg_padding_bottom = styles["background-padding-bottom"]
+        if bg_padding_bottom then
+            options.bg_padding_bottom = bg_padding_bottom
         end
 
         local textdecoration = styles["text-decoration"]
@@ -449,14 +461,14 @@ function collect_horizontal_nodes( elt,parameter )
             options.underline = 3
         end
         if verticalalign == "super" then
-            options.script = 2
+            options.subscript = 2
         elseif verticalalign == "sub" then
-            options.script = 1
+            options.subscript = 1
         end
 
         local thisret = {}
         if typ == "string" then
-            thisret[#thisret + 1] = publisher.mknodes(thiselt,options.fontfamily,options)
+            thisret[#thisret + 1] = publisher.mknodes(thiselt,options)
         elseif typ == "table" then
             local attributes = thiselt.attributes or {}
             local eltname = thiselt.elementname
@@ -552,7 +564,6 @@ function build_html_table_tbody(tbody)
                         copy_attributes(styles,attributes)
                         local r = build_nodelist(td)
                         table.remove(stylesstack)
-
                         local newtd = { elementname = "Paragraph" , contents = r[1] }
                         local newcontents = { newtd }
                         local att = td.attributes
@@ -567,6 +578,13 @@ function build_html_table_tbody(tbody)
                             if brw then newcontents["border-right"] = brw end
                         end
                         tdtab[#tdtab + 1] = { elementname = "Td", contents = newcontents }
+                    end
+                end
+                local att = tr.attributes
+                if att then
+                    local valign = att["vertical-align"]
+                    if valign == "top" or valign == "bottom" or valign == "middle" then
+                        tdtab.valign = valign
                     end
                 end
                 trtab[#trtab + 1] = { elementname = "Tr", contents =  tdtab  }
@@ -719,9 +737,7 @@ function build_nodelist( elt )
         local fontfamily = styles["font-family"]
         local fontsize = styles["font-size"]
         local fontname = fontsize
-        local fam = get_fontfamily(fontfamily,styles.fontsize_sp,fontname)
-
-
+        local fam = get_fontfamily(fontfamily,styles.fontsize_sp,fontname, styles)
 
         local textalign = styles["text-align"]
         local hyphens = styles.hyphens
@@ -740,8 +756,9 @@ function build_nodelist( elt )
                 tf.disable_hyphenation = true
             end
 
-            local n = collect_horizontal_nodes(thiselt)
-            local a = paragraph:new(tf.name)
+            local n = collect_horizontal_nodes(thiselt,{textformat = tf})
+
+            local a = par:new(tf.name,"html.lua")
 
             for i=1,#n do
                 local thisn = n[i]
@@ -750,28 +767,27 @@ function build_nodelist( elt )
                 elseif i == #n then
                     thisn = trim_space_end(thisn)
                 end
-
                 if thisn then
                     a:append(thisn)
                 end
             end
-            if a.nodelist then
-                ret[#ret + 1] = a
-            end
+            a:mknodelist()
+            ret[#ret + 1] = a
         else
             local box = Box:new()
             box.margintop = margin_top or 0
             box.marginbottom = margin_bottom or 0
-            box.indent = margin_left + padding_left
+            box.indent_amount = margin_left + padding_left
             box.width = styles.calculated_width - margin_left - margin_right - padding_left - padding_right
 
             if thiseltname == "table" then
                 local nl = build_html_table(thiselt)
-                local tabpar = paragraph:new()
+                local tabpar = par:new()
                 tabpar.margin_top = margin_top
-                box[#box + 1] = tabpar
                 node.set_attribute(nl,publisher.att_lineheight,nl.height)
                 tabpar:append(nl)
+                tabpar:mknodelist()
+                box[#box + 1] = tabpar
                 ret[#ret + 1] = box
             elseif thiseltname == "ol" or thiseltname == "ul" then
                 if thiseltname == "ol" then
@@ -789,7 +805,7 @@ function build_nodelist( elt )
                 for i=1,#n do
                     box[#box + 1] = n[i]
                 end
-                box.indent = tex.sp("20pt")
+                box.indent_amount = tex.sp("20pt")
                 ret[#ret + 1] = box
             elseif thiseltname == "li" then
                 olcounter[styles.ollevel] = olcounter[styles.ollevel] + 1
@@ -876,12 +892,13 @@ function resolve_list_style_type(styles, olcounter)
     return str
 end
 
-function handle_pages( pages )
+function handle_pages( pages,maxwidth_sp )
     -- defaults:
-    xpath.set_variable("__maxwidth",tex.pagewidth)
+    local pagewd = tex.pagewidth
+
+    xpath.set_variable("__maxwidth",pagewd)
     xpath.set_variable("__maxheight",tex.pageheight)
 
-    local pagewd = tex.pagewidth
     local masterpage = pages["*"]
     if masterpage then
         if masterpage.width then
@@ -906,9 +923,13 @@ function handle_pages( pages )
         xpath.set_variable("__maxwidth",pagewd)
         publisher.masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(margin_left,margin_top,margin_right,margin_bottom) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
     else
-        local margin_right = publisher.tenmm_sp
-        local margin_left = publisher.tenmm_sp
-        pagewd = pagewd - margin_left - margin_right
+        if maxwidth_sp then
+            pagewd = maxwidth_sp
+        else
+            local margin_right = publisher.tenmm_sp
+            local margin_left = publisher.tenmm_sp
+            pagewd = pagewd - margin_left - margin_right
+        end
         xpath.set_variable("__maxwidth",pagewd)
     end
 end
@@ -924,8 +945,8 @@ function clearattributes( elt )
 end
 
 -- Entry point for HTML parsing
-function parse_html_new( elt )
-    handle_pages(elt.pages)
+function parse_html_new( elt, maxwidth_sp )
+    handle_pages(elt.pages,maxwidth_sp)
     fontfamilies = elt.fontfamilies
     elt.fontfamilies = nil
     local att = elt[1].attributes

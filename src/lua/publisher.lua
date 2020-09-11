@@ -31,7 +31,8 @@ local html         = require("publisher.html")
 local fonts        = require("publisher.fonts")
 local uuid         = require("uuid")
 
-paragraph    = require("paragraph")
+paragraph  = require("paragraph")
+par        = require("par")
 uuid.randomseed(tex.randomseed)
 
 splib        = require("splib")
@@ -614,7 +615,8 @@ local dispatch_table = {
     Overlay                 = commands.overlay,
     Pageformat              = commands.page_format,
     Pagetype                = commands.pagetype,
-    Paragraph               = commands.paragraph,
+    Par                     = commands.par,
+    Paragraph               = commands.par,
     PDFOptions              = commands.pdfoptions,
     PlaceObject             = commands.place_object,
     Position                = commands.position,
@@ -758,6 +760,22 @@ function pdfstring_from_color(colorname_or_number)
     return colentry.pdfstring
 end
 
+function get_colorindex_from_name(colorname, default)
+    colorname = colorname or default
+    local colorindex
+    if colorname then
+        if not colors[colorname] then
+            if default then
+                err("Color %q is not defined yet.",colorname)
+            else
+                colorindex = nil
+            end
+        else
+            colorindex = colors[colorname].index
+        end
+    end
+    return colorindex
+end
 
 --- Bookmarks are collected and later processed. This function (recursively)
 --- creates TeX code from the generated tables.
@@ -856,16 +874,9 @@ function dothings()
     --- Define a basic font family with name `text`:
     define_default_fontfamily()
 
-    --- The server mode is quite interesting: we don't generate a PDF, but wait for requests and try to answer
-    --- them. We rely on the internal communication (tcp) in publisher.server#servermode.
-    if arg[2] == "___server___" then
-        local s = require("publisher.server")
-        s.servermode(tcp)
-    else
-        initialize_luatex_and_generate_pdf()
-        -- The last thing is to put a stamp in the PDF
-        pdf.obj({type="raw",string="(Created with the speedata Publisher - www.speedata.de)", immediate = true, objcompression = false})
-    end
+    initialize_luatex_and_generate_pdf()
+    -- The last thing is to put a stamp in the PDF
+    pdf.obj({type="raw",string="(Created with the speedata Publisher - www.speedata.de)", immediate = true, objcompression = false})
 end
 
 function get_extension(fn)
@@ -899,7 +910,7 @@ do
     function flatten_boxes(box,parameter,ret)
         ret = ret or {}
         parameter = parameter or {}
-        local indent = box.indent or 0
+        local indent = box.indent_amount or 0
         -- w("fb: indent %gpt",indent / factor)
         if indent and parameter.indent then
             indent = parameter.indent + indent
@@ -910,14 +921,14 @@ do
         if box.prependbox and #box.prependbox > 0 then
             for i=1,#box.prependbox do
                 local pp = box.prependbox[i]
-                local a = paragraph:new()
+                local a = par:new()
                 a:indent(parameter.indent or 0)
                 a:append(pp)
                 ret[#ret + 1] = a
             end
         end
         for i=1,#box do
-            if box[i].nodelist then
+            if box[i].min_width then
                 -- a regular paragraph
                 if parameter.indent then
                     box[i]:indent(indent)
@@ -1436,7 +1447,6 @@ function shipout(nodelist, pagenumber )
     tex.box[666] = nodelist
     tex.shipout(666)
 end
-
 --- Load an XML file from the hard drive. filename is without path but including extension,
 --- filetype is a string representing the type of file read, such as "layout" or "data".
 --- The return value is a lua table representing the XML file.
@@ -2015,10 +2025,10 @@ function bgtext( box, textstring, angle, colorname, fontfamily, bgsize)
     local sin = math.sin(angle_rad)
     local cos = math.cos(angle_rad)
 
-    a = paragraph:new()
-    a:append(textstring, {fontfamily = fontfamily})
-    a:set_color(colorindex)
-    local textbox = node.hpack(a.nodelist)
+    a = par:new()
+    a:append(textstring, {fontfamily = fontfamily,color = colorindex})
+    a:mknodelist()
+    local textbox = node.hpack(a.objects[1])
     local rotated_height = sin * textbox.width  + cos * textbox.height
     local scale
     local shift_up = 0
@@ -2926,10 +2936,11 @@ marker.value = 1
 --- Convert `<b>`, `<u>` and `<i>` in text to publisher recognized elements.
 -- The 'new' HTML parse is in the file html.lua
 function parse_html( elt, parameter )
+    parameter = parameter or {}
     if elt.typ == "csshtmltree" then
-        return html.parse_html_new(elt,parameter)
+        return html.parse_html_new(elt, parameter.maxwidth_sp)
     end
-    local a = paragraph:new()
+    local a = par:new(nil,"parse_html",parameter)
     parameter = parameter or {}
     local bold,italic,underline,allowbreak
     local backgroundcolor   = parameter.backgroundcolor
@@ -2965,46 +2976,10 @@ function parse_html( elt, parameter )
         if eltname == "table" then
             -- Evil. Build a table in Publisher-mode and send it to the output
             local x = parse_html_table(elt)
-            x = node.hpack(x)
-            node.set_attribute(x,att_dont_format,1)
-            return x
-        elseif eltname == "span" then
-            local css_rules = css:matches({element = 'span', class=elt.class}) or {}
-            local has_css = false
-            local fg_colorindex
-            local bg_colorindex
-
-            if css_rules["color"] then
-                has_css = true
-                fg_colorindex = colors[css_rules["color"]].index
-            end
-            local bgcolor = css_rules["background-color"]
-            if bgcolor then
-                has_css = true
-                bg_colorindex = colors[bgcolor].index
-            end
-
-            local td = css_rules["text-decoration"]
-            if  td and string.match(td,"underline") then
-               has_css = true
-                underline = 1
-            end
-            if has_css then
-                local b = paragraph:new()
-                if type(elt[1]) == "string" then
-                    options["backgroundcolor"] = bg_colorindex
-                    if css_rules["background-padding-top"] then
-                        options["bg_padding_top"]    = tex.sp(css_rules["background-padding-top"])
-                    end
-                    if css_rules["background-padding-bottom"] then
-                        options["bg_padding_bottom"] = tex.sp(css_rules["background-padding-bottom"])
-                    end
-                    b:append(elt[1],options)
-                    b:set_color(fg_colorindex)
-                    a:append(b)
-                    elt = {}
-                end
-            end
+            x = node.vpack(x)
+            x.shift = x.height * 0.25
+            a:append({x})
+            return a
         elseif eltname == "b" or eltname == "strong" then
             options.bold = 1
         elseif eltname == "i" or eltname == "em" then
@@ -3018,42 +2993,13 @@ function parse_html( elt, parameter )
                 end
             end
         elseif eltname == "sub" then
-            for i=1,#elt do
-                if type(elt[i]) == "string" then
-                    a:script(elt[i],1,options)
-                elseif type(elt[i]) == "table" then
-                    a:script(parse_html(elt[i]),1,options)
-                end
-            end
-            elt = {}
+            options.subscript = 1
         elseif eltname == "sup" then
-            for i=1,#elt do
-                if type(elt[i]) == "string" then
-                    a:script(elt[i],2,options)
-                elseif type(elt[i]) == "table" then
-                    a:script(parse_html(elt[i]),2,options)
-                end
-            end
-            elt = {}
+            options.subscript = 2
+        elseif eltname == "li" then
+            options.prepend = "•"
         elseif eltname == "ul" then
-            for i=1,#elt do
-                if type(elt[i]) == "string" then
-                    -- ignore
-                elseif type(elt[i]) == "table" then
-                    -- remove last br in the list
-                    if  elt[i][#elt[i]] and elt[i][#elt[i]][".__name"] == "br" then
-                        elt[i][#elt[i]] = nil
-                    end
-                    a:append(node.copy(marker))
-                    local bul = bullet_hbox(tex.sp("2.5mm"))
-                    a:append(bul)
-                    a:append(parse_html(elt[i]),options)
-                    a:append("\n",{})
-                end
-            end
-            a:append(node.copy(marker))
-            a:append(node.new(glue_node))
-            return a
+            options.indent = tex.sp("5mm")
         elseif eltname == "ol" then
             local counter = 0
             for i=1,#elt do
@@ -3087,53 +3033,43 @@ function parse_html( elt, parameter )
                 end
             else
                 hyperlinks[#hyperlinks + 1] = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",elt.href)
-                options.add_attributes = { { att_hyperlink, #hyperlinks } }
-                for i=1,#elt do
-                    if type(elt[i]) == "string" then
-                        a:append(elt[i],options)
-                    elseif type(elt[i]) == "table" then
-                        a:append(parse_html(elt[i]),options)
-                    end
-                end
-                options.add_attributes = nil
+                options.hyperlink = #hyperlinks
             end
-            return a
         elseif eltname=="br" then
-            a:append("\n",{})
+            options.newline = true
+            a:append("\n",options)
+        elseif eltname == "p" then
+            -- ignore now, append \n after the end tag
         elseif #elt == 0 then
             -- dummy: insert U+200B ZERO WIDTH SPACE which results in a penalty
             -- a:append("\xE2\x80\x8B")
-            a:append(addstrut())
+            -- a:append(addstrut())
         else
             local css_rules = css:matches({element = eltname, class=elt.class}) or {}
-            local has_css = false
-            local colorindex
-            local fontfamily = 0
-            local ff = css_rules["font-family"]
-            if ff then
-                has_css = true
-                local tmp = publisher.fonts.lookup_fontfamily_name_number[ff]
-                if tmp then
-                    fontfamily = tmp
-                end
-            end
-
             if css_rules["color"] then
-                has_css = true
-                colorindex = colors[css_rules["color"]].index
+                options.color = colors[css_rules["color"]].index
+            end
+            local bgcolor = css_rules["background-color"]
+            if bgcolor then
+                options.backgroundcolor = colors[bgcolor].index
+            end
+            local bg_padding_top = css_rules["background-padding-top"]
+            if bg_padding_top then
+                options.bg_padding_top = bg_padding_top
+            end
+            local bg_padding_bottom = css_rules["background-padding-bottom"]
+            if bg_padding_bottom then
+                options.bg_padding_bottom = bg_padding_bottom
             end
             local td = css_rules["text-decoration"]
-            if  td and string.match(td,"underline") then
-               has_css = true
-                underline = 1
+            if td and string.match(td,"underline") then
+                options.underline = 1
             end
-            if has_css then
-                local b = paragraph:new()
-                if type(elt[1]) == "string" then
-                    b:append(elt[1],options)
-                    b:set_color(colorindex)
-                    a:append(b)
-                    elt = {}
+            local ff = css_rules["font-family"]
+            if ff then
+                local tmp = publisher.fonts.lookup_fontfamily_name_number[ff]
+                if tmp then
+                    options.fontfamily = tmp
                 end
             end
         end
@@ -3142,13 +3078,18 @@ function parse_html( elt, parameter )
     for i=1,#elt do
         local typ = type(elt[i])
         if typ == "string" or typ == "number" or typ == "boolean" then
-            a:append(elt[i],options)
+            a:append({elt[i]},options)
         elseif typ == "table" then
             local tmp = parse_html(elt[i],options)
-            a:append(tmp)
+            a:append(tmp,options)
         end
     end
-
+    if elt[".__local_name"] then
+        local eltname = string.lower(elt[".__local_name"])
+        if eltname == "p"  then
+            a:append("\n",{discardallowed = true})
+        end
+    end
     return a
 end
 
@@ -3243,7 +3184,7 @@ function parse_html_tr(tr)
                     end
                     tmp[#tmp + 1] = { elementname = "Paragraph" , contents = a }
                 elseif type(td[i]) == "string" then
-                    local a = paragraph:new()
+                    local a = par:new()
                     if textalign == "right" then a.textformat = "__rightaligned" end
                     a:append(td[i])
                     tmp[#tmp + 1] = { elementname = "Paragraph" , contents = a }
@@ -3300,7 +3241,11 @@ function find_user_defined_whatsits( head, parent )
                     node.set_attribute(colstop,att_dont_format,dontformat)
                 end
                 node.set_attribute(colstop,att_origin,origin_setcolor)
-                parent.head = node.insert_before(parent.head,head,colstop)
+                if fgcolor then
+                    parent.head = node.insert_after(parent.head,head,colstop)
+                else
+                    parent.head = node.insert_before(parent.head,head,colstop)
+                end
             end
             if insert_startcolor then
                 local colstart = node.new("whatsit","pdf_colorstack")
@@ -3511,7 +3456,12 @@ function remove_first_whitespace ( tbl )
             return true
         end
         if type(tbl[i]) == "table" then
-            local ret = remove_first_whitespace(tbl[i])
+            local ret
+            if tbl[i].contents and type(tbl[i].contents) == "table" then
+                ret = remove_first_whitespace(tbl[i].contents)
+            else
+                ret = remove_first_whitespace(tbl[i])
+            end
             if ret then return true end
         end
     end
@@ -3521,13 +3471,82 @@ end
 function remove_last_whitespace ( tbl )
     for i=#tbl,1,-1 do
         if type(tbl[i]) == "string" then
-            tbl[i] = string.gsub(tbl[i],"^(.-)[\n\t]*$","%1")
+            if string.match(tbl[i],"^%s*$") then
+                table.remove( tbl,i )
+            else
+                tbl[i] = string.gsub(tbl[i],"^(.-)[\n\t]*$","%1")
+            end
             return true
         end
         if type(tbl[i]) == "table" then
-            local ret = remove_last_whitespace(tbl[i])
+            local ret
+            if tbl[i].contents and type(tbl[i].contents) == "table" then
+                ret = remove_last_whitespace(tbl[i].contents)
+            else
+                ret = remove_last_whitespace(tbl[i])
+            end
             if ret then return true end
         end
+    end
+end
+
+function setprop(n, prop, value)
+    local props = node.getproperty(n)
+    if not props then
+      props = {}
+      node.setproperty(n, props)
+    end
+    props[prop] = value
+end
+
+function getprop( n, prop )
+    local props = node.getproperty(n)
+    if not props then return nil end
+    if type(props) == "table" then return props[prop] end
+    return nil
+end
+
+local function setstyles(n,parameter)
+    if parameter.bold == 1 then
+        node.set_attribute(n,att_bold,1)
+        setprop(n,"font-weight","bold")
+    end
+    if parameter.italic == 1 then
+        node.set_attribute(n,att_italic,1)
+        setprop(n,"font-style","italic")
+    end
+    if parameter.underline then
+        node.set_attribute(n,att_underline,parameter.underline)
+        node.set_attribute(n,att_underline_color,current_fgcolor)
+        setprop(n,"text-decoration","underline")
+    end
+    if parameter.color and parameter.color ~= 1 then
+        node.set_attribute(n,att_underline_color,parameter.color)
+        node.set_attribute(n,att_fgcolor,parameter.color)
+        setprop(n,"color",parameter.color)
+    end
+    if parameter.hyperlink then
+        local hl = parameter.hyperlink
+        node.set_attribute(n,att_hyperlink,hl)
+        setprop(n,"hyperlink",hl)
+    end
+    if parameter.languagecode and node.has_field(n,"lang") then
+        local lc = parameter.languagecode
+        n.lang = lc
+    end
+    if parameter.backgroundcolor then
+        node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
+        local bg_padding_top = tex.sp(parameter.bg_padding_top or 0)
+        local bg_padding_bottom = tex.sp(parameter.bg_padding_bottom or 0)
+        node.set_attribute(n,att_bgpaddingtop,bg_padding_top)
+        node.set_attribute(n,att_bgpaddingbottom,bg_padding_bottom)
+    end
+    if parameter.subscript then
+        node.set_attribute(n,att_script,parameter.subscript)
+        setprop(n,"subscript",parameter.subscript)
+    end
+    if parameter.indent then
+        setprop(n,"indent",parameter.indent)
     end
 end
 
@@ -3537,7 +3556,9 @@ end
 --- * bold (bold)
 --- * italic (italic)
 --- * underline
-function mknodes(str,fontfamily,parameter)
+function mknodes(str,parameter)
+    parameter = parameter or {}
+    local fontfamily = parameter.fontfamily
     -- instance is the internal font number
     parameter = parameter or {}
     local allowbreak = parameter.allowbreak or " -"
@@ -3563,32 +3584,88 @@ function mknodes(str,fontfamily,parameter)
     else
         instance = 1
     end
+    if not instance then
+        err("font %s not found for family %s",instancename,fontfamily)
+        -- let's try "regular"
+        if fontfamily and fontfamily > 0 then
+            parameter.bold = nil
+            parameter.italic = nil
+            instance = fonts.lookup_fontfamily_number_instance[fontfamily].normal
+        end
+        if not instance then
+            instance = 1
+        end
+    end
+
     local allow_newline = true
     if options.htmlignoreeol then
         allow_newline = false
     end
-
-    local tbl = publisher.fonts.used_fonts[instance]
+    local tbl = fonts.used_fonts[instance]
     local space   = tbl.parameters.space
     local shrink  = tbl.parameters.space_shrink
     local stretch = tbl.parameters.space_stretch
     local match = unicode.utf8.match
 
     if tbl.face then
+        local newlines_at = {}
+        -- w("hb mode")
+        local pos = 0
+        for c in unicode.utf8.gmatch(str,".") do
+            if c == "\n" then
+                newlines_at[pos] = true
+            end
+            pos = pos + string.len(c)
+        end
+
+
         local buf = harfbuzz.Buffer.new()
         buf:add_utf8(str)
         -- shape(tbl.font,buf, { language = "deu", script = "latn", direction = "ltr" })
         shape(tbl,buf)
 
         local glyphs = buf:get_glyphs()
+
         local list, cur
         local n,k
         for i=1,#glyphs do
+            local thisglyph = glyphs[i]
             local cp = glyphs[i].codepoint
             local uc = tbl.backmap[cp] or cp
+
             if uc == 32 then
                 n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch})
+                setstyles(n,parameter)
                 list,cur = node.insert_after(list,cur,n)
+            elseif cp == 0 and newlines_at[thisglyph.cluster] then
+                local dummypenalty
+                dummypenalty = node.new("penalty")
+                dummypenalty.penalty = 10000
+                node.set_attribute(dummypenalty,att_newline,1)
+                head,last = node.insert_after(head,last,dummypenalty)
+
+                local strut
+                strut = add_rule(nil,"head",{height = 8 * factor, depth = 3 * factor, width = 0 })
+                node.set_attribute(strut,att_newline,1)
+                head,last = node.insert_after(head,last,strut)
+
+                local p1,g,p2
+                p1 = node.new("penalty")
+                p1.penalty = 10000
+
+                g = set_glue(nil,{stretch = 2^16, stretch_order = 2})
+
+                p2 = node.new("penalty")
+                p2.penalty = -10000
+
+                node.set_attribute(p1,att_newline,1)
+                node.set_attribute(p2,att_newline,1)
+                node.set_attribute(g,att_newline,1)
+
+                list,cur = node.insert_after(list,cur,p1)
+                list,cur = node.insert_after(list,cur,g)
+                list,cur = node.insert_after(list,cur,p2)
+
             else
                 n = node.new("glyph")
                 n.font = instance
@@ -3598,7 +3675,17 @@ function mknodes(str,fontfamily,parameter)
                 n.left = parameter.left or tex.lefthyphenmin
                 n.right = parameter.right or tex.righthyphenmin
                 node.set_attribute(n,att_fontfamily,fontfamily)
+                setstyles(n,parameter)
                 list,cur = node.insert_after(list,cur,n)
+
+                if parameter.letterspacing then
+                    local k = node.new("kern")
+                    setstyles(k,parameter)
+                    k.kern = parameter.letterspacing
+                    list,cur = node.insert_after(list,cur,k)
+                    lastitemwasglyph = true
+                end
+
                 -- local diff = glyphs[i].x_advance - tbl.characters[uc].hadvance
                 -- if diff ~= 0 then
                 --     k = node.new("kern")
@@ -3656,6 +3743,10 @@ function mknodes(str,fontfamily,parameter)
             node.set_attribute(p1,att_newline,1)
             node.set_attribute(p2,att_newline,1)
             node.set_attribute(g,att_newline,1)
+
+            node.set_attribute(p1,att_fontfamily,fontfamily)
+            node.set_attribute(p2,att_fontfamily,fontfamily)
+            node.set_attribute(g,att_fontfamily,fontfamily)
 
             head,last = node.insert_after(head,last,p1)
             head,last = node.insert_after(head,last,g)
@@ -3767,25 +3858,12 @@ function mknodes(str,fontfamily,parameter)
             n.uchyph = 1
             n.left = parameter.left or tex.lefthyphenmin
             n.right = parameter.right or tex.righthyphenmin
+            setstyles(n,parameter)
             node.set_attribute(n,att_fontfamily,fontfamily)
-            if parameter.bold == 1 then
-                node.set_attribute(n,att_bold,1)
-            end
-            if parameter.italic == 1 then
-                node.set_attribute(n,att_italic,1)
-            end
-            if parameter.underline then
-                node.set_attribute(n,att_underline,parameter.underline)
-                node.set_attribute(n,att_underline_color,current_fgcolor)
-            end
-            if parameter.backgroundcolor then
-                node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
-                node.set_attribute(n,att_bgpaddingtop,parameter.bg_padding_top)
-                node.set_attribute(n,att_bgpaddingbottom,parameter.bg_padding_bottom)
-            end
             if parameter.letterspacing then
                 local k = node.new("kern")
                 k.kern = parameter.letterspacing
+                setstyles(k,parameter)
                 head,last = node.insert_after(head,last,k)
                 lastitemwasglyph = true
             end
@@ -3864,7 +3942,7 @@ end
 --- Return a hbox with width `labelwidth`
 function bullet_hbox( labelwidth )
     local bullet, pre_glue, post_glue
-    bullet = mknodes("•",nil,{})
+    bullet = mknodes("•",{})
     pre_glue = set_glue(nil,{stretch = 2^16, stretch_order = 3})
     pre_glue.next = bullet
 
@@ -3884,7 +3962,7 @@ end
 --- Return a hbox with width `labelwidth`
 function number_hbox( num, labelwidth )
     local pre_glue, post_glue
-    local digits = mknodes( tostring(num) .. ".",nil,{})
+    local digits = mknodes( tostring(num) .. ".",{})
     pre_glue = set_glue(nil,{stretch = 2^16, stretch_order = 3})
     pre_glue.next = digits
 
@@ -3901,11 +3979,15 @@ function number_hbox( num, labelwidth )
     return digit_hbox
 end
 
-function whatever_hbox( str, labelwidth,fam )
+function whatever_hbox( str, labelwidth,fam,labelsep_wd )
+    labelsep_wd = labelsep_wd or fonts.lookup_fontfamily_number_instance[fam].size / 2
     local label, pre_glue
-    label = mknodes(str .. " ",fam,{})
+    label = mknodes(str,{fontfamily = fam})
     pre_glue = set_glue(nil,{stretch = 2^16, stretch_order = 3,width= - labelwidth})
     pre_glue.next = label
+    local label_sep = set_glue(nil,{width = labelsep_wd})
+    local t = node.slide(label)
+    t.next = label_sep
     local label_hbox = node.hpack(pre_glue,0,"exactly")
     node.set_attribute(label_hbox.head,att_fontfamily,fam)
     label_hbox.head = addstrut(label_hbox.head,"head")
@@ -4162,8 +4244,8 @@ function do_linebreak( nodelist,hsize,parameters )
                 -- There could be a hlist (HTML table for example) in the line
                 if head_list.id == hlist_node or head_list.id == vlist_node then
                     if head_list.head then
-                        _, _h, _ = node.dimensions(head_list.head)
-                        maxlineheight = math.max(_h,maxlineheight)
+                        _, _h, _d = node.dimensions(head_list.head)
+                        maxlineheight = math.max(_h + _d,maxlineheight)
                     end
                 else
                     fam = node.has_attribute(head_list,att_fontfamily)
@@ -4229,7 +4311,6 @@ function mkstringdest(name)
     d.named_id = 1
     d.dest_id = name
     d.dest_type = 0
-    node.set_attribute(d,att_fontfamily,0)
     return d
 end
 
@@ -5179,7 +5260,9 @@ function deepcopy(t)
     for k,v in pairs(t) do
         typ = type(v)
         if typ == 'table' then
-            v = deepcopy(v)
+            if k ~= ".__parent" and k ~= ".__context" then
+                v = deepcopy(v)
+            end
         else
             if node.is_node(v) then
                 v = node.copy_list(v)
@@ -5189,6 +5272,18 @@ function deepcopy(t)
     end
     setmetatable(res,mt)
     return res
+end
+
+
+function copy_table_from_defaults( defaults )
+    if type(defaults) ~= "table" then
+        return defaults
+    end
+    local newtbl = {}
+    for key,value in next,defaults,nil do
+        newtbl[key] = value
+    end
+    return newtbl
 end
 
 -- Return the height of the page given by the relative page number

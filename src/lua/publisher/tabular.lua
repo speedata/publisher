@@ -107,6 +107,26 @@ function attach_objects_row( self, tab, current_row )
                         inline = {}
                     end
                     block[#block + 1] = {eltcontents}
+                elseif eltname == "Par" then
+                    local default_textformat_name = self.textformat
+                    local alignment = td_contents.align or tab.align or self.align[current_column]
+                    if     alignment=="center"  then  default_textformat_name = "__centered"
+                    elseif alignment=="left"    then  default_textformat_name = "__leftaligned"
+                    elseif alignment=="right"   then  default_textformat_name = "__rightaligned"
+                    elseif alignment=="justify" then  default_textformat_name = "__justified"
+                    end
+                    -- box doesn't have field textformat
+                    if type(eltcontents) == "table" then
+                        eltcontents.textformat = eltcontents.textformat or default_textformat_name or "__leftaligned"
+                        eltcontents.rotate = eltcontents.rotate
+                    end
+                    -- block
+                    if #inline > 0 then
+                        -- add current inline to the list of blocks
+                        block[#block + 1] = inline
+                        inline = {}
+                    end
+                    block[#block + 1] = {eltcontents}
                 elseif eltname == "Table" or eltname == "Groupcontents" then
                     -- block
                     if #inline > 0 then
@@ -225,21 +245,19 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
         for _,blockobject in ipairs(td_contents.objects) do
             for i=1,#blockobject do
                 local inlineobject = blockobject[i]
-                if type(inlineobject)=="table" then
-
-                    if inlineobject.nodelist then
-                        local fam = publisher.set_fontfamily_if_necessary(inlineobject.nodelist,self.fontfamily)
-                        if fam then
-                            cellheight = publisher.fonts.lookup_fontfamily_number_instance[fam].size
-                        end
-                        publisher.fonts.pre_linebreak(inlineobject.nodelist)
-                    end
-
+                if type(inlineobject)=="table" and node.is_node(inlineobject.nodelist) then
+                    local wd, ht, dp = node.dimensions(inlineobject.nodelist)
+                    max_wd = math.max(wd + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
+                    min_wd = paragraph.minimal_width_nodelist(inlineobject.nodelist,inlineobject.textformat)
+                    cellheight = cellheight + ht + dp
+                elseif type(inlineobject)=="table" then
                     if inlineobject.min_width then
-                        min_wd = math.max(inlineobject:min_width(inlineobject.alignment) + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
+                        local mw = inlineobject:min_width(inlineobject.alignment,{fontfamily = self.fontfamily})
+                        min_wd = math.max(mw + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
                     end
-                    if inlineobject.max_width then
-                        max_wd = math.max(inlineobject:max_width() + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
+                    if inlineobject.max_width_and_lineheight then
+                        local mw,cellheight = inlineobject:max_width_and_lineheight({fontfamily = self.fontfamily})
+                        max_wd = math.max(mw + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
                     end
                 elseif node.is_node(inlineobject) and node.has_field(inlineobject,"width") then
                     min_wd = math.max(inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
@@ -579,17 +597,17 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
                 local inlineobject = blockobject[i]
                 if type(inlineobject) == "table" then
                     if width then
-                        publisher.set_fontfamily_if_necessary(inlineobject.nodelist,self.fontfamily)
                         local angle_rad = -1 * math.rad(blockobjects.rotate or 0)
                         local sin_angle = math.sin( angle_rad )
                         local format_width = width
                         if sin_angle ~= 0 then
                             -- The width is not 100% accurate yet. Multi-line paragraphs for example
                             -- are not yet taken into account.
-                            format_width = math.max(format_width, inlineobject:max_width() * sin_angle )
+                            local mw = inlineobject:max_width_and_lineheight()
+                            format_width = math.max(format_width, mw * sin_angle )
                         end
 
-                        local v = inlineobject:format(format_width,inlineobject.textformat)
+                        local v = inlineobject:format(format_width,{textformat = inlineobject.textformat,fontfamily = self.fontfamily })
                         cell = node.insert_after(cell,node.tail(cell),v)
                     else
                         w("no width given in paragraph")

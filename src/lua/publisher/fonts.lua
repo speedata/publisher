@@ -161,6 +161,7 @@ function pre_linebreak( head )
     while head do
         if head.id == hlist_node then -- hlist
             pre_linebreak(head.list)
+            -- I don't think this is used anymore!? TODO check
             if node.has_attribute(head,att_script) then
                 local sub_sup = node.has_attribute(head,att_script)
                 local fam = lookup_fontfamily_number_instance[fontfamily]
@@ -235,56 +236,6 @@ function pre_linebreak( head )
                 head.leader = tmpbox
 
             end
-            local gluespec
-            local writable
-            if node.has_field(head,"spec") then
-                gluespec = head.spec
-                writable = gluespec.writable
-            else
-                gluespec = head
-                writable = true
-            end
-            if gluespec then
-                if node.has_attribute(head,att_fontfamily) then
-                    local fontfamily=node.has_attribute(head,att_fontfamily)
-                    -- FIXME: safety net
-                    if fontfamily == 0 then fontfamily = 1 end
-                    local instance = lookup_fontfamily_number_instance[fontfamily]
-                    assert(instance)
-                    local f
-                    local italic = node.has_attribute(head,att_italic)
-                    local bold   = node.has_attribute(head,att_bold)
-                    if italic == 1 and bold ~= 1 then
-                        f = used_fonts[instance.italic]
-                    elseif italic == 1 and bold == 1 then
-                        f = used_fonts[instance.bolditalic]
-                    elseif bold == 1 then
-                        f = used_fonts[instance.bold]
-                    else
-                        f = used_fonts[instance.normal]
-                    end
-                    if not f then f=publisher.options.defaultfont
-                    end
-                    if gluespec.stretch_order == 0 and writable then
-                        gluespec.width=f.parameters.space
-                        gluespec.stretch=f.parameters.space_stretch
-                        gluespec.shrink=f.parameters.space_shrink
-                    else
-                        -- w("gluespec: %s, subtype: %s",tostring(gluespec),tostring(head.subtype))
-                    end
-                end
-            else
-                -- FIXME: how can it be that there is no glue_spec???
-                -- no glue_spec found.
-                gluespec = node.new("glue_spec")
-                local fontfamily=node.has_attribute(head,att_fontfamily)
-                local instance = lookup_fontfamily_number_instance[fontfamily]
-                local f = used_fonts[instance.normal]
-                gluespec.width   = f.parameters.space
-                gluespec.stretch = f.parameters.space_stretch
-                gluespec.shrink  = f.parameters.space_shrink
-                head.spec = gluespec
-            end
         elseif head.id == kern_node then -- kern
         elseif head.id == penalty_node then -- penalty
         elseif head.id == glyph_node then -- glyph
@@ -312,6 +263,13 @@ function pre_linebreak( head )
 
                 if node.has_attribute(head,att_script) then
                     instancename = instancename .. "script"
+                    local sub_sup = node.has_attribute(head,att_script)
+                    local fam = lookup_fontfamily_number_instance[fontfamily]
+                    if sub_sup == 1 then
+                        head.yoffset = -fam.scriptshift
+                    else
+                        head.yoffset = fam.scriptshift
+                    end
                 end
 
                 tmp_fontnum = instance[instancename]

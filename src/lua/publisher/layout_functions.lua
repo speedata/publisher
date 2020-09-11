@@ -460,7 +460,8 @@ local function decode_html( dataxml, arg )
             err("decode-html failed")
             return nil
         end
-        local ret = luxor.parse_xml("<dummy>" .. msg .. "</dummy>")
+        -- two dummy tags because xpath.parse_raw removes the surrounding table
+        local ret = luxor.parse_xml("<dummy><dummy>" .. msg .. "</dummy></dummy>")
         return ret
     end
 end

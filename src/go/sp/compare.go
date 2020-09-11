@@ -13,6 +13,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -26,6 +27,12 @@ type compareStatus struct {
 	Badpages []int
 	Delta    float64
 }
+
+type byDelta []compareStatus
+
+func (a byDelta) Len() int           { return len(a) }
+func (a byDelta) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a byDelta) Less(i, j int) bool { return a[i].Delta > a[j].Delta }
 
 var (
 	finished  chan bool
@@ -227,10 +234,11 @@ func mkWebPage() error {
 	if len(cs) == 0 {
 		return nil
 	}
+	sort.Sort(byDelta(cs))
 	tmpl := `<!DOCTYPE html>
 <html>
 <head>
-	<title>Bilder</title>
+	<title>speedata compare result</title>
 	<style type="text/css">
 		img { height: 150px ; border: 1px solid black; }
 		tr.img td	{ border-bottom: 1px solid black; }
@@ -242,7 +250,7 @@ func mkWebPage() error {
 	{{ range .CompareStatus -}}
 	{{ $path := .Path}}
 	<tr>
-		<td colspan="1">{{ .Path }}</td>
+		<td colspan="1">{{ .Path }} ({{ .Delta | printf "%.3f" }})</td>
 	</tr>
 	<tr>
 		<td>
@@ -293,7 +301,7 @@ func getCompareStatus(statuschan chan compareStatus) {
 				fmt.Println("Finished with comparison in")
 				fmt.Println(st.Path)
 				fmt.Println("Comparison failed. Bad pages are:", st.Badpages)
-				fmt.Println("Max delta is", st.Delta)
+				fmt.Println("Max delta is", fmt.Sprintf("%.2f", st.Delta))
 			}
 		case <-finished:
 			// now that we have read from the channel, we are all done

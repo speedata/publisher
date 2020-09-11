@@ -12,6 +12,7 @@ require("publisher.fonts")
 require("publisher.tabular")
 local spotcolors = require("spotcolors")
 local paragraph  = require("paragraph")
+local par  = require("par")
 do_luafile("css.lua")
 
 -- This module contains the commands in the layout file (the tags)
@@ -22,42 +23,27 @@ commands = {}
 --- Insert a hyperlink into the PDF.
 function commands.a( layoutxml,dataxml )
     local interaction = ( publisher.options.interaction ~= false )
-    p = paragraph:new()
+    p = par:new()
 
     if interaction then
         local href = publisher.read_attribute(layoutxml,dataxml,"href","rawstring")
         local link = publisher.read_attribute(layoutxml,dataxml,"link","rawstring")
-        local an = publisher.get_action_node(3)
+
+        local hl
         if link then
-            an.data = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D(mark%s)>>",link)
+            hl = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D(mark%s)>>",link)
         else
-            an.data = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/URI/URI(%s)>>",href)
+            hl = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/URI/URI(%s)>>",href)
         end
-        local stl = node.new("whatsit","pdf_start_link")
-        stl.action = an
-        stl.width = -1073741824
-        stl.height = -1073741824
-        stl.depth = -1073741824
-        p:append(stl)
+        publisher.hyperlinks[#publisher.hyperlinks + 1] = hl
     end
 
     local tab = publisher.dispatch(layoutxml,dataxml)
-    local objects = {}
-    for i,j in ipairs(tab) do
-        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j))
-        else
-            objects[#objects + 1] = publisher.element_contents(j)
-        end
-    end
-    for _,j in ipairs(objects) do
-        p:append(j,{})
-    end
-    if interaction then
-        local enl = node.new("whatsit","pdf_end_link")
-        p:append(enl)
-    end
 
+    for _,j in ipairs(tab) do
+        local c = publisher.element_contents(j)
+        p:append(c,{hyperlink = #publisher.hyperlinks, allowbreak=publisher.allowbreak})
+    end
 
     return p
 end
@@ -72,7 +58,7 @@ end
 --- is  placed.
 function commands.action( layoutxml,dataxml)
     local tab = publisher.dispatch(layoutxml,dataxml)
-    p = paragraph:new()
+    p = par:new()
 
     for _,j in ipairs(tab) do
         local eltname = publisher.elementname(j)
@@ -258,30 +244,21 @@ end
 --- -------------------
 --- Set the contents of this element in boldface
 function commands.bold( layoutxml,dataxml )
-    local a = paragraph:new()
-
-    local objects = {}
+    local p = par:new()
     local tab = publisher.dispatch(layoutxml,dataxml)
-
-    for i,j in ipairs(tab) do
-        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{bold = true, allowbreak=publisher.allowbreak})
-        else
-            objects[#objects + 1] = publisher.element_contents(j)
-        end
-    end
-    for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = 0, bold = 1, allowbreak=publisher.allowbreak})
+    for _,j in ipairs(tab) do
+        local c = publisher.element_contents(j)
+        p:append(c,{bold = 1, allowbreak=publisher.allowbreak})
     end
 
-    return a
+    return p
 end
 
 --- Br
 --- ---
 --- Insert a newline
 function commands.br( layoutxml,dataxml )
-    a = paragraph:new()
+    a = par:new()
     a:append("\n",{})
     return a
 end
@@ -406,7 +383,7 @@ function commands.bookmark( layoutxml,dataxml )
         publisher.setup_page(nil,"commands#bookmark")
         publisher.output_absolute_position({nodelist = hlist, x = 0, y = 0})
     else
-        local p = paragraph:new()
+        local p = par:new()
         p:append(hlist)
         return p
     end
@@ -436,16 +413,9 @@ end
 --- Set the color of the enclosed text.
 function commands.color( layoutxml, dataxml )
     local colorname = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
-    local colorindex
-    if colorname then
-        if not publisher.colors[colorname] then
-            err("Color %q is not defined yet.",colorname)
-        else
-            colorindex = publisher.colors[colorname].index
-        end
-    end
+    local colorindex = publisher.get_colorindex_from_name(colorname,"black")
 
-    local a = paragraph:new()
+    local p = par:new()
 
     local objects = {}
     local prev_fgcolor = publisher.current_fgcolor
@@ -453,19 +423,12 @@ function commands.color( layoutxml, dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     publisher.current_fgcolor = prev_fgcolor
 
-    for i,j in ipairs(tab) do
-        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{allowbreak=publisher.allowbreak})
-        else
-            objects[#objects + 1] = publisher.element_contents(j)
-        end
-    end
-    for _,j in ipairs(objects) do
-        a:append(j,{allowbreak=publisher.allowbreak})
+    for _,j in ipairs(tab) do
+        local c = publisher.element_contents(j)
+        p:append(c,{color = colorindex, allowbreak=publisher.allowbreak})
     end
 
-    a:set_color(colorindex)
-    return a
+    return p
 end
 
 
@@ -821,22 +784,14 @@ function commands.fontface( layoutxml,dataxml )
     if not familynumber then
         err("font: family %q unknown",fontfamily)
     else
-        local a = paragraph:new()
+        local p = par:new()
         local tab = publisher.dispatch(layoutxml,dataxml)
-        local objects = {}
-
-        for i,j in ipairs(tab) do
-            if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-                objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{allowbreak=publisher.allowbreak})
-            else
-                objects[#objects + 1] = publisher.element_contents(j)
-            end
-        end
-        for _,j in ipairs(objects) do
-            a:append(j,{fontfamily = familynumber, allowbreak=publisher.allowbreak})
+        for _,j in ipairs(tab) do
+            local c = publisher.element_contents(j)
+            p:append(c,{fontfamily = familynumber, allowbreak=publisher.allowbreak})
         end
 
-        return a
+        return p
     end
 end
 
@@ -1054,49 +1009,39 @@ end
 --- Create a horizontal space that stretches up to infinity
 function commands.hspace( layoutxml,dataxml )
     local width      = publisher.read_attribute(layoutxml,dataxml,"width", "length_sp")
-    local minwidth      = publisher.read_attribute(layoutxml,dataxml,"minwidth", "length_sp")
+    local minwidth   = publisher.read_attribute(layoutxml,dataxml,"minwidth", "length_sp")
     local leadertext = publisher.read_attribute(layoutxml,dataxml,"leader", "rawstring")
     local leaderwd   = publisher.read_attribute(layoutxml,dataxml,"leader-width", "length_sp")
-    local a = paragraph:new()
+    local a = par:new()
 
-    -- It seems that it's safe to use 100 for leaders and leader-less-glue
-    local subtype = 0
-    if leadertext then
-        subtype = 100
+    -- We insert a function that gets called in paragraph creation
+    local ud = node.new("whatsit","user_defined")
+    ud.type = 108
+    ud.value = function(options)
+        local n
+        if width == nil then
+            n = set_glue(nil,{width = minwidth or 0, stretch = 2^16, stretch_order = 3})
+        else
+            n = set_glue(nil,{width = tonumber(width)})
+        end
+        if leadertext then
+            n.subtype = 100
+            n.leader = publisher.mknodes(leadertext,options)
+            node.set_attribute(n.leader, publisher.att_leaderwd, leaderwd or -1)
+        end
+
+        local p1, p2
+        p1 = node.new("penalty")
+        p1.penalty = 0
+        p2 = node.new("penalty")
+        p2.penalty = 10000
+        local h1 = node.new("hlist")
+        node.insert_after(p1,p1,h1)
+        node.insert_after(p1,h1,p2)
+        node.insert_after(p1,p2,n)
+        return p1
     end
-    local n
-
-    if width == nil then
-        n = set_glue(nil,{width = minwidth or 0, stretch = 2^16, stretch_order = 3})
-    else
-        n = set_glue(nil,{width = tonumber(width)})
-    end
-    n.subtype = subtype
-
-    if leadertext then
-        local lp = paragraph:new()
-        lp:append(leadertext)
-        -- With no given width, we ask the pre_linebreak_filter
-        -- to set the width of the hbox later on (after font setting)
-        node.set_attribute(lp.nodelist, publisher.att_leaderwd, leaderwd or -1)
-        n.leader = lp.nodelist
-    end
-    local p1, p2
-    p1 = node.new("penalty")
-    p1.penalty = 0
-
-    p2 = node.new("penalty")
-    p2.penalty = 10000
-
-    local h1 = node.new("hlist")
-
-    node.insert_after(p1,p1,h1)
-    node.insert_after(p1,h1,p2)
-    node.insert_after(p1,p2,n)
-
-
-    a:append(p1,{})
-
+    a:append(ud,{})
     return a
 end
 
@@ -1406,7 +1351,7 @@ function commands.initial( layoutxml,dataxml)
         end
     end
     local box
-    box = publisher.mknodes(initialvalue,fontfamily,{})
+    box = publisher.mknodes(initialvalue,{fontfamily = fontfamily})
 
     if colorname then
         if not publisher.colors[colorname] then
@@ -1486,40 +1431,26 @@ end
 --- -------------------
 --- Set the contents of this element in italic text
 function commands.italic( layoutxml,dataxml )
-    local a = paragraph:new()
-    local objects = {}
+    local p = par:new()
     local tab = publisher.dispatch(layoutxml,dataxml)
-    for i,j in ipairs(tab) do
-        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{italic = true, allowbreak=publisher.allowbreak})
-        else
-            objects[#objects + 1] = publisher.element_contents(j)
-        end
+    for _,j in ipairs(tab) do
+        local c = publisher.element_contents(j)
+        p:append(c,{italic = 1, allowbreak=publisher.allowbreak})
     end
-    for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = 0, italic = 1, allowbreak=publisher.allowbreak})
-    end
-    return a
+    return p
 end
 
 --- List item (`<Li>`)
 --- ------------------
 --- An entry of an ordered or unordered list.
 function commands.li(layoutxml,dataxml )
-    local objects = {}
-    local a = paragraph:new()
+    local p = par:new(nil,"li")
     local tab = publisher.dispatch(layoutxml,dataxml)
-    for i,j in ipairs(tab) do
-        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j))
-        else
-            objects[#objects + 1] = publisher.element_contents(j)
-        end
+    for _,j in ipairs(tab) do
+        local c = publisher.element_contents(j)
+        p:append(c,{allowbreak=publisher.allowbreak,padding_left = tex.sp("5mm")})
     end
-    for _,j in ipairs(objects) do
-        a:append(j,{})
-    end
-    return a
+    return p
 end
 
 
@@ -1881,90 +1812,98 @@ function commands.nobreak( layoutxml, dataxml )
     local text             = publisher.read_attribute(layoutxml,dataxml,"text",     "rawstring")
     local fontname         = publisher.read_attribute(layoutxml,dataxml,"fontface", "rawstring")
 
-    local fontfamily = 0
-    if fontname then
-        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
-        if fontfamily == nil then
-            err("Fontfamily %q not found.",fontname)
-            fontfamily = 0
-        end
-        publisher.current_fontfamily = fontfamily
-    end
-
-    local languagecode = publisher.defaultlanguage
-
-    publisher.intextblockcontext = publisher.intextblockcontext + 1
-    local a = paragraph:new(textformat)
-    local objects = {}
+    local p = par:new()
     local tab = publisher.dispatch(layoutxml,dataxml)
-    for _,j in ipairs(tab) do
-        local contents = publisher.element_contents(j)
-        if publisher.elementname(j) == "Value" and type(contents) == "table" and #contents == 1 and type(contents[1]) == "string"  then
-            objects[#objects + 1] = contents[1]
-        elseif publisher.elementname(j) == "Value" and type(contents) == "table" then
-            objects[#objects + 1] = publisher.parse_html(contents,{allowbreak = allowbreak})
-        else
-            objects[#objects + 1] = contents
-        end
-    end
-    for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = fontfamily, languagecode = languagecode, allowbreak = allowbreak})
-    end
 
     if strategy == "fontsize" then
-        local fam = publisher.current_fontfamily
-        local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[fam]
-        local strut
-        strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 })
+        p:append(tab,{})
+        p.flatten_callback = function(thiselt,options)
+            local fam = options.fontfamily
+            local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[fam]
+            local strut
+            strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 })
+            local loops = 0
+            local nl
 
-        local nl
-        local loops = 0
+            local tmppar
+            repeat
+                tmppar = par:new()
+                loops = loops + 1
+                if loops > 10 then
+                    err("Nobreak: More than 100 loops, giving up")
+                    break
+                end
+                local thisoptions = publisher.copy_table_from_defaults(options)
+                thisoptions.fontfamily = fam
+                foo = par:new()
+                for _,j in ipairs(tab) do
+                    local c = publisher.element_contents(j)
+                    tmppar:append(publisher.copy_table_from_defaults(c),thisoptions)
+                end
+                tmppar:mknodelist(thisoptions)
+                nl = node.copy_list(tmppar.objects[1])
+                nl = node.hpack(nl)
+                nl = node.insert_before(nl, nl , node.copy(strut))
+                fam = publisher.fonts.clone_family(fam, {size = shrinkfactor})
+                local wd = node.dimensions(nl)
+            until wd <= current_maxwidth
 
-        repeat
-            loops = loops + 1
-            if loops > 100 then
-                err("Nobreak: More than 100 loops, giving up")
-                break
-            end
-            nl = node.copy_list(a.nodelist)
-            publisher.set_fontfamily_if_necessary(nl,fam)
-            -- pre_linebreak is necessary to set the different font widths
-            publisher.fonts.pre_linebreak(nl)
-            nl = node.hpack(nl)
-            nl = node.insert_before(nl, nl , node.copy(strut))
-            fam = publisher.fonts.clone_family(fam, {size = shrinkfactor})
-        until nl.next.width <= current_maxwidth
-
-        a.nodelist = nl
-        node.set_attribute(a.nodelist,publisher.att_fontfamily,fam)
-
-        publisher.intextblockcontext = publisher.intextblockcontext - 1
+            return tmppar
+        end
+        return p
     elseif strategy == "cut" then
-        local nl = node.copy_list(a.nodelist)
-        publisher.set_fontfamily_if_necessary(nl,publisher.current_fontfamily)
-        publisher.fonts.pre_linebreak(nl)
-        nl = node.hpack(nl)
-        if node.dimensions(nl) <= current_maxwidth then
-            return a
+        p:append(tab,{})
+        p.flatten_callback = function(thiselt,options)
+            tmppar = par:new()
+            for _,j in ipairs(tab) do
+                local c = publisher.element_contents(j)
+                tmppar:append(c,thisoptions)
+            end
+            tmppar:mknodelist(thisoptions)
+            local nl = tmppar.objects[1]
+            local wd = node.dimensions(nl)
+            if wd < current_maxwidth then
+                return tmppar
+            end
+
+            local txtnl = publisher.mknodes(text,{fontfamily = options.fontfamily})
+            txtnl = node.hpack(txtnl)
+            local txtwd = node.dimensions(txtnl)
+
+            local head = nl
+            local wd = 0
+            while head and wd + txtwd <= current_maxwidth do
+                head = head.next
+                wd = node.dimensions(nl,head)
+            end
+            local tmpnl = node.copy_list(nl,head)
+            node.insert_after(tmpnl,node.tail(tmpnl),txtnl)
+            tmppar[1] = tmpnl
+            return tmppar
         end
-        local txt = publisher.mknodes(text,fontfamily,{})
-        txt = node.hpack(txt)
-        local wd_txt = node.dimensions(txt)
-        local head = nl.list
-        local wd = 0
-        while head and wd + wd_txt <= current_maxwidth do
-            head = head.next
-            wd = node.dimensions(nl.list,head)
+        return p
+    elseif strategy == "keeptogether" then
+        p:append(tab,{})
+        p.flatten_callback = function(thiselt,options)
+            tmppar = par:new()
+            for _,j in ipairs(tab) do
+                local c = publisher.element_contents(j)
+                tmppar:append(c,options)
+            end
+            tmppar:mknodelist(options)
+            local nl = tmppar.objects[1]
+
+            local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily]
+            local lineheight = fam_tbl.baselineskip
+            local strut = publisher.add_rule(nil,"head",{height = lineheight * 0.75 , depth = lineheight * 0.25 , width = 0 })
+            nl = node.hpack(nl)
+            nl = node.insert_before(nl,nl,strut)
+
+            tmppar[1] = nl
+            return tmppar
         end
-        a.nodelist = node.copy_list(nl.list,head)
-        node.set_attribute(a.nodelist,publisher.att_fontfamily,fontfamily)
-        node.insert_after(a.nodelist,node.tail(a.nodelist),txt)
-    elseif strategy == "keeptogether" then -- default
-        a.nodelist = node.hpack(a.nodelist)
-        a.nodelist = publisher.addstrut(a.nodelist,"head")
-        node.set_attribute(a.nodelist,publisher.att_fontfamily,fontfamily)
+        return p
     end
-    return a
 end
 
 
@@ -1976,7 +1915,7 @@ function commands.ol(layoutxml,dataxml )
     local labelwidth = tex.sp("5mm")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
-        local a = paragraph:new("__fivemm")
+        local a = par:new("__fivemm")
         a:append(publisher.number_hbox(i,labelwidth),{})
         a:append(publisher.element_contents(j),{})
         ret[#ret + 1] = a
@@ -2246,6 +2185,68 @@ function commands.pagetype(layoutxml,dataxml)
     publisher.masterpages[#publisher.masterpages + 1] = { is_pagetype = test, res = tmp_tab, name = pagetypename,ns=layoutxml[".__ns"]}
 end
 
+--- Par
+function commands.par( layoutxml, dataxml )
+    local allowbreak    = publisher.read_attribute(layoutxml,dataxml,"allowbreak","rawstring")
+    local fontname  = publisher.read_attribute(layoutxml,dataxml,"fontface",  "rawstring")
+    local colorname = publisher.read_attribute(layoutxml,dataxml,"color",     "rawstring")
+    local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
+    local paddingleft   = publisher.read_attribute(layoutxml,dataxml,"padding-left","width_sp")
+    local paddingright  = publisher.read_attribute(layoutxml,dataxml,"padding-right","width_sp")
+    local textformat    = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
+
+    if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
+
+    local fontfamily
+    if fontname then
+        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+        if fontfamily == nil then
+            err("Fontfamily %q not found.",fontname)
+            fontfamily = 0
+        end
+        publisher.current_fontfamily = fontfamily
+    else
+        fontfamily = nil
+    end
+    local colorindex = publisher.get_colorindex_from_name(colorname)
+    local languagecode
+
+    if language_name then
+        languagecode = publisher.get_languagecode(language_name)
+    else
+        languagecode = publisher.defaultlanguage
+    end
+
+
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    local p = par:new(nil,"par")
+
+    local initial
+    for i=1,#tab do
+        local thischild = tab[i]
+        local eltname = publisher.elementname(thischild)
+        local contents = publisher.element_contents(thischild)
+        local params = {fontfamily = fontfamily,
+            color = colorindex,
+            initial = initial,
+            languagecode = languagecode,
+            padding_left = paddingleft,
+            padding_right = paddingright,
+            textformat = textformat,
+            allowbreak = allowbreak,
+        }
+        if eltname == "Initial" then
+            initial = contents
+        elseif eltname == "Image" then
+            p:append(contents[1],params)
+        else
+            p:append(contents,params)
+        end
+    end
+
+    return p
+end
+
 --- Paragraph
 --- ---------
 --- A paragraph is just a bunch of text that is not yet typeset.
@@ -2264,7 +2265,7 @@ function commands.paragraph( layoutxml,dataxml )
     local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
     local role          = publisher.read_attribute(layoutxml,dataxml,"role",      "string")
     local paddingleft   = publisher.read_attribute(layoutxml,dataxml,"padding-left","width_sp")
-    local paddingright   = publisher.read_attribute(layoutxml,dataxml,"padding-right","width_sp")
+    local paddingright  = publisher.read_attribute(layoutxml,dataxml,"padding-right","width_sp")
 
     if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
 
@@ -2775,7 +2776,7 @@ function commands.place_object( layoutxml,dataxml )
                 current_column_start = current_column_start - width_in_gridcells + 1
             end
             publisher.output_at({
-                nodelist = object,
+                nodelist = node.copy(object),
                 x = current_column_start,
                 y = current_row,
                 allocate = ( allocate == "yes"),
@@ -2797,6 +2798,7 @@ function commands.place_object( layoutxml,dataxml )
                 vreference = vreference,
                 })
             row = nil -- the current rows is not valid anymore because an object is already rendered
+            node.flush_list(object)
         end -- no absolute positioning
         if i < #objects then
             -- don't switch when inside a group
@@ -3341,7 +3343,7 @@ function commands.span( layoutxml,dataxml )
     if backgroundcolor == nil then backgroundcolor = css_rules["background-color"]  end
     if bg_padding_top == nil then
         if css_rules["background-padding-top"] then
-            bg_padding_top =  tex.sp(css_rules["background-padding-top"])
+            bg_padding_top = tex.sp(css_rules["background-padding-top"])
         end
     end
     if bg_padding_bottom == nil then
@@ -3354,7 +3356,7 @@ function commands.span( layoutxml,dataxml )
         colornumber = publisher.colors[backgroundcolor].index
     end
 
-    local a = paragraph:new()
+    local a = par:new()
     local params = {
         underline = underline,
         allowbreak=publisher.allowbreak,
@@ -3363,20 +3365,15 @@ function commands.span( layoutxml,dataxml )
         bg_padding_bottom = bg_padding_bottom,
         letterspacing = letterspacing,
     }
-    local objects = {}
+
+    local p = par:new()
     local tab = publisher.dispatch(layoutxml,dataxml)
-    for i,j in ipairs(tab) do
-        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),params)
-        else
-            objects[#objects + 1] = publisher.element_contents(j)
-        end
+    for _,j in ipairs(tab) do
+        local c = publisher.element_contents(j)
+        p:append(c,params)
     end
 
-    for _,j in ipairs(objects) do
-        a:append(j,params)
-    end
-    return a
+    return p
 end
 --- Stylesheet
 --- ----------
@@ -3394,24 +3391,26 @@ end
 --- ---
 --- Subscript. The contents of this element should be written in subscript (smaller, lower)
 function commands.sub( layoutxml,dataxml )
-    local a = paragraph:new()
+    local p = par:new()
     local tab = publisher.dispatch(layoutxml,dataxml)
-    for i,j in ipairs(tab) do
-        a:script(publisher.element_contents(j),1,{fontfamily = 0})
+    for _,j in ipairs(tab) do
+        local c = publisher.element_contents(j)
+        p:append(c,{subscript = 1, allowbreak=publisher.allowbreak})
     end
-    return a
+    return p
 end
 
 --- Sup
 --- ---
 --- Superscript. The contents of this element should be written in superscript (smaller, higher)
 function commands.sup( layoutxml,dataxml )
-    local a = paragraph:new()
+    local p = par:new()
     local tab = publisher.dispatch(layoutxml,dataxml)
-    for i,j in ipairs(tab) do
-        a:script(publisher.element_contents(j),2,{fontfamily = 0})
+    for _,j in ipairs(tab) do
+        local c = publisher.element_contents(j)
+        p:append(c,{subscript = 0, allowbreak=publisher.allowbreak})
     end
-    return a
+    return p
 end
 
 --- Switch
@@ -3903,8 +3902,10 @@ function commands.text(layoutxml,dataxml)
         local contents = publisher.element_contents(j)
         if eltname == "Paragraph" then
             objects[#objects + 1] = contents
+        elseif eltname == "Par" then
+            objects[#objects + 1] = contents
         elseif eltname == "Image" then
-            local a = paragraph:new()
+            local a = par:new()
             local c = contents[1]
             node.set_attribute(c,publisher.att_dontadjustlineheight,1)
             a:append(c)
@@ -3937,6 +3938,8 @@ function commands.text(layoutxml,dataxml)
     -- of the area to be filled.
     local cg = publisher.current_grid
     tab.pull = function(parameter,state)
+            parameter.fontfamily = fontfamily
+            parameter.textformat = textformat
             -- When pull is called the first time the state is not set yet.
             -- Currently we format all sub-objects (paragraphs),
             -- add them into the "object list" (state.objects) and
@@ -3953,13 +3956,16 @@ function commands.text(layoutxml,dataxml)
                 local startrow =  cg:current_row(parameter.area)
                 for i=1,#tab do
                     local contents = tab[i]
-                    local dont_format = node.has_attribute(contents.nodelist,publisher.att_dont_format)
+                    local dont_format = 0
+                    if  node.is_node(contents.nodelist) then
+                        dont_format = node.has_attribute(contents.nodelist,publisher.att_dont_format)
+                    end
                     if dont_format == 1 then
                         obj = node.vpack(contents.nodelist)
                     else
-                        contents.nodelist = publisher.set_color_if_necessary(contents.nodelist,colorindex)
-                        publisher.set_fontfamily_if_necessary(contents.nodelist,fontfamily)
-                        obj,startpage,startrow = contents:format(parameter.width,textformat,parameter,startpage,startrow)
+                        -- contents.nodelist = publisher.set_color_if_necessary(contents.nodelist,colorindex)
+                        -- publisher.set_fontfamily_if_necessary(contents.nodelist,fontfamily)
+                        obj = contents:format(parameter.width,parameter)
                     end
                     objects[#objects + 1] = obj
                     local ht_rows, extra = cg:height_in_gridcells_sp(obj.height + obj.depth + extra_accumulated, {extrathreshold = -100})
@@ -4074,6 +4080,8 @@ function commands.textblock( layoutxml,dataxml )
         local contents = publisher.element_contents(j)
         if eltname == "Paragraph" then
             objects[#objects + 1] = contents
+        elseif eltname == "Par" then
+            objects[#objects + 1] = contents
         elseif eltname == "Ul" or eltname == "Ol" then
             for j,w in ipairs(contents) do
                 objects[#objects + 1] = w
@@ -4101,18 +4109,21 @@ function commands.textblock( layoutxml,dataxml )
         if paragraph.id == publisher.whatsit_node then
             -- todo: document how this can be!
             nodes[#nodes + 1] = paragraph
-        else
+        elseif paragraph.nodelist then
             nodelist = paragraph.nodelist
-            assert(nodelist,"No nodelist found in objects (Text)")
             local tmp = node.has_attribute(nodelist,publisher.att_dont_format)
             if tmp ~= 1 then
                 publisher.set_fontfamily_if_necessary(nodelist,fontfamily)
                 paragraph.nodelist = publisher.set_color_if_necessary(nodelist,colorindex)
                 node.slide(nodelist)
-                nodelist = paragraph:format(width_sp,textformat)
+                nodelist = paragraph:format(width_sp,{textformat = textformat})
             end
 
             nodes[#nodes + 1] = nodelist
+        else
+            -- new <Par> mode
+            local fmt = paragraph:format(width_sp,{textformat = textformat,fontfamily = fontfamily, color = colorindex })
+            table.insert( nodes, fmt )
         end
     end
 
@@ -4190,24 +4201,20 @@ function commands.underline( layoutxml,dataxml )
     local css_rules = publisher.css:matches({element = 'u', class=class,id=id}) or {}
     if dashed == nil then dashed = ( css_rules["border-style"] == "dashed") end
 
-    local a = paragraph:new()
-    local objects = {}
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local p = par:new()
     local underline = 1
     if dashed then
         underline = 2
     end
-    for i,j in ipairs(tab) do
-        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
-            objects[#objects + 1] = publisher.parse_html(publisher.element_contents(j),{underline = underline, allowbreak=publisher.allowbreak})
-        else
-            objects[#objects + 1] = publisher.element_contents(j)
-        end
+
+
+    local tab = publisher.dispatch(layoutxml,dataxml)
+
+    for _,j in ipairs(tab) do
+        local c = publisher.element_contents(j)
+        p:append(c,{underline = underline, allowbreak=publisher.allowbreak})
     end
-    for _,j in ipairs(objects) do
-        a:append(j,{fontfamily = 0, underline = underline, allowbreak=publisher.allowbreak})
-    end
-    return a
+    return p
 end
 
 --- Unordered list (`<Ul>`)
@@ -4218,7 +4225,7 @@ function commands.ul(layoutxml,dataxml )
     local labelwidth = tex.sp("5mm")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
-        local a = paragraph:new("__fivemm")
+        local a = par:new(nil,"ul")
         a:append(publisher.bullet_hbox(labelwidth),{})
         a:append(publisher.element_contents(j),{})
         ret[#ret + 1] = a
@@ -4244,12 +4251,20 @@ end
 --- ---
 --- Format the current URL. It should make the URL active.
 function commands.url(layoutxml,dataxml)
-    local a = paragraph:new()
+    local a = par:new()
     local tab = publisher.dispatch(layoutxml,dataxml)
-    for i,j in ipairs(tab) do
-        a:append(xpath.textvalue_raw(true,publisher.element_contents(j)),{})
-        a.nodelist = publisher.break_url(a.nodelist)
+
+    local ud = node.new("whatsit","user_defined")
+    ud.type = 108
+    ud.value = function(options)
+        local str = {}
+        for i,j in ipairs(tab) do
+            table.insert(str,publisher.element_contents(j))
+        end
+        local urlnodes = publisher.mknodes(table.concat(str,""),options)
+        return publisher.break_url(urlnodes)
     end
+    a:append(ud)
     return a
 end
 
