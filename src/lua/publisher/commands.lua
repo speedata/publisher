@@ -2222,7 +2222,6 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     end
     local params = {fontfamily = fontfamily,
         color = colorindex,
-        initial = initial,
         languagecode = languagecode,
         padding_left = paddingleft,
         padding_right = paddingright,
@@ -2241,7 +2240,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
         local contents = publisher.element_contents(thischild)
 
         if eltname == "Initial" then
-            initial = contents
+            params.initial = contents
         elseif eltname == "Image" then
             p:append(contents[1],params)
         else

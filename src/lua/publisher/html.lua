@@ -424,7 +424,7 @@ function collect_horizontal_nodes( elt,parameter )
         copy_attributes(styles,attributes)
         local fontfamily = styles["font-family"]
         local fontsize = styles["font-size"]
-        options.fontfamily = get_fontfamily(fontfamily,styles.fontsize_sp, fontname,styles)
+        options.fontfamily = get_fontfamily(fontfamily,styles.fontsize_sp, fontsize,styles)
         local fontstyle = styles["font-style"]
         local fontweight = styles["font-weight"]
         local fg_colorindex, bg_colorindex
@@ -673,6 +673,7 @@ end
 
 local olcounter = {}
 function build_nodelist( elt,options )
+    options = options or {}
     local ret = {}
     for i=1,#elt do
         local thiselt = elt[i]

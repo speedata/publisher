@@ -47,7 +47,7 @@ local function reconstruct_html_text(elt)
         local thiselt = elt[i]
         local type_thiselt = type(thiselt)
         if type_thiselt == "string" then
-            table.insert(ret,thiselt)
+            table.insert(ret,publisher.xml_escape(thiselt))
         elseif type_thiselt == "table" then
             table.insert(ret,reconstruct_html_text(thiselt))
         end
