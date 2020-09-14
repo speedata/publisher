@@ -1847,17 +1847,6 @@
          <empty></empty>
       </element>
    </define>
-   <define name="e_HTML">
-      <element name="HTML">
-         <a:documentation>Verarbeite HTML aus den Daten.</a:documentation>
-         <interleave>
-            <group>
-               <ref name="e_Value"></ref>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
-      </element>
-   </define>
    <define name="e_I">
       <element name="I">
          <a:documentation>Schaltet auf »Kursiv« um.</a:documentation>
@@ -5256,7 +5245,6 @@
                      <ref name="e_Bookmark"></ref>
                      <ref name="e_Copy-of"></ref>
                      <ref name="e_ForAll"></ref>
-                     <ref name="e_HTML"></ref>
                      <ref name="e_Loop"></ref>
                      <ref name="e_Ol"></ref>
                      <ref name="e_Paragraph"></ref>
@@ -5296,7 +5284,6 @@
                      <ref name="e_Bookmark"></ref>
                      <ref name="e_Copy-of"></ref>
                      <ref name="e_ForAll"></ref>
-                     <ref name="e_HTML"></ref>
                      <ref name="e_Image"></ref>
                      <ref name="e_Loop"></ref>
                      <ref name="e_Ol"></ref>

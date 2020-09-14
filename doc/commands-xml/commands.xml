@@ -3257,7 +3257,7 @@
     </example>
     <seealso><cmd name="Paragraph"/></seealso>
   </command>
-  <command en="HTML" since="3.9.9">
+  <!-- <command en="HTML" since="3.9.9">
     <description xml:lang="en">
       <para>Collect HTML from data.</para>
     </description>
@@ -3298,7 +3298,7 @@
       <para>Dieser Befehl ist experimentell. Nicht darauf verlassen, dass dieser Befehl in Zukunft existiert.</para>
     </info>
     <seealso></seealso>
-  </command>
+  </command> -->
   <command en="I">
     <description xml:lang="en">
       <para>Switch to italic text.</para>
@@ -8550,7 +8550,6 @@
           <cmd name="Bookmark"/>
           <cmd name="Copy-of"/>
           <cmd name="ForAll"/>
-          <cmd name="HTML"/>
           <cmd name="Loop"/>
           <cmd name="Ol"/>
           <cmd name="Paragraph"/>
@@ -8681,7 +8680,6 @@
           <cmd name="Bookmark"/>
           <cmd name="Copy-of"/>
           <cmd name="ForAll"/>
-          <cmd name="HTML"/>
           <cmd name="Image"/>
           <cmd name="Loop"/>
           <cmd name="Ol"/>

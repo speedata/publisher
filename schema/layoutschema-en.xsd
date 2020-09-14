@@ -1538,16 +1538,6 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  <xs:element name="HTML">
-    <xs:annotation>
-      <xs:documentation>Collect HTML from data.</xs:documentation>
-    </xs:annotation>
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="en:Value"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="I">
     <xs:annotation>
       <xs:documentation>Switch to italic text.</xs:documentation>
@@ -5100,7 +5090,6 @@
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Copy-of"/>
         <xs:element ref="en:ForAll"/>
-        <xs:element ref="en:HTML"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Ol"/>
         <xs:element ref="en:Paragraph"/>
@@ -5404,7 +5393,6 @@
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Copy-of"/>
         <xs:element ref="en:ForAll"/>
-        <xs:element ref="en:HTML"/>
         <xs:element ref="en:Image"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Ol"/>
