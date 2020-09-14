@@ -2936,7 +2936,7 @@ marker.value = 1
 function parse_html( elt, parameter )
     parameter = parameter or {}
     if elt.typ == "csshtmltree" then
-        return html.parse_html_new(elt, parameter.maxwidth_sp)
+        return html.parse_html_new(elt, parameter)
     else
         err("This should not happen (parse_html)")
     end
@@ -3295,12 +3295,7 @@ local function setstyles(n,parameter)
     end
 end
 
---- Create a `\hbox`. Return a nodelist. Parameter is one of
----
---- * language code
---- * bold (bold)
---- * italic (italic)
---- * underline
+-- Return a list of nodes
 function mknodes(str,parameter)
     parameter = parameter or {}
     local fontfamily = parameter.fontfamily
@@ -3352,6 +3347,14 @@ function mknodes(str,parameter)
     local stretch = tbl.parameters.space_stretch
     local match = unicode.utf8.match
 
+    -- languages
+    -- CJK needs special treatment, so let's check if we have for example Chinese
+    local lc = parameter.languagecode
+    local thislang = "en"
+    if lc and languages_id_lang[lc].locale then
+        thislang = languages_id_lang[lc].locale
+    end
+
     if tbl.face then
         local newlines_at = {}
         -- w("hb mode")
@@ -3366,8 +3369,17 @@ function mknodes(str,parameter)
 
         local buf = harfbuzz.Buffer.new()
         buf:add_utf8(str)
-        -- shape(tbl.font,buf, { language = "deu", script = "latn", direction = "ltr" })
-        shape(tbl,buf)
+        local script = "Latn"
+        if thislang == "--" then
+            thislang = nil
+            script = nil
+        elseif thislang == "zh" then
+            script = "Hans"
+        elseif thislang == "bn" then
+            -- "bn" not used yet
+            script = "beng"
+        end
+        shape(tbl,buf, { language = thislang, script = script } )
 
         local glyphs = buf:get_glyphs()
 
@@ -3430,6 +3442,17 @@ function mknodes(str,parameter)
                     list,cur = node.insert_after(list,cur,k)
                     lastitemwasglyph = true
                 end
+                            -- CJK
+                if thislang == "zh" and uc >= 12032 then
+                    local pen = node.new("penalty")
+                    pen.penalty = 0
+                    list,cur = node.insert_after(list,cur,pen)
+                end
+                -- simplified chinese
+                -- characters that must not appear at the beginning of a line
+                -- !%),.:;?]}¢°·'""†‡›℃∶、。〃〆〕〗〞﹚﹜！＂％＇），．：；？！］｝～
+                -- characters that must not appear at the end of a line
+                -- $(£¥·'"〈《「『【〔〖〝﹙﹛＄（．［｛￡￥
 
                 -- local diff = glyphs[i].x_advance - tbl.characters[uc].hadvance
                 -- if diff ~= 0 then
@@ -4555,6 +4578,7 @@ language_mapping = {
     ["Basque"]                       = "eu",
     ["Bulgarian"]                    = "bg",
     ["Catalan"]                      = "ca",
+    ["Chinese"]                      = "zh",
     ["Croatian"]                     = "hr",
     ["Czech"]                        = "cs",
     ["Danish"]                       = "da",
@@ -4582,6 +4606,7 @@ language_mapping = {
     ["Malayalam"]                    = "ml",
     ["Norwegian Bokmål"]             = "nb",
     ["Norwegian Nynorsk"]            = "nn",
+    ["Other"]                        = "--",
     ["Polish"]                       = "pl",
     ["Portuguese"]                   = "pt",
     ["Romanian"]                     = "ro",
@@ -4646,6 +4671,8 @@ language_filename = {
     ["sv"]    = "sv",
     ["tr"]    = "tr",
     ["uk"]    = "uk",
+    ["zh"]    = "",
+    ["--"]    = "",
 }
 
 --- Once a hyphenation pattern file is loaded, we only need the _id_ of it. This is stored in the
@@ -4679,28 +4706,34 @@ function get_language(id_or_locale_or_name)
         if string.match( locale ,"%-" ) then
             sep = "-"
         end
-        local lang, _ = unpack(string.explode(locale,sep))
-        if language_filename[lang] then
-            filename_part = language_filename[lang]
+        local langcode, _ = unpack(string.explode(locale,sep))
+        if language_filename[langcode] then
+            filename_part = language_filename[langcode]
         end
     end
-    if not filename_part then
-        err("Can't find hyphenation patterns for language %s",tostring(orig_id_or_locale_or_name))
-        return 0
-    end
-
-    local filename = string.format("hyph-%s.pat.txt",filename_part)
-    log("Loading hyphenation patterns %q.",filename)
-    local path = kpse.find_file(filename)
-    local pattern_file = io.open(path)
-    local pattern = pattern_file:read("*all")
-    pattern_file:close()
 
     local l = lang.new()
-    l:patterns(pattern)
+
+    if filename_part == "" then
+        -- ignore this
+        -- probably cjk or another language without hyphenation patterns
+    elseif not filename_part then
+        err("Can't find hyphenation patterns for language %s",tostring(orig_id_or_locale_or_name))
+        return 0
+    else
+        local filename = string.format("hyph-%s.pat.txt",filename_part)
+        log("Loading hyphenation patterns %q.",filename)
+        local path = kpse.find_file(filename)
+        local pattern_file = io.open(path)
+        local pattern = pattern_file:read("*all")
+        pattern_file:close()
+
+        l:patterns(pattern)
+    end
+
     local id = l:id()
     log("Language id: %d",id)
-    local ret = { id = id, l = l }
+    local ret = { id = id, l = l, locale = locale }
     languages_id_lang[id] = ret
     languages[locale] = ret
     return ret
@@ -5939,11 +5972,11 @@ local opts, ftrs = {}, {}
 shape = function(tbl, buf, options)
     local font = tbl.font
     options = options or { }
-    local lang, script, dir
+    local hblang, script, dir
 
     if options.language then
-        lang = harfbuzz.Language.new(options.language)
-        buf:set_language(lang)
+        hblang = harfbuzz.Language.new(options.language)
+        buf:set_language(hblang)
     end
     if options.script then
         script = harfbuzz.Script.new(options.script)

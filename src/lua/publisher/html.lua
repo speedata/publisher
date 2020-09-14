@@ -672,7 +672,7 @@ local function getsize(size,fontsize)
 end
 
 local olcounter = {}
-function build_nodelist( elt )
+function build_nodelist( elt,options )
     local ret = {}
     for i=1,#elt do
         local thiselt = elt[i]
@@ -755,8 +755,8 @@ function build_nodelist( elt )
             if hyphens == "none" or hyphens == "manual" then
                 tf.disable_hyphenation = true
             end
-
-            local n = collect_horizontal_nodes(thiselt,{textformat = tf})
+            options.textformat = tf
+            local n = collect_horizontal_nodes(thiselt,options)
 
             local a = par:new(tf.name,"html.lua")
 
@@ -796,7 +796,7 @@ function build_nodelist( elt )
                     styles.ullevel = styles.ullevel + 1
                 end
                 olcounter[styles.ollevel] = 0
-                local n = build_nodelist(thiselt)
+                local n = build_nodelist(thiselt,options)
                 if thiseltname == "ol" then
                     styles.ollevel = styles.ollevel - 1
                 else
@@ -810,7 +810,7 @@ function build_nodelist( elt )
             elseif thiseltname == "li" then
                 olcounter[styles.ollevel] = olcounter[styles.ollevel] + 1
                 local str = resolve_list_style_type(styles,olcounter)
-                local n = build_nodelist(thiselt)
+                local n = build_nodelist(thiselt,options)
                 for i=1,#n do
                     local a = n[i]
                     if i == 1 then
@@ -820,7 +820,7 @@ function build_nodelist( elt )
                     ret[#ret + 1] = a
                 end
             else
-                local n = build_nodelist(thiselt)
+                local n = build_nodelist(thiselt,options)
                 box.draw_border = attributes.has_border
                 box.border = {
                     borderstart = true,
@@ -945,7 +945,9 @@ function clearattributes( elt )
 end
 
 -- Entry point for HTML parsing
-function parse_html_new( elt, maxwidth_sp )
+function parse_html_new( elt, options )
+    options = options or {}
+    local maxwidth_sp = options.maxwidth_sp
     handle_pages(elt.pages,maxwidth_sp)
     fontfamilies = elt.fontfamilies
     elt.fontfamilies = nil
@@ -964,6 +966,6 @@ function parse_html_new( elt, maxwidth_sp )
         publisher.set_mainlanguage(lang)
     end
     parse_html_inner(elt[1])
-    local block = build_nodelist(elt)
+    local block = build_nodelist(elt,options)
     return block
 end

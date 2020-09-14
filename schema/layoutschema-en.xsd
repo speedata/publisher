@@ -2521,7 +2521,7 @@
       </xs:attribute>
       <xs:attribute name="mainlanguage">
         <xs:annotation>
-          <xs:documentation>The default language for text (hyphenation). You can also set the default language on the command line and locally set it at Paragraph.</xs:documentation>
+          <xs:documentation>The default language for text (hyphenation and rendering). You can also set the default language on the command line and locally set it at Paragraph and Textblock.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:union>
@@ -2580,6 +2580,15 @@
                 <xs:enumeration value="Catalan">
                   <xs:annotation>
                     <xs:documentation>Switch to Catalan hyphenation patterns.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Chinese">
+                  <xs:annotation>
+                    <xs:documentation>Switch to Chinese language setting.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2814,6 +2823,15 @@
                 <xs:enumeration value="Norwegian Nynorsk">
                   <xs:annotation>
                     <xs:documentation>Switch to Norwegian Nynorsk hyphenation patterns.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Other">
+                  <xs:annotation>
+                    <xs:documentation>Don't switch to any of these languages. Useful if a text does not render correctly.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3260,7 +3278,7 @@
       </xs:attribute>
       <xs:attribute name="language">
         <xs:annotation>
-          <xs:documentation>Name of the language for hyphenation.</xs:documentation>
+          <xs:documentation>Name of the language for hyphenation and rendering.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -3292,6 +3310,11 @@
             <xs:enumeration value="Catalan">
               <xs:annotation>
                 <xs:documentation>Switch to Catalan hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Chinese">
+              <xs:annotation>
+                <xs:documentation>Switch to Chinese language setting.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="Croatian">
@@ -3422,6 +3445,11 @@
             <xs:enumeration value="Norwegian Nynorsk">
               <xs:annotation>
                 <xs:documentation>Switch to Norwegian Nynorsk hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Other">
+              <xs:annotation>
+                <xs:documentation>Don't switch to any of these languages. Useful if a text does not render correctly.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="Polish">
@@ -5104,6 +5132,245 @@
         <xs:annotation>
           <xs:documentation>The name of the font family. Defaults to text.</xs:documentation>
         </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="language">
+        <xs:annotation>
+          <xs:documentation>Set the language for hyphenation and rendering.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="Ancient Greek">
+              <xs:annotation>
+                <xs:documentation>Switch to Ancient Greek hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Armenian">
+              <xs:annotation>
+                <xs:documentation>Switch to Armenian hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Bahasa Indonesia">
+              <xs:annotation>
+                <xs:documentation>Switch to Bahasa Indonesia hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Basque">
+              <xs:annotation>
+                <xs:documentation>Switch to Basque hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Bulgarian">
+              <xs:annotation>
+                <xs:documentation>Switch to Bulgarian (latin alphabet) hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Catalan">
+              <xs:annotation>
+                <xs:documentation>Switch to Catalan hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Chinese">
+              <xs:annotation>
+                <xs:documentation>Switch to Chinese language setting.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Croatian">
+              <xs:annotation>
+                <xs:documentation>Switch to Croatian hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Czech">
+              <xs:annotation>
+                <xs:documentation>Switch to Czech hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Danish">
+              <xs:annotation>
+                <xs:documentation>Switch to Danish hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Dutch">
+              <xs:annotation>
+                <xs:documentation>Switch to Dutch hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="English (Great Britain)">
+              <xs:annotation>
+                <xs:documentation>Switch to British hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="English (USA)">
+              <xs:annotation>
+                <xs:documentation>Switch to American English hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Esperanto">
+              <xs:annotation>
+                <xs:documentation>Switch to Esperanto hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Estonian">
+              <xs:annotation>
+                <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Finnish">
+              <xs:annotation>
+                <xs:documentation>Switch to Finnish hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="French">
+              <xs:annotation>
+                <xs:documentation>Switch to French hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Galician">
+              <xs:annotation>
+                <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="German">
+              <xs:annotation>
+                <xs:documentation>Switch to German hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Greek">
+              <xs:annotation>
+                <xs:documentation>Switch to Monotonic Greek hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Gujarati">
+              <xs:annotation>
+                <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Hungarian">
+              <xs:annotation>
+                <xs:documentation>Switch to Hungarian hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Hindi">
+              <xs:annotation>
+                <xs:documentation>Switch to Hindi hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Icelandic">
+              <xs:annotation>
+                <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Irish">
+              <xs:annotation>
+                <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Italian">
+              <xs:annotation>
+                <xs:documentation>Switch to Italian hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Kannada">
+              <xs:annotation>
+                <xs:documentation>Switch to Kannada hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Kurmanji">
+              <xs:annotation>
+                <xs:documentation>Switch to Kurmanji hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Latvian">
+              <xs:annotation>
+                <xs:documentation>Switch to Latvian hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Lithuanian">
+              <xs:annotation>
+                <xs:documentation>Switch to Lithuanian hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Malayalam">
+              <xs:annotation>
+                <xs:documentation>Switch to Malayalam hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Norwegian Bokmål">
+              <xs:annotation>
+                <xs:documentation>Switch to Norwegian Bokmål hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Norwegian Nynorsk">
+              <xs:annotation>
+                <xs:documentation>Switch to Norwegian Nynorsk hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Other">
+              <xs:annotation>
+                <xs:documentation>Don't switch to any of these languages. Useful if a text does not render correctly.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Polish">
+              <xs:annotation>
+                <xs:documentation>Switch to Polish hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Portuguese">
+              <xs:annotation>
+                <xs:documentation>Switch to Portuguese hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Romanian">
+              <xs:annotation>
+                <xs:documentation>Switch to Romanian hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Russian">
+              <xs:annotation>
+                <xs:documentation>Switch to Russian hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Serbian">
+              <xs:annotation>
+                <xs:documentation>Switch to Serbian hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Slovak">
+              <xs:annotation>
+                <xs:documentation>Switch to Slovak hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Slovenian">
+              <xs:annotation>
+                <xs:documentation>Switch to Slovenian hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Spanish">
+              <xs:annotation>
+                <xs:documentation>Switch to Spanish hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Swedish">
+              <xs:annotation>
+                <xs:documentation>Switch to Swedish hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Turkish">
+              <xs:annotation>
+                <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Ukrainian">
+              <xs:annotation>
+                <xs:documentation>Switch to Ukrainian hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Welsh">
+              <xs:annotation>
+                <xs:documentation>Switch to Welsh hyphenation patterns.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="minheight">
         <xs:annotation>

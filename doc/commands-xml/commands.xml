@@ -226,6 +226,14 @@
         <para>Auf katalanische Trennmuster umschalten.</para>
       </description>
     </choice>
+    <choice en="Chinese">
+      <description xml:lang="en">
+        <para>Switch to Chinese language setting.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf chinsische Sprache umschalten.</para>
+      </description>
+    </choice>
     <choice en="Croatian">
       <description xml:lang="en">
         <para>Switch to Croatian hyphenation patterns.</para>
@@ -432,6 +440,14 @@
       </description>
       <description xml:lang="de">
         <para>Auf norwegische Trennmuster umschalten (Nynorsk).</para>
+      </description>
+    </choice>
+    <choice en="Other">
+      <description xml:lang="en">
+        <para>Don't switch to any of these languages. Useful if a text does not render correctly.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf keine der anderen Sprachen umschalten. Hilfreich bei Darstellungsproblemen.</para>
       </description>
     </choice>
     <choice en="Polish">
@@ -5116,10 +5132,10 @@
     </attribute>
     <attribute en="mainlanguage" optional="yes" allowxpath="yes">
       <description xml:lang="en">
-        <para>The default language for text (hyphenation). You can also set the default language on the command line and locally set it at <cmd name="Paragraph"/>.</para>
+        <para>The default language for text (hyphenation and rendering). You can also set the default language on the command line and locally set it at <cmd name="Paragraph"/> and <cmd name="Textblock" />.</para>
       </description>
       <description xml:lang="de">
-        <para>Die Sprache (Silbentrennung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist. Sie kann global über die Kommandozeile gesteuert werden oder für jeden <cmd name="Paragraph"/> einzeln.</para>
+        <para>Die Sprache (Silbentrennung und Darstellung), die im Text benutzt wird, wenn keine andere Sprache angegeben ist. Sie kann global über die Kommandozeile gesteuert werden oder für jeden <cmd name="Paragraph"/> und <cmd name="Textblock" /> einzeln.</para>
       </description>
       <referenceattribute name="languages" />
     </attribute>
@@ -5540,10 +5556,10 @@
     </attribute>
     <attribute en="language" optional="yes">
       <description xml:lang="en">
-        <para>Name of the language for hyphenation.</para>
+        <para>Name of the language for hyphenation and rendering.</para>
       </description>
       <description xml:lang="de">
-        <para>Name der Sprache für die Silbentrennung.</para>
+        <para>Name der Sprache für die Silbentrennung und Darstellung.</para>
       </description>
       <referenceattribute name="languages" />
     </attribute>
@@ -8583,6 +8599,15 @@
       <description xml:lang="de">
         <para>Name der Schriftfamilie, die benutzt werden soll.</para>
       </description>
+    </attribute>
+    <attribute en="language" optional="yes" since="4.1.1">
+      <description xml:lang="en">
+        <para>Set the language for hyphenation and rendering.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze die Sprache für Silbentrennung und Darstellung.</para>
+      </description>
+      <referenceattribute name="languages" />
     </attribute>
     <attribute en="minheight" optional="yes" type="numberorlength" since="2.3.28">
       <description xml:lang="en">

@@ -2189,7 +2189,8 @@ end
 --- A paragraph is just a bunch of text that is not yet typeset.
 --- It can have a font face, color,... but these can be also given
 --- On the surrounding element (`Textblock`).
-function commands.paragraph( layoutxml, dataxml )
+function commands.paragraph( layoutxml, dataxml,textblockoptions )
+    textblockoptions = textblockoptions or {}
     local allowbreak    = publisher.read_attribute(layoutxml,dataxml,"allowbreak","rawstring")
     local fontname  = publisher.read_attribute(layoutxml,dataxml,"fontface",  "rawstring")
     local colorname = publisher.read_attribute(layoutxml,dataxml,"color",     "rawstring")
@@ -2217,8 +2218,17 @@ function commands.paragraph( layoutxml, dataxml )
     if language_name then
         languagecode = publisher.get_languagecode(language_name)
     else
-        languagecode = publisher.defaultlanguage
+        languagecode = textblockoptions.languagecode or publisher.defaultlanguage
     end
+    local params = {fontfamily = fontfamily,
+        color = colorindex,
+        initial = initial,
+        languagecode = languagecode,
+        padding_left = paddingleft,
+        padding_right = paddingright,
+        textformat = textformat,
+        allowbreak = allowbreak,
+    }
 
 
     local tab = publisher.dispatch(layoutxml,dataxml)
@@ -2229,15 +2239,7 @@ function commands.paragraph( layoutxml, dataxml )
         local thischild = tab[i]
         local eltname = publisher.elementname(thischild)
         local contents = publisher.element_contents(thischild)
-        local params = {fontfamily = fontfamily,
-            color = colorindex,
-            initial = initial,
-            languagecode = languagecode,
-            padding_left = paddingleft,
-            padding_right = paddingright,
-            textformat = textformat,
-            allowbreak = allowbreak,
-        }
+
         if eltname == "Initial" then
             initial = contents
         elseif eltname == "Image" then
@@ -3868,6 +3870,7 @@ function commands.textblock( layoutxml,dataxml )
     local columns        = publisher.read_attribute(layoutxml,dataxml,"columns", "number")
     local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","rawstring")
     local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
+    local language_name  = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
     local save_width = xpath.get_variable("__maxwidth")
     width = width or save_width
     xpath.set_variable("__maxwidth", width)
@@ -3909,6 +3912,12 @@ function commands.textblock( layoutxml,dataxml )
         end
     end
 
+    if language_name then
+        languagecode = publisher.get_languagecode(language_name)
+    else
+        languagecode = publisher.defaultlanguage
+    end
+
     -- FIXME: remove width_sp
     local width_sp = width
 
@@ -3919,8 +3928,13 @@ function commands.textblock( layoutxml,dataxml )
         save_color = publisher.current_fgcolor
         publisher.current_fgcolor = colorindex
     end
+    local options = {
+        textformat = textformat,
+        fontfamily = fontfamily,
+        color = colorindex,
+        languagecode = languagecode }
 
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch(layoutxml,dataxml,options)
     if colorname then
         publisher.current_fgcolor = save_color
     end
@@ -3972,7 +3986,7 @@ function commands.textblock( layoutxml,dataxml )
             nodes[#nodes + 1] = nodelist
         else
             -- new <Par> mode
-            local fmt = paragraph:format(width_sp,{textformat = textformat,fontfamily = fontfamily, color = colorindex })
+            local fmt = paragraph:format(width_sp,options)
             table.insert( nodes, fmt )
         end
     end

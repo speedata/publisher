@@ -2910,7 +2910,7 @@
          </optional>
          <optional>
             <attribute name="mainlanguage">
-               <a:documentation>The default language for text (hyphenation). You can also set the default language on the command line and locally set it at Paragraph.</a:documentation>
+               <a:documentation>The default language for text (hyphenation and rendering). You can also set the default language on the command line and locally set it at Paragraph and Textblock.</a:documentation>
                <choice>
                   <data type="string">
                      <param name="pattern">\{.+\}</param>
@@ -2927,6 +2927,8 @@
                   <a:documentation>Switch to Bulgarian (latin alphabet) hyphenation patterns.</a:documentation>
                   <value>Catalan</value>
                   <a:documentation>Switch to Catalan hyphenation patterns.</a:documentation>
+                  <value>Chinese</value>
+                  <a:documentation>Switch to Chinese language setting.</a:documentation>
                   <value>Croatian</value>
                   <a:documentation>Switch to Croatian hyphenation patterns.</a:documentation>
                   <value>Czech</value>
@@ -2979,6 +2981,8 @@
                   <a:documentation>Switch to Norwegian Bokmål hyphenation patterns.</a:documentation>
                   <value>Norwegian Nynorsk</value>
                   <a:documentation>Switch to Norwegian Nynorsk hyphenation patterns.</a:documentation>
+                  <value>Other</value>
+                  <a:documentation>Don&#39;t switch to any of these languages. Useful if a text does not render correctly.</a:documentation>
                   <value>Polish</value>
                   <a:documentation>Switch to Polish hyphenation patterns.</a:documentation>
                   <value>Portuguese</value>
@@ -3408,7 +3412,7 @@
                </optional>
                <optional>
                   <attribute name="language">
-                     <a:documentation>Name of the language for hyphenation.</a:documentation>
+                     <a:documentation>Name of the language for hyphenation and rendering.</a:documentation>
                      <choice>
                         <value>Ancient Greek</value>
                         <a:documentation>Switch to Ancient Greek hyphenation patterns.</a:documentation>
@@ -3422,6 +3426,8 @@
                         <a:documentation>Switch to Bulgarian (latin alphabet) hyphenation patterns.</a:documentation>
                         <value>Catalan</value>
                         <a:documentation>Switch to Catalan hyphenation patterns.</a:documentation>
+                        <value>Chinese</value>
+                        <a:documentation>Switch to Chinese language setting.</a:documentation>
                         <value>Croatian</value>
                         <a:documentation>Switch to Croatian hyphenation patterns.</a:documentation>
                         <value>Czech</value>
@@ -3474,6 +3480,8 @@
                         <a:documentation>Switch to Norwegian Bokmål hyphenation patterns.</a:documentation>
                         <value>Norwegian Nynorsk</value>
                         <a:documentation>Switch to Norwegian Nynorsk hyphenation patterns.</a:documentation>
+                        <value>Other</value>
+                        <a:documentation>Don&#39;t switch to any of these languages. Useful if a text does not render correctly.</a:documentation>
                         <value>Polish</value>
                         <a:documentation>Switch to Polish hyphenation patterns.</a:documentation>
                         <value>Portuguese</value>
@@ -5126,6 +5134,105 @@
                <optional>
                   <attribute name="fontface">
                      <a:documentation>The name of the font family. Defaults to text.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="language">
+                     <a:documentation>Set the language for hyphenation and rendering.</a:documentation>
+                     <choice>
+                        <value>Ancient Greek</value>
+                        <a:documentation>Switch to Ancient Greek hyphenation patterns.</a:documentation>
+                        <value>Armenian</value>
+                        <a:documentation>Switch to Armenian hyphenation patterns.</a:documentation>
+                        <value>Bahasa Indonesia</value>
+                        <a:documentation>Switch to Bahasa Indonesia hyphenation patterns.</a:documentation>
+                        <value>Basque</value>
+                        <a:documentation>Switch to Basque hyphenation patterns.</a:documentation>
+                        <value>Bulgarian</value>
+                        <a:documentation>Switch to Bulgarian (latin alphabet) hyphenation patterns.</a:documentation>
+                        <value>Catalan</value>
+                        <a:documentation>Switch to Catalan hyphenation patterns.</a:documentation>
+                        <value>Chinese</value>
+                        <a:documentation>Switch to Chinese language setting.</a:documentation>
+                        <value>Croatian</value>
+                        <a:documentation>Switch to Croatian hyphenation patterns.</a:documentation>
+                        <value>Czech</value>
+                        <a:documentation>Switch to Czech hyphenation patterns.</a:documentation>
+                        <value>Danish</value>
+                        <a:documentation>Switch to Danish hyphenation patterns.</a:documentation>
+                        <value>Dutch</value>
+                        <a:documentation>Switch to Dutch hyphenation patterns.</a:documentation>
+                        <value>English (Great Britain)</value>
+                        <a:documentation>Switch to British hyphenation patterns.</a:documentation>
+                        <value>English (USA)</value>
+                        <a:documentation>Switch to American English hyphenation patterns.</a:documentation>
+                        <value>Esperanto</value>
+                        <a:documentation>Switch to Esperanto hyphenation patterns.</a:documentation>
+                        <value>Estonian</value>
+                        <a:documentation>Switch to Turkish hyphenation patterns.</a:documentation>
+                        <value>Finnish</value>
+                        <a:documentation>Switch to Finnish hyphenation patterns.</a:documentation>
+                        <value>French</value>
+                        <a:documentation>Switch to French hyphenation patterns.</a:documentation>
+                        <value>Galician</value>
+                        <a:documentation>Switch to Turkish hyphenation patterns.</a:documentation>
+                        <value>German</value>
+                        <a:documentation>Switch to German hyphenation patterns.</a:documentation>
+                        <value>Greek</value>
+                        <a:documentation>Switch to Monotonic Greek hyphenation patterns.</a:documentation>
+                        <value>Gujarati</value>
+                        <a:documentation>Switch to Turkish hyphenation patterns.</a:documentation>
+                        <value>Hungarian</value>
+                        <a:documentation>Switch to Hungarian hyphenation patterns.</a:documentation>
+                        <value>Hindi</value>
+                        <a:documentation>Switch to Hindi hyphenation patterns.</a:documentation>
+                        <value>Icelandic</value>
+                        <a:documentation>Switch to Turkish hyphenation patterns.</a:documentation>
+                        <value>Irish</value>
+                        <a:documentation>Switch to Turkish hyphenation patterns.</a:documentation>
+                        <value>Italian</value>
+                        <a:documentation>Switch to Italian hyphenation patterns.</a:documentation>
+                        <value>Kannada</value>
+                        <a:documentation>Switch to Kannada hyphenation patterns.</a:documentation>
+                        <value>Kurmanji</value>
+                        <a:documentation>Switch to Kurmanji hyphenation patterns.</a:documentation>
+                        <value>Latvian</value>
+                        <a:documentation>Switch to Latvian hyphenation patterns.</a:documentation>
+                        <value>Lithuanian</value>
+                        <a:documentation>Switch to Lithuanian hyphenation patterns.</a:documentation>
+                        <value>Malayalam</value>
+                        <a:documentation>Switch to Malayalam hyphenation patterns.</a:documentation>
+                        <value>Norwegian Bokmål</value>
+                        <a:documentation>Switch to Norwegian Bokmål hyphenation patterns.</a:documentation>
+                        <value>Norwegian Nynorsk</value>
+                        <a:documentation>Switch to Norwegian Nynorsk hyphenation patterns.</a:documentation>
+                        <value>Other</value>
+                        <a:documentation>Don&#39;t switch to any of these languages. Useful if a text does not render correctly.</a:documentation>
+                        <value>Polish</value>
+                        <a:documentation>Switch to Polish hyphenation patterns.</a:documentation>
+                        <value>Portuguese</value>
+                        <a:documentation>Switch to Portuguese hyphenation patterns.</a:documentation>
+                        <value>Romanian</value>
+                        <a:documentation>Switch to Romanian hyphenation patterns.</a:documentation>
+                        <value>Russian</value>
+                        <a:documentation>Switch to Russian hyphenation patterns.</a:documentation>
+                        <value>Serbian</value>
+                        <a:documentation>Switch to Serbian hyphenation patterns.</a:documentation>
+                        <value>Slovak</value>
+                        <a:documentation>Switch to Slovak hyphenation patterns.</a:documentation>
+                        <value>Slovenian</value>
+                        <a:documentation>Switch to Slovenian hyphenation patterns.</a:documentation>
+                        <value>Spanish</value>
+                        <a:documentation>Switch to Spanish hyphenation patterns.</a:documentation>
+                        <value>Swedish</value>
+                        <a:documentation>Switch to Swedish hyphenation patterns.</a:documentation>
+                        <value>Turkish</value>
+                        <a:documentation>Switch to Turkish hyphenation patterns.</a:documentation>
+                        <value>Ukrainian</value>
+                        <a:documentation>Switch to Ukrainian hyphenation patterns.</a:documentation>
+                        <value>Welsh</value>
+                        <a:documentation>Switch to Welsh hyphenation patterns.</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <optional>
