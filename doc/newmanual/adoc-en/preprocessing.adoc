@@ -90,7 +90,7 @@ runtime = require("runtime")
 runtime.run_saxon(‹XSL›, ‹source›, ‹outfile›, ‹parameter›)
 -------------------------------------------------------------------------------
 
-The parameters have the form `keyword=value` and are separated by spaces.
+The parameters have the form `keyword=value`. Only one parameter can be given, for more parameters use the named parameters based saxon call (see below).
 
 
 
@@ -99,7 +99,7 @@ The parameters have the form `keyword=value` and are separated by spaces.
 runtime = require("runtime")
 ok, msg = runtime.run_saxon("transformation.xsl", "sourcefile.xml", "data.xml")
 
--- quit the publishing process if the trainsformation fails
+-- quit the publishing process if the transformation fails
 if not ok then
     print(msg)
     os.exit(-1)
@@ -119,10 +119,11 @@ Allowed key/value pairs are:
 [options="header"]
 |=======
 | Key | Value
-| `source` | source file (XML)
-| `stylesheet` | stylesheet file (XSL)
+| `source` | Source file (XML)
+| `stylesheet` | Stylesheet file (XSL)
 | `out` | Result
-| `initialtemplate` | name of the template to be called
+| `initialtemplate` | Name of the template to be called
+| `params` | Table with the key/value pairs
 |=======
 
 Example:
@@ -133,7 +134,8 @@ Example:
 runtime = require("runtime")
 ok, msg = runtime.run_saxon({stylesheet = 'json2xml.xsl',
                              out = 'data.xml',
-                             initialtemplate = 'main'})
+                             initialtemplate = 'main',
+                             params = { ["key"] = value }})
 ----
 
 See also the example in https://github.com/speedata/examples/tree/master/technical/jsonreader[examples repository].
@@ -283,8 +285,22 @@ runtime.finalizer = finished
 This function validates the specified XML file with the RELAX NG (XML syntax) schema specified in the second parameter.
 The return is a boolean value that is true if the command was executed without errors. Otherwise a second return value (string) is returned, which contains the error message.
 
-`run_saxon(‹XSL›, ‹Source file›, ‹Output file›, ‹Parameters›)`::
-This function calls the `saxon` program supplied with the Publisher. It expects three string arguments (the stylesheet, the input file and the output file) and an optional argument that is passed as a parameter to saxon. The return is a boolean value which is true if the command was executed without errors. Otherwise a second return value (string) is returned, which contains the error message. The parameters have the form `keyword1=value1 keyword2=value2` (separated by spaces).
+`run_saxon(‹XSL›, ‹source file›, ‹output file›, ‹parameter›)`::
+This function calls the `saxon` program supplied with the Publisher. It expects three string arguments (the stylesheet, the input file and the output file) and an optional argument that is passed as a parameter to saxon. The return is a boolean value which is true if the command was executed without errors. Otherwise a second return value (string) is returned, which contains the error message. The parameter has the form `keyword=value`.
+
+`run_saxon(‹table›)`::
+This function calls the `saxon` program supplied with the Publisher. It expects the arguments as a table with the keys explained in the table below. The value of `params` is a table of key value pairs for parameters that are passed to saxon. The return is a boolean value which is true if the command was executed without errors. Otherwise a second return value (string) is returned, which contains the error message.
++
+[options="header"]
+|=======
+| Key | Value
+| `source` | Source file (XML)
+| `stylesheet` | Stylesheet file (XSL)
+| `out` | Result
+| `initialtemplate` | Name of the template to be called
+| `params` | Table with the key/value pairs
+|=======
+
 
 `find_file(‹filename or URL›)`::
 Find the resource and return a full path on the local disk to access the resource. Returns nil or false and perhaps an error message if it can't find the resource.

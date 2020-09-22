@@ -79,6 +79,12 @@ func runSaxon(l *lua.LState) int {
 			// parameters at the end
 			if str := tbl.RawGetString("params"); str.Type() == lua.LTString {
 				command = append(command, str.String())
+			} else if tbl := tbl.RawGetString("params"); tbl.Type() == lua.LTTable {
+				if paramtbl, ok := tbl.(*lua.LTable); ok {
+					paramtbl.ForEach(func(key lua.LValue, value lua.LValue) {
+						command = append(command, fmt.Sprintf("%s=%s", key.String(), value.String()))
+					})
+				}
 			}
 
 		} else {

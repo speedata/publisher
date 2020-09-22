@@ -85,16 +85,15 @@ runtime = require("runtime")
 runtime.run_saxon(‹XSL›,‹source›,‹outfile›,‹parameter›)
 -------------------------------------------------------------------------------
 
-Die Parameter haben die Form `keyword=value` und werden durch Leerzeichen getrennt.
-
-
+Es kann nur ein Parameter angegeben werden (`key=value`).
+Für mehrere Parameter muss die alternative Version über benannte Parameter benutzt werden.
 
 [source, lua]
 -------------------------------------------------------------------------------
 runtime = require("runtime")
 ok, msg = runtime.run_saxon("transformation.xsl","sourcefile.xml","data.xml")
 
--- quit the publishing process if the trainsformation fails
+-- quit the publishing process if the transformation fails
 if not ok then
     print(msg)
     os.exit(-1)
@@ -118,6 +117,7 @@ Erlaubte key/value-Paare sind:
 | `stylesheet` | Stylesheetdatei (XSL)
 | `out` | Resultat
 | `initialtemplate` | Name des Template, das aufgerufen werden soll
+| `params` | Tabelle mit Parametern für das Stylesheet
 |=======
 
 Beispiel:
@@ -127,7 +127,8 @@ Beispiel:
 runtime = require("runtime")
 ok, msg = runtime.run_saxon({stylesheet = 'json2xml.xsl',
                              out = 'data.xml',
-                             initialtemplate = 'main'})
+                             initialtemplate = 'main',
+                             params = { ["key"] = "value" }})
 ----
 
 Siehe dazu auch das Beispiel im https://github.com/speedata/examples/tree/master/technical/jsonreader[Beispiele-Repository].
@@ -279,7 +280,21 @@ Diese Funktion validiert die angegebene XML-Datei mit dem im zweiten Parameter a
 Die Rückgabe ist ein boolean-Wert, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurück gegeben, der die Fehlermeldung enthält.
 
 `run_saxon(‹XSL›,‹Quelldatei›,‹Ausgabedatei›,‹Parameter›)`::
-Diese Funktion ruft das zum Publisher mitgelieferte Programm `saxon` auf. Sie erwartet drei string-Argumente (das Stylesheet, die Eingabe- und die Ausgabedatei) und ein optionales Argument das als Parameter an saxon übergeben wird. Die Rückgabe ist ein boolean-Wert, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurück gegeben, der die Fehlermeldung enthält. Die Parameter haben die Form `keyword1=value1 keyword2=value2` (mit Leerzeichen getrennt).
+Diese Funktion ruft das zum Publisher mitgelieferte Programm `saxon` auf. Sie erwartet drei string-Argumente (das Stylesheet, die Eingabe- und die Ausgabedatei) und ein optionales Argument das als Parameter an saxon übergeben wird. Die Rückgabe ist ein boolean-Wert, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurück gegeben, der die Fehlermeldung enthält. Der Parameter hat die Form `keyword=value`.
+
+`run_saxon(‹tabelle›)`::
+Diese Funktion ruft das zum Publisher mitgelieferte Programm `saxon` auf. Sie erwartet eine Tabelle als Argument mit den Schlüsselwörtern, die unten aufgelistet sind. Die Rückgabe ist ein boolean-Wert, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurück gegeben, der die Fehlermeldung enthält.
++
+[options="header"]
+|=======
+| Schlüssel  | Wert
+| `source` | Quelldatei (XML)
+| `stylesheet` | Stylesheetdatei (XSL)
+| `out` | Resultat
+| `initialtemplate` | Name des Template, das aufgerufen werden soll
+| `params` | Tabelle mit Parametern für das Stylesheet
+|=======
+
 
 `find_file(‹Dateiname oder URL›)`::
 Findet die angegebene Datei im Publisher-Suchpfad und gibt den absoluten Pfad zurück. Bei nicht gefunden: nil bzw. false und eine Fehlermeldung.
@@ -290,7 +305,7 @@ Mit dem XML-Modul werden XML-Dateien erzeugt.
 Zuerst muss die XML-Struktur in einer Lua-Tabelle erzeugt werden, anschließend wird sie mit `encode_table()` unter dem Namen `data.xml` gespeichert.
 
 
-`xml.encode_table(‹tabelle›,[dateiname])`::
+`encode_table(‹tabelle›,[dateiname])`::
 
 Erzeugt eine XML-Datei (`data.xml` bzw. der optional gegebene Dateiname) der übergebenen Tabelle.
 Rückgabewert 1 ist ein bool (success), Wert 2 ist die Fehlermeldung, wenn der erste Wert `false` ist.
