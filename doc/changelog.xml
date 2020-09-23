@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.2" date="2020-09-23">
+      <en>Few bugfixes and improvements (Barcode/keepfontsize).</en>
+      <de>Ein paar Fehlerkorrekturen und Verbesserungen (Barcode/keepfontsize)</de>
+    </entry>
     <entry version="4.1.1" date="2020-09-14">
         <en>New paragraph construction mode and new HTML processing, better language support.</en>
         <de>Neuer Absatz-Zusammenbauer und neue HTML Verarbeitung, bessere Sprachunterstützung.</de>
