@@ -52,7 +52,7 @@ func init() {
 	reInsideWS = regexp.MustCompile(`\n|[\s\p{Zs}]{2,}`) //to match 2 or more whitespace symbols inside a string or NL
 	isSpace = regexp.MustCompile(`^\s*$`)
 	// go %s must escape quotes and newlines for Lua
-	quoteString = strings.NewReplacer(`"`, `\"`, "\n", `\n`)
+	quoteString = strings.NewReplacer(`"`, `\"`, "\n", `\n`, `\`, `\\`)
 }
 
 func normalizespace(input string) string {
