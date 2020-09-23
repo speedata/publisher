@@ -7085,22 +7085,23 @@
     <childelements>
       <oneOrMore>
         <interleave>
-          <optional><cmd name="Paragraph"/></optional>
-          <optional><cmd name="Value"/></optional>
+          <optional><cmd name="Attribute"/></optional>
+          <optional><cmd name="Column"/></optional>
+          <optional><cmd name="Columns"/></optional>
           <optional><cmd name="Copy-of"/></optional>
           <optional><cmd name="Element"/></optional>
-          <optional><cmd name="Attribute"/></optional>
-          <optional><cmd name="Switch"/></optional>
-          <optional><cmd name="Loop"/></optional>
           <optional><cmd name="ForAll"/></optional>
-          <optional><cmd name="Tr"/></optional>
-          <optional><cmd name="Td"/></optional>
-          <optional><cmd name="Columns"/></optional>
+          <optional><cmd name="Loop"/></optional>
+          <optional><cmd name="Paragraph"/></optional>
           <optional><cmd name="Table"/></optional>
           <optional><cmd name="TableNewPage"/></optional>
           <optional><cmd name="Tablerule"/></optional>
           <optional><cmd name="Tablehead"/></optional>
+          <optional><cmd name="Td"/></optional>
+          <optional><cmd name="Tr"/></optional>
           <optional><cmd name="SortSequence"/></optional>
+          <optional><cmd name="Switch"/></optional>
+          <optional><cmd name="Value"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>

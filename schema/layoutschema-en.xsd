@@ -4406,22 +4406,23 @@
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="en:Paragraph"/>
-        <xs:element ref="en:Value"/>
+        <xs:element ref="en:Attribute"/>
+        <xs:element ref="en:Column"/>
+        <xs:element ref="en:Columns"/>
         <xs:element ref="en:Copy-of"/>
         <xs:element ref="en:Element"/>
-        <xs:element ref="en:Attribute"/>
-        <xs:element ref="en:Switch"/>
-        <xs:element ref="en:Loop"/>
         <xs:element ref="en:ForAll"/>
-        <xs:element ref="en:Tr"/>
-        <xs:element ref="en:Td"/>
-        <xs:element ref="en:Columns"/>
+        <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Paragraph"/>
         <xs:element ref="en:Table"/>
         <xs:element ref="en:TableNewPage"/>
         <xs:element ref="en:Tablerule"/>
         <xs:element ref="en:Tablehead"/>
+        <xs:element ref="en:Td"/>
+        <xs:element ref="en:Tr"/>
         <xs:element ref="en:SortSequence"/>
+        <xs:element ref="en:Switch"/>
+        <xs:element ref="en:Value"/>
       </xs:choice>
       <xs:attribute name="variable" use="required">
         <xs:annotation>

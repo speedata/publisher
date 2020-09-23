@@ -4464,10 +4464,13 @@
                <oneOrMore>
                   <interleave>
                      <optional>
-                        <ref name="e_Paragraph"></ref>
+                        <ref name="e_Attribute"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_Value"></ref>
+                        <ref name="e_Column"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Columns"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Copy-of"></ref>
@@ -4476,25 +4479,13 @@
                         <ref name="e_Element"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_Attribute"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Switch"></ref>
+                        <ref name="e_ForAll"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Loop"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_ForAll"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Tr"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Td"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Columns"></ref>
+                        <ref name="e_Paragraph"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Table"></ref>
@@ -4509,7 +4500,19 @@
                         <ref name="e_Tablehead"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Td"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Tr"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_SortSequence"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Switch"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Value"></ref>
                      </optional>
                   </interleave>
                </oneOrMore>
