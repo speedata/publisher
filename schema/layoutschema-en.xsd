@@ -278,6 +278,17 @@
           <xs:documentation>Height of the barcode.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="keepfontsize">
+        <xs:annotation>
+          <xs:documentation>Try to keep the size of the requested font. Works with EAN13 only.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="overshoot">
         <xs:annotation>
           <xs:documentation>The factor denoting the extra length of the outer and middle bar. Only useful with EAN13.</xs:documentation>

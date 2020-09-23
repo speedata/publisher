@@ -206,6 +206,7 @@ function commands.barcode( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select"   ,"xpath"         )
     local fontname  = publisher.read_attribute(layoutxml,dataxml,"fontface" ,"rawstring"     )
     local showtext  = publisher.read_attribute(layoutxml,dataxml,"showtext" ,"boolean", "yes")
+    local keepfontsize = publisher.read_attribute(layoutxml,dataxml,"keepfontsize" ,"boolean", "no")
     local overshoot = publisher.read_attribute(layoutxml,dataxml,"overshoot","number"        )
 
 
@@ -224,7 +225,7 @@ function commands.barcode( layoutxml,dataxml )
     if typ=="Code128" then
         return barcodes.code128(width,height,fontfamily,selection,showtext)
     elseif typ=="EAN13" then
-        return barcodes.ean13(width,height,fontfamily,selection,showtext,overshoot)
+        return barcodes.ean13(width,height,fontfamily,selection,showtext,overshoot,keepfontsize)
     elseif typ=="QRCode" then
         if eclevel == "L" then eclevel = 1
         elseif eclevel == "M" then eclevel = 2

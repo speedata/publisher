@@ -401,6 +401,15 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="keepfontsize">
+               <a:documentation>Try to keep the size of the requested font. Works with EAN13 only.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="overshoot">
                <a:documentation>The factor denoting the extra length of the outer and middle bar. Only useful with EAN13.</a:documentation>
             </attribute>

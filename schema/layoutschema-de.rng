@@ -401,6 +401,15 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="keepfontsize">
+               <a:documentation>Versuche die Schriftgröße beizubehalten (EAN13).</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="overshoot">
                <a:documentation>Der Faktor, um den die äußeren und der innere Balken die normalen Balken übersteigt. Nur anwendbar bei EAN13.</a:documentation>
             </attribute>

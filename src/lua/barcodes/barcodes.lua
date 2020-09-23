@@ -102,11 +102,14 @@ local function mkkern( wd )
   return k
 end
 
-local function mkglyph( char,fontnumber )
-  local g = node.new("glyph")
-  g.char = string.byte(char)
-  g.font = fontnumber
-  return g
+local function mkglyph( char,fontnumber, destwd )
+    local g = node.new("glyph")
+    g.char = string.byte(char)
+    g.font = fontnumber
+    local nl = publisher.add_glue(g,"head",{width = 0, stretch = 2^16, stretch_order = 2})
+    nl = publisher.add_glue(nl,"tail",{width = 0, stretch = 2^16, stretch_order = 2})
+    nl = node.hpack(nl,destwd,"exactly")
+    return nl
 end
 
 
@@ -128,21 +131,28 @@ local function pattern_to_wd_dp( pattern,pos,overshoot)
   return wd,dp
 end
 
-
-local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor)
+local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor,keep_fontsize)
     if #digits ~= 13 and showtext then
         err("Not enough numbers for EAN13 code _and_ text")
         showtext = false
     end
 	local fontnumber  = publisher.fonts.lookup_fontfamily_number_instance[fontfamily].normal
-  local digit_zero  = font.fonts[fontnumber].characters[48]
-	local unit = calculate_unit(digit_zero)
-	local scalefactor
-	if width then -- we need to scale the resulting barcode
-		scalefactor =  width / ( unit * 105 )
-	else
-		scalefactor = 1
-	end
+    local digit_zero  = font.fonts[fontnumber].characters[48]
+    local unit = calculate_unit(digit_zero)
+
+    local scalefactor = 1
+    if width then -- we need to scale the resulting barcode
+        if keep_fontsize then
+            if width / ( unit * 105 ) > 1 then
+                local new_unit = width / 105
+                unit = new_unit
+            else
+                scalefactor =  width / ( unit * 105 )
+            end
+        else
+            scalefactor =  width / ( unit * 105 )
+        end
+    end
 
 	local barlength,overshoot
 	if showtext then
@@ -167,10 +177,12 @@ local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor)
 	end
 
 	local nodelist
-  	local pattern = mkpattern(digits)
+    local pattern = mkpattern(digits)
+    -- pattern is now a string such as "801011141222321121132122211310101321122212221113211141132010"
     local wd,dp
     for i=1,string.len(pattern) do
       wd,dp = pattern_to_wd_dp(pattern,i,overshoot)
+      -- kern rule kern rule kern ... rule
       if i % 2 == 0 then
         nodelist = add_to_nodelist(nodelist,mkrule(wd * unit,barlength,tex.sp(dp)))
       else
@@ -181,9 +193,10 @@ local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor)
     local barcode_top = node.hpack(nodelist)
     if showtext then
         nodelist = nil
+        -- split_number returns three parts x xxxxxx xxxxxx
         for i,v in ipairs({split_number(digits)}) do
           for j=1,string.len(v) do
-            nodelist = add_to_nodelist(nodelist,mkglyph(string.sub(v,j,j),fontnumber))
+            nodelist = add_to_nodelist(nodelist,mkglyph(string.sub(v,j,j),fontnumber,unit * 7))
           end
           if i == 1 then
             nodelist = add_to_nodelist(nodelist,mkkern(5 * unit))
@@ -195,7 +208,7 @@ local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor)
         -- barcode_top now has three elements: the hbox
         -- from the rules and kerns, the kern of -1.7mm
         -- and the hbox with the digits below the bars.
-        local vkern = mkkern(-0.9 * overshoot)
+        local vkern = mkkern(-0.6 * overshoot)
         barcode_top = add_to_nodelist(barcode_top,vkern)
         barcode_top = add_to_nodelist(barcode_top,barcode_bottom)
     else

@@ -994,6 +994,14 @@
         <para>Höhe des Strichcodes.</para>
       </description>
     </attribute>
+    <attribute en="keepfontsize" optional="yes" type="boolean" since="4.1.2">
+      <description xml:lang="en">
+        <para>Try to keep the size of the requested font. Works with EAN13 only.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Versuche die Schriftgröße beizubehalten (EAN13).</para>
+      </description>
+    </attribute>
     <attribute en="overshoot" optional="yes" type="number">
       <description xml:lang="en">
         <para>The factor denoting the extra length of the outer and middle bar. Only useful with EAN13.</para>
