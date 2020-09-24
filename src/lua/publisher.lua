@@ -682,7 +682,7 @@ function dispatch(layoutxml,dataxml,options)
                 tmp = dispatch_table[eltname](j,dataxml,options)
 
                 -- Copy-of-elements can be resolved immediately
-                if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" or eltname == "Transformation" or eltname == "Frame" then
+                if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" or eltname == "Transformation" or eltname == "Frame" or eltname == "Include" or eltname == "Layout" then
                     if type(tmp)=="table" then
                         for i=1,#tmp do
                             if tmp[i].contents then
