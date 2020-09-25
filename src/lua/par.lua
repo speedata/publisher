@@ -9,6 +9,7 @@ function Par:new( textformat,origin )
         nodelist,
         textformat = textformat,
         origin = origin,
+        typ = "par"
     }
     setmetatable(instance, self)
     self.__index = self
@@ -66,6 +67,7 @@ local function flatten(self,items,options)
         local typ_thisself = type(thisself)
         local new_options = publisher.copy_table_from_defaults(options)
         if typ_thisself == "table" and thisself.contents then
+            -- w("par/flatten: type: table with contents")
             local thisself_contents = thisself.contents
             for key,value in next,thisself.options,nil do
                new_options[key] = value
@@ -97,6 +99,7 @@ local function flatten(self,items,options)
                 end
             end
         elseif typ_thisself == "string" or typ_thisself == "number" or typ_thisself == "boolean" then
+            -- w("par/flatten: type: string or similar")
             local nodes = publisher.mknodes(tostring(thisself),new_options)
             local tmp = node.getproperty(nodes)
             if new_options.fontfamily then
@@ -118,59 +121,80 @@ local function flatten(self,items,options)
                 end
             end
             table.insert(ret,nodes)
-        elseif typ_thisself == "table" and thisself[".__type"] == "element" then
+        elseif typ_thisself == "table" and thisself[".__type"] == "element" and new_options.html ~= "off" then
+            -- w("par/flatten: type: HTML")
             -- Now this is a bit strange and I should explain. The XML parser (luxor.lua)
             -- creates a table structure from the XML text, but for HTML parsing, we need the
             -- original XML string. So I reconstruct the XML text (without comments etc.) and
             -- run this through Go's HTML parser and add CSS.
             -- This is basically the new HTML mode. The old HTML parser is not needed anymore.
-            local htmltext =  reconstruct_html_text(thisself)
-            local csstext = publisher.css:gettext()
-            -- todo: add  white-space: pre; if publisher.options.ignoreeol == false
-            -- csstext = string.format("body {font-family-number: %d ;} ",options.fontfamily)
-            csstext = csstext .. string.format(" body {font-family-number: %d ;} ",options.fontfamily)
-            local tab = splib.parse_html_text(htmltext,csstext)
-            if type(tab) == "string" then
-                local a,b = load(tab)
-                if a then a() else err(b) return end
-            end
-            local startnewline = 0
-            local body = csshtmltree[1]
-
-            local firstelement = body[1]
-            if firstelement then
-                if type(firstelement) == "string" and not string.match( firstelement ,"^%s*$")  then
-                    startnewline = 1
-                elseif type(firstelement[1]) == "string" and not string.match( firstelement[1] ,"^%s*$")  then
-                    startnewline = 1
-                elseif type(firstelement[1]) == "table" then
-                    if firstelement[1].direction == "→" then
-                        startnewline = 1
+            if new_options.html == "inner" then
+                local c = 1
+                while true do
+                    if #thisself > c and type(thisself[1]) ~= "table" then
+                        c = c + 1
+                    else
+                        break
                     end
                 end
+                thisself = thisself[c]
+            end
+            if type(thisself) == "string" then
+                local text = thisself
+                local tmp = flatten(self,{text},new_options)
+                for i=1,#tmp do
+                    table.insert(ret,tmp[i])
+                end
+            else
+                local htmltext = reconstruct_html_text(thisself)
+                local csstext = publisher.css:gettext()
+                -- todo: add  white-space: pre; if publisher.options.ignoreeol == false
+                -- csstext = string.format("body {font-family-number: %d ;} ",options.fontfamily)
+                csstext = csstext .. string.format(" body {font-family-number: %d ;} ",options.fontfamily)
+                local tab = splib.parse_html_text(htmltext,csstext)
+                if type(tab) == "string" then
+                    local a,b = load(tab)
+                    if a then a() else err(b) return end
+                end
+                local startnewline = 0
+                local body = csshtmltree[1]
 
-                local blocks = publisher.parse_html(csshtmltree, options) or {}
-                blocks = publisher.flatten_boxes(blocks)
-                local c = 0
-                for b=1,#blocks do
-                    local thisblock = blocks[b]
-                    if thisblock.objects then
-                        for i=1,#thisblock.objects do
-                            local thisnodelist = thisblock.objects[i]
+                local firstelement = body[1]
+                if firstelement then
+                    if type(firstelement) == "string" and not string.match( firstelement ,"^%s*$")  then
+                        startnewline = 1
+                    elseif type(firstelement[1]) == "string" and not string.match( firstelement[1] ,"^%s*$")  then
+                        startnewline = 1
+                    elseif type(firstelement[1]) == "table" then
+                        if firstelement[1].direction == "→" then
+                            startnewline = 1
+                        end
+                    end
+                    local blocks = publisher.parse_html(csshtmltree, options) or {}
+                    blocks = publisher.flatten_boxes(blocks)
+                    local c = 1
+                    for b=1,#blocks do
+                        local thisblock = blocks[b]
+                        local has_contents = false
+                        for tb=1,#thisblock do
+                            local tbc = thisblock[tb].contents
+                            if tbc then
+                                if c > startnewline and ( has_contents == false ) then
+                                    publisher.setprop(tbc,"split",true)
+                                    publisher.setprop(tbc,"thisblock.contents",true)
+                                end
+                                table.insert(ret,tbc)
+                                has_contents = true
+                            end
+                        end
+                        if has_contents then
                             c = c + 1
-                            if thisblock.prependnodelist then
-                                thisnodelist = node.insert_before(thisnodelist,thisnodelist,thisblock.prependnodelist)
-                            end
-                            if c > startnewline then
-                                publisher.setprop(thisnodelist,"split",true)
-                            end
-                            publisher.setprop(thisnodelist,"indent",thisblock.padding_left)
-                            table.insert(ret,thisnodelist)
                         end
                     end
                 end
             end
         elseif typ_thisself == "userdata" and node.is_node(thisself) then
+            -- w("par/flatten: type: userdata")
             if thisself.id == publisher.whatsit_node and thisself.subtype == publisher.user_defined_whatsit then
                 if type(thisself.value) == "function" then
                     -- leaders and break_url
@@ -182,9 +206,17 @@ local function flatten(self,items,options)
                  table.insert(ret,thisself)
             end
         elseif typ_thisself == "table" and thisself.elementname == "SetVariable" then
+            -- w("par/flatten: type: setvariable - ignore")
             -- ignore
+        elseif typ_thisself == "table" then
+            -- w("par/flatten: type: table")
+            local tmp = flatten(self,{table_textvalue(thisself)},new_options)
+            for i=1,#tmp do
+                table.insert(ret,tmp[i])
+            end
         else
-            w("typ_thisself %s",typ_thisself)
+            -- w("par/flatten: type: unknown")
+            -- w("typ_thisself %s",typ_thisself)
         end
     end
     for i=#items,1,-1 do
@@ -208,6 +240,7 @@ end
 function Par:min_width( textformat_name, options )
     options = options or {}
     local newpar = publisher.deepcopy(self)
+    newpar.origin = "min_width"
     options = options or {}
     local new_options = publisher.copy_table_from_defaults(options)
     new_options.textformat = textformat_name
@@ -236,6 +269,7 @@ end
 
 function Par:max_width_and_lineheight(options)
     local newpar = publisher.deepcopy(self)
+    newpar.origin = "max_width_and_lineheight"
     newpar.textformat = nil
     options = options or {}
     local new_options = publisher.copy_table_from_defaults(options)
@@ -273,13 +307,23 @@ function Par:mknodelist( options )
             thisself.prev = tail
         end
     end
+    -- insert the last fragment as an object of its own (new line)
+    -- or add it to the last object of the table
     if nodelist then
-        table.insert(objects,nodelist)
+        local split = publisher.getprop(nodelist,"split")
+        if #objects > 0 and not split then
+            local tail = node.tail(objects[#objects])
+            tail.next = nodelist
+            nodelist.prev = tail
+        else
+            table.insert(objects,nodelist)
+        end
     end
     self.objects = objects
 end
 
 function Par:format( width_sp, options )
+    -- w("call format %s",self.origin)
     options = options or {}
     options.maxwidth_sp = width_sp
     publisher.remove_first_whitespace(self)
@@ -470,8 +514,6 @@ function Par:format( width_sp, options )
     if #objects == 0 then return node.new("vlist") end
     for i=1,#objects do
         nodelist = objects[i]
-
-
         local langs_num,langs
         langs = {}
         if current_textformat.hyphenchar then
@@ -487,14 +529,15 @@ function Par:format( width_sp, options )
 
         -- both are set only for ul/ol lists
         local indent = node.has_attribute(nodelist,publisher.att_indent) or 0
-        local rows   = node.has_attribute(nodelist,publisher.att_rows) or 0
+        local rows   = node.has_attribute(nodelist,publisher.att_rows)
 
         if publisher.getprop(nodelist,"indent") then
             indent = indent + publisher.getprop(nodelist,"indent")
         end
 
-        parameter.hangindent =    indent or current_textformat.indent or 0
-        parameter.hangafter  =  ( rows   or current_textformat.rows   or 0 )
+        parameter.hangindent = indent + ( current_textformat.indent or 0 )
+        parameter.hangafter  = rows  or current_textformat.rows  or 0
+
         if self.initial then
             parameter.hangindent =  parameter.hangindent + self.initial.width
             local i_ht = self.initial.height + self.initial.depth
@@ -652,6 +695,7 @@ function Par:format( width_sp, options )
     end
 
     nodelist = node.vpack(objects[1])
+    publisher.setprop(nodelist,"origin","par:format")
 
     if self.initial then
         local initial_hlist = self.initial
@@ -662,6 +706,7 @@ function Par:format( width_sp, options )
         node.set_attribute(self.initial,publisher.att_origin,publisher.origin_initial)
 
         initial_hlist = node.vpack(initial_hlist)
+        publisher.setprop(initial_hlist,"origin","initial")
         initial_hlist.shift = -ht / 2
         initial_hlist.width = 0
         initial_hlist.height = 0
@@ -669,6 +714,8 @@ function Par:format( width_sp, options )
 
         nodelist.head.head = node.insert_before(nodelist.head.head,nodelist.head.head,initial_hlist)
     end
+    self.objects = nil
+    self.nodelist = nodelist
     return nodelist
 end
 
@@ -680,6 +727,8 @@ function Par:append( whatever, options )
         if not self.padding_left then w("set padding-left") self.padding_left = options.padding_left end
     end
     if options.padding_right and not self.padding_right then self.padding_right = options.padding_right end
+    -- if options.dontformat then w("dontformat") end
+    -- w("whatever %s type %s",tostring(whatever), type(whatever))
     if type(whatever) == "string" then whatever = {whatever} end
     table.insert(self,{ contents = whatever, options = options} )
 end

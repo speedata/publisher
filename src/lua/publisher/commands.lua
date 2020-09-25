@@ -22,7 +22,7 @@ commands = {}
 --- Insert a hyperlink into the PDF.
 function commands.a( layoutxml,dataxml )
     local interaction = ( publisher.options.interaction ~= false )
-    p = par:new()
+    p = par:new(nil,"a")
 
     if interaction then
         local href = publisher.read_attribute(layoutxml,dataxml,"href","rawstring")
@@ -57,7 +57,7 @@ end
 --- is  placed.
 function commands.action( layoutxml,dataxml)
     local tab = publisher.dispatch(layoutxml,dataxml)
-    p = par:new()
+    p = par:new(nil,"action")
 
     for _,j in ipairs(tab) do
         local eltname = publisher.elementname(j)
@@ -244,7 +244,7 @@ end
 --- -------------------
 --- Set the contents of this element in boldface
 function commands.bold( layoutxml,dataxml )
-    local p = par:new()
+    local p = par:new(nil,"b")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
@@ -258,7 +258,7 @@ end
 --- ---
 --- Insert a newline
 function commands.br( layoutxml,dataxml )
-    a = par:new()
+    a = par:new(nil,"br")
     a:append("\n",{})
     return a
 end
@@ -383,7 +383,7 @@ function commands.bookmark( layoutxml,dataxml )
         publisher.setup_page(nil,"commands#bookmark")
         publisher.output_absolute_position({nodelist = hlist, x = 0, y = 0})
     else
-        local p = par:new()
+        local p = par:new(nil,"bookmark")
         p:append(hlist)
         return p
     end
@@ -415,7 +415,7 @@ function commands.color( layoutxml, dataxml )
     local colorname = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     local colorindex = publisher.get_colorindex_from_name(colorname,"black")
 
-    local p = par:new()
+    local p = par:new(nil,"color")
 
     local objects = {}
     local prev_fgcolor = publisher.current_fgcolor
@@ -784,7 +784,7 @@ function commands.fontface( layoutxml,dataxml )
     if not familynumber then
         err("font: family %q unknown",fontfamily)
     else
-        local p = par:new()
+        local p = par:new(nil,"fontface")
         local tab = publisher.dispatch(layoutxml,dataxml)
         for _,j in ipairs(tab) do
             local c = publisher.element_contents(j)
@@ -1012,7 +1012,7 @@ function commands.hspace( layoutxml,dataxml )
     local minwidth   = publisher.read_attribute(layoutxml,dataxml,"minwidth", "length_sp")
     local leadertext = publisher.read_attribute(layoutxml,dataxml,"leader", "rawstring")
     local leaderwd   = publisher.read_attribute(layoutxml,dataxml,"leader-width", "length_sp")
-    local a = par:new()
+    local a = par:new(nil,"hspace")
 
     -- We insert a function that gets called in paragraph creation
     local ud = node.new("whatsit","user_defined")
@@ -1431,7 +1431,7 @@ end
 --- -------------------
 --- Set the contents of this element in italic text
 function commands.italic( layoutxml,dataxml )
-    local p = par:new()
+    local p = par:new(nil,"I")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
@@ -1812,7 +1812,7 @@ function commands.nobreak( layoutxml, dataxml )
     local text             = publisher.read_attribute(layoutxml,dataxml,"text",     "rawstring")
     local fontname         = publisher.read_attribute(layoutxml,dataxml,"fontface", "rawstring")
 
-    local p = par:new()
+    local p = par:new(nil,"nobreak")
     local tab = publisher.dispatch(layoutxml,dataxml)
 
     if strategy == "fontsize" then
@@ -1827,7 +1827,7 @@ function commands.nobreak( layoutxml, dataxml )
 
             local tmppar
             repeat
-                tmppar = par:new()
+                tmppar = par:new(nil,"nobreak(fontsize 1)")
                 loops = loops + 1
                 if loops > 10 then
                     err("Nobreak: More than 100 loops, giving up")
@@ -1835,7 +1835,7 @@ function commands.nobreak( layoutxml, dataxml )
                 end
                 local thisoptions = publisher.copy_table_from_defaults(options)
                 thisoptions.fontfamily = fam
-                foo = par:new()
+                foo = par:new(nil,"nobreak(fontsize 2)")
                 for _,j in ipairs(tab) do
                     local c = publisher.element_contents(j)
                     tmppar:append(publisher.copy_table_from_defaults(c),thisoptions)
@@ -1854,7 +1854,7 @@ function commands.nobreak( layoutxml, dataxml )
     elseif strategy == "cut" then
         p:append(tab,{})
         p.flatten_callback = function(thiselt,options)
-            tmppar = par:new()
+            tmppar = par:new(nil,"cut")
             for _,j in ipairs(tab) do
                 local c = publisher.element_contents(j)
                 tmppar:append(c,thisoptions)
@@ -1885,7 +1885,7 @@ function commands.nobreak( layoutxml, dataxml )
     elseif strategy == "keeptogether" then
         p:append(tab,{})
         p.flatten_callback = function(thiselt,options)
-            tmppar = par:new()
+            tmppar = par:new(nil,"keeptogether")
             for _,j in ipairs(tab) do
                 local c = publisher.element_contents(j)
                 tmppar:append(c,options)
@@ -1915,7 +1915,7 @@ function commands.ol(layoutxml,dataxml )
     local labelwidth = tex.sp("5mm")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
-        local a = par:new("__fivemm")
+        local a = par:new("__fivemm","ol")
         a:append(publisher.number_hbox(i,labelwidth),{})
         a:append(publisher.element_contents(j),{})
         ret[#ret + 1] = a
@@ -2199,6 +2199,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local paddingleft   = publisher.read_attribute(layoutxml,dataxml,"padding-left","width_sp")
     local paddingright  = publisher.read_attribute(layoutxml,dataxml,"padding-right","width_sp")
     local textformat    = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
+    local html          = publisher.read_attribute(layoutxml,dataxml,"html","rawstring","all")
 
     if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
 
@@ -2228,11 +2229,12 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
         padding_right = paddingright,
         textformat = textformat,
         allowbreak = allowbreak,
+        html = html,
     }
 
 
     local tab = publisher.dispatch(layoutxml,dataxml)
-    local p = par:new(nil,"par")
+    local p = par:new(nil,"commands.paragraph")
 
     local initial
     for i=1,#tab do
@@ -3208,7 +3210,7 @@ function commands.span( layoutxml,dataxml )
         colornumber = publisher.colors[backgroundcolor].index
     end
 
-    local a = par:new()
+    local a = par:new(nil,"span")
     local params = {
         underline = underline,
         allowbreak=publisher.allowbreak,
@@ -3218,7 +3220,7 @@ function commands.span( layoutxml,dataxml )
         letterspacing = letterspacing,
     }
 
-    local p = par:new()
+    local p = par:new(nil,"span2")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
@@ -3243,7 +3245,7 @@ end
 --- ---
 --- Subscript. The contents of this element should be written in subscript (smaller, lower)
 function commands.sub( layoutxml,dataxml )
-    local p = par:new()
+    local p = par:new(nil,"sub")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
@@ -3256,7 +3258,7 @@ end
 --- ---
 --- Superscript. The contents of this element should be written in superscript (smaller, higher)
 function commands.sup( layoutxml,dataxml )
-    local p = par:new()
+    local p = par:new(nil,"sup")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
@@ -3757,7 +3759,7 @@ function commands.text(layoutxml,dataxml)
         elseif eltname == "Par" then
             objects[#objects + 1] = contents
         elseif eltname == "Image" then
-            local a = par:new()
+            local a = par:new(nil,"text")
             local c = contents[1]
             node.set_attribute(c,publisher.att_dontadjustlineheight,1)
             a:append(c)
@@ -4065,7 +4067,7 @@ function commands.underline( layoutxml,dataxml )
     local css_rules = publisher.css:matches({element = 'u', class=class,id=id}) or {}
     if dashed == nil then dashed = ( css_rules["border-style"] == "dashed") end
 
-    local p = par:new()
+    local p = par:new(nil,"underline")
     local underline = 1
     if dashed then
         underline = 2
@@ -4115,7 +4117,7 @@ end
 --- ---
 --- Format the current URL. It should make the URL active.
 function commands.url(layoutxml,dataxml)
-    local a = par:new()
+    local a = par:new(nil,"URL")
     local tab = publisher.dispatch(layoutxml,dataxml)
 
     local ud = node.new("whatsit","user_defined")

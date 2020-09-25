@@ -115,6 +115,11 @@ function nodelist_tostring( head )
     local ret = {}
     while head do
         if head.id == publisher.hlist_node or head.id == publisher.vlist_node then
+            if head.id == publisher.hlist_node then
+                ret[#ret + 1] = " → "
+              else
+                ret[#ret + 1] = " ↳ "
+            end
             ret[#ret + 1] = nodelist_tostring(head.head)
         elseif head.id == publisher.glyph_node then
             local c = head.char

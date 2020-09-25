@@ -406,7 +406,9 @@ function copy_attributes( styles,attributes )
     end
 end
 
-function collect_horizontal_nodes( elt,parameter )
+-- collect horizontal nodes returns a table with nodelists (glyphs for example)
+function collect_horizontal_nodes( elt,parameter,origin )
+    -- w("collect_horizontal_nodes %s",origin or "?")
     parameter = parameter or {}
     local ret = {}
     for i=1,#elt do
@@ -514,7 +516,7 @@ function collect_horizontal_nodes( elt,parameter )
             elseif eltname == "wbr" then
                 thisret[#thisret + 1] = "\xE2\x80\x8B"
             end
-            local n = collect_horizontal_nodes(thiselt,options)
+            local n = collect_horizontal_nodes(thiselt,options,string.format("collect horizontl mode element %s",eltname))
             for i=1,#n do
                 thisret[#thisret + 1] = n[i]
             end
@@ -562,7 +564,7 @@ function build_html_table_tbody(tbody)
                         stylesstack[#stylesstack + 1] = styles
                         local attributes = td.attributes or {}
                         copy_attributes(styles,attributes)
-                        local r = build_nodelist(td)
+                        local r = build_nodelist(td,{},"build_html_table_tbody/td")
                         table.remove(stylesstack)
                         local newtd = { elementname = "Paragraph" , contents = r[1] }
                         local newcontents = { newtd }
@@ -672,8 +674,10 @@ local function getsize(size,fontsize)
 end
 
 local olcounter = {}
-function build_nodelist( elt,options )
+function build_nodelist( elt,options, caller )
+    -- w("html: build nodelist from %s", caller or "?")
     options = options or {}
+    -- ret is a nested table of boxes and paragraphs
     local ret = {}
     for i=1,#elt do
         local thiselt = elt[i]
@@ -757,10 +761,10 @@ function build_nodelist( elt,options )
                 tf.disable_hyphenation = true
             end
             options.textformat = tf
-            local n = collect_horizontal_nodes(thiselt,options)
+            local n = collect_horizontal_nodes(thiselt,options,"build nodelist horizontal mode")
 
-            local a = par:new(tf.name,"html.lua")
-
+            local a = par:new(tf.name,"html.lua (horizontal)")
+            local appended = false
             for i=1,#n do
                 local thisn = n[i]
                 if i == 1 then
@@ -769,11 +773,13 @@ function build_nodelist( elt,options )
                     thisn = trim_space_end(thisn)
                 end
                 if thisn then
+                    appended = true
                     a:append(thisn)
                 end
             end
-            a:mknodelist()
-            ret[#ret + 1] = a
+            if appended then
+                ret[#ret + 1] = a
+            end
         else
             local box = Box:new()
             box.margintop = margin_top or 0
@@ -782,12 +788,13 @@ function build_nodelist( elt,options )
             box.width = styles.calculated_width - margin_left - margin_right - padding_left - padding_right
 
             if thiseltname == "table" then
+                -- w("html/table")
                 local nl = build_html_table(thiselt)
-                local tabpar = par:new()
+                local tabpar = par:new(nil,"html table (a)")
                 tabpar.margin_top = margin_top
                 node.set_attribute(nl,publisher.att_lineheight,nl.height)
-                tabpar:append(nl)
-                tabpar:mknodelist()
+                publisher.setprop(nl,"origin","html table")
+                tabpar:append(nl,{dontformat=true})
                 box[#box + 1] = tabpar
                 ret[#ret + 1] = box
             elseif thiseltname == "ol" or thiseltname == "ul" then
@@ -797,7 +804,7 @@ function build_nodelist( elt,options )
                     styles.ullevel = styles.ullevel + 1
                 end
                 olcounter[styles.ollevel] = 0
-                local n = build_nodelist(thiselt,options)
+                local n = build_nodelist(thiselt,options,"build_nodelist/ ol/ul" )
                 if thiseltname == "ol" then
                     styles.ollevel = styles.ollevel - 1
                 else
@@ -809,9 +816,9 @@ function build_nodelist( elt,options )
                 box.indent_amount = tex.sp("20pt")
                 ret[#ret + 1] = box
             elseif thiseltname == "li" then
-                olcounter[styles.ollevel] = olcounter[styles.ollevel] + 1
+                olcounter[styles.ollevel] = (olcounter[styles.ollevel] or 0 ) + 1
                 local str = resolve_list_style_type(styles,olcounter)
-                local n = build_nodelist(thiselt,options)
+                local n = build_nodelist(thiselt,options, "build_nodelist/ li" )
                 for i=1,#n do
                     local a = n[i]
                     if i == 1 then
@@ -821,7 +828,7 @@ function build_nodelist( elt,options )
                     ret[#ret + 1] = a
                 end
             else
-                local n = build_nodelist(thiselt,options)
+                local n = build_nodelist(thiselt,options,string.format("build_nodelist/ any element name %q",thiseltname))
                 box.draw_border = attributes.has_border
                 box.border = {
                     borderstart = true,
@@ -851,9 +858,7 @@ function build_nodelist( elt,options )
                     margin_left = margin_left,
                 }
 
-                for i=1,#n do
-                    box[#box + 1] = n[i]
-                end
+                box[#box + 1] = n
                 ret[#ret + 1] = box
             end
         end
@@ -967,6 +972,6 @@ function parse_html_new( elt, options )
         publisher.set_mainlanguage(lang)
     end
     parse_html_inner(elt[1])
-    local block = build_nodelist(elt,options)
+    local block = build_nodelist(elt,options,"parse_html_new")
     return block
 end

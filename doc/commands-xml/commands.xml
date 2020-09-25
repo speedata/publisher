@@ -5522,6 +5522,38 @@
         <para>Name der Schriftart. Voreinstellung ist »text« (mit kleinem t).</para>
       </description>
     </attribute>
+    <attribute en="html" optional="yes" since="4.1.2">
+      <description xml:lang="en">
+        <para>Set the HTML processing mode. Defaults to 'all'.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Stelle die HTML-Verarbeitung ein. Voreinstellung ist 'all'.</para>
+      </description>
+      <choice en="all">
+        <description xml:lang="en">
+          <para>Interpret HTML starting from the current element.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Interpretiere HTML beginnend mit dem aktuellen Element.</para>
+        </description>
+      </choice>
+      <choice en="inner">
+        <description xml:lang="en">
+          <para>Ignore the name of the outer element.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Ignoriere den Namen des äußeren Elements.</para>
+        </description>
+      </choice>
+      <choice en="off">
+        <description xml:lang="en">
+          <para>Switch off HTML in this paragraph. Use only the text value.</para>
+        </description>
+        <description xml:lang="de">
+          <para>HTML in diesem Absatz auschalten. Nehme nur den Text.</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="padding-left" optional="yes" since="3.9.27" allowxpath="yes" type="length">
       <description xml:lang="en">
         <para>Set the left padding, i.e. the inner distance to the allocated area.</para>

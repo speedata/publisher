@@ -3388,6 +3388,19 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="html">
+                     <a:documentation>Set the HTML processing mode. Defaults to &#39;all&#39;.</a:documentation>
+                     <choice>
+                        <value>all</value>
+                        <a:documentation>Interpret HTML starting from the current element.</a:documentation>
+                        <value>inner</value>
+                        <a:documentation>Ignore the name of the outer element.</a:documentation>
+                        <value>off</value>
+                        <a:documentation>Switch off HTML in this paragraph. Use only the text value.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="padding-left">
                      <a:documentation>Set the left padding, i.e. the inner distance to the allocated area.</a:documentation>
                   </attribute>

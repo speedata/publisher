@@ -919,7 +919,7 @@ do
         if box.prependbox and #box.prependbox > 0 then
             for i=1,#box.prependbox do
                 local pp = box.prependbox[i]
-                local a = par:new()
+                local a = par:new(nil,"flatten_boxes")
                 a:indent(parameter.indent or 0)
                 a:append(pp)
                 ret[#ret + 1] = a
@@ -2023,7 +2023,7 @@ function bgtext( box, textstring, angle, colorname, fontfamily, bgsize)
     local sin = math.sin(angle_rad)
     local cos = math.cos(angle_rad)
 
-    a = par:new()
+    a = par:new(nil,"bgtext")
     a:append(textstring, {fontfamily = fontfamily,color = colorindex})
     a:mknodelist()
     local textbox = node.hpack(a.objects[1])

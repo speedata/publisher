@@ -3248,6 +3248,30 @@
           <xs:documentation>Name der Schriftart. Voreinstellung ist »text« (mit kleinem t).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="html">
+        <xs:annotation>
+          <xs:documentation>Stelle die HTML-Verarbeitung ein. Voreinstellung ist 'all'.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="all">
+              <xs:annotation>
+                <xs:documentation>Interpretiere HTML beginnend mit dem aktuellen Element.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="inner">
+              <xs:annotation>
+                <xs:documentation>Ignoriere den Namen des äußeren Elements.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="off">
+              <xs:annotation>
+                <xs:documentation>HTML in diesem Absatz auschalten. Nehme nur den Text.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="padding-left">
         <xs:annotation>
           <xs:documentation>Stelle das padding links ein, also der Innenabstand des Textblocks.</xs:documentation>
