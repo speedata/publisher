@@ -158,7 +158,7 @@ local function flatten(self,items,options)
                 end
                 local startnewline = 0
                 local body = csshtmltree[1]
-
+                -- printtable("body",body)
                 local firstelement = body[1]
                 if firstelement then
                     if type(firstelement) == "string" and not string.match( firstelement ,"^%s*$")  then
@@ -172,6 +172,7 @@ local function flatten(self,items,options)
                     end
                     local blocks = publisher.parse_html(csshtmltree, options) or {}
                     blocks = publisher.flatten_boxes(blocks)
+                    -- printtable("blocks",blocks)
                     local c = 1
                     for b=1,#blocks do
                         local thisblock = blocks[b]
@@ -181,7 +182,9 @@ local function flatten(self,items,options)
                             if tbc then
                                 if c > startnewline and ( has_contents == false ) then
                                     publisher.setprop(tbc,"split",true)
-                                    publisher.setprop(tbc,"thisblock.contents",true)
+                                    publisher.setprop(tbc,"padding_left",thisblock.padding_left)
+                                    publisher.setprop(tbc,"prependnodelist",thisblock.prependnodelist)
+                                    publisher.setprop(tbc,"prependlist",thisblock.prependlist)
                                 end
                                 table.insert(ret,tbc)
                                 has_contents = true
@@ -227,12 +230,13 @@ local function flatten(self,items,options)
     end
     return items
 end
-
 function Par:prepend(whatever)
-    self.prependnodelist = whatever
+    self.prependlist = self.prependlist or {}
+    table.insert(self.prependlist,1, whatever)
 end
 
 function Par:indent(width_sp)
+    -- w("indent %s wd %gpt",self.origin or "?", width_sp / publisher.factor)
     self.padding_left = self.padding_left or 0
     self.padding_left = self.padding_left + width_sp
 end
@@ -340,6 +344,7 @@ function Par:format( width_sp, options )
         width_sp = self.width
     end
     self.padding_left = self.padding_left or 0
+
     self.padding_right = self.padding_right or 0
     if self.padding_left > 0 then
         width_sp = width_sp - self.padding_left
@@ -347,7 +352,7 @@ function Par:format( width_sp, options )
     if self.padding_right > 0 then
         width_sp = width_sp - self.padding_right
     end
-
+    -- w("self.padding_left %s %gpt",self.origin,self.padding_left / publisher.factor)
     for i=1,#self do
         self[i] = nil
     end
@@ -511,9 +516,17 @@ function Par:format( width_sp, options )
         end
     end
     local objects = self.objects
+    local orig_width_sp = width_sp
     if #objects == 0 then return node.new("vlist") end
     for i=1,#objects do
         nodelist = objects[i]
+        width_sp = orig_width_sp
+        local thispaddingleft = self.padding_left
+        local this_object_padding_left = publisher.getprop(nodelist,"padding_left")
+        if this_object_padding_left then
+            thispaddingleft = thispaddingleft + this_object_padding_left
+            width_sp = width_sp - this_object_padding_left
+        end
         local langs_num,langs
         langs = {}
         if current_textformat.hyphenchar then
@@ -530,10 +543,6 @@ function Par:format( width_sp, options )
         -- both are set only for ul/ol lists
         local indent = node.has_attribute(nodelist,publisher.att_indent) or 0
         local rows   = node.has_attribute(nodelist,publisher.att_rows)
-
-        if publisher.getprop(nodelist,"indent") then
-            indent = indent + publisher.getprop(nodelist,"indent")
-        end
 
         parameter.hangindent = indent + ( current_textformat.indent or 0 )
         parameter.hangafter  = rows  or current_textformat.rows  or 0
@@ -564,6 +573,14 @@ function Par:format( width_sp, options )
 
         parameter.hangafter = parameter.hangafter * -1
         parameter.disable_hyphenation = current_textformat.disable_hyphenation
+        local prepend = publisher.getprop(nodelist,"prependlist") or self.prependlist
+        local sumindent = 0
+        if prepend and true then
+            local sumwd = 0
+            for j=1,#prepend do
+                sumindent = sumindent + prepend[j][2]
+            end
+        end
 
         local ragged_shape
         if current_textformat.alignment == "leftaligned" or current_textformat.alignment == "rightaligned" or current_textformat.alignment == "centered" then
@@ -578,9 +595,11 @@ function Par:format( width_sp, options )
             nodelist = node.remove(nodelist,tail)
             tail = node.tail(nodelist)
         end
+
         if nodelist == nil then
             -- ignore
         else
+
             -- If there is ragged shape (i.e. not a rectangle of text) then we should turn off
             -- font expansion. This is done by setting tex.(pdf)adjustspacing to 0 temporarily
             if ragged_shape then
@@ -605,10 +624,9 @@ function Par:format( width_sp, options )
                 nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
             end
 
-            if self.padding_left > 0 then
-                indent_nodelist(nodelist,self.padding_left)
+            if thispaddingleft > 0 then
+                indent_nodelist(nodelist,thispaddingleft)
             end
-
             for _,v in ipairs(langs) do
                 lang.prehyphenchar(v.l,v.prehyphenchar)
             end
@@ -683,8 +701,40 @@ function Par:format( width_sp, options )
                 node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,7)
             end
             objects[i] = nodelist.list
+            if prepend and true then
+                local prependnodelist = nil
+                for j=1,#prepend do
+                    local str = prepend[j][1]
+                    local wd = prepend[j][2]
+                    local fam = prepend[j][3]
+                    local label = node.hpack(publisher.mknodes(str,{fontfamily = fam}))
+                    local labelbox = publisher.whatever_hbox(str,wd,fam,tex.sp("5pt"))
+                    prependnodelist = node.insert_after(prependnodelist,node.tail(prependnodelist),labelbox)
+                end
+                prependnodelist = node.hpack(prependnodelist)
+                prependnodelist.head = publisher.add_glue(prependnodelist.head,"head",{width = - prependnodelist.width, shrink = 2^16, shrink_order = 3 })
+                prependnodelist.width = 0
+
+                local thisobject = objects[i]
+                while thisobject do
+                    if thisobject.id == publisher.hlist_node then
+                        break
+                    end
+                    thisobject = thisobject.next
+                end
+                local cur = thisobject.head
+                while cur do
+                    if cur.id ~= publisher.glue_node then
+                        cur = node.insert_before(thisobject.head,cur,prependnodelist)
+                        break
+                    end
+                    cur = cur.next
+                end
+                thisobject.head = cur
+            end
+
             nodelist.list = nil
-            -- node.free(nodelist)
+            node.free(nodelist)
         end
     end
 
@@ -723,9 +773,6 @@ function Par:append( whatever, options )
     options = options or {}
     if options.initial and not self.initial then self.initial = options.initial end
     if options.textformat and not self.textformat then self.textformat = options.textformat end
-    if options.padding_left then
-        if not self.padding_left then w("set padding-left") self.padding_left = options.padding_left end
-    end
     if options.padding_right and not self.padding_right then self.padding_right = options.padding_right end
     -- if options.dontformat then w("dontformat") end
     -- w("whatever %s type %s",tostring(whatever), type(whatever))

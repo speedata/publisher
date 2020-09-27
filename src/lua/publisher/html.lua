@@ -28,6 +28,9 @@ inherited = {
     calculated_width = true,
     ollevel = true,
     ullevel = true,
+    listlevel = true,
+    listindent = true,
+    olullisttype = true,
     hyphens = true,
     currentcolor = true,
     ["border-collapse"] = true,
@@ -565,9 +568,13 @@ function build_html_table_tbody(tbody)
                         local attributes = td.attributes or {}
                         copy_attributes(styles,attributes)
                         local r = build_nodelist(td,{},"build_html_table_tbody/td")
+                        r = publisher.flatten_boxes(r)
                         table.remove(stylesstack)
-                        local newtd = { elementname = "Paragraph" , contents = r[1] }
-                        local newcontents = { newtd }
+                        local newcontents = {}
+                        for i=1,#r do
+                            local newtd = { elementname = "Paragraph" , contents = r[i] }
+                            table.insert(newcontents,newtd)
+                        end
                         local att = td.attributes
                         if att then
                             local bbw = att["border-bottom-width"]
@@ -689,6 +696,7 @@ function build_nodelist( elt,options, caller )
         if thiseltname == "body" then
             styles.ollevel = 0
             styles.ullevel = 0
+            styles.listlevel = 0
         end
 
         local attributes = thiselt.attributes or {}
@@ -798,33 +806,39 @@ function build_nodelist( elt,options, caller )
                 box[#box + 1] = tabpar
                 ret[#ret + 1] = box
             elseif thiseltname == "ol" or thiseltname == "ul" then
+                styles.olullisttype = thiseltname
+                styles.listindent = padding_left
+                styles.listlevel = styles.listlevel + 1
                 if thiseltname == "ol" then
                     styles.ollevel = styles.ollevel + 1
                 else
                     styles.ullevel = styles.ullevel + 1
                 end
-                olcounter[styles.ollevel] = 0
+                olcounter[styles.listlevel] = 0
                 local n = build_nodelist(thiselt,options,"build_nodelist/ ol/ul" )
                 if thiseltname == "ol" then
                     styles.ollevel = styles.ollevel - 1
                 else
                     styles.ullevel = styles.ullevel - 1
                 end
+                styles.listlevel = styles.listlevel - 1
                 for i=1,#n do
                     box[#box + 1] = n[i]
                 end
-                box.indent_amount = tex.sp("20pt")
                 ret[#ret + 1] = box
             elseif thiseltname == "li" then
-                olcounter[styles.ollevel] = (olcounter[styles.ollevel] or 0 ) + 1
+                olcounter[styles.listlevel] = olcounter[styles.listlevel] or 0
+                olcounter[styles.listlevel] = olcounter[styles.listlevel] + 1
                 local str = resolve_list_style_type(styles,olcounter)
                 local n = build_nodelist(thiselt,options, "build_nodelist/ li" )
+                -- n is a table of box and / or par
                 for i=1,#n do
                     local a = n[i]
-                    if i == 1 then
-                        local x = publisher.whatever_hbox(str,tex.sp("20pt"),fam)
-                        a:prepend(x)
-                    end
+                    local wd = styles.listindent
+                    local x = { str,wd,fam }
+                    a:prepend(x)
+                    -- label only for the first
+                    str = ""
                     ret[#ret + 1] = a
                 end
             else
@@ -882,10 +896,18 @@ function resolve_list_style_type(styles, olcounter)
     local str
     if liststyletype == "decimal" then
         str = tostring(counter) .. "."
+    elseif liststyletype == "decimal-leading-zero" then
+        str = string.format("%02d.",counter)
     elseif liststyletype == "lower-roman" then
         str = tex.romannumeral(counter) .. "."
     elseif liststyletype == "upper-roman" then
         str = string.upper( tex.romannumeral(counter) ) .. "."
+    elseif liststyletype == "disc" then
+        str = "•"
+    elseif liststyletype == "circle" then
+        str = "◦"
+    elseif liststyletype == "square" then
+        str = ""
     else
         if ullevel == 1 then
             str = "•"

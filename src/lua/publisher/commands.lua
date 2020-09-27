@@ -3964,9 +3964,6 @@ function commands.textblock( layoutxml,dataxml )
         end
     end
 
-    -- for HTML processing
-    objects = publisher.flatten_boxes(objects)
-
     if columns > 1 then
         width_sp = math.floor(  (width_sp - columndistance * ( columns - 1 ) )   / columns)
     end

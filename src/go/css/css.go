@@ -110,8 +110,9 @@ tfoot           { vertical-align: middle }
 td, th, tr      { vertical-align: inherit }
 s, strike, del  { text-decoration: line-through }
 hr              { border: 1px inset }
-ol, ul, dir, dd { margin-left: 40px }
+ol, ul, dir, dd { padding-left: 20pt }
 ol              { list-style-type: decimal }
+ul              { list-style-type: disc }
 ol ul, ul ol,
 ul ul, ol ol    { margin-top: 0; margin-bottom: 0 }
 u, ins          { text-decoration: underline }
@@ -120,7 +121,7 @@ center          { text-align: center }
 
 // :link           { text-decoration: underline }
 
-// Return the position of th matching closing brace "}"
+// Return the position of the matching closing brace "}"
 func findClosingBrace(toks tokenstream) int {
 	level := 1
 	for i, t := range toks {

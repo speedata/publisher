@@ -905,6 +905,7 @@ function define_image_callback( extensionhandler )
 end
 
 do
+    local prependbox
     function flatten_boxes(box,parameter,ret)
         ret = ret or {}
         parameter = parameter or {}
@@ -917,38 +918,42 @@ do
             indent = indent
         }
         if box.prependbox and #box.prependbox > 0 then
+            prependbox = prependbox or {}
             for i=1,#box.prependbox do
-                local pp = box.prependbox[i]
-                local a = par:new(nil,"flatten_boxes")
-                a:indent(parameter.indent or 0)
-                a:append(pp)
-                ret[#ret + 1] = a
+                table.insert(prependbox,box.prependbox[i])
             end
         end
         for i=1,#box do
-            if box[i].min_width then
+            local thisbox = box[i]
+            if thisbox.min_width then
                 -- a regular paragraph
                 if parameter.indent then
-                    box[i]:indent(indent)
+                    thisbox:indent(indent)
                 end
                 if box.width then
-                    box[i].width = box.width
+                    thisbox.width = box.width
                 end
                 if box.draw_border then
-                    box[i].draw_border = true
-                    box[i].border = box.border
+                    thisbox.draw_border = true
+                    thisbox.border = box.border
+                end
+                if prependbox then
+                    for p=1,#prependbox do
+                        thisbox:prepend(prependbox[p])
+                    end
+                    prependbox = nil
                 end
                 if i == 1 then
-                    box[i].margin_top = box.margintop
+                    thisbox.margin_top = box.margintop
                 end
                 if i == #box then
-                    box[i].margin_bottom = box.marginbottom
+                    thisbox.margin_bottom = box.marginbottom
                 end
 
-                ret[#ret + 1] = box[i]
+                ret[#ret + 1] = thisbox
             else
                 -- a box with paragraphs inside
-                flatten_boxes(box[i],new_parameter,ret)
+                flatten_boxes(thisbox,new_parameter,ret)
             end
         end
         return ret
@@ -3751,12 +3756,12 @@ function whatever_hbox( str, labelwidth,fam,labelsep_wd )
     labelsep_wd = labelsep_wd or fonts.lookup_fontfamily_number_instance[fam].size / 2
     local label, pre_glue
     label = mknodes(str,{fontfamily = fam})
-    pre_glue = set_glue(nil,{stretch = 2^16, stretch_order = 3,width= - labelwidth})
+    pre_glue = set_glue(nil,{shrink = 2^16, shrink_order = 3,width =  labelwidth})
     pre_glue.next = label
     local label_sep = set_glue(nil,{width = labelsep_wd})
     local t = node.slide(label)
     t.next = label_sep
-    local label_hbox = node.hpack(pre_glue,0,"exactly")
+    local label_hbox = node.hpack(pre_glue,labelwidth,"exactly")
     node.set_attribute(label_hbox.head,att_fontfamily,fam)
     label_hbox.head = addstrut(label_hbox.head,"head")
     return label_hbox
