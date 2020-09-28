@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.3" date="2020-09-28">
+        <en>Fix HTML ul/ol and li.</en>
+        <de>Korrigiere HTML ul/ol und li.</de>
+    </entry>
+    <entry version="4.1.3" date="2020-09-28">
+        <en>.</en>
+        <de>.</de>
+    </entry>
+    <entry version="4.1.3" date="2020-09-28">
+        <en>Allow xinclude in table cells (#263).</en>
+        <de>Erlaube xinclude in Tabellenzellen (#263).</de>
+    </entry>
     <entry version="4.1.2" date="2020-09-23">
       <en>Few bugfixes and improvements (Barcode/keepfontsize).</en>
       <de>Ein paar Fehlerkorrekturen und Verbesserungen (Barcode/keepfontsize)</de>
