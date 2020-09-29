@@ -5554,6 +5554,54 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="label-left" optional="yes" type="text" since="4.1.4">
+      <description xml:lang="en">
+        <para>A text to the left of the paragraph.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Text der links vom Absatz ausgegeben wird.</para>
+      </description>
+    </attribute>
+    <attribute en="label-left-width" optional="yes" type="length" since="4.1.4">
+      <description xml:lang="en">
+        <para>Width of the text.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Breite des Textes</para>
+      </description>
+    </attribute>
+    <attribute en="label-left-align" optional="yes" since="4.1.4">
+      <description xml:lang="en">
+        <para>Alignment of the text.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Ausrichtung des Textes</para>
+      </description>
+      <choice en="left">
+        <description xml:lang="en">
+          <para>Left aligned</para>
+        </description>
+        <description xml:lang="de">
+          <para>Linksbündig</para>
+        </description>
+      </choice>
+      <choice en="right">
+        <description xml:lang="en">
+          <para>Right aligned</para>
+        </description>
+        <description xml:lang="de">
+          <para>Rechtsbündig</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="label-left-distance" optional="yes" type="length" since="4.1.4">
+      <description xml:lang="en">
+        <para>Horizontal distance between text and paragraph (if right aligned).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Horizontaler Abstand zwischen Text und Absatz (wenn rechtsbündig).</para>
+      </description>
+    </attribute>
     <attribute en="padding-left" optional="yes" since="3.9.27" allowxpath="yes" type="length">
       <description xml:lang="en">
         <para>Set the left padding, i.e. the inner distance to the allocated area.</para>

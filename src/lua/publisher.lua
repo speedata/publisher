@@ -3153,7 +3153,7 @@ function bigger_glue_spec( a,b )
 end
 
 -- Used to set the line height within nobreak.
-function addstrut(nodelist,where)
+function addstrut(nodelist,where,origin)
     local strutheight = 0
     local head = nodelist
     while head do
@@ -3191,8 +3191,8 @@ function addstrut(nodelist,where)
     local strut
     -- for debugging purposes set width to 20000:
     strut = add_rule(nodelist,"head",{height = 0.75 * strutheight, depth = 0.25 * strutheight, width = 0 })
-    if where then
-        node.set_attribute(strut,att_origin,where)
+    if origin then
+        setprop(strut,"origin",origin)
     end
     return strut
 end
@@ -3752,18 +3752,30 @@ function number_hbox( num, labelwidth )
     return digit_hbox
 end
 
-function whatever_hbox( str, labelwidth,fam,labelsep_wd )
+-- Create a hbox for a label
+function whatever_hbox( str, labelwidth,fam,labelsep_wd,labelalign )
     labelsep_wd = labelsep_wd or fonts.lookup_fontfamily_number_instance[fam].size / 2
-    local label, pre_glue
-    label = mknodes(str,{fontfamily = fam})
-    pre_glue = set_glue(nil,{shrink = 2^16, shrink_order = 3,width =  labelwidth})
-    pre_glue.next = label
+    labelalign = labelalign or "right"
+    local shrink_glue = set_glue(nil,{shrink = 2^16, shrink_order = 3,width =  labelwidth})
+    local label = mknodes(str,{fontfamily = fam})
     local label_sep = set_glue(nil,{width = labelsep_wd})
-    local t = node.slide(label)
-    t.next = label_sep
-    local label_hbox = node.hpack(pre_glue,labelwidth,"exactly")
+
+    local label_hbox
+    if labelalign == "right" then
+        shrink_glue.next = label
+        local t = node.slide(label)
+        t.next = label_sep
+        label_hbox = node.hpack(shrink_glue,labelwidth,"exactly")
+    else
+        local t = node.slide(label)
+        t.next = label_sep
+        label_sep.next = shrink_glue
+        label_hbox = node.hpack(label,labelwidth,"exactly")
+    end
+
     node.set_attribute(label_hbox.head,att_fontfamily,fam)
-    label_hbox.head = addstrut(label_hbox.head,"head")
+    label_hbox.head = addstrut(label_hbox.head,"head","whatever_hbox/strut")
+
     return label_hbox
 end
 

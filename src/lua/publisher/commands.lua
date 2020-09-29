@@ -2198,8 +2198,12 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
     local paddingleft   = publisher.read_attribute(layoutxml,dataxml,"padding-left","width_sp")
     local paddingright  = publisher.read_attribute(layoutxml,dataxml,"padding-right","width_sp")
-    local textformat    = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
-    local html          = publisher.read_attribute(layoutxml,dataxml,"html","rawstring","all")
+    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
+    local html           = publisher.read_attribute(layoutxml,dataxml,"html","rawstring","all")
+    local labelleft      = publisher.read_attribute(layoutxml,dataxml,"label-left","rawstring")
+    local labelleftwidth = publisher.read_attribute(layoutxml,dataxml,"label-left-width","width_sp")
+    local labelleftalign = publisher.read_attribute(layoutxml,dataxml,"label-left-align","rawstring")
+    local labelleftdistance = publisher.read_attribute(layoutxml,dataxml,"label-left-distance","width_sp")
 
     if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
 
@@ -2230,12 +2234,15 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
         textformat = textformat,
         allowbreak = allowbreak,
         html = html,
+        labelleft = labelleft,
+        labelleftwidth = labelleftwidth,
+        labelleftalign = labelleftalign,
+        labelleftdistance = labelleftdistance,
     }
 
 
     local tab = publisher.dispatch(layoutxml,dataxml)
     local p = par:new(nil,"commands.paragraph")
-
     local initial
     for i=1,#tab do
         local thischild = tab[i]

@@ -3401,6 +3401,32 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="label-left">
+                     <a:documentation>A text to the left of the paragraph.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-left-width">
+                     <a:documentation>Width of the text.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-left-align">
+                     <a:documentation>Alignment of the text.</a:documentation>
+                     <choice>
+                        <value>left</value>
+                        <a:documentation>Left aligned</a:documentation>
+                        <value>right</value>
+                        <a:documentation>Right aligned</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-left-distance">
+                     <a:documentation>Horizontal distance between text and paragraph (if right aligned).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="padding-left">
                      <a:documentation>Set the left padding, i.e. the inner distance to the allocated area.</a:documentation>
                   </attribute>

@@ -3401,6 +3401,32 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="label-left">
+                     <a:documentation>Text der links vom Absatz ausgegeben wird.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-left-width">
+                     <a:documentation>Breite des Textes</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-left-align">
+                     <a:documentation>Ausrichtung des Textes</a:documentation>
+                     <choice>
+                        <value>left</value>
+                        <a:documentation>Linksbündig</a:documentation>
+                        <value>right</value>
+                        <a:documentation>Rechtsbündig</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-left-distance">
+                     <a:documentation>Horizontaler Abstand zwischen Text und Absatz (wenn rechtsbündig).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="padding-left">
                      <a:documentation>Stelle das padding links ein, also der Innenabstand des Textblocks.</a:documentation>
                   </attribute>

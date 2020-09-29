@@ -574,14 +574,6 @@ function Par:format( width_sp, options )
         parameter.hangafter = parameter.hangafter * -1
         parameter.disable_hyphenation = current_textformat.disable_hyphenation
         local prepend = publisher.getprop(nodelist,"prependlist") or self.prependlist
-        local sumindent = 0
-        if prepend and true then
-            local sumwd = 0
-            for j=1,#prepend do
-                sumindent = sumindent + prepend[j][2]
-            end
-        end
-
         local ragged_shape
         if current_textformat.alignment == "leftaligned" or current_textformat.alignment == "rightaligned" or current_textformat.alignment == "centered" then
             ragged_shape = true
@@ -701,14 +693,17 @@ function Par:format( width_sp, options )
                 node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,7)
             end
             objects[i] = nodelist.list
-            if prepend and true then
+            if prepend then
                 local prependnodelist = nil
                 for j=1,#prepend do
-                    local str = prepend[j][1]
-                    local wd = prepend[j][2]
-                    local fam = prepend[j][3]
+                    local thisprepend = prepend[j]
+                    local str = thisprepend[1]
+                    local fam = thisprepend[3] or options.fontfamily
                     local label = node.hpack(publisher.mknodes(str,{fontfamily = fam}))
-                    local labelbox = publisher.whatever_hbox(str,wd,fam,tex.sp("5pt"))
+                    local wd = thisprepend[2] or node.dimensions(label)
+                    local labeldistance = thisprepend[4] or tex.sp("5pt")
+                    local labelalign = thisprepend[5] or "right"
+                    local labelbox = publisher.whatever_hbox(str,wd,fam,labeldistance,labelalign)
                     prependnodelist = node.insert_after(prependnodelist,node.tail(prependnodelist),labelbox)
                 end
                 prependnodelist = node.hpack(prependnodelist)
@@ -774,6 +769,9 @@ function Par:append( whatever, options )
     if options.initial and not self.initial then self.initial = options.initial end
     if options.textformat and not self.textformat then self.textformat = options.textformat end
     if options.padding_right and not self.padding_right then self.padding_right = options.padding_right end
+    if options.labelleft then
+        self:prepend({options.labelleft,options.labelleftwidth,options.fontfamily,options.labelleftdistance,options.labelleftalign})
+    end
     -- if options.dontformat then w("dontformat") end
     -- w("whatever %s type %s",tostring(whatever), type(whatever))
     if type(whatever) == "string" then whatever = {whatever} end
