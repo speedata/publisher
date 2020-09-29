@@ -938,7 +938,7 @@ do
                     thisbox.border = box.border
                 end
                 if prependbox then
-                    for p=1,#prependbox do
+                    for p=#prependbox,1,-1 do
                         thisbox:prepend(prependbox[p])
                     end
                     prependbox = nil
