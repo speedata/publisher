@@ -280,6 +280,10 @@ end
 runtime.finalizer = finished
 -------------------------------------------------------------------------------
 
+`options`::
+
+Table with configuration values (see <<ch-configuration,how to configure the speedata Publisher>>). Can be used for reading and writing the settings.
+
 `validate_relaxng(‹xml file›, ‹schema file›)`::
 
 This function validates the specified XML file with the RELAX NG (XML syntax) schema specified in the second parameter.

@@ -161,9 +161,47 @@ func fillRuntimeModule(mod lua.LValue) {
 		lvars.RawSetString(k, lua.LString(v))
 	}
 	l.SetField(mod, "variables", lvars)
-
+	l.SetField(mod, "options", getOptionsTable((l)))
 	wd, _ := os.Getwd()
 	l.SetField(mod, "projectdir", lua.LString(wd))
+}
+
+func getOptionsTable(l *lua.LState) *lua.LTable {
+	options := l.NewTable()
+	mt := l.NewTable()
+	l.SetField(mt, "__index", l.NewFunction(indexOptions))
+	l.SetField(mt, "__newindex", l.NewFunction(newIndexOptions))
+	l.SetMetatable(options, mt)
+	return options
+}
+
+// Set string
+func newIndexOptions(l *lua.LState) int {
+	numberArguments := l.GetTop()
+	if numberArguments < 3 {
+		l.Push(lua.LNil)
+		return 1
+	}
+	// 1: tbl
+	// 2: key
+	// 3: value
+	optionName := l.CheckString(2)
+	optionValue := l.CheckString(3)
+	options[optionName] = optionValue
+	return 0
+}
+
+func indexOptions(l *lua.LState) int {
+	numberArguments := l.GetTop()
+	if numberArguments < 2 {
+		l.Push(lua.LNil)
+		return 1
+	}
+	// 1: tbl
+	// 2: key
+	optionName := l.CheckString(2)
+	l.Push(lua.LString(getOption(optionName)))
+	return 1
 }
 
 // When runtime.finalizer is set, call that function after
@@ -200,5 +238,6 @@ func runLuaScript(filename string) bool {
 		fmt.Println(err)
 		return false
 	}
+
 	return true
 }

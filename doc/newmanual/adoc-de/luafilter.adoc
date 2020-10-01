@@ -274,6 +274,10 @@ end
 runtime.finalizer = finished
 -------------------------------------------------------------------------------
 
+`options`::
+
+Tabelle mit Konfigurationswerten (siehe <<ch-konfiguration>>). Kann sowohl zum Lesen der Werte als auch zum Setzen benutzt werden.
+
 `validate_relaxng(‹xmldatei›,‹schemadatei›)`::
 
 Diese Funktion validiert die angegebene XML-Datei mit dem im zweiten Parameter angegebenen RELAX NG (XML-Syntax) Schema.
