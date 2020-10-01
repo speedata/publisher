@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.5" date="2020-10-01">
+        <en>Access options during the prepressing stage.</en>
+        <de>Zugriff auf Optionen während der Datenvorverarbeitung.</de>
+    </entry>
     <entry version="4.1.4" date="2020-10-01">
         <en>Bugfix ordering of ul/ol li (#264).</en>
         <de>Fehlerkorrektur Reihenfolge der ol/ul li labels (#246).</de>
