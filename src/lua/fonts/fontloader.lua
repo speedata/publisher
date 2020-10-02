@@ -168,6 +168,13 @@ function define_font_hb( name, size, extra_parameter )
         local touni = glyph_uni[gid]
         local uni = touni or 0x110000 + gid
         local ge = font:get_glyph_extents(gid)
+        if uni == 160 then
+            uni = 32
+        elseif uni == 173 then
+            uni = 45
+        elseif uni == 8208 then
+            uni = 45
+        end
         f.characters[uni] = {
             index = gid,
             width = font:get_glyph_h_advance(gid) * mag,

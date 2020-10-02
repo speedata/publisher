@@ -3302,6 +3302,13 @@ end
 
 -- Return a list of nodes
 function mknodes(str,parameter)
+    -- if it's an empty string, we make a zero-width rule
+    if string.len(str) == 0 then
+        -- a space char can have a width, so we return a zero width something
+        local strut = add_rule(nil,"head",{height = 1 * factor, depth = 0, width = 0 })
+        return strut
+    end
+
     parameter = parameter or {}
     local fontfamily = parameter.fontfamily
     -- instance is the internal font number
@@ -3387,15 +3394,17 @@ function mknodes(str,parameter)
         shape(tbl,buf, { language = thislang, script = script } )
 
         local glyphs = buf:get_glyphs()
-
         local list, cur
         local n,k
         for i=1,#glyphs do
             local thisglyph = glyphs[i]
             local cp = glyphs[i].codepoint
             local uc = tbl.backmap[cp] or cp
-
-            if uc == 32 then
+            if false then
+                -- just for simple adding at the beginning
+            elseif uc == 160 and #glyphs == 1 then
+                -- ignore
+            elseif uc == 32 or uc == 160 then
                 n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch})
                 setstyles(n,parameter)
                 list,cur = node.insert_after(list,cur,n)
@@ -3472,12 +3481,6 @@ function mknodes(str,parameter)
     local head, last, n
     local char
 
-    -- if it's an empty string, we make a zero-width rule
-    if string.len(str) == 0 then
-        -- a space char can have a width, so we return a zero width something
-        local strut = add_rule(nil,"head",{height = 1 * factor, depth = 0, width = 0 })
-        return strut
-    end
     local lastitemwasglyph
     local newline = 10
     local breakatspace = true
