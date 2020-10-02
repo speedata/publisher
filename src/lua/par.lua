@@ -26,10 +26,11 @@ local function indent_nodelist(nl,wd)
     while hbox do
         if hbox.id == publisher.hlist_node then
             hbox.head = node.insert_before(hbox.head,hbox.head,node.copy(glue))
+            hbox.width = hbox.width + wd
         end
         hbox = hbox.next
-
     end
+    nl.width = nl.width + wd
     return nl
 end
 
