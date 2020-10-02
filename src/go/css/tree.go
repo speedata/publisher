@@ -10,10 +10,9 @@ import (
 
 	"golang.org/x/net/html"
 
-	"internal/github-css/scanner"
-
 	"github.com/PuerkitoBio/goquery"
 	"github.com/andybalholm/cascadia"
+	"github.com/speedata/css/scanner"
 )
 
 var (

@@ -907,15 +907,9 @@ function resolve_list_style_type(styles, olcounter)
     elseif liststyletype == "circle" then
         str = "◦"
     elseif liststyletype == "square" then
-        str = ""
+        str = "□"
     else
-        if ullevel == 1 then
-            str = "•"
-        elseif ullevel == 2 then
-            str = "◦"
-        else
-            str = ""
-        end
+        str = liststyletype
     end
     return str
 end

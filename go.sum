@@ -11,7 +11,6 @@ github.com/alecthomas/kong v0.1.17-0.20190424132513-439c674f7ae0/go.mod h1:+inYU
 github.com/alecthomas/kong v0.2.1-0.20190708041108-0548c6b1afae/go.mod h1:+inYUSluD+p4L8KdviBSgzcqEjUQOfC5fQDRFuc36lI=
 github.com/alecthomas/kong-hcl v0.1.8-0.20190615233001-b21fea9723c8/go.mod h1:MRgZdU3vrFd05IQ89AxUZ0aYdF39BYoNFa324SodPCA=
 github.com/alecthomas/repr v0.0.0-20180818092828-117648cd9897/go.mod h1:xTS7Pm1pD1mvyM075QCDSRqH6qRLXylzS24ZTpRiSzQ=
-github.com/andybalholm/cascadia v1.0.0 h1:hOCXnnZ5A+3eVDX8pvgl4kofXv2ELss0bKcqRySc45o=
 github.com/andybalholm/cascadia v1.0.0/go.mod h1:GsXiBklL0woXo1j/WYWtSYYC4ouU9PqHO0sqidkEA4Y=
 github.com/andybalholm/cascadia v1.1.1-0.20191115165331-903109d295d5 h1:lm0H7kPz04JjPtTb+35IO5GrQvadC9nTL5zdvnK49mQ=
 github.com/andybalholm/cascadia v1.1.1-0.20191115165331-903109d295d5/go.mod h1:YCyR8vOZT9aZ1CHEd8ap0gMVm2aFgxBp0T0eFw1RUQY=
@@ -37,7 +36,6 @@ github.com/google/btree v1.0.0 h1:0udJVsspx3VBr5FwtLhQQtuAsVc79tTq0ocGIPAU6qo=
 github.com/google/btree v1.0.0/go.mod h1:lNA+9X1NB3Zf8V7Ke586lFgjr2dZNuvo3lPJSGZ5JPQ=
 github.com/gorilla/context v1.1.1/go.mod h1:kBGZzfjB9CEq2AlWe17Uuf7NDRt0dE0s8S51q0aT7Yg=
 github.com/gorilla/csrf v1.6.0/go.mod h1:7tSf8kmjNYr7IWDCYhd3U8Ck34iQ/Yw5CJu7bAkHEGI=
-github.com/gorilla/feeds v1.1.0 h1:pcgLJhbdYgaUESnj3AmXPcB7cS3vy63+jC/TI14AGXk=
 github.com/gorilla/feeds v1.1.0/go.mod h1:Nk0jZrvPFZX1OBe5NPiddPw7CfwF6Q9eqzaBbaightA=
 github.com/gorilla/handlers v1.4.1/go.mod h1:Qkdc/uu4tH4g6mTK6auzZ766c4CA0Ng8+o/OAirnOIQ=
 github.com/gorilla/mux v1.6.2/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
@@ -64,7 +62,9 @@ github.com/speedata/config v0.0.0-20181203093101-3a3f44982ec4 h1:20KhtGSKIcqEv4W
 github.com/speedata/config v0.0.0-20181203093101-3a3f44982ec4/go.mod h1:TxWfFcFnaw1mu9xndZolTbZk1BWCdDZWvsEfQnCvbZY=
 github.com/speedata/configurator v0.0.0-20181204130920-092f848de8e1 h1:MOkDOMUlbquW+gXaRLdxmHLqsXpwOE8iidcpgwbk78s=
 github.com/speedata/configurator v0.0.0-20181204130920-092f848de8e1/go.mod h1:h+7uQzaP66Pxnw2Cd5f8TnzRlC5ue52Eem85P+WnzVc=
-github.com/speedata/decorate v0.0.0-20140819225746-11c959617936 h1:Ue2lSsLGxsc0ag89CHWOt6Vk4xx7DWlTicmWzKX8kK8=
+github.com/speedata/css v1.0.1 h1:lcrvhkiBeCwWaOPwoejMVHc4fZrI1GV3qCEMwYJc1WE=
+github.com/speedata/css/scanner v0.0.0-20201002105008-5a0a811b34fe h1:NTxBQwPb4Y/gxGxgjls3yMcHzeT1qrdlzA+f54VPA2g=
+github.com/speedata/css/scanner v0.0.0-20201002105008-5a0a811b34fe/go.mod h1:uF4+EGySaBnGeZpXZ0boh/oR6P0vNiYfQ2MAJXCU9hE=
 github.com/speedata/decorate v0.0.0-20140819225746-11c959617936/go.mod h1:PPKQSVs/r3HPpMsJ+VvPRB/5OnYoS+b2IYYMdomUQGg=
 github.com/speedata/go-epub v0.5.5 h1:jcZWJD0t7smT5cswJrHXkHdGbNXUX9Vsl2dM0o/EMUQ=
 github.com/speedata/go-epub v0.5.5/go.mod h1:j/d0SwgywCeWsAFrme3XCBRzJX/nfRwPpx65FU9Tnoc=
@@ -77,7 +77,6 @@ github.com/speedata/optionparser v1.0.0/go.mod h1:AetA6qHxho+CGuukPCm44MsGu+Vvu/
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
-github.com/thejerf/css v1.0.1 h1:5hpxzZOpcdd/KsvGMwXnJq5AS2ITVqUhcco1SFpMgBs=
 github.com/thejerf/css v1.0.1/go.mod h1:J5y2JcaFqscqPr77rQ2vgI/DQEaY78qFQlO7FYANNtc=
 github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=
 github.com/valyala/fasttemplate v1.0.1/go.mod h1:UQGH1tvbgY+Nz5t2n7tXsz52dQxojPUpymEIMZ47gx8=

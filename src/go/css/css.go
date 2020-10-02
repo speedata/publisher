@@ -6,11 +6,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"golang.org/x/net/html"
-
-	"internal/github-css/scanner"
-
 	"github.com/PuerkitoBio/goquery"
+	"github.com/speedata/css/scanner"
+	"golang.org/x/net/html"
 )
 
 type tokenstream []*scanner.Token
@@ -224,10 +222,12 @@ func consumeBlock(toks tokenstream, inblock bool) sBlock {
 			case "{":
 				var nb sBlock
 				l := findClosingBrace(toks[i+1:])
-				if i+1 == l {
+				if l == 1 {
 					break
 				}
-				nb = consumeBlock(toks[i+1:i+l], true)
+				subblock := toks[i+1 : i+l]
+				// subblock is without the enclosing curly braces
+				nb = consumeBlock(subblock, true)
 				if toks[start].Type == scanner.AtKeyword {
 					nb.Name = toks[start].Value
 					b.ChildAtRules = append(b.ChildAtRules, &nb)
@@ -353,7 +353,7 @@ func ParseHTMLFragment(htmltext, csstext string) (string, error) {
 }
 
 // Run returns a Lua tree
-func Run(tmpdir string, arguments []string) (string, error) {
+func Run(arguments []string) (string, error) {
 	var err error
 	curwd, err := os.Getwd()
 	if err != nil {
@@ -377,7 +377,6 @@ func Run(tmpdir string, arguments []string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	os.Setenv("SPHTMLBASE", p)
 	os.Chdir(p)
 	defer os.Chdir(curwd)
 	err = c.openHTMLFile(fn)
@@ -385,6 +384,7 @@ func Run(tmpdir string, arguments []string) (string, error) {
 		return "", err
 	}
 	c.processAtRules()
+
 	var b strings.Builder
 	c.dumpTree(&b)
 

@@ -14,13 +14,11 @@ replace css v0.0.0 => ./src/go/css
 
 replace internal/github-css/scanner v0.0.0 => ./src/go/css/internal/github-css/scanner
 
+go 1.11
 
 require (
+	github.com/speedata/css/scanner v0.0.0-20201002105008-5a0a811b34fe // indirect
 	sp/sp v0.0.0 // indirect
 	sphelper v0.0.0 // indirect
-	splib v0.0.0 // indirect
 	splibaux v0.0.0 // indirect
-	internal/github-css/scanner v0.0.0 // indirect
 )
-
-go 1.11

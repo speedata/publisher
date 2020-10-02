@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"internal/github-css/scanner"
+	"github.com/speedata/css/scanner"
 )
 
 func parseCSSFile(filename string) (tokenstream, error) {

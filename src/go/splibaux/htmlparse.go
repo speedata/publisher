@@ -2,7 +2,6 @@ package splibaux
 
 import (
 	"fmt"
-	"os"
 
 	"css"
 )
@@ -23,14 +22,7 @@ func ParseHTML(filename string) (string, error) {
 		return "", fmt.Errorf("File not found: %q", filename)
 	}
 
-	var tmpdir string
-	dir, err := os.Getwd()
-	if err != nil {
-		return "", err
-	}
-	tmpdir = dir
-
-	str, err := css.Run(tmpdir, []string{p})
+	str, err := css.Run([]string{p})
 	if err != nil {
 		return "", err
 	}
