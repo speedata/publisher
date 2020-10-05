@@ -3464,11 +3464,26 @@ function mknodes(str,parameter)
                     list,cur = node.insert_after(list,cur,k)
                     lastitemwasglyph = true
                 end
-                            -- CJK
-                if thislang == "zh" and uc >= 12032 then
-                    local pen = node.new("penalty")
-                    pen.penalty = 0
-                    list,cur = node.insert_after(list,cur,pen)
+                -- CJK
+                if thislang == "zh" and i < #glyphs and uc > 12032 then
+                    -- don't break within non-cjk words
+                    if prohibited_at_end[thislang][unicode.utf8.char(uc)] then
+                        -- ignore
+                    else
+                        if i < #glyphs then
+                            local nextchar = glyphs[i+1].codepoint
+                            local nextuc = tbl.backmap[nextchar] or nextchar
+                            if not prohibited_at_beginning[thislang][unicode.utf8.char(nextuc)] then
+                                local pen = node.new("penalty")
+                                pen.penalty = 0
+                                if parameter.textformat.alignment == "justified" then
+                                    local g = set_glue(nil,{stretch = 2^16, stretch_order = 0})
+                                    list,cur = node.insert_after(list,cur,g)
+                                end
+                                list,cur = node.insert_after(list,cur,pen)
+                            end
+                        end
+                    end
                 end
                 -- simplified chinese
                 -- characters that must not appear at the beginning of a line

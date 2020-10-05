@@ -377,6 +377,9 @@ local function setup()
     end
 end
 
+prohibited_at_end = {zh = {["$"] = true,["("] = true,["£"] = true,["¥"] = true,["·"] = true,["'"] = true,["\""] = true,["〈"] = true,["《"] = true,["「"] = true,["『"] = true,["【"] = true,["〔"] = true,["〖"] = true,["〝"] = true,["﹙"] = true,["﹛"] = true,["＄"] = true,["（"] = true,["．"] = true,["［"] = true,["｛"] = true,["￡"] = true,["￥"] = true}}
+prohibited_at_beginning = {zh = {["!"] = true,["%"] = true,[")"] = true,[","] = true,["."] = true,[":"] = true,[";"] = true,["?"] = true,["]"] = true,["}"] = true,["¢"] = true,["°"] = true,["·"] = true,["'"] = true,['"'] = true,["†"] = true,["‡"] = true,["›"] = true,["℃"] = true,["∶"] = true,["、"] = true,["。"] = true,["〃"] = true,["〆"] = true,["〕"] = true,["〗"] = true,["〞"] = true,["﹚"] = true,["﹜"] = true,["！"] = true,["＂"] = true,["％"] = true,["＇"] = true,["）"] = true,["，"] = true,["．"] = true,["："] = true,["；"] = true,["？"] = true,["！"] = true,["］"] = true,["｝"] = true,["～"] = true}}
+
 errorlog = io.open(string.format("%s.protocol",tex.jobname),"ab")
 errorlog:write("---------------------------------------------\n")
 
