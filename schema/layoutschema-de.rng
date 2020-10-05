@@ -1334,6 +1334,19 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="html-vertical-spacing">
+               <a:documentation>Setze den vertikalen Abstand für HTML Inhalte. Voreinstellung ist »off«.</a:documentation>
+               <choice>
+                  <value>all</value>
+                  <a:documentation>Erlaube jeden vertiaklen Abstand.</a:documentation>
+                  <value>inner</value>
+                  <a:documentation>Ignoriere ersten und letzten vertikalen Abstand.</a:documentation>
+                  <value>off</value>
+                  <a:documentation>Ignoriere alle vertikale Abstände.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="widow">
                <a:documentation>Wenn »yes«, Hurenkinder erlauben (letzte Zeile eines Absatzes ist auf der nächsten Seite). Wenn eine Zahl angegeben wird, ist dies die Anzahl der Zeilen, die zusammengehalten werden. Voreinstellung ist »no«.</a:documentation>
                <data type="string">

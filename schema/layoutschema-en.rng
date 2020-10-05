@@ -1334,6 +1334,19 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="html-vertical-spacing">
+               <a:documentation>Set the vertical spacing for HTML contents. Defaults to “off”.</a:documentation>
+               <choice>
+                  <value>all</value>
+                  <a:documentation>Allow each vertical spacing.</a:documentation>
+                  <value>inner</value>
+                  <a:documentation>Discard first and last vertical spacing.</a:documentation>
+                  <value>off</value>
+                  <a:documentation>Ignore all vertical spacing.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="widow">
                <a:documentation>If yes, allow widows (last line of paragraph is on the next page). If you provide a number, it is the number of lines that must be kept together.  Default: no.</a:documentation>
                <data type="string">

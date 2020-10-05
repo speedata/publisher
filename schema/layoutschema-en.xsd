@@ -1198,6 +1198,30 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="html-vertical-spacing">
+        <xs:annotation>
+          <xs:documentation>Set the vertical spacing for HTML contents. Defaults to “off”.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="all">
+              <xs:annotation>
+                <xs:documentation>Allow each vertical spacing.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="inner">
+              <xs:annotation>
+                <xs:documentation>Discard first and last vertical spacing.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="off">
+              <xs:annotation>
+                <xs:documentation>Ignore all vertical spacing.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="widow">
         <xs:annotation>
           <xs:documentation>If yes, allow widows (last line of paragraph is on the next page). If you provide a number, it is the number of lines that must be kept together.  Default: no.</xs:documentation>

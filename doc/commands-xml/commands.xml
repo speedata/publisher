@@ -2585,6 +2585,38 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="html-vertical-spacing" optional="yes" since="4.1.6">
+      <description xml:lang="en">
+        <para>Set the vertical spacing for HTML contents. Defaults to “off”.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze den vertikalen Abstand für HTML Inhalte. Voreinstellung ist »off«.</para>
+      </description>
+      <choice en="all">
+        <description xml:lang="en">
+          <para>Allow each vertical spacing.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Erlaube jeden vertiaklen Abstand.</para>
+        </description>
+      </choice>
+      <choice en="inner">
+        <description xml:lang="en">
+          <para>Discard first and last vertical spacing.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Ignoriere ersten und letzten vertikalen Abstand.</para>
+        </description>
+      </choice>
+      <choice en="off">
+        <description xml:lang="en">
+          <para>Ignore all vertical spacing.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Ignoriere alle vertikale Abstände.</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="widow" optional="yes" type="yesnonumber" lastchanged="3.1.22">
       <description xml:lang="en">
         <para>If yes, allow widows (last line of paragraph is on the next page). If you provide a number, it is the number of lines that must be kept together.  Default: no.</para>

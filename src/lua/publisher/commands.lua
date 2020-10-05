@@ -591,6 +591,7 @@ function commands.define_textformat(layoutxml)
     local rows         = publisher.read_attribute(layoutxml,dataxml,"rows",        "number")
     local bordertop    = publisher.read_attribute(layoutxml,dataxml,"border-top",  "rawstring")
     local borderbottom = publisher.read_attribute(layoutxml,dataxml,"border-bottom","rawstring")
+    local htmlverticalspacing = publisher.read_attribute(layoutxml,dataxml,"html-vertical-spacing","rawstring")
     local margintop     = publisher.read_attribute(layoutxml,dataxml,"margin-top",    "rawstring")
     local marginbottom  = publisher.read_attribute(layoutxml,dataxml,"margin-bottom", "rawstring")
     local paddingtop    = publisher.read_attribute(layoutxml,dataxml,"padding-top",   "rawstring")
@@ -606,6 +607,7 @@ function commands.define_textformat(layoutxml)
     local margintopboxstart  = publisher.read_attribute(layoutxml,dataxml,"margin-top-box-start","length_sp")
     local fmt = {
         colpaddingtop = colpaddingtop,
+        htmlverticalspacing = htmlverticalspacing,
     }
 
     if alignment == "leftaligned" or alignment == "rightaligned" or alignment == "centered" then

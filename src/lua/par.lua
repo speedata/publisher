@@ -186,6 +186,8 @@ local function flatten(self,items,options)
                                     publisher.setprop(tbc,"padding_left",thisblock.padding_left)
                                     publisher.setprop(tbc,"prependnodelist",thisblock.prependnodelist)
                                     publisher.setprop(tbc,"prependlist",thisblock.prependlist)
+                                    publisher.setprop(tbc,"margin_top",thisblock.margin_top)
+                                    publisher.setprop(tbc,"margin_bottom",thisblock.margin_bottom)
                                 end
                                 table.insert(ret,tbc)
                                 has_contents = true
@@ -521,6 +523,13 @@ function Par:format( width_sp, options )
     if #objects == 0 then return node.new("vlist") end
     for i=1,#objects do
         nodelist = objects[i]
+        local has_margin_top, has_margin_bottom
+        if current_textformat.htmlverticalspacing == "inner" and i > 1 or current_textformat.htmlverticalspacing == "all" then
+            has_margin_top = publisher.getprop(nodelist,"margin_top")
+        end
+        if current_textformat.htmlverticalspacing == "inner" and i < #objects or current_textformat.htmlverticalspacing == "all" then
+            has_margin_bottom = publisher.getprop(nodelist,"margin_bottom")
+        end
         width_sp = orig_width_sp
         local thispaddingleft = self.padding_left
         local this_object_padding_left = publisher.getprop(nodelist,"padding_left")
@@ -659,6 +668,9 @@ function Par:format( width_sp, options )
             if self.margin_top then
                 nodelist.list = publisher.add_glue(nodelist.list,"head",{width = self.margin_top})
             end
+            if has_margin_top then
+                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = has_margin_top})
+            end
             if current_textformat.paddingtop and current_textformat.paddingtop ~= 0 then
                 nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.paddingtop})
                 node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,3)
@@ -685,6 +697,10 @@ function Par:format( width_sp, options )
             end
             if self.margin_bottom and self.margin_bottom > 0 then
                 nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = self.margin_bottom})
+                node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
+            end
+            if has_margin_bottom then
+                nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = has_margin_bottom})
                 node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
             end
 

@@ -1198,6 +1198,30 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="html-vertical-spacing">
+        <xs:annotation>
+          <xs:documentation>Setze den vertikalen Abstand für HTML Inhalte. Voreinstellung ist »off«.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="all">
+              <xs:annotation>
+                <xs:documentation>Erlaube jeden vertiaklen Abstand.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="inner">
+              <xs:annotation>
+                <xs:documentation>Ignoriere ersten und letzten vertikalen Abstand.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="off">
+              <xs:annotation>
+                <xs:documentation>Ignoriere alle vertikale Abstände.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="widow">
         <xs:annotation>
           <xs:documentation>Wenn »yes«, Hurenkinder erlauben (letzte Zeile eines Absatzes ist auf der nächsten Seite). Wenn eine Zahl angegeben wird, ist dies die Anzahl der Zeilen, die zusammengehalten werden. Voreinstellung ist »no«.</xs:documentation>
