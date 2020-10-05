@@ -1,5 +1,21 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.6" date="2020-10-05">
+        <en>Better padding-left and padding-right on Paragraph (fixes #267).</en>
+        <de>Verbessertes padding-left und padding right bei Paragraph.</de>
+    </entry>
+    <entry version="4.1.6" date="2020-10-05">
+        <en>Control vertical spacing in HTML mode and HTML data.</en>
+        <de>Kontrolle über vertikalen Leerraum im HTML Modus und in HTML-Daten.</de>
+    </entry>
+    <entry version="4.1.6" date="2020-10-05">
+        <en>Enhance harfbuzz font loader (more supported fonts).</en>
+        <de>Harfbuzz Fontloader verbessert (mehr unterstützte Fonts).</de>
+    </entry>
+    <entry version="4.1.6" date="2020-10-05">
+        <en>Server temporary directories can start with any character.</en>
+        <de>Sever temporäres Verzeichnis kann mit jedem Zeichen anfangen.</de>
+    </entry>
     <entry version="4.1.5" date="2020-10-01">
         <en>Access options during the prepressing stage.</en>
         <de>Zugriff auf Optionen während der Datenvorverarbeitung.</de>
