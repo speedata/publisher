@@ -2134,9 +2134,9 @@ function frame(obj)
     local rw = math.round(width / factor,3) -- width of stroke
 
     -- outer boundary
-    local x1, y1   = -rw + b_b_l_radius                     , -rw
-    local x2, y2   =  rw + wd - b_b_r_radius                , -rw
-    local x3, y3   =  rw + wd - circle_bezier * b_b_r_radius, -rw
+    local x1, y1   = -rw + b_b_l_radius                     , -rw - dp
+    local x2, y2   =  rw + wd - b_b_r_radius                , -rw - dp
+    local x3, y3   =  rw + wd - circle_bezier * b_b_r_radius, -rw - dp
     local x4, y4   =  rw + wd                               , -rw + circle_bezier * b_b_r_radius
     local x5, y5   =  rw + wd                               , -rw + b_b_r_radius
     local x6, y6   =  rw + wd                               ,  rw + ht - b_t_r_radius
@@ -2170,8 +2170,8 @@ function frame(obj)
 
 
     -- inner boundary
-    local xx1, yy1   =   b_b_l_radius_inner                      , 0
-    local xx2, yy2   =   wd - b_b_r_radius_inner                 , 0
+    local xx1, yy1   =   b_b_l_radius_inner                      , -dp
+    local xx2, yy2   =   wd - b_b_r_radius_inner                 , -dp
     local xx3, yy3   =   wd - circle_bezier * b_b_r_radius_inner , 0
     local xx4, yy4   =   wd                                      , circle_bezier * b_b_r_radius_inner
     local xx5, yy5   =   wd                                      , b_b_r_radius_inner
@@ -2271,9 +2271,12 @@ function frame(obj)
     end
 
     local hvbox = node.hpack(pdf_save)
+    local savedp = hvbox.depth
     hvbox.depth = 0
     node.insert_after(hvbox,node.tail(hvbox),pdf_restore)
     hvbox = node.vpack(hvbox)
+    hvbox = node.vpack(hvbox)
+    hvbox.depth = savedp
     return hvbox
 end
 
