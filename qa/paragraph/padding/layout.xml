@@ -1,0 +1,14 @@
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en" xmlns="urn:speedata.de:2009/publisher/en">
+    <Record element="data">
+        <Options crop="2mm" />
+        <PlaceObject frame="solid">
+            <Frame backgroundcolor="lightgreen">
+                <Textblock width="3">
+                    <Paragraph padding-left="5pt" padding-right="10pt">
+                        <Value>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Value>
+                    </Paragraph>
+                </Textblock>
+            </Frame>
+        </PlaceObject>
+    </Record>
+</Layout>

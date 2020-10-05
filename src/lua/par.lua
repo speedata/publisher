@@ -19,10 +19,25 @@ function Par:new( textformat,origin )
     return instance
 end
 
+local function widen_nodelist(nl,wd)
+    local glue = publisher.make_glue({ width = wd })
+    local hbox = nl.head
+
+    while hbox do
+        if hbox.id == publisher.hlist_node then
+            local tail = node.tail(hbox)
+            node.insert_after(tail,tail,node.copy(glue))
+            hbox.width = hbox.width + wd
+        end
+        hbox = hbox.next
+    end
+    nl.width = nl.width + wd
+    return nl
+end
+
 local function indent_nodelist(nl,wd)
     local glue = publisher.make_glue({ width = wd })
     local hbox = nl.head
-    local prevhead = nil
     while hbox do
         if hbox.id == publisher.hlist_node then
             hbox.head = node.insert_before(hbox.head,hbox.head,node.copy(glue))
@@ -532,11 +547,13 @@ function Par:format( width_sp, options )
         end
         width_sp = orig_width_sp
         local thispaddingleft = self.padding_left
+        local thispaddingright = self.padding_right
         local this_object_padding_left = publisher.getprop(nodelist,"padding_left")
         if this_object_padding_left then
             thispaddingleft = thispaddingleft + this_object_padding_left
             width_sp = width_sp - this_object_padding_left
         end
+        local this_object_padding_left = publisher.getprop(nodelist,"padding_left")
         local langs_num,langs
         langs = {}
         if current_textformat.hyphenchar then
@@ -601,7 +618,6 @@ function Par:format( width_sp, options )
         if nodelist == nil then
             -- ignore
         else
-
             -- If there is ragged shape (i.e. not a rectangle of text) then we should turn off
             -- font expansion. This is done by setting tex.(pdf)adjustspacing to 0 temporarily
             if ragged_shape then
@@ -628,6 +644,9 @@ function Par:format( width_sp, options )
 
             if thispaddingleft > 0 then
                 indent_nodelist(nodelist,thispaddingleft)
+            end
+            if thispaddingright > 0 then
+                widen_nodelist(nodelist,thispaddingright)
             end
             for _,v in ipairs(langs) do
                 lang.prehyphenchar(v.l,v.prehyphenchar)

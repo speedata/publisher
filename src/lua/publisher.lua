@@ -4058,7 +4058,7 @@ function do_linebreak( nodelist,hsize,parameters )
         head = head.next
     end
     local ret = node.vpack(j)
-    node.set_attribute(ret,att_origin,origin_dolinebreak)
+    setprop(ret,"origin","do_linebreak")
     return ret
 end
 
