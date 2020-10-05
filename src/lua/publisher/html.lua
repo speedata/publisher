@@ -871,8 +871,9 @@ function build_nodelist( elt,options, caller )
                     margin_bottom = margin_bottom,
                     margin_left = margin_left,
                 }
-
-                box[#box + 1] = n
+                for i = 1,#n do
+                    box[#box + 1] = n[i]
+                end
                 ret[#ret + 1] = box
             end
         end
