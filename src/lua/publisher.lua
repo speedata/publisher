@@ -490,7 +490,7 @@ lowercase = false
 --- "centered" and "justified"
 textformats = {
 
-    text           = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2},
+    text           = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2, name = "text"},
     __centered     = { indent = 0, alignment="centered",    rows = 1, orphan = 2, widow = 2},
     __leftaligned  = { indent = 0, alignment="leftaligned", rows = 1, orphan = 2, widow = 2},
     __rightaligned = { indent = 0, alignment="rightaligned",rows = 1, orphan = 2, widow = 2},
@@ -3303,7 +3303,7 @@ end
 -- Return a list of nodes
 function mknodes(str,parameter)
     -- if it's an empty string, we make a zero-width rule
-    if string.len(str) == 0 then
+    if not str or string.len(str) == 0 then
         -- a space char can have a width, so we return a zero width something
         local strut = add_rule(nil,"head",{height = 1 * factor, depth = 0, width = 0 })
         return strut
