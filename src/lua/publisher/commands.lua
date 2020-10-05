@@ -1917,7 +1917,7 @@ function commands.ol(layoutxml,dataxml )
     local labelwidth = tex.sp("5mm")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
-        local a = par:new("__fivemm","ol")
+        local a = par:new(publisher.textformats["__fivemm"],"ol")
         a:append(publisher.number_hbox(i,labelwidth),{})
         a:append(publisher.element_contents(j),{})
         ret[#ret + 1] = a
@@ -2233,7 +2233,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
         languagecode = languagecode,
         padding_left = paddingleft,
         padding_right = paddingright,
-        textformat = textformat,
+        textformat = publisher.textformats[textformat],
         allowbreak = allowbreak,
         html = html,
         labelleft = labelleft,
@@ -3734,7 +3734,7 @@ end
 function commands.text(layoutxml,dataxml)
     local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface","rawstring")
     local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",   "rawstring", "black")
-    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
+    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring","text")
 
     local colorindex
     if colorname then
@@ -3802,7 +3802,7 @@ function commands.text(layoutxml,dataxml)
     local cg = publisher.current_grid
     tab.pull = function(parameter,state)
             parameter.fontfamily = fontfamily
-            parameter.textformat = textformat
+            parameter.textformat = publisher.textformats[textformat]
             -- When pull is called the first time the state is not set yet.
             -- Currently we format all sub-objects (paragraphs),
             -- add them into the "object list" (state.objects) and
@@ -3880,7 +3880,7 @@ function commands.textblock( layoutxml,dataxml )
     local minheight      = publisher.read_attribute(layoutxml,dataxml,"minheight", "height_sp")
     local columns        = publisher.read_attribute(layoutxml,dataxml,"columns", "number")
     local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","rawstring")
-    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
+    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring","text")
     local language_name  = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
     local save_width = xpath.get_variable("__maxwidth")
     width = width or save_width
@@ -3940,7 +3940,7 @@ function commands.textblock( layoutxml,dataxml )
         publisher.current_fgcolor = colorindex
     end
     local options = {
-        textformat = textformat,
+        textformat = publisher.textformats[textformat],
         fontfamily = fontfamily,
         color = colorindex,
         languagecode = languagecode }

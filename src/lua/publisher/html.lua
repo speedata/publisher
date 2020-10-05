@@ -754,24 +754,30 @@ function build_nodelist( elt,options, caller )
 
         local textalign = styles["text-align"]
         local hyphens = styles.hyphens
-        local textformat = "leftaligned"
+        local alignment = "leftaligned"
         if textalign == "right" then
-            textformat = "rightaligned"
+            alignment = "rightaligned"
         elseif textalign == "center" then
-            textformat = "centered"
+            alignment = "centered"
         elseif textalign == "justify" then
-            textformat = "justified"
+            alignment = "justified"
         end
 
         if thiselt.mode == "horizontal" then
-            local tf = publisher.new_textformat("","text",{alignment = textformat})
+            -- when called from Paragraph, we use that textformat
+            local tf
+            if options.override_alignment then
+                tf = options.textformat
+            else
+                tf = publisher.new_textformat("","text",{alignment = alignment})
+            end
             if hyphens == "none" or hyphens == "manual" then
                 tf.disable_hyphenation = true
             end
             options.textformat = tf
             local n = collect_horizontal_nodes(thiselt,options,"build nodelist horizontal mode")
 
-            local a = par:new(tf.name,"html.lua (horizontal)")
+            local a = par:new(tf,"html.lua (horizontal)")
             local appended = false
             for i=1,#n do
                 local thisn = n[i]

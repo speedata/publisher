@@ -19,6 +19,11 @@ function Par:new( textformat,origin )
     return instance
 end
 
+-- Used when padding right > 0
+-- It is not enough to reduce the width of the lines, because
+-- the outer object will be smaller than requested.
+-- Therefore it is necessary to add the padding right width
+-- to the right of each line.
 local function widen_nodelist(nl,wd)
     local glue = publisher.make_glue({ width = wd })
     local hbox = nl.head
@@ -118,7 +123,7 @@ local function flatten(self,items,options)
             -- w("par/flatten: type: string or similar")
             local nodes = publisher.mknodes(tostring(thisself),new_options)
             local tmp = node.getproperty(nodes)
-            if new_options.fontfamily then
+            if new_options.fontfamily and publisher.fonts.lookup_fontfamily_number_instance[new_options.fontfamily] then
                 local fontheight = publisher.fonts.lookup_fontfamily_number_instance[new_options.fontfamily].baselineskip
                 nodes = publisher.add_rule(nodes,"head",{height = 0.75 * fontheight, depth = 0.25 * fontheight, width = 0 })
                 node.setproperty(nodes,tmp)
@@ -186,6 +191,7 @@ local function flatten(self,items,options)
                             startnewline = 1
                         end
                     end
+                    options.override_alignment = true
                     local blocks = publisher.parse_html(csshtmltree, options) or {}
                     blocks = publisher.flatten_boxes(blocks)
                     -- printtable("blocks",blocks)
@@ -295,7 +301,7 @@ function Par:max_width_and_lineheight(options)
     newpar.textformat = nil
     options = options or {}
     local new_options = publisher.copy_table_from_defaults(options)
-    new_options.textformat = "__leftaligned"
+    new_options.textformat = publisher.textformats["__leftaligned"]
     local nl = newpar:format(publisher.maxdimen,new_options)
     local maxwd = 0
     local hlist = nl.head
@@ -352,10 +358,11 @@ function Par:format( width_sp, options )
     publisher.remove_last_whitespace(self)
     self:mknodelist(options)
     local parameter = {}
-    local textformat_name = self.textformat or options.textformat or "text"
-    local current_textformat = publisher.textformats[textformat_name]
+    local current_textformat = self.textformat or options.textformat
     if not current_textformat then
-        err("textformat %q undefined, using text instead",tostring(textformat_name))
+        if self.textformat or options.textformat then
+            err("textformat %q undefined, using text instead",tostring(textformat_name))
+        end
         current_textformat = publisher.textformats.text
     end
     if self.width then
@@ -382,7 +389,12 @@ function Par:format( width_sp, options )
                 if head.id == publisher.glyph_node  then
                     local ffnumber = node.has_attribute(head,publisher.att_fontfamily)
                     local fi = publisher.fonts.lookup_fontfamily_number_instance[ffnumber]
-                    return fi.baselineskip
+                    if fi then
+                        return fi.baselineskip
+                    else
+                        err("allocate/auto cannot find font instance")
+                        return 0
+                    end
                 end
                 head = head.next
             end
