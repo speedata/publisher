@@ -473,7 +473,9 @@ function collect_horizontal_nodes( elt,parameter,origin )
 
         local thisret = {}
         if typ == "string" then
-            thisret[#thisret + 1] = publisher.mknodes(thiselt,options)
+            local nodes = publisher.mknodes(thiselt,options)
+            publisher.setprop(nodes,"direction",elt.direction)
+            thisret[#thisret + 1] = nodes
         elseif typ == "table" then
             local attributes = thiselt.attributes or {}
             local eltname = thiselt.elementname
@@ -548,6 +550,8 @@ function trim_space_end( nodelist )
 end
 
 function trim_space_beginning( nodelist )
+    local dir = publisher.getprop(nodelist,"direction")
+    if dir == "→" then return nodelist end
     if nodelist.id == publisher.glue_node then
         nodelist=nodelist.next
     end

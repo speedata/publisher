@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Pageformat height="4cm" width="4cm" />
+	<Record element="data">
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value>|</Value>
+					<ForAll select="*">
+						<Value select="." />
+					</ForAll>
+					<Value>|</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+	</Record>
+</Layout>
