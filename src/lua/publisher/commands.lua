@@ -2624,7 +2624,7 @@ function commands.place_object( layoutxml,dataxml )
                     -- the current grid is different when in a group
                     current_row = current_grid:find_suitable_row(current_column_start,width_in_gridcells,height_in_gridcells,area)
                     if not current_row then
-                        warning("No suitable row found for object")
+                        warning("No suitable row found for %s",objecttype)
                         publisher.next_area(area)
                         publisher.setup_page(nil,"commands#PlaceObject")
                         current_grid = publisher.current_grid

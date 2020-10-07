@@ -63,9 +63,10 @@ function attach_objects_row( self, tab, current_row )
             local block = {}
             local inline = {}
             local colspan = tonumber(td_contents.colspan) or 1
+            local thiscolumn = current_column
             current_column = current_column + colspan - 1
-
             while self.skip[current_row] and self.skip[current_row][current_column] do
+                thiscolumn = thiscolumn + 1
                 current_column = current_column + 1
             end
             for i,j in ipairs(td_contents) do
@@ -89,7 +90,7 @@ function attach_objects_row( self, tab, current_row )
                     block[#block + 1] = {eltcontents}
                 elseif eltname == "Paragraph" or eltname == "Box" then
                     local default_textformat_name = self.textformat
-                    local alignment = td_contents.align or tab.align or self.align[current_column]
+                    local alignment = td_contents.align or tab.align or self.align[thiscolumn]
                     if     alignment=="center"  then  default_textformat_name = "__centered"
                     elseif alignment=="left"    then  default_textformat_name = "__leftaligned"
                     elseif alignment=="right"   then  default_textformat_name = "__rightaligned"
@@ -110,7 +111,7 @@ function attach_objects_row( self, tab, current_row )
                     block[#block + 1] = {eltcontents}
                 elseif eltname == "Par" then
                     local default_textformat_name = self.textformat
-                    local alignment = td_contents.align or tab.align or self.align[current_column]
+                    local alignment = td_contents.align or tab.align or self.align[thiscolumn]
                     if     alignment=="center"  then  default_textformat_name = "__centered"
                     elseif alignment=="left"    then  default_textformat_name = "__leftaligned"
                     elseif alignment=="right"   then  default_textformat_name = "__rightaligned"
