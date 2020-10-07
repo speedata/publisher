@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.7" date="2020-10-07">
+        <en>Add basic support for simplified Chinese. (#204)</en>
+        <de>Grundlegende Unterstützung für verinfachtes Chinesisch. (#204)</de>
+    </entry>
+    <entry version="4.1.7" date="2020-10-07">
+        <en>Fix HTML whitespace handling.</en>
+        <de>Korrigiere HTML Whitespace.</de>
+    </entry>
     <entry version="4.1.6" date="2020-10-05">
         <en>Better padding-left and padding-right on Paragraph (fixes #267).</en>
         <de>Verbessertes padding-left und padding right bei Paragraph.</de>
