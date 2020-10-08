@@ -3,7 +3,7 @@
 
 _This page was automatically translated. Stay tuned for a human translation..._
 
-Hyphenation is necessary in most Western languages to have an acceptable appearance for narrow texts. Hyphenation is an integral part of the pagination algorithm, for example to avoid multiple hyphenations in consecutive lines.
+Hyphenation is necessary in most Western languages to have an acceptable appearance for narrow texts. Hyphenation is an integral part of the line breaking algorithm, for example to avoid multiple hyphenations in consecutive lines.
 
 Hyphenation is controlled by language in the Publisher and is pattern-based. The language can be set globally via `<Options mainlanguage="...">` or paragraphwise.
 
@@ -22,6 +22,19 @@ switches the entire document to German hyphenation patterns, while
 -------------------------------------------------------------------------------
 
 changes the language for only one paragraph. The available languages are described in the command reference under <<cmd-options,`<Options>`>>.
+
+Alternatively to the written out names like `German`, the language code can be used.
+The two examples above can also be used as follows:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Options mainlanguage="de" />
+
+<Paragraph language="de">
+    <Value>Autobahn</Value>
+</Paragraph>
+-------------------------------------------------------------------------------
+
 
 If you want to test if the words are hyphenated correctly, you can create small marks with `<Trace hyphenation="yes" />`.
 
@@ -99,3 +112,62 @@ A property of `<Paragraph>` allows to limit the characters where a line break ma
 The default setting for allowbreak is “ -”, i.e. a break at a space or hyphen.
 
 TIP: This is an experimental feature in the Publisher. It is likely to be associated with a text format in a future version.
+
+
+
+== Language settings for non-western languages
+
+Some languages have special typesetting rules that do not affect hyphenation, but the appearance of the text.
+So the characters can change their shape or position, depending on where they are in the word.
+To use this feature, the following conditions must be met:
+
+. `mode="harfbuzz"` must be activated at <<cmd-loadfontfile,`<LoadFontfile>`>>.
+. The language must be set correctly. If the language is not available in the <<cmd-options,list of supported languages>>, `Other` or `--` (two dashes) must be used.
+. The selected font must contain the appropriate characters.
+
+
+[source,xml]
+----
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    version="4.1.7">
+
+    <LoadFontfile name="NotoSansBengali-Regular"
+                  filename="NotoSansBengali-Regular.ttf"
+                  mode="harfbuzz" />
+    <DefineFontfamily fontsize="10" leading="12" name="text">
+        <Regular fontface="NotoSansBengali-Regular" />
+    </DefineFontfamily>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <!-- No language set, wrong output! -->
+                    <Value>আমি</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+----
+
+[[fig-hb-bengali-incorrect]]
+.It should not look like this. The language was not set and is therefore “English” by default.
+image::hb-bengali-incorrect.png[width=50%]
+
+
+[source,xml]
+----
+<PlaceObject>
+    <Textblock>
+        <Paragraph language="Other">
+            <Value>আমি</Value>
+        </Paragraph>
+    </Textblock>
+</PlaceObject>
+----
+
+[[fig-hb-bengali-correct]]
+.Better. The language is recognized by the system itself.
+image::hb-bengali-correct.png[width=50%]

@@ -27,6 +27,19 @@ stellt das gesamte Dokument auf deutsche Trennmuster um, während
 nur für einen Absatz die Sprache umstellt.
 Die verfügbaren Sprachen sind in der Befehlsreferenz unter <<cmd-options,`<Options>`>> beschrieben.
 
+Alternativ zu den ausgeschriebenen Namen wie `German` kann auch der Sprachcode verwendet werden.
+Die beiden Beispiele oben können auch wie folgt benutzt werden:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Options mainlanguage="de" />
+
+<Paragraph language="de">
+    <Value>Autobahn</Value>
+</Paragraph>
+-------------------------------------------------------------------------------
+
+
 Möchte man testen, ob die Wörter richtig getrennt werden, kann man mit `<Trace hyphenation="yes" />` kleine Markierungen erzeugen lassen.
 ifdef::backend-docbook99[]
 Siehe die Abbildung~<<abb-trennstellenimtext>>.
@@ -121,3 +134,58 @@ Die Voreinstellung für `allowbreak` ist `" -"`, also ein Umbruch an einem Leerz
 
 TIP: Das ist ein experimentelles Feature im Publisher. Wahrscheinlich wird dies in einer zukünftigen Version einem Textformat zugeordnet werden.
 
+
+== Spracheinstellungen für nicht-westliche Sprachen
+
+Manche Sprachen haben besondere Satzregeln, die sich nicht auf die Silbentrennung auswirken, sondern auf das Erscheinungsbild des Textes. So können die Zeichen ihre Form oder Position verändern, je nach dem wo sie im Wort stehen. Um dieses Feature zu nutzen müssen folgende Bedingungen erfüllt sein:
+
+. `mode="harfbuzz"` muss bei <<cmd-loadfontfile,`<LoadFontfile>`>> aktiviert sein.
+. Die Sprache muss korrekt eingestellt sein. Falls die Sprache nicht in der <<cmd-options,Liste der unterstützten Sprachen>> vorhanden ist, muss `Other` oder `--` (zwei Striche) eingestellt werden.
+. Die gewählte Schriftart muss die entsprechenden Zeichen enthalten.
+
+
+[source,xml]
+----
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    version="4.1.7">
+
+    <LoadFontfile name="NotoSansBengali-Regular"
+                  filename="NotoSansBengali-Regular.ttf"
+                  mode="harfbuzz" />
+    <DefineFontfamily fontsize="10" leading="12" name="text">
+        <Regular fontface="NotoSansBengali-Regular" />
+    </DefineFontfamily>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <!-- No language set, wrong output! -->
+                    <Value>আমি</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+----
+
+[[fig-hb-bengali-incorrect]]
+.So sollte es nicht aussehen. Die Sprache wurde nicht eingestellt und ist somit in der Voreinstellung »Englisch«.
+image::hb-bengali-incorrect.png[width=50%]
+
+
+[source,xml]
+----
+<PlaceObject>
+    <Textblock>
+        <Paragraph language="Other">
+            <Value>আমি</Value>
+        </Paragraph>
+    </Textblock>
+</PlaceObject>
+----
+
+[[fig-hb-bengali-correct]]
+.Besser. Die Sprache wird vom System selbst erkannt.
+image::hb-bengali-correct.png[width=50%]
