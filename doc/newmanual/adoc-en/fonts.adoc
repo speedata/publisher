@@ -142,6 +142,68 @@ The OpenType format knows so-called OpenType features, such as old style figures
 .Text figures (above) often make reading the numbers more pleasant. Real small caps (below) differ significantly from mathematically reduced capital letters. The line width and proportions must be adjusted. Depending on the font used, smallcaps also switches to "old style figures".
 image::osfsmcp.png[width=100%]
 
+== Harfbuzz
+
+Since version 4 of speedata Publisher there is a new mode for loading font files: harfbuzz.
+It activates the library of the same name, which not only loads the font files, but is also responsible for the arrangement of characters in a word (text shaping).
+This is not as important for western writing systems as for e.g. Arabic.
+A side effect of the harfbuzz library is the extensive support for OpenType features.
+
+Using the harfbuzz mode is as follows:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<LoadFontfile
+  name="..."
+  filename="..."
+  mode="harfbuzz" />
+-------------------------------------------------------------------------------
+
+The OpenType features can be set with the `features` attribute, for example
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    >
+
+    <LoadFontfile name="CrimsonPro-Regular"
+      filename="CrimsonPro-Regular.ttf"
+      mode="harfbuzz" />
+    <LoadFontfile name="CrimsonPro-Regular-frac"
+      filename="CrimsonPro-Regular.ttf"
+      mode="harfbuzz"
+      features="+frac" />
+
+    <DefineFontfamily fontsize="10" leading="12" name="regular">
+        <Regular fontface="CrimsonPro-Regular" />
+    </DefineFontfamily>
+    <DefineFontfamily fontsize="10" leading="12" name="frac">
+        <Regular fontface="CrimsonPro-Regular-frac" />
+    </DefineFontfamily>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph fontface="regular">
+                    <Value>Use 1/4 cup of milk.</Value>
+                </Paragraph>
+                <Paragraph fontface="frac">
+                    <Value>Use 1/4 cup of milk.</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+
+.Upper text without the `frac` feature, lower text with the feature.
+image::frac-feature-hb.png[width=50%]
+
+A complete description of the OpenType features can be found on
+https://docs.microsoft.com/en-us/typography/opentype/spec/featurelist
+
 [[ch-marginprotrusion]]
 == Optical margin alignment
 

@@ -164,20 +164,67 @@ Manche dieser Features können bei `<LoadFontfile>` aktiviert werden.
 .Mediävalziffern (oben) machen das Lesen der Ziffern oftmals angenehmer. Echte Kapitälchen (unten) unterscheiden sich deutlich von rechnerisch verkleinerten Großbuchstaben. Die Strichstärke und Proportionen müssen angepasst werden. Je nach verwendeter Schriftart schaltet `smallcaps` auch auf  »Mediävalziffern« um.
 image::osfsmcp.png[width=100%]
 
-// [[ch-schrift-kapitaelchen]]
-// === Kapitälchen
+== Harfbuzz
 
-// [source,xml]
-// -------
-// -------
+Seit Version 4 des speedata Publishers gibt es einen neuen Modus zum Laden von Schriftdateien: harfbuzz.
+Er aktiviert die gleichnamige Bibliothek, die nicht nur die Schriftdateien lädt, sondern auch für Anordnung der Zeichen in einem Wort zuständig ist.
+Das ist für lateinische (westliche) Schreibsysteme nicht so wichtig wie für z.B. das Arabische.
+Ein Nebeneffekt der harfbuzz-Bibliothek ist die umfangreiche Unterstützung für OpenType Features.
+
+Die Benutzung des Harfbuzz Modus ist wie folgt:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<LoadFontfile
+  name="..."
+  filename="..."
+  mode="harfbuzz" />
+-------------------------------------------------------------------------------
+
+Die OpenType features können mit dem Attribut `features` eingestellt werden, also z.B.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    >
+
+    <LoadFontfile name="CrimsonPro-Regular"
+      filename="CrimsonPro-Regular.ttf"
+      mode="harfbuzz" />
+    <LoadFontfile name="CrimsonPro-Regular-frac"
+      filename="CrimsonPro-Regular.ttf"
+      mode="harfbuzz"
+      features="+frac" />
+
+    <DefineFontfamily fontsize="10" leading="12" name="regular">
+        <Regular fontface="CrimsonPro-Regular" />
+    </DefineFontfamily>
+    <DefineFontfamily fontsize="10" leading="12" name="frac">
+        <Regular fontface="CrimsonPro-Regular-frac" />
+    </DefineFontfamily>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph fontface="regular">
+                    <Value>Use 1/4 cup of milk.</Value>
+                </Paragraph>
+                <Paragraph fontface="frac">
+                    <Value>Use 1/4 cup of milk.</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+-------------------------------------------------------------------------------
 
 
-// .
-// image::14-smcp.png[]
+.Oben der Text ohne das OpenType feature `frac`, unten mit.
+image::frac-feature-hb.png[width=50%]
 
-
-// Falls OpenType Features in der Schriftart vorhanden sind, aber nicht mit dem Publisher aktiviert werden können, bitte ich um eine (Fehler-)Meldung.
-
+Eine Beschreibung aller OpenType Features findet sich unter
+https://docs.microsoft.com/en-us/typography/opentype/spec/featurelist
 
 [[ch-optischerrandausgleich]]
 == Optischer Randausgleich

@@ -145,6 +145,9 @@ function make_font_instance( name,size )
             return true, num
         else
             err(string.format("Font '%s' could not be loaded!",filename))
+            if filename == "CrimsonText-Regular.ttf" or filename == "CrimsonText-Bold.ttf" or filename == "CrimsonText-Italic.ttf" or filename == "CrimsonText-BoldItalic.ttf" then
+                err("CrimsonText has been replaced by CrimsonPro. Just change 'Text' to 'Pro' in the filename or download the fonts.")
+            end
             return false, f or ""
         end
     end

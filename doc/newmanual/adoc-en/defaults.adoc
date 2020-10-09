@@ -9,14 +9,44 @@ The distribution includes the free font family TeXGyreHeros, a high quality clon
 
 [source, xml]
 -------------------------------------------------------------------------------
-<LoadFontfile name="TeXGyreHeros-Regular"
-              filename="texgyreheros-regular.otf" />
-<LoadFontfile name="TeXGyreHeros-Bold"
-              filename="texgyreheros-bold.otf" />
-<LoadFontfile name="TeXGyreHeros-Italic"
-              filename="texgyreheros-italic.otf" />
-<LoadFontfile name="TeXGyreHeros-BoldItalic"
-              filename="texgyreheros-bolditalic.otf" />
+<LoadFontfile
+       name="TeXGyreHeros-Regular"
+       filename="texgyreheros-regular.otf" />
+<LoadFontfile
+       name="TeXGyreHeros-Bold"
+       filename="texgyreheros-bold.otf" />
+<LoadFontfile
+       name="TeXGyreHeros-Italic"
+       filename="texgyreheros-italic.otf" />
+<LoadFontfile
+       name="TeXGyreHeros-BoldItalic"
+       filename="texgyreheros-bolditalic.otf" />
+
+<LoadFontfile
+       name="CamingoCode-Bold"
+       filename="CamingoCode-Bold.ttf" />
+<LoadFontfile
+       name="CamingoCode-BoldItalic"
+       filename="CamingoCode-BoldItalic.ttf" />
+<LoadFontfile
+       name="CamingoCode-Italic"
+       filename="CamingoCode-Italic.ttf" />
+<LoadFontfile
+       name="CamingoCode-Regular"
+       filename="CamingoCode-Regular.ttf" />
+
+<LoadFontfile
+       name="CrimsonPro-Bold"
+       filename="CrimsonPro-Bold.ttf" />
+<LoadFontfile
+       name="CrimsonPro-BoldItalic"
+       filename="CrimsonPro-BoldItalic.ttf" />
+<LoadFontfile
+       name="CrimsonPro-Italic"
+       filename="CrimsonPro-Italic.ttf" />
+<LoadFontfile
+       name="CrimsonPro-Regular"
+       filename="CrimsonPro-Regular.ttf" />
 -------------------------------------------------------------------------------
 
 The corresponding font family is defined as:
@@ -35,10 +65,41 @@ and since the font family named text is taken as the default for the paragraphs,
 
 The font aliases are defined for the default font:
 
-* `TeXGyreHeros-Regular` -> `sans`
-* `TeXGyreHeros-Bold` -> `sans-bold`
-* `TeXGyreHeros-Italic` -> `sans-italic`
-* `TeXGyreHeros-BoldItalic` -> `sans-bolditalic`
+* `TeXGyreHeros-Regular` -> sans
+* `TeXGyreHeros-Bold` -> sans-bold
+* `TeXGyreHeros-Italic` -> sans-italic
+* `TeXGyreHeros-BoldItalic` -> sans-bolditalic
+
+* `CrimsonPro-Regular` -> serif
+* `CrimsonPro-Bold` -> serif-bold
+* `CrimsonPro-Italic` -> serif-italic
+* `CrimsonPro-BoldItalic` -> serif-bolditalic
+
+* `CamingoCode-Regular` -> monospace
+* `CamingoCode-Bold` -> monospace-bold
+* `CamingoCode-Italic` -> monospace-italic
+* `CamingoCode-BoldItalic` -> monospace-bolditalic
+
+The OpenType features activated with the `harfbuzz` mode are:
+
+[options="header"]
+|=======
+| Feature | Description
+| `abvm` | Above-base Mark Positioning
+| `blwm` | Below-base Mark Positioning
+| `calt` | Contextual Alternates
+| `ccmp` | Glyph Composition/Decomposition
+| `clig` | Contextual Ligatures
+| `curs` | Cursive Positioning
+| `dist` | Distances
+| `kern` | Kerning
+| `locl` | Localized Forms
+| `mark` | Mark Positioning
+| `mkmk` | Mark to Mark Positioning
+| `rclt` | Required Contextual Alternates
+| `rlig` | Required Ligatures
+|=======
+
 
 == Textformats
 

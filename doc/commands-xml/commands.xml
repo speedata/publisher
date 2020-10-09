@@ -4038,7 +4038,7 @@
         <para>A comma separated list of OpenType features, such as <tt>+liga,-kern</tt></para>
       </description>
       <description xml:lang="de">
-        <para>Eine Kommaseparierte Liste von OpenType features, z.B. <tt>+liga,-kern</tt></para>
+        <para>Eine kommaseparierte Liste von OpenType features, z.B. <tt>+liga,-kern</tt></para>
       </description>
     </attribute>
     <attribute en="filename" type="text" optional="no">

@@ -859,10 +859,10 @@ function dothings()
     fonts.load_fontfile("TeXGyreHeros-BoldItalic","texgyreheros-bolditalic.otf")
 
     -- These are used in HTML mode when the user switches to monospace or serif
-    fonts.load_fontfile("CrimsonText-Regular","CrimsonText-Regular.ttf")
-    fonts.load_fontfile("CrimsonText-Bold","CrimsonText-Bold.ttf")
-    fonts.load_fontfile("CrimsonText-Italic","CrimsonText-Italic.ttf")
-    fonts.load_fontfile("CrimsonText-BoldItalic","CrimsonText-BoldItalic.ttf")
+    fonts.load_fontfile("CrimsonPro-Regular","CrimsonPro-Regular.ttf")
+    fonts.load_fontfile("CrimsonPro-Bold","CrimsonPro-Bold.ttf")
+    fonts.load_fontfile("CrimsonPro-Italic","CrimsonPro-Italic.ttf")
+    fonts.load_fontfile("CrimsonPro-BoldItalic","CrimsonPro-BoldItalic.ttf")
 
     fonts.load_fontfile("CamingoCode-Regular","CamingoCode-Regular.ttf")
     fonts.load_fontfile("CamingoCode-Bold","CamingoCode-Bold.ttf")
@@ -4973,10 +4973,10 @@ function define_default_fontfamily()
     fontaliases["sans-italic"] = "TeXGyreHeros-Italic"
     fontaliases["sans-bolditalic"] = "TeXGyreHeros-BoldItalic"
 
-    fontaliases["serif"] = "CrimsonText-Regular"
-    fontaliases["serif-bold"] = "CrimsonText-Bold"
-    fontaliases["serif-italic"] = "CrimsonText-Italic"
-    fontaliases["serif-bolditalic"] = "CrimsonText-BoldItalic"
+    fontaliases["serif"] = "CrimsonPro-Regular"
+    fontaliases["serif-bold"] = "CrimsonPro-Bold"
+    fontaliases["serif-italic"] = "CrimsonPro-Italic"
+    fontaliases["serif-bolditalic"] = "CrimsonPro-BoldItalic"
 
     fontaliases["monospace"] = "CamingoCode-Regular"
     fontaliases["monospace-bold"] = "CamingoCode-Bold"
@@ -6009,8 +6009,6 @@ function utf8_to_utf16_string_pdf( str )
     local utf16str = "<feff" .. table.concat(ret) .. ">"
     return utf16str
 end
-
-local opts, ftrs = {}, {}
 
 shape = function(tbl, buf, options)
     local font = tbl.font
