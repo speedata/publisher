@@ -1488,6 +1488,7 @@ function commands.load_fontfile( layoutxml,dataxml )
         otfeatures       = {
             smcp = smcp == "yes",
             onum = osf == true,
+            liga = false,
         },
     }
     if features then
