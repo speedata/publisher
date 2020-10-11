@@ -16,6 +16,7 @@ The output does not always work as it should. Sometimes objects are too wide, so
     grid="no"
     gridallocation="no"
     hyphenation="no"
+    kerning="no"
     textformat="no"
     />
 -------------------------------------------------------------------------------
@@ -37,6 +38,9 @@ The output does not always work as it should. Sometimes objects are too wide, so
 
 `hyphenation`::
   Marks the places where the words may be hyphenated.
+
+`kerning`::
+  Mark the place where the font inserts a kerning (harfbuzz mode).
 
 `text format`::
   Creates a tooltip above each line of text, showing the text format used. See the example in the Text Formats section.

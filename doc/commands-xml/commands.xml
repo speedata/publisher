@@ -8987,6 +8987,30 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="kerning" optional="yes">
+      <description xml:lang="en">
+        <para>Draw little marks to show all kerning.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bei 'yes' markiert der speedata Publisher die Unterschneidungen.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Show kerning.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeige Unterschneidungen.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Don't show any kerning (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Keine Unterschneidungen zeigen (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="objects" optional="yes">
       <description xml:lang="en">
         <para>Draw rectangles around objects.</para>

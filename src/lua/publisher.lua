@@ -3491,14 +3491,13 @@ function mknodes(str,parameter)
                 -- characters that must not appear at the end of a line
                 -- $(£¥·'"〈《「『【〔〖〝﹙﹛＄（．［｛￡￥
 
-                -- local diff = glyphs[i].x_advance - tbl.characters[uc].hadvance
-                -- if diff ~= 0 then
-                --     k = node.new("kern")
-                --     k.kern = diff * tbl.mag
-                --     list,cur = node.insert_after(list,cur,k)
-                -- end
+                local diff = thisglyph.x_advance - tbl.characters[uc].hadvance
+                if diff ~= 0 then
+                    publisher.setprop(cur,"kern",diff * tbl.mag)
+                end
             end
         end
+        setprop(list,"haskerns",true)
         return list
     end
     local head, last, n
@@ -3863,11 +3862,45 @@ function finish_par( nodelist,hsize,parameters )
     n.prev = last
     last = n
 
-    n = node.kerning(nodelist)
-    -- FIXME: why do I call node.ligaturing()? I don't have any ligatures anyway
-    -- n = node.ligaturing(n)
+    -- mode harfbuzz sets haskerns, different kind of kerning
+    if not getprop(nodelist,"haskerns") then
+        n = node.kerning(nodelist)
+    else
+        n = hbkern(nodelist)
+    end
+
     -- 15 is a parfillskip
     n,last = add_glue(n,"tail",{ subtype = 15, width = 0, stretch = 2^16, stretch_order = 2})
+end
+
+function hbkern(nodelist)
+    local head = nodelist
+    local curkern = 0
+    while head do
+        if head.id == glyph_node then
+            if curkern and curkern ~= 0 then
+                local kern = node.new(kern_node)
+                kern.kern = curkern
+                nodelist = node.insert_before(nodelist,head,kern)
+                curkern = 0
+            end
+            local k = getprop(head,"kern")
+            if k and k ~= 0 then
+                curkern = k
+            end
+        elseif head.id == disc_node then
+            if curkern and curkern ~= 0 then
+                local kern = node.new(kern_node)
+                kern.kern = curkern
+                head.replace = kern
+                curkern = 0
+            end
+        else
+            curkern = 0
+        end
+        head = head.next
+    end
+    return nodelist
 end
 
 function fix_justification( nodelist,alignment,parent)

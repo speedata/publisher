@@ -1895,7 +1895,7 @@
       </xs:attribute>
       <xs:attribute name="features">
         <xs:annotation>
-          <xs:documentation>Eine Kommaseparierte Liste von OpenType features, z.B. +liga,-kern</xs:documentation>
+          <xs:documentation>Eine kommaseparierte Liste von OpenType features, z.B. +liga,-kern</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="filename" use="required">
@@ -5588,6 +5588,25 @@
             <xs:enumeration value="no">
               <xs:annotation>
                 <xs:documentation>Keine Silbentrennungsmöglichkeiten zeigen (Voreinstellung).</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="kerning">
+        <xs:annotation>
+          <xs:documentation>Bei 'yes' markiert der speedata Publisher die Unterschneidungen.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes">
+              <xs:annotation>
+                <xs:documentation>Zeige Unterschneidungen.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="no">
+              <xs:annotation>
+                <xs:documentation>Keine Unterschneidungen zeigen (Voreinstellung).</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
           </xs:restriction>

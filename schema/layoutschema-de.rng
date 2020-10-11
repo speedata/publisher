@@ -2183,7 +2183,7 @@
                </attribute>
                <optional>
                   <attribute name="features">
-                     <a:documentation>Eine Kommaseparierte Liste von OpenType features, z.B. +liga,-kern</a:documentation>
+                     <a:documentation>Eine kommaseparierte Liste von OpenType features, z.B. +liga,-kern</a:documentation>
                   </attribute>
                </optional>
                <attribute name="filename">
@@ -5406,6 +5406,17 @@
                   <a:documentation>Zeige Silbentrennungsmöglichkeiten.</a:documentation>
                   <value>no</value>
                   <a:documentation>Keine Silbentrennungsmöglichkeiten zeigen (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="kerning">
+               <a:documentation>Bei &#39;yes&#39; markiert der speedata Publisher die Unterschneidungen.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeige Unterschneidungen.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Keine Unterschneidungen zeigen (Voreinstellung).</a:documentation>
                </choice>
             </attribute>
          </optional>

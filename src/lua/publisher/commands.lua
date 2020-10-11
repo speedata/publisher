@@ -3702,6 +3702,7 @@ function commands.trace(layoutxml,dataxml)
     local grid             = publisher.read_attribute(layoutxml,dataxml,"grid",          "boolean")
     local gridallocation   = publisher.read_attribute(layoutxml,dataxml,"gridallocation","boolean")
     local hyphenation      = publisher.read_attribute(layoutxml,dataxml,"hyphenation",   "boolean")
+    local kerning          = publisher.read_attribute(layoutxml,dataxml,"kerning",   "boolean")
     local objects          = publisher.read_attribute(layoutxml,dataxml,"objects",       "boolean")
     local verbose          = publisher.read_attribute(layoutxml,dataxml,"verbose",       "boolean")
     local textformat       = publisher.read_attribute(layoutxml,dataxml,"textformat",    "boolean")
@@ -3717,6 +3718,9 @@ function commands.trace(layoutxml,dataxml)
     end
     if hyphenation ~= nil then
         publisher.options.showhyphenation = hyphenation
+    end
+    if kerning ~= nil then
+        publisher.options.showkerning = kerning
     end
     if objects ~= nil then
         publisher.options.showobjects = objects

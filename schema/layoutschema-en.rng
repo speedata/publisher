@@ -5410,6 +5410,17 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="kerning">
+               <a:documentation>Draw little marks to show all kerning.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Show kerning.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Don&#39;t show any kerning (default).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="objects">
                <a:documentation>Draw rectangles around objects.</a:documentation>
                <choice>
