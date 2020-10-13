@@ -1,5 +1,21 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.8" date="2020-10-13">
+        <en>Bugfix textformat in table cells (#270).</en>
+        <de>Fehlerkorrektur in Tabellenzellen (#270).</de>
+    </entry>
+    <entry version="4.1.8" date="2020-10-13">
+        <en>Add kerning in harfbuzz mode, allow kern tracing.</en>
+        <de>Kerning im harfbuzz modus, trace / kern.</de>
+    </entry>
+    <entry version="4.1.8" date="2020-10-13">
+        <en>Disable liga in harfbuzz mode.</en>
+        <de>Ligaturen im harfbuzz-Modus ausschalten.</de>
+    </entry>
+    <entry version="4.1.8" date="2020-10-13">
+        <en>Replace font CrimsonText by CrimsonPro.</en>
+        <de>Ersetze font CrimsonText durch CrimsonPro.</de>
+    </entry>
     <entry version="4.1.7" date="2020-10-07">
         <en>Add basic support for simplified Chinese. (#204)</en>
         <de>Grundlegende Unterstützung für verinfachtes Chinesisch. (#204)</de>
