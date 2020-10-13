@@ -491,15 +491,15 @@ lowercase = false
 textformats = {
 
     text           = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2, name = "text"},
-    __centered     = { indent = 0, alignment="centered",    rows = 1, orphan = 2, widow = 2},
-    __leftaligned  = { indent = 0, alignment="leftaligned", rows = 1, orphan = 2, widow = 2},
-    __rightaligned = { indent = 0, alignment="rightaligned",rows = 1, orphan = 2, widow = 2},
-    __justified    = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2},
+    __centered     = { indent = 0, alignment="centered",    rows = 1, orphan = 2, widow = 2, name = "__centered"},
+    __leftaligned  = { indent = 0, alignment="leftaligned", rows = 1, orphan = 2, widow = 2, name = "__leftaligned"},
+    __rightaligned = { indent = 0, alignment="rightaligned",rows = 1, orphan = 2, widow = 2, name = "__rightaligned"},
+    __justified    = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2, name = "__justified"},
+    justified      = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2, name = "justified"},
+    centered       = { indent = 0, alignment="centered",    rows = 1, orphan = 2, widow = 2, name = "centered"},
+    left           = { indent = 0, alignment="leftaligned", rows = 1, orphan = 2, widow = 2, name = "left"},
+    right          = { indent = 0, alignment="rightaligned",rows = 1, orphan = 2, widow = 2, name = "right"},
     __fivemm       = { indent = tex.sp("5mm"), alignment="justified",   rows = 1, orphan = 2, widow = 2},
-    justified      = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2},
-    centered       = { indent = 0, alignment="centered",    rows = 1, orphan = 2, widow = 2},
-    left           = { indent = 0, alignment="leftaligned", rows = 1, orphan = 2, widow = 2},
-    right          = { indent = 0, alignment="rightaligned",rows = 1, orphan = 2, widow = 2},
 }
 
 function new_textformat(name, base,options )

@@ -608,6 +608,7 @@ function commands.define_textformat(layoutxml)
     local fmt = {
         colpaddingtop = colpaddingtop,
         htmlverticalspacing = htmlverticalspacing,
+        name = name,
     }
 
     if alignment == "leftaligned" or alignment == "rightaligned" or alignment == "centered" then

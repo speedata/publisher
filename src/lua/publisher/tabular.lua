@@ -89,7 +89,9 @@ function attach_objects_row( self, tab, current_row )
                     end
                     block[#block + 1] = {eltcontents}
                 elseif eltname == "Paragraph" or eltname == "Box" then
+                    -- the text format for the whole table
                     local default_textformat_name = self.textformat
+                    -- td align=..., tr align=... and columns align=...
                     local alignment = td_contents.align or tab.align or self.align[thiscolumn]
                     if     alignment=="center"  then  default_textformat_name = "__centered"
                     elseif alignment=="left"    then  default_textformat_name = "__leftaligned"
@@ -98,28 +100,9 @@ function attach_objects_row( self, tab, current_row )
                     end
                     -- box doesn't have field textformat
                     if type(eltcontents) == "table" then
+                        -- if <Paragraph> has its own text format then use this, instead of the td... one above
                         local tfname = ( eltcontents.textformat and eltcontents.textformat.name) or default_textformat_name or "__leftaligned"
                         eltcontents.textformat = publisher.textformats[tfname]
-                        eltcontents.rotate = eltcontents.rotate
-                    end
-                    -- block
-                    if #inline > 0 then
-                        -- add current inline to the list of blocks
-                        block[#block + 1] = inline
-                        inline = {}
-                    end
-                    block[#block + 1] = {eltcontents}
-                elseif eltname == "Par" then
-                    local default_textformat_name = self.textformat
-                    local alignment = td_contents.align or tab.align or self.align[thiscolumn]
-                    if     alignment=="center"  then  default_textformat_name = "__centered"
-                    elseif alignment=="left"    then  default_textformat_name = "__leftaligned"
-                    elseif alignment=="right"   then  default_textformat_name = "__rightaligned"
-                    elseif alignment=="justify" then  default_textformat_name = "__justified"
-                    end
-                    -- box doesn't have field textformat
-                    if type(eltcontents) == "table" then
-                        eltcontents.textformat = publisher.textformats[eltcontents.textformat or default_textformat_name or "__leftaligned"]
                         eltcontents.rotate = eltcontents.rotate
                     end
                     -- block
