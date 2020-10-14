@@ -1093,10 +1093,9 @@ function typeset_row(self, tr_contents, current_row )
     return row
 end
 
--- Gets called for each <Tablehead> element
+-- Gets called for each <Tablehead> element. second_run is for dynamic table head
 local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current_row,second_run)
     local current_tablehead_type
-
     if tr_contents.page == "first" then
         current_tablehead_type = tablehead_first
         if second_run ~= true then
@@ -1120,6 +1119,9 @@ local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current
             current_tablehead_type[#current_tablehead_type + 1] = node.hpack(tmp)
         end
     end
+    if #current_tablehead_type == 0 then
+        table.insert(current_tablehead_type,node.new("hlist"))
+    end
     if self.rowsep ~= 0 then
         publisher.add_glue(current_tablehead_type[#current_tablehead_type], "tail", {width=self.rowsep})
     end
@@ -1127,6 +1129,7 @@ local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current
     return current_row
 end
 
+-- second run is for dynamic table foot
 local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_row,second_run)
     local current_tablefoot_type
     if tr_contents.page == "last" then
@@ -1151,6 +1154,10 @@ local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_
             current_tablefoot_type[#current_tablefoot_type + 1] = node.hpack(tmp)
         end
     end
+    if #current_tablefoot_type == 0 then
+        table.insert(current_tablefoot_type,node.new("hlist"))
+    end
+
     return current_row
 end
 --------------------------------------------------------------------------

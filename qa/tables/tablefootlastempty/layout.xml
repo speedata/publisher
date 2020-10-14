@@ -1,0 +1,19 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+   xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="5cm" width="5cm" />
+   <Record element="data">
+      <PlaceObject>
+        <Table>
+          <Tablefoot page="all">
+            <Tr><Td><Paragraph><Value>x</Value></Paragraph></Td></Tr>
+          </Tablefoot>
+          <Tablefoot page="last"/>
+          <Loop select="12" variable="n">
+            <Tr>
+              <Td><Paragraph><Value select="$n"></Value></Paragraph></Td>
+            </Tr>
+          </Loop>
+        </Table>
+      </PlaceObject>
+   </Record>
+</Layout>

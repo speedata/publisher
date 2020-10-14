@@ -391,7 +391,23 @@ Das geht analog zu `<Tablehead>`, nur dass die Seitenauswahl anstelle von `first
 -------------------------------------------------------------------------------
 
 Tabellenköpfe und -füße müssen nicht nur aus einer Zeile bestehen.
-Sie können auch Linien und mehrere Zeilen enthalten.
+Sie können auch Linien und mehrere Zeilen enthalten. Werden bestimmte Kopf- oder Fußbereiche leer gelassen (leeres Element), dann wird der Teil nicht angezeigt:
+
+.Der Tabellenfuß wird nicht auf der letzte Seite angezeigt, da das obere Element (`page="last"`) leer ist.
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+<Tablefoot page="last" />
+<Tablefoot page="all">
+  <Tr backgroundcolor="gray">
+    <Td>
+      <Paragraph>
+        <Value>Table foot for all pages</Value>
+      </Paragraph>
+    </Td>
+  </Tr>
+</Tablefoot>
+-------------------------------------------------------------------------------
+
 
 [[ch-tab-kopf_fuss_dynamisch]]
 == Kopf- und Fußzeilen (dynamisch)

@@ -340,7 +340,24 @@ With this variant you can not only define the (repeating) table header, but also
 </Tablefoot>
 -------------------------------------------------------------------------------
 
-Table headers and footers do not have to consist of only one line. They can also contain lines and multiple lines.
+Table headers and footers do not have to consist of only one line. They can also contain lines and multiple lines. If some parts are left empty, this the output will be discarded.
+
+.The table foot will not be shown on the last page, because the upper element (`page="last"`) is empty.
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+<Tablefoot page="last" />
+<Tablefoot page="all">
+  <Tr backgroundcolor="gray">
+    <Td>
+      <Paragraph>
+        <Value>Table foot for all pages</Value>
+      </Paragraph>
+    </Td>
+  </Tr>
+</Tablefoot>
+-------------------------------------------------------------------------------
+
+
 
 == Headers and footers (dynamic)
 In the previous section, the table header is created using `<Tablehead>` (and its counterpart `<Tablefoot>`). In contrast, this section shows how to create a dynamic table header. Both variants can be combined.
