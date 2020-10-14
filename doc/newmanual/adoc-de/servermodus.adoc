@@ -128,9 +128,10 @@ Ein GET-Request an diese URL mit einer id aus dem oben beschriebenen POST-Reques
 {"status":"ok",
  "path":"/pfad/zu/publisher.pdf",
  "blob":"<base64 kodiertes PDF>",
- "finished":"2015-03-03T13:12:55+01:00"}
+ "finished":"2015-03-03T13:12:55+01:00",
+ "output":"<Nicht kodierte Ausgabe des sp-Laufs>"
+}
 -------------------------------------------------------------------------------
-
 
 oder, im Fehlerfall, falls die id unbekannt ist:
 
@@ -146,8 +147,17 @@ Falls die PDF-Datei noch nicht fertig geschrieben wurde:
 {"status":"error","path":"","blob":"in progress"}
 -------------------------------------------------------------------------------
 
+Falls andere Fehler auftauchen:
+
+[source, json]
+-------------------------------------------------------------------------------
+{"status": "error", "path":"", "output": "some helpful output"}
+-------------------------------------------------------------------------------
+
 
 Das Verzeichnis mit der PDF-Datei wird nach diesem Request gelöscht, es sei denn, die URL enthält den Parameter `delete` mit dem Wert `false`.
+
+Zukünftige Versionen können weitere Felder in der JSON-Antwort haben.
 
 [[api-method-v0-pdf]]
 == `/v0/pdf/<id>`

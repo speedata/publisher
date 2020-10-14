@@ -73,10 +73,10 @@ func (w worker) Start() {
 			select {
 			case work := <-w.Work:
 				// Receive a work request.
-				fmt.Fprintf(protocolFile, "Running speedata publisher for id %s\n", work.ID)
+				fmt.Fprintf(protocolFile, "%s: running speedata publisher\n", work.ID)
 				dir := filepath.Join(serverTemp, work.ID)
 				// Force the jobname, so the result is always 'publisher.pdf'
-				params := []string{"--jobname", "publisher"}
+				params := []string{"--jobname", "publisher", "--quiet"}
 				if _, err := os.Stat(filepath.Join(dir, "extravars")); err == nil {
 					params = append(params, "--varsfile")
 					params = append(params, "extravars")
@@ -86,17 +86,26 @@ func (w worker) Start() {
 					params = append(params, strings.Join(work.Modes, ","))
 				}
 				for _, p := range serverExtraDir {
-					params = append(params, "--extra-dir")
-					params = append(params, p)
+					if p != "" {
+						params = append(params, "--extra-dir")
+						params = append(params, p)
+					}
 				}
 				if serverFilter != "" {
 					params = append(params, "--filter", serverFilter)
 				}
 				cmd := exec.Command(filepath.Join(bindir, "sp"+exeSuffix), params...)
+				if verbose {
+					fmt.Fprintf(protocolFile, "%v\n", cmd.Args)
+				}
 				cmd.Dir = dir
-				cmd.Run()
+				out, err := cmd.CombinedOutput()
+				if err != nil {
+					fmt.Fprintf(protocolFile, "%s: start sp, returns %q\n", work.ID, err.Error())
+				}
+				ioutil.WriteFile(filepath.Join(dir, "output.txt"), out, 0600)
 				ioutil.WriteFile(filepath.Join(dir, work.ID+"finished.txt"), []byte("finished"), 0600)
-				fmt.Fprintf(protocolFile, "Id %s finished\n", work.ID)
+				fmt.Fprintf(protocolFile, "%s: finished\n", work.ID)
 			case <-w.QuitChan:
 				// We have been asked to stop.
 				return

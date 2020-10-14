@@ -55,6 +55,14 @@ func makePublisherTemp() error {
 	return errors.New("internal error: serverTemp exists, but is not a directory")
 }
 
+func fileToString(filename string) string {
+	myfile, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return ""
+	}
+	return string(myfile)
+}
+
 func encodeFileToBase64(filename string) (string, error) {
 	layoutf, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -75,7 +83,7 @@ func encodeFileToBase64(filename string) (string, error) {
 }
 
 func addPublishrequestToQueue(id string, modes []string) {
-	fmt.Fprintf(protocolFile, "Add request %s to queue.\n", id)
+	fmt.Fprintf(protocolFile, "%s: Add request to queue.\n", id)
 	workQueue <- WorkRequest{ID: id, Modes: modes}
 }
 
@@ -134,6 +142,7 @@ func v0PublishIDHandler(w http.ResponseWriter, r *http.Request) {
 		Blob       string `json:"blob"`
 		Statusfile string `json:"statusfile"`
 		Finished   string `json:"finished"`
+		Output     string `json:"output`
 	}{}
 	publishdir := filepath.Join(serverTemp, id)
 	fi, err := os.Stat(publishdir)
@@ -156,6 +165,7 @@ func v0PublishIDHandler(w http.ResponseWriter, r *http.Request) {
 	pdfPath := filepath.Join(publishdir, "publisher.pdf")
 	statusfilePath := filepath.Join(publishdir, "publisher.status")
 	finishedfile := filepath.Join(serverTemp, id, id+"finished.txt")
+	outputfile := filepath.Join(serverTemp, id, "output.txt")
 
 	fi, err = os.Stat(finishedfile)
 	if err != nil && os.IsNotExist(err) {
@@ -190,14 +200,8 @@ func v0PublishIDHandler(w http.ResponseWriter, r *http.Request) {
 	response.Status = "ok"
 	response.Path = pdfPath
 	response.Finished = fi.ModTime().Format(time.RFC3339)
-	response.Blob, err = encodeFileToBase64(pdfPath)
-	if err != nil && !os.IsNotExist(err) {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintln(protocolFile, "Internal error 004:")
-		fmt.Fprintln(protocolFile, err)
-		fmt.Fprintln(w, "Internal error 004")
-		return
-	}
+	response.Blob, _ = encodeFileToBase64(pdfPath)
+
 	if response.Blob == "" {
 		response.Status = statusError
 		response.Path = ""
@@ -205,12 +209,11 @@ func v0PublishIDHandler(w http.ResponseWriter, r *http.Request) {
 
 	response.Statusfile, err = encodeFileToBase64(statusfilePath)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintln(protocolFile, "Internal error 005:")
-		fmt.Fprintln(protocolFile, err)
-		fmt.Fprintln(w, "Internal error 005")
-		return
+		fmt.Fprintf(protocolFile, "%s: No status file, something went wrong\n", id)
+		response.Status = statusError
 	}
+
+	response.Output = fileToString(outputfile)
 
 	buf, marshallerr := json.Marshal(response)
 	if marshallerr != nil {
@@ -457,7 +460,7 @@ func v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(protocolFile, "%s: Publishing request from %s with id %s\n", time.Now().Format("2006-01-02 15:04:05"), r.RemoteAddr, id)
+	fmt.Fprintf(protocolFile, "%s: Publishing request from %s at %s\n", id, r.RemoteAddr, time.Now().Format("2006-01-02 15:04:05"))
 
 	for k, v := range files {
 		bb := bytes.NewBuffer([]byte(v.(string)))
