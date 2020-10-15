@@ -104,6 +104,9 @@ function get_fontname( localname, url )
     return nil
 end
 
+local preloaded_fonts = {}
+
+
 -- Return false, error message in case of failure, true, number otherwise. number
 -- is the internal font number. After calling this method, the font can be used
 -- with the key { filename,size}
@@ -131,29 +134,64 @@ function make_font_instance( name,size )
     if fontnumber then
         return true,fontnumber
     else
-        local ok, f
-        if parameter.mode == "harfbuzz" then
-            ok,f = fonts.fontloader.define_font_hb(filename,size,parameter)
-        else
-            ok,f = fonts.fontloader.define_font(filename,size,parameter)
-        end
-        if ok then
-            local num = font.define(f)
-            log("Create font metrics for %s at %.2gpt (id: %d)",filename,size / publisher.factor,num)
-            font_instances[k]=num
-            used_fonts[num]=f
-            return true, num
-        else
-            err(string.format("Font '%s' could not be loaded!",filename))
-            if filename == "CrimsonText-Regular.ttf" or filename == "CrimsonText-Bold.ttf" or filename == "CrimsonText-Italic.ttf" or filename == "CrimsonText-BoldItalic.ttf" then
-                err("CrimsonText has been replaced by CrimsonPro. Just change 'Text' to 'Pro' in the filename or download the fonts.")
-            end
-            return false, f or ""
-        end
+        local f
+        local num = font.nextid(true)
+        f = fonts.fontloader.preload_font(filename,size,parameter,parameter.mode)
+        f.reserved_num = num
+        preloaded_fonts[num] = f
+        log("Preload font %q at %.2gpt (id: %d)",filename,size / publisher.factor,num)
+        font_instances[k]=num
+        return true, num
     end
     return false, "Internal error"
 end
 
+-- Define font from preloaded font
+function define_font(instance)
+    local mode = instance.requested_mode
+    local num = instance.reserved_num
+    log("Create font metrics for %q at %.2gpt (id: %d) mode=%s",instance.requested_name,instance.requested_size / publisher.factor, tostring(num), tostring(mode))
+    local f, ok
+    if mode == "harfbuzz" then
+        ok,f = fonts.fontloader.define_font_hb(instance.requested_name,instance.requested_size,instance.requested_extra_parameter)
+    else
+        ok,f = fonts.fontloader.define_font(instance.requested_name,instance.requested_size,instance.requested_extra_parameter)
+    end
+    if not ok then
+        err("Failed to load font %s",instance.requested_name)
+    else
+        preloaded_fonts[num] = f
+        used_fonts[num]=f
+        font.define(num,f)
+    end
+end
+
+-- Return instance number from fontfamily number and instance name
+function get_fontinstance(fontfamily,instancename)
+    local instance
+    if fontfamily and fontfamily > 0 then
+        instance = lookup_fontfamily_number_instance[fontfamily][instancename]
+    else
+        instance = 1
+    end
+    if not instance then
+        err("font %s not found for family %s",instancename,fontfamily)
+        -- let's try "regular"
+        if fontfamily and fontfamily > 0 then
+            parameter.bold = nil
+            parameter.italic = nil
+            instance = lookup_fontfamily_number_instance[fontfamily].normal
+        end
+        if not instance then
+            instance = 1
+        end
+    end
+    local pe = preloaded_fonts[instance]
+    if pe.loaded == false then
+        define_font(pe)
+    end
+    return instance
+end
 
 --- At this time we must adjust the contents of the paragraph how we would
 --- like it. For example the (sub/sup)script glyphs still have the width of
@@ -164,21 +202,6 @@ function pre_linebreak( head )
     while head do
         if head.id == hlist_node then -- hlist
             pre_linebreak(head.list)
-            -- I don't think this is used anymore!? TODO check
-            if node.has_attribute(head,att_script) then
-                local sub_sup = node.has_attribute(head,att_script)
-                local fam = lookup_fontfamily_number_instance[fontfamily]
-                if sub_sup == 1 then
-                    head.shift = fam.scriptshift
-                else
-                    head.shift = -fam.scriptshift
-                end
-                -- The hbox still has the width of the regular glyph (from Paragraph:script)
-                local n = node.hpack(head.list)
-                head.width = n.width
-                n.list = nil
-                node.free(n)
-            end
         elseif head.id == vlist_node then -- vlist
             pre_linebreak(head.list)
         elseif head.id == rule_node then -- rule
@@ -247,7 +270,7 @@ function pre_linebreak( head )
                 fontfamily=node.has_attribute(head,att_fontfamily)
 
                 -- Last resort
-                if fontfamily == 0 then fontfamily = 1 end
+                if fontfamily == 0 then fontfamily = 1 warning("Undefined fontfamily, set fontfamily to 1") end
 
                 local instance = lookup_fontfamily_number_instance[fontfamily]
                 local italic = node.has_attribute(head,att_italic)
@@ -275,7 +298,7 @@ function pre_linebreak( head )
                     end
                 end
 
-                tmp_fontnum = instance[instancename]
+                tmp_fontnum = get_fontinstance(fontfamily,instancename)
 
                 if not tmp_fontnum then
                     head.font = publisher.options.defaultfontnumber

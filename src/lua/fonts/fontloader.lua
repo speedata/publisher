@@ -89,6 +89,11 @@ end
 --- Only the size dependent values are computed.
 local lookup_fonttable_from_filename = {}
 
+function preload_font(name, size,extra_parameter,mode)
+    local f = { requested_mode = mode, loaded = false, requested_name = name, requested_size = size, requested_extra_parameter = extra_parameter }
+    return f
+end
+
 -- The harfbuzz version of the fontloader.
 function define_font_hb( name, size, extra_parameter )
     if not hasharfbuzz then

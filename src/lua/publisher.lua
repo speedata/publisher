@@ -3309,7 +3309,7 @@ local function setstyles(n,parameter)
 end
 
 -- Return a list of nodes
-function mknodes(str,parameter)
+function mknodes(str,parameter,origin)
     -- if it's an empty string, we make a zero-width rule
     if not str or string.len(str) == 0 then
         -- a space char can have a width, so we return a zero width something
@@ -3336,26 +3336,11 @@ function mknodes(str,parameter)
     else
         instancename = "normal"
     end
+
     if parameter.monospace then
         fontfamily = fonts.lookup_fontfamily_name_number.monospace
     end
-    if fontfamily and fontfamily > 0 then
-        instance = fonts.lookup_fontfamily_number_instance[fontfamily][instancename]
-    else
-        instance = 1
-    end
-    if not instance then
-        err("font %s not found for family %s",instancename,fontfamily)
-        -- let's try "regular"
-        if fontfamily and fontfamily > 0 then
-            parameter.bold = nil
-            parameter.italic = nil
-            instance = fonts.lookup_fontfamily_number_instance[fontfamily].normal
-        end
-        if not instance then
-            instance = 1
-        end
-    end
+    instance = fonts.get_fontinstance(fontfamily,instancename)
 
     local allow_newline = true
     if options.htmlignoreeol then

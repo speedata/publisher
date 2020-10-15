@@ -121,7 +121,7 @@ local function flatten(self,items,options)
             end
         elseif typ_thisself == "string" or typ_thisself == "number" or typ_thisself == "boolean" then
             -- w("par/flatten: type: string or similar")
-            local nodes = publisher.mknodes(tostring(thisself),new_options)
+            local nodes = publisher.mknodes(tostring(thisself),new_options,"par/stringvalue")
             local tmp = node.getproperty(nodes)
             if new_options.fontfamily and publisher.fonts.lookup_fontfamily_number_instance[new_options.fontfamily] then
                 local fontheight = publisher.fonts.lookup_fontfamily_number_instance[new_options.fontfamily].baselineskip
@@ -748,7 +748,7 @@ function Par:format( width_sp, options )
                     local thisprepend = prepend[j]
                     local str = thisprepend[1]
                     local fam = thisprepend[3] or options.fontfamily
-                    local label = node.hpack(publisher.mknodes(str,{fontfamily = fam}))
+                    local label = node.hpack(publisher.mknodes(str,{fontfamily = fam},"par prepend"))
                     local wd = thisprepend[2] or node.dimensions(label)
                     local labeldistance = thisprepend[4] or tex.sp("5pt")
                     local labelalign = thisprepend[5] or "right"

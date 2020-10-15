@@ -1861,18 +1861,18 @@ function commands.nobreak( layoutxml, dataxml )
             tmppar = par:new(nil,"cut")
             for _,j in ipairs(tab) do
                 local c = publisher.element_contents(j)
-                tmppar:append(c,thisoptions)
+                tmppar:append(c,options)
             end
-            tmppar:mknodelist(thisoptions)
+            tmppar:mknodelist(options)
             local nl = tmppar.objects[1]
             local wd = node.dimensions(nl)
             if wd < current_maxwidth then
                 return tmppar
             end
+            local cuttextnodelist = publisher.mknodes(text,{fontfamily = options.fontfamily})
+            cuttextnodelist = node.hpack(cuttextnodelist)
 
-            local txtnl = publisher.mknodes(text,{fontfamily = options.fontfamily})
-            txtnl = node.hpack(txtnl)
-            local txtwd = node.dimensions(txtnl)
+            local txtwd = node.dimensions(cuttextnodelist)
 
             local head = nl
             local wd = 0
@@ -1881,7 +1881,7 @@ function commands.nobreak( layoutxml, dataxml )
                 wd = node.dimensions(nl,head)
             end
             local tmpnl = node.copy_list(nl,head)
-            node.insert_after(tmpnl,node.tail(tmpnl),txtnl)
+            node.insert_after(tmpnl,node.tail(tmpnl),cuttextnodelist)
             tmppar[1] = tmpnl
             return tmppar
         end
