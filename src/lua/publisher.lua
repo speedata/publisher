@@ -3354,15 +3354,11 @@ function mknodes(str,parameter,origin)
 
     -- languages
     -- CJK needs special treatment, so let's check if we have for example Chinese
-    local lc = parameter.languagecode
-    local thislang = "en"
-    if lc and languages_id_lang[lc].locale then
-        thislang = languages_id_lang[lc].locale
-    end
+    local lc = languagecode
 
     if tbl.face then
-        local newlines_at = {}
         -- w("hb mode")
+        local newlines_at = {}
         local pos = 0
         for c in unicode.utf8.gmatch(str,".") do
             if c == "\n" then
@@ -3371,10 +3367,15 @@ function mknodes(str,parameter,origin)
             pos = pos + string.len(c)
         end
 
+        local thislang = "en"
+        if lc and languages_id_lang[lc].locale then
+            thislang = languages_id_lang[lc].locale
+        end
 
         local buf = harfbuzz.Buffer.new()
         buf:add_utf8(str)
-        local script = "Latn"
+
+        local script = nil
         if thislang == "--" then
             thislang = nil
             script = nil
@@ -3384,7 +3385,16 @@ function mknodes(str,parameter,origin)
             -- "bn" not used yet
             script = "beng"
         end
-        shape(tbl,buf, { language = thislang, script = script } )
+        -- shape returns the guessed script from the buffer
+        script = shape(tbl,buf, { language = thislang, script = script } )
+
+        local is_chinese = false
+        if script == "Hans" or script == "Hant" or script == "Hani" then
+            is_chinese = true
+            -- script can be guessed from buffer and thislang could be empty, so
+            -- lang must be set again.
+            thislang = "zh"
+        end
 
         local glyphs = buf:get_glyphs()
         local list, cur
@@ -3450,11 +3460,12 @@ function mknodes(str,parameter,origin)
                     lastitemwasglyph = true
                 end
                 -- CJK
-                if thislang == "zh" and i < #glyphs and uc > 12032 then
+                if is_chinese and i < #glyphs and uc > 12032 then
                     -- don't break within non-cjk words
                     if prohibited_at_end[thislang][unicode.utf8.char(uc)] then
                         -- ignore
                     else
+                        -- add breaking point between this glyph and next glyph unless prohibited
                         if i < #glyphs then
                             local nextchar = glyphs[i+1].codepoint
                             local nextuc = tbl.backmap[nextchar] or nextchar
@@ -6046,8 +6057,9 @@ shape = function(tbl, buf, options)
         buf:set_direction(dir)
     end
     buf:guess_segment_properties()
-
+    local bufscript = buf:get_script()
     harfbuzz.shape_full(font, buf, tbl.otfeatures, {})
+    return tostring(bufscript)
 end
 
 
