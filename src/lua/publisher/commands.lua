@@ -1416,7 +1416,7 @@ function commands.insert_pages( layoutxml,dataxml )
         local new_pagenumber = current_pagenumber + pages
         publisher.current_pagenumber = new_pagenumber
         publisher.pagenum_tbl[current_pagenumber] = new_pagenumber
-        publisher.pagestore[pagestore_name] = {pages,current_pagenumber}
+        publisher.pagestore[pagestore_name] = {pages,current_pagenumber,#publisher.bookmarks}
         publisher.forward_pagestore[pagestore_name] = true
         return
     end
@@ -2967,6 +2967,8 @@ function commands.save_pages( layoutxml,dataxml )
         local ps = publisher.pagestore[pagestore_name]
         local number_of_pages = ps[1]
         local location = ps[2]
+        local oldbookmarkspos = ps[3]
+        local bookmarkscount = #publisher.bookmarks
         publisher.current_pagenumber = location
 
         -- We need to set the destination before the pages are created
@@ -2978,14 +2980,31 @@ function commands.save_pages( layoutxml,dataxml )
             ppt[save_current_pagenumber + i - publisher.total_inserted_pages - 1] = location + i - 1
         end
         local tab = publisher.dispatch(layoutxml,dataxml)
-        if publisher.current_pagenumber - location + 1 ~= number_of_pages then
-            err("SavePages: incorrect number of pages. Expected %d, got %d", number_of_pages,publisher.current_pagenumber - location)
+
+        local realpagecount = publisher.current_pagenumber - location + 1
+        if realpagecount ~= number_of_pages then
+            err("SavePages: incorrect number of pages. Expected %d, got %d",number_of_pages, realpagecount)
             return tab
         end
 
         -- for next pages, if any:
         ppt[save_current_pagenumber] = save_current_pagenumber
         publisher.new_page()
+
+        -- If bookmarks are used in SavePages, we need to insert them at the
+        -- correct location (InsertPages)
+        local newbookmarkscount = #publisher.bookmarks
+        if newbookmarkscount > bookmarkscount then
+            local tmpbookmarks = {}
+            for i = bookmarkscount + 1, newbookmarkscount do
+                local item = table.remove(publisher.bookmarks,i)
+                table.insert(tmpbookmarks,item)
+            end
+            for i = 1,#tmpbookmarks do
+                table.insert(publisher.bookmarks,oldbookmarkspos + i - 1,tmpbookmarks[i])
+            end
+        end
+
         publisher.current_pagenumber = save_current_pagenumber
         return tab
 
