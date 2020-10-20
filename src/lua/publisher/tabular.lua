@@ -237,11 +237,11 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
                     cellheight = cellheight + ht + dp
                 elseif type(inlineobject)=="table" then
                     if inlineobject.min_width then
-                        local mw = inlineobject:min_width(inlineobject.alignment,{fontfamily = self.fontfamily})
+                        local mw = inlineobject:min_width(inlineobject.alignment,{fontfamily = inlineobject.fontfamily or self.fontfamily})
                         min_wd = math.max(mw + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
                     end
                     if inlineobject.max_width_and_lineheight then
-                        local mw,cellheight = inlineobject:max_width_and_lineheight({fontfamily = self.fontfamily})
+                        local mw,cellheight = inlineobject:max_width_and_lineheight({fontfamily = inlineobject.fontfamily or self.fontfamily})
                         max_wd = math.max(mw + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
                     end
                 elseif node.is_node(inlineobject) and node.has_field(inlineobject,"width") then
@@ -588,11 +588,11 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
                         if sin_angle ~= 0 then
                             -- The width is not 100% accurate yet. Multi-line paragraphs for example
                             -- are not yet taken into account.
-                            local mw = inlineobject:max_width_and_lineheight()
+                            local mw = inlineobject:max_width_and_lineheight({fontfamily = inlineobject.fontfamily or self.fontfamily})
                             format_width = math.max(format_width, mw * sin_angle )
                         end
 
-                        local v = inlineobject:format(format_width,{textformat = inlineobject.textformat,fontfamily = self.fontfamily })
+                        local v = inlineobject:format(format_width,{textformat = inlineobject.textformat,fontfamily = inlineobject.fontfamily or self.fontfamily })
                         cell = node.insert_after(cell,node.tail(cell),v)
                     else
                         w("no width given in paragraph")

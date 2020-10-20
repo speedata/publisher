@@ -2230,7 +2230,8 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     else
         languagecode = textblockoptions.languagecode or publisher.defaultlanguage
     end
-    local params = {fontfamily = fontfamily,
+    local params = {
+        fontfamily = fontfamily,
         color = colorindex,
         languagecode = languagecode,
         padding_left = paddingleft,
@@ -2247,6 +2248,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
 
     local tab = publisher.dispatch(layoutxml,dataxml)
     local p = par:new(nil,"commands.paragraph")
+    p.fontfamily = fontfamily
     local initial
     for i=1,#tab do
         local thischild = tab[i]
