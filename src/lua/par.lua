@@ -720,7 +720,7 @@ function Par:format( width_sp, options )
                 node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,5)
             end
             if current_textformat.borderbottom and current_textformat.borderbottom ~= 0 then
-                nodelist.list = publisher.add_rule(nodelist.list,"tail",{width = -1073741824, height = current_textformat.borderbottom})
+                nodelist.list = publisher.add_rule(nodelist.list,"tail",{width = width_sp, height = current_textformat.borderbottom})
                 node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,6)
             end
             if current_textformat.marginbottom and current_textformat.marginbottom ~= 0 then

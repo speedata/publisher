@@ -1,0 +1,22 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat height="5cm" width="8cm" />
+  <DefineTextformat name="h1" border-bottom="1pt" margin-bottom="10pt" />
+
+  <Pagetype name="t" test="true()">
+    <PositioningArea name="t">
+      <PositioningFrame width="5" height="10" row="1" column="1" />
+    </PositioningArea>
+  </Pagetype>
+  <Record element="data">
+    <Output area="t">
+      <Text>
+        <Paragraph textformat="h1">
+          <Value>Title</Value>
+        </Paragraph>
+        <Paragraph>
+          <Value>Some text</Value>
+        </Paragraph>
+      </Text>
+    </Output>
+  </Record>
+</Layout>
