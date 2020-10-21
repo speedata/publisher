@@ -1,0 +1,15 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <SetGrid height="12pt" nx="1"/>
+  <Pageformat height="4cm" width="3cm" />
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="1">
+        <Paragraph language="de">
+          <Value>Autobahn</Value><Br /><Value>Mautbrücke</Value>
+        </Paragraph>
+    </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

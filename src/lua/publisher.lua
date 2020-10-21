@@ -3441,6 +3441,9 @@ function mknodes(str,parameter,origin)
                 list,cur = node.insert_after(list,cur,g)
                 list,cur = node.insert_after(list,cur,p2)
 
+                -- add glue so next word can hyphenate (#274)
+                g = set_glue(nil,{})
+                head,last = node.insert_after(head,last,g)
             else
                 n = node.new("glyph")
                 n.font = instance
@@ -3547,6 +3550,10 @@ function mknodes(str,parameter,origin)
             head,last = node.insert_after(head,last,p1)
             head,last = node.insert_after(head,last,g)
             head,last = node.insert_after(head,last,p2)
+
+            -- add glue so next word can hyphenate (#274)
+            g = set_glue(nil,{})
+            head,last = node.insert_after(head,last,g)
         elseif preserve_whitespace and match(char,"^%s$") then
             local strut = add_rule(nil,"head",{height = 0 * factor, depth = 0, width = space })
             head,last = node.insert_after(head,last,strut)
