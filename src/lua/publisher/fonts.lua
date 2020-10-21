@@ -159,11 +159,12 @@ function define_font(instance)
     end
     if not ok then
         err("Failed to load font %s",instance.requested_name)
-    else
-        preloaded_fonts[num] = f
-        used_fonts[num]=f
-        font.define(num,f)
+        return false
     end
+    preloaded_fonts[num] = f
+    used_fonts[num]=f
+    font.define(num,f)
+    return true
 end
 
 -- Return instance number from fontfamily number and instance name
@@ -188,7 +189,10 @@ function get_fontinstance(fontfamily,instancename)
     end
     local pe = preloaded_fonts[instance]
     if pe.loaded == false then
-        define_font(pe)
+        local ok = define_font(pe)
+        if not ok then
+            return get_fontinstance(1,"normal")
+        end
     end
     return instance
 end
