@@ -178,6 +178,12 @@
         </element>
       </oneOrMore>
       <oneOrMore>
+        <element name="definelist">
+          <attribute name="name"/>
+          <text/>
+        </element>
+      </oneOrMore>
+      <oneOrMore>
         <element name="command">
           <attribute name="en"/>
           <optional><attribute name="css"/></optional>

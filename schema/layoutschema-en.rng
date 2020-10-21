@@ -2930,6 +2930,9 @@
                   <data type="string">
                      <param name="pattern">\{.+\}</param>
                   </data>
+                  <data type="string">
+                     <param name="pattern">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</param>
+                  </data>
                   <value>Ancient Greek</value>
                   <a:documentation>Switch to Ancient Greek hyphenation patterns.</a:documentation>
                   <value>Armenian</value>
@@ -3470,6 +3473,9 @@
                      <choice>
                         <data type="string">
                            <param name="pattern">\{.+\}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</param>
                         </data>
                         <value>Ancient Greek</value>
                         <a:documentation>Switch to Ancient Greek hyphenation patterns.</a:documentation>
@@ -5200,6 +5206,12 @@
                   <attribute name="language">
                      <a:documentation>Set the language for hyphenation and rendering.</a:documentation>
                      <choice>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</param>
+                        </data>
                         <value>Ancient Greek</value>
                         <a:documentation>Switch to Ancient Greek hyphenation patterns.</a:documentation>
                         <value>Armenian</value>

@@ -238,6 +238,22 @@ func genRelaxNGSchema(commands *commandsxml.CommandsXML, lang string, allowForei
 							enc.EncodeToken(param.End())
 							enc.EncodeToken(data.End())
 						}
+						if attrdefinition.Name == "languages" {
+							dl := commands.DefineList
+							for _, deflist := range dl {
+								if deflist.Name == "languagesshortcodes" {
+									data := xml.StartElement{Name: xml.Name{Local: "data"}}
+									data.Attr = []xml.Attr{{Name: xml.Name{Local: "type"}, Value: "string"}}
+									enc.EncodeToken(data)
+									param := xml.StartElement{Name: xml.Name{Local: "param"}}
+									param.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: "pattern"}}
+									enc.EncodeToken(param)
+									enc.EncodeToken(xml.CharData(string(deflist.Text)))
+									enc.EncodeToken(param.End())
+									enc.EncodeToken(data.End())
+								}
+							}
+						}
 						for _, choice := range attrdefinition.Choices {
 							enc.EncodeToken(valueElement.Copy())
 							enc.EncodeToken(xml.CharData(choice.Name))

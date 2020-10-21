@@ -548,6 +548,8 @@
     </choice>
   </defineattribute>
 
+  <definelist name="languagesshortcodes">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</definelist>
+
   <command en="A">
     <description xml:lang="en">
       <para>Insert hyperlink to a URL.</para>
@@ -8744,7 +8746,7 @@
         <para>Name der Schriftfamilie, die benutzt werden soll.</para>
       </description>
     </attribute>
-    <attribute en="language" optional="yes" since="4.1.1">
+    <attribute en="language" optional="yes" allowxpath="yes" since="4.1.1">
       <description xml:lang="en">
         <para>Set the language for hyphenation and rendering.</para>
       </description>

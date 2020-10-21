@@ -90,9 +90,15 @@ type DefineAttrXML struct {
 	Choices []ChoiceXML `xml:"choice"`
 }
 
+type DefineListXML struct {
+	Name string `xml:"name,attr"`
+	Text []byte `xml:",innerxml"`
+}
+
 type CommandsXML struct {
 	Defines     []DefineXML          `xml:"define"`
 	DefineAttrs []DefineAttrXML      `xml:"defineattribute"`
+	DefineList  []DefineListXML      `xml:"definelist"`
 	Commands    []CommandsxmlCommand `xml:"command"`
 }
 
