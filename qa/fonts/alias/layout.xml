@@ -14,7 +14,7 @@
 
   <Record element="data">
     <PlaceObject>
-      <Textblock fontface="title" width="6">
+      <Textblock fontfamily="title" width="6">
         <Paragraph>
           <Value>Hello world! </Value>
           <B><Value>Bold</Value></B>

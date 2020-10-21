@@ -26,7 +26,7 @@
     <Output area="text" allocate="auto" row="1">
       <Text>
         <Loop select="2">
-          <Paragraph fontface="text">
+          <Paragraph fontfamily="text">
             <Value select="sd:dummytext()"/>
           </Paragraph>
         </Loop>

@@ -17,10 +17,10 @@
         <SetVariable variable="testtext" select="'Hello world, 1234567890'"/>
         <PlaceObject>
             <Textblock width="4">
-                <Paragraph fontface="osf">
+                <Paragraph fontfamily="osf">
                     <Value select="$testtext"/>
                 </Paragraph>
-                <Paragraph fontface="smcp">
+                <Paragraph fontfamily="smcp">
                     <Value select="$testtext"/>
                 </Paragraph>
             </Textblock>

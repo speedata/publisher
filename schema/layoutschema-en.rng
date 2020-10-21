@@ -392,6 +392,11 @@
          </optional>
          <optional>
             <attribute name="fontface">
+               <a:documentation>Deprecated. Use fontfamily instead.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fontfamily">
                <a:documentation>Name of the font of the text that can be placed beneath the barcode. Not used in all codes.</a:documentation>
             </attribute>
          </optional>
@@ -1971,7 +1976,12 @@
                      <a:documentation>Set the color of the initial. Defaults to black.</a:documentation>
                   </attribute>
                </optional>
-               <attribute name="fontface">
+               <optional>
+                  <attribute name="fontface">
+                     <a:documentation>Deprecated. Use fontfamily instead.</a:documentation>
+                  </attribute>
+               </optional>
+               <attribute name="fontfamily">
                   <a:documentation>Choose the font family. Only »Regular« shape is used at the moment.</a:documentation>
                </attribute>
                <optional>
@@ -2807,6 +2817,11 @@
                </optional>
                <optional>
                   <attribute name="fontface">
+                     <a:documentation>Deprecated. Use fontfamily instead.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="fontfamily">
                      <a:documentation>The name of the fontface for text to be reduced. The default is »text« (lowercase t).</a:documentation>
                   </attribute>
                </optional>
@@ -3404,7 +3419,12 @@
                </optional>
                <optional>
                   <attribute name="fontface">
-                     <a:documentation>The name of the fontface for the paragraph. The default is »text« (lowercase t).</a:documentation>
+                     <a:documentation>Deprecated. Use fontfamily instead.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="fontfamily">
+                     <a:documentation>The name of the font family for the paragraph. The default is »text« (lowercase t).</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -4887,6 +4907,11 @@
                </optional>
                <optional>
                   <attribute name="fontface">
+                     <a:documentation>Deprecated. Use fontfamily instead.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="fontfamily">
                      <a:documentation>Name of the font family for the table. If not given, the font face ‘text’ is used.</a:documentation>
                   </attribute>
                </optional>
@@ -5304,6 +5329,11 @@
                </optional>
                <optional>
                   <attribute name="fontface">
+                     <a:documentation>Deprecated. Use fontfamily instead.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="fontfamily">
                      <a:documentation>The name of the font family. Defaults to text.</a:documentation>
                   </attribute>
                </optional>
@@ -5458,6 +5488,11 @@
                </optional>
                <optional>
                   <attribute name="fontface">
+                     <a:documentation>The name of the font family. Defaults to text.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="fontfamily">
                      <a:documentation>The name of the font family. Defaults to text.</a:documentation>
                   </attribute>
                </optional>

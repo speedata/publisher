@@ -982,6 +982,14 @@
     </attribute>
     <attribute en="fontface" type="text" optional="yes">
       <description xml:lang="en">
+        <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Veraltet: Bitte Attribut <tt>fontfamily</tt> benutzen.</para>
+      </description>
+    </attribute>
+    <attribute en="fontfamily" type="text" optional="yes">
+      <description xml:lang="en">
         <para>Name of the font of the text that can be placed beneath the barcode. Not used in all codes.</para>
       </description>
       <description xml:lang="de">
@@ -3497,7 +3505,15 @@
         <para>Setze die Farbe der Initiale. Voreingestellt ist Schwarz.</para>
       </description>
     </attribute>
-    <attribute en="fontface" optional="no" type="text">
+    <attribute en="fontface" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Veraltet: Bitte Attribut <tt>fontfamily</tt> benutzen.</para>
+      </description>
+    </attribute>
+    <attribute en="fontfamily" optional="no" type="text">
       <description xml:lang="en">
         <para>Choose the font family. Only »Regular« shape is used at the moment.</para>
       </description>
@@ -3524,7 +3540,7 @@
     <example xml:lang="en">
       <listing><![CDATA[<Textblock>
   <Paragraph>
-    <Initial fontface="Large" padding-right="2pt">
+    <Initial fontfamily="Large" padding-right="2pt">
       <Value select="'A'"/>
     </Initial>
     <Value>certain king had a beautiful garden,
@@ -3538,7 +3554,7 @@
     <example xml:lang="de">
       <listing><![CDATA[<Textblock>
   <Paragraph>
-    <Initial fontface="Large" padding-right="2pt">
+    <Initial fontfamily="Large" padding-right="2pt">
       <Value select="'E'"/>
     </Initial>
     <Value>s war einmal ein König und eine Königin,
@@ -4979,6 +4995,14 @@
     </attribute>
     <attribute en="fontface" type="text" optional="yes">
       <description xml:lang="en">
+        <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Veraltet: Bitte Attribut <tt>fontfamily</tt> benutzen.</para>
+      </description>
+    </attribute>
+    <attribute en="fontfamily" type="text" optional="yes">
+      <description xml:lang="en">
         <para>The name of the fontface for text to be reduced. The default is »text« (lowercase t).</para>
       </description>
       <description xml:lang="de">
@@ -5426,7 +5450,7 @@
   <Record element="data">
     <Output area="text">
       <Text>
-        <Paragraph fontface="text">
+        <Paragraph fontfamily="text">
           <Value>A wonderful serenity has taken possession of my entire soul,...</Value>
         </Paragraph>
       </Text>
@@ -5446,7 +5470,7 @@
   <Record element="data">
     <Output area="text">
       <Text>
-        <Paragraph fontface="text">
+        <Paragraph fontfamily="text">
           <Value>Kaum standen am folgenden...</Value>
         </Paragraph>
       </Text>
@@ -5574,10 +5598,18 @@
     </attribute>
     <attribute en="fontface" css="font-family" type="text" optional="yes">
       <description xml:lang="en">
-        <para>The name of the fontface for the paragraph. The default is »text« (lowercase t).</para>
+        <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
       </description>
       <description xml:lang="de">
-        <para>Name der Schriftart. Voreinstellung ist »text« (mit kleinem t).</para>
+        <para>Veraltet: Bitte Attribut <tt>fontfamily</tt> benutzen.</para>
+      </description>
+    </attribute>
+    <attribute en="fontfamily" css="font-family" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The name of the font family for the paragraph. The default is »text« (lowercase t).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</para>
       </description>
     </attribute>
     <attribute en="html" optional="yes" since="4.1.2">
@@ -5719,7 +5751,7 @@
     </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Textblock>
-  <Paragraph fontface="Title">
+  <Paragraph fontfamily="Title">
     <Value>Hello World</Value>
   </Paragraph>
 </Textblock>
@@ -5727,7 +5759,7 @@
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Textblock>
-  <Paragraph fontface="Überschrift">
+  <Paragraph fontfamily="Überschrift">
     <Value>Hallo Welt</Value>
   </Paragraph>
 </Textblock>
@@ -5735,7 +5767,7 @@
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Textblock >
-  <Paragraph fontface="Überschrift" language="German">
+  <Paragraph fontfamily="Überschrift" language="German">
     <Value select="node()"/>
   </Paragraph>
   </Textblock>]]></listing>
@@ -7899,6 +7931,14 @@
     </attribute>
     <attribute en="fontface" type="text" optional="yes">
       <description xml:lang="en">
+        <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Veraltet: Bitte Attribut <tt>fontfamily</tt> benutzen.</para>
+      </description>
+    </attribute>
+    <attribute en="fontfamily" type="text" optional="yes">
+      <description xml:lang="en">
         <para>Name of the font family for the table. If not given, the font face ‘text’ is used.</para>
       </description>
       <description xml:lang="de">
@@ -8749,6 +8789,14 @@
     </attribute>
     <attribute en="fontface" type="text" optional="yes">
       <description xml:lang="en">
+        <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Veraltet: Bitte Attribut <tt>fontfamily</tt> benutzen.</para>
+      </description>
+    </attribute>
+    <attribute en="fontfamily" type="text" optional="yes">
+      <description xml:lang="en">
         <para>The name of the font family. Defaults to <tt>text</tt>.</para>
       </description>
       <description xml:lang="de">
@@ -8855,6 +8903,14 @@
       </description>
     </attribute>
     <attribute en="fontface" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The name of the font family. Defaults to <tt>text</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name der Schriftfamilie, die benutzt werden soll. Voreinstellung ist <tt>text</tt></para>
+      </description>
+    </attribute>
+    <attribute en="fontfamily" type="text" optional="yes">
       <description xml:lang="en">
         <para>The name of the font family. Defaults to <tt>text</tt>.</para>
       </description>

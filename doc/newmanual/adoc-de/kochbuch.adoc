@@ -7,8 +7,6 @@ Drei Kapitel (Inhaltsverzeichnis, Index und Seite X von Y) werden über denselbe
 
 include::griffmarken.adoc[leveloffset=+1]
 
-// include::initialien.adoc[leveloffset=+1]
-
 include::mehrseitigepdf.adoc[leveloffset=+1]
 
 include::optimierungmitgruppen.adoc[leveloffset=+1]

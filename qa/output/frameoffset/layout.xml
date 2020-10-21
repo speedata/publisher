@@ -22,7 +22,7 @@
         </PlaceObject>
         <Output area="page" allocate="auto" row="1">
             <Text>
-                <Paragraph fontface="text">
+                <Paragraph fontfamily="text">
                     <Value select="sd:dummytext()"></Value>
                 </Paragraph>
             </Text>

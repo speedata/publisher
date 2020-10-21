@@ -16,7 +16,7 @@
 
   <Record element="data">
     <PlaceObject column="1" row="{sd:number-of-rows()}" vreference="bottom" valign="bottom">
-      <Table fontface="Fußzeile" stretch="max" >
+      <Table fontfamily="Fußzeile" stretch="max" >
         <Columns>
           <Column width="1*"/>
           <Column width="1*"/>

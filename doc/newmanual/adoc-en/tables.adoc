@@ -626,7 +626,7 @@ With the command `<Overlay>` you can overlay elements. In table cells, this can 
               <!-- Rotate 90 degrees -->
                 <Transformation matrix="0 1 -1 0 0 0"
                   origin-x="0" origin-y="100">
-                  <Textblock width="4" fontface="mini">
+                  <Textblock width="4" fontfamily="mini">
                     <Paragraph textformat="left">
                       <Value>Photo: Reinhard M.</Value>
                     </Paragraph>

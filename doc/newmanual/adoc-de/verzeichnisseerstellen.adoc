@@ -112,7 +112,7 @@ Die mit dem folgenden Layout ausgegeben wird:
     <!--3-->
     <PlaceObject>
       <Textblock>
-        <Paragraph fontface="title">
+        <Paragraph fontfamily="title">
           <Value select="@title"/>
         </Paragraph>
         <Paragraph>

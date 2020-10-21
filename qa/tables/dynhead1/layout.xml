@@ -36,19 +36,19 @@
           </Tr>
           <Tr>
             <Td colspan="3"></Td>
-            <Td border-bottom="0.25pt" colspan="2" align="right"><Paragraph fontface="text"><Value>Sum: </Value><Value select="$_last_tr_data"/></Paragraph></Td>
+            <Td border-bottom="0.25pt" colspan="2" align="right"><Paragraph fontfamily="text"><Value>Sum: </Value><Value select="$_last_tr_data"/></Paragraph></Td>
           </Tr>
         </Tablehead>
         <Tablefoot page="all">
           <Tr>
             <Td colspan="3"></Td>
-            <Td border-top="0.25pt" colspan="2" align="right"><Paragraph fontface="text"><Value>Sum:</Value><HSpace/><Value select="$_last_tr_data"/></Paragraph></Td>
+            <Td border-top="0.25pt" colspan="2" align="right"><Paragraph fontfamily="text"><Value>Sum:</Value><HSpace/><Value select="$_last_tr_data"/></Paragraph></Td>
           </Tr>
         </Tablefoot>
         <Tablefoot page="last">
           <Tr>
             <Td colspan="3"></Td>
-            <Td border-top="0.25pt" colspan="2" align="right"><Paragraph fontface="text"><Value>Total:</Value><HSpace/><Value select="$_last_tr_data"/></Paragraph></Td>
+            <Td border-top="0.25pt" colspan="2" align="right"><Paragraph fontfamily="text"><Value>Total:</Value><HSpace/><Value select="$_last_tr_data"/></Paragraph></Td>
           </Tr>
         </Tablefoot>
         <ForAll select="item">

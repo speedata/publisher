@@ -9,8 +9,6 @@ In this section concrete applications are shown, with designed data, but with re
 
 include::thumbindex.adoc[leveloffset=+1]
 
-// include::initialien.adoc[leveloffset=+1]
-
 include::multipagepdf.adoc[leveloffset=+1]
 
 include::optimizingwithgroups.adoc[leveloffset=+1]

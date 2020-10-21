@@ -40,7 +40,7 @@ Page breaks, for example after a heading, are undesirable. To prevent page break
   <Record element="data">
     <Output>
       <Text>
-        <Paragraph fontface="h1" textformat="keeptogether">
+        <Paragraph fontfamily="h1" textformat="keeptogether">
           <Value>A Title</Value>
         </Paragraph>
         <Paragraph>
@@ -63,7 +63,7 @@ However, the break-below="no" property is only taken into account within a text 
 -------------------------------------------------------------------------------
   <Record element="data">
     <SetVariable variable="mytitle">
-      <Paragraph fontface="h1" textformat="keeptogether">
+      <Paragraph fontfamily="h1" textformat="keeptogether">
         <Value>A Title</Value>
       </Paragraph>
     </SetVariable>

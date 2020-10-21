@@ -270,6 +270,11 @@
       </xs:attribute>
       <xs:attribute name="fontface">
         <xs:annotation>
+          <xs:documentation>Deprecated. Use fontfamily instead.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontfamily">
+        <xs:annotation>
           <xs:documentation>Name of the font of the text that can be placed beneath the barcode. Not used in all codes.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -1649,7 +1654,12 @@
           <xs:documentation>Set the color of the initial. Defaults to black.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="fontface" use="required">
+      <xs:attribute name="fontface">
+        <xs:annotation>
+          <xs:documentation>Deprecated. Use fontfamily instead.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontfamily" use="required">
         <xs:annotation>
           <xs:documentation>Choose the font family. Only »Regular« shape is used at the moment.</xs:documentation>
         </xs:annotation>
@@ -2431,6 +2441,11 @@
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="fontface">
+        <xs:annotation>
+          <xs:documentation>Deprecated. Use fontfamily instead.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>The name of the fontface for text to be reduced. The default is »text« (lowercase t).</xs:documentation>
         </xs:annotation>
@@ -3284,7 +3299,12 @@
       </xs:attribute>
       <xs:attribute name="fontface">
         <xs:annotation>
-          <xs:documentation>The name of the fontface for the paragraph. The default is »text« (lowercase t).</xs:documentation>
+          <xs:documentation>Deprecated. Use fontfamily instead.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontfamily">
+        <xs:annotation>
+          <xs:documentation>The name of the font family for the paragraph. The default is »text« (lowercase t).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="html">
@@ -5409,6 +5429,11 @@
       </xs:attribute>
       <xs:attribute name="fontface">
         <xs:annotation>
+          <xs:documentation>Deprecated. Use fontfamily instead.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontfamily">
+        <xs:annotation>
           <xs:documentation>Name of the font family for the table. If not given, the font face ‘text’ is used.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -5854,6 +5879,11 @@
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="fontface">
+        <xs:annotation>
+          <xs:documentation>Deprecated. Use fontfamily instead.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>The name of the font family. Defaults to text.</xs:documentation>
         </xs:annotation>
@@ -6337,6 +6367,11 @@
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="fontface">
+        <xs:annotation>
+          <xs:documentation>The name of the font family. Defaults to text.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>The name of the font family. Defaults to text.</xs:documentation>
         </xs:annotation>

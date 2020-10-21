@@ -111,7 +111,7 @@ Which is output with the following layout:
     <!--3-->
     <PlaceObject>
       <Textblock>
-        <Paragraph fontface="title">
+        <Paragraph fontfamily="title">
           <Value select="@title"/>
         </Paragraph>
         <Paragraph>

@@ -69,7 +69,7 @@ Which is output with the following layout:
         <Action>
           <Mark select="@title"/>
         </Action>
-        <Paragraph fontface="title">
+        <Paragraph fontfamily="title">
           <Value select="@title"/>
         </Paragraph>
         <Paragraph>

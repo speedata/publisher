@@ -153,7 +153,7 @@ Da dies ein Beispiel ist, erzeugen wir einen Absatz in einer Schleife.
   <Record element="article">
     <Output area="title">
       <Text>
-        <Paragraph textformat="title" fontface="title">
+        <Paragraph textformat="title" fontfamily="title">
           <Color name="green">
             <Value select="@title"/>
           </Color>
@@ -164,7 +164,7 @@ Da dies ein Beispiel ist, erzeugen wir einen Absatz in einer Schleife.
     <Loop select="7" variable="c">
       <Output area="text" allocate="auto">
         <Text>
-          <Paragraph fontface="text">
+          <Paragraph fontfamily="text">
             <Value select="text/paragraph"/>
           </Paragraph>
         </Text>

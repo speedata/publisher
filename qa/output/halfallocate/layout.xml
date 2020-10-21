@@ -11,7 +11,7 @@
         </PlaceObject>
         <Output allocate="auto" row="{$currentrow}">
             <Text>
-                <Paragraph fontface="text" textformat="text">
+                <Paragraph fontfamily="text" textformat="text">
                     <Value select="sd:dummytext()"/>
                 </Paragraph>
             </Text>

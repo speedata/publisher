@@ -26,7 +26,7 @@
     <ForAll select="Paragraph">
       <Output area="text">
         <Text>
-          <Paragraph fontface="text">
+          <Paragraph fontfamily="text">
             <Value select="string(.)"></Value>
           </Paragraph>
         </Text>

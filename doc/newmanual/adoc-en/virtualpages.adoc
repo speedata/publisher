@@ -156,7 +156,7 @@ Since this is an example, we create a paragraph in a loop.
   <Record element="article">
     <Output area="title">
       <Text>
-        <Paragraph textformat="title" fontface="title">
+        <Paragraph textformat="title" fontfamily="title">
           <Color name="green">
             <Value select="@title"/>
           </Color>
@@ -167,7 +167,7 @@ Since this is an example, we create a paragraph in a loop.
     <Loop select="7" variable="c">
       <Output area="text" allocate="auto">
         <Text>
-          <Paragraph fontface="text">
+          <Paragraph fontfamily="text">
             <Value select="text/paragraph"/>
           </Paragraph>
         </Text>

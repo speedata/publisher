@@ -3,22 +3,22 @@
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
   <Pageformat width="50mm" height="50mm"/>
-  
+
   <LoadFontfile name="t" filename="texgyreheros-regular.otf" />
   <LoadFontfile name="t-smcp" filename="texgyreheros-regular.otf" smallcaps="yes" oldstylefigures="yes" />
-  
+
   <DefineFontfamily name="text" fontsize="10" leading="12">
     <Regular fontface="t"/>
   </DefineFontfamily>
   <DefineFontfamily name="smcp" fontsize="10" leading="12">
     <Regular fontface="t-smcp"/>
   </DefineFontfamily>
-  
+
    <Record element="data">
      <SetVariable variable="foo" select="'Test 1234'"></SetVariable>
       <PlaceObject>
-        <Textblock><Paragraph><Value select="$foo"/></Paragraph><Paragraph fontface="smcp"><Value select="$foo"/></Paragraph></Textblock>
+        <Textblock><Paragraph><Value select="$foo"/></Paragraph><Paragraph fontfamily="smcp"><Value select="$foo"/></Paragraph></Textblock>
       </PlaceObject>
    </Record>
-   
+
 </Layout>

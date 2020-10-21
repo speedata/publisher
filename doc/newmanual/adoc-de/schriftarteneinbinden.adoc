@@ -39,7 +39,7 @@ Die lezten drei Schnitte (Fett, Kursiv und Fettkursiv) müssen nicht angegeben w
 image::14-fontsize-leading.png[width=100%]
 
 
-Benutzt wird die Schriftart auf verschiedene Weise: in den Befehlen  `<Textblock>`, `<Text>`, `<Paragraph>`, `<Table>`, `<NoBreak>` und `<Barcode>` kann mit dem Attribut `fontface` eine Schriftart mitgegeben werden, z. B. `<Paragraph fontface="textschrift">`.
+Benutzt wird die Schriftart auf verschiedene Weise: in den Befehlen  `<Textblock>`, `<Text>`, `<Paragraph>`, `<Table>`, `<NoBreak>` und `<Barcode>` kann mit dem Attribut `fontfamily` eine Schriftart mitgegeben werden, z. B. `<Paragraph fontfamily="textschrift">`.
 Temporär kann mit dem Befehl `<Fontface fontfamily="...">` auf eine andere Familie umgeschaltet werden:(((`Fontface`)))
 
 
@@ -61,7 +61,7 @@ Die direkteste ist mit den Befehlen `B` und `I` umzuschalten, diese können auch
 [source,xml]
 -------
 <PlaceObject>
-  <Textblock fontface="textfont">
+  <Textblock fontfamily="textfont">
     <Paragraph>
       <Value>A wonderful </Value>
       <B><Value>serenity</Value></B>
@@ -89,7 +89,7 @@ Sind in den Daten Auszeichnungen vorhanden (z. B. als HTML-Tags), dann geht da
 [source,xml]
 -------
 <PlaceObject>
-  <Textblock fontface="textschrift">
+  <Textblock fontfamily="textschrift">
     <Paragraph>
       <Value select="."/>
     </Paragraph>
@@ -148,10 +148,10 @@ Manche dieser Features können bei `<LoadFontfile>` aktiviert werden.
   <Record element="data">
     <PlaceObject>
       <Textblock>
-        <Paragraph fontface="osftext">
+        <Paragraph fontfamily="osftext">
           <Value>Text with oldstyle figures 1234567890</Value>
         </Paragraph>
-        <Paragraph fontface="smcptext">
+        <Paragraph fontfamily="smcptext">
           <Value>Text with small caps 1234567890</Value>
         </Paragraph>
       </Textblock>
@@ -207,10 +207,10 @@ Die OpenType features können mit dem Attribut `features` eingestellt werden, al
     <Record element="data">
         <PlaceObject>
             <Textblock>
-                <Paragraph fontface="regular">
+                <Paragraph fontfamily="regular">
                     <Value>Use 1/4 cup of milk.</Value>
                 </Paragraph>
-                <Paragraph fontface="frac">
+                <Paragraph fontfamily="frac">
                     <Value>Use 1/4 cup of milk.</Value>
                 </Paragraph>
             </Textblock>

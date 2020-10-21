@@ -16,14 +16,14 @@
   <Record element="data">
     <PlaceObject>
       <Textblock>
-        <Paragraph fontface="a">
+        <Paragraph fontfamily="a">
           <Value>large space between words</Value>
         </Paragraph>
       </Textblock>
     </PlaceObject>
     <PlaceObject>
       <Textblock>
-        <Paragraph fontface="b">
+        <Paragraph fontfamily="b">
           <Value>small space between words</Value>
         </Paragraph>
       </Textblock>

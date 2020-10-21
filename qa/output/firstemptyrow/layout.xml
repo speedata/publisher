@@ -10,18 +10,18 @@
         <PlaceObject row="2" column="13">
             <Box width="13" height="4" backgroundcolor="green"/>
         </PlaceObject>
-        
+
         <Output allocate="auto" row="1">
             <Text>
-                <Paragraph fontface="text"><Value>xx</Value></Paragraph>
-                <Paragraph fontface="text"><Value>xx</Value></Paragraph>
+                <Paragraph fontfamily="text"><Value>xx</Value></Paragraph>
+                <Paragraph fontfamily="text"><Value>xx</Value></Paragraph>
             </Text>
         </Output>
-        
+
         <Output allocate="auto" row="{sd:current-row()}">
             <Text>
-                <Paragraph fontface="text"><Value>yyyyy</Value></Paragraph>
-                <Paragraph fontface="text"><Value>yyyyy</Value></Paragraph>
+                <Paragraph fontfamily="text"><Value>yyyyy</Value></Paragraph>
+                <Paragraph fontfamily="text"><Value>yyyyy</Value></Paragraph>
             </Text>
         </Output>
     </Record>

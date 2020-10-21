@@ -9,7 +9,7 @@
     <Loop select="2">
       <Output allocate="auto" >
         <Text>
-          <Paragraph textformat="spacebelow" fontface="text">
+          <Paragraph textformat="spacebelow" fontfamily="text">
             <Value select="sd:dummytext()"/>
           </Paragraph>
         </Text>

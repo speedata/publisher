@@ -13,7 +13,7 @@
       </PlaceObject>
 
     <Output allocate="auto" row="1">
-      <Text fontface="text" >
+      <Text fontfamily="text" >
         <Paragraph>
           <Value select="."/>
         </Paragraph>

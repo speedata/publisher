@@ -2,22 +2,22 @@
 <Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
   xmlns="urn:speedata.de:2009/publisher/en" >
   <Options ignoreeol="yes" mainlanguage="German"/>
-  
+
   <DefineColor name="gray1" model="gray" g="90"/>
   <DefineColor name="gray2" model="gray" g="98"/>
-  
+
   <LoadFontfile name="DVSCondensed" filename="DejaVuSerifCondensed.ttf" />
-  
+
   <Pageformat width="210mm" height="50mm"/>
-  
+
   <DefineFontfamily name="table" fontsize="8" leading="9">
     <Regular fontface="DVSCondensed"/>
   </DefineFontfamily>
-  
-  
+
+
   <Record element="data">
     <PlaceObject>
-      <Table stretch="max" fontface="table" padding="3pt">
+      <Table stretch="max" fontfamily="table" padding="3pt">
         <Columns>
           <Column width="247.805pt"/>
           <Column width="179.035pt"/>

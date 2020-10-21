@@ -38,7 +38,7 @@ There is nothing special about thumb indexes at first, they are either created w
         <Table width="1cm" stretch="max">
           <Tr valign="middle" minheight="1">
             <Td align="center">
-              <Paragraph fontface="thumbindex" color="white">
+              <Paragraph fontfamily="thumbindex" color="white">
                 <Value select="$chapter"/>
               </Paragraph>
             </Td>

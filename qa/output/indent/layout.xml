@@ -12,7 +12,7 @@
       <Output allocate="auto" row="1">
         <Text>
           <ForAll select="li" limit="2">
-            <Paragraph fontface="text"  textformat="bullet">
+            <Paragraph fontfamily="text"  textformat="bullet">
               <Value>•</Value><HSpace width="1.5mm"/><Value select="sd:dummytext()"/>
             </Paragraph>
           </ForAll>

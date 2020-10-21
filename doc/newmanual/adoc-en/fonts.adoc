@@ -29,7 +29,7 @@ The last three cuts (bold, italic and bold italic) do not have to be specified i
 .Font size and line spacing
 image::14-fontsize-leading.png[width=100%]
 
-The font is used in different ways: in the commands `<Textblock>`, `<Text>`, `<Paragraph>`, `<Table>`, `<NoBreak>` and `<Barcode>`, a font can be specified with the attribute fontface, e.g. `<Paragraph fontface="text font">`. Temporarily you can switch to another family with the command `<Fontface fontfamily="...">`:
+The font is used in different ways: in the commands `<Textblock>`, `<Text>`, `<Paragraph>`, `<Table>`, `<NoBreak>` and `<Barcode>`, a font can be specified with the attribute fontfamily, e.g. `<Paragraph fontfamily="text font">`. Temporarily you can switch to another family with the command `<Fontface fontfamily="...">`:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ There are several ways to switch to the cuts fat, italic and fat-italic. The mos
 [source,xml]
 -------
 <PlaceObject>
-  <Textblock fontface="textfont">
+  <Textblock fontfamily="textfont">
     <Paragraph>
       <Value>A wonderful </Value>
       <B><Value>serenity</Value></B>
@@ -73,7 +73,7 @@ If there are markups in the data (e.g. as HTML tags), then this works in princip
 [source,xml]
 -------
 <PlaceObject>
-  <Textblock fontface="textfont">
+  <Textblock fontfamily="textfont">
     <Paragraph>
       <Value select="."/>
     </Paragraph>
@@ -127,10 +127,10 @@ The OpenType format knows so-called OpenType features, such as old style figures
   <Record element="data">
     <PlaceObject>
       <Textblock>
-        <Paragraph fontface="osftext">
+        <Paragraph fontfamily="osftext">
           <Value>Text with oldstyle figures 1234567890</Value>
         </Paragraph>
-        <Paragraph fontface="smcptext">
+        <Paragraph fontfamily="smcptext">
           <Value>Text with small caps 1234567890</Value>
         </Paragraph>
       </Textblock>
@@ -185,10 +185,10 @@ The OpenType features can be set with the `features` attribute, for example
     <Record element="data">
         <PlaceObject>
             <Textblock>
-                <Paragraph fontface="regular">
+                <Paragraph fontfamily="regular">
                     <Value>Use 1/4 cup of milk.</Value>
                 </Paragraph>
-                <Paragraph fontface="frac">
+                <Paragraph fontfamily="frac">
                     <Value>Use 1/4 cup of milk.</Value>
                 </Paragraph>
             </Textblock>

@@ -392,6 +392,11 @@
          </optional>
          <optional>
             <attribute name="fontface">
+               <a:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fontfamily">
                <a:documentation>Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird. Nicht in allen Codes verwendet.</a:documentation>
             </attribute>
          </optional>
@@ -1971,7 +1976,12 @@
                      <a:documentation>Setze die Farbe der Initiale. Voreingestellt ist Schwarz.</a:documentation>
                   </attribute>
                </optional>
-               <attribute name="fontface">
+               <optional>
+                  <attribute name="fontface">
+                     <a:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</a:documentation>
+                  </attribute>
+               </optional>
+               <attribute name="fontfamily">
                   <a:documentation>Wähle die Fontfamilie. Derzeit wird nur der Schnitt Regular verwendet.</a:documentation>
                </attribute>
                <optional>
@@ -2807,6 +2817,11 @@
                </optional>
                <optional>
                   <attribute name="fontface">
+                     <a:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="fontfamily">
                      <a:documentation>Name der Schriftart für den Text, der verkürzt werden soll. Voreinstellung ist »text« (mit kleinem t).</a:documentation>
                   </attribute>
                </optional>
@@ -3404,7 +3419,12 @@
                </optional>
                <optional>
                   <attribute name="fontface">
-                     <a:documentation>Name der Schriftart. Voreinstellung ist »text« (mit kleinem t).</a:documentation>
+                     <a:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="fontfamily">
+                     <a:documentation>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -4887,6 +4907,11 @@
                </optional>
                <optional>
                   <attribute name="fontface">
+                     <a:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="fontfamily">
                      <a:documentation>Name der Schriftfamilie, die benutzt werden soll. Wenn keine Schriftart angegeben ist, wird auf die Schriftart ›text‹ umgeschaltet.</a:documentation>
                   </attribute>
                </optional>
@@ -5304,6 +5329,11 @@
                </optional>
                <optional>
                   <attribute name="fontface">
+                     <a:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="fontfamily">
                      <a:documentation>Name der Schriftfamilie, die benutzt werden soll.</a:documentation>
                   </attribute>
                </optional>
@@ -5458,6 +5488,11 @@
                </optional>
                <optional>
                   <attribute name="fontface">
+                     <a:documentation>Name der Schriftfamilie, die benutzt werden soll. Voreinstellung ist text</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="fontfamily">
                      <a:documentation>Name der Schriftfamilie, die benutzt werden soll. Voreinstellung ist text</a:documentation>
                   </attribute>
                </optional>

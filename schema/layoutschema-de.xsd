@@ -270,6 +270,11 @@
       </xs:attribute>
       <xs:attribute name="fontface">
         <xs:annotation>
+          <xs:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontfamily">
+        <xs:annotation>
           <xs:documentation>Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird. Nicht in allen Codes verwendet.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -1649,7 +1654,12 @@
           <xs:documentation>Setze die Farbe der Initiale. Voreingestellt ist Schwarz.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="fontface" use="required">
+      <xs:attribute name="fontface">
+        <xs:annotation>
+          <xs:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontfamily" use="required">
         <xs:annotation>
           <xs:documentation>Wähle die Fontfamilie. Derzeit wird nur der Schnitt Regular verwendet.</xs:documentation>
         </xs:annotation>
@@ -2431,6 +2441,11 @@
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="fontface">
+        <xs:annotation>
+          <xs:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Name der Schriftart für den Text, der verkürzt werden soll. Voreinstellung ist »text« (mit kleinem t).</xs:documentation>
         </xs:annotation>
@@ -3284,7 +3299,12 @@
       </xs:attribute>
       <xs:attribute name="fontface">
         <xs:annotation>
-          <xs:documentation>Name der Schriftart. Voreinstellung ist »text« (mit kleinem t).</xs:documentation>
+          <xs:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontfamily">
+        <xs:annotation>
+          <xs:documentation>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="html">
@@ -5409,6 +5429,11 @@
       </xs:attribute>
       <xs:attribute name="fontface">
         <xs:annotation>
+          <xs:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontfamily">
+        <xs:annotation>
           <xs:documentation>Name der Schriftfamilie, die benutzt werden soll. Wenn keine Schriftart angegeben ist, wird auf die Schriftart ›text‹ umgeschaltet.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -5854,6 +5879,11 @@
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="fontface">
+        <xs:annotation>
+          <xs:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Name der Schriftfamilie, die benutzt werden soll.</xs:documentation>
         </xs:annotation>
@@ -6337,6 +6367,11 @@
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="fontface">
+        <xs:annotation>
+          <xs:documentation>Name der Schriftfamilie, die benutzt werden soll. Voreinstellung ist text</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Name der Schriftfamilie, die benutzt werden soll. Voreinstellung ist text</xs:documentation>
         </xs:annotation>

@@ -45,7 +45,7 @@ Um Umbrüche an diesen Stellen zu unterbinden, kann die Textformat-Eigenschaft `
   <Record element="data">
     <Output>
       <Text>
-        <Paragraph fontface="h1" textformat="keeptogether">
+        <Paragraph fontfamily="h1" textformat="keeptogether">
           <Value>A Title</Value>
         </Paragraph>
         <Paragraph>
@@ -69,7 +69,7 @@ Um dennoch einen Text an einem Stück auszugeben, der erst aus den Daten zusamme
 -------------------------------------------------------------------------------
   <Record element="data">
     <SetVariable variable="mytitle">
-      <Paragraph fontface="h1" textformat="keeptogether">
+      <Paragraph fontfamily="h1" textformat="keeptogether">
         <Value>A Title</Value>
       </Paragraph>
     </SetVariable>

@@ -21,7 +21,7 @@
         </PlaceObject>
         <Output allocate="auto" row="1">
             <Text>
-                <Paragraph fontface="ff">
+                <Paragraph fontfamily="ff">
                     <Loop select="2">
                         <Value select="sd:dummytext()"/>
                     </Loop>
@@ -30,4 +30,3 @@
         </Output>
     </Record>
 </Layout>
-

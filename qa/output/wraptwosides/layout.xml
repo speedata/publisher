@@ -22,8 +22,8 @@
         </PlaceObject>
         <Output row="1" allocate="auto">
             <Text>
-                <Paragraph fontface="h1"><Value>Head</Value></Paragraph>
-                <Paragraph fontface="text"><Value select="sd:dummytext()"/></Paragraph>
+                <Paragraph fontfamily="h1"><Value>Head</Value></Paragraph>
+                <Paragraph fontfamily="text"><Value select="sd:dummytext()"/></Paragraph>
             </Text>
         </Output>
     </Record>

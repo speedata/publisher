@@ -736,7 +736,7 @@ endif::[]
               <!-- Drehung um 90 Grad -->
                 <Transformation matrix="0 1 -1 0 0 0"
                   origin-x="0" origin-y="100">
-                  <Textblock width="4" fontface="mini">
+                  <Textblock width="4" fontfamily="mini">
                     <Paragraph textformat="left">
                       <Value>Foto: Reinhard M.</Value>
                     </Paragraph>

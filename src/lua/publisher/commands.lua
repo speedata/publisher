@@ -199,24 +199,26 @@ end
 --- Create a EAN 13 barcode. The width of the barcode depends on the font
 --- given in `fontface` (or the default `text`).
 function commands.barcode( layoutxml,dataxml )
-    local width     = publisher.read_attribute(layoutxml,dataxml,"width"    ,"length_sp"     )
-    local height    = publisher.read_attribute(layoutxml,dataxml,"height"   ,"height_sp"     )
-    local typ       = publisher.read_attribute(layoutxml,dataxml,"type"     ,"rawstring"     )
-    local eclevel   = publisher.read_attribute(layoutxml,dataxml,"eclevel"  ,"rawstring"     )
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select"   ,"xpath"         )
-    local fontname  = publisher.read_attribute(layoutxml,dataxml,"fontface" ,"rawstring"     )
-    local showtext  = publisher.read_attribute(layoutxml,dataxml,"showtext" ,"boolean", "yes")
-    local keepfontsize = publisher.read_attribute(layoutxml,dataxml,"keepfontsize" ,"boolean", "no")
-    local overshoot = publisher.read_attribute(layoutxml,dataxml,"overshoot","number"        )
+    local eclevel        = publisher.read_attribute(layoutxml,dataxml,"eclevel"  ,   "rawstring")
+    local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface" ,   "rawstring")
+    local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily",  "rawstring",fontname)
+    local height         = publisher.read_attribute(layoutxml,dataxml,"height"   ,   "height_sp")
+    local keepfontsize   = publisher.read_attribute(layoutxml,dataxml,"keepfontsize","boolean", "no")
+    local overshoot      = publisher.read_attribute(layoutxml,dataxml,"overshoot",   "number")
+    local selection      = publisher.read_attribute(layoutxml,dataxml,"select",      "xpath")
+    local showtext       = publisher.read_attribute(layoutxml,dataxml,"showtext",    "boolean", "yes")
+    local typ            = publisher.read_attribute(layoutxml,dataxml,"type",        "rawstring")
+    local width          = publisher.read_attribute(layoutxml,dataxml,"width",       "length_sp")
+    if fontname then warning("Barcode/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
 
     width = width or xpath.get_variable("__maxwidth")
 
     local fontfamily
-    if fontname then
-        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+    if fontfamilyname then
+        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
         if not fontfamily then
-            err("Fontfamily %q not found.",fontname or "???")
+            err("Fontfamily %q not found.",fontfamilyname or "???")
             fontfamily = 1
         end
     else
@@ -724,7 +726,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
     local regular, bold, italic, bolditalic
     for i,v in ipairs(layoutxml) do
         elementname = v[".__local_name"]
-        fontface    = publisher.read_attribute(v,dataxml,"fontface","rawstring")
+        fontface = publisher.read_attribute(v,dataxml,"fontface","rawstring")
         fontface = publisher.get_fontname(fontface)
         if type(v) ~= "table" then
             -- ignore
@@ -1329,15 +1331,18 @@ end
 --- -------
 --- Insert a decorated letter (or more than one) at the beginning of the paragraph.
 function commands.initial( layoutxml,dataxml)
-    local fontname      = publisher.read_attribute(layoutxml,dataxml,"fontface",     "rawstring")
-    local colorname     = publisher.read_attribute(layoutxml,dataxml,"color",        "rawstring")
-    local padding_left  = publisher.read_attribute(layoutxml,dataxml,"padding-left", "length_sp",0)
-    local padding_right = publisher.read_attribute(layoutxml,dataxml,"padding-right","length_sp",0)
+    local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",        "rawstring")
+    local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",     "rawstring")
+    local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily",   "rawstring",fontname)
+    local padding_left   = publisher.read_attribute(layoutxml,dataxml,"padding-left", "length_sp",0)
+    local padding_right  = publisher.read_attribute(layoutxml,dataxml,"padding-right","length_sp",0)
+    if fontname then warning("Initial/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
+
     local fontfamily = 0
-    if fontname then
-        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+    if fontfamilyname then
+        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
         if fontfamily == nil then
-            err("Fontfamily %q not found.",fontname)
+            err("Fontfamily %q not found.",fontfamilyname)
             fontfamily = 0
         end
     end
@@ -1810,11 +1815,13 @@ end
 --- -------
 --- Don't allow a line break of the contents. Reduce font size if necessary
 function commands.nobreak( layoutxml, dataxml )
-    local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth", "length_sp", xpath.get_variable("__maxwidth"))
-    local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor",   "rawstring",0.9)
-    local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce",   "string", "keeptogether")
-    local text             = publisher.read_attribute(layoutxml,dataxml,"text",     "rawstring")
-    local fontname         = publisher.read_attribute(layoutxml,dataxml,"fontface", "rawstring")
+    local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth",   "length_sp", xpath.get_variable("__maxwidth"))
+    local fontname         = publisher.read_attribute(layoutxml,dataxml,"fontface",   "rawstring")
+    local fontfamilyname   = publisher.read_attribute(layoutxml,dataxml,"fontfamily", "rawstring",fontname)
+    local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce",     "string", "keeptogether")
+    local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor",     "rawstring",0.9)
+    local text             = publisher.read_attribute(layoutxml,dataxml,"text",       "rawstring")
+    if fontname then warning("Nobreak/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     local p = par:new(nil,"nobreak")
     local tab = publisher.dispatch(layoutxml,dataxml)
@@ -2196,26 +2203,28 @@ end
 --- On the surrounding element (`Textblock`).
 function commands.paragraph( layoutxml, dataxml,textblockoptions )
     textblockoptions = textblockoptions or {}
-    local allowbreak    = publisher.read_attribute(layoutxml,dataxml,"allowbreak","rawstring")
-    local fontname  = publisher.read_attribute(layoutxml,dataxml,"fontface",  "rawstring")
-    local colorname = publisher.read_attribute(layoutxml,dataxml,"color",     "rawstring")
-    local language_name = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
-    local paddingleft   = publisher.read_attribute(layoutxml,dataxml,"padding-left","width_sp")
-    local paddingright  = publisher.read_attribute(layoutxml,dataxml,"padding-right","width_sp")
-    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring")
-    local html           = publisher.read_attribute(layoutxml,dataxml,"html","rawstring","all")
-    local labelleft      = publisher.read_attribute(layoutxml,dataxml,"label-left","rawstring")
-    local labelleftwidth = publisher.read_attribute(layoutxml,dataxml,"label-left-width","width_sp")
-    local labelleftalign = publisher.read_attribute(layoutxml,dataxml,"label-left-align","rawstring")
+    local allowbreak        = publisher.read_attribute(layoutxml,dataxml,"allowbreak",         "rawstring")
+    local colorname         = publisher.read_attribute(layoutxml,dataxml,"color",              "rawstring")
+    local fontname          = publisher.read_attribute(layoutxml,dataxml,"fontface",           "rawstring")
+    local fontfamilyname    = publisher.read_attribute(layoutxml,dataxml,"fontfamily",         "rawstring",fontname)
+    local html              = publisher.read_attribute(layoutxml,dataxml,"html",               "rawstring","all")
+    local language_name     = publisher.read_attribute(layoutxml,dataxml,"language",           "string")
+    local labelleft         = publisher.read_attribute(layoutxml,dataxml,"label-left",         "rawstring")
+    local labelleftwidth    = publisher.read_attribute(layoutxml,dataxml,"label-left-width",   "width_sp")
+    local labelleftalign    = publisher.read_attribute(layoutxml,dataxml,"label-left-align",   "rawstring")
     local labelleftdistance = publisher.read_attribute(layoutxml,dataxml,"label-left-distance","width_sp")
+    local paddingleft       = publisher.read_attribute(layoutxml,dataxml,"padding-left",       "width_sp")
+    local paddingright      = publisher.read_attribute(layoutxml,dataxml,"padding-right",      "width_sp")
+    local textformat        = publisher.read_attribute(layoutxml,dataxml,"textformat",         "rawstring")
+    if fontname then warning("Paragraph/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
 
     local fontfamily
-    if fontname then
-        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+    if fontfamilyname then
+        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
         if fontfamily == nil then
-            err("Fontfamily %q not found.",fontname)
+            err("Fontfamily %q not found.",fontfamilyname)
             fontfamily = 0
         end
         publisher.current_fontfamily = fontfamily
@@ -3337,16 +3346,18 @@ end
 --- -----
 --- Typesets tabular material. Mostly like an HTML table.
 function commands.table( layoutxml,dataxml,options )
-    local width          = publisher.read_attribute(layoutxml,dataxml,"width",         "length")
-    local padding        = publisher.read_attribute(layoutxml,dataxml,"padding",       "length")
-    local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","length")
-    local rowdistance    = publisher.read_attribute(layoutxml,dataxml,"leading",       "length")
-    local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",      "rawstring")
-    local autostretch    = publisher.read_attribute(layoutxml,dataxml,"stretch",       "string")
-    local eval           = publisher.read_attribute(layoutxml,dataxml,"eval",          "xpath")
-    local collapse       = publisher.read_attribute(layoutxml,dataxml,"border-collapse",  "string", "separate")
-    local balance        = publisher.read_attribute(layoutxml,dataxml,"balance",       "boolean", false)
-    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",    "rawstring", "__leftaligned")
+    local autostretch    = publisher.read_attribute(layoutxml,dataxml,"stretch",         "string")
+    local balance        = publisher.read_attribute(layoutxml,dataxml,"balance",         "boolean", false)
+    local collapse       = publisher.read_attribute(layoutxml,dataxml,"border-collapse", "string", "separate")
+    local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance",  "length")
+    local eval           = publisher.read_attribute(layoutxml,dataxml,"eval",            "xpath")
+    local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",        "rawstring")
+    local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily",      "rawstring",fontname)
+    local padding        = publisher.read_attribute(layoutxml,dataxml,"padding",         "length")
+    local rowdistance    = publisher.read_attribute(layoutxml,dataxml,"leading",         "length")
+    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",      "rawstring", "__leftaligned")
+    local width          = publisher.read_attribute(layoutxml,dataxml,"width",           "length")
+    if fontname then warning("Table/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     -- FIXME: leading -> row distance or so
     padding        = tex.sp(padding        or "0pt")
@@ -3375,13 +3386,13 @@ function commands.table( layoutxml,dataxml,options )
         return v
     end
 
-    if not fontname then fontname = "text" end
-    local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+    if not fontfamilyname then fontfamilyname = "text" end
+    local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
     local save_fontfamily = publisher.current_fontfamily
     publisher.current_fontfamily = fontfamily
 
     if fontfamily == nil then
-        err("Fontfamily %q not found.",fontname or "???")
+        err("Fontfamily %q not found.",fontfamilyname or "???")
         fontfamily = 1
     end
     local tab = {}
@@ -3764,9 +3775,11 @@ end
 --- ----
 --- Text is currently the only function / command that implements the pull-interface defined by output.
 function commands.text(layoutxml,dataxml)
-    local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface","rawstring")
-    local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",   "rawstring", "black")
-    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring","text")
+    local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",      "rawstring", "black")
+    local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",   "rawstring")
+    local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily", "rawstring",fontname)
+    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat", "rawstring","text")
+    if fontname then warning("Text/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     local colorindex
     if colorname then
@@ -3781,10 +3794,10 @@ function commands.text(layoutxml,dataxml)
     local tab = publisher.dispatch(layoutxml,dataxml)
     publisher.current_fgcolor = save_color
 
-    if not fontname then fontname = "text" end
-    fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+    if not fontfamilyname then fontfamilyname = "text" end
+    fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
     if fontfamily == nil then
-        err("Fontfamily %q not found.",fontname or "???")
+        err("Fontfamily %q not found.",fontfamilyname or "???")
         fontfamily = 1
     end
 
@@ -3905,15 +3918,18 @@ end
 --- A rectangular block of text. Return a vertical nodelist.
 function commands.textblock( layoutxml,dataxml )
     local fontfamily
-    local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface","rawstring")
-    local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",   "rawstring", "black")
-    local width          = publisher.read_attribute(layoutxml,dataxml,"width",   "length_sp")
-    local angle          = publisher.read_attribute(layoutxml,dataxml,"angle",   "number")
-    local minheight      = publisher.read_attribute(layoutxml,dataxml,"minheight", "height_sp")
-    local columns        = publisher.read_attribute(layoutxml,dataxml,"columns", "number")
+    local angle          = publisher.read_attribute(layoutxml,dataxml,"angle",         "number")
+    local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",         "rawstring", "black")
+    local columns        = publisher.read_attribute(layoutxml,dataxml,"columns",       "number")
     local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","rawstring")
-    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat","rawstring","text")
-    local language_name  = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
+    local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",      "rawstring")
+    local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily",    "rawstring",fontname)
+    local language_name  = publisher.read_attribute(layoutxml,dataxml,"language",      "string")
+    local minheight      = publisher.read_attribute(layoutxml,dataxml,"minheight",     "height_sp")
+    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",    "rawstring","text")
+    local width          = publisher.read_attribute(layoutxml,dataxml,"width",         "length_sp")
+    if fontname then warning("Textblock/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
+
     local save_width = xpath.get_variable("__maxwidth")
     width = width or save_width
     xpath.set_variable("__maxwidth", width)
@@ -3936,10 +3952,10 @@ function commands.textblock( layoutxml,dataxml )
         columndistance = tex.sp(columndistance)
     end
 
-    if not fontname then fontname = "text" end
-    fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
+    if not fontfamilyname then fontfamilyname = "text" end
+    fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
     if fontfamily == nil then
-        err("Fontfamily %q not found.",fontname or "???")
+        err("Fontfamily %q not found.",fontfamilyname or "???")
         fontfamily = 1
     end
 
