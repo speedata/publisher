@@ -98,6 +98,30 @@ The hyphenation character can also be changed using a text format:
 .Other character for word hyphenations
 image::13-dothyphen.png[width=50%]
 
+== Use different languages within a paragraph
+
+You can set the language for a textblock, a paragraph and you can even set the language for a piece of text by surrounding the text by `<Span language="...">` and `</Span>`.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph language="en">
+  <Span language="de">
+    <Value>Also schön, Guido Heffels,
+           nachfolgend meine Textempfehlung
+           für das Blindtextbuch.
+    </Value>
+  </Span>
+  <Br />
+  <Span>
+    <Value>A wonderful serenity has taken
+           possession of my entire soul, like these sweet
+           mornings of spring which I enjoy with my whole
+           heart.
+    </Value>
+  </Span>
+</Paragraph>
+-------------------------------------------------------------------------------
+
 == Allow hyphenations only on certain characters
 
 A property of `<Paragraph>` allows to limit the characters where a line break may be inserted. This is often important for technical data where, for example, type designations in the form `12-345/AB` occur and should not be hyphenated. In the following example, a line break may only be inserted after a slash:

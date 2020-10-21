@@ -114,10 +114,35 @@ Das Zeichen für die Silbentrennung kann man ebenfalls über ein Textformat ver�
 .Anderes Zeichen für Worttrennungen
 image::13-dothyphen.png[width=50%]
 
+
+== Verschiedene Sprachen innerhalb eines Absatzes benutzen
+
+Man kann die Sprache für einen Textblock, einen Absatz und sogar für Teile eines Absatzes setzen. Dazu umgibt man den Text mit `<Span language="...">` und `</Span>`.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph language="en">
+  <Span language="de">
+    <Value>Also schön, Guido Heffels,
+           nachfolgend meine Textempfehlung
+           für das Blindtextbuch.
+    </Value>
+  </Span>
+  <Br />
+  <Span>
+    <Value>A wonderful serenity has taken
+           possession of my entire soul, like these sweet
+           mornings of spring which I enjoy with my whole
+           heart.
+    </Value>
+  </Span>
+</Paragraph>
+-------------------------------------------------------------------------------
+
 == Trennungen nur an bestimmten Zeichen zulassen
 
 Eine Eigenschaft von `<Paragraph>` erlaubt die Zeichen einzugrenzen, an denen ein Zeilenumbruch  eingefügt werden darf.
-Das ist bei technischen Daten oft wichtig, wo z. B. Typbezeichnungen in der Form `12-345/AB` vorkommen, und nicht getrennt werden sollen.
+Das ist bei technischen Daten oft wichtig, wo z. B. Typenbezeichnungen in der Form `12-345/AB` vorkommen, und nicht getrennt werden sollen.
 Im folgenden Beispiel darf nur hinter einem Schrägstrich umbrochen werden:
 
 

@@ -4858,6 +4858,439 @@
           <xs:documentation>Der Innenabstand (unten) der Hintergrundfarbe (kann negativ sein)</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="language">
+        <xs:annotation>
+          <xs:documentation>Name der Sprache für die Silbentrennung und Darstellung.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Ancient Greek">
+                  <xs:annotation>
+                    <xs:documentation>Altgriechische Trennmuster.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Armenian">
+                  <xs:annotation>
+                    <xs:documentation>Auf armenische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Bahasa Indonesia">
+                  <xs:annotation>
+                    <xs:documentation>Auf indonesische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Basque">
+                  <xs:annotation>
+                    <xs:documentation>Auf baskische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Bulgarian">
+                  <xs:annotation>
+                    <xs:documentation>Auf bulgarische (lateinisches Alphabet) Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Catalan">
+                  <xs:annotation>
+                    <xs:documentation>Auf katalanische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Chinese">
+                  <xs:annotation>
+                    <xs:documentation>Auf chinsische Sprache umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Croatian">
+                  <xs:annotation>
+                    <xs:documentation>Auf kroatische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Czech">
+                  <xs:annotation>
+                    <xs:documentation>Auf tschechische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Danish">
+                  <xs:annotation>
+                    <xs:documentation>Auf dänische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Dutch">
+                  <xs:annotation>
+                    <xs:documentation>Auf niederländische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="English (Great Britain)">
+                  <xs:annotation>
+                    <xs:documentation>Auf GB-englische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="English (USA)">
+                  <xs:annotation>
+                    <xs:documentation>Auf US-englische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Esperanto">
+                  <xs:annotation>
+                    <xs:documentation>Auf Esperanto Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Estonian">
+                  <xs:annotation>
+                    <xs:documentation>Auf estnische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Finnish">
+                  <xs:annotation>
+                    <xs:documentation>Auf finnische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="French">
+                  <xs:annotation>
+                    <xs:documentation>Französische Trennmuster</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Galician">
+                  <xs:annotation>
+                    <xs:documentation>Auf galicische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="German">
+                  <xs:annotation>
+                    <xs:documentation>Auf deutsche Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Greek">
+                  <xs:annotation>
+                    <xs:documentation>Neugriechisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Gujarati">
+                  <xs:annotation>
+                    <xs:documentation>Auf Gujarati Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Hungarian">
+                  <xs:annotation>
+                    <xs:documentation>Auf ungarische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Hindi">
+                  <xs:annotation>
+                    <xs:documentation>Auf Hindi Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Icelandic">
+                  <xs:annotation>
+                    <xs:documentation>Auf isländische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Irish">
+                  <xs:annotation>
+                    <xs:documentation>Auf irische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Italian">
+                  <xs:annotation>
+                    <xs:documentation>Auf italienische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Kannada">
+                  <xs:annotation>
+                    <xs:documentation>Auf kanaresische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Kurmanji">
+                  <xs:annotation>
+                    <xs:documentation>Auf Kurmandschi Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Latvian">
+                  <xs:annotation>
+                    <xs:documentation>Auf lettische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Lithuanian">
+                  <xs:annotation>
+                    <xs:documentation>Auf litauische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Malayalam">
+                  <xs:annotation>
+                    <xs:documentation>Auf Malayalam Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Norwegian Bokmål">
+                  <xs:annotation>
+                    <xs:documentation>Auf norwegische Trennmuster umschalten (Bokmål).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Norwegian Nynorsk">
+                  <xs:annotation>
+                    <xs:documentation>Auf norwegische Trennmuster umschalten (Nynorsk).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Other">
+                  <xs:annotation>
+                    <xs:documentation>Auf keine der anderen Sprachen umschalten. Hilfreich bei Darstellungsproblemen.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Polish">
+                  <xs:annotation>
+                    <xs:documentation>Auf polnische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Portuguese">
+                  <xs:annotation>
+                    <xs:documentation>Auf portugiesische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Romanian">
+                  <xs:annotation>
+                    <xs:documentation>Auf rumänische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Russian">
+                  <xs:annotation>
+                    <xs:documentation>Auf russische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Serbian">
+                  <xs:annotation>
+                    <xs:documentation>Auf serbische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Slovak">
+                  <xs:annotation>
+                    <xs:documentation>Auf slowakische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Slovenian">
+                  <xs:annotation>
+                    <xs:documentation>Auf slowenische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Spanish">
+                  <xs:annotation>
+                    <xs:documentation>Auf spanische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Swedish">
+                  <xs:annotation>
+                    <xs:documentation>Auf schwedische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Turkish">
+                  <xs:annotation>
+                    <xs:documentation>Auf türkische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Ukrainian">
+                  <xs:annotation>
+                    <xs:documentation>Auf ukrainische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Welsh">
+                  <xs:annotation>
+                    <xs:documentation>Auf walisische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="letter-spacing">
         <xs:annotation>
           <xs:documentation>Erhöhe Leerraum zwischen Zeichen.</xs:documentation>

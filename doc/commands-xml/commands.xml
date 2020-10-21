@@ -7548,6 +7548,15 @@
         <para>Der Innenabstand (unten) der Hintergrundfarbe (kann negativ sein)</para>
       </description>
     </attribute>
+    <attribute en="language" optional="yes" allowxpath="yes" since="4.1.10">
+      <description xml:lang="en">
+        <para>Name of the language for hyphenation and rendering.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name der Sprache für die Silbentrennung und Darstellung.</para>
+      </description>
+      <referenceattribute name="languages" />
+    </attribute>
     <attribute en="letter-spacing" optional="yes" type="length" css="letter-spacing" since="3.5.2">
       <description xml:lang="en">
         <para>Increase spacing between glyphs.</para>

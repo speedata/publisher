@@ -3210,7 +3210,7 @@ function commands.span( layoutxml,dataxml )
     local letterspacing      = publisher.read_attribute(layoutxml,dataxml,"letter-spacing",  "booleanorlength")
     local bg_padding_top     = publisher.read_attribute(layoutxml,dataxml,"background-padding-top",  "length_sp")
     local bg_padding_bottom  = publisher.read_attribute(layoutxml,dataxml,"background-padding-bottom",  "length_sp")
-
+    local language_name      = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
     local class              = publisher.read_attribute(layoutxml,dataxml,"class",  "rawstring")
     local id                 = publisher.read_attribute(layoutxml,dataxml,"id",     "rawstring")
     local css_rules          = publisher.css:matches({element = 'span', class=class,id=id}) or {}
@@ -3241,6 +3241,10 @@ function commands.span( layoutxml,dataxml )
     if backgroundcolor then
         colornumber = publisher.colors[backgroundcolor].index
     end
+    local languagecode
+    if language_name then
+        languagecode = publisher.get_languagecode(language_name)
+    end
 
     local a = par:new(nil,"span")
     local params = {
@@ -3250,6 +3254,7 @@ function commands.span( layoutxml,dataxml )
         bg_padding_top = bg_padding_top,
         bg_padding_bottom = bg_padding_bottom,
         letterspacing = letterspacing,
+        languagecode = languagecode,
     }
 
     local p = par:new(nil,"span2")
