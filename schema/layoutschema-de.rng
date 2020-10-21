@@ -1231,6 +1231,10 @@
                   <a:documentation>Der Text flattert am linken Rand</a:documentation>
                   <value>centered</value>
                   <a:documentation>Der Text ist im Flattersatz an beiden Rändern (rechts und links) gesetzt.</a:documentation>
+                  <value>start</value>
+                  <a:documentation>Der Text flattert am rechten Rand für links-nach-rechts Texte und am linken Rand für rechts-nach-links Texte.</a:documentation>
+                  <value>end</value>
+                  <a:documentation>Der Text flattert am linken Rand für links-nach-rechts Texte und am rechten Rand für rechts-nach-links Texte.</a:documentation>
                </choice>
             </attribute>
          </optional>

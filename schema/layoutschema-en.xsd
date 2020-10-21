@@ -1068,6 +1068,16 @@
                 <xs:documentation>The text is ragged at the left and the right margin.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="start">
+              <xs:annotation>
+                <xs:documentation>The text is ragged at the right margin for left-to-right texts and at the left margin for right-to-left texts.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="end">
+              <xs:annotation>
+                <xs:documentation>The text is ragged at the left margin for left-to-right texts and at the right margin for right-to-left texts.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>

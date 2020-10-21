@@ -1068,6 +1068,16 @@
                 <xs:documentation>Der Text ist im Flattersatz an beiden Rändern (rechts und links) gesetzt.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="start">
+              <xs:annotation>
+                <xs:documentation>Der Text flattert am rechten Rand für links-nach-rechts Texte und am linken Rand für rechts-nach-links Texte.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="end">
+              <xs:annotation>
+                <xs:documentation>Der Text flattert am linken Rand für links-nach-rechts Texte und am rechten Rand für rechts-nach-links Texte.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>

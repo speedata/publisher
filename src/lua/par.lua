@@ -551,6 +551,13 @@ function Par:format( width_sp, options )
     if #objects == 0 then return node.new("vlist") end
     for i=1,#objects do
         nodelist = objects[i]
+        local pardir = publisher.getprop(nodelist,"pardir")
+        if pardir == "rtl" then
+            tex.shapemode = 1
+            parameter.pardir = "TRT"
+        else
+            tex.shapemode = 0
+        end
         local has_margin_top, has_margin_bottom
         if current_textformat.htmlverticalspacing == "inner" and i > 1 or current_textformat.htmlverticalspacing == "all" then
             has_margin_top = publisher.getprop(nodelist,"margin_top")
@@ -615,7 +622,7 @@ function Par:format( width_sp, options )
         parameter.disable_hyphenation = current_textformat.disable_hyphenation
         local prepend = publisher.getprop(nodelist,"prependlist") or self.prependlist
         local ragged_shape
-        if current_textformat.alignment == "leftaligned" or current_textformat.alignment == "rightaligned" or current_textformat.alignment == "centered" then
+        if current_textformat.alignment == "leftaligned" or current_textformat.alignment == "rightaligned" or current_textformat.alignment == "centered" or current_textformat.alignment == "start" or current_textformat.alignment == "end" then
             ragged_shape = true
         else
             ragged_shape = false
@@ -650,7 +657,7 @@ function Par:format( width_sp, options )
 
                 tex.pdfadjustspacing = adjspace
                 tex.adjustspacing = adjspace
-                publisher.fix_justification(nodelist,current_textformat.alignment)
+                publisher.fix_justification(nodelist,current_textformat.alignment,nil,pardir)
             else
                 nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
             end

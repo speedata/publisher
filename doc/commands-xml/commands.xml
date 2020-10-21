@@ -2408,6 +2408,22 @@
           <para>Der Text ist im Flattersatz an beiden Rändern (rechts und links) gesetzt.</para>
         </description>
       </choice>
+      <choice en="start" since="4.1.10">
+        <description xml:lang="en">
+          <para>The text is ragged at the right margin for left-to-right texts and at the left margin for right-to-left texts.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Text flattert am rechten Rand für links-nach-rechts Texte und am linken Rand für rechts-nach-links Texte.</para>
+        </description>
+      </choice>
+      <choice en="end" since="4.1.10">
+        <description xml:lang="en">
+          <para>The text is ragged at the left margin for left-to-right texts and at the right margin for right-to-left texts.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Text flattert am linken Rand für links-nach-rechts Texte und am rechten Rand für rechts-nach-links Texte.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="border-top" type="length" optional="yes">
       <description xml:lang="en">

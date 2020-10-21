@@ -611,7 +611,7 @@ function commands.define_textformat(layoutxml)
         name = name,
     }
 
-    if alignment == "leftaligned" or alignment == "rightaligned" or alignment == "centered" then
+    if alignment == "leftaligned" or alignment == "rightaligned" or alignment == "centered" or alignment == "start" or alignment == "end" then
         fmt.alignment = alignment
     else
         fmt.alignment = "justified"

@@ -1231,6 +1231,10 @@
                   <a:documentation>The text is ragged right at the left margin.</a:documentation>
                   <value>centered</value>
                   <a:documentation>The text is ragged at the left and the right margin.</a:documentation>
+                  <value>start</value>
+                  <a:documentation>The text is ragged at the right margin for left-to-right texts and at the left margin for right-to-left texts.</a:documentation>
+                  <value>end</value>
+                  <a:documentation>The text is ragged at the left margin for left-to-right texts and at the right margin for right-to-left texts.</a:documentation>
                </choice>
             </attribute>
          </optional>

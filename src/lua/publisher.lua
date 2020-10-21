@@ -487,7 +487,7 @@ lowercase = false
 --- Text formats is a hash with arbitrary names as keys and the values
 --- are tables with alignment and indent. indent is the amount of
 --- indentation in sp. alignment is one of "leftaligned", "rightaligned",
---- "centered" and "justified"
+--- "centered", "justified", "start" and "end".
 textformats = {
 
     text           = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2, name = "text"},
@@ -3376,6 +3376,7 @@ function mknodes(str,parameter,origin)
         buf:add_utf8(str)
 
         local script = nil
+        local direction = nil
         if thislang == "--" then
             thislang = nil
             script = nil
@@ -3386,7 +3387,7 @@ function mknodes(str,parameter,origin)
             script = "beng"
         end
         -- shape returns the guessed script from the buffer
-        script = shape(tbl,buf, { language = thislang, script = script } )
+        script, direction = shape(tbl,buf, { language = thislang, script = script } )
 
         local is_chinese = false
         if script == "Hans" or script == "Hant" or script == "Hani" then
@@ -3494,6 +3495,7 @@ function mknodes(str,parameter,origin)
             end
         end
         setprop(list,"haskerns",true)
+        setprop(list,"pardir",direction)
         return list
     end
     local head, last, n
@@ -3899,7 +3901,29 @@ function hbkern(nodelist)
     return nodelist
 end
 
-function fix_justification( nodelist,alignment,parent)
+function fix_justification(nodelist,alignment,parent,direction)
+    if alignment == "start" then
+        if direction == "rtl" then
+            alignment = "rightaligned"
+        else
+            alignment = "leftaligned"
+        end
+    elseif alignment == "end" then
+        if direction == "rtl" then
+            alignment = "leftaligned"
+        else
+            alignment = "rightaligned"
+        end
+    end
+    local curalignment = alignment
+    if direction == "rtl" then
+        if alignment == "rightaligned" then
+            curalignment = "leftaligned"
+        elseif alignment == "leftaligned" then
+            curalignment = "rightaligned"
+        end
+    end
+
     local head = nodelist
     while head do
         if head.id == 0 then -- hlist
@@ -3946,7 +3970,7 @@ function fix_justification( nodelist,alignment,parent)
                 end
             end
 
-            if alignment == "rightaligned" then
+            if curalignment == "rightaligned" then
 
                 local list_start = head.head
                 local rightskip_node = node.tail(head.head)
@@ -3992,7 +4016,7 @@ function fix_justification( nodelist,alignment,parent)
                 head.head = node.insert_before(head.head,head.head,leftskip_node)
             end
         elseif head.id == 1 then -- vlist
-            fix_justification(head.head,alignment,head)
+            fix_justification(head.head,alignment,head,direction)
         end
         head = head.next
     end
@@ -6056,10 +6080,16 @@ shape = function(tbl, buf, options)
         dir = harfbuzz.Direction.new(options.direction)
         buf:set_direction(dir)
     end
+
     buf:guess_segment_properties()
-    local bufscript = buf:get_script()
+
+    local bufdir = tostring(buf:get_direction())
+    local bufscript = tostring(buf:get_script())
     harfbuzz.shape_full(font, buf, tbl.otfeatures, {})
-    return tostring(bufscript)
+    if bufdir == "rtl" then
+        buf:reverse()
+    end
+    return bufscript,bufdir
 end
 
 
