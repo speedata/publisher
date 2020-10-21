@@ -5682,7 +5682,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="language" optional="yes">
+    <attribute en="language" optional="yes" allowxpath="yes">
       <description xml:lang="en">
         <para>Name of the language for hyphenation and rendering.</para>
       </description>

@@ -3464,6 +3464,9 @@
                   <attribute name="language">
                      <a:documentation>Name der Sprache für die Silbentrennung und Darstellung.</a:documentation>
                      <choice>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
                         <value>Ancient Greek</value>
                         <a:documentation>Altgriechische Trennmuster.</a:documentation>
                         <value>Armenian</value>

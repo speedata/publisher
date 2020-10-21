@@ -3464,6 +3464,9 @@
                   <attribute name="language">
                      <a:documentation>Name of the language for hyphenation and rendering.</a:documentation>
                      <choice>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
                         <value>Ancient Greek</value>
                         <a:documentation>Switch to Ancient Greek hyphenation patterns.</a:documentation>
                         <value>Armenian</value>
