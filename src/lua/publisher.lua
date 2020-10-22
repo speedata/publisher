@@ -3452,6 +3452,13 @@ function mknodes(str,parameter,origin)
                 n.uchyph = 1
                 n.left = parameter.left or tex.lefthyphenmin
                 n.right = parameter.right or tex.righthyphenmin
+
+                if thisglyph.x_offset ~= 0 then
+                    n.xoffset = -1 * thisglyph.x_offset * tbl.mag
+                end
+                if thisglyph.y_offset ~= 0 then
+                    n.yoffset = thisglyph.y_offset * tbl.mag
+                end
                 node.set_attribute(n,att_fontfamily,fontfamily)
                 setstyles(n,parameter)
                 list,cur = node.insert_after(list,cur,n)
