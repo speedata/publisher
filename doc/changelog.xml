@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.11" date="2020-10-22">
+        <en>Better accents placement in harfbuzz mode (RTL).</en>
+        <de>Verbesserte Akzenteplatzierung im harfbuzz-Modus (RTL).</de>
+    </entry>
+    <entry version="4.1.11" date="2020-10-21">
+        <en>Bugfix for hyphenation after a <tt>&lt;br></tt> (#274).</en>
+        <de>Fehlerkorrektur für Silbentrennung nach <tt>&lt;br></tt> (#274).</de>
+    </entry>
+    <entry version="4.1.11" date="2020-10-21">
+        <en>Deprecate <tt>fontface</tt> on text commands (Paragraph, Textblock, ...). This command will stop working in version 5.</en>
+        <de>Warnung bei <tt>fontface</tt> bei Textbefehlen (Paragraph, Textblock, ...). Dieser Befehl wird in Version 5 verschwinden.</de>
+    </entry>
     <entry version="4.1.10" date="2020-10-21">
         <en>Set language on <tt>Span</tt> (#273).</en>
         <de>Sprache in <tt>Span</tt> setzen (#273).</de>
