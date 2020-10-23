@@ -9,3 +9,4 @@ publisher.status
 publisher.finished
 publisher-aux.xml
 publisher-*.dataxml
+.vscode

@@ -849,25 +849,25 @@ function dothings()
     xpath.set_variable("_jobname", tex.jobname)
 
     lowercase = os.getenv("SP_IGNORECASE") == "1"
-
+    local extra_parameter = { otfeatures = { kern = true, liga = false } }
     --- The free font family `TeXGyreHeros` is a Helvetica clone and is part of the
     --- [The TeX Gyre Collection of Fonts](http://www.gust.org.pl/projects/e-foundry/tex-gyre).
     --- We ship it in the distribution.
-    fonts.load_fontfile("TeXGyreHeros-Regular",   "texgyreheros-regular.otf")
-    fonts.load_fontfile("TeXGyreHeros-Bold",      "texgyreheros-bold.otf")
-    fonts.load_fontfile("TeXGyreHeros-Italic",    "texgyreheros-italic.otf")
-    fonts.load_fontfile("TeXGyreHeros-BoldItalic","texgyreheros-bolditalic.otf")
+    fonts.load_fontfile("TeXGyreHeros-Regular",   "texgyreheros-regular.otf",extra_parameter)
+    fonts.load_fontfile("TeXGyreHeros-Bold",      "texgyreheros-bold.otf",extra_parameter)
+    fonts.load_fontfile("TeXGyreHeros-Italic",    "texgyreheros-italic.otf",extra_parameter)
+    fonts.load_fontfile("TeXGyreHeros-BoldItalic","texgyreheros-bolditalic.otf",extra_parameter)
 
     -- These are used in HTML mode when the user switches to monospace or serif
-    fonts.load_fontfile("CrimsonPro-Regular","CrimsonPro-Regular.ttf")
-    fonts.load_fontfile("CrimsonPro-Bold","CrimsonPro-Bold.ttf")
-    fonts.load_fontfile("CrimsonPro-Italic","CrimsonPro-Italic.ttf")
-    fonts.load_fontfile("CrimsonPro-BoldItalic","CrimsonPro-BoldItalic.ttf")
+    fonts.load_fontfile("CrimsonPro-Regular","CrimsonPro-Regular.ttf",extra_parameter)
+    fonts.load_fontfile("CrimsonPro-Bold","CrimsonPro-Bold.ttf",extra_parameter)
+    fonts.load_fontfile("CrimsonPro-Italic","CrimsonPro-Italic.ttf",extra_parameter)
+    fonts.load_fontfile("CrimsonPro-BoldItalic","CrimsonPro-BoldItalic.ttf",extra_parameter)
 
-    fonts.load_fontfile("CamingoCode-Regular","CamingoCode-Regular.ttf")
-    fonts.load_fontfile("CamingoCode-Bold","CamingoCode-Bold.ttf")
-    fonts.load_fontfile("CamingoCode-Italic","CamingoCode-Italic.ttf")
-    fonts.load_fontfile("CamingoCode-BoldItalic","CamingoCode-BoldItalic.ttf")
+    fonts.load_fontfile("CamingoCode-Regular","CamingoCode-Regular.ttf",extra_parameter)
+    fonts.load_fontfile("CamingoCode-Bold","CamingoCode-Bold.ttf",extra_parameter)
+    fonts.load_fontfile("CamingoCode-Italic","CamingoCode-Italic.ttf",extra_parameter)
+    fonts.load_fontfile("CamingoCode-BoldItalic","CamingoCode-BoldItalic.ttf",extra_parameter)
 
     --- Define a basic font family with name `text`:
     define_default_fontfamily()
@@ -1455,6 +1455,7 @@ function shipout(nodelist, pagenumber )
     tex.box[666] = nodelist
     tex.shipout(666)
 end
+
 --- Load an XML file from the hard drive. filename is without path but including extension,
 --- filetype is a string representing the type of file read, such as "layout" or "data".
 --- The return value is a lua table representing the XML file.
@@ -3351,6 +3352,7 @@ function mknodes(str,parameter,origin)
     local shrink  = tbl.parameters.space_shrink
     local stretch = tbl.parameters.space_stretch
     local match = unicode.utf8.match
+    local lastitemwasglyph
 
     -- languages
     -- CJK needs special treatment, so let's check if we have for example Chinese
@@ -3359,12 +3361,15 @@ function mknodes(str,parameter,origin)
     if tbl.face then
         -- w("hb mode")
         local newlines_at = {}
+
+        local cluster = {}
         local pos = 0
         for c in unicode.utf8.gmatch(str,".") do
+            cluster[pos] = unicode.utf8.byte(c)
             if c == "\n" then
                 newlines_at[pos] = true
             end
-            pos = pos + string.len(c)
+            pos = pos + #c
         end
 
         local thislang = "en"
@@ -3396,7 +3401,6 @@ function mknodes(str,parameter,origin)
             -- lang must be set again.
             thislang = "zh"
         end
-
         local glyphs = buf:get_glyphs()
         local list, cur
         local n,k
@@ -3408,21 +3412,45 @@ function mknodes(str,parameter,origin)
                 -- just for simple adding at the beginning
             elseif uc == 160 and #glyphs == 1 then
                 -- ignore
-            elseif uc == 32 or uc == 160 then
-                n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch})
-                setstyles(n,parameter)
-                list,cur = node.insert_after(list,cur,n)
+            elseif uc == 32 then
+                local thiscluster = thisglyph.cluster
+                if cluster[thiscluster] == 160 then
+                    n = node.new("penalty")
+                    n.penalty = 10000
+                    list,cur = node.insert_after(list,cur,n)
+
+                    n = set_glue(nil,{width = space, shrink = shrink, stretch = stretch})
+                    node.set_attribute(n,att_tie_glue,1)
+                    list,cur = node.insert_after(list,cur,n)
+
+                    -- can be 1 == solid or 2 == dashed
+                    if parameter.underline then
+                        node.set_attribute(n,att_underline,parameter.underline)
+                        node.set_attribute(n,att_underline_color,current_fgcolor)
+                    end
+
+                    if parameter.backgroundcolor then
+                        node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
+                        node.set_attribute(n,att_bgpaddingtop,parameter.bg_padding_top)
+                        node.set_attribute(n,att_bgpaddingbottom,parameter.bg_padding_bottom)
+                    end
+                    node.set_attribute(n,att_fontfamily,fontfamily)
+                 else
+                    n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch})
+                    setstyles(n,parameter)
+                    list,cur = node.insert_after(list,cur,n)
+                end
             elseif cp == 0 and newlines_at[thisglyph.cluster] then
                 local dummypenalty
                 dummypenalty = node.new("penalty")
                 dummypenalty.penalty = 10000
                 node.set_attribute(dummypenalty,att_newline,1)
-                head,last = node.insert_after(head,last,dummypenalty)
+                list,cur = node.insert_after(list,cur,dummypenalty)
 
                 local strut
                 strut = add_rule(nil,"head",{height = 8 * factor, depth = 3 * factor, width = 0 })
                 node.set_attribute(strut,att_newline,1)
-                head,last = node.insert_after(head,last,strut)
+                list,cur = node.insert_after(list,cur,strut)
 
                 local p1,g,p2
                 p1 = node.new("penalty")
@@ -3436,6 +3464,9 @@ function mknodes(str,parameter,origin)
                 node.set_attribute(p1,att_newline,1)
                 node.set_attribute(p2,att_newline,1)
                 node.set_attribute(g,att_newline,1)
+
+                -- important for empty lines (adjustlineheight)
+                node.set_attribute(p1,att_fontfamily,fontfamily)
 
                 list,cur = node.insert_after(list,cur,p1)
                 list,cur = node.insert_after(list,cur,g)
@@ -3470,6 +3501,10 @@ function mknodes(str,parameter,origin)
                     list,cur = node.insert_after(list,cur,k)
                     lastitemwasglyph = true
                 end
+                if cur and cur.prev and cur.prev.id == glyph_node then
+                    lastitemwasglyph = true
+                end
+
                 -- CJK
                 if is_chinese and i < #glyphs and uc > 12032 then
                     -- don't break within non-cjk words
@@ -3500,10 +3535,33 @@ function mknodes(str,parameter,origin)
 
                 local diff = thisglyph.x_advance - tbl.characters[uc].hadvance
                 if diff ~= 0 then
-                    publisher.setprop(cur,"kern",diff * tbl.mag)
+                    publisher.setprop(cur,"kern", diff * tbl.mag)
+                end
+                if uc == -1 then
+                elseif uc > 0x110000 then
+                    -- ignore
+                elseif ( uc == 45 or uc == 8211) and lastitemwasglyph and string.find(allowbreak, "-",1,true) then
+                    -- only break if allowbreak contains the hyphen char
+                    local pen = node.new("penalty")
+                    pen.penalty = 10000
+                    list = node.insert_before(list,cur,pen)
+                    local disc = node.new("disc")
+                    list,cur = node.insert_after(list,cur,disc)
+                    local g = set_glue(nil)
+                    list,cur = node.insert_after(list,cur,g)
+                elseif string.find(allowbreak,unicode.utf8.char(uc),1,true) then
+                    -- allowbreak lists characters where the publisher may break lines
+                    local pen = node.new("penalty")
+                    pen.penalty = 0
+                    list,cur = node.insert_after(list,cur,pen)
                 end
             end
         end
+        local aa = parameter.add_attributes or {}
+        for i=1,#aa do
+            set_attribute_recurse(list,aa[i][1],aa[i][2])
+        end
+
         setprop(list,"haskerns",true)
         setprop(list,"pardir",direction)
         return list

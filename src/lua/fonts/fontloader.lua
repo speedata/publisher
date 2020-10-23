@@ -119,7 +119,7 @@ function define_font_hb( name, size, extra_parameter )
     -- Some fonts have `units_per_em` set to 0. I am not sure if setting this to
     -- 1000 in that case has any drawbacks.
     local upem = face:get_upem()
-    local mag = math.floor(size / upem)
+    local mag = size / upem
     local backmap = {}
     local f = {}
     f.mag = mag
@@ -180,10 +180,11 @@ function define_font_hb( name, size, extra_parameter )
         elseif uni == 8208 then
             uni = 45
         end
+        local hadvance = font:get_glyph_h_advance(gid)
         f.characters[uni] = {
             index = gid,
-            width = font:get_glyph_h_advance(gid) * mag,
-            hadvance = font:get_glyph_h_advance(gid),
+            width = hadvance * mag,
+            hadvance = hadvance,
             name  = font:get_glyph_name(gid),
             expansion_factor = 1000,
         }

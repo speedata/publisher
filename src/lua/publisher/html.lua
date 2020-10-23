@@ -553,7 +553,11 @@ function trim_space_beginning( nodelist )
     local dir = publisher.getprop(nodelist,"direction")
     if dir == "→" then return nodelist end
     if nodelist.id == publisher.glue_node then
+        local tmp = node.getproperty(nodelist)
         nodelist=nodelist.next
+        if nodelist then
+            node.setproperty(nodelist,tmp)
+        end
     end
     return nodelist
 end
