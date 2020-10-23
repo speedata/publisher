@@ -3297,6 +3297,11 @@
           <xs:documentation>Color of the paragraph. Must be defined with DefineColor before use.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="direction">
+        <xs:annotation>
+          <xs:documentation>The text direction (ltr or rtl)</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="fontface">
         <xs:annotation>
           <xs:documentation>Deprecated. Use fontfamily instead.</xs:documentation>

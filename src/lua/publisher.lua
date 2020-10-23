@@ -3387,7 +3387,7 @@ function mknodes(str,parameter,origin)
             script = "beng"
         end
         -- shape returns the guessed script from the buffer
-        script, direction = shape(tbl,buf, { language = thislang, script = script } )
+        script, direction = shape(tbl,buf, { language = thislang, script = script, direction = parameter.direction } )
 
         local is_chinese = false
         if script == "Hans" or script == "Hant" or script == "Hani" then

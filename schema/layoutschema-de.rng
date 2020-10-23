@@ -3418,6 +3418,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="direction">
+                     <a:documentation>Die Laufrichtung des Textes (ltr oder rtl)</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="fontface">
                      <a:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</a:documentation>
                   </attribute>

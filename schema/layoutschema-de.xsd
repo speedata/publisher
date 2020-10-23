@@ -3297,6 +3297,11 @@
           <xs:documentation>Farbe des Absatzes. Muss vorher mit DefineColor definiert worden sein.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="direction">
+        <xs:annotation>
+          <xs:documentation>Die Laufrichtung des Textes (ltr oder rtl)</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="fontface">
         <xs:annotation>
           <xs:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</xs:documentation>

@@ -2205,6 +2205,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     textblockoptions = textblockoptions or {}
     local allowbreak        = publisher.read_attribute(layoutxml,dataxml,"allowbreak",         "rawstring")
     local colorname         = publisher.read_attribute(layoutxml,dataxml,"color",              "rawstring")
+    local direction         = publisher.read_attribute(layoutxml,dataxml,"direction",          "rawstring")
     local fontname          = publisher.read_attribute(layoutxml,dataxml,"fontface",           "rawstring")
     local fontfamilyname    = publisher.read_attribute(layoutxml,dataxml,"fontfamily",         "rawstring",fontname)
     local html              = publisher.read_attribute(layoutxml,dataxml,"html",               "rawstring","all")
@@ -2242,6 +2243,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local params = {
         fontfamily = fontfamily,
         color = colorindex,
+        direction = direction,
         languagecode = languagecode,
         padding_left = paddingleft,
         padding_right = paddingright,

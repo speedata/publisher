@@ -5596,6 +5596,14 @@
         <para>Farbe des Absatzes. Muss vorher mit <cmd name="DefineColor"/> definiert worden sein.</para>
       </description>
     </attribute>
+    <attribute en="direction" since="4.1.12" optional="yes" allowxpath="yes" type="text">
+      <description xml:lang="en">
+        <para>The text direction (ltr or rtl)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Laufrichtung des Textes (ltr oder rtl)</para>
+      </description>
+    </attribute>
     <attribute en="fontface" css="font-family" type="text" optional="yes">
       <description xml:lang="en">
         <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>

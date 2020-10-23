@@ -3418,6 +3418,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="direction">
+                     <a:documentation>The text direction (ltr or rtl)</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="fontface">
                      <a:documentation>Deprecated. Use fontfamily instead.</a:documentation>
                   </attribute>
