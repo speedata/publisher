@@ -1474,7 +1474,7 @@ function commands.load_fontfile( layoutxml,dataxml )
     local name             = publisher.read_attribute(layoutxml,dataxml,"name",            "rawstring")
     local osf              = publisher.read_attribute(layoutxml,dataxml,"oldstylefigures", "boolean")
     local features         = publisher.read_attribute(layoutxml,dataxml,"features",        "rawstring")
-    local mode             = publisher.read_attribute(layoutxml,dataxml,"mode",            "rawstring", "fontforge")
+    local mode             = publisher.read_attribute(layoutxml,dataxml,"mode",            "rawstring", publisher.options.fontloader)
 
     local fallbacks = {}
     for _,v in ipairs(layoutxml) do

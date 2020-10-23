@@ -56,6 +56,8 @@ erkannt. Folgende Optionen werden unterstützt:
   Zuordnung von Dateiendungen zu in `imagehandler` definierten Konvertern. Um Grafiken on-the-fly zu konvertieren. Beispiel: `extensionhandler="mmd:mermaid"`. Mehrere Einträge werden mit Semikolon getrennt. Siehe auch `imagehandler`. (Seit Version 3.9.1, experimentell.)
 `extraxml`::
   Diese XML-Dateien zu den Layoutanweisungen hinzufügen. Kommaseparierte Liste (`extraxml=datei1.xml,datei2.xml`).
+`fontloader`::
+   Setze den Fontlader auf `fontforge` (Voreinstellung bis Version 4) oder `harfbuzz` (Voreinstellung ab Version 5).
 `prependxml`::
   Diese XML-Dateien vor den Layoutanweisungen hinzufügen. Kommaseparierte Liste (`prependxml=datei1.xml,datei2.xml`).
 `filter`::

@@ -50,6 +50,8 @@ The format of the file is important, otherwise it won’t be recognized. The fol
    Assignment of file extensions to converters defined in 'imagehandler'. To convert graphics on-the-fly. Example: `extensionhandler="mmd:mermaid"`. Multiple entries are separated by semicolon. See also `imagehandler`. (Since version 3.9.1.)
 `extraxml`::
    Add this XML file to the layout instructions. List of comma separated file names (`extraxml=file1.xml,file2.xml`).
+`fontloader`::
+   Set the fontloader to `fontforge` (default until version 4) or `harfbuzz` (default starting from version 5).
 `prependxml`::
    Add this XML file in front of the layout instructions. List of comma separated file names (`prependxml=file1.xml,file2.xml`).
 `filter`::

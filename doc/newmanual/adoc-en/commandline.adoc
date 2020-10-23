@@ -111,6 +111,8 @@ you can display a list of the allowed commands and parameters.
    The document's main language in locale format, for example 'en' or 'en_US'.
 `--mode=NAME`::
    Set mode. Multiple modes given in a comma separated list. See <<ch-advanced-cotrollayout>>.
+`--option=OPTION`::
+   Set a specific option that has no command line parameter.
 `--outputdir=DIR`::
    Copy PDF and protocol to this directory
 `--prepend-xml=NAME`::

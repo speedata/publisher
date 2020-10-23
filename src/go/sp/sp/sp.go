@@ -123,6 +123,7 @@ func init() {
 		"tempdir":    os.TempDir(),
 		"cache":      "optimal",
 		"inkscape":   "inkscape",
+		"fontloader": "fontforge",
 	}
 
 	switch runtime.GOOS {
@@ -265,6 +266,11 @@ func openFile(filename string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func setOption(str string) {
+	a := strings.Split(str, "=")
+	options[a[0]] = a[1]
 }
 
 // Put string a=b into the variables map
@@ -560,6 +566,8 @@ func runPublisher(cachemethod string, runmode string, filename string) (exitstat
 	f.Close()
 
 	layoutoptions["grid"] = getOption("grid")
+	os.Setenv("SP_FONTLOADER", getOption("fontloader"))
+
 	layoutoptions["reportmissingglyphs"] = getOption("reportmissingglyphs")
 
 	// layoutoptions are passed as a command line argument to the publisher
@@ -780,6 +788,7 @@ func main() {
 	op.On("--mainlanguage NAME", "The document's main language in locale format, for example 'en' or 'en_US'.", &mainlanguage)
 	op.On("--mode NAME", "Set mode. Multiple modes given in a comma separated list.", options)
 	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)
+	op.On("--option=OPTION", "Set a specific option", setOption)
 	op.On("--prepend-xml NAME", "Add this file in front of the layout file", prependXML)
 	op.On("--port PORT", "Port to be used for the server mode. Defaults to 5266", options)
 	op.On("--quiet", "Run publisher in silent mode", options)

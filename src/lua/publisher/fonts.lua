@@ -109,7 +109,7 @@ local preloaded_fonts = {}
 
 -- Return false, error message in case of failure, true, number otherwise. number
 -- is the internal font number. After calling this method, the font can be used
--- with the key { filename,size}
+-- with the key {filename,size}
 function make_font_instance( name,size )
     -- Name is something like "TeXGyreHeros-Regular", the visible name of the font file
     assert(name)
@@ -121,7 +121,7 @@ function make_font_instance( name,size )
     end
     local filename,parameter = unpack(lookup_fontname_filename[name])
     assert(filename)
-    local k = {filename = filename, fontsize = size, space = parameter.space, mode = parameter.mode or "fontforge"}
+    local k = {filename = filename, fontsize = size, space = parameter.space, mode = parameter.mode or publisher.options.fontloader}
 
     if parameter.otfeatures then
         for fea,enabled in pairs(parameter.otfeatures) do
@@ -136,7 +136,7 @@ function make_font_instance( name,size )
     else
         local f
         local num = font.nextid(true)
-        f = fonts.fontloader.preload_font(filename,size,parameter,parameter.mode)
+        f = fonts.fontloader.preload_font(filename,size,parameter,parameter.mode or publisher.options.fontloader)
         f.reserved_num = num
         preloaded_fonts[num] = f
         log("Preload font %q at %.2gpt (id: %d)",filename,size / publisher.factor,num)

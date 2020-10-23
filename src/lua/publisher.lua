@@ -235,6 +235,7 @@ options = {
     gridcells_x = 0,
     gridcells_y = 0,
     reportmissingglyphs = true,
+    fontloader = os.getenv("SP_FONTLOADER") or "fontforge"
 }
 
 -- List of virtual areas. Key is the group name and value is
