@@ -191,7 +191,7 @@ func runComparison(path string, statuschan chan compareStatus) {
 		return
 	}
 
-	cmd = exec.Command("convert"+exeSuffix, "publisher.pdf", "source-%02d.png")
+	cmd = exec.Command("convert"+exeSuffix, "-density", "150", "-trim", "publisher.pdf", "source-%02d.png")
 	cmd.Dir = path
 	cmd.Run()
 	if err != nil {
@@ -202,7 +202,7 @@ func runComparison(path string, statuschan chan compareStatus) {
 	// we only do that when the pdf is newer than the png files
 	// (that is: the pdf has been updated)
 	if newer(filepath.Join(path, "reference.pdf"), filepath.Join(path, "reference-00.png")) {
-		cmd := exec.Command("convert"+exeSuffix, "reference.pdf", "reference-%02d.png")
+		cmd := exec.Command("convert"+exeSuffix, "-density", "150", "-trim", "reference.pdf", "reference-%02d.png")
 		cmd.Dir = path
 		err = cmd.Run()
 		if err != nil {
@@ -240,7 +240,7 @@ func mkWebPage() error {
 <head>
 	<title>speedata compare result</title>
 	<style type="text/css">
-		img { height: 150px ; border: 1px solid black; }
+		img { height: 150px ; border: 1px solid black; max-width: 75%; width: auto; height: auto; }
 		tr.img td	{ border-bottom: 1px solid black; }
 		tr  {vertical-align: top;}
 	</style>
