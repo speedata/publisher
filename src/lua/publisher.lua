@@ -3443,7 +3443,7 @@ function mknodes(str,parameter,origin)
 
                 -- add glue so next word can hyphenate (#274)
                 g = set_glue(nil,{})
-                head,last = node.insert_after(head,last,g)
+                list,cur = node.insert_after(list,cur,g)
             else
                 n = node.new("glyph")
                 n.font = instance
