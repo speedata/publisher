@@ -3665,6 +3665,16 @@
                <attribute name="name">
                   <a:documentation>Name der Seitenvorlage. Der Name ist zu Informationszwecken und zur Auswahl bei NewPage.</a:documentation>
                </attribute>
+               <optional>
+                  <attribute name="width">
+                     <a:documentation>The height of the page</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="height">
+                     <a:documentation>Die Seitenhöhe. Voreinstellung ist die globale Einstellung.</a:documentation>
+                  </attribute>
+               </optional>
                <attribute name="test">
                   <a:documentation>Wenn der XPath-Ausdruck »wahr« ergibt, dann wird diese Seite als Vorlage genommen.</a:documentation>
                </attribute>

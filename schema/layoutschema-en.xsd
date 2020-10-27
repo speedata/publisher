@@ -3899,6 +3899,16 @@
           <xs:documentation>Name of the master page. It is for informational purpose and as a selection for NewPage.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="width">
+        <xs:annotation>
+          <xs:documentation>The width of the page. Defaults to the global setting.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="height">
+        <xs:annotation>
+          <xs:documentation>The height of the page. Defaults to the global setting.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="test" use="required">
         <xs:annotation>
           <xs:documentation>If this xpath expression evaluates to true, this page is taken as a master page.</xs:documentation>

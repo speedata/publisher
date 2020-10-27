@@ -830,7 +830,7 @@ function calculate_rowheights(self)
             self.rowheights[current_row] = rowheight
             rowspans = table.__concat(rowspans,_rowspans)
         else
-            warning("Unknown contents in »Table« %s",eltname or "?")
+            warning("Unknown contents in “Table” %s",eltname or "?")
         end -- if it's not a <Tablerule>
     end -- for all rows
 
@@ -1317,7 +1317,7 @@ function typeset_table(self)
             node.set_attribute(tf,publisher.att_tablenewpage, 1)
             rows[#rows + 1] = tf
         else
-            warning("Unknown contents in »Table« %s",eltname or "?" )
+            warning("Unknown contents in “Table” %s",eltname or "?" )
         end -- if it's a table cell
     end
 

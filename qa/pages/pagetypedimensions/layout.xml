@@ -1,0 +1,31 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Pageformat width="120mm" height="110mm"/>
+	<Pagetype name="odd" test="sd:odd(sd:current-page())" width="90mm" height="110mm"/>
+
+	<Record element="data">
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value select="concat('page dimensions: ',$_pagewidth, ' × ',$_pageheight)"/>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<Loop select="2">
+			<PlaceObject column="1">
+				<Textblock width="4">
+					<Paragraph>
+						<Value select="sd:dummytext()"></Value>
+					</Paragraph>
+				</Textblock>
+			</PlaceObject>
+		</Loop>
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value select="concat('default page dimensions: ',$_pagewidth, ' × ',$_pageheight)"/>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+	</Record>
+</Layout>

@@ -842,7 +842,12 @@ function dothings()
     log("Running LuaTeX version %d on %s",tex.luatexversion,os.name)
     --- First we set some defaults.
     --- A4 paper is 210x297 mm
-    set_pageformat(tex.sp("210mm"),tex.sp("297mm"))
+    local wd_sp = tex.sp("210mm")
+    local ht_sp = tex.sp("297mm")
+    set_pageformat(wd_sp,ht_sp)
+    options.default_pagewidth = wd_sp
+    options.default_pageheight = ht_sp
+
     get_languagecode(os.getenv("SP_MAINLANGUAGE") or "en_GB")
     xpath.set_variable("_bleed", "0mm")
     xpath.set_variable("_pageheight", "297mm")
@@ -1236,7 +1241,7 @@ function initialize_luatex_and_generate_pdf()
     xpath.set_variable("__position", 1)
     --- The rare case that the user has not any `Record` commands in the layout file:
     if not data_dispatcher[""] then
-        err("Can't find any »Record« commands in the layout file.")
+        err("Can't find any “Record” commands in the layout file.")
         exit()
     end
     tmp = data_dispatcher[""][name]
@@ -1862,9 +1867,9 @@ function setup_page(pagenumber,fromwhere)
     end
     local errorstring
 
-    current_page, errorstring = page:new(options.pagewidth,options.pageheight, extra_margin, trim_amount,thispage)
+    current_page, errorstring = page:new(options.default_pagewidth,options.default_pageheight, extra_margin, trim_amount,thispage)
     if not current_page then
-        err("Can't create a new page. Is the page type (»PageType«) defined? %s",errorstring)
+        err("Can't create a new page. Is the page type (“PageType”) defined? %s",errorstring)
         exit()
     end
     current_grid = current_page.grid
@@ -1879,14 +1884,33 @@ function setup_page(pagenumber,fromwhere)
 
     local pagetype = detect_pagetype(thispage)
     if pagetype == false then return false end
+    if pagetype.width then
+        current_page.width = tex.sp(pagetype.width)
+    end
+    if pagetype.height then
+        current_page.height = tex.sp(pagetype.height)
+    end
+    if pagetype.width or pagetype.height then
+        xpath.set_variable("_pagewidth", pagetype.width)
+        xpath.set_variable("_pageheight", pagetype.height)
+        set_pageformat(current_page.width,current_page.height)
+    else
+        -- 186467sp = 1mm
+        local pagewd = current_page.width / 186467
+        local pageht = current_page.height / 186467
+
+        xpath.set_variable("_pagewidth", tostring(math.round(pagewd,0)) .. "mm")
+        xpath.set_variable("_pageheight", tostring(math.round(pageht,0)) .. "mm")
+    end
 
     for _,j in ipairs(pagetype) do
         local eltname = elementname(j)
+        local eltcontents = element_contents(j)
         if type(element_contents(j))=="function" and eltname=="Margin" then
-            element_contents(j)(current_page)
+            eltcontents(current_page)
         elseif eltname=="Grid" then
-            local layoutxml = element_contents(j).layoutxml
-            local dataxml = element_contents(j).dataxml
+            local layoutxml = eltcontents.layoutxml
+            local dataxml = eltcontents.dataxml
             local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
             local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --PG
             local _nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "number")
@@ -4962,7 +4986,7 @@ end
 --- Misc
 --- --------
 function set_pageformat( wd,ht )
-    options.pagewidth    = wd
+    options.pagewidth   = wd
     options.pageheight  = ht
     tex.pagewidth =  wd
     tex.pageheight = ht

@@ -2162,24 +2162,33 @@ end
 --- PageFormat
 --- ----------
 --- Set the dimensions of the page
-function commands.page_format(layoutxml,dataxml)
+function commands.page_format(layoutxml,dataxml,options)
     local width  = publisher.read_attribute(layoutxml,dataxml,"width","length")
     local height = publisher.read_attribute(layoutxml,dataxml,"height","length")
-    xpath.set_variable("_pageheight",height)
-    xpath.set_variable("_pagewidth",width)
 
-    publisher.set_pageformat(tex.sp(width),tex.sp(height))
+    local wd_sp = tex.sp(width)
+    local ht_sp = tex.sp(height)
+    xpath.set_variable("_pagewidth",width)
+    xpath.set_variable("_pageheight",height)
+    publisher.set_pageformat(wd_sp,ht_sp)
+    publisher.options.default_pagewidth = wd_sp
+    publisher.options.default_pageheight = ht_sp
 end
 
 --- PageType
 --- --------
 --- This command should be probably called master page or something similar.
 function commands.pagetype(layoutxml,dataxml)
-    local tmp_tab = {
-        layoutxml = layoutxml
-    }
     local test         = publisher.read_attribute(layoutxml,dataxml,"test","rawstring")
     local pagetypename = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
+    local width  = publisher.read_attribute(layoutxml,dataxml,"width","length")
+    local height = publisher.read_attribute(layoutxml,dataxml,"height","length")
+
+    local tmp_tab = {
+        layoutxml = layoutxml,
+        width = width,
+        height = height,
+    }
     -- evaluate the default color for this page later on, so we can set it dynamically (XPath)
 
     local tab = publisher.dispatch(layoutxml,dataxml)
@@ -2189,7 +2198,7 @@ function commands.pagetype(layoutxml,dataxml)
         if eltname=="Margin" or eltname == "AtPageShipout" or eltname == "AtPageCreation" or eltname=="Grid" or eltname=="PositioningArea" then
             tmp_tab [#tmp_tab + 1] = j
         else
-            err("Element %q in »Pagetype« unknown",tostring(eltname))
+            err("Element %q in “Pagetype” unknown",tostring(eltname))
             tmp_tab [#tmp_tab + 1] = j
         end
     end
@@ -2447,7 +2456,7 @@ function commands.place_object( layoutxml,dataxml )
 
     if absolute_positioning then
         if not ( row and column ) then
-            err("»Column« and »Row« must be given with absolute positioning (PlaceObject).")
+            err("“Column” and “Row” must be given with absolute positioning (PlaceObject).")
             return
         end
     end
@@ -2837,7 +2846,7 @@ function commands.rule( layoutxml,dataxml )
         elseif direction == "vertical" then
             length = publisher.current_grid:height_sp(length)
         else
-            err("Attribute »direction« with »Rule«: unknown direction: %q",direction)
+            err("Attribute “direction” with “Rule”: unknown direction: %q",direction)
         end
     else
         length = tex.sp(length)
@@ -3085,7 +3094,7 @@ function commands.setvariable( layoutxml,dataxml )
     -- FIXME: if the variable contains nodes, the must be freed:
 
     if not varname then
-        err("Variable name in »SetVariable« not recognized")
+        err("Variable name in “SetVariable” not recognized")
         return
     end
     local contents

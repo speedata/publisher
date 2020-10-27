@@ -5857,6 +5857,22 @@
         <para>Name der Seitenvorlage. Der Name ist zu Informationszwecken und zur Auswahl bei <cmd name="NewPage"/>.</para>
       </description>
     </attribute>
+    <attribute en="width" optional="yes" since="4.1.13" type="length">
+      <description xml:lang="en">
+        <para>The width of the page. Defaults to the global setting.</para>
+      </description>
+      <description xml:lang="de">
+        <para>The height of the page</para>
+      </description>
+    </attribute>
+    <attribute en="height" optional="yes" since="4.1.13" type="length">
+      <description xml:lang="en">
+        <para>The height of the page. Defaults to the global setting.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Seitenhöhe. Voreinstellung ist die globale Einstellung.</para>
+      </description>
+    </attribute>
     <attribute en="test" type="xpath" optional="no">
       <description xml:lang="en">
         <para>If this xpath expression evaluates to true, this page is taken as a master page.</para>

@@ -3665,6 +3665,16 @@
                <attribute name="name">
                   <a:documentation>Name of the master page. It is for informational purpose and as a selection for NewPage.</a:documentation>
                </attribute>
+               <optional>
+                  <attribute name="width">
+                     <a:documentation>The width of the page. Defaults to the global setting.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="height">
+                     <a:documentation>The height of the page. Defaults to the global setting.</a:documentation>
+                  </attribute>
+               </optional>
                <attribute name="test">
                   <a:documentation>If this xpath expression evaluates to true, this page is taken as a master page.</a:documentation>
                </attribute>
