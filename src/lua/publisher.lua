@@ -2722,7 +2722,8 @@ function dothingsbeforeoutput( thispage )
     -- r should be cg
     local cg = r
     local str
-    find_user_defined_whatsits(pages[current_pagenumber].pagebox)
+    local thispagebox = pages[current_pagenumber].pagebox
+    find_user_defined_whatsits(thispagebox)
     local firstbox
 
     -- for spot colors, if necessary
@@ -2972,6 +2973,9 @@ function find_user_defined_whatsits( head, parent )
 
             if fgcolor and head.next == nil then
                 -- at end insert endcolor if in color mode
+                if prev_fgcolor == nil  then
+                    insert_startcolor = true
+                end
                 insert_endcolor = true
                 prev_fgcolor = nil
             elseif fgcolor ~= prev_fgcolor then
