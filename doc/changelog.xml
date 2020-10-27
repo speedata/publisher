@@ -1,5 +1,25 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.12" date="2020-10-27">
+        <en>Paragraph: allow direction setting (experimental).</en>
+        <de>Paragraph: Textrichtung einstellbar (experimentell).</de>
+    </entry>
+    <entry version="4.1.12" date="2020-10-27">
+        <en>Bugfixes for harfbuzz mode.</en>
+        <de>Fehlerkorrekturen im Harfbuzz-Modus.</de>
+    </entry>
+    <entry version="4.1.12" date="2020-10-27">
+        <en>Allow setting of fontloader in sp/config.</en>
+        <de>Fontlader ist per sp/config einstellbar.</de>
+    </entry>
+    <entry version="4.1.12" date="2020-10-27">
+        <en>Higher resolution for QA images.</en>
+        <de>Höhere Auflösung für QA-Bilder.</de>
+    </entry>
+    <entry version="4.1.12" date="2020-10-27">
+        <en>Schema fix (languages).</en>
+        <de>Schemakorrektur (Sprachen).</de>
+    </entry>
     <entry version="4.1.11" date="2020-10-22">
         <en>Better accents placement in harfbuzz mode (RTL).</en>
         <de>Verbesserte Akzenteplatzierung im harfbuzz-Modus (RTL).</de>
