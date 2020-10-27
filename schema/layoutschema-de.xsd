@@ -1049,7 +1049,7 @@
     <xs:complexType>
       <xs:attribute name="alignment">
         <xs:annotation>
-          <xs:documentation>Bestimmt die Formatierung des Textes.</xs:documentation>
+          <xs:documentation>Bestimmt die Formatierung des Textes. Voreinstellung ist justified.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -2938,6 +2938,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Serbian (cyrillic)">
+                  <xs:annotation>
+                    <xs:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovak">
                   <xs:annotation>
                     <xs:documentation>Auf slowakische Trennmuster umschalten.</xs:documentation>
@@ -3762,6 +3771,15 @@
                 <xs:enumeration value="Serbian">
                   <xs:annotation>
                     <xs:documentation>Auf serbische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Serbian (cyrillic)">
+                  <xs:annotation>
+                    <xs:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5252,6 +5270,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Serbian (cyrillic)">
+                  <xs:annotation>
+                    <xs:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovak">
                   <xs:annotation>
                     <xs:documentation>Auf slowakische Trennmuster umschalten.</xs:documentation>
@@ -6256,6 +6283,15 @@
                 <xs:enumeration value="Serbian">
                   <xs:annotation>
                     <xs:documentation>Auf serbische Trennmuster umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Serbian (cyrillic)">
+                  <xs:annotation>
+                    <xs:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>

@@ -490,6 +490,14 @@
         <para>Auf serbische Trennmuster umschalten.</para>
       </description>
     </choice>
+    <choice en="Serbian (cyrillic)">
+      <description xml:lang="en">
+        <para>Switch to Serbian hyphenation patterns with cyrillic script.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</para>
+      </description>
+    </choice>
     <choice en="Slovak">
       <description xml:lang="en">
         <para>Switch to Slovak hyphenation patterns.</para>
@@ -2381,10 +2389,10 @@
     <childelements/>
     <attribute en="alignment" optional="yes">
       <description xml:lang="en">
-        <para>Determines the formatting of the text.</para>
+        <para>Determines the formatting of the text. It defaults to justified.</para>
       </description>
       <description xml:lang="de">
-        <para>Bestimmt die Formatierung des Textes.</para>
+        <para>Bestimmt die Formatierung des Textes. Voreinstellung ist justified.</para>
       </description>
       <choice en="justified">
         <description xml:lang="en">

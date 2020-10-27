@@ -1226,7 +1226,7 @@
          <a:documentation>Define text formatting instructions. A textformat is used to align and indent text and create margins and rules before and after the text.</a:documentation>
          <optional>
             <attribute name="alignment">
-               <a:documentation>Determines the formatting of the text.</a:documentation>
+               <a:documentation>Determines the formatting of the text. It defaults to justified.</a:documentation>
                <choice>
                   <value>justified</value>
                   <a:documentation>Textblock has a rectangular shape.</a:documentation>
@@ -3026,6 +3026,8 @@
                   <a:documentation>Switch to Russian hyphenation patterns.</a:documentation>
                   <value>Serbian</value>
                   <a:documentation>Switch to Serbian hyphenation patterns.</a:documentation>
+                  <value>Serbian (cyrillic)</value>
+                  <a:documentation>Switch to Serbian hyphenation patterns with cyrillic script.</a:documentation>
                   <value>Slovak</value>
                   <a:documentation>Switch to Slovak hyphenation patterns.</a:documentation>
                   <value>Slovenian</value>
@@ -3580,6 +3582,8 @@
                         <a:documentation>Switch to Russian hyphenation patterns.</a:documentation>
                         <value>Serbian</value>
                         <a:documentation>Switch to Serbian hyphenation patterns.</a:documentation>
+                        <value>Serbian (cyrillic)</value>
+                        <a:documentation>Switch to Serbian hyphenation patterns with cyrillic script.</a:documentation>
                         <value>Slovak</value>
                         <a:documentation>Switch to Slovak hyphenation patterns.</a:documentation>
                         <value>Slovenian</value>
@@ -4768,6 +4772,8 @@
                         <a:documentation>Switch to Russian hyphenation patterns.</a:documentation>
                         <value>Serbian</value>
                         <a:documentation>Switch to Serbian hyphenation patterns.</a:documentation>
+                        <value>Serbian (cyrillic)</value>
+                        <a:documentation>Switch to Serbian hyphenation patterns with cyrillic script.</a:documentation>
                         <value>Slovak</value>
                         <a:documentation>Switch to Slovak hyphenation patterns.</a:documentation>
                         <value>Slovenian</value>
@@ -5430,6 +5436,8 @@
                         <a:documentation>Switch to Russian hyphenation patterns.</a:documentation>
                         <value>Serbian</value>
                         <a:documentation>Switch to Serbian hyphenation patterns.</a:documentation>
+                        <value>Serbian (cyrillic)</value>
+                        <a:documentation>Switch to Serbian hyphenation patterns with cyrillic script.</a:documentation>
                         <value>Slovak</value>
                         <a:documentation>Switch to Slovak hyphenation patterns.</a:documentation>
                         <value>Slovenian</value>

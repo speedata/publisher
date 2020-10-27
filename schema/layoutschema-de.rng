@@ -1226,7 +1226,7 @@
          <a:documentation>Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen Paragraph und Textblock) zurückgegriffen werden.</a:documentation>
          <optional>
             <attribute name="alignment">
-               <a:documentation>Bestimmt die Formatierung des Textes.</a:documentation>
+               <a:documentation>Bestimmt die Formatierung des Textes. Voreinstellung ist justified.</a:documentation>
                <choice>
                   <value>justified</value>
                   <a:documentation>Der Text hat eine rechteckige Form.</a:documentation>
@@ -3026,6 +3026,8 @@
                   <a:documentation>Auf russische Trennmuster umschalten.</a:documentation>
                   <value>Serbian</value>
                   <a:documentation>Auf serbische Trennmuster umschalten.</a:documentation>
+                  <value>Serbian (cyrillic)</value>
+                  <a:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</a:documentation>
                   <value>Slovak</value>
                   <a:documentation>Auf slowakische Trennmuster umschalten.</a:documentation>
                   <value>Slovenian</value>
@@ -3580,6 +3582,8 @@
                         <a:documentation>Auf russische Trennmuster umschalten.</a:documentation>
                         <value>Serbian</value>
                         <a:documentation>Auf serbische Trennmuster umschalten.</a:documentation>
+                        <value>Serbian (cyrillic)</value>
+                        <a:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</a:documentation>
                         <value>Slovak</value>
                         <a:documentation>Auf slowakische Trennmuster umschalten.</a:documentation>
                         <value>Slovenian</value>
@@ -4768,6 +4772,8 @@
                         <a:documentation>Auf russische Trennmuster umschalten.</a:documentation>
                         <value>Serbian</value>
                         <a:documentation>Auf serbische Trennmuster umschalten.</a:documentation>
+                        <value>Serbian (cyrillic)</value>
+                        <a:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</a:documentation>
                         <value>Slovak</value>
                         <a:documentation>Auf slowakische Trennmuster umschalten.</a:documentation>
                         <value>Slovenian</value>
@@ -5430,6 +5436,8 @@
                         <a:documentation>Auf russische Trennmuster umschalten.</a:documentation>
                         <value>Serbian</value>
                         <a:documentation>Auf serbische Trennmuster umschalten.</a:documentation>
+                        <value>Serbian (cyrillic)</value>
+                        <a:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</a:documentation>
                         <value>Slovak</value>
                         <a:documentation>Auf slowakische Trennmuster umschalten.</a:documentation>
                         <value>Slovenian</value>
