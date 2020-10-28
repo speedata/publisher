@@ -2079,6 +2079,7 @@ function background( box, colorname )
     local pdfcolorstring = colors[colorname].pdfstring
     local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
     n = node.new("whatsit","pdf_literal")
+    setprop(n,"origin","background")
     n.data = string.format("q %s 0 -%g %g %g re f Q",pdfcolorstring,dp,wd,ht + dp)
     n.mode = 0
     if node.type(box.id) == "hlist" then
@@ -2210,6 +2211,7 @@ function frame(obj)
 
     if obj.clip then
         n_clip = node.new("whatsit","pdf_literal")
+        setprop(n_clip,"origin","obj.clip")
         rule_clip = {}
         rule_clip[#rule_clip + 1] = string.format("%g %g m",xx1,yy1)
         rule_clip[#rule_clip + 1] = string.format("%g %g l",xx2,yy2)
@@ -2223,6 +2225,7 @@ function frame(obj)
     end
 
     local n = node.new("whatsit","pdf_literal")
+    setprop(n,"origin","publisher.frame")
     local rule = {}
 
     -- We need to add q .. Q because the color would leak into the inner objects (#55)
@@ -2691,6 +2694,7 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
     rules_clip[#rules_clip + 1] = "h W* n"
 
     local n_clip = node.new("whatsit","pdf_literal")
+    setprop(n_clip,"origin","htmlbox.clip")
     local n_clip_data = table.concat(rules_clip," ")
     n_clip_data = n_clip_data .. " " .. table.concat(rules," ")
     n_clip.data = n_clip_data
@@ -2967,6 +2971,8 @@ function find_user_defined_whatsits( head, parent )
         if head.id == vlist_node or head.id==hlist_node then
             find_user_defined_whatsits(head.list,head)
         else
+            local props = node.getproperty(head)
+            local underline = node.has_attribute(head,att_underline)
             local fgcolor = node.has_attribute(head,att_fgcolor)
             local insert_startcolor = false
             local insert_endcolor = false
@@ -2997,6 +3003,8 @@ function find_user_defined_whatsits( head, parent )
             end
             if insert_endcolor then
                 local colstop  = node.new("whatsit","pdf_colorstack")
+                node.setproperty(colstop,props)
+                node.set_attribute(colstop,att_underline,underline)
                 colstop.data  = ""
                 colstop.command = 2
                 colstop.stack = 0
@@ -3013,6 +3021,8 @@ function find_user_defined_whatsits( head, parent )
             end
             if insert_startcolor then
                 local colstart = node.new("whatsit","pdf_colorstack")
+                node.setproperty(colstart,props)
+                node.set_attribute(colstart,att_underline,underline)
                 local colorname = colortable[fgcolor]
                 local col = colors[colorname].pdfstring
                 colstart.data  = col
@@ -3704,7 +3714,7 @@ function mknodes(str,parameter,origin)
             end
 
             n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch})
-
+            setstyles(n,parameter)
             if breakatspace == false then
                 node.set_attribute(n,att_tie_glue,1)
             end
@@ -3957,6 +3967,9 @@ function hbkern(nodelist)
                 local kern = node.new(kern_node)
                 kern.kern = curkern
                 nodelist = node.insert_before(nodelist,head,kern)
+                node.set_attribute(kern,att_underline,node.has_attribute(head,att_underline))
+                node.set_attribute(kern,att_underline_color,node.has_attribute(head,att_underline_color))
+                node.setproperty(kern,node.getproperty(head))
                 curkern = 0
             end
             local k = getprop(head,"kern")
@@ -3968,6 +3981,9 @@ function hbkern(nodelist)
                 local kern = node.new(kern_node)
                 kern.kern = curkern
                 head.replace = kern
+                node.set_attribute(head.replace,att_underline_color,node.has_attribute(head,att_underline_color))
+                node.set_attribute(head.replace,att_underline,node.has_attribute(head,att_underline))
+                node.setproperty(head.replace,node.getproperty(head))
                 curkern = 0
             end
         else
@@ -4447,6 +4463,7 @@ function colorbar( wd,ht,dp,color,origin )
     end
 
     local rule_start = node.new("whatsit","pdf_literal")
+    setprop(rule_start,"origin","colorbar")
     rule_start.mode = 0
     rule_start.data = "q "..colors[colorname].pdfstring .. string.format(" 0 0 %g %g  re f Q ",sp_to_bp(wd),sp_to_bp(ht))
 

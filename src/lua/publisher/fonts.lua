@@ -396,6 +396,7 @@ function insert_underline( parent, head, start, typ, colornumber)
     ht = ht / publisher.factor
     dp = dp / publisher.factor
     local rule = node.new("whatsit","pdf_literal")
+    publisher.setprop(rule,"origin","insert_underline")
     -- thickness: ht / ...
     -- downshift: dp/2
     local rule_width = math.round(ht / 13,3)
