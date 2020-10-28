@@ -1981,9 +1981,11 @@
                      <a:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</a:documentation>
                   </attribute>
                </optional>
-               <attribute name="fontfamily">
-                  <a:documentation>Wähle die Fontfamilie. Derzeit wird nur der Schnitt Regular verwendet.</a:documentation>
-               </attribute>
+               <optional>
+                  <attribute name="fontfamily">
+                     <a:documentation>Wähle die Fontfamilie. Derzeit wird nur der Schnitt Regular verwendet.</a:documentation>
+                  </attribute>
+               </optional>
                <optional>
                   <attribute name="padding-left">
                      <a:documentation>Fügt Leerraum links der Initiale ein.</a:documentation>

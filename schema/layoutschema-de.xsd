@@ -1659,7 +1659,7 @@
           <xs:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="fontfamily" use="required">
+      <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Wähle die Fontfamilie. Derzeit wird nur der Schnitt Regular verwendet.</xs:documentation>
         </xs:annotation>

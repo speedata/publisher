@@ -1981,9 +1981,11 @@
                      <a:documentation>Deprecated. Use fontfamily instead.</a:documentation>
                   </attribute>
                </optional>
-               <attribute name="fontfamily">
-                  <a:documentation>Choose the font family. Only »Regular« shape is used at the moment.</a:documentation>
-               </attribute>
+               <optional>
+                  <attribute name="fontfamily">
+                     <a:documentation>Choose the font family. Only »Regular« shape is used at the moment.</a:documentation>
+                  </attribute>
+               </optional>
                <optional>
                   <attribute name="padding-left">
                      <a:documentation>Insert space left of the initial.</a:documentation>

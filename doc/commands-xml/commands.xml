@@ -3521,7 +3521,7 @@
         <para>Veraltet: Bitte Attribut <tt>fontfamily</tt> benutzen.</para>
       </description>
     </attribute>
-    <attribute en="fontfamily" optional="no" type="text">
+    <attribute en="fontfamily" optional="yes" type="text">
       <description xml:lang="en">
         <para>Choose the font family. Only »Regular« shape is used at the moment.</para>
       </description>

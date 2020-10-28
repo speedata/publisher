@@ -1659,7 +1659,7 @@
           <xs:documentation>Deprecated. Use fontfamily instead.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="fontfamily" use="required">
+      <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Choose the font family. Only »Regular« shape is used at the moment.</xs:documentation>
         </xs:annotation>
