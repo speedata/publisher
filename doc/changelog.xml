@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.13" date="2020-10-28">
+        <en>Set page width and page height at Pagetype.</en>
+        <de>Seitenbreite und Seitenhöhe bei Pagetype einstellbar.</de>
+    </entry>
+    <entry version="4.1.13" date="2020-10-28">
+        <en>Bugfix color at end of a paragraph (#276).</en>
+        <de>Fehlerkorrektur Farbe am Ende eines Absatzes (#276).</de>
+    </entry>
     <entry version="4.1.12" date="2020-10-27">
         <en>Paragraph: allow direction setting (experimental).</en>
         <de>Paragraph: Textrichtung einstellbar (experimentell).</de>
