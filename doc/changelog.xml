@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.14" date="2020-10-30">
+        <en>Automatic NewPage before SavePages (forward mode).</en>
+        <de>Automatisches NewPage vor SavePages (Modus zukünftige Seiten).</de>
+    </entry>
+    <entry version="4.1.14" date="2020-10-30">
+        <en>Bidi algorithm (experimental).</en>
+        <de>Bidi-Algorithmus (experimentell).</de>
+    </entry>
     <entry version="4.1.13" date="2020-10-28">
         <en>Set page width and page height at Pagetype.</en>
         <de>Seitenbreite und Seitenhöhe bei Pagetype einstellbar.</de>
@@ -37,8 +45,8 @@
         <de>Fehlerkorrektur für Silbentrennung nach <tt>&lt;br></tt> (#274).</de>
     </entry>
     <entry version="4.1.11" date="2020-10-21">
-        <en>Deprecate <tt>fontface</tt> on text commands (Paragraph, Textblock, ...). This command will stop working in version 5.</en>
-        <de>Warnung bei <tt>fontface</tt> bei Textbefehlen (Paragraph, Textblock, ...). Dieser Befehl wird in Version 5 verschwinden.</de>
+        <en>Deprecate <tt>fontface</tt> on text commands (Paragraph, Textblock, Initial, Text, Barcode, Table, Nobreak). This command will stop working in version 5.</en>
+        <de>Warnung bei <tt>fontface</tt> bei Textbefehlen (Paragraph, Textblock, Initial, Text, Barcode, Table, Nobreak). Dieser Befehl wird in Version 5 verschwinden.</de>
     </entry>
     <entry version="4.1.10" date="2020-10-21">
         <en>Set language on <tt>Span</tt> (#273).</en>
