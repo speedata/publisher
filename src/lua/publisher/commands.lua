@@ -2969,9 +2969,9 @@ end
 --- Save pages for later restore
 function commands.save_pages( layoutxml,dataxml )
     -- w("save_pages")
-    local save_current_pagenumber = publisher.current_pagenumber
     local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     if publisher.forward_pagestore[pagestore_name] == nil then
+        local save_current_pagenumber = publisher.current_pagenumber
         -- backwards mode. First save_pages, then insert_pages
         publisher.current_pagestore_name = pagestore_name
         publisher.pagestore[pagestore_name] = {}
@@ -2986,6 +2986,13 @@ function commands.save_pages( layoutxml,dataxml )
         return tab
     else
         -- forward mode. First insert pages then save pages
+
+        -- Run NewPage if the current page is not finished
+        if publisher.page_initialized_p(publisher.current_pagenumber) then
+            publisher.new_page()
+        end
+
+        local save_current_pagenumber = publisher.current_pagenumber
         local ps = publisher.pagestore[pagestore_name]
         local number_of_pages = ps[1]
         local location = ps[2]
