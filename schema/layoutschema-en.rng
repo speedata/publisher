@@ -3417,6 +3417,17 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="bidi">
+                     <a:documentation>Analyze direction of the text. Useful for mixing left-to-right and right-to-left text.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Analyze text.</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Don&#39;t handle mixed directions (default).</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="color">
                      <a:documentation>Color of the paragraph. Must be defined with DefineColor before use.</a:documentation>
                   </attribute>
@@ -4694,6 +4705,11 @@
                <optional>
                   <attribute name="background-padding-bottom">
                      <a:documentation>The bottom padding of the background color (can be negative)</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="fontfamily">
+                     <a:documentation>The name of the font family to switch to.</a:documentation>
                   </attribute>
                </optional>
                <optional>

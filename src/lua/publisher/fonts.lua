@@ -29,6 +29,7 @@ local glue_node      = node.id("glue")
 local glyph_node     = node.id("glyph")
 local disc_node      = node.id("disc")
 local rule_node      = node.id("rule")
+local dir_node       = node.id("dir")
 local kern_node      = node.id("kern")
 local penalty_node   = node.id("penalty")
 local whatsit_node   = node.id("whatsit")
@@ -208,7 +209,10 @@ function pre_linebreak( head )
             pre_linebreak(head.list)
         elseif head.id == vlist_node then -- vlist
             pre_linebreak(head.list)
-        elseif head.id == rule_node then -- rule
+        elseif head.id == rule_node then
+            -- ignore
+        elseif head.id == dir_node then
+            -- ignore
         elseif head.id == disc_node then -- discretionary
             pre_linebreak(head.pre)
             pre_linebreak(head.post)

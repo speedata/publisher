@@ -5596,6 +5596,30 @@
         <para>(Experimentell) Liste der Zeichen, bei denen ein Umbruch möglich ist. Das Leerzeichen wird nicht automatisch als Umbruchbunkt erkannt, wenn das Attribut angegeben ist.</para>
       </description>
     </attribute>
+    <attribute en="bidi" optional="yes" since="4.1.14">
+      <description xml:lang="en">
+        <para>Analyze direction of the text. Useful for mixing left-to-right and right-to-left text.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Analysiere die Richtung des Textes. Hilfreich für gemsichten links-nach-rechts und rechts-nach-links Text.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Analyze text.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Analysiere den Text.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Don't handle mixed directions (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Unterschiedliche Textrichtungen nicht beachten (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="color" type="text" css="color" optional="yes">
       <description xml:lang="en">
         <para>Color of the paragraph. Must be defined with <cmd name="DefineColor"/> before use.</para>
@@ -7610,6 +7634,14 @@
       </description>
       <description xml:lang="de">
         <para>Der Innenabstand (unten) der Hintergrundfarbe (kann negativ sein)</para>
+      </description>
+    </attribute>
+    <attribute en="fontfamily" type="text" optional="yes" since="4.1.14">
+      <description xml:lang="en">
+        <para>The name of the font family to switch to.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Schaltet auf die angegebene Schriftfamilie um.</para>
       </description>
     </attribute>
     <attribute en="language" optional="yes" allowxpath="yes" since="4.1.10">

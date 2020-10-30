@@ -169,6 +169,7 @@ user_defined_mark_append = 5
 
 action_node    = node.id("action")
 disc_node      = node.id("disc")
+dir_node       = node.id("dir")
 glue_node      = node.id("glue")
 glue_spec_node = node.id("glue_spec")
 glyph_node     = node.id("glyph")
@@ -3348,263 +3349,210 @@ local function setstyles(n,parameter)
     end
 end
 
--- Return a list of nodes
-function mknodes(str,parameter,origin)
-    -- if it's an empty string, we make a zero-width rule
-    if not str or string.len(str) == 0 then
-        -- a space char can have a width, so we return a zero width something
-        local strut = add_rule(nil,"head",{height = 1 * factor, depth = 0, width = 0 })
-        return strut
-    end
-
-    parameter = parameter or {}
+function hbglyphlist(arguments)
+    local tbl = arguments.tbl
+    local glyphs = arguments.glyphs
+    local cluster = arguments.cluster
+    local parameter = arguments.parameter
+    local allowbreak = arguments.allowbreak
+    local newlines_at = arguments.newlines_at
     local fontfamily = parameter.fontfamily
-    -- instance is the internal font number
-    parameter = parameter or {}
-    local allowbreak = parameter.allowbreak or " -"
-    local instance
-    local instancename
-    local languagecode = parameter.languagecode or defaultlanguage
-    if parameter.bold == 1 then
-        if parameter.italic == 1 then
-            instancename = "bolditalic"
+    local direction = arguments.direction
+    local script = arguments.script
+    local thislang = arguments.thislang
+    local fontnumber = arguments.fontnumber
+    local is_chinese = arguments.is_chinese
+
+    local lastitemwasglyph
+    local space   = tbl.parameters.space
+    local shrink  = tbl.parameters.space_shrink
+    local stretch = tbl.parameters.space_stretch
+    local list, cur
+    local n,k
+    for i=1,#glyphs do
+        local thisglyph = glyphs[i]
+        local cp = glyphs[i].codepoint
+        local uc = tbl.backmap[cp] or cp
+        if false then
+            -- just for simple adding at the beginning
+        elseif uc == 160 and #glyphs == 1 then
+            -- ignore
+        elseif uc == 32 then
+            local thiscluster = thisglyph.cluster
+            if cluster[thiscluster] == 160 then
+                n = node.new("penalty")
+                n.penalty = 10000
+                list,cur = node.insert_after(list,cur,n)
+
+                n = set_glue(nil,{width = space, shrink = shrink, stretch = stretch})
+                node.set_attribute(n,att_tie_glue,1)
+                list,cur = node.insert_after(list,cur,n)
+
+                -- can be 1 == solid or 2 == dashed
+                if parameter.underline then
+                    node.set_attribute(n,att_underline,parameter.underline)
+                    node.set_attribute(n,att_underline_color,current_fgcolor)
+                end
+
+                if parameter.backgroundcolor then
+                    node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
+                    node.set_attribute(n,att_bgpaddingtop,parameter.bg_padding_top)
+                    node.set_attribute(n,att_bgpaddingbottom,parameter.bg_padding_bottom)
+                end
+                node.set_attribute(n,att_fontfamily,fontfamily)
+             else
+                n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch})
+                setstyles(n,parameter)
+                list,cur = node.insert_after(list,cur,n)
+            end
+        elseif cp == 0 and newlines_at[thisglyph.cluster] then
+            local dummypenalty
+            dummypenalty = node.new("penalty")
+            dummypenalty.penalty = 10000
+            node.set_attribute(dummypenalty,att_newline,1)
+            list,cur = node.insert_after(list,cur,dummypenalty)
+
+            local strut
+            strut = add_rule(nil,"head",{height = 8 * factor, depth = 3 * factor, width = 0 })
+            node.set_attribute(strut,att_newline,1)
+            list,cur = node.insert_after(list,cur,strut)
+
+            local p1,g,p2
+            p1 = node.new("penalty")
+            p1.penalty = 10000
+
+            g = set_glue(nil,{stretch = 2^16, stretch_order = 2})
+
+            p2 = node.new("penalty")
+            p2.penalty = -10000
+
+            node.set_attribute(p1,att_newline,1)
+            node.set_attribute(p2,att_newline,1)
+            node.set_attribute(g,att_newline,1)
+
+            -- important for empty lines (adjustlineheight)
+            node.set_attribute(p1,att_fontfamily,fontfamily)
+
+            list,cur = node.insert_after(list,cur,p1)
+            list,cur = node.insert_after(list,cur,g)
+            list,cur = node.insert_after(list,cur,p2)
+
+            -- add glue so next word can hyphenate (#274)
+            g = set_glue(nil,{})
+            list,cur = node.insert_after(list,cur,g)
         else
-            instancename = "bold"
+            n = node.new("glyph")
+            n.font = instance
+            n.subtype = 1
+            n.char = uc
+            n.uchyph = 1
+            n.left = parameter.left or tex.lefthyphenmin
+            n.right = parameter.right or tex.righthyphenmin
+
+            if thisglyph.x_offset ~= 0 then
+                n.xoffset = -1 * thisglyph.x_offset * tbl.mag
+            end
+            if thisglyph.y_offset ~= 0 then
+                n.yoffset = thisglyph.y_offset * tbl.mag
+            end
+            node.set_attribute(n,att_fontfamily,fontfamily)
+            setstyles(n,parameter)
+            list,cur = node.insert_after(list,cur,n)
+
+            if parameter.letterspacing then
+                local k = node.new("kern")
+                setstyles(k,parameter)
+                k.kern = parameter.letterspacing
+                list,cur = node.insert_after(list,cur,k)
+                lastitemwasglyph = true
+            end
+            if cur and cur.prev and cur.prev.id == glyph_node then
+                lastitemwasglyph = true
+            end
+
+            -- CJK
+            if is_chinese and i < #glyphs and uc > 12032 then
+                -- don't break within non-cjk words
+                if prohibited_at_end[thislang][unicode.utf8.char(uc)] then
+                    -- ignore
+                else
+                    -- add breaking point between this glyph and next glyph unless prohibited
+                    if i < #glyphs then
+                        local nextchar = glyphs[i+1].codepoint
+                        local nextuc = tbl.backmap[nextchar] or nextchar
+                        if not prohibited_at_beginning[thislang][unicode.utf8.char(nextuc)] then
+                            local pen = node.new("penalty")
+                            pen.penalty = 0
+                            if parameter.textformat.alignment == "justified" then
+                                local g = set_glue(nil,{stretch = 2^16, stretch_order = 0})
+                                list,cur = node.insert_after(list,cur,g)
+                            end
+                            list,cur = node.insert_after(list,cur,pen)
+                        end
+                    end
+                end
+            end
+            -- simplified chinese
+            -- characters that must not appear at the beginning of a line
+            -- !%),.:;?]}¢°·'""†‡›℃∶、。〃〆〕〗〞﹚﹜！＂％＇），．：；？！］｝～
+            -- characters that must not appear at the end of a line
+            -- $(£¥·'"〈《「『【〔〖〝﹙﹛＄（．［｛￡￥
+
+            local diff = thisglyph.x_advance - tbl.characters[uc].hadvance
+            if diff ~= 0 then
+                publisher.setprop(cur,"kern", diff * tbl.mag)
+            end
+            if uc == -1 then
+            elseif uc > 0x110000 then
+                -- ignore
+            elseif ( uc == 45 or uc == 8211) and lastitemwasglyph and string.find(allowbreak, "-",1,true) then
+                -- only break if allowbreak contains the hyphen char
+                local pen = node.new("penalty")
+                pen.penalty = 10000
+                list = node.insert_before(list,cur,pen)
+                local disc = node.new("disc")
+                list,cur = node.insert_after(list,cur,disc)
+                local g = set_glue(nil)
+                list,cur = node.insert_after(list,cur,g)
+            elseif string.find(allowbreak,unicode.utf8.char(uc),1,true) then
+                -- allowbreak lists characters where the publisher may break lines
+                local pen = node.new("penalty")
+                pen.penalty = 0
+                list,cur = node.insert_after(list,cur,pen)
+            end
         end
-    elseif parameter.italic == 1 then
-        instancename = "italic"
-    else
-        instancename = "normal"
     end
-
-    if parameter.monospace then
-        fontfamily = fonts.lookup_fontfamily_name_number.monospace
+    local aa = parameter.add_attributes or {}
+    for i=1,#aa do
+        set_attribute_recurse(list,aa[i][1],aa[i][2])
     end
-    instance = fonts.get_fontinstance(fontfamily,instancename)
+    setprop(list,"haskerns",true)
+    return list
+end
 
+
+local function ffglyphlist(arguments)
+    local tbl = arguments.tbl
+    local str = arguments.str
+
+    local parameter = arguments.parameter
+    local allowbreak = arguments.allowbreak
+    local fontfamily = parameter.fontfamily
+    local script = arguments.script
+    local thislang = arguments.thislang
+    local fontnumber = arguments.fontnumber
+    local languagecode = arguments.languagecode
+
+    local space   = tbl.parameters.space
+    local shrink  = tbl.parameters.space_shrink
+    local stretch = tbl.parameters.space_stretch
+
+    local match = unicode.utf8.match
     local allow_newline = true
     if options.htmlignoreeol then
         allow_newline = false
     end
-    local tbl = fonts.used_fonts[instance]
-    local space   = tbl.parameters.space
-    local shrink  = tbl.parameters.space_shrink
-    local stretch = tbl.parameters.space_stretch
-    local match = unicode.utf8.match
-    local lastitemwasglyph
 
-    -- languages
-    -- CJK needs special treatment, so let's check if we have for example Chinese
-    local lc = languagecode
-
-    if tbl.face then
-        -- w("hb mode")
-        local newlines_at = {}
-
-        local cluster = {}
-        local pos = 0
-        for c in unicode.utf8.gmatch(str,".") do
-            cluster[pos] = unicode.utf8.byte(c)
-            if c == "\n" then
-                newlines_at[pos] = true
-            end
-            pos = pos + #c
-        end
-
-        local thislang = "en"
-        if lc and languages_id_lang[lc].locale then
-            thislang = languages_id_lang[lc].locale
-        end
-
-        local buf = harfbuzz.Buffer.new()
-        buf:add_utf8(str)
-
-        local script = nil
-        local direction = nil
-        if thislang == "--" then
-            thislang = nil
-            script = nil
-        elseif thislang == "zh" then
-            script = "Hans"
-        elseif thislang == "bn" then
-            -- "bn" not used yet
-            script = "beng"
-        end
-        -- shape returns the guessed script from the buffer
-        script, direction = shape(tbl,buf, { language = thislang, script = script, direction = parameter.direction } )
-
-        local is_chinese = false
-        if script == "Hans" or script == "Hant" or script == "Hani" then
-            is_chinese = true
-            -- script can be guessed from buffer and thislang could be empty, so
-            -- lang must be set again.
-            thislang = "zh"
-        end
-        local glyphs = buf:get_glyphs()
-        local list, cur
-        local n,k
-        for i=1,#glyphs do
-            local thisglyph = glyphs[i]
-            local cp = glyphs[i].codepoint
-            local uc = tbl.backmap[cp] or cp
-            if false then
-                -- just for simple adding at the beginning
-            elseif uc == 160 and #glyphs == 1 then
-                -- ignore
-            elseif uc == 32 then
-                local thiscluster = thisglyph.cluster
-                if cluster[thiscluster] == 160 then
-                    n = node.new("penalty")
-                    n.penalty = 10000
-                    list,cur = node.insert_after(list,cur,n)
-
-                    n = set_glue(nil,{width = space, shrink = shrink, stretch = stretch})
-                    node.set_attribute(n,att_tie_glue,1)
-                    list,cur = node.insert_after(list,cur,n)
-
-                    -- can be 1 == solid or 2 == dashed
-                    if parameter.underline then
-                        node.set_attribute(n,att_underline,parameter.underline)
-                        node.set_attribute(n,att_underline_color,current_fgcolor)
-                    end
-
-                    if parameter.backgroundcolor then
-                        node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
-                        node.set_attribute(n,att_bgpaddingtop,parameter.bg_padding_top)
-                        node.set_attribute(n,att_bgpaddingbottom,parameter.bg_padding_bottom)
-                    end
-                    node.set_attribute(n,att_fontfamily,fontfamily)
-                 else
-                    n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch})
-                    setstyles(n,parameter)
-                    list,cur = node.insert_after(list,cur,n)
-                end
-            elseif cp == 0 and newlines_at[thisglyph.cluster] then
-                local dummypenalty
-                dummypenalty = node.new("penalty")
-                dummypenalty.penalty = 10000
-                node.set_attribute(dummypenalty,att_newline,1)
-                list,cur = node.insert_after(list,cur,dummypenalty)
-
-                local strut
-                strut = add_rule(nil,"head",{height = 8 * factor, depth = 3 * factor, width = 0 })
-                node.set_attribute(strut,att_newline,1)
-                list,cur = node.insert_after(list,cur,strut)
-
-                local p1,g,p2
-                p1 = node.new("penalty")
-                p1.penalty = 10000
-
-                g = set_glue(nil,{stretch = 2^16, stretch_order = 2})
-
-                p2 = node.new("penalty")
-                p2.penalty = -10000
-
-                node.set_attribute(p1,att_newline,1)
-                node.set_attribute(p2,att_newline,1)
-                node.set_attribute(g,att_newline,1)
-
-                -- important for empty lines (adjustlineheight)
-                node.set_attribute(p1,att_fontfamily,fontfamily)
-
-                list,cur = node.insert_after(list,cur,p1)
-                list,cur = node.insert_after(list,cur,g)
-                list,cur = node.insert_after(list,cur,p2)
-
-                -- add glue so next word can hyphenate (#274)
-                g = set_glue(nil,{})
-                list,cur = node.insert_after(list,cur,g)
-            else
-                n = node.new("glyph")
-                n.font = instance
-                n.subtype = 1
-                n.char = uc
-                n.uchyph = 1
-                n.left = parameter.left or tex.lefthyphenmin
-                n.right = parameter.right or tex.righthyphenmin
-
-                if thisglyph.x_offset ~= 0 then
-                    n.xoffset = -1 * thisglyph.x_offset * tbl.mag
-                end
-                if thisglyph.y_offset ~= 0 then
-                    n.yoffset = thisglyph.y_offset * tbl.mag
-                end
-                node.set_attribute(n,att_fontfamily,fontfamily)
-                setstyles(n,parameter)
-                list,cur = node.insert_after(list,cur,n)
-
-                if parameter.letterspacing then
-                    local k = node.new("kern")
-                    setstyles(k,parameter)
-                    k.kern = parameter.letterspacing
-                    list,cur = node.insert_after(list,cur,k)
-                    lastitemwasglyph = true
-                end
-                if cur and cur.prev and cur.prev.id == glyph_node then
-                    lastitemwasglyph = true
-                end
-
-                -- CJK
-                if is_chinese and i < #glyphs and uc > 12032 then
-                    -- don't break within non-cjk words
-                    if prohibited_at_end[thislang][unicode.utf8.char(uc)] then
-                        -- ignore
-                    else
-                        -- add breaking point between this glyph and next glyph unless prohibited
-                        if i < #glyphs then
-                            local nextchar = glyphs[i+1].codepoint
-                            local nextuc = tbl.backmap[nextchar] or nextchar
-                            if not prohibited_at_beginning[thislang][unicode.utf8.char(nextuc)] then
-                                local pen = node.new("penalty")
-                                pen.penalty = 0
-                                if parameter.textformat.alignment == "justified" then
-                                    local g = set_glue(nil,{stretch = 2^16, stretch_order = 0})
-                                    list,cur = node.insert_after(list,cur,g)
-                                end
-                                list,cur = node.insert_after(list,cur,pen)
-                            end
-                        end
-                    end
-                end
-                -- simplified chinese
-                -- characters that must not appear at the beginning of a line
-                -- !%),.:;?]}¢°·'""†‡›℃∶、。〃〆〕〗〞﹚﹜！＂％＇），．：；？！］｝～
-                -- characters that must not appear at the end of a line
-                -- $(£¥·'"〈《「『【〔〖〝﹙﹛＄（．［｛￡￥
-
-                local diff = thisglyph.x_advance - tbl.characters[uc].hadvance
-                if diff ~= 0 then
-                    publisher.setprop(cur,"kern", diff * tbl.mag)
-                end
-                if uc == -1 then
-                elseif uc > 0x110000 then
-                    -- ignore
-                elseif ( uc == 45 or uc == 8211) and lastitemwasglyph and string.find(allowbreak, "-",1,true) then
-                    -- only break if allowbreak contains the hyphen char
-                    local pen = node.new("penalty")
-                    pen.penalty = 10000
-                    list = node.insert_before(list,cur,pen)
-                    local disc = node.new("disc")
-                    list,cur = node.insert_after(list,cur,disc)
-                    local g = set_glue(nil)
-                    list,cur = node.insert_after(list,cur,g)
-                elseif string.find(allowbreak,unicode.utf8.char(uc),1,true) then
-                    -- allowbreak lists characters where the publisher may break lines
-                    local pen = node.new("penalty")
-                    pen.penalty = 0
-                    list,cur = node.insert_after(list,cur,pen)
-                end
-            end
-        end
-        local aa = parameter.add_attributes or {}
-        for i=1,#aa do
-            set_attribute_recurse(list,aa[i][1],aa[i][2])
-        end
-
-        setprop(list,"haskerns",true)
-        setprop(list,"pardir",direction)
-        return list
-    end
     local head, last, n
     local char
 
@@ -3758,7 +3706,7 @@ function mknodes(str,parameter,origin)
         else
             -- A regular character?!?
             n = node.new("glyph")
-            n.font = instance
+            n.font = fontnumber
             n.subtype = 1
             n.char = s
             n.lang = languagecode
@@ -3820,8 +3768,185 @@ function mknodes(str,parameter,origin)
     for i=1,#aa do
         set_attribute_recurse(head,aa[i][1],aa[i][2])
     end
-
     return head
+end
+
+function getinstancename(parameter)
+    local instancename
+    if parameter.bold == 1 then
+        if parameter.italic == 1 then
+            instancename = "bolditalic"
+        else
+            instancename = "bold"
+        end
+    elseif parameter.italic == 1 then
+        instancename = "italic"
+    else
+        instancename = "normal"
+    end
+    return instancename
+end
+
+-- Return a list of nodes
+function mknodes(str,parameter,origin)
+    -- if it's an empty string, we make a zero-width rule
+    if not str or string.len(str) == 0 then
+        -- a space char can have a width, so we return a zero width something
+        local strut = add_rule(nil,"head",{height = 1 * factor, depth = 0, width = 0 })
+        return strut
+    end
+    parameter = parameter or {}
+    local languagecode = parameter.languagecode or defaultlanguage
+
+    local fontfamily = parameter.fontfamily
+    if parameter.monospace then
+        fontfamily = fonts.lookup_fontfamily_name_number.monospace
+    end
+    local fontnumber = fonts.get_fontinstance(fontfamily,getinstancename(parameter))
+    local tbl = fonts.used_fonts[fontnumber]
+
+    local maindirection
+    local segments
+    if parameter.bidi then
+        segments = splib.segmentize(str)
+        if segments[1][1] == 0 then
+            segments.maindirection = "ltr"
+        else
+            segments.maindirection = "rtl"
+        end
+    else
+        local dir = 0
+        segments = {}
+        if parameter.direction == "rtl" then
+            dir = 1
+            segments.maindirection = "rtl"
+        elseif parameter.direction == "ltr" then
+            segments.maindirection = "ltr"
+        end
+        segments[1] = {dir,str}
+    end
+    maindirection = parameter.direction or segments.maindirection
+    local nodelistsegments
+
+    for i=1,#segments do
+        str = segments[i][2]
+        local direction = segments[i][1]
+        local thislang = "en"
+        if languagecode and languages_id_lang[languagecode].locale then
+            thislang = languages_id_lang[languagecode].locale
+        end
+        local thissegment
+        if tbl.face then
+            -- w("hb mode")
+
+            local script = nil
+            if thislang == "--" then
+                thislang = nil
+                script = nil
+            elseif thislang == "zh" then
+                script = "Hans"
+            end
+
+            local newlines_at = {}
+
+            local cluster = {}
+            local pos = 0
+            for c in unicode.utf8.gmatch(str,".") do
+                cluster[pos] = unicode.utf8.byte(c)
+                if c == "\n" then
+                    newlines_at[pos] = true
+                end
+                pos = pos + #c
+            end
+            local buf = harfbuzz.Buffer.new()
+            buf:add_utf8(str)
+            -- shape returns the guessed script from the buffer
+            script, direction = shape(tbl,buf, { language = thislang, script = script, direction = direction } )
+
+            local is_chinese = false
+            if script == "Hans" or script == "Hant" or script == "Hani" then
+                is_chinese = true
+                -- script can be guessed from buffer and thislang could be empty, so
+                -- lang must be set again.
+                thislang = "zh"
+            end
+
+            local glyphs = buf:get_glyphs()
+
+            thissegment = hbglyphlist({
+                glyphs = glyphs,
+                tbl = tbl,
+                cluster = cluster,
+                parameter = parameter,
+                allowbreak = parameter.allowbreak or " -",
+                newlines_at = newlines_at,
+                script = script,
+                direction = maindirection,
+                thislang = thislang,
+                fontnumber = fontnumber,
+                is_chinese = is_chinese,
+            })
+
+
+        else
+            -- old fontforge code
+            thissegment = ffglyphlist({
+                str = str,
+                tbl = tbl,
+                parameter = parameter,
+                allowbreak = parameter.allowbreak or " -",
+                fontfamily = fontfamily,
+                direction = maindirection,
+                thislang = thislang,
+                fontnumber = fontnumber,
+                languagecode = languagecode,
+            })
+        end
+        thissegment = setsegmentdir(thissegment,direction,maindirection)
+
+        if nodelistsegments then
+            local tail = node.tail(nodelistsegments)
+            tail.next = thissegment
+            thissegment.prev = tail
+        else
+            nodelistsegments = thissegment
+        end
+    end
+    if maindirection then
+        setprop(nodelistsegments,"pardir",maindirection)
+    end
+    return nodelistsegments
+end
+
+-- direction is ltr or rtl or 0 or 1
+function setsegmentdir(nodelist,direction, maindirection)
+    local dirstring
+    if direction == 0 or direction == "ltr" then
+        dirstring = "TLT"
+    elseif direction == 1 or direction == "rtl" then
+        dirstring = "TRT"
+    end
+
+    -- don't do anything if this segment goes in the paragraph direction
+    if ( maindirection == nil or maindirection == "ltr" ) and dirstring == "TLT" then
+        return nodelist
+    elseif maindirection == "rtl" and dirstring == "TRT" then
+        return nodelist
+    end
+
+    local dirstart = node.new(dir_node)
+    local dirend = node.new(dir_node)
+    dirstart.dir = "+" .. dirstring
+    dirend.dir = "-" .. dirstring
+    node.setproperty(dirstart,node.getproperty(nodelist))
+    node.set_attribute(dirstart,att_fontfamily,node.has_attribute(nodelist,att_fontfamily))
+    nodelist = node.insert_before(nodelist,nodelist,dirstart)
+
+    local tail = node.tail(nodelist)
+    node.set_attribute(dirend,att_fontfamily,node.has_attribute(tail,att_fontfamily))
+    node.setproperty(dirend,node.getproperty(tail))
+    node.insert_after(nodelist,tail,dirend)
+    return nodelist
 end
 
 -- head_or_tail = "head" oder "tail" (default: tail). Return new head (perhaps same as nodelist)

@@ -3417,6 +3417,17 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="bidi">
+                     <a:documentation>Analysiere die Richtung des Textes. Hilfreich für gemsichten links-nach-rechts und rechts-nach-links Text.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Analysiere den Text.</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Unterschiedliche Textrichtungen nicht beachten (Voreinstellung).</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="color">
                      <a:documentation>Farbe des Absatzes. Muss vorher mit DefineColor definiert worden sein.</a:documentation>
                   </attribute>
@@ -4694,6 +4705,11 @@
                <optional>
                   <attribute name="background-padding-bottom">
                      <a:documentation>Der Innenabstand (unten) der Hintergrundfarbe (kann negativ sein)</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="fontfamily">
+                     <a:documentation>Schaltet auf die angegebene Schriftfamilie um.</a:documentation>
                   </attribute>
                </optional>
                <optional>

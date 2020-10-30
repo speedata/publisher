@@ -3301,6 +3301,25 @@
           <xs:documentation>(Experimentell) Liste der Zeichen, bei denen ein Umbruch möglich ist. Das Leerzeichen wird nicht automatisch als Umbruchbunkt erkannt, wenn das Attribut angegeben ist.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="bidi">
+        <xs:annotation>
+          <xs:documentation>Analysiere die Richtung des Textes. Hilfreich für gemsichten links-nach-rechts und rechts-nach-links Text.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes">
+              <xs:annotation>
+                <xs:documentation>Analysiere den Text.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="no">
+              <xs:annotation>
+                <xs:documentation>Unterschiedliche Textrichtungen nicht beachten (Voreinstellung).</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="color">
         <xs:annotation>
           <xs:documentation>Farbe des Absatzes. Muss vorher mit DefineColor definiert worden sein.</xs:documentation>
@@ -4909,6 +4928,11 @@
       <xs:attribute name="background-padding-bottom">
         <xs:annotation>
           <xs:documentation>Der Innenabstand (unten) der Hintergrundfarbe (kann negativ sein)</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontfamily">
+        <xs:annotation>
+          <xs:documentation>Schaltet auf die angegebene Schriftfamilie um.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="language">

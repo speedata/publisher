@@ -2213,6 +2213,7 @@ end
 function commands.paragraph( layoutxml, dataxml,textblockoptions )
     textblockoptions = textblockoptions or {}
     local allowbreak        = publisher.read_attribute(layoutxml,dataxml,"allowbreak",         "rawstring")
+    local bidi              = publisher.read_attribute(layoutxml,dataxml,"bidi",               "boolean")
     local colorname         = publisher.read_attribute(layoutxml,dataxml,"color",              "rawstring")
     local direction         = publisher.read_attribute(layoutxml,dataxml,"direction",          "rawstring")
     local fontname          = publisher.read_attribute(layoutxml,dataxml,"fontface",           "rawstring")
@@ -2227,7 +2228,6 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local paddingright      = publisher.read_attribute(layoutxml,dataxml,"padding-right",      "width_sp")
     local textformat        = publisher.read_attribute(layoutxml,dataxml,"textformat",         "rawstring")
     if fontname then warning("Paragraph/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
-
     if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
 
     local fontfamily
@@ -2263,6 +2263,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
         labelleftwidth = labelleftwidth,
         labelleftalign = labelleftalign,
         labelleftdistance = labelleftdistance,
+        bidi = bidi,
     }
 
 
@@ -3233,13 +3234,14 @@ end
 --- ---------
 --- Surround text by some style like underline or (background-)color
 function commands.span( layoutxml,dataxml )
-    local backgroundcolor    = publisher.read_attribute(layoutxml,dataxml,"background-color",  "rawstring")
-    local letterspacing      = publisher.read_attribute(layoutxml,dataxml,"letter-spacing",  "booleanorlength")
-    local bg_padding_top     = publisher.read_attribute(layoutxml,dataxml,"background-padding-top",  "length_sp")
-    local bg_padding_bottom  = publisher.read_attribute(layoutxml,dataxml,"background-padding-bottom",  "length_sp")
-    local language_name      = publisher.read_attribute(layoutxml,dataxml,"language",  "string")
-    local class              = publisher.read_attribute(layoutxml,dataxml,"class",  "rawstring")
-    local id                 = publisher.read_attribute(layoutxml,dataxml,"id",     "rawstring")
+    local backgroundcolor    = publisher.read_attribute(layoutxml,dataxml,"background-color",         "rawstring")
+    local bg_padding_top     = publisher.read_attribute(layoutxml,dataxml,"background-padding-top",   "length_sp")
+    local bg_padding_bottom  = publisher.read_attribute(layoutxml,dataxml,"background-padding-bottom","length_sp")
+    local fontfamilyname     = publisher.read_attribute(layoutxml,dataxml,"fontfamily",               "rawstring")
+    local language_name      = publisher.read_attribute(layoutxml,dataxml,"language",                 "string")
+    local letterspacing      = publisher.read_attribute(layoutxml,dataxml,"letter-spacing",           "booleanorlength")
+    local class              = publisher.read_attribute(layoutxml,dataxml,"class",                    "rawstring")
+    local id                 = publisher.read_attribute(layoutxml,dataxml,"id",                       "rawstring")
     local css_rules          = publisher.css:matches({element = 'span', class=class,id=id}) or {}
 
 
@@ -3277,6 +3279,7 @@ function commands.span( layoutxml,dataxml )
     local params = {
         underline = underline,
         allowbreak=publisher.allowbreak,
+        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname],
         backgroundcolor = colornumber,
         bg_padding_top = bg_padding_top,
         bg_padding_bottom = bg_padding_bottom,
