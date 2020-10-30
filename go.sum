@@ -74,6 +74,8 @@ github.com/speedata/hotfolder v0.0.0-20181204121114-5f743a840a92 h1:X9JJkHmcQlWm
 github.com/speedata/hotfolder v0.0.0-20181204121114-5f743a840a92/go.mod h1:rsc2+nghpGmXpyXMj/zuke7fphLxMvAmgcO6WCeBuic=
 github.com/speedata/optionparser v1.0.0 h1:O9Bvoq20BQWMPq0b/id0kBT9oI0njNlHzY/wtQ3JA1o=
 github.com/speedata/optionparser v1.0.0/go.mod h1:AetA6qHxho+CGuukPCm44MsGu+Vvu/fATB/Er9PKmGk=
+github.com/speedata/sdbidi v0.0.0-20201030124501-2f58e192d2d8 h1:Qagnumh6szQFPWdE7Opk00OV1rwrpnZa23yvxJBI6Jw=
+github.com/speedata/sdbidi v0.0.0-20201030124501-2f58e192d2d8/go.mod h1:QW1mCSv0V8obpuyz9eWS5UD3j9QKWgPeUwslx748vFk=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=

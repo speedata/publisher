@@ -14,6 +14,15 @@ typedef char _check_for_64_bit_pointer_matching_GoInt[sizeof(void*)==64/8 ? 1:-1
 end
 
 ffi.cdef[[
+struct splitvalues {
+    char** splitted;
+    int* directions;
+    int count;
+    int direction;
+};
+
+
+
 typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 typedef signed char GoInt8;
@@ -42,20 +51,20 @@ typedef void *GoChan;
 typedef struct { void *t; void *v; } GoInterface;
 typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 
-extern char* parseHTMLText(GoString p0,GoString p1);
-extern char* parseHTML(GoString p0);
-extern void addDir(GoString p0);
-extern char* contains(GoString p0, GoString p1);
-extern char** tokenize(GoString p0, GoString p1);
-extern char* replace(GoString p0, GoString p1, GoString p2);
-extern char* htmlToXml(GoString p0);
-extern void buildFilelist();
-extern char* lookupFile(GoString p0);
-extern char** listFonts();
-extern char* convertSVGImage(GoString p0);
-extern char* convertContents(GoString p0, GoString p1);
-extern char* convertImage(GoString p0, GoString p1);
-
+extern char* sdParseHTMLText(GoString htmltext, GoString csstext);
+extern char* sdParseHTML(GoString filename);
+extern char* sdContains(GoString haystack, GoString needle);
+extern char** sdTokenize(GoString text, GoString rexpr);
+extern char* sdReplace(GoString text, GoString rexpr, GoString repl);
+extern char* sdHtmlToXml(GoString input);
+extern void sdBuildFilelist();
+extern void sdAddDir(GoString p);
+extern char* sdLookupFile(GoString path);
+extern char** sdListFonts();
+extern char* sdConvertContents(GoString contents, GoString handler);
+extern char* sdConvertImage(GoString filename, GoString handler);
+extern char* sdConvertSVGImage(GoString path);
+extern struct splitvalues* sdSegmentize(GoString original);
 ]]
 
 ld = ffi.load("libsplib")
@@ -66,7 +75,7 @@ local function c(str)
 end
 
 local function parse_html_text(htmltext,csstext)
-    local ret = ld.parseHTMLText(c(htmltext),c(csstext))
+    local ret = ld.sdParseHTMLText(c(htmltext),c(csstext))
     local _ret = ffi.string(ret)
 
     if string.match( _ret,errorpattern ) then
@@ -77,7 +86,7 @@ local function parse_html_text(htmltext,csstext)
 end
 
 local function parse_html(filename)
-    local ret = ld.parseHTML(c(filename))
+    local ret = ld.sdParseHTML(c(filename))
     local _ret = ffi.string(ret)
 
     if string.match( _ret,errorpattern ) then
@@ -88,7 +97,7 @@ local function parse_html(filename)
 end
 
 local function tokenize(dataxml,arg)
-    local ret = ld.tokenize(c(arg[1]),c(arg[2]))
+    local ret = ld.sdTokenize(c(arg[1]),c(arg[2]))
     local tbl = {}
     local i = 0
     while ret[i] ~= nil do
@@ -99,7 +108,7 @@ local function tokenize(dataxml,arg)
 end
 
 local function contains(haystack,needle)
-    local ret = ld.contains(c(haystack),c(needle))
+    local ret = ld.sdContains(c(haystack),c(needle))
     return ffi.string(ret)
 end
 
@@ -107,12 +116,12 @@ local function replace(text, rexpr, repl)
     text  = tostring(text)
     rexpr = tostring(rexpr)
     repl  = tostring(repl)
-    local ret = ld.replace(c(text),c(rexpr),c(repl))
+    local ret = ld.sdReplace(c(text),c(rexpr),c(repl))
     return ffi.string(ret)
 end
 
 local function htmltoxml(input)
-    local ret = ld.htmlToXml(c(input))
+    local ret = ld.sdHtmlToXml(c(input))
     if ret == nil then
         err("sd:decode")
         return nil
@@ -122,11 +131,11 @@ local function htmltoxml(input)
 end
 
 local function buildfilelist()
-    ld.buildFilelist()
+    ld.sdBuildFilelist()
 end
 
 local function add_dir(dirname)
-    ld.addDir(c(dirname))
+    ld.sdAddDir(c(dirname))
 end
 
 local function lookupfile(filename)
@@ -135,7 +144,7 @@ local function lookupfile(filename)
         return found
     end
 
-    local ret = ld.lookupFile(c(filename))
+    local ret = ld.sdLookupFile(c(filename))
     local _ret = ffi.string(ret)
     if string.match( _ret,errorpattern ) then
         err(string.gsub( _ret,errorpattern ,"" ))
@@ -147,7 +156,7 @@ local function lookupfile(filename)
 end
 
 local function listfonts()
-    local ret = ld.listFonts()
+    local ret = ld.sdListFonts()
     local tbl = {}
     local i = 0
     while ret[i] ~= nil do
@@ -158,7 +167,7 @@ local function listfonts()
 end
 
 local function convertcontents(contents,imagehandler)
-    local ret = ld.convertContents(c(contents),c(imagehandler))
+    local ret = ld.sdConvertContents(c(contents),c(imagehandler))
     local _ret = ffi.string(ret)
 
     if string.match( _ret,errorpattern ) then
@@ -176,7 +185,7 @@ local function convertcontents(contents,imagehandler)
 end
 
 local function convertimage(filename,imagehandler)
-    local ret = ld.convertImage(c(filename),c(imagehandler))
+    local ret = ld.sdConvertImage(c(filename),c(imagehandler))
     local _ret = ffi.string(ret)
 
     if string.match( _ret,errorpattern ) then
@@ -191,7 +200,7 @@ end
 
 
 local function convertSVGImage(filename)
-    local ret = ld.convertSVGImage(c(filename))
+    local ret = ld.sdConvertSVGImage(c(filename))
     local _ret = ffi.string(ret)
 
     if string.match( _ret,errorpattern ) then
@@ -202,6 +211,18 @@ local function convertSVGImage(filename)
     if _ret == "" then return nil end
 
     return _ret
+end
+
+local function segmentize(inputstring)
+    -- struct splitvalues* sv;
+    sv = ld.sdSegmentize(c(inputstring))
+    local ret = {}
+    for i = 0,sv.count - 1 do
+        ret[#ret + 1] = {
+            sv.directions[i],ffi.string(sv.splitted[i])
+        }
+    end
+    return ret
 end
 
 
@@ -219,5 +240,6 @@ return {
     convertcontents = convertcontents,
     convertimage    = convertimage,
     convert_svg_image = convertSVGImage,
+    segmentize = segmentize,
 }
 

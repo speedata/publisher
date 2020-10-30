@@ -18,7 +18,9 @@ go 1.11
 
 require (
 	github.com/speedata/css/scanner v0.0.0-20201002105008-5a0a811b34fe // indirect
+	github.com/speedata/sdbidi v0.0.0-20201030124501-2f58e192d2d8 // indirect
 	sp/sp v0.0.0 // indirect
 	sphelper v0.0.0 // indirect
+	splib v0.0.0 // indirect
 	splibaux v0.0.0 // indirect
 )

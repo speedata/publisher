@@ -1,5 +1,15 @@
 package main
 
+/*
+
+struct splitvalues {
+	char** splitted;
+	int* directions;
+	int count;
+	int direction;
+};
+
+*/
 import "C"
 
 import (
@@ -14,11 +24,17 @@ import (
 	"unsafe"
 
 	"splibaux"
+
+	"github.com/speedata/sdbidi"
 )
 
 var (
 	errorpattern = `**err`
 )
+
+func s2c(input string) *C.char {
+	return C.CString(input)
+}
 
 // Convert a string slice to a C char* array and add a NULL pointer.
 func toCharArray(s []string) **C.char {
@@ -32,12 +48,8 @@ func toCharArray(s []string) **C.char {
 	return (**C.char)(cArray)
 }
 
-func s2c(input string) *C.char {
-	return C.CString(input)
-}
-
-//export parseHTMLText
-func parseHTMLText(htmltext string, csstext string) *C.char {
+//export sdParseHTMLText
+func sdParseHTMLText(htmltext string, csstext string) *C.char {
 	str, err := splibaux.ParseHTMLText(htmltext, csstext)
 	if err != nil {
 		return s2c(errorpattern + err.Error())
@@ -45,8 +57,8 @@ func parseHTMLText(htmltext string, csstext string) *C.char {
 	return C.CString(str)
 }
 
-//export parseHTML
-func parseHTML(filename string) *C.char {
+//export sdParseHTML
+func sdParseHTML(filename string) *C.char {
 	str, err := splibaux.ParseHTML(filename)
 	if err != nil {
 		return s2c(errorpattern + err.Error())
@@ -54,8 +66,8 @@ func parseHTML(filename string) *C.char {
 	return C.CString(str)
 }
 
-//export contains
-func contains(haystack string, needle string) *C.char {
+//export sdContains
+func sdContains(haystack string, needle string) *C.char {
 	var ret string
 	if strings.Contains(haystack, needle) {
 		ret = "true"
@@ -65,8 +77,8 @@ func contains(haystack string, needle string) *C.char {
 	return C.CString(ret)
 }
 
-//export tokenize
-func tokenize(text, rexpr string) **C.char {
+//export sdTokenize
+func sdTokenize(text, rexpr string) **C.char {
 	r := regexp.MustCompile(rexpr)
 	idx := r.FindAllStringIndex(text, -1)
 	pos := 0
@@ -79,8 +91,8 @@ func tokenize(text, rexpr string) **C.char {
 	return toCharArray(res)
 }
 
-//export replace
-func replace(text string, rexpr string, repl string) *C.char {
+//export sdReplace
+func sdReplace(text string, rexpr string, repl string) *C.char {
 	r := regexp.MustCompile(rexpr)
 
 	// xpath uses $12 for $12 or $1, depending on the existence of $12 or $1.
@@ -97,8 +109,8 @@ func replace(text string, rexpr string, repl string) *C.char {
 	return C.CString(str)
 }
 
-//export htmlToXml
-func htmlToXml(input string) *C.char {
+//export sdHtmlToXml
+func sdHtmlToXml(input string) *C.char {
 	input = "<toplevel·toplevel>" + input + "</toplevel·toplevel>"
 	r := strings.NewReader(input)
 	var w bytes.Buffer
@@ -136,8 +148,8 @@ func htmlToXml(input string) *C.char {
 	return C.CString(w.String())
 }
 
-//export buildFilelist
-func buildFilelist() {
+//export sdBuildFilelist
+func sdBuildFilelist() {
 	paths := filepath.SplitList(os.Getenv("PUBLISHER_BASE_PATH"))
 	if fp := os.Getenv("SP_FONT_PATH"); fp != "" {
 		for _, p := range filepath.SplitList(fp) {
@@ -151,13 +163,13 @@ func buildFilelist() {
 	splibaux.BuildFilelist(paths)
 }
 
-//export addDir
-func addDir(p string) {
+//export sdAddDir
+func sdAddDir(p string) {
 	splibaux.AddDir(p)
 }
 
-//export lookupFile
-func lookupFile(path string) *C.char {
+//export sdLookupFile
+func sdLookupFile(path string) *C.char {
 	ret, err := splibaux.GetFullPath(path)
 	if err != nil {
 		return s2c(errorpattern + err.Error())
@@ -165,14 +177,14 @@ func lookupFile(path string) *C.char {
 	return s2c(ret)
 }
 
-//export listFonts
-func listFonts() **C.char {
+//export sdListFonts
+func sdListFonts() **C.char {
 	res := splibaux.ListFonts()
 	return toCharArray(res)
 }
 
-//export convertContents
-func convertContents(contents, handler string) *C.char {
+//export sdConvertContents
+func sdConvertContents(contents, handler string) *C.char {
 	ret, err := splibaux.ConvertContents(contents, handler)
 	if err != nil {
 		return s2c(errorpattern + err.Error())
@@ -180,8 +192,8 @@ func convertContents(contents, handler string) *C.char {
 	return s2c(ret)
 }
 
-//export convertImage
-func convertImage(filename, handler string) *C.char {
+//export sdConvertImage
+func sdConvertImage(filename, handler string) *C.char {
 	ret, err := splibaux.ConvertImage(filename, handler)
 	if err != nil {
 		return s2c(errorpattern + err.Error())
@@ -189,8 +201,8 @@ func convertImage(filename, handler string) *C.char {
 	return s2c(ret)
 }
 
-//export convertSVGImage
-func convertSVGImage(path string) *C.char {
+//export sdConvertSVGImage
+func sdConvertSVGImage(path string) *C.char {
 	ret, err := splibaux.ConvertSVGImage(path)
 	if err != nil {
 		return s2c(errorpattern + err.Error())
@@ -198,4 +210,34 @@ func convertSVGImage(path string) *C.char {
 	return s2c(ret)
 }
 
+//export sdSegmentize
+func sdSegmentize(original string) *C.struct_splitvalues {
+	inputstring := original
+	p := sdbidi.Paragraph{}
+	p.SetString(inputstring)
+	ordering, err := p.Order()
+	if err != nil {
+		panic(err)
+	}
+	nr := ordering.NumRuns()
+
+	cLenghtsInt := C.malloc(C.size_t(nr) * C.size_t(unsafe.Sizeof(C.int(0))))
+	cSplittedStrings := C.malloc(C.size_t(nr) * C.size_t(unsafe.Sizeof(uintptr(0))))
+	returnStruct := (*C.struct_splitvalues)(C.malloc(C.size_t(unsafe.Sizeof(C.struct_splitvalues{}))))
+
+	ints := (*[1<<15 - 1]C.int)(cLenghtsInt)[:nr:nr]
+	a := (*[1<<15 - 1]*C.char)(cSplittedStrings)
+
+	for i := 0; i < nr; i++ {
+		r := ordering.Run(i)
+		ints[i] = C.int(int(r.Direction()))
+		a[i] = C.CString(r.String())
+	}
+
+	returnStruct.splitted = (**C.char)(cSplittedStrings)
+	returnStruct.directions = (*C.int)(cLenghtsInt)
+	returnStruct.count = C.int(nr)
+
+	return returnStruct
+}
 func main() {}
