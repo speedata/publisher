@@ -3363,6 +3363,8 @@ function hbglyphlist(arguments)
     local fontnumber = arguments.fontnumber
     local is_chinese = arguments.is_chinese
 
+    local thisfont = fonts.used_fonts[fontnumber]
+    local reportmissingglyphs = options.reportmissingglyphs
     local lastitemwasglyph
     local space   = tbl.parameters.space
     local shrink  = tbl.parameters.space_shrink
@@ -3371,7 +3373,7 @@ function hbglyphlist(arguments)
     local n,k
     for i=1,#glyphs do
         local thisglyph = glyphs[i]
-        local cp = glyphs[i].codepoint
+        local cp = thisglyph.codepoint
         local uc = tbl.backmap[cp] or cp
         if false then
             -- just for simple adding at the beginning
@@ -3440,6 +3442,15 @@ function hbglyphlist(arguments)
             -- add glue so next word can hyphenate (#274)
             g = set_glue(nil,{})
             list,cur = node.insert_after(list,cur,g)
+        elseif cp == 0 then
+            if reportmissingglyphs then
+                local missgingglyph = cluster[thisglyph.cluster]
+                if reportmissingglyphs == "warning" then
+                    warning("Glyph %04x (hex) is missing from the font %q",missgingglyph,thisfont.name)
+                else
+                    err("Glyph %04x (hex) is missing from the font %q",missgingglyph,thisfont.name)
+                end
+            end
         else
             n = node.new("glyph")
             n.font = instance
@@ -3521,6 +3532,12 @@ function hbglyphlist(arguments)
                 list,cur = node.insert_after(list,cur,pen)
             end
         end
+    end
+
+    if not list then
+        -- This should never happen.
+        warning("No head found")
+        return node.new("hlist")
     end
     local aa = parameter.add_attributes or {}
     for i=1,#aa do
