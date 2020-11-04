@@ -3453,7 +3453,7 @@ function hbglyphlist(arguments)
             end
         else
             n = node.new("glyph")
-            n.font = instance
+            n.font = fontnumber
             n.subtype = 1
             n.char = uc
             n.uchyph = 1
