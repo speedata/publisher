@@ -50,7 +50,7 @@ end
 ---
 --- ![Objects in a table](../img/objectsintable.svg)
 --- The table is stored in the objects
-function attach_objects_row( self, tab, current_row )
+function attach_objects_row( self, tab, current_row,skiptable )
     -- For each block object (container) there is one row in block
     local td_elementname
     local td_contents
@@ -65,7 +65,7 @@ function attach_objects_row( self, tab, current_row )
             local colspan = tonumber(td_contents.colspan) or 1
             local thiscolumn = current_column
             current_column = current_column + colspan - 1
-            while self.skip[current_row] and self.skip[current_row][current_column] do
+            while skiptable[current_row] and skiptable[current_row][current_column] do
                 thiscolumn = thiscolumn + 1
                 current_column = current_column + 1
             end
@@ -133,7 +133,7 @@ function attach_objects_row( self, tab, current_row )
             td_contents.objects = block
             td_contents.objects.rotate = td_contents.rotate
         elseif td_elementname == "Tr" then -- probably from tablefoot/head
-            attach_objects_row(self,td_contents,current_row)
+            attach_objects_row(self,td_contents,current_row, skiptable)
         elseif td_elementname == "Column" or td_elementname == "Tablerule" or td_elementname == "TableNewPage" then
             -- ignore, they don't have objects
         else
@@ -146,9 +146,13 @@ function attach_objects( self, tab, row )
     row = row or 1
     for _,tr in ipairs(tab) do
         local eltname = publisher.elementname(tr)
-        if eltname == "Tr" or eltname == "Tablehead" or eltname == "Tablefoot" then
-            attach_objects_row(self, publisher.element_contents(tr), row)
+        if eltname == "Tr" then
+            local skiptable = self.skiptables.body
+            attach_objects_row(self, publisher.element_contents(tr), row,skiptable)
             row = row + 1
+        elseif eltname == "Tablehead" or eltname == "Tablefoot" then
+            local skiptable = self.skiptables.tablehead or {}
+            attach_objects_row(self, publisher.element_contents(tr), row,skiptable)
         end
     end
 end
@@ -167,7 +171,7 @@ end
 --- side didn't have a border. In that case we need to adjust the border colors. Beware: the result is slightly undefined
 --- if both sides have different colors.
 -- Calculate the width for each column in the row.
-function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,colmin,colmax )
+function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,colmin,colmax,skiptable )
     local current_column = 0
     local max_wd, min_wd -- maximum and minimum width of a table cell (Td)
     -- first we go through all rows/cells and look, how wide the columns
@@ -220,7 +224,7 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
         local colspan = tonumber(td_contents.colspan) or 1
 
         -- When I am on a skip column (because of a row span), we jump over to the next column
-        while self.skip[current_row] and self.skip[current_row][current_column] do current_column = current_column + 1 end
+        while skiptable[current_row] and skiptable[current_row][current_column] do current_column = current_column + 1 end
 
         local td_borderleft  = tex.sp(td_contents["border-left"]  or 0)
         local td_borderright = tex.sp(td_contents["border-right"] or 0)
@@ -401,10 +405,9 @@ function calculate_columnwidth( self )
     for _,tr in ipairs(self.tab) do
         local tr_contents      = publisher.element_contents(tr)
         local tr_elementname = publisher.elementname(tr)
-
         if tr_elementname == "Tr" then
             current_row = current_row + 1
-            self:calculate_columnwidths_for_row(tr_contents,current_row,colspans,colmin,colmax)
+            self:calculate_columnwidths_for_row(tr_contents,current_row,colspans,colmin,colmax,self.skiptables.body)
         elseif tr_elementname == "Tablerule" then
             -- ignore
         elseif tr_elementname == "Tablehead" then
@@ -413,7 +416,7 @@ function calculate_columnwidth( self )
                 local row_elementname = publisher.elementname(row)
                 if row_elementname == "Tr" then
                     current_row = current_row + 1
-                    self:calculate_columnwidths_for_row(row_contents,current_row,colspans,colmin,colmax)
+                    self:calculate_columnwidths_for_row(row_contents,current_row,colspans,colmin,colmax,self.skiptables.tablehead)
                 end
             end
         elseif tr_elementname == "Tablefoot" then
@@ -422,7 +425,7 @@ function calculate_columnwidth( self )
                 local row_elementname = publisher.elementname(row)
                 if row_elementname == "Tr" then
                     current_row = current_row + 1
-                    self:calculate_columnwidths_for_row(row_contents,current_row,colspans,colmin,colmax)
+                    self:calculate_columnwidths_for_row(row_contents,current_row,colspans,colmin,colmax,self.skiptables.tablefoot)
                 end
             end
         elseif tr_elementname == "Columns" or tr_elementname == "TableNewPage" then
@@ -554,6 +557,7 @@ function calculate_columnwidth( self )
         for i=1,#colmax do
             self.colwidths[i] = colmax[i]
         end
+
         return
     end
 
@@ -695,7 +699,7 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
 end
 
 --- last\_shiftup is for vertical border-collapse.
-function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
+function calculate_rowheight( self,tr_contents, current_row,last_shiftup,skiptable )
     last_shiftup = last_shiftup or 0
     local rowheight
     local rowspan,colspan
@@ -748,12 +752,12 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup )
         -- There might be a rowspan in the row above, so we need to find the correct
         -- column width
 
-        while self.skip[current_row] and self.skip[current_row][current_column] do
+        while skiptable[current_row] and skiptable[current_row][current_column] do
             current_column = current_column + 1
         end
         for s = current_column,current_column + colspan - 1 do
             if self.colwidths[s] == nil then
-                err("Something went wrong with the number of columns in the table")
+                err("Something went wrong with the number of columns in the table (calculate_rowheight)")
             else
                 wd = wd + self.colwidths[s]
             end
@@ -787,76 +791,109 @@ end
 
 
 function calculate_rowheights(self)
-    local current_row = 0
+    -- rowspans is the concatenation of each rowspan for a table row
     local rowspans = {}
     local _rowspans
+    local rowheightarea
+    local rowspanarea
+    local tablearea
+    local rowcounter = {}
+    local current_row
 
     local last_shiftup = 0
 
     for _,tr in ipairs(self.tab) do
         local tr_contents = publisher.element_contents(tr)
         local eltname = publisher.elementname(tr)
+        if eltname == "Tablerule" or eltname == "Columns" or eltname == "TableNewPage" then
+            -- ignore
+        elseif eltname == "Tablehead" then
+            tablearea = "tablehead"
+        elseif eltname == "Tablefoot" then
+            tablearea = "tablefoot"
+        else
+            tablearea = "body"
+        end
+        if tablearea then
+            self.rowheights[tablearea] = self.rowheights[tablearea] or {}
+            rowheightarea = self.rowheights[tablearea]
+            rowspans[tablearea] = rowspans[tablearea] or {}
+            rowspanarea = rowspans[tablearea]
+            rowcounter[tablearea] = rowcounter[tablearea] or 0
+        end
 
         if eltname == "Tablerule" or eltname == "Columns" or eltname == "TableNewPage" then
             -- ignore
         elseif eltname == "Tablehead" then
+            -- TODO: should be first, all, odd, even
             local last_shiftup_head = 0
             for _,row in ipairs(tr_contents) do
                 local cellcontents  = publisher.element_contents(row)
                 local cell_elementname = publisher.elementname(row)
                 if cell_elementname == "Tr" then
-                    current_row = current_row + 1
-                    rowheight, _rowspans,last_shiftup_head = self:calculate_rowheight(cellcontents,current_row,last_shiftup_head)
-                    self.rowheights[current_row] = rowheight
-                    rowspans = table.__concat(rowspans,_rowspans)
+                    rowcounter[tablearea] = rowcounter[tablearea] + 1
+                    current_row = rowcounter[tablearea]
+                    rowheight, _rowspans,last_shiftup_head = self:calculate_rowheight(cellcontents,current_row,last_shiftup_head,self.skiptables.tablehead)
+                    rowheightarea[current_row] = rowheight
+                    rowspans[tablearea] = table.__concat(rowspanarea,_rowspans)
                 end
             end
         elseif eltname == "Tablefoot" then
+            -- TODO: should be split into first/last,...
             local last_shiftup_foot = 0
             for _,row in ipairs(tr_contents) do
                 local cellcontents  = publisher.element_contents(row)
                 local cell_elementname = publisher.elementname(row)
                 if cell_elementname == "Tr" then
-                    current_row = current_row + 1
-                    rowheight, _rowspans,last_shiftup_foot = self:calculate_rowheight(cellcontents,current_row,last_shiftup_foot)
-                    self.rowheights[current_row] = rowheight
-                    rowspans = table.__concat(rowspans,_rowspans)
+                    rowcounter[tablearea] = rowcounter[tablearea] + 1
+                    current_row = rowcounter[tablearea]
+                    rowheight, _rowspans,last_shiftup_foot = self:calculate_rowheight(cellcontents,current_row,last_shiftup_foot,self.skiptables.tablefoot)
+                    rowheightarea[current_row] = rowheight
+                    rowspans[tablearea] = table.__concat(rowspanarea,_rowspans)
                 end
             end
 
         elseif eltname == "Tr" then
-            current_row = current_row + 1
-            rowheight, _rowspans,last_shiftup = self:calculate_rowheight(tr_contents,current_row,last_shiftup)
-            self.rowheights[current_row] = rowheight
-            rowspans = table.__concat(rowspans,_rowspans)
+            rowcounter[tablearea] = rowcounter[tablearea] + 1
+            current_row = rowcounter[tablearea]
+            rowheight, _rowspans,last_shiftup = self:calculate_rowheight(tr_contents,current_row,last_shiftup,self.skiptables.body)
+            rowheightarea[current_row] = rowheight
+            rowspans[tablearea] = table.__concat(rowspanarea,_rowspans)
         else
             warning("Unknown contents in “Table” %s",eltname or "?")
         end -- if it's not a <Tablerule>
     end -- for all rows
 
+    for k,v in pairs(self.rowheights) do
+        local thisrowspan = rowspans[k]
+        self:adjust_row_heights_for_rowspans(thisrowspan,v)
+    end
+end
+
+function adjust_row_heights_for_rowspans(self,rowspans,area)
     -- Adjust row heights. We have to do calculations on all row heights, before the rows can get their
     -- final heights
     for i,rowspan in pairs(rowspans) do
         local sum_ht = 0
         for j=rowspan.start,rowspan.stop do
-            if not self.rowheights[j] then
+            if not area[j] then
                 err("Rowspan exceeds the number of rows in the table")
             else
-                sum_ht = sum_ht + self.rowheights[j]
+                sum_ht = sum_ht + area[j]
             end
         end
         sum_ht = sum_ht + self.rowsep * ( rowspan.stop - rowspan.start )
         if rowspan.ht > sum_ht then
             local excess_per_row = (rowspan.ht - sum_ht) / (rowspan.stop - rowspan.start + 1)
             for j=rowspan.start,rowspan.stop do
-                self.rowheights[j] = self.rowheights[j] + excess_per_row
+                area[j] = area[j] + excess_per_row
             end
         end
     end
 
     -- We have now calculated all row heights. So we can adjust the rowspans now.
     for i,rowspan in pairs(rowspans) do
-        rowspan.sum_ht = table.sum(self.rowheights,rowspan.start, rowspan.stop) + self.rowsep * ( rowspan.stop - rowspan.start )
+        rowspan.sum_ht = table.sum(area,rowspan.start, rowspan.stop) + self.rowsep * ( rowspan.stop - rowspan.start )
     end
 end
 
@@ -867,7 +904,7 @@ end
 --- ---------------------
 --- First, we create a complete table with all rows. Splitting into pages is done later on
 -- Return one row (an hlist)
-function typeset_row(self, tr_contents, current_row )
+function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
     local current_column
     local current_column_width, ht
     local row = {}
@@ -892,24 +929,23 @@ function typeset_row(self, tr_contents, current_row )
         local td_borderright  = tex.sp(td_contents["border-right"]  or 0)
         local td_bordertop    = tex.sp(td_contents["border-top"]    or 0)
         local td_borderbottom = tex.sp(td_contents["border-bottom"] or 0)
-
         local padding_left    = td_contents.padding_left   or self.padding_left_col[current_column]  or self.padding_left
         local padding_right   = td_contents.padding_right  or self.padding_right_col[current_column] or  self.padding_right
         local padding_top     = td_contents.padding_top    or self.padding_top
         local padding_bottom  = td_contents.padding_bottom or self.padding_bottom
 
         -- when we are on a skip-cell (because of a rowspan), we need to create an empty hbox
-        while self.skip[current_row] and self.skip[current_row][current_column] do
+        while skiptable[current_row] and skiptable[current_row][current_column] do
             v = publisher.create_empty_hbox_with_width(self.colwidths[current_column])
             v = publisher.add_glue(v,"head",fill) -- otherwise we'd get an underfull box
-            row[current_column] = node.vpack(v,self.rowheights[current_row],"exactly")
+            row[current_column] = node.vpack(v,rowheightarea[current_row],"exactly")
             current_column = current_column + 1
         end
 
         current_column_width = 0
         for s = current_column,current_column + colspan - 1 do
             if self.colwidths[s] == nil then
-                err("Something went wrong with the number of columns in the table")
+                err("Something went wrong with the number of columns in the table (typeset_row)")
             else
                 current_column_width = current_column_width + self.colwidths[s]
             end
@@ -918,11 +954,10 @@ function typeset_row(self, tr_contents, current_row )
         -- FIXME: use column_distances[i] instead of self.colsep
         current_column_width = current_column_width + ( colspan - 1 ) * self.colsep
         current_column = current_column + colspan - 1
-
         if rowspan > 1 then
             ht = td_contents.rowspan_internal.sum_ht
         else
-            ht = self.rowheights[current_row]
+            ht = rowheightarea[current_row]
         end
 
         local g = set_glue(nil,{width = padding_top})
@@ -976,7 +1011,7 @@ function typeset_row(self, tr_contents, current_row )
         local ht_border = 0
         rowspan = td_contents.rowspan or 1
         for i=1,rowspan do
-            ht_border = ht_border + self.rowheights[current_row + i - 1] + self.rowsep
+            ht_border = ht_border + rowheightarea[current_row + i - 1] + self.rowsep
         end
         ht_border = ht_border - td_bordertop - td_borderbottom - self.rowsep
 
@@ -1054,7 +1089,7 @@ function typeset_row(self, tr_contents, current_row )
         --- This is our table cell now:
         ---
         --- ![Table cell vertical](../img/tablecell3.svg)
-        hlist = node.vpack(head,self.rowheights[current_row],"exactly")
+        hlist = node.vpack(head,rowheightarea[current_row],"exactly")
 
         if publisher.options.showobjects then
             publisher.boxit(hlist)
@@ -1067,7 +1102,7 @@ function typeset_row(self, tr_contents, current_row )
     if current_column == 0 then
         v = publisher.create_empty_hbox_with_width(self.tablewidth_target)
         v = publisher.add_glue(v,"head",fill) -- otherwise we get an underfull vbox
-        row[1] = node.vpack(v,self.rowheights[current_row],"exactly")
+        row[1] = node.vpack(v,rowheightarea[current_row],"exactly")
     end
 
     local cell_start,current
@@ -1113,7 +1148,7 @@ local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current
         row_elementname = publisher.elementname(row)
         if row_elementname == "Tr" then
             current_row = current_row + 1
-            current_tablehead_type[#current_tablehead_type + 1] = self:typeset_row(row_contents,current_row)
+            current_tablehead_type[#current_tablehead_type + 1] = self:typeset_row(row_contents,current_row,self.skiptables.tablehead or {},self.rowheights.tablehead)
         elseif row_elementname == "Tablerule" then
             tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,publisher.origin_tablerule)
             current_tablehead_type[#current_tablehead_type + 1] = node.hpack(tmp)
@@ -1148,7 +1183,7 @@ local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_
         row_elementname = publisher.elementname(row)
         if row_elementname == "Tr" then
             current_row = current_row + 1
-            current_tablefoot_type[#current_tablefoot_type + 1] = self:typeset_row(row_contents,current_row)
+            current_tablefoot_type[#current_tablefoot_type + 1] = self:typeset_row(row_contents,current_row,self.skiptables.tablefoot or {},self.rowheights.tablefoot)
         elseif row_elementname == "Tablerule" then
             tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,origin_tablerule)
             current_tablefoot_type[#current_tablefoot_type + 1] = node.hpack(tmp)
@@ -1275,7 +1310,7 @@ function typeset_table(self)
             end
 
         elseif eltname == "Tablehead" then
-            current_row = make_tablehead(self,tr_contents,tablehead_first,tablehead,current_row)
+            make_tablehead(self,tr_contents,tablehead_first,tablehead,current_row)
             if tr_contents.page == "first" then
                 filter.tablehead_force_first = true
             elseif tr_contents.page == "odd" or tr_contents.page == "even" then
@@ -1285,11 +1320,11 @@ function typeset_table(self)
             end
 
         elseif eltname == "Tablefoot" then
-            current_row = make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_row)
+            make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_row)
 
         elseif eltname == "Tr" then
             current_row = current_row + 1
-            rows[#rows + 1] = self:typeset_row(tr_contents,current_row)
+            rows[#rows + 1] = self:typeset_row(tr_contents,current_row,self.skiptables.body,self.rowheights.body)
             -- We allow data to be attached to a table row.
             if tr_contents.data then
                 dynamic_data[#dynamic_data + 1] = tr_contents.data
@@ -1816,12 +1851,15 @@ function set_skip_table( self )
     local colspan
     local current_column
     local current_row = 0
+    self.skiptables={ body = {}, tablehead = {}, tablefoot = {}}
+    local curskiptable
     for _,tr in ipairs(self.tab) do
 
         local tr_contents = publisher.element_contents(tr)
         local eltname = publisher.elementname(tr)
-
+        -- TODO: set skip tables for tablehead, tablefoot?
         if eltname == "Tr" then
+            curskiptable = self.skiptables.body
             current_row = current_row + 1
             current_column = 0
             for _,td in ipairs(tr_contents) do
@@ -1833,11 +1871,11 @@ function set_skip_table( self )
                 -- column width
                 for z = current_row + 1, current_row + rowspan - 1 do
                     for y = current_column, current_column + colspan - 1 do
-                        self.skip[z] = self.skip[z] or {}
-                        self.skip[z][y] = true
+                        curskiptable[z] = curskiptable[z] or {}
+                        curskiptable[z][y] = true
                     end
                 end
-                while self.skip[current_row] and self.skip[current_row][current_column] do
+                while curskiptable[current_row] and curskiptable[current_row][current_column] do
                     current_column = current_column + 1
                 end
                 current_column = current_column + colspan - 1
