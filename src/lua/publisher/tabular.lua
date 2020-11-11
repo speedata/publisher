@@ -1864,11 +1864,16 @@ function set_skip_table( self )
             current_column = 0
             for _,td in ipairs(tr_contents) do
                 current_column = current_column + 1
+
+                -- There might be a rowspan from the row above, so we need to find the correct column
+                while curskiptable[current_row] and curskiptable[current_row][current_column] do
+                    current_column = current_column + 1
+                end
+
                 local td_contents = publisher.element_contents(td)
                 rowspan = tonumber(td_contents.rowspan) or 1
                 colspan = tonumber(td_contents.colspan) or 1
-                -- There might be a rowspan in the row above, so we need to find the correct
-                -- column width
+
                 for z = current_row + 1, current_row + rowspan - 1 do
                     for y = current_column, current_column + colspan - 1 do
                         curskiptable[z] = curskiptable[z] or {}

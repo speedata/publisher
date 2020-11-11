@@ -1,0 +1,21 @@
+<Table>
+	<Row>
+		<Cell rowspan="1">11</Cell>
+		<Cell rowspan="2">12-22</Cell>
+		<Cell rowspan="1">13</Cell>
+		<Cell rowspan="1">14</Cell>
+	</Row>
+	<Row>
+		<Cell rowspan="1">21</Cell>
+		<Cell rowspan="3">23-33-43</Cell>
+		<Cell rowspan="1">24</Cell>
+	</Row>
+	<Row>
+		<Cell rowspan="2">31-41</Cell>
+		<Cell rowspan="1">32</Cell>
+		<Cell rowspan="2">34-44</Cell>
+	</Row>
+	<Row>
+		<Cell rowspan="1">42</Cell>
+	</Row>
+</Table>
