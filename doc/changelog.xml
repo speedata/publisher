@@ -1,5 +1,21 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.15" date="2020-11-12">
+        <en>Some right-to-left and mixed ltr/rtl fixes.</en>
+        <de>Einige Fehlerkorrekturen bei rechts-nach-links und gemischten ltr/rtl Texten.</de>
+    </entry>
+    <entry version="4.1.15" date="2020-11-12">
+        <en>Bugfix for rowspan in table heads (#279, #280).</en>
+        <de>Fehlerkorrektur für rowspan in Tabellenköpfen (#279, #280).</de>
+    </entry>
+    <entry version="4.1.15" date="2020-11-12">
+        <en>Remove doctype from XML catalog (this is due to a regression in VSCode/XML mode).</en>
+        <de>Lösche den doctype Eintrag im XML Katalog (für einen Fehler in VSCode/XML-Modus).</de>
+    </entry>
+    <entry version="4.1.15" date="2020-11-12">
+        <en>Report missing glyphs for harfbuzz mode.</en>
+        <de>Fehlende Glyphen im harfbuzz Modus melden.</de>
+    </entry>
     <entry version="4.1.14" date="2020-10-30">
         <en>Automatic NewPage before SavePages (forward mode).</en>
         <de>Automatisches NewPage vor SavePages (Modus zukünftige Seiten).</de>
