@@ -361,7 +361,8 @@ function pre_linebreak( head )
     return true
 end
 
-function insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding_top, bg_padding_bottom )
+function insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding_top, bg_padding_bottom, reverse )
+    reverse = reverse or false
     bg_padding_top    = bg_padding_top or 0
     bg_padding_bottom = bg_padding_bottom or 0
     local wd = node.dimensions(parent.glue_set,parent.glue_sign, parent.glue_order,start,head)
@@ -378,7 +379,7 @@ function insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding_t
     bg_padding_top    = bg_padding_top    / publisher.factor
     bg_padding_bottom = bg_padding_bottom / publisher.factor
     local rule = node.new("whatsit","pdf_literal")
-
+    if reverse then wd = wd * -1 end
     rule.data = string.format("q %s 0 %g %g %g re f Q", pdfstring, -dp - bg_padding_bottom ,  wd, ht + dp + bg_padding_top + bg_padding_bottom )
     rule.mode = 0
     parent.head = node.insert_before(parent.head,start,rule)
@@ -425,114 +426,142 @@ end
 --- affect it's typesetting. Underline and 'showhyphens' is done here. The
 --- overall appearance of the paragraph is fixed at this time, we can only add
 --- decoration now.
-function post_linebreak( head, list_head)
-    local underlinetype = nil
-    local start_underline = nil
-    local underline_color = nil
-    local bgcolorindex = nil
-    local start_bgcolor = nil
-    local bg_padding_top = 0
-    local bg_padding_bottom = 0
-    local reportmissingglyphs = publisher.options.reportmissingglyphs
-    while head do
-        if head.id == hlist_node then -- hlist
-            post_linebreak(head.list,head)
-        elseif head.id == vlist_node then -- vlist
-            post_linebreak(head.list,head)
-        elseif head.id == disc_node then -- disc
-            if publisher.options.showhyphenation then
-                -- Insert a small tick where the disc node is
-                local n = node.new("whatsit","pdf_literal")
-                n.mode = 0
-                n.data = "q 0.3 w 0 2 m 0 7 l S Q"
-                -- We don't assign back the list head as we assume(!?!) that
-                -- hyphenation does not start right at the beginning of the list...
-                node.insert_before(list_head,head,n)
+do
+    local curdir = {}, pardir
+    function post_linebreak( head, list_head)
+        local underlinetype = nil
+        local start_underline = nil
+        local underline_color = nil
+        local bgcolorindex = nil
+        local start_bgcolor = nil
+        local bgcolor_reverse = false
+        local bg_padding_top = 0
+        local bg_padding_bottom = 0
+        local reportmissingglyphs = publisher.options.reportmissingglyphs
+        while head do
+            local pd = publisher.getprop(head,"pardir")
+            if pd and #curdir == 0 then
+                curdir = {pd}
             end
-        elseif head.id == kern_node then
-            local att_underline = node.has_attribute(head, publisher.att_underline)
-            local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)
-            -- at rightskip we must underline (if start exists)
-            if att_underline == nil then
-                if start_underline then
-                    insert_underline(list_head, head, start_underline,underlinetype,underline_color)
-                    start_underline = nil
+            if head.id == hlist_node then -- hlist
+                post_linebreak(head.list,head)
+            elseif head.id == vlist_node then -- vlist
+                post_linebreak(head.list,head)
+            elseif head.id == dir_node then
+                local mode = string.sub(head.dir,1,1)
+                local texdir = string.sub(head.dir,2,4)
+                local ldir
+                if texdir == "TLT" then ldir = "ltr" else ldir = "rtl" end
+                if mode == "+" then
+                    table.insert(curdir,ldir)
+                elseif mode == "-" then
+                    local x = table.remove(curdir)
+                    if x ~= ldir then
+                        warning("paragraph direction incorrect, found %s, expected %s",ldir,x)
+                    end
                 end
-            end
-            if att_bgcolor == nil then
-                if start_bgcolor then
-                    insert_backgroundcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom)
-                    start_bgcolor = nil
+                if att_bgcolor == nil then
+                    if start_bgcolor then
+                        insert_backgroundcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                        start_bgcolor = nil
+                    end
                 end
-            end
-            if publisher.options.showkerning  then
-                -- Insert a small tick where the disc node is
-                local n = node.new("whatsit","pdf_literal")
-                n.mode = 0
-                n.data = "q .4 G 0.3 w 0 2 m 0 7 l S Q"
-                node.insert_before(list_head,head,n)
-            end
-        elseif head.id == glue_node then -- glue
-            local att_underline = node.has_attribute(head, publisher.att_underline)
-            local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)
-            -- at rightskip we must underline (if start exists)
-            if att_underline == nil or head.subtype == 9 then
-                if start_underline then
-                    insert_underline(list_head, head, start_underline,underlinetype,underline_color)
-                    start_underline = nil
+            elseif head.id == disc_node then -- disc
+                if publisher.options.showhyphenation then
+                    -- Insert a small tick where the disc node is
+                    local n = node.new("whatsit","pdf_literal")
+                    n.mode = 0
+                    n.data = "q 0.3 w 0 2 m 0 7 l S Q"
+                    -- We don't assign back the list head as we assume(!?!) that
+                    -- hyphenation does not start right at the beginning of the list...
+                    node.insert_before(list_head,head,n)
                 end
-            end
-            if att_bgcolor == nil or head.subtype == 9 then
-                if start_bgcolor then
-                    insert_backgroundcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom)
-                    start_bgcolor = nil
+            elseif head.id == kern_node then
+                local att_underline = node.has_attribute(head, publisher.att_underline)
+                local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)
+                -- at rightskip we must underline (if start exists)
+                if att_underline == nil then
+                    if start_underline then
+                        insert_underline(list_head, head, start_underline,underlinetype,underline_color)
+                        start_underline = nil
+                    end
                 end
-            end
-        elseif head.id == glyph_node then -- glyph
-            if reportmissingglyphs then
-                local thisfont = used_fonts[head.font]
-                if thisfont and not thisfont.characters[head.char] then
-                    if reportmissingglyphs == "warning" then
-                        warning("Glyph %x (hex) is missing from the font %q",head.char,thisfont.name)
-                    else
-                        err("Glyph %x (hex) is missing from the font %q",head.char,thisfont.name)
+                if att_bgcolor == nil then
+                    if start_bgcolor then
+                        insert_backgroundcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                        start_bgcolor = nil
+                    end
+                end
+                if publisher.options.showkerning  then
+                    -- Insert a small tick where the disc node is
+                    local n = node.new("whatsit","pdf_literal")
+                    n.mode = 0
+                    n.data = "q .4 G 0.3 w 0 2 m 0 7 l S Q"
+                    node.insert_before(list_head,head,n)
+                end
+            elseif head.id == glue_node then -- glue
+                local att_underline = node.has_attribute(head, publisher.att_underline)
+                local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)
+                -- at rightskip we must underline (if start exists)
+                if att_underline == nil or head.subtype == 9 then
+                    if start_underline then
+                        insert_underline(list_head, head, start_underline,underlinetype,underline_color)
+                        start_underline = nil
+                    end
+                end
+                if att_bgcolor == nil or head.subtype == 9 then
+                    if start_bgcolor then
+                        insert_backgroundcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                        start_bgcolor = nil
+                    end
+                end
+            elseif head.id == glyph_node then -- glyph
+                if reportmissingglyphs then
+                    local thisfont = used_fonts[head.font]
+                    if thisfont and not thisfont.characters[head.char] then
+                        if reportmissingglyphs == "warning" then
+                            warning("Glyph %x (hex) is missing from the font %q",head.char,thisfont.name)
+                        else
+                            err("Glyph %x (hex) is missing from the font %q",head.char,thisfont.name)
+                        end
+                    end
+                end
+                local att_underline = node.has_attribute(head, publisher.att_underline)
+                local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)
+                local att_underline_color   = node.has_attribute(head, publisher.att_underline_color)
+                local att_bgpaddingtop    = node.has_attribute(head, publisher.att_bgpaddingtop)
+                local att_bgpaddingbottom = node.has_attribute(head, publisher.att_bgpaddingbottom)
+                if att_underline and att_underline > 0 then
+                    if not start_underline then
+                        underlinetype = att_underline
+                        start_underline = head
+                        underline_color = att_underline_color
+                    end
+                else
+                    if start_underline then
+                        insert_underline(list_head, head, start_underline, underlinetype,underline_color)
+                        start_underline = nil
+                    end
+                end
+                if att_bgcolor and att_bgcolor > 0 then
+                    if not start_bgcolor then
+                        bgcolorindex = att_bgcolor
+                        bg_padding_top    = att_bgpaddingtop
+                        bg_padding_bottom = att_bgpaddingbottom
+                        start_bgcolor = head
+                        bgcolor_reverse = ( curdir[#curdir] == "rtl" )
+                    end
+                else
+                    if start_bgcolor then
+                        insert_backgroundcolor(list_head, head, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                        start_bgcolor = nil
                     end
                 end
             end
-            local att_underline = node.has_attribute(head, publisher.att_underline)
-            local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)
-            local att_underline_color   = node.has_attribute(head, publisher.att_underline_color)
-            local att_bgpaddingtop    = node.has_attribute(head, publisher.att_bgpaddingtop)
-            local att_bgpaddingbottom = node.has_attribute(head, publisher.att_bgpaddingbottom)
-            if att_underline and att_underline > 0 then
-                if not start_underline then
-                    underlinetype = att_underline
-                    start_underline = head
-                    underline_color = att_underline_color
-                end
-            else
-                if start_underline then
-                    insert_underline(list_head, head, start_underline, underlinetype,underline_color)
-                    start_underline = nil
-                end
-            end
-            if att_bgcolor and att_bgcolor > 0 then
-                if not start_bgcolor then
-                    bgcolorindex = att_bgcolor
-                    bg_padding_top    = att_bgpaddingtop
-                    bg_padding_bottom = att_bgpaddingbottom
-                    start_bgcolor = head
-                end
-            else
-                if start_bgcolor then
-                    insert_backgroundcolor(list_head, head, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom)
-                    start_bgcolor = nil
-                end
-            end
+            head = head.next
         end
-        head = head.next
+        return head
     end
-    return head
 end
 
 -- fam is a number

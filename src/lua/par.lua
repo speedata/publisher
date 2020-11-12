@@ -87,6 +87,7 @@ local function flatten(self,items,options)
         local thisself = items[i]
         local typ_thisself = type(thisself)
         local new_options = publisher.copy_table_from_defaults(options)
+        new_options.direction = new_options.direction or self.direction
         if typ_thisself == "table" and thisself.contents then
             -- w("par/flatten: type: table with contents")
             local thisself_contents = thisself.contents
@@ -121,7 +122,8 @@ local function flatten(self,items,options)
             end
         elseif typ_thisself == "string" or typ_thisself == "number" or typ_thisself == "boolean" then
             -- w("par/flatten: type: string or similar")
-            local nodes = publisher.mknodes(tostring(thisself),new_options,"par/stringvalue")
+            local nodes, newdir = publisher.mknodes(tostring(thisself),new_options,"par/stringvalue")
+            self.direction = self.direction or newdir
             local tmp = node.getproperty(nodes)
             if new_options.fontfamily and publisher.fonts.lookup_fontfamily_number_instance[new_options.fontfamily] then
                 local fontheight = publisher.fonts.lookup_fontfamily_number_instance[new_options.fontfamily].baselineskip

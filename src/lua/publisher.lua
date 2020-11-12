@@ -3339,6 +3339,7 @@ local function setstyles(n,parameter)
         local bg_padding_bottom = tex.sp(parameter.bg_padding_bottom or 0)
         node.set_attribute(n,att_bgpaddingtop,bg_padding_top)
         node.set_attribute(n,att_bgpaddingbottom,bg_padding_bottom)
+        setprop(n,"background-color",parameter.backgroundcolor)
     end
     if parameter.subscript then
         node.set_attribute(n,att_script,parameter.subscript)
@@ -3932,7 +3933,7 @@ function mknodes(str,parameter,origin)
     if maindirection then
         setprop(nodelistsegments,"pardir",maindirection)
     end
-    return nodelistsegments
+    return nodelistsegments, maindirection
 end
 
 -- direction is ltr or rtl or 0 or 1
