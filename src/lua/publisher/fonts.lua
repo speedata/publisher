@@ -478,8 +478,7 @@ do
                 end
             elseif head.id == kern_node then
                 local att_underline = node.has_attribute(head, publisher.att_underline)
-                local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)
-                -- at rightskip we must underline (if start exists)
+                local att_bgcolor = publisher.getprop(head,"background-color")
                 if att_underline == nil then
                     if start_underline then
                         insert_underline(list_head, head, start_underline,underlinetype,underline_color)
@@ -492,7 +491,7 @@ do
                         start_bgcolor = nil
                     end
                 end
-                if publisher.options.showkerning  then
+                if publisher.options.showkerning then
                     -- Insert a small tick where the disc node is
                     local n = node.new("whatsit","pdf_literal")
                     n.mode = 0
@@ -501,7 +500,7 @@ do
                 end
             elseif head.id == glue_node then -- glue
                 local att_underline = node.has_attribute(head, publisher.att_underline)
-                local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)
+                local att_bgcolor = publisher.getprop(head,"background-color")
                 -- at rightskip we must underline (if start exists)
                 if att_underline == nil or head.subtype == 9 then
                     if start_underline then
@@ -509,7 +508,13 @@ do
                         start_underline = nil
                     end
                 end
-                if att_bgcolor == nil or head.subtype == 9 then
+                if att_bgcolor and att_bgcolor > 0 and not start_bgcolor then
+                    bgcolor_reverse = ( curdir[#curdir] == "rtl" )
+                    bgcolorindex = att_bgcolor
+                    bg_padding_top    = att_bgpaddingtop
+                    bg_padding_bottom = att_bgpaddingbottom
+                    start_bgcolor = head
+                elseif att_bgcolor == nil or head.subtype == 9 then
                     if start_bgcolor then
                         insert_backgroundcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
                         start_bgcolor = nil
@@ -527,7 +532,7 @@ do
                     end
                 end
                 local att_underline = node.has_attribute(head, publisher.att_underline)
-                local att_bgcolor   = node.has_attribute(head, publisher.att_bgcolor)
+                local att_bgcolor = publisher.getprop(head,"background-color")
                 local att_underline_color   = node.has_attribute(head, publisher.att_underline_color)
                 local att_bgpaddingtop    = node.has_attribute(head, publisher.att_bgpaddingtop)
                 local att_bgpaddingbottom = node.has_attribute(head, publisher.att_bgpaddingbottom)
