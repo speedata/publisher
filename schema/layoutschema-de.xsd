@@ -3921,6 +3921,38 @@
           <xs:element ref="en:Grid"/>
         </xs:choice>
       </xs:sequence>
+      <xs:attribute name="columnordering">
+        <xs:annotation>
+          <xs:documentation>Drehe die Reihenfolge der Spalten im rtl-Modus um. Ändert nur die Bereiche, die nebeneneinander sind.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="ltr">
+                  <xs:annotation>
+                    <xs:documentation>Die Spalten sind in der Reihenfolge von erster zu letzten. (Voreinstellung)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="rtl">
+                  <xs:annotation>
+                    <xs:documentation>Kehre die Reihenfolge der Spalten um. Die zuerst definiert Spalte wird als letzte gefüllt.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="defaultcolor">
         <xs:annotation>
           <xs:documentation>Die Textfarbe der Seite, sofern sie nicht in Textblock oder Paragraph überschrieben wird. Voreinstellung ist 'black'.</xs:documentation>
@@ -3933,7 +3965,7 @@
       </xs:attribute>
       <xs:attribute name="width">
         <xs:annotation>
-          <xs:documentation>The height of the page</xs:documentation>
+          <xs:documentation>Die Seitenbreite. Voreinstellung ist die globale Einstellung.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="height">

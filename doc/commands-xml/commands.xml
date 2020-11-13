@@ -5865,6 +5865,30 @@
         <optional><cmd name="Grid"/></optional>
       </interleave>
     </childelements>
+    <attribute en="columnordering" optional="yes" since="4.1.18" allowxpath="yes">
+      <description xml:lang="en">
+        <para>Reverse the logical column ordering if in rtl mode. Only changes areas that are next to each other.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Drehe die Reihenfolge der Spalten im rtl-Modus um. Ändert nur die Bereiche, die nebeneneinander sind.</para>
+      </description>
+      <choice en="ltr">
+        <description xml:lang="en">
+          <para>The columns are ordered from first defined to last defined. (default)</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Spalten sind in der Reihenfolge von erster zu letzten. (Voreinstellung)</para>
+        </description>
+      </choice>
+      <choice en="rtl">
+        <description xml:lang="en">
+          <para>Reverse the order of columns. The first defined column will be the last column.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Kehre die Reihenfolge der Spalten um. Die zuerst definiert Spalte wird als letzte gefüllt.</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="defaultcolor" optional="yes" type="text" since="2.9.3">
       <description xml:lang="en">
         <para>The default text color for this page (unless overridden in Paragraph or Textblock). Defaults to 'black'.</para>
@@ -5886,7 +5910,7 @@
         <para>The width of the page. Defaults to the global setting.</para>
       </description>
       <description xml:lang="de">
-        <para>The height of the page</para>
+        <para>Die Seitenbreite. Voreinstellung ist die globale Einstellung.</para>
       </description>
     </attribute>
     <attribute en="height" optional="yes" since="4.1.13" type="length">

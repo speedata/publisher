@@ -3672,6 +3672,20 @@
          <interleave>
             <group>
                <optional>
+                  <attribute name="columnordering">
+                     <a:documentation>Reverse the logical column ordering if in rtl mode. Only changes areas that are next to each other.</a:documentation>
+                     <choice>
+                        <value>ltr</value>
+                        <a:documentation>The columns are ordered from first defined to last defined. (default)</a:documentation>
+                        <value>rtl</value>
+                        <a:documentation>Reverse the order of columns. The first defined column will be the last column.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="defaultcolor">
                      <a:documentation>The default text color for this page (unless overridden in Paragraph or Textblock). Defaults to &#39;black&#39;.</a:documentation>
                   </attribute>

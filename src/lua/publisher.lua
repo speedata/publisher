@@ -1942,7 +1942,7 @@ function setup_page(pagenumber,fromwhere)
     if pagetype.layoutxml and pagetype.layoutxml.defaultcolor then
         current_page.defaultcolor = read_attribute(pagetype.layoutxml,nil,"defaultcolor","rawstring")
     end
-
+    local columnordering = pagetype.columnordering
     for _,j in ipairs(pagetype) do
         local eltname = elementname(j)
         if type(element_contents(j))=="function" and eltname=="Margin" then
@@ -1959,9 +1959,22 @@ function setup_page(pagenumber,fromwhere)
             local current_positioning_area = current_grid.positioning_frames[name]
             -- we evaluate now, because the attributes in PositioningFrame can be page dependent.
             local tab  = dispatch(element_contents(j).layoutxml,element_contents(j).dataxml)
+            local tmp = {}
             for i,k in ipairs(tab) do
-                current_positioning_area[#current_positioning_area + 1] = element_contents(k)
+                tmp[#tmp + 1] = element_contents(k)
+                tmp[#tmp].order = i
             end
+            if columnordering == "rtl" then
+                table.sort(tmp,function(a,b)
+                    if a.column == b.column then return a.order > b.order end
+                    return a.column > b.column
+                end)
+            end
+
+            for i=1,#tmp do
+                table.insert(current_positioning_area,tmp[i])
+            end
+            -- current_positioning_area[#current_positioning_area + 1] =
             current_positioning_area.colorname = element_contents(j).colorname
         else
             err("Element name %q unknown (setup_page())",eltname or "<create_page>")
@@ -1992,7 +2005,6 @@ function setup_page(pagenumber,fromwhere)
         end
     end
     current_page = cp
-
 end
 
 --- Switch to the next frame in the given area.

@@ -1,0 +1,22 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Trace grid="yes" />
+    <SetGrid height="12pt" nx="9" />
+    <Pageformat height="6cm" width="210mm" />
+
+    <Pagetype name="t" test="true()" columnordering="rtl">
+        <PositioningArea name="a">
+            <PositioningFrame width="4" height="10" row="1" column="1" />
+            <PositioningFrame width="4" height="10" row="1" column="6" />
+        </PositioningArea>
+    </Pagetype>
+
+    <Record element="data">
+        <Output area="a">
+            <Text>
+                <Paragraph><Value select="sd:dummytext(2)"></Value></Paragraph>
+            </Text>
+        </Output>
+
+    </Record>
+</Layout>

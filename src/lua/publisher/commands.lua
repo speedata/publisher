@@ -2179,8 +2179,9 @@ end
 --- --------
 --- This command should be probably called master page or something similar.
 function commands.pagetype(layoutxml,dataxml)
-    local test         = publisher.read_attribute(layoutxml,dataxml,"test","rawstring")
-    local pagetypename = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
+    local columnordering = publisher.read_attribute(layoutxml,dataxml,"columnordering","rawstring")
+    local test           = publisher.read_attribute(layoutxml,dataxml,"test","rawstring")
+    local pagetypename   = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     local width  = publisher.read_attribute(layoutxml,dataxml,"width","length")
     local height = publisher.read_attribute(layoutxml,dataxml,"height","length")
 
@@ -2188,6 +2189,7 @@ function commands.pagetype(layoutxml,dataxml)
         layoutxml = layoutxml,
         width = width,
         height = height,
+        columnordering = columnordering,
     }
     -- evaluate the default color for this page later on, so we can set it dynamically (XPath)
 
@@ -3242,6 +3244,7 @@ function commands.span( layoutxml,dataxml )
     local backgroundcolor    = publisher.read_attribute(layoutxml,dataxml,"background-color",         "rawstring")
     local bg_padding_top     = publisher.read_attribute(layoutxml,dataxml,"background-padding-top",   "length_sp")
     local bg_padding_bottom  = publisher.read_attribute(layoutxml,dataxml,"background-padding-bottom","length_sp")
+    local direction          = publisher.read_attribute(layoutxml,dataxml,"direction",                "rawstring")
     local fontfamilyname     = publisher.read_attribute(layoutxml,dataxml,"fontfamily",               "rawstring")
     local language_name      = publisher.read_attribute(layoutxml,dataxml,"language",                 "string")
     local letterspacing      = publisher.read_attribute(layoutxml,dataxml,"letter-spacing",           "booleanorlength")
@@ -3283,7 +3286,8 @@ function commands.span( layoutxml,dataxml )
     local a = par:new(nil,"span")
     local params = {
         underline = underline,
-        allowbreak=publisher.allowbreak,
+        allowbreak = publisher.allowbreak,
+        direction = direction,
         fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname],
         backgroundcolor = colornumber,
         bg_padding_top = bg_padding_top,

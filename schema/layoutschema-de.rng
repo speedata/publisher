@@ -3672,6 +3672,20 @@
          <interleave>
             <group>
                <optional>
+                  <attribute name="columnordering">
+                     <a:documentation>Drehe die Reihenfolge der Spalten im rtl-Modus um. Ändert nur die Bereiche, die nebeneneinander sind.</a:documentation>
+                     <choice>
+                        <value>ltr</value>
+                        <a:documentation>Die Spalten sind in der Reihenfolge von erster zu letzten. (Voreinstellung)</a:documentation>
+                        <value>rtl</value>
+                        <a:documentation>Kehre die Reihenfolge der Spalten um. Die zuerst definiert Spalte wird als letzte gefüllt.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="defaultcolor">
                      <a:documentation>Die Textfarbe der Seite, sofern sie nicht in Textblock oder Paragraph überschrieben wird. Voreinstellung ist &#39;black&#39;.</a:documentation>
                   </attribute>
@@ -3681,7 +3695,7 @@
                </attribute>
                <optional>
                   <attribute name="width">
-                     <a:documentation>The height of the page</a:documentation>
+                     <a:documentation>Die Seitenbreite. Voreinstellung ist die globale Einstellung.</a:documentation>
                   </attribute>
                </optional>
                <optional>
