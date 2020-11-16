@@ -1,4 +1,4 @@
-[[ch-seitexvony]]
+[[ch-pagexofy]]
 = Page numbers: Page x of y
 
 There are two ways to get the last page number.

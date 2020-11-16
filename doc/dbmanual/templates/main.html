@@ -49,7 +49,7 @@
 							<input class="search-submit" value="{{translate .Language "Search"}}" type="submit">
 						</form>
 						{{ $.NaviMobile}}
-					<ul><li>{{ if eq .Language "en"}}<a href="{{linkTo "/de/index.html" .Section}}">This manual in German</a>{{else}}<a href="{{linkTo "/en/index.html" .Section}}">Dieses Handbuch auf Englisch</a>{{end}}</li></ul>
+					<ul><li>{{ if eq .Language "en"}}<a href="{{linkTo "/de/index.html" .Section}}">Dieses Handbuch auf Deutsch</a>{{else}}<a href="{{linkTo "/en/index.html" .Section}}">This manual in English</a>{{end}}</li></ul>
 					</div>
 				</div>
 				<div id="logo">
@@ -170,7 +170,7 @@ function getSource() {
 			<div id="footer">
 				<div class="boxattheend"></div>
 				<div id="navi2">
-					<ul><li>{{ if eq .Language "en"}}<a href="{{linkTo "/de/index.html" .Section}}">This manual in German</a>{{else}}<a href="{{linkTo "/en/index.html" .Section}}">Dieses Handbuch auf Englisch</a>{{end}}</li></ul>
+					<ul><li>{{ if eq .Language "en"}}<a href="{{ otherManual $.Section }}">Diese Seite auf Deutsch</a>{{else}}<a href="{{ otherManual $.Section }}">This page in English</a>{{end}}</li></ul>
 				</div>
 					<div id="navi3">
 					<p>{{ translate .Language "More information"}}:</p>

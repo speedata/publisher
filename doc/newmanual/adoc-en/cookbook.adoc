@@ -23,7 +23,7 @@ This chapter is dedicated to the creation of directories.
 There are basically two ways to create a directory.
 Therefore, the next section is about the built-in mechanism of markers (`<Mark>`), the following sections are about the way via `<Element>` and `<Attributes>` and manually saving the data for another pass.
 
-TIP: In order for the Publisher to run through several times, the `runs` parameter must be set on the command line or in the configuration file, for example with `sp --runs=2` (command line) or `runs = 2` (configuration file). In the section <<ch-cookbook-toinonerun>> a mechanism is shown how in some cases a directory can be created in only one run.
+TIP: In order for the Publisher to run through several times, the `runs` parameter must be set on the command line or in the configuration file, for example with `sp --runs=2` (command line) or `runs = 2` (configuration file). In the section <<ch-cookbook-tocinonerun>> a mechanism is shown how in some cases a directory can be created in only one run.
 
 
 include::directoriesmarker.adoc[leveloffset=+2]

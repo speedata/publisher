@@ -374,7 +374,7 @@ include::ref/insertpages.adoc[]
 
 == See also
 
-The command <<cmd-savepages,`<SavePages>`>>, the section <<ch-savepages>> and <<ch-cookbook-toinonerun>>.
+The command <<cmd-savepages,`<SavePages>`>>, the section <<ch-savepages>> and <<ch-cookbook-tocinonerun>>.
 
 
 include::ref/italic.adoc[]
@@ -587,7 +587,7 @@ Commands <<cmd-attribute,`<Attribute>`>>, <<cmd-element,`<Element>`>> and <<cmd-
 include::ref/savepages.adoc[]
 == See also
 
-The command <<cmd-insertpages,`<InsertPages>`>>, the section <<ch-savepages>> and <<ch-cookbook-toinonerun>>.
+The command <<cmd-insertpages,`<InsertPages>`>>, the section <<ch-savepages>> and <<ch-cookbook-tocinonerun>>.
 
 include::ref/setgrid.adoc[]
 

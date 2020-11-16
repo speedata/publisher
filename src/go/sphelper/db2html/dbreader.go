@@ -48,12 +48,77 @@ var (
 		"xmlediting":       "basics/writelayoutfile",
 		"xpath":            "xpathfunctions",
 	}
+	rp    *strings.Replacer
+	refrp *strings.Replacer
 )
 
 func init() {
 	coReplace = regexp.MustCompile(`CO\d+-(\d+)`)
 	tagRemover = regexp.MustCompile(`<[^>]*>`)
 	assetsTrim = regexp.MustCompile(`^(\.\./)*dbmanual/assets(.*)$`)
+	pairs := []string{
+		"grundlagen", "basics",
+		"einleitung", "introduction",
+		"appendix-schema-assigning", "anhang-schemazuweisen",
+		"images", "bildereinbinden",
+		"configuration", "konfiguration",
+		"commandline", "kommandozeile",
+		"cookbook-tcoinonerun", "kochbuch-verzeichnisseeindurchlauf",
+		"filenames", "dateinamen",
+		"defaults", "voreinstellungenimpublisher",
+		"glossary", "glossar",
+		"cookbook", "kochbuch",
+		"hallowelt", "helloworld",
+		"erstellenlayoutwerk", "writelayoutfile",
+		"datenstrukturierung", "structuredatafile",
+		"objekteausgeben", "outputtingobjects",
+		"advancedtopics", "fortgeschrittenethemen",
+		"advanced-cotrollayout", "fortgeschrittenethemen-steuerunglayout",
+		"preprocessing", "luafilter",
+		"schemavalidation", "schemavalidierung",
+		"servermode", "servermodus",
+		"sortingdata", "sortierenvondaten",
+		"pagetypes", "seitentypen",
+		"outputforprinter", "druckausgabe",
+		"groups", "gruppen",
+		"elementattribute", "xmlstrukturen",
+		"wraparoundimages", "umfliessenvonbildern",
+		"troubleshooting", "tracing",
+		"fileorganization", "organisationdaten",
+		"colors", "farben",
+		"fonts", "einbindungschriftarten",
+		"rotation", "rotierenvoninahlten",
+		"grid", "raster",
+		"hyphenation-language", "silbentrennung-sprache",
+		"outputtingobjects", "objekteausgeben",
+		"structuredatafile", "datenstrukturierung",
+		"textformats", "textformate",
+		"writelayoutfile", "erstellenlayoutwerk",
+		"textformatting", "textformatierung",
+		"tables2", "tabellen2",
+		"internalvariables", "internevariablen",
+		"thumbindex", "griffmarken",
+		"multipagepdf", "mehrseitigepdf",
+		"directories-marker", "verzeichnisseerstellen-marker",
+		"layoutoptimizationusinggroups", "optimierung-mit-gruppen",
+		"xpathfunctions", "xpathfunktionen",
+		"pagexofy", "seitexvony",
+		"programming", "programmierung",
+		"lengthsunits", "massangaben",
+		"qa", "qualitaetssicherung",
+		"index", "index",
+		"en", "de",
+	}
+	// replace will be a, b, b, a, c, d, d, c, ...
+	replace := make([]string, len(pairs)*2)
+	for i := 0; i < len(pairs)/2; i++ {
+		replace[i*4] = pairs[i*2+1]
+		replace[i*4+1] = pairs[i*2]
+		replace[i*4+2] = pairs[i*2]
+		replace[i*4+3] = pairs[i*2+1]
+	}
+	rp = strings.NewReplacer(replace...)
+	refrp = strings.NewReplacer("befehlsreferenz", "commandreference", "commandreference", "befehlsreferenz", "de", "en", "en", "de")
 }
 
 func formatSource(source, lang string) (string, error) {
@@ -844,6 +909,17 @@ func (d *DocBook) linkToPage(dest string, page section) string {
 	return ret
 }
 
+func (d *DocBook) otherManual(page section) string {
+	var ret string
+	// simple replaceemnt in command reference
+	if strings.Contains(page.Link, "befehlsreferenz") || strings.Contains(page.Link, "commandreference") {
+		ret = d.linkToPage(refrp.Replace(page.Link), page)
+	} else {
+		ret = d.linkToPage(rp.Replace(page.Link), page)
+	}
+	return ret
+}
+
 func (d *DocBook) genNavi(thissection *section, navi bool) string {
 	prevSecLevel := 0
 	var nav strings.Builder
@@ -881,8 +957,9 @@ func (d *DocBook) WriteHTMLFiles(basedir string) error {
 	}
 	templatesdir := filepath.Join(d.cfg.Basedir(), "doc", "dbmanual", "templates", "*.html")
 	funcMap := template.FuncMap{
-		"linkTo":    func(dest string, page section) string { return d.linkToPage(dest, page) },
-		"translate": func(lang string, text string) string { return d.translate(lang, text) },
+		"linkTo":      func(dest string, page section) string { return d.linkToPage(dest, page) },
+		"translate":   func(lang string, text string) string { return d.translate(lang, text) },
+		"otherManual": func(page section) string { return d.otherManual(page) },
 	}
 	tmpl := template.Must(template.New("dummy").Funcs(funcMap).ParseGlob(filepath.Join(templatesdir)))
 
@@ -1090,6 +1167,7 @@ func ReadFile(filename string, staticmode bool) (*DocBook, error) {
 	}
 	d.r = f
 	d.staticmode = staticmode
+	// getIds sets d.Lang
 	d.getIds()
 	if !(d.Lang == "de" || d.Lang == "en") {
 		return nil, fmt.Errorf("could not recognize docbook language %q", d.Lang)
