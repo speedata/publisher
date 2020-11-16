@@ -165,7 +165,7 @@ TIP: Das ist ein experimentelles Feature im Publisher. Wahrscheinlich wird dies 
 Manche Sprachen haben besondere Satzregeln, die sich nicht auf die Silbentrennung auswirken, sondern auf das Erscheinungsbild des Textes. So können die Zeichen ihre Form oder Position verändern, je nach dem wo sie im Wort stehen. Um dieses Feature zu nutzen müssen folgende Bedingungen erfüllt sein:
 
 . `mode="harfbuzz"` muss bei <<cmd-loadfontfile,`<LoadFontfile>`>> aktiviert sein.
-. Die Sprache muss korrekt eingestellt sein. Falls die Sprache nicht in der <<cmd-options,Liste der unterstützten Sprachen>> vorhanden ist, muss `Other` oder `--` (zwei Striche) eingestellt werden.
+. Die Sprache sollte korrekt eingestellt sein. Falls die Sprache nicht in der <<cmd-options,Liste der unterstützten Sprachen>> vorhanden ist, muss `Other` oder `--` (zwei Striche) eingestellt werden. Wenn die Sprache nicht korrekt eingestellt ist, kann es zu Darstellungsproblemen kommen.
 . Die gewählte Schriftart muss die entsprechenden Zeichen enthalten.
 
 
@@ -185,8 +185,7 @@ Manche Sprachen haben besondere Satzregeln, die sich nicht auf die Silbentrennun
     <Record element="data">
         <PlaceObject>
             <Textblock>
-                <Paragraph>
-                    <!-- No language set, wrong output! -->
+                <Paragraph language="Other">
                     <Value>আমি</Value>
                 </Paragraph>
             </Textblock>
@@ -195,22 +194,78 @@ Manche Sprachen haben besondere Satzregeln, die sich nicht auf die Silbentrennun
 </Layout>
 ----
 
-[[fig-hb-bengali-incorrect]]
-.So sollte es nicht aussehen. Die Sprache wurde nicht eingestellt und ist somit in der Voreinstellung »Englisch«.
-image::hb-bengali-incorrect.png[width=50%]
+
+[[fig-hb-bengali-correct]]
+.Die Sprache wird vom System selbst erkannt, wenn sie auf `Other` gesetzt ist.
+image::hb-bengali-correct.png[width=50%]
+
+== Rechts-nach-links laufender Text
+
+Wird Text ausgegeben, der von rechts nach links läuft (z.B. Arabisch), muss die Richtung des Absatzes mit
+angegeben werden (`direction="rtl"`).
+Ansonsten ist die Ausrichtung ggf. falsch (die letzte Zeile ist dann linksbündig anstelle von rechtsbündig).
+
+Falls kein Blocksatz ausgegeben wird, muss im Textformat bei der Ausrichtung `start` und `end` benutzt werden und nicht `leftaligned` und `rightaligned`. `start` und `end` orientieren sich an der Startposition des Textes und nicht an der Orientierung der Seite (Ausgabefläche).
 
 
-[source,xml]
-----
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    version="4.1.16">
+
+  <LoadFontfile
+    name="Amiri-Regular"
+    filename="amiri-regular.ttf"
+    mode="harfbuzz" />
+  <DefineFontfamily fontsize="10" leading="12" name="text">
+        <Regular fontface="Amiri-Regular" />
+    </DefineFontfamily>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock width="5">
+                <Paragraph direction="rtl">
+                  <Value select="."/>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+[source, xml]
+-------------------------------------------------------------------------------
+<data>المادة 1 يولد جميع الناس أحرارًا متساوين في الكرامة والحقوق.
+وقد وهبوا عقلاً وضميرًا وعليهم أن يعامل بعضهم بعضًا بروح الإخاء.</data>
+-------------------------------------------------------------------------------
+
+[[fig-rtl-text]]
+.Der Text läuft von rechts nach links.
+image::rtl-text.png[width=100%]
+
+== Gemischter Text (rechts-nach-links und links-nach-rechts)
+
+Wird Text ausgegeben, der sowohl von rechts nach links (rtl, right to left) als auch von links nach recht (ltr) läuft, muss der Absatz in einzelne Segmente unterteilt werden und zwischen den Segmenten die Schreibrichtung geändert werden. Dieser sogenannte »Bidi-Algorithmus« ist im speedata Publisher eingebaut
+und wird mit `bidi="yes"` aktiviert:
+
+[source, xml]
+-------------------------------------------------------------------------------
 <PlaceObject>
-    <Textblock>
-        <Paragraph language="Other">
-            <Value>আমি</Value>
+    <Textblock width="5">
+        <Paragraph bidi="yes">
+            <Value select="."/>
         </Paragraph>
     </Textblock>
 </PlaceObject>
-----
+-------------------------------------------------------------------------------
 
-[[fig-hb-bengali-correct]]
-.Besser. Die Sprache wird vom System selbst erkannt.
-image::hb-bengali-correct.png[width=50%]
+[source, xml]
+-------------------------------------------------------------------------------
+<data>العاشر ليونيكود (Unicode Conference)،
+الذي سيعقد في 10-12 آذار 1997 مبدينة</data>
+-------------------------------------------------------------------------------
+
+[[fig-bidi-sample]]
+.Hier wird die Textrichtung für jedes Teilstück separat berechnet. Wird `bidi="yes"` angegeben, wird der erste Teil als Hauptrichtung des Absatzes genommen, in diesem Fall ist die Angabe `direction="rtl"` nicht notwendig
+image::bidi-sample.png[width=100%]

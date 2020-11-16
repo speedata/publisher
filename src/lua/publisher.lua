@@ -3856,7 +3856,6 @@ function mknodes(str,parameter,origin)
         local thissegment
         if tbl.face then
             -- w("hb mode")
-
             local script = nil
             if thislang == "--" then
                 thislang = nil
@@ -3878,7 +3877,7 @@ function mknodes(str,parameter,origin)
             end
             local buf = harfbuzz.Buffer.new()
             buf:add_utf8(str)
-            -- shape returns the guessed script from the buffer
+            -- shape returns the guessed script and direction from the buffer
             script, direction = shape(tbl,buf, { language = thislang, script = script, direction = direction } )
 
             local is_chinese = false

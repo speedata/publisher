@@ -146,7 +146,7 @@ So the characters can change their shape or position, depending on where they ar
 To use this feature, the following conditions must be met:
 
 . `mode="harfbuzz"` must be activated at <<cmd-loadfontfile,`<LoadFontfile>`>>.
-. The language must be set correctly. If the language is not available in the <<cmd-options,list of supported languages>>, `Other` or `--` (two dashes) must be used.
+. The language should be set correctly. If the language is not available in the <<cmd-options,list of supported languages>>, `Other` or `--` (two dashes) must be used. If the language is not set correctly, layout errors might orccur.
 . The selected font must contain the appropriate characters.
 
 
@@ -166,8 +166,7 @@ To use this feature, the following conditions must be met:
     <Record element="data">
         <PlaceObject>
             <Textblock>
-                <Paragraph>
-                    <!-- No language set, wrong output! -->
+                <Paragraph language="Other">
                     <Value>আমি</Value>
                 </Paragraph>
             </Textblock>
@@ -176,22 +175,79 @@ To use this feature, the following conditions must be met:
 </Layout>
 ----
 
-[[fig-hb-bengali-incorrect]]
-.It should not look like this. The language was not set and is therefore “English” by default.
-image::hb-bengali-incorrect.png[width=50%]
+[[fig-hb-bengali-correct]]
+.The language is recognized by the system when set to `Other`.
+image::hb-bengali-correct.png[width=50%]
+
+== Right-to-left running text
+
+If text is output that runs from right to left (e.g. Arabic), the direction of the paragraph must be specified with must be specified (`direction="rtl"`).
+Otherwise, the alignment may be wrong (the last line is left-aligned instead of right-aligned).
+
+If the output text is not justified then `start` and `end` must be used for the alignment in text format and not 'leftaligned' and 'rightaligned'. `start` and `end` are based on the start position of the text and not on the orientation of the page (output area).
 
 
-[source,xml]
-----
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    version="4.1.16">
+
+  <LoadFontfile
+    name="Amiri-Regular"
+    filename="amiri-regular.ttf"
+    mode="harfbuzz" />
+  <DefineFontfamily fontsize="10" leading="12" name="text">
+        <Regular fontface="Amiri-Regular" />
+    </DefineFontfamily>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock width="5">
+                <Paragraph direction="rtl">
+                  <Value select="."/>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+[source, xml]
+-------------------------------------------------------------------------------
+<data>المادة 1 يولد جميع الناس أحرارًا متساوين في الكرامة والحقوق.
+وقد وهبوا عقلاً وضميرًا وعليهم أن يعامل بعضهم بعضًا بروح الإخاء.</data>
+-------------------------------------------------------------------------------
+
+[[fig-rtl-text]]
+.The text runs from right to left.
+image::rtl-text.png[width=100%]
+
+== Mixed text (right-to-left and left-to-right)
+
+If text is output that runs both from right to left (rtl) and from left to right (ltr), the paragraph must be divided into individual segments and the writing direction must be changed between the segments. This so-called “bidi algorithm” is built into the speedata Publisher
+and is activated with `bidi="yes"`:
+
+
+
+[source, xml]
+-------------------------------------------------------------------------------
 <PlaceObject>
-    <Textblock>
-        <Paragraph language="Other">
-            <Value>আমি</Value>
+    <Textblock width="5">
+        <Paragraph bidi="yes">
+            <Value select="."/>
         </Paragraph>
     </Textblock>
 </PlaceObject>
-----
+-------------------------------------------------------------------------------
 
-[[fig-hb-bengali-correct]]
-.Better. The language is recognized by the system itself.
-image::hb-bengali-correct.png[width=50%]
+[source, xml]
+-------------------------------------------------------------------------------
+<data>العاشر ليونيكود (Unicode Conference)،
+الذي سيعقد في 10-12 آذار 1997 مبدينة</data>
+-------------------------------------------------------------------------------
+
+[[fig-bidi-sample]]
+.Here the text direction is calculated separately for each section. If `bidi="yes"` is specified, the first part is taken as the main direction of the paragraph, in this case the specification `direction="rtl"` is not necessary
+image::bidi-sample.png[width=100%]
+
