@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.17" date="2020-11-18">
+        <en>Fixes for bidi text/right to left text, documentation updates.</en>
+        <de>Korrekturen für bidi-Text/rechts-nach-links Text, Dokumentation Updates.</de>
+    </entry>
     <entry version="4.1.16" date="2020-11-13">
         <en>Bugfix for background-color and word space.</en>
         <de>Fehlerkorrektur für background-color und Wortzwischenraum.</de>
