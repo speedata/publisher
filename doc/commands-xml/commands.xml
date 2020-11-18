@@ -5596,7 +5596,7 @@
         <para>(Experimentell) Liste der Zeichen, bei denen ein Umbruch möglich ist. Das Leerzeichen wird nicht automatisch als Umbruchbunkt erkannt, wenn das Attribut angegeben ist.</para>
       </description>
     </attribute>
-    <attribute en="bidi" optional="yes" since="4.1.14">
+    <attribute en="bidi" optional="yes" since="4.1.14" allowxpath="yes">
       <description xml:lang="en">
         <para>Analyze direction of the text. Useful for mixing left-to-right and right-to-left text.</para>
       </description>

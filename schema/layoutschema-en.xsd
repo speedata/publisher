@@ -3306,18 +3306,31 @@
           <xs:documentation>Analyze direction of the text. Useful for mixing left-to-right and right-to-left text.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="yes">
-              <xs:annotation>
-                <xs:documentation>Analyze text.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="no">
-              <xs:annotation>
-                <xs:documentation>Don't handle mixed directions (default).</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes">
+                  <xs:annotation>
+                    <xs:documentation>Analyze text.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="no">
+                  <xs:annotation>
+                    <xs:documentation>Don't handle mixed directions (default).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="color">

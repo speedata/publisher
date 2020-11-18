@@ -3424,6 +3424,9 @@
                         <a:documentation>Analysiere den Text.</a:documentation>
                         <value>no</value>
                         <a:documentation>Unterschiedliche Textrichtungen nicht beachten (Voreinstellung).</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
                      </choice>
                   </attribute>
                </optional>

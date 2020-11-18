@@ -2229,7 +2229,12 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local textformat        = publisher.read_attribute(layoutxml,dataxml,"textformat",         "rawstring")
     if fontname then warning("Paragraph/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
     if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
-
+    if direction and not ( direction == "ltr" or direction == "rtl") then
+        if not ( direction == "" ) then
+            warning("direction must be 'ltr' or 'rtl', ignoring direction")
+        end
+        direction = nil
+    end
     local fontfamily
     if fontfamilyname then
         fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]

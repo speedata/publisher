@@ -3424,6 +3424,9 @@
                         <a:documentation>Analyze text.</a:documentation>
                         <value>no</value>
                         <a:documentation>Don&#39;t handle mixed directions (default).</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
                      </choice>
                   </attribute>
                </optional>

@@ -3306,18 +3306,31 @@
           <xs:documentation>Analysiere die Richtung des Textes. Hilfreich für gemsichten links-nach-rechts und rechts-nach-links Text.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="yes">
-              <xs:annotation>
-                <xs:documentation>Analysiere den Text.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="no">
-              <xs:annotation>
-                <xs:documentation>Unterschiedliche Textrichtungen nicht beachten (Voreinstellung).</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes">
+                  <xs:annotation>
+                    <xs:documentation>Analysiere den Text.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="no">
+                  <xs:annotation>
+                    <xs:documentation>Unterschiedliche Textrichtungen nicht beachten (Voreinstellung).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="color">
