@@ -164,6 +164,7 @@ Manche dieser Features können bei `<LoadFontfile>` aktiviert werden.
 .Mediävalziffern (oben) machen das Lesen der Ziffern oftmals angenehmer. Echte Kapitälchen (unten) unterscheiden sich deutlich von rechnerisch verkleinerten Großbuchstaben. Die Strichstärke und Proportionen müssen angepasst werden. Je nach verwendeter Schriftart schaltet `smallcaps` auch auf  »Mediävalziffern« um.
 image::osfsmcp.png[width=100%]
 
+[[ch-harfbuzz-mode]]
 == Harfbuzz
 
 Seit Version 4 des speedata Publishers gibt es einen neuen Modus zum Laden von Schriftdateien: harfbuzz.

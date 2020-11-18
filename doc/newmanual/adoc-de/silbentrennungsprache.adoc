@@ -269,3 +269,15 @@ und wird mit `bidi="yes"` aktiviert:
 [[fig-bidi-sample]]
 .Hier wird die Textrichtung für jedes Teilstück separat berechnet. Wird `bidi="yes"` angegeben, wird der erste Teil als Hauptrichtung des Absatzes genommen, in diesem Fall ist die Angabe `direction="rtl"` nicht notwendig
 image::bidi-sample.png[width=100%]
+
+
+== Regeln für gemischten Text
+
+* Setze das Attribut `direction`, wenn klar ist, in welchem Kontext der Text erscheinen soll. Wenn es leer oder nicht gesetzt ist, entscheidet der Inhalt des Textes, welche Richtung der Absatz haben soll. Das klappt in den meisten Fällen gut, aber beispielsweise nicht mit gemischtem Text, der mit einer »falschen« Richtung anfängt.
+* Setze das Attribut `bidi` im Zweifelsfall auf `yes`. Der einzige Nachteil ist, dass der Publishing-Lauf etwas langsamer sein könnte. Andere Unterschiede sollten nicht auftreten.
+* Die Spracheinstellung (`language`) sollte entweder die richtige Sprache beinhalten, leer sein oder auf die Sprache `Other` gesetzt werden. Das Problem ist, dass manche Spracheinstellungen eine unerwünschte Schreibrichtung erwirken können.
+* Als Textausrichtung (`alignment` bei <<cmd-definetextformat>>) sollte anstelle von `left` oder `right` lieber `start` und `end` benutzt werden. `start` und `end` orientieren sich an der Richtung für den Absatz.
+* Es muss der <<ch-harfbuzz-mode,harfbuzz-Fontlader>> aktiviert sein.
+
+
+// end

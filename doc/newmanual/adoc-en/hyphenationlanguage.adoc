@@ -251,3 +251,11 @@ and is activated with `bidi="yes"`:
 .Here the text direction is calculated separately for each section. If `bidi="yes"` is specified, the first part is taken as the main direction of the paragraph, in this case the specification `direction="rtl"` is not necessary
 image::bidi-sample.png[width=100%]
 
+
+== Rules for mixed text
+
+* Set the `direction` attribute if it is clear in which context the text should appear. If it is empty or not set, the content of the text decides which direction the paragraph should have. This works well in most cases, but not, for example, with mixed text that starts with a “wrong” direction.
+* If in doubt, set the attribute `bidi` to `yes`. The only drawback is that the publishing run might be a bit slower. Other differences should not occur.
+* The language setting (`language`) should either contain the correct language, be empty or set to the language `Other`. The problem is that some language settings can cause an unwanted write direction.
+* For text alignment (`alignment` at <<cmd-definetextformat>>) you should use `start` and `end` instead of `left` or `right`. `start` and `end` are oriented to the direction for the paragraph.
+* The <<ch-harfbuzz-mode,harfbuzz-fontloader>> must be activated.

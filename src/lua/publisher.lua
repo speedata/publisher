@@ -4216,20 +4216,12 @@ function fix_justification(nodelist,alignment,parent,direction)
                     if n.subtype==0 and font_before_glue and get_glue_value(n,"width") > 0 and head.glue_sign == 1 then
                         local fonttable = font.fonts[font_before_glue]
                         if not fonttable then fonttable = font.fonts[1] err("Some font not found") end
-                        if node.has_field(n,"spec") then
-                            spec_new = node.new("glue_spec")
-                            spec_new.width = fonttable.parameters.space
-                            spec_new.shrink_order = head.glue_order
-                            n.spec = spec_new
-                        else
-                            -- somewhat it looks as if this is not the equivalent of the above. FIXME!
-                            set_glue_values(n,{width = fonttable.parameters.space, shrink_order = head.glue_order, stretch = 0, stretch_order = 0})
-                        end
+                        set_glue_values(n,{width = fonttable.parameters.space, shrink_order = head.glue_order, stretch = 0, stretch_order = 0})
                     end
                 end
             end
 
-            if curalignment == "rightaligned" then
+            if curalignment == "rightaligned" or curalignment == "centered" then
 
                 local list_start = head.head
                 local rightskip_node = node.tail(head.head)
@@ -4240,7 +4232,7 @@ function fix_justification(nodelist,alignment,parent,direction)
                 -- the glues might contain "plus 1 fill" and the penalties are not
                 -- useful
                 local tmp = rightskip_node.prev
-                while tmp and ( tmp.id == glue_node or tmp.id == penalty_node ) do
+                while tmp and ( tmp.id == glue_node or tmp.id == penalty_node or tmp.id == dir_node ) do
                     tmp = tmp.prev
                     if tmp == nil then break end
                     head.head = node.remove(head.head,tmp.next)
@@ -4248,30 +4240,12 @@ function fix_justification(nodelist,alignment,parent,direction)
 
                 local wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
 
-                local leftskip_node = set_glue(nil,{width = goal - wd})
-                head.head = node.insert_before(head.head,head.head,leftskip_node)
-            end
-
-            if alignment == "centered" then
-                local list_start = head.head
-                local rightskip_node = node.tail(head.head)
-                local parfillskip
-
-                -- first we remove everything between the rightskip and the
-                -- last non-glue/non-penalty item
-                -- the glues might contain "plus 1 fill" and the penalties are not
-                -- useful
-                local tmp = rightskip_node.prev
-                while tmp and ( tmp.id == glue_node or tmp.id == penalty_node ) do
-                    tmp = tmp.prev
-                    if tmp then
-                        head.head = node.remove(head.head,tmp.next)
-                    end
+                local leftskip_node
+                if curalignment == "rightaligned" then
+                    leftskip_node = set_glue(nil,{width = goal - wd})
+                else
+                    leftskip_node = set_glue(nil,{width = ( goal - wd ) / 2 })
                 end
-
-                local wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
-
-                local leftskip_node = set_glue(nil,{width = ( goal - wd ) / 2 })
                 head.head = node.insert_before(head.head,head.head,leftskip_node)
             end
         elseif head.id == 1 then -- vlist
