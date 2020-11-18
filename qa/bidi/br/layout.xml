@@ -1,0 +1,15 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    version="4.1.16">
+    <Pageformat height="3cm" width="4cm" />
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph bidi="yes">
+                    <Value>Two</Value><Br /><Value>lines</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
