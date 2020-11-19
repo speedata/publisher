@@ -1,11 +1,13 @@
 # NEWS
 
-This file gets updated before a release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/).
+This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/).
 
 ## Version 4.1 (development branch)
 
 * This branch now has a new paragraph builder, a new font shaper (harfbuzz) and an enhanced HTML mode. The HTML mode is currently limited to Textblock/Paragraph, but will be enhanced in the next versions.
 * New language settings (`Other`) to let the font shape guess the language and the script.
+* Support for non-western scripts such as CJK and Arabic. This includes right to left (rtl) typesetting.
+* Support for mixing left to right and right to left typesetting (bidi).
 
 
 ## Version 4
@@ -28,7 +30,6 @@ The paragraph building mode is completely rewritten in version 4 and could lead 
 ## Plans for Version 4.2
 
 * Better OpenType (`.otf` and `.ttf`) font support. Including font features, colored fonts and perhaps variable fonts.
-* Support for non-western scripts such as CJK and Arabic. This includes right to left typesetting.
 * Print CSS support. This includes a completely new HTML parser and renderer.
 
 
