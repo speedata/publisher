@@ -22,7 +22,7 @@
 == {{ translate $.Lang "Attributes" }}
 {{ with .Command.Attributes }}
 {{ range $.Command.Attributes }}
-[[{{.Attlink $.Command}}]]`{{.Name}}` ({{atttypeinfo . $.Lang}}{{ with .Css }}, {{ translate $.Lang "CSS property"}}: {{.}}{{end}}{{with .Since}}, _{{translate $.Lang "since version"}} {{.}}_{{end}})::
+[[{{.Attlink $.Command}}]]`{{.Name}}` ({{atttypeinfo . $.Lang}}{{ with .CSS }}, {{ translate $.Lang "CSS property"}}: {{.}}{{end}}{{with .Since}}, _{{translate $.Lang "since version"}} {{.}}_{{end}})::
   {{.DescriptionAdoc $.Lang }}
 {{ end }}{{else}}(keine){{ end }}
 

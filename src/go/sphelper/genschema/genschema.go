@@ -10,6 +10,7 @@ import (
 )
 
 const (
+	// SDNAMESPACE is the speedata layout rules namespace
 	SDNAMESPACE string = "urn:speedata.de:2009/publisher/en"
 )
 

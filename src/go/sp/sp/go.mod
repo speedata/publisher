@@ -14,8 +14,13 @@ require (
 	golang.org/x/sys v0.0.0-20181128092732-4ed8d59d0b35 // indirect
 	golang.org/x/text v0.3.0
 	sp v0.0.0
+	splibaux v0.0.0
 )
 
 replace sp v0.0.0 => ../../sp
+
+replace splibaux => ../../splibaux
+
+replace css => ../../css
 
 go 1.11

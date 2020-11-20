@@ -118,7 +118,7 @@ func init() {
 		replace[i*4+3] = pairs[i*2+1]
 	}
 	rp = strings.NewReplacer(replace...)
-	refrp = strings.NewReplacer("befehlsreferenz", "commandreference", "commandreference", "befehlsreferenz", "de", "en", "en", "de")
+	refrp = strings.NewReplacer("befehlsreferenz", "commandreference", "commandreference", "befehlsreferenz", "index.html", "index.html", "de", "en", "en", "de")
 }
 
 func formatSource(source, lang string) (string, error) {
@@ -129,7 +129,7 @@ func formatSource(source, lang string) (string, error) {
 		style = styles.Fallback
 	}
 
-	formatter := html.New(html.WithClasses())
+	formatter := html.New(html.WithClasses(true))
 	var str strings.Builder
 	iterator, err := xmllexer.Tokenise(nil, source)
 	if err != nil {

@@ -47,7 +47,9 @@ end
 
 desc "Build sphelper program"
 task :sphelper do
-	sh "go install -ldflags \"-X main.basedir=#{installdir} -s\"  sphelper/sphelper"
+	Dir.chdir(srcdir.join("go","sphelper")) do
+		sh "go install -ldflags \"-X main.basedir=#{installdir} -s\"  sphelper/sphelper"
+	end
 end
 
 

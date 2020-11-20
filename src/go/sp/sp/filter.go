@@ -8,12 +8,12 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"splibaux"
 	"strings"
 
 	"sp/sp/luacsv"
 	"sp/sp/luaxlsx"
 	"sp/sp/luaxml"
+	"splibaux"
 
 	"github.com/cjoudrey/gluahttp"
 	lua "github.com/yuin/gopher-lua"
@@ -125,19 +125,18 @@ func findFile(l *lua.LState) int {
 		return lerr("find_file requires 1 argument: the file to find")
 	}
 	fn := l.CheckString(1)
-	if abspath, err := splibaux.GetFullPath(fn); abspath == "" {
+	abspath, err := splibaux.GetFullPath(fn)
+	if abspath == "" {
 		if err != nil {
 			l.Push(lua.LNil)
 			l.Push(lua.LString(err.Error()))
 			return 2
-		} else {
-			l.Push(lua.LNil)
-			return 1
 		}
-	} else {
-		l.Push(lua.LString(abspath))
+		l.Push(lua.LNil)
 		return 1
 	}
+	l.Push(lua.LString(abspath))
+	return 1
 }
 
 var exports = map[string]lua.LGFunction{

@@ -10,10 +10,11 @@ import (
 	"sphelper/config"
 )
 
+// BuildLib builds the dynamic library and
 func BuildLib(cfg *config.Config, goos string, goarch string) error {
 	fmt.Println("Building dynamic library for", goos)
 	srcdir := cfg.Srcdir
-
+	os.Chdir(filepath.Join(srcdir, "go", "splib"))
 	libraryextension := ".so"
 	switch goos {
 	case "darwin":
@@ -34,7 +35,8 @@ func BuildLib(cfg *config.Config, goos string, goarch string) error {
 		cmd.Env = append(cmd.Env, "GOARCH="+goarch)
 	}
 	cmd.Env = append(cmd.Env, "CGO_ENABLED=1")
-	cmd.Env = append(cmd.Env, "GOPATH="+filepath.Join(srcdir, "go"))
+	// put the pkg file in tempdir, get the files from src
+	cmd.Env = append(cmd.Env, "GOPATH="+os.TempDir()+":"+filepath.Join(srcdir, "go"))
 	cmd.Env = append(cmd.Env, "GOCACHE="+os.Getenv("GOCACHE"))
 	cmd.Env = append(cmd.Env, "PATH="+os.Getenv("PATH"))
 	outbuf, err := cmd.CombinedOutput()

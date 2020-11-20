@@ -41,7 +41,7 @@ layoutschema-de.xsd
 layoutschema-en.xsd
 ----
 
-für XSD, je nach gewünschter Sprache der Dokumentation. Weitere Informationen zum Schema gibt es im Kapitel <<ch-schemavalidierung>> und im Anhang <<ch-anhang-schemazuweisen,Installatinsanleitungen für verschiedene Editoren (z.B. oXygen, Visual Studio Code)>>.
+für XSD, je nach gewünschter Sprache der Dokumentation. Weitere Informationen zum Schema gibt es im Kapitel <<ch-schemavalidierung>> und im Anhang <<ch-anhang-schemazuweisen,Installationsanleitungen für verschiedene Editoren (z.B. oXygen, Visual Studio Code)>>.
 
 
 == Namensraum des Layoutregelwerks

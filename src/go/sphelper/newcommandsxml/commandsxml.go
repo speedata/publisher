@@ -181,13 +181,14 @@ type choice struct {
 	DescriptionDe *description
 }
 
+// Attribute has all information about each attribute
 type Attribute struct {
 	commands      *Commands
 	DescriptionEn *description
 	DescriptionDe *description
 	Choice        []*choice
 	Name          string
-	Css           string
+	CSS           string
 	Since         string
 	Type          string
 	Optional      bool
@@ -218,10 +219,9 @@ func (c *choice) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
 			}
 		}
 	}
-	return nil
 }
 
-// cmd-commandname-attname
+// Attlink returns a string like cmd-attribute
 func (a *Attribute) Attlink(cmd *Command) string {
 	ret := []string{}
 	ret = append(ret, cmd.CmdLink())
@@ -231,6 +231,7 @@ func (a *Attribute) Attlink(cmd *Command) string {
 	return strings.Join(ret, "-")
 }
 
+// UnmarshalXML fills the attribute from the given XML segment
 func (a *Attribute) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
 	for {
 		tok, err := dec.Token()
@@ -267,9 +268,9 @@ func (a *Attribute) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error
 			}
 		}
 	}
-	return nil
 }
 
+// DescriptionHTML returns the the attribute description as an HTML blob.
 func (a *Attribute) DescriptionHTML(lang string) template.HTML {
 	var ret []string
 	switch lang {
@@ -306,6 +307,7 @@ func (a *Attribute) DescriptionHTML(lang string) template.HTML {
 	return template.HTML(strings.Join(ret, "\n"))
 }
 
+// DescriptionAdoc returns the description of the attribute as an asciidoctor blob.
 func (a *Attribute) DescriptionAdoc(lang string) string {
 	var ret []string
 	switch lang {
@@ -332,10 +334,7 @@ func (a *Attribute) DescriptionAdoc(lang string) string {
 	return string(strings.Join(ret, "\n"))
 }
 
-func (a *Attribute) HTMLFragment() string {
-	return a.Name
-}
-
+// Childelement has all child elements of a command.
 type Childelement struct {
 	commands *Commands
 	Text     []byte `xml:",innerxml"`
@@ -391,6 +390,7 @@ func (d *description) HTML() string {
 	return strings.Join(ret, "")
 }
 
+// Adoc returns the description in asciidoctor format.
 func (d *description) Adoc() string {
 	if d == nil {
 		return ""
@@ -457,6 +457,7 @@ func (d *description) String() string {
 	return strings.Join(ret, "")
 }
 
+// Command has information about a command
 type Command struct {
 	commands       *Commands
 	parentelements map[*Command]bool
@@ -470,18 +471,19 @@ type Command struct {
 	ExamplesEn     []*example
 	ExamplesDe     []*example
 	Childelement   *Childelement
-	Children       map[string][]*Command
+	children       map[string][]*Command
 	Name           string
-	Css            string
+	CSS            string
 	Since          string
 	Deprecated     bool
 	seealso        *seealso
 }
 
+// Parents retuns all parent commands
 func (c *Command) Parents(lang string) []*Command {
 	var cmds []*Command
 	mutex.Lock()
-	for k, _ := range c.parentelements {
+	for k := range c.parentelements {
 		cmds = append(cmds, k)
 	}
 	mutex.Unlock()
@@ -494,6 +496,7 @@ func (c *Command) String() string {
 	return c.Name
 }
 
+// UnmarshalXML fills the command from the XML segment
 func (c *Command) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
 	for {
 		tok, err := dec.Token()
@@ -546,7 +549,7 @@ func (c *Command) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
 					case "en":
 						a.Name = attribute.Value
 					case "css":
-						a.Css = attribute.Value
+						a.CSS = attribute.Value
 					case "since":
 						a.Since = attribute.Value
 					case "optional":
@@ -580,9 +583,9 @@ func (c *Command) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
 			}
 		}
 	}
-	return nil
 }
 
+// Adoclink retuns the command name with ".adoc"
 func (c *Command) Adoclink() string {
 	if c == nil {
 		return ""
@@ -592,6 +595,7 @@ func (c *Command) Adoclink() string {
 	return filenameSansExtension + ".adoc"
 }
 
+// Htmllink retuns a text such as "mycmd.html"
 func (c *Command) Htmllink() string {
 	if c == nil {
 		return ""
@@ -601,7 +605,7 @@ func (c *Command) Htmllink() string {
 	return filenameSansExtension + ".html"
 }
 
-// cmd-atpageshipout
+// CmdLink retuns a text such as cmd-atpageshipout
 func (c *Command) CmdLink() string {
 	if c == nil {
 		return ""
@@ -617,7 +621,7 @@ func (c *Command) CmdLink() string {
 	return "cmd-" + filenameSansExtension
 }
 
-//
+// DescriptionHTML returns the description as a HTML blob
 func (c *Command) DescriptionHTML(lang string) template.HTML {
 	var ret string
 	switch lang {
@@ -631,6 +635,7 @@ func (c *Command) DescriptionHTML(lang string) template.HTML {
 	return template.HTML(ret)
 }
 
+// DescriptionAdoc returns the description of the command as a asciidoctor blob.
 func (c *Command) DescriptionAdoc(lang string) string {
 	var ret string
 	switch lang {
@@ -644,6 +649,7 @@ func (c *Command) DescriptionAdoc(lang string) string {
 	return ret
 }
 
+// RemarkHTML returns the remark section as a formatted HTML blob.
 func (c *Command) RemarkHTML(lang string) template.HTML {
 	var ret string
 	switch lang {
@@ -657,6 +663,7 @@ func (c *Command) RemarkHTML(lang string) template.HTML {
 	return template.HTML(ret)
 }
 
+// RemarkAdoc retuns the remark section as a formatted asciidoctor blob.
 func (c *Command) RemarkAdoc(lang string) string {
 	var ret string
 	switch lang {
@@ -670,20 +677,21 @@ func (c *Command) RemarkAdoc(lang string) string {
 	return ret
 }
 
+// InfoHTML returns the info section as a HTML blob
 func (c *Command) InfoHTML(lang string) template.HTML {
 	var r *bytes.Reader
 	switch lang {
 	case "en":
-		if x := c.InfoEn; x == nil {
-			return template.HTML("")
-		} else {
+		if x := c.InfoEn; x != nil {
 			r = bytes.NewReader(x.Text)
+		} else {
+			return template.HTML("")
 		}
 	case "de":
-		if x := c.InfoDe; x == nil {
-			return template.HTML("")
-		} else {
+		if x := c.InfoDe; x != nil {
 			r = bytes.NewReader(x.Text)
+		} else {
+			return template.HTML("")
 		}
 	}
 
@@ -738,20 +746,21 @@ func (c *Command) InfoHTML(lang string) template.HTML {
 	return template.HTML(strings.Join(ret, ""))
 }
 
+// InfoAdoc returns the info section as a asciidoctor blob.
 func (c *Command) InfoAdoc(lang string) string {
 	var r *bytes.Reader
 	switch lang {
 	case "en":
-		if x := c.InfoEn; x == nil {
-			return ""
-		} else {
+		if x := c.InfoEn; x != nil {
 			r = bytes.NewReader(x.Text)
+		} else {
+			return ""
 		}
 	case "de":
-		if x := c.InfoDe; x == nil {
-			return ""
-		} else {
+		if x := c.InfoDe; x != nil {
 			r = bytes.NewReader(x.Text)
+		} else {
+			return ""
 		}
 	}
 
@@ -815,6 +824,7 @@ func (c *Command) InfoAdoc(lang string) string {
 	return strings.Join(ret, "")
 }
 
+// DescriptionText returns the description as text.
 func (c *Command) DescriptionText(lang string) string {
 	var r *bytes.Reader
 	switch lang {
@@ -884,6 +894,7 @@ func init() {
 	}
 }
 
+// SeealsoHTML retuns the see also section as a HTML blob
 func (c *Command) SeealsoHTML(lang string) template.HTML {
 	if c.seealso == nil {
 		return ""
@@ -942,6 +953,7 @@ func (c *Command) SeealsoHTML(lang string) template.HTML {
 	return template.HTML(strings.Join(ret, ""))
 }
 
+// SeealsoAdoc returns the see also section as an asciidoctor blob
 func (c *Command) SeealsoAdoc(lang string) string {
 	if c.seealso == nil {
 		return ""
@@ -1000,6 +1012,7 @@ func (c *Command) SeealsoAdoc(lang string) string {
 	return strings.Join(ret, "")
 }
 
+// Attributes returns all attributes for the command
 func (c *Command) Attributes() []*Attribute {
 	mutex.Lock()
 	sort.Sort(attributesbyen{c.Attr})
@@ -1009,20 +1022,21 @@ func (c *Command) Attributes() []*Attribute {
 	return ret
 }
 
+// ExampleAdoc returns the examples section as an asciidoctor blob.
 func (c *Command) ExampleAdoc(lang string) string {
 	var r *bytes.Reader
 	switch lang {
 	case "en":
-		if x := c.ExamplesEn; len(x) == 0 {
-			return ""
-		} else {
+		if x := c.ExamplesEn; len(x) != 0 {
 			r = bytes.NewReader(x[0].Text)
+		} else {
+			return ""
 		}
 	case "de":
-		if x := c.ExamplesDe; len(x) == 0 {
-			return ""
-		} else {
+		if x := c.ExamplesDe; len(x) != 0 {
 			r = bytes.NewReader(x[0].Text)
+		} else {
+			return ""
 		}
 	default:
 		return ""
@@ -1086,20 +1100,21 @@ func (c *Command) ExampleAdoc(lang string) string {
 	return strings.Join(ret, "")
 }
 
+// ExampleHTML returns the examples section as a HTML blob
 func (c *Command) ExampleHTML(lang string) template.HTML {
 	var r *bytes.Reader
 	switch lang {
 	case "en":
-		if x := c.ExamplesEn; len(x) == 0 {
-			return template.HTML("")
-		} else {
+		if x := c.ExamplesEn; len(x) != 0 {
 			r = bytes.NewReader(x[0].Text)
+		} else {
+			return template.HTML("")
 		}
 	case "de":
-		if x := c.ExamplesDe; len(x) == 0 {
-			return template.HTML("")
-		} else {
+		if x := c.ExamplesDe; len(x) != 0 {
 			r = bytes.NewReader(x[0].Text)
+		} else {
+			return template.HTML("")
 		}
 	default:
 		return template.HTML("")
@@ -1197,12 +1212,13 @@ func getchildren(c *Commands, dec *xml.Decoder) []*Command {
 	return cmds
 }
 
+// Childelements returns a list of commands that are allowed within this command.
 func (c *Command) Childelements(lang string) []*Command {
 	if c == nil {
 		return nil
 	}
 	mutex.Lock()
-	x := c.Children[lang]
+	x := c.children[lang]
 	mutex.Unlock()
 	if x != nil {
 		return x
@@ -1224,11 +1240,12 @@ func (c *Command) Childelements(lang string) []*Command {
 		sort.Sort(commandsbyen{cmds})
 	}
 	mutex.Lock()
-	c.Children[lang] = cmds
+	c.children[lang] = cmds
 	mutex.Unlock()
 	return cmds
 }
 
+// Commands is the root structure of all Commands
 type Commands struct {
 	defines          map[string]*define
 	CommandsEn       map[string]*Command
@@ -1252,6 +1269,7 @@ func (s attributesbyen) Less(i, j int) bool {
 	return s.sortattributes[i].Name < s.sortattributes[j].Name
 }
 
+// ReadCommandsFile reads from the reader. It must be in the format of a commands file.
 func ReadCommandsFile(r io.Reader) (*Commands, error) {
 	commands := &Commands{}
 	commands.defines = make(map[string]*define)
@@ -1282,7 +1300,7 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 			case "command":
 				c := &Command{}
 				c.commands = commands
-				c.Children = make(map[string][]*Command)
+				c.children = make(map[string][]*Command)
 				c.parentelements = make(map[*Command]bool)
 
 				err = dec.DecodeElement(c, &v)
@@ -1297,7 +1315,7 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 						c.Name = attribute.Value
 					}
 					if attribute.Name.Local == "css" {
-						c.Css = attribute.Value
+						c.CSS = attribute.Value
 					}
 					if attribute.Name.Local == "since" {
 						c.Since = attribute.Value
@@ -1313,10 +1331,12 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 	return commands, nil
 }
 
+// LoadCommandsFile opens the doc/commands.xml/commands.xml in the given base dir
 func LoadCommandsFile(basedir string) (*Commands, error) {
 	r, err := os.Open(filepath.Join(basedir, "doc", "commands-xml", "commands.xml"))
 	if err != nil {
 		return nil, err
 	}
+	defer r.Close()
 	return ReadCommandsFile(r)
 }

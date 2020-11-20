@@ -988,7 +988,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="fontface" type="text" optional="yes">
+    <attribute en="fontface" type="text" optional="yes" deprecated="yes">
       <description xml:lang="en">
         <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
       </description>
@@ -3513,7 +3513,7 @@
         <para>Setze die Farbe der Initiale. Voreingestellt ist Schwarz.</para>
       </description>
     </attribute>
-    <attribute en="fontface" optional="yes" type="text">
+    <attribute en="fontface" optional="yes" type="text" deprecated="yes">
       <description xml:lang="en">
         <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
       </description>
@@ -5001,7 +5001,7 @@
         <para>Multiplikator für die Schriftgröße, wenn reduce=fontsize. Voreinstellung: 0.9. Das bedeutet, dass die Schriftgröße um 0,9 reduziert wird, bis der Text in die vorgegebene Breite hineinpasst.</para>
       </description>
     </attribute>
-    <attribute en="fontface" type="text" optional="yes">
+    <attribute en="fontface" type="text" optional="yes" deprecated="yes">
       <description xml:lang="en">
         <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
       </description>
@@ -5636,7 +5636,7 @@
         <para>Die Laufrichtung des Textes (ltr oder rtl)</para>
       </description>
     </attribute>
-    <attribute en="fontface" css="font-family" type="text" optional="yes">
+    <attribute en="fontface" css="font-family" type="text" optional="yes" deprecated="yes">
       <description xml:lang="en">
         <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
       </description>
@@ -7993,7 +7993,7 @@
         <para>Wertet den angegebenen XPath-Ausdruck aus und ignoriert dessen Ausgabe.</para>
       </description>
     </attribute>
-    <attribute en="fontface" type="text" optional="yes">
+    <attribute en="fontface" type="text" optional="yes" deprecated="yes">
       <description xml:lang="en">
         <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
       </description>
@@ -8851,7 +8851,7 @@
         <para>Abstand zwischen zwei Spalten. Voreinstellung: 3mm.</para>
       </description>
     </attribute>
-    <attribute en="fontface" type="text" optional="yes">
+    <attribute en="fontface" type="text" optional="yes" deprecated="yes">
       <description xml:lang="en">
         <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
       </description>

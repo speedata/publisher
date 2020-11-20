@@ -566,7 +566,7 @@ func secondPass(r io.Reader, outdir, lang string) error {
 				if style == nil {
 					style = styles.Fallback
 				}
-				formatter := html.New(html.PreventSurroundingPre(), html.WithClasses())
+				formatter := html.New(html.PreventSurroundingPre(true), html.WithClasses(true))
 
 				var lexer chroma.Lexer
 				switch programListingLang {

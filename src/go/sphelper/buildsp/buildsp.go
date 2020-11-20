@@ -5,15 +5,16 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 
 	"sphelper/config"
 )
 
+// BuildGo builds the speedata Publisher runner
 func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype, location string) error {
-	srcdir := cfg.Srcdir
-	os.Chdir(cfg.Basedir())
+	// srcdir := cfg.Srcdir
+	os.Chdir(filepath.Join(cfg.Srcdir, "go", "sp", "sp"))
 
-	os.Setenv("GOPATH", filepath.Join(srcdir, "go"))
 	if goarch != "" {
 		os.Setenv("GOARCH", goarch)
 	}
@@ -22,7 +23,7 @@ func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype, location str
 		os.Setenv("GOOS", goos)
 	}
 
-	publisher_version := cfg.Publisherversion.String()
+	publisherversion := cfg.Publisherversion.String()
 
 	binaryname := "sp"
 	if goos == "windows" {
@@ -31,9 +32,23 @@ func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype, location str
 	if location == "" {
 		location = filepath.Join(destbin, binaryname)
 	}
+
 	// Now compile the go executable
-	arguments := []string{"build", "-ldflags", fmt.Sprintf("-X main.dest=%s -X main.version=%s -s -w", targettype, publisher_version), "-o", location, "sp/sp"}
+	arguments := []string{"build", "-ldflags", fmt.Sprintf("-X main.dest=%s -X main.version=%s -s -w", targettype, publisherversion), "-o", location, "sp/sp"}
 	cmd := exec.Command("go", arguments...)
+	cmd.Env = append(cmd.Env, "GOPATH="+os.TempDir()+":"+filepath.Join(cfg.Srcdir, "go"))
+	cmd.Env = append(cmd.Env, "GOCACHE="+os.Getenv("GOCACHE"))
+	cmd.Env = append(cmd.Env, "HOME="+os.Getenv("HOME"))
+
+	if goos != runtime.GOOS {
+		cmd.Env = append(cmd.Env, "GOOS="+goos)
+	}
+	if goarch != "" {
+		cmd.Env = append(cmd.Env, "GOARCH="+goarch)
+	}
+
+	// cmd.Dir = filepath.Join(srcdir, "go")
+
 	outbuf, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println(string(outbuf))

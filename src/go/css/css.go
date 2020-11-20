@@ -253,7 +253,7 @@ func consumeBlock(toks tokenstream, inblock bool) sBlock {
 		}
 	}
 	if colon > 0 {
-		b.Rules = append(b.Rules, qrule{Key: toks[start:colon], Value: toks[colon+1 : len(toks)]})
+		b.Rules = append(b.Rules, qrule{Key: toks[start:colon], Value: toks[colon+1:]})
 	}
 	return b
 }

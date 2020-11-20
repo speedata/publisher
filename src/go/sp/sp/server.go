@@ -142,7 +142,7 @@ func v0PublishIDHandler(w http.ResponseWriter, r *http.Request) {
 		Blob       string `json:"blob"`
 		Statusfile string `json:"statusfile"`
 		Finished   string `json:"finished"`
-		Output     string `json:"output`
+		Output     string `json:"output"`
 	}{}
 	publishdir := filepath.Join(serverTemp, id)
 	fi, err := os.Stat(publishdir)

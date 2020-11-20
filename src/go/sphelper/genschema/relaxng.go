@@ -29,7 +29,8 @@ func init() {
 	choiceElement = xml.StartElement{Name: xml.Name{Local: "choice"}}
 }
 
-func getChildElements(commands *commandsxml.CommandsXML, enc *xml.Encoder, children []byte, lang string) {
+// writeChildElements writes the child elements from this command to the encoder.
+func writeChildElements(commands *commandsxml.CommandsXML, enc *xml.Encoder, children []byte, lang string) {
 	if len(children) == 0 {
 		enc.EncodeToken(emptyElement.Copy())
 		enc.EncodeToken(emptyElement.End())
@@ -66,7 +67,7 @@ func getChildElements(commands *commandsxml.CommandsXML, enc *xml.Encoder, child
 			case "reference":
 				for _, attr := range v.Attr {
 					if attr.Name.Local == "name" {
-						getChildElements(commands, enc, commands.GetDefine(attr.Value), lang)
+						writeChildElements(commands, enc, commands.GetDefine(attr.Value), lang)
 					}
 				}
 			default:
@@ -274,7 +275,7 @@ func genRelaxNGSchema(commands *commandsxml.CommandsXML, lang string, allowForei
 				enc.EncodeToken(optionalElement.Copy().End())
 			}
 		}
-		getChildElements(commands, enc, cmd.Childelements.Text, lang)
+		writeChildElements(commands, enc, cmd.Childelements.Text, lang)
 
 		// if the child elements contents is "empty", there is no need for allowing foreign nodes (2/2)
 		if cmd.Name != "Include" && len(cmd.Childelements.Text) > 0 {
