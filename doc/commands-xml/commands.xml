@@ -2302,10 +2302,10 @@
   </command>
   <command en="DefineFontfamily">
     <description xml:lang="en">
-      <para>Defines a font family consisting of the shapes »regular», »bold«, »bold italic« and »italic«. To be used in <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface"/> and <cmd name="Table"/> with the attribute <tt>fontface</tt>.</para>
+      <para>Defines a font family consisting of the shapes »regular», »bold«, »bold italic« and »italic«. To be used in <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface"/> and <cmd name="Table"/> with the attribute <tt>fontfamily</tt>.</para>
     </description>
     <description xml:lang="de">
-      <para>Das Element <cmd name="DefineFontfamily"/> definiert eine Schriftfamilie, auf in den Elementen <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface"/> und <cmd name="Table"/> mit dem Attribut <tt>fontface</tt> zugegriffen werden kann.</para>
+      <para>Das Element <cmd name="DefineFontfamily"/> definiert eine Schriftfamilie, auf in den Elementen <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface"/> und <cmd name="Table"/> mit dem Attribut <tt>fontfamily</tt> zugegriffen werden kann.</para>
     </description>
     <childelements>
       <interleave>
@@ -2356,7 +2356,7 @@
 </DefineFontfamily>
 ]]></listing>
       <para>This font family can now be accessed like this:</para>
-      <listing><![CDATA[<Textblock fontface="Title">
+      <listing><![CDATA[<Textblock fontfamily="Title">
   <Paragraph>
     <Value>...<Value>
   </Paragraph>
@@ -2371,7 +2371,7 @@
   <BoldItalic fontface="Helvetica Fett Kursiv"/>
 </DefineFontfamily>]]></listing>
       <para>Anschließend kann im Text auf diese Schriftfamilie zugegriffen werden:</para>
-      <listing><![CDATA[<Textblock fontface="Helvetica">
+      <listing><![CDATA[<Textblock fontfamily="Helvetica">
   <Paragraph>
    ...]]></listing>
     </example>
@@ -2802,7 +2802,7 @@
       <listing><![CDATA[<Record element="...">
   <PlaceObject>
     <Textblock>
-      <Paragraph fontface="large">
+      <Paragraph fontfamily="large">
         <Value>large</Value>
         <Fontface fontfamily="text">
           <Value>regular</Value><B><Value>bold</Value></B>
@@ -2815,7 +2815,7 @@
     <example xml:lang="de">
       <listing><![CDATA[<PlaceObject>
   <Textblock>
-    <Paragraph fontface="Groß">
+    <Paragraph fontfamily="Groß">
       <Value>Groß</Value>
       <Fontface fontfamily="text">
         <Value>normal</Value><B><Value>fett</Value></B>
@@ -6926,7 +6926,7 @@
 </DefineFontfamily>
 ]]></listing>
       <para>This font family can now be accessed like this:</para>
-      <listing><![CDATA[<Textblock fontface="Title">
+      <listing><![CDATA[<Textblock fontfamily="Title">
   <Paragraph>
     <Value>...<Value>
   </Paragraph>
