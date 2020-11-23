@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.18" date="2020-11-23">
+      <en>New options columndirection in Pagetype.</en>
+      <de>Neue Option columndirection in Pagetype.</de>
+    </entry>
+    <entry version="4.1.18" date="2020-11-23">
+      <en>Bugfix for initials in rtl mode.</en>
+      <de>Fehlerkorrekt für Initialen im rtl-Modus.</de>
+    </entry>
+    <entry version="4.1.18" date="2020-11-23">
+      <en>Re-organize Go files, move sp server to a separate package.</en>
+      <de>Reorganisation der Go-Quelldateien, sp server in einem neuen Paket.</de>
+    </entry>
     <entry version="4.1.17" date="2020-11-18">
         <en>Fixes for bidi text/right to left text, documentation updates.</en>
         <de>Korrekturen für bidi-Text/rechts-nach-links Text, Dokumentation Updates.</de>
