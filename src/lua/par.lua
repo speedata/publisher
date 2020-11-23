@@ -803,9 +803,9 @@ function Par:format( width_sp, options )
     if self.initial then
         local initial_hlist = self.initial
         local ht = initial_hlist.height
-
-
-        initial_hlist.shift = -initial_hlist.width
+        if not ( self.direction == "rtl") then
+            initial_hlist.shift = -initial_hlist.width
+        end
         node.set_attribute(self.initial,publisher.att_origin,publisher.origin_initial)
 
         initial_hlist = node.vpack(initial_hlist)
@@ -825,12 +825,12 @@ end
 function Par:append( whatever, options )
     options = options or {}
     if options.initial and not self.initial then self.initial = options.initial end
+    self.direction = self.direction or options.direction
     if options.textformat and not self.textformat then self.textformat = options.textformat end
     if options.padding_right and not self.padding_right then self.padding_right = options.padding_right end
     if options.labelleft then
         self:prepend({options.labelleft,options.labelleftwidth,options.fontfamily,options.labelleftdistance,options.labelleftalign})
     end
-    -- if options.dontformat then w("dontformat") end
     -- w("whatever %s type %s",tostring(whatever), type(whatever))
     if type(whatever) == "string" then whatever = {whatever} end
     table.insert(self,{ contents = whatever, options = options} )

@@ -1,0 +1,24 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="4cm" width="5cm" />
+    <DefineTextformat name="start" alignment="start" />
+    <LoadFontfile name="EzraSIL" filename="ezra_sil.ttf" mode="harfbuzz" />
+    <DefineFontfamily fontsize="10" leading="12" name="ezra">
+        <Regular fontface="EzraSIL" />
+    </DefineFontfamily>
+    <DefineFontfamily fontsize="28" leading="28" name="init">
+        <Regular fontface="sans" />
+    </DefineFontfamily>
+
+    <Record element="data">
+        <Output>
+            <Text fontfamily="ezra" textformat="start">
+                <Paragraph bidi="yes" direction="rtl">
+                    <Initial fontfamily="init" padding-left="2pt"><Value>1</Value></Initial>
+                    <Value select="."/>
+                </Paragraph>
+            </Text>
+        </Output>
+    </Record>
+
+</Layout>
