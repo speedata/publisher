@@ -1,6 +1,6 @@
 // Heavily inspired by Nick Saika (https://nesv.github.io/golang/2014/02/25/worker-queues-in-go.html)
 
-package main
+package server
 
 import (
 	"fmt"
@@ -23,12 +23,12 @@ var (
 )
 
 // startDispatcher starts the worker queue with the number of processors
-func startDispatcher(nworkers int) {
+func startDispatcher(s *Server, nworkers int) {
 	// First, initialize the channel we are going to but the workers' work channels into.
 	workerQueue = make(chan chan WorkRequest, nworkers)
 	// Now, create all of our workers.
 	for i := 1; i <= nworkers; i++ {
-		newWorker(i, workerQueue).Start()
+		newWorker(s, i, workerQueue).Start()
 	}
 	go func() {
 		for {
@@ -46,6 +46,7 @@ func startDispatcher(nworkers int) {
 
 // Worker needs documentation
 type worker struct {
+	Server      *Server
 	ID          int
 	Work        chan WorkRequest
 	WorkerQueue chan chan WorkRequest
@@ -53,8 +54,9 @@ type worker struct {
 }
 
 // NewWorker creates and return the worker
-func newWorker(id int, workerQueue chan chan WorkRequest) worker {
+func newWorker(s *Server, id int, workerQueue chan chan WorkRequest) worker {
 	worker := worker{
+		Server:      s,
 		ID:          id,
 		Work:        make(chan WorkRequest),
 		WorkerQueue: workerQueue,
@@ -73,8 +75,8 @@ func (w worker) Start() {
 			select {
 			case work := <-w.Work:
 				// Receive a work request.
-				fmt.Fprintf(protocolFile, "%s: running speedata publisher\n", work.ID)
-				dir := filepath.Join(serverTemp, work.ID)
+				fmt.Fprintf(w.Server.ProtocolFile, "%s: running speedata publisher\n", work.ID)
+				dir := filepath.Join(w.Server.serverTemp, work.ID)
 				// Force the jobname, so the result is always 'publisher.pdf'
 				params := []string{"--jobname", "publisher", "--quiet"}
 				if _, err := os.Stat(filepath.Join(dir, "extravars")); err == nil {
@@ -85,27 +87,27 @@ func (w worker) Start() {
 					params = append(params, "--mode")
 					params = append(params, strings.Join(work.Modes, ","))
 				}
-				for _, p := range serverExtraDir {
+				for _, p := range w.Server.ClientExtraDir {
 					if p != "" {
 						params = append(params, "--extra-dir")
 						params = append(params, p)
 					}
 				}
-				if serverFilter != "" {
-					params = append(params, "--filter", serverFilter)
+				if f := w.Server.Filter; f != "" {
+					params = append(params, "--filter", f)
 				}
-				cmd := exec.Command(filepath.Join(bindir, "sp"+exeSuffix), params...)
-				if verbose {
-					fmt.Fprintf(protocolFile, "%v\n", cmd.Args)
+				cmd := exec.Command(w.Server.BinaryPath, params...)
+				if w.Server.Verbose {
+					fmt.Fprintf(w.Server.ProtocolFile, "%v\n", cmd.Args)
 				}
 				cmd.Dir = dir
 				out, err := cmd.CombinedOutput()
 				if err != nil {
-					fmt.Fprintf(protocolFile, "%s: start sp, returns %q\n", work.ID, err.Error())
+					fmt.Fprintf(w.Server.ProtocolFile, "%s: start sp, returns %q\n", work.ID, err.Error())
 				}
 				ioutil.WriteFile(filepath.Join(dir, "output.txt"), out, 0600)
 				ioutil.WriteFile(filepath.Join(dir, work.ID+"finished.txt"), []byte("finished"), 0600)
-				fmt.Fprintf(protocolFile, "%s: finished\n", work.ID)
+				fmt.Fprintf(w.Server.ProtocolFile, "%s: finished\n", work.ID)
 			case <-w.QuitChan:
 				// We have been asked to stop.
 				return

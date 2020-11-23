@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"sp"
+	"sp/server"
 
 	"github.com/speedata/configurator"
 	"github.com/speedata/hotfolder"
@@ -1116,11 +1117,33 @@ func main() {
 			log.Fatal("Problem with watch dir in section [hotfolder].")
 		}
 	case cmdServer:
-		serverextradir := strings.Split(getOptionSection("extra-dir", "server"), string(filepath.ListSeparator))
-		serverfilter := getOptionSection("filter", "server")
-		serverPort := getSectionOptionWithWarning("port", "server")
-		serverAddress := getSectionOptionWithWarning("address", "server")
-		runServer(serverPort, serverAddress, getOption("tempdir"), serverextradir, serverfilter)
+		options["quiet"] = "true"
+		options["autoopen"] = "false"
+		s := server.NewServer()
+		s.ClientExtraDir = strings.Split(getOptionSection("extra-dir", "server"), string(filepath.ListSeparator))
+		s.Port = getSectionOptionWithWarning("port", "server")
+		s.Filter = getOptionSection("filter", "server")
+		s.Address = getSectionOptionWithWarning("address", "server")
+		logfilename := "publisher.protocol"
+		if fn := getSectionOptionWithWarning("logfile", "server"); fn != "" {
+			logfilename = fn
+		}
+		var protocolFile io.Writer
+		if logfilename == "STDOUT" {
+			protocolFile = os.Stdout
+		} else if logfilename == "STDERR" {
+			protocolFile = os.Stderr
+		} else {
+			protocolFile, err = os.Create(logfilename)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+		fmt.Fprintf(protocolFile, "Protocol file for speedata Publisher (%s) - server mode\n", version)
+		fmt.Fprintln(protocolFile, "Time:", time.Now().Format(time.ANSIC))
+		s.BinaryPath = filepath.Join(bindir, "sp"+exeSuffix)
+		s.ProtocolFile = protocolFile
+		s.Run()
 	default:
 		log.Fatal("unknown command:", command)
 	}

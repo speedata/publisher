@@ -1,0 +1,10 @@
+github.com/fsnotify/fsnotify v1.4.9 h1:hsms1Qyu0jgnwNXIxa+/V/PDsU6CfLf6CNO8H7IWoS4=
+github.com/fsnotify/fsnotify v1.4.9/go.mod h1:znqG4EE+3YCdAaPaxE2ZRY/06pZUdp0tY4IgpuI1SZQ=
+github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
+github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
+github.com/speedata/config v0.0.0-20181203093101-3a3f44982ec4 h1:20KhtGSKIcqEv4WtuCVYM9rWhgiuYJGLm5aCeW4IufI=
+github.com/speedata/config v0.0.0-20181203093101-3a3f44982ec4/go.mod h1:TxWfFcFnaw1mu9xndZolTbZk1BWCdDZWvsEfQnCvbZY=
+github.com/speedata/configurator v0.0.0-20181204130920-092f848de8e1 h1:MOkDOMUlbquW+gXaRLdxmHLqsXpwOE8iidcpgwbk78s=
+github.com/speedata/configurator v0.0.0-20181204130920-092f848de8e1/go.mod h1:h+7uQzaP66Pxnw2Cd5f8TnzRlC5ue52Eem85P+WnzVc=
+golang.org/x/sys v0.0.0-20191005200804-aed5e4c7ecf9 h1:L2auWcuQIvxz9xSEqzESnV/QN/gNRXNApHi3fYwl2w0=
+golang.org/x/sys v0.0.0-20191005200804-aed5e4c7ecf9/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
