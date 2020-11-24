@@ -1,3 +1,4 @@
+// Package changelog reads a changelog.xml file
 package changelog
 
 import (
@@ -25,16 +26,17 @@ type clChapter struct {
 	Entries []clEntry `xml:"entry"`
 }
 
-type changelog struct {
+// Changelog is a sequence of chapters.
+type Changelog struct {
 	Chapter []clChapter `xml:"chapter"`
 }
 
-func parseChangelog(filename string) (*changelog, error) {
+func parseChangelog(filename string) (*Changelog, error) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
-	cl := &changelog{}
+	cl := &Changelog{}
 	err = xml.Unmarshal(data, cl)
 	if err != nil {
 		return nil, err
@@ -42,8 +44,8 @@ func parseChangelog(filename string) (*changelog, error) {
 	return cl, nil
 }
 
-// ReadChangelog reads the file in doc/changelog.xml and returns the parsed file as an object.
-func ReadChangelog(cfg *config.Config) (*changelog, error) {
+// ReadChangelog reads the file in basedir/doc/changelog.xml and returns the parsed file as an object.
+func ReadChangelog(cfg *config.Config) (*Changelog, error) {
 	cl, err := parseChangelog(filepath.Join(cfg.Basedir(), "doc", "changelog.xml"))
 	return cl, err
 }

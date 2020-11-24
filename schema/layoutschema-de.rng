@@ -1190,7 +1190,7 @@
    </define>
    <define name="e_DefineFontfamily">
       <element name="DefineFontfamily">
-         <a:documentation>Das Element DefineFontfamily definiert eine Schriftfamilie, auf in den Elementen Paragraph, Textblock, Fontface und Table mit dem Attribut fontface zugegriffen werden kann.</a:documentation>
+         <a:documentation>Das Element DefineFontfamily definiert eine Schriftfamilie, auf in den Elementen Paragraph, Textblock, Fontface und Table mit dem Attribut fontfamily zugegriffen werden kann.</a:documentation>
          <interleave>
             <group>
                <attribute name="fontsize">
@@ -4566,8 +4566,8 @@
       </element>
    </define>
       <sch:pattern>
-        <sch:rule context="t:Zuweisung">
-        <sch:assert test="not(  not(empty(@select)) and node()  )">Zuweisung: entweder Attribut select benutzen _oder_ Kindelemente, aber nicht beides.</sch:assert>
+        <sch:rule context="t:SetVariable">
+        <sch:assert test="not(  not(empty(@select)) and node()  )">SetVariable: entweder Attribut select benutzen _oder_ Kindelemente, aber nicht beides.</sch:assert>
       </sch:rule>
       </sch:pattern>
     

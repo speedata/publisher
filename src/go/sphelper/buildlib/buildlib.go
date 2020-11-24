@@ -1,3 +1,4 @@
+// Package buildlib builds the dynamic library for LuaTeX
 package buildlib
 
 import (

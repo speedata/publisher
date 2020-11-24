@@ -1,3 +1,4 @@
+// Package genschema creates Relax NG and XSD schema files for English and German
 package genschema
 
 import (
@@ -5,7 +6,6 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"sphelper/commandsxml"
 	"sphelper/config"
 )
 
@@ -18,7 +18,7 @@ const (
 func DoThings(cfg *config.Config) error {
 	basedir := cfg.Basedir()
 	libdir := cfg.Libdir
-	c, err := commandsxml.ReadCommandsFile(basedir)
+	c, err := readCommandsFile(basedir)
 	if err != nil {
 		return err
 	}

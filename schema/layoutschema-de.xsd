@@ -1016,7 +1016,7 @@
   </xs:element>
   <xs:element name="DefineFontfamily">
     <xs:annotation>
-      <xs:documentation>Das Element DefineFontfamily definiert eine Schriftfamilie, auf in den Elementen Paragraph, Textblock, Fontface und Table mit dem Attribut fontface zugegriffen werden kann.</xs:documentation>
+      <xs:documentation>Das Element DefineFontfamily definiert eine Schriftfamilie, auf in den Elementen Paragraph, Textblock, Fontface und Table mit dem Attribut fontfamily zugegriffen werden kann.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">

@@ -1,3 +1,4 @@
+// Package buildsp builds the sp executable
 package buildsp
 
 import (

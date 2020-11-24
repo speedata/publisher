@@ -7475,8 +7475,8 @@
     </rules>
     <rules xml:lang="de">
       <sch:pattern>
-        <sch:rule context="t:Zuweisung">
-        <sch:assert test="not(  not(empty(@select)) and node()  )">Zuweisung: entweder Attribut select benutzen _oder_ Kindelemente, aber nicht beides.</sch:assert>
+        <sch:rule context="t:SetVariable">
+        <sch:assert test="not(  not(empty(@select)) and node()  )">SetVariable: entweder Attribut select benutzen _oder_ Kindelemente, aber nicht beides.</sch:assert>
       </sch:rule>
       </sch:pattern>
     </rules>

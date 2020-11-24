@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"encoding/xml"
 	"fmt"
-
-	"sphelper/commandsxml"
 )
 
 const (
@@ -30,7 +28,7 @@ func init() {
 }
 
 // writeChildElements writes the child elements from this command to the encoder.
-func writeChildElements(commands *commandsxml.CommandsXML, enc *xml.Encoder, children []byte, lang string) {
+func writeChildElements(commands *commandsXML, enc *xml.Encoder, children []byte, lang string) {
 	if len(children) == 0 {
 		enc.EncodeToken(emptyElement.Copy())
 		enc.EncodeToken(emptyElement.End())
@@ -67,7 +65,7 @@ func writeChildElements(commands *commandsxml.CommandsXML, enc *xml.Encoder, chi
 			case "reference":
 				for _, attr := range v.Attr {
 					if attr.Name.Local == "name" {
-						writeChildElements(commands, enc, commands.GetDefine(attr.Value), lang)
+						writeChildElements(commands, enc, commands.getDefine(attr.Value), lang)
 					}
 				}
 			default:
@@ -87,7 +85,7 @@ func writeChildElements(commands *commandsxml.CommandsXML, enc *xml.Encoder, chi
 	}
 }
 
-func genRelaxNGSchema(commands *commandsxml.CommandsXML, lang string, allowForeignNodes bool) ([]byte, error) {
+func genRelaxNGSchema(commands *commandsXML, lang string, allowForeignNodes bool) ([]byte, error) {
 	var outbuf bytes.Buffer
 	var interleave, group xml.StartElement
 
@@ -150,7 +148,7 @@ func genRelaxNGSchema(commands *commandsxml.CommandsXML, lang string, allowForei
 
 		doc := xml.StartElement{Name: xml.Name{Local: "a:documentation"}}
 		enc.EncodeToken(doc)
-		enc.EncodeToken(xml.CharData(cmd.GetCommandDescription(lang)))
+		enc.EncodeToken(xml.CharData(cmd.getCommandDescription(lang)))
 		enc.EncodeToken(doc.End())
 
 		// if the child elements contents is "empty", there is no need for allowing foreign nodes (1/2)

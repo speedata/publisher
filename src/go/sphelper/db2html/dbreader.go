@@ -1,3 +1,4 @@
+// Package db2html creates HTML files from the docbook documenation.
 package db2html
 
 import (
@@ -106,8 +107,6 @@ func init() {
 		"programming", "programmierung",
 		"lengthsunits", "massangaben",
 		"qa", "qualitaetssicherung",
-		"index", "index",
-		"en", "de",
 	}
 	// replace will be a, b, b, a, c, d, d, c, ...
 	replace := make([]string, len(pairs)*2)
@@ -118,7 +117,7 @@ func init() {
 		replace[i*4+3] = pairs[i*2+1]
 	}
 	rp = strings.NewReplacer(replace...)
-	refrp = strings.NewReplacer("befehlsreferenz", "commandreference", "commandreference", "befehlsreferenz", "index.html", "index.html", "de", "en", "en", "de")
+	refrp = strings.NewReplacer("befehlsreferenz", "commandreference", "commandreference", "befehlsreferenz")
 }
 
 func formatSource(source, lang string) (string, error) {
@@ -912,11 +911,22 @@ func (d *DocBook) linkToPage(dest string, page section) string {
 func (d *DocBook) otherManual(page section) string {
 	var ret string
 	// simple replaceemnt in command reference
-	if strings.Contains(page.Link, "befehlsreferenz") || strings.Contains(page.Link, "commandreference") {
-		ret = d.linkToPage(refrp.Replace(page.Link), page)
-	} else {
-		ret = d.linkToPage(rp.Replace(page.Link), page)
+	linkparts := strings.Split(page.Link, "/")
+	for i, b := range linkparts {
+		switch b {
+		case "de":
+			linkparts[i] = "en"
+		case "en":
+			linkparts[i] = "de"
+		default:
+			if strings.Contains(page.Link, "befehlsreferenz") || strings.Contains(page.Link, "commandreference") {
+				linkparts[i] = refrp.Replace(b)
+			} else {
+				linkparts[i] = rp.Replace(b)
+			}
+		}
 	}
+	ret = d.linkToPage(strings.Join(linkparts, "/"), page)
 	return ret
 }
 

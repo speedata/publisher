@@ -1,3 +1,4 @@
+// Package fileutils provides some helper functions for file / directory copying
 package fileutils
 
 import (
@@ -6,6 +7,7 @@ import (
 	"path/filepath"
 )
 
+// IsDir returns true if the given path exists and is a directory.
 func IsDir(path string) bool {
 	fi, err := os.Stat(path)
 	if err != nil {
@@ -14,6 +16,7 @@ func IsDir(path string) bool {
 	return fi.IsDir()
 }
 
+// IsExeFile returns true if the path exists and is a regular file.
 func IsExeFile(path string) bool {
 	fi, err := os.Stat(path)
 	if err != nil {
@@ -25,6 +28,8 @@ func IsExeFile(path string) bool {
 	return false
 }
 
+// CopyFile copies the source file to the destionation path.
+// If dest is a directory, the dest file name will have the same name as source.
 func CopyFile(source string, dest string) (err error) {
 	sf, err := os.Open(source)
 	if err != nil {

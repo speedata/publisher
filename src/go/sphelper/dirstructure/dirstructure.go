@@ -1,3 +1,4 @@
+// Package dirstructure creates the directory structure used in the distribution ZIP files.
 package dirstructure
 
 import (
@@ -9,7 +10,7 @@ import (
 	"sphelper/fileutils"
 )
 
-// build dir contains the documentation
+// MkBuilddir builds the directory structure. srcbindir contains all files necessary to run LuaTeX
 func MkBuilddir(cfg *config.Config, srcbindir string) error {
 	var err error
 

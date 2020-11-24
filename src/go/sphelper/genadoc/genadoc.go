@@ -14,9 +14,9 @@ import (
 	"time"
 
 	"sphelper/changelog"
+	"sphelper/commandsxml"
 	"sphelper/config"
 	"sphelper/fileutils"
-	commandsxml "sphelper/newcommandsxml"
 )
 
 var (
@@ -69,19 +69,19 @@ func translate(lang, text string) string {
 	}
 	return "--"
 }
-func attributes(lang string, attributes []*commandsxml.Attribute, cmd *commandsxml.Command) string {
+func attributes(lang string, attributes []*commandsxml.Attribute) string {
 	if len(attributes) == 0 {
 		return "(" + translate(lang, "none") + ")"
 	}
 	var ret []string
 	for _, att := range attributes {
-		ret = append(ret, fmt.Sprintf("<<%s,`%s`>>", att.Attlink(cmd), att.Name))
+		ret = append(ret, fmt.Sprintf("<<%s,`%s`>>", att.Attlink(), att.Name))
 	}
 	return strings.Join(ret, ", ")
 }
 
 func sortedcommands(commands *commandsxml.Commands) []*commandsxml.Command {
-	return commands.CommandsSortedEn
+	return commands.Commands()
 }
 
 func parentelements(lang string, cmd *commandsxml.Command) string {
@@ -154,7 +154,7 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) string {
 	return string(strings.Join(ret, ", "))
 }
 
-// GenerateAdocFiles reads the commands.xml file and creates the files in the ref directory.
+// GenerateAdocFiles reads the commands.xml file and creates the files in the ref directory. mode is the asciidoctor mode.
 func GenerateAdocFiles(cfg *config.Config, lang string, mode ...string) error {
 	var err error
 	srcpath := filepath.Join(cfg.Basedir(), "doc", "newmanual")
@@ -173,9 +173,6 @@ func GenerateAdocFiles(cfg *config.Config, lang string, mode ...string) error {
 	c, err := commandsxml.ReadCommandsFile(r)
 	if err != nil {
 		return err
-	}
-	for _, cmd := range c.CommandsEn {
-		cmd.Childelements("en")
 	}
 
 	refdir := filepath.Join(srcpath, "adoc-"+lang, "ref")
@@ -197,7 +194,7 @@ func GenerateAdocFiles(cfg *config.Config, lang string, mode ...string) error {
 		return err
 	}
 
-	for _, v := range c.CommandsEn {
+	for _, v := range c.Commands() {
 		fullpath := filepath.Join(refdir, v.Adoclink())
 		wg.Add(1)
 		go builddoc(c, v, lang, fullpath)
@@ -292,15 +289,9 @@ func GenerateAdocFiles(cfg *config.Config, lang string, mode ...string) error {
 	return nil
 }
 
-func DoThings(cfg *config.Config, lang string, sitedoc bool) error {
+// DoThings creates the documentation in asciidoctor format. The output directory
+func DoThings(cfg *config.Config, lang string) error {
 	var err error
-	newmanualdestpath := filepath.Join(cfg.Builddir, "newdoc", "newmanual-en")
-
-	err = os.RemoveAll(newmanualdestpath)
-	if err != nil {
-		return err
-	}
-
 	err = GenerateAdocFiles(cfg, lang)
 	if err != nil {
 		return err

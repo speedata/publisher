@@ -1190,7 +1190,7 @@
    </define>
    <define name="e_DefineFontfamily">
       <element name="DefineFontfamily">
-         <a:documentation>Defines a font family consisting of the shapes »regular», »bold«, »bold italic« and »italic«. To be used in Paragraph, Textblock, Fontface and Table with the attribute fontface.</a:documentation>
+         <a:documentation>Defines a font family consisting of the shapes »regular», »bold«, »bold italic« and »italic«. To be used in Paragraph, Textblock, Fontface and Table with the attribute fontfamily.</a:documentation>
          <interleave>
             <group>
                <attribute name="fontsize">

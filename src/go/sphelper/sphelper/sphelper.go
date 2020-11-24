@@ -1,3 +1,4 @@
+// Package sphelper is the starting point for creating documentation/schema and building the binaries
 package main
 
 import (
@@ -38,7 +39,7 @@ func makedoc(cfg *config.Config, sitedoc bool) error {
 	}
 
 	for _, lang := range []string{"en", "de"} {
-		err = genadoc.DoThings(cfg, lang, sitedoc)
+		err = genadoc.DoThings(cfg, lang)
 		if err != nil {
 			return err
 		}

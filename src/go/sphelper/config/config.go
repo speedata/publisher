@@ -1,3 +1,4 @@
+// Package config holds information about the paths and version of the speedata Publisher
 package config
 
 import (
@@ -9,12 +10,14 @@ import (
 	"strings"
 )
 
+// Config is the basic configuration object
 type Config struct {
 	basedir                  string
 	Srcdir, Builddir, Libdir string
 	Publisherversion         Version
 }
 
+// Version holds the speedata version information
 type Version struct {
 	Major int
 	Minor int
@@ -25,6 +28,7 @@ func (v Version) String() string {
 	return fmt.Sprintf("%d.%d.%d", v.Major, v.Minor, v.Patch)
 }
 
+// SetBasedir sets the root of the speedata Publisher source files
 func (cfg *Config) SetBasedir(basedir string) {
 	cfg.basedir = basedir
 	cfg.Srcdir = filepath.Join(basedir, "src")
@@ -32,10 +36,12 @@ func (cfg *Config) SetBasedir(basedir string) {
 	cfg.Libdir = filepath.Join(basedir, "lib")
 }
 
+// Basedir returns the root of the speedata Publisher source files
 func (cfg *Config) Basedir() string {
 	return cfg.basedir
 }
 
+// NewConfig creates a new configuration struct
 func NewConfig(basedir string) *Config {
 	cfg := &Config{}
 	cfg.SetBasedir(basedir)
@@ -43,6 +49,7 @@ func NewConfig(basedir string) *Config {
 	return cfg
 }
 
+// Read the file `version' and parse the information
 func readVersion(product string, basedir string) Version {
 	curwd, err := os.Getwd()
 	if err != nil {
@@ -79,6 +86,4 @@ func readVersion(product string, basedir string) Version {
 		}
 	}
 	panic("Cannot find version number")
-
-	return ver
 }

@@ -1,3 +1,4 @@
+// Package sourcedoc creates a documentation of the Lua source code
 package sourcedoc
 
 import (
