@@ -3415,7 +3415,12 @@ function hbglyphlist(arguments)
                     node.set_attribute(n,att_bgpaddingbottom,parameter.bg_padding_bottom)
                 end
                 node.set_attribute(n,att_fontfamily,fontfamily)
-             else
+            elseif cluster[thiscluster] == 8203 then
+                -- U+200B ZERO WIDTH SPACE
+                p = node.new("penalty")
+                p.penalty = -10
+                list,cur = node.insert_after(list,cur,p)
+            else
                 n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch})
                 setstyles(n,parameter)
                 list,cur = node.insert_after(list,cur,n)
