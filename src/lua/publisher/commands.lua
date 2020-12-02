@@ -209,7 +209,7 @@ function commands.barcode( layoutxml,dataxml )
     local showtext       = publisher.read_attribute(layoutxml,dataxml,"showtext",    "boolean", "yes")
     local typ            = publisher.read_attribute(layoutxml,dataxml,"type",        "rawstring")
     local width          = publisher.read_attribute(layoutxml,dataxml,"width",       "length_sp")
-    if fontname then warning("Barcode/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
+    if fontname then warning("Barcode/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
 
     width = width or xpath.get_variable("__maxwidth")
@@ -1336,7 +1336,7 @@ function commands.initial( layoutxml,dataxml)
     local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily",   "rawstring",fontname)
     local padding_left   = publisher.read_attribute(layoutxml,dataxml,"padding-left", "length_sp",0)
     local padding_right  = publisher.read_attribute(layoutxml,dataxml,"padding-right","length_sp",0)
-    if fontname then warning("Initial/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
+    if fontname then warning("Initial/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     local fontfamily = 0
     if fontfamilyname then
@@ -1821,7 +1821,7 @@ function commands.nobreak( layoutxml, dataxml )
     local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce",     "string", "keeptogether")
     local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor",     "rawstring",0.9)
     local text             = publisher.read_attribute(layoutxml,dataxml,"text",       "rawstring")
-    if fontname then warning("Nobreak/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
+    if fontname then warning("Nobreak/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     local p = par:new(nil,"nobreak")
     local tab = publisher.dispatch(layoutxml,dataxml)
@@ -2229,7 +2229,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local paddingleft       = publisher.read_attribute(layoutxml,dataxml,"padding-left",       "width_sp")
     local paddingright      = publisher.read_attribute(layoutxml,dataxml,"padding-right",      "width_sp")
     local textformat        = publisher.read_attribute(layoutxml,dataxml,"textformat",         "rawstring")
-    if fontname then warning("Paragraph/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
+    if fontname then warning("Paragraph/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
     if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
     if direction and not ( direction == "ltr" or direction == "rtl") then
         if not ( direction == "" ) then
@@ -3387,7 +3387,7 @@ function commands.table( layoutxml,dataxml,options )
     local rowdistance    = publisher.read_attribute(layoutxml,dataxml,"leading",         "length")
     local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",      "rawstring", "__leftaligned")
     local width          = publisher.read_attribute(layoutxml,dataxml,"width",           "length")
-    if fontname then warning("Table/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
+    if fontname then warning("Table/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     -- FIXME: leading -> row distance or so
     padding        = tex.sp(padding        or "0pt")
@@ -3809,7 +3809,7 @@ function commands.text(layoutxml,dataxml)
     local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",   "rawstring")
     local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily", "rawstring",fontname)
     local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat", "rawstring","text")
-    if fontname then warning("Text/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
+    if fontname then warning("Text/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     local colorindex
     if colorname then
@@ -3958,7 +3958,7 @@ function commands.textblock( layoutxml,dataxml )
     local minheight      = publisher.read_attribute(layoutxml,dataxml,"minheight",     "height_sp")
     local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",    "rawstring","text")
     local width          = publisher.read_attribute(layoutxml,dataxml,"width",         "length_sp")
-    if fontname then warning("Textblock/fontname is deprecated and will be removed in version 5. Please use fontfamily instead") end
+    if fontname then warning("Textblock/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     local save_width = xpath.get_variable("__maxwidth")
     width = width or save_width
