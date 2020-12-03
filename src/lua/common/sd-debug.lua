@@ -48,7 +48,8 @@ do
   local function indent(level)
     return string.rep( "    ", level )
   end
-  function printtable (ind,tbl_to_print,level)
+  function printtable (ind,tbl_to_print,level,depth)
+    if depth and depth <= level then return end
     if type(tbl_to_print) ~= "table" then
       log("printtable: %q is not a table, it is a %s (%q)",tostring(ind),type(tbl_to_print),tostring(tbl_to_print))
       return
@@ -80,7 +81,7 @@ do
         end
       if type(l)=="table" then
         if k ~= ".__parent" then
-          printtable(k,l,level)
+          printtable(k,l,level,depth)
         else
           log("%s[\".__parent\"] = <%s>", indent(level),l[".__local_name"])
         end
