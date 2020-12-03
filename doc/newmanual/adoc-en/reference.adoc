@@ -516,7 +516,8 @@ The section <<ch-pagetypes>>.
 include::ref/paragraph.adoc[]
 == See also
 
-The section <<ch-textformatting,text formatting>>.
+The section <<ch-textformatting,text formatting>> and the command <<cmd-options>> for a list of all languages.
+
 
 
 include::ref/pdfoptions.adoc[]
@@ -618,6 +619,7 @@ include::ref/span.adoc[]
 
 == See also
 
+The command <<cmd-options>> for a list of all languages.
 
 include::ref/sub.adoc[]
 

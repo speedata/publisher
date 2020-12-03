@@ -511,7 +511,8 @@ Das Kapitel <<ch-seitentypen,Seitentypen>>.
 include::ref/paragraph.adoc[]
 == Siehe auch
 
-Das Kapitel <<ch-textformatierung,Textformatierung>>.
+Das Kapitel <<ch-textformatierung,Textformatierung>> und den Befehl <<cmd-options>> für eine Liste aller unterstützter Sprachen.
+
 
 
 
@@ -614,7 +615,7 @@ include::ref/span.adoc[]
 
 == Siehe auch
 
-
+Den Befehl <<cmd-options>> für eine Liste aller unterstützter Sprachen.
 
 include::ref/sub.adoc[]
 
