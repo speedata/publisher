@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.19" date="2020-12-03">
+        <en>Lots of minor changes (documentation and re-organization of internal code).</en>
+        <de>Viele kleine Änderungen (Dokumentation und reorganisation des Quellcodes).</de>
+    </entry>
     <entry version="4.1.18" date="2020-11-23">
       <en>New options columndirection in Pagetype.</en>
       <de>Neue Option columndirection in Pagetype.</de>
