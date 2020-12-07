@@ -429,7 +429,10 @@ local function make_code(size,matrix)
           white_bits = white_bits + 1
         else
           -- draw black
-          bc[#bc + 1] = string.format("%g %g %g %g re f",( x - 1) * unit,( y - 1 ) * -unit, unit * 1.02, dark_bits * unit)
+          if dark_bits > 0 then
+            local str = string.format("%g %g %g %g re f",( x - 1) * unit,( y - 1 ) * -unit, unit * 1.02, dark_bits * unit)
+            bc[#bc + 1] = str
+          end
           dark_bits = 0
           white_bits = 1
         end
@@ -437,7 +440,10 @@ local function make_code(size,matrix)
       end
     end
     if last_bit == "black" then
-      bc[#bc + 1] = string.format("%g %g %g %g re f",(x - 1) * unit,( #matrix ) * -unit, unit * 1.02, dark_bits * unit)
+      if dark_bits > 0 then
+        local str =  string.format("%g %g %g %g re f",(x - 1) * unit,( #matrix ) * -unit, unit * 1.02, dark_bits * unit)
+        bc[#bc + 1] = str
+      end
     end
   end
   bc[#bc + 1] = "Q"
