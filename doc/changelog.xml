@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.20" date="2020-12-07">
+        <en>Bugfix for thin lines in qrcodes (#282).</en>
+        <de>Fehlerkorrektur für dünne Linien in qrcodes (#282).</de>
+    </entry>
     <entry version="4.1.19" date="2020-12-03">
         <en>Lots of minor changes (documentation and re-organization of internal code).</en>
         <de>Viele kleine Änderungen (Dokumentation und reorganisation des Quellcodes).</de>
