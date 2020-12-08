@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.21" date="2020-12-08">
+        <en>Beautify version information (#284).</en>
+        <de>Versionsinformation verschönern (#284).</de>
+    </entry>
+    <entry version="4.1.21" date="2020-12-08">
+        <en>Bugfix for incorrect font scaling (#283).</en>
+        <de>Fehlerkorrektur für fehlerhafte Fontskalierung (#283).</de>
+    </entry>
     <entry version="4.1.20" date="2020-12-07">
         <en>Bugfix for thin lines in qrcodes (#282).</en>
         <de>Fehlerkorrektur für dünne Linien in qrcodes (#282).</de>
