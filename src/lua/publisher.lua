@@ -840,7 +840,7 @@ end
 --- -------------------------------
 --- This is the entry point of the processing. It is called from publisher.spinit#main_loop.
 function dothings()
-    log("Running LuaTeX version %d on %s",tex.luatexversion,os.name)
+    log("Running LuaTeX version %s on %s",luatex_version,os.name)
     --- First we set some defaults.
     --- A4 paper is 210x297 mm
     local wd_sp = tex.sp("210mm")
@@ -1303,7 +1303,7 @@ function initialize_luatex_and_generate_pdf()
     if sp_suppressinfo then
         infos = { "/Creator (speedata Publisher) /Producer (LuaTeX)"}
     else
-        infos = { string.format("/Creator (%s) /Producer (LuaTeX %d - %s)",creator, status.luatex_version or -1, status.development_id or "-") }
+        infos = { string.format("/Creator (%s) /Producer (LuaTeX %s (build %s))",creator, luatex_version or -1, status.development_id or "-") }
     end
 
     if options.documenttitle and options.documenttitle ~= "" then
