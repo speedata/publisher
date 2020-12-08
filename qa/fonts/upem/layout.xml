@@ -1,0 +1,20 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat height="3cm" width="4cm" />
+
+  <LoadFontfile name="InterRegular" filename="Inter-Regular.otf" mode="harfbuzz" />
+  <DefineFontfamily name="inter" fontsize="10" leading="12">
+    <Regular fontface="InterRegular" />
+  </DefineFontfamily>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph fontfamily="text">
+          <Value>Va</Value>
+        </Paragraph>
+        <Paragraph fontfamily="inter">
+          <Value>Va</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

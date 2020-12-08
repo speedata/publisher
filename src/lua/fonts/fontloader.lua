@@ -102,15 +102,15 @@ function define_font_hb( name, size, extra_parameter )
     end
     local fonttable
     local filename_with_path
-        filename_with_path = kpse.find_file(name)
-        if not filename_with_path then return false, string.format("Fontfile '%s' not found.", name) end
-        local face = harfbuzz.Face.new(filename_with_path)
-        local font = harfbuzz.Font.new(face)
-        fonttable = {
-            face = face,
-            font = font
-        }
-        lookup_fonttable_from_filename[name] = fonttable
+    filename_with_path = kpse.find_file(name)
+    if not filename_with_path then return false, string.format("Fontfile '%s' not found.", name) end
+    local face = harfbuzz.Face.new(filename_with_path)
+    local font = harfbuzz.Font.new(face)
+    fonttable = {
+        face = face,
+        font = font
+    }
+    lookup_fonttable_from_filename[name] = fonttable
     local face = fonttable.face
     local font = fonttable.font
 
@@ -124,6 +124,7 @@ function define_font_hb( name, size, extra_parameter )
     local f = {}
     f.mag = mag
     f.mode          = "harfbuzz"
+    f.units_per_em  = upem
     f.face          = face
     f.font          = font
     f.characters    = {}
@@ -188,13 +189,14 @@ function define_font_hb( name, size, extra_parameter )
             name  = font:get_glyph_name(gid),
             expansion_factor = 1000,
         }
+        local thischar = f.characters[uni]
         backmap[gid] = uni
         if touni then
-            f.characters[uni].tounicode = touni
+            thischar.tounicode = touni
         end
         if ge then
-            f.characters[uni].height = ge.y_bearing * mag
-            f.characters[uni].depth = (ge.height + ge.y_bearing) * -1 * mag
+            thischar.height = ge.y_bearing * mag
+            thischar.depth = (ge.height + ge.y_bearing) * -1 * mag
         end
     end
     f.backmap = backmap
@@ -310,6 +312,7 @@ function define_font(name, size,extra_parameter)
     f.fontloader    = fonttable
     f.otfeatures    = {}
     f.mode          = "fontforge"
+    f.units_per_em  = fonttable.units_per_em
     f.name          = fonttable.fontname
     f.fullname      = fonttable.fontname
     f.designsize    = size
