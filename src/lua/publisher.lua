@@ -1303,7 +1303,7 @@ function initialize_luatex_and_generate_pdf()
     if sp_suppressinfo then
         infos = { "/Creator (speedata Publisher) /Producer (LuaTeX)"}
     else
-        infos = { string.format("/Creator (%s) /Producer (LuaTeX %s (build %s))",creator, luatex_version or -1, status.development_id or "-") }
+        infos = { string.format("/Creator (%s) /Producer (LuaTeX %s (build %s))",creator, luatex_version, status.development_id or "-") }
     end
 
     if options.documenttitle and options.documenttitle ~= "" then
