@@ -3828,7 +3828,8 @@ function mknodes(str,parameter,origin)
     if not str or string.len(str) == 0 then
         -- a space char can have a width, so we return a zero width something
         local strut = add_rule(nil,"head",{height = 1 * factor, depth = 0, width = 0 })
-        return strut
+        setprop(strut,"pardir",parameter.direction)
+        return strut, parameter.direction
     end
     parameter = parameter or {}
     local languagecode = parameter.languagecode or defaultlanguage
