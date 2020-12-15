@@ -93,6 +93,8 @@ func stringValue(toks tokenstream) string {
 			default:
 				w("unhandled delimiter", tok)
 			}
+		case scanner.URI:
+			ret = append(ret, "url("+tok.Value+")")
 		default:
 			w("unhandled token", tok)
 		}
@@ -212,6 +214,19 @@ func resolveAttributes(attrs []html.Attribute) map[string]string {
 			values := getFourValues(attr.Val)
 			for _, margin := range toprightbottomleft {
 				resolved["margin-"+margin] = values[margin]
+			}
+		case "list-style":
+			for _, part := range strings.Split(attr.Val, " ") {
+				switch part {
+				case "inside", "outside":
+					resolved["list-style-position"] = part
+				default:
+					if strings.HasPrefix(part, "url") {
+						resolved["list-style-image"] = part
+					} else {
+						resolved["list-style-type"] = part
+					}
+				}
 			}
 		case "padding":
 			values := getFourValues(attr.Val)
@@ -407,7 +422,11 @@ func (c *CSS) dumpTree(outfile io.Writer) {
 		for _, r := range rules[k] {
 			for _, singlerule := range r.rule {
 				for _, node := range cascadia.QueryAll(doc, r.selector) {
-					node.Attr = append(node.Attr, html.Attribute{Key: stringValue(singlerule.Key), Val: stringValue(singlerule.Value)})
+					var prefix string
+					if pe := r.selector.PseudoElement(); pe != "" {
+						prefix = pe + "::"
+					}
+					node.Attr = append(node.Attr, html.Attribute{Key: prefix + stringValue(singlerule.Key), Val: stringValue(singlerule.Value)})
 				}
 			}
 		}

@@ -194,6 +194,8 @@ function calculate_height( attribute_height, original_size )
         local amount = string.match(attribute_height, "(%d+)%%$")
         original_size = math.round(original_size * tonumber(amount) / 100, 0)
         return original_size
+    elseif tonumber(attribute_height) then
+        return attribute_height
     else
         err("not implemented yet, calculate_height")
         return original_size
@@ -330,6 +332,9 @@ function set_calculated_width(styles)
         -- xx percent
         local amount = string.match(sw, "(%d+)%%$")
         cw = math.round(cw * tonumber(amount) / 100, 0)
+    elseif string.match(sw,"em$") then
+        local amount = string.match(sw,"(%d+)em$")
+        cw = math.round(styles.fontsize_sp * tonumber(amount), 0)
     elseif sw == "auto" then
         cw = styles.calculated_width
         if styles.height and styles.height ~= "auto" then
@@ -409,8 +414,85 @@ function copy_attributes( styles,attributes )
     end
 end
 
+-- return an option table for mknodes
+function set_options_for_mknodes(styles,options)
+    options = options or {}
+    local fontfamily = styles["font-family"]
+    local fontsize = styles["font-size"]
+    options.fontfamily = get_fontfamily(fontfamily,styles.fontsize_sp, fontsize,styles)
+    local fontstyle = styles["font-style"]
+    local fontweight = styles["font-weight"]
+    local fg_colorindex, bg_colorindex
+    local backgroundcolor = styles["background-color"]
+    if styles.color then
+        fg_colorindex = publisher.colors[styles.color].index
+        options.add_attributes = { { publisher.att_fgcolor, fg_colorindex }}
+        styles.currentcolor = styles.color
+    end
+    if backgroundcolor then
+        bg_colorindex = publisher.colors[backgroundcolor].index
+        options.backgroundcolor = bg_colorindex
+    end
+
+    local bg_padding_top = styles["background-padding-top"]
+    if bg_padding_top then
+        options.bg_padding_top = bg_padding_top
+    end
+    local bg_padding_bottom = styles["background-padding-bottom"]
+    if bg_padding_bottom then
+        options.bg_padding_bottom = bg_padding_bottom
+    end
+
+    local textdecoration = styles["text-decoration"]
+    local verticalalign = styles["vertical-align"]
+    local whitespace = styles["white-space"]
+
+    if fontweight == "bold" then options.bold = 1 end
+    if fontstyle == "italic" then options.italic = 1 end
+    if whitespace == "pre" then options.whitespace = "pre" end
+    if textdecoration == "underline" then
+        options.underline = 1
+    elseif textdecoration == "line-through" then
+        options.underline = 3
+    end
+    if verticalalign == "super" then
+        options.subscript = 2
+    elseif verticalalign == "sub" then
+        options.subscript = 1
+    end
+end
+
+function set_image_dimensions(image,styles,width_sp,height_sp)
+    local orig_imagewidth, orig_imageheight = image.width, image.height
+    local imagewidth, imageheight = orig_imagewidth, orig_imageheight
+    -- Todo: check if width _and_ height are set
+    local factor = 1
+    if width_sp ~= 0 then
+        imagewidth = width_sp
+        factor = orig_imagewidth / imagewidth
+    end
+    if height_sp ~= 0 then
+        imageheight = tex.sp(imageheight)
+        imageheight = calculate_height(height_sp,orig_imageheight)
+        factor = orig_imageheight / imageheight
+    end
+    if factor ~= 1 then
+        imagewidth = orig_imagewidth / factor
+        imageheight = orig_imageheight / factor
+    end
+
+    local maxwd = xpath.get_variable("__maxwidth")
+    local maxht = xpath.get_variable("__maxheight")
+    maxht = maxht - styles.fontsize_sp * 0.25
+    local calc_width, calc_height = publisher.calculate_image_width_height(image,imagewidth,imageheight,0,0,maxwd,maxht)
+    image.width = calc_width
+    image.height = calc_height
+    return calc_width,calc_height
+end
+
+
 -- collect horizontal nodes returns a table with nodelists (glyphs for example)
-function collect_horizontal_nodes( elt,parameter,origin )
+function collect_horizontal_nodes( elt,parameter,before_box,origin )
     -- w("collect_horizontal_nodes %s",origin or "?")
     parameter = parameter or {}
     local ret = {}
@@ -427,53 +509,15 @@ function collect_horizontal_nodes( elt,parameter,origin )
 
         local attributes = thiselt.attributes or {}
         copy_attributes(styles,attributes)
-        local fontfamily = styles["font-family"]
-        local fontsize = styles["font-size"]
-        options.fontfamily = get_fontfamily(fontfamily,styles.fontsize_sp, fontsize,styles)
-        local fontstyle = styles["font-style"]
-        local fontweight = styles["font-weight"]
-        local fg_colorindex, bg_colorindex
-        local backgroundcolor = styles["background-color"]
-        if styles.color then
-            fg_colorindex = publisher.colors[styles.color].index
-            options.add_attributes = { { publisher.att_fgcolor, fg_colorindex }}
-            styles.currentcolor = styles.color
-        end
-        if backgroundcolor then
-            bg_colorindex = publisher.colors[backgroundcolor].index
-            options.backgroundcolor = bg_colorindex
-        end
-
-        local bg_padding_top = styles["background-padding-top"]
-        if bg_padding_top then
-            options.bg_padding_top = bg_padding_top
-        end
-        local bg_padding_bottom = styles["background-padding-bottom"]
-        if bg_padding_bottom then
-            options.bg_padding_bottom = bg_padding_bottom
-        end
-
-        local textdecoration = styles["text-decoration"]
-        local verticalalign = styles["vertical-align"]
-        local whitespace = styles["white-space"]
-
-        if fontweight == "bold" then options.bold = 1 end
-        if fontstyle == "italic" then options.italic = 1 end
-        if whitespace == "pre" then options.whitespace = "pre" end
-        if textdecoration == "underline" then
-            options.underline = 1
-        elseif textdecoration == "line-through" then
-            options.underline = 3
-        end
-        if verticalalign == "super" then
-            options.subscript = 2
-        elseif verticalalign == "sub" then
-            options.subscript = 1
-        end
+        set_options_for_mknodes(styles,options)
 
         local thisret = {}
         if typ == "string" then
             local nodes = publisher.mknodes(thiselt,options)
+            if before_box then
+                nodes = node.insert_before(nodes,nodes,before_box)
+            end
+            before_box = nil
             publisher.setprop(nodes,"direction",elt.direction)
             thisret[#thisret + 1] = nodes
         elseif typ == "table" then
@@ -486,33 +530,12 @@ function collect_horizontal_nodes( elt,parameter,origin )
             elseif eltname == "img" then
                 local source = attributes.src
                 local it = publisher.new_image(source,1,nil,nil)
-                -- if we don#t copy the image, the changed size settings would
+                -- if we don't copy the image, the changed size settings would
                 -- affect future images with the same name
                 it = img.copy(it.img)
-                local orig_imagewidth, orig_imageheight = it.width, it.height
-                local imagewidth, imageheight = orig_imagewidth, orig_imageheight
-                -- Todo: check if width _and_ height are set
-                local factor = 1
-                if attributes.width then
-                    imagewidth = tex.sp(styles.calculated_width)
-                    factor = orig_imagewidth / imagewidth
-                end
-                if attributes.height then
-                    imageheight = tex.sp(imageheight)
-                    imageheight = calculate_height(attributes.height,orig_imageheight)
-                    factor = orig_imageheight / imageheight
-                end
-                if factor ~= 1 then
-                    imagewidth = orig_imagewidth / factor
-                    imageheight = orig_imageheight / factor
-                end
-
-                local maxwd = xpath.get_variable("__maxwidth")
-                local maxht = xpath.get_variable("__maxheight")
-                maxht = maxht - styles.fontsize_sp * 0.25
-                local calc_width, calc_height = publisher.calculate_image_width_height(it,imagewidth,imageheight,0,0,maxwd,maxht)
-                it.width = calc_width
-                it.height = calc_height
+                local wd = 0
+                if attributes.width then wd = styles.calculated_width end
+                local calc_width, calc_height = set_image_dimensions(it,styles,wd,attributes.height or 0)
                 local box = publisher.box(calc_width,calc_height,"-")
                 node.set_attribute(box,publisher.att_dontadjustlineheight,1)
                 node.set_attribute(box,publisher.att_ignore_orphan_widowsetting,1)
@@ -521,7 +544,7 @@ function collect_horizontal_nodes( elt,parameter,origin )
             elseif eltname == "wbr" then
                 thisret[#thisret + 1] = "\xE2\x80\x8B"
             end
-            local n = collect_horizontal_nodes(thiselt,options,string.format("collect horizontl mode element %s",eltname))
+            local n = collect_horizontal_nodes(thiselt,options,before_box,string.format("collect horizontl mode element %s",eltname))
             for i=1,#n do
                 thisret[#thisret + 1] = n[i]
             end
@@ -575,7 +598,7 @@ function build_html_table_tbody(tbody)
                         stylesstack[#stylesstack + 1] = styles
                         local attributes = td.attributes or {}
                         copy_attributes(styles,attributes)
-                        local r = build_nodelist(td,{},"build_html_table_tbody/td")
+                        local r = build_nodelist(td,{},nil,"build_html_table_tbody/td")
                         r = publisher.flatten_boxes(r)
                         table.remove(stylesstack)
                         local newcontents = {}
@@ -689,7 +712,7 @@ local function getsize(size,fontsize)
 end
 
 local olcounter = {}
-function build_nodelist( elt,options, caller )
+function build_nodelist(elt,options,before_box,caller )
     -- w("html: build nodelist from %s", caller or "?")
     options = options or {}
     -- ret is a nested table of boxes and paragraphs
@@ -708,6 +731,34 @@ function build_nodelist( elt,options, caller )
         end
 
         local attributes = thiselt.attributes or {}
+        local before_attributes = {}
+        local has_before_attributes = false
+        for k,v in pairs(attributes) do
+            if string.match(k,"^before::") then
+                local rawattribute = string.gsub(k,"^before::(.*)","%1")
+                before_attributes[rawattribute] = v
+                attributes[k] = nil
+                has_before_attributes = true
+            end
+        end
+        -- local before_box
+
+        if has_before_attributes then
+            local styles = setmetatable({}, levelmt)
+            stylesstack[#stylesstack + 1] = styles
+            copy_attributes(styles,before_attributes)
+
+            local before_options = {}
+            set_options_for_mknodes(styles,before_options)
+            local nl = publisher.mknodes(styles.content,before_options)
+            if styles.width then
+                local g = publisher.make_glue({stretch = 2^16})
+                node.insert_after(nl,nl,g)
+            end
+            before_box = node.hpack(nl,styles.calculated_width,"exactly")
+            table.remove(stylesstack)
+        end
+
         copy_attributes(styles,attributes)
 
         local margin_top = getsize(styles["margin-top"],styles.fontsize_sp)
@@ -783,7 +834,7 @@ function build_nodelist( elt,options, caller )
                 tf.disable_hyphenation = true
             end
             options.textformat = tf
-            local n = collect_horizontal_nodes(thiselt,options,"build nodelist horizontal mode")
+            local n = collect_horizontal_nodes(thiselt,options,before_box,"build nodelist horizontal mode")
 
             local a = par:new(tf,"html.lua (horizontal)")
             local appended = false
@@ -829,7 +880,8 @@ function build_nodelist( elt,options, caller )
                     styles.ullevel = styles.ullevel + 1
                 end
                 olcounter[styles.listlevel] = 0
-                local n = build_nodelist(thiselt,options,"build_nodelist/ ol/ul" )
+                local n = build_nodelist(thiselt,options,before_box,"build_nodelist/ ol/ul" )
+                before_box = nil
                 if thiseltname == "ol" then
                     styles.ollevel = styles.ollevel - 1
                 else
@@ -843,20 +895,22 @@ function build_nodelist( elt,options, caller )
             elseif thiseltname == "li" then
                 olcounter[styles.listlevel] = olcounter[styles.listlevel] or 0
                 olcounter[styles.listlevel] = olcounter[styles.listlevel] + 1
-                local str = resolve_list_style_type(styles,olcounter)
-                local n = build_nodelist(thiselt,options, "build_nodelist/ li" )
+                local n = build_nodelist(thiselt,options,before_box,"build_nodelist/ li" )
+                before_box = nil
                 -- n is a table of box and / or par
+                local str = resolve_list_style_type(styles,olcounter)
                 for i=1,#n do
                     local a = n[i]
                     local wd = styles.listindent
-                    local x = { str,wd,fam }
+                    local x = { str,wd,{fontfamily=fam} }
                     a:prepend(x)
                     -- label only for the first
                     str = ""
                     ret[#ret + 1] = a
                 end
             else
-                local n = build_nodelist(thiselt,options,string.format("build_nodelist/ any element name %q",thiseltname))
+                local n = build_nodelist(thiselt,options,before_box,string.format("build_nodelist/ any element name %q",thiseltname))
+                before_box = nil
                 box.draw_border = attributes.has_border
                 box.border = {
                     borderstart = true,
@@ -906,11 +960,21 @@ end
 
 function resolve_list_style_type(styles, olcounter)
     local liststyletype = styles["list-style-type"]
+    local liststyleimage = styles["list-style-image"]
+    if liststyleimage then
+        local filename = string.match(liststyleimage,"url%((.*)%)")
+        local it = publisher.new_image(filename,1,nil,nil)
+        it = img.copy(it.img)
+        set_image_dimensions(it,styles,0,styles.fontsize_sp * 0.9)
+        return img.node(it)
+    end
     local counter  = olcounter[styles.ollevel]
     local ullevel = styles.ullevel
-    local str
+    local str = ""
     if liststyletype == "decimal" then
         str = tostring(counter) .. "."
+    elseif liststyletype == "none" then
+        -- ignore
     elseif liststyletype == "decimal-leading-zero" then
         str = string.format("%02d.",counter)
     elseif liststyletype == "lower-roman" then
@@ -1003,6 +1067,6 @@ function parse_html_new( elt, options )
         publisher.set_mainlanguage(lang)
     end
     parse_html_inner(elt[1])
-    local block = build_nodelist(elt,options,"parse_html_new")
+    local block = build_nodelist(elt,options,nil,"parse_html_new")
     return block
 end

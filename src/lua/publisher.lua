@@ -4047,11 +4047,11 @@ function number_hbox( num, labelwidth )
 end
 
 -- Create a hbox for a label
-function whatever_hbox( str, labelwidth,fam,labelsep_wd,labelalign )
+function whatever_hbox( label,labelwidth,options,labelsep_wd,labelalign )
+    local fam = options.fontfamily
     labelsep_wd = labelsep_wd or fonts.lookup_fontfamily_number_instance[fam].size / 2
     labelalign = labelalign or "right"
     local shrink_glue = set_glue(nil,{shrink = 2^16, shrink_order = 3,width =  labelwidth})
-    local label = mknodes(str,{fontfamily = fam})
     local label_sep = set_glue(nil,{width = labelsep_wd})
 
     local label_hbox
@@ -4072,6 +4072,7 @@ function whatever_hbox( str, labelwidth,fam,labelsep_wd,labelalign )
 
     return label_hbox
 end
+
 
 -- just the plain size, not included the stretch or shrink
 function get_glue_size( n )

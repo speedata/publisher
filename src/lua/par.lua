@@ -755,13 +755,19 @@ function Par:format( width_sp, options )
                 local prependnodelist = nil
                 for j=1,#prepend do
                     local thisprepend = prepend[j]
+                    local options = thisprepend[3] or options
                     local str = thisprepend[1]
-                    local fam = thisprepend[3] or options.fontfamily
-                    local label = node.hpack(publisher.mknodes(str,{fontfamily = fam},"par prepend"))
+                    local label
+                    if type(str) == "string" then
+                        label = node.hpack(publisher.mknodes(str,options,"par prepend"))
+                    elseif node.is_node(str) then
+                        label = str
+                    end
                     local wd = thisprepend[2] or node.dimensions(label)
                     local labeldistance = thisprepend[4] or tex.sp("5pt")
                     local labelalign = thisprepend[5] or "right"
-                    local labelbox = publisher.whatever_hbox(str,wd,fam,labeldistance,labelalign)
+                    local labelbox
+                    labelbox = publisher.whatever_hbox(label,wd,options,labeldistance,labelalign)
                     prependnodelist = node.insert_after(prependnodelist,node.tail(prependnodelist),labelbox)
                 end
                 prependnodelist = node.hpack(prependnodelist)
@@ -829,7 +835,7 @@ function Par:append( whatever, options )
     if options.textformat and not self.textformat then self.textformat = options.textformat end
     if options.padding_right and not self.padding_right then self.padding_right = options.padding_right end
     if options.labelleft then
-        self:prepend({options.labelleft,options.labelleftwidth,options.fontfamily,options.labelleftdistance,options.labelleftalign})
+        self:prepend({options.labelleft,options.labelleftwidth,options,options.labelleftdistance,options.labelleftalign})
     end
     -- w("whatever %s type %s",tostring(whatever), type(whatever))
     if type(whatever) == "string" then whatever = {whatever} end
