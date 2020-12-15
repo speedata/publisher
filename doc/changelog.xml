@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.23" date="2020-12-15">
+        <en>Implement li::before for alternative bullet points. (#286)</en>
+        <de>Implementiere li::before für alternative Aufzählungspunkte. (#286)</de>
+    </entry>
     <entry version="4.1.22" date="2020-12-11">
         <en>Bugfix for right-to-left and empty strings (#285).</en>
         <de>Fehlerkorrektur: leerer String bei rechts-nach-links Texten (#285).</de>
