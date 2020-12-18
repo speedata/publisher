@@ -3249,9 +3249,8 @@ function addstrut(nodelist,where,origin)
 
     local fi = fonts.lookup_fontfamily_number_instance[fontfamily]
     strutheight = math.max(fi.baselineskip, strutheight)
-    local strut
     -- for debugging purposes set width to 20000:
-    strut = add_rule(nodelist,"head",{height = 0.75 * strutheight, depth = 0.25 * strutheight, width = 0 })
+    local strut = add_rule(nodelist,"head",{height = 0.75 * strutheight, depth = 0.25 * strutheight, width = 0 })
     if origin then
         setprop(strut,"origin",origin)
     end
@@ -3432,9 +3431,10 @@ function hbglyphlist(arguments)
             node.set_attribute(dummypenalty,att_newline,1)
             list,cur = node.insert_after(list,cur,dummypenalty)
 
-            local strut
-            strut = add_rule(nil,"head",{height = 8 * factor, depth = 3 * factor, width = 0 })
+            local ht = fonts.lookup_fontfamily_number_instance[fontfamily].size
+            local strut = add_rule(nil,"head",{height = ht * 0.75, depth = 0.25 * ht, width = 0 })
             node.set_attribute(strut,att_newline,1)
+            setprop(strut,"origin","strut newline hb")
             list,cur = node.insert_after(list,cur,strut)
 
             local p1,g,p2
@@ -3612,8 +3612,9 @@ local function ffglyphlist(arguments)
             node.set_attribute(dummypenalty,att_newline,1)
             head,last = node.insert_after(head,last,dummypenalty)
 
-            local strut
-            strut = add_rule(nil,"head",{height = 8 * factor, depth = 3 * factor, width = 0 })
+            local ht = fonts.lookup_fontfamily_number_instance[fontfamily].size
+            local strut = add_rule(nil,"head",{height = ht * 0.75, depth = ht * 0.25, width = 0 })
+            setprop(strut,"origin","strut newline ff")
             node.set_attribute(strut,att_newline,1)
             head,last = node.insert_after(head,last,strut)
 
@@ -4365,9 +4366,7 @@ function do_linebreak( nodelist,hsize,parameters )
                     end
                 else
                     fam = node.has_attribute(head_list,att_fontfamily)
-                    if fam then
-                        -- Is this necessary anymore? FIXME
-                        if fam == 0 then fam = 1 end
+                    if fam and fam > 0 then
                         maxlineheight = math.max(fonts.lookup_fontfamily_number_instance[fam].baselineskip,maxlineheight)
                     end
                 end

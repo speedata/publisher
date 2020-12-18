@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<DefineFontfamily name="FF-Tiny" fontsize="5" leading="5">
+		<Regular fontface="sans" />
+	</DefineFontfamily>
+
+	<SetGrid nx="2" height="12pt" />
+	<Pageformat width="5cm" height="4cm" />
+
+	<Record element="data">
+		<PlaceObject>
+			<Textblock width="1">
+				<Paragraph language="Other" textformat="left" bidi="yes">
+					<Value>A</Value>
+					<Br />
+					<Fontface fontfamily='FF-Tiny'>
+						<Br />
+					</Fontface>
+					<Value>B</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<PlaceObject>
+			<Textblock width="1">
+				<Paragraph language="Other" textformat="left" bidi="yes" direction="rtl">
+					<Value>C</Value>
+					<Br />
+					<Fontface fontfamily='FF-Tiny'>
+						<Br />
+					</Fontface>
+					<Value>D</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+	</Record>
+</Layout>
