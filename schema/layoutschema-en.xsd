@@ -4121,6 +4121,7 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:Image"/>
+        <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Box"/>
         <xs:element ref="en:Circle"/>
         <xs:element ref="en:Rule"/>

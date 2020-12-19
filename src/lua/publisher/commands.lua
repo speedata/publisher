@@ -2555,7 +2555,11 @@ function commands.place_object( layoutxml,dataxml )
                         objects[#objects + 1] = {object = object[i], objecttype = objecttype }
                     end
                 else
-                    objects[#objects + 1] = {object = object, objecttype = objecttype }
+                    if objecttype == "Bookmark" then
+                        -- ignore
+                    else
+                        objects[#objects + 1] = {object = object, objecttype = objecttype }
+                    end
                 end
             end
         end

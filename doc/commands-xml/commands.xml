@@ -6177,6 +6177,7 @@
       <oneOrMore>
         <interleave>
           <optional><cmd name="Image"/></optional>
+          <optional><cmd name="Bookmark"/></optional>
           <optional><cmd name="Box"/></optional>
           <optional><cmd name="Circle"/></optional>
           <optional><cmd name="Rule"/></optional>

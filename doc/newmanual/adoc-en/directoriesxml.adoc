@@ -127,7 +127,7 @@ Which is output with the following layout:
 <2> The section 'data' is extended by loading and saving the XML data for the directory
 <3> Here code is inserted that assembles the XML structure (see below)
 
-Now a variable is defined (`entries'), which contains the information about the chapter beginnings.
+Now a variable is defined (`entries`), which contains the information about the chapter beginnings.
 The target structure should be as follows:
 
 [source, xml]
@@ -139,7 +139,7 @@ The target structure should be as follows:
 </tableofcontent>
 -------------------------------------------------------------------------------
 
-In the 'chapter' section (point 3 in the layout above) the code is inserted at the top to fill the variable 'entries' with the contents:
+In the `chapter` section (point 3 in the layout above) the code is inserted at the top to fill the variable `entries` with the contents:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -156,12 +156,12 @@ In the 'chapter' section (point 3 in the layout above) the code is inserted at t
     ...
 -------------------------------------------------------------------------------
 
-Thus, something new is added to a variable using `<Copy-of>'.
+Thus, something new is added to a variable using `<Copy-of>`.
 
 
 The structure must be loaded at the beginning and saved at the end of the run to ensure that it is always up-to-date.
-If the file 'toc' does not yet exist, the command is simply skipped.
-The new section 'data' now looks like this and is inserted at position 2 in the layout above (instead of the record existing there)
+If the file `toc` does not yet exist, the command is simply skipped.
+The new section `data` now looks like this and is inserted at position 2 in the layout above (instead of the record existing there)
 
 
 
@@ -176,8 +176,8 @@ The new section 'data' now looks like this and is inserted at position 2 in the 
   </Record>
 -------------------------------------------------------------------------------
 
-On the next run, the command '`<LoadDataset>' takes effect and opens the previously saved XML file.
-The layout ruleset searches for a section for the 'tableofcontents' element, which is the root element of the saved file.
+On the next run, the command `<LoadDataset>` takes effect and opens the previously saved XML file.
+The layout ruleset searches for a section for the `tableofcontents` element, which is the root element of the saved file.
 This has to be added to the layout rules (position 1 in the layout above):
 
 [source, xml,indent=0]
@@ -197,7 +197,7 @@ This has to be added to the layout rules (position 1 in the layout above):
   </Record>
 -------------------------------------------------------------------------------
 
-A table is output with one line for each child element 'entry'.
+A table is output with one line for each child element `entry`.
 The subsequent page break shifts the subsequent text backwards.
 This means that you have to run through the document three times before the table of contents is correct:
 

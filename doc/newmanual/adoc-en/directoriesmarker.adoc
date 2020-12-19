@@ -26,7 +26,7 @@ The structure is as follows:
 
 After outputting the page, the page number can now be determined with `sd:pagenumber('textstart')`.
 
-The markers are automatically stored in an internal auxiliary file `publisher.aux' so that when the page numbers are scanned again with `sd:pagenumber()`, they are available before the page is placed.
+The markers are automatically stored in an internal auxiliary file `publisher.aux` so that when the page numbers are scanned again with `sd:pagenumber()`, they are available before the page is placed.
 A simple text structure is used as an example (it is the same example as in the next section):
 
 

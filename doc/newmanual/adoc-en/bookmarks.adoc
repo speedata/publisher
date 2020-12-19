@@ -33,7 +33,7 @@ Bookmarks are displayed in texts or on the level of `<Record>`.
 image::bookmarks.png[width=80%,scaledwidth=100%]
 
 
-Important: The layers must be consecutive. A Level 1 bookmark may only be followed by another Level 1 bookmark (for the next section) or one on Level 2 (subsection).
+Important: The levels must be consecutive. A level 1 bookmark may only be followed by another level 1 bookmark (for the next section) or one on level 2 (subsection).
 
-A detailed example is shown in <<ch-directoriesxml>>.
+// A detailed example is shown in <<ch-directoriesxml>>.
 // EOF

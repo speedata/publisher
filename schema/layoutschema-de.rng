@@ -4051,6 +4051,9 @@
                         <ref name="e_Image"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Bookmark"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Box"></ref>
                      </optional>
                      <optional>
