@@ -3542,6 +3542,8 @@ function hbglyphlist(arguments)
                 local disc = node.new("disc")
                 list,cur = node.insert_after(list,cur,disc)
                 local g = set_glue(nil)
+                setstyles(disc,parameter)
+                setstyles(g,parameter)
                 list,cur = node.insert_after(list,cur,g)
             elseif string.find(allowbreak,unicode.utf8.char(uc),1,true) then
                 -- allowbreak lists characters where the publisher may break lines
@@ -3785,6 +3787,8 @@ local function ffglyphlist(arguments)
                 local disc = node.new("disc")
                 head,last = node.insert_after(head,last,disc)
                 local g = set_glue(nil)
+                setstyles(disc,parameter)
+                setstyles(g,parameter)
                 head,last = node.insert_after(head,last,g)
             elseif string.find(allowbreak,char,1,true) then
                 -- allowbreak lists characters where the publisher may break lines

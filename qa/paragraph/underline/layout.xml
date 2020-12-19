@@ -1,6 +1,12 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
 	xmlns:sd="urn:speedata:2009/publisher/functions/en">
-	<Options crop="2mm" />
+
+	<LoadFontfile name="serif" filename="CrimsonPro-Regular.ttf" mode="harfbuzz" />
+	<DefineFontfamily fontsize="10" leading="12" name="cp">
+		<Regular fontface="serif" />
+	</DefineFontfamily>
+
+	<Pageformat height="10cm" width="6cm" />
 	<Record element="data">
 		<PlaceObject>
 			<Textblock width="4">
@@ -26,5 +32,20 @@
 				</Paragraph>
 			</Textblock>
 		</PlaceObject>
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<U>
+						<Value>Test - Underlined Title</Value>
+					</U>
+				</Paragraph>
+				<Paragraph fontfamily="cp">
+					<U>
+						<Value>Test - Underlined Title</Value>
+					</U>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+
 	</Record>
 </Layout>
