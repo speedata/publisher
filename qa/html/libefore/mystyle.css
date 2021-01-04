@@ -1,0 +1,14 @@
+ul {
+  list-style: none;
+  padding-left: 1em;
+}
+
+ul li::before {
+  content: "\2022";
+  color: red;
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+

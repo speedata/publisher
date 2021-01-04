@@ -4117,6 +4117,11 @@ function add_glue( nodelist,head_or_tail,parameter)
     assert(false,"never reached")
 end
 
+-- 0pt plus 1fil minus 1fil
+function hss_glue()
+    return make_glue({stretch = 2^16, stretch_order = 2, shrink=2^16, shrink_order = 2})
+end
+
 function make_glue( parameter )
     return set_glue(nil, parameter)
 end

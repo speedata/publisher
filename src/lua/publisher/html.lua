@@ -741,7 +741,6 @@ function build_nodelist(elt,options,before_box,caller )
                 has_before_attributes = true
             end
         end
-        -- local before_box
 
         if has_before_attributes then
             local styles = setmetatable({}, levelmt)
@@ -751,11 +750,19 @@ function build_nodelist(elt,options,before_box,caller )
             local before_options = {}
             set_options_for_mknodes(styles,before_options)
             local nl = publisher.mknodes(styles.content,before_options)
+            local margin_left = getsize(styles["margin-left"],styles.fontsize_sp)
+
+            local hss = publisher.hss_glue()
+            local ml_box = node.hpack(hss,margin_left,"exactly")
+
             if styles.width then
-                local g = publisher.make_glue({stretch = 2^16})
-                node.insert_after(nl,nl,g)
+                node.insert_after(nl,nl,publisher.hss_glue())
+                nl = node.hpack(nl,styles.calculated_width,"exactly")
             end
-            before_box = node.hpack(nl,styles.calculated_width,"exactly")
+
+            before_box = node.insert_after(ml_box,ml_box,nl)
+            before_box = node.hpack(before_box)
+
             table.remove(stylesstack)
         end
 
