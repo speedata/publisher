@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.2">
+    <entry version="4.1.25" date="2021-01-06">
+        <en>Rewrite command Initial (backwards incompatible change) (#287).</en>
+        <de>Rückwärtes inkompatible Neuimplementierung des Befehls Initial (#287).</de>
+    </entry>
     <entry version="4.1.24" date="2021-01-04">
         <en>Styling of li::before (#286).</en>
         <de>Styling von li::before (#286).</de>
