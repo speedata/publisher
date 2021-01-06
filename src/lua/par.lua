@@ -353,6 +353,26 @@ function Par:mknodelist( options )
     self.objects = objects
 end
 
+local get_lineheight
+function get_lineheight( nodelist )
+    local head = nodelist
+    while head do
+        if head.id == publisher.vlist_node or head.id == publisher.hlist_node then return get_lineheight(head.list) end
+        if head.id == publisher.glyph_node then
+            local ffnumber = node.has_attribute(head,publisher.att_fontfamily)
+            local fi = publisher.fonts.lookup_fontfamily_number_instance[ffnumber]
+            if fi then
+                return fi.baselineskip
+            else
+                err("allocate/auto cannot find font instance")
+                return 0
+            end
+        end
+        head = head.next
+    end
+    return 0
+end
+
 function Par:format( width_sp, options )
     -- w("call format %s",self.origin)
     options = options or {}
@@ -386,23 +406,6 @@ function Par:format( width_sp, options )
     end
 
     if options.allocate == "auto" then
-        local get_lineheight = function( nodelist )
-            local head = nodelist
-            while head do
-                if head.id == publisher.glyph_node  then
-                    local ffnumber = node.has_attribute(head,publisher.att_fontfamily)
-                    local fi = publisher.fonts.lookup_fontfamily_number_instance[ffnumber]
-                    if fi then
-                        return fi.baselineskip
-                    else
-                        err("allocate/auto cannot find font instance")
-                        return 0
-                    end
-                end
-                head = head.next
-            end
-            return 0
-        end
         local indent = current_textformat.indent
         local indent_this_row = function(row)
             if not indent or indent == 0 then return false end
@@ -599,24 +602,24 @@ function Par:format( width_sp, options )
         if self.initial then
             parameter.hangindent =  parameter.hangindent + self.initial.width
             local i_ht = self.initial.height + self.initial.depth
-            local _w, _h, _d = node.dimensions(nodelist)
-            local nl_ht = _h + _d
+            local ht_nodelist = get_lineheight(nodelist)
+
             local maxindent = 0
             -- get max indent
             if parameter.parshape then
-                for i=1,math.round(i_ht / nl_ht,0) do
+                for i=1,math.round(i_ht / ht_nodelist,0) do
                     maxindent = math.max(parameter.parshape[i][1],maxindent)
                 end
             end
             local curindent
             if parameter.parshape then
-                for i=1,math.round(i_ht / nl_ht,0) do
+                for i=1,math.round(i_ht / ht_nodelist,0) do
                     curindent = maxindent - parameter.parshape[i][1]
                     parameter.parshape[i][1] = maxindent + self.initial.width
                     parameter.parshape[i][2] = parameter.parshape[i][2] - self.initial.width - curindent
                 end
             else
-                parameter.hangafter = math.max( parameter.hangafter, math.ceil(math.round(i_ht / nl_ht,1)))
+                parameter.hangafter = math.max( parameter.hangafter, math.ceil(math.round(i_ht / ht_nodelist,1)))
             end
         end
 
@@ -807,20 +810,23 @@ function Par:format( width_sp, options )
     publisher.setprop(nodelist,"origin","par:format")
 
     if self.initial then
+        local ht_nodelist = get_lineheight(nodelist)
         local initial_hlist = self.initial
-        local ht = initial_hlist.height
-        if not ( self.direction == "rtl") then
+        local ht_initial = initial_hlist.height
+
+        -- Node lists of width 0 stick to the right, which is
+        -- good for rtl text, but not for ltr. So on non-rtl text
+        -- the shift left must be equal to the width
+        if self.direction ~= "rtl" then
             initial_hlist.shift = -initial_hlist.width
         end
         node.set_attribute(self.initial,publisher.att_origin,publisher.origin_initial)
-
         initial_hlist = node.vpack(initial_hlist)
         publisher.setprop(initial_hlist,"origin","initial")
-        initial_hlist.shift = -ht / 2
-        initial_hlist.width = 0
-        initial_hlist.height = 0
-        initial_hlist.depth  = 0
 
+        local shift_down =  ht_nodelist * 0.75 - initial_hlist.height
+        initial_hlist.shift = -shift_down
+        initial_hlist.width = 0
         nodelist.head.head = node.insert_before(nodelist.head.head,nodelist.head.head,initial_hlist)
     end
     self.objects = nil

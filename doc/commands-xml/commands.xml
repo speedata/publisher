@@ -3542,7 +3542,23 @@
         <para>Insert space right of the initial.</para>
       </description>
       <description xml:lang="de">
-        <para>Fügt Leerraum right der Initiale ein.</para>
+        <para>Fügt Leerraum rechts der Initiale ein.</para>
+      </description>
+    </attribute>
+    <attribute en="padding-top" type="length" optional="yes" since="4.1.25">
+      <description xml:lang="en">
+        <para>Insert space top of the initial.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Fügt Leerraum oben der Initiale ein.</para>
+      </description>
+    </attribute>
+    <attribute en="padding-bottom" type="length" optional="yes" since="4.1.25">
+      <description xml:lang="en">
+        <para>Insert space bottom of the initial.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Fügt Leerraum unten der Initiale ein.</para>
       </description>
     </attribute>
     <example xml:lang="en">

@@ -1996,6 +1996,16 @@
                      <a:documentation>Insert space right of the initial.</a:documentation>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="padding-top">
+                     <a:documentation>Insert space top of the initial.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-bottom">
+                     <a:documentation>Insert space bottom of the initial.</a:documentation>
+                  </attribute>
+               </optional>
                <ref name="e_Value"></ref>
             </group>
             <ref name="foreign-nodes"></ref>

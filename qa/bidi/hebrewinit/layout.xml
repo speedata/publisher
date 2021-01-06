@@ -6,7 +6,7 @@
     <DefineFontfamily fontsize="10" leading="12" name="ezra">
         <Regular fontface="EzraSIL" />
     </DefineFontfamily>
-    <DefineFontfamily fontsize="28" leading="28" name="init">
+    <DefineFontfamily fontsize="24" leading="24" name="init">
         <Regular fontface="sans" />
     </DefineFontfamily>
 

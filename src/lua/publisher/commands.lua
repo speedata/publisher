@@ -1336,6 +1336,8 @@ function commands.initial( layoutxml,dataxml)
     local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily",   "rawstring",fontname)
     local padding_left   = publisher.read_attribute(layoutxml,dataxml,"padding-left", "length_sp",0)
     local padding_right  = publisher.read_attribute(layoutxml,dataxml,"padding-right","length_sp",0)
+    local padding_top    = publisher.read_attribute(layoutxml,dataxml,"padding-top", "length_sp",0)
+    local padding_bottom = publisher.read_attribute(layoutxml,dataxml,"padding-bottom","length_sp",0)
     if fontname then warning("Initial/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     local fontfamily = 0
@@ -1359,33 +1361,28 @@ function commands.initial( layoutxml,dataxml)
         end
     end
     local box
-    box = publisher.mknodes(initialvalue,{fontfamily = fontfamily})
-
-    if colorname then
-        if not publisher.colors[colorname] then
-            err("Color %q is not defined yet.",colorname)
-        else
-            local colorindex
-            colorindex = publisher.colors[colorname].index
-            box = publisher.set_color_if_necessary(box,colorindex)
-        end
-    end
+    box = publisher.mknodes(initialvalue,{fontfamily = fontfamily,color = publisher.get_colorindex_from_name(colorname,"black")})
+    box = publisher.addstrut(box,"head","initial")
     box = node.hpack(box)
-    local initialheight = box.height + box.depth
-    box.depth = 0
-    box.height = initialheight
-    local ht = fi.baselineskip - initialheight
-    if padding_left ~= 0 then
-        box = publisher.add_rule(box,"head",{height = 0, width = padding_left})
+    local head = box
+    if padding_left and padding_left ~= 0 then
+        head = node.insert_before(box,box,publisher.make_glue({width = padding_left}))
     end
-    box = publisher.add_rule(box,"head",{height = fi.size - (fi.size - initialheight ) / 2, width = 0})
-    if padding_right ~= 0 then
-        box = publisher.add_rule(box,"tail",{height = 0, width = padding_right})
+    if padding_right and pading_right ~= 0 then
+        head = node.insert_after(head,box,publisher.make_glue({width = padding_right}))
     end
-    local x = node.hpack(box)
-    x.height = x.height + x.depth
-    x.depth = 0
-    return x
+    box = node.hpack(head)
+    head = box
+
+    if padding_top and padding_top ~= 0 then
+        head = node.insert_before(box,box,publisher.make_glue({width = padding_top}))
+    end
+    if padding_bottom and pading_bottom ~= 0 then
+        head = node.insert_after(head,box,publisher.make_glue({width = padding_bottom}))
+    end
+    box = node.vpack(head)
+
+    return box
 end
 
 --- InsertPages

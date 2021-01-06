@@ -1674,6 +1674,16 @@
           <xs:documentation>Insert space right of the initial.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="padding-top">
+        <xs:annotation>
+          <xs:documentation>Insert space top of the initial.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="padding-bottom">
+        <xs:annotation>
+          <xs:documentation>Insert space bottom of the initial.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="InsertPages">

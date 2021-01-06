@@ -13,7 +13,7 @@
     <PlaceObject>
       <Textblock>
         <Paragraph>
-          <Initial fontfamily="init" >
+          <Initial fontfamily="init" padding-top="2pt" padding-bottom="-2pt">
             <Value>1</Value>
           </Initial>
           <Value select="sd:dummytext()"/>

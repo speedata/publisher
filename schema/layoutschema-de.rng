@@ -1993,7 +1993,17 @@
                </optional>
                <optional>
                   <attribute name="padding-right">
-                     <a:documentation>Fügt Leerraum right der Initiale ein.</a:documentation>
+                     <a:documentation>Fügt Leerraum rechts der Initiale ein.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-top">
+                     <a:documentation>Fügt Leerraum oben der Initiale ein.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-bottom">
+                     <a:documentation>Fügt Leerraum unten der Initiale ein.</a:documentation>
                   </attribute>
                </optional>
                <ref name="e_Value"></ref>
