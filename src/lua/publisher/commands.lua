@@ -3771,16 +3771,20 @@ end
 --- Set various tracing options
 function commands.trace(layoutxml,dataxml)
     local assignments      = publisher.read_attribute(layoutxml,dataxml,"assignments",   "boolean")
+    local debug            = publisher.read_attribute(layoutxml,dataxml,"debug",         "boolean")
     local grid             = publisher.read_attribute(layoutxml,dataxml,"grid",          "boolean")
     local gridallocation   = publisher.read_attribute(layoutxml,dataxml,"gridallocation","boolean")
     local hyphenation      = publisher.read_attribute(layoutxml,dataxml,"hyphenation",   "boolean")
-    local kerning          = publisher.read_attribute(layoutxml,dataxml,"kerning",   "boolean")
+    local kerning          = publisher.read_attribute(layoutxml,dataxml,"kerning",       "boolean")
     local objects          = publisher.read_attribute(layoutxml,dataxml,"objects",       "boolean")
     local verbose          = publisher.read_attribute(layoutxml,dataxml,"verbose",       "boolean")
     local textformat       = publisher.read_attribute(layoutxml,dataxml,"textformat",    "boolean")
 
     if assignments ~= nil then
         publisher.options.showassignments = assignments
+    end
+    if debug ~= nil then
+        publisher.options.showdebug = debug
     end
     if grid ~= nil then
         publisher.options.showgrid = grid

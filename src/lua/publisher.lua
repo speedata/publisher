@@ -1459,6 +1459,10 @@ function shipout(nodelist, pagenumber )
     if options.format == "PDF/UA" then
         insert_struct_elements(nodelist,pagenumber)
     end
+    if options.showdebug then
+        local visdebug = require("lua-visual-debug")
+        visdebug.show_page_elements(nodelist)
+    end
     tex.box[666] = nodelist
     tex.shipout(666)
 end
