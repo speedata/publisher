@@ -4,14 +4,9 @@ module(...,package.seeall)
 
 fileslookup = {}
 
-if os.name == "windows" then
-    ffi.cdef[[
-typedef char _check_for_32_bit_pointer_matching_GoInt[sizeof(void*)==32/8 ? 1:-1];
-]]
-    else ffi.cdef[[
+ffi.cdef[[
 typedef char _check_for_64_bit_pointer_matching_GoInt[sizeof(void*)==64/8 ? 1:-1];
 ]]
-end
 
 ffi.cdef[[
 struct splitvalues {
