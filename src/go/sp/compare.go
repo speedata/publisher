@@ -35,11 +35,13 @@ func (a byDelta) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a byDelta) Less(i, j int) bool { return a[i].Delta > a[j].Delta }
 
 var (
-	finished  chan bool
-	exeSuffix string
-	cs        []compareStatus
-	mutex     *sync.Mutex
-	wp        *workerpool.WorkerPool
+	finished          chan bool
+	exeSuffix         string
+	cs                []compareStatus
+	mutex             *sync.Mutex
+	wp                *workerpool.WorkerPool
+	verbose           bool
+	referencefilename string
 )
 
 func init() {
@@ -58,7 +60,7 @@ func fileExists(filename string) bool {
 // DoCompare starts comparing the files in the
 // current directory and its subdirectory.
 // This is the function to be called (first).
-func DoCompare(absdir string, withHTML bool) {
+func DoCompare(absdir string, withHTML bool, moreinfo bool, referencefn string) {
 	switch runtime.GOOS {
 	case "windows":
 		exeSuffix = ".exe"
@@ -66,7 +68,8 @@ func DoCompare(absdir string, withHTML bool) {
 		exeSuffix = ""
 	}
 	wp = workerpool.New(runtime.NumCPU())
-
+	referencefilename = referencefn
+	verbose = moreinfo
 	statuschan := make(chan compareStatus, 0)
 	compareFunc := mkCompare(statuschan)
 	filepath.Walk(absdir, compareFunc)
@@ -159,6 +162,31 @@ func calculateHash(filename string) []byte {
 func runComparison(path string, statuschan chan compareStatus) {
 	cs := compareStatus{}
 	cs.Path = path
+	var err error
+	if verbose {
+		fmt.Println(path)
+	}
+	cmd := exec.Command("sp"+exeSuffix, "--suppressinfo")
+	cmd.Dir = path
+	err = cmd.Run()
+	if err != nil {
+		log.Println(path)
+		log.Fatal("Error running command 'sp': ", err)
+	}
+
+	p := calculateHash(filepath.Join(path, "publisher.pdf"))
+	r := calculateHash(filepath.Join(path, fmt.Sprintf("%s.pdf", referencefilename)))
+	if bytes.Equal(p, r) {
+		if verbose {
+			fmt.Println("files have the same checksum")
+		}
+		cs.Delta = 0
+		statuschan <- cs
+		return
+	}
+	if verbose {
+		fmt.Println("Run convert")
+	}
 	sourceFiles, err := filepath.Glob(filepath.Join(path, "source-*.png"))
 	if err != nil {
 		log.Fatal(err)
@@ -175,22 +203,6 @@ func runComparison(path string, statuschan chan compareStatus) {
 		}
 	}
 
-	cmd := exec.Command("sp"+exeSuffix, "--suppressinfo")
-	cmd.Dir = path
-	err = cmd.Run()
-	if err != nil {
-		log.Println(path)
-		log.Fatal("Error running command 'sp': ", err)
-	}
-
-	p := calculateHash(filepath.Join(path, "publisher.pdf"))
-	r := calculateHash(filepath.Join(path, "reference.pdf"))
-	if bytes.Equal(p, r) {
-		cs.Delta = 0
-		statuschan <- cs
-		return
-	}
-
 	cmd = exec.Command("convert"+exeSuffix, "-density", "150", "-trim", "publisher.pdf", "source-%02d.png")
 	cmd.Dir = path
 	cmd.Run()
@@ -201,8 +213,8 @@ func runComparison(path string, statuschan chan compareStatus) {
 	// convert the reference pdf to png for later comparisons
 	// we only do that when the pdf is newer than the png files
 	// (that is: the pdf has been updated)
-	if newer(filepath.Join(path, "reference.pdf"), filepath.Join(path, "reference-00.png")) {
-		cmd := exec.Command("convert"+exeSuffix, "-density", "150", "-trim", "reference.pdf", "reference-%02d.png")
+	if newer(filepath.Join(path, fmt.Sprintf("%s.pdf", referencefilename)), filepath.Join(path, "reference-00.png")) {
+		cmd := exec.Command("convert"+exeSuffix, "-density", "150", "-trim", fmt.Sprintf("%s.pdf", referencefilename), referencefilename+"-%02d.png")
 		cmd.Dir = path
 		err = cmd.Run()
 		if err != nil {
@@ -217,7 +229,7 @@ func runComparison(path string, statuschan chan compareStatus) {
 
 	for i := 0; i < len(sourceFiles); i++ {
 		sourceFile := fmt.Sprintf("source-%02d.png", i)
-		referenceFile := fmt.Sprintf("reference-%02d.png", i)
+		referenceFile := fmt.Sprintf("%s-%02d.png", referencefilename, i)
 		dummyFile := fmt.Sprintf("pagediff-%02d.png", i)
 		if delta := compareTwoPages(sourceFile, referenceFile, dummyFile, path); delta > 0 {
 			cs.Delta = math.Max(cs.Delta, delta)
@@ -316,7 +328,7 @@ func mkCompare(statuschan chan compareStatus) filepath.WalkFunc {
 		if info == nil || !info.IsDir() {
 			return nil
 		}
-		if _, err := os.Stat(filepath.Join(path, "reference.pdf")); err == nil {
+		if _, err := os.Stat(filepath.Join(path, fmt.Sprintf("%s.pdf", referencefilename))); err == nil {
 			wp.Submit(func() { runComparison(path, statuschan) })
 		} else if _, err := os.Stat(filepath.Join(path, "layout.xml")); err == nil {
 			fmt.Println("Warning: directory", path, "has layout.xml but not reference.pdf")

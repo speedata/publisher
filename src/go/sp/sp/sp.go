@@ -111,20 +111,21 @@ func init() {
 	layoutoptions = make(map[string]string)
 	options = make(map[string]string)
 	defaults = map[string]string{
-		"address":    "127.0.0.1",
-		"data":       "data.xml",
-		"fontpath":   "",
-		"grid":       "",
-		"imagecache": "",
-		"jobname":    "publisher",
-		"layout":     "layout.xml",
-		"port":       "5266",
-		"quiet":      stringFalse,
-		"runs":       "1",
-		"tempdir":    os.TempDir(),
-		"cache":      "optimal",
-		"inkscape":   "inkscape",
-		"fontloader": "fontforge",
+		"address":           "127.0.0.1",
+		"data":              "data.xml",
+		"fontpath":          "",
+		"grid":              "",
+		"imagecache":        "",
+		"jobname":           "publisher",
+		"layout":            "layout.xml",
+		"port":              "5266",
+		"quiet":             stringFalse,
+		"runs":              "1",
+		"tempdir":           os.TempDir(),
+		"cache":             "optimal",
+		"inkscape":          "inkscape",
+		"fontloader":        "fontforge",
+		"referencefilename": "reference",
 	}
 
 	switch runtime.GOOS {
@@ -824,21 +825,6 @@ func main() {
 		log.Fatal("Parse error: ", err)
 	}
 
-	var command string
-	switch len(op.Extra) {
-	case 0:
-		// no command given, run is the default command
-		command = cmdRun
-	case 1:
-		// great
-		command = op.Extra[0]
-	default:
-		// more than one command given, what should I do?
-		command = op.Extra[0]
-	}
-	if command == cmdHTML {
-		defaults["layout"] = "_internallayouthtml.xml"
-	}
 	switch runtime.GOOS {
 	case osWindows:
 		cfg, err = configurator.ReadFiles(filepath.Join(os.Getenv("APPDATA"), "speedata", "publisher.cfg"))
@@ -863,6 +849,27 @@ func main() {
 	}
 
 	cfg.ReadFile(filepath.Join(pwd, configfilename))
+
+	var command string
+
+	switch len(op.Extra) {
+	case 0:
+		// no command given, run is the default command
+		if cmdOpt := getOption("command"); cmdOpt == "" {
+			command = cmdRun
+		} else {
+			command = cmdOpt
+		}
+	case 1:
+		// great
+		command = op.Extra[0]
+	default:
+		// more than one command given, what should I do?
+		command = op.Extra[0]
+	}
+	if command == cmdHTML {
+		defaults["layout"] = "_internallayouthtml.xml"
+	}
 
 	// ... but if the local config file has a wd=... option, we should honor this
 	// and also honor the settings in that publisher.cfg file
@@ -1040,7 +1047,7 @@ func main() {
 				log.Fatal(err)
 			}
 			// true = write HTML file to $TEMPDIR
-			sp.DoCompare(absDir, true)
+			sp.DoCompare(absDir, true, verbose, getOption("referencefilename"))
 		} else {
 			log.Println("Please give one directory")
 		}
@@ -1081,11 +1088,17 @@ func main() {
 		cmdline := []string{"--luaonly", filepath.Join(srcdir, "lua", "sdscripts.lua"), inifile, "list-fonts", xml}
 		run(getExecutablePath(), cmdline, []string{"LC_ALL=C"})
 	case cmdHTML:
+		optHTMLfilename := getOption("htmlfilename")
+		var htmlfile string
 		if len(op.Extra) < 2 {
-			fmt.Println("command html must have one: the HTML file")
-			os.Exit(1)
+			if optHTMLfilename == "" {
+				fmt.Println("command html must have one argument: the HTML file")
+				os.Exit(1)
+			}
+			htmlfile = optHTMLfilename
+		} else {
+			htmlfile = op.Extra[1]
 		}
-		htmlfile := op.Extra[1]
 		jobname := strings.TrimSuffix(htmlfile, filepath.Ext(htmlfile))
 		options["jobname"] = jobname
 		runPublisher(cachemethod, cmdHTML, htmlfile)
