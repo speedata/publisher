@@ -1,6 +1,6 @@
 [.split]
 [[ch-advancedtopics]]
-= Advanced topcis
+= Advanced topics
 
 In this section some of the features already mentioned will be discussed in more detail.
 
