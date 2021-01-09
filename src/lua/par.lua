@@ -54,29 +54,41 @@ local function indent_nodelist(nl,wd)
     return nl
 end
 
+local void_elements = {area = true, base = true, br = true, col = true, hr = true, img = true, input = true, link = true, meta = true, param = true, command = true, keygen = true, source = true }
+
 local function reconstruct_html_text(elt)
+    local eltname = elt[".__local_name"]
     local ret = {}
     table.insert(ret,"<")
-    table.insert(ret,elt[".__local_name"])
+    table.insert(ret,eltname)
     local attributes = {}
     for key,value in next,elt,nil do
         if type(key) == "string" and not string.match( key,"^.__" ) then
             table.insert(ret,string.format(" %s=%q",key,value))
         end
     end
-    table.insert(ret,">")
-    for i=1,#elt do
-        local thiselt = elt[i]
-        local type_thiselt = type(thiselt)
-        if type_thiselt == "string" then
-            table.insert(ret,publisher.xml_escape(thiselt))
-        elseif type_thiselt == "table" then
-            table.insert(ret,reconstruct_html_text(thiselt))
+    if #elt == 0 then
+        if void_elements[eltname] then
+            table.insert(ret,">")
+        else
+            table.insert(ret," />")
         end
+    else
+        table.insert(ret,">")
+        for i=1,#elt do
+            local thiselt = elt[i]
+            local type_thiselt = type(thiselt)
+            if type_thiselt == "string" then
+                table.insert(ret,publisher.xml_escape(thiselt))
+            elseif type_thiselt == "table" then
+                table.insert(ret,reconstruct_html_text(thiselt))
+            end
+        end
+
+        table.insert(ret,"</")
+        table.insert(ret,eltname)
+        table.insert(ret,">")
     end
-    table.insert(ret,"</")
-    table.insert(ret,elt[".__local_name"])
-    table.insert(ret,">")
     return table.concat( ret )
 end
 
