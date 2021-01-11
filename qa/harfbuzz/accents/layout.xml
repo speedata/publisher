@@ -1,0 +1,22 @@
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat height="30mm" width="40mm" />
+  <SetGrid height="12pt" nx="5" />
+  <LoadFontfile name="NotoSansBengali-Regular" filename="NotoSansBengali-Regular.ttf" mode="harfbuzz" />
+
+  <Options mainlanguage="Other"/>
+  <DefineFontfamily fontsize="10" leading="12" name="ben">
+    <Regular fontface="NotoSansBengali-Regular"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock fontfamily="ben" textformat="left">
+        <Paragraph>
+        <Value>বর্তমান</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

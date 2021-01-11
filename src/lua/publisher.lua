@@ -3483,7 +3483,9 @@ function hbglyphlist(arguments)
             n.right = parameter.right or tex.righthyphenmin
 
             if thisglyph.x_offset ~= 0 then
-                n.xoffset = -1 * thisglyph.x_offset * tbl.mag
+                local dir = 1
+                if direction == "rtl" then dir = -1 end
+                n.xoffset = dir * thisglyph.x_offset * tbl.mag
             end
             if thisglyph.y_offset ~= 0 then
                 n.yoffset = thisglyph.y_offset * tbl.mag
