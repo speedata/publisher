@@ -495,6 +495,10 @@ end
 function collect_horizontal_nodes( elt,parameter,before_box,origin )
     -- w("collect_horizontal_nodes %s",origin or "?")
     parameter = parameter or {}
+    if elt.elementname == "br" then
+        local nodes = publisher.mknodes("\n",parameter)
+        return {nodes}
+    end
     local ret = {}
     for i=1,#elt do
         local styles = setmetatable({}, levelmt)
@@ -915,6 +919,11 @@ function build_nodelist(elt,options,before_box,caller )
                     str = ""
                     ret[#ret + 1] = a
                 end
+            elseif thiseltname == "br" then
+                local a = par:new(tf,"html.lua (br)")
+                a:append(node.new("hlist"))
+                box[#box + 1] = a
+                ret[#ret + 1] = box
             else
                 local n = build_nodelist(thiselt,options,before_box,string.format("build_nodelist/ any element name %q",thiseltname))
                 before_box = nil

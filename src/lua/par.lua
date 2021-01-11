@@ -102,7 +102,6 @@ local function flatten(self,items,options)
         new_options.direction = new_options.direction or self.direction
         if typ_thisself == "table" and thisself.contents then
             -- w("par/flatten: type: table with contents")
-            local thisself_contents = thisself.contents
             for key,value in next,thisself.options,nil do
                new_options[key] = value
             end
