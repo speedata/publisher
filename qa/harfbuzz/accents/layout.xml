@@ -1,11 +1,17 @@
 <Layout
   xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
-  <Pageformat height="30mm" width="40mm" />
-  <SetGrid height="12pt" nx="5" />
-  <LoadFontfile name="NotoSansBengali-Regular" filename="NotoSansBengali-Regular.ttf" mode="harfbuzz" />
-
+  <Pageformat height="40mm" width="40mm" />
   <Options mainlanguage="Other"/>
+  <SetGrid height="12pt" nx="5" />
+
+  <LoadFontfile name="NotoSansBengali-Regular" filename="NotoSansBengali-Regular.ttf" mode="harfbuzz" />
+  <LoadFontfile name="NotoSansArabic-Regular" filename="NotoSansArabic-Regular.ttf" mode="harfbuzz" />
+
+  <DefineFontfamily fontsize="10" leading="12" name="arab">
+    <Regular fontface="NotoSansArabic-Regular" />
+  </DefineFontfamily>
+
   <DefineFontfamily fontsize="10" leading="12" name="ben">
     <Regular fontface="NotoSansBengali-Regular"/>
   </DefineFontfamily>
@@ -18,5 +24,13 @@
         </Paragraph>
       </Textblock>
     </PlaceObject>
+    <PlaceObject>
+      <Textblock>
+        <Paragraph fontfamily="arab">
+          <Value>بعضًا</Value>
+        </Paragraph>
+    </Textblock>
+    </PlaceObject>
+
   </Record>
 </Layout>

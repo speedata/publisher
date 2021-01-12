@@ -3927,7 +3927,7 @@ function mknodes(str,parameter,origin)
                 allowbreak = parameter.allowbreak or " -",
                 newlines_at = newlines_at,
                 script = script,
-                direction = maindirection,
+                direction = maindirection or direction,
                 thislang = thislang,
                 fontnumber = fontnumber,
                 is_chinese = is_chinese,
