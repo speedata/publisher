@@ -126,9 +126,18 @@ local function flatten(self,items,options)
                     table.insert(ret,tmp[i])
                 end
             else
-                local tmp = flatten(self,thisself.contents,new_options)
-                for i=1,#tmp do
-                    table.insert(ret,tmp[i])
+                if #thisself.contents == 0 then
+                    local nodes, newdir = publisher.mknodes("\n",new_options,"par/emptyvalue")
+                    publisher.setprop(nodes,"newline",true)
+                    if new_options.discardallowed then
+                        publisher.setprop(nodes,"discardallowed",true)
+                    end
+                    table.insert(ret,nodes)
+                else
+                    local tmp = flatten(self,thisself.contents,new_options)
+                    for i=1,#tmp do
+                        table.insert(ret,tmp[i])
+                    end
                 end
             end
         elseif typ_thisself == "string" or typ_thisself == "number" or typ_thisself == "boolean" then
