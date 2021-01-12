@@ -11,3 +11,4 @@ compare-report.html
 /publisher.code-workspace
 src/lua/nodetree.lua
 TODO
+/rakelib
