@@ -1271,6 +1271,10 @@ function initialize_luatex_and_generate_pdf()
         local n = node.vpack(pages[current_pagenumber].pagebox)
         shipout(n,current_pagenumber)
     end
+    local lastpage = current_pagenumber
+    while not(page_initialized_p(lastpage)) and lastpage > 0 and current_pagestore_name == nil do
+        lastpage = lastpage - 1
+    end
 
     --- At this point, all pages are in the PDF
     local vp = {}
@@ -1396,7 +1400,7 @@ function initialize_luatex_and_generate_pdf()
     local file = io.open(auxfilename,"wb")
     file:write("<marker>\n")
     file:write(table.concat(tab,"\n"))
-    file:write(string.format("\n <lastpage page='%d' />",current_pagenumber))
+    file:write(string.format("\n <lastpage page='%d' />",lastpage))
     file:write("\n</marker>")
     file:close()
 end
