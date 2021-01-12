@@ -4018,9 +4018,9 @@ function add_rule( nodelist,head_or_tail,parameters)
 end
 
 --- Return a hbox with width `labelwidth`
-function bullet_hbox( labelwidth )
+function bullet_hbox( labelwidth,parameter )
     local bullet, pre_glue, post_glue
-    bullet = mknodes("•",{})
+    bullet = mknodes("•",parameter)
     pre_glue = set_glue(nil,{stretch = 2^16, stretch_order = 3})
     pre_glue.next = bullet
 
@@ -4038,9 +4038,9 @@ function bullet_hbox( labelwidth )
 end
 
 --- Return a hbox with width `labelwidth`
-function number_hbox( num, labelwidth )
+function number_hbox( num, labelwidth,parameter )
     local pre_glue, post_glue
-    local digits = mknodes( tostring(num) .. ".",{})
+    local digits = mknodes( tostring(num) .. ".",parameter)
     pre_glue = set_glue(nil,{stretch = 2^16, stretch_order = 3})
     pre_glue.next = digits
 

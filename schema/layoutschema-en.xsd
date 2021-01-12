@@ -2470,6 +2470,11 @@
       <xs:sequence>
         <xs:element maxOccurs="unbounded" ref="en:Li"/>
       </xs:sequence>
+      <xs:attribute name="fontfamily">
+        <xs:annotation>
+          <xs:documentation>The name of the font family for the paragraph. The default is »text« (lowercase t).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Options">
@@ -6951,6 +6956,11 @@
         <xs:element ref="en:Li"/>
         <xs:element ref="en:ForAll"/>
       </xs:choice>
+      <xs:attribute name="fontfamily">
+        <xs:annotation>
+          <xs:documentation>The name of the font family for the paragraph. The default is »text« (lowercase t).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Until">

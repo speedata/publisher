@@ -2871,6 +2871,11 @@
          <a:documentation>Create an ordered list, just like in HTML</a:documentation>
          <interleave>
             <group>
+               <optional>
+                  <attribute name="fontfamily">
+                     <a:documentation>The name of the font family for the paragraph. The default is »text« (lowercase t).</a:documentation>
+                  </attribute>
+               </optional>
                <oneOrMore>
                   <ref name="e_Li"></ref>
                </oneOrMore>
@@ -5913,6 +5918,11 @@
          <a:documentation>Create an unordered list, just like in HTML</a:documentation>
          <interleave>
             <group>
+               <optional>
+                  <attribute name="fontfamily">
+                     <a:documentation>The name of the font family for the paragraph. The default is »text« (lowercase t).</a:documentation>
+                  </attribute>
+               </optional>
                <oneOrMore>
                   <interleave>
                      <optional>

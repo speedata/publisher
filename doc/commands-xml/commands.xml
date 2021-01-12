@@ -5074,7 +5074,15 @@
         <cmd name="Li"/>
       </oneOrMore>
     </childelements>
-    <example xml:lang="en">
+    <attribute en="fontfamily" type="text" optional="yes" since="4.3.1">
+      <description xml:lang="en">
+        <para>The name of the font family for the paragraph. The default is »text« (lowercase t).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</para>
+      </description>
+    </attribute>
+      <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
   <Textblock>
     <Ol>
@@ -9665,7 +9673,15 @@
         </interleave>
       </oneOrMore>
    </childelements>
-    <example xml:lang="en">
+   <attribute en="fontfamily" type="text" optional="yes" since="4.3.1">
+    <description xml:lang="en">
+      <para>The name of the font family for the paragraph. The default is »text« (lowercase t).</para>
+    </description>
+    <description xml:lang="de">
+      <para>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</para>
+    </description>
+  </attribute>
+   <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
   <Textblock>
     <Ul>

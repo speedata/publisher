@@ -1453,7 +1453,7 @@ function commands.li(layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
-        p:append(c,{allowbreak=publisher.allowbreak,padding_left = tex.sp("5mm")})
+        p:append(c,{allowbreak=publisher.allowbreak,padding_left = 0})
     end
     return p
 end
@@ -1919,12 +1919,26 @@ end
 --- ------------------
 --- A list with numbers
 function commands.ol(layoutxml,dataxml )
+    local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily","rawstring")
+    local fontfamily
+    if fontfamilyname then
+        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
+        if fontfamily == nil then
+            err("Fontfamily %q not found.",fontfamilyname)
+            fontfamily = 0
+        end
+        publisher.current_fontfamily = fontfamily
+    else
+        fontfamily = nil
+    end
+    if not fontfamily then fontfamily = publisher.fonts.lookup_fontfamily_name_number["text"] end
+
     local ret = {}
     local labelwidth = tex.sp("5mm")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
-        local a = par:new(publisher.textformats["__fivemm"],"ol")
-        a:append(publisher.number_hbox(i,labelwidth),{})
+        local a = par:new(nil,"ol")
+        a:append(publisher.number_hbox(i,labelwidth,{fontfamily = fontfamily}))
         a:append(publisher.element_contents(j),{})
         ret[#ret + 1] = a
     end
@@ -4176,12 +4190,26 @@ end
 --- ------------------
 --- A list with bullet points.
 function commands.ul(layoutxml,dataxml )
+    local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily","rawstring")
+    local fontfamily
+    if fontfamilyname then
+        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
+        if fontfamily == nil then
+            err("Fontfamily %q not found.",fontfamilyname)
+            fontfamily = 0
+        end
+        publisher.current_fontfamily = fontfamily
+    else
+        fontfamily = nil
+    end
+    if not fontfamily then fontfamily = publisher.fonts.lookup_fontfamily_name_number["text"] end
+
     local ret = {}
     local labelwidth = tex.sp("5mm")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
         local a = par:new(nil,"ul")
-        a:append(publisher.bullet_hbox(labelwidth),{})
+        a:append(publisher.bullet_hbox(labelwidth,{fontfamily = fontfamily}))
         a:append(publisher.element_contents(j),{})
         ret[#ret + 1] = a
     end

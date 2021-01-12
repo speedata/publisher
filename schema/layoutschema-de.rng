@@ -2871,6 +2871,11 @@
          <a:documentation>Erzeugt eine nummerierte Aufzählungsliste wie in HTML</a:documentation>
          <interleave>
             <group>
+               <optional>
+                  <attribute name="fontfamily">
+                     <a:documentation>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</a:documentation>
+                  </attribute>
+               </optional>
                <oneOrMore>
                   <ref name="e_Li"></ref>
                </oneOrMore>
@@ -5913,6 +5918,11 @@
          <a:documentation>Erzeugt eine Stichpunktliste mit Aufzählungspunkten</a:documentation>
          <interleave>
             <group>
+               <optional>
+                  <attribute name="fontfamily">
+                     <a:documentation>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</a:documentation>
+                  </attribute>
+               </optional>
                <oneOrMore>
                   <interleave>
                      <optional>
