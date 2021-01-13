@@ -1,4 +1,34 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="4.4">
+    <entry version="4.3.1" date="2021-01-13">
+        <en><tt>$_lastpage</tt> handles final NewPage (#299).</en>
+        <de><tt>$_lastpage</tt> beachtet letztes NewPage (#299).</de>
+    </entry>
+    <entry version="4.3.1" date="2021-01-13">
+        <en>Empty paragraph results in newline (#297).</en>
+        <de>Leerer Absatz erzeugt eine Leerzeile (#297).</de>
+    </entry>
+    <entry version="4.3.1" date="2021-01-13">
+        <en>Fix indentation of UL/OL, set fontfamily.</en>
+        <de>Korrigiere Einrückung von UL/OL, setze fontfamily.</de>
+    </entry>
+    <entry version="4.3.1" date="2021-01-13">
+        <en>Harfbuzz: fix accents placement (#296, #298).</en>
+        <de>Harfbuzz: Akzente Platzierung verbessern (#296, #298).</de>
+    </entry>
+    <entry version="4.3.1" date="2021-01-13">
+        <en>HTML: allow br in elements (#293).</en>
+        <de>HTML: br in Elementen erlauben (#293).</de>
+    </entry>
+    <entry version="4.3.1" date="2021-01-13">
+        <en>HTML parser: handle void elements.</en>
+        <de>HTML Parser: leere Elemente beachten.</de>
+    </entry>
+    <entry version="4.3.1" date="2021-01-13">
+      <en>Windows 64 bit package</en>
+      <de>Windows 64 Bit Paket</de>
+    </entry>
+  </chapter>
   <chapter version="4.2" date="2021-01-07">
     <entry version="4.1.25" date="2021-01-06">
         <en>Rewrite command Initial (backwards incompatible change) (#287).</en>
