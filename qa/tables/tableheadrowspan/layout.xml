@@ -1,0 +1,39 @@
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en" xmlns="urn:speedata.de:2009/publisher/en" version="4.2.0">
+  <Pageformat height="6cm" width="210mm" />
+	<Record element="data">
+		<PlaceObject>
+			<Table width="170mm">
+				<Columns>
+					<Column width="42.5mm" align="center" />
+					<Column width="42.5mm" align="center" />
+					<Column width="42.5mm" align="center" />
+					<Column width="42.5mm" align="center" />
+				</Columns>
+				<Tablehead>
+				<ForAll select="th">
+					<Tr>
+						<ForAll select="td">
+							<Td rowspan="{@rowspan}" colspan="{@colspan}" border-left="1pt" border-right="1pt" border-top="1pt" border-bottom="1pt">
+								<Paragraph>
+									<Value select="string(.)"/>
+								</Paragraph>
+							</Td>
+						</ForAll>
+					</Tr>
+				</ForAll>
+				</Tablehead>
+				<ForAll select="tr">
+					<Tr>
+						<ForAll select="td">
+							<Td rowspan="{@rowspan}" colspan="{@colspan}" border-left="1pt" border-right="1pt" border-top="1pt" border-bottom="1pt">
+								<Paragraph>
+									<Value select="string(.)"/>
+								</Paragraph>
+							</Td>
+						</ForAll>
+					</Tr>
+				</ForAll>
+			</Table>
+		</PlaceObject>
+	</Record>
+</Layout>

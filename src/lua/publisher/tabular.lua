@@ -795,7 +795,6 @@ function calculate_rowheights(self)
     local rowspans = {}
     local _rowspans
     local rowheightarea
-    local rowspanarea
     local tablearea
     local rowcounter = {}
     local current_row
@@ -818,7 +817,6 @@ function calculate_rowheights(self)
             self.rowheights[tablearea] = self.rowheights[tablearea] or {}
             rowheightarea = self.rowheights[tablearea]
             rowspans[tablearea] = rowspans[tablearea] or {}
-            rowspanarea = rowspans[tablearea]
             rowcounter[tablearea] = rowcounter[tablearea] or 0
         end
 
@@ -835,7 +833,7 @@ function calculate_rowheights(self)
                     current_row = rowcounter[tablearea]
                     rowheight, _rowspans,last_shiftup_head = self:calculate_rowheight(cellcontents,current_row,last_shiftup_head,self.skiptables.tablehead)
                     rowheightarea[current_row] = rowheight
-                    rowspans[tablearea] = table.__concat(rowspanarea,_rowspans)
+                    rowspans[tablearea] = table.__concat(rowspans[tablearea],_rowspans)
                 end
             end
         elseif eltname == "Tablefoot" then
@@ -849,7 +847,7 @@ function calculate_rowheights(self)
                     current_row = rowcounter[tablearea]
                     rowheight, _rowspans,last_shiftup_foot = self:calculate_rowheight(cellcontents,current_row,last_shiftup_foot,self.skiptables.tablefoot)
                     rowheightarea[current_row] = rowheight
-                    rowspans[tablearea] = table.__concat(rowspanarea,_rowspans)
+                    rowspans[tablearea] = table.__concat(rowspans[tablearea],_rowspans)
                 end
             end
 
@@ -858,7 +856,7 @@ function calculate_rowheights(self)
             current_row = rowcounter[tablearea]
             rowheight, _rowspans,last_shiftup = self:calculate_rowheight(tr_contents,current_row,last_shiftup,self.skiptables.body)
             rowheightarea[current_row] = rowheight
-            rowspans[tablearea] = table.__concat(rowspanarea,_rowspans)
+            rowspans[tablearea] = table.__concat(rowspans[tablearea],_rowspans)
         else
             warning("Unknown contents in “Table” %s",eltname or "?")
         end -- if it's not a <Tablerule>
@@ -1845,45 +1843,59 @@ function reformat_head( self,pagenumber)
     return tmp1[1],tmp2[1]
 end
 
-
-function set_skip_table( self )
+function set_skip_table_elt(tr_contents,curskiptable,current_row)
     local rowspan
     local colspan
     local current_column
-    local current_row = 0
+
+    current_column = 0
+    for _,td in ipairs(tr_contents) do
+        current_column = current_column + 1
+
+        -- There might be a rowspan from the row above, so we need to find the correct column
+        while curskiptable[current_row] and curskiptable[current_row][current_column] do
+            current_column = current_column + 1
+        end
+
+        local td_contents = publisher.element_contents(td)
+        rowspan = tonumber(td_contents.rowspan) or 1
+        colspan = tonumber(td_contents.colspan) or 1
+
+        for z = current_row + 1, current_row + rowspan - 1 do
+            for y = current_column, current_column + colspan - 1 do
+                curskiptable[z] = curskiptable[z] or {}
+                curskiptable[z][y] = true
+            end
+        end
+        while curskiptable[current_row] and curskiptable[current_row][current_column] do
+            current_column = current_column + 1
+        end
+        current_column = current_column + colspan - 1
+    end
+end
+
+
+function set_skip_table( self )
     self.skiptables={ body = {}, tablehead = {}, tablefoot = {}}
     local curskiptable
-    for _,tr in ipairs(self.tab) do
+    local current_row_body = 0
+    local current_row_head = 0
 
+    for _,tr in ipairs(self.tab) do
         local tr_contents = publisher.element_contents(tr)
         local eltname = publisher.elementname(tr)
         -- TODO: set skip tables for tablehead, tablefoot?
         if eltname == "Tr" then
-            curskiptable = self.skiptables.body
-            current_row = current_row + 1
-            current_column = 0
-            for _,td in ipairs(tr_contents) do
-                current_column = current_column + 1
-
-                -- There might be a rowspan from the row above, so we need to find the correct column
-                while curskiptable[current_row] and curskiptable[current_row][current_column] do
-                    current_column = current_column + 1
+            current_row_body = current_row_body + 1
+            set_skip_table_elt(tr_contents,self.skiptables.body,current_row_body)
+        elseif eltname == "Tablehead" then
+            for _,tr_inner in ipairs(tr_contents) do
+                local inner_eltname = publisher.elementname(tr_inner)
+                local inner_contents = publisher.element_contents(tr_inner)
+                if inner_eltname == "Tr" then
+                    current_row_head = current_row_head + 1
+                    set_skip_table_elt(inner_contents,self.skiptables.tablehead,current_row_head)
                 end
-
-                local td_contents = publisher.element_contents(td)
-                rowspan = tonumber(td_contents.rowspan) or 1
-                colspan = tonumber(td_contents.colspan) or 1
-
-                for z = current_row + 1, current_row + rowspan - 1 do
-                    for y = current_column, current_column + colspan - 1 do
-                        curskiptable[z] = curskiptable[z] or {}
-                        curskiptable[z][y] = true
-                    end
-                end
-                while curskiptable[current_row] and curskiptable[current_row][current_column] do
-                    current_column = current_column + 1
-                end
-                current_column = current_column + colspan - 1
             end
         end
     end
