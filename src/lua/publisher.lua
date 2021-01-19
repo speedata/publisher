@@ -917,7 +917,6 @@ do
         ret = ret or {}
         parameter = parameter or {}
         local indent = box.indent_amount or 0
-        -- w("fb: indent %gpt",indent / factor)
         if indent and parameter.indent then
             indent = parameter.indent + indent
         end
@@ -961,6 +960,7 @@ do
             else
                 -- a box with paragraphs inside
                 flatten_boxes(thisbox,new_parameter,ret)
+                if thisbox.mode == "block" then ret.mode = "block" end
             end
         end
         return ret

@@ -721,6 +721,7 @@ function build_nodelist(elt,options,before_box,caller )
     options = options or {}
     -- ret is a nested table of boxes and paragraphs
     local ret = {}
+    local prevdir = "vertical"
     for i=1,#elt do
         local thiselt = elt[i]
         local thiseltname = thiselt.elementname
@@ -862,7 +863,10 @@ function build_nodelist(elt,options,before_box,caller )
                 end
             end
             if appended then
+                prevdir = "horizontal"
                 ret[#ret + 1] = a
+            else
+                prevdir = "vertical"
             end
         else
             local box = Box:new()
@@ -872,6 +876,7 @@ function build_nodelist(elt,options,before_box,caller )
             box.width = styles.calculated_width - margin_left - margin_right - padding_left - padding_right
 
             if thiseltname == "table" then
+                prevdir = "vertical"
                 -- w("html/table")
                 local nl = build_html_table(thiselt)
                 local tabpar = par:new(nil,"html table (a)")
@@ -882,6 +887,7 @@ function build_nodelist(elt,options,before_box,caller )
                 box[#box + 1] = tabpar
                 ret[#ret + 1] = box
             elseif thiseltname == "ol" or thiseltname == "ul" then
+                prevdir = "vertical"
                 styles.olullisttype = thiseltname
                 styles.listindent = padding_left
                 styles.listlevel = styles.listlevel + 1
@@ -904,6 +910,7 @@ function build_nodelist(elt,options,before_box,caller )
                 end
                 ret[#ret + 1] = box
             elseif thiseltname == "li" then
+                prevdir = "vertical"
                 olcounter[styles.listlevel] = olcounter[styles.listlevel] or 0
                 olcounter[styles.listlevel] = olcounter[styles.listlevel] + 1
                 local n = build_nodelist(thiselt,options,before_box,"build_nodelist/ li" )
@@ -920,43 +927,59 @@ function build_nodelist(elt,options,before_box,caller )
                     ret[#ret + 1] = a
                 end
             elseif thiseltname == "br" then
-                local a = par:new(tf,"html.lua (br)")
-                a:append(node.new("hlist"))
-                box[#box + 1] = a
-                ret[#ret + 1] = box
+                if prevdir == "vertical" then
+                    local a = par:new(tf,"html.lua (br)")
+                    local strutheight = publisher.fonts.lookup_fontfamily_number_instance[fam].baselineskip
+                    local strut = node.new("rule")
+                    strut.width=0
+                    strut.height = strutheight*0.75
+                    strut.depth = strutheight*0.25
+                    local hlist = node.hpack(strut)
+
+                    a:append(hlist)
+                    box[#box + 1] = a
+                    ret[#ret + 1] = box
+                end
+                prevdir = "vertical"
             else
+                prevdir = "vertical"
                 local n = build_nodelist(thiselt,options,before_box,string.format("build_nodelist/ any element name %q",thiseltname))
                 before_box = nil
                 box.draw_border = attributes.has_border
-                box.border = {
-                    borderstart = true,
-                    border_top_style = border_top_style,
-                    border_right_style = border_right_style,
-                    border_bottom_style = border_bottom_style,
-                    border_left_style = border_left_style,
-                    padding_top = padding_top,
-                    padding_right = padding_right,
-                    padding_bottom = padding_bottom,
-                    padding_left = padding_left,
-                    rule_width_top = rule_width_top,
-                    rule_width_right = rule_width_right,
-                    rule_width_bottom = rule_width_bottom,
-                    rule_width_left = rule_width_left,
-                    border_top_color = border_top_color,
-                    border_right_color = border_right_color,
-                    border_bottom_color = border_bottom_color,
-                    border_left_color = border_left_color,
-                    border_bottom_right_radius = tex.sp(border_bottom_right_radius),
-                    border_bottom_left_radius = tex.sp(border_bottom_left_radius),
-                    border_top_right_radius = tex.sp(border_top_right_radius),
-                    border_top_left_radius = tex.sp(border_top_left_radius),
-                    margin_top = margin_top,
-                    margin_right = margin_right,
-                    margin_bottom = margin_bottom,
-                    margin_left = margin_left,
-                }
+                if box.draw_border then
+                    box.border = {
+                        borderstart = true,
+                        border_top_style = border_top_style,
+                        border_right_style = border_right_style,
+                        border_bottom_style = border_bottom_style,
+                        border_left_style = border_left_style,
+                        padding_top = padding_top,
+                        padding_right = padding_right,
+                        padding_bottom = padding_bottom,
+                        padding_left = padding_left,
+                        rule_width_top = rule_width_top,
+                        rule_width_right = rule_width_right,
+                        rule_width_bottom = rule_width_bottom,
+                        rule_width_left = rule_width_left,
+                        border_top_color = border_top_color,
+                        border_right_color = border_right_color,
+                        border_bottom_color = border_bottom_color,
+                        border_left_color = border_left_color,
+                        border_bottom_right_radius = tex.sp(border_bottom_right_radius),
+                        border_bottom_left_radius = tex.sp(border_bottom_left_radius),
+                        border_top_right_radius = tex.sp(border_top_right_radius),
+                        border_top_left_radius = tex.sp(border_top_left_radius),
+                        margin_top = margin_top,
+                        margin_right = margin_right,
+                        margin_bottom = margin_bottom,
+                        margin_left = margin_left,
+                    }
+                end
+                local mode
+                if thiselt.block then mode = "block" end
                 for i = 1,#n do
                     box[#box + 1] = n[i]
+                    box[#box].mode = mode
                 end
                 ret[#ret + 1] = box
             end

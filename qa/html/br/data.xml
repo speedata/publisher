@@ -1,0 +1,10 @@
+<data>
+    <case>
+        <!-- three br -->
+        A<br/><br/><br/>B
+    </case>
+    <case>
+        <!-- par and two br-->
+        <p>A</p><br/><br/><p>B</p>
+    </case>
+ </data>

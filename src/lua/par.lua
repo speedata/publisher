@@ -224,8 +224,9 @@ local function flatten(self,items,options)
                         for tb=1,#thisblock do
                             local tbc = thisblock[tb].contents
                             local dir = publisher.getprop(tbc,"direction")
+                            local mode = thisblock.mode
                             if tbc then
-                                if c > startnewline and ( has_contents == false ) and dir ~= "→" then
+                                if (tb == 1 and mode == "block" ) or  ( c > startnewline and ( has_contents == false ) and dir ~= "→" ) then
                                     publisher.setprop(tbc,"split",true)
                                     publisher.setprop(tbc,"padding_left",thisblock.padding_left)
                                     publisher.setprop(tbc,"prependnodelist",thisblock.prependnodelist)

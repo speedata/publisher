@@ -355,8 +355,15 @@ func dumpElement(thisNode *html.Node, level int, direction mode) {
 			} else {
 				// keep dir
 			}
-			fmt.Fprintf(out, "%s { elementname = %q, direction = %q,\n", indent, eltname, newDir)
-
+			isBlock := false
+			if eltname == "address" || eltname == "article" || eltname == "aside" || eltname == "audio" || eltname == "video" || eltname == "blockquote" || eltname == "canvas" || eltname == "dd" || eltname == "div" || eltname == "dl" || eltname == "fieldset" || eltname == "figcaption" || eltname == "figure" || eltname == "footer" || eltname == "form" || eltname == "h1" || eltname == "h2" || eltname == "h3" || eltname == "h4" || eltname == "h5" || eltname == "h6" || eltname == "header" || eltname == "hgroup" || eltname == "hr" || eltname == "noscript" || eltname == "ol" || eltname == "output" || eltname == "p" || eltname == "pre" || eltname == "section" || eltname == "table" || eltname == "tfoot" || eltname == "ul" {
+				isBlock = true
+			}
+			fmt.Fprintf(out, "%s { elementname = %q, direction = %q,", indent, eltname, newDir)
+			if isBlock {
+				fmt.Fprint(out, " block=true,")
+			}
+			fmt.Fprintln(out)
 			attributes := thisNode.Attr
 			if len(attributes) > 0 {
 				fmt.Fprintf(out, "%s   attributes = {", indent)

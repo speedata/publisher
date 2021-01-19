@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Trace grid="yes"/>
+  <SetGrid height="12pt" nx="4" />
+  <Pageformat width="5cm" height="6cm"/>
+
+  <Record element="data">
+    <PlaceObject>
+        <Textblock>
+          <ForAll select="case">
+            <Paragraph>
+              <Value select="."/>
+          </Paragraph>
+          </ForAll>
+        </Textblock>
+    </PlaceObject>
+  </Record>
+
+</Layout>
