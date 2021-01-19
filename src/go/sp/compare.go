@@ -178,14 +178,14 @@ func runComparison(path string, statuschan chan compareStatus) {
 	r := calculateHash(filepath.Join(path, fmt.Sprintf("%s.pdf", referencefilename)))
 	if bytes.Equal(p, r) {
 		if verbose {
-			fmt.Println("files have the same checksum")
+			fmt.Printf("Files in %q have the same checksum\n", path)
 		}
 		cs.Delta = 0
 		statuschan <- cs
 		return
 	}
 	if verbose {
-		fmt.Println("Run convert")
+		fmt.Printf("Run convert for %q\n", path)
 	}
 	sourceFiles, err := filepath.Glob(filepath.Join(path, "source-*.png"))
 	if err != nil {
