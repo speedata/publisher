@@ -1,0 +1,16 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="3cm" width="4cm" />
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                  <ForAll select="elt">
+                    <Value select="@att1"/>
+                    <Value select="@att2"/>
+                  </ForAll>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
