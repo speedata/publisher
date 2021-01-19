@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.4">
+    <entry version="4.3.2" date="2021-01-19">
+        <en>Bugfix for newlines introduced by empty attributes (#306).</en>
+        <de>Fehlerkorrektur für Leerzeilen durch leere Attribute (#306).</de>
+    </entry>
+    <entry version="4.3.2" date="2021-01-19">
+        <en>Support for mulitple br tags in HTML (#303, #305).</en>
+        <de>Unterstützung für mehrfache br-Tags in HTML (#303, #305).</de>
+    </entry>
+    <entry version="4.3.2" date="2021-01-19">
+        <en>Bugfix for rowspan in table head (#300).</en>
+        <de>Fehlerkorrektur für rowspan im Tabellenkopf (#300).</de>
+    </entry>
     <entry version="4.3.1" date="2021-01-13">
         <en><tt>$_lastpage</tt> handles final NewPage (#299).</en>
         <de><tt>$_lastpage</tt> beachtet letztes NewPage (#299).</de>
