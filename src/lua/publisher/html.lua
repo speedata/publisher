@@ -925,38 +925,9 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
                     ret[#ret + 1] = a
                 end
             elseif thiseltname == "br" then
-                local a = par:new(tf,"html.lua (br)")
                 if prevdir == "vertical" then
-                    local dummypenalty
-                    dummypenalty = node.new("penalty")
-                    dummypenalty.penalty = 10000
-                    node.set_attribute(dummypenalty,publisher.att_newline,1)
-                    local list, cur
-                    list, cur = dummypenalty,dummypenalty
-                    local strutheight = publisher.fonts.lookup_fontfamily_number_instance[fam].baselineskip
-                    local strut = node.new("rule")
-                    strut.width=0
-                    strut.height = strutheight*0.75
-                    strut.depth = strutheight*0.25
-                    list,cur = node.insert_after(list,cur,strut)
-                    local p1,g,p2
-                    p1 = node.new("penalty")
-                    p1.penalty = 10000
-                    g = set_glue(nil,{stretch = 2^16, stretch_order = 2})
-                    p2 = node.new("penalty")
-                    p2.penalty = -10000
-                    node.set_attribute(p1,publisher.att_newline,1)
-                    node.set_attribute(p2,publisher.att_newline,1)
-                    node.set_attribute(g,publisher.att_newline,1)
-                    -- important for empty lines (adjustlineheight)
-                    node.set_attribute(p1,publisher.att_fontfamily,fam)
-                    list,cur = node.insert_after(list,cur,p1)
-                    list,cur = node.insert_after(list,cur,g)
-                    list,cur = node.insert_after(list,cur,p2)
-                    -- add glue so next word can hyphenate (#274)
-                    g = set_glue(nil,{})
-                    list,cur = node.insert_after(list,cur,g)
                     local a = par:new(tf,"html.lua (br)")
+                    local list = publisher.newline(fam)
                     a:append(list)
                     ret[#ret + 1] = a
                 end
@@ -1000,7 +971,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
                 if thiselt.block then mode = "block" end
                 if thiselt.block and #n == 0 then
                     local list = publisher.newline(fam)
-                    local a = par:new(tf,"html.lua (br)")
+                    local a = par:new(tf,"html.lua (p)")
                     a:append(list)
                     box[#box + 1] = a
                 end
