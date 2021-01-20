@@ -3,7 +3,7 @@
   xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <Trace grid="yes"/>
+  <Trace grid="no"/>
   <SetGrid height="12pt" nx="4" />
   <Pageformat width="5cm" height="6cm"/>
 

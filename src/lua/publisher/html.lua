@@ -716,12 +716,11 @@ local function getsize(size,fontsize)
 end
 
 local olcounter = {}
-function build_nodelist(elt,options,before_box,caller )
-    -- w("html: build nodelist from %s", caller or "?")
+function build_nodelist(elt,options,before_box,caller, prevdir )
+    -- w("html: build nodelist from %s, prevdir = %s", caller or "?",prevdir or "?")
     options = options or {}
     -- ret is a nested table of boxes and paragraphs
     local ret = {}
-    local prevdir = "vertical"
     for i=1,#elt do
         local thiselt = elt[i]
         local thiseltname = thiselt.elementname
@@ -865,8 +864,6 @@ function build_nodelist(elt,options,before_box,caller )
             if appended then
                 prevdir = "horizontal"
                 ret[#ret + 1] = a
-            else
-                prevdir = "vertical"
             end
         else
             local box = Box:new()
@@ -874,7 +871,6 @@ function build_nodelist(elt,options,before_box,caller )
             box.marginbottom = margin_bottom or 0
             box.indent_amount = margin_left + padding_left
             box.width = styles.calculated_width - margin_left - margin_right - padding_left - padding_right
-
             if thiseltname == "table" then
                 prevdir = "vertical"
                 -- w("html/table")
@@ -897,7 +893,8 @@ function build_nodelist(elt,options,before_box,caller )
                     styles.ullevel = styles.ullevel + 1
                 end
                 olcounter[styles.listlevel] = 0
-                local n = build_nodelist(thiselt,options,before_box,"build_nodelist/ ol/ul" )
+                local n
+                n, prevdir = build_nodelist(thiselt,options,before_box,"build_nodelist/ ol/ul",prevdir)
                 before_box = nil
                 if thiseltname == "ol" then
                     styles.ollevel = styles.ollevel - 1
@@ -913,7 +910,8 @@ function build_nodelist(elt,options,before_box,caller )
                 prevdir = "vertical"
                 olcounter[styles.listlevel] = olcounter[styles.listlevel] or 0
                 olcounter[styles.listlevel] = olcounter[styles.listlevel] + 1
-                local n = build_nodelist(thiselt,options,before_box,"build_nodelist/ li" )
+                local n
+                n, prevdir = build_nodelist(thiselt,options,before_box,"build_nodelist/ li",prevdir )
                 before_box = nil
                 -- n is a table of box and / or par
                 local str = resolve_list_style_type(styles,olcounter)
@@ -927,23 +925,46 @@ function build_nodelist(elt,options,before_box,caller )
                     ret[#ret + 1] = a
                 end
             elseif thiseltname == "br" then
+                local a = par:new(tf,"html.lua (br)")
                 if prevdir == "vertical" then
-                    local a = par:new(tf,"html.lua (br)")
+                    local dummypenalty
+                    dummypenalty = node.new("penalty")
+                    dummypenalty.penalty = 10000
+                    node.set_attribute(dummypenalty,publisher.att_newline,1)
+                    local list, cur
+                    list, cur = dummypenalty,dummypenalty
                     local strutheight = publisher.fonts.lookup_fontfamily_number_instance[fam].baselineskip
                     local strut = node.new("rule")
                     strut.width=0
                     strut.height = strutheight*0.75
                     strut.depth = strutheight*0.25
-                    local hlist = node.hpack(strut)
-
-                    a:append(hlist)
-                    box[#box + 1] = a
-                    ret[#ret + 1] = box
+                    list,cur = node.insert_after(list,cur,strut)
+                    local p1,g,p2
+                    p1 = node.new("penalty")
+                    p1.penalty = 10000
+                    g = set_glue(nil,{stretch = 2^16, stretch_order = 2})
+                    p2 = node.new("penalty")
+                    p2.penalty = -10000
+                    node.set_attribute(p1,publisher.att_newline,1)
+                    node.set_attribute(p2,publisher.att_newline,1)
+                    node.set_attribute(g,publisher.att_newline,1)
+                    -- important for empty lines (adjustlineheight)
+                    node.set_attribute(p1,publisher.att_fontfamily,fam)
+                    list,cur = node.insert_after(list,cur,p1)
+                    list,cur = node.insert_after(list,cur,g)
+                    list,cur = node.insert_after(list,cur,p2)
+                    -- add glue so next word can hyphenate (#274)
+                    g = set_glue(nil,{})
+                    list,cur = node.insert_after(list,cur,g)
+                    local a = par:new(tf,"html.lua (br)")
+                    a:append(list)
+                    ret[#ret + 1] = a
                 end
                 prevdir = "vertical"
             else
-                prevdir = "vertical"
-                local n = build_nodelist(thiselt,options,before_box,string.format("build_nodelist/ any element name %q",thiseltname))
+                local n
+                n, prevdir = build_nodelist(thiselt,options,before_box,string.format("build_nodelist/ any element name %q",thiseltname),prevdir)
+                if thiselt.block then prevdir = "vertical" end
                 before_box = nil
                 box.draw_border = attributes.has_border
                 if box.draw_border then
@@ -994,7 +1015,8 @@ function build_nodelist(elt,options,before_box,caller )
         ret[i].marginbottom = max / 2
         ret[i + 1].margintop = max / 2
     end
-    return ret
+
+    return ret, prevdir
 end
 
 function resolve_list_style_type(styles, olcounter)
@@ -1106,6 +1128,6 @@ function parse_html_new( elt, options )
         publisher.set_mainlanguage(lang)
     end
     parse_html_inner(elt[1])
-    local block = build_nodelist(elt,options,nil,"parse_html_new")
+    local block = build_nodelist(elt,options,nil,"parse_html_new","vertical")
     return block
 end

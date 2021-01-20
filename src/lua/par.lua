@@ -216,8 +216,10 @@ local function flatten(self,items,options)
                             local tbc = thisblock[tb].contents
                             local dir = publisher.getprop(tbc,"direction")
                             local mode = thisblock.mode
+                            local startblock = (tb == 1 and mode == "block" )
+                            local is_newline = ( c > startnewline and ( has_contents == false ) and dir ~= "→" )
                             if tbc then
-                                if (tb == 1 and mode == "block" ) or  ( c > startnewline and ( has_contents == false ) and dir ~= "→" ) then
+                                if startblock or is_newline then
                                     publisher.setprop(tbc,"split",true)
                                     publisher.setprop(tbc,"padding_left",thisblock.padding_left)
                                     publisher.setprop(tbc,"prependnodelist",thisblock.prependnodelist)
@@ -341,9 +343,13 @@ function Par:mknodelist( options )
         if nodelist == nil then
             nodelist = thisself
         elseif thisself.id == publisher.vlist_node or publisher.getprop(thisself,"split") then
-            table.insert(objects,nodelist)
-            table.insert(objects,thisself)
-            nodelist = nil
+            if nodelist.id == publisher.glue_node and nodelist.prev == nil and nodelist.next == nil then
+                nodelist = thisself
+            else
+                table.insert(objects,nodelist)
+                table.insert(objects,thisself)
+                nodelist = nil
+            end
         else
             local tail = node.tail(nodelist)
             tail.next = thisself
