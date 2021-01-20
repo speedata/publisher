@@ -3221,6 +3221,45 @@ function bigger_glue_spec( a,b )
     if a.width > b.width then return a else return b end
 end
 
+-- newline returns a nodelist that behaves as a new line in TeX
+function newline(fam)
+    local strutheight = fonts.lookup_fontfamily_number_instance[fam].baselineskip
+    local dummypenalty
+    dummypenalty = node.new("penalty")
+    dummypenalty.penalty = 10000
+    node.set_attribute(dummypenalty,att_newline,1)
+
+    local list, cur
+    list, cur = dummypenalty,dummypenalty
+
+    local strut = node.new("rule")
+    -- set to 60000 for example for debugging
+    strut.width=0
+    strut.height = strutheight*0.75
+    strut.depth = strutheight*0.25
+    list,cur = node.insert_after(list,cur,strut)
+
+    local p1,g,p2
+    p1 = node.new("penalty")
+    p1.penalty = 10000
+    g = set_glue(nil,{stretch = 2^16, stretch_order = 2})
+    p2 = node.new("penalty")
+    p2.penalty = -10000
+    node.set_attribute(p1,att_newline,1)
+    node.set_attribute(p2,att_newline,1)
+    node.set_attribute(g,att_newline,1)
+    -- important for empty lines (adjustlineheight)
+    node.set_attribute(p1,att_fontfamily,fam)
+    list,cur = node.insert_after(list,cur,p1)
+    list,cur = node.insert_after(list,cur,g)
+    list,cur = node.insert_after(list,cur,p2)
+    -- add glue so next word can hyphenate (#274)
+    g = set_glue(nil,{})
+    list,cur = node.insert_after(list,cur,g)
+
+    return list, cur
+end
+
 -- Used to set the line height within nobreak.
 function addstrut(nodelist,where,origin)
     local strutheight = 0

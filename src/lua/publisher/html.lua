@@ -998,6 +998,12 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
                 end
                 local mode
                 if thiselt.block then mode = "block" end
+                if thiselt.block and #n == 0 then
+                    local list = publisher.newline(fam)
+                    local a = par:new(tf,"html.lua (br)")
+                    a:append(list)
+                    box[#box + 1] = a
+                end
                 for i = 1,#n do
                     box[#box + 1] = n[i]
                     box[#box].mode = mode
