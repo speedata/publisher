@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.4">
+    <entry version="4.3.3" date="2021-01-20">
+        <en>Empty &lt;p&gt; in HTML mode creates an empty line (#309).</en>
+        <de>Leeres &lt;p&gt;-Tag im HTML Modus erzeugt eine leere Zeile (#309).</de>
+    </entry>
+    <entry version="4.3.3" date="2021-01-20">
+        <en>Bugfix: space creates a new line in HTML mode (#308).</en>
+        <de>Fehlerkorrektur: Leerzeichen erzeugt eine leere Zeile in HTML (#308).</de>
+    </entry>
     <entry version="4.3.2" date="2021-01-19">
         <en>Bugfix for newlines introduced by empty attributes (#306).</en>
         <de>Fehlerkorrektur für Leerzeilen durch leere Attribute (#306).</de>
@@ -41,7 +49,13 @@
       <de>Windows 64 Bit Paket</de>
     </entry>
   </chapter>
-  <chapter version="4.2" date="2021-01-07">
+  <chapter version="4.2" date="2021-01-09">
+    <entry version="4.2.0" date="2021-01-09">
+      <en>Release version 4.2</en>
+      <de>Veröffentliche Version 4.2</de>
+    </entry>
+  </chapter>
+  <chapter version="4.1" date="2021-01-07">
     <entry version="4.1.25" date="2021-01-06">
         <en>Rewrite command Initial (backwards incompatible change) (#287).</en>
         <de>Rückwärtsinkompatible Neuimplementierung des Befehls Initial (#287).</de>
