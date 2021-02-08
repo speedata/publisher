@@ -15,6 +15,25 @@ M.functions = {}
 M.default_functions = {}
 local nilmarker = "\1"
 
+
+if table_textvalue == nil then
+    -- Get the text value of a table. Only the indexes 1,...#table are taken into account.
+    -- The function recurses into nested tables.
+    function table_textvalue( tbl )
+        if not tbl then return nil end
+        if type(tbl) ~= "table" then return tostring(tbl) end
+        local ret = {}
+        for _,v in ipairs(tbl) do
+            if type(v) == "string" then
+                ret[#ret + 1] = v
+            elseif type(v) == "table" then
+                ret[#ret + 1] = table_textvalue(v)
+            end
+        end
+        return table.concat(ret)
+    end
+end
+
 -- We need push/pop to run a sub-xpath during an active xpath session.
 -- file global variables suck!
 function M.push_state()

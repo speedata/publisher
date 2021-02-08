@@ -125,8 +125,9 @@ desc "Test source code"
 task :test do
 	ENV["LUA_PATH"] = "#{srcdir}/lua/?.lua;#{installdir}/lib/?.lua;#{installdir}/test/?.lua"
 	ENV["PUBLISHER_BASE_PATH"] = installdir.to_s
-	inifile = srcdir.join("sdini.lua")
-	sh "texlua --lua=#{inifile} #{installdir}/bin/luatest tc_xpath.lua"
+	ENV["LD_LIBRARY_PATH"] = "#{installdir}/lib"
+	inifile = srcdir.join("lua/spinit.lua")
+	sh "bin/sdluatex --luaonly --lua=#{inifile} --ini --shell-escape #{installdir}/bin/luatest tc_xpath.lua"
 end
 
 desc "Run quality assurance"
