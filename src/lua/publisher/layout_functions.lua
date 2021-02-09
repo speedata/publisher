@@ -498,6 +498,10 @@ local function randomitem(dataxml, arg)
     return arg[x]
 end
 
+local function romannumeral(dataxml,arg)
+    return tex.romannumeral(arg[1])
+end
+
 local function aspectratio( dataxml,arg )
   local filename = arg[1]
   local img = publisher.imageinfo(filename)
@@ -592,6 +596,8 @@ register("urn:speedata:2009/publisher/functions/en","odd",odd)
 register("urn:speedata:2009/publisher/functions/en","pagenumber",pagenumber)
 
 register("urn:speedata:2009/publisher/functions/en","randomitem",randomitem)
+
+register("urn:speedata:2009/publisher/functions/en","romannumeral",romannumeral)
 
 register("urn:speedata:2009/publisher/functions/en","reset_alternating",reset_alternating) -- backward comp.
 register("urn:speedata:2009/publisher/functions/en","reset-alternating",reset_alternating)

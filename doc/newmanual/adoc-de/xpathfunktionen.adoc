@@ -158,6 +158,9 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `sd:reset-alternating(<typ>)`::
    Setzt den Zustand für `sd:alternating()` für den angegebenen Typ zurück.
 
+`sd:romannumeral(<number>)`::
+  Konvertiere die Zahl in eine römische Zahl.
+
 `sd:sha1(<Wert>[,<Wert>, ...])`::
    Erzeugt die SHA-1 Summe der Hintereinanderkettung der Werte als Hex-Zeichenkette. Beispiel: `sd:sha1('Hallo ', 'Welt')` ergibt die Zeichenkette `28cbbc72d6a52617a7abbfff6756d04bbad0106a`.
 

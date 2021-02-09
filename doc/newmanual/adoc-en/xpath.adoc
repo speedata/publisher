@@ -142,6 +142,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `sd:pagenumber(<string>)`::
   Get the number of the page where the given mark is placed on. See the command Mark.
 
+`sd:romannumeral(<number>)`::
+  Convert the number into a lowercase roman numeral.
+
 `sd:randomitem(<Value>,<Value>, …)`::
   Return one of the values.
 
