@@ -22,6 +22,11 @@
                      <a:documentation>The target of the document link (a Mark). Example: article123</a:documentation>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="page">
+                     <a:documentation>Link to a (logical) page number.</a:documentation>
+                  </attribute>
+               </optional>
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>

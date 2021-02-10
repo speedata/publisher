@@ -27,12 +27,15 @@ function commands.a( layoutxml,dataxml )
     if interaction then
         local href = publisher.read_attribute(layoutxml,dataxml,"href","rawstring")
         local link = publisher.read_attribute(layoutxml,dataxml,"link","rawstring")
-
+        local page = publisher.read_attribute(layoutxml,dataxml,"page","number")
         local hl
         if link then
             hl = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D(mark%s)>>",link)
-        else
+        elseif href then
             hl = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/URI/URI(%s)>>",href)
+        elseif page then
+            local pageobjnum = pdf.getpageref(page)
+            hl = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D [ %d 0 R /Fit ] >>",pageobjnum)
         end
         publisher.hyperlinks[#publisher.hyperlinks + 1] = hl
     end

@@ -39,6 +39,11 @@
           <xs:documentation>The target of the document link (a Mark). Example: article123</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="page">
+        <xs:annotation>
+          <xs:documentation>Link to a (logical) page number.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Action">

@@ -39,6 +39,11 @@
           <xs:documentation>Das Ziel des Dokumentlinks. Beispiel: article123. Ziele werden mit Action/Mark erzeugt</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="page">
+        <xs:annotation>
+          <xs:documentation>Link zu einer (logischen) Seitenzahl.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Action">

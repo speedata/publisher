@@ -811,14 +811,14 @@ function page_initialized_p( pagenumber )
     return pages[pagenumber] ~= nil
 end
 
+-- action type is one of
+-- 0 page
+-- 1 goto
+-- 2 thread
+-- 3 user
 -- return an action node or a whatsit with pdf_action subtype.
 function get_action_node( action_type )
-    local ai
-    if action_node then
-        ai = node.new("action")
-    else
-        ai = node.new("whatsit",publisher.pdf_action_whatsit)
-    end
+    local ai = node.new("whatsit",publisher.pdf_action_whatsit)
     ai.action_type = action_type
     return ai
 end
@@ -3177,6 +3177,7 @@ function find_user_defined_whatsits( head, parent )
             end
             if insert_startlink then
                 linklevel = linklevel + 1
+                -- 3 = user
                 local ai = get_action_node(3)
                 ai.data = hyperlinks[hl]
                 local stl = node.new("whatsit","pdf_start_link")

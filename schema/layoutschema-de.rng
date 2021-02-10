@@ -22,6 +22,11 @@
                      <a:documentation>Das Ziel des Dokumentlinks. Beispiel: article123. Ziele werden mit Action/Mark erzeugt</a:documentation>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="page">
+                     <a:documentation>Link zu einer (logischen) Seitenzahl.</a:documentation>
+                  </attribute>
+               </optional>
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>

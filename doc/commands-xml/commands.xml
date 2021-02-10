@@ -585,6 +585,14 @@
         <para>Das Ziel des Dokumentlinks. Beispiel: <tt>article123</tt>. Ziele werden mit Action/Mark erzeugt</para>
       </description>
     </attribute>
+    <attribute en="page" optional="yes" since="4.3.5" type="number">
+      <description xml:lang="en">
+        <para>Link to a (logical) page number.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Link zu einer (logischen) Seitenzahl.</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
   <Textblock>
