@@ -31,6 +31,7 @@ ifndef::backend-docbook5[]
 <<cmd-definecolorprofile,DefineColorprofile>>  +
 <<cmd-definefontalias,DefineFontalias>>  +
 <<cmd-definefontfamily,DefineFontfamily>>  +
+<<cmd-definematter,DefineMatter>>  +
 <<cmd-definetextformat,DefineTextformat>>  +
 <<cmd-element,Element>>  +
 <<cmd-fallback,Fallback>>  +
@@ -265,6 +266,13 @@ include::ref/definefontfamily.adoc[]
 == See also
 
 The section about <<ch-fonts>> and the command <<cmd-definefontalias,`<DefineFontalias>`>> as well as <<cmd-loadfontfile,`<LoadFontfile>`>>.
+
+include::ref/definematter.adoc[]
+
+== See also
+
+The command <<cmd-pageformat>>.
+
 
 include::ref/definetextformat.adoc[]
 
@@ -510,7 +518,7 @@ include::ref/pagetype.adoc[]
 
 == See also
 
-The section <<ch-pagetypes>>.
+The section <<ch-pagetypes>> and the command <<cmd-definematter>>.
 
 
 include::ref/paragraph.adoc[]

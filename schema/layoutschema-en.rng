@@ -1221,6 +1221,55 @@
          </interleave>
       </element>
    </define>
+   <define name="e_DefineMatter">
+      <element name="DefineMatter">
+         <a:documentation>Define a new section of the document.</a:documentation>
+         <attribute name="name">
+            <a:documentation>The name of the section to be defined.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="prefix">
+               <a:documentation>Set the prefix of the displayed page number.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="label">
+               <a:documentation>Set label for the user-visible page number.</a:documentation>
+               <choice>
+                  <value>decimal</value>
+                  <a:documentation>Set the page number to decimal arabic numerals.</a:documentation>
+                  <value>lowercase-romannumeral</value>
+                  <a:documentation>Set the page numbering to lowercase romannumeral</a:documentation>
+                  <value>uppercase-romannumeral</value>
+                  <a:documentation>Set the page numbering to uppercase romannumeral</a:documentation>
+                  <value>lowercase-letter</value>
+                  <a:documentation>Set the page numbering to lowercase letter (a-z)</a:documentation>
+                  <value>uppercase-letter</value>
+                  <a:documentation>Set the page numbering to uppercase letter (A-Z)</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="resetafter">
+               <a:documentation>Reset page numbering to 1 after this matter.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="resetbefore">
+               <a:documentation>Set the page number to 1 at the section start.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_DefineTextformat">
       <element name="DefineTextformat">
          <a:documentation>Define text formatting instructions. A textformat is used to align and indent text and create margins and rules before and after the text.</a:documentation>
@@ -2307,6 +2356,9 @@
                   </optional>
                   <optional>
                      <ref name="e_DefineTextformat"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_DefineMatter"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Hyphenation"></ref>
@@ -3716,6 +3768,11 @@
                <optional>
                   <attribute name="height">
                      <a:documentation>The height of the page. Defaults to the global setting.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="part">
+                     <a:documentation>Set the part of the document for this page type (mainmatter is the default).</a:documentation>
                   </attribute>
                </optional>
                <attribute name="test">

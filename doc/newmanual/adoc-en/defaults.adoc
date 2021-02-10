@@ -142,3 +142,13 @@ The known CSS colors are defined in the RGB color space. The colors 'black' and 
 The special colors HKS 1-97 and many Pantone colors are already defined with their CMYK values.
 
 
+== Matters
+
+There are two sections defined:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineMatter name="mainmatter" label="decimal" resetbefore="yes" />
+<DefineMatter name="frontmatter" label="lowercase-romannumeral" />
+-------------------------------------------------------------------------------
+

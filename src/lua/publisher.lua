@@ -210,6 +210,12 @@ pagenum_tbl = setmetatable({1}, {__index = function(tbl,idx) return tbl[idx - 1]
 forward_pagestore = {}
 total_inserted_pages = 0
 
+pagelabels = {}
+
+matters = { mainmatter = { label = "decimal", resetafter = false, resetbefore = true, prefix = "" },
+            frontmatter = { label = "lowercase-romannumeral"}
+}
+
 default_areaname = "_page"
 default_area     = "_page"
 
@@ -581,6 +587,7 @@ local dispatch_table = {
     DefineFontfamily        = commands.define_fontfamily,
     DefineFontalias         = commands.define_fontalias,
     DefineTextformat        = commands.define_textformat,
+    DefineMatter            = commands.definematter,
     Element                 = commands.element,
     EmptyLine               = commands.emptyline,
     Fontface                = commands.fontface,
@@ -1263,6 +1270,10 @@ function initialize_luatex_and_generate_pdf()
       pdfcatalog[#pdfcatalog + 1] = string.format([[ /Names << /EmbeddedFiles <<  /Names [(ZUGFeRD-invoice.xml) %d 0 R ] >> >> /Metadata %d 0 R ]],filespecnumbers[1][1],filespecnumbers[1][2])
       pdfcatalog[#pdfcatalog + 1] = string.format([[ /AF %d 0 R ]],filespecnumbers[1][3])
     end
+    local str = get_page_labels_str()
+    if str then
+        pdfcatalog[#pdfcatalog + 1] = str
+    end
 
     --- emit last page if necessary
     -- current_pagestore_name is set when in SavePages and nil otherwise
@@ -1405,6 +1416,46 @@ function initialize_luatex_and_generate_pdf()
     file:close()
 end
 
+-- Create a PageLabels dictionary entry
+function get_page_labels_str()
+    local labeltypes = { ["lowercase-romannumeral"] = "/r", ["uppercase-romannumeral"] = "/R", decimal = "/D", ["lowercase-letter"] = "/a", ["uppercase-letter"] = "/A" }
+    local prevmatter
+
+    local tmp = {}
+    local c = 0
+    for i = 1,#pagelabels do
+        c = c + 1
+        local p = pagelabels[i]
+        local mattername = pagelabels[i].matter
+        local thismatter = matters[mattername]
+
+        if prevmatter ~= mattername then
+            local str = {}
+            if thismatter.prefix and thismatter.prefix ~= "" then
+                str[#str + 1] = "/P " .. utf8_to_utf16_string_pdf(thismatter.prefix)
+            end
+            if thismatter.label then
+                str[#str + 1] = "/S " .. ( labeltypes[thismatter.label] or ("/D"))
+            else
+                str[#str + 1] = "/S /D"
+            end
+            if prevmatter and matters[prevmatter].resetafter then
+                c = 1
+            end
+            if thismatter.resetbefore then
+                c = 1
+            end
+            if c > 1 then
+                str[#str + 1] = string.format("/St %d",c)
+            end
+            prevmatter = mattername
+            tmp[#tmp + 1] = string.format("%d << %s >>", p.pagenumber - 1, table.concat(str," "))
+        end
+    end
+    local tmpstring = table.concat(tmp," ")
+    if tmpstring == "" or tmpstring == "0 << /S /D >>" then return nil end
+    return string.format("/PageLabels << /Nums [ %s ] >> ",tmpstring)
+end
 
 -- format: { pagenumber = 1, page_structelem_array = objnum, structelementobjects = {}}
 -- where objnum is an array such as [5 0 R 6 0 R]
@@ -1450,7 +1501,17 @@ do
 end
 
 function shipout(nodelist, pagenumber )
-    local colorname = pages[pagenumber].defaultcolor
+    local cp = pages[pagenumber]
+    local colorname = cp.defaultcolor
+    if not matters[cp.matter] then
+        err("matter %q unknown, revert to mainmatter",cp.matter or "-" )
+        cp.matter = "mainmatter"
+    end
+
+    pagelabels[pagenumber] = {
+        pagenumber = pagenumber,
+        matter = cp.matter,
+    }
     if colorname then
         if not colors[colorname] then
             err("Pagetype / defaultcolor: color %q is not defined yet.",colorname)
@@ -1911,6 +1972,8 @@ function setup_page(pagenumber,fromwhere)
         xpath.set_variable("_pagewidth", tostring(math.round(pagewd,0)) .. "mm")
         xpath.set_variable("_pageheight", tostring(math.round(pageht,0)) .. "mm")
     end
+    local matter = matters[pagetype.part]
+    current_page.matter = pagetype.part or "mainmatter"
 
     for _,j in ipairs(pagetype) do
         local eltname = elementname(j)

@@ -743,6 +743,16 @@ function commands.define_fontfamily( layoutxml,dataxml )
     local fam = publisher.define_fontfamily(regular,bold,italic,bolditalic,name,size,baselineskip)
 end
 
+--- DefineMatter
+function commands.definematter(layoutxml,dataxml)
+    local name       = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
+    local label      = publisher.read_attribute(layoutxml,dataxml,"label","rawstring")
+    local prefix     = publisher.read_attribute(layoutxml,dataxml,"prefix","rawstring")
+    local resetafter = publisher.read_attribute(layoutxml,dataxml,"resetafter","boolean")
+    local resetbefore = publisher.read_attribute(layoutxml,dataxml,"resetbefore","boolean")
+    publisher.matters[name] = {label = label, prefix = prefix, resetafter = resetafter, resetbefore = resetbefore }
+end
+
 --- Element
 --- -------
 --- Create an element for use with Attribute and SaveDataset
@@ -2193,6 +2203,8 @@ function commands.pagetype(layoutxml,dataxml)
     local columnordering = publisher.read_attribute(layoutxml,dataxml,"columnordering","rawstring")
     local test           = publisher.read_attribute(layoutxml,dataxml,"test","rawstring")
     local pagetypename   = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
+    local part           = publisher.read_attribute(layoutxml,dataxml,"part","rawstring")
+
     local width  = publisher.read_attribute(layoutxml,dataxml,"width","length")
     local height = publisher.read_attribute(layoutxml,dataxml,"height","length")
 
@@ -2201,6 +2213,7 @@ function commands.pagetype(layoutxml,dataxml)
         width = width,
         height = height,
         columnordering = columnordering,
+        part = part,
     }
     -- evaluate the default color for this page later on, so we can set it dynamically (XPath)
 

@@ -1221,6 +1221,55 @@
          </interleave>
       </element>
    </define>
+   <define name="e_DefineMatter">
+      <element name="DefineMatter">
+         <a:documentation>Definiere einen neuen Abschnitt im Dokument.</a:documentation>
+         <attribute name="name">
+            <a:documentation>Der Name des Abschnitts, der definiert werden soll.</a:documentation>
+         </attribute>
+         <optional>
+            <attribute name="prefix">
+               <a:documentation>Der Präfix für die angezeigte Seitenzahl</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="label">
+               <a:documentation>Setze das Label für die Benutzersichtbare Seitenzahl.</a:documentation>
+               <choice>
+                  <value>decimal</value>
+                  <a:documentation>Setze die Seitennummerierung auf Dezimalzahlen</a:documentation>
+                  <value>lowercase-romannumeral</value>
+                  <a:documentation>Setze die Seitennummerierung auf römische Zahlen (Kleinbuchstaben)</a:documentation>
+                  <value>uppercase-romannumeral</value>
+                  <a:documentation>Setze die Seitennummerierung auf römische Zahlen (Großbuchstaben)</a:documentation>
+                  <value>lowercase-letter</value>
+                  <a:documentation>Setze die Seitennummerierung auf Buchstaben (a-z)</a:documentation>
+                  <value>uppercase-letter</value>
+                  <a:documentation>Setze die Seitennummerierung auf Buchstaben (A-Z)</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="resetafter">
+               <a:documentation>Setze Seitenzahl auf 1 nach diesem Abschnitt.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="resetbefore">
+               <a:documentation>Setze Seitenzahl auf 1 bei Beginn des Abschnitts.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_DefineTextformat">
       <element name="DefineTextformat">
          <a:documentation>Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen Paragraph und Textblock) zurückgegriffen werden.</a:documentation>
@@ -2307,6 +2356,9 @@
                   </optional>
                   <optional>
                      <ref name="e_DefineTextformat"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_DefineMatter"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Hyphenation"></ref>
@@ -3716,6 +3768,11 @@
                <optional>
                   <attribute name="height">
                      <a:documentation>Die Seitenhöhe. Voreinstellung ist die globale Einstellung.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="part">
+                     <a:documentation>Setze den Abschnitt des Dokuments, in dem der Seitentyp enthalten ist (mainmatter ist die Voreinstellung)</a:documentation>
                   </attribute>
                </optional>
                <attribute name="test">

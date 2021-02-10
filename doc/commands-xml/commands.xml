@@ -143,6 +143,7 @@
     <optional><cmd name="DefineFontalias"/></optional>
     <optional><cmd name="DefineFontfamily"/></optional>
     <optional><cmd name="DefineTextformat"/></optional>
+    <optional><cmd name="DefineMatter"></cmd></optional>
     <optional><cmd name="Hyphenation"/></optional>
     <optional><cmd name="LoadFontfile"/></optional>
     <optional><cmd name="Loop"/></optional>
@@ -2378,6 +2379,110 @@
     <seealso>
       <cmd name="LoadFontfile"/>, <cmd name="DefineFontalias"/>
     </seealso>
+  </command>
+  <command en="DefineMatter" since="4.3.5">
+    <description xml:lang="en">
+      <para>Define a new section of the document.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Definiere einen neuen Abschnitt im Dokument.</para>
+    </description>
+    <childelements/>
+    <attribute en="name" optional="no" type="text">
+      <description xml:lang="en">
+        <para>The name of the section to be defined.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name des Abschnitts, der definiert werden soll.</para>
+      </description>
+    </attribute>
+    <attribute en="prefix" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>Set the prefix of the displayed page number.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Präfix für die angezeigte Seitenzahl</para>
+      </description>
+    </attribute>
+    <attribute en="label" optional="yes">
+      <description xml:lang="en">
+        <para>Set label for the user-visible page number.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze das Label für die Benutzersichtbare Seitenzahl.</para>
+      </description>
+      <choice en="decimal">
+        <description xml:lang="en">
+          <para>Set the page number to decimal arabic numerals.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setze die Seitennummerierung auf Dezimalzahlen</para>
+        </description>
+      </choice>
+      <choice en="lowercase-romannumeral">
+        <description xml:lang="en">
+          <para>Set the page numbering to lowercase romannumeral</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setze die Seitennummerierung auf römische Zahlen (Kleinbuchstaben)</para>
+        </description>
+      </choice>
+      <choice en="uppercase-romannumeral">
+        <description xml:lang="en">
+          <para>Set the page numbering to uppercase romannumeral</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setze die Seitennummerierung auf römische Zahlen (Großbuchstaben)</para>
+        </description>
+      </choice>
+      <choice en="lowercase-letter">
+        <description xml:lang="en">
+          <para>Set the page numbering to lowercase letter (a-z)</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setze die Seitennummerierung auf Buchstaben (a-z)</para>
+        </description>
+      </choice>
+      <choice en="uppercase-letter">
+        <description xml:lang="en">
+          <para>Set the page numbering to uppercase letter (A-Z)</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setze die Seitennummerierung auf Buchstaben (A-Z)</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="resetafter" optional="yes" type="boolean">
+      <description xml:lang="en">
+        <para>Reset page numbering to 1 after this matter.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze Seitenzahl auf 1 nach diesem Abschnitt.</para>
+      </description>
+    </attribute>
+    <attribute en="resetbefore" optional="yes" type="boolean">
+      <description xml:lang="en">
+        <para>Set the page number to 1 at the section start.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze Seitenzahl auf 1 bei Beginn des Abschnitts.</para>
+      </description>
+    </attribute>
+    <remark xml:lang="en">
+      <para>There are two predefined matters: mainmatter (default) and frontmatter (which switches to lowercase romannumeral).</para>
+    </remark>
+    <remark xml:lang="de">
+      <para>Es gibt zwei vordefinierte Bereiche: mainmatter (Voreinstellung) und frontmatter (das auf römische Zahlen in Kleinbuchstaben umschaltet).</para>
+    </remark>
+    <example xml:lang="en">
+      <para>Set the page numbering to “A-1, A-2, ...”</para>
+      <listing><![CDATA[<DefineMatter name="mainmatter" label="decimal" prefix="A-" />]]></listing>
+    </example>
+    <example xml:lang="de">
+      <para>Setze die Seitennummerierung auf »A-1, A-2, ... «</para>
+      <listing><![CDATA[<DefineMatter name="mainmatter" label="decimal" prefix="A-" />]]></listing>
+    </example>
+    <seealso><cmd name="pagetype"/></seealso>
   </command>
   <command en="DefineTextformat">
     <description xml:lang="en">
@@ -5945,6 +6050,14 @@
         <para>Die Seitenhöhe. Voreinstellung ist die globale Einstellung.</para>
       </description>
     </attribute>
+    <attribute en="part" optional="yes" since="4.3.4" type="text">
+      <description xml:lang="en">
+        <para>Set the part of the document for this page type (mainmatter is the default).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze den Abschnitt des Dokuments, in dem der Seitentyp enthalten ist (mainmatter ist die Voreinstellung)</para>
+      </description>
+    </attribute>
     <attribute en="test" type="xpath" optional="no">
       <description xml:lang="en">
         <para>If this xpath expression evaluates to true, this page is taken as a master page.</para>
@@ -6007,7 +6120,7 @@
   </PositioningArea>
 </Pagetype>]]></listing>
     </example>
-    <seealso><ref name="xpath"/>, <cmd name="AtPageCreation"/>,  <cmd name="AtPageShipout"/>,   <cmd name="PositioningArea"/>,  <cmd name="NewPage"/>
+    <seealso><ref name="xpath"/>, <cmd name="AtPageCreation"/>,  <cmd name="AtPageShipout"/>,   <cmd name="PositioningArea"/>,  <cmd name="NewPage"/>, <cmd name="DefineMatter"/>
     </seealso>
   </command>
   <command en="PDFOptions" since="2.3.39">

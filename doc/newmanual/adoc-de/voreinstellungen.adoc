@@ -150,3 +150,15 @@ Die bekannten CSS-Farben sind im RGB-Farbraum definiert. Die Farben `black` und 
 Die Sonderfarben HKS 1-97 sowie viele Pantone Farben sind schon mit ihren CMYK-Werten definiert.
 
 
+
+== Dokumentabschnitte
+
+Zwei Abschnitte sind vordefiniert:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineMatter name="mainmatter" label="decimal" resetbefore="yes" />
+<DefineMatter name="frontmatter" label="lowercase-romannumeral" />
+-------------------------------------------------------------------------------
+
+// EOF

@@ -1042,6 +1042,79 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
+  <xs:element name="DefineMatter">
+    <xs:annotation>
+      <xs:documentation>Definiere einen neuen Abschnitt im Dokument.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name="name" use="required">
+        <xs:annotation>
+          <xs:documentation>Der Name des Abschnitts, der definiert werden soll.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="prefix">
+        <xs:annotation>
+          <xs:documentation>Der Präfix für die angezeigte Seitenzahl</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="label">
+        <xs:annotation>
+          <xs:documentation>Setze das Label für die Benutzersichtbare Seitenzahl.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="decimal">
+              <xs:annotation>
+                <xs:documentation>Setze die Seitennummerierung auf Dezimalzahlen</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="lowercase-romannumeral">
+              <xs:annotation>
+                <xs:documentation>Setze die Seitennummerierung auf römische Zahlen (Kleinbuchstaben)</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="uppercase-romannumeral">
+              <xs:annotation>
+                <xs:documentation>Setze die Seitennummerierung auf römische Zahlen (Großbuchstaben)</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="lowercase-letter">
+              <xs:annotation>
+                <xs:documentation>Setze die Seitennummerierung auf Buchstaben (a-z)</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="uppercase-letter">
+              <xs:annotation>
+                <xs:documentation>Setze die Seitennummerierung auf Buchstaben (A-Z)</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="resetafter">
+        <xs:annotation>
+          <xs:documentation>Setze Seitenzahl auf 1 nach diesem Abschnitt.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="resetbefore">
+        <xs:annotation>
+          <xs:documentation>Setze Seitenzahl auf 1 bei Beginn des Abschnitts.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="DefineTextformat">
     <xs:annotation>
       <xs:documentation>Definiert ein Textformat. Ein Textformat dient zur Formatierung von Absätzen (Einrückung und Ausrichtung). Auf die definierten Textformate kann im Layout (in den Elementen Paragraph und Textblock) zurückgegriffen werden.</xs:documentation>
@@ -2016,6 +2089,7 @@
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineTextformat"/>
+        <xs:element minOccurs="0" ref="en:DefineMatter"/>
         <xs:element minOccurs="0" ref="en:Hyphenation"/>
         <xs:element minOccurs="0" ref="en:LoadFontfile"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
@@ -3986,6 +4060,11 @@
       <xs:attribute name="height">
         <xs:annotation>
           <xs:documentation>Die Seitenhöhe. Voreinstellung ist die globale Einstellung.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="part">
+        <xs:annotation>
+          <xs:documentation>Setze den Abschnitt des Dokuments, in dem der Seitentyp enthalten ist (mainmatter ist die Voreinstellung)</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="test" use="required">

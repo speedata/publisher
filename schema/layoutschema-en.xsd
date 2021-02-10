@@ -1042,6 +1042,79 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
+  <xs:element name="DefineMatter">
+    <xs:annotation>
+      <xs:documentation>Define a new section of the document.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name="name" use="required">
+        <xs:annotation>
+          <xs:documentation>The name of the section to be defined.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="prefix">
+        <xs:annotation>
+          <xs:documentation>Set the prefix of the displayed page number.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="label">
+        <xs:annotation>
+          <xs:documentation>Set label for the user-visible page number.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="decimal">
+              <xs:annotation>
+                <xs:documentation>Set the page number to decimal arabic numerals.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="lowercase-romannumeral">
+              <xs:annotation>
+                <xs:documentation>Set the page numbering to lowercase romannumeral</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="uppercase-romannumeral">
+              <xs:annotation>
+                <xs:documentation>Set the page numbering to uppercase romannumeral</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="lowercase-letter">
+              <xs:annotation>
+                <xs:documentation>Set the page numbering to lowercase letter (a-z)</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="uppercase-letter">
+              <xs:annotation>
+                <xs:documentation>Set the page numbering to uppercase letter (A-Z)</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="resetafter">
+        <xs:annotation>
+          <xs:documentation>Reset page numbering to 1 after this matter.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="resetbefore">
+        <xs:annotation>
+          <xs:documentation>Set the page number to 1 at the section start.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="DefineTextformat">
     <xs:annotation>
       <xs:documentation>Define text formatting instructions. A textformat is used to align and indent text and create margins and rules before and after the text.</xs:documentation>
@@ -2016,6 +2089,7 @@
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineTextformat"/>
+        <xs:element minOccurs="0" ref="en:DefineMatter"/>
         <xs:element minOccurs="0" ref="en:Hyphenation"/>
         <xs:element minOccurs="0" ref="en:LoadFontfile"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
@@ -3986,6 +4060,11 @@
       <xs:attribute name="height">
         <xs:annotation>
           <xs:documentation>The height of the page. Defaults to the global setting.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="part">
+        <xs:annotation>
+          <xs:documentation>Set the part of the document for this page type (mainmatter is the default).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="test" use="required">

@@ -232,6 +232,13 @@
                   </choice>
                 </attribute>
               </optional>
+              <optional>
+                <attribute name="deprecated">
+                  <choice>
+                    <value>yes</value>
+                  </choice>
+                </attribute>
+              </optional>
               <ref name="descriptions" />
               <choice>
                 <attribute name="type">
