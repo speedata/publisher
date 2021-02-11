@@ -6104,6 +6104,14 @@ function imageinfo( filename,page,box,fallback )
     return images[new_name]
 end
 
+function hlpage(pagenumber)
+    pagenumber = tonumber(pagenumber)
+    local pageobjnum = pdf.getpageref(pagenumber)
+    local str = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D [ %d 0 R /Fit ] >>",pageobjnum)
+    hyperlinks[#hyperlinks + 1] = str
+    return #hyperlinks
+end
+
 --- Sorting
 --- -------
 --- The sorting code is currently used for index generation (commands#makeindex)

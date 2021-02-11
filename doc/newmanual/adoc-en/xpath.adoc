@@ -121,8 +121,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `sd:loremipsum()`::
   Same as sd:dummytext()
 
-`sd:merge-pagenumbers(<pagenumbers>,<separator for range>,<separator for space>)`::
+`sd:merge-pagenumbers(<pagenumbers>,<separator for range>,<separator for space>, [hyperlinks])`::
   Merge page numbers. For example the numbers "1, 3, 4, 5" are merged into 1, 3–5. Defaults for the separator for the range is an en-dash (–), default for the spacing separator is ', ' (comma, space). This function sorts the page numbers and removes duplicates. When the separator for range is empty, the page numbers are separated each with the separator for the space.
+  If hyperlinks is set to `true()`, the page numbers become active. The default is `false()`. The function will show the user visible page numbers, which correspond to the logical page numbers by default.
 
 `sd:mode(<string>[,<string>...])`::
   Returns true (`true()`) if one of the specified modes is set. A mode can be set from the command line or from the configuration file. See  <<ch-advanced-cotrollayout>>

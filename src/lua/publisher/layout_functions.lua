@@ -11,6 +11,10 @@ file_start("layout_functions.lua")
 local luxor = do_luafile("luxor.lua")
 local sha1  = require('sha1')
 
+local function visiblepagenumber(pagenumber)
+    pagenumber = tonumber(pagenumber)
+    return publisher.visible_pagenumbers[pagenumber] or pagenumber
+end
 
 local function allocated( dataxml,arg )
     local x = arg[1]
@@ -151,10 +155,11 @@ local function number_of_columns(dataxml,arg)
 end
 
 --- Merge numbers like '1,2,3,4,5, 8, 9,10' into '1-5, 8-10'
-local function merge_pagenumbers(dataxml,arg )
+local function merge_pagenumbers(dataxml,arg)
     local pagenumbers_string = string.gsub(arg[1] or "","%s","")
     local mergechar = arg[2] or "–"
     local spacer    = arg[3] or ", "
+    local interaction = arg[4] or false
 
     local pagenumbers = string.explode(pagenumbers_string,",")
     -- let's remove duplicates now
@@ -179,11 +184,28 @@ local function merge_pagenumbers(dataxml,arg )
             end
         end
     end
-    publisher.stable_sort(withoutdupes,function(elta,eltb)
-          return tonumber(elta) < tonumber(eltb)
-      end)
+    publisher.stable_sort(withoutdupes,function(elta,eltb) return tonumber(elta) < tonumber(eltb) end)
+    local gethyperlink
+    if interaction then
+        gethyperlink = function(pagenum) return {hyperlink = publisher.hlpage(pagenum)} end
+    else
+        gethyperlink = function(pagenum) return nil end
+    end
 
-    if mergechar ~= "" then
+    local p = par:new(nil,"merge-pagenumbers")
+    if mergechar == "" then
+        local pagenumber
+        for i = 1, #withoutdupes - 1 do
+            pagenumber = withoutdupes[i]
+            p:append(visiblepagenumber(pagenumber),gethyperlink(pagenumber))
+            p:append(spacer)
+        end
+        pagenumber = withoutdupes[#withoutdupes]
+        p:append(visiblepagenumber(pagenumber),gethyperlink(pagenumber))
+    else
+        -- Buckets have consecutive pages. For example 1,2,3,4,5
+        -- So when merging the numbers, we just have to look for the first and last
+        -- entry in a bucket.
         local buckets = {}
         local bucket
         local cur
@@ -199,19 +221,28 @@ local function merge_pagenumbers(dataxml,arg )
             end
             prev = cur
         end
+
         for i=1,#buckets do
             if #buckets[i] > 2 then
-                buckets[i] = buckets[i][1] .. mergechar .. buckets[i][#buckets[i]]
+                local from, to = buckets[i][1], buckets[i][#buckets[i]]
+                p:append(visiblepagenumber(from),gethyperlink(from))
+                p:append(mergechar)
+                p:append(visiblepagenumber(to),gethyperlink(to))
             elseif #buckets[i] == 2 then
-                buckets[i] = buckets[i][1] .. spacer .. buckets[i][#buckets[i]]
+                local from, to = buckets[i][1], buckets[i][#buckets[i]]
+                p:append(visiblepagenumber(from),gethyperlink(from))
+                p:append(spacer)
+                p:append(visiblepagenumber(to),gethyperlink(to))
             else
-                buckets[i] = buckets[i][1]
+                local to = buckets[i][1]
+                p:append( visiblepagenumber(to),gethyperlink(to))
+            end
+            if i < #buckets then
+                p:append(spacer)
             end
         end
-        return table.concat(buckets,spacer)
-    else
-        return table.concat(withoutdupes, spacer)
     end
+    return p
 end
 
 local function number_of_rows(dataxml,arg)
@@ -509,9 +540,9 @@ local function aspectratio( dataxml,arg )
 end
 
 local function visible_pagenumber(dataxml, arg)
-    local pagenumber = tonumber(arg[1])
-    return publisher.visible_pagenumbers[pagenumber] or pagenumber
+    return visiblepagenumber(arg[1])
 end
+
 local function loremipsum(dataxml,arg)
     local count = arg and arg[1] or 1
     local lorem = [[

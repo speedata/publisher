@@ -34,8 +34,7 @@ function commands.a( layoutxml,dataxml )
         elseif href then
             hl = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/URI/URI(%s)>>",href)
         elseif page then
-            local pageobjnum = pdf.getpageref(page)
-            hl = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D [ %d 0 R /Fit ] >>",pageobjnum)
+            hl = publisher.hlpage(page)
         end
         publisher.hyperlinks[#publisher.hyperlinks + 1] = hl
     end

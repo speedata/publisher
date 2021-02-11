@@ -127,12 +127,12 @@ Beispiel: die Funktion `sd:current-row()`  kann auch mit Parameter `sd:current-r
 `sd:loremipsum()`::
    Alias für `sd:dummytext()`
 
-`sd:merge-pagenumbers(<Seitenzahlen>,[<Trenner für Bereiche>],[<Trenner für Leerraum>])`::
+`sd:merge-pagenumbers(<Seitenzahlen>,[<Trenner für Bereiche>],[<Trenner für Leerraum>],[Hyperlinks])`::
    Fasst Seitenzahlenbereiche zusammen. Beispielsweise aus `"1, 3, 4, 5"` wird `1, 3–5`.
 Voreinstellung für den Trenner für Bereiche ist ein Halbgeviertstrich (–), Voreinstellung für den Trenner für Leerraum ist ', ' (Komma, Leerzeichen).
 Diese Funktion sortiert die Zahlen und löscht doppelte Einträge.
 Bei leerem Trenner für Bereiche werden Zahlen
-nicht zusammengeführt, sondern einzeln mit dem Trenner für Leerraum verbunden.
+nicht zusammengeführt, sondern einzeln mit dem Trenner für Leerraum verbunden. Ist Hyperlinks auf `true()` gesetzt, werden die Seitenzahlen aktiv und führen über einen Klick zur jeweiligen Seite. Die Voreinstellung ist `false()`. Es werden die in der Anzeige die benuzterdefinierten Seitenzahlen verwendet, die in der Voreinstellung den echten Seitenzahlen entsprechen.
 
 `sd:mode(<string>[,<string>...])`::
 Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein Modus kann über die Kommandozeile oder über die Konfigurationsdatei gesetzt werden. Siehe <<ch-fortgeschrittenethemen-steuerunglayout>>.

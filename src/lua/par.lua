@@ -92,6 +92,31 @@ local function reconstruct_html_text(elt)
     return table.concat( ret )
 end
 
+local function mktextnode(self,text,options)
+    local nodes, newdir = publisher.mknodes(tostring(text),options,"par/mktextnode")
+    self.direction = self.direction or newdir
+    local tmp = node.getproperty(nodes)
+    if options.fontfamily and publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily] then
+        local fontheight = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily].baselineskip
+        nodes = publisher.add_rule(nodes,"head",{height = 0.75 * fontheight, depth = 0.25 * fontheight, width = 0 })
+        node.setproperty(nodes,tmp)
+        node.set_attribute(nodes,publisher.att_fontfamily,options.fontfamily)
+    end
+    if options.newline then
+        publisher.setprop(nodes,"newline",true)
+        if options.discardallowed then
+            publisher.setprop(nodes,"discardallowed",true)
+        end
+    end
+    if thisself == "\n" then
+        publisher.setprop(nodes,"newline",true)
+        if options.discardallowed then
+            publisher.setprop(nodes,"discardallowed",true)
+        end
+    end
+    return nodes
+end
+
 local function flatten(self,items,options)
     options = options or {}
     local ret = {}
@@ -118,13 +143,15 @@ local function flatten(self,items,options)
                 else
                     table.insert(ret,thisself.contents)
                 end
-            elseif thisself.contents.flatten_callback then
+            elseif type(thisself.contents) == "table" and thisself.contents.flatten_callback then
                 local f = thisself.contents.flatten_callback
                 thisself.contents.flatten_callback = nil
                 local tmp = f(thisself.contents,new_options)
                 for i=1,#tmp do
                     table.insert(ret,tmp[i])
                 end
+            elseif type(thisself.contents) == "string" or type(thisself.contents) == "number" or type(thisself.contents) == "boolean" then
+                table.insert(ret,mktextnode(self,thisself.contents,new_options))
             else
                 local tmp = flatten(self,thisself.contents,new_options)
                 for i=1,#tmp do
@@ -133,28 +160,7 @@ local function flatten(self,items,options)
             end
         elseif typ_thisself == "string" or typ_thisself == "number" or typ_thisself == "boolean" then
             -- w("par/flatten: type: string or similar")
-            local nodes, newdir = publisher.mknodes(tostring(thisself),new_options,"par/stringvalue")
-            self.direction = self.direction or newdir
-            local tmp = node.getproperty(nodes)
-            if new_options.fontfamily and publisher.fonts.lookup_fontfamily_number_instance[new_options.fontfamily] then
-                local fontheight = publisher.fonts.lookup_fontfamily_number_instance[new_options.fontfamily].baselineskip
-                nodes = publisher.add_rule(nodes,"head",{height = 0.75 * fontheight, depth = 0.25 * fontheight, width = 0 })
-                node.setproperty(nodes,tmp)
-                node.set_attribute(nodes,publisher.att_fontfamily,new_options.fontfamily)
-            end
-            if options.newline then
-                publisher.setprop(nodes,"newline",true)
-                if new_options.discardallowed then
-                    publisher.setprop(nodes,"discardallowed",true)
-                end
-            end
-            if thisself == "\n" then
-                publisher.setprop(nodes,"newline",true)
-                if new_options.discardallowed then
-                    publisher.setprop(nodes,"discardallowed",true)
-                end
-            end
-            table.insert(ret,nodes)
+            table.insert(ret,mktextnode(self,thisself,new_options))
         elseif typ_thisself == "table" and thisself[".__type"] == "element" and new_options.html ~= "off" then
             -- w("par/flatten: type: HTML")
             -- Now this is a bit strange and I should explain. The XML parser (luxor.lua)
