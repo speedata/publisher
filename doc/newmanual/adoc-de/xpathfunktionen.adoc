@@ -170,6 +170,9 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `sd:variable(<Name>[, ...])`::
    ist dasselbe wie `$Name`, nur mit der Möglichkeit den Namen auch dynamisch zu erzeugen. Falls `$i` den Wert 3 enthält, liest `sd:variable('foo',$i)` den Inhalt der Variablen `$foo3`. Damit lassen sich Arrays abbilden.
 
+`sd:visible-pagenumber(<Zahl>)`::
+   Liefert die Benutzerdefinerte Seitenzahl für die angegebene echte Seitenzahl zurück. Benutzerdefinierte Seitenzahlen können mit <<cmd-definematter>> erzeugt werden.
+
 
 == XPath-Funktionen
 

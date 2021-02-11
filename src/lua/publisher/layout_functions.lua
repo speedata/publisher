@@ -508,6 +508,10 @@ local function aspectratio( dataxml,arg )
   return img.img.xsize / img.img.ysize
 end
 
+local function visible_pagenumber(dataxml, arg)
+    local pagenumber = tonumber(arg[1])
+    return publisher.visible_pagenumbers[pagenumber] or pagenumber
+end
 local function loremipsum(dataxml,arg)
     local count = arg and arg[1] or 1
     local lorem = [[
@@ -608,5 +612,6 @@ register("urn:speedata:2009/publisher/functions/en","variable",variable)
 
 register("urn:speedata:2009/publisher/functions/en","variable-exists",variable_exists)
 
+register("urn:speedata:2009/publisher/functions/en","visible-pagenumber",visible_pagenumber)
 
 file_end("layout_functions.lua")

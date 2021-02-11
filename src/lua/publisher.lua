@@ -210,7 +210,13 @@ pagenum_tbl = setmetatable({1}, {__index = function(tbl,idx) return tbl[idx - 1]
 forward_pagestore = {}
 total_inserted_pages = 0
 
+-- pagelabel contains information about a page with the following structure (see shipout() and get_page_labels_str() )
+-- pagelabels[pagenumber] = { pagenumber = pagenumber, matter = cp.matter }
 pagelabels = {}
+
+-- An array of strings - a mapping of real page numbers and user visible pagenumbers
+visible_pagenumbers = {}
+
 
 matters = { mainmatter = { label = "decimal", resetafter = false, resetbefore = true, prefix = "" },
             frontmatter = { label = "lowercase-romannumeral"}
@@ -1186,6 +1192,8 @@ function initialize_luatex_and_generate_pdf()
                             marker_max[pagenumber] = id
                         end
                     end
+                elseif mt[".__local_name"] == "pagelabel" then
+                    visible_pagenumbers[tonumber(mt.pagenumber)] = mt.visible
                 elseif mt[".__local_name"] == "lastpage" then
                     xpath.set_variable("_lastpage", mt.page )
                 end
@@ -1408,6 +1416,9 @@ function initialize_luatex_and_generate_pdf()
     for k,v in pairs(markers) do
         tab[#tab + 1] = string.format("  <mark name=%q page=%q id=%q />",xml_escape(tostring(k)),xml_escape(tostring(v.page)), tostring(v.count))
     end
+    for i = 1,#visible_pagenumbers do
+        tab[#tab + 1] = string.format("  <pagelabel pagenumber=%q visible=%q />",tostring(i),xml_escape(tostring(visible_pagenumbers[i])))
+    end
     local file = io.open(auxfilename,"wb")
     file:write("<marker>\n")
     file:write(table.concat(tab,"\n"))
@@ -1416,13 +1427,40 @@ function initialize_luatex_and_generate_pdf()
     file:close()
 end
 
--- Create a PageLabels dictionary entry
+-- Create a PageLabels dictionary entry and update the visible_pagenumber
+-- entry in the pagelabels table for referencing.
+-- This is called at the end, when writing a dictionary
 function get_page_labels_str()
-    local labeltypes = { ["lowercase-romannumeral"] = "/r", ["uppercase-romannumeral"] = "/R", decimal = "/D", ["lowercase-letter"] = "/a", ["uppercase-letter"] = "/A" }
+    local labeltypes = {
+        ["lowercase-romannumeral"] = "/r",
+        ["uppercase-romannumeral"] = "/R",
+        decimal = "/D",
+        ["lowercase-letter"] = "/a",
+        ["uppercase-letter"] = "/A"
+    }
+    local labelfunc = function(label,pagenumber)
+        if label == "lowercase-romannumeral" then
+            return tex.romannumeral(pagenumber)
+        elseif label == "uppercase-romannumeral" then
+            return string.upper(tex.romannumeral(pagenumber))
+        elseif label == "lowercase-letter" then
+            return string.char(96 + pagenumber)
+        elseif label == "uppercase-letter" then
+            return string.char(64 + pagenumber)
+        else
+            return pagenumber
+        end
+    end
+
     local prevmatter
+    local prefix
+    local label
 
     local tmp = {}
     local c = 0
+    -- reset, there might be more pages in the previous run.
+    visible_pagenumbers = {}
+
     for i = 1,#pagelabels do
         c = c + 1
         local p = pagelabels[i]
@@ -1451,6 +1489,7 @@ function get_page_labels_str()
             prevmatter = mattername
             tmp[#tmp + 1] = string.format("%d << %s >>", p.pagenumber - 1, table.concat(str," "))
         end
+        visible_pagenumbers[i] = string.format("%s%s",thismatter.prefix or "",labelfunc(thismatter.label,c))
     end
     local tmpstring = table.concat(tmp," ")
     if tmpstring == "" or tmpstring == "0 << /S /D >>" then return nil end

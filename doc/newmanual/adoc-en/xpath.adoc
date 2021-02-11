@@ -160,6 +160,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `sd:variable-exists(<name>)`::
   True if variable name exists.
 
+`sd:visible-pagenumber(<number>)`::
+  Return the user visible page number (as defined by matters) for the given real page number.
+
 == XPath functions
 
 `abs(<number>)`::
