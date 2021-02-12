@@ -867,6 +867,8 @@ function dothings()
     xpath.set_variable("_pageheight", "297mm")
     xpath.set_variable("_pagewidth", "210mm")
     xpath.set_variable("_jobname", tex.jobname)
+    xpath.set_variable("_matter","mainmatter")
+
 
     lowercase = os.getenv("SP_IGNORECASE") == "1"
     local extra_parameter = { otfeatures = { kern = true, liga = false } }
@@ -1543,10 +1545,10 @@ function shipout(nodelist, pagenumber )
     local cp = pages[pagenumber]
     local colorname = cp.defaultcolor
     if not matters[cp.matter] then
-        err("matter %q unknown, revert to mainmatter",cp.matter or "-" )
-        cp.matter = "mainmatter"
+        local defaultmatter = xpath.get_variable("_matter")
+        err("matter %q unknown, revert to %s",cp.matter or "-", defaultmatter )
+        cp.matter = defaultmatter
     end
-
     pagelabels[pagenumber] = {
         pagenumber = pagenumber,
         matter = cp.matter,
@@ -2011,8 +2013,9 @@ function setup_page(pagenumber,fromwhere)
         xpath.set_variable("_pagewidth", tostring(math.round(pagewd,0)) .. "mm")
         xpath.set_variable("_pageheight", tostring(math.round(pageht,0)) .. "mm")
     end
-    local matter = matters[pagetype.part]
-    current_page.matter = pagetype.part or "mainmatter"
+    local mattername = pagetype.part or xpath.get_variable("_matter")
+    local matter = matters[mattername]
+    current_page.matter = mattername
 
     for _,j in ipairs(pagetype) do
         local eltname = elementname(j)

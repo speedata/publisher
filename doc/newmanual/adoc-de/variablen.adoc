@@ -21,6 +21,9 @@ Sonst könnten Kollisionen bei der Namensvergabe entstehen.
 `_loopcounter`::
   Der Durchlauf in einer `<Loop>`-Schleife.
 
+`_matter`::
+  Der voreingestellte Abschnitt für das Dokument (`mainmatter` ist der Anfangswert).
+
 `_mode`::
   Der Modus für den Durchlauf. Kommasepariert.
 

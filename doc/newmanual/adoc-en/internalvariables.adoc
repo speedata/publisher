@@ -21,6 +21,9 @@ Otherwise there could be collisions when assigning names.
 `_loopcounter`::
   The pass in a `<Loop>' loop.
 
+`_matter`::
+  The current default matter for the document (`mainmatter` is the initial value).
+
 `_mode`::
   The mode for the pass. Separated by commas.
 
