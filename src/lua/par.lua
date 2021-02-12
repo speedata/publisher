@@ -277,6 +277,7 @@ local function flatten(self,items,options)
     end
     return items
 end
+
 function Par:prepend(whatever)
     self.prependlist = self.prependlist or {}
     table.insert(self.prependlist,1, whatever)
@@ -790,33 +791,37 @@ function Par:format( width_sp, options )
                     elseif node.is_node(str) then
                         label = str
                     end
-                    local wd = thisprepend[2] or node.dimensions(label)
-                    local labeldistance = thisprepend[4] or tex.sp("5pt")
-                    local labelalign = thisprepend[5] or "right"
-                    local labelbox
-                    labelbox = publisher.whatever_hbox(label,wd,options,labeldistance,labelalign)
-                    prependnodelist = node.insert_after(prependnodelist,node.tail(prependnodelist),labelbox)
+                    if label then
+                        local wd = thisprepend[2] or node.dimensions(label)
+                        local labeldistance = thisprepend[4] or tex.sp("5pt")
+                        local labelalign = thisprepend[5] or "right"
+                        local labelbox
+                        labelbox = publisher.whatever_hbox(label,wd,options,labeldistance,labelalign)
+                        prependnodelist = node.insert_after(prependnodelist,node.tail(prependnodelist),labelbox)
+                    end
                 end
-                prependnodelist = node.hpack(prependnodelist)
-                prependnodelist.head = publisher.add_glue(prependnodelist.head,"head",{width = - prependnodelist.width, shrink = 2^16, shrink_order = 3 })
-                prependnodelist.width = 0
+                if prependnodelist then
+                    prependnodelist = node.hpack(prependnodelist)
+                    prependnodelist.head = publisher.add_glue(prependnodelist.head,"head",{width = - prependnodelist.width, shrink = 2^16, shrink_order = 3 })
+                    prependnodelist.width = 0
 
-                local thisobject = objects[i]
-                while thisobject do
-                    if thisobject.id == publisher.hlist_node then
-                        break
+                    local thisobject = objects[i]
+                    while thisobject do
+                        if thisobject.id == publisher.hlist_node then
+                            break
+                        end
+                        thisobject = thisobject.next
                     end
-                    thisobject = thisobject.next
-                end
-                local cur = thisobject.head
-                while cur do
-                    if cur.id ~= publisher.glue_node then
-                        cur = node.insert_before(thisobject.head,cur,prependnodelist)
-                        break
+                    local cur = thisobject.head
+                    while cur do
+                        if cur.id ~= publisher.glue_node then
+                            cur = node.insert_before(thisobject.head,cur,prependnodelist)
+                            break
+                        end
+                        cur = cur.next
                     end
-                    cur = cur.next
+                    thisobject.head = cur
                 end
-                thisobject.head = cur
             end
 
             nodelist.list = nil
