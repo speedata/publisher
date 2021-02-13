@@ -1,5 +1,33 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.4">
+    <entry version="4.3.5" date="2021-02-12">
+        <en>New variable for page sectioning (<tt>_matter</tt>).</en>
+        <de>Neue Variable für Seitenabschnitte (<tt>_matter</tt>).</de>
+    </entry>
+    <entry version="4.3.5" date="2021-02-12">
+      <en>Bugfix li/p (#313).</en>
+      <de>Fehlerkorrektur li/p (#313).</de>
+    </entry>
+    <entry version="4.3.5" date="2021-02-12">
+      <en><tt>sd:merge-pagenumbers()</tt> with hyperlinks.</en>
+      <de><tt>sd:merge-pagenumbers()</tt> mit Hyperlinks.</de>
+    </entry>
+    <entry version="4.3.5" date="2021-02-12">
+      <en>New layout function <tt>sd:visible-pagenumber()</tt>.</en>
+      <de>Neue Layoutfunktion <tt>sd:visible-pagenumber()</tt>.</de>
+    </entry>
+    <entry version="4.3.5" date="2021-02-12">
+      <en>Link to pages (<tt>&lt;A page="..."</tt>).</en>
+      <de>Links zu Seiten (<tt>&lt;A page="..."</tt>.</de>
+    </entry>
+    <entry version="4.3.5" date="2021-02-12">
+      <en>Document parts (frontmatter, mainmatter) for different page numbering.</en>
+      <de>Dokumentenabschnitte (frontmatter, mainmatter) für unterschiedliche Seitennummerierung.</de>
+    </entry>
+    <entry version="4.3.5" date="2021-02-12">
+        <en>New xpath function <tt>sd:romannumeral()</tt>.</en>
+        <de>Neue XPath-Funktion <tt>sd:romannumeral()</tt>.</de>
+    </entry>
     <entry version="4.3.4" date="2021-02-04">
         <en>Set temporary directory in server mode.</en>
         <de>Setze temporäres Verzeichnis im Server-Modus.</de>
