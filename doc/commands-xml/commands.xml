@@ -4,6 +4,7 @@
   xmlns:sch="http://purl.oclc.org/dsdl/schematron"
   >
   <define name="Switchcontents">
+    <optional><cmd name="A"/></optional>
     <optional><cmd name="Action"/></optional>
     <optional><cmd name="AddSearchpath"/></optional>
     <optional><cmd name="Attribute"/></optional>
@@ -567,7 +568,14 @@
       <para>Hyperlink auf eine URL einfügen.</para>
     </description>
     <childelements>
-      <reference name="Textvalues"/>
+      <oneOrMore>
+        <interleave>
+          <reference name="Textvalues"/>
+          <optional>
+            <cmd name="Box"/>
+          </optional>
+        </interleave>
+      </oneOrMore>
     </childelements>
     <attribute en="href" type="text" optional="yes">
       <description xml:lang="en">
@@ -6321,6 +6329,7 @@
     <childelements>
       <oneOrMore>
         <interleave>
+          <optional><cmd name="A"/></optional>
           <optional><cmd name="Image"/></optional>
           <optional><cmd name="Bookmark"/></optional>
           <optional><cmd name="Box"/></optional>

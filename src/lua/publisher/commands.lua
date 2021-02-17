@@ -22,31 +22,61 @@ commands = {}
 --- Insert a hyperlink into the PDF.
 function commands.a( layoutxml,dataxml )
     local interaction = ( publisher.options.interaction ~= false )
-    p = par:new(nil,"a")
 
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    local eltname = publisher.elementname(tab[1])
     if interaction then
         local href = publisher.read_attribute(layoutxml,dataxml,"href","rawstring")
         local link = publisher.read_attribute(layoutxml,dataxml,"link","rawstring")
         local page = publisher.read_attribute(layoutxml,dataxml,"page","number")
-        local hl
+        local str
         if link then
-            hl = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D(mark%s)>>",link)
+            str = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D(mark%s)>>",link)
+            publisher.hyperlinks[#publisher.hyperlinks + 1] = str
         elseif href then
-            hl = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/URI/URI(%s)>>",href)
+            str = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/URI/URI(%s)>>",href)
+            publisher.hyperlinks[#publisher.hyperlinks + 1] = str
         elseif page then
-            hl = publisher.hlpage(page)
+            publisher.hlpage(page)
         end
-        publisher.hyperlinks[#publisher.hyperlinks + 1] = hl
+
+        if eltname == "Image" or eltname == "Box" then
+            local c
+            if eltname == "Image" then
+                c = tab[1].contents[1]
+            else
+                c = tab[1].contents
+            end
+            local ai = publisher.get_action_node(3)
+            local data = publisher.hyperlinks[#publisher.hyperlinks]
+            ai.data = data
+
+            local stl = node.new("whatsit","pdf_start_link")
+            stl.action = ai
+            stl.width = -1073741824
+            stl.height = -1073741824
+            stl.depth = -1073741824
+
+            local enl = node.new("whatsit","pdf_end_link")
+
+            c = node.insert_after(c,c,enl)
+            c = node.insert_before(c,c,stl)
+            c = node.hpack(c)
+
+            return c
+        else
+            p = par:new(nil,"a")
+            local ch = #publisher.hyperlinks
+            for _,j in ipairs(tab) do
+                local c = publisher.element_contents(j)
+                p:append(c,{hyperlink = ch , allowbreak=publisher.allowbreak})
+            end
+
+            return p
+        end
+    else
+        return tab[1].contents
     end
-
-    local tab = publisher.dispatch(layoutxml,dataxml)
-
-    for _,j in ipairs(tab) do
-        local c = publisher.element_contents(j)
-        p:append(c,{hyperlink = #publisher.hyperlinks, allowbreak=publisher.allowbreak})
-    end
-
-    return p
 end
 
 --- Action

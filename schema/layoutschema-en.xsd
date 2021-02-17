@@ -8,26 +8,29 @@
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="en:A"/>
-        <xs:element ref="en:Action"/>
-        <xs:element ref="en:B"/>
-        <xs:element ref="en:Br"/>
-        <xs:element ref="en:Color"/>
-        <xs:element ref="en:Fontface"/>
-        <xs:element ref="en:ForAll"/>
-        <xs:element ref="en:Frame"/>
-        <xs:element ref="en:HSpace"/>
-        <xs:element ref="en:I"/>
-        <xs:element ref="en:Image"/>
-        <xs:element ref="en:Loop"/>
-        <xs:element ref="en:NoBreak"/>
-        <xs:element ref="en:Sub"/>
-        <xs:element ref="en:Sup"/>
-        <xs:element ref="en:Span"/>
-        <xs:element ref="en:Switch"/>
-        <xs:element ref="en:U"/>
-        <xs:element ref="en:URL"/>
-        <xs:element ref="en:Value"/>
+        <xs:choice>
+          <xs:element ref="en:A"/>
+          <xs:element ref="en:Action"/>
+          <xs:element ref="en:B"/>
+          <xs:element ref="en:Br"/>
+          <xs:element ref="en:Color"/>
+          <xs:element ref="en:Fontface"/>
+          <xs:element ref="en:ForAll"/>
+          <xs:element ref="en:Frame"/>
+          <xs:element ref="en:HSpace"/>
+          <xs:element ref="en:I"/>
+          <xs:element ref="en:Image"/>
+          <xs:element ref="en:Loop"/>
+          <xs:element ref="en:NoBreak"/>
+          <xs:element ref="en:Sub"/>
+          <xs:element ref="en:Sup"/>
+          <xs:element ref="en:Span"/>
+          <xs:element ref="en:Switch"/>
+          <xs:element ref="en:U"/>
+          <xs:element ref="en:URL"/>
+          <xs:element ref="en:Value"/>
+        </xs:choice>
+        <xs:element ref="en:Box"/>
       </xs:choice>
       <xs:attribute name="href">
         <xs:annotation>
@@ -532,6 +535,7 @@
     </xs:annotation>
     <xs:complexType>
       <xs:sequence maxOccurs="unbounded">
+        <xs:element minOccurs="0" ref="en:A"/>
         <xs:element minOccurs="0" ref="en:Action"/>
         <xs:element minOccurs="0" ref="en:AddSearchpath"/>
         <xs:element minOccurs="0" ref="en:Attribute"/>
@@ -1402,6 +1406,7 @@
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:AddSearchpath"/>
         <xs:element ref="en:Attribute"/>
@@ -2160,6 +2165,7 @@
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:AddSearchpath"/>
         <xs:element ref="en:Attribute"/>
@@ -3166,6 +3172,7 @@
     </xs:annotation>
     <xs:complexType>
       <xs:sequence maxOccurs="unbounded">
+        <xs:element minOccurs="0" ref="en:A"/>
         <xs:element minOccurs="0" ref="en:Action"/>
         <xs:element minOccurs="0" ref="en:AddSearchpath"/>
         <xs:element minOccurs="0" ref="en:Attribute"/>
@@ -4219,6 +4226,7 @@
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="en:A"/>
         <xs:element ref="en:Image"/>
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Box"/>
@@ -7053,6 +7061,7 @@
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:AddSearchpath"/>
         <xs:element ref="en:Attribute"/>
@@ -7185,6 +7194,7 @@
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:AddSearchpath"/>
         <xs:element ref="en:Attribute"/>

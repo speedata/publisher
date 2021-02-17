@@ -27,30 +27,37 @@
                      <a:documentation>Link zu einer (logischen) Seitenzahl.</a:documentation>
                   </attribute>
                </optional>
-               <zeroOrMore>
-                  <choice>
-                     <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
-                     <ref name="e_B"></ref>
-                     <ref name="e_Br"></ref>
-                     <ref name="e_Color"></ref>
-                     <ref name="e_Fontface"></ref>
-                     <ref name="e_ForAll"></ref>
-                     <ref name="e_Frame"></ref>
-                     <ref name="e_HSpace"></ref>
-                     <ref name="e_I"></ref>
-                     <ref name="e_Image"></ref>
-                     <ref name="e_Loop"></ref>
-                     <ref name="e_NoBreak"></ref>
-                     <ref name="e_Sub"></ref>
-                     <ref name="e_Sup"></ref>
-                     <ref name="e_Span"></ref>
-                     <ref name="e_Switch"></ref>
-                     <ref name="e_U"></ref>
-                     <ref name="e_URL"></ref>
-                     <ref name="e_Value"></ref>
-                  </choice>
-               </zeroOrMore>
+               <oneOrMore>
+                  <interleave>
+                     <zeroOrMore>
+                        <choice>
+                           <ref name="e_A"></ref>
+                           <ref name="e_Action"></ref>
+                           <ref name="e_B"></ref>
+                           <ref name="e_Br"></ref>
+                           <ref name="e_Color"></ref>
+                           <ref name="e_Fontface"></ref>
+                           <ref name="e_ForAll"></ref>
+                           <ref name="e_Frame"></ref>
+                           <ref name="e_HSpace"></ref>
+                           <ref name="e_I"></ref>
+                           <ref name="e_Image"></ref>
+                           <ref name="e_Loop"></ref>
+                           <ref name="e_NoBreak"></ref>
+                           <ref name="e_Sub"></ref>
+                           <ref name="e_Sup"></ref>
+                           <ref name="e_Span"></ref>
+                           <ref name="e_Switch"></ref>
+                           <ref name="e_U"></ref>
+                           <ref name="e_URL"></ref>
+                           <ref name="e_Value"></ref>
+                        </choice>
+                     </zeroOrMore>
+                     <optional>
+                        <ref name="e_Box"></ref>
+                     </optional>
+                  </interleave>
+               </oneOrMore>
             </group>
             <ref name="foreign-nodes"></ref>
          </interleave>
@@ -583,6 +590,9 @@
                   <a:documentation>Für jeden Fall in einer Fallunterscheidung wird überprüft, ob die Bedingung erfüllt ist und bei Übereinstimmung die Kindelemente ausgeführt.</a:documentation>
                </attribute>
                <oneOrMore>
+                  <optional>
+                     <ref name="e_A"></ref>
+                  </optional>
                   <optional>
                      <ref name="e_Action"></ref>
                   </optional>
@@ -1531,6 +1541,9 @@
                <oneOrMore>
                   <interleave>
                      <optional>
+                        <ref name="e_A"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Action"></ref>
                      </optional>
                      <optional>
@@ -2472,6 +2485,9 @@
                <oneOrMore>
                   <interleave>
                      <optional>
+                        <ref name="e_A"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Action"></ref>
                      </optional>
                      <optional>
@@ -3162,6 +3178,9 @@
          <interleave>
             <group>
                <oneOrMore>
+                  <optional>
+                     <ref name="e_A"></ref>
+                  </optional>
                   <optional>
                      <ref name="e_Action"></ref>
                   </optional>
@@ -4124,6 +4143,9 @@
                </optional>
                <oneOrMore>
                   <interleave>
+                     <optional>
+                        <ref name="e_A"></ref>
+                     </optional>
                      <optional>
                         <ref name="e_Image"></ref>
                      </optional>
@@ -6011,6 +6033,9 @@
                <oneOrMore>
                   <interleave>
                      <optional>
+                        <ref name="e_A"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Action"></ref>
                      </optional>
                      <optional>
@@ -6287,6 +6312,9 @@
                </attribute>
                <oneOrMore>
                   <interleave>
+                     <optional>
+                        <ref name="e_A"></ref>
+                     </optional>
                      <optional>
                         <ref name="e_Action"></ref>
                      </optional>
