@@ -25,7 +25,7 @@ import (
 
 	"speedatapublisher/splibaux"
 
-	"github.com/speedata/sdbidi"
+	"golang.org/x/text/unicode/bidi"
 )
 
 var (
@@ -213,7 +213,7 @@ func sdConvertSVGImage(path string) *C.char {
 //export sdSegmentize
 func sdSegmentize(original string) *C.struct_splitvalues {
 	inputstring := original
-	p := sdbidi.Paragraph{}
+	p := bidi.Paragraph{}
 	p.SetString(inputstring)
 	ordering, err := p.Order()
 	if err != nil {

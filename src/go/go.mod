@@ -21,7 +21,6 @@ require (
 	github.com/speedata/goxlsx v1.0.2
 	github.com/speedata/hotfolder v0.0.0-20181204121114-5f743a840a92
 	github.com/speedata/optionparser v1.0.0
-	github.com/speedata/sdbidi v0.0.0-20201109092552-0d81915ca415
 	github.com/yuin/gopher-lua v0.0.0-20200816102855-ee81675732da
 	golang.org/x/net v0.0.0-20210220033124-5f55cee0dc0d
 	golang.org/x/text v0.3.5
