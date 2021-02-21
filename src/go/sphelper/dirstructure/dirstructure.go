@@ -6,8 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"sphelper/config"
-	"sphelper/fileutils"
+	"speedatapublisher/sphelper/config"
+	"speedatapublisher/sphelper/fileutils"
 )
 
 // MkBuilddir builds the directory structure. srcbindir contains all files necessary to run LuaTeX

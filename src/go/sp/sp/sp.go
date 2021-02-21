@@ -16,14 +16,14 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
-	"splibaux"
 	"strconv"
 	"strings"
 	"syscall"
 	"time"
 
-	"sp"
-	"sp/server"
+	"speedatapublisher/server"
+	"speedatapublisher/sp"
+	"speedatapublisher/splibaux"
 
 	"github.com/speedata/configurator"
 	"github.com/speedata/hotfolder"
@@ -740,7 +740,7 @@ func scaffold(extra ...string) error {
 func showCredits() {
 	fmt.Println("This is the speedata Publisher, version", version)
 	fmt.Println(`
-Copyright 2019 speedata GmbH, Berlin. Licensed under
+Copyright 2009-2021 speedata GmbH, Berlin. Licensed under
 the GNU Affero GPL License, see
   https://raw.githubusercontent.com/speedata/publisher/develop/COPYING
 for details.

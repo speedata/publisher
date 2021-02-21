@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"sphelper/config"
+	"speedatapublisher/sphelper/config"
 )
 
 // BuildLib builds the dynamic library and
@@ -26,7 +26,8 @@ func BuildLib(cfg *config.Config, goos string, goarch string) error {
 	dylibbuild := filepath.Join(cfg.Builddir, "dylib")
 	os.RemoveAll(dylibbuild)
 	os.MkdirAll(dylibbuild, 0755)
-	cmd := exec.Command("go", "build", "-buildmode=c-shared", "-o", filepath.Join(dylibbuild, "libsplib"+libraryextension), "splib")
+	cmd := exec.Command("go", "build", "-buildmode=c-shared", "-o", filepath.Join(dylibbuild, "libsplib"+libraryextension), "speedatapublisher/splib")
+	cmd.Env = os.Environ()
 	if goos != runtime.GOOS {
 		ccenv := os.Getenv("CC_" + goos)
 		cmd.Env = append(cmd.Env, "CC="+ccenv)
@@ -36,10 +37,6 @@ func BuildLib(cfg *config.Config, goos string, goarch string) error {
 		cmd.Env = append(cmd.Env, "GOARCH="+goarch)
 	}
 	cmd.Env = append(cmd.Env, "CGO_ENABLED=1")
-	// put the pkg file in tempdir, get the files from src
-	cmd.Env = append(cmd.Env, "GOPATH="+os.TempDir()+":"+filepath.Join(srcdir, "go"))
-	cmd.Env = append(cmd.Env, "GOCACHE="+os.Getenv("GOCACHE"))
-	cmd.Env = append(cmd.Env, "PATH="+os.Getenv("PATH"))
 	outbuf, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println(string(outbuf))

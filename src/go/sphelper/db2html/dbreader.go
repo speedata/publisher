@@ -14,8 +14,8 @@ import (
 	"strconv"
 	"strings"
 
-	"sphelper/config"
-	"sphelper/fileutils"
+	"speedatapublisher/sphelper/config"
+	"speedatapublisher/sphelper/fileutils"
 
 	"github.com/alecthomas/chroma/formatters/html"
 	"github.com/alecthomas/chroma/lexers"

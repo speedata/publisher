@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
-	"splibaux"
+
+	"speedatapublisher/splibaux"
 )
 
 func dothings() error {

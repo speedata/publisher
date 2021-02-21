@@ -3,7 +3,7 @@ package splibaux
 import (
 	"fmt"
 
-	"css"
+	"speedatapublisher/css"
 )
 
 // ParseHTMLText reads a HTML and a CSS string and returns a table

@@ -8,13 +8,12 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"sphelper/config"
+	"speedatapublisher/sphelper/config"
 )
 
 // BuildGo builds the speedata Publisher runner
 func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype, location string) error {
-	// srcdir := cfg.Srcdir
-	os.Chdir(filepath.Join(cfg.Srcdir, "go", "sp", "sp"))
+	os.Chdir(filepath.Join(cfg.Srcdir, "go"))
 
 	if goarch != "" {
 		os.Setenv("GOARCH", goarch)
@@ -35,11 +34,9 @@ func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype, location str
 	}
 
 	// Now compile the go executable
-	arguments := []string{"build", "-ldflags", fmt.Sprintf("-X main.dest=%s -X main.version=%s -s -w", targettype, publisherversion), "-o", location, "sp/sp"}
+	arguments := []string{"build", "-ldflags", fmt.Sprintf("-X main.dest=%s -X main.version=%s -s -w", targettype, publisherversion), "-o", location, "speedatapublisher/sp/sp"}
 	cmd := exec.Command("go", arguments...)
-	cmd.Env = append(cmd.Env, "GOPATH="+os.TempDir()+":"+filepath.Join(cfg.Srcdir, "go"))
-	cmd.Env = append(cmd.Env, "GOCACHE="+os.Getenv("GOCACHE"))
-	cmd.Env = append(cmd.Env, "HOME="+os.Getenv("HOME"))
+	cmd.Env = os.Environ()
 
 	if goos != runtime.GOOS {
 		cmd.Env = append(cmd.Env, "GOOS="+goos)
@@ -47,8 +44,6 @@ func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype, location str
 	if goarch != "" {
 		cmd.Env = append(cmd.Env, "GOARCH="+goarch)
 	}
-
-	// cmd.Dir = filepath.Join(srcdir, "go")
 
 	outbuf, err := cmd.CombinedOutput()
 	if err != nil {

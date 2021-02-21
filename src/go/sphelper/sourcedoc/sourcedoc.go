@@ -12,8 +12,8 @@ import (
 	"regexp"
 	"strings"
 
-	"sphelper/config"
-	"sphelper/fileutils"
+	"speedatapublisher/sphelper/config"
+	"speedatapublisher/sphelper/fileutils"
 
 	"github.com/russross/blackfriday"
 )

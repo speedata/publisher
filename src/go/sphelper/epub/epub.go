@@ -4,8 +4,8 @@ package epub
 import (
 	"os"
 	"path/filepath"
-	"sphelper/config"
-	"sphelper/genadoc"
+	"speedatapublisher/sphelper/config"
+	"speedatapublisher/sphelper/genadoc"
 )
 
 type ebpubconf struct {

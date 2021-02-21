@@ -13,10 +13,10 @@ import (
 	"text/template"
 	"time"
 
-	"sphelper/changelog"
-	"sphelper/commandsxml"
-	"sphelper/config"
-	"sphelper/fileutils"
+	"speedatapublisher/sphelper/changelog"
+	"speedatapublisher/sphelper/commandsxml"
+	"speedatapublisher/sphelper/config"
+	"speedatapublisher/sphelper/fileutils"
 )
 
 var (

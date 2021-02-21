@@ -10,10 +10,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"sp/sp/luacsv"
-	"sp/sp/luaxlsx"
-	"sp/sp/luaxml"
-	"splibaux"
+	"speedatapublisher/sp/sp/luacsv"
+	"speedatapublisher/sp/sp/luaxlsx"
+	"speedatapublisher/sp/sp/luaxml"
+	"speedatapublisher/splibaux"
 
 	"github.com/cjoudrey/gluahttp"
 	lua "github.com/yuin/gopher-lua"

@@ -23,7 +23,7 @@ import (
 	"strings"
 	"unsafe"
 
-	"splibaux"
+	"speedatapublisher/splibaux"
 
 	"github.com/speedata/sdbidi"
 )

@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"sphelper/config"
+	"speedatapublisher/sphelper/config"
 )
 
 const (

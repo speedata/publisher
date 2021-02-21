@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"sphelper/config"
+	"speedatapublisher/sphelper/config"
 )
 
 type clText struct {
