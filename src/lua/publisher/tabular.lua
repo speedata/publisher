@@ -1318,8 +1318,7 @@ function typeset_table(self)
             end
 
         elseif eltname == "Tablefoot" then
-            make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_row)
-
+            make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,0)
         elseif eltname == "Tr" then
             current_row = current_row + 1
             rows[#rows + 1] = self:typeset_row(tr_contents,current_row,self.skiptables.body,self.rowheights.body)

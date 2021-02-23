@@ -1,0 +1,25 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Record element="data">
+        <PlaceObject>
+            <Table>
+                <Tr>
+                    <Td>
+                        <Paragraph>
+                            <Value>A</Value>
+                        </Paragraph>
+                    </Td>
+                </Tr>
+                <Tablefoot>
+                    <Tr>
+                        <Td>
+                            <Paragraph>
+                                <Value>F</Value>
+                            </Paragraph>
+                        </Td>
+                    </Tr>
+                </Tablefoot>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>
