@@ -132,7 +132,7 @@ end
 -- Get the text value of a table. Only the indexes 1,...#table are taken into account.
 -- The function recurses into nested tables.
 function table_textvalue( tbl )
-    if not tbl then return nil end
+    if not tbl then return "" end
     if type(tbl) ~= "table" then return tostring(tbl) end
     local ret = {}
     for _,v in ipairs(tbl) do
