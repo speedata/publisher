@@ -1270,6 +1270,19 @@ function initialize_luatex_and_generate_pdf()
         exit()
     end
 
+    --- emit last page if necessary
+    -- current_pagestore_name is set when in SavePages and nil otherwise
+    if page_initialized_p(current_pagenumber) and current_pagestore_name == nil then
+        dothingsbeforeoutput(pages[current_pagenumber])
+        local n = node.vpack(pages[current_pagenumber].pagebox)
+        shipout(n,current_pagenumber)
+    end
+    local lastpage = current_pagenumber
+    while not(page_initialized_p(lastpage)) and lastpage > 0 and current_pagestore_name == nil do
+        lastpage = lastpage - 1
+    end
+
+    --- At this point, all pages are in the PDF
     --- We are not at the end of the processing. Let's write the PDF information and status files.
     local pdfcatalog = {}
     if sp_suppressinfo then
@@ -1285,19 +1298,6 @@ function initialize_luatex_and_generate_pdf()
         pdfcatalog[#pdfcatalog + 1] = str
     end
 
-    --- emit last page if necessary
-    -- current_pagestore_name is set when in SavePages and nil otherwise
-    if page_initialized_p(current_pagenumber) and current_pagestore_name == nil then
-        dothingsbeforeoutput(pages[current_pagenumber])
-        local n = node.vpack(pages[current_pagenumber].pagebox)
-        shipout(n,current_pagenumber)
-    end
-    local lastpage = current_pagenumber
-    while not(page_initialized_p(lastpage)) and lastpage > 0 and current_pagestore_name == nil do
-        lastpage = lastpage - 1
-    end
-
-    --- At this point, all pages are in the PDF
     local vp = {}
     if viewerpreferences.numcopies and viewerpreferences.numcopies > 1 and viewerpreferences.numcopies <= 5 then
         vp[#vp + 1] = string.format("/NumCopies %d", viewerpreferences.numcopies)
