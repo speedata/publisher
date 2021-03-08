@@ -2319,7 +2319,7 @@
   </command>
   <command en="DefineFontfamily">
     <description xml:lang="en">
-      <para>Defines a font family consisting of the shapes »regular», »bold«, »bold italic« and »italic«. To be used in <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface"/> and <cmd name="Table"/> with the attribute <tt>fontfamily</tt>.</para>
+      <para>Defines a font family consisting of the shapes “regular”, “bold”, “bold italic” and “italic”. To be used in <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface"/> and <cmd name="Table"/> with the attribute <tt>fontfamily</tt>.</para>
     </description>
     <description xml:lang="de">
       <para>Das Element <cmd name="DefineFontfamily"/> definiert eine Schriftfamilie, auf in den Elementen <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface"/> und <cmd name="Table"/> mit dem Attribut <tt>fontfamily</tt> zugegriffen werden kann.</para>

@@ -1025,7 +1025,7 @@
   </xs:element>
   <xs:element name="DefineFontfamily">
     <xs:annotation>
-      <xs:documentation>Defines a font family consisting of the shapes »regular», »bold«, »bold italic« and »italic«. To be used in Paragraph, Textblock, Fontface and Table with the attribute fontfamily.</xs:documentation>
+      <xs:documentation>Defines a font family consisting of the shapes “regular”, “bold”, “bold italic” and “italic”. To be used in Paragraph, Textblock, Fontface and Table with the attribute fontfamily.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
