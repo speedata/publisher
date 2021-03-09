@@ -1913,6 +1913,17 @@
           <xs:documentation>Set the inner distance (width between contents and the border) to the right edge.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="stretch">
+        <xs:annotation>
+          <xs:documentation>Stretch image until one of maximum width and maximum height is reached. Useful if images should be as large as possible but should not use more than the given space.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="rotate">
         <xs:annotation>
           <xs:documentation>Rotate the image in steps of 90°. The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</xs:documentation>

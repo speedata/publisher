@@ -5906,7 +5906,9 @@ function set_image_length(len,width_or_height)
 end
 
 
-function calculate_image_width_height( image, width, height, minwidth, minheight, maxwidth, maxheight )
+-- Calculate the image width and height
+-- stretch: grow to maxwidth,maxheight if needed
+function calculate_image_width_height( image, width, height, minwidth, minheight, maxwidth, maxheight,stretch )
     -- from https://www.w3.org/TR/CSS2/visudet.html#min-max-widths:
     --
     -- Constraint Violation                                                           Resolved Width                      Resolved Height
@@ -5922,6 +5924,14 @@ function calculate_image_width_height( image, width, height, minwidth, minheight
     --  9 (w < min-width) and (h < min-height), where (min-width/w > min-height/h)    min-width                           min(max-height, min-width * h/w)
     -- 10 (w < min-width) and (h > max-height)                                        min-width                           max-height
     -- 11 (w > max-width) and (h < min-height)                                        max-width                           min-height
+
+    -- if stretch and max{height,width} then the image should grow as needed
+    if stretch and maxheight < maxdimen and maxwidth < maxdimen then
+        local stretchamount = math.min(maxwidth / image.xsize , maxheight / image.ysize )
+        if stretchamount > 1 then
+            return image.xsize * stretchamount, image.ysize * stretchamount
+        end
+    end
 
     if width < minwidth and height > maxheight then
         -- w("10")

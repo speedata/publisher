@@ -74,6 +74,8 @@ To use the natural size, but specify restrictions, there are four combinations o
 .The image is limited to the height of three grid cells.
 image::18-maxheight.png[width=50%,scaledwidth=100%]
 
+If the natural image size is smaller than the given `maxwidth` and `maxheight`, you can set the attribute `stretch` to `yes` to increase the size of the image until one of the given constraints are reached.
+
 ==  Rotating images
 
 With the rotate attribute you can rotate images in 90 degree steps (positive values: clockwise). The following example rotates an image 90 degrees counterclockwise if it is a portrait image. With the XPath command `sd:aspectratio(<filename>)` you can determine the aspect ratio of an image. If it is greater than 1, then it is a landscape image.

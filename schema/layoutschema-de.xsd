@@ -1913,6 +1913,17 @@
           <xs:documentation>Bestimmt den Innenabstand des Bildes (rechts)</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="stretch">
+        <xs:annotation>
+          <xs:documentation>Dehnt das Bild bis eine der Angaben von maxheight und maxwidth erreich ist. Hilfreich um Bilder so groß wie möglich aber innerhalb gewisser Grenzen anzeigen zu lassen.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="rotate">
         <xs:annotation>
           <xs:documentation>Dreht das Bild in 90°-Schritten. Ein Winkel &gt; 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</xs:documentation>

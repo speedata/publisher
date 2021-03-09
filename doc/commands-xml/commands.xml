@@ -3970,6 +3970,14 @@
         <para>Bestimmt den Innenabstand des Bildes (rechts)</para>
       </description>
     </attribute>
+    <attribute en="stretch" optional="yes" type="boolean" since="4.3.8">
+      <description xml:lang="en">
+        <para>Stretch image until one of maximum width and maximum height is reached. Useful if images should be as large as possible but should not use more than the given space.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Dehnt das Bild bis eine der Angaben von maxheight und maxwidth erreich ist. Hilfreich um Bilder so groß wie möglich aber innerhalb gewisser Grenzen anzeigen zu lassen.</para>
+      </description>
+    </attribute>
     <attribute en="rotate" type="number" optional="yes">
       <description xml:lang="en">
         <para>Rotate the image in steps of 90°. The amount of movement is defined by the specified angle; if positive, the movement will be clockwise, if negative, it will be counter-clockwise.</para>

@@ -1130,6 +1130,7 @@ function commands.image( layoutxml,dataxml )
     local maxheight = publisher.read_attribute(layoutxml,dataxml,"maxheight",  "rawstring")
     local clip      = publisher.read_attribute(layoutxml,dataxml,"clip",       "boolean")
     local page      = publisher.read_attribute(layoutxml,dataxml,"page",       "number")
+    local stretch   = publisher.read_attribute(layoutxml,dataxml,"stretch",    "boolean",false)
     -- deprecated since 2.7.5
     local max_box   = publisher.read_attribute(layoutxml,dataxml,"maxsize",    "rawstring")
     local vis_box   = publisher.read_attribute(layoutxml,dataxml,"visiblebox", "rawstring")
@@ -1235,7 +1236,7 @@ function commands.image( layoutxml,dataxml )
     maxwidth  = publisher.set_image_length(maxwidth, "width" ) or publisher.maxdimen
 
     if not clip then
-        width, height = publisher.calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight )
+        width, height = publisher.calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight,stretch)
         if dpiwarn then
             local inch_x = width / publisher.factor / 72
             local inch_y = height / publisher.factor / 72

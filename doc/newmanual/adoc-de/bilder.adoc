@@ -93,6 +93,8 @@ Um die natürliche Größe zu benutzen, aber Einschränkungen anzugeben, gibt es
 -------------------------------------------------------------------------------
 
 
+Falls die natürliche Größe des Bildes kleiner ist als die vorgegebenen Angaben von `maxwidth` und `maxheight`, kann man `stretch` auf `yes` setzen, um das Bild so weit zu vergrößern, bis eine der beiden Einschränkungen erreicht wird.
+
 .Das Bild ist auf die Höhe von drei Rasterzellen beschränkt.
 image::18-maxheight.png[width=50%,scaledwidth=100%]
 

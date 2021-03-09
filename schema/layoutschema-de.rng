@@ -2202,6 +2202,15 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="stretch">
+                     <a:documentation>Dehnt das Bild bis eine der Angaben von maxheight und maxwidth erreich ist. Hilfreich um Bilder so groß wie möglich aber innerhalb gewisser Grenzen anzeigen zu lassen.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <value>no</value>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="rotate">
                      <a:documentation>Dreht das Bild in 90°-Schritten. Ein Winkel &gt; 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</a:documentation>
                   </attribute>
