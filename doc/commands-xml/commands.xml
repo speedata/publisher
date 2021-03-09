@@ -11,6 +11,7 @@
     <optional><cmd name="B"/></optional>
     <optional><cmd name="Barcode"/></optional>
     <optional><cmd name="Bookmark"/></optional>
+    <optional><cmd name="Box"/></optional>
     <optional><cmd name="Br"/></optional>
     <optional><cmd name="Color"/></optional>
     <optional><cmd name="Column"/></optional>
