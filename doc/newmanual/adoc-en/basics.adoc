@@ -2,7 +2,6 @@
 [[ch-basics]]
 = Basics
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 The study of this chapter should be sufficient to create layout rules by yourself. Occasionally, more detailed topics will be covered in more detail in a later chapter. For example, only the most important formatting for tables is dealt with; a separate chapter (chapter <<ch-tables2,Tables>>) describes tables in detail. In such cases there is of course a cross-reference.
 

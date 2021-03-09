@@ -1,7 +1,6 @@
 [[ch-layoutoptimizationusinggroups]]
 = Layout optimization using groups
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 A typical case with database publishing is that you don't know what data to expect. Text varies in length, images have different aspect ratios, the amount of data in the record varies, and so on. In order to still create a presentation that is appealing (i.e. follows certain rules), you can make queries. Besides static questions like "How many articles are in the article group?", dynamic questions can be answered.
 

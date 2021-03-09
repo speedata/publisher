@@ -1,7 +1,6 @@
 [[ch-hyphenation-language]]
 = Hyphenation / language settings
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 Hyphenation is necessary in most Western languages to have an acceptable appearance for narrow texts. Hyphenation is an integral part of the line breaking algorithm, for example to avoid multiple hyphenations in consecutive lines.
 

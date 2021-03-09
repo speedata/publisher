@@ -1,7 +1,6 @@
 [[ch-pagetypes]]
 = Page types
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 Page types (or master pages, page templates) are used to define margins for pages, create page frames and perform actions when a page is created or written to the PDF file.
 Classically, there is a page template for left pages and for right pages.

@@ -1,7 +1,6 @@
 [[ch-hotfolder,Hotfolder]]
 = Starting the Publisher via the Hotfolder
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 The speedata Publisher can monitor a directory as a “watchdog” in order to start automatically when changes are made.
 Such a directory is also called hotfolder.

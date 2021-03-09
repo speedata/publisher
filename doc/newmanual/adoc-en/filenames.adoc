@@ -2,7 +2,6 @@
 [[ch-filenames,File names with speedata]]
 = File name in the Publisher
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 External files are referenced at various points in the layout, mainly in the images.
 These can have the following formats:

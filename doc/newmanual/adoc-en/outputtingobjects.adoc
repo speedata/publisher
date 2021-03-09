@@ -3,7 +3,6 @@
 [[ch-outputtingobjects]]
 = Outputting objects
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 There are two commands to output objects. One is called `<Output>` and is only used for text that is to wrap to multiple pages. All other objects (images, tables, barcodes, ...) are output using the command `<PlaceObject>`.
 The parameters are listed in detail in the command reference (see command <<cmd-placeobject,`<PlaceObject>`>>). Here are some examples and possible applications.

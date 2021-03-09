@@ -1,7 +1,6 @@
 [[ch-cookbook-tocinonerun]]
 = Create table of contents in one go
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 Often enough you have documents with a table of contents that should be somewhere at the beginning of the document. The normal way with the speedata Publisher is to collect the data for the table of contents during a run-through (which sections are there? On which page do they start?). In the next run this data is then used to create the table of contents. This method was necessary until now because this information is needed before it is available.
 

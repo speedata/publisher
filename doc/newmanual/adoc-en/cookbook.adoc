@@ -2,7 +2,6 @@
 [[ch-cookbook]]
 = Cookbook
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 In this section concrete applications are shown, with designed data, but with requirements occurring in practice. Three chapters (Table of Contents, Index, and Page X of Y) are implemented using the same mechanism with the XML element structure (chapter Creating XML Structures).
 

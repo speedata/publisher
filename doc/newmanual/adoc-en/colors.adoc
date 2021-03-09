@@ -2,7 +2,6 @@
 [[ch-colors]]
 = Colors
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 
 The output of colors in speedata Publisher is very simple. Usually one specification for the object to be output is sufficient:

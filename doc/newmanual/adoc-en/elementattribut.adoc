@@ -1,7 +1,6 @@
 [[ch-elementattribute,Creation of XML structures]]
 = Creation of XML structures
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 The speedata Publisher can create, save and read in XML files.
 This allows you to create tables of contents, cross-references and other applications.

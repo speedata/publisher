@@ -1,7 +1,6 @@
 [[ch-fonts,Using fonts]]
 = Using fonts
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 Embedding fonts in the common formats is very easy. The formats Type1 (files .pfb and .afm) as well as TrueType and OpenType (files .ttf and .otf) are supported.
 

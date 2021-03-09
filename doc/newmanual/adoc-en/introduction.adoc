@@ -1,7 +1,6 @@
 [[ch-introduction]]
 = Introduction
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 
 The speedata Publisher is software for creating PDF files fully automatically from XML data. The data can be product data, structured texts or other content, for example.
@@ -44,5 +43,7 @@ There is a separate repository with examples on Github (https://github.com/speed
 
 .Examples from the repository
 image::beispiele.png[width=100%]
+
+_Remark_: most of this manual is automatically translated. If you find any mistakes, please  <<ch-bugreporting,report>> them.
 
 // EOF

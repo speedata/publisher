@@ -116,6 +116,21 @@ Stop processing data
 Duration: 0.223866 seconds
 -------------------------------------------------------------------------------
 
+== Wie Sie Hilfe erhalten
+
+Wenn alle Fehlersuche fehlschlägt oder wenn Sie Fragen oder Kommentare haben, die Sie mit anderen teilen möchten, können Sie die folgenden Ressourcen nutzen:
+
+* Chat auf Gitter: https://gitter.im/speedata/publisher
+* Diskussionen auf Github: https://github.com/speedata/publisher/discussions
+* Issues auf Github: https://github.com/speedata/publisher/issues
+* Stackoverflow mit dem Tag `speedatapublisher`: https://stackoverflow.com/questions/tagged/speedatapublisher
+
+Jedes Feedback ist willkommen und hilfreich. Beachten Sie jedoch: Bezahlter Support wird _immer_ gegenüber unbezahltem Support priorisiert. Wenn Sie also einen Feature-Wunsch haben oder einen Bug-Fix benötigen, ziehen Sie bitte in Betracht, einen Support-Plan zu kaufen oder dieses Projekt auf Github zu sponsern, um auf die Überholspur zu kommen.
+
+Feature-Requests auf Github werden alle gesehen und auf einer nicht-öffentlichen Liste notiert, aber irgendwann von Github geschlossen, um die Issue-Liste sauber zu halten.
+
+Wenn Sie einen Fehlerbericht haben: Bitte folgen Sie der einfachen Richtlinie: Machen Sie ein Beispiel, das so klein wie möglich ist, aber den Fehler zeigt. Sonst kann ich nicht sehen, was schief läuft.
+
 
 
 

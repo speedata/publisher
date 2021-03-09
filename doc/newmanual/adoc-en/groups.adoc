@@ -1,7 +1,6 @@
 [[ch-groups]]
 = Groups (virtual objects)
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 One of the most important features of the Publisher is the ability to place objects on a virtual area (Group) in order to subsequently measure them or place them together.
 This virtual area initially has no width and no height.

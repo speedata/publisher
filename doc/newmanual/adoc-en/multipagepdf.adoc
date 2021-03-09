@@ -1,7 +1,6 @@
 [[ch-multipagepdf]]
 = Embed multipage PDF files
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 Embedding multiple pages of a PDF file is easy. You can use the layout function `sd:number-of-pages()` to determine how many pages a PDF file has.
 With the `<Image>` command to include an image, you can specify the desired number of pages. So the pattern for including all pages of a PDF file is as follows:

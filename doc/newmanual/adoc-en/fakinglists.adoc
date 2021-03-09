@@ -1,7 +1,6 @@
 [[ch-fakelists]]
 = Imitate bulleted lists
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 The Publisher does not (currently) have any special skills to create bulleted lists. This is also because they can be imitated quite easily via text formats.
 

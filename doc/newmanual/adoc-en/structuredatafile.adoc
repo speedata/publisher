@@ -2,7 +2,6 @@
 = Structure of the data file and the layout rules
 
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 [quote, Freely adapted from Henry Ford]
 You can use any data format so long as it is XML.

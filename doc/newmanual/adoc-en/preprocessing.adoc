@@ -1,7 +1,6 @@
 [[ch-preprocessing]]
 = Lua-Filter / pre-processing
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 
 Sometimes you may want to convert the data into another format or check for correctness before the actual PDF creation.

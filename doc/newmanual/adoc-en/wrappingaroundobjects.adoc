@@ -1,7 +1,6 @@
 [[ch-wraparoundimages,Wrap around images]]
 = Wrap around images
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 Text that is output using the `<Output allocate="auto">` command flows around previously placed objects. It is therefore useful to place objects that are to be flowed around on future pages first. This can be achieved with the page attribute in the command <PlaceObject>. In the attribute you must specify either a concrete page number or next for the next page. To avoid the cursor being changed during output, it is recommended to set the attribute keepposition to yes.
 

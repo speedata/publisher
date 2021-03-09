@@ -1,7 +1,6 @@
 [[ch-textformatting]]
 = Text formatting
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 
 `<Textblock>` and `<Text>` contain one or more paragraphs (command `<Paragraph>`). The actual texts are encapsulated there within `<Value>`. There are numerous possibilities to influence the formatting of the texts. The switches for the font styles were introduced in Include Fonts. With a similar functionality there are the following commands:

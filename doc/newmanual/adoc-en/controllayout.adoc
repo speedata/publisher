@@ -1,7 +1,6 @@
 [[ch-advanced-cotrollayout]]
 = Control of the layout when calling the Publisher
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 If you want to control the behavior of the speedata Publisher without changing any of the files (`data.xml` or `layout.xml`), you can do this in two different ways.
 An example is a PDF that is to be output in different page formats (portrait and landscape) or that you provide a print PDF (with bleed) and an online PDF (with smaller images).

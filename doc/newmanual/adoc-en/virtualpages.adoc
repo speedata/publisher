@@ -1,7 +1,6 @@
 [[ch-savepages]]
 = Virtual pages
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 With the Virtual Pages you can create and discard pages, similar to the Virtual Areas (Groups).
 For this purpose there are the commands `<SavePages>` and `<InsertPages>` and the layout function `sd:count-saved-pages()`.

@@ -9,7 +9,6 @@
 [[ch-tables2]]
 = Tables
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 
 The table model used in the Publisher is basically the same as that of HTML.

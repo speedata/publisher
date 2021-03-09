@@ -3,7 +3,6 @@
 = Hello, world!
 
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 
 The classic: “Hello, world!” Or: what does a simple document look like? As already described, the input for the Publisher consists of two files: the data file and the layout file. Both must be in XML format and must always be available. The data file is saved under the name data.xml and the layout file under layout.xml. These two files are best created with an XML editor, a simple text editor like  https://atom.io/[Atom] or https://macromates.com/[Textmate] is sufficient for the first steps.

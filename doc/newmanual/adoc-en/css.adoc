@@ -2,7 +2,6 @@
 
 = Using CSS with the speedata Publisher
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 CSS (Cascading Stylesheets) is a language mainly used on the web to determine the appearance of objects.
 The idea is to separate formatting from content.

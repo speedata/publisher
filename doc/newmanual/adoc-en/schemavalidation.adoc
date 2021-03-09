@@ -1,7 +1,6 @@
 [[ch-schemavalidation]]
 = Schema validation
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 A special feature of the speedata Publisher is that the input language is formulated in XML. Compared to other programming languages, XML is "chatty": You always have to write end tags for the start tags:
 

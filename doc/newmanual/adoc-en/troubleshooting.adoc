@@ -1,11 +1,8 @@
 [[ch-troubleshooting]]
 = Troubleshooting / Debugging
 
-_This page was automatically translated. Stay tuned for a human translation..._
 
 The output does not always work as it should. Sometimes objects are too wide, sometimes the wrong text format is used and sometimes the table does not look as it should. In order to prevent troubleshooting from becoming too difficult, the speedata Publisher provides various aids. For this there is the command <Trace>, which offers different switches. These are (by default):
-
-
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -102,6 +99,23 @@ Stop processing data
 0 errors occurred
 Duration: 0.223866 seconds
 -------------------------------------------------------------------------------
+
+[[ch-bugreporting]]
+== How to get help
+
+If all troubleshooting fails or if you have questions or comments that you want to share with others, you can use the following resources:
+
+* Chat on gitter: https://gitter.im/speedata/publisher
+* Discussions on Github: https://github.com/speedata/publisher/discussions
+* Issues on Github: https://github.com/speedata/publisher/issues
+* Stackoverflow with tag `speedatapublisher`: https://stackoverflow.com/questions/tagged/speedatapublisher
+
+Any feedback is welcome and helpful. Notice however: Paid support is _always_ prioritized over unpaid support. So if you have a feature request or the need of a bug-fix, please consider buying a support plan or sponsor this project on Github to get into the fast lane.
+
+Feature requests on Github will all be seen and written down on a non-public list but closed from Github eventually, to keep the issue list clean.
+
+If you have a bug report: please follow the simple guideline: Make an example that is as small as possible but shows the error. Otherwise I can't see what is going wrong.
+
 
 
 // EOF
