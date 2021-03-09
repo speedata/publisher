@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.4">
+    <entry version="4.3.8" date="2021-03-09">
+        <en>Grow image if needed (maxwidth,maxheight set and stretch="yes") (#321).</en>
+        <de>Bild bei Bedarf vergrößern (maxwidth,maxheight gesetzt und stretch="yes") (#321). </de>
+    </entry>
     <entry version="4.3.7" date="2021-03-08">
         <en>Bugfix visible-pagenumbers (#320).</en>
         <de>Fehlerkorrektur visible-pagenumbers (#320).</de>
