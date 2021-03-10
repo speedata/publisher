@@ -472,7 +472,7 @@ func getExecutablePath() string {
 	}
 
 	// 3 assume simple installation and take luatex(.exe)
-	executableName = "luatex" + exeSuffix
+	executableName = "luajittex" + exeSuffix
 
 	// 3.5 check the installdir/bin for sdluatex(.exe)
 	p = filepath.Join(installdir, "sdluatex", executableName)
@@ -623,11 +623,15 @@ func runPublisher(cachemethod string, runmode string, filename string) (exitstat
 	cmdline = append(cmdline, layoutoptionsSlice...)
 	env := []string{"LC_ALL=C", "SP_JOBNAME=%s" + jobname}
 	for i := 1; i <= runs; i++ {
-		if run(getExecutablePath(), cmdline, env) < 0 {
+		ep := getExecutablePath()
+		if verbose {
+			fmt.Println("Executable path:", ep)
+		}
+		if run(ep, cmdline, env) < 0 {
 			exitstatus = -1
 			v := status{}
 			v.Errors = 1
-			v.Error = append(v.Error, statuserror{Error: "Error executing sdluatex", Code: 1})
+			v.Error = append(v.Error, statuserror{Error: "Error executing sdluatex (" + ep + ")", Code: 1})
 			data, nerr := xml.Marshal(v)
 			if nerr != nil {
 				log.Fatal(nerr)
