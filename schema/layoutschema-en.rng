@@ -541,6 +541,11 @@
                <a:documentation>CSS class for this box.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="graphic">
+               <a:documentation>The name of the metapost graphic to use instead of the box.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="height">
             <a:documentation>Height of the box in grid cells.</a:documentation>
          </attribute>
@@ -1192,6 +1197,22 @@
             </attribute>
          </optional>
          <empty></empty>
+      </element>
+   </define>
+   <define name="e_DefineGraphic">
+      <element name="DefineGraphic">
+         <a:documentation>Define a metapost graphic to be used in Box. EXPERIMENTAL!</a:documentation>
+         <interleave>
+            <group>
+               <optional>
+                  <attribute name="name">
+                     <a:documentation>The name of the graphic.</a:documentation>
+                  </attribute>
+               </optional>
+               <text></text>
+            </group>
+            <ref name="foreign-nodes"></ref>
+         </interleave>
       </element>
    </define>
    <define name="e_DefineFontalias">
@@ -2383,6 +2404,9 @@
                   </optional>
                   <optional>
                      <ref name="e_DefineFontalias"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_DefineGraphic"></ref>
                   </optional>
                   <optional>
                      <ref name="e_DefineFontfamily"></ref>
@@ -4705,6 +4729,19 @@
                <optional>
                   <attribute name="select">
                      <a:documentation>The value of the contents.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="type">
+                     <a:documentation>Set the data type of the variable. Currently only supported for MetaPost variables.</a:documentation>
+                     <choice>
+                        <value>sd:any</value>
+                        <a:documentation>The default (any) datatype for variables in the speedata layout language.</a:documentation>
+                        <value>mp:cmykcolor</value>
+                        <a:documentation>A MetaPost CMYK color.</a:documentation>
+                        <value>mp:rgbcolor</value>
+                        <a:documentation>A MetaPost RGB color.</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <optional>

@@ -1,0 +1,111 @@
+[[ch-fortgeschrittenethemen-metapostgrafiken]]
+= Bilder mit MetaPost erstellen und einbinden
+
+TIP: Die Funktionalität, MetaPost-Grafiken zu erstellen und einzubinden ist noch sehr neu und experimentell. Die Schnittstelle kann sich noch ändern bzw. ganz wegfallen. Insofern sollte man sie mit Vorsicht benutzen.
+
+MetaPost ist eine Programmiersprache, mit der man Grafiken erstellen kann.
+
+So erzeugt man beispielsweise aus folgendem Programmcode:
+
+[source, text]
+-------------------------------------------------------------------------------
+beginfig(1)
+    for a=0 upto 9:
+      draw (0,0){dir 45}..{dir -10a}(6cm,0);
+    endfor
+endfig;
+-------------------------------------------------------------------------------
+
+eine Grafik:
+
+image::ad-mp-first.png[width=50%,scaledwidth=100%]
+
+== MetaPost im speedata Publisher
+
+Die Idee ist nun, diese Bilder auch im speedata Publisher nutzen zu können.
+Dazu definiert man erst eine Grafik und benutzt sie später bei dem Box-Befehl:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+    xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <DefineGraphic name="dottedbox">
+      beginfig(1);
+      pickup pencircle scaled 1mm;
+      draw (0,0) -- (box_width,0) -- (box_width, box_height) --
+        (box_width, box_height) -- (0, box_height ) -- cycle
+        dashed withdots withcolor 0.7red ;
+      endfig;
+    </DefineGraphic>
+
+
+    <Record element="data">
+        <PlaceObject row="1" column="1">
+            <Box height="2" width="5" graphic="dottedbox" />
+        </PlaceObject>
+    </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+Die Breite der Box und die Höhe der Box sind mit den Variablen `box_width` und `box_height` in MetaPost definiert.
+Damit kann man die Grafik an die Vorgaben im Publisher anpassen.
+
+.Die gepunkteten Linien entsprechen den Vorgaben der Box. Die Rasterdarstellung wurde eingeschaltet, damit das sichtbar wird.
+image::ad-mp-dotted.png[width=50%,scaledwidth=100%]
+
+== Koordinaten
+
+Der Ursprung des Koordinatensystems liegt in der linken unteren Ecke der Box, positive Werte gehen also in die Richtung rechts und oben.
+
+== Variablen
+
+Es können mit `<SetVariable>` Variablen für MetaPost gesetzt werden.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<SetVariable
+    variable="curcol"
+    type="mp:rgbcolor"
+    select="'colors_mycolor'"/>
+-------------------------------------------------------------------------------
+
+Die Zuweisung wird zu Beginn des MetaPost-Kontexts ausgewertet. Damit steht `curcol` am Anfang der Grafiken zur Verfügung.
+
+== Vordefinierte Werte
+
+Alle Farben, die im Layout definiert werden, können mit dem Präfix `color_` in MetaPost benutzt werden:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineColor name="mycolor" value="#FF4E00"/>
+
+<DefineGraphic name="dots">
+    beginfig(1);
+    pickup pencircle scaled 3mm;
+    for i=0 upto 3:
+        draw (i * 1cm, i * 1cm) withcolor colors_mycolor ;
+    endfor;
+    endfig;
+</DefineGraphic>
+
+<Record element="data">
+    <PlaceObject row="1" column="1">
+        <Box height="5" width="1" graphic="dots" />
+    </PlaceObject>
+</Record>
+-------------------------------------------------------------------------------
+
+== MetaPost Ressourcen
+
+Es gibt eine Reihe englischer Handbücher und Tutorials für MetaPost:
+
+* Das MetaPost Handbuch (mpman) ist auf CTAN zu finden: http://mirrors.ctan.org/systems/doc/metapost/mpman.pdf
+* Learning MetaPost by doing von André Heck: https://staff.fnwi.uva.nl/a.j.p.heck/Courses/mptut.pdf
+* MetaPost Beispiele: http://tex.loria.fr/prod-graph/zoonekynd/metapost/metapost.html
+* A Beginner’s Guide to MetaPost for Creating High-Quality Graphics http://www.tug.org/pracjourn/2006-4/henderson/henderson.pdf
+* Puzzling graphics in MetaPost https://www.pragma-ade.com/articles/art-puzz.pdf
+* MetaFun (ein Makropaket, das auf MetaPost aufsetzt - nicht alle Befehle sind im speedata Publisher verfügbar) https://www.pragma-ade.com/general/manuals/metafun-p.pdf
+

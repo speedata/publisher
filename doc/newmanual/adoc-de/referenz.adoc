@@ -28,6 +28,7 @@ ifndef::backend-docbook5[]
 <<cmd-contents,Contents>>  +
 <<cmd-copy_of,Copy-of>>  +
 <<cmd-definecolor,DefineColor>>  +
+<<cmd-definegraphic,DefineGraphic>>  +
 <<cmd-definecolorprofile,DefineColorprofile>>  +
 <<cmd-definefontalias,DefineFontalias>>  +
 <<cmd-definefontfamily,DefineFontfamily>>  +
@@ -266,6 +267,12 @@ include::ref/definefontfamily.adoc[]
 == Siehe auch
 
 Das Kapitel über <<ch-einbindungschriftarten>> und den Befehl <<cmd-definefontalias,`<DefineFontalias>`>> sowie <<cmd-loadfontfile,`<LoadFontfile>`>>.
+
+include::ref/definegraphic.adoc[]
+
+== Siehe auch
+
+Den Abschnitt <<ch-fortgeschrittenethemen-metapostgrafiken>> im Handbuch.
 
 include::ref/definematter.adoc[]
 
@@ -604,8 +611,7 @@ include::ref/setvariable.adoc[]
 
 == Siehe auch
 
-Das Kapitel <<ch-programmierung,Programmierung>>.
-
+Die Kapitel <<ch-programmierung,Programmierung>> und <<ch-fortgeschrittenethemen-metapostgrafiken>>.
 
 include::ref/sortsequence.adoc[]
 

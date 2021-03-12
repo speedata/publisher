@@ -39,4 +39,7 @@ include::servermodus.adoc[leveloffset=+1]
 
 include::steuerunglayout.adoc[leveloffset=+1]
 
+include::metapostgrafiken.adoc[leveloffset=+1]
+
+
 // EOF

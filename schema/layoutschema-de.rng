@@ -541,6 +541,11 @@
                <a:documentation>CSS Klasse für diese Box.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="graphic">
+               <a:documentation>Der Name der Metapost Grafik, die anstelle der Box angezeigt werden soll.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="height">
             <a:documentation>Höhe der Box in Rasterzellen.</a:documentation>
          </attribute>
@@ -1192,6 +1197,22 @@
             </attribute>
          </optional>
          <empty></empty>
+      </element>
+   </define>
+   <define name="e_DefineGraphic">
+      <element name="DefineGraphic">
+         <a:documentation>Definiere eine Metapost-Grafik die in Box benutzt werden kann. Experimentell!</a:documentation>
+         <interleave>
+            <group>
+               <optional>
+                  <attribute name="name">
+                     <a:documentation>Der Name der Grafik.</a:documentation>
+                  </attribute>
+               </optional>
+               <text></text>
+            </group>
+            <ref name="foreign-nodes"></ref>
+         </interleave>
       </element>
    </define>
    <define name="e_DefineFontalias">
@@ -2383,6 +2404,9 @@
                   </optional>
                   <optional>
                      <ref name="e_DefineFontalias"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_DefineGraphic"></ref>
                   </optional>
                   <optional>
                      <ref name="e_DefineFontfamily"></ref>
@@ -4705,6 +4729,19 @@
                <optional>
                   <attribute name="select">
                      <a:documentation>Inhalt, der der Variablen zugewiesen wird.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="type">
+                     <a:documentation>Setzt den Datentyp der Variable. Derzeit nur für MetaPost-Variablen unterstützt.</a:documentation>
+                     <choice>
+                        <value>sd:any</value>
+                        <a:documentation>Der voreingestellte Datentyp für die speedata Layoutsprache.</a:documentation>
+                        <value>mp:cmykcolor</value>
+                        <a:documentation>Eine MetaPost CMYK Farbe.</a:documentation>
+                        <value>mp:rgbcolor</value>
+                        <a:documentation>Eine MetaPost RGB Farbe.</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <optional>

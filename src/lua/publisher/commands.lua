@@ -12,6 +12,7 @@ require("publisher.fonts")
 require("publisher.tabular")
 local spotcolors = require("spotcolors")
 local par  = require("par")
+local metapost = require("publisher.metapost")
 do_luafile("css.lua")
 
 -- This module contains the commands in the layout file (the tags)
@@ -303,6 +304,7 @@ end
 function commands.box( layoutxml,dataxml )
     local bleed     = publisher.read_attribute(layoutxml,dataxml,"bleed",          "string")
     local colorname = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","rawstring")
+    local graphic   = publisher.read_attribute(layoutxml,dataxml,"graphic",        "rawstring")
     local height    = publisher.read_attribute(layoutxml,dataxml,"height",         "length")
     local width     = publisher.read_attribute(layoutxml,dataxml,"width",          "length")
 
@@ -318,26 +320,6 @@ function commands.box( layoutxml,dataxml )
         ["padding-bottom"]   = "length",
         ["padding-left"]     = "length",
     }
-    local tab = {}
-    if css_rules and type(css_rules) == "table" then
-        for k,v in pairs(css_rules) do
-            tab[k]=v
-        end
-    end
-
-    local tmpattr
-    for attname,atttyp in pairs(attribute) do
-        tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
-        if tmpattr then
-            tab[attname] = tmpattr
-        end
-    end
-    if tab["padding-top"]    then tab.padding_top    = tex.sp(tab["padding-top"])    end
-    if tab["padding-bottom"] then tab.padding_bottom = tex.sp(tab["padding-bottom"]) end
-    if tab["padding-left"]   then tab.padding_left   = tex.sp(tab["padding-left"])   end
-    if tab["padding-right"]  then tab.padding_right  = tex.sp(tab["padding-right"])  end
-
-    local current_grid = publisher.current_grid
 
     -- Todo: document length or number
     if tonumber(width) ~= nil then
@@ -350,6 +332,72 @@ function commands.box( layoutxml,dataxml )
     else
         height = tex.sp(height)
     end
+
+    local tab = {}
+
+    local tmpattr
+    for attname,atttyp in pairs(attribute) do
+        tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+        if tmpattr then
+            tab[attname] = tmpattr
+        end
+    end
+
+    if tab["padding-top"]    then tab.padding_top    = tex.sp(tab["padding-top"])    end
+    if tab["padding-bottom"] then tab.padding_bottom = tex.sp(tab["padding-bottom"]) end
+    if tab["padding-left"]   then tab.padding_left   = tex.sp(tab["padding-left"])   end
+    if tab["padding-right"]  then tab.padding_right  = tex.sp(tab["padding-right"])  end
+
+
+    if css_rules and type(css_rules) == "table" then
+        for k,v in pairs(css_rules) do
+            tab[k]=v
+        end
+    end
+
+    if graphic then
+        local mp = mplib.new({mem_name = 'plain', find_file = metapost.finder,ini_version=true })
+        local l = mp:execute("input plain;")
+        l = mp:execute(string.format("box_width = %fbp;",width / 65782))
+        l = mp:execute(string.format("box_height = %fbp;",height / 65782))
+
+        for name,v in pairs(publisher.metapostcolors) do
+            if v.model == "cmyk" then
+                l = mp:execute(string.format("cmykcolor colors_%s; colors_%s := (%g, %g, %g, %g);",name, name, v.c, v.m, v.y, v.k ))
+            elseif v.model == "rgb" then
+                l = mp:execute(string.format("rgbcolor colors_%s; colors_%s := (%g, %g, %g);",name, name, v.r, v.g, v.b ))
+            end
+        end
+
+        for name, v in pairs(publisher.metapostvariables) do
+            local expr
+            expr = string.format("%s %s ; %s := %s ;", v.typ,name,name,v[1])
+            l = mp:execute(expr)
+        end
+
+        l = mp:execute(publisher.metapostgraphics[graphic])
+        if l.status > 0 then
+            w("l.term %s",tostring(l.term))
+        end
+
+        local pdfstring
+        if l and l.fig and l.fig[1] then
+            pdfstring = "q " .. metapost.pstopdf(l.fig[1]:postscript()) .. " Q"
+            -- w("pdfstring %s",tostring(pdfstring))
+        end
+        mp:finish();
+        local a=node.new("whatsit","pdf_literal")
+        a.data = pdfstring
+        a.mode = 0
+        a = node.hpack(a,width,"exactly")
+        a.height = height
+        a = node.vpack(a)
+        return a
+
+    end
+
+    local current_grid = publisher.current_grid
+
     local shift_left,shift_up = 0,0
 
     if tab.padding_left then
@@ -556,6 +604,7 @@ function commands.define_color( layoutxml,dataxml )
         color.y = publisher.read_attribute(layoutxml,dataxml,"y","number")
         color.k = publisher.read_attribute(layoutxml,dataxml,"k","number")
         color.pdfstring = string.format("%s %g %g %g %g k %g %g %g %g K", op, color.c/100, color.m/100, color.y/100, color.k/100,color.c/100, color.m/100, color.y/100, color.k/100)
+        publisher.metapostcolors[name] = {model = "cmyk", c = color.c/100, m = color.m/100, y = color.y/100, k = color.k/100 }
     elseif model=="rgb" then
         color.r = publisher.read_attribute(layoutxml,dataxml,"r","number") / 100
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number") / 100
@@ -583,6 +632,7 @@ function commands.define_color( layoutxml,dataxml )
         color.r,color.g,color.b = publisher.getrgb(value)
         color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
         model = "rgb"
+        publisher.metapostcolors[name] = {model = model, r = color.r, g = color.g, b = color.b }
     else
         err("Unknown color model: %s",model or "?")
     end
@@ -606,6 +656,15 @@ function commands.define_colorprofile( layoutxml,dataxml )
     local name       = publisher.read_attribute(layoutxml,dataxml,"name",      "rawstring")
     local registry   = publisher.read_attribute(layoutxml,dataxml,"registry",  "string","http://www.color.org")
     spotcolors.register_colorprofile(name,{filename = filename, identifier = identifier, condition = condition, registry = registry, colors = colors, info = info })
+end
+
+--- DefineGraphic
+--- ------------
+--- Define a metapost graphic for later use
+function commands.define_graphic(layoutxml,dataxml)
+    local name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
+    local code = layoutxml[1]
+    publisher.metapostgraphics[name] = code
 end
 
 
@@ -3170,7 +3229,8 @@ function commands.setvariable( layoutxml,dataxml )
     local trace_p   = publisher.options.showassignments or publisher.read_attribute(layoutxml,dataxml,"trace","boolean")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
     local varname   = publisher.read_attribute(layoutxml,dataxml,"variable","rawstring")
-    -- FIXME: if the variable contains nodes, the must be freed:
+    local typ      = publisher.read_attribute(layoutxml,dataxml,"type","rawstring","sd")
+    -- FIXME: if the variable contains nodes, the must be freed.
 
     if not varname then
         err("Variable name in “SetVariable” not recognized")
@@ -3241,7 +3301,11 @@ function commands.setvariable( layoutxml,dataxml )
         end
     end
     publisher.flush_variable(varname)
-    publisher.xpath.set_variable(varname,contents)
+    if string.sub(typ,1,2) == "mp" then
+        publisher.metapostvariables[varname] = { typ = string.sub(typ,4), contents}
+    else
+        publisher.xpath.set_variable(varname,contents)
+    end
 end
 
 --- SortSequence

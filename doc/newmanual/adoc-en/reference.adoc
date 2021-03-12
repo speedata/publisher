@@ -267,6 +267,13 @@ include::ref/definefontfamily.adoc[]
 
 The section about <<ch-fonts>> and the command <<cmd-definefontalias,`<DefineFontalias>`>> as well as <<cmd-loadfontfile,`<LoadFontfile>`>>.
 
+include::ref/definegraphic.adoc[]
+
+== See also
+
+The section <<ch-advancedtopics-metapostgraphics>> in the avanced topics section.
+
+
 include::ref/definematter.adoc[]
 
 == See also
@@ -608,7 +615,7 @@ include::ref/setvariable.adoc[]
 
 == See also
 
-The section <<ch-programming>>
+The sections <<ch-programming>> and <<ch-advancedtopics-metapostgraphics>>.
 
 
 include::ref/sortsequence.adoc[]

@@ -143,6 +143,7 @@
     <optional><cmd name="DefineColor"/></optional>
     <optional><cmd name="DefineColorprofile"/></optional>
     <optional><cmd name="DefineFontalias"/></optional>
+    <optional><cmd name="DefineGraphic"/></optional>
     <optional><cmd name="DefineFontfamily"/></optional>
     <optional><cmd name="DefineTextformat"/></optional>
     <optional><cmd name="DefineMatter"></cmd></optional>
@@ -1415,6 +1416,14 @@
         <para>CSS Klasse für diese Box.</para>
       </description>
     </attribute>
+    <attribute en="graphic" optional="yes" since="4.3.10" type="text">
+      <description xml:lang="en">
+        <para>The name of the metapost graphic to use instead of the box.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name der Metapost Grafik, die anstelle der Box angezeigt werden soll.</para>
+      </description>
+    </attribute>
     <attribute en="height" type="numberorlength" optional="no">
       <description xml:lang="en">
         <para>Height of the box in grid cells.</para>
@@ -2263,6 +2272,54 @@
     <info xml:lang="de"><para>Die Farben aus CSS Level 3 sind vordefinert im RGB-Farbraum. Siehe http://www.w3.org/TR/css3-color/ für die Definitionen. Damit kann man häufige Farben wie <tt>red</tt> oder <tt>goldenrod</tt> benutzen, ohne sie vorher mit <cmd name="DefineColor"/> zu definieren.</para>
       <para>Die vordefinierten Farben sind <tt>aliceblue</tt>, <tt>black</tt>, <tt>orange</tt>, <tt>rebeccapurple</tt>, <tt>antiquewhite</tt>, <tt>aqua</tt>, <tt>aquamarine</tt>, <tt>azure</tt>, <tt>beige</tt>, <tt>bisque</tt>, <tt>blanchedalmond</tt>, <tt>blue</tt>, <tt>blueviolet</tt>, <tt>brown</tt>, <tt>burlywood</tt>, <tt>cadetblue</tt>, <tt>chartreuse</tt>, <tt>chocolate</tt>, <tt>coral</tt>, <tt>cornflowerblue</tt>, <tt>cornsilk</tt>, <tt>crimson</tt>, <tt>darkblue</tt>, <tt>darkcyan</tt>, <tt>darkgoldenrod</tt>, <tt>darkgray</tt>, <tt>darkgreen</tt>, <tt>darkgrey</tt>, <tt>darkkhaki</tt>, <tt>darkmagenta</tt>, <tt>darkolivegreen</tt>, <tt>darkorange</tt>, <tt>darkorchid</tt>, <tt>darkred</tt>, <tt>darksalmon</tt>, <tt>darkseagreen</tt>, <tt>darkslateblue</tt>, <tt>darkslategray</tt>, <tt>darkslategrey</tt>, <tt>darkturquoise</tt>, <tt>darkviolet</tt>, <tt>deeppink</tt>, <tt>deepskyblue</tt>, <tt>dimgray</tt>, <tt>dimgrey</tt>, <tt>dodgerblue</tt>, <tt>firebrick</tt>, <tt>floralwhite</tt>, <tt>forestgreen</tt>, <tt>fuchsia</tt>, <tt>gainsboro</tt>, <tt>ghostwhite</tt>, <tt>gold</tt>, <tt>goldenrod</tt>, <tt>gray</tt>, <tt>green</tt>, <tt>greenyellow</tt>, <tt>grey</tt>, <tt>honeydew</tt>, <tt>hotpink</tt>, <tt>indianred</tt>, <tt>indigo</tt>, <tt>ivory</tt>, <tt>khaki</tt>, <tt>lavender</tt>, <tt>lavenderblush</tt>, <tt>lawngreen</tt>, <tt>lemonchiffon</tt>, <tt>lightblue</tt>, <tt>lightcoral</tt>, <tt>lightcyan</tt>, <tt>lightgoldenrodyellow</tt>, <tt>lightgray</tt>, <tt>lightgreen</tt>, <tt>lightgrey</tt>, <tt>lightpink</tt>, <tt>lightsalmon</tt>, <tt>lightseagreen</tt>, <tt>lightskyblue</tt>, <tt>lightslategray</tt>, <tt>lightslategrey</tt>, <tt>lightsteelblue</tt>, <tt>lightyellow</tt>, <tt>lime</tt>, <tt>limegreen</tt>, <tt>linen</tt>, <tt>maroon</tt>, <tt>mediumaquamarine</tt>, <tt>mediumblue</tt>, <tt>mediumorchid</tt>, <tt>mediumpurple</tt>, <tt>mediumseagreen</tt>, <tt>mediumslateblue</tt>, <tt>mediumspringgreen</tt>, <tt>mediumturquoise</tt>, <tt>mediumvioletred</tt>, <tt>midnightblue</tt>, <tt>mintcream</tt>, <tt>mistyrose</tt>, <tt>moccasin</tt>, <tt>navajowhite</tt>, <tt>navy</tt>, <tt>oldlace</tt>, <tt>olive</tt>, <tt>olivedrab</tt>, <tt>orangered</tt>, <tt>orchid</tt>, <tt>palegoldenrod</tt>, <tt>palegreen</tt>, <tt>paleturquoise</tt>, <tt>palevioletred</tt>, <tt>papayawhip</tt>, <tt>peachpuff</tt>, <tt>peru</tt>, <tt>pink</tt>, <tt>plum</tt>, <tt>powderblue</tt>, <tt>purple</tt>, <tt>red</tt>, <tt>rosybrown</tt>, <tt>royalblue</tt>, <tt>saddlebrown</tt>, <tt>salmon</tt>, <tt>sandybrown</tt>, <tt>seagreen</tt>, <tt>seashell</tt>, <tt>sienna</tt>, <tt>silver</tt>, <tt>skyblue</tt>, <tt>slateblue</tt>, <tt>slategray</tt>, <tt>slategrey</tt>, <tt>snow</tt>, <tt>springgreen</tt>, <tt>steelblue</tt>, <tt>tan</tt>, <tt>teal</tt>, <tt>thistle</tt>, <tt>tomato</tt>, <tt>turquoise</tt>, <tt>violet</tt>, <tt>wheat</tt>, <tt>white</tt>, <tt>whitesmoke</tt>, <tt>yellow</tt> und <tt>yellowgreen</tt>.</para></info>
     <seealso/>
+  </command>
+  <command en="DefineGraphic" since="4.3.10">
+    <description xml:lang="en">
+      <para>Define a metapost graphic to be used in Box. EXPERIMENTAL!</para>
+    </description>
+    <description xml:lang="de">
+      <para>Definiere eine Metapost-Grafik die in Box benutzt werden kann. Experimentell!</para>
+    </description>
+    <childelements><text/></childelements>
+    <attribute en="name" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>The name of the graphic.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name der Grafik.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<DefineGraphic name="dottedbox">
+   beginfig(1);
+        pickup pencircle scaled 0.4mm;
+        draw (0,0) -- (box_width,0) -- (box_width, box_height) -- (0, box_height) -- cycle dashed withdots ;
+    endfig;
+</DefineGraphic>
+
+<Record element="data">
+    <PlaceObject row="3" column="1">
+        <Box height="5" width="1" graphic="dottedbox" />
+    </PlaceObject>
+</Record>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<DefineGraphic name="dottedbox">
+   beginfig(1);
+        pickup pencircle scaled 0.4mm;
+        draw (0,0) -- (box_width,0) -- (box_width, box_height) -- (0, box_height) -- cycle dashed withdots ;
+    endfig;
+</DefineGraphic>
+
+<Record element="data">
+    <PlaceObject row="3" column="1">
+        <Box height="5" width="1" graphic="dottedbox" />
+    </PlaceObject>
+</Record>
+]]></listing>
+    </example>
+    <seealso></seealso>
   </command>
   <command en="DefineFontalias" since="2.7.12">
     <description xml:lang="en">
@@ -7534,6 +7591,38 @@
       <description xml:lang="de">
         <para>Inhalt, der der Variablen zugewiesen wird.</para>
       </description>
+    </attribute>
+    <attribute en="type" optional="yes" since="4.3.10">
+      <description xml:lang="en">
+        <para>Set the data type of the variable. Currently only supported for MetaPost variables.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setzt den Datentyp der Variable. Derzeit nur für MetaPost-Variablen unterstützt.</para>
+      </description>
+      <choice en="sd:any">
+        <description xml:lang="en">
+          <para>The default (any) datatype for variables in the speedata layout language.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der voreingestellte Datentyp für die speedata Layoutsprache.</para>
+        </description>
+      </choice>
+      <choice en="mp:cmykcolor">
+        <description xml:lang="en">
+          <para>A MetaPost CMYK color.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Eine MetaPost CMYK Farbe.</para>
+        </description>
+      </choice>
+      <choice en="mp:rgbcolor">
+        <description xml:lang="en">
+          <para>A MetaPost RGB color.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Eine MetaPost RGB Farbe.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="trace" optional="yes">
       <description xml:lang="en">

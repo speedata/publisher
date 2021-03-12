@@ -279,6 +279,10 @@ marker_min = {}
 marker_max = {}
 marker_id_value = {}
 
+-- metapost graphics. Keys are name and values are "beginfig(1)...." texts.
+metapostgraphics = {}
+metapostcolors = {}
+metapostvariables = {}
 
 -- The spot colors used in the document (even when discarded)
 used_spotcolors = {}
@@ -592,6 +596,7 @@ local dispatch_table = {
     DefineColorprofile      = commands.define_colorprofile,
     DefineFontfamily        = commands.define_fontfamily,
     DefineFontalias         = commands.define_fontalias,
+    DefineGraphic           = commands.define_graphic,
     DefineTextformat        = commands.define_textformat,
     DefineMatter            = commands.definematter,
     Element                 = commands.element,

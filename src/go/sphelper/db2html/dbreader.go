@@ -75,6 +75,7 @@ func init() {
 		"objekteausgeben", "outputtingobjects",
 		"advancedtopics", "fortgeschrittenethemen",
 		"advanced-cotrollayout", "fortgeschrittenethemen-steuerunglayout",
+		"metapostgrafiken", "metapostgraphics",
 		"preprocessing", "luafilter",
 		"schemavalidation", "schemavalidierung",
 		"servermode", "servermodus",

@@ -486,6 +486,11 @@
           <xs:documentation>CSS Klasse für diese Box.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="graphic">
+        <xs:annotation>
+          <xs:documentation>Der Name der Metapost Grafik, die anstelle der Box angezeigt werden soll.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="height" use="required">
         <xs:annotation>
           <xs:documentation>Höhe der Box in Rasterzellen.</xs:documentation>
@@ -1003,6 +1008,18 @@
       <xs:attribute name="k">
         <xs:annotation>
           <xs:documentation>Schwarz (key) Anteil bei CMYK</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DefineGraphic">
+    <xs:annotation>
+      <xs:documentation>Definiere eine Metapost-Grafik die in Box benutzt werden kann. Experimentell!</xs:documentation>
+    </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:attribute name="name">
+        <xs:annotation>
+          <xs:documentation>Der Name der Grafik.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
@@ -2110,6 +2127,7 @@
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineColorprofile"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
+        <xs:element minOccurs="0" ref="en:DefineGraphic"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineTextformat"/>
         <xs:element minOccurs="0" ref="en:DefineMatter"/>
@@ -4964,6 +4982,30 @@
         <xs:annotation>
           <xs:documentation>Inhalt, der der Variablen zugewiesen wird.</xs:documentation>
         </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="type">
+        <xs:annotation>
+          <xs:documentation>Setzt den Datentyp der Variable. Derzeit nur für MetaPost-Variablen unterstützt.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="sd:any">
+              <xs:annotation>
+                <xs:documentation>Der voreingestellte Datentyp für die speedata Layoutsprache.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="mp:cmykcolor">
+              <xs:annotation>
+                <xs:documentation>Eine MetaPost CMYK Farbe.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="mp:rgbcolor">
+              <xs:annotation>
+                <xs:documentation>Eine MetaPost RGB Farbe.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="trace">
         <xs:annotation>
