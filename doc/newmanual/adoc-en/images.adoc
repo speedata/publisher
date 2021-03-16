@@ -17,7 +17,7 @@ Inserting images into the PDF is very easy, a short command is enough:
 </Record>
 -------------------------------------------------------------------------------
 
-The image `{samplea}` is (like `{sampleb}`) part of the Publisher and can be used for testing purposes. As image formats PDF, PNG and JPEG are possible. Other formats must be converted into one of these formats before processing. If the program inkscape is installed, it is used to automatically convert SVG files to PDF. The format that causes the least problems in practice is PDF. Here, color profiles can also be embedded.
+The image `{samplea}` is (like `{sampleb}`) part of the Publisher and can be used for testing purposes. As image formats PDF, PNG and JPEG are possible. Other formats must be converted into one of these formats before processing. If the program inkscape is installed, it is used to automatically convert SVG files to PDF (check the section about the <<ch-configuration,configuration>> for setting the command line parameters for inkscape). The format that causes the least problems in practice is PDF. Here, color profiles can also be embedded.
 
 The images are not changed during processing in the Publisher, i.e. they retain their original (file) size, among other things. With very large images, the processing speed is lower and the size of the resulting PDF file naturally increases. Therefore it may be worthwhile to have special versions with smaller file sizes available for processing.
 

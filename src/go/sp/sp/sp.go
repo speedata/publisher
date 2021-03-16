@@ -124,6 +124,7 @@ func init() {
 		"tempdir":           os.TempDir(),
 		"cache":             "optimal",
 		"inkscape":          "inkscape",
+		"inkscape-command":  "--export-pdf",
 		"fontloader":        "fontforge",
 		"referencefilename": "reference",
 	}
@@ -923,6 +924,7 @@ func main() {
 	os.Setenv("SP_FONT_PATH", getOption("fontpath"))
 	os.Setenv("SP_PATH_REWRITE", getOption("pathrewrite"))
 	os.Setenv("SP_INKSCAPE", getOption("inkscape"))
+	os.Setenv("SP_INKSCAPECMD", getOption("inkscape-command"))
 
 	ic := getOption("imagecache")
 	if ic == "" {

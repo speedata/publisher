@@ -19,7 +19,7 @@ Bilder in das PDF einfügen ist sehr einfach, es reicht ein kurzer Befehl:
 Das Bild  `{samplea}` ist (wie `{sampleb}`) Bestandteil des Publishers und für Testzwecke gut nutzbar.
 Als Bildformate sind PDF, PNG und JPEG möglich.
 Andere Formate müssen vor der Verarbeitung in eines dieser Formate konvertiert werden.
-Wenn das Programm inkscape installiert ist, wird das genutzt um Dateien im SVG-Format automatisch nach PDF zu konviertieren.
+Wenn das Programm inkscape installiert ist, wird das genutzt um Dateien im SVG-Format automatisch nach PDF zu konviertieren (siehe dazu den Abschnitt über <<ch-konfiguration,Konfiguration>> - dort können auch die Kommandozeilenparameter für die Konvertierung gesetzt werden).
 Das Format, das in der Praxis am wenigsten Probleme
 bereitet ist PDF. Hier können auch Farbprofile eingebettet werden.
 

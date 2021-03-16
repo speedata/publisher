@@ -293,9 +293,10 @@ func ConvertSVGImage(filename string) (string, error) {
 		fmt.Println("SP_INKSCAPE should be set. Why is it empty?")
 		binaryname = "inkscape"
 	}
+	argument := os.Getenv("SP_INKSCAPECMD")
 
 	fmt.Print("Running inkscape on ", svgfile, "...")
-	cmd := exec.Command(binaryname, "--export-pdf", pdffile, svgfile)
+	cmd := exec.Command(binaryname, argument, pdffile, svgfile)
 	out, err := cmd.CombinedOutput()
 	fmt.Println("done. Output follows (if any):")
 	fmt.Println(string(out))

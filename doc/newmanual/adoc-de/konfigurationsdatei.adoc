@@ -74,6 +74,8 @@ erkannt. Folgende Optionen werden unterstützt:
   Ignoriere die Groß- und Kleinschreibung für Dateizugriff.
 `inkscape`::
   Pfad zum Inkscape-Programm.
+`inkscape-command`::
+  Befehlszeile zur Bildkonvertierung. In Version 0.92 und vorher ist dies `--export-pdf` und ab Version 1 ist das `--export-filename`.
 `jobname`::
   Name der Ausgabedatei ohne Dateiendung. Voreinstellung ist `publisher`.
 `layout`::

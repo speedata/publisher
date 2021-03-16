@@ -68,6 +68,8 @@ The format of the file is important, otherwise it won’t be recognized. The fol
    Ignore case when accessing files (on a case-insensitive file system).
 `inkscape`::
    The path to the program inkscape when you need on the fly SVG to PDF conversion.
+`inkscape-command`::
+  Command line for image conversion. Version 0.92 and before needs `--export-pdf` and since version 1 it is `--export-filename`.
 `jobname`::
    Name of the output file. Default is `publisher`.
 `layout`::
