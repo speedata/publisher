@@ -10,7 +10,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strconv"
 	"strings"
 )
@@ -296,12 +295,6 @@ func ConvertSVGImage(filename string) (string, error) {
 	}
 
 	fmt.Print("Running inkscape on ", svgfile, "...")
-	switch runtime.GOOS {
-	case "windows":
-		if !strings.HasSuffix(binaryname, ".exe") {
-			binaryname = binaryname + ".exe"
-		}
-	}
 	cmd := exec.Command(binaryname, "--export-pdf", pdffile, svgfile)
 	out, err := cmd.CombinedOutput()
 	fmt.Println("done. Output follows (if any):")
