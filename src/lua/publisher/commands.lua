@@ -356,16 +356,41 @@ function commands.box( layoutxml,dataxml )
     end
 
     if graphic then
+        local declarations = {}
         local mp = mplib.new({mem_name = 'plain', find_file = metapost.finder,ini_version=true })
         local l = mp:execute("input plain;")
+        if l.status > 0 then
+            w("l.term (a) %s",tostring(l.term))
+        end
+
         l = mp:execute(string.format("box_width = %fbp;",width / 65782))
+        if l.status > 0 then
+            w("l.term (b) %s",tostring(l.term))
+        end
         l = mp:execute(string.format("box_height = %fbp;",height / 65782))
+        if l.status > 0 then
+            w("l.term (c) %s",tostring(l.term))
+        end
 
         for name,v in pairs(publisher.metapostcolors) do
             if v.model == "cmyk" then
-                l = mp:execute(string.format("cmykcolor colors_%s; colors_%s := (%g, %g, %g, %g);",name, name, v.c, v.m, v.y, v.k ))
-            elseif v.model == "rgb" then
-                l = mp:execute(string.format("rgbcolor colors_%s; colors_%s := (%g, %g, %g);",name, name, v.r, v.g, v.b ))
+                local varname = string.gsub(name,"%d","[]")
+                local decl = string.format("cmykcolor colors_%s;",varname)
+                if not declarations[decl] then
+                    declarations[decl] = true
+                    l = mp:execute(decl)
+                    if l.status > 0 then
+                        w("l.term (1) %s",tostring(l.term))
+                    end
+                end
+                local mpstatement = string.format("colors_%s := (%g, %g, %g, %g);",name, v.c, v.m, v.y, v.k )
+
+                l = mp:execute(mpstatement)
+                if l.status > 0 then
+                    w("l.term (2) %s",tostring(l.term))
+                end
+                    elseif v.model == "rgb" then
+                l = mp:execute(string.format("rgbcolor colors_%s; colors_%s := (%g, %g, %g);",varname, name, v.r, v.g, v.b ))
             end
         end
 
@@ -376,8 +401,12 @@ function commands.box( layoutxml,dataxml )
         end
 
         l = mp:execute(publisher.metapostgraphics[graphic])
-        if l.status > 0 then
-            w("l.term %s",tostring(l.term))
+        if not l then
+            err("Something is wrong with the metapost graphic %s", graphic)
+            return
+        end
+        if l and l.status > 0 then
+            w("l.term (3) %s",tostring(l.term))
         end
 
         local pdfstring
