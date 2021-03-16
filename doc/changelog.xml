@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.4">
+    <entry version="4.3.11" date="2021-03-16">
+        <en>Bugfix for Incscape on Windows (#324).</en>
+        <de>Fehlerkorrektur für Incscape auf Windows (#324).</de>
+    </entry>
+    <entry version="4.3.11" date="2021-03-16">
+        <en>Include metapost format in distribution.</en>
+        <de>Metapost Format in das Paket mit inkludieren.</de>
+    </entry>
     <entry version="4.3.10" date="2021-03-12">
         <en>Basic MetaPost functionality.</en>
         <de>Grundlegende MetaPost Funktionalität.</de>
