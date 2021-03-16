@@ -1185,7 +1185,15 @@ end
 --- The contents of this element must be a string such as `hy-phen-ation`.
 -- FIXME: allow language attribute.
 function commands.hyphenation( layoutxml,dataxml )
-    local l = publisher.get_language(publisher.defaultlanguage)
+    local languagename = publisher.read_attribute(layoutxml,dataxml,"language","rawstring")
+    local languagecode
+    if languagename then
+        languagecode = publisher.get_languagecode(languagename)
+    else
+        languagecode = publisher.defaultlanguage
+    end
+
+    local l = publisher.get_language(languagecode)
     lang.hyphenation(l.l,layoutxml[1])
 end
 

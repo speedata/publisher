@@ -1656,10 +1656,454 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  <xs:element name="Hyphenation" type="xs:string">
+  <xs:element name="Hyphenation">
     <xs:annotation>
       <xs:documentation>Erzeugt einen Trennvorschlag für die automatische Silbentrennung. Die Trennvorschläge werden dann benutzt, wenn die automatische Silbentrennung fehlerhaft trennt. Alle Trennstellen müssen mit eine Bindestrich (-) markiert werden (s. Beispiel).</xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:attribute name="language">
+        <xs:annotation>
+          <xs:documentation>Die Sprache für diese Trennausnahme. Die Voreinstellung ist die Hauptsprache des Dokuments.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Ancient Greek">
+                  <xs:annotation>
+                    <xs:documentation>Altgriechisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Armenian">
+                  <xs:annotation>
+                    <xs:documentation>Armenisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Bahasa Indonesia">
+                  <xs:annotation>
+                    <xs:documentation>Indonesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Basque">
+                  <xs:annotation>
+                    <xs:documentation>Baskisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Bulgarian">
+                  <xs:annotation>
+                    <xs:documentation>Bulgarisch (lateinisches Alphabet)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Catalan">
+                  <xs:annotation>
+                    <xs:documentation>Katalanisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Chinese">
+                  <xs:annotation>
+                    <xs:documentation>Auf chinsische Sprache umschalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Croatian">
+                  <xs:annotation>
+                    <xs:documentation>Kroatisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Czech">
+                  <xs:annotation>
+                    <xs:documentation>Tschechisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Danish">
+                  <xs:annotation>
+                    <xs:documentation>Dänisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Dutch">
+                  <xs:annotation>
+                    <xs:documentation>Niederländisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="English (Great Britain)">
+                  <xs:annotation>
+                    <xs:documentation>GB-Englisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="English (USA)">
+                  <xs:annotation>
+                    <xs:documentation>US-Englisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Esperanto">
+                  <xs:annotation>
+                    <xs:documentation>Esperanto</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Estonian">
+                  <xs:annotation>
+                    <xs:documentation>Estnisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Finnish">
+                  <xs:annotation>
+                    <xs:documentation>Finnisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="French">
+                  <xs:annotation>
+                    <xs:documentation>Französisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Galician">
+                  <xs:annotation>
+                    <xs:documentation>Galicisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="German">
+                  <xs:annotation>
+                    <xs:documentation>Deutsch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Greek">
+                  <xs:annotation>
+                    <xs:documentation>Neugriechisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Gujarati">
+                  <xs:annotation>
+                    <xs:documentation>Gujarati</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Hungarian">
+                  <xs:annotation>
+                    <xs:documentation>Ungarisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Hindi">
+                  <xs:annotation>
+                    <xs:documentation>Hindi</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Icelandic">
+                  <xs:annotation>
+                    <xs:documentation>Isländisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Irish">
+                  <xs:annotation>
+                    <xs:documentation>Irisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Italian">
+                  <xs:annotation>
+                    <xs:documentation>Italienisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Kannada">
+                  <xs:annotation>
+                    <xs:documentation>Kanaresisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Kurmanji">
+                  <xs:annotation>
+                    <xs:documentation>Kurmandschi</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Latvian">
+                  <xs:annotation>
+                    <xs:documentation>Lettisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Lithuanian">
+                  <xs:annotation>
+                    <xs:documentation>Litauisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Malayalam">
+                  <xs:annotation>
+                    <xs:documentation>Malayalam</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Norwegian Bokmål">
+                  <xs:annotation>
+                    <xs:documentation>Norwegisch (Bokmål).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Norwegian Nynorsk">
+                  <xs:annotation>
+                    <xs:documentation>Norwegisch (Nynorsk).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Other">
+                  <xs:annotation>
+                    <xs:documentation>Auf keine der anderen Sprachen umschalten. Hilfreich bei Darstellungsproblemen.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Polish">
+                  <xs:annotation>
+                    <xs:documentation>Polnisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Portuguese">
+                  <xs:annotation>
+                    <xs:documentation>Portugiesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Romanian">
+                  <xs:annotation>
+                    <xs:documentation>Rumänisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Russian">
+                  <xs:annotation>
+                    <xs:documentation>Russisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Serbian">
+                  <xs:annotation>
+                    <xs:documentation>Serbisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Serbian (cyrillic)">
+                  <xs:annotation>
+                    <xs:documentation>Serbisch (kyrillische Buchstaben).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Slovak">
+                  <xs:annotation>
+                    <xs:documentation>Slowakisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Slovenian">
+                  <xs:annotation>
+                    <xs:documentation>Slowenisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Spanish">
+                  <xs:annotation>
+                    <xs:documentation>Spanisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Swedish">
+                  <xs:annotation>
+                    <xs:documentation>Schwedisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Turkish">
+                  <xs:annotation>
+                    <xs:documentation>Türkisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Ukrainian">
+                  <xs:annotation>
+                    <xs:documentation>Ukrainisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Welsh">
+                  <xs:annotation>
+                    <xs:documentation>Walisisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
   </xs:element>
   <xs:element name="HSpace">
     <xs:annotation>
@@ -2721,7 +3165,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ancient Greek">
                   <xs:annotation>
-                    <xs:documentation>Altgriechische Trennmuster.</xs:documentation>
+                    <xs:documentation>Altgriechisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2730,7 +3174,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Armenian">
                   <xs:annotation>
-                    <xs:documentation>Auf armenische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Armenisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2739,7 +3183,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bahasa Indonesia">
                   <xs:annotation>
-                    <xs:documentation>Auf indonesische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Indonesisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2748,7 +3192,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Basque">
                   <xs:annotation>
-                    <xs:documentation>Auf baskische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Baskisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2757,7 +3201,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bulgarian">
                   <xs:annotation>
-                    <xs:documentation>Auf bulgarische (lateinisches Alphabet) Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Bulgarisch (lateinisches Alphabet)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2766,7 +3210,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Catalan">
                   <xs:annotation>
-                    <xs:documentation>Auf katalanische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Katalanisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2784,7 +3228,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Croatian">
                   <xs:annotation>
-                    <xs:documentation>Auf kroatische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Kroatisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2793,7 +3237,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Czech">
                   <xs:annotation>
-                    <xs:documentation>Auf tschechische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Tschechisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2802,7 +3246,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Danish">
                   <xs:annotation>
-                    <xs:documentation>Auf dänische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Dänisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2811,7 +3255,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Dutch">
                   <xs:annotation>
-                    <xs:documentation>Auf niederländische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Niederländisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2820,7 +3264,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (Great Britain)">
                   <xs:annotation>
-                    <xs:documentation>Auf GB-englische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>GB-Englisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2829,7 +3273,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (USA)">
                   <xs:annotation>
-                    <xs:documentation>Auf US-englische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>US-Englisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2838,7 +3282,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Esperanto">
                   <xs:annotation>
-                    <xs:documentation>Auf Esperanto Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Esperanto</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2847,7 +3291,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Estonian">
                   <xs:annotation>
-                    <xs:documentation>Auf estnische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Estnisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2856,7 +3300,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Finnish">
                   <xs:annotation>
-                    <xs:documentation>Auf finnische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Finnisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2865,7 +3309,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="French">
                   <xs:annotation>
-                    <xs:documentation>Französische Trennmuster</xs:documentation>
+                    <xs:documentation>Französisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2874,7 +3318,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Galician">
                   <xs:annotation>
-                    <xs:documentation>Auf galicische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Galicisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2883,7 +3327,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="German">
                   <xs:annotation>
-                    <xs:documentation>Auf deutsche Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Deutsch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2901,7 +3345,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Gujarati">
                   <xs:annotation>
-                    <xs:documentation>Auf Gujarati Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Gujarati</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2910,7 +3354,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hungarian">
                   <xs:annotation>
-                    <xs:documentation>Auf ungarische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Ungarisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2919,7 +3363,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hindi">
                   <xs:annotation>
-                    <xs:documentation>Auf Hindi Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Hindi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2928,7 +3372,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Icelandic">
                   <xs:annotation>
-                    <xs:documentation>Auf isländische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Isländisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2937,7 +3381,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Irish">
                   <xs:annotation>
-                    <xs:documentation>Auf irische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Irisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2946,7 +3390,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Italian">
                   <xs:annotation>
-                    <xs:documentation>Auf italienische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Italienisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2955,7 +3399,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kannada">
                   <xs:annotation>
-                    <xs:documentation>Auf kanaresische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Kanaresisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2964,7 +3408,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kurmanji">
                   <xs:annotation>
-                    <xs:documentation>Auf Kurmandschi Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Kurmandschi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2973,7 +3417,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Latvian">
                   <xs:annotation>
-                    <xs:documentation>Auf lettische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Lettisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2982,7 +3426,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Lithuanian">
                   <xs:annotation>
-                    <xs:documentation>Auf litauische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Litauisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2991,7 +3435,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Malayalam">
                   <xs:annotation>
-                    <xs:documentation>Auf Malayalam Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Malayalam</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3000,7 +3444,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Bokmål">
                   <xs:annotation>
-                    <xs:documentation>Auf norwegische Trennmuster umschalten (Bokmål).</xs:documentation>
+                    <xs:documentation>Norwegisch (Bokmål).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3009,7 +3453,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Nynorsk">
                   <xs:annotation>
-                    <xs:documentation>Auf norwegische Trennmuster umschalten (Nynorsk).</xs:documentation>
+                    <xs:documentation>Norwegisch (Nynorsk).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3027,7 +3471,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Polish">
                   <xs:annotation>
-                    <xs:documentation>Auf polnische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Polnisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3036,7 +3480,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Portuguese">
                   <xs:annotation>
-                    <xs:documentation>Auf portugiesische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Portugiesisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3045,7 +3489,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Romanian">
                   <xs:annotation>
-                    <xs:documentation>Auf rumänische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Rumänisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3054,7 +3498,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Russian">
                   <xs:annotation>
-                    <xs:documentation>Auf russische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Russisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3063,7 +3507,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian">
                   <xs:annotation>
-                    <xs:documentation>Auf serbische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Serbisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3072,7 +3516,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian (cyrillic)">
                   <xs:annotation>
-                    <xs:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</xs:documentation>
+                    <xs:documentation>Serbisch (kyrillische Buchstaben).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3081,7 +3525,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovak">
                   <xs:annotation>
-                    <xs:documentation>Auf slowakische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Slowakisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3090,7 +3534,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovenian">
                   <xs:annotation>
-                    <xs:documentation>Auf slowenische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Slowenisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3099,7 +3543,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Spanish">
                   <xs:annotation>
-                    <xs:documentation>Auf spanische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Spanisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3108,7 +3552,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Swedish">
                   <xs:annotation>
-                    <xs:documentation>Auf schwedische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Schwedisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3117,7 +3561,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Turkish">
                   <xs:annotation>
-                    <xs:documentation>Auf türkische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Türkisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3126,7 +3570,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ukrainian">
                   <xs:annotation>
-                    <xs:documentation>Auf ukrainische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Ukrainisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3135,7 +3579,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Welsh">
                   <xs:annotation>
-                    <xs:documentation>Auf walisische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Walisisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3594,7 +4038,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ancient Greek">
                   <xs:annotation>
-                    <xs:documentation>Altgriechische Trennmuster.</xs:documentation>
+                    <xs:documentation>Altgriechisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3603,7 +4047,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Armenian">
                   <xs:annotation>
-                    <xs:documentation>Auf armenische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Armenisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3612,7 +4056,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bahasa Indonesia">
                   <xs:annotation>
-                    <xs:documentation>Auf indonesische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Indonesisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3621,7 +4065,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Basque">
                   <xs:annotation>
-                    <xs:documentation>Auf baskische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Baskisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3630,7 +4074,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bulgarian">
                   <xs:annotation>
-                    <xs:documentation>Auf bulgarische (lateinisches Alphabet) Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Bulgarisch (lateinisches Alphabet)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3639,7 +4083,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Catalan">
                   <xs:annotation>
-                    <xs:documentation>Auf katalanische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Katalanisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3657,7 +4101,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Croatian">
                   <xs:annotation>
-                    <xs:documentation>Auf kroatische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Kroatisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3666,7 +4110,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Czech">
                   <xs:annotation>
-                    <xs:documentation>Auf tschechische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Tschechisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3675,7 +4119,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Danish">
                   <xs:annotation>
-                    <xs:documentation>Auf dänische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Dänisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3684,7 +4128,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Dutch">
                   <xs:annotation>
-                    <xs:documentation>Auf niederländische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Niederländisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3693,7 +4137,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (Great Britain)">
                   <xs:annotation>
-                    <xs:documentation>Auf GB-englische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>GB-Englisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3702,7 +4146,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (USA)">
                   <xs:annotation>
-                    <xs:documentation>Auf US-englische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>US-Englisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3711,7 +4155,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Esperanto">
                   <xs:annotation>
-                    <xs:documentation>Auf Esperanto Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Esperanto</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3720,7 +4164,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Estonian">
                   <xs:annotation>
-                    <xs:documentation>Auf estnische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Estnisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3729,7 +4173,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Finnish">
                   <xs:annotation>
-                    <xs:documentation>Auf finnische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Finnisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3738,7 +4182,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="French">
                   <xs:annotation>
-                    <xs:documentation>Französische Trennmuster</xs:documentation>
+                    <xs:documentation>Französisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3747,7 +4191,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Galician">
                   <xs:annotation>
-                    <xs:documentation>Auf galicische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Galicisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3756,7 +4200,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="German">
                   <xs:annotation>
-                    <xs:documentation>Auf deutsche Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Deutsch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3774,7 +4218,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Gujarati">
                   <xs:annotation>
-                    <xs:documentation>Auf Gujarati Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Gujarati</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3783,7 +4227,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hungarian">
                   <xs:annotation>
-                    <xs:documentation>Auf ungarische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Ungarisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3792,7 +4236,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hindi">
                   <xs:annotation>
-                    <xs:documentation>Auf Hindi Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Hindi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3801,7 +4245,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Icelandic">
                   <xs:annotation>
-                    <xs:documentation>Auf isländische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Isländisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3810,7 +4254,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Irish">
                   <xs:annotation>
-                    <xs:documentation>Auf irische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Irisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3819,7 +4263,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Italian">
                   <xs:annotation>
-                    <xs:documentation>Auf italienische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Italienisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3828,7 +4272,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kannada">
                   <xs:annotation>
-                    <xs:documentation>Auf kanaresische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Kanaresisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3837,7 +4281,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kurmanji">
                   <xs:annotation>
-                    <xs:documentation>Auf Kurmandschi Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Kurmandschi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3846,7 +4290,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Latvian">
                   <xs:annotation>
-                    <xs:documentation>Auf lettische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Lettisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3855,7 +4299,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Lithuanian">
                   <xs:annotation>
-                    <xs:documentation>Auf litauische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Litauisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3864,7 +4308,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Malayalam">
                   <xs:annotation>
-                    <xs:documentation>Auf Malayalam Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Malayalam</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3873,7 +4317,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Bokmål">
                   <xs:annotation>
-                    <xs:documentation>Auf norwegische Trennmuster umschalten (Bokmål).</xs:documentation>
+                    <xs:documentation>Norwegisch (Bokmål).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3882,7 +4326,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Nynorsk">
                   <xs:annotation>
-                    <xs:documentation>Auf norwegische Trennmuster umschalten (Nynorsk).</xs:documentation>
+                    <xs:documentation>Norwegisch (Nynorsk).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3900,7 +4344,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Polish">
                   <xs:annotation>
-                    <xs:documentation>Auf polnische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Polnisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3909,7 +4353,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Portuguese">
                   <xs:annotation>
-                    <xs:documentation>Auf portugiesische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Portugiesisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3918,7 +4362,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Romanian">
                   <xs:annotation>
-                    <xs:documentation>Auf rumänische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Rumänisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3927,7 +4371,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Russian">
                   <xs:annotation>
-                    <xs:documentation>Auf russische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Russisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3936,7 +4380,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian">
                   <xs:annotation>
-                    <xs:documentation>Auf serbische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Serbisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3945,7 +4389,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian (cyrillic)">
                   <xs:annotation>
-                    <xs:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</xs:documentation>
+                    <xs:documentation>Serbisch (kyrillische Buchstaben).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3954,7 +4398,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovak">
                   <xs:annotation>
-                    <xs:documentation>Auf slowakische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Slowakisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3963,7 +4407,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovenian">
                   <xs:annotation>
-                    <xs:documentation>Auf slowenische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Slowenisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3972,7 +4416,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Spanish">
                   <xs:annotation>
-                    <xs:documentation>Auf spanische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Spanisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3981,7 +4425,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Swedish">
                   <xs:annotation>
-                    <xs:documentation>Auf schwedische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Schwedisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3990,7 +4434,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Turkish">
                   <xs:annotation>
-                    <xs:documentation>Auf türkische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Türkisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3999,7 +4443,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ukrainian">
                   <xs:annotation>
-                    <xs:documentation>Auf ukrainische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Ukrainisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -4008,7 +4452,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Welsh">
                   <xs:annotation>
-                    <xs:documentation>Auf walisische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Walisisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5165,7 +5609,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ancient Greek">
                   <xs:annotation>
-                    <xs:documentation>Altgriechische Trennmuster.</xs:documentation>
+                    <xs:documentation>Altgriechisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5174,7 +5618,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Armenian">
                   <xs:annotation>
-                    <xs:documentation>Auf armenische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Armenisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5183,7 +5627,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bahasa Indonesia">
                   <xs:annotation>
-                    <xs:documentation>Auf indonesische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Indonesisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5192,7 +5636,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Basque">
                   <xs:annotation>
-                    <xs:documentation>Auf baskische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Baskisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5201,7 +5645,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bulgarian">
                   <xs:annotation>
-                    <xs:documentation>Auf bulgarische (lateinisches Alphabet) Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Bulgarisch (lateinisches Alphabet)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5210,7 +5654,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Catalan">
                   <xs:annotation>
-                    <xs:documentation>Auf katalanische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Katalanisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5228,7 +5672,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Croatian">
                   <xs:annotation>
-                    <xs:documentation>Auf kroatische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Kroatisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5237,7 +5681,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Czech">
                   <xs:annotation>
-                    <xs:documentation>Auf tschechische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Tschechisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5246,7 +5690,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Danish">
                   <xs:annotation>
-                    <xs:documentation>Auf dänische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Dänisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5255,7 +5699,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Dutch">
                   <xs:annotation>
-                    <xs:documentation>Auf niederländische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Niederländisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5264,7 +5708,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (Great Britain)">
                   <xs:annotation>
-                    <xs:documentation>Auf GB-englische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>GB-Englisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5273,7 +5717,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (USA)">
                   <xs:annotation>
-                    <xs:documentation>Auf US-englische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>US-Englisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5282,7 +5726,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Esperanto">
                   <xs:annotation>
-                    <xs:documentation>Auf Esperanto Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Esperanto</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5291,7 +5735,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Estonian">
                   <xs:annotation>
-                    <xs:documentation>Auf estnische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Estnisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5300,7 +5744,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Finnish">
                   <xs:annotation>
-                    <xs:documentation>Auf finnische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Finnisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5309,7 +5753,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="French">
                   <xs:annotation>
-                    <xs:documentation>Französische Trennmuster</xs:documentation>
+                    <xs:documentation>Französisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5318,7 +5762,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Galician">
                   <xs:annotation>
-                    <xs:documentation>Auf galicische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Galicisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5327,7 +5771,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="German">
                   <xs:annotation>
-                    <xs:documentation>Auf deutsche Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Deutsch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5345,7 +5789,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Gujarati">
                   <xs:annotation>
-                    <xs:documentation>Auf Gujarati Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Gujarati</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5354,7 +5798,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hungarian">
                   <xs:annotation>
-                    <xs:documentation>Auf ungarische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Ungarisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5363,7 +5807,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hindi">
                   <xs:annotation>
-                    <xs:documentation>Auf Hindi Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Hindi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5372,7 +5816,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Icelandic">
                   <xs:annotation>
-                    <xs:documentation>Auf isländische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Isländisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5381,7 +5825,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Irish">
                   <xs:annotation>
-                    <xs:documentation>Auf irische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Irisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5390,7 +5834,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Italian">
                   <xs:annotation>
-                    <xs:documentation>Auf italienische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Italienisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5399,7 +5843,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kannada">
                   <xs:annotation>
-                    <xs:documentation>Auf kanaresische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Kanaresisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5408,7 +5852,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kurmanji">
                   <xs:annotation>
-                    <xs:documentation>Auf Kurmandschi Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Kurmandschi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5417,7 +5861,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Latvian">
                   <xs:annotation>
-                    <xs:documentation>Auf lettische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Lettisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5426,7 +5870,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Lithuanian">
                   <xs:annotation>
-                    <xs:documentation>Auf litauische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Litauisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5435,7 +5879,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Malayalam">
                   <xs:annotation>
-                    <xs:documentation>Auf Malayalam Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Malayalam</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5444,7 +5888,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Bokmål">
                   <xs:annotation>
-                    <xs:documentation>Auf norwegische Trennmuster umschalten (Bokmål).</xs:documentation>
+                    <xs:documentation>Norwegisch (Bokmål).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5453,7 +5897,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Nynorsk">
                   <xs:annotation>
-                    <xs:documentation>Auf norwegische Trennmuster umschalten (Nynorsk).</xs:documentation>
+                    <xs:documentation>Norwegisch (Nynorsk).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5471,7 +5915,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Polish">
                   <xs:annotation>
-                    <xs:documentation>Auf polnische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Polnisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5480,7 +5924,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Portuguese">
                   <xs:annotation>
-                    <xs:documentation>Auf portugiesische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Portugiesisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5489,7 +5933,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Romanian">
                   <xs:annotation>
-                    <xs:documentation>Auf rumänische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Rumänisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5498,7 +5942,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Russian">
                   <xs:annotation>
-                    <xs:documentation>Auf russische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Russisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5507,7 +5951,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian">
                   <xs:annotation>
-                    <xs:documentation>Auf serbische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Serbisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5516,7 +5960,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian (cyrillic)">
                   <xs:annotation>
-                    <xs:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</xs:documentation>
+                    <xs:documentation>Serbisch (kyrillische Buchstaben).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5525,7 +5969,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovak">
                   <xs:annotation>
-                    <xs:documentation>Auf slowakische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Slowakisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5534,7 +5978,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovenian">
                   <xs:annotation>
-                    <xs:documentation>Auf slowenische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Slowenisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5543,7 +5987,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Spanish">
                   <xs:annotation>
-                    <xs:documentation>Auf spanische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Spanisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5552,7 +5996,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Swedish">
                   <xs:annotation>
-                    <xs:documentation>Auf schwedische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Schwedisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5561,7 +6005,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Turkish">
                   <xs:annotation>
-                    <xs:documentation>Auf türkische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Türkisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5570,7 +6014,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ukrainian">
                   <xs:annotation>
-                    <xs:documentation>Auf ukrainische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Ukrainisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5579,7 +6023,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Welsh">
                   <xs:annotation>
-                    <xs:documentation>Auf walisische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Walisisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6184,7 +6628,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ancient Greek">
                   <xs:annotation>
-                    <xs:documentation>Altgriechische Trennmuster.</xs:documentation>
+                    <xs:documentation>Altgriechisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6193,7 +6637,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Armenian">
                   <xs:annotation>
-                    <xs:documentation>Auf armenische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Armenisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6202,7 +6646,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bahasa Indonesia">
                   <xs:annotation>
-                    <xs:documentation>Auf indonesische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Indonesisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6211,7 +6655,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Basque">
                   <xs:annotation>
-                    <xs:documentation>Auf baskische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Baskisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6220,7 +6664,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bulgarian">
                   <xs:annotation>
-                    <xs:documentation>Auf bulgarische (lateinisches Alphabet) Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Bulgarisch (lateinisches Alphabet)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6229,7 +6673,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Catalan">
                   <xs:annotation>
-                    <xs:documentation>Auf katalanische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Katalanisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6247,7 +6691,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Croatian">
                   <xs:annotation>
-                    <xs:documentation>Auf kroatische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Kroatisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6256,7 +6700,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Czech">
                   <xs:annotation>
-                    <xs:documentation>Auf tschechische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Tschechisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6265,7 +6709,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Danish">
                   <xs:annotation>
-                    <xs:documentation>Auf dänische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Dänisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6274,7 +6718,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Dutch">
                   <xs:annotation>
-                    <xs:documentation>Auf niederländische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Niederländisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6283,7 +6727,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (Great Britain)">
                   <xs:annotation>
-                    <xs:documentation>Auf GB-englische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>GB-Englisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6292,7 +6736,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (USA)">
                   <xs:annotation>
-                    <xs:documentation>Auf US-englische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>US-Englisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6301,7 +6745,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Esperanto">
                   <xs:annotation>
-                    <xs:documentation>Auf Esperanto Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Esperanto</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6310,7 +6754,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Estonian">
                   <xs:annotation>
-                    <xs:documentation>Auf estnische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Estnisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6319,7 +6763,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Finnish">
                   <xs:annotation>
-                    <xs:documentation>Auf finnische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Finnisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6328,7 +6772,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="French">
                   <xs:annotation>
-                    <xs:documentation>Französische Trennmuster</xs:documentation>
+                    <xs:documentation>Französisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6337,7 +6781,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Galician">
                   <xs:annotation>
-                    <xs:documentation>Auf galicische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Galicisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6346,7 +6790,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="German">
                   <xs:annotation>
-                    <xs:documentation>Auf deutsche Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Deutsch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6364,7 +6808,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Gujarati">
                   <xs:annotation>
-                    <xs:documentation>Auf Gujarati Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Gujarati</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6373,7 +6817,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hungarian">
                   <xs:annotation>
-                    <xs:documentation>Auf ungarische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Ungarisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6382,7 +6826,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hindi">
                   <xs:annotation>
-                    <xs:documentation>Auf Hindi Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Hindi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6391,7 +6835,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Icelandic">
                   <xs:annotation>
-                    <xs:documentation>Auf isländische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Isländisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6400,7 +6844,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Irish">
                   <xs:annotation>
-                    <xs:documentation>Auf irische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Irisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6409,7 +6853,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Italian">
                   <xs:annotation>
-                    <xs:documentation>Auf italienische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Italienisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6418,7 +6862,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kannada">
                   <xs:annotation>
-                    <xs:documentation>Auf kanaresische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Kanaresisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6427,7 +6871,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kurmanji">
                   <xs:annotation>
-                    <xs:documentation>Auf Kurmandschi Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Kurmandschi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6436,7 +6880,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Latvian">
                   <xs:annotation>
-                    <xs:documentation>Auf lettische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Lettisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6445,7 +6889,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Lithuanian">
                   <xs:annotation>
-                    <xs:documentation>Auf litauische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Litauisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6454,7 +6898,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Malayalam">
                   <xs:annotation>
-                    <xs:documentation>Auf Malayalam Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Malayalam</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6463,7 +6907,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Bokmål">
                   <xs:annotation>
-                    <xs:documentation>Auf norwegische Trennmuster umschalten (Bokmål).</xs:documentation>
+                    <xs:documentation>Norwegisch (Bokmål).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6472,7 +6916,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Nynorsk">
                   <xs:annotation>
-                    <xs:documentation>Auf norwegische Trennmuster umschalten (Nynorsk).</xs:documentation>
+                    <xs:documentation>Norwegisch (Nynorsk).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6490,7 +6934,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Polish">
                   <xs:annotation>
-                    <xs:documentation>Auf polnische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Polnisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6499,7 +6943,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Portuguese">
                   <xs:annotation>
-                    <xs:documentation>Auf portugiesische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Portugiesisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6508,7 +6952,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Romanian">
                   <xs:annotation>
-                    <xs:documentation>Auf rumänische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Rumänisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6517,7 +6961,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Russian">
                   <xs:annotation>
-                    <xs:documentation>Auf russische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Russisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6526,7 +6970,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian">
                   <xs:annotation>
-                    <xs:documentation>Auf serbische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Serbisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6535,7 +6979,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian (cyrillic)">
                   <xs:annotation>
-                    <xs:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</xs:documentation>
+                    <xs:documentation>Serbisch (kyrillische Buchstaben).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6544,7 +6988,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovak">
                   <xs:annotation>
-                    <xs:documentation>Auf slowakische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Slowakisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6553,7 +6997,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovenian">
                   <xs:annotation>
-                    <xs:documentation>Auf slowenische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Slowenisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6562,7 +7006,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Spanish">
                   <xs:annotation>
-                    <xs:documentation>Auf spanische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Spanisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6571,7 +7015,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Swedish">
                   <xs:annotation>
-                    <xs:documentation>Auf schwedische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Schwedisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6580,7 +7024,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Turkish">
                   <xs:annotation>
-                    <xs:documentation>Auf türkische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Türkisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6589,7 +7033,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ukrainian">
                   <xs:annotation>
-                    <xs:documentation>Auf ukrainische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Ukrainisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6598,7 +7042,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Welsh">
                   <xs:annotation>
-                    <xs:documentation>Auf walisische Trennmuster umschalten.</xs:documentation>
+                    <xs:documentation>Walisisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>

@@ -1656,10 +1656,454 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  <xs:element name="Hyphenation" type="xs:string">
+  <xs:element name="Hyphenation">
     <xs:annotation>
       <xs:documentation>Suggest a hyphenation. This hyphenation will be used in the running text. See the example.</xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:attribute name="language">
+        <xs:annotation>
+          <xs:documentation>The language for this hyphenation exception. The default is the main document language.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Ancient Greek">
+                  <xs:annotation>
+                    <xs:documentation>Ancient Greek</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Armenian">
+                  <xs:annotation>
+                    <xs:documentation>Armenian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Bahasa Indonesia">
+                  <xs:annotation>
+                    <xs:documentation>Bahasa Indonesia</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Basque">
+                  <xs:annotation>
+                    <xs:documentation>Basque</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Bulgarian">
+                  <xs:annotation>
+                    <xs:documentation>Bulgarian (latin alphabet)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Catalan">
+                  <xs:annotation>
+                    <xs:documentation>Catalan</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Chinese">
+                  <xs:annotation>
+                    <xs:documentation>Chinese language setting.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Croatian">
+                  <xs:annotation>
+                    <xs:documentation>Croatian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Czech">
+                  <xs:annotation>
+                    <xs:documentation>Czech</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Danish">
+                  <xs:annotation>
+                    <xs:documentation>Danish</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Dutch">
+                  <xs:annotation>
+                    <xs:documentation>Dutch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="English (Great Britain)">
+                  <xs:annotation>
+                    <xs:documentation>British</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="English (USA)">
+                  <xs:annotation>
+                    <xs:documentation>American English</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Esperanto">
+                  <xs:annotation>
+                    <xs:documentation>Esperanto</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Estonian">
+                  <xs:annotation>
+                    <xs:documentation>Estonian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Finnish">
+                  <xs:annotation>
+                    <xs:documentation>Finnish</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="French">
+                  <xs:annotation>
+                    <xs:documentation>French</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Galician">
+                  <xs:annotation>
+                    <xs:documentation>Galician</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="German">
+                  <xs:annotation>
+                    <xs:documentation>German</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Greek">
+                  <xs:annotation>
+                    <xs:documentation>Monotonic Greek</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Gujarati">
+                  <xs:annotation>
+                    <xs:documentation>Gujarati</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Hungarian">
+                  <xs:annotation>
+                    <xs:documentation>Hungarian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Hindi">
+                  <xs:annotation>
+                    <xs:documentation>Hindi</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Icelandic">
+                  <xs:annotation>
+                    <xs:documentation>Icelandic</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Irish">
+                  <xs:annotation>
+                    <xs:documentation>Irish</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Italian">
+                  <xs:annotation>
+                    <xs:documentation>Italian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Kannada">
+                  <xs:annotation>
+                    <xs:documentation>Kannada</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Kurmanji">
+                  <xs:annotation>
+                    <xs:documentation>Kurmanji</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Latvian">
+                  <xs:annotation>
+                    <xs:documentation>Latvian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Lithuanian">
+                  <xs:annotation>
+                    <xs:documentation>Lithuanian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Malayalam">
+                  <xs:annotation>
+                    <xs:documentation>Malayalam</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Norwegian Bokmål">
+                  <xs:annotation>
+                    <xs:documentation>Norwegian Bokmål</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Norwegian Nynorsk">
+                  <xs:annotation>
+                    <xs:documentation>Norwegian Nynorsk</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Other">
+                  <xs:annotation>
+                    <xs:documentation>Don't any of these languages. Useful if a text does not render correctly.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Polish">
+                  <xs:annotation>
+                    <xs:documentation>Polish</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Portuguese">
+                  <xs:annotation>
+                    <xs:documentation>Portuguese</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Romanian">
+                  <xs:annotation>
+                    <xs:documentation>Romanian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Russian">
+                  <xs:annotation>
+                    <xs:documentation>Russian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Serbian">
+                  <xs:annotation>
+                    <xs:documentation>Serbian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Serbian (cyrillic)">
+                  <xs:annotation>
+                    <xs:documentation>Serbian (cyrillic script).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Slovak">
+                  <xs:annotation>
+                    <xs:documentation>Slovak</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Slovenian">
+                  <xs:annotation>
+                    <xs:documentation>Slovenian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Spanish">
+                  <xs:annotation>
+                    <xs:documentation>Spanish</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Swedish">
+                  <xs:annotation>
+                    <xs:documentation>Swedish</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Turkish">
+                  <xs:annotation>
+                    <xs:documentation>Turkish</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Ukrainian">
+                  <xs:annotation>
+                    <xs:documentation>Ukrainian</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Welsh">
+                  <xs:annotation>
+                    <xs:documentation>Welsh</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
   </xs:element>
   <xs:element name="HSpace">
     <xs:annotation>
@@ -2721,7 +3165,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ancient Greek">
                   <xs:annotation>
-                    <xs:documentation>Switch to Ancient Greek hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Ancient Greek</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2730,7 +3174,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Armenian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Armenian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Armenian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2739,7 +3183,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bahasa Indonesia">
                   <xs:annotation>
-                    <xs:documentation>Switch to Bahasa Indonesia hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Bahasa Indonesia</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2748,7 +3192,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Basque">
                   <xs:annotation>
-                    <xs:documentation>Switch to Basque hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Basque</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2757,7 +3201,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bulgarian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Bulgarian (latin alphabet) hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Bulgarian (latin alphabet)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2766,7 +3210,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Catalan">
                   <xs:annotation>
-                    <xs:documentation>Switch to Catalan hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Catalan</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2775,7 +3219,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Chinese">
                   <xs:annotation>
-                    <xs:documentation>Switch to Chinese language setting.</xs:documentation>
+                    <xs:documentation>Chinese language setting.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2784,7 +3228,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Croatian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Croatian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Croatian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2793,7 +3237,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Czech">
                   <xs:annotation>
-                    <xs:documentation>Switch to Czech hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Czech</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2802,7 +3246,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Danish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Danish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Danish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2811,7 +3255,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Dutch">
                   <xs:annotation>
-                    <xs:documentation>Switch to Dutch hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Dutch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2820,7 +3264,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (Great Britain)">
                   <xs:annotation>
-                    <xs:documentation>Switch to British hyphenation patterns.</xs:documentation>
+                    <xs:documentation>British</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2829,7 +3273,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (USA)">
                   <xs:annotation>
-                    <xs:documentation>Switch to American English hyphenation patterns.</xs:documentation>
+                    <xs:documentation>American English</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2838,7 +3282,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Esperanto">
                   <xs:annotation>
-                    <xs:documentation>Switch to Esperanto hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Esperanto</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2847,7 +3291,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Estonian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Estonian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2856,7 +3300,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Finnish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Finnish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Finnish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2865,7 +3309,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="French">
                   <xs:annotation>
-                    <xs:documentation>Switch to French hyphenation patterns.</xs:documentation>
+                    <xs:documentation>French</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2874,7 +3318,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Galician">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Galician</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2883,7 +3327,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="German">
                   <xs:annotation>
-                    <xs:documentation>Switch to German hyphenation patterns.</xs:documentation>
+                    <xs:documentation>German</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2892,7 +3336,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Greek">
                   <xs:annotation>
-                    <xs:documentation>Switch to Monotonic Greek hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Monotonic Greek</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2901,7 +3345,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Gujarati">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Gujarati</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2910,7 +3354,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hungarian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Hungarian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Hungarian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2919,7 +3363,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hindi">
                   <xs:annotation>
-                    <xs:documentation>Switch to Hindi hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Hindi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2928,7 +3372,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Icelandic">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Icelandic</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2937,7 +3381,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Irish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Irish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2946,7 +3390,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Italian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Italian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Italian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2955,7 +3399,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kannada">
                   <xs:annotation>
-                    <xs:documentation>Switch to Kannada hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Kannada</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2964,7 +3408,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kurmanji">
                   <xs:annotation>
-                    <xs:documentation>Switch to Kurmanji hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Kurmanji</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2973,7 +3417,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Latvian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Latvian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Latvian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2982,7 +3426,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Lithuanian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Lithuanian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Lithuanian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2991,7 +3435,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Malayalam">
                   <xs:annotation>
-                    <xs:documentation>Switch to Malayalam hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Malayalam</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3000,7 +3444,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Bokmål">
                   <xs:annotation>
-                    <xs:documentation>Switch to Norwegian Bokmål hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Norwegian Bokmål</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3009,7 +3453,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Nynorsk">
                   <xs:annotation>
-                    <xs:documentation>Switch to Norwegian Nynorsk hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Norwegian Nynorsk</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3018,7 +3462,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Other">
                   <xs:annotation>
-                    <xs:documentation>Don't switch to any of these languages. Useful if a text does not render correctly.</xs:documentation>
+                    <xs:documentation>Don't any of these languages. Useful if a text does not render correctly.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3027,7 +3471,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Polish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Polish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Polish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3036,7 +3480,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Portuguese">
                   <xs:annotation>
-                    <xs:documentation>Switch to Portuguese hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Portuguese</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3045,7 +3489,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Romanian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Romanian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Romanian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3054,7 +3498,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Russian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Russian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Russian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3063,7 +3507,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Serbian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Serbian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3072,7 +3516,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian (cyrillic)">
                   <xs:annotation>
-                    <xs:documentation>Switch to Serbian hyphenation patterns with cyrillic script.</xs:documentation>
+                    <xs:documentation>Serbian (cyrillic script).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3081,7 +3525,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovak">
                   <xs:annotation>
-                    <xs:documentation>Switch to Slovak hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Slovak</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3090,7 +3534,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovenian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Slovenian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Slovenian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3099,7 +3543,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Spanish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Spanish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Spanish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3108,7 +3552,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Swedish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Swedish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Swedish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3117,7 +3561,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Turkish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Turkish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3126,7 +3570,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ukrainian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Ukrainian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Ukrainian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3135,7 +3579,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Welsh">
                   <xs:annotation>
-                    <xs:documentation>Switch to Welsh hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Welsh</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3594,7 +4038,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ancient Greek">
                   <xs:annotation>
-                    <xs:documentation>Switch to Ancient Greek hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Ancient Greek</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3603,7 +4047,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Armenian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Armenian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Armenian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3612,7 +4056,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bahasa Indonesia">
                   <xs:annotation>
-                    <xs:documentation>Switch to Bahasa Indonesia hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Bahasa Indonesia</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3621,7 +4065,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Basque">
                   <xs:annotation>
-                    <xs:documentation>Switch to Basque hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Basque</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3630,7 +4074,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bulgarian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Bulgarian (latin alphabet) hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Bulgarian (latin alphabet)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3639,7 +4083,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Catalan">
                   <xs:annotation>
-                    <xs:documentation>Switch to Catalan hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Catalan</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3648,7 +4092,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Chinese">
                   <xs:annotation>
-                    <xs:documentation>Switch to Chinese language setting.</xs:documentation>
+                    <xs:documentation>Chinese language setting.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3657,7 +4101,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Croatian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Croatian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Croatian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3666,7 +4110,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Czech">
                   <xs:annotation>
-                    <xs:documentation>Switch to Czech hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Czech</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3675,7 +4119,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Danish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Danish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Danish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3684,7 +4128,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Dutch">
                   <xs:annotation>
-                    <xs:documentation>Switch to Dutch hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Dutch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3693,7 +4137,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (Great Britain)">
                   <xs:annotation>
-                    <xs:documentation>Switch to British hyphenation patterns.</xs:documentation>
+                    <xs:documentation>British</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3702,7 +4146,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (USA)">
                   <xs:annotation>
-                    <xs:documentation>Switch to American English hyphenation patterns.</xs:documentation>
+                    <xs:documentation>American English</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3711,7 +4155,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Esperanto">
                   <xs:annotation>
-                    <xs:documentation>Switch to Esperanto hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Esperanto</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3720,7 +4164,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Estonian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Estonian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3729,7 +4173,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Finnish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Finnish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Finnish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3738,7 +4182,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="French">
                   <xs:annotation>
-                    <xs:documentation>Switch to French hyphenation patterns.</xs:documentation>
+                    <xs:documentation>French</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3747,7 +4191,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Galician">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Galician</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3756,7 +4200,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="German">
                   <xs:annotation>
-                    <xs:documentation>Switch to German hyphenation patterns.</xs:documentation>
+                    <xs:documentation>German</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3765,7 +4209,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Greek">
                   <xs:annotation>
-                    <xs:documentation>Switch to Monotonic Greek hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Monotonic Greek</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3774,7 +4218,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Gujarati">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Gujarati</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3783,7 +4227,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hungarian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Hungarian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Hungarian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3792,7 +4236,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hindi">
                   <xs:annotation>
-                    <xs:documentation>Switch to Hindi hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Hindi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3801,7 +4245,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Icelandic">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Icelandic</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3810,7 +4254,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Irish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Irish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3819,7 +4263,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Italian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Italian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Italian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3828,7 +4272,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kannada">
                   <xs:annotation>
-                    <xs:documentation>Switch to Kannada hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Kannada</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3837,7 +4281,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kurmanji">
                   <xs:annotation>
-                    <xs:documentation>Switch to Kurmanji hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Kurmanji</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3846,7 +4290,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Latvian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Latvian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Latvian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3855,7 +4299,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Lithuanian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Lithuanian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Lithuanian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3864,7 +4308,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Malayalam">
                   <xs:annotation>
-                    <xs:documentation>Switch to Malayalam hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Malayalam</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3873,7 +4317,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Bokmål">
                   <xs:annotation>
-                    <xs:documentation>Switch to Norwegian Bokmål hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Norwegian Bokmål</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3882,7 +4326,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Nynorsk">
                   <xs:annotation>
-                    <xs:documentation>Switch to Norwegian Nynorsk hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Norwegian Nynorsk</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3891,7 +4335,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Other">
                   <xs:annotation>
-                    <xs:documentation>Don't switch to any of these languages. Useful if a text does not render correctly.</xs:documentation>
+                    <xs:documentation>Don't any of these languages. Useful if a text does not render correctly.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3900,7 +4344,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Polish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Polish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Polish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3909,7 +4353,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Portuguese">
                   <xs:annotation>
-                    <xs:documentation>Switch to Portuguese hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Portuguese</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3918,7 +4362,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Romanian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Romanian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Romanian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3927,7 +4371,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Russian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Russian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Russian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3936,7 +4380,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Serbian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Serbian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3945,7 +4389,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian (cyrillic)">
                   <xs:annotation>
-                    <xs:documentation>Switch to Serbian hyphenation patterns with cyrillic script.</xs:documentation>
+                    <xs:documentation>Serbian (cyrillic script).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3954,7 +4398,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovak">
                   <xs:annotation>
-                    <xs:documentation>Switch to Slovak hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Slovak</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3963,7 +4407,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovenian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Slovenian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Slovenian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3972,7 +4416,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Spanish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Spanish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Spanish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3981,7 +4425,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Swedish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Swedish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Swedish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3990,7 +4434,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Turkish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Turkish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3999,7 +4443,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ukrainian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Ukrainian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Ukrainian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -4008,7 +4452,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Welsh">
                   <xs:annotation>
-                    <xs:documentation>Switch to Welsh hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Welsh</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5165,7 +5609,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ancient Greek">
                   <xs:annotation>
-                    <xs:documentation>Switch to Ancient Greek hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Ancient Greek</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5174,7 +5618,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Armenian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Armenian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Armenian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5183,7 +5627,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bahasa Indonesia">
                   <xs:annotation>
-                    <xs:documentation>Switch to Bahasa Indonesia hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Bahasa Indonesia</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5192,7 +5636,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Basque">
                   <xs:annotation>
-                    <xs:documentation>Switch to Basque hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Basque</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5201,7 +5645,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bulgarian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Bulgarian (latin alphabet) hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Bulgarian (latin alphabet)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5210,7 +5654,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Catalan">
                   <xs:annotation>
-                    <xs:documentation>Switch to Catalan hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Catalan</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5219,7 +5663,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Chinese">
                   <xs:annotation>
-                    <xs:documentation>Switch to Chinese language setting.</xs:documentation>
+                    <xs:documentation>Chinese language setting.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5228,7 +5672,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Croatian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Croatian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Croatian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5237,7 +5681,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Czech">
                   <xs:annotation>
-                    <xs:documentation>Switch to Czech hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Czech</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5246,7 +5690,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Danish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Danish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Danish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5255,7 +5699,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Dutch">
                   <xs:annotation>
-                    <xs:documentation>Switch to Dutch hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Dutch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5264,7 +5708,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (Great Britain)">
                   <xs:annotation>
-                    <xs:documentation>Switch to British hyphenation patterns.</xs:documentation>
+                    <xs:documentation>British</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5273,7 +5717,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (USA)">
                   <xs:annotation>
-                    <xs:documentation>Switch to American English hyphenation patterns.</xs:documentation>
+                    <xs:documentation>American English</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5282,7 +5726,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Esperanto">
                   <xs:annotation>
-                    <xs:documentation>Switch to Esperanto hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Esperanto</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5291,7 +5735,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Estonian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Estonian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5300,7 +5744,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Finnish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Finnish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Finnish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5309,7 +5753,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="French">
                   <xs:annotation>
-                    <xs:documentation>Switch to French hyphenation patterns.</xs:documentation>
+                    <xs:documentation>French</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5318,7 +5762,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Galician">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Galician</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5327,7 +5771,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="German">
                   <xs:annotation>
-                    <xs:documentation>Switch to German hyphenation patterns.</xs:documentation>
+                    <xs:documentation>German</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5336,7 +5780,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Greek">
                   <xs:annotation>
-                    <xs:documentation>Switch to Monotonic Greek hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Monotonic Greek</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5345,7 +5789,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Gujarati">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Gujarati</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5354,7 +5798,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hungarian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Hungarian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Hungarian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5363,7 +5807,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hindi">
                   <xs:annotation>
-                    <xs:documentation>Switch to Hindi hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Hindi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5372,7 +5816,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Icelandic">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Icelandic</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5381,7 +5825,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Irish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Irish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5390,7 +5834,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Italian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Italian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Italian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5399,7 +5843,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kannada">
                   <xs:annotation>
-                    <xs:documentation>Switch to Kannada hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Kannada</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5408,7 +5852,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kurmanji">
                   <xs:annotation>
-                    <xs:documentation>Switch to Kurmanji hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Kurmanji</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5417,7 +5861,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Latvian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Latvian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Latvian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5426,7 +5870,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Lithuanian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Lithuanian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Lithuanian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5435,7 +5879,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Malayalam">
                   <xs:annotation>
-                    <xs:documentation>Switch to Malayalam hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Malayalam</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5444,7 +5888,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Bokmål">
                   <xs:annotation>
-                    <xs:documentation>Switch to Norwegian Bokmål hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Norwegian Bokmål</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5453,7 +5897,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Nynorsk">
                   <xs:annotation>
-                    <xs:documentation>Switch to Norwegian Nynorsk hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Norwegian Nynorsk</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5462,7 +5906,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Other">
                   <xs:annotation>
-                    <xs:documentation>Don't switch to any of these languages. Useful if a text does not render correctly.</xs:documentation>
+                    <xs:documentation>Don't any of these languages. Useful if a text does not render correctly.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5471,7 +5915,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Polish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Polish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Polish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5480,7 +5924,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Portuguese">
                   <xs:annotation>
-                    <xs:documentation>Switch to Portuguese hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Portuguese</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5489,7 +5933,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Romanian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Romanian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Romanian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5498,7 +5942,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Russian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Russian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Russian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5507,7 +5951,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Serbian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Serbian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5516,7 +5960,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian (cyrillic)">
                   <xs:annotation>
-                    <xs:documentation>Switch to Serbian hyphenation patterns with cyrillic script.</xs:documentation>
+                    <xs:documentation>Serbian (cyrillic script).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5525,7 +5969,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovak">
                   <xs:annotation>
-                    <xs:documentation>Switch to Slovak hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Slovak</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5534,7 +5978,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovenian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Slovenian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Slovenian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5543,7 +5987,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Spanish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Spanish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Spanish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5552,7 +5996,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Swedish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Swedish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Swedish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5561,7 +6005,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Turkish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Turkish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5570,7 +6014,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ukrainian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Ukrainian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Ukrainian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5579,7 +6023,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Welsh">
                   <xs:annotation>
-                    <xs:documentation>Switch to Welsh hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Welsh</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6184,7 +6628,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ancient Greek">
                   <xs:annotation>
-                    <xs:documentation>Switch to Ancient Greek hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Ancient Greek</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6193,7 +6637,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Armenian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Armenian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Armenian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6202,7 +6646,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bahasa Indonesia">
                   <xs:annotation>
-                    <xs:documentation>Switch to Bahasa Indonesia hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Bahasa Indonesia</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6211,7 +6655,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Basque">
                   <xs:annotation>
-                    <xs:documentation>Switch to Basque hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Basque</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6220,7 +6664,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Bulgarian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Bulgarian (latin alphabet) hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Bulgarian (latin alphabet)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6229,7 +6673,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Catalan">
                   <xs:annotation>
-                    <xs:documentation>Switch to Catalan hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Catalan</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6238,7 +6682,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Chinese">
                   <xs:annotation>
-                    <xs:documentation>Switch to Chinese language setting.</xs:documentation>
+                    <xs:documentation>Chinese language setting.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6247,7 +6691,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Croatian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Croatian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Croatian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6256,7 +6700,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Czech">
                   <xs:annotation>
-                    <xs:documentation>Switch to Czech hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Czech</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6265,7 +6709,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Danish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Danish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Danish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6274,7 +6718,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Dutch">
                   <xs:annotation>
-                    <xs:documentation>Switch to Dutch hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Dutch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6283,7 +6727,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (Great Britain)">
                   <xs:annotation>
-                    <xs:documentation>Switch to British hyphenation patterns.</xs:documentation>
+                    <xs:documentation>British</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6292,7 +6736,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="English (USA)">
                   <xs:annotation>
-                    <xs:documentation>Switch to American English hyphenation patterns.</xs:documentation>
+                    <xs:documentation>American English</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6301,7 +6745,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Esperanto">
                   <xs:annotation>
-                    <xs:documentation>Switch to Esperanto hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Esperanto</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6310,7 +6754,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Estonian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Estonian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6319,7 +6763,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Finnish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Finnish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Finnish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6328,7 +6772,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="French">
                   <xs:annotation>
-                    <xs:documentation>Switch to French hyphenation patterns.</xs:documentation>
+                    <xs:documentation>French</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6337,7 +6781,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Galician">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Galician</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6346,7 +6790,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="German">
                   <xs:annotation>
-                    <xs:documentation>Switch to German hyphenation patterns.</xs:documentation>
+                    <xs:documentation>German</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6355,7 +6799,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Greek">
                   <xs:annotation>
-                    <xs:documentation>Switch to Monotonic Greek hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Monotonic Greek</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6364,7 +6808,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Gujarati">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Gujarati</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6373,7 +6817,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hungarian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Hungarian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Hungarian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6382,7 +6826,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Hindi">
                   <xs:annotation>
-                    <xs:documentation>Switch to Hindi hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Hindi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6391,7 +6835,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Icelandic">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Icelandic</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6400,7 +6844,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Irish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Irish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6409,7 +6853,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Italian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Italian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Italian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6418,7 +6862,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kannada">
                   <xs:annotation>
-                    <xs:documentation>Switch to Kannada hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Kannada</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6427,7 +6871,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Kurmanji">
                   <xs:annotation>
-                    <xs:documentation>Switch to Kurmanji hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Kurmanji</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6436,7 +6880,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Latvian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Latvian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Latvian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6445,7 +6889,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Lithuanian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Lithuanian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Lithuanian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6454,7 +6898,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Malayalam">
                   <xs:annotation>
-                    <xs:documentation>Switch to Malayalam hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Malayalam</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6463,7 +6907,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Bokmål">
                   <xs:annotation>
-                    <xs:documentation>Switch to Norwegian Bokmål hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Norwegian Bokmål</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6472,7 +6916,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Nynorsk">
                   <xs:annotation>
-                    <xs:documentation>Switch to Norwegian Nynorsk hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Norwegian Nynorsk</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6481,7 +6925,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Other">
                   <xs:annotation>
-                    <xs:documentation>Don't switch to any of these languages. Useful if a text does not render correctly.</xs:documentation>
+                    <xs:documentation>Don't any of these languages. Useful if a text does not render correctly.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6490,7 +6934,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Polish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Polish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Polish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6499,7 +6943,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Portuguese">
                   <xs:annotation>
-                    <xs:documentation>Switch to Portuguese hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Portuguese</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6508,7 +6952,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Romanian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Romanian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Romanian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6517,7 +6961,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Russian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Russian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Russian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6526,7 +6970,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Serbian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Serbian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6535,7 +6979,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian (cyrillic)">
                   <xs:annotation>
-                    <xs:documentation>Switch to Serbian hyphenation patterns with cyrillic script.</xs:documentation>
+                    <xs:documentation>Serbian (cyrillic script).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6544,7 +6988,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovak">
                   <xs:annotation>
-                    <xs:documentation>Switch to Slovak hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Slovak</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6553,7 +6997,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Slovenian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Slovenian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Slovenian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6562,7 +7006,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Spanish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Spanish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Spanish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6571,7 +7015,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Swedish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Swedish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Swedish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6580,7 +7024,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Turkish">
                   <xs:annotation>
-                    <xs:documentation>Switch to Turkish hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Turkish</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6589,7 +7033,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Ukrainian">
                   <xs:annotation>
-                    <xs:documentation>Switch to Ukrainian hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Ukrainian</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6598,7 +7042,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Welsh">
                   <xs:annotation>
-                    <xs:documentation>Switch to Welsh hyphenation patterns.</xs:documentation>
+                    <xs:documentation>Welsh</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>

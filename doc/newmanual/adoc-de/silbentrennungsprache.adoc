@@ -83,8 +83,7 @@ Mittels(((`Hyphenation`)))
 <Hyphenation>er-go-no-mic</Hyphenation>
 -------------------------------------------------------------------------------
 
-
-kann man für einzelne Wörter Trennvorschläge bzw. -ausnahmen definieren. So werden die Wörter dann nur an den mit Bindestrich angegebenen Stellen getrennt.
+kann man für einzelne Wörter Trennvorschläge bzw. -ausnahmen definieren. So werden die Wörter dann nur an den mit Bindestrich angegebenen Stellen getrennt. Die Trennausnahme gilt für die Hauptsprache des Dokuments. Mit dem Attribut `language` kann man die Sprache festlegen, für die die Trennausnahme gilt.
 
 TIP: Mit optischem Randausgleich, der im Abschnitt <<ch-optischerrandausgleich>> beschrieben ist, kann man die Anzahl der Silbentrennungen im Dokument etwas verringern.
 

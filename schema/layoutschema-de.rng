@@ -1938,6 +1938,113 @@
          <a:documentation>Erzeugt einen Trennvorschlag für die automatische Silbentrennung. Die Trennvorschläge werden dann benutzt, wenn die automatische Silbentrennung fehlerhaft trennt. Alle Trennstellen müssen mit eine Bindestrich (-) markiert werden (s. Beispiel).</a:documentation>
          <interleave>
             <group>
+               <optional>
+                  <attribute name="language">
+                     <a:documentation>Die Sprache für diese Trennausnahme. Die Voreinstellung ist die Hauptsprache des Dokuments.</a:documentation>
+                     <choice>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</param>
+                        </data>
+                        <value>Ancient Greek</value>
+                        <a:documentation>Altgriechisch</a:documentation>
+                        <value>Armenian</value>
+                        <a:documentation>Armenisch</a:documentation>
+                        <value>Bahasa Indonesia</value>
+                        <a:documentation>Indonesisch</a:documentation>
+                        <value>Basque</value>
+                        <a:documentation>Baskisch</a:documentation>
+                        <value>Bulgarian</value>
+                        <a:documentation>Bulgarisch (lateinisches Alphabet)</a:documentation>
+                        <value>Catalan</value>
+                        <a:documentation>Katalanisch</a:documentation>
+                        <value>Chinese</value>
+                        <a:documentation>Auf chinsische Sprache umschalten.</a:documentation>
+                        <value>Croatian</value>
+                        <a:documentation>Kroatisch</a:documentation>
+                        <value>Czech</value>
+                        <a:documentation>Tschechisch</a:documentation>
+                        <value>Danish</value>
+                        <a:documentation>Dänisch</a:documentation>
+                        <value>Dutch</value>
+                        <a:documentation>Niederländisch</a:documentation>
+                        <value>English (Great Britain)</value>
+                        <a:documentation>GB-Englisch</a:documentation>
+                        <value>English (USA)</value>
+                        <a:documentation>US-Englisch</a:documentation>
+                        <value>Esperanto</value>
+                        <a:documentation>Esperanto</a:documentation>
+                        <value>Estonian</value>
+                        <a:documentation>Estnisch</a:documentation>
+                        <value>Finnish</value>
+                        <a:documentation>Finnisch</a:documentation>
+                        <value>French</value>
+                        <a:documentation>Französisch</a:documentation>
+                        <value>Galician</value>
+                        <a:documentation>Galicisch</a:documentation>
+                        <value>German</value>
+                        <a:documentation>Deutsch</a:documentation>
+                        <value>Greek</value>
+                        <a:documentation>Neugriechisch</a:documentation>
+                        <value>Gujarati</value>
+                        <a:documentation>Gujarati</a:documentation>
+                        <value>Hungarian</value>
+                        <a:documentation>Ungarisch</a:documentation>
+                        <value>Hindi</value>
+                        <a:documentation>Hindi</a:documentation>
+                        <value>Icelandic</value>
+                        <a:documentation>Isländisch</a:documentation>
+                        <value>Irish</value>
+                        <a:documentation>Irisch</a:documentation>
+                        <value>Italian</value>
+                        <a:documentation>Italienisch</a:documentation>
+                        <value>Kannada</value>
+                        <a:documentation>Kanaresisch</a:documentation>
+                        <value>Kurmanji</value>
+                        <a:documentation>Kurmandschi</a:documentation>
+                        <value>Latvian</value>
+                        <a:documentation>Lettisch</a:documentation>
+                        <value>Lithuanian</value>
+                        <a:documentation>Litauisch</a:documentation>
+                        <value>Malayalam</value>
+                        <a:documentation>Malayalam</a:documentation>
+                        <value>Norwegian Bokmål</value>
+                        <a:documentation>Norwegisch (Bokmål).</a:documentation>
+                        <value>Norwegian Nynorsk</value>
+                        <a:documentation>Norwegisch (Nynorsk).</a:documentation>
+                        <value>Other</value>
+                        <a:documentation>Auf keine der anderen Sprachen umschalten. Hilfreich bei Darstellungsproblemen.</a:documentation>
+                        <value>Polish</value>
+                        <a:documentation>Polnisch</a:documentation>
+                        <value>Portuguese</value>
+                        <a:documentation>Portugiesisch</a:documentation>
+                        <value>Romanian</value>
+                        <a:documentation>Rumänisch</a:documentation>
+                        <value>Russian</value>
+                        <a:documentation>Russisch</a:documentation>
+                        <value>Serbian</value>
+                        <a:documentation>Serbisch</a:documentation>
+                        <value>Serbian (cyrillic)</value>
+                        <a:documentation>Serbisch (kyrillische Buchstaben).</a:documentation>
+                        <value>Slovak</value>
+                        <a:documentation>Slowakisch</a:documentation>
+                        <value>Slovenian</value>
+                        <a:documentation>Slowenisch</a:documentation>
+                        <value>Spanish</value>
+                        <a:documentation>Spanisch</a:documentation>
+                        <value>Swedish</value>
+                        <a:documentation>Schwedisch</a:documentation>
+                        <value>Turkish</value>
+                        <a:documentation>Türkisch</a:documentation>
+                        <value>Ukrainian</value>
+                        <a:documentation>Ukrainisch</a:documentation>
+                        <value>Welsh</value>
+                        <a:documentation>Walisisch</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
                <text></text>
             </group>
             <ref name="foreign-nodes"></ref>
@@ -3081,99 +3188,99 @@
                      <param name="pattern">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</param>
                   </data>
                   <value>Ancient Greek</value>
-                  <a:documentation>Altgriechische Trennmuster.</a:documentation>
+                  <a:documentation>Altgriechisch</a:documentation>
                   <value>Armenian</value>
-                  <a:documentation>Auf armenische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Armenisch</a:documentation>
                   <value>Bahasa Indonesia</value>
-                  <a:documentation>Auf indonesische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Indonesisch</a:documentation>
                   <value>Basque</value>
-                  <a:documentation>Auf baskische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Baskisch</a:documentation>
                   <value>Bulgarian</value>
-                  <a:documentation>Auf bulgarische (lateinisches Alphabet) Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Bulgarisch (lateinisches Alphabet)</a:documentation>
                   <value>Catalan</value>
-                  <a:documentation>Auf katalanische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Katalanisch</a:documentation>
                   <value>Chinese</value>
                   <a:documentation>Auf chinsische Sprache umschalten.</a:documentation>
                   <value>Croatian</value>
-                  <a:documentation>Auf kroatische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Kroatisch</a:documentation>
                   <value>Czech</value>
-                  <a:documentation>Auf tschechische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Tschechisch</a:documentation>
                   <value>Danish</value>
-                  <a:documentation>Auf dänische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Dänisch</a:documentation>
                   <value>Dutch</value>
-                  <a:documentation>Auf niederländische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Niederländisch</a:documentation>
                   <value>English (Great Britain)</value>
-                  <a:documentation>Auf GB-englische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>GB-Englisch</a:documentation>
                   <value>English (USA)</value>
-                  <a:documentation>Auf US-englische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>US-Englisch</a:documentation>
                   <value>Esperanto</value>
-                  <a:documentation>Auf Esperanto Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Esperanto</a:documentation>
                   <value>Estonian</value>
-                  <a:documentation>Auf estnische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Estnisch</a:documentation>
                   <value>Finnish</value>
-                  <a:documentation>Auf finnische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Finnisch</a:documentation>
                   <value>French</value>
-                  <a:documentation>Französische Trennmuster</a:documentation>
+                  <a:documentation>Französisch</a:documentation>
                   <value>Galician</value>
-                  <a:documentation>Auf galicische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Galicisch</a:documentation>
                   <value>German</value>
-                  <a:documentation>Auf deutsche Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Deutsch</a:documentation>
                   <value>Greek</value>
                   <a:documentation>Neugriechisch</a:documentation>
                   <value>Gujarati</value>
-                  <a:documentation>Auf Gujarati Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Gujarati</a:documentation>
                   <value>Hungarian</value>
-                  <a:documentation>Auf ungarische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Ungarisch</a:documentation>
                   <value>Hindi</value>
-                  <a:documentation>Auf Hindi Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Hindi</a:documentation>
                   <value>Icelandic</value>
-                  <a:documentation>Auf isländische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Isländisch</a:documentation>
                   <value>Irish</value>
-                  <a:documentation>Auf irische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Irisch</a:documentation>
                   <value>Italian</value>
-                  <a:documentation>Auf italienische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Italienisch</a:documentation>
                   <value>Kannada</value>
-                  <a:documentation>Auf kanaresische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Kanaresisch</a:documentation>
                   <value>Kurmanji</value>
-                  <a:documentation>Auf Kurmandschi Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Kurmandschi</a:documentation>
                   <value>Latvian</value>
-                  <a:documentation>Auf lettische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Lettisch</a:documentation>
                   <value>Lithuanian</value>
-                  <a:documentation>Auf litauische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Litauisch</a:documentation>
                   <value>Malayalam</value>
-                  <a:documentation>Auf Malayalam Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Malayalam</a:documentation>
                   <value>Norwegian Bokmål</value>
-                  <a:documentation>Auf norwegische Trennmuster umschalten (Bokmål).</a:documentation>
+                  <a:documentation>Norwegisch (Bokmål).</a:documentation>
                   <value>Norwegian Nynorsk</value>
-                  <a:documentation>Auf norwegische Trennmuster umschalten (Nynorsk).</a:documentation>
+                  <a:documentation>Norwegisch (Nynorsk).</a:documentation>
                   <value>Other</value>
                   <a:documentation>Auf keine der anderen Sprachen umschalten. Hilfreich bei Darstellungsproblemen.</a:documentation>
                   <value>Polish</value>
-                  <a:documentation>Auf polnische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Polnisch</a:documentation>
                   <value>Portuguese</value>
-                  <a:documentation>Auf portugiesische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Portugiesisch</a:documentation>
                   <value>Romanian</value>
-                  <a:documentation>Auf rumänische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Rumänisch</a:documentation>
                   <value>Russian</value>
-                  <a:documentation>Auf russische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Russisch</a:documentation>
                   <value>Serbian</value>
-                  <a:documentation>Auf serbische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Serbisch</a:documentation>
                   <value>Serbian (cyrillic)</value>
-                  <a:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</a:documentation>
+                  <a:documentation>Serbisch (kyrillische Buchstaben).</a:documentation>
                   <value>Slovak</value>
-                  <a:documentation>Auf slowakische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Slowakisch</a:documentation>
                   <value>Slovenian</value>
-                  <a:documentation>Auf slowenische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Slowenisch</a:documentation>
                   <value>Spanish</value>
-                  <a:documentation>Auf spanische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Spanisch</a:documentation>
                   <value>Swedish</value>
-                  <a:documentation>Auf schwedische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Schwedisch</a:documentation>
                   <value>Turkish</value>
-                  <a:documentation>Auf türkische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Türkisch</a:documentation>
                   <value>Ukrainian</value>
-                  <a:documentation>Auf ukrainische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Ukrainisch</a:documentation>
                   <value>Welsh</value>
-                  <a:documentation>Auf walisische Trennmuster umschalten.</a:documentation>
+                  <a:documentation>Walisisch</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -3657,99 +3764,99 @@
                            <param name="pattern">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</param>
                         </data>
                         <value>Ancient Greek</value>
-                        <a:documentation>Altgriechische Trennmuster.</a:documentation>
+                        <a:documentation>Altgriechisch</a:documentation>
                         <value>Armenian</value>
-                        <a:documentation>Auf armenische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Armenisch</a:documentation>
                         <value>Bahasa Indonesia</value>
-                        <a:documentation>Auf indonesische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Indonesisch</a:documentation>
                         <value>Basque</value>
-                        <a:documentation>Auf baskische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Baskisch</a:documentation>
                         <value>Bulgarian</value>
-                        <a:documentation>Auf bulgarische (lateinisches Alphabet) Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Bulgarisch (lateinisches Alphabet)</a:documentation>
                         <value>Catalan</value>
-                        <a:documentation>Auf katalanische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Katalanisch</a:documentation>
                         <value>Chinese</value>
                         <a:documentation>Auf chinsische Sprache umschalten.</a:documentation>
                         <value>Croatian</value>
-                        <a:documentation>Auf kroatische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Kroatisch</a:documentation>
                         <value>Czech</value>
-                        <a:documentation>Auf tschechische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Tschechisch</a:documentation>
                         <value>Danish</value>
-                        <a:documentation>Auf dänische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Dänisch</a:documentation>
                         <value>Dutch</value>
-                        <a:documentation>Auf niederländische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Niederländisch</a:documentation>
                         <value>English (Great Britain)</value>
-                        <a:documentation>Auf GB-englische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>GB-Englisch</a:documentation>
                         <value>English (USA)</value>
-                        <a:documentation>Auf US-englische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>US-Englisch</a:documentation>
                         <value>Esperanto</value>
-                        <a:documentation>Auf Esperanto Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Esperanto</a:documentation>
                         <value>Estonian</value>
-                        <a:documentation>Auf estnische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Estnisch</a:documentation>
                         <value>Finnish</value>
-                        <a:documentation>Auf finnische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Finnisch</a:documentation>
                         <value>French</value>
-                        <a:documentation>Französische Trennmuster</a:documentation>
+                        <a:documentation>Französisch</a:documentation>
                         <value>Galician</value>
-                        <a:documentation>Auf galicische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Galicisch</a:documentation>
                         <value>German</value>
-                        <a:documentation>Auf deutsche Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Deutsch</a:documentation>
                         <value>Greek</value>
                         <a:documentation>Neugriechisch</a:documentation>
                         <value>Gujarati</value>
-                        <a:documentation>Auf Gujarati Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Gujarati</a:documentation>
                         <value>Hungarian</value>
-                        <a:documentation>Auf ungarische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Ungarisch</a:documentation>
                         <value>Hindi</value>
-                        <a:documentation>Auf Hindi Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Hindi</a:documentation>
                         <value>Icelandic</value>
-                        <a:documentation>Auf isländische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Isländisch</a:documentation>
                         <value>Irish</value>
-                        <a:documentation>Auf irische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Irisch</a:documentation>
                         <value>Italian</value>
-                        <a:documentation>Auf italienische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Italienisch</a:documentation>
                         <value>Kannada</value>
-                        <a:documentation>Auf kanaresische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Kanaresisch</a:documentation>
                         <value>Kurmanji</value>
-                        <a:documentation>Auf Kurmandschi Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Kurmandschi</a:documentation>
                         <value>Latvian</value>
-                        <a:documentation>Auf lettische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Lettisch</a:documentation>
                         <value>Lithuanian</value>
-                        <a:documentation>Auf litauische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Litauisch</a:documentation>
                         <value>Malayalam</value>
-                        <a:documentation>Auf Malayalam Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Malayalam</a:documentation>
                         <value>Norwegian Bokmål</value>
-                        <a:documentation>Auf norwegische Trennmuster umschalten (Bokmål).</a:documentation>
+                        <a:documentation>Norwegisch (Bokmål).</a:documentation>
                         <value>Norwegian Nynorsk</value>
-                        <a:documentation>Auf norwegische Trennmuster umschalten (Nynorsk).</a:documentation>
+                        <a:documentation>Norwegisch (Nynorsk).</a:documentation>
                         <value>Other</value>
                         <a:documentation>Auf keine der anderen Sprachen umschalten. Hilfreich bei Darstellungsproblemen.</a:documentation>
                         <value>Polish</value>
-                        <a:documentation>Auf polnische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Polnisch</a:documentation>
                         <value>Portuguese</value>
-                        <a:documentation>Auf portugiesische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Portugiesisch</a:documentation>
                         <value>Romanian</value>
-                        <a:documentation>Auf rumänische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Rumänisch</a:documentation>
                         <value>Russian</value>
-                        <a:documentation>Auf russische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Russisch</a:documentation>
                         <value>Serbian</value>
-                        <a:documentation>Auf serbische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Serbisch</a:documentation>
                         <value>Serbian (cyrillic)</value>
-                        <a:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</a:documentation>
+                        <a:documentation>Serbisch (kyrillische Buchstaben).</a:documentation>
                         <value>Slovak</value>
-                        <a:documentation>Auf slowakische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Slowakisch</a:documentation>
                         <value>Slovenian</value>
-                        <a:documentation>Auf slowenische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Slowenisch</a:documentation>
                         <value>Spanish</value>
-                        <a:documentation>Auf spanische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Spanisch</a:documentation>
                         <value>Swedish</value>
-                        <a:documentation>Auf schwedische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Schwedisch</a:documentation>
                         <value>Turkish</value>
-                        <a:documentation>Auf türkische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Türkisch</a:documentation>
                         <value>Ukrainian</value>
-                        <a:documentation>Auf ukrainische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Ukrainisch</a:documentation>
                         <value>Welsh</value>
-                        <a:documentation>Auf walisische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Walisisch</a:documentation>
                      </choice>
                   </attribute>
                </optional>
@@ -4900,99 +5007,99 @@
                            <param name="pattern">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</param>
                         </data>
                         <value>Ancient Greek</value>
-                        <a:documentation>Altgriechische Trennmuster.</a:documentation>
+                        <a:documentation>Altgriechisch</a:documentation>
                         <value>Armenian</value>
-                        <a:documentation>Auf armenische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Armenisch</a:documentation>
                         <value>Bahasa Indonesia</value>
-                        <a:documentation>Auf indonesische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Indonesisch</a:documentation>
                         <value>Basque</value>
-                        <a:documentation>Auf baskische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Baskisch</a:documentation>
                         <value>Bulgarian</value>
-                        <a:documentation>Auf bulgarische (lateinisches Alphabet) Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Bulgarisch (lateinisches Alphabet)</a:documentation>
                         <value>Catalan</value>
-                        <a:documentation>Auf katalanische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Katalanisch</a:documentation>
                         <value>Chinese</value>
                         <a:documentation>Auf chinsische Sprache umschalten.</a:documentation>
                         <value>Croatian</value>
-                        <a:documentation>Auf kroatische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Kroatisch</a:documentation>
                         <value>Czech</value>
-                        <a:documentation>Auf tschechische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Tschechisch</a:documentation>
                         <value>Danish</value>
-                        <a:documentation>Auf dänische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Dänisch</a:documentation>
                         <value>Dutch</value>
-                        <a:documentation>Auf niederländische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Niederländisch</a:documentation>
                         <value>English (Great Britain)</value>
-                        <a:documentation>Auf GB-englische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>GB-Englisch</a:documentation>
                         <value>English (USA)</value>
-                        <a:documentation>Auf US-englische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>US-Englisch</a:documentation>
                         <value>Esperanto</value>
-                        <a:documentation>Auf Esperanto Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Esperanto</a:documentation>
                         <value>Estonian</value>
-                        <a:documentation>Auf estnische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Estnisch</a:documentation>
                         <value>Finnish</value>
-                        <a:documentation>Auf finnische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Finnisch</a:documentation>
                         <value>French</value>
-                        <a:documentation>Französische Trennmuster</a:documentation>
+                        <a:documentation>Französisch</a:documentation>
                         <value>Galician</value>
-                        <a:documentation>Auf galicische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Galicisch</a:documentation>
                         <value>German</value>
-                        <a:documentation>Auf deutsche Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Deutsch</a:documentation>
                         <value>Greek</value>
                         <a:documentation>Neugriechisch</a:documentation>
                         <value>Gujarati</value>
-                        <a:documentation>Auf Gujarati Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Gujarati</a:documentation>
                         <value>Hungarian</value>
-                        <a:documentation>Auf ungarische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Ungarisch</a:documentation>
                         <value>Hindi</value>
-                        <a:documentation>Auf Hindi Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Hindi</a:documentation>
                         <value>Icelandic</value>
-                        <a:documentation>Auf isländische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Isländisch</a:documentation>
                         <value>Irish</value>
-                        <a:documentation>Auf irische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Irisch</a:documentation>
                         <value>Italian</value>
-                        <a:documentation>Auf italienische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Italienisch</a:documentation>
                         <value>Kannada</value>
-                        <a:documentation>Auf kanaresische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Kanaresisch</a:documentation>
                         <value>Kurmanji</value>
-                        <a:documentation>Auf Kurmandschi Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Kurmandschi</a:documentation>
                         <value>Latvian</value>
-                        <a:documentation>Auf lettische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Lettisch</a:documentation>
                         <value>Lithuanian</value>
-                        <a:documentation>Auf litauische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Litauisch</a:documentation>
                         <value>Malayalam</value>
-                        <a:documentation>Auf Malayalam Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Malayalam</a:documentation>
                         <value>Norwegian Bokmål</value>
-                        <a:documentation>Auf norwegische Trennmuster umschalten (Bokmål).</a:documentation>
+                        <a:documentation>Norwegisch (Bokmål).</a:documentation>
                         <value>Norwegian Nynorsk</value>
-                        <a:documentation>Auf norwegische Trennmuster umschalten (Nynorsk).</a:documentation>
+                        <a:documentation>Norwegisch (Nynorsk).</a:documentation>
                         <value>Other</value>
                         <a:documentation>Auf keine der anderen Sprachen umschalten. Hilfreich bei Darstellungsproblemen.</a:documentation>
                         <value>Polish</value>
-                        <a:documentation>Auf polnische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Polnisch</a:documentation>
                         <value>Portuguese</value>
-                        <a:documentation>Auf portugiesische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Portugiesisch</a:documentation>
                         <value>Romanian</value>
-                        <a:documentation>Auf rumänische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Rumänisch</a:documentation>
                         <value>Russian</value>
-                        <a:documentation>Auf russische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Russisch</a:documentation>
                         <value>Serbian</value>
-                        <a:documentation>Auf serbische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Serbisch</a:documentation>
                         <value>Serbian (cyrillic)</value>
-                        <a:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</a:documentation>
+                        <a:documentation>Serbisch (kyrillische Buchstaben).</a:documentation>
                         <value>Slovak</value>
-                        <a:documentation>Auf slowakische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Slowakisch</a:documentation>
                         <value>Slovenian</value>
-                        <a:documentation>Auf slowenische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Slowenisch</a:documentation>
                         <value>Spanish</value>
-                        <a:documentation>Auf spanische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Spanisch</a:documentation>
                         <value>Swedish</value>
-                        <a:documentation>Auf schwedische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Schwedisch</a:documentation>
                         <value>Turkish</value>
-                        <a:documentation>Auf türkische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Türkisch</a:documentation>
                         <value>Ukrainian</value>
-                        <a:documentation>Auf ukrainische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Ukrainisch</a:documentation>
                         <value>Welsh</value>
-                        <a:documentation>Auf walisische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Walisisch</a:documentation>
                      </choice>
                   </attribute>
                </optional>
@@ -5564,99 +5671,99 @@
                            <param name="pattern">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</param>
                         </data>
                         <value>Ancient Greek</value>
-                        <a:documentation>Altgriechische Trennmuster.</a:documentation>
+                        <a:documentation>Altgriechisch</a:documentation>
                         <value>Armenian</value>
-                        <a:documentation>Auf armenische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Armenisch</a:documentation>
                         <value>Bahasa Indonesia</value>
-                        <a:documentation>Auf indonesische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Indonesisch</a:documentation>
                         <value>Basque</value>
-                        <a:documentation>Auf baskische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Baskisch</a:documentation>
                         <value>Bulgarian</value>
-                        <a:documentation>Auf bulgarische (lateinisches Alphabet) Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Bulgarisch (lateinisches Alphabet)</a:documentation>
                         <value>Catalan</value>
-                        <a:documentation>Auf katalanische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Katalanisch</a:documentation>
                         <value>Chinese</value>
                         <a:documentation>Auf chinsische Sprache umschalten.</a:documentation>
                         <value>Croatian</value>
-                        <a:documentation>Auf kroatische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Kroatisch</a:documentation>
                         <value>Czech</value>
-                        <a:documentation>Auf tschechische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Tschechisch</a:documentation>
                         <value>Danish</value>
-                        <a:documentation>Auf dänische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Dänisch</a:documentation>
                         <value>Dutch</value>
-                        <a:documentation>Auf niederländische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Niederländisch</a:documentation>
                         <value>English (Great Britain)</value>
-                        <a:documentation>Auf GB-englische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>GB-Englisch</a:documentation>
                         <value>English (USA)</value>
-                        <a:documentation>Auf US-englische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>US-Englisch</a:documentation>
                         <value>Esperanto</value>
-                        <a:documentation>Auf Esperanto Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Esperanto</a:documentation>
                         <value>Estonian</value>
-                        <a:documentation>Auf estnische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Estnisch</a:documentation>
                         <value>Finnish</value>
-                        <a:documentation>Auf finnische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Finnisch</a:documentation>
                         <value>French</value>
-                        <a:documentation>Französische Trennmuster</a:documentation>
+                        <a:documentation>Französisch</a:documentation>
                         <value>Galician</value>
-                        <a:documentation>Auf galicische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Galicisch</a:documentation>
                         <value>German</value>
-                        <a:documentation>Auf deutsche Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Deutsch</a:documentation>
                         <value>Greek</value>
                         <a:documentation>Neugriechisch</a:documentation>
                         <value>Gujarati</value>
-                        <a:documentation>Auf Gujarati Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Gujarati</a:documentation>
                         <value>Hungarian</value>
-                        <a:documentation>Auf ungarische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Ungarisch</a:documentation>
                         <value>Hindi</value>
-                        <a:documentation>Auf Hindi Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Hindi</a:documentation>
                         <value>Icelandic</value>
-                        <a:documentation>Auf isländische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Isländisch</a:documentation>
                         <value>Irish</value>
-                        <a:documentation>Auf irische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Irisch</a:documentation>
                         <value>Italian</value>
-                        <a:documentation>Auf italienische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Italienisch</a:documentation>
                         <value>Kannada</value>
-                        <a:documentation>Auf kanaresische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Kanaresisch</a:documentation>
                         <value>Kurmanji</value>
-                        <a:documentation>Auf Kurmandschi Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Kurmandschi</a:documentation>
                         <value>Latvian</value>
-                        <a:documentation>Auf lettische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Lettisch</a:documentation>
                         <value>Lithuanian</value>
-                        <a:documentation>Auf litauische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Litauisch</a:documentation>
                         <value>Malayalam</value>
-                        <a:documentation>Auf Malayalam Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Malayalam</a:documentation>
                         <value>Norwegian Bokmål</value>
-                        <a:documentation>Auf norwegische Trennmuster umschalten (Bokmål).</a:documentation>
+                        <a:documentation>Norwegisch (Bokmål).</a:documentation>
                         <value>Norwegian Nynorsk</value>
-                        <a:documentation>Auf norwegische Trennmuster umschalten (Nynorsk).</a:documentation>
+                        <a:documentation>Norwegisch (Nynorsk).</a:documentation>
                         <value>Other</value>
                         <a:documentation>Auf keine der anderen Sprachen umschalten. Hilfreich bei Darstellungsproblemen.</a:documentation>
                         <value>Polish</value>
-                        <a:documentation>Auf polnische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Polnisch</a:documentation>
                         <value>Portuguese</value>
-                        <a:documentation>Auf portugiesische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Portugiesisch</a:documentation>
                         <value>Romanian</value>
-                        <a:documentation>Auf rumänische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Rumänisch</a:documentation>
                         <value>Russian</value>
-                        <a:documentation>Auf russische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Russisch</a:documentation>
                         <value>Serbian</value>
-                        <a:documentation>Auf serbische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Serbisch</a:documentation>
                         <value>Serbian (cyrillic)</value>
-                        <a:documentation>Auf serbische Trennmuster umschalten mit kyrillischen Buchstaben.</a:documentation>
+                        <a:documentation>Serbisch (kyrillische Buchstaben).</a:documentation>
                         <value>Slovak</value>
-                        <a:documentation>Auf slowakische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Slowakisch</a:documentation>
                         <value>Slovenian</value>
-                        <a:documentation>Auf slowenische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Slowenisch</a:documentation>
                         <value>Spanish</value>
-                        <a:documentation>Auf spanische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Spanisch</a:documentation>
                         <value>Swedish</value>
-                        <a:documentation>Auf schwedische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Schwedisch</a:documentation>
                         <value>Turkish</value>
-                        <a:documentation>Auf türkische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Türkisch</a:documentation>
                         <value>Ukrainian</value>
-                        <a:documentation>Auf ukrainische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Ukrainisch</a:documentation>
                         <value>Welsh</value>
-                        <a:documentation>Auf walisische Trennmuster umschalten.</a:documentation>
+                        <a:documentation>Walisisch</a:documentation>
                      </choice>
                   </attribute>
                </optional>

@@ -71,7 +71,7 @@ Via
 <Hyphenation>er-go-no-mic</Hyphenation>
 -------------------------------------------------------------------------------
 
-you can define hyphenation suggestions or exceptions for individual words. In this way, the words are then only hyphenated at the positions indicated by a hyphen.
+you can define hyphenation suggestions or exceptions for individual words. In this way, the words are then only hyphenated at the positions indicated by a hyphen. The `language` attribute can be used to specify the language for which the separation exception applies.
 
 TIP: With optical margin alignment, which is described in the section <<ch-marginprotrusion>>, you can reduce the number of hyphenations in the document somewhat.
 
