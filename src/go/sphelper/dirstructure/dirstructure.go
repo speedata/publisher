@@ -32,12 +32,13 @@ func MkBuilddir(cfg *config.Config, srcbindir string) error {
 		{src: filepath.Join(cfg.Basedir(), "fonts"), dest: filepath.Join(destdir, "sw", "fonts")},
 		{src: filepath.Join(cfg.Basedir(), "img"), dest: filepath.Join(destdir, "sw", "img")},
 		{src: filepath.Join(srcdir, "tex"), dest: filepath.Join(destdir, "sw", "tex")},
+		{src: filepath.Join(srcdir, "metapost"), dest: filepath.Join(destdir, "sw", "metapost")},
 		{src: filepath.Join(srcdir, "lua"), dest: filepath.Join(destdir, "sw", "lua"), reject: []string{"viznodelist.lua", "fileutils.lua", ".gitignore"}},
 		{src: filepath.Join(srcdir, "hyphenation"), dest: filepath.Join(destdir, "sw", "hyphenation")},
 	}
 
 	for _, v := range mapping {
-		reject := append(v.reject, ".DS_Store")
+		reject := append(v.reject, ".DS_Store", ".gitignore")
 		err = fileutils.CpR(v.src, v.dest, reject...)
 		if err != nil {
 			return err
