@@ -5512,6 +5512,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="graphics">
+                     <a:documentation>Draw the predefined MetaPost graphic around the table cell (experimental).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="padding">
                      <a:documentation>Shorthand for setting padding-top and the other values with this length.</a:documentation>
                   </attribute>

@@ -9,6 +9,8 @@ file_start("tabular.lua")
 
 module(...,package.seeall)
 
+local metapost = require("publisher.metapost")
+
 local dynamic_data = {}
 
 function new( self )
@@ -1066,6 +1068,16 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
             local ff = publisher.fonts.lookup_fontfamily_name_number[fontname]
             hlist = publisher.bgtext(hlist,bg,angle,bgcolor, ff or self.fontfamily,bgsize)
         end
+
+        if td_contents.graphics then
+            local _, x = metapost.prepareboxgraphic(hlist.width,hlist.height,td_contents.graphics)
+            local x = node.hpack(x)
+            x.width = 0
+            x.height = 0
+            hlist = node.insert_before(hlist,hlist,x)
+            hlist = node.hpack(hlist)
+        end
+
 
         local head = hlist
         if td_bordertop > 0 then

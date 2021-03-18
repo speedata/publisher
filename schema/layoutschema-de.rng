@@ -5512,6 +5512,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="graphics">
+                     <a:documentation>Zeichne die vordefinierte MetaPost-Grafik um die Tabellenzelle (experimentell).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="padding">
                      <a:documentation>Kurzform für die Bestimmung von padding-top und den anderen drei Werten mit derselben Maßangabe</a:documentation>
                   </attribute>

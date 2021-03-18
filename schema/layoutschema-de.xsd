@@ -6440,6 +6440,11 @@
           <xs:documentation>Die Anzahl der Spalten, die die Zelle überdecken soll. Voreinstellung ist 1.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="graphics">
+        <xs:annotation>
+          <xs:documentation>Zeichne die vordefinierte MetaPost-Grafik um die Tabellenzelle (experimentell).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="padding">
         <xs:annotation>
           <xs:documentation>Kurzform für die Bestimmung von padding-top und den anderen drei Werten mit derselben Maßangabe</xs:documentation>

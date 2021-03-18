@@ -356,73 +356,7 @@ function commands.box( layoutxml,dataxml )
     end
 
     if graphic then
-        local declarations = {}
-        local mp = mplib.new({mem_name = 'plain', find_file = metapost.finder,ini_version=true })
-        local l = mp:execute("input plain;")
-        if l.status > 0 then
-            w("l.term (a) %s",tostring(l.term))
-        end
-
-        l = mp:execute(string.format("box_width = %fbp;",width / 65782))
-        if l.status > 0 then
-            w("l.term (b) %s",tostring(l.term))
-        end
-        l = mp:execute(string.format("box_height = %fbp;",height / 65782))
-        if l.status > 0 then
-            w("l.term (c) %s",tostring(l.term))
-        end
-
-        for name,v in pairs(publisher.metapostcolors) do
-            if v.model == "cmyk" then
-                local varname = string.gsub(name,"%d","[]")
-                local decl = string.format("cmykcolor colors_%s;",varname)
-                if not declarations[decl] then
-                    declarations[decl] = true
-                    l = mp:execute(decl)
-                    if l.status > 0 then
-                        w("l.term (1) %s",tostring(l.term))
-                    end
-                end
-                local mpstatement = string.format("colors_%s := (%g, %g, %g, %g);",name, v.c, v.m, v.y, v.k )
-
-                l = mp:execute(mpstatement)
-                if l.status > 0 then
-                    w("l.term (2) %s",tostring(l.term))
-                end
-                    elseif v.model == "rgb" then
-                l = mp:execute(string.format("rgbcolor colors_%s; colors_%s := (%g, %g, %g);",varname, name, v.r, v.g, v.b ))
-            end
-        end
-
-        for name, v in pairs(publisher.metapostvariables) do
-            local expr
-            expr = string.format("%s %s ; %s := %s ;", v.typ,name,name,v[1])
-            l = mp:execute(expr)
-        end
-
-        l = mp:execute(publisher.metapostgraphics[graphic])
-        if not l then
-            err("Something is wrong with the metapost graphic %s", graphic)
-            return
-        end
-        if l and l.status > 0 then
-            w("l.term (3) %s",tostring(l.term))
-        end
-
-        local pdfstring
-        if l and l.fig and l.fig[1] then
-            pdfstring = "q " .. metapost.pstopdf(l.fig[1]:postscript()) .. " Q"
-            -- w("pdfstring %s",tostring(pdfstring))
-        end
-        mp:finish();
-        local a=node.new("whatsit","pdf_literal")
-        a.data = pdfstring
-        a.mode = 0
-        a = node.hpack(a,width,"exactly")
-        a.height = height
-        a = node.vpack(a)
-        return a
-
+        return metapost.boxgraphic(width,height,graphic)
     end
 
     local current_grid = publisher.current_grid
@@ -3884,6 +3818,7 @@ function commands.td( layoutxml,dataxml )
         ["background-transform"] = "rawstring",
         ["background-size"]        = "rawstring",
         ["background-font-family"] = "rawstring",
+        ["graphics"]               = "rawstring",
         ["valign"]           = "string",
         ["border-left"]      = "length",
         ["border-right"]     = "length",

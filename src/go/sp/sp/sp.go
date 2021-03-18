@@ -207,6 +207,7 @@ func init() {
 			filepath.Join(srcdir, "lua"),
 			filepath.Join(srcdir, "other"),
 			filepath.Join(srcdir, "tex"),
+			filepath.Join(srcdir, "metapost"),
 			filepath.Join(srcdir, "hyphenation")}, string(os.PathListSeparator)))
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
 		extradir(filepath.Join(installdir, "fonts"))

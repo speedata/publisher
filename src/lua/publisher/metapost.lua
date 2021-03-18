@@ -176,8 +176,98 @@ function pstopdf(str)
 end
 
 
-function finder (name, mode, type)
+local function finder (name, mode, type)
     local loc = kpse.find_file(name)
     if mode == "r" then return loc  end
     return name
+end
+
+function execute(mpobj,str)
+    -- w("execute %q",str)
+    if not str then
+        err("Empty metapost string for execute")
+        return false
+    end
+    local l = mpobj.mp:execute(str)
+    if l and l.status > 0 then
+        err("Executing %s: %s", str,l.term)
+        return false
+    end
+    mpobj.l = l
+    return true
+end
+
+function newbox(width_sp, height_sp)
+    local mp = mplib.new({mem_name = 'plain', find_file = finder,ini_version=true })
+    local mpobj = {
+        mp = mp,
+        width = width_sp,
+        height = height_sp,
+    }
+    if not execute(mpobj,"input plain;") then
+        err("Cannot start metapost.")
+        return nil
+    end
+    execute(mpobj,string.format("box_width = %fbp;",width_sp / 65782))
+    execute(mpobj,string.format("box_height = %fbp;",height_sp / 65782))
+
+
+    local declarations = {}
+    for name,v in pairs(publisher.metapostcolors) do
+        if v.model == "cmyk" then
+            local varname = string.gsub(name,"%d","[]")
+            local decl = string.format("cmykcolor colors_%s;",varname)
+            if not declarations[decl] then
+                declarations[decl] = true
+                execute(mpobj,decl)
+            end
+            local mpstatement = string.format("colors_%s := (%g, %g, %g, %g);",name, v.c, v.m, v.y, v.k )
+
+            execute(mpobj,mpstatement)
+        elseif v.model == "rgb" then
+            execute(mpobj,string.format("rgbcolor colors_%s; colors_%s := (%g, %g, %g);",name, name, v.r, v.g, v.b ))
+        end
+    end
+
+    for name, v in pairs(publisher.metapostvariables) do
+        local expr
+        expr = string.format("%s %s ; %s := %s ;", v.typ,name,name,v[1])
+        metapost.execute(mpobj,expr)
+    end
+    return mpobj
+end
+
+function finish(mpobj)
+    local pdfstring
+    if mpobj.l and mpobj.l.fig and mpobj.l.fig[1] then
+        pdfstring = "q " .. pstopdf(mpobj.l.fig[1]:postscript()) .. " Q"
+    end
+    mpobj.mp:finish()
+    return pdfstring
+end
+
+-- Return a pdf_whatsit node
+function prepareboxgraphic(width_sp,height_sp,graphic)
+    if not publisher.metapostgraphics[graphic] then
+        err("MetaPost graphic %s not defined",graphic)
+        return nil
+    end
+    local mpobj = newbox(width_sp,height_sp)
+    execute(mpobj,"beginfig(1);")
+    execute(mpobj,publisher.metapostgraphics[graphic])
+    execute(mpobj,"endfig;")
+    local pdfstring = finish(mpobj);
+    local a=node.new("whatsit","pdf_literal")
+    a.data = pdfstring
+    a.mode = 0
+    return mpobj,a
+end
+
+-- return a vbox with the pdf_whatsit node
+function boxgraphic(width_sp,height_sp,graphic)
+    local mpobj, a = prepareboxgraphic(width_sp,height_sp,graphic)
+    a = node.hpack(a,mpobj.width,"exactly")
+    a.height = mpobj.height
+    a = node.vpack(a)
+    return a
 end

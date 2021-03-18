@@ -33,12 +33,10 @@ To do this, you first define a graphic and then use it later in the box command:
     xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
     <DefineGraphic name="dottedbox">
-      beginfig(1);
       pickup pencircle scaled 1mm;
       draw (0,0) -- (box_width,0) -- (box_width, box_height) --
         (box_width, box_height) -- (0, box_height ) -- cycle
         dashed withdots withcolor 0.7red ;
-      endfig;
     </DefineGraphic>
 
 
@@ -83,12 +81,10 @@ All colors defined in the layout can be used in MetaPost with the prefix `color_
 <DefineColor name="mycolor" value="#FF4E00"/>
 
 <DefineGraphic name="dots">
-    beginfig(1);
     pickup pencircle scaled 3mm;
     for i=0 upto 3:
         draw (i * 1cm, i * 1cm) withcolor colors_mycolor ;
     endfor;
-    endfig;
 </DefineGraphic>
 
 <Record element="data">
