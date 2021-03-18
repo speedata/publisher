@@ -72,24 +72,21 @@ rake build
 rake buildlib
 -------------------------------------------------------------------------------
 +
-Um auch dieses Handbuch bzw. das ebook zu erstellen, werden https://asciidoctor.org/[asciidoctor], Java und https://gohugo.io/[Hugo] benötigt.
-Damit werden auch etliche Abhängigkeiten installiert.
+Um auch dieses Handbuch bzw. das ebook zu erstellen, wird https://asciidoctor.org/[asciidoctor] benötigt:
 +
 -------------------------------------------------------------------------------
 sudo gem install asciidoctor
-sudo apt install openjdk-11-jre
-sudo snap install hugo
 rake doc
 -------------------------------------------------------------------------------
 +
 Falls der speedata Publisher aus den Quellen gebaut wird, muss noch [.nowrap]#LuaTeX# hinzugefügt werden.
 Der vorgeschlagene Weg ist, unter <https://download.speedata.de/#extra> die Binärpakete zu laden und das passende Paket in das bin-Verzeichnis zu kopieren.
-Beispielsweise um LuajitTeX 1.10 auf einem Linux AMD64 System zu nutzen, kann man die folgenden Befehle ausführen:
+Beispielsweise um LuajitTeX 1.12 auf einem Linux AMD64 System zu nutzen, kann man die folgenden Befehle ausführen:
 +
 -------------------------------------------------------------------------------
-wget https://download.speedata.de/files/extra/luatex_110-win-mac-linux.zip
-unzip luatex_110-win-mac-linux.zip
-cp luatex/linux/amd64/1_10/sdluatex bin
+wget https://download.speedata.de/files/extra/luatex_112-win-mac-linux.zip
+unzip luatex_112-win-mac-linux.zip
+cp luatex/linux/amd64/1_12/sdluatex bin
 -------------------------------------------------------------------------------
 +
 Nach der Installation kann man `bin/sdluatex --version` aufrufen, um zu überprüfen, ob es die richtige Version ist.
@@ -98,3 +95,4 @@ Nach der Installation kann man `bin/sdluatex --version` aufrufen, um zu überpr�
 TIP: Unter Windows benötigt man die https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads[Microsoft Visual C++ compiler runtime]  und die DLL `VCRuntime140.dll`.
 
 
+// EOF

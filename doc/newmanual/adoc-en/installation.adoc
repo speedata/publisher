@@ -41,7 +41,14 @@ Now you can run sudo apt update and apt get install speedata-publisher and have 
     git clone https://github.com/speedata/publisher.git
     cd publisher
     rake build
-    rake doc
+    rake buildlib
++
+To build the manual and the ebook, you need https://asciidoctor.org/[asciidoctor]:
++
+-------------------------------------------------------------------------------
+sudo gem install asciidoctor
+rake doc
+-------------------------------------------------------------------------------
 +
 If you are building speedata Publisher from source, you will also need to install [.nowrap]#LuaTeX# manually. The recommended way is to download a binary from https://download.speedata.de/#extra and copy it into the bin/ directory of the Publisher. For example, to download and install LuajitTeX 1.12 on a Linux amd64 system, you could use the commands:
 +
@@ -52,12 +59,6 @@ If you are building speedata Publisher from source, you will also need to instal
 After installation, you can run `bin/sdluatex --version` to confirm the program version.
 
 TIP: On windows, you might need the https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads[Microsoft Visual C++ compiler]  and the VCRuntime140.dll.
-
-// TODO document:
-
-//  * docker hub
-//  * manual (asciidoctor)
-//  * bin/sdluatex or somewhere else?
 
 
 // EOF

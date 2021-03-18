@@ -54,6 +54,7 @@ endif::[]
 - <<ch-appendix-schema-assigning>>
 - <<ch-changelog,Changelog>>
 - <<app-glossary,Glossary>>
+- <<app-compatibilitylist,Compatibility list>>
 - <<ch-commandreference,Command reference>>
 
 
@@ -81,6 +82,7 @@ include::internalvariables.adoc[]
 include::associateschema.adoc[]
 include::changelog.adoc[]
 include::glossary.adoc[]
+include::compatibilitylist.adoc[]
 
 [appendix]
 [.split]

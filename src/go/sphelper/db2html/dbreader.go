@@ -64,6 +64,7 @@ func init() {
 		"images", "bildereinbinden",
 		"configuration", "konfiguration",
 		"commandline", "kommandozeile",
+		"compatibilitylist", "kompatibilitaet",
 		"cookbook-tcoinonerun", "kochbuch-verzeichnisseeindurchlauf",
 		"filenames", "dateinamen",
 		"defaults", "voreinstellungenimpublisher",
