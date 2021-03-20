@@ -32,6 +32,7 @@ To do this, you first define a graphic and then use it later in the box command:
     xmlns="urn:speedata.de:2009/publisher/en"
     xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
+    <!-- no beginfig() ... endfig necessary -->
     <DefineGraphic name="dottedbox">
       pickup pencircle scaled 1mm;
       draw (0,0) -- (box_width,0) -- (box_width, box_height) --
@@ -94,6 +95,8 @@ All colors defined in the layout can be used in MetaPost with the prefix `color_
 </Record>
 -------------------------------------------------------------------------------
 
+CSS level 3 colors can be included with `input csscolors;`
+
 == MetaPost resources
 
 There are a number of manuals and tutorials for MetaPost:
@@ -104,7 +107,4 @@ There are a number of manuals and tutorials for MetaPost:
 * A Beginner’s Guide to MetaPost for Creating High-Quality Graphics http://www.tug.org/pracjourn/2006-4/henderson/henderson.pdf
 * Puzzling graphics in MetaPost https://www.pragma-ade.com/articles/art-puzz.pdf
 * MetaFun (a macro package that is based on MetaPost - not all commands are supported by the speedata Publisher) https://www.pragma-ade.com/general/manuals/metafun-p.pdf
-
-
-
 

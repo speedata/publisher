@@ -1017,7 +1017,7 @@
       <xs:documentation>Definiere eine Metapost-Grafik die in Box benutzt werden kann. Experimentell!</xs:documentation>
     </xs:annotation>
     <xs:complexType mixed="true">
-      <xs:attribute name="name">
+      <xs:attribute name="name" use="required">
         <xs:annotation>
           <xs:documentation>Der Name der Grafik.</xs:documentation>
         </xs:annotation>

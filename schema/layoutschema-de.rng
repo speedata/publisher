@@ -1204,11 +1204,9 @@
          <a:documentation>Definiere eine Metapost-Grafik die in Box benutzt werden kann. Experimentell!</a:documentation>
          <interleave>
             <group>
-               <optional>
-                  <attribute name="name">
-                     <a:documentation>Der Name der Grafik.</a:documentation>
-                  </attribute>
-               </optional>
+               <attribute name="name">
+                  <a:documentation>Der Name der Grafik.</a:documentation>
+               </attribute>
                <text></text>
             </group>
             <ref name="foreign-nodes"></ref>

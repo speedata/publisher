@@ -32,6 +32,7 @@ Dazu definiert man erst eine Grafik und benutzt sie später bei dem Box-Befehl:
     xmlns="urn:speedata.de:2009/publisher/en"
     xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
+    <!-- beginfig() ... endfig nicht notwendig -->
     <DefineGraphic name="dottedbox">
       pickup pencircle scaled 1mm;
       draw (0,0) -- (box_width,0) -- (box_width, box_height) --
@@ -93,6 +94,8 @@ Alle Farben, die im Layout definiert werden, können mit dem Präfix `color_` in
     </PlaceObject>
 </Record>
 -------------------------------------------------------------------------------
+
+CSS Level 3 Farben können mit `input csscolors` eingebunden werden.
 
 == MetaPost Ressourcen
 

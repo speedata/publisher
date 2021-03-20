@@ -2281,7 +2281,7 @@
       <para>Definiere eine Metapost-Grafik die in Box benutzt werden kann. Experimentell!</para>
     </description>
     <childelements><text/></childelements>
-    <attribute en="name" optional="yes" type="text">
+    <attribute en="name" optional="no" type="text">
       <description xml:lang="en">
         <para>The name of the graphic.</para>
       </description>

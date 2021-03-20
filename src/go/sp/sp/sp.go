@@ -754,7 +754,6 @@ for details.
 This software is built upon and contains third party libraries including:
 
 LuaTeX (http://www.luatex.org/)
-Blackfriday (https://github.com/russross/blackfriday)
 Camingo Code font (https://www.janfromm.de/typefaces/camingomono/camingocode/, CC BY-ND 3.0)
 Crimson text (https://fonts.google.com/specimen/Crimson+Text, SIL Open font license)
 goconfig (https://github.com/Unknwon/goconfig)
