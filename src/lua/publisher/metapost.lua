@@ -232,7 +232,7 @@ function newbox(width_sp, height_sp)
     for name, v in pairs(publisher.metapostvariables) do
         local expr
         expr = string.format("%s %s ; %s := %s ;", v.typ,name,name,v[1])
-        metapost.execute(mpobj,expr)
+        execute(mpobj,expr)
     end
     return mpobj
 end
