@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.4">
+    <entry version="4.3.13" date="2021-03-23">
+        <en>MetaPost CSS colors and bug fixes.</en>
+        <de>MetaPost CSS-Farben und Fehlerkorrekturen.</de>
+    </entry>
+    <entry version="4.3.13" date="2021-03-23">
+        <en>Bugfix error on <tt>sd:file-exists()</tt> and external resource.</en>
+        <de>Fehlerkorrektur bei <tt>sd:file-exists()</tt> und externen Ressourcen.</de>
+    </entry>
     <entry version="4.3.12" date="2021-03-16">
       <en>Bugfix for Incscape on Windows (#324).</en>
       <de>Fehlerkorrektur für Incscape auf Windows (#324).</de>
