@@ -48,7 +48,6 @@ func getFilenameAndDoCaching(cachedir, outfilename, url string) (string, error) 
 		return "", err
 	}
 	if resp.StatusCode == http.StatusNotFound {
-		os.Remove(outpath)
 		return "", fmt.Errorf("Resource not found (404): %q", url)
 	}
 	outf, err := ioutil.TempFile(cachedir, "download")

@@ -142,7 +142,7 @@ local function lookupfile(filename)
     local ret = ld.sdLookupFile(c(filename))
     local _ret = ffi.string(ret)
     if string.match( _ret,errorpattern ) then
-        return nil, string.gsub( _ret,errorpattern ,"" )
+        return nil
     end
     if _ret == "" then return nil end
     fileslookup[filename] = _ret

@@ -36,6 +36,9 @@ func downloadFile(resourceURL string, outfile io.Writer) error {
 		return err
 	}
 	defer res.Body.Close()
+	if res.StatusCode != 200 {
+		return fmt.Errorf("Resource not found")
+	}
 	_, err = io.Copy(outfile, res.Body)
 	return err
 }
