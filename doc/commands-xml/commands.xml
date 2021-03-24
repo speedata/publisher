@@ -755,6 +755,14 @@
         <reference name="Commands"/>
       </oneOrMore>
     </childelements>
+    <attribute en="graphic" optional="yes" since="4.3.14" type="text">
+      <description xml:lang="en">
+        <para>The name of a metapost graphic.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name einer Metapost-Grafik.</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<AtPageCreation>
   <PlaceObject column="1" row="1">
@@ -793,6 +801,14 @@
         <reference name="Commands"/>
       </oneOrMore>
     </childelements>
+    <attribute en="graphic" optional="yes" since="4.3.14" type="text">
+      <description xml:lang="en">
+        <para>The name of a metapost graphic.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name einer Metapost-Grafik.</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<AtPageShipout>
   <PlaceObject column="1" row="20">

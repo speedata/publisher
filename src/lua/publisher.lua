@@ -1906,18 +1906,22 @@ function output_at( param )
             nodelist = rotate(nodelist,param.rotate, param.origin_x or 0, param.origin_y or 0)
         end
 
-        local n = add_glue( nodelist ,"head",{ width = delta_x })
-        n = node.hpack(n)
-        n = add_glue(n, "head", {width = delta_y})
-        n = node.vpack(n)
-        n.width  = 0
-        n.height = 0
-        n.depth  = 0
-        local tail = node.tail(pages[outputpage].pagebox)
-        tail.next = n
-        n.prev = tail
-
+        place_at(pages[outputpage].pagebox,nodelist,delta_x,delta_y)
     end
+end
+
+function place_at(pagebox,nodelist,x_sp,y_sp)
+    local tail = node.tail(pagebox)
+    local n = add_glue( nodelist ,"head",{ width = x_sp })
+    n = node.hpack(n)
+    n = add_glue(n, "head", {width = y_sp})
+    n = node.vpack(n)
+    n.width  = 0
+    n.height = 0
+    n.depth  = 0
+
+    tail.next = n
+    n.prev = tail
 end
 
 --- Return the XML structure that is stored at &lt;pagetype>. For every pagetype
@@ -2060,6 +2064,7 @@ function setup_page(pagenumber,fromwhere)
     if pagetype.layoutxml and pagetype.layoutxml.defaultcolor then
         current_page.defaultcolor = read_attribute(pagetype.layoutxml,nil,"defaultcolor","rawstring")
     end
+    current_page.graphic = pagetype.graphic
     local columnordering = pagetype.columnordering
     for _,j in ipairs(pagetype) do
         local eltname = elementname(j)
@@ -2109,6 +2114,11 @@ function setup_page(pagenumber,fromwhere)
         dispatch(current_page.atpagecreation,nil)
         current_pagenumber = cpn
         pagebreak_impossible = false
+        local graphic = current_page.atpagecreation.graphic
+        if graphic then
+            local _,whatsit = metapost.prepareboxgraphic(current_page.width,current_page.height,graphic,metapost.extra_page_parameter(current_page))
+            place_at(current_page.pagebox,whatsit,0,current_page.height)
+        end
     end
 
     local css_rules
@@ -2874,6 +2884,11 @@ function dothingsbeforeoutput( thispage )
         pagebreak_impossible = true
         dispatch(thispage.AtPageShipout)
         pagebreak_impossible = false
+        local graphic = thispage.AtPageShipout.graphic
+        if graphic then
+            local _,whatsit = metapost.prepareboxgraphic(thispage.width,thispage.height,graphic,metapost.extra_page_parameter(thispage))
+            place_at(thispage.pagebox,whatsit,0,thispage.height)
+        end
     end
 
     local current_page = pages[current_pagenumber]

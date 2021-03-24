@@ -90,6 +90,11 @@
          <a:documentation>Die Inhalte des Elements AtPageCreation werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird. Dieser Befehl kann in einem Seitentyp (Pagetype) benutzt werden.</a:documentation>
          <interleave>
             <group>
+               <optional>
+                  <attribute name="graphic">
+                     <a:documentation>Der Name einer Metapost-Grafik.</a:documentation>
+                  </attribute>
+               </optional>
                <oneOrMore>
                   <optional>
                      <ref name="e_AddSearchpath"></ref>
@@ -201,6 +206,11 @@
          <a:documentation>Die innerhalb dieses Befehls definierten Anweisungen werden ausgeführt, sobald die Seite ins PDF ausgegeben wird. Wird in Pagetype benutzt.</a:documentation>
          <interleave>
             <group>
+               <optional>
+                  <attribute name="graphic">
+                     <a:documentation>Der Name einer Metapost-Grafik.</a:documentation>
+                  </attribute>
+               </optional>
                <oneOrMore>
                   <optional>
                      <ref name="e_AddSearchpath"></ref>

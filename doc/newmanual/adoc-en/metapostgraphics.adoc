@@ -35,8 +35,8 @@ To do this, you first define a graphic and then use it later in the box command:
     <!-- no beginfig() ... endfig necessary -->
     <DefineGraphic name="dottedbox">
       pickup pencircle scaled 1mm;
-      draw (0,0) -- (box_width,0) -- (box_width, box_height) --
-        (box_width, box_height) -- (0, box_height ) -- cycle
+      draw (0,0) -- (box.width,0) -- (box.width, box.height) --
+        (box.width, box.height) -- (0, box.height ) -- cycle
         dashed withdots withcolor 0.7red ;
     </DefineGraphic>
 
@@ -49,7 +49,7 @@ To do this, you first define a graphic and then use it later in the box command:
 </Layout>
 -------------------------------------------------------------------------------
 
-The width of the box and the height of the box are defined with the variables `box_width` and `box_height` in MetaPost.
+The width of the box and the height of the box are defined with the variables `box.width` and `box.height` in MetaPost.
 This allows you to adjust the graphic to the defaults in the Publisher.
 
 .The dotted lines correspond to the specifications of the box. Raster display has been turned on to make this visible.
@@ -75,8 +75,8 @@ The assignment is evaluated at the beginning of the MetaPost context. Thus `curc
 
 == Predefined values
 
-All colors defined in the layout can be used in MetaPost with the prefix `color_`:
-
+* All colors defined in the layout can be used in MetaPost with the prefix `colors.`:
++
 [source, xml]
 -------------------------------------------------------------------------------
 <DefineColor name="mycolor" value="#FF4E00"/>
@@ -84,7 +84,7 @@ All colors defined in the layout can be used in MetaPost with the prefix `color_
 <DefineGraphic name="dots">
     pickup pencircle scaled 3mm;
     for i=0 upto 3:
-        draw (i * 1cm, i * 1cm) withcolor colors_mycolor ;
+        draw (i * 1cm, i * 1cm) withcolor colors.mycolor ;
     endfor;
 </DefineGraphic>
 
@@ -95,7 +95,24 @@ All colors defined in the layout can be used in MetaPost with the prefix `color_
 </Record>
 -------------------------------------------------------------------------------
 
-CSS level 3 colors can be included with `input csscolors;`
+* CSS level 3 colors can be included with `input csscolors;`
+* The width and height of a box can be accessed via `box.width` and `box.height`
+* In page types you can also access these variables:
++
+[options="header"]
+|=======
+| Variable | Description
+| `page.width` | Page width
+| `page.height` | Page height
+| `page.margin.left` | Margin left
+| `page.margin.right` | Margin right
+| `page.margin.top` | Margin top
+| `page.margin.bottom` | Margin bottom
+| `page.trim`  | Bleed
+|=======
+
+
+
 
 == MetaPost resources
 

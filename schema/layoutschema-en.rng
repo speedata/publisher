@@ -90,6 +90,11 @@
          <a:documentation>The contents of the element AtPageCreation is executed the first time the page is accessed. This is used in Pagetype.</a:documentation>
          <interleave>
             <group>
+               <optional>
+                  <attribute name="graphic">
+                     <a:documentation>The name of a metapost graphic.</a:documentation>
+                  </attribute>
+               </optional>
                <oneOrMore>
                   <optional>
                      <ref name="e_AddSearchpath"></ref>
@@ -201,6 +206,11 @@
          <a:documentation>The enclosed instructions will be executed when the page is placed into the PDF file. Used in Pagetype.</a:documentation>
          <interleave>
             <group>
+               <optional>
+                  <attribute name="graphic">
+                     <a:documentation>The name of a metapost graphic.</a:documentation>
+                  </attribute>
+               </optional>
                <oneOrMore>
                   <optional>
                      <ref name="e_AddSearchpath"></ref>

@@ -35,8 +35,8 @@ Dazu definiert man erst eine Grafik und benutzt sie später bei dem Box-Befehl:
     <!-- beginfig() ... endfig nicht notwendig -->
     <DefineGraphic name="dottedbox">
       pickup pencircle scaled 1mm;
-      draw (0,0) -- (box_width,0) -- (box_width, box_height) --
-        (box_width, box_height) -- (0, box_height ) -- cycle
+      draw (0,0) -- (box.width,0) -- (box.width, box.height) --
+        (box.width, box.height) -- (0, box.height ) -- cycle
         dashed withdots withcolor 0.7red ;
     </DefineGraphic>
 
@@ -49,7 +49,7 @@ Dazu definiert man erst eine Grafik und benutzt sie später bei dem Box-Befehl:
 </Layout>
 -------------------------------------------------------------------------------
 
-Die Breite der Box und die Höhe der Box sind mit den Variablen `box_width` und `box_height` in MetaPost definiert.
+Die Breite der Box und die Höhe der Box sind mit den Variablen `box.width` und `box.height` in MetaPost definiert.
 Damit kann man die Grafik an die Vorgaben im Publisher anpassen.
 
 .Die gepunkteten Linien entsprechen den Vorgaben der Box. Die Rasterdarstellung wurde eingeschaltet, damit das sichtbar wird.
@@ -68,15 +68,15 @@ Es können mit `<SetVariable>` Variablen für MetaPost gesetzt werden.
 <SetVariable
     variable="curcol"
     type="mp:rgbcolor"
-    select="'colors_mycolor'"/>
+    select="'colors.mycolor'"/>
 -------------------------------------------------------------------------------
 
 Die Zuweisung wird zu Beginn des MetaPost-Kontexts ausgewertet. Damit steht `curcol` am Anfang der Grafiken zur Verfügung.
 
 == Vordefinierte Werte
 
-Alle Farben, die im Layout definiert werden, können mit dem Präfix `color_` in MetaPost benutzt werden:
-
+* Alle Farben, die im Layout definiert werden, können mit dem Präfix `colors.` in MetaPost benutzt werden:
++
 [source, xml]
 -------------------------------------------------------------------------------
 <DefineColor name="mycolor" value="#FF4E00"/>
@@ -84,7 +84,7 @@ Alle Farben, die im Layout definiert werden, können mit dem Präfix `color_` in
 <DefineGraphic name="dots">
     pickup pencircle scaled 3mm;
     for i=0 upto 3:
-        draw (i * 1cm, i * 1cm) withcolor colors_mycolor ;
+        draw (i * 1cm, i * 1cm) withcolor colors.mycolor ;
     endfor;
 </DefineGraphic>
 
@@ -95,7 +95,21 @@ Alle Farben, die im Layout definiert werden, können mit dem Präfix `color_` in
 </Record>
 -------------------------------------------------------------------------------
 
-CSS Level 3 Farben können mit `input csscolors` eingebunden werden.
+* CSS Level 3 Farben können mit `input csscolors;` eingebunden werden.
+* Die Breite und Höhe der umgebenden Box können mit `box.width` und `box.height` abgefragt werden.
+* Bei Seitentypen stehen zusätzlich folgende Variablen zur Verfügung:
++
+[options="header"]
+|=======
+| Variable | Beschreibung
+| `page.width` | Seitenbreite
+| `page.height` | Seitenhöhe
+| `page.margin.left` | Rand links
+| `page.margin.right` | Rand rechts
+| `page.margin.top` | Rand oben
+| `page.margin.bottom` | Rand unten
+| `page.trim`  | Beschnittzugabe
+|=======
 
 == MetaPost Ressourcen
 

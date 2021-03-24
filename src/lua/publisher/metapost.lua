@@ -8,6 +8,22 @@
 
 module(...,package.seeall)
 
+
+-- helper
+
+function extra_page_parameter(current_page)
+    return {
+        ["page.margin.top"]    = sp_to_bp(current_page.grid.margin_top),
+        ["page.margin.left"]   = sp_to_bp(current_page.grid.margin_left),
+        ["page.margin.right"]  = sp_to_bp(current_page.grid.margin_right),
+        ["page.margin.bottom"] = sp_to_bp(current_page.grid.margin_bottom),
+        ["page.width"]         = sp_to_bp(current_page.width),
+        ["page.height"]        = sp_to_bp(current_page.height),
+        ["page.trim"]          = sp_to_bp(current_page.grid.trim),
+    }
+end
+
+
 -- PostScript operators and their pdf equivalent and #arguments. These are just the simple cases.
 local pdfoperators = {
     closepath = {"h",0},
@@ -208,24 +224,24 @@ function newbox(width_sp, height_sp)
         err("Cannot start metapost.")
         return nil
     end
-    execute(mpobj,string.format("box_width = %fbp;",width_sp / 65782))
-    execute(mpobj,string.format("box_height = %fbp;",height_sp / 65782))
+    execute(mpobj,string.format("box.width = %fbp;",width_sp / 65782))
+    execute(mpobj,string.format("box.height = %fbp;",height_sp / 65782))
 
 
     local declarations = {}
     for name,v in pairs(publisher.metapostcolors) do
         if v.model == "cmyk" then
             local varname = string.gsub(name,"%d","[]")
-            local decl = string.format("cmykcolor colors_%s;",varname)
+            local decl = string.format("cmykcolor colors.%s;",varname)
             if not declarations[decl] then
                 declarations[decl] = true
                 execute(mpobj,decl)
             end
-            local mpstatement = string.format("colors_%s := (%g, %g, %g, %g);",name, v.c, v.m, v.y, v.k )
+            local mpstatement = string.format("colors.%s := (%g, %g, %g, %g);",name, v.c, v.m, v.y, v.k )
 
             execute(mpobj,mpstatement)
         elseif v.model == "rgb" then
-            execute(mpobj,string.format("rgbcolor colors_%s; colors_%s := (%g, %g, %g);",name, name, v.r, v.g, v.b ))
+            execute(mpobj,string.format("rgbcolor colors.%s; colors.%s := (%g, %g, %g);",name, name, v.r, v.g, v.b ))
         end
     end
 
@@ -247,14 +263,18 @@ function finish(mpobj)
 end
 
 -- Return a pdf_whatsit node
-function prepareboxgraphic(width_sp,height_sp,graphic)
-    if not publisher.metapostgraphics[graphic] then
-        err("MetaPost graphic %s not defined",graphic)
+function prepareboxgraphic(width_sp,height_sp,graphicname,extra_parameter)
+    if not publisher.metapostgraphics[graphicname] then
+        err("MetaPost graphic %s not defined",graphicname)
         return nil
     end
     local mpobj = newbox(width_sp,height_sp)
     execute(mpobj,"beginfig(1);")
-    execute(mpobj,publisher.metapostgraphics[graphic])
+    for k,v in pairs(extra_parameter or {}) do
+        local fmt = string.format("%s = %s ;",k,v)
+        execute(mpobj,fmt)
+    end
+    execute(mpobj,publisher.metapostgraphics[graphicname])
     execute(mpobj,"endfig;")
     local pdfstring = finish(mpobj);
     local a=node.new("whatsit","pdf_literal")
@@ -264,8 +284,8 @@ function prepareboxgraphic(width_sp,height_sp,graphic)
 end
 
 -- return a vbox with the pdf_whatsit node
-function boxgraphic(width_sp,height_sp,graphic)
-    local mpobj, a = prepareboxgraphic(width_sp,height_sp,graphic)
+function boxgraphic(width_sp,height_sp,graphicname,extra_parameter)
+    local mpobj, a = prepareboxgraphic(width_sp,height_sp,graphicname,extra_parameter)
     a = node.hpack(a,mpobj.width,"exactly")
     a.height = mpobj.height
     a = node.vpack(a)

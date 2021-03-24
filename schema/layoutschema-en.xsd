@@ -111,6 +111,11 @@
         <xs:element minOccurs="0" ref="en:Until"/>
         <xs:element minOccurs="0" ref="en:While"/>
       </xs:sequence>
+      <xs:attribute name="graphic">
+        <xs:annotation>
+          <xs:documentation>The name of a metapost graphic.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="AtPageShipout">
@@ -153,6 +158,11 @@
         <xs:element minOccurs="0" ref="en:Until"/>
         <xs:element minOccurs="0" ref="en:While"/>
       </xs:sequence>
+      <xs:attribute name="graphic">
+        <xs:annotation>
+          <xs:documentation>The name of a metapost graphic.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="AttachFile">
