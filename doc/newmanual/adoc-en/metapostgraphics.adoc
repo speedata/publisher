@@ -95,8 +95,9 @@ The assignment is evaluated at the beginning of the MetaPost context. Thus `curc
 </Record>
 -------------------------------------------------------------------------------
 
-* CSS level 3 colors can be included with `input csscolors;`
+* CSS level 3 colors are defined in RGB colorspace.
 * The width and height of a box can be accessed via `box.width` and `box.height`
+* Hans Hagen's MetaFun macro package is included (parts of it).
 * In page types you can also access these variables:
 +
 [options="header"]

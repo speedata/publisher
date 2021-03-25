@@ -95,8 +95,9 @@ Die Zuweisung wird zu Beginn des MetaPost-Kontexts ausgewertet. Damit steht `cur
 </Record>
 -------------------------------------------------------------------------------
 
-* CSS Level 3 Farben können mit `input csscolors;` eingebunden werden.
+* CSS Level 3 Farben sind im RGB-Farbraum vordefiniert.
 * Die Breite und Höhe der umgebenden Box können mit `box.width` und `box.height` abgefragt werden.
+* Hans Hagens Metafun-Makros sind teilweise eingebunden.
 * Bei Seitentypen stehen zusätzlich folgende Variablen zur Verfügung:
 +
 [options="header"]

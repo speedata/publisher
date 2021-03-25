@@ -214,15 +214,17 @@ function execute(mpobj,str)
 end
 
 function newbox(width_sp, height_sp)
-    local mp = mplib.new({mem_name = 'plain', find_file = finder,ini_version=true })
+    local mp = mplib.new({mem_name = 'plain', find_file = finder,ini_version=true,math_mode = "double", random_seed = math.random(100) })
     local mpobj = {
         mp = mp,
         width = width_sp,
         height = height_sp,
     }
-    if not execute(mpobj,"input plain;") then
-        err("Cannot start metapost.")
-        return nil
+    for _,v in pairs({"plain","csscolors","metafun"}) do
+        if not execute(mpobj,string.format("input %s;",v)) then
+            err("Cannot start metapost.")
+            return nil
+        end
     end
     execute(mpobj,string.format("box.width = %fbp;",width_sp / 65782))
     execute(mpobj,string.format("box.height = %fbp;",height_sp / 65782))

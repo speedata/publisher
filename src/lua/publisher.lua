@@ -2117,7 +2117,7 @@ function setup_page(pagenumber,fromwhere)
         local graphic = current_page.atpagecreation.graphic
         if graphic then
             local _,whatsit = metapost.prepareboxgraphic(current_page.width,current_page.height,graphic,metapost.extra_page_parameter(current_page))
-            place_at(current_page.pagebox,whatsit,0,current_page.height)
+            place_at(current_page.pagebox,whatsit, current_page.grid.extra_margin,current_page.height+current_page.grid.extra_margin)
         end
     end
 
@@ -2879,6 +2879,12 @@ end
 
 --- After everything is ready for page ship-out, we add debug output and crop marks if necessary
 function dothingsbeforeoutput( thispage )
+    -- FIXME: what is the difference between thispage and current_page?
+    -- FIXME: use cg instead of r
+    local current_page = pages[current_pagenumber]
+    local r = current_page.grid
+    -- r should be cg
+    local cg = r
 
     if thispage and thispage.AtPageShipout then
         pagebreak_impossible = true
@@ -2887,14 +2893,10 @@ function dothingsbeforeoutput( thispage )
         local graphic = thispage.AtPageShipout.graphic
         if graphic then
             local _,whatsit = metapost.prepareboxgraphic(thispage.width,thispage.height,graphic,metapost.extra_page_parameter(thispage))
-            place_at(thispage.pagebox,whatsit,0,thispage.height)
+            place_at(thispage.pagebox,whatsit,thispage.grid.extra_margin,thispage.height+thispage.grid.extra_margin)
         end
     end
 
-    local current_page = pages[current_pagenumber]
-    local r = current_page.grid
-    -- r should be cg
-    local cg = r
     local str
     local thispagebox = pages[current_pagenumber].pagebox
     find_user_defined_whatsits(thispagebox)
