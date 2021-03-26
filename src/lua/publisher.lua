@@ -2879,12 +2879,7 @@ end
 
 --- After everything is ready for page ship-out, we add debug output and crop marks if necessary
 function dothingsbeforeoutput( thispage )
-    -- FIXME: what is the difference between thispage and current_page?
-    -- FIXME: use cg instead of r
-    local current_page = pages[current_pagenumber]
-    local r = current_page.grid
-    -- r should be cg
-    local cg = r
+    local cg = thispage.grid
 
     if thispage and thispage.AtPageShipout then
         pagebreak_impossible = true
@@ -2898,7 +2893,7 @@ function dothingsbeforeoutput( thispage )
     end
 
     local str
-    local thispagebox = pages[current_pagenumber].pagebox
+    local thispagebox = thispage.pagebox
     find_user_defined_whatsits(thispagebox)
     local firstbox
 
@@ -2930,7 +2925,7 @@ function dothingsbeforeoutput( thispage )
     if options.showgridallocation then
         local lit = node.new("whatsit","pdf_literal")
         lit.mode = 1
-        lit.data = r:draw_gridallocation()
+        lit.data = cg:draw_gridallocation()
 
         if firstbox then
             local tail = node.tail(firstbox)
@@ -2941,7 +2936,7 @@ function dothingsbeforeoutput( thispage )
         end
     end
 
-    for framename,v in pairs(r.positioning_frames) do
+    for framename,v in pairs(cg.positioning_frames) do
         for _,frame in ipairs(v) do
             if frame.draw then
                 local lit = node.new("whatsit","pdf_literal")
@@ -2961,7 +2956,7 @@ function dothingsbeforeoutput( thispage )
     if options.showgrid then
         local lit = node.new("whatsit","pdf_literal")
         lit.mode = 1
-        lit.data = r:draw_grid()
+        lit.data = cg:draw_grid()
         if firstbox then
             local tail = node.tail(firstbox)
             tail.next = lit
@@ -2971,15 +2966,15 @@ function dothingsbeforeoutput( thispage )
         end
     end
     if options.format == "PDF/UA" then
-        r:trimbox(options.crop, string.format("/StructParents %d",#pdfuapages))
+        cg:trimbox(options.crop, string.format("/StructParents %d",#pdfuapages))
     else
-        r:trimbox(options.crop)
+        cg:trimbox(options.crop)
     end
 
     if options.cutmarks then
         local lit = node.new("whatsit","pdf_literal")
         lit.mode = 1
-        lit.data = r:cutmarks()
+        lit.data = cg:cutmarks()
         if firstbox then
             local tail = node.tail(firstbox)
             tail.next = lit
@@ -2992,7 +2987,7 @@ function dothingsbeforeoutput( thispage )
     if options.trimmarks then
         local lit = node.new("whatsit","pdf_literal")
         lit.mode = 1
-        lit.data = r:trimmarks()
+        lit.data = cg:trimmarks()
         if firstbox then
             local tail = node.tail(firstbox)
             tail.next = lit
@@ -3003,8 +2998,8 @@ function dothingsbeforeoutput( thispage )
     end
 
     if firstbox then
-        local list_start = pages[current_pagenumber].pagebox
-        pages[current_pagenumber].pagebox = firstbox
+        local list_start = thispagebox
+        thispage.pagebox = firstbox
         node.tail(firstbox).next = list_start
         list_start.prev = node.tail(firstbox)
     end
