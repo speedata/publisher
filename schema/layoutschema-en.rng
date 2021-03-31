@@ -1131,6 +1131,11 @@
       <element name="DefineColor">
          <a:documentation>Colors defined with DefineColors can be referenced later by their name.</a:documentation>
          <optional>
+            <attribute name="alpha">
+               <a:documentation>Set the opacity of the color. (0-100/255, where 0 is invisible)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="colorname">
                <a:documentation>The name of the spot color if model is »spotcolor«. The name must match the required color name, such as »PANTONE 116 C«.</a:documentation>
             </attribute>
@@ -1168,42 +1173,42 @@
          </optional>
          <optional>
             <attribute name="value">
-               <a:documentation>Hex value of the color, such as #FA5 or #FFAA55.</a:documentation>
+               <a:documentation>Hex value of the color, such as #FA5 or #FFAA55 or rgb(255,170,85) or rgba(255,170,85,1).</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="r">
-               <a:documentation>Red part with RGB</a:documentation>
+               <a:documentation>Red part with rgb (0-100) or RGB (0-255).</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="g">
-               <a:documentation>Green part with RGB / gray part when using the model gray</a:documentation>
+               <a:documentation>Green part with rgb (0-100) or RGB (0-255) / gray part when using the model gray (0-100).</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="b">
-               <a:documentation>Blue part with RGB</a:documentation>
+               <a:documentation>Blue part with rgb (0-100) or RGB (0-255).</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="c">
-               <a:documentation>Cyan part with CMYK</a:documentation>
+               <a:documentation>Cyan part with cmyk (0-100).</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="m">
-               <a:documentation>Magenta part with CMYK</a:documentation>
+               <a:documentation>Magenta part with cmyk (0-100)</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="y">
-               <a:documentation>Yellow part with CMYK</a:documentation>
+               <a:documentation>Yellow part with cmyk (0-100).</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="k">
-               <a:documentation>Black part with CMYK</a:documentation>
+               <a:documentation>Black part with cmyk (0-100).</a:documentation>
             </attribute>
          </optional>
          <empty></empty>
@@ -2316,6 +2321,11 @@
                <optional>
                   <attribute name="minheight">
                      <a:documentation>The minimum height of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells) or a length.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="opacity">
+                     <a:documentation>Set image opacity (0-100, 100=fully opaque).</a:documentation>
                   </attribute>
                </optional>
                <optional>

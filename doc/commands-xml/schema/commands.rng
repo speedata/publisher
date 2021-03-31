@@ -249,6 +249,7 @@
                     <value>text</value>
                     <value>boolean</value>
                     <value>zerotohundred</value>
+                    <value>zerohundredtwofivefive</value>
                     <value>length</value>
                     <value>numberlengthorstar</value>
                     <value>yesnolength</value>
@@ -370,4 +371,3 @@
     </attribute>
   </define>
 </grammar>
-

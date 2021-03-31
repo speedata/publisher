@@ -81,6 +81,7 @@ att_bgpaddingtop   = 10
 att_bgpaddingbottom  = 11
 att_hyperlink      = 12
 att_underline_color = 13
+att_transparency    = 14  -- image transparency
 
 -- for debugging purpose
 att_origin         = 98
@@ -443,6 +444,9 @@ colors  = {
 -- An array of defined colors
 colortable = {"black","aliceblue", "orange", "rebeccapurple", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "blanchedalmond", "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkgrey", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange", "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkslategrey", "darkturquoise", "darkviolet", "deeppink", "deepskyblue", "dimgray", "dimgrey", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold", "goldenrod", "gray", "green", "greenyellow", "grey", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush", "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgray", "lightgreen", "lightgrey", "lightpink", "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightslategrey", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue", "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy", "oldlace", "olive", "olivedrab", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred", "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon", "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "slategrey", "snow", "springgreen", "steelblue", "tan", "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen"}
 
+-- The color stack to use
+defaultcolorstack = 0
+
 setmetatable(colors,{  __index = function (tbl,key)
     if not key then
         err("Empty color")
@@ -770,29 +774,37 @@ function pdfstring_from_color(colorname_or_number)
     if colno then
         colorname = colortable[colno]
     end
-    local colentry = colors[colorname]
-    if not colentry then
-        colentry = colors.black
-        err("Color %q not found",tostring(colorname_or_number))
-    end
-    return colentry.pdfstring
+    local colentry = get_colentry_from_name(colorname,"black")
+    if colentry then return colentry.pdfstring else return nil end
 end
 
-function get_colorindex_from_name(colorname, default)
+function get_colentry_from_name(colorname, default)
     colorname = colorname or default
-    local colorindex
+    local colentry
     if colorname then
         if not colors[colorname] then
             if default then
                 err("Color %q is not defined yet.",colorname)
             else
-                colorindex = nil
+                colentry = nil
             end
         else
-            colorindex = colors[colorname].index
+            colentry = colors[colorname]
         end
     end
-    return colorindex
+    return setmetatable(colentry, colormetatable)
+end
+
+function get_colorindex_from_name(colorname, default)
+    if not colorname then return nil end
+    local colentry = get_colentry_from_name(colorname,default)
+    if colentry then return colentry.index else return nil end
+end
+
+function transparentcolorstack()
+    if defaultcolorstack == 0 then
+        defaultcolorstack = pdf.newcolorstack("0 g 0 G/TRP1 gs","direct",true)
+    end
 end
 
 --- Bookmarks are collected and later processed. This function (recursively)
@@ -2456,9 +2468,18 @@ function usespotcolor(num)
 end
 
 -- Set the PDF page-resources for the current page.
-function setpageresources()
-
-    local gstateresource = string.format(" /ExtGState << /GS0 %d 0 R /GS1 %d 0 R >>", GS_State_OP_On, GS_State_OP_Off)
+function setpageresources(thispage)
+    -- thispage.transparenttext is something like { 40 = true, 20 = true}
+    -- but only if we use alpha values for color
+    local transparenttextresources = ""
+    if defaultcolorstack ~= 0 then
+        local tmp = {"/TRP1 << /CA 1 /ca 1 >>"}
+        for k,_ in pairs(thispage.transparenttext) do
+            tmp[#tmp + 1] = string.format("/TRP%s << /CA %g /ca %g >>",k,k/100,k/100)
+        end
+        transparenttextresources = table.concat(tmp,"")
+    end
+    local gstateresource = string.format(" /ExtGState << %s/GS0 %d 0 R /GS1 %d 0 R >>", transparenttextresources, GS_State_OP_On, GS_State_OP_Off)
     local cropbox = ""
 
     -- LuaTeX has setpageresources
@@ -2468,6 +2489,54 @@ function setpageresources()
         pdf.setpageresources(gstateresource)
     end
 end
+
+-- index metatable for colentry.pdfstring
+function colentry_index_function(tbl,idx)
+    local model = rawget(tbl,"model")
+    if model == "spotcolor" then
+        if idx == "pdfstring" then
+            usespotcolor(tbl.colornum)
+            local op
+            if tbl.overprint then
+                op = "/GS0 gs"
+            else
+                op = ""
+            end
+            return string.format("%s /CS%d CS /CS%d cs 1 scn ",op,tbl.colornum, tbl.colornum)
+        elseif idx == "pdfstring_stroking" then
+            usespotcolor(tbl.colornum)
+            local op
+            if tbl.overprint then
+                op = "/GS0 gs"
+            else
+                op = ""
+            end
+            local ret = string.format("%s /CS%d CS 1 scn ",op,tbl.colornum)
+            return ret
+        elseif idx == "pdfstring_fill" then
+            usespotcolor(tbl.colornum)
+            local op
+            if tbl.overprint then
+                op = "/GS0 gs"
+            else
+                op = ""
+            end
+            local ret = string.format("%s /CS%d cs 1 scn ",op,tbl.colornum)
+            return ret
+        end
+    elseif idx == "pdfstring_stroking" then
+        local _,b = fill_stroke_color(rawget(tbl,"pdfstring"))
+        return b
+    elseif idx == "pdfstring_fill" then
+        local a,_ = fill_stroke_color(rawget(tbl,"pdfstring"))
+        return a
+    -- elseif idx == "pdfstring" then
+    --     return rawget(tbl,"pdfstring")
+    end
+end
+
+-- used in DefineColor
+colormetatable = {__index = colentry_index_function}
 
 -- return the fill and stroke color of the given color string
 function fill_stroke_color( pdfcolor )
@@ -2540,19 +2609,19 @@ function circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp)
     if rulewidth_sp < 5 then
         framecolorname = colorname
     end
-    local colentry = colors[colorname]
+    local colentry = get_colentry_from_name(colorname)
     if not colentry then
         err("Color %q unknown, reverting to black",colorname or "(no color name given)")
         colentry = colors["black"]
     end
-    local framecolentry = colors[framecolorname]
+    local framecolentry = get_colentry_from_name(framecolorname)
+
     if not framecolentry then
         err("Color %q unknown, reverting to black",framecolorname or "(no color name given)")
         framecolentry = colors["black"]
     end
-
-    local fillcolor, _    =  fill_stroke_color(colentry.pdfstring)
-    local  _, bordercolor =  fill_stroke_color(framecolentry.pdfstring)
+    local fillcolor   = colentry.pdfstring_fill
+    local bordercolor = framecolentry.pdfstring_stroking
 
     local paint = node.new("whatsit","pdf_literal")
     paint.data = circle_pdfstring(0,0,radiusx_sp, radiusy_sp, bordercolor, fillcolor, rulewidth_sp)
@@ -2574,7 +2643,9 @@ function box( width_sp,height_sp,colorname )
         end
         paint.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colentry.pdfstring,_width,_height)
         paint.mode = 0
-
+        if colentry.alpha then
+            node.set_attribute(paint,att_fgcolor,get_colorindex_from_name(colorname))
+        end
         local hglue = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3 })
         h = node.insert_after(paint,paint,hglue)
 
@@ -2898,7 +2969,7 @@ function dothingsbeforeoutput( thispage )
     local firstbox
 
     -- for spot colors, if necessary
-    setpageresources()
+    setpageresources(thispage)
 
     -- White background on page. Todo: Make color customizable and background optional.
     local wd = sp_to_bp(current_page.width)
@@ -3141,6 +3212,7 @@ function find_user_defined_whatsits( head, parent )
             local props = node.getproperty(head)
             local underline = node.has_attribute(head,att_underline)
             local fgcolor = node.has_attribute(head,att_fgcolor)
+            local transparency = getprop(head,"opacity")
             local insert_startcolor = false
             local insert_endcolor = false
 
@@ -3174,7 +3246,7 @@ function find_user_defined_whatsits( head, parent )
                 node.set_attribute(colstop,att_underline,underline)
                 colstop.data  = ""
                 colstop.command = 2
-                colstop.stack = 0
+                colstop.stack = defaultcolorstack
                 local dontformat = node.has_attribute(head,att_dont_format)
                 if dontformat then
                     node.set_attribute(colstop,att_dont_format,dontformat)
@@ -3191,10 +3263,16 @@ function find_user_defined_whatsits( head, parent )
                 node.setproperty(colstart,props)
                 node.set_attribute(colstart,att_underline,underline)
                 local colorname = colortable[fgcolor]
-                local col = colors[colorname].pdfstring
+                local colorentry = colors[colorname]
+                local col = colorentry.pdfstring
+                local alpha = colorentry.alpha
+                if alpha then
+                    current_page.transparenttext[alpha] = true
+                    col = col .. string.format("/TRP%d gs",alpha )
+                end
                 colstart.data  = col
                 colstart.command = 1
-                colstart.stack = 0
+                colstart.stack = defaultcolorstack
 
                 local dontformat = node.has_attribute(head,att_dont_format)
                 if dontformat then
@@ -3204,6 +3282,20 @@ function find_user_defined_whatsits( head, parent )
                 parent.head = node.insert_before(parent.head,head,colstart)
             end
 
+            if transparency then
+                local colstart = node.new("whatsit","pdf_colorstack")
+                colstart.data = string.format("/TRP%d gs",transparency )
+                colstart.command = 1
+                colstart.stack = defaultcolorstack
+                current_page.transparenttext[transparency] = true
+
+                local colend = node.new("whatsit","pdf_colorstack")
+                colend.command = 2
+                colend.stack = defaultcolorstack
+                parent.head = node.insert_before(parent.head,head,colstart)
+                node.insert_after(parent.head,head,colend)
+                head = head.next
+            end
             -- First, let's look at hyperlinks from HTML <a href="...">
             -- Hyperlinks are inserted as attributes
             local hl = node.has_attribute(head,att_hyperlink)
@@ -4671,14 +4763,28 @@ function register_color( name )
     return #colortable
 end
 
+-- Get r,g,b and alpha values (#f0f,#ff00ff,rgb(0,255,0) or rgb(0,255,0,1))
 function getrgb( colorvalue )
-    local r,g,b
+    local r,g,b,a
     local model = "rgb"
+    local rgbstr = "^rgba?%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*%)$"
+    local rgbastr = "^rgba?%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d%.%d)%s*%)$"
     if string.sub(colorvalue,1,3) == "rgb" then
-        r,g,b = string.match(colorvalue, "^rgb%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*%)$")
+        if string.match(colorvalue, rgbstr) then
+            r,g,b = string.match(colorvalue, rgbstr)
+        elseif string.match(colorvalue, rgbastr) then
+            r,g,b,a = string.match(colorvalue, rgbastr)
+        else
+            -- w("don't know")
+        end
+        if r == nil then
+            err("Could not parse color %q",colorvalue)
+            return 0,0,0
+        end
         r = math.round(r / 255 , 3)
         g = math.round(g / 255 , 3)
         b = math.round(b / 255 , 3)
+        if a then a = a * 100 end
     elseif #colorvalue == 7 then
         r,g,b = string.match(colorvalue,"#?(%x%x)(%x%x)(%x%x)")
         r = math.round(tonumber(r,16) / 255, 3)
@@ -4689,8 +4795,11 @@ function getrgb( colorvalue )
         r = math.round(tonumber(r,16) / 15, 3)
         g = math.round(tonumber(g,16) / 15, 3)
         b = math.round(tonumber(b,16) / 15, 3)
+    else
+        err("Could not parse color %q",colorvalue)
+        return 0,0,0
     end
-    return r,g,b
+    return r,g,b,a
 end
 
 -- color is an integer
@@ -4715,8 +4824,8 @@ function set_color_if_necessary( nodelist,color )
     colstop.data  = ""
     colstart.command = 1
     colstop.command  = 2
-    colstart.stack = 0
-    colstop.stack  = 0
+    colstart.stack = defaultcolorstack
+    colstop.stack = defaultcolorstack
 
     if dontformat then
         node.set_attribute(colstart,att_dont_format,dontformat)

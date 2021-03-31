@@ -532,28 +532,18 @@ end
 function commands.define_color( layoutxml,dataxml )
     local name  = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     local value = publisher.read_attribute(layoutxml,dataxml,"value","rawstring")
+    local alpha = publisher.read_attribute(layoutxml,dataxml,"alpha","number")
     local model = publisher.read_attribute(layoutxml,dataxml,"model","string")
     local colorname = publisher.read_attribute(layoutxml,dataxml,"colorname","rawstring")
     local overprint = publisher.read_attribute(layoutxml,dataxml,"overprint","boolean")
 
-
-    local color = setmetatable({},
-        {
-           __index = function(tbl,idx)
-               if idx == "pdfstring" and tbl.model == "spotcolor" then
-                publisher.usespotcolor(tbl.colornum)
-                local op
-                if tbl.overprint then
-                    op = "/GS0 gs"
-                else
-                    op = ""
-                end
-                return string.format("%s /CS%d CS /CS%d cs 1 scn ",op,tbl.colornum, tbl.colornum)
-               end
-           end
-        })
+    local color = setmetatable({}, publisher.colormetatable)
     color.overprint = overprint
-
+    if alpha then
+        publisher.transparentcolorstack()
+        -- color.alpha is in the range of 0 to 100
+        color.alpha = alpha
+    end
     local op
     if overprint then
         op = "/GS0 gs"
@@ -588,11 +578,7 @@ function commands.define_color( layoutxml,dataxml )
         local k = publisher.read_attribute(layoutxml,dataxml,"k","number")
         color.colornum = spotcolors.register(colorname,c,m,y,k)
     elseif value then
-        if string.sub(value,1,1) ~= "#" then
-            err("DefineColor: value does not start with #, it is %q",tostring(value))
-            return nil
-        end
-        color.r,color.g,color.b = publisher.getrgb(value)
+        color.r,color.g,color.b,color.alpha = publisher.getrgb(value)
         color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
         model = "rgb"
         publisher.metapostcolors[name] = {model = model, r = color.r, g = color.g, b = color.b }
@@ -600,9 +586,9 @@ function commands.define_color( layoutxml,dataxml )
         err("Unknown color model: %s",model or "?")
     end
 
-    log("Defining color %q",name)
     color.model = model
     color.index = publisher.register_color(name)
+    log("Defining color %q (%d)",name,color.index)
     publisher.colors[name]=color
 end
 
@@ -1170,6 +1156,7 @@ function commands.image( layoutxml,dataxml )
     local rotate    = publisher.read_attribute(layoutxml,dataxml,"rotate",     "number")
     local fallback  = publisher.read_attribute(layoutxml,dataxml,"fallback",   "rawstring")
     local imagetype = publisher.read_attribute(layoutxml,dataxml,"imagetype",  "rawstring")
+    local opacity   = publisher.read_attribute(layoutxml,dataxml,"opacity",     "number")
     local class = publisher.read_attribute(layoutxml,dataxml,"class","rawstring")
     local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "rawstring")
     local css_rules = publisher.css:matches({element = 'img', class=class,id=id}) or {}
@@ -1336,6 +1323,11 @@ function commands.image( layoutxml,dataxml )
     image.width  = width
     image.height = height
 
+    local imagenode = img.node(image)
+    if opacity then
+        publisher.transparentcolorstack()
+        publisher.setprop(imagenode,"opacity",opacity)
+    end
     local box
     if clip then
         local shift_left,shift_up = 0,0
@@ -1366,9 +1358,8 @@ function commands.image( layoutxml,dataxml )
         pdf_restore = node.new("whatsit","pdf_restore")
 
         a.data = string.format("%g %g m %g %g l %g %g l %g %g l W n ",left,bottom,right,bottom,right,top,left,top)
-        i = img.node(image)
         node.insert_after(pdf_save,pdf_save,a)
-        node.insert_after(a,a,i)
+        node.insert_after(a,a,imagenode)
         box = node.hpack(pdf_save)
         box.depth = 0
         node.insert_after(box,node.tail(box),pdf_restore)
@@ -1389,7 +1380,7 @@ function commands.image( layoutxml,dataxml )
         node.set_attribute(box, publisher.att_shift_up, padding_shift_up)
 
     else
-        box = node.vpack(img.node(image))
+        box = node.vpack(imagenode)
         node.set_attribute(box,publisher.att_origin,publisher.origin_image)
         node.set_attribute(box,publisher.att_lineheight,box.height)
         node.set_attribute(box, publisher.att_shift_left, padding_shift_left)
@@ -2975,16 +2966,16 @@ function commands.rule( layoutxml,dataxml )
     else
         dashpattern = ""
     end
-    if not publisher.colors[colorname] then
-        err("Rule: colorname %q unknown",tostring(colorname))
-        colorname = "black"
-    end
+    local colentry = publisher.get_colentry_from_name(colorname)
     if direction == "horizontal" then
-        n.data = string.format("q %g w %s %s 0 0 m %g 0 l S Q",rulewidth, dashpattern, publisher.colors[colorname].pdfstring,length)
+        n.data = string.format("q %g w %s %s 0 0 m %g 0 l S Q",rulewidth, dashpattern, colentry.pdfstring,length)
     elseif direction == "vertical" then
-        n.data = string.format("q %g w %s %s 0 0 m 0 %g l S Q",rulewidth,dashpattern, publisher.colors[colorname].pdfstring,-length)
+        n.data = string.format("q %g w %s %s 0 0 m 0 %g l S Q",rulewidth,dashpattern, colentry.pdfstring,-length)
     else
         --
+    end
+    if colentry.alpha then
+        node.set_attribute(n,publisher.att_fgcolor,colentry.index)
     end
     n = node.hpack(n)
     return n

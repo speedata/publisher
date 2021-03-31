@@ -917,6 +917,11 @@
       <xs:documentation>Colors defined with DefineColors can be referenced later by their name.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
+      <xs:attribute name="alpha">
+        <xs:annotation>
+          <xs:documentation>Set the opacity of the color. (0-100/255, where 0 is invisible)</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="colorname">
         <xs:annotation>
           <xs:documentation>The name of the spot color if model is »spotcolor«. The name must match the required color name, such as »PANTONE 116 C«.</xs:documentation>
@@ -982,42 +987,42 @@
       </xs:attribute>
       <xs:attribute name="value">
         <xs:annotation>
-          <xs:documentation>Hex value of the color, such as #FA5 or #FFAA55.</xs:documentation>
+          <xs:documentation>Hex value of the color, such as #FA5 or #FFAA55 or rgb(255,170,85) or rgba(255,170,85,1).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="r">
         <xs:annotation>
-          <xs:documentation>Red part with RGB</xs:documentation>
+          <xs:documentation>Red part with rgb (0-100) or RGB (0-255).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="g">
         <xs:annotation>
-          <xs:documentation>Green part with RGB / gray part when using the model gray</xs:documentation>
+          <xs:documentation>Green part with rgb (0-100) or RGB (0-255) / gray part when using the model gray (0-100).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="b">
         <xs:annotation>
-          <xs:documentation>Blue part with RGB</xs:documentation>
+          <xs:documentation>Blue part with rgb (0-100) or RGB (0-255).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="c">
         <xs:annotation>
-          <xs:documentation>Cyan part with CMYK</xs:documentation>
+          <xs:documentation>Cyan part with cmyk (0-100).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="m">
         <xs:annotation>
-          <xs:documentation>Magenta part with CMYK</xs:documentation>
+          <xs:documentation>Magenta part with cmyk (0-100)</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="y">
         <xs:annotation>
-          <xs:documentation>Yellow part with CMYK</xs:documentation>
+          <xs:documentation>Yellow part with cmyk (0-100).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="k">
         <xs:annotation>
-          <xs:documentation>Black part with CMYK</xs:documentation>
+          <xs:documentation>Black part with cmyk (0-100).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
@@ -2359,6 +2364,11 @@
       <xs:attribute name="minheight">
         <xs:annotation>
           <xs:documentation>The minimum height of the image. Only used when clip="no". Value is a number (grid cells) or a length.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="opacity">
+        <xs:annotation>
+          <xs:documentation>Set image opacity (0-100, 100=fully opaque).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="padding">

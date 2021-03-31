@@ -917,6 +917,11 @@
       <xs:documentation>Definiert Farben, die später im Layout benutzt werden können</xs:documentation>
     </xs:annotation>
     <xs:complexType>
+      <xs:attribute name="alpha">
+        <xs:annotation>
+          <xs:documentation>Setze die Farbintensität (Deckung) im Bereich von 0-100 bzw. bei RGB von 0-255. 0 bedeutet unsichtbar.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="colorname">
         <xs:annotation>
           <xs:documentation>Der Name der Sonderfarbe wenn das Modell auf »spotcolor« eingestellt ist. Der muss den offiziellen Namen tragen, wie z.B. »PANTONE 116 C«.</xs:documentation>
@@ -924,7 +929,7 @@
       </xs:attribute>
       <xs:attribute name="model">
         <xs:annotation>
-          <xs:documentation>Das Farbmodell, das benutzt werden soll. Derzeit werden »rgb«, »cmyk«, “gray” und spotcolor« unterstützt.</xs:documentation>
+          <xs:documentation>Das Farbmodell, das benutzt werden soll. Derzeit werden »rgb«, »cmyk«, »gray« und »spotcolor« unterstützt.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -982,42 +987,42 @@
       </xs:attribute>
       <xs:attribute name="value">
         <xs:annotation>
-          <xs:documentation>Der Hexwert der Farbe, wie beispielsweise #FA5 oder #FFAA55.</xs:documentation>
+          <xs:documentation>Der Hexwert der Farbe, wie beispielsweise #FA5 oder #FFAA55 oder rgb(255,170,85) oder rgba(255,170,85,1).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="r">
         <xs:annotation>
-          <xs:documentation>Rot Anteil bei RGB</xs:documentation>
+          <xs:documentation>Rot Anteil bei rgb (0-100) oder RGB (0-255).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="g">
         <xs:annotation>
-          <xs:documentation>Grün Anteil bei RGB</xs:documentation>
+          <xs:documentation>Grün Anteil bei rgb (0-100) oder RGB (0-255) bzw. Grauanteil beim Farbmodell gray (0-100).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="b">
         <xs:annotation>
-          <xs:documentation>Blau Anteil bei RGB</xs:documentation>
+          <xs:documentation>Blau Anteil bei rgb (0-100) oder RGB (0-255).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="c">
         <xs:annotation>
-          <xs:documentation>Cyan Anteil bei CMYK</xs:documentation>
+          <xs:documentation>Cyan Anteil bei cmyk (0-100).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="m">
         <xs:annotation>
-          <xs:documentation>Magenta Anteil bei CMYK</xs:documentation>
+          <xs:documentation>Magenta Anteil bei cmyk (0-100)</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="y">
         <xs:annotation>
-          <xs:documentation>Gelb Anteil bei CMYK</xs:documentation>
+          <xs:documentation>Gelb Anteil bei cmyk (0-100).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="k">
         <xs:annotation>
-          <xs:documentation>Schwarz (key) Anteil bei CMYK</xs:documentation>
+          <xs:documentation>Schwarz (key) Anteil bei cmyk (0-100).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
@@ -2359,6 +2364,11 @@
       <xs:attribute name="minheight">
         <xs:annotation>
           <xs:documentation>Die minimale Breite des Bilds. Nur, wenn clip="no". Angabe in absoluten Längen oder Anzahl Rasterzellen.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="opacity">
+        <xs:annotation>
+          <xs:documentation>Setze den Deckungsgrad des Bildes (0-100, 100 = voll deckend).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="padding">

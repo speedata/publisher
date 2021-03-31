@@ -17,12 +17,10 @@ In der Regel reicht eine Angabe bei dem Objekt, das ausgegeben werden soll:
     </PlaceObject>
 -------------------------------------------------------------------------------
 
+Alle CSS4 Farben sind im Publisher definiert, siehe dazu die Liste bei <<cmd-definecolor,`<DefineColor>`>>.
 
 .Nicht jede Farbkombination ist schön
 image::kreismitfarbe.png[width=20%,scaledwidth=50%]
-
-Die Farben können auch als Hexadezimalwert oder als `rgb(...)`, z.B. `rgb(255, 19, 147)` angegeben werden, wie bei HTML.
-Dem drei oder sechsstelligen Wert muss ein Doppelkreuz vorangestellt sein, zum Beispiel: `...color="{hexcolor}"`.
 
 Möchte man Farben in einem anderen Farbraum (CMYK, Grau, Sonderfarben) ausgeben, müssen diese vorher definiert werden:
 
@@ -64,6 +62,27 @@ Im PDF wird diese Farbe unter dem Namen `speedatagreen` geführt und in der Ausg
 .Die neue Farbe erscheint im PDF als eigener Farbkanal
 image::speedatagruen.png[width=90%,scaledwidth=100%]
 
-* Überdrucken
-* Farben mit rgb(r,g,b)
+== Angaben als HTML-Wert
 
+Farben können beim Benutzen direkt definert werden:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject allocate="no" column="3">
+    <Box height="4" width="5" backgroundcolor="#FFC72C"  />
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+Die Farben können nicht nur als Hexadezimalwert (drei oder sechssstellig), sondern auch in der Form `rgb(...)`, z.B. `rgb(255, 19, 147)` angegeben werden, wie bei HTML. Diese Angaben können auch bei `<DefineColor>` benutzt werden:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineColor name="meinrot" value="rgb(255,0,0)" />
+-------------------------------------------------------------------------------
+
+== Transparenz
+
+Farbwerte können mit einem Alpha-Kanal angegeben werden, der die Farbintensität im Bereich von 0-100 angibt, wobei 100 eine volle Deckung ist und 0 die Farbe gar nicht darstellt. HTML-Angaben wie `rgb(...)` können als vierten Parameter die Deckungskraft als Wert von 0–1 angeben.
+Transparenz funktioniert möglicherweise nicht mit jedem Grafikobjekt. Bitte nicht zögern und ggf. einen <<ch-hilfeerhalten,Fehlerbericht>> schreiben.
+
+// EOF

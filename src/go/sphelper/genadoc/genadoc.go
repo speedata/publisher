@@ -111,24 +111,26 @@ func childelements(lang string, children []*commandsxml.Command) string {
 
 func atttypeinfo(att *commandsxml.Attribute, lang string) string {
 	atttypesDe := map[string]string{
-		"boolean":            "yes oder no",
-		"xpath":              `<<ch-xpathfunktionen,XPath-Ausdruck>>`,
-		"text":               "Text",
-		"number":             "Zahl",
-		"length":             "Längenangabe",
-		"yesnolength":        "yes, no oder Längenangabe",
-		"yesnonumber":        "yes, no oder eine Zahl",
-		"numberorlength":     "Zahl oder Längenangabe",
-		"numberlengthorstar": "Zahl, Maßangabe oder *-Angaben",
-		"zerotohundred":      "0 bis 100",
+		"boolean":                "yes oder no",
+		"xpath":                  `<<ch-xpathfunktionen,XPath-Ausdruck>>`,
+		"text":                   "Text",
+		"number":                 "Zahl",
+		"length":                 "Längenangabe",
+		"yesnolength":            "yes, no oder Längenangabe",
+		"yesnonumber":            "yes, no oder eine Zahl",
+		"numberorlength":         "Zahl oder Längenangabe",
+		"numberlengthorstar":     "Zahl, Maßangabe oder *-Angaben",
+		"zerotohundred":          "0 bis 100",
+		"zerohundredtwofivefive": "0 bis 100 bzw. 0 bis 255",
 	}
 	atttypesEn := map[string]string{
-		"boolean":            "yes or no",
-		"xpath":              `<<ch-xpathfunctions,XPath expression>>`,
-		"numberorlength":     "number or length",
-		"numberlengthorstar": "Number, length or *-numbers",
-		"yesnolength":        "yes, no or length",
-		"zerotohundred":      "0 up to 100",
+		"boolean":                "yes or no",
+		"xpath":                  `<<ch-xpathfunctions,XPath expression>>`,
+		"numberorlength":         "number or length",
+		"numberlengthorstar":     "Number, length or *-numbers",
+		"yesnolength":            "yes, no or length",
+		"zerotohundred":          "0 up to 100",
+		"zerohundredtwofivefive": "0 to 100 or 0 to 255",
 	}
 	ret := []string{}
 	if att.Type != "" {

@@ -22,6 +22,7 @@ function page.new( self,width,height,additional_margin, trim,pagenumber )
     grid = grid:new(pagenumber),
     width  = width,
     height = height,
+    transparenttext = {}, -- values for alpha
     pagebox = node.new("vlist"),
   }
 

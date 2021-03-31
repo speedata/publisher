@@ -116,6 +116,7 @@ Stop processing data
 Duration: 0.223866 seconds
 -------------------------------------------------------------------------------
 
+[[ch-hilfeerhalten]]
 == Wie Sie Hilfe erhalten
 
 Wenn alle Fehlersuche fehlschlägt oder wenn Sie Fragen oder Kommentare haben, die Sie mit anderen teilen möchten, können Sie die folgenden Ressourcen nutzen:
@@ -131,39 +132,5 @@ Feature-Requests auf Github werden alle gesehen und auf einer nicht-öffentliche
 
 Wenn Sie einen Fehlerbericht haben: Bitte folgen Sie der einfachen Richtlinie: Machen Sie ein Beispiel, das so klein wie möglich ist, aber den Fehler zeigt. Sonst kann ich nicht sehen, was schief läuft.
 
-
-
-
-
-////
-
-<?xml version="1.0" encoding="UTF-8"?>
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-  xmlns:sd="urn:speedata:2009/publisher/functions/en">
-
-  <Trace objects="yes"/>
-
-  <Record element="data">
-    <PlaceObject>
-      <Table columndistance="2pt" leading="2pt">
-        <Loop select="5" variable="i">
-          <Tr>
-            <Loop select="4" variable="j">
-              <Td>
-                <Paragraph>
-                  <Value select="concat('Zelle ',$i', '/', $j)"/>
-                </Paragraph>
-              </Td>
-            </Loop>
-          </Tr>
-        </Loop>
-      </Table>
-    </PlaceObject>
-
-  </Record>
-
-</Layout>
-
-////
 
 // Ende

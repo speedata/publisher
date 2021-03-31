@@ -2123,6 +2123,14 @@
       <para>Definiert Farben, die später im Layout benutzt werden können</para>
     </description>
     <childelements/>
+    <attribute en="alpha" type="number" optional="yes" since="4.3.15">
+      <description xml:lang="en">
+        <para>Set the opacity of the color. (0-100/255, where 0 is invisible)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze die Farbintensität (Deckung) im Bereich von 0-100 bzw. bei RGB von 0-255. 0 bedeutet unsichtbar.</para>
+      </description>
+    </attribute>
     <attribute en="colorname" type="text" optional="yes">
       <description xml:lang="en">
         <para>The name of the spot color if model is »spotcolor«. The name must match the required color name, such as »PANTONE 116 C«.</para>
@@ -2136,7 +2144,7 @@
         <para>Color model to be used for the color. Currently “rgb”, “cmyk”, “gray” and “spotcolor” are supported.</para>
       </description>
       <description xml:lang="de">
-        <para>Das Farbmodell, das benutzt werden soll. Derzeit werden »rgb«, »cmyk«, “gray” und spotcolor« unterstützt.</para>
+        <para>Das Farbmodell, das benutzt werden soll. Derzeit werden »rgb«, »cmyk«, »gray« und »spotcolor« unterstützt.</para>
       </description>
       <choice en="cmyk">
         <description xml:lang="en">
@@ -2213,66 +2221,66 @@
     </attribute>
     <attribute en="value" type="text" optional="yes">
       <description xml:lang="en">
-        <para>Hex value of the color, such as <tt>#FA5</tt> or <tt>#FFAA55</tt>.</para>
+        <para>Hex value of the color, such as <tt>#FA5</tt> or <tt>#FFAA55</tt> or <tt>rgb(255,170,85)</tt> or <tt>rgba(255,170,85,1)</tt>.</para>
       </description>
       <description xml:lang="de">
-        <para>Der Hexwert der Farbe, wie beispielsweise <tt>#FA5</tt> oder <tt>#FFAA55</tt>.</para>
+        <para>Der Hexwert der Farbe, wie beispielsweise <tt>#FA5</tt> oder <tt>#FFAA55</tt> oder <tt>rgb(255,170,85)</tt> oder <tt>rgba(255,170,85,1)</tt>.</para>
       </description>
     </attribute>
-    <attribute en="r" type="zerotohundred" optional="yes">
+    <attribute en="r" type="zerohundredtwofivefive" optional="yes">
       <description xml:lang="en">
-        <para>Red part with RGB</para>
+        <para>Red part with rgb (0-100) or RGB (0-255).</para>
       </description>
       <description xml:lang="de">
-        <para>Rot Anteil bei RGB</para>
+        <para>Rot Anteil bei rgb (0-100) oder RGB (0-255).</para>
       </description>
     </attribute>
-    <attribute en="g" type="zerotohundred" optional="yes">
+    <attribute en="g" type="zerohundredtwofivefive" optional="yes">
       <description xml:lang="en">
-        <para>Green part with RGB / gray part when using the model gray</para>
+        <para>Green part with rgb (0-100) or RGB (0-255) / gray part when using the model gray (0-100).</para>
       </description>
       <description xml:lang="de">
-        <para>Grün Anteil bei RGB</para>
+        <para>Grün Anteil bei rgb (0-100) oder RGB (0-255) bzw. Grauanteil beim Farbmodell gray (0-100).</para>
       </description>
     </attribute>
-    <attribute en="b" type="zerotohundred" optional="yes">
+    <attribute en="b" type="zerohundredtwofivefive" optional="yes">
       <description xml:lang="en">
-        <para>Blue part with RGB</para>
+        <para>Blue part with rgb (0-100) or RGB (0-255).</para>
       </description>
       <description xml:lang="de">
-        <para>Blau Anteil bei RGB</para>
+        <para>Blau Anteil bei rgb (0-100) oder RGB (0-255).</para>
       </description>
     </attribute>
     <attribute en="c" type="zerotohundred" optional="yes">
       <description xml:lang="en">
-        <para>Cyan part with CMYK</para>
+        <para>Cyan part with cmyk (0-100).</para>
       </description>
       <description xml:lang="de">
-        <para>Cyan Anteil bei CMYK</para>
+        <para>Cyan Anteil bei cmyk (0-100).</para>
       </description>
     </attribute>
     <attribute en="m" type="zerotohundred" optional="yes">
       <description xml:lang="en">
-        <para>Magenta part with CMYK</para>
+        <para>Magenta part with cmyk (0-100)</para>
       </description>
       <description xml:lang="de">
-        <para>Magenta Anteil bei CMYK</para>
+        <para>Magenta Anteil bei cmyk (0-100)</para>
       </description>
     </attribute>
     <attribute en="y" type="zerotohundred" optional="yes">
       <description xml:lang="en">
-        <para>Yellow part with CMYK</para>
+        <para>Yellow part with cmyk (0-100).</para>
       </description>
       <description xml:lang="de">
-        <para>Gelb Anteil bei CMYK</para>
+        <para>Gelb Anteil bei cmyk (0-100).</para>
       </description>
     </attribute>
     <attribute en="k" type="zerotohundred" optional="yes">
       <description xml:lang="en">
-        <para>Black part with CMYK</para>
+        <para>Black part with cmyk (0-100).</para>
       </description>
       <description xml:lang="de">
-        <para>Schwarz (key) Anteil bei CMYK</para>
+        <para>Schwarz (key) Anteil bei cmyk (0-100).</para>
       </description>
     </attribute>
     <example xml:lang="de">
@@ -4011,6 +4019,14 @@
       </description>
       <description xml:lang="de">
         <para>Die minimale Breite des Bilds. Nur, wenn clip="no". Angabe in absoluten Längen oder Anzahl Rasterzellen.</para>
+      </description>
+    </attribute>
+    <attribute en="opacity" type="number" optional="yes" since="4.3.15">
+      <description xml:lang="en">
+        <para>Set image opacity (0-100, 100=fully opaque).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze den Deckungsgrad des Bildes (0-100, 100 = voll deckend).</para>
       </description>
     </attribute>
     <attribute en="padding" optional="yes" since="2.9.5" type="length">

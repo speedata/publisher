@@ -17,10 +17,11 @@ The output of colors in speedata Publisher is very simple. Usually one specifica
     </PlaceObject>
 -------------------------------------------------------------------------------
 
+All CSS4 colors are predefined, see the list at <<cmd-definecolor,`<DefineColor>`>>.
+
+
 .Not every color combination is beautiful
 image::kreismitfarbe.png[width=20%,scaledwidth=50%]
-
-The colors can also be specified as hexadecimal or `rgb()` values (e.g. `rgb(255, 19, 147)`), as with HTML. The three or six digit value must be preceded by a double cross, for example: `color="{hexcolor}"`.
 
 If you want to output colors in a different color space (CMYK, gray, spot colors), they must be defined first:
 
@@ -56,7 +57,27 @@ Here a color is defined which is addressed in the Publisher with the output comm
 .The new color appears in the PDF as a separate color channel
 image::speedatagruen.png[width=90%,scaledwidth=100%]
 
-Todo: document overprint
+== Color values similar to HTML/CSS
 
+HTML and CSS like colors can be used directly:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject allocate="no" column="3">
+    <Box height="4" width="5" backgroundcolor="#FFC72C"  />
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+The colors can not only be written as hex values (three or six digits), but also as `rgb(...)` such as `rgb(255, 19, 147)`. These values can also be used with `<DefineColor>`:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineColor name="meinrot" value="rgb(255,0,0)" />
+-------------------------------------------------------------------------------
+
+== Transparency
+
+Color values can be specified with an alpha channel that specifies the color intensity in the range 0-100, where 100 is full coverage and 0 does not represent the color at all. HTML specifications like `rgb(...)` can specify the opacity as a fourth parameter as a value from 0-1. Transparency may not work with all graphic objects. If you encounter a problem, please don't hesitate to file a <<ch-bugreporting,bug report>>.
 
 // EOF

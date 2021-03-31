@@ -302,8 +302,13 @@ local function setup()
     else
         pdf.setsuppressoptionalinfo(143)
     end
-    pdf.setcompresslevel(9)
-    pdf.setobjcompresslevel(9)
+    if false then
+        pdf.setcompresslevel(0)
+        pdf.setobjcompresslevel(0)
+    else
+        pdf.setcompresslevel(9)
+        pdf.setobjcompresslevel(9)
+    end
     tex.pdfadjustspacing = 2
     tex.adjustspacing = 2
     tex.pdfpageheight = tex.sp("29.7cm")
