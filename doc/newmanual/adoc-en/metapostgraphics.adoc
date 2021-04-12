@@ -18,7 +18,7 @@ endfig;
 
 a graphic:
 
-image::ad-mp-first.png[width=50%,scaledwidth=100%]
+image::mp-first.png[width=50%,scaledwidth=100%]
 
 
 == MetaPost and the speedata Publisher
@@ -53,7 +53,7 @@ The width of the box and the height of the box are defined with the variables `b
 This allows you to adjust the graphic to the defaults in the Publisher.
 
 .The dotted lines correspond to the specifications of the box. Raster display has been turned on to make this visible.
-image::ad-mp-dotted.png[width=50%,scaledwidth=100%]
+image::mp-dotted.png[width=50%,scaledwidth=100%]
 
 == Coordinates
 

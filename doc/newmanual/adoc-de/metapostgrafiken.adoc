@@ -18,7 +18,7 @@ endfig;
 
 eine Grafik:
 
-image::ad-mp-first.png[width=50%,scaledwidth=100%]
+image::mp-first.png[width=50%,scaledwidth=100%]
 
 == MetaPost im speedata Publisher
 
@@ -53,7 +53,7 @@ Die Breite der Box und die Höhe der Box sind mit den Variablen `box.width` und 
 Damit kann man die Grafik an die Vorgaben im Publisher anpassen.
 
 .Die gepunkteten Linien entsprechen den Vorgaben der Box. Die Rasterdarstellung wurde eingeschaltet, damit das sichtbar wird.
-image::ad-mp-dotted.png[width=50%,scaledwidth=100%]
+image::mp-dotted.png[width=50%,scaledwidth=100%]
 
 == Koordinaten
 
