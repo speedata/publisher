@@ -40,6 +40,12 @@ To do this, you first define a graphic and then use it later in the box command:
         dashed withdots withcolor 0.7red ;
     </DefineGraphic>
 
+    <!-- same, but uses predefined path box: -->
+    <DefineGraphic name="dottedboxsimple">
+        pickup pencircle scaled 1mm;
+        draw box dashed withdots withcolor 0.7red ;
+    </DefineGraphic>
+
 
     <Record element="data">
         <PlaceObject row="1" column="1">
@@ -97,6 +103,7 @@ The assignment is evaluated at the beginning of the MetaPost context. Thus `curc
 
 * CSS level 3 colors are defined in RGB colorspace.
 * The width and height of a box can be accessed via `box.width` and `box.height`
+* The box' path is saved in the variable `box` (see the example above).
 * Hans Hagen's MetaFun macro package is included (parts of it).
 * In page types you can also access these variables:
 +

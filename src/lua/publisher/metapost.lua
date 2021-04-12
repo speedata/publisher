@@ -228,6 +228,7 @@ function newbox(width_sp, height_sp)
     end
     execute(mpobj,string.format("box.width = %fbp;",width_sp / 65782))
     execute(mpobj,string.format("box.height = %fbp;",height_sp / 65782))
+    execute(mpobj,[[path box; box = (0,0) -- (box.width,0) -- (box.width,box.height) -- (0,box.height) -- cycle ;]])
 
 
     local declarations = {}

@@ -40,6 +40,11 @@ Dazu definiert man erst eine Grafik und benutzt sie später bei dem Box-Befehl:
         dashed withdots withcolor 0.7red ;
     </DefineGraphic>
 
+    <!-- dasselbe, nutzt aber den vordefinierten Pfad box: -->
+    <DefineGraphic name="dottedboxsimple">
+        pickup pencircle scaled 1mm;
+        draw box dashed withdots withcolor 0.7red ;
+    </DefineGraphic>
 
     <Record element="data">
         <PlaceObject row="1" column="1">
@@ -96,7 +101,8 @@ Die Zuweisung wird zu Beginn des MetaPost-Kontexts ausgewertet. Damit steht `cur
 -------------------------------------------------------------------------------
 
 * CSS Level 3 Farben sind im RGB-Farbraum vordefiniert.
-* Die Breite und Höhe der umgebenden Box können mit `box.width` und `box.height` abgefragt werden.
+* Die Breite und Höhe der umgebenden Fläche können mit `box.width` und `box.height` abgefragt werden.
+* Der Pfad `box` ist für die Außmaße der Fläche definiert (siehe das Beispiel oben).
 * Hans Hagens Metafun-Makros sind teilweise eingebunden.
 * Bei Seitentypen stehen zusätzlich folgende Variablen zur Verfügung:
 +
