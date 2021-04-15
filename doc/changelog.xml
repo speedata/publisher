@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.4">
+    <entry version="4.3.15" date="2021-04-15">
+        <en>New PDFOption for hyperlink borders.</en>
+        <de>Neue PDFOption für Hyperlink Rahmen.</de>
+    </entry>
+    <entry version="4.3.15" date="2021-04-15">
+        <en>Transparency with text and images.</en>
+        <de>Transparenz bei Text und Bildern.</de>
+    </entry>
+    <entry version="4.3.15" date="2021-04-15">
+        <en>MetaPost enhancements.</en>
+        <de>MetaPost Erweiterungen.</de>
+    </entry>
     <entry version="4.3.14" date="2021-03-24">
         <en>Change MetaPost variable names, add page.* variables.</en>
         <de>Ändere MetaPost Variablenanmen und füge page.* Variablen hinzu.</de>
