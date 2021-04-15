@@ -2310,6 +2310,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local labelleftdistance = publisher.read_attribute(layoutxml,dataxml,"label-left-distance","width_sp")
     local paddingleft       = publisher.read_attribute(layoutxml,dataxml,"padding-left",       "width_sp")
     local paddingright      = publisher.read_attribute(layoutxml,dataxml,"padding-right",      "width_sp")
+    local role              = publisher.read_attribute(layoutxml,dataxml,"role",               "string")
     local textformat        = publisher.read_attribute(layoutxml,dataxml,"textformat",         "rawstring")
     if fontname then warning("Paragraph/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
     if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
@@ -2353,6 +2354,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
         labelleftalign = labelleftalign,
         labelleftdistance = labelleftdistance,
         bidi = bidi,
+        role = publisher.get_rolenum(role),
     }
 
 
@@ -4122,7 +4124,8 @@ function commands.textblock( layoutxml,dataxml )
         textformat = publisher.textformats[textformat],
         fontfamily = fontfamily,
         color = colorindex,
-        languagecode = languagecode }
+        languagecode = languagecode,
+    }
 
     local tab = publisher.dispatch(layoutxml,dataxml,options)
     if colorname then

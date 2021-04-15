@@ -861,8 +861,11 @@ for k,v in pairs(roles) do
 end
 
 function get_rolenum( rolestring )
+    if not rolestring then return nil end
     local ret = roles[rolestring]
-    if ret then return ret end
+    if ret then
+        return ret
+    end
     err("Unknown role %q",tostring(rolestring))
 end
 
@@ -3037,6 +3040,7 @@ function dothingsbeforeoutput( thispage )
         end
     end
     if options.format == "PDF/UA" then
+        -- second argument is extra page attributes
         cg:trimbox(options.crop, string.format("/StructParents %d",#pdfuapages))
     else
         cg:trimbox(options.crop)
@@ -3201,20 +3205,32 @@ function parse_html( elt, parameter )
 end
 
 --- Look for `user_defined` at end of page (ship-out) and runs actions encoded in them.
-function find_user_defined_whatsits( head, parent )
+function find_user_defined_whatsits( head, parent, blockinline )
+    blockinline = blockinline or "vertical"
     local fun
-    local prev_hyperlink, prev_fgcolor
+    local prev_hyperlink, prev_fgcolor,prev_role
     local linklevel = 0
     while head do
-        if head.id == vlist_node or head.id==hlist_node then
-            find_user_defined_whatsits(head.list,head)
+        if head.id==hlist_node and head.subtype == 1 then
+            find_user_defined_whatsits(head.list,head,"horizontal")
+        elseif head.id==hlist_node or head.id == vlist_node then
+            find_user_defined_whatsits(head.list,head,"vertical")
         else
             local props = node.getproperty(head)
             local underline = node.has_attribute(head,att_underline)
             local fgcolor = node.has_attribute(head,att_fgcolor)
             local transparency = getprop(head,"opacity")
+            local role = getprop(head,"role")
+
+            if head.id == glyph_node and role and head.next and head.next.id == disc_node then
+                setprop(head.next,"role",role)
+            end
+
             local insert_startcolor = false
             local insert_endcolor = false
+            local insert_startrole = false
+            local insert_endrole = false
+
 
             if fgcolor and head.next == nil then
                 -- at end insert endcolor if in color mode
@@ -3239,6 +3255,31 @@ function find_user_defined_whatsits( head, parent )
                     insert_startcolor = true
                 end
                 prev_fgcolor = fgcolor
+            end
+
+            if role and head.next == nil then
+                -- at end insert endrole if in role mode
+                if prev_role == nil  then
+                    insert_startrole = true
+                end
+                insert_endrole = true
+                prev_role = nil
+            elseif role ~= prev_role then
+                -- 1: role nil and prev_role != nil
+                -- 2: role val and prev_role diff val
+                -- 3: role val and prev_role nil
+                if role == nil and prev_role then
+                    -- 1
+                    insert_endrole = true
+                elseif role and prev_role then
+                    -- 2
+                    insert_endrole = true
+                    insert_startrole = true
+                else
+                    -- 3
+                    insert_startrole = true
+                end
+                prev_role = role
             end
             if insert_endcolor then
                 local colstop  = node.new("whatsit","pdf_colorstack")
@@ -3280,6 +3321,26 @@ function find_user_defined_whatsits( head, parent )
                 end
                 node.set_attribute(colstart,att_origin,origin_setcolor)
                 parent.head = node.insert_before(parent.head,head,colstart)
+            end
+            if insert_endrole then
+
+                local emc = node.new("whatsit","pdf_literal")
+                emc.data = "EMC"
+                emc.mode = 1
+
+                if role then
+                    parent.head = node.insert_after(parent.head,head,emc)
+                else
+                    parent.head = node.insert_before(parent.head,head,emc)
+                end
+            end
+            if insert_startrole then
+                local bdc = node.new("whatsit","pdf_literal")
+                node.set_attribute(bdc,publisher.att_role, role)
+                bdc.data = ""
+                bdc.mode = 1
+                parent.head = node.insert_before(parent.head,head,bdc)
+
             end
 
             if transparency then
@@ -3402,6 +3463,14 @@ function find_user_defined_whatsits( head, parent )
                         end
                     end
                 end
+            elseif head.id == glue_node and head.subtype == 0 and blockinline == "horizontal" and options.format == "PDF/UA" then
+                local g = node.new("glyph")
+                g.subtype = 1
+                g.font = 1
+                g.char = 32
+                g.width = head.width
+                parent.head = node.insert_before(parent.head,head,g)
+                head.width = 0
             end
         end
         head = head.next
@@ -3620,6 +3689,9 @@ local function setstyles(n,parameter)
     end
     if parameter.indent then
         setprop(n,"indent",parameter.indent)
+    end
+    if parameter.role then
+        setprop(n,"role",parameter.role)
     end
 end
 
