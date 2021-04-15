@@ -4080,6 +4080,15 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="showhyperlinks">
+               <a:documentation>Zeige Hyperlinks im Adobe Acrobat und ggf anderen PDF-Anzeigeprogrammen.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="subject">
                <a:documentation>Legt den Betreff (subject) des Dokuments fest</a:documentation>
             </attribute>

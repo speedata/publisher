@@ -529,8 +529,7 @@ function collect_horizontal_nodes( elt,parameter,before_box,origin )
             local eltname = thiselt.elementname
             if eltname == "a" then
                 local href = attributes["href"]
-                publisher.hyperlinks[#publisher.hyperlinks + 1] = string.format("/Subtype/Link/A<</Type/Action/S/URI/URI(%s)>>",href)
-                options.add_attributes = { { publisher.att_hyperlink, #publisher.hyperlinks } }
+                options.add_attributes = { { publisher.att_hyperlink, publisher.hlurl(href) } }
             elseif eltname == "img" then
                 local source = attributes.src
                 local it = publisher.new_image(source,1,nil,nil)

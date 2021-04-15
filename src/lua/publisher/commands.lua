@@ -30,13 +30,17 @@ function commands.a( layoutxml,dataxml )
         local href = publisher.read_attribute(layoutxml,dataxml,"href","rawstring")
         local link = publisher.read_attribute(layoutxml,dataxml,"link","rawstring")
         local page = publisher.read_attribute(layoutxml,dataxml,"page","number")
+        local border = "/Border[0 0 0]"
+        if publisher.options.showhyperlinks then
+            border = ""
+        end
+
         local str
         if link then
-            str = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D(mark%s)>>",link)
+            str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoTo/D(mark%s)>>",border,link)
             publisher.hyperlinks[#publisher.hyperlinks + 1] = str
         elseif href then
-            str = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/URI/URI(%s)>>",href)
-            publisher.hyperlinks[#publisher.hyperlinks + 1] = str
+            publisher.hlurl(href)
         elseif page then
             publisher.hlpage(page)
         end
@@ -2385,6 +2389,7 @@ function commands.pdfoptions( layoutxml, dataxml )
     local printscaling = publisher.read_attribute(layoutxml,dataxml,"printscaling", "string")
     local showbookmarks = publisher.read_attribute(layoutxml,dataxml,"showbookmarks", "boolean",true)
     local picktray     = publisher.read_attribute(layoutxml,dataxml,"picktraybypdfsize", "boolean")
+    local showhyperlinks = publisher.read_attribute(layoutxml,dataxml,"showhyperlinks", "boolean", false)
     local duplex       = publisher.read_attribute(layoutxml,dataxml,"duplex",   "string")
     local title        = publisher.read_attribute(layoutxml,dataxml,"title",    "string")
     local author       = publisher.read_attribute(layoutxml,dataxml,"author",   "string")
@@ -2396,6 +2401,7 @@ function commands.pdfoptions( layoutxml, dataxml )
     publisher.options.documentauthor   = author
     publisher.options.documentsubject  = subject
     publisher.options.documentkeywords = keywords
+    publisher.options.showhyperlinks   = showhyperlinks
 
     publisher.viewerpreferences.numcopies = nc or 1
     publisher.viewerpreferences.showbookmarks = showbookmarks

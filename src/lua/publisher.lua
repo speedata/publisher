@@ -6246,7 +6246,21 @@ end
 function hlpage(pagenumber)
     pagenumber = tonumber(pagenumber)
     local pageobjnum = pdf.getpageref(pagenumber)
-    local str = string.format("/Subtype/Link/Border[0 0 0]/A<</Type/Action/S/GoTo/D [ %d 0 R /Fit ] >>",pageobjnum)
+    local border = "/Border[0 0 0]"
+    if options.showhyperlinks then
+        border = ""
+    end
+    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoTo/D [ %d 0 R /Fit ] >>",border,pageobjnum)
+    hyperlinks[#hyperlinks + 1] = str
+    return #hyperlinks
+end
+
+function hlurl(href)
+    local border = "/Border[0 0 0]"
+    if options.showhyperlinks then
+        border = ""
+    end
+    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/URI/URI(%s)>>",border,href)
     hyperlinks[#hyperlinks + 1] = str
     return #hyperlinks
 end

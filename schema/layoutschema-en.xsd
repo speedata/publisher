@@ -4705,6 +4705,17 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="showhyperlinks">
+        <xs:annotation>
+          <xs:documentation>Show hyperlinks in Adobe Acrobat and perhaps other PDF viewers.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="subject">
         <xs:annotation>
           <xs:documentation>Set the subject of the document</xs:documentation>

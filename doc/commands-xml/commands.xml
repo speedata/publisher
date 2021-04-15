@@ -6406,6 +6406,14 @@
         <para>Zeige Lesezeichen im Adobe Acrobat beim Öffnen des Dokuments.</para>
      </description>
     </attribute>
+    <attribute en="showhyperlinks" optional="yes" since="4.3.15" type="boolean">
+      <description xml:lang="en">
+        <para>Show hyperlinks in Adobe Acrobat and perhaps other PDF viewers.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zeige Hyperlinks im Adobe Acrobat und ggf anderen PDF-Anzeigeprogrammen.</para>
+     </description>
+    </attribute>
     <attribute en="subject" optional="yes" type="text" since="3.1.24">
       <description xml:lang="en">
         <para>Set the subject of the document</para>
