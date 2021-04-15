@@ -6650,6 +6650,14 @@
           <para>Das Objekt wird in der angegebenen Spalte platziert.</para>
         </description>
       </choice>
+      <choice en="center" since="4.3.16">
+        <description xml:lang="en">
+          <para>The column determines the center of the object. Works only with absolute positioning.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Spalte bestimmt den Mittelpunkt des Objekts. Funktioniert nur mit absoluter Positionierung.</para>
+        </description>
+      </choice>
       <choice en="right">
         <description xml:lang="en">
           <para>The given columns determines the right edge of the border.</para>

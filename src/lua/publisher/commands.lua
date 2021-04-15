@@ -2694,6 +2694,8 @@ function commands.place_object( layoutxml,dataxml )
         if absolute_positioning then
             if hreference == "right" then
                 column = column - object.width
+            elseif hreference == "center" then
+                column = column - object.width / 2
             end
             local top = row + current_grid.extra_margin
             if vreference == "bottom" then
@@ -2731,6 +2733,12 @@ function commands.place_object( layoutxml,dataxml )
                 current_row = nil
             end
 
+            if hreference == "right" then
+                current_column_start = current_column_start - width_in_gridcells + 1
+            elseif hreference == "center" then
+                current_column_start = current_column_start - math.round(width_in_gridcells / 2,0) + 1
+            end
+
             -- While (not found a free area) switch to next frame
             while current_row == nil do
                 if not column then
@@ -2760,9 +2768,7 @@ function commands.place_object( layoutxml,dataxml )
             -- if the object has no height (for example an Action node), we don't move the cursor
             if height_in_gridcells == 0  then allocate = "no" end
             log("PlaceObject: %s at (%d,%d) wd/ht: %d/%d in %q (p. %d)", objecttype, current_row, current_column_start,width_in_gridcells,height_in_gridcells,publisher.current_group or area or "(default)", onpage or publisher.current_pagenumber)
-            if hreference == "right" then
-                current_column_start = current_column_start - width_in_gridcells + 1
-            end
+
             publisher.output_at({
                 nodelist = node.copy(object),
                 x = current_column_start,

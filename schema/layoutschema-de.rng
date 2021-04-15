@@ -4213,6 +4213,8 @@
                      <choice>
                         <value>left</value>
                         <a:documentation>Das Objekt wird in der angegebenen Spalte platziert.</a:documentation>
+                        <value>center</value>
+                        <a:documentation>Die Spalte bestimmt den Mittelpunkt des Objekts. Funktioniert nur mit absoluter Positionierung.</a:documentation>
                         <value>right</value>
                         <a:documentation>Das Objekt wird mit dem rechten Rand in der gegebenen Spalte ausgerichtet.</a:documentation>
                      </choice>

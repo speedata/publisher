@@ -4213,6 +4213,8 @@
                      <choice>
                         <value>left</value>
                         <a:documentation>The object is placed in given column.</a:documentation>
+                        <value>center</value>
+                        <a:documentation>The column determines the center of the object. Works only with absolute positioning.</a:documentation>
                         <value>right</value>
                         <a:documentation>The given columns determines the right edge of the border.</a:documentation>
                      </choice>
