@@ -49,7 +49,7 @@
         <Paragraph><Value>And this is page </Value><Value select="sd:current-page()"/></Paragraph>
       </Textblock>
     </PlaceObject>
-    <NewPage/>
+    <NewPage openon="right"/>
   </Record>
 
 </Layout>

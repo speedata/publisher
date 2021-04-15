@@ -1972,9 +1972,20 @@ function detect_pagetype(pagenumber)
     return false
 end
 
+-- skippages are set in commands.new_page if openon="..."
+skippages = nil
 --- _Must_ be called before something can be put on the page. Looks for hooks to be run before page creation.
 function setup_page(pagenumber,fromwhere)
     if current_group then return end
+    if skippages then
+        local tmp = skippages
+        skippages = nil
+        new_page()
+        nextpage = tmp.skippagetype
+        new_page()
+        nextpage = tmp.pagetype
+    end
+
     local thispage
     if pagenumber then
         thispage = pagenumber
