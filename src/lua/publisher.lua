@@ -1994,8 +1994,10 @@ function setup_page(pagenumber,fromwhere)
     if skippages then
         local tmp = skippages
         skippages = nil
-        new_page()
-        nextpage = tmp.skippagetype
+        if tmp.doubleopen then
+            new_page()
+            nextpage = tmp.skippagetype
+        end
         new_page()
         nextpage = tmp.pagetype
     end
@@ -2214,10 +2216,6 @@ function new_page()
         shipout(n,current_pagenumber)
     end
     current_pagenumber = current_pagenumber + 1
-    if nextpage then
-        pages[current_pagenumber] = nil
-        setup_page(current_pagenumber)
-    end
 end
 
 -- a,b are both arrays of 6 numbers

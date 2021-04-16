@@ -1860,14 +1860,11 @@ function commands.new_page( layoutxml,dataxml )
     local skippagetype = publisher.read_attribute(layoutxml,dataxml,"skippagetype","rawstring")
     local openon       = publisher.read_attribute(layoutxml,dataxml,"openon","rawstring")
 
-    if openon == "right" and math.fmod(publisher.current_pagenumber,2) == 1 then
-        publisher.skippages = {skippagetype = skippagetype, pagetype = pagetype}
-    elseif openon == "left" and math.fmod(publisher.current_pagenumber,2) == 0 then
-        publisher.skippages = {skippagetype = skippagetype, pagetype = pagetype}
-    else
-        publisher.nextpage = pagetype
-        publisher.new_page()
+    local doubleopen = false
+    if ( openon == "right" and math.fmod(publisher.current_pagenumber,2) == 1 ) or ( openon == "left" and math.fmod(publisher.current_pagenumber,2) == 0 ) then
+        doubleopen = true
     end
+    publisher.skippages = {skippagetype = skippagetype, pagetype = pagetype, doubleopen = doubleopen}
 end
 
 --- NoBreak

@@ -3,7 +3,7 @@
   xmlns="urn:speedata.de:2009/publisher/en" >
 
   <Pageformat width="10cm" height="5cm"/>
-
+  <Pagetype name="dummy" test="false()"/>
 
   <Pagetype name="skip" test="false()">
     <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
@@ -50,6 +50,13 @@
       </Textblock>
     </PlaceObject>
     <NewPage openon="right"/>
+    <PlaceObject>
+        <Textblock>
+            <Paragraph>
+                <Value>Sometext</Value>
+            </Paragraph>
+        </Textblock>
+    </PlaceObject>
+    <NewPage pagetype="dummy" openon="left"/>
   </Record>
-
 </Layout>
