@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.4">
+    <entry version="4.3.16" date="2021-04-16">
+        <en>New alignment PlaceObject/hreference=center (#327).</en>
+        <de>Neue Ausrichtung bei PlaceObject: hreference=center (#327).</de>
+    </entry>
+    <entry version="4.3.16" date="2021-04-16">
+        <en>Bugfix: NewPage openon="..." at end of document  (#329).</en>
+        <de>Fehlerkorrektur NewPage openon="..." am Ende des Dokuments (#329).</de>
+    </entry>
+    <entry version="4.3.16" date="2021-04-16">
+        <en>Print md5sum of XML files with --verbose.</en>
+        <de>Ausgabe der md5-Summe der XML-Dateien mit --verbose.</de>
+    </entry>
     <entry version="4.3.15" date="2021-04-15">
         <en>New PDFOption for hyperlink borders.</en>
         <de>Neue PDFOption für Hyperlink Rahmen.</de>
