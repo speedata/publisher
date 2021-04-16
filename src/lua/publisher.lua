@@ -1006,6 +1006,11 @@ end
 -- it has defaults, loads a layout file and a data file and
 -- executes them both
 function initialize_luatex_and_generate_pdf()
+    if os.getenv("SP_VERBOSITY") == nil then
+        options.verbosity = 0
+    else
+        options.verbosity = tonumber(os.getenv("SP_VERBOSITY"))
+    end
 
     --- The default page type has 1cm margin
     masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(tenmm_sp,tenmm_sp,tenmm_sp,tenmm_sp) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
@@ -1116,11 +1121,6 @@ function initialize_luatex_and_generate_pdf()
             v = v:gsub("^\"(.*)\"$","%1")
             options[k]=v
         end
-    end
-    if os.getenv("SP_VERBOSITY") == nil then
-        options.verbosity = 0
-    else
-        options.verbosity = tonumber(os.getenv("SP_VERBOSITY"))
     end
 
     if options.interaction == "false" then
@@ -1626,7 +1626,7 @@ end
 ---       [3] = " "
 ---       [".__local_name"] = "data"
 ---     },
-function load_xml(filename,filetype,options)
+function load_xml(filename,filetype,parameter)
     if filename == "_internallayouthtml.xml" then
         local src = [[<Layout xmlns="urn:speedata.de:2009/publisher/en"
         xmlns:sd="urn:speedata:2009/publisher/functions/en">
@@ -1641,15 +1641,29 @@ function load_xml(filename,filetype,options)
    </Record>
 </Layout>]]
         log("Loading internal HTML layoutfile")
-        return luxor.parse_xml(src,options)
+        return luxor.parse_xml(src,parameter)
     else
         local path = kpse.find_file(filename)
         if not path then
             err("Can't find XML file %q. Abort.",filename or "?")
             return
         end
+        if options.verbosity > 0 then
+            calculate_md5sum(filename)
+        end
         log("Loading %s %q",filetype or "file",path)
-        return luxor.parse_xml_file(path, options,kpse.find_file)
+        return luxor.parse_xml_file(path, parameter,kpse.find_file)
+    end
+end
+
+function calculate_md5sum(filename)
+    local p = kpse.find_file(filename)
+    if p then
+        local f = io.open(p)
+        local str = f:read("*a")
+        local sum = md5.sumhexa(str)
+        f:close()
+        log("filename %q, md5sum: %s",filename,sum)
     end
 end
 
