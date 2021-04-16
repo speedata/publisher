@@ -148,13 +148,14 @@ The following example defines two page types, a template “Standard”, which i
 </Layout>
 -------------------------------------------------------------------------------
 
-In the ((log file)) (`publisher.log`) you can see which page types are selected:
+In the ((log file)) (`publisher.protocol`) you can see which page types are selected:
 
 --------
 ...
 Page of type "Standard" created (1)
 Number of rows: 3, number of columns = 19
-PlaceObject: Text block in row 1 and column 1, width=19, height=1 (page 1)
+Create font metrics for "texgyreheros-regular.otf" at 10pt (id: 1) mode=harfbuzz
+PlaceObject: Textblock at (1,1) wd/ht: 19/1 in "_page" (p. 1)
 > Shipout page 1
 Page of type "Standard" created (2)
 Number of rows: 3, number of columns = 19

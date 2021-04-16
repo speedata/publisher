@@ -123,7 +123,7 @@ Im folgenden Beispiel werden zwei Seitentypen definiert, eine Vorlage »Standard
 
   <Pageformat width="210mm" height="50mm"/>
 
-  <Pagetype name="Spezial" test="false()">
+  <Pagetype name="Special" test="false()">
     <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
   </Pagetype>
 
@@ -139,7 +139,7 @@ Im folgenden Beispiel werden zwei Seitentypen definiert, eine Vorlage »Standard
         </Paragraph>
       </Textblock>
     </PlaceObject>
-    <NewPage pagetype="Spezial" openon="right" />
+    <NewPage pagetype="Special" openon="right" />
     <PlaceObject>
       <Textblock>
         <Paragraph>
@@ -151,22 +151,20 @@ Im folgenden Beispiel werden zwei Seitentypen definiert, eine Vorlage »Standard
 </Layout>
 -------------------------------------------------------------------------------
 
-In der ((Logdatei)) (`publisher.log`) sieht man, welche Seitentypen gewählt werden:
+In der ((Logdatei)) (`publisher.protocol`) sieht man, welche Seitentypen gewählt werden:
 
 --------
 ...
 Page of type "Standard" created (1)
-Anzahl Zeilen: 3, Anzahl Spalten = 19
-PlaceObject: Textblock in row 1 and column 1, width=19, height=1 (page 1)
+Number of rows: 3, number of columns = 19
+Create font metrics for "texgyreheros-regular.otf" at 10pt (id: 1) mode=harfbuzz
+PlaceObject: Textblock at (1,1) wd/ht: 19/1 in "_page" (p. 1)
 > Shipout page 1
 Page of type "Standard" created (2)
-Anzahl Zeilen: 3, Anzahl Spalten = 19
+Number of rows: 3, number of columns = 19
 > Shipout page 2
-Page of type "Spezial" created (3) - pagetype requested
+Page of type "Special" created (3) - pagetype requested
 ...
 --------
 
-// .Verschiedene Seitentypen
-// image::nextpage.png[width=80%]
-
-// Ende
+// EOF
