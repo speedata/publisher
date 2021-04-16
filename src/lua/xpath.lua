@@ -300,6 +300,7 @@ function M.is_nodeselector( dataxml,str,pos,ns )
         M.tok = {dataxml}
         return true
     end
+    if type(dataxml) ~= "table" then M.err = true M.errmsg = "data is not a table" return end
     -- All sub nodes
     start,stop = string.find(str,"^%*%s*",pos)
     if start then
