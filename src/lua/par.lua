@@ -98,9 +98,13 @@ local function mktextnode(self,text,options)
     local tmp = node.getproperty(nodes)
     if options.fontfamily and publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily] then
         local fontheight = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily].baselineskip
+        local col = node.has_attribute(nodes,publisher.att_fgcolor)
         nodes = publisher.add_rule(nodes,"head",{height = 0.75 * fontheight, depth = 0.25 * fontheight, width = 0 })
         node.setproperty(nodes,tmp)
         node.set_attribute(nodes,publisher.att_fontfamily,options.fontfamily)
+        if col then
+            node.set_attribute(nodes,publisher.att_fgcolor,col)
+        end
     end
     if options.newline then
         publisher.setprop(nodes,"newline",true)

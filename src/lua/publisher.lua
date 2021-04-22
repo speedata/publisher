@@ -3382,7 +3382,7 @@ function find_user_defined_whatsits( head, parent, blockinline )
             end
             -- First, let's look at hyperlinks from HTML <a href="...">
             -- Hyperlinks are inserted as attributes
-            local hl = node.has_attribute(head,att_hyperlink)
+            local hl = node.has_attribute(head,att_hyperlink) or getprop(head,"hyperlink")
             local insert_startlink = false
             local insert_endlink = false
             -- case 1: link ends at the end of the list

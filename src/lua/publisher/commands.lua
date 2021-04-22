@@ -1095,6 +1095,21 @@ function commands.hspace( layoutxml,dataxml )
         p2 = node.new("penalty")
         p2.penalty = 10000
         local h1 = node.new("hlist")
+
+        -- TODO: also copy all other attributes necessary for styling
+        local col = options.color
+        if col then
+            node.set_attribute(p1,publisher.att_fgcolor,col)
+            node.set_attribute(p2,publisher.att_fgcolor,col)
+            node.set_attribute(h1,publisher.att_fgcolor,col)
+            node.set_attribute(n,publisher.att_fgcolor,col)
+        end
+        if options.hyperlink then
+            publisher.setprop(p1,"hyperlink",options.hyperlink)
+            publisher.setprop(p2,"hyperlink",options.hyperlink)
+            publisher.setprop(h1,"hyperlink",options.hyperlink)
+            publisher.setprop(n,"hyperlink",options.hyperlink)
+        end
         node.insert_after(p1,p1,h1)
         node.insert_after(p1,h1,p2)
         node.insert_after(p1,p2,n)
