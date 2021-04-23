@@ -1016,7 +1016,9 @@ function initialize_luatex_and_generate_pdf()
     masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(tenmm_sp,tenmm_sp,tenmm_sp,tenmm_sp) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
     xpath.set_variable("__maxwidth", tex.sp("190mm"))
     --- The `vars` file hold a lua document holding table
-    local vars = loadfile(tex.jobname .. ".vars")()
+    local vars
+    local varsfun = loadfile(tex.jobname .. ".vars")
+    if varsfun then vars = varsfun() else err("Could not load .vars file. Something strange is happening.") vars = {} end
     for k,v in pairs(vars) do
         xpath.set_variable(k,v)
     end
