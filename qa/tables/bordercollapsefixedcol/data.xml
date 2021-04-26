@@ -1,0 +1,18 @@
+<data>
+	<tr>
+		<td colspan="1" rowspan="1">a</td>
+		<td colspan="1" rowspan="1">b</td>
+		<td colspan="1" rowspan="1">c</td>
+	</tr>
+	<tr>
+		<td colspan="1" rowspan="3">1</td>
+		<td colspan="1" rowspan="1">2</td>
+		<td colspan="1" rowspan="3">3</td>
+	</tr>
+	<tr>
+		<td colspan="1" rowspan="1">4</td>
+	</tr>
+	<tr>
+		<td colspan="1" rowspan="1">5</td>
+	</tr>
+</data>

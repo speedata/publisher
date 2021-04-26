@@ -182,31 +182,6 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
     local max_wd, min_wd -- maximum and minimum width of a table cell (Td)
     -- first we go through all rows/cells and look, how wide the columns
     -- are supposed to be. If there are colspans, they have to be treated specially
-    if self.bordercollapse_horizontal then
-        for i=1,#tr_contents do
-            if i ~= #tr_contents then
-                local thiscell,nextcell,nextcell_borderleft,thiscell_borderright,new_borderwidth,new_borderwidth
-
-                thiscell = publisher.element_contents(tr_contents[i])
-                nextcell = publisher.element_contents(tr_contents[i + 1])
-
-                thiscell_borderright = tex.sp(thiscell["border-right"] or 0)
-                nextcell_borderleft  = tex.sp(nextcell["border-left"]  or 0)
-
-                new_borderwidth = math.abs( math.max(thiscell_borderright,nextcell_borderleft) / 2 )
-
-                nextcell["border-left"]  = new_borderwidth
-                thiscell["border-right"] = new_borderwidth
-
-                if thiscell_borderright == 0 then
-                    thiscell["border-right-color"] = nextcell["border-left-color"]
-                end
-                if nextcell_borderleft == 0 then
-                    nextcell["border-left-color"] = thiscell["border-right-color"]
-                end
-            end
-        end
-    end
 
     --- We calculate the widths in two passes:
     ---
@@ -315,9 +290,121 @@ function collect_alignments( self )
     end
 end
 
+
+-- This code is not really correct. See #332 for more information.
+-- The column widths should be ajusted as well.
+function merge_border_with_nextcell(row,x)
+    local thiscell,nextcell,nextcell_borderleft,thiscell_borderright,new_borderwidth,new_borderwidth
+    thiscell = row[x]
+    nextcell = row[x+1]
+
+    thiscell_borderright = tex.sp(thiscell["border-right"] or 0)
+    nextcell_borderleft  = tex.sp(nextcell["border-left"]  or 0)
+    new_borderwidth = math.abs( math.max(thiscell_borderright,nextcell_borderleft) / 2 )
+
+    nextcell["border-left"]  = new_borderwidth
+    thiscell["border-right"] = new_borderwidth
+
+    if thiscell_borderright == 0 then
+        thiscell["border-right-color"] = nextcell["border-left-color"]
+    end
+    if nextcell_borderleft == 0 then
+        nextcell["border-left-color"] = thiscell["border-right-color"]
+    end
+end
+
+function merge_border_with_nextrow(tablematrix,row,col)
+    local thiscell,nextcell,nextcell_borderleft,thiscell_borderright,new_borderwidth,new_borderwidth
+    thiscell = tablematrix[row][col]
+    if tonumber(thiscell.rowspan) and thiscell.rowspan > 1 then return end
+    nextcell = tablematrix[row + 1][col]
+
+    thiscell_borderbottom = tex.sp(thiscell["border-bottom"] or 0)
+    nextcell_bordertop  = tex.sp(nextcell["border-top"]  or 0)
+    new_borderwidth = math.abs( math.max(thiscell_borderbottom,nextcell_bordertop) / 2 )
+
+    nextcell["border-top"]  = new_borderwidth
+    thiscell["border-bottom"] = new_borderwidth
+
+    if thiscell_borderbottom == 0 then
+        thiscell["border-bottom-color"] = nextcell["border-top-color"]
+    end
+    if nextcell_bordertop == 0 then
+        nextcell["border-top-color"] = thiscell["border-bottom-color"]
+    end
+end
+
+
+function adjust_borderwidths_collapse(self,tr_contents,tablearea)
+    tablearea = tablearea or "body"
+    local firstrow = tr_contents[1]
+    local eltname = publisher.elementname(firstrow)
+    if eltname == "Tablehead" or eltname == "Tablefoot" then
+        if eltname == "Tablehead" then tablearea = "tablehead" else tablearea = "tablefoot" end
+        tablearea = tablearea .. (tr_contents[i].page or "")
+        adjust_borderwidths_collapse(self,publisher.element_contents(firstrow),tablearea)
+        return
+    end
+    local skiptable = self.skiptables[tablearea]
+    -- tablematrix has one cell for each virtual cell. A cell with rowspan=2 has two entries.
+    -- The value for the entry is the td_contents of the cell.
+    local tablematrix = {}
+    local row = 0
+    local maxcol = 0
+    for i = 1,#tr_contents do
+        local eltname = publisher.elementname(tr_contents[i])
+        local tr = publisher.element_contents(tr_contents[i])
+        if eltname == "Tr" then
+            row = row + 1
+            tablematrix[row] = tablematrix[row] or {}
+
+            local col = 0
+            for j = 1, #tr do
+                local td = publisher.element_contents(tr[j])
+                col = col + 1
+                while skiptable[row] and skiptable[row][col] do
+                    col = col + 1
+                end
+                tablematrix[row][col] = td
+                maxcol = math.max(maxcol,j)
+
+                if skiptable[row + 1] and skiptable[row + 1][col] then
+                    local r = row + 1
+                    while skiptable[r] and skiptable[r][col] do
+                        tablematrix[r] = tablematrix[r] or {}
+                        tablematrix[r][col] = td
+                        r = r + 1
+                    end
+                end
+            end
+        end
+    end
+
+    for y = 1, #tablematrix do
+        local thisrow = tablematrix[y]
+        for x = 1,#thisrow - 1 do
+            merge_border_with_nextcell(thisrow,x)
+        end
+    end
+
+    for y = 1, #tablematrix - 1 do
+        local thisrow = tablematrix[y]
+        for x = 1,#thisrow do
+            merge_border_with_nextrow(tablematrix,y,x)
+        end
+    end
+
+end
+
 --- Calculate the widths of the columns for the table.
 --- -------------------------------------------------
 function calculate_columnwidth( self )
+    -- first, adjust widths for border collapse
+    if self.bordercollapse then
+        adjust_borderwidths_collapse(self,self.tab)
+    end
+
+
     local colspans = {}
     local colmax,colmin = {},{}
 
@@ -780,9 +867,6 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup,skiptab
             td_contents.rowspan_internal = rowspans[#rowspans]
         else
             rowheight = math.max(rowheight,tmp)
-        end
-        if self.bordercollapse_vertical then
-            shiftup = math.max(shiftup,td_borderbottom)
         end
     end
     tr_contents.shiftup = last_shiftup
@@ -1877,7 +1961,7 @@ end
 
 
 function set_skip_table( self )
-    self.skiptables={ body = {"body"}, tablehead = {"tablehead"}, tablefoot = {"tablefoot"}}
+    self.skiptables={ body = { name = "body"}, tablehead = { name = "tablehead"}, tablefoot = { name = "tablefoot"}}
     local curskiptable
     local rowcounter = {}
     local current_row_body = 0
@@ -1894,7 +1978,7 @@ function set_skip_table( self )
             if eltname == "Tablehead" then tablearea = "tablehead" else tablearea = "tablefoot" end
             tablearea = tablearea .. (tr_contents.page or "")
             rowcounter[tablearea] = 0
-            self.skiptables[tablearea] = self.skiptables[tablearea] or {self.skiptables[tablearea]}
+            self.skiptables[tablearea] = self.skiptables[tablearea] or { name = self.skiptables[tablearea]}
             for _,tr_inner in ipairs(tr_contents) do
                 local inner_eltname = publisher.elementname(tr_inner)
                 local inner_contents = publisher.element_contents(tr_inner)

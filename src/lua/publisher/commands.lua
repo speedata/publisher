@@ -3564,8 +3564,8 @@ function commands.table( layoutxml,dataxml,options )
     tabular.colsep         = columndistance
     tabular.rowsep         = rowdistance
     tabular.autostretch    = autostretch
-    tabular.bordercollapse_horizontal = collapse == "collapse"
-    tabular.bordercollapse_vertical   = collapse == "collapse"
+    tabular.bordercollapse = collapse == "collapse"
+
     if columndistance > 0 then tabular.bordercollapse_horizontal = false end
     if rowdistance    > 0 then tabular.bordercollapse_vertical   = false end
     if balance then

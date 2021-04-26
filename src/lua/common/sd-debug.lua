@@ -44,15 +44,10 @@ local function cmpkeys( a,b )
 end
 
 do
-  tables_printed = {}
   local function indent(level)
     return string.rep( "    ", level )
   end
   function printtable (ind,tbl_to_print,level,depth)
-    if tables_printed[tbl_to_print] then return end
-    if tbl_to_print then
-      tables_printed[tbl_to_print] = true
-    end
     if depth and depth <= level then return end
     if type(tbl_to_print) ~= "table" then
       log("printtable: %q is not a table, it is a %s (%q)",tostring(ind),type(tbl_to_print),tostring(tbl_to_print))
@@ -84,10 +79,12 @@ do
             l = "⬖".. nodelist_tostring(l) .. "⬗"
         end
       if type(l)=="table" then
-        if k ~= ".__parent" then
+        if k ~= ".__parent" and k ~= ".__context" then
           printtable(k,l,level,depth)
         else
-          log("%s[\".__parent\"] = <%s>", indent(level),l[".__local_name"])
+          if k == ".__parent" then
+            log("%s[\".__parent\"] = <%s>", indent(level),l[".__local_name"])
+          end
         end
       else
         if type(k) == "number" then
