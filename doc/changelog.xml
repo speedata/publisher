@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.4">
+    <entry version="4.3.17" date="2021-04-26">
+        <en>Various bugfixes (#330,#331,#316,#317).</en>
+        <de>Verschiedene Fehlerkorrekturen (#330,#331,#316,#317).</de>
+    </entry>
     <entry version="4.3.16" date="2021-04-16">
         <en>New alignment PlaceObject/hreference=center (#327).</en>
         <de>Neue Ausrichtung bei PlaceObject: hreference=center (#327).</de>
