@@ -1,0 +1,40 @@
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en" xmlns="urn:speedata.de:2009/publisher/en">
+    <SetGrid nx="2" ny="8"/>
+    <Pageformat height="5cm" width="5cm" />
+    <Record element="data">
+        <Pagetype name="t" test="true()">
+            <PositioningArea name="a">
+                <PositioningFrame width="1" height="5" row="1" column="1" />
+                <PositioningFrame width="1" height="5" row="1" column="2" />
+            </PositioningArea>
+        </Pagetype>
+        <PlaceObject area="a">
+            <Table>
+                <Tablehead page="first">
+                    <Tr>
+                        <Td>
+                            <Paragraph><Value>A</Value></Paragraph>
+                        </Td>
+                    </Tr>
+                    <Tr>
+                        <Td padding-bottom="5pt" border-left="1pt" border-top="1pt" border-bottom="1pt">
+                            <Paragraph><Value>B</Value></Paragraph>
+                        </Td>
+                    </Tr>
+                </Tablehead>
+                <Tablehead page="all">
+                    <Tr>
+                        <Td padding-bottom="5pt" border-left="1pt" border-top="1pt" border-bottom="1pt">
+                            <Paragraph><Value>C</Value></Paragraph>
+                        </Td>
+                    </Tr>
+                </Tablehead>
+               <Loop select="2" variable="i">
+                    <Tr>
+                        <Td><Paragraph><Value select="$i"/></Paragraph></Td>
+                    </Tr>
+                </Loop>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>

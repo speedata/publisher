@@ -3,8 +3,9 @@
   xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
+  <Trace grid="no"/>
+
   <Options
-    show-grid="no"
     mainlanguage="English (Great Britain)"
   />
   <SetGrid nx="16" height="12pt"/>

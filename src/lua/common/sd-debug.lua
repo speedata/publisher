@@ -49,6 +49,10 @@ do
     return string.rep( "    ", level )
   end
   function printtable (ind,tbl_to_print,level,depth)
+    if tables_printed[tbl_to_print] then return end
+    if tbl_to_print then
+      tables_printed[tbl_to_print] = true
+    end
     if depth and depth <= level then return end
     if type(tbl_to_print) ~= "table" then
       log("printtable: %q is not a table, it is a %s (%q)",tostring(ind),type(tbl_to_print),tostring(tbl_to_print))

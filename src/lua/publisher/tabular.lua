@@ -148,12 +148,16 @@ function attach_objects( self, tab, row )
     row = row or 1
     for _,tr in ipairs(tab) do
         local eltname = publisher.elementname(tr)
+        local tr_contents = publisher.element_contents(tr)
         if eltname == "Tr" then
             local skiptable = self.skiptables.body
             attach_objects_row(self, publisher.element_contents(tr), row,skiptable)
             row = row + 1
         elseif eltname == "Tablehead" or eltname == "Tablefoot" then
-            local skiptable = self.skiptables.tablehead or {}
+            local area
+            if eltname == "Tablehead" then area = "tablehead" else area = "tablefoot" end
+            area = area .. (tr_contents.page or "")
+            local skiptable = self.skiptables[area] or {}
             attach_objects_row(self, publisher.element_contents(tr), row,skiptable)
         end
     end
@@ -412,22 +416,16 @@ function calculate_columnwidth( self )
             self:calculate_columnwidths_for_row(tr_contents,current_row,colspans,colmin,colmax,self.skiptables.body)
         elseif tr_elementname == "Tablerule" then
             -- ignore
-        elseif tr_elementname == "Tablehead" then
+        elseif tr_elementname == "Tablehead" or tr_elementname == "Tablefoot" then
+            local area
+            if tr_elementname == "Tablehead" then area = "tablehead" else area = "tablefoot" end
+            area = area .. (tr_contents.page or "")
             for _,row in ipairs(tr_contents) do
                 local row_contents    = publisher.element_contents(row)
                 local row_elementname = publisher.elementname(row)
                 if row_elementname == "Tr" then
                     current_row = current_row + 1
-                    self:calculate_columnwidths_for_row(row_contents,current_row,colspans,colmin,colmax,self.skiptables.tablehead)
-                end
-            end
-        elseif tr_elementname == "Tablefoot" then
-            for _,row in ipairs(tr_contents) do
-                local row_contents    = publisher.element_contents(row)
-                local row_elementname = publisher.elementname(row)
-                if row_elementname == "Tr" then
-                    current_row = current_row + 1
-                    self:calculate_columnwidths_for_row(row_contents,current_row,colspans,colmin,colmax,self.skiptables.tablefoot)
+                    self:calculate_columnwidths_for_row(row_contents,current_row,colspans,colmin,colmax,self.skiptables[area])
                 end
             end
         elseif tr_elementname == "Columns" or tr_elementname == "TableNewPage" then
@@ -809,9 +807,9 @@ function calculate_rowheights(self)
         if eltname == "Tablerule" or eltname == "Columns" or eltname == "TableNewPage" then
             -- ignore
         elseif eltname == "Tablehead" then
-            tablearea = "tablehead"
+            tablearea = "tablehead" .. (tr_contents.page or "")
         elseif eltname == "Tablefoot" then
-            tablearea = "tablefoot"
+            tablearea = "tablefoot" .. (tr_contents.page or "")
         else
             tablearea = "body"
         end
@@ -824,35 +822,19 @@ function calculate_rowheights(self)
 
         if eltname == "Tablerule" or eltname == "Columns" or eltname == "TableNewPage" then
             -- ignore
-        elseif eltname == "Tablehead" then
-            -- TODO: should be first, all, odd, even
-            local last_shiftup_head = 0
+        elseif eltname == "Tablehead" or eltname == "Tablefoot" then
+            local last_shiftup = 0
             for _,row in ipairs(tr_contents) do
                 local cellcontents  = publisher.element_contents(row)
                 local cell_elementname = publisher.elementname(row)
                 if cell_elementname == "Tr" then
                     rowcounter[tablearea] = rowcounter[tablearea] + 1
                     current_row = rowcounter[tablearea]
-                    rowheight, _rowspans,last_shiftup_head = self:calculate_rowheight(cellcontents,current_row,last_shiftup_head,self.skiptables.tablehead)
+                    rowheight, _rowspans,last_shiftup = self:calculate_rowheight(cellcontents,current_row,last_shiftup,self.skiptables[tablearea])
                     rowheightarea[current_row] = rowheight
                     rowspans[tablearea] = table.__concat(rowspans[tablearea],_rowspans)
                 end
             end
-        elseif eltname == "Tablefoot" then
-            -- TODO: should be split into first/last,...
-            local last_shiftup_foot = 0
-            for _,row in ipairs(tr_contents) do
-                local cellcontents  = publisher.element_contents(row)
-                local cell_elementname = publisher.elementname(row)
-                if cell_elementname == "Tr" then
-                    rowcounter[tablearea] = rowcounter[tablearea] + 1
-                    current_row = rowcounter[tablearea]
-                    rowheight, _rowspans,last_shiftup_foot = self:calculate_rowheight(cellcontents,current_row,last_shiftup_foot,self.skiptables.tablefoot)
-                    rowheightarea[current_row] = rowheight
-                    rowspans[tablearea] = table.__concat(rowspans[tablearea],_rowspans)
-                end
-            end
-
         elseif eltname == "Tr" then
             rowcounter[tablearea] = rowcounter[tablearea] + 1
             current_row = rowcounter[tablearea]
@@ -1153,12 +1135,14 @@ local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current
         end
     end
 
+    local tablearea = "tablehead" .. (tr_contents.page or "")
+
     for _,row in ipairs(tr_contents) do
         row_contents = publisher.element_contents(row)
         row_elementname = publisher.elementname(row)
         if row_elementname == "Tr" then
             current_row = current_row + 1
-            current_tablehead_type[#current_tablehead_type + 1] = self:typeset_row(row_contents,current_row,self.skiptables.tablehead or {},self.rowheights.tablehead)
+            current_tablehead_type[#current_tablehead_type + 1] = self:typeset_row(row_contents,current_row,self.skiptables[tablearea] or {},self.rowheights[tablearea])
         elseif row_elementname == "Tablerule" then
             tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,publisher.origin_tablerule)
             current_tablehead_type[#current_tablehead_type + 1] = node.hpack(tmp)
@@ -1191,9 +1175,11 @@ local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_
     for _,row in ipairs(tr_contents) do
         row_contents = publisher.element_contents(row)
         row_elementname = publisher.elementname(row)
+
+        local tablearea = "tablefoot" .. (tr_contents.page or "")
         if row_elementname == "Tr" then
             current_row = current_row + 1
-            current_tablefoot_type[#current_tablefoot_type + 1] = self:typeset_row(row_contents,current_row,self.skiptables.tablefoot or {},self.rowheights.tablefoot)
+            current_tablefoot_type[#current_tablefoot_type + 1] = self:typeset_row(row_contents,current_row,self.skiptables[tablearea] or {},self.rowheights[tablearea])
         elseif row_elementname == "Tablerule" then
             tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,origin_tablerule)
             current_tablefoot_type[#current_tablefoot_type + 1] = node.hpack(tmp)
@@ -1797,11 +1783,11 @@ function typeset_table(self)
             -- we have some data attached to table rows, so we re-format the footer
             local val = dynamic_data[last_tr_data]
             publisher.xpath.set_variable("_last_tr_data",val)
-            local tmp1,tmp2 = reformat_foot(self,s - 1,#splits - 1)
+            local tmp_tablefoot_last,tmp_tablefoot_all = reformat_foot(self,s - 1,#splits - 1)
             if s < #splits then
-                thissplittable[#thissplittable + 1] = node.copy_list(tmp2)
+                thissplittable[#thissplittable + 1] = node.copy_list(tmp_tablefoot_all)
             else
-                thissplittable[#thissplittable + 1] = node.copy_list(tmp2)
+                thissplittable[#thissplittable + 1] = node.copy_list(tmp_tablefoot_last or tmp_tablefoot_all)
             end
         else
             -- no dynamic data, no re-formatting
@@ -1836,11 +1822,13 @@ function reformat_foot( self,pagenumber,max_splits)
         rownumber = self.tablefoot_contents[2]
     end
     local x = publisher.dispatch(y._layoutxml,y._dataxml)
+    local page = publisher.read_attribute(y._layoutxml,y._dataxml,"page","rawstring","all")
+    x.page = page
     attach_objects(self, x)
-    local tmp1,tmp2 = {},{}
-    make_tablefoot(self,x,tmp1,tmp2,rownumber,true)
-    calculate_height_and_connect_tablefoot(self,tmp1,tmp2)
-    return tmp1[1],tmp2[1]
+    local tmp_tablefoot_last,tmp_tablefoot_all = {},{}
+    make_tablefoot(self,x,tmp_tablefoot_last,tmp_tablefoot_all,rownumber,true)
+    calculate_height_and_connect_tablefoot(self,tmp_tablefoot_last,tmp_tablefoot_all)
+    return tmp_tablefoot_last[1],tmp_tablefoot_all[1]
 end
 
 function reformat_head( self,pagenumber)
@@ -1849,6 +1837,8 @@ function reformat_head( self,pagenumber)
     local x = publisher.dispatch(y._layoutxml,y._dataxml)
     attach_objects( self, x)
     local tmp1,tmp2 = {}, {}
+    local page = publisher.read_attribute(y._layoutxml,y._dataxml,"page","rawstring","all")
+    x.page = page
     make_tablehead(self,x,tmp1,tmp2,rownumber,true)
     calculate_height_and_connect_tablehead(self,tmp1,tmp2)
     return tmp1[1],tmp2[1]
@@ -1887,25 +1877,30 @@ end
 
 
 function set_skip_table( self )
-    self.skiptables={ body = {}, tablehead = {}, tablefoot = {}}
+    self.skiptables={ body = {"body"}, tablehead = {"tablehead"}, tablefoot = {"tablefoot"}}
     local curskiptable
+    local rowcounter = {}
     local current_row_body = 0
     local current_row_head = 0
-
     for _,tr in ipairs(self.tab) do
         local tr_contents = publisher.element_contents(tr)
         local eltname = publisher.elementname(tr)
-        -- TODO: set skip tables for tablehead, tablefoot?
+        local page = tr_contents.page or ""
         if eltname == "Tr" then
             current_row_body = current_row_body + 1
             set_skip_table_elt(tr_contents,self.skiptables.body,current_row_body)
-        elseif eltname == "Tablehead" then
+        elseif eltname == "Tablehead" or eltname == "Tablefoot" then
+            local tablearea
+            if eltname == "Tablehead" then tablearea = "tablehead" else tablearea = "tablefoot" end
+            tablearea = tablearea .. (tr_contents.page or "")
+            rowcounter[tablearea] = 0
+            self.skiptables[tablearea] = self.skiptables[tablearea] or {self.skiptables[tablearea]}
             for _,tr_inner in ipairs(tr_contents) do
                 local inner_eltname = publisher.elementname(tr_inner)
                 local inner_contents = publisher.element_contents(tr_inner)
                 if inner_eltname == "Tr" then
-                    current_row_head = current_row_head + 1
-                    set_skip_table_elt(inner_contents,self.skiptables.tablehead,current_row_head)
+                    rowcounter[tablearea] = rowcounter[tablearea] + 1
+                    set_skip_table_elt(inner_contents,self.skiptables[tablearea],rowcounter[tablearea])
                 end
             end
         end
