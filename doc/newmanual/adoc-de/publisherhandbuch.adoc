@@ -38,7 +38,7 @@ endif::[]
 -  <<ch-programmierung,Programmierung>>
 -  <<ch-bildereinbinden,Bilder einbinden>>
 -  <<ch-tabellen2,Tabellen>>
-- <<ch-html,HTML im speedata Publisher>>
+// - <<ch-html,HTML im speedata Publisher>>
 -  <<ch-fortgeschrittenethemen,Fortgeschrittene Themen>>
 -  <<ch-kochbuch,Kochbuch>>
 
@@ -52,7 +52,7 @@ endif::[]
 - <<app-massangaben,Längenangaben und Maßeinheiten>>
 - <<ch-xpathfunktionen,XPath- und Layoutfunktionen>>
 - <<ch-internevariablen,Interne Variablen>>
-- <<ch-htmlreferenz,HTML Referenz>>
+// - <<ch-htmlreferenz,HTML Referenz>>
 - <<ch-changelog,Liste der Änderungen>>
 - <<ch-anhang-schemazuweisen>>
 - <<app-glossar,Glossar>>
