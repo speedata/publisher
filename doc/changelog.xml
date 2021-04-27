@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.4">
+    <entry version="4.3.18" date="2021-04-27">
+        <en>Better border-collapse implementation (#260, #332).</en>
+        <de>Bessere Implementierung von border-collapse (#260, #332).</de>
+    </entry>
     <entry version="4.3.17" date="2021-04-26">
         <en>Various bugfixes (#330,#331,#316,#317).</en>
         <de>Verschiedene Fehlerkorrekturen (#330,#331,#316,#317).</de>
