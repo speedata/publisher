@@ -2,9 +2,16 @@
 
 This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/).
 
-## Version 4.3 (development branch)
+## Version 4.4 (to be released)
 
-* No plans yet. Probably I will work on better CSS/HTML support.
+* Transparency (available for text and images)
+* MetaPost integration
+* Windows 64 binaries
+* Document separation (frontmatter, mainmatter)
+* Logical and visible page numbering
+* Better hyperlinks within a document (pages, page numbers, leaders, images and boxes)
+* Lots of bug fixes (mostly related to table head/foots and HTML support).
+
 
 ## Version 4.2
 

@@ -18,7 +18,7 @@ Think of it as »XSL-FO on steroids« or »server side InDesign«.
 Examples
 --------
 
-There are some examples in the [example repository on github](https://github.com/speedata/examples). Also, there are lots of small examples in the `qa` subdirectory that is used for quality assurance. See also our [showcase](https://showcase.speedata.de/).
+There are some examples in the [example repository on GitHub](https://github.com/speedata/examples). Also, there are lots of small examples in the `qa` subdirectory that is used for quality assurance. See also our [showcase](https://showcase.speedata.de/).
 
 <img src="https://doc.speedata.de/publisher/static/img/beispiele.png">
 
@@ -37,8 +37,7 @@ I might add the “needs funding” label on a bug report or feature request onc
 
 To support the sustainable development of the speedata Publisher, please consider clicking on the [“sponsor” button](https://github.com/sponsors/speedata) or request a support and maintenance pack by contacting [speedata](https://www.speedata.de/imprint/).
 
-Next features I am working on are “Print CSS” support and i18n (typesetting Arabic and other non-trivial writing scripts), so please help to speed up development.
-
+For a list of upcoming and recent features see the [news file](News.md).
 
 Installation
 ------------
@@ -54,7 +53,7 @@ Our documentation is available online: <https://doc.speedata.de/> and included i
 Bugs
 ----
 
-Please use the [github bug tracker](https://github.com/speedata/publisher/issues) for reporting bugs or write an email. See below for contact details.
+Please use the [GitHub bug tracker](https://github.com/speedata/publisher/issues) for reporting bugs or write an email. See below for contact details.
 
 
 License / Contributing
@@ -62,7 +61,7 @@ License / Contributing
 
 The license is AGPLv3, see the file COPYING in the root directory.
 
-We welcome contributions. Just [follow the github procedure (fork, pull requests)](https://help.github.com/articles/using-pull-requests/). The [installation manual](https://doc.speedata.de/publisher/en/installation/) has a section on building the binary from the source code.
+We welcome contributions. Just [follow the GitHub procedure (fork, pull requests)](https://help.github.com/articles/using-pull-requests/). The [installation manual](https://doc.speedata.de/publisher/en/installation/) has a section on building the binary from the source code.
 
 Contact / Support
 -----------------
