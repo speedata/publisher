@@ -1475,6 +1475,8 @@ function commands.insert_pages( layoutxml,dataxml )
     local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     local pages          = publisher.read_attribute(layoutxml,dataxml,"pages","number")
 
+    publisher.setup_page(publisher.current_pagenumber)
+
     local thispagestore = publisher.pagestore[pagestore_name]
     if not thispagestore then
         -- Forward mode: re-order pages
@@ -1484,6 +1486,8 @@ function commands.insert_pages( layoutxml,dataxml )
         end
         local current_pagenumber = publisher.current_pagenumber
         local thispage = publisher.pages[current_pagenumber]
+        local savenextpage = publisher.nextpage
+        publisher.nextpage = nil
         --- If we insert before the first page, we don't need to to anything.
         --- Otherwise finish the current page.
         --- This duplicates code in publisher#initialize_luatex_and_generate_pdf
@@ -1501,8 +1505,9 @@ function commands.insert_pages( layoutxml,dataxml )
         local new_pagenumber = current_pagenumber + pages
         publisher.current_pagenumber = new_pagenumber
         publisher.pagenum_tbl[current_pagenumber] = new_pagenumber
-        publisher.pagestore[pagestore_name] = {pages,current_pagenumber,#publisher.bookmarks}
+        publisher.pagestore[pagestore_name] = {pages,current_pagenumber,#publisher.bookmarks,pagetype = savenextpage}
         publisher.forward_pagestore[pagestore_name] = true
+        publisher.nextpage = nil
         return
     end
 
@@ -3083,6 +3088,8 @@ end
 function commands.save_pages( layoutxml,dataxml )
     -- w("save_pages")
     local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
+    local nextpagetype   = publisher.read_attribute(layoutxml,dataxml,"pagetype", "rawstring")
+
     if publisher.forward_pagestore[pagestore_name] == nil then
         local save_current_pagenumber = publisher.current_pagenumber
         -- backwards mode. First save_pages, then insert_pages
@@ -3099,7 +3106,6 @@ function commands.save_pages( layoutxml,dataxml )
         return tab
     else
         -- forward mode. First insert pages then save pages
-
         -- Run NewPage if the current page is not finished
         if publisher.page_initialized_p(publisher.current_pagenumber) then
             publisher.new_page()
@@ -3121,6 +3127,8 @@ function commands.save_pages( layoutxml,dataxml )
         for i=1,number_of_pages do
             ppt[save_current_pagenumber + i - publisher.total_inserted_pages - 1] = location + i - 1
         end
+
+        publisher.nextpage = ps.pagetype
         local tab = publisher.dispatch(layoutxml,dataxml)
 
         local realpagecount = publisher.current_pagenumber - location + 1

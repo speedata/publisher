@@ -5048,10 +5048,10 @@
     </attribute>
     <attribute en="pagetype" type="text" optional="yes">
       <description xml:lang="en">
-        <para>The name of the next page type that should be used.</para>
+        <para>The name of the next page type that should be used. If an InsertPage follows the NextPage, the pagetype is used for the first inserted page.</para>
       </description>
       <description xml:lang="de">
-        <para>Der Name des Seitentyps der für die nächste Seite genommen werden soll.</para>
+        <para>Der Name des Seitentyps der für die nächste Seite genommen werden soll. Falls danach ein InsertPage folgt, wird der Seitentyp für die erste Seite von InsertPage genommen.</para>
       </description>
     </attribute>
     <attribute en="skippagetype" type="text" optional="yes">

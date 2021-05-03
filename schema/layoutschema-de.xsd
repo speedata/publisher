@@ -2921,7 +2921,7 @@
       </xs:attribute>
       <xs:attribute name="pagetype">
         <xs:annotation>
-          <xs:documentation>Der Name des Seitentyps der für die nächste Seite genommen werden soll.</xs:documentation>
+          <xs:documentation>Der Name des Seitentyps der für die nächste Seite genommen werden soll. Falls danach ein InsertPage folgt, wird der Seitentyp für die erste Seite von InsertPage genommen.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="skippagetype">

@@ -2993,7 +2993,7 @@
          </optional>
          <optional>
             <attribute name="pagetype">
-               <a:documentation>The name of the next page type that should be used.</a:documentation>
+               <a:documentation>The name of the next page type that should be used. If an InsertPage follows the NextPage, the pagetype is used for the first inserted page.</a:documentation>
             </attribute>
          </optional>
          <optional>

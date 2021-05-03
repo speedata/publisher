@@ -2993,7 +2993,7 @@
          </optional>
          <optional>
             <attribute name="pagetype">
-               <a:documentation>Der Name des Seitentyps der für die nächste Seite genommen werden soll.</a:documentation>
+               <a:documentation>Der Name des Seitentyps der für die nächste Seite genommen werden soll. Falls danach ein InsertPage folgt, wird der Seitentyp für die erste Seite von InsertPage genommen.</a:documentation>
             </attribute>
          </optional>
          <optional>
