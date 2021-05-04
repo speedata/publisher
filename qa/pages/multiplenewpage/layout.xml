@@ -1,0 +1,25 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pageformat height="3cm" width="5cm" />
+
+  <Record element="data">
+    <PlaceObject>
+        <Textblock>
+            <Paragraph>
+                <Value>first page</Value>
+            </Paragraph>
+        </Textblock>
+    </PlaceObject>
+    <NewPage  />
+    <NewPage  />
+    <NewPage  />
+    <PlaceObject>
+        <Textblock>
+            <Paragraph>
+                <Value>last page</Value>
+            </Paragraph>
+        </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

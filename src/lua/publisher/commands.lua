@@ -1879,7 +1879,11 @@ function commands.new_page( layoutxml,dataxml )
     local pagetype     = publisher.read_attribute(layoutxml,dataxml,"pagetype","rawstring")
     local skippagetype = publisher.read_attribute(layoutxml,dataxml,"skippagetype","rawstring")
     local openon       = publisher.read_attribute(layoutxml,dataxml,"openon","rawstring")
-
+    -- two new pages right after each other should insert a new page
+    if publisher.skippages then
+        publisher.skippages = nil
+        publisher.new_page()
+    end
     local doubleopen = false
     if ( openon == "right" and math.fmod(publisher.current_pagenumber,2) == 1 ) or ( openon == "left" and math.fmod(publisher.current_pagenumber,2) == 0 ) then
         doubleopen = true
