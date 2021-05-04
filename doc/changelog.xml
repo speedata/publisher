@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.3">
+    <entry version="4.3.20" date="2021-05-04">
+        <en>Bugfix for multiple NewPage (#334).</en>
+        <de>Fehlerkorrektur für mehrfache NewPage (#334).</de>
+    </entry>
     <entry version="4.3.19" date="2021-05-03">
         <en>Bugfix for InsertPages after NewPage (#333).</en>
         <de>Fehlerkorrektur für InsertPages nach NewPage (#333).</de>
