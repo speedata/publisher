@@ -6,10 +6,9 @@ Oder: wie sieht ein einfaches Dokument aus?
 Wie schon beschrieben, besteht die Eingabe für den Publisher aus zwei Dateien: der Datendatei und der Layoutdatei.
 Beide müssen im XML-Format vorliegen und immer vorhanden sein.
 Die Datendatei speichert man unter dem Namen `data.xml` und die Layoutdatei unter `layout.xml`.
-Diese beiden Dateien erstellt man am besten mit einem XML-Editor, es reicht für die ersten Schritte ein einfacher Texteditor wie https://atom.io/[Atom] oder https://macromates.com/[Textmate].
+Diese beiden Dateien erstellt man am besten mit einem XML-Editor oder dem kostenfreien Editor https://code.visualstudio.com/[Visual Studio Code], der eine sehr gute XML-Unterstützung bietet.
 
 TIP: Wer das »Hallo Welt« Beispiel selber ausprobieren möchte, kann einfach `sp new helloworld` aufrufen. Das erstellt ein Verzeichnis mit den beiden notwendigen Dateien. Somit kann man sofort loslegen und mit dem Befehl `sp` in diesem Verzeichnis ein PDF erzeugen.
-
 
 
 Die Datendatei für das »Hallo Welt« Beispiel mit dem Namen `data.xml`:
