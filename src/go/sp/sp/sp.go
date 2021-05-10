@@ -322,6 +322,15 @@ func sigIntCatcher() {
 	os.Exit(0)
 }
 
+func isASCII(s string) bool {
+	for i := 0; i < len(s); i++ {
+		if s[i] > '\u007F' {
+			return false
+		}
+	}
+	return true
+}
+
 // Run the given command line
 func run(command string, cmdline []string, environ []string) (errorcode int) {
 	errorcode = 0
@@ -629,6 +638,19 @@ func runPublisher(cachemethod string, runmode string, filename string) (exitstat
 		if verbose {
 			fmt.Println("Executable path:", ep)
 		}
+		if runtime.GOOS == "windows" && !isASCII(ep) {
+			fmt.Println(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Your windows path contains non-ascii characters.
+The speedata Publisher will probably not work in this environment.
+Please make sure that you install the speedata Publisher in a directory
+without accented characters.
+
+See https://github.com/speedata/publisher/issues/310 for details.
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`)
+		}
+
 		if run(ep, cmdline, env) < 0 {
 			exitstatus = -1
 			v := status{}
@@ -972,6 +994,7 @@ func main() {
 		fmt.Println("SD_EXTRA_DIRS:", os.Getenv("SD_EXTRA_DIRS"))
 		fmt.Println("SD_EXTRA_XML:", os.Getenv("SD_EXTRA_XML"))
 		fmt.Println("SD_PREPEND_XML:", os.Getenv("SD_PREPEND_XML"))
+		fmt.Println("LUA_PATH", os.Getenv("LUA_PATH"))
 	}
 
 	if getOption("ignore-case") == stringTrue {

@@ -52,3 +52,7 @@ This section summarizes experience reports about compatibility. If something is 
 | ZUGFeRD  | Version 1 | Electronic invoice
 |=======
 
+
+== Known problems
+
+* The speedata Publisher installation on Windows must not contain non-ascii characters (see bug https://github.com/speedata/publisher/issues/310[#310]).

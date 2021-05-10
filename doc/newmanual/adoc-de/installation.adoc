@@ -92,7 +92,7 @@ cp luatex/linux/amd64/1_12/sdluatex bin
 Nach der Installation kann man `bin/sdluatex --version` aufrufen, um zu überprüfen, ob es die richtige Version ist.
 
 
-TIP: Unter Windows benötigt man die https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads[Microsoft Visual C++ compiler runtime]  und die DLL `VCRuntime140.dll`.
+TIP: Unter Windows benötigt man die https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads[Microsoft Visual C++ compiler runtime]  und die DLL `VCRuntime140.dll`. Außerdem darf die Installation nicht in einem Verzeichnis liegen, das aus nicht-Ascii Zeichen wie Umlauten besteht.
 
 
 // EOF

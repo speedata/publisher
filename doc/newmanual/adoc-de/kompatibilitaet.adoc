@@ -51,3 +51,6 @@ In diesem Abschnitt werden Erfahrungsberichte über die Kompatibilität zusammen
 | ZUGFeRD  | Version 1 |
 |=======
 
+== Bekannte Probleme
+
+* Die speedata Publisher Installation auf Windows darf keine Umlaute enthalten. (Siehe Fehler https://github.com/speedata/publisher/issues/310[#310].)

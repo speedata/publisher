@@ -58,7 +58,7 @@ If you are building speedata Publisher from source, you will also need to instal
 +
 After installation, you can run `bin/sdluatex --version` to confirm the program version.
 
-TIP: On windows, you might need the https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads[Microsoft Visual C++ compiler]  and the VCRuntime140.dll.
+TIP: On windows, you might need the https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads[Microsoft Visual C++ compiler] and the VCRuntime140.dll. The installation path of the speedata Publisher must only contain ascii characters and must contain any accented characters.
 
 
 // EOF
