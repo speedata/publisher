@@ -2,7 +2,9 @@
 
 This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/).
 
-## Version 4.4 (to be released)
+## Version 4.4
+
+Released 2021-05-11
 
 * Transparency (available for text and images)
 * MetaPost integration
