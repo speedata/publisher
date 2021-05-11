@@ -1,5 +1,11 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="4.3">
+  <chapter version="4.4" date="2021-05-11">
+    <entry version="4.4.0" date="2021-05-11">
+        <en>Release version 4.4.</en>
+        <de>Veröffentliche Version 4.4.</de>
+    </entry>
+  </chapter>
+  <chapter version="4.3" date="2021-05-11">
     <entry version="4.3.21" date="2021-05-11">
         <en>Warning for Windows users and non-ascii path names (#310).</en>
         <de>Warnung für Windows-Anwender und nicht-ASCII Verzeichnisnamen (#310).</de>
