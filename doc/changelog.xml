@@ -1,4 +1,7 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="4.5">
+
+  </chapter>
   <chapter version="4.4" date="2021-05-11">
     <entry version="4.4.1" date="2021-05-25">
         <en>Bugfix for InsertPages (#335).</en>

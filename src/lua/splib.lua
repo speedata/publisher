@@ -70,6 +70,7 @@ local function c(str)
 end
 
 local function parse_html_text(htmltext,csstext)
+    htmltext = "<body>"..htmltext.."</body>"
     local ret = ld.sdParseHTMLText(c(htmltext),c(csstext))
     local _ret = ffi.string(ret)
 
