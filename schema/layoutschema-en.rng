@@ -973,6 +973,15 @@
                </choice>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="luaxmlreader">
+               <a:documentation>Use old Lua based XML reader.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

@@ -18,6 +18,7 @@ var (
 	files      map[string]string
 	ignorefile string
 	verbosity  int
+	nr         *strings.Replacer
 )
 
 func init() {
@@ -27,6 +28,7 @@ func init() {
 	if v := os.Getenv("SP_VERBOSITY"); v != "" {
 		verbosity, _ = strconv.Atoi(v)
 	}
+	nr = strings.NewReplacer("\n", `\n`, `"`, `\"`, `\`, `\\`)
 }
 
 func downloadFile(resourceURL string, outfile io.Writer) error {
@@ -307,4 +309,23 @@ func ConvertSVGImage(filename string) (string, error) {
 		return "", err
 	}
 	return pdffile, nil
+}
+
+func handleXInclude(href string, startindex, indent int) (string, error) {
+	fullpath := LookupFile(href)
+	f, err := os.Open(fullpath)
+	if err != nil {
+		return "", err
+	}
+	return readXMLFile(f, startindex, indent)
+}
+
+func ReadXMLFile(filename string) (string, error) {
+	fullpath := LookupFile(filename)
+	f, err := os.Open(fullpath)
+	if err != nil {
+		return "", err
+	}
+	str, err := readXMLFile(f, 1, 0)
+	return "tbl = {" + str + "}", err
 }

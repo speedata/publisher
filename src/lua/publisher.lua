@@ -262,6 +262,7 @@ pagestore = {}
 -- See commands.compatibility
 compatibility = {
     movecursoronrightedge = true,
+    luaxmlreader = false,
 }
 
 -- for external image conversion software
@@ -691,7 +692,7 @@ local dispatch_table = {
 ---         },
 ---       },
 ---     },
-function dispatch(layoutxml,dataxml,options)
+function dispatch(layoutxml,dataxml,opts)
     local ret = {}
     local tmp
     if not layoutxml then
@@ -703,7 +704,10 @@ function dispatch(layoutxml,dataxml,options)
         if type(j)=="table" then
             local eltname = j[".__local_name"]
             if dispatch_table[eltname] ~= nil then
-                tmp = dispatch_table[eltname](j,dataxml,options)
+                if options.verbosity > 0 then
+                    log("Call %q from layout input line %d column %d",eltname,j['.__line'] or -1,j['.__col'] or -1)
+                end
+                tmp = dispatch_table[eltname](j,dataxml,opts)
 
                 -- Copy-of-elements can be resolved immediately
                 if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" or eltname == "Transformation" or eltname == "Frame" or eltname == "Include" or eltname == "Layout" then
@@ -717,7 +721,7 @@ function dispatch(layoutxml,dataxml,options)
                         end
                     end
                 else
-                    ret[#ret + 1] = { elementname = eltname, contents = tmp }
+                    ret[#ret + 1] = { elementname = eltname, contents = tmp}
                 end
             else
                 local prefix, localname = table.unpack( string.explode(j[".__name"],":"))
@@ -1595,6 +1599,21 @@ function shipout(nodelist, pagenumber )
     tex.shipout(666)
 end
 
+-- adds index metatble for namespace lookup to layout xml
+function fixup_layoutxml(tbl,ignoreeol,parent)
+    setmetatable(tbl,xml_stringvalue_mt)
+    if parent then
+        setmetatable(tbl[".__ns"],{__index = parent[".__ns"]})
+    end
+    for i = 1, #tbl do
+        if type(tbl[i]) == "table" then
+            fixup_layoutxml(tbl[i],ignoreeol,tbl)
+        elseif ignoreeol and type(tbl[i]) == "string" then
+            tbl[i] = string.gsub(tbl[i],"\n"," ")
+        end
+    end
+end
+
 --- Load an XML file from the hard drive. filename is without path but including extension,
 --- filetype is a string representing the type of file read, such as "layout" or "data".
 --- The return value is a lua table representing the XML file.
@@ -1629,6 +1648,7 @@ end
 ---       [".__local_name"] = "data"
 ---     },
 function load_xml(filename,filetype,parameter)
+    parameter = parameter or {}
     if filename == "_internallayouthtml.xml" then
         local src = [[<Layout xmlns="urn:speedata.de:2009/publisher/en"
         xmlns:sd="urn:speedata:2009/publisher/functions/en">
@@ -1645,16 +1665,44 @@ function load_xml(filename,filetype,parameter)
         log("Loading internal HTML layoutfile")
         return luxor.parse_xml(src,parameter)
     else
-        local path = kpse.find_file(filename)
-        if not path then
-            err("Can't find XML file %q. Abort.",filename or "?")
-            return
+        if not compatibility.luaxmlreader then
+            if options.verbosity > 0 then
+                log("Using new Go based XML reader")
+            end
+            if options.verbosity > 0 then
+                calculate_md5sum(filename)
+            end
+
+            local str = splib.loadxmlfile(filename)
+            if not str then return {} end
+            local ok,msg = load(str)
+            if ok then
+                ok()
+            else
+                log("%s",str)
+                err("%s",msg)
+                return {}
+            end
+            local xmltable = tbl[1]
+            fixup_layoutxml(xmltable,parameter.ignoreeol)
+            return xmltable
+        else
+            if options.verbosity > 0 then
+                log("Using old Lua based XML reader")
+            end
+
+            local path = kpse.find_file(filename)
+            if not path then
+                err("Can't find XML file %q. Abort.",filename or "?")
+                return
+            end
+            if options.verbosity > 0 then
+                calculate_md5sum(filename)
+            end
+            log("Loading %s %q",filetype or "file",path)
+            local parsed_xml = luxor.parse_xml_file(path, parameter,kpse.find_file)
+            return parsed_xml
         end
-        if options.verbosity > 0 then
-            calculate_md5sum(filename)
-        end
-        log("Loading %s %q",filetype or "file",path)
-        return luxor.parse_xml_file(path, parameter,kpse.find_file)
     end
 end
 

@@ -60,6 +60,7 @@ extern char* sdConvertContents(GoString contents, GoString handler);
 extern char* sdConvertImage(GoString filename, GoString handler);
 extern char* sdConvertSVGImage(GoString path);
 extern struct splitvalues* sdSegmentize(GoString original);
+extern char* sdReadXMLFile(GoString filename);
 ]]
 
 ld = ffi.load("libsplib")
@@ -220,6 +221,17 @@ local function segmentize(inputstring)
     return ret
 end
 
+local function loadxmlfile(filename)
+    local ret = ld.sdReadXMLFile(c(filename))
+    local _ret = ffi.string(ret)
+
+    if string.match( _ret,errorpattern ) then
+        err(string.gsub( _ret,errorpattern ,"" ))
+        return
+    end
+    return _ret
+end
+
 
 return {
     parse_html    = parse_html,
@@ -236,5 +248,6 @@ return {
     convertimage    = convertimage,
     convert_svg_image = convertSVGImage,
     segmentize = segmentize,
+    loadxmlfile = loadxmlfile,
 }
 

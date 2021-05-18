@@ -508,6 +508,8 @@ end
 
 function commands.compatibility( layoutxml,dataxml )
     local movecursoronrightedge = publisher.read_attribute(layoutxml,dataxml,"movecursoronplaceobject", "boolean","yes")
+    publisher.compatibility.luaxmlreader = publisher.read_attribute(layoutxml,dataxml,"luaxmlreader", "boolean","no")
+
     publisher.compatibility.movecursoronrightedge = movecursoronrightedge
 end
 
@@ -1564,7 +1566,7 @@ function commands.load_fontfile( layoutxml,dataxml )
     local fallbacks = {}
     for _,v in ipairs(layoutxml) do
         if type(v) == "table" then
-            if v[".__name"] == "Fallback" then
+            if v[".__local_name"] == "Fallback" then
                fallbacks[#fallbacks + 1] = v.filename
             end
         end
@@ -2463,7 +2465,7 @@ end
 --- -----------
 --- Emit a rectangular object. The object can be
 --- one of `Textblock`, `Table`, `Image`, `Box` or `Rule`.
-function commands.place_object( layoutxml,dataxml )
+function commands.place_object( layoutxml,dataxml)
     local absolute_positioning = false
     local column           = publisher.read_attribute(layoutxml,dataxml,"column",         "rawstring")
     local row              = publisher.read_attribute(layoutxml,dataxml,"row",            "rawstring")

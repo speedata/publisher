@@ -240,4 +240,14 @@ func sdSegmentize(original string) *C.struct_splitvalues {
 
 	return returnStruct
 }
+
+//export sdReadXMLFile
+func sdReadXMLFile(filename string) *C.char {
+	str, err := splibaux.ReadXMLFile(filename)
+	if err != nil {
+		return s2c(errorpattern + err.Error())
+	}
+	return s2c(str)
+}
+
 func main() {}
