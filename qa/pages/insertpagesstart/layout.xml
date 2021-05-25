@@ -1,0 +1,28 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  version="4.4.0">
+
+  <Pageformat height="2.5cm" width="6cm" />
+  <SetGrid height="12pt" nx="10"/>
+
+  <Record element="data">
+    <InsertPages name="inserted" pages="1" />
+
+    <PlaceObject>
+        <Textblock>
+            <Paragraph>
+                <Value>Some text</Value>
+            </Paragraph>
+        </Textblock>
+    </PlaceObject>
+    <SavePages name="inserted">
+      <PlaceObject>
+          <Textblock>
+              <Paragraph>
+                  <Value>inserted text</Value>
+              </Paragraph>
+          </Textblock>
+      </PlaceObject>
+    </SavePages>
+  </Record>
+</Layout>
