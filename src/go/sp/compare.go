@@ -38,6 +38,7 @@ var (
 	finished          chan bool
 	exeSuffix         string
 	cs                []compareStatus
+	allPages          []compareStatus
 	mutex             *sync.Mutex
 	wp                *workerpool.WorkerPool
 	verbose           bool
@@ -70,7 +71,7 @@ func DoCompare(absdir string, withHTML bool, moreinfo bool, referencefn string) 
 	wp = workerpool.New(runtime.NumCPU())
 	referencefilename = referencefn
 	verbose = moreinfo
-	statuschan := make(chan compareStatus, 0)
+	statuschan := make(chan []compareStatus, 0)
 	compareFunc := mkCompare(statuschan)
 	filepath.Walk(absdir, compareFunc)
 	go getCompareStatus(statuschan)
@@ -78,7 +79,7 @@ func DoCompare(absdir string, withHTML bool, moreinfo bool, referencefn string) 
 
 	finished <- true
 	if withHTML {
-		mkWebPage()
+		mkWebPage(!verbose)
 	}
 }
 
@@ -159,9 +160,12 @@ func calculateHash(filename string) []byte {
 	return h.Sum(nil)
 }
 
-func runComparison(path string, statuschan chan compareStatus) {
+func runComparison(path string, statuschan chan []compareStatus) {
 	cs := compareStatus{}
+	allPages := compareStatus{}
 	cs.Path = path
+	allPages.Path = path
+	allPages.Badpages = append(allPages.Badpages, 0)
 	var err error
 	if verbose {
 		fmt.Println(path)
@@ -181,7 +185,8 @@ func runComparison(path string, statuschan chan compareStatus) {
 			fmt.Printf("Files in %q have the same checksum\n", path)
 		}
 		cs.Delta = 0
-		statuschan <- cs
+		allPages.Delta = 0
+		statuschan <- []compareStatus{cs, allPages}
 		return
 	}
 	if verbose {
@@ -233,20 +238,33 @@ func runComparison(path string, statuschan chan compareStatus) {
 		dummyFile := fmt.Sprintf("pagediff-%02d.png", i)
 		if delta := compareTwoPages(sourceFile, referenceFile, dummyFile, path); delta > 0 {
 			cs.Delta = math.Max(cs.Delta, delta)
+			allPages.Delta = cs.Delta
 			if delta > 0.3 {
+				if i > 0 {
+					allPages.Badpages = append(allPages.Badpages, i)
+				}
 				cs.Badpages = append(cs.Badpages, i)
 			}
 		}
 	}
 
-	statuschan <- cs
+	statuschan <- []compareStatus{cs, allPages}
 }
 
-func mkWebPage() error {
-	if len(cs) == 0 {
+func mkWebPage(onlyErrorPages bool) error {
+
+	if onlyErrorPages && len(cs) == 0 {
 		return nil
 	}
-	sort.Sort(byDelta(cs))
+	var pages []compareStatus
+	if onlyErrorPages {
+		pages = cs
+	} else {
+		pages = allPages
+	}
+
+	sort.Sort(byDelta(pages))
+
 	tmpl := `<!DOCTYPE html>
 <html>
 <head>
@@ -266,7 +284,7 @@ func mkWebPage() error {
 	</tr>
 	<tr>
 		<td>
-		{{range .Badpages}}{{.}}: <a href="{{ $path}}/{{. | printf "pagediff-%.2d.png" }}"><img src="{{ $path}}/{{. | printf "pagediff-%.2d.png" }}" ></a>{{end}}
+		{{range .Badpages}}{{.}}: <a href="{{ $path}}/{{. | printf $.ImageToShow }}"><img src="{{ $path}}/{{. | printf $.ImageToShow }}" ></a>{{end}}
 		</td>
 	</tr>
 	{{- end }}
@@ -280,8 +298,14 @@ func mkWebPage() error {
 	t := template.Must(template.New("html").Parse(tmpl))
 	data := struct {
 		CompareStatus []compareStatus
+		ImageToShow   string
 	}{
-		CompareStatus: cs,
+		CompareStatus: pages,
+	}
+	if onlyErrorPages {
+		data.ImageToShow = "pagediff-%.2d.png"
+	} else {
+		data.ImageToShow = "source-%.2d.png"
 	}
 	err := t.Execute(&buf, data)
 	if err != nil {
@@ -301,19 +325,20 @@ func mkWebPage() error {
 	return nil
 }
 
-func getCompareStatus(statuschan chan compareStatus) {
+func getCompareStatus(statuschan chan []compareStatus) {
 	for {
 		select {
 		case st := <-statuschan:
-			if len(st.Badpages) > 0 {
+			allPages = append(allPages, st[1])
+			if len(st[0].Badpages) > 0 {
 				mutex.Lock()
-				cs = append(cs, st)
+				cs = append(cs, st[0])
 				mutex.Unlock()
 				fmt.Println("---------------------------")
 				fmt.Println("Finished with comparison in")
-				fmt.Println(st.Path)
-				fmt.Println("Comparison failed. Bad pages are:", st.Badpages)
-				fmt.Println("Max delta is", fmt.Sprintf("%.2f", st.Delta))
+				fmt.Println(st[0].Path)
+				fmt.Println("Comparison failed. Bad pages are:", st[0].Badpages)
+				fmt.Println("Max delta is", fmt.Sprintf("%.2f", st[0].Delta))
 			}
 		case <-finished:
 			// now that we have read from the channel, we are all done
@@ -323,7 +348,7 @@ func getCompareStatus(statuschan chan compareStatus) {
 
 // Return a filepath.WalkFunc that looks into a directory, runs convert to generate the PNG files from the PDF and
 // compares the two resulting files. The function puts the result into the channel compareStatus.
-func mkCompare(statuschan chan compareStatus) filepath.WalkFunc {
+func mkCompare(statuschan chan []compareStatus) filepath.WalkFunc {
 	return func(path string, info os.FileInfo, err error) error {
 		if info == nil || !info.IsDir() {
 			return nil

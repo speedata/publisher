@@ -98,12 +98,12 @@ local function mktextnode(self,text,options)
     local tmp = node.getproperty(nodes)
     if options.fontfamily and publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily] then
         local fontheight = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily].baselineskip
-        local col = node.has_attribute(nodes,publisher.att_fgcolor)
+        local col = publisher.get_attribute(nodes,"color")
         nodes = publisher.add_rule(nodes,"head",{height = 0.75 * fontheight, depth = 0.25 * fontheight, width = 0 })
         node.setproperty(nodes,tmp)
-        node.set_attribute(nodes,publisher.att_fontfamily,options.fontfamily)
+        publisher.set_attribute(nodes,"fontfamily",options.fontfamily)
         if col then
-            node.set_attribute(nodes,publisher.att_fgcolor,col)
+            publisher.set_attribute(nodes,"color",col)
         end
     end
     if options.newline then
@@ -194,7 +194,7 @@ local function flatten(self,items,options)
                 local csstext = publisher.css:gettext()
                 -- todo: add  white-space: pre; if publisher.options.ignoreeol == false
                 -- csstext = string.format("body {font-family-number: %d ;} ",options.fontfamily)
-                csstext = csstext .. string.format(" body {font-family-number: %d ;} ",options.fontfamily)
+                csstext = " a { text-decoration: none; color: black}" ..  csstext .. string.format(" body {font-family-number: %d ;}",options.fontfamily)
                 local tab = splib.parse_html_text(htmltext,csstext)
                 if type(tab) == "string" then
                     local a,b = load(tab)
@@ -388,7 +388,7 @@ function get_lineheight( nodelist )
     while head do
         if head.id == publisher.vlist_node or head.id == publisher.hlist_node then return get_lineheight(head.list) end
         if head.id == publisher.glyph_node then
-            local ffnumber = node.has_attribute(head,publisher.att_fontfamily)
+            local ffnumber = publisher.get_attribute(head,"fontfamily")
             local fi = publisher.fonts.lookup_fontfamily_number_instance[ffnumber]
             if fi then
                 return fi.baselineskip
@@ -622,7 +622,7 @@ function Par:format( width_sp, options )
         publisher.fonts.pre_linebreak(nodelist)
 
         -- both are set only for ul/ol lists
-        local indent = node.has_attribute(nodelist,publisher.att_indent) or 0
+        local indent = publisher.get_attribute(nodelist,"indent") or 0
         local rows   = node.has_attribute(nodelist,publisher.att_rows)
 
         parameter.hangindent = indent + ( current_textformat.indent or 0 )
@@ -664,7 +664,7 @@ function Par:format( width_sp, options )
 
         -- if the last items are newline nodes, clear them (see #142)
         local tail = node.slide(nodelist)
-        while tail and node.has_attribute(tail,publisher.att_newline) do
+        while tail and publisher.get_attribute(tail,"newline") do
             nodelist = node.remove(nodelist,tail)
             tail = node.tail(nodelist)
         end
@@ -853,7 +853,7 @@ function Par:format( width_sp, options )
         if self.direction ~= "rtl" then
             initial_hlist.shift = -initial_hlist.width
         end
-        node.set_attribute(self.initial,publisher.att_origin,publisher.origin_initial)
+        publisher.setprop(self.initial,"origin","initial")
         initial_hlist = node.vpack(initial_hlist)
         publisher.setprop(initial_hlist,"origin","initial")
 

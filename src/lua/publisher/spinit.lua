@@ -154,7 +154,7 @@ function math.round(num, idp)
     return math.floor(num + 0.5)
 end
 
-function set_glue( gluenode, values )
+function set_glue( gluenode, values, origin )
     local n
     if gluenode == nil then
         n = node.new("glue")
@@ -172,6 +172,9 @@ function set_glue( gluenode, values )
     values = values or {}
     for k,v in pairs(values) do
         spec[k] = v
+    end
+    if origin then
+        publisher.setprop(n,"origin",origin)
     end
     return n
 end
@@ -222,6 +225,7 @@ function tex.sp( number_or_string )
         local tmp = string.gsub(number_or_string,"(%d)pt","%1bp"):gsub("(%d)pp","%1pt")
         local ret = { pcall(orig_texsp,tmp) }
         if ret[1]==false then
+            -- texio.write_nl(debug.traceback())
             err("Could not convert dimension %q",number_or_string)
             return nil
         end

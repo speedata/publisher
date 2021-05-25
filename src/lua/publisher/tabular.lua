@@ -756,11 +756,11 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
             end
 
             if glue_left then
-                node.set_attribute(glue_left,publisher.att_origin,publisher.origin_align_left)
+                publisher.setprop(glue_left,"origin","align_left")
                 tmp = node.insert_before(tmp,n,glue_left)
             end
             if glue_right then
-                node.set_attribute(glue_right,publisher.att_origin,publisher.origin_align_right)
+                publisher.setprop(glue_right,"origin","align_right")
                 tmp = node.insert_after(tmp,n,glue_right)
             end
             tmp = node.hpack(tmp,width,"exactly")
@@ -1027,7 +1027,7 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
         end
 
         local g = set_glue(nil,{width = padding_top})
-        node.set_attribute(g,publisher.att_origin,publisher.origin_align_top)
+        publisher.setprop(g,"origin","align_top")
 
         local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
         if valign ~= "top" then
@@ -1056,7 +1056,7 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
         cell.prev = tail
 
         local g = set_glue(nil,{width = padding_bottom})
-        node.set_attribute(g,publisher.att_origin,publisher.origin_align_bottom)
+        publisher.setprop(g,"origin","align_bottom")
 
         local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
         if valign ~= "bottom" then
@@ -1228,7 +1228,7 @@ local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current
             current_row = current_row + 1
             current_tablehead_type[#current_tablehead_type + 1] = self:typeset_row(row_contents,current_row,self.skiptables[tablearea] or {},self.rowheights[tablearea])
         elseif row_elementname == "Tablerule" then
-            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,publisher.origin_tablerule)
+            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,"tablerule")
             current_tablehead_type[#current_tablehead_type + 1] = node.hpack(tmp)
         end
     end
@@ -1265,7 +1265,7 @@ local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_
             current_row = current_row + 1
             current_tablefoot_type[#current_tablefoot_type + 1] = self:typeset_row(row_contents,current_row,self.skiptables[tablearea] or {},self.rowheights[tablearea])
         elseif row_elementname == "Tablerule" then
-            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,origin_tablerule)
+            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,"tablerule")
             current_tablefoot_type[#current_tablefoot_type + 1] = node.hpack(tmp)
         end
     end
@@ -1373,10 +1373,10 @@ function typeset_table(self)
                 end
                 offset = sum
             end
-            tmp = publisher.colorbar(self.tablewidth_target - offset,tex.sp(tr_contents.rulewidth or "0.25pt"),0,tr_contents.color,publisher.origin_tablerule)
+            tmp = publisher.colorbar(self.tablewidth_target - offset,tex.sp(tr_contents.rulewidth or "0.25pt"),0,tr_contents.color,"tablerule")
             tmp = publisher.add_glue(tmp,"head",{width = offset})
             tmp = node.hpack(tmp)
-            node.set_attribute(tmp,publisher.att_origin,publisher.origin_tablerule)
+            publisher.setprop(tmp,"origin","tablerule")
             rows[#rows + 1] = tmp
             if break_above == false then
                 if publisher.options.showobjects then
@@ -1791,7 +1791,7 @@ function typeset_table(self)
         -- When the last column has exacly one table rule, this rule
         -- gets moved to the previous column
         if #splits > 1 and splits[#splits] - splits[#splits - 1] == 1 then
-            local istablerule = node.has_attribute(rows[#rows],publisher.att_origin) == publisher.origin_tablerule
+            local istablerule = publisher.getprop(rows[#rows],"origin") == "tablerule"
             if istablerule then
                 splits[#splits - 1] = splits[#splits]
                 table.remove(splits)

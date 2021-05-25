@@ -68,24 +68,44 @@ onein_sp       = tex.sp("1in")
 --- nodes, we don't yet know what font the user will use).
 ---
 --- Attributes may have any number, they just need to be constant across the whole source.
-att_fontfamily     = 1
-att_italic         = 2
-att_bold           = 3
-att_script         = 4
-att_underline      = 5
-att_indent         = 6 -- see text formats for details
-att_rows           = 7 -- see text formats for details
-att_bgcolor        = 8 -- similar to underline
-att_fgcolor        = 9 -- similar to underline
-att_bgpaddingtop   = 10
-att_bgpaddingbottom  = 11
-att_hyperlink      = 12
-att_underline_color = 13
-att_transparency    = 14  -- image transparency
+--- The attributes value must also be a number.
 
--- for debugging purpose
-att_origin         = 98
-att_debug          = 99
+--- Instead of storing strings we store indexes to strings based on the attributes table.
+--- Note: there are also properties in LuaTeX which are much more flexible, we use the old mechanism
+--- because in disc nodes, the attributes are inherited (as far as I can see).
+attributes = {
+    ["background-color"] = true,
+    ["bgpaddingbottom"] = true,
+    ["bgpaddingtop"] = true,
+    ["color"] = true,
+    ["font-style"] = {"italic","oblique"},
+    ["font-weight"] = {"normal","bold"},
+    ["fontfamily"] = true,
+    ["hyperlink"] = true,
+    ["indent"] = true,
+    ["newline"] = true,
+    ["rows"] = true,
+    ["text-decoration-color"] = true,
+    ["text-decoration-line"] = {"underline","overline","line-through"},
+    ["text-decoration-style"] = {"solid","double","dotted","dashed","wavy"},
+    ["transparency"] = true,
+    ["underline_color"] = true,
+    ["underline"] = true,
+    ["vertical-align"] = {"baseline","top","middle","bottom","sub","super"},
+}
+
+attribute_name_number = {}
+attribute_number_name = {}
+do
+    local c = 1
+    for k, _ in pairs(attributes) do
+        attribute_name_number[k] = c
+        attribute_number_name[c] = k
+        c = c + 1
+    end
+end
+
+att_rows           = 98 -- see text formats for details
 
 --- These attributes are for image shifting. The amount of shift up/left can
 --- be negative and is counted in scaled points.
@@ -139,27 +159,6 @@ att_newline = 900
 -- PDF/UA - tagged PDF
 att_role  = 1000
 
--- Debugging / see att_origin
-origin_table = 1
-origin_vspace = 2
-origin_align_top = 3
-origin_align_bottom = 4
-origin_align_left = 5
-origin_align_right = 6
-origin_image = 7
-
-origin_finishpar = 20
-origin_text = 21
-origin_setcolor = 22
-origin_setcolorifnecessary = 23
-origin_paragraph = 24
-origin_initial = 25
-origin_text = 26
-origin_join_table_box = 27
-origin_dolinebreak = 28
-origin_colorbar = 40
-
-origin_tablerule = 50
 
 user_defined_addtolist = 1
 user_defined_bookmark  = 2
@@ -1038,6 +1037,10 @@ function initialize_luatex_and_generate_pdf()
             htmlfilename = v
             htmlblocks = {}
             options.htmlignoreeol = false
+            -- pdf.setcompresslevel(0)
+            -- pdf.setobjcompresslevel(0)
+            -- publisher.documenttitle = "document"
+            -- publisher.options.format = "PDF/UA"
             local tmp = splib.parse_html(htmlfilename)
             if tmp == "" then
                 err("Could not read HTML file %q",tostring(htmlfilename))
@@ -1046,6 +1049,9 @@ function initialize_luatex_and_generate_pdf()
             if type(tmp) == "string" then
                 local a,b = load(tmp)
                 if a then a() else err(b) return end
+                local f = io.open(htmlfilename .. ".lua","w")
+                f:write(tmp)
+                f:close()
                 local blocks = publisher.parse_html(csshtmltree) or {}
                 for b=1,#blocks do
                     local thisblock = blocks[b]
@@ -2720,7 +2726,7 @@ function box( width_sp,height_sp,colorname )
         paint.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colentry.pdfstring,_width,_height)
         paint.mode = 0
         if colentry.alpha then
-            node.set_attribute(paint,att_fgcolor,get_colorindex_from_name(colorname))
+            set_attribute(paint,"color",get_colorindex_from_name(colorname))
         end
         local hglue = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3 })
         h = node.insert_after(paint,paint,hglue)
@@ -3041,7 +3047,7 @@ function dothingsbeforeoutput( thispage )
 
     local str
     local thispagebox = thispage.pagebox
-    find_user_defined_whatsits(thispagebox)
+    insert_nonmoving_whatsits(thispagebox)
     local firstbox
 
     -- for spot colors, if necessary
@@ -3277,21 +3283,78 @@ function parse_html( elt, parameter )
     end
 end
 
+function get_attributes(nodelist)
+    local attributes = {}
+    local n = nodelist.attr
+    while n do
+        if n.number then
+            attributes[n.number] = n.value
+        end
+        n = n.next
+    end
+    return attributes
+end
+
+-- Get an attribute value. If the attribute table entry has a table, return the
+-- string value of the attribute
+function get_attribute(nodelist,attribute_name)
+    local a = get_attributes(nodelist) or {}
+    local att_number = attribute_name_number[attribute_name]
+    local entry = attributes[attribute_name]
+    local val = a[att_number]
+    if not val then return nil end
+    if type(entry) == "table" then
+        return entry[val]
+    end
+    return a[att_number]
+end
+
+-- set_attribute sets an attribute for this node. The attribute name must be
+-- present in the global attribute list or a number from the list attribute_name_number.
+-- The value must be a number or a string value
+function set_attribute(nodelist,attribute_name,value)
+    local att_number = attribute_name_number[attribute_name]
+    if not att_number then err("Internal error: attribute %s unknown",attribute_name or "?") return end
+    local entry = attributes[attribute_name]
+    local att_value
+    if type(entry) == "table" then
+        for k,v in ipairs(entry) do
+            if v == value then att_value = k break end
+        end
+    else
+        att_value = value
+    end
+    node.set_attribute(nodelist,att_number,att_value)
+end
+
+-- list of attributes { key = val, key = val }
+function set_attributes(nodelist,att_tbl)
+    for k, v in pairs(att_tbl) do
+        if k and v then
+            local num = k
+            if type(k) == "number" then k = attribute_number_name[k] end
+            if not k then w("attribute name %d not found",num) end
+            set_attribute(nodelist,k,v)
+        end
+    end
+end
+
 --- Look for `user_defined` at end of page (ship-out) and runs actions encoded in them.
-function find_user_defined_whatsits( head, parent, blockinline )
+function insert_nonmoving_whatsits( head, parent, blockinline )
+    if not head then return end
     blockinline = blockinline or "vertical"
     local fun
     local prev_hyperlink, prev_fgcolor,prev_role
     local linklevel = 0
     while head do
         if head.id==hlist_node and head.subtype == 1 then
-            find_user_defined_whatsits(head.list,head,"horizontal")
+            insert_nonmoving_whatsits(head.list,head,"horizontal")
         elseif head.id==hlist_node or head.id == vlist_node then
-            find_user_defined_whatsits(head.list,head,"vertical")
+            insert_nonmoving_whatsits(head.list,head,"vertical")
         else
             local props = node.getproperty(head)
-            local underline = node.has_attribute(head,att_underline)
-            local fgcolor = node.has_attribute(head,att_fgcolor)
+            local attribs = get_attributes(head)
+            local fgcolor = get_attribute(head,"color")
             local transparency = getprop(head,"opacity")
             local role = getprop(head,"role")
 
@@ -3303,7 +3366,6 @@ function find_user_defined_whatsits( head, parent, blockinline )
             local insert_endcolor = false
             local insert_startrole = false
             local insert_endrole = false
-
 
             if fgcolor and head.next == nil then
                 -- at end insert endcolor if in color mode
@@ -3356,26 +3418,21 @@ function find_user_defined_whatsits( head, parent, blockinline )
             end
             if insert_endcolor then
                 local colstop  = node.new("whatsit","pdf_colorstack")
-                node.setproperty(colstop,props)
-                node.set_attribute(colstop,att_underline,underline)
+                set_attributes(colstop,attribs)
                 colstop.data  = ""
                 colstop.command = 2
                 colstop.stack = defaultcolorstack
-                local dontformat = node.has_attribute(head,att_dont_format)
-                if dontformat then
-                    node.set_attribute(colstop,att_dont_format,dontformat)
-                end
-                node.set_attribute(colstop,att_origin,origin_setcolor)
-                if fgcolor then
+                setprop(colstop,"origin","setcolor")
+                if fgcolor and not prev_fgcolor then
                     parent.head = node.insert_after(parent.head,head,colstop)
+                    head = head.next
                 else
                     parent.head = node.insert_before(parent.head,head,colstop)
                 end
             end
             if insert_startcolor then
                 local colstart = node.new("whatsit","pdf_colorstack")
-                node.setproperty(colstart,props)
-                node.set_attribute(colstart,att_underline,underline)
+                set_attributes(colstart,attribs)
                 local colorname = colortable[fgcolor]
                 local colorentry = colors[colorname]
                 local col = colorentry.pdfstring
@@ -3388,11 +3445,7 @@ function find_user_defined_whatsits( head, parent, blockinline )
                 colstart.command = 1
                 colstart.stack = defaultcolorstack
 
-                local dontformat = node.has_attribute(head,att_dont_format)
-                if dontformat then
-                    node.set_attribute(colstart,att_dont_format,dontformat)
-                end
-                node.set_attribute(colstart,att_origin,origin_setcolor)
+                setprop(colstart,"origin","setcolor")
                 parent.head = node.insert_before(parent.head,head,colstart)
             end
             if insert_endrole then
@@ -3403,6 +3456,7 @@ function find_user_defined_whatsits( head, parent, blockinline )
 
                 if role then
                     parent.head = node.insert_after(parent.head,head,emc)
+                    head = head.next
                 else
                     parent.head = node.insert_before(parent.head,head,emc)
                 end
@@ -3413,7 +3467,6 @@ function find_user_defined_whatsits( head, parent, blockinline )
                 bdc.data = ""
                 bdc.mode = 1
                 parent.head = node.insert_before(parent.head,head,bdc)
-
             end
 
             if transparency then
@@ -3432,7 +3485,7 @@ function find_user_defined_whatsits( head, parent, blockinline )
             end
             -- First, let's look at hyperlinks from HTML <a href="...">
             -- Hyperlinks are inserted as attributes
-            local hl = node.has_attribute(head,att_hyperlink) or getprop(head,"hyperlink")
+            local hl = get_attribute(head,"hyperlink") or getprop(head,"hyperlink")
             local insert_startlink = false
             local insert_endlink = false
             -- case 1: link ends at the end of the list
@@ -3584,7 +3637,7 @@ function newline(fam)
     local dummypenalty
     dummypenalty = node.new("penalty")
     dummypenalty.penalty = 10000
-    node.set_attribute(dummypenalty,att_newline,1)
+    set_attribute(dummypenalty,"newline")
 
     local list, cur
     list, cur = dummypenalty,dummypenalty
@@ -3602,11 +3655,11 @@ function newline(fam)
     g = set_glue(nil,{stretch = 2^16, stretch_order = 2})
     p2 = node.new("penalty")
     p2.penalty = -10000
-    node.set_attribute(p1,att_newline,1)
-    node.set_attribute(p2,att_newline,1)
-    node.set_attribute(g,att_newline,1)
+    set_attribute(p1,"newline")
+    set_attribute(p2,"newline")
+    set_attribute(g,"newline")
     -- important for empty lines (adjustlineheight)
-    node.set_attribute(p1,att_fontfamily,fam)
+    set_attribute(p1,"fontfamily",fam)
     list,cur = node.insert_after(list,cur,p1)
     list,cur = node.insert_after(list,cur,g)
     list,cur = node.insert_after(list,cur,p2)
@@ -3635,7 +3688,7 @@ function addstrut(nodelist,where,origin)
     end
     head = nodelist
     while head do
-        if node.has_attribute(head, att_fontfamily) then
+        if get_attribute(head,"fontfamily") then
             break
         end
         head = head.next
@@ -3645,7 +3698,7 @@ function addstrut(nodelist,where,origin)
     if head == nil then
         fontfamily = nil
     else
-        fontfamily = node.has_attribute(head, att_fontfamily)
+        fontfamily = get_attribute(head,"fontfamily")
     end
     if fontfamily == nil or fontfamily == 0 then
         fontfamily = fonts.lookup_fontfamily_name_number["text"]
@@ -3722,43 +3775,38 @@ end
 
 local function setstyles(n,parameter)
     if parameter.bold == 1 then
-        node.set_attribute(n,att_bold,1)
+        set_attribute(n,"font-weight","bold")
         setprop(n,"font-weight","bold")
     end
     if parameter.italic == 1 then
-        node.set_attribute(n,att_italic,1)
-        setprop(n,"font-style","italic")
+        publisher.set_attribute(n,"font-style","italic")
     end
-    if parameter.underline then
-        node.set_attribute(n,att_underline,parameter.underline)
-        node.set_attribute(n,att_underline_color,current_fgcolor)
-        setprop(n,"text-decoration","underline")
+    if parameter.textdecorationline then
+        set_attribute(n,"text-decoration-line",parameter.textdecorationline)
+        set_attribute(n,"text-decoration-style",parameter.textdecorationstyle)
+        set_attribute(n,"text-decoration-color",current_fgcolor)
     end
     if parameter.color and parameter.color ~= 1 then
-        node.set_attribute(n,att_underline_color,parameter.color)
-        node.set_attribute(n,att_fgcolor,parameter.color)
-        setprop(n,"color",parameter.color)
+        set_attribute(n,"text-decoration-color",parameter.color)
+        set_attribute(n,"color",parameter.color)
     end
     if parameter.hyperlink then
         local hl = parameter.hyperlink
-        node.set_attribute(n,att_hyperlink,hl)
-        setprop(n,"hyperlink",hl)
+        set_attribute(n,"hyperlink",hl)
     end
     if parameter.languagecode and node.has_field(n,"lang") then
         local lc = parameter.languagecode
         n.lang = lc
     end
     if parameter.backgroundcolor then
-        node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
+        set_attribute(n,"background-color",parameter.backgroundcolor)
         local bg_padding_top = tex.sp(parameter.bg_padding_top or 0)
         local bg_padding_bottom = tex.sp(parameter.bg_padding_bottom or 0)
-        node.set_attribute(n,att_bgpaddingtop,bg_padding_top)
-        node.set_attribute(n,att_bgpaddingbottom,bg_padding_bottom)
-        setprop(n,"background-color",parameter.backgroundcolor)
+        set_attribute(n,"bgpaddingtop",bg_padding_top)
+        set_attribute(n,"bgpaddingbottom",bg_padding_bottom)
     end
-    if parameter.subscript then
-        node.set_attribute(n,att_script,parameter.subscript)
-        setprop(n,"subscript",parameter.subscript)
+    if parameter.verticalalign then
+        set_attribute(n,"vertical-align",parameter.verticalalign)
     end
     if parameter.indent then
         setprop(n,"indent",parameter.indent)
@@ -3804,43 +3852,42 @@ function hbglyphlist(arguments)
                 n = node.new("penalty")
                 n.penalty = 10000
                 list,cur = node.insert_after(list,cur,n)
-
-                n = set_glue(nil,{width = space, shrink = shrink, stretch = stretch})
+                n = set_glue(nil,{width = space, shrink = shrink, stretch = stretch},"uc=32,160")
                 node.set_attribute(n,att_tie_glue,1)
                 list,cur = node.insert_after(list,cur,n)
 
-                -- can be 1 == solid or 2 == dashed
-                if parameter.underline then
-                    node.set_attribute(n,att_underline,parameter.underline)
-                    node.set_attribute(n,att_underline_color,current_fgcolor)
-                end
-
-                if parameter.backgroundcolor then
-                    node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
-                    node.set_attribute(n,att_bgpaddingtop,parameter.bg_padding_top)
-                    node.set_attribute(n,att_bgpaddingbottom,parameter.bg_padding_bottom)
-                end
-                node.set_attribute(n,att_fontfamily,fontfamily)
             elseif cluster[thiscluster] == 8203 then
                 -- U+200B ZERO WIDTH SPACE
                 p = node.new("penalty")
                 p.penalty = -10
                 list,cur = node.insert_after(list,cur,p)
             else
-                n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch})
+                n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch},"uc=32")
                 setstyles(n,parameter)
                 list,cur = node.insert_after(list,cur,n)
             end
+            if parameter.textdecorationline then
+                set_attribute(n,"text-decoration-line",parameter.textdecorationline)
+                set_attribute(n,"text-decoration-style",parameter.textdecorationstyle)
+                set_attribute(n,"text-decoration-color",current_fgcolor)
+            end
+
+            if parameter.backgroundcolor then
+                set_attribute(n,"background-color",parameter.backgroundcolor)
+                set_attribute(n,"bgpaddingtop",parameter.bg_padding_top)
+                set_attribute(n,"bgpaddingbottom",parameter.bg_padding_bottom)
+            end
+            set_attribute(n,"fontfamily",fontfamily)
         elseif cp == 0 and newlines_at[thisglyph.cluster] then
             local dummypenalty
             dummypenalty = node.new("penalty")
             dummypenalty.penalty = 10000
-            node.set_attribute(dummypenalty,att_newline,1)
+            set_attribute(dummypenalty,"newline")
             list,cur = node.insert_after(list,cur,dummypenalty)
 
             local ht = fonts.lookup_fontfamily_number_instance[fontfamily].size
             local strut = add_rule(nil,"head",{height = ht * 0.75, depth = 0.25 * ht, width = 0 })
-            node.set_attribute(strut,att_newline,1)
+            set_attribute(strut,"newline")
             setprop(strut,"origin","strut newline hb")
             list,cur = node.insert_after(list,cur,strut)
 
@@ -3852,13 +3899,13 @@ function hbglyphlist(arguments)
 
             p2 = node.new("penalty")
             p2.penalty = -10000
+            set_attribute(p1,"newline")
+            set_attribute(p2,"newline")
+            set_attribute(g,"newline")
 
-            node.set_attribute(p1,att_newline,1)
-            node.set_attribute(p2,att_newline,1)
-            node.set_attribute(g,att_newline,1)
 
             -- important for empty lines (adjustlineheight)
-            node.set_attribute(p1,att_fontfamily,fontfamily)
+            set_attribute(p1,"fontfamily",fontfamily)
 
             list,cur = node.insert_after(list,cur,p1)
             list,cur = node.insert_after(list,cur,g)
@@ -3884,6 +3931,12 @@ function hbglyphlist(arguments)
             n.uchyph = 1
             n.left = parameter.left or tex.lefthyphenmin
             n.right = parameter.right or tex.righthyphenmin
+            local famtab = fonts.lookup_fontfamily_number_instance[fontfamily]
+            if parameter.verticalalign == "sub" then
+                n.yoffset = -famtab.scriptshift
+            elseif parameter.verticalalign == "super" then
+                n.yoffset = famtab.scriptshift
+            end
 
             if thisglyph.x_offset ~= 0 then
                 local dir = 1
@@ -3893,7 +3946,7 @@ function hbglyphlist(arguments)
             if thisglyph.y_offset ~= 0 then
                 n.yoffset = thisglyph.y_offset * tbl.mag
             end
-            node.set_attribute(n,att_fontfamily,fontfamily)
+            set_attribute(n,"fontfamily",fontfamily)
             setstyles(n,parameter)
             list,cur = node.insert_after(list,cur,n)
 
@@ -4020,13 +4073,13 @@ local function ffglyphlist(arguments)
             local dummypenalty
             dummypenalty = node.new("penalty")
             dummypenalty.penalty = 10000
-            node.set_attribute(dummypenalty,att_newline,1)
+            set_attribute(dummypenalty,"newline")
             head,last = node.insert_after(head,last,dummypenalty)
 
             local ht = fonts.lookup_fontfamily_number_instance[fontfamily].size
             local strut = add_rule(nil,"head",{height = ht * 0.75, depth = ht * 0.25, width = 0 })
             setprop(strut,"origin","strut newline ff")
-            node.set_attribute(strut,att_newline,1)
+            set_attribute(strut,"newline")
             head,last = node.insert_after(head,last,strut)
 
             local p1,g,p2
@@ -4038,13 +4091,13 @@ local function ffglyphlist(arguments)
             p2 = node.new("penalty")
             p2.penalty = -10000
 
-            node.set_attribute(p1,att_newline,1)
-            node.set_attribute(p2,att_newline,1)
-            node.set_attribute(g,att_newline,1)
-
-            node.set_attribute(p1,att_fontfamily,fontfamily)
-            node.set_attribute(p2,att_fontfamily,fontfamily)
-            node.set_attribute(g,att_fontfamily,fontfamily)
+            set_attribute(p1,"newline")
+            set_attribute(p2,"newline")
+            set_attribute(g,"newline")
+            local attr = { fontfamily = fontfamily}
+            set_attributes(p1,attr)
+            set_attributes(p2,attr)
+            set_attributes(g,attr)
 
             head,last = node.insert_after(head,last,p1)
             head,last = node.insert_after(head,last,g)
@@ -4079,18 +4132,18 @@ local function ffglyphlist(arguments)
 
             head,last = node.insert_after(head,last,n)
 
-            -- can be 1 == solid or 2 == dashed
-            if parameter.underline then
-                node.set_attribute(n,att_underline,parameter.underline)
-                node.set_attribute(n,att_underline_color,current_fgcolor)
+            if parameter.textdecorationline then
+                set_attribute(n,"text-decoration-line",parameter.textdecorationline)
+                set_attribute(n,"text-decoration-style",parameter.textdecorationstyle)
+                set_attribute(n,"text-decoration-color",current_fgcolor)
             end
 
             if parameter.backgroundcolor then
-                node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
-                node.set_attribute(n,att_bgpaddingtop,parameter.bg_padding_top)
-                node.set_attribute(n,att_bgpaddingbottom,parameter.bg_padding_bottom)
+                set_attribute(n,"background-color",parameter.backgroundcolor)
+                set_attribute(n,"bgpaddingtop",parameter.bg_padding_top)
+                set_attribute(n,"bgpaddingbottom",parameter.bg_padding_bottom)
             end
-            node.set_attribute(n,att_fontfamily,fontfamily)
+            set_attribute(n,"fontfamily",fontfamily)
         elseif s == 173 then -- soft hyphen
             -- The soft hyphen is used in server-mode /v0/format
             n = node.new(penalty_node)
@@ -4138,17 +4191,17 @@ local function ffglyphlist(arguments)
                 node.set_attribute(n,att_tie_glue,1)
             end
 
-            if parameter.underline then
-                node.set_attribute(n,att_underline,parameter.underline)
-                node.set_attribute(n,att_underline_color,current_fgcolor)
+            if parameter.textdecorationline then
+                set_attribute(n,"text-decoration-line",parameter.textdecorationline)
+                set_attribute(n,"text-decoration-color",current_fgcolor)
             end
             if parameter.backgroundcolor then
-                node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
-                node.set_attribute(n,att_bgpaddingtop,parameter.bg_padding_top)
-                node.set_attribute(n,att_bgpaddingbottom,parameter.bg_padding_bottom)
-            end
-            node.set_attribute(n,att_fontfamily,fontfamily)
+                set_attribute(n,"background-color",parameter.backgroundcolor)
+                set_attribute(n,"bgpaddingtop",parameter.bg_padding_top)
+                set_attribute(n,"bgpaddingbottom",parameter.bg_padding_bottom)
 
+            end
+            set_attribute(n,"fontfamily",fontfamily)
             head,last = node.insert_after(head,last,n)
         else
             -- A regular character?!?
@@ -4161,7 +4214,15 @@ local function ffglyphlist(arguments)
             n.left = parameter.left or tex.lefthyphenmin
             n.right = parameter.right or tex.righthyphenmin
             setstyles(n,parameter)
-            node.set_attribute(n,att_fontfamily,fontfamily)
+            set_attribute(n,"fontfamily",fontfamily)
+
+            local famtab = fonts.lookup_fontfamily_number_instance[fontfamily]
+            if parameter.verticalalign == "sub" then
+                n.yoffset = -famtab.scriptshift
+            elseif parameter.verticalalign == "super" then
+                n.yoffset = famtab.scriptshift
+            end
+
             if parameter.letterspacing then
                 local k = node.new("kern")
                 k.kern = parameter.letterspacing
@@ -4232,6 +4293,9 @@ function getinstancename(parameter)
         instancename = "italic"
     else
         instancename = "normal"
+    end
+    if parameter.fontsize == "small" then
+        instancename = instancename .. "script"
     end
     return instancename
 end
@@ -4388,11 +4452,13 @@ function setsegmentdir(nodelist,direction, maindirection)
     dirstart.dir = "+" .. dirstring
     dirend.dir = "-" .. dirstring
     node.setproperty(dirstart,node.getproperty(nodelist))
-    node.set_attribute(dirstart,att_fontfamily,node.has_attribute(nodelist,att_fontfamily))
+    local ff = get_attribute(nodelist,"fontfamily")
+    set_attribute(dirstart,"fontfamily",ff)
     nodelist = node.insert_before(nodelist,nodelist,dirstart)
 
     local tail = node.tail(nodelist)
-    node.set_attribute(dirend,att_fontfamily,node.has_attribute(tail,att_fontfamily))
+    local ff = get_attribute(tail,"fontfamily")
+    set_attribute(dirend,"fontfamily",ff)
     node.setproperty(dirend,node.getproperty(tail))
     node.insert_after(nodelist,tail,dirend)
     return nodelist
@@ -4435,7 +4501,7 @@ function bullet_hbox( labelwidth,parameter )
     if options.showobjects then
         boxit(bullet_hbox)
     end
-    node.set_attribute(bullet_hbox,att_indent,labelwidth)
+    set_attribute(bullet_hbox,"indent",labelwidth)
     node.set_attribute(bullet_hbox,att_rows,-1)
     return bullet_hbox
 end
@@ -4455,7 +4521,7 @@ function number_hbox( num, labelwidth,parameter )
     if options.showobjects then
         boxit(digit_hbox)
     end
-    node.set_attribute(digit_hbox,att_indent,labelwidth)
+    set_attribute(digit_hbox,"indent",labelwidth)
     node.set_attribute(digit_hbox,att_rows,-1)
     return digit_hbox
 end
@@ -4480,8 +4546,7 @@ function whatever_hbox( label,labelwidth,options,labelsep_wd,labelalign )
         label_sep.next = shrink_glue
         label_hbox = node.hpack(label,labelwidth,"exactly")
     end
-
-    node.set_attribute(label_hbox.head,att_fontfamily,fam)
+    set_attribute(label_hbox.head,"fontfamily",fam)
     label_hbox.head = addstrut(label_hbox.head,"head","whatever_hbox/strut")
 
     return label_hbox
@@ -4543,7 +4608,7 @@ function finish_par( nodelist,hsize,parameters )
         lang.hyphenate(nodelist)
     end
     local n = node.new("penalty")
-    node.set_attribute(n,att_origin,origin_finishpar)
+    setprop(n,"origin","finishpar")
     n.penalty = 10000
     local last = node.slide(nodelist)
 
@@ -4571,8 +4636,10 @@ function hbkern(nodelist)
                 local kern = node.new(kern_node)
                 kern.kern = curkern
                 nodelist = node.insert_before(nodelist,head,kern)
-                node.set_attribute(kern,att_underline,node.has_attribute(head,att_underline))
-                node.set_attribute(kern,att_underline_color,node.has_attribute(head,att_underline_color))
+                local ul = get_attribute(head,"text-decoration-line")
+                set_attribute(kern,"text-decoration-line",ul)
+                local uccolor = get_attribute(head,"text-decoration-color")
+                set_attribute(kern,"text-decoration-color",uccolor)
                 node.setproperty(kern,node.getproperty(head))
                 curkern = 0
             end
@@ -4585,8 +4652,10 @@ function hbkern(nodelist)
                 local kern = node.new(kern_node)
                 kern.kern = curkern
                 head.replace = kern
-                node.set_attribute(head.replace,att_underline_color,node.has_attribute(head,att_underline_color))
-                node.set_attribute(head.replace,att_underline,node.has_attribute(head,att_underline))
+                local ul = get_attribute(head,"text-decoration-line")
+                local uccolor = get_attribute(head,"text-decoration-color")
+                set_attribute(head.replace,"text-decoration-line",ul)
+                set_attribute(head.replace,"text-decoration-color",uccolor)
                 node.setproperty(head.replace,node.getproperty(head))
                 curkern = 0
             end
@@ -4783,7 +4852,7 @@ function do_linebreak( nodelist,hsize,parameters )
                         maxlineheight = math.max(_h + _d,maxlineheight)
                     end
                 else
-                    fam = node.has_attribute(head_list,att_fontfamily)
+                    fam = get_attribute(head_list,"fontfamily")
                     if fam and fam > 0 then
                         maxlineheight = math.max(fonts.lookup_fontfamily_number_instance[fam].baselineskip,maxlineheight)
                     end
@@ -4980,8 +5049,8 @@ function set_color_if_necessary( nodelist,color )
     local last = node.tail(nodelist)
     nodelist = node.insert_after(nodelist,tail,colstop)
 
-    node.set_attribute(colstart,att_origin,origin_setcolorifnecessary)
-    node.set_attribute(colstop,att_origin,origin_setcolorifnecessary)
+    setprop(colstart,"origin","setcolorifnecessary")
+    setprop(colstop,"origin","setcolorifnecessary")
     return nodelist
 end
 
@@ -4991,7 +5060,7 @@ function set_attribute_recurse(nodelist,attribute,value)
         if nodelist.id==vlist_node or nodelist.id==hlist_node  then
             set_attribute_recurse(nodelist.list,attribute,value)
         else
-            node.set_attribute(nodelist,attribute,value)
+            set_attribute(nodelist,attribute,value)
         end
         nodelist=nodelist.next
     end
@@ -5005,22 +5074,16 @@ function set_fontfamily_if_necessary(nodelist,fontfamily)
         elseif nodelist.id == glue_node and nodelist.subtype == 100  then
             fam = set_fontfamily_if_necessary(nodelist.leader,fontfamily)
         else
-            fam = node.has_attribute(nodelist,att_fontfamily)
+            fam = get_attribute(nodelist,"fontfamily")
             -- See #242, #235 and referenced bugs (and change 5af208f)
-            if fam == 0 or ( fam == nil and nodelist.id == rule_node and node.has_attribute(nodelist,att_newline) == 1 )  then
-                node.set_attribute(nodelist,att_fontfamily,fontfamily)
+            if fam == 0 or ( fam == nil and nodelist.id == rule_node and get_attribute(nodelist,"publisher") == 1 )  then
+                set_attribute(nodelist,"fontfamily",fontfamily)
                 fam = fontfamily
             end
         end
         nodelist=nodelist.next
     end
     return fam
-end
-
-function set_sub_supscript( nodelist,script )
-    for glyf in node.traverse_id(glyph_node,nodelist) do
-        node.set_attribute(glyf,att_script,script)
-    end
 end
 
 function break_url( nodelist )
@@ -5065,7 +5128,7 @@ function colorbar( wd,ht,dp,color,origin )
     h.depth = dp
     h.height = ht
     origin = origin or origin_colorbar
-    node.set_attribute(h,att_origin,origin)
+    setprop(h,"origin",origin)
     return h
 end
 
@@ -5728,8 +5791,8 @@ function define_fontfamily( regular,bold,italic,bolditalic, name, size, baseline
     local fam={
         size         = size,
         baselineskip = baselineskip,
-        scriptsize   = size * 0.8,
-        scriptshift  = size * 0.3,
+        scriptsize   = math.round(size * 0.8,0),
+        scriptshift  = math.round(size * 0.3,0),
         name = name
     }
     local ok,tmp
@@ -5775,40 +5838,6 @@ function define_fontfamily( regular,bold,italic,bolditalic, name, size, baseline
     fonts.lookup_fontfamily_name_number[name] = fontnumber
     log("DefineFontfamily %q size %.03gpt/%.03gpt id: %d",name,size / factor,baselineskip / factor,fontnumber)
     return fontnumber
-end
-
-function define_small_fontfamily()
-    local fam={
-        size         = 4 * factor,
-        baselineskip = 4 * factor,
-        scriptsize   = 4 * factor * 0.8,
-        scriptshift  = 4 * factor * 0.3,
-        name = "__verysmall__"
-    }
-    local ok,tmp
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Regular",fam.size)
-    fam.normal = tmp
-    fam.fontfaceregular = "TeXGyreHeros-Regular"
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Regular",fam.scriptsize)
-    fam.normalscript = tmp
-
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Bold",fam.size)
-    fam.bold = tmp
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Bold",fam.scriptsize)
-    fam.boldscript = tmp
-
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Italic",fam.size)
-    fam.italic = tmp
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-Italic",fam.scriptsize)
-    fam.italicscript = tmp
-
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-BoldItalic",fam.size)
-    fam.bolditalic = tmp
-    ok,tmp = fonts.make_font_instance("TeXGyreHeros-BoldItalic",fam.scriptsize)
-    fam.bolditalicscript = tmp
-    fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
-    fonts.lookup_fontfamily_name_number["__verysmall__"]=#fonts.lookup_fontfamily_number_instance
-    return fonts.lookup_fontfamily_name_number["__verysmall__"]
 end
 
 
@@ -5923,7 +5952,8 @@ function join_table_to_box(objects)
     node.slide(objects[1])
 
     local vbox = node.vpack(objects[1])
-    node.set_attribute(vbox,publisher.att_origin,publisher.origin_join_table_box)
+    setprop(vbox,"origin","join_table_hbox")
+    setprop(vbox,"origin","join_table_hbox")
     return vbox
 end
 
@@ -6266,6 +6296,16 @@ function new_image(filename,page,box,fallback)
     return imageinfo(filename,page,box,fallback)
 end
 
+function validimagetype(filename)
+    local localfilename = kpse.find_file(filename)
+    local f = io.open(localfilename)
+    local whatever = f:read(5)
+    if string.match(whatever,"<svg") then
+        localfilename = splib.convert_svg_image(localfilename)
+    end
+    f:close()
+    return localfilename
+end
 
 function get_fallback_image_name( filename, missingfilename )
     if filename then
@@ -6382,6 +6422,7 @@ function imageinfo( filename,page,box,fallback )
             if filename == nil or filename == "" then filename = "filenotfound.pdf" else log("Using converted file %q instead",filename) end
 
         end
+        filename = validimagetype(filename)
         local image_info = img.scan{filename = filename, pagebox = box, page=page,keepopen=true }
         images[new_name] = { img = image_info, allocate = mt }
     end
@@ -6810,6 +6851,7 @@ shape = function(tbl, buf, options)
     end
     return bufscript,bufdir
 end
+
 
 
 file_end("publisher.lua")

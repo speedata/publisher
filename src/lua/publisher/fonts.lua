@@ -19,11 +19,6 @@ local font_instances={}
 used_fonts={}
 
 
-local att_fontfamily     = 1
-local att_italic         = 2
-local att_bold           = 3
-local att_script         = 4
-
 local glue_spec_node = node.id("glue_spec")
 local glue_node      = node.id("glue")
 local glyph_node     = node.id("glyph")
@@ -219,7 +214,7 @@ function pre_linebreak( head )
             pre_linebreak(head.replace)
         elseif head.id == whatsit_node then -- whatsit
             if head.subtype == pdf_dest_whatsit then
-                local dest_fontfamily = node.has_attribute(head,publisher.att_fontfamily)
+                local dest_fontfamily = publisher.get_attribute(head,"fontfamily")
                 if dest_fontfamily then
                     local tmpnext = head.next
                     local tmpprev = head.prev
@@ -273,46 +268,31 @@ function pre_linebreak( head )
         elseif head.id == kern_node then -- kern
         elseif head.id == penalty_node then -- penalty
         elseif head.id == glyph_node then -- glyph
-            if node.has_attribute(head,att_fontfamily) then
+            local ff = publisher.get_attribute(head,"fontfamily")
+            local va = publisher.get_attribute(head,"vertical-align")
+            if ff then
                 -- not local, so that we can access fontfamily later
-                fontfamily=node.has_attribute(head,att_fontfamily)
+                fontfamily=ff
 
                 -- Last resort
                 if fontfamily == 0 then fontfamily = 1 warning("Undefined fontfamily, set fontfamily to 1") end
 
-                local instance = lookup_fontfamily_number_instance[fontfamily]
-                local italic = node.has_attribute(head,att_italic)
-                local bold   = node.has_attribute(head,att_bold)
+                local fontstyle = publisher.get_attribute(head,"font-style")
+                local fontweight = publisher.get_attribute(head,"font-weight")
 
                 local instancename = nil
-                if italic == 1 and bold ~= 1 then
+                if fontstyle == "italic" and fontweight ~= "bold" then
                     instancename = "italic"
-                elseif italic == 1 and bold == 1 then
+                elseif fontstyle == "italic" and fontweight == "bold" then
                     instancename = "bolditalic"
-                elseif bold == 1 then
+                elseif fontweight == "bold" then
                     instancename = "bold"
                 else
                     instancename = "normal"
                 end
 
-                if node.has_attribute(head,att_script) then
-                    instancename = instancename .. "script"
-                    local sub_sup = node.has_attribute(head,att_script)
-                    local fam = lookup_fontfamily_number_instance[fontfamily]
-                    if sub_sup == 1 then
-                        head.yoffset = -fam.scriptshift
-                    else
-                        head.yoffset = fam.scriptshift
-                    end
-                end
+                local tmp_fontnum = get_fontinstance(fontfamily,instancename)
 
-                tmp_fontnum = get_fontinstance(fontfamily,instancename)
-
-                if not tmp_fontnum then
-                    head.font = publisher.options.defaultfontnumber
-                else
-                    head.font = tmp_fontnum
-                end
                 -- check for font features
                 local f = used_fonts[tmp_fontnum]
                 if f and f.mode == "fontforge" and f.otfeatures then
@@ -387,7 +367,7 @@ function insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding_t
 end
 
 --- Insert a horizontal rule in the nodelist that is used for underlining. typ is 1 (solid) or 2 (dashed)
-function insert_underline( parent, head, start, typ, colornumber)
+function insert_underline( parent, head, start, typ, style, colornumber)
     colornumber = colornumber or 1
     if colornumber == 0 then colornumber = 1 end
     local wd = node.dimensions(parent.glue_set,parent.glue_sign, parent.glue_order,start,head)
@@ -405,19 +385,18 @@ function insert_underline( parent, head, start, typ, colornumber)
     -- thickness: ht / ...
     -- downshift: dp/2
     local rule_width = math.round(ht / 13,3)
-
-    if typ == 2 then
-        -- dashed
+    if style == "dashed" then
         dashpattern = string.format("[%g] 0 d", 3 * rule_width)
     end
 
     local shift_down = ( dp - rule_width ) / 1.5
-    if typ == 3 then
-        -- line-through
+    if typ == "line-through" then
         shift_down = - 1.6 * shift_down
     end
-    rule.data = string.format("q %s %g w %s  0 %g m %g %g l S Q", pdfstring, rule_width, dashpattern, -1 * shift_down, -wd, -1 * shift_down )
+    rule.data = string.format("q %s %g w %s 0 %g m %g %g l S Q", pdfstring, rule_width, dashpattern, -1 * shift_down, -wd, -1 * shift_down )
     rule.mode = 0
+    local attribs = publisher.get_attributes(start)
+    publisher.set_attributes(rule,attribs)
     parent.head = node.insert_before(parent.head,head,rule)
     return rule
 end
@@ -430,6 +409,7 @@ do
     local curdir = {}, pardir
     function post_linebreak( head, list_head)
         local underlinetype = nil
+        local underlinestyle = nil
         local start_underline = nil
         local underline_color = nil
         local bgcolorindex = nil
@@ -460,12 +440,6 @@ do
                         warning("paragraph direction incorrect, found %s, expected %s",ldir,x)
                     end
                 end
-                if att_bgcolor == nil then
-                    if start_bgcolor then
-                        insert_backgroundcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
-                        start_bgcolor = nil
-                    end
-                end
             elseif head.id == disc_node then -- disc
                 if publisher.options.showhyphenation then
                     -- Insert a small tick where the disc node is
@@ -477,15 +451,15 @@ do
                     node.insert_before(list_head,head,n)
                 end
             elseif head.id == kern_node then
-                local att_underline = node.has_attribute(head, publisher.att_underline)
-                local att_bgcolor = publisher.getprop(head,"background-color")
-                if att_underline == nil then
+                local ul = publisher.get_attribute(head,"text-decoration-line")
+                local bgcolor = publisher.get_attribute(head,"background-color")
+                if ul == nil then
                     if start_underline then
-                        insert_underline(list_head, head, start_underline,underlinetype,underline_color)
+                        insert_underline(list_head, head, start_underline,underlinetype,underlinestyle,underline_color)
                         start_underline = nil
                     end
                 end
-                if att_bgcolor == nil then
+                if bgcolor == nil then
                     if start_bgcolor then
                         insert_backgroundcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
                         start_bgcolor = nil
@@ -499,22 +473,20 @@ do
                     node.insert_before(list_head,head,n)
                 end
             elseif head.id == glue_node then -- glue
-                local att_underline = node.has_attribute(head, publisher.att_underline)
-                local att_bgcolor = publisher.getprop(head,"background-color")
+                local ul = publisher.get_attribute(head,"text-decoration-line")
+                local bgcolor = publisher.get_attribute(head,"background-color")
                 -- at rightskip we must underline (if start exists)
-                if att_underline == nil or head.subtype == 9 then
+                if ul == nil or head.subtype == 9 then
                     if start_underline then
-                        insert_underline(list_head, head, start_underline,underlinetype,underline_color)
+                        insert_underline(list_head, head, start_underline,underlinetype,underlinestyle,underline_color)
                         start_underline = nil
                     end
                 end
-                if att_bgcolor and att_bgcolor > 0 and not start_bgcolor then
+                if bgcolor and bgcolor > 0 and not start_bgcolor then
                     bgcolor_reverse = ( curdir[#curdir] == "rtl" )
-                    bgcolorindex = att_bgcolor
-                    bg_padding_top    = att_bgpaddingtop
-                    bg_padding_bottom = att_bgpaddingbottom
+                    bgcolorindex = bgcolor
                     start_bgcolor = head
-                elseif att_bgcolor == nil or head.subtype == 9 then
+                elseif bgcolor == nil or head.subtype == 9 then
                     if start_bgcolor then
                         insert_backgroundcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
                         start_bgcolor = nil
@@ -531,28 +503,29 @@ do
                         end
                     end
                 end
-                local att_underline = node.has_attribute(head, publisher.att_underline)
-                local att_bgcolor = publisher.getprop(head,"background-color")
-                local att_underline_color   = node.has_attribute(head, publisher.att_underline_color)
-                local att_bgpaddingtop    = node.has_attribute(head, publisher.att_bgpaddingtop)
-                local att_bgpaddingbottom = node.has_attribute(head, publisher.att_bgpaddingbottom)
-                if att_underline and att_underline > 0 then
+                local ul = publisher.get_attribute(head,"text-decoration-line")
+                local bgcolor = publisher.get_attribute(head,"background-color")
+                local underlinecolor = publisher.get_attribute(head, "text-decoration-color")
+                local paddingtop = publisher.get_attribute(head,"bgpaddingtop")
+                local paddingbottom = publisher.get_attribute(head,"bgpaddingbottom")
+                if ul then
                     if not start_underline then
-                        underlinetype = att_underline
+                        underlinetype = publisher.get_attribute(head,"text-decoration-line")
+                        underlinestyle = publisher.get_attribute(head,"text-decoration-style")
                         start_underline = head
-                        underline_color = att_underline_color
+                        underline_color = underlinecolor
                     end
                 else
                     if start_underline then
-                        insert_underline(list_head, head, start_underline, underlinetype,underline_color)
+                        insert_underline(list_head, head, start_underline, underlinetype,underlinestyle,underline_color)
                         start_underline = nil
                     end
                 end
-                if att_bgcolor and att_bgcolor > 0 then
+                if bgcolor and bgcolor > 0 then
                     if not start_bgcolor then
-                        bgcolorindex = att_bgcolor
-                        bg_padding_top    = att_bgpaddingtop
-                        bg_padding_bottom = att_bgpaddingbottom
+                        bgcolorindex = bgcolor
+                        bg_padding_top    = paddingtop
+                        bg_padding_bottom = paddingbottom
                         start_bgcolor = head
                         bgcolor_reverse = ( curdir[#curdir] == "rtl" )
                     end

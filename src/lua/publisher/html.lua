@@ -81,6 +81,21 @@ local levelmt = {
 local styles = setmetatable({}, levelmt)
 stylesstack[#stylesstack + 1] = styles
 
+local function getsize(size,fontsize)
+    if size == nil then return 0 end
+    size = size or 0
+    local ret
+    if string.match(size, "em$") then
+        local amount = string.gsub(size, "^(.*)r?em$", "%1")
+        ret = math.round(fontsize * amount)
+    elseif tonumber(size) then
+        ret = tex.sp(size .. "px")
+    else
+        ret = tex.sp(size)
+    end
+    return ret
+end
+
 local function familyname( fontfamily )
     if fontfamilies[fontfamily] then
         return fontfamilies[fontfamily]
@@ -366,6 +381,8 @@ function set_calculated_width(styles)
         if border_right then
             cw = cw - tex.sp(border_right)
         end
+    elseif tonumber(sw) then
+        cw = tex.sp(string.format("%spx",sw))
     elseif tex.sp(sw) then
         -- a length
         cw = tex.sp(sw)
@@ -384,6 +401,12 @@ function copy_attributes( styles,attributes )
             if string.match(v, "em$") then
                 local amount = string.gsub(v, "^(.*)r?em$", "%1")
                 local fontsize = math.round(styles.fontsize_sp * amount)
+                styles.fontsize_sp = fontsize
+            elseif string.match(v,"%d+%%$") then
+                local amount = string.match(v, "(%d+)%%$")
+                styles.fontsize_sp = math.round(styles.fontsize_sp * tonumber(amount) / 100, 0)
+            elseif v == "small" then
+                local fontsize = math.round(styles.fontsize_sp * 0.8)
                 styles.fontsize_sp = fontsize
             else
                 styles.fontsize_sp = tex.sp(v)
@@ -419,6 +442,7 @@ function set_options_for_mknodes(styles,options)
     options = options or {}
     local fontfamily = styles["font-family"]
     local fontsize = styles["font-size"]
+    local hasff = options.fontfamily ~= nil
     options.fontfamily = get_fontfamily(fontfamily,styles.fontsize_sp, fontsize,styles)
     local fontstyle = styles["font-style"]
     local fontweight = styles["font-weight"]
@@ -426,7 +450,8 @@ function set_options_for_mknodes(styles,options)
     local backgroundcolor = styles["background-color"]
     if styles.color then
         fg_colorindex = publisher.colors[styles.color].index
-        options.add_attributes = { { publisher.att_fgcolor, fg_colorindex }}
+        options.textdecorationcolor = fg_colorindex
+        options.color = fg_colorindex
         styles.currentcolor = styles.color
     end
     if backgroundcolor then
@@ -443,23 +468,38 @@ function set_options_for_mknodes(styles,options)
         options.bg_padding_bottom = bg_padding_bottom
     end
 
-    local textdecoration = styles["text-decoration"]
-    local verticalalign = styles["vertical-align"]
+    local textdecorationline = styles["text-decoration-line"]
+    local textdecorationstyle = styles["text-decoration-style"]
+    local textdecorationcolor = styles["text-decoration-color"]
+    if textdecorationcolor and textdecorationcolor ~= "currentcolor" then
+        options.textdecorationcolor = textdecorationcolor
+    end
     local whitespace = styles["white-space"]
-
     if fontweight == "bold" then options.bold = 1 end
     if fontstyle == "italic" then options.italic = 1 end
     if whitespace == "pre" then options.whitespace = "pre" end
-    if textdecoration == "underline" then
-        options.underline = 1
-    elseif textdecoration == "line-through" then
-        options.underline = 3
+    if textdecorationline == "underline" then
+        options.textdecorationline = "underline"
+        options.textdecorationstyle = textdecorationstyle
+    elseif textdecorationline == "line-through" then
+        options.textdecorationline = "line-through"
+        options.textdecorationstyle = textdecorationstyle
     end
-    if verticalalign == "super" then
-        options.subscript = 2
-    elseif verticalalign == "sub" then
-        options.subscript = 1
+
+    local verticalalign = styles["vertical-align"]
+    local fontfamilynumber = tonumber(styles["font-family-number"])
+    if verticalalign == "super" or verticalalign == "sub" then
+        options.verticalalign = verticalalign
+        -- in case of HTML coming from <Paragraph>, the font family number is already set
+        -- and font sizes usually don't change (unlike HTML mode)
+        -- therefore on "sub" or "super" the font size changes
+        -- this should be done in a proper way without fixed "script" fonts
+        if fontfamilynumber then
+            options.fontsize = "small"
+        end
     end
+
+
 end
 
 function set_image_dimensions(image,styles,width_sp,height_sp)
@@ -529,7 +569,7 @@ function collect_horizontal_nodes( elt,parameter,before_box,origin )
             local eltname = thiselt.elementname
             if eltname == "a" then
                 local href = attributes["href"]
-                options.add_attributes = { { publisher.att_hyperlink, publisher.hlurl(href) } }
+                options.add_attributes = { { "hyperlink", publisher.hlurl(href) } }
             elseif eltname == "img" then
                 local source = attributes.src
                 local it = publisher.new_image(source,1,nil,nil)
@@ -537,8 +577,11 @@ function collect_horizontal_nodes( elt,parameter,before_box,origin )
                 -- affect future images with the same name
                 it = img.copy(it.img)
                 local wd = 0
-                if attributes.width then wd = styles.calculated_width end
-                local calc_width, calc_height = set_image_dimensions(it,styles,wd,attributes.height or 0)
+                if attributes.width then
+                     wd = styles.calculated_width
+                end
+                local height = getsize(attributes.height)
+                local calc_width, calc_height = set_image_dimensions(it,styles,wd,height or 0)
                 local box = publisher.box(calc_width,calc_height,"-")
                 node.set_attribute(box,publisher.att_dontadjustlineheight,1)
                 node.set_attribute(box,publisher.att_ignore_orphan_widowsetting,1)
@@ -547,7 +590,7 @@ function collect_horizontal_nodes( elt,parameter,before_box,origin )
             elseif eltname == "wbr" then
                 thisret[#thisret + 1] = "\xE2\x80\x8B"
             end
-            local n = collect_horizontal_nodes(thiselt,options,before_box,string.format("collect horizontl mode element %s",eltname))
+            local n = collect_horizontal_nodes(thiselt,options,before_box,string.format("collect horizontal mode element %s",eltname))
             for i=1,#n do
                 thisret[#thisret + 1] = n[i]
             end
@@ -699,19 +742,6 @@ function build_html_table( elt )
 
     local n = tabular:make_table()
     return n[1]
-end
-
-local function getsize(size,fontsize)
-    if size == nil then return 0 end
-    size = size or 0
-    local ret
-    if string.match(size, "em$") then
-        local amount = string.gsub(size, "^(.*)r?em$", "%1")
-        ret = math.round(fontsize * amount)
-    else
-        ret = tex.sp(size)
-    end
-    return ret
 end
 
 local olcounter = {}
@@ -933,6 +963,12 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
                 prevdir = "vertical"
             else
                 local n
+                local nloptions = publisher.copy_table_from_defaults(options)
+                if thiseltname == "h1" then
+                    nloptions.role = publisher.get_rolenum("H1")
+                elseif thiseltname == "p" then
+                    nloptions.role = publisher.get_rolenum("P")
+                end
                 n, prevdir = build_nodelist(thiselt,options,before_box,string.format("build_nodelist/ any element name %q",thiseltname),prevdir)
                 if thiselt.block then prevdir = "vertical" end
                 before_box = nil

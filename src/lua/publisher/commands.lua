@@ -1099,19 +1099,13 @@ function commands.hspace( layoutxml,dataxml )
         local h1 = node.new("hlist")
 
         -- TODO: also copy all other attributes necessary for styling
-        local col = options.color
-        if col then
-            node.set_attribute(p1,publisher.att_fgcolor,col)
-            node.set_attribute(p2,publisher.att_fgcolor,col)
-            node.set_attribute(h1,publisher.att_fgcolor,col)
-            node.set_attribute(n,publisher.att_fgcolor,col)
-        end
-        if options.hyperlink then
-            publisher.setprop(p1,"hyperlink",options.hyperlink)
-            publisher.setprop(p2,"hyperlink",options.hyperlink)
-            publisher.setprop(h1,"hyperlink",options.hyperlink)
-            publisher.setprop(n,"hyperlink",options.hyperlink)
-        end
+        local att_tbl = {color = options.color, hyperlink = options.hyperlink }
+
+        publisher.set_attributes(p1,att_tbl)
+        publisher.set_attributes(p2,att_tbl)
+        publisher.set_attributes(h1,att_tbl)
+        publisher.set_attributes(n,att_tbl)
+
         node.insert_after(p1,p1,h1)
         node.insert_after(p1,h1,p2)
         node.insert_after(p1,p2,n)
@@ -1402,7 +1396,7 @@ function commands.image( layoutxml,dataxml )
 
     else
         box = node.vpack(imagenode)
-        node.set_attribute(box,publisher.att_origin,publisher.origin_image)
+        publisher.setprop(box,"origin","image")
         node.set_attribute(box,publisher.att_lineheight,box.height)
         node.set_attribute(box, publisher.att_shift_left, padding_shift_left)
         node.set_attribute(box, publisher.att_shift_up  , padding_shift_up  )
@@ -3006,7 +3000,7 @@ function commands.rule( layoutxml,dataxml )
         --
     end
     if colentry.alpha then
-        node.set_attribute(n,publisher.att_fgcolor,colentry.index)
+        publisher.set_attribute(n,"color",colentry.index)
     end
     n = node.hpack(n)
     return n
@@ -3449,7 +3443,7 @@ function commands.sub( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
-        p:append(c,{subscript = 1, allowbreak=publisher.allowbreak})
+        p:append(c,{verticalalign = "sub", fontsize = "small", allowbreak=publisher.allowbreak})
     end
     return p
 end
@@ -3462,7 +3456,7 @@ function commands.sup( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
-        p:append(c,{subscript = 0, allowbreak=publisher.allowbreak})
+        p:append(c,{verticalalign = "super", fontsize = "small", allowbreak=publisher.allowbreak})
     end
     return p
 end
@@ -3597,7 +3591,7 @@ function commands.table( layoutxml,dataxml,options )
     end
     -- Helpful for debugging purpose:
     -- for i=1,#n do
-    --     node.set_attribute(n[i],publisher.att_origin,publisher.origin_table)
+    --     publisher.setprop(n[i],"origin","table")
     -- end
     return n
 end
@@ -4277,9 +4271,9 @@ function commands.underline( layoutxml,dataxml )
     if dashed == nil then dashed = ( css_rules["border-style"] == "dashed") end
 
     local p = par:new(nil,"underline")
-    local underline = 1
+    local tds = "solid"
     if dashed then
-        underline = 2
+        tds = "dashed"
     end
 
 
@@ -4287,7 +4281,7 @@ function commands.underline( layoutxml,dataxml )
 
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
-        p:append(c,{underline = underline, allowbreak=publisher.allowbreak})
+        p:append(c,{textdecorationline = "underline", textdecorationstyle = tds, allowbreak=publisher.allowbreak})
     end
     return p
 end
@@ -4387,7 +4381,7 @@ end
 --- Create a vertical space that stretches up to infinity
 function commands.vspace( layoutxml,dataxml )
     local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
-    node.set_attribute(n,publisher.att_origin,publisher.origin_vspace)
+    publisher.setprop(n,"origin","vspace")
     return n
 end
 

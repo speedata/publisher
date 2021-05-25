@@ -3,7 +3,6 @@ package css
 import (
 	"fmt"
 	"io"
-	"os"
 	"regexp"
 	"sort"
 	"strings"
@@ -207,7 +206,6 @@ func resolveAttributes(attrs []html.Attribute) map[string]string {
 	//    border-left-style: dotted;
 	//    border-left: thick green;
 	// because the second line overrides the first line (style defaults to "none")
-
 	for _, attr := range attrs {
 		switch attr.Key {
 		case "margin":
@@ -280,6 +278,50 @@ func resolveAttributes(attrs []html.Attribute) map[string]string {
 			for _, loc := range toprightbottomleft {
 				resolved["border-"+loc+"-width"] = values[loc]
 			}
+		case "font":
+			fontstyle := "normal"
+			fontweight := "normal"
+
+			/*
+				it must include values for:
+					<font-size>
+					<font-family>
+				it may optionally include values for:
+					<font-style>
+					<font-variant>
+					<font-weight>
+					<font-stretch>
+					<line-height>
+				* font-style, font-variant and font-weight must precede font-size
+				* font-variant may only specify the values defined in CSS 2.1, that is normal and small-caps
+				* font-stretch may only be a single keyword value.
+				* line-height must immediately follow font-size, preceded by "/", like this: "16px/3"
+				* font-family must be the last value specified.
+			*/
+			val := attr.Val
+			fields := strings.Fields(val)
+			l := len(fields)
+			for idx, field := range fields {
+				if idx > l-3 {
+					if dimen.MatchString(field) || strings.Contains(field, "%") {
+						resolved["font-size"] = field
+					} else {
+						resolved["font-name"] = field
+					}
+				}
+			}
+			resolved["font-style"] = fontstyle
+			resolved["font-weight"] = fontweight
+		// font-stretch: ultra-condensed; extra-condensed; condensed; semi-condensed; normal; semi-expanded; expanded; extra-expanded; ultra-expanded;
+		case "text-decoration":
+			for _, part := range strings.Split(attr.Val, " ") {
+				if part == "none" || part == "underline" || part == "overline" || part == "line-through" {
+					resolved["text-decoration-line"] = part
+				} else if part == "solid" || part == "double" || part == "dotted" || part == "dashed" || part == "wavy" {
+					resolved["text-decoration-style"] = part
+				}
+			}
+
 		case "background":
 			// background-clip, background-color, background-image, background-origin, background-position, background-repeat, background-size, and background-attachment
 			for _, part := range strings.Split(attr.Val, " ") {
@@ -288,6 +330,9 @@ func resolveAttributes(attrs []html.Attribute) map[string]string {
 		default:
 			resolved[attr.Key] = attr.Val
 		}
+	}
+	if str, ok := resolved["text-decoration-line"]; ok && str != "none" {
+		resolved["text-decoration-style"] = "solid"
 	}
 	return resolved
 }
@@ -505,30 +550,7 @@ func (c *CSS) readHTMLChunk(htmltext string) error {
 	var errcond error
 	c.document.Find(":root > head link").Each(func(i int, sel *goquery.Selection) {
 		if stylesheetfile, attExists := sel.Attr("href"); attExists {
-			block, err := parseCSSFile(stylesheetfile)
-			if err != nil {
-				errcond = err
-			}
-			parsedStyles := consumeBlock(block, false)
-			c.Stylesheet = append(c.Stylesheet, parsedStyles)
-		}
-	})
-	return errcond
-}
-
-func (c *CSS) openHTMLFile(filename string) error {
-	r, err := os.Open(filename)
-	if err != nil {
-		return err
-	}
-	c.document, err = goquery.NewDocumentFromReader(r)
-	if err != nil {
-		return err
-	}
-	var errcond error
-	c.document.Find(":root > head link").Each(func(i int, sel *goquery.Selection) {
-		if stylesheetfile, attExists := sel.Attr("href"); attExists {
-			block, err := parseCSSFile(stylesheetfile)
+			block, err := c.parseCSSFile(stylesheetfile)
 			if err != nil {
 				errcond = err
 			}

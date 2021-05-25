@@ -3,31 +3,22 @@ package css
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/speedata/css/scanner"
 )
 
-func parseCSSFile(filename string) (tokenstream, error) {
+func (c *CSS) parseCSSFile(filename string) (tokenstream, error) {
 	if filename == "" {
 		return nil, fmt.Errorf("parseCSSFile: no filename given")
 	}
-	curwd, err := os.Getwd()
-	if err != nil {
-		return nil, err
-	}
-	p, err := filepath.Abs(filepath.Dir(filename))
-	if err != nil {
-		return nil, err
-	}
-	rel := filepath.Base(filename)
-	err = os.Chdir(p)
-	if err != nil {
-		return nil, err
-	}
-	defer os.Chdir(curwd)
-	tokens, err := parseCSSBody(rel)
+	var tokens tokenstream
+	var err error
+	dir, fn := filepath.Split(filename)
+	c.dirstack = append(c.dirstack, dir)
+	dirs := strings.Join(c.dirstack, "")
+	tokens, err = parseCSSBody(filepath.Join(dirs, fn))
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +37,7 @@ func parseCSSFile(filename string) (tokenstream, error) {
 				}
 			}
 			importvalue := tokens[i]
-			toks, err := parseCSSFile(importvalue.Value)
+			toks, err := c.parseCSSFile(importvalue.Value)
 			if err != nil {
 				return nil, err
 			}
@@ -71,6 +62,7 @@ func parseCSSFile(filename string) (tokenstream, error) {
 			finalTokens = append(finalTokens, tok)
 		}
 	}
+	c.dirstack = c.dirstack[:len(c.dirstack)-1]
 	return finalTokens, nil
 }
 

@@ -2,8 +2,6 @@ package css
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -34,6 +32,7 @@ type cssPage struct {
 
 // CSS has all the information
 type CSS struct {
+	dirstack     []string
 	document     *goquery.Document
 	Stylesheet   []sBlock
 	Fontfamilies map[string]FontFamily
@@ -66,6 +65,7 @@ type FontFamily struct {
 }
 
 var cssdefaults = `
+a               { text-decoration: underline; color: blue; }
 li              { display: list-item; padding-inline-start: 40pt; }
 head            { display: none }
 table           { display: table }
@@ -183,9 +183,6 @@ func consumeBlock(toks tokenstream, inblock bool) sBlock {
 		return sBlock{}
 	}
 	b := sBlock{}
-	if len(toks) == 0 {
-		return b
-	}
 	i := 0
 	// we might start with whitespace, skip it
 	for {
@@ -221,13 +218,16 @@ func consumeBlock(toks tokenstream, inblock bool) sBlock {
 				start = i + 1
 			case "{":
 				var nb sBlock
+				// l is the length of the sub block
 				l := findClosingBrace(toks[i+1:])
 				if l == 1 {
 					break
 				}
 				subblock := toks[i+1 : i+l]
 				// subblock is without the enclosing curly braces
-				nb = consumeBlock(subblock, true)
+				starttok := toks[start]
+				startsWithATKeyword := starttok.Type == scanner.AtKeyword && (starttok.Value == "media" || starttok.Value == "supports")
+				nb = consumeBlock(subblock, !startsWithATKeyword)
 				if toks[start].Type == scanner.AtKeyword {
 					nb.Name = toks[start].Value
 					b.ChildAtRules = append(b.ChildAtRules, &nb)
@@ -236,6 +236,7 @@ func consumeBlock(toks tokenstream, inblock bool) sBlock {
 					b.Blocks = append(b.Blocks, &nb)
 					nb.ComponentValues = fixupComponentValues(toks[start:i])
 				}
+
 				i = i + l
 				start = i + 1
 				// skip over whitespace
@@ -335,11 +336,15 @@ func (c *CSS) processAtRules() {
 	}
 }
 
+type Findfunc func(string) (string, error)
+
+func NewCssParser() *CSS {
+	return &CSS{}
+}
+
 // ParseHTMLFragment takes the HTML text and the CSS text and returns a
 // Lua table as a string and perhaps an error.
-func ParseHTMLFragment(htmltext, csstext string) (string, error) {
-	c := CSS{}
-
+func (c *CSS) ParseHTMLFragment(htmltext, csstext string) (string, error) {
 	c.Stylesheet = append(c.Stylesheet, consumeBlock(parseCSSString(cssdefaults), false))
 	c.Stylesheet = append(c.Stylesheet, consumeBlock(parseCSSString(csstext), false))
 	err := c.readHTMLChunk(htmltext)
@@ -353,38 +358,15 @@ func ParseHTMLFragment(htmltext, csstext string) (string, error) {
 }
 
 // Run returns a Lua tree
-func Run(arguments []string) (string, error) {
+func (c *CSS) Run(htmlfilename string) (string, error) {
 	var err error
-	curwd, err := os.Getwd()
-	if err != nil {
-		return "", err
-	}
-	c := CSS{}
-
 	c.Stylesheet = append(c.Stylesheet, consumeBlock(parseCSSString(cssdefaults), false))
-	htmlfilename := arguments[0]
-	// read additional stylesheets given on the command line
-	for i := 1; i < len(arguments); i++ {
-		block, err := parseCSSFile(arguments[i])
-		if err != nil {
-			return "", err
-		}
-		c.Stylesheet = append(c.Stylesheet, consumeBlock(block, false))
-	}
 
-	fn := filepath.Base(htmlfilename)
-	p, err := filepath.Abs(filepath.Dir(htmlfilename))
-	if err != nil {
-		return "", err
-	}
-	os.Chdir(p)
-	defer os.Chdir(curwd)
-	err = c.openHTMLFile(fn)
+	err = c.openHTMLFile(htmlfilename)
 	if err != nil {
 		return "", err
 	}
 	c.processAtRules()
-
 	var b strings.Builder
 	c.dumpTree(&b)
 
