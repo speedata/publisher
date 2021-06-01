@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.5">
+    <entry version="4.5.2" date="2021-06-01">
+        <en>Handle double XInclude with the new XML parser.</en>
+        <de>Mehrfaches XInclude beim neuen XML-Parser.</de>
+    </entry>
     <entry version="4.5.1" date="2021-05-25">
         <en>Internal changes (named attributes, more CSS alike style names).</en>
         <de>Interne Änderungen (benannte Attribute, weitere CSS-ähnliche style-Namen).</de>
