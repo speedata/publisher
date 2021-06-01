@@ -248,7 +248,8 @@ options = {
     gridcells_x = 0,
     gridcells_y = 0,
     reportmissingglyphs = true,
-    fontloader = os.getenv("SP_FONTLOADER") or "fontforge"
+    fontloader = os.getenv("SP_FONTLOADER") or "fontforge",
+    xmlparser = os.getenv("SP_XMLPARSER") or "go",
 }
 
 -- List of virtual areas. Key is the group name and value is
@@ -261,7 +262,6 @@ pagestore = {}
 -- See commands.compatibility
 compatibility = {
     movecursoronrightedge = true,
-    luaxmlreader = false,
 }
 
 -- for external image conversion software
@@ -1671,7 +1671,7 @@ function load_xml(filename,filetype,parameter)
         log("Loading internal HTML layoutfile")
         return luxor.parse_xml(src,parameter)
     else
-        if not compatibility.luaxmlreader then
+        if options.xmlparser == "go" then
             if options.verbosity > 0 then
                 log("Using new Go based XML reader")
             end

@@ -104,7 +104,8 @@ erkannt. Folgende Optionen werden unterstützt:
   Kommaseparierte Liste der Form `var=wert` um Variablen in der Konfigurationsdatei festzulegen.
 `wd`::
   Setzt das Basis-Verzeichnis. Der speedata Publisher nimmt dies als Startverzeichnis.
-
+`xmlparser`::
+  Setzt den zu verwendenden XML-Parser. Seit Version 4.5 ist die Voreinstellung `go`, die alte Variante ist `lua`. Diese Option wird in einer zukünftigen Version des Publishers zugunsten der Variante `go` entfallen und ist derzeit nur für die Kompatibilität enthalten.
 
 === Abschnitt Server (`server`)
 

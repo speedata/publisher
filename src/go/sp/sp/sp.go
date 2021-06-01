@@ -127,6 +127,7 @@ func init() {
 		"inkscape-command":  "--export-pdf",
 		"fontloader":        "fontforge",
 		"referencefilename": "reference",
+		"xmlparser":         "go",
 	}
 
 	switch runtime.GOOS {
@@ -580,6 +581,7 @@ func runPublisher(cachemethod string, runmode string, filename string) (exitstat
 
 	layoutoptions["grid"] = getOption("grid")
 	os.Setenv("SP_FONTLOADER", getOption("fontloader"))
+	os.Setenv("SP_XMLPARSER", getOption("xmlparser"))
 
 	layoutoptions["reportmissingglyphs"] = getOption("reportmissingglyphs")
 

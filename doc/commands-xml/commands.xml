@@ -1924,14 +1924,6 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="luaxmlreader" optional="yes" since="4.5.1" type="boolean">
-      <description xml:lang="en">
-        <para>Use old Lua based XML reader.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Benutze alten Lua-basierten XML Parser.</para>
-      </description>
-    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Compatibility
     movecursoronplaceobject="no"
