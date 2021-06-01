@@ -131,8 +131,10 @@ local function flatten(self,items,options)
         new_options.direction = new_options.direction or self.direction
         if typ_thisself == "table" and thisself.contents then
             -- w("par/flatten: type: table with contents")
-            for key,value in next,thisself.options,nil do
-               new_options[key] = value
+            if thisself.options then
+                for key,value in next,thisself.options,nil do
+                   new_options[key] = value
+                end
             end
             if new_options.padding_left and not self.padding_left then self.padding_left = new_options.padding_left end
             if node.is_node(thisself.contents) then

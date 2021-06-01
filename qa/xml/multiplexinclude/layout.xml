@@ -1,0 +1,20 @@
+<Layout
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  version="4.5.1">
+  <Pageformat height="5cm" width="4cm" />
+  <xi:include href="include.xml" />
+  <xi:include href="include2.xml" />
+
+  <Record element="data">
+    <PlaceObject>
+        <Textblock>
+            <Paragraph>
+                <Value select="$myvar"/>
+            </Paragraph>
+        </Textblock>
+    </PlaceObject>
+  </Record>
+
+</Layout>

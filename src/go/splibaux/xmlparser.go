@@ -43,7 +43,7 @@ func readXMLFile(r io.Reader, startindex, extraindentlevel int) (string, error) 
 						href = attr.Value
 					}
 				}
-				str, err := handleXInclude(href, indentlevel+1, indentamount-1)
+				str, err := handleXInclude(href, stackcounter[indentlevel], indentamount-1)
 				if err != nil {
 					return "", err
 				}

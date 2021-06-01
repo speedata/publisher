@@ -1681,6 +1681,11 @@ function load_xml(filename,filetype,parameter)
 
             local str = splib.loadxmlfile(filename)
             if not str then return {} end
+            -- if options.verbosity > 0 and filetype == "layout instructions" then
+            --     local f = io.open(filename .. ".lua","w")
+            --     f:write(str)
+            --     f:close()
+            -- end
             local ok,msg = load(str)
             if ok then
                 ok()
@@ -1707,6 +1712,9 @@ function load_xml(filename,filetype,parameter)
             end
             log("Loading %s %q",filetype or "file",path)
             local parsed_xml = luxor.parse_xml_file(path, parameter,kpse.find_file)
+            -- if options.verbosity > 0 and filetype == "layout instructions" then
+            --     printtable("parsed_xml",parsed_xml)
+            -- end
             return parsed_xml
         end
     end

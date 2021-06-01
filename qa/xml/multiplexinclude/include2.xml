@@ -1,0 +1,4 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <SetVariable variable="myvar2"><Value>Include 2</Value></SetVariable>
+</Layout>
