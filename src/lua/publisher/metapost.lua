@@ -274,8 +274,20 @@ function prepareboxgraphic(width_sp,height_sp,graphicname,extra_parameter)
     local mpobj = newbox(width_sp,height_sp)
     execute(mpobj,"beginfig(1);")
     for k,v in pairs(extra_parameter or {}) do
-        local fmt = string.format("%s = %s ;",k,v)
-        execute(mpobj,fmt)
+        if k == "colors" and type(v) == "table" then
+            for col, val in pairs(v) do
+                local fmt = string.format("color %s; %s = %s;",col,col,val)
+                execute(mpobj,fmt)
+            end
+        elseif k == "strings" and type(v) == "table" then
+            for col, val in pairs(v) do
+                local fmt = string.format("string %s; %s = %q;",col,col,val)
+                execute(mpobj,fmt)
+            end
+        else
+            local fmt = string.format("%s = %s ;",k,v)
+            execute(mpobj,fmt)
+        end
     end
     execute(mpobj,publisher.metapostgraphics[graphicname])
     execute(mpobj,"endfig;")
@@ -287,10 +299,13 @@ function prepareboxgraphic(width_sp,height_sp,graphicname,extra_parameter)
 end
 
 -- return a vbox with the pdf_whatsit node
-function boxgraphic(width_sp,height_sp,graphicname,extra_parameter)
+function boxgraphic(width_sp,height_sp,graphicname,extra_parameter,parameter)
     local mpobj, a = prepareboxgraphic(width_sp,height_sp,graphicname,extra_parameter)
     a = node.hpack(a,mpobj.width,"exactly")
     a.height = mpobj.height
+    if parameter and parameter.shiftdown then
+        a.height = a.height + parameter.shiftdown
+    end
     a = node.vpack(a)
     return a
 end

@@ -217,125 +217,125 @@ function calculate_height( attribute_height, original_size )
     end
 end
 
-function draw_border(nodelists, attributes,styles)
-    if not attributes then
-        return nodelists
-    end
-    if not attributes.has_border then return nodelists end
-    local ret = {}
+-- function draw_border(nodelists, attributes,styles)
+--     if not attributes then
+--         return nodelists
+--     end
+--     if not attributes.has_border then return nodelists end
+--     local ret = {}
 
-    lineheight = styles.lineheight_sp
-    local factor = publisher.factor
+--     lineheight = styles.lineheight_sp
+--     local factor = publisher.factor
 
-    local padding_top = attributes["padding-top"] or 0
-    local padding_right = attributes["padding-right"] or 0
-    local padding_bottom = attributes["padding-bottom"] or 0
-    local padding_left = attributes["padding-left"] or 0
+--     local padding_top = attributes["padding-top"] or 0
+--     local padding_right = attributes["padding-right"] or 0
+--     local padding_bottom = attributes["padding-bottom"] or 0
+--     local padding_left = attributes["padding-left"] or 0
 
-    local margin_top = attributes["margin-top"] or 0
-    local margin_right = attributes["margin-right"] or 0
-    local margin_bottom = attributes["margin-bottom"] or 0
-    local margin_left = attributes["margin-left"] or 0
+--     local margin_top = attributes["margin-top"] or 0
+--     local margin_right = attributes["margin-right"] or 0
+--     local margin_bottom = attributes["margin-bottom"] or 0
+--     local margin_left = attributes["margin-left"] or 0
 
-    padding_top = tex.sp(padding_top)
-    padding_right = tex.sp(padding_right)
-    padding_bottom = tex.sp(padding_bottom)
-    padding_left = tex.sp(padding_left)
+--     padding_top = tex.sp(padding_top)
+--     padding_right = tex.sp(padding_right)
+--     padding_bottom = tex.sp(padding_bottom)
+--     padding_left = tex.sp(padding_left)
 
-    margin_top = tex.sp(margin_top)
-    margin_right = tex.sp(margin_right)
-    margin_bottom = tex.sp(margin_bottom)
-    margin_left = tex.sp(margin_left)
+--     margin_top = tex.sp(margin_top)
+--     margin_right = tex.sp(margin_right)
+--     margin_bottom = tex.sp(margin_bottom)
+--     margin_left = tex.sp(margin_left)
 
-    local border_top_style = attributes["border-top-style"] or "none"
-    local border_right_style = attributes["border-right-style"] or "none"
-    local border_bottom_style = attributes["border-bottom-style"] or "none"
-    local border_left_style = attributes["border-left-style"] or "none"
+--     local border_top_style = attributes["border-top-style"] or "none"
+--     local border_right_style = attributes["border-right-style"] or "none"
+--     local border_bottom_style = attributes["border-bottom-style"] or "none"
+--     local border_left_style = attributes["border-left-style"] or "none"
 
-    local border_top_width = attributes["border-top-width"] or 0
-    local border_right_width = attributes["border-right-width"] or 0
-    local border_bottom_width = attributes["border-bottom-width"] or 0
-    local border_left_width = attributes["border-left-width"] or 0
+--     local border_top_width = attributes["border-top-width"] or 0
+--     local border_right_width = attributes["border-right-width"] or 0
+--     local border_bottom_width = attributes["border-bottom-width"] or 0
+--     local border_left_width = attributes["border-left-width"] or 0
 
-    local border_top_color = styles["border-top-color"]
-    local border_right_color = styles["border-right-color"]
-    local border_bottom_color = styles["border-bottom-color"]
-    local border_left_color = styles["border-left-color"]
+--     local border_top_color = styles["border-top-color"]
+--     local border_right_color = styles["border-right-color"]
+--     local border_bottom_color = styles["border-bottom-color"]
+--     local border_left_color = styles["border-left-color"]
 
-    local border_bottom_right_radius = attributes["border-bottom-right-radius"] or 0
-    local border_bottom_left_radius = attributes["border-bottom-left-radius"] or 0
-    local border_top_right_radius = attributes["border-top-right-radius"] or 0
-    local border_top_left_radius = attributes["border-top-left-radius"] or 0
+--     local border_bottom_right_radius = attributes["border-bottom-right-radius"] or 0
+--     local border_bottom_left_radius = attributes["border-bottom-left-radius"] or 0
+--     local border_top_right_radius = attributes["border-top-right-radius"] or 0
+--     local border_top_left_radius = attributes["border-top-left-radius"] or 0
 
 
-    local rule_width_top, rule_width_right, rule_width_bottom, rule_width_left = 0, 0, 0, 0
-    if border_top_style ~= "none" then
-        rule_width_top = tex.sp(border_top_width)
-    end
-    if border_right_style ~= "none" then
-        rule_width_right = tex.sp(border_right_width)
-    end
-    if border_left_style ~= "none" then
-        rule_width_left = tex.sp(border_left_width)
-    end
-    if border_bottom_style ~= "none" then
-        rule_width_bottom = tex.sp(border_bottom_width)
-    end
-    local firstlist = nodelists[1]
-    local lastlist = nodelists[#nodelists]
-    local wd, wd_bp = firstlist.width, firstlist.width / factor
-    local ht, ht_bp = firstlist.height, ( firstlist.height or 0 ) / factor
-    local dp, dp_bp = firstlist.depth, ( firstlist.depth or 0 ) / factor
+--     local border_top_width, border_right_width, border_bottom_width, border_left_width = 0, 0, 0, 0
+--     if border_top_style ~= "none" then
+--         border_top_width = tex.sp(border_top_width)
+--     end
+--     if border_right_style ~= "none" then
+--         border_right_width = tex.sp(border_right_width)
+--     end
+--     if border_left_style ~= "none" then
+--         border_left_width = tex.sp(border_left_width)
+--     end
+--     if border_bottom_style ~= "none" then
+--         border_bottom_width = tex.sp(border_bottom_width)
+--     end
+--     local firstlist = nodelists[1]
+--     local lastlist = nodelists[#nodelists]
+--     local wd, wd_bp = firstlist.width, firstlist.width / factor
+--     local ht, ht_bp = firstlist.height, ( firstlist.height or 0 ) / factor
+--     local dp, dp_bp = firstlist.depth, ( firstlist.depth or 0 ) / factor
 
-    local kernleft = node.new(publisher.kern_node)
-    local kernright = node.new(publisher.kern_node)
-    kernleft.kern = rule_width_left + padding_left + margin_left
-    kernright.kern = rule_width_right + padding_right + margin_right + padding_left
+--     local kernleft = node.new(publisher.kern_node)
+--     local kernright = node.new(publisher.kern_node)
+--     kernleft.kern = border_left_width + padding_left + margin_left
+--     kernright.kern = border_right_width + padding_right + margin_right + padding_left
 
-    firstlist = node.insert_before(firstlist,firstlist,kernleft)
-    local tail = node.tail(lastlist)
-    node.insert_after(lastlist,tail,kernright)
+--     firstlist = node.insert_before(firstlist,firstlist,kernleft)
+--     local tail = node.tail(lastlist)
+--     node.insert_after(lastlist,tail,kernright)
 
-    node.setproperty(firstlist,{
-        borderstart = true,
-        border_top_style = border_top_style,
-        border_right_style = border_right_style,
-        border_bottom_style = border_bottom_style,
-        border_left_style = border_left_style,
-        padding_top = padding_top,
-        padding_right = padding_right,
-        padding_bottom = padding_bottom,
-        padding_left = padding_left,
-        rule_width_top = rule_width_top,
-        rule_width_right = rule_width_right,
-        rule_width_bottom = rule_width_bottom,
-        rule_width_left = rule_width_left,
-        border_top_color = border_top_color,
-        border_right_color = border_right_color,
-        border_bottom_color = border_bottom_color,
-        border_left_color = border_left_color,
-        border_bottom_right_radius = tex.sp(border_bottom_right_radius),
-        border_bottom_left_radius = tex.sp(border_bottom_left_radius),
-        border_top_right_radius = tex.sp(border_top_right_radius),
-        border_top_left_radius = tex.sp(border_top_left_radius),
-        margin_top = margin_top,
-        margin_right = margin_right,
-        margin_bottom = margin_bottom,
-        margin_left = margin_left,
-        height = lineheight * 0.75,
-        depth = lineheight * 0.25,
-        lineheight = lineheight,
-    })
+--     node.setproperty(firstlist,{
+--         borderstart = true,
+--         border_top_style = border_top_style,
+--         border_right_style = border_right_style,
+--         border_bottom_style = border_bottom_style,
+--         border_left_style = border_left_style,
+--         padding_top = padding_top,
+--         padding_right = padding_right,
+--         padding_bottom = padding_bottom,
+--         padding_left = padding_left,
+--         border_top_width = border_top_width,
+--         border_right_width = border_right_width,
+--         border_bottom_width = border_bottom_width,
+--         border_left_width = border_left_width,
+--         border_top_color = border_top_color,
+--         border_right_color = border_right_color,
+--         border_bottom_color = border_bottom_color,
+--         border_left_color = border_left_color,
+--         border_bottom_right_radius = tex.sp(border_bottom_right_radius),
+--         border_bottom_left_radius = tex.sp(border_bottom_left_radius),
+--         border_top_right_radius = tex.sp(border_top_right_radius),
+--         border_top_left_radius = tex.sp(border_top_left_radius),
+--         margin_top = margin_top,
+--         margin_right = margin_right,
+--         margin_bottom = margin_bottom,
+--         margin_left = margin_left,
+--         height = lineheight * 0.75,
+--         depth = lineheight * 0.25,
+--         lineheight = lineheight,
+--     })
 
-    node.setproperty(kernright,{
-        borderend = true,
-    })
-    nodelists[1] = firstlist
-    if #nodelists > 1 then
-        nodelists[#nodelists] = lastlist
-    end
-    return nodelists
-end
+--     node.setproperty(kernright,{
+--         borderend = true,
+--     })
+--     nodelists[1] = firstlist
+--     if #nodelists > 1 then
+--         nodelists[#nodelists] = lastlist
+--     end
+--     return nodelists
+-- end
 
 
 function set_calculated_width(styles)
@@ -800,31 +800,36 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
         end
 
         copy_attributes(styles,attributes)
+        local styles_fontsize_sp = styles.fontsize_sp
+        local margin_top = getsize(styles["margin-top"],styles_fontsize_sp)
+        local margin_right = getsize(styles["margin-right"],styles_fontsize_sp)
+        local margin_bottom = getsize(styles["margin-bottom"],styles_fontsize_sp)
+        local margin_left = getsize(styles["margin-left"],styles_fontsize_sp)
 
-        local margin_top = getsize(styles["margin-top"],styles.fontsize_sp)
-        local margin_right = getsize(styles["margin-right"],styles.fontsize_sp)
-        local margin_bottom = getsize(styles["margin-bottom"],styles.fontsize_sp)
-        local margin_left = getsize(styles["margin-left"],styles.fontsize_sp)
-
-        local padding_top = getsize(styles["padding-top"],styles.fontsize_sp)
-        local padding_right = getsize(styles["padding-right"],styles.fontsize_sp)
-        local padding_bottom = getsize(styles["padding-bottom"],styles.fontsize_sp)
-        local padding_left = getsize(styles["padding-left"],styles.fontsize_sp)
+        local padding_top = getsize(styles["padding-top"],styles_fontsize_sp)
+        local padding_right = getsize(styles["padding-right"],styles_fontsize_sp)
+        local padding_bottom = getsize(styles["padding-bottom"],styles_fontsize_sp)
+        local padding_left = getsize(styles["padding-left"],styles_fontsize_sp)
 
         local border_top_style = attributes["border-top-style"] or "none"
         local border_right_style = attributes["border-right-style"] or "none"
         local border_bottom_style = attributes["border-bottom-style"] or "none"
         local border_left_style = attributes["border-left-style"] or "none"
 
-        local border_top_width = attributes["border-top-width"] or 0
-        local border_right_width = attributes["border-right-width"] or 0
-        local border_bottom_width = attributes["border-bottom-width"] or 0
-        local border_left_width = attributes["border-left-width"] or 0
+        local border_top_width = getsize(styles["border-top-width"],styles_fontsize_sp)
+        local border_right_width = getsize(styles["border-right-width"],styles_fontsize_sp)
+        local border_bottom_width = getsize(styles["border-bottom-width"],styles_fontsize_sp)
+        local border_left_width = getsize(styles["border-left-width"],styles_fontsize_sp)
 
         local border_top_color = styles["border-top-color"]
         local border_right_color = styles["border-right-color"]
         local border_bottom_color = styles["border-bottom-color"]
         local border_left_color = styles["border-left-color"]
+
+        border_top_color = border_top_color or styles.color or "black"
+        border_right_color = border_right_color or styles.color or "black"
+        border_bottom_color = border_bottom_color or styles.color or "black"
+        border_left_color = border_left_color or styles.color or "black"
 
         local border_bottom_right_radius = attributes["border-bottom-right-radius"] or 0
         local border_bottom_left_radius = attributes["border-bottom-left-radius"] or 0
@@ -832,19 +837,19 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
         local border_top_left_radius = attributes["border-top-left-radius"] or 0
 
 
-        local rule_width_top, rule_width_right, rule_width_bottom, rule_width_left = 0, 0, 0, 0
-        if border_top_style ~= "none" then
-            rule_width_top = tex.sp(border_top_width)
-        end
-        if border_right_style ~= "none" then
-            rule_width_right = tex.sp(border_right_width)
-        end
-        if border_left_style ~= "none" then
-            rule_width_left = tex.sp(border_left_width)
-        end
-        if border_bottom_style ~= "none" then
-            rule_width_bottom = tex.sp(border_bottom_width)
-        end
+        -- local border_top_width, border_right_width, border_bottom_width, border_left_width = 0, 0, 0, 0
+        -- if border_top_style ~= "none" then
+        --     border_top_width = tex.sp(border_top_width)
+        -- end
+        -- if border_right_style ~= "none" then
+        --     border_right_width = tex.sp(border_right_width)
+        -- end
+        -- if border_left_style ~= "none" then
+        --     border_left_width = tex.sp(border_left_width)
+        -- end
+        -- if border_bottom_style ~= "none" then
+        --     border_bottom_width = tex.sp(border_bottom_width)
+        -- end
 
         local fontfamily = styles["font-family"]
         local fontsize = styles["font-size"]
@@ -896,10 +901,44 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
             end
         else
             local box = Box:new()
+            box.eltname = thiseltname
             box.margintop = margin_top or 0
             box.marginbottom = margin_bottom or 0
             box.indent_amount = margin_left + padding_left
-            box.width = styles.calculated_width - margin_left - margin_right - padding_left - padding_right
+            styles.calculated_width = styles.calculated_width - margin_left - padding_left - border_left_width - border_right_width
+            box.width = styles.calculated_width
+            box.draw_border = attributes.has_border
+            box.padding_top = padding_top
+            box.padding_bottom = padding_bottom
+            if attributes.has_border then
+                box.border = {
+                    borderstart = true,
+                    border_top_style = border_top_style,
+                    border_right_style = border_right_style,
+                    border_bottom_style = border_bottom_style,
+                    border_left_style = border_left_style,
+                    padding_top = padding_top,
+                    padding_right = padding_right,
+                    padding_bottom = padding_bottom,
+                    padding_left = padding_left,
+                    border_top_width = border_top_width,
+                    border_right_width = border_right_width,
+                    border_bottom_width = border_bottom_width,
+                    border_left_width = border_left_width,
+                    border_top_color = border_top_color,
+                    border_right_color = border_right_color,
+                    border_bottom_color = border_bottom_color,
+                    border_left_color = border_left_color,
+                    border_bottom_right_radius = tex.sp(border_bottom_right_radius),
+                    border_bottom_left_radius = tex.sp(border_bottom_left_radius),
+                    border_top_right_radius = tex.sp(border_top_right_radius),
+                    border_top_left_radius = tex.sp(border_top_left_radius),
+                    margin_top = margin_top,
+                    margin_right = margin_right,
+                    margin_bottom = margin_bottom,
+                    margin_left = margin_left,
+                }
+            end
             if thiseltname == "table" then
                 prevdir = "vertical"
                 -- w("html/table")
@@ -961,6 +1000,14 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
                     ret[#ret + 1] = a
                 end
                 prevdir = "vertical"
+            elseif thiseltname == "hr" then
+                local ht = getsize(styles.height,styles.fontsize_sp)
+                ht = ht + border_top_width + border_bottom_width
+                local bx = publisher.create_empty_vbox_width_width_height(styles.calculated_width,ht)
+                local a = par:new(tf,"html.lua (hr)")
+                a:append(bx)
+                box[#box + 1] = a
+                ret[#ret + 1] = box
             else
                 local n
                 local nloptions = publisher.copy_table_from_defaults(options)
@@ -972,36 +1019,6 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
                 n, prevdir = build_nodelist(thiselt,options,before_box,string.format("build_nodelist/ any element name %q",thiseltname),prevdir)
                 if thiselt.block then prevdir = "vertical" end
                 before_box = nil
-                box.draw_border = attributes.has_border
-                if box.draw_border then
-                    box.border = {
-                        borderstart = true,
-                        border_top_style = border_top_style,
-                        border_right_style = border_right_style,
-                        border_bottom_style = border_bottom_style,
-                        border_left_style = border_left_style,
-                        padding_top = padding_top,
-                        padding_right = padding_right,
-                        padding_bottom = padding_bottom,
-                        padding_left = padding_left,
-                        rule_width_top = rule_width_top,
-                        rule_width_right = rule_width_right,
-                        rule_width_bottom = rule_width_bottom,
-                        rule_width_left = rule_width_left,
-                        border_top_color = border_top_color,
-                        border_right_color = border_right_color,
-                        border_bottom_color = border_bottom_color,
-                        border_left_color = border_left_color,
-                        border_bottom_right_radius = tex.sp(border_bottom_right_radius),
-                        border_bottom_left_radius = tex.sp(border_bottom_left_radius),
-                        border_top_right_radius = tex.sp(border_top_right_radius),
-                        border_top_left_radius = tex.sp(border_top_left_radius),
-                        margin_top = margin_top,
-                        margin_right = margin_right,
-                        margin_bottom = margin_bottom,
-                        margin_left = margin_left,
-                    }
-                end
                 local mode
                 if thiselt.block then mode = "block" end
                 if thiselt.block and #n == 0 then
@@ -1075,13 +1092,14 @@ function handle_pages( pages,maxwidth_sp )
 
     local masterpage = pages["*"]
     if masterpage then
+        local wd,ht
         if masterpage.width then
-            local wd = tex.sp(masterpage.width)
+            wd = tex.sp(masterpage.width)
             xpath.set_variable("_pagewidth",masterpage.width)
             pagewd = wd
             if masterpage.height then
                 xpath.set_variable("_pageheight",masterpage.height)
-                local ht = tex.sp(masterpage.height)
+                ht = tex.sp(masterpage.height)
                 publisher.set_pageformat(wd,ht)
                 xpath.set_variable("__maxwidth",wd)
                 xpath.set_variable("__maxheight",ht)
@@ -1095,7 +1113,8 @@ function handle_pages( pages,maxwidth_sp )
         if ml then margin_left = tex.sp(ml) end
         pagewd = pagewd - margin_left - margin_right
         xpath.set_variable("__maxwidth",pagewd)
-        publisher.masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(margin_left,margin_top,margin_right,margin_bottom) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
+        publisher.set_pageformat(wd,ht)
+        publisher.masterpages[1] = { is_pagetype = "true()", res = { width = wd, height = ht, { elementname = "Margin", contents = function(_page) _page.grid:set_margin(margin_left,margin_top,margin_right,margin_bottom) end }}, name = "Default HTML page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
     else
         if maxwidth_sp then
             pagewd = maxwidth_sp

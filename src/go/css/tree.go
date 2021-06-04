@@ -45,7 +45,7 @@ func init() {
 	toprightbottomleft = [...]string{"top", "right", "bottom", "left"}
 	dimen = regexp.MustCompile(`px|mm|cm|in|pt|pc|ch|em|ex|lh|rem|0`)
 	zeroDimen = regexp.MustCompile(`^0+(px|mm|cm|in|pt|pc|ch|em|ex|lh|rem)?`)
-	style = regexp.MustCompile(`none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset`)
+	style = regexp.MustCompile(`^none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset$`)
 	reLeadcloseWhtsp = regexp.MustCompile(`^[\s\p{Zs}]+|[\s\p{Zs}]+$`)
 	reInsideWS = regexp.MustCompile(`\n|[\s\p{Zs}]{2,}`) //to match 2 or more whitespace symbols inside a string or NL
 	isSpace = regexp.MustCompile(`^\s*$`)
@@ -114,7 +114,7 @@ func resolveStyle(i int, sel *goquery.Selection) {
 				break
 			}
 			switch token.Type {
-			case scanner.Comment, scanner.S:
+			case scanner.Comment:
 				// ignore
 			default:
 				tokens = append(tokens, token)
@@ -202,7 +202,8 @@ func getFourValues(str string) map[string]string {
 // Change "margin: 1cm;" into "margin-left: 1cm; margin-right: 1cm; ..."
 func resolveAttributes(attrs []html.Attribute) map[string]string {
 	resolved := make(map[string]string)
-	// attribute resolving must be in order of appearance. For example the following border-left-style has no effect:
+	// attribute resolving must be in order of appearance.
+	// For example the following border-left-style has no effect:
 	//    border-left-style: dotted;
 	//    border-left: thick green;
 	// because the second line overrides the first line (style defaults to "none")
@@ -232,13 +233,19 @@ func resolveAttributes(attrs []html.Attribute) map[string]string {
 				resolved["padding-"+padding] = values[padding]
 			}
 		case "border":
+			for _, loc := range toprightbottomleft {
+				resolved["border-"+loc+"-style"] = "none"
+				resolved["border-"+loc+"-width"] = "1pt"
+				resolved["border-"+loc+"-color"] = "currentcolor"
+			}
+
 			// This does not work with colors such as rgb(1 , 2 , 4) which have spaces in them
 			for _, part := range strings.Split(attr.Val, " ") {
 				for _, border := range toprightbottomleft {
-					if ok, str := isDimension(part); ok {
-						resolved["border-"+border+"-width"] = str
-					} else if ok, str := isBorderStyle(part); ok {
+					if ok, str := isBorderStyle(part); ok {
 						resolved["border-"+border+"-style"] = str
+					} else if ok, str := isDimension(part); ok {
+						resolved["border-"+border+"-width"] = str
 					} else {
 						resolved["border-"+border+"-color"] = part
 					}
@@ -253,6 +260,7 @@ func resolveAttributes(attrs []html.Attribute) map[string]string {
 		case "border-top", "border-right", "border-bottom", "border-left":
 			resolved[attr.Key+"-width"] = "1pt"
 			resolved[attr.Key+"-style"] = "none"
+			resolved[attr.Key+"-color"] = "currentcolor"
 
 			for _, part := range strings.Split(attr.Val, " ") {
 				if ok, str := isDimension(part); ok {
@@ -533,11 +541,59 @@ func (c *CSS) dumpFonts() {
 }
 
 func papersize(typ string) (string, string) {
-	switch typ {
-	case "a5":
-		return "148mm", "210mm"
+	typ = strings.ToLower(typ)
+	var width, height string
+	portrait := true
+	for i, e := range strings.Fields(typ) {
+		switch e {
+		case "portrait":
+			// good, nothing to do
+		case "landscape":
+			portrait = false
+		case "a5":
+			width = "148mm"
+			height = "210mm"
+		case "a4":
+			width = "210mm"
+			height = "297mm"
+		case "a3":
+			width = "297mm"
+			height = "420mm"
+		case "b5":
+			width = "176mm"
+			height = "250mm"
+		case "b4":
+			width = "250mm"
+			height = "353mm"
+		case "jis-b5":
+			width = "182mm"
+			height = "257mm"
+		case "jis-b4":
+			width = "257mm"
+			height = "364mm"
+		case "letter":
+			width = "8.5in"
+			height = "11in"
+		case "legal":
+			width = "8.5in"
+			height = "14in"
+		case "ledger":
+			width = "11in"
+			height = "17in"
+		default:
+			if i == 0 {
+				width = e
+				height = e
+			} else {
+				height = e
+			}
+		}
 	}
-	return "210mm", "297mm"
+
+	if portrait {
+		return width, height
+	}
+	return height, width
 }
 
 func (c *CSS) readHTMLChunk(htmltext string) error {

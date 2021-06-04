@@ -404,6 +404,30 @@ function get_lineheight( nodelist )
     return 0
 end
 
+local function get_border_width_height_margintop(nodelist)
+    local sum_ht = 0
+    local sum_margin_top = 0
+    local sum_margin_bottom = 0
+    local head = nodelist.head
+    while head do
+        if head.id == publisher.glue_node then
+            local margintop = publisher.get_attribute(head,"margintop")
+            local paddingtop = publisher.get_attribute(head,"paddingtop")
+            local paddingbottom = publisher.get_attribute(head,"paddingbottom")
+            if margintop then
+                sum_margin_top = sum_margin_top + head.width
+            elseif paddingtop or paddingbottom then
+                sum_ht = sum_ht + head.width
+            end
+        elseif node.has_field(head,"height") then
+            sum_ht = sum_ht + head.height + head.depth
+        end
+        head = head.next
+    end
+    return nodelist.width,sum_ht,sum_margin_top
+end
+
+
 function Par:format( width_sp, options )
     -- w("call format %s",self.origin)
     options = options or {}
@@ -629,6 +653,11 @@ function Par:format( width_sp, options )
 
         parameter.hangindent = indent + ( current_textformat.indent or 0 )
         parameter.hangafter  = rows  or current_textformat.rows  or 0
+        if self.startendborder or self.startborder then
+            local ba = publisher.borderattributes[self.borderstart or self.startendborder]
+            thispaddingleft = thispaddingleft + ba.border_left_width
+        end
+
 
         if self.initial then
             parameter.hangindent =  parameter.hangindent + self.initial.width
@@ -741,10 +770,16 @@ function Par:format( width_sp, options )
             publisher.fonts.post_linebreak(nodelist)
 
             if self.margin_top then
-                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = self.margin_top})
+                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = self.margin_top},"par.lua/if self.margin_top")
+                publisher.set_attribute(nodelist.list,"margintop",1)
             end
             if has_margin_top then
-                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = has_margin_top})
+                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = has_margin_top},"par.lua/if has_margin_top")
+                publisher.set_attribute(nodelist.list,"margintop",1)
+            end
+            if self.padding_top and self.padding_top > 0 then
+                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = self.padding_top, attributes},"par.lua/self.padding_top" )
+                publisher.set_attribute(nodelist.list,"paddingtop",1)
             end
             if current_textformat.paddingtop and current_textformat.paddingtop ~= 0 then
                 nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.paddingtop})
@@ -762,16 +797,23 @@ function Par:format( width_sp, options )
             if current_textformat.breakbelow == false then
                 node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,5)
             end
+
+            if self.padding_bottom and self.padding_bottom > 0 then
+                local glue
+                nodelist.list, glue = publisher.add_glue(nodelist.list,"tail",{width = self.padding_bottom, attributes},"par.lua/self.padding_bottom" )
+                publisher.set_attribute(glue,"paddingbottom",1)
+            end
+
             if current_textformat.borderbottom and current_textformat.borderbottom ~= 0 then
-                nodelist.list = publisher.add_rule(nodelist.list,"tail",{width = width_sp, height = current_textformat.borderbottom})
+                nodelist.list = publisher.add_rule(nodelist.list,"tail",{width = width_sp, height = current_textformat.borderbottom},"par.lua/tf.borderbottom")
                 node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,6)
             end
             if current_textformat.marginbottom and current_textformat.marginbottom ~= 0 then
-                nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = current_textformat.marginbottom})
+                nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = current_textformat.marginbottom},"par.lua/tf.marginbottom")
                 node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
             end
             if self.margin_bottom and self.margin_bottom > 0 then
-                nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = self.margin_bottom})
+                nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = self.margin_bottom},"par.lua/self.margin_bottom")
                 node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
             end
             if has_margin_bottom then
@@ -842,6 +884,15 @@ function Par:format( width_sp, options )
     end
 
     nodelist = node.vpack(objects[1])
+
+    if self.startendborder or self.startborder then
+        local wd,ht,margintop = get_border_width_height_margintop(nodelist)
+        local bordernumber = self.startendborder or self.startborder
+        publisher.borderattributes[bordernumber].shiftdown = margintop
+        publisher.set_attribute(nodelist.list,"bordernumber",bordernumber)
+        publisher.set_attribute(nodelist.list,"borderwd",wd)
+        publisher.set_attribute(nodelist.list,"borderht",ht)
+    end
     publisher.setprop(nodelist,"origin","par:format")
 
     if self.initial then

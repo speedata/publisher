@@ -2200,7 +2200,7 @@ function commands.output( layoutxml,dataxml )
             else
                 local ht = current_grid:height_in_gridcells_sp(obj.height)
                 publisher.output_at({nodelist = obj, x = 1, y = row, allocate = true, area = area})
-                -- We don't need to go to the next page when we are a the end
+                -- We don't need to go to the next page when we are at the end
                 if nextfreerow then
                     if nextfreerow <= row then
                         nextfreerow = row + 1

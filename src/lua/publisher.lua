@@ -77,13 +77,21 @@ attributes = {
     ["background-color"] = true,
     ["bgpaddingbottom"] = true,
     ["bgpaddingtop"] = true,
+    ["bordernumber"] = true,
+    ["borderwd"] = true,
+    ["borderht"] = true,
+    ["borderdp"] = true,
     ["color"] = true,
     ["font-style"] = {"italic","oblique"},
     ["font-weight"] = {"normal","bold"},
     ["fontfamily"] = true,
     ["hyperlink"] = true,
     ["indent"] = true,
+    ["margintop"] = true,
+    ["marginbottom"] = true,
     ["newline"] = true,
+    ["paddingtop"] = true,
+    ["paddingbottom"] = true,
     ["rows"] = true,
     ["text-decoration-color"] = true,
     ["text-decoration-line"] = {"underline","overline","line-through"},
@@ -949,7 +957,15 @@ function define_image_callback( extensionhandler )
 
 end
 
+borderattributes = {}
 do
+    -- the idea of flatten_boxes is to return an array that only has
+    -- par objects.
+    -- The input of flatten_boxes is a mix of Box objects and Par objects.
+    -- You can consider Box objects something similar to <div> blocks in HTML
+    -- and Par objects like <p> that has acutal content in it (also: images and other stuff)
+    -- Margin settings should go from <div> to the <p> (from Box to Par) so we can
+    -- leave out the div stuff.
     local prependbox
     function flatten_boxes(box,parameter,ret)
         ret = ret or {}
@@ -967,9 +983,32 @@ do
                 table.insert(prependbox,box.prependbox[i])
             end
         end
+
+        if box.padding_bottom and box.padding_bottom ~= 0 then
+            box[1].padding_bottom = box.padding_bottom
+        end
+        if box.padding_top and box.padding_top ~= 0 then
+            box[1].padding_top = box.padding_top
+        end
+        if box.draw_border then
+            borderattributes[#borderattributes + 1] = box.border
+            if #box > 1 then
+                box[1].startborder = #borderattributes
+            else
+                box[1].startendborder = #borderattributes
+            end
+        end
+        if box.startendborder then
+            box[1].startendborder = box.startendborder
+        end
+
         for i=1,#box do
             local thisbox = box[i]
-            if thisbox.min_width then
+            if not thisbox.min_width then
+                -- a box with paragraphs inside
+                flatten_boxes(thisbox,new_parameter,ret)
+                if thisbox.mode == "block" then ret.mode = "block" end
+            else
                 -- a regular paragraph
                 if parameter.indent then
                     thisbox:indent(indent)
@@ -980,6 +1019,9 @@ do
                 if box.draw_border then
                     thisbox.draw_border = true
                     thisbox.border = box.border
+                end
+                if box.startborder then
+                    thisbox.startborder = box.startborder
                 end
                 if prependbox then
                     for p=#prependbox,1,-1 do
@@ -995,10 +1037,6 @@ do
                 end
 
                 ret[#ret + 1] = thisbox
-            else
-                -- a box with paragraphs inside
-                flatten_boxes(thisbox,new_parameter,ret)
-                if thisbox.mode == "block" then ret.mode = "block" end
             end
         end
         return ret
@@ -2719,6 +2757,106 @@ function circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp)
     return v
 end
 
+function mpbox(parameter,width,height)
+    local width_sp = width
+    local height_sp = height
+    local extra_parameter = {}
+
+    extra_parameter.bordertopwidth = sp_to_bp(parameter.border_top_width) .. "bp"
+    extra_parameter.borderbottomwidth = sp_to_bp(parameter.border_bottom_width) .. "bp"
+    extra_parameter.borderleftwidth = sp_to_bp(parameter.border_left_width) .. "bp"
+    extra_parameter.borderrightwidth = sp_to_bp(parameter.border_right_width) .. "bp"
+    extra_parameter.paddingtop = sp_to_bp(parameter.padding_top or 0) .. "bp"
+    extra_parameter.paddingbottom = sp_to_bp(parameter.padding_bottom or 0) .. "bp"
+
+    extra_parameter.colors = {
+        bordertopcolor = parameter.border_top_color,
+        borderbottomcolor = parameter.border_bottom_color,
+        borderleftcolor = parameter.border_left_color,
+        borderrightcolor = parameter.border_right_color
+    }
+    extra_parameter.strings = {
+        bordertopstyle = parameter.border_top_style,
+        borderbottomstyle = parameter.border_bottom_style,
+        borderleftstyle = parameter.border_left_style,
+        borderrightstyle = parameter.border_right_style
+    }
+
+    local mptext = [[
+        linecap := butt;
+        wd = box.width  ;
+        ht = box.height - bordertopwidth - borderbottomwidth ;
+        if ht < 0: ht := 0; fi;
+        if wd < 0: wd := 0; fi;
+        z1 = (0,0);
+        x2 = borderleftwidth;
+        x3 = x2 + wd;
+        x4 = x3 + borderrightwidth;
+
+        y2 = y1 + borderbottomwidth;
+        y3 = y2 + ht;
+        y4 = y3 + bordertopwidth;
+
+        % draw z1 -- (x4,y1) -- z4 -- (x1,y4) -- cycle;
+        % draw z2 -- (x3,y2) -- z3 -- (x2,y3) -- cycle;
+
+        picture border; border = nullpicture;
+
+        path clip_top, clip_bottom, clip_left, clip_right;
+        clip_top = (x1,y4) -- (x2,y3) -- z3 -- z4 -- cycle;
+        clip_bottom = (x1,y1) -- (x2,y2) -- (x3,y2) -- (x4,y1) -- cycle;
+        clip_left = (x1,y1) -- (x2,y2) -- (x2,y3) -- (x1,y4) -- cycle;
+        clip_right = (x4,y1) -- (x3,y2) -- (x3,y3) -- (x4,y4) -- cycle;
+        def isdarkcolor(expr c) =
+            (redpart c < 0.2) and (greenpart c < 0.2) and (bluepart c < 0.2 )
+        enddef;
+
+        def drawborder(expr bordercolor, bwd, style, a, b, clippath, pos) =
+            color col; col = bordercolor;
+            string str;
+            str = "withcolor col withpen pencircle scaled " & decimal bwd ;
+            if style == "dashed":
+                str := str & " dashed dashpattern(on 4bp off 5bp)"
+            elseif ( style == "inset" )  and  (  (pos == "top" )  or (pos == "left") ):
+                if isdarkcolor(col):
+                    str := str & " withcolor 0.2[col, white] ";
+                else:
+                    str := str & " withcolor 0.5[col, black] ";
+                fi;
+            elseif ( style == "inset" ) and isdarkcolor(col) and ( (pos == "bottom" ) or (pos == "right") ):
+                str := str & " withcolor 0.5[col, white] ";
+            elseif ( style == "outset" )  and  (  (pos == "right" ) or (pos == "bottom") ):
+                str := str & " withcolor 0.5[col, black] ";
+            fi;
+            drawoptions(scantokens(str));
+
+            draw a -- b ;
+            clip currentpicture to clippath ;
+            addto border also currentpicture ;
+        enddef;
+
+        y34 = 0.5[y3,y4];
+        y12 = 0.5[y1,y2];
+        x12 = 0.5[x1,x2];
+        x34 = 0.5[x3,x4];
+
+        drawborder(bordertopcolor,bordertopwidth, bordertopstyle, (x1,y34),(x4,y34), clip_top, "top" );
+        drawborder(borderbottomcolor,borderbottomwidth,borderbottomstyle, (x1,y12),(x4,y12), clip_bottom, "bottom");
+        drawborder(borderleftcolor,borderleftwidth, borderleftstyle,(x12,y1),(x12,y4), clip_left, "left" );
+        drawborder(borderrightcolor,borderrightwidth, borderrightstyle,(x34,y1),(x34,y4), clip_right, "right" );
+
+        currentpicture := border;
+
+    ]]
+    metapostgraphics.__htmlbox = mptext
+    local ret = metapost.boxgraphic(width_sp,height_sp,"__htmlbox",extra_parameter,{shiftdown = parameter.shiftdown})
+    node.set_attribute(ret,att_dontadjustlineheight,1)
+    ret.height = 0
+    ret.depth = 0
+    ret.shift = parameter.margin_left
+    return ret
+end
+
 --- Create a colored area. width and height are in scaled points.
 function box( width_sp,height_sp,colorname )
     local h,v
@@ -2804,10 +2942,10 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
     local b_t_r_radius = properties.border_top_right_radius
     local b_t_l_radius = properties.border_top_left_radius
 
-    local border_top_width = properties.rule_width_top
-    local border_right_width = properties.rule_width_right
-    local border_bottom_width = properties.rule_width_bottom
-    local border_left_width = properties.rule_width_left
+    local border_top_width = properties.border_top_width
+    local border_right_width = properties.border_right_width
+    local border_bottom_width = properties.border_bottom_width
+    local border_left_width = properties.border_left_width
 
     -- ht == y3, wd == x3
 
@@ -3335,6 +3473,14 @@ function set_attribute(nodelist,attribute_name,value)
     node.set_attribute(nodelist,att_number,att_value)
 end
 
+function clear_attribute(nodelist,attribute_name)
+    local att_number = attribute_name_number[attribute_name]
+    if not att_number then err("Internal error: attribute %s unknown",attribute_name or "?") return end
+    local entry = attribute_name_number[attribute_name]
+    node.unset_attribute(nodelist,entry)
+end
+
+
 -- list of attributes { key = val, key = val }
 function set_attributes(nodelist,att_tbl)
     for k, v in pairs(att_tbl) do
@@ -3357,12 +3503,30 @@ function insert_nonmoving_whatsits( head, parent, blockinline )
     while head do
         if head.id==hlist_node and head.subtype == 1 then
             insert_nonmoving_whatsits(head.list,head,"horizontal")
+            local bordernumber = get_attribute(head,"bordernumber")
+            if bordernumber then
+                local bordervbox = mpbox(borderattributes[bordernumber],head.width,head.height)
+                parent.head = node.insert_before(parent.head,head,bordervbox)
+            end
         elseif head.id==hlist_node or head.id == vlist_node then
+            local bordernumber = get_attribute(head,"bordernumber")
+            if bordernumber then
+                local bordervbox = mpbox(borderattributes[bordernumber],head.width,head.height + head.depth)
+                parent.head = node.insert_before(parent.head,head,bordervbox)
+            end
             insert_nonmoving_whatsits(head.list,head,"vertical")
         else
             local props = node.getproperty(head)
             local attribs = get_attributes(head)
             local fgcolor = get_attribute(head,"color")
+            local bordernumber = get_attribute(head,"bordernumber")
+            if bordernumber then
+                local wd,ht = get_attribute(head,"borderwd"),get_attribute(head,"borderht")
+                local ba = borderattributes[bordernumber]
+                wd = wd - ba.border_right_width - ba.margin_right + ba.padding_right
+                local bordervbox = mpbox(ba,wd,ht)
+                parent.head = node.insert_before(parent.head,head,bordervbox)
+            end
             local transparency = getprop(head,"opacity")
             local role = getprop(head,"role")
 
@@ -4578,12 +4742,12 @@ end
 -- either the string `head` or `tail`. `parameter` is a table with the keys
 -- `width`, `stretch` and `stretch_order`. If the nodelist is nil, a simple
 -- node list consisting of a glue will be created.
-function add_glue( nodelist,head_or_tail,parameter)
+function add_glue( nodelist,head_or_tail,parameter,origin)
     parameter = parameter or {}
 
     local n = set_glue(nil, parameter)
     n.subtype = parameter.subtype or 0
-
+    if origin then setprop(n,"origin",origin) end
     if nodelist == nil then return n end
 
     if head_or_tail=="head" then
@@ -4882,6 +5046,15 @@ function do_linebreak( nodelist,hsize,parameters )
     local ret = node.vpack(j)
     setprop(ret,"origin","do_linebreak")
     return ret
+end
+
+function create_empty_vbox_width_width_height(wd,ht)
+    local hb = create_empty_hbox_with_width(wd)
+    local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
+    node.insert_after(hb,hb,n)
+    n = node.vpack(n,ht,"exactly")
+    node.set_attribute(n,att_dontadjustlineheight,1)
+    return n
 end
 
 function create_empty_hbox_with_width( wd )
@@ -5950,7 +6123,7 @@ function less_or_equal_than_n_lines( nodelist, lines )
     return nodelist.next == nil
 end
 
-function join_table_to_box(objects)
+function join_table_to_box(objects,from)
     for i=1,#objects - 1 do
         objects[i].next = objects[i+1]
     end
@@ -5958,10 +6131,8 @@ function join_table_to_box(objects)
         return nil
     end
     node.slide(objects[1])
-
     local vbox = node.vpack(objects[1])
-    setprop(vbox,"origin","join_table_hbox")
-    setprop(vbox,"origin","join_table_hbox")
+    setprop(vbox,"origin","join_table_hbox " .. (from or "") )
     return vbox
 end
 
@@ -6018,6 +6189,13 @@ function vsplit( objects_t, parameter )
     while vlist do
         local head = vlist.head
         while head do
+            local bordernumber = get_attribute(head,"bordernumber")
+            if bordernumber then
+                -- move bordernumber to vlist
+                set_attribute(vlist,"bordernumber",bordernumber)
+                clear_attribute(vlist,"bordernumber")
+            end
+
             local tmp_margin_newcolumn = node.has_attribute(head, publisher.att_margin_newcolumn)
 
             if tmp_margin_newcolumn then
@@ -6048,7 +6226,7 @@ function vsplit( objects_t, parameter )
                     head = tmp
 
                     local margin_newcolumn_tmplist = node.has_attribute(tmplist[1], publisher.att_margin_newcolumn)
-                    local vbox = join_table_to_box(tmplist)
+                    local vbox = join_table_to_box(tmplist,"break allowed")
                     node.set_attribute(vbox,publisher.att_margin_newcolumn,margin_newcolumn_tmplist)
 
                     hlist[#hlist + 1] = vbox
@@ -6081,13 +6259,13 @@ function vsplit( objects_t, parameter )
             table.insert(hlist,1,publisher.add_glue(nil,"head",{width=margin_newcolumn_obj1}))
             splitpos = splitpos + 1
         end
-        local obj1 = join_table_to_box({table.unpack(hlist,1,splitpos)})
+        local obj1 = join_table_to_box({table.unpack(hlist,1,splitpos)},"balance > 1 obj1")
         if hlist[splitpos + 1] then
             local margin_newcolumn_obj2 = node.has_attribute(hlist[splitpos + 1], publisher.att_margin_newcolumn)
             if margin_newcolumn_obj2 and margin_newcolumn_obj2 > 0 then
                 table.insert(hlist,splitpos + 1,publisher.add_glue(nil,"head",{width=margin_newcolumn_obj2}))
             end
-            local obj2 = join_table_to_box({table.unpack(hlist,splitpos + 1)})
+            local obj2 = join_table_to_box({table.unpack(hlist,splitpos + 1)},"balance > 1 obj2")
             if valignlast == "bottom" then
                 local remaining_height = frameheight - math.max(obj1.height, obj2.height)
 
@@ -6185,14 +6363,14 @@ function vsplit( objects_t, parameter )
     if #remaining_objects == 1 and node.has_attribute(remaining_objects[1], publisher.att_omit_at_top)  then
         -- ignore!?
     else
-        objects_t[1] = join_table_to_box(remaining_objects)
+        objects_t[1] = join_table_to_box(remaining_objects,"remaining objects != 1")
     end
 
     --- It's a common situation where there is a single free row but the next material is
     --- too high for the row. So we return an empty list and hope that the calling function
     --- is clever enough to detect this case. (Well, it's not too difficult to detect, as
     --- the `objects_t` table is not empty yet.)
-    return join_table_to_box(thisarea) or publisher.empty_block()
+    return join_table_to_box(thisarea,"return") or publisher.empty_block()
 end
 
 --- Image handling
