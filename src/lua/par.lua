@@ -645,6 +645,12 @@ function Par:format( width_sp, options )
                 lang.prehyphenchar(l.l,unicode.utf8.byte(current_textformat.hyphenchar))
             end
         end
+
+        -- see #338 - penalty - hlist - penalty gives an error “Assertion ``varmem[(o)].hh.v.RH == cur_p`` failed”
+        if nodelist.id == publisher.penalty_node and nodelist.next and nodelist.next.id == publisher.hlist_node and nodelist.next.next and nodelist.next.next.id == publisher.penalty_node and nodelist.next.next.next then
+            nodelist = nodelist.next
+        end
+
         publisher.fonts.pre_linebreak(nodelist)
 
         -- both are set only for ul/ol lists
