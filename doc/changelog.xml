@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.5">
+    <entry version="4.5.3" date="2021-07-02">
+        <en>Ignore data attributes for css styling (#337).</en>
+        <de>Datenattribute für CSS-Style ignorieren (#337).</de>
+    </entry>
     <entry version="4.5.2" date="2021-06-01">
         <en>Handle double XInclude with the new XML parser.</en>
         <de>Mehrfaches XInclude beim neuen XML-Parser.</de>
