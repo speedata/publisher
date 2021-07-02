@@ -134,8 +134,7 @@ func resolveStyle(i int, sel *goquery.Selection) {
 					colon = i + 1
 				case ";":
 					val = tokens[colon:i]
-
-					sel.SetAttr(key.String(), val.String())
+					sel.SetAttr("!"+key.String(), val.String())
 					start = i
 				default:
 					w("unknown delimiter", tok.Value)
@@ -149,7 +148,7 @@ func resolveStyle(i int, sel *goquery.Selection) {
 			}
 		}
 		val = tokens[colon:i]
-		sel.SetAttr(stringValue(key), stringValue(val))
+		sel.SetAttr("!"+stringValue(key), stringValue(val))
 		sel.RemoveAttr("style")
 	}
 	sel.Children().Each(resolveStyle)
@@ -200,15 +199,23 @@ func getFourValues(str string) map[string]string {
 }
 
 // Change "margin: 1cm;" into "margin-left: 1cm; margin-right: 1cm; ..."
-func resolveAttributes(attrs []html.Attribute) map[string]string {
+func resolveAttributes(attrs []html.Attribute) (map[string]string, map[string]string) {
 	resolved := make(map[string]string)
+	attributes := make(map[string]string)
 	// attribute resolving must be in order of appearance.
 	// For example the following border-left-style has no effect:
 	//    border-left-style: dotted;
 	//    border-left: thick green;
 	// because the second line overrides the first line (style defaults to "none")
 	for _, attr := range attrs {
-		switch attr.Key {
+		key := attr.Key
+		if !strings.HasPrefix(key, "!") {
+			attributes[key] = attr.Val
+			continue
+		}
+		key = strings.TrimPrefix(key, "!")
+
+		switch key {
 		case "margin":
 			values := getFourValues(attr.Val)
 			for _, margin := range toprightbottomleft {
@@ -336,13 +343,13 @@ func resolveAttributes(attrs []html.Attribute) map[string]string {
 				resolved["background-color"] = part
 			}
 		default:
-			resolved[attr.Key] = attr.Val
+			resolved[key] = attr.Val
 		}
 	}
 	if str, ok := resolved["text-decoration-line"]; ok && str != "none" {
 		resolved["text-decoration-style"] = "solid"
 	}
-	return resolved
+	return resolved, attributes
 }
 
 var preserveWhitespace = []bool{false}
@@ -419,10 +426,9 @@ func dumpElement(thisNode *html.Node, level int, direction mode) {
 			fmt.Fprintln(out)
 			attributes := thisNode.Attr
 			if len(attributes) > 0 {
-				fmt.Fprintf(out, "%s   attributes = {", indent)
-				resolvedAttributes := resolveAttributes(attributes)
-				for key, value := range resolvedAttributes {
-
+				fmt.Fprintf(out, "%s  styles = {", indent)
+				resolvedStyles, resolvedAttributes := resolveAttributes(attributes)
+				for key, value := range resolvedStyles {
 					if key == "white-space" {
 						if value == "pre" {
 							ws = true
@@ -432,7 +438,11 @@ func dumpElement(thisNode *html.Node, level int, direction mode) {
 					}
 					fmt.Fprintf(out, "[%q] = %q ,", key, value)
 				}
-				fmt.Fprintf(out, "has_border = %t ,", hasBorder(resolvedAttributes))
+				fmt.Fprintf(out, "has_border = %t ,", hasBorder(resolvedStyles))
+				fmt.Fprintf(out, "%s  }, attributes = {", indent)
+				for key, value := range resolvedAttributes {
+					fmt.Fprintf(out, "[%q] = %q ,", key, value)
+				}
 				fmt.Fprintln(out, "},")
 			}
 			preserveWhitespace = append(preserveWhitespace, ws)
@@ -486,7 +496,7 @@ func (c *CSS) dumpTree(outfile io.Writer) {
 					if pe := r.selector.PseudoElement(); pe != "" {
 						prefix = pe + "::"
 					}
-					node.Attr = append(node.Attr, html.Attribute{Key: prefix + stringValue(singlerule.Key), Val: stringValue(singlerule.Value)})
+					node.Attr = append(node.Attr, html.Attribute{Key: "!" + prefix + stringValue(singlerule.Key), Val: stringValue(singlerule.Value)})
 				}
 			}
 		}
@@ -514,7 +524,8 @@ func (c *CSS) dumpPages() {
 			k = "*"
 		}
 		fmt.Fprintf(out, "    [%q] = {", k)
-		for k, v := range resolveAttributes(v.attributes) {
+		styles, _ := resolveAttributes(v.attributes)
+		for k, v := range styles {
 			fmt.Fprintf(out, "[%q]=%q,", k, v)
 		}
 		wd, ht := papersize(v.papersize)

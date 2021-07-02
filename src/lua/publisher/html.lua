@@ -552,7 +552,9 @@ function collect_horizontal_nodes( elt,parameter,before_box,origin )
         local typ = type(thiselt)
 
         local attributes = thiselt.attributes or {}
-        copy_attributes(styles,attributes)
+        local thiselt_styles = thiselt.styles or {}
+        copy_attributes(styles,thiselt_styles)
+
         set_options_for_mknodes(styles,options)
 
         local thisret = {}
@@ -643,7 +645,8 @@ function build_html_table_tbody(tbody)
                         local styles = setmetatable({}, levelmt)
                         stylesstack[#stylesstack + 1] = styles
                         local attributes = td.attributes or {}
-                        copy_attributes(styles,attributes)
+                        local td_styles = td.styles or {}
+                        copy_attributes(styles,td_styles)
                         local r = build_nodelist(td,{},nil,"build_html_table_tbody/td")
                         r = publisher.flatten_boxes(r)
                         table.remove(stylesstack)
@@ -764,21 +767,23 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
         end
 
         local attributes = thiselt.attributes or {}
-        local before_attributes = {}
-        local has_before_attributes = false
-        for k,v in pairs(attributes) do
+        local thiselt_styles = thiselt.styles or {}
+
+        local before_styles = {}
+        local has_before_styles = false
+        for k,v in pairs(thiselt_styles) do
             if string.match(k,"^before::") then
-                local rawattribute = string.gsub(k,"^before::(.*)","%1")
-                before_attributes[rawattribute] = v
-                attributes[k] = nil
-                has_before_attributes = true
+                local rawstyle = string.gsub(k,"^before::(.*)","%1")
+                before_styles[rawstyle] = v
+                thiselt_styles[k] = nil
+                has_before_styles = true
             end
         end
 
-        if has_before_attributes then
+        if has_before_styles then
             local styles = setmetatable({}, levelmt)
             stylesstack[#stylesstack + 1] = styles
-            copy_attributes(styles,before_attributes)
+            copy_attributes(styles,before_styles)
 
             local before_options = {}
             set_options_for_mknodes(styles,before_options)
@@ -798,8 +803,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
 
             table.remove(stylesstack)
         end
-
-        copy_attributes(styles,attributes)
+        copy_attributes(styles,thiselt_styles)
         local styles_fontsize_sp = styles.fontsize_sp
         local margin_top = getsize(styles["margin-top"],styles_fontsize_sp)
         local margin_right = getsize(styles["margin-right"],styles_fontsize_sp)
@@ -811,10 +815,10 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
         local padding_bottom = getsize(styles["padding-bottom"],styles_fontsize_sp)
         local padding_left = getsize(styles["padding-left"],styles_fontsize_sp)
 
-        local border_top_style = attributes["border-top-style"] or "none"
-        local border_right_style = attributes["border-right-style"] or "none"
-        local border_bottom_style = attributes["border-bottom-style"] or "none"
-        local border_left_style = attributes["border-left-style"] or "none"
+        local border_top_style = thiselt_styles["border-top-style"] or "none"
+        local border_right_style = thiselt_styles["border-right-style"] or "none"
+        local border_bottom_style = thiselt_styles["border-bottom-style"] or "none"
+        local border_left_style = thiselt_styles["border-left-style"] or "none"
 
         local border_top_width = getsize(styles["border-top-width"],styles_fontsize_sp)
         local border_right_width = getsize(styles["border-right-width"],styles_fontsize_sp)
@@ -831,10 +835,10 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
         border_bottom_color = border_bottom_color or styles.color or "black"
         border_left_color = border_left_color or styles.color or "black"
 
-        local border_bottom_right_radius = attributes["border-bottom-right-radius"] or 0
-        local border_bottom_left_radius = attributes["border-bottom-left-radius"] or 0
-        local border_top_right_radius = attributes["border-top-right-radius"] or 0
-        local border_top_left_radius = attributes["border-top-left-radius"] or 0
+        local border_bottom_right_radius = thiselt_styles["border-bottom-right-radius"] or 0
+        local border_bottom_left_radius = thiselt_styles["border-bottom-left-radius"] or 0
+        local border_top_right_radius = thiselt_styles["border-top-right-radius"] or 0
+        local border_top_left_radius = thiselt_styles["border-top-left-radius"] or 0
 
 
         -- local border_top_width, border_right_width, border_bottom_width, border_left_width = 0, 0, 0, 0
@@ -907,10 +911,10 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
             box.indent_amount = margin_left + padding_left
             styles.calculated_width = styles.calculated_width - margin_left - padding_left - border_left_width - border_right_width
             box.width = styles.calculated_width
-            box.draw_border = attributes.has_border
+            box.draw_border = thiselt_styles.has_border
             box.padding_top = padding_top
             box.padding_bottom = padding_bottom
-            if attributes.has_border then
+            if thiselt_styles.has_border then
                 box.border = {
                     borderstart = true,
                     border_top_style = border_top_style,
@@ -1144,7 +1148,7 @@ function parse_html_new( elt, options )
     handle_pages(elt.pages,maxwidth_sp)
     fontfamilies = elt.fontfamilies
     elt.fontfamilies = nil
-    local att = elt[1].attributes
+    local att = elt[1].styles
     if att and type(att) == "table" then
         local trace = att["-sp-trace"] or ""
         if string.match(trace,"objects") then publisher.options.showobjects = true end
@@ -1153,7 +1157,7 @@ function parse_html_new( elt, options )
         if string.match(trace,"hyphenation") then publisher.options.showhyphenation = true end
         if string.match(trace,"textformat") then publisher.options.showtextformat = true end
     end
-    elt[1].attributes.calculated_width = xpath.get_variable("__maxwidth")
+    elt[1].styles.calculated_width = xpath.get_variable("__maxwidth")
     local lang = elt.lang
     if lang then
         publisher.set_mainlanguage(lang)
