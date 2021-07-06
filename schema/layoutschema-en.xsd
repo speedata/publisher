@@ -105,6 +105,7 @@
         <xs:element minOccurs="0" ref="en:ProcessNode"/>
         <xs:element minOccurs="0" ref="en:SaveDataset"/>
         <xs:element minOccurs="0" ref="en:SavePages"/>
+        <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
@@ -152,6 +153,7 @@
         <xs:element minOccurs="0" ref="en:ProcessNode"/>
         <xs:element minOccurs="0" ref="en:SaveDataset"/>
         <xs:element minOccurs="0" ref="en:SavePages"/>
+        <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
@@ -850,6 +852,7 @@
         <xs:element minOccurs="0" ref="en:ProcessNode"/>
         <xs:element minOccurs="0" ref="en:SaveDataset"/>
         <xs:element minOccurs="0" ref="en:SavePages"/>
+        <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
@@ -5218,6 +5221,7 @@
         <xs:element minOccurs="0" ref="en:ProcessNode"/>
         <xs:element minOccurs="0" ref="en:SaveDataset"/>
         <xs:element minOccurs="0" ref="en:SavePages"/>
+        <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
@@ -5379,6 +5383,7 @@
         <xs:element ref="en:ProcessNode"/>
         <xs:element ref="en:SaveDataset"/>
         <xs:element ref="en:SavePages"/>
+        <xs:element ref="en:SetGrid"/>
         <xs:element ref="en:SetVariable"/>
         <xs:element ref="en:SortSequence"/>
         <xs:element ref="en:Switch"/>

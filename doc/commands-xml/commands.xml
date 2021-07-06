@@ -102,6 +102,7 @@
     <optional><cmd name="ProcessNode"/></optional>
     <optional><cmd name="SaveDataset"/></optional>
     <optional><cmd name="SavePages"/></optional>
+    <optional><cmd name="SetGrid"/></optional>
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="SortSequence"/></optional>
     <optional><cmd name="Switch"/></optional>

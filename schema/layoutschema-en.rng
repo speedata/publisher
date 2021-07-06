@@ -181,6 +181,9 @@
                      <ref name="e_SavePages"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_SetGrid"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_SetVariable"></ref>
                   </optional>
                   <optional>
@@ -295,6 +298,9 @@
                   </optional>
                   <optional>
                      <ref name="e_SavePages"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_SetGrid"></ref>
                   </optional>
                   <optional>
                      <ref name="e_SetVariable"></ref>
@@ -1065,6 +1071,9 @@
                   </optional>
                   <optional>
                      <ref name="e_SavePages"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_SetGrid"></ref>
                   </optional>
                   <optional>
                      <ref name="e_SetVariable"></ref>
@@ -4580,6 +4589,9 @@
                      <ref name="e_SavePages"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_SetGrid"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_SetVariable"></ref>
                   </optional>
                   <optional>
@@ -4789,6 +4801,9 @@
                      </optional>
                      <optional>
                         <ref name="e_SavePages"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_SetGrid"></ref>
                      </optional>
                      <optional>
                         <ref name="e_SetVariable"></ref>

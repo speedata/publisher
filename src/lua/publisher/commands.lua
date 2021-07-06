@@ -3164,7 +3164,7 @@ end
 --- SetGrid
 --- -------
 --- Set the grid to the given values.
-function commands.set_grid(layoutxml)
+function commands.set_grid(layoutxml,dataxml)
     local wd = publisher.read_attribute(layoutxml,dataxml,"width", "rawstring")
     local ht = publisher.read_attribute(layoutxml,dataxml,"height","rawstring")
     local nx = publisher.read_attribute(layoutxml,dataxml,"nx",    "rawstring")
