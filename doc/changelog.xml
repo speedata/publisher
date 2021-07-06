@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.5">
+    <entry version="4.5.5" date="2021-07-06">
+        <en>Allow SetGrid to access data.</en>
+        <de>Datenzugriff bei SetGrid.</de>
+    </entry>
     <entry version="4.5.4" date="2021-07-02">
         <en>HSpace at the beginning of text (#338).</en>
         <de>HSpace am Anfang des Textes (#338).</de>
