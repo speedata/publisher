@@ -16,6 +16,7 @@ The lengths can be given in one of these units: `pp`, `pc`, `in`, `pt`, `cm`, `m
 |mm |	Millimeter
 |dd |	Didot point
 |cc |	cicero (12 dd)
+|sp |   scaled point, 1pp = 65535sp
 |=======
 
 [discrete]
@@ -35,5 +36,6 @@ The lengths can be given in one of these units: `pp`, `pc`, `in`, `pt`, `cm`, `m
 | 1  mm |	0,237 Pica = 2,845 Pica-point
 |=======
 
+To convert units you can use the layout function `sd:tounit()`
 
 // EOF

@@ -60,6 +60,13 @@ twelvepoint_sp = tex.sp("12pt")
 tenmm_sp       = tex.sp("10mm")
 onemm_sp       = tex.sp("1mm")
 onein_sp       = tex.sp("1in")
+onept_sp       = tex.sp("1pt")
+onepc_sp       = tex.sp("1pc")
+onepp_sp       = tex.sp("1pp")
+onedd_sp       = tex.sp("1dd")
+onecc_sp       = tex.sp("1cc")
+onecm_sp       = tenmm_sp
+
 
 --- Attributes
 --- ----------

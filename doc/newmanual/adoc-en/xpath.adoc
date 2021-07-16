@@ -155,6 +155,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `sd:sha1(<value>,<value>, …)`::
   Return the SHA-1 sum of the concatenation of each value as a hex string. Example: sd:sha1('hello ', 'world') gives the string 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed.
 
+`sd:tounit(<string>,<string>[,<number>])`::
+  Return a scalar of the unit given in the second argument converted to the unit given in the first argument rounded to the digits in the third argument (defaults to 0 - return integer values). Example: `sd:tounit('pt','1pc')` returns 12, because there are 12pt in 1pc (pica point).
+
 `sd:variable(<name>, ...)`::
   The same as $name. This function allows variable names to be constructed dynamically. Example: sd:variable('myvar',$num) – if $num contains the number 3, the resulting variable name is myvar3.
 
@@ -219,6 +222,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 
 `replace(<input>,<regexp>, <replacement>)`::
    Replace the input using the regular expression with the given replacement text. Example: replace("banana", "a", "o") yields bonono.
+
+`round(<number>,<number>`)`::
+    Return the argument in the first parameter rounded to number of deciaml places in the second parameter. The second parameter defaults to 0.
 
 `string(<sequence>)`::
    Return the text value of the sequence e.g. the contents of the elements.

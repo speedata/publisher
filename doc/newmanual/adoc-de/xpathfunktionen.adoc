@@ -158,11 +158,14 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `sd:reset-alternating(<typ>)`::
    Setzt den Zustand für `sd:alternating()` für den angegebenen Typ zurück.
 
-`sd:romannumeral(<number>)`::
+`sd:romannumeral(<Zahl>)`::
   Konvertiere die Zahl in eine römische Zahl.
 
 `sd:sha1(<Wert>[,<Wert>, ...])`::
    Erzeugt die SHA-1 Summe der Hintereinanderkettung der Werte als Hex-Zeichenkette. Beispiel: `sd:sha1('Hallo ', 'Welt')` ergibt die Zeichenkette `28cbbc72d6a52617a7abbfff6756d04bbad0106a`.
+
+`sd:tounit(<Zeichenkette>,<Zeichenkette>[,<Zahl>])`::
+  Gibt einen skalaren Wert der Einheit im zweiten Argument konvertiert in die Einheit des ersten Arguments zurück. Das dritte Argument ist die Anzahl der Nachkommastellen auf die gerundet werden soll (Voreinstellung: 0 - runden auf Ganzzahlwerte). Beispiel: `sd:tounit('pt','1pc')` ergibt 12, da ein Pica (pc) 12 Punkt enthält.
 
 `sd:variable-exists(<Name>)`::
    Prüft, ob eine Variable definiert wurde.
@@ -195,7 +198,6 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 
 `count()`::
    Zählt alle Kindelemente mit dem angegebenen Namen. Beispiel: `count(eintrag)` zählt, wie viele Kindelemente mit den Namen `eintrag` existieren.
-
 
 `empty(<Attribut>)`::
    Prüft, ob ein Attribut (nicht) vorhanden ist. `empty(@doesnotexist)` ergibt `true()`, `empty(@empty)` ergibt `true()` und `empty(@nonempty)` ergibt `false()`.
@@ -232,6 +234,9 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 
 `replace(<Eingabe>,<Regexp>, <Ersetzung>)`::
     Ersetzt die Eingabe mit dem regulären Ausdruck durch den Ersetzungstext. Beispiel: `replace("banana", "a", "o")` ergibt `bonono`. Beispiel mit Ersetzungen: `replace('W151TBH','^[A-Z]([0-9]\+)[A-Z]+$', '$1')` ergibt 151.
+
+`round(<Zahl>,<Zahl>`)`::
+   Rundet die angegebene Zahl im ersten Argument auf die Anzahl der Nachkommastellen im zweiten Argument.
 
 `string(<Sequenz>)`::
    Gibt den Textwert der Sequenz zurück, d. h. den Inhalt der Elemente.

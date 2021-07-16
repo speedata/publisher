@@ -257,28 +257,40 @@ local function number_of_pages(dataxml,arg )
 end
 
 local function imagewidth(dataxml, arg )
-  local filename = arg[1]
-  local img = publisher.imageinfo(filename)
-  publisher.setup_page(nil,"layout_functions#imagewidth")
-  local unit = arg[2]
-  local width
-  if unit then
-      width = img.img.width
-      local ret
-      if unit == "cm" then
-          ret = width / publisher.tenmm_sp
-      elseif unit == "mm" then
-          ret = width / publisher.onemm_sp
-      elseif unit == "in" then
-          ret = width / publisher.onein_sp
-      else
-          err("unsupported unit: %q, please use 'cm', 'mm' or 'in'",unit)
-      end
-      return math.round(ret, 4)
-  else
-      width = publisher.current_grid:width_in_gridcells_sp(img.img.width)
-      return width
-  end
+    local filename = arg[1]
+    local img = publisher.imageinfo(filename)
+    publisher.setup_page(nil,"layout_functions#imagewidth")
+    local unit = arg[2]
+    local width
+    if unit then
+        width = img.img.width
+        local ret
+        if unit == "cm" then
+            ret = width / publisher.tenmm_sp
+        elseif unit == "mm" then
+            ret = width / publisher.onemm_sp
+        elseif unit == "in" then
+            ret = width / publisher.onein_sp
+        elseif unit == "sp" then
+            ret = width
+        elseif unit == "pc" then
+            ret = width / publisher.onepc_sp
+        elseif unit == "pt" then
+            ret = width / publisher.onept_sp
+        elseif unit == "pp" then
+            ret = width / publisher.onepp_sp
+        elseif unit == "dd" then
+            ret = width / publisher.onedd_sp
+        elseif unit == "cc" then
+            ret = width / publisher.onecc_sp
+        else
+            err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'",unit)
+        end
+        return math.round(ret, 4)
+    else
+        width = publisher.current_grid:width_in_gridcells_sp(img.img.width)
+        return width
+    end
 end
 
 local function imageheight(dataxml, arg )
@@ -296,10 +308,22 @@ local function imageheight(dataxml, arg )
           ret = height / publisher.onemm_sp
       elseif unit == "in" then
           ret = height / publisher.onein_sp
-      else
-          err("unsupported unit: %q, please use 'cm', 'mm' or 'in'",unit)
-      end
-      return math.round(ret, 4)
+        elseif unit == "sp" then
+            ret = width
+        elseif unit == "pc" then
+            ret = width / publisher.onepc_sp
+        elseif unit == "pt" then
+            ret = width / publisher.onept_sp
+        elseif unit == "pp" then
+            ret = width / publisher.onepp_sp
+        elseif unit == "dd" then
+            ret = width / publisher.onedd_sp
+        elseif unit == "cc" then
+            ret = width / publisher.onecc_sp
+        else
+            err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'",unit)
+        end
+          return math.round(ret, 4)
   else
       height = publisher.current_grid:height_in_gridcells_sp(img.img.height)
       return height
@@ -384,10 +408,22 @@ local function groupheight(dataxml, arg )
             ret = height / publisher.onemm_sp
         elseif unit == "in" then
             ret = height / publisher.onein_sp
+        elseif unit == "sp" then
+            ret = width
+        elseif unit == "pc" then
+            ret = width / publisher.onepc_sp
+        elseif unit == "pt" then
+            ret = width / publisher.onept_sp
+        elseif unit == "pp" then
+            ret = width / publisher.onepp_sp
+        elseif unit == "dd" then
+            ret = width / publisher.onedd_sp
+        elseif unit == "cc" then
+            ret = width / publisher.onecc_sp
         else
-            err("unsupported unit: %q, please use 'cm', 'mm' or 'in'",unit)
+            err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'",unit)
         end
-        return math.round(ret, 4)
+            return math.round(ret, 4)
     else
         local grid = publisher.current_grid
         height = grid:height_in_gridcells_sp(groupcontents.height)
@@ -419,10 +455,22 @@ local function groupwidth(dataxml, arg )
           ret = width / publisher.onemm_sp
       elseif unit == "in" then
           ret = width / publisher.onein_sp
-      else
-          err("unsupported unit: %q, please use 'cm', 'mm' or 'in'",unit)
-      end
-      return math.round(ret, 4)
+        elseif unit == "sp" then
+            ret = width
+        elseif unit == "pc" then
+            ret = width / publisher.onepc_sp
+        elseif unit == "pt" then
+            ret = width / publisher.onept_sp
+        elseif unit == "pp" then
+            ret = width / publisher.onepp_sp
+        elseif unit == "dd" then
+            ret = width / publisher.onedd_sp
+        elseif unit == "cc" then
+            ret = width / publisher.onecc_sp
+        else
+            err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'",unit)
+        end
+          return math.round(ret, 4)
   else
       local grid = publisher.current_grid
       width = grid:width_in_gridcells_sp(groupcontents.width)
@@ -462,6 +510,37 @@ local function shaone(dataxml,arg)
     local message = table.concat(arg)
     local ret = sha1.sha1(message)
     return ret
+end
+
+-- convert a textual dimension (e.g. '2cm') to a scalar in another dimension.
+local function tounit(dataxml,arg)
+    local unit = arg[1]
+    local value = arg[2]
+    local decimal = arg[3] or 0
+    local width = tex.sp(arg[2])
+    local ret
+    if unit == "cm" then
+        ret = width / publisher.onecm_sp
+    elseif unit == "mm" then
+        ret = width / publisher.onemm_sp
+    elseif unit == "in" then
+        ret = width / publisher.onein_sp
+    elseif unit == "sp" then
+        ret = width
+    elseif unit == "pc" then
+        ret = width / publisher.onepc_sp
+    elseif unit == "pt" then
+        ret = width / publisher.onept_sp
+    elseif unit == "pp" then
+        ret = width / publisher.onepp_sp
+    elseif unit == "dd" then
+        ret = width / publisher.onedd_sp
+    elseif unit == "cc" then
+        ret = width / publisher.onecc_sp
+    else
+        err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'",unit)
+    end
+    return math.round(ret,decimal)
 end
 
 
@@ -638,6 +717,9 @@ register("urn:speedata:2009/publisher/functions/en","reset_alternating",reset_al
 register("urn:speedata:2009/publisher/functions/en","reset-alternating",reset_alternating)
 
 register("urn:speedata:2009/publisher/functions/en","sha1",shaone)
+
+register("urn:speedata:2009/publisher/functions/en","todimen",tounit)
+register("urn:speedata:2009/publisher/functions/en","tounit",tounit)
 
 register("urn:speedata:2009/publisher/functions/en","variable",variable)
 

@@ -1,8 +1,9 @@
 [appendix]
+
 [[app-massangaben]]
 = Längenangaben und Maßeinheiten
 
-Längenangaben im Layoutregelwerk können in den Folgenden Einheiten angegeben werden: `pp`, `pc`, `in`, `pt`, `cm`, `mm`, `dd`, `cc`.
+Längenangaben im Layoutregelwerk können in den Folgenden Einheiten angegeben werden: `pp`, `pc`, `in`, `pt`, `cm`, `mm`, `dd`, `cc`, `sp`.
 Ist die Zahl ohne Einheit, so wird in der Regel die Anzahl an Rasterzellen genommen.
 
 
@@ -16,10 +17,10 @@ Ist die Zahl ohne Einheit, so wird in der Regel die Anzahl an Rasterzellen genom
 | cm |  Zentimeter
 | mm |  Millimeter
 | dd |  Didot Punkte
-| cc | Cicero (12 dd)
+| cc |  Cicero (12 dd)
+| sp |  Scaled points, 1pp = 65536sp
 |=======
 
-// Ende
 
 [discrete]
 == Umrechnungen
