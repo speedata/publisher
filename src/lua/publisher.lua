@@ -1791,6 +1791,7 @@ function output_absolute_position(param)
     local x = param.x
     local y = param.y
     local nodelist = param.nodelist
+    local keepposition = param.keepposition
 
     if param.allocate then
         local additional_width,additional_height = 0,0
@@ -1837,6 +1838,7 @@ function output_absolute_position(param)
             posy = _y,
             width_gridcells = _wd,
             height_gridcells = _ht,
+            keepposition = keepposition,
             allocate_matrix = param.allocate_matrix})
     end
 
