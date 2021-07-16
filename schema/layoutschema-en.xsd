@@ -4890,23 +4890,40 @@
           <xs:documentation>Determines the placement of the object relative to the given column. If 'left' (which is the default), the given column is the left border of the object. If 'right', the column determines the right edge of the object.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="left">
-              <xs:annotation>
-                <xs:documentation>The object is placed in given column.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="center">
-              <xs:annotation>
-                <xs:documentation>The column determines the center of the object. Works only with absolute positioning.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="right">
-              <xs:annotation>
-                <xs:documentation>The given columns determines the right edge of the border.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="left">
+                  <xs:annotation>
+                    <xs:documentation>The object is placed in given column.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="center">
+                  <xs:annotation>
+                    <xs:documentation>The column determines the center of the object. Works only with absolute positioning.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="right">
+                  <xs:annotation>
+                    <xs:documentation>The given columns determines the right edge of the border.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="halign">

@@ -4890,23 +4890,40 @@
           <xs:documentation>Bestimmt, ob die angegebene Spalte die linke oder die rechte Kante vom Objekt bezeichnet.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="left">
-              <xs:annotation>
-                <xs:documentation>Das Objekt wird in der angegebenen Spalte platziert.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="center">
-              <xs:annotation>
-                <xs:documentation>Die Spalte bestimmt den Mittelpunkt des Objekts. Funktioniert nur mit absoluter Positionierung.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="right">
-              <xs:annotation>
-                <xs:documentation>Das Objekt wird mit dem rechten Rand in der gegebenen Spalte ausgerichtet.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="left">
+                  <xs:annotation>
+                    <xs:documentation>Das Objekt wird in der angegebenen Spalte platziert.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="center">
+                  <xs:annotation>
+                    <xs:documentation>Die Spalte bestimmt den Mittelpunkt des Objekts. Funktioniert nur mit absoluter Positionierung.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="right">
+                  <xs:annotation>
+                    <xs:documentation>Das Objekt wird mit dem rechten Rand in der gegebenen Spalte ausgerichtet.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="halign">

@@ -6636,7 +6636,7 @@
         <para>Wenn eine Gruppe ausgegeben werden soll, muss der Name hier angegeben werden.</para>
       </description>
     </attribute>
-    <attribute en="hreference" optional="yes">
+    <attribute en="hreference" optional="yes" allowxpath="yes">
       <description xml:lang="en">
         <para>Determines the placement of the object relative to the given column. If 'left' (which is the default), the given column is the left border of the object. If 'right', the column determines the right edge of the object.</para>
       </description>

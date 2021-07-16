@@ -4226,6 +4226,9 @@
                         <a:documentation>Die Spalte bestimmt den Mittelpunkt des Objekts. Funktioniert nur mit absoluter Positionierung.</a:documentation>
                         <value>right</value>
                         <a:documentation>Das Objekt wird mit dem rechten Rand in der gegebenen Spalte ausgerichtet.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
                      </choice>
                   </attribute>
                </optional>
