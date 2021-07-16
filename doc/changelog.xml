@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.5">
+    <entry version="4.5.6" date="2021-07-16">
+        <en>New layout function `sd:tounit()` for unit conversion.</en>
+        <de>Neue Layoutfunktion `sd:tounit()` für Berechnungen mit Einheiten.</de>
+    </entry>
+    <entry version="4.5.6" date="2021-07-16">
+        <en>PlaceObject keepposition="yes" with absolute positioning.</en>
+        <de>PlaceObject keepposition="yes" mit absoluter Positionierung.</de>
+    </entry>
     <entry version="4.5.5" date="2021-07-06">
         <en>Allow SetGrid to access data.</en>
         <de>Datenzugriff bei SetGrid.</de>
