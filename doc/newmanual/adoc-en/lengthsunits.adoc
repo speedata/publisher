@@ -16,7 +16,7 @@ The lengths can be given in one of these units: `pp`, `pc`, `in`, `pt`, `cm`, `m
 |mm |	Millimeter
 |dd |	Didot point
 |cc |	cicero (12 dd)
-|sp |   scaled point, 1pp = 65535sp
+|sp |   scaled point, 1pp = 65536sp
 |=======
 
 [discrete]

@@ -38,13 +38,10 @@ end
 -- Evaluate the string arg as a dimension. The return value is a string with the dimension "sp".
 local function dimexpression( dataxml,arg )
     arg = table.concat(arg)
-    local save_dim = is_dim
-    is_dim = true
     xpath.push_state()
     local ret = xpath.parse(dataxml,arg,"")
     xpath.pop_state()
-    is_dim = save_dim
-    return ret .. "sp"
+    return ret
 end
 
 --- Get the page number of a marker

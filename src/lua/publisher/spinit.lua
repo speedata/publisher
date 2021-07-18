@@ -11,8 +11,10 @@
 
 -- file_start("spinit.lua")
 local u8fix = require('utf8fix')
+if not running_in_testmode then
+    tex.enableprimitives('',tex.extraprimitives())
+end
 
-tex.enableprimitives('',tex.extraprimitives ())
 -- Lua 5.2 has table.unpack
 unpack = unpack or table.unpack
 
@@ -393,6 +395,9 @@ prohibited_at_beginning = {zh = {["!"] = true,["%"] = true,[")"] = true,[","] = 
 errorlog = io.open(string.format("%s.protocol",tex.jobname),"ab")
 errorlog:write("---------------------------------------------\n")
 
+if running_in_testmode then
+    return
+end
 --- This is the entry point in the publishing run and called from the TeX file (`publisher.tex`).
 require("publisher")
 

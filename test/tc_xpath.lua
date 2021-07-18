@@ -1,5 +1,8 @@
 module(...,package.seeall)
 
+
+require("publisher.spinit")
+
 xpath = do_luafile("xpath.lua")
 luxor = do_luafile("luxor.lua")
 
@@ -30,13 +33,16 @@ local with_underscore_src=[[<root>
  <foo_bar>Hello world</foo_bar>
 </root>]]
 
-local with_dash_src=[[<foo att="Hello world">xx<bar-bar att="xx"></bar-bar></foo>]]
+local calc_src=[[<data><sub>2</sub><sub>2</sub></data>]]
 
+local with_dash_src=[[<foo att="Hello world">xx<bar-bar att="xx"></bar-bar></foo>]]
 
 local data = luxor.parse_xml(data_src)
 local with_underscore = luxor.parse_xml(with_underscore_src)
 local with_dash = luxor.parse_xml(with_dash_src)
 local mixed_elements = luxor.parse_xml(mixed_elements_src)
+local calc = luxor.parse_xml(calc_src)
+
 local namespace = { sd = "foo" }
 
 function number_of_datasets(self,arg)
@@ -269,6 +275,10 @@ function test_functions()
     assert_equal(xpath.parse(data , " concat($column, 'abc' ) ",namespace ),"2abc")
     -- dashes:
     assert_equal(xpath.parse( data, " sd:return-ten() ", namespace ), 10)
+end
+
+function test_calc()
+  assert_equal(xpath.parse( calc, " 2 + ." , namespace ),24)
 end
 
 function test_other()

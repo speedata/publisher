@@ -97,7 +97,6 @@ function M.is_number(str,pos)
 end
 
 function M.is_dimension(str,pos)
-    if not is_dim then return false end
     local start,stop,num
     start, stop, num = string.find(str,"^([%-+]?%d+%.?%d*%a+)%s*",pos)
     if num then
@@ -561,51 +560,6 @@ local function xml_to_string( self )
     return table.concat(ret)
 end
 
-local mt = {
-    __tostring = xml_to_string
-}
-
-
-function M.eval_addition(first,second,operator)
-    if type(first)=='table' then
-        setmetatable(first, mt)
-        first = tostring(first)
-    end
-    if type(second)=='table' then
-        setmetatable(second, mt)
-        second = tostring(second)
-    end
-    if type(first)=='string' then
-        if is_dim then
-            first = tex.sp(first)
-        else
-            first = tonumber(first)
-        end
-    end
-    if first == nil then
-        if err then
-            err("The first operand of +/- is not a number. Evaluating to 0 (%q)",M.str)
-        end
-        return 0
-    end
-    if type(second)=='string' then
-        if is_dim then
-            second = tex.sp(second)
-        else
-            second = tonumber(second)
-        end
-    end
-    if second == nil then
-        err("The second operand of +/- is not a number. Evaluating to 0")
-        return 0
-    end
-
-    if operator == "\1+" then
-        return first + second
-    elseif operator == "\1-" then
-        return first - second
-    end
-end
 
 function M.eval_castable_as(first,second,operator)
     if second == "xs:double" then
@@ -619,54 +573,80 @@ function M.eval_castable_as(first,second,operator)
 end
 
 
-function M.eval_multiplication(first,second,operator)
-    if type(first)=='table' then
-        err("The first operand of the multiplication is a table. Evaluating to 0")
-        return 0
+local mt = {
+    __tostring = xml_to_string
+}
+
+function get_argument_number(arg,pos,what)
+    local unit
+    if type(arg)=='table' then
+        setmetatable(arg, mt)
+        arg = tostring(arg)
     end
-    if type(second)=='table' then
-        err("The second operand of the multiplication is a table. Evaluating to 0")
-        return 0
-    end
-    if type(first)=='string' then
-        if is_dim then
-            first = tex.sp(first)
+
+    if type(arg)=='string' then
+        if tonumber(arg) then
+            return tonumber(arg)
         else
-            first = tonumber(first)
+            local tmpnum = tex.sp(arg)
+            return tonumber(tmpnum), "sp"
         end
     end
-    if first == nil then
+
+    if arg == nil then
         if err then
-            err("The first operand of the multiplication is not a number. Evaluating to 0")
-        end
-        return 0
-    end
-    if type(second)=='string' then
-        if is_dim then
-            second = tex.sp(second)
+            err("The %s operand of %s is not a number. Evaluating to 0 (%q)",pos,what,M.str)
         else
-            second = tonumber(second)
+            err("The %s operand of %s is not a number. Evaluating to 0",pos,what)
         end
-    end
-    if second == nil then
-        err("The second operand of the multiplication is not a number. Evaluating to 0")
         return 0
     end
 
+    return arg
+end
+
+
+function M.eval_addition(first,second,operator)
+    local unit_first, unit_second
+    first, unit_first = get_argument_number(first,"first")
+    second, unit_second = get_argument_number(second,"second")
+    local res
+    if operator == "\1+" then
+        res = first + second
+    elseif operator == "\1-" then
+        res = first - second
+    end
+    local unit = unit_first or unit_second
+    if unit then
+        res = string.format("%s%s",tostring(res),unit)
+    end
+    return res
+end
+
+function M.eval_multiplication(first,second,operator)
+    local unit_first, unit_second
+    first, unit_first = get_argument_number(first,"first","one of * div, mod, idiv")
+    second, unit_second = get_argument_number(second,"second","one of * div, mod, idiv")
+    local res
     if operator == "\1*" then
-        return first * second
+        res = first * second
     elseif operator == "\1mod" then
-        return math.fmod(first,second)
+        res = math.fmod(first,second)
     elseif operator == "\1div" then
-        return first / second
+        res = first / second
     elseif operator =="\1idiv" then
         local a = first / second
         if a > 0 then
-            return math.floor(a)
+            res = math.floor(a)
         else
-            return math.ceil(a)
+            res = math.ceil(a)
         end
     end
+    local unit = unit_first or unit_second
+    if unit then
+        res = string.format("%s%s",tostring(res),unit)
+    end
+    return res
 end
 
 -- Precedence order
