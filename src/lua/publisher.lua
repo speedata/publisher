@@ -859,7 +859,7 @@ end
 -- 3 user
 -- return an action node or a whatsit with pdf_action subtype.
 function get_action_node( action_type )
-    local ai = node.new("whatsit",publisher.pdf_action_whatsit)
+    local ai = node.new("whatsit",pdf_action_whatsit)
     ai.action_type = action_type
     return ai
 end
@@ -1097,7 +1097,7 @@ function initialize_luatex_and_generate_pdf()
                 local f = io.open(htmlfilename .. ".lua","w")
                 f:write(tmp)
                 f:close()
-                local blocks = publisher.parse_html(csshtmltree) or {}
+                local blocks = parse_html(csshtmltree) or {}
                 for b=1,#blocks do
                     local thisblock = blocks[b]
                     htmlblocks[#htmlblocks + 1] = thisblock
@@ -2187,12 +2187,12 @@ function setup_page(pagenumber,fromwhere)
         elseif eltname=="Grid" then
             local layoutxml = eltcontents.layoutxml
             local dataxml = eltcontents.dataxml
-            local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
-            local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --PG
-            local _nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "number")
-            local _ny     = publisher.read_attribute(layoutxml,dataxml,"ny",     "number")
-            local _dx     = publisher.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
-            local _dy     = publisher.read_attribute(layoutxml,dataxml,"dy",     "length_sp")
+            local width  = read_attribute(layoutxml,dataxml,"width",  "length_sp")
+            local height = read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --PG
+            local _nx     = read_attribute(layoutxml,dataxml,"nx",     "number")
+            local _ny     = read_attribute(layoutxml,dataxml,"ny",     "number")
+            local _dx     = read_attribute(layoutxml,dataxml,"dx",     "length_sp")
+            local _dy     = read_attribute(layoutxml,dataxml,"dy",     "length_sp")
 
             gridwidth  = width
             gridheight = height
@@ -2278,7 +2278,7 @@ function setup_page(pagenumber,fromwhere)
     local cg = current_page.grid
 
     for k,v in pairs(cg.positioning_frames) do
-        css_rules = publisher.css:matches({element = 'area', class=class,id=k}) or {}
+        css_rules = css:matches({element = 'area', class=class,id=k}) or {}
         if css_rules["border-width"] then
             for i,frame in ipairs(v) do
                 frame.draw = { color = "green", width = css_rules["border-width"] }
