@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.5">
+    <entry version="4.5.7" date="2021-08-25">
+        <en>Bugfix for self closing HTML tags (#339).</en>
+        <de>Fehlerkorrektur für selbstschließende HTML-Tags (#339).</de>
+    </entry>
+    <entry version="4.5.7" date="2021-08-25">
+        <en>Better length calculation in XPath expressions.</en>
+        <de>Bessere Längenberechnung in XPath-Ausdrücken.</de>
+    </entry>
     <entry version="4.5.6" date="2021-07-16">
         <en>New layout function `sd:tounit()` for unit conversion.</en>
         <de>Neue Layoutfunktion `sd:tounit()` für Berechnungen mit Einheiten.</de>
