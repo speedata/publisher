@@ -67,12 +67,8 @@ local function reconstruct_html_text(elt)
             table.insert(ret,string.format(" %s=%q",key,value))
         end
     end
-    if #elt == 0 then
-        if void_elements[eltname] then
-            table.insert(ret,">")
-        else
-            table.insert(ret," />")
-        end
+    if #elt == 0 and void_elements[eltname] then
+        table.insert(ret,">")
     else
         table.insert(ret,">")
         for i=1,#elt do
