@@ -345,21 +345,23 @@ end
 function Par:mknodelist( options )
     flatten(self,self,options)
     local nodelist
-    local tail
     local objects = {}
     for i=1,#self do
         local thisself = self[i]
         if nodelist == nil then
+            -- the beginning of a new line (perhaps the first new line)
             nodelist = thisself
         elseif thisself.id == publisher.vlist_node or publisher.getprop(thisself,"split") then
+            -- text right after a  newline, so push stuff that we have into the objects list and
+            -- put what we have into the node list
             if nodelist.id == publisher.glue_node and nodelist.prev == nil and nodelist.next == nil then
-                nodelist = thisself
+                -- ignore, just glue
             else
                 table.insert(objects,nodelist)
-                table.insert(objects,thisself)
-                nodelist = nil
             end
+            nodelist = thisself
         else
+            -- just objects to be appended to the node list
             local tail = node.tail(nodelist)
             tail.next = thisself
             thisself.prev = tail

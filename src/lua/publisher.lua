@@ -12,8 +12,6 @@ file_start("publisher.lua")
 barcodes = do_luafile("barcodes.lua")
 local luxor = do_luafile("luxor.lua")
 
-local http = require("socket.http")
-local url  = require("socket_url")
 local spotcolors = require("spotcolors")
 
 xpath = do_luafile("xpath.lua")
