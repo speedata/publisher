@@ -263,8 +263,8 @@ local function flatten(self,items,options)
         elseif typ_thisself == "table" then
             -- w("par/flatten: type: table")
             local tmp = flatten(self,{table_textvalue(thisself)},new_options)
-            for i=1,#tmp do
-                table.insert(ret,tmp[i])
+            for j=1,#tmp do
+                table.insert(ret,tmp[j])
             end
         else
             -- w("par/flatten: type: unknown")

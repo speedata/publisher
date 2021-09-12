@@ -3929,7 +3929,11 @@ function remove_last_whitespace ( tbl )
             if tbl[i].contents and type(tbl[i].contents) == "table" then
                 ret = remove_last_whitespace(tbl[i].contents)
             else
-                ret = remove_last_whitespace(tbl[i])
+                local tic = tbl[i].contents
+                -- the last contents could be an image for example. See #342
+                if type(tic) == "userdata" then ret = true else
+                    ret = remove_last_whitespace(tbl[i])
+                end
             end
             if ret then return true end
         end
