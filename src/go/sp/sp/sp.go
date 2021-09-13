@@ -127,7 +127,7 @@ func init() {
 		"inkscape-command":  "--export-pdf",
 		"fontloader":        "fontforge",
 		"referencefilename": "reference",
-		"xmlparser":         "go",
+		"xmlparser":         "lua",
 	}
 
 	switch runtime.GOOS {

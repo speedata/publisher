@@ -262,7 +262,7 @@ options = {
     gridcells_y = 0,
     reportmissingglyphs = true,
     fontloader = os.getenv("SP_FONTLOADER") or "fontforge",
-    xmlparser = os.getenv("SP_XMLPARSER") or "go",
+    xmlparser = os.getenv("SP_XMLPARSER") or "lua",
 }
 
 -- List of virtual areas. Key is the group name and value is
