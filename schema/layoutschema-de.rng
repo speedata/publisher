@@ -404,6 +404,11 @@
       <element name="Barcode">
          <a:documentation>Erzeugt einen 1D oder 2D Strichcode (barcode), der in PlaceObject ausgegeben werden kann.</a:documentation>
          <optional>
+            <attribute name="color">
+               <a:documentation>Farbe des Strichcodes. Muss vorher mit DefineColor definiert worden sein. Derzeit nur für QR-Codes.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="eclevel">
                <a:documentation>Setzt den Fehlerkorrekturlevel für QR-Codes. Wenn nicht angegeben, nutzt das System den maximalen Level für die kleinste QR-Code Größe. Je höher der Level, desto mehr Fehlerkorrektur ist im QR-Code.</a:documentation>
                <choice>

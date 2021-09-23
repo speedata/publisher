@@ -403,13 +403,13 @@ end
 barcodes_qrencode = nil
 
 -- size is in scaled points
-local function make_code(size,matrix)
+local function make_code(size,matrix,pdfcolorstring)
   local size_bp = size / publisher.factor
   local dark_bits
   local white_bits
   local unit = math.round(size_bp / #matrix,3)
   local bc = {}
-  bc[#bc + 1] = "q"
+  bc[#bc + 1] = string.format("q %s",pdfcolorstring)
   for x=1,#matrix do
     last_bit = "-"
     dark_bits = 0
@@ -458,14 +458,15 @@ local function make_code(size,matrix)
   return v
 end
 
-local function qrcode(width,height,codeword,eclevel)
+local function qrcode(width,height,codeword,eclevel,colorname)
+  local pdfcolorstring = publisher.colors[colorname or "black"].pdfstring
   if not barcodes_qrencode then barcodes_qrencode = do_luafile("qrencode.lua") end
   local ok, tab_or_message =  barcodes_qrencode.qrcode(codeword,eclevel)
   if not ok then
     err(tab_or_message)
     return nil
   else
-    return make_code(width,tab_or_message)
+    return make_code(width,tab_or_message,pdfcolorstring)
   end
 end
 

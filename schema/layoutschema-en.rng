@@ -404,6 +404,11 @@
       <element name="Barcode">
          <a:documentation>Print a 1d or 2d barcode. To be used in PlaceObject.</a:documentation>
          <optional>
+            <attribute name="color">
+               <a:documentation>Color of the barcode. Must be defined with DefineColor before use. Currently only used for QR codes.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="eclevel">
                <a:documentation>Set the error correction level for QR-codes. If not provided, the system uses the maximum level for minimum size. The higher the level, the more error correction is in the QR-code.</a:documentation>
                <choice>

@@ -236,6 +236,7 @@ end
 --- Create a EAN 13 barcode. The width of the barcode depends on the font
 --- given in `fontface` (or the default `text`).
 function commands.barcode( layoutxml,dataxml )
+    local colorname      = publisher.read_attribute(layoutxml,dataxml,"color"  ,     "rawstring","black")
     local eclevel        = publisher.read_attribute(layoutxml,dataxml,"eclevel"  ,   "rawstring")
     local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface" ,   "rawstring")
     local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily",  "rawstring",fontname)
@@ -247,7 +248,6 @@ function commands.barcode( layoutxml,dataxml )
     local typ            = publisher.read_attribute(layoutxml,dataxml,"type",        "rawstring")
     local width          = publisher.read_attribute(layoutxml,dataxml,"width",       "length_sp")
     if fontname then warning("Barcode/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
-
 
     width = width or xpath.get_variable("__maxwidth")
 
@@ -273,7 +273,7 @@ function commands.barcode( layoutxml,dataxml )
         else
             eclevel = nil
         end
-        return barcodes.qrcode(width,height,selection,eclevel)
+        return barcodes.qrcode(width,height,selection,eclevel,colorname)
     else
         err("Unknown barcode type %q", typ or "?")
     end

@@ -259,6 +259,11 @@
       <xs:documentation>Erzeugt einen 1D oder 2D Strichcode (barcode), der in PlaceObject ausgegeben werden kann.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
+      <xs:attribute name="color">
+        <xs:annotation>
+          <xs:documentation>Farbe des Strichcodes. Muss vorher mit DefineColor definiert worden sein. Derzeit nur für QR-Codes.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="eclevel">
         <xs:annotation>
           <xs:documentation>Setzt den Fehlerkorrekturlevel für QR-Codes. Wenn nicht angegeben, nutzt das System den maximalen Level für die kleinste QR-Code Größe. Je höher der Level, desto mehr Fehlerkorrektur ist im QR-Code.</xs:documentation>

@@ -984,6 +984,14 @@
     <para>Erzeugt einen 1D oder 2D Strichcode (barcode), der in <cmd name="PlaceObject"/> ausgegeben werden kann.</para>
   </description>
     <childelements/>
+    <attribute en="color" optional="yes" since="4.5.11" allowxpath="yes">
+      <description xml:lang="en">
+        <para>Color of the barcode. Must be defined with <cmd name="DefineColor"/> before use. Currently only used for QR codes.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Farbe des Strichcodes. Muss vorher mit <cmd name="DefineColor"/> definiert worden sein. Derzeit nur für QR-Codes.</para>
+      </description>
+    </attribute>
     <attribute en="eclevel" optional="yes" since="2.7.10">
       <description xml:lang="en">
         <para>Set the error correction level for QR-codes. If not provided, the system uses the maximum level for minimum size. The higher the level, the more error correction is in the QR-code.</para>
