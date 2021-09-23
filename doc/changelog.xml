@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.5">
+    <entry version="4.5.11" date="2021-09-23">
+        <en>Colored QR codes.</en>
+        <de>Farbige QR-Codes.</de>
+    </entry>
     <entry version="4.5.10" date="2021-09-13">
         <en>Switch back to Lua based XML reader.</en>
         <de>Zurück zum Lua-basierten XML-Leser.</de>
