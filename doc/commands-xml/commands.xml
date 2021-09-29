@@ -66,6 +66,7 @@
     <optional><cmd name="Tablerule"/></optional>
     <optional><cmd name="Td"/></optional>
     <optional><cmd name="Tr"/></optional>
+    <optional><cmd name="Transformation"/></optional>
     <optional><cmd name="Trace"/></optional>
     <optional><cmd name="U"></cmd></optional>
     <optional><cmd name="Until"/></optional>
