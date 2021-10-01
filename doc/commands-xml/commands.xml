@@ -81,6 +81,7 @@
     <optional><cmd name="DefineColor"/></optional>
     <optional><cmd name="DefineFontfamily"/></optional>
     <optional><cmd name="DefineFontalias"/></optional>
+    <optional><cmd name="DefineMatter"/></optional>
     <optional><cmd name="DefineTextformat"/></optional>
     <optional><cmd name="ForAll"/></optional>
     <optional><cmd name="Group"/></optional>
@@ -5032,6 +5033,14 @@
       <para>Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</para>
     </description>
     <childelements/>
+    <attribute en="force" optional="yes" allowxpath="yes" since="4.5.12">
+      <description xml:lang="en">
+        <para>Force the shipout of page now.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Seitenausgabe erzwingen.</para>
+      </description>
+    </attribute>
     <attribute en="openon" optional="yes">
       <description xml:lang="en">
         <para>The next current page will be a left or a right page. E.g. when on page 1 and openon="right" then page 2 is empty and the next current page is 3.</para>

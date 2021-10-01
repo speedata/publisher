@@ -115,6 +115,9 @@
                      <ref name="e_DefineFontalias"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_DefineMatter"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_DefineTextformat"></ref>
                   </optional>
                   <optional>
@@ -232,6 +235,9 @@
                   </optional>
                   <optional>
                      <ref name="e_DefineFontalias"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_DefineMatter"></ref>
                   </optional>
                   <optional>
                      <ref name="e_DefineTextformat"></ref>
@@ -1013,6 +1019,9 @@
                   </optional>
                   <optional>
                      <ref name="e_DefineFontalias"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_DefineMatter"></ref>
                   </optional>
                   <optional>
                      <ref name="e_DefineTextformat"></ref>
@@ -3004,6 +3013,11 @@
       <element name="NewPage">
          <a:documentation>Finishes the current page and creates a new one (only if new material for the page is available).</a:documentation>
          <optional>
+            <attribute name="force">
+               <a:documentation>Force the shipout of page now.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="openon">
                <a:documentation>The next current page will be a left or a right page. E.g. when on page 1 and openon=&#34;right&#34; then page 2 is empty and the next current page is 3.</a:documentation>
                <choice>
@@ -4543,6 +4557,9 @@
                      <ref name="e_DefineFontalias"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_DefineMatter"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_DefineTextformat"></ref>
                   </optional>
                   <optional>
@@ -4755,6 +4772,9 @@
                      </optional>
                      <optional>
                         <ref name="e_DefineFontalias"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_DefineMatter"></ref>
                      </optional>
                      <optional>
                         <ref name="e_DefineTextformat"></ref>

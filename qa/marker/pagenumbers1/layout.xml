@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
-  <Options show-grid="no" resetmarks="yes" />
-  
+  <Options resetmarks="yes" />
+
   <Pageformat width="4cm" height="4cm"/>
 
   <Record element="data">
@@ -34,9 +34,9 @@
         </Paragraph>
       </Textblock>
     </PlaceObject>
-    
+
     <NewPage/>
-    
+
     <PlaceObject>
       <Textblock>
         <Paragraph>

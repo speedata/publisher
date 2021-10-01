@@ -1875,6 +1875,7 @@ function commands.new_page( layoutxml,dataxml )
     local pagetype     = publisher.read_attribute(layoutxml,dataxml,"pagetype","rawstring")
     local skippagetype = publisher.read_attribute(layoutxml,dataxml,"skippagetype","rawstring")
     local openon       = publisher.read_attribute(layoutxml,dataxml,"openon","rawstring")
+    local force        = publisher.read_attribute(layoutxml,dataxml,"force", "boolean")
     -- two new pages right after each other should insert a new page
     if publisher.skippages then
         publisher.skippages = nil
@@ -1885,6 +1886,13 @@ function commands.new_page( layoutxml,dataxml )
         doubleopen = true
     end
     publisher.skippages = {skippagetype = skippagetype, pagetype = pagetype, doubleopen = doubleopen}
+    if force then
+        local thispage = publisher.pages[publisher.current_pagenumber]
+        publisher.dothingsbeforeoutput(thispage)
+        local n = node.vpack(thispage.pagebox)
+        publisher.shipout(n,publisher.current_pagenumber)
+        publisher.current_pagenumber = publisher.current_pagenumber + 1
+    end
 end
 
 --- NoBreak

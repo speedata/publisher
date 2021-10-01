@@ -83,6 +83,7 @@
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
+        <xs:element minOccurs="0" ref="en:DefineMatter"/>
         <xs:element minOccurs="0" ref="en:DefineTextformat"/>
         <xs:element minOccurs="0" ref="en:ForAll"/>
         <xs:element minOccurs="0" ref="en:Group"/>
@@ -131,6 +132,7 @@
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
+        <xs:element minOccurs="0" ref="en:DefineMatter"/>
         <xs:element minOccurs="0" ref="en:DefineTextformat"/>
         <xs:element minOccurs="0" ref="en:ForAll"/>
         <xs:element minOccurs="0" ref="en:Group"/>
@@ -836,6 +838,7 @@
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
+        <xs:element minOccurs="0" ref="en:DefineMatter"/>
         <xs:element minOccurs="0" ref="en:DefineTextformat"/>
         <xs:element minOccurs="0" ref="en:ForAll"/>
         <xs:element minOccurs="0" ref="en:Group"/>
@@ -2911,6 +2914,11 @@
       <xs:documentation>Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
+      <xs:attribute name="force">
+        <xs:annotation>
+          <xs:documentation>Seitenausgabe erzwingen.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="openon">
         <xs:annotation>
           <xs:documentation>Die nächste aktuelle Seite ist eine linke oder rechte Seite. Z.B. wenn auf Seite 1 ein Seitenwechsel erzwungen wird mit openon="right", dann wird Seite zwei leer und die nächste aktuelle Seite ist die Seite 3.</xs:documentation>
@@ -5225,6 +5233,7 @@
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
+        <xs:element minOccurs="0" ref="en:DefineMatter"/>
         <xs:element minOccurs="0" ref="en:DefineTextformat"/>
         <xs:element minOccurs="0" ref="en:ForAll"/>
         <xs:element minOccurs="0" ref="en:Group"/>
@@ -5387,6 +5396,7 @@
         <xs:element ref="en:DefineColor"/>
         <xs:element ref="en:DefineFontfamily"/>
         <xs:element ref="en:DefineFontalias"/>
+        <xs:element ref="en:DefineMatter"/>
         <xs:element ref="en:DefineTextformat"/>
         <xs:element ref="en:ForAll"/>
         <xs:element ref="en:Group"/>
