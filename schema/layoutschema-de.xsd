@@ -576,6 +576,7 @@
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
         <xs:element minOccurs="0" ref="en:DefineTextformat"/>
+        <xs:element minOccurs="0" ref="en:DefineMatter"/>
         <xs:element minOccurs="0" ref="en:Element"/>
         <xs:element minOccurs="0" ref="en:Fontface"/>
         <xs:element minOccurs="0" ref="en:ForAll"/>
@@ -1468,6 +1469,7 @@
         <xs:element ref="en:DefineFontfamily"/>
         <xs:element ref="en:DefineFontalias"/>
         <xs:element ref="en:DefineTextformat"/>
+        <xs:element ref="en:DefineMatter"/>
         <xs:element ref="en:Element"/>
         <xs:element ref="en:Fontface"/>
         <xs:element ref="en:ForAll"/>
@@ -2690,6 +2692,7 @@
         <xs:element ref="en:DefineFontfamily"/>
         <xs:element ref="en:DefineFontalias"/>
         <xs:element ref="en:DefineTextformat"/>
+        <xs:element ref="en:DefineMatter"/>
         <xs:element ref="en:Element"/>
         <xs:element ref="en:Fontface"/>
         <xs:element ref="en:ForAll"/>
@@ -3704,6 +3707,7 @@
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
         <xs:element minOccurs="0" ref="en:DefineTextformat"/>
+        <xs:element minOccurs="0" ref="en:DefineMatter"/>
         <xs:element minOccurs="0" ref="en:Element"/>
         <xs:element minOccurs="0" ref="en:Fontface"/>
         <xs:element minOccurs="0" ref="en:ForAll"/>
@@ -7693,6 +7697,7 @@
         <xs:element ref="en:DefineFontfamily"/>
         <xs:element ref="en:DefineFontalias"/>
         <xs:element ref="en:DefineTextformat"/>
+        <xs:element ref="en:DefineMatter"/>
         <xs:element ref="en:Element"/>
         <xs:element ref="en:Fontface"/>
         <xs:element ref="en:ForAll"/>
@@ -7828,6 +7833,7 @@
         <xs:element ref="en:DefineFontfamily"/>
         <xs:element ref="en:DefineFontalias"/>
         <xs:element ref="en:DefineTextformat"/>
+        <xs:element ref="en:DefineMatter"/>
         <xs:element ref="en:Element"/>
         <xs:element ref="en:Fontface"/>
         <xs:element ref="en:ForAll"/>

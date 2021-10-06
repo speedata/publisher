@@ -5313,7 +5313,8 @@ function colorbar( wd,ht,dp,color,origin )
     local rule_start = node.new("whatsit","pdf_literal")
     setprop(rule_start,"origin","colorbar")
     rule_start.mode = 0
-    rule_start.data = "q "..colors[colorname].pdfstring .. string.format(" 0 0 %g %g  re f Q ",sp_to_bp(wd),sp_to_bp(ht))
+    rule_start.data = "q "..colors[colorname].pdfstring .. string.format(" %g w 0 %g m  %g %g l s Q ",sp_to_bp(ht),sp_to_bp(ht / 2) , sp_to_bp(wd),sp_to_bp(ht / 2))
+    -- rule_start.data = "q "..colors[colorname].pdfstring .. string.format(" 0 0 %g %g  re f Q ",sp_to_bp(wd),sp_to_bp(ht))
 
     local h = node.hpack(rule_start)
     h.width = wd

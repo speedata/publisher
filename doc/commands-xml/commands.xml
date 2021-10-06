@@ -21,6 +21,7 @@
     <optional><cmd name="DefineFontfamily"/></optional>
     <optional><cmd name="DefineFontalias"/></optional>
     <optional><cmd name="DefineTextformat"/></optional>
+    <optional><cmd name="DefineMatter"></cmd></optional>
     <optional><cmd name="Element"/></optional>
     <optional><cmd name="Fontface"/></optional>
     <optional><cmd name="ForAll"/></optional>
