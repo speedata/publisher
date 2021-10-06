@@ -23,9 +23,6 @@ function new( self )
         padding_left_col  = {},
         padding_right_col = {},
         skip              = {},
-        tablefoot_last_contents,
-        tablefoot_contents,
-        tablewidth_target,
         backgroundcolumncolors  = {},
         -- The distance between column i and i+1
         column_distances = {},
@@ -950,9 +947,13 @@ function adjust_row_heights_for_rowspans(self,rowspans,area)
         end
         sum_ht = sum_ht + self.rowsep * ( rowspan.stop - rowspan.start )
         if rowspan.ht > sum_ht then
-            local excess_per_row = (rowspan.ht - sum_ht) / (rowspan.stop - rowspan.start + 1)
-            for j=rowspan.start,rowspan.stop do
-                area[j] = area[j] + excess_per_row
+            if self.vexcess == "bottom" then
+                area[rowspan.stop] = area[rowspan.stop] + rowspan.ht - sum_ht
+            else
+                local excess_per_row = (rowspan.ht - sum_ht) / (rowspan.stop - rowspan.start + 1)
+                for j=rowspan.start,rowspan.stop do
+                    area[j] = area[j] + excess_per_row
+                end
             end
         end
     end

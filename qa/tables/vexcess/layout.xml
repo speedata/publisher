@@ -1,0 +1,30 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Pageformat height="6cm" width="6cm" />
+    <Record element="data">
+        <PlaceObject>
+            <Table vexcess="bottom">
+                <Tr valign="top">
+                    <Td rowspan="3">
+                        <Image file="_samplea.pdf" width="2cm" height="3cm"></Image>
+                    </Td>
+                    <Td>
+                        <Paragraph><Value>Row A</Value></Paragraph>
+                        <Paragraph><Value>Row A</Value></Paragraph>
+                    </Td>
+                </Tr>
+                <Tr valign="top">
+                    <Td>
+                        <Paragraph><Value>Row B</Value></Paragraph>
+                    </Td>
+                </Tr>
+                <Tr valign="top">
+                    <Td>
+                        <Paragraph><Value>Row C</Value></Paragraph>
+                    </Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>

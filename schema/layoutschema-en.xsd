@@ -6273,6 +6273,38 @@
           <xs:documentation>The maximum width of the table (in grid cells or absolute values). Defaults to the available space.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="vexcess">
+        <xs:annotation>
+          <xs:documentation>Set behaviour when cells stretch in vertical direction due to rowspans.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="stretch">
+                  <xs:annotation>
+                    <xs:documentation>Stretch all table cells evenly (default).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="bottom">
+                  <xs:annotation>
+                    <xs:documentation>Only stretch the last table cell.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Tablefoot">

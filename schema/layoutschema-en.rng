@@ -5353,6 +5353,20 @@
                      <a:documentation>The maximum width of the table (in grid cells or absolute values). Defaults to the available space.</a:documentation>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="vexcess">
+                     <a:documentation>Set behaviour when cells stretch in vertical direction due to rowspans.</a:documentation>
+                     <choice>
+                        <value>stretch</value>
+                        <a:documentation>Stretch all table cells evenly (default).</a:documentation>
+                        <value>bottom</value>
+                        <a:documentation>Only stretch the last table cell.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
+                     </choice>
+                  </attribute>
+               </optional>
                <oneOrMore>
                   <interleave>
                      <optional>

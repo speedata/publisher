@@ -6273,6 +6273,38 @@
           <xs:documentation>Der Bereich, den die Tabelle (maximal) im Raster belegt. Angabe in Rasterzellen oder absoluten Längenangaben. Voreinstellung ist der verfügbare Platz.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="vexcess">
+        <xs:annotation>
+          <xs:documentation>Setze das Verhalten wenn Zeilen vertikal vergrößert werden wegen eines Rowspans.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="stretch">
+                  <xs:annotation>
+                    <xs:documentation>Vergrößere alle Tabellenzellen gleichmäßig (Voreinstellung).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="bottom">
+                  <xs:annotation>
+                    <xs:documentation>Nur die letzte Tabellenzelle vergrößern.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Tablefoot">

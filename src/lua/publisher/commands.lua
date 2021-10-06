@@ -3514,6 +3514,7 @@ function commands.table( layoutxml,dataxml,options )
     local rowdistance    = publisher.read_attribute(layoutxml,dataxml,"leading",         "length")
     local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",      "rawstring", "__leftaligned")
     local width          = publisher.read_attribute(layoutxml,dataxml,"width",           "length")
+    local vexcess        = publisher.read_attribute(layoutxml,dataxml,"vexcess",         "rawstring", "stretch")
     if fontname then warning("Table/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     -- FIXME: leading -> row distance or so
@@ -3581,6 +3582,7 @@ function commands.table( layoutxml,dataxml,options )
     tabular.colsep         = columndistance
     tabular.rowsep         = rowdistance
     tabular.autostretch    = autostretch
+    tabular.vexcess        = vexcess
     tabular.bordercollapse = collapse == "collapse"
 
     if columndistance > 0 then tabular.bordercollapse_horizontal = false end

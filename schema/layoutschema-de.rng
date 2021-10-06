@@ -5353,6 +5353,20 @@
                      <a:documentation>Der Bereich, den die Tabelle (maximal) im Raster belegt. Angabe in Rasterzellen oder absoluten Längenangaben. Voreinstellung ist der verfügbare Platz.</a:documentation>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="vexcess">
+                     <a:documentation>Setze das Verhalten wenn Zeilen vertikal vergrößert werden wegen eines Rowspans.</a:documentation>
+                     <choice>
+                        <value>stretch</value>
+                        <a:documentation>Vergrößere alle Tabellenzellen gleichmäßig (Voreinstellung).</a:documentation>
+                        <value>bottom</value>
+                        <a:documentation>Nur die letzte Tabellenzelle vergrößern.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
+                     </choice>
+                  </attribute>
+               </optional>
                <oneOrMore>
                   <interleave>
                      <optional>

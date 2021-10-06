@@ -8418,6 +8418,30 @@
         <para>Der Bereich, den die Tabelle (maximal) im Raster belegt. Angabe in Rasterzellen oder absoluten Längenangaben. Voreinstellung ist der verfügbare Platz.</para>
       </description>
     </attribute>
+    <attribute en="vexcess" optional="yes" allowxpath="yes" since="4.5.12">
+      <description xml:lang="en">
+        <para>Set behaviour when cells stretch in vertical direction due to rowspans.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze das Verhalten wenn Zeilen vertikal vergrößert werden wegen eines Rowspans.</para>
+      </description>
+      <choice en="stretch">
+        <description xml:lang="en">
+          <para>Stretch all table cells evenly (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Vergrößere alle Tabellenzellen gleichmäßig (Voreinstellung).</para>
+        </description>
+      </choice>
+      <choice en="bottom">
+        <description xml:lang="en">
+          <para>Only stretch the last table cell.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Nur die letzte Tabellenzelle vergrößern.</para>
+        </description>
+      </choice>
+    </attribute>
     <remark xml:lang="en">
       <para>The table cells may contain Paragraphs, Images and other objects that are allowed in <cmd name="PlaceObject"/>.</para>
     </remark>
