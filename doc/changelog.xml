@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.5">
+    <entry version="4.5.13" date="2021-10-07">
+        <en>Include color profile in distribution (#344).</en>
+        <de>Farbprofil in die Distribution einbinden (#344).</de>
+    </entry>
     <entry version="4.5.12" date="2021-10-06">
         <en>Internal/Tablerule: replace filled rectangular by PDF line.</en>
         <de>Intern/Tablerule: ersetze gefülltes Rechteck durch PDF-Linie.</de>
