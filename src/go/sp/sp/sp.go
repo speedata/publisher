@@ -206,7 +206,7 @@ func init() {
 		srcdir = filepath.Join(installdir, "src")
 		os.Setenv("PUBLISHER_BASE_PATH", strings.Join([]string{
 			filepath.Join(srcdir, "lua"),
-			filepath.Join(srcdir, "other"),
+			filepath.Join(srcdir, "colorprofiles"),
 			filepath.Join(srcdir, "tex"),
 			filepath.Join(srcdir, "metapost"),
 			filepath.Join(srcdir, "hyphenation")}, string(os.PathListSeparator)))
