@@ -106,6 +106,9 @@
                      <ref name="e_Bookmark"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_ClearPage"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_DefineColor"></ref>
                   </optional>
                   <optional>
@@ -226,6 +229,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Bookmark"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_ClearPage"></ref>
                   </optional>
                   <optional>
                      <ref name="e_DefineColor"></ref>
@@ -650,6 +656,9 @@
                      <ref name="e_Br"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_ClearPage"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Color"></ref>
                   </optional>
                   <optional>
@@ -874,6 +883,43 @@
          <empty></empty>
       </element>
    </define>
+   <define name="e_ClearPage">
+      <element name="ClearPage">
+         <a:documentation>Finishes the current page.</a:documentation>
+         <optional>
+            <attribute name="force">
+               <a:documentation>Force the creation of a new page when multiple consecutive ClearPage commands occur.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="matter">
+               <a:documentation>Set the matter for the new page.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="openon">
+               <a:documentation>The next current page will be a left or a right page. E.g. when on page 1 and openon=&#34;right&#34; then page 2 is empty and the next current page is 3.</a:documentation>
+               <choice>
+                  <value>left</value>
+                  <a:documentation>The next objects will be placed on a left page.</a:documentation>
+                  <value>right</value>
+                  <a:documentation>The next objects will be placed on a right page.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="pagetype">
+               <a:documentation>The name of the next page type that should be used. If an InsertPage follows the NextPage, the pagetype is used for the first inserted page.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="skippagetype">
+               <a:documentation>The pagetype of the blank page if inserted (see the attribute openon).</a:documentation>
+            </attribute>
+         </optional>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Color">
       <element name="Color">
          <a:documentation>Switch to another text color</a:documentation>
@@ -1013,6 +1059,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Bookmark"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_ClearPage"></ref>
                   </optional>
                   <optional>
                      <ref name="e_DefineColor"></ref>
@@ -1632,6 +1681,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Br"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_ClearPage"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Color"></ref>
@@ -2711,6 +2763,9 @@
                         <ref name="e_Br"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_ClearPage"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Color"></ref>
                      </optional>
                      <optional>
@@ -3020,7 +3075,8 @@
    </define>
    <define name="e_NewPage">
       <element name="NewPage">
-         <a:documentation>Finishes the current page and creates a new one (only if new material for the page is available).</a:documentation>
+         <a:documentation>Deprecated since 4.5.14. Use ClearPage (perhaps with option force=&#34;yes&#34;).
+      Finish the current page and creates a new one (only if new material for the page is available).</a:documentation>
          <optional>
             <attribute name="force">
                <a:documentation>Force the shipout of page now.</a:documentation>
@@ -3417,6 +3473,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Br"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_ClearPage"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Color"></ref>
@@ -4004,7 +4063,7 @@
                   </attribute>
                </optional>
                <attribute name="name">
-                  <a:documentation>Name of the master page. It is for informational purpose and as a selection for NewPage.</a:documentation>
+                  <a:documentation>Name of the master page. It is for informational purpose and as a selection for ClearPage.</a:documentation>
                </attribute>
                <optional>
                   <attribute name="width">
@@ -4560,6 +4619,9 @@
                      <ref name="e_Bookmark"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_ClearPage"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_DefineColor"></ref>
                   </optional>
                   <optional>
@@ -4775,6 +4837,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Bookmark"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_ClearPage"></ref>
                      </optional>
                      <optional>
                         <ref name="e_DefineColor"></ref>
@@ -6340,6 +6405,9 @@
                         <ref name="e_Br"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_ClearPage"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Color"></ref>
                      </optional>
                      <optional>
@@ -6627,6 +6695,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Br"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_ClearPage"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Color"></ref>

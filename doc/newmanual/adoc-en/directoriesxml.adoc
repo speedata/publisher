@@ -119,7 +119,7 @@ Which is output with the following layout:
         </Paragraph>
       </Textblock>
     </PlaceObject>
-    <NewPage/>
+    <ClearPage/>
   </Record>
 </Layout>
 -------------------------------------------------------------------------------
@@ -171,7 +171,7 @@ The new section `data` now looks like this and is inserted at position 2 in the 
     <LoadDataset name="toc"/>
     <SetVariable variable="entries"/>
     <ProcessNode select="chapter"/>
-    <SaveDataset filename="toc" elementname="tableofcontents"
+    <SaveDataset name="toc" elementname="tableofcontents"
                  select="$entries"/>
   </Record>
 -------------------------------------------------------------------------------
@@ -193,7 +193,7 @@ This has to be added to the layout rules (position 1 in the layout above):
         </ForAll>
       </Table>
     </PlaceObject>
-    <NewPage/>
+    <ClearPage/>
   </Record>
 -------------------------------------------------------------------------------
 

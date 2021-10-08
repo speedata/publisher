@@ -118,7 +118,7 @@ The `chapter` section stores the page number and title of the chapter and prints
         </Loop>
       </Text>
     </Output>
-    <NewPage />
+    <ClearPage />
   </Record>
 -------------------------------------------------------------------------------
 <1> The variable `chapterXtitle' behaves like an array by changing X in the variable name.

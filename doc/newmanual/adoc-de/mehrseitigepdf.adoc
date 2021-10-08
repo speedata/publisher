@@ -19,7 +19,7 @@ So ist das Muster, alle Seiten einer PDF-Datei einzubinden, wie folgt:
       <PlaceObject column="0mm" row="0mm">
         <Image file="{$myfile}" width="210mm" page="{$page}"/>
       </PlaceObject>
-      <NewPage/>
+      <ClearPage/>
     </Loop>
   </Record>
 

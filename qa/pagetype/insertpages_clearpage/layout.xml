@@ -1,0 +1,66 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  version="3.7.12">
+
+  <Pageformat height="4cm" width="12cm" />
+  <SetGrid height="12pt" nx="10"/>
+  <Pagetype name="empty" test="false()">
+    <AtPageShipout>
+      <PlaceObject>
+          <Textblock>
+              <Paragraph>
+                  <Value>foo</Value>
+              </Paragraph>
+          </Textblock>
+      </PlaceObject>
+    </AtPageShipout>
+  </Pagetype>
+  <Pagetype name="a" test="true()">
+    <Margin left="1cm" right="1cm" top="24pt" bottom="24pt"/>
+    <!-- The area 'text' is two rows shorter than the page so we can
+          place the page number at the bottom without overlapping -->
+    <PositioningArea name="text">
+      <PositioningFrame height="{sd:number-of-rows() - 2}" width="{sd:number-of-columns() }" column="1" row="1" />
+    </PositioningArea>
+    <AtPageShipout>
+      <!-- page number -->
+      <PlaceObject column="1" row="{sd:number-of-rows()}" valign="bottom" allocate="no">
+        <Table  stretch="max">
+          <Tr>
+            <Td align="{if (sd:even(sd:current-page())) then 'left' else 'right'}">
+              <Paragraph>
+                <Value select="sd:current-page()" />
+              </Paragraph>
+            </Td>
+          </Tr>
+        </Table>
+      </PlaceObject>
+    </AtPageShipout>
+  </Pagetype>
+
+  <Record element="chapter">
+    <PlaceObject>
+        <Textblock>
+            <Paragraph>
+                <Value select="."/>
+            </Paragraph>
+        </Textblock>
+    </PlaceObject>
+    <ClearPage />
+  </Record>
+
+  <Record element="data">
+    <ClearPage skippagetype="empty" pagetype="empty" openon="right" force="yes"/>
+    <InsertPages name="insert" pages="1"  />
+    <ProcessNode select="chapter" />
+    <SavePages name="insert">
+      <PlaceObject>
+          <Textblock>
+              <Paragraph>
+                  <Value>Inserted page</Value>
+              </Paragraph>
+          </Textblock>
+      </PlaceObject>
+    </SavePages>
+  </Record>
+</Layout>

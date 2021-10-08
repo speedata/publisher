@@ -1247,6 +1247,7 @@ function write_colorprofile()
         if not path then
             err("colorprofile not found %s",tostring(colorprofile_filename))
         else
+            log("colorprofile found: %s",path)
             currentcolorprofile.objectid = pdf.immediateobj("streamfile",path,  string.format("/N %d",currentcolorprofile.colors or 4))
         end
     end

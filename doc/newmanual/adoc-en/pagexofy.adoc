@@ -36,7 +36,7 @@ The following example creates some pages with output in the form Page 1 of ??. T
         </Textblock>
       </PlaceObject>
       <SetVariable variable="lastpage" select="sd:current-page()"/>
-      <NewPage/>
+      <ClearPage/>
     </Loop>
   </Record>
 </Layout>
@@ -113,7 +113,7 @@ The complete example now looks like this:
         </Textblock>
       </PlaceObject>
       <SetVariable variable="lastpage" select="sd:current-page()"/>
-      <NewPage/>
+      <ClearPage/>
     </Loop>
     <!--  Now we know the total number of pages  -->
     <SetVariable variable="attrPagenumber">

@@ -120,7 +120,7 @@ Die mit dem folgenden Layout ausgegeben wird:
         </Paragraph>
       </Textblock>
     </PlaceObject>
-    <NewPage/>
+    <ClearPage/>
   </Record>
 </Layout>
 -------------------------------------------------------------------------------
@@ -176,7 +176,7 @@ Der neue Abschnitt `data` sieht nun so aus und wird an die Stelle 2 im Layout ob
     <LoadDataset name="toc"/>
     <SetVariable variable="entries"/>
     <ProcessNode select="chapter"/>
-    <SaveDataset filename="toc" elementname="tableofcontents"
+    <SaveDataset name="toc" elementname="tableofcontents"
                  select="$entries"/>
   </Record>
 -------------------------------------------------------------------------------
@@ -202,7 +202,7 @@ Das muss noch in das Layoutregelwerk eingefügt werden (Stelle 1 im Layout oben)
         </ForAll>
       </Table>
     </PlaceObject>
-    <NewPage/>
+    <ClearPage/>
   </Record>
 -------------------------------------------------------------------------------
 

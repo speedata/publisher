@@ -457,6 +457,20 @@ function commands.circle( layoutxml,dataxml )
     return publisher.circle(radiusx,radiusy,colorname,framecolorname,rulewidth_sp)
 end
 
+--- Clearpage
+--- ---------
+--- Finishes the current page
+function commands.clearpage( layoutxml,dataxml)
+    local matter = publisher.read_attribute(layoutxml,dataxml,"matter","rawstring")
+    local pagetype     = publisher.read_attribute(layoutxml,dataxml,"pagetype","rawstring")
+    local skippagetype = publisher.read_attribute(layoutxml,dataxml,"skippagetype","rawstring")
+    local openon       = publisher.read_attribute(layoutxml,dataxml,"openon","rawstring")
+    local force        = publisher.read_attribute(layoutxml,dataxml,"force", "boolean")
+
+    publisher.clearpage({matter = matter,pagetype = pagetype, openon = openon, skippagetype = skippagetype,force = force})
+end
+
+
 --- Color
 --- -----
 --- Set the color of the enclosed text.
@@ -1471,7 +1485,13 @@ function commands.insert_pages( layoutxml,dataxml )
     local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     local pages          = publisher.read_attribute(layoutxml,dataxml,"pages","number")
 
-    publisher.setup_page(publisher.current_pagenumber)
+    local current_pagenumber = publisher.current_pagenumber
+
+    local tmp = publisher.pages[publisher.current_pagenumber]
+    if not tmp and not publisher.pages_shippedout[current_pagenumber - 1] then
+        publisher.setup_page(publisher.current_pagenumber)
+        current_pagenumber = publisher.current_pagenumber
+    end
 
     local thispagestore = publisher.pagestore[pagestore_name]
     if not thispagestore then
@@ -1480,7 +1500,6 @@ function commands.insert_pages( layoutxml,dataxml )
             err("For future mode please provide the number of pages to insert.")
             return
         end
-        local current_pagenumber = publisher.current_pagenumber
         local thispage = publisher.pages[current_pagenumber]
         local savenextpage = publisher.nextpage
         publisher.nextpage = nil
@@ -1876,10 +1895,12 @@ function commands.new_page( layoutxml,dataxml )
     local skippagetype = publisher.read_attribute(layoutxml,dataxml,"skippagetype","rawstring")
     local openon       = publisher.read_attribute(layoutxml,dataxml,"openon","rawstring")
     local force        = publisher.read_attribute(layoutxml,dataxml,"force", "boolean")
+    warning("NewPage is deprecated and will be removed in version 5.\nPlease use ClearPage instead.\nSee https://github.com/speedata/publisher/discussions/345 for details.")
+
     -- two new pages right after each other should insert a new page
     if publisher.skippages then
         publisher.skippages = nil
-        publisher.new_page()
+        publisher.new_page("new_page")
     end
     local doubleopen = false
     if ( openon == "right" and math.fmod(publisher.current_pagenumber,2) == 1 ) or ( openon == "left" and math.fmod(publisher.current_pagenumber,2) == 0 ) then
@@ -3095,7 +3116,6 @@ end
 --- ---------
 --- Save pages for later restore
 function commands.save_pages( layoutxml,dataxml )
-    -- w("save_pages")
     local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","rawstring")
     local nextpagetype   = publisher.read_attribute(layoutxml,dataxml,"pagetype", "rawstring")
 
@@ -3105,7 +3125,7 @@ function commands.save_pages( layoutxml,dataxml )
         publisher.current_pagestore_name = pagestore_name
         publisher.pagestore[pagestore_name] = {}
         local tab = publisher.dispatch(layoutxml,dataxml)
-        publisher.new_page()
+        publisher.new_page("save_pages")
         for i=save_current_pagenumber,publisher.current_pagenumber - 1 do
             publisher.pages[i] = nil
         end
@@ -3117,7 +3137,7 @@ function commands.save_pages( layoutxml,dataxml )
         -- forward mode. First insert pages then save pages
         -- Run NewPage if the current page is not finished
         if publisher.page_initialized_p(publisher.current_pagenumber) then
-            publisher.new_page()
+            publisher.new_page("save_pages forward mode")
         end
 
         local save_current_pagenumber = publisher.current_pagenumber
@@ -3127,7 +3147,6 @@ function commands.save_pages( layoutxml,dataxml )
         local oldbookmarkspos = ps[3]
         local bookmarkscount = #publisher.bookmarks
         publisher.current_pagenumber = location
-
         -- We need to set the destination before the pages are created
         -- since the callback for page ordering is called after
         -- each shipout.
@@ -3148,7 +3167,7 @@ function commands.save_pages( layoutxml,dataxml )
 
         -- for next pages, if any:
         ppt[save_current_pagenumber] = save_current_pagenumber
-        publisher.new_page()
+        publisher.new_page("save_pages forward mode 2")
 
         -- If bookmarks are used in SavePages, we need to insert them at the
         -- correct location (InsertPages)

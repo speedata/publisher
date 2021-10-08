@@ -80,6 +80,7 @@
         <xs:element minOccurs="0" ref="en:AddSearchpath"/>
         <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Bookmark"/>
+        <xs:element minOccurs="0" ref="en:ClearPage"/>
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
@@ -129,6 +130,7 @@
         <xs:element minOccurs="0" ref="en:AddSearchpath"/>
         <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Bookmark"/>
+        <xs:element minOccurs="0" ref="en:ClearPage"/>
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
@@ -568,6 +570,7 @@
         <xs:element minOccurs="0" ref="en:Bookmark"/>
         <xs:element minOccurs="0" ref="en:Box"/>
         <xs:element minOccurs="0" ref="en:Br"/>
+        <xs:element minOccurs="0" ref="en:ClearPage"/>
         <xs:element minOccurs="0" ref="en:Color"/>
         <xs:element minOccurs="0" ref="en:Column"/>
         <xs:element minOccurs="0" ref="en:Columns"/>
@@ -674,6 +677,52 @@
       <xs:attribute name="rulewidth">
         <xs:annotation>
           <xs:documentation>The thickness of the border that is drawn around the object.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ClearPage">
+    <xs:annotation>
+      <xs:documentation>Finishes the current page.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name="force">
+        <xs:annotation>
+          <xs:documentation>Force the creation of a new page when multiple consecutive ClearPage commands occur.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="matter">
+        <xs:annotation>
+          <xs:documentation>Set the matter for the new page.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="openon">
+        <xs:annotation>
+          <xs:documentation>The next current page will be a left or a right page. E.g. when on page 1 and openon="right" then page 2 is empty and the next current page is 3.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="left">
+              <xs:annotation>
+                <xs:documentation>The next objects will be placed on a left page.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="right">
+              <xs:annotation>
+                <xs:documentation>The next objects will be placed on a right page.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="pagetype">
+        <xs:annotation>
+          <xs:documentation>The name of the next page type that should be used. If an InsertPage follows the NextPage, the pagetype is used for the first inserted page.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="skippagetype">
+        <xs:annotation>
+          <xs:documentation>The pagetype of the blank page if inserted (see the attribute openon).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
@@ -836,6 +885,7 @@
         <xs:element minOccurs="0" ref="en:AddSearchpath"/>
         <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Bookmark"/>
+        <xs:element minOccurs="0" ref="en:ClearPage"/>
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
@@ -1461,6 +1511,7 @@
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Box"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:ClearPage"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>
@@ -2684,6 +2735,7 @@
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Box"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:ClearPage"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>
@@ -2914,7 +2966,8 @@
   </xs:element>
   <xs:element name="NewPage">
     <xs:annotation>
-      <xs:documentation>Finishes the current page and creates a new one (only if new material for the page is available).</xs:documentation>
+      <xs:documentation>Deprecated since 4.5.14. Use ClearPage (perhaps with option force="yes").
+      Finish the current page and creates a new one (only if new material for the page is available).</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:attribute name="force">
@@ -3699,6 +3752,7 @@
         <xs:element minOccurs="0" ref="en:Bookmark"/>
         <xs:element minOccurs="0" ref="en:Box"/>
         <xs:element minOccurs="0" ref="en:Br"/>
+        <xs:element minOccurs="0" ref="en:ClearPage"/>
         <xs:element minOccurs="0" ref="en:Color"/>
         <xs:element minOccurs="0" ref="en:Column"/>
         <xs:element minOccurs="0" ref="en:Columns"/>
@@ -4582,7 +4636,7 @@
       </xs:attribute>
       <xs:attribute name="name" use="required">
         <xs:annotation>
-          <xs:documentation>Name of the master page. It is for informational purpose and as a selection for NewPage.</xs:documentation>
+          <xs:documentation>Name of the master page. It is for informational purpose and as a selection for ClearPage.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="width">
@@ -5234,6 +5288,7 @@
         <xs:element minOccurs="0" ref="en:AddSearchpath"/>
         <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Bookmark"/>
+        <xs:element minOccurs="0" ref="en:ClearPage"/>
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
@@ -5397,6 +5452,7 @@
         <xs:element ref="en:AddSearchpath"/>
         <xs:element ref="en:AttachFile"/>
         <xs:element ref="en:Bookmark"/>
+        <xs:element ref="en:ClearPage"/>
         <xs:element ref="en:DefineColor"/>
         <xs:element ref="en:DefineFontfamily"/>
         <xs:element ref="en:DefineFontalias"/>
@@ -7689,6 +7745,7 @@
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Box"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:ClearPage"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>
@@ -7825,6 +7882,7 @@
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Box"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:ClearPage"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>

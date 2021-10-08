@@ -21,6 +21,7 @@ ifndef::backend-docbook5[]
 <<cmd-br,Br>>  +
 <<cmd-case,Case>>  +
 <<cmd-circle,Circle>>  +
+<<cmd-clearpage,ClearPage>>  +
 <<cmd-color,Color>>  +
 <<cmd-column,Column>>  +
 <<cmd-columns,Columns>>  +
@@ -203,12 +204,17 @@ include::ref/case.adoc[]
 
 The section <<ch-programming-case,programming>>.
 
-
 include::ref/circle.adoc[]
 
 == See also
 
 The section about <<ch-outputtingobjects-circle,`<Circle>` in the basics chapter>>.
+
+include::ref/clearpage.adoc[]
+
+== See also
+
+<<ch-pagetypes-clearpage>>
 
 include::ref/color.adoc[]
 
@@ -456,7 +462,7 @@ include::ref/newpage.adoc[]
 
 == See also
 
-<<ch-pagetypes-newpage>>
+<<ch-pagetypes-clearpage>>
 
 
 include::ref/nextframe.adoc[]

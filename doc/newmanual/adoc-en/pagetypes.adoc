@@ -105,12 +105,12 @@ The following is an example of a page footer.
 .Page with footer
 image::fusszeileseitentyp.png[width=100%]
 
-[[ch-pagetypes-newpage]]
-== NewPage
+[[ch-pagetypes-clearpage]]
+== ClearPage
 
-With the command `<NewPage>` you can specify which page type should be selected for the next page, even if the condition (`test`) for `<Pagetype>' does not return _true_.
+With the command `<ClearPage>` you can specify which page type should be selected for the next page, even if the condition (`test`) for `<Pagetype>' does not return _true_.
 
-The following example defines two page types, a template “Standard”, which is always used and a template “Special”, which is explicitly selected with `<NewPage>`.
+The following example defines two page types, a template “Standard”, which is always used and a template “Special”, which is explicitly selected with `<ClearPage>`.
 
 
 [source, xml]
@@ -136,7 +136,7 @@ The following example defines two page types, a template “Standard”, which i
         </Paragraph>
       </Textblock>
     </PlaceObject>
-    <NewPage pagetype="Special" openon="right" />
+    <ClearPage pagetype="Special" openon="right" />
     <PlaceObject>
       <Textblock>
         <Paragraph>

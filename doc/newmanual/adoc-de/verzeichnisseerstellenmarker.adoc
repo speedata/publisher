@@ -77,7 +77,7 @@ Die mit dem folgenden Layout ausgegeben wird:
         </Paragraph>
       </Textblock>
     </PlaceObject>
-    <NewPage/>
+    <ClearPage/>
   </Record>
 </Layout>
 -------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ Der Publisher ordnet nun die Kapitel der Seitenzahl zu. Man kann nun das Verzeic
       </ForAll>
     </Table>
   </PlaceObject>
-  <NewPage/>
+  <ClearPage/>
 -------------------------------------------------------------------------------
 <1> In einem weiteren Durchlauf stehen die Seitenzahlen zur Verfügung, bevor die eigentlichen Kapitel auf die Folgeseiten geschrieben werden.
 

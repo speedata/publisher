@@ -249,6 +249,10 @@ current_pagenumber = 1
 
 pages = {}
 
+-- page n shipped out to PDF?
+pages_shippedout = {}
+
+
 -- CSS properties. Use `:matches(tbl)` to find a matching rule. `tbl` has the following structure: `{element=..., id=..., class=... }`
 css = do_luafile("css.lua"):new()
 
@@ -604,6 +608,7 @@ local dispatch_table = {
     Box                     = commands.box,
     Br                      = commands.br,
     Circle                  = commands.circle,
+    ClearPage               = commands.clearpage,
     Color                   = commands.color,
     Column                  = commands.column,
     Columns                 = commands.columns,
@@ -1530,14 +1535,11 @@ function get_page_labels_str()
     end
 
     local prevmatter
-    local prefix
-    local label
 
     local tmp = {}
     local c = 0
     -- reset, there might be more pages in the previous run.
     visible_pagenumbers = {}
-
     for i = 1,#pagelabels do
         c = c + 1
         local p = pagelabels[i]
@@ -1600,7 +1602,6 @@ do
         end
     end
 
-
     -- called once for each page
     function insert_struct_elements( nodelist,pagenumber )
         structelementobjects = {}
@@ -1617,6 +1618,7 @@ do
 end
 
 function shipout(nodelist, pagenumber )
+    pages_shippedout[pagenumber] = true
     local cp = pages[pagenumber]
     local colorname = cp.defaultcolor
     if not matters[cp.matter] then
@@ -2095,23 +2097,9 @@ function detect_pagetype(pagenumber)
     return false
 end
 
--- skippages are set in commands.new_page if openon="..."
-skippages = nil
---- _Must_ be called before something can be put on the page. Looks for hooks to be run before page creation.
-function setup_page(pagenumber,fromwhere)
-    if current_group then return end
-    if skippages then
-        local tmp = skippages
-        skippages = nil
-        if tmp.doubleopen then
-            new_page()
-            nextpage = tmp.skippagetype
-        end
-        new_page()
-        nextpage = tmp.pagetype
-    end
-
+function initialize_page(pagenumber)
     local thispage
+
     if pagenumber then
         thispage = pagenumber
         if pages[pagenumber] ~= nil then
@@ -2284,6 +2272,26 @@ function setup_page(pagenumber,fromwhere)
         end
     end
     current_page = cp
+
+end
+
+-- skippages are set in commands.new_page if openon="..."
+skippages = nil
+--- _Must_ be called before something can be put on the page. Looks for hooks to be run before page creation.
+function setup_page(pagenumber,fromwhere)
+    if current_group then return end
+    if skippages then
+        local tmp = skippages
+        skippages = nil
+        if tmp.doubleopen then
+            new_page("setup_page - skippages doubleopen")
+            nextpage = tmp.skippagetype
+        end
+        new_page("setup_page - skippages 2")
+        nextpage = tmp.pagetype
+    end
+
+     initialize_page(pagenumber)
 end
 
 --- Switch to the next frame in the given area.
@@ -2295,7 +2303,7 @@ function next_area( areaname, grid )
         return
     end
     if current_framenumber >= grid:number_of_frames(areaname) then
-        new_page()
+        new_page("next_area")
     else
         grid:set_framenumber(areaname, current_framenumber + 1)
     end
@@ -2304,7 +2312,8 @@ end
 
 --- Switch to a new page and ship out the current page.
 --- This new page is only created if something is typeset on it.
-function new_page()
+function new_page(from)
+    -- w("new page from %s",from or "-")
     if pagebreak_impossible then
         return
     end
@@ -2325,6 +2334,51 @@ function new_page()
         shipout(n,current_pagenumber)
     end
     current_pagenumber = current_pagenumber + 1
+end
+
+function clearpage(options)
+    local thispage = pages[current_pagenumber]
+
+    if thispage then
+        dothingsbeforeoutput(thispage)
+        local n = node.vpack(pages[current_pagenumber].pagebox)
+        shipout(n,current_pagenumber)
+        current_pagenumber = current_pagenumber + 1
+    else
+        if options.force then
+            initialize_page()
+            local tmp = pages[current_pagenumber]
+            dothingsbeforeoutput(tmp)
+            local n = node.vpack(pages[current_pagenumber].pagebox)
+            shipout(n,current_pagenumber)
+            current_pagenumber = current_pagenumber + 1
+        end
+    end
+
+    local doubleopen = false
+    if ( options.openon == "right" and math.fmod(current_pagenumber,2) == 0 ) or ( options.openon == "left" and math.fmod(current_pagenumber,2) == 1 ) then
+        doubleopen = true
+    end
+
+    if doubleopen then
+        -- shipout dummy page
+        if options.skippagetype then
+            nextpage = options.skippagetype
+        end
+        initialize_page()
+        local tmp = pages[current_pagenumber]
+        dothingsbeforeoutput(tmp)
+        local n = node.vpack(pages[current_pagenumber].pagebox)
+        shipout(n,current_pagenumber)
+        current_pagenumber = current_pagenumber + 1
+    end
+
+    if options.matter then
+        xpath.set_variable("_matter",options.matter)
+    end
+    if options.pagetype then
+        nextpage = options.pagetype
+    end
 end
 
 -- a,b are both arrays of 6 numbers

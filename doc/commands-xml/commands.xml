@@ -13,6 +13,7 @@
     <optional><cmd name="Bookmark"/></optional>
     <optional><cmd name="Box"/></optional>
     <optional><cmd name="Br"/></optional>
+    <optional><cmd name="ClearPage"/></optional>
     <optional><cmd name="Color"/></optional>
     <optional><cmd name="Column"/></optional>
     <optional><cmd name="Columns"/></optional>
@@ -79,6 +80,7 @@
     <optional><cmd name="AddSearchpath"/></optional>
     <optional><cmd name="AttachFile"/></optional>
     <optional><cmd name="Bookmark"/></optional>
+    <optional><cmd name="ClearPage"/></optional>
     <optional><cmd name="DefineColor"/></optional>
     <optional><cmd name="DefineFontfamily"/></optional>
     <optional><cmd name="DefineFontalias"/></optional>
@@ -673,7 +675,7 @@
       </Paragraph>
     </Textblock>
   </PlaceObject>
-  <NewPage/>
+  <ClearPage/>
   <Message select="sd:pagenumber('textstart')"></Message>
 </Record>
 ]]></listing>
@@ -706,7 +708,7 @@
       </Paragraph>
     </Textblock>
   </PlaceObject>
-  <NewPage/>
+  <ClearPage/>
   <Message select="sd:pagenumber('Textanfang')"/>
 </Record>
 ]]></listing>
@@ -1674,6 +1676,114 @@
       <image file="ref-circlewithborder.png" width="30%"/>
     </example>
     <seealso><cmd name="DefineColor"/>, <cmd name="PlaceObject"/></seealso>
+  </command>
+  <command en="ClearPage" since="4.5.14" >
+    <description xml:lang="en">
+      <para>Finishes the current page. </para>
+    </description>
+    <description xml:lang="de">
+      <para>Beendet die Ausgabe auf der aktuellen Seite.</para>
+    </description>
+    <childelements/>
+    <attribute en="force" optional="yes" allowxpath="yes">
+      <description xml:lang="en">
+        <para>Force the creation of a new page when multiple consecutive <cmd name="ClearPage"/> commands occur.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Seitenausgabe erzwingen, wenn mehrere <cmd name="ClearPage"/> Befehle hintereinander stehen.</para>
+      </description>
+    </attribute>
+    <attribute en="matter" optional="yes" allowxpath="yes">
+      <description xml:lang="en">
+        <para>Set the matter for the new page.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Legt den Abschnitt (matter) für die neue Seite fest.</para>
+      </description>
+    </attribute>
+    <attribute en="openon" optional="yes">
+      <description xml:lang="en">
+        <para>The next current page will be a left or a right page. E.g. when on page 1 and openon="right" then page 2 is empty and the next current page is 3.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die nächste aktuelle Seite ist eine linke oder rechte Seite. Z.B. wenn auf Seite 1 ein Seitenwechsel erzwungen wird mit openon="right", dann wird Seite zwei leer und die nächste aktuelle Seite ist die Seite 3.</para>
+      </description>
+      <choice en="left">
+        <description xml:lang="en">
+          <para>The next objects will be placed on a left page.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die nächsten Objekte werden auf einer linken Seite ausgegeben.</para>
+        </description>
+      </choice>
+      <choice en="right">
+        <description xml:lang="en">
+          <para>The next objects will be placed on a right page.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die nächsten Objekte werden auf einer rechten Seite ausgegeben.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="pagetype" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The name of the next page type that should be used. If an InsertPage follows the NextPage, the pagetype is used for the first inserted page.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name des Seitentyps der für die nächste Seite genommen werden soll. Falls danach ein InsertPage folgt, wird der Seitentyp für die erste Seite von InsertPage genommen.</para>
+      </description>
+    </attribute>
+    <attribute en="skippagetype" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>The pagetype of the blank page if inserted (see the attribute openon).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Seitentyp der leeren Seite, falls sie eingefügt wird.</para>
+      </description>
+    </attribute>
+    <remark xml:lang="en">
+      <para>This used to be the command <tt>&lt;NewPage></tt>. NewPage is kept internally for backwards compatibility, but had incorrect behaviour.</para>
+    </remark>
+    <remark xml:lang="de">
+      <para>Ursprünglich war das der Befehl <tt>&lt;NewPage></tt>. NewPage wird intern vorerst weiter für Rückwärtskompatibilität beibehalten, hatte aber ein fehlerhaftes Verhalten.</para>
+    </remark>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
+    <Textblock>
+      <Paragraph><Value>This is page 1</Value></Paragraph>
+    </Textblock>
+  </PlaceObject>
+  <ClearPage openon="right"/>
+  <PlaceObject>
+    <Textblock>
+      <Paragraph><Value>And this is page 3</Value></Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Record element="data">
+  <PlaceObject>
+    <Textblock>
+      <Paragraph>
+        <Value>Das ist Seite 1</Value>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+  <ClearPage openon="right"/>
+  <PlaceObject>
+    <Textblock>
+      <Paragraph>
+        <Value>Das ist Seite 3</Value>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+]]></listing>
+    </example>
+    <seealso><cmd name="Pagetype"/></seealso>
   </command>
   <command en="Color">
     <description xml:lang="en">
@@ -4290,7 +4400,7 @@
     <example xml:lang="en">
       <listing><![CDATA[<Record element="articles">
   <LoadDataset name="toc"/>
-  <NewPage/>
+  <ClearPage/>
   <ProcessNode select="article"/>
 </Record>
 ]]></listing>
@@ -4300,7 +4410,7 @@
   <SetVariable variable="spalte" select="2" />
   <LoadDataset name="toc"/>
   <SetVariable variable="Inhalt" select="''"/>
-  <NewPage/>
+  <ClearPage/>
   <ProcessNode select="planet"/>
 </Record>]]></listing>
     </example>
@@ -4894,7 +5004,7 @@
       </Paragraph>
     </Textblock>
   </PlaceObject>
-  <NewPage/>
+  <ClearPage/>
   <Message select="sd:pagenumber('textstart')"></Message>
 </Record>
 ]]></listing>
@@ -4927,7 +5037,7 @@
       </Paragraph>
     </Textblock>
   </PlaceObject>
-  <NewPage/>
+  <ClearPage/>
   <Message select="sd:pagenumber('Textanfang')"/>
 </Record>
 ]]></listing>
@@ -5026,11 +5136,13 @@
     </example>
     <seealso/>
   </command>
-  <command en="NewPage">
+  <command en="NewPage" deprecated="yes">
     <description xml:lang="en">
-      <para>Finishes the current page and creates a new one (only if new material for the page is available).</para>
+      <para>Deprecated since 4.5.14. Use <cmd name="ClearPage"/> (perhaps with option force="yes").</para>
+      <para>Finish the current page and creates a new one (only if new material for the page is available).</para>
     </description>
     <description xml:lang="de">
+      <para>Veraltet seit Version 4.5.14. Benutze <cmd name="ClearPage"/> (ggf. mit der Option force="yes").</para>
       <para>Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</para>
     </description>
     <childelements/>
@@ -5089,7 +5201,7 @@
       <Paragraph><Value>This is page 1</Value></Paragraph>
     </Textblock>
   </PlaceObject>
-  <NewPage openon="right"/>
+  <ClearPage openon="right"/>
   <PlaceObject>
     <Textblock>
       <Paragraph><Value>And this is page 3</Value></Paragraph>
@@ -5107,7 +5219,7 @@
       </Paragraph>
     </Textblock>
   </PlaceObject>
-  <NewPage openon="right"/>
+  <ClearPage openon="right"/>
   <PlaceObject>
     <Textblock>
       <Paragraph>
@@ -6171,10 +6283,10 @@
     </attribute>
     <attribute en="name" type="text" optional="no">
       <description xml:lang="en">
-        <para>Name of the master page. It is for informational purpose and as a selection for <cmd name="NewPage"/>.</para>
+        <para>Name of the master page. It is for informational purpose and as a selection for <cmd name="ClearPage"/>.</para>
       </description>
       <description xml:lang="de">
-        <para>Name der Seitenvorlage. Der Name ist zu Informationszwecken und zur Auswahl bei <cmd name="NewPage"/>.</para>
+        <para>Name der Seitenvorlage. Der Name ist zu Informationszwecken und zur Auswahl bei <cmd name="ClearPage"/>.</para>
       </description>
     </attribute>
     <attribute en="width" optional="yes" since="4.1.13" type="length">
@@ -6215,7 +6327,7 @@
     </remark>
     <remark xml:lang="de">
       <para>Die Inhalte des Elements <cmd name="AtPageCreation"/> werden ausgeführt, sobald das erste Mal auf die Seite zugegriffen wird, bei <cmd name="AtPageShipout"/> werden die Inhalte ausgeführt, sobald
-        beispielsweise <cmd name="NewPage"/> aufgerufen wird.</para>
+        beispielsweise <cmd name="ClearPage"/> aufgerufen wird.</para>
       <para>Wenn eine neue Seite erzeugt wird, werden die Seitentypen in umgekehrter Reihenfolge geprüft. Das bedeutet, dass die allgemeineren Seitentypen zuerst definiert werden müssen, später die
         speziellen. Das ist nur dann wichtig, wenn mehrere Bedingungen »wahr« ergeben würden. </para>
     </remark>
@@ -6263,7 +6375,7 @@
   </PositioningArea>
 </Pagetype>]]></listing>
     </example>
-    <seealso><ref name="xpath"/>, <cmd name="AtPageCreation"/>,  <cmd name="AtPageShipout"/>,   <cmd name="PositioningArea"/>,  <cmd name="NewPage"/>, <cmd name="DefineMatter"/>
+    <seealso><ref name="xpath"/>, <cmd name="AtPageCreation"/>,  <cmd name="AtPageShipout"/>,   <cmd name="PositioningArea"/>,  <cmd name="ClearPage"/>, <cmd name="DefineMatter"/>
     </seealso>
   </command>
   <command en="PDFOptions" since="2.3.39">

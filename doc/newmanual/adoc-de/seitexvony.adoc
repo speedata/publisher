@@ -42,7 +42,7 @@ Das dient als Basis für die Ergänzungen.
         </Textblock>
       </PlaceObject>
       <SetVariable variable="lastpage" select="sd:current-page()"/>
-      <NewPage/>
+      <ClearPage/>
     </Loop>
   </Record>
 </Layout>
@@ -120,7 +120,7 @@ Das vollständige Beispiel sieht nun so aus:
         </Textblock>
       </PlaceObject>
       <SetVariable variable="lastpage" select="sd:current-page()"/>
-      <NewPage/>
+      <ClearPage/>
     </Loop>
     <!--  Now we know the total number of pages  -->
     <SetVariable variable="attrPagenumber">

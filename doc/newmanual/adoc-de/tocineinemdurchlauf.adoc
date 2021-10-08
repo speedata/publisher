@@ -117,7 +117,7 @@ Der Abschnitt `chapter` speichert die Seitenzahl und den Titel des Kapitels und 
         </Loop>
       </Text>
     </Output>
-    <NewPage />
+    <ClearPage />
   </Record>
 -------------------------------------------------------------------------------
 <1> Die Variable `chapterXtitle` verhält sich wie ein array durch die Veränderung von X im Variablennamen.

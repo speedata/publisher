@@ -17,7 +17,7 @@ With the `<Image>` command to include an image, you can specify the desired numb
       <PlaceObject column="0mm" row="0mm">
         <Image file="{$myfile}" width="210mm" page="{$page}"/>
       </PlaceObject>
-      <NewPage/>
+      <ClearPage/>
     </Loop>
   </Record>
 

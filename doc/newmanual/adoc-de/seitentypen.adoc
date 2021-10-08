@@ -109,12 +109,12 @@ endif::[]
 .Seite mit Fußzeile
 image::fusszeileseitentyp.png[width=100%]
 
-[[ch-seitentypen-newpage]]
-== NewPage
+[[ch-seitentypen-clearpage]]
+== ClearPage
 
-Bei dem Befehl `<NewPage>` kann angegeben werden, welcher Seitentyp für die nächste Seite ausgewählt werden soll, auch wenn die Bedingung (`test`) bei `<Pagetype>` nicht _wahr_ ergibt.
+Bei dem Befehl `<ClearPage>` kann angegeben werden, welcher Seitentyp für die nächste Seite ausgewählt werden soll, auch wenn die Bedingung (`test`) bei `<Pagetype>` nicht _wahr_ ergibt.
 
-Im folgenden Beispiel werden zwei Seitentypen definiert, eine Vorlage »Standard«, die immer genommen wird und eine Vorlage »Spezial«, die explizit mit `<NewPage>` ausgewählt wird.
+Im folgenden Beispiel werden zwei Seitentypen definiert, eine Vorlage »Standard«, die immer genommen wird und eine Vorlage »Spezial«, die explizit mit `<ClearPage>` ausgewählt wird.
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -135,15 +135,15 @@ Im folgenden Beispiel werden zwei Seitentypen definiert, eine Vorlage »Standard
     <PlaceObject>
       <Textblock>
         <Paragraph>
-          <Value>Seite 1</Value>
+          <Value>Page 1</Value>
         </Paragraph>
       </Textblock>
     </PlaceObject>
-    <NewPage pagetype="Special" openon="right" />
+    <ClearPage pagetype="Special" openon="right" />
     <PlaceObject>
       <Textblock>
         <Paragraph>
-          <Value>Seite 3</Value>
+          <Value>Page 3</Value>
         </Paragraph>
       </Textblock>
     </PlaceObject>

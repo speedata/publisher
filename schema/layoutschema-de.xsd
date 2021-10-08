@@ -80,6 +80,7 @@
         <xs:element minOccurs="0" ref="en:AddSearchpath"/>
         <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Bookmark"/>
+        <xs:element minOccurs="0" ref="en:ClearPage"/>
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
@@ -129,6 +130,7 @@
         <xs:element minOccurs="0" ref="en:AddSearchpath"/>
         <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Bookmark"/>
+        <xs:element minOccurs="0" ref="en:ClearPage"/>
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
@@ -568,6 +570,7 @@
         <xs:element minOccurs="0" ref="en:Bookmark"/>
         <xs:element minOccurs="0" ref="en:Box"/>
         <xs:element minOccurs="0" ref="en:Br"/>
+        <xs:element minOccurs="0" ref="en:ClearPage"/>
         <xs:element minOccurs="0" ref="en:Color"/>
         <xs:element minOccurs="0" ref="en:Column"/>
         <xs:element minOccurs="0" ref="en:Columns"/>
@@ -674,6 +677,52 @@
       <xs:attribute name="rulewidth">
         <xs:annotation>
           <xs:documentation>Die Dicke des Striches um den Kreis.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ClearPage">
+    <xs:annotation>
+      <xs:documentation>Beendet die Ausgabe auf der aktuellen Seite.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name="force">
+        <xs:annotation>
+          <xs:documentation>Seitenausgabe erzwingen, wenn mehrere ClearPage Befehle hintereinander stehen.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="matter">
+        <xs:annotation>
+          <xs:documentation>Legt den Abschnitt (matter) für die neue Seite fest.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="openon">
+        <xs:annotation>
+          <xs:documentation>Die nächste aktuelle Seite ist eine linke oder rechte Seite. Z.B. wenn auf Seite 1 ein Seitenwechsel erzwungen wird mit openon="right", dann wird Seite zwei leer und die nächste aktuelle Seite ist die Seite 3.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="left">
+              <xs:annotation>
+                <xs:documentation>Die nächsten Objekte werden auf einer linken Seite ausgegeben.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="right">
+              <xs:annotation>
+                <xs:documentation>Die nächsten Objekte werden auf einer rechten Seite ausgegeben.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="pagetype">
+        <xs:annotation>
+          <xs:documentation>Der Name des Seitentyps der für die nächste Seite genommen werden soll. Falls danach ein InsertPage folgt, wird der Seitentyp für die erste Seite von InsertPage genommen.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="skippagetype">
+        <xs:annotation>
+          <xs:documentation>Der Seitentyp der leeren Seite, falls sie eingefügt wird.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
@@ -836,6 +885,7 @@
         <xs:element minOccurs="0" ref="en:AddSearchpath"/>
         <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Bookmark"/>
+        <xs:element minOccurs="0" ref="en:ClearPage"/>
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
@@ -1461,6 +1511,7 @@
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Box"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:ClearPage"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>
@@ -2684,6 +2735,7 @@
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Box"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:ClearPage"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>
@@ -2914,7 +2966,8 @@
   </xs:element>
   <xs:element name="NewPage">
     <xs:annotation>
-      <xs:documentation>Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</xs:documentation>
+      <xs:documentation>Veraltet seit Version 4.5.14. Benutze ClearPage (ggf. mit der Option force="yes").
+      Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:attribute name="force">
@@ -3699,6 +3752,7 @@
         <xs:element minOccurs="0" ref="en:Bookmark"/>
         <xs:element minOccurs="0" ref="en:Box"/>
         <xs:element minOccurs="0" ref="en:Br"/>
+        <xs:element minOccurs="0" ref="en:ClearPage"/>
         <xs:element minOccurs="0" ref="en:Color"/>
         <xs:element minOccurs="0" ref="en:Column"/>
         <xs:element minOccurs="0" ref="en:Columns"/>
@@ -4582,7 +4636,7 @@
       </xs:attribute>
       <xs:attribute name="name" use="required">
         <xs:annotation>
-          <xs:documentation>Name der Seitenvorlage. Der Name ist zu Informationszwecken und zur Auswahl bei NewPage.</xs:documentation>
+          <xs:documentation>Name der Seitenvorlage. Der Name ist zu Informationszwecken und zur Auswahl bei ClearPage.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="width">
@@ -5234,6 +5288,7 @@
         <xs:element minOccurs="0" ref="en:AddSearchpath"/>
         <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Bookmark"/>
+        <xs:element minOccurs="0" ref="en:ClearPage"/>
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
@@ -5397,6 +5452,7 @@
         <xs:element ref="en:AddSearchpath"/>
         <xs:element ref="en:AttachFile"/>
         <xs:element ref="en:Bookmark"/>
+        <xs:element ref="en:ClearPage"/>
         <xs:element ref="en:DefineColor"/>
         <xs:element ref="en:DefineFontfamily"/>
         <xs:element ref="en:DefineFontalias"/>
@@ -7689,6 +7745,7 @@
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Box"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:ClearPage"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>
@@ -7825,6 +7882,7 @@
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Box"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:ClearPage"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>

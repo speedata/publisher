@@ -77,7 +77,7 @@ Which is output with the following layout:
         </Paragraph>
       </Textblock>
     </PlaceObject>
-    <NewPage/>
+    <ClearPage/>
   </Record>
 </Layout>
 -------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ The Publisher now assigns the chapters to the page number. You can now output th
       </ForAll>
     </Table>
   </PlaceObject>
-  <NewPage/>
+  <ClearPage/>
 -------------------------------------------------------------------------------
 <1> In a further pass, the page numbers are available before the actual chapters are written to the following pages.
 
