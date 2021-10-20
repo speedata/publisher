@@ -41,6 +41,7 @@ Falls es zukünftig inkompatible Änderungen gibt, sind diese in der Versionsnum
 | POST | <<api-method-v0-publish-post,`/v0/publish`>> | Sende Daten an den Server, um einen Publishing-Lauf zu starten.
 | GET | <<api-method-v0-publish-get,`/v0/publish/<id>`>> | Prüfe, ob ein Publishing-Lauf beendet ist.
 | GET | <<api-method-v0-pdf,`/v0/pdf/<id>`>> | Warte auf die Fertigstellung eines PDF.
+| POST | <<api-method-v0-pdf-post,`/v0/pdf`>> | Sende Daten und warte auf die Fertigstellung eines PDFs.
 | GET | <<api-method-v0-data,`/v0/data/<id>`>> | Lade die `data.xml` aus dem Pubishing-Lauf.
 | GET | <<api-method-v0-layout,`/v0/layout/<id>`>> | Lade die `layout.xml` aus dem Pubishing-Lauf.
 | GET | <<api-method-v0-statusfile,`/v0/statusfile/<id>`>> | Lade die Statusdatei (`publisher.status`) aus dem Publishing-Lauf.
@@ -158,6 +159,11 @@ Falls andere Fehler auftauchen:
 Das Verzeichnis mit der PDF-Datei wird nach diesem Request gelöscht, es sei denn, die URL enthält den Parameter `delete` mit dem Wert `false`.
 
 Zukünftige Versionen können weitere Felder in der JSON-Antwort haben.
+
+[[api-method-v0-pdf-post]]
+== `/v0/pdf`
+
+Ein Post-Request um Daten an den Server zu schicken und in demselben Reuqest ein PDF zu erhalten. Die Kodierung der Daten entspricht der von <<api-method-v0-publish-post,`/v0/publish`>> und die Rückgabewerte entsprechen denen aus <<api-method-v0-pdf,`/v0/pdf/<id>`>>.
 
 [[api-method-v0-pdf]]
 == `/v0/pdf/<id>`

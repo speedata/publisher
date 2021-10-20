@@ -272,21 +272,13 @@ func (s *Server) v0DeleteHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// Return the PDF from job id (given in the URL)
-func (s *Server) v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
-	// Not found? 404
-	// PDF not ready? Wait
-	// PDF has errors? 406
-	// PDF ok? 200
-	// Internal error? 500
-	id := mux.Vars(r)["id"]
-	fmt.Fprintf(s.ProtocolFile, "/v0/pdf/%s\n", id)
+func (s *Server) sendPDF(w http.ResponseWriter, r *http.Request, id string) error {
 	publishdir := filepath.Join(s.serverTemp, id)
 	fi, err := os.Stat(publishdir)
 	if err != nil && os.IsNotExist(err) || !fi.IsDir() {
 		w.WriteHeader(http.StatusNotFound)
 		fmt.Fprintln(s.ProtocolFile, err)
-		return
+		return fmt.Errorf("Internal error: file not found")
 	}
 
 	// Only if the PDF is finished, we may remove the directory
@@ -305,26 +297,19 @@ func (s *Server) v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 	data, err := ioutil.ReadFile(statusPath)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintln(s.ProtocolFile, "Internal error 008:")
-		fmt.Fprintln(s.ProtocolFile, err)
-		fmt.Fprintln(w, "Internal error 008")
-		return
+		return fmt.Errorf("Internal error 008")
 	}
 
 	v := status{}
 	err = xml.Unmarshal(data, &v)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintln(s.ProtocolFile, "Internal error 009:")
-		fmt.Fprintln(s.ProtocolFile, err)
-		fmt.Fprintln(w, "Internal error 009")
-		return
+		return fmt.Errorf("Internal error 009")
 	}
 
 	if v.Errors > 0 {
 		w.WriteHeader(http.StatusNotAcceptable)
-		fmt.Fprintf(s.ProtocolFile, "PDF with errors")
-		return
+		return fmt.Errorf("PDF with errors (id %s)", id)
 	}
 
 	filename := "publisher.pdf"
@@ -334,10 +319,7 @@ func (s *Server) v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 		name, err := ioutil.ReadFile(filepath.Join(publishdir, "jobname.txt"))
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintln(s.ProtocolFile, "Internal error 010:")
-			fmt.Fprintln(s.ProtocolFile, err)
-			fmt.Fprintln(w, "Internal error 010")
-			return
+			return fmt.Errorf("Internal error 010")
 		}
 		filename = string(name) + ".pdf"
 	}
@@ -346,6 +328,25 @@ func (s *Server) v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Disposition", fmt.Sprintf(`attachment; filename=%q`, filename))
 	w.Header().Add("Content-Transfer-Encoding", "binary")
 	http.ServeFile(w, r, filepath.Join(publishdir, "publisher.pdf"))
+	return nil
+}
+
+// Return the PDF from job id (given in the URL)
+func (s *Server) v0GetPDFHandler(w http.ResponseWriter, r *http.Request) {
+	// Not found? 404
+	// PDF not ready? Wait
+	// PDF has errors? 406
+	// PDF ok? 200
+	// Internal error? 500
+	id := mux.Vars(r)["id"]
+	fmt.Fprintf(s.ProtocolFile, "/v0/pdf/%s\n", id)
+	err := s.sendPDF(w, r, id)
+	if err != nil {
+		fmt.Fprintln(s.ProtocolFile, err.Error())
+		fmt.Fprintln(s.ProtocolFile, err)
+		fmt.Fprintln(w, err.Error())
+		return
+	}
 }
 
 // Send the given file down the stream. Change format with ?format=json/base64/... Default is the unencoded / unchanged file
@@ -420,51 +421,36 @@ func (s *Server) writeInternalError(w http.ResponseWriter) {
 	return
 }
 
-// Start a publishing process. Accepted parameter:
-//   jobname=<jobname>
-//   vars=var1=foo,var2=bar (where all but the frist = is encoded as %3D)
-func (s *Server) v0PublishHandler(w http.ResponseWriter, r *http.Request) {
+// write necessary files encoded in the POST json
+func (s *Server) writeFiles(w http.ResponseWriter, r *http.Request) (string, error) {
 	var files map[string]interface{}
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintln(s.ProtocolFile, "Internal error 011:")
-		fmt.Fprintln(s.ProtocolFile, err)
-		fmt.Fprintln(w, "Internal error 011")
-		return
+		return "", fmt.Errorf("Internal error 011")
 	}
 
 	err = json.Unmarshal(data, &files)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintln(w, "JSON error:", err)
-		return
+		return "", fmt.Errorf("JSON encoding error")
 	}
 	err = s.makePublisherTemp()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintln(s.ProtocolFile, "Internal error 012:")
-		fmt.Fprintln(s.ProtocolFile, err)
-		fmt.Fprintln(w, "Internal error 012")
-		return
+		return "", fmt.Errorf("Internal error 012")
 	}
 
 	tmpdir, err := ioutil.TempDir(s.serverTemp, "")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintln(s.ProtocolFile, "Internal error 013:")
-		fmt.Fprintln(s.ProtocolFile, err)
-		fmt.Fprintln(w, "Internal error 013")
-		return
+		return "", fmt.Errorf("Internal error 013")
 	}
 
 	id, err := filepath.Rel(s.serverTemp, tmpdir)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintln(s.ProtocolFile, "Internal error 014:")
-		fmt.Fprintln(s.ProtocolFile, err)
-		fmt.Fprintln(w, "Internal error 014")
-		return
+		return "", fmt.Errorf("Internal error 014")
 	}
 
 	fmt.Fprintf(s.ProtocolFile, "%s: Publishing request from %s at %s\n", id, r.RemoteAddr, time.Now().Format("2006-01-02 15:04:05"))
@@ -475,18 +461,12 @@ func (s *Server) v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 		f, nerr := os.Create(filepath.Join(tmpdir, k))
 		if nerr != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintln(s.ProtocolFile, "Internal error 015:")
-			fmt.Fprintln(s.ProtocolFile, nerr)
-			fmt.Fprintln(w, "Internal error 015")
-			return
+			return "", fmt.Errorf("Internal error 015")
 		}
 		_, err = io.Copy(f, b64reader)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintln(s.ProtocolFile, "Internal error 016:")
-			fmt.Fprintln(s.ProtocolFile, err)
-			fmt.Fprintln(w, "Internal error 016")
-			return
+			return "", fmt.Errorf("Internal error 016")
 		}
 		f.Close()
 	}
@@ -502,10 +482,7 @@ func (s *Server) v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 		err = ioutil.WriteFile(filepath.Join(tmpdir, "jobname.txt"), []byte(jobname), 0644)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintln(s.ProtocolFile, "Internal error 017:")
-			fmt.Fprintln(s.ProtocolFile, err)
-			fmt.Fprintln(w, "Internal error 017")
-			return
+			return "", fmt.Errorf("Internal error 017")
 		}
 	}
 
@@ -513,16 +490,55 @@ func (s *Server) v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 		f, err := os.OpenFile(filepath.Join(tmpdir, "extravars"), os.O_RDWR|os.O_CREATE, 0644)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			fmt.Fprintln(s.ProtocolFile, "Internal error 018:")
-			fmt.Fprintln(s.ProtocolFile, err)
-			fmt.Fprintln(w, "Internal error 018")
-			return
+			return "", fmt.Errorf("Internal error 018")
 		}
 		for _, v := range strings.Split(vars, ",") {
 			f.Write([]byte(v + "\n"))
 		}
 		f.Close()
 	}
+	return id, nil
+}
+
+func (s *Server) v0CreatePDFHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(s.ProtocolFile, "/v0/pdf\n")
+
+	id, err := s.writeFiles(w, r)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintln(s.ProtocolFile, "Internal error 021:")
+		fmt.Fprintln(s.ProtocolFile, err)
+		fmt.Fprintln(w, "Internal error 021")
+		return
+	}
+	var modes []string
+	if mode := r.FormValue("mode"); mode != "" {
+		modes = strings.Split(mode, ",")
+	}
+
+	s.addPublishrequestToQueue(id, modes)
+
+	if err = s.sendPDF(w, r, id); err != nil {
+		fmt.Fprintln(s.ProtocolFile, err.Error())
+		fmt.Fprintln(s.ProtocolFile, err)
+		fmt.Fprintln(w, err.Error())
+		return
+	}
+
+}
+
+// Start a publishing process. Accepted parameter:
+//   jobname=<jobname>
+//   vars=var1=foo,var2=bar (where all but the first = is encoded as %3D)
+func (s *Server) v0PublishHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := s.writeFiles(w, r)
+	if err != nil {
+		fmt.Fprintln(s.ProtocolFile, err.Error())
+		fmt.Fprintln(s.ProtocolFile, err)
+		fmt.Fprintln(w, err.Error())
+		return
+	}
+
 	var modes []string
 	if mode := r.FormValue("mode"); mode != "" {
 		modes = strings.Split(mode, ",")
@@ -762,6 +778,7 @@ func (s *Server) Run() {
 	v0 := r.PathPrefix("/v0").Subrouter()
 	v0.HandleFunc("/publish", s.v0PublishHandler).Methods("POST")
 	v0.HandleFunc("/status", s.v0GetAllStatusHandler).Methods("GET")
+	v0.HandleFunc("/pdf", s.v0CreatePDFHandler).Methods("POST")
 	v0.HandleFunc("/pdf/{id}", s.v0GetPDFHandler).Methods("GET")
 	v0.HandleFunc("/publish/{id}", s.v0PublishIDHandler).Methods("GET")
 	v0.HandleFunc("/status/{id}", s.v0StatusHandler).Methods("GET")
