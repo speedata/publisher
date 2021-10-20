@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.5">
+    <entry version="4.5.15" date="2021-10-20">
+        <en>Add new route for REST API to send data and get PDF in one request.</en>
+        <de>Neue Route für die REST API um in einem Request Daten zu senden und PDF zu empfangen.</de>
+    </entry>
     <entry version="4.5.14" date="2021-10-08">
         <en>Deprecate NewPage, use ClearPage. See #345 for details.</en>
         <de>NewPage ist veraltet, nutze ClearPage. Siehe #345 für Informationen.</de>
