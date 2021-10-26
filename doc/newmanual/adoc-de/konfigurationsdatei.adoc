@@ -119,6 +119,9 @@ erkannt. Folgende Optionen werden unterstützt:
   Dateiname für das Protokoll. `STDOUT` für Standardausgabe und `STDERR` für Standardfehlerausgabe.
 `port`::
   Port, zu dem eine Verbindung aufgebaut werden kann.
+`runs`::
+  Anzahl der Durchläufe für das Dokument.
+
 
 === Abschnitt Hotfolder (`hotfolder`)
 

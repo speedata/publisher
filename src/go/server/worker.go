@@ -96,6 +96,9 @@ func (w worker) Start() {
 				if f := w.Server.Filter; f != "" {
 					params = append(params, "--filter", f)
 				}
+				if r := w.Server.Runs; r != "" {
+					params = append(params, "--runs", r)
+				}
 				cmd := exec.Command(w.Server.BinaryPath, params...)
 				if w.Server.Verbose {
 					fmt.Fprintf(w.Server.ProtocolFile, "%v\n", cmd.Args)

@@ -759,6 +759,7 @@ type Server struct {
 	Verbose        bool
 	Tempdir        string
 	BinaryPath     string
+	Runs           string
 	ProtocolFile   io.Writer
 	serverTemp     string
 }
@@ -770,11 +771,14 @@ func NewServer() *Server {
 
 // Run starts the speedata server on the given port
 func (s *Server) Run() {
+	s.serverTemp = filepath.Join(s.Tempdir, "publisher-server")
+
 	if s.Verbose {
-		fmt.Println("Server info: filter:", s.Filter, "temp dir", s.Tempdir)
+		fmt.Println("Server info:")
+		fmt.Println("   filter:", s.Filter)
+		fmt.Println("   temp dir:", s.serverTemp)
 		fmt.Println("   client extra dir:", s.ClientExtraDir)
 	}
-	s.serverTemp = filepath.Join(s.Tempdir, "publisher-server")
 	startDispatcher(s, runtime.NumCPU())
 
 	r := mux.NewRouter()

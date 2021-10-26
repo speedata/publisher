@@ -1171,6 +1171,7 @@ func main() {
 		s.Filter = getOptionSection("filter", "server")
 		s.Address = getSectionOptionWithWarning("address", "server")
 		s.Tempdir = getOption("tempdir")
+		s.Runs = getOptionSection("runs", "server")
 		logfilename := "publisher.protocol"
 		if fn := getSectionOptionWithWarning("logfile", "server"); fn != "" {
 			logfilename = fn

@@ -115,6 +115,8 @@ The format of the file is important, otherwise it won’t be recognized. The fol
   File name for the log. `STDOUT` for standard output and `STDERR` for standard error.
 `port`::
   Port to which a connection can be established.
+`runs`::
+  Set the number of publishing runs for the client document.
 
 === Section Hotfolder (`hotfolder`)
 
