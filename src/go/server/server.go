@@ -19,7 +19,8 @@ import (
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/gorilla/mux"
-	"github.com/speedata/configurator"
+
+	"speedatapublisher/configurator"
 )
 
 const (
@@ -769,7 +770,10 @@ func NewServer() *Server {
 
 // Run starts the speedata server on the given port
 func (s *Server) Run() {
-
+	if s.Verbose {
+		fmt.Println("Server info: filter:", s.Filter, "temp dir", s.Tempdir)
+		fmt.Println("   client extra dir:", s.ClientExtraDir)
+	}
 	s.serverTemp = filepath.Join(s.Tempdir, "publisher-server")
 	startDispatcher(s, runtime.NumCPU())
 

@@ -163,7 +163,7 @@ Zukünftige Versionen können weitere Felder in der JSON-Antwort haben.
 [[api-method-v0-pdf-post]]
 == `/v0/pdf`
 
-Ein Post-Request um Daten an den Server zu schicken und in demselben Reuqest ein PDF zu erhalten. Die Kodierung der Daten entspricht der von <<api-method-v0-publish-post,`/v0/publish`>> und die Rückgabewerte entsprechen denen aus <<api-method-v0-pdf,`/v0/pdf/<id>`>>.
+Ein Post-Request um Daten an den Server zu schicken und in demselben Request ein PDF zu erhalten. Die Kodierung der Daten entspricht der von <<api-method-v0-publish-post,`/v0/publish`>> und die Rückgabewerte entsprechen denen aus <<api-method-v0-pdf,`/v0/pdf/<id>`>>.
 
 [[api-method-v0-pdf]]
 == `/v0/pdf/<id>`

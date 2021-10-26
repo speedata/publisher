@@ -14,8 +14,7 @@ require (
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
 	github.com/russross/blackfriday v1.6.0
-	github.com/speedata/config v0.0.0-20181203093101-3a3f44982ec4 // indirect
-	github.com/speedata/configurator v0.0.0-20181204130920-092f848de8e1
+	github.com/speedata/config v0.0.0-20181203093101-3a3f44982ec4
 	github.com/speedata/css/scanner v0.0.0-20201005071706-2ed32c3ce553
 	github.com/speedata/go-epub v0.5.5
 	github.com/speedata/goxlsx v1.0.2

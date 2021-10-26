@@ -21,11 +21,11 @@ import (
 	"syscall"
 	"time"
 
+	"speedatapublisher/configurator"
 	"speedatapublisher/server"
 	"speedatapublisher/sp"
 	"speedatapublisher/splibaux"
 
-	"github.com/speedata/configurator"
 	"github.com/speedata/hotfolder"
 	"github.com/speedata/optionparser"
 )
@@ -916,6 +916,7 @@ func main() {
 	if getOption("verbose") != "" {
 		verbose = true
 		os.Setenv("SP_VERBOSITY", "1")
+		fmt.Println("Config files read: ", strings.Join(cfg.Filenames, ", "))
 	}
 
 	if addLocalPath {
@@ -1164,6 +1165,7 @@ func main() {
 		options["quiet"] = "true"
 		options["autoopen"] = "false"
 		s := server.NewServer()
+		s.Verbose = verbose
 		s.ClientExtraDir = strings.Split(getOptionSection("extra-dir", "server"), string(filepath.ListSeparator))
 		s.Port = getSectionOptionWithWarning("port", "server")
 		s.Filter = getOptionSection("filter", "server")
