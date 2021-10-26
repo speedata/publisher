@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.5">
+    <entry version="4.5.16" date="2021-10-26">
+        <en>Increase verbosity of sp server (<tt>sp server --verbose</tt>).</en>
+        <de>Verbosität des Servers erhöhen (<tt>sp server --verbose</tt>).</de>
+    </entry>
     <entry version="4.5.15" date="2021-10-20">
         <en>Add new route for REST API to send data and get PDF in one request.</en>
         <de>Neue Route für die REST API um in einem Request Daten zu senden und PDF zu empfangen.</de>
