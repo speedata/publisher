@@ -3376,15 +3376,18 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     end
 
     local val,num,ret
-    val = string.gsub(layoutxml[attname],"{(.-)}", function (x)
-        local ok, xp = xpath.parse_raw(dataxml,x,namespaces)
-        if not ok then
-            err(xp)
-            return nil
-        end
-        return xpath.textvalue(xp[1])
-        end)
-
+    if attname ~= "select" and attname ~= "test" then
+        val = string.gsub(layoutxml[attname],"{(.-)}", function (x)
+            local ok, xp = xpath.parse_raw(dataxml,x,namespaces)
+            if not ok then
+                err(xp)
+                return nil
+            end
+            return xpath.textvalue(xp[1])
+            end)
+    else
+        val = layoutxml[attname]
+    end
     if typ=="xpath" then
         return xpath.textvalue(xpath.parse(dataxml,val,namespaces))
     elseif typ=="xpathraw" then
