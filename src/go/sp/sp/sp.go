@@ -218,6 +218,7 @@ func init() {
 	inifile = filepath.Join(srcdir, "lua/sdini.lua")
 	os.Setenv("PUBLISHERVERSION", version)
 	os.Setenv("LD_LIBRARY_PATH", libdir)
+	os.Setenv("DYLD_LIBRARY_PATH", libdir)
 }
 
 func getOptionSection(optionname string, section string) string {
