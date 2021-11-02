@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.5">
+    <entry version="4.5.18" date="2021-11-02">
+        <en>Set DYLD_LIBRARY_PATH on macOS.</en>
+        <de>Setze DYLD_LIBRARY_PATH auf macOS.</de>
+    </entry>
+    <entry version="4.5.18" date="2021-11-02">
+        <en>Restrict {} xpath evaluation for non-xpath attributes (all except select, test).</en>
+        <de>XPath-Modus auf Attribute beschränken, die nicht select oder test sind.</de>
+    </entry>
     <entry version="4.5.17" date="2021-10-26">
         <en>Set the number of publishing-runs for the server.</en>
         <de>Setze die Anzahl der Durchläufe für den Server.</de>
