@@ -3376,7 +3376,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     end
 
     local val,num,ret
-    if attname ~= "select" and attname ~= "test" then
+    if typ ~= "xpath" and typ ~= "xpathraw" then
         val = string.gsub(layoutxml[attname],"{(.-)}", function (x)
             local ok, xp = xpath.parse_raw(dataxml,x,namespaces)
             if not ok then
