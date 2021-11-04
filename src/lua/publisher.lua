@@ -722,7 +722,7 @@ function dispatch(layoutxml,dataxml,opts)
             local eltname = j[".__local_name"]
             if dispatch_table[eltname] ~= nil then
                 if options.verbosity > 0 then
-                    log("Call %q from layout input line %d column %d",eltname,j['.__line'] or -1,j['.__col'] or -1)
+                    log("Call %q from layout",eltname)
                 end
                 tmp = dispatch_table[eltname](j,dataxml,opts)
 
@@ -818,6 +818,7 @@ end
 
 function get_colorindex_from_name(colorname, default)
     if not colorname then return nil end
+    if colorname == "nil" then return nil end
     local colentry = get_colentry_from_name(colorname,default)
     if colentry then return colentry.index else return nil end
 end

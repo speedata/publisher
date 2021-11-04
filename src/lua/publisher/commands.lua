@@ -3021,7 +3021,7 @@ function commands.rule( layoutxml,dataxml )
     else
         dashpattern = ""
     end
-    local colentry = publisher.get_colentry_from_name(colorname)
+    local colentry = publisher.get_colentry_from_name(colorname,"black")
     if direction == "horizontal" then
         n.data = string.format("q %g w %s %s 0 0 m %g 0 l S Q",rulewidth, dashpattern, colentry.pdfstring,length)
     elseif direction == "vertical" then
