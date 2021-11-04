@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.5">
+    <entry version="4.5.19" date="2021-11-04">
+        <en>Enhanced error handling.</en>
+        <de>Verbesserte Fehlerhandhabung.</de>
+    </entry>
     <entry version="4.5.18" date="2021-11-02">
         <en>Set DYLD_LIBRARY_PATH on macOS.</en>
         <de>Setze DYLD_LIBRARY_PATH auf macOS.</de>
