@@ -1,5 +1,11 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="4.5">
+  <chapter version="4.6">
+    <entry version="4.6.0" date="2021-11-10">
+        <en>Release version 4.6.</en>
+        <de>Veröffentliche Version 4.6.</de>
+    </entry>
+  </chapter>
+  <chapter version="4.5" date="2021-11-10">
     <entry version="4.5.19" date="2021-11-04">
         <en>Enhanced error handling.</en>
         <de>Verbesserte Fehlerhandhabung.</de>

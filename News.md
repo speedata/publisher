@@ -2,16 +2,30 @@
 
 This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/).
 
+## Version 4.6
+
+Released 2021-11-10
+
+* Lots of bug fixes, as always.
+* REST API: set number of runs.
+* REST API: enhanced server verbosity.
+* REST API: new route for direct publishing (send data and get PDF in one request).
+* [NewPage deprecation (use ClearPage instead)](https://github.com/speedata/publisher/discussions/345).
+* macOS 12.0 compatibility.
+* Include color profile in distribution.
+* Easier calculation with lengths.
+* Use new Go based XML parser.
+
 ## Version 4.4
 
 Released 2021-05-11
 
-* Transparency (available for text and images)
-* MetaPost integration
-* Windows 64 binaries
-* Document separation (frontmatter, mainmatter)
-* Logical and visible page numbering
-* Better hyperlinks within a document (pages, page numbers, leaders, images and boxes)
+* Transparency (available for text and images).
+* MetaPost integration.
+* Windows 64 binaries.
+* Document separation (frontmatter, mainmatter).
+* Logical and visible page numbering.
+* Better hyperlinks within a document (pages, page numbers, leaders, images and boxes).
 * Lots of bug fixes (mostly related to table head/foots and HTML support).
 
 
