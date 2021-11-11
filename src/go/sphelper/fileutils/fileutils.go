@@ -2,6 +2,7 @@
 package fileutils
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -60,10 +61,15 @@ func CopyFile(source string, dest string) (err error) {
 // Beware: this function behaves a bit weird.
 func CpR(srcdir, destdir string, reject ...string) error {
 	a := func(path string, info os.FileInfo, err error) error {
+		if info == nil {
+			return fmt.Errorf("info is nil for path %s", path)
+		}
+
 		rel, err := filepath.Rel(srcdir, path)
 		if err != nil {
 			return err
 		}
+
 		dest := filepath.Join(destdir, rel)
 		if info.IsDir() {
 			err = os.MkdirAll(dest, 0755)
@@ -81,9 +87,8 @@ func CpR(srcdir, destdir string, reject ...string) error {
 			}
 			if dontcopy {
 				return nil
-			} else {
-				return CopyFile(path, dest)
 			}
+			return CopyFile(path, dest)
 
 		}
 		return nil
