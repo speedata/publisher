@@ -1,0 +1,28 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="4cm" width="3cm" />
+    <Record element="data">
+        <PlaceObject>
+            <Table border-collapse="collapse">
+                <Tr>
+                    <Td colspan="2">
+                        <Paragraph>
+                            <Value>a</Value>
+                        </Paragraph>
+                    </Td>
+                </Tr>
+                <Tr>
+                    <Td border-bottom="1pt" border-top="1pt">
+                        <Paragraph>
+                            <Value>b</Value>
+                        </Paragraph>
+                    </Td>
+                    <Td border-bottom="1pt" border-top="1pt">
+                        <Paragraph>
+                            <Value>c</Value>
+                        </Paragraph>
+                    </Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>

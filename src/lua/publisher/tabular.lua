@@ -291,7 +291,7 @@ end
 -- This code is not really correct. See #332 for more information.
 -- The column widths should be ajusted as well.
 function merge_border_with_nextcell(row,x)
-    local thiscell,nextcell,nextcell_borderleft,thiscell_borderright,new_borderwidth,new_borderwidth
+    local thiscell,nextcell,nextcell_borderleft,thiscell_borderright,new_borderwidth
     thiscell = row[x]
     nextcell = row[x+1]
 
@@ -310,24 +310,27 @@ function merge_border_with_nextcell(row,x)
     end
 end
 
-function merge_border_with_nextrow(tablematrix,row,col)
-    local thiscell,nextcell,nextcell_borderleft,thiscell_borderright,new_borderwidth,new_borderwidth
+function merge_border_with_nextrow(tablematrix,row,col,cols)
+    local thiscell,nextcell,new_borderwidth
     thiscell = tablematrix[row][col]
-    if tonumber(thiscell.rowspan) and thiscell.rowspan > 1 then return end
-    nextcell = tablematrix[row + 1][col]
-
     thiscell_borderbottom = tex.sp(thiscell["border-bottom"] or 0)
-    nextcell_bordertop  = tex.sp(nextcell["border-top"]  or 0)
-    new_borderwidth = math.abs( math.max(thiscell_borderbottom,nextcell_bordertop) / 2 )
+    if tonumber(thiscell.rowspan) and thiscell.rowspan > 1 then return end
+    for i = 1, cols do
+        nextcell = tablematrix[row + 1][col + i - 1]
+        nextcell_bordertop  = tex.sp(nextcell["border-top"]  or 0)
+        new_borderwidth = math.abs( math.max(thiscell_borderbottom,nextcell_bordertop) / 2 )
 
-    nextcell["border-top"]  = new_borderwidth
-    thiscell["border-bottom"] = new_borderwidth
+        nextcell["border-top"]  = new_borderwidth
+        if i == 1 then
+            thiscell["border-bottom"] = new_borderwidth
+        end
 
-    if thiscell_borderbottom == 0 then
-        thiscell["border-bottom-color"] = nextcell["border-top-color"]
-    end
-    if nextcell_bordertop == 0 then
-        nextcell["border-top-color"] = thiscell["border-bottom-color"]
+        if thiscell_borderbottom == 0 then
+            thiscell["border-bottom-color"] = nextcell["border-top-color"]
+        end
+        if nextcell_bordertop == 0 then
+            nextcell["border-top-color"] = thiscell["border-bottom-color"]
+        end
     end
 end
 
@@ -386,8 +389,11 @@ function adjust_borderwidths_collapse(self,tr_contents,tablearea)
 
     for y = 1, #tablematrix - 1 do
         local thisrow = tablematrix[y]
-        for x = 1,#thisrow do
-            merge_border_with_nextrow(tablematrix,y,x)
+        local x = 1
+        while x <= #thisrow do
+            local cs = tablematrix[y][x].colspan or 1
+            merge_border_with_nextrow(tablematrix,y,x,cs)
+            x = x + cs
         end
     end
 
