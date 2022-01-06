@@ -1823,7 +1823,7 @@
     <example xml:lang="de">
       <listing><![CDATA[<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en" xmlns="urn:speedata.de:2009/publisher/en">
 
-  <DefineColor name="rot" wert="#f00"/>
+  <DefineColor name="rot" value="#f00"/>
 
   <Record element="data">
     <PlaceObject>
