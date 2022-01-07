@@ -1750,8 +1750,7 @@ function typeset_table(self)
         end
 
         -- percolumn_goal is the optimum height for each column
-        local percolumn_goal =  math.ceil( sum_ht / tosplit )
-
+        local percolumn_goal = math.ceil( sum_ht / tosplit )
         local sum_frame = 0
         local break_below_allowed
         local maxht = ht_current
@@ -1777,7 +1776,7 @@ function typeset_table(self)
                 sum_frame = 0
             -- When stepped over the goal, move this line to the next frame.
             -- See #232 for a situation where the second test is necessary.
-            elseif sum_frame > percolumn_goal and last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t] ~= splits[#splits] then
+            elseif sum_frame >= percolumn_goal and last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t] ~= splits[#splits] then
                 splits[#splits + 1] = last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t]
                 tosplit = tosplit - 1
 
