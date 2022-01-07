@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.7">
+    <entry version="4.7.2" date="2022-01-07">
+        <en>Bugfix: table balancing and minheight=1 (#348).</en>
+        <de>Fehlerkorrektur: Tabellenausgleich und minheight=1 (#348).</de>
+    </entry>
     <entry version="4.7.1" date="2021-12-17">
         <en>Bugfix: colspan > 1 and border-collapse (#347).</en>
         <de>Fehlerkorrektur: colspan > 1 und border-collapse (#347).</de>
