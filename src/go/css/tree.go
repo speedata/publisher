@@ -372,6 +372,23 @@ func hasBorder(attrs map[string]string) bool {
 	return false
 }
 
+// luaescape writes unicode runes > 127 as an escaped UTF8 sequence.
+// For example U+F8FF will be written as `\239\163\191`.
+func luaescape(in string) string {
+	var out strings.Builder
+	for _, b := range []byte(in) {
+		if b > 127 {
+			// \123 must be exactly three digits, but a byte > 127
+			// will be three digits anyway.
+			fmt.Fprintf(&out, "\\%d", b)
+		} else {
+			out.WriteByte(b)
+		}
+	}
+
+	return out.String()
+}
+
 func dumpElement(thisNode *html.Node, level int, direction mode) {
 	indent := strings.Repeat("  ", level)
 	newDir := direction
@@ -436,12 +453,12 @@ func dumpElement(thisNode *html.Node, level int, direction mode) {
 							ws = false
 						}
 					}
-					fmt.Fprintf(out, "[%q] = %q ,", key, value)
+					fmt.Fprintf(out, "[%q] = \"%s\" ,", key, luaescape(value))
 				}
 				fmt.Fprintf(out, "has_border = %t ,", hasBorder(resolvedStyles))
 				fmt.Fprintf(out, "%s  }, attributes = {", indent)
 				for key, value := range resolvedAttributes {
-					fmt.Fprintf(out, "[%q] = %q ,", key, value)
+					fmt.Fprintf(out, "[%q] = \"%s\" ,", key, luaescape(value))
 				}
 				fmt.Fprintln(out, "},")
 			}
