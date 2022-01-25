@@ -377,7 +377,13 @@ func hasBorder(attrs map[string]string) bool {
 func luaescape(in string) string {
 	var out strings.Builder
 	for _, b := range []byte(in) {
-		if b > 127 {
+		if b == 34 {
+			// a " (quote)
+			out.WriteString(`\"`)
+		} else if b == 92 {
+			// a backslash
+			out.WriteString(`\\`)
+		} else if b > 127 {
 			// \123 must be exactly three digits, but a byte > 127
 			// will be three digits anyway.
 			fmt.Fprintf(&out, "\\%d", b)
