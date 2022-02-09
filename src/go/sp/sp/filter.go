@@ -60,7 +60,7 @@ func validateRelaxNG(l *lua.LState) int {
 func runSaxon(l *lua.LState) int {
 	numberArguments := l.GetTop()
 	var command []string
-	command = []string{"-jar", filepath.Join(libdir, "saxon9804he.jar")}
+	command = []string{"-jar", filepath.Join(libdir, "saxon-he-11.1.jar")}
 	if numberArguments == 1 {
 		// hopefully a table
 		lv := l.Get(-1)

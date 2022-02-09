@@ -348,11 +348,12 @@ task :deb => [:sphelper] do
 	cp_r(Dir.glob("img/*"),targetimg)
 	Dir.chdir("lib") do
 		Dir.glob("*").reject { |x|
-			x =~ /libsplib|imageedit/
+			x =~ /libsplib|imageedit|lib/
 		}.each { |x|
 			  mkdir_p(targetlib.join(File.dirname(x)))
 			  cp(x,targetlib.join(File.dirname(x)))
 		}
+		cp_r("lib" ,targetlib)
 	end
 	cp_r(Dir.glob("#{builddir}/dylib/libsplib.so"),targetlib)
 
