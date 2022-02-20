@@ -406,7 +406,7 @@ end
 --- overall appearance of the paragraph is fixed at this time, we can only add
 --- decoration now.
 do
-    local curdir = {}, pardir
+    local curdir = {}
     function post_linebreak( head, list_head)
         local underlinetype = nil
         local underlinestyle = nil
@@ -439,6 +439,10 @@ do
                     if x ~= ldir then
                         warning("paragraph direction incorrect, found %s, expected %s",ldir,x)
                     end
+                end
+                if start_bgcolor then
+                    insert_backgroundcolor(list_head, head, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                    start_bgcolor = nil
                 end
             elseif head.id == disc_node then -- disc
                 if publisher.options.showhyphenation then
