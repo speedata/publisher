@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Pageformat height="5cm" width="5cm" />
+
+	<LoadFontfile mode="harfbuzz" name="FB-REGU" filename="ezra_sil.ttf" />
+	<DefineFontfamily name="text" fontsize="8" leading="15">
+		<Regular fontface="FB-REGU" />
+	</DefineFontfamily>
+	<DefineFontfamily name="FF-Bnum" fontsize="8" leading="15">
+		<Regular fontface="sans" />
+	</DefineFontfamily>
+
+	<Stylesheet> .bg { background-color: #E0E0E0; } </Stylesheet>
+
+	<Record element="data">
+		<Output >
+			<Text>
+				<Paragraph bidi="yes" direction="rtl">
+                    <Span class="bg">
+                        <Fontface fontfamily="FF-Bnum">
+                            <Value>6</Value>
+                        </Fontface>
+                    </Span>
+                    <Span class="bg">
+                        <Value>יהוה</Value>
+                    </Span>
+				</Paragraph>
+			</Text>
+		</Output>
+	</Record>
+</Layout>
