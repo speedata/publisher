@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.7">
+    <entry version="4.7.5" date="2022-02-20">
+        <en>Background color and mix of rtl/ltr text (#352).</en>
+        <de>Hintergrundfarbe und Mix von RTL/LTR Text (#352).</de>
+    </entry>
     <entry version="4.7.4" date="2022-02-09">
         <en>Update to Saxon 11.</en>
         <de>Update auf Saxon 11.</de>
