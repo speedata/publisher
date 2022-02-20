@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Pageformat height="5cm" width="7cm" />
+
+	<LoadFontfile mode="harfbuzz" name="amiri" filename="amiri-regular.ttf" />
+
+	<DefineFontfamily name="text" fontsize="8" leading="18">
+		<Regular fontface="amiri" />
+	</DefineFontfamily>
+
+	<Stylesheet>.bg { background-color: #E0E0E0; } </Stylesheet>
+
+	<Record element="data">
+		<Output>
+			<Text fontfamily="text">
+				<Paragraph language='Other' bidi="yes" direction="rtl">
+					<Span class='bg'>
+						<Value> وَلَكِنَّهُ عَلَى وَشْكِ أَنْ يَطْلُعَ مِنَ الْهَاوِيَةِ وَيَمْضِيَ إِلَى الْهَلاَكِ</Value>
+					</Span>
+			</Paragraph>
+			</Text>
+		</Output>
+	</Record>
+
+</Layout>

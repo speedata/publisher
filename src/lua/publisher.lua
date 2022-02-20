@@ -4881,6 +4881,8 @@ function hbkern(nodelist)
                 set_attribute(kern,"text-decoration-line",ul)
                 local uccolor = get_attribute(head,"text-decoration-color")
                 set_attribute(kern,"text-decoration-color",uccolor)
+                local bgcolor = get_attribute(head,"background-color")
+                set_attribute(kern,"background-color",bgcolor)
                 node.setproperty(kern,node.getproperty(head))
                 curkern = 0
             end
@@ -4895,8 +4897,10 @@ function hbkern(nodelist)
                 head.replace = kern
                 local ul = get_attribute(head,"text-decoration-line")
                 local uccolor = get_attribute(head,"text-decoration-color")
+                local bgcolor = get_attribute(head,"background-color")
                 set_attribute(head.replace,"text-decoration-line",ul)
                 set_attribute(head.replace,"text-decoration-color",uccolor)
+                set_attribute(head.replace,"background-color",bgcolor)
                 node.setproperty(head.replace,node.getproperty(head))
                 curkern = 0
             end
