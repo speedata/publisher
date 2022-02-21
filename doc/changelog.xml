@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.7">
+    <entry version="4.7.6" date="2022-02-21">
+        <en>Background color (text) and kerning (#353).</en>
+        <de>Hintergrundfarbe (Text) und Kerning (#353).</de>
+    </entry>
     <entry version="4.7.5" date="2022-02-20">
         <en>Background color and mix of rtl/ltr text (#352).</en>
         <de>Hintergrundfarbe und Mix von RTL/LTR Text (#352).</de>
