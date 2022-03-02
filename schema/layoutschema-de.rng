@@ -749,6 +749,9 @@
                      <ref name="e_NextRow"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_NoBreak"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Options"></ref>
                   </optional>
                   <optional>
@@ -1774,6 +1777,9 @@
                      </optional>
                      <optional>
                         <ref name="e_NextRow"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_NoBreak"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Options"></ref>
@@ -2856,6 +2862,9 @@
                         <ref name="e_NextRow"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_NoBreak"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Options"></ref>
                      </optional>
                      <optional>
@@ -3566,6 +3575,9 @@
                   </optional>
                   <optional>
                      <ref name="e_NextRow"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_NoBreak"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Options"></ref>
@@ -6498,6 +6510,9 @@
                         <ref name="e_NextRow"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_NoBreak"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Options"></ref>
                      </optional>
                      <optional>
@@ -6788,6 +6803,9 @@
                      </optional>
                      <optional>
                         <ref name="e_NextRow"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_NoBreak"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Options"></ref>

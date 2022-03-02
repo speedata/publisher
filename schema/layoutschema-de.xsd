@@ -601,6 +601,7 @@
         <xs:element minOccurs="0" ref="en:NewPage"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
         <xs:element minOccurs="0" ref="en:NextRow"/>
+        <xs:element minOccurs="0" ref="en:NoBreak"/>
         <xs:element minOccurs="0" ref="en:Options"/>
         <xs:element minOccurs="0" ref="en:Output"/>
         <xs:element minOccurs="0" ref="en:Pagetype"/>
@@ -1542,6 +1543,7 @@
         <xs:element ref="en:NewPage"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
+        <xs:element ref="en:NoBreak"/>
         <xs:element ref="en:Options"/>
         <xs:element ref="en:Output"/>
         <xs:element ref="en:Pagetype"/>
@@ -2766,6 +2768,7 @@
         <xs:element ref="en:NewPage"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
+        <xs:element ref="en:NoBreak"/>
         <xs:element ref="en:Options"/>
         <xs:element ref="en:Output"/>
         <xs:element ref="en:Pagetype"/>
@@ -3783,6 +3786,7 @@
         <xs:element minOccurs="0" ref="en:NewPage"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
         <xs:element minOccurs="0" ref="en:NextRow"/>
+        <xs:element minOccurs="0" ref="en:NoBreak"/>
         <xs:element minOccurs="0" ref="en:Options"/>
         <xs:element minOccurs="0" ref="en:Output"/>
         <xs:element minOccurs="0" ref="en:Pagetype"/>
@@ -7776,6 +7780,7 @@
         <xs:element ref="en:NewPage"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
+        <xs:element ref="en:NoBreak"/>
         <xs:element ref="en:Options"/>
         <xs:element ref="en:Output"/>
         <xs:element ref="en:Pagetype"/>
@@ -7913,6 +7918,7 @@
         <xs:element ref="en:NewPage"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
+        <xs:element ref="en:NoBreak"/>
         <xs:element ref="en:Options"/>
         <xs:element ref="en:Output"/>
         <xs:element ref="en:Pagetype"/>

@@ -44,6 +44,7 @@
     <optional><cmd name="NewPage"/></optional>
     <optional><cmd name="NextFrame"/></optional>
     <optional><cmd name="NextRow"/></optional>
+    <optional><cmd name="NoBreak"/></optional>
     <optional><cmd name="Options"/></optional>
     <optional><cmd name="Output"/></optional>
     <optional><cmd name="Pagetype"/></optional>
