@@ -148,8 +148,24 @@ local function parse_xmldecl( txt,pos )
 	local newpos = string.find(txt,"<",pos+1)
 	return newpos
 end
+
+-- jump over doctype declaration.
 local function parse_doctype(txt,pos)
-	local newpos = string.find(txt,"<",pos+1)
+	local newpos
+	local level = 0
+	for i = pos + 1, #txt do
+		local chr = string.sub(txt,i,i)
+		if chr == "[" then
+			level = level + 1
+		elseif chr == "]" then
+			level = level - 1
+		elseif level == 0 and chr == ">" then
+			newpos = i + 1
+			break
+		end
+	end
+
+	newpos = string.find(txt,"<",newpos)
 	return newpos
 end
 
