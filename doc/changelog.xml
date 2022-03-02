@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.7">
+    <entry version="4.7.7" date="2022-03-02">
+        <en>XML parser: ignore DTD (#355).</en>
+        <de>XML-Parser: DTD ignorieren (#355).</de>
+    </entry>
+    <entry version="4.7.7" date="2022-03-02">
+      <en>Schema: add NoBreak to ForAll, Case, Otherwise, Loop,... (#356).</en>
+      <de>Schema: NoBreak zu ForAll, Case, Otherwise, Loop,... hinzufügen (#356).</de>
+    </entry>
     <entry version="4.7.6" date="2022-02-21">
         <en>Background color (text) and kerning (#353).</en>
         <de>Hintergrundfarbe (Text) und Kerning (#353).</de>
