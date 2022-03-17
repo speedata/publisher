@@ -107,7 +107,13 @@ func main() {
 		}
 	case "buildlib":
 		// build the library
-		err := buildlib.BuildLib(cfg, runtime.GOOS, runtime.GOARCH)
+		goos, goarch := runtime.GOOS, runtime.GOARCH
+		if goos == "darwin" {
+			// switch to amd64 because there seems to be an error in the LuaTeX
+			// binary for m1.
+			goarch = "amd64"
+		}
+		err := buildlib.BuildLib(cfg, goos, goarch)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(-1)
