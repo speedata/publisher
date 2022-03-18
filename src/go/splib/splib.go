@@ -120,6 +120,7 @@ func sdHtmlToXml(input string) *C.char {
 
 	dec.Strict = false
 	dec.AutoClose = xml.HTMLAutoClose
+	dec.Entity = xml.HTMLEntity
 	for {
 		t, err := dec.Token()
 		if err == io.EOF {
