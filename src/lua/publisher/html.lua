@@ -976,6 +976,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
                 styles.listlevel = styles.listlevel - 1
                 for i=1,#n do
                     box[#box + 1] = n[i]
+                    box[#box].mode = "block"
                 end
                 ret[#ret + 1] = box
             elseif thiseltname == "li" then
