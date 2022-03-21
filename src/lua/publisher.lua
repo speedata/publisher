@@ -6701,15 +6701,31 @@ function hlpage(pagenumber)
     return #hyperlinks
 end
 
+local function char_to_hex(c)
+    return string.format("%%%02X", string.byte(c))
+end
+
+local function urlencode(url)
+    if url == nil then
+        return
+    end
+    url = url:gsub("\n", "\r\n")
+    url = url:gsub("([^%w _%%%-%.~:/])", char_to_hex)
+    url = url:gsub(" ", "+")
+    return url
+end
+
 function hlurl(href)
     local border = "/Border[0 0 0]"
     if options.showhyperlinks then
         border = ""
     end
-    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/URI/URI(%s)>>",border,href)
+    local uri = urlencode(href)
+    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/URI/URI (%s)>>",border,uri)
     hyperlinks[#hyperlinks + 1] = str
     return #hyperlinks
 end
+
 
 --- Sorting
 --- -------
