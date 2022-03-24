@@ -2309,6 +2309,7 @@ function next_area( areaname, grid )
         grid:set_framenumber(areaname, current_framenumber + 1)
     end
     grid:set_current_row(1,areaname)
+    grid:set_current_column(1,areaname)
 end
 
 --- Switch to a new page and ship out the current page.
