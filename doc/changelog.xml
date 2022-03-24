@@ -1,5 +1,21 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.7">
+    <entry version="4.7.8" date="2022-03-24">
+        <en>NextFrame moves cursor to first column (#358).</en>
+        <de>NextFrame verschiebt den Cursor in die erste Spalte (#358).</de>
+    </entry>
+    <entry version="4.7.8" date="2022-03-24">
+        <en>URL escape hyperlinks.</en>
+        <de>URL Escape hyperlinks.</de>
+    </entry>
+    <entry version="4.7.8" date="2022-03-24">
+        <en>sd:decode-html() decodes all HTML entities.</en>
+        <de>sd:decode-html() dekodiert alle HTML Entitäten.</de>
+    </entry>
+    <entry version="4.7.8" date="2022-03-24">
+        <en>Bugfix ul/ol missing first entry of li (#357).</en>
+        <de>Fehlerkorrektur ul/ol unterschlägt den ersten Eintrag von li (#357).</de>
+    </entry>
     <entry version="4.7.7" date="2022-03-02">
         <en>XML parser: ignore DTD (#355).</en>
         <de>XML-Parser: DTD ignorieren (#355).</de>
