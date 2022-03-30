@@ -15,20 +15,34 @@ import (
 )
 
 var (
-	files      map[string]string
-	ignorefile string
-	verbosity  int
-	nr         *strings.Replacer
+	files       map[string]string = make(map[string]string)
+	ignorefile  string
+	verbosity   int
+	pathrewrite *strings.Replacer
+	nr          *strings.Replacer
 )
 
 func init() {
 	wd, _ := os.Getwd()
 	ignorefile = filepath.Join(wd, os.Getenv("SP_JOBNAME")+".pdf")
-	files = make(map[string]string)
 	if v := os.Getenv("SP_VERBOSITY"); v != "" {
 		verbosity, _ = strconv.Atoi(v)
 	}
 	nr = strings.NewReplacer("\n", `\n`, `"`, `\"`, `\`, `\\`)
+
+	if rewriteString := os.Getenv("SP_PATH_REWRITE"); rewriteString != "" {
+		var rewrites = []string{}
+
+		elements := strings.Split(rewriteString, ",")
+		for _, elt := range elements {
+			kv := strings.Split(elt, "=")
+			if len(kv) == 2 {
+				rewrites = append(rewrites, kv[0])
+				rewrites = append(rewrites, kv[1])
+			}
+		}
+		pathrewrite = strings.NewReplacer(rewrites...)
+	}
 }
 
 func downloadFile(resourceURL string, outfile io.Writer) error {
@@ -135,6 +149,10 @@ func LookupFile(path string) string {
 	// TODO: lowercase
 	// local lowercase = os.getenv("SP_IGNORECASE") == "1"
 	//  if lowercase then filename_or_uri = unicode.utf8.lower(filename_or_uri) end
+	if pathrewrite != nil {
+		path = pathrewrite.Replace(path)
+	}
+
 	if ret, ok := files[path]; ok {
 		return ret
 	}
