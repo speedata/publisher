@@ -1434,9 +1434,13 @@ function typeset_table(self)
                 break_above = false
             end
         elseif eltname == "TableNewPage" then
-            local tf = node.new("hlist")
-            node.set_attribute(tf,publisher.att_tablenewpage, 1)
-            rows[#rows + 1] = tf
+            if publisher.current_group == nil then
+                local tf = node.new("hlist")
+                node.set_attribute(tf,publisher.att_tablenewpage, 1)
+                rows[#rows + 1] = tf
+            else
+                warning("TableNewPage does not work in Group")
+            end
         else
             warning("Unknown contents in “Table” %s",eltname or "?" )
         end -- if it's a table cell

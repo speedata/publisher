@@ -1,0 +1,29 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Record element="data">
+        <Pageformat height="5cm" width="5cm" />
+        <Group name="tt">
+            <Contents>
+                <PlaceObject>
+                    <Table width="5">
+                        <Tr>
+                            <Td>
+                                <Paragraph>
+                                    <Value>BB</Value>
+                                </Paragraph>
+                            </Td>
+                        </Tr>
+                        <TableNewPage />
+                        <Tr>
+                            <Td>
+                                <Paragraph>
+                                    <Value>BB</Value>
+                                </Paragraph>
+                            </Td>
+                        </Tr>
+                    </Table>
+                </PlaceObject>
+            </Contents>
+        </Group>
+        <PlaceObject groupname="tt"/>
+    </Record>
+</Layout>
