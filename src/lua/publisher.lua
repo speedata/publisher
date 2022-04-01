@@ -3676,7 +3676,9 @@ function insert_nonmoving_whatsits( head, parent, blockinline )
                 local col = colorentry.pdfstring
                 local alpha = colorentry.alpha
                 if alpha then
-                    current_page.transparenttext[alpha] = true
+                    local thispage = pages[current_pagenumber]
+                    thispage.transparenttext = thispage.transparenttext or {}
+                    thispage.transparenttext[alpha] = true
                     col = col .. string.format("/TRP%d gs",alpha )
                 end
                 colstart.data  = col

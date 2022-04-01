@@ -1,0 +1,41 @@
+<Layout
+    xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="5cm" width="5cm" />
+    <DefineColor name="watermark" model="RGB" r="0" g="0" b="0" alpha="20"/>
+
+    <DefineFontfamily name="watermark" fontsize="10" leading="20">
+        <Regular fontface="sans"/>
+    </DefineFontfamily>
+
+    <Pagetype name="default" test="true()">
+        <AtPageShipout>
+            <PlaceObject allocate="no" row="1" column="1">
+                <Textblock fontfamily="watermark" color="watermark">
+                  <Paragraph>
+                    <Value>D</Value>
+                  </Paragraph>
+                </Textblock>
+              </PlaceObject>
+        </AtPageShipout>
+    </Pagetype>
+
+    <Record element="data">
+        <PlaceObject>
+            <Table stretch="max" padding="5pt">
+              <Columns>
+                <Column width="1*" align="center" valign="middle"/>
+              </Columns>
+              <Loop select="5">
+                <Tr>
+                  <Td>
+                    <Paragraph>
+                      <Value>L.</Value>
+                    </Paragraph>
+                  </Td>
+                </Tr>
+              </Loop>
+            </Table>
+          </PlaceObject>
+    </Record>
+</Layout>
