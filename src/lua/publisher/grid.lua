@@ -795,14 +795,12 @@ function position_grid_cell(self,x,y,areaname,wd,ht,valign,halign)
         else
             local area = self.positioning_frames[areaname]
             local current_frame = area.current_frame or 1
-            local current_row = self:current_row(areaname)
             -- todo: find the correct block, the blocks can be of different width / height
             local block = area[current_frame]
             frame_margin_left = block.column - 1
             frame_margin_top = block.row - 1
         end
     end
-    local numgridcells = math.floor(wd / self.gridwidth)
 
     x_sp = (frame_margin_left + x - 1) * (self.gridwidth + self.grid_dx) + self.margin_left + self.extra_margin
     y_sp = (frame_margin_top  + y - 1) * (self.gridheight + self.grid_dy) + self.margin_top  + self.extra_margin

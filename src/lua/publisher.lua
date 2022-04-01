@@ -6146,7 +6146,6 @@ function getheight( relative_framenumber )
     cpn = current_pagenumber
 
     local areaname = xpath.get_variable("__currentarea")
-    local number_of_frames = grid:number_of_frames(areaname)
     local current_framenumber = grid:framenumber(areaname)
     cfn = current_framenumber
 
@@ -6187,7 +6186,6 @@ end
 -- lines left over and is not at the last line.
 function less_or_equal_than_n_lines( nodelist, lines )
     if lines == 0 then return false end
-    local has_n_lines = false
     for i=1,lines - 1 do
         if nodelist.id == publisher.hlist_node and nodelist.next then
             nodelist = nodelist.next

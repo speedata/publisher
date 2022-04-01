@@ -184,8 +184,8 @@ local function flatten(self,items,options)
             if type(thisself) == "string" then
                 local text = thisself
                 local tmp = flatten(self,{text},new_options)
-                for i=1,#tmp do
-                    table.insert(ret,tmp[i])
+                for j=1,#tmp do
+                    table.insert(ret,tmp[j])
                 end
             else
                 local htmltext = reconstruct_html_text(thisself)
@@ -437,7 +437,7 @@ function Par:format( width_sp, options )
     local current_textformat = self.textformat or options.textformat
     if not current_textformat then
         if self.textformat or options.textformat then
-            err("textformat %q undefined, using text instead",tostring(textformat_name))
+            err("textformat undefined, using text instead")
         end
         current_textformat = publisher.textformats.text
     end
