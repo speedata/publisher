@@ -1,0 +1,35 @@
+<Layout
+    xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Trace grid="yes" objects="yes"/>
+    <Pageformat height="9cm" width="5cm" />
+    <SetGrid height="12pt" width="1cm"/>
+
+    <Pagetype name="default" test="true()">
+      <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+      <PositioningArea name="main">
+        <PositioningFrame width="{sd:number-of-columns()}" height="{sd:number-of-rows() -3}" row="4" column="1"/>
+      </PositioningArea>
+    </Pagetype>
+
+    <Record element="data">
+        <PlaceObject area="main">
+          <Box height="3" width="1" />
+        </PlaceObject>
+        <NextRow />
+
+        <PlaceObject column="1" area="main">
+            <Table padding="5pt" leading="5pt">
+              <Loop select="6">
+                <Tr>
+                  <Td>
+                    <Paragraph>
+                      <Value>L</Value>
+                    </Paragraph>
+                  </Td>
+                </Tr>
+              </Loop>
+            </Table>
+          </PlaceObject>
+    </Record>
+</Layout>

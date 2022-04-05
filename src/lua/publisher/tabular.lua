@@ -1609,8 +1609,6 @@ function typeset_table(self)
 
     -- When we split the current table we return an array:
     local final_split_tables = {}
-    local current_table
-    local tmp
     local pagegoal = 0
 
     local ht_row,space_above,too_high
@@ -1865,7 +1863,8 @@ function typeset_table(self)
             end
             thissplittable[#thissplittable + 1] = publisher.make_glue({ width = space_above})
             thissplittable[#thissplittable + 1] = rows[i]
-            if i < #rows or self.tablefoot_contents then
+            -- the last rowsep at the end of a split should be omitted.
+            if ( i < #rows and i < splits[s] ) or self.tablefoot_contents then
                 thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep})
             end
         end
