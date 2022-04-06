@@ -5787,7 +5787,7 @@
          </optional>
          <optional>
             <attribute name="color">
-               <a:documentation>The color of the rule. Defaults to black.</a:documentation>
+               <a:documentation>The color of the rule. Defaults to black. A color named “-” (without quotes) is a transparent “color”.</a:documentation>
             </attribute>
          </optional>
          <optional>

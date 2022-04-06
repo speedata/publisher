@@ -6708,7 +6708,7 @@
       </xs:attribute>
       <xs:attribute name="color">
         <xs:annotation>
-          <xs:documentation>The color of the rule. Defaults to black.</xs:documentation>
+          <xs:documentation>The color of the rule. Defaults to black. A color named “-” (without quotes) is a transparent “color”.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="start">

@@ -5367,25 +5367,29 @@ end
 
 function colorbar( wd,ht,dp,color,origin )
     local colorname = color
-    if not colorname or colorname == "" then
-        colorname = "black"
-    end
-    if not colors[colorname] then
-        err("Color %q not found",color)
-        colorname = "black"
+    if color == "-" then
+        -- ok, ignore
+    else
+        if not colorname or colorname == "" then
+            colorname = "black"
+        end
+        if not colors[colorname] then
+            err("Color %q not found",color)
+            colorname = "black"
+        end
     end
 
     local rule_start = node.new("whatsit","pdf_literal")
     setprop(rule_start,"origin","colorbar")
-    rule_start.mode = 0
-    rule_start.data = "q "..colors[colorname].pdfstring .. string.format(" %g w 0 %g m  %g %g l s Q ",sp_to_bp(ht),sp_to_bp(ht / 2) , sp_to_bp(wd),sp_to_bp(ht / 2))
-    -- rule_start.data = "q "..colors[colorname].pdfstring .. string.format(" 0 0 %g %g  re f Q ",sp_to_bp(wd),sp_to_bp(ht))
-
+    if colorname ~= "-" then
+        rule_start.mode = 0
+        rule_start.data = "q "..colors[colorname].pdfstring .. string.format(" %g w 0 %g m  %g %g l s Q ",sp_to_bp(ht),sp_to_bp(ht / 2) , sp_to_bp(wd),sp_to_bp(ht / 2))
+    end
     local h = node.hpack(rule_start)
     h.width = wd
     h.depth = dp
     h.height = ht
-    origin = origin or origin_colorbar
+    origin = origin or "origin_colorbar"
     setprop(h,"origin",origin)
     return h
 end

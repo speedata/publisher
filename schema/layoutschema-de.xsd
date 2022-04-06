@@ -6708,7 +6708,7 @@
       </xs:attribute>
       <xs:attribute name="color">
         <xs:annotation>
-          <xs:documentation>Farbe der Linie. (Default: Schwarz)</xs:documentation>
+          <xs:documentation>Farbe der Linie. (Default: Schwarz). Eine Farbe mit dem Namen »-« (ohne Anführungszeichen) ist eine transparente »Farbe«.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="start">

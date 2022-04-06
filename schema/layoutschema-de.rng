@@ -5787,7 +5787,7 @@
          </optional>
          <optional>
             <attribute name="color">
-               <a:documentation>Farbe der Linie. (Default: Schwarz)</a:documentation>
+               <a:documentation>Farbe der Linie. (Default: Schwarz). Eine Farbe mit dem Namen »-« (ohne Anführungszeichen) ist eine transparente »Farbe«.</a:documentation>
             </attribute>
          </optional>
          <optional>

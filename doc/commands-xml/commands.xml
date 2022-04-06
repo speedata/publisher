@@ -9228,10 +9228,10 @@
     </attribute>
     <attribute en="color" type="text" optional="yes" css="background-color">
       <description xml:lang="en">
-        <para>The color of the rule. Defaults to black.</para>
+        <para>The color of the rule. Defaults to black. A color named “-” (without quotes) is a transparent “color”.</para>
       </description>
       <description xml:lang="de">
-        <para>Farbe der Linie. (Default: Schwarz)</para>
+        <para>Farbe der Linie. (Default: Schwarz). Eine Farbe mit dem Namen »-« (ohne Anführungszeichen) ist eine transparente »Farbe«.</para>
       </description>
     </attribute>
     <attribute en="start" type="number" optional="yes" css="rule-start">
