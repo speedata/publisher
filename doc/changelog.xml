@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.7">
+    <entry version="4.7.11" date="2022-04-07">
+        <en>Allow color <tt>-</tt> in Tablerule.</en>
+        <de>Erlaube Farbe <tt>-</tt> in Tablerule.</de>
+    </entry>
     <entry version="4.7.10" date="2022-04-05">
         <en>Bugfix table split and rowsep / leading (#361).</en>
         <de>Fehlerkorrektur Tabellensplit und rowsep/leading (#361).</de>
