@@ -406,17 +406,17 @@ local function groupheight(dataxml, arg )
         elseif unit == "in" then
             ret = height / publisher.onein_sp
         elseif unit == "sp" then
-            ret = width
+            ret = height
         elseif unit == "pc" then
-            ret = width / publisher.onepc_sp
+            ret = height / publisher.onepc_sp
         elseif unit == "pt" then
-            ret = width / publisher.onept_sp
+            ret = height / publisher.onept_sp
         elseif unit == "pp" then
-            ret = width / publisher.onepp_sp
+            ret = height / publisher.onepp_sp
         elseif unit == "dd" then
-            ret = width / publisher.onedd_sp
+            ret = height / publisher.onedd_sp
         elseif unit == "cc" then
-            ret = width / publisher.onecc_sp
+            ret = height / publisher.onecc_sp
         else
             err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'",unit)
         end
