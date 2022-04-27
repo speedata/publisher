@@ -3871,6 +3871,30 @@ function bigger_glue_spec( a,b )
     if a.width > b.width then return a else return b end
 end
 
+
+function short_newline(fam)
+    local strutheight = fonts.lookup_fontfamily_number_instance[fam].baselineskip
+    local dummypenalty
+    dummypenalty = node.new("penalty")
+    dummypenalty.penalty = 10000
+    set_attribute(dummypenalty,"newline")
+
+    local list, cur
+    list, cur = dummypenalty,dummypenalty
+
+    local strut = node.new("rule")
+    -- set to 60000 for example for debugging
+    strut.width=0
+    strut.height = strutheight*0.75
+    strut.depth = strutheight*0.25
+    list,cur = node.insert_after(list,cur,strut)
+
+    g = set_glue(nil,{})
+    list,cur = node.insert_after(list,cur,g)
+    return list, cur
+
+end
+
 -- newline returns a nodelist that behaves as a new line in TeX
 function newline(fam)
     local strutheight = fonts.lookup_fontfamily_number_instance[fam].baselineskip
@@ -3906,7 +3930,6 @@ function newline(fam)
     -- add glue so next word can hyphenate (#274)
     g = set_glue(nil,{})
     list,cur = node.insert_after(list,cur,g)
-
     return list, cur
 end
 

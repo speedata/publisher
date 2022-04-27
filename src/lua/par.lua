@@ -631,7 +631,6 @@ function Par:format( width_sp, options )
             thispaddingleft = thispaddingleft + this_object_padding_left
             width_sp = width_sp - this_object_padding_left
         end
-        local this_object_padding_left = publisher.getprop(nodelist,"padding_left")
         local langs_num,langs
         langs = {}
         if current_textformat.hyphenchar then

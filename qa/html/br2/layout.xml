@@ -1,0 +1,16 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pagetype name="t" test="true()">
+      <Margin left="0mm" right="0mm" top="0mm" bottom="0mm" />
+    </Pagetype>
+    <Pageformat height="2cm" width="2cm" />
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="."></Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

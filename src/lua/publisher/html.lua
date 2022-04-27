@@ -998,13 +998,16 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
                     ret[#ret + 1] = a
                 end
             elseif thiseltname == "br" then
+                local a = par:new(tf,"html.lua (br)")
+                local list
                 if prevdir == "vertical" then
-                    local a = par:new(tf,"html.lua (br)")
-                    local list = publisher.newline(fam)
-                    a:append(list)
-                    ret[#ret + 1] = a
+                    list = publisher.newline(fam)
+                else
+                    list = publisher.short_newline(fam)
                 end
-                prevdir = "vertical"
+                a:append(list)
+                ret[#ret + 1] = a
+            prevdir = "vertical"
             elseif thiseltname == "hr" then
                 local ht = getsize(styles.height,styles.fontsize_sp)
                 ht = ht + border_top_width + border_bottom_width
