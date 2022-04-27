@@ -4410,7 +4410,16 @@ end
 --- ------
 --- Create a vertical space that stretches up to infinity
 function commands.vspace( layoutxml,dataxml )
-    local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
+    local height      = publisher.read_attribute(layoutxml,dataxml,"height", "height_sp")
+    local minheight   = publisher.read_attribute(layoutxml,dataxml,"minheight", "height_sp")
+
+    local n
+    if height == nil then
+        n = set_glue(nil,{width = minheight or 0, stretch = 2^16, stretch_order = 3})
+    else
+        n = set_glue(nil,{width = tonumber(height)})
+    end
+
     publisher.setprop(n,"origin","vspace")
     return n
 end

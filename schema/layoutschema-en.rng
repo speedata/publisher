@@ -6671,6 +6671,16 @@
    <define name="e_VSpace">
       <element name="VSpace">
          <a:documentation>Create a vertically stretching space. The space has a minimum height of 0 but is able to stretch up to infinity. Useful in table cells.</a:documentation>
+         <optional>
+            <attribute name="minheight">
+               <a:documentation>The (optional) minimum height of the inserted space.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="height">
+               <a:documentation>Optional height of the space (a length).</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

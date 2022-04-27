@@ -7870,7 +7870,18 @@
     <xs:annotation>
       <xs:documentation>Erzeugt einen vertikal dehnbaren Leerraum. Der Leerraum hat die minimale Höhe 0 und die maximale Höhe »unendlich«. Sinnvoll nutzbar in Tabellenzellen.</xs:documentation>
     </xs:annotation>
-    <xs:complexType/>
+    <xs:complexType>
+      <xs:attribute name="minheight">
+        <xs:annotation>
+          <xs:documentation>Die (optionale) minimale Höhe des eingefügten Leerraums.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="height">
+        <xs:annotation>
+          <xs:documentation>Optionale Höhe des Leerraums</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
   </xs:element>
   <xs:element name="While">
     <xs:annotation>

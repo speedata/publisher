@@ -6671,6 +6671,16 @@
    <define name="e_VSpace">
       <element name="VSpace">
          <a:documentation>Erzeugt einen vertikal dehnbaren Leerraum. Der Leerraum hat die minimale Höhe 0 und die maximale Höhe »unendlich«. Sinnvoll nutzbar in Tabellenzellen.</a:documentation>
+         <optional>
+            <attribute name="minheight">
+               <a:documentation>Die (optionale) minimale Höhe des eingefügten Leerraums.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="height">
+               <a:documentation>Optionale Höhe des Leerraums</a:documentation>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

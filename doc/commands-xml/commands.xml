@@ -10308,6 +10308,18 @@ Message: "$i is: 3"]]></listing>
       <para>Erzeugt einen vertikal dehnbaren Leerraum. Der Leerraum hat die minimale Höhe 0 und die maximale Höhe »unendlich«. Sinnvoll nutzbar in Tabellenzellen.</para>
     </description>
     <childelements/>
+    <attribute en="minheight" optional="yes" type="length" since="4.7.12">
+      <description xml:lang="en"><para>The (optional) minimum height of the inserted space.</para></description>
+      <description xml:lang="de"><para>Die (optionale) minimale Höhe des eingefügten Leerraums.</para></description>
+    </attribute>
+    <attribute en="height" optional="yes" type="length" since="4.7.12">
+      <description xml:lang="en">
+        <para>Optional height of the space (a length).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Optionale Höhe des Leerraums</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Td valign="bottom">
   <VSpace/>
