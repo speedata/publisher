@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.7">
+    <entry version="4.7.12" date="2022-04-28">
+        <en>Bugfixes (sd:group-height() and HTML rendering) (#364).</en>
+        <de>Fehlerkorrekturen (sd:group-height() und HTML Darstellung) (#364).</de>
+    </entry>
+    <entry version="4.7.12" date="2022-04-28">
+        <en>VSpace now has minheight and height attributes.</en>
+        <de>VSpace hat nun minheight und height Attribute.</de>
+    </entry>
     <entry version="4.7.11" date="2022-04-07">
         <en>Allow color <tt>-</tt> in Tablerule.</en>
         <de>Erlaube Farbe <tt>-</tt> in Tablerule.</de>
