@@ -964,7 +964,12 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
                 else
                     styles.ullevel = styles.ullevel + 1
                 end
-                olcounter[styles.listlevel] = 0
+                local attribs = thiselt.attributes
+                if attribs and attribs.start then
+                    olcounter[styles.listlevel] = attribs.start - 1
+                else
+                    olcounter[styles.listlevel] = 0
+                end
                 local n
                 n, prevdir = build_nodelist(thiselt,options,before_box,"build_nodelist/ ol/ul",prevdir)
                 before_box = nil
