@@ -609,8 +609,12 @@ function Par:format( width_sp, options )
     local objects = self.objects
     local orig_width_sp = width_sp
     if #objects == 0 then return node.new("vlist") end
+    local objectrow = 0
     for i=1,#objects do
         nodelist = objects[i]
+        if publisher.getprop(nodelist,"br") ~= true then
+            objectrow = objectrow + 1
+        end
         local pardir = publisher.getprop(nodelist,"pardir")
         if pardir == "rtl" then
             tex.shapemode = 1
@@ -655,9 +659,15 @@ function Par:format( width_sp, options )
         -- both are set only for ul/ol lists
         local indent = publisher.get_attribute(nodelist,"indent") or 0
         local rows   = node.has_attribute(nodelist,publisher.att_rows)
+        parameter.hangindent = indent
 
-        parameter.hangindent = indent + ( current_textformat.indent or 0 )
-        parameter.hangafter  = rows  or current_textformat.rows  or 0
+        -- indent and rows
+        if current_textformat.indent and current_textformat.rows then
+            if objectrow <= current_textformat.rows or current_textformat.rows < 0 then
+                parameter.hangindent = parameter.hangindent + current_textformat.indent
+            end
+        end
+        parameter.hangafter = rows  or current_textformat.rows  or 0
         if self.startendborder or self.startborder then
             local ba = publisher.borderattributes[self.borderstart or self.startendborder]
             thispaddingleft = thispaddingleft + ba.border_left_width

@@ -1010,6 +1010,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
                 else
                     list = publisher.short_newline(fam)
                 end
+                publisher.setprop(list,"br",true)
                 a:append(list)
                 ret[#ret + 1] = a
             prevdir = "vertical"

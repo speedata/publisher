@@ -2987,9 +2987,11 @@
     </attribute>
     <remark xml:lang="en">
       <para>The textformats <tt>text</tt>, <tt>centered</tt>, <tt>left</tt> and <tt>right</tt> are predefined. They stand for justified, centered, left aligned and right aligned text.</para>
+      <para>Indentation with negative values for rows do not work with HTML text.</para>
     </remark>
     <remark xml:lang="de">
       <para>Die Textformate <tt>text</tt>, <tt>centered</tt>, <tt>left</tt> und <tt>right</tt> sind vordefiniert. Sie stehen für Blocksatz, zentrierten, linksbündigen und rechtsbündigen Text.</para>
+      <para>Einrückung funktioniert nicht mit negativen Werten für row im HTML-Modus.</para>
     </remark>
     <example xml:lang="en">
       <listing><![CDATA[<DefineTextformat name="text with indentation" alignment="justified" indentation="1cm"/>

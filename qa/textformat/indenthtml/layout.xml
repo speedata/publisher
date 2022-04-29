@@ -1,0 +1,13 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <DefineTextformat name="indent" indentation="20pt" rows="2" alignment="leftaligned" />
+    <Pageformat height="6cm" width="4cm" />
+    <Record element="data">
+      <PlaceObject>
+        <Textblock>
+          <Paragraph textformat="indent" fontfamily="text">
+            <Value select="." />
+          </Paragraph>
+        </Textblock>
+      </PlaceObject>
+    </Record>
+  </Layout>
