@@ -216,16 +216,18 @@ local function flatten(self,items,options)
                     local blocks = publisher.parse_html(csshtmltree, options) or {}
                     blocks = publisher.flatten_boxes(blocks)
                     -- printtable("blocks",blocks)
-                    local c = 1
+
+                    -- block number width contents
+                    local blocknumber = 1
                     for b=1,#blocks do
                         local thisblock = blocks[b]
-                        local has_contents = false
+                        local this_block_has_contents = false
                         for tb=1,#thisblock do
                             local tbc = thisblock[tb].contents
                             local dir = publisher.getprop(tbc,"direction")
                             local mode = thisblock.mode
                             local startblock = (tb == 1 and mode == "block" )
-                            local is_newline = ( c > startnewline and ( has_contents == false ) and dir ~= "→" )
+                            local is_newline = ( blocknumber > startnewline and ( this_block_has_contents == false ) and dir ~= "→" )
                             if tbc then
                                 if startblock or is_newline then
                                     publisher.setprop(tbc,"split",true)
@@ -236,11 +238,11 @@ local function flatten(self,items,options)
                                     publisher.setprop(tbc,"margin_bottom",thisblock.margin_bottom)
                                 end
                                 table.insert(ret,tbc)
-                                has_contents = true
+                                this_block_has_contents = true
                             end
                         end
-                        if has_contents then
-                            c = c + 1
+                        if this_block_has_contents then
+                            blocknumber = blocknumber + 1
                         end
                     end
                 end
