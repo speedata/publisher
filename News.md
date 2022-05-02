@@ -2,6 +2,15 @@
 
 This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/).
 
+## Version 4.8
+
+Released 2022-05-02
+
+* Bug fixes
+* Allow `color="-"` in `<Tablerule>`
+* `<VSpace>` with attributes `height` and `minheight`
+
+
 ## Version 4.6
 
 Released 2021-11-10
