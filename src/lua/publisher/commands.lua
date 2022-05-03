@@ -2438,34 +2438,54 @@ function commands.pdfoptions( layoutxml, dataxml )
     local keywords     = publisher.read_attribute(layoutxml,dataxml,"keywords", "string")
     local colorprofile = publisher.read_attribute(layoutxml,dataxml,"colorprofile", "rawstring")
 
-    publisher.options.documenttitle    = title
-    publisher.options.documentauthor   = author
-    publisher.options.documentsubject  = subject
-    publisher.options.documentkeywords = keywords
-    publisher.options.showhyperlinks   = showhyperlinks
-
-    publisher.viewerpreferences.numcopies = nc or 1
-    publisher.viewerpreferences.showbookmarks = showbookmarks
-
-    if printscaling == "appdefault" then
-        publisher.viewerpreferences.printscaling = "AppDefault"
-    elseif printscaling == "none" then
-        publisher.viewerpreferences.printscaling = "None"
-    else
-        publisher.viewerpreferences.printscaling = ""
+    if title then
+        publisher.options.documenttitle = title
     end
+    if author then
+        publisher.options.documentauthor = author
+    end
+    if subject then
+        publisher.options.documentsubject = subject
+    end
+    if keywords then
+        publisher.options.documentkeywords = keywords
+    end
+    if showhyperlinks then
+        publisher.options.showhyperlinks = showhyperlinks
+    end
+    if nc then
+        publisher.viewerpreferences.numcopies = nc
+    end
+    if showbookmarks ~= nil then
+        publisher.viewerpreferences.showbookmarks = showbookmarks
+    end
+
+    if printscaling then
+        if printscaling == "appdefault" then
+            publisher.viewerpreferences.printscaling = "AppDefault"
+        elseif printscaling == "none" then
+            publisher.viewerpreferences.printscaling = "None"
+        else
+            publisher.viewerpreferences.printscaling = ""
+        end
+    end
+
     if picktray ~= nil then
         publisher.viewerpreferences.picktray = tostring(picktray)
     end
-    if duplex == "simplex" then
-        publisher.viewerpreferences.duplex = "Simplex"
-    elseif duplex == "duplexflipshortedge" then
-        publisher.viewerpreferences.duplex = "DuplexFlipShortEdge"
-    elseif duplex == "duplexfliplongedge" then
-        publisher.viewerpreferences.duplex = "DuplexFlipLongEdge"
-    else
-        publisher.viewerpreferences.duplex = ""
+
+    if duplex then
+        if duplex == "simplex" then
+            publisher.viewerpreferences.duplex = "Simplex"
+        elseif duplex == "duplexflipshortedge" then
+            publisher.viewerpreferences.duplex = "DuplexFlipShortEdge"
+        elseif duplex == "duplexfliplongedge" then
+            publisher.viewerpreferences.duplex = "DuplexFlipLongEdge"
+        else
+            publisher.viewerpreferences.duplex = ""
+        end
     end
+
     if colorprofile then
         spotcolors.set_colorprofile(colorprofile)
     end

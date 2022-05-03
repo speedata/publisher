@@ -1471,12 +1471,13 @@ function initialize_luatex_and_generate_pdf()
             pdfcatalog[#pdfcatalog + 1] = string.format("/StructTreeRoot %d 0 R",structtreeroot)
         end
 
-        if #vp > 0 then
-            pdfcatalog[#pdfcatalog + 1] = "/ViewerPreferences <<" .. table.concat(vp," ") .. ">>"
-        end
         if metadataobjnum then
             pdfcatalog[#pdfcatalog + 1] = string.format("/Metadata %d 0 R",metadataobjnum )
         end
+    end
+
+    if #vp > 0 then
+        pdfcatalog[#pdfcatalog + 1] = "/ViewerPreferences <<" .. table.concat(vp," ") .. ">>"
     end
 
     local info = table.concat(infos, " ")
