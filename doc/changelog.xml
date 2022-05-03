@@ -1,4 +1,14 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="4.9">
+    <entry version="4.9.1" date="2022-05-03">
+        <en>Fix PDFOptions overrides previous entries (#367).</en>
+        <de>Korrektur: PDFOptions überschreibt vorhergehende Einträge (#367).</de>
+    </entry>
+    <entry version="4.9.1" date="2022-05-03">
+        <en>Fix ordering of bookmarks in InsertPages (#366).</en>
+        <de>Korrigiere Reihenfolge der Bookmarks bei InsertPages (#366).</de>
+    </entry>
+  </chapter>
   <chapter version="4.8" date="2022-05-02">
     <entry version="4.8.0" date="2022-05-02">
         <en>Release version 4.8.</en>
