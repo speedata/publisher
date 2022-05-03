@@ -1903,7 +1903,7 @@ end
 --- origin_y        | Origin Y for rotation. Top is 0 and bottom is 100
 --- framewidth      | When frame=solid then this has the frame width
 function output_at( param )
-    _wd, _ht, _dp = node.dimensions(param.nodelist)
+    local _wd, _ht, _dp = node.dimensions(param.nodelist)
     if param.framewidth then
         _wd = _wd + param.framewidth
         _ht = _ht + param.framewidth

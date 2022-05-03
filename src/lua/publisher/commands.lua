@@ -3143,6 +3143,7 @@ function commands.save_pages( layoutxml,dataxml )
         local ps = publisher.pagestore[pagestore_name]
         local number_of_pages = ps[1]
         local location = ps[2]
+        -- oldbookmarkspos = the number of bookmarks before the insert pages command
         local oldbookmarkspos = ps[3]
         local bookmarkscount = #publisher.bookmarks
         publisher.current_pagenumber = location
@@ -3178,7 +3179,8 @@ function commands.save_pages( layoutxml,dataxml )
                 table.insert(tmpbookmarks,item)
             end
             for i = 1,#tmpbookmarks do
-                table.insert(publisher.bookmarks,oldbookmarkspos + i - 1,tmpbookmarks[i])
+                local pos = oldbookmarkspos + i
+                table.insert(publisher.bookmarks,pos,tmpbookmarks[i])
             end
         end
 

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+		xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="4cm" width="6cm" />
+	<Record element="data">
+		<PlaceObject row="1">
+			<Textblock>
+				<Bookmark select="'Title'" level="1" open="yes"/>
+				<Paragraph>
+					<B>
+						<Value select="Title"/>
+					</B>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<ClearPage/>
+		<InsertPages name="TOC" pages="1"/>
+		<ProcessNode select="Product"/>
+
+        <SavePages name="TOC">
+			<PlaceObject row="1">
+			<Textblock>
+				<Bookmark select="'TOC'" level="1" open="yes"/>
+				<Paragraph>
+					<B>
+						<Value select="'TOC'"/>
+					</B>
+				</Paragraph>
+			</Textblock>
+			</PlaceObject>
+
+		</SavePages>
+
+	</Record>
+
+
+	<Record element="Product">
+		<SetVariable variable="Name" select="."/>
+		<PlaceObject row="1">
+			<Textblock>
+				<Bookmark select="concat('Product ', $Name)" level="1" open="yes"/>
+				<Paragraph>
+					<Value select="concat('Product ', $Name)"/>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<ClearPage/>
+	</Record>
+
+</Layout>
