@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.9">
+    <entry version="4.9.2" date="2022-05-09">
+        <en>Allow setting the creator of the document.</en>
+        <de>Erlaubt es die Anwendung (creator) des Documents festzulegen.</de>
+    </entry>
     <entry version="4.9.1" date="2022-05-03">
         <en>Fix PDFOptions overrides previous entries (#367).</en>
         <de>Korrektur: PDFOptions überschreibt vorhergehende Einträge (#367).</de>
