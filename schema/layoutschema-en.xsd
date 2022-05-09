@@ -2485,33 +2485,58 @@
           <xs:documentation>The PDF box that represents the visible area of the included image. Default is “cropbox”.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="artbox">
-              <xs:annotation>
-                <xs:documentation>Use the artbox as the visible area. The artbox is usually not contained in a PDF.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="bleedbox">
-              <xs:annotation>
-                <xs:documentation>Use the bleedbox of the included PDF.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="cropbox">
-              <xs:annotation>
-                <xs:documentation>Use the cropbox of the included PDF (default).</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="mediabox">
-              <xs:annotation>
-                <xs:documentation>Use the mediabox of the included PDF. This is the largest box.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="trimbox">
-              <xs:annotation>
-                <xs:documentation>Use the trimbox of the includes PDF. The trimbox is the final paper size. For example, the trim box of an A4 PDF is 210mm x 297mm.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="artbox">
+                  <xs:annotation>
+                    <xs:documentation>Use the artbox as the visible area. The artbox is usually not contained in a PDF.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="bleedbox">
+                  <xs:annotation>
+                    <xs:documentation>Use the bleedbox of the included PDF.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="cropbox">
+                  <xs:annotation>
+                    <xs:documentation>Use the cropbox of the included PDF (default).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="mediabox">
+                  <xs:annotation>
+                    <xs:documentation>Use the mediabox of the included PDF. This is the largest box.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="trimbox">
+                  <xs:annotation>
+                    <xs:documentation>Use the trimbox of the includes PDF. The trimbox is the final paper size. For example, the trim box of an A4 PDF is 210mm x 297mm.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="width">
@@ -4702,6 +4727,11 @@
       <xs:attribute name="author">
         <xs:annotation>
           <xs:documentation>Set the author of the document</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="creator">
+        <xs:annotation>
+          <xs:documentation>Set the creator application of the document</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="duplex">

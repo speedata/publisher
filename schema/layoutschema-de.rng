@@ -2474,6 +2474,9 @@
                         <a:documentation>Nutze die mediabox der eingebundenen PDF-Datei. Das ist die größte Box.</a:documentation>
                         <value>trimbox</value>
                         <a:documentation>Nutze die trimbox der eingebundenen PDF-Datei. Die trimbox ist die Papiergröße. Beispielsweise hat die trimbox eines A4-PDFs die Größe 210mm x 297mm.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
                      </choice>
                   </attribute>
                </optional>
@@ -4146,6 +4149,11 @@
          <optional>
             <attribute name="author">
                <a:documentation>Legt den Autor des Dokuments fest</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="creator">
+               <a:documentation>Legt die Anwendung des Dokuments fest</a:documentation>
             </attribute>
          </optional>
          <optional>

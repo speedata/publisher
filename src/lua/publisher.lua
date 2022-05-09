@@ -871,6 +871,8 @@ end
 local function getcreator()
     if sp_suppressinfo then
         return "speedata Publisher, www.speedata.de"
+    elseif options.documentcreator and options.documentcreator ~= "" then
+        return options.documentcreator
     else
         return string.format("speedata Publisher %s, www.speedata.de",env_publisherversion)
     end
@@ -1408,6 +1410,8 @@ function initialize_luatex_and_generate_pdf()
     local infos
     if sp_suppressinfo then
         infos = { "/Creator (speedata Publisher) /Producer (LuaTeX)"}
+    elseif options.documentcreator and options.documentcreator ~= "" then
+        infos = { string.format("/Creator %s /Producer (speedata Publisher %s using LuaTeX) ",utf8_to_utf16_string_pdf(creator),env_publisherversion) }
     else
         infos = { string.format("/Creator (%s) /Producer (LuaTeX %s (build %s))",creator, luatex_version, status.development_id or "-") }
     end

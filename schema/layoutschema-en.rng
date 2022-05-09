@@ -2474,6 +2474,9 @@
                         <a:documentation>Use the mediabox of the included PDF. This is the largest box.</a:documentation>
                         <value>trimbox</value>
                         <a:documentation>Use the trimbox of the includes PDF. The trimbox is the final paper size. For example, the trim box of an A4 PDF is 210mm x 297mm.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
                      </choice>
                   </attribute>
                </optional>
@@ -4146,6 +4149,11 @@
          <optional>
             <attribute name="author">
                <a:documentation>Set the author of the document</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="creator">
+               <a:documentation>Set the creator application of the document</a:documentation>
             </attribute>
          </optional>
          <optional>

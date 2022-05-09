@@ -4210,7 +4210,7 @@
         <para>Dreht das Bild in 90°-Schritten. Ein Winkel > 0 dreht das Objekt im Uhrzeigersinn, ein Winkel &lt; 0 gegen den Uhrzeigersinn.</para>
       </description>
     </attribute>
-    <attribute en="visiblebox" optional="yes">
+    <attribute en="visiblebox" optional="yes" allowxpath="yes">
       <description xml:lang="en">
         <para>The PDF box that represents the visible area of the included image. Default is “cropbox”.</para>
       </description>
@@ -6435,6 +6435,14 @@
       </description>
       <description xml:lang="de">
         <para>Legt den Autor des Dokuments fest</para>
+      </description>
+    </attribute>
+    <attribute en="creator" optional="yes" type="text" since="4.9.2">
+      <description xml:lang="en">
+        <para>Set the creator application of the document</para>
+      </description>
+      <description xml:lang="de">
+        <para>Legt die Anwendung des Dokuments fest</para>
       </description>
     </attribute>
     <attribute en="duplex" optional="yes" since="2.3.47">

@@ -2434,6 +2434,7 @@ function commands.pdfoptions( layoutxml, dataxml )
     local duplex       = publisher.read_attribute(layoutxml,dataxml,"duplex",   "string")
     local title        = publisher.read_attribute(layoutxml,dataxml,"title",    "string")
     local author       = publisher.read_attribute(layoutxml,dataxml,"author",   "string")
+    local creator      = publisher.read_attribute(layoutxml,dataxml,"creator",   "string")
     local subject      = publisher.read_attribute(layoutxml,dataxml,"subject",  "string")
     local keywords     = publisher.read_attribute(layoutxml,dataxml,"keywords", "string")
     local colorprofile = publisher.read_attribute(layoutxml,dataxml,"colorprofile", "rawstring")
@@ -2443,6 +2444,9 @@ function commands.pdfoptions( layoutxml, dataxml )
     end
     if author then
         publisher.options.documentauthor = author
+    end
+    if creator then
+        publisher.options.documentcreator = creator
     end
     if subject then
         publisher.options.documentsubject = subject

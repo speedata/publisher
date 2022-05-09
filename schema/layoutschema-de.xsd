@@ -2485,33 +2485,58 @@
           <xs:documentation>Die PDF-Box, die den sichtbaren Bereich angibt des eingebundenen PDFs angibt. Voreinstellung ist »cropbox«.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="artbox">
-              <xs:annotation>
-                <xs:documentation>Nutze die artbox als sichtbaren Bereich. Diese Box ist normalerweise in PDF-Dateien nicht enthalten.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="bleedbox">
-              <xs:annotation>
-                <xs:documentation>Nutze die bleedbox des eingebundenen PDFs.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="cropbox">
-              <xs:annotation>
-                <xs:documentation>Nutze die cropbox der eingebundenen PDF-Datei (Voreinstellung).</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="mediabox">
-              <xs:annotation>
-                <xs:documentation>Nutze die mediabox der eingebundenen PDF-Datei. Das ist die größte Box.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="trimbox">
-              <xs:annotation>
-                <xs:documentation>Nutze die trimbox der eingebundenen PDF-Datei. Die trimbox ist die Papiergröße. Beispielsweise hat die trimbox eines A4-PDFs die Größe 210mm x 297mm.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="artbox">
+                  <xs:annotation>
+                    <xs:documentation>Nutze die artbox als sichtbaren Bereich. Diese Box ist normalerweise in PDF-Dateien nicht enthalten.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="bleedbox">
+                  <xs:annotation>
+                    <xs:documentation>Nutze die bleedbox des eingebundenen PDFs.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="cropbox">
+                  <xs:annotation>
+                    <xs:documentation>Nutze die cropbox der eingebundenen PDF-Datei (Voreinstellung).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="mediabox">
+                  <xs:annotation>
+                    <xs:documentation>Nutze die mediabox der eingebundenen PDF-Datei. Das ist die größte Box.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="trimbox">
+                  <xs:annotation>
+                    <xs:documentation>Nutze die trimbox der eingebundenen PDF-Datei. Die trimbox ist die Papiergröße. Beispielsweise hat die trimbox eines A4-PDFs die Größe 210mm x 297mm.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="width">
@@ -4702,6 +4727,11 @@
       <xs:attribute name="author">
         <xs:annotation>
           <xs:documentation>Legt den Autor des Dokuments fest</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="creator">
+        <xs:annotation>
+          <xs:documentation>Legt die Anwendung des Dokuments fest</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="duplex">
