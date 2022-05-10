@@ -1,0 +1,17 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <LoadFontfile name="Noto" filename="NotoSansDevanagari-Regular.ttf" mode="harfbuzz"/>
+    <Pageformat height="4cm" width="5cm" />
+    <DefineFontfamily fontsize="10" leading="12" name="text">
+        <Regular fontface="Noto" />
+    </DefineFontfamily>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph language="Other">
+                    <Value>परमेश्‍वर</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

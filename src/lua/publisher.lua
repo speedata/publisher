@@ -4120,24 +4120,27 @@ function hbglyphlist(arguments)
             -- ignore
         elseif uc == 32 then
             local thiscluster = thisglyph.cluster
-            if cluster[thiscluster] == 160 then
-                n = node.new("penalty")
-                n.penalty = 10000
-                list,cur = node.insert_after(list,cur,n)
-                n = set_glue(nil,{width = space, shrink = shrink, stretch = stretch},"uc=32,160")
-                node.set_attribute(n,att_tie_glue,1)
-                list,cur = node.insert_after(list,cur,n)
-
-            elseif cluster[thiscluster] == 8203 then
-                -- U+200B ZERO WIDTH SPACE
-                p = node.new("penalty")
-                p.penalty = -10
-                list,cur = node.insert_after(list,cur,p)
+            if thisglyph.x_advance == 0 then
+                -- ignore
             else
-                n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch},"uc=32")
-                setstyles(n,parameter)
-                list,cur = node.insert_after(list,cur,n)
-            end
+                if cluster[thiscluster] == 160 then
+                    n = node.new("penalty")
+                    n.penalty = 10000
+                    list,cur = node.insert_after(list,cur,n)
+                    n = set_glue(nil,{width = space, shrink = shrink, stretch = stretch},"uc=32,160")
+                    node.set_attribute(n,att_tie_glue,1)
+                    list,cur = node.insert_after(list,cur,n)
+                elseif cluster[thiscluster] == 8203 then
+                    -- U+200B ZERO WIDTH SPACE
+                    p = node.new("penalty")
+                    p.penalty = -10
+                    list,cur = node.insert_after(list,cur,p)
+                else
+                    n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch},"uc=32")
+                    setstyles(n,parameter)
+                    list,cur = node.insert_after(list,cur,n)
+                end
+        end
             if parameter.textdecorationline then
                 set_attribute(n,"text-decoration-line",parameter.textdecorationline)
                 set_attribute(n,"text-decoration-style",parameter.textdecorationstyle)
