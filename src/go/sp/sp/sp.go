@@ -821,6 +821,7 @@ func main() {
 	op.On("--mode NAME", "Set mode. Multiple modes given in a comma separated list.", options)
 	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)
 	op.On("--option=OPTION", "Set a specific option", setOption)
+	op.On("--pdfversion=VERSION", "Set the PDF version. Default is 1.6", options)
 	op.On("--prepend-xml NAME", "Add this file in front of the layout file", prependXML)
 	op.On("--port PORT", "Port to be used for the server mode. Defaults to 5266", options)
 	op.On("--quiet", "Run publisher in silent mode", options)
@@ -951,6 +952,19 @@ func main() {
 	os.Setenv("SP_PATH_REWRITE", getOption("pathrewrite"))
 	os.Setenv("SP_INKSCAPE", getOption("inkscape"))
 	os.Setenv("SP_INKSCAPECMD", getOption("inkscape-command"))
+
+	if pdfversion := getOption("pdfversion"); pdfversion == "" {
+		os.Setenv("SP_PDFMAJORVERSION", "1")
+		os.Setenv("SP_PDFMINORVERSION", "6")
+	} else {
+		vi := strings.Split(pdfversion, ".")
+		if len(vi) != 2 {
+			fmt.Println("The option pdfversion must have the format X.Y where X is the major version and Y is the minor version number.")
+			os.Exit(-1)
+		}
+		os.Setenv("SP_PDFMAJORVERSION", vi[0])
+		os.Setenv("SP_PDFMINORVERSION", vi[1])
+	}
 
 	ic := getOption("imagecache")
 	if ic == "" {

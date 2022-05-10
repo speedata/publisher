@@ -298,7 +298,11 @@ end
 local function setup()
     tex.pdfhorigin = 0
     tex.pdfvorigin = 0
-    pdf.setminorversion(6)
+
+    -- since 4.9.3
+    pdf.setminorversion(tonumber(os.getenv("SP_PDFMINORVERSION")))
+    pdf.setmajorversion(tonumber(os.getenv("SP_PDFMAJORVERSION")))
+
     -- 10 00 11 11 == 143
     -- PTEX.FullBanner, PTEX.FileName, PTEX.PageNumber, PTEX.InfoDict, Producer
     if os.getenv("SP_SUPPRESSINFO") == "TRUE" then
@@ -313,7 +317,9 @@ local function setup()
         pdf.setobjcompresslevel(0)
     else
         pdf.setcompresslevel(9)
-        pdf.setobjcompresslevel(9)
+        if pdf.getmajorversion() == 1 and pdf.getminorversion() > 4 then
+            pdf.setobjcompresslevel(9)
+        end
     end
     tex.pdfadjustspacing = 2
     tex.adjustspacing = 2

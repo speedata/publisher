@@ -113,6 +113,8 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
    Portnummer für den Servermodus. Voreinstellung ist 5266.
 `--prepend-xml=NAME`::
    Diese Datei vor der Layout-XML einfügen.
+`--pdfversion=VERSION`::
+   Setzt die PDF Version. Voreinstellung ist 1.6.
 `--quiet`::
    Unterdrückt alle Ausgaben des Publishers.
 `--runs = NUM`::

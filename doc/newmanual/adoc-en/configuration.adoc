@@ -52,8 +52,6 @@ The format of the file is important, otherwise it won’t be recognized. The fol
    Add this XML file to the layout instructions. List of comma separated file names (`extraxml=file1.xml,file2.xml`).
 `fontloader`::
    Set the fontloader to `fontforge` (default until version 4) or `harfbuzz` (default starting from version 5).
-`prependxml`::
-   Add this XML file in front of the layout instructions. List of comma separated file names (`prependxml=file1.xml,file2.xml`).
 `filter`::
    Run the given file as an Lua-Filter. See the section <<ch-preprocessing>>.
 `fontpath`::
@@ -82,6 +80,10 @@ The format of the file is important, otherwise it won’t be recognized. The fol
    Command that will be run to open the documentation and the PDF file. For MacOS X this should be `open`, for Linux `xdg-open` or `exo-open` (xfce).
 `pathrewrite`::
    Comma separated list of entries of the form A=B which replace parts in `file:///media/XYZ` to `file:///path/to/project/myfiles/XYZ`. Useful when you have absolute paths in the data which must be changed during the publishing process.
+`pdfversion`::
+  The PDF version that gets written. For example `1.7`.
+`prependxml`::
+   Add this XML file in front of the layout instructions. List of comma separated file names (`prependxml=file1.xml,file2.xml`).
 `reportmissingglyphs`::
    Should requested but missing glyphs be reported as an error or as a warning? The allowed values are `true`, `false`, or `warning`. `false` disables the reporting.
 `runs`::

@@ -114,7 +114,9 @@ you can display a list of the allowed commands and parameters.
 `--option=OPTION`::
    Set a specific option that has no command line parameter.
 `--outputdir=DIR`::
-   Copy PDF and protocol to this directory
+   Copy PDF and protocol to this directory.
+`--pdfversion=VERSION`::
+   Set the PDF version. Default is 1.6.
 `--prepend-xml=NAME`::
    Add this file in front of the layout file
 `--port=PORT`::
