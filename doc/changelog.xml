@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.9">
+    <entry version="4.9.3" date="2022-05-10">
+        <en>New command line option to set the PDF version (<tt>--pdfversion</tt>).</en>
+        <de>Neue Kommandozeilenoption, um die PDF-Version zu setzen (<tt>--pdfversion</tt>).</de>
+    </entry>
+    <entry version="4.9.3" date="2022-05-10">
+        <en>Bugfix zero width joiner in Hindi texts (#369).</en>
+        <de>Fehlerkorrektur beim zero width joiner und Indischer Schriften (#369).</de>
+    </entry>
     <entry version="4.9.2" date="2022-05-09">
         <en>Allow setting the creator of the document.</en>
         <de>Erlaubt es die Anwendung (creator) des Documents festzulegen.</de>
