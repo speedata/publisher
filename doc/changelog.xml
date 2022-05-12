@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.9">
+    <entry version="4.9.4" date="2022-05-12">
+        <en>Better fix for ZWJ (#369).</en>
+        <de>Bessere Korrektur für ZWJ (#369).</de>
+    </entry>
     <entry version="4.9.3" date="2022-05-10">
         <en>New command line option to set the PDF version (<tt>--pdfversion</tt>).</en>
         <de>Neue Kommandozeilenoption, um die PDF-Version zu setzen (<tt>--pdfversion</tt>).</de>
