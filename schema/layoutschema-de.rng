@@ -839,6 +839,9 @@
                      <ref name="e_Value"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_VSpace"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_While"></ref>
                   </optional>
                </oneOrMore>
@@ -1867,6 +1870,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Value"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_VSpace"></ref>
                      </optional>
                      <optional>
                         <ref name="e_While"></ref>
@@ -2955,6 +2961,9 @@
                         <ref name="e_Value"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_VSpace"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_While"></ref>
                      </optional>
                   </interleave>
@@ -3668,6 +3677,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Value"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_VSpace"></ref>
                   </optional>
                   <optional>
                      <ref name="e_While"></ref>
@@ -6608,6 +6620,9 @@
                         <ref name="e_Value"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_VSpace"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_While"></ref>
                      </optional>
                   </interleave>
@@ -6911,6 +6926,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Value"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_VSpace"></ref>
                      </optional>
                      <optional>
                         <ref name="e_While"></ref>

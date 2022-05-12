@@ -631,6 +631,7 @@
         <xs:element minOccurs="0" ref="en:U"/>
         <xs:element minOccurs="0" ref="en:Until"/>
         <xs:element minOccurs="0" ref="en:Value"/>
+        <xs:element minOccurs="0" ref="en:VSpace"/>
         <xs:element minOccurs="0" ref="en:While"/>
       </xs:sequence>
       <xs:attribute name="test" use="required">
@@ -1573,6 +1574,7 @@
         <xs:element ref="en:U"/>
         <xs:element ref="en:Until"/>
         <xs:element ref="en:Value"/>
+        <xs:element ref="en:VSpace"/>
         <xs:element ref="en:While"/>
       </xs:choice>
       <xs:attribute name="select" use="required">
@@ -2823,6 +2825,7 @@
         <xs:element ref="en:U"/>
         <xs:element ref="en:Until"/>
         <xs:element ref="en:Value"/>
+        <xs:element ref="en:VSpace"/>
         <xs:element ref="en:While"/>
       </xs:choice>
       <xs:attribute name="select" use="required">
@@ -3841,6 +3844,7 @@
         <xs:element minOccurs="0" ref="en:U"/>
         <xs:element minOccurs="0" ref="en:Until"/>
         <xs:element minOccurs="0" ref="en:Value"/>
+        <xs:element minOccurs="0" ref="en:VSpace"/>
         <xs:element minOccurs="0" ref="en:While"/>
       </xs:sequence>
     </xs:complexType>
@@ -7840,6 +7844,7 @@
         <xs:element ref="en:U"/>
         <xs:element ref="en:Until"/>
         <xs:element ref="en:Value"/>
+        <xs:element ref="en:VSpace"/>
         <xs:element ref="en:While"/>
       </xs:choice>
       <xs:attribute name="test" use="required">
@@ -7989,6 +7994,7 @@
         <xs:element ref="en:U"/>
         <xs:element ref="en:Until"/>
         <xs:element ref="en:Value"/>
+        <xs:element ref="en:VSpace"/>
         <xs:element ref="en:While"/>
       </xs:choice>
       <xs:attribute name="test" use="required">

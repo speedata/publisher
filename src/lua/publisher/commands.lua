@@ -616,10 +616,10 @@ end
 --- -----------
 --- Associate a name with a color profile.
 function commands.define_colorprofile( layoutxml,dataxml )
-    local condition  = publisher.read_attribute(layoutxml,dataxml,"condition", "string",info)
+    local condition  = publisher.read_attribute(layoutxml,dataxml,"condition", "string")
     local colors     = publisher.read_attribute(layoutxml,dataxml,"colors",    "number" , 4)
     local filename   = publisher.read_attribute(layoutxml,dataxml,"filename",  "rawstring")
-    local identifier = publisher.read_attribute(layoutxml,dataxml,"identifier","string",name)
+    local identifier = publisher.read_attribute(layoutxml,dataxml,"identifier","string")
     local info       = publisher.read_attribute(layoutxml,dataxml,"info",      "rawstring")
     local name       = publisher.read_attribute(layoutxml,dataxml,"name",      "rawstring")
     local registry   = publisher.read_attribute(layoutxml,dataxml,"registry",  "string","http://www.color.org")
@@ -645,7 +645,7 @@ end
 --- * if a paragraph has a textformat then use it, end
 --- * if the textblock has a textformat then use it, end
 --- * use the textformat `text` end
-function commands.define_textformat(layoutxml)
+function commands.define_textformat(layoutxml,dataxml)
     local alignment    = publisher.read_attribute(layoutxml,dataxml,"alignment",   "string")
     local indentation  = publisher.read_attribute(layoutxml,dataxml,"indentation", "length")
     local name         = publisher.read_attribute(layoutxml,dataxml,"name",        "rawstring")

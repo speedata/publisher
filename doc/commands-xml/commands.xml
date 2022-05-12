@@ -74,6 +74,7 @@
     <optional><cmd name="U"></cmd></optional>
     <optional><cmd name="Until"/></optional>
     <optional><cmd name="Value"/></optional>
+    <optional><cmd name="VSpace"/></optional>
     <optional><cmd name="While"/></optional>
   </define>
 

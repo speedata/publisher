@@ -172,13 +172,13 @@ function define_font_hb( name, size, extra_parameter )
 
     for gid = 0, face:get_glyph_count() - 1 do
         local touni = glyph_uni[gid]
-        local uni = touni or 0x110000 + gid
+        local uni = touni or ( 0x110000 + gid )
         local ge = font:get_glyph_extents(gid)
-        if uni == 160 then
+        if uni == 160 then -- U+00A0 NO-BREAK SPACE
             uni = 32
-        elseif uni == 173 then
+        elseif uni == 173 then -- U+00AD SOFT HYPHEN
             uni = 45
-        elseif uni == 8208 then
+        elseif uni == 8208 then -- U+2010 HYPHEN
             uni = 45
         end
         local hadvance = font:get_glyph_h_advance(gid)
