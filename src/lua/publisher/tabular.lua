@@ -1562,13 +1562,21 @@ function typeset_table(self)
         return ht
     end
 
+    local maxpages = 0
+
     setmetatable(pagegoals, { __index = function(tbl,idx)
+                local footerheight = ht_footer
+                if idx == maxpages then
+                    footerheight = ht_footer_last
+                end
                 local ht_head = get_height_header(idx)
                 local val
                 if idx == 1 then
-                    val = ht_current - ht_head - ht_footer
+                    val = ht_current - ht_head - footerheight
+                    return val
                 elseif idx == -1 then
-                    val = ht_current - ht_head - ht_footer
+                    val = ht_current - ht_head - footerheight
+                    return val
                 else
                     if self.getheight then
                         -- self.getheight is a function which expects a relative
@@ -1577,15 +1585,13 @@ function typeset_table(self)
                         -- to obtain the max height
                         local ht = self.getheight(idx)
                         if ht then
-                            val = ht - ht_head - ht_footer
+                            val = ht - ht_head - footerheight
                             tbl[idx] = val
                             return val
                         end
                     end
-                    val = ht_max - ht_head - ht_footer
+                    val = ht_max - ht_head - footerheight
                 end
-                tbl[idx] = val
-
                 return val
     end})
 
@@ -1612,9 +1618,6 @@ function typeset_table(self)
     local pagegoal = 0
 
     local ht_row,space_above,too_high
-    local accumulated_height = 0
-    local extra_height = 0
-    local break_above
     --- splits is a table which includes the number of the rows each page has in a multi-page table
     ---
     ---     splits = {
@@ -1623,85 +1626,93 @@ function typeset_table(self)
     ---       [3] = "44"
     ---     }
 
-    local splits = {0}
-    -- We need to take into acccount:
-    -- * the head
-    -- * the foot
-    -- * the row height
-    -- * row sep
-    -- * distance above
-    -- * break_above?
+    local splits
 
-    local last_possible_split_is_after_line = 0
+    local function calculate_splits()
+        local current_page = 1
+        local last_possible_split_is_after_line = 0
+        local accumulated_height = 0
+        local extra_height = 0
 
-    local current_page = 1
-    for i=1,#rows do
-        -- We can mark a row as "use_as_head" to turn the row into a dynamic head
-        local use_as_head = node.has_attribute(rows[i],publisher.att_use_as_head)
-        if use_as_head == 1 then
-            set_tableheads_extra(#splits,node.copy(rows[i]),i)
-        elseif use_as_head == 2 then
-            set_tableheads_extra(#splits,publisher.create_empty_hbox_with_width(1),i)
-        end
-        local shiftup = node.has_attribute(rows[i],publisher.att_tr_shift_up) or 0
-        if shiftup > 0 then
-            rows[i].height = rows[i].height - shiftup
-        end
-
-        pagegoal = pagegoals[current_page]
-        ht_row = rows[i].height + rows[i].depth
-        break_above = node.has_attribute(rows[i],publisher.att_break_above) or -1
-        space_above = node.has_attribute(rows[i],publisher.att_space_amount) or 0
-
-        local break_above_allowed = break_above ~= 1
-
-        if break_above_allowed then
-            last_possible_split_is_after_line = i - 1
-            accumulated_height = accumulated_height + extra_height
-            extra_height = 0
-        end
-        extra_height = extra_height + ht_row
-
-        -- This should be turned on with a separate switch in trace
-        -- if publisher.options.showobjects then
-        --     local ht = tostring(sp_to_pt(ht_row)) .. "|" .. tostring(sp_to_pt(accumulated_height)) .. "|" .. tostring(sp_to_pt(extra_height))
-        --     rows[i] = publisher.showtextatright(rows[i],ht)
-        -- end
-        local tablenewpage = node.has_attribute(rows[i],publisher.att_tablenewpage)
-
-        local fits_in_table = accumulated_height + extra_height + space_above <= pagegoal
-        if tablenewpage or not fits_in_table then
-            if node.has_attribute(rows[i],publisher.att_use_as_head) == 1 then
-                -- the next line would be used as a header, so let's skip the
-                -- header on this page
-                omit_head_on_pages[#splits + 1] = true
+        splits = {0}
+        for i=1,#rows do
+            -- We can mark a row as "use_as_head" to turn the row into a dynamic head
+            local use_as_head = node.has_attribute(rows[i],publisher.att_use_as_head)
+            if use_as_head == 1 then
+                set_tableheads_extra(#splits,node.copy(rows[i]),i)
+            elseif use_as_head == 2 then
+                set_tableheads_extra(#splits,publisher.create_empty_hbox_with_width(1),i)
             end
-
+            local shiftup = node.has_attribute(rows[i],publisher.att_tr_shift_up) or 0
             if shiftup > 0 then
-                rows[i].height = rows[i].height + shiftup
+                rows[i].height = rows[i].height - shiftup
             end
-            -- ==0 can happen when there's not enough room for table head + first line
-            if last_possible_split_is_after_line ~= 0 then
-                if node.has_attribute(rows[last_possible_split_is_after_line + 1],publisher.att_use_as_head) == 1 then
+            pagegoal = pagegoals[current_page]
+            ht_row = rows[i].height + rows[i].depth
+            break_above = node.has_attribute(rows[i],publisher.att_break_above) or -1
+            space_above = node.has_attribute(rows[i],publisher.att_space_amount) or 0
+
+            local break_above_allowed = break_above ~= 1
+
+            if break_above_allowed then
+                last_possible_split_is_after_line = i - 1
+                accumulated_height = accumulated_height + extra_height
+                extra_height = 0
+            end
+            extra_height = extra_height + ht_row
+
+            -- This should be turned on with a separate switch in trace
+            -- if publisher.options.showobjects then
+            --     local ht = tostring(sp_to_pt(ht_row)) .. "|" .. tostring(sp_to_pt(accumulated_height)) .. "|" .. tostring(sp_to_pt(extra_height))
+            --     rows[i] = publisher.showtextatright(rows[i],ht)
+            -- end
+            local tablenewpage = node.has_attribute(rows[i],publisher.att_tablenewpage)
+
+            local fits_in_table = accumulated_height + extra_height + space_above <= pagegoal
+            if tablenewpage or not fits_in_table then
+                if node.has_attribute(rows[i],publisher.att_use_as_head) == 1 then
+                    -- the next line would be used as a header, so let's skip the
+                    -- header on this page
                     omit_head_on_pages[#splits + 1] = true
                 end
-                splits[#splits + 1] = last_possible_split_is_after_line
-                tablepart_absolute = tablepart_absolute + 1
+
+                if shiftup > 0 then
+                    rows[i].height = rows[i].height + shiftup
+                end
+                -- ==0 can happen when there's not enough room for table head + first line
+                if last_possible_split_is_after_line ~= 0 then
+                    if node.has_attribute(rows[last_possible_split_is_after_line + 1],publisher.att_use_as_head) == 1 then
+                        omit_head_on_pages[#splits + 1] = true
+                    end
+                    splits[#splits + 1] = last_possible_split_is_after_line
+                    tablepart_absolute = tablepart_absolute + 1
+                else
+                    startpage = startpage + 1
+                end
+                accumulated_height = ht_row
+                extra_height = self.rowsep + extra_height - ht_row
+                current_page = current_page + 1
             else
-                startpage = startpage + 1
+                -- if it is not the first row in a table,
+                -- add space_above
+                if i ~= splits[#splits] + 1 then
+                    extra_height = extra_height + space_above
+                end
             end
-            accumulated_height = ht_row
-            extra_height = self.rowsep + extra_height - ht_row
-            current_page = current_page + 1
-        else
-            -- if it is not the first row in a table,
-            -- add space_above
-            if i ~= splits[#splits] + 1 then
-                extra_height = extra_height + space_above
-            end
+            extra_height = extra_height + self.rowsep
         end
-        extra_height = extra_height + self.rowsep
     end
+
+    calculate_splits()
+    -- If there is a longer last footer than the other footers, we need to re-calculate
+    -- the splitting. The last table foot can be too high. See #268.
+    if ht_footer_last > 0 and ht_footer_last > ht_footer then
+        maxpages = #splits
+        tablepart_absolute = 1
+        startpage = publisher.current_pagenumber
+        calculate_splits()
+    end
+
     -- This is the last split
     splits[#splits + 1] = #rows
 

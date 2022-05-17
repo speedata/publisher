@@ -1,0 +1,44 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Pageformat height="240pt" width="6cm" />
+	<SetGrid height="12pt" nx="2" />
+	<Pagetype name="t" test="true()">
+		<Margin left="12pt" right="12pt" top="12pt" bottom="12pt" />
+	</Pagetype>
+	<Record element="data">
+		<PlaceObject>
+			<Table>
+				<Tablefoot page="all">
+					<Tr>
+						<Td>
+							<Paragraph>
+								<Value>Short tablefoot all pages</Value>
+							</Paragraph>
+						</Td>
+					</Tr>
+				</Tablefoot>
+				<Tablefoot page="last">
+					<Tr>
+						<Td>
+                            <Loop select="4">
+                                <Paragraph>
+                                    <Value>Long tablefoot last page</Value>
+                                </Paragraph>
+                            </Loop>
+						</Td>
+					</Tr>
+				</Tablefoot>
+				<Loop select="15" variable="n">
+					<Tr>
+						<Td>
+							<Paragraph>
+								<Value select="$n" />
+								<Value> A table row</Value>
+							</Paragraph>
+						</Td>
+					</Tr>
+				</Loop>
+			</Table>
+		</PlaceObject>
+	</Record>
+</Layout>
