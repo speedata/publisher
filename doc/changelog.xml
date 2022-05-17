@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.9">
+    <entry version="4.9.5" date="2022-05-17">
+        <en>Bugfix for long table foot on the last page (#268).</en>
+        <de>Fehlerkorrektur für langer Tabellenfuß auf der letzten Seite (#268).</de>
+    </entry>
     <entry version="4.9.4" date="2022-05-12">
         <en>Better fix for ZWJ (#369).</en>
         <de>Bessere Korrektur für ZWJ (#369).</de>
