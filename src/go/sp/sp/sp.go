@@ -799,7 +799,7 @@ or see the web page
 func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--address IPADDRESS", "Address to be used for the server mode. Defaults to 127.0.0.1", options)
-	op.On("--autoopen", "Open the PDF file (MacOS X and Linux only)", options)
+	op.On("--autoopen", "Open the PDF file", options)
 	op.On("--cache METHOD", "Use cache method. One of 'none', 'fast' or 'optimal'. Default is 'optimal'", options)
 	op.On("-c NAME", "--config", "Read the config file with the given NAME. Default: 'publisher.cfg'", &configfilename)
 	op.On("--credits", "Show credits and exit", showCredits)
