@@ -72,7 +72,7 @@ you can display a list of the allowed commands and parameters.
 `--address=IPADDRESS`::
    Address to be used for the server mode. Defaults to 127.0.0.1.
 `--autoopen`::
-   Open the PDF file (MacOS X and Linux only). Can be set in the <<ch-configuration>>.
+   Open the PDF file. Can be set in the <<ch-configuration>>.
 `--cache=METHOD`::
    Use cache method. One of 'none', 'fast' or 'optimal'. Default is 'optimal'.
 `-c`, `--config=NAME`::
