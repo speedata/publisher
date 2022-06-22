@@ -2,7 +2,7 @@
 = Text formats
 
 
-Text formats are used to control the paragraphs. You can use them to control various things like text indents, text alignment, whore children and cobbler boys, pagination and more.
+Text formats are used to control the paragraphs. You can use them to control various things like text indents, text alignment, orphan and widow lines, pagination and more.
 
 The individual parameters are described in the reference under <DefineTextformat>.
 
