@@ -11,11 +11,6 @@ The idea is basically always the same: either you assign a schema file to the sp
 include::vscodeschema.adoc[leveloffset=+1]
 include::oxygenxmlschema.adoc[leveloffset=+1]
 
-== Atom
-
-For the ((Atom)) editor, the package is called `language-speedata-publisher`. Installation instructions can be found on the github page at https://github.com/speedata/atom-schema-speedata.
-
-image::atom-autocompletion.png[]
 
 
 // EOF

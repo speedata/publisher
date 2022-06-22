@@ -19,7 +19,6 @@ Um dieses Schema einzubinden, muss ein passender XML-Editor benutzt werden, der 
 
 Die ersten beiden Editoren bieten hervorragende Cross-Plattform Unterstützung für die Schema.
 
--   https://atom.io/[Atom] (Mac, Windows, Linux, kostenlos)
 -   https://www.altova.com/xml-editor/[XMLSpy] (Windows)
 -   https://www.xmlblueprint.com/[XML Blueprint] (Windows)
 -   https://www.gnu.org/software/emacs/[GNU Emacs] mit http://www.thaiopensource.com/nxml-mode/[nxml-mode] (alle Betriebssysteme, kostenlos)

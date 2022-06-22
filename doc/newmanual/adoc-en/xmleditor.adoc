@@ -16,7 +16,6 @@ To include this schema, you need to use a suitable XML editor that can process R
 
 The first two editors provide excellent cross-platform support for the schema.
 
--   https://atom.io/[Atom] (Mac, Windows, Linux, free)
 -   https://www.altova.com/xml-editor/[XMLSpy] (Windows)
 -   https://www.xmlblueprint.com/[XML Blueprint] (Windows)
 -   https://www.gnu.org/software/emacs/[GNU Emacs] with http://www.thaiopensource.com/nxml-mode/[nxml-mode] (cross platform, free)

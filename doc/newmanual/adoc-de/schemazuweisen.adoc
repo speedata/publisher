@@ -12,13 +12,6 @@ Die Idee ist im Prinzip immer dasselbe: entweder weist man dem speedata Namensra
 
 include::vscodeschema.adoc[leveloffset=+1]
 include::oxygenxmlschema.adoc[leveloffset=+1]
-// include::atom.adoc[]
-
-== Atom
-
-Für den ((Atom))-Editor heißt das Paket `language-speedata-publisher`. Die Installationsanleitung ist auf der Github-Seite unter https://github.com/speedata/atom-schema-speedata zu finden.
-
-image::atom-autocompletion.png[]
 
 // EOF
 

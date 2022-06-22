@@ -391,17 +391,3 @@ desc "Show the version number"
 task :publisherversion do
 	puts @versions['publisher_version']
 end
-
-desc "Update the package for the Atom editor"
-task :atomschema => [:schema] do
-	puts "Update atom schema to version #{@versions['publisher_version']}"
-	atomdir = File.join(__dir__, 'atom-schema-speedata')
-	cp_r(File.join("schema","layoutschema-en.rng"),File.join(atomdir,"schemata"))
-	Dir.chdir(atomdir) do
-		puts `git add schemata/layoutschema-en.rng`
-		puts `git commit -m "Update schema file"`
-		puts `apm publish #{@versions['publisher_version']}`
-	end
-
-end
-
