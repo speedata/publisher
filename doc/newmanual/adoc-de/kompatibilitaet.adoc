@@ -3,7 +3,7 @@
 = Kompatibilität mit anderer Software
 
 Der speedata Publisher steht unter der AGPL (GNU Affero General Public License), die keine Gewährleistung für das Funktionieren einer Software vorsieht.
-Trotdem liegt es im Bestreben von speedata, dass die Software auf den gängigen Betriebssystemen läuft und mit externer Software problemlos zusammenspielt.
+Trotzdem liegt es im Bestreben von speedata, dass die Software auf den gängigen Betriebssystemen läuft und mit externer Software problemlos zusammenspielt.
 
 In diesem Abschnitt werden Erfahrungsberichte über die Kompatibilität zusammengefasst. Wenn hier etwas fehlt oder nicht stimmt, wird um Korrektur gebeten (info@speedata.de).
 

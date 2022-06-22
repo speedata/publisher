@@ -9,7 +9,7 @@ v1.0, 2018-03-19
 :lang: en
 :figure-caption: Figure
 :last-update-label: Last change
-:toc-title: Inhalt
+:toc-title: Table of contents
 :appendix-caption: Appendix
 :docinfo: private
 :icons: font

@@ -29,7 +29,7 @@ func IsExeFile(path string) bool {
 	return false
 }
 
-// CopyFile copies the source file to the destionation path.
+// CopyFile copies the source file to the destination path.
 // If dest is a directory, the dest file name will have the same name as source.
 func CopyFile(source string, dest string) (err error) {
 	sf, err := os.Open(source)

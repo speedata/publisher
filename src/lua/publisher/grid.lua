@@ -637,7 +637,6 @@ function draw_frame(self,frame,width_sp)
     local wd = math.round(sp_to_bp(width_sp),3)
     ret[#ret + 1] = string.format("q %g w ",wd)
     local paperheight_bp = sp_to_bp(tex.pageheight - self.extra_margin)
-    local paperwidth_bp  = sp_to_bp(tex.pagewidth  - self.extra_margin)
     local x,y
     local width,height
     local colorname = frame.draw.color
