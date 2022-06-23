@@ -242,7 +242,7 @@ In diesem Beispiel werden nur die Spalten 1, 2 und 3 ausgegeben.
 Das Ergebnis ist eine Tabelle aus Zeilen.
 Jede Zeile ist wiederum eine Tabelle, die die einzelnen Werte der Zeile enthält.
 
-Im Beispiele-Repository wird gezeigt, wie man aus der CSV-Datei eine XML-Datei erstellen kann.
+Im Beispiele-Repository wird gezeigt, wie man https://github.com/speedata/examples/tree/master/technical/csvreader[aus der CSV-Datei eine XML-Datei erstellen] kann.
 
 == Funktionsreferenz
 
