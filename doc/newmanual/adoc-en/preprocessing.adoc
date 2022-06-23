@@ -247,7 +247,7 @@ In this example only columns 1, 2 and 3 are output.
 The result is a table of rows.
 Each row is in turn a table containing the individual values of the row.
 
-The example repository shows how to create an XML file from the CSV file.
+The example repository shows how to https://github.com/speedata/examples/tree/master/technical/csvreader[create an XML file from the CSV file].
 
 == Function reference
 
