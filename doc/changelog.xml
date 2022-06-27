@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.9">
+    <entry version="4.9.7" date="2022-06-27">
+        <en>runtime.execute in Lua filter.</en>
+        <de>runtime.execute in der Lua Vorverarbeitung.</de>
+    </entry>
     <entry version="4.9.6" date="2022-06-22">
         <en>Only documentation updates.</en>
         <de>Nur Änderungen im Handbuch.</de>
