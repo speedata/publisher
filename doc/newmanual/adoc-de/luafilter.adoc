@@ -300,6 +300,16 @@ Diese Funktion ruft das zum Publisher mitgelieferte Programm `saxon` auf. Sie er
 |=======
 
 
+`execute(‹Tabelle mit Programmname und Argumenten›)`::
+Führt ein Programm aus und gibt dessen Ausgabe in die Konsole aus. Um den speedata Publisher z.B. selbst zu starten, funktioniert folgende Syntax:
++
+[source, lua]
+-------------------------------------------------------------------------------
+runtime.execute({"sp","--runs","2"})
+-------------------------------------------------------------------------------
++
+If necessary, the first parameter (the program name) must be specified with absolute path of the program. On Windows, forward slashes (`/`) also work as separators instead of backward slashes (`\`).
+
 `find_file(‹Dateiname oder URL›)`::
 Findet die angegebene Datei im Publisher-Suchpfad und gibt den absoluten Pfad zurück. Bei nicht gefunden: nil bzw. false und eine Fehlermeldung.
 

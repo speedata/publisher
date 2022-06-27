@@ -138,11 +138,34 @@ func findFile(l *lua.LState) int {
 	l.Push(lua.LString(abspath))
 	return 1
 }
+func execute(l *lua.LState) int {
+	cmdline := l.CheckTable(1)
+	var cmd string
+	var arguments []string
+
+	for i := 1; i <= cmdline.Len(); i++ {
+		val := cmdline.RawGetInt(i)
+		if i == 1 {
+			cmd = val.String()
+		} else {
+			arguments = append(arguments, val.String())
+		}
+	}
+	command := exec.Command(cmd, arguments...)
+	data, err := command.CombinedOutput()
+	fmt.Println(string(data))
+	if err != nil {
+		return lerr(err.Error())
+	}
+	l.Push(lua.LTrue)
+	return 1
+}
 
 var exports = map[string]lua.LGFunction{
 	"validate_relaxng": validateRelaxNG,
 	"run_saxon":        runSaxon,
 	"find_file":        findFile,
+	"execute":          execute,
 }
 
 func runtimeLoader(l *lua.LState) int {

@@ -304,6 +304,15 @@ This function calls the `saxon` program supplied with the Publisher. It expects 
 | `params` | Table with the key/value pairs
 |=======
 
+`execute(‹table with arguments›)`::
+Runs a program and prints its output to the console. For example, to start the speedata Publisher itself, the following syntax works:
++
+[source, lua]
+-------------------------------------------------------------------------------
+runtime.execute({"sp","--runs","2"})
+-------------------------------------------------------------------------------
++
+If necessary, the first parameter (the program name) must be specified with absolute path of the program. Under Windows, forward slashes (/) also work as separators instead of backward slashes (\).
 
 `find_file(‹filename or URL›)`::
 Find the resource and return a full path on the local disk to access the resource. Returns nil or false and perhaps an error message if it can't find the resource.
