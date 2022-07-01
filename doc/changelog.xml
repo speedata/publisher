@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.9">
+    <entry version="4.9.8" date="2022-07-01">
+      <en>Allow to set image shape on Image element.</en>
+      <de>Bildumrisse können nun per Bild angeschaltet werden.</de>
+    </entry>
+    <entry version="4.9.8" date="2022-07-01">
+        <en>Add XML deocder for lua filter.</en>
+        <de>XML-Dekodierer für Lua-Filter.</de>
+    </entry>
+    <entry version="4.9.8" date="2022-07-01">
+        <en>Bugfix URL rendering with hyperlinks (#381).</en>
+        <de>Fehlerkorrektur URL Darstellung mit Hyperlinks (#381).</de>
+    </entry>
     <entry version="4.9.7" date="2022-06-27">
         <en>runtime.execute in Lua filter.</en>
         <de>runtime.execute in der Lua Vorverarbeitung.</de>
