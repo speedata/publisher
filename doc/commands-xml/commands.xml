@@ -4107,6 +4107,14 @@
         <para>Bildhöhe. Angabe in der Form 'auto' (Voreinstellung, natürliche Bildbreite), Längenangabe wie '4cm' oder Zahl (Anzahl von Rasterspalten)</para>
       </description>
     </attribute>
+    <attribute en="imageshape" optional="yes" type="boolean" since="4.9.8">
+      <description xml:lang="en">
+        <para>Try to load an image shape. Defaults to no.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Versuche Bildumrisse zu laden. Voreinstellung ist nein.</para>
+      </description>
+    </attribute>
     <attribute en="page" type="number" optional="yes">
       <description xml:lang="en">
         <para>The page number from the PDF. Default is 1 (include the first page).</para>

@@ -2398,6 +2398,15 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="imageshape">
+                     <a:documentation>Try to load an image shape. Defaults to no.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <value>no</value>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="page">
                      <a:documentation>The page number from the PDF. Default is 1 (include the first page).</a:documentation>
                   </attribute>

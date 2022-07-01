@@ -6586,8 +6586,8 @@ end
 
 
 local images = {}
-function new_image(filename,page,box,fallback)
-    return imageinfo(filename,page,box,fallback)
+function new_image(filename,page,box,fallback,imageshape)
+    return imageinfo(filename,page,box,fallback,imageshape)
 end
 
 function validimagetype(filename)
@@ -6615,7 +6615,7 @@ function get_fallback_image_name( filename, missingfilename )
 end
 
 -- Box is none, media, crop, bleed, trim, art
-function imageinfo( filename,page,box,fallback )
+function imageinfo( filename,page,box,fallback,imageshape )
     page = page or 1
     box = box or "crop"
     -- there is no filename, we should fail or throw an error
@@ -6669,7 +6669,7 @@ function imageinfo( filename,page,box,fallback )
     --  </imageinfo>
     local mt
     -- don't request XML shape file for http locations
-    if not string.match(filename, "^https?://") then
+    if imageshape and not string.match(filename, "^https?://") then
         local xmlfilename = string.gsub(filename,"(%..*)$","") .. ".xml"
 
         if kpse.find_file(xmlfilename) then

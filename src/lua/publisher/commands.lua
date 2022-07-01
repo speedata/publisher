@@ -1175,6 +1175,7 @@ function commands.image( layoutxml,dataxml )
     local clip      = publisher.read_attribute(layoutxml,dataxml,"clip",       "boolean")
     local page      = publisher.read_attribute(layoutxml,dataxml,"page",       "number")
     local stretch   = publisher.read_attribute(layoutxml,dataxml,"stretch",    "boolean",false)
+    local imageshape = publisher.read_attribute(layoutxml,dataxml,"imageshape",    "boolean",false)
     -- deprecated since 2.7.5
     local max_box   = publisher.read_attribute(layoutxml,dataxml,"maxsize",    "rawstring")
     local vis_box   = publisher.read_attribute(layoutxml,dataxml,"visiblebox", "rawstring")
@@ -1253,7 +1254,7 @@ function commands.image( layoutxml,dataxml )
 
     local imageinfo
     filename = filename or url
-    imageinfo = publisher.new_image(filename,page,box_lookup[vis_box] or "crop", fallback)
+    imageinfo = publisher.new_image(filename,page,box_lookup[vis_box] or "crop", fallback,imageshape)
 
 
     local image = img.copy(imageinfo.img)
@@ -1298,17 +1299,17 @@ function commands.image( layoutxml,dataxml )
         local col = xpath.get_variable("__column")
         local row = xpath.get_variable("__row")
         if col == 0 then
-            tab.padding_left = tab.padding_left or 0 - publisher.options.trim
+            tab.padding_left = (tab.padding_left or 0 ) - publisher.options.trim
             if width == publisher.options.pagewidth then
-                tab.padding_right = tab.padding_right or 0 - publisher.options.trim
+                tab.padding_right = (tab.padding_right or 0) - publisher.options.trim
             end
         elseif publisher.options.pagewidth - col - width < 100 then
-            tab.padding_right = tab.padding_right or 0 - publisher.options.trim
+            tab.padding_right = (tab.padding_right or 0) - publisher.options.trim
         end
         if row == 0 then
-            tab.padding_top = tab.padding_top or 0 - publisher.options.trim
+            tab.padding_top = (tab.padding_top or 0) - publisher.options.trim
             if height == publisher.options.pageheight then
-                tab.padding_bottom = tab.padding_bottom  or 0 - publisher.options.trim
+                tab.padding_bottom = (tab.padding_bottom or 0) - publisher.options.trim
             end
         end
 

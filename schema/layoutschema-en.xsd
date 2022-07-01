@@ -2411,6 +2411,17 @@
           <xs:documentation>Image height. One of 'auto' (default, take image width), length (such as '3cm') or number (in grid cells).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="imageshape">
+        <xs:annotation>
+          <xs:documentation>Try to load an image shape. Defaults to no.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="page">
         <xs:annotation>
           <xs:documentation>The page number from the PDF. Default is 1 (include the first page).</xs:documentation>

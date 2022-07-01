@@ -2411,6 +2411,17 @@
           <xs:documentation>Bildhöhe. Angabe in der Form 'auto' (Voreinstellung, natürliche Bildbreite), Längenangabe wie '4cm' oder Zahl (Anzahl von Rasterspalten)</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="imageshape">
+        <xs:annotation>
+          <xs:documentation>Versuche Bildumrisse zu laden. Voreinstellung ist nein.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="page">
         <xs:annotation>
           <xs:documentation>Die Seitenzahl aus dem PDF. Voreinstellung ist 1.</xs:documentation>

@@ -2398,6 +2398,15 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="imageshape">
+                     <a:documentation>Versuche Bildumrisse zu laden. Voreinstellung ist nein.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <value>no</value>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="page">
                      <a:documentation>Die Seitenzahl aus dem PDF. Voreinstellung ist 1.</a:documentation>
                   </attribute>
