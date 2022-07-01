@@ -5384,6 +5384,7 @@ function break_url( nodelist )
         else
             p.penalty=-5
         end
+        set_attribute(p,"hyperlink",get_attribute(n,"hyperlink"))
         p.next = n.next
         if n.next and n.next.prev then
             n.next.prev = p
