@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/yuin/gopher-lua"
+	lua "github.com/yuin/gopher-lua"
 )
 
 func lerr(l *lua.LState, errormessage string) int {
@@ -126,6 +126,7 @@ func encodeTable(l *lua.LState) int {
 
 var exports = map[string]lua.LGFunction{
 	"encode_table": encodeTable,
+	"decode_xml":   decodeXML,
 }
 
 // Open starts this lua instance

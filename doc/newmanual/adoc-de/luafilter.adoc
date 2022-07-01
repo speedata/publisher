@@ -315,9 +315,7 @@ Findet die angegebene Datei im Publisher-Suchpfad und gibt den absoluten Pfad zu
 
 === `xml`
 
-Mit dem XML-Modul werden XML-Dateien erzeugt.
-Zuerst muss die XML-Struktur in einer Lua-Tabelle erzeugt werden, anschließend wird sie mit `encode_table()` unter dem Namen `data.xml` gespeichert.
-
+Mit dem XML-Modul werden XML-Dateien erzeugt bzw. gelesen.
 
 `encode_table(‹tabelle›,[dateiname])`::
 
@@ -349,6 +347,9 @@ comment = {
    }
 -------------------------------------------------------------------------------
 
+`decode_xml(‹dateiname›)`::
+
+Liest eine XML-Datei ein und gibt eine Tabelle in der Struktur wie unter `encode_table()` beschrieben zurück. Die Rückgabewerte der Funktion sind ein Boolean-Wert und im Falle von true, eine Tabelle wie oben und im Falle von false, eine Fehlermeldung.
 
 === `CSV`
 

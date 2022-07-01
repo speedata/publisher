@@ -319,9 +319,7 @@ Find the resource and return a full path on the local disk to access the resourc
 
 === `xml`
 
-The XML module is used to generate XML files.
-First the XML structure must be created in a Lua table, then it is saved with `encode_table()` under the name `data.xml`.
-
+The XML module is used to crate or read XML files.
 
 `xml.encode_table(‹table›,[filename])`::
 
@@ -352,6 +350,10 @@ comment = {
          _value = " This is a comment! "
    }
 -------------------------------------------------------------------------------
+
+`decode_xml(filename›)`::
+
+Reads an XML file and creates a table in the format from `encode_table`. Return value 1 is a bool (success), value 2 is the error message if the first value is `false` or the table if the first value is true.
 
 
 === `CSV`
