@@ -152,8 +152,9 @@ func execute(l *lua.LState) int {
 		}
 	}
 	command := exec.Command(cmd, arguments...)
-	data, err := command.CombinedOutput()
-	fmt.Println(string(data))
+	command.Stdout = os.Stdout
+	command.Stdin = os.Stdin
+	err := command.Run()
 	if err != nil {
 		return lerr(err.Error())
 	}
