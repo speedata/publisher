@@ -9,14 +9,7 @@ TIP: The speedata Publisher can be downloaded in two versions: `stable` and `dev
 There are three ways to install speedata Publisher:
 
 . **Binary packages (The recommended way)**: Go to our https://download.speedata.de/[download page] and download the latest package for your operating system. You can unzip the file anywhere in the filesystem you want. You don't need root/administrator rights to use the Publisher this way. There are extra installer packages for windows, if you don't want to set the `PATH` variable yourself.
-+
-On macOS 10.15 (Catalina) the security feature »Gatekeeper« asks for special permissions to run the speedata Publisher. This happens when you download the software from a browser. You can use curl to circumvent this (on the command line):
-+
--------------------------------------------------------------------------------
-curl -O https://download.speedata.de/dl/speedata-publisher-darwin-amd64-latest.zip
--------------------------------------------------------------------------------
-+
-This loads the ZIP file into the current directory.
+
 
 . **APT repository**: If you have root or sudo rights on Debian or Ubuntu GNU/Linux (or a similar system), you can install the .deb files we have prepared from our APT repository. (For now, only the 64 bit architecture is supported.) This is very easy, just follow a few steps:
 +

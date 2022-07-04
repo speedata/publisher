@@ -25,12 +25,6 @@ Damit ist in der Windows-Shell das Programm `sp` überall aufrufbar.
  +
  +
 Die aus dem ZIP extrahierte Struktur darf nicht verändert werden (z.B. verschieben des Binaries), der speedata Publisher erwartet das vorgegebene Dateilayout.
- +
-Unter macOS 10.15 (Catalina) kommt es vor, dass das Sicherheitsfeature »Gatekeeper« für Ausführung des speedata Publishers eine spezielle Berechtigung anfordert. Das passiert, wenn die ZIP-Datei über einen Browser heruntergeladen wird. Um das zu umgehen, kann über die Kommandozeile mit `curl` der Publisher heruntergeladen werden:
-+
--------------------------------------------------------------------------------
-curl -O https://download.speedata.de/dl/speedata-publisher-darwin-amd64-latest.zip
--------------------------------------------------------------------------------
 +
 Das lädt die ZIP-Datei in das aktuelle Verzeichnis.
 
