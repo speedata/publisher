@@ -1238,7 +1238,7 @@ function initialize_luatex_and_generate_pdf()
     if options.startpage then
         local num = options.startpage
         if num then
-            current_pagenumber = num
+            current_pagenumber = tonumber(num)
             log("Set page number to %d",num)
         else
             err("Can't recognize starting page number %q",options.startpage)

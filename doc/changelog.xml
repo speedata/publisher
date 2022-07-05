@@ -5,7 +5,7 @@
       <de>Bildumrisse können nun per Bild angeschaltet werden.</de>
     </entry>
     <entry version="4.9.8" date="2022-07-01">
-        <en>Add XML deocder for lua filter.</en>
+        <en>Add XML decoder for lua filter.</en>
         <de>XML-Dekodierer für Lua-Filter.</de>
     </entry>
     <entry version="4.9.8" date="2022-07-01">
@@ -89,7 +89,7 @@
         <de>Fehlerkorrektur Transparenz und mehrseitige Tabellen (#360).</de>
     </entry>
     <entry version="4.7.9" date="2022-04-01">
-        <en>Re-implmenet pathrewrite.</en>
+        <en>Re-implement pathrewrite.</en>
         <de>Pathrewrite wieder implementieren.</de>
     </entry>
     <entry version="4.7.8" date="2022-03-24">
@@ -185,7 +185,7 @@
         <de>Intern/Tablerule: ersetze gefülltes Rechteck durch PDF-Linie.</de>
     </entry>
     <entry version="4.5.12" date="2021-10-06">
-        <en>Set vertical excess space behaviour for rowspan in tables.</en>
+        <en>Set vertical excess space behavior for rowspan in tables.</en>
         <de>Setze das Verhalten bei überschüssigem vertikalen Leerraum.</de>
     </entry>
     <entry version="4.5.11" date="2021-09-23">
