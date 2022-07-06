@@ -167,10 +167,10 @@ image::osfsmcp.png[width=100%]
 [[ch-harfbuzz-mode]]
 == Harfbuzz
 
-Seit Version 4 des speedata Publishers gibt es einen neuen Modus zum Laden von Schriftdateien: harfbuzz.
+Seit Version 4 des speedata Publishers gibt es einen neuen Modus zum Laden von Schriftdateien: Harfbuzz.
 Er aktiviert die gleichnamige Bibliothek, die nicht nur die Schriftdateien lädt, sondern auch für Anordnung der Zeichen in einem Wort zuständig ist.
 Das ist für lateinische (westliche) Schreibsysteme nicht so wichtig wie für z.B. das Arabische.
-Ein Nebeneffekt der harfbuzz-Bibliothek ist die umfangreiche Unterstützung für OpenType Features.
+Ein Nebeneffekt der Harfbuzz-Bibliothek ist die umfangreiche Unterstützung für OpenType Features.
 
 Die Benutzung des Harfbuzz Modus ist wie folgt:
 
@@ -225,7 +225,8 @@ Die OpenType features können mit dem Attribut `features` eingestellt werden, al
 image::frac-feature-hb.png[width=50%]
 
 Eine Beschreibung aller OpenType Features findet sich unter
-https://docs.microsoft.com/en-us/typography/opentype/spec/featurelist
+https://docs.microsoft.com/en-us/typography/opentype/spec/featurelist.
+Die voreingestellten Features sind die, die im  https://harfbuzz.github.io/shaping-opentype-features.html[Harfbuzz Handbuch] beschrieben sind, ohne `liga`.
 
 [[ch-optischerrandausgleich]]
 == Optischer Randausgleich

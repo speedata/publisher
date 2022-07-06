@@ -202,7 +202,9 @@ The OpenType features can be set with the `features` attribute, for example
 image::frac-feature-hb.png[width=50%]
 
 A complete description of the OpenType features can be found on
-https://docs.microsoft.com/en-us/typography/opentype/spec/featurelist
+https://docs.microsoft.com/en-us/typography/opentype/spec/featurelist.
+The default features are the ones that are mentioned in the  https://harfbuzz.github.io/shaping-opentype-features.html[harfbuzz manual] but without `liga`.
+
 
 [[ch-marginprotrusion]]
 == Optical margin alignment
