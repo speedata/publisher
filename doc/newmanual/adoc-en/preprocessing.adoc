@@ -242,7 +242,7 @@ if not csvtab then
 end
 -------------------------------------------------------------------------------
 
-The second parameter at `csv.deocde()` is optional.
+The second parameter at `csv.decode()` is optional.
 In this example only columns 1, 2 and 3 are output.
 The result is a table of rows.
 Each row is in turn a table containing the individual values of the row.
