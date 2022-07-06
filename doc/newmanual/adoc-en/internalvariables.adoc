@@ -27,7 +27,7 @@ Otherwise there could be collisions when assigning names.
 `_mode`::
   The mode for the pass. Separated by commas.
 
-`_pagewidth` und `_pageheight`::
+`_pagewidth` and `_pageheight`::
   The width and height of the page. Default is 210mm and 297mm.
 
 `_page`::
@@ -35,7 +35,7 @@ Otherwise there could be collisions when assigning names.
 
 Also worth mentioning:
 
-`_samplea.pdf` und `_sampleb.pdf`::
+`_samplea.pdf` and `_sampleb.pdf`::
    Image files included in the Publisher. Can be used for testing purposes.
 
 // EOF
