@@ -237,7 +237,7 @@ if not csvtab then
 end
 -------------------------------------------------------------------------------
 
-Der zweite Parameter bei `csv.deocde()` ist optional.
+Der zweite Parameter bei `csv.decode()` ist optional.
 In diesem Beispiel werden nur die Spalten 1, 2 und 3 ausgegeben.
 Das Ergebnis ist eine Tabelle aus Zeilen.
 Jede Zeile ist wiederum eine Tabelle, die die einzelnen Werte der Zeile enthält.
