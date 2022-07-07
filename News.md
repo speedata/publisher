@@ -2,6 +2,14 @@
 
 This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/).
 
+## Version 4.10
+
+* Mostly bug fixes
+* `runtime.execute()` in Lua filter/preprocessing for executing external programs
+* `xml.decode_xml()` in Lua filter/preprocessing for reading XML files
+
+Version 4.10 will be the last stable version that runs with LuaJIT/FFI.
+
 ## Version 4.8
 
 Released 2022-05-02
