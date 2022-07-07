@@ -335,7 +335,7 @@ local function setup()
     tex.vfuzz    = publisher.maxdimen
     tex.hbadness = publisher.maxdimen
     tex.vbadness = publisher.maxdimen
-    luatex_version = string.format("%d.%d.%d",status.luatex_version / 100,status.luatex_version % 100,status.luatex_revision)
+    luatex_version = string.format("%d.%d.%d",math.floor(status.luatex_version / 100),math.floor(status.luatex_version % 100),math.floor(status.luatex_revision))
     --- The `lccode` is used for hyphenation. TeX sets the lccode for a-z to itself and A-Z to its lower correspondent.
     --- The code for all other characters are not set and thus they don't hyphenate unless set like this.
     for _,i in ipairs

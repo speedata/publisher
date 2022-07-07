@@ -1,2 +1,3 @@
 /libsplib.h
 /*.dylib
+luaglue.so

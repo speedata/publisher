@@ -49,7 +49,9 @@ func toCharArray(s []string) **C.char {
 }
 
 //export sdParseHTMLText
-func sdParseHTMLText(htmltext string, csstext string) *C.char {
+func sdParseHTMLText(htmltextC *C.char, csstextC *C.char) *C.char {
+	htmltext := C.GoString(htmltextC)
+	csstext := C.GoString(csstextC)
 	str, err := splibaux.ParseHTMLText(htmltext, csstext)
 	if err != nil {
 		return s2c(errorpattern + err.Error())
@@ -58,7 +60,8 @@ func sdParseHTMLText(htmltext string, csstext string) *C.char {
 }
 
 //export sdParseHTML
-func sdParseHTML(filename string) *C.char {
+func sdParseHTML(filenameC *C.char) *C.char {
+	filename := C.GoString(filenameC)
 	str, err := splibaux.ParseHTML(filename)
 	if err != nil {
 		return s2c(errorpattern + err.Error())
@@ -67,7 +70,9 @@ func sdParseHTML(filename string) *C.char {
 }
 
 //export sdContains
-func sdContains(haystack string, needle string) *C.char {
+func sdContains(haystackC *C.char, needleC *C.char) *C.char {
+	haystack := C.GoString(haystackC)
+	needle := C.GoString(needleC)
 	var ret string
 	if strings.Contains(haystack, needle) {
 		ret = "true"
@@ -78,7 +83,10 @@ func sdContains(haystack string, needle string) *C.char {
 }
 
 //export sdTokenize
-func sdTokenize(text, rexpr string) **C.char {
+func sdTokenize(textC, rexprC *C.char) **C.char {
+	text := C.GoString(textC)
+	rexpr := C.GoString(rexprC)
+
 	r := regexp.MustCompile(rexpr)
 	idx := r.FindAllStringIndex(text, -1)
 	pos := 0
@@ -92,7 +100,11 @@ func sdTokenize(text, rexpr string) **C.char {
 }
 
 //export sdReplace
-func sdReplace(text string, rexpr string, repl string) *C.char {
+func sdReplace(textC, rexprC, replC *C.char) *C.char {
+	text := C.GoString(textC)
+	rexpr := C.GoString(rexprC)
+	repl := C.GoString(replC)
+
 	r := regexp.MustCompile(rexpr)
 
 	// xpath uses $12 for $12 or $1, depending on the existence of $12 or $1.
@@ -110,7 +122,8 @@ func sdReplace(text string, rexpr string, repl string) *C.char {
 }
 
 //export sdHtmlToXml
-func sdHtmlToXml(input string) *C.char {
+func sdHtmlToXml(inputC *C.char) *C.char {
+	input := C.GoString(inputC)
 	input = "<toplevel·toplevel>" + input + "</toplevel·toplevel>"
 	r := strings.NewReader(input)
 	var w bytes.Buffer
@@ -160,17 +173,18 @@ func sdBuildFilelist() {
 	for _, p := range filepath.SplitList(os.Getenv("SD_EXTRA_DIRS")) {
 		paths = append(paths, p)
 	}
-
 	splibaux.BuildFilelist(paths)
 }
 
 //export sdAddDir
-func sdAddDir(p string) {
-	splibaux.AddDir(p)
+func sdAddDir(cpath *C.char) {
+	path := C.GoString(cpath)
+	splibaux.AddDir(path)
 }
 
 //export sdLookupFile
-func sdLookupFile(path string) *C.char {
+func sdLookupFile(cpath *C.char) *C.char {
+	path := C.GoString(cpath)
 	ret, err := splibaux.GetFullPath(path)
 	if err != nil {
 		return s2c(errorpattern + err.Error())
@@ -185,7 +199,9 @@ func sdListFonts() **C.char {
 }
 
 //export sdConvertContents
-func sdConvertContents(contents, handler string) *C.char {
+func sdConvertContents(contentsC, handlerC *C.char) *C.char {
+	contents := C.GoString(contentsC)
+	handler := C.GoString(handlerC)
 	ret, err := splibaux.ConvertContents(contents, handler)
 	if err != nil {
 		return s2c(errorpattern + err.Error())
@@ -194,7 +210,10 @@ func sdConvertContents(contents, handler string) *C.char {
 }
 
 //export sdConvertImage
-func sdConvertImage(filename, handler string) *C.char {
+func sdConvertImage(filenameC, handlerC *C.char) *C.char {
+	filename := C.GoString(filenameC)
+	handler := C.GoString(handlerC)
+
 	ret, err := splibaux.ConvertImage(filename, handler)
 	if err != nil {
 		return s2c(errorpattern + err.Error())
@@ -203,7 +222,8 @@ func sdConvertImage(filename, handler string) *C.char {
 }
 
 //export sdConvertSVGImage
-func sdConvertSVGImage(path string) *C.char {
+func sdConvertSVGImage(pathC *C.char) *C.char {
+	path := C.GoString(pathC)
 	ret, err := splibaux.ConvertSVGImage(path)
 	if err != nil {
 		return s2c(errorpattern + err.Error())
@@ -212,8 +232,8 @@ func sdConvertSVGImage(path string) *C.char {
 }
 
 //export sdSegmentize
-func sdSegmentize(original string) *C.struct_splitvalues {
-	inputstring := original
+func sdSegmentize(originalC *C.char) *C.struct_splitvalues {
+	inputstring := C.GoString(originalC)
 	p := bidi.Paragraph{}
 	p.SetString(inputstring)
 	ordering, err := p.Order()
@@ -243,7 +263,8 @@ func sdSegmentize(original string) *C.struct_splitvalues {
 }
 
 //export sdReadXMLFile
-func sdReadXMLFile(filename string) *C.char {
+func sdReadXMLFile(filenameC *C.char) *C.char {
+	filename := C.GoString(filenameC)
 	str, err := splibaux.ReadXMLFile(filename)
 	if err != nil {
 		return s2c(errorpattern + err.Error())

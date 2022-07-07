@@ -9,7 +9,23 @@
 -- BUG on windows: http://lua-users.org/lists/lua-l/2012-08/msg00052.html
 -- ! in LUA_PATH gets replaced by $PWD
 package.path=os.getenv("LUA_PATH")
-local splib = require("splib")
+
+local libname
+if os.name == "windows" then
+  libname = "libsplib.dll"
+elseif os.name == "linux" then
+  libname = "libsplib.so"
+else
+  libname = "libsplib.dylib"
+end
+
+local ok, msg = package.loadlib(libname,"*")
+if not ok then
+   print(msg)
+   os.exit(0)
+end
+
+local luaglue = require("luaglue")
 
 texio.write("Loading file sdini.lua ...")
 callback.register('start_run',function() return true end)
@@ -20,7 +36,7 @@ texconfig.max_print_line=99999
 texconfig.formatname="sd-format"
 texconfig.trace_file_names = false
 
-splib.buildfilelist()
+luaglue.buildfilelist()
 kpse = {}
 
 
@@ -35,13 +51,14 @@ function file_end( filename )
   end
 end
 
-
 function kpse.find_file(filename)
-    return splib.lookupfile(filename)
+  local ret = luaglue.lookupfile(filename)
+  if ret == "" then return nil end
+  return ret
 end
 
 function kpse.add_dir(dirname)
-    return splib.add_dir(dirname)
+    return luaglue.add_dir(dirname)
 end
 
 function do_luafile(filename)

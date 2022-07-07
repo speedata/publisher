@@ -108,12 +108,12 @@ func main() {
 	case "buildlib":
 		// build the library
 		goos, goarch := runtime.GOOS, runtime.GOARCH
-		if goos == "darwin" {
-			// switch to amd64 because there seems to be an error in the LuaTeX
-			// binary for m1.
-			goarch = "amd64"
-		}
 		err := buildlib.BuildLib(cfg, goos, goarch)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(-1)
+		}
+		err = buildlib.BuildCLib(cfg, goos, goarch)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(-1)
@@ -191,8 +191,16 @@ func main() {
 				if err != nil {
 					os.Exit(-1)
 				}
+				dylibbuild := filepath.Join(cfg.Builddir, "dylib")
+				os.RemoveAll(dylibbuild)
+				os.MkdirAll(dylibbuild, 0755)
 
 				err = buildlib.BuildLib(cfg, platform, arch)
+				if err != nil {
+					fmt.Println(err)
+					os.Exit(-1)
+				}
+				err = buildlib.BuildCLib(cfg, platform, arch)
 				if err != nil {
 					fmt.Println(err)
 					os.Exit(-1)
@@ -201,10 +209,13 @@ func main() {
 				switch platform {
 				case "windows":
 					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dll"), filepath.Join(buildsdluatexdir, "libsplib.dll"))
+					os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.dll"), filepath.Join(cfg.Builddir, "speedata-publisher", "share", "lib", "luaglue.dll"))
 				case "linux":
 					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(cfg.Builddir, "speedata-publisher", "share", "lib", "libsplib.so"))
+					os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(cfg.Builddir, "speedata-publisher", "share", "lib", "luaglue.so"))
 				case "darwin":
 					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dylib"), filepath.Join(cfg.Builddir, "speedata-publisher", "share", "lib", "libsplib.dylib"))
+					os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(cfg.Builddir, "speedata-publisher", "share", "lib", "luaglue.so"))
 				}
 
 				os.Chdir(cfg.Builddir)

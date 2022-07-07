@@ -233,7 +233,7 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
    Ermittelt die Position des aktuellen Datensatzes. Anwendungsfall: `<Switch><Case test="position() = last()"> ...` führt den Inhalt des `<Case>`-Abschnittes nur beim letzten Element aus.
 
 `replace(<Eingabe>,<Regexp>, <Ersetzung>)`::
-    Ersetzt die Eingabe mit dem regulären Ausdruck durch den Ersetzungstext. Beispiel: `replace("banana", "a", "o")` ergibt `bonono`. Beispiel mit Ersetzungen: `replace('W151TBH','^[A-Z]([0-9]\+)[A-Z]+$', '$1')` ergibt 151.
+    Ersetzt die Eingabe mit dem regulären Ausdruck durch den Ersetzungstext. Beispiel: `replace('banana', 'a', 'o')` ergibt `bonono`. Beispiel mit Ersetzungen: `replace('W151TBH','^[A-Z]([0-9]+)[A-Z]+$', '$1')` ergibt 151.
 
 `round(<Zahl>,<Zahl>`)`::
    Rundet die angegebene Zahl im ersten Argument auf die Anzahl der Nachkommastellen im zweiten Argument.

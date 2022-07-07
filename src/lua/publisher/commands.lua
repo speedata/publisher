@@ -2831,7 +2831,7 @@ function commands.place_object( layoutxml,dataxml)
             end
             -- if the object has no height (for example an Action node), we don't move the cursor
             if height_in_gridcells == 0  then allocate = "no" end
-            log("PlaceObject: %s at (%d,%d) wd/ht: %d/%d in %q (p. %d)", objecttype, current_column_start, current_row,width_in_gridcells,height_in_gridcells,publisher.current_group or area or "(default)", onpage or publisher.current_pagenumber)
+            log("PlaceObject: %s at (%d,%d) wd/ht: %d/%d in %q (p. %d)", objecttype, math.floor(current_column_start), math.floor(current_row),width_in_gridcells,height_in_gridcells,publisher.current_group or area or "(default)", onpage or publisher.current_pagenumber)
 
             publisher.output_at({
                 nodelist = node.copy(object),

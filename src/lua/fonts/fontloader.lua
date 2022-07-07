@@ -57,7 +57,7 @@ function to_utf16(codepoint)
     if codepoint < 65536 then
         return string.format("%04X",codepoint)
     else
-        return string.format("%04X%04X",codepoint / 1024 + 0xD800 ,codepoint % 1024 + 0xDC00)
+        return string.format("%04X%04X",math.floor(codepoint / 1024) + 0xD800 ,codepoint % 1024 + 0xDC00)
     end
 end
 

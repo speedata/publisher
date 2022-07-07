@@ -1048,7 +1048,7 @@ M.default_functions["tokenize"] = function(dataxml,arg)
         err("tokenize: one of the arguments is empty")
         return ""
     end
-    return publisher.splib.tokenize(dataxml,arg)
+    return publisher.splib.tokenize(arg[1],arg[2])
 end
 
 M.default_functions["round"] = function( dataxml,arg )

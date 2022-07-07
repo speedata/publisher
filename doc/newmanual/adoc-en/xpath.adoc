@@ -89,7 +89,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
   Save the given contents into a file and return the file name.
 
 `sd:firstmark(pagenumber)`::
-   The first marker of the given page number. Useful for headings in dictionarys where the first and the last entry of a page is given.
+   The first marker of the given page number. Useful for headings in dictionaries where the first and the last entry of a page is given.
 
 `sd:first-free-row(<name>)`::
   Return the first free row of this area (experimental).
@@ -116,7 +116,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
   Use the current value of sd:alternating(<type>) without changing the value.
 
 `sd:lastmark(pagenumber)`::
-   The first marker of the given page number. Useful for headings in dictionarys where the first and the last entry of a page is given.
+   The first marker of the given page number. Useful for headings in dictionaries where the first and the last entry of a page is given.
 
 `sd:loremipsum()`::
   Same as sd:dummytext()
@@ -221,10 +221,10 @@ The standard functions should behave like documented by the XPath 2.0 standard.
    Return the position of the current node.
 
 `replace(<input>,<regexp>, <replacement>)`::
-   Replace the input using the regular expression with the given replacement text. Example: replace("banana", "a", "o") yields bonono.
+   Replace the input using the regular expression with the given replacement text. Example: replace('banana', 'a', 'o') yields bonono.
 
 `round(<number>,<number>`)`::
-    Return the argument in the first parameter rounded to number of deciaml places in the second parameter. The second parameter defaults to 0.
+    Return the argument in the first parameter rounded to number of decimal places in the second parameter. The second parameter defaults to 0.
 
 `string(<sequence>)`::
    Return the text value of the sequence e.g. the contents of the elements.

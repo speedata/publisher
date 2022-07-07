@@ -32,7 +32,7 @@ local uuid         = require("uuid")
 par        = require("par")
 uuid.randomseed(tex.randomseed)
 
-splib        = require("splib")
+splib        = require("luaglue")
 
 local env_publisherversion = os.getenv("PUBLISHERVERSION")
 
@@ -219,7 +219,18 @@ modes = {}
 -- The value of a key is usually the successor of the previous entry
 -- 1,2,3,4 but can be changed by setting a single entry. E.g. setting
 -- entry 3 to 5 gives the array 1,2,5,6,7,8...
-pagenum_tbl = setmetatable({1}, {__index = function(tbl,idx) return tbl[idx - 1] + 1 end})
+pagenum_tbl = setmetatable({1}, {__index=function(tbl, idx)
+    local acc = 0
+    for i=idx-1, 1, -1 do
+      local th = rawget(tbl, i)
+      if th then
+        acc = acc + th + 1
+      else
+        acc = acc + 1
+      end
+    end
+    return acc
+  end})
 forward_pagestore = {}
 total_inserted_pages = 0
 
