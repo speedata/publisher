@@ -2401,7 +2401,6 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local tab = publisher.dispatch(layoutxml,dataxml)
     local p = par:new(nil,"commands.paragraph")
     p.fontfamily = fontfamily
-    local initial
     if #tab == 1 and tab[1].contents == "" then
         tab[1].contents = " "
     end
