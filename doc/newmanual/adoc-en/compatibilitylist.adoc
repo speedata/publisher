@@ -55,4 +55,6 @@ This section summarizes experience reports about compatibility. If something is 
 
 == Known problems
 
-* The speedata Publisher installation on Windows must not contain non-ascii characters (see bug https://github.com/speedata/publisher/issues/310[#310]).
+* The speedata Publisher installation path on Windows must not contain non-ascii characters (see bug https://github.com/speedata/publisher/issues/310[#310]).
+
+// EOF

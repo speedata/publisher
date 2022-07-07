@@ -53,4 +53,7 @@ In diesem Abschnitt werden Erfahrungsberichte über die Kompatibilität zusammen
 
 == Bekannte Probleme
 
-* Die speedata Publisher Installation auf Windows darf keine Umlaute enthalten. (Siehe Fehler https://github.com/speedata/publisher/issues/310[#310].)
+* Der Pfad der speedata Publisher-Installation auf Windows darf keine Umlaute enthalten. (Siehe Fehler https://github.com/speedata/publisher/issues/310[#310].)
+
+
+// EOF
