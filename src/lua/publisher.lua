@@ -5197,7 +5197,7 @@ end
 function mkstringdest(name)
     local d = node.new("whatsit","pdf_dest")
     d.named_id = 1
-    d.dest_id = name
+    d.dest_id = utf8_to_utf16_string_pdf(name)
     d.dest_type = 0
     return d
 end

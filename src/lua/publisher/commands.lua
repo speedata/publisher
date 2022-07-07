@@ -39,7 +39,7 @@ function commands.a( layoutxml,dataxml )
 
     local str
     if link then
-        str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoTo/D(mark%s)>>",border,link)
+        str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoTo/D %s>>",border,publisher.utf8_to_utf16_string_pdf(string.format("mark%s",link)))
         publisher.hyperlinks[#publisher.hyperlinks + 1] = str
     elseif href then
         publisher.hlurl(href)
