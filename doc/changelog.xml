@@ -1,4 +1,10 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="4.11">
+    <entry version="4.11.1" date="2022-07-07">
+        <en>Remove LuaJIT/FFI dependency.</en>
+        <de>Entferne Abhängigkeit von LuaJIT/FFI.</de>
+    </entry>
+  </chapter>
   <chapter version="4.10" date="2022-07-07">
     <entry version="4.10.0" date="2022-07-07">
         <en>Release version 4.10.</en>
