@@ -24,3 +24,5 @@ sp --dummy --data https://raw.githubusercontent.com/speedata/examples/master/tec
 
 First the resource is cached on the local computer and then loaded from there.
 
+
+TIP: Sometimes the backslash (`\`) itself must be provided with a backslash (`\\`). This is mostly necessary at shell level, i.e. when passing arguments when calling the speedata publisher.
