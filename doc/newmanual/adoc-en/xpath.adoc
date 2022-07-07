@@ -106,11 +106,11 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `sd:group-width(<string>[, <unit>])`::
   Return the number of gridcells of the given group’s width. The argument must be the name of an existing group. Example: sd:group-width('My group'). See sd:group-height() for description of the second parameter.
 
-`sd:imageheight(<filename or URI schema>)`::
-  Natural height of the image in grid cells. Attention: if the image is not found, the height of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists.
+`sd:imageheight(<filename or URI schema>[, <unit>])`::
+  Natural height of the image in grid cells. Attention: if the image is not found, the height of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists. If provided with an optional second argument, it returns the height of the image in multiples of this unit. For example sd:imageheight('myimage.pdf', 'in') returns the height of 'myimage.pdf' in inches.
 
-`sd:imagewidth(<filename or URI schema>)`::
-  Natural width of the image in grid cells. Attention: if the image is not found, the width of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists.
+`sd:imagewidth(<filename or URI schema>[, <unit>])`::
+  Natural width of the image in grid cells. Attention: if the image is not found, the width of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists. If provided with an optional second argument, it returns the width of the image in multiples of this unit. For example sd:imagewidth('myimage.pdf', 'in') returns the width of 'myimage.pdf' in inches.
 
 `sd:keep-alternating(<type>)`::
   Use the current value of sd:alternating(<type>) without changing the value.
