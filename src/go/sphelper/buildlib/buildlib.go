@@ -19,9 +19,16 @@ func BuildCLib(cfg *config.Config, goos string, goarch string) error {
 	dylibbuild := filepath.Join(cfg.Builddir, "dylib")
 
 	var cmd *exec.Cmd
+	var triple string
 	switch goos {
 	case "darwin":
-		cmd = exec.Command("clang", "-dynamiclib", "-fPIC", "-undefined", "dynamic_lookup", "-o", filepath.Join(dylibbuild, "luaglue.so"), "luaglue.c", "-I/opt/homebrew/opt/lua@5.3/include/lua")
+		switch goarch {
+		case "amd64":
+			triple = "x86_64-apple-macos11"
+		case "arm64":
+			triple = "arm64-apple-macos11"
+		}
+		cmd = exec.Command("clang", "-dynamiclib", "-target", triple, "-fPIC", "-undefined", "dynamic_lookup", "-o", filepath.Join(dylibbuild, "luaglue.so"), "luaglue.c", "-I/opt/homebrew/opt/lua@5.3/include/lua")
 	case "linux":
 		cmd = exec.Command("cc", "-shared", "-fPIC", "-o", filepath.Join(dylibbuild, "luaglue.so"), "luaglue.c", "-I/usr/include/lua5.3/")
 	case "windows":
