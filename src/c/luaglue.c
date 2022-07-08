@@ -36,7 +36,7 @@ static void stackDump(lua_State *L) {
 }
 
 int handlerror(lua_State *L, const char *retvalue) {
-  const char *errorpattern = "**err";
+  const char *errorpattern = "^%*%*err";
   lua_getglobal(L, "string");
   lua_getfield(L, -1, "match");
   lua_pushstring(L, retvalue);

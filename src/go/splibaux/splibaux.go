@@ -345,5 +345,6 @@ func ReadXMLFile(filename string) (string, error) {
 		return "", err
 	}
 	str, err := readXMLFile(f, 1, 0)
+	f.Close()
 	return "tbl = {" + str + "}", err
 }
