@@ -1,6 +1,6 @@
 OutFile {{ .Exename }}
 !include "../src/other/EnvVarUpdate.nsh"
-InstallDir $PROGRAMFILES\speedata-publisher
+InstallDir $PROGRAMFILES64\speedata-publisher
 DirText "This will install speedata Publisher on your computer. Choose a directory"
 
 Section
