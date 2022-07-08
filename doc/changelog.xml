@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.11">
+    <entry version="4.11.2" date="2022-07-08">
+        <en>Various bugfixes introduced in the migration from LuaJIT/FFI.</en>
+        <de>Verschiedene Fehlerkorrekturen, die durch die Migration weg von LuaJIT/FFI entstanden sind.</de>
+    </entry>
     <entry version="4.11.1" date="2022-07-07">
         <en>Remove LuaJIT/FFI dependency.</en>
         <de>Entferne Abhängigkeit von LuaJIT/FFI.</de>
