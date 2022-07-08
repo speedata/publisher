@@ -181,7 +181,7 @@ static int lua_loadxmlfile(lua_State *L) {
   const char *filename = luaL_checkstring(L, -1);
   lua_pop(L, 1);
 
-  const char *ret = sdLookupFile(filename);
+  const char *ret = sdReadXMLFile(filename);
   if (handlerror(L, ret) == 1) {
     return 0;
   }
