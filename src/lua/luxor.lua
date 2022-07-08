@@ -284,6 +284,7 @@ local function parse_xml(txt,options)
 
 	txt = string.gsub(txt,"<!%-%-.-%-%->","")
 	txt = string.gsub(txt,"<!%[CDATA%[(.-)%]%]>",replacecdata)
+	txt = string.gsub(txt,"^%s*<","<")
 
 	if string.byte(txt) ~= 60 then
 		local tmp
