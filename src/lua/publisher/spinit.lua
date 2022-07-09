@@ -15,17 +15,14 @@ if not running_in_testmode then
     tex.enableprimitives('',tex.extraprimitives())
 end
 
--- Lua 5.2 has table.unpack
-unpack = unpack or table.unpack
-
 function warning(...)
     local text = { ... }
     local unpacked
     if publisher then
-        unpacked = string.format( "[page %d] ",publisher.current_pagenumber ) .. string.format(unpack(text))
+        unpacked = string.format( "[page %d] ",publisher.current_pagenumber ) .. string.format(table.unpack(text))
         publisher.messages[#publisher.messages + 1] = { unpacked , "warning" }
     else
-        unpacked = string.format( "%s",string.format(unpack(text)))
+        unpacked = string.format( "%s",string.format(table.unpack(text)))
     end
     errorlog:write("Warning: " .. unpacked .. "\n")
     texio.write("Warning: " .. unpacked .. "\n")
@@ -41,10 +38,10 @@ function err(...)
     end
     local unpacked
     if publisher then
-        unpacked = string.format( "[page %d] ",publisher.current_pagenumber ) .. string.format(unpack(text))
+        unpacked = string.format( "[page %d] ",publisher.current_pagenumber ) .. string.format(table.unpack(text))
         publisher.messages[#publisher.messages + 1] = { unpacked , "error", errorcode }
     else
-        unpacked = string.format( "%s",string.format(unpack(text)))
+        unpacked = string.format( "%s",string.format(table.unpack(text)))
     end
     errcount =  errcount + 1
     errorlog:write("Error: " .. unpacked .. "\n")
@@ -57,12 +54,12 @@ function call(...)
         err(tostring(ret[2])  .. "\n" .. debug.traceback())
         return
     end
-    return unpack(ret,2)
+    return table.unpack(ret,2)
 end
 
 function log(...)
     local text = { ... }
-    local res = call(string.format,unpack(text))
+    local res = call(string.format,table.unpack(text))
     texio.write(res .. "\n")
     if io.type(errorlog) == "file" then
         errorlog:write(res .. "\n")
@@ -231,7 +228,7 @@ function tex.sp( number_or_string )
             err("Could not convert dimension %q",number_or_string)
             return nil
         end
-        return unpack(ret,2)
+        return table.unpack(ret,2)
     end
     return orig_texsp(number_or_string)
 end

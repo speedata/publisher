@@ -14,9 +14,6 @@
 
 local trace_callbacks = false
 
--- Lua 5.2 has table.unpack
-unpack = unpack or table.unpack
-
 
 local function reader( asked_name )
     if trace_callbacks then
@@ -32,7 +29,7 @@ end
 local rewrite_tbl = {}
 if os.getenv("SP_PATH_REWRITE") ~= nil then
     for _,v in ipairs(string.explode(os.getenv("SP_PATH_REWRITE"),",")) do
-        a,b = unpack(string.explode(v,"="))
+        a,b = table.unpack(string.explode(v,"="))
         local str = string.gsub(a,"%-","%%-")
         str = string.gsub(str,"%(","%%(")
         str = string.gsub(str,"%)","%%)")

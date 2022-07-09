@@ -5851,7 +5851,7 @@ function get_language(id_or_locale_or_name)
         if string.match( locale ,"%-" ) then
             sep = "-"
         end
-        local langcode, _ = unpack(string.explode(locale,sep))
+        local langcode, _ = table.unpack(string.explode(locale,sep))
         if language_filename[langcode] then
             filename_part = language_filename[langcode]
         end

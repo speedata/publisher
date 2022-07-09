@@ -115,7 +115,7 @@ function make_font_instance( name,size )
         err(msg)
         return false, msg
     end
-    local filename,parameter = unpack(lookup_fontname_filename[name])
+    local filename,parameter = table.unpack(lookup_fontname_filename[name])
     assert(filename)
     local k = {filename = filename, fontsize = size, space = parameter.space, mode = parameter.mode or publisher.options.fontloader}
 
