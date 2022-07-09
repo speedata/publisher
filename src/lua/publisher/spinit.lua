@@ -160,17 +160,9 @@ function set_glue( gluenode, values, origin )
     else
         n = gluenode
     end
-    local spec
-
-    if node.has_field(n,"spec") then
-        spec = node.new("glue_spec")
-        n.spec = spec
-    else
-        spec = n
-    end
     values = values or {}
     for k,v in pairs(values) do
-        spec[k] = v
+        n[k] = v
     end
     if origin then
         publisher.setprop(n,"origin",origin)
@@ -179,28 +171,14 @@ function set_glue( gluenode, values, origin )
 end
 
 function set_glue_values( n , values)
-    local spec
-
-    if node.has_field(n,"spec") then
-        spec = n.spec
-    else
-        spec = n
-    end
-
     for k,v in pairs(values) do
-        spec[k]=v
+        n[k]=v
     end
 
 end
 
 function get_glue_value( n, value )
-    local spec
-    if node.has_field(n,"spec") then
-        spec = n.spec
-    else
-        spec = n
-    end
-    return spec[value]
+    return n[value]
 end
 
 --- This is like the original `tex.sp` except that it changes `pt` to `bp` and `pp` to `pt`.

@@ -3875,10 +3875,6 @@ leftskip.stretch_order = 3
 
 --- Return the larger glue(spec) values
 function bigger_glue_spec( a,b )
-    if node.has_field(a,"spec") then
-        a = a.spec
-        b = b.spec
-    end
     if a.stretch_order > b.stretch_order then return a end
     if b.stretch_order > a.stretch_order then return b end
     if a.stretch > b.stretch then return a end
@@ -4393,15 +4389,11 @@ local function ffglyphlist(arguments)
             -- double space, use the bigger glue
             local tmp = set_glue(nil, {width = space, shrink = shrink, stretch = stretch})
             local tmp2 = bigger_glue_spec(last,tmp)
-            if node.has_field(tmp,"spec") then
-                last.spec = tmp2
-            else
-                last.width = tmp2.width
-                last.stretch = tmp2.stretch
-                last.shrink = tmp2.shrink
-                last.stretch_order = tmp2.stretch_order
-                last.shrink_order = tmp2.shrink_order
-            end
+            last.width = tmp2.width
+            last.stretch = tmp2.stretch
+            last.shrink = tmp2.shrink
+            last.stretch_order = tmp2.stretch_order
+            last.shrink_order = tmp2.shrink_order
         elseif s == 160 then -- non breaking space U+00A0
             n = node.new("penalty")
             n.penalty = 10000
