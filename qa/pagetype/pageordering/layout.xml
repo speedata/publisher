@@ -1,6 +1,5 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
     xmlns:sd="urn:speedata:2009/publisher/functions/en">
-    <Trace grid="yes" />
     <SetGrid height="12pt" nx="9" />
     <Pageformat height="6cm" width="210mm" />
 

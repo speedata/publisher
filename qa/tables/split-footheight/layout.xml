@@ -5,8 +5,6 @@
   <Pageformat width="60mm" height="110mm" />
   <SetGrid height="24pt" nx="10"/>
 
-  <Trace assignments="no" objects="yes" verbose="no" grid="yes" gridallocation="no" hyphenation="no" textformat="no" />
-
   <Pagetype name="x" test="true()">
     <Margin left="5mm" right="5mm" top="5mm" bottom="5mm"/>
     <PositioningArea name="area">

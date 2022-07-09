@@ -1,7 +1,7 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <Options show-grid="yes" mainlanguage="German" ignoreeol="yes"/>
+  <Options mainlanguage="German" ignoreeol="yes"/>
 
   <DefineFontfamily name="text" fontsize="11" leading="13">
     <Regular fontface="TeXGyreHeros-Regular"/>

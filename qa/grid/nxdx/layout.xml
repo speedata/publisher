@@ -4,7 +4,6 @@
     <Pageformat width="180mm" height="180mm" />
 
     <SetGrid nx="4" dx="5mm" height="12pt"/>
-    <Trace grid="yes" gridallocation="no"/>
 
     <Pagetype name="page" test="true()">
         <Margin left="10mm" right="10mm" top="10mm" bottom="10mm"/>
