@@ -362,7 +362,7 @@ Liest eine CSV-Datei ein. Der Rückgabewert ist eine Tabelle bzw. im Fehlerfall 
 Die `parameter` werden in einer Tabelle kodiert:
 +
 `charset`:::
-Wenn die CSV-Datei Latin-1 kodiert ist, muss dieser Wert auf ISO-8859-1 stehen. Andere Kodierungen auf Anfrage.
+Wenn die CSV-Datei Latin-1 kodiert ist, muss dieser Wert auf ISO-8859-1 stehen. Andere Kodierungen auf Anfrage. Die Voreinstellung (ohne Angabe von charset) ist UTF-8.
 `separator`:::
 Entweder ein Komma (Voreinstellung), ein Semikolon oder das entsprechend genutzte Trennzeichen.
 

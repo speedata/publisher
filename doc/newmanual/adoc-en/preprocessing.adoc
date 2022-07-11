@@ -367,7 +367,7 @@ Reads a CSV file. The return value is a table or, in case of an error, `false` a
 The `parameters` are encoded in a table:
 +
 `charset`:::
-If the CSV file is Latin-1 encoded, this value must be ISO-8859-1. Other encodings on request.
+If the CSV file is Latin-1 encoded, this value must be ISO-8859-1. Other encodings on request. The default (without the charset parameter) is UTF-8.
 `separator`:::
 Either a comma (default), a semicolon or the appropriate separator.
 
