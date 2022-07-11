@@ -9,7 +9,7 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/yuin/gopher-lua"
+	lua "github.com/yuin/gopher-lua"
 	"golang.org/x/text/encoding/charmap"
 )
 
