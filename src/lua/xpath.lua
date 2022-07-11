@@ -1062,7 +1062,11 @@ M.default_functions["replace"] = function(dataxml,arg)
         warning("replace: one of the arguments is empty")
         return ""
     end
-    return publisher.splib.replace(arg[1],arg[2],arg[3])
+    local firstarg = arg[1]
+    if type(arg[1]) == "table" and arg[1][".__type"] == "element" then
+        firstarg = xml_to_string(arg[1])
+    end
+    return publisher.splib.replace(firstarg,arg[2],arg[3])
 end
 
 M.default_functions["contains"] = function(dataxml,arg)
