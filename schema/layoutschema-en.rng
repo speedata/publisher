@@ -436,11 +436,6 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="fontface">
-               <a:documentation>Deprecated. Use fontfamily instead.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="fontfamily">
                <a:documentation>Name of the font of the text that can be placed beneath the barcode. Not used in all codes.</a:documentation>
             </attribute>
@@ -2290,11 +2285,6 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="fontface">
-                     <a:documentation>Deprecated. Use fontfamily instead.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
                   <attribute name="fontfamily">
                      <a:documentation>Choose the font family. Only »Regular« shape is used at the moment.</a:documentation>
                   </attribute>
@@ -3200,11 +3190,6 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="fontface">
-                     <a:documentation>Deprecated. Use fontfamily instead.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
                   <attribute name="fontfamily">
                      <a:documentation>The name of the fontface for text to be reduced. The default is »text« (lowercase t).</a:documentation>
                   </attribute>
@@ -3846,11 +3831,6 @@
                <optional>
                   <attribute name="direction">
                      <a:documentation>The text direction (ltr or rtl)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="fontface">
-                     <a:documentation>Deprecated. Use fontfamily instead.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -5431,11 +5411,6 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="fontface">
-                     <a:documentation>Deprecated. Use fontfamily instead.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
                   <attribute name="fontfamily">
                      <a:documentation>Name of the font family for the table. If not given, the font face ‘text’ is used.</a:documentation>
                   </attribute>
@@ -5869,11 +5844,6 @@
                <optional>
                   <attribute name="columndistance">
                      <a:documentation>Distance between two columns. Defaults to 3mm.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="fontface">
-                     <a:documentation>Deprecated. Use fontfamily instead.</a:documentation>
                   </attribute>
                </optional>
                <optional>

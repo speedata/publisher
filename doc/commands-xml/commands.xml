@@ -1039,14 +1039,6 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="fontface" type="text" optional="yes" deprecated="yes">
-      <description xml:lang="en">
-        <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Veraltet: Bitte Attribut <tt>fontfamily</tt> benutzen.</para>
-      </description>
-    </attribute>
     <attribute en="fontfamily" type="text" optional="yes">
       <description xml:lang="en">
         <para>Name of the font of the text that can be placed beneath the barcode. Not used in all codes.</para>
@@ -3851,14 +3843,6 @@
         <para>Setze die Farbe der Initiale. Voreingestellt ist Schwarz.</para>
       </description>
     </attribute>
-    <attribute en="fontface" optional="yes" type="text" deprecated="yes">
-      <description xml:lang="en">
-        <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Veraltet: Bitte Attribut <tt>fontfamily</tt> benutzen.</para>
-      </description>
-    </attribute>
     <attribute en="fontfamily" optional="yes" type="text">
       <description xml:lang="en">
         <para>Choose the font family. Only »Regular« shape is used at the moment.</para>
@@ -5389,14 +5373,6 @@
         <para>Multiplikator für die Schriftgröße, wenn reduce=fontsize. Voreinstellung: 0.9. Das bedeutet, dass die Schriftgröße um 0,9 reduziert wird, bis der Text in die vorgegebene Breite hineinpasst.</para>
       </description>
     </attribute>
-    <attribute en="fontface" type="text" optional="yes" deprecated="yes">
-      <description xml:lang="en">
-        <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Veraltet: Bitte Attribut <tt>fontfamily</tt> benutzen.</para>
-      </description>
-    </attribute>
     <attribute en="fontfamily" type="text" optional="yes">
       <description xml:lang="en">
         <para>The name of the fontface for text to be reduced. The default is »text« (lowercase t).</para>
@@ -6030,14 +6006,6 @@
       </description>
       <description xml:lang="de">
         <para>Die Laufrichtung des Textes (ltr oder rtl)</para>
-      </description>
-    </attribute>
-    <attribute en="fontface" css="font-family" type="text" optional="yes" deprecated="yes">
-      <description xml:lang="en">
-        <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Veraltet: Bitte Attribut <tt>fontfamily</tt> benutzen.</para>
       </description>
     </attribute>
     <attribute en="fontfamily" css="font-family" type="text" optional="yes">
@@ -8479,14 +8447,6 @@
         <para>Wertet den angegebenen XPath-Ausdruck aus und ignoriert dessen Ausgabe.</para>
       </description>
     </attribute>
-    <attribute en="fontface" type="text" optional="yes" deprecated="yes">
-      <description xml:lang="en">
-        <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Veraltet: Bitte Attribut <tt>fontfamily</tt> benutzen.</para>
-      </description>
-    </attribute>
     <attribute en="fontfamily" type="text" optional="yes">
       <description xml:lang="en">
         <para>Name of the font family for the table. If not given, the font face ‘text’ is used.</para>
@@ -9367,14 +9327,6 @@
       </description>
       <description xml:lang="de">
         <para>Abstand zwischen zwei Spalten. Voreinstellung: 3mm.</para>
-      </description>
-    </attribute>
-    <attribute en="fontface" type="text" optional="yes" deprecated="yes">
-      <description xml:lang="en">
-        <para>Deprecated. Use <tt>fontfamily</tt> instead.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Veraltet: Bitte Attribut <tt>fontfamily</tt> benutzen.</para>
       </description>
     </attribute>
     <attribute en="fontfamily" type="text" optional="yes">

@@ -436,11 +436,6 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="fontface">
-               <a:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="fontfamily">
                <a:documentation>Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird. Nicht in allen Codes verwendet.</a:documentation>
             </attribute>
@@ -2290,11 +2285,6 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="fontface">
-                     <a:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
                   <attribute name="fontfamily">
                      <a:documentation>Wähle die Fontfamilie. Derzeit wird nur der Schnitt Regular verwendet.</a:documentation>
                   </attribute>
@@ -3200,11 +3190,6 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="fontface">
-                     <a:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
                   <attribute name="fontfamily">
                      <a:documentation>Name der Schriftart für den Text, der verkürzt werden soll. Voreinstellung ist »text« (mit kleinem t).</a:documentation>
                   </attribute>
@@ -3846,11 +3831,6 @@
                <optional>
                   <attribute name="direction">
                      <a:documentation>Die Laufrichtung des Textes (ltr oder rtl)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="fontface">
-                     <a:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -5431,11 +5411,6 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="fontface">
-                     <a:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
                   <attribute name="fontfamily">
                      <a:documentation>Name der Schriftfamilie, die benutzt werden soll. Wenn keine Schriftart angegeben ist, wird auf die Schriftart ›text‹ umgeschaltet.</a:documentation>
                   </attribute>
@@ -5869,11 +5844,6 @@
                <optional>
                   <attribute name="columndistance">
                      <a:documentation>Abstand zwischen zwei Spalten. Voreinstellung: 3mm.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="fontface">
-                     <a:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</a:documentation>
                   </attribute>
                </optional>
                <optional>

@@ -297,11 +297,6 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="fontface">
-        <xs:annotation>
-          <xs:documentation>Deprecated. Use fontfamily instead.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Name of the font of the text that can be placed beneath the barcode. Not used in all codes.</xs:documentation>
@@ -2285,11 +2280,6 @@
           <xs:documentation>Set the color of the initial. Defaults to black.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="fontface">
-        <xs:annotation>
-          <xs:documentation>Deprecated. Use fontfamily instead.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Choose the font family. Only »Regular« shape is used at the moment.</xs:documentation>
@@ -3146,11 +3136,6 @@
       <xs:attribute name="factor">
         <xs:annotation>
           <xs:documentation>Multiplier for the font size when reduce=fontsize. Default value: 0.9. That means the font size gets decreased by 0.9 until the text fits the objects width.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="fontface">
-        <xs:annotation>
-          <xs:documentation>Deprecated. Use fontfamily instead.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="fontfamily">
@@ -4061,11 +4046,6 @@
       <xs:attribute name="direction">
         <xs:annotation>
           <xs:documentation>The text direction (ltr or rtl)</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="fontface">
-        <xs:annotation>
-          <xs:documentation>Deprecated. Use fontfamily instead.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="fontfamily">
@@ -6333,11 +6313,6 @@
           <xs:documentation>Evaluates the given XPath expression and discards its output.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="fontface">
-        <xs:annotation>
-          <xs:documentation>Deprecated. Use fontfamily instead.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Name of the font family for the table. If not given, the font face ‘text’ is used.</xs:documentation>
@@ -6819,11 +6794,6 @@
       <xs:attribute name="columndistance">
         <xs:annotation>
           <xs:documentation>Distance between two columns. Defaults to 3mm.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="fontface">
-        <xs:annotation>
-          <xs:documentation>Deprecated. Use fontfamily instead.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="fontfamily">

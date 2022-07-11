@@ -297,11 +297,6 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="fontface">
-        <xs:annotation>
-          <xs:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Name der Schriftart des Textes, der ggf. unterhalb des Strichcodes ausgegeben wird. Nicht in allen Codes verwendet.</xs:documentation>
@@ -2285,11 +2280,6 @@
           <xs:documentation>Setze die Farbe der Initiale. Voreingestellt ist Schwarz.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="fontface">
-        <xs:annotation>
-          <xs:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Wähle die Fontfamilie. Derzeit wird nur der Schnitt Regular verwendet.</xs:documentation>
@@ -3146,11 +3136,6 @@
       <xs:attribute name="factor">
         <xs:annotation>
           <xs:documentation>Multiplikator für die Schriftgröße, wenn reduce=fontsize. Voreinstellung: 0.9. Das bedeutet, dass die Schriftgröße um 0,9 reduziert wird, bis der Text in die vorgegebene Breite hineinpasst.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="fontface">
-        <xs:annotation>
-          <xs:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="fontfamily">
@@ -4061,11 +4046,6 @@
       <xs:attribute name="direction">
         <xs:annotation>
           <xs:documentation>Die Laufrichtung des Textes (ltr oder rtl)</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="fontface">
-        <xs:annotation>
-          <xs:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="fontfamily">
@@ -6333,11 +6313,6 @@
           <xs:documentation>Wertet den angegebenen XPath-Ausdruck aus und ignoriert dessen Ausgabe.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="fontface">
-        <xs:annotation>
-          <xs:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Name der Schriftfamilie, die benutzt werden soll. Wenn keine Schriftart angegeben ist, wird auf die Schriftart ›text‹ umgeschaltet.</xs:documentation>
@@ -6819,11 +6794,6 @@
       <xs:attribute name="columndistance">
         <xs:annotation>
           <xs:documentation>Abstand zwischen zwei Spalten. Voreinstellung: 3mm.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="fontface">
-        <xs:annotation>
-          <xs:documentation>Veraltet: Bitte Attribut fontfamily benutzen.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="fontfamily">
