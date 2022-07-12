@@ -6819,7 +6819,7 @@ local function urlencode(url)
         return
     end
     url = url:gsub("\n", "\r\n")
-    url = url:gsub("([^%w _%%%-%.~:/])", char_to_hex)
+    url = url:gsub("([^%w _%-%.~:/%%=%?&])", char_to_hex)
     url = url:gsub(" ", "+")
     return url
 end
@@ -6829,8 +6829,9 @@ function hlurl(href)
     if options.showhyperlinks then
         border = ""
     end
-    local uri = urlencode(href)
-    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/URI/URI (%s)>>",border,uri)
+    href = urlencode(href)
+    href = escape_pdfstring(href)
+    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/URI/URI (%s)>>",border,href)
     hyperlinks[#hyperlinks + 1] = str
     return #hyperlinks
 end
@@ -7191,6 +7192,8 @@ function pdfdate(num)
 end
 
 function escape_pdfstring( str )
+    str = string.gsub(str,"%(","\\(")
+    str = string.gsub(str,"%)","\\)")
     return str
 end
 
