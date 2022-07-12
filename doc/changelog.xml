@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.11">
+    <entry version="4.11.3" date="2022-07-12">
+        <en>New command Clip to cut off edges from objects.</en>
+        <de>Neuer Befehl Clip um Kanten von Objekten abzuschneiden.</de>
+    </entry>
     <entry version="4.11.2" date="2022-07-08">
         <en>Various bugfixes introduced in the migration from LuaJIT/FFI.</en>
         <de>Verschiedene Fehlerkorrekturen, die durch die Migration weg von LuaJIT/FFI entstanden sind.</de>
