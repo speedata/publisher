@@ -22,6 +22,7 @@ ifndef::backend-docbook5[]
 <<cmd-case,Case>>  +
 <<cmd-circle,Circle>>  +
 <<cmd-clearpage,ClearPage>>  +
+<<cmd-clip,Clip>>  +
 <<cmd-color,Color>>  +
 <<cmd-column,Column>>  +
 <<cmd-columns,Columns>>  +
@@ -217,6 +218,13 @@ include::ref/clearpage.adoc[]
 == Siehe auch
 
 <<ch-seitentypen-clearpage>>
+
+
+include::ref/clip.adoc[]
+
+== Siehe auch
+
+<<ch-objekteausgeben-clipping>>
 
 include::ref/color.adoc[]
 

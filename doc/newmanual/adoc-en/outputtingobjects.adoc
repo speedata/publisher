@@ -341,4 +341,34 @@ The output is as expected
 image::qrcode-hallowelt.png[width=20%]
 
 Barcodes in the coding "EAN13" and "Code 128" can be output.
+
+[[ch-outputtingobjects-clipping]]
+== Clipping
+
+Since version 4.11.3 the speedata Publisher can clip any kind of objects. The new object is smaller than the original object if the method shrink (the default) is selected, otherwise (method=clip) the resulting object has the original size but the visible portion of the image is set to the clipping path.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat height="14cm" width="11cm" />
+
+  <Record element="data">
+    <PlaceObject>
+      <Clip left="1cm" right="1cm" top="1cm" bottom="2cm" method="shrink">
+        <Image width="5cm" file="_sampleb.pdf" />
+      </Clip>
+    </PlaceObject>
+    <PlaceObject column="5" >
+      <Image width="5cm" file="_sampleb.pdf" />
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+
+[[fig-clippedobject]]
+.A clipped and a non-clipped image.
+image::outputobjects-clip.png[width=100%]
+
 // EOF

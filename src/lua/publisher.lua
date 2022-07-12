@@ -617,6 +617,7 @@ local dispatch_table = {
     Br                      = commands.br,
     Circle                  = commands.circle,
     ClearPage               = commands.clearpage,
+    Clip                    = commands.clip,
     Color                   = commands.color,
     Column                  = commands.column,
     Columns                 = commands.columns,
@@ -735,7 +736,7 @@ function dispatch(layoutxml,dataxml,opts)
                 tmp = dispatch_table[eltname](j,dataxml,opts)
 
                 -- Copy-of-elements can be resolved immediately
-                if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" or eltname == "Transformation" or eltname == "Frame" or eltname == "Include" or eltname == "Layout" then
+                if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" or eltname == "Transformation" or eltname == "Frame" or eltname == "Include" or eltname == "Layout" or eltname == "Clip" then
                     if type(tmp)=="table" then
                         for i=1,#tmp do
                             if tmp[i].contents then
@@ -2665,6 +2666,83 @@ function frame(obj)
     hvbox.depth = savedp
     return hvbox
 end
+
+function clip(obj)
+    local box = obj.box
+    local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
+
+    local kern_left = node.new("kern")
+    local kern_top = node.new("kern")
+
+    if obj.clip_width_sp ~= 0 then
+        if obj.clip_left_sp ~= 0 or obj.clip_right_sp == 0 then
+            obj.clip_right_sp = box.width - obj.clip_width_sp - obj.clip_left_sp
+        else
+            obj.clip_left_sp = box.width - obj.clip_width_sp - obj.clip_right_sp
+        end
+    end
+
+    if obj.clip_height_sp ~= 0 then
+        if obj.clip_top_sp ~= 0 or obj.clip_bottom_sp == 0  then
+            obj.clip_bottom_sp = box.height - obj.clip_height_sp - obj.clip_top_sp
+        else
+            obj.clip_top_sp = box.height - obj.clip_height_sp - obj.clip_bottom_sp
+        end
+    end
+
+
+
+    local clip_top_bp = sp_to_bp(obj.clip_top_sp)
+    local clip_bottom_bp = sp_to_bp(obj.clip_bottom_sp)
+    local clip_left_bp = sp_to_bp(obj.clip_left_sp)
+    local clip_right_bp = sp_to_bp(obj.clip_right_sp)
+
+    if obj.method == "shrink" then
+        kern_left.kern = -1 * obj.clip_left_sp
+        kern_top.kern = -1 * obj.clip_top_sp
+    end
+
+    node.insert_after(kern_left,kern_left,box)
+    box = node.hpack(kern_left)
+    node.insert_after(kern_top,kern_top,box)
+    box = node.vpack(kern_top)
+
+    n_clip = node.new("whatsit","pdf_literal")
+    setprop(n_clip,"origin","obj.clip")
+    local n_clip, rule_clip
+    rule_clip = {}
+    if obj.method == "shrink" then
+        rule_clip[#rule_clip + 1] = string.format(" %g %g %g %g re W n ", 0,  -1 * dp + clip_bottom_bp, wd - clip_right_bp - clip_left_bp,ht+dp - clip_bottom_bp - clip_top_bp )
+    elseif obj.method == "clip" then
+        rule_clip[#rule_clip + 1] = string.format(" %g %g %g %g re W n ", clip_left_bp,  -1 * dp + clip_bottom_bp, wd - clip_right_bp - clip_left_bp,ht+dp - clip_bottom_bp - clip_top_bp )
+    else
+        err("Clip: method %s not implemented",obj.method)
+    end
+
+    n_clip = node.new("whatsit","pdf_literal")
+    n_clip.data = table.concat(rule_clip, " ")
+    node.setproperty(n_clip,{origin = "frame/clip"})
+
+    local pdf_save    = node.new("whatsit","pdf_save")
+    local pdf_restore = node.new("whatsit","pdf_restore")
+
+    node.insert_after(pdf_save,pdf_save,n_clip)
+    node.insert_after(n_clip,n_clip,box)
+
+    local hvbox = node.hpack(pdf_save)
+    local savedp = hvbox.depth
+    hvbox.depth = 0
+    node.insert_after(hvbox,node.tail(hvbox),pdf_restore)
+    hvbox = node.vpack(hvbox)
+    if obj.method == "shrink" then
+        hvbox.width = hvbox.width - obj.clip_right_sp
+        hvbox.height = hvbox.height - obj.clip_bottom_sp
+    end
+    hvbox.depth = savedp
+
+    return hvbox
+end
+
 
 -- collect all spot colors used so far to create proper page resources
 function usespotcolor(num)

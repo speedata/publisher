@@ -13,6 +13,7 @@
           <xs:element ref="en:Action"/>
           <xs:element ref="en:B"/>
           <xs:element ref="en:Br"/>
+          <xs:element ref="en:Clip"/>
           <xs:element ref="en:Color"/>
           <xs:element ref="en:Fontface"/>
           <xs:element ref="en:ForAll"/>
@@ -239,6 +240,7 @@
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Fontface"/>
         <xs:element ref="en:ForAll"/>
@@ -566,6 +568,7 @@
         <xs:element minOccurs="0" ref="en:Box"/>
         <xs:element minOccurs="0" ref="en:Br"/>
         <xs:element minOccurs="0" ref="en:ClearPage"/>
+        <xs:element minOccurs="0" ref="en:Clip"/>
         <xs:element minOccurs="0" ref="en:Color"/>
         <xs:element minOccurs="0" ref="en:Column"/>
         <xs:element minOccurs="0" ref="en:Columns"/>
@@ -724,6 +727,86 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
+  <xs:element name="Clip">
+    <xs:annotation>
+      <xs:documentation>Clip an image or other output</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="en:Image"/>
+        <xs:element ref="en:Box"/>
+        <xs:element ref="en:Circle"/>
+        <xs:element ref="en:Rule"/>
+        <xs:element ref="en:Textblock"/>
+        <xs:element ref="en:Barcode"/>
+        <xs:element ref="en:Table"/>
+        <xs:element ref="en:Transformation"/>
+        <xs:element ref="en:Frame"/>
+      </xs:choice>
+      <xs:attribute name="left">
+        <xs:annotation>
+          <xs:documentation>The amount of clip from the left border.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="top">
+        <xs:annotation>
+          <xs:documentation>The amount of clip from the top border.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="right">
+        <xs:annotation>
+          <xs:documentation>The amount of clip from the right border.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="bottom">
+        <xs:annotation>
+          <xs:documentation>The amount of clip from the bottom border.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="width">
+        <xs:annotation>
+          <xs:documentation>The clipped width of the object. Should be used with one of left or right.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="height">
+        <xs:annotation>
+          <xs:documentation>The clipped height of the object. Should be used with one of top or bottom.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="method">
+        <xs:annotation>
+          <xs:documentation>Set the resize method of the resulting object.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="shrink">
+                  <xs:annotation>
+                    <xs:documentation>Clip and shrink the object.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="clip">
+                  <xs:annotation>
+                    <xs:documentation>Just clip, do not change the size of the object.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Color">
     <xs:annotation>
       <xs:documentation>Switch to another text color</xs:documentation>
@@ -734,6 +817,7 @@
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Fontface"/>
         <xs:element ref="en:ForAll"/>
@@ -1469,6 +1553,7 @@
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Fontface"/>
         <xs:element ref="en:ForAll"/>
@@ -1509,6 +1594,7 @@
         <xs:element ref="en:Box"/>
         <xs:element ref="en:Br"/>
         <xs:element ref="en:ClearPage"/>
+        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>
@@ -2224,6 +2310,7 @@
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Fontface"/>
         <xs:element ref="en:ForAll"/>
@@ -2731,6 +2818,7 @@
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Fontface"/>
         <xs:element ref="en:ForAll"/>
@@ -2766,6 +2854,7 @@
         <xs:element ref="en:Box"/>
         <xs:element ref="en:Br"/>
         <xs:element ref="en:ClearPage"/>
+        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>
@@ -3082,6 +3171,7 @@
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Fontface"/>
         <xs:element ref="en:ForAll"/>
@@ -3780,6 +3870,7 @@
         <xs:element minOccurs="0" ref="en:Box"/>
         <xs:element minOccurs="0" ref="en:Br"/>
         <xs:element minOccurs="0" ref="en:ClearPage"/>
+        <xs:element minOccurs="0" ref="en:Clip"/>
         <xs:element minOccurs="0" ref="en:Color"/>
         <xs:element minOccurs="0" ref="en:Column"/>
         <xs:element minOccurs="0" ref="en:Columns"/>
@@ -3973,6 +4064,7 @@
           <xs:element ref="en:Action"/>
           <xs:element ref="en:B"/>
           <xs:element ref="en:Br"/>
+          <xs:element ref="en:Clip"/>
           <xs:element ref="en:Color"/>
           <xs:element ref="en:Fontface"/>
           <xs:element ref="en:ForAll"/>
@@ -4845,6 +4937,7 @@
         <xs:element ref="en:Image"/>
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Box"/>
+        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Circle"/>
         <xs:element ref="en:Rule"/>
         <xs:element ref="en:Textblock"/>
@@ -5708,6 +5801,7 @@
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Fontface"/>
         <xs:element ref="en:ForAll"/>
@@ -7685,6 +7779,7 @@
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Fontface"/>
         <xs:element ref="en:ForAll"/>
@@ -7765,6 +7860,7 @@
         <xs:element ref="en:Box"/>
         <xs:element ref="en:Br"/>
         <xs:element ref="en:ClearPage"/>
+        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>
@@ -7845,6 +7941,7 @@
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Br"/>
+        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Fontface"/>
         <xs:element ref="en:ForAll"/>
@@ -7915,6 +8012,7 @@
         <xs:element ref="en:Box"/>
         <xs:element ref="en:Br"/>
         <xs:element ref="en:ClearPage"/>
+        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>

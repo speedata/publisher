@@ -35,6 +35,7 @@
                            <ref name="e_Action"></ref>
                            <ref name="e_B"></ref>
                            <ref name="e_Br"></ref>
+                           <ref name="e_Clip"></ref>
                            <ref name="e_Color"></ref>
                            <ref name="e_Fontface"></ref>
                            <ref name="e_ForAll"></ref>
@@ -389,6 +390,7 @@
                      <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Br"></ref>
+                     <ref name="e_Clip"></ref>
                      <ref name="e_Color"></ref>
                      <ref name="e_Fontface"></ref>
                      <ref name="e_ForAll"></ref>
@@ -652,6 +654,9 @@
                   </optional>
                   <optional>
                      <ref name="e_ClearPage"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Clip"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Color"></ref>
@@ -921,6 +926,91 @@
          <empty></empty>
       </element>
    </define>
+   <define name="e_Clip">
+      <element name="Clip">
+         <a:documentation>Beschneide ein Bild oder eine andere Ausgabe</a:documentation>
+         <interleave>
+            <group>
+               <optional>
+                  <attribute name="left">
+                     <a:documentation>Das Maß, das von der linken Seite abgeschnitten wird.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="top">
+                     <a:documentation>Das Maß, das von der oberen Seite abgeschnitten wird.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="right">
+                     <a:documentation>Das Maß, das von der rechten Seite abgeschnitten wird.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="bottom">
+                     <a:documentation>Das Maß, das von der unteren Seite abgeschnitten wird.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="width">
+                     <a:documentation>Die sichtbare Breite des Objekts. Sollte mit einem Wert left oder right benutzt werden.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="height">
+                     <a:documentation>Die sichtbare Höhe des Objekts. Sollte mit einem Wert top oder bottom benutzt werden.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="method">
+                     <a:documentation>Setze die Verkleinerungsmethode des erzeugten Objekts.</a:documentation>
+                     <choice>
+                        <value>shrink</value>
+                        <a:documentation>Abschneiden und verkleinern.</a:documentation>
+                        <value>clip</value>
+                        <a:documentation>Nur abschneiden, nicht die Größe ändern.</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
+                     </choice>
+                  </attribute>
+               </optional>
+               <oneOrMore>
+                  <interleave>
+                     <optional>
+                        <ref name="e_Image"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Box"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Circle"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Rule"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Textblock"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Barcode"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Table"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Transformation"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Frame"></ref>
+                     </optional>
+                  </interleave>
+               </oneOrMore>
+            </group>
+            <ref name="foreign-nodes"></ref>
+         </interleave>
+      </element>
+   </define>
    <define name="e_Color">
       <element name="Color">
          <a:documentation>Auf eine andere Textfarbe wechseln</a:documentation>
@@ -935,6 +1025,7 @@
                      <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Br"></ref>
+                     <ref name="e_Clip"></ref>
                      <ref name="e_Color"></ref>
                      <ref name="e_Fontface"></ref>
                      <ref name="e_ForAll"></ref>
@@ -1613,6 +1704,7 @@
                      <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Br"></ref>
+                     <ref name="e_Clip"></ref>
                      <ref name="e_Color"></ref>
                      <ref name="e_Fontface"></ref>
                      <ref name="e_ForAll"></ref>
@@ -1685,6 +1777,9 @@
                      </optional>
                      <optional>
                         <ref name="e_ClearPage"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Clip"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Color"></ref>
@@ -2197,6 +2292,7 @@
                      <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Br"></ref>
+                     <ref name="e_Clip"></ref>
                      <ref name="e_Color"></ref>
                      <ref name="e_Fontface"></ref>
                      <ref name="e_ForAll"></ref>
@@ -2711,6 +2807,7 @@
                      <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Br"></ref>
+                     <ref name="e_Clip"></ref>
                      <ref name="e_Color"></ref>
                      <ref name="e_Fontface"></ref>
                      <ref name="e_ForAll"></ref>
@@ -2778,6 +2875,9 @@
                      </optional>
                      <optional>
                         <ref name="e_ClearPage"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Clip"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Color"></ref>
@@ -3200,6 +3300,7 @@
                      <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Br"></ref>
+                     <ref name="e_Clip"></ref>
                      <ref name="e_Color"></ref>
                      <ref name="e_Fontface"></ref>
                      <ref name="e_ForAll"></ref>
@@ -3491,6 +3592,9 @@
                   </optional>
                   <optional>
                      <ref name="e_ClearPage"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Clip"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Color"></ref>
@@ -4019,6 +4123,7 @@
                      <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Br"></ref>
+                     <ref name="e_Clip"></ref>
                      <ref name="e_Color"></ref>
                      <ref name="e_Fontface"></ref>
                      <ref name="e_ForAll"></ref>
@@ -4470,6 +4575,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Box"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Clip"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Circle"></ref>
@@ -5296,6 +5404,7 @@
                      <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Br"></ref>
+                     <ref name="e_Clip"></ref>
                      <ref name="e_Color"></ref>
                      <ref name="e_Fontface"></ref>
                      <ref name="e_ForAll"></ref>
@@ -6330,6 +6439,7 @@
                      <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Br"></ref>
+                     <ref name="e_Clip"></ref>
                      <ref name="e_Color"></ref>
                      <ref name="e_Fontface"></ref>
                      <ref name="e_ForAll"></ref>
@@ -6417,6 +6527,9 @@
                      </optional>
                      <optional>
                         <ref name="e_ClearPage"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Clip"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Color"></ref>
@@ -6622,6 +6735,7 @@
                      <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Br"></ref>
+                     <ref name="e_Clip"></ref>
                      <ref name="e_Color"></ref>
                      <ref name="e_Fontface"></ref>
                      <ref name="e_ForAll"></ref>
@@ -6725,6 +6839,9 @@
                      </optional>
                      <optional>
                         <ref name="e_ClearPage"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Clip"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Color"></ref>

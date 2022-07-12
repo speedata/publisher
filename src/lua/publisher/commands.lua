@@ -470,6 +470,56 @@ function commands.clearpage( layoutxml,dataxml)
 end
 
 
+--- Clip
+--- --------------
+--- Apply a clip on an object for PlaceObject.
+function commands.clip( layoutxml,dataxml )
+    local clip_top_sp = publisher.read_attribute(layoutxml,dataxml,"top","length_sp", 0)
+    local clip_bottom_sp = publisher.read_attribute(layoutxml,dataxml,"bottom","length_sp", 0)
+    local clip_left_sp = publisher.read_attribute(layoutxml,dataxml,"left","length_sp", 0)
+    local clip_right_sp = publisher.read_attribute(layoutxml,dataxml,"right","length_sp", 0)
+    local clip_width_sp = publisher.read_attribute(layoutxml,dataxml,"width","width_sp", 0)
+    local clip_height_sp = publisher.read_attribute(layoutxml,dataxml,"height","height_sp", 0)
+    local method = publisher.read_attribute(layoutxml,dataxml,"method", "string","shrink")
+
+    local tab = publisher.dispatch(layoutxml,dataxml)
+    for i=1,#tab do
+        local contents = publisher.element_contents(tab[i])
+
+
+        if node.is_node(contents) then
+            -- This case is for <Textblock>...
+            tab[i].contents = publisher.clip({
+                box = contents,
+                clip_top_sp = clip_top_sp,
+                clip_bottom_sp = clip_bottom_sp,
+                clip_left_sp = clip_left_sp,
+                clip_right_sp = clip_right_sp,
+                clip_width_sp = clip_width_sp,
+                clip_height_sp = clip_height_sp,
+                method = method,
+            })
+        else
+            -- This case is for <Table>
+            for j=1,#contents do
+                if node.is_node(contents[j]) then
+                    contents[j] = publisher.clip({
+                        box = contents[j],
+                        clip_top_sp = clip_top_sp,
+                        clip_bottom_sp = clip_bottom_sp,
+                        clip_left_sp = clip_left_sp,
+                        clip_right_sp = clip_right_sp,
+                        clip_width_sp = clip_width_sp,
+                        clip_height_sp = clip_height_sp,
+                        method = method,
+                    })
+                end
+            end
+        end
+    end
+    return tab
+end
+
 --- Color
 --- -----
 --- Set the color of the enclosed text.

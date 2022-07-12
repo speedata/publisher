@@ -14,6 +14,7 @@
     <optional><cmd name="Box"/></optional>
     <optional><cmd name="Br"/></optional>
     <optional><cmd name="ClearPage"/></optional>
+    <optional><cmd name="Clip"/></optional>
     <optional><cmd name="Color"/></optional>
     <optional><cmd name="Column"/></optional>
     <optional><cmd name="Columns"/></optional>
@@ -124,6 +125,7 @@
         <cmd name="Action"/>
         <cmd name="B"/>
         <cmd name="Br"/>
+        <cmd name="Clip"/>
         <cmd name="Color"/>
         <cmd name="Fontface"/>
         <cmd name="ForAll"/>
@@ -1778,6 +1780,116 @@
 ]]></listing>
     </example>
     <seealso><cmd name="Pagetype"/></seealso>
+  </command>
+  <command en="Clip" since="4.11.3">
+    <description xml:lang="en">
+      <para>Clip an image or other output</para>
+    </description>
+    <description xml:lang="de">
+      <para>Beschneide ein Bild oder eine andere Ausgabe</para>
+    </description>
+    <childelements>
+      <oneOrMore>
+        <interleave>
+          <optional><cmd name="Image"/></optional>
+          <optional><cmd name="Box"/></optional>
+          <optional><cmd name="Circle"/></optional>
+          <optional><cmd name="Rule"/></optional>
+          <optional><cmd name="Textblock"/></optional>
+          <optional><cmd name="Barcode"/></optional>
+          <optional><cmd name="Table"/></optional>
+          <optional><cmd name="Transformation"/></optional>
+          <optional><cmd name="Frame"/></optional>
+        </interleave>
+      </oneOrMore>
+    </childelements>
+    <attribute en="left" optional="yes" allowxpath="yes" type="length">
+      <description xml:lang="en">
+        <para>The amount of clip from the left border.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Das Maß, das von der linken Seite abgeschnitten wird.</para>
+      </description>
+    </attribute>
+    <attribute en="top" optional="yes" allowxpath="yes" type="length">
+      <description xml:lang="en">
+        <para>The amount of clip from the top border.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Das Maß, das von der oberen Seite abgeschnitten wird.</para>
+      </description>
+    </attribute>
+    <attribute en="right" optional="yes" allowxpath="yes" type="length">
+      <description xml:lang="en">
+        <para>The amount of clip from the right border.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Das Maß, das von der rechten Seite abgeschnitten wird.</para>
+      </description>
+    </attribute>
+    <attribute en="bottom" optional="yes" allowxpath="yes" type="length">
+      <description xml:lang="en">
+        <para>The amount of clip from the bottom border.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Das Maß, das von der unteren Seite abgeschnitten wird.</para>
+      </description>
+    </attribute>
+    <attribute en="width" optional="yes" allowxpath="yes" type="length">
+      <description xml:lang="en">
+        <para>The clipped width of the object. Should be used with one of left or right.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die sichtbare Breite des Objekts. Sollte mit einem Wert left oder right benutzt werden.</para>
+      </description>
+    </attribute>
+    <attribute en="height" optional="yes" allowxpath="yes" type="length">
+      <description xml:lang="en">
+        <para>The clipped height of the object. Should be used with one of top or bottom.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die sichtbare Höhe des Objekts. Sollte mit einem Wert top oder bottom benutzt werden.</para>
+      </description>
+    </attribute>
+    <attribute en="method" optional="yes" allowxpath="yes">
+      <description xml:lang="en">
+        <para>Set the resize method of the resulting object.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze die Verkleinerungsmethode des erzeugten Objekts.</para>
+      </description>
+      <choice en="shrink">
+        <description xml:lang="en">
+          <para>Clip and shrink the object.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Abschneiden und verkleinern.</para>
+        </description>
+      </choice>
+      <choice en="clip">
+        <description xml:lang="en">
+          <para>Just clip, do not change the size of the object.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Nur abschneiden, nicht die Größe ändern.</para>
+        </description>
+      </choice>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<PlaceObject frame="solid">
+    <Clip left="1cm" right="1cm" top="1cm" bottom="2cm" method="clip">
+        <Image width="5cm" file="_sampleb.pdf" />
+    </Clip>
+</PlaceObject>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<PlaceObject frame="solid">
+    <Clip left="1cm" right="1cm" top="1cm" bottom="2cm" method="clip">
+        <Image width="5cm" file="_sampleb.pdf" />
+    </Clip>
+</PlaceObject>]]></listing>
+    </example>
+    <seealso></seealso>
   </command>
   <command en="Color">
     <description xml:lang="en">
@@ -6568,6 +6680,7 @@
           <optional><cmd name="Image"/></optional>
           <optional><cmd name="Bookmark"/></optional>
           <optional><cmd name="Box"/></optional>
+          <optional><cmd name="Clip"/></optional>
           <optional><cmd name="Circle"/></optional>
           <optional><cmd name="Rule"/></optional>
           <optional><cmd name="Textblock"/></optional>

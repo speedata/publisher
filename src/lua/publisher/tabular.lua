@@ -289,7 +289,7 @@ end
 
 
 -- This code is not really correct. See #332 for more information.
--- The column widths should be ajusted as well.
+-- The column widths should be adjusted as well.
 function merge_border_with_nextcell(row,x)
     local thiscell,nextcell,nextcell_borderleft,thiscell_borderright,new_borderwidth
     thiscell = row[x]
