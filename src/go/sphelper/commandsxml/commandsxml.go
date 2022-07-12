@@ -517,8 +517,9 @@ type Command struct {
 	seealso        *seealso
 }
 
-// Parents retuns all parent commands
+// Parents returns all parent commands
 func (c *Command) Parents(lang string) []*Command {
+
 	var cmds []*Command
 	mutex.Lock()
 	for k := range c.parentelements {
@@ -630,7 +631,7 @@ func (c *Command) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
 	}
 }
 
-// Adoclink retuns the command name with ".adoc"
+// Adoclink returns the command name with ".adoc"
 func (c *Command) Adoclink() string {
 	if c == nil {
 		return ""
@@ -640,7 +641,7 @@ func (c *Command) Adoclink() string {
 	return filenameSansExtension + ".adoc"
 }
 
-// Htmllink retuns a text such as "mycmd.html"
+// Htmllink returns a text such as "mycmd.html"
 func (c *Command) Htmllink() string {
 	if c == nil {
 		return ""
@@ -650,7 +651,7 @@ func (c *Command) Htmllink() string {
 	return filenameSansExtension + ".html"
 }
 
-// CmdLink retuns a text such as cmd-atpageshipout
+// CmdLink returns a text such as cmd-atpageshipout
 func (c *Command) CmdLink() string {
 	if c == nil {
 		return ""
@@ -708,7 +709,7 @@ func (c *Command) RemarkHTML(lang string) template.HTML {
 	return template.HTML(ret)
 }
 
-// RemarkAdoc retuns the remark section as a formatted asciidoctor blob.
+// RemarkAdoc returns the remark section as a formatted asciidoctor blob.
 func (c *Command) RemarkAdoc(lang string) string {
 	var ret string
 	switch lang {
@@ -943,7 +944,7 @@ func init() {
 	}
 }
 
-// SeealsoHTML retuns the see also section as a HTML blob
+// SeealsoHTML returns the see also section as a HTML blob
 func (c *Command) SeealsoHTML(lang string) template.HTML {
 	if c.seealso == nil {
 		return ""
@@ -1295,7 +1296,7 @@ func (c *Command) Childelements() []*Command {
 	return cmds
 }
 
-// GetDefineText retuns the byte value of a define section in the commands xml
+// GetDefineText returns the byte value of a define section in the commands xml
 func (c *Commands) GetDefineText(section string) []byte {
 	if t, ok := c.defines[section]; ok {
 		return t.Text
@@ -1391,6 +1392,11 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 		}
 	}
 	sort.Sort(commandsbyen{commands.commandsSortedEn})
+	// to get the full list of parent elements, the child element of each command
+	// have to be called at least once. I know this sucks...
+	for _, v := range commands.commandsEn {
+		v.Childelements()
+	}
 	return commands, nil
 }
 
