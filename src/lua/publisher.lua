@@ -702,7 +702,6 @@ local dispatch_table = {
     Until                   = commands.until_do,
     URL                     = commands.url,
     Value                   = commands.value,
-    Variable                = commands.variable,
     VSpace                  = commands.vspace,
     While                   = commands.while_do,
 }

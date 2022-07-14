@@ -10,6 +10,7 @@ On the one hand there are _commands_, on the other hand the commands can be cont
 $ sp <Command> <Parameter> <Parameter> ...
 -------------------------------------------------------------------------------
 
+TIP: On Windows/PowerShell you have to run `sp.exe` since `sp` is an internal command of PowerShell.
 
 The default command is 'run'. So the call of
 

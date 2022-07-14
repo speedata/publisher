@@ -10,6 +10,8 @@ Einerseits gibt es _Befehle_, anderseits lassen sich die Befehle über _Paramete
 $ sp <Befehl>  <Parameter> <Parameter> ...
 -------------------------------------------------------------------------------
 
+TIP: Unter Windows/PowerShell muss man `sp.exe` angeben, da `sp` ein interner Befehl der PowerShell ist.
+
 
 Der Standardbefehl ist `run`. So ist der Aufruf von
 

@@ -27,7 +27,6 @@ aus dieser Struktur im Layoutregelwerk erzeugt werden:
 </Element>
 -------------------------------------------------------------------------------
 
-erzeugt werden.
 Textinhalte außerhalb von Attributen, wie z. B. mixed content, können mit dem Publisher nicht ausgegeben werden.
 
 
