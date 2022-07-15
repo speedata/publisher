@@ -854,6 +854,7 @@ getContents:
 
 				}
 				chardata.Reset()
+				omitP = false
 			case "variablelist":
 				curOutput.WriteString("\n")
 				curOutput.WriteString(`</dl>`)

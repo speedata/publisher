@@ -1,0 +1,9 @@
+= {{ translate .Lang "Attribute index" }}
+
+{{range $.AttributeNames}}
+{{.}}::
+{{ range (index $.AttributeMap . ) }}
+ * <<{{.CmdLink}},{{.Name}}>>{{end}}
+{{end}}
+
+

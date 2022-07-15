@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 	"sync"
 	"text/template"
@@ -36,6 +37,8 @@ func translate(lang, text string) string {
 		return text
 	}
 	switch text {
+	case "Attribute index":
+		return "Attribute Index"
 	case "Description":
 		return "Beschreibung"
 	case "Commands":
@@ -156,6 +159,12 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) string {
 	return string(strings.Join(ret, ", "))
 }
 
+type sortAllAttributeNamesT []string
+
+func (a sortAllAttributeNamesT) Len() int           { return len(a) }
+func (a sortAllAttributeNamesT) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a sortAllAttributeNamesT) Less(i, j int) bool { return a[i] < a[j] }
+
 // GenerateAdocFiles reads the commands.xml file and creates the files in the ref directory. mode is the asciidoctor mode.
 func GenerateAdocFiles(cfg *config.Config, lang string, mode ...string) error {
 	var err error
@@ -176,6 +185,20 @@ func GenerateAdocFiles(cfg *config.Config, lang string, mode ...string) error {
 	if err != nil {
 		return err
 	}
+	allAttributes := make(map[string][]*commandsxml.Command)
+	for _, cmd := range c.Commands() {
+		for _, attr := range cmd.Attr {
+			allAttributes[attr.Name] = append(allAttributes[attr.Name], cmd)
+		}
+	}
+
+	allAttributeNames := make(sortAllAttributeNamesT, 0, len(allAttributes))
+
+	for attr := range allAttributes {
+		allAttributeNames = append(allAttributeNames, attr)
+	}
+
+	sort.Sort(allAttributeNames)
 
 	refdir := filepath.Join(srcpath, "adoc-"+lang, "ref")
 	err = os.MkdirAll(refdir, 0755)
@@ -191,9 +214,18 @@ func GenerateAdocFiles(cfg *config.Config, lang string, mode ...string) error {
 		"sortedcommands": sortedcommands,
 		"atttypeinfo":    atttypeinfo,
 	}
-	templates, err = template.New("").Funcs(funcMap).ParseFiles(filepath.Join(srcpath, "templates", "command.txt"))
+	templates, err = template.New("").Funcs(funcMap).ParseFiles(filepath.Join(srcpath, "templates", "command.txt"), filepath.Join(srcpath, "templates", "attributesref.txt"))
 	if err != nil {
 		return err
+	}
+	fullpath := filepath.Join(refdir, "00attributes.adoc")
+	f, err := os.Create(fullpath)
+	if err != nil {
+		panic(err)
+	}
+	err = templates.ExecuteTemplate(f, "attributesref.txt", struct{ Lang, AttributeNames, AttributeMap interface{} }{lang, allAttributeNames, allAttributes})
+	if err != nil {
+		fmt.Println(err)
 	}
 
 	for _, v := range c.Commands() {

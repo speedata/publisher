@@ -111,6 +111,7 @@ ifndef::backend-docbook5[]
 <<cmd-while,While>>  +
 endif::[]
 
+include::ref/00attributes.adoc[]
 
 include::ref/a.adoc[]
 
