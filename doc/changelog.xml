@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.11">
+    <entry version="4.11.5" date="2022-07-15">
+        <en>Rename the methods on command Clip (#405).</en>
+        <de>Methoden beim Befehl Clip umbenennen (#405).</de>
+    </entry>
     <entry version="4.11.4" date="2022-07-12">
         <en>Bugfix for URL escaping.</en>
         <de>Fehlerkorrektur für URL escaping.</de>
