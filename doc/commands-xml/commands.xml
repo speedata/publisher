@@ -1858,7 +1858,7 @@
       <description xml:lang="de">
         <para>Setze die Verkleinerungsmethode des erzeugten Objekts.</para>
       </description>
-      <choice en="shrink">
+      <choice en="clip">
         <description xml:lang="en">
           <para>Clip and shrink the object.</para>
         </description>
@@ -1866,12 +1866,12 @@
           <para>Abschneiden und verkleinern.</para>
         </description>
       </choice>
-      <choice en="clip">
+      <choice en="frame">
         <description xml:lang="en">
-          <para>Just clip, do not change the size of the object.</para>
+          <para>Just hide the outer frame of the object, do not change the size.</para>
         </description>
         <description xml:lang="de">
-          <para>Nur abschneiden, nicht die Größe ändern.</para>
+          <para>Nur den Rand des Objekts verstecken, nicht die Größe ändern.</para>
         </description>
       </choice>
     </attribute>

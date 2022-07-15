@@ -2696,7 +2696,7 @@ function clip(obj)
     local clip_left_bp = sp_to_bp(obj.clip_left_sp)
     local clip_right_bp = sp_to_bp(obj.clip_right_sp)
 
-    if obj.method == "shrink" then
+    if obj.method == "clip" then
         kern_left.kern = -1 * obj.clip_left_sp
         kern_top.kern = -1 * obj.clip_top_sp
     end
@@ -2710,9 +2710,9 @@ function clip(obj)
     setprop(n_clip,"origin","obj.clip")
     local n_clip, rule_clip
     rule_clip = {}
-    if obj.method == "shrink" then
+    if obj.method == "clip" then
         rule_clip[#rule_clip + 1] = string.format(" %g %g %g %g re W n ", 0,  -1 * dp + clip_bottom_bp, wd - clip_right_bp - clip_left_bp,ht+dp - clip_bottom_bp - clip_top_bp )
-    elseif obj.method == "clip" then
+    elseif obj.method == "frame" then
         rule_clip[#rule_clip + 1] = string.format(" %g %g %g %g re W n ", clip_left_bp,  -1 * dp + clip_bottom_bp, wd - clip_right_bp - clip_left_bp,ht+dp - clip_bottom_bp - clip_top_bp )
     else
         err("Clip: method %s not implemented",obj.method)
@@ -2733,7 +2733,7 @@ function clip(obj)
     hvbox.depth = 0
     node.insert_after(hvbox,node.tail(hvbox),pdf_restore)
     hvbox = node.vpack(hvbox)
-    if obj.method == "shrink" then
+    if obj.method == "clip" then
         hvbox.width = hvbox.width - obj.clip_right_sp
         hvbox.height = hvbox.height - obj.clip_bottom_sp
     end

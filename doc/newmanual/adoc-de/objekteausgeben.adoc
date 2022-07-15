@@ -448,11 +448,11 @@ Es lassen sich Barcodes in der Kodierung »EAN13« und »Code 128« ausgeben.
 [[ch-objekteausgeben-clipping]]
 == Beschneiden von Bildern
 
-Seit Version 4.11.3 kann der speedata Publsher Bilder und andere Objekte beschneiden. Das resultierende Objekt ist kleiner als das Original, sofern die Methode `shrink` (Voreinstellung) gewählt ist. Andernfalls (Methode `clip`) ist das resultierende Objekt genau so groß wie das Original, es wird nur ein kleinerer Ausschnitt ausgegeben.
+Seit Version 4.11.3 kann der speedata Publsher Bilder und andere Objekte beschneiden. Das resultierende Objekt ist kleiner als das Original, sofern die Methode `clip` (Voreinstellung) gewählt ist. Andernfalls (Methode `frame`) ist das resultierende Objekt genau so groß wie das Original, es wird nur ein kleinerer Ausschnitt ausgegeben.
 
-Ein Benutzer hat eine schöne Erklärung der Unterschiede zwischen den Methoden `shrink` und `clip`:
+Ein Benutzer hat eine schöne Erklärung der Unterschiede zwischen den Methoden `clip` und `frame`:
 
-Wenn der _Publisher_ eine Schere hätte, würde `shrink` das Bild selber beschneiden und `clip` würde einen Rahmen (Passepartout) mit der Öffnung der angegebenen Werte schneiden und über das Bild legen.
+Wenn der _Publisher_ eine Schere hätte, würde `clip` das Bild selber beschneiden und `frame` würde einen Rahmen (Passepartout) mit der Öffnung der angegebenen Werte schneiden und über das Bild legen.
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -462,7 +462,7 @@ Wenn der _Publisher_ eine Schere hätte, würde `shrink` das Bild selber beschne
 
   <Record element="data">
     <PlaceObject>
-      <Clip left="1cm" right="1cm" top="1cm" bottom="2cm" method="shrink">
+      <Clip left="1cm" right="1cm" top="1cm" bottom="2cm" method="clip">
         <Image width="5cm" file="_sampleb.pdf" />
       </Clip>
     </PlaceObject>

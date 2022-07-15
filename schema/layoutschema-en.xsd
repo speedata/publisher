@@ -781,7 +781,7 @@
           <xs:union>
             <xs:simpleType>
               <xs:restriction base="xs:token">
-                <xs:enumeration value="shrink">
+                <xs:enumeration value="clip">
                   <xs:annotation>
                     <xs:documentation>Clip and shrink the object.</xs:documentation>
                   </xs:annotation>
@@ -790,9 +790,9 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
-                <xs:enumeration value="clip">
+                <xs:enumeration value="frame">
                   <xs:annotation>
-                    <xs:documentation>Just clip, do not change the size of the object.</xs:documentation>
+                    <xs:documentation>Just hide the outer frame of the object, do not change the size.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>

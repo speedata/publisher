@@ -480,7 +480,7 @@ function commands.clip( layoutxml,dataxml )
     local clip_right_sp = publisher.read_attribute(layoutxml,dataxml,"right","length_sp", 0)
     local clip_width_sp = publisher.read_attribute(layoutxml,dataxml,"width","width_sp", 0)
     local clip_height_sp = publisher.read_attribute(layoutxml,dataxml,"height","height_sp", 0)
-    local method = publisher.read_attribute(layoutxml,dataxml,"method", "string","shrink")
+    local method = publisher.read_attribute(layoutxml,dataxml,"method", "string","clip")
 
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i=1,#tab do

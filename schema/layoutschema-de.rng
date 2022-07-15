@@ -965,10 +965,10 @@
                   <attribute name="method">
                      <a:documentation>Setze die Verkleinerungsmethode des erzeugten Objekts.</a:documentation>
                      <choice>
-                        <value>shrink</value>
-                        <a:documentation>Abschneiden und verkleinern.</a:documentation>
                         <value>clip</value>
-                        <a:documentation>Nur abschneiden, nicht die Größe ändern.</a:documentation>
+                        <a:documentation>Abschneiden und verkleinern.</a:documentation>
+                        <value>frame</value>
+                        <a:documentation>Nur den Rand des Objekts verstecken, nicht die Größe ändern.</a:documentation>
                         <data type="string">
                            <param name="pattern">\{.+\}</param>
                         </data>

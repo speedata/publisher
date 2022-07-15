@@ -965,10 +965,10 @@
                   <attribute name="method">
                      <a:documentation>Set the resize method of the resulting object.</a:documentation>
                      <choice>
-                        <value>shrink</value>
-                        <a:documentation>Clip and shrink the object.</a:documentation>
                         <value>clip</value>
-                        <a:documentation>Just clip, do not change the size of the object.</a:documentation>
+                        <a:documentation>Clip and shrink the object.</a:documentation>
+                        <value>frame</value>
+                        <a:documentation>Just hide the outer frame of the object, do not change the size.</a:documentation>
                         <data type="string">
                            <param name="pattern">\{.+\}</param>
                         </data>
