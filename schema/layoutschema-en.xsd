@@ -12,6 +12,7 @@
           <xs:element ref="en:A"/>
           <xs:element ref="en:Action"/>
           <xs:element ref="en:B"/>
+          <xs:element ref="en:Barcode"/>
           <xs:element ref="en:Br"/>
           <xs:element ref="en:Clip"/>
           <xs:element ref="en:Color"/>
@@ -239,6 +240,7 @@
         <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
+        <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
         <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
@@ -816,6 +818,7 @@
         <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
+        <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
         <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
@@ -1552,6 +1555,7 @@
         <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
+        <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
         <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
@@ -2309,6 +2313,7 @@
         <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
+        <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
         <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
@@ -2817,6 +2822,7 @@
         <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
+        <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
         <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
@@ -3170,6 +3176,7 @@
         <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
+        <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
         <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
@@ -4063,6 +4070,7 @@
           <xs:element ref="en:A"/>
           <xs:element ref="en:Action"/>
           <xs:element ref="en:B"/>
+          <xs:element ref="en:Barcode"/>
           <xs:element ref="en:Br"/>
           <xs:element ref="en:Clip"/>
           <xs:element ref="en:Color"/>
@@ -5800,6 +5808,7 @@
         <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
+        <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
         <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
@@ -7778,6 +7787,7 @@
         <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
+        <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
         <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>
@@ -7940,6 +7950,7 @@
         <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
+        <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
         <xs:element ref="en:Clip"/>
         <xs:element ref="en:Color"/>

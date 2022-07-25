@@ -124,6 +124,7 @@
         <cmd name="A"/>
         <cmd name="Action"/>
         <cmd name="B"/>
+        <cmd name="Barcode"/>
         <cmd name="Br"/>
         <cmd name="Clip"/>
         <cmd name="Color"/>
