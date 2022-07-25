@@ -35,7 +35,7 @@ static void stackDump(lua_State *L) {
   printf("\n"); /* end the listing */
 }
 
-int handlerror(lua_State *L, const char *retvalue) {
+int handleerror(lua_State *L, const char *retvalue) {
   const char *errorpattern = "^%*%*err";
   lua_getglobal(L, "string");
   lua_getfield(L, -1, "match");
@@ -88,7 +88,7 @@ static int lua_convertimage(lua_State *L) {
   lua_pop(L, 1);
 
   char *ret = sdConvertImage(filename, imagehandler);
-  if (handlerror(L, ret) == 1) {
+  if (handleerror(L, ret) == 1) {
     return 0;
   }
   if (strncmp(ret, "", 1) == 0) {
@@ -104,7 +104,7 @@ static int lua_convertsvgimage(lua_State *L) {
   const char *ret = sdConvertSVGImage(filename);
   lua_pop(L, 1);
 
-  if (handlerror(L, ret) == 1) {
+  if (handleerror(L, ret) == 1) {
     return 0;
   }
   if (strncmp(ret, "", 1) == 0) {
@@ -121,7 +121,7 @@ static int lua_convertcontents(lua_State *L) {
   lua_pop(L, 1);
   lua_pop(L, 1);
   const char *ret = sdContains(contents, imagehandler);
-  if (handlerror(L, ret) == 1) {
+  if (handleerror(L, ret) == 1) {
     return 0;
   }
   if (strncmp(ret, "", 1) == 0) {
@@ -182,7 +182,7 @@ static int lua_loadxmlfile(lua_State *L) {
   lua_pop(L, 1);
 
   const char *ret = sdReadXMLFile(filename);
-  if (handlerror(L, ret) == 1) {
+  if (handleerror(L, ret) == 1) {
     return 0;
   }
   lua_pushstring(L, ret);
@@ -193,6 +193,11 @@ static int lua_lookupfile(lua_State *L) {
   const char *filename = luaL_checkstring(L, -1);
   lua_pop(L, 1);
   const char *ret = sdLookupFile(filename);
+
+  if (handleerror(L, ret) == 1) {
+    return 0;
+  }
+
   lua_pushstring(L, ret);
   return 1;
 }

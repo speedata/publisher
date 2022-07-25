@@ -6666,7 +6666,11 @@ end
 
 function validimagetype(filename)
     local localfilename = kpse.find_file(filename)
-    local f = io.open(localfilename)
+    local f,errmsg = io.open(localfilename)
+    if not f then
+        err(errmsg)
+        return nil
+    end
     local whatever = f:read(5)
     if string.match(whatever,"<svg") then
         localfilename = splib.convert_svg_image(localfilename)
