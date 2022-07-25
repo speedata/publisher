@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.11">
+    <entry version="4.11.6" date="2022-07-25">
+      <en>Better error handling for file lookup (#407).</en>
+      <de>Bessere Fehlerbehandlung für Dateisuche (#407).</de>
+    </entry>
     <entry version="4.11.5" date="2022-07-15">
         <en>Rename the methods on command Clip (#405).</en>
         <de>Methoden beim Befehl Clip umbenennen (#405).</de>
