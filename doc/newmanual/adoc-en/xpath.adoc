@@ -71,7 +71,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
   Expect a string encoded in base64 and return the binary contents.
 
 `sd:decode-html(<node>)`::
-  Change text such as &lt;i&gt;italic&lt;/i&gt; into HTML markup.
+  Change text such as `\&lt;i\&gt;italic\&lt;/i\&gt;` into HTML markup.
 
 `sd:dimexpr(<string>)`::
   _Deprecated_ Evaluate the string as a dimension with a unit. Handy if you want to add / multiply lengths. Example: "2mm + 5cm". Since version 4.5.7 you can now calculate with dimensions directly.
