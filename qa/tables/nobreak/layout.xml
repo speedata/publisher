@@ -1,0 +1,21 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="4cm" width="4cm" />
+    <Record element="data">
+        <PlaceObject>
+            <Table>
+                <Tr>
+                    <Td>
+                        <Paragraph>
+                            <NoBreak>
+                                <!-- ok: -->
+                                <!-- <Value>abc</Value> -->
+                                <!-- not ok: -->
+                                <Value select="'abc'" />
+                            </NoBreak>
+                        </Paragraph>
+                    </Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>

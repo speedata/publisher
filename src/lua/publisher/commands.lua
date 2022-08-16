@@ -2054,7 +2054,7 @@ function commands.nobreak( layoutxml, dataxml )
             tmppar = par:new(nil,"keeptogether")
             for _,j in ipairs(tab) do
                 local c = publisher.element_contents(j)
-                tmppar:append(c,options)
+                tmppar:append(publisher.deepcopy(c),options)
             end
             tmppar:mknodelist(options)
             local nl = tmppar.objects[1]
