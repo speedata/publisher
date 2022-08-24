@@ -2215,7 +2215,7 @@ function initialize_page(pagenumber)
 
     -- The default color is applied during ship-out
     if pagetype.layoutxml and pagetype.layoutxml.defaultcolor then
-        current_page.defaultcolor = read_attribute(pagetype.layoutxml,nil,"defaultcolor","rawstring")
+        current_page.defaultcolor = read_attribute(pagetype.layoutxml,nil,"defaultcolor","string")
     end
     current_page.graphic = pagetype.graphic
     local columnordering = pagetype.columnordering
@@ -3488,8 +3488,6 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
         else
             return tmp
         end
-    elseif typ=="rawstring" then
-        return tostring(val)
     elseif typ=="string" then
         return tostring(val or default)
     elseif typ=="number" then

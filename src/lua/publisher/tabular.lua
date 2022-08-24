@@ -1926,7 +1926,7 @@ function reformat_foot( self,pagenumber,max_splits)
         rownumber = self.tablefoot_contents[2]
     end
     local x = publisher.dispatch(y._layoutxml,y._dataxml)
-    local page = publisher.read_attribute(y._layoutxml,y._dataxml,"page","rawstring","all")
+    local page = publisher.read_attribute(y._layoutxml,y._dataxml,"page","string","all")
     x.page = page
     attach_objects(self, x)
     local tmp_tablefoot_last,tmp_tablefoot_all = {},{}
@@ -1941,7 +1941,7 @@ function reformat_head( self,pagenumber)
     local x = publisher.dispatch(y._layoutxml,y._dataxml)
     attach_objects( self, x)
     local tmp1,tmp2 = {}, {}
-    local page = publisher.read_attribute(y._layoutxml,y._dataxml,"page","rawstring","all")
+    local page = publisher.read_attribute(y._layoutxml,y._dataxml,"page","string","all")
     x.page = page
     make_tablehead(self,x,tmp1,tmp2,rownumber,true)
     calculate_height_and_connect_tablehead(self,tmp1,tmp2)
