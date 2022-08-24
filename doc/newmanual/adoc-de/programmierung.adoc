@@ -105,6 +105,9 @@ um diese dann anschließend in mehreren Tabellen zu benutzen:
 
 Durch die einmalige Definition und Wiederverwendung spart man sich Tipparbeit und verringert die Fehlerquellen.
 
+
+TIP: Variablen dürfen keine Ausgabebefehle wie `<PlaceObject>` oder `<ClearPage>` enthalten.
+
 [[ch-copyof]]
 == Copy-of
 

@@ -93,6 +93,9 @@ and then use them in several tables:
 
 The one-time definition and reuse saves typing work and reduces the sources of error.
 
+TIP: Variables must not contain outputting commands such as `<PlaceObject>` or `<ClearPage>`.
+
+
 [[ch-copyof]]
 == Copy of
 <Copy-of> was already used before. This copies the contents of the variable to the current position. The contents of the variables remain unchanged during copying.
