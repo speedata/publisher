@@ -414,6 +414,29 @@ func readVariables() {
 	}
 }
 
+// luaescape writes unicode runes > 127 as an escaped UTF8 sequence.
+// For example U+F8FF will be written as `\239\163\191`.
+func luaescape(in string) string {
+	var out strings.Builder
+	for _, b := range []byte(in) {
+		if b == 34 {
+			// a " (quote)
+			out.WriteString(`\"`)
+		} else if b == 92 {
+			// a backslash
+			out.WriteString(`\\`)
+		} else if b > 127 {
+			// \123 must be exactly three digits, but a byte > 127
+			// will be three digits anyway.
+			fmt.Fprintf(&out, "\\%d", b)
+		} else {
+			out.WriteByte(b)
+		}
+	}
+
+	return out.String()
+}
+
 func saveVariables() {
 	jobname := getOption("jobname")
 	f, err := os.Create(jobname + ".vars")
@@ -422,7 +445,7 @@ func saveVariables() {
 	}
 	fmt.Fprintln(f, "return { ")
 	for key, value := range variables {
-		fmt.Fprintf(f, `["%s"] = "%s", `+"\n", key, value)
+		fmt.Fprintf(f, `["%s"] = "%s", `+"\n", key, luaescape(value))
 	}
 	fmt.Fprintln(f, "} ")
 	f.Close()
