@@ -1,5 +1,25 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.11">
+    <entry version="4.11.7" date="2022-08-25">
+        <en>Fix NoBreak inside Td (#410).</en>
+        <de>Korrigiere NoBreak innerhalb von Td (#410).</de>
+    </entry>
+    <entry version="4.11.7" date="2022-08-25">
+        <en>Handle command line variables with backslashes (#411).</en>
+        <de>Verarbeite Kommandozeilenvariablen mit Schrägstrichen (#411).</de>
+    </entry>
+    <entry version="4.11.7" date="2022-08-25">
+        <en>Allow Unicode strings in attachment description (#376).</en>
+        <de>Erlaube Unicode Zeichenketten in der Beschreibung von Anhängen (#376).</de>
+    </entry>
+    <entry version="4.11.7" date="2022-08-25">
+        <en>Correct kerning in mixed fontforge / harfbuzz paragraphs (#413).</en>
+        <de>Korrigiere Kerning in gemischten fontforge / harfbuzz Absätzen (#413).</de>
+    </entry>
+    <entry version="4.11.7" date="2022-08-25">
+        <en>Fix space at end of the paragraph (#392).</en>
+        <de>Korrigiere Leerzeichen am Ende des Absatzes (#392).</de>
+    </entry>
     <entry version="4.11.6" date="2022-07-25">
       <en>Better error handling for file lookup (#407).</en>
       <de>Bessere Fehlerbehandlung für Dateisuche (#407).</de>
