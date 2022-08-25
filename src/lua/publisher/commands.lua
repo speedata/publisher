@@ -2452,7 +2452,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local p = par:new(nil,"commands.paragraph")
     p.fontfamily = fontfamily
     if #tab == 1 and tab[1].contents == "" then
-        tab[1].contents = " "
+        tab[1].contents = " " -- U+00A0, non breaking space
     end
     for i=1,#tab do
         local thischild = tab[i]

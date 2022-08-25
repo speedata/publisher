@@ -108,12 +108,6 @@ local function mktextnode(self,text,options)
             publisher.setprop(nodes,"discardallowed",true)
         end
     end
-    if thisself == "\n" then
-        publisher.setprop(nodes,"newline",true)
-        if options.discardallowed then
-            publisher.setprop(nodes,"discardallowed",true)
-        end
-    end
     return nodes
 end
 
