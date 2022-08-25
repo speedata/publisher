@@ -7146,7 +7146,7 @@ function attach_file_pdf(zugferdcontents,description,mimetype,modificationtime,d
 
     local filespecnum = pdf.immediateobj(string.format([[<<
   /AFRelationship /Alternative
-  /Desc (%s)
+  /Desc %s
   /EF <<
     /F %d 0 R
     /UF %d 0 R
@@ -7154,7 +7154,7 @@ function attach_file_pdf(zugferdcontents,description,mimetype,modificationtime,d
   /F (%s)
   /Type /Filespec
   /UF %s
->>]],escape_pdfstring(description), fileobjectnum,fileobjectnum,destfilename,utf8_to_utf16_string_pdf(destfilename)))
+>>]],utf8_to_utf16_string_pdf(description), fileobjectnum,fileobjectnum,destfilename,utf8_to_utf16_string_pdf(destfilename)))
         -- BASIC, COMFORT, EXTENDED
     local metadataobjnum = pdf.obj({type = "stream",
                  string = getzugferdmetadata(conformancelevel, options.documenttitle or "ZUGFeRD Rechnung",options.documentauthor or "The Author"),
