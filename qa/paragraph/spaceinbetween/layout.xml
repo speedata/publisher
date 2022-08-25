@@ -1,6 +1,17 @@
-<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
-	<Pageformat height="4cm" width="4cm" />
-	<Record element="data">
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="5cm" width="7cm" />
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Span background-color="lightgray">
+                        <Value>abcdef</Value>
+                        <Value> </Value>
+                    </Span>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
 		<PlaceObject>
 			<Textblock>
 				<Paragraph html="off">
@@ -10,5 +21,5 @@
 				</Paragraph>
 			</Textblock>
 		</PlaceObject>
-	</Record>
+    </Record>
 </Layout>

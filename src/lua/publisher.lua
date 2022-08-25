@@ -4084,7 +4084,11 @@ end
 function remove_last_whitespace ( tbl )
     for i=#tbl,1,-1 do
         if type(tbl[i]) == "string" then
-            tbl[i] = string.gsub(tbl[i],"^(.-)[\n\t]*$","%1")
+            if string.match(tbl[i],"^%s*$") then
+                table.remove( tbl,i )
+            else
+                tbl[i] = string.gsub(tbl[i],"^(.-)[\n\t]*$","%1")
+            end
             return true
         end
         if type(tbl[i]) == "table" then
@@ -4098,7 +4102,7 @@ function remove_last_whitespace ( tbl )
                     ret = remove_last_whitespace(tbl[i])
                 end
             end
-            if ret then return true end
+            return ret
         end
     end
 end
