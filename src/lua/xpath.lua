@@ -896,6 +896,20 @@ end
 -- -- Standard XPath functions
 -- ------------------------------------------------------------
 
+M.default_functions.doc = function (dataxml,arg)
+    local filename = arg[1]
+    local loc = kpse.find_file(filename)
+    if loc == nil then return end
+    local f,e = io.open(loc,"r")
+    if f == nil then
+        err(e)
+        return
+    end
+    local contents = f:read("*a")
+    f:close()
+    return contents
+end
+
 M.default_functions.abs = function(dataxml,arg)
     local tmp = math.abs(tonumber(arg[1]))
     return tmp

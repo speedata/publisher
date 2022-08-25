@@ -9,7 +9,7 @@
 file_start("layout_functions.lua")
 
 local luxor = do_luafile("luxor.lua")
-local sha1  = require('sha1')
+local sha  = require('shalocal')
 
 local function visiblepagenumber(pagenumber)
     pagenumber = tonumber(pagenumber)
@@ -505,7 +505,25 @@ end
 -- SHA-1
 local function shaone(dataxml,arg)
     local message = table.concat(arg)
-    local ret = sha1.sha1(message)
+    local ret = sha.sha1(message)
+    return ret
+end
+
+local function sha256(dataxml,arg)
+    local message = table.concat(arg)
+    local ret = sha.sha256(message)
+    return ret
+end
+
+local function sha512(dataxml,arg)
+    local message = table.concat(arg)
+    local ret = sha.sha512(message)
+    return ret
+end
+
+local function md5(dataxml,arg)
+    local message = table.concat(arg)
+    local ret = sha.md5(message)
     return ret
 end
 
@@ -714,6 +732,9 @@ register("urn:speedata:2009/publisher/functions/en","reset_alternating",reset_al
 register("urn:speedata:2009/publisher/functions/en","reset-alternating",reset_alternating)
 
 register("urn:speedata:2009/publisher/functions/en","sha1",shaone)
+register("urn:speedata:2009/publisher/functions/en","sha256",sha256)
+register("urn:speedata:2009/publisher/functions/en","sha512",sha512)
+register("urn:speedata:2009/publisher/functions/en","md5",md5)
 
 register("urn:speedata:2009/publisher/functions/en","todimen",tounit)
 register("urn:speedata:2009/publisher/functions/en","tounit",tounit)

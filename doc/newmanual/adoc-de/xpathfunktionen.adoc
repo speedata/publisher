@@ -127,6 +127,9 @@ Beispiel: die Funktion `sd:current-row()`  kann auch mit Parameter `sd:current-r
 `sd:loremipsum()`::
    Alias für `sd:dummytext()`
 
+`sd:md5(<Wert>[,<Wert>, ...])`::
+   Erzeugt die MD5 Summe der Hintereinanderkettung der Werte als Hex-Zeichenkette. Beispiel: `sd:md5('Hallo ', 'Welt')` ergibt die Zeichenkette `5c372a32c9ae748a4c040ebadc51a829`.
+
 `sd:merge-pagenumbers(<Seitenzahlen>,[<Trenner für Bereiche>],[<Trenner für Leerraum>],[Hyperlinks])`::
    Fasst Seitenzahlenbereiche zusammen. Beispielsweise aus `"1, 3, 4, 5"` wird `1, 3–5`.
 Voreinstellung für den Trenner für Bereiche ist ein Halbgeviertstrich (–), Voreinstellung für den Trenner für Leerraum ist ', ' (Komma, Leerzeichen).
@@ -164,6 +167,12 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `sd:sha1(<Wert>[,<Wert>, ...])`::
    Erzeugt die SHA-1 Summe der Hintereinanderkettung der Werte als Hex-Zeichenkette. Beispiel: `sd:sha1('Hallo ', 'Welt')` ergibt die Zeichenkette `28cbbc72d6a52617a7abbfff6756d04bbad0106a`.
 
+`sd:sha256(<Wert>[,<Wert>, ...])`::
+   Erzeugt die SHA-256 Summe der Hintereinanderkettung der Werte als Hex-Zeichenkette. Beispiel: `sd:sha256('Hallo ', 'Welt')` ergibt die Zeichenkette `2d2da19605a34e037dbe82173f98a992a530a5fdd53dad882f570d4ba204ef30`.
+
+`sd:sha512(<Wert>[,<Wert>, ...])`::
+   Erzeugt die SHA-512 Summe der Hintereinanderkettung der Werte als Hex-Zeichenkette. Beispiel: `sd:sha512('Hallo ', 'Welt')` ergibt die Zeichenkette `6e32f66f62a8df494e45a2da0480189e108335301b76f03457caafcc996693c4c991683594fefc843739fe3a3f2a7d2593dff308d2549ecd0a791ef42d98a2cc`.
+
 `sd:tounit(<Zeichenkette>,<Zeichenkette>[,<Zahl>])`::
   Gibt einen skalaren Wert der Einheit im zweiten Argument konvertiert in die Einheit des ersten Arguments zurück. Das dritte Argument ist die Anzahl der Nachkommastellen auf die gerundet werden soll (Voreinstellung: 0 - runden auf Ganzzahlwerte). Beispiel: `sd:tounit('pt','1pc')` ergibt 12, da ein Pica (pc) 12 Punkt enthält.
 
@@ -195,9 +204,11 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `contains(<heuhaufen>,<nadel>)`::
    Wahr, wenn `heuhaufen` `nadel` enthält. Beispiel: `contains('bana','na')` ergibt `true()`.
 
-
 `count()`::
    Zählt alle Kindelemente mit dem angegebenen Namen. Beispiel: `count(eintrag)` zählt, wie viele Kindelemente mit den Namen `eintrag` existieren.
+
+`doc(<string>)`::
+   Öffnet die Datei mit dem angegebenen Dateinamen und gibt den Inhalt der Datei zurück.
 
 `empty(<Attribut>)`::
    Prüft, ob ein Attribut (nicht) vorhanden ist. `empty(@doesnotexist)` ergibt `true()`, `empty(@empty)` ergibt `true()` und `empty(@nonempty)` ergibt `false()`.

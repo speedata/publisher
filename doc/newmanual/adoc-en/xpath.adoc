@@ -121,6 +121,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `sd:loremipsum()`::
   Same as sd:dummytext()
 
+`sd:md5(<value>,<value>, …)`::
+  Return the MD5 sum of the concatenation of each value as a hex string. Example: sd:md5('hello ', 'world') gives the string 5eb63bbbe01eeed093cb22bb8f5acdc3.
+
 `sd:merge-pagenumbers(<pagenumbers>,<separator for range>,<separator for space>, [hyperlinks])`::
   Merge page numbers. For example the numbers "1, 3, 4, 5" are merged into 1, 3–5. Defaults for the separator for the range is an en-dash (–), default for the spacing separator is ', ' (comma, space). This function sorts the page numbers and removes duplicates. When the separator for range is empty, the page numbers are separated each with the separator for the space.
   If hyperlinks is set to `true()`, the page numbers become active. The default is `false()`. The function will show the user visible page numbers, which correspond to the logical page numbers by default.
@@ -155,6 +158,12 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `sd:sha1(<value>,<value>, …)`::
   Return the SHA-1 sum of the concatenation of each value as a hex string. Example: sd:sha1('hello ', 'world') gives the string 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed.
 
+`sd:sha256(<value>,<value>, …)`::
+  Return the SHA-256 sum of the concatenation of each value as a hex string. Example: sd:sha256('hello ', 'world') gives the string b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9.
+
+`sd:sha512(<value>,<value>, …)`::
+  Return the SHA-512 sum of the concatenation of each value as a hex string. Example: sd:sha512('hello ', 'world') gives the string 309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f.
+
 `sd:tounit(<string>,<string>[,<number>])`::
   Return a scalar of the unit given in the second argument converted to the unit given in the first argument rounded to the digits in the third argument (defaults to 0 - return integer values). Example: `sd:tounit('pt','1pc')` returns 12, because there are 12pt in 1pc (pica point).
 
@@ -170,7 +179,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 == XPath functions
 
 `abs(<number>)`::
-  Return the positve value of the number.
+  Return the positive value of the number.
 
 `ceiling()`::
   Round to the higher integer. `ceiling(-1.34)` returns 1, `ceiling(1.34)` returns 2.
@@ -186,6 +195,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 
 `ceiling()`::
    Returns the smallest number with no fractional part that is not less than the value of the given argument.
+
+`doc(<string>)`::
+  Open the file with the given file name and return its contents.
 
 `empty(<attribute>)`::
    Checks, if an attribute is (not) available.
