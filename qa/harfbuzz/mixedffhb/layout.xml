@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Pageformat height="4cm" width="5cm" />
+	<LoadFontfile mode="harfbuzz" name="padauk-regular" filename="padauk-regular.ttf" />
+	<DefineFontfamily name="padauk" fontsize="13" leading="25">
+		<Regular fontface="padauk-regular" />
+	</DefineFontfamily>
+
+	<Record element="data">
+		<PlaceObject>
+			<Textblock>
+				<Paragraph language="English (USA)" fontfamily="text">
+					<Value>A</Value>
+					<Span language='Other'>
+						<Fontface fontfamily='padauk'>
+							<Value>ပြန်</Value>
+						</Fontface>
+					</Span>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+	</Record>
+</Layout>

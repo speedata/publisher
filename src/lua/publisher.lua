@@ -4373,7 +4373,7 @@ function hbglyphlist(arguments)
     for i=1,#aa do
         set_attribute_recurse(list,aa[i][1],aa[i][2])
     end
-    setprop(list,"haskerns",true)
+    list = hbkern(list)
     return list
 end
 
@@ -4961,11 +4961,7 @@ function finish_par( nodelist,hsize,parameters )
     last = n
 
     -- mode harfbuzz sets haskerns, different kind of kerning
-    if not getprop(nodelist,"haskerns") then
-        n = node.kerning(nodelist)
-    else
-        n = hbkern(nodelist)
-    end
+    n = node.kerning(nodelist)
 
     -- 15 is a parfillskip
     n,last = add_glue(n,"tail",{ subtype = 15, width = 0, stretch = 2^16, stretch_order = 2})
