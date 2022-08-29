@@ -4987,6 +4987,7 @@ function hbkern(nodelist)
                 local bgcolor = get_attribute(head,"background-color")
                 set_attribute(kern,"background-color",bgcolor)
                 node.setproperty(kern,node.getproperty(head))
+                set_attribute(kern,"hyperlink",get_attribute(head,"hyperlink"))
                 curkern = 0
             end
             local k = getprop(head,"kern")
@@ -5001,9 +5002,11 @@ function hbkern(nodelist)
                 local ul = get_attribute(head,"text-decoration-line")
                 local uccolor = get_attribute(head,"text-decoration-color")
                 local bgcolor = get_attribute(head,"background-color")
+                local hyperlink = get_attribute(head,"hyperlink")
                 set_attribute(head.replace,"text-decoration-line",ul)
                 set_attribute(head.replace,"text-decoration-color",uccolor)
                 set_attribute(head.replace,"background-color",bgcolor)
+                set_attribute(head.replace,"hyperlink",hyperlink)
                 node.setproperty(head.replace,node.getproperty(head))
                 curkern = 0
             end
