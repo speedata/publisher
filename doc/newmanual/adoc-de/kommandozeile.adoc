@@ -125,6 +125,8 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
    Die Seitennummer der ersten Seite.
 `--show-gridallocation`::
    Markiert die belegten Rasterzellen in Gelb. Doppelt belegte Zellen werden rot gekennzeichnet. Siehe den <<cmd-trace,Befehl `<Trace>`>>.
+`-s`, `--suppressinfo`::
+   Unterdrücke optionale Informationen (Zeitstempel) and benutze eine festgelegte Dokumenten-ID.
 `--systemfonts`::
    Lädt zusätzlich Systemschriftarten. Funktioniert nicht unter Windows XP.
 `--tempdir` ::
