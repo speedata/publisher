@@ -4284,6 +4284,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="hyperlinksbordercolor">
+               <a:documentation>Setze die Rahmenfarbe von Hyperlinks wenn showhyperlinks aktiviert ist. Die Voreinstellung ist 0 0 0 und muss eine Zeichenkette mit 1, 3 oder 4 Zahlen zwischen 0 und 1 sein, deren Werte eine Farbe im Farbraum grau, rgb oder cmyk darstellt.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="keywords">
                <a:documentation>Legt die Schlüsselwörter des Dokuments fest (kommaseparierte Liste)</a:documentation>
             </attribute>

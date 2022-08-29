@@ -6807,7 +6807,7 @@ function hlpage(pagenumber)
     local pageobjnum = pdf.getpageref(pagenumber)
     local border = "/Border[0 0 0]"
     if options.showhyperlinks then
-        border = ""
+        border = string.format("/C [%s]",options.hyperlinksbordercolor or "0 0 0" )
     end
     local str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoTo/D [ %d 0 R /Fit ] >>",border,pageobjnum)
     hyperlinks[#hyperlinks + 1] = str
@@ -6831,7 +6831,7 @@ end
 function hlurl(href)
     local border = "/Border[0 0 0]"
     if options.showhyperlinks then
-        border = ""
+        border = string.format("/C [%s]",options.hyperlinksbordercolor or "0 0 0" )
     end
     href = urlencode(href)
     href = escape_pdfstring(href)

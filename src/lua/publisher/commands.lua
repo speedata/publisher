@@ -2481,6 +2481,7 @@ function commands.pdfoptions( layoutxml, dataxml )
     local showbookmarks = publisher.read_attribute(layoutxml,dataxml,"showbookmarks", "boolean",true)
     local picktray     = publisher.read_attribute(layoutxml,dataxml,"picktraybypdfsize", "boolean")
     local showhyperlinks = publisher.read_attribute(layoutxml,dataxml,"showhyperlinks", "boolean", false)
+    local hyperlinksbordercolor = publisher.read_attribute(layoutxml,dataxml,"hyperlinksbordercolor", "string")
     local duplex       = publisher.read_attribute(layoutxml,dataxml,"duplex",   "string")
     local title        = publisher.read_attribute(layoutxml,dataxml,"title",    "string")
     local author       = publisher.read_attribute(layoutxml,dataxml,"author",   "string")
@@ -2506,6 +2507,9 @@ function commands.pdfoptions( layoutxml, dataxml )
     end
     if showhyperlinks then
         publisher.options.showhyperlinks = showhyperlinks
+    end
+    if hyperlinksbordercolor then
+        publisher.options.hyperlinksbordercolor = hyperlinksbordercolor
     end
     if nc then
         publisher.viewerpreferences.numcopies = nc

@@ -4853,6 +4853,11 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="hyperlinksbordercolor">
+        <xs:annotation>
+          <xs:documentation>Setze die Rahmenfarbe von Hyperlinks wenn showhyperlinks aktiviert ist. Die Voreinstellung ist 0 0 0 und muss eine Zeichenkette mit 1, 3 oder 4 Zahlen zwischen 0 und 1 sein, deren Werte eine Farbe im Farbraum grau, rgb oder cmyk darstellt.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="keywords">
         <xs:annotation>
           <xs:documentation>Legt die Schlüsselwörter des Dokuments fest (kommaseparierte Liste)</xs:documentation>

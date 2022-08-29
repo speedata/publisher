@@ -6567,6 +6567,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="hyperlinksbordercolor" optional="yes" type="text" since="4.11.8">
+      <description xml:lang="en">
+        <para>Set the border color of hyperlinks when showhyperlinks is set. The default is 0 0 0 and should be a string of 1, 3 or 4 values betwen 0 and 1 where the values represent a color in the gray, rgb or cmyk colorspace respectively.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze die Rahmenfarbe von Hyperlinks wenn showhyperlinks aktiviert ist. Die Voreinstellung ist 0 0 0 und muss eine Zeichenkette mit 1, 3 oder 4 Zahlen zwischen 0 und 1 sein, deren Werte eine Farbe im Farbraum grau, rgb oder cmyk darstellt.</para>
+      </description>
+    </attribute>
     <attribute en="keywords" optional="yes" type="text" since="3.1.24">
       <description xml:lang="en">
         <para>Set the keywords of the document (comma separated list).</para>
