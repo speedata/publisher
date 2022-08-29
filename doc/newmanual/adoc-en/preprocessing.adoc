@@ -319,7 +319,7 @@ Find the resource and return a full path on the local disk to access the resourc
 
 === `xml`
 
-The XML module is used to crate or read XML files.
+The XML module is used to create or read XML files.
 
 `xml.encode_table(‹table›,[filename])`::
 
