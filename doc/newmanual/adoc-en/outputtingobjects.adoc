@@ -345,7 +345,7 @@ Barcodes in the coding "EAN13" and "Code 128" can be output.
 [[ch-outputtingobjects-clipping]]
 == Clipping
 
-Since version 4.11.3 the speedata Publisher can clip any kind of objects. The new object is smaller than the original object if the method clip (the default) is selected, otherwise (method=frame) the resulting object has the original size but the visible portion of the image is set to the clipping path.
+Since version 4.11.3 the speedata Publisher can clip any kind of objects. The new object is smaller than the original object if the method is clip (`method=clip`, the default) is selected, otherwise (`method=frame`) the resulting object has the original size but the visible portion of the image is set to the clipping path.
 
 A user came up with a very good description of the differences between the methods `clip` and `frame`:
 
