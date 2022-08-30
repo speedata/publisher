@@ -91,7 +91,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `startpage`::
    Number of the first page.
 `systemfonts`::
-   If set to 'true', then the publisher searches for fonts in the system directory.
+   If set to `true`, then the publisher searches for fonts in the system directory.
 `tempdir`::
    Name of the temporary directory. Default is the system's temp.
 `timeout`::
@@ -105,7 +105,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 
 
 
-=== Section server (`server')
+=== Section server (`server`)
 
 `address`::
   IP address to which the server should open the port. Default is 127.0.0.1.
