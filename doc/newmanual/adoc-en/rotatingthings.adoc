@@ -29,6 +29,28 @@ TIP: In https://github.com/speedata/examples/[examples repository on github] the
 
 The attribute `rotate` is available for both `<PlaceObject>` and `<Image>`. The attribute at `<Image>` can only rotate images in 90° steps. Therefore, in practice the rotation is rather controlled by `<PlaceObject>`.
 
+Depending on what you are aiming at, rotation should be applied directly to the image `<Image>` or to the `<PlaceObject>` element.
+
+This minimal sample shows the difference:
+
+[source, xml,indent=0]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="data">
+    <PlaceObject rotate="-90">
+      <Image file="_sampleb.pdf" width="3cm"/>
+    </PlaceObject>
+    <ClearPage/>
+    <PlaceObject>
+      <Image file="_sampleb.pdf" width="3cm"  rotate="-90"/>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+Bear in mind that this rotation might also affect to some given image dimensions.
 
 [discrete]
 == Rotate via transformation
