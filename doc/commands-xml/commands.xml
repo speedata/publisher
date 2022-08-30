@@ -888,7 +888,7 @@
     </attribute>
     <attribute en="name" type="text" optional="yes" since="3.7.3">
       <description xml:lang="en">
-        <para>Set the (PDF) name of the included file. Defaults to <tt>ZUGFeRD-invoice.xml</tt>.</para>
+        <para>Set the name of the attached file in the PDF document. Defaults to <tt>ZUGFeRD-invoice.xml</tt>.</para>
       </description>
       <description xml:lang="de">
         <para>Name der eingebunden Datei im PDF. Voreinstellung ist <tt>ZUGFeRD-invoice.xml</tt>.</para>
