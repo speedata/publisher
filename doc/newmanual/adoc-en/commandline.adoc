@@ -12,7 +12,7 @@ $ sp <Command> <Parameter> <Parameter> ...
 
 TIP: On Windows/PowerShell you have to run `sp.exe` since `sp` is an internal command of PowerShell.
 
-The default command is 'run'. So the call of
+The default command is `run`. So the call of
 
 [source,shell,subs="verbatim,quotes"]
 -------------------------------------------------------------------------------
@@ -27,7 +27,7 @@ the same as
 $ sp run
 -------------------------------------------------------------------------------
 
-Besides the command 'run' there are other commands (see below).
+Besides the command `run` there are other commands (see below).
 
 With
 
@@ -75,17 +75,17 @@ you can display a list of the allowed commands and parameters.
 `--autoopen`::
    Open the PDF file. Can be set in the <<ch-configuration>>.
 `--cache=METHOD`::
-   Use cache method. One of 'none', 'fast' or 'optimal'. Default is 'optimal'.
+   Use cache method. One of `none`, `fast` or `optimal`. Default is `optimal`.
 `-c`, `--config=NAME`::
-   Read the config file with the given NAME. Default: 'publisher.cfg'
+   Read the config file with the given NAME. Default: `publisher.cfg`
 `--credits`::
    Show credits and exit
 `--[no-]cutmarks`::
    Display cutmarks in the document
 `--data=NAME`::
-   Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN (only 1 run possible).
+   Name of the XML data file. Defaults to `data.xml`. Use `-` for STDIN (only 1 run possible).
 `--dummy`::
-   Don't read a data file, use '<data />' as input
+   Don't read a data file, use `<data />` as input
 `-x`, `--extra-dir=DIR`::
    Additional directory for file search.
 `--extra-xml=NAME`::
@@ -93,7 +93,7 @@ you can display a list of the allowed commands and parameters.
 `--filter=FILTER`::
    Run Lua filter before publishing starts
 `--grid`::
-   Display background grid. Disable with `--no-grid
+   Display background grid. Disable with `--no-grid`
 `--ignore-case`::
    Ignore case when accessing files (on a case-insensitive file system)
 `--imagecache=PATH`::
@@ -101,15 +101,15 @@ you can display a list of the allowed commands and parameters.
 `--inkscape=PATH`::
    Set the path to the inkscape program
 `--jobname=NAME`::
-   The name of the resulting PDF file (without extension), default is 'publisher'
+   The name of the resulting PDF file (without extension), default is `publisher`
 `--[no-]local`::
    Add local directory to the search path. Default is true
 `--layout=NAME`::
-   Name of the layout file. Defaults to 'layout.xml'
+   Name of the layout file. Defaults to `layout.xml`
 `--logfile=NAME`::
-   Logfile for server mode. Default 'publisher.protocol'. Use STDOUT for standard output and STDERR for standard error.
+   Logfile for server mode. Default `publisher.protocol`. Use STDOUT for standard output and STDERR for standard error.
 `--mainlanguage=NAME`::
-   The document's main language in locale format, for example 'en' or 'en_US'.
+   The document's main language in locale format, for example `en` or `en_US`.
 `--mode=NAME`::
    Set mode. Multiple modes given in a comma separated list. See <<ch-advanced-cotrollayout>>.
 `--option=OPTION`::
@@ -143,7 +143,7 @@ you can display a list of the allowed commands and parameters.
 `-v`, `--var=VAR=VALUE`::
    Set a variable for the publishing run
 `--varsfile=NAME`::
-   Set variables for the publishing run from key=value... file
+   Set variables for the publishing run from a file with each line containing `key=value` pairs
 `--verbose`::
    Print a bit of debugging output
 `--version`::
