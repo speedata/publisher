@@ -111,6 +111,9 @@
                      <ref name="e_ClearPage"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Copy-of"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_DefineColor"></ref>
                   </optional>
                   <optional>
@@ -234,6 +237,9 @@
                   </optional>
                   <optional>
                      <ref name="e_ClearPage"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Copy-of"></ref>
                   </optional>
                   <optional>
                      <ref name="e_DefineColor"></ref>
@@ -1157,6 +1163,9 @@
                   </optional>
                   <optional>
                      <ref name="e_ClearPage"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Copy-of"></ref>
                   </optional>
                   <optional>
                      <ref name="e_DefineColor"></ref>
@@ -4764,6 +4773,9 @@
                      <ref name="e_ClearPage"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Copy-of"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_DefineColor"></ref>
                   </optional>
                   <optional>
@@ -4984,6 +4996,9 @@
                         <ref name="e_ClearPage"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Copy-of"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_DefineColor"></ref>
                      </optional>
                      <optional>
@@ -5165,10 +5180,24 @@
                      </choice>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="execute">
+                     <a:documentation>Execute the contents of setvariable now or execute it on usage.</a:documentation>
+                     <choice>
+                        <value>now</value>
+                        <a:documentation>Execute the contents during SetVariable (default).</a:documentation>
+                        <value>later</value>
+                        <a:documentation>Execute the contents when evaluated during Copy-of.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
                <oneOrMore>
                   <interleave>
                      <optional>
                         <ref name="e_Attribute"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_ClearPage"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Column"></ref>
@@ -5190,6 +5219,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Paragraph"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_PlaceObject"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Table"></ref>

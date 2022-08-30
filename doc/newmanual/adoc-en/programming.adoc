@@ -93,7 +93,67 @@ and then use them in several tables:
 
 The one-time definition and reuse saves typing work and reduces the sources of error.
 
-TIP: Variables must not contain outputting commands such as `<PlaceObject>` or `<ClearPage>`.
+=== Execution time
+
+The contents of variables containing child elements are evaluated immediately. I.e. in the following case
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<SetVariable variable="tmp">
+    <Paragraph><Value select="$greeting"/></Paragraph>
+</SetVariable>
+-------------------------------------------------------------------------------
+
+the variable `greeting` must already be defined.
+Subsequent modification of the output in the paragraph does not happen.
+
+It follows that the variables must not contain any output commands, such as `<PlaceObject>` or `<ClearPage>`, since these would take effect immediately.
+
+There is an option to defer this evaluation time to the application at `<Copy-of>` (`execute="later"`):
+
+[source, xml]
+-------------------------------------------------------------------------------
+<SetVariable variable="tmp" execute="later">
+    <Paragraph><Value select="$greeting"/></Paragraph>
+</SetVariable>
+
+<SetVariable variable="greeting" select="'Hello User'"/>
+
+<PlaceObject>
+    <Textblock>
+        <Copy-of select="$tmp" />
+    </Textblock>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+
+Here, only when `<Copy-of>` is used, the contents of `$tmp` are evaluated, then output.
+This also works with output commands:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<SetVariable variable="tmp" execute="later">
+    <PlaceObject>
+        <Textblock>
+            <Paragraph><Value select="$greeting"/></Paragraph>
+        </Textblock>
+    </PlaceObject>
+    <ClearPage />
+    <PlaceObject>
+        <Textblock>
+            <Paragraph><Value>Hello user</Value></Paragraph>
+        </Textblock>
+    </PlaceObject>
+</SetVariable>
+
+<SetVariable variable="greeting" select="'Hello User'"/>
+
+<Copy-of select="$tmp" />
+-------------------------------------------------------------------------------
+
+generates twice the output 'Hello User' on a separate page.
 
 
 [[ch-copyof]]

@@ -83,6 +83,7 @@
         <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Bookmark"/>
         <xs:element minOccurs="0" ref="en:ClearPage"/>
+        <xs:element minOccurs="0" ref="en:Copy-of"/>
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
@@ -133,6 +134,7 @@
         <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Bookmark"/>
         <xs:element minOccurs="0" ref="en:ClearPage"/>
+        <xs:element minOccurs="0" ref="en:Copy-of"/>
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
@@ -970,6 +972,7 @@
         <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Bookmark"/>
         <xs:element minOccurs="0" ref="en:ClearPage"/>
+        <xs:element minOccurs="0" ref="en:Copy-of"/>
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
@@ -5424,6 +5427,7 @@
         <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Bookmark"/>
         <xs:element minOccurs="0" ref="en:ClearPage"/>
+        <xs:element minOccurs="0" ref="en:Copy-of"/>
         <xs:element minOccurs="0" ref="en:DefineColor"/>
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineFontalias"/>
@@ -5588,6 +5592,7 @@
         <xs:element ref="en:AttachFile"/>
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:ClearPage"/>
+        <xs:element ref="en:Copy-of"/>
         <xs:element ref="en:DefineColor"/>
         <xs:element ref="en:DefineFontfamily"/>
         <xs:element ref="en:DefineFontalias"/>
@@ -5672,6 +5677,7 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:Attribute"/>
+        <xs:element ref="en:ClearPage"/>
         <xs:element ref="en:Column"/>
         <xs:element ref="en:Columns"/>
         <xs:element ref="en:Copy-of"/>
@@ -5679,6 +5685,7 @@
         <xs:element ref="en:ForAll"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Paragraph"/>
+        <xs:element ref="en:PlaceObject"/>
         <xs:element ref="en:Table"/>
         <xs:element ref="en:TableNewPage"/>
         <xs:element ref="en:Tablerule"/>
@@ -5737,6 +5744,25 @@
             <xs:enumeration value="no">
               <xs:annotation>
                 <xs:documentation>Don't show information (default).</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="execute">
+        <xs:annotation>
+          <xs:documentation>Execute the contents of setvariable now or execute it on usage.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="now">
+              <xs:annotation>
+                <xs:documentation>Execute the contents during SetVariable (default).</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="later">
+              <xs:annotation>
+                <xs:documentation>Execute the contents when evaluated during Copy-of.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
           </xs:restriction>

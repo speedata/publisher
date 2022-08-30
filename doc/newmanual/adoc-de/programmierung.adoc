@@ -106,7 +106,63 @@ um diese dann anschließend in mehreren Tabellen zu benutzen:
 Durch die einmalige Definition und Wiederverwendung spart man sich Tipparbeit und verringert die Fehlerquellen.
 
 
-TIP: Variablen dürfen keine Ausgabebefehle wie `<PlaceObject>` oder `<ClearPage>` enthalten.
+=== Ausführungszeit
+
+Die Inhalte von Variablen, die Kindelemente enthalten, werden sofort evaluiert. D.h. im folgenden Fall
+
+[source, xml]
+-------------------------------------------------------------------------------
+<SetVariable variable="tmp">
+    <Paragraph><Value select="$greeting"/></Paragraph>
+</SetVariable>
+-------------------------------------------------------------------------------
+
+muss die Variable `greeting` schon definiert sein.
+Eine nachträgliche Änderung der Ausgabe im Absatz passiert nicht.
+Daraus folgt, dass die Variablen keine Ausgabebefehle enthalten dürfen, wie z.B. `<PlaceObject>` oder `<ClearPage>`, da diese sofort wirksam wären.
+
+Es gibt die Möglichkeit diese Evaluierungszeit auf die Anwendung bei `<Copy-of>` zu verschieben (`execute="later"`):
+
+[source, xml]
+-------------------------------------------------------------------------------
+<SetVariable variable="tmp" execute="later">
+    <Paragraph><Value select="$greeting"/></Paragraph>
+</SetVariable>
+
+<SetVariable variable="greeting" select="'Hello User'"/>
+
+<PlaceObject>
+    <Textblock>
+        <Copy-of select="$tmp" />
+    </Textblock>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+Hier wird erst bei der Benutzung von `<Copy-of>` der Inhalt von `$tmp` ausgewertet, anschließend ausgegeben.
+Das funktioniert auch mit Ausgabebefehlen:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<SetVariable variable="tmp" execute="later">
+    <PlaceObject>
+        <Textblock>
+            <Paragraph><Value select="$greeting"/></Paragraph>
+        </Textblock>
+    </PlaceObject>
+    <ClearPage />
+    <PlaceObject>
+        <Textblock>
+            <Paragraph><Value>Hello user</Value></Paragraph>
+        </Textblock>
+    </PlaceObject>
+</SetVariable>
+
+<SetVariable variable="greeting" select="'Hello User'"/>
+
+<Copy-of select="$tmp" />
+-------------------------------------------------------------------------------
+
+erzeugt zweimal die Ausgabe 'Hello User' auf einer eigenen Seite.
 
 [[ch-copyof]]
 == Copy-of

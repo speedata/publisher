@@ -590,6 +590,10 @@ function commands.copy_of( layoutxml,dataxml )
             err(selection)
             return nil
         end
+        if type(selection) == "table" and selection[1] == "expand"  then
+            local tmp = publisher.dispatch(selection,dataxml)
+            return tmp
+        end
 
         return publisher.deepcopy(selection)
     end
@@ -3326,7 +3330,8 @@ function commands.setvariable( layoutxml,dataxml )
     local trace_p   = publisher.options.showassignments or publisher.read_attribute(layoutxml,dataxml,"trace","boolean")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","string")
     local varname   = publisher.read_attribute(layoutxml,dataxml,"variable","string")
-    local typ      = publisher.read_attribute(layoutxml,dataxml,"type","string","sd")
+    local typ       = publisher.read_attribute(layoutxml,dataxml,"type","string","sd")
+    local execute   = publisher.read_attribute(layoutxml,dataxml,"execute", "string","now")
     -- FIXME: if the variable contains nodes, the must be freed.
 
     if not varname then
@@ -3335,11 +3340,26 @@ function commands.setvariable( layoutxml,dataxml )
     end
     local contents
 
-    if selection then
-        contents = xpath.parse(dataxml,selection,layoutxml[".__ns"])
+    if execute == "later" then
+        local save = {}
+        if selection then
+            save = selection
+        else
+            save[#save+1] = "expand"
+            for i = 1, #layoutxml do
+                save[#save+1] = layoutxml[i]
+            end
+        end
+
+        publisher.xpath.set_variable(varname, save )
+        return
     else
-        local tab = publisher.dispatch(layoutxml,dataxml)
-        contents = tab
+        if selection then
+            contents = xpath.parse(dataxml,selection,layoutxml[".__ns"])
+        else
+            local tab = publisher.dispatch(layoutxml,dataxml)
+            contents = tab
+        end
     end
 
     if type(contents)=="table" then

@@ -84,6 +84,7 @@
     <optional><cmd name="AttachFile"/></optional>
     <optional><cmd name="Bookmark"/></optional>
     <optional><cmd name="ClearPage"/></optional>
+    <optional><cmd name="Copy-of"/></optional>
     <optional><cmd name="DefineColor"/></optional>
     <optional><cmd name="DefineFontfamily"/></optional>
     <optional><cmd name="DefineFontalias"/></optional>
@@ -7856,6 +7857,7 @@
       <oneOrMore>
         <interleave>
           <optional><cmd name="Attribute"/></optional>
+          <optional><cmd name="ClearPage"/></optional>
           <optional><cmd name="Column"/></optional>
           <optional><cmd name="Columns"/></optional>
           <optional><cmd name="Copy-of"/></optional>
@@ -7863,6 +7865,7 @@
           <optional><cmd name="ForAll"/></optional>
           <optional><cmd name="Loop"/></optional>
           <optional><cmd name="Paragraph"/></optional>
+          <optional><cmd name="PlaceObject"/></optional>
           <optional><cmd name="Table"/></optional>
           <optional><cmd name="TableNewPage"/></optional>
           <optional><cmd name="Tablerule"/></optional>
@@ -7944,6 +7947,30 @@
         </description>
         <description xml:lang="de">
           <para>Zeige keine Informationen (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="execute" optional="yes" since="4.11.8">
+      <description xml:lang="en">
+        <para>Execute the contents of setvariable now or execute it on usage.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Führe den Inhalt sofort aus oder später bei der Benutzung.</para>
+      </description>
+      <choice en="now">
+        <description xml:lang="en">
+          <para>Execute the contents during SetVariable (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Führe den Inhalt sofort aus (Voreinstellung).</para>
+        </description>
+      </choice>
+      <choice en="later">
+        <description xml:lang="en">
+          <para>Execute the contents when evaluated during <cmd name="Copy-of" />. Experimental.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Führe den Inhalt bei der Benutzung von <cmd name="Copy-of" /> aus. Experimentell.</para>
         </description>
       </choice>
     </attribute>
