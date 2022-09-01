@@ -485,7 +485,7 @@ setmetatable(colors,{  __index = function (tbl,key)
     color.r, color.g, color.b = getrgb(key)
     color.pdfstring = string.format("%g %g %g rg %g %g %g RG", color.r, color.g, color.b, color.r,color.g, color.b)
     color.overprint = false
-    color.model = model
+    color.model = "rgb"
     colortable[#colortable + 1] = key
     color.index = #colortable
     rawset(tbl,key,color)
@@ -6803,12 +6803,33 @@ function imageinfo( filename,page,box,fallback,imageshape )
     return images[new_name]
 end
 
+-- getBordercolor turns a color into a three RGB (0-1) value to be used for the /C array.
+-- The PDF viewers only support RGB (three values in the /C array).
+function getBordercolor(colorname)
+    local entry = get_colentry_from_name(colorname,"black")
+    if entry == nil then
+        return "0 0 0"
+    end
+    if entry.model == "rgb" then
+        return string.format("%g %g %g",entry.r,entry.g,entry.b)
+    elseif entry.model == "gray" then
+        return string.format("%g %g %g",entry.g,entry.g,entry.g)
+    elseif entry.model == "cmyk" then
+        local hundredminusk = ( 100 - entry.k) / 100
+        local r = (100 - entry.c) * hundredminusk / 100
+        local g = (100 - entry.m) * hundredminusk / 100
+        local b = (100 - entry.y) * hundredminusk / 100
+        return string.format("%g %g %g",r,g,b)
+    end
+    return "0 0 0"
+end
+
 function hlpage(pagenumber)
     pagenumber = tonumber(pagenumber)
     local pageobjnum = pdf.getpageref(pagenumber)
     local border = "/Border[0 0 0]"
     if options.showhyperlinks then
-        border = string.format("/C [%s]",options.hyperlinksbordercolor or "0 0 0" )
+        border = string.format("/C [%s]",getBordercolor(options.hyperlinksbordercolor) )
     end
     local str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoTo/D [ %d 0 R /Fit ] >>",border,pageobjnum)
     hyperlinks[#hyperlinks + 1] = str
@@ -6832,7 +6853,7 @@ end
 function hlurl(href)
     local border = "/Border[0 0 0]"
     if options.showhyperlinks then
-        border = string.format("/C [%s]",options.hyperlinksbordercolor or "0 0 0" )
+        border = string.format("/C [%s]",getBordercolor(options.hyperlinksbordercolor))
     end
     href = urlencode(href)
     href = escape_pdfstring(href)
