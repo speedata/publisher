@@ -6536,6 +6536,31 @@
         <para>Legt die Anwendung des Dokuments fest</para>
       </description>
     </attribute>
+    <attribute en="displaymode" optional="yes" since="4.11.8">
+      <description xml:lang="en">
+        <para>Select the display mode when opening PDF document (mainly with Acrobat).</para>
+      </description>
+      <choice en="attachments">
+        <description xml:lang="en">
+          <para>Display the attachment pane.</para>
+        </description>
+      </choice>
+      <choice en="bookmarks">
+        <description xml:lang="en">
+          <para>Display the bookmarks pane (only works if the PDF document contains at least one bookmark).</para>
+        </description>
+      </choice>
+      <choice en="fullscreen">
+        <description xml:lang="en">
+          <para>Open the document in fullscreen mode.</para>
+        </description>
+      </choice>
+      <choice en="thumbnails">
+        <description xml:lang="en">
+          <para>Display the thumbnail pane.</para>
+        </description>
+      </choice>
+    </attribute>    
     <attribute en="duplex" optional="yes" since="2.3.47">
       <description xml:lang="en">
         <para>Set viewer preference to one or two page printing. Default: empty.</para>
@@ -6639,14 +6664,6 @@
           <para>Keine Seitenskalierung</para>
         </description>
       </choice>
-    </attribute>
-    <attribute en="showbookmarks" optional="yes" since="3.9.8" type="boolean">
-      <description xml:lang="en">
-        <para>Show bookmarks in Adobe Acrobat when opening the document.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Zeige Lesezeichen im Adobe Acrobat beim Öffnen des Dokuments.</para>
-     </description>
     </attribute>
     <attribute en="showhyperlinks" optional="yes" since="4.3.15" type="boolean">
       <description xml:lang="en">
