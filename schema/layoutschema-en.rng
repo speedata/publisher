@@ -4280,6 +4280,23 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="displaymode">
+               <a:documentation>Select the display mode when opening PDF document (mainly with Acrobat).</a:documentation>
+               <choice>
+                  <value>attachments</value>
+                  <a:documentation>Display the attachment pane.</a:documentation>
+                  <value>bookmarks</value>
+                  <a:documentation>Display the bookmarks pane (only works if the PDF document contains at least one bookmark).</a:documentation>
+                  <value>fullscreen</value>
+                  <a:documentation>Open the document in fullscreen mode.</a:documentation>
+                  <value>none</value>
+                  <a:documentation>Do not display a special pane.</a:documentation>
+                  <value>thumbnails</value>
+                  <a:documentation>Display the thumbnail pane.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="duplex">
                <a:documentation>Set viewer preference to one or two page printing. Default: empty.</a:documentation>
                <choice>
@@ -4331,7 +4348,7 @@
          </optional>
          <optional>
             <attribute name="showbookmarks">
-               <a:documentation>Show bookmarks in Adobe Acrobat when opening the document.</a:documentation>
+               <a:documentation>Show bookmarks in the PDF viewer when opening the document. Deprecated - use displaymode instead.</a:documentation>
                <choice>
                   <value>yes</value>
                   <value>no</value>

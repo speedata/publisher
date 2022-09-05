@@ -4832,6 +4832,40 @@
           <xs:documentation>Set the creator application of the document</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="displaymode">
+        <xs:annotation>
+          <xs:documentation>Select the display mode when opening PDF document (mainly with Acrobat).</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="attachments">
+              <xs:annotation>
+                <xs:documentation>Display the attachment pane.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="bookmarks">
+              <xs:annotation>
+                <xs:documentation>Display the bookmarks pane (only works if the PDF document contains at least one bookmark).</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="fullscreen">
+              <xs:annotation>
+                <xs:documentation>Open the document in fullscreen mode.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="none">
+              <xs:annotation>
+                <xs:documentation>Do not display a special pane.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="thumbnails">
+              <xs:annotation>
+                <xs:documentation>Display the thumbnail pane.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="duplex">
         <xs:annotation>
           <xs:documentation>Set viewer preference to one or two page printing. Default: empty.</xs:documentation>
@@ -4911,7 +4945,7 @@
       </xs:attribute>
       <xs:attribute name="showbookmarks">
         <xs:annotation>
-          <xs:documentation>Show bookmarks in Adobe Acrobat when opening the document.</xs:documentation>
+          <xs:documentation>Show bookmarks in the PDF viewer when opening the document. Deprecated - use displaymode instead.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">

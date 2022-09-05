@@ -4280,6 +4280,23 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="displaymode">
+               <a:documentation>Wähle den PDF-Anzeigemodes (vornehmlich beim Adobe Acrobat).</a:documentation>
+               <choice>
+                  <value>attachments</value>
+                  <a:documentation>Zeige die Anhänge.</a:documentation>
+                  <value>bookmarks</value>
+                  <a:documentation>Zeige die Lesezeichen (sofern das Dokument Lesezeichen enthält).</a:documentation>
+                  <value>fullscreen</value>
+                  <a:documentation>Öffne das Dokument im Vollbildmodus.</a:documentation>
+                  <value>none</value>
+                  <a:documentation>Keine besondere Anzeigeart wählen.</a:documentation>
+                  <value>thumbnails</value>
+                  <a:documentation>Die Vorschaubilder zeigen.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="duplex">
                <a:documentation>Setze PDF Anzeigeprogramm auf einseitigen oder doppelseitigen Druck. Voreinstellung: leer.</a:documentation>
                <choice>
@@ -4331,7 +4348,7 @@
          </optional>
          <optional>
             <attribute name="showbookmarks">
-               <a:documentation>Zeige Lesezeichen im Adobe Acrobat beim Öffnen des Dokuments.</a:documentation>
+               <a:documentation>Zeige Lesezeichen im Adobe Acrobat beim Öffnen des Dokuments. Veraltet - benutze stattedessen displaymode.</a:documentation>
                <choice>
                   <value>yes</value>
                   <value>no</value>

@@ -4832,6 +4832,40 @@
           <xs:documentation>Legt die Anwendung des Dokuments fest</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="displaymode">
+        <xs:annotation>
+          <xs:documentation>Wähle den PDF-Anzeigemodes (vornehmlich beim Adobe Acrobat).</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="attachments">
+              <xs:annotation>
+                <xs:documentation>Zeige die Anhänge.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="bookmarks">
+              <xs:annotation>
+                <xs:documentation>Zeige die Lesezeichen (sofern das Dokument Lesezeichen enthält).</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="fullscreen">
+              <xs:annotation>
+                <xs:documentation>Öffne das Dokument im Vollbildmodus.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="none">
+              <xs:annotation>
+                <xs:documentation>Keine besondere Anzeigeart wählen.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="thumbnails">
+              <xs:annotation>
+                <xs:documentation>Die Vorschaubilder zeigen.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="duplex">
         <xs:annotation>
           <xs:documentation>Setze PDF Anzeigeprogramm auf einseitigen oder doppelseitigen Druck. Voreinstellung: leer.</xs:documentation>
@@ -4911,7 +4945,7 @@
       </xs:attribute>
       <xs:attribute name="showbookmarks">
         <xs:annotation>
-          <xs:documentation>Zeige Lesezeichen im Adobe Acrobat beim Öffnen des Dokuments.</xs:documentation>
+          <xs:documentation>Zeige Lesezeichen im Adobe Acrobat beim Öffnen des Dokuments. Veraltet - benutze stattedessen displaymode.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">

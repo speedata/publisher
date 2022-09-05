@@ -6536,6 +6536,54 @@
         <para>Legt die Anwendung des Dokuments fest</para>
       </description>
     </attribute>
+    <attribute en="displaymode" optional="yes" since="4.11.8">
+      <description xml:lang="en">
+        <para>Select the display mode when opening PDF document (mainly with Acrobat).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wähle den PDF-Anzeigemodes (vornehmlich beim Adobe Acrobat).</para>
+      </description>
+      <choice en="attachments">
+        <description xml:lang="en">
+          <para>Display the attachment pane.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeige die Anhänge.</para>
+        </description>
+      </choice>
+      <choice en="bookmarks">
+        <description xml:lang="en">
+          <para>Display the bookmarks pane (only works if the PDF document contains at least one bookmark).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeige die Lesezeichen (sofern das Dokument Lesezeichen enthält).</para>
+        </description>
+      </choice>
+      <choice en="fullscreen">
+        <description xml:lang="en">
+          <para>Open the document in fullscreen mode.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Öffne das Dokument im Vollbildmodus.</para>
+        </description>
+      </choice>
+      <choice en="none">
+        <description xml:lang="en">
+          <para>Do not display a special pane.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Keine besondere Anzeigeart wählen.</para>
+        </description>
+      </choice>
+      <choice en="thumbnails">
+        <description xml:lang="en">
+          <para>Display the thumbnail pane.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Vorschaubilder zeigen.</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="duplex" optional="yes" since="2.3.47">
       <description xml:lang="en">
         <para>Set viewer preference to one or two page printing. Default: empty.</para>
@@ -6640,13 +6688,13 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="showbookmarks" optional="yes" since="3.9.8" type="boolean">
+    <attribute en="showbookmarks" optional="yes" since="3.9.8" type="boolean" deprecated="yes">
       <description xml:lang="en">
-        <para>Show bookmarks in Adobe Acrobat when opening the document.</para>
+        <para>Show bookmarks in the PDF viewer when opening the document. Deprecated - use displaymode instead.</para>
       </description>
       <description xml:lang="de">
-        <para>Zeige Lesezeichen im Adobe Acrobat beim Öffnen des Dokuments.</para>
-     </description>
+        <para>Zeige Lesezeichen im Adobe Acrobat beim Öffnen des Dokuments. Veraltet - benutze stattedessen displaymode.</para>
+      </description>
     </attribute>
     <attribute en="showhyperlinks" optional="yes" since="4.3.15" type="boolean">
       <description xml:lang="en">

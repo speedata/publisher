@@ -2482,7 +2482,8 @@ function commands.pdfoptions( layoutxml, dataxml )
     local format       = publisher.read_attribute(layoutxml,dataxml,"format",    "string")
     local nc           = publisher.read_attribute(layoutxml,dataxml,"numcopies", "number")
     local printscaling = publisher.read_attribute(layoutxml,dataxml,"printscaling", "string")
-    local showbookmarks = publisher.read_attribute(layoutxml,dataxml,"showbookmarks", "boolean",true)
+    local showbookmarks = publisher.read_attribute(layoutxml,dataxml,"showbookmarks", "boolean")
+    local displaymode = publisher.read_attribute(layoutxml,dataxml,"displaymode", "string")
     local picktray     = publisher.read_attribute(layoutxml,dataxml,"picktraybypdfsize", "boolean")
     local showhyperlinks = publisher.read_attribute(layoutxml,dataxml,"showhyperlinks", "boolean", false)
     local hyperlinksbordercolor = publisher.read_attribute(layoutxml,dataxml,"hyperlinksbordercolor", "string")
@@ -2518,8 +2519,22 @@ function commands.pdfoptions( layoutxml, dataxml )
     if nc then
         publisher.viewerpreferences.numcopies = nc
     end
-    if showbookmarks ~= nil then
-        publisher.viewerpreferences.showbookmarks = showbookmarks
+
+    if displaymode == "attachments" then
+        publisher.options.displaymode = "UseAttachments"
+    elseif displaymode == "bookmarks" then
+        publisher.options.displaymode = "UseOutlines"
+    elseif displaymode == "fullscreen" then
+        publisher.options.displaymode = "FullScreen"
+    elseif displaymode == "thumbnails" then
+        publisher.options.displaymode = "UseThumbs"
+    else
+        publisher.options.displaymode = "UseNone"
+    end
+
+    if showbookmarks then
+        publisher.options.displaymode = "UseOutlines"
+        warning("PDFOptions/showbookmarks is deprecated and will be removed in version 5. Please use displaymode instead")
     end
 
     if printscaling then
