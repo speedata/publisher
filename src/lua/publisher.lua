@@ -877,10 +877,10 @@ function get_action_node( action_type )
 end
 
 local function getcreator()
-    if sp_suppressinfo then
-        return "speedata Publisher, www.speedata.de"
-    elseif options.documentcreator and options.documentcreator ~= "" then
+    if options.documentcreator and options.documentcreator ~= "" then
         return options.documentcreator
+    elseif sp_suppressinfo then
+        return "speedata Publisher, www.speedata.de"
     else
         return string.format("speedata Publisher %s, www.speedata.de",env_publisherversion)
     end
@@ -1416,10 +1416,10 @@ function initialize_luatex_and_generate_pdf()
     -- Keywords  Keywords associated with the document.
     local creator = getcreator()
     local infos
-    if sp_suppressinfo then
-        infos = { "/Creator (speedata Publisher) /Producer (LuaTeX)"}
-    elseif options.documentcreator and options.documentcreator ~= "" then
+    if options.documentcreator and options.documentcreator ~= "" then
         infos = { string.format("/Creator %s /Producer (speedata Publisher %s using LuaTeX) ",utf8_to_utf16_string_pdf(creator),env_publisherversion) }
+    elseif sp_suppressinfo then
+        infos = { "/Creator (speedata Publisher) /Producer (LuaTeX)"}
     else
         infos = { string.format("/Creator (%s) /Producer (LuaTeX %s (build %s))",creator, luatex_version, status.development_id or "-") }
     end
