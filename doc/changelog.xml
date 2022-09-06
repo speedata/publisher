@@ -1,5 +1,25 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.11">
+    <entry version="4.11.8" date="2022-09-06">
+        <en>Suppressinfo allows creator to be set (#420).</en>
+        <de>Suppressinfo erlaubt den PDF creator zu setzen (#420).</de>
+    </entry>
+    <entry version="4.11.8" date="2022-09-06">
+        <en>New attribute displaymode for PDFOptions (#428).</en>
+        <de>Neues Attribut displaymode für PDFOptions (#428).</de>
+    </entry>
+    <entry version="4.11.8" date="2022-09-06">
+        <en>Optional delay execution on SetVariable (#412).</en>
+        <de>Ausführung von SetVariable verzögern (optional) (#412).</de>
+    </entry>
+    <entry version="4.11.8" date="2022-09-06">
+        <en>Add sd:sha256, sd:sha512 and sd:md5 functions (#414).</en>
+        <de>Füge sd:sha256, sha512 und sd:md5 Funktionen hinzu (#414).</de>
+    </entry>
+    <entry version="4.11.8" date="2022-09-06">
+        <en>Set border color for hyperlinks (#416).</en>
+        <de>Setze Rahmenfarbe für Hyperlinks (#416).</de>
+    </entry>
     <entry version="4.11.7" date="2022-08-25">
         <en>Fix NoBreak inside Td (#410).</en>
         <de>Korrigiere NoBreak innerhalb von Td (#410).</de>
