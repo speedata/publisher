@@ -2146,7 +2146,7 @@ function commands.options( layoutxml,dataxml )
     local reportmissingglyphs             = publisher.read_attribute(layoutxml,dataxml,"reportmissingglyphs", "string")
     publisher.options.interaction         = publisher.read_attribute(layoutxml,dataxml,"interaction", "boolean", publisher.options.interaction)
     local imagenotfound                   = publisher.read_attribute(layoutxml,dataxml,"imagenotfound", "string","error")
-    local mainlanguage                    = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","")
+    publisher.options.mainlanguage        = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string", publisher.options.mainlanguage)
     local default_area                    = publisher.read_attribute(layoutxml,dataxml,"defaultarea","string")
 
     if default_area then
@@ -2155,8 +2155,8 @@ function commands.options( layoutxml,dataxml )
 
 
     publisher.options.imagenotfounderror = imagenotfound == "error"
-    if mainlanguage ~= "" then
-        publisher.set_mainlanguage(mainlanguage,true)
+    if publisher.options.mainlanguage ~= "" then
+        publisher.set_mainlanguage(publisher.options.mainlanguage,true)
     end
     if publisher.options.trim then
         xpath.set_variable("_bleed",publisher.options.trim)
