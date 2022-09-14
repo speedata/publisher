@@ -1442,6 +1442,12 @@ function initialize_luatex_and_generate_pdf()
         infos[#infos + 1] = string.format("/Keywords %s", utf8_to_utf16_string_pdf(options.documentkeywords))
     end
 
+    if options.mainlanguage ~= nil and options.mainlanguage ~= "" then
+        pdfcatalog[#pdfcatalog + 1] = string.format("/Lang (%s)", language_mapping[options.mainlanguage] or options.mainlanguage)
+	elseif sp_mainlanguage then
+        pdfcatalog[#pdfcatalog + 1] = string.format("/Lang (%s)", language_mapping[sp_mainlanguage] or sp_mainlanguage)
+    end
+
     if options.format then
         local metadataobjnum
         if options.format == "PDF/X-3:2002" or options.format == "PDF/X-4" then
@@ -1458,7 +1464,7 @@ function initialize_luatex_and_generate_pdf()
             pdfcatalog[#pdfcatalog + 1] = string.format("/OutputIntents %d 0 R",outputintentsarrayobjnum )
         end
         if options.format == "PDF/UA" then
-            pdfcatalog[#pdfcatalog + 1] = string.format("/Lang (de)  /MarkInfo <<  /Marked true >> ")
+            pdfcatalog[#pdfcatalog + 1] = string.format("/MarkInfo << /Marked true >>" )
             metadataobjnum = pdf.obj({ type="stream", string = getuametadata(), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0,})
             vp[#vp + 1] = "/DisplayDocTitle true"
 
