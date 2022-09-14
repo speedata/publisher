@@ -287,6 +287,9 @@ local function setup()
     else
         pdf.setsuppressoptionalinfo(143)
     end
+    if os.getenv("SP_MAINLANGUAGE") ~= nil and os.getenv("SP_MAINLANGUAGE") ~= "" then
+        sp_mainlanguage = os.getenv("SP_MAINLANGUAGE")
+    end
     if false then
         pdf.setcompresslevel(0)
         pdf.setobjcompresslevel(0)
