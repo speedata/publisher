@@ -1261,7 +1261,13 @@ function register( colorname,c,m,y,k )
     _,_, rawname = string.find(string.lower(colorname),"^(.-)%s*[cmunkez]?%s*$")
     local cmyktable = spotcolors[rawname]
     if not cmyktable then
-        spotcolors[rawname] = { c,m,y,k }
+        if c == nil or m == nil or y == nil or k == nil then
+            warning("You must define a CMYK substitute for the spot color %q in order to display it in the PDF.",rawname)
+            spotcolors[rawname] = {0,0,0,50}
+        else
+            spotcolors[rawname] = { c,m,y,k }
+        end
+
     end
     return #colorobjects
 end
