@@ -184,8 +184,12 @@ function commands.attachfile( layoutxml,dataxml )
     local filename = publisher.read_attribute(layoutxml,dataxml,"filename","string")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     local destfilename = publisher.read_attribute(layoutxml,dataxml,"name","string", "ZUGFeRD-invoice.xml")
+    local filename_extension = filename:match("^.*%.(.+)$"):lower()
     local zugferdcontents
     local modificationtime
+    if destfilename:match("^.*%.(.+)$") == nil then
+        destfilename = string.format("%s.%s",destfilename,filename_extension)
+    end
     if selection ~= nil then
         zugferdcontents = publisher.xml_to_string(selection[1],0)
         modificationtime = os.time()
