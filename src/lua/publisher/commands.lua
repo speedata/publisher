@@ -196,6 +196,11 @@ function commands.attachfile( layoutxml,dataxml )
             return
         end
         local stat = lfs.attributes(path)
+        local filename_extension = filename:match("^.*%.(.+)$"):lower()
+        if destfilename:match("^.*%.(.+)$") == nil then
+            warning("AttachFile: name attribute has no file extension, take from source.")
+            destfilename = string.format("%s.%s",destfilename,filename_extension)
+        end
         modificationtime = stat.modification
         local zugferdfile = io.open(path)
 
