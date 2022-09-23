@@ -4311,7 +4311,7 @@
          </optional>
          <optional>
             <attribute name="hyperlinksbordercolor">
-               <a:documentation>Setze die Rahmenfarbe von Hyperlinks wenn showhyperlinks aktiviert ist. Die Voreinstellung ist 0 0 0 und muss eine Zeichenkette mit 1, 3 oder 4 Zahlen zwischen 0 und 1 sein, deren Werte eine Farbe im Farbraum grau, rgb oder cmyk darstellt.</a:documentation>
+               <a:documentation>Setze die Rahmenfarbe von Hyperlinks wenn showhyperlinks aktiviert ist. Die Voreinstellung ist black.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -5206,7 +5206,7 @@
                         <value>now</value>
                         <a:documentation>Führe den Inhalt sofort aus (Voreinstellung).</a:documentation>
                         <value>later</value>
-                        <a:documentation>Führe den Inhalt bei der Benutzung von Copy-of aus.</a:documentation>
+                        <a:documentation>Führe den Inhalt bei der Benutzung von Copy-of aus. Experimentell.</a:documentation>
                      </choice>
                   </attribute>
                </optional>
