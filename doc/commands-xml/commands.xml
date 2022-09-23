@@ -7165,6 +7165,14 @@
           <para>Die Zeile gibt die untere Kante des Objekts an.</para>
         </description>
       </choice>
+      <choice en="middle">
+        <description xml:lang="en">
+          <para>If 'middle', the given row is the center of the object. Works only with absolute positioning.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Zeile gibt die Mitte des Objekts an. Funktioniert nur bei absoluter Positionierung.</para>
+        </description>
+      </choice>
       <choice en="top">
         <description xml:lang="en">
           <para>If 'top' (default), the given row is the top border of the object.</para>

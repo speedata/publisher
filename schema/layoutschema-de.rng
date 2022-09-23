@@ -4596,6 +4596,8 @@
                      <choice>
                         <value>bottom</value>
                         <a:documentation>Die Zeile gibt die untere Kante des Objekts an.</a:documentation>
+                        <value>middle</value>
+                        <a:documentation>Die Zeile gibt die Mitte des Objekts an. Funktioniert nur bei absoluter Positionierung.</a:documentation>
                         <value>top</value>
                         <a:documentation>Die Zeile gibt die obere Kante des Objekts an (Voreinstellung).</a:documentation>
                      </choice>

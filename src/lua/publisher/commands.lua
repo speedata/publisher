@@ -2739,6 +2739,10 @@ function commands.place_object( layoutxml,dataxml)
         options.ht_max = areaheight
         if vreference == "bottom" then
             options.current_height = areaheight
+        elseif vreference == "middle" then
+            -- incorrect, but irrelevant since vreference==middle only in
+            -- absolute positioning
+            options.current_height = areaheight
         else
             options.current_height = math.min(current_grid:remaining_height_sp(row,area,tonumber(column)),areaheight)
         end
@@ -2836,6 +2840,8 @@ function commands.place_object( layoutxml,dataxml)
             local top = row + current_grid.extra_margin
             if vreference == "bottom" then
                 top = top - object.height
+            elseif vreference == "middle" then
+                top = top - object.height / 2
             end
             publisher.output_absolute_position({
                 nodelist = object,
@@ -2854,6 +2860,7 @@ function commands.place_object( layoutxml,dataxml)
             })
         else
             -- Look for a place for the object
+            local current_row
             -- local current_row = current_grid:current_row(area)
             if not node.has_field(object,"width") then
                 warning("Can't calculate with object's width!")
@@ -2863,6 +2870,8 @@ function commands.place_object( layoutxml,dataxml)
             if row then
                 if vreference == "bottom" then
                     current_row = row - height_in_gridcells + 1
+                elseif vreference == "middle" then
+                    current_row = row - math.round (height_in_gridcells / 2,0) + 1
                 else
                     current_row = row
                 end

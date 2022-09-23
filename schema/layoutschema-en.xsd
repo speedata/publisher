@@ -5341,6 +5341,11 @@
                 <xs:documentation>The row determines the bottom edge of the object.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="middle">
+              <xs:annotation>
+                <xs:documentation>If 'middle', the given row is the center of the object. Works only with absolute positioning.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="top">
               <xs:annotation>
                 <xs:documentation>If 'top' (default), the given row is the top border of the object.</xs:documentation>

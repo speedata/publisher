@@ -4596,6 +4596,8 @@
                      <choice>
                         <value>bottom</value>
                         <a:documentation>The row determines the bottom edge of the object.</a:documentation>
+                        <value>middle</value>
+                        <a:documentation>If &#39;middle&#39;, the given row is the center of the object. Works only with absolute positioning.</a:documentation>
                         <value>top</value>
                         <a:documentation>If &#39;top&#39; (default), the given row is the top border of the object.</a:documentation>
                      </choice>

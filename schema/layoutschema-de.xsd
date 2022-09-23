@@ -5341,6 +5341,11 @@
                 <xs:documentation>Die Zeile gibt die untere Kante des Objekts an.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="middle">
+              <xs:annotation>
+                <xs:documentation>Die Zeile gibt die Mitte des Objekts an. Funktioniert nur bei absoluter Positionierung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="top">
               <xs:annotation>
                 <xs:documentation>Die Zeile gibt die obere Kante des Objekts an (Voreinstellung).</xs:documentation>
