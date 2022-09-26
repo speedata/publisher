@@ -1388,6 +1388,11 @@ function initialize_luatex_and_generate_pdf()
     if str then
         pdfcatalog[#pdfcatalog + 1] = str
     end
+    local langtbl = get_language(defaultlanguage)
+
+    if langtbl and langtbl.locale then
+        pdfcatalog[#pdfcatalog+1] = string.format(" /Lang (%s)",string.gsub(langtbl.locale,"^(%a+).*","%1"))
+    end
 
     local vp = {}
     if viewerpreferences.numcopies and viewerpreferences.numcopies > 1 and viewerpreferences.numcopies <= 5 then
@@ -1458,7 +1463,7 @@ function initialize_luatex_and_generate_pdf()
             pdfcatalog[#pdfcatalog + 1] = string.format("/OutputIntents %d 0 R",outputintentsarrayobjnum )
         end
         if options.format == "PDF/UA" then
-            pdfcatalog[#pdfcatalog + 1] = string.format("/Lang (de)  /MarkInfo <<  /Marked true >> ")
+            pdfcatalog[#pdfcatalog + 1] = string.format(" /MarkInfo <<  /Marked true >> ")
             metadataobjnum = pdf.obj({ type="stream", string = getuametadata(), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0,})
             vp[#vp + 1] = "/DisplayDocTitle true"
 
