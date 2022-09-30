@@ -23,8 +23,38 @@ All CSS4 colors are predefined, see the list at <<cmd-definecolor,`<DefineColor>
 .Not every color combination is beautiful
 image::kreismitfarbe.png[width=20%,scaledwidth=50%]
 
-If you want to output colors in a different color space (CMYK, gray, spot colors), they must be defined first:
+== Color definitions
 
+Colors can be assigned to a name with <<cmd-definecolor,`<DefineColor>`>> and then addressed under that name:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineColor name="logocolor" model="cmyk" c="0" m="18" y="90" k="2" />
+<PlaceObject>
+  <Box height="4" width="3" backgroundcolor="logocolor" />
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+The values are between 0 (no color application) and 100 or 255 (full color application). The permitted attributes can be found in the following table:
+
+[options="header"]
+|=======
+| Color space | Attributes | Values
+| `cmyk`   | `c`, `m`, `y`, `k` | 0–100 (0,0,0,0 = white, 0,0,0,100 = black)
+| `rgb`    | `r`, `g`, `b`      | 0–100 (0,0,0 = black, 100,100,100 = white)
+| `RGB`    | `r`, `g`, `b`      | 0–255 (0,0,0 = black, 255,255,255 = white)
+| `gray`   | `g`                | 0–100 (0 = black, 100 = white)
+|=======
+
+
+[.profeature]
+== Spot colors
+
+Spot colors are colors that are addressed separately in the printer.
+They are unknown to the PDF display program and must be approximated for the screen output.
+For many printing colors such as Pantone or HKS, these values are already stored in the Publisher, but they can or must be defined separately for unknown spot colors.
+
+In the following case, the spot color is already known and can be used without CMYK values:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -41,7 +71,7 @@ If you want to output colors in a different color space (CMYK, gray, spot colors
 .Various spot colors are predefined in the Publisher, such as the Pantone 116 color.
 image::box116c.png[]
 
-If a separate spot color is defined that is not yet included in the Publisher, CMYK values must be specified so that a replacement can be displayed in the PDF. Spot colors are unknown in the PDF and are only available as instructions for the printer. Therefore, the PDF must also contain instructions on how to output this color on screen or on printers that do not contain this spot color.
+In the next example, the spot color `speedatagreen` is used and the CMYK replacement value is defined for the PDF display program:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -52,7 +82,7 @@ If a separate spot color is defined that is not yet included in the Publisher, C
     c="56" m="7" y="98" k="21" />
 -------------------------------------------------------------------------------
 
-Here a color is defined which is addressed in the Publisher with the output commands under the name mycolor. In the PDF this color is called speedatagreen and in the output it appears in a dark green.
+Here a color is defined which is addressed in the Publisher with the output commands under the name `mycolor`. In the PDF this color is called `speedatagreen` and in the output it appears in a dark green.
 
 .The new color appears in the PDF as a separate color channel
 image::speedatagruen.png[width=90%,scaledwidth=100%]
@@ -73,7 +103,7 @@ The colors can not only be written as hex values (three or six digits), but also
 
 [source, xml]
 -------------------------------------------------------------------------------
-<DefineColor name="meinrot" value="rgb(255,0,0)" />
+<DefineColor name="myred" value="rgb(255,0,0)" />
 -------------------------------------------------------------------------------
 
 == Transparency

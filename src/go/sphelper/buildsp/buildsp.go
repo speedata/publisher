@@ -34,7 +34,14 @@ func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype, location str
 	}
 
 	// Now compile the go executable
-	arguments := []string{"build", "-ldflags", fmt.Sprintf("-X main.dest=%s -X main.version=%s -s -w", targettype, publisherversion), "-o", location, "speedatapublisher/sp/sp"}
+	var arguments []string
+	if cfg.IsPro {
+		fmt.Println("build pro")
+		arguments = []string{"build", "-ldflags", fmt.Sprintf("-X main.dest=%s -X main.version=%s -X main.pro=yes -s -w", targettype, publisherversion), "-tags", "pro", "-o", location, "speedatapublisher/sp/sp"}
+	} else {
+		fmt.Println("build std")
+		arguments = []string{"build", "-ldflags", fmt.Sprintf("-X main.dest=%s -X main.version=%s -s -w", targettype, publisherversion), "-o", location, "speedatapublisher/sp/sp"}
+	}
 	cmd := exec.Command("go", arguments...)
 	cmd.Env = os.Environ()
 

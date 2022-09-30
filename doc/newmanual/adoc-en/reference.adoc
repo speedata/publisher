@@ -503,9 +503,10 @@ The section <<ch-textformatting-enumerationlists>> as well as the commands <<cmd
 
 
 include::ref/options.adoc[]
+
 == See also
 
-<<ch-commandline>>, <<ch-configuration>>.
+<<ch-commandline>>, <<ch-configuration>>, <<ch-outputforprinter>>.
 
 include::ref/otherwise.adoc[]
 

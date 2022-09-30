@@ -322,10 +322,11 @@ There are the following basic transformation types (see figure The four basic tr
 image::eagle-transform.png[width=50%,scaledwidth=100%]
 //~
 
+[.profeature]
 [[ch-barcodes]]
 == Barcodes, QR Codes
 
-Barcodes or QR codes are integrated via the command <Barcode>:
+Barcodes or QR codes are integrated via the command `<Barcode>`:
 
 [source, xml]
 -------------------------------------------------------------------------------

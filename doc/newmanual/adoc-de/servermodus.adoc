@@ -1,3 +1,4 @@
+[.profeature]
 [[ch-servermodus]]
 = Servermodus
 

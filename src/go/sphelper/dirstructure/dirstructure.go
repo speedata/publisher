@@ -13,8 +13,15 @@ import (
 // MkBuilddir builds the directory structure. srcbindir contains all files necessary to run LuaTeX
 func MkBuilddir(cfg *config.Config, srcbindir string) error {
 	var err error
+	var filename string
 
-	destdir := filepath.Join(cfg.Builddir, "speedata-publisher")
+	if cfg.IsPro {
+		filename = "speedata-publisherpro"
+	} else {
+		filename = "speedata-publisher"
+
+	}
+	destdir := filepath.Join(cfg.Builddir, filename)
 	os.RemoveAll(destdir)
 	os.MkdirAll(destdir, 0755)
 

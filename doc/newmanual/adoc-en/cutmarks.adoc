@@ -29,7 +29,7 @@ Quality (pixel number) of the images::
 Fonts::
   The Publisher automatically embeds all used fonts in the PDF (subsetting - only the actually used letters and characters are embedded).
 
-
+[.profeature]
 == Crop marks
 
 If no special setting is made, the speedata Publisher creates a PDF which has exactly the size of the specified pages.

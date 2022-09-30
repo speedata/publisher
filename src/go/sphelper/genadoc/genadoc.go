@@ -165,7 +165,8 @@ func (a sortAllAttributeNamesT) Len() int           { return len(a) }
 func (a sortAllAttributeNamesT) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a sortAllAttributeNamesT) Less(i, j int) bool { return a[i] < a[j] }
 
-// GenerateAdocFiles reads the commands.xml file and creates the files in the ref directory. mode is the asciidoctor mode.
+// GenerateAdocFiles reads the commands.xml file and creates the files in the
+// ref directory. mode is the asciidoctor mode.
 func GenerateAdocFiles(cfg *config.Config, lang string, mode ...string) error {
 	var err error
 	srcpath := filepath.Join(cfg.Basedir(), "doc", "newmanual")

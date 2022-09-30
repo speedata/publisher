@@ -55,7 +55,12 @@ func BuildLib(cfg *config.Config, goos string, goarch string) error {
 		libraryextension = ".dll"
 	}
 	dylibbuild := filepath.Join(cfg.Builddir, "dylib")
-	cmd := exec.Command("go", "build", "-buildmode=c-shared", "-o", filepath.Join(dylibbuild, "libsplib"+libraryextension), "speedatapublisher/splib")
+	var cmd *exec.Cmd
+	if cfg.IsPro {
+		cmd = exec.Command("go", "build", "-tags", "pro", "-buildmode=c-shared", "-o", filepath.Join(dylibbuild, "libsplib"+libraryextension), "speedatapublisher/splib")
+	} else {
+		cmd = exec.Command("go", "build", "-buildmode=c-shared", "-o", filepath.Join(dylibbuild, "libsplib"+libraryextension), "speedatapublisher/splib")
+	}
 	cmd.Env = os.Environ()
 	if goos != runtime.GOOS {
 		ccenv := os.Getenv("CC_" + goos)

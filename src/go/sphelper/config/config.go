@@ -15,6 +15,7 @@ type Config struct {
 	basedir                  string
 	Srcdir, Builddir, Libdir string
 	Publisherversion         Version
+	IsPro                    bool
 }
 
 // Version holds the speedata version information

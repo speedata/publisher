@@ -66,6 +66,7 @@ func makedoc(cfg *config.Config, sitedoc bool) error {
 
 func main() {
 	cfg := config.NewConfig(basedir)
+	cfg.IsPro = os.Getenv("SDPRO") == "yes"
 
 	var commandlinebasedir string
 	op := optionparser.NewOptionParser()
@@ -74,7 +75,7 @@ func main() {
 	op.Command("buildlib", "Build sp library")
 	op.Command("builddeb", "Build sp binary for debian (/usr/)")
 	op.Command("doc", "Generate speedata Publisher documentation (standalone)")
-	op.Command("epub", "Generate EPUB documentation (German only)")
+	op.Command("epub", "Generate EPUB documentation")
 	op.Command("sitedoc", "Generate speedata Publisher documentation to be used with a web server")
 	op.Command("dist", "Generate zip files and windows installers")
 	op.Command("genschema", "Generate schema (layoutschema-en.xml)")
@@ -157,8 +158,15 @@ func main() {
 	case "dist":
 		fmt.Println("Generate ZIP files and windows installer")
 		os.RemoveAll(cfg.Builddir)
+		var filename string
+		if cfg.IsPro {
+			filename = "speedata-publisherpro"
+		} else {
+			filename = "speedata-publisher"
+		}
+
 		makedoc(cfg, false)
-		destdir := filepath.Join(cfg.Builddir, "speedata-publisher")
+		destdir := filepath.Join(cfg.Builddir, filename)
 		var srcbindir string
 		if srcbindir = os.Getenv("LUATEX_BIN"); srcbindir == "" || !fileutils.IsDir(srcbindir) {
 			fmt.Println("Error: environment variable LUATEX_BIN not set or does not point to a directory")
@@ -185,8 +193,8 @@ func main() {
 					log.Fatal(err)
 				}
 
-				buildbindir := filepath.Join(cfg.Builddir, "speedata-publisher", "bin")
-				buildsdluatexdir := filepath.Join(cfg.Builddir, "speedata-publisher", "sdluatex")
+				buildbindir := filepath.Join(cfg.Builddir, filename, "bin")
+				buildsdluatexdir := filepath.Join(cfg.Builddir, filename, "sdluatex")
 				err = buildsp.BuildGo(cfg, buildbindir, platform, arch, "directory", "")
 				if err != nil {
 					os.Exit(-1)
@@ -209,22 +217,23 @@ func main() {
 				switch platform {
 				case "windows":
 					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dll"), filepath.Join(buildsdluatexdir, "libsplib.dll"))
-					os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.dll"), filepath.Join(cfg.Builddir, "speedata-publisher", "share", "lib", "luaglue.dll"))
+					os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.dll"), filepath.Join(cfg.Builddir, filename, "share", "lib", "luaglue.dll"))
 				case "linux":
-					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(cfg.Builddir, "speedata-publisher", "share", "lib", "libsplib.so"))
-					os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(cfg.Builddir, "speedata-publisher", "share", "lib", "luaglue.so"))
+					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(cfg.Builddir, filename, "share", "lib", "libsplib.so"))
+					os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(cfg.Builddir, filename, "share", "lib", "luaglue.so"))
 				case "darwin":
-					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dylib"), filepath.Join(cfg.Builddir, "speedata-publisher", "share", "lib", "libsplib.dylib"))
-					os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(cfg.Builddir, "speedata-publisher", "share", "lib", "luaglue.so"))
+					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dylib"), filepath.Join(cfg.Builddir, filename, "share", "lib", "libsplib.dylib"))
+					os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(cfg.Builddir, filename, "share", "lib", "luaglue.so"))
 				}
 
 				os.Chdir(cfg.Builddir)
-				zipname := fmt.Sprintf("speedata-publisher-%s-%s-%s.zip", platform, arch, cfg.Publisherversion)
+				mkreadme(cfg, platform, filepath.Join(cfg.Builddir, filename))
+				zipname := fmt.Sprintf("%s-%s-%s-%s.zip", filename, platform, arch, cfg.Publisherversion)
 				os.Remove(zipname)
-				exec.Command("zip", "-rq", zipname, "speedata-publisher").Run()
+				exec.Command("zip", "-rq", zipname, filename).Run()
 
 				if platform == "windows" {
-					exename := fmt.Sprintf("speedata-publisher-%s-%s-%s-installer.exe", platform, arch, cfg.Publisherversion)
+					exename := fmt.Sprintf("%s-%s-%s-%s-installer.exe", filename, platform, arch, cfg.Publisherversion)
 					os.Remove(exename)
 					data := struct {
 						Exename   string
@@ -255,25 +264,10 @@ func main() {
 			fmt.Println("Where <os> is one of 'linux', 'darwin' or 'windows'.")
 			os.Exit(-1)
 		}
-		t := template.Must(template.ParseFiles("doc/installation.txt"))
-		data := struct {
-			Os string
-		}{
-			op.Extra[1],
-		}
-
-		w, err := os.OpenFile(filepath.Join(op.Extra[2], "installation.txt"), os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
-		if err != nil {
+		if err := mkreadme(cfg, op.Extra[1], op.Extra[2]); err != nil {
 			fmt.Println(err)
 			os.Exit(-1)
 		}
-
-		err = t.Execute(w, data)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(-1)
-		}
-
 	case "sourcedoc":
 		err := sourcedoc.GenSourcedoc(cfg)
 		if err != nil {
@@ -283,4 +277,28 @@ func main() {
 		op.Help()
 		os.Exit(-1)
 	}
+}
+
+func mkreadme(cfg *config.Config, osname string, destdir string) error {
+	w, err := os.Create(filepath.Join(destdir, "installation.txt"))
+	if err != nil {
+		return err
+	}
+	defer w.Close()
+	t := template.Must(template.ParseFiles(filepath.Join(cfg.Basedir(), "doc", "installation.txt")))
+	data := struct {
+		Os      string
+		Version string
+	}{
+		Os: osname,
+	}
+	if cfg.IsPro {
+		data.Version = fmt.Sprintf("%s (Pro)", cfg.Publisherversion)
+	} else {
+		data.Version = cfg.Publisherversion.String()
+	}
+	if err = t.Execute(w, data); err != nil {
+		return err
+	}
+	return nil
 }

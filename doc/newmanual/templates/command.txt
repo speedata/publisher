@@ -1,4 +1,4 @@
-[.commanddetail]
+{{if .Command.Pro}}[.profeature]{{end}}
 [[{{.Command.CmdLink}}]]
 = {{ .Command.Name }}
 
@@ -22,6 +22,8 @@
 == {{ translate $.Lang "Attributes" }}
 {{ with .Command.Attributes }}
 {{ range $.Command.Attributes }}
+{{if .Pro}}[.profeature]
+{{end }}
 [[{{.Attlink }}]]`{{.Name}}` ({{atttypeinfo . $.Lang}}{{ with .CSS }}, {{ translate $.Lang "CSS property"}}: {{.}}{{end}}{{with .Since}}, _{{translate $.Lang "since version"}} {{.}}_{{end}})::
   {{.DescriptionAdoc $.Lang }}
 {{ end }}{{else}}(keine){{ end }}

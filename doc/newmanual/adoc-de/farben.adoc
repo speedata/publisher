@@ -22,8 +22,38 @@ Alle CSS4 Farben sind im Publisher definiert, siehe dazu die Liste bei <<cmd-def
 .Nicht jede Farbkombination ist schön
 image::kreismitfarbe.png[width=20%,scaledwidth=50%]
 
-Möchte man Farben in einem anderen Farbraum (CMYK, Grau, Sonderfarben) ausgeben, müssen diese vorher definiert werden:
+== Farbdefinitionen
 
+Farben können mit <<cmd-definecolor,`<DefineColor>`>> einem Namen zugewiesen und anschließend unter diesem angesprochen werden:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<DefineColor name="logocolor" model="cmyk" c="0" m="18" y="90" k="2" />
+<PlaceObject>
+  <Box height="4" width="3" backgroundcolor="logocolor" />
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+Die Werte liegen zwischen 0 (kein Farbauftrag) und 100 bzw. 255 (voller Farbauftrag). Die erlaubten Attribute sind folgender Tabelle zu entnehmen:
+
+[options="header"]
+|=======
+| Farbraum | Attribute | Werte
+| `cmyk`   | `c`, `m`, `y`, `k` | 0–100 (0,0,0,0 = weiß, 0,0,0,100 = schwarz)
+| `rgb`    | `r`, `g`, `b`      | 0–100 (0,0,0 = schwarz, 100,100,100 = weiß)
+| `RGB`    | `r`, `g`, `b`      | 0–255 (0,0,0 = schwarz, 255,255,255 = weiß)
+| `gray`   | `g`                | 0–100 (0 = schwarz, 100 = weiß)
+|=======
+
+
+[.profeature]
+== Sonderfarben
+
+Sonderfarben (Schmuckfarben) sind Farben, die im Drucker gesondert angesprochen werden.
+Sie sind für das PDF-Anzeigeprogramm an sich unbekannt und müssen für die Bildschirmausgabe angenähert werden.
+Für viele Druckfarben wie Pantone oder HKS sind diese Werte schon im Publisher hinterlegt, sie können aber bzw. für unbekannte Sonderfarben müssen sie separat definiert werden.
+
+Im folgenden Fall ist die Sonderfarbe schon bekannt und kann ohne CMYK-Werte benutzt werden:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -37,15 +67,10 @@ Möchte man Farben in einem anderen Farbraum (CMYK, Grau, Sonderfarben) ausgeben
 </Record>
 -------------------------------------------------------------------------------
 
-
 .Diverse Sonderfarben sind im Publisher vorgegeben, so die Farbe Pantone 116.
 image::box116c.png[]
 
-
-Wird eine eigene Sonderfarbe definiert, die noch nicht im Publisher enthalten ist, müssen CMYK-Werte angegeben weren, damit im PDF ein Ersatz dargestellt werden kann.
-Sonderfarben sind im PDF an sich unbekannt und nur als Anweisung für den Drucker vorhanden.
-Daher müssen im PDF ebenfalls Anweisungen enthalten sein, wie diese Farbe am Bildschirm oder auf Druckern, die diese Sonderfarbe nicht enthalten, ausgegeben werden.
-
+Im nächsten Beispiel wird die Schmuckfarbe `speedatagreen` benutzt und für das PDF-Anzeigeprogramm der CMYK-Ersatzwert definiert:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -64,7 +89,7 @@ image::speedatagruen.png[width=90%,scaledwidth=100%]
 
 == Angaben als HTML-Wert
 
-Farben können beim Benutzen direkt definert werden:
+Farben können beim Benutzen direkt definiert werden:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -73,7 +98,7 @@ Farben können beim Benutzen direkt definert werden:
 </PlaceObject>
 -------------------------------------------------------------------------------
 
-Die Farben können nicht nur als Hexadezimalwert (drei oder sechssstellig), sondern auch in der Form `rgb(...)`, z.B. `rgb(255, 19, 147)` angegeben werden, wie bei HTML. Diese Angaben können auch bei `<DefineColor>` benutzt werden:
+Die Farben können nicht nur als Hexadezimalwert (drei oder sechsstellig), sondern auch in der Form `rgb(...)`, z.B. `rgb(255, 19, 147)` angegeben werden, wie bei HTML. Diese Angaben können auch bei `<DefineColor>` benutzt werden:
 
 [source, xml]
 -------------------------------------------------------------------------------

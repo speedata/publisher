@@ -417,7 +417,7 @@ image::eagle-transform.png[width=50%,scaledwidth=100%]
 
 
 
-
+[.profeature]
 [[ch-objekteausgeben-barcode]]
 == Barcodes, QR-Codes
 

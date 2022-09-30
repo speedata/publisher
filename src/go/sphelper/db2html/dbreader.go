@@ -418,7 +418,7 @@ func (d *DocBook) collectContents() error {
 		filenamePagemap[page.Pagename] = page
 		page.Index = i
 	}
-
+	var sectionRole string
 	var figureid string
 	var figuretitle string
 	var imagedata string
@@ -438,6 +438,7 @@ func (d *DocBook) collectContents() error {
 	var headinglevel int
 	var titlecounter int
 	var omitP bool
+	var variablelistPro bool
 	var programlistingLanguage string
 	var chardata strings.Builder
 	var curOutput io.StringWriter
@@ -531,10 +532,13 @@ getContents:
 					titlecounter = 0
 					switchOutputGetString()
 				}
-				if attr(elt, "role") == "split" {
+				if role := attr(elt, "role"); role == "split" {
 					headinglevel = 0
 				} else {
 					headinglevel = 1
+					if role != "" {
+						sectionRole = role
+					}
 				}
 			case "informalfigure":
 				imagedata = ""
@@ -613,6 +617,10 @@ getContents:
 					curpage = cp
 					titlecounter = 0
 				}
+				if role := attr(elt, "role"); role != "" {
+					sectionRole = role
+				}
+
 				headinglevel++
 			case "subscript":
 				curOutput.WriteString(`<sub>`)
@@ -642,6 +650,9 @@ getContents:
 			case "title":
 				oStartRecording()
 			case "variablelist":
+				if attr(elt, "role") == "profeature" {
+					variablelistPro = true
+				}
 				curOutput.WriteString("\n")
 				curOutput.WriteString(`<dl>`)
 				listlevel = append(listlevel, lVarlist)
@@ -822,7 +833,12 @@ getContents:
 				curOutput.WriteString(`<thead>`)
 				inThead = false
 			case "term":
-				curOutput.WriteString("\n")
+				proLink := ""
+				if variablelistPro {
+					proLink = fmt.Sprintf(`<a href="https://www.speedata.de/%s" class="prolink" data-tooltip="%s" data-flow="top">PRO</a>`, d.translate(d.Lang, "en/product/prices/"), d.translate(d.Lang, "Available in the PRO plan"))
+					variablelistPro = false
+				}
+				curOutput.WriteString(fmt.Sprintf("%s\n", proLink))
 				curOutput.WriteString(`</dt>`)
 			case "title":
 				title := switchOutputGetString()
@@ -839,14 +855,20 @@ getContents:
 					if headinglevel == 0 {
 						lvl = 1
 					}
-					curOutput.WriteString(fmt.Sprintf(`<h%d%s>%s</h%d>`, lvl, thisid, title, lvl))
+					proLink := ""
+					if sectionRole == "profeature" {
+						proLink = fmt.Sprintf(`<a href="https://www.speedata.de/%s" class="prolink" data-tooltip="%s" data-flow="top">PRO</a>`, d.translate(d.Lang, "en/product/prices/"), d.translate(d.Lang, "Available in the PRO plan"))
+						sectionRole = ""
+					}
+
+					curOutput.WriteString(fmt.Sprintf(`<h%d%s>%s%s</h%d>`, lvl, thisid, title, proLink, lvl))
 					curOutput.WriteString("\n")
 					if curpage.Index == 0 && titlecounter == 0 {
 						switch d.Lang {
 						case "en":
-							curOutput.WriteString(`<div class="epub"><p>New! Now also as ebook</p><a href="https://doc.speedata.de/publisher/en/publishermanual.epub">Download</a></div>`)
+							curOutput.WriteString(`<div class="epub"><p>Also as ebook</p><a href="https://doc.speedata.de/publisher/en/publishermanual.epub">Download</a></div>`)
 						case "de":
-							curOutput.WriteString(`<div class="epub"><p>Neu! Jetzt auch als ebook</p><a href="https://doc.speedata.de/publisher/de/publisherhandbuch.epub">Download</a></div>`)
+							curOutput.WriteString(`<div class="epub"><p>Auch als ebook</p><a href="https://doc.speedata.de/publisher/de/publisherhandbuch.epub">Download</a></div>`)
 						}
 						curOutput.WriteString("\n")
 					}
@@ -888,6 +910,10 @@ func (d *DocBook) translate(lang, text string) string {
 		return "Weiterführende Links"
 	case "Website":
 		return "Webseite"
+	case "Available in the PRO plan":
+		return "Verfügbar im PRO-Paket"
+	case "en/product/prices/":
+		return "de/produkt/preise/"
 	default:
 		panic(fmt.Sprintf("not translated: %q", text))
 	}

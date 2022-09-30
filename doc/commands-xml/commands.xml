@@ -846,7 +846,7 @@
     </example>
     <seealso><cmd name="AtPageCreation"/>, <cmd name="Pagetype"/></seealso>
   </command>
-  <command en="AttachFile" since="3.1.1">
+  <command en="AttachFile" since="3.1.1" pro="yes">
     <description xml:lang="en">
       <para>Attach a ZUGFeRD file.</para>
     </description>
@@ -987,7 +987,7 @@
     </example>
     <seealso><cmd name="I"/>, <ref name="fonts"/></seealso>
   </command>
-  <command en="Barcode">
+  <command en="Barcode" pro="yes">
     <description xml:lang="en">
       <para>Print a 1d or 2d barcode. To be used in <cmd name="PlaceObject"/>.</para>
     </description>
@@ -1163,7 +1163,7 @@
   <Barcode select="'http://www.speedata.de'" type="QRCode" height="5"/>
 </PlaceObject>
 ]]></listing>
-      <para>looks like (surprise!)</para>
+      <para>looks like</para>
       <image file="ref-speedata-publisher-qrcode.png" width="300"/>
     </example>
     <example xml:lang="de">
@@ -2408,7 +2408,7 @@
           <para>Graustufen (0=Schwarz,100=Weiß)</para>
         </description>
       </choice>
-      <choice en="spotcolor">
+      <choice en="spotcolor" pro="yes">
         <description xml:lang="en">
           <para>Use a PANTONE or HKS color.</para>
         </description>
@@ -5578,7 +5578,7 @@
       <para>Setzt Publisher-spezifische Optionen.</para>
     </description>
     <childelements/>
-    <attribute en="bleed" type="length" optional="yes">
+    <attribute en="bleed" type="length" optional="yes" pro="yes">
       <description xml:lang="en">
         <para>The amount of bleed. Defaults to 0mm.</para>
       </description>
@@ -5586,7 +5586,7 @@
         <para>Die Größe des Anschnitts (bleed). Voreinstellung ist 0mm.</para>
       </description>
     </attribute>
-    <attribute en="bleedmarks" optional="yes" since="2.3.24">
+    <attribute en="bleedmarks" optional="yes" since="2.3.24" pro="yes">
       <description xml:lang="en">
         <para>Trim marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute <tt>trim</tt>, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is <tt>no</tt>, that means no trim marks will be displayed. The trim marks show the additional trim distance.</para>
       </description>
@@ -5618,7 +5618,7 @@
         <para>Beschneidet eine Seite, so dass die Objekte auf einer Seite die Größe bestimmen. Erlaubte Werte sind 'yes', 'no' und eine Längenangabe.</para>
       </description>
     </attribute>
-    <attribute en="cutmarks" optional="yes">
+    <attribute en="cutmarks" optional="yes" pro="yes">
       <description xml:lang="en">
         <para>Cut marks / crop marks will be placed in the PDF. The distance of the marks from the imaginary center is determined by the attribute <tt>trim</tt>, but is at least 5mm. The length of the cut marks is 1cm. The default of this attribute is <tt>no</tt>, that means no cut marks will be displayed.</para>
       </description>

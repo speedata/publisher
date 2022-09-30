@@ -194,6 +194,12 @@
               <value>no</value>
             </choice>
           </attribute></optional>
+          <optional><attribute name="pro">
+            <choice>
+              <value>yes</value>
+              <value>no</value>
+            </choice>
+          </attribute></optional>
           <ref name="descriptions" />
           <element name="childelements">
             <zeroOrMore>
@@ -262,6 +268,12 @@
                     <optional><attribute name="css"/></optional>
                     <optional><attribute name="context"/></optional>
                     <optional><attribute name="since"/></optional>
+                    <optional><attribute name="pro">
+                      <choice>
+                        <value>yes</value>
+                        <value>no</value>
+                      </choice>
+                    </attribute></optional>
                     <ref name="descriptions"/>
                   </element>
                 </zeroOrMore>

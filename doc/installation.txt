@@ -1,3 +1,5 @@
+Welcome to speedata Publisher {{.Version}}
+
 How to install the speedata Publisher (ZIP file)
 ================================================
 
@@ -7,6 +9,7 @@ The ZIP file is organized as follows:
 
 speedata-publisher/
 ├── bin
+├── sdluatex
 ├── share
 └── sw
 

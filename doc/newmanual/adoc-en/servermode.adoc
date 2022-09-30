@@ -1,3 +1,4 @@
+[.profeature]
 [[ch-servermode]]
 = Server mode (REST API)
 

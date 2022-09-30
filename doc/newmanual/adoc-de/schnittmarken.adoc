@@ -29,7 +29,7 @@ Schriftarten::
   Der Publisher bindet automatisch alle benutzten Schriftarten in das PDF ein (subsetting - nur die tatsächlich benutzten Buchstaben und Zeichen werden eingebettet).
 
 
-
+[.profeature]
 == Schnittmarken
 
 Wird keine gesonderte Einstellung vorgenommen, so erzeugt der speedata Publisher ein PDF, das genau der Größe der angegebenen Seiten hat.

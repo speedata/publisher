@@ -1,0 +1,60 @@
+[[ch-speedatapro]]
+= speedata Publisher Pro plan
+
+The speedata Publisher is available in two plans: Standard and Pro. The Pro plan includes features that are helpful for professional applications:
+
+* Support via e-mail
+* <<ch-servermode,servermode>> (REST API for local networks)
+* <<ch-hotfolder>> (for fully automatic publisher startup)
+* <<cmd-barcode,QR codes and barcodes>>
+* Embedding of ZUGFeRD invoices
+* Embedding of resources via HTTP(s), e.g. for media databases
+* <<ch-printout,bleed>>
+
+
+Also included in the Pro plan is access to the speedata web service, which allows you to use the publisher without local installation (the publishing API will be available soon).
+
+A comparison of speedata Publisher Standard and Pro can be found https://www.speedata.de/en/product/prices/[on the product page].
+
+== How do I get the Pro plan?
+
+Access to the Pro plan works via the https://download.speedata.de/[download area] at https://download.speedata.de. Under "login" you have to register for an account which provides access to the Pro plan. Billing is handled by the company Stripe.
+
+There are two ways to download the Pro plan (assuming a valid Pro plan):
+
+. If you are logged in to you account in the download area, then you can use the download links to download the ZIP files or the installation packages.
+
+. Via command line (e.g. wget or curl) you can download the package. For this you have to create a token in the login area and pass it as authentication:
++
+[source, shell]
+-------------------------------------------------------------------------------
+curl -u sdapi_....:  \
+  -O https://download.speedata.de/dl/speedata-publisherpro-linux-amd64-latest.zip
+-------------------------------------------------------------------------------
++
+oder with wget:
++
+[source, shell]
+-------------------------------------------------------------------------------
+wget --auth-no-challenge  --user sdapi_...  \
+   --password ""  https://download.speedata.de/dl/speedata-publisherpro-linux-amd64-latest.zip
+-------------------------------------------------------------------------------
+
+The standard packages can be downloaded as usual without login or token.
+
+== Checking the version
+
+On the command line you can check if you have the downloaded speedata Publisher Pro with
+
+[source, shell]
+-------------------------------------------------------------------------------
+sp --version
+-------------------------------------------------------------------------------
+
+The output will be something like this:
+
+---------
+Version: 4.11.8 (Pro)
+---------
+
+// EOF

@@ -38,6 +38,7 @@ endif::[]
 -  <<ch-programmierung,Programmierung>>
 -  <<ch-bildereinbinden,Bilder einbinden>>
 -  <<ch-tabellen2,Tabellen>>
+-  <<ch-saasapi,Publishing API>>
 // - <<ch-html,HTML im speedata Publisher>>
 -  <<ch-fortgeschrittenethemen,Fortgeschrittene Themen>>
 -  <<ch-kochbuch,Kochbuch>>
@@ -55,6 +56,7 @@ endif::[]
 // - <<ch-htmlreferenz,HTML Referenz>>
 - <<ch-changelog,Liste der Änderungen>>
 - <<ch-anhang-schemazuweisen>>
+- <<ch-speedatapro>>
 - <<app-glossar,Glossar>>
 - <<app-kompatibilitaet,Kompatibilitätsliste>>
 - <<ch-befehlsreferenz,Befehlsreferenz>>
@@ -68,6 +70,7 @@ include::grundlagen.adoc[]
 include::programmierung.adoc[]
 include::bilder.adoc[]
 include::tabellen.adoc[]
+include::saasapide.adoc[]
 // include::kaphtml.adoc[]
 include::fortgeschrittenethemen.adoc[]
 include::kochbuch.adoc[]
@@ -85,6 +88,7 @@ include::massangaben.adoc[]
 include::xpathfunktionen.adoc[]
 include::variablen.adoc[]
 include::schemazuweisen.adoc[]
+include::speedataprode.adoc[]
 
 // [[ch-htmlreferenz]]
 // = HTML Referenz

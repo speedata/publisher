@@ -191,6 +191,7 @@ type Choice struct {
 	commands      *Commands
 	Text          []byte `xml:",innerxml"`
 	Name          string `xml:"en,attr"`
+	Pro           bool
 	descriptionEn *description
 	descriptionDe *description
 }
@@ -204,6 +205,7 @@ type Attribute struct {
 	Type          string
 	Optional      bool
 	AllowXPath    bool
+	Pro           bool
 	commands      *Commands
 	command       *Command
 	descriptionEn *description
@@ -280,6 +282,8 @@ func (a *Attribute) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error
 					switch attribute.Name.Local {
 					case "en":
 						c.Name = attribute.Value
+					case "pro":
+						c.Pro = attribute.Value == "yes"
 					}
 				}
 				a.Choice = append(a.Choice, c)
@@ -359,6 +363,9 @@ func (a *Attribute) DescriptionAdoc(lang string) string {
 		case "de":
 			name = c.Name
 			desc = c.descriptionDe.Adoc()
+		}
+		if c.Pro {
+			ret = append(ret, "[.profeature]")
 		}
 		ret = append(ret, "\n`"+name+"`:::\n"+desc)
 	}
@@ -500,6 +507,7 @@ type Command struct {
 	Name           string
 	CSS            string
 	Since          string
+	Pro            bool
 	Deprecated     bool
 	Rules          []SchematronRules `xml:"rules"`
 	childelement   *Childelement
@@ -598,6 +606,8 @@ func (c *Command) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
 						a.Type = attribute.Value
 					case "allowxpath":
 						a.AllowXPath = attribute.Value == "yes"
+					case "pro":
+						a.Pro = attribute.Value == "yes"
 					}
 				}
 
@@ -1383,6 +1393,9 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 					}
 					if attribute.Name.Local == "since" {
 						c.Since = attribute.Value
+					}
+					if attribute.Name.Local == "pro" {
+						c.Pro = attribute.Value == "yes"
 					}
 					if attribute.Name.Local == "deprecated" {
 						c.Deprecated = attribute.Value == "yes"

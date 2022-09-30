@@ -65,6 +65,10 @@ onedd_sp       = tex.sp("1dd")
 onecc_sp       = tex.sp("1cc")
 onecm_sp       = tenmm_sp
 
+-- User has a pro plan
+pro = false
+
+has_pro_error = false
 
 --- Attributes
 --- ----------
@@ -1117,6 +1121,8 @@ function initialize_luatex_and_generate_pdf()
                     htmlblocks[#htmlblocks + 1] = thisblock
                 end
             end
+        elseif k == "pro" then
+            pro = true
         end
     end
 
@@ -1526,11 +1532,23 @@ function initialize_luatex_and_generate_pdf()
         tab[#tab + 1] = string.format("  <pagelabel pagenumber=%q visible=%q />",tostring(i),xml_escape(tostring(visible_pagenumbers[i])))
     end
     local file = io.open(auxfilename,"wb")
+    if file == nil then return end
     file:write("<marker>\n")
     file:write(table.concat(tab,"\n"))
     file:write(string.format("\n <lastpage page='%d' />",lastpage))
     file:write("\n</marker>")
     file:close()
+    if has_pro_error then
+        log("*****************************************************")
+        log("*                                                   *")
+        log("* This layout uses features that require a Pro plan *")
+        log("*                                                   *")
+        log("* See                                               *")
+        log("*  https://www.speedata.de/en/product/prices/       *")
+        log("* for more information                              *")
+        log("*                                                   *")
+        log("*****************************************************")
+    end
 end
 
 -- Create a PageLabels dictionary entry and update the visible_pagenumber
@@ -2144,9 +2162,19 @@ function initialize_page(pagenumber)
     local trim_amount = tex.sp(options.trim or 0)
     local extra_margin
     if options.cutmarks or options.trimmarks then
-        extra_margin = tenmm_sp + trim_amount
+        if not pro then
+            err("cutmarks need a pro plan")
+            publisher.has_pro_error = true
+        else
+            extra_margin = tenmm_sp + trim_amount
+        end
     elseif trim_amount > 0 then
-        extra_margin = trim_amount
+        if not pro then
+            err("page bleed needs a pro plan")
+            publisher.has_pro_error = true
+        else
+            extra_margin = trim_amount
+        end
     end
     local errorstring
 
@@ -3434,15 +3462,20 @@ function dothingsbeforeoutput( thispage )
     end
 
     if options.cutmarks then
-        local lit = node.new("whatsit","pdf_literal")
-        lit.mode = 1
-        lit.data = cg:cutmarks()
-        if firstbox then
-            local tail = node.tail(firstbox)
-            tail.next = lit
-            lit.prev = tail
+        if not pro then
+            err("cutmarks need a pro plan")
+            publisher.has_pro_error = true
         else
-            firstbox = lit
+            local lit = node.new("whatsit","pdf_literal")
+            lit.mode = 1
+            lit.data = cg:cutmarks()
+            if firstbox then
+                local tail = node.tail(firstbox)
+                tail.next = lit
+                lit.prev = tail
+            else
+                firstbox = lit
+            end
         end
     end
 
@@ -6879,7 +6912,6 @@ end
 -- see http://lua.2524044.n2.nabble.com/A-stable-sort-td7648892.html
 -- public domain or cc0
 
--- If you're using LuaJIT, change to 72.
 local max_chunk_size = 12
 
 function insertion_sort( array, first, last, goes_before )

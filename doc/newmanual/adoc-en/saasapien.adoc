@@ -1,0 +1,164 @@
+[[ch-saasapi]]
+[.profeature]
+= Publisher Webservice API
+
+TIP: The speedata Webservice REST API will be available soon.
+
+The speedata Publisher can be used without local installation.
+For this purpose, a so-called Software-as-a-Service solution is available at https://api.speedata.de, which can be used via a REST interface.
+
+In order to access the speedata Publisher API, a valid Pro plan must be available and an API key (token) must be generated in the download area. This key can then be used to access all functions.
+
+== Authentication
+
+All methods whose path starts with `/v0` must be authenticated with a user name:
+
+[source, shell]
+-------------------------------------------------------------------------------
+curl -u "sdapi_...:" "https://api.speedata.de/v0/.."
+-------------------------------------------------------------------------------
+
+The colon at `-u` separates the username from the password and is not part of the username.
+
+TIP: The username must of course be replaced by your own token, which must be generated at https://download.speedata.de/#account.
+
+== Overview of the REST methods
+
+[options="header"]
+|=======
+| Method | URL | Short description
+| GET | <<saasapi-method-available,`/available`>> | Gib 200 zurück, um zu prüfen, ob der Server läuft.
+| GET | <<saasapi-method-versions,`/v0/versions`>> | List available versions.
+| POST | <<saasapi-method-publish,`/v0/publish`>> | Starte einen Publishing-Vorgang.
+| GET | <<saasapi-method-statusid,`/v0/status/<id>`>> | Erhalte den Status eines Publishing runs.
+| GET | <<saasapi-method-waitid,`/v0/wait/<id>`>> | Warte auf die Fertigstellung eines PDFs.
+| GET | <<saasapi-method-pdfid,`/v0/pdf/<id>`>> | Lade ein PDF.
+|=======
+
+[[saasapi-method-available]]
+=== `/available`
+
+Without version number.
+Returns HTTP status 200.
+
+[[saasapi-method-versions]]
+=== `/v0/versions`
+
+List all available versions. Return is a JSON array in the form `["1.3.12", "1.4.1"]` The version can be used as query parameter in `/v0/publish`.
+
+
+[[saasapi-method-publish]]
+=== `/v0/publish`
+
+POST a JSON file to `https://api.speedata.de/v0/publish` to start the publishing process
+
+[source, json]
+-------------------------------------------------------------------------------
+{
+    "files": [
+        {
+            "filename": "layout.xml",
+            "contents": "PExheW91dAog..."
+        },
+        {
+            "filename": "data.xml",
+            "contents": "PGRhdGE+CiAg..."
+        }
+    ]
+}
+-------------------------------------------------------------------------------
+
+The file contents is encoded base64.
+
+The answer is in case of success a session id, such as 340416874 encoded as json: `{"id":"340416874"}` with a status code 201.
+
+A version number (or the string `latest`) can be passed as query parameter `version`, which specifies the desired speedata Publisher version. The default is always the latest developer version. Example: `/v0/publish?version=1.2.43`
+
+[[saasapi-method-statusid]]
+=== `/v0/status/<id>`
+
+[options="header"]
+|=======
+|Field | Meaning
+|finished | A time stamp in the format “2019-12-05T13:27:29.450219694+01:00” if the run has stopped, otherwise the string ‘null’.
+|errors | The number of errors occured during the publishing run.
+|errormessages | An array of error messages, if any. An error message is a dictionary with the keys “code” and “error”. Se the example.
+|=======
+
+
+[source, json]
+-------------------------------------------------------------------------------
+{
+    "finished": "2019-12-05T13:38:42.855821194+01:00",
+    "errors": 1,
+    "errormessages": [
+        {
+            "code": 1,
+            "error": "[page 1] Image \"doesnotexist.pdf\" not found!"
+        }
+    ]
+}
+-------------------------------------------------------------------------------
+
+
+[[saasapi-method-waitid]]
+=== `/v0/wait/<id>`
+
+The result is the same as in /v0/status. You don’t need to call wait to make sure the PDF file is finished, you can do a call to /v0/pdf/ which waits for the PDF to complete.
+
+[[saasapi-method-pdfid]]
+=== `/v0/pdf/<id>`
+
+To download the PDF, call `+https://api.speedata.de/v0/pdf/<id>+` and replace the `<id>` with the the id from `/v0/publish`.
+
+
+== Status codes
+The speedata API uses the following status codes:
+
+[options="header"]
+|=======
+| Status Code |	Meaning
+| 200 |	Everything went well
+| 201 |	The requested publishing run has been created
+| 401 |	Unauthorized – Your API key is wrong
+| 404 |	API URL does not exist
+| 422 |	Something went wrong
+|=======
+
+In most error cases, a JSON file confirming to RFC 7807 is sent to the client with the following fields:
+
+[options="header"]
+|=======
+| Field | Meaning
+| type | A unique URI of an error
+| title | A short description
+| detail | A more detailed description of the problem
+| instance | The request path
+| requestid |A unique id for debugging purposes
+|=======
+
+
+Example:
+
+
+[source, json]
+-------------------------------------------------------------------------------
+{
+    "detail":"You have provided an incorrect authentication token",
+    "instance":"/v0/publish",
+    "title":"Not authorized",
+    "type":"urn:de:speedata:api:v0:unauthorized",
+    "requestid": "1234",
+}
+-------------------------------------------------------------------------------
+
+
+== Library for the programming language Go
+
+The API is deliberately kept small, so that applications can be quickly created
+that use the API. For the programming language Go there is a
+library that makes it easier to use the API.
+
+The documentation can be found at https://pkg.go.dev/github.com/speedata/publisher-api[Go dev], the repository is on GitHub at https://github.com/speedata/publisher-api.
+
+// EOF+

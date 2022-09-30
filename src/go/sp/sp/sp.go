@@ -51,6 +51,13 @@ const (
 	stringTrue  = "true"
 )
 
+// settings from the build script
+var (
+	dest    string // The platform which this script runs on.
+	version string
+	pro     string // contains 'yes' if the build is with the pro tag
+)
+
 var (
 	options             map[string]string
 	defaults            map[string]string
@@ -62,8 +69,6 @@ var (
 	srcdir              string
 	pathToDocumentation string // Where the documentation (index.html) is
 	inifile             string
-	dest                string // The platform which this script runs on.
-	version             string
 	homecfg             string
 	systemcfg           string
 	pwd                 string
@@ -79,6 +84,7 @@ var (
 	starttime           time.Time
 	cfg                 *configurator.ConfigData
 	runningProcess      []*os.Process
+	versionWithPro      string
 
 	verbose bool
 )
@@ -106,6 +112,11 @@ func init() {
 	pwd, err = os.Getwd()
 	if err != nil {
 		log.Fatal(err)
+	}
+	if pro == "yes" {
+		versionWithPro = version + " (Pro)"
+	} else {
+		versionWithPro = version
 	}
 	variables = make(map[string]string)
 	layoutoptions = make(map[string]string)
@@ -509,7 +520,7 @@ func getExecutablePath() string {
 	}
 
 	// 3 assume simple installation and take luatex(.exe)
-	executableName = "luajittex" + exeSuffix
+	executableName = "luahbtex" + exeSuffix
 
 	// 3.5 check the installdir/bin for sdluatex(.exe)
 	p = filepath.Join(installdir, "sdluatex", executableName)
@@ -537,7 +548,7 @@ func getExecutablePath() string {
 
 // Print version information
 func versioninfo() {
-	log.Println("Version: ", version)
+	log.Printf("Version: %s", versionWithPro)
 	os.Exit(0)
 }
 
@@ -582,7 +593,7 @@ func writeFinishedfile(path string) {
 }
 
 func runPublisher(cachemethod string, runmode string, filename string) (exitstatus int) {
-	log.Print("Run speedata publisher")
+	log.Printf("Run speedata publisher %s", versionWithPro)
 	defer removeLogfile()
 
 	cmdline := []string{}
@@ -600,7 +611,7 @@ func runPublisher(cachemethod string, runmode string, filename string) (exitstat
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Fprintf(f, "Protocol file for speedata Publisher (%s)\n", version)
+	fmt.Fprintf(f, "Protocol file for speedata Publisher (%s)\n", versionWithPro)
 	fmt.Fprintln(f, "Time:", starttime.Format(time.ANSIC))
 	f.Close()
 
@@ -632,6 +643,9 @@ func runPublisher(cachemethod string, runmode string, filename string) (exitstat
 	}
 	if mode := getOption("mode"); mode != "" {
 		layoutoptionsSlice = append(layoutoptionsSlice, `mode=`+mode)
+	}
+	if pro == "yes" {
+		layoutoptionsSlice = append(layoutoptionsSlice, `pro=yes`)
 	}
 	if imagehandler := getOption("imagehandler"); imagehandler != "" {
 		layoutoptionsSlice = append(layoutoptionsSlice, `imagehandler=`+imagehandler)
@@ -793,7 +807,7 @@ func scaffold(extra ...string) error {
 }
 
 func showCredits() {
-	fmt.Println("This is the speedata Publisher, version", version)
+	fmt.Println("This is the speedata Publisher, version", versionWithPro)
 	fmt.Println(`
 Copyright 2009-2021 speedata GmbH, Berlin. Licensed under
 the GNU Affero GPL License, see
@@ -1180,6 +1194,10 @@ func main() {
 		}
 		os.Exit(0)
 	case cmdWatch:
+		if pro != "yes" {
+			fmt.Println("The hotfolder is part of the Pro package. See https://doc.speedata.de/publisher/en/speedatapro/")
+			break
+		}
 		watchDir := getOptionSection("hotfolder", "hotfolder")
 		events := getOptionSection("events", "hotfolder")
 		var hotfolderEvents []hotfolder.Event

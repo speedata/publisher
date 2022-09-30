@@ -181,6 +181,11 @@ end
 
 
 function commands.attachfile( layoutxml,dataxml )
+    if not publisher.pro then
+        err("attaching ZUGReRD files need a pro plan")
+        publisher.has_pro_error = true
+        return nil
+    end
     local filename = publisher.read_attribute(layoutxml,dataxml,"filename","string")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     local destfilename = publisher.read_attribute(layoutxml,dataxml,"name","string", "ZUGFeRD-invoice.xml")
@@ -240,6 +245,11 @@ end
 --- Create a EAN 13 barcode. The width of the barcode depends on the font
 --- given in `fontface` (or the default `text`).
 function commands.barcode( layoutxml,dataxml )
+    if not publisher.pro then
+        err("barcodes and qr codes need a pro plan")
+        publisher.has_pro_error = true
+        return nil
+    end
     local colorname      = publisher.read_attribute(layoutxml,dataxml,"color"  ,     "string","black")
     local eclevel        = publisher.read_attribute(layoutxml,dataxml,"eclevel"  ,   "string")
     local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface" ,   "string")
@@ -650,6 +660,11 @@ function commands.define_color( layoutxml,dataxml )
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number")
         color.pdfstring = string.format("%s %g g %g G",op,color.g/100,color.g/100)
     elseif model=="spotcolor" then
+        if not publisher.pro then
+            err("spot colors need a Pro plan")
+            publisher.has_pro_error = true
+            return
+        end
         local c = publisher.read_attribute(layoutxml,dataxml,"c","number")
         local m = publisher.read_attribute(layoutxml,dataxml,"m","number")
         local y = publisher.read_attribute(layoutxml,dataxml,"y","number")

@@ -504,7 +504,7 @@ Das Kapitel <<ch-aufzaehlungslisten,Aufzählungslisten>> sowie die Befehle <<cmd
 include::ref/options.adoc[]
 == Siehe auch
 
-<<ch-kommandozeile,Starten des Publishers über Kommandozeile>>, <<ch-konfiguration,Konfigurieren des Publishers>>
+<<ch-kommandozeile,Starten des Publishers über Kommandozeile>>, <<ch-konfiguration,Konfigurieren des Publishers>>, <<ch-druckausgabe>>.
 
 include::ref/otherwise.adoc[]
 

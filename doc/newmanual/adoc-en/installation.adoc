@@ -3,12 +3,12 @@
 = Installation instructions
 (((Installation)))
 
-TIP: The speedata Publisher can be downloaded in two versions: `stable` and `development`. Both versions are easy to use. Extensive quality assurance prevents errors from creeping in undetected. In the development version, the documentation may be behind the current status. To try it out, you can usually download the development version.
+TIP: The speedata Publisher can be downloaded in two versions: `stable` and `development`. Both versions are easy to use. Extensive quality assurance prevents errors from creeping in undetected. In the development version, the documentation may be behind the current status. To try it out, you can usually download the development version. The speedata Publisher also comes with a Standard and a Pro plan. The Pro plan offers additional features that are helpful for professional PDF generation.
 
 
 There are three ways to install speedata Publisher:
 
-. **Binary packages (The recommended way)**: Go to our https://download.speedata.de/[download page] and download the latest package for your operating system. You can unzip the file anywhere in the filesystem you want. You don't need root/administrator rights to use the Publisher this way. There are extra installer packages for windows, if you don't want to set the `PATH` variable yourself.
+. **Binary packages (The recommended way)**: Go to our https://download.speedata.de/[download page] and download the latest package for your operating system. You can unzip the file anywhere in the filesystem you want. You don't need root/administrator rights to use the Publisher this way. There are extra installer packages for windows, if you don't want to set the `PATH` variable yourself. This is the method if you want to install the <<ch-speedatapro,speedata Publisher Pro>> software.
 
 
 . **APT repository**: If you have root or sudo rights on Debian or Ubuntu GNU/Linux (or a similar system), you can install the .deb files we have prepared from our APT repository. (For now, only the 64 bit architecture is supported.) This is very easy, just follow a few steps:
@@ -43,11 +43,11 @@ sudo gem install asciidoctor
 rake doc
 -------------------------------------------------------------------------------
 +
-If you are building speedata Publisher from source, you will also need to install [.nowrap]#LuaTeX# manually. The recommended way is to download a binary from https://download.speedata.de/#extra and copy it into the bin/ directory of the Publisher. For example, to download and install LuajitTeX 1.12 on a Linux amd64 system, you could use the commands:
+If you are building speedata Publisher from source, you will also need to install [.nowrap]#LuaTeX# manually. The recommended way is to download a binary from https://download.speedata.de/#extra and copy it into the bin/ directory of the Publisher. For example, to download and install LuaTeX 1.15 on a Linux amd64 system, you could use the commands:
 +
-    wget https://download.speedata.de/files/extra/luatex_112-win-mac-linux.zip
-    unzip luatex_112-win-mac-linux.zip
-    cp luatex/linux/amd64/1_12/sdluatex bin
+    wget https://download.speedata.de/files/extra/luatex_115-win-mac-linux.zip
+    unzip luatex_115-win-mac-linux.zip
+    cp luatex/linux/sdluatex bin
 +
 After installation, you can run `bin/sdluatex --version` to confirm the program version.
 

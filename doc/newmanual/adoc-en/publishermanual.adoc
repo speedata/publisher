@@ -38,6 +38,7 @@ endif::[]
 -  <<ch-programming,Programming>>
 -  <<ch-images,Images>>
 -  <<ch-tables2,Tables>>
+-  <<ch-saasapi,Publishing API>>
 -  <<ch-advancedtopics,Advanced topics>>
 -  <<ch-cookbook,Cookbook>>
 
@@ -52,6 +53,7 @@ endif::[]
 - <<ch-xpathfunctions,XPath- and layoutfunctions>>
 - <<ch-internalvariables,Internal variables>>
 - <<ch-appendix-schema-assigning>>
+- <<ch-speedatapro>>
 - <<ch-changelog,Changelog>>
 - <<app-glossary,Glossary>>
 - <<app-compatibilitylist,Compatibility list>>
@@ -66,6 +68,7 @@ include::basics.adoc[]
 include::programming.adoc[]
 include::images.adoc[]
 include::tables.adoc[]
+include::saasapien.adoc[]
 include::advancedtopics.adoc[]
 include::cookbook.adoc[]
 
@@ -80,6 +83,7 @@ include::lengthsunits.adoc[]
 include::xpath.adoc[]
 include::internalvariables.adoc[]
 include::associateschema.adoc[]
+include::speedataproen.adoc[]
 include::changelog.adoc[]
 include::glossary.adoc[]
 include::compatibilitylist.adoc[]

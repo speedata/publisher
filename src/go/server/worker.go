@@ -1,3 +1,6 @@
+//go:build pro
+// +build pro
+
 // Heavily inspired by Nick Saika (https://nesv.github.io/golang/2014/02/25/worker-queues-in-go.html)
 
 package server
