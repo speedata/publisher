@@ -1,5 +1,11 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="4.11">
+  <chapter version="4.12">
+    <entry version="4.12.0" date="2022-09-30">
+        <en>Release version 4.12.0.</en>
+        <de>Veröffentliche Version 4.12.0.</de>
+    </entry>
+  </chapter>
+  <chapter version="4.11" date="2022-09-06">
     <entry version="4.11.8" date="2022-09-06">
         <en>Suppressinfo allows creator to be set (#420).</en>
         <de>Suppressinfo erlaubt den PDF creator zu setzen (#420).</de>
