@@ -17,7 +17,10 @@ Ein Vergleich von speedata Standard und Pro ist https://www.speedata.de/de/produ
 
 == Wie bekomme ich das Pro Paket?
 
-Der Zugriff auf das Pro-Paket funktioniert über den https://download.speedata.de/[Downloadbereich] unter https://download.speedata.de. Unter »login« muss man sich für ein Konto registrieren, der den Zugang zum Pro-Paket bietet. Die Abrechnung wird über die Firma Stripe abgewickelt.
+. Unter https://download.speedata.de/register kann man einen Account im Downloadbereich erstellen
+. Nach erfolgreicher Registrierung muss man das passende Paket auswählen (monatliche / jährliche zahlweise)
+
+
 
 Um das Pro-Paket herunter zu laden, gibt es zwei Möglichkeiten (ein gültiges Pro-Paket vorausgesetzt):
 

@@ -18,7 +18,9 @@ A comparison of speedata Publisher Standard and Pro can be found https://www.spe
 
 == How do I get the Pro plan?
 
-Access to the Pro plan works via the https://download.speedata.de/[download area] at https://download.speedata.de. Under "login" you have to register for an account which provides access to the Pro plan. Billing is handled by the company Stripe.
+. At https://download.speedata.de/register you can create an account in the download area.
+. After successful registration you must select the appropriate plan (monthly / annual payment).
+
 
 There are two ways to download the Pro plan (assuming a valid Pro plan):
 
