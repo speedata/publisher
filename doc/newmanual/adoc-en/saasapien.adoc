@@ -2,7 +2,7 @@
 [.profeature]
 = Publisher Webservice API
 
-TIP: The speedata Webservice REST API will be available soon.
+TIP: The speedata Webservice REST API is now available (but still beta).
 
 The speedata Publisher can be used without local installation.
 For this purpose, a so-called Software-as-a-Service solution is available at https://api.speedata.de, which can be used via a REST interface.
@@ -27,12 +27,12 @@ TIP: The username must of course be replaced by your own token, which must be ge
 [options="header"]
 |=======
 | Method | URL | Short description
-| GET | <<saasapi-method-available,`/available`>> | Gib 200 zurück, um zu prüfen, ob der Server läuft.
+| GET | <<saasapi-method-available,`/available`>> | Return 200 OK to check if the server is running.
 | GET | <<saasapi-method-versions,`/v0/versions`>> | List available versions.
-| POST | <<saasapi-method-publish,`/v0/publish`>> | Starte einen Publishing-Vorgang.
-| GET | <<saasapi-method-statusid,`/v0/status/<id>`>> | Erhalte den Status eines Publishing runs.
-| GET | <<saasapi-method-waitid,`/v0/wait/<id>`>> | Warte auf die Fertigstellung eines PDFs.
-| GET | <<saasapi-method-pdfid,`/v0/pdf/<id>`>> | Lade ein PDF.
+| POST | <<saasapi-method-publish,`/v0/publish`>> | Start a publishing process.
+| GET | <<saasapi-method-statusid,`/v0/status/<id>`>> | Get the status of a publishing run.
+| GET | <<saasapi-method-waitid,`/v0/wait/<id>`>> | Wait for the PDF to get written.
+| GET | <<saasapi-method-pdfid,`/v0/pdf/<id>`>> | Download the PDF.
 |=======
 
 [[saasapi-method-available]]

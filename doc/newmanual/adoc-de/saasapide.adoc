@@ -2,7 +2,7 @@
 [[ch-saasapi]]
 = Publisher Webservice API
 
-TIP: Der speedata Webservice befindet sich derzeit im Aufbau und steht in Kürze zur Verfügung.
+TIP: Der speedata Webservice steht als Beta-Version zur Verfügung.
 
 Der speedata Publisher kann auch ohne lokale Installation benutzt werden.
 Dafür steht unter https://api.speedata.de eine sogenannte Software-as-a-Service Lösung zur Verfügung, die über eine REST-Schnittstelle benutzt werden kann.
@@ -30,7 +30,7 @@ TIP: Der Benutzername ist natürlich durch den eigenen Token zu ersetzen, der un
 | GET | <<saasapi-method-available,`/available`>> | Gib 200 zurück, um zu prüfen, ob der Server läuft.
 | GET | <<saasapi-method-versions,`/v0/versions`>> | Liste verfügbare Versionen auf.
 | POST | <<saasapi-method-publish,`/v0/publish`>> | Starte einen Publishing-Vorgang.
-| GET | <<saasapi-method-statusid,`/v0/status/<id>`>> | Erhalte den Status eines Publishing runs.
+| GET | <<saasapi-method-statusid,`/v0/status/<id>`>> | Erhalte den Status eines Publishing-Laufs.
 | GET | <<saasapi-method-waitid,`/v0/wait/<id>`>> | Warte auf die Fertigstellung des PDFs.
 | GET | <<saasapi-method-pdfid,`/v0/pdf/<id>`>> | Lade das PDF.
 |=======
