@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <commands xmlns="urn:speedata.de:2011/publisher/documentation"
-  xmlns:de="urn:speedata.de:2009/publisher/en"
   xmlns:sch="http://purl.oclc.org/dsdl/schematron"
   >
   <define name="Switchcontents">
