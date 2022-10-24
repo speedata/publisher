@@ -11,7 +11,7 @@ Der speedata Publisher ist in zwei Paketen erhältlich: Standard und Pro. Das Pr
 * Einbinden von Ressourcen über HTTP(s), z.B. für Mediendatenbanken
 * <<ch-druckausgabe,Beschnittzugabe>> (bleed)
 
-Ebenso im Pro-Paket enthalten ist der Zugriff auf den speedata Webservice, der die Benutzung des Publishers ohne lokale Installation ermöglicht (die Publishing API steht bald zur Verfügung).
+Ebenso im Pro-Paket enthalten ist der Zugriff auf den <<ch-saasapi,speedata Webservice>>, der die Benutzung des Publishers ohne lokale Installation ermöglicht.
 
 Ein Vergleich von speedata Standard und Pro ist https://www.speedata.de/de/produkt/preise/[auf der Produktseite] zu finden.
 
@@ -22,7 +22,7 @@ Ein Vergleich von speedata Standard und Pro ist https://www.speedata.de/de/produ
 
 
 
-Um das Pro-Paket herunter zu laden, gibt es zwei Möglichkeiten (ein gültiges Pro-Paket vorausgesetzt):
+Um das Pro-Paket herunter zu laden, gibt es zwei Möglichkeiten (ein gültiges Abonnement des Pro-Pakets vorausgesetzt):
 
 . Ist man im Downloadbereich angemeldet, dann kann man über die Download-Links die ZIP-Dateien oder die Installationspakete herunter laden.
 

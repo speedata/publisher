@@ -2342,6 +2342,12 @@
 <PDFOptions format="PDF/X-3" colorprofile="fogra51"/>
 ]]></listing>
     </example>
+    <info xml:lang="en">
+      <para>The profile “FOGRA39” - Coated FOGRA39 (ISO 12647-2:2004) is included in the distribution.</para>
+    </info>
+    <info xml:lang="de">
+      <para>Das Farbprofil »FOGRA39« - Coated FOGRA39 (ISO 12647-2:2004) ist in der Distribution enthalten.</para>
+    </info>
     <seealso><cmd name="PDFOptions"/></seealso>
   </command>
   <command en="DefineColor">
@@ -5532,7 +5538,10 @@
     </description>
     <childelements>
       <oneOrMore>
-        <cmd name="Li"/>
+        <interleave>
+          <optional><cmd name="Li"/></optional>
+          <optional><cmd name="ForAll"/></optional>
+        </interleave>
       </oneOrMore>
     </childelements>
     <attribute en="fontfamily" type="text" optional="yes" since="4.3.1">

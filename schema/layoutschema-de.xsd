@@ -3250,9 +3250,10 @@
       <xs:documentation>Erzeugt eine nummerierte Aufzählungsliste wie in HTML</xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="en:Li"/>
-      </xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="en:Li"/>
+        <xs:element ref="en:ForAll"/>
+      </xs:choice>
       <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</xs:documentation>

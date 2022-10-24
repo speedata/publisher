@@ -3351,7 +3351,14 @@
                   </attribute>
                </optional>
                <oneOrMore>
-                  <ref name="e_Li"></ref>
+                  <interleave>
+                     <optional>
+                        <ref name="e_Li"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_ForAll"></ref>
+                     </optional>
+                  </interleave>
                </oneOrMore>
             </group>
             <ref name="foreign-nodes"></ref>

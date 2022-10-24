@@ -12,7 +12,7 @@ The speedata Publisher is available in two plans: Standard and Pro. The Pro plan
 * <<ch-printout,bleed>>
 
 
-Also included in the Pro plan is access to the speedata web service, which allows you to use the publisher without local installation (the publishing API will be available soon).
+Also included in the Pro plan is access to the <<ch-saasapi,speedata web service>>, which allows you to use the publisher without local installation.
 
 A comparison of speedata Publisher Standard and Pro can be found https://www.speedata.de/en/product/prices/[on the product page].
 
