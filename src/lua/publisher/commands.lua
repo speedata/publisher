@@ -1361,10 +1361,10 @@ function commands.image( layoutxml,dataxml )
             local inch_x = width / publisher.factor / 72
             local inch_y = height / publisher.factor / 72
             if (image.xsize / inch_x) < dpiwarn then
-                warning("Image dpi value too small (horizontal). Rendered is %d, requested minimum is %d. Filename: %q", image.xsize / inch_x,dpiwarn,filename)
+                warning("Image dpi value too small (horizontal). Rendered is %d, requested minimum is %d. Filename: %q", math.floor(image.xsize / inch_x),dpiwarn,filename)
             end
             if (image.ysize / inch_y) < dpiwarn then
-                warning("Image dpi value too small (vertical). Rendered is %d, requested minimum is %d. Filename: %q", image.xsize / inch_x,dpiwarn,filename)
+                warning("Image dpi value too small (vertical). Rendered is %d, requested minimum is %d. Filename: %q", math.floor(image.xsize / inch_x),dpiwarn,filename)
             end
         end
     end
