@@ -4386,7 +4386,9 @@ function hbglyphlist(arguments)
 
             local diff = thisglyph.x_advance - tbl.characters[uc].hadvance
             if diff ~= 0 then
-                publisher.setprop(cur,"kern", diff * tbl.mag)
+                local property = "kernafter"
+                if direction == "rtl" then property = "kernbefore" end
+                publisher.setprop(cur,property, diff * tbl.mag)
             end
             if uc == -1 then
             elseif uc > 0x110000 then
@@ -4720,7 +4722,7 @@ function mknodes(str,parameter,origin)
             segments.maindirection = "rtl"
         end
     else
-        local dir = 0
+        local dir = nil
         segments = {}
         if parameter.direction == "rtl" then
             dir = 1
@@ -4764,6 +4766,7 @@ function mknodes(str,parameter,origin)
             end
             local buf = harfbuzz.Buffer.new()
             buf:add_utf8(str)
+            if direction == 0 then direction = "ltr" elseif direction == 1 then direction = "rtl" end
             -- shape returns the guessed script and direction from the buffer
             script, direction = shape(tbl,buf, { language = thislang, script = script, direction = direction } )
 
@@ -4785,7 +4788,7 @@ function mknodes(str,parameter,origin)
                 allowbreak = parameter.allowbreak or " -",
                 newlines_at = newlines_at,
                 script = script,
-                direction = maindirection or direction,
+                direction = direction or maindirection,
                 thislang = thislang,
                 fontnumber = fontnumber,
                 is_chinese = is_chinese,
@@ -4806,6 +4809,7 @@ function mknodes(str,parameter,origin)
                 languagecode = languagecode,
             })
         end
+        direction = direction or 0
         thissegment = setsegmentdir(thissegment,direction,maindirection)
 
         if nodelistsegments then
@@ -5019,6 +5023,11 @@ function hbkern(nodelist)
     local curkern = 0
     while head do
         if head.id == glyph_node then
+            local k = getprop(head,"kernbefore")
+            if k and k ~= 0 then
+                curkern = k
+            end
+
             if curkern and curkern ~= 0 then
                 local kern = node.new(kern_node)
                 kern.kern = curkern
@@ -5033,7 +5042,7 @@ function hbkern(nodelist)
                 set_attribute(kern,"hyperlink",get_attribute(head,"hyperlink"))
                 curkern = 0
             end
-            local k = getprop(head,"kern")
+            local k = getprop(head,"kernafter")
             if k and k ~= 0 then
                 curkern = k
             end
