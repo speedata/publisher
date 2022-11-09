@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.13">
+    <entry version="4.13.1" date="2022-11-09">
+        <en>Bugfix spacing in RTL mode (#445).</en>
+        <de>Fehlerkorrektur im RTL-Modus (#445).</de>
+    </entry>
     <entry version="4.13.0" date="2022-09-30">
         <en>Start with Pro plan.</en>
         <de>Starte mit Pro-Paket.</de>
