@@ -345,7 +345,7 @@
    </define>
    <define name="e_AttachFile">
       <element name="AttachFile">
-         <a:documentation>Binde eine ZUGFeRD Datei ein.</a:documentation>
+         <a:documentation>Hänge eine Datei an das PDF an. Kann benutzt werden, um eine ZUGFeRD Datei einzubinden.</a:documentation>
          <optional>
             <attribute name="filename">
                <a:documentation>Der Name der Datei, die in die PDF-Datei eingebettet werden soll.</a:documentation>
@@ -355,20 +355,16 @@
             <a:documentation>Textuelle Beschreibung der einzubindenden Datei (für den PDF-Viewer).</a:documentation>
          </attribute>
          <attribute name="type">
-            <a:documentation>Der Typ der eingebundenen Datei. Derzeit wird nur ZUGFeRD unterstützt.</a:documentation>
-            <choice>
-               <value>ZUGFeRD invoice</value>
-               <a:documentation>Die eingebundene Datei ist eine ZUGFeRD XML-Datei</a:documentation>
-            </choice>
+            <a:documentation>Der Typ der eingebundenen Datei. Muss ein Media Type (mime type) sein oder ZUGFeRD invoice.</a:documentation>
          </attribute>
          <optional>
             <attribute name="name">
-               <a:documentation>Name der eingebunden Datei im PDF. Voreinstellung ist ZUGFeRD-invoice.xml.</a:documentation>
+               <a:documentation>Name der eingebunden Datei im PDF. Voreinstellung ist ZUGFeRD-invoice.xml falls der Typ ZUGFeRD invoice ist.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="select">
-               <a:documentation>Der Inhalt des ZUGFeRD-Datei. Alternativ zum Lesen von der Festplatte.</a:documentation>
+               <a:documentation>Der Inhalt des Datei. Alternativ zum Lesen von der Festplatte.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>

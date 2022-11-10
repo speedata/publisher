@@ -1,0 +1,43 @@
+[[ch-attachments]]
+= Attach files to the PDF
+
+The PDF file format offers the possibility of embedding files in the document so that they can then be downloaded as stand-alone documents. Electronic invoices, for example, can be sent as a “human-readable” PDF with an attached computer-readable description (as XML).
+
+Any number of files can be attached, but only one ZUGFeRD invoice.
+
+== Attach files
+
+[source, xml]
+-------------------------------------------------------------------------------
+<AttachFile description="A nice view"
+            type="application/pdf"
+            filename="ocean.pdf" />
+-------------------------------------------------------------------------------
+
+This command is used to attach a file to the PDF. The type is the https://en.wikipedia.org/wiki/Media_type[mime type] of the attached file.
+
+
+.This is what attached files look like in Adobe Acrobat.
+image::attachfile.png[]
+
+
+[.profeature]
+== Attach ZUGFeRD invoices
+
+To attach an electronic invoice, the value at type must be exactly the string ZUGFeRD invoice:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<AttachFile description="Electronic invoice"
+            type="ZUGFeRD invoice"
+            filename="invoice.pdf" />
+-------------------------------------------------------------------------------
+
+
+The output filename is automatically set to ZUGFeRD-invoice.xml and the document conforms to the PDF/A-3 standard.
+
+.The file name is changed to ZUGFeRD-invoice.xml.
+image::attachfile-zugferd.png[]
+
+// EOF
+

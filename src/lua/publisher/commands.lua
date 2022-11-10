@@ -181,45 +181,59 @@ end
 
 
 function commands.attachfile( layoutxml,dataxml )
-    if not publisher.pro then
-        err("attaching ZUGReRD files need a pro plan")
-        publisher.has_pro_error = true
-        return nil
-    end
-    local filename = publisher.read_attribute(layoutxml,dataxml,"filename","string")
+    -- destfilename is optional. It defaults to 'ZUGFeRD-invoice.xml' when
+    -- attaching a ZUGFeRD file or to the input file name otherwise.
+    local inputfilename = publisher.read_attribute(layoutxml,dataxml,"filename","string")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
-    local destfilename = publisher.read_attribute(layoutxml,dataxml,"name","string", "ZUGFeRD-invoice.xml")
-    local zugferdcontents
+    local destfilename = publisher.read_attribute(layoutxml,dataxml,"name","string")
+    local filetype = publisher.read_attribute(layoutxml,dataxml,"type","string")
+
+
+    if filetype == "ZUGFeRD invoice" then
+        if not publisher.pro then
+            err("attaching ZUGReRD files need a pro plan")
+            publisher.has_pro_error = true
+            return nil
+        end
+
+        if not destfilename then
+            warning("AttachFile: please provide a filename for the attachment by setting the attribute name.")
+            destfilename = "ZUGFeRD-invoice.xml"
+        end
+    end
+
+    local filecontents
     local modificationtime
     if selection ~= nil then
-        zugferdcontents = publisher.xml_to_string(selection[1],0)
+        filecontents = publisher.xml_to_string(selection[1],0)
+        if not destfilename then
+            err("AttachFile: you must provide a file name when reading from selection")
+        end
         modificationtime = os.time()
     else
-        local path = kpse.find_file(filename)
+        local path = kpse.find_file(inputfilename)
         if path == nil then
-            err("Cannot find file %q",filename)
+            err("Cannot find file %q",inputfilename)
             return
         end
         local stat = lfs.attributes(path)
-        local filename_extension = filename:match("^.*%.(.+)$"):lower()
+        local filename_extension = inputfilename:match("^.*%.(.+)$"):lower()
+        destfilename = destfilename or inputfilename
         if destfilename:match("^.*%.(.+)$") == nil then
             warning("AttachFile: name attribute has no file extension, take from source.")
             destfilename = string.format("%s.%s",destfilename,filename_extension)
         end
         modificationtime = stat.modification
-        local zugferdfile = io.open(path)
-
-        zugferdcontents = zugferdfile:read("*all")
-        zugferdfile:close()
+        local attachfile,msg = io.open(path)
+        if attachfile == nil then
+            err("could not read file %s",msg)
+            return
+        end
+        filecontents = attachfile:read("*all")
+        attachfile:close()
     end
     local description = publisher.read_attribute(layoutxml,dataxml,"description","string")
-    local filetype = publisher.read_attribute(layoutxml,dataxml,"type","string")
-    local expected = "ZUGFeRD invoice"
-    if filetype ~= expected then
-        err("AttachFile: type must be %q but got %q",expected,filetype)
-    else
-        publisher.attach_file_pdf(zugferdcontents,description,"text/xml",modificationtime,destfilename)
-    end
+    publisher.attach_file_pdf(filecontents,description,filetype,modificationtime,destfilename)
 end
 
 --- AtPageCreation

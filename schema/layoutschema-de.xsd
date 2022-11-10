@@ -177,7 +177,7 @@
   </xs:element>
   <xs:element name="AttachFile">
     <xs:annotation>
-      <xs:documentation>Binde eine ZUGFeRD Datei ein.</xs:documentation>
+      <xs:documentation>Hänge eine Datei an das PDF an. Kann benutzt werden, um eine ZUGFeRD Datei einzubinden.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:attribute name="filename">
@@ -192,26 +192,17 @@
       </xs:attribute>
       <xs:attribute name="type" use="required">
         <xs:annotation>
-          <xs:documentation>Der Typ der eingebundenen Datei. Derzeit wird nur ZUGFeRD unterstützt.</xs:documentation>
+          <xs:documentation>Der Typ der eingebundenen Datei. Muss ein Media Type (mime type) sein oder ZUGFeRD invoice.</xs:documentation>
         </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="ZUGFeRD invoice">
-              <xs:annotation>
-                <xs:documentation>Die eingebundene Datei ist eine ZUGFeRD XML-Datei</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
-        </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="name">
         <xs:annotation>
-          <xs:documentation>Name der eingebunden Datei im PDF. Voreinstellung ist ZUGFeRD-invoice.xml.</xs:documentation>
+          <xs:documentation>Name der eingebunden Datei im PDF. Voreinstellung ist ZUGFeRD-invoice.xml falls der Typ ZUGFeRD invoice ist.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="select">
         <xs:annotation>
-          <xs:documentation>Der Inhalt des ZUGFeRD-Datei. Alternativ zum Lesen von der Festplatte.</xs:documentation>
+          <xs:documentation>Der Inhalt des Datei. Alternativ zum Lesen von der Festplatte.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>

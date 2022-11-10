@@ -345,7 +345,7 @@
    </define>
    <define name="e_AttachFile">
       <element name="AttachFile">
-         <a:documentation>Attach a ZUGFeRD file.</a:documentation>
+         <a:documentation>Attach a file to the PDF. Can be used to attach a ZUGFeRD electronic invoice.</a:documentation>
          <optional>
             <attribute name="filename">
                <a:documentation>The name of the local file to be attached to the PDF.</a:documentation>
@@ -355,20 +355,16 @@
             <a:documentation>Textual description of the attached file (for the PDF viewer).</a:documentation>
          </attribute>
          <attribute name="type">
-            <a:documentation>The type of the included file. Currently only ZUGFeRD is supported.</a:documentation>
-            <choice>
-               <value>ZUGFeRD invoice</value>
-               <a:documentation>The attached file is an XML file containing a ZUGFeRD invoice</a:documentation>
-            </choice>
+            <a:documentation>The type of the included file. Must be a mime type or ZUGFeRD invoice.</a:documentation>
          </attribute>
          <optional>
             <attribute name="name">
-               <a:documentation>Set the name of the attached file in the PDF document. Defaults to ZUGFeRD-invoice.xml.</a:documentation>
+               <a:documentation>Set the name of the attached file in the PDF document. Defaults to ZUGFeRD-invoice.xml if the attached file type is ZUGFeRD invoice.</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="select">
-               <a:documentation>The contents of the ZUGFeRD file. Alternative to reading a file from the hard-drive.</a:documentation>
+               <a:documentation>The contents of the file. Alternative to reading a file from the hard-drive.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>

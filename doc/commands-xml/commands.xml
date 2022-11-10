@@ -845,12 +845,12 @@
     </example>
     <seealso><cmd name="AtPageCreation"/>, <cmd name="Pagetype"/></seealso>
   </command>
-  <command en="AttachFile" since="3.1.1" pro="yes">
+  <command en="AttachFile" since="3.1.1" >
     <description xml:lang="en">
-      <para>Attach a ZUGFeRD file.</para>
+      <para>Attach a file to the PDF. Can be used to attach a ZUGFeRD electronic invoice.</para>
     </description>
     <description xml:lang="de">
-      <para>Binde eine ZUGFeRD Datei ein.</para>
+      <para>Hänge eine Datei an das PDF an. Kann benutzt werden, um eine ZUGFeRD Datei einzubinden.</para>
     </description>
     <childelements/>
     <attribute en="filename" optional="yes" type="text">
@@ -869,36 +869,28 @@
         <para>Textuelle Beschreibung der einzubindenden Datei (für den PDF-Viewer).</para>
       </description>
     </attribute>
-    <attribute en="type" optional="no">
+    <attribute en="type" optional="no" type="text">
       <description xml:lang="en">
-        <para>The type of the included file. Currently only ZUGFeRD is supported.</para>
+        <para>The type of the included file. Must be a mime type or <tt>ZUGFeRD invoice</tt>.</para>
       </description>
       <description xml:lang="de">
-        <para>Der Typ der eingebundenen Datei. Derzeit wird nur ZUGFeRD unterstützt.</para>
+        <para>Der Typ der eingebundenen Datei. Muss ein Media Type (mime type) sein oder <tt>ZUGFeRD invoice</tt>.</para>
       </description>
-      <choice en="ZUGFeRD invoice">
-        <description xml:lang="en">
-          <para>The attached file is an XML file containing a ZUGFeRD invoice</para>
-        </description>
-        <description xml:lang="de">
-          <para>Die eingebundene Datei ist eine ZUGFeRD XML-Datei</para>
-        </description>
-      </choice>
     </attribute>
     <attribute en="name" type="text" optional="yes" since="3.7.3">
       <description xml:lang="en">
-        <para>Set the name of the attached file in the PDF document. Defaults to <tt>ZUGFeRD-invoice.xml</tt>.</para>
+        <para>Set the name of the attached file in the PDF document. Defaults to <tt>ZUGFeRD-invoice.xml</tt> if the attached file type is <tt>ZUGFeRD invoice</tt>.</para>
       </description>
       <description xml:lang="de">
-        <para>Name der eingebunden Datei im PDF. Voreinstellung ist <tt>ZUGFeRD-invoice.xml</tt>.</para>
+        <para>Name der eingebunden Datei im PDF. Voreinstellung ist <tt>ZUGFeRD-invoice.xml</tt> falls der Typ <tt>ZUGFeRD invoice</tt> ist.</para>
       </description>
     </attribute>
       <attribute en="select" type="xpath" optional="yes" since="3.7.2">
       <description xml:lang="en">
-        <para>The contents of the ZUGFeRD file. Alternative to reading a file from the hard-drive.</para>
+        <para>The contents of the file. Alternative to reading a file from the hard-drive.</para>
       </description>
       <description xml:lang="de">
-        <para>Der Inhalt des ZUGFeRD-Datei. Alternativ zum Lesen von der Festplatte.</para>
+        <para>Der Inhalt des Datei. Alternativ zum Lesen von der Festplatte.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -913,6 +905,12 @@
     <example xml:lang="de">
       <listing><![CDATA[<AttachFile select="CrossIndustryDocument" description="ZUGFeRD Rechnung" type="ZUGFeRD invoice"/>]]></listing>
     </example>
+    <info xml:lang="en">
+      <para>Attaching a ZUGFeRD electronic invoice is available in the Pro plan.</para>
+    </info>
+    <info xml:lang="de">
+      <para>Voraussetzung für das Anhängen einer ZUGFeRD Datei ist das Pro-Paket.</para>
+    </info>
     <seealso/>
   </command>
   <command en="Attribute">

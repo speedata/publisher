@@ -25,6 +25,8 @@ include::umfliessenvonbildern.adoc[leveloffset=+1]
 
 include::seitentypen.adoc[leveloffset=+1]
 
+include::attachmentsde.adoc[leveloffset=+1]
+
 include::hotfolder.adoc[leveloffset=+1]
 
 include::luafilter.adoc[leveloffset=+1]

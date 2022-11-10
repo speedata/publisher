@@ -1,0 +1,42 @@
+[[ch-attachments]]
+= Dateien an das PDF anhängen
+
+Das PDF Dateiformat bietet die Möglichkeit, Dateien in das Dokument einzubetten, so dass diese dann als eigenständige Dokumente herunter geladen werden können.
+Elektronische Rechnungen können z.B. als »menschenlesbares« PDF mit einer angehängten computerlesbaren Beschreibung (als XML) verschickt werden.
+
+Es können beliebig viele Dateien angehängt werden, jedoch nur eine ZUGFeRD-Rechnung.
+
+== Anhängen von Dateien
+
+[source, xml]
+-------------------------------------------------------------------------------
+<AttachFile description="A nice view"
+            type="application/pdf"
+            filename="ocean.pdf" />
+-------------------------------------------------------------------------------
+
+Mit diesem Befehl hängt man eine Datei an das PDF an. Der Typ ist der https://de.wikipedia.org/wiki/Internet_Media_Type[Mime-Typ] der angehängten Datei.
+
+.So zeigt der Adobe Acrobat die angehängten Dateien an
+image::attachfile.png[]
+
+
+[.profeature]
+== ZUGFeRD Rechnungen anhängen
+
+Um eine elektronische Rechnung anzuhängen, muss der Wert bei `type` genau die Zeichenkette `ZUGFeRD invoice` sein:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<AttachFile description="Electronic invoice"
+            type="ZUGFeRD invoice"
+            filename="invoice.pdf" />
+-------------------------------------------------------------------------------
+
+Der Ausgabedateiname wird automatisch auf `ZUGFeRD-invoice.xml` gesetzt und das Dokument entspricht dem PDF/A-3 Standard.
+
+.Der Dateiname wird automatisch auf ZUGFeRD-invoice.xml gesetzt.
+image::attachfile-zugferd.png[]
+
+// EOF
+

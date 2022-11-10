@@ -1385,11 +1385,34 @@ function initialize_luatex_and_generate_pdf()
     if sp_suppressinfo then
         pdf.settrailerid(" [ <FA052949448907805BA83C1E78896398> <FA052949448907805BA83C1E78896398> ]")
     end
-    -- For now only one file can be attached
+
+    -- file attachment
     if #filespecnumbers > 0 then
-      pdfcatalog[#pdfcatalog + 1] = string.format([[ /Names << /EmbeddedFiles <<  /Names [(ZUGFeRD-invoice.xml) %d 0 R ] >> >> /Metadata %d 0 R ]],filespecnumbers[1][1],filespecnumbers[1][2])
-      pdfcatalog[#pdfcatalog + 1] = string.format([[ /AF %d 0 R ]],filespecnumbers[1][3])
+        local afstring = {}
+        for i = 1, #filespecnumbers do
+            local filespecnum = filespecnumbers[i][1]
+            afstring[#afstring+1] = string.format("%d 0 R",filespecnum)
+        end
+        local af = "[" .. table.concat(afstring," ") .. "]"
+
+        local names = {}
+        for i = 1, #filespecnumbers do
+            local filespecnum = filespecnumbers[i][1]
+            local filename = filespecnumbers[i][3]
+            local metadataobj = filespecnumbers[i][2]
+            names[#names+1] = string.format([[%s %d 0 R]],utf8_to_utf16_string_pdf(filename),filespecnum)
+            if metadataobj == nil then
+                -- ignore
+            else
+                -- A ZUGFeRD file
+                -- warning: the metadata entry should be written when we now which metadata to write.
+                pdfcatalog[#pdfcatalog + 1] = string.format([[ /Metadata %d 0 R ]],metadataobj)
+            end
+        end
+        pdfcatalog[#pdfcatalog + 1] = string.format([[ /Names << /EmbeddedFiles <<  /Names [%s] >> >> ]],table.concat(names," "))
+        pdfcatalog[#pdfcatalog + 1] = string.format([[ /AF %s ]],af)
     end
+
     local str = get_page_labels_str()
     if str then
         pdfcatalog[#pdfcatalog + 1] = str
@@ -7203,20 +7226,18 @@ function getzugferdmetadata( conformancelevel, title, author )
     return metadata
 end
 
-
-function attach_file_pdf(zugferdcontents,description,mimetype,modificationtime,destfilename)
-    local conformancelevel = string.match(zugferdcontents, "urn:ferd:CrossIndustryDocument:invoice:1p0:(.-)<")
-    if not conformancelevel then
-        err("No ZUGFeRD contents found")
-        return
-    else
-        conformancelevel = string.upper(conformancelevel)
+---@para filecontents data Contents of the file.
+function attach_file_pdf(filecontents,description,mimetype,modificationtime,destfilename)
+    local is_zugferd = false
+    if mimetype == "ZUGFeRD invoice" then
+        is_zugferd = true
+        mimetype = "text/xml"
     end
     local fileobjectnum = pdf.immediateobj("stream",
-        zugferdcontents,
+        filecontents,
         string.format([[/Params <</ModDate (%s) /Size %d >> /Subtype /%s /Type /EmbeddedFile ]],
             pdfdate(modificationtime),
-            #zugferdcontents,
+            #filecontents,
             escape_pdfname(mimetype)))
 
     local filespecnum = pdf.immediateobj(string.format([[<<
@@ -7226,19 +7247,30 @@ function attach_file_pdf(zugferdcontents,description,mimetype,modificationtime,d
     /F %d 0 R
     /UF %d 0 R
   >>
-  /F (%s)
+  /F %s
   /Type /Filespec
   /UF %s
->>]],utf8_to_utf16_string_pdf(description), fileobjectnum,fileobjectnum,destfilename,utf8_to_utf16_string_pdf(destfilename)))
+>>]],utf8_to_utf16_string_pdf(description), fileobjectnum,fileobjectnum,utf8_to_utf16_string_pdf(destfilename),utf8_to_utf16_string_pdf(destfilename)))
+    if is_zugferd then
+        local conformancelevel = string.match(filecontents, "urn:ferd:CrossIndustryDocument:invoice:1p0:(.-)<")
+        if not conformancelevel then
+            err("No ZUGFeRD contents found")
+            return
+        else
+            conformancelevel = string.upper(conformancelevel)
+        end
+
         -- BASIC, COMFORT, EXTENDED
-    local metadataobjnum = pdf.obj({type = "stream",
-                 string = getzugferdmetadata(conformancelevel, options.documenttitle or "ZUGFeRD Rechnung",options.documentauthor or "The Author"),
-                 immediate = true,
-                 attr = [[  /Subtype /XML /Type /Metadata  ]],
-                 compresslevel = 0,
-                 })
-    local afdatanum = pdf.immediateobj( string.format("[ %d 0 R ]",filespecnum))
-    filespecnumbers[#filespecnumbers + 1] = {filespecnum,metadataobjnum,afdatanum}
+        local metadataobjnum = pdf.obj({type = "stream",
+                     string = getzugferdmetadata(conformancelevel, options.documenttitle or "ZUGFeRD Rechnung",options.documentauthor or "The Author"),
+                     immediate = true,
+                     attr = [[  /Subtype /XML /Type /Metadata  ]],
+                     compresslevel = 0,
+                     })
+        filespecnumbers[#filespecnumbers + 1] = {filespecnum,metadataobjnum,"ZUGFeRD-invoice.xml"}
+    else
+        filespecnumbers[#filespecnumbers + 1] = {filespecnum,nil,destfilename}
+    end
 end
 
 -- %a  abbreviated weekday name (e.g., Wed)

@@ -25,6 +25,8 @@ include::wrappingaroundobjects.adoc[leveloffset=+1]
 
 include::pagetypes.adoc[leveloffset=+1]
 
+include::attachmentsen.adoc[leveloffset=+1]
+
 include::hotfolder.adoc[leveloffset=+1]
 
 include::preprocessing.adoc[leveloffset=+1]
