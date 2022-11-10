@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.13">
+    <entry version="4.13.2" date="2022-11-10">
+        <en>Vertical shift for hyperlink anchors.</en>
+        <de>Vertikaler Versatz für Hyperlink-Anker.</de>
+    </entry>
+    <entry version="4.13.2" date="2022-11-10">
+        <en>AttachFile can now attach other files than ZUGFeRD invoices..</en>
+        <de>AttachFile kann nun andere Dateien neben ZUGFeRD Rechnungen anhängen.</de>
+    </entry>
     <entry version="4.13.1" date="2022-11-09">
         <en>Bugfix spacing in RTL mode (#445).</en>
         <de>Fehlerkorrektur im RTL-Modus (#445).</de>
