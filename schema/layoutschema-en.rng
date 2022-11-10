@@ -3139,6 +3139,11 @@
             <a:documentation>The name of the mark to be set.</a:documentation>
          </attribute>
          <optional>
+            <attribute name="shiftup">
+               <a:documentation>Raise the position of the hyperlink anchor by this amount.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="pdftarget">
                <a:documentation>Set a pdf target that can be referenced by A</a:documentation>
                <choice>

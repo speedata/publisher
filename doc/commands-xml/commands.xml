@@ -5081,6 +5081,14 @@
         <para>Der Name des Markers, der gesetzt wird.</para>
       </description>
     </attribute>
+    <attribute en="shiftup" optional="yes" since="4.13.2" type="length">
+      <description xml:lang="en">
+        <para>Raise the position of the hyperlink anchor by this amount.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Verschiebe die Position des Hyperlink-Ankers um diesen Betrag.</para>
+      </description>
+    </attribute>
     <attribute en="pdftarget" optional="yes" since="3.3.8" type="boolean">
       <description xml:lang="en">
         <para>Set a pdf target that can be referenced by <cmd name="A"/></para>

@@ -116,6 +116,10 @@ function commands.action( layoutxml,dataxml)
                 n.value = v.selection
                 if v.pdftarget then
                     local d = publisher.mkstringdest("mark" .. tostring(v.selection))
+                    if v.shiftup ~= nil then
+                        d = node.hpack(d)
+                        d.shift = -1 * tex.sp(v.shiftup)
+                    end
                     p:append(d)
                 end
                 p:append(n)
@@ -1847,10 +1851,11 @@ function commands.mark( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     local append    = publisher.read_attribute(layoutxml,dataxml,"append","boolean")
     local pdftarget = publisher.read_attribute(layoutxml,dataxml,"pdftarget","boolean")
+    local shiftup   = publisher.read_attribute(layoutxml,dataxml,"shiftup","height_sp")
     local ret = {}
     if type(selection) == "table" then
         for _,v in ipairs(selection) do
-            ret[#ret + 1] = { selection = v, append = append, pdftarget = pdftarget }
+            ret[#ret + 1] = { selection = v, append = append, pdftarget = pdftarget, shiftup = shiftup }
         end
         return ret
     else

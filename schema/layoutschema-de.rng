@@ -3139,6 +3139,11 @@
             <a:documentation>Der Name des Markers, der gesetzt wird.</a:documentation>
          </attribute>
          <optional>
+            <attribute name="shiftup">
+               <a:documentation>Verschiebe die Position des Hyperlink-Ankers um diesen Betrag.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="pdftarget">
                <a:documentation>Setze ein PDF-Ziel, das mit A referenziert werden kann.</a:documentation>
                <choice>
