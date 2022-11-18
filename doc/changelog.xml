@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.13">
+    <entry version="4.13.3" date="2022-11-18">
+        <en>A few bugfixes related to AttachFile.</en>
+        <de>Einige Fehlerkorrekturen bei AttachFile.</de>
+    </entry>
     <entry version="4.13.2" date="2022-11-10">
         <en>Vertical shift for hyperlink anchors.</en>
         <de>Vertikaler Versatz für Hyperlink-Anker.</de>
