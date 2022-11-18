@@ -351,9 +351,11 @@
                <a:documentation>Der Name der Datei, die in die PDF-Datei eingebettet werden soll.</a:documentation>
             </attribute>
          </optional>
-         <attribute name="description">
-            <a:documentation>Textuelle Beschreibung der einzubindenden Datei (für den PDF-Viewer).</a:documentation>
-         </attribute>
+         <optional>
+            <attribute name="description">
+               <a:documentation>Textuelle Beschreibung der einzubindenden Datei (für den PDF-Viewer).</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="type">
             <a:documentation>Der Typ der eingebundenen Datei. Muss ein Media Type (mime type) sein oder ZUGFeRD invoice.</a:documentation>
          </attribute>

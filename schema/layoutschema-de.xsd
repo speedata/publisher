@@ -185,7 +185,7 @@
           <xs:documentation>Der Name der Datei, die in die PDF-Datei eingebettet werden soll.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="description" use="required">
+      <xs:attribute name="description">
         <xs:annotation>
           <xs:documentation>Textuelle Beschreibung der einzubindenden Datei (für den PDF-Viewer).</xs:documentation>
         </xs:annotation>

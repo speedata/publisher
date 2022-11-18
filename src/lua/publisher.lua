@@ -7239,18 +7239,20 @@ function attach_file_pdf(filecontents,description,mimetype,modificationtime,dest
             pdfdate(modificationtime),
             #filecontents,
             escape_pdfname(mimetype)))
-
+    local descPDF = ""
+    if description then
+        descPDF = string.format("/Desc %s\n  ",utf8_to_utf16_string_pdf(description))
+    end
     local filespecnum = pdf.immediateobj(string.format([[<<
   /AFRelationship /Alternative
-  /Desc %s
-  /EF <<
+  %s/EF <<
     /F %d 0 R
     /UF %d 0 R
   >>
   /F %s
   /Type /Filespec
   /UF %s
->>]],utf8_to_utf16_string_pdf(description), fileobjectnum,fileobjectnum,utf8_to_utf16_string_pdf(destfilename),utf8_to_utf16_string_pdf(destfilename)))
+>>]],descPDF, fileobjectnum,fileobjectnum,utf8_to_utf16_string_pdf(destfilename),utf8_to_utf16_string_pdf(destfilename)))
     if is_zugferd then
         local conformancelevel = string.match(filecontents, "urn:ferd:CrossIndustryDocument:invoice:1p0:(.-)<")
         if not conformancelevel then

@@ -351,9 +351,11 @@
                <a:documentation>The name of the local file to be attached to the PDF.</a:documentation>
             </attribute>
          </optional>
-         <attribute name="description">
-            <a:documentation>Textual description of the attached file (for the PDF viewer).</a:documentation>
-         </attribute>
+         <optional>
+            <attribute name="description">
+               <a:documentation>Textual description of the attached file (for the PDF viewer).</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="type">
             <a:documentation>The type of the included file. Must be a mime type or ZUGFeRD invoice.</a:documentation>
          </attribute>

@@ -185,7 +185,7 @@
           <xs:documentation>The name of the local file to be attached to the PDF.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="description" use="required">
+      <xs:attribute name="description">
         <xs:annotation>
           <xs:documentation>Textual description of the attached file (for the PDF viewer).</xs:documentation>
         </xs:annotation>

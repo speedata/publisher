@@ -861,7 +861,7 @@
         <para>Der Name der Datei, die in die PDF-Datei eingebettet werden soll.</para>
       </description>
     </attribute>
-    <attribute en="description" optional="no" type="text">
+    <attribute en="description" optional="yes" type="text">
       <description xml:lang="en">
         <para>Textual description of the attached file (for the PDF viewer).</para>
       </description>
