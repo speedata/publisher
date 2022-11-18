@@ -228,7 +228,7 @@ function commands.attachfile( layoutxml,dataxml )
             destfilename = string.format("%s.%s",destfilename,filename_extension)
         end
         modificationtime = stat.modification
-        local attachfile,msg = io.open(path)
+        local attachfile,msg = io.open(path,"rb")
         if attachfile == nil then
             err("could not read file %s",msg)
             return
