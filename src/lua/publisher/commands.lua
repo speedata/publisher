@@ -2769,7 +2769,7 @@ function commands.place_object( layoutxml,dataxml)
     if absolute_positioning == false and column and tonumber(column) < current_grid:current_column(area) then
         publisher.next_row(nil,area,1)
     end
-    local current_column_start = column or current_grid:current_column(area)
+    local current_column_start = tonumber(column or current_grid:current_column(area))
 
     -- current_height is the remaining space on the current page in sp
     local areaheight = ( maxheight or current_grid:number_of_rows(area) ) * current_grid.gridheight

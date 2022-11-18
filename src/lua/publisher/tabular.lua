@@ -475,7 +475,7 @@ function calculate_columnwidth( self )
 
             if count_stars > 0 then
 
-                -- now we know the number of *-columns and the sum of the fix colums, so that
+                -- now we know the number of *-columns and the sum of the fix columns, so that
                 -- we can distribute the remaining space
                 local to_distribute = self.tablewidth_target - sum_real_widths - table.sum(self.column_distances,1,count_columns - 1)
                 i = 0

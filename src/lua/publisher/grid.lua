@@ -499,7 +499,7 @@ function fits_in_row_area(self,column,width,row,areaname)
 end
 
 -- Return the row in which the object of the given width can be placed.
--- Starting column is @column@, If the page size is not know yet, the next free
+-- Starting column is @column@, If the page size is not known yet, the next free
 -- row will be given. Is the page full (the object cannot be placed), the
 -- function returns nil.
 function find_suitable_row( self,column, width,height,areaname, framenumber)

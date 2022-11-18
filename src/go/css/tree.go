@@ -38,7 +38,7 @@ func (m mode) String() string {
 
 const (
 	modeHorizontal mode = iota
-	modeVertial
+	modeVertical
 )
 
 func init() {
@@ -415,7 +415,7 @@ func dumpElement(thisNode *html.Node, level int, direction mode) {
 				}
 			}
 			if !isSpace.MatchString(txt) {
-				if direction == modeVertial {
+				if direction == modeVertical {
 					newDir = modeHorizontal
 				}
 			}
@@ -432,7 +432,7 @@ func dumpElement(thisNode *html.Node, level int, direction mode) {
 			ws := preserveWhitespace[len(preserveWhitespace)-1]
 			eltname := thisNode.Data
 			if eltname == "body" || eltname == "address" || eltname == "article" || eltname == "aside" || eltname == "blockquote" || eltname == "br" || eltname == "canvas" || eltname == "dd" || eltname == "div" || eltname == "dl" || eltname == "dt" || eltname == "fieldset" || eltname == "figcaption" || eltname == "figure" || eltname == "footer" || eltname == "form" || eltname == "h1" || eltname == "h2" || eltname == "h3" || eltname == "h4" || eltname == "h5" || eltname == "h6" || eltname == "header" || eltname == "hr" || eltname == "li" || eltname == "main" || eltname == "nav" || eltname == "noscript" || eltname == "ol" || eltname == "p" || eltname == "pre" || eltname == "section" || eltname == "table" || eltname == "tfoot" || eltname == "thead" || eltname == "tbody" || eltname == "tr" || eltname == "td" || eltname == "th" || eltname == "ul" || eltname == "video" {
-				newDir = modeVertial
+				newDir = modeVertical
 			} else if eltname == "b" || eltname == "big" || eltname == "i" || eltname == "small" || eltname == "tt" || eltname == "abbr" || eltname == "acronym" || eltname == "cite" || eltname == "code" || eltname == "dfn" || eltname == "em" || eltname == "kbd" || eltname == "strong" || eltname == "samp" || eltname == "var" || eltname == "a" || eltname == "bdo" || eltname == "img" || eltname == "map" || eltname == "object" || eltname == "q" || eltname == "script" || eltname == "span" || eltname == "sub" || eltname == "sup" || eltname == "button" || eltname == "input" || eltname == "label" || eltname == "select" || eltname == "textarea" {
 				newDir = modeHorizontal
 			} else {
@@ -535,7 +535,7 @@ func (c *CSS) dumpTree(outfile io.Writer) {
 	c.dumpFonts()
 	c.dumpPages()
 
-	dumpElement(elt, 0, modeVertial)
+	dumpElement(elt, 0, modeVertical)
 
 	fmt.Fprintln(out, "}")
 }
