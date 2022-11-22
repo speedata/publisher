@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.13">
+    <entry version="4.13.4" date="2022-11-22">
+        <en>Bugfixes calculating hashes and reading attachments (#446).</en>
+        <de>Fehlerkorrekturen Berechnung von Hashes und bei Anhängen (#446).</de>
+    </entry>
+    <entry version="4.13.4" date="2022-11-22">
+        <en>Bugfix style at penalty (#449).</en>
+        <de>Fehlerkorrektur Stil bei Penalty (#449).</de>
+    </entry>
     <entry version="4.13.3" date="2022-11-18">
         <en>A few bugfixes related to AttachFile.</en>
         <de>Einige Fehlerkorrekturen bei AttachFile.</de>
