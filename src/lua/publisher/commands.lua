@@ -190,7 +190,7 @@ function commands.attachfile( layoutxml,dataxml )
     local inputfilename = publisher.read_attribute(layoutxml,dataxml,"filename","string")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     local destfilename = publisher.read_attribute(layoutxml,dataxml,"name","string")
-    local filetype = publisher.read_attribute(layoutxml,dataxml,"type","string")
+    local filetype = publisher.read_attribute(layoutxml,dataxml,"type","string","application/octet-stream")
 
 
     if filetype == "ZUGFeRD invoice" then
