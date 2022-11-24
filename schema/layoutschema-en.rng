@@ -641,6 +641,9 @@
                      <ref name="e_AddSearchpath"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_AttachFile"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Attribute"></ref>
                   </optional>
                   <optional>
@@ -1769,6 +1772,9 @@
                         <ref name="e_AddSearchpath"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_AttachFile"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Attribute"></ref>
                      </optional>
                      <optional>
@@ -2869,6 +2875,9 @@
                         <ref name="e_AddSearchpath"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_AttachFile"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Attribute"></ref>
                      </optional>
                      <optional>
@@ -3597,6 +3606,9 @@
                   </optional>
                   <optional>
                      <ref name="e_AddSearchpath"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_AttachFile"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Attribute"></ref>
@@ -5247,6 +5259,9 @@
                         <ref name="e_Loop"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Output"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Paragraph"></ref>
                      </optional>
                      <optional>
@@ -6584,6 +6599,9 @@
                         <ref name="e_AddSearchpath"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_AttachFile"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Attribute"></ref>
                      </optional>
                      <optional>
@@ -6895,6 +6913,9 @@
                      </optional>
                      <optional>
                         <ref name="e_AddSearchpath"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_AttachFile"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Attribute"></ref>

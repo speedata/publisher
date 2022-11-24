@@ -6,6 +6,7 @@
     <optional><cmd name="A"/></optional>
     <optional><cmd name="Action"/></optional>
     <optional><cmd name="AddSearchpath"/></optional>
+    <optional><cmd name="AttachFile"/></optional>
     <optional><cmd name="Attribute"/></optional>
     <optional><cmd name="B"/></optional>
     <optional><cmd name="Barcode"/></optional>
@@ -7934,6 +7935,7 @@
           <optional><cmd name="Element"/></optional>
           <optional><cmd name="ForAll"/></optional>
           <optional><cmd name="Loop"/></optional>
+          <optional><cmd name="Output"/></optional>
           <optional><cmd name="Paragraph"/></optional>
           <optional><cmd name="PlaceObject"/></optional>
           <optional><cmd name="Table"/></optional>

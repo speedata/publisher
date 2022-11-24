@@ -556,6 +556,7 @@
         <xs:element minOccurs="0" ref="en:A"/>
         <xs:element minOccurs="0" ref="en:Action"/>
         <xs:element minOccurs="0" ref="en:AddSearchpath"/>
+        <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Attribute"/>
         <xs:element minOccurs="0" ref="en:B"/>
         <xs:element minOccurs="0" ref="en:Barcode"/>
@@ -1585,6 +1586,7 @@
         <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:AddSearchpath"/>
+        <xs:element ref="en:AttachFile"/>
         <xs:element ref="en:Attribute"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Barcode"/>
@@ -2847,6 +2849,7 @@
         <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:AddSearchpath"/>
+        <xs:element ref="en:AttachFile"/>
         <xs:element ref="en:Attribute"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Barcode"/>
@@ -3870,6 +3873,7 @@
         <xs:element minOccurs="0" ref="en:A"/>
         <xs:element minOccurs="0" ref="en:Action"/>
         <xs:element minOccurs="0" ref="en:AddSearchpath"/>
+        <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Attribute"/>
         <xs:element minOccurs="0" ref="en:B"/>
         <xs:element minOccurs="0" ref="en:Barcode"/>
@@ -5720,6 +5724,7 @@
         <xs:element ref="en:Element"/>
         <xs:element ref="en:ForAll"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Output"/>
         <xs:element ref="en:Paragraph"/>
         <xs:element ref="en:PlaceObject"/>
         <xs:element ref="en:Table"/>
@@ -7930,6 +7935,7 @@
         <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:AddSearchpath"/>
+        <xs:element ref="en:AttachFile"/>
         <xs:element ref="en:Attribute"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Barcode"/>
@@ -8083,6 +8089,7 @@
         <xs:element ref="en:A"/>
         <xs:element ref="en:Action"/>
         <xs:element ref="en:AddSearchpath"/>
+        <xs:element ref="en:AttachFile"/>
         <xs:element ref="en:Attribute"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Barcode"/>
