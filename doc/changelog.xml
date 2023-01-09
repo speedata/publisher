@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.12">
+    <entry version="4.12.1" date="2023-01-09">
+        <en>Bugfix sd list-fonts (#454).</en>
+        <de>Fehlerkorrektur sd list-fonts (#454).</de>
+    </entry>
     <entry version="4.12.0" date="2022-09-30">
         <en>Release version 4.12.0.</en>
         <de>Veröffentliche Version 4.12.0.</de>
