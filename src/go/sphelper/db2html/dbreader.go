@@ -23,13 +23,16 @@ import (
 )
 
 var (
-	sanitizer  = strings.NewReplacer("<", "&lt;", "LuaTeX", `LuaT<span class="TeX-e">e</span><span class="TeX-x">X</span>`)
-	escaper    = strings.NewReplacer("&", "&amp;", "<", "&lt;")
-	sectH      = strings.NewReplacer("sect", "h")
-	coReplace  *regexp.Regexp
-	assetsTrim *regexp.Regexp
-	tagRemover *regexp.Regexp
-	redirects  = map[string]string{
+	sanitizer     = strings.NewReplacer("<", "&lt;", "LuaTeX", `LuaT<span class="TeX-e">e</span><span class="TeX-x">X</span>`)
+	escaper       = strings.NewReplacer("&", "&amp;", "<", "&lt;")
+	unescaper     = strings.NewReplacer("&amp;", "&", "&lt;", "<")
+	sectH         = strings.NewReplacer("sect", "h")
+	coReplace     = regexp.MustCompile(`CO\d+-(\d+)`)
+	tagRemover    = regexp.MustCompile(`[^>]*>`)
+	assetsTrim    = regexp.MustCompile(`^(\.\./)*dbmanual/assets(.*)$`)
+	leadcloseWSRe = regexp.MustCompile(`^[\s\p{Zs}]+|[\s\p{Zs}]+$`)
+	insideWSRe    = regexp.MustCompile(`[\s\p{Zs}]{2,}`)
+	redirects     = map[string]string{
 		"changelog":        "changelog",
 		"colors":           "basics/colors",
 		"commandline":      "commandline",
@@ -54,9 +57,6 @@ var (
 )
 
 func init() {
-	coReplace = regexp.MustCompile(`CO\d+-(\d+)`)
-	tagRemover = regexp.MustCompile(`<[^>]*>`)
-	assetsTrim = regexp.MustCompile(`^(\.\./)*dbmanual/assets(.*)$`)
 	pairs := []string{
 		"grundlagen", "basics",
 		"einleitung", "introduction",
@@ -165,11 +165,17 @@ type section struct {
 	Index        int
 	Split        bool
 	IsSearch     bool
+	PutInIndex   bool
 }
 
 func (s *section) WriteString(input string) (int, error) {
-	s.Contents.WriteString(input)
-	return s.RawContents.WriteString(tagRemover.ReplaceAllString(input, ""))
+	var i int
+	var err error
+	i, err = s.Contents.WriteString(input)
+	if s.PutInIndex {
+		i, err = s.RawContents.WriteString(tagRemover.ReplaceAllString(unescaper.Replace(input), " "))
+	}
+	return i, err
 
 }
 
@@ -442,6 +448,8 @@ func (d *DocBook) collectContents() error {
 	var programlistingLanguage string
 	var chardata strings.Builder
 	var curOutput io.StringWriter
+	// switchOutputGetString switches back to recording to the current section
+	// and returns the string that has been recorded in the mean time.
 	switchOutputGetString := func() string {
 		curChardata := chardata.String()
 		curOutput = curpage
@@ -842,6 +850,11 @@ getContents:
 				curOutput.WriteString(`</dt>`)
 			case "title":
 				title := switchOutputGetString()
+				if title == "Child elements" || title == "Kindelemente" || title == "Parent elements" || title == "Elternelemente" {
+					curpage.PutInIndex = false
+				} else {
+					curpage.PutInIndex = true
+				}
 				if inFigure {
 					figuretitle = title
 				} else {
@@ -1018,6 +1031,7 @@ func (d *DocBook) WriteHTMLFiles(basedir string) error {
 		Content string `json:"content"`
 		Href    string `json:"href"`
 	}
+	// jsonpages is an array containing search contents
 	jsonpages := make([]jsonpage, 0, len(d.chain))
 
 	// now the search page
@@ -1104,9 +1118,16 @@ func (d *DocBook) WriteHTMLFiles(basedir string) error {
 			Next:        nextsection,
 			Children:    children,
 		}
+		contents := leadcloseWSRe.ReplaceAllString(page.RawContents.String(), "")
+		contents = insideWSRe.ReplaceAllString(contents, " ")
+		title := page.Title
+
+		if strings.Contains(page.Link, "befehlsreferenz") || strings.Contains(page.Link, "commandreference") {
+			title += " (ref)"
+		}
 		jsonpages = append(jsonpages, jsonpage{
-			Title:   page.Title,
-			Content: page.RawContents.String(),
+			Title:   title,
+			Content: contents,
 			Href:    d.linkToPage(page.Link, *searchpage),
 		})
 		err = tmpl.ExecuteTemplate(f, "main.html", data)
@@ -1116,6 +1137,7 @@ func (d *DocBook) WriteHTMLFiles(basedir string) error {
 		f.Close()
 	}
 
+	// b is the search contents
 	b, err := json.MarshalIndent(jsonpages, "", " ")
 	if err != nil {
 		return (err)

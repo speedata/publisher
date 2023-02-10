@@ -6434,8 +6434,6 @@ function vsplit( objects_t, parameter )
 
 
     local hlist = {}
-    local ht_hlist = 0
-
     -- We need the height for the decision to balance the text
     local ht_hlist = 0
 
