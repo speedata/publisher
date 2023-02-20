@@ -13,23 +13,46 @@
 	<meta name="robots" content="index,follow" />
 	<meta name="googlebot" content="index,follow" />
 	<link rel="icon" href="{{ linkTo "/static/favicon.png" .Section }}" type="image/png">
-
 	<link rel="stylesheet" href="{{ linkTo "/static/css/glightbox.min.css" .Section }}" />
 	<link rel="stylesheet" href="{{ linkTo "/static/css/style.css" .Section }}" />
 	<link rel="stylesheet" href="{{ linkTo "/static/font-awesome-4.7.0/css/font-awesome.min.css" .Section }}" />
 	<link rel="stylesheet" href="{{ linkTo "/static/css/roboto.css" .Section }}" />
+	{{ if not $.IsStatic }}
+		<link rel="stylesheet" href="{{ linkTo "/static/css/docs-searchbar.min.css" .Section }}" />
+		<link rel="stylesheet" href="{{ linkTo "/static/css/search.css" .Section }}" />
+	{{end}}
+
 	<!--endofhead-->
 </head>
 <body class="handbuch">
 	<div id="pageWrapper" class="clearfix">
+		{{ if not $.IsStatic }}
+		<div id="searchabs">
+			<input type="search" id="search-bar-input" placeholder="{{translate .Language "Press 's' or '/' to search"}}...">
+			<script src="{{ linkTo "/static/js/docs-searchbar.min.js" .Section }}"></script>
+			<script>
+			  docsSearchBar({
+				hostUrl: {{ $.SearchInfo.APIHost }},
+				apiKey: {{ $.SearchInfo.APIKey }},
+				indexUid: {{ $.SearchInfo.IndexUID }},
+				inputSelector: '#search-bar-input',
+				debug: false
+			  });
+			</script>
+		</div>
+		{{ end }}
 		<div id="sitemap">
+			{{- if $.IsStatic -}}
 			<form role="search" method="get" class="search-form" action="{{ linkTo $.Searchpage.Link .Section}}">
 				<label><span class="screen-reader-text">{{translate .Language "Search manual"}}:</span><input class="search-field"
 						placeholder="{{translate .Language "Search"}}&nbsp;…" value="" name="q" type="search">
 				</label>
 				<input class="search-submit" value="{{translate .Language "Search"}}" type="submit">
 			</form>
-			{{ $.Navi}}
+			{{- else -}}
+			<div id="presearch"></div>
+			{{- end -}}
+			{{ $.Navi }}
 			<br />
 		</div>
 		<div id="page" class="inhalt">
@@ -42,13 +65,28 @@
 				</div>
 				<div id="navi">
 					<div id="searchmobil">
+						{{- if not $.IsStatic -}}
+						<div id="searchabsmobile">
+							<input type="search" id="search-bar-mobile" placeholder="Search...">
+							<script>
+							  docsSearchBar({
+								hostUrl: {{ $.SearchInfo.APIHost }},
+								apiKey: {{ $.SearchInfo.APIKey }},
+								indexUid: {{ $.SearchInfo.IndexUID }},
+								inputSelector: '#search-bar-mobile',
+								debug: false
+							  });
+							</script>
+						</div>
+						{{- else -}}
 						<form role="search" method="get" class="search-form" action="{{ linkTo $.Searchpage.Link .Section}}">
 							<label><span class="screen-reader-text">{{translate .Language "Search manual"}}</span><input
-									class="search-field" placeholder="{{translate .Language "Search"}}&nbsp;…" value="" name="q" type="search">
+								class="search-field" placeholder="{{translate .Language "Search"}}&nbsp;…" value="" name="q" type="search">
 							</label>
 							<input class="search-submit" value="{{translate .Language "Search"}}" type="submit">
 						</form>
-						{{ $.NaviMobile}}
+						{{- end -}}
+						{{ $.NaviMobile }}
 					<ul><li>{{ if eq .Language "en"}}<a href="{{linkTo "/de/index.html" .Section}}">Dieses Handbuch auf Deutsch</a>{{else}}<a href="{{linkTo "/en/index.html" .Section}}">This manual in English</a>{{end}}</li></ul>
 					</div>
 				</div>

@@ -16,6 +16,7 @@ type Config struct {
 	Srcdir, Builddir, Libdir string
 	Publisherversion         Version
 	IsPro                    bool
+	SearchAPIKey             string
 }
 
 // Version holds the speedata version information
@@ -47,6 +48,7 @@ func NewConfig(basedir string) *Config {
 	cfg := &Config{}
 	cfg.SetBasedir(basedir)
 	cfg.Publisherversion = readVersion("publisher", basedir)
+	cfg.SearchAPIKey = os.Getenv("SP_SEARCH_API_KEY")
 	return cfg
 }
 

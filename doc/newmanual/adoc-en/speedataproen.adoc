@@ -9,7 +9,7 @@ The speedata Publisher is available in two plans: Standard and Pro. The Pro plan
 * <<cmd-barcode,QR codes and barcodes>>
 * Embedding of ZUGFeRD invoices
 * Embedding of resources via HTTP(s), e.g. for media databases
-* <<ch-printout,bleed>>
+* <<ch-outputforprinter,bleed>>
 
 
 Also included in the Pro plan is access to the <<ch-saasapi,speedata web service>>, which allows you to use the publisher without local installation.

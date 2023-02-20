@@ -1,5 +1,4 @@
 [[ch-outputforprinter]]
-
 = Print output / crop marks
 
 

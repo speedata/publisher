@@ -24,7 +24,7 @@ Here an image is loaded with the specified file name and a specified width. The 
 [discrete]
 == Grid based placement of objects
 
-The <<ch-grid,section aboud grids>> provides a detailed description of the design grid. Only so much should be mentioned here: The grid helps on the one hand to position the objects (easy arrangement of the objects) and on the other hand to find the right place. Grid cells are not occupied by two objects at the same time, unless you explicitly allow this.
+The <<ch-grid,section about grids>> provides a detailed description of the design grid. Only so much should be mentioned here: The grid helps on the one hand to position the objects (easy arrangement of the objects) and on the other hand to find the right place. Grid cells are not occupied by two objects at the same time, unless you explicitly allow this.
 
 This is an example of grid-based output. The specifications for `row` and `column` are coordinates in the page grid, where the upper left corner is position 1,1.
 

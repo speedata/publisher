@@ -1,0 +1,48 @@
+@media screen and (min-width: 1024px) and (max-width: 1280px) {
+    #searchabs {
+        left: 20px ;
+    }
+    #presearch {
+        left: 10;
+    }
+
+}
+
+@media screen and (min-width: 1280px) {
+    #searchabs {
+        left: calc( ( 100vw - 1260px) / 2 + 20px ) ;
+    }
+    #presearch {
+        left: calc( ( 100vw - 1260px) / 2 + 20px ) ;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    #searchabs {
+        display: none;
+    }
+}
+
+#sitemap > ul {
+    margin-top: 50px;
+}
+
+#searchabs {
+    position: fixed;
+    top: 30px;
+    z-index: 50;
+}
+
+
+#presearch {
+    position: fixed;
+    top: 0px;
+    width: 280px;
+    height: 90px;
+    z-index: 40;
+    background: linear-gradient(rgb(255, 239, 179,1) 70% ,rgb(255, 239, 179,0)  );
+}
+
+#search-bar-input {
+    width: 260px;
+}

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -32,6 +33,7 @@ var (
 	assetsTrim    = regexp.MustCompile(`^(\.\./)*dbmanual/assets(.*)$`)
 	leadcloseWSRe = regexp.MustCompile(`^[\s\p{Zs}]+|[\s\p{Zs}]+$`)
 	insideWSRe    = regexp.MustCompile(`[\s\p{Zs}]{2,}`)
+	numberStart   = regexp.MustCompile(`\d*(.*)$`)
 	redirects     = map[string]string{
 		"changelog":        "changelog",
 		"colors":           "basics/colors",
@@ -122,6 +124,12 @@ func init() {
 	refrp = strings.NewReplacer("befehlsreferenz", "commandreference", "commandreference", "befehlsreferenz")
 }
 
+func stringToHTMLID(src string) string {
+	src = strings.Join(strings.Fields(src), "")
+	src = strings.ToLower(src)
+	return numberStart.ReplaceAllString(src, "$1")
+}
+
 func formatSource(source, lang string) (string, error) {
 	xmllexer := lexers.Get(lang)
 
@@ -154,6 +162,11 @@ func sanitizeInput(input string) string {
 	return sanitizer.Replace(input)
 }
 
+func normalizeSpace(input string) string {
+	input = leadcloseWSRe.ReplaceAllString(input, "")
+	return insideWSRe.ReplaceAllString(input, " ")
+}
+
 type section struct {
 	Sectionlevel int
 	Title        string
@@ -179,6 +192,14 @@ func (s *section) WriteString(input string) (int, error) {
 
 }
 
+type searchData struct {
+	PageURL      string
+	Contents     string
+	SectionTitle string
+	Anchor       string
+	Parent       string
+}
+
 // DocBook is the main structure for basic docbook 5 files
 type DocBook struct {
 	Lang           string
@@ -189,6 +210,17 @@ type DocBook struct {
 	idfilemapping  map[string]string
 	idTitlemapping map[string]string
 	chain          []*section
+	searchData     []*searchData
+}
+
+func (d *DocBook) createSearchEntry(sectionTitle string, contents string, url string, anchor string, parent string) {
+	d.searchData = append(d.searchData, &searchData{
+		PageURL:      url,
+		Contents:     normalizeSpace(contents),
+		SectionTitle: sectionTitle,
+		Anchor:       anchor,
+		Parent:       parent,
+	})
 }
 
 // make previous and next link
@@ -379,7 +411,6 @@ gatherid:
 				idStack = idStack[:len(idStack)-1]
 				d.idTitlemapping[thisid] = thistitle
 				tmp := curFilenameStack[len(curFilenameStack)-1]
-
 				if sectionlevel == 1 && splitChapter {
 					newSec := &section{
 						Title:        thistitle,
@@ -441,6 +472,10 @@ func (d *DocBook) collectContents() error {
 	var attribution string
 	var phraserole string
 	var sectionid string
+	// for search index
+	var indexSectionID string
+	var curSectionTitle string
+
 	var headinglevel int
 	var titlecounter int
 	var omitP bool
@@ -488,7 +523,7 @@ getContents:
 			case "callout":
 				calloutcounter++
 				omitP = true
-				curOutput.WriteString(`<p>` + string('①'+calloutcounter-1) + ` `)
+				curOutput.WriteString(`<p>` + string(int32('①')+int32(calloutcounter)-1) + ` `)
 			case "calloutlist":
 				calloutcounter = 0
 			case "co":
@@ -498,7 +533,7 @@ getContents:
 				if err != nil {
 					return err
 				}
-				curOutput.WriteString(string('①' + conum - 1))
+				curOutput.WriteString(string(int32('①') + int32(conum) - 1))
 			case "emphasis":
 				class := ""
 				if attr(elt, "role") == "strong" {
@@ -535,6 +570,7 @@ getContents:
 			case "chapter", "appendix", "preface":
 				id := attr(elt, "id")
 				sectionid = id
+				indexSectionID = id
 				if cp, ok := idIndex[id]; ok {
 					curpage = cp
 					titlecounter = 0
@@ -619,8 +655,15 @@ getContents:
 					curOutput.WriteString(`<p>`)
 				}
 			case "section":
+				curSectionContents := normalizeSpace(curpage.RawContents.String())
+				if curSectionContents != "" {
+					d.createSearchEntry(curSectionTitle, curpage.RawContents.String(), curpage.Pagename, indexSectionID, curpage.Title)
+					indexSectionID = ""
+					curpage.RawContents.Reset()
+				}
 				id := attr(elt, "id")
 				sectionid = id
+				indexSectionID = id
 				if cp, ok := idIndex[id]; ok {
 					curpage = cp
 					titlecounter = 0
@@ -705,8 +748,17 @@ getContents:
 				omitP = false
 			case "bridgehead":
 				src := switchOutputGetString()
+				anchor := stringToHTMLID(src)
+
+				curSectionContents := normalizeSpace(curpage.RawContents.String())
+				if curSectionContents != "" {
+					d.createSearchEntry(curSectionTitle, curpage.RawContents.String(), curpage.Pagename, indexSectionID, curpage.Title)
+					curpage.RawContents.Reset()
+				}
+				indexSectionID = anchor
+				curSectionTitle = src
 				curOutput.WriteString("\n")
-				curOutput.WriteString(fmt.Sprintf(`<%s>%s</%s>`, brideheadLevel, src, brideheadLevel))
+				curOutput.WriteString(fmt.Sprintf(`<%s id="%s">%s</%s>`, brideheadLevel, anchor, src, brideheadLevel))
 				curOutput.WriteString("\n")
 			case "callout":
 				curOutput.WriteString("</p>\n")
@@ -820,6 +872,13 @@ getContents:
 				curOutput.WriteString(`</code></pre>`)
 				curOutput.WriteString("\n")
 			case "section":
+				if !d.staticmode {
+					if indexSectionID != "" {
+						d.createSearchEntry(curSectionTitle, curpage.RawContents.String(), curpage.Pagename, indexSectionID, curpage.Title)
+						indexSectionID = ""
+						curpage.RawContents.Reset()
+					}
+				}
 				headinglevel--
 			case "subscript":
 				curOutput.WriteString(`</sub>`)
@@ -858,6 +917,7 @@ getContents:
 				if inFigure {
 					figuretitle = title
 				} else {
+					curSectionTitle = title
 					var thisid string
 					if sectionid != "" {
 						thisid = fmt.Sprintf(" id=%q", sectionid)
@@ -909,6 +969,8 @@ func (d *DocBook) translate(lang, text string) string {
 		return "Handbuch"
 	case "Search":
 		return "Suche"
+	case `Press 's' or '/' to search`:
+		return `Drücke 's' oder '/' für Suche`
 	case "Results":
 		return "Ergebnisse"
 	case "No results":
@@ -993,6 +1055,30 @@ func (d *DocBook) genNavi(thissection *section, navi bool) string {
 	}
 	nav.WriteString("</li></ul></li></ul>")
 	return nav.String()
+}
+
+type siteInfo struct {
+	Navi          template.HTML
+	NaviMobile    template.HTML
+	Contents      template.HTML
+	Section       *section
+	Searchpage    *section
+	Language      string
+	Version       string
+	Chain         []*section
+	Breadcrumbs   []*section
+	Prev          *section
+	Next          *section
+	Children      []int
+	SearchContent template.JS
+	IsStatic      bool
+	SearchInfo    *searchInfo
+}
+
+type searchInfo struct {
+	APIKey   string
+	APIHost  string
+	IndexUID string
 }
 
 // WriteHTMLFiles creates a directory and writes all HTML and static
@@ -1090,21 +1176,7 @@ func (d *DocBook) WriteHTMLFiles(basedir string) error {
 				}
 			}
 		}
-		data := struct {
-			Navi          template.HTML
-			NaviMobile    template.HTML
-			Contents      template.HTML
-			Section       *section
-			Searchpage    *section
-			Language      string
-			Version       string
-			Chain         []*section
-			Breadcrumbs   []*section
-			Prev          *section
-			Next          *section
-			Children      []int
-			SearchContent template.JS
-		}{
+		data := siteInfo{
 			Navi:        template.HTML(d.genNavi(page, false)),
 			NaviMobile:  template.HTML(d.genNavi(page, true)),
 			Contents:    template.HTML(page.Contents.String()),
@@ -1117,9 +1189,14 @@ func (d *DocBook) WriteHTMLFiles(basedir string) error {
 			Prev:        prevsection,
 			Next:        nextsection,
 			Children:    children,
+			IsStatic:    d.staticmode,
+			SearchInfo: &searchInfo{
+				APIKey:   d.cfg.SearchAPIKey,
+				APIHost:  "https://msearch.speedata.de",
+				IndexUID: "speedatapublisher" + d.Lang,
+			},
 		}
-		contents := leadcloseWSRe.ReplaceAllString(page.RawContents.String(), "")
-		contents = insideWSRe.ReplaceAllString(contents, " ")
+		contents := normalizeSpace(page.RawContents.String())
 		title := page.Title
 
 		if strings.Contains(page.Link, "befehlsreferenz") || strings.Contains(page.Link, "commandreference") {
@@ -1136,48 +1213,46 @@ func (d *DocBook) WriteHTMLFiles(basedir string) error {
 		}
 		f.Close()
 	}
+	if !d.staticmode {
+		data, err := json.MarshalIndent(d.searchData, "", "  ")
+		if err != nil {
+			return err
+		}
+		searchindex := filepath.Join(d.cfg.Builddir, fmt.Sprintf("searchindex-%s.json", d.Lang))
+		fmt.Println("Write search index to ", searchindex)
+		if err = ioutil.WriteFile(searchindex, data, 0644); err != nil {
+			return err
+		}
+	} else {
+		// b is the search contents
+		b, err := json.MarshalIndent(jsonpages, "", " ")
+		if err != nil {
+			return (err)
+		}
 
-	// b is the search contents
-	b, err := json.MarshalIndent(jsonpages, "", " ")
-	if err != nil {
-		return (err)
-	}
+		data := siteInfo{
+			Navi:          template.HTML(d.genNavi(searchpage, false)),
+			NaviMobile:    template.HTML(d.genNavi(searchpage, true)),
+			Contents:      template.HTML("foo"),
+			Section:       searchpage,
+			Searchpage:    searchpage,
+			Language:      d.Lang,
+			Version:       d.Version,
+			Chain:         d.chain,
+			SearchContent: template.JS(string(b)),
+			SearchInfo: &searchInfo{
+				APIKey:   "",
+				APIHost:  "",
+				IndexUID: "",
+			},
+		}
 
-	data := struct {
-		Navi          template.HTML
-		NaviMobile    template.HTML
-		Contents      template.HTML
-		Section       *section
-		Searchpage    *section
-		Language      string
-		Version       string
-		Chain         []*section
-		Breadcrumbs   []*section
-		Prev          *section
-		Next          *section
-		Children      []int
-		SearchContent template.JS
-	}{
-		Navi:          template.HTML(d.genNavi(searchpage, false)),
-		NaviMobile:    template.HTML(d.genNavi(searchpage, true)),
-		Contents:      template.HTML("foo"),
-		Section:       searchpage,
-		Searchpage:    searchpage,
-		Language:      d.Lang,
-		Version:       d.Version,
-		Chain:         d.chain,
-		Breadcrumbs:   nil,
-		Prev:          nil,
-		Next:          nil,
-		Children:      nil,
-		SearchContent: template.JS(string(b)),
+		err = tmpl.ExecuteTemplate(f, "main.html", data)
+		if err != nil {
+			return err
+		}
+		f.Close()
 	}
-
-	err = tmpl.ExecuteTemplate(f, "main.html", data)
-	if err != nil {
-		return err
-	}
-	f.Close()
 
 	// to maintain old links / bookmarks, let's write some redirects
 	if d.Lang == "en" && !d.staticmode {
@@ -1246,7 +1321,9 @@ func DoThings(cfg *config.Config, manualname string, sitedoc bool) error {
 	d.cfg = cfg
 	d.Version = cfg.Publisherversion.String()
 
-	d.collectContents()
+	if err = d.collectContents(); err != nil {
+		return err
+	}
 
 	outdir := filepath.Join(cfg.Builddir, "manual")
 	err = d.WriteHTMLFiles(outdir)
