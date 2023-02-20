@@ -11,6 +11,26 @@ file_start("layout_functions.lua")
 local luxor = do_luafile("luxor.lua")
 local sha  = require('shalocal')
 
+---@param filename string
+---@return string, integer
+local function get_filename_pagenum_from_filename(filename)
+    local newfilename = filename
+
+    local fn, found = string.gsub(filename,"(.*):(%d+)","%1")
+    if found == 1 then
+        newfilename = fn
+    end
+
+    local p
+    p, found = string.gsub(filename,"(.-):(%d+)$","%2")
+    if found == 1 then
+        return newfilename, tonumber(p,10)
+    end
+
+    return newfilename, 1
+end
+
+
 local function visiblepagenumber(pagenumber)
     pagenumber = tonumber(pagenumber)
     return publisher.visible_pagenumbers[pagenumber] or pagenumber
@@ -255,7 +275,9 @@ end
 
 local function imagewidth(dataxml, arg )
     local filename = arg[1]
-    local img = publisher.imageinfo(filename)
+    local pagenumber
+    filename,pagenumber = get_filename_pagenum_from_filename(filename)
+    local img = publisher.imageinfo(filename,pagenumber)
     publisher.setup_page(nil,"layout_functions#imagewidth")
     local unit = arg[2]
     local width
@@ -291,40 +313,42 @@ local function imagewidth(dataxml, arg )
 end
 
 local function imageheight(dataxml, arg )
-  local filename = arg[1]
-  local img = publisher.imageinfo(filename)
-  publisher.setup_page(nil,"layout_functions#imageheight")
-  local unit = arg[2]
-  local height
-  if unit then
-      height = img.img.height
-      local ret
-      if unit == "cm" then
-          ret = height / publisher.tenmm_sp
-      elseif unit == "mm" then
-          ret = height / publisher.onemm_sp
-      elseif unit == "in" then
-          ret = height / publisher.onein_sp
+    local filename = arg[1]
+    local pagenumber
+    filename,pagenumber = get_filename_pagenum_from_filename(filename)
+    local img = publisher.imageinfo(filename,pagenumber)
+    publisher.setup_page(nil,"layout_functions#imageheight")
+    local unit = arg[2]
+    local height
+    if unit then
+        height = img.img.height
+        local ret
+        if unit == "cm" then
+            ret = height / publisher.tenmm_sp
+        elseif unit == "mm" then
+            ret = height / publisher.onemm_sp
+        elseif unit == "in" then
+            ret = height / publisher.onein_sp
         elseif unit == "sp" then
-            ret = width
+            ret = height
         elseif unit == "pc" then
-            ret = width / publisher.onepc_sp
+            ret = height / publisher.onepc_sp
         elseif unit == "pt" then
-            ret = width / publisher.onept_sp
+            ret = height / publisher.onept_sp
         elseif unit == "pp" then
-            ret = width / publisher.onepp_sp
+            ret = height / publisher.onepp_sp
         elseif unit == "dd" then
-            ret = width / publisher.onedd_sp
+            ret = height / publisher.onedd_sp
         elseif unit == "cc" then
-            ret = width / publisher.onecc_sp
+            ret = height / publisher.onecc_sp
         else
             err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'",unit)
         end
           return math.round(ret, 4)
-  else
-      height = publisher.current_grid:height_in_gridcells_sp(img.img.height)
-      return height
-  end
+    else
+        height = publisher.current_grid:height_in_gridcells_sp(img.img.height)
+        return height
+    end
 end
 
 local function file_exists(dataxml, arg )
@@ -629,7 +653,9 @@ end
 
 local function aspectratio( dataxml,arg )
   local filename = arg[1]
-  local img = publisher.imageinfo(filename)
+  local pagenum
+  filename, pagenum = get_filename_pagenum_from_filename(filename)
+  local img = publisher.imageinfo(filename,pagenum)
   return img.img.xsize / img.img.ysize
 end
 
