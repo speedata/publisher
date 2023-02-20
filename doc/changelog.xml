@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.13">
+    <entry version="4.13.6" date="2023-02-20">
+        <en>Rename graphics attribute on Td to graphic (#457).</en>
+        <de>Umbenennung des Attributs graphics zu graphic bei Td (#457).</de>
+    </entry>
+    <entry version="4.13.6" date="2023-02-20">
+        <en>Remove command NewPage from schema and documentation.</en>
+        <de>Entferne den Befehl NewPage vom Schema und der Dokumentation.</de>
+    </entry>
+    <entry version="4.13.6" date="2023-02-20">
+        <en>Colon syntax for specifying page number on sd:aspectratio, sd:imagewidth and sd:imageheight (#456).</en>
+        <de>Doppelpunkt-Syntax für die Angabe einer Seitennummer bei sd:aspectratio, sd:imagewidth und sd:imageheight (#456).</de>
+    </entry>
     <entry version="4.13.5" date="2023-01-07">
         <en>Bugfix for sd list-fonts (#454).</en>
         <de>Fehlerkorrektur für sd list-fonts (#454).</de>
