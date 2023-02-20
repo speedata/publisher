@@ -9164,12 +9164,12 @@
         <para>Die Anzahl der Spalten, die die Zelle überdecken soll. Voreinstellung ist 1.</para>
       </description>
     </attribute>
-    <attribute en="graphics" type="text" optional="yes" since="4.3.12">
+    <attribute en="graphic" type="text" optional="yes" since="4.3.12">
       <description xml:lang="en">
-        <para>Draw the predefined MetaPost graphic around the table cell (experimental).</para>
+        <para>Draw the predefined MetaPost graphic around the table cell.</para>
       </description>
       <description xml:lang="de">
-        <para>Zeichne die vordefinierte MetaPost-Grafik um die Tabellenzelle (experimentell).</para>
+        <para>Zeichne die vordefinierte MetaPost-Grafik um die Tabellenzelle.</para>
       </description>
     </attribute>
     <attribute en="padding" type="length" optional="yes" css="padding">

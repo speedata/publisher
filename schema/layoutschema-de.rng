@@ -5842,8 +5842,8 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="graphics">
-                     <a:documentation>Zeichne die vordefinierte MetaPost-Grafik um die Tabellenzelle (experimentell).</a:documentation>
+                  <attribute name="graphic">
+                     <a:documentation>Zeichne die vordefinierte MetaPost-Grafik um die Tabellenzelle.</a:documentation>
                   </attribute>
                </optional>
                <optional>

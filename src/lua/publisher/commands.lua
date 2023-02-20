@@ -4025,6 +4025,7 @@ function commands.td( layoutxml,dataxml )
         ["background-size"]        = "string",
         ["background-font-family"] = "string",
         ["graphics"]               = "string",
+        ["graphic"]                = "string",
         ["valign"]           = "string",
         ["border-left"]      = "length",
         ["border-right"]     = "length",
@@ -4043,6 +4044,12 @@ function commands.td( layoutxml,dataxml )
         if tmpattr then
             tab[attname] = tmpattr
         end
+    end
+
+    -- backwards compatibility. Used to be graphics, but should be without "s" (#457)
+    if tab.graphics then
+        warning("deprecation note: attribute graphics on Td should be graphic (without s)")
+        tab.graphic = tab.graphics
     end
 
     local tmp = publisher.read_attribute(layoutxml,dataxml,"align","string",nil,"align")

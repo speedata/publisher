@@ -1142,8 +1142,8 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
             hlist = publisher.bgtext(hlist,bg,angle,bgcolor, ff or self.fontfamily,bgsize)
         end
 
-        if td_contents.graphics then
-            local _, x = metapost.prepareboxgraphic(hlist.width,hlist.height,td_contents.graphics)
+        if td_contents.graphic then
+            local _, x = metapost.prepareboxgraphic(hlist.width,hlist.height,td_contents.graphic)
             local x = node.hpack(x)
             x.width = 0
             x.height = 0

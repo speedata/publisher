@@ -6757,9 +6757,9 @@
           <xs:documentation>Die Anzahl der Spalten, die die Zelle überdecken soll. Voreinstellung ist 1.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="graphics">
+      <xs:attribute name="graphic">
         <xs:annotation>
-          <xs:documentation>Zeichne die vordefinierte MetaPost-Grafik um die Tabellenzelle (experimentell).</xs:documentation>
+          <xs:documentation>Zeichne die vordefinierte MetaPost-Grafik um die Tabellenzelle.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="padding">

@@ -5842,8 +5842,8 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="graphics">
-                     <a:documentation>Draw the predefined MetaPost graphic around the table cell (experimental).</a:documentation>
+                  <attribute name="graphic">
+                     <a:documentation>Draw the predefined MetaPost graphic around the table cell.</a:documentation>
                   </attribute>
                </optional>
                <optional>

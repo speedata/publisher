@@ -6757,9 +6757,9 @@
           <xs:documentation>The number of columns this cell spans. Defaults to 1.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="graphics">
+      <xs:attribute name="graphic">
         <xs:annotation>
-          <xs:documentation>Draw the predefined MetaPost graphic around the table cell (experimental).</xs:documentation>
+          <xs:documentation>Draw the predefined MetaPost graphic around the table cell.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="padding">
