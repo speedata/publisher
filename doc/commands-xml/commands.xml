@@ -42,7 +42,6 @@
     <optional><cmd name="LoadFontfile"/></optional>
     <optional><cmd name="Loop"/></optional>
     <optional><cmd name="Message"/></optional>
-    <optional><cmd name="NewPage"/></optional>
     <optional><cmd name="NextFrame"/></optional>
     <optional><cmd name="NextRow"/></optional>
     <optional><cmd name="NoBreak"/></optional>
@@ -99,7 +98,6 @@
     <optional><cmd name="LoadDataset"/></optional>
     <optional><cmd name="Loop"/></optional>
     <optional><cmd name="Message"/></optional>
-    <optional><cmd name="NewPage"/></optional>
     <optional><cmd name="NextFrame"/></optional>
     <optional><cmd name="NextRow"/></optional>
     <optional><cmd name="Options"/></optional>
@@ -5258,102 +5256,6 @@
     </example>
     <seealso/>
   </command>
-  <command en="NewPage" deprecated="yes">
-    <description xml:lang="en">
-      <para>Deprecated since 4.5.14. Use <cmd name="ClearPage"/> (perhaps with option force="yes").</para>
-      <para>Finish the current page and creates a new one (only if new material for the page is available).</para>
-    </description>
-    <description xml:lang="de">
-      <para>Veraltet seit Version 4.5.14. Benutze <cmd name="ClearPage"/> (ggf. mit der Option force="yes").</para>
-      <para>Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</para>
-    </description>
-    <childelements/>
-    <attribute en="force" optional="yes" allowxpath="yes" since="4.5.12">
-      <description xml:lang="en">
-        <para>Force the shipout of page now.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Seitenausgabe erzwingen.</para>
-      </description>
-    </attribute>
-    <attribute en="openon" optional="yes">
-      <description xml:lang="en">
-        <para>The next current page will be a left or a right page. E.g. when on page 1 and openon="right" then page 2 is empty and the next current page is 3.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die nächste aktuelle Seite ist eine linke oder rechte Seite. Z.B. wenn auf Seite 1 ein Seitenwechsel erzwungen wird mit openon="right", dann wird Seite zwei leer und die nächste aktuelle Seite ist die Seite 3.</para>
-      </description>
-      <choice en="left">
-        <description xml:lang="en">
-          <para>The next objects will be placed on a left page.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Die nächsten Objekte werden auf einer linken Seite ausgegeben.</para>
-        </description>
-      </choice>
-      <choice en="right">
-        <description xml:lang="en">
-          <para>The next objects will be placed on a right page.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Die nächsten Objekte werden auf einer rechten Seite ausgegeben.</para>
-        </description>
-      </choice>
-    </attribute>
-    <attribute en="pagetype" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>The name of the next page type that should be used. If an InsertPage follows the NextPage, the pagetype is used for the first inserted page.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Name des Seitentyps der für die nächste Seite genommen werden soll. Falls danach ein InsertPage folgt, wird der Seitentyp für die erste Seite von InsertPage genommen.</para>
-      </description>
-    </attribute>
-    <attribute en="skippagetype" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>The pagetype of the blank page if inserted (see the attribute openon).</para>
-      </description>
-      <description xml:lang="de">
-        <para>Der Seitentyp der leeren Seite, falls sie eingefügt wird.</para>
-      </description>
-    </attribute>
-    <example xml:lang="en">
-      <listing><![CDATA[<Record element="data">
-  <PlaceObject>
-    <Textblock>
-      <Paragraph><Value>This is page 1</Value></Paragraph>
-    </Textblock>
-  </PlaceObject>
-  <ClearPage openon="right"/>
-  <PlaceObject>
-    <Textblock>
-      <Paragraph><Value>And this is page 3</Value></Paragraph>
-    </Textblock>
-  </PlaceObject>
-</Record>
-]]></listing>
-    </example>
-    <example xml:lang="de">
-      <listing><![CDATA[<Record element="data">
-  <PlaceObject>
-    <Textblock>
-      <Paragraph>
-        <Value>Das ist Seite 1</Value>
-      </Paragraph>
-    </Textblock>
-  </PlaceObject>
-  <ClearPage openon="right"/>
-  <PlaceObject>
-    <Textblock>
-      <Paragraph>
-        <Value>Das ist Seite 3</Value>
-      </Paragraph>
-    </Textblock>
-  </PlaceObject>
-</Record>
-]]></listing>
-    </example>
-    <seealso><cmd name="Pagetype"/></seealso>
-  </command>
   <command en="NextFrame">
     <description xml:lang="en">
       <para>Switch to the next free frame of a positioning area.</para>
@@ -7792,7 +7694,7 @@
                     </Paragraph>
                 </Textblock>
             </PlaceObject>
-            <NewPage/>
+            <ClearPage />
         </Loop>
         <SavePages name="firstpage">
             <PlaceObject>
@@ -7837,7 +7739,7 @@
                     </Paragraph>
                 </Textblock>
             </PlaceObject>
-            <NewPage/>
+            <ClearPage />
         </Loop>
         <SavePages name="firstpage">
             <PlaceObject>

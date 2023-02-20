@@ -98,7 +98,6 @@
         <xs:element minOccurs="0" ref="en:LoadDataset"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
         <xs:element minOccurs="0" ref="en:Message"/>
-        <xs:element minOccurs="0" ref="en:NewPage"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
         <xs:element minOccurs="0" ref="en:NextRow"/>
         <xs:element minOccurs="0" ref="en:Options"/>
@@ -149,7 +148,6 @@
         <xs:element minOccurs="0" ref="en:LoadDataset"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
         <xs:element minOccurs="0" ref="en:Message"/>
-        <xs:element minOccurs="0" ref="en:NewPage"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
         <xs:element minOccurs="0" ref="en:NextRow"/>
         <xs:element minOccurs="0" ref="en:Options"/>
@@ -592,7 +590,6 @@
         <xs:element minOccurs="0" ref="en:LoadFontfile"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
         <xs:element minOccurs="0" ref="en:Message"/>
-        <xs:element minOccurs="0" ref="en:NewPage"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
         <xs:element minOccurs="0" ref="en:NextRow"/>
         <xs:element minOccurs="0" ref="en:NoBreak"/>
@@ -979,7 +976,6 @@
         <xs:element minOccurs="0" ref="en:LoadDataset"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
         <xs:element minOccurs="0" ref="en:Message"/>
-        <xs:element minOccurs="0" ref="en:NewPage"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
         <xs:element minOccurs="0" ref="en:NextRow"/>
         <xs:element minOccurs="0" ref="en:Options"/>
@@ -1622,7 +1618,6 @@
         <xs:element ref="en:LoadFontfile"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Message"/>
-        <xs:element ref="en:NewPage"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
         <xs:element ref="en:NoBreak"/>
@@ -2885,7 +2880,6 @@
         <xs:element ref="en:LoadFontfile"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Message"/>
-        <xs:element ref="en:NewPage"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
         <xs:element ref="en:NoBreak"/>
@@ -3090,48 +3084,6 @@
             </xs:enumeration>
           </xs:restriction>
         </xs:simpleType>
-      </xs:attribute>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="NewPage">
-    <xs:annotation>
-      <xs:documentation>Deprecated since 4.5.14. Use ClearPage (perhaps with option force="yes").
-      Finish the current page and creates a new one (only if new material for the page is available).</xs:documentation>
-    </xs:annotation>
-    <xs:complexType>
-      <xs:attribute name="force">
-        <xs:annotation>
-          <xs:documentation>Force the shipout of page now.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="openon">
-        <xs:annotation>
-          <xs:documentation>The next current page will be a left or a right page. E.g. when on page 1 and openon="right" then page 2 is empty and the next current page is 3.</xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="left">
-              <xs:annotation>
-                <xs:documentation>The next objects will be placed on a left page.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="right">
-              <xs:annotation>
-                <xs:documentation>The next objects will be placed on a right page.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-      <xs:attribute name="pagetype">
-        <xs:annotation>
-          <xs:documentation>The name of the next page type that should be used. If an InsertPage follows the NextPage, the pagetype is used for the first inserted page.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="skippagetype">
-        <xs:annotation>
-          <xs:documentation>The pagetype of the blank page if inserted (see the attribute openon).</xs:documentation>
-        </xs:annotation>
       </xs:attribute>
     </xs:complexType>
   </xs:element>
@@ -3909,7 +3861,6 @@
         <xs:element minOccurs="0" ref="en:LoadFontfile"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
         <xs:element minOccurs="0" ref="en:Message"/>
-        <xs:element minOccurs="0" ref="en:NewPage"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
         <xs:element minOccurs="0" ref="en:NextRow"/>
         <xs:element minOccurs="0" ref="en:NoBreak"/>
@@ -5482,7 +5433,6 @@
         <xs:element minOccurs="0" ref="en:LoadDataset"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
         <xs:element minOccurs="0" ref="en:Message"/>
-        <xs:element minOccurs="0" ref="en:NewPage"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
         <xs:element minOccurs="0" ref="en:NextRow"/>
         <xs:element minOccurs="0" ref="en:Options"/>
@@ -5647,7 +5597,6 @@
         <xs:element ref="en:LoadDataset"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Message"/>
-        <xs:element ref="en:NewPage"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
         <xs:element ref="en:Options"/>
@@ -7971,7 +7920,6 @@
         <xs:element ref="en:LoadFontfile"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Message"/>
-        <xs:element ref="en:NewPage"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
         <xs:element ref="en:NoBreak"/>
@@ -8125,7 +8073,6 @@
         <xs:element ref="en:LoadFontfile"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Message"/>
-        <xs:element ref="en:NewPage"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
         <xs:element ref="en:NoBreak"/>

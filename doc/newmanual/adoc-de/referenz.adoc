@@ -61,7 +61,6 @@ ifndef::backend-docbook5[]
 <<cmd-margin,Margin>>  +
 <<cmd-mark,Mark>>  +
 <<cmd-message,Message>>  +
-<<cmd-newpage,NewPage>>  +
 <<cmd-nextframe,NextFrame>>  +
 <<cmd-nextrow,NextRow>>  +
 <<cmd-nobreak,NoBreak>>  +
@@ -467,10 +466,6 @@ include::ref/message.adoc[]
 == Siehe auch
 
 Das Kapitel <<ch-tracing,Fehlersuche>>.
-
-include::ref/newpage.adoc[]
-
-<<ch-seitentypen-clearpage>>
 
 
 include::ref/nextframe.adoc[]

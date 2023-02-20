@@ -156,9 +156,6 @@
                      <ref name="e_Message"></ref>
                   </optional>
                   <optional>
-                     <ref name="e_NewPage"></ref>
-                  </optional>
-                  <optional>
                      <ref name="e_NextFrame"></ref>
                   </optional>
                   <optional>
@@ -282,9 +279,6 @@
                   </optional>
                   <optional>
                      <ref name="e_Message"></ref>
-                  </optional>
-                  <optional>
-                     <ref name="e_NewPage"></ref>
                   </optional>
                   <optional>
                      <ref name="e_NextFrame"></ref>
@@ -749,9 +743,6 @@
                      <ref name="e_Message"></ref>
                   </optional>
                   <optional>
-                     <ref name="e_NewPage"></ref>
-                  </optional>
-                  <optional>
                      <ref name="e_NextFrame"></ref>
                   </optional>
                   <optional>
@@ -1209,9 +1200,6 @@
                   </optional>
                   <optional>
                      <ref name="e_Message"></ref>
-                  </optional>
-                  <optional>
-                     <ref name="e_NewPage"></ref>
                   </optional>
                   <optional>
                      <ref name="e_NextFrame"></ref>
@@ -1878,9 +1866,6 @@
                      </optional>
                      <optional>
                         <ref name="e_Message"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_NewPage"></ref>
                      </optional>
                      <optional>
                         <ref name="e_NextFrame"></ref>
@@ -2983,9 +2968,6 @@
                         <ref name="e_Message"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_NewPage"></ref>
-                     </optional>
-                     <optional>
                         <ref name="e_NextFrame"></ref>
                      </optional>
                      <optional>
@@ -3218,39 +3200,6 @@
             </group>
             <ref name="foreign-nodes"></ref>
          </interleave>
-      </element>
-   </define>
-   <define name="e_NewPage">
-      <element name="NewPage">
-         <a:documentation>Deprecated since 4.5.14. Use ClearPage (perhaps with option force=&#34;yes&#34;).
-      Finish the current page and creates a new one (only if new material for the page is available).</a:documentation>
-         <optional>
-            <attribute name="force">
-               <a:documentation>Force the shipout of page now.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="openon">
-               <a:documentation>The next current page will be a left or a right page. E.g. when on page 1 and openon=&#34;right&#34; then page 2 is empty and the next current page is 3.</a:documentation>
-               <choice>
-                  <value>left</value>
-                  <a:documentation>The next objects will be placed on a left page.</a:documentation>
-                  <value>right</value>
-                  <a:documentation>The next objects will be placed on a right page.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="pagetype">
-               <a:documentation>The name of the next page type that should be used. If an InsertPage follows the NextPage, the pagetype is used for the first inserted page.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="skippagetype">
-               <a:documentation>The pagetype of the blank page if inserted (see the attribute openon).</a:documentation>
-            </attribute>
-         </optional>
-         <empty></empty>
       </element>
    </define>
    <define name="e_NextFrame">
@@ -3714,9 +3663,6 @@
                   </optional>
                   <optional>
                      <ref name="e_Message"></ref>
-                  </optional>
-                  <optional>
-                     <ref name="e_NewPage"></ref>
                   </optional>
                   <optional>
                      <ref name="e_NextFrame"></ref>
@@ -4859,9 +4805,6 @@
                      <ref name="e_Message"></ref>
                   </optional>
                   <optional>
-                     <ref name="e_NewPage"></ref>
-                  </optional>
-                  <optional>
                      <ref name="e_NextFrame"></ref>
                   </optional>
                   <optional>
@@ -5080,9 +5023,6 @@
                      </optional>
                      <optional>
                         <ref name="e_Message"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_NewPage"></ref>
                      </optional>
                      <optional>
                         <ref name="e_NextFrame"></ref>
@@ -6707,9 +6647,6 @@
                         <ref name="e_Message"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_NewPage"></ref>
-                     </optional>
-                     <optional>
                         <ref name="e_NextFrame"></ref>
                      </optional>
                      <optional>
@@ -7021,9 +6958,6 @@
                      </optional>
                      <optional>
                         <ref name="e_Message"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_NewPage"></ref>
                      </optional>
                      <optional>
                         <ref name="e_NextFrame"></ref>

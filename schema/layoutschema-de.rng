@@ -156,9 +156,6 @@
                      <ref name="e_Message"></ref>
                   </optional>
                   <optional>
-                     <ref name="e_NewPage"></ref>
-                  </optional>
-                  <optional>
                      <ref name="e_NextFrame"></ref>
                   </optional>
                   <optional>
@@ -282,9 +279,6 @@
                   </optional>
                   <optional>
                      <ref name="e_Message"></ref>
-                  </optional>
-                  <optional>
-                     <ref name="e_NewPage"></ref>
                   </optional>
                   <optional>
                      <ref name="e_NextFrame"></ref>
@@ -749,9 +743,6 @@
                      <ref name="e_Message"></ref>
                   </optional>
                   <optional>
-                     <ref name="e_NewPage"></ref>
-                  </optional>
-                  <optional>
                      <ref name="e_NextFrame"></ref>
                   </optional>
                   <optional>
@@ -1209,9 +1200,6 @@
                   </optional>
                   <optional>
                      <ref name="e_Message"></ref>
-                  </optional>
-                  <optional>
-                     <ref name="e_NewPage"></ref>
                   </optional>
                   <optional>
                      <ref name="e_NextFrame"></ref>
@@ -1878,9 +1866,6 @@
                      </optional>
                      <optional>
                         <ref name="e_Message"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_NewPage"></ref>
                      </optional>
                      <optional>
                         <ref name="e_NextFrame"></ref>
@@ -2983,9 +2968,6 @@
                         <ref name="e_Message"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_NewPage"></ref>
-                     </optional>
-                     <optional>
                         <ref name="e_NextFrame"></ref>
                      </optional>
                      <optional>
@@ -3218,39 +3200,6 @@
             </group>
             <ref name="foreign-nodes"></ref>
          </interleave>
-      </element>
-   </define>
-   <define name="e_NewPage">
-      <element name="NewPage">
-         <a:documentation>Veraltet seit Version 4.5.14. Benutze ClearPage (ggf. mit der Option force=&#34;yes&#34;).
-      Beendet die Ausgabe auf der aktuellen Seite und erzeugt eine neue Seite. Diese wird nur angelegt, wenn später Text o.ä. ausgegeben wird.</a:documentation>
-         <optional>
-            <attribute name="force">
-               <a:documentation>Seitenausgabe erzwingen.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="openon">
-               <a:documentation>Die nächste aktuelle Seite ist eine linke oder rechte Seite. Z.B. wenn auf Seite 1 ein Seitenwechsel erzwungen wird mit openon=&#34;right&#34;, dann wird Seite zwei leer und die nächste aktuelle Seite ist die Seite 3.</a:documentation>
-               <choice>
-                  <value>left</value>
-                  <a:documentation>Die nächsten Objekte werden auf einer linken Seite ausgegeben.</a:documentation>
-                  <value>right</value>
-                  <a:documentation>Die nächsten Objekte werden auf einer rechten Seite ausgegeben.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="pagetype">
-               <a:documentation>Der Name des Seitentyps der für die nächste Seite genommen werden soll. Falls danach ein InsertPage folgt, wird der Seitentyp für die erste Seite von InsertPage genommen.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="skippagetype">
-               <a:documentation>Der Seitentyp der leeren Seite, falls sie eingefügt wird.</a:documentation>
-            </attribute>
-         </optional>
-         <empty></empty>
       </element>
    </define>
    <define name="e_NextFrame">
@@ -3714,9 +3663,6 @@
                   </optional>
                   <optional>
                      <ref name="e_Message"></ref>
-                  </optional>
-                  <optional>
-                     <ref name="e_NewPage"></ref>
                   </optional>
                   <optional>
                      <ref name="e_NextFrame"></ref>
@@ -4859,9 +4805,6 @@
                      <ref name="e_Message"></ref>
                   </optional>
                   <optional>
-                     <ref name="e_NewPage"></ref>
-                  </optional>
-                  <optional>
                      <ref name="e_NextFrame"></ref>
                   </optional>
                   <optional>
@@ -5080,9 +5023,6 @@
                      </optional>
                      <optional>
                         <ref name="e_Message"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_NewPage"></ref>
                      </optional>
                      <optional>
                         <ref name="e_NextFrame"></ref>
@@ -6707,9 +6647,6 @@
                         <ref name="e_Message"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_NewPage"></ref>
-                     </optional>
-                     <optional>
                         <ref name="e_NextFrame"></ref>
                      </optional>
                      <optional>
@@ -7021,9 +6958,6 @@
                      </optional>
                      <optional>
                         <ref name="e_Message"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_NewPage"></ref>
                      </optional>
                      <optional>
                         <ref name="e_NextFrame"></ref>
