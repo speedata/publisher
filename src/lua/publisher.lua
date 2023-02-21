@@ -801,6 +801,29 @@ local function pdf_lineto( x,y )
     return string.format("%g %g l",x,y)
 end
 
+
+local function pdf_draw_pos_bp(x,y)
+    local wd = 0.1
+    return string.format("q 0 g 0.2 w %g %g m %g %g l %g %g l %g %g l h f Q ",x - wd,y - wd,x - wd,y + wd,x + wd,y + wd,x + wd,y - wd)
+end
+
+local function pdf_circle_pos_bp(x,y)
+    return circle_pdfstring_bp(x,y,0.5,0.5,"0G 0g","0G 0g",0)
+end
+local function pdf_circle_pos_big_bp(x,y)
+    return circle_pdfstring_bp(x,y,3,3,"0G 0g","0G 0g",0)
+end
+local function pdf_curveto_bp(x1,y1,x2,y2,x3,y3)
+    return string.format("%g %g %g %g %g %g c",x1,y1,x2,y2,x3,y3)
+end
+local function pdf_moveto_bp( x,y )
+    return string.format("%g %g m",x,y)
+end
+
+local function pdf_lineto_bp( x,y )
+    return string.format("%g %g l",x,y)
+end
+
 function pdfstring_from_color(colorname_or_number)
     local colno = tonumber(colorname_or_number)
     local colorname
@@ -2582,7 +2605,7 @@ function frame(obj)
     local x1, y1   = -rw + b_b_l_radius                     , -rw - dp
     local x2, y2   =  rw + wd - b_b_r_radius                , -rw - dp
     local x3, y3   =  rw + wd - circle_bezier * b_b_r_radius, -rw - dp
-    local x4, y4   =  rw + wd                               , -rw + circle_bezier * b_b_r_radius
+    local x4, y4   =  rw + wd                               , -rw - dp + circle_bezier * b_b_r_radius
     local x5, y5   =  rw + wd                               , -rw + b_b_r_radius
     local x6, y6   =  rw + wd                               ,  rw + ht - b_t_r_radius
     local x7, y7   =  rw + wd                               ,  rw + ht - circle_bezier * b_t_r_radius
@@ -2592,9 +2615,9 @@ function frame(obj)
     local x11, y11 = -rw + circle_bezier * b_t_l_radius     ,  rw + ht
     local x12, y12 = -rw                                    ,  rw + ht - circle_bezier * b_t_l_radius
     local x13, y13 = -rw                                    ,  rw + ht - b_t_l_radius
-    local x14, y14 = -rw                                    , -rw + b_b_l_radius
-    local x15, y15 = -rw                                    , -rw + circle_bezier * b_b_l_radius
-    local x16, y16 = -rw + circle_bezier * b_b_l_radius     , -rw
+    local x14, y14 = -rw                                    , -rw - dp + b_b_l_radius
+    local x15, y15 = -rw                                    , -rw -dp + circle_bezier * b_b_l_radius
+    local x16, y16 = -rw + circle_bezier * b_b_l_radius     , -rw - dp
 
     x1,  y1  = math.round(x1,3),  math.round(y1,3)
     x2,  y2  = math.round(x2,3),  math.round(y2,3)
@@ -2617,8 +2640,8 @@ function frame(obj)
     -- inner boundary
     local xx1, yy1   =   b_b_l_radius_inner                      , -dp
     local xx2, yy2   =   wd - b_b_r_radius_inner                 , -dp
-    local xx3, yy3   =   wd - circle_bezier * b_b_r_radius_inner , 0
-    local xx4, yy4   =   wd                                      , circle_bezier * b_b_r_radius_inner
+    local xx3, yy3   =   wd - circle_bezier * b_b_r_radius_inner , -dp
+    local xx4, yy4   =   wd                                      , -dp + circle_bezier * b_b_r_radius_inner
     local xx5, yy5   =   wd                                      , b_b_r_radius_inner
     local xx6, yy6   =   wd                                      , ht - b_t_r_radius_inner
     local xx7, yy7   =   wd                                      , ht - circle_bezier * b_t_r_radius_inner
@@ -2628,9 +2651,9 @@ function frame(obj)
     local xx11, yy11 =   circle_bezier * b_t_l_radius_inner      , ht
     local xx12, yy12 =   0                                       , ht - circle_bezier * b_t_l_radius_inner
     local xx13, yy13 =   0                                       , ht - b_t_l_radius_inner
-    local xx14, yy14 =   0                                       , b_b_l_radius_inner
-    local xx15, yy15 =   0                                       , circle_bezier * b_b_l_radius_inner
-    local xx16, yy16 =   circle_bezier * b_b_l_radius_inner      , 0
+    local xx14, yy14 =   0                                       , -dp + b_b_l_radius_inner
+    local xx15, yy15 =   0                                       , -dp + circle_bezier * b_b_l_radius_inner
+    local xx16, yy16 =   circle_bezier * b_b_l_radius_inner      , -dp
 
     xx1,  yy1  = math.round(xx1,3),  math.round(yy1,3)
     xx2,  yy2  = math.round(xx2,3),  math.round(yy2,3)
@@ -2701,7 +2724,7 @@ function frame(obj)
     rule[#rule + 1] = "Q"
 
     n.data = table.concat(rule," ")
-    if (obj.clip==true) then
+    if obj.clip then
         n_clip.data = table.concat(rule_clip, " ")
         node.setproperty(n_clip,{origin = "frame/clip"})
     end
@@ -2710,7 +2733,7 @@ function frame(obj)
     local pdf_restore = node.new("whatsit","pdf_restore")
 
     node.insert_after(pdf_save,pdf_save,n)
-    if (obj.clip==true) then
+    if obj.clip then
         node.insert_after(n,n,n_clip)
         node.insert_after(n_clip,n_clip,box)
     else
@@ -2936,6 +2959,54 @@ function circle_pdfstring(center_x, center_y, radiusx_sp, radiusy_sp, stroke_col
     circle[#circle + 1] = pdf_curveto(x5,y5,x6,y6,x7,y7)
     circle[#circle + 1] = pdf_curveto(x8,y8,x9,y9,x10,y10)
     circle[#circle + 1] = pdf_curveto(x11,y11,x12,y12,x1,y1)
+    if fill_colorstring == "" then
+        circle[#circle + 1] = "s"
+    else
+        circle[#circle + 1] = "b"
+    end
+    circle[#circle + 1] = "Q"
+    return table.concat(circle, " ")
+end
+
+function circle_pdfstring_bp(center_x, center_y, radiusx_bp, radiusy_bp, stroke_colorstring, fill_colorstring, rulewidth_bp )
+    local circle_bezier = 0.551915024494
+
+    local shift_dn, shift_rt = -radiusy_bp + center_y, -radiusx_bp + center_x
+    local dx = radiusx_bp * (1 - circle_bezier)
+    local dy = radiusy_bp * (1 - circle_bezier)
+
+    local x1 = shift_rt
+    local y1 = shift_dn + radiusy_bp
+    local x2 = x1
+    local y2 = shift_dn + radiusy_bp * 2 - dy
+    local x3 = shift_rt + dx
+    local y3 = shift_dn + radiusy_bp * 2
+    local x4 = shift_rt + radiusx_bp
+    local y4 = shift_dn + radiusy_bp * 2
+    local x5 = shift_rt + radiusx_bp * 2 - dx
+    local y5 = y3
+    local x6 = shift_rt + radiusx_bp * 2
+    local y6 = y2
+    local x7 = x6
+    local y7 = y1
+    local x8 = x6
+    local y8 = shift_dn + dy
+    local x9 = x5
+    local y9 = shift_dn
+    local x10 = x4
+    local y10 = y9
+    local x11 = x3
+    local y11 = y9
+    local x12 = x1
+    local y12 = y8
+    local circle = {}
+    circle[#circle + 1] = "q"
+    circle[#circle + 1] = string.format("%g w %s %s", rulewidth_bp, stroke_colorstring, fill_colorstring)
+    circle[#circle + 1] = pdf_moveto_bp(x1,y1)
+    circle[#circle + 1] = pdf_curveto_bp(x2,y2,x3,y3,x4,y4)
+    circle[#circle + 1] = pdf_curveto_bp(x5,y5,x6,y6,x7,y7)
+    circle[#circle + 1] = pdf_curveto_bp(x8,y8,x9,y9,x10,y10)
+    circle[#circle + 1] = pdf_curveto_bp(x11,y11,x12,y12,x1,y1)
     if fill_colorstring == "" then
         circle[#circle + 1] = "s"
     else
