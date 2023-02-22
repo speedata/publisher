@@ -4577,7 +4577,7 @@
                         <ref name="e_A"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_Image"></ref>
+                        <ref name="e_Barcode"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Bookmark"></ref>
@@ -4586,31 +4586,34 @@
                         <ref name="e_Box"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_Clip"></ref>
-                     </optional>
-                     <optional>
                         <ref name="e_Circle"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_Rule"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Textblock"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Barcode"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Table"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Transformation"></ref>
+                        <ref name="e_Clip"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Frame"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Image"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Overlay"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Rule"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Switch"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Table"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Textblock"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Transformation"></ref>
                      </optional>
                   </interleave>
                </oneOrMore>

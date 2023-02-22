@@ -4936,18 +4936,19 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:A"/>
-        <xs:element ref="en:Image"/>
+        <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Box"/>
-        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Circle"/>
-        <xs:element ref="en:Rule"/>
-        <xs:element ref="en:Textblock"/>
-        <xs:element ref="en:Barcode"/>
-        <xs:element ref="en:Table"/>
-        <xs:element ref="en:Transformation"/>
+        <xs:element ref="en:Clip"/>
         <xs:element ref="en:Frame"/>
+        <xs:element ref="en:Image"/>
+        <xs:element ref="en:Overlay"/>
+        <xs:element ref="en:Rule"/>
         <xs:element ref="en:Switch"/>
+        <xs:element ref="en:Table"/>
+        <xs:element ref="en:Textblock"/>
+        <xs:element ref="en:Transformation"/>
       </xs:choice>
       <xs:attribute name="allocate">
         <xs:annotation>
