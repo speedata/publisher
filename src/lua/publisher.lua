@@ -3760,7 +3760,11 @@ function set_attribute(nodelist,attribute_name,value)
     else
         att_value = value
     end
-    node.set_attribute(nodelist,att_number,att_value)
+    if att_value == nil then
+        node.unset_attribute(nodelist,att_number)
+    else
+        node.set_attribute(nodelist,att_number,att_value)
+    end
 end
 
 function clear_attribute(nodelist,attribute_name)
@@ -5135,7 +5139,8 @@ function hbkern(nodelist)
                 local bgcolor = get_attribute(head,"background-color")
                 set_attribute(kern,"background-color",bgcolor)
                 node.setproperty(kern,node.getproperty(head))
-                set_attribute(kern,"hyperlink",get_attribute(head,"hyperlink"))
+                local hl = get_attribute(head,"hyperlink")
+                set_attribute(kern,"hyperlink",hl)
                 curkern = 0
             end
             local k = getprop(head,"kernafter")
