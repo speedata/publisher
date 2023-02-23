@@ -4095,13 +4095,13 @@ function bigger_glue_spec( a,b )
     if a.width > b.width then return a else return b end
 end
 
-
+-- used for br
 function short_newline(fam)
     local strutheight = fonts.lookup_fontfamily_number_instance[fam].baselineskip
     local dummypenalty
     dummypenalty = node.new("penalty")
     dummypenalty.penalty = 10000
-    set_attribute(dummypenalty,"newline")
+    set_attribute(dummypenalty,"newline",1)
 
     local list, cur
     list, cur = dummypenalty,dummypenalty
@@ -4125,7 +4125,7 @@ function newline(fam)
     local dummypenalty
     dummypenalty = node.new("penalty")
     dummypenalty.penalty = 10000
-    set_attribute(dummypenalty,"newline")
+    set_attribute(dummypenalty,"newline",1)
 
     local list, cur
     list, cur = dummypenalty,dummypenalty
@@ -4143,9 +4143,9 @@ function newline(fam)
     g = set_glue(nil,{stretch = 2^16, stretch_order = 2})
     p2 = node.new("penalty")
     p2.penalty = -10000
-    set_attribute(p1,"newline")
-    set_attribute(p2,"newline")
-    set_attribute(g,"newline")
+    set_attribute(p1,"newline",1)
+    set_attribute(p2,"newline",1)
+    set_attribute(g,"newline",1)
     -- important for empty lines (adjustlineheight)
     set_attribute(p1,"fontfamily",fam)
     list,cur = node.insert_after(list,cur,p1)
@@ -4375,12 +4375,12 @@ function hbglyphlist(arguments)
             local dummypenalty
             dummypenalty = node.new("penalty")
             dummypenalty.penalty = 10000
-            set_attribute(dummypenalty,"newline")
+            set_attribute(dummypenalty,"newline",1)
             list,cur = node.insert_after(list,cur,dummypenalty)
 
             local ht = fonts.lookup_fontfamily_number_instance[fontfamily].size
             local strut = add_rule(nil,"head",{height = ht * 0.75, depth = 0.25 * ht, width = 0 })
-            set_attribute(strut,"newline")
+            set_attribute(strut,"newline",1)
             setprop(strut,"origin","strut newline hb")
             list,cur = node.insert_after(list,cur,strut)
 
@@ -4392,9 +4392,9 @@ function hbglyphlist(arguments)
 
             p2 = node.new("penalty")
             p2.penalty = -10000
-            set_attribute(p1,"newline")
-            set_attribute(p2,"newline")
-            set_attribute(g,"newline")
+            set_attribute(p1,"newline",1)
+            set_attribute(p2,"newline",1)
+            set_attribute(g,"newline",1)
 
 
             -- important for empty lines (adjustlineheight)
@@ -4569,13 +4569,13 @@ local function ffglyphlist(arguments)
             local dummypenalty
             dummypenalty = node.new("penalty")
             dummypenalty.penalty = 10000
-            set_attribute(dummypenalty,"newline")
+            set_attribute(dummypenalty,"newline",1)
             head,last = node.insert_after(head,last,dummypenalty)
 
             local ht = fonts.lookup_fontfamily_number_instance[fontfamily].size
             local strut = add_rule(nil,"head",{height = ht * 0.75, depth = ht * 0.25, width = 0 })
             setprop(strut,"origin","strut newline ff")
-            set_attribute(strut,"newline")
+            set_attribute(strut,"newline",1)
             head,last = node.insert_after(head,last,strut)
 
             local p1,g,p2
@@ -4587,9 +4587,9 @@ local function ffglyphlist(arguments)
             p2 = node.new("penalty")
             p2.penalty = -10000
 
-            set_attribute(p1,"newline")
-            set_attribute(p2,"newline")
-            set_attribute(g,"newline")
+            set_attribute(p1,"newline",1)
+            set_attribute(p2,"newline",1)
+            set_attribute(g,"newline",1)
             local attr = { fontfamily = fontfamily}
             set_attributes(p1,attr)
             set_attributes(p2,attr)
