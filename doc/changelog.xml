@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.13">
+    <entry version="4.13.8" date="2023-02-23">
+        <en>Two new functions for page width and page height (#464).</en>
+        <de>Zwei neue Funktionen Seitenbreite und Seitenhöhe (#464).</de>
+    </entry>
     <entry version="4.13.7" date="2023-02-22">
         <en>Bugfix: broken hyperlink gets inserted at kern (#461).</en>
         <de>Fehlerkorrektur: kaputter hyperlink wird beim Kern eingesetzt (#461).</de>
