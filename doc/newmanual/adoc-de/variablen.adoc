@@ -28,7 +28,7 @@ Sonst könnten Kollisionen bei der Namensvergabe entstehen.
   Der Modus für den Durchlauf. Kommasepariert.
 
 `_pagewidth` und `_pageheight`::
-  Die Breite und Höhe der Seite. Vorgabe ist 210mm und 297mm.
+  Die Breite und Höhe der Seite. Vorgabe ist 210mm und 297mm. Diese Variablen dürfen nur benutzt werden, wenn die Seite korrekt initialisiert wurde, z.B. durch Ausgeben eines Objekts. Es wird empfohlen, die Funktionen `sd:pagewidth('mm')` und `sd:pageheight('mm')` zu benutzen.
 
 `_page`::
    Der Name des Textbereichs der ganzen Seite.

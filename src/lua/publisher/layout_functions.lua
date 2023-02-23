@@ -659,6 +659,69 @@ local function aspectratio( dataxml,arg )
   return img.img.xsize / img.img.ysize
 end
 
+local function pageheight(dataxml,arg)
+    publisher.setup_page(nil,"layout_functions#pageheight")
+    local unit = arg[1] or "mm"
+    if unit then
+        local width = publisher.current_page.height
+        local ret
+        if unit == "cm" then
+            ret = width / publisher.tenmm_sp
+        elseif unit == "mm" then
+            ret = width / publisher.onemm_sp
+        elseif unit == "in" then
+            ret = width / publisher.onein_sp
+        elseif unit == "sp" then
+            ret = width
+        elseif unit == "pc" then
+            ret = width / publisher.onepc_sp
+        elseif unit == "pt" then
+            ret = width / publisher.onept_sp
+        elseif unit == "pp" then
+            ret = width / publisher.onepp_sp
+        elseif unit == "dd" then
+            ret = width / publisher.onedd_sp
+        elseif unit == "cc" then
+            ret = width / publisher.onecc_sp
+        else
+            err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'",unit)
+        end
+        return math.round(ret, 0)
+    end
+end
+
+
+local function pagewidth(dataxml,arg)
+    publisher.setup_page(nil,"layout_functions#pagewidth")
+    local unit = arg[1] or "mm"
+    if unit then
+        local width = publisher.current_page.width
+        local ret
+        if unit == "cm" then
+            ret = width / publisher.tenmm_sp
+        elseif unit == "mm" then
+            ret = width / publisher.onemm_sp
+        elseif unit == "in" then
+            ret = width / publisher.onein_sp
+        elseif unit == "sp" then
+            ret = width
+        elseif unit == "pc" then
+            ret = width / publisher.onepc_sp
+        elseif unit == "pt" then
+            ret = width / publisher.onept_sp
+        elseif unit == "pp" then
+            ret = width / publisher.onepp_sp
+        elseif unit == "dd" then
+            ret = width / publisher.onedd_sp
+        elseif unit == "cc" then
+            ret = width / publisher.onecc_sp
+        else
+            err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'",unit)
+        end
+        return math.round(ret, 0)
+    end
+end
+
 local function visible_pagenumber(dataxml, arg)
     return visiblepagenumber(arg[1])
 end
@@ -749,6 +812,10 @@ register("urn:speedata:2009/publisher/functions/en","number-of-pages",number_of_
 register("urn:speedata:2009/publisher/functions/en","odd",odd)
 
 register("urn:speedata:2009/publisher/functions/en","pagenumber",pagenumber)
+
+register("urn:speedata:2009/publisher/functions/en","pagewidth",pagewidth)
+
+register("urn:speedata:2009/publisher/functions/en","pageheight",pageheight)
 
 register("urn:speedata:2009/publisher/functions/en","randomitem",randomitem)
 

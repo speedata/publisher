@@ -146,6 +146,12 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `sd:pagenumber(<string>)`::
   Get the number of the page where the given mark is placed on. See the command Mark.
 
+`sd:pageheight(<unit>)`::
+  Similar to `sd:pagewidth()`, just for the height.
+
+`sd:pagewidth(<unit>)`::
+  Get the width of the page in number of units (but without the unit). For example a page with width 210mm `sd:pagewidth("mm")` returns `210`. This function initializes a page. (Since version 4.13.8.)
+
 `sd:romannumeral(<number>)`::
   Convert the number into a lowercase roman numeral.
 

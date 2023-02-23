@@ -28,7 +28,7 @@ Otherwise there could be collisions when assigning names.
   The mode for the pass. Separated by commas.
 
 `_pagewidth` and `_pageheight`::
-  The width and height of the page. Default is 210mm and 297mm.
+  The width and height of the page. Default is 210mm and 297mm. These variables must not be used unless the page is initialized correctly (for example with placing objects on the page). It is suggested to use the variables `sd:pagewidth('mm')` and `sd:pageheight('mm')` instead.
 
 `_page`::
    The name of the text area of the whole page.

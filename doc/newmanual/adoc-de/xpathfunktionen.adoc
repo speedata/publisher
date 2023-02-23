@@ -155,6 +155,12 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `sd:pagenumber(<Marke>)`::
    Liefert die Seitenzahl der Seite auf der die angegebene Marke ausgegeben wurde. Siehe den Befehl <<cmd-mark,Mark>> und den Abschnitt über <<ch-verzeichnisseerstellen-marker>>.
 
+`sd:pageheight(<Einheit>)`::
+  Wie `sd:pagewidth()`, nur für die Höhe.
+
+`sd:pagewidth(<Einheit>)`::
+   Erhalte die Breite der Seite in der angegebenen Einheit. Es wird eine Zahl ohne diese Einheit zurückgegeben. Beispiel für eine Seite mit 210mm Breite würde die Funktion `sd:pagewidth("mm")` die Zahl `210` zurückgeben. Diese Funktion initialisiert eine Seite. (Seit Version 4.13.8.)
+
 `sd:randomitem(<Wert>[,<Wert>,...])`::
    Gibt einen der Werte zurück.
 
