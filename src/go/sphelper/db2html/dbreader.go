@@ -568,6 +568,15 @@ getContents:
 				curOutput.WriteString("\n<ul>")
 				omitP = true
 			case "chapter", "appendix", "preface":
+				if curpage != nil {
+					curSectionContents := normalizeSpace(curpage.RawContents.String())
+					if curSectionContents != "" {
+						d.createSearchEntry(curSectionTitle, curpage.RawContents.String(), curpage.Pagename, indexSectionID, curpage.Title)
+						indexSectionID = ""
+						curpage.RawContents.Reset()
+					}
+				}
+
 				id := attr(elt, "id")
 				sectionid = id
 				indexSectionID = id
