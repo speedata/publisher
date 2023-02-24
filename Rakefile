@@ -15,26 +15,6 @@ File.read("version").each_line do |line|
 	@versions[product]=versionnumber
 end
 
-def build_go(srcdir,destbin,goos,goarch,targettype)
-	if goarch
-		ENV['GOARCH'] = goarch
-	end
-	if goos
-		ENV['GOOS'] = goos
-	end
-	publisher_version = @versions['publisher_version']
-	binaryname = goos == "windows" ? "sp.exe" : "sp"
-    # Now compile the go executable
-	cmdline = "go build -ldflags '-X main.dest=#{targettype} -X main.version=#{publisher_version}' -o #{destbin}/#{binaryname} sp/main"
-	sh cmdline do |ok, res|
-		if ! ok
-	    	puts "Go compilation failed"
-	    	return false
-	    end
-	end
-	return true
-end
-
 desc "Show rake description"
 task :default do
 	puts
@@ -51,7 +31,6 @@ task :sphelper do
 		sh "go install -ldflags \"-X main.basedir=#{installdir} -s\"  speedatapublisher/sphelper/sphelper"
 	end
 end
-
 
 desc "Compile and install necessary software"
 task :build => [:sphelper] do
@@ -81,27 +60,6 @@ desc "Generate site documentation"
 task :sitedoc => [:sphelper] do
 	sh "#{installdir}/bin/sphelper sitedoc"
 	puts "done"
-end
-
-desc "Generate new docbook based manual"
-task :dbmanual => [:sphelper] do
-	sh "#{installdir}/bin/sphelper db2html"
-	puts "done"
-end
-
-
-desc "Update the examples in the documentation"
-task :updateexamples do
-	Dir.chdir(installdir.join("doc","manual")) do
-		Dir.glob('doc/examples-*/**').select { |f| File.directory? f}.each do |dir|
-			puts "Update example in #{dir}"
-			Dir.chdir(dir) do
-				`sp`
-				`sp clean`
-				`convert publisher.pdf[0] -thumbnail 240  thumbnail.png`
-			end
-		end
-	end
 end
 
 desc "Generate schema from master"
@@ -185,94 +143,6 @@ task :dist => [:sphelper] do
 	sh "#{installdir}/bin/sphelper dist windows/amd64 linux/amd64"
 end
 
-desc "Make ZIP files - set NODOC=true for stripped zip file"
-task :zip => [:sphelper] do
-	srcbindir = ENV["LUATEX_BIN"] || ""
-	if ! test(?d,srcbindir) then
-		puts "Environment variable LUATEX_BIN does not exist.\nMake sure it points to a path which contains `luatex'.\nUse like this: rake zip LUATEX_BIN=/path/to/bin\nAborting"
-		next
-	end
-	publisher_version = @versions['publisher_version']
-
-	dest="#{builddir}/speedata-publisher"
-	targetbin="#{dest}/bin"
-	targetshare="#{dest}/share"
-	targetsw=File.join(dest,"sw")
-	targetfonts=File.join(targetsw,"fonts")
-	targetschema=File.join(targetshare,"schema")
-	rm_rf dest
-	mkdir_p dest
-	mkdir_p targetbin
-	mkdir_p File.join(targetsw,"img")
-	mkdir_p targetschema
-	mkdir_p targetsw
-	if ENV['NODOC'] != "true" then
-		Rake::Task["doc"].execute
-		cp_r "#{builddir}/manual",File.join(targetshare,"doc")
-	end
-	platform = nil
-	arch = nil
-	execfilename = "sdluatex"
-	if test(?f, srcbindir +"/sdluatex") then
-		cp_r(srcbindir +"/sdluatex",targetbin)
-	elsif test(?f,srcbindir +"/sdluatex.exe") then
-		cp_r(Dir.glob(srcbindir +"/*") ,targetbin)
-		File.open(targetbin + "/texmf.cnf", "w") { |file| file.write("#dummy\n") }
-		platform = "windows"
-		execfilename = "sdluatex.exe"
-	end
-	cmd = "file #{targetbin}/#{execfilename}"
-	res = `#{cmd}`.gsub(/^.*luatex.*:/,'')
-	case res
-	when /Mach-O/
-		platform = "darwin"
-	when /Linux/
-		platform = "linux"
-	end
-	case res
-	when /x86-64/,/x86_64/,/64-bit/,/PE32\+/
-		arch = "amd64"
-	when /32-bit/,/80386/,/i386/
-		arch = "386"
-	end
-	if !platform or !arch then
-		puts "Could not determine architecture (amd64/386) or platform (windows/linux/darwin)"
-		puts "This is the output of 'file':"
-		puts res
-		next
-	end
-
-	zipname = "speedata-publisher-#{platform}-#{arch}-#{publisher_version}.zip"
-	rm_rf File.join(builddir,zipname)
-
-	if build_go(srcdir,targetbin,platform,arch,"directory") == false then next end
-	cp_r(File.join("fonts"),targetfonts)
-	cp_r(Dir.glob("img/*"),File.join(targetsw,"img"))
-	cp_r(File.join("lib"),targetshare)
-	cp_r(File.join("schema","layoutschema-en.rng"),targetschema)
-	cp_r(File.join("schema","layoutschema-de.rng"),targetschema)
-
-	Dir.chdir("src") do
-		cp_r(["tex","hyphenation"],targetsw)
-		# do not copy every Lua file to the dest
-		# and leave out .gitignore and others
-		Dir.glob("**/*.lua").reject { |x|
-		    x =~  /viznode|fileutils/
-		}.each { |x|
-		  FileUtils.mkdir_p(File.join(targetsw , File.dirname(x)))
-		  FileUtils.cp(x,File.join(targetsw,File.dirname(x)))
-		}
-	end
-	sh "#{installdir}/bin/sphelper mkreadme #{platform} #{dest}"
-	dirname = "speedata-publisher"
-	cmdline = "zip -rq #{zipname} #{dirname}"
-	Dir.chdir("build") do
-		puts cmdline
-		puts `#{cmdline}`
-	end
-end
-
-
 desc "Prepare a .deb directory"
 task :deb => [:sphelper] do
 	srcbindir = ENV["LUATEX_BIN"] || ""
@@ -284,7 +154,6 @@ task :deb => [:sphelper] do
 
 	destdir      = builddir.join("deb")
 	targetbin    = destdir.join("usr","bin")
-	targetdoc    = destdir.join("usr","share","doc","speedata-publisher")
 	targetshare  = destdir.join("usr","share")
 	targetfonts  = targetshare.join("speedata-publisher", "fonts")
 	targetimg    = targetshare.join("speedata-publisher", "img")
@@ -293,18 +162,14 @@ task :deb => [:sphelper] do
 	targetsw     = targetshare.join("speedata-publisher", "sw")
 
 	rm_rf destdir
-	Rake::Task["doc"].execute
 
 	mkdir_p targetbin
-	mkdir_p targetdoc
 	mkdir_p targetfonts
 	mkdir_p targetimg
 	mkdir_p targetlib
 	mkdir_p targetschema
 	mkdir_p targetsw
 
-
-	cp_r "#{builddir}/manual/.",targetdoc
 
 	platform = nil
 	arch = nil
@@ -360,6 +225,10 @@ task :deb => [:sphelper] do
 
 	cp_r(File.join("schema","layoutschema-en.rng"),targetschema)
 	cp_r(File.join("schema","layoutschema-de.rng"),targetschema)
+	cp_r(File.join("schema","catalog-schema-en.xml"),targetschema)
+	cp_r(File.join("schema","catalog-schema-de.xml"),targetschema)
+	cp_r(File.join("schema","layoutschema-en.xsd"),targetschema)
+	cp_r(File.join("schema","layoutschema-de.xsd"),targetschema)
 
 	Dir.chdir("src") do
 		cp_r(["tex","hyphenation","metapost"],targetsw)

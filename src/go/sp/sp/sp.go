@@ -171,12 +171,15 @@ func init() {
 	switch runtime.GOOS {
 	case osDarwin:
 		defaults["opencommand"] = "open"
+		defaults["openurl"] = "open -u"
 		homedir = os.Getenv("HOME")
 	case osLinux:
 		defaults["opencommand"] = "xdg-open"
+		defaults["openurl"] = "xdg-open"
 		homedir = os.Getenv("HOME")
 	case osWindows:
 		defaults["opencommand"] = "cmd /C start"
+		defaults["openurl"] = "start"
 
 		me, err := user.Current()
 		if err != nil {
@@ -280,6 +283,19 @@ func openFile(filename string) {
 	// windows doesn't like quotation marks on the filename argument. So we change into the
 	// directory
 	cmd.Dir = filepath.Dir(filename)
+	err := cmd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func openWebPage(url string) {
+	opencommand := getOption("opencommand")
+	cmdname := strings.SplitN(opencommand, " ", -1)
+	cmdname = append(cmdname, url)
+	cmd := exec.Command(cmdname[0], cmdname[1:]...)
+	// windows doesn't like quotation marks on the filename argument. So we change into the
+	// directory
 	err := cmd.Run()
 	if err != nil {
 		log.Fatal(err)
@@ -482,10 +498,10 @@ func prependXML(arg string) {
 	prependxml = append(prependxml, arg)
 }
 
-/// We don't know where the executable is. On systems where we have
-/// LuaTeX, we don't want to interfere with the binary so we
-/// install a binary called sdluatex (linux package). Therefore
-/// we check for `sdluatex` and `luatex`, if the former is not found.
+// We don't know where the executable is. On systems where we have
+// LuaTeX, we don't want to interfere with the binary so we
+// install a binary called sdluatex (linux package). Therefore
+// we check for `sdluatex` and `luatex`, if the former is not found.
 func getExecutablePath() string {
 	// 1 check the installdir/bin for sdluatex(.exe)
 	// 2 check PATH for sdluatex(.exe)
@@ -1163,7 +1179,7 @@ func main() {
 			}
 		}
 	case cmdDoc:
-		openFile(pathToDocumentation)
+		openWebPage("https://doc.speedata.de")
 		os.Exit(0)
 	case cmdListFonts:
 		var xml string

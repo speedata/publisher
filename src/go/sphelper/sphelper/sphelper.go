@@ -145,11 +145,6 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-	case "db2html":
-		err = db2html.DoThings(cfg, "publisherhandbuch", false)
-		if err != nil {
-			log.Fatal(err)
-		}
 	case "genschema":
 		err = genschema.DoThings(cfg)
 		if err != nil {
@@ -165,7 +160,6 @@ func main() {
 			filename = "speedata-publisher"
 		}
 
-		makedoc(cfg, false)
 		destdir := filepath.Join(cfg.Builddir, filename)
 		var srcbindir string
 		if srcbindir = os.Getenv("LUATEX_BIN"); srcbindir == "" || !fileutils.IsDir(srcbindir) {
