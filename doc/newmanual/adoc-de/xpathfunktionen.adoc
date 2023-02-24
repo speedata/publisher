@@ -234,6 +234,9 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `lower-case(<text>)`::
    Gibt den Text als Kleinbuchstaben zurück. `lower-case('Text')` ergibt `text`.
 
+`matches(<Text>,<Regexp>[,<flags>])`::
+   Prüft, ob der Text auf den Regulären Ausdruck Regexp passt. Flags kann ein oder mehrere Zeichen von `sim` sein (siehe https://www.w3.org/TR/xpath-functions-31/#flags). Beispiel: `matches("banana", "^(.a)+$")` ergibt „Wahr“.
+
 `max(<Zahl>[, <Zahl>, ...])`::
 	Liefert das Maximum der Werte zurück: `max(1.1,2.2,3.3,4.4)` ergibt `4.4`.
 

@@ -81,6 +81,14 @@ static int lua_contains(lua_State *L) {
   return 1;
 }
 
+static int lua_matches(lua_State *L) {
+  const char *text = luaL_checkstring(L, 1);
+  const char *regexp = luaL_checkstring(L, 2);
+  const int ret = sdMatches(text, regexp);
+  lua_pushboolean(L,ret);
+  return 1;
+}
+
 static int lua_convertimage(lua_State *L) {
   const char *filename = luaL_checkstring(L, 1);
   const char *imagehandler = luaL_checkstring(L, 2);
@@ -257,6 +265,7 @@ static const struct luaL_Reg myfuncs[] = {
     {"listfonts", lua_listfonts},
     {"loadxmlfile", lua_loadxmlfile},
     {"lookupfile", lua_lookupfile},
+    {"matches",lua_matches},
     {"parse_html_text", lua_parsehtmltext},
     {"parse_html", lua_parsehtml},
     {"replace", lua_sdreplace},

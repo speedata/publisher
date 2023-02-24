@@ -1096,6 +1096,28 @@ M.default_functions["contains"] = function(dataxml,arg)
     return ret == "true"
 end
 
+
+M.default_functions["matches"] = function(dataxml,arg)
+    -- flags can be one of ims, x is not supported
+    if arg[1] == nil or arg[2] == nil  then
+        -- warning("contains(): one of the arguments is empty")
+        return false
+    end
+    local text = publisher.xml_stringvalue(arg[1])
+    local re = publisher.xml_stringvalue(arg[2])
+
+    local flags = arg[3] or ""
+    if string.find(flags,"x") then
+        warning("matches does not support the x flag")
+    end
+    if flags ~= "" then
+        flags = "(?" .. flags .. ")"
+    end
+    local ret = publisher.splib.matches(text,flags .. re)
+    return ret
+end
+
+
 M.default_functions["upper-case"] = function(dataxml,arg)
     local str = arg and arg[1]
     if str then

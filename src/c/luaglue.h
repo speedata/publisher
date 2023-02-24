@@ -83,6 +83,7 @@ extern "C" {
 extern char* sdParseHTMLText(const char* htmltext, const char* csstext);
 extern char* sdParseHTML(const char* filename);
 extern char* sdContains(const char* haystack, const char* needle);
+extern int sdMatches(const char* text, const char* rexpr);
 extern char** sdTokenize(const char* text, const char* rexpr);
 extern char* sdReplace(const char* text, const char* rexpr, const char* repl);
 extern char* sdHtmlToXml(const char* input);

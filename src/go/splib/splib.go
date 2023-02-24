@@ -82,6 +82,21 @@ func sdContains(haystackC *C.char, needleC *C.char) *C.char {
 	return C.CString(ret)
 }
 
+//export sdMatches
+func sdMatches(textC, rexprC, flags *C.char) int {
+	text := C.GoString(textC)
+	reString := C.GoString(rexprC)
+	re, err := regexp.Compile(reString)
+	if err != nil {
+		return 0
+	}
+	r := re.MatchString(text)
+	if r {
+		return 1
+	}
+	return 0
+}
+
 //export sdTokenize
 func sdTokenize(textC, rexprC *C.char) **C.char {
 	text := C.GoString(textC)

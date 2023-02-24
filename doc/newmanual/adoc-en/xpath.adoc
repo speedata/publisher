@@ -223,6 +223,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `lower-case(<text>)`::
    Return the text in lowercase letters.
 
+`matches(<text>,<regexp>[,<flags>])`::
+  Return true if the regexp matches the text. Flags can be one of `sim` and are described in the spec: https://www.w3.org/TR/xpath-functions-31/#flags. Example: `matches("banana", "^(.a)+$")` returns true.
+
 `max()`::
   Return the maximum value. `max(1.1,2.2,3.3,4.4)` returns `4.4`.
 
