@@ -1072,6 +1072,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="minwidth">
+               <a:documentation>Minimum width of the column. Argument can be a number (in grid cells) or a length (e.g. 2cm).</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="padding-left">
                <a:documentation>Set the left padding for the column</a:documentation>
             </attribute>
@@ -1083,7 +1088,7 @@
          </optional>
          <optional>
             <attribute name="width">
-               <a:documentation>Width of the column. Argument can be a number (in grid cells) a length (e.g. 2cm) or a *-number (e.g. 4*).</a:documentation>
+               <a:documentation>Width of the column. Argument can be a number (in grid cells) a length (e.g. 2cm), a *-number (e.g. 4*) or the keyword min or max.</a:documentation>
             </attribute>
          </optional>
          <optional>

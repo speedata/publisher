@@ -582,6 +582,7 @@ end
 --- Set definitions for a specific column of a table.
 function commands.column( layoutxml,dataxml )
     local ret = {}
+    ret.minwidth         = publisher.read_attribute(layoutxml,dataxml,"minwidth","width_sp")
     ret.width            = publisher.read_attribute(layoutxml,dataxml,"width","string")
     ret.backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string")
     ret.align            = publisher.read_attribute(layoutxml,dataxml,"align","string")

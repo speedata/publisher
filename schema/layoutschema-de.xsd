@@ -870,6 +870,11 @@
           <xs:documentation>Farbe der Tabellenspalte.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="minwidth">
+        <xs:annotation>
+          <xs:documentation>Minimale Breite der Spalte. Kann entweder in Rasterzellen (Zahl) oder in absoluten Maßangaben (z.B. 1cm) angegeben werden.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="padding-left">
         <xs:annotation>
           <xs:documentation>Setze das linke padding für diese Spalte</xs:documentation>
@@ -882,7 +887,7 @@
       </xs:attribute>
       <xs:attribute name="width">
         <xs:annotation>
-          <xs:documentation>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm) oder in *-Angaben (z.B. 4*) angegeben werden.</xs:documentation>
+          <xs:documentation>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm), in *-Angaben (z.B. 4*) oder mit den Schlüsselwörtern min und max angegeben werden.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="valign">

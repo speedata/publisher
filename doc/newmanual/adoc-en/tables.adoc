@@ -231,7 +231,7 @@ image::tab-colspan-rowspan.png[width=50%,scaledwidth=100%]
 [[ch-tables-columnwidths]]
 == Specifying the column widths
 
-In the previous examples the widths of the cells are automatically determined by the content. You can also specify fixed column widths. The command for this is called Columns and is listed directly as the first command within Table:
+In the previous examples the widths of the cells are automatically determined by the content. You can also specify fixed column widths. The command for this is called `Columns` and is listed directly as the first command within `Table`:
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -248,7 +248,42 @@ In the previous examples the widths of the cells are automatically determined by
 -------------------------------------------------------------------------------
 
 
-Here it is specified that the table has three columns. The first column has a width of 2mm, the second and third columns divide the remaining width in a ratio of 1 to 3. In the Column command, you can also define further specifications for the column: the horizontal and vertical alignment and the background color can be specified. A specification for a cell overwrites the default.
+Here it is specified that the table has three columns. The first column has a width of 2mm, the second and third columns divide the remaining width in a ratio of 1 to 3.
+
+Instead of a fixed width or a `*` specification, you can also specify the keywords `min` and `max`:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Trace objects="yes" />
+<Table>
+    <Columns>
+        <Column width="min" />
+        <Column width="max" />
+    </Columns>
+    <Tr valign="top">
+        <Td>
+            <Paragraph>
+                <Value>The quick brown fox</Value>
+            </Paragraph>
+        </Td>
+        <Td>
+            <Paragraph>
+                <Value>The quick brown fox</Value>
+            </Paragraph>
+        </Td>
+    </Tr>
+</Table>
+-------------------------------------------------------------------------------
+
+[[abb-min-max-table]]
+.Effect of min and max for column specifications
+image::tab-min-max.png[width=40%,scaledwidth=100%]
+
+`min` in the width specification means that the column will be as narrow as possible, `max` means that the column will be as wide as necessary.
+
+In addition to specifying `min` or `max` for column widths, you can also use `minwidth` to specify the minimum width of a column.
+
+In the `Column` command, you can also define further specifications for the column: the horizontal and vertical alignment and the background color can be specified. A specification for a cell overwrites the default.
 
 == Table wraps
 

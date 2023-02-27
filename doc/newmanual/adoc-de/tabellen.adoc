@@ -284,6 +284,40 @@ Der Befehl dazu lautet `Columns` und wird direkt als erster Befehl innerhalb von
 
 Hier wird festgelegt, dass die Tabelle drei Spalten hat.
 Die erste Spalte hat eine Breite von 2mm, die zweite und die dritte Spalte teilen sich die übrige Breite im Verhältnis von 1 zu 3 auf.
+
+Anstelle einer festen Breite oder eine Stern-Angabe kann man auch die Schlüsselwörter `min` und `max` angeben:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Trace objects="yes" />
+<Table>
+    <Columns>
+        <Column width="min" />
+        <Column width="max" />
+    </Columns>
+    <Tr valign="top">
+        <Td>
+            <Paragraph>
+                <Value>The quick brown fox</Value>
+            </Paragraph>
+        </Td>
+        <Td>
+            <Paragraph>
+                <Value>The quick brown fox</Value>
+            </Paragraph>
+        </Td>
+    </Tr>
+</Table>
+-------------------------------------------------------------------------------
+
+[[abb-min-max-table]]
+.Auswirkung von min und max bei Spaltenangaben
+image::tab-min-max.png[width=40%,scaledwidth=100%]
+
+`min` bei der Breitenangabe bedeutet dass die Spalte so schmal wie möglich wird, `max` bedeutet, dass die Spalte so breit wie nötig wird.
+
+Zusätzlich zur Angabe von `min` oder `max` bei Spaltenbreiten kann man auch mit `minwidth` die minimale Breite einer Spalte bestimmen.
+
 Im Befehl `Column` kann man noch weitere Angaben für die Spalte festlegen: die horizontale und vertikale Ausrichtung und die Hintergrundfarbe können vorgegeben werden.
 Eine Angabe bei einer Zelle überschreibt die Vorgabe.
 

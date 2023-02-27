@@ -1992,6 +1992,14 @@
         <para>Farbe der Tabellenspalte.</para>
       </description>
     </attribute>
+    <attribute en="minwidth" type="length" optional="yes" since="4.13.9">
+      <description xml:lang="en">
+        <para>Minimum width of the column. Argument can be a number (in grid cells) or a length (e.g. 2cm).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Minimale Breite der Spalte. Kann entweder in Rasterzellen (Zahl) oder in absoluten Maßangaben (z.B. 1cm) angegeben werden.</para>
+      </description>
+    </attribute>
     <attribute en="padding-left" optional="yes" since="3.1.8" type="length">
       <description xml:lang="en">
         <para>Set the left padding for the column</para>
@@ -2010,10 +2018,10 @@
     </attribute>
     <attribute en="width" type="numberlengthorstar" optional="yes">
       <description xml:lang="en">
-        <para>Width of the column. Argument can be a number (in grid cells) a length (e.g. 2cm) or a *-number (e.g. 4*).</para>
+        <para>Width of the column. Argument can be a number (in grid cells) a length (e.g. 2cm), a *-number (e.g. 4*) or the keyword <tt>min</tt> or <tt>max</tt>.</para>
       </description>
       <description xml:lang="de">
-        <para>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm) oder in <tt>*</tt>-Angaben (z.B. <tt>4*</tt>) angegeben werden.</para>
+        <para>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm), in <tt>*</tt>-Angaben (z.B. <tt>4*</tt>) oder mit den Schlüsselwörtern <tt>min</tt> und <tt>max</tt> angegeben werden.</para>
       </description>
     </attribute>
     <attribute en="valign" optional="yes">

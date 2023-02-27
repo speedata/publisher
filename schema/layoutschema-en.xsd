@@ -870,6 +870,11 @@
           <xs:documentation>All cells in this column have this background color.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="minwidth">
+        <xs:annotation>
+          <xs:documentation>Minimum width of the column. Argument can be a number (in grid cells) or a length (e.g. 2cm).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="padding-left">
         <xs:annotation>
           <xs:documentation>Set the left padding for the column</xs:documentation>
@@ -882,7 +887,7 @@
       </xs:attribute>
       <xs:attribute name="width">
         <xs:annotation>
-          <xs:documentation>Width of the column. Argument can be a number (in grid cells) a length (e.g. 2cm) or a *-number (e.g. 4*).</xs:documentation>
+          <xs:documentation>Width of the column. Argument can be a number (in grid cells) a length (e.g. 2cm), a *-number (e.g. 4*) or the keyword min or max.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="valign">

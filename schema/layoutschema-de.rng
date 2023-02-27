@@ -1072,6 +1072,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="minwidth">
+               <a:documentation>Minimale Breite der Spalte. Kann entweder in Rasterzellen (Zahl) oder in absoluten Maßangaben (z.B. 1cm) angegeben werden.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="padding-left">
                <a:documentation>Setze das linke padding für diese Spalte</a:documentation>
             </attribute>
@@ -1083,7 +1088,7 @@
          </optional>
          <optional>
             <attribute name="width">
-               <a:documentation>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm) oder in *-Angaben (z.B. 4*) angegeben werden.</a:documentation>
+               <a:documentation>Breite der Spalte. Kann entweder in Rasterzellen (Zahl), absoluten Maßangaben (z.B. 1cm), in *-Angaben (z.B. 4*) oder mit den Schlüsselwörtern min und max angegeben werden.</a:documentation>
             </attribute>
          </optional>
          <optional>

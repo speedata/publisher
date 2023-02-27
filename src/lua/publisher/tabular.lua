@@ -409,8 +409,8 @@ function calculate_columnwidth( self )
 
 
     local colspans = {}
-    local colmax,colmin = {},{}
-
+    local minwidths,col_shrink,starcols,colmax,colmin = {},{},{},{},{}
+    local hasminwidth = false
     local current_row = 0
     self.tablewidth_target = self.width
     local columnwidths_given = false
@@ -428,33 +428,46 @@ function calculate_columnwidth( self )
         ---       <Column width="1*"/>
         ---       <Column width="3*"/>
         ---     </Columns>
+        ---
         --- When we typeset a table with a requested with of 11cm, the first column would get 3cm,
         --- the second column 1/4 of the rest (2cm) and the third 3/4 of the rest (6cm).
         --- ![Table calculation](../img/table313.svg)
         if tr_elementname == "Columns" then
-            local wd
             local i = 0
             local count_stars = 0
             local sum_real_widths = 0
             local count_columns = 0
-            local pattern = "([0-9]+)%*"
+            local starpattern = "([0-9]+)%*"
             for _,column in ipairs(tr_contents) do
                 if publisher.elementname(column)=="Column" then
                     local column_contents = publisher.element_contents(column)
                     i = i + 1
+                    if column_contents.minwidth then
+                        minwidths[i] = column_contents.minwidth
+                    end
                     if column_contents.width then
-                        -- if I have something written in <column> I don't need to calculate column width:
-                        columnwidths_given = true
-                        local width_stars = string.match(column_contents.width,pattern)
-                        if width_stars then
-                            count_stars = count_stars + width_stars
+                        -- if I have something written in <column> I don't need
+                        -- to calculate column width:
+                        if column_contents.width == "max" then
+                            col_shrink[i] = 1
+                            hasminwidth = true
+                        elseif column_contents.width == "min" then
+                            col_shrink[i] = 2
+                            hasminwidth = true
                         else
-                            if tonumber(column_contents.width) then
-                                self.colwidths[i] = publisher.current_grid:width_sp(column_contents.width)
+                            columnwidths_given = true
+                            local width_stars = string.match(column_contents.width,starpattern)
+                            if width_stars then
+                                starcols[i] = tonumber(width_stars,10)
+                                count_stars = count_stars + width_stars
                             else
-                                self.colwidths[i] = tex.sp(column_contents.width)
+                                if tonumber(column_contents.width) then
+                                    self.colwidths[i] = publisher.current_grid:width_sp(column_contents.width)
+                                else
+                                    self.colwidths[i] = tex.sp(column_contents.width)
+                                end
+                                sum_real_widths = sum_real_widths + self.colwidths[i]
                             end
-                            sum_real_widths = sum_real_widths + self.colwidths[i]
                         end
                     end
                     if column_contents.backgroundcolor then
@@ -470,11 +483,14 @@ function calculate_columnwidth( self )
             if self.autostretch ~= "max" and count_stars == 0 then
                 self.tablewidth_target = sum_real_widths
             end
+            if hasminwidth then
+                columnwidths_given = false
+                break
+            end
 
             if columnwidths_given and count_stars == 0 then return end
 
             if count_stars > 0 then
-
                 -- now we know the number of *-columns and the sum of the fix columns, so that
                 -- we can distribute the remaining space
                 local to_distribute = self.tablewidth_target - sum_real_widths - table.sum(self.column_distances,1,count_columns - 1)
@@ -483,7 +499,7 @@ function calculate_columnwidth( self )
                     if publisher.elementname(column)=="Column" then
                         local column_contents = publisher.element_contents(column)
                         i = i + 1
-                        local width_stars = string.match(column_contents.width,pattern)
+                        local width_stars = string.match(column_contents.width,starpattern)
                         if width_stars then
                             self.colwidths[i] = math.round( to_distribute *  width_stars / count_stars ,0)
                         end
@@ -525,6 +541,40 @@ function calculate_columnwidth( self )
         end -- if it's really a row
     end -- ∀ rows / rules
 
+    if hasminwidth then
+        local one_star_width = self.tablewidth_target
+        local to_distribute = 0
+        for i = 1, #colmin do
+            if col_shrink[i] then
+                local to_shrink
+                if col_shrink[i] == 1 then
+                    to_shrink = colmax[i]
+                    if minwidths[i] and minwidths[i] > colmax[i] then
+                        to_shrink = minwidths[i]
+                    end
+                else
+                    to_shrink = colmin[i]
+                    if minwidths[i] and minwidths[i] > colmin[i] then
+                        to_shrink = minwidths[i]
+                    end
+                end
+                one_star_width = one_star_width - to_shrink
+                self.colwidths[i] = to_shrink
+            elseif starcols[i] then
+                to_distribute = to_distribute + starcols[i]
+            else
+                one_star_width = one_star_width - self.colwidths[i]
+            end
+        end
+        one_star_width = one_star_width / to_distribute
+
+        for i = 1, #colmin do
+            if starcols[i] then
+                self.colwidths[i] = one_star_width * starcols[i]
+            end
+        end
+        return
+    end
 
     --- Now we are finished with all cells in all rows. If there are colospans, we might have
     --- to increase some column widths
@@ -664,7 +714,6 @@ end
 
 -- Typeset a table cell. Return a vlist, tightly packed (i.e. all vspace are 0).
 function pack_cell(self, blockobjects, width, horizontal_alignment)
-    local rotate = tonumber(blockobjects.rotate)
     local cell
     for _,blockobject in ipairs(blockobjects) do
         local cellrow = nil
