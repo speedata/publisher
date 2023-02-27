@@ -21,6 +21,6 @@ require (
 	github.com/speedata/hotfolder v0.0.0-20181204121114-5f743a840a92
 	github.com/speedata/optionparser v1.0.0
 	github.com/yuin/gopher-lua v0.0.0-20200816102855-ee81675732da
-	golang.org/x/net v0.0.0-20220722155237-a158d28d115b
-	golang.org/x/text v0.3.8
+	golang.org/x/net v0.7.0
+	golang.org/x/text v0.7.0
 )
