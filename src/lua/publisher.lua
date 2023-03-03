@@ -3616,6 +3616,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     else
         val = layoutxml[attname]
     end
+    if val == "nil" then val = nil end
     if typ=="xpath" then
         return xpath.textvalue(xpath.parse(dataxml,val,namespaces))
     elseif typ=="xpathraw" then
@@ -3640,6 +3641,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
         else
             ret = val
         end
+        if not ret then return end
         return tex.sp(ret)
     elseif typ=="height_sp" then
         num = tonumber(val or default)
@@ -3649,6 +3651,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
         else
             ret = val
         end
+        if not ret then return end
         return tex.sp(ret)
     elseif typ=="width_sp" then
         num = tonumber(val or default)
@@ -3658,6 +3661,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
         else
             ret = val
         end
+        if not ret then return end
         return tex.sp(ret)
     elseif typ=="boolean" then
         val = val or default

@@ -185,6 +185,9 @@ end
 --- We do that because in the dtp world when we say 12pt, we always mean 12*1/72 inch.
 local orig_texsp = tex.sp
 function tex.sp( number_or_string )
+    if not number_or_string then
+        return
+    end
     if number_or_string == "0" or number_or_string == 0 or number_or_string == "" then
         return 0
     end
