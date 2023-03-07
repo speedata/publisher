@@ -2568,8 +2568,6 @@ function commands.pdfoptions( layoutxml, dataxml )
         publisher.options.displaymode = "FullScreen"
     elseif displaymode == "thumbnails" then
         publisher.options.displaymode = "UseThumbs"
-    else
-        publisher.options.displaymode = "UseNone"
     end
 
     if showbookmarks then
