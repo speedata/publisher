@@ -6995,7 +6995,7 @@ local function urlencode(url)
         return
     end
     url = url:gsub("\n", "\r\n")
-    url = url:gsub("([^%w _%-%.~:/%%=%?&])", char_to_hex)
+    url = url:gsub("([^%w _%-%.~:/%%=%?&#])", char_to_hex)
     url = url:gsub(" ", "+")
     return url
 end
