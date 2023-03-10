@@ -8,26 +8,29 @@
 
 file_start("layout_functions.lua")
 
+
+local box_lookup = {
+    ["artbox"]   = "art",
+    ["cropbox"]  = "crop",
+    ["trimbox"]  = "trim",
+    ["mediabox"] = "media",
+    ["bleedbox"] =  "bleed",
+}
+
 local luxor = do_luafile("luxor.lua")
 local sha  = require('shalocal')
 
 ---@param filename string
----@return string, integer
-local function get_filename_pagenum_from_filename(filename)
-    local newfilename = filename
-
-    local fn, found = string.gsub(filename,"(.*):(%d+)","%1")
-    if found == 1 then
-        newfilename = fn
+---@return string, integer, string|nil
+local function get_filename_pagenum_box_from_filename(filename)
+    if not string.match(filename,"%.pdf:") then
+        return filename,1,nil
     end
 
-    local p
-    p, found = string.gsub(filename,"(.-):(%d+)$","%2")
-    if found == 1 then
-        return newfilename, tonumber(p,10)
-    end
-
-    return newfilename, 1
+    newfilename,pagenum,box = table.unpack(string.explode(filename,":"))
+    if box_lookup[box] then box = box_lookup[box] end
+    pagenum = tonumber(pagenum) or 1
+    return newfilename,pagenum,box
 end
 
 
@@ -276,8 +279,8 @@ end
 local function imagewidth(dataxml, arg )
     local filename = arg[1]
     local pagenumber
-    filename,pagenumber = get_filename_pagenum_from_filename(filename)
-    local img = publisher.imageinfo(filename,pagenumber)
+    filename,pagenumber,box = get_filename_pagenum_box_from_filename(filename)
+    local img = publisher.imageinfo(filename,pagenumber,box)
     publisher.setup_page(nil,"layout_functions#imagewidth")
     local unit = arg[2]
     local width
@@ -315,8 +318,8 @@ end
 local function imageheight(dataxml, arg )
     local filename = arg[1]
     local pagenumber
-    filename,pagenumber = get_filename_pagenum_from_filename(filename)
-    local img = publisher.imageinfo(filename,pagenumber)
+    filename,pagenumber,box = get_filename_pagenum_box_from_filename(filename)
+    local img = publisher.imageinfo(filename,pagenumber,box)
     publisher.setup_page(nil,"layout_functions#imageheight")
     local unit = arg[2]
     local height
@@ -653,9 +656,9 @@ end
 
 local function aspectratio( dataxml,arg )
   local filename = arg[1]
-  local pagenum
-  filename, pagenum = get_filename_pagenum_from_filename(filename)
-  local img = publisher.imageinfo(filename,pagenum)
+  local pagenum, box
+  filename, pagenum, box = get_filename_pagenum_box_from_filename(filename)
+  local img = publisher.imageinfo(filename,pagenum,box)
   return img.img.xsize / img.img.ysize
 end
 
