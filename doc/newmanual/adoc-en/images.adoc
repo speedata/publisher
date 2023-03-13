@@ -200,14 +200,14 @@ The `page` attribute is also described in the section <<ch-multipagepdf>>. It is
 === Specifying the page for layout functions
 
 Some layout functions (`sd:aspectratio()`, `sd:imageheight()`, and `sd:imagewidth()`) access image files.
-In the case of a PDF file, the filename can be used to specify the page and the desired PDF box.
-For this purpose, the file name is structured as follows: filename.pdf:pagenumber:pdfbox.
+In the case of a PDF file, the file name can be used to specify the page number and the desired PDF box.
+For this purpose, the file name is structured as follows: `filename.pdf:pagenumber:pdfbox`.
 
-Example: `sd:aspectratio("ocean.pdf:1:cropbox")`
+Example: `sd:aspectratio('ocean.pdf:3:cropbox')`
 
 If no box is specified, the `cropbox` is used. Possible values for the box specification: `artbox`, `cropbox`, `trimbox`, `mediabox` and `bleedbox`.
 
-The filename can of course also be assembled via the usual ways with XPath, e.g.: `sd:aspectratio(concat("ocean.pdf:",$pagenum,":cropbox"))`.
+When variables are used, the use of the XPath function `concat()` is required, e.g.: `sd:aspectratio(concat($filename, ':', $pagenum, ':mediabox'))`.
 
 
 
