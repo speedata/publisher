@@ -1293,6 +1293,7 @@ function initialize_luatex_and_generate_pdf()
     -- load help file if it exists
     if kpse.find_file(auxfilename) and options.resetmarks == false then
         local mark_tab = load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeol = true })
+        if not mark_tab then return end
         for i=1,#mark_tab do
             local mt = mark_tab[i]
             if type(mt) == "table" then
