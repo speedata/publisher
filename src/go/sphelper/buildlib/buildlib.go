@@ -31,6 +31,8 @@ func BuildCLib(cfg *config.Config, goos string, goarch string) error {
 		cmd = exec.Command("clang", "-dynamiclib", "-target", triple, "-fPIC", "-undefined", "dynamic_lookup", "-o", filepath.Join(dylibbuild, "luaglue.so"), "luaglue.c", "-I/opt/homebrew/opt/lua@5.3/include/lua")
 	case "linux":
 		cmd = exec.Command("cc", "-shared", "-fPIC", "-o", filepath.Join(dylibbuild, "luaglue.so"), "luaglue.c", "-I/usr/include/lua5.3/")
+	case "freebsd":
+		cmd = exec.Command("cc", "-shared", "-fPIC", "-o", filepath.Join(dylibbuild, "luaglue.so"), "luaglue.c", "-I/usr/local/include/lua53/")
 	case "windows":
 		cmd = exec.Command("/usr/bin/x86_64-w64-mingw32-gcc", "-shared", "-o", filepath.Join(dylibbuild, "luaglue.dll"), "luaglue.c", "-I/usr/include/lua5.3/", "-L/luatex-bin/luatex/windows/amd64/default/", "-llua53w64", "-llibsplib", "-L"+dylibbuild)
 	}

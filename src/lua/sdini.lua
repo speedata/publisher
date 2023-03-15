@@ -15,6 +15,8 @@ if os.name == "windows" then
   libname = "libsplib.dll"
 elseif os.name == "linux" then
   libname = "libsplib.so"
+elseif os.name == "freebsd" then
+  libname = "libsplib.so"
 else
   libname = "libsplib.dylib"
 end
