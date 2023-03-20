@@ -4,8 +4,7 @@ local starttime = os.gettimeofday()
 
 local io = io
 
-local running_tex = arg[-1] == "luatex"
-
+local running_tex = arg[-5] == "bin/sdluatex"
 running_in_testmode = true
 
 if not running_tex then
@@ -157,10 +156,6 @@ function assert_not_fail( ... )
   end
   print(string.format("assertion failed.\nFile: %s, function: %s:%d", current_file,current_function,row()))
   failed()
-end
-
-if running_tex then
-  table.remove(arg,1) -- remove luatest.tex
 end
 
 local mod

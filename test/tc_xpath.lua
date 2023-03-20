@@ -1,10 +1,8 @@
 module(...,package.seeall)
 
 
-require("publisher.spinit")
-
-xpath = do_luafile("xpath.lua")
-luxor = do_luafile("luxor.lua")
+xpath = require("xpath")
+luxor = require("luxor")
 
 xpath.set_variable("column",2)
 xpath.set_variable("counter",1)

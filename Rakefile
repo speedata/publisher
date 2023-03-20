@@ -84,7 +84,7 @@ task :test do
 	ENV["LUA_PATH"] = "#{srcdir}/lua/?.lua;#{installdir}/lib/?.lua;#{installdir}/test/?.lua"
 	ENV["PUBLISHER_BASE_PATH"] = installdir.to_s
 	ENV["LD_LIBRARY_PATH"] = "#{installdir}/lib"
-	inifile = srcdir.join("lua/spinit.lua")
+	inifile = srcdir.join("lua/sdini.lua")
 	sh "bin/sdluatex --luaonly --lua=#{inifile} --ini --shell-escape #{installdir}/bin/luatest tc_xpath.lua"
 end
 
