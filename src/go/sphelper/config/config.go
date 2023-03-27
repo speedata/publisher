@@ -81,7 +81,7 @@ func readVersion(product string, basedir string) Version {
 			if err != nil {
 				panic("Cannot parse minor number in version")
 			}
-			ver.Patch, err = strconv.Atoi(versionStrings[2])
+			ver.Patch, err = strconv.Atoi(strings.ReplaceAll(versionStrings[2], "\r", ""))
 			if err != nil {
 				panic("Cannot parse patch number in version")
 			}
