@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.13">
+    <entry version="4.13.12" date="2023-03-27">
+        <en>\r in version file (#486).</en>
+        <de>\r in Versionsdatei (#486).</de>
+    </entry>
+    <entry version="4.13.12" date="2023-03-27">
+        <en>Update dependencies.</en>
+        <de>Aktualisiere Abhängigkeiten.</de>
+    </entry>
     <entry version="4.13.11" date="2023-03-14">
         <en>Bugfix for empty aux files.</en>
         <de>Fehlerkorrektur für leere AUX-Dateien.</de>
