@@ -166,7 +166,14 @@ func main() {
 			fmt.Println("Error: environment variable LUATEX_BIN not set or does not point to a directory")
 			os.Exit(-1)
 		}
-		t := texttemplate.Must(texttemplate.ParseFiles(filepath.Join(cfg.Srcdir, "other", "nsitemplate.txt")))
+
+		var t *texttemplate.Template
+		if runtime.GOOS == "windows" {
+			t = texttemplate.Must(texttemplate.ParseFiles(filepath.Join(cfg.Srcdir, "other", "nsitemplate_win.txt")))
+		} else {
+			t = texttemplate.Must(texttemplate.ParseFiles(filepath.Join(cfg.Srcdir, "other", "nsitemplate.txt")))
+		}
+
 
 		for i := 1; i < len(op.Extra); i++ {
 			osArch := strings.Split(op.Extra[i], "/")
