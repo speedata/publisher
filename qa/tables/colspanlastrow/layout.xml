@@ -1,0 +1,72 @@
+<Layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en"
+	xmlns="urn:speedata.de:2009/publisher/en">
+	<Record element="data">
+		<PlaceObject>
+			<Table stretch="max" padding="2pt">
+				<Columns>
+					<Column width="0.16*" />
+					<Column width="0.16*" />
+					<Column width="0.16*" />
+					<Column width="0.16*" />
+					<Column width="0.16*" />
+					<Column width="0.16*" />
+				</Columns>
+				<Tr>
+					<Td colspan="6" align="right" border-top="1pt" border-bottom="1pt"
+						border-left="1pt" border-right="1pt">
+						<Paragraph>
+							<Value select="'Row1 Cell1-2-3-4-5-6'" />
+						</Paragraph>
+					</Td>
+				</Tr>
+				<Tr>
+					<Td border-top="1pt" border-bottom="1pt" border-left="1pt" border-right="1pt"
+						align="center">
+						<Paragraph>
+							<Value select="'Row2 Cell1'" />
+						</Paragraph>
+					</Td>
+					<Td border-top="1pt" border-bottom="1pt" border-left="1pt" border-right="1pt"
+						align="center">
+						<Paragraph>
+							<Value select="'Row2 Cell2'" />
+						</Paragraph>
+					</Td>
+					<Td rowspan="2" colspan="2" border-top="1pt" border-bottom="1pt"
+						border-left="1pt" border-right="1pt" align="center">
+						<Paragraph>
+							<Value select="'Row2-3 Cell3-4'" />
+						</Paragraph>
+					</Td>
+					<Td border-top="1pt" border-bottom="1pt" border-left="1pt" border-right="1pt"
+						align="center">
+						<Paragraph>
+							<Value select="'Row2 Cell5'" />
+						</Paragraph>
+					</Td>
+					<Td align="right" border-top="1pt" border-bottom="1pt" border-left="1pt"
+						border-right="1pt">
+						<Paragraph>
+							<Value select="'Row2 Cell 6'" />
+						</Paragraph>
+					</Td>
+				</Tr>
+				<Tr>
+					<Td colspan="2" align="left" border-top="1pt" border-bottom="1pt"
+						border-left="1pt" border-right="1pt">
+						<Paragraph>
+							<Value select="'Row3 Cell 1-2'" />
+						</Paragraph>
+					</Td>
+					<Td colspan="2" align="right" border-top="1pt" border-bottom="1pt"
+						border-left="1pt" border-right="1pt">
+						<Paragraph>
+							<Value select="'Row3 Cell 5-6'" />
+						</Paragraph>
+					</Td>
+				</Tr>
+			</Table>
+		</PlaceObject>
+	</Record>
+</Layout>

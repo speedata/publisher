@@ -1237,19 +1237,21 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
         row[1] = node.vpack(v,rowheightarea[current_row],"exactly")
     end
 
-    local cell_start,current
-    cell_start = row[1]
-    current = cell_start
 
     --- We now add colsep and connect the cells so we have a list of vboxes and
     --- pack them in a hbox.
     --- ![a row](../img/tablerow.svg)
     -- FIXME: use column_distances[i] instead of self.colsep
+    local cell_start,current
+    cell_start = row[1]
+    current = cell_start
     if row[1] then
         for z=2,#row do
             _,current = publisher.add_glue(current,"tail",{ width = self.colsep })
-            current.next = row[z]
-            current = row[z]
+            if row[z] then
+                current.next = row[z]
+                current = row[z]
+            end
         end
         row = node.hpack(cell_start)
     else
