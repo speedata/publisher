@@ -44,7 +44,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
   Return true if the grid cell is allocated, false otherwise (since 2.3.71).
 
 `sd:alternating(<type>, <text>,<text>,.. )`::
-  On each call the next element will be returned. You can define more alternating sequences by using distinct type values. Example: sd:alternating("tbl", "White","Gray") can be used for alternating color of table rules. To reset the state, use sd:reset-alternating(<type>).
+  On each call the next element will be returned. You can define more alternating sequences by using distinct type values. Example: `sd:alternating('tbl', 'White','Gray')` can be used for alternating color of table rules. To reset the state, use `sd:reset-alternating(<type>)`.
 
 `sd:aspectratio(<imagename>)`::
   Return the result of the division width by height of the given image. (< 1 for portrait images, > 1 for landscape). The image name can have a colon suffix, see <<ch-colonsyntax>> for details.
@@ -71,7 +71,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
   Expect a string encoded in base64 and return the binary contents.
 
 `sd:decode-html(<node>)`::
-  Change text such as `\&lt;i\&gt;italic\&lt;/i\&gt;` into HTML markup.
+  Change text such as `\&lt;i\&gt;italic\&lt;/i\&gt;` into HTML markup (`<i>italic</i>` in this case).
 
 `sd:dimexpr(<string>)`::
   _Deprecated_ Evaluate the string as a dimension with a unit. Handy if you want to add / multiply lengths. Example: "2mm + 5cm". Since version 4.5.7 you can now calculate with dimensions directly.
@@ -110,7 +110,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
   Natural height of the image in grid cells. Attention: if the image is not found, the height of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists. If provided with an optional second argument, it returns the height of the image in multiples of this unit. For example `sd:imageheight('myimage.pdf', 'in')` returns the height of 'myimage.pdf' in inches. The image name can have a colon suffix, see <<ch-colonsyntax>> for details.
 
 `sd:imagewidth(<filename or URI schema>[, <unit>])`::
-  Natural width of the image in grid cells. Attention: if the image is not found, the width of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists. If provided with an optional second argument, it returns the width of the image in multiples of this unit. For example `sd:imagewidth('myimage.pdf', 'in')` returns the width of 'myimage.pdf' in inches. The image name can have a colon suffix, see <<ch-colonsyntax>> for details.
+  Natural width of the image in grid cells. Attention: if the image is not found, the width of the file-not-found placeholder will be returned. Therefore you need to check in advance if the image exists. If provided with an optional second argument, it returns the width of the image in multiples of this unit. For example `sd:imagewidth('myimage.pdf', 'in')` returns the width of `myimage.pdf` in inches. The image name can have a colon suffix, see <<ch-colonsyntax>> for details.
 
 `sd:keep-alternating(<type>)`::
   Use the current value of `sd:alternating(<type>)` without changing the value.
@@ -162,13 +162,13 @@ The standard functions should behave like documented by the XPath 2.0 standard.
   Reset alternating so the next `sd:alternating()` starts again from the first element.
 
 `sd:sha1(<value>,<value>, …)`::
-  Return the SHA-1 sum of the concatenation of each value as a hex string. Example: sd:sha1('hello ', 'world') gives the string 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed.
+  Return the SHA-1 sum of the concatenation of each value as a hex string. Example: `sd:sha1('hello ', 'world')` gives the string 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed.
 
 `sd:sha256(<value>,<value>, …)`::
-  Return the SHA-256 sum of the concatenation of each value as a hex string. Example: sd:sha256('hello ', 'world') gives the string b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9.
+  Return the SHA-256 sum of the concatenation of each value as a hex string. Example: `sd:sha256('hello ', 'world')` gives the string b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9.
 
 `sd:sha512(<value>,<value>, …)`::
-  Return the SHA-512 sum of the concatenation of each value as a hex string. Example: sd:sha512('hello ', 'world') gives the string 309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f.
+  Return the SHA-512 sum of the concatenation of each value as a hex string. Example: `sd:sha512('hello ', 'world')` gives the string 309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f.
 
 `sd:tounit(<string>,<string>[,<number>])`::
   Return a scalar of the unit given in the second argument converted to the unit given in the first argument rounded to the digits in the third argument (defaults to 0 - return integer values). Example: `sd:tounit('pt','1pc')` returns 12, because there are 12pt in 1pc (pica point).
@@ -177,7 +177,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
   The same as `$name`. This function allows variable names to be constructed dynamically. Example: `sd:variable('myvar',$num)` – if $num contains the number 3, the resulting variable name is myvar3.
 
 `sd:variable-exists(<name>)`::
-  True if variable name exists.
+  True if variable name exists. Example: `sd:variable-exists('my_bar')` checks whether `$my_bar` is defined (variable names in this function have to be enclosed in single quotation marks if double quotation marks are used to delimit the XPath attribute).
 
 `sd:visible-pagenumber(<number>)`::
   Return the user visible page number (as defined by matters) for the given real page number.
@@ -242,9 +242,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
    Return the position of the current node.
 
 `replace(<input>,<regexp>, <replacement>)`::
-   Replace the input using the regular expression with the given replacement text. Example: replace('banana', 'a', 'o') yields bonono.
+   Replace the input using the regular expression with the given replacement text. Example: `replace('banana', 'a', 'o')` yields `bonono`.
 
-`round(<number>,<number>`)`::
+`round(<number>,<number>)`::
     Return the argument in the first parameter rounded to number of decimal places in the second parameter. The second parameter defaults to 0.
 
 `string(<sequence>)`::
@@ -260,13 +260,13 @@ The standard functions should behave like documented by the XPath 2.0 standard.
    Return the length of the string in characters. Multi-byte UTF-8 sequences are counted as 1.
 
 `tokenize(<input>,<regexp>)`::
-   This function returns a sequence of strings. The input text is read from left to right. When the regular expression matches the current position, the text read so far from the last match is returned. Example (from the great XPath / XSLT book by M. Key): tokenize("Go home, Jack!", "\W+") returns the sequence "Go", "home", "Jack", "".
+   This function returns a sequence of strings. The input text is read from left to right. When the regular expression matches the current position, the text read so far from the last match is returned. Example (from the great XPath / XSLT book by M. Key): `tokenize("Go home, Jack!", "\W+")` returns the sequence `"Go", "home", "Jack", ""`.
 
 `true()`::
    Return true.
 
 `upper-case()`::
-  Converts the text to capital letters: `upper-case('text')` results in `TEXT'.
+  Converts the text to capital letters: `upper-case('text')` results in `TEXT`.
 
 
 // EOF
