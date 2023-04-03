@@ -177,7 +177,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
   The same as `$name`. This function allows variable names to be constructed dynamically. Example: `sd:variable('myvar',$num)` – if $num contains the number 3, the resulting variable name is myvar3.
 
 `sd:variable-exists(<name>)`::
-  True if variable name exists.
+  True if variable name exists. Example: `sd:variable-exists('my_bar')` checks whether `$my_bar` is defined (variable names in this function have to be enclosed in single quotation marks).
 
 `sd:visible-pagenumber(<number>)`::
   Return the user visible page number (as defined by matters) for the given real page number.
@@ -242,9 +242,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
    Return the position of the current node.
 
 `replace(<input>,<regexp>, <replacement>)`::
-   Replace the input using the regular expression with the given replacement text. Example: replace('banana', 'a', 'o') yields bonono.
+   Replace the input using the regular expression with the given replacement text. Example: `replace('banana', 'a', 'o')` yields `bonono`.
 
-`round(<number>,<number>`)`::
+`round(<number>,<number>)`::
     Return the argument in the first parameter rounded to number of decimal places in the second parameter. The second parameter defaults to 0.
 
 `string(<sequence>)`::
@@ -260,13 +260,13 @@ The standard functions should behave like documented by the XPath 2.0 standard.
    Return the length of the string in characters. Multi-byte UTF-8 sequences are counted as 1.
 
 `tokenize(<input>,<regexp>)`::
-   This function returns a sequence of strings. The input text is read from left to right. When the regular expression matches the current position, the text read so far from the last match is returned. Example (from the great XPath / XSLT book by M. Key): tokenize("Go home, Jack!", "\W+") returns the sequence "Go", "home", "Jack", "".
+   This function returns a sequence of strings. The input text is read from left to right. When the regular expression matches the current position, the text read so far from the last match is returned. Example (from the great XPath / XSLT book by M. Key): `tokenize("Go home, Jack!", "\W+")` returns the sequence `"Go", "home", "Jack", ""`.
 
 `true()`::
    Return true.
 
 `upper-case()`::
-  Converts the text to capital letters: `upper-case('text')` results in `TEXT'.
+  Converts the text to capital letters: `upper-case('text')` results in `TEXT`.
 
 
 // EOF
