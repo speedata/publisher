@@ -2506,6 +2506,26 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="margin-bottom">
+                     <a:documentation>Extra space at the bottom of the image.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="margin-top">
+                     <a:documentation>Extra space at the top of the image.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="margin-left">
+                     <a:documentation>Extra space at the left of the image.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="margin-right">
+                     <a:documentation>Extra space at the right of the image.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="maxwidth">
                      <a:documentation>The maximum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value »100%« for full width image.</a:documentation>
                   </attribute>

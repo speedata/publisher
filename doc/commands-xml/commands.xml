@@ -4231,6 +4231,38 @@
         <para>Die Seitenzahl aus dem PDF. Voreinstellung ist 1.</para>
       </description>
     </attribute>
+    <attribute en="margin-bottom" type="length" optional="yes" since="4.13.13">
+      <description xml:lang="en">
+        <para>Extra space at the bottom of the image.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Extra Leerraum unterhalb des Bildes.</para>
+      </description>
+    </attribute>
+    <attribute en="margin-top" type="length" optional="yes" since="4.13.13">
+      <description xml:lang="en">
+        <para>Extra space at the top of the image.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Extra Leerraum oberhalb des Bildes.</para>
+      </description>
+    </attribute>
+    <attribute en="margin-left" type="length" optional="yes" since="4.13.13">
+      <description xml:lang="en">
+        <para>Extra space at the left of the image.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Extra Leerraum links des Bildes.</para>
+      </description>
+    </attribute>
+    <attribute en="margin-right" type="length" optional="yes" since="4.13.13">
+      <description xml:lang="en">
+        <para>Extra space at the right of the image.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Extra Leerraum rechts des Bildes.</para>
+      </description>
+    </attribute>
     <attribute en="maxwidth" type="numberorlength" optional="yes">
       <description xml:lang="en">
         <para>The maximum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value »100%« for full width image.</para>

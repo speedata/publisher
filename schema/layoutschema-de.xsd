@@ -2505,6 +2505,26 @@
           <xs:documentation>Die Seitenzahl aus dem PDF. Voreinstellung ist 1.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="margin-bottom">
+        <xs:annotation>
+          <xs:documentation>Extra Leerraum unterhalb des Bildes.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="margin-top">
+        <xs:annotation>
+          <xs:documentation>Extra Leerraum oberhalb des Bildes.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="margin-left">
+        <xs:annotation>
+          <xs:documentation>Extra Leerraum links des Bildes.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="margin-right">
+        <xs:annotation>
+          <xs:documentation>Extra Leerraum rechts des Bildes.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="maxwidth">
         <xs:annotation>
           <xs:documentation>Die maximale Breite des Bilds. Nur, wenn clip="no". Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</xs:documentation>

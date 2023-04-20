@@ -2505,6 +2505,26 @@
           <xs:documentation>The page number from the PDF. Default is 1 (include the first page).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="margin-bottom">
+        <xs:annotation>
+          <xs:documentation>Extra space at the bottom of the image.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="margin-top">
+        <xs:annotation>
+          <xs:documentation>Extra space at the top of the image.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="margin-left">
+        <xs:annotation>
+          <xs:documentation>Extra space at the left of the image.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="margin-right">
+        <xs:annotation>
+          <xs:documentation>Extra space at the right of the image.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="maxwidth">
         <xs:annotation>
           <xs:documentation>The maximum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value »100%« for full width image.</xs:documentation>

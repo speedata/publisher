@@ -2506,6 +2506,26 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="margin-bottom">
+                     <a:documentation>Extra Leerraum unterhalb des Bildes.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="margin-top">
+                     <a:documentation>Extra Leerraum oberhalb des Bildes.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="margin-left">
+                     <a:documentation>Extra Leerraum links des Bildes.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="margin-right">
+                     <a:documentation>Extra Leerraum rechts des Bildes.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="maxwidth">
                      <a:documentation>Die maximale Breite des Bilds. Nur, wenn clip=&#34;no&#34;. Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</a:documentation>
                   </attribute>

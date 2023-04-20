@@ -1283,6 +1283,12 @@ function commands.image( layoutxml,dataxml )
     local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "string")
     local css_rules = publisher.css:matches({element = 'img', class=class,id=id}) or {}
 
+    local margin_right = publisher.read_attribute(layoutxml,dataxml,"margin-right","length_sp")
+    local margin_left = publisher.read_attribute(layoutxml,dataxml,"margin-left","length_sp")
+    local margin_top = publisher.read_attribute(layoutxml,dataxml,"margin-top","length_sp")
+    local margin_bottom = publisher.read_attribute(layoutxml,dataxml,"margin-bottom","length_sp")
+
+
     -- fallback for older versions (< 2.7.5)
     vis_box = vis_box or max_box
 
@@ -1450,6 +1456,39 @@ function commands.image( layoutxml,dataxml )
         publisher.transparentcolorstack()
         publisher.setprop(imagenode,"opacity",opacity)
     end
+
+    if margin_left then
+        g = node.new("glue")
+        g.width = tex.sp(margin_left)
+        imagenode = node.insert_before(imagenode,imagenode,g)
+    end
+
+    if margin_right then
+        g = node.new("glue")
+        g.width = tex.sp(margin_right)
+        imagenode = node.insert_after(imagenode,imagenode,g)
+    end
+
+    if margin_left or margin_right then
+        imagenode = node.hpack(imagenode)
+    end
+
+    if margin_top then
+        g = node.new("glue")
+        g.width = tex.sp(margin_top)
+        imagenode = node.insert_before(imagenode,imagenode,g)
+    end
+
+    if margin_bottom then
+        g = node.new("glue")
+        g.width = tex.sp(margin_bottom)
+        imagenode = node.insert_after(imagenode,imagenode,g)
+    end
+
+    if margin_top or margin_bottom then
+        imagenode = node.vpack(imagenode)
+    end
+
     local box
     if clip then
         local shift_left,shift_up = 0,0
