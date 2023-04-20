@@ -175,8 +175,6 @@ function get_fontinstance(fontfamily,instancename)
         err("font %s not found for family %s",instancename,fontfamily)
         -- let's try "regular"
         if fontfamily and fontfamily > 0 then
-            parameter.bold = nil
-            parameter.italic = nil
             instance = lookup_fontfamily_number_instance[fontfamily].normal
         end
         if not instance then
