@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.13">
+    <entry version="4.13.13" date="2023-04-20">
+        <en>margin-* in Image.</en>
+        <de>margin-* bei Image.</de>
+    </entry>
+    <entry version="4.13.13" date="2023-04-20">
+        <en>Bugfix colspan (#481).</en>
+        <de>Fehlerkorrektur colspan (#481).</de>
+    </entry>
     <entry version="4.13.12" date="2023-03-27">
         <en>\r in version file (#486).</en>
         <de>\r in Versionsdatei (#486).</de>
