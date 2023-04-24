@@ -1992,6 +1992,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="border-radius">
+                     <a:documentation>Radius of the four corners.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="border-bottom-right-radius">
                      <a:documentation>Radius of corner bottom right.</a:documentation>
                   </attribute>
