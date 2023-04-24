@@ -2012,6 +2012,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="border-radius">
+                     <a:documentation>Radien aller vier Ecken.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="framecolor">
                      <a:documentation>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</a:documentation>
                   </attribute>

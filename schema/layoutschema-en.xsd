@@ -1716,6 +1716,11 @@
           <xs:documentation>Radius of corner bottom left.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="border-radius">
+        <xs:annotation>
+          <xs:documentation>Border rdius of the four corners.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="framecolor">
         <xs:annotation>
           <xs:documentation>The color of the frame around the object. Only makes sense in combination with the attribute 'frame'.</xs:documentation>

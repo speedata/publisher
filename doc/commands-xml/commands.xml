@@ -3412,6 +3412,14 @@
         <para>Radius der Ecke unten links.</para>
       </description>
     </attribute>
+    <attribute en="border-radius" optional="yes" since="4.13.14">
+      <description xml:lang="en">
+        <para>Border radius of the four corners.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Radien aller vier Ecken.</para>
+      </description>
+    </attribute>
     <attribute en="framecolor" type="text" optional="yes">
       <description xml:lang="en">
         <para>The color of the frame around the object. Only makes sense in combination with the attribute 'frame'.</para>

@@ -2012,6 +2012,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="border-radius">
+                     <a:documentation>Border rdius of the four corners.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="framecolor">
                      <a:documentation>The color of the frame around the object. Only makes sense in combination with the attribute &#39;frame&#39;.</a:documentation>
                   </attribute>
