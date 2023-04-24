@@ -1002,6 +1002,7 @@ end
 --- Apply a frame on an object for PlaceObject. Frames can be nested (with Transformation)
 function commands.frame( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
+    local b_radius         = publisher.read_attribute(layoutxml,dataxml,"border-radius", "string")
     local b_b_r_radius     = publisher.read_attribute(layoutxml,dataxml,"border-bottom-right-radius", "string")
     local b_t_r_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-right-radius",    "string")
     local b_t_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-left-radius",     "string")
@@ -1015,10 +1016,10 @@ function commands.frame( layoutxml,dataxml )
 
     local css_rules = publisher.css:matches({element = 'frame', class=class,id=id}) or {}
 
-    b_b_r_radius = b_b_r_radius or css_rules["border-bottom-right-radius"]
-    b_b_l_radius = b_b_l_radius or css_rules["border-bottom-left-radius"]
-    b_t_r_radius = b_t_r_radius or css_rules["border-top-right-radius"]
-    b_t_l_radius = b_t_l_radius or css_rules["border-top-left-radius"]
+    b_b_r_radius = b_b_r_radius or b_radius or css_rules["border-bottom-right-radius"]
+    b_b_l_radius = b_b_l_radius or b_radius or css_rules["border-bottom-left-radius"]
+    b_t_r_radius = b_t_r_radius or b_radius or css_rules["border-top-right-radius"]
+    b_t_l_radius = b_t_l_radius or b_radius or css_rules["border-top-left-radius"]
 
     for i=1,#tab do
         local contents = publisher.element_contents(tab[i])
