@@ -1696,6 +1696,11 @@
           <xs:documentation>Color of the background if ›background‹ is set to ›full‹.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="border-radius">
+        <xs:annotation>
+          <xs:documentation>Radius of the four corners.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="border-bottom-right-radius">
         <xs:annotation>
           <xs:documentation>Radius of corner bottom right.</xs:documentation>
