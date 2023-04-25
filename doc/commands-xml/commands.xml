@@ -4233,7 +4233,7 @@
     </attribute>
     <attribute en="margin" type="length" optional="yes" since="4.13.14">
       <description xml:lang="en">
-        <para>Extra space at the four margins (left, right, top & bottom) of the image.</para>
+        <para>Extra space at the four margins (left, right, top &amp; bottom) of the image.</para>
       </description>
     </attribute>
     <attribute en="margin-bottom" type="length" optional="yes" since="4.13.13">
