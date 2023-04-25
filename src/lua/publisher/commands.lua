@@ -1284,6 +1284,7 @@ function commands.image( layoutxml,dataxml )
     local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "string")
     local css_rules = publisher.css:matches({element = 'img', class=class,id=id}) or {}
 
+    local margin = publisher.read_attribute(layoutxml,dataxml,"margin","length_sp")
     local margin_right = publisher.read_attribute(layoutxml,dataxml,"margin-right","length_sp")
     local margin_left = publisher.read_attribute(layoutxml,dataxml,"margin-left","length_sp")
     local margin_top = publisher.read_attribute(layoutxml,dataxml,"margin-top","length_sp")
@@ -1458,15 +1459,15 @@ function commands.image( layoutxml,dataxml )
         publisher.setprop(imagenode,"opacity",opacity)
     end
 
-    if margin_left then
+    if margin_left or margin then
         g = node.new("glue")
-        g.width = tex.sp(margin_left)
+        g.width = tex.sp(margin_left or margin)
         imagenode = node.insert_before(imagenode,imagenode,g)
     end
 
-    if margin_right then
+    if margin_right or margin then
         g = node.new("glue")
-        g.width = tex.sp(margin_right)
+        g.width = tex.sp(margin_right or margin)
         imagenode = node.insert_after(imagenode,imagenode,g)
     end
 
@@ -1474,15 +1475,15 @@ function commands.image( layoutxml,dataxml )
         imagenode = node.hpack(imagenode)
     end
 
-    if margin_top then
+    if margin_top or margin then
         g = node.new("glue")
-        g.width = tex.sp(margin_top)
+        g.width = tex.sp(margin_top or margin)
         imagenode = node.insert_before(imagenode,imagenode,g)
     end
 
-    if margin_bottom then
+    if margin_bottom or margin then
         g = node.new("glue")
-        g.width = tex.sp(margin_bottom)
+        g.width = tex.sp(margin_bottom or margin)
         imagenode = node.insert_after(imagenode,imagenode,g)
     end
 
