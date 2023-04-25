@@ -4231,6 +4231,11 @@
         <para>Die Seitenzahl aus dem PDF. Voreinstellung ist 1.</para>
       </description>
     </attribute>
+    <attribute en="margin" type="length" optional="yes" since="4.13.14">
+      <description xml:lang="en">
+        <para>Extra space at the four margins (left, right, top & bottom) of the image.</para>
+      </description>
+    </attribute>
     <attribute en="margin-bottom" type="length" optional="yes" since="4.13.13">
       <description xml:lang="en">
         <para>Extra space at the bottom of the image.</para>
