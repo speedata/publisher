@@ -4,21 +4,21 @@
 
 The speedata publisher can be configured in several ways:
 
-. The file publisher.cfg in /etc/speedata/, in the home directory (with a leading dot) and in the current working directory (Linux, Mac)
-. The file %APPDATA%\speedata\publisher.cfg on Windows.
+. The file publisher.cfg in `/etc/speedata/`, in the home directory (with a leading dot) and in the current working directory (Linux, Mac)
+. The file `%APPDATA%\speedata\publisher.cfg` on Windows.
 . Parameters given on the command line
 . Options given in the layout file
 
 == The file `publisher.cfg`
 
-The file publisher.cfg (/etc/speedata/publisher.cfg, $HOME/.publisher.cfg and in the current working directory) is a text file, that is read at the beginning of the publisher run. The default file looks like this:
+The file publisher.cfg (`/etc/speedata/publisher.cfg`, `$HOME/.publisher.cfg` and in the current working directory) is a text file, that is read at the beginning of the publisher run. The default file looks like this:
 
 ------------------------------
 data      = data.xml
 layout    = layout.xml
 autoopen  = false
 # This is a comment
-# And this is not a comment
+# But this is not a comment
 # ^^^ of course the line above is also a comment
 #
 
