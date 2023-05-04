@@ -1457,37 +1457,38 @@ function commands.image( layoutxml,dataxml )
         publisher.transparentcolorstack()
         publisher.setprop(imagenode,"opacity",opacity)
     end
-
+    local head, hbox = imagenode, imagenode
     if margin_left then
-        g = node.new("glue")
+        local g = node.new("glue")
         g.width = tex.sp(margin_left)
-        imagenode = node.insert_before(imagenode,imagenode,g)
+        head = node.insert_before(head,imagenode,g)
     end
 
     if margin_right then
-        g = node.new("glue")
+        local g = node.new("glue")
         g.width = tex.sp(margin_right)
-        imagenode = node.insert_after(imagenode,imagenode,g)
+        head = node.insert_after(head,imagenode,g)
     end
 
     if margin_left or margin_right then
-        imagenode = node.hpack(imagenode)
+        head = node.hpack(head)
+        hbox = head
     end
 
     if margin_top then
-        g = node.new("glue")
+        local g = node.new("glue")
         g.width = tex.sp(margin_top)
-        imagenode = node.insert_before(imagenode,imagenode,g)
+        head = node.insert_before(head,hbox,g)
     end
 
     if margin_bottom then
-        g = node.new("glue")
+        local g = node.new("glue")
         g.width = tex.sp(margin_bottom)
-        imagenode = node.insert_after(imagenode,imagenode,g)
+        head = node.insert_after(head,hbox,g)
     end
 
-    if margin_top or margin_bottom then
-        imagenode = node.vpack(imagenode)
+    if margin_left or margin_right or margin_top or margin_bottom then
+        imagenode = node.vpack(head)
     end
 
     local box

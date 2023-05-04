@@ -1,0 +1,18 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="17cm" width="6cm" />
+    <Record element="data">
+        <PlaceObject frame="solid" framecolor="green" rulewidth="0.1pt">
+            <Image file="_samplea.pdf" width="3cm" height="3cm" margin-left="2mm" />
+        </PlaceObject>
+        <PlaceObject frame="solid" framecolor="green" rulewidth="0.1pt">
+            <Image file="_samplea.pdf" width="3cm" height="3cm" margin-top="2mm" margin-bottom="8mm"/>
+        </PlaceObject>
+        <PlaceObject frame="solid" framecolor="green" rulewidth="0.1pt">
+            <Image file="_samplea.pdf" width="3cm" height="3cm" margin-left="2mm" margin-right="8mm"/>
+        </PlaceObject>
+        <PlaceObject frame="solid" framecolor="green" rulewidth="0.1pt">
+            <Image file="_samplea.pdf" width="3cm" height="3cm" margin-left="2mm" margin-right="8mm" margin-top="3mm" margin-bottom="7mm"/>
+        </PlaceObject>
+    </Record>
+</Layout>
