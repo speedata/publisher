@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.13">
+    <entry version="4.13.14" date="2023-05-04">
+        <en>Bug fix for *-columns in tables and minwidth.</en>
+        <de>Fehlerkorrektur für *-Spalten in Tabellen und minwidth.</de>
+    </entry>
+    <entry version="4.13.14" date="2023-05-04">
+        <en>Bug fix for image margin (#491).</en>
+        <de>Fehlerkorrektur für margin bei Image (#491).</de>
+    </entry>
+    <entry version="4.13.14" date="2023-05-04">
+        <en>Frame: set border radius for all four corner (#492).</en>
+        <de>Frame: Border-radius für alle vier Ecken bestimmen (#492).</de>
+    </entry>
     <entry version="4.13.13" date="2023-04-20">
         <en>margin-* in Image.</en>
         <de>margin-* bei Image.</de>
