@@ -1,0 +1,30 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="6cm" width="210mm" />
+    <Record element="data">
+        <ForAll select="elt">
+            <PlaceObject>
+                <Table padding="1pt">
+                    <Columns>
+                        <Column width="18mm" minwidth="0mm" />
+                        <Column width="10mm" minwidth="0mm" />
+                        <Column width="1*" minwidth="14mm" />
+                        <Loop select="count(td) - 3">
+                            <Column width="max" minwidth="11mm" />
+                        </Loop>
+                    </Columns>
+                    <Tr valign="top">
+                        <ForAll select="td">
+                            <Td>
+                                <Paragraph>
+                                    <Value select="." />
+                                </Paragraph>
+                            </Td>
+
+                        </ForAll>
+                    </Tr>
+                </Table>
+            </PlaceObject>
+        </ForAll>
+    </Record>
+</Layout>

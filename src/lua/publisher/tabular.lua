@@ -442,6 +442,7 @@ function calculate_columnwidth( self )
                 if publisher.elementname(column)=="Column" then
                     local column_contents = publisher.element_contents(column)
                     i = i + 1
+                    minwidths[i] = 0
                     if column_contents.minwidth then
                         minwidths[i] = column_contents.minwidth
                     end
@@ -542,36 +543,56 @@ function calculate_columnwidth( self )
     end -- ∀ rows / rules
 
     if hasminwidth then
-        local one_star_width = self.tablewidth_target
-        local to_distribute = 0
+        local stretch = {}
+        local count_stretch = 0
+        local sum_stretch = 0
+        local total_stars_width = self.width
+        local count_stars = 0
         for i = 1, #colmin do
+            stretch[i] = 0
             if col_shrink[i] then
-                local to_shrink
                 if col_shrink[i] == 1 then
-                    to_shrink = colmax[i]
-                    if minwidths[i] and minwidths[i] > colmax[i] then
-                        to_shrink = minwidths[i]
+                    -- width="max"
+                    if colmax[i] > minwidths[i] then
+                        stretch[i] = colmax[i] - minwidths[i]
+                        count_stretch = count_stretch + 1
+                        sum_stretch = sum_stretch + stretch[i]
                     end
                 else
-                    to_shrink = colmin[i]
-                    if minwidths[i] and minwidths[i] > colmin[i] then
-                        to_shrink = minwidths[i]
-                    end
+                    -- width="min"
                 end
-                one_star_width = one_star_width - to_shrink
-                self.colwidths[i] = to_shrink
+                self.colwidths[i] = minwidths[i]
+                total_stars_width = total_stars_width - self.colwidths[i]
             elseif starcols[i] then
-                to_distribute = to_distribute + starcols[i]
+                count_stars = count_stars + starcols[i]
             else
-                one_star_width = one_star_width - self.colwidths[i]
+                total_stars_width = total_stars_width - self.colwidths[i]
             end
         end
-        one_star_width = one_star_width / to_distribute
-
+        local sum_star_minwd = 0
+        for i in pairs(starcols) do
+            sum_star_minwd = sum_star_minwd + colmin[i]
+        end
+        local overshoot = 0
+        local r = 1
+        if total_stars_width - sum_star_minwd < sum_stretch then
+            overshoot = total_stars_width - sum_star_minwd
+            total_stars_width = sum_star_minwd
+            r = overshoot / sum_stretch
+        else
+            total_stars_width = total_stars_width - sum_stretch
+        end
+        for i = 1, #stretch do
+            if stretch[i] > 0 then
+                self.colwidths[i] = self.colwidths[i] + stretch[i] * r
+            end
+        end
+        total_stars_width = total_stars_width / count_stars
         for i = 1, #colmin do
             if starcols[i] then
-                self.colwidths[i] = one_star_width * starcols[i]
+                self.colwidths[i] = total_stars_width * starcols[i]
             end
+
         end
         return
     end
