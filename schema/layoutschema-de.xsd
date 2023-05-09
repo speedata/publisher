@@ -4030,16 +4030,17 @@
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" ref="en:Image"/>
+        <xs:element minOccurs="0" ref="en:A"/>
+        <xs:element minOccurs="0" ref="en:Barcode"/>
         <xs:element minOccurs="0" ref="en:Box"/>
         <xs:element minOccurs="0" ref="en:Circle"/>
-        <xs:element minOccurs="0" ref="en:Rule"/>
-        <xs:element minOccurs="0" ref="en:Textblock"/>
-        <xs:element minOccurs="0" ref="en:Barcode"/>
-        <xs:element minOccurs="0" ref="en:Table"/>
-        <xs:element minOccurs="0" ref="en:Transformation"/>
         <xs:element minOccurs="0" ref="en:Frame"/>
+        <xs:element minOccurs="0" ref="en:Image"/>
+        <xs:element minOccurs="0" ref="en:Rule"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
+        <xs:element minOccurs="0" ref="en:Table"/>
+        <xs:element minOccurs="0" ref="en:Textblock"/>
+        <xs:element minOccurs="0" ref="en:Transformation"/>
         <xs:element maxOccurs="unbounded" ref="en:Position"/>
       </xs:sequence>
     </xs:complexType>

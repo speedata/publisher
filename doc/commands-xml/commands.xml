@@ -5947,16 +5947,17 @@
       <para>Überlagert das erste Element mit den nachfolgenden »Positionen«.</para>
     </description>
     <childelements>
-      <optional><cmd name="Image"/></optional>
+      <optional><cmd name="A"/></optional>
+      <optional><cmd name="Barcode"/></optional>
       <optional><cmd name="Box"/></optional>
       <optional><cmd name="Circle"/></optional>
-      <optional><cmd name="Rule"/></optional>
-      <optional><cmd name="Textblock"/></optional>
-      <optional><cmd name="Barcode"/></optional>
-      <optional><cmd name="Table"/></optional>
-      <optional><cmd name="Transformation"/></optional>
       <optional><cmd name="Frame"/></optional>
+      <optional><cmd name="Image"/></optional>
+      <optional><cmd name="Rule"/></optional>
       <optional><cmd name="Switch"/></optional>
+      <optional><cmd name="Table"/></optional>
+      <optional><cmd name="Textblock"/></optional>
+      <optional><cmd name="Transformation"/></optional>
       <oneOrMore>
         <cmd name="Position"/>
       </oneOrMore>

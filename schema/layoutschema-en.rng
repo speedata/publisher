@@ -2013,7 +2013,7 @@
                </optional>
                <optional>
                   <attribute name="border-radius">
-                     <a:documentation>Border rdius of the four corners.</a:documentation>
+                     <a:documentation>Border radius of the four corners.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -3870,7 +3870,10 @@
          <interleave>
             <group>
                <optional>
-                  <ref name="e_Image"></ref>
+                  <ref name="e_A"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Barcode"></ref>
                </optional>
                <optional>
                   <ref name="e_Box"></ref>
@@ -3879,25 +3882,25 @@
                   <ref name="e_Circle"></ref>
                </optional>
                <optional>
+                  <ref name="e_Frame"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_Image"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Rule"></ref>
                </optional>
                <optional>
-                  <ref name="e_Textblock"></ref>
-               </optional>
-               <optional>
-                  <ref name="e_Barcode"></ref>
+                  <ref name="e_Switch"></ref>
                </optional>
                <optional>
                   <ref name="e_Table"></ref>
                </optional>
                <optional>
+                  <ref name="e_Textblock"></ref>
+               </optional>
+               <optional>
                   <ref name="e_Transformation"></ref>
-               </optional>
-               <optional>
-                  <ref name="e_Frame"></ref>
-               </optional>
-               <optional>
-                  <ref name="e_Switch"></ref>
                </optional>
                <oneOrMore>
                   <ref name="e_Position"></ref>
