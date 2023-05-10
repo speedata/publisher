@@ -112,6 +112,25 @@ Schachtelung ist ebenfalls erlaubt und auch hier wird mit `<u>` unterstrichen.
 
 TIP: Sollten die Daten nicht als wohlgeformtes XML sondern beispielsweise im HTML Format vorliegen, kann man die Layoutfunktion `sd:decode-html()` benutzen, sie zu interpretieren.
 
+== Konturschrift
+
+Mit dem Attribut `font-outline` kann man die Linienstärke für eine Konturschrift angeben:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+    <Textblock>
+        <Paragraph font-outline="0.3pt">
+            <Value>Hello nice world</Value>
+        </Paragraph>
+    </Textblock>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+[[fig-outlinefont]]
+.Eine Konturschrift erzeugt man mit der Angabe einer Liniendicke mit dem Attribut `font-outline` bei Paragraph.
+image::outlinehelloworld.png[width=100%]
+
 
 == OpenType Features
 

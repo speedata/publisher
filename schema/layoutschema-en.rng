@@ -3960,6 +3960,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="font-outline">
+                     <a:documentation>Set the line width of the font outline.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="html">
                      <a:documentation>Set the HTML processing mode. Defaults to &#39;all&#39;.</a:documentation>
                      <choice>

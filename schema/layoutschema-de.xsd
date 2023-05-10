@@ -4139,6 +4139,11 @@
           <xs:documentation>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="font-outline">
+        <xs:annotation>
+          <xs:documentation>Setze die Liniendicke der Schriftkontur.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="html">
         <xs:annotation>
           <xs:documentation>Stelle die HTML-Verarbeitung ein. Voreinstellung ist 'all'.</xs:documentation>

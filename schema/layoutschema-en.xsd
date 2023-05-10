@@ -4139,6 +4139,11 @@
           <xs:documentation>The name of the font family for the paragraph. The default is »text« (lowercase t).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="font-outline">
+        <xs:annotation>
+          <xs:documentation>Set the line width of the font outline.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="html">
         <xs:annotation>
           <xs:documentation>Set the HTML processing mode. Defaults to 'all'.</xs:documentation>

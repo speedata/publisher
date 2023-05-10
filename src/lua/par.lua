@@ -90,6 +90,16 @@ end
 
 local function mktextnode(self,text,options)
     local nodes, newdir = publisher.mknodes(tostring(text),options,"par/mktextnode")
+    if options.fontoutlinewidth and options.fontoutlinewidth > 0 then
+        local pw = node.new("whatsit","pdf_literal")
+        pw.data = string.format(" 1 Tr %g w ",sp_to_bp(options.fontoutlinewidth))
+        nodes = node.insert_before(nodes,nodes,pw)
+
+        pw = node.new("whatsit","pdf_literal")
+        pw.data = " 0 Tr "
+        nodes = node.insert_after(nodes,node.tail(nodes),pw)
+    end
+
     self.direction = self.direction or newdir
     local tmp = node.getproperty(nodes)
     if options.fontfamily and publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily] then
@@ -907,7 +917,6 @@ function Par:format( width_sp, options )
     if self.initial then
         local ht_nodelist = get_lineheight(nodelist)
         local initial_hlist = self.initial
-        local ht_initial = initial_hlist.height
 
         -- Node lists of width 0 stick to the right, which is
         -- good for rtl text, but not for ltr. So on non-rtl text

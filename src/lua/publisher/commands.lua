@@ -2477,6 +2477,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local direction         = publisher.read_attribute(layoutxml,dataxml,"direction",          "string")
     local fontname          = publisher.read_attribute(layoutxml,dataxml,"fontface",           "string")
     local fontfamilyname    = publisher.read_attribute(layoutxml,dataxml,"fontfamily",         "string",fontname)
+    local fontoutline       = publisher.read_attribute(layoutxml,dataxml,"font-outline",  "width_sp")
     local html              = publisher.read_attribute(layoutxml,dataxml,"html",               "string","all")
     local language_name     = publisher.read_attribute(layoutxml,dataxml,"language",           "string")
     local labelleft         = publisher.read_attribute(layoutxml,dataxml,"label-left",         "string")
@@ -2508,12 +2509,17 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     end
     local colorindex = publisher.get_colorindex_from_name(colorname)
     local languagecode
-
     if language_name then
         languagecode = publisher.get_languagecode(language_name)
     else
         languagecode = textblockoptions.languagecode or publisher.defaultlanguage
     end
+
+    local fontoutlinewidth
+    if fontoutline then
+        fontoutlinewidth = fontoutline
+    end
+
     local params = {
         fontfamily = fontfamily,
         color = colorindex,
@@ -2530,6 +2536,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
         labelleftdistance = labelleftdistance,
         bidi = bidi,
         role = publisher.get_rolenum(role),
+        fontoutlinewidth = fontoutlinewidth,
     }
 
 
@@ -4368,12 +4375,14 @@ function commands.textblock( layoutxml,dataxml )
     local width_sp = width
 
     local objects, nodes = {},{}
-    local nodelist,parameter
+    local nodelist
 
     if colorname then
         save_color = publisher.current_fgcolor
         publisher.current_fgcolor = colorindex
     end
+
+
     local options = {
         textformat = publisher.textformats[textformat],
         fontfamily = fontfamily,

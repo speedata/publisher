@@ -6096,6 +6096,14 @@
         <para>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</para>
       </description>
     </attribute>
+    <attribute en="font-outline" optional="yes" since="4.13.15" type="length">
+      <description xml:lang="en">
+        <para>Set the line width of the font outline.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze die Liniendicke der Schriftkontur.</para>
+      </description>
+    </attribute>
     <attribute en="html" optional="yes" since="4.1.2">
       <description xml:lang="en">
         <para>Set the HTML processing mode. Defaults to 'all'.</para>

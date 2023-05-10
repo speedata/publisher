@@ -3960,6 +3960,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="font-outline">
+                     <a:documentation>Setze die Liniendicke der Schriftkontur.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="html">
                      <a:documentation>Stelle die HTML-Verarbeitung ein. Voreinstellung ist &#39;all&#39;.</a:documentation>
                      <choice>

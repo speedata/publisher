@@ -141,6 +141,27 @@ The OpenType format knows so-called OpenType features, such as old style figures
 .Text figures (above) often make reading the numbers more pleasant. Real small caps (below) differ significantly from mathematically reduced capital letters. The line width and proportions must be adjusted. Depending on the font used, smallcaps also switches to "old style figures".
 image::osfsmcp.png[width=100%]
 
+== Outline font
+
+The `font-outline` attribute can be used to specify the line width for an outline font:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<PlaceObject>
+    <Textblock>
+        <Paragraph font-outline="0.3pt">
+            <Value>Hello nice world</Value>
+        </Paragraph>
+    </Textblock>
+</PlaceObject>
+-------------------------------------------------------------------------------
+
+[[fig-outlinefont]]
+.An outline font is created by specifying a line thickness with the `font-outline` attribute at Paragraph.
+image::outlinehelloworld.png[width=100%]
+
+
+
 [[ch-harfbuzz-mode]]
 == Harfbuzz
 
