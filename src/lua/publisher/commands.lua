@@ -1399,17 +1399,17 @@ function commands.image( layoutxml,dataxml )
         local col = xpath.get_variable("__column")
         local row = xpath.get_variable("__row")
         if col == 0 then
-            tab.padding_left = (tab.padding_left or 0 ) - publisher.options.trim
+            tab.padding_left = (tab.padding_left or 0 ) - ( publisher.options.trim or 0 )
             if width == publisher.options.pagewidth then
-                tab.padding_right = (tab.padding_right or 0) - publisher.options.trim
+                tab.padding_right = (tab.padding_right or 0) - ( publisher.options.trim or 0 )
             end
         elseif publisher.options.pagewidth - col - width < 100 then
-            tab.padding_right = (tab.padding_right or 0) - publisher.options.trim
+            tab.padding_right = (tab.padding_right or 0) - ( publisher.options.trim or 0 )
         end
         if row == 0 then
-            tab.padding_top = (tab.padding_top or 0) - publisher.options.trim
+            tab.padding_top = (tab.padding_top or 0) - ( publisher.options.trim or 0 )
             if height == publisher.options.pageheight then
-                tab.padding_bottom = (tab.padding_bottom or 0) - publisher.options.trim
+                tab.padding_bottom = (tab.padding_bottom or 0) - ( publisher.options.trim or 0 )
             end
         end
 
