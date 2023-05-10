@@ -2216,7 +2216,12 @@ function commands.options( layoutxml,dataxml )
     publisher.options.cutmarks            = publisher.read_attribute(layoutxml,dataxml,"cutmarks",    "boolean",publisher.options.cutmarks)
     publisher.options.trimmarks           = publisher.read_attribute(layoutxml,dataxml,"trimmarks",   "boolean",publisher.options.trimmarks)
     publisher.options.trimmarks           = publisher.read_attribute(layoutxml,dataxml,"bleedmarks",  "boolean",publisher.options.trimmarks)
-    publisher.options.startpage           = publisher.read_attribute(layoutxml,dataxml,"startpage",   "number", publisher.options.startpage)
+    local num = publisher.read_attribute(layoutxml,dataxml,"startpage",   "number", publisher.options.startpage)
+    if tonumber(num) then
+        publisher.current_pagenumber = tonumber(num)
+        log("Set page number to %d",num)
+    end
+
     publisher.options.trim                = publisher.read_attribute(layoutxml,dataxml,"trim",        "length", publisher.options.trim)
     publisher.options.trim                = publisher.read_attribute(layoutxml,dataxml,"bleed",       "length", publisher.options.trim)
     publisher.options.ignoreeol           = publisher.read_attribute(layoutxml,dataxml,"ignoreeol",   "boolean",publisher.options.ignoreeol)
@@ -3774,7 +3779,6 @@ function commands.table( layoutxml,dataxml,options )
 
     if not fontfamilyname then fontfamilyname = "text" end
     local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
-    local save_fontfamily = publisher.current_fontfamily
     publisher.current_fontfamily = fontfamily
 
     if fontfamily == nil then
@@ -4213,7 +4217,7 @@ function commands.text(layoutxml,dataxml)
             a:append(c)
             objects[#objects + 1] = a
         elseif eltname == "Ul" or eltname == "Ol" then
-            for j,w in ipairs(contents) do
+            for _,w in ipairs(contents) do
                 objects[#objects + 1] = w
             end
         elseif eltname == "Text" then
@@ -4253,9 +4257,6 @@ function commands.text(layoutxml,dataxml)
                 state.objects = objects
                 local obj
                 local extra_accumulated = 0
-                local extra
-                local startpage = publisher.current_pagenumber
-                local startrow =  cg:current_row(parameter.area)
                 for i=1,#tab do
                     local contents = tab[i]
                     local dont_format = 0

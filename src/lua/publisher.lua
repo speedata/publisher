@@ -1632,32 +1632,34 @@ function get_page_labels_str()
     for i = 1,#pagelabels do
         c = c + 1
         local p = pagelabels[i]
-        local mattername = pagelabels[i].matter
-        local thismatter = matters[mattername]
+        if p then
+            local mattername = p.matter
+            local thismatter = matters[mattername]
 
-        if prevmatter ~= mattername then
-            local str = {}
-            if thismatter.prefix and thismatter.prefix ~= "" then
-                str[#str + 1] = "/P " .. utf8_to_utf16_string_pdf(thismatter.prefix)
+            if prevmatter ~= mattername then
+                local str = {}
+                if thismatter.prefix and thismatter.prefix ~= "" then
+                    str[#str + 1] = "/P " .. utf8_to_utf16_string_pdf(thismatter.prefix)
+                end
+                if thismatter.label then
+                    str[#str + 1] = "/S " .. ( labeltypes[thismatter.label] or ("/D"))
+                else
+                    str[#str + 1] = "/S /D"
+                end
+                if prevmatter and matters[prevmatter].resetafter then
+                    c = 1
+                end
+                if thismatter.resetbefore then
+                    c = 1
+                end
+                if c > 1 then
+                    str[#str + 1] = string.format("/St %d",c)
+                end
+                prevmatter = mattername
+                tmp[#tmp + 1] = string.format("%d << %s >>", p.pagenumber - 1, table.concat(str," "))
             end
-            if thismatter.label then
-                str[#str + 1] = "/S " .. ( labeltypes[thismatter.label] or ("/D"))
-            else
-                str[#str + 1] = "/S /D"
-            end
-            if prevmatter and matters[prevmatter].resetafter then
-                c = 1
-            end
-            if thismatter.resetbefore then
-                c = 1
-            end
-            if c > 1 then
-                str[#str + 1] = string.format("/St %d",c)
-            end
-            prevmatter = mattername
-            tmp[#tmp + 1] = string.format("%d << %s >>", p.pagenumber - 1, table.concat(str," "))
+            visible_pagenumbers[i] = string.format("%s%s",thismatter.prefix or "",labelfunc(thismatter.label,c))
         end
-        visible_pagenumbers[i] = string.format("%s%s",thismatter.prefix or "",labelfunc(thismatter.label,c))
     end
     local tmpstring = table.concat(tmp," ")
     if tmpstring == "" or tmpstring == "0 << /S /D >>" then return nil end
