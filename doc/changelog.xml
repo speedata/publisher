@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.13">
+    <entry version="4.13.15" date="2023-05-11">
+        <en>Bugfix with Options startpage.</en>
+        <de>Bugfix bei Options startpage.</de>
+    </entry>
+    <entry version="4.13.15" date="2023-05-11">
+        <en>Bugfix: Image bleed="auto" and Options trim not set.</en>
+        <de>Fehlerkorrektur: Image bleed="auto" und Options trim nicht gesetzt.</de>
+    </entry>
+    <entry version="4.13.15" date="2023-05-11">
+        <en>Outline fonts.</en>
+        <de>Konturschrift.</de>
+    </entry>
     <entry version="4.13.14" date="2023-05-04">
         <en>Bug fix for *-columns in tables and minwidth.</en>
         <de>Fehlerkorrektur für *-Spalten in Tabellen und minwidth.</de>
