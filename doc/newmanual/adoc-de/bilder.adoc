@@ -244,18 +244,16 @@ Das Attribut `page` wird auch im Abschnitt <<ch-mehrseitigepdf>> beschrieben.
 Er dient dazu, die Seite auszuwählen, wenn eine PDF-Datei eingebunden wird.
 Mit `sd:number-of-pages(‹Dateiname›)` kann ermittelt werden, wie viele Seiten eine PDF-Datei enthält.
 
-[[ch-colonsyntax]]
+[[ch-imagearguments]]
 === Angabe der Seite bei Layout-Funktionen
 
 Einige Layoutfunktionen (`sd:aspectratio()`, `sd:imageheight()` und `sd:imagewidth()`) greifen auf Bilddateien zu.
-Im Falle einer PDF Datei, kann man mit dem Dateinamen die Seite und die gewünschte PDF-Box angeben.
-Dazu ist der Dateiname wie folgt aufgebaut: dateiname.pdf:seitenzahl:pdfbox.
+Im Falle einer PDF Datei, kann man neben dem Dateinamen die Seite und die gewünschte PDF-Box angeben.
+Diese Angaben sind optional.
 
-Beispiel: `sd:aspectratio("ocean.pdf:1:cropbox")`
+Beispiel: `sd:aspectratio("ocean.pdf",1,"cropbox")`
 
 Falls keine Box angegeben wird, wird die cropbox benutzt. Mögliche Werte für die Box-Angabe: `artbox`, `cropbox`, `trimbox`, `mediabox` und `bleedbox`.
-
-Der Dateiname kann natürlich auch über die üblichen Wege mit XPath zusammengebaut werden, z.B.: `sd:aspectratio(concat("ocean.pdf:",$pagenum,":cropbox"))`.
 
 
 == Externe Konvertierungstools

@@ -20,17 +20,25 @@ local box_lookup = {
 local luxor = do_luafile("luxor.lua")
 local sha  = require('shalocal')
 
----@param filename string
----@return string, integer, string|nil
-local function get_filename_pagenum_box_from_filename(filename)
-    if not string.match(filename,"%.pdf:") then
-        return filename,1,nil
+-- Return filename, pagenumber, box and unit from the arg. Used in imagewidth et al.
+--- @param arg table
+--- @return string, number, string, string | nil
+local function get_filename_pagenum_box_unit_from_arg(arg)
+    local filename, box, unit
+    box = "cropbox"
+    local pagenumber = 1
+    filename = arg[1]
+    for i = 2, #arg do
+        local ai = arg[i]
+        if tonumber(ai) then
+            pagenumber = tonumber(ai) or 1
+        elseif ai == "cm" or ai == "mm" or ai == "in" or ai == "sp" or ai == "pc" or ai == "pt" or ai == "pp" or ai == "cc" then
+            unit = ai
+        elseif ai == "artbox" or ai == "cropbox" or ai == "bleedbox" or ai == "trimbox" or ai == "mediabox" then
+            box = ai
+        end
     end
-
-    newfilename,pagenum,box = table.unpack(string.explode(filename,":"))
-    if box_lookup[box] then box = box_lookup[box] end
-    pagenum = tonumber(pagenum) or 1
-    return newfilename,pagenum,box
+    return filename,pagenumber,box,unit
 end
 
 
@@ -68,7 +76,7 @@ local function dimexpression( dataxml,arg )
 end
 
 --- Get the page number of a marker
-local function pagenumber(dataxml,arg)
+local function fnpagenumber(dataxml,arg)
   local m = publisher.markers[arg[1]]
   if m then
     return m.page
@@ -125,6 +133,10 @@ end
 -- and Image to read an image from the data.
 local function filecontents( dataxml,arg )
       local tmpdir = os.getenv("SP_TEMPDIR")
+      if tmpdir == nil then
+        err("SD_TEMPDIR is nil")
+        return
+      end
       lfs.mkdir(tmpdir)
       local filename = publisher.string_random(20)
       local path = tmpdir .. publisher.os_separator .. filename
@@ -277,12 +289,10 @@ local function number_of_pages(dataxml,arg )
 end
 
 local function imagewidth(dataxml, arg )
-    local filename = arg[1]
-    local pagenumber
-    filename,pagenumber,box = get_filename_pagenum_box_from_filename(filename)
+    local filename,pagenumber,box,unit = get_filename_pagenum_box_unit_from_arg(arg)
     local img = publisher.imageinfo(filename,pagenumber,box)
     publisher.setup_page(nil,"layout_functions#imagewidth")
-    local unit = arg[2]
+
     local width
     if unit then
         width = img.img.width
@@ -316,12 +326,9 @@ local function imagewidth(dataxml, arg )
 end
 
 local function imageheight(dataxml, arg )
-    local filename = arg[1]
-    local pagenumber
-    filename,pagenumber,box = get_filename_pagenum_box_from_filename(filename)
+    local filename,pagenumber,box, unit = get_filename_pagenum_box_unit_from_arg(arg)
     local img = publisher.imageinfo(filename,pagenumber,box)
     publisher.setup_page(nil,"layout_functions#imageheight")
-    local unit = arg[2]
     local height
     if unit then
         height = img.img.height
@@ -373,11 +380,11 @@ local function format_number(dataxml,arg)
   for i=1, ( #digits - first_digits) / 3 do
     ret[#ret + 1] = string.sub(digits,first_digits + ( i - 1) * 3 + 1 ,first_digits + i * 3 )
   end
-  ret = table.concat(ret, thousandssep)
+  local retstr = table.concat(ret, thousandssep)
   if commadigits and #commadigits > 0 then
-    return  sign .. ret .. commasep .. commadigits
+    return  sign .. retstr .. commasep .. commadigits
   else
-    return sign .. ret
+    return sign .. retstr
   end
 end
 
@@ -655,10 +662,8 @@ local function romannumeral(dataxml,arg)
 end
 
 local function aspectratio( dataxml,arg )
-  local filename = arg[1]
-  local pagenum, box
-  filename, pagenum, box = get_filename_pagenum_box_from_filename(filename)
-  local img = publisher.imageinfo(filename,pagenum,box)
+  local filename, pagenumber, box, _ = get_filename_pagenum_box_unit_from_arg(arg)
+  local img = publisher.imageinfo(filename,pagenumber,box)
   return img.img.xsize / img.img.ysize
 end
 
@@ -814,7 +819,7 @@ register("urn:speedata:2009/publisher/functions/en","number-of-pages",number_of_
 
 register("urn:speedata:2009/publisher/functions/en","odd",odd)
 
-register("urn:speedata:2009/publisher/functions/en","pagenumber",pagenumber)
+register("urn:speedata:2009/publisher/functions/en","pagenumber",fnpagenumber)
 
 register("urn:speedata:2009/publisher/functions/en","pagewidth",pagewidth)
 

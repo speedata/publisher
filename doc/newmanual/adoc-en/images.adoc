@@ -196,18 +196,15 @@ means that the "artbox" is displayed in the size 210mm × 297mm
 
 The `page` attribute is also described in the section <<ch-multipagepdf>>. It is used to select the page when a PDF file is embedded. With `sd:number-of-pages('filename')` it can be determined how many pages a PDF file contains.
 
-[[ch-colonsyntax]]
+[[ch-imagearguments]]
 === Specifying the page for layout functions
 
 Some layout functions (`sd:aspectratio()`, `sd:imageheight()`, and `sd:imagewidth()`) access image files.
-In the case of a PDF file, the file name can be used to specify page number and desired PDF box too.
-For this purpose, the file name is structured as follows: `filename.pdf:pagenumber:pdfbox`.
+In the case of a PDF file, the file name can be specified next to the optional page number and desired PDF box.
 
-Example: `sd:aspectratio('ocean.pdf:3:mediabox')`
+Example: `sd:aspectratio('ocean.pdf',3,'mediabox')`
 
 If no box is specified, the `cropbox` is used. Possible values for the box specification: `artbox`, `cropbox`, `trimbox`, `mediabox` and `bleedbox`.
-
-When variables are used, the XPath function `concat()` is required, e.g.: `sd:aspectratio(concat($filename,':',$pagenum,':mediabox'))`.
 
 
 == External Conversion Tools
