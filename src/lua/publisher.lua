@@ -2053,7 +2053,7 @@ function output_at( param )
         height_gridcells = height_gridcells + additional_height
     end
 
-    local delta_x, delta_y = r:position_grid_cell(x,y,area,wd,ht,valign,halign)
+    local delta_x, delta_y = r:position_grid_cell(x,y,area,wd,ht,valign,halign,width_gridcells,height_gridcells)
 
     if not delta_x then
         -- if delta_x is nil, delta_y has the error message
