@@ -103,7 +103,12 @@ func addFileToList(path string, info os.FileInfo, err error) error {
 	if info != nil {
 		if !info.IsDir() {
 			if ignorefile != path {
-				files[filepath.Base(path)] = path
+				fb := filepath.Base(path)
+				if dup, found := files[fb]; found && verbosity > 0 {
+					fmt.Println("warning: duplicate entry in directories:", dup, "and", path)
+				} else {
+					files[fb] = path
+				}
 			}
 		}
 	}
