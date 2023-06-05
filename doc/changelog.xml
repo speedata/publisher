@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.13">
+    <entry version="4.13.17" date="2023-06-05">
+        <en>Bugfix valign and halign on PlaceObject (#503).</en>
+        <de>Fehlerkorrektur valign und halign bei PlaceObject (#503).</de>
+    </entry>
+    <entry version="4.13.17" date="2023-06-05">
+        <en>Bugfix available space with grid dy > 0 (#505).</en>
+        <de>Fehlerkorrektur verfügbarer Raum mit Raster dy > 0 (#505).</de>
+    </entry>
     <entry version="4.13.16" date="2023-06-02">
         <en>Bugfix halign="right" with grid gap &gt; 0 (#503).</en>
         <de>Fehlerkorrektur halign="right" mit Abstand im Raster (#503).</de>
