@@ -60,7 +60,7 @@ function remaining_height_sp( self,row,areaname,column,framenumber )
     if column and cur_col > column then
         remaining_rows = remaining_rows - 1
     end
-    return self.gridheight * remaining_rows - overshoot
+    return self.gridheight * remaining_rows + self.grid_dy * ( remaining_rows - 1 ) - overshoot
 end
 
 function current_row( self,areaname,framenumber )

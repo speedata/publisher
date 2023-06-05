@@ -2823,8 +2823,9 @@ function commands.place_object( layoutxml,dataxml)
     end
     local current_column_start = tonumber(column or current_grid:current_column(area))
 
-    -- current_height is the remaining space on the current page in sp
-    local areaheight = ( maxheight or current_grid:number_of_rows(area) ) * current_grid.gridheight
+    -- current_height is the remaining space on the current page in sps
+    local maxcells = maxheight or current_grid:number_of_rows(area)
+    local areaheight = maxcells * current_grid.gridheight + ( maxcells - 1 ) * current_grid.grid_dy
     local options = {}
     if publisher.current_group == nil then
         options.ht_max = areaheight
