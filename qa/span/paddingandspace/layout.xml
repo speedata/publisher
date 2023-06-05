@@ -1,0 +1,17 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="3cm" width="6cm" />
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>Hello nice </Value>
+                    <Span background-padding-top="2mm" background-padding-bottom="2mm" background-color="lightgreen">
+                        <Value> or cruel </Value>
+                    </Span>
+                    <Value> world</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

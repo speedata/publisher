@@ -4374,8 +4374,12 @@ function hbglyphlist(arguments)
 
             if parameter.backgroundcolor then
                 set_attribute(n,"background-color",parameter.backgroundcolor)
-                set_attribute(n,"bgpaddingtop",parameter.bg_padding_top)
-                set_attribute(n,"bgpaddingbottom",parameter.bg_padding_bottom)
+                if parameter.bg_padding_top then
+                    set_attribute(n,"bgpaddingtop",parameter.bg_padding_top)
+                end
+                if parameter.bg_pading_bottom then
+                    set_attribute(n,"bgpaddingbottom",parameter.bg_padding_bottom)
+                end
             end
             set_attribute(n,"fontfamily",fontfamily)
         elseif cp == 0 and newlines_at[thisglyph.cluster] then

@@ -477,6 +477,9 @@ do
             elseif head.id == glue_node then -- glue
                 local ul = publisher.get_attribute(head,"text-decoration-line")
                 local bgcolor = publisher.get_attribute(head,"background-color")
+                local paddingtop = publisher.get_attribute(head,"bgpaddingtop")
+                local paddingbottom = publisher.get_attribute(head,"bgpaddingbottom")
+
                 -- at rightskip we must underline (if start exists)
                 if ul == nil or head.subtype == 9 then
                     if start_underline then
@@ -488,7 +491,9 @@ do
                     bgcolor_reverse = ( curdir[#curdir] == "rtl" )
                     bgcolorindex = bgcolor
                     start_bgcolor = head
-                elseif bgcolor == nil or head.subtype == 9 then
+                    bg_padding_top = paddingtop
+                    bg_padding_bottom = paddingbottom
+            elseif bgcolor == nil or head.subtype == 9 then -- 9 == rightskip
                     if start_bgcolor then
                         insert_backgroundcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
                         start_bgcolor = nil
