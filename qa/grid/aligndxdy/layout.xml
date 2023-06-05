@@ -1,0 +1,56 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- <Trace grid="yes" /> -->
+    <SetGrid nx="12" ny="12" dx="6mm" dy="6pt" />
+    <Record element="data">
+
+        <PlaceObject column="1" valign="top">
+            <Image file="_samplea.pdf" maxheight="1.2" maxwidth="26mm" ></Image>
+        </PlaceObject>
+        <PlaceObject column="1" valign="top">
+            <Image file="_samplea.pdf" maxheight="1.2"  ></Image>
+        </PlaceObject>
+
+
+        <PlaceObject column="1" valign="middle">
+            <Image file="_samplea.pdf" maxheight="1.2" maxwidth="26mm" ></Image>
+        </PlaceObject>
+        <PlaceObject column="1" valign="middle">
+            <Image file="_samplea.pdf" maxheight="1.2"  ></Image>
+        </PlaceObject>
+
+
+        <PlaceObject column="1" valign="bottom">
+            <Image file="_samplea.pdf" maxheight="1.2" maxwidth="26mm" ></Image>
+        </PlaceObject>
+        <PlaceObject column="1" valign="bottom">
+            <Image file="_samplea.pdf" maxheight="1.2"  ></Image>
+        </PlaceObject>
+
+        <NextRow row="1"/>
+
+        <PlaceObject column="12" halign="left" hreference="right">
+            <Image file="_samplea.pdf" maxheight="1" maxwidth="26mm" ></Image>
+        </PlaceObject>
+        <PlaceObject column="12" halign="left" hreference="right">
+            <Image file="_samplea.pdf" maxheight="1"  ></Image>
+        </PlaceObject>
+
+
+        <PlaceObject column="12" halign="center" hreference="right">
+            <Image file="_samplea.pdf" maxheight="1" maxwidth="26mm" ></Image>
+        </PlaceObject>
+        <PlaceObject column="12" halign="center" hreference="right">
+            <Image file="_samplea.pdf" maxheight="1"  ></Image>
+        </PlaceObject>
+
+
+        <PlaceObject column="12" halign="right" hreference="right">
+            <Image file="_samplea.pdf" maxheight="1" maxwidth="26mm" ></Image>
+        </PlaceObject>
+        <PlaceObject column="12" halign="right" hreference="right">
+            <Image file="_samplea.pdf" maxheight="1"  ></Image>
+        </PlaceObject>
+    </Record>
+</Layout>

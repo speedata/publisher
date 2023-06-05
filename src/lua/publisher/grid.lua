@@ -804,25 +804,19 @@ function position_grid_cell(self,x,y,areaname,wd,ht,valign,halign,width_gridcell
     x_sp = (frame_margin_left + x - 1) * (self.gridwidth + self.grid_dx) + self.margin_left + self.extra_margin
     y_sp = (frame_margin_top  + y - 1) * (self.gridheight + self.grid_dy) + self.margin_top  + self.extra_margin
     if valign then
-        -- height mod cellheight = "overshoot"
-        local overshoot = ht % self.gridheight
+        local overshoot = (( height_gridcells - 1 ) * self.grid_dy + height_gridcells * self.gridheight) % ht
         if valign == "bottom" and overshoot > 0 then
-            -- cellheight - "overshoot" = shift_down
-            y_sp = y_sp + ( height_gridcells - 1 ) * self.grid_dy + self.gridheight - overshoot
+            y_sp = y_sp + overshoot
         elseif valign == "middle" then
-            -- ( cellheight - "overshoot") / 2 = shift_down
-            y_sp = y_sp + ( ( height_gridcells - 1 ) * self.grid_dy + self.gridheight - overshoot ) / 2
+            y_sp = y_sp + overshoot / 2
         end
     end
     if halign then
-        -- width mod cellwidth = "overshoot"
-        local overshoot = wd % self.gridwidth
+        local overshoot = (( width_gridcells - 1 ) * self.grid_dx + width_gridcells * self.gridwidth) % wd
         if halign == "right" then
-            -- cellwidth - "overshoot" = shift_down
-            x_sp = x_sp + ( width_gridcells - 1 ) * self.grid_dx + self.gridwidth - overshoot
+            x_sp = x_sp + overshoot
         elseif halign == "center" then
-            -- ( cellwidth - "overshoot") / 2 = shift_down
-            x_sp = x_sp + ( width_gridcells - 1 ) * self.grid_dx + ( self.gridwidth - overshoot ) / 2
+            x_sp = x_sp + overshoot / 2
         end
     end
     return x_sp,y_sp

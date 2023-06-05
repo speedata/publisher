@@ -1,9 +1,0 @@
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-    xmlns:sd="urn:speedata:2009/publisher/functions/en">
-    <SetGrid nx="12" ny="12" dx="5mm" dy="5pt" />
-    <Record element="data">
-        <PlaceObject column="12" row="1" halign="right" hreference="right">
-            <Image file="_samplea.pdf" height="1" ></Image>
-        </PlaceObject>
-    </Record>
-</Layout>
