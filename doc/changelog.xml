@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.13">
+    <entry version="4.13.18" date="2023-06-06">
+        <en>Bugfix: border collapse and rowspan (#482).</en>
+        <de>Fehlerkorrektur: border collapse und rowspan (#482).</de>
+    </entry>
+    <entry version="4.13.18" date="2023-06-06">
+        <en>Bugfix Nobreak can have only one child (#455).</en>
+        <de>Fehlerkorrektur. NoBreak kann nur ein Kind haben (#455).</de>
+    </entry>
+    <entry version="4.13.18" date="2023-06-06">
+        <en>Bugfix. Span/padding and space at the beginning (#506).</en>
+        <de>Fehlerkorrektur: Span/padding und Leerraum am Anfang (#506).</de>
+    </entry>
     <entry version="4.13.17" date="2023-06-05">
         <en>Bugfix valign and halign on PlaceObject (#503).</en>
         <de>Fehlerkorrektur valign und halign bei PlaceObject (#503).</de>
