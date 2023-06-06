@@ -404,7 +404,8 @@ end
 
 
 local function even(dataxml, arg )
-  return math.fmod(arg[1],2) == 0
+    if not tonumber(arg[1]) then err("sd:even() - argument is not a number") return false end
+    return math.fmod(arg[1],2) == 0
 end
 
 local function current_frame_number(dataxml,arg)
