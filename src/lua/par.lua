@@ -153,8 +153,8 @@ local function flatten(self,items,options)
                 local f = thisself.contents.flatten_callback
                 thisself.contents.flatten_callback = nil
                 local tmp = f(thisself.contents,new_options)
-                for i=1,#tmp do
-                    table.insert(ret,tmp[i])
+                for i=1,#tmp.objects do
+                    table.insert(ret,tmp.objects[i])
                 end
             elseif type(thisself.contents) == "string" or type(thisself.contents) == "number" or type(thisself.contents) == "boolean" then
                 table.insert(ret,mktextnode(self,thisself.contents,new_options))

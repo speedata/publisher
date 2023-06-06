@@ -2087,7 +2087,7 @@ function commands.nobreak( layoutxml, dataxml )
                 local thisoptions = publisher.copy_table_from_defaults(options)
                 thisoptions.fontfamily = fam
                 foo = par:new(nil,"nobreak(fontsize 2)")
-                for _,j in ipairs(tab) do
+                for _,j in ipairs(thiselt) do
                     local c = publisher.element_contents(j)
                     tmppar:append(publisher.copy_table_from_defaults(c),thisoptions)
                 end
@@ -2106,7 +2106,7 @@ function commands.nobreak( layoutxml, dataxml )
         p:append(tab,{})
         p.flatten_callback = function(thiselt,options)
             tmppar = par:new(nil,"cut")
-            for _,j in ipairs(tab) do
+            for _,j in ipairs(thiselt) do
                 local c = publisher.element_contents(j)
                 tmppar:append(c,options)
             end
@@ -2130,6 +2130,7 @@ function commands.nobreak( layoutxml, dataxml )
             local tmpnl = node.copy_list(nl,head)
             node.insert_after(tmpnl,node.tail(tmpnl),cuttextnodelist)
             tmppar[1] = tmpnl
+            tmppar.objects = { tmpnl  }
             return tmppar
         end
         return p
@@ -2137,20 +2138,15 @@ function commands.nobreak( layoutxml, dataxml )
         p:append(tab,{})
         p.flatten_callback = function(thiselt,options)
             tmppar = par:new(nil,"keeptogether")
-            for _,j in ipairs(tab) do
-                local c = publisher.element_contents(j)
-                tmppar:append(publisher.deepcopy(c),options)
-            end
+            tmppar:append(thiselt)
             tmppar:mknodelist(options)
             local nl = tmppar.objects[1]
-
             local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily]
             local lineheight = fam_tbl.baselineskip
             local strut = publisher.add_rule(nil,"head",{height = lineheight * 0.75 , depth = lineheight * 0.25 , width = 0 })
             nl = node.hpack(nl)
             nl = node.insert_before(nl,nl,strut)
-
-            tmppar[1] = nl
+            tmppar.objects[1] = nl
             return tmppar
         end
         return p
