@@ -294,7 +294,9 @@ function merge_border_with_nextcell(row,x)
     local thiscell,nextcell,nextcell_borderleft,thiscell_borderright,new_borderwidth
     thiscell = row[x]
     nextcell = row[x+1]
-
+    if #nextcell == 0 then
+        return
+    end
     thiscell_borderright = tex.sp(thiscell["border-right"] or 0)
     nextcell_borderleft  = tex.sp(nextcell["border-left"]  or 0)
     new_borderwidth = math.abs( math.max(thiscell_borderright,nextcell_borderleft) / 2 )
@@ -351,6 +353,7 @@ function adjust_borderwidths_collapse(self,tr_contents,tablearea)
     local tablematrix = {}
     local row = 0
     local maxcol = 0
+
     for i = 1,#tr_contents do
         local eltname = publisher.elementname(tr_contents[i])
         local tr = publisher.element_contents(tr_contents[i])
@@ -358,6 +361,32 @@ function adjust_borderwidths_collapse(self,tr_contents,tablearea)
             row = row + 1
             tablematrix[row] = tablematrix[row] or {}
 
+            local col = 0
+            local colstart = 1
+            for j = 1, #tr do
+                local td = publisher.element_contents(tr[j])
+
+                if skiptable[row] and skiptable[row][colstart] then
+                    while skiptable[row] and skiptable[row][colstart] do
+                        colstart = colstart + 1
+                    end
+                end
+
+                col = colstart + ( td.colspan or 1 ) - 1
+                colstart = col + 1
+            end
+            tablematrix[row] = {}
+            for i = 1, col do
+                tablematrix[row][i] = {}
+            end
+        end
+    end
+    row = 0
+    for i = 1,#tr_contents do
+        local eltname = publisher.elementname(tr_contents[i])
+        local tr = publisher.element_contents(tr_contents[i])
+        if eltname == "Tr" then
+            row = row + 1
             local col = 0
             for j = 1, #tr do
                 local td = publisher.element_contents(tr[j])

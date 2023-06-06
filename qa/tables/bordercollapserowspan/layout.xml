@@ -1,0 +1,46 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="5cm" width="210mm" />
+    <Record element="data">
+      <PlaceObject>
+        <Table stretch="max" padding="2pt" border-collapse="collapse">
+          <Columns>
+            <Column width="1*" />
+            <Column width="1*" />
+            <Column width="1*" />
+          </Columns>
+          <Tr>
+            <Td colspan="3" border-top="1pt" border-bottom="1pt" border-left="1pt" border-right="1pt">
+              <Paragraph>
+                <Value select="'Row1 Cell1-2-3'" />
+              </Paragraph>
+            </Td>
+          </Tr>
+          <Tr>
+            <Td rowspan="2" colspan="1" border-top="1pt" border-bottom="1pt" border-left="1pt"
+              border-right="1pt">
+              <Paragraph>
+                <Value select="'Row2-3 Cell1'" />
+              </Paragraph>
+            </Td>
+            <Td border-top="1pt" border-bottom="1pt" border-left="1pt" border-right="1pt">
+              <Paragraph>
+                <Value select="'Row2 Cell2'" />
+              </Paragraph>
+            </Td>
+            <Td border-top="1pt" border-bottom="1pt" border-left="1pt" border-right="1pt">
+              <Paragraph>
+                <Value select="'Row2 Cell3'" />
+              </Paragraph>
+            </Td>
+          </Tr>
+          <Tr>
+            <Td colspan="2" border-top="1pt" border-bottom="1pt" border-left="1pt" border-right="1pt">
+              <Paragraph>
+                <Value select="'Row3 Cell2-3'" />
+              </Paragraph>
+            </Td>
+          </Tr>
+        </Table>
+      </PlaceObject>
+    </Record>
+  </Layout>
