@@ -2,6 +2,30 @@
 
 This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/).
 
+
+## Version 4.14
+
+Released 2023-07-03
+
+* New syntax for filename, page number and PDF box in image functions ([#502](https://github.com/speedata/publisher/issues/502)).
+* Outline fonts.
+* Tables: new Column spec `minwidth` and new keywords for width (`min` and `max`).
+* New XPath function `matches()` ([#453](https://github.com/speedata/publisher/issues/453)).
+* [Pro package](https://doc.speedata.de/publisher/en/speedatapro/).
+* Bug fixes
+
+## Version  4.12
+
+Released 2022-09-30
+
+* PDFOptions displaymode
+* Delay execution on SetVariable.
+* Set border color for hyperlinks.
+* Add sha256, sha512 functions.
+* New command Clip.
+* Remove LuaJIT/FFI, add new lua glue library.
+
+
 ## Version 4.10
 
 * Mostly bug fixes
