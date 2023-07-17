@@ -2057,7 +2057,6 @@ end
 function commands.nobreak( layoutxml, dataxml )
     local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth",   "length_sp", xpath.get_variable("__maxwidth"))
     local fontname         = publisher.read_attribute(layoutxml,dataxml,"fontface",   "string")
-    local fontfamilyname   = publisher.read_attribute(layoutxml,dataxml,"fontfamily", "string",fontname)
     local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce",     "string", "keeptogether")
     local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor",     "string",0.9)
     local text             = publisher.read_attribute(layoutxml,dataxml,"text",       "string")
@@ -4131,6 +4130,7 @@ function commands.trace(layoutxml,dataxml)
     local debug            = publisher.read_attribute(layoutxml,dataxml,"debug",         "boolean")
     local grid             = publisher.read_attribute(layoutxml,dataxml,"grid",          "boolean")
     local gridallocation   = publisher.read_attribute(layoutxml,dataxml,"gridallocation","boolean")
+    local gridlocation     = publisher.read_attribute(layoutxml,dataxml,"gridlocation",  "string")
     local hyphenation      = publisher.read_attribute(layoutxml,dataxml,"hyphenation",   "boolean")
     local kerning          = publisher.read_attribute(layoutxml,dataxml,"kerning",       "boolean")
     local objects          = publisher.read_attribute(layoutxml,dataxml,"objects",       "boolean")
@@ -4163,6 +4163,14 @@ function commands.trace(layoutxml,dataxml)
     end
     if textformat ~= nil then
         publisher.options.showtextformat = textformat
+    end
+    if gridlocation ~= nil then
+        if gridlocation == "foreground" or gridlocation == "background" then
+            publisher.options.gridlocation = gridlocation
+        else
+            warning("Grid location %s unknown",gridlocation)
+        end
+
     end
 end
 

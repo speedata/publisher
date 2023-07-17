@@ -9761,6 +9761,30 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="gridlocation" optional="yes" since="4.15.0">
+      <description xml:lang="en">
+        <para>Location of the grid.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Ort des Rasters.</para>
+      </description>
+      <choice en="foreground">
+        <description xml:lang="en">
+          <para>Draw the grid on top of all other objects.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeichne das Raster über allen Objekten.</para>
+        </description>
+      </choice>
+      <choice en="background">
+        <description xml:lang="en">
+          <para>Draw the grid below all other objects (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeichne das Raster unter allen Objekten (default).</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="hyphenation" optional="yes">
       <description xml:lang="en">
         <para>Draw little marks to show all hyphenation points.</para>

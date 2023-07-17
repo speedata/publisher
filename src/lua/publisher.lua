@@ -277,6 +277,7 @@ options = {
     gridcells_x = 0,
     gridcells_y = 0,
     reportmissingglyphs = true,
+    gridlocation = "background",
     fontloader = os.getenv("SP_FONTLOADER") or "fontforge",
     xmlparser = os.getenv("SP_XMLPARSER") or "lua",
 }
@@ -1737,6 +1738,7 @@ function shipout(nodelist, pagenumber )
         local visdebug = require("lua-visual-debug")
         visdebug.show_page_elements(nodelist)
     end
+    nodelist = dothingsafteroutput(cp,nodelist)
     tex.box[666] = nodelist
     tex.shipout(666)
 end
@@ -3539,7 +3541,7 @@ function dothingsbeforeoutput( thispage )
         end
     end
 
-    if options.showgrid then
+    if options.showgrid and options.gridlocation == "background" then
         local lit = node.new("whatsit","pdf_literal")
         lit.mode = 1
         lit.data = cg:draw_grid()
@@ -3595,6 +3597,18 @@ function dothingsbeforeoutput( thispage )
         node.tail(firstbox).next = list_start
         list_start.prev = node.tail(firstbox)
     end
+end
+
+function dothingsafteroutput(thispage,nodelist)
+    if options.showgrid and options.gridlocation == "foreground" then
+        local cg = thispage.grid
+        local lit = node.new("whatsit","pdf_literal")
+        lit.mode = 1
+        lit.data = cg:draw_grid()
+        node.insert_after(nodelist,nodelist,lit)
+        nodelist = node.vpack(nodelist)
+    end
+    return nodelist
 end
 
 --- Read the contents of the attribute `attname`. `typ` is one of

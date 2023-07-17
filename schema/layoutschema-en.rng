@@ -6254,6 +6254,17 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="gridlocation">
+               <a:documentation>Location of the grid.</a:documentation>
+               <choice>
+                  <value>foreground</value>
+                  <a:documentation>Draw the grid on top of all other objects.</a:documentation>
+                  <value>background</value>
+                  <a:documentation>Draw the grid below all other objects (default).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="hyphenation">
                <a:documentation>Draw little marks to show all hyphenation points.</a:documentation>
                <choice>

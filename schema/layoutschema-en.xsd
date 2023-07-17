@@ -7528,6 +7528,25 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="gridlocation">
+        <xs:annotation>
+          <xs:documentation>Location of the grid.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="foreground">
+              <xs:annotation>
+                <xs:documentation>Draw the grid on top of all other objects.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="background">
+              <xs:annotation>
+                <xs:documentation>Draw the grid below all other objects (default).</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="hyphenation">
         <xs:annotation>
           <xs:documentation>Draw little marks to show all hyphenation points.</xs:documentation>
