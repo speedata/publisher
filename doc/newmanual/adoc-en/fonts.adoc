@@ -40,9 +40,9 @@ The font is used in different ways: in the commands `<Textblock>`, `<Text>`, `<P
 </Paragraph>
 -------------------------------------------------------------------------------
 
-== Text labeling in the layout rules
+== Text markup in the layout rules
 
-There are several ways to switch to the cuts fat, italic and fat-italic. The most direct one is to switch with the commands `<B>` and `<I>`, these can also be nested within each other:
+There are several ways to switch to the cuts bold, italic and bold-italic. The most direct one is to switch with the commands `<B>` and `<I>`, these can also be nested within each other:
 
 [source,xml]
 -------
@@ -89,7 +89,7 @@ with the corresponding data:
   mornings.</data>
 -------
 
-The result is the same as above. The tags can also be written in capital letters in the data: `<B>` instead of `<b>. Nesting is also allowed and again `<u>` is underlined.
+The result is the same as above. The tags can also be written in capital letters in the data: `<B>` instead of `<b>`. Nesting is also allowed and again `<u>` is underlined.
 
 TIP: If the data is not in well-formed XML but in HTML format for example, you can use the layout function `sd:decode-html()` to interpret it.
 
@@ -288,7 +288,7 @@ In order to save yourself work in defining fonts, you can use the command
 $ sp list-fonts --xml
 -------
 
-use. This will then list all font files found, together with a line that can be used directly in the layout.
+This will then list all font files found, together with a line that can be used directly in the layout.
 
 -------
 $ sp list-fonts --xml

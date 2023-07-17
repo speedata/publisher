@@ -4582,8 +4582,16 @@ local function ffglyphlist(arguments)
             dummypenalty.penalty = 10000
             set_attribute(dummypenalty,"newline",1)
             head,last = node.insert_after(head,last,dummypenalty)
-
-            local ht = fonts.lookup_fontfamily_number_instance[fontfamily].size
+            if fontfamily == nil then
+                err( "ffglyphlist: fontfamily is nil")
+                return
+            end
+            local ff = fonts.lookup_fontfamily_number_instance[fontfamily]
+            if ff == nil then
+                err( string.format("Could not find instance of family %s",fontfamily))
+                return
+            end
+            local ht = ff.size
             local strut = add_rule(nil,"head",{height = ht * 0.75, depth = ht * 0.25, width = 0 })
             setprop(strut,"origin","strut newline ff")
             set_attribute(strut,"newline",1)

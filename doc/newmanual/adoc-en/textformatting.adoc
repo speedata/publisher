@@ -145,6 +145,4 @@ results in
 
 image::url.png[width=70%]
 
-(See also https://github.com/speedata/publisher/issues/173)
-
 // EOF
