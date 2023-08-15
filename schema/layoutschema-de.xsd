@@ -4893,6 +4893,45 @@
           <xs:documentation>Setze Anzahl der Kopien. Maximal erlaubt sind 5 aufgrund der PDF-Spezifikation.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="pagelayout">
+        <xs:annotation>
+          <xs:documentation>Bestimme das Seitenlayout im Adobe Acrobat.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="singlepage">
+              <xs:annotation>
+                <xs:documentation>Seitenanzeige »Einzelansicht«.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="onecolumn">
+              <xs:annotation>
+                <xs:documentation>Seitenanzeige »Bildlauf«.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="twocolumnleft">
+              <xs:annotation>
+                <xs:documentation>Seitenanzeige »Bildlauf in Zweiseitenansicht«.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="twocolumnright">
+              <xs:annotation>
+                <xs:documentation>Seitenanzeige »Bildlauf in Zweiseitenansicht« mit Deckblatt.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="twopageleft">
+              <xs:annotation>
+                <xs:documentation>Seitenanzeige »Zweiseitenansicht«.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="twopageright">
+              <xs:annotation>
+                <xs:documentation>Seitenanzeige »Zweiseitenansicht« mit Deckblatt.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="picktraybypdfsize">
         <xs:annotation>
           <xs:documentation>Auswahlfeld im PDF-Viewer »Papierquelle gemäß PDF-Seitengröße auswählen«.</xs:documentation>

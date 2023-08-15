@@ -2567,21 +2567,22 @@ end
 --- ------------
 --- Sets number of copies and such. See #57
 function commands.pdfoptions( layoutxml, dataxml )
+    local author       = publisher.read_attribute(layoutxml,dataxml,"author",   "string")
+    local colorprofile = publisher.read_attribute(layoutxml,dataxml,"colorprofile", "string")
+    local creator      = publisher.read_attribute(layoutxml,dataxml,"creator",   "string")
+    local displaymode  = publisher.read_attribute(layoutxml,dataxml,"displaymode", "string")
+    local duplex       = publisher.read_attribute(layoutxml,dataxml,"duplex",   "string")
     local format       = publisher.read_attribute(layoutxml,dataxml,"format",    "string")
+    local hyperlinksbordercolor = publisher.read_attribute(layoutxml,dataxml,"hyperlinksbordercolor", "string")
+    local keywords     = publisher.read_attribute(layoutxml,dataxml,"keywords", "string")
     local nc           = publisher.read_attribute(layoutxml,dataxml,"numcopies", "number")
+    local pagelayout   = publisher.read_attribute(layoutxml,dataxml,"pagelayout", "string")
+    local picktray     = publisher.read_attribute(layoutxml,dataxml,"picktraybypdfsize", "boolean")
     local printscaling = publisher.read_attribute(layoutxml,dataxml,"printscaling", "string")
     local showbookmarks = publisher.read_attribute(layoutxml,dataxml,"showbookmarks", "boolean")
-    local displaymode = publisher.read_attribute(layoutxml,dataxml,"displaymode", "string")
-    local picktray     = publisher.read_attribute(layoutxml,dataxml,"picktraybypdfsize", "boolean")
     local showhyperlinks = publisher.read_attribute(layoutxml,dataxml,"showhyperlinks", "boolean", false)
-    local hyperlinksbordercolor = publisher.read_attribute(layoutxml,dataxml,"hyperlinksbordercolor", "string")
-    local duplex       = publisher.read_attribute(layoutxml,dataxml,"duplex",   "string")
-    local title        = publisher.read_attribute(layoutxml,dataxml,"title",    "string")
-    local author       = publisher.read_attribute(layoutxml,dataxml,"author",   "string")
-    local creator      = publisher.read_attribute(layoutxml,dataxml,"creator",   "string")
     local subject      = publisher.read_attribute(layoutxml,dataxml,"subject",  "string")
-    local keywords     = publisher.read_attribute(layoutxml,dataxml,"keywords", "string")
-    local colorprofile = publisher.read_attribute(layoutxml,dataxml,"colorprofile", "string")
+    local title        = publisher.read_attribute(layoutxml,dataxml,"title",    "string")
 
     if title then
         publisher.options.documenttitle = title
@@ -2606,6 +2607,20 @@ function commands.pdfoptions( layoutxml, dataxml )
     end
     if nc then
         publisher.viewerpreferences.numcopies = nc
+    end
+
+    if pagelayout == "twocolumnleft" then
+        publisher.options.pagelayout = "TwoColumnLeft"
+    elseif pagelayout == "twocolumnright" then
+        publisher.options.pagelayout = "TwoColumnRight"
+    elseif pagelayout == "twopageleft" then
+        publisher.options.pagelayout = "TwoPageLeft"
+    elseif pagelayout == "twopageright" then
+        publisher.options.pagelayout = "TwoPageRight"
+    elseif pagelayout == "onecolumn" then
+        publisher.options.pagelayout = "OneColumn"
+    elseif pagelayout == "singlepage" then
+        publisher.options.pagelayout = "SinglePage"
     end
 
     if displaymode == "attachments" then

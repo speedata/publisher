@@ -244,7 +244,6 @@ function define_font(name, size,extra_parameter)
         lookup_fonttable_from_filename[name]=fonttable
 
         fonttable.filename_with_path = filename_with_path
-        local is_unicode = (fonttable.pfminfo.unicoderanges ~= nil)
 
         --- We require a mapping glyph number -> unicode codepoint.
         --- I used to have two different means of unicode -> glyph mapping.

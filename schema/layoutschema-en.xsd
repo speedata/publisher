@@ -4893,6 +4893,45 @@
           <xs:documentation>Set the number of copies. At most 5 are allowed in the PDF specification.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="pagelayout">
+        <xs:annotation>
+          <xs:documentation>Specify the layout of the pages in Adobe Acrobat.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="singlepage">
+              <xs:annotation>
+                <xs:documentation>Display one page at a time.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="onecolumn">
+              <xs:annotation>
+                <xs:documentation>Display the pages in one column.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="twocolumnleft">
+              <xs:annotation>
+                <xs:documentation>Display the pages in two columns, with odd- numbered pages on the left.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="twocolumnright">
+              <xs:annotation>
+                <xs:documentation>Display the pages in two columns, with odd- numbered pages on the right.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="twopageleft">
+              <xs:annotation>
+                <xs:documentation>Display the pages two at a time, with odd-numbered pages on the left.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="twopageright">
+              <xs:annotation>
+                <xs:documentation>Display the pages two at a time, with odd-numbered pages on the right.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="picktraybypdfsize">
         <xs:annotation>
           <xs:documentation>Activate the check box in the PDF viewer for choosing the paper tray based on the page size.</xs:documentation>

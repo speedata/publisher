@@ -6446,6 +6446,11 @@
     <seealso><ref name="xpath"/>, <cmd name="AtPageCreation"/>,  <cmd name="AtPageShipout"/>,   <cmd name="PositioningArea"/>,  <cmd name="ClearPage"/>, <cmd name="DefineMatter"/>
     </seealso>
   </command>
+  <!--
+    *************************
+    * PDFOptions
+    *************************
+  -->
   <command en="PDFOptions" since="2.3.39">
     <description xml:lang="en">
       <para>Set PDF options like number of copies and such</para>
@@ -6613,6 +6618,62 @@
       <description xml:lang="de">
         <para>Setze Anzahl der Kopien. Maximal erlaubt sind 5 aufgrund der PDF-Spezifikation.</para>
       </description>
+    </attribute>
+    <attribute en="pagelayout" optional="yes" since="4.15.1">
+      <description xml:lang="en">
+        <para>Specify the layout of the pages in Adobe Acrobat.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimme das Seitenlayout im Adobe Acrobat.</para>
+      </description>
+      <choice en="singlepage">
+        <description xml:lang="en">
+          <para>Display one page at a time.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Seitenanzeige »Einzelansicht«.</para>
+        </description>
+      </choice>
+      <choice en="onecolumn">
+        <description xml:lang="en">
+          <para>Display the pages in one column.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Seitenanzeige »Bildlauf«.</para>
+        </description>
+      </choice>
+      <choice en="twocolumnleft">
+        <description xml:lang="en">
+          <para>Display the pages in two columns, with odd- numbered pages on the left.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Seitenanzeige »Bildlauf in Zweiseitenansicht«.</para>
+        </description>
+      </choice>
+      <choice en="twocolumnright">
+        <description xml:lang="en">
+          <para>Display the pages in two columns, with odd- numbered pages on the right.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Seitenanzeige »Bildlauf in Zweiseitenansicht« mit Deckblatt.</para>
+        </description>
+      </choice>
+      <choice en="twopageleft">
+        <description xml:lang="en">
+          <para>Display the pages two at a time, with odd-numbered pages on the left.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Seitenanzeige »Zweiseitenansicht«.</para>
+        </description>
+      </choice>
+      <choice en="twopageright">
+        <description xml:lang="en">
+          <para>Display the pages two at a time, with odd-numbered pages on the right.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Seitenanzeige »Zweiseitenansicht« mit Deckblatt.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="picktraybypdfsize" optional="yes" since="2.3.46">
       <description xml:lang="en">

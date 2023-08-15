@@ -1463,6 +1463,10 @@ function initialize_luatex_and_generate_pdf()
         vp[#vp + 1] = string.format("/Duplex /%s", viewerpreferences.duplex)
     end
 
+    if options.pagelayout then
+        pdfcatalog[#pdfcatalog + 1] = string.format("/PageLayout /%s", options.pagelayout)
+    end
+
     if options.displaymode then
         pdfcatalog[#pdfcatalog + 1] = string.format("/PageMode /%s", options.displaymode)
     else

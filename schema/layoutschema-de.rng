@@ -4331,6 +4331,25 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="pagelayout">
+               <a:documentation>Bestimme das Seitenlayout im Adobe Acrobat.</a:documentation>
+               <choice>
+                  <value>singlepage</value>
+                  <a:documentation>Seitenanzeige »Einzelansicht«.</a:documentation>
+                  <value>onecolumn</value>
+                  <a:documentation>Seitenanzeige »Bildlauf«.</a:documentation>
+                  <value>twocolumnleft</value>
+                  <a:documentation>Seitenanzeige »Bildlauf in Zweiseitenansicht«.</a:documentation>
+                  <value>twocolumnright</value>
+                  <a:documentation>Seitenanzeige »Bildlauf in Zweiseitenansicht« mit Deckblatt.</a:documentation>
+                  <value>twopageleft</value>
+                  <a:documentation>Seitenanzeige »Zweiseitenansicht«.</a:documentation>
+                  <value>twopageright</value>
+                  <a:documentation>Seitenanzeige »Zweiseitenansicht« mit Deckblatt.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="picktraybypdfsize">
                <a:documentation>Auswahlfeld im PDF-Viewer »Papierquelle gemäß PDF-Seitengröße auswählen«.</a:documentation>
                <choice>
