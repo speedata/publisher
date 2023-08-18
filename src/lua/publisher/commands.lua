@@ -2226,7 +2226,7 @@ function commands.options( layoutxml,dataxml )
     local randomseed                      = publisher.read_attribute(layoutxml,dataxml,"randomseed",  "number")
     local reportmissingglyphs             = publisher.read_attribute(layoutxml,dataxml,"reportmissingglyphs", "string")
     publisher.options.interaction         = publisher.read_attribute(layoutxml,dataxml,"interaction", "boolean", publisher.options.interaction)
-    local imagenotfound                   = publisher.read_attribute(layoutxml,dataxml,"imagenotfound", "string","error")
+    local imagenotfound                   = publisher.read_attribute(layoutxml,dataxml,"imagenotfound", "string")
     local mainlanguage                    = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","")
     local default_area                    = publisher.read_attribute(layoutxml,dataxml,"defaultarea","string")
 
@@ -2234,8 +2234,10 @@ function commands.options( layoutxml,dataxml )
         publisher.default_area = default_area
     end
 
+    if imagenotfound == "warning" or imagenotfound == "error" then
+        publisher.options.imagenotfounderror = (imagenotfound == "error")
+    end
 
-    publisher.options.imagenotfounderror = imagenotfound == "error"
     if mainlanguage ~= "" then
         publisher.set_mainlanguage(mainlanguage,true)
     end
