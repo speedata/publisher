@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.15">
+    <entry version="4.15.2" date="2023-08-18">
+        <en>Warning for image not found on non-last Option fix (#514).</en>
+        <de>Warnung bei Bild nicht gefunden und nicht-letzter Option (#514).</de>
+    </entry>
     <entry version="4.15.1" date="2023-08-16">
         <en>New PDFOptions for page layout.</en>
         <de>Neue Optionen für Seitenlayout bei PDFOptions.</de>
