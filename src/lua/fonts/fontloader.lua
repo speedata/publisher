@@ -151,6 +151,13 @@ function define_font_hb( name, size, extra_parameter )
         space_shrink  = 0.1  * size,
         x_height      = 0.4  * size,
         quad          = 1.0  * size,
+        emspace       = size,
+        enspace       = size / 2,
+        thirdspace    = size / 3,
+        quarterspace  = size / 4,
+        sixthspace    = size / 6,
+        thinspace     = size / 8,
+        hairspace     = size / 24,
         extra_space   = 0
     }
     local features = {}
@@ -333,6 +340,13 @@ function define_font(name, size,extra_parameter)
         space_shrink  = 0.1  * size,
         x_height      = 0.4  * size,
         quad          = 1.0  * size,
+        emspace       = size,
+        enspace       = size / 2,
+        thirdspace    = size / 3,
+        quarterspace  = size / 4,
+        sixthspace    = size / 6,
+        thinspace     = size / 8,
+        hairspace     = size / 24,
         extra_space   = 0
     }
 

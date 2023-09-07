@@ -4341,7 +4341,6 @@ function hbglyphlist(arguments)
     local newlines_at = arguments.newlines_at
     local fontfamily = parameter.fontfamily
     local direction = arguments.direction
-    local script = arguments.script
     local thislang = arguments.thislang
     local fontnumber = arguments.fontnumber
     local is_chinese = arguments.is_chinese
@@ -4353,7 +4352,7 @@ function hbglyphlist(arguments)
     local shrink  = tbl.parameters.space_shrink
     local stretch = tbl.parameters.space_stretch
     local list, cur
-    local n,k
+    local n
     for i=1,#glyphs do
         local thisglyph = glyphs[i]
         local cp = thisglyph.codepoint
@@ -4370,6 +4369,41 @@ function hbglyphlist(arguments)
                 list,cur = node.insert_after(list,cur,n)
                 n = set_glue(nil,{width = space, shrink = shrink, stretch = stretch},"uc=32,160")
                 node.set_attribute(n,att_tie_glue,1)
+                list,cur = node.insert_after(list,cur,n)
+            elseif cluster[thiscluster] == 8194 then -- en space
+                n = set_glue(nil,{width = tbl.parameters.enspace },"uc=8194")
+                -- prevent from stretching with ragged shape
+                n.subtype = 1
+                list,cur = node.insert_after(list,cur,n)
+            elseif cluster[thiscluster] == 8195 then -- em space
+                n = set_glue(nil,{width = tbl.parameters.emspace },"uc=8195")
+                -- prevent from stretching with ragged shape
+                n.subtype = 1
+                list,cur = node.insert_after(list,cur,n)
+            elseif cluster[thiscluster] == 8196 then -- three per em space
+                n = set_glue(nil,{width = tbl.parameters.thirdspace },"uc=8196")
+                -- prevent from stretching with ragged shape
+                n.subtype = 1
+                list,cur = node.insert_after(list,cur,n)
+            elseif cluster[thiscluster] == 8197 then -- four per em space
+                n = set_glue(nil,{width = tbl.parameters.quarterspace },"uc=8197")
+                -- prevent from stretching with ragged shape
+                n.subtype = 1
+                list,cur = node.insert_after(list,cur,n)
+            elseif cluster[thiscluster] == 8198 then -- six per em space
+                n = set_glue(nil,{width = tbl.parameters.sixthspace },"uc=8198")
+                -- prevent from stretching with ragged shape
+                n.subtype = 1
+                list,cur = node.insert_after(list,cur,n)
+            elseif cluster[thiscluster] == 8201 then -- thin space
+                n = set_glue(nil,{width = tbl.parameters.thinspace },"uc=8201")
+                -- prevent from stretching with ragged shape
+                n.subtype = 1
+                list,cur = node.insert_after(list,cur,n)
+            elseif cluster[thiscluster] == 8202 then -- hair space
+                n = set_glue(nil,{width = tbl.parameters.hairspace},"uc=8202")
+                -- prevent from stretching with ragged shape
+                n.subtype = 1
                 list,cur = node.insert_after(list,cur,n)
             elseif cluster[thiscluster] == 8203 then
                 -- U+200B ZERO WIDTH SPACE
@@ -4562,11 +4596,8 @@ local function ffglyphlist(arguments)
     local parameter = arguments.parameter
     local allowbreak = arguments.allowbreak
     local fontfamily = parameter.fontfamily
-    local script = arguments.script
-    local thislang = arguments.thislang
     local fontnumber = arguments.fontnumber
     local languagecode = arguments.languagecode
-
     local space   = tbl.parameters.space
     local shrink  = tbl.parameters.space_shrink
     local stretch = tbl.parameters.space_stretch
@@ -4578,7 +4609,6 @@ local function ffglyphlist(arguments)
     end
 
     local head, last, n
-    local char
 
     local lastitemwasglyph
     local newline = 10
@@ -4691,6 +4721,41 @@ local function ffglyphlist(arguments)
             head, last = node.insert_after(head,last,n)
         elseif s == 9 and parameter.tab == 'hspace' then
             local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
+            head, last = node.insert_after(head,last,n)
+        elseif s == 8194 then -- en space
+            local n = set_glue(nil,{width = tbl.parameters.enspace },"uc=8194")
+            -- prevent from stretching with ragged shape
+            n.subtype = 1
+            head, last = node.insert_after(head,last,n)
+        elseif s == 8195 then -- em space
+            local n = set_glue(nil,{width = tbl.parameters.emspace },"uc=8195")
+            -- prevent from stretching with ragged shape
+            n.subtype = 1
+            head, last = node.insert_after(head,last,n)
+        elseif s == 8196 then -- three per em space
+            local n = set_glue(nil,{width = tbl.parameters.thirdspace },"uc=8196")
+            -- prevent from stretching with ragged shape
+            n.subtype = 1
+            head, last = node.insert_after(head,last,n)
+        elseif s == 8197 then -- four per em space
+            local n = set_glue(nil,{width = tbl.parameters.quarterspace },"uc=8197")
+            -- prevent from stretching with ragged shape
+            n.subtype = 1
+            head, last = node.insert_after(head,last,n)
+        elseif s == 8198 then -- six per em space
+            local n = set_glue(nil,{width = tbl.parameters.sixthspace },"uc=8198")
+            -- prevent from stretching with ragged shape
+            n.subtype = 1
+            head, last = node.insert_after(head,last,n)
+        elseif s == 8201 then -- thin space
+            local n = set_glue(nil,{width = tbl.parameters.thinspace },"uc=8201")
+            -- prevent from stretching with ragged shape
+            n.subtype = 1
+            head, last = node.insert_after(head,last,n)
+        elseif s == 8202 then -- hair space
+            local n = set_glue(nil,{width = tbl.parameters.hairspace },"uc=8202")
+            -- prevent from stretching with ragged shape
+            n.subtype = 1
             head, last = node.insert_after(head,last,n)
         elseif s == 8203 then
             -- U+200B ZERO WIDTH SPACE

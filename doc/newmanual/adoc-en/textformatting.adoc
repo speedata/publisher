@@ -53,6 +53,28 @@
 .Various text markups
 image::textauszeichnungen.png[width=100%]
 
+[[ch-spacing,Space characters]]
+== Space characters
+
+The following Unicode space characters are interpreted by the speedata Publisher:
+
+[options="header"]
+|=======
+| Code            | Name | Example | Width
+| `&amp;#x00A0;`  | NO-BREAK SPACE     | 1000 × 500                   | Variable
+| `&amp;#x2002;`  | EN SPACE           | 1000&#x2002;×&#x2002;500     | 1 em
+| `&amp;#x2003;`  | EM SPACE           | 1000&#x2003;×&#x2003;500     | 1/2 em
+| `&amp;#x2004;`  | THREE-PER-EM SPACE | 1000&#x2004;×&#x2004;500     | 1/3 em
+| `&amp;#x2005;`  | FOUR-PER-EM  SPACE | 1000&#x2005;×&#x2005;500     | 1/4em
+| `&amp;#x2006;`  | SIX-PER-EM SPACE   | 1000&#x2006;×&#x2006;500     | 1/6 em
+| `&amp;#x2009;`  | THIN SPACE         | 1000&#x2009;×&#x2009;500     | 1/8 em
+| `&amp;#x200A;`  | HAIR SPACE         | 1000&#x200A;×&#x200A;500     | 1/24 em
+| `&amp;#x200B;`  | ZERO WIDTH SPACE   | 1000&#x200B;×&#x200B;500     | without width
+| (space)         | SPACE              | 1000 × 500                   | Variable
+|=======
+
+
+
 [[ch-textformatting-enumerationlists]]
 == Enumeration lists
 

@@ -1,0 +1,83 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="9cm" width="14cm" />
+    <Record element="data">
+        <PlaceObject>
+            <Table padding="3pt">
+                <Tablehead>
+                    <Tr>
+                        <Td>
+                            <Paragraph>
+                                <Value>Code</Value>
+                            </Paragraph>
+                        </Td>
+                        <Td>
+                            <Paragraph>
+                                <Value>Name</Value>
+                            </Paragraph>
+                        </Td>
+                        <Td>
+                            <Paragraph>
+                                <Value>Result</Value>
+                            </Paragraph>
+                        </Td>
+                        <Td>
+                            <Paragraph>
+                                <Value>Width</Value>
+                            </Paragraph>
+                        </Td>
+                    </Tr>
+                </Tablehead>
+                <Tr>
+                    <Td><Paragraph><Value>&amp;#x2003;</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>EM SPACE</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>1000&#x2003;×&#x2003;500</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>1 em</Value></Paragraph></Td>
+                </Tr>
+                <Tr>
+                    <Td><Paragraph><Value>&amp;#x2002;</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>EN SPACE</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>1000&#x2002;×&#x2002;500</Value></Paragraph></Td>
+                    <Td><Paragraph><Sup><Value>1</Value></Sup><Value>/</Value><Sub><Value>2</Value></Sub><Value> em</Value></Paragraph></Td>
+                </Tr>
+                <Tr>
+                    <Td><Paragraph><Value>&amp;#x2004;</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>THREE-PER-EM SPACE</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>1000&#x2004;×&#x2004;500</Value></Paragraph></Td>
+                    <Td><Paragraph><Sup><Value>1</Value></Sup><Value>/</Value><Sub><Value>3</Value></Sub><Value> em</Value></Paragraph></Td>
+                </Tr>
+                <Tr>
+                    <Td><Paragraph><Value>&amp;#x2005;</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>FOUR-PER-EM SPACE</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>1000&#x2005;×&#x2005;500</Value></Paragraph></Td>
+                    <Td><Paragraph><Sup><Value>1</Value></Sup><Value>/</Value><Sub><Value>4</Value></Sub><Value> em</Value></Paragraph></Td>
+                </Tr>
+                <Tr>
+                    <Td><Paragraph><Value>&amp;#x2006;</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>SIX-PER-EM SPACE</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>1000&#x2006;×&#x2006;500</Value></Paragraph></Td>
+                    <Td><Paragraph><Sup><Value>1</Value></Sup><Value>/</Value><Sub><Value>6</Value></Sub><Value> em</Value></Paragraph></Td>
+                </Tr>
+                <Tr>
+                    <Td><Paragraph><Value>&amp;#x2009;</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>THIN SPACE</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>1000&#x2009;×&#x2009;500</Value></Paragraph></Td>
+                    <Td><Paragraph><Sup><Value>1</Value></Sup><Value>/</Value><Sub><Value>8</Value></Sub><Value> em</Value></Paragraph></Td>
+                </Tr>
+                <Tr>
+                    <Td><Paragraph><Value>&amp;#x200A;</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>HAIR SPACE</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>1000&#x200A;×&#x200A;500</Value></Paragraph></Td>
+                    <Td><Paragraph><Sup><Value>1</Value></Sup><Value>/</Value><Sub><Value>24</Value></Sub><Value> em</Value></Paragraph></Td>
+                </Tr>
+                <Tr>
+                    <Td><Paragraph><Value>(just a space)</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>SPACE</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>1000 × 500</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>variable</Value></Paragraph></Td>
+                </Tr>
+
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>
