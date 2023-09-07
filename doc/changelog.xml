@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.15">
+    <entry version="4.15.3" date="2023-09-07">
+        <en>Add more Unicode spacing characters.</en>
+        <de>Weitere Unicode Leerzeichen hinzugefügt.</de>
+    </entry>
     <entry version="4.15.2" date="2023-08-18">
         <en>Warning for image not found on non-last Option fix (#514).</en>
         <de>Warnung bei Bild nicht gefunden und nicht-letzter Option (#514).</de>
