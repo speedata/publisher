@@ -14,7 +14,7 @@ In this way, you only have to include the catalog:
 .In the settings the variable `xml.catalogs` can be changed. This must be set to `catalog-schema-en.xml` or `catalog-schema-en.xml`. Of course the path must be adjusted.
 image::vscode-xml-catalog.png[]
 
-There are two different schema files, each documented in two languages. For the English documentation `catalog-schema-en.xml` must be used, for the German documentation `catalog-schema-en.xml`.
+There are two different schema files, each documented in two languages. For the English documentation `catalog-schema-en.xml` must be used, for the German documentation `catalog-schema-de.xml`.
 
 If everything worked out fine, a layout with the namespace `urn:speedata.de:2009/publisher/en` will get the auto-complete with description:
 

@@ -51,10 +51,10 @@ local function getboundingbox(pdfimage,txt)
     pdfimage.highresbb = { tonumber(a), tonumber(b), tonumber(c), tonumber(d)}
 end
 
--- PostScript is a stack based, full featured programming langauge whereas pdf is just a simple
--- text format. Therefore an interpretation of the input would be necessary, but I try
--- with a simple analysis for now.
-local function getpostscript(stack,pdfimage,txt)
+-- PostScript is a stack based, full featured programming langauge whereas pdf
+-- is just a simple text format. Therefore an interpretation of the input would
+-- be necessary, but I try with a simple analysis for now.
+local function getpostscript(stack,pdfimage,txt,transparency_values)
     local push = function(elt)
         -- w("PUSH %s",tostring(elt))
         table.insert(stack,elt)
@@ -65,7 +65,6 @@ local function getpostscript(stack,pdfimage,txt)
         -- w("POP %s",tostring(elt))
         return elt
     end
-
     local tbl = string.explode(txt)
     for i = 1, #tbl do
         local thistoken = tbl[i]
@@ -160,6 +159,13 @@ local function getpostscript(stack,pdfimage,txt)
                 pdfimage.cury = pdfimage[#pdfimage]
             end
             table.insert(pdfimage,tab[1])
+        elseif string.match(thistoken,"^alpha=") then
+            local val = string.gsub(thistoken,"^alpha=","")
+            local intvalue = string.format("%d",val * 100)
+            transparency_values[intvalue] = true
+            table.insert(pdfimage,string.format("/TRP%s gs",intvalue))
+        elseif thistoken == "endalpha" then
+            table.insert(pdfimage,"/TRP1 gs")
         elseif ignored_pdfoperators[thistoken] then
             -- ignore
         else
@@ -177,6 +183,7 @@ function pstopdf(str)
 
     local pdfimage = {}
     local stack = {}
+    local transparency_values = {}
     for i =1,#lines do
         local thisline = lines[i]
         if string.match(thisline,"^%%%%HiResBoundingBox:") then
@@ -184,11 +191,10 @@ function pstopdf(str)
         elseif string.match(thisline,"^%%") then
             -- ignore
         else
-            getpostscript(stack,pdfimage,thisline)
+            getpostscript(stack,pdfimage,thisline,transparency_values)
         end
     end
-
-    return table.concat(pdfimage," ")
+    return table.concat(pdfimage," "), transparency_values
 end
 
 
@@ -199,7 +205,6 @@ local function finder (name, mode, type)
 end
 
 function execute(mpobj,str)
-    -- w("execute %q",str)
     if not str then
         err("Empty metapost string for execute")
         return false
@@ -220,7 +225,7 @@ function newbox(width_sp, height_sp)
         width = width_sp,
         height = height_sp,
     }
-    for _,v in pairs({"plain","csscolors","metafun"}) do
+    for _,v in pairs({"plain","csscolors","sp"}) do
         if not execute(mpobj,string.format("input %s;",v)) then
             err("Cannot start metapost.")
             return nil
@@ -245,6 +250,10 @@ function newbox(width_sp, height_sp)
             execute(mpobj,mpstatement)
         elseif v.model == "rgb" then
             execute(mpobj,string.format("rgbcolor colors.%s; colors.%s := (%g, %g, %g);",name, name, v.r, v.g, v.b ))
+        elseif v.model == "gray" then
+            execute(mpobj,string.format("rgbcolor colors.%s; colors.%s := (%g, %g, %g);",name, name, v.k, v.k, v.k ))
+        else
+            err("metapost: model %q not supported",v.model)
         end
     end
 
@@ -257,12 +266,14 @@ function newbox(width_sp, height_sp)
 end
 
 function finish(mpobj)
+    local tv,txt
     local pdfstring
     if mpobj.l and mpobj.l.fig and mpobj.l.fig[1] then
-        pdfstring = "q " .. pstopdf(mpobj.l.fig[1]:postscript()) .. " Q"
+        txt, tv = pstopdf(mpobj.l.fig[1]:postscript())
+        pdfstring = "q " .. txt .. " Q"
     end
     mpobj.mp:finish()
-    return pdfstring
+    return pdfstring, tv
 end
 
 -- Return a pdf_whatsit node
@@ -291,10 +302,16 @@ function prepareboxgraphic(width_sp,height_sp,graphicname,extra_parameter)
     end
     execute(mpobj,publisher.metapostgraphics[graphicname])
     execute(mpobj,"endfig;")
-    local pdfstring = finish(mpobj);
+    local pdfstring, tv = finish(mpobj);
     local a=node.new("whatsit","pdf_literal")
     a.data = pdfstring
     a.mode = 0
+    local thispage = publisher.pages[publisher.current_pagenumber]
+    thispage.transparenttext = thispage.transparenttext or {}
+    for key in pairs(tv) do
+        thispage.transparenttext[tonumber(key)] = true
+    end
+
     return mpobj,a
 end
 

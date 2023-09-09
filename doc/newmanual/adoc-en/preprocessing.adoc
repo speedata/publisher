@@ -63,13 +63,13 @@ This is saved in a file, e.g. `valididate.lua` and then the publisher is called 
 sp --filter validate.lua
 ```
 
-on. Before each run, the system checks whether the layout file corresponds to the schema and only then does processing continue.
+Before each run, the system checks whether the layout file corresponds to the schema and only then does processing continue.
 
 
 
 TIP: You can check not only the layout file for correctness, but also all other XML files.
 But for this you have to create your own RELAX NG schema.
-Instructions are available at https://speedata.github.io/relaxngtutorial-de/.
+Instructions are available at https://relaxng.org/tutorial-20011203.html.
 Depending on the data file this is also quite easy.
 Especially if you get data from external sources again and again, you can be sure that the desired structure is kept.
 

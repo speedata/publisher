@@ -21,7 +21,7 @@ this is more typing. The solution to this "problem" is to use a text editor that
 
 == What is a schema?
 
-A schema (e.g. https://de.wikipedia.org/wiki/XML_Schema[XML-Schema] orhttps://de.wikipedia.org/wiki/RELAX_NG[RELAX NG]) contains information about the permitted structure of an XML file. For example, the schema that is supplied with the speedata Publisher contains the following
+A schema (e.g. https://de.wikipedia.org/wiki/XML_Schema[XML-Schema] or https://de.wikipedia.org/wiki/RELAX_NG[RELAX NG]) contains information about the permitted structure of an XML file. For example, the schema that is supplied with the speedata Publisher contains the following information:
 
 * The root element must be called `<Layout>`
 * The child element of `<PlaceObject>` must be either `<Barcode>`, `<Box>`, `<Circle>`, `<Frame>`, `<Image>`, `<Rule>`, `<Table>`, `<Textblock>` or `<Transformation>`.

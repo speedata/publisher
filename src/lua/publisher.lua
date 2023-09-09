@@ -2239,7 +2239,6 @@ function initialize_page(pagenumber)
         exit()
     end
     current_grid = current_page.grid
-    -- pages[current_pagenumber] = nil
     pages[thispage] = current_page
 
     local gridwidth, gridheight, nx, ny, dx, dy
@@ -2269,7 +2268,6 @@ function initialize_page(pagenumber)
         xpath.set_variable("_pageheight", tostring(math.round(pageht,0)) .. "mm")
     end
     local mattername = pagetype.part or xpath.get_variable("_matter")
-    local matter = matters[mattername]
     current_page.matter = mattername
 
     for _,j in ipairs(pagetype) do
@@ -2843,6 +2841,9 @@ end
 
 -- Set the PDF page-resources for the current page.
 function setpageresources(thispage)
+    if next(thispage.transparenttext) ~= nil and defaultcolorstack == 0 then
+        transparentcolorstack()
+    end
     -- thispage.transparenttext is something like { 40 = true, 20 = true}
     -- but only if we use alpha values for color
     local transparenttextresources = ""
@@ -3835,7 +3836,6 @@ function insert_nonmoving_whatsits( head, parent, blockinline )
             end
             insert_nonmoving_whatsits(head.list,head,"vertical")
         else
-            local props = node.getproperty(head)
             local attribs = get_attributes(head)
             local fgcolor = get_attribute(head,"color")
             local bordernumber = get_attribute(head,"bordernumber")

@@ -395,8 +395,6 @@ function commands.box( layoutxml,dataxml )
         return metapost.boxgraphic(width,height,graphic)
     end
 
-    local current_grid = publisher.current_grid
-
     local shift_left,shift_up = 0,0
 
     if tab.padding_left then
@@ -562,7 +560,6 @@ function commands.color( layoutxml, dataxml )
 
     local p = par:new(nil,"color")
 
-    local objects = {}
     local prev_fgcolor = publisher.current_fgcolor
     publisher.current_fgcolor = colorindex
     local tab = publisher.dispatch(layoutxml,dataxml)
@@ -670,6 +667,7 @@ function commands.define_color( layoutxml,dataxml )
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number") / 100
         color.b = publisher.read_attribute(layoutxml,dataxml,"b","number") / 100
         color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
+        publisher.metapostcolors[name] = {model = "rgb", r = color.r/100, g = color.g/100, b = color.b/100 }
     elseif model=="RGB" then
         color.r = publisher.read_attribute(layoutxml,dataxml,"r","number") / 255
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number") / 255
@@ -678,6 +676,7 @@ function commands.define_color( layoutxml,dataxml )
     elseif model=="gray" then
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number")
         color.pdfstring = string.format("%s %g g %g G",op,color.g/100,color.g/100)
+        publisher.metapostcolors[name] = {model = "gray", k = color.g/100 }
     elseif model=="spotcolor" then
         if not publisher.pro then
             err("spot colors need a Pro plan")

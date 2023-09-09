@@ -1,0 +1,131 @@
+<Layout
+    xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Options randomseed="2607" />
+    <Pageformat height="7cm" width="7cm" />
+    <SetGrid nx="10" ny="14" />
+
+    <DefineColor name="mycolor" value="#FFC72C" />
+    <DefineColor name="yellow" model="cmyk" c="0" m="0" y="100" k="0" />
+
+    <Pagetype name="t" test="true()">
+        <AtPageCreation graphic="RD" />
+    </Pagetype>
+
+
+    <DefineGraphic name="dots">
+        pickup pencircle scaled 3mm;
+        for i=0 upto 3:
+            draw (i * 1cm, i * 1cm)
+            withcolor colors_mycolor;
+        endfor;
+    </DefineGraphic>
+
+    <DefineGraphic name="framed">
+        pickup pencircle scaled 0.5bp;
+        draw box;
+    </DefineGraphic>
+
+    <DefineGraphic name="highlight">
+        def d = ((uniformdeviate drift) - (drift/2)) enddef;
+        vardef randomstroke (expr w,h) = drift := .6h; (0+d,0+d) -- (0+d,h+d) -- (w+d,h+d) -- (w+d,0+d) -- cycle enddef;
+        def highlight (expr n) = % number of strokes
+            save w,h;
+            w:=box.width;
+            h:=box.height;
+            for i:= 0  upto n-1:
+                filldraw randomstroke (w,h/n) shifted (0,h/n * (i - i/n));
+            endfor;
+        enddef;
+
+        drawoptions (withcolor colors.yellow);
+        highlight(5);
+    </DefineGraphic>
+
+
+    <DefineGraphic name="dottedbox">
+        pickup pencircle scaled 1mm;
+        wd = box.width ;
+        ht = box.height ;
+        origin_x = 0;
+        origin_y = 0;
+        draw (origin_x,origin_y) -- (wd,origin_y) -- (wd, ht) -- (wd, ht) -- (origin_x, ht ) -- cycle dashed withdots withcolor darkblue;
+    </DefineGraphic>
+
+    <DefineGraphic name="SEbox">
+        % superellipsed box
+        pickup pencircle scaled 2mm;
+        draw unitsquare xscaled box.width yscaled box.height superellipsed 0.94 withcolor darkblue;
+    </DefineGraphic>
+
+    <DefineGraphic name="RD">
+        % organger Rand
+        pickup pencircle scaled 1mm;
+        fill unitsquare xyscaled (box.width + 2page.trim,box.height + 2page.trim) shifted paired (-page.trim) withcolor orange;
+        path p;
+        p = unitsquare xyscaled ( box.width - 2cm, box.height - 2cm );
+        unfill p shifted paired(1cm) randomized 10mm;
+    </DefineGraphic>
+
+    <DefineGraphic name="RSQ">
+        % rounded square
+        pickup pencircle scaled 1mm;
+        draw roundedsquare(box.width, box.height, 2mm) withcolor red;
+    </DefineGraphic>
+
+    <DefineGraphic name="alphabox">
+        save corner;
+        corner := 10;
+        filldraw (0, box.height - corner){down} .. {down}(0,corner) ..
+                (corner,0) -- (box.width - corner,0) .. {up}(box.width, corner) --
+                (box.width, box.height - corner) .. {left}(box.width - corner, box.height) --
+                (corner,box.height){left} .. cycle withcolor gray withalpha 0.5;
+    </DefineGraphic>
+
+    <Record element="data">
+        <PlaceObject row="2" column="2">
+            <Box height="2" width="5" graphic="SEbox" />
+        </PlaceObject>
+        <PlaceObject row="5" column="2">
+            <Box height="2" width="5" graphic="RSQ" />
+        </PlaceObject>
+        <PlaceObject row="8" column="2">
+            <Box height="2" width="5" graphic="dottedbox" />
+        </PlaceObject>
+
+        <NextRow rows="2" />
+        <PlaceObject>
+            <Table>
+                <Columns>
+                    <Column width="40pt" align="center" />
+                    <Column width="40pt" align="center" />
+                    <Column width="40pt" align="center" />
+                </Columns>
+                <Tr>
+                    <Td>
+                        <Paragraph>
+                            <Value>A</Value>
+                        </Paragraph>
+                    </Td>
+                    <Td graphic="highlight">
+                        <Paragraph>
+                            <Value>B</Value>
+                        </Paragraph>
+                    </Td>
+                    <Td graphic="framed">
+                        <Paragraph>
+                            <Value>C</Value>
+                        </Paragraph>
+                    </Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+
+        <NextRow rows="2" />
+
+        <PlaceObject row="3" column="4" allocate="no">
+            <Box height="3" width="5" graphic="alphabox" />
+        </PlaceObject>
+
+    </Record>
+</Layout>
