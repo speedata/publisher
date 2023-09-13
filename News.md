@@ -3,6 +3,12 @@
 This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/).
 
 
+## Version 4.16
+
+Not yet released.
+
+* Complete overhaul of the MetaPost integration.
+
 ## Version 4.14
 
 Released 2023-07-03

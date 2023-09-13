@@ -119,6 +119,45 @@ The assignment is evaluated at the beginning of the MetaPost context. Thus `curc
 | `page.trim`  | Bleed
 |=======
 
+== Text in MetaPost
+
+[source]
+-------------------------------------------------------------------------------
+sptext("Hello, world!","text","regular")
+-------------------------------------------------------------------------------
+
+The arguments are: the text for output, the font family and the variant. The possible values for the variant are: `regular`, `bold`, `italic` and `bolditalic`.
+
+Example usage with label:
+
+[source]
+-------------------------------------------------------------------------------
+label.top(sptext("origin","text","regular"),(0,0));
+-------------------------------------------------------------------------------
+
+Alternatively to the verbose macro there is the short form:
+
+[source]
+-------------------------------------------------------------------------------
+defaultfontfamily := "mptext";
+defaultfontstyle := "bold";
+
+draw txt("Hello, world!");
+-------------------------------------------------------------------------------
+
+Renders the text in the font family `mptext` and the variant bold.
+
+
+== Transparency
+
+To get a transparency effect you can supplement a color with the keyword `withalpha` and a factor. This factor is between 0 (invisible) und 1 (full color).
+
+[source, text]
+-------------------------------------------------------------------------------
+fill box scaled 0.5 shifted (-20,-20);
+fill box withcolor rebeccapurple withalpha 0.6;
+-------------------------------------------------------------------------------
+
 
 
 

@@ -19,6 +19,15 @@
 % %C therefore copyrighted by \PRAGMA. See mreadme.pdf for
 % %C details.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%        Shifting and scaling
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+def xshifted expr dx = shifted(dx,0) enddef ;
+def yshifted expr dy = shifted(0,dy) enddef ;
 
 primarydef p xyscaled q = % secundarydef does not work out well
     begingroup
@@ -39,6 +48,40 @@ vardef tripled primary d =
     if color d : d else : (d,d,d) fi
 enddef ;
 
+
+path quartercircle, halfcircle, fullcircle, unitsquare ;
+
+fullcircle    = makepath pencircle ;
+halfcircle    = subpath (0,4) of fullcircle ;
+quartercircle = subpath (0,2) of fullcircle ;
+unitsquare    = (0,0) -- (1,0) -- (1,1) -- (0,1) -- cycle ;
+
+def drawdot expr p =
+    if pair p :
+        addto currentpicture doublepath p
+            withpen currentpen _op_
+    elseif path p :
+        draw image (
+            for i=0 upto length p :
+                addto currentpicture doublepath point i of p
+                    withpen currentpen _op_ ;
+            endfor ;
+        )
+    elseif picture p :
+        draw image (
+            save pp ; path pp ;
+            for i within p :
+                if stroked i or filled i :
+                    pp := pathpart i ;
+                    for j=0 upto length pp :
+                        addto currentpicture doublepath point j of pp
+                            withpen currentpen _op_ ;
+                    endfor ;
+                fi ;
+            endfor ;
+        )
+    fi
+enddef ;
 
 primarydef p randomized s = (
     if path p :
@@ -114,6 +157,72 @@ vardef roundedsquare (expr width, height, offset) =
     (0,height-offset)     -- (0,offset)            {down}  .. cycle
 enddef ;
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%        Transparency
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+vardef transparency_alternative_to_number(expr name) =
+    if string name :
+        if expandafter known scantokens(name & "transparent") :
+            scantokens(name & "transparent")
+        else :
+            0
+        fi
+    elseif name < 17 :
+        name
+    else :
+        0
+    fi
+enddef ;
+
+
+def withtransparency(expr a, t) =
+    withprescript "tr_alternative="  & decimal transparency_alternative_to_number(a)
+    withprescript "tr_transparency=" & decimal t
+enddef ;
+
+
+def withopacity expr t =
+    if pair t :
+        withprescript "tr_alternative="  & decimal transparency_alternative_to_number(xpart t)
+        withprescript "tr_transparency=" & decimal ypart t
+    else :
+        mfun_with_opacity (transparency_alternative_to_number(t))
+    fi
+enddef ;
+
+def mfun_with_opacity (expr a) expr t =
+    withprescript "tr_alternative="  & decimal a
+    withprescript "tr_transparency=" & decimal t
+enddef ;
+
+
 primarydef n withalpha t =
-    n withprescript "alpha=" & decimal(t) withpostscript "endalpha";
+    n withtransparency(1,t)
 enddef;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%        Text
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+string defaultfontfamily, defaultfontstyle ;
+
+defaultfontfamily := "text";
+defaultfontstyle  := "regular";
+
+
+def sptext(expr t, fnt, style) =
+    runscript("sptext{"& fnt & ":" & style & ":" & t &"}")
+enddef;
+
+
+def txt(expr t) =
+    runscript("sptext{"& defaultfontfamily & ":" & defaultfontstyle & ":" & t &"}")
+enddef;
+

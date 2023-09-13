@@ -34,7 +34,7 @@
             w:=box.width;
             h:=box.height;
             for i:= 0  upto n-1:
-                filldraw randomstroke (w,h/n) shifted (0,h/n * (i - i/n));
+                fill randomstroke (w,h/n) shifted (0,h/n * (i - i/n));
             endfor;
         enddef;
 
@@ -76,10 +76,10 @@
     <DefineGraphic name="alphabox">
         save corner;
         corner := 10;
-        filldraw (0, box.height - corner){down} .. {down}(0,corner) ..
-                (corner,0) -- (box.width - corner,0) .. {up}(box.width, corner) --
-                (box.width, box.height - corner) .. {left}(box.width - corner, box.height) --
-                (corner,box.height){left} .. cycle withcolor gray withalpha 0.5;
+        fill (0, box.height - corner){down} .. {down}(0,corner) ..
+             (corner,0) -- (box.width - corner,0) .. {up}(box.width, corner) --
+             (box.width, box.height - corner) .. {left}(box.width - corner, box.height) --
+             (corner,box.height){left} .. cycle withcolor gray withalpha 0.5;
     </DefineGraphic>
 
     <Record element="data">

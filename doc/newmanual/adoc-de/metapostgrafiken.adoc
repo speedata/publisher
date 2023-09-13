@@ -118,6 +118,46 @@ Die Zuweisung wird zu Beginn des MetaPost-Kontexts ausgewertet. Damit steht `cur
 | `page.trim`  | Beschnittzugabe
 |=======
 
+== Text in MetaPost
+
+[source]
+-------------------------------------------------------------------------------
+sptext("Hello, world!","text","regular")
+-------------------------------------------------------------------------------
+
+Die Argumente sind folgende: der zu druckende Text, die Schriftfamilie und der Schnitt, wobei die möglichen Werte für Schnitt folgende sind: `regular`, `bold`, `italic` und `bolditalic`.
+
+Beispiel in der Nutzung von Label:
+
+[source]
+-------------------------------------------------------------------------------
+label.top(sptext("origin","text","regular"),(0,0));
+-------------------------------------------------------------------------------
+
+Alternativ zu diesem »langen« Makro gibt es auch die kurze Variante:
+
+[source]
+-------------------------------------------------------------------------------
+defaultfontfamily := "mptext";
+defaultfontstyle := "bold";
+
+draw txt("Hello, world!");
+-------------------------------------------------------------------------------
+
+Gibt den Text in der Variante Fett der Familie `mptext` aus.
+
+
+== Transparenz
+
+Um einen Transparenzeffekt zu nutzen, kann man eine Farbangabe mit `withalpha` um einen Faktor ergänzen. Dieser liegt zwischen 0 (unsichtbar) und 1 (voller Farbauftrag).
+
+[source, text]
+-------------------------------------------------------------------------------
+fill box scaled 0.5 shifted (-20,-20);
+fill box withcolor rebeccapurple withalpha 0.6;
+-------------------------------------------------------------------------------
+
+
 == MetaPost Ressourcen
 
 Es gibt eine Reihe englischer Handbücher und Tutorials für MetaPost:
