@@ -200,7 +200,7 @@ span.TeX-x {
   text-transform: uppercase;
   text-decoration: none; }
 
-pre, code {
+pre, code, .handbuch #main ol li code span {
   font-family: "Roboto Mono", monospace;
   line-height: 140%;
   width: 100%;

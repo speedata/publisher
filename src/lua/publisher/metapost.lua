@@ -39,6 +39,7 @@ end
 local pdfcode
 local pdfcodepointer
 local nodelists = {}
+local boundingbox
 
 local function pdf_literalcode(fmt, ...)
     pdfcode[pdfcodepointer] = pdfcode[pdfcodepointer] or {}
@@ -161,9 +162,15 @@ function newbox(width_sp, height_sp)
             return nil
         end
     end
-    execute(mpobj, string.format("box.width = %fbp;", width_sp / 65782))
-    execute(mpobj, string.format("box.height = %fbp;", height_sp / 65782))
-    execute(mpobj, [[path box; box = (0,0) -- (box.width,0) -- (box.width,box.height) -- (0,box.height) -- cycle ;]])
+    if width_sp and width_sp ~= 0 then
+        execute(mpobj, string.format("box.width = %fbp;", width_sp / 65782))
+    end
+    if height_sp and height_sp ~= 0 then
+        execute(mpobj, string.format("box.height = %fbp;", height_sp / 65782))
+    end
+    if height_sp and width_sp and height_sp ~= 0 and width_sp ~= 0 then
+        execute(mpobj, [[path box; box = (0,0) -- (box.width,0) -- (box.width,box.height) -- (0,box.height) -- cycle ;]])
+    end
 
 
     local declarations = {}
@@ -448,8 +455,8 @@ local function convert(result)
                 local figure = figures[f]
                 local objects = figure:objects()
                 local miterlimit, linecap, linejoin, dashed = -1, -1, -1, false
-                local bbox = figure:boundingbox()
-                local llx, lly, urx, ury = bbox[1], bbox[2], bbox[3], bbox[4] -- faster than unpack
+                boundingbox = figure:boundingbox()
+                local llx, lly, urx, ury = boundingbox[1], boundingbox[2], boundingbox[3], boundingbox[4] -- faster than unpack
                 if urx < llx then
                     w("no figure")
                 else
@@ -493,8 +500,8 @@ local function convert(result)
                                 local ot = object.transform -- 3,4,5,6,1,2
                                 pdf_literalcode("q")
                                 pdf_literalcode("%f %f %f %f %f %f cm", ot[3], ot[4], ot[5], ot[6], ot[1], ot[2])
-                                pdf_textfigure(object.font, object.dsize, object.text, object.width, object.height,
-                                    object.depth)
+                                -- pdf_textfigure(object.font, object.dsize, object.text, object.width, object.height,
+                                --     object.depth)
                                 pdf_literalcode("Q")
                             else
                                 local evenodd, collect, both = false, false, false
@@ -651,6 +658,7 @@ function finish(mpobj)
     pdfcode = {}
     pdfcodepointer = 1
     transparency_values = {}
+    boundingbox = {}
     convert(mpobj.l)
     local head, tail
     for i = 1, #pdfcode do
@@ -667,7 +675,7 @@ function finish(mpobj)
     end
     tv = transparency_values
     mpobj.mp:finish()
-    return head, tv
+    return head, tv, boundingbox
 end
 
 -- Return a pdf_whatsit node
@@ -696,24 +704,25 @@ function prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
     end
     execute(mpobj, publisher.metapostgraphics[graphicname])
     execute(mpobj, "endfig;")
-    local nl, tv = finish(mpobj);
+    local nl, tv, bbox = finish(mpobj);
     local thispage = publisher.pages[publisher.current_pagenumber]
     thispage.transparenttext = thispage.transparenttext or {}
     for key in pairs(tv) do
         thispage.transparenttext[tonumber(key)] = true
     end
 
-    return mpobj, nl
+    return mpobj, nl, bbox
 end
 
 -- return a vbox with the pdf_whatsit node
+---@param width_sp integer
+---@param height_sp integer
+---@param graphicname string
+---@param extra_parameter table
+---@param parameter table
+---@return Node
+---@return table bounding box
 function boxgraphic(width_sp, height_sp, graphicname, extra_parameter, parameter)
-    local mpobj, a = prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
-    a = node.hpack(a, mpobj.width, "exactly")
-    a.height = mpobj.height
-    if parameter and parameter.shiftdown then
-        a.height = a.height + parameter.shiftdown
-    end
-    a = node.vpack(a)
-    return a
+    local mpobj, a, bbox = prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
+    return a, bbox
 end

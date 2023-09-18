@@ -5783,9 +5783,19 @@
                 <xs:documentation>The default (any) datatype for variables in the speedata layout language.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="mp:boolean">
+              <xs:annotation>
+                <xs:documentation>A MetaPost boolean value.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="mp:cmykcolor">
               <xs:annotation>
                 <xs:documentation>A MetaPost CMYK color.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="mp:numeric">
+              <xs:annotation>
+                <xs:documentation>A MetaPost numeric value.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="mp:rgbcolor">

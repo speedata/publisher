@@ -5203,8 +5203,12 @@
                      <choice>
                         <value>sd:any</value>
                         <a:documentation>Der voreingestellte Datentyp für die speedata Layoutsprache.</a:documentation>
+                        <value>mp:boolean</value>
+                        <a:documentation>Ein boolescher Wert für MetaPost.</a:documentation>
                         <value>mp:cmykcolor</value>
                         <a:documentation>Eine MetaPost CMYK Farbe.</a:documentation>
+                        <value>mp:numeric</value>
+                        <a:documentation>Ein nummerischer Wert für MetaPost.</a:documentation>
                         <value>mp:rgbcolor</value>
                         <a:documentation>Eine MetaPost RGB Farbe.</a:documentation>
                      </choice>

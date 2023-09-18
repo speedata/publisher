@@ -392,7 +392,11 @@ function commands.box( layoutxml,dataxml )
     end
 
     if graphic then
-        return metapost.boxgraphic(width,height,graphic)
+        local instr, bbox = metapost.boxgraphic(width,height,graphic)
+        local bx = node.hpack(instr,width,"exactly")
+        bx.height = height
+        bx = node.vpack(bx)
+        return bx, bbox
     end
 
     local shift_left,shift_up = 0,0
@@ -1333,9 +1337,10 @@ function commands.image( layoutxml,dataxml )
         if not imagetype then
             err("Cannot handle image without imagetype")
             filename = nil
+        elseif imagetype == "metapost" then
+            return publisher.do_metapostimage(children[1].contents,width,height,clip)
         else
             log("Image: found %q contents",imagetype or "?")
-
             local elt = children[1]
             local contents = publisher.element_contents(elt)
             if publisher.elementname(elt) == "Value" and type(contents) == "table" then
@@ -1350,9 +1355,20 @@ function commands.image( layoutxml,dataxml )
         end
     end
 
+    filename = filename or url
+
+    if filename and string.match(filename,"%.mp$") then
+        local mpfile, msg = io.open(filename,"r")
+        if mpfile == nil then
+            err(msg)
+            return nil
+        end
+        local contents = mpfile:read("*a")
+        mpfile:close()
+        return publisher.do_metapostimage(contents,width,height,clip)
+    end
 
     local imageinfo
-    filename = filename or url
     imageinfo = publisher.new_image(filename,page,box_lookup[vis_box] or "crop", fallback,imageshape)
 
 

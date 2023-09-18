@@ -2360,7 +2360,7 @@ function initialize_page(pagenumber)
         pagebreak_impossible = false
         local graphic = current_page.atpagecreation.graphic
         if graphic then
-            local _,whatsit = metapost.prepareboxgraphic(current_page.width,current_page.height,graphic,metapost.extra_page_parameter(current_page))
+            local _,whatsit, _ = metapost.prepareboxgraphic(current_page.width,current_page.height,graphic,metapost.extra_page_parameter(current_page))
             place_at(current_page.pagebox,whatsit, current_page.grid.extra_margin,current_page.height+current_page.grid.extra_margin)
         end
     end
@@ -3051,6 +3051,68 @@ function circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp)
     return v
 end
 
+function do_metapostimage(txt,width,height,clip)
+    metapostgraphics["_image"] = txt
+    local cp = publisher.current_page
+    local width_sp, height_sp
+    if tonumber(width) then
+        width_sp = cp.grid:width_sp(tonumber(width))
+    else
+        width_sp = tex.sp(width)
+    end
+    if tonumber(height) then
+        height_sp = cp.grid:height_sp(tonumber(height))
+    else
+        height_sp = tex.sp(height)
+    end
+
+    local box, bbox = metapost.boxgraphic(width_sp,height_sp,"_image",{},{})
+    local image = {
+        xsize = publisher.bp_to_sp(bbox[3] - bbox[1]),
+        ysize = publisher.bp_to_sp(bbox[4] - bbox[2])
+    }
+
+    image.width = image.xsize
+    image.height = image.ysize
+
+    height    = set_image_length(height,   "height") or image.height
+    width     = set_image_length(width,    "width" ) or image.width
+    minheight = set_image_length(minheight,"height") or 0
+    minwidth  = set_image_length(minwidth, "width" ) or 0
+    maxheight = set_image_length(maxheight,"height") or maxdimen
+    maxwidth  = set_image_length(maxwidth, "width" ) or maxdimen
+
+    if not clip then
+        width, height = calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight,stretch)
+
+        box = node.hpack(box)
+        box.width = width
+        box.height = height
+        box = node.vpack(box)
+
+        local scaler      = node.new("whatsit","pdf_literal")
+        local pdf_save    = node.new("whatsit","pdf_save")
+        local pdf_restore = node.new("whatsit","pdf_restore")
+
+        local scaleX = math.round(width / image.xsize,3)
+        local scaleY = math.round(height / image.ysize,3)
+        local shiftX = -bbox[1] * scaleX
+        local shiftY = -bbox[2] * scaleY + sp_to_bp(height) * ( scaleY - 1 )
+        local scalerdata = string.format("%g 0 0 %g %g %g cm ", scaleX,scaleY,shiftX,shiftY )
+        scaler.data = scalerdata
+
+        box.head = node.insert_before(box.head,box.head, scaler)
+        box.head = node.insert_before(box.head,box.head,pdf_save)
+        box.height = 0
+        box.depth = 0
+        box = node.vpack(box)
+        node.insert_after(box.head,box.head,pdf_restore)
+        box.height = height
+    end
+
+    return {box,nil}
+end
+
 function mpbox(parameter,width,height)
     local width_sp = width
     local height_sp = height
@@ -3143,7 +3205,16 @@ function mpbox(parameter,width,height)
 
     ]]
     metapostgraphics.__htmlbox = mptext
-    local ret = metapost.boxgraphic(width_sp,height_sp,"__htmlbox",extra_parameter,{shiftdown = parameter.shiftdown})
+
+    -- TODO: test, changed code during metapost overhaul
+    local instr,bbox = metapost.boxgraphic(width_sp,height_sp,"__htmlbox",extra_parameter)
+    local ret = node.hpack(instr,width,"exactly")
+    ret.height = height
+    if parameter.shiftdown then
+        ret.height = ret.height + parameter.shiftdown
+    end
+    ret = node.vpack(ret)
+
     node.set_attribute(ret,att_dontadjustlineheight,1)
     ret.height = 0
     ret.depth = 0

@@ -290,6 +290,32 @@ Of course it is also possible to extract the image description from the data. Fo
 </PlaceObject>
 -------------------------------------------------------------------------------
 
+== MetaPost Images
+
+There is an <<ch-advancedtopics-metapostgraphics,extra chapter>> for MetaPost graphics. Here is shown how to include these images.
+
+. As an image with the suffix `.mp`:
++
+[source, xml]
+-------------------------------------------------------------------------------
+<Image file="myfile.mp" />
+-------------------------------------------------------------------------------
++
+. A textual description of the type `metapost`:
++
+[source, xml]
+-------------------------------------------------------------------------------
+<Image width="7cm" imagetype="metapost">
+    <Value>....</Value>
+</Image>
+-------------------------------------------------------------------------------
++
+. As a reference at the commands within the master page (<<cmd-atpagecreation>>, <<cmd-atpageshipout>>), with <<cmd-td>> and boxes (<<cmd-box>>).
+
+See also the chapter on <<ch-advancedtopics-metapostgraphics,MetaPost>> and the examples at https://github.com/speedata/examples/tree/master/metapost[the examples repository].
+
+
+
 
 == Other parameters
 

@@ -4117,10 +4117,10 @@
   </command>
   <command en="Image">
     <description xml:lang="en">
-      <para>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). See below for a limitation on the number of included PDF files.</para>
+      <para>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). Other file types might be possible with external converters. See below for a limitation on the number of included PDF files.</para>
     </description>
     <description xml:lang="de">
-      <para>Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (.pdf), PNG (.png) und JPEG (.jpg). Siehe unten für die Einschränkung eingebundener PDF-Dateien.</para>
+      <para>Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (.pdf), PNG (.png) und JPEG (.jpg). Andere Dateitypen sind mit externen Konvertierungsprogrammen möglich. Siehe unten für die Einschränkung eingebundener PDF-Dateien.</para>
     </description>
     <childelements>
       <optional>
@@ -8002,12 +8002,28 @@
           <para>Der voreingestellte Datentyp für die speedata Layoutsprache.</para>
         </description>
       </choice>
+      <choice en="mp:boolean">
+        <description xml:lang="en">
+          <para>A MetaPost boolean value.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Ein boolescher Wert für MetaPost.</para>
+        </description>
+      </choice>
       <choice en="mp:cmykcolor">
         <description xml:lang="en">
           <para>A MetaPost CMYK color.</para>
         </description>
         <description xml:lang="de">
           <para>Eine MetaPost CMYK Farbe.</para>
+        </description>
+      </choice>
+      <choice en="mp:numeric">
+        <description xml:lang="en">
+          <para>A MetaPost numeric value.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Ein nummerischer Wert für MetaPost.</para>
         </description>
       </choice>
       <choice en="mp:rgbcolor">

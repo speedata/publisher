@@ -258,7 +258,7 @@ Falls keine Box angegeben wird, wird die cropbox benutzt. Mögliche Werte für d
 
 == Externe Konvertierungstools
 
-Der Publisher verabeitet in der Regel nur PDF, PNG und JPEG Dateien.
+Der Publisher verarbeitet in der Regel nur PDF, PNG und JPEG Dateien.
 Um andere Formate nutzen zu können, muss man sie in eines der drei Formate umwandeln.
 Das kann im Vorfeld gemacht werden, aber auch zur Laufzeit des Publishers.
 
@@ -342,6 +342,30 @@ Natürlich ist es auch möglich, die Bildbeschreibung aus den Daten zu entnehmen
   </Image>
 </PlaceObject>
 -------------------------------------------------------------------------------
+
+== MetaPost Bilder
+
+Zu MetaPost gibt es ein <<ch-fortgeschrittenethemen-metapostgrafiken,eigenes Kapitel>>. Hier ist jedoch gezeigt, mit welchen Möglichkeiten diese Grafiken eingebunden werden können:
+
+. Als Bild mit der Endung `.mp`:
++
+[source, xml]
+-------------------------------------------------------------------------------
+<Image file="myfile.mp" />
+-------------------------------------------------------------------------------
++
+. Als textuelle Beschreibung mit dem Typ `metapost`:
++
+[source, xml]
+-------------------------------------------------------------------------------
+<Image width="7cm" imagetype="metapost">
+    <Value>....</Value>
+</Image>
+-------------------------------------------------------------------------------
++
+. Als Referenz bei Seitentypen (<<cmd-atpagecreation>>, <<cmd-atpageshipout>>), bei <<cmd-td>> und bei Boxen (<<cmd-box>>).
+
+Siehe auch das Kapitel über <<ch-fortgeschrittenethemen-metapostgrafiken,MetaPost>> sowie die https://github.com/speedata/examples/tree/master/metapost[MetaPost-Beispiele].
 
 
 == Weitere Parameter

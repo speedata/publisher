@@ -5203,8 +5203,12 @@
                      <choice>
                         <value>sd:any</value>
                         <a:documentation>The default (any) datatype for variables in the speedata layout language.</a:documentation>
+                        <value>mp:boolean</value>
+                        <a:documentation>A MetaPost boolean value.</a:documentation>
                         <value>mp:cmykcolor</value>
                         <a:documentation>A MetaPost CMYK color.</a:documentation>
+                        <value>mp:numeric</value>
+                        <a:documentation>A MetaPost numeric value.</a:documentation>
                         <value>mp:rgbcolor</value>
                         <a:documentation>A MetaPost RGB color.</a:documentation>
                      </choice>
