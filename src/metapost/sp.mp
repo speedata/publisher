@@ -49,13 +49,6 @@ vardef tripled primary d =
 enddef ;
 
 
-path quartercircle, halfcircle, fullcircle, unitsquare ;
-
-fullcircle    = makepath pencircle ;
-halfcircle    = subpath (0,4) of fullcircle ;
-quartercircle = subpath (0,2) of fullcircle ;
-unitsquare    = (0,0) -- (1,0) -- (1,1) -- (0,1) -- cycle ;
-
 def drawdot expr p =
     if pair p :
         addto currentpicture doublepath p

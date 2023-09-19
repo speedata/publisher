@@ -1,10 +1,8 @@
 [[ch-advancedtopics-metapostgraphics]]
 = Create and use images with MetaPost
 
-TIP: The functionality to create and embed MetaPost graphics is still very new and experimental. The interface may still change or disappear altogether. In this respect, it should be used with caution.
 
 MetaPost is a programming language that can be used to create graphics.
-
 For example, one creates from the following program code:
 
 [source, text]
@@ -16,7 +14,7 @@ beginfig(1)
 endfig;
 -------------------------------------------------------------------------------
 
-a graphic:
+this graphic:
 
 image::mp-first.png[width=50%,scaledwidth=100%]
 
@@ -158,6 +156,87 @@ fill box scaled 0.5 shifted (-20,-20);
 fill box withcolor rebeccapurple withalpha 0.6;
 -------------------------------------------------------------------------------
 
+== MetaPost macros
+
+The macros contained in the “plain” format are included in the speedata Publisher.
+In addition, the following (partly from MetaFun).
+
+
+
+=== Verschiebungen etc.
+
+`xshifted`, `yshifted`::
+    Movement in one direction.
+
+    draw unitsquare xshifted 3cm;
+
+
+`xyscaled`::
+    Scaling with different values for x and y.
+
+    draw unitsquare xyscaled (2cm,5cm);
+
+`randomshifted`::
+    Shift with random values.
+
+    draw unitsquare randomshifted (2cm,5cm);
+
+`superellipsed`::
+    Transformation to a “superellipse”.
+
+    draw box superellipsed 0.9;
+
+`roundedsquare`::
+    Rectangle with rounded corners.
+
+    draw roundedsquare(box.width,box.height,.25cm);
+
+
+`withalpha`::
+    Change color intensity (1.0 = full color, 0 = no color).
+
+    fill unitsquare withalpha 0.7;
+
+`randomized`::
+    Randomize the values. A value can be path, a pair or a color.
+
+    draw box randomized 2cm;
+
+
+=== Paths
+
+`box`::
+    Rectangle from the layout with the provided width and height.
+
+    draw box;
+
+
+=== Image commands
+
+`drawdot`::
+    Draw a dot at a given position.
+
+    drawdot origin;
+
+
+=== Text
+
+`sptext`::
+    Text with information about the font and the variant. The possible values are described under `defaultfontfamily` and `defaultfontstyle`.
+
+    draw sptext("Hello","text","bold");
+
+`txt`::
+    Text that uses the defaults `defaultfontfamily` and `defaultfontstyle`.
+
+=== Options
+
+`defaultfontfamily`::
+    Font family which will be used with `txt()`. The family must have been previously defined in the layout.
+
+
+`defaultfontstyle`::
+    Font style used with `txt()`. Possible styles: `regular`, `bold`, `italic`, `bolditalic`.
 
 
 

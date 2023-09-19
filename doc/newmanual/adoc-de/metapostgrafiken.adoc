@@ -1,10 +1,7 @@
 [[ch-fortgeschrittenethemen-metapostgrafiken]]
 = Bilder mit MetaPost erstellen und einbinden
 
-TIP: Die Funktionalität, MetaPost-Grafiken zu erstellen und einzubinden ist noch sehr neu und experimentell. Die Schnittstelle kann sich noch ändern bzw. ganz wegfallen. Insofern sollte man sie mit Vorsicht benutzen.
-
 MetaPost ist eine Programmiersprache, mit der man Grafiken erstellen kann.
-
 So erzeugt man beispielsweise aus folgendem Programmcode:
 
 [source, text]
@@ -16,7 +13,7 @@ beginfig(1)
 endfig;
 -------------------------------------------------------------------------------
 
-eine Grafik:
+diese Grafik:
 
 image::mp-first.png[width=50%,scaledwidth=100%]
 
@@ -57,8 +54,12 @@ Dazu definiert man erst eine Grafik und benutzt sie später bei dem Box-Befehl:
 Die Breite der Box und die Höhe der Box sind mit den Variablen `box.width` und `box.height` in MetaPost definiert.
 Damit kann man die Grafik an die Vorgaben im Publisher anpassen.
 
+
 .Die gepunkteten Linien entsprechen den Vorgaben der Box. Die Rasterdarstellung wurde eingeschaltet, damit das sichtbar wird.
 image::mp-dotted.png[width=50%,scaledwidth=100%]
+
+
+Alternativ kann die Grafik auch bei dem `<Image>` Befehl aus einer Datei mit der Endung `.mp` geladen werden.
 
 == Koordinaten
 
@@ -157,6 +158,84 @@ fill box scaled 0.5 shifted (-20,-20);
 fill box withcolor rebeccapurple withalpha 0.6;
 -------------------------------------------------------------------------------
 
+
+== Verfügbare Makros (mit Beispielen)
+
+Die in dem Format »plain« enthaltenen Makros sind im speedata Publisher enthalten. Daneben noch folgende (tlw. aus MetaFun).
+
+=== Verschiebungen etc.
+
+`xshifted`, `yshifted`::
+    Verschiebung in einer Richtung.
+
+    draw unitsquare xshifted 3cm;
+
+
+`xyscaled`::
+    Skalierung mit unterschiedlichen Werten
+
+    draw unitsquare xyscaled (2cm,5cm);
+
+`randomshifted`::
+    Verschiebung mit zufälligen Werten
+
+    draw unitsquare randomshifted (2cm,5cm);
+
+`superellipsed`::
+    Transformation zu einer »Superellipse«
+
+    draw box superellipsed 0.9;
+
+`roundedsquare`::
+    Rechteck mit abgerundeten Ecken
+
+    draw roundedsquare(box.width,box.height,.25cm);
+
+
+`withalpha`::
+    Veränderung des Farbauftrags (1.0 = voller Farbauftrag, 0 = kein Farbauftrag)
+
+    fill unitsquare withalpha 0.7;
+
+`randomized`::
+    Veränderung verschiedener Objekte um einen bestimmten Wert.
+
+    draw box randomized 2cm;
+
+
+=== Pfade
+
+`box`::
+    Rechteck mit der Seitenlänge aus dem Layout.
+
+    draw box;
+
+
+=== Bildbefehle
+
+`drawdot`::
+    Zeichnet einen Punkt an eine bestimmte Stelle.
+
+    drawdot origin;
+
+
+=== Text
+
+`sptext`::
+    Text mit Angaben zur Schriftart und der Variante. Die möglichen Werte sind unter `defaultfontfamily` und `defaultfontstyle` beschrieben.
+
+    draw sptext("Hello","text","bold");
+
+`txt`::
+    Text, der die Voreinstellungen `defaultfontfamily` und `defaultfontstyle` nutzt.
+
+=== Optionen
+
+`defaultfontfamily`::
+    Font-Familie, die bei `txt()` benutzt wird. Die Familie muss zuvor im Layout definiert worden sein.
+
+`defaultfontstyle`::
+    Font-Stil, der bei `txt()`  benutzt wird. Mögliche Stile: `regular`, `bold`, `italic`, `bolditalic`.
 
 == MetaPost Ressourcen
 
