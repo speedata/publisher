@@ -143,7 +143,7 @@ you can display a list of the allowed commands and parameters.
 `-v`, `--var=VAR=VALUE`::
    Set a variable for the publishing run
 `--varsfile=NAME`::
-   Set variables for the publishing run from a file with each line containing `key=value` pairs
+   Set variables for the publishing run from a file with each line containing `key=value` pairs. Lines starting with a `#` are ignored.
 `--verbose`::
    Print a bit of debugging output
 `--version`::

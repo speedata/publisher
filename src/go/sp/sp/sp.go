@@ -421,7 +421,11 @@ func readVariables() {
 		s := bufio.NewScanner(f)
 		// Read each line
 		for s.Scan() {
-			res := strings.Split(s.Text(), "=")
+			txt := s.Text()
+			if strings.HasPrefix(txt, "#") {
+				continue
+			}
+			res := strings.Split(txt, "=")
 			if len(res) != 2 {
 				// ignore
 			} else {
