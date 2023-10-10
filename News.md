@@ -3,6 +3,10 @@
 This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/).
 
 
+## Version 5
+
+* New XPath engine.
+
 ## Version 4.16
 
 Not yet released.

@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.15">
+    <entry version="4.15.5" date="2023-10-10">
+        <en>Add new metapost command spcolor (#524).</en>
+        <de>Neuer Metapost Befehl spcolor (#524).</de>
+    </entry>
+    <entry version="4.15.5" date="2023-10-10">
+        <en>Allow comments in variables file (#518).</en>
+        <de>Erlaube Kommentare in Variablen-Dateien (#518).</de>
+    </entry>
     <entry version="4.15.4" date="2023-09-18">
         <en>Rewrite and extension of the MetaPost subsystem.</en>
         <de>MetaPost subsystem neu geschrieben und erweitert.</de>
