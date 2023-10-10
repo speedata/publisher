@@ -219,3 +219,8 @@ def txt(expr t) =
     runscript("sptext{"& defaultfontfamily & ":" & defaultfontstyle & ":" & t &"}")
 enddef;
 
+
+def spcolor(expr t) =
+    runscript("spcolor{" & t & "}")
+enddef;
+

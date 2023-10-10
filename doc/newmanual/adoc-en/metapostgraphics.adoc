@@ -218,6 +218,11 @@ In addition, the following (partly from MetaFun).
 
     drawdot origin;
 
+`spcolor`::
+    Gets a color from the previously defined colors. Can only be used with `withcolor`. The difference to using a color from the `colors.` variable is that the color space is preserved and not converted to RGB.
+
+    fill box withcolor spcolor("mycolor");
+
 
 === Text
 

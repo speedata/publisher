@@ -218,6 +218,10 @@ Die in dem Format »plain« enthaltenen Makros sind im speedata Publisher enthal
 
     drawdot origin;
 
+`spcolor`::
+    Wählt eine Farbe aus den vordefinierten Farben aus. Kann nur mit `withcolor` benutzt werden. Der Unterschied zu den Farben aus `colors.`  ist, dass der Farbraum erhalten bleibt.
+
+    fill box withcolor spcolor("mycolor");
 
 === Text
 

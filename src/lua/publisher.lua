@@ -827,9 +827,10 @@ end
 
 function pdfstring_from_color(colorname_or_number)
     local colno = tonumber(colorname_or_number)
-    local colorname
     if colno then
         colorname = colortable[colno]
+    else
+        colorname = colorname_or_number
     end
     local colentry = get_colentry_from_name(colorname,"black")
     if colentry then return colentry.pdfstring else return nil end

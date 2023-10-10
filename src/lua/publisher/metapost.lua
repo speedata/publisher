@@ -85,6 +85,25 @@ local function process_tex_text(str,fmt)
         return x
     end
 end
+
+local function process_color (str)
+    if str then
+        if not str:find("{.-}") then
+            str = string.format("{%s}",str)
+        end
+        str = str:match("{(.*)}")
+        local colentry = publisher.get_colentry_from_name(str)
+        local transparency = ""
+        if colentry.alpha then
+            transparency = string.format('withprescript "tr_alternative=1" withprescript "tr_transparency=%g"',colentry.alpha)
+        end
+        str = string.format('1 %s withprescript "MPlibOverrideColor=%s" ',transparency, colentry.pdfstring)
+        return str
+    end
+    return ""
+  end
+
+
 local function scriptrunner(code)
     local id, str = code:match("(.-){(.*)}")
     if id and str then
@@ -92,6 +111,10 @@ local function scriptrunner(code)
             return process_tex_text(str,textext_fmt)
         elseif id == "drawtext" then
             return process_tex_text(str,textext2_fmt)
+        elseif id == "spcolor" then
+            return process_color(str)
+        else
+            print("**** unknown runner",code)
         end
     end
 end
@@ -358,7 +381,7 @@ local function do_preobj_color(object, prescript)
         pdf_literalcode("/TRP%s gs", str_int_val)
     end
     local override = prescript and prescript.MPlibOverrideColor
-    if override then
+    if override and type(override) == "string" then
         pdf_literalcode(override)
         override = nil
     else

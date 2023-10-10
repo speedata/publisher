@@ -1,0 +1,26 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="8cm" width="10cm" />
+    <DefineColor name="mygray" model="gray"  g="80"/>
+    <DefineColor name="transparentorange" model="cmyk"  c="0" m="45" y="87" k="0" alpha="0.4"/>
+
+    <DefineGraphic name="box">
+        fill box withcolor spcolor("mygray");
+    </DefineGraphic>
+
+    <DefineGraphic name="alphabox">
+        fill box withcolor spcolor("transparentorange");
+    </DefineGraphic>
+
+    <Record element="data">
+        <PlaceObject>
+            <Box height="4" width="4"  graphic="box"/>
+        </PlaceObject>
+        <PlaceObject>
+            <Box height="4" width="4"  backgroundcolor="blue"/>
+        </PlaceObject>
+        <PlaceObject row="3" column="3" allocate="no">
+            <Box height="4" width="4"  graphic="alphabox"/>
+        </PlaceObject>
+    </Record>
+</Layout>
