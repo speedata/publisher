@@ -11,7 +11,7 @@ In diesen wird eine Zuordnung von Namensraum zu einem Schema erstellt.
 Zwei vorgefertigte Kataloge werden mit dem speedata Publisher geliefert, die den speedata Namensraum mit den entsprechenden Schemadateien verknüpfen.
 So muss man nur den Katalog einbinden:
 
-.In den Einstellungen kann die Variable `xml.catalogs` geändert werden. Dieser muss auf `catalog-schema-en.xml` bzw. `catalog-schema-de.xml` gesetzt werden. Der Pfad muss natürlich angepasst werden.
+.In den Einstellungen kann die Variable `xml.catalogs` geändert werden. Dieser muss auf `catalog-schema-en.xml` bzw. `catalog-schema-de.xml` gesetzt werden. Der Pfad muss natürlich angepasst werden. Unter Windows wäre es `C:\\Users\\path\\to\\catalog.xml`.
 image::vscode-xml-catalog.png[]
 
 Es gibt zwei verschiedene Schemadateien, die in je zwei Sprachen dokumentiert sind. Für die englischsprachige Dokumentation muss `catalog-schema-en.xml` benutzt werden, für die deutschsprachige Dokumentation `catalog-schema-de.xml`.

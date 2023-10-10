@@ -26,7 +26,7 @@
 {{end }}
 [[{{.Attlink }}]]`{{.Name}}` ({{atttypeinfo . $.Lang}}{{ with .CSS }}, {{ translate $.Lang "CSS property"}}: {{.}}{{end}}{{with .Since}}, _{{translate $.Lang "since version"}} {{.}}_{{end}})::
   {{.DescriptionAdoc $.Lang }}
-{{ end }}{{else}}(keine){{ end }}
+{{ end }}{{else}}({{ translate $.Lang "none" }}){{ end }}
 
 {{ with (.Command.RemarkAdoc $.Lang)}}
 == {{ translate $.Lang "Remarks" }}
