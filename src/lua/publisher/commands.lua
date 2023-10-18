@@ -4621,19 +4621,17 @@ end
 --- Format the current URL. It should make the URL active.
 function commands.url(layoutxml,dataxml)
     local a = par:new(nil,"URL")
+    local strings = {}
     local tab = publisher.dispatch(layoutxml,dataxml)
-
-    local ud = node.new("whatsit","user_defined")
-    ud.type = 108
-    ud.value = function(options)
-        local str = {}
-        for i,j in ipairs(tab) do
-            table.insert(str,publisher.element_contents(j))
+    for i = 1, #tab do
+        local contents = publisher.element_contents(tab[i])
+        if publisher.elementname(tab[i]) == "Value" and type(contents) == "table" then
+            strings[#strings+1] = publisher.xml_stringvalue(contents)
         end
-        local urlnodes = publisher.mknodes(table.concat(str,""),options)
-        return publisher.break_url(urlnodes)
     end
-    a:append(ud)
+    local str = table.concat(strings)
+    local urlnodes = publisher.mknodes(str,options)
+    a:append(publisher.break_url(urlnodes))
     return a
 end
 
