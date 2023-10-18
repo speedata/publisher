@@ -207,6 +207,7 @@ Example: `sd:aspectratio('ocean.pdf',3,'mediabox')`
 If no box is specified, the `cropbox` is used. Possible values for the box specification: `artbox`, `cropbox`, `trimbox`, `mediabox` and `bleedbox`.
 
 
+[[ch-externalconverting]]
 == External Conversion Tools
 
 The Publisher usually only processes PDF, PNG and JPEG files. In order to use other formats, you have to convert them into one of the three formats. This can be done in advance, but also during the runtime of the Publisher.
@@ -233,7 +234,14 @@ imagehandler="tiffimage:(convert %%input%% %%output%%.pdf)"
 extensionhandler="tiff:tiffimage"
 -------------------------------------------------------------------------------
 
-The file name extension `.tiff` is assigned to the handler `tiffimage` (line 2). In the first line, the handler `tiffimage` is assigned to the program `convert %%input%% %%output%%%.pdf`, whereby the file names are replaced at runtime.
+
+The file name extension `.tiff` is assigned to the handler `tiffimage` (line 2). In the first line, the handler `tiffimage` is assigned to the program `convert %%input%% %%output%%%.pdf`, whereby the file names are replaced at runtime. If the file names contain spaces, you need to use double quotes (without backslash or other escape characters before):
+
+[source, ini]
+-------------------------------------------------------------------------------
+imagehandler="tiffimage:("/path/with space/convert" "%%input%%" "%%output%%.pdf")"
+-------------------------------------------------------------------------------
+
 
 == Images from textual descriptions
 

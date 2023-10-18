@@ -255,7 +255,7 @@ Beispiel: `sd:aspectratio("ocean.pdf",1,"cropbox")`
 
 Falls keine Box angegeben wird, wird die cropbox benutzt. Mögliche Werte für die Box-Angabe: `artbox`, `cropbox`, `trimbox`, `mediabox` und `bleedbox`.
 
-
+[[ch-externalconverting]]
 == Externe Konvertierungstools
 
 Der Publisher verarbeitet in der Regel nur PDF, PNG und JPEG Dateien.
@@ -286,7 +286,12 @@ imagehandler="tiffimage:(convert %%input%% %%output%%.pdf)"
 extensionhandler="tiff:tiffimage"
 -------------------------------------------------------------------------------
 
-Der Dateinamenendung `.tiff` wird der Handler `tiffimage` zugeordnet (Zeile 2). In der ersten Zeile wird dem Handler `tiffimage` dem Programm `convert  %%input%% %%output%%.pdf`, wobei die Dateinamen zur Laufzeit ersetzt werden.
+Der Dateinamenendung `.tiff` wird der Handler `tiffimage` zugeordnet (Zeile 2). In der ersten Zeile wird dem Handler `tiffimage` dem Programm `convert  %%input%% %%output%%.pdf`, wobei die Dateinamen zur Laufzeit ersetzt werden. Wenn Leerzeichen in Dateinamen enthalten sind, müssen die Ersetzungen wie `%%input%%` in Anführungszeichen (ohne Schrägstrich o.ä. davor) gesetzt werden:
+
+[source, ini]
+-------------------------------------------------------------------------------
+imagehandler="tiffimage:("/path/with space/convert" "%%input%%" "%%output%%.pdf")"
+-------------------------------------------------------------------------------
 
 == Bilder aus textuellen Beschreibungen
 

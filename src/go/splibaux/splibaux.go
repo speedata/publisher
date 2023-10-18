@@ -2,6 +2,7 @@ package splibaux
 
 import (
 	"crypto/md5"
+	"encoding/csv"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -190,8 +191,16 @@ func convertFile(inputfilename, baseoutputfilename, handler string) (string, err
 	}
 
 	outfile := filepath.Join(rawimgcache, baseoutputfilename)
-	replacer := strings.NewReplacer("%%input%%", inputfilename, "%%output%%", outfile)
-	replacedHandler := strings.Fields(replacer.Replace(handler))
+	replaced := strings.NewReplacer("%%input%%", inputfilename, "%%output%%", outfile).Replace(handler)
+	r := csv.NewReader(strings.NewReader(replaced))
+	r.Comma = ' '
+
+	record, err := r.Read()
+	if err != nil {
+		return "", err
+	}
+
+	replacedHandler := record
 	executableFile := replacedHandler[0]
 	replacedHandler = replacedHandler[1:]
 	for _, itm := range replacedHandler {
