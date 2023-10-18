@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.15">
+    <entry version="4.15.6" date="2023-10-18">
+      <en>Bugfix for URL text disappearing (#529).</en>
+      <de>Fehlerkorrektur für URL Text (#529).</de>
+    </entry>
+    <entry version="4.15.6" date="2023-10-18">
+        <en>Allow white space in image handlers (#527).</en>
+        <de>Erlaube Leerzeichen in imagehandler (#527).</de>
+    </entry>
     <entry version="4.15.5" date="2023-10-10">
         <en>Add new metapost command spcolor (#524).</en>
         <de>Neuer Metapost Befehl spcolor (#524).</de>
