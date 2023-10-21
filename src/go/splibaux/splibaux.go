@@ -84,13 +84,12 @@ func GetFullPath(filename string) (string, error) {
 // LookupFile returns the full path of the given file name. The file name can be a
 // simple name, a path, a URL etc.
 func LookupFile(path string) string {
-	// TODO: lowercase
-	// local lowercase = os.getenv("SP_IGNORECASE") == "1"
-	//  if lowercase then filename_or_uri = unicode.utf8.lower(filename_or_uri) end
 	if pathrewrite != nil {
 		path = pathrewrite.Replace(path)
 	}
-
+	if os.Getenv("SP_IGNORECASE") == "1" {
+		path = strings.ToLower(path)
+	}
 	if ret, ok := files[path]; ok {
 		return ret
 	}
