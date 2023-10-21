@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.15">
+    <entry version="4.15.7" date="2023-10-21">
+        <en>Border color with A (#526).</en>
+        <de>Rahmenfarbe bei A (#526).</de>
+    </entry>
+    <entry version="4.15.7" date="2023-10-21">
+        <en>Re-implement sp --ignore-case (#534).</en>
+        <de>sp --ignore-case wieder eingebaut (#534).</de>
+    </entry>
+    <entry version="4.15.7" date="2023-10-21">
+        <en>Not found hyphenation patterns give warning instead of error (#532).</en>
+        <de>Nicht gefundene Trennmuster geben eine Warnung anstelle eines Fehlers (#532).</de>
+    </entry>
     <entry version="4.15.6" date="2023-10-18">
       <en>Bugfix for URL text disappearing (#529).</en>
       <de>Fehlerkorrektur für URL Text (#529).</de>
