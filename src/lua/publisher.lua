@@ -280,6 +280,7 @@ options = {
     gridlocation = "background",
     fontloader = os.getenv("SP_FONTLOADER") or "fontforge",
     xmlparser = os.getenv("SP_XMLPARSER") or "lua",
+    hyperlinkborderwidth = tex.sp("1pt")
 }
 
 -- List of virtual areas. Key is the group name and value is
@@ -7147,18 +7148,6 @@ function getBordercolor(colorname)
     return "0 0 0"
 end
 
-function hlpage(pagenumber)
-    pagenumber = tonumber(pagenumber)
-    local pageobjnum = pdf.getpageref(pagenumber)
-    local border = "/Border[0 0 0]"
-    if options.showhyperlinks then
-        border = string.format("/C [%s]",getBordercolor(options.hyperlinksbordercolor) )
-    end
-    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoTo/D [ %d 0 R /Fit ] >>",border,pageobjnum)
-    hyperlinks[#hyperlinks + 1] = str
-    return #hyperlinks
-end
-
 local function char_to_hex(c)
     return string.format("%%%02X", string.byte(c))
 end
@@ -7173,14 +7162,38 @@ local function urlencode(url)
     return url
 end
 
-function hlurl(href)
+local function get_border_for_link(color)
+    -- no border:
     local border = "/Border[0 0 0]"
+    local border_thickness = options.hyperlinkborderwidth
     if options.showhyperlinks then
-        border = string.format("/C [%s]",getBordercolor(options.hyperlinksbordercolor))
+        local thickness = ""
+        if border_thickness ~= 0 then
+            thickness = string.format("/Border[0 0 %d]",sp_to_bp(border_thickness))
+        end
+        border = string.format("%s/C [%s]",thickness,getBordercolor(color or options.hyperlinkbordercolor))
     end
+    return border
+end
+
+function hlurl(href,bordercolor)
     href = urlencode(href)
     href = escape_pdfstring(href)
-    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/URI/URI (%s)>>",border,href)
+    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/URI/URI (%s)>>",get_border_for_link(bordercolor),href)
+    hyperlinks[#hyperlinks + 1] = str
+    return #hyperlinks
+end
+
+function hlpage(pagenumber,bordercolor)
+    pagenumber = tonumber(pagenumber)
+    local pageobjnum = pdf.getpageref(pagenumber)
+    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoTo/D [ %d 0 R /Fit ] >>",get_border_for_link(bordercolor),pageobjnum)
+    hyperlinks[#hyperlinks + 1] = str
+    return #hyperlinks
+end
+
+function hllink(link,bordercolor)
+    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoTo/D %s>>",get_border_for_link(bordercolor),publisher.utf8_to_utf16_string_pdf(string.format("mark%s",link)))
     hyperlinks[#hyperlinks + 1] = str
     return #hyperlinks
 end

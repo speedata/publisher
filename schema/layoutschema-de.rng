@@ -13,6 +13,11 @@
          <interleave>
             <group>
                <optional>
+                  <attribute name="bordercolor">
+                     <a:documentation>Setze die Rahmenfarbe des links (nur Adobe Acrobat)</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="href">
                      <a:documentation>Das Ziel des Hyperlinks. Beispiel: https://www.speedata.de</a:documentation>
                   </attribute>
@@ -2441,7 +2446,7 @@
    </define>
    <define name="e_Image">
       <element name="Image">
-         <a:documentation>Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (.pdf), PNG (.png) und JPEG (.jpg). Siehe unten für die Einschränkung eingebundener PDF-Dateien.</a:documentation>
+         <a:documentation>Bindet eine externe Grafik ein. Erlaubte Grafikformate sind PDF (.pdf), PNG (.png) und JPEG (.jpg). Andere Dateitypen sind mit externen Konvertierungsprogrammen möglich. Siehe unten für die Einschränkung eingebundener PDF-Dateien.</a:documentation>
          <interleave>
             <group>
                <optional>
@@ -4316,8 +4321,13 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="hyperlinksbordercolor">
-               <a:documentation>Setze die Rahmenfarbe von Hyperlinks wenn showhyperlinks aktiviert ist. Die Voreinstellung ist black.</a:documentation>
+            <attribute name="hyperlinkbordercolor">
+               <a:documentation>Setze die Rahmenfarbe von Hyperlinks wenn showhyperlinks aktiviert ist. Die Voreinstellung ist black. (Umbenannt von hyperlinksbordercolor)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="hyperlinkborderwidth">
+               <a:documentation>Setze die Rahmendicke von Hyperlinks wenn showhyperlinks aktiviert ist. Die Voreinstellung ist 1pt.</a:documentation>
             </attribute>
          </optional>
          <optional>

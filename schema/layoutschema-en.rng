@@ -13,6 +13,11 @@
          <interleave>
             <group>
                <optional>
+                  <attribute name="bordercolor">
+                     <a:documentation>Set the color of the border (Adobe Acrobat ony).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="href">
                      <a:documentation>The target of the hyperlink (URI). Example: https://www.speedata.de</a:documentation>
                   </attribute>
@@ -2441,7 +2446,7 @@
    </define>
    <define name="e_Image">
       <element name="Image">
-         <a:documentation>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). See below for a limitation on the number of included PDF files.</a:documentation>
+         <a:documentation>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). Other file types might be possible with external converters. See below for a limitation on the number of included PDF files.</a:documentation>
          <interleave>
             <group>
                <optional>
@@ -4316,8 +4321,13 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="hyperlinksbordercolor">
-               <a:documentation>Set the border color of hyperlinks when showhyperlinks is set. The default is black.</a:documentation>
+            <attribute name="hyperlinkbordercolor">
+               <a:documentation>Set the border color of hyperlinks when showhyperlinks is set. The default is black. (Renamed from hyperlinksbordercolor.)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="hyperlinkborderwidth">
+               <a:documentation>Set the border width of hyperlinks when showhyperlinks is set. The default is 1pt.</a:documentation>
             </attribute>
          </optional>
          <optional>

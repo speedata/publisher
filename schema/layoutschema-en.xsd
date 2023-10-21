@@ -34,6 +34,11 @@
         </xs:choice>
         <xs:element ref="en:Box"/>
       </xs:choice>
+      <xs:attribute name="bordercolor">
+        <xs:annotation>
+          <xs:documentation>Set the color of the border (Adobe Acrobat ony).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="href">
         <xs:annotation>
           <xs:documentation>The target of the hyperlink (URI). Example: https://www.speedata.de</xs:documentation>
@@ -2420,7 +2425,7 @@
   </xs:element>
   <xs:element name="Image">
     <xs:annotation>
-      <xs:documentation>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). See below for a limitation on the number of included PDF files.</xs:documentation>
+      <xs:documentation>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). Other file types might be possible with external converters. See below for a limitation on the number of included PDF files.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
@@ -4878,9 +4883,14 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="hyperlinksbordercolor">
+      <xs:attribute name="hyperlinkbordercolor">
         <xs:annotation>
-          <xs:documentation>Set the border color of hyperlinks when showhyperlinks is set. The default is black.</xs:documentation>
+          <xs:documentation>Set the border color of hyperlinks when showhyperlinks is set. The default is black. (Renamed from hyperlinksbordercolor.)</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="hyperlinkborderwidth">
+        <xs:annotation>
+          <xs:documentation>Set the border width of hyperlinks when showhyperlinks is set. The default is 1pt.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="keywords">

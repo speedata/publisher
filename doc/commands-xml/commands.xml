@@ -589,6 +589,14 @@
         </interleave>
       </oneOrMore>
     </childelements>
+    <attribute en="bordercolor" type="text" optional="yes" since="4.15.7">
+      <description xml:lang="en">
+        <para>Set the color of the border (Adobe Acrobat ony).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze die Rahmenfarbe des links (nur Adobe Acrobat)</para>
+      </description>
+    </attribute>
     <attribute en="href" type="text" optional="yes">
       <description xml:lang="en">
         <para>The target of the hyperlink (URI). Example: <tt>https://www.speedata.de</tt></para>
@@ -6595,12 +6603,20 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="hyperlinksbordercolor" optional="yes" type="text" since="4.11.8">
+    <attribute en="hyperlinkbordercolor" optional="yes" type="text" since="4.11.8">
       <description xml:lang="en">
-        <para>Set the border color of hyperlinks when showhyperlinks is set. The default is black.</para>
+        <para>Set the border color of hyperlinks when showhyperlinks is set. The default is black. (Renamed from hyperlinksbordercolor.)</para>
       </description>
       <description xml:lang="de">
-        <para>Setze die Rahmenfarbe von Hyperlinks wenn showhyperlinks aktiviert ist. Die Voreinstellung ist black.</para>
+        <para>Setze die Rahmenfarbe von Hyperlinks wenn showhyperlinks aktiviert ist. Die Voreinstellung ist black. (Umbenannt von hyperlinksbordercolor)</para>
+      </description>
+    </attribute>
+    <attribute en="hyperlinkborderwidth" optional="yes" type="text" since="4.15.6">
+      <description xml:lang="en">
+        <para>Set the border width of hyperlinks when showhyperlinks is set. The default is 1pt.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze die Rahmendicke von Hyperlinks wenn showhyperlinks aktiviert ist. Die Voreinstellung ist 1pt.</para>
       </description>
     </attribute>
     <attribute en="keywords" optional="yes" type="text" since="3.1.24">

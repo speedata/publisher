@@ -29,22 +29,17 @@ function commands.a( layoutxml,dataxml )
     if not interaction then
         return tab
     end
+    local bordercolor = publisher.read_attribute(layoutxml,dataxml,"bordercolor","string")
     local href = publisher.read_attribute(layoutxml,dataxml,"href","string")
     local link = publisher.read_attribute(layoutxml,dataxml,"link","string")
     local page = publisher.read_attribute(layoutxml,dataxml,"page","number")
-    local border = "/Border[0 0 0]"
-    if publisher.options.showhyperlinks then
-        border = ""
-    end
 
-    local str
     if link then
-        str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoTo/D %s>>",border,publisher.utf8_to_utf16_string_pdf(string.format("mark%s",link)))
-        publisher.hyperlinks[#publisher.hyperlinks + 1] = str
+        publisher.hllink(link,bordercolor)
     elseif href then
-        publisher.hlurl(href)
+        publisher.hlurl(href,bordercolor)
     elseif page then
-        publisher.hlpage(page)
+        publisher.hlpage(page,bordercolor)
     end
 
     if eltname == "Image" or eltname == "Box" then
@@ -2591,6 +2586,8 @@ function commands.pdfoptions( layoutxml, dataxml )
     local duplex       = publisher.read_attribute(layoutxml,dataxml,"duplex",   "string")
     local format       = publisher.read_attribute(layoutxml,dataxml,"format",    "string")
     local hyperlinksbordercolor = publisher.read_attribute(layoutxml,dataxml,"hyperlinksbordercolor", "string")
+    local hyperlinkbordercolor = publisher.read_attribute(layoutxml,dataxml,"hyperlinkbordercolor", "string",hyperlinksbordercolor)
+    local hyperlinkborderwidth = publisher.read_attribute(layoutxml,dataxml,"hyperlinkborderwidth", "width_sp")
     local keywords     = publisher.read_attribute(layoutxml,dataxml,"keywords", "string")
     local nc           = publisher.read_attribute(layoutxml,dataxml,"numcopies", "number")
     local pagelayout   = publisher.read_attribute(layoutxml,dataxml,"pagelayout", "string")
@@ -2619,8 +2616,11 @@ function commands.pdfoptions( layoutxml, dataxml )
     if showhyperlinks then
         publisher.options.showhyperlinks = showhyperlinks
     end
-    if hyperlinksbordercolor then
-        publisher.options.hyperlinksbordercolor = hyperlinksbordercolor
+    if hyperlinkbordercolor then
+        publisher.options.hyperlinkbordercolor = hyperlinkbordercolor
+    end
+    if hyperlinkborderwidth then
+        publisher.options.hyperlinkborderwidth = hyperlinkborderwidth
     end
     if nc then
         publisher.viewerpreferences.numcopies = nc
