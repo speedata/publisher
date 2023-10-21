@@ -6257,7 +6257,7 @@ function get_language(id_or_locale_or_name)
         -- ignore this
         -- probably cjk or another language without hyphenation patterns
     elseif not filename_part then
-        err("Can't find hyphenation patterns for language %s",tostring(orig_id_or_locale_or_name))
+        warning("Can't find hyphenation patterns for language %s",tostring(orig_id_or_locale_or_name))
         return 0
     else
         local filename = string.format("hyph-%s.pat.txt",filename_part)
@@ -6282,7 +6282,6 @@ end
 function get_languagecode( locale_or_name )
     local tmp = get_language(locale_or_name)
     if type(tmp) ~= "table" then
-        err("get_languagecode: return value should be a table. Something is wrong.")
         return 0
     end
     return tmp.id
