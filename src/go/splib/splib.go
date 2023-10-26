@@ -287,4 +287,14 @@ func sdReadXMLFile(filenameC *C.char) *C.char {
 	return s2c(str)
 }
 
+//export sdReadXMLString
+func sdReadXMLString(xmlstring *C.char) *C.char {
+	goXMLString := C.GoString(xmlstring)
+	str, err := splibaux.ReadXMLString(goXMLString)
+	if err != nil {
+		return s2c(errorpattern + err.Error())
+	}
+	return s2c(str)
+}
+
 func main() {}

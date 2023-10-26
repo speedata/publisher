@@ -1,7 +1,51 @@
 :ast: *
 [appendix]
-[[ch-xpathfunktionen]]
-= XPath- und Layoutfunktionen (alter XPath Parser)
+[[ch-lxpath,XPath- und Layoutfunktionen (neuer XPath Parser)]]
+= XPath- und Layoutfunktionen (neuer XPath Parser)
+
+Diese Seite beschreibt den experimentellen neuen XPath-Parser, genannt »lxpath«. Es gibt das Standard-XPath-Modul namens »luxor«. Um zwischen diesen beiden Modulen zu wechseln, können Sie die Standardeinstellung in der XPath-Konfiguration festlegen, zum Beispiel auf der Kommandozeile mit
+
+[source, shell]
+-------------------------------------------------------------------------------
+sp --xpath luxor
+-------------------------------------------------------------------------------
+
+(das alte, derzeitige Standardmodul)
+
+oder
+
+[source, shell]
+-------------------------------------------------------------------------------
+sp --xpath lxpath
+-------------------------------------------------------------------------------
+
+für den neuen XPath. Sie können diese Einstellung auch in der <<ch-konfiguration,Konfigurationsdatei>> vornehmen.
+
+== Was ist XPath und warum gibt es zwei verschiedene Implementierungen?
+
+
+Die Eingabe des speedata Publishers sind im XML-Format kodierte Daten.
+XML ist eine hierarchische Datenstruktur, in der es ein Wurzelelement gibt und jedes Element Attribute und Kinder haben kann, die entweder Text oder andere Elemente sind.
+Sie können beispielsweise ein Element _artikelgruppe_ haben, das zehn _artikel_-Elemente enthält.
+Die Idee von XPath ist es nun, durch den XML-Baum zu navigieren und Fragen zu stellen wie:
+Gib mir alle Artikel, die ein bestimmtes Attribut haben.
+Oder wie viele Artikel habe ich in dieser Artikelgruppe?
+
+Bisher verwendet der speedata-Publisher eine Ad-hoc-Implementierung eines XML-Parsers, der sich zwar bewährt hat, aber nicht sehr robust ist und nicht viele Fehler mit falschen Daten meldet.
+Auch der XPath-Parser hat hauptsächlich mit regulären Ausdrücken und globalen Zuständen gearbeitet, was ebenfalls nicht sehr robust ist.
+
+Die neue Implementierung verwendet den XML-Parser aus der Standardbibliothek von Go (mit einem kleinen Patch, um die Eingabeposition zu melden) und eine https://github.com/speedata/lxpath[XPath-Implementierung], die neu ist und mit der XPath Grammatik im Hinterkopf entwickelt wurde.
+
+Die neue XML/XPath-Implementierung besteht alle 199 Tests in der Testsuite, so dass der aktuelle Stand der Kompatibilität vielversprechend ist.
+
+Im Zweifelsfall verwenden Sie bitte die neue (lxpath) XML/XPath-Implementierung und melden Sie Fehler, wenn Sie einen finden. Sie werden einige Vorteile haben:
+
+* Die gesamte Implementierung ist schneller.
+* Es gibt bessere Fehlermeldungen (zum Beispiel sind Zeilennummern Teil der Fehlermeldungen).
+* Sie können <<ch-programmingfunctions,Ihre eigenen Funktionsdefinitionen haben>>.
+* Der neue XPath-Parser wird in speedata Publisher Version 5 standardmäßig verwendet.
+
+
 
 == XPath Ausdrücke
 
@@ -10,6 +54,7 @@ In allen anderen Attributen kann durch die geschweiften Klammern (`{` und `}`) e
 Siehe https://github.com/speedata/examples/blob/master/technical/fontshrinking/layout.xml#L16[z.B. das Layout im examples-Repository für Optimierung mit Gruppen].
 In diesem Beispiel werden im Attribut `width` und im Element `Value` die Werte dynamisch erzeugt, d. h. für die
 Angabe der Breite wird auf den Inhalt der Variablen `breite` zurückgegriffen, der Inhalt des Absatzes ist der Inhalt (Textwert) des gerade aktuellen Datenknotens.
+
 
 
 [source, xml]
@@ -34,7 +79,7 @@ Angabe der Breite wird auf den Inhalt der Variablen `breite` zurückgegriffen, d
 *   Zugriff auf Attribute in Kindelementen, zum Beispiel `foo/@bar`.
 *   Boolesche Ausdrücke: `<`, `>`, `\<=`, `>=`, `=`, `!=`. Vorsicht: das   Zeichen `<` muss in XML als `\&lt;` geschrieben werden,  das Zeichen  `>` kann als `\&gt;` geschrieben werden. Beispiel: `$zahl > 6`. Kann in Bedingungen benutzt werden.
 *   Einfache `if/then/else`-Abfragen: `if (...) then ... else ...`
-
+*   Einfache for-Ausdrücke, z.B.: `for $i in (1,2,3) return $i * 2`
 
 
 == Layout-Funktionen
@@ -76,9 +121,6 @@ Beispiel: die Funktion `sd:current-row()`  kann auch mit Parameter `sd:current-r
 
 `sd:decode-html(<Node>)`::
    Wandelt Texte wie `\&lt;i\&gt;Kursiv\&lt;/i\&gt;` in entsprechendes HTML-Markup.
-
-`sd:dimexpr(<string>)`::
-  _Deprecated_ Werte die Zeichnkette aus. Hilfreich, wenn man Längen addieren oder multiplizieren möchte. Beispiel: "2mm + 5cm". Seit der Version 4.5.7 des speedata Publishers können Längen direkt berechnet werden.
 
 `sd:dummytext([<Anzahl>])`::
    Gibt den Blindtext "Lorem ipsum..." mit über 50 Wörtern zurück. Mit dem optionalen Parameter kann man festlegen, wie oft der Text wiederholt wird.
@@ -196,10 +238,14 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `abs(<Zahl>)`::
 	Liefert den positiven Wert der angegebenen Zahl zurück. Beispiel: sowohl `abs(-1.34)` als auch `abs(-1.34)` ergeben die Zahl `1.34`.
 
+`boolean(<Sequenz>)`::
+    Gibt den https://www.w3.org/TR/xpath20/#id-ebv[effektiven Booleschen Wert] der Sequenz zurück.
 
 `ceiling(<Zahl>)`::
 	Ergibt die nächst höhere Ganzzahl zurück. `ceiling(-1.34)` ergibt 1, `ceiling(1.34)` ergibt 2.
 
+`codepoints-to-string( <codepoints> )`::
+    Konvertiere die Sequenz von Codepoints in eine Zeichenkette.
 
 `concat(<Wert>,<Wert>, ...)`::
    Erzeugt einen neuen Text aus der Verkettung der einzelnen Werte.
@@ -215,7 +261,7 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
    Öffnet die Datei mit dem angegebenen Dateinamen und gibt den Inhalt der Datei zurück.
 
 `empty(<Attribut>)`::
-   Prüft, ob ein Attribut (nicht) vorhanden ist. `empty(@doesnotexist)` ergibt `true()`, `empty(@empty)` ergibt `true()` und `empty(@nonempty)` ergibt `false()`.
+   Ergibt wahr, wenn die Sequenz leer ist, z.B. wenn ein Attribut oder ein Element nicht vorhanden ist. `empty(@doesnotexist)` ergibt `true()` und `empty(@nonempty)` ergibt `false()` bei folgendem Element: `<elt nonempty="..." />`.
 
 `false()`::
    Gibt „Falsch“ zurück.
@@ -247,6 +293,9 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `not()`::
    Negiert den Wahrheitswert des Arguments. Beispiel: `not(true())` ergibt `false()`.
 
+`number(<Wert>)`::
+    Konvertiert den Wert in eine Zahl (double). Falls die Zahl nicht konvertiert werden kann, ist die Rückgabe “not a number” (NaN).
+
 `position()`::
    Ermittelt die Position des aktuellen Datensatzes. Anwendungsfall: `<Switch><Case test="position() = last()"> ...` führt den Inhalt des `<Case>`-Abschnittes nur beim letzten Element aus.
 
@@ -255,6 +304,15 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 
 `round(<Zahl>,<Zahl>`)`::
    Rundet die angegebene Zahl im ersten Argument auf die Anzahl der Nachkommastellen im zweiten Argument.
+
+`root(<element>)`::
+    Gibt das Wurzelelement des Elements zurück.
+
+`ends-with ( <string>, <string>)`::
+   Gibt wahr (true) zurück, wenn die erste Zeichenkette mit der zweiten endet. Beispiel: `ends-with ( "tattoo", "too")` ergibt `true`.
+
+`starts-with ( <string>, <string>)`::
+   Gibt wahr (true) zurück, wenn die erste Zeichenkette mit der zweiten anfängt. Beispiel: `ends-with ( "tattoo", "tat")` ergibt `true`.
 
 `string(<Sequenz>)`::
    Gibt den Textwert der Sequenz zurück, d. h. den Inhalt der Elemente.
@@ -265,8 +323,17 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `string-length(<string>)`::
    Gibt die Länge der Zeichenkette zurück. Multibyte UTF-8 Sequenzen werden als eine Position gezählt.
 
+`string-to-codepoints( <string> )`::
+    Konvertiere die Zeichenkette in eine Sequenz von Codepoints.
+
 `substring(<input>,<start>[,<length>])`::
    Gibt einen Teil der Zeichenkette aus `input` zurück, die bei `start` anfängt und (optional) die Länge `length` hat. `substring('Goldfarb', 5, 3)` gibt `far` zurück. `start` kann auch (entgegen der XPath-Spezifikation) auch negativ sein, dann wird vom Ende der Eingabe gezählt.
+
+`substring-after(<string>,<string>])`::
+   Gibt den Inhalt der ersten Zeichenkette zurück, der ab der zweiten Zeichenkette vorkommt: Beispiel: `substring-after ( "tattoo", "tat")` ergibt `"too"`.
+
+`substring-before(<string>,<string>])`::
+   Gibt den Inhalt der ersten Zeichenkette zurück, der bis zur zweiten Zeichenkette geht: Beispiel: `substring-before ( "tattoo", "attoo")` ergibt `"t"`.
 
 `tokenize(<Eingabe>,<Regexp>)`::
    Die Rückgabe ist eine Sequenz von Zeichenketten. Die Eingabe wird von links nach rechts gelesen. Sobald eine Stelle gefunden wird, auf die der Reguläre Ausdruck passt, wird die bisherige Eingabe zurück gegeben. Beispiel (aus M. Kays XPath / XSLT-Buch): `tokenize("Go home, Jack!", "\W+")` ergibt die Sequenz `"Go", "home", "Jack", ""`.

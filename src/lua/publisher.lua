@@ -14,7 +14,12 @@ local luxor = do_luafile("luxor.lua")
 
 local spotcolors = require("spotcolors")
 
-xpath = do_luafile("xpath.lua")
+if os.getenv("SP_XMLPARSER") == "lxpath" then
+    xpath = require("lxpath")
+    xpath.stringmatch = unicode.utf8.match
+else
+    xpath = do_luafile("xpath.lua")
+end
 
 hasharfbuzz, harfbuzz = pcall(require,'luaharfbuzz')
 if not hasharfbuzz then
@@ -29,19 +34,24 @@ local html         = require("publisher.html")
 local fonts        = require("publisher.fonts")
 local uuid         = require("uuid")
 
-par        = require("par")
+par = require("par")
 uuid.randomseed(tex.randomseed)
 
-splib        = require("luaglue")
+splib = require("luaglue")
 
 local env_publisherversion = os.getenv("PUBLISHERVERSION")
 
 module(...,package.seeall)
 
+newxpath = false
 
-do_luafile("layout_functions.lua")
+if os.getenv("SP_XMLPARSER") == "lxpath" then
+    newxpath = true
+    do_luafile("layout_functions_lxpath.lua")
+else
+    do_luafile("layout_functions.lua")
+end
 
-processmode = "XML"
 
 -- so that node.copy_list copies the node properties
 node.set_properties_mode(true)
@@ -280,8 +290,16 @@ options = {
     gridlocation = "background",
     fontloader = os.getenv("SP_FONTLOADER") or "fontforge",
     xmlparser = os.getenv("SP_XMLPARSER") or "lua",
-    hyperlinkborderwidth = tex.sp("1pt")
+    hyperlinkborderwidth = tex.sp("1pt"),
 }
+
+current_layout_line = ""
+
+if newxpath then
+    options.xmlparser = "go"
+else
+    options.xmlparser = "lua"
+end
 
 -- List of virtual areas. Key is the group name and value is
 -- a hash with keys contents (a nodelist) and grid (grid).
@@ -641,6 +659,7 @@ local dispatch_table = {
     Fontface                = commands.fontface,
     ForAll                  = commands.forall,
     Frame                   = commands.frame,
+    Function                = commands.func,
     Grid                    = commands.grid,
     Group                   = commands.group,
     Groupcontents           = commands.groupcontents,
@@ -672,6 +691,7 @@ local dispatch_table = {
     Pageformat              = commands.page_format,
     Pagetype                = commands.pagetype,
     Paragraph               = commands.paragraph,
+    Param                   = commands.param,
     PDFOptions              = commands.pdfoptions,
     PlaceObject             = commands.place_object,
     Position                = commands.position,
@@ -727,7 +747,7 @@ function dispatch(layoutxml,dataxml,opts)
     local ret = {}
     local tmp
     if not layoutxml then
-        err("No elements for dispatch, why?")
+        assert(false,"No elements for dispatch, why?")
         return
     end
     for _,j in ipairs(layoutxml) do
@@ -736,8 +756,16 @@ function dispatch(layoutxml,dataxml,opts)
             local eltname = j[".__local_name"]
             if dispatch_table[eltname] ~= nil then
                 if options.verbosity > 0 then
-                    log("Call %q from layout",eltname)
+                    local lineinfo = ""
+                    if newxpath then
+                        lineinfo = string.format(" (line %s)",j[".__line"])
+                    end
+                    log("Call %q from layout%s",eltname,lineinfo)
                 end
+                if newxpath then
+                    current_layout_line = j[".__line"]
+                end
+
                 tmp = dispatch_table[eltname](j,dataxml,opts)
 
                 -- Copy-of-elements can be resolved immediately
@@ -945,12 +973,6 @@ function dothings()
     options.default_pageheight = ht_sp
 
     get_languagecode(os.getenv("SP_MAINLANGUAGE") or "en_GB")
-    xpath.set_variable("_bleed", "0mm")
-    xpath.set_variable("_pageheight", "297mm")
-    xpath.set_variable("_pagewidth", "210mm")
-    xpath.set_variable("_jobname", tex.jobname)
-    xpath.set_variable("_matter","mainmatter")
-
 
     lowercase = os.getenv("SP_IGNORECASE") == "1"
     local extra_parameter = { otfeatures = { kern = true, liga = false } }
@@ -1106,14 +1128,12 @@ function initialize_luatex_and_generate_pdf()
 
     --- The default page type has 1cm margin
     masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(tenmm_sp,tenmm_sp,tenmm_sp,tenmm_sp) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
-    xpath.set_variable("__maxwidth", tex.sp("190mm"))
+
     --- The `vars` file hold a lua document holding table
     local vars
     local varsfun = loadfile(tex.jobname .. ".vars")
     if varsfun then vars = varsfun() else err("Could not load .vars file. Something strange is happening.") vars = {} end
-    for k,v in pairs(vars) do
-        xpath.set_variable(k,v)
-    end
+
     for i=4,#arg do
         local k,v = arg[i]:match("^(.+)=(.+)$")
         if k == "mode" then -- everything else handled after loading layout
@@ -1121,31 +1141,6 @@ function initialize_luatex_and_generate_pdf()
             local _modes = string.explode(v,",")
             for _,m in ipairs(_modes) do
                 modes[m] = true
-            end
-        elseif k == "html" then
-            htmlfilename = v
-            htmlblocks = {}
-            options.htmlignoreeol = false
-            -- pdf.setcompresslevel(0)
-            -- pdf.setobjcompresslevel(0)
-            -- publisher.documenttitle = "document"
-            -- publisher.options.format = "PDF/UA"
-            local tmp = splib.parse_html(htmlfilename)
-            if tmp == "" then
-                err("Could not read HTML file %q",tostring(htmlfilename))
-                exit(false)
-            end
-            if type(tmp) == "string" then
-                local a,b = load(tmp)
-                if a then a() else err(b) return end
-                local f = io.open(htmlfilename .. ".lua","w")
-                f:write(tmp)
-                f:close()
-                local blocks = parse_html(csshtmltree) or {}
-                for b=1,#blocks do
-                    local thisblock = blocks[b]
-                    htmlblocks[#htmlblocks + 1] = thisblock
-                end
             end
         elseif k == "pro" then
             pro = true
@@ -1158,7 +1153,9 @@ function initialize_luatex_and_generate_pdf()
         err("Without a valid layout-XML file, I can't really do anything.")
         exit()
     end
-
+    if newxpath then
+        layoutxml = layoutxml[1] -- skip document
+    end
     --- Used in `xpath.lua` to find out which language the function is in.
     local ns = layoutxml[".__namespace"]
     if not ns then
@@ -1176,11 +1173,18 @@ function initialize_luatex_and_generate_pdf()
         err("The German layout instructions have been removed\nin version 2.7 of the publisher.")
         exit()
     end
-
-    if layoutxml.version then
+    local version
+    if newxpath then
+        if layoutxml[".__attributes"] and layoutxml[".__attributes"]["version"] then
+            version = layoutxml[".__attributes"]["version"]
+        end
+    else
+        version = layoutxml.version
+    end
+    if version then
         local version_mismatch = false
         local publisher_version = string.explode(env_publisherversion,".")
-        local requested_version = string.explode(layoutxml.version,".")
+        local requested_version = string.explode(version,".")
 
         if publisher_version[1] ~= requested_version[1] then
             if tonumber(publisher_version[1]) < tonumber(requested_version[1]) then
@@ -1193,25 +1197,42 @@ function initialize_luatex_and_generate_pdf()
             version_mismatch = true
         end
         if version_mismatch then
-            err("Version mismatch. speedata Publisher is at version %s, requested version %s", env_publisherversion, layoutxml.version)
+            err("Version mismatch. speedata Publisher is at version %s, requested version %s", env_publisherversion, version)
             exit()
         end
     end
-
-    tmp = os.getenv("SD_PREPEND_XML")
-    if tmp and tmp ~= "" then
-        for i,v in ipairs(string.explode(tmp,",")) do
-            table.insert(layoutxml, i, luxor.parse_xml_file(v))
+    if not newxpath then
+        tmp = os.getenv("SD_PREPEND_XML")
+        if tmp and tmp ~= "" then
+            for i,v in ipairs(string.explode(tmp,",")) do
+                table.insert(layoutxml, i, luxor.parse_xml_file(v))
+            end
+        end
+        tmp = os.getenv("SD_EXTRA_XML")
+        if tmp and tmp ~= "" then
+            for _,v in ipairs(string.explode(tmp,",")) do
+                layoutxml[#layoutxml + 1] = luxor.parse_xml_file(v)
+            end
         end
     end
-    tmp = os.getenv("SD_EXTRA_XML")
-    if tmp and tmp ~= "" then
-        for _,v in ipairs(string.explode(tmp,",")) do
-            layoutxml[#layoutxml + 1] = luxor.parse_xml_file(v)
-        end
+
+    if newxpath then
+        local ctxvalue = {
+            vars = {
+                _bleed = "0mm",
+                _pageheight = "297mm",
+                _pagewidth = "210mm",
+                _jobname =  tex.jobname,
+                _matter = "mainmatter",
+                __maxwidth = tex.sp("190mm"),
+                _lastpage = 1,
+            },
+            namespaces = layoutxml[".__ns"]
+        }
+        data = xpath.context:new(ctxvalue)
     end
 
-    dispatch(layoutxml)
+    dispatch(layoutxml,data)
 
     -- We define two graphic states for overprinting on and off.
     GS_State_OP_On  = pdf.immediateobj([[<< /Type/ExtGState /OP true /OPM 1 >>]])
@@ -1291,22 +1312,30 @@ function initialize_luatex_and_generate_pdf()
     end
 
     local auxfilename = tex.jobname .. "-aux.xml"
-    xpath.set_variable("_lastpage", 1)
 
     -- load help file if it exists
     if kpse.find_file(auxfilename) and options.resetmarks == false then
         local mark_tab = load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeol = true })
         if not mark_tab then return end
+        if newxpath then
+            mark_tab = mark_tab[1]
+        end
         for i=1,#mark_tab do
             local mt = mark_tab[i]
             if type(mt) == "table" then
+                local attributes
+                if newxpath then
+                    attributes = mt[".__attributes"]
+                else
+                    attributes = mt
+                end
                 if mt[".__local_name"] == "mark" then
-                    markers[mt.name] = { page = mt.page}
-                    local id = tonumber(mt.id)
+                    markers[attributes.name] = { page = attributes.page}
+                    local id = tonumber(attributes.id)
                     if id then
-                        marker_id_value[id] = { page = mt.page, name = mt.name}
+                        marker_id_value[id] = { page = attributes.page, name = attributes.name}
 
-                        local pagenumber = tonumber(mt.page)
+                        local pagenumber = tonumber(attributes.page)
                         if not marker_min[pagenumber] then
                             marker_min[pagenumber] = id
                         elseif marker_min[pagenumber] > id then
@@ -1319,9 +1348,13 @@ function initialize_luatex_and_generate_pdf()
                         end
                     end
                 elseif mt[".__local_name"] == "pagelabel" then
-                    visible_pagenumbers[tonumber(mt.pagenumber)] = mt.visible
+                    visible_pagenumbers[tonumber(attributes.pagenumber)] = attributes.visible
                 elseif mt[".__local_name"] == "lastpage" then
-                    xpath.set_variable("_lastpage", mt.page )
+                    if newxpath then
+                        data.vars["_lastpage"] = attributes.page
+                    else
+                        xpath.set_variable("_lastpage", attributes.page )
+                    end
                 end
             end
         end
@@ -1331,7 +1364,20 @@ function initialize_luatex_and_generate_pdf()
     local dataxml
     local datafilename = arg[3]
     if datafilename == "-dummy" then
-        dataxml = luxor.parse_xml("<data />")
+        if newxpath then
+            local str = splib.loadxmlstring("<data />")
+            local ok,msg = load(str)
+            if ok then
+                ok()
+            else
+                log("%s",str)
+                err("%s",msg)
+                return {}
+            end
+            dataxml = tbl
+        else
+            dataxml = luxor.parse_xml("<data />")
+        end
     elseif datafilename == "-" then
         log("Reading from stdin")
         dataxml = luxor.parse_xml(io.stdin:read("*a"),{htmlentities = true})
@@ -1342,6 +1388,28 @@ function initialize_luatex_and_generate_pdf()
         err("Something is wrong with the data: dataxml is not a table")
         exit()
     end
+
+    if newxpath then
+        data.xmldoc = {dataxml}
+        data.sequence = {dataxml}
+
+        for k,v in pairs(vars) do
+            data.vars[k] = v
+        end
+    else
+        xpath.set_variable("_bleed", "0mm")
+        xpath.set_variable("_pageheight", "297mm")
+        xpath.set_variable("_pagewidth", "210mm")
+        xpath.set_variable("_jobname", tex.jobname)
+        xpath.set_variable("_matter","mainmatter")
+        xpath.set_variable("__maxwidth", tex.sp("190mm"))
+        xpath.set_variable("_lastpage", 1)
+
+        for k,v in pairs(vars) do
+            xpath.set_variable(k,v)
+        end
+    end
+
     -- The xml now looks like
     -- dataxml = {
     --     [1] = "\
@@ -1378,9 +1446,24 @@ function initialize_luatex_and_generate_pdf()
     -- Attributes are table keys and metadata is stored as ".__" plus the metadata.
 
     --- Start data processing in the default mode (`""`)
-    local tmp
-    local name = dataxml[".__local_name"]
-    xpath.set_variable("__position", 1)
+    local name, tmp
+    if newxpath then
+        local seq, msg
+        seq, msg = data:execute("root()")
+        if msg then
+            err(msg)
+        end
+        seq, msg = data:eval("local-name()")
+        if msg then
+            err(msg)
+        end
+        name = xpath.string_value(seq)
+        data.vars.__position = 1
+    else
+        name = dataxml[".__local_name"]
+        xpath.set_variable("__position", 1)
+    end
+
     --- The rare case that the user has not any `Record` commands in the layout file:
     if not data_dispatcher[""] then
         err("Can't find any “Record” commands in the layout file.")
@@ -1388,18 +1471,23 @@ function initialize_luatex_and_generate_pdf()
     end
     tmp = data_dispatcher[""][name]
     if tmp then
-        dispatch(tmp,dataxml)
+        if newxpath then
+            dispatch(tmp,data)
+        else
+            dispatch(tmp,dataxml)
+        end
     else
         err("Can't find “Record” command for the root node %q.",name or "")
         exit()
     end
 
+
     --- emit last page if necessary
     -- current_pagestore_name is set when in SavePages and nil otherwise
     if page_initialized_p(current_pagenumber) and current_pagestore_name == nil then
-        dothingsbeforeoutput(pages[current_pagenumber])
+        dothingsbeforeoutput(pages[current_pagenumber],data)
         local n = node.vpack(pages[current_pagenumber].pagebox)
-        shipout(n,current_pagenumber)
+        shipout(n,current_pagenumber,dataxml)
     end
     local lastpage = current_pagenumber
     while not(page_initialized_p(lastpage)) and lastpage > 0 and current_pagestore_name == nil do
@@ -1715,12 +1803,17 @@ do
     end
 end
 
-function shipout(nodelist, pagenumber )
+function shipout(nodelist, pagenumber,dataxml)
     pages_shippedout[pagenumber] = true
     local cp = pages[pagenumber]
     local colorname = cp.defaultcolor
     if not matters[cp.matter] then
-        local defaultmatter = xpath.get_variable("_matter")
+        local defaultmatter
+        if newxpath then
+            defaultmatter = xpath.string_value(dataxml.vars["_matter"])
+        else
+            defaultmatter = xpath.get_variable("_matter")
+        end
         err("matter %q unknown, revert to %s",cp.matter or "-", defaultmatter )
         cp.matter = defaultmatter
     end
@@ -1797,70 +1890,55 @@ end
 ---       [3] = " "
 ---       [".__local_name"] = "data"
 ---     },
+---@return table
 function load_xml(filename,filetype,parameter)
     parameter = parameter or {}
-    if filename == "_internallayouthtml.xml" then
-        local src = [[<Layout xmlns="urn:speedata.de:2009/publisher/en"
-        xmlns:sd="urn:speedata:2009/publisher/functions/en">
-   <Record element="data">
-      <Output>
-         <Text>
-            <HTML>
-               <Value select="sd:html(.)"/>
-            </HTML>
-         </Text>
-      </Output>
-   </Record>
-</Layout>]]
-        log("Loading internal HTML layoutfile")
-        return luxor.parse_xml(src,parameter)
-    else
-        if options.xmlparser == "go" then
-            if options.verbosity > 0 then
-                log("Using new Go based XML reader")
-            end
-            if options.verbosity > 0 then
-                calculate_md5sum(filename)
-            end
-
-            local str = splib.loadxmlfile(filename)
-            if not str then return {} end
-            -- if options.verbosity > 0 and filetype == "layout instructions" then
-            --     local f = io.open(filename .. ".lua","w")
-            --     f:write(str)
-            --     f:close()
-            -- end
-            local ok,msg = load(str)
-            if ok then
-                ok()
-            else
-                log("%s",str)
-                err("%s",msg)
-                return {}
-            end
-            local xmltable = tbl[1]
-            fixup_layoutxml(xmltable,parameter.ignoreeol)
-            return xmltable
-        else
-            if options.verbosity > 0 then
-                log("Using old Lua based XML reader")
-            end
-
-            local path = kpse.find_file(filename)
-            if not path then
-                err("Can't find XML file %q. Abort.",filename or "?")
-                return
-            end
-            if options.verbosity > 0 then
-                calculate_md5sum(filename)
-            end
-            log("Loading %s %q",filetype or "file",path)
-            local parsed_xml = luxor.parse_xml_file(path, parameter,kpse.find_file)
-            -- if options.verbosity > 0 and filetype == "layout instructions" then
-            --     printtable("parsed_xml",parsed_xml)
-            -- end
-            return parsed_xml
+    if newxpath then
+        if options.verbosity > 0 then
+            log("Using new Go based XML reader")
         end
+        if options.verbosity > 0 then
+            calculate_md5sum(filename)
+        end
+
+        local str = splib.loadxmlfile(filename)
+        if not str then return {} end
+        if options.verbosity > 0 and filetype == "layout instructions" then
+            -- local f = io.open(filename .. ".lua","w")
+            -- f:write(str)
+            -- f:close()
+        end
+        local ok,msg = load(str)
+        if ok then
+            ok()
+        else
+            log("%s",str)
+            err("%s",msg)
+            return {}
+        end
+        ---@diagnostic disable-next-line
+        local xmltable = tbl
+        fixup_layoutxml(xmltable,parameter.ignoreeol)
+        return xmltable
+    else
+        if options.verbosity > 0 then
+            log("Using old Lua based XML reader")
+        end
+
+        local path = kpse.find_file(filename)
+        if not path then
+            err("Can't find XML file %q. Abort.",filename or "?")
+            return
+        end
+        if options.verbosity > 0 then
+            calculate_md5sum(filename)
+        end
+        log("Loading %s %q",filetype or "file",path)
+        local parsed_xml = luxor.parse_xml_file(path, parameter,kpse.find_file)
+        -- if options.verbosity > 0 and filetype == "layout instructions" then
+        --     printtable("parsed_xml",parsed_xml)
+        -- end
+        return parsed_xml
     end
 end
 
@@ -2166,9 +2244,11 @@ end
 --- Return the XML structure that is stored at &lt;pagetype>. For every pagetype
 --- in the table "masterpages" the function is_pagetype() gets called.
 -- pagenumber is for debugging purpose
-function detect_pagetype(pagenumber)
+function detect_pagetype(pagenumber, data)
     -- ugly hack. file global variables are a bad idea.
-    xpath.push_state()
+    if not newxpath then
+        xpath.push_state()
+    end
     local cp = current_pagenumber
     current_pagenumber = pagenumber
     local ret = nil
@@ -2181,22 +2261,43 @@ function detect_pagetype(pagenumber)
                 return pagetype.res
             end
         else
-           if xpath.parse(nil,pagetype.is_pagetype,pagetype.ns) == true then
-               log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
-               ret = pagetype.res
-               xpath.pop_state()
-               current_pagenumber = cp
-               return ret
-           end
+            if newxpath then
+                assert(data,"detect_pagetype")
+                local seq, msg = data:eval(pagetype.is_pagetype)
+                if msg then
+                    err(msg)
+                end
+                local ok
+                ok, msg = xpath.boolean_value(seq)
+                if msg then
+                    err(msg)
+                end
+                if ok then
+                    log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
+                    ret = pagetype.res
+                    current_pagenumber = cp
+                    return ret
+                end
+            else
+                if xpath.parse(data,pagetype.is_pagetype,pagetype.ns) == true then
+                    log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
+                    ret = pagetype.res
+                    xpath.pop_state()
+                    current_pagenumber = cp
+                    return ret
+                end
+            end
         end
     end
     err("Can't find correct page type!")
     current_pagenumber = cp
-    xpath.pop_state()
+    if not newxpath then
+        xpath.pop_state()
+    end
     return false
 end
 
-function initialize_page(pagenumber)
+function initialize_page(pagenumber,data)
     local thispage
 
     if pagenumber then
@@ -2249,8 +2350,9 @@ function initialize_page(pagenumber)
     dx = options.gridcells_dx
     dy = options.gridcells_dy
 
-    local pagetype = detect_pagetype(thispage)
+    local pagetype = detect_pagetype(thispage,data)
     if pagetype == false then return false end
+    if not pagetype then return false end
     if pagetype.width then
         current_page.width = tex.sp(pagetype.width)
     end
@@ -2258,18 +2360,33 @@ function initialize_page(pagenumber)
         current_page.height = tex.sp(pagetype.height)
     end
     if pagetype.width or pagetype.height then
-        xpath.set_variable("_pagewidth", pagetype.width)
-        xpath.set_variable("_pageheight", pagetype.height)
+        if newxpath then
+            data.vars["_pagewidth"] =  pagetype.width
+            data.vars["_pageheight"] = pagetype.height
+        else
+            xpath.set_variable("_pagewidth", pagetype.width)
+            xpath.set_variable("_pageheight", pagetype.height)
+        end
         set_pageformat(current_page.width,current_page.height)
     else
         -- 186467sp = 1mm
         local pagewd = current_page.width / 186467
         local pageht = current_page.height / 186467
-
-        xpath.set_variable("_pagewidth", tostring(math.round(pagewd,0)) .. "mm")
-        xpath.set_variable("_pageheight", tostring(math.round(pageht,0)) .. "mm")
+        if newxpath then
+            data.vars["_pagewidth"] = tostring(math.round(pagewd,0)) .. "mm"
+            data.vars["_pageheight"] = tostring(math.round(pageht,0)) .. "mm"
+        else
+            xpath.set_variable("_pagewidth", tostring(math.round(pagewd,0)) .. "mm")
+            xpath.set_variable("_pageheight", tostring(math.round(pageht,0)) .. "mm")
+        end
     end
-    local mattername = pagetype.part or xpath.get_variable("_matter")
+
+    local mattername
+    if newxpath then
+        mattername = pagetype.part or xpath.string_value(data.vars["_matter"])
+    else
+        mattername = pagetype.part or xpath.get_variable("_matter")
+    end
     current_page.matter = mattername
 
     for _,j in ipairs(pagetype) do
@@ -2307,8 +2424,14 @@ function initialize_page(pagenumber)
     current_page.grid:set_width_height({wd = gridwidth, ht = gridheight, nx = nx, ny = ny, dx = dx, dy = dy })
 
     -- The default color is applied during ship-out
-    if pagetype.layoutxml and pagetype.layoutxml.defaultcolor then
-        current_page.defaultcolor = read_attribute(pagetype.layoutxml,nil,"defaultcolor","string")
+    if newxpath then
+        if pagetype.layoutxml and pagetype.layoutxml[".__attributes"].defaultcolor then
+            current_page.defaultcolor = read_attribute(pagetype.layoutxml,nil,"defaultcolor","string")
+        end
+    else
+        if pagetype.layoutxml and pagetype.layoutxml.defaultcolor then
+            current_page.defaultcolor = read_attribute(pagetype.layoutxml,nil,"defaultcolor","string")
+        end
     end
     current_page.graphic = pagetype.graphic
     local columnordering = pagetype.columnordering
@@ -2327,7 +2450,9 @@ function initialize_page(pagenumber)
             current_grid.positioning_frames[name] = {}
             local current_positioning_area = current_grid.positioning_frames[name]
             -- we evaluate now, because the attributes in PositioningFrame can be page dependent.
-            local tab  = dispatch(element_contents(j).layoutxml,element_contents(j).dataxml)
+            local d = element_contents(j).dataxml
+            local l = element_contents(j).layoutxml
+            local tab  = dispatch(l,d)
             local tmp = {}
             for i,k in ipairs(tab) do
                 tmp[#tmp + 1] = element_contents(k)
@@ -2357,10 +2482,16 @@ function initialize_page(pagenumber)
         local cpn = current_pagenumber
         current_pagenumber = thispage
         current_grid = pages[thispage].grid
-        dispatch(current_page.atpagecreation,nil)
+        dispatch(current_page.atpagecreation,data)
         current_pagenumber = cpn
         pagebreak_impossible = false
-        local graphic = current_page.atpagecreation.graphic
+        local graphic
+        if newxpath then
+            local attrs = current_page.atpagecreation[".__attributes"]
+            if attrs then graphic = attrs.graphic end
+        else
+            graphic = current_page.atpagecreation.graphic
+        end
         if graphic then
             local _,whatsit, _ = metapost.prepareboxgraphic(current_page.width,current_page.height,graphic,metapost.extra_page_parameter(current_page))
             place_at(current_page.pagebox,whatsit, current_page.grid.extra_margin,current_page.height+current_page.grid.extra_margin)
@@ -2385,24 +2516,24 @@ end
 -- skippages are set in commands.new_page if openon="..."
 skippages = nil
 --- _Must_ be called before something can be put on the page. Looks for hooks to be run before page creation.
-function setup_page(pagenumber,fromwhere)
+function setup_page(pagenumber,fromwhere,dataxml)
     if current_group then return end
     if skippages then
         local tmp = skippages
         skippages = nil
         if tmp.doubleopen then
-            new_page("setup_page - skippages doubleopen")
+            new_page("setup_page - skippages doubleopen",dataxml)
             nextpage = tmp.skippagetype
         end
-        new_page("setup_page - skippages 2")
+        new_page("setup_page - skippages 2",dataxml)
         nextpage = tmp.pagetype
     end
 
-     initialize_page(pagenumber)
+     initialize_page(pagenumber,dataxml)
 end
 
 --- Switch to the next frame in the given area.
-function next_area( areaname, grid )
+function next_area( areaname, grid, dataxml )
     grid = grid or current_grid
     local current_framenumber = grid:framenumber(areaname)
     if not current_framenumber then
@@ -2410,7 +2541,7 @@ function next_area( areaname, grid )
         return
     end
     if current_framenumber >= grid:number_of_frames(areaname) then
-        new_page("next_area")
+        new_page("next_area",dataxml)
     else
         grid:set_framenumber(areaname, current_framenumber + 1)
     end
@@ -2420,7 +2551,7 @@ end
 
 --- Switch to a new page and ship out the current page.
 --- This new page is only created if something is typeset on it.
-function new_page(from)
+function new_page(from,dataxml)
     -- w("new page from %s",from or "-")
     if pagebreak_impossible then
         return
@@ -2428,18 +2559,18 @@ function new_page(from)
     local thispage = pages[current_pagenumber]
     if not thispage then
         -- new_page() is called without anything on the page yet
-        setup_page(nil,"new_page")
+        setup_page(nil,"new_page",dataxml)
         thispage = current_page
     end
 
-    dothingsbeforeoutput(thispage)
+    dothingsbeforeoutput(thispage,data)
 
     local n = node.vpack(pages[current_pagenumber].pagebox)
     if current_pagestore_name then
         local thispagestore = pagestore[current_pagestore_name]
         thispagestore[#thispagestore + 1] = n
     else
-        shipout(n,current_pagenumber)
+        shipout(n,current_pagenumber,dataxml)
     end
     current_pagenumber = current_pagenumber + 1
 end
@@ -2448,17 +2579,17 @@ function clearpage(options)
     local thispage = pages[current_pagenumber]
 
     if thispage then
-        dothingsbeforeoutput(thispage)
+        dothingsbeforeoutput(thispage,data)
         local n = node.vpack(pages[current_pagenumber].pagebox)
-        shipout(n,current_pagenumber)
+        shipout(n,current_pagenumber,options.dataxml)
         current_pagenumber = current_pagenumber + 1
     else
         if options.force then
-            initialize_page()
+            initialize_page(nil,options.dataxml)
             local tmp = pages[current_pagenumber]
-            dothingsbeforeoutput(tmp)
+            dothingsbeforeoutput(tmp,data)
             local n = node.vpack(pages[current_pagenumber].pagebox)
-            shipout(n,current_pagenumber)
+            shipout(n,current_pagenumber,options.dataxml)
             current_pagenumber = current_pagenumber + 1
         end
     end
@@ -2473,16 +2604,20 @@ function clearpage(options)
         if options.skippagetype then
             nextpage = options.skippagetype
         end
-        initialize_page()
+        initialize_page(nil,options.dataxml)
         local tmp = pages[current_pagenumber]
-        dothingsbeforeoutput(tmp)
+        dothingsbeforeoutput(tmp,data)
         local n = node.vpack(pages[current_pagenumber].pagebox)
-        shipout(n,current_pagenumber)
+        shipout(n,current_pagenumber,options.dataxml)
         current_pagenumber = current_pagenumber + 1
     end
 
     if options.matter then
-        xpath.set_variable("_matter",options.matter)
+        if newxpath then
+            options.dataxml.vars["_matter"] = options.matter
+        else
+            xpath.set_variable("_matter",options.matter)
+        end
     end
     if options.pagetype then
         nextpage = options.pagetype
@@ -2511,7 +2646,7 @@ function bgtext( box, textstring, angle, colorname, fontfamily, bgsize)
 
     a = par:new(nil,"bgtext")
     a:append(textstring, {fontfamily = fontfamily,color = colorindex})
-    a:mknodelist()
+    a:mknodelist(data)
     local textbox = node.hpack(a.objects[1])
     local rotated_height = sin * textbox.width  + cos * textbox.height
     local scale
@@ -3544,12 +3679,12 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
 end
 
 --- After everything is ready for page ship-out, we add debug output and crop marks if necessary
-function dothingsbeforeoutput( thispage )
+function dothingsbeforeoutput( thispage,data )
     local cg = thispage.grid
 
     if thispage and thispage.AtPageShipout then
         pagebreak_impossible = true
-        dispatch(thispage.AtPageShipout)
+        dispatch(thispage.AtPageShipout,data)
         pagebreak_impossible = false
         local graphic = thispage.AtPageShipout.graphic
         if graphic then
@@ -3694,32 +3829,83 @@ end
 --- `default` gives something that is to be returned if no attribute with this name is present.
 function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     local namespaces = layoutxml[".__ns"]
-    if not layoutxml[attname] then
-        return default -- can be nil
+
+    local attr
+
+    if newxpath then
+        local attributes = layoutxml[".__attributes"]
+        if not attributes then
+            return default
+        end
+        if not attributes[attname] then
+            return default
+        end
+        attr = attributes[attname]
+    else
+        if not layoutxml[attname] then
+            return default -- can be nil
+        end
+        attr = layoutxml[attname]
     end
 
     local val,num,ret
     if typ ~= "xpath" and typ ~= "xpathraw" then
-        val = string.gsub(layoutxml[attname],"{(.-)}", function (x)
-            local ok, xp = xpath.parse_raw(dataxml,x,namespaces)
-            if not ok then
-                err(xp)
-                return nil
+        val = string.gsub(attr,"{(.-)}", function (x)
+            if newxpath then
+                local copysequence = dataxml.sequence
+                local seq, msg = dataxml:eval(x)
+                if msg then
+                    err(msg)
+                    return nil
+                end
+                local txt
+                txt, msg = xpath.string_value(seq)
+                if msg then
+                    err(msg)
+                    return nil
+                end
+                dataxml.sequence = copysequence
+                return txt
+            else
+                local ok, xp = xpath.parse_raw(dataxml,x,namespaces)
+                if not ok then
+                    err(xp)
+                    return nil
+                end
+                return xpath.textvalue(xp[1])
             end
-            return xpath.textvalue(xp[1])
-            end)
+        end)
     else
-        val = layoutxml[attname]
+        val = attr
     end
+
     if val == "nil" then val = nil end
     if typ=="xpath" then
-        return xpath.textvalue(xpath.parse(dataxml,val,namespaces))
-    elseif typ=="xpathraw" then
-        local ok,tmp = xpath.parse_raw(dataxml,val,namespaces)
-        if not ok then err(tmp)
-            return nil
+        if newxpath then
+            local seq, msg = dataxml:eval(val)
+            if msg then
+                err(msg)
+                return nil
+            end
+            return xpath.string_value(seq)
         else
-            return tmp
+            return xpath.textvalue(xpath.parse(dataxml,val,namespaces))
+        end
+    elseif typ=="xpathraw" then
+        if newxpath then
+            local seq, msg = dataxml:eval(val)
+            if msg then
+                err(msg)
+                return nil
+            end
+            return seq
+        else
+            local ok,tmp = xpath.parse_raw(dataxml,val,namespaces)
+            if not ok then err(tmp)
+                return nil
+            else
+                return tmp
+            end
         end
     elseif typ=="string" then
         return tostring(val or default)
@@ -3741,7 +3927,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     elseif typ=="height_sp" then
         num = tonumber(val or default)
         if num then -- most likely really a number, we need to multiply with grid height
-            setup_page(nil,"read_attribute height_sp")
+            setup_page(nil,"read_attribute height_sp",dataxml)
             ret = current_page.grid.gridheight * num
         else
             ret = val
@@ -3751,7 +3937,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     elseif typ=="width_sp" then
         num = tonumber(val or default)
         if num then -- most likely really a number, we need to multiply with grid width
-            setup_page(nil,"read_attribute width_sp")
+            setup_page(nil,"read_attribute width_sp",dataxml)
             ret = current_page.grid:width_sp(num)
         else
             ret = val
@@ -3809,10 +3995,10 @@ marker.value = 1
 
 --- Convert `<b>`, `<u>` and `<i>` in text to publisher recognized elements.
 -- The 'new' HTML parse is in the file html.lua
-function parse_html( elt, parameter )
+function parse_html( elt, parameter, data )
     parameter = parameter or {}
     if elt.typ == "csshtmltree" then
-        return html.parse_html_new(elt, parameter)
+        return html.parse_html_new(elt, parameter, data)
     else
         err("This should not happen (parse_html)")
     end
@@ -3981,9 +4167,9 @@ function insert_nonmoving_whatsits( head, parent, blockinline )
                 prev_role = role
             end
             if insert_endcolor then
-                local colstop  = node.new("whatsit","pdf_colorstack")
+                local colstop = node.new("whatsit","pdf_colorstack")
                 set_attributes(colstop,attribs)
-                colstop.data  = ""
+                colstop.data = ""
                 colstop.command = 2
                 colstop.stack = defaultcolorstack
                 setprop(colstop,"origin","setcolor")
@@ -4007,7 +4193,7 @@ function insert_nonmoving_whatsits( head, parent, blockinline )
                     thispage.transparenttext[alpha] = true
                     col = col .. string.format("/TRP%d gs",alpha )
                 end
-                colstart.data  = col
+                colstart.data = col
                 colstart.command = 1
                 colstart.stack = defaultcolorstack
 
@@ -5468,7 +5654,7 @@ function do_linebreak( nodelist,hsize,parameters )
     finish_par(nodelist,hsize,parameters)
 
     local pdfignoreddimen
-    pdfignoreddimen    = -65536000
+    pdfignoreddimen = -65536000
 
 
     local default_parameters = {
@@ -5727,7 +5913,7 @@ function set_color_if_necessary( nodelist,color )
     colstart.command = 1
     colstop.command  = 2
     colstart.stack = defaultcolorstack
-    colstop.stack = defaultcolorstack
+    colstop.stack  = defaultcolorstack
 
     if dontformat then
         node.set_attribute(colstart,att_dont_format,dontformat)
@@ -5886,7 +6072,7 @@ function matrix( nodelist,matrix,origin_x,origin_y )
     local pdf_literal_q = node.new("whatsit","pdf_literal")
     local pdf_literal_Q = node.new("whatsit","pdf_literal")
 
-    pdf_literal_q.data   = string.format("q 1 0 0 1 %g -%g cm  q %g %g %g %g %g %g cm q 1 0 0 1 -%g %g cm ",x,y,tbl[1],tbl[2],tbl[3],tbl[4],tbl[5],tbl[6],x,y )
+    pdf_literal_q.data = string.format("q 1 0 0 1 %g -%g cm  q %g %g %g %g %g %g cm q 1 0 0 1 -%g %g cm ",x,y,tbl[1],tbl[2],tbl[3],tbl[4],tbl[5],tbl[6],x,y )
     pdf_literal_Q.data = "Q Q Q"
 
     local pdf_save    = node.new("whatsit","pdf_save")
@@ -5933,7 +6119,7 @@ function rotate( nodelist,angle,origin_x,origin_y )
     Q.data = "Q Q Q"
     tail.next = Q
     local tmp = node.vpack(q)
-    tmp.width  = 0
+    tmp.width = 0
     tmp.height = 0
     tmp.depth = 0
     return tmp
@@ -6327,7 +6513,7 @@ function get_remaining_height(area,allocate)
         err("get remaining height: no current row")
         firstrow = 1
     end
-    maxrows  = current_grid:number_of_rows(area)
+    maxrows = current_grid:number_of_rows(area)
     if allocate == "auto" then
         while firstrow <= maxrows and (not current_grid:row_has_some_space(firstrow,area)) do
             firstrow = firstrow + 1
@@ -6378,7 +6564,7 @@ function get_remaining_height(area,allocate)
 
 end
 
-function next_row(rownumber,areaname,rows)
+function next_row(rownumber,areaname,rows,dataxml)
     local grid = current_grid
 
     if rownumber then
@@ -6389,8 +6575,8 @@ function next_row(rownumber,areaname,rows)
     local current_row
     current_row = grid:find_suitable_row(1,grid:number_of_columns(areaname),rows,areaname)
     if not current_row then
-        next_area(areaname)
-        setup_page(nil,"next_row")
+        next_area(areaname,nil, dataxml)
+        setup_page(nil,"next_row",dataxml)
         grid = current_page.grid
         grid:set_current_row(1)
     else
@@ -6573,14 +6759,18 @@ end
 -- (starting from the current_pagenumber).
 -- This is used in tables to get the height of a page in a multi
 -- page table. Called from tabular.lua / set in commands.lua (#table)
-function getheight( relative_framenumber )
+function getheight( relative_framenumber,dataxml )
     local grid = current_grid
     local cp, cg, cpn, cfn -- current page, current grid, current page number, current frame number
     cp = current_page
     cg = current_grid
     cpn = current_pagenumber
-
-    local areaname = xpath.get_variable("__currentarea")
+    local areaname
+    if newxpath then
+        areaname = dataxml.vars["__currentarea"]
+    else
+        areaname = xpath.get_variable("__currentarea")
+    end
     local current_framenumber = grid:framenumber(areaname)
     cfn = current_framenumber
 
@@ -6595,7 +6785,7 @@ function getheight( relative_framenumber )
             -- parameter. Therefore the current_pagenumber has to be set
             current_pagenumber = thispagenumber
             if not thispage then
-                setup_page(thispagenumber,"getheight")
+                setup_page(thispagenumber,"getheight",dataxml)
             end
             current_framenumber = 1
         else
@@ -6946,7 +7136,7 @@ function calculate_image_width_height( image, width, height, minwidth, minheight
         height = maxheight
     elseif width < minwidth and height < minheight and minwidth / width <= minheight / height then
         -- w("8")
-        width  = math.min(maxwidth,minheight * width / height)
+        width = math.min(maxwidth,minheight * width / height)
         height = minheight
     elseif width < minwidth and height < minheight and minwidth / width > minheight / height then
         -- w("9")
@@ -7081,17 +7271,28 @@ function imageinfo( filename,page,box,fallback,imageshape )
             if not xmltab then
                 err(msg)
             else
+                if newxpath then
+                    -- document node, need the root node.
+                    -- should be more complex like root(),
+                    -- -> needts to be fixed in the future
+                    xmltab = xmltab[1]
+                end
                 mt = {}
                 local segments = {}
                 local cells_x,cells_y
                 for _,v in ipairs(xmltab) do
                     if v[".__local_name"] == "cells_x" then
-                        cells_x = v[1]
+                        cells_x = tonumber(v[1])
                     elseif v[".__local_name"] == "cells_y" then
-                        cells_y = v[1]
+                        cells_y = tonumber(v[1])
                     elseif v[".__local_name"] == "segment" then
                         -- 0 based segments
-                        segments[#segments + 1] = {v.x1,v.y1,v.x2,v.y2}
+                        if newxpath then
+                            local attrs = v[".__attributes"]
+                            segments[#segments + 1] = {tonumber(attrs.x1),tonumber(attrs.y1),tonumber(attrs.x2),tonumber(attrs.y2)}
+                        else
+                            segments[#segments + 1] = {tonumber(v.x1),tonumber(v.y1),tonumber(v.x2),tonumber(v.y2)}
+                        end
                     end
                 end
                 -- we have parsed the file, let's build a beautiful 2dim array
@@ -7302,8 +7503,14 @@ function flush_table(tbl)
     end
 end
 
+-- clear variable
 function flush_variable( varname )
-    local x = xpath.get_variable(varname)
+    local x
+    if newxpath then
+        x = data.vars[varname]
+    else
+        x = xpath.get_variable(varname)
+    end
     if type(x) == "table" then
         flush_table(x)
     end

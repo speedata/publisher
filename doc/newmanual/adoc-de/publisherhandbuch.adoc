@@ -51,9 +51,9 @@ endif::[]
 - <<ch-kommandozeile,Starten des Publishers über die Kommandozeile>>
 - <<ch-konfiguration,Konfiguration des Publishers>>
 - <<app-massangaben,Längenangaben und Maßeinheiten>>
-- <<ch-xpathfunktionen,XPath- und Layoutfunktionen>>
+- <<ch-xpathfunktionen,XPath- und Layoutfunktionen (alter XPath Parser)>>
+- <<ch-lxpath,XPath- und Layoutfunktionen (neuer XPath Parser)>>
 - <<ch-internevariablen,Interne Variablen>>
-// - <<ch-htmlreferenz,HTML Referenz>>
 - <<ch-changelog,Liste der Änderungen>>
 - <<ch-anhang-schemazuweisen>>
 - <<ch-speedatapro>>
@@ -71,7 +71,6 @@ include::programmierung.adoc[]
 include::bilder.adoc[]
 include::tabellen.adoc[]
 include::saasapide.adoc[]
-// include::kaphtml.adoc[]
 include::fortgeschrittenethemen.adoc[]
 include::kochbuch.adoc[]
 
@@ -86,6 +85,7 @@ include::kommandozeile.adoc[]
 include::konfigurationsdatei.adoc[]
 include::massangaben.adoc[]
 include::xpathfunktionen.adoc[]
+include::lxpath.adoc[]
 include::variablen.adoc[]
 include::schemazuweisen.adoc[]
 include::speedataprode.adoc[]

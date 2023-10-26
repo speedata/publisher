@@ -1,0 +1,71 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="10cm" width="7cm" />
+
+    <Record element="data">
+      <PlaceObject>
+        <Table>
+          <Tr backgroundcolor="{sd:alternating('tab','white','goldenrod')}">
+            <Td>
+              <Paragraph><Value>one</Value></Paragraph>
+            </Td>
+          </Tr>
+          <Tr backgroundcolor="{sd:alternating('tab','white','goldenrod')}">
+            <Td>
+              <Paragraph><Value>two</Value></Paragraph>
+            </Td>
+          </Tr>
+          <Tr backgroundcolor="{sd:alternating('tab','white','goldenrod')}">
+            <Td>
+              <Paragraph><Value>three</Value></Paragraph>
+            </Td>
+          </Tr>
+        </Table>
+      </PlaceObject>
+      <NextRow />
+      <Value select="sd:reset-alternating('tab')" />
+
+      <PlaceObject>
+        <Table>
+          <Tr backgroundcolor="{sd:alternating('tab','white','goldenrod')}">
+            <Td>
+              <Paragraph><Value>one</Value></Paragraph>
+            </Td>
+          </Tr>
+          <Tr backgroundcolor="{sd:alternating('tab','white','goldenrod')}">
+            <Td>
+              <Paragraph><Value>two</Value></Paragraph>
+            </Td>
+          </Tr>
+          <Tr backgroundcolor="{sd:alternating('tab','white','goldenrod')}">
+            <Td>
+              <Paragraph><Value>three</Value></Paragraph>
+            </Td>
+          </Tr>
+        </Table>
+      </PlaceObject>
+      <NextRow />
+      <Value select="sd:reset-alternating('tab')" />
+      <PlaceObject>
+        <Table>
+          <Tr backgroundcolor="{sd:alternating('tab','white','goldenrod')}">
+            <Td>
+              <Paragraph><Value>one</Value></Paragraph>
+            </Td>
+          </Tr>
+          <Tr backgroundcolor="{sd:alternating('tab','white','goldenrod')}">
+            <Td>
+              <Paragraph><Value>two</Value></Paragraph>
+            </Td>
+          </Tr>
+          <Tr backgroundcolor="{sd:keep-alternating('tab','white','goldenrod')}">
+            <Td>
+              <Paragraph><Value>three</Value></Paragraph>
+            </Td>
+          </Tr>
+        </Table>
+      </PlaceObject>
+
+
+   </Record>
+</Layout>

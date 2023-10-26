@@ -197,6 +197,18 @@ static int lua_loadxmlfile(lua_State *L) {
   return 1;
 }
 
+static int lua_loadxmlstring(lua_State *L) {
+  const char *xmltext = luaL_checkstring(L, -1);
+  lua_pop(L, 1);
+
+  const char *ret = sdReadXMLString(xmltext);
+  if (handleerror(L, ret) == 1) {
+    return 0;
+  }
+  lua_pushstring(L, ret);
+  return 1;
+}
+
 static int lua_lookupfile(lua_State *L) {
   const char *filename = luaL_checkstring(L, -1);
   lua_pop(L, 1);
@@ -264,6 +276,7 @@ static const struct luaL_Reg myfuncs[] = {
     {"htmltoxml", lua_htmltoxml},
     {"listfonts", lua_listfonts},
     {"loadxmlfile", lua_loadxmlfile},
+    {"loadxmlstring", lua_loadxmlstring},
     {"lookupfile", lua_lookupfile},
     {"matches",lua_matches},
     {"parse_html_text", lua_parsehtmltext},

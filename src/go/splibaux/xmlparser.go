@@ -80,17 +80,13 @@ func readXMLFile(r io.Reader, startindex, extraindentlevel int) (string, error) 
 					}
 				}
 				fmt.Fprintf(&out, "%s},\n", indent(indentamount))
-				for k, val := range attributes {
-					fmt.Fprintf(&out, `%s["%s"] = "%s", `, indent(indentamount), luaescape(k), luaescape(val))
-					fmt.Fprintln(&out)
-				}
+				fmt.Fprintf(&out, `%s[".__attributes"] = {`, indent(indentamount))
 				if len(attributes) > 0 {
-					fmt.Fprintf(&out, `%s[".__attributes"] = {`, indent(indentamount))
 					for k, val := range attributes {
 						fmt.Fprintf(&out, `["%s"] = "%s", `, luaescape(k), luaescape(val))
 					}
-					fmt.Fprintln(&out, "},")
 				}
+				fmt.Fprintln(&out, "},")
 			}
 			stackcounter[indentlevel]++
 			indentlevel++

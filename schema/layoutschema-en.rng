@@ -209,6 +209,9 @@
                      <ref name="e_Until"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Value"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_While"></ref>
                   </optional>
                </oneOrMore>
@@ -332,6 +335,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Until"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Value"></ref>
                   </optional>
                   <optional>
                      <ref name="e_While"></ref>
@@ -1260,6 +1266,9 @@
                      <ref name="e_Until"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Value"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_While"></ref>
                   </optional>
                </oneOrMore>
@@ -2088,6 +2097,72 @@
          </interleave>
       </element>
    </define>
+   <define name="e_Function">
+      <element name="Function">
+         <a:documentation>Define a function</a:documentation>
+         <interleave>
+            <group>
+               <attribute name="name">
+                  <a:documentation>The name of the function (with namespace prefix).</a:documentation>
+               </attribute>
+               <zeroOrMore>
+                  <ref name="e_Param"></ref>
+               </zeroOrMore>
+               <oneOrMore>
+                  <optional>
+                     <ref name="e_ClearPage"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Column"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Columns"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_ForAll"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Group"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_LoadDataset"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Loop"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Message"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_NextFrame"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_NextRow"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_PlaceObject"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_ProcessNode"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_SaveDataset"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_SetVariable"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Switch"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Value"></ref>
+                  </optional>
+               </oneOrMore>
+            </group>
+            <ref name="foreign-nodes"></ref>
+         </interleave>
+      </element>
+   </define>
    <define name="e_Grid">
       <element name="Grid">
          <a:documentation>Override the grid settings from SetGrid.</a:documentation>
@@ -2776,6 +2851,9 @@
                   </optional>
                   <optional>
                      <ref name="e_DefineMatter"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Function"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Hyphenation"></ref>
@@ -4175,6 +4253,15 @@
          </interleave>
       </element>
    </define>
+   <define name="e_Param">
+      <element name="Param">
+         <a:documentation>Specify a parameter for a function definition.</a:documentation>
+         <attribute name="name">
+            <a:documentation>The name of the parameter.</a:documentation>
+         </attribute>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Pageformat">
       <element name="Pageformat">
          <a:documentation>The size of the PDF pages. Defaults to 210mm width and 297mm height (A4)</a:documentation>
@@ -4923,6 +5010,9 @@
                      <ref name="e_Until"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Value"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_While"></ref>
                   </optional>
                </oneOrMore>
@@ -5141,6 +5231,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Until"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Value"></ref>
                      </optional>
                      <optional>
                         <ref name="e_While"></ref>

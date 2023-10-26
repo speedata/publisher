@@ -50,7 +50,8 @@ endif::[]
 - <<ch-commandline,Running the speedata publisher on the command line>>
 - <<ch-configuration,How to configure the speedata publisher>>
 - <<app-lengthsunits,Lenghts and units>>
-- <<ch-xpathfunctions,XPath- and layoutfunctions>>
+- <<ch-xpathfunctions,XPath- and layoutfunctions (old xpath parser)>>
+- <<ch-lxpath,XPath- and layoutfunctions (new xpath parser)>>
 - <<ch-internalvariables,Internal variables>>
 - <<ch-appendix-schema-assigning>>
 - <<ch-speedatapro>>
@@ -81,6 +82,7 @@ include::commandline.adoc[]
 include::configuration.adoc[]
 include::lengthsunits.adoc[]
 include::xpath.adoc[]
+include::lxpath.adoc[]
 include::internalvariables.adoc[]
 include::associateschema.adoc[]
 include::speedataproen.adoc[]

@@ -7,7 +7,6 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -41,7 +40,6 @@ const (
 	cmdNew        = "new"
 	cmdWatch      = "watch"
 	cmdHelp       = "help"
-	cmdHTML       = "html"
 
 	osWindows = "windows"
 	osLinux   = "linux"
@@ -59,32 +57,31 @@ var (
 )
 
 var (
-	options             map[string]string
-	defaults            map[string]string
-	layoutoptions       map[string]string
-	variables           map[string]string
-	installdir          string
-	bindir              string
-	libdir              string
-	srcdir              string
-	pathToDocumentation string // Where the documentation (index.html) is
-	inifile             string
-	homecfg             string
-	systemcfg           string
-	pwd                 string
-	exeSuffix           string
-	homedir             string
-	addLocalPath        bool // Add pwd recursively to extra-dir
-	useSystemFonts      bool
-	configfilename      string
-	mainlanguage        string
-	extraDir            []string
-	extraxml            []string
-	prependxml          []string
-	starttime           time.Time
-	cfg                 *configurator.ConfigData
-	runningProcess      []*os.Process
-	versionWithPro      string
+	options        map[string]string
+	defaults       map[string]string
+	layoutoptions  map[string]string
+	variables      map[string]string
+	installdir     string
+	bindir         string
+	libdir         string
+	srcdir         string
+	inifile        string
+	homecfg        string
+	systemcfg      string
+	pwd            string
+	exeSuffix      string
+	homedir        string
+	addLocalPath   bool // Add pwd recursively to extra-dir
+	useSystemFonts bool
+	configfilename string
+	mainlanguage   string
+	extraDir       []string
+	extraxml       []string
+	prependxml     []string
+	starttime      time.Time
+	cfg            *configurator.ConfigData
+	runningProcess []*os.Process
+	versionWithPro string
 
 	verbose bool
 )
@@ -138,7 +135,7 @@ func init() {
 		"inkscape-command":  "--export-pdf",
 		"fontloader":        "fontforge",
 		"referencefilename": "reference",
-		"xmlparser":         "lua",
+		"xpath":             "luxor",
 	}
 
 	switch runtime.GOOS {
@@ -192,26 +189,15 @@ func init() {
 	configfilename = "publisher.cfg"
 	mainlanguage = "en_GB"
 
-	// LC_ALL is something like "de_DE.UTF-8"
-	re := regexp.MustCompile("^(d|D)(e|E)")
-	var indexpage string
-	if re.MatchString(os.Getenv("LANG")) {
-		indexpage = filepath.Join("de", "index.html")
-	} else {
-		indexpage = filepath.Join("en", "index.html")
-	}
-
 	switch dest {
 	case "linux-usr":
 		libdir = "/usr/share/speedata-publisher/lib"
 		srcdir = "/usr/share/speedata-publisher/sw"
 		os.Setenv("PUBLISHER_BASE_PATH", "/usr/share/speedata-publisher")
 		os.Setenv("LUA_PATH", fmt.Sprintf("%s/lua/?.lua;%s/lua/common/?.lua;", srcdir, srcdir))
-		pathToDocumentation = "/usr/share/doc/speedata-publisher/" + indexpage
 	case "directory":
 		libdir = filepath.Join(installdir, "share", "lib")
 		srcdir = filepath.Join(installdir, "sw")
-		pathToDocumentation = filepath.Join(installdir, "share/doc/"+indexpage)
 		os.Setenv("PUBLISHER_BASE_PATH", srcdir)
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
 	default:
@@ -227,7 +213,6 @@ func init() {
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
 		extradir(filepath.Join(installdir, "fonts"))
 		extradir(filepath.Join(installdir, "img"))
-		pathToDocumentation = filepath.Join(installdir, "/build/manual/"+indexpage)
 	}
 	os.Setenv("LUA_CPATH", libdir+"/?.so;"+libdir+"/?.dll;")
 	inifile = filepath.Join(srcdir, "lua/sdini.lua")
@@ -387,8 +372,8 @@ func run(command string, cmdline []string, environ []string) (errorcode int) {
 	runningProcess = append(runningProcess, cmd.Process)
 
 	if getOption("quiet") == stringTrue {
-		go io.Copy(ioutil.Discard, stdout)
-		go io.Copy(ioutil.Discard, stderr)
+		go io.Copy(io.Discard, stdout)
+		go io.Copy(io.Discard, stderr)
 	} else {
 		go io.Copy(os.Stdout, stdout)
 		go io.Copy(os.Stderr, stderr)
@@ -609,7 +594,7 @@ func fileExists(filename string) bool {
 }
 
 func writeFinishedfile(path string) {
-	ioutil.WriteFile(path, []byte("finished\n"), 0600)
+	os.WriteFile(path, []byte("finished\n"), 0600)
 }
 
 func runPublisher(cachemethod string, runmode string, filename string) (exitstatus int) {
@@ -637,7 +622,7 @@ func runPublisher(cachemethod string, runmode string, filename string) (exitstat
 
 	layoutoptions["grid"] = getOption("grid")
 	os.Setenv("SP_FONTLOADER", getOption("fontloader"))
-	os.Setenv("SP_XMLPARSER", getOption("xmlparser"))
+	os.Setenv("SP_XMLPARSER", getOption("xpath"))
 
 	layoutoptions["reportmissingglyphs"] = getOption("reportmissingglyphs")
 
@@ -680,10 +665,6 @@ func runPublisher(cachemethod string, runmode string, filename string) (exitstat
 	if dummyData := getOption("dummy"); dummyData == stringTrue {
 		dataname = "-dummy"
 	}
-	if runmode == cmdHTML {
-		dataname = "-dummy"
-		layoutoptionsSlice = append(layoutoptionsSlice, `html=`+filename)
-	}
 	runs, err := strconv.Atoi(getOption("runs"))
 	if err != nil {
 		log.Fatal(err)
@@ -721,7 +702,7 @@ See https://github.com/speedata/publisher/issues/310 for details.
 			if nerr != nil {
 				log.Fatal(nerr)
 			}
-			err = ioutil.WriteFile(fmt.Sprintf("%s.status", jobname), data, 0600)
+			err = os.WriteFile(fmt.Sprintf("%s.status", jobname), data, 0600)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -734,7 +715,7 @@ See https://github.com/speedata/publisher/issues/310 for details.
 		}
 	}
 	// todo: DRY code -> server/status
-	data, err := ioutil.ReadFile(fmt.Sprintf("%s.status", jobname))
+	data, err := os.ReadFile(fmt.Sprintf("%s.status", jobname))
 	if err == nil {
 		v := new(status)
 		err = xml.Unmarshal(data, &v)
@@ -813,12 +794,12 @@ func scaffold(extra ...string) error {
 </Layout>
 `
 
-	err = ioutil.WriteFile("data.xml", []byte(dataTxt), 0644)
+	err = os.WriteFile("data.xml", []byte(dataTxt), 0644)
 	if err != nil {
 		return err
 	}
 
-	err = ioutil.WriteFile("layout.xml", []byte(layoutTxt), 0644)
+	err = os.WriteFile("layout.xml", []byte(layoutTxt), 0644)
 	if err != nil {
 		return err
 	}
@@ -896,6 +877,7 @@ func main() {
 	op.On("--verbose", "Print a bit of debugging output", options)
 	op.On("--version", "Show version information", versioninfo)
 	op.On("--wd DIR", "Change working directory", options)
+	op.On("--xpath MODE", "Set the xpath mode (old: 'luxor', new: 'lxpath'). Default is luxor", options)
 	op.On("--xml", "Output as (pseudo-)XML (for list-fonts)", options)
 
 	op.Command(cmdHelp, "Show usage help")
@@ -904,7 +886,6 @@ func main() {
 	op.Command(cmdClearcache, "Clear image cache")
 	op.Command(cmdDoc, "Open documentation")
 	op.Command(cmdListFonts, "List installed fonts (use together with --xml for copy/paste)")
-	op.Command(cmdHTML, "Run in HTML mode")
 	op.Command(cmdNew, "Create simple layout and data file to start. Provide optional directory")
 	op.Command(cmdRun, "Start publishing (default)")
 	op.Command(cmdServer, "Run as http-api server on localhost port 5266 (configure with --address and --port)")
@@ -956,9 +937,6 @@ func main() {
 		// more than one command given, what should I do?
 		command = op.Extra[0]
 	}
-	if command == cmdHTML {
-		defaults["layout"] = "_internallayouthtml.xml"
-	}
 
 	// ... but if the local config file has a wd=... option, we should honor this
 	// and also honor the settings in that publisher.cfg file
@@ -973,7 +951,7 @@ func main() {
 			cfg.ReadFile(filepath.Join(pwd, configfilename))
 		}
 	}
-	if getOption("verbose") != "" {
+	if getOption("verbose") == "true" {
 		verbose = true
 		os.Setenv("SP_VERBOSITY", "1")
 		fmt.Println("Config files read: ", strings.Join(cfg.Filenames, ", "))
@@ -1192,21 +1170,6 @@ func main() {
 		}
 		cmdline := []string{"--luaonly", filepath.Join(srcdir, "lua", "sdscripts.lua"), inifile, "list-fonts", xml}
 		run(getExecutablePath(), cmdline, []string{"LC_ALL=C"})
-	case cmdHTML:
-		optHTMLfilename := getOption("htmlfilename")
-		var htmlfile string
-		if len(op.Extra) < 2 {
-			if optHTMLfilename == "" {
-				fmt.Println("command html must have one argument: the HTML file")
-				os.Exit(1)
-			}
-			htmlfile = optHTMLfilename
-		} else {
-			htmlfile = op.Extra[1]
-		}
-		jobname := strings.TrimSuffix(htmlfile, filepath.Ext(htmlfile))
-		options["jobname"] = jobname
-		runPublisher(cachemethod, cmdHTML, htmlfile)
 	case cmdNew:
 		err = scaffold(op.Extra[1:]...)
 		if err != nil {

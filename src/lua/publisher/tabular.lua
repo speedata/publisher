@@ -219,11 +219,11 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
                     cellheight = cellheight + ht + dp
                 elseif type(inlineobject)=="table" then
                     if inlineobject.min_width then
-                        local mw = inlineobject:min_width(inlineobject.alignment,{fontfamily = inlineobject.fontfamily or self.fontfamily})
+                        local mw = inlineobject:min_width(inlineobject.alignment,{fontfamily = inlineobject.fontfamily or self.fontfamily},self.dataxml)
                         min_wd = math.max(mw + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
                     end
                     if inlineobject.max_width_and_lineheight then
-                        local mw,cellheight = inlineobject:max_width_and_lineheight({fontfamily = inlineobject.fontfamily or self.fontfamily})
+                        local mw,_ = inlineobject:max_width_and_lineheight({fontfamily = inlineobject.fontfamily or self.fontfamily},self.dataxml)
                         max_wd = math.max(mw + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
                     end
                 elseif node.is_node(inlineobject) and node.has_field(inlineobject,"width") then
@@ -785,7 +785,7 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
                             format_width = math.max(format_width, mw * sin_angle )
                         end
 
-                        local v = inlineobject:format(format_width,{textformat = inlineobject.textformat,fontfamily = inlineobject.fontfamily or self.fontfamily })
+                        local v = inlineobject:format(format_width,{textformat = inlineobject.textformat,fontfamily = inlineobject.fontfamily or self.fontfamily }, self.dataxml)
                         cell = node.insert_after(cell,node.tail(cell),v)
                     else
                         w("no width given in paragraph")
@@ -1448,7 +1448,7 @@ function remove_bookmark_nodes( nodelist )
     return nodelist
 end
 
-function typeset_table(self)
+function typeset_table(self,dataxml)
     local current_row
     local tablehead_first = {}
     local tablehead = {}
@@ -1684,7 +1684,7 @@ function typeset_table(self)
                         -- page number (1 = first page of table, 2 = second page of table...)
                         -- The function might return nil, if it doesn't have enough information
                         -- to obtain the max height
-                        local ht = self.getheight(idx)
+                        local ht = self.getheight(idx,self.dataxml)
                         if ht then
                             val = ht - ht_head - footerheight
                             tbl[idx] = val
@@ -1939,7 +1939,11 @@ function typeset_table(self)
     tablepart_absolute = 0
     for s=2,#splits do
         tablepart_absolute = tablepart_absolute + 1
-        publisher.xpath.set_variable("_last_tr_data",nil)
+        if publisher.newxpath then
+            dataxml["_last_tr_data"] = nil
+        else
+            publisher.xpath.set_variable("_last_tr_data",nil)
+        end
         first_row_in_new_table = splits[s-1] + 1
 
         thissplittable = {}
@@ -1949,7 +1953,11 @@ function typeset_table(self)
         if last_tr_data and self.tablehead_contents then
             -- we have some data attached to table rows, so we re-format the header
             local val = dynamic_data[last_tr_data]
-            publisher.xpath.set_variable("_last_tr_data",val)
+            if publisher.newxpath then
+                dataxml["_last_tr_data"] = val
+            else
+                publisher.xpath.set_variable("_last_tr_data",val)
+            end
             local tmp1,tmp2 = reformat_head(self,s - 1)
             if s == 2 then
                 -- first page
@@ -1987,7 +1995,12 @@ function typeset_table(self)
         if last_tr_data and self.tablefoot_contents then
             -- we have some data attached to table rows, so we re-format the footer
             local val = dynamic_data[last_tr_data]
-            publisher.xpath.set_variable("_last_tr_data",val)
+            if publisher.newxpath then
+                dataxml.vars["_last_tr_data"] = val
+            else
+                publisher.xpath.set_variable("_last_tr_data",val)
+            end
+
             local tmp_tablefoot_last,tmp_tablefoot_all = reformat_foot(self,s - 1,#splits - 1)
             if s < #splits then
                 thissplittable[#thissplittable + 1] = node.copy_list(tmp_tablefoot_all)
@@ -2113,7 +2126,7 @@ function set_skip_table( self )
     -- body
 end
 
-function make_table( self )
+function make_table( self,dataxml )
     setmetatable(self.column_distances,{ __index = function() return self.colsep or 0 end })
     set_skip_table(self)
     collect_alignments(self)
@@ -2125,8 +2138,13 @@ function make_table( self )
     end
 
     calculate_rowheights(self)
-    publisher.xpath.set_variable("_last_tr_data","")
-    return typeset_table(self)
+    if publisher.newxpath then
+        dataxml.vars["_last_tr_data"] = ""
+    else
+        publisher.xpath.set_variable("_last_tr_data","")
+    end
+
+    return typeset_table(self,dataxml)
 end
 
 file_end("tabular.lua")

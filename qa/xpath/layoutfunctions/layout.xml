@@ -54,7 +54,7 @@
         </Paragraph>
         <Paragraph>
           <Value>Number of datasets 'entry': </Value>
-          <Value select="sd:number-of-datasets(entry)"></Value>
+          <Value select="count(entry)"></Value>
         </Paragraph>
         <Paragraph>
           <Value>Even 5: </Value>

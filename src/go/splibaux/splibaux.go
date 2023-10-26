@@ -105,7 +105,9 @@ func addFileToList(path string, info os.FileInfo, err error) error {
 			if ignorefile != path {
 				fb := filepath.Base(path)
 				if dup, found := files[fb]; found && verbosity > 0 {
-					fmt.Println("warning: duplicate entry in directories:", dup, "and", path)
+					if !strings.HasSuffix(dup, ".DS_Store") {
+						fmt.Println("warning: duplicate entry in directories:", dup, "and", path)
+					}
 				} else {
 					files[fb] = path
 				}
@@ -296,5 +298,12 @@ func ReadXMLFile(filename string) (string, error) {
 	}
 	str, err := readXMLFile(f, 1, 0)
 	f.Close()
-	return "tbl = {" + str + "}", err
+	return `tbl = { [".__type"] = "document", ` + str + "}", err
+}
+
+// ReadXMLString parses the XML string and return a Lua table as a string.
+func ReadXMLString(xmlstring string) (string, error) {
+	sr := strings.NewReader(xmlstring)
+	str, err := readXMLFile(sr, 1, 0)
+	return `tbl = { [".__type"] = "document", ` + str + "}", err
 }

@@ -309,7 +309,62 @@ Neben der while-Schleife gibt es noch die until-Schleife, die analog funktionier
 </Record>
 -------------------------------------------------------------------------------
 
+[[ch-programmingfunctions]]
+== Funktionen
 
+Es ist mit dem <<ch-lxpath,neuen XPath-Modul>> möglich, Funktionen zu definieren:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    xmlns:fn="mynamespace">
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="fn:add(3,4)" />
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+
+    <Function name="fn:add">
+        <Param name="a" />
+        <Param name="b" />
+        <Value select="$a + $b" />
+    </Function>
+</Layout>
+-------------------------------------------------------------------------------
+
+Die Funktionen können auch komplexere Ausdrücke enthalten:
+
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    xmlns:fn="mynamespace">
+
+    <Record element="data">
+        <Value select="fn:chapter('First chapter')" />
+    </Record>
+
+    <Function name="fn:chapter">
+        <Param name="chaptername" />
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="$chaptername"/>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Function>
+</Layout>
+-------------------------------------------------------------------------------
+
+Der Namensraum für die Funktion muss im Wurzelelement definiert werden (hier: `xmlns:fn="..."`). Variablen, die in der Funktion definiert werden, bleiben lokal, d.h. sind nicht in anderen Programmteilen sichtbar.
 
 == Datenstrukturen
 

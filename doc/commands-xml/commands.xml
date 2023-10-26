@@ -114,6 +114,7 @@
     <optional><cmd name="SortSequence"/></optional>
     <optional><cmd name="Switch"/></optional>
     <optional><cmd name="Until"/></optional>
+    <optional><cmd name="Value"/></optional>
     <optional><cmd name="While"/></optional>
   </define>
 
@@ -157,6 +158,7 @@
     <optional><cmd name="DefineFontfamily"/></optional>
     <optional><cmd name="DefineTextformat"/></optional>
     <optional><cmd name="DefineMatter"></cmd></optional>
+    <optional><cmd name="Function"></cmd></optional>
     <optional><cmd name="Hyphenation"/></optional>
     <optional><cmd name="LoadFontfile"/></optional>
     <optional><cmd name="Loop"/></optional>
@@ -3506,6 +3508,99 @@
     </example>
     <seealso><cmd name="PlaceObject"/></seealso>
   </command>
+
+  <!--
+    *************************
+    * Function
+    *************************
+  -->
+  <command en="Function">
+    <description xml:lang="en">
+      <para>Define a function</para>
+    </description>
+    <description xml:lang="de">
+      <para>Definiere eine Funktion</para>
+    </description>
+    <childelements>
+      <zeroOrMore>
+        <cmd name="Param"></cmd>
+      </zeroOrMore>
+      <oneOrMore>
+        <optional><cmd name="ClearPage"/></optional>
+        <optional><cmd name="Column"/></optional>
+        <optional><cmd name="Columns"/></optional>
+        <optional><cmd name="ForAll"/></optional>
+        <optional><cmd name="Group"/></optional>
+        <optional><cmd name="LoadDataset"/></optional>
+        <optional><cmd name="Loop"/></optional>
+        <optional><cmd name="Message"/></optional>
+        <optional><cmd name="NextFrame"/></optional>
+        <optional><cmd name="NextRow"/></optional>
+        <optional><cmd name="PlaceObject"/></optional>
+        <optional><cmd name="ProcessNode"/></optional>
+        <optional><cmd name="SaveDataset"/></optional>
+        <optional><cmd name="SetVariable"/></optional>
+        <optional><cmd name="Switch"/></optional>
+        <optional><cmd name="Value"/></optional>
+      </oneOrMore>
+    </childelements>
+    <attribute en="name" optional="no" type="text">
+      <description xml:lang="en">
+        <para>The name of the function (with namespace prefix).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name der Funktion (mit Namensraum-Präfix)</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
+        xmlns:sd="urn:speedata:2009/publisher/functions/en"
+        xmlns:fn="mynamespace">
+
+        <Record element="data">
+            <PlaceObject>
+                <Textblock>
+                    <Paragraph>
+                        <Value select="fn:add(3,4)" />
+                    </Paragraph>
+                </Textblock>
+            </PlaceObject>
+        </Record>
+
+        <Function name="fn:add">
+            <Param name="a" />
+            <Param name="b" />
+            <Value select="$a + $b" />
+        </Function>
+    </Layout>]]></listing>
+      <para>Print out the number 7.</para>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
+        xmlns:sd="urn:speedata:2009/publisher/functions/en"
+        xmlns:fn="mynamespace">
+
+        <Record element="data">
+            <PlaceObject>
+                <Textblock>
+                    <Paragraph>
+                        <Value select="fn:add(3,4)" />
+                    </Paragraph>
+                </Textblock>
+            </PlaceObject>
+        </Record>
+
+        <Function name="fn:add">
+            <Param name="a" />
+            <Param name="b" />
+            <Value select="$a + $b" />
+        </Function>
+    </Layout>]]></listing>
+      <para>Gibt die Zahl 7 aus.</para>
+    </example>
+    <seealso></seealso>
+  </command>
+
   <command en="Grid">
     <description xml:lang="en">
       <para>Override the grid settings from <cmd name="SetGrid"/>.</para>
@@ -3801,48 +3896,6 @@
     </example>
     <seealso><cmd name="Paragraph"/></seealso>
   </command>
-  <!-- <command en="HTML" since="3.9.9">
-    <description xml:lang="en">
-      <para>Collect HTML from data.</para>
-    </description>
-    <description xml:lang="de">
-      <para>Verarbeite HTML aus den Daten.</para>
-    </description>
-    <childelements>
-      <cmd name="Value"/>
-    </childelements>
-    <example xml:lang="en">
-      <listing><![CDATA[<Record element="data">
-    <Output>
-       <Text>
-          <HTML>
-             <Value select="sd:html(.)"/>
-          </HTML>
-       </Text>
-    </Output>
-</Record>
-]]></listing>
-    </example>
-    <example xml:lang="de">
-      <listing><![CDATA[<Record element="data">
-    <Output>
-       <Text>
-          <HTML>
-             <Value select="sd:html(.)"/>
-          </HTML>
-       </Text>
-    </Output>
-</Record>
-]]></listing>
-    </example>
-    <info xml:lang="en">
-      <para>This is experimental. Don't rely on this command to exist in future versions of the publisher.</para>
-    </info>
-    <info xml:lang="de">
-      <para>Dieser Befehl ist experimentell. Nicht darauf verlassen, dass dieser Befehl in Zukunft existiert.</para>
-    </info>
-    <seealso></seealso>
-  </command> -->
   <command en="I">
     <description xml:lang="en">
       <para>Switch to italic text.</para>
@@ -6021,6 +6074,8 @@
     </example>
     <seealso><cmd name="Position"/></seealso>
   </command>
+
+
   <command en="Paragraph" css="p">
     <description xml:lang="en">
       <para>Insert a paragraph of text. The width of the paragraph is inherited from the surrounding element.</para>
@@ -6276,6 +6331,37 @@
     </example>
     <seealso><cmd name="Textblock"/>, <ref name="fonts"/></seealso>
   </command>
+
+  <!--
+      ****************************************************************************************
+      * Param
+      ****************************************************************************************
+  -->
+  <command en="Param">
+    <description xml:lang="en">
+      <para>Specify a parameter for a function definition.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Lege einen Parameter für eine Funktionsdefinition fest.</para>
+    </description>
+    <childelements></childelements>
+    <attribute en="name" optional="no" type="text">
+      <description xml:lang="en">
+        <para>The name of the parameter.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name des Parameters</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <para>See the example at <cmd name="Function"/></para>
+    </example>
+    <example xml:lang="de">
+      <para>Siehe das Bespiel bei <cmd name="Function"/>.</para>
+    </example>
+    <seealso></seealso>
+  </command>
+
   <command en="Pageformat">
     <description xml:lang="en">
       <para>The size of the PDF pages. Defaults to 210mm width and 297mm height (A4)</para>
@@ -7474,6 +7560,12 @@
     </example>
     <seealso><cmd name="Record"/></seealso>
   </command>
+
+  <!--
+    *************************
+    * Record
+    *************************
+  -->
   <command en="Record">
     <description xml:lang="en">
       <para>Contains the instructions when the publisher processes the element in the data file with the given name. The record matching the root element will be called by the software automatically, all further data handling must be done by the user.</para>

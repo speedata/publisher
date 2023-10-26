@@ -119,6 +119,7 @@
         <xs:element minOccurs="0" ref="en:SortSequence"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
         <xs:element minOccurs="0" ref="en:Until"/>
+        <xs:element minOccurs="0" ref="en:Value"/>
         <xs:element minOccurs="0" ref="en:While"/>
       </xs:sequence>
       <xs:attribute name="graphic">
@@ -169,6 +170,7 @@
         <xs:element minOccurs="0" ref="en:SortSequence"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
         <xs:element minOccurs="0" ref="en:Until"/>
+        <xs:element minOccurs="0" ref="en:Value"/>
         <xs:element minOccurs="0" ref="en:While"/>
       </xs:sequence>
       <xs:attribute name="graphic">
@@ -1002,6 +1004,7 @@
         <xs:element minOccurs="0" ref="en:SortSequence"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
         <xs:element minOccurs="0" ref="en:Until"/>
+        <xs:element minOccurs="0" ref="en:Value"/>
         <xs:element minOccurs="0" ref="en:While"/>
       </xs:sequence>
     </xs:complexType>
@@ -1764,6 +1767,39 @@
             </xs:enumeration>
           </xs:restriction>
         </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Function">
+    <xs:annotation>
+      <xs:documentation>Definiere eine Funktion</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="en:Param"/>
+        <xs:sequence maxOccurs="unbounded">
+          <xs:element minOccurs="0" ref="en:ClearPage"/>
+          <xs:element minOccurs="0" ref="en:Column"/>
+          <xs:element minOccurs="0" ref="en:Columns"/>
+          <xs:element minOccurs="0" ref="en:ForAll"/>
+          <xs:element minOccurs="0" ref="en:Group"/>
+          <xs:element minOccurs="0" ref="en:LoadDataset"/>
+          <xs:element minOccurs="0" ref="en:Loop"/>
+          <xs:element minOccurs="0" ref="en:Message"/>
+          <xs:element minOccurs="0" ref="en:NextFrame"/>
+          <xs:element minOccurs="0" ref="en:NextRow"/>
+          <xs:element minOccurs="0" ref="en:PlaceObject"/>
+          <xs:element minOccurs="0" ref="en:ProcessNode"/>
+          <xs:element minOccurs="0" ref="en:SaveDataset"/>
+          <xs:element minOccurs="0" ref="en:SetVariable"/>
+          <xs:element minOccurs="0" ref="en:Switch"/>
+          <xs:element minOccurs="0" ref="en:Value"/>
+        </xs:sequence>
+      </xs:sequence>
+      <xs:attribute name="name" use="required">
+        <xs:annotation>
+          <xs:documentation>Der Name der Funktion (mit Namensraum-Präfix)</xs:documentation>
+        </xs:annotation>
       </xs:attribute>
     </xs:complexType>
   </xs:element>
@@ -2809,6 +2845,7 @@
         <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
         <xs:element minOccurs="0" ref="en:DefineTextformat"/>
         <xs:element minOccurs="0" ref="en:DefineMatter"/>
+        <xs:element minOccurs="0" ref="en:Function"/>
         <xs:element minOccurs="0" ref="en:Hyphenation"/>
         <xs:element minOccurs="0" ref="en:LoadFontfile"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
@@ -4685,6 +4722,18 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
+  <xs:element name="Param">
+    <xs:annotation>
+      <xs:documentation>Lege einen Parameter für eine Funktionsdefinition fest.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name="name" use="required">
+        <xs:annotation>
+          <xs:documentation>Der Name des Parameters</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Pageformat">
     <xs:annotation>
       <xs:documentation>Legt die Größe des Ausgabemediums (z.B. DIN A4) fest. Voreinstellung ist eine Breite von 210mm und eine Höhe von 297mm.</xs:documentation>
@@ -5535,6 +5584,7 @@
         <xs:element minOccurs="0" ref="en:SortSequence"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
         <xs:element minOccurs="0" ref="en:Until"/>
+        <xs:element minOccurs="0" ref="en:Value"/>
         <xs:element minOccurs="0" ref="en:While"/>
       </xs:sequence>
       <xs:attribute name="element" use="required">
@@ -5699,6 +5749,7 @@
         <xs:element ref="en:SortSequence"/>
         <xs:element ref="en:Switch"/>
         <xs:element ref="en:Until"/>
+        <xs:element ref="en:Value"/>
         <xs:element ref="en:While"/>
       </xs:choice>
       <xs:attribute name="name" use="required">

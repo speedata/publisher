@@ -96,6 +96,7 @@ extern char* sdConvertImage(const char* filename, const char* handler);
 extern char* sdConvertSVGImage(const char* path);
 extern struct splitvalues* sdSegmentize(const char* original);
 extern char* sdReadXMLFile(const char* filename);
+extern char* sdReadXMLString(const char* xmlstring);
 
 #ifdef __cplusplus
 }

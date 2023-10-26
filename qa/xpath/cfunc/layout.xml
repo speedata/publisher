@@ -1,0 +1,23 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="10cm" width="7cm" />
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+              <Paragraph>
+                <Value select='string-join(tokenize("Go home, Jack!", "\W+"),"-")'></Value>
+            </Paragraph>
+            <Paragraph>
+              <Value select="replace('banana', 'a', 'o')"></Value>
+            </Paragraph>
+            <Paragraph>
+              <Value select="matches('banana', '^(.a)+$')"></Value>
+            </Paragraph>
+            <Paragraph>
+              <Value select="contains('bana','na')"></Value>
+            </Paragraph>
+          </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

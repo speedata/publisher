@@ -143,6 +143,8 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
    Gibt mehr Informationen aus, also notwendig.
 `--wd=DIR`::
    Wechselt in das angegebene Verzeichnis. Verhält sich genau so, als ob man vorher mit cd in dieses Verzeichnis gewechselt hat.
+`--xpath`::
+   Setze den XML und XPath Parser auf eine Option aus `luxor` und `lxpath`. Die Voreinstellung ist der ältere 'luxor'. Die neue Variante `lxpath` robuster und hat erweiterte Fähigkeiten, ist aber noch experimentell.
 `--xml`::
    Die Ausgabe des Befehls `list-fonts` werden als (Pseudo-)XML dargestellt, um sie in das Layoutregelwerk zu übernehmen.
 

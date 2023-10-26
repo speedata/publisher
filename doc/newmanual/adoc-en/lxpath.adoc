@@ -1,9 +1,9 @@
 :ast: *
 [appendix]
-[[ch-xpathfunctions,XPath and Layout Functions]]
-= XPath and Layout Functions (old XPath module)
+[[ch-lxpath,XPath and Layout Functions]]
+= XPath and Layout Functions (new XPath module)
 
-This page describes the default XPath parser, called “luxor”. There is a new, experimental XPath module called “lxpath”. To switch between these two, you can set the default by setting the xpath configuration, for example on the <<ch-commandline,command line>> with
+This page describes the experimental new XPath parser, called “lxpath”. There is the default XPath module called “luxor”. To switch between these two, you can set the default by setting the xpath configuration, for example on the <<ch-commandline,command line>> with
 
 [source, shell]
 -------------------------------------------------------------------------------
@@ -20,16 +20,42 @@ sp --xpath lxpath
 
 for the new one. You can also set this in the <<ch-configuration,configuration>> file.
 
+== What is XPath and why are there two different implementations?
 
+The speedata Publisher's input is data encoded in the XML format.
+XML is a hierarchical data structure where there is a root element and each element can have attributes and children, that are either text or other elements.
+For example you can have an element _articlegroup_  which contains ten _article_ elements.
+Now the idea of XPath is to navigate through the XML tree and ask questions like:
+give me all articles that have a certain attribute.
+Or how many articles do I have in this article group?
+
+Up to now the speedata Publisher uses an ad-hoc implementation of an XML parser that has proven to work, but which is not very robust and does not report many errors with incorrect data.
+Also the XPath parser has worked mostly with regular expressions and global state, which is also not very robust.
+
+The new implementation uses the XML parser from Go's standard library (with a minor patch to report the input position) and an https://github.com/speedata/lxpath[XPath implementation] that is rewritten with the XPath grammar in mind.
+It aims to be fully XPath 2 compliant.
+
+The new XML/XPath implementation passes all 199 tests in the test suite, so the current state of the compatibility is promising.
+
+When in doubt, please use the new (`lxpath`) XML/XPath implementation and report bugs if you find one. You will have a few benefits:
+
+* The overall implementation is faster.
+* There are better error messages (for example line numbers are part of error messages).
+* You can have your own <<cmd-function,function definitions>>.
+* The new XPath parser will be the default in speedata Publisher version 5.
 
 == XPath expressions
 
-The speedata Publisher accepts XPath expressions in some attributes. These attributes are called test or select or documented as such. In all other attributes XPath expressions can be used via curly braces (`{` and `}`). In the following example XPath expressions are used in the attribute width and in the element Value. The width of the textblock is taken from the variable `$width`, the contents of the paragraph is the string value of the current node.
+The speedata Publisher accepts XPath expressions in some attributes.
+These attributes are called test or select or documented as such.
+In all other attributes XPath expressions can be used via curly braces (`{` and `}`).
+In the following example XPath expressions are used in the attribute width and in the attribute `select` of the element Value.
+The width of the textblock is taken from the variable `$width`, the contents of the paragraph is the value of the current node (whatever this is).
 
 
 [source, xml]
 -------------------------------------------------------------------------------
-<Textblock width="{$width}">
+<Textblock width="{ $width }">
   <Paragraph>
     <Value select="."/>
   </Paragraph>
@@ -49,6 +75,9 @@ The speedata Publisher accepts XPath expressions in some attributes. These attri
 * Attribute access in subnodes, for example `foo/@bar`
 * Boolean expressions:  `<`, `>`, `\<=`, `>=`, `=`, `!=`. Attention, the less than symbol `<` must be written in XML as `\&lt;`, the symbol `>`  may be written as `&gt;`. Example: `$number > 6`. Can be used in tests.
 * Simple if/then/else expressions: if (...) then ... else ....
+* Simple for clauses for example: `for $i in (1,2,3) return $i * 2`
+
+See the https://github.com/speedata/lxpath/blob/main/lxpath_test.lua[test file of lxpath] if in doubt
 
 == The following XPath functions are known to the system:
 
@@ -205,6 +234,12 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `abs(<number>)`::
   Return the positive value of the number.
 
+`boolean(<value>)`::
+    Return the https://www.w3.org/TR/xpath20/#id-ebv[effective boolean value] of the argument.
+
+`codepoints-to-string( <codepoints> )`::
+    Convert the sequence of code points to a string.
+
 `ceiling()`::
   Round to the higher integer. `ceiling(-1.34)` returns 1, `ceiling(1.34)` returns 2.
 
@@ -217,14 +252,8 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `count(<text>)`::
    Counts all child elements with the given name. Example: `count(article)` counts how many child elements with the name `article` exist.
 
-`ceiling()`::
-   Returns the smallest number with no fractional part that is not less than the value of the given argument.
-
-`doc(<string>)`::
-  Open the file with the given file name and return its contents.
-
-`empty(<attribute>)`::
-   Checks, if an attribute is (not) available.
+`empty( <sequence> )`::
+   Checks, if the sequence is empty. For example non existing child elements or non existing attributes are “empty”.
 
 `false()`::
    Return false.
@@ -250,6 +279,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `min()`::
   Return the minimum value.  `min(1.1,2.2,3.3,4.4)` returns `1.1`.
 
+`number(<value>)`::
+    Convert the argument to a number. Return “not a number” if the value cannot be converted.
+
 `not()`::
    Negates the value of the argument. Example: `not(true())` returns `false()`.
 
@@ -262,8 +294,18 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `replace(<input>,<regexp>, <replacement>)`::
    Replace the input using the regular expression with the given replacement text. Example: `replace('banana', 'a', 'o')` yields `bonono`.
 
+`root(element)`::
+    Return the root element of the element.
+
 `round(<number>,<number>)`::
     Return the argument in the first parameter rounded to number of decimal places in the second parameter. The second parameter defaults to 0.
+
+`ends-with ( <string>, <string>)`::
+    Return true if the first string ends with the second string. Example: `ends-with ( "tattoo", "too")` returns `true`.
+
+
+`starts-with ( <string>, <string>)`::
+    Return true if the first string starts with the second string. Example: `starts-with ( "tattoo", "tat")` returns `true`.
 
 `string(<sequence>)`::
    Return the text value of the sequence e.g. the contents of the elements.
@@ -271,11 +313,17 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `string-join(<sequence>,separator)`::
    Return the string value of the sequence, where each element is separated by the separator.
 
+`string-length(<string>)`::
+   Return the length of the string in characters. Multi-byte UTF-8 sequences are counted as 1.
+
 `substring(<input>,<start>,<length>)`::
    Return the part of the string input that starts at start and optionally has the given length. start can be (in contrast to the XPath specification) negative which counts from the end of the input.
 
-`string-length(<string>)`::
-   Return the length of the string in characters. Multi-byte UTF-8 sequences are counted as 1.
+`substring-after(<string>,<string>])`::
+  Return the contents of the first string, that comes after the second string. Example: `substring-after ( "tattoo", "tat")` returns `"too"`.
+
+`substring-before(<string>,<string>])`::
+  Return the contents of the first string, that comes before the second string. Example: `substring-before ( "tattoo", "attoo")` returns `"t"`.
 
 `tokenize(<input>,<regexp>)`::
    This function returns a sequence of strings. The input text is read from left to right. When the regular expression matches the current position, the text read so far from the last match is returned. Example (from the great XPath / XSLT book by M. Key): `tokenize("Go home, Jack!", "\W+")` returns the sequence `"Go", "home", "Jack", ""`.

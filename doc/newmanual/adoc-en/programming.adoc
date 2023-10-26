@@ -280,6 +280,63 @@ In addition to the while loop, there is also the until loop, which works in the 
 </Record>
 -------------------------------------------------------------------------------
 
+[[ch-programmingfunctions]]
+
+== Functions
+
+It is possible to define functions with the <<ch-lxpath,new XPath module>>:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    xmlns:fn="mynamespace">
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="fn:add(3,4)" />
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+
+    <Function name="fn:add">
+        <Param name="a" />
+        <Param name="b" />
+        <Value select="$a + $b" />
+    </Function>
+</Layout>
+-------------------------------------------------------------------------------
+
+The functions can also contain more complex expressions:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    xmlns:fn="mynamespace">
+
+    <Record element="data">
+        <Value select="fn:chapter('First chapter')" />
+    </Record>
+
+    <Function name="fn:chapter">
+        <Param name="chaptername" />
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="$chaptername"/>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Function>
+</Layout>
+-------------------------------------------------------------------------------
+
+The namespace for the function must be defined in the root element (here: `xmlns:fn="..."`). Variables defined in the function remain local, i.e. are not visible in other program parts.
+
 == Data Structures
 
 The speedata Publisher does not offer direct support for data structures such as arrays (fields) or dictionaries (hashes or dictionaries). These can be simulated using variables. The field a1, a2, ..., ai could be filled as follows:

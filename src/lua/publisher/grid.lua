@@ -219,6 +219,11 @@ function number_of_columns(self,areaname)
     return width
 end
 
+---@param self table
+---@param x integer
+---@param y integer
+---@param areaname string
+---@param framenumber integer
 function isallocated( self,x,y,areaname,framenumber )
     assert(self)
     local areaname = areaname or publisher.default_areaname
@@ -511,7 +516,7 @@ function find_suitable_row( self,column, width,height,areaname, framenumber)
     else
         local area = self.positioning_frames[areaname]
         if not self.positioning_frames[areaname] then
-            err("Area %q unknown, using page",areaname)
+            err("Area %q unknown, using page",areaname or "-")
             areaname = publisher.default_areaname
             frame_margin_left, frame_margin_top = 0,0
         else

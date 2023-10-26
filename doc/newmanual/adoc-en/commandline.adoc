@@ -150,6 +150,8 @@ you can display a list of the allowed commands and parameters.
    Show version information
 `--wd=DIR`::
    Change working directory
+`--xpath`::
+   Set the XML and XPath parser to one of `luxor` or `lxpath`. Default is the old 'luxor'. The new `lxpath` is more robust and has more capabilities but is still considered experimental.
 `--xml`::
    Output as (pseudo-)XML (for list-fonts)
 

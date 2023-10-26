@@ -38,7 +38,11 @@ function err(...)
     end
     local unpacked
     if publisher then
-        unpacked = string.format( "[page %d] ",publisher.current_pagenumber ) .. string.format(table.unpack(text))
+        local lineinfo = ""
+        if publisher.newxpath then
+            lineinfo = string.format(" line %s",publisher.current_layout_line)
+        end
+        unpacked = string.format( "[page %d%s] ",publisher.current_pagenumber, lineinfo ) .. string.format(table.unpack(text))
         publisher.messages[#publisher.messages + 1] = { unpacked , "error", errorcode }
     else
         unpacked = string.format( "%s",string.format(table.unpack(text)))
@@ -394,7 +398,7 @@ require("publisher")
 function main_loop()
     log("Start processing")
     setup()
-    call(publisher.dothings)
+    publisher.dothings()
     exit(true)
 end
 

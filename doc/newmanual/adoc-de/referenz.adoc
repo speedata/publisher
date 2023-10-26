@@ -41,6 +41,7 @@ ifndef::backend-docbook5[]
 <<cmd-fontface,Fontface>>  +
 <<cmd-forall,ForAll>>  +
 <<cmd-frame,Frame>>  +
+<<cmd-function,Function>>  +
 <<cmd-grid,Grid>>  +
 <<cmd-group,Group>>  +
 <<cmd-groupcontents,Groupcontents>>  +
@@ -72,6 +73,7 @@ ifndef::backend-docbook5[]
 <<cmd-pageformat,Pageformat>>  +
 <<cmd-pagetype,Pagetype>>  +
 <<cmd-paragraph,Paragraph>>  +
+<<cmd-param,Param>>  +
 <<cmd-pdfoptions,PDFOptions>>  +
 <<cmd-placeobject,PlaceObject>>  +
 <<cmd-position,Position>>  +
@@ -336,6 +338,12 @@ include::ref/frame.adoc[]
 
 Den Abschnitt über <<ch-objekteausgeben-frame,Rahmen im Grundlagenkapitel>>.
 
+include::ref/function.adoc[]
+
+== Siehe auch
+
+Das <<ch-programmingfunctions,Kapitel über Programmierung>>.
+
 include::ref/grid.adoc[]
 
 == Siehe auch
@@ -542,6 +550,9 @@ include::ref/paragraph.adoc[]
 
 Das Kapitel <<ch-textformatierung,Textformatierung>> und den Befehl <<cmd-options>> für eine Liste aller unterstützter Sprachen.
 
+include::ref/param.adoc[]
+
+== Siehe auch
 
 
 

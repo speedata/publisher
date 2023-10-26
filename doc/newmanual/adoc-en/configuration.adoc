@@ -100,8 +100,8 @@ The format of the file is important, otherwise it won’t be recognized. The fol
    Comma separated list of variables and values in the form var=value to set additional variables.
 `wd`::
    Set the current directory.
-`xmlparser`::
-  Sets the XML parser to use. Since version 4.5 the default is `go`, the old variant is `lua`. This option will be dropped in a future version of the Publisher in favor of the `go` variant and is currently included only for compatibility.
+`xpath`::
+   Set the XML module. The current default is `luxor`, and the new, experimental is called `lxpath`.
 
 
 

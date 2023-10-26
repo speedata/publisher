@@ -40,6 +40,7 @@ ifndef::backend-docbook5[]
 <<cmd-fontface,Fontface>>  +
 <<cmd-forall,ForAll>>  +
 <<cmd-frame,Frame>>  +
+<<cmd-function,Function>>  +
 <<cmd-grid,Grid>>  +
 <<cmd-group,Group>>  +
 <<cmd-groupcontents,Groupcontents>>  +
@@ -68,6 +69,7 @@ ifndef::backend-docbook5[]
 <<cmd-otherwise,Otherwise>>  +
 <<cmd-output,Output>>  +
 <<cmd-overlay,Overlay>>  +
+<<cmd-param,Param>>  +
 <<cmd-pageformat,Pageformat>>  +
 <<cmd-pagetype,Pagetype>>  +
 <<cmd-paragraph,Paragraph>>  +
@@ -334,6 +336,12 @@ include::ref/frame.adoc[]
 
 The section about <<ch-outputtingobjects-frame,frames in the basics chapter>>.
 
+include::ref/function.adoc[]
+
+== See also
+
+The <<ch-programmingfunctions,chapter about programming>>.
+
 include::ref/grid.adoc[]
 
 == See also
@@ -536,8 +544,13 @@ include::ref/pagetype.adoc[]
 
 The section <<ch-pagetypes>> and the command <<cmd-definematter>>.
 
+include::ref/param.adoc[]
+
+== See also
+
 
 include::ref/paragraph.adoc[]
+
 == See also
 
 The section <<ch-textformatting,text formatting>> and the command <<cmd-options>> for a list of all languages.

@@ -61,10 +61,15 @@ local function reconstruct_html_text(elt)
     local ret = {}
     table.insert(ret,"<")
     table.insert(ret,eltname)
-    local attributes = {}
-    for key,value in next,elt,nil do
-        if type(key) == "string" and not string.match( key,"^.__" ) then
+    if publisher.newxpath and elt[".__attributes"]  then
+        for key, value in pairs(elt[".__attributes"]) do
             table.insert(ret,string.format(" %s=%q",key,value))
+        end
+    else
+        for key,value in next,elt,nil do
+            if type(key) == "string" and not string.match( key,"^.__" ) then
+                table.insert(ret,string.format(" %s=%q",key,value))
+            end
         end
     end
     if #elt == 0 and void_elements[eltname] then
@@ -121,7 +126,7 @@ local function mktextnode(self,text,options)
     return nodes
 end
 
-local function flatten(self,items,options)
+local function flatten(self,items,options,data)
     options = options or {}
     local ret = {}
     for i=1,#items do
@@ -159,7 +164,7 @@ local function flatten(self,items,options)
             elseif type(thisself.contents) == "string" or type(thisself.contents) == "number" or type(thisself.contents) == "boolean" then
                 table.insert(ret,mktextnode(self,thisself.contents,new_options))
             else
-                local tmp = flatten(self,thisself.contents,new_options)
+                local tmp = flatten(self,thisself.contents,new_options,data)
                 for i=1,#tmp do
                     table.insert(ret,tmp[i])
                 end
@@ -187,7 +192,7 @@ local function flatten(self,items,options)
             end
             if type(thisself) == "string" then
                 local text = thisself
-                local tmp = flatten(self,{text},new_options)
+                local tmp = flatten(self,{text},new_options,data)
                 for j=1,#tmp do
                     table.insert(ret,tmp[j])
                 end
@@ -217,7 +222,7 @@ local function flatten(self,items,options)
                         end
                     end
                     options.override_alignment = true
-                    local blocks = publisher.parse_html(csshtmltree, options) or {}
+                    local blocks = publisher.parse_html(csshtmltree, options, data) or {}
                     blocks = publisher.flatten_boxes(blocks)
                     -- printtable("blocks",blocks)
 
@@ -268,7 +273,14 @@ local function flatten(self,items,options)
             -- ignore
         elseif typ_thisself == "table" then
             -- w("par/flatten: type: table")
-            local tmp = flatten(self,{table_textvalue(thisself)},new_options)
+            local tmp
+            if publisher.newxpath then
+                local x, msg = xpath.string_value(thisself)
+                if msg then err(msg) end
+                tmp = flatten(self,{x},new_options, data)
+            else
+                tmp = flatten(self,{table_textvalue(thisself)},new_options, data)
+            end
             for j=1,#tmp do
                 table.insert(ret,tmp[j])
             end
@@ -297,7 +309,7 @@ function Par:indent(width_sp)
     self.padding_left = self.padding_left + width_sp
 end
 
-function Par:min_width( textformat_name, options )
+function Par:min_width( textformat_name, options,data )
     options = options or {}
     local newpar = publisher.deepcopy(self)
     newpar.origin = "min_width"
@@ -305,7 +317,7 @@ function Par:min_width( textformat_name, options )
     local new_options = publisher.copy_table_from_defaults(options)
     new_options.textformat = textformat_name
 
-    local formatted = newpar:format(1,new_options)
+    local formatted = newpar:format(1,new_options,data)
     local nl = formatted
     local head = formatted.head
     if not head then return 0 end
@@ -327,14 +339,14 @@ function Par:min_width( textformat_name, options )
     return max
 end
 
-function Par:max_width_and_lineheight(options)
+function Par:max_width_and_lineheight(options,data)
     local newpar = publisher.deepcopy(self)
     newpar.origin = "max_width_and_lineheight"
     newpar.textformat = nil
     options = options or {}
     local new_options = publisher.copy_table_from_defaults(options)
     new_options.textformat = publisher.textformats["__leftaligned"]
-    local nl = newpar:format(publisher.maxdimen,new_options)
+    local nl = newpar:format(publisher.maxdimen,new_options,data)
     local maxwd = 0
     local hlist = nl.head
     while hlist do
@@ -348,8 +360,8 @@ function Par:max_width_and_lineheight(options)
     return maxwd, nl.height + nl.depth
 end
 
-function Par:mknodelist( options )
-    flatten(self,self,options)
+function Par:mknodelist( options, data )
+    flatten(self,self,options, data)
     local nodelist
     local objects = {}
     for i=1,#self do
@@ -432,13 +444,13 @@ local function get_border_width_height_margintop(nodelist)
 end
 
 
-function Par:format( width_sp, options )
+function Par:format( width_sp, options,data )
     -- w("call format %s",self.origin)
     options = options or {}
     options.maxwidth_sp = width_sp
     publisher.remove_first_whitespace(self)
     publisher.remove_last_whitespace(self)
-    self:mknodelist(options)
+    self:mknodelist(options,data)
     local parameter = {}
     local current_textformat = self.textformat or options.textformat
     if not current_textformat then

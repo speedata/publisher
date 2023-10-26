@@ -682,7 +682,8 @@ function build_html_table_tbody(tbody)
     return trtab
 end
 
-function build_html_table( elt )
+function build_html_table( elt, dataxml )
+    assert(dataxml,"build_html_table")
     local tablecontents = elt
     local head, foot, body = {},{},{}
     local styles = setmetatable({}, levelmt)
@@ -724,7 +725,6 @@ function build_html_table( elt )
     tabular.tab = tab
     local fontname = "text"
     local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
-    local save_fontfamily = publisher.current_fontfamily
     publisher.current_fontfamily = fontfamily
 
     if fontfamily == nil then
@@ -742,13 +742,14 @@ function build_html_table( elt )
     tabular.rowsep         = 0
     tabular.bordercollapse_horizontal = true
     tabular.bordercollapse_vertical = true
+    tabular.dataxml = dataxml
 
-    local n = tabular:make_table()
+    local n = tabular:make_table(dataxml)
     return n[1]
 end
 
 local olcounter = {}
-function build_nodelist(elt,options,before_box,caller, prevdir )
+function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
     -- w("html: build nodelist from %s, prevdir = %s", caller or "?",prevdir or "?")
     options = options or {}
     -- ret is a nested table of boxes and paragraphs
@@ -946,7 +947,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
             if thiseltname == "table" then
                 prevdir = "vertical"
                 -- w("html/table")
-                local nl = build_html_table(thiselt)
+                local nl = build_html_table(thiselt,dataxml)
                 local tabpar = par:new(nil,"html table (a)")
                 tabpar.margin_top = margin_top
                 node.set_attribute(nl,publisher.att_lineheight,nl.height)
@@ -971,7 +972,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
                     olcounter[styles.listlevel] = 0
                 end
                 local n
-                n, prevdir = build_nodelist(thiselt,options,before_box,"build_nodelist/ ol/ul",prevdir)
+                n, prevdir = build_nodelist(thiselt,options,before_box,"build_nodelist/ ol/ul",prevdir,dataxml)
                 before_box = nil
                 if thiseltname == "ol" then
                     styles.ollevel = styles.ollevel - 1
@@ -989,7 +990,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
                 olcounter[styles.listlevel] = olcounter[styles.listlevel] or 0
                 olcounter[styles.listlevel] = olcounter[styles.listlevel] + 1
                 local n
-                n, prevdir = build_nodelist(thiselt,options,before_box,"build_nodelist/ li",prevdir )
+                n, prevdir = build_nodelist(thiselt,options,before_box,"build_nodelist/ li",prevdir,dataxml)
                 before_box = nil
                 -- n is a table of box and / or par
                 local str = resolve_list_style_type(styles,olcounter)
@@ -1030,7 +1031,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir )
                 elseif thiseltname == "p" then
                     nloptions.role = publisher.get_rolenum("P")
                 end
-                n, prevdir = build_nodelist(thiselt,options,before_box,string.format("build_nodelist/ any element name %q",thiseltname),prevdir)
+                n, prevdir = build_nodelist(thiselt,options,before_box,string.format("build_nodelist/ any element name %q",thiseltname),prevdir,dataxml)
                 if thiselt.block then prevdir = "vertical" end
                 before_box = nil
                 local mode
@@ -1097,19 +1098,27 @@ function resolve_list_style_type(styles, olcounter)
     return str
 end
 
-function handle_pages( pages,maxwidth_sp )
+function handle_pages( pages,maxwidth_sp,data )
     -- defaults:
     local pagewd = tex.pagewidth
+    if publisher.newxpath then
 
-    xpath.set_variable("__maxwidth",pagewd)
-    xpath.set_variable("__maxheight",tex.pageheight)
+    else
+        xpath.set_variable("__maxwidth",pagewd)
+        xpath.set_variable("__maxheight",tex.pageheight)
+    end
 
     local masterpage = pages["*"]
     if masterpage then
         local wd,ht
         if masterpage.width then
             wd = tex.sp(masterpage.width)
-            xpath.set_variable("_pagewidth",masterpage.width)
+            if publisher.newxpath then
+                data.vars["_pagewidth"] = masterpage.width
+            else
+                xpath.set_variable("_pagewidth",masterpage.width)
+            end
+
             pagewd = wd
             if masterpage.height then
                 xpath.set_variable("_pageheight",masterpage.height)
@@ -1126,7 +1135,11 @@ function handle_pages( pages,maxwidth_sp )
         if mb then margin_bottom = tex.sp(mb) end
         if ml then margin_left = tex.sp(ml) end
         pagewd = pagewd - margin_left - margin_right
-        xpath.set_variable("__maxwidth",pagewd)
+        if publisher.newxpath then
+            data.vars["__maxwidth"] = pagewd
+        else
+            xpath.set_variable("__maxwidth",pagewd)
+        end
         publisher.set_pageformat(wd,ht)
         publisher.masterpages[1] = { is_pagetype = "true()", res = { width = wd, height = ht, { elementname = "Margin", contents = function(_page) _page.grid:set_margin(margin_left,margin_top,margin_right,margin_bottom) end }}, name = "Default HTML page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
     else
@@ -1137,7 +1150,11 @@ function handle_pages( pages,maxwidth_sp )
             local margin_left = publisher.tenmm_sp
             pagewd = pagewd - margin_left - margin_right
         end
-        xpath.set_variable("__maxwidth",pagewd)
+        if publisher.newxpath then
+            data.vars["__maxwidth"] = pagewd
+        else
+            xpath.set_variable("__maxwidth",pagewd)
+        end
     end
 end
 
@@ -1152,10 +1169,10 @@ function clearattributes( elt )
 end
 
 -- Entry point for HTML parsing
-function parse_html_new( elt, options )
+function parse_html_new( elt, options, data )
     options = options or {}
     local maxwidth_sp = options.maxwidth_sp
-    handle_pages(elt.pages,maxwidth_sp)
+    handle_pages(elt.pages,maxwidth_sp, data)
     fontfamilies = elt.fontfamilies
     elt.fontfamilies = nil
     local att = elt[1].styles
@@ -1167,12 +1184,16 @@ function parse_html_new( elt, options )
         if string.match(trace,"hyphenation") then publisher.options.showhyphenation = true end
         if string.match(trace,"textformat") then publisher.options.showtextformat = true end
     end
-    elt[1].styles.calculated_width = xpath.get_variable("__maxwidth")
+    if publisher.newxpath then
+        elt[1].styles.calculated_width = data.vars["__maxwidth"]
+    else
+        elt[1].styles.calculated_width = xpath.get_variable("__maxwidth")
+    end
     local lang = elt.lang
     if lang then
         publisher.set_mainlanguage(lang)
     end
     parse_html_inner(elt[1])
-    local block = build_nodelist(elt,options,nil,"parse_html_new","vertical")
+    local block = build_nodelist(elt,options,nil,"parse_html_new","vertical",data)
     return block
 end
