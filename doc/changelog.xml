@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.15">
+    <entry version="4.15.8" date="2023-11-02">
+        <en>New XML/XPath parser (#536).</en>
+        <de>Neuer XPath Parser (#536).</de>
+    </entry>
+    <entry version="4.15.8" date="2023-11-02">
+        <en>Remove standalone HTML subsystem.</en>
+        <de>Das eigenständige HTML Subsystem entfernt.</de>
+    </entry>
     <entry version="4.15.7" date="2023-10-21">
         <en>Border color with A (#526).</en>
         <de>Rahmenfarbe bei A (#526).</de>
