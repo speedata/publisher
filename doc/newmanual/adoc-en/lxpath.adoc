@@ -70,19 +70,19 @@ The width of the textblock is taken from the variable `$width`, the contents of 
 * Arithmetic operation (`{ast}`, `div`, `idiv`, `+`, `-`, `mod`). Example:   `( 6 + 4.5 ) * 2`
 * Variables. Example: `$column + 2`
 * Access to the current node (dot operator). Example: `. + 2`
-* Access to subelements. Examples: `productdata`, `node()`, `{ast}`, `foo/bar`
+* Access to subelements. Examples: `productdata`, `{ast}`, `foo/bar`
 * Attribute access in the current node. Example `@a`
 * Attribute access in subnodes, for example `foo/@bar`
-* Boolean expressions:  `<`, `>`, `\<=`, `>=`, `=`, `!=`. Attention, the less than symbol `<` must be written in XML as `\&lt;`, the symbol `>`  may be written as `&gt;`. Example: `$number > 6`. Can be used in tests.
-* Simple if/then/else expressions: if (...) then ... else ....
-* Simple for clauses for example: `for $i in (1,2,3) return $i * 2`
+* Boolean expressions:  `<`, `>`, `\<=`, `>=`, `=`, `!=`. Attention, the less than symbol `<` must be written in XML as `\&lt;`, the symbol `>`  may be written as `\&gt;`. Example: `$number > 6`. Can be used in tests.
+* if/then/else expressions: if (...) then ... else ....
+* for clauses for example: `for $i in (1,2,3) return $i * 2` or `for $i in 1 to 3 return $i * 2`.
 
 See the https://github.com/speedata/lxpath/blob/main/lxpath_test.lua[test file of lxpath] if in doubt
 
 == The following XPath functions are known to the system:
 
-There are two classes of XPath functions: standard XPath functions and speedata Publisher specific ones.
-The specific functions are in the namespace `urn:speedata:2009/publisher/functions/en` (denoted by `sd:` below).
+There are three classes of XPath functions: standard XPath functions, the speedata Publisher specific ones and <<cmd-function,user defined functions>>.
+The layout specific functions are in the namespace `urn:speedata:2009/publisher/functions/en` (denoted by `sd:` below).
 The standard functions should behave like documented by the XPath 2.0 standard.
 
 == sd layout functions
@@ -119,9 +119,6 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 
 `sd:decode-html(<node>)`::
   Change text such as `\&lt;i\&gt;italic\&lt;/i\&gt;` into HTML markup (`<i>italic</i>` in this case).
-
-`sd:dimexpr(<string>)`::
-  _Deprecated_ Evaluate the string as a dimension with a unit. Handy if you want to add / multiply lengths. Example: "2mm + 5cm". Since version 4.5.7 you can now calculate with dimensions directly.
 
 `sd:dummytext([<count>])`::
   Return a “Lorem ispum... ” dummy text. The count defaults to 1.

@@ -399,7 +399,8 @@ local function boolean_value(seq)
         ok = (val ~= 0 and val == val)
     elseif type(val) == "boolean" then
         ok = val
-    elseif is_element(val) then return true
+    elseif is_element(val) then
+        return true
     end
     return ok, nil
 end
@@ -472,11 +473,11 @@ local function docomparefunc(op, leftitem, rightitem)
     if is_attribute(leftitem) then leftitem = leftitem.value end
     if is_attribute(rightitem) then rightitem = rightitem.value end
 
-    local ln,rn
-    ln,_ = number_value(leftitem)
-    rn,_ = number_value(rightitem)
+    local ln, rn
+    ln, _ = number_value(leftitem)
+    rn, _ = number_value(rightitem)
 
-    if type(ln) == "number" and type(rn) == "number"  then
+    if type(ln) == "number" and type(rn) == "number" then
         local x, errmsg = docomparenumber(op, ln, rn)
         return x, errmsg
     elseif type(leftitem) == "string" or type(rightitem) == "string" then
@@ -509,17 +510,17 @@ end
 
 local function patternescape(s)
     return (s:gsub('%%', '%%%%')
-            :gsub('^%^', '%%^')
-            :gsub('%$$', '%%$')
-            :gsub('%(', '%%(')
-            :gsub('%)', '%%)')
-            :gsub('%.', '%%.')
-            :gsub('%[', '%%[')
-            :gsub('%]', '%%]')
-            :gsub('%*', '%%*')
-            :gsub('%+', '%%+')
-            :gsub('%-', '%%-')
-            :gsub('%?', '%%?'))
+        :gsub('^%^', '%%^')
+        :gsub('%$$', '%%$')
+        :gsub('%(', '%%(')
+        :gsub('%)', '%%)')
+        :gsub('%.', '%%.')
+        :gsub('%[', '%%[')
+        :gsub('%]', '%%]')
+        :gsub('%*', '%%*')
+        :gsub('%+', '%%+')
+        :gsub('%-', '%%-')
+        :gsub('%?', '%%?'))
 end
 
 
@@ -589,7 +590,7 @@ local function fnEndsWith(ctx, seq)
     local secondarg = string_value(seq[2])
     secondarg = patternescape(secondarg)
     local m = M.stringmatch(firstarg, secondarg .. "$")
-    return { m ~= nil },nil
+    return { m ~= nil }, nil
 end
 
 local function fnFalse(ctx, seq)
@@ -720,8 +721,8 @@ local function fnRoot(ctx, seq)
     for i = 1, #ctx.xmldoc[1] do
         local tab = ctx.xmldoc[1][i]
         if is_element(tab) then
-            ctx.sequence = {tab}
-            return {tab},nil
+            ctx.sequence = { tab }
+            return { tab }, nil
         end
     end
     return nil, "no root found"
@@ -754,8 +755,8 @@ local function fnStartsWith(ctx, seq)
     local firstarg = string_value(seq[1])
     local secondarg = string_value(seq[2])
     secondarg = patternescape(secondarg)
-    local m = M.stringmatch(firstarg,"^" .. secondarg)
-    return { m ~= nil },nil
+    local m = M.stringmatch(firstarg, "^" .. secondarg)
+    return { m ~= nil }, nil
 end
 
 local function fnStringJoin(ctx, seq)
@@ -818,18 +819,18 @@ end
 local function fnSubstringAfter(ctx, seq)
     local firstarg = string_value(seq[1])
     local secondarg = string_value(seq[2])
-    local a,b = M.stringfind(firstarg,secondarg,1,true)
-    if not a then return {""},nil end
-    return { string.sub(firstarg,b+1,-1) }
+    local a, b = M.stringfind(firstarg, secondarg, 1, true)
+    if not a then return { "" }, nil end
+    return { string.sub(firstarg, b + 1, -1) }
 end
 
 
 local function fnSubstringBefore(ctx, seq)
     local firstarg = string_value(seq[1])
     local secondarg = string_value(seq[2])
-    local a = M.stringfind(firstarg,secondarg,1,true)
-    if not a then return {""},nil end
-    return { string.sub(firstarg,1, a -1) }
+    local a = M.stringfind(firstarg, secondarg, 1, true)
+    if not a then return { "" }, nil end
+    return { string.sub(firstarg, 1, a - 1) }
 end
 
 
@@ -910,11 +911,12 @@ local function callFunction(fname, seq, ctx)
     local func = getFunction(namespace, fname)
     local minarg, maxarg = func[4], func[5]
 
-    if #seq < minarg or ( maxarg ~= -1 and #seq > maxarg ) then
+    if #seq < minarg or (maxarg ~= -1 and #seq > maxarg) then
         if minarg == maxarg then
-            return {}, string.format("function %s requires %d arguments, %d supplied",func[1],minarg,#seq)
+            return {}, string.format("function %s requires %d arguments, %d supplied", func[1], minarg, #seq)
         else
-            return {}, string.format("function %s requires %d to %d arguments, %d supplied",func[1],minarg,maxarg,#seq)
+            return {}, string.format("function %s requires %d to %d arguments, %d supplied", func[1], minarg, maxarg,
+                #seq)
         end
     end
 
@@ -1442,14 +1444,47 @@ end
 ---@return string? error
 function parse_range_expr(tl)
     enterStep(tl, "11 parse_range_expr")
+    local efs = {}
     local ef, errmsg = parse_additive_expr(tl)
     if errmsg ~= nil then
         leaveStep(tl, "11 parse_range_expr")
         return nil, errmsg
     end
+    efs[#efs + 1] = ef
+    if tl:nextTokIsType("tokQName") then
+        if tl:readNexttokIfIsOneOfValue({ "to" }) then
+            ef, errmsg = parse_additive_expr(tl)
+            if errmsg ~= nil then
+                leaveStep(tl, "11 parse_range_expr")
+                return nil, errmsg
+            end
+            efs[#efs + 1] = ef
+        end
+    end
+    if #efs == 1 then
+        leaveStep(tl, "11 parse_range_expr")
+        return efs[1], nil
+    end
 
+    local evaler = function(ctx)
+        local lhs, rhs, msg
+        lhs, msg = efs[1](ctx)
+        if msg then return nil, msg end
+        rhs, msg = efs[2](ctx)
+        if msg then return nil, msg end
+        local lhsn, rhsn
+        lhsn, msg = number_value(lhs)
+        if msg then return nil, msg end
+        rhsn, msg = number_value(rhs)
+        if msg then return nil, msg end
+        local seq = {}
+        for i = lhsn, rhsn do
+            seq[#seq + 1] = i
+        end
+        return seq, nil
+    end
     leaveStep(tl, "11 parse_range_expr")
-    return ef, nil
+    return evaler, nil
 end
 
 -- [12] AdditiveExpr ::= MultiplicativeExpr ( ("+" | "-") MultiplicativeExpr )*
@@ -2177,7 +2212,7 @@ function parse_primary_expr(tl)
             local varname = nexttok[1]
             local value = ctx.vars[varname]
             if type(value) == "table" then return value, nil end
-            if not ctx.vars[varname] then return nil, string.format("variable %s does not exist",varname) end
+            if not ctx.vars[varname] then return nil, string.format("variable %s does not exist", varname) end
             return { ctx.vars[varname] }, nil
         end
         leaveStep(tl, "41 parse_primary_expr (vr)")
@@ -2363,4 +2398,3 @@ function context:execute(xpathstring)
 end
 
 return M
-

@@ -1230,6 +1230,9 @@ function initialize_luatex_and_generate_pdf()
             namespaces = layoutxml[".__ns"]
         }
         data = xpath.context:new(ctxvalue)
+        for k,v in pairs(vars) do
+            data.vars[k] = v
+        end
     end
 
     dispatch(layoutxml,data)
@@ -1392,10 +1395,6 @@ function initialize_luatex_and_generate_pdf()
     if newxpath then
         data.xmldoc = {dataxml}
         data.sequence = {dataxml}
-
-        for k,v in pairs(vars) do
-            data.vars[k] = v
-        end
     else
         xpath.set_variable("_bleed", "0mm")
         xpath.set_variable("_pageheight", "297mm")
@@ -1458,7 +1457,6 @@ function initialize_luatex_and_generate_pdf()
             err(msg)
         end
         name = xpath.string_value(seq)
-        data.vars.__position = 1
     else
         name = dataxml[".__local_name"]
         xpath.set_variable("__position", 1)
