@@ -1,0 +1,50 @@
+[appendix,compatibilityolderversions]
+[[app-compatibilityolderversions]]
+= Kompatibilität mit älteren Versionen des speedata Publisher
+
+Die Entwicklung des speedata Publishers hat ein großes »Mantra«: Bestehende Setups müssen ohne Änderung mit neueren Versionen des speedata Publishers funktionieren. Sie können also immer auf die neueste Entwicklungsversion aktualisieren, ohne befürchten zu müssen, dass Sie Ihre Layout-Datei ändern müssen.
+
+Das bringt natürlich Einschränkungen bei der Entwicklung und Nutzung mit sich.
+Neue Funktionen haben neue XML-Tags oder Attribute.
+Zum Beispiel wurde mit der Version 2.3.39 ein Befehl zum Setzen von Optionen für die PDF-Verarbeitung eingeführt. Dies betrifft nur Layoutdateien, die diesen Befehl verwenden, alte Layoutdateien ignorieren diesen Befehl einfach. Ähnlich verhält es sich mit Attributen, z. B. wurde das Attribut balance in Tabellen in Version 3.1.24 eingeführt. In diesem Fall werden ältere Versionen des speedata Publishers die Tabelle nicht ausbalancieren, sondern weiterhin funktionieren.
+
+Seit der ersten Veröffentlichung des speedata Publishers im Jahr 2010 wurden einige wichtige neue Technologien eingeführt. Diese funktionieren in der Regel mit einem Feature-Flag:
+
+* Um den Fontloader »harfbuzz« zu aktivieren, müssen Sie die Option fontloader auf `harfbuzz` setzen,
+* der neue XML/XPath-Parser wird nur verwendet, wenn die Option `xpath` auf `lxpath` gesetzt ist.
+
+Diese beiden Funktionen ersetzen die älteren Versionen sofort.
+Es gibt ein paar Sonderfälle, die die alte Version dieser beiden Optionen erfordern:
+
+* Der alte Fontloader `fontforge` hat die Fähigkeit, virtuelle Fonts zu verwenden, die dazu dienen, einige Fontfeatures vorzutäuschen.
+* Der alte xpath-Parser luxor kann mit Dimensionen rechnen (z.B. `"2cm + 12mm"`), dies entspricht nicht der XPath-Spezifikation, wird aber in einigen Layouts verwendet.
+
+Version 5 des speedata Publishers setzt den Standard auf die neueren Versionen dieser beiden Optionen. Dies hat keine Auswirkungen auf die meisten Layouts. Es wird jedoch einige Layouts geben, die sich auf die alten Standardwerte verlassen und die dann nicht mehr funktionieren. Daher müssen Sie die älteren Versionen in der Konfigurationsdatei aktivieren.
+
+== Austausch von Layoutdateien zwischen verschiedenen Installationen
+
+Es kann zu Problemen kommen, wenn Sie sich darauf verlassen, dass eine Funktion vorhanden ist (z. B. der alte Fontloader), Sie aber die Layoutdatei mit einer Installation verwenden, in der die neue Funktion aktiviert ist. Sie können die Anforderungen in der Layoutdatei (ab Version 4.15.10) festlegen, indem Sie dem Befehl <<cmd-layout,`<Layout>`>> eine durch Kommata getrennte Liste übergeben:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+    xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    require="lxpath,harfbuzz">
+-------------------------------------------------------------------------------
+
+Dies stellt sicher, dass die Installation sowohl den neuen XPath-Parser als auch den neuen Fontloader aktiviert hat. Derzeit ist dies nur eine Überprüfung, zukünftige Versionen könnten diese Funktionen über das require-Attribut aktivieren.
+
+Die verfügbaren Optionen sind:
+
+[options="header"]
+|=======
+| Schlüsselwort  | Beschreibung
+| `lxpath` | Stellt sicher, dass der neue XPath Parser benutzt wird.
+| `luxor` | Stellt sicher, dass der alte XPath Parser benutzt wird.
+| `fontforge` | Sichert zu, dass der alte Fontlader benutzt wird.
+| `harfbuzz` | Sichert zu, dass der neue Fontlader benutzt wird.
+|=======
+
+
+// eof

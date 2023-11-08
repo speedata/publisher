@@ -2821,6 +2821,11 @@
                      <a:documentation>A name for the layout. Optional, without any influence on the layout itself.</a:documentation>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="require">
+                     <a:documentation>A comma separated list of required default features. Currently supported features are luxor/lxpath and harfbuzz/fontforge.</a:documentation>
+                  </attribute>
+               </optional>
                <oneOrMore>
                   <optional>
                      <ref name="e_AttachFile"></ref>

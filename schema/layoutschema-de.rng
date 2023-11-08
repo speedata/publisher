@@ -2821,6 +2821,11 @@
                      <a:documentation>Name des Layouts. Hat keinen Einfluss auf das Layout.</a:documentation>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="require">
+                     <a:documentation>Kommaseparierte Liste mit erforderlichen Features. Erlaubt sind luxor/lxpath und harfbuzz/fontforge</a:documentation>
+                  </attribute>
+               </optional>
                <oneOrMore>
                   <optional>
                      <ref name="e_AttachFile"></ref>

@@ -1,0 +1,56 @@
+[appendix,compatibilityolderversions]
+[[app-compatibilityolderversions]]
+= Compatibility with older versions of the speedata Publisher
+
+The development of the speedata Publisher has one big “mantra”: existing setups must work with newer versions of the speedata Publisher without change. So you can always upgrade the latest development version without having to fear that you need to change your layout file.
+
+This imposes limitations on development and usage of course.
+New features have new XML tags or attributes.
+For example the version 2.3.39 introduced a command to set options for PDF processing.
+This only affects layout files that use this commands, old layout files simply ignore this command.
+Similar with attributes, for example the `balance` attribute in tables was introduced in version 3.1.24.
+In this case, older versions of the speedata Publisher will not balance the table, but will continue to work.
+
+There are some major new technologies introduced since the speedata Publisher was first published in 2010. These usually work with a feature flag:
+
+* to activate the “harfbuzz” font loader, you need to set the option `fontloader` to `harfbuzz`,
+* the new XML/XPath parser is only used when the option `xpath` is set to `lxpath`.
+
+Both of these two features are drop-in replacements of the older versions.
+There are a few special edge cases that require the old version of these two options:
+
+* The old font loader `fontforge` has the ability to use virtual fonts which is used to fake some font features.
+* The old xpath parser `luxor` can be used to calculate with dimensions (for example “2cm + 12mm”), this is not in accordance to the XPath specification, but used in some layouts.
+
+Version 5 of the speedata Publisher sets the default to the newer versions of these two options.
+This will have no effect on most of the layouts.
+However there will be some layouts which rely on the old defaults and will break. Therefore you need to enable the older versions in the <<ch-configuration,configuration file>>.
+
+== Exchanging layout files between different installations
+
+Problems might show up when you rely on a feature to be present (for example the old font loader), but you use the layout file with an installation that has the new one activated.
+You can set the requirements in the layout file (beginning with version 4.15.10) by giving a comma separated list to the <<cmd-layout,`Layout`>> command:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+    xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    require="lxpath,harfbuzz">
+-------------------------------------------------------------------------------
+
+This makes sure that the installation has both activated the new XPath parser and the new font loader. Currently this is only a check, future versions might activate these features from the `require` attribute.
+
+The available options are
+
+[options="header"]
+|=======
+| Key  | Value
+| `lxpath` | Assert that the new XPath parser is used.
+| `luxor` | Assert that the old XPath parser is used.
+| `fontforge` | Make sure that the old font loader is active.
+| `harfbuzz` | Make sure that the new font loader is active.
+|=======
+
+
+// eof

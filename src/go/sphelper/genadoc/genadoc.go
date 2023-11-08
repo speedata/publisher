@@ -290,7 +290,11 @@ func GenerateAdocFiles(cfg *config.Config, lang string, mode ...string) error {
 
 		fmt.Fprintln(clw)
 		for _, r := range rr {
-			fmt.Fprintf(clw, "%s (%s)::\n", r.version, r.date.Format("2.1.2006"))
+			if lang == "en" {
+				fmt.Fprintf(clw, "%s (%s)::\n", r.version, r.date.Format("2006-01-02"))
+			} else {
+				fmt.Fprintf(clw, "%s (%s)::\n", r.version, r.date.Format("2.1.2006"))
+			}
 			for _, e := range r.entries {
 				fmt.Fprintf(clw, " * %s\n", e)
 			}

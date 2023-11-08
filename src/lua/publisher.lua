@@ -1174,12 +1174,18 @@ function initialize_luatex_and_generate_pdf()
         exit()
     end
     local version
+    local requirements
     if newxpath then
-        if layoutxml[".__attributes"] and layoutxml[".__attributes"]["version"] then
-            version = layoutxml[".__attributes"]["version"]
+        local attr = layoutxml[".__attributes"]
+        if attr and attr["version"] then
+            version = attr["version"]
+        end
+        if attr and attr["require"] then
+            requirements = attr["require"]
         end
     else
         version = layoutxml.version
+        requirements = layoutxml.require
     end
     if version then
         local version_mismatch = false
@@ -1199,6 +1205,35 @@ function initialize_luatex_and_generate_pdf()
         if version_mismatch then
             err("Version mismatch. speedata Publisher is at version %s, requested version %s", env_publisherversion, version)
             exit()
+        end
+    end
+    if requirements and type(requirements) == "string" then
+        local r = string.explode(requirements,",")
+        for _, req in ipairs(r) do
+            if req == "lxpath" then
+                if not newxpath then
+                    err("This layout requires the lxpath XML / XPath parser\nPlease see https://doc.speedata.de/publisher/en/lxpath/ how to activate.")
+                    exit(false)
+                end
+            elseif req == "luxor" then
+                    if newxpath then
+                        err("This layout requires the luxor XML / XPath parser\nPlease see https://doc.speedata.de/publisher/en/xpathfunctions/ how to activate.")
+                        exit(false)
+                    end
+            elseif req == "harfbuzz" then
+                if options.fontloader ~= "harfbuzz" then
+                    err("This layout requires the harfbuzz font loader\nPlease see https://doc.speedata.de/publisher/en/configuration/ how to activate.")
+                    exit(false)
+                end
+            elseif req == "fontforge" then
+                if options.fontloader ~= "fontforge" then
+                    err("This layout requires the fontforge font loader\nPlease see https://doc.speedata.de/publisher/en/configuration/ how to activate.")
+                    exit(false)
+                end
+            else
+                err("This layout requires feature %q, but I don't know what it is.\nPerhaps I am too old?",req)
+                exit(false)
+            end
         end
     end
     if not newxpath then

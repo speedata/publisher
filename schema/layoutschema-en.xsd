@@ -2874,6 +2874,11 @@
           <xs:documentation>A name for the layout. Optional, without any influence on the layout itself.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="require">
+        <xs:annotation>
+          <xs:documentation>A comma separated list of required default features. Currently supported features are luxor/lxpath and harfbuzz/fontforge.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Li">

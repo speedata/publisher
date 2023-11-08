@@ -38,7 +38,7 @@ See the <<ch-commandline,command line section>> for explanations on how to start
 
 == Examples
 
-There is a separate repository with examples on Github (https://github.com/speedata/examples). There you can find complete documents, which you can use to try out different functionality.
+You can find some examples of real world documents https://showcase.speedata.de/[in the showcase].  If you need hands-on examples, you can find them in a separate repository on Github (https://github.com/speedata/examples). There you can find complete documents, which you can use to try out different functionality.
 
 
 .Examples from the repository

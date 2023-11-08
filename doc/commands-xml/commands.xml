@@ -4781,6 +4781,12 @@
     <seealso>
       <cmd name="DefineFontfamily"/>, <cmd name="Fallback"/> <ref name="fonts"/></seealso>
   </command>
+
+    <!--
+    *************************
+    * Layout
+    *************************
+  -->
   <command en="Layout">
     <description xml:lang="en">
       <para>This command is the root element in the Layout instructions.</para>
@@ -4809,6 +4815,14 @@
       </description>
       <description xml:lang="de">
         <para>Name des Layouts. Hat keinen Einfluss auf das Layout.</para>
+      </description>
+    </attribute>
+    <attribute en="require" type="text" optional="yes" since="4.15.10">
+      <description xml:lang="en">
+        <para>A comma separated list of required default features. Currently supported features are <tt>luxor</tt>/<tt>lxpath</tt> and <tt>harfbuzz</tt>/<tt>fontforge</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Kommaseparierte Liste mit erforderlichen Features. Erlaubt sind <tt>luxor</tt>/<tt>lxpath</tt> und <tt>harfbuzz</tt>/<tt>fontforge</tt></para>
       </description>
     </attribute>
     <example xml:lang="en">

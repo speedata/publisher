@@ -2874,6 +2874,11 @@
           <xs:documentation>Name des Layouts. Hat keinen Einfluss auf das Layout.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="require">
+        <xs:annotation>
+          <xs:documentation>Kommaseparierte Liste mit erforderlichen Features. Erlaubt sind luxor/lxpath und harfbuzz/fontforge</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Li">

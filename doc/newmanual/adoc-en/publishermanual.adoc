@@ -57,6 +57,7 @@ endif::[]
 - <<ch-speedatapro>>
 - <<ch-changelog,Changelog>>
 - <<app-glossary,Glossary>>
+- <<app-compatibilityolderversions,Compatibility with older versions>>
 - <<app-compatibilitylist,Compatibility list>>
 - <<ch-commandreference,Command reference>>
 
@@ -89,6 +90,7 @@ include::speedataproen.adoc[]
 include::changelog.adoc[]
 include::glossary.adoc[]
 include::compatibilitylist.adoc[]
+include::compatibility-olderversions.adoc[]
 
 [appendix]
 [.split]

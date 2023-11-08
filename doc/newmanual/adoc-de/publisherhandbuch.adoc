@@ -59,6 +59,7 @@ endif::[]
 - <<ch-speedatapro>>
 - <<app-glossar,Glossar>>
 - <<app-kompatibilitaet,Kompatibilitätsliste>>
+- <<app-compatibilityolderversions,Kompatibilität mit älteren Versionen des speedata Publishers>>
 - <<ch-befehlsreferenz,Befehlsreferenz>>
 
 
@@ -89,14 +90,10 @@ include::lxpath.adoc[]
 include::variablen.adoc[]
 include::schemazuweisen.adoc[]
 include::speedataprode.adoc[]
-
-// [[ch-htmlreferenz]]
-// = HTML Referenz
-// include::htmlreferenz.adoc[leveloffset=+1]
-
 include::changelog.adoc[]
 include::glossar.adoc[]
 include::kompatibilitaet.adoc[]
+include::compatibility-olderversions.adoc[]
 
 [appendix]
 [.split]
