@@ -5,7 +5,6 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -165,7 +164,7 @@ func ListFonts() []string {
 
 func writeContentsToTempfile(contents string) (string, error) {
 	var filename string
-	f, err := ioutil.TempFile("", "speedata")
+	f, err := os.CreateTemp("", "speedata")
 	if err != nil {
 		return "", err
 	}

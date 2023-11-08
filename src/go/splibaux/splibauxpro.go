@@ -5,7 +5,6 @@ package splibaux
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -61,7 +60,7 @@ func saveFileFromURL(parsedURL *url.URL, rawURL string) (string, error) {
 
 	// We create a temporary file and use that for downloading.
 	// After that (the process can take some time) we create the file we need.
-	f, err := ioutil.TempFile(rawimgcache, "download")
+	f, err := os.CreateTemp(rawimgcache, "download")
 	if err != nil {
 		return "", err
 	}

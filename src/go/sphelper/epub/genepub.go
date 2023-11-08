@@ -1,7 +1,7 @@
 package epub
 
 import (
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -48,7 +48,7 @@ func writeEpub(conf ebpubconf, outdir string) error {
 		filename := sec[0]
 		destfilename := filename
 		// destfilename := strings.TrimPrefix(filename, "out/")
-		b, err := ioutil.ReadFile(filepath.Join(outdir, filename))
+		b, err := os.ReadFile(filepath.Join(outdir, filename))
 		if err != nil {
 			return err
 		}

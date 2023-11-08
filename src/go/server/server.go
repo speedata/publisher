@@ -11,7 +11,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -67,7 +66,7 @@ func (s *Server) makePublisherTemp() error {
 }
 
 func fileToString(filename string) string {
-	myfile, err := ioutil.ReadFile(filename)
+	myfile, err := os.ReadFile(filename)
 	if err != nil {
 		return ""
 	}
@@ -75,7 +74,7 @@ func fileToString(filename string) string {
 }
 
 func encodeFileToBase64(filename string) (string, error) {
-	layoutf, err := ioutil.ReadFile(filename)
+	layoutf, err := os.ReadFile(filename)
 	if err != nil {
 		return "", err
 	}
@@ -298,7 +297,7 @@ func (s *Server) sendPDF(w http.ResponseWriter, r *http.Request, id string) erro
 	}
 
 	statusPath := filepath.Join(publishdir, "publisher.status")
-	data, err := ioutil.ReadFile(statusPath)
+	data, err := os.ReadFile(statusPath)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return fmt.Errorf("Internal error 008")
@@ -320,7 +319,7 @@ func (s *Server) sendPDF(w http.ResponseWriter, r *http.Request, id string) erro
 	// if jobname.txt was written, use the contents for the jobname
 	fi, err = os.Stat(filepath.Join(publishdir, "jobname.txt"))
 	if err == nil {
-		name, err := ioutil.ReadFile(filepath.Join(publishdir, "jobname.txt"))
+		name, err := os.ReadFile(filepath.Join(publishdir, "jobname.txt"))
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return fmt.Errorf("Internal error 010")
@@ -376,7 +375,7 @@ func (s *Server) sendFile(id string, filename string, w http.ResponseWriter, r *
 		encoder.Close()
 	case "json", "JSON":
 		var buf []byte
-		buf, err = ioutil.ReadAll(f)
+		buf, err = io.ReadAll(f)
 		if err != nil {
 			s.writeInternalError(w)
 			return
@@ -428,7 +427,7 @@ func (s *Server) writeInternalError(w http.ResponseWriter) {
 // write necessary files encoded in the POST json
 func (s *Server) writeFiles(w http.ResponseWriter, r *http.Request) (string, error) {
 	var files map[string]interface{}
-	data, err := ioutil.ReadAll(r.Body)
+	data, err := io.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return "", fmt.Errorf("Internal error 011")
@@ -445,7 +444,7 @@ func (s *Server) writeFiles(w http.ResponseWriter, r *http.Request) (string, err
 		return "", fmt.Errorf("Internal error 012")
 	}
 
-	tmpdir, err := ioutil.TempDir(s.serverTemp, "")
+	tmpdir, err := os.MkdirTemp(s.serverTemp, "")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return "", fmt.Errorf("Internal error 013")
@@ -483,7 +482,7 @@ func (s *Server) writeFiles(w http.ResponseWriter, r *http.Request) (string, err
 		}
 	}
 	if jobname != "" {
-		err = ioutil.WriteFile(filepath.Join(tmpdir, "jobname.txt"), []byte(jobname), 0644)
+		err = os.WriteFile(filepath.Join(tmpdir, "jobname.txt"), []byte(jobname), 0644)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return "", fmt.Errorf("Internal error 017")
@@ -532,8 +531,9 @@ func (s *Server) v0CreatePDFHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Start a publishing process. Accepted parameter:
-//   jobname=<jobname>
-//   vars=var1=foo,var2=bar (where all but the first = is encoded as %3D)
+//
+//	jobname=<jobname>
+//	vars=var1=foo,var2=bar (where all but the first = is encoded as %3D)
 func (s *Server) v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := s.writeFiles(w, r)
 	if err != nil {
@@ -594,7 +594,7 @@ func (s *Server) getStatusForID(id string) (statusresponse, error) {
 		return spstatus, fmt.Errorf("Error stat: %s", err)
 	}
 
-	data, err := ioutil.ReadFile(statusPath)
+	data, err := os.ReadFile(statusPath)
 	if err != nil {
 		return spstatus, fmt.Errorf("Error read: %s", err)
 	}

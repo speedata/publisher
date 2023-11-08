@@ -3,7 +3,6 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -64,7 +63,7 @@ func readVersion(product string, basedir string) Version {
 	}
 	defer os.Chdir(curwd)
 
-	buf, err := ioutil.ReadFile("version")
+	buf, err := os.ReadFile("version")
 	if err != nil {
 		panic("Cannot read version file")
 	}

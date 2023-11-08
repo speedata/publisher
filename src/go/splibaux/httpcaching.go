@@ -4,7 +4,6 @@ import (
 	"crypto/md5"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -50,7 +49,7 @@ func getFilenameAndDoCaching(cachedir, outfilename, url string) (string, error) 
 	if resp.StatusCode == http.StatusNotFound {
 		return "", fmt.Errorf("Resource not found (404): %q", url)
 	}
-	outf, err := ioutil.TempFile(cachedir, "download")
+	outf, err := os.CreateTemp(cachedir, "download")
 	if err != nil {
 		return "", err
 	}

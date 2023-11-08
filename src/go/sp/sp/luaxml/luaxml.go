@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/xml"
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	lua "github.com/yuin/gopher-lua"
 )
@@ -120,7 +120,7 @@ func encodeTable(l *lua.LState) int {
 	l.SetTop(0)
 	l.Push(lua.LTrue)
 	enc.Flush()
-	ioutil.WriteFile(filename, b.Bytes(), 0644)
+	os.WriteFile(filename, b.Bytes(), 0644)
 	return 1
 }
 

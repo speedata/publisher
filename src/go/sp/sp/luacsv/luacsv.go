@@ -5,7 +5,6 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"regexp"
 
@@ -65,7 +64,7 @@ func decode(l *lua.LState) int {
 		rd = charmap.ISO8859_1.NewDecoder().Reader(rd)
 	}
 
-	data, err := ioutil.ReadAll(rd)
+	data, err := io.ReadAll(rd)
 	if err != nil {
 		return lerr(l, err.Error())
 	}

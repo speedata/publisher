@@ -2,7 +2,7 @@ package css
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -67,7 +67,7 @@ func (c *CSS) parseCSSFile(filename string) (tokenstream, error) {
 }
 
 func parseCSSBody(filename string) (tokenstream, error) {
-	b, err := ioutil.ReadFile(filename)
+	b, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}

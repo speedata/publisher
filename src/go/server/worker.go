@@ -7,7 +7,6 @@ package server
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -111,8 +110,8 @@ func (w worker) Start() {
 				if err != nil {
 					fmt.Fprintf(w.Server.ProtocolFile, "%s: start sp, returns %q\n", work.ID, err.Error())
 				}
-				ioutil.WriteFile(filepath.Join(dir, "output.txt"), out, 0600)
-				ioutil.WriteFile(filepath.Join(dir, work.ID+"finished.txt"), []byte("finished"), 0600)
+				os.WriteFile(filepath.Join(dir, "output.txt"), out, 0600)
+				os.WriteFile(filepath.Join(dir, work.ID+"finished.txt"), []byte("finished"), 0600)
 				fmt.Fprintf(w.Server.ProtocolFile, "%s: finished\n", work.ID)
 			case <-w.QuitChan:
 				// We have been asked to stop.

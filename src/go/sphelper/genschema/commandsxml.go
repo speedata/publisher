@@ -2,7 +2,7 @@ package genschema
 
 import (
 	"encoding/xml"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 )
@@ -103,7 +103,7 @@ type commandsXML struct {
 }
 
 func readCommandsFile(basedir string) (*commandsXML, error) {
-	commandsdata, err := ioutil.ReadFile(filepath.Join(basedir, "doc", "commands-xml", "commands.xml"))
+	commandsdata, err := os.ReadFile(filepath.Join(basedir, "doc", "commands-xml", "commands.xml"))
 	if err != nil {
 		return nil, err
 	}

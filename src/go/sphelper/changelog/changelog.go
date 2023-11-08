@@ -3,7 +3,7 @@ package changelog
 
 import (
 	"encoding/xml"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 
 	"speedatapublisher/sphelper/config"
@@ -32,7 +32,7 @@ type Changelog struct {
 }
 
 func parseChangelog(filename string) (*Changelog, error) {
-	data, err := ioutil.ReadFile(filename)
+	data, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}

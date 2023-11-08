@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -1229,7 +1228,7 @@ func (d *DocBook) WriteHTMLFiles(basedir string) error {
 		}
 		searchindex := filepath.Join(d.cfg.Builddir, fmt.Sprintf("searchindex-%s.json", d.Lang))
 		fmt.Println("Write search index to ", searchindex)
-		if err = ioutil.WriteFile(searchindex, data, 0644); err != nil {
+		if err = os.WriteFile(searchindex, data, 0644); err != nil {
 			return err
 		}
 	} else {
