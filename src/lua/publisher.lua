@@ -1233,6 +1233,10 @@ function initialize_luatex_and_generate_pdf()
         for k,v in pairs(vars) do
             data.vars[k] = v
         end
+    else
+        for k,v in pairs(vars) do
+            xpath.set_variable(k,v)
+        end
     end
 
     dispatch(layoutxml,data)
@@ -1403,10 +1407,6 @@ function initialize_luatex_and_generate_pdf()
         xpath.set_variable("_matter","mainmatter")
         xpath.set_variable("__maxwidth", tex.sp("190mm"))
         xpath.set_variable("_lastpage", 1)
-
-        for k,v in pairs(vars) do
-            xpath.set_variable(k,v)
-        end
     end
 
     -- The xml now looks like
