@@ -71,6 +71,6 @@ We offer commercial support for the speedata Publisher. You can find the contact
 
 --------
 Source: <https://github.com/speedata/publisher/> <br>
-Blog (German): <https://blog.speedata.de/> <br>
+News: <https://news.speedata.de/> <br>
 Webpage: <https://www.speedata.de/> <br>
 Chat: <https://gitter.im/speedata/publisher>
