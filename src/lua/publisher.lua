@@ -6058,6 +6058,7 @@ end
 function montage( nodelist_background,nodelist_foreground, origin_x, origin_y )
     local wd_bg = nodelist_background.width
     local ht_bg = nodelist_background.height + nodelist_background.depth
+    local dp_bg = nodelist_background.depth
     local wd_fg = nodelist_foreground.width
     local ht_fg = nodelist_foreground.height + nodelist_foreground.depth
     local wd = wd_bg - wd_fg
@@ -6088,7 +6089,8 @@ function montage( nodelist_background,nodelist_foreground, origin_x, origin_y )
 
     hbox = node.vpack(hbox)
     hbox.width = wd_bg
-    hbox.height = ht_bg
+    hbox.height = ht_bg - dp_bg
+    hbox.depth = dp_bg
     return hbox
 end
 

@@ -1,0 +1,46 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="5cm" width="21cm" />
+    <Pagetype name="page" test="true()">
+        <Margin left="10mm" right="10mm" top="10mm" bottom="10mm" />
+        <AtPageCreation>
+            <PlaceObject row="1" column="1">
+                <Overlay>
+                    <Textblock>
+                        <Paragraph>
+                            <Value>A</Value>
+                        </Paragraph>
+                    </Textblock>
+                    <Position x="0" y="0">
+                        <Textblock textformat="centered">
+                            <Paragraph>
+                                <Value>B</Value>
+                            </Paragraph>
+                        </Textblock>
+                    </Position>
+                    <Position x="0" y="0">
+                        <Textblock textformat="right">
+                            <Paragraph>
+                                <Value>C</Value>
+                            </Paragraph>
+                        </Textblock>
+                    </Position>
+                </Overlay>
+            </PlaceObject>
+            <PlaceObject row="1" column="1">
+                <Transformation matrix="1 0 0 1 0 -12.5">
+                    <Rule direction="horizontal" length="19" rulewidth="0.6pt" />
+                </Transformation>
+            </PlaceObject>
+        </AtPageCreation>
+    </Pagetype>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>dummy text</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
