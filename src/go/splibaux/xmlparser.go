@@ -17,6 +17,7 @@ func indent(i int) string {
 }
 
 func readXMLFile(r io.Reader, startindex, extraindentlevel int) (string, error) {
+	i := 0
 	var out strings.Builder
 
 	stackcounter := []int{startindex}
@@ -55,6 +56,9 @@ func readXMLFile(r io.Reader, startindex, extraindentlevel int) (string, error) 
 				fmt.Fprintf(&out, `%s[".__name"] = "%s",`, indent(indentamount), luaescape(v.Name.Local))
 				fmt.Fprintln(&out)
 				fmt.Fprintf(&out, `%s[".__type"] = "element",`, indent(indentamount))
+				fmt.Fprintln(&out)
+				fmt.Fprintf(&out, `%s[".__id"] = "%d",`, indent(indentamount), i)
+				i++
 				fmt.Fprintln(&out)
 				fmt.Fprintf(&out, `%s[".__local_name"] = "%s",`, indent(indentamount), luaescape(v.Name.Local))
 				fmt.Fprintln(&out)

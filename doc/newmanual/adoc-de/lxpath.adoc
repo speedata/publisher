@@ -74,12 +74,20 @@ Angabe der Breite wird auf den Inhalt der Variablen `breite` zurückgegriffen, d
 *   Rechenoperationen (`{ast}`, `div`, `idiv`, `+`, `-`, `mod`). Beispiel:   `( 6 + 4.5 ) * 2`
 *   Zugriff auf Variablen. Beispiel: `$spalte + 2`
 *   Zugriff auf den aktuellen Knoten (Punkt-Operator). Beispiel: `. + 2`
+*   Zugriff auf Unterelemente. Beispiel: `produktdaten`, `{ast}`, `foo/bar`, `node()`.
+*   Zugriff auf Elternelement: `../`.
+*   Filter in eckigen Klammern: `article[1]` wählt das erste Kindelement `article` aus.
+*   Zugriff auf Attribute im aktuellen Knoten. Beispiel `@a`.
 *   Zugriff auf Unterelemente. Beispiel: `produktdaten`, `{ast}`, `foo/bar`
 *   Zugriff auf Attribute im aktuellen Knoten. Beispiel `@a`
 *   Zugriff auf Attribute in Kindelementen, zum Beispiel `foo/@bar`.
 *   Boolesche Ausdrücke: `<`, `>`, `\<=`, `>=`, `=`, `!=`. Vorsicht: das   Zeichen `<` muss in XML als `\&lt;` geschrieben werden,  das Zeichen  `>` kann als `\&gt;` geschrieben werden. Beispiel: `$zahl > 6`. Kann in Bedingungen benutzt werden.
 *   `if`/ `then`/ `else`-Abfragen: `if (...) then ... else ...`
 *   for-Ausdrücke, z.B.: `for $i in (1,2,3) return $i * 2` oder `for $i in 1 to 3 return $i * 2`.
+*   Die bekannten Achsen wie preceding-sibling, parent oder descendant-or-self.
+
+Immer noch im Unklaren, wie XPath funktioniert? Bei https://www.w3schools.com/xml/xpath_intro.asp[W3Schools gibt es ein gutes Tutorial].
+
 
 
 == Layout-Funktionen
@@ -308,10 +316,10 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `root(<element>)`::
     Gibt das Wurzelelement des Elements zurück.
 
-`ends-with ( <string>, <string>)`::
+`ends-with( <string>, <string>)`::
    Gibt wahr (true) zurück, wenn die erste Zeichenkette mit der zweiten endet. Beispiel: `ends-with ( "tattoo", "too")` ergibt `true`.
 
-`starts-with ( <string>, <string>)`::
+`starts-with( <string>, <string>)`::
    Gibt wahr (true) zurück, wenn die erste Zeichenkette mit der zweiten anfängt. Beispiel: `ends-with ( "tattoo", "tat")` ergibt `true`.
 
 `string(<Sequenz>)`::

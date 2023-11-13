@@ -70,13 +70,21 @@ The width of the textblock is taken from the variable `$width`, the contents of 
 * Arithmetic operation (`{ast}`, `div`, `idiv`, `+`, `-`, `mod`). Example:   `( 6 + 4.5 ) * 2`
 * Variables. Example: `$column + 2`
 * Access to the current node (dot operator). Example: `. + 2`
+* Access to subelements. Examples: `productdata`, `{ast}`, `foo/bar`, `node()`,
+* Parent nodes: `../`
+* Filter in square brackets, for example `article[1]` selects the first article.
 * Access to subelements. Examples: `productdata`, `{ast}`, `foo/bar`
 * Attribute access in the current node. Example `@a`
 * Attribute access in subnodes, for example `foo/@bar`
-* Boolean expressions:  `<`, `>`, `\<=`, `>=`, `=`, `!=`. Attention, the less than symbol `<` must be written in XML as `\&lt;`, the symbol `>`  may be written as `\&gt;`. Example: `$number > 6`. Can be used in tests.
+* Boolean expressions:  `<`, `>`, `\<=`, `>=`, `=`, `!=`. Attention, the less than symbol `<` must be written in XML as `\&lt;`,
+the symbol `>`  may be written as `\&gt;`. Example: `$number > 6`. Can be used in tests.
 * if/then/else expressions: if (...) then ... else ....
 * for clauses for example: `for $i in (1,2,3) return $i * 2` or `for $i in 1 to 3 return $i * 2`.
+* The well known axis expressions like following-sibling, parent, preceding-sibling.
 
+See the https://github.com/speedata/lxpath/blob/main/lxpath_test.lua[test file of lxpath] if in doubt.
+
+If you are still uncertain about XPath, please follow https://www.w3schools.com/xml/xpath_intro.asp[the good tutorial at W3Schools].
 See the https://github.com/speedata/lxpath/blob/main/lxpath_test.lua[test file of lxpath] if in doubt
 
 == The following XPath functions are known to the system:

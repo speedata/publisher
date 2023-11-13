@@ -163,13 +163,15 @@ function tokenlist:new(o)
     return o
 end
 
+---@param pos integer?
 ---@return token?
 ---@return boolean
-function tokenlist:peek()
-    if self.pos > #self then
+function tokenlist:peek(pos)
+    pos = pos or 1
+    if self.pos + pos - 1 > #self then
         return nil, true
     end
-    return self[self.pos], false
+    return self[self.pos + pos - 1], false
 end
 
 ---@return token?
@@ -207,13 +209,19 @@ end
 ---@param tokvalues table
 ---@return token?
 ---@return string?
-function tokenlist:readNexttokIfIsOneOfValue(tokvalues)
+function tokenlist:readNexttokIfIsOneOfValue(tokvalues, typ)
     if self.pos > #self then
         return nil, nil
     end
     for _, tokvalue in ipairs(tokvalues) do
         if self[self.pos][1] == tokvalue then
-            return self:read()
+            if typ and self[self.pos][2] == typ then
+                return self:read()
+            elseif typ and self[self.pos][2] ~= typ then
+                -- ignore
+            else
+                return self:read()
+            end
         end
     end
     return nil, nil
@@ -261,7 +269,9 @@ function M.string_to_tokenlist(str)
                 tokens[#tokens + 1] = { '.', "tokOperator" }
                 break
             end
-            if '0' <= nextrune and nextrune <= '9' then
+            if nextrune == "." then
+                tokens[#tokens + 1] = { '..', "tokOperator" }
+            elseif '0' <= nextrune and nextrune <= '9' then
                 unread_rune(runes)
                 unread_rune(runes)
                 local num
@@ -357,6 +367,11 @@ end
 local function is_element(itm)
     return type(itm) == "table" and itm[".__type"] == "element"
 end
+
+local function is_document(itm)
+    return type(itm) == "table" and itm[".__type"] == "document"
+end
+
 M.is_element = is_element
 
 local function is_attribute(itm)
@@ -389,6 +404,9 @@ local function number_value(sequence)
 end
 
 local function boolean_value(seq)
+    if type(seq) == "boolean" then
+        return seq
+    end
     if #seq == 0 then return false, nil end
     if #seq > 1 then return false, "invalid argument for boolean value" end
     local val = seq[1]
@@ -1036,7 +1054,7 @@ function context:document()
     return self.sequence
 end
 
-function context:attributeaixs()
+function context:attributeaixs(testfunc)
     local seq = {}
     for _, itm in ipairs(self.sequence) do
         if is_element(itm) then
@@ -1046,7 +1064,9 @@ function context:attributeaixs()
                     value = value,
                     [".__type"] = "attribute",
                 }
-                seq[#seq + 1] = x
+                if testfunc(x) then
+                    seq[#seq + 1] = x
+                end
             end
         end
     end
@@ -1054,29 +1074,240 @@ function context:attributeaixs()
     return seq, nil
 end
 
-function context:childaxis()
+function context:childaxis(testfunc)
     local seq = {}
     for _, elt in ipairs(self.sequence) do
         if type(elt) == "table" then
-            if is_element(elt) then
-                for _, cld in ipairs(elt) do
-                    seq[#seq + 1] = cld
+            for _, child in ipairs(elt) do
+                if is_element(child) then
+                    child[".__parent"] = elt
                 end
-            elseif elt[".__type"] and elt[".__type"] == "document" then
-                for _, cld in ipairs(elt) do
-                    seq[#seq + 1] = cld
+                if testfunc(child) then
+                    seq[#seq + 1] = child
+                end
+            end
+        end
+    end
+    self.sequence = seq
+    return seq, nil
+end
+
+function context:descendant(testfunc)
+    local seq = {}
+    for _, elt in ipairs(self.sequence) do
+        if type(elt) == "table" then
+            if is_element(elt) or is_document(elt) then
+                for i = 1, #elt do
+                    local child = elt[i]
+                    if is_element(child) then
+                        child[".__parent"] = elt
+                    end
+                    if is_element(child) then
+                        if testfunc(child) then
+                            seq[#seq + 1] = child
+                        end
+                        local newself = self:copy()
+                        newself.sequence = { child }
+                        local s, errmsg = newself:descendant(testfunc)
+                        if errmsg then return nil, errmsg end
+                        if not s then return nil, "descendant is nil" end
+                        for j = 1, #s do
+                            seq[#seq + 1] = s[j]
+                        end
+                    else
+                        if testfunc(child) then
+                            seq[#seq + 1] = child
+                        end
+                    end
                 end
             else
-                for key, value in pairs(elt) do
-                    print(key, value)
-                end
-                assert(false, "table, not element")
+                assert(false)
             end
         elseif type(elt) == "string" then
             seq[#seq + 1] = elt
         else
-            print("something else", type)
+            -- ignore
         end
+    end
+    self.sequence = seq
+    return seq, nil
+end
+
+function context:following(testfunc)
+    local seq   = {}
+    local newself
+    local ret, errmsg
+    newself     = self:copy()
+    ret, errmsg = newself:followingSibling(testfunc)
+    if errmsg then return nil, errmsg end
+    ret, errmsg = newself:descendantOrSelf(testfunc)
+    if errmsg then return nil, errmsg end
+    if not ret then return nil, "following: ret is empty" end
+    for _, itm in ipairs(ret) do
+        seq[#seq + 1] = itm
+    end
+    self.sequence = seq
+    return seq, nil
+end
+
+function context:followingSibling(testfunc)
+    local seq = {}
+    for _, elt in ipairs(self.sequence) do
+        if is_element(elt) then
+            local curid = elt[".__id"]
+            local parent = elt[".__parent"]
+            local startCollecting = false
+            for i = 1, #parent do
+                local sibling = parent[i]
+                if is_element(sibling) then
+                    if sibling[".__id"] > curid then
+                        startCollecting = true
+                    end
+                end
+                if startCollecting and testfunc(sibling) then
+                    seq[#seq + 1] = sibling
+                end
+            end
+        end
+    end
+    self.sequence = seq
+    return seq, nil
+end
+
+function context:descendantOrSelf(testfunc)
+    local seq = {}
+    for _, elt in ipairs(self.sequence) do
+        if type(elt) == "table" then
+            if is_element(elt) or is_document(elt) then
+                if testfunc(elt) then
+                    seq[#seq + 1] = elt
+                end
+                for i = 1, #elt do
+                    local child = elt[i]
+                    if is_element(child) then
+                        local newself = self:copy()
+                        newself.sequence = { child }
+                        local s, errmsg = newself:descendantOrSelf(testfunc)
+                        if errmsg then return nil, errmsg end
+                        if not s then return nil, "descendantOrSelf is nil" end
+                        for j = 1, #s do
+                            seq[#seq + 1] = s[j]
+                        end
+                    else
+                        if testfunc(child) then
+                            seq[#seq + 1] = child
+                        end
+                    end
+                end
+            else
+                assert(false)
+            end
+        elseif type(elt) == "string" then
+            seq[#seq + 1] = elt
+        else
+            -- ignore
+        end
+    end
+    self.sequence = seq
+    return seq, nil
+end
+
+function context:parentAxis(testfunc)
+    local seq = {}
+    for _, elt in ipairs(self.sequence) do
+        if is_element(elt) then
+            local parent = elt[".__parent"]
+            if testfunc(parent) then
+                seq[#seq + 1] = parent
+            end
+        end
+    end
+    self.sequence = seq
+    return seq, nil
+end
+
+function context:ancestorAxis(testfunc)
+    local seq = {}
+    for _, elt in ipairs(self.sequence) do
+        if is_element(elt) then
+            local parent = elt[".__parent"]
+            if is_element(parent) then
+                local newcontext = self:copy()
+                newcontext.sequence = { parent }
+                local ret, errmsg = newcontext:ancestorAxis(testfunc)
+                if errmsg then return nil, errmsg end
+                for _, itm in ipairs(ret) do
+                    seq[#seq + 1] = itm
+                end
+            end
+            if testfunc(parent) then
+                seq[#seq + 1] = parent
+            end
+        end
+    end
+    self.sequence = seq
+    return seq, nil
+end
+
+function context:ancestorOrSelfAxis(testfunc)
+    local seq = {}
+    for _, elt in ipairs(self.sequence) do
+        if is_element(elt) then
+            local parent = elt[".__parent"]
+            if is_element(parent) then
+                local newcontext = self:copy()
+                newcontext.sequence = { parent }
+                local ret, errmsg = newcontext:ancestorOrSelfAxis(testfunc)
+                if errmsg then return nil, errmsg end
+                for _, itm in ipairs(ret) do
+                    seq[#seq + 1] = itm
+                end
+            end
+        end
+        if testfunc(elt) then
+            seq[#seq + 1] = elt
+        end
+    end
+    self.sequence = seq
+    return seq, nil
+end
+
+function context:precedingSiblingAxis(testfunc)
+    local seq = {}
+    for _, elt in ipairs(self.sequence) do
+        if is_element(elt) then
+            local curid = elt[".__id"]
+            local parent = elt[".__parent"]
+            local startCollecting = true
+            for i = 1, #parent do
+                local sibling = parent[i]
+                if is_element(sibling) then
+                    if sibling[".__id"] >= curid then
+                        startCollecting = false
+                    end
+                end
+                if startCollecting and testfunc(sibling) then
+                    seq[#seq + 1] = sibling
+                end
+            end
+        end
+    end
+    self.sequence = seq
+    return seq, nil
+end
+
+function context:precedingAxis(testfunc)
+    local newself
+    local ret, errmsg
+    local seq   = {}
+    newself     = self:copy()
+    ret, errmsg = newself:precedingSiblingAxis(testfunc)
+    if errmsg then return nil, errmsg end
+    ret, errmsg = newself:descendantOrSelf(testfunc)
+    if errmsg then return nil, errmsg end
+    if not ret then return nil, "following: ret is empty" end
+    for _, itm in ipairs(ret) do
+        seq[#seq + 1] = itm
     end
     self.sequence = seq
     return seq, nil
@@ -1169,18 +1400,17 @@ end
 ---@return string? error
 function parse_expr_single(tl)
     enterStep(tl, "3 parse_expr_single")
-    local tok, errmsg = tl:readNexttokIfIsOneOfValue({ "for", "some", "if" })
-    if errmsg then
-        leaveStep(tl, "3 parse_expr_single")
-        return nil, errmsg
-    end
-    if tok then
+    local tok, errmsg
+    tok = tl:peek()
+    if tok and tok[2] == "tokQName" and (tok[1] == "for" or tok[1] == "some" or tok[1] == "every" or tok[1] == "if") then
         local ef
         if tok[1] == "for" then
+            tl:read()
             ef, errmsg = parse_for_expr(tl)
-        elseif tok[1] == "some" then
-            assert(false, "nyi")
+        elseif tok[1] == "some" or tok[1] == "every" then
+            ef, errmsg = parse_quantified_expr(tl)
         elseif tok[1] == "if" then
+            tl:read()
             ef, errmsg = parse_if_expr(tl)
         else
             return nil, "nil"
@@ -1252,6 +1482,122 @@ function parse_for_expr(tl)
         return ret, nil
     end
     leaveStep(tl, "4 parse_for_expr")
+    return evaler, nil
+end
+
+-- [6] QuantifiedExpr ::= ("some" | "every") "$" VarName "in" ExprSingle ("," "$" VarName "in" ExprSingle)* "satisfies" ExprSingle
+--
+---@param tl tokenlist
+---@return evalfunc?
+---@return string? error
+function parse_quantified_expr(tl)
+    enterStep(tl, "6 parse_quantified_expr")
+    local efs, varnames = {}, {}
+    local ef, errmsg
+    local someEveryTok = tl:read()
+    if not someEveryTok then
+        return nil, "some or every expected"
+    end
+    local someEvery = someEveryTok[1]
+    while true do
+        local vartok, errmsg = tl:read()
+        if errmsg then
+            leaveStep(tl, "6 parse_quantified_expr")
+            return nil, errmsg
+        end
+        if not vartok then
+            leaveStep(tl, "6 parse_quantified_expr")
+            return nil, "could not read variable name"
+        end
+        if vartok[2] ~= "tokVarname" then
+            leaveStep(tl, "6 parse_quantified_expr")
+            return nil, "variable expected"
+        end
+        local varname = vartok[1]
+        local intok = tl:readNexttokIfIsOneOfValue({ "in" }, "tokQName")
+        if not intok then
+            leaveStep(tl, "6 parse_quantified_expr")
+            return nil, "\"in\" expected"
+        end
+        ef, errmsg = parse_expr_single(tl)
+        if errmsg then
+            leaveStep(tl, "6 parse_quantified_expr")
+            return nil, errmsg
+        end
+        efs[#efs + 1] = ef
+        varnames[#varnames + 1] = varname
+        local comma = tl:readNexttokIfIsOneOfValue({ "," }, "tokComma")
+        if not comma then break end
+    end
+    local intok = tl:readNexttokIfIsOneOfValue({ "satisfies" }, "tokQName")
+    if not intok then
+        leaveStep(tl, "6 parse_quantified_expr")
+        return nil, "\"satisfies\" expected"
+    end
+    local singleef
+    singleef, errmsg = parse_expr_single(tl)
+    if errmsg then
+        leaveStep(tl, "6 parse_quantified_expr")
+        return nil, errmsg
+    end
+
+    local evaler = function(ctx)
+        local newcontext = ctx:copy()
+        local copysequence = newcontext.sequence
+        local sequences = {}
+        local seq, errmsg
+        for i = 1, #efs do
+            local ef = efs[i]
+            newcontext.sequence = copysequence
+            seq, errmsg = ef(newcontext)
+            if errmsg then return nil, errmsg end
+            sequences[i] = seq
+        end
+        newcontext.sequence = copysequence
+        if singleef == nil then return nil, "single ef == nil" end
+
+        local func
+        func = function(vars, seq, ef)
+            if #vars > 0 then
+                local varname = table.remove(vars, 1)
+                local sequence = table.remove(seq, 1)
+
+                for i = 1, #sequence do
+                    local nvars = {}
+                    local nseq = {}
+                    for i = 1, #vars do
+                        nvars[#nvars + 1] = vars[i]
+                        nseq[#nseq + 1] = seq[i]
+                    end
+                    newcontext.vars[varname] = { sequence[i] }
+                    local x = func(nvars, nseq, ef)
+                    if x then
+                        if someEvery == "some" then
+                            if boolean_value(x) then
+                                return { true }
+                            end
+                        else
+                            if not boolean_value(x) then
+                                return { false }
+                            end
+                        end
+                    end
+                end
+            else
+                local x, y = ef(newcontext)
+                return x, y
+            end
+            if "some" then
+                return { false }
+            else
+                return { true }
+            end
+        end
+
+        local z = func(varnames, sequences, singleef)
+        return z, nil
+    end
+    leaveStep(tl, "6 parse_quantified_expr")
     return evaler, nil
 end
 
@@ -1818,7 +2164,6 @@ function parse_path_expr(tl)
         if op then
             if op[1] == "/" then
                 local evaler = function(ctx)
-                    w("/, eof")
                     ctx:document()
                     return ctx.sequence, nil
                 end
@@ -1834,18 +2179,16 @@ function parse_path_expr(tl)
         return nil, errmsg
     end
     if op then
-        if op[1] == "/" then
-            local evaler = function(ctx)
-                ctx:document()
-                seq, msg = rpe(ctx)
-                if msg then return nil, msg end
-                return seq, nil
+        local evaler = function(ctx)
+            ctx:document()
+            if op[1] == "//" then
+                ctx:descendantOrSelf(function() return true end)
             end
-            return evaler, nil
-            -- print("/")
-        else
-            assert(false, "nyi")
+            seq, msg = rpe(ctx)
+            if msg then return nil, msg end
+            return seq, nil
         end
+        return evaler, nil
     end
 
     leaveStep(tl, "25 parse_path_expr")
@@ -1861,6 +2204,7 @@ function parse_relative_path_expr(tl)
     enterStep(tl, "26 parse_relative_path_expr")
 
     local efs = {}
+    local ops = {}
     while true do
         local ef, errmsg = parse_step_expr(tl)
         if errmsg ~= nil then
@@ -1868,7 +2212,12 @@ function parse_relative_path_expr(tl)
             return nil, errmsg
         end
         efs[#efs + 1] = ef
-        if not tl:readNexttokIfIsOneOfValue { "/", "//" } then
+        local nt, eof = tl:peek()
+        if eof then break end
+        if nt and nt[2] == "tokOperator" and (nt[1] == "/" or nt[1] == "//") then
+            ops[#ops + 1] = nt[1]
+            tl:read()
+        else
             break
         end
     end
@@ -1876,6 +2225,7 @@ function parse_relative_path_expr(tl)
         leaveStep(tl, "26 parse_relative_path_expr #efs1")
         return efs[1], nil
     end
+
     local evaler = function(ctx)
         local retseq
         for i = 1, #efs do
@@ -1895,6 +2245,9 @@ function parse_relative_path_expr(tl)
                 end
             end
             ctx.sequence = retseq
+            if i <= #ops and ops[i] == "//" then
+                ctx:descendantOrSelf(function(itm) return is_element(itm) end)
+            end
         end
         return retseq, nil
     end
@@ -1979,7 +2332,11 @@ function parse_axis_step(tl)
 end
 
 -- [29] ForwardStep ::= (ForwardAxis NodeTest) | AbbrevForwardStep
+-- [30] ForwardAxis ::= ("child" "::") | ("descendant" "::") | ("attribute" "::") | ("self" "::") | ("descendant-or-self" "::") | ("following-sibling" "::") | ("following" "::") | ("namespace" "::")
 -- [31] AbbrevForwardStep ::= "@"? NodeTest
+-- [32] ReverseStep ::= (ReverseAxis NodeTest) | AbbrevReverseStep
+-- [33] ReverseAxis ::= ("parent" "::") | ("ancestor" "::") | ("preceding-sibling" "::") | ("preceding" "::") | ("ancestor-or-self" "::")
+-- [34] AbbrevReverseStep ::= ".."
 --
 ---@param tl tokenlist
 ---@return evalfunc?
@@ -1988,8 +2345,63 @@ function parse_forward_step(tl)
     enterStep(tl, "29 parse_forward_step")
     local errmsg = nil
     local tf
-    local axisChild, axisAttribute = 1, 2
+    local axisChild, axisAttribute, axisSelf, axisDescendant, axisDescendantOrSelf, axisFollowing, axisFollowingSibling, axisNamespace =
+        1, 2, 3, 4, 5, 6, 7, 8
+    local axisParent, axisAncestor, axisPrecedingSibling, axisPreceding, axisAncestorOrSelf = 9, 10, 11, 12, 13
     local stepAxis = axisChild
+
+    if tl:nextTokIsType("tokDoubleColon") then
+        local tok
+        tok, errmsg = tl:read()
+        if errmsg then
+            leaveStep(tl, "29 parse_forward_step")
+            return nil, errmsg
+        end
+        if not tok then
+            return nil, "tok is nil"
+        end
+        if tok[1] == "child" then
+            stepAxis = axisChild
+        elseif tok[1] == "self" then
+            stepAxis = axisSelf
+        elseif tok[1] == "descendant" then
+            stepAxis = axisDescendant
+        elseif tok[1] == "descendant-or-self" then
+            stepAxis = axisDescendantOrSelf
+        elseif tok[1] == "following" then
+            stepAxis = axisFollowing
+        elseif tok[1] == "following-sibling" then
+            stepAxis = axisFollowingSibling
+        elseif tok[1] == "parent" then
+            stepAxis = axisParent
+        elseif tok[1] == "ancestor" then
+            stepAxis = axisAncestor
+        elseif tok[1] == "ancestor-or-self" then
+            stepAxis = axisAncestorOrSelf
+        elseif tok[1] == "preceding-sibling" then
+            stepAxis = axisPrecedingSibling
+        elseif tok[1] == "preceding" then
+            stepAxis = axisPreceding
+        else
+            assert(false, tok[1])
+        end
+
+        if tl:readNexttokIfIsOneOfValue({ "@" }) then
+            return nil, "@ invalid"
+        end
+    end
+
+    if tl:nextTokIsType("tokOperator") and tl:readNexttokIfIsOneOfValue({ ".." }) then
+        local evaler = function(ctx)
+            local seq, errmsg = ctx:parentAxis(function() return true end)
+            if errmsg then
+                return nil, errmsg
+            end
+            ctx.sequence = seq
+            return seq, nil
+        end
+        return evaler, nil
+    end
 
     if tl:readNexttokIfIsOneOfValue({ "@" }) then
         tl.attributeMode = true
@@ -2008,22 +2420,42 @@ function parse_forward_step(tl)
         return nil, nil
     end
     local evaler = function(ctx)
-        if stepAxis == axisChild then
-            ctx:childaxis()
-        else
-            ctx:attributeaixs()
-        end
         if not tf then return nil, nil end
+        if stepAxis == axisSelf then
+            -- do nothing
+        elseif stepAxis == axisChild then
+            ctx:childaxis(tf)
+        elseif stepAxis == axisAttribute then
+            ctx:attributeaixs(tf)
+        elseif stepAxis == axisDescendant then
+            ctx:descendant(tf)
+        elseif stepAxis == axisDescendantOrSelf then
+            ctx:descendantOrSelf(tf)
+        elseif stepAxis == axisFollowing then
+            ctx:following(tf)
+        elseif stepAxis == axisFollowingSibling then
+            ctx:followingSibling(tf)
+        elseif stepAxis == axisParent then
+            ctx:parentAxis(tf)
+        elseif stepAxis == axisAncestor then
+            ctx:ancestorAxis(tf)
+        elseif stepAxis == axisAncestorOrSelf then
+            ctx:ancestorOrSelfAxis(tf)
+        elseif stepAxis == axisPrecedingSibling then
+            ctx:precedingSiblingAxis(tf)
+        elseif stepAxis == axisPreceding then
+            ctx:precedingAxis(tf)
+        else
+            assert(false, "not yet implemented stepAxis")
+        end
         local ret = {}
         ctx.positions = {}
         ctx.lengths = {}
         local c = 1
         for _, itm in ipairs(ctx.sequence) do
-            if tf(itm) then
-                ctx.positions[#ctx.positions + 1] = c
-                c = c + 1
-                ret[#ret + 1] = itm
-            end
+            ctx.positions[#ctx.positions + 1] = c
+            c = c + 1
+            ret[#ret + 1] = itm
         end
         for i = 1, #ret do
             ctx.lengths[#ctx.lengths + 1] = #ret
@@ -2044,10 +2476,17 @@ end
 function parse_node_test(tl)
     enterStep(tl, "35 parse_node_test")
     local tf, errmsg
-    tf, errmsg = parse_name_test(tl)
+    tf, errmsg = parse_kind_test(tl)
     if errmsg then
         leaveStep(tl, "35 parse_node_test")
         return nil, errmsg
+    end
+    if not tf then
+        tf, errmsg = parse_name_test(tl)
+        if errmsg then
+            leaveStep(tl, "35 parse_node_test")
+            return nil, errmsg
+        end
     end
     leaveStep(tl, "35 parse_node_test")
     return tf, nil
@@ -2079,6 +2518,8 @@ function parse_name_test(tl)
         else
             tf = function(itm)
                 if is_element(itm) then
+                    if itm[".__name"] == name then
+                    end
                     return itm[".__name"] == name
                 end
                 return false
@@ -2231,6 +2672,12 @@ function parse_primary_expr(tl)
     -- FunctionCall
     if nexttok[2] == "tokQName" then
         if tl:nextTokIsType("tokOpenParen") then
+            local fnname = nexttok[1]
+            if fnname == "node" or fnname == "element" or fnname == "text" or fnname == "comment" or fnname == "schema-attribute" or fnname == "schema-element" or fnname == "attribute" or fnname == "document" or fnname == "processing-instruction" then
+                tl:unread()
+                leaveStep(tl, "41 parse_primary_expr (kindtest)")
+                return nil, nil
+            end
             tl:unread()
             local ef
             ef, errmsg = parse_function_call(tl)
@@ -2338,6 +2785,129 @@ function parse_function_call(tl)
     end
     leaveStep(tl, "48 parse_function_call")
     return evaler, nil
+end
+
+-- [54] ::= KindTest ::= DocumentTest | ElementTest | AttributeTest | SchemaElementTest | SchemaAttributeTest | PITest | CommentTest | TextTest | AnyKindTest
+--
+---@param tl tokenlist
+---@return evalfunc?
+---@return string? error
+function parse_kind_test(tl)
+    enterStep(tl, "54 parse_kind_test")
+    local tf, errmsg
+    tf, errmsg = parse_element_test(tl)
+    if errmsg then
+        leaveStep(tl, "54 parse_kind_test")
+        return nil, errmsg
+    end
+    if tf then
+        leaveStep(tl, "54 parse_kind_test")
+        return tf, nil
+    end
+    tf, errmsg = parse_text_test(tl)
+    if errmsg then
+        leaveStep(tl, "54 parse_kind_test")
+        return nil, errmsg
+    end
+    if tf then
+        leaveStep(tl, "54 parse_kind_test")
+        return tf, nil
+    end
+    tf, errmsg = parse_any_kind_test(tl)
+    if errmsg then
+        leaveStep(tl, "54 parse_kind_test")
+        return nil, errmsg
+    end
+
+    leaveStep(tl, "54 parse_kind_test")
+    return tf, nil
+end
+
+-- [55] AnyKindTest ::= "node" "(" ")"
+--
+---@param tl tokenlist
+---@return evalfunc?
+---@return string? error
+function parse_any_kind_test(tl)
+    enterStep(tl, "55 parse_any_kind_test")
+    local tok, eof
+    tok, eof = tl:peek(1)
+    if not eof and tok[1] == "node" and tok[2] == "tokQName" then
+        tok, eof = tl:peek(2)
+        if not eof and tok[2] == "tokOpenParen" then
+            tok, eof = tl:peek(3)
+            if not eof and tok[2] == "tokCloseParen" then
+                tl:read()
+                tl:read()
+                tl:read()
+                local tf = function(itm)
+                    return true, nil
+                end
+                leaveStep(tl, "55 parse_any_kind_test")
+                return tf, nil
+            end
+        end
+    end
+    leaveStep(tl, "55 parse_any_kind_test")
+    return nil, nil
+end
+
+-- [64] ElementTest ::= "element" "(" ")"
+--
+---@param tl tokenlist
+---@return evalfunc?
+---@return string? error
+function parse_element_test(tl)
+    enterStep(tl, "64 parse_element_test")
+    local tok, eof
+    tok, eof = tl:peek(1)
+    if not eof and tok[1] == "element" and tok[2] == "tokQName" then
+        tok, eof = tl:peek(2)
+        if not eof and tok[2] == "tokOpenParen" then
+            tok, eof = tl:peek(3)
+            if not eof and tok[2] == "tokCloseParen" then
+                tl:read()
+                tl:read()
+                tl:read()
+                local tf = function(itm)
+                    return is_element(itm), nil
+                end
+                leaveStep(tl, "64 parse_element_test")
+                return tf, nil
+            end
+        end
+    end
+    leaveStep(tl, "64 parse_element_test")
+    return nil, nil
+end
+
+-- [57] TextTest ::= "text" "(" ")"
+--
+---@param tl tokenlist
+---@return evalfunc?
+---@return string? error
+function parse_text_test(tl)
+    enterStep(tl, "57 parse_text_test")
+    local tok, eof
+    tok, eof = tl:peek(1)
+    if not eof and tok[1] == "text" and tok[2] == "tokQName" then
+        tok, eof = tl:peek(2)
+        if not eof and tok[2] == "tokOpenParen" then
+            tok, eof = tl:peek(3)
+            if not eof and tok[2] == "tokCloseParen" then
+                tl:read()
+                tl:read()
+                tl:read()
+                local tf = function(itm)
+                    return type(itm) == "string", nil
+                end
+                leaveStep(tl, "57 parse_text_test")
+                return tf, nil
+            end
+        end
+    end
+    leaveStep(tl, "57 parse_text_test")
+    return nil, nil
 end
 
 ---@param tl tokenlist
