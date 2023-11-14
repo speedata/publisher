@@ -18,6 +18,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="embed">
+                     <a:documentation>Link to an attached file. To open a page other than the first page, add #page= and the page number.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="href">
                      <a:documentation>The target of the hyperlink (URI). Example: https://www.speedata.de</a:documentation>
                   </attribute>

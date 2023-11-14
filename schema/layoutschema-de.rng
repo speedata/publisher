@@ -18,6 +18,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="embed">
+                     <a:documentation>Link zu einer eingebetteten Datei. Um eine andere Seite als die erste Seite zu öffnen, füge #page= und die Seitenzahl hinzu.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="href">
                      <a:documentation>Das Ziel des Hyperlinks. Beispiel: https://www.speedata.de</a:documentation>
                   </attribute>

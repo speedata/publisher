@@ -39,6 +39,11 @@
           <xs:documentation>Set the color of the border (Adobe Acrobat ony).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="embed">
+        <xs:annotation>
+          <xs:documentation>Link to an attached file. To open a page other than the first page, add #page= and the page number.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="href">
         <xs:annotation>
           <xs:documentation>The target of the hyperlink (URI). Example: https://www.speedata.de</xs:documentation>

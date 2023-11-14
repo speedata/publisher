@@ -33,6 +33,7 @@ function commands.a( layoutxml,dataxml )
     local href = publisher.read_attribute(layoutxml,dataxml,"href","string")
     local link = publisher.read_attribute(layoutxml,dataxml,"link","string")
     local page = publisher.read_attribute(layoutxml,dataxml,"page","number")
+    local embed = publisher.read_attribute(layoutxml,dataxml,"embed","string")
 
     if link then
         publisher.hllink(link,bordercolor)
@@ -40,6 +41,8 @@ function commands.a( layoutxml,dataxml )
         publisher.hlurl(href,bordercolor)
     elseif page then
         publisher.hlpage(page,bordercolor)
+    elseif embed then
+        publisher.hlembed(embed,bordercolor)
     end
 
     if eltname == "Image" or eltname == "Box" then

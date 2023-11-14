@@ -39,6 +39,11 @@
           <xs:documentation>Setze die Rahmenfarbe des links (nur Adobe Acrobat)</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="embed">
+        <xs:annotation>
+          <xs:documentation>Link zu einer eingebetteten Datei. Um eine andere Seite als die erste Seite zu öffnen, füge #page= und die Seitenzahl hinzu.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="href">
         <xs:annotation>
           <xs:documentation>Das Ziel des Hyperlinks. Beispiel: https://www.speedata.de</xs:documentation>

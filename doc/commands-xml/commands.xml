@@ -574,6 +574,11 @@
 
   <definelist name="languagesshortcodes">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</definelist>
 
+  <!--
+  *************************
+  * A
+  *************************
+  -->
   <command en="A">
     <description xml:lang="en">
       <para>Insert hyperlink to a URL.</para>
@@ -599,7 +604,15 @@
         <para>Setze die Rahmenfarbe des links (nur Adobe Acrobat)</para>
       </description>
     </attribute>
-    <attribute en="href" type="text" optional="yes">
+    <attribute en="embed" optional="yes" since="4.15.11" type="text">
+      <description xml:lang="en">
+        <para>Link to an attached file. To open a page other than the first page, append <tt>#page=</tt> and the page number to the file name.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Link zu einer eingebetteten Datei. Um eine andere Seite als die erste Seite zu öffnen, füge <tt>#page=</tt> und die Seitenzahl hinzu.</para>
+      </description>
+      </attribute>
+      <attribute en="href" type="text" optional="yes">
       <description xml:lang="en">
         <para>The target of the hyperlink (URI). Example: <tt>https://www.speedata.de</tt></para>
       </description>
@@ -624,6 +637,7 @@
       </description>
     </attribute>
     <example xml:lang="en">
+      <para>Create a simple hyperlink to a URL.</para>
       <listing><![CDATA[<PlaceObject>
   <Textblock>
     <Paragraph><Value>See the </Value>
@@ -635,7 +649,50 @@
   </Textblock>
 </PlaceObject>]]></listing>
     </example>
+    <example xml:lang="en">
+      <para>Create a hyperlink to an attached document. Only supported on a few PDF viewers.</para>
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
+        xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <AttachFile type="application/pdf"
+              filename="document.pdf"
+              description="An important document" />
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <A embed="document.pdf#page=5">
+            <Value>See the page 5 of the document.</Value>
+          </A>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>]]></listing>
+    </example>
     <example xml:lang="de">
+      <para>Erzeugt einen Link in einem Dokument auf ein angehängtes Dokument. Wird nur von wenigen PDF Anzeigeprogrammen unterstützt.</para>
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
+        xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <AttachFile type="application/pdf"
+              filename="document.pdf"
+              description="An important document" />
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <A embed="document.pdf#page=5">
+            <Value>See the page 5 of the document.</Value>
+          </A>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <para>Erzeugt einen normalen Hyperlink auf eine URL:</para>
       <listing><![CDATA[<PlaceObject>
   <Textblock>
     <Paragraph>
