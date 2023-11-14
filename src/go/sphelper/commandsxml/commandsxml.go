@@ -1085,78 +1085,78 @@ func (c *Command) Attributes() []*Attribute {
 // ExampleAdoc returns the examples section as an asciidoctor blob.
 func (c *Command) ExampleAdoc(lang string) string {
 	var r *bytes.Reader
+	var x []*example
 	switch lang {
 	case "en":
-		if x := c.examplesEn; len(x) != 0 {
-			r = bytes.NewReader(x[0].Text)
-		} else {
+		if x = c.examplesEn; len(x) == 0 {
 			return ""
 		}
 	case "de":
-		if x := c.examplesDe; len(x) != 0 {
-			r = bytes.NewReader(x[0].Text)
-		} else {
-			return ""
+		if x = c.examplesDe; len(x) == 0 {
 		}
-	default:
-		return ""
 	}
 	var ret []string
-	dec := xml.NewDecoder(r)
+	for _, ex := range x {
 
-	inListing := false
-	for {
-		tok, err := dec.Token()
-		if err != nil && err == io.EOF {
-			break
-		}
-		if err != nil {
-			panic(err)
-		}
-		switch v := tok.(type) {
-		case xml.StartElement:
-			switch v.Name.Local {
-			case "listing":
-				inListing = true
-			case "image":
-				var fn, wd string
-				for _, a := range v.Attr {
-					wd = "auto"
-					if a.Name.Local == "file" {
-						fn = a.Value
-					} else if a.Name.Local == "width" {
-						wd = fmt.Sprintf(`%s`, a.Value)
+		r = bytes.NewReader(ex.Text)
+		dec := xml.NewDecoder(r)
+
+		inListing := false
+		for {
+			tok, err := dec.Token()
+			if err != nil && err == io.EOF {
+				break
+			}
+			if err != nil {
+				panic(err)
+			}
+			switch v := tok.(type) {
+			case xml.StartElement:
+				switch v.Name.Local {
+				case "listing":
+					inListing = true
+				case "image":
+					var fn, wd string
+					for _, a := range v.Attr {
+						wd = "auto"
+						if a.Name.Local == "file" {
+							fn = a.Value
+						} else if a.Name.Local == "width" {
+							wd = fmt.Sprintf(`%s`, a.Value)
+						}
 					}
+					ret = append(ret, fmt.Sprintf("\nimage::%s[width=%s]\n", fn, wd))
+				case "para":
+					p := &para{}
+					p.commands = c.commands
+					err = dec.DecodeElement(p, &v)
+					if err != nil {
+						panic(err)
+					}
+					ret = append(ret, "\n")
+					ret = append(ret, p.Adoc(lang))
+					ret = append(ret, "\n")
 				}
-				ret = append(ret, fmt.Sprintf("\nimage::%s[width=%s]\n", fn, wd))
-			case "para":
-				p := &para{}
-				p.commands = c.commands
-				err = dec.DecodeElement(p, &v)
-				if err != nil {
-					panic(err)
-				}
-				ret = append(ret, "\n")
-				ret = append(ret, p.Adoc(lang))
-				ret = append(ret, "\n")
-			}
-		case xml.CharData:
-			if inListing {
-				ret = append(ret, `[source, xml]
+			case xml.CharData:
+				if inListing {
+					ret = append(ret, `[source, xml]
 -------------------------------------------------------------------------------
 `)
-				ret = append(ret, string(v))
-				ret = append(ret, `
+					ret = append(ret, string(v))
+					ret = append(ret, `
 -------------------------------------------------------------------------------
+
 `)
-			}
-		case xml.EndElement:
-			switch v.Name.Local {
-			case "listing":
-				inListing = false
+				}
+			case xml.EndElement:
+				switch v.Name.Local {
+				case "listing":
+					inListing = false
+				}
 			}
 		}
 	}
+
 	return strings.Join(ret, "")
 }
 
