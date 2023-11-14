@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.15">
+    <entry version="4.15.11" date="2023-11-14">
+        <en>Overlay: fix positioning of multiple children (#520).</en>
+        <de>Overlay: korrigiere Positionierung bei mehreren Kindern (#520).</de>
+    </entry>
+    <entry version="4.15.11" date="2023-11-14">
+        <en>Link to embedded files (#522).</en>
+        <de>Hyperlink auf eingebettete Dateien (#522).</de>
+    </entry>
+    <entry version="4.15.11" date="2023-11-14">
+        <en>Update lxpath XPath parser.</en>
+        <de>Aktualisiere den lxpath XPath parser.</de>
+    </entry>
     <entry version="4.15.10" date="2023-11-08">
       <en>Bug fix new XPath parser again (#538).</en>
       <de>Erneute Fehlerkorrektur neuer XPath Parser (#538).</de>
