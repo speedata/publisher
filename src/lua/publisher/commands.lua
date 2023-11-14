@@ -2070,8 +2070,14 @@ function commands.mark( layoutxml,dataxml )
     local shiftup   = publisher.read_attribute(layoutxml,dataxml,"shiftup","height_sp")
     local ret = {}
     if type(selection) == "table" then
-        for _,v in ipairs(selection) do
-            ret[#ret + 1] = { selection = v, append = append, pdftarget = pdftarget, shiftup = shiftup }
+        if publisher.newxpath then
+            for _,v in ipairs(selection) do
+                ret[#ret + 1] = { selection = xpath.string_value(v) , append = append, pdftarget = pdftarget, shiftup = shiftup }
+            end
+        else
+            for _,v in ipairs(selection) do
+                ret[#ret + 1] = { selection = v, append = append, pdftarget = pdftarget, shiftup = shiftup }
+            end
         end
         return ret
     else
