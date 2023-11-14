@@ -7844,8 +7844,13 @@ function escape_pdfname( str )
     return string.gsub(str,'/','#2f')
 end
 
---- Convert the argument `str` (in UTF-8) to a string suitable for writing into the PDF file. The returned string starts with `<feff` and ends with `>`
+--- Convert the argument `str` (in UTF-8) to a string suitable for writing into
+--- the PDF file. The returned string starts with `<feff` and ends with `>`, unless
+--- the string is a simple string that can be expressed with (...).
 function utf8_to_utf16_string_pdf( str )
+    if str:match("^[a-zA-Z.]+$") then
+        return "("..str.. ")"
+    end
     local ret = {}
     for s in string.utfvalues(str) do
         ret[#ret + 1] = fontloader.to_utf16(s)
