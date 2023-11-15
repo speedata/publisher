@@ -13,20 +13,30 @@ There are three ways to install speedata Publisher:
 
 . **APT repository**: If you have root or sudo rights on Debian or Ubuntu GNU/Linux (or a similar system), you can install the .deb files we have prepared from our APT repository. (For now, only the 64 bit architecture is supported.) This is very easy, just follow a few steps:
 +
+Add our GPG key to the system to make sure you get the correct software:
++
+    # all on one line:
+    curl -fsSL
+       http://de.speedata.s3.amazonaws.com/gpgkey-speedata.txt
+       | sudo gpg --dearmor
+       -o /usr/share/keyrings/speedata_de.gpg
++
 Add the following file to /etc/apt/sources.list.d/speedata.list for the development version (unstable):
 +
-    deb https://software.speedata.de/download/devel stable main
+    deb
+      [arch=amd64 signed-by=/usr/share/keyrings/speedata_de.gpg]
+      https://software.speedata.de/download/devel stable main
 +
 or for the main (stable) releases:
 +
-    deb https://software.speedata.de/download/public stable main
+    deb
+       [arch=amd64 signed-by=/usr/share/keyrings/speedata_de.gpg]
+       https://software.speedata.de/download/public stable main
 +
-Add our GPG key to the system to make sure you get the correct software:
-+
-    curl -O http://de.speedata.s3.amazonaws.com/gpgkey-speedata.txt
-    sudo apt-key add gpgkey-speedata.txt
-+
-Now you can run sudo apt update and apt get install speedata-publisher and have a working installation. You can find the documentation in /usr/share/doc/speedata-publisher/index.html which should open with sp doc on a desktop system.
+
+TIP: The previous three commands and source codes entries must be on one line.
+
+Now you can run `sudo apt update` and `apt install speedata-publisher` and have a working installation.
 
 . **Build from source**: For developers interested in contributing to speedata Publisher, the program and documentation can be built directly from source. You can choose between a prebuilt docker image on dockerhub or build the software from the git repository using rake. You need to have the Go language version 1.11 or later installed. For example, on Debian or Ubuntu GNU/Linux, where Go is packaged as 'golang', you can use the commands:
 +

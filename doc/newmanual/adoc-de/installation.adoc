@@ -33,27 +33,35 @@ Nur hier kann das Pro-Paket heruntergeladen werden.
 
 . **APT Repository**: Falls Administratorrechte auf einem Debian oder Ubuntu GNU/Linux System vorhanden sind, kann man einfach die `.deb`-Datei installieren. Hinweis: es wird bis auf weiteres nur die 64-Bit Plattform unterstützt.
 
+.. Füge den GPG-Schlüssel von uns hinzu, damit du sicherstellst, dass du immer die richtige Software bekommst:
++
+-------------------------------------------------------------------------------
+# alles in einer Zeile:
+curl -fsSL
+   http://de.speedata.s3.amazonaws.com/gpgkey-speedata.txt
+   | sudo gpg --dearmor
+   -o /usr/share/keyrings/speedata_de.gpg
+-------------------------------------------------------------------------------
+
 .. Erstelle die Datei `/etc/apt/sources.list.d/speedata.list` mit dem Inhalt (Entwicklungsversion - development):
 +
 -------------------------------------------------------------------------------
-deb https://software.speedata.de/download/devel stable main
+deb
+ [arch=amd64 signed-by=/usr/share/keyrings/speedata_de.gpg]
+ https://software.speedata.de/download/devel stable main
 -------------------------------------------------------------------------------
 +
 oder für die stabile Version:
 +
 -------------------------------------------------------------------------------
-deb https://software.speedata.de/download/public stable main
+deb
+ [arch=amd64 signed-by=/usr/share/keyrings/speedata_de.gpg]
+ https://software.speedata.de/download/public stable main
 -------------------------------------------------------------------------------
 
-.. Füge den GPG-Schlüssel von uns hinzu, damit du sicherstellst, dass du immer die richtige Software bekommst:
-+
--------------------------------------------------------------------------------
-curl -O http://de.speedata.s3.amazonaws.com/gpgkey-speedata.txt
-sudo apt-key add gpgkey-speedata.txt
--------------------------------------------------------------------------------
+TIP: Die letzten drei Beispiele müssen in einer Zeile eingegeben werden.
 
 .. Nun kann man mit  `sudo apt update` und `sudo apt install speedata-publisher` den Publisher installieren.
-Die Dokumentation befindet sich in `/usr/share/doc/speedata-publisher/index.html`, die mit `sp doc` auf einem Desktop-System geöffnet werden kann.
 
 . **Aus den Quellen installieren**: Für die Entwickler, die am Publisher selbst Änderungen vornehmen möchten. Hierzu gibt es ein https://hub.docker.com/r/speedata/development[fertiges Docker-Image auf dockerhub]. Alternativ kann man die Software auch lokal bauen: sie aus dem Quellcode gebaut werden mithilfe des Befehls `rake` erstellt werden.
 Notwendig dafür sind die üblichen Entwicklungswerkzeuge und die Programmiersprache Go (https://golang.org/) in Version 1.11 oder höher.
