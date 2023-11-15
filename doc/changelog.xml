@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.15">
+    <entry version="4.15.12" date="2023-11-15">
+        <en>Bugfix Mark command with the new XPath parser.</en>
+        <de>Fehlerkorrektur Mark-Befehl mit dem neuen XPath parser.</de>
+    </entry>
+    <entry version="4.15.12" date="2023-11-15">
+        <en>New function <tt>sd:dimexpr()</tt> for unit calculation.</en>
+        <de>Neue Funktion <tt>sd:dimexpr()</tt>, um mit Einheiten zu rechnen.</de>
+    </entry>
     <entry version="4.15.11" date="2023-11-14">
         <en>Overlay: fix positioning of multiple children (#520).</en>
         <de>Overlay: korrigiere Positionierung bei mehreren Kindern (#520).</de>
