@@ -165,7 +165,7 @@ image::outlinehelloworld.png[width=100%]
 [[ch-harfbuzz-mode]]
 == Harfbuzz
 
-Since version 4 of speedata Publisher there is a new mode for loading font files: harfbuzz.
+Since version 4 of speedata Publisher there is a new mode for loading font files: HarfBuzz.
 It activates the library of the same name, which not only loads the font files, but is also responsible for the arrangement of characters in a word (text shaping).
 This is not as important for western writing systems as for e.g. Arabic.
 A side effect of the harfbuzz library is the extensive support for OpenType features.

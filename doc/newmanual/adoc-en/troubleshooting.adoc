@@ -37,7 +37,7 @@ The output does not always work as it should. Sometimes objects are too wide, so
   Marks the places where the words may be hyphenated.
 
 `kerning`::
-  Mark the place where the font inserts a kerning (harfbuzz mode).
+  Mark the place where the font inserts a kerning (HarfBuzz mode).
 
 `text format`::
   Creates a tooltip above each line of text, showing the text format used. See the example in the Text Formats section.

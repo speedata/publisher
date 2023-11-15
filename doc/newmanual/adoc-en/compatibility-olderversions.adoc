@@ -13,7 +13,7 @@ In this case, older versions of the speedata Publisher will not balance the tabl
 
 There are some major new technologies introduced since the speedata Publisher was first published in 2010. These usually work with a feature flag:
 
-* to activate the “harfbuzz” font loader, you need to set the option `fontloader` to `harfbuzz`,
+* to activate the “HarfBuzz” font loader, you need to set the option `fontloader` to `harfbuzz`,
 * the new XML/XPath parser is only used when the option `xpath` is set to `lxpath`.
 
 Both of these two features are drop-in replacements of the older versions.

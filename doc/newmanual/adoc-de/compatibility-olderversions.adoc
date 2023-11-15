@@ -10,7 +10,7 @@ Zum Beispiel wurde mit der Version 2.3.39 ein Befehl zum Setzen von Optionen fü
 
 Seit der ersten Veröffentlichung des speedata Publishers im Jahr 2010 wurden einige wichtige neue Technologien eingeführt. Diese funktionieren in der Regel mit einem Feature-Flag:
 
-* Um den Fontloader »harfbuzz« zu aktivieren, müssen Sie die Option fontloader auf `harfbuzz` setzen,
+* Um den Fontloader »HarfBuzz« zu aktivieren, müssen Sie die Option fontloader auf `harfbuzz` setzen,
 * der neue XML/XPath-Parser wird nur verwendet, wenn die Option `xpath` auf `lxpath` gesetzt ist.
 
 Diese beiden Funktionen ersetzen die älteren Versionen sofort.

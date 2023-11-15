@@ -257,4 +257,4 @@ image::bidi-sample.png[width=100%]
 * If in doubt, set the attribute `bidi` to `yes`. The only drawback is that the publishing run might be a bit slower. Other differences should not occur.
 * The language setting (`language`) should either contain the correct language, be empty or set to the language `Other`. The problem is that some language settings can cause an unwanted write direction.
 * For text alignment (`alignment` at <<cmd-definetextformat>>) you should use `start` and `end` instead of `left` or `right`. `start` and `end` are oriented to the direction for the paragraph.
-* The <<ch-harfbuzz-mode,harfbuzz-fontloader>> must be activated.
+* The <<ch-harfbuzz-mode,HarfBuzz-fontloader>> must be activated.

@@ -276,7 +276,7 @@ image::bidi-sample.png[width=100%]
 * Setze das Attribut `bidi` im Zweifelsfall auf `yes`. Der einzige Nachteil ist, dass der Publishing-Lauf etwas langsamer sein könnte. Andere Unterschiede sollten nicht auftreten.
 * Die Spracheinstellung (`language`) sollte entweder die richtige Sprache beinhalten, leer sein oder auf die Sprache `Other` gesetzt werden. Das Problem ist, dass manche Spracheinstellungen eine unerwünschte Schreibrichtung erwirken können.
 * Als Textausrichtung (`alignment` bei <<cmd-definetextformat>>) sollte anstelle von `left` oder `right` lieber `start` und `end` benutzt werden. `start` und `end` orientieren sich an der Richtung für den Absatz.
-* Es muss der <<ch-harfbuzz-mode,harfbuzz-Fontlader>> aktiviert sein.
+* Es muss der <<ch-harfbuzz-mode,HarfBuzz-Fontlader>> aktiviert sein.
 
 
 // end
