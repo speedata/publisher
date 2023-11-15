@@ -128,6 +128,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `sd:decode-html(<node>)`::
   Change text such as `\&lt;i\&gt;italic\&lt;/i\&gt;` into HTML markup (`<i>italic</i>` in this case).
 
+`sd:dimexpr(<Unit>,<Expression>)`::
+  Interprets the expression as a calculation and return the value as a scalar in the unit. Interprets variables. For example, say that `$twocm` is set to the string `2cm`, `sd:dimexpr('cm',' (40mm + $twocm) / 2 ')` returns the number 3.0.
+
 `sd:dummytext([<count>])`::
   Return a “Lorem ispum... ” dummy text. The count defaults to 1.
 

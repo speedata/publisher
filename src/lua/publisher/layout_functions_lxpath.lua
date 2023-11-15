@@ -8,14 +8,8 @@
 
 file_start("layout_functions.lua")
 
+local de = require("dimexpr")
 
-local box_lookup = {
-    ["artbox"]   = "art",
-    ["cropbox"]  = "crop",
-    ["trimbox"]  = "trim",
-    ["mediabox"] = "media",
-    ["bleedbox"] = "bleed",
-}
 
 local luxor      = do_luafile("luxor.lua")
 local sha        = require('shalocal')
@@ -608,7 +602,6 @@ end
 -- convert a textual dimension (e.g. '2cm') to a scalar in another dimension.
 local function tounit(dataxml, arg)
     local unit = arg[1]
-    local value = arg[2]
     local decimal = arg[3] or 0
     local width = tex.sp(arg[2])
     local ret
@@ -636,6 +629,37 @@ local function tounit(dataxml, arg)
     return { math.round(ret, decimal) }, nil
 end
 
+local function fnDimexpr(dataxml, arg)
+    local unit = xpath.string_value(arg[1])
+    local secondarg = xpath.string_value(arg[2])
+    local ret = de.string_to_tokenlist(secondarg,dataxml)
+    local fun = load(" value = " .. ret)
+    if not fun then return nil, "error in sd:dimexpr" end
+    fun()
+    if unit == "cm" then
+        ret = value / publisher.onecm_sp
+    elseif unit == "mm" then
+        ret = value / publisher.onemm_sp
+    elseif unit == "in" then
+        ret = value / publisher.onein_sp
+    elseif unit == "sp" then
+        ret = value
+    elseif unit == "pc" then
+        ret = value / publisher.onepc_sp
+    elseif unit == "pt" then
+        ret = value / publisher.onept_sp
+    elseif unit == "pp" then
+        ret = value / publisher.onepp_sp
+    elseif unit == "dd" then
+        ret = value / publisher.onedd_sp
+    elseif unit == "cc" then
+        ret = value / publisher.onecc_sp
+    else
+        err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
+    end
+
+    return {math.round(ret,3)}, nil
+end
 -- Turn &lt;b&gt;Hello&lt;b /&gt; into an HTML table and then into XML structure.
 local function decode_html(dataxml, arg)
     if arg == nil then
@@ -800,6 +824,7 @@ local funcs = {
     { "current-row",         sdns, fnCurrentRow,         0, 1 },
     { "decode-base64",       sdns, decode_base64,        1, 1 },
     { "decode-html",         sdns, decode_html,          1, 1 },
+    { "dimexpr",             sdns, fnDimexpr,            2, 2 },
     { "dummytext",           sdns, loremipsum,           0, 1 },
     { "even",                sdns, even,                 1, 1 },
     { "file-exists",         sdns, file_exists,          1, 1 },

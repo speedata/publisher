@@ -130,6 +130,9 @@ Beispiel: die Funktion `sd:current-row()`  kann auch mit Parameter `sd:current-r
 `sd:decode-html(<Node>)`::
    Wandelt Texte wie `\&lt;i\&gt;Kursiv\&lt;/i\&gt;` in entsprechendes HTML-Markup.
 
+`sd:dimexpr(<Einheit>,<Ausdruck>)`::
+   Interpretiert den Ausdruck als Rechenoperation und gibt den Wert als Skalar in der Einheit zurück. Interpretiert Variablen. Beispiel: Wenn `$twocm` auf die Zeichenkette `2cm` gesetzt ist, ergibt `sd:dimexpr('cm',' (40mm + $twocm) / 2 ')` die Zahl 3.0.
+
 `sd:dummytext([<Anzahl>])`::
    Gibt den Blindtext "Lorem ipsum..." mit über 50 Wörtern zurück. Mit dem optionalen Parameter kann man festlegen, wie oft der Text wiederholt wird.
 
