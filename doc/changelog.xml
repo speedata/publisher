@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.15">
+    <entry version="4.15.13" date="2023-11-21">
+        <en>Rename A/embed to embedded (#522).</en>
+        <de>Umbenennung von A/embed zu A/embedded.</de>
+    </entry>
     <entry version="4.15.12" date="2023-11-15">
         <en>Bugfix Mark command with the new XPath parser.</en>
         <de>Fehlerkorrektur Mark-Befehl mit dem neuen XPath parser.</de>
