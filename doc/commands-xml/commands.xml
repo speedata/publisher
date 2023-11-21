@@ -604,12 +604,12 @@
         <para>Setze die Rahmenfarbe des links (nur Adobe Acrobat)</para>
       </description>
     </attribute>
-    <attribute en="embed" optional="yes" since="4.15.11" type="text">
+    <attribute en="embedded" optional="yes" since="4.15.11" type="text">
       <description xml:lang="en">
-        <para>Link to an attached file. To open a page other than the first page, append <tt>#page=</tt> and the page number to the file name.</para>
+        <para>Link to an attached file. To open a page other than the first page, set the page attribute, to open a named destination, set the link attribute.</para>
       </description>
       <description xml:lang="de">
-        <para>Link zu einer eingebetteten Datei. Um eine andere Seite als die erste Seite zu öffnen, füge <tt>#page=</tt> und die Seitenzahl hinzu.</para>
+        <para>Link zu einer eingebetteten Datei. Um eine andere Seite als die erste Seite zu öffnen, setze das page-Attribute auf die Seitenzahl. Um eine named destination anzusteuern, nutze das link-Attribut.</para>
       </description>
       </attribute>
       <attribute en="href" type="text" optional="yes">
@@ -622,18 +622,18 @@
     </attribute>
     <attribute en="link" type="text" optional="yes" since="3.3.8">
       <description xml:lang="en">
-        <para>The target of the document link (a Mark). Example: <tt>article123</tt></para>
+        <para>The target of the document link (a Mark). Example: <tt>article123</tt>. When linking to embedded files, the link attribute may contain the named destination of the target.</para>
       </description>
       <description xml:lang="de">
-        <para>Das Ziel des Dokumentlinks. Beispiel: <tt>article123</tt>. Ziele werden mit Action/Mark erzeugt</para>
+        <para>Das Ziel des Dokumentlinks. Beispiel: <tt>article123</tt>. Ziele werden mit Action/Mark erzeugt. Bei Links auf eingebettete Dateien, kann das link-Attribut den Namen des Ziels beinhalten.</para>
       </description>
     </attribute>
     <attribute en="page" optional="yes" since="4.3.5" type="number">
       <description xml:lang="en">
-        <para>Link to a (logical) page number.</para>
+        <para>Link to a (logical) page number. When linking to embedded files, the page attribute may contain the page number of the target.</para>
       </description>
       <description xml:lang="de">
-        <para>Link zu einer (logischen) Seitenzahl.</para>
+        <para>Link zu einer (logischen) Seitenzahl. Bei Links auf eingebettete Dateien, kann das page-Attribut die Seitenzahl des Ziels beinhalten.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -661,7 +661,7 @@
     <PlaceObject>
       <Textblock>
         <Paragraph>
-          <A embed="document.pdf#page=5">
+          <A embedded="document.pdf" page="5">
             <Value>See the page 5 of the document.</Value>
           </A>
         </Paragraph>
@@ -682,7 +682,7 @@
     <PlaceObject>
       <Textblock>
         <Paragraph>
-          <A embed="document.pdf#page=5">
+          <A embedded="document.pdf" page="5">
             <Value>See the page 5 of the document.</Value>
           </A>
         </Paragraph>

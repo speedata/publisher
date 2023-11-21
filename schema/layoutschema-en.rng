@@ -18,8 +18,8 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="embed">
-                     <a:documentation>Link to an attached file. To open a page other than the first page, add #page= and the page number.</a:documentation>
+                  <attribute name="embedded">
+                     <a:documentation>Link to an attached file. To open a page other than the first page, set the page attribute, to open a named destination, set the link attribute.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -29,12 +29,12 @@
                </optional>
                <optional>
                   <attribute name="link">
-                     <a:documentation>The target of the document link (a Mark). Example: article123</a:documentation>
+                     <a:documentation>The target of the document link (a Mark). Example: article123. When linking to embedded files, the link attribute may contain the named destination of the target.</a:documentation>
                   </attribute>
                </optional>
                <optional>
                   <attribute name="page">
-                     <a:documentation>Link to a (logical) page number.</a:documentation>
+                     <a:documentation>Link to a (logical) page number. When linking to embedded files, the page attribute may contain the page number of the target.</a:documentation>
                   </attribute>
                </optional>
                <oneOrMore>

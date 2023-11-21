@@ -18,8 +18,8 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="embed">
-                     <a:documentation>Link zu einer eingebetteten Datei. Um eine andere Seite als die erste Seite zu öffnen, füge #page= und die Seitenzahl hinzu.</a:documentation>
+                  <attribute name="embedded">
+                     <a:documentation>Link zu einer eingebetteten Datei. Um eine andere Seite als die erste Seite zu öffnen, setze das page-Attribute auf die Seitenzahl. Um eine named destination anzusteuern, nutze das link-Attribut.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -29,12 +29,12 @@
                </optional>
                <optional>
                   <attribute name="link">
-                     <a:documentation>Das Ziel des Dokumentlinks. Beispiel: article123. Ziele werden mit Action/Mark erzeugt</a:documentation>
+                     <a:documentation>Das Ziel des Dokumentlinks. Beispiel: article123. Ziele werden mit Action/Mark erzeugt. Bei Links auf eingebettete Dateien, kann das link-Attribut den Namen des Ziels beinhalten.</a:documentation>
                   </attribute>
                </optional>
                <optional>
                   <attribute name="page">
-                     <a:documentation>Link zu einer (logischen) Seitenzahl.</a:documentation>
+                     <a:documentation>Link zu einer (logischen) Seitenzahl. Bei Links auf eingebettete Dateien, kann das page-Attribut die Seitenzahl des Ziels beinhalten.</a:documentation>
                   </attribute>
                </optional>
                <oneOrMore>

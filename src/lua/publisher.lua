@@ -7412,30 +7412,20 @@ local function get_border_for_link(color)
     return border
 end
 
-local function parse_embed_filename(filename)
-    local parsed_url = {}
-    local url_pg, url_nd
-    parsed_url.fn = utf8_to_utf16_string_pdf(filename:match("^(.+)#") or filename)
-    if filename:match("#") ~= nil then
-        if filename:match("nameddest=") then
-            url_nd = filename:match("nameddest=(.+)&") or filename:match("nameddest=(.+)")
-        elseif filename:match("#page=") ~= nil then
-            url_pg = tonumber(filename:match("page=(%d+)")) - 1
-            parsed_url.dest = ("[%s /Fit]"):format(url_pg)
-        else
-            url_nd = filename:match("#(.+)&") or filename:match("#(.+)")
-        end
-        if url_nd then
-            parsed_url.dest = utf8_to_utf16_string_pdf(url_nd)
-        end
+local function parse_embed_filename(filename, page, link)
+    local parsed_url = { fn = utf8_to_utf16_string_pdf(filename) }
+    if page then
+        parsed_url.dest = string.format("[%s /Fit]", tonumber(page) - 1)
+    elseif link then
+        parsed_url.dest = utf8_to_utf16_string_pdf(link)
     else
-        parsed_url.dest = "[0 /XYZ 0 0 0]"
+        parsed_url.dest = "[0 /Fit]"
     end
     return parsed_url
 end
 
-function hlembed(filename,bordercolor)
-    local parsed_url = parse_embed_filename(filename)
+function hlembed(filename, page, link, bordercolor)
+    local parsed_url = parse_embed_filename(filename, page, link)
     local str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoToE/NewWindow true/D %s /T<</R/C/N%s >> >>", get_border_for_link(bordercolor), parsed_url.dest, parsed_url.fn)
     hyperlinks[#hyperlinks + 1] = str
     return #hyperlinks
