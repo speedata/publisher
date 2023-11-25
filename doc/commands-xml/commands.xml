@@ -47,6 +47,7 @@
     <optional><cmd name="NoBreak"/></optional>
     <optional><cmd name="Options"/></optional>
     <optional><cmd name="Output"/></optional>
+    <optional><cmd name="Overlay"/></optional>
     <optional><cmd name="Pagetype"/></optional>
     <optional><cmd name="Pageformat"/></optional>
     <optional><cmd name="Paragraph"/></optional>

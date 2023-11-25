@@ -774,6 +774,9 @@
                      <ref name="e_Output"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Overlay"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Pagetype"></ref>
                   </optional>
                   <optional>
@@ -1905,6 +1908,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Output"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Overlay"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Pagetype"></ref>
@@ -3106,6 +3112,9 @@
                         <ref name="e_Output"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Overlay"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Pagetype"></ref>
                      </optional>
                      <optional>
@@ -3801,6 +3810,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Output"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Overlay"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Pagetype"></ref>
@@ -6850,6 +6862,9 @@
                         <ref name="e_Output"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Overlay"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Pagetype"></ref>
                      </optional>
                      <optional>
@@ -7161,6 +7176,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Output"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Overlay"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Pagetype"></ref>
