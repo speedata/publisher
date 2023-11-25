@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.15">
+    <entry version="4.15.14" date="2023-11-25">
+        <en>Few bugfixes related to lxpath (DefineGraphic and ProcessNode).</en>
+        <de>Einige Fehlerkorrekturen bzgl. lxpath (DefineGraphic und ProcessNode).</de>
+    </entry>
+    <entry version="4.15.14" date="2023-11-25">
+        <en>Schema change (allow Overlay in Case).</en>
+        <de>Schema Änderung (erlaube Overlay in Case).</de>
+    </entry>
     <entry version="4.15.13" date="2023-11-21">
         <en>Rename A/embed to embedded (#522).</en>
         <de>Umbenennung von A/embed zu A/embedded.</de>
