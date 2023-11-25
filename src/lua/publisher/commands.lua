@@ -748,7 +748,12 @@ end
 --- Define a metapost graphic for later use
 function commands.define_graphic(layoutxml,dataxml)
     local name = publisher.read_attribute(layoutxml,dataxml,"name","string")
-    local code = layoutxml[1]
+    local code
+    if publisher.newxpath then
+        code = xpath.string_value(layoutxml)
+    else
+        code = layoutxml[1]
+    end
     publisher.metapostgraphics[name] = code
 end
 
@@ -3389,9 +3394,9 @@ function commands.process_node(layoutxml,dataxml)
             pos = pos + 1
         end
     end
-    dataxml.sequence = copysequence
     --- Now restore the value for the parent element
     if publisher.newxpath then
+        dataxml.sequence = copysequence
         dataxml.pos = current_position
     else
         publisher.xpath.set_variable("__position",current_position)

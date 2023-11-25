@@ -3,6 +3,7 @@ package splibaux
 import (
 	"fmt"
 	"io"
+	"os"
 	"strings"
 
 	"speedatapublisher/xml"
@@ -31,6 +32,10 @@ func readXMLFile(r io.Reader, startindex, extraindentlevel int) (string, error) 
 			break
 		}
 		if err != nil {
+			if f, ok := r.(*os.File); ok {
+				f.Name()
+				return "", fmt.Errorf("%w file name %s", err, f.Name())
+			}
 			return "", err
 		}
 		indentamount := indentlevel + extraindentlevel + 1

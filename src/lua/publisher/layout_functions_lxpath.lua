@@ -560,7 +560,7 @@ local function variable(dataxml, arg)
     end
     local varname = table.concat(args)
     local var = dataxml.vars[varname]
-    return var
+    return {var}, nil
 end
 
 local function attr(dataxml, arg)
@@ -844,7 +844,7 @@ local funcs = {
     { "lastmark",            sdns, lastmark,             1, 1 },
     { "loremipsum",          sdns, loremipsum,           0, 1 },
     { "md5",                 sdns, md5,                  1, 1 },
-    { "merge-pagenumbers",   sdns, fnMergePagenumbers,   1, 3 },
+    { "merge-pagenumbers",   sdns, fnMergePagenumbers,   1, 4 },
     { "mode",                sdns, mode,                 1, 1 },
     { "number-of-columns",   sdns, fnNumberOfColumns,    0, 1 },
     { "number-of-pages",     sdns, fnNumberOfPages,      1, 1 },
