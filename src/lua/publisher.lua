@@ -3217,6 +3217,9 @@ function circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp)
 
     local paint = node.new("whatsit","pdf_literal")
     paint.data = circle_pdfstring(0,0,radiusx_sp, radiusy_sp, bordercolor, fillcolor, rulewidth_sp)
+    if colentry.alpha then
+        setprop(paint,"opacity",colentry.alpha)
+    end
     local v = node.vpack(paint)
     return v
 end
