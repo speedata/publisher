@@ -681,9 +681,10 @@ function commands.define_color( layoutxml,dataxml )
     end
 
     local mpname = function(str)
-        if string.find(str,'@') then
-            local mpcolorname = string.gsub(str,"@","")
-            warning("The color %q has an @ in it, the metapost color will be colors.%s, not colors.%s",str, mpcolorname,str)
+        local invalid = "[^a-zA-Z]"
+        if string.find(str,invalid) then
+            local mpcolorname = string.gsub(str,invalid,"")
+            warning("The color %q has characters in it that confuse\n the metapost interpreter, therefore I have renamed the color\n for metapost to colors.%s",str, mpcolorname)
             return mpcolorname
         end
         return str
