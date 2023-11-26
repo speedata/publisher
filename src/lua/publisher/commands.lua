@@ -680,28 +680,38 @@ function commands.define_color( layoutxml,dataxml )
         op = ""
     end
 
+    local mpname = function(str)
+        if string.find(str,'@') then
+            local mpcolorname = string.gsub(str,"@","")
+            warning("The color %q has an @ in it, the metapost color will be colors.%s, not colors.%s",str, mpcolorname,str)
+            return mpcolorname
+        end
+        return str
+    end
+
     if model=="cmyk" then
         color.c = publisher.read_attribute(layoutxml,dataxml,"c","number")
         color.m = publisher.read_attribute(layoutxml,dataxml,"m","number")
         color.y = publisher.read_attribute(layoutxml,dataxml,"y","number")
         color.k = publisher.read_attribute(layoutxml,dataxml,"k","number")
         color.pdfstring = string.format("%s %g %g %g %g k %g %g %g %g K", op, color.c/100, color.m/100, color.y/100, color.k/100,color.c/100, color.m/100, color.y/100, color.k/100)
-        publisher.metapostcolors[name] = {model = "cmyk", c = color.c/100, m = color.m/100, y = color.y/100, k = color.k/100 }
+        publisher.metapostcolors[mpname(name)] = {model = "cmyk", c = color.c/100, m = color.m/100, y = color.y/100, k = color.k/100 }
     elseif model=="rgb" then
         color.r = publisher.read_attribute(layoutxml,dataxml,"r","number") / 100
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number") / 100
         color.b = publisher.read_attribute(layoutxml,dataxml,"b","number") / 100
         color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
-        publisher.metapostcolors[name] = {model = "rgb", r = color.r/100, g = color.g/100, b = color.b/100 }
+        publisher.metapostcolors[mpname(name)] = {model = "rgb", r = color.r/100, g = color.g/100, b = color.b/100 }
     elseif model=="RGB" then
         color.r = publisher.read_attribute(layoutxml,dataxml,"r","number") / 255
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number") / 255
         color.b = publisher.read_attribute(layoutxml,dataxml,"b","number") / 255
         color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
+        publisher.metapostcolors[mpname(name)] = {model = "rgb", r = color.r/255, g = color.g/255, b = color.b/255 }
     elseif model=="gray" then
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number")
         color.pdfstring = string.format("%s %g g %g G",op,color.g/100,color.g/100)
-        publisher.metapostcolors[name] = {model = "gray", k = color.g/100 }
+        publisher.metapostcolors[mpname(name)] = {model = "gray", k = color.g/100 }
     elseif model=="spotcolor" then
         if not publisher.pro then
             err("spot colors need a Pro plan")
