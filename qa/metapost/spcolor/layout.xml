@@ -2,7 +2,7 @@
     xmlns:sd="urn:speedata:2009/publisher/functions/en">
     <Pageformat height="8cm" width="10cm" />
     <DefineColor name="mygray" model="gray"  g="80"/>
-    <DefineColor name="transparentorange" model="cmyk"  c="0" m="45" y="87" k="0" alpha="0.4"/>
+    <DefineColor name="transparentorange" model="cmyk"  c="0" m="45" y="87" k="0" alpha="40"/>
 
     <DefineGraphic name="box">
         fill box withcolor spcolor("mygray");

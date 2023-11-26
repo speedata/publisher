@@ -174,24 +174,8 @@ enddef ;
 
 def withtransparency(expr a, t) =
     withprescript "tr_alternative="  & decimal transparency_alternative_to_number(a)
-    withprescript "tr_transparency=" & decimal t
+    withprescript "tr_transparency=" & decimal ( t * 100)
 enddef ;
-
-
-def withopacity expr t =
-    if pair t :
-        withprescript "tr_alternative="  & decimal transparency_alternative_to_number(xpart t)
-        withprescript "tr_transparency=" & decimal ypart t
-    else :
-        mfun_with_opacity (transparency_alternative_to_number(t))
-    fi
-enddef ;
-
-def mfun_with_opacity (expr a) expr t =
-    withprescript "tr_alternative="  & decimal a
-    withprescript "tr_transparency=" & decimal t
-enddef ;
-
 
 primarydef n withalpha t =
     n withtransparency(1,t)

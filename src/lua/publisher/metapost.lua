@@ -376,7 +376,7 @@ local function do_preobj_color(object, prescript)
         local mode = prescript.tr_alternative or 1
         mode = transparancy_modes[tonumber(mode)]
         -- tron_no, troff_no = tr_pdf_pageresources(mode, opaq)
-        local str_int_val = string.format("%d", opaq * 100)
+        local str_int_val = string.format("%d", opaq)
         transparency_values[str_int_val] = true
         pdf_literalcode("/TRP%s gs", str_int_val)
     end
