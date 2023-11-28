@@ -702,17 +702,17 @@ function commands.define_color( layoutxml,dataxml )
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number") / 100
         color.b = publisher.read_attribute(layoutxml,dataxml,"b","number") / 100
         color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
-        publisher.metapostcolors[mpname(name)] = {model = "rgb", r = color.r/100, g = color.g/100, b = color.b/100 }
+        publisher.metapostcolors[mpname(name)] = {model = "rgb", r = color.r, g = color.g, b = color.b }
     elseif model=="RGB" then
         color.r = publisher.read_attribute(layoutxml,dataxml,"r","number") / 255
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number") / 255
         color.b = publisher.read_attribute(layoutxml,dataxml,"b","number") / 255
         color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
-        publisher.metapostcolors[mpname(name)] = {model = "rgb", r = color.r/255, g = color.g/255, b = color.b/255 }
+        publisher.metapostcolors[mpname(name)] = {model = "rgb", r = color.r, g = color.g, b = color.b }
     elseif model=="gray" then
         color.g = publisher.read_attribute(layoutxml,dataxml,"g","number")
         color.pdfstring = string.format("%s %g g %g G",op,color.g/100,color.g/100)
-        publisher.metapostcolors[mpname(name)] = {model = "gray", k = color.g/100 }
+        publisher.metapostcolors[mpname(name)] = {model = "gray", k = color.g }
     elseif model=="spotcolor" then
         if not publisher.pro then
             err("spot colors need a Pro plan")
@@ -728,7 +728,7 @@ function commands.define_color( layoutxml,dataxml )
         color.r,color.g,color.b,color.alpha = publisher.getrgb(value)
         color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
         model = "rgb"
-        publisher.metapostcolors[name] = {model = model, r = color.r, g = color.g, b = color.b }
+        publisher.metapostcolors[mpname(name)] = {model = model, r = color.r, g = color.g, b = color.b }
     else
         err("Unknown color model: %s",model or "?")
     end
