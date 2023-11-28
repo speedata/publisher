@@ -5334,6 +5334,8 @@
                         <a:documentation>A MetaPost CMYK color.</a:documentation>
                         <value>mp:numeric</value>
                         <a:documentation>A MetaPost numeric value.</a:documentation>
+                        <value>mp:string</value>
+                        <a:documentation>A MetaPost string value.</a:documentation>
                         <value>mp:rgbcolor</value>
                         <a:documentation>A MetaPost RGB color.</a:documentation>
                      </choice>

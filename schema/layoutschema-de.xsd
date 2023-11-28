@@ -5873,6 +5873,11 @@
                 <xs:documentation>Ein nummerischer Wert für MetaPost.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="mp:string">
+              <xs:annotation>
+                <xs:documentation>Eine Zeichenkette für MetaPost.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="mp:rgbcolor">
               <xs:annotation>
                 <xs:documentation>Eine MetaPost RGB Farbe.</xs:documentation>

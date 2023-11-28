@@ -8206,6 +8206,14 @@
           <para>Ein nummerischer Wert für MetaPost.</para>
         </description>
       </choice>
+      <choice en="mp:string">
+        <description xml:lang="en">
+          <para>A MetaPost string value.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Eine Zeichenkette für MetaPost.</para>
+        </description>
+      </choice>
       <choice en="mp:rgbcolor">
         <description xml:lang="en">
           <para>A MetaPost RGB color.</para>
