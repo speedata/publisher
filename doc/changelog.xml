@@ -841,7 +841,7 @@
         <de>Bookmark auf Ebene von PlaceObject (#290).</de>
     </entry>
     <entry version="4.1.24" date="2021-01-04">
-        <en>Bugfix incrorrect line height (#289).</en>
+        <en>Bugfix incorrect line height (#289).</en>
         <de>Fehlerkorrektur für falsche Zeilenhöhe (#289).</de>
     </entry>
     <entry version="4.1.23" date="2020-12-15">
@@ -866,7 +866,7 @@
     </entry>
     <entry version="4.1.19" date="2020-12-03">
         <en>Lots of minor changes (documentation and re-organization of internal code).</en>
-        <de>Viele kleine Änderungen (Dokumentation und reorganisation des Quellcodes).</de>
+        <de>Viele kleine Änderungen (Dokumentation und Reorganisation des Quellcodes).</de>
     </entry>
     <entry version="4.1.18" date="2020-11-23">
       <en>New options columndirection in Pagetype.</en>
@@ -874,7 +874,7 @@
     </entry>
     <entry version="4.1.18" date="2020-11-23">
       <en>Bugfix for initials in rtl mode.</en>
-      <de>Fehlerkorrekt für Initialen im rtl-Modus.</de>
+      <de>Fehlerkorrektur für Initialen im rtl-Modus.</de>
     </entry>
     <entry version="4.1.18" date="2020-11-23">
       <en>Re-organize Go files, move sp server to a separate package.</en>
@@ -957,11 +957,11 @@
         <de>Sprache in <tt>Span</tt> setzen (#273).</de>
     </entry>
     <entry version="4.1.10" date="2020-10-21">
-        <en>Allow language shortcodes in XML Schema.</en>
+        <en>Allow language short codes in XML Schema.</en>
         <de>Erlaube Sprachcodes im XML Schema.</de>
     </entry>
     <entry version="4.1.10" date="2020-10-21">
-        <en>First preperations for right-to-left text.</en>
+        <en>First preparations for right-to-left text.</en>
         <de>Erste Vorbereitungen für rechts-nach-links Text.</de>
     </entry>
     <entry version="4.1.10" date="2020-10-21">
@@ -969,7 +969,7 @@
         <de>Schemakorrektur (erlaube XPath in Paragraph/language).</de>
     </entry>
     <entry version="4.1.10" date="2020-10-21">
-        <en>Buffix textformat/margin bottom and border bottom (#262).</en>
+        <en>Bugfix textformat/margin bottom and border bottom (#262).</en>
         <de>Fehlerkorrektur textformat/margin bottom und border bottom (#262).</de>
     </entry>
     <entry version="4.1.9" date="2020-10-19">
@@ -1098,7 +1098,7 @@
     </entry>
     <entry version="3.9.30" date="2020-08-14">
       <en>Fix hyperlinks (no border in acrobat, make them work).</en>
-      <de>Korrigiere Hyperinks (kein Rahmen im Acrobat, interaktion ist Voreinstellung).</de>
+      <de>Korrigiere Hyperlinks (kein Rahmen im Acrobat, Interaktion ist Voreinstellung).</de>
     </entry>
     <entry version="3.9.29" date="2020-08-14">
       <en>Bugfix for ForAll and reduced result set (#261).</en>
