@@ -2178,7 +2178,11 @@ function commands.message( layoutxml, dataxml )
         if not ignore_message then
             publisher.messages[#publisher.messages + 1] = { contents, "message" }
         end
-        log("Message: %q", tostring(contents) or "?")
+        local lineinfo = ""
+        if publisher.newxpath then
+            lineinfo = string.format(" (line %s)",layoutxml[".__line"])
+        end
+        log("Message%s: %q", lineinfo, tostring(contents) or "?")
     end
     if exitnow then
         err(-1,"Exiting on user request.")
