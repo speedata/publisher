@@ -2718,12 +2718,17 @@ function background( box, colorname )
         warning("Background: Color %q is not defined",colorname)
         return box
     end
-    local pdfcolorstring = colors[colorname].pdfstring
+    local colentry = colors[colorname]
+
+    local pdfcolorstring = colentry.pdfstring
     local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
     n = node.new("whatsit","pdf_literal")
     setprop(n,"origin","background")
     n.data = string.format("q %s 0 -%g %g %g re f Q",pdfcolorstring,dp,wd,ht + dp)
     n.mode = 0
+    if colentry.alpha then
+        setprop(n,"opacity",colentry.alpha)
+    end
     if node.type(box.id) == "hlist" then
         -- pdfliteral does not use up any space, so we can add it to the already packed box.
         n.next = box.list
