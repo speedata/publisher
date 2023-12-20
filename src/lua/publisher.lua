@@ -2774,12 +2774,12 @@ function frame(obj)
     -- http://spencermortensen.com/articles/bezier-circle/
     -- 0.551915024494
     local circle_bezier = 0.551915024494
-    local color = colors[colorname]
-    if not color then
+    local colentry = colors[colorname]
+    if not colentry then
         err("Color %q is not defined",tostring(colorname))
-        color = colors["black"]
+        colentry = colors["black"]
     end
-    local pdfcolorstring = color.pdfstring
+    local pdfcolorstring = colentry.pdfstring
     local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
     local rw = math.round(width / factor,3) -- width of stroke
 
@@ -2906,6 +2906,10 @@ function frame(obj)
     rule[#rule + 1] = "Q"
 
     n.data = table.concat(rule," ")
+    if colentry.alpha then
+        setprop(n,"opacity",colentry.alpha)
+    end
+
     if obj.clip then
         n_clip.data = table.concat(rule_clip, " ")
         node.setproperty(n_clip,{origin = "frame/clip"})

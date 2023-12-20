@@ -1,0 +1,19 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="2cm" width="2cm" />
+    <Pagetype name="t" test="true()">
+        <Margin left="0mm" right="0mm" top="0mm" bottom="0mm" />
+    </Pagetype>
+    <DefineColor name="a" model="RGB" r="69" g="177" b="0" alpha="30" />
+    <Record element="data">
+        <PlaceObject>
+            <Frame backgroundcolor="a" framecolor="a" rulewidth="2pt">
+                <Table>
+                    <Tr>
+                        <Td><Paragraph><Value>some text</Value></Paragraph></Td>
+                    </Tr>
+                </Table>
+            </Frame>
+        </PlaceObject>
+    </Record>
+</Layout>
