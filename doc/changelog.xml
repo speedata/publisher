@@ -1,12 +1,16 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.15">
+    <entry version="4.15.18" date="2023-12-20">
+        <en>Transparency with Frame border (#544).</en>
+        <de>Transparenz mit Frame/Rahmenfarbe (#544).</de>
+    </entry>
     <entry version="4.15.17" date="2023-12-19">
         <en>Line information on Message (#545).</en>
         <de>Zeileninformation bei Message (#545).</de>
     </entry>
     <entry version="4.15.17" date="2023-12-19">
-        <en>Transparency with Frame.</en>
-        <de>Transparenz mit Frame.</de>
+        <en>Transparency with Frame (#544).</en>
+        <de>Transparenz mit Frame (#544).</de>
     </entry>
     <entry version="4.15.16" date="2023-11-28">
         <en>Various metapost related fixes (#542, #543).</en>
