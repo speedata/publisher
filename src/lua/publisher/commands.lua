@@ -4056,7 +4056,6 @@ function commands.span( layoutxml,dataxml )
         languagecode = publisher.get_languagecode(language_name)
     end
 
-    local a = par:new(nil,"span")
     local params = {
         underline = underline,
         allowbreak = publisher.allowbreak,
