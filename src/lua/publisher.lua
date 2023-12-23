@@ -5095,9 +5095,12 @@ local function ffglyphlist(arguments)
             end
             if parameter.backgroundcolor then
                 set_attribute(n,"background-color",parameter.backgroundcolor)
-                set_attribute(n,"bgpaddingtop",parameter.bg_padding_top)
-                set_attribute(n,"bgpaddingbottom",parameter.bg_padding_bottom)
-
+                if parameter.bg_padding_top then
+                    set_attribute(n,"bgpaddingtop",parameter.bg_padding_top)
+                end
+                if parameter.bg_padding_bottom then
+                    set_attribute(n,"bgpaddingbottom",parameter.bg_padding_bottom)
+                end
             end
             set_attribute(n,"fontfamily",fontfamily)
             head,last = node.insert_after(head,last,n)
