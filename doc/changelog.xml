@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.15">
+    <entry version="4.15.19" date="2023-12-23">
+        <en>Bugfix background with Span (#547).</en>
+        <de>Fehlerkorrektur bei Span und Hintergrund (#547).</de>
+    </entry>
     <entry version="4.15.18" date="2023-12-20">
         <en>Transparency with Frame border (#544).</en>
         <de>Transparenz mit Frame/Rahmenfarbe (#544).</de>
