@@ -94,7 +94,7 @@ local function parsetxt(self,csstext)
 end
 
 local function parse( self,filename)
-  local path = kpse.find_file(filename)
+  local path = publisher.find_file(filename)
   if not path then
     err("CSS: cannot find filename %q.",filename or "--")
     return

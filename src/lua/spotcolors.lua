@@ -1243,7 +1243,7 @@ function write_colorprofile()
     if currentcolorprofile.objectid == nil or currentcolorprofile.objectid == 0 then
         local colorprofile_filename = currentcolorprofile.filename
         log("Loading colorprofile %s",colorprofile_filename)
-        local path = kpse.find_file(colorprofile_filename)
+        local path = publisher.find_file(colorprofile_filename)
         if not path then
             err("colorprofile not found %s",tostring(colorprofile_filename))
         else

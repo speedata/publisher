@@ -27,7 +27,7 @@ function extra_page_parameter(current_page)
 end
 
 local function finder(name, mode, type)
-    local loc = kpse.find_file(name)
+    local loc = publisher.find_file(name)
     if mode == "r" then return loc end
     return name
 end

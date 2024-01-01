@@ -365,7 +365,7 @@ local function file_exists(dataxml, arg)
     local filename = arg[1]
     if not filename then return false end
     if filename == "" then return false end
-    return kpse.find_file(filename) ~= nil
+    return publisher.find_file(filename) ~= nil
 end
 
 --- Insert 1000's separator and comma separator

@@ -798,6 +798,14 @@ function dispatch(layoutxml,dataxml,opts)
     return ret
 end
 
+function find_file(filename)
+    local ret = kpse.find_file(filename)
+    if options.verbosity and options.verbosity > 0 then
+        log("file lookup: %s -> %s",tostring(filename),tostring(ret))
+    end
+
+    return ret
+end
 
 local function pdf_draw_pos(x,y)
     x = sp_to_bp(x)
@@ -1015,7 +1023,7 @@ function define_image_callback( extensionhandler )
         extensions[ext] = handler
     end
     local function find_image_file( asked_name )
-        local file = kpse.find_file(asked_name)
+        local file = find_file(asked_name)
         local ext = get_extension(asked_name)
         local handlername = extensions[ext]
         local handler = imagehandler[handlername]
@@ -1356,7 +1364,7 @@ function initialize_luatex_and_generate_pdf()
     local auxfilename = tex.jobname .. "-aux.xml"
 
     -- load help file if it exists
-    if kpse.find_file(auxfilename) and options.resetmarks == false then
+    if find_file(auxfilename) and options.resetmarks == false then
         local mark_tab = load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeol = true })
         if not mark_tab then return end
         if newxpath then
@@ -1958,7 +1966,7 @@ function load_xml(filename,filetype,parameter)
             log("Using old Lua based XML reader")
         end
 
-        local path = kpse.find_file(filename)
+        local path = find_file(filename)
         if not path then
             err("Can't find XML file %q. Abort.",filename or "?")
             return
@@ -1967,7 +1975,7 @@ function load_xml(filename,filetype,parameter)
             calculate_md5sum(filename)
         end
         log("Loading %s %q",filetype or "file",path)
-        local parsed_xml = luxor.parse_xml_file(path, parameter,kpse.find_file)
+        local parsed_xml = luxor.parse_xml_file(path, parameter,find_file)
         -- if options.verbosity > 0 and filetype == "layout instructions" then
         --     printtable("parsed_xml",parsed_xml)
         -- end
@@ -1976,7 +1984,7 @@ function load_xml(filename,filetype,parameter)
 end
 
 function calculate_md5sum(filename)
-    local p = kpse.find_file(filename)
+    local p = find_file(filename)
     if p then
         local f = io.open(p)
         local str = f:read("*a")
@@ -6499,7 +6507,7 @@ function get_language(id_or_locale_or_name)
     else
         local filename = string.format("hyph-%s.pat.txt",filename_part)
         log("Loading hyphenation patterns %q.",filename)
-        local path = kpse.find_file(filename)
+        local path = find_file(filename)
         local pattern_file = io.open(path)
         local pattern = pattern_file:read("*all")
         pattern_file:close()
@@ -7231,7 +7239,7 @@ function new_image(filename,page,box,fallback,imageshape)
 end
 
 function validimagetype(filename)
-    local localfilename = kpse.find_file(filename)
+    local localfilename = find_file(filename)
     local f,errmsg = io.open(localfilename)
     if not f then
         err(errmsg)
@@ -7248,7 +7256,7 @@ end
 function get_fallback_image_name( filename, missingfilename )
     if filename then
         warning("Using fallback %q, missing file name is %q", filename or "<filename>", missingfilename or "<empty>")
-        if not kpse.find_file(filename) then
+        if not find_file(filename) then
             err("fallback image %q not found",filename or "<filename>")
             return "filenotfound.pdf"
         end
@@ -7279,7 +7287,7 @@ function imageinfo( filename,page,box,fallback,imageshape )
     end
 
     log("Searching for image %q",tostring(filename))
-    if not kpse.find_file(filename) then
+    if not find_file(filename) then
         if options.imagenotfounderror then
             err("Image %q not found!",filename or "???")
         else
@@ -7316,7 +7324,7 @@ function imageinfo( filename,page,box,fallback,imageshape )
     if imageshape and not string.match(filename, "^https?://") then
         local xmlfilename = string.gsub(filename,"(%..*)$","") .. ".xml"
 
-        if kpse.find_file(xmlfilename) then
+        if find_file(xmlfilename) then
             local xmltab,msg = load_xml(xmlfilename,"Imageinfo")
             if not xmltab then
                 err(msg)

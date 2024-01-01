@@ -219,7 +219,7 @@ function commands.attachfile( layoutxml,dataxml )
         end
         modificationtime = os.time()
     else
-        local path = kpse.find_file(inputfilename)
+        local path = publisher.find_file(inputfilename)
         if path == nil then
             err("Cannot find file %q",inputfilename)
             return
@@ -1901,11 +1901,11 @@ function commands.load_dataset( layoutxml,dataxml )
     local name = publisher.read_attribute(layoutxml,dataxml,"name", "string")
     if filename then
         log("Loading data file %q",filename)
-        path = kpse.find_file(filename)
+        path = publisher.find_file(filename)
     elseif name then
         name = tex.jobname .. "-" .. name .. ".dataxml"
         log("Loading data file %q",name)
-        path = kpse.find_file(name)
+        path = publisher.find_file(name)
     else
         err("LoadDataset: no (file)name given.")
     end

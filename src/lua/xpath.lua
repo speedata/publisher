@@ -898,7 +898,7 @@ end
 
 M.default_functions.doc = function (dataxml,arg)
     local filename = arg[1]
-    local loc = kpse.find_file(filename)
+    local loc = publisher.find_file(filename)
     if loc == nil then return end
     local f,e = io.open(loc,"rb")
     if f == nil then
