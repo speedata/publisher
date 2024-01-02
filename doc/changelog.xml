@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.15">
+    <entry version="4.15.20" date="2024-01-02">
+        <en>Bugfix: zero width space (#552).</en>
+        <de>Fehlerkorrektur: Zero width space (#552).</de>
+    </entry>
+    <entry version="4.15.20" date="2024-01-02">
+        <en>Log file lookup when verbose > 0.</en>
+        <de>Logge Dateilookup bei Verbose > 0.</de>
+    </entry>
     <entry version="4.15.19" date="2023-12-23">
         <en>Bugfix background with Span (#547).</en>
         <de>Fehlerkorrektur bei Span und Hintergrund (#547).</de>
