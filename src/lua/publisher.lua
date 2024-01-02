@@ -4745,7 +4745,9 @@ function hbglyphlist(arguments)
                     set_attribute(n,"bgpaddingbottom",parameter.bg_padding_bottom)
                 end
             end
-            set_attribute(n,"fontfamily",fontfamily)
+            if n then
+                set_attribute(n,"fontfamily",fontfamily)
+            end
         elseif cp == 0 and newlines_at[thisglyph.cluster] then
             local dummypenalty
             dummypenalty = node.new("penalty")
@@ -5070,11 +5072,10 @@ local function ffglyphlist(arguments)
             n.subtype = 1
             head, last = node.insert_after(head,last,n)
         elseif s == 8203 then
-            -- U+200B ZERO WIDTH SPACE
-            p = node.new("penalty")
-            p.penalty = -10
-            head = p
-            last = node.tail(head)
+            local n = set_glue(nil,{width = 0 },"uc=8203")
+            -- prevent from stretching with ragged shape
+            n.subtype = 1
+            head, last = node.insert_after(head,last,n)
         -- anchor is necessary. Otherwise à (C3A0) would match A0 - %s
         elseif match(char,"^%s$") then -- Space
             if breakatspace == false then
