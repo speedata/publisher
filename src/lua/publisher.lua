@@ -487,11 +487,12 @@ colors  = {
   white = { model="gray", g="1" , pdfstring = "1 G 1 g", index = 143},
   whitesmoke = { model="rgb", r="0.961" , g="0.961" , b="0.961" , pdfstring = "0.961 0.961 0.961 rg 0.961 0.961 0.961 RG", index = 144},
   yellow = { model="rgb", r="1" , g="1" , b="0" , pdfstring = "1 1 0 rg 1 1 0 RG", index = 145},
-  yellowgreen = { model="rgb", r="0.604" , g="0.804" , b="0.196" , pdfstring = "0.604 0.804 0.196 rg 0.604 0.804 0.196 RG", index = 146}
+  yellowgreen = { model="rgb", r="0.604" , g="0.804" , b="0.196" , pdfstring = "0.604 0.804 0.196 rg 0.604 0.804 0.196 RG", index = 146},
+  ["-"] = { pdfstring = " ", index = 147 }
 }
 
 -- An array of defined colors
-colortable = {"black","aliceblue", "orange", "rebeccapurple", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "blanchedalmond", "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkgrey", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange", "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkslategrey", "darkturquoise", "darkviolet", "deeppink", "deepskyblue", "dimgray", "dimgrey", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold", "goldenrod", "gray", "green", "greenyellow", "grey", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush", "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgray", "lightgreen", "lightgrey", "lightpink", "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightslategrey", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue", "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy", "oldlace", "olive", "olivedrab", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred", "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon", "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "slategrey", "snow", "springgreen", "steelblue", "tan", "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen"}
+colortable = {"black","aliceblue", "orange", "rebeccapurple", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "blanchedalmond", "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkgrey", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange", "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkslategrey", "darkturquoise", "darkviolet", "deeppink", "deepskyblue", "dimgray", "dimgrey", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold", "goldenrod", "gray", "green", "greenyellow", "grey", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush", "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgray", "lightgreen", "lightgrey", "lightpink", "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightslategrey", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue", "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy", "oldlace", "olive", "olivedrab", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred", "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon", "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "slategrey", "snow", "springgreen", "steelblue", "tan", "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen", "-"}
 
 -- The color stack to use
 defaultcolorstack = 0
@@ -2762,9 +2763,8 @@ end
 --   b_x_y_radius, where x = b or t and y = r or l: the radius of the corners
 -- The function returns a hbox
 function frame(obj)
-    local  box, colorname, width
+    local  box, width
     box          = obj.box
-    colorname    = obj.colorname or "black"
     width        = obj.rulewidth or 0
     local b_b_r_radius = sp_to_bp(obj.b_b_r_radius)
     local b_t_r_radius = sp_to_bp(obj.b_t_r_radius)
@@ -2782,14 +2782,18 @@ function frame(obj)
     -- http://spencermortensen.com/articles/bezier-circle/
     -- 0.551915024494
     local circle_bezier = 0.551915024494
-    local colentry = colors[colorname]
+
+    local colentry = get_colentry_from_name(obj.colorname,"black")
     if not colentry then
-        err("Color %q is not defined",tostring(colorname))
+        err("Color %q is not defined",tostring(obj.colorname))
         colentry = colors["black"]
     end
     local pdfcolorstring = colentry.pdfstring
     local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
     local rw = math.round(width / factor,3) -- width of stroke
+    if obj.colorname == "-" then
+        rw = 0
+    end
 
     -- outer boundary
     local x1, y1   = -rw + b_b_l_radius                     , -rw - dp
