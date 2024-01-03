@@ -725,7 +725,11 @@ function commands.define_color( layoutxml,dataxml )
         local k = publisher.read_attribute(layoutxml,dataxml,"k","number")
         color.colornum = spotcolors.register(colorname,c,m,y,k)
     elseif value then
-        color.r,color.g,color.b,color.alpha = publisher.getrgb(value)
+        local calpha
+        color.r,color.g,color.b,calpha = publisher.getrgb(value)
+        if calpha then
+            color.alpha = calpha
+        end
         color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
         model = "rgb"
         publisher.metapostcolors[mpname(name)] = {model = model, r = color.r, g = color.g, b = color.b }
