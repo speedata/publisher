@@ -101,7 +101,7 @@ Dh. in der Zeile
 
 haben alle Spalten bis auf die letzte die Ausrichtung »linksbündig«.
 
-In der Zeile kann auch die Hintergrundfarbe für die einzelnen Spalten festgelegt werden (`backgroundcolor`).
+In der Zeile kann auch die Hintergrundfarbe für die einzelnen Spalten festgelegt werden (`background-color`).
 Ebenso kann die minimale Höhe (`minheight`, Angabe in Rasterzellen bzw. einer Maßangabe) und der Abstand oberhalb der Zelle, sofern sie nicht auf einen Seitenumbruch folgt, festgelegt werden.
 
 [discrete]
@@ -137,7 +137,7 @@ Das bezieht sich auf die Anordnung innerhalb der Tabellenzelle:
         <Paragraph textformat="justified">
           <Value select="sd:dummytext()"/>
         </Paragraph>
-        <Box width="2" height="1" backgroundcolor="green"/>
+        <Box width="2" height="1" background-color="green"/>
       </Td>
     </Tr>
   </Table>
@@ -239,7 +239,7 @@ endif::[]
             <Paragraph><Value>1/3</Value></Paragraph>
           </Td>
         </Tr>
-        <Tr backgroundcolor="yellow">
+        <Tr background-color="yellow">
           <Td>
             <Paragraph><Value>2/1</Value></Paragraph>
           </Td>
@@ -373,7 +373,7 @@ Die Kopfzeile definiert man in der Tabelle wie folgt (als Kindelement des Elemen
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
 <Tablehead>
-  <Tr backgroundcolor="gray">
+  <Tr background-color="gray">
     <Td>
       <Paragraph>
         <Value>Head</Value>
@@ -405,7 +405,7 @@ Das geht analog zu `<Tablehead>`, nur dass die Seitenauswahl anstelle von `first
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
 <Tablefoot page="last">
-  <Tr backgroundcolor="gray">
+  <Tr background-color="gray">
     <Td>
       <Paragraph>
         <Value>Table foot last page</Value>
@@ -414,7 +414,7 @@ Das geht analog zu `<Tablehead>`, nur dass die Seitenauswahl anstelle von `first
   </Tr>
 </Tablefoot>
 <Tablefoot page="all">
-  <Tr backgroundcolor="gray">
+  <Tr background-color="gray">
     <Td>
       <Paragraph>
         <Value>Table foot for all pages</Value>
@@ -432,7 +432,7 @@ Sie können auch Linien und mehrere Zeilen enthalten. Werden bestimmte Kopf- ode
 -------------------------------------------------------------------------------
 <Tablefoot page="last" />
 <Tablefoot page="all">
-  <Tr backgroundcolor="gray">
+  <Tr background-color="gray">
     <Td>
       <Paragraph>
         <Value>Table foot for all pages</Value>
@@ -454,7 +454,7 @@ Beide Varianten können kombiniert werden.
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
-<Tr sethead="yes" backgroundcolor="lightgray">
+<Tr sethead="yes" background-color="lightgray">
   <Td>
     <Paragraph>
       <Value>New head</Value>
@@ -494,7 +494,7 @@ In einer Schleife werden die gewünschten Zeilen ausgegeben.
     <PlaceObject>
       <Table padding="1mm" stretch="max">
         <ForAll select="section">
-          <Tr sethead="yes" backgroundcolor="lightgray">
+          <Tr sethead="yes" background-color="lightgray">
             <Td>
               <Paragraph>
                 <Value select="@name"/>
@@ -565,7 +565,7 @@ Um dies zu illustrieren, gibt es ein vollständiges Layoutregelwerk, das diesen 
     <PlaceObject>
       <Table stretch="max">
         <Tablehead>
-          <Tr backgroundcolor="#eee">
+          <Tr background-color="#eee">
             <Td>
               <Paragraph>
                 <Value>Value of $_last_tr_data: </Value>
@@ -664,7 +664,7 @@ Eine etwas ausführlichere Beschreibung findet sich im Abschnitt <<ch-optimierun
 == Abwechselnde Zeilenfarben
 
 Wechselnde Zeilenfarben werden häufig in Tabellen mit vielen Spalten benutzt, um eine Hilfe für das Auge beim Lesen der Tabelle zu geben.
-Die Zeilenfarbe kann man durch `backgroundcolor="..."` bei `<Tr>` angeben.
+Die Zeilenfarbe kann man durch `background-color="..."` bei `<Tr>` angeben.
 
 
 .Wechselnde Zeilenfarben. Das erste Argument der Funktion  sd:alternating() ist eine Kennung, um verschiedene Alternierungen in einem Dokument zu unterscheiden.
@@ -672,7 +672,7 @@ Die Zeilenfarbe kann man durch `backgroundcolor="..."` bei `<Tr>` angeben.
 -------------------------------------------------------------------------------
 <Table>
   <Loop select="5" variable="i">
-    <Tr backgroundcolor="{sd:alternating('tab', 'white', 'gray')}">
+    <Tr background-color="{sd:alternating('tab', 'white', 'gray')}">
       <Td>
         <Paragraph>
           <Value>Zeile </Value>
@@ -690,7 +690,7 @@ Die Zeilenfarbe kann man durch `backgroundcolor="..."` bei `<Tr>` angeben.
 image::tab-wechselnde-zeilenfarben.png[width=20%,scaledwidth=50%]
 
 Der Trick ist hier die Anwendung der Layoutfunktion `sd:alternating()`, die zwischen den Argumenten wechselt.
-Da das Attribut `backgroundcolor` einen festen Wert erwartet, muss mit den geschweiften Klammern in den »XPath-Modus« gesprungen werden.
+Da das Attribut `background-color` einen festen Wert erwartet, muss mit den geschweiften Klammern in den »XPath-Modus« gesprungen werden.
 
 Nach der Ausgabe der Tabelle ist nicht sichergestellt, dass beim nächsten Aufruf von `sd:alternating()` mit der Kennung `tab` wieder mit dem ersten Wert angefangen wird.
 Das kommt darauf an, welcher Wert zuletzt benutzt wurde.

@@ -849,7 +849,7 @@ func main() {
 	op.On("--extra-xml NAME", "Add this file to the layout file", extraXML)
 	op.On("--filter FILTER", "Run Lua filter before publishing starts", options)
 	op.On("--grid", "Display background grid. Disable with --no-grid", options)
-	op.On("--ignore-case", "Ignore case when accessing files (on a case-insensitive file system)", options)
+	op.On("--ignore-case", "Ignore case when accessing files in the recursive file list (on a case-insensitive file system)", options)
 	op.On("--imagecache PATH", "Set the image cache", options)
 	op.On("--inkscape PATH", "Set the path to the inkscape program", options)
 	op.On("--jobname NAME", "The name of the resulting PDF file (without extension), default is 'publisher'", options)

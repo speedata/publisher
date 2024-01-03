@@ -11,6 +11,7 @@ It follows from this:
 . If something changes in the file system during the run, the Publisher will not notice this.
 . It does not matter what the directories are called. The images can, but do not have to be stored in the directory with the name "images".
 . If the working directory is too large, the startup process is slow. A few thousand files in the working directory are usually no problem.
+. If there are duplicates in the file tree, a file is selected “at random”. E.g. `data.xml` in the main directory and in a subdirectory.
 
 There are exceptions to the rule:
 
@@ -77,5 +78,11 @@ The data file can also be split into several files. XInclude is used for this.
 -------
 
 The namespace for XInclude must be declared in the root node (in the above example, 'catalog').
+
+=== XInclude and XML schema
+
+If the XInclude mechanism is used, it is possible that the XML editor will flag the `<xi:include ...>` statements as unknown.
+To prevent this, the RELAX NG schema must be linked to the editor instead of the XML schema. See the chapter <<ch-appendix-schema-assigning,Associate XML editor with schema>>.
+
 
 // EOF

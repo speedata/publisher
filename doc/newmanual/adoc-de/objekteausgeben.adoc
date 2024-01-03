@@ -251,7 +251,7 @@ endif::[]
 [source, xml]
 -------------------------------------------------------------------------------
 <PlaceObject>
-  <Box width="4" height="3" backgroundcolor="limegreen"/>
+  <Box width="4" height="3" background-color="limegreen"/>
 </PlaceObject>
 -------------------------------------------------------------------------------
 
@@ -275,10 +275,10 @@ Kreise werden mit dem Befehl `<Circle>` ausgegeben:
 -------------------------------------------------------------------------------
 <Record element="data">
   <PlaceObject column="5" row="5">
-    <Circle radiusx="3" backgroundcolor="goldenrod"/>
+    <Circle radiusx="3" background-color="goldenrod"/>
   </PlaceObject>
   <PlaceObject column="5" row="5">
-    <Circle radiusx="1pt" backgroundcolor="black"/>
+    <Circle radiusx="1pt" background-color="black"/>
   </PlaceObject>
 </Record>
 -------------------------------------------------------------------------------

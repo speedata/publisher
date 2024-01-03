@@ -11,7 +11,7 @@ The output of colors in speedata Publisher is very simple. Usually one specifica
     <PlaceObject column="4" row="4">
       <Circle
          radiusx="2"
-         backgroundcolor="deeppink"
+         background-color="deeppink"
          framecolor="mediumaquamarine"
          rulewidth="8pt"/>
     </PlaceObject>
@@ -31,7 +31,7 @@ Colors can be assigned to a name with <<cmd-definecolor,`<DefineColor>`>> and th
 -------------------------------------------------------------------------------
 <DefineColor name="logocolor" model="cmyk" c="0" m="18" y="90" k="2" />
 <PlaceObject>
-  <Box height="4" width="3" backgroundcolor="logocolor" />
+  <Box height="4" width="3" background-color="logocolor" />
 </PlaceObject>
 -------------------------------------------------------------------------------
 
@@ -63,7 +63,7 @@ In the following case, the spot color is already known and can be used without C
 
 <Record element="data">
   <PlaceObject>
-    <Box width="5" height="2" backgroundcolor="logocolor"/>
+    <Box width="5" height="2" background-color="logocolor"/>
   </PlaceObject>
 </Record>
 -------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ HTML and CSS like colors can be used directly:
 [source, xml]
 -------------------------------------------------------------------------------
 <PlaceObject allocate="no" column="3">
-    <Box height="4" width="5" backgroundcolor="#FFC72C"  />
+    <Box height="4" width="5" background-color="#FFC72C"  />
 </PlaceObject>
 -------------------------------------------------------------------------------
 

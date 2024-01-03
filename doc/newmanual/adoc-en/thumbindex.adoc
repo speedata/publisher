@@ -28,7 +28,7 @@ There is nothing special about thumb indexes at first, they are either created w
       <PlaceObject column="200mm"
           row="{20 + 20 * $chapter}mm"> <!--2-->
 
-        <Box width="1cm" height="1cm" backgroundcolor="black"
+        <Box width="1cm" height="1cm" background-color="black"
              bleed="right"/> <!--3-->
       </PlaceObject>
 

@@ -123,7 +123,7 @@ Anschließend wird für jeden Eintrag innerhalb dieses Abschnittes eine Zeile mi
       <Table width="3" stretch="max">
         <ForAll select="section">
           <Tr break-below="no" top-distance="10pt">
-            <Td colspan="2" backgroundcolor="lightgray">
+            <Td colspan="2" background-color="lightgray">
               <Paragraph><Value select="@name"></Value></Paragraph>
             </Td>
           </Tr>

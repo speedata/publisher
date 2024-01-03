@@ -3665,18 +3665,18 @@
     </attribute>
     <attribute en="framecolor" type="text" optional="yes">
       <description xml:lang="en">
-        <para>The color of the frame around the object. Only makes sense in combination with the attribute 'frame'.</para>
+        <para>The color of the frame around the object. This defaults to 'black'. Can be hidden with the special color '-'.</para>
       </description>
       <description xml:lang="de">
-        <para>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
+        <para>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird. Voreinstellung ist 'black'. Kann mit der speziellen Farbe '-' ausgeschaltet werden.</para>
       </description>
     </attribute>
     <attribute en="rulewidth" type="length" optional="yes">
       <description xml:lang="en">
-        <para>The thickness of the frame that is drawn around the object. Only makes sense in combination with the attribute 'frame'.</para>
+        <para>The thickness of the frame that is drawn around the object.</para>
       </description>
       <description xml:lang="de">
-        <para>Die Dicke des Rahmens, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</para>
+        <para>Die Dicke des Rahmens, der um das Objekt gezogen wird. </para>
       </description>
     </attribute>
     <attribute en="class" optional="yes" type="text">

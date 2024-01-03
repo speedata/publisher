@@ -5,13 +5,18 @@ This file gets updated before a stable release. There is a [detailed changelog](
 
 ## Version 5
 
-* New XPath engine.
+* New defaults for the XPath engine and the font loader.
+
+## Version 4.18
+
+* New output / logging backend.
 
 ## Version 4.16
 
 Not yet released.
 
 * Complete overhaul of the MetaPost integration.
+* New XPath engine (optional).
 
 ## Version 4.14
 

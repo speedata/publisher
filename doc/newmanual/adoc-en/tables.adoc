@@ -92,7 +92,7 @@ Statements in table rows (`<Tr>`) determine properties for all cells in that row
 
 all columns except the last have the alignment "left-aligned".
 
-You can also specify the background color for the individual columns in the line (backgroundcolor). You can also specify the minimum height (minheight, specified in grid cells or a dimension) and the space above the cell, provided it does not follow a page break.
+You can also specify the background color for the individual columns in the line (background-color). You can also specify the minimum height (minheight, specified in grid cells or a dimension) and the space above the cell, provided it does not follow a page break.
 
 [discrete]
 === Cells
@@ -123,7 +123,7 @@ Table cells contain horizontal objects (inline elements) and vertical objects (b
         <Paragraph textformat="justified">
           <Value select="sd:dummytext()"/>
         </Paragraph>
-        <Box width="2" height="1" backgroundcolor="green"/>
+        <Box width="2" height="1" background-color="green"/>
       </Td>
     </Tr>
   </Table>
@@ -208,7 +208,7 @@ The natural property of a table is that all cells in a row are the same height a
             <Paragraph><Value>1/3</Value></Paragraph>
           </Td>
         </Tr>
-        <Tr backgroundcolor="yellow">
+        <Tr background-color="yellow">
           <Td>
             <Paragraph><Value>2/1</Value></Paragraph>
           </Td>
@@ -325,7 +325,7 @@ The header line is defined in the table as follows (as child element of the elem
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
 <Tablehead>
-  <Tr backgroundcolor="gray">
+  <Tr background-color="gray">
     <Td>
       <Paragraph>
         <Value>Head</Value>
@@ -355,7 +355,7 @@ With this variant you can not only define the (repeating) table header, but also
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
 <Tablefoot page="last">
-  <Tr backgroundcolor="gray">
+  <Tr background-color="gray">
     <Td>
       <Paragraph>
         <Value>Table foot last page</Value>
@@ -364,7 +364,7 @@ With this variant you can not only define the (repeating) table header, but also
   </Tr>
 </Tablefoot>
 <Tablefoot page="all">
-  <Tr backgroundcolor="gray">
+  <Tr background-color="gray">
     <Td>
       <Paragraph>
         <Value>Table foot for all pages</Value>
@@ -381,7 +381,7 @@ Table headers and footers do not have to consist of only one line. They can also
 -------------------------------------------------------------------------------
 <Tablefoot page="last" />
 <Tablefoot page="all">
-  <Tr backgroundcolor="gray">
+  <Tr background-color="gray">
     <Td>
       <Paragraph>
         <Value>Table foot for all pages</Value>
@@ -398,7 +398,7 @@ In the previous section, the table header is created using `<Tablehead>` (and it
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
-<Tr sethead="yes" backgroundcolor="lightgray">
+<Tr sethead="yes" background-color="lightgray">
   <Td>
     <Paragraph>
       <Value>New head</Value>
@@ -434,7 +434,7 @@ The layout outputs a table, for each section the heading is displayed as a line 
     <PlaceObject>
       <Table padding="1mm" stretch="max">
         <ForAll select="section">
-          <Tr sethead="yes" backgroundcolor="lightgray">
+          <Tr sethead="yes" background-color="lightgray">
             <Td>
               <Paragraph>
                 <Value select="@name"/>
@@ -490,7 +490,7 @@ This data can later be retrieved in headers and footers with the special variabl
     <PlaceObject>
       <Table stretch="max">
         <Tablehead>
-          <Tr backgroundcolor="#eee">
+          <Tr background-color="#eee">
             <Td>
               <Paragraph>
                 <Value>Value of $_last_tr_data: </Value>
@@ -578,14 +578,14 @@ The check now takes place by creating the table in a group and then checking the
 A more detailed description can be found in the section <<ch-layoutoptimizationusinggroups>>.
 
 == Alternating line colors
-Changing row colors are often used in tables with many columns to help the eye read the table. The row color can be specified by `backgroundcolor="..."` at `<Tr>`.
+Changing row colors are often used in tables with many columns to help the eye read the table. The row color can be specified by `background-color="..."` at `<Tr>`.
 
 .Changing line colors. The first argument of the function sd:alternating() is an identifier to distinguish different alternations in a document.
 [source, xml, indent=0]
 -------------------------------------------------------------------------------
 <Table>
   <Loop select="5" variable="i">
-    <Tr backgroundcolor="{sd:alternating('tab', 'white', 'gray')}">
+    <Tr background-color="{sd:alternating('tab', 'white', 'gray')}">
       <Td>
         <Paragraph>
           <Value>Zeile </Value>
@@ -601,7 +601,7 @@ Changing row colors are often used in tables with many columns to help the eye r
 .Alternating background colors
 image::tab-wechselnde-zeilenfarben.png[width=20%,scaledwidth=50%]
 
-The trick here is to use the layout function `sd:alternating()`, which switches between arguments. Since the attribute backgroundcolor expects a fixed value, the curly brackets must be used to jump to “XPath mode”.
+The trick here is to use the layout function `sd:alternating()`, which switches between arguments. Since the attribute background-color expects a fixed value, the curly brackets must be used to jump to “XPath mode”.
 
 After the table has been output, there is no guarantee that the next call to `sd:alternating()` with the identification tab will start with the first value again. This depends on which value was used last. To ensure that the table starts with the first value again, you can use the attribute `eval="..."` for `<Table>`:
 

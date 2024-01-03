@@ -26,13 +26,13 @@ Das vollständige Beispiel ist unter https://github.com/speedata/examples/tree/m
   <Record element="data">
     <PlaceObject column="8" row="1" keepposition="yes">
       <Box width="3" height="6"
-           backgroundcolor="thistle" padding-left="2mm"
+           background-color="thistle" padding-left="2mm"
            padding-bottom="2mm"/>
     </PlaceObject>
 
     <PlaceObject column="1" row="12" keepposition="yes">
       <Box width="3" height="6"
-           backgroundcolor="lightgreen" padding-top="2mm"
+           background-color="lightgreen" padding-top="2mm"
            padding-right="2mm"/>
     </PlaceObject>
 

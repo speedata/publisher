@@ -71,7 +71,7 @@ erkannt. Folgende Optionen werden unterstützt:
 `imagehandler`::
   Zuordnungen von Bildtyp zu externen Konvertern. Z.B. `imagehandler="mermaid:(/usr/bin/mmdc -i %%input%% -o %%output%%.pdf)"`. Der Bildtyp _mermaid_ wird mit dem Programm `/usr/bin/mmdc` konvertiert und erhält als Eingabeparameter `-i`, die Eingabedatei, `-o` und die Ausgabedatei mit angehängter Dateiendung `.pdf`. Die Dateinamen werden zur Laufzeit ersetzt und zufällig generiert. Mehrere Einträge werden mit Semikolon getrennt. Siehe auch <<ch-externalconverting>>.
 `ignore-case`::
-  Ignoriere die Groß- und Kleinschreibung für Dateizugriff.
+  Ignoriere die Groß- und Kleinschreibung für Dateizugriff in der rekursiven Dateiliste.
 `inkscape`::
   Pfad zum Inkscape-Programm.
 `inkscape-command`::

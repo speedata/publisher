@@ -34,7 +34,7 @@ Es folgt ein Beispiel für Kapitelnummern in einer quadratischen Box.
       <PlaceObject column="200mm"
           row="{20 + 20 * $chapter}mm"> <!--2-->
 
-        <Box width="1cm" height="1cm" backgroundcolor="black"
+        <Box width="1cm" height="1cm" background-color="black"
              bleed="right"/> <!--3-->
       </PlaceObject>
 

@@ -12,6 +12,7 @@ Daraus folgt:
 . Wenn sich während des Laufs etwas im Dateisystem ändert, bekommt der Publisher davon nichts mit.
 . Es ist egal, wie die Verzeichnisse heißen. Die Bilder können, müssen aber nicht, im Verzeichnis mit dem Namen »bilder« gespeichert sein.
 . Wenn das Arbeitsverzeichnis zu groß ist, ist der Startvorgang langsam. Einige Tausend Dateien im Arbeitsverzeichnis sind  in der Regel kein Problem.
+. Gibt es Duplikate im Dateibaum, wird eine Datei »zufällig« ausgewählt. Z.B. `data.xml` im Hauptverzeichnis und in einem Unterverzeichnis.
 
 Es gibt Ausnahmen von der Regel:
 
@@ -47,8 +48,6 @@ Es gibt zwei Möglichkeiten, die Dateien zusammenzuführen.
 Auf der Kommandozeile kann man mit `--extra-xml` ein oder mehrere Layoutregelwerke angeben, die zusätzlich eingelesen werden.
 Alternativ dazu kann man den Mechanismus über XInclude(((`Include`))) benutzen, hier im Fall einer Fontdefinition:
 
-// und  Fontdefinitionen kann man dann in eine eigene Datei auslagern (z. B. `dejavu.xml`) und so quasi »kapseln«:
-
 [source,xml]
 -------
 <Layout
@@ -82,7 +81,7 @@ Der Namensraum für XInclude muss wie oben deklariert werden, sonst gibt es eine
 [[ch-include_data]]
 == Daten in einzelne Dateien aufteilen
 Auch die Datendatei kann in mehrere Dateien aufgeteilt werden.
-Hierzu wird XInclude(((`Include`))) genutzt. 
+Hierzu wird XInclude(((`Include`))) genutzt.
 
 [source,xml]
 -------
@@ -94,7 +93,11 @@ Hierzu wird XInclude(((`Include`))) genutzt.
 </catalog>
 -------
 
-Im Wurzelknoten (im obigen Beispiel 'catalog') muss der Namensraum für XInclude deklariert werden. 
+Im Wurzelknoten (im obigen Beispiel 'catalog') muss der Namensraum für XInclude deklariert werden.
 
+=== XInclude und Schema
+
+Wird der XInclude-Mechanismus benutzt, so kann es sein, dass der XML Editor die `<xi:include ...>`-Anweisungen als unbekannt bemängelt.
+Um das zu verhindern, muss das RELAX NG Schema anstelle des XML-Schemas mit dem Editor verknüpft werden. Siehe das Kapitel <<ch-anhang-schemazuweisen,Schema zuweisen>>.
 
 // Ende

@@ -95,7 +95,7 @@ you can display a list of the allowed commands and parameters.
 `--grid`::
    Display background grid. Disable with `--no-grid`
 `--ignore-case`::
-   Ignore case when accessing files (on a case-insensitive file system)
+   Ignore case when accessing files (on a case-insensitive file system) in the recursive file lookup.
 `--imagecache=PATH`::
    Set the image cache
 `--inkscape=PATH`::

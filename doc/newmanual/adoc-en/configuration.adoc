@@ -63,7 +63,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `imagehandler`::
    Assignments of screen type to external converters. For example, `imagehandler="mermaid:(/usr/bin/mmdc -i %%input%% -o %%output%%%.pdf)"`. The image type _mermaid_ is converted with the program `/usr/bin/mmdc` and receives as input parameter `-i`, the input file, `-o` and the output file with attached file extension `.pdf`. The file names are replaced at runtime and generated randomly. Multiple entries are separated by semicolons. See also <<ch-externalconverting>>.
 `ignore-case`::
-   Ignore case when accessing files (on a case-insensitive file system).
+   Ignore case when accessing files (on a case-insensitive file system) in the recursive file lookup.
 `inkscape`::
    The path to the program inkscape when you need on the fly SVG to PDF conversion.
 `inkscape-command`::

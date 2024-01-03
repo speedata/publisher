@@ -11,7 +11,7 @@ In der Regel reicht eine Angabe bei dem Objekt, das ausgegeben werden soll:
     <PlaceObject column="4" row="4">
       <Circle
          radiusx="2"
-         backgroundcolor="deeppink"
+         background-color="deeppink"
          framecolor="mediumaquamarine"
          rulewidth="8pt"/>
     </PlaceObject>
@@ -30,7 +30,7 @@ Farben können mit <<cmd-definecolor,`<DefineColor>`>> einem Namen zugewiesen un
 -------------------------------------------------------------------------------
 <DefineColor name="logocolor" model="cmyk" c="0" m="18" y="90" k="2" />
 <PlaceObject>
-  <Box height="4" width="3" backgroundcolor="logocolor" />
+  <Box height="4" width="3" background-color="logocolor" />
 </PlaceObject>
 -------------------------------------------------------------------------------
 
@@ -62,7 +62,7 @@ Im folgenden Fall ist die Sonderfarbe schon bekannt und kann ohne CMYK-Werte ben
 
 <Record element="data">
   <PlaceObject>
-    <Box width="5" height="2" backgroundcolor="logocolor"/>
+    <Box width="5" height="2" background-color="logocolor"/>
   </PlaceObject>
 </Record>
 -------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ Farben können beim Benutzen direkt definiert werden:
 [source, xml]
 -------------------------------------------------------------------------------
 <PlaceObject allocate="no" column="3">
-    <Box height="4" width="5" backgroundcolor="#FFC72C"  />
+    <Box height="4" width="5" background-color="#FFC72C"  />
 </PlaceObject>
 -------------------------------------------------------------------------------
 

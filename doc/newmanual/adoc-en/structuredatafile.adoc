@@ -156,7 +156,7 @@ Alternatively to the procedure with `<ProcessNode>` and its counterpart `<Record
     <PlaceObject>
       <Table stretch="max"> <!--1-->
         <Tablehead> <!--2-->
-          <Tr backgroundcolor="gray">
+          <Tr background-color="gray">
             <Td>
               <Paragraph><Value>Article number</Value></Paragraph>
             </Td>
