@@ -15,7 +15,8 @@ import (
 )
 
 var (
-	files       map[string]string = make(map[string]string)
+	files       map[string]string   = make(map[string]string)
+	duplicates  map[string][]string = make(map[string][]string)
 	ignorefile  string
 	verbosity   int
 	pathrewrite *strings.Replacer
@@ -90,6 +91,12 @@ func LookupFile(path string) string {
 		path = strings.ToLower(path)
 	}
 	if ret, ok := files[path]; ok {
+		if dupes, ok := duplicates[path]; ok {
+			for _, dupe := range dupes {
+				fmt.Println("Found duplicate entry in file lookup: ", dupe)
+			}
+			fmt.Println("Using this file:", ret)
+		}
 		return ret
 	}
 	if _, err := os.Stat(path); err == nil {
@@ -103,10 +110,8 @@ func addFileToList(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() {
 			if ignorefile != path {
 				fb := filepath.Base(path)
-				if dup, found := files[fb]; found && verbosity > 0 {
-					if !strings.HasSuffix(dup, ".DS_Store") {
-						fmt.Println("warning: duplicate entry in directories:", dup, "and", path)
-					}
+				if _, found := files[fb]; found {
+					duplicates[fb] = append(duplicates[fb], path)
 				} else {
 					files[fb] = path
 				}
