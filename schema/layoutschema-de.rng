@@ -6333,11 +6333,6 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="fontface">
-                     <a:documentation>Name der Schriftfamilie, die benutzt werden soll. Voreinstellung ist text</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
                   <attribute name="fontfamily">
                      <a:documentation>Name der Schriftfamilie, die benutzt werden soll. Voreinstellung ist text</a:documentation>
                   </attribute>

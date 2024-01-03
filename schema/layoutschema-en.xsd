@@ -7578,11 +7578,6 @@
           <xs:documentation>The name of the color of the text.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="fontface">
-        <xs:annotation>
-          <xs:documentation>The name of the font family. Defaults to text.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>The name of the font family. Defaults to text.</xs:documentation>

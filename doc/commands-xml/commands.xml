@@ -576,9 +576,9 @@
   <definelist name="languagesshortcodes">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</definelist>
 
   <!--
-  *************************
-  * A
-  *************************
+      *************************
+      * A
+      *************************
   -->
   <command en="A">
     <description xml:lang="en">
@@ -707,6 +707,11 @@
     </example>
     <seealso/>
   </command>
+  <!--
+      *************************
+      * Action
+      *************************
+  -->
   <command en="Action">
     <description xml:lang="en">
       <para>Associates an action with a text. Once the text is placed on the page, the associated action will be executed. The action can be compared to an invisible character. When the publisher outputs the character, the corresponding instructions will be run.</para>
@@ -787,6 +792,11 @@
     </example>
     <seealso><cmd name="Textblock"/>, <cmd name="Mark"/></seealso>
   </command>
+  <!--
+      *************************
+      * AddSearchpath
+      *************************
+  -->
   <command en="AddSearchpath" since="3.1.1">
     <description xml:lang="en">
       <para>Add a directory on the hard-drive to be added to the publisher's search path.</para>
@@ -821,6 +831,11 @@
     </example>
     <seealso></seealso>
   </command>
+  <!--
+      *************************
+      * AtPageCreation
+      *************************
+  -->
   <command en="AtPageCreation">
     <description xml:lang="en">
       <para>The contents of the element <cmd name="AtPageCreation"/> is executed the first time the page is accessed. This is used in <cmd name="Pagetype"/>.</para>
@@ -867,6 +882,11 @@
     </example>
     <seealso><cmd name="Pagetype"/>, <cmd name="AtPageShipout"/></seealso>
   </command>
+  <!--
+      *************************
+      * AtPageShipout
+      *************************
+  -->
   <command en="AtPageShipout">
     <description xml:lang="en">
       <para>The enclosed instructions will be executed when the page is placed into the PDF file. Used in <cmd name="Pagetype"/>.</para>
@@ -912,6 +932,11 @@
     </example>
     <seealso><cmd name="AtPageCreation"/>, <cmd name="Pagetype"/></seealso>
   </command>
+  <!--
+      *************************
+      * AttachFile
+      *************************
+  -->
   <command en="AttachFile" since="3.1.1" >
     <description xml:lang="en">
       <para>Attach a file to the PDF. Can be used to attach a ZUGFeRD electronic invoice.</para>
@@ -980,6 +1005,11 @@
     </info>
     <seealso/>
   </command>
+  <!--
+      *************************
+      * Attribute
+      *************************
+  -->
   <command en="Attribute">
     <description xml:lang="en">
       <para>Create an attribute for the <cmd name="Element"/> data structure that can be saved to the hard drive with <cmd name="SaveDataset"/>.</para>
@@ -1023,6 +1053,11 @@
     </example>
     <seealso><cmd name="Element"/>, <cmd name="SaveDataset"/>, <ref name="directories"/></seealso>
   </command>
+  <!--
+      *************************
+      * B
+      *************************
+  -->
   <command en="B">
     <description xml:lang="en">
       <para>Switch to font weight »bold«</para>
@@ -1051,6 +1086,11 @@
     </example>
     <seealso><cmd name="I"/>, <ref name="fonts"/></seealso>
   </command>
+  <!--
+      *************************
+      * Barcode
+      *************************
+  -->
   <command en="Barcode" pro="yes">
     <description xml:lang="en">
       <para>Print a 1d or 2d barcode. To be used in <cmd name="PlaceObject"/>.</para>
@@ -1251,6 +1291,11 @@
     </example>
     <seealso><cmd name="PlaceObject"/></seealso>
   </command>
+  <!--
+      *************************
+      * Bold
+      *************************
+  -->
   <command en="Bold">
     <description xml:lang="en">
       <para>Name of the font face that should be used when switching to »bold«.</para>
@@ -1299,6 +1344,11 @@
       <cmd name="B"/>, <cmd name="BoldItalic"/>, <cmd name="Regular"/>, <cmd name="Italic"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * BoldItalic
+      *************************
+  -->
   <command en="BoldItalic">
     <description xml:lang="en">
       <para>Name of the font face that should be used when switching to »bold italic«. </para>
@@ -1352,6 +1402,11 @@
       <cmd name="Bold"/>, <ref name="fonts"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Bookmark
+      *************************
+  -->
   <command en="Bookmark">
     <description xml:lang="en">
       <para>Create a bookmark for the PDF viewer (e.g. Adobe Reader). When the user clicks on a bookmark, the PDF viewer <quote>jumps</quote> to that place in the document.</para>
@@ -1412,6 +1467,11 @@
       <cmd name="Textblock"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Box
+      *************************
+  -->
   <command en="Box" css="box">
     <description xml:lang="en">
       <para>Create a rectangular colored area. The area must fit the grid cells.</para>
@@ -1592,6 +1652,11 @@
     </example>
     <seealso><cmd name="DefineColor"/>, <cmd name="PlaceObject"/></seealso>
   </command>
+  <!--
+      *************************
+      * Br
+      *************************
+  -->
   <command en="Br">
     <description xml:lang="en">
       <para>Insert a newline</para>
@@ -1625,6 +1690,11 @@
     </example>
     <seealso/>
   </command>
+  <!--
+      *************************
+      * Case
+      *************************
+  -->
   <command en="Case">
     <description xml:lang="en">
       <para>Part of a <cmd name="Switch"/> construct. All cases up to the first case which evaluates to »true« will be executed. If no cases match and there is a <cmd name="Otherwise"/>, this will be executed instead.</para>
@@ -1655,6 +1725,11 @@
       <cmd name="Switch"/>, <cmd name="Otherwise"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Circle
+      *************************
+  -->
   <command en="Circle" css="circle" since="2.3.42">
     <description xml:lang="en">
       <para>Create a circle or ellipse.</para>
@@ -1739,6 +1814,11 @@
     </example>
     <seealso><cmd name="DefineColor"/>, <cmd name="PlaceObject"/></seealso>
   </command>
+  <!--
+      *************************
+      * ClearPage
+      *************************
+  -->
   <command en="ClearPage" since="4.5.14" >
     <description xml:lang="en">
       <para>Finishes the current page. </para>
@@ -1847,6 +1927,11 @@
     </example>
     <seealso><cmd name="Pagetype"/></seealso>
   </command>
+  <!--
+      *************************
+      * Clip
+      *************************
+  -->
   <command en="Clip" since="4.11.3">
     <description xml:lang="en">
       <para>Clip an image or other output</para>
@@ -1957,6 +2042,11 @@
     </example>
     <seealso></seealso>
   </command>
+  <!--
+      *************************
+      * Color
+      *************************
+  -->
   <command en="Color">
     <description xml:lang="en">
       <para>Switch to another text color</para>
@@ -2012,6 +2102,11 @@
     </example>
     <seealso><cmd name="DefineColor"/></seealso>
   </command>
+  <!--
+      *************************
+      * Column
+      *************************
+  -->
   <command en="Column">
     <description xml:lang="en">
       <para>Set the properties of a column in the table.</para>
@@ -2135,6 +2230,11 @@
       <cmd name="Columns"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Columns
+      *************************
+  -->
   <command en="Columns">
     <description xml:lang="en">
       <para>Set the widths and other properties of the columns in a table.</para>
@@ -2194,6 +2294,11 @@
       <cmd name="Table"/>, <cmd name="Column"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Compatibility
+      *************************
+  -->
   <command en="Compatibility">
     <description xml:lang="en">
       <para>Set compatibility for older layouts</para>
@@ -2240,6 +2345,11 @@
     </example>
     <seealso></seealso>
   </command>
+  <!--
+      *************************
+      * Contents
+      *************************
+  -->
   <command en="Contents">
     <description xml:lang="en">
       <para>Marks the contents of a <cmd name="Group"/>, a virtual area.</para>
@@ -2260,6 +2370,11 @@
     </example>
     <seealso><cmd name="Group"/></seealso>
   </command>
+  <!--
+      *************************
+      * Copy-of
+      *************************
+  -->
   <command en="Copy-of">
     <description xml:lang="en">
       <para>Replace this element by the copy of the selection as an element structure. You can use it to construct more complex data structures.</para>
@@ -2323,6 +2438,11 @@
     </example>
     <seealso><cmd name="Value"/>, <ref name="xpath"/>, <cmd name="SetVariable"/></seealso>
   </command>
+  <!--
+      *************************
+      * DefineColorprofile
+      *************************
+  -->
   <command en="DefineColorprofile" since="3.5.7">
     <description xml:lang="en">
       <para>Associate an external color profile with a name. To be used in PDFOptions.</para>
@@ -2423,6 +2543,11 @@
     </info>
     <seealso><cmd name="PDFOptions"/></seealso>
   </command>
+  <!--
+      *************************
+      * DefineColor
+      *************************
+  -->
   <command en="DefineColor">
     <description xml:lang="en">
       <para>Colors defined with DefineColors can be referenced later by their name.</para>
@@ -2605,6 +2730,11 @@
       <para>Die vordefinierten Farben sind <tt>aliceblue</tt>, <tt>black</tt>, <tt>orange</tt>, <tt>rebeccapurple</tt>, <tt>antiquewhite</tt>, <tt>aqua</tt>, <tt>aquamarine</tt>, <tt>azure</tt>, <tt>beige</tt>, <tt>bisque</tt>, <tt>blanchedalmond</tt>, <tt>blue</tt>, <tt>blueviolet</tt>, <tt>brown</tt>, <tt>burlywood</tt>, <tt>cadetblue</tt>, <tt>chartreuse</tt>, <tt>chocolate</tt>, <tt>coral</tt>, <tt>cornflowerblue</tt>, <tt>cornsilk</tt>, <tt>crimson</tt>, <tt>darkblue</tt>, <tt>darkcyan</tt>, <tt>darkgoldenrod</tt>, <tt>darkgray</tt>, <tt>darkgreen</tt>, <tt>darkgrey</tt>, <tt>darkkhaki</tt>, <tt>darkmagenta</tt>, <tt>darkolivegreen</tt>, <tt>darkorange</tt>, <tt>darkorchid</tt>, <tt>darkred</tt>, <tt>darksalmon</tt>, <tt>darkseagreen</tt>, <tt>darkslateblue</tt>, <tt>darkslategray</tt>, <tt>darkslategrey</tt>, <tt>darkturquoise</tt>, <tt>darkviolet</tt>, <tt>deeppink</tt>, <tt>deepskyblue</tt>, <tt>dimgray</tt>, <tt>dimgrey</tt>, <tt>dodgerblue</tt>, <tt>firebrick</tt>, <tt>floralwhite</tt>, <tt>forestgreen</tt>, <tt>fuchsia</tt>, <tt>gainsboro</tt>, <tt>ghostwhite</tt>, <tt>gold</tt>, <tt>goldenrod</tt>, <tt>gray</tt>, <tt>green</tt>, <tt>greenyellow</tt>, <tt>grey</tt>, <tt>honeydew</tt>, <tt>hotpink</tt>, <tt>indianred</tt>, <tt>indigo</tt>, <tt>ivory</tt>, <tt>khaki</tt>, <tt>lavender</tt>, <tt>lavenderblush</tt>, <tt>lawngreen</tt>, <tt>lemonchiffon</tt>, <tt>lightblue</tt>, <tt>lightcoral</tt>, <tt>lightcyan</tt>, <tt>lightgoldenrodyellow</tt>, <tt>lightgray</tt>, <tt>lightgreen</tt>, <tt>lightgrey</tt>, <tt>lightpink</tt>, <tt>lightsalmon</tt>, <tt>lightseagreen</tt>, <tt>lightskyblue</tt>, <tt>lightslategray</tt>, <tt>lightslategrey</tt>, <tt>lightsteelblue</tt>, <tt>lightyellow</tt>, <tt>lime</tt>, <tt>limegreen</tt>, <tt>linen</tt>, <tt>maroon</tt>, <tt>mediumaquamarine</tt>, <tt>mediumblue</tt>, <tt>mediumorchid</tt>, <tt>mediumpurple</tt>, <tt>mediumseagreen</tt>, <tt>mediumslateblue</tt>, <tt>mediumspringgreen</tt>, <tt>mediumturquoise</tt>, <tt>mediumvioletred</tt>, <tt>midnightblue</tt>, <tt>mintcream</tt>, <tt>mistyrose</tt>, <tt>moccasin</tt>, <tt>navajowhite</tt>, <tt>navy</tt>, <tt>oldlace</tt>, <tt>olive</tt>, <tt>olivedrab</tt>, <tt>orangered</tt>, <tt>orchid</tt>, <tt>palegoldenrod</tt>, <tt>palegreen</tt>, <tt>paleturquoise</tt>, <tt>palevioletred</tt>, <tt>papayawhip</tt>, <tt>peachpuff</tt>, <tt>peru</tt>, <tt>pink</tt>, <tt>plum</tt>, <tt>powderblue</tt>, <tt>purple</tt>, <tt>red</tt>, <tt>rosybrown</tt>, <tt>royalblue</tt>, <tt>saddlebrown</tt>, <tt>salmon</tt>, <tt>sandybrown</tt>, <tt>seagreen</tt>, <tt>seashell</tt>, <tt>sienna</tt>, <tt>silver</tt>, <tt>skyblue</tt>, <tt>slateblue</tt>, <tt>slategray</tt>, <tt>slategrey</tt>, <tt>snow</tt>, <tt>springgreen</tt>, <tt>steelblue</tt>, <tt>tan</tt>, <tt>teal</tt>, <tt>thistle</tt>, <tt>tomato</tt>, <tt>turquoise</tt>, <tt>violet</tt>, <tt>wheat</tt>, <tt>white</tt>, <tt>whitesmoke</tt>, <tt>yellow</tt> und <tt>yellowgreen</tt>.</para></info>
     <seealso/>
   </command>
+  <!--
+      *************************
+      * DefineGraphic
+      *************************
+  -->
   <command en="DefineGraphic" since="4.3.10">
     <description xml:lang="en">
       <para>Define a metapost graphic to be used in Box. EXPERIMENTAL!</para>
@@ -2653,6 +2783,11 @@
     </example>
     <seealso></seealso>
   </command>
+  <!--
+      *************************
+      * DefineFontalias
+      *************************
+  -->
   <command en="DefineFontalias" since="2.7.12">
     <description xml:lang="en">
       <para>Defines a font alias. When defining a font family, you can use the an alias for the fontname. Aliases are looked up recursively.</para>
@@ -2707,6 +2842,11 @@
       <cmd name="DefineFontfamily"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * DefineFontfamily
+      *************************
+  -->
   <command en="DefineFontfamily">
     <description xml:lang="en">
       <para>Defines a font family consisting of the shapes “regular”, “bold”, “bold italic” and “italic”. To be used in <cmd name="Paragraph"/>, <cmd name="Textblock"/>, <cmd name="Fontface"/> and <cmd name="Table"/> with the attribute <tt>fontfamily</tt>.</para>
@@ -2786,6 +2926,11 @@
       <cmd name="LoadFontfile"/>, <cmd name="DefineFontalias"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * DefineMatter
+      *************************
+  -->
   <command en="DefineMatter" since="4.3.5">
     <description xml:lang="en">
       <para>Define a new section of the document.</para>
@@ -2890,6 +3035,11 @@
     </example>
     <seealso><cmd name="pagetype"/></seealso>
   </command>
+  <!--
+      *************************
+      * DefineTextformat
+      *************************
+  -->
   <command en="DefineTextformat">
     <description xml:lang="en">
       <para>Define text formatting instructions. A textformat is used to align and indent text and create margins and rules before and after the text.</para>
@@ -3210,6 +3360,11 @@
       <cmd name="Paragraph"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Element
+      *************************
+  -->
   <command en="Element">
     <description xml:lang="en">
       <para>Create a data structure that can be used to save on the hard-drive between consecutive runs (with <cmd name="SaveDataset"/>).</para>
@@ -3261,6 +3416,11 @@
       <cmd name="SaveDataset"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Fallback
+      *************************
+  -->
   <command en="Fallback" since="3.7.7">
     <description xml:lang="en">
       <para>Define a fallback for <cmd name="LoadFontfile"/></para>
@@ -3293,6 +3453,11 @@
     </example>
     <seealso><cmd name="LoadFontfile"/></seealso>
   </command>
+  <!--
+      *************************
+      * Fontface
+      *************************
+  -->
   <command en="Fontface">
     <description xml:lang="en">
       <para>Switch to another font family.</para>
@@ -3344,6 +3509,11 @@
       <cmd name="B"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * ForAll
+      *************************
+  -->
   <command en="ForAll">
     <description xml:lang="en">
       <para>Executes the given commands for all elements in the data XML file that match the contents of the attribute <tt>select</tt>.</para>
@@ -3418,6 +3588,11 @@
     </example>
     <seealso><cmd name="Switch"/></seealso>
   </command>
+  <!--
+      *************************
+      * Frame
+      *************************
+  -->
   <command en="Frame" css="frame">
     <description xml:lang="en">
       <para>Manipulate an object's appearance by drawing a frame. Can be used as a clipping path.</para>
@@ -3568,9 +3743,9 @@
   </command>
 
   <!--
-    *************************
-    * Function
-    *************************
+      *************************
+      * Function
+      *************************
   -->
   <command en="Function">
     <description xml:lang="en">
@@ -3659,6 +3834,11 @@
     <seealso></seealso>
   </command>
 
+  <!--
+      *************************
+      * Grid
+      *************************
+  -->
   <command en="Grid">
     <description xml:lang="en">
       <para>Override the grid settings from <cmd name="SetGrid"/>.</para>
@@ -3742,6 +3922,11 @@
       <cmd name="Group"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Group
+      *************************
+  -->
   <command en="Group">
     <description xml:lang="en">
       <para>Create a virtual page that behaves like a real page but is not placed into the PDF.</para>
@@ -3813,6 +3998,11 @@
       <cmd name="Contents"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Groupcontents
+      *************************
+  -->
   <command en="Groupcontents" since="2.9.10">
     <description xml:lang="en">
       <para>Insert the contents of a group (a virtual area)</para>
@@ -3869,6 +4059,11 @@
     </example>
     <seealso></seealso>
   </command>
+  <!--
+      *************************
+      * Hyphenation
+      *************************
+  -->
   <command en="Hyphenation">
     <description xml:lang="en">
       <para>Suggest a hyphenation. This hyphenation will be used in the running text. See the example.</para>
@@ -3894,6 +4089,11 @@
     </example>
     <seealso/>
   </command>
+  <!--
+      *************************
+      * HSpace
+      *************************
+  -->
   <command en="HSpace">
     <description xml:lang="en">
       <para>Two modes: with a given width, the space takes up the given amount. </para>
@@ -3954,6 +4154,11 @@
     </example>
     <seealso><cmd name="Paragraph"/></seealso>
   </command>
+  <!--
+      *************************
+      * I
+      *************************
+  -->
   <command en="I">
     <description xml:lang="en">
       <para>Switch to italic text.</para>
@@ -3982,6 +4187,11 @@
     </example>
     <seealso><cmd name="B"/></seealso>
   </command>
+  <!--
+      *************************
+      * Include
+      *************************
+  -->
   <command en="Include" deprecated="yes">
     <description xml:lang="en">
       <para>Toplevel element for included layout files.</para>
@@ -4076,6 +4286,11 @@
     </rules>
      -->
   </command>
+  <!--
+      *************************
+      * Initial
+      *************************
+  -->
   <command en="Initial" since="2.9.7">
     <description xml:lang="en">
       <para>Make some letters appear in a larger font at the beginning of the paragraph.</para>
@@ -4166,6 +4381,11 @@
     <info xml:lang="de"><para>Bitte stellen Sie sicher, dass die Schriftart für den Absatz korrekt eingestellt ist (Voreinstellung: text). Auf dieser Einstellung beruht die Höhenberechnung.</para></info>
     <seealso></seealso>
   </command>
+  <!--
+      *************************
+      * InsertPage
+      *************************
+  -->
   <command en="InsertPages">
     <description xml:lang="en">
       <para>Insert previously saved pages or reserve space for pages to be generted in the future.</para>
@@ -4234,6 +4454,11 @@
     </example>
     <seealso><cmd name="SavePages"/></seealso>
   </command>
+  <!--
+      *************************
+      * Image
+      *************************
+  -->
   <command en="Image">
     <description xml:lang="en">
       <para>Includes an external Graphic. Allowed graphic formats are PDF (.pdf), PNG (.png) and JPEG (.jpg). Other file types might be possible with external converters. See below for a limitation on the number of included PDF files.</para>
@@ -4604,6 +4829,11 @@
     </info>
     <seealso><cmd name="PlaceObject"/></seealso>
   </command>
+  <!--
+      *************************
+      * Italic
+      *************************
+  -->
   <command en="Italic">
     <description xml:lang="en">
       <para>The font face to be used when the user switches to italic.</para>
@@ -4652,6 +4882,11 @@
       <cmd name="BoldItalic"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * LoadDataset
+      *************************
+  -->
   <command en="LoadDataset">
     <description xml:lang="en">
       <para>Load an XML file previously written by <cmd name="SaveDataset"/> (attribute name) or a well formed XML file (attribute filename). The regular data processing is interrupted and the contents of the data file is taken as a data source. If the file does not exist, the call to <cmd name="LoadDataset"/> is ignored.</para>
@@ -4698,6 +4933,11 @@
       <cmd name="Attribute"/>,
       <cmd name="SaveDataset"/>, <ref name="directories"/></seealso>
   </command>
+  <!--
+      *************************
+      * Loadfontfile
+      *************************
+  -->
   <command en="LoadFontfile">
     <description xml:lang="en">
       <para>Load a font file (.otf, .ttf, .pfb) and associate it with an internal name. If a glyph is not found in the font file, an error will be raised (this can be configured via the <cmd name="Options"/> command). You can specify fallbacks as a child element of Loadfontfile.</para>
@@ -4840,10 +5080,10 @@
       <cmd name="DefineFontfamily"/>, <cmd name="Fallback"/> <ref name="fonts"/></seealso>
   </command>
 
-    <!--
-    *************************
-    * Layout
-    *************************
+  <!--
+      *************************
+      * Layout
+      *************************
   -->
   <command en="Layout">
     <description xml:lang="en">
@@ -4935,6 +5175,11 @@
     </example>
     <seealso/>
   </command>
+  <!--
+      *************************
+      * Li
+      *************************
+  -->
   <command en="Li">
     <description xml:lang="en">
       <para>List item in an ordered or unordered list.</para>
@@ -4971,6 +5216,11 @@
     </example>
     <seealso><cmd name="Ol"/>, <cmd name="Ul"/></seealso>
   </command>
+  <!--
+      *************************
+      * Loop
+      *************************
+  -->
   <command en="Loop">
     <description xml:lang="en">
       <para>Repeat the contents of this element several times.</para>
@@ -5025,6 +5275,11 @@
     </example>
     <seealso><cmd name="ForAll"/></seealso>
   </command>
+  <!--
+      *************************
+      * Makeindex
+      *************************
+  -->
   <command en="Makeindex">
     <description xml:lang="en">
       <para>Sort and split a list of elements to make an index.</para>
@@ -5173,6 +5428,11 @@
       <cmd name="SaveDataset"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Margin
+      *************************
+  -->
   <command en="Margin">
     <description xml:lang="en">
       <para>Set the margin of the document or master page.</para>
@@ -5221,6 +5481,11 @@
     </example>
     <seealso/>
   </command>
+  <!--
+      *************************
+      * Mark
+      *************************
+  -->
   <command en="Mark">
     <description xml:lang="en">
       <para>Sets an invisible mark into the output. This is helpful when you want to know on which page the mark is placed on.</para>
@@ -5351,6 +5616,11 @@
     </info>
     <seealso><cmd name="Action"/></seealso>
   </command>
+  <!--
+      *************************
+      * Message
+      *************************
+  -->
   <command en="Message">
     <description xml:lang="en">
       <para>Writes a message onto the console and to the protocol file.</para>
@@ -5437,6 +5707,11 @@
     </example>
     <seealso/>
   </command>
+  <!--
+      *************************
+      * NextFrame
+      *************************
+  -->
   <command en="NextFrame">
     <description xml:lang="en">
       <para>Switch to the next free frame of a positioning area.</para>
@@ -5466,6 +5741,11 @@
       <cmd name="PositioningFrame"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * NextRow
+      *************************
+  -->
   <command en="NextRow">
     <description xml:lang="en">
       <para>The virtual cursor is set on the next free row.</para>
@@ -5518,6 +5798,11 @@
     <seealso>
     </seealso>
   </command>
+  <!--
+      *************************
+      * NoBreak
+      *************************
+  -->
   <command en="NoBreak" since="2.3.14">
     <description xml:lang="en">
       <para>Don't allow a line break within this element</para>
@@ -5619,6 +5904,11 @@
     </example>
     <seealso></seealso>
   </command>
+  <!--
+      *************************
+      * Ol
+      *************************
+  -->
   <command en="Ol">
     <description xml:lang="en">
       <para>Create an ordered list, just like in HTML</para>
@@ -5668,6 +5958,11 @@
     </example>
     <seealso><cmd name="Ul"/>, <cmd name="Li"/></seealso>
   </command>
+  <!--
+      *************************
+      * Options
+      *************************
+  -->
   <command en="Options">
     <description xml:lang="en">
       <para>Set publisher specific options.</para>
@@ -5901,6 +6196,11 @@
     </info>
     <seealso><ref name="cutmarks"/></seealso>
   </command>
+  <!--
+      *************************
+      * Otherwise
+      *************************
+  -->
   <command en="Otherwise">
     <description xml:lang="en">
       <para>Default branch of a <cmd name="Switch"/> command.</para>
@@ -5923,6 +6223,11 @@
       <cmd name="Switch"/>, <cmd name="Case"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Output
+      *************************
+  -->
   <command en="Output">
     <description xml:lang="en">
       <para>This command is similar to <cmd name="PlaceObject"/> and is currently limited to output text which can be broken across positioning frames and which can wrap around objects.</para>
@@ -6072,6 +6377,11 @@
     </example>
     <seealso/>
   </command>
+  <!--
+      *************************
+      * Overlay
+      *************************
+  -->
   <command en="Overlay" since="2.3.26">
     <description xml:lang="en">
       <para>Overlays the first element with the following »positions«.</para>
@@ -6147,7 +6457,11 @@
     <seealso><cmd name="Position"/></seealso>
   </command>
 
-
+  <!--
+      *************************
+      * Paragraph
+      *************************
+  -->
   <command en="Paragraph" css="p">
     <description xml:lang="en">
       <para>Insert a paragraph of text. The width of the paragraph is inherited from the surrounding element.</para>
@@ -6405,9 +6719,9 @@
   </command>
 
   <!--
-      ****************************************************************************************
+      *************************
       * Param
-      ****************************************************************************************
+      *************************
   -->
   <command en="Param">
     <description xml:lang="en">
@@ -6434,6 +6748,11 @@
     <seealso></seealso>
   </command>
 
+ <!--
+      *************************
+      * Pageformat
+      *************************
+  -->
   <command en="Pageformat">
     <description xml:lang="en">
       <para>The size of the PDF pages. Defaults to 210mm width and 297mm height (A4)</para>
@@ -6466,6 +6785,11 @@
     </example>
     <seealso/>
   </command>
+  <!--
+      *************************
+      * Pagetype
+      *************************
+  -->
   <command en="Pagetype">
     <description xml:lang="en">
       <para>Define a master page. A master page is chosen depending on the criterion given with the attribute »test«.</para>
@@ -6613,9 +6937,9 @@
     </seealso>
   </command>
   <!--
-    *************************
-    * PDFOptions
-    *************************
+      *************************
+      * PDFOptions
+      *************************
   -->
   <command en="PDFOptions" since="2.3.39">
     <description xml:lang="en">
@@ -6933,6 +7257,11 @@
     <example xml:lang="de"><listing><![CDATA[<PDFOptions numcopies="4"/>]]></listing></example>
     <seealso></seealso>
   </command>
+  <!--
+      *************************
+      * PlaceObject
+      *************************
+  -->
   <command en="PlaceObject">
     <description xml:lang="en">
       <para>Outputs a rectangular object (image, table, box, barcode or textblock).</para>
@@ -7438,6 +7767,11 @@
       <cmd name="Output"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Position
+      *************************
+  -->
   <command en="Position" since="2.3.26">
     <description xml:lang="en">
       <para>Add an element to the current <cmd name="Overlay"/>.</para>
@@ -7481,6 +7815,11 @@
     </example>
     <seealso><cmd name="Overlay"/></seealso>
   </command>
+  <!--
+      *************************
+      * PositioningArea
+      *************************
+  -->
   <command en="PositioningArea">
     <description xml:lang="en">
       <para>Describes an area which contains one or more frames. Elements can be placed within these frames.</para>
@@ -7533,6 +7872,11 @@
       <cmd name="PlaceObject"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * PositioningFrame
+      *************************
+  -->
   <command en="PositioningFrame">
     <description xml:lang="en">
       <para>Defines a rectangular area for objects.</para>
@@ -7592,6 +7936,11 @@
       <cmd name="PositioningArea"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * ProcessNode
+      *************************
+  -->
   <command en="ProcessNode">
     <description xml:lang="en">
       <para>Executes all given nodes. The elements, that are to be executed, are given with the attribute <tt>selection</tt>.</para>
@@ -7634,9 +7983,9 @@
   </command>
 
   <!--
-    *************************
-    * Record
-    *************************
+      *************************
+      * Record
+      *************************
   -->
   <command en="Record">
     <description xml:lang="en">
@@ -7694,6 +8043,11 @@
       <cmd name="ProcessNode"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Regular
+      *************************
+  -->
   <command en="Regular">
     <description xml:lang="en">
       <para>The (symbolic) name of the fontface for regular text, i.e. without bold or italic.</para>
@@ -7743,6 +8097,11 @@
       <cmd name="BoldItalic"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Rule
+      *************************
+  -->
   <command en="Rule" css="rule">
     <description xml:lang="en">
       <para>Draw a horizontal or vertical rule in the grid.</para>
@@ -7842,6 +8201,11 @@
       <cmd name="PlaceObject"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * SaveDataset
+      *************************
+  -->
   <command en="SaveDataset">
     <description xml:lang="en">
       <para>Saves an element/attribute structure to be used in the next publisher run. The contents must have a tree structure.</para>
@@ -7930,6 +8294,11 @@
       <cmd name="Element"/>, <cmd name="Attribute"/>, <cmd name="LoadDataset"/>, <ref name="directories"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * SavePages
+      *************************
+  -->
   <command en="SavePages">
     <description xml:lang="en">
       <para>This command is used for two different but similar purposes.</para>
@@ -8054,6 +8423,11 @@
     </example>
     <seealso><cmd name="InsertPages"/></seealso>
   </command>
+  <!--
+      *************************
+      * SetGrid
+      *************************
+  -->
   <command en="SetGrid">
     <description xml:lang="en">
       <para>Set size of the grid cells. All objects are placed in the grid.</para>
@@ -8118,6 +8492,11 @@
     </example>
     <seealso><cmd name="Grid"/></seealso>
   </command>
+  <!--
+      *************************
+      * SetVariable
+      *************************
+  -->
   <command en="SetVariable">
     <description xml:lang="en">
       <para>Associates a value with a variable name. The value can be a simple value or a more complex one consisting of several elements.</para>
@@ -8357,6 +8736,11 @@
       </sch:pattern>
     </rules>
   </command>
+  <!--
+      *************************
+      * SortSequence
+      *************************
+  -->
   <command en="SortSequence">
     <description xml:lang="en">
       <para>Sort a list.</para>
@@ -8486,6 +8870,11 @@
     </example>
     <seealso/>
   </command>
+  <!--
+      *************************
+      * Span
+      *************************
+  -->
   <command en="Span" css="span" since="3.1.15">
     <description xml:lang="en">
       <para>Surround text by styling options.</para>
@@ -8595,6 +8984,11 @@
     </example>
     <seealso></seealso>
   </command>
+  <!--
+      *************************
+      * Sub
+      *************************
+  -->
   <command en="Sub">
     <description xml:lang="en">
       <para>Subscript text.</para>
@@ -8624,6 +9018,11 @@
       <cmd name="Sup"/>, <cmd name="Paragraph"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Sup
+      *************************
+  -->
   <command en="Sup">
     <description xml:lang="en">
       <para>Superscript text.</para>
@@ -8654,6 +9053,11 @@
       <cmd name="Sub"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Switch
+      *************************
+  -->
   <command en="Switch">
     <description xml:lang="en">
       <para>Create an if-then-else construct. The test attribute of each <cmd name="Case"/> commands is evaluated until it yields true. The contents of the Case gets executed. If no test succeeds, the (optional) <cmd name="Otherwise"/> gets executed.</para>
@@ -8751,6 +9155,11 @@
       <cmd name="Otherwise"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Stylesheet
+      *************************
+  -->
   <command en="Stylesheet">
     <description xml:lang="en">
       <para>Load a CSS file or define CSS rules</para>
@@ -8805,6 +9214,11 @@
     </example>
     <seealso><ref name="css"/></seealso>
   </command>
+  <!--
+      *************************
+      * Table
+      *************************
+  -->
   <command en="Table">
     <description xml:lang="en">
       <para>Create a table that is similar to the HTML table model.</para>
@@ -9097,6 +9511,11 @@
       <cmd name="Tr"/>,  <cmd name="Td"/>, <cmd name="Tablerule"/>, <cmd name="PlaceObject"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Tablefoot
+      *************************
+  -->
   <command en="Tablefoot">
     <description xml:lang="en">
       <para>Create a repeating table footer.</para>
@@ -9152,6 +9571,11 @@
       <cmd name="Tablehead"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Tablehead
+      *************************
+  -->
   <command en="Tablehead">
     <description xml:lang="en">
       <para>Create a repeating table head.</para>
@@ -9228,6 +9652,11 @@
       <cmd name="Tablefoot"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * TableNewPage
+      *************************
+  -->
   <command en="TableNewPage" since="3.3.13">
     <description xml:lang="en">
       <para>Switches to a new page within the table.</para>
@@ -9268,6 +9697,11 @@
     </example>
     <seealso></seealso>
   </command>
+  <!--
+      *************************
+      * Td
+      *************************
+  -->
   <command en="Td" css="td">
     <description xml:lang="en">
       <para>Td wraps a table cell, just like HTML.</para>
@@ -9635,6 +10069,11 @@
       <cmd name="Stylesheet"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Tablerule
+      *************************
+  -->
   <command en="Tablerule" css="tablerule">
     <description xml:lang="en">
       <para>Insert a horizontal rule in a table</para>
@@ -9720,6 +10159,11 @@
       <cmd name="Table"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Textblock
+      *************************
+  -->
   <command en="Textblock">
     <description xml:lang="en">
       <para>Create a rectangular piece of text.</para>
@@ -9850,6 +10294,12 @@
       <cmd name="DefineTextformat"/>, <cmd name="DefineColor"/>, <cmd name="Paragraph"/>, <cmd name="PlaceObject"/>
     </seealso>
   </command>
+
+  <!--
+      *************************
+      * Text
+      *************************
+  -->
   <command en="Text">
     <description xml:lang="en">
       <para>Create a text that can be broken across text containers or pages. To be used with <cmd name="Output"/></para>
@@ -9880,14 +10330,6 @@
       </description>
       <description xml:lang="de">
         <para>Name der Farbe im Textblock.</para>
-      </description>
-    </attribute>
-    <attribute en="fontface" type="text" optional="yes">
-      <description xml:lang="en">
-        <para>The name of the font family. Defaults to <tt>text</tt>.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Name der Schriftfamilie, die benutzt werden soll. Voreinstellung ist <tt>text</tt></para>
       </description>
     </attribute>
     <attribute en="fontfamily" type="text" optional="yes">
@@ -9946,6 +10388,11 @@
     </example>
     <seealso><cmd name="PlaceObject"/></seealso>
   </command>
+  <!--
+      *************************
+      * Trace
+      *************************
+  -->
   <command en="Trace" since="2.7.4">
     <description xml:lang="en">
       <para>Set debugging switches</para>
@@ -10178,6 +10625,11 @@
     </example>
     <seealso></seealso>
   </command>
+  <!--
+      *************************
+      * Tr
+      *************************
+  -->
   <command en="Tr">
     <description xml:lang="en">
       <para>Tablerow</para>
@@ -10386,6 +10838,11 @@
       <cmd name="Table"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Transformation
+      *************************
+  -->
   <command en="Transformation">
     <description xml:lang="en">
       <para>Manipulate an object's appearance by applying a matrix. See the PDF reference 4.2.2 Common Transformations and following.</para>
@@ -10464,6 +10921,11 @@
     </example>
     <seealso><cmd name="PlaceObject"/></seealso>
   </command>
+  <!--
+      *************************
+      * U
+      *************************
+  -->
   <command en="U" css="u">
     <description xml:lang="en">
       <para>Underline text.</para>
@@ -10549,6 +11011,11 @@
       <cmd name="Paragraph"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * Ul
+      *************************
+  -->
   <command en="Ul">
     <description xml:lang="en">
       <para>Create an unordered list, just like in HTML</para>
@@ -10598,6 +11065,11 @@
     </example>
     <seealso><cmd name="Ol"/></seealso>
   </command>
+  <!--
+      *************************
+      * Until
+      *************************
+  -->
   <command en="Until">
     <description xml:lang="en">
       <para>Create a loop. All child elements are executed repeatedly until the given condition is true.</para>
@@ -10650,6 +11122,11 @@ Message: "$i is: 3"]]></listing>
       <cmd name="While"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * URL
+      *************************
+  -->
   <command en="URL">
     <description xml:lang="en">
       <para>enables a better breaking of URLs.</para>
@@ -10681,6 +11158,11 @@ Message: "$i is: 3"]]></listing>
     </example>
     <seealso/>
   </command>
+  <!--
+      *************************
+      * Value
+      *************************
+  -->
   <command en="Value">
     <description xml:lang="en">
       <para>Contains a text value that is passed to the surrounding element.</para>
@@ -10741,6 +11223,11 @@ Message: "$i is: 3"]]></listing>
       <cmd name="SetVariable"/>
     </seealso>
   </command>
+  <!--
+      *************************
+      * VSpace
+      *************************
+  -->
   <command en="VSpace">
     <description xml:lang="en">
       <para>Create a vertically stretching space. The space has a minimum height of 0 but is able to stretch up to infinity. Useful in table cells.</para>
@@ -10783,6 +11270,11 @@ Message: "$i is: 3"]]></listing>
     </example>
     <seealso><cmd name="Td"/></seealso>
   </command>
+  <!--
+      *************************
+      * While
+      *************************
+  -->
   <command en="While">
     <description xml:lang="en">
       <para>Create a loop. All child elements are executed as long as the condition in the test attribute evaluates to true.</para>

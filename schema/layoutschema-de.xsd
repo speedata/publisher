@@ -7578,11 +7578,6 @@
           <xs:documentation>Name der Farbe im Textblock.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="fontface">
-        <xs:annotation>
-          <xs:documentation>Name der Schriftfamilie, die benutzt werden soll. Voreinstellung ist text</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Name der Schriftfamilie, die benutzt werden soll. Voreinstellung ist text</xs:documentation>
