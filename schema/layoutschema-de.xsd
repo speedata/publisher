@@ -450,7 +450,7 @@
       <xs:documentation>Erzeugt einen rechteckigen gefärbten Bereich. Die Fläche muss mit den Rasterzellen übereinstimmen.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:attribute name="backgroundcolor">
+      <xs:attribute name="background-color">
         <xs:annotation>
           <xs:documentation>Farbe der Box. Wird für die Farbe ein Strich angegeben (-), ist der Hintergrund transparent.</xs:documentation>
         </xs:annotation>
@@ -650,7 +650,7 @@
       <xs:documentation>Erzeugt einen Kreis oder eine Ellipse.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:attribute name="backgroundcolor">
+      <xs:attribute name="background-color">
         <xs:annotation>
           <xs:documentation>Farbe des Kreises.</xs:documentation>
         </xs:annotation>
@@ -878,7 +878,7 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="backgroundcolor">
+      <xs:attribute name="background-color">
         <xs:annotation>
           <xs:documentation>Farbe der Tabellenspalte.</xs:documentation>
         </xs:annotation>
@@ -1706,7 +1706,7 @@
         <xs:element ref="en:Transformation"/>
         <xs:element ref="en:Frame"/>
       </xs:choice>
-      <xs:attribute name="backgroundcolor">
+      <xs:attribute name="background-color">
         <xs:annotation>
           <xs:documentation>Hintergrundfarbe wenn das Objekt mit einer Farbe hinterlegt werden soll.</xs:documentation>
         </xs:annotation>
@@ -5144,7 +5144,7 @@
       </xs:attribute>
       <xs:attribute name="background">
         <xs:annotation>
-          <xs:documentation>Erzeugt einen farbigen Hintergrund für das Objekt. Das Attribut ›backgroundcolor‹ gibt die Farbe an.</xs:documentation>
+          <xs:documentation>Erzeugt einen farbigen Hintergrund für das Objekt. Das Attribut ›background-color‹ gibt die Farbe an.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:union>
@@ -5152,7 +5152,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="full">
                   <xs:annotation>
-                    <xs:documentation>Den Hintergrund in der angegebenen Farbe füllen (in backgroundcolor)</xs:documentation>
+                    <xs:documentation>Den Hintergrund in der angegebenen Farbe füllen (in background-color)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5174,7 +5174,7 @@
           </xs:union>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="backgroundcolor">
+      <xs:attribute name="background-color">
         <xs:annotation>
           <xs:documentation>Hintergrundfarbe wenn das Objekt mit einer Farbe hinterlegt werden soll.</xs:documentation>
         </xs:annotation>
@@ -6834,7 +6834,7 @@
           </xs:union>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="backgroundcolor">
+      <xs:attribute name="background-color">
         <xs:annotation>
           <xs:documentation>Der Name der Hintergrundfarbe, wenn die Zelle eingefärbt werden soll.</xs:documentation>
         </xs:annotation>
@@ -7815,7 +7815,7 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="backgroundcolor">
+      <xs:attribute name="background-color">
         <xs:annotation>
           <xs:documentation>Die Farbe der Zellen in der Zeile.</xs:documentation>
         </xs:annotation>

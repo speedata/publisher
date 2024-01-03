@@ -450,7 +450,7 @@
       <xs:documentation>Create a rectangular colored area. The area must fit the grid cells.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:attribute name="backgroundcolor">
+      <xs:attribute name="background-color">
         <xs:annotation>
           <xs:documentation>Color of the box. If the color name is a dash (-), a transparent background is used.</xs:documentation>
         </xs:annotation>
@@ -650,7 +650,7 @@
       <xs:documentation>Create a circle or ellipse.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:attribute name="backgroundcolor">
+      <xs:attribute name="background-color">
         <xs:annotation>
           <xs:documentation>Color of the circle.</xs:documentation>
         </xs:annotation>
@@ -878,7 +878,7 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="backgroundcolor">
+      <xs:attribute name="background-color">
         <xs:annotation>
           <xs:documentation>All cells in this column have this background color.</xs:documentation>
         </xs:annotation>
@@ -1706,7 +1706,7 @@
         <xs:element ref="en:Transformation"/>
         <xs:element ref="en:Frame"/>
       </xs:choice>
-      <xs:attribute name="backgroundcolor">
+      <xs:attribute name="background-color">
         <xs:annotation>
           <xs:documentation>Color of the background if ›background‹ is set to ›full‹.</xs:documentation>
         </xs:annotation>
@@ -5144,7 +5144,7 @@
       </xs:attribute>
       <xs:attribute name="background">
         <xs:annotation>
-          <xs:documentation>Fill the background of the object (full grid cells) with a color, given by backgroundcolor.</xs:documentation>
+          <xs:documentation>Fill the background of the object (full grid cells) with a color, given by background-color.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:union>
@@ -5152,7 +5152,7 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="full">
                   <xs:annotation>
-                    <xs:documentation>Fill background with the given color (in backgroundcolor).</xs:documentation>
+                    <xs:documentation>Fill background with the given color (in background-color).</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5174,7 +5174,7 @@
           </xs:union>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="backgroundcolor">
+      <xs:attribute name="background-color">
         <xs:annotation>
           <xs:documentation>Color of the background if ›background‹ is set to ›full‹.</xs:documentation>
         </xs:annotation>
@@ -6834,7 +6834,7 @@
           </xs:union>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="backgroundcolor">
+      <xs:attribute name="background-color">
         <xs:annotation>
           <xs:documentation>The name of the background color (if the cell should get a background).</xs:documentation>
         </xs:annotation>
@@ -7815,7 +7815,7 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="backgroundcolor">
+      <xs:attribute name="background-color">
         <xs:annotation>
           <xs:documentation>Background color of each cell in this row.</xs:documentation>
         </xs:annotation>

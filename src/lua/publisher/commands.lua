@@ -343,7 +343,8 @@ end
 --- Draw a rectangular filled area
 function commands.box( layoutxml,dataxml )
     local bleed     = publisher.read_attribute(layoutxml,dataxml,"bleed",          "string")
-    local colorname = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string")
+    local colorname = publisher.read_attribute(layoutxml,dataxml,"background-color","string")
+    colorname       = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string",colorname)
     local graphic   = publisher.read_attribute(layoutxml,dataxml,"graphic",        "string")
     local height    = publisher.read_attribute(layoutxml,dataxml,"height",         "length")
     local width     = publisher.read_attribute(layoutxml,dataxml,"width",          "length")
@@ -484,7 +485,8 @@ function commands.circle( layoutxml,dataxml )
     local radiusy        = publisher.read_attribute(layoutxml,dataxml,"radiusy", "height_sp", radiusx)
     local framecolorname = publisher.read_attribute(layoutxml,dataxml,"framecolor","string")
     local rulewidth_sp   = publisher.read_attribute(layoutxml,dataxml,"rulewidth","length_sp", 0)
-    local colorname      = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string")
+    local colorname      = publisher.read_attribute(layoutxml,dataxml,"background-color","string")
+    colorname            = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string",colorname)
     local class          = publisher.read_attribute(layoutxml,dataxml,"class",          "string")
     local id             = publisher.read_attribute(layoutxml,dataxml,"id",             "string")
 
@@ -589,7 +591,8 @@ function commands.column( layoutxml,dataxml )
     local ret = {}
     ret.minwidth         = publisher.read_attribute(layoutxml,dataxml,"minwidth","width_sp")
     ret.width            = publisher.read_attribute(layoutxml,dataxml,"width","string")
-    ret.backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string")
+    ret.backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"background-color","string")
+    ret.backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string",ret.backgroundcolor)
     ret.align            = publisher.read_attribute(layoutxml,dataxml,"align","string")
     ret.valign           = publisher.read_attribute(layoutxml,dataxml,"valign","string")
     ret.padding_left     = publisher.read_attribute(layoutxml,dataxml,"padding-left","length_sp")
@@ -1075,7 +1078,8 @@ function commands.frame( layoutxml,dataxml )
     local b_t_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-left-radius",     "string")
     local b_b_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-bottom-left-radius",  "string")
     local framecolor       = publisher.read_attribute(layoutxml,dataxml,"framecolor",                 "string")
-    local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor",            "string")
+    local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"background-color",            "string")
+    backgroundcolor        = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor",            "string", backgroundcolor)
     local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",                  "length_sp", 26312) -- 0.4bp
     local class            = publisher.read_attribute(layoutxml,dataxml,"class",                      "string")
     local id               = publisher.read_attribute(layoutxml,dataxml,"id",                         "string")
@@ -2950,7 +2954,8 @@ function commands.place_object( layoutxml,dataxml)
     local area             = publisher.read_attribute(layoutxml,dataxml,"area",           "string")
     local allocate         = publisher.read_attribute(layoutxml,dataxml,"allocate",       "string")
     local framecolor       = publisher.read_attribute(layoutxml,dataxml,"framecolor",     "string")
-    local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string")
+    local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"background-color","string")
+    backgroundcolor        = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string",backgroundcolor)
     local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",      "length_sp", 26312) -- 0.4bp
     local maxheight        = publisher.read_attribute(layoutxml,dataxml,"maxheight",      "number")
     local onpage           = publisher.read_attribute(layoutxml,dataxml,"page",           "string")
@@ -4377,13 +4382,9 @@ function commands.tr( layoutxml,dataxml )
                 tab[k] = v
             end
         end
-
     end
 
-
     local eltname
-
-
     -- filter things like <Message ...> that don't give sensible output
     for i=1,#tab_tmp do
         eltname = publisher.elementname(tab_tmp[i])
@@ -4396,6 +4397,7 @@ function commands.tr( layoutxml,dataxml )
     local attribute = {
         ["data"]            = "xpath",
         ["valign"]          = "string",
+        ["background-color"] = "string",
         ["backgroundcolor"] = "string",
         ["minheight"]       = "length",
         ["top-distance"]    = "string",
@@ -4406,6 +4408,7 @@ function commands.tr( layoutxml,dataxml )
     for attname,atttyp in pairs(attribute) do
         tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
         if tmpattr then
+            if attname == "background-color" then attname = "backgroundcolor" end
             tab[attname] = tmpattr
         end
     end
@@ -4516,6 +4519,7 @@ function commands.td( layoutxml,dataxml )
         ["padding-right"]    = "length",
         ["padding-bottom"]   = "length",
         ["padding-left"]     = "length",
+        ["background-color"]     = "string",
         ["backgroundcolor"]      = "string",
         ["background-text"]      = "string",
         ["background-textcolor"] = "string",
@@ -4540,6 +4544,7 @@ function commands.td( layoutxml,dataxml )
     for attname,atttyp in pairs(attribute) do
         tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
         if tmpattr then
+            if attname == "background-color" then attname = "backgroundcolor" end
             tab[attname] = tmpattr
         end
     end

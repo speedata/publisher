@@ -555,7 +555,7 @@
       <element name="Box">
          <a:documentation>Create a rectangular colored area. The area must fit the grid cells.</a:documentation>
          <optional>
-            <attribute name="backgroundcolor">
+            <attribute name="background-color">
                <a:documentation>Color of the box. If the color name is a dash (-), a transparent background is used.</a:documentation>
             </attribute>
          </optional>
@@ -873,7 +873,7 @@
       <element name="Circle">
          <a:documentation>Create a circle or ellipse.</a:documentation>
          <optional>
-            <attribute name="backgroundcolor">
+            <attribute name="background-color">
                <a:documentation>Color of the circle.</a:documentation>
             </attribute>
          </optional>
@@ -1086,7 +1086,7 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="backgroundcolor">
+            <attribute name="background-color">
                <a:documentation>All cells in this column have this background color.</a:documentation>
             </attribute>
          </optional>
@@ -2012,7 +2012,7 @@
          <interleave>
             <group>
                <optional>
-                  <attribute name="backgroundcolor">
+                  <attribute name="background-color">
                      <a:documentation>Color of the background if ›background‹ is set to ›full‹.</a:documentation>
                   </attribute>
                </optional>
@@ -4564,10 +4564,10 @@
                </optional>
                <optional>
                   <attribute name="background">
-                     <a:documentation>Fill the background of the object (full grid cells) with a color, given by backgroundcolor.</a:documentation>
+                     <a:documentation>Fill the background of the object (full grid cells) with a color, given by background-color.</a:documentation>
                      <choice>
                         <value>full</value>
-                        <a:documentation>Fill background with the given color (in backgroundcolor).</a:documentation>
+                        <a:documentation>Fill background with the given color (in background-color).</a:documentation>
                         <value>without</value>
                         <a:documentation>Empty background</a:documentation>
                         <data type="string">
@@ -4577,7 +4577,7 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="backgroundcolor">
+                  <attribute name="background-color">
                      <a:documentation>Color of the background if ›background‹ is set to ›full‹.</a:documentation>
                   </attribute>
                </optional>
@@ -5952,7 +5952,7 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="backgroundcolor">
+                  <attribute name="background-color">
                      <a:documentation>The name of the background color (if the cell should get a background).</a:documentation>
                   </attribute>
                </optional>
@@ -6493,7 +6493,7 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="backgroundcolor">
+                  <attribute name="background-color">
                      <a:documentation>Background color of each cell in this row.</a:documentation>
                   </attribute>
                </optional>

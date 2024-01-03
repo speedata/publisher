@@ -1420,7 +1420,7 @@
       <para>Erzeugt einen rechteckigen gefärbten Bereich. Die Fläche muss mit den Rasterzellen übereinstimmen.</para>
     </description>
     <childelements/>
-    <attribute en="backgroundcolor" type="text" optional="yes" css="background-color">
+    <attribute en="background-color" type="text" optional="yes" css="background-color">
       <description xml:lang="en">
         <para>Color of the box. If the color name is a dash (<tt>-</tt>), a transparent background is used.</para>
       </description>
@@ -1575,7 +1575,7 @@
     <example xml:lang="en">
       <listing><![CDATA[<DefineColor name="mygreen" model="cmyk" c="22" m="0" y="55" k="0"/>
 <PlaceObject>
-  <Box width="10" height="5" backgroundcolor="mygreen"/>
+  <Box width="10" height="5" background-color="mygreen"/>
 </PlaceObject>
 ]]></listing>
       <para>looks like</para>
@@ -1584,7 +1584,7 @@
     <example xml:lang="de">
       <listing><![CDATA[<DefineColor name="meingrün" model="cmyk" c="22" m="0" y="55" k="0"/>
 <PlaceObject>
-  <Box width="10" height="5" backgroundcolor="meingrün" />
+  <Box width="10" height="5" background-color="meingrün" />
 </PlaceObject>
 ]]></listing>
       <para>erzeugt ein farbiges Rechteck</para>
@@ -1663,7 +1663,7 @@
       <para>Erzeugt einen Kreis oder eine Ellipse.</para>
     </description>
     <childelements/>
-    <attribute en="backgroundcolor" type="text" optional="yes" css="background-color">
+    <attribute en="background-color" type="text" optional="yes" css="background-color">
       <description xml:lang="en">
         <para>Color of the circle.</para>
       </description>
@@ -1722,7 +1722,7 @@
     <example xml:lang="en">
       <listing><![CDATA[<DefineColor name="mygreen" model="cmyk" c="22" m="0" y="55" k="0"/>
 <PlaceObject row="5" column="5" >
-    <Circle radiusx="10mm" backgroundcolor="blue" framecolor="mygreen" rulewidth="1mm"/>
+    <Circle radiusx="10mm" background-color="blue" framecolor="mygreen" rulewidth="1mm"/>
 </PlaceObject>
 ]]></listing>
       <para>looks like</para>
@@ -1731,7 +1731,7 @@
     <example xml:lang="de">
       <listing><![CDATA[<DefineColor name="meingrün" model="cmyk" c="22" m="0" y="55" k="0"/>
 <PlaceObject>
-  <Circle radiusx="10mm" backgroundcolor="blue" framecolor="meingrün" rulewidth="1mm"/>
+  <Circle radiusx="10mm" background-color="blue" framecolor="meingrün" rulewidth="1mm"/>
 </PlaceObject>
 ]]></listing>
       <para>erzeugt einen Kreis</para>
@@ -2052,7 +2052,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="backgroundcolor" type="text" optional="yes">
+    <attribute en="background-color" type="text" optional="yes">
       <description xml:lang="en">
         <para>All cells in this column have this background color.</para>
       </description>
@@ -2171,7 +2171,7 @@
     <Column width="2" />
     <Column width="1*" align="right" valign="top" />
     <Column width="5*" />
-    <Column width="5mm" backgroundcolor="gray" />
+    <Column width="5mm" background-color="gray" />
     <Tr>
        ....
     </Tr>
@@ -2186,7 +2186,7 @@
     <Column width="2" />
     <Column width="1*" align="right" valign="top" />
     <Column width="5*" />
-    <Column width="5mm" backgroundcolor="grau" />
+    <Column width="5mm" background-color="grau" />
   </Columns>
 </Table>]]></listing>
     </example>
@@ -3440,7 +3440,7 @@
         </interleave>
       </oneOrMore>
     </childelements>
-    <attribute en="backgroundcolor" type="text" optional="yes">
+    <attribute en="background-color" type="text" optional="yes">
       <description xml:lang="en">
         <para>Color of the background if ›background‹ is set to ›full‹.</para>
       </description>
@@ -4012,7 +4012,7 @@
   <xi:include href="sublayout.xml" />
 
   <Record element="data">
-    <PlaceObject background="full" backgroundcolor="green">
+    <PlaceObject background="full" background-color="green">
       <Textblock>
         <Paragraph><Value>Hello world</Value></Paragraph>
       </Textblock>
@@ -6103,7 +6103,7 @@
         <Overlay>
           <Image width="5" height="4" file="_samplea.pdf"/>
           <Position x="0" y="0">
-            <Box width="2" height="2" backgroundcolor="white"/>
+            <Box width="2" height="2" background-color="white"/>
           </Position>
           <Position x="0" y="0">
             <Barcode select="'speedata'" type="QRCode" width="2" height="2"/>
@@ -6127,7 +6127,7 @@
         <Overlay>
           <Image width="5" height="4" file="_samplea.pdf"/>
           <Position x="0" y="0">
-            <Box width="2" height="2" backgroundcolor="#fff"/>
+            <Box width="2" height="2" background-color="#fff"/>
           </Position>
           <Position y="0" x="0">
             <Barcode select="'speedata'" type="QRCode" width="2"/>
@@ -7026,17 +7026,17 @@
     </attribute>
     <attribute en="background" optional="yes" allowxpath="yes">
       <description xml:lang="en">
-        <para>Fill the background of the object (full grid cells) with a color, given by backgroundcolor.</para>
+        <para>Fill the background of the object (full grid cells) with a color, given by background-color.</para>
       </description>
       <description xml:lang="de">
-        <para>Erzeugt einen farbigen Hintergrund für das Objekt. Das Attribut ›backgroundcolor‹ gibt die Farbe an.</para>
+        <para>Erzeugt einen farbigen Hintergrund für das Objekt. Das Attribut ›background-color‹ gibt die Farbe an.</para>
       </description>
       <choice en="full">
         <description xml:lang="en">
-          <para>Fill background with the given color (in backgroundcolor).</para>
+          <para>Fill background with the given color (in background-color).</para>
         </description>
         <description xml:lang="de">
-          <para>Den Hintergrund in der angegebenen Farbe füllen (in backgroundcolor)</para>
+          <para>Den Hintergrund in der angegebenen Farbe füllen (in background-color)</para>
         </description>
       </choice>
       <choice en="without">
@@ -7048,7 +7048,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="backgroundcolor" type="text" optional="yes">
+    <attribute en="background-color" type="text" optional="yes">
       <description xml:lang="en">
         <para>Color of the background if ›background‹ is set to ›full‹.</para>
       </description>
@@ -8993,13 +8993,13 @@
   <PlaceObject>
     <Table stretch="max" padding="1pt">
       <Tablehead>
-        <Tr backgroundcolor="gray">
+        <Tr background-color="gray">
           <Td colspan="3"/>
           <Td border-left="0.2pt" border-left-color="white" colspan="6" align="center">
             <Paragraph><B><Value>Total</Value></B></Paragraph></Td>
           <Td border-left="0.2pt" border-left-color="white"/>
         </Tr>
-        <Tr backgroundcolor="gray">
+        <Tr background-color="gray">
           <Td/>
           <Td><Paragraph><B><Value>Clubs</Value></B></Paragraph></Td>
           <Td><Paragraph><B><Value>P</Value></B></Paragraph></Td>
@@ -9351,7 +9351,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="backgroundcolor" css="background-color" type="text" optional="yes">
+    <attribute en="background-color" css="background-color" type="text" optional="yes">
       <description xml:lang="en">
         <para>The name of the background color (if the cell should get a background).</para>
       </description>
@@ -10243,7 +10243,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="backgroundcolor" type="text" optional="yes">
+    <attribute en="background-color" type="text" optional="yes">
       <description xml:lang="en">
         <para>Background color of each cell in this row.</para>
       </description>
@@ -10364,7 +10364,7 @@
       </choice>
     </attribute>
     <example xml:lang="en">
-      <listing><![CDATA[<Tr minheight="8mm" backgroundcolor="yellow">
+      <listing><![CDATA[<Tr minheight="8mm" background-color="yellow">
   <Td align="center"><Paragraph><Value>A</Value></Paragraph></Td>
   <Td><Paragraph><Value>B</Value></Paragraph></Td>
   <Td align="center"><Paragraph><Value>C</Value></Paragraph></Td>
@@ -10373,7 +10373,7 @@
 </Tr>]]></listing>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Tr minheight="8mm" backgroundcolor="yellow">
+      <listing><![CDATA[<Tr minheight="8mm" background-color="yellow">
   <Td align="center"><Paragraph><Value>4</Value></Paragraph></Td>
   <Td><Paragraph><Value>Borussia Dortmund</Value></Paragraph></Td>
   <Td align="center"><Paragraph><Value>45</Value></Paragraph></Td>

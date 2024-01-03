@@ -555,7 +555,7 @@
       <element name="Box">
          <a:documentation>Erzeugt einen rechteckigen gefärbten Bereich. Die Fläche muss mit den Rasterzellen übereinstimmen.</a:documentation>
          <optional>
-            <attribute name="backgroundcolor">
+            <attribute name="background-color">
                <a:documentation>Farbe der Box. Wird für die Farbe ein Strich angegeben (-), ist der Hintergrund transparent.</a:documentation>
             </attribute>
          </optional>
@@ -873,7 +873,7 @@
       <element name="Circle">
          <a:documentation>Erzeugt einen Kreis oder eine Ellipse.</a:documentation>
          <optional>
-            <attribute name="backgroundcolor">
+            <attribute name="background-color">
                <a:documentation>Farbe des Kreises.</a:documentation>
             </attribute>
          </optional>
@@ -1086,7 +1086,7 @@
             </attribute>
          </optional>
          <optional>
-            <attribute name="backgroundcolor">
+            <attribute name="background-color">
                <a:documentation>Farbe der Tabellenspalte.</a:documentation>
             </attribute>
          </optional>
@@ -2012,7 +2012,7 @@
          <interleave>
             <group>
                <optional>
-                  <attribute name="backgroundcolor">
+                  <attribute name="background-color">
                      <a:documentation>Hintergrundfarbe wenn das Objekt mit einer Farbe hinterlegt werden soll.</a:documentation>
                   </attribute>
                </optional>
@@ -4564,10 +4564,10 @@
                </optional>
                <optional>
                   <attribute name="background">
-                     <a:documentation>Erzeugt einen farbigen Hintergrund für das Objekt. Das Attribut ›backgroundcolor‹ gibt die Farbe an.</a:documentation>
+                     <a:documentation>Erzeugt einen farbigen Hintergrund für das Objekt. Das Attribut ›background-color‹ gibt die Farbe an.</a:documentation>
                      <choice>
                         <value>full</value>
-                        <a:documentation>Den Hintergrund in der angegebenen Farbe füllen (in backgroundcolor)</a:documentation>
+                        <a:documentation>Den Hintergrund in der angegebenen Farbe füllen (in background-color)</a:documentation>
                         <value>without</value>
                         <a:documentation>Leerer Hintergrund</a:documentation>
                         <data type="string">
@@ -4577,7 +4577,7 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="backgroundcolor">
+                  <attribute name="background-color">
                      <a:documentation>Hintergrundfarbe wenn das Objekt mit einer Farbe hinterlegt werden soll.</a:documentation>
                   </attribute>
                </optional>
@@ -5952,7 +5952,7 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="backgroundcolor">
+                  <attribute name="background-color">
                      <a:documentation>Der Name der Hintergrundfarbe, wenn die Zelle eingefärbt werden soll.</a:documentation>
                   </attribute>
                </optional>
@@ -6493,7 +6493,7 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="backgroundcolor">
+                  <attribute name="background-color">
                      <a:documentation>Die Farbe der Zellen in der Zeile.</a:documentation>
                   </attribute>
                </optional>
