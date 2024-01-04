@@ -1,5 +1,21 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.15">
+    <entry version="4.15.21" date="2024-01-04">
+        <en>Rename backgroundcolor to background-color on various elements (#554).</en>
+        <de>Benenne backgroundcolor nach background-color bei verschiedenen Befehlen um (#554).</de>
+    </entry>
+    <entry version="4.15.21" date="2024-01-04">
+        <en>Allow frame color '-' for “no color”.</en>
+        <de>Rahmenfarbe '-' für keine Farbe bei Frame.</de>
+    </entry>
+    <entry version="4.15.21" date="2024-01-04">
+        <en>Opacity with DefineColor and <tt>value="..."</tt>.</en>
+        <de>Transparenz bei DefineColor und <tt>value="..."</tt>.</de>
+    </entry>
+    <entry version="4.15.21" date="2024-01-04">
+        <en>Set default schema in catalog.xml to RELAX NG.</en>
+        <de>Setze das voreingestellte Schema in catalog.xml auf RELAX NG.</de>
+    </entry>
     <entry version="4.15.20" date="2024-01-02">
         <en>Bugfix: zero width space (#552).</en>
         <de>Fehlerkorrektur: Zero width space (#552).</de>
