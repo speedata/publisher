@@ -1,4 +1,10 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="4.16">
+    <entry version="4.16.0" date="2024-01-07">
+        <en>Release version 4.16.0.</en>
+        <de>Veröffentliche Version 4.16.0.</de>
+    </entry>
+  </chapter>
   <chapter version="4.15">
     <entry version="4.15.21" date="2024-01-04">
         <en>Rename backgroundcolor to background-color on various elements (#554).</en>

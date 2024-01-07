@@ -13,7 +13,7 @@ This file gets updated before a stable release. There is a [detailed changelog](
 
 ## Version 4.16
 
-Not yet released.
+Released 2024-01-07
 
 * Complete overhaul of the MetaPost integration.
 * New XPath engine (optional).
