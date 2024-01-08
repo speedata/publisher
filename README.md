@@ -13,7 +13,7 @@ The speedata Publisher is a full featured and mature database publishing softwar
 
 Its built-in layout description language allows you to create almost arbitrary layouts, while keeping the job as simple as possible.
 
-Think of it as »XSL-FO on steroids« or »server side InDesign«.
+Think of it as “XSL-FO on steroids” or “server side InDesign”.
 
 Examples
 --------

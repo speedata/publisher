@@ -190,6 +190,10 @@ func init() {
 	mainlanguage = "en_GB"
 
 	switch dest {
+	case "custom":
+		// pray that the user has set libdir and srcdir during compilation
+		os.Setenv("LUA_PATH", fmt.Sprintf("%s/lua/?.lua;%s/lua/common/?.lua;", srcdir, srcdir))
+		os.Setenv("PUBLISHER_BASE_PATH", srcdir)
 	case "linux-usr":
 		libdir = "/usr/share/speedata-publisher/lib"
 		srcdir = "/usr/share/speedata-publisher/sw"

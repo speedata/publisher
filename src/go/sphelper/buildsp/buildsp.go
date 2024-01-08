@@ -12,7 +12,7 @@ import (
 )
 
 // BuildGo builds the speedata Publisher runner
-func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype, location string) error {
+func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype, location, extraldflags string) error {
 	os.Chdir(filepath.Join(cfg.Srcdir, "go"))
 
 	if goarch != "" {
@@ -37,10 +37,10 @@ func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype, location str
 	var arguments []string
 	if cfg.IsPro {
 		fmt.Println("build pro")
-		arguments = []string{"build", "-ldflags", fmt.Sprintf("-X main.dest=%s -X main.version=%s -X main.pro=yes -s -w", targettype, publisherversion), "-tags", "pro", "-o", location, "speedatapublisher/sp/sp"}
+		arguments = []string{"build", "-ldflags", fmt.Sprintf("%s -X main.dest=%s -X main.version=%s -X main.pro=yes -s -w", extraldflags, targettype, publisherversion), "-tags", "pro", "-o", location, "speedatapublisher/sp/sp"}
 	} else {
 		fmt.Println("build std")
-		arguments = []string{"build", "-ldflags", fmt.Sprintf("-X main.dest=%s -X main.version=%s -s -w", targettype, publisherversion), "-o", location, "speedatapublisher/sp/sp"}
+		arguments = []string{"build", "-ldflags", fmt.Sprintf("%s -X main.dest=%s -X main.version=%s -s -w", extraldflags, targettype, publisherversion), "-o", location, "speedatapublisher/sp/sp"}
 	}
 	cmd := exec.Command("go", arguments...)
 	cmd.Env = os.Environ()

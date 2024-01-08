@@ -17,6 +17,7 @@ import (
 	"speedatapublisher/sphelper/config"
 	"speedatapublisher/sphelper/db2html"
 	"speedatapublisher/sphelper/dirstructure"
+	"speedatapublisher/sphelper/distcustom"
 	"speedatapublisher/sphelper/epub"
 	"speedatapublisher/sphelper/fileutils"
 	"speedatapublisher/sphelper/genadoc"
@@ -72,16 +73,17 @@ func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--basedir DIR", "Base dir", &commandlinebasedir)
 	op.Command("build", "Build go binary")
-	op.Command("buildlib", "Build sp library")
 	op.Command("builddeb", "Build sp binary for debian (/usr/)")
+	op.Command("buildlib", "Build sp library")
+	op.Command("dbmanual", "Generate docbook based documentation")
+	op.Command("dist", "Generate zip files and windows installers")
+	op.Command("distcustom", "Generate custom directory structure for distribution")
 	op.Command("doc", "Generate speedata Publisher documentation (standalone)")
 	op.Command("epub", "Generate EPUB documentation")
-	op.Command("sitedoc", "Generate speedata Publisher documentation to be used with a web server")
-	op.Command("dist", "Generate zip files and windows installers")
 	op.Command("genschema", "Generate schema (layoutschema-en.xml)")
 	op.Command("mkreadme", "Make readme for installation/distribution")
+	op.Command("sitedoc", "Generate speedata Publisher documentation to be used with a web server")
 	op.Command("sourcedoc", "Generate the source documentation")
-	op.Command("dbmanual", "Generate docbook based documentation")
 	err := op.Parse()
 	if err != nil {
 		log.Fatal(err)
@@ -102,7 +104,7 @@ func main() {
 	switch command {
 	case "build":
 		// build the sp executable
-		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local", "")
+		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local", "", "")
 		if err != nil {
 			os.Exit(-1)
 		}
@@ -125,7 +127,7 @@ func main() {
 			fmt.Println("Need three arguments: sphelper builddeb <platform> <arch> <dest>")
 			os.Exit(-1)
 		}
-		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), op.Extra[1], op.Extra[2], "linux-usr", op.Extra[3])
+		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), op.Extra[1], op.Extra[2], "linux-usr", op.Extra[3], "")
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(-1)
@@ -161,6 +163,12 @@ func main() {
 		}
 
 		destdir := filepath.Join(cfg.Builddir, filename)
+		bindestdir := filepath.Join(destdir, "bin")
+		sharedestdir := filepath.Join(destdir, "share")
+		swdestdir := filepath.Join(destdir, "sw")
+		libdestdir := filepath.Join(sharedestdir, "lib")
+		dylibbuild := filepath.Join(cfg.Builddir, "dylib")
+
 		var srcbindir string
 		if srcbindir = os.Getenv("LUATEX_BIN"); srcbindir == "" || !fileutils.IsDir(srcbindir) {
 			fmt.Println("Error: environment variable LUATEX_BIN not set or does not point to a directory")
@@ -174,89 +182,89 @@ func main() {
 			t = texttemplate.Must(texttemplate.ParseFiles(filepath.Join(cfg.Srcdir, "other", "nsitemplate.txt")))
 		}
 
-
 		for i := 1; i < len(op.Extra); i++ {
 			osArch := strings.Split(op.Extra[i], "/")
 			platform := osArch[0]
 			arch := osArch[1]
 			fmt.Println(platform, arch)
-			d := filepath.Join(srcbindir, platform, arch, "default")
-			if !fileutils.IsDir(d) {
-				fmt.Println("Does not exist:", d, "... skipping")
-			} else {
-				bindir, err := filepath.EvalSymlinks(d)
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				err = dirstructure.MkBuilddir(cfg, bindir)
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				buildbindir := filepath.Join(cfg.Builddir, filename, "bin")
-				err = buildsp.BuildGo(cfg, buildbindir, platform, arch, "directory", "")
-				if err != nil {
-					os.Exit(-1)
-				}
-				dylibbuild := filepath.Join(cfg.Builddir, "dylib")
-				os.RemoveAll(dylibbuild)
-				os.MkdirAll(dylibbuild, 0755)
-
-				err = buildlib.BuildLib(cfg, platform, arch)
-				if err != nil {
-					fmt.Println(err)
-					os.Exit(-1)
-				}
-				err = buildlib.BuildCLib(cfg, platform, arch)
-				if err != nil {
-					fmt.Println(err)
-					os.Exit(-1)
-				}
-
-				switch platform {
-				case "windows":
-					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dll"), filepath.Join(buildbindir, "libsplib.dll"))
-					os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.dll"), filepath.Join(cfg.Builddir, filename, "share", "lib", "luaglue.dll"))
-				case "linux":
-					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(cfg.Builddir, filename, "share", "lib", "libsplib.so"))
-					os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(cfg.Builddir, filename, "share", "lib", "luaglue.so"))
-				case "darwin":
-					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dylib"), filepath.Join(cfg.Builddir, filename, "share", "lib", "libsplib.dylib"))
-					os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(cfg.Builddir, filename, "share", "lib", "luaglue.so"))
-				}
-
-				os.Chdir(cfg.Builddir)
-				mkreadme(cfg, platform, filepath.Join(cfg.Builddir, filename))
-				zipname := fmt.Sprintf("%s-%s-%s-%s.zip", filename, platform, arch, cfg.Publisherversion)
-				os.Remove(zipname)
-				exec.Command("zip", "-rq", zipname, filename).Run()
-
-				if platform == "windows" {
-					exename := fmt.Sprintf("%s-%s-%s-%s-installer.exe", filename, platform, arch, cfg.Publisherversion)
-					os.Remove(exename)
-					data := struct {
-						Exename   string
-						Sourcedir string
-						Arch      string
-					}{
-						Exename:   exename,
-						Sourcedir: destdir,
-						Arch:      arch,
-					}
-					f, err := os.Create("installer.nsi")
-					if err != nil {
-						log.Fatal(err)
-					}
-					t.Execute(f, data)
-					out, err := exec.Command("makensis", "installer.nsi").Output()
-					if err != nil {
-						fmt.Println(string(out))
-						log.Fatal(err)
-					}
-					f.Close()
-				}
+			luatexdir, err := dirstructure.GetLuaTeXDir(platform, arch)
+			if err != nil {
+				log.Fatal(err)
 			}
+
+			os.RemoveAll(destdir)
+			os.MkdirAll(destdir, 0755)
+			os.RemoveAll(dylibbuild)
+			os.MkdirAll(dylibbuild, 0755)
+
+			err = dirstructure.FillBuildDir(cfg, luatexdir, bindestdir, sharedestdir, swdestdir)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			err = buildsp.BuildGo(cfg, bindestdir, platform, arch, "directory", "", "")
+			if err != nil {
+				os.Exit(-1)
+			}
+
+			err = buildlib.BuildLib(cfg, platform, arch)
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(-1)
+			}
+			err = buildlib.BuildCLib(cfg, platform, arch)
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(-1)
+			}
+
+			switch platform {
+			case "windows":
+				os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dll"), filepath.Join(bindestdir, "libsplib.dll"))
+				os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.dll"), filepath.Join(libdestdir, "luaglue.dll"))
+			case "linux":
+				os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(libdestdir, "libsplib.so"))
+				os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(libdestdir, "luaglue.so"))
+			case "darwin":
+				os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dylib"), filepath.Join(libdestdir, "libsplib.dylib"))
+				os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(libdestdir, "luaglue.so"))
+			}
+
+			os.Chdir(cfg.Builddir)
+			mkreadme(cfg, platform, destdir)
+			zipname := fmt.Sprintf("%s-%s-%s-%s.zip", filename, platform, arch, cfg.Publisherversion)
+			os.Remove(zipname)
+			exec.Command("zip", "-rq", zipname, filename).Run()
+
+			if platform == "windows" {
+				exename := fmt.Sprintf("%s-%s-%s-%s-installer.exe", filename, platform, arch, cfg.Publisherversion)
+				os.Remove(exename)
+				data := struct {
+					Exename   string
+					Sourcedir string
+					Arch      string
+				}{
+					Exename:   exename,
+					Sourcedir: destdir,
+					Arch:      arch,
+				}
+				f, err := os.Create("installer.nsi")
+				if err != nil {
+					log.Fatal(err)
+				}
+				t.Execute(f, data)
+				out, err := exec.Command("makensis", "installer.nsi").Output()
+				if err != nil {
+					fmt.Println(string(out))
+					log.Fatal(err)
+				}
+				f.Close()
+			}
+		}
+	case "distcustom":
+		err = distcustom.CreateCustomBuild(cfg, op.Extra[1:])
+		if err != nil {
+			log.Fatal(err)
 		}
 	case "mkreadme":
 		if len(op.Extra) < 3 {

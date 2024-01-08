@@ -143,6 +143,26 @@ task :dist => [:sphelper] do
 	sh "#{installdir}/bin/sphelper dist windows/amd64 linux/amd64"
 end
 
+desc "Create a customized directory strcuture for distribution"
+task :distcustom => [:sphelper] do
+	# This should be taken as a blueprint for creating your own directory
+	# structure. Instructions: build the sphelper binary,
+	# then set the environment variables, and run
+	#   sphelper distcutom linux/amd64
+	# (replace the target of course)
+
+	# for building the source tree
+	ENV['SP_BUILDDIR_SW'] = "/tmp/build/sw"
+	ENV['SP_BUILDDIR_SHARE'] = "/tmp/build/share"
+	ENV['SP_BUILDDIR_BIN'] = "/tmp/build/bin"
+
+	# lookup paths for the executable
+	ENV['SP_DESTDIR_SW'] = "/usr/src/speedata-publisher"
+	ENV['SP_DESTDIR_SHARE'] = "/usr/share"
+	ENV['SP_DESTDIR_BIN'] = "/usr/bin"
+	sh "#{installdir}/bin/sphelper distcustom linux/amd64"
+end
+
 desc "Prepare a .deb directory"
 task :deb => [:sphelper] do
 	srcbindir = ENV["LUATEX_BIN"] || ""
