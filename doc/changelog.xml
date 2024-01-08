@@ -1,5 +1,11 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="4.16">
+  <chapter version="4.17">
+    <entry version="4.17.0" date="2024-01-08">
+        <en>New ZIP layout without extra sdluatex folder.</en>
+        <de>Neues Layout der ZIP Datei ohne Extra sdluatex Verzeichnis.</de>
+    </entry>
+  </chapter>
+  <chapter version="4.16" date="2024-01-07">
     <entry version="4.16.0" date="2024-01-07">
         <en>Release version 4.16.0.</en>
         <de>Veröffentliche Version 4.16.0.</de>
@@ -159,7 +165,7 @@
         <de>Erlaube das Tracing-Raster obenauf zu sein (#512).</de>
     </entry>
   </chapter>
-  <chapter version="4.14">
+  <chapter version="4.14" date="2023-07-03">
     <entry version="4.14.0" date="2023-07-03">
         <en>Release version 4.14.</en>
         <de>Veröffentliche Version 4.14.</de>
