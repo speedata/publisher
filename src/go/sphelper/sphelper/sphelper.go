@@ -195,7 +195,6 @@ func main() {
 				}
 
 				buildbindir := filepath.Join(cfg.Builddir, filename, "bin")
-				buildsdluatexdir := filepath.Join(cfg.Builddir, filename, "sdluatex")
 				err = buildsp.BuildGo(cfg, buildbindir, platform, arch, "directory", "")
 				if err != nil {
 					os.Exit(-1)
@@ -217,7 +216,7 @@ func main() {
 
 				switch platform {
 				case "windows":
-					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dll"), filepath.Join(buildsdluatexdir, "libsplib.dll"))
+					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dll"), filepath.Join(buildbindir, "libsplib.dll"))
 					os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.dll"), filepath.Join(cfg.Builddir, filename, "share", "lib", "luaglue.dll"))
 				case "linux":
 					os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(cfg.Builddir, filename, "share", "lib", "libsplib.so"))

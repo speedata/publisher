@@ -9,7 +9,6 @@ The ZIP file is organized as follows:
 
 speedata-publisher/
 ├── bin
-├── sdluatex
 ├── share
 └── sw
 

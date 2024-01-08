@@ -32,7 +32,7 @@ func MkBuilddir(cfg *config.Config, srcbindir string) error {
 		dest   string
 		reject []string
 	}{
-		{src: srcbindir, dest: filepath.Join(destdir, "sdluatex")},
+		{src: srcbindir, dest: filepath.Join(destdir, "bin")},
 		{src: filepath.Join(cfg.Basedir(), "lib"), dest: filepath.Join(destdir, "share", "lib"), reject: []string{".gitignore", "libsplib.h", "libsplib.dll", "libsplib.so", "libsplib.dylib", "trang.jar"}},
 		{src: filepath.Join(cfg.Basedir(), "schema"), dest: filepath.Join(destdir, "share", "schema"), reject: []string{"changelog.rng", "readme.txt"}},
 		{src: filepath.Join(cfg.Basedir(), "fonts"), dest: filepath.Join(destdir, "sw", "fonts")},
@@ -58,11 +58,6 @@ func MkBuilddir(cfg *config.Config, srcbindir string) error {
 	}
 	for _, v := range exefiles {
 		os.Chmod(v, 0755)
-	}
-	exefiles, err = filepath.Glob(filepath.Join(destdir, "sdluatex", "*"))
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(-1)
 	}
 	for _, v := range exefiles {
 		os.Chmod(v, 0755)

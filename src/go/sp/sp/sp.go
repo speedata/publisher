@@ -487,67 +487,27 @@ func prependXML(arg string) {
 	prependxml = append(prependxml, arg)
 }
 
-// We don't know where the executable is. On systems where we have
-// LuaTeX, we don't want to interfere with the binary so we
-// install a binary called sdluatex (linux package). Therefore
-// we check for `sdluatex` and `luatex`, if the former is not found.
+// Return the full path to the TeX executable. It is called sdluatex(.exe) and
+// can be overridden by the 'luatex' option. It panics if the TeX binary cannot
+// be found.
 func getExecutablePath() string {
 	// 1 check the installdir/bin for sdluatex(.exe)
-	// 2 check PATH for sdluatex(.exe)
-	// 3 assume simple installation and take luatex(.exe)
-	// 4 check then installdir/bin for luatex(.exe)
-	// 5 check PATH for luatex(.exe)
-	// 6 panic!
+	// 2 panic!
 	if luatex := getOption("luatex"); luatex != "" {
 		return luatex
 	}
 	executableName := "sdluatex" + exeSuffix
 	var p string
 
-	// 0 check the installdir/bin for sdluatex(.exe)
-	p = filepath.Join(installdir, "sdluatex", executableName)
+	// 1 check the installdir/bin for sdluatex(.exe)
+	p = filepath.Join(installdir, "bin", executableName)
 	fi, _ := os.Stat(p)
 	if fi != nil {
 		return p
 	}
 
-	// 1 check the installdir/bin for sdluatex(.exe)
-	p = fmt.Sprintf("%s/bin/%s", installdir, executableName)
-	fi, _ = os.Stat(p)
-	if fi != nil {
-		return p
-	}
-
-	// 2 check PATH for sdluatex(.exe)
-	p, _ = exec.LookPath(executableName)
-	if p != "" {
-		return p
-	}
-
-	// 3 assume simple installation and take luatex(.exe)
-	executableName = "luahbtex" + exeSuffix
-
-	// 3.5 check the installdir/bin for sdluatex(.exe)
-	p = filepath.Join(installdir, "sdluatex", executableName)
-	fi, _ = os.Stat(p)
-	if fi != nil {
-		return p
-	}
-
-	// 4 check then installdir/bin for luatex(.exe)
-	p = fmt.Sprintf("%s/bin/%s", installdir, executableName)
-	fi, _ = os.Stat(p)
-	if fi != nil {
-		return p
-	}
-	// 5 check PATH for luatex(.exe)
-	p, _ = exec.LookPath(executableName)
-	if p != "" {
-		return p
-	}
-
-	// 6 panic!
-	log.Fatal("Can't find sdluatex or luatex binary")
+	// 2 panic!
+	log.Fatal("Can't find sdluatex binary")
 	return ""
 }
 
