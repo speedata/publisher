@@ -1,12 +1,11 @@
 package splibaux
 
 import (
+	"encoding/xml"
 	"fmt"
 	"io"
 	"os"
 	"strings"
-
-	"speedatapublisher/xml"
 )
 
 func luaescape(s string) string {

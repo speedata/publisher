@@ -294,6 +294,8 @@ func handleXInclude(href string, startindex, indent int) (string, error) {
 	return readXMLFile(f, startindex, indent)
 }
 
+// ReadXMLFile loads an XML file and returns a Lua string that contains the
+// document.
 func ReadXMLFile(filename string) (string, error) {
 	fullpath := LookupFile(filename)
 	f, err := os.Open(fullpath)
