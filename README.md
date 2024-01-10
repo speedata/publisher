@@ -1,4 +1,4 @@
-[![Join the chat at https://gitter.im/speedata/publisher](https://img.shields.io/gitter/room/speedata/publisher?color=yellow)](https://gitter.im/speedata/publisher)&nbsp;[![Fund the development](https://img.shields.io/badge/Sponsor-Fund%20development-yellow)](https://github.com/sponsors/speedata)&nbsp;[![Platforms](https://img.shields.io/badge/Platform-Mac%2FLinux%2FWindows-lightgrey)](https://doc.speedata.de/publisher/en/installation/)
+[![Join the chat at https://matrix.to/#/#speedata_publisher:gitter.im](https://img.shields.io/gitter/room/speedata/publisher?color=yellow)](https://matrix.to/#/#speedata_publisher:gitter.im)&nbsp;[![Fund the development](https://img.shields.io/badge/Sponsor-Fund%20development-yellow)](https://github.com/sponsors/speedata)&nbsp;[![Platforms](https://img.shields.io/badge/Platform-Mac%2FLinux%2FWindows-lightgrey)](https://doc.speedata.de/publisher/en/installation/)
 
 speedata Publisher
 ==================
@@ -73,4 +73,4 @@ We offer commercial support for the speedata Publisher. You can find the contact
 Source: <https://github.com/speedata/publisher/> <br>
 News: <https://news.speedata.de/> <br>
 Webpage: <https://www.speedata.de/> <br>
-Chat: <https://gitter.im/speedata/publisher>
+Chat: <https://matrix.to/#/#speedata_publisher:gitter.im>
