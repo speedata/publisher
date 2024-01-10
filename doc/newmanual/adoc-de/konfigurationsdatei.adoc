@@ -57,7 +57,7 @@ erkannt. Folgende Optionen werden unterstützt:
 `extraxml`::
   Diese XML-Dateien zu den Layoutanweisungen hinzufügen. Kommaseparierte Liste (`extraxml=datei1.xml,datei2.xml`).
 `fontloader`::
-   Setze den Fontlader auf `fontforge` (Voreinstellung bis Version 4) oder `harfbuzz` (Voreinstellung ab Version 5).
+   Setze den Fontlader auf `fontforge` (Voreinstellung bis Version 4.16) oder `harfbuzz` (Voreinstellung ab Version 4.18).
 `prependxml`::
   Diese XML-Dateien vor den Layoutanweisungen hinzufügen. Kommaseparierte Liste (`prependxml=datei1.xml,datei2.xml`).
 `filter`::

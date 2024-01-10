@@ -4986,10 +4986,10 @@
     </attribute>
     <attribute en="mode" optional="yes" since="3.9.29">
       <description xml:lang="en">
-        <para>Set the shaping mode of the font. Defaults to <tt>fontforge</tt>.</para>
+        <para>Set the shaping mode of the font. Defaults to <tt>harfbuzz</tt>.</para>
       </description>
       <description xml:lang="de">
-        <para>Setzt den Fonthandler. Voreinstellung ist <tt>fontforge</tt>.</para>
+        <para>Setzt den Fonthandler. Voreinstellung ist <tt>harfbuzz</tt>.</para>
       </description>
       <choice en="fontforge">
         <description xml:lang="en">
@@ -5001,10 +5001,10 @@
       </choice>
       <choice en="harfbuzz">
         <description xml:lang="en">
-          <para>The experimental new renderer that will eventually handle all scripts including right-to-left.</para>
+          <para>The new renderer that will eventually handle all scripts including right-to-left.</para>
         </description>
         <description xml:lang="de">
-          <para>Der experimentelle neue Fonthandler der arabisch und andere komplexen Schreibsysteme verarbeiten kann.</para>
+          <para>Der neue Fonthandler der Arabisch und andere komplexen Schreibsysteme verarbeiten kann.</para>
         </description>
       </choice>
     </attribute>

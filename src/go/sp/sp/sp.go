@@ -133,7 +133,7 @@ func init() {
 		"cache":             "optimal",
 		"inkscape":          "inkscape",
 		"inkscape-command":  "--export-pdf",
-		"fontloader":        "fontforge",
+		"fontloader":        "harfbuzz",
 		"referencefilename": "reference",
 		"xpath":             "luxor",
 	}

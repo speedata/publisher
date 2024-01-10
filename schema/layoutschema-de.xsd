@@ -1738,12 +1738,12 @@
       </xs:attribute>
       <xs:attribute name="framecolor">
         <xs:annotation>
-          <xs:documentation>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</xs:documentation>
+          <xs:documentation>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird. Voreinstellung ist 'black'. Kann mit der speziellen Farbe '-' ausgeschaltet werden.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="rulewidth">
         <xs:annotation>
-          <xs:documentation>Die Dicke des Rahmens, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</xs:documentation>
+          <xs:documentation>Die Dicke des Rahmens, der um das Objekt gezogen wird.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="class">
@@ -2774,7 +2774,7 @@
       </xs:attribute>
       <xs:attribute name="mode">
         <xs:annotation>
-          <xs:documentation>Setzt den Fonthandler. Voreinstellung ist fontforge.</xs:documentation>
+          <xs:documentation>Setzt den Fonthandler. Voreinstellung ist harfbuzz.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -2785,7 +2785,7 @@
             </xs:enumeration>
             <xs:enumeration value="harfbuzz">
               <xs:annotation>
-                <xs:documentation>Der experimentelle neue Fonthandler der arabisch und andere komplexen Schreibsysteme verarbeiten kann.</xs:documentation>
+                <xs:documentation>Der neue Fonthandler der Arabisch und andere komplexen Schreibsysteme verarbeiten kann.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
           </xs:restriction>

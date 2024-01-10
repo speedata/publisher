@@ -286,7 +286,7 @@ options = {
     gridcells_y = 0,
     reportmissingglyphs = true,
     gridlocation = "background",
-    fontloader = os.getenv("SP_FONTLOADER") or "fontforge",
+    fontloader = os.getenv("SP_FONTLOADER") or "harfbuzz",
     xmlparser = os.getenv("SP_XMLPARSER") or "lua",
     hyperlinkborderwidth = tex.sp("1pt"),
 }
@@ -4894,7 +4894,6 @@ function hbglyphlist(arguments)
     for i=1,#aa do
         set_attribute_recurse(list,aa[i][1],aa[i][2])
     end
-    list = hbkern(list)
     return list
 end
 
@@ -5526,7 +5525,11 @@ function finish_par( nodelist,hsize,parameters )
     last = n
 
     -- mode harfbuzz sets haskerns, different kind of kerning
-    n = node.kerning(nodelist)
+    if options.fontloader == "harfbuzz" then
+        n = hbkern(nodelist)
+    else
+        n = node.kerning(nodelist)
+    end
 
     -- 15 is a parfillskip
     n,last = add_glue(n,"tail",{ subtype = 15, width = 0, stretch = 2^16, stretch_order = 2})

@@ -2043,12 +2043,12 @@
                </optional>
                <optional>
                   <attribute name="framecolor">
-                     <a:documentation>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</a:documentation>
+                     <a:documentation>Die Farbe des Rahmens, wenn ein Rahmen ausgegeben wird. Voreinstellung ist &#39;black&#39;. Kann mit der speziellen Farbe &#39;-&#39; ausgeschaltet werden.</a:documentation>
                   </attribute>
                </optional>
                <optional>
                   <attribute name="rulewidth">
-                     <a:documentation>Die Dicke des Rahmens, der um das Objekt gezogen wird. Nur sinnvoll zusammen mit dem Attribut rahmen.</a:documentation>
+                     <a:documentation>Die Dicke des Rahmens, der um das Objekt gezogen wird.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -2771,12 +2771,12 @@
                </optional>
                <optional>
                   <attribute name="mode">
-                     <a:documentation>Setzt den Fonthandler. Voreinstellung ist fontforge.</a:documentation>
+                     <a:documentation>Setzt den Fonthandler. Voreinstellung ist harfbuzz.</a:documentation>
                      <choice>
                         <value>fontforge</value>
                         <a:documentation>Der alte und gut funktionierende Fonthandler. Funktioniert gut mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen.</a:documentation>
                         <value>harfbuzz</value>
-                        <a:documentation>Der experimentelle neue Fonthandler der arabisch und andere komplexen Schreibsysteme verarbeiten kann.</a:documentation>
+                        <a:documentation>Der neue Fonthandler der Arabisch und andere komplexen Schreibsysteme verarbeiten kann.</a:documentation>
                      </choice>
                   </attribute>
                </optional>

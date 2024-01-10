@@ -51,7 +51,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `extraxml`::
    Add this XML file to the layout instructions. List of comma separated file names (`extraxml=file1.xml,file2.xml`).
 `fontloader`::
-   Set the fontloader to `fontforge` (default until version 4) or `harfbuzz` (default starting from version 5).
+   Set the fontloader to `fontforge` (default until version 4.16) or `harfbuzz` (default starting from version 4.18).
 `filter`::
    Run the given file as an Lua-Filter. See the section <<ch-preprocessing>>.
 `fontpath`::

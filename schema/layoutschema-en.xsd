@@ -1738,12 +1738,12 @@
       </xs:attribute>
       <xs:attribute name="framecolor">
         <xs:annotation>
-          <xs:documentation>The color of the frame around the object. Only makes sense in combination with the attribute 'frame'.</xs:documentation>
+          <xs:documentation>The color of the frame around the object. This defaults to 'black'. Can be hidden with the special color '-'.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="rulewidth">
         <xs:annotation>
-          <xs:documentation>The thickness of the frame that is drawn around the object. Only makes sense in combination with the attribute 'frame'.</xs:documentation>
+          <xs:documentation>The thickness of the frame that is drawn around the object.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="class">
@@ -2774,7 +2774,7 @@
       </xs:attribute>
       <xs:attribute name="mode">
         <xs:annotation>
-          <xs:documentation>Set the shaping mode of the font. Defaults to fontforge.</xs:documentation>
+          <xs:documentation>Set the shaping mode of the font. Defaults to harfbuzz.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -2785,7 +2785,7 @@
             </xs:enumeration>
             <xs:enumeration value="harfbuzz">
               <xs:annotation>
-                <xs:documentation>The experimental new renderer that will eventually handle all scripts including right-to-left.</xs:documentation>
+                <xs:documentation>The new renderer that will eventually handle all scripts including right-to-left.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
           </xs:restriction>
