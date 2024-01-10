@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.2" date="2024-01-10">
+        <en>Make harfbuzz the default font loader.</en>
+        <de>Harfbuzz ist nun der voreingestellte Font-Loader.</de>
+    </entry>
     <entry version="4.17.1" date="2024-01-10">
         <en>Switch go Go 1.21.</en>
         <de>Aktualisiere auf Go 1.21.</de>
