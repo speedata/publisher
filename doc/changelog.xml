@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.1" date="2024-01-10">
+        <en>Switch go Go 1.21.</en>
+        <de>Aktualisiere auf Go 1.21.</de>
+    </entry>
+    <entry version="4.17.1" date="2024-01-10">
+        <en>Rewrite speedata Publisher logging/output.</en>
+        <de>speedata Publisher Ausgabe / logging vollständig verändert.</de>
+    </entry>
     <entry version="4.17.0" date="2024-01-08">
         <en>New ZIP layout without extra sdluatex folder.</en>
         <de>Neues Layout der ZIP Datei ohne Extra sdluatex Verzeichnis.</de>
