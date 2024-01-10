@@ -6,7 +6,7 @@
 --  See file COPYING in the root directory for license info.
 
 
-file_start("layout_functions.lua")
+file_start("layout_functions_lxpath.lua")
 
 local de = require("dimexpr")
 
@@ -918,4 +918,4 @@ for _, func in ipairs(funcs) do
 end
 
 
-file_end("layout_functions.lua")
+file_end("layout_functions_lxpath.lua")

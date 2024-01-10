@@ -60,10 +60,6 @@ function log(...)
     splib.logmessage("info",res)
 end
 
-function synclog()
-    io.stdout:flush()
-end
-
 do
 local matches = {
     ["^"] = "%^";
@@ -273,11 +269,12 @@ function quit()
 end
 
 local function setup()
-    splib.logmessages("debug","Setting","varname","SD_EXTRA_DIRS", "value", os.getenv("SD_EXTRA_DIRS") or "")
-    splib.logmessages("debug","Setting","varname","SD_EXTRA_XML", "value", os.getenv("SD_EXTRA_XML") or "")
-    splib.logmessages("debug","Setting","varname","SD_PREPEND_XML", "value", os.getenv("SD_PREPEND_XML") or "")
     splib.logmessages("debug","Setting","varname","LUA_PATH", "value", os.getenv("LUA_PATH") or "")
+    splib.logmessages("debug","Setting","varname","SP_EXTRA_DIRS", "value", os.getenv("SP_EXTRA_DIRS") or "")
+    splib.logmessages("debug","Setting","varname","SP_EXTRA_XML", "value", os.getenv("SP_EXTRA_XML") or "")
+    splib.logmessages("debug","Setting","varname","SP_PREPEND_XML", "value", os.getenv("SP_PREPEND_XML") or "")
     splib.logmessages("debug","Setting","varname","SP_IGNORECASE", "value", os.getenv("SP_IGNORECASE") or "")
+    splib.logmessages("debug","Setting","varname","SP_XMLPARSER", "value", os.getenv("SP_XMLPARSER") or "")
 
     tex.pdfhorigin = 0
     tex.pdfvorigin = 0

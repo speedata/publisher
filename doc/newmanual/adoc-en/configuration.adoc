@@ -101,7 +101,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `vars`::
    Comma separated list of variables and values in the form var=value to set additional variables.
 `verbose`::
-   Print the messages from the protocol file to the standard output.
+   `true` prints the messages from the protocol file to the standard output.
 `wd`::
    Set the current directory.
 `xpath`::

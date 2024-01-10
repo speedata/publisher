@@ -984,7 +984,7 @@ func main() {
 			}
 		}
 	}
-	os.Setenv("SD_EXTRA_DIRS", strings.Join(extraDir, string(filepath.ListSeparator)))
+	os.Setenv("SP_EXTRA_DIRS", strings.Join(extraDir, string(filepath.ListSeparator)))
 
 	if extraxmloption := getOption("extraxml"); extraxmloption != "" {
 		for _, xmlfile := range strings.Split(extraxmloption, ",") {
@@ -998,8 +998,8 @@ func main() {
 		}
 	}
 
-	os.Setenv("SD_EXTRA_XML", strings.Join(extraxml, ","))
-	os.Setenv("SD_PREPEND_XML", strings.Join(prependxml, ","))
+	os.Setenv("SP_EXTRA_XML", strings.Join(extraxml, ","))
+	os.Setenv("SP_PREPEND_XML", strings.Join(prependxml, ","))
 
 	if getOption("ignore-case") == stringTrue {
 		os.Setenv("SP_IGNORECASE", "1")

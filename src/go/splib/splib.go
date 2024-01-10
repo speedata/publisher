@@ -199,7 +199,7 @@ func sdBuildFilelist() {
 			paths = append(paths, p)
 		}
 	}
-	for _, p := range filepath.SplitList(os.Getenv("SD_EXTRA_DIRS")) {
+	for _, p := range filepath.SplitList(os.Getenv("SP_EXTRA_DIRS")) {
 		paths = append(paths, p)
 	}
 	splibaux.BuildFilelist(paths)
@@ -216,8 +216,10 @@ func sdLookupFile(cpath *C.char) *C.char {
 	path := C.GoString(cpath)
 	ret, err := splibaux.GetFullPath(path)
 	if err != nil {
+		slog.Error("internal error", "where", "splibaux.GetFullPath", "argument", path, "errormessage", err.Error())
 		return s2c(errorpattern + err.Error())
 	}
+	slog.Debug("File lookup", "request", path, "found", ret)
 	return s2c(ret)
 }
 

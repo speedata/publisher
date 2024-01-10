@@ -164,7 +164,7 @@ function commands.add_searchpath( layoutxml,dataxml )
         err("AddSearchpath: The path %q does not exist",selection)
         return
     end
-    log("Add search path: %q",selection)
+    splib.logmessages("info","Add search path","path",selection)
     kpse.add_dir(selection)
 end
 
@@ -742,7 +742,7 @@ function commands.define_color( layoutxml,dataxml )
 
     color.model = model
     color.index = publisher.register_color(name)
-    log("Defining color %q (%d)",name,color.index)
+    splib.logmessages("info","Define color","name",name,"index",color.index)
     publisher.colors[name]=color
 end
 
@@ -1215,9 +1215,9 @@ function commands.group( layoutxml,dataxml )
     local groupname = publisher.read_attribute(layoutxml,dataxml,"name", "string")
 
     if publisher.groups[groupname] == nil then
-        log("Create Group %q.",groupname)
+        splib.logmessages("debug","Create group","name",groupname)
     else
-        log("Re-use Group %q.",groupname)
+        splib.logmessages("debug","Re-use group","name",groupname)
         -- The old nodes are still in the group. We should clean the nodes
         -- but this cleans too much.
         node.flush_list(publisher.groups[groupname].contents)
@@ -1895,7 +1895,7 @@ function commands.load_fontfile( layoutxml,dataxml )
     end
 
     if publisher.lowercase then filename = unicode.utf8.lower(filename) end
-    log("Load Fontfile %q",filename or "?")
+    splib.logmessages("info","Load font file","filename",filename or "?")
     publisher.fonts.load_fontfile(name,filename,extra_parameter)
 end
 
@@ -1908,11 +1908,11 @@ function commands.load_dataset( layoutxml,dataxml )
     local filename = publisher.read_attribute(layoutxml,dataxml,"filename", "string")
     local name = publisher.read_attribute(layoutxml,dataxml,"name", "string")
     if filename then
-        log("Loading data file %q",filename)
+        splib.logmessages("info","Load data file","filename",filename)
         path = publisher.find_file(filename)
     elseif name then
         name = tex.jobname .. "-" .. name .. ".dataxml"
-        log("Loading data file %q",name)
+        splib.logmessages("info","Load data file","filename",name)
         path = publisher.find_file(name)
     else
         err("LoadDataset: no (file)name given.")
@@ -2186,14 +2186,11 @@ function commands.message( layoutxml, dataxml )
         if not ignore_message then
             publisher.messages[#publisher.messages + 1] = { contents, "message" }
         end
-        local lineinfo = ""
         if publisher.newxpath then
-            lineinfo = string.format(" (line %s)",layoutxml[".__line"])
             splib.logmessages("info","Message","line",layoutxml[".__line"],"message",tostring(contents) or "?")
         else
             splib.logmessages("info","Message","message",tostring(contents) or "?")
         end
-        -- log("Message%s: %q", lineinfo, tostring(contents) or "?")
     end
     if exitnow then
         err(-1,"Exiting on user request.")
@@ -3303,7 +3300,6 @@ function commands.place_object( layoutxml,dataxml)
             end
             -- if the object has no height (for example an Action node), we don't move the cursor
             if height_in_gridcells == 0  then allocate = "no" end
-            -- log("PlaceObject: %s at (%d,%d) wd/ht: %d/%d in %q (p. %d)", objecttype, math.floor(current_column_start), math.floor(current_row),,publisher.current_group or area or "(default)", onpage or publisher.current_pagenumber)
             splib.logmessages("debug","PlaceObject","type",objecttype,"col",tostring(math.floor(current_column_start)),"row",tostring(math.floor(current_row)),"wd",width_in_gridcells,"ht",height_in_gridcells,"page",onpage or publisher.current_pagenumber)
             publisher.output_at({
                 nodelist = node.copy(object),
@@ -3920,7 +3916,7 @@ function commands.setvariable( layoutxml,dataxml )
     end
 
     if trace_p then
-        log("SetVariable, variable name = %q, type = %q, value = %q",varname or "(no variable name)", type(contents), tostring(contents))
+        splib.logmessages("info","SetVariable","varname",varname or "(no variable name)","value",tostring(contents))
         if type(contents) == "table" then
             printtable("SetVariable",contents)
         end

@@ -503,7 +503,7 @@ setmetatable(colors,{  __index = function (tbl,key)
     if string.sub(key,1,1) ~= "#" and string.sub(key,1,3) ~= "rgb" then
         return nil
     end
-    log("Defining color %q",key)
+    splib.logmessages("info","Define color","name",key)
     local color = {}
     color.r, color.g, color.b = getrgb(key)
     color.pdfstring = string.format("%g %g %g rg %g %g %g RG", color.r, color.g, color.b, color.r,color.g, color.b)
@@ -802,7 +802,6 @@ end
 
 function find_file(filename)
     local ret = kpse.find_file(filename)
-    splib.logmessages("debug","File lookup","source",tostring(filename),"found",tostring(ret))
     return ret
 end
 
@@ -1245,13 +1244,13 @@ function initialize_luatex_and_generate_pdf()
         end
     end
     if not newxpath then
-        tmp = os.getenv("SD_PREPEND_XML")
+        tmp = os.getenv("SP_PREPEND_XML")
         if tmp and tmp ~= "" then
             for i,v in ipairs(string.explode(tmp,",")) do
                 table.insert(layoutxml, i, luxor.parse_xml_file(v))
             end
         end
-        tmp = os.getenv("SD_EXTRA_XML")
+        tmp = os.getenv("SP_EXTRA_XML")
         if tmp and tmp ~= "" then
             for _,v in ipairs(string.explode(tmp,",")) do
                 layoutxml[#layoutxml + 1] = luxor.parse_xml_file(v)
@@ -1935,11 +1934,9 @@ end
 function load_xml(filename,filetype,parameter)
     parameter = parameter or {}
     if newxpath then
-        if options.verbosity > 0 then
-            log("Using new Go based XML reader")
-        end
         local str = splib.loadxmlfile(filename)
         if not str then return {} end
+        splib.logmessages("info","Load XML","type",filetype or "file","filename",filename)
         -- if options.verbosity > 0 and filetype == "layout instructions" then
             -- local f = io.open(filename .. ".lua","w")
             -- f:write(str)
@@ -1970,7 +1967,7 @@ function load_xml(filename,filetype,parameter)
         if options.verbosity > 0 then
             calculate_md5sum(filename)
         end
-        log("Loading %s %q",filetype or "file",path)
+        splib.logmessages("info","Load XML","type",filetype or "file","filename",path)
         local parsed_xml = luxor.parse_xml_file(path, parameter,find_file)
         -- if options.verbosity > 0 and filetype == "layout instructions" then
         --     printtable("parsed_xml",parsed_xml)
@@ -2294,7 +2291,6 @@ function detect_pagetype(pagenumber, data)
         if nextpage then
             if pagetype.name == nextpage then
                 splib.logmessages("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
-                -- log("Page of type %q created (%d) - pagetype requested",pagetype.name or "<detect_pagetype>",pagenumber)
                 nextpage = nil
                 return pagetype.res
             end
@@ -2312,7 +2308,6 @@ function detect_pagetype(pagenumber, data)
                 end
                 if ok then
                     splib.logmessages("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
-                    -- log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
                     ret = pagetype.res
                     current_pagenumber = cp
                     return ret
@@ -2320,7 +2315,6 @@ function detect_pagetype(pagenumber, data)
             else
                 if xpath.parse(data,pagetype.is_pagetype,pagetype.ns) == true then
                     splib.logmessages("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
-                    -- log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
                     ret = pagetype.res
                     xpath.pop_state()
                     current_pagenumber = cp
@@ -6520,7 +6514,6 @@ function get_language(id_or_locale_or_name)
 
     local id = l:id()
     splib.logmessages("debug","Language ID","id",id)
-    -- log("Language id: %d",id)
     local ret = { id = id, l = l, locale = locale }
     languages_id_lang[id] = ret
     languages[locale] = ret
@@ -6777,7 +6770,6 @@ function define_fontfamily( regular,bold,italic,bolditalic, name, size, baseline
     fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
     local fontnumber = #fonts.lookup_fontfamily_number_instance
     fonts.lookup_fontfamily_name_number[name] = fontnumber
-    -- log("DefineFontfamily %q size %.03gpt/%.03gpt id: %d",name,size / factor,baselineskip / factor,fontnumber)
     splib.logmessages("info","Define font family","name",name,"size",math.round(size / factor, 3),"leading",math.round(baselineskip / factor,3), "id",fontnumber)
     return fontnumber
 end
