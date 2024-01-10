@@ -37,8 +37,6 @@ local uuid         = require("uuid")
 par = require("par")
 uuid.randomseed(tex.randomseed)
 
-splib = require("luaglue")
-
 local env_publisherversion = os.getenv("PUBLISHERVERSION")
 
 module(...,package.seeall)
@@ -759,9 +757,12 @@ function dispatch(layoutxml,dataxml,opts)
                 if options.verbosity > 0 then
                     local lineinfo = ""
                     if newxpath then
-                        lineinfo = string.format(" (line %s)",j[".__line"])
+                        splib.logmessages("debug","Call command","name",eltname,"line",j[".__line"])
+                    else
+                        splib.logmessages("debug","Call command","name",eltname)
                     end
-                    log("Call %q from layout%s",eltname,lineinfo)
+
+                    -- log("Call %q from layout%s",eltname,lineinfo)
                 end
                 if newxpath then
                     current_layout_line = j[".__line"]
@@ -801,10 +802,7 @@ end
 
 function find_file(filename)
     local ret = kpse.find_file(filename)
-    if options.verbosity and options.verbosity > 0 then
-        log("file lookup: %s -> %s",tostring(filename),tostring(ret))
-    end
-
+    splib.logmessages("debug","File lookup","source",tostring(filename),"found",tostring(ret))
     return ret
 end
 
@@ -1153,6 +1151,7 @@ function initialize_luatex_and_generate_pdf()
             end
         elseif k == "pro" then
             pro = true
+            splib.logmessage("info","speedata Publisher Pro")
         end
     end
 
@@ -1939,17 +1938,13 @@ function load_xml(filename,filetype,parameter)
         if options.verbosity > 0 then
             log("Using new Go based XML reader")
         end
-        if options.verbosity > 0 then
-            calculate_md5sum(filename)
-        end
-
         local str = splib.loadxmlfile(filename)
         if not str then return {} end
-        if options.verbosity > 0 and filetype == "layout instructions" then
+        -- if options.verbosity > 0 and filetype == "layout instructions" then
             -- local f = io.open(filename .. ".lua","w")
             -- f:write(str)
             -- f:close()
-        end
+        -- end
         local ok,msg = load(str)
         if ok then
             ok()
@@ -2298,7 +2293,8 @@ function detect_pagetype(pagenumber, data)
         local pagetype = masterpages[i]
         if nextpage then
             if pagetype.name == nextpage then
-                log("Page of type %q created (%d) - pagetype requested",pagetype.name or "<detect_pagetype>",pagenumber)
+                splib.logmessages("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
+                -- log("Page of type %q created (%d) - pagetype requested",pagetype.name or "<detect_pagetype>",pagenumber)
                 nextpage = nil
                 return pagetype.res
             end
@@ -2315,14 +2311,16 @@ function detect_pagetype(pagenumber, data)
                     err(msg)
                 end
                 if ok then
-                    log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
+                    splib.logmessages("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
+                    -- log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
                     ret = pagetype.res
                     current_pagenumber = cp
                     return ret
                 end
             else
                 if xpath.parse(data,pagetype.is_pagetype,pagetype.ns) == true then
-                    log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
+                    splib.logmessages("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
+                    -- log("Page of type %q created (%d)",pagetype.name or "<detect_pagetype>",pagenumber)
                     ret = pagetype.res
                     xpath.pop_state()
                     current_pagenumber = cp
@@ -6511,7 +6509,7 @@ function get_language(id_or_locale_or_name)
         return 0
     else
         local filename = string.format("hyph-%s.pat.txt",filename_part)
-        log("Loading hyphenation patterns %q.",filename)
+        splib.logmessages("debug","Loading hyphenation pattern","filename",filename)
         local path = find_file(filename)
         local pattern_file = io.open(path)
         local pattern = pattern_file:read("*all")
@@ -6521,7 +6519,8 @@ function get_language(id_or_locale_or_name)
     end
 
     local id = l:id()
-    log("Language id: %d",id)
+    splib.logmessages("debug","Language ID","id",id)
+    -- log("Language id: %d",id)
     local ret = { id = id, l = l, locale = locale }
     languages_id_lang[id] = ret
     languages[locale] = ret
@@ -6778,7 +6777,8 @@ function define_fontfamily( regular,bold,italic,bolditalic, name, size, baseline
     fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
     local fontnumber = #fonts.lookup_fontfamily_number_instance
     fonts.lookup_fontfamily_name_number[name] = fontnumber
-    log("DefineFontfamily %q size %.03gpt/%.03gpt id: %d",name,size / factor,baselineskip / factor,fontnumber)
+    -- log("DefineFontfamily %q size %.03gpt/%.03gpt id: %d",name,size / factor,baselineskip / factor,fontnumber)
+    splib.logmessages("info","Define font family","name",name,"size",math.round(size / factor, 3),"leading",math.round(baselineskip / factor,3), "id",fontnumber)
     return fontnumber
 end
 

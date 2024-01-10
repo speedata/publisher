@@ -7,13 +7,11 @@
 --  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 
+splib = require("luaglue")
 
-
--- file_start("spinit.lua")
+file_start("spinit.lua")
 local u8fix = require('utf8fix')
-if not running_in_testmode then
-    tex.enableprimitives('',tex.extraprimitives())
-end
+tex.enableprimitives('',tex.extraprimitives())
 
 function warning(...)
     local text = { ... }
@@ -24,11 +22,9 @@ function warning(...)
     else
         unpacked = string.format( "%s",string.format(table.unpack(text)))
     end
-    errorlog:write("Warning: " .. unpacked .. "\n")
-    texio.write("Warning: " .. unpacked .. "\n")
+    splib.logmessage("warn",unpacked)
 end
 
-local errcount=0
 function err(...)
     local text = { ... }
     local errorcode = 1
@@ -47,9 +43,6 @@ function err(...)
     else
         unpacked = string.format( "%s",string.format(table.unpack(text)))
     end
-    errcount =  errcount + 1
-    errorlog:write("Error: " .. unpacked .. "\n")
-    texio.write("Error: " .. unpacked .. "\n")
 end
 
 function call(...)
@@ -64,10 +57,7 @@ end
 function log(...)
     local text = { ... }
     local res = call(string.format,table.unpack(text))
-    texio.write(res .. "\n")
-    if io.type(errorlog) == "file" then
-        errorlog:write(res .. "\n")
-    end
+    splib.logmessage("info",res)
 end
 
 function synclog()
@@ -228,7 +218,6 @@ function tex.bp(number_or_string)
     return sp_to_bp(tex.sp(number_or_string))
 end
 
-local _assert = assert
 function assert( what,msg)
   if not what then
     texio.write_nl("An error occurred: " .. (msg or "") )
@@ -250,14 +239,14 @@ end
 --- Stop the data processing and write PDF. If `graceful` is not given or `false` then
 --- `os.exit()` gets called. This is the last function to be called.
 function exit(graceful)
+    errcount = splib.errcount()
+    warncount = splib.warncount()
     log("Stop processing data")
-    log("%d errors occurred",errcount)
+    log("%d errors occurred",splib.errcount())
     log("Duration: %3f seconds",os.gettimeofday() - starttime)
-    errorlog:write("---------------------------------------------\n")
-    errorlog:write(string.format("Duration: %3f seconds\n",os.gettimeofday() - starttime))
-    errorlog:close()
+
     statusfile = io.open(string.format("%s.status",tex.jobname),"wb")
-    statusfile:write(string.format("<Status>\n  <Errors>%d</Errors>\n",errcount))
+    statusfile:write(string.format("<Status>\n  <Errors>%d</Errors>\n",splib.errcount()))
     local msgs = publisher.messages
     for i=1,#msgs do
         if msgs[i][2] == "error" then
@@ -273,6 +262,7 @@ function exit(graceful)
     statusfile:write(string.format("  <DurationSeconds>%d</DurationSeconds>\n",math.ceil(os.gettimeofday() - starttime)))
     statusfile:write("</Status>")
     statusfile:close()
+    splib.teardown()
     if not graceful then
         os.exit()
     end
@@ -283,6 +273,12 @@ function quit()
 end
 
 local function setup()
+    splib.logmessages("debug","Setting","varname","SD_EXTRA_DIRS", "value", os.getenv("SD_EXTRA_DIRS") or "")
+    splib.logmessages("debug","Setting","varname","SD_EXTRA_XML", "value", os.getenv("SD_EXTRA_XML") or "")
+    splib.logmessages("debug","Setting","varname","SD_PREPEND_XML", "value", os.getenv("SD_PREPEND_XML") or "")
+    splib.logmessages("debug","Setting","varname","LUA_PATH", "value", os.getenv("LUA_PATH") or "")
+    splib.logmessages("debug","Setting","varname","SP_IGNORECASE", "value", os.getenv("SP_IGNORECASE") or "")
+
     tex.pdfhorigin = 0
     tex.pdfvorigin = 0
 
@@ -385,12 +381,6 @@ end
 prohibited_at_end = {zh = {["$"] = true,["("] = true,["£"] = true,["¥"] = true,["·"] = true,["'"] = true,["\""] = true,["〈"] = true,["《"] = true,["「"] = true,["『"] = true,["【"] = true,["〔"] = true,["〖"] = true,["〝"] = true,["﹙"] = true,["﹛"] = true,["＄"] = true,["（"] = true,["．"] = true,["［"] = true,["｛"] = true,["￡"] = true,["￥"] = true}}
 prohibited_at_beginning = {zh = {["!"] = true,["%"] = true,[")"] = true,[","] = true,["."] = true,[":"] = true,[";"] = true,["?"] = true,["]"] = true,["}"] = true,["¢"] = true,["°"] = true,["·"] = true,["'"] = true,['"'] = true,["†"] = true,["‡"] = true,["›"] = true,["℃"] = true,["∶"] = true,["、"] = true,["。"] = true,["〃"] = true,["〆"] = true,["〕"] = true,["〗"] = true,["〞"] = true,["﹚"] = true,["﹜"] = true,["！"] = true,["＂"] = true,["％"] = true,["＇"] = true,["）"] = true,["，"] = true,["．"] = true,["："] = true,["；"] = true,["？"] = true,["！"] = true,["］"] = true,["｝"] = true,["～"] = true}}
 
-errorlog = io.open(string.format("%s.protocol",tex.jobname),"ab")
-errorlog:write("---------------------------------------------\n")
-
-if running_in_testmode then
-    return
-end
 --- This is the entry point in the publishing run and called from the TeX file (`publisher.tex`).
 require("publisher")
 
@@ -406,5 +396,7 @@ end
 starttime = os.gettimeofday()
 
 font.cache = 'no'
+
+file_end("spinit.lua")
 
 main_loop()

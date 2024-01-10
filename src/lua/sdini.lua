@@ -26,10 +26,17 @@ if not ok then
    print(msg)
    os.exit(0)
 end
-
 local luaglue = require("luaglue")
 
-texio.write("Loading file sdini.lua ...")
+function file_start( filename )
+  luaglue.logmessages("debug","Start file","filename",filename)
+end
+function file_end( filename )
+luaglue.logmessages("debug","End file","filename",filename)
+end
+
+
+file_start("sdini.lua")
 callback.register('start_run',function() return true end)
 
 
@@ -42,16 +49,6 @@ luaglue.buildfilelist()
 kpse = {}
 
 
-function file_start( filename )
-  if log then
-    log("Load file: %q ...",filename)
-  end
-end
-function file_end( filename )
-  if log then
-    log("Load file: %q ... done",filename)
-  end
-end
 
 --- @param filename string The file name to look up
 --- @return string|nil The full path of the file name or nil if the file is not found.
@@ -74,4 +71,4 @@ end
 do_luafile("sd-debug.lua")
 do_luafile("sd-callbacks.lua")
 
-texio.write(" done\n")
+file_end("sdini.lua")

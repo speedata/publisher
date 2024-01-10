@@ -135,7 +135,7 @@ function make_font_instance( name,size )
         f = fonts.fontloader.preload_font(filename,size,parameter,parameter.mode or publisher.options.fontloader)
         f.reserved_num = num
         preloaded_fonts[num] = f
-        log("Preload font %q at %.2gpt (id: %d)",filename,size / publisher.factor,num)
+        splib.logmessages("debug","Preload font","name",filename,"size",tostring(math.round(size / publisher.factor,3)),"id",tostring(num))
         font_instances[k]=num
         return true, num
     end
@@ -146,7 +146,7 @@ end
 function define_font(instance)
     local mode = instance.requested_mode
     local num = instance.reserved_num
-    log("Create font metrics for %q at %.2gpt (id: %d) mode=%s",instance.requested_name,instance.requested_size / publisher.factor, tostring(num), tostring(mode))
+    splib.logmessages("info","Create font metrics","name",instance.requested_name,"size",math.round(instance.requested_size / publisher.factor,3),"id",num,"mode",mode)
     local f, ok
     if mode == "harfbuzz" then
         ok,f = fonts.fontloader.define_font_hb(instance.requested_name,instance.requested_size,instance.requested_extra_parameter)

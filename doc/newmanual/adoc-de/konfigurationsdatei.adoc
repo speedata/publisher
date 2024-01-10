@@ -80,6 +80,8 @@ erkannt. Folgende Optionen werden unterstützt:
   Name der Ausgabedatei ohne Dateiendung. Voreinstellung ist `publisher`.
 `layout`::
   Name des Layoutregelwerks. `layout.xml` ist der voreingestellte Name.
+`loglevel`::
+   Setze die Logausgabe auf ein level of `debug`, `info`, `warn` und `error`.
 `luatex`::
   Pfad zum LuaTeX-Programm. Für Entwicklungszwecke.
 `mode`::
@@ -104,6 +106,8 @@ erkannt. Folgende Optionen werden unterstützt:
   Maximale Dauer des Publishing-Laufs. Wenn dieser Wert überschritten wird, bricht der Lauf mit Fehler 1 ab. Angabe in Sekunden.
 `vars`::
   Kommaseparierte Liste der Form `var=wert` um Variablen in der Konfigurationsdatei festzulegen.
+`verbose`::
+   `true` gibt die Ausgaben der Protokolldatei auf Standardausgabe aus.
 `wd`::
   Setzt das Basis-Verzeichnis. Der speedata Publisher nimmt dies als Startverzeichnis.
 `xpath`::

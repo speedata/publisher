@@ -148,20 +148,21 @@ The following example defines two page types, a template “Standard”, which i
 </Layout>
 -------------------------------------------------------------------------------
 
-In the ((log file)) (`publisher.protocol`) you can see which page types are selected:
+In the ((log file)) (`publisher-protocol.xml`) you can see which page types are selected:
 
---------
-...
-Page of type "Standard" created (1)
-Number of rows: 3, number of columns = 19
-Create font metrics for "texgyreheros-regular.otf" at 10pt (id: 1) mode=harfbuzz
-PlaceObject: Textblock at (1,1) wd/ht: 19/1 in "_page" (p. 1)
-> Shipout page 1
-Page of type "Standard" created (2)
-Number of rows: 3, number of columns = 19
-> Shipout page 2
-Page of type "Special" created (3) - pagetype requested
-...
---------
+[source, xml]
+-------------------------------------------------------------------------------
+<entry level="INFO" msg="Create page" type="Standard" pagenumber="1"></entry>
+<entry level="INFO" msg="Number of rows: 3, number of columns = 19"></entry>
+<entry level="INFO" msg="Create font metrics" name="texgyreheros-regular.otf" size="10.0" id="1" mode="harfbuzz"></entry>
+<entry level="INFO" msg="Shipout page 1"></entry>
+<entry level="INFO" msg="Create page" type="Standard" pagenumber="2"></entry>
+<entry level="INFO" msg="Number of rows: 3, number of columns = 19"></entry>
+<entry level="INFO" msg="Shipout page 2"></entry>
+<entry level="INFO" msg="Create page" type="Special" pagenumber="3"></entry>
+<entry level="INFO" msg="Number of rows: 3, number of columns = 19"></entry>
+<entry level="INFO" msg="Shipout page 3"></entry>
+-------------------------------------------------------------------------------
+
 
 // EOF

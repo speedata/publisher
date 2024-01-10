@@ -72,6 +72,8 @@ The format of the file is important, otherwise it won’t be recognized. The fol
    Name of the output file. Default is `publisher`.
 `layout`::
    Name of the layout rule set (XML). The default name is `layout.xml`.
+`loglevel`::
+   Set the log level to one of `debug`, `info`, `warn` and `error`.
 `luatex`::
    Path to the Lua(jit)TeX binary. Experimental! This is provided for your experiments, not for production use.
 `mode`::
@@ -98,6 +100,8 @@ The format of the file is important, otherwise it won’t be recognized. The fol
    Maximum time of the publishing run. If time is exceeded, the publisher exits with status 1.
 `vars`::
    Comma separated list of variables and values in the form var=value to set additional variables.
+`verbose`::
+   Print the messages from the protocol file to the standard output.
 `wd`::
    Set the current directory.
 `xpath`::

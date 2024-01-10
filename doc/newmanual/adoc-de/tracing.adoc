@@ -61,12 +61,12 @@ Neben den Möglichkeiten, die der Befehl `<Trace>` liefert, gibt es noch die Mö
 <Message select="sd:current-page()"/>
 -------------------------------------------------------------------------------
 
-Die Ausgaben erscheinen in der Logdatei (`publisher.protocol`) (((Protokolldatei)))
+Die Ausgaben erscheinen in der Logdatei (`publisher-protocol.xml`) (((Protokolldatei)))
 
-
+[source, xml]
 -------------------------------------------------------------------------------
-Message: "Hello, world!"
-Message: "1"
+<entry level="INFO" msg="Message" line="5" message="Hello, world"></entry>
+<entry level="INFO" msg="Message" line="6" message="1"></entry>
 -------------------------------------------------------------------------------
 
 Den Befehl `<Message>` kann man mit `error="yes"` anweisen, eine Fehlermeldung auszugeben (anstelle einer Nachricht).
@@ -90,30 +90,45 @@ Das Beispiel oben mit den zwei Nachrichten ergibt die folgende Datei:
 </Status>
 -------------------------------------------------------------------------------
 
-Ebenso wird eine etwas ausführlichere Protokolldatei (`publisher.protocol`) geschrieben, die verschiedene Informationen enthält.
+Ebenso wird eine etwas ausführlichere Protokolldatei (`publisher-protocol.xml`) geschrieben, die verschiedene Informationen enthält. Möchte man möglichst viele Ausgaben erhalten, kann man den Log-Level hoch setzen: mit `sp --loglevel debug` bekommt man viele Informationen
 
 
+[source, xml]
 -------------------------------------------------------------------------------
-Protocol file for speedata Publisher (2.9.2)
-Time: Mon Feb 20 11:03:25 2017
----------------------------------------------
-Start processing
-Talking to server on port 56486
-LuaTeX version 79.1
-Loading hyphenation patterns "hyph-en-gb.pat.txt".
-Language id: 0
-Loading layout instructions "/tmp/layout.xml"
-DefineFontfamily, family=2, name="Überschrift"
-Loading aux file "/tmp/publisher-aux.xml"
-Loading data file "/tmp/data.xml"
-Page of type "Default Page" created (1)
-Number of rows: 28, number of columns = 19
-PlaceObject: Textblock in row 1 and column 1, width=19, height=1 (page 1)
-Message: "Hallo Welt!"
-Message: "1"
-Stop processing data
-0 errors occurred
-Duration: 0.223866 seconds
+<log loglevel="DEBUG" time="Jan 10 12:30:02" version="4.17.0" pro="yes">
+  <entry level="DEBUG" msg="Start file" filename="sdini.lua"></entry>
+  [...]
+  <entry level="INFO" msg="Start processing"></entry>
+  [...]
+  <entry level="INFO" msg="Running LuaTeX version 1.15.0 on macosx"></entry>
+  <entry level="DEBUG" msg="Loading hyphenation pattern" filename="hyph-en-gb.pat.txt"></entry>
+  <entry level="DEBUG" msg="File lookup" source="hyph-en-gb.pat.txt" found="/home/user/work/software/publisher/src/hyphenation/hyph-en-gb.pat.txt"></entry>
+  <entry level="DEBUG" msg="Language ID" id="0"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-regular.otf" size="10.0" id="1"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-regular.otf" size="8.0" id="2"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-bold.otf" size="10.0" id="3"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-bold.otf" size="8.0" id="4"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-italic.otf" size="10.0" id="5"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-italic.otf" size="8.0" id="6"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-bolditalic.otf" size="10.0" id="7"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-bolditalic.otf" size="8.0" id="8"></entry>
+  <entry level="INFO" msg="Define font family" name="text" size="10.0" leading="12.0" id="1"></entry>
+  <entry level="INFO" msg="speedata Publisher Pro"></entry>
+  <entry level="DEBUG" msg="Checksum" filename="layout.xml" md5="d5251dcca6e8bc94331d395f9ee4ea69"></entry>
+  <entry level="DEBUG" msg="File lookup" source="publisher-aux.xml" found="/home/user/work/software/publisher/spielwiese/publisher-aux.xml"></entry>
+  <entry level="DEBUG" msg="Checksum" filename="publisher-aux.xml" md5="81c05dd1e89a65fc2a8a31348f5ccb7c"></entry>
+  <entry level="DEBUG" msg="Using this file:" file="/home/user/work/software/publisher/spielwiese/data.xml"></entry>
+  <entry level="DEBUG" msg="Checksum" filename="data.xml" md5="cbe30e8afae15473d28be5d8272ddf95"></entry>
+  <entry level="INFO" msg="Create page" type="Default Page" pagenumber="1"></entry>
+  <entry level="INFO" msg="Number of rows: 28, number of columns = 19"></entry>
+  <entry level="INFO" msg="Create font metrics" name="texgyreheros-regular.otf" size="10.0" id="1" mode="harfbuzz"></entry>
+  <entry level="DEBUG" msg="File lookup" source="texgyreheros-regular.otf" found="/home/user/work/software/publisher/fonts/texgyreheros/texgyreheros-regular.otf"></entry>
+  <entry level="DEBUG" msg="PlaceObject" type="Textblock" col="1" row="1" wd="19" ht="1" page="1"></entry>
+  <entry level="INFO" msg="Shipout page 1"></entry>
+  <entry level="INFO" msg="Stop processing data"></entry>
+  <entry level="INFO" msg="0 errors occurred"></entry>
+  <entry level="INFO" msg="Duration: 0.014821 seconds"></entry>
+</log>
 -------------------------------------------------------------------------------
 
 [[ch-hilfeerhalten]]
@@ -121,7 +136,7 @@ Duration: 0.223866 seconds
 
 Wenn alle Fehlersuche fehlschlägt oder wenn Sie Fragen oder Kommentare haben, die Sie mit anderen teilen möchten, können Sie die folgenden Ressourcen nutzen:
 
-* Chat auf Gitter: https://gitter.im/speedata/publisher
+* Chat auf Gitter: https://matrix.to/#/#speedata_publisher:gitter.im
 * Diskussionen auf Github: https://github.com/speedata/publisher/discussions
 * Issues auf Github: https://github.com/speedata/publisher/issues
 * Stackoverflow mit dem Tag `speedatapublisher`: https://stackoverflow.com/questions/tagged/speedatapublisher

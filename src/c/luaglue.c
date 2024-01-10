@@ -1,3 +1,5 @@
+#include "luaglue.h"
+
 #include <lauxlib.h>
 #include <lua.h>
 #include <lualib.h>
@@ -5,30 +7,27 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "luaglue.h"
-
 static void stackDump(lua_State *L) {
   int i;
   int top = lua_gettop(L);
   for (i = 1; i <= top; i++) { /* repeat for each level */
     int t = lua_type(L, i);
     switch (t) {
+      case LUA_TSTRING: /* strings */
+        printf("`%s'", lua_tostring(L, i));
+        break;
 
-    case LUA_TSTRING: /* strings */
-      printf("`%s'", lua_tostring(L, i));
-      break;
+      case LUA_TBOOLEAN: /* booleans */
+        printf(lua_toboolean(L, i) ? "true" : "false");
+        break;
 
-    case LUA_TBOOLEAN: /* booleans */
-      printf(lua_toboolean(L, i) ? "true" : "false");
-      break;
+      case LUA_TNUMBER: /* numbers */
+        printf("%g", lua_tonumber(L, i));
+        break;
 
-    case LUA_TNUMBER: /* numbers */
-      printf("%g", lua_tonumber(L, i));
-      break;
-
-    default: /* other values */
-      printf("%s", lua_typename(L, t));
-      break;
+      default: /* other values */
+        printf("%s", lua_typename(L, t));
+        break;
     }
     printf("  "); /* put a separator */
   }
@@ -85,7 +84,7 @@ static int lua_matches(lua_State *L) {
   const char *text = luaL_checkstring(L, 1);
   const char *regexp = luaL_checkstring(L, 2);
   const int ret = sdMatches(text, regexp);
-  lua_pushboolean(L,ret);
+  lua_pushboolean(L, ret);
   return 1;
 }
 
@@ -266,6 +265,45 @@ static int lua_tokenize(lua_State *L) {
   return 1;
 }
 
+static int lua_teardown(lua_State *L) {
+  sdTeardown();
+  return 0;
+}
+
+static int lua_logmessage(lua_State *L) {
+  const char *loglevel = luaL_checkstring(L, 1);
+  const char *message = luaL_checkstring(L, 2);
+  sdLogMessage(loglevel, message);
+  return 0;
+}
+
+static int lua_logmessages(lua_State *L) {
+  const char *loglevel = luaL_checkstring(L, 1);
+  const char *message = luaL_checkstring(L, 2);
+  int a = lua_gettop(L);
+  char *arg;
+  char *arr[a - 3];
+  for (int i = 3; i <= a; i++) {
+    arg = luaL_checkstring(L, i);
+    arr[i - 3] = arg;
+  }
+  GoSlice gs = {arr, a - 2, a - 2};
+  sdLogMessages(loglevel, message, gs);
+  return 0;
+}
+
+static int lua_errcount(lua_State *L) {
+  int a = sdGetErrCount();
+  lua_pushinteger(L, a);
+  return 1;
+}
+
+static int lua_warncount(lua_State *L) {
+  int a = sdGetWarnCount();
+  lua_pushinteger(L, a);
+  return 1;
+}
+
 static const struct luaL_Reg myfuncs[] = {
     {"add_dir", lua_adddir},
     {"buildfilelist", lua_buildfilelist},
@@ -278,12 +316,17 @@ static const struct luaL_Reg myfuncs[] = {
     {"loadxmlfile", lua_loadxmlfile},
     {"loadxmlstring", lua_loadxmlstring},
     {"lookupfile", lua_lookupfile},
-    {"matches",lua_matches},
+    {"matches", lua_matches},
     {"parse_html_text", lua_parsehtmltext},
     {"parse_html", lua_parsehtml},
     {"replace", lua_sdreplace},
     {"segmentize", lua_segmentize},
     {"tokenize", lua_tokenize},
+    {"logmessage", lua_logmessage},
+    {"logmessages", lua_logmessages},
+    {"errcount", lua_errcount},
+    {"warncount", lua_warncount},
+    {"teardown", lua_teardown},
     {NULL, NULL},
 };
 

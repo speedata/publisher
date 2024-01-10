@@ -82,8 +82,7 @@ var (
 	cfg            *configurator.ConfigData
 	runningProcess []*os.Process
 	versionWithPro string
-
-	verbose bool
+	verbose        bool
 )
 
 // The LuaTeX process writes out a file called "publisher.status"
@@ -126,6 +125,7 @@ func init() {
 		"imagecache":        "",
 		"jobname":           "publisher",
 		"layout":            "layout.xml",
+		"loglevel":          "warn",
 		"port":              "5266",
 		"quiet":             stringFalse,
 		"runs":              "1",
@@ -304,7 +304,9 @@ func setVariable(str string) {
 
 // Prints the total run time in the log file.
 func showDuration() {
-	log.Printf("Total run time: %v\n", time.Now().Sub(starttime))
+	if getOption("quiet") != "true" {
+		log.Printf("Total run time: %v\n", time.Now().Sub(starttime))
+	}
 }
 
 // Kill all running child processes
@@ -474,9 +476,6 @@ func saveVariables() {
 // add the command line argument (extra-dir) into the slice
 func extradir(arg string) {
 	for _, p := range strings.Split(arg, string(filepath.ListSeparator)) {
-		if verbose {
-			fmt.Println("Add directory to search path", p)
-		}
 		extraDir = append(extraDir, p)
 	}
 }
@@ -562,7 +561,9 @@ func writeFinishedfile(path string) {
 }
 
 func runPublisher(cachemethod string, runmode string, filename string) (exitstatus int) {
-	log.Printf("Run speedata publisher %s", versionWithPro)
+	if getOption("quiet") != "true" {
+		log.Printf("Run speedata publisher %s", versionWithPro)
+	}
 	defer removeLogfile()
 
 	cmdline := []string{}
@@ -575,14 +576,6 @@ func runPublisher(cachemethod string, runmode string, filename string) (exitstat
 
 	exitstatus = 0
 	saveVariables()
-
-	f, err := os.Create(jobname + ".protocol")
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Fprintf(f, "Protocol file for speedata Publisher (%s)\n", versionWithPro)
-	fmt.Fprintln(f, "Time:", starttime.Format(time.ANSIC))
-	f.Close()
 
 	layoutoptions["grid"] = getOption("grid")
 	os.Setenv("SP_FONTLOADER", getOption("fontloader"))
@@ -638,12 +631,9 @@ func runPublisher(cachemethod string, runmode string, filename string) (exitstat
 	cmdline = append(cmdline, "--ini", fmt.Sprintf("--lua=%s", inifile), "publisher.tex")
 	cmdline = append(cmdline, layoutname, dataname)
 	cmdline = append(cmdline, layoutoptionsSlice...)
-	env := []string{"LC_ALL=C", "SP_JOBNAME=%s" + jobname}
+	env := []string{"LC_ALL=C", "SP_JOBNAME=" + jobname}
 	for i := 1; i <= runs; i++ {
 		ep := getExecutablePath()
-		if verbose {
-			fmt.Println("Executable path:", ep)
-		}
 		if runtime.GOOS == "windows" && !isASCII(ep) {
 			fmt.Println(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -820,6 +810,7 @@ func main() {
 	op.On("--no-local", "Add local directory to the search path. Default is true", &addLocalPath)
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)
 	op.On("--logfile NAME", "Logfile for server mode. Default 'publisher.protocol'. Use STDOUT for standard output and STDERR for standard error.", options)
+	op.On("--loglevel LVL", "Set the log level for the console to one of debug, info, warn, error", options)
 	op.On("--mainlanguage NAME", "The document's main language in locale format, for example 'en' or 'en_US'.", &mainlanguage)
 	op.On("--mode NAME", "Set mode. Multiple modes given in a comma separated list.", options)
 	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)
@@ -921,6 +912,8 @@ func main() {
 		fmt.Println("Config files read: ", strings.Join(cfg.Filenames, ", "))
 	}
 
+	os.Setenv("SD_LOGLEVEL", getOption("loglevel"))
+
 	if addLocalPath {
 		extradir(pwd)
 	}
@@ -1008,18 +1001,8 @@ func main() {
 	os.Setenv("SD_EXTRA_XML", strings.Join(extraxml, ","))
 	os.Setenv("SD_PREPEND_XML", strings.Join(prependxml, ","))
 
-	if verbose {
-		fmt.Println("SD_EXTRA_DIRS:", os.Getenv("SD_EXTRA_DIRS"))
-		fmt.Println("SD_EXTRA_XML:", os.Getenv("SD_EXTRA_XML"))
-		fmt.Println("SD_PREPEND_XML:", os.Getenv("SD_PREPEND_XML"))
-		fmt.Println("LUA_PATH", os.Getenv("LUA_PATH"))
-	}
-
 	if getOption("ignore-case") == stringTrue {
 		os.Setenv("SP_IGNORECASE", "1")
-		if verbose {
-			fmt.Println("Ignore case for file system access")
-		}
 	}
 
 	var exitstatus int
@@ -1039,6 +1022,7 @@ func main() {
 	case cmdHelp:
 		op.Help()
 	case cmdRun:
+		os.Setenv("SP_PRO", pro)
 		jobname := getOption("jobname")
 		finishedfilename := fmt.Sprintf("%s.finished", jobname)
 		os.Remove(finishedfilename)
@@ -1116,7 +1100,7 @@ func main() {
 					log.Println(err)
 				}
 			}
-			if v == jobname+"-aux.xml" {
+			if v == jobname+"-aux.xml" || v == jobname+"-protocol.xml" {
 				log.Printf("Removing %s", v)
 				err = os.Remove(v)
 				if err != nil {

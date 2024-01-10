@@ -74,7 +74,16 @@ end
 
 
 function print_page_number()
-  texio.write(string.format("> Shipout page %d\n",publisher.current_pagenumber))
+    splib.logmessage("info",string.format("Shipout page %d",publisher.current_pagenumber))
 end
+
+function stop_run_cb()
+    print(string.format("Finished with %d errors and %d warnings",errcount,warncount))
+    print(string.format("Output written on %s (%d pages, %d bytes)",status.output_file_name,status.total_pages,status.pdf_gone))
+    print(string.format("Transcript written to %s-protocol.xml",tex.jobname))
+end
+
 callback.register("start_page_number",print_page_number)
 callback.register("stop_page_number",false)
+callback.register("stop_run",stop_run_cb)
+

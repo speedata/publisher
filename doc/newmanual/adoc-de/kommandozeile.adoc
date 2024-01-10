@@ -101,6 +101,8 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
    Das aktuelle Verzeichnis wird (nicht) rekursiv dem Suchpfad hinzugefügt. Voreingestellt ist, dass das aktuelle Verzeichnis und seine Unterverzeichnisse beachtet werden.
 `--logfile=NAME`::
    Logdatei im Server-Modus. Voreinstellung ist 'publisher.protocol'. Benutze STDOUT für Standardausgabe und STDERR für Standardfehlerausgabe.
+`--loglevel=LVL`::
+   Setze den Log-Level, ab dem die Logmeldungen angezeigt werden. Erlaubt ist `debug`, `info`, `warn` und `error`. Die Ausgaben in dem Level und darüber werden in der Protokolldatei ausgegeben.
 `--jobname=NAME`::
    Bestimmt den Ausgabenamen. Voreinstellung ist `publisher`.
 `--mainlanguage=NAME`::
@@ -137,10 +139,10 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
    Gibt zusätzliche Ausgaben auf der Standardausgabe aus.
 `-v`, `--var=value`::
    Übergibt zusätzliche Variablen an den Publisher-Lauf. Diese können wie üblich mit `select="$variable"` benutzt werden. Beispiel: `sp --var myvar=hello` setzt `$myvar` auf `hello`.
-`--varsfile=NAME` ::
+`--varsfile=NAME`::
    Liest eine Datei ein, in der in jeder Zeile in der Form `variable=wert` Variablen definiert werden. Zeilen, die mit `#` anfangen, werden ignoriert.
 `--verbose`::
-   Gibt mehr Informationen aus, also notwendig.
+   Gibt die Informationen, die in der Protokolldatei erscheinen, zusätzlich auf der Standardausgabe aus.
 `--wd=DIR`::
    Wechselt in das angegebene Verzeichnis. Verhält sich genau so, als ob man vorher mit cd in dieses Verzeichnis gewechselt hat.
 `--xpath`::

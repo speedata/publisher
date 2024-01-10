@@ -5,6 +5,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"os"
@@ -93,9 +94,9 @@ func LookupFile(path string) string {
 	if ret, ok := files[path]; ok {
 		if dupes, ok := duplicates[path]; ok {
 			for _, dupe := range dupes {
-				fmt.Println("Found duplicate entry in file lookup: ", dupe)
+				slog.Warn("Found duplicate entry in file lookup", "file", dupe)
 			}
-			fmt.Println("Using this file:", ret)
+			slog.Debug("Using this file:", "file", ret)
 		}
 		return ret
 	}

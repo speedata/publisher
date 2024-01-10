@@ -8,5 +8,6 @@ publisher.pdf
 publisher.status
 publisher.finished
 publisher-aux.xml
+publisher-protocol.xml
 publisher-*.dataxml
 .vscode

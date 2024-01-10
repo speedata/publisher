@@ -17,9 +17,11 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 	"unsafe"
 
@@ -29,8 +31,20 @@ import (
 )
 
 var (
-	errorpattern = `**err`
+	errorpattern     = `**err`
+	protocolFilename string
+	verbosity        = 0
 )
+
+func init() {
+	protocolFilename = os.Getenv("SP_JOBNAME") + "-protocol.xml"
+	verbosity, _ = strconv.Atoi(os.Getenv("SP_VERBOSITY"))
+	loglevel.Set(slog.LevelInfo)
+	err := setupLog(protocolFilename)
+	if err != nil {
+		panic(err)
+	}
+}
 
 func s2c(input string) *C.char {
 	return C.CString(input)
@@ -281,6 +295,7 @@ func sdSegmentize(originalC *C.char) *C.struct_splitvalues {
 func sdReadXMLFile(filenameC *C.char) *C.char {
 	filename := C.GoString(filenameC)
 	str, err := splibaux.ReadXMLFile(filename)
+	slog.Debug("Checksum", "filename", filename, "md5", md5calc(filename))
 	if err != nil {
 		return s2c(errorpattern + err.Error())
 	}
@@ -295,6 +310,68 @@ func sdReadXMLString(xmlstring *C.char) *C.char {
 		return s2c(errorpattern + err.Error())
 	}
 	return s2c(str)
+}
+
+//export sdTeardown
+func sdTeardown() {
+	err := teardownLog()
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+//export sdLogMessage
+func sdLogMessage(level *C.char, message *C.char) {
+	goLevel := C.GoString(level)
+	goMessage := C.GoString(message)
+	switch goLevel {
+	case "notice":
+		slog.Log(nil, LevelNotice, goMessage)
+	case "info":
+		slog.Log(nil, slog.LevelInfo, goMessage)
+	case "debug":
+		slog.Log(nil, slog.LevelDebug, goMessage)
+	case "warning", "warn":
+		slog.Log(nil, slog.LevelWarn, goMessage)
+	case "error":
+		slog.Log(nil, slog.LevelError, goMessage)
+	default:
+		fmt.Println("~~> unknown log level", goLevel)
+	}
+}
+
+//export sdLogMessages
+func sdLogMessages(level *C.char, message *C.char, arguments []*C.char) {
+	goLevel := C.GoString(level)
+	goMessage := C.GoString(message)
+	var argsAny []any
+	for _, arg := range arguments {
+		argsAny = append(argsAny, C.GoString(arg))
+	}
+	switch goLevel {
+	case "notice":
+		slog.Log(nil, LevelNotice, goMessage, argsAny...)
+	case "info":
+		slog.Info(goMessage, argsAny...)
+	case "debug":
+		slog.Debug(goMessage, argsAny...)
+	case "warning", "warn":
+		slog.Warn(goMessage, argsAny...)
+	case "error":
+		slog.Error(goMessage, argsAny...)
+	default:
+		fmt.Println("~~> unknown log level", goLevel)
+	}
+}
+
+//export sdGetErrCount
+func sdGetErrCount() int {
+	return errCount
+}
+
+//export sdGetWarnCount
+func sdGetWarnCount() int {
+	return warnCount
 }
 
 func main() {}

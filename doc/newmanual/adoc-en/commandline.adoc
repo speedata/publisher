@@ -108,6 +108,8 @@ you can display a list of the allowed commands and parameters.
    Name of the layout file. Defaults to `layout.xml`
 `--logfile=NAME`::
    Logfile for server mode. Default `publisher.protocol`. Use STDOUT for standard output and STDERR for standard error.
+`--loglevel=LVL`::
+   Set the log level to one of `debug`, `info`, `warn` and `error`. Messages from this level and above are written to the protocol file.
 `--mainlanguage=NAME`::
    The document's main language in locale format, for example `en` or `en_US`.
 `--mode=NAME`::
@@ -145,7 +147,7 @@ you can display a list of the allowed commands and parameters.
 `--varsfile=NAME`::
    Set variables for the publishing run from a file with each line containing `key=value` pairs. Lines starting with a `#` are ignored.
 `--verbose`::
-   Print a bit of debugging output
+   Print the messages from the log file to standard out.
 `--version`::
    Show version information
 `--wd=DIR`::
