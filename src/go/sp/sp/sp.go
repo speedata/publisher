@@ -135,7 +135,7 @@ func init() {
 		"inkscape-command":  "--export-pdf",
 		"fontloader":        "harfbuzz",
 		"referencefilename": "reference",
-		"xpath":             "luxor",
+		"xpath":             "lxpath",
 	}
 
 	switch runtime.GOOS {
@@ -832,7 +832,7 @@ func main() {
 	op.On("--verbose", "Print a bit of debugging output", options)
 	op.On("--version", "Show version information", versioninfo)
 	op.On("--wd DIR", "Change working directory", options)
-	op.On("--xpath MODE", "Set the xpath mode (old: 'luxor', new: 'lxpath'). Default is luxor", options)
+	op.On("--xpath MODE", "Set the xpath mode (old: 'luxor', new: 'lxpath'). Default is lxpath", options)
 	op.On("--xml", "Output as (pseudo-)XML (for list-fonts)", options)
 
 	op.Command(cmdHelp, "Show usage help")

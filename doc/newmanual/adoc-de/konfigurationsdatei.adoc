@@ -85,7 +85,7 @@ erkannt. Folgende Optionen werden unterstützt:
 `luatex`::
   Pfad zum LuaTeX-Programm. Für Entwicklungszwecke.
 `mode`::
-  Setzt einen Modus für die Verabeitung. Kann im Layout mit <<ch-xpathfunktionen,`sd:mode()`>> abgefragt werden. Mehrere Modi werden durch Komma getrennt angegeben. Siehe <<ch-fortgeschrittenethemen-steuerunglayout>>.
+  Setzt einen Modus für die Verabeitung. Kann im Layout mit <<ch-lxpath,`sd:mode()`>> abgefragt werden. Mehrere Modi werden durch Komma getrennt angegeben. Siehe <<ch-fortgeschrittenethemen-steuerunglayout>>.
 `opencommand`::
   Kommando für das automatische Öffnen der Dokumentation bzw. PDF-Datei. Für MacOS X sollte das `open` sein, für Linux `xdg-open` oder `exo-open` (xfce).
 `pathrewrite`::
@@ -111,7 +111,7 @@ erkannt. Folgende Optionen werden unterstützt:
 `wd`::
   Setzt das Basis-Verzeichnis. Der speedata Publisher nimmt dies als Startverzeichnis.
 `xpath`::
-  Setzt das XML Modul. Die Voreinstellung ist der <<ch-xpathfunktionen,bisherige XML/XPath Parser>> `luxor`, mit `lxpath` wird der neue, experimentelle XML/XPath Parser eingeschaltet.
+  Setzt das XML Modul. Die Voreinstellung ist der <<ch-lxpath,neue XML/XPath Parser>> `lxpath`, mit `luxor` wird der alte XML/XPath Parser eingeschaltet.
 
 === Abschnitt Server (`server`)
 

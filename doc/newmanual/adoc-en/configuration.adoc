@@ -75,7 +75,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `loglevel`::
    Set the log level to one of `debug`, `info`, `warn` and `error`.
 `luatex`::
-   Path to the Lua(jit)TeX binary. Experimental! This is provided for your experiments, not for production use.
+   Path to the LuaTeX binary. Experimental! This is provided for your experiments, not for production use.
 `mode`::
    Set the layout mode. See <<ch-advanced-cotrollayout>>.
 `opencommand`::
@@ -105,7 +105,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `wd`::
    Set the current directory.
 `xpath`::
-   Set the XML module. The current default is `luxor`, and the new, experimental is called `lxpath`.
+   <<ch-lxpath,Set the XML module>>. The current default is `lxpath`, and the old is called `luxor`.
 
 
 

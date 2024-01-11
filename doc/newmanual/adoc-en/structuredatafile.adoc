@@ -57,7 +57,7 @@ To summarize it: If you have the possibility to influence the structure of the d
 
 == How do you access the data from the layout?
 
-Since the data file can be structured as you like, special commands are needed to access the data. These are described below and in the appendix under <<ch-xpathfunctions>>. In the following we will start from this simple data file:
+Since the data file can be structured as you like, special commands are needed to access the data. These are described below and in the appendix under <<ch-lxpath>>. In the following we will start from this simple data file:
 
 [source, xml]
 -------------------------------------------------------------------------------

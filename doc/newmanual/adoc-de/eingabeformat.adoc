@@ -80,7 +80,7 @@ Experimentieren Sie mit der Reihenfolge der Daten, manchmal erleichtert einem di
 == Wie greift man vom Layout auf die Daten zu?
 
 
-Da die Datendatei beliebig strukturiert sein kann, bedarf es spezieller Befehle, um auf die Daten zugreifen zu können. Diese werden weiter unten und im Anhang bei den <<ch-xpathfunktionen,XPath-Funktionen>> beschrieben.
+Da die Datendatei beliebig strukturiert sein kann, bedarf es spezieller Befehle, um auf die Daten zugreifen zu können. Diese werden weiter unten und im Anhang bei den <<ch-lxpath,XPath-Funktionen>> beschrieben.
 Im Folgenden wird von dieser einfachen Datendatei ausgegangen:
 
 
@@ -173,7 +173,7 @@ Beispiele:
 * `description` ergibt eine Sequenz mit einem Element, dem Inhalt `Text` (erster Artikel).
 * `image/@mainimage` ist im ersten Fall die Zeichenkette `"ja"` (der Inhalt des Attributs `mainimage`), im zweiten Fall die leere Zeichenkette `""`, weil das Attribut dort nicht vorhanden ist.
 
-Die Details hierzu finden sich im Abschnitt über die <<ch-xpathfunktionen,XPath-Funktionen>>.
+Die Details hierzu finden sich im Abschnitt über die <<ch-lxpath,XPath-Funktionen>>.
 
 Alternativ zur Vorgehensweise mit `<ProcessNode>` und dem Gegenstück `<Record>` kann auch mit ((`<ForAll>`)) auf Kindelemente zugegriffen werden.
 Das nachfolgende Beispiel erzeugt für jedes Kindelement mit dem Namen `article` eine Tabellenzeile:

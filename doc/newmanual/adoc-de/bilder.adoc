@@ -141,7 +141,7 @@ endif::[]
 .Das zweite Bild wird um 90° gedreht, weil es im Hochformat ist.
 image::drehungaspectratio.png[width=50%,scaledwidth=100%]
 
-TIP: Die geschweiften Klammern bei `file` und `rotate` bedeuten, dass in den XPath-Modus gesprungen wird, um die XPath-Ausdrücke (Zugriff auf das Attribut `file` und die Wenn-Dann-Abfrage) auszuwerten. Mehr dazu im Abschnitt <<ch-xpathfunktionen,XPath- und Layoutfunktionen>>.
+TIP: Die geschweiften Klammern bei `file` und `rotate` bedeuten, dass in den XPath-Modus gesprungen wird, um die XPath-Ausdrücke (Zugriff auf das Attribut `file` und die Wenn-Dann-Abfrage) auszuwerten. Mehr dazu im Abschnitt <<ch-lxpath,XPath- und Layoutfunktionen>>.
 
 _Achtung: ist das Bild im Argument von `sd:aspectratio()` nicht im Dateisystem vorhanden, wird der Wert von dem Platzhalterbild (Kapitel <<ch-filenotfound>>) genommen. Um zu überprüfen, ob ein Bild überhaupt vorhanden ist, kann man den Befehl `sd:file-exists(<Dateiname>)` benutzen._
 

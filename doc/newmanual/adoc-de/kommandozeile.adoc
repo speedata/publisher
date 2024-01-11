@@ -108,7 +108,7 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 `--mainlanguage=NAME`::
    Bestimmt die Hauptsprache des Dokuments für die Silbentrennung. Mögliche Werte sind: `af`, `as`, `bg`, `ca`, `cs`, `cy`, `da`, `de`, `el`, `en`, `en_GB`, `en_US`, `eo`, `es`, `et`, `eu`, `fi`, `fr`,`ga`, `gl`, `gu`, `hi`, `hr`, `hu`, `hy`, `ia`, `id`, `is`, `it`,`ku`, `kn`, `la`, `lo`, `lt`, `ml`, `lv`, `ml`, `mn`, `mr`, `nb`, `nl`, `nn`, `or`, `pa`, `pl`, `pt`, `ro`, `ru`, `sa`, `sk`, `sl`,`sr`, `sv`, `ta`, `te`, `tk`, `tr`, `uk` und `zh`. Siehe http://www.loc.gov/standards/iso639-2/php/code_list.php[Codeliste der Sprachen].
 `--mode=NAME[,NAME...]`::
-   Setzt einen Modus für die Verabeitung. Kann im Layout mit <<ch-xpathfunktionen,`sd:mode()`>> abgefragt werden. Mehrere Modi werden durch Komma getrennt angegeben. Siehe <<ch-fortgeschrittenethemen-steuerunglayout>>.
+   Setzt einen Modus für die Verabeitung. Kann im Layout mit <<ch-lxpath,`sd:mode()`>> abgefragt werden. Mehrere Modi werden durch Komma getrennt angegeben. Siehe <<ch-fortgeschrittenethemen-steuerunglayout>>.
 `--option=OPTION`::
    Setze Optionen, die keine eigenen Kommandozeilenparameter haben.
 `--outputdir=VERZEICHNIS`::
@@ -146,7 +146,7 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 `--wd=DIR`::
    Wechselt in das angegebene Verzeichnis. Verhält sich genau so, als ob man vorher mit cd in dieses Verzeichnis gewechselt hat.
 `--xpath`::
-   Setze den XML und XPath Parser auf eine Option aus `luxor` und `lxpath`. Die Voreinstellung ist der ältere 'luxor'. Die neue Variante `lxpath` robuster und hat erweiterte Fähigkeiten, ist aber noch experimentell.
+   Setze den XML und XPath Parser auf eine Option aus `luxor` und `lxpath`. Die Voreinstellung ist der neue 'lxpath'. Diese Variante ist robuster und hat erweiterte Fähigkeiten.
 `--xml`::
    Die Ausgabe des Befehls `list-fonts` werden als (Pseudo-)XML dargestellt, um sie in das Layoutregelwerk zu übernehmen.
 

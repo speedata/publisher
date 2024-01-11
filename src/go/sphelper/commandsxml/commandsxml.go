@@ -946,7 +946,7 @@ func init() {
 			"Cutmarks and bleed", "Schnittmarken und Beschnittzugabe", "cutmarks.html", "",
 		},
 		"xpath": {
-			"XPath expressions", "XPath-Ausdrücke", "xpath.html", "ch-xpathfunktionen",
+			"XPath expressions", "XPath-Ausdrücke", "xpath.html", "ch-ch-xpath",
 		},
 		"css": {
 			"Using CSS with the speedata Publisher", "CSS im speedata Publisher", "css.html", "",

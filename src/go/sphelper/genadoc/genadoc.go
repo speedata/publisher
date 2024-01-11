@@ -115,7 +115,7 @@ func childelements(lang string, children []*commandsxml.Command) string {
 func atttypeinfo(att *commandsxml.Attribute, lang string) string {
 	atttypesDe := map[string]string{
 		"boolean":                "yes oder no",
-		"xpath":                  `<<ch-xpathfunktionen,XPath-Ausdruck>>`,
+		"xpath":                  `<<ch-lxpath,XPath-Ausdruck>>`,
 		"text":                   "Text",
 		"number":                 "Zahl",
 		"length":                 "Längenangabe",
@@ -128,7 +128,7 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) string {
 	}
 	atttypesEn := map[string]string{
 		"boolean":                "yes or no",
-		"xpath":                  `<<ch-xpathfunctions,XPath expression>>`,
+		"xpath":                  `<<ch-lxpath,XPath expression>>`,
 		"numberorlength":         "number or length",
 		"numberlengthorstar":     "Number, length or *-numbers",
 		"yesnolength":            "yes, no or length",

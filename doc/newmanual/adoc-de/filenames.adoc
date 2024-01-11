@@ -13,7 +13,7 @@ Diese können folgende Formate haben:
 * file-Schema: `file://c/Users/Joe%20User/datei.png` oder `file:///home/user/datei.png`.
 * http-Schema: `http://placekitten.com/g/400/300` oder https: `https://placekitten.com/g/400/300` (<<ch-speedatapro,Pro Feature>>)
 
-Diese Dateinamen können bei <<cmd-image,Bildern>>, bei <<ch-xpathfunktionen,XPath- und Layoutfunktionen>> sowie auf der Kommandozeile benutzt werden.
+Diese Dateinamen können bei <<cmd-image,Bildern>>, bei <<ch-lxpath,XPath- und Layoutfunktionen>> sowie auf der Kommandozeile benutzt werden.
 So ist es möglich, den Publisher mit
 
 

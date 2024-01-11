@@ -13,7 +13,7 @@ These can have the following formats:
 * file scheme: `file://c/Users/Joe%20User/file.png` or `file:///home/user/file.png`.
 * http-scheme: `http://placekitten.com/g/400/300` or https: `https://placekitten.com/g/400/300` (<<ch-speedatapro,Pro feature>>).
 
-These file names can be used for <<cmd-image,Images>>, for <<ch-xpathfunctions,XPath- and layoutfunctions>> as well as on the command line.
+These file names can be used for <<cmd-image,Images>>, for <<ch-lxpath,XPath- and layoutfunctions>> as well as on the command line.
 So it is possible to start the Publisher with
 
 

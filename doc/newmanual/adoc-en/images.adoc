@@ -110,7 +110,7 @@ With the rotate attribute you can rotate images in 90 degree steps (positive val
 image::drehungaspectratio.png[width=50%,scaledwidth=100%]
 
 
-TIP: The curly brackets at file and rotate mean that the system jumps to XPath mode to evaluate the XPath expressions (access to the file attribute and the if-then query). See the <<ch-xpathfunctions>> for more information.
+TIP: The curly brackets at file and rotate mean that the system jumps to XPath mode to evaluate the XPath expressions (access to the file attribute and the if-then query). See the <<ch-lxpath>> for more information.
 
 _Note: if the image in the argument of `sd:aspectratio()` is not available in the filesystem, the value is taken from the placeholder image (chapter <<ch-imagenotfound>>). To check if an image is available at all, you can use the command `sd:file-exists(<filename>)`._
 
