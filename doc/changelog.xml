@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.4" date="2024-01-11">
+        <en>Few bugfixes related to harfbuzz/lxpath (#556).</en>
+        <de>Fehlerkorrekturen im Zusammenhang mit harfbuzz/lxpath (#556).</de>
+    </entry>
     <entry version="4.17.3" date="2024-01-11">
         <en>lxpath is the new default XPath parser..</en>
         <de>lxpath ist nun der voreingestellte XPath Parser.</de>
