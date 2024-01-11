@@ -47,7 +47,7 @@ do
   function printtable (ind,tbl_to_print,level,depth)
     if depth and depth <= level then return end
     if type(tbl_to_print) ~= "table" then
-      log("printtable: %q is not a table, it is a %s (%q)",tostring(ind),type(tbl_to_print),tostring(tbl_to_print))
+      print(string.format("printtable: %q is not a table, it is a %s (%q)",tostring(ind),type(tbl_to_print),tostring(tbl_to_print)))
       return
     end
     level = level or 0
@@ -62,7 +62,7 @@ do
     else
       key = ind
     end
-    log(indent(level) .. tostring(key) .. " = {")
+    print(indent(level) .. tostring(key) .. " = {")
     level=level+1
     local keys = {}
     for k,_ in pairs(tbl_to_print) do
@@ -80,7 +80,7 @@ do
           printtable(k,l,level,depth)
         else
           if k == ".__parent" then
-            log("%s[\".__parent\"] = <%s>", indent(level),l[".__local_name"])
+            print(string.format("%s[\".__parent\"] = <%s>", indent(level),l[".__local_name"]))
           end
         end
       else
@@ -89,10 +89,10 @@ do
         else
           key = string.format("[%q]",tostring(k))
         end
-        log("%s%s = %q", indent(level), key,tostring(l))
+        print(string.format("%s%s = %q", indent(level), key,tostring(l)))
       end
     end
-    log(indent(level-1) .. "},")
+    print(indent(level-1) .. "},")
   end
 end
 
