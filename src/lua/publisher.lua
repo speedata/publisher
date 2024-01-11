@@ -4665,6 +4665,10 @@ function hbglyphlist(arguments)
         local thisglyph = glyphs[i]
         local cp = thisglyph.codepoint
         local uc = tbl.backmap[cp] or cp
+        -- skip double space
+        if i > 1 and uc == 32 and cp == glyphs[i-1].codepoint then
+            goto continue
+        end
         if false then
             -- just for simple adding at the beginning
         elseif uc == 160 and #glyphs == 1 then
@@ -4883,6 +4887,7 @@ function hbglyphlist(arguments)
                 list,cur = node.insert_after(list,cur,pen)
             end
         end
+        ::continue::
     end
 
     if not list then
