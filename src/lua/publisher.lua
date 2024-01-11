@@ -4537,6 +4537,10 @@ end
 
 -- Remove the first \n in a paragraph value table. See #132
 function remove_first_whitespace ( tbl )
+    if newxpath and xpath.is_attribute(tbl) then
+        tbl.value = string.gsub(tbl.value,"^[\n\t]*(.-)$","%1")
+        return true
+    end
     for i=1,#tbl do
         if type(tbl[i]) == "string" then
             tbl[i] = string.gsub(tbl[i],"^[\n\t]*(.-)$","%1")

@@ -372,11 +372,12 @@ local function is_document(itm)
     return type(itm) == "table" and itm[".__type"] == "document"
 end
 
-M.is_element = is_element
-
 local function is_attribute(itm)
     return type(itm) == "table" and itm[".__type"] == "attribute"
 end
+
+M.is_element = is_element
+M.is_attribute = is_attribute
 
 local function number_value(sequence)
     if type(sequence) == "string" then return tonumber(sequence) end
