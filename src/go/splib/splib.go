@@ -83,6 +83,23 @@ func sdParseHTML(filenameC *C.char) *C.char {
 	return C.CString(str)
 }
 
+//export sdCreateXMLFile
+func sdCreateXMLFile(filenameC *C.char) *C.char {
+	filename := C.GoString(filenameC)
+	f, err := os.CreateTemp("", "spxmlfile")
+	_ = f
+	if err != nil {
+		slog.Error("internal error", "where", "sdCreateXMLFile", "message", err.Error())
+		return nil
+	}
+	if err = splibaux.WriteXMLToLuaFile(filename, f); err != nil {
+		slog.Error("internal error", "where", "sdCreateXMLFile (2)", "message", err.Error())
+		return nil
+	}
+	f.Close()
+	return C.CString(f.Name())
+}
+
 //export sdContains
 func sdContains(haystackC *C.char, needleC *C.char) *C.char {
 	haystack := C.GoString(haystackC)
@@ -216,7 +233,7 @@ func sdLookupFile(cpath *C.char) *C.char {
 	path := C.GoString(cpath)
 	ret, err := splibaux.GetFullPath(path)
 	if err != nil {
-		slog.Error("internal error", "where", "splibaux.GetFullPath", "argument", path, "errormessage", err.Error())
+		slog.Error("internal error", "where", "splibaux.GetFullPath", "argument", path, "message", err.Error())
 		return s2c(errorpattern + err.Error())
 	}
 	slog.Debug("File lookup", "request", path, "found", ret)

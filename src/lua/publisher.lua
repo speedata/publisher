@@ -1142,6 +1142,7 @@ function initialize_luatex_and_generate_pdf()
 
     for i=4,#arg do
         local k,v = arg[i]:match("^(.+)=(.+)$")
+        if k == "xmlfile" and v == "true" then options.xmlfile = "true" end
         if k == "mode" then -- everything else handled after loading layout
             v = v:gsub("^\"(.*)\"$","%1")
             local _modes = string.explode(v,",")
@@ -1934,21 +1935,31 @@ end
 function load_xml(filename,filetype,parameter)
     parameter = parameter or {}
     if newxpath then
-        local str = splib.loadxmlfile(filename)
-        if not str then return {} end
-        splib.logmessages("info","Load XML","type",filetype or "file","filename",filename)
-        -- if options.verbosity > 0 and filetype == "layout instructions" then
-            -- local f = io.open(filename .. ".lua","w")
-            -- f:write(str)
-            -- f:close()
-        -- end
-        local ok,msg = load(str)
-        if ok then
-            ok()
+        w([[options.xmlfile %s]],tostring(options.xmlfile))
+        if options.xmlfile == "true" then
+            filename = splib.createxmlfile(filename)
+            ok, msg = loadfile(filename)
+            if ok then
+                ok()
+            else
+                err("%s", msg)
+                return {}
+            end
+            splib.logmessages("info", "Load XML", "type", filetype or "file", "filename", filename)
+            os.remove(filename)
         else
-            log("%s",str)
-            err("%s",msg)
-            return {}
+            local str
+            str = splib.loadxmlfile(filename)
+            if not str then return {} end
+            splib.logmessages("info", "Load XML", "type", filetype or "file", "filename", filename)
+            local ok, msg = load(str)
+            if ok then
+                ok()
+            else
+                log("%s", str)
+                err("%s", msg)
+                return {}
+            end
         end
         ---@diagnostic disable-next-line
         local xmltable = tbl

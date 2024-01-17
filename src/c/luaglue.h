@@ -98,6 +98,7 @@ extern char* sdLookupFile(const char* cpath);
 extern char** sdListFonts();
 extern char* sdConvertContents(const char* contents, const char* handler);
 extern char* sdConvertImage(const char* filename, const char* handler);
+extern char* sdCreateXMLFile(const char* path);
 extern char* sdConvertSVGImage(const char* path);
 extern struct splitvalues* sdSegmentize(const char* original);
 extern char* sdReadXMLFile(const char* filename);

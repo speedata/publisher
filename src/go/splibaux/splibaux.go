@@ -286,13 +286,29 @@ func ConvertSVGImage(filename string) (string, error) {
 	return pdffile, nil
 }
 
-func handleXInclude(href string, startindex, indent int) (string, error) {
+func handleXInclude(href string, startindex, indent int, out io.Writer) error {
 	fullpath := LookupFile(href)
 	f, err := os.Open(fullpath)
 	if err != nil {
-		return "", err
+		return err
 	}
-	return readXMLFile(f, startindex, indent)
+	return readXMLFile(f, startindex, indent, out)
+}
+
+// WriteXMLToLuaFile loads an XML file writes the contents (a Lua string that
+// contains the document) to a temporary file. It returns the file name of the
+// temp file.
+func WriteXMLToLuaFile(filename string, out io.Writer) error {
+	fullpath := LookupFile(filename)
+	f, err := os.Open(fullpath)
+	if err != nil {
+		return err
+	}
+	fmt.Fprint(out, `tbl = { [".__type"] = "document", `)
+	err = readXMLFile(f, 1, 0, out)
+	f.Close()
+	fmt.Fprintln(out, "}")
+	return err
 }
 
 // ReadXMLFile loads an XML file and returns a Lua string that contains the
@@ -303,14 +319,16 @@ func ReadXMLFile(filename string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	str, err := readXMLFile(f, 1, 0)
+	var out strings.Builder
+	err = readXMLFile(f, 1, 0, &out)
 	f.Close()
-	return `tbl = { [".__type"] = "document", ` + str + "}", err
+	return `tbl = { [".__type"] = "document", ` + out.String() + "}", err
 }
 
 // ReadXMLString parses the XML string and return a Lua table as a string.
 func ReadXMLString(xmlstring string) (string, error) {
 	sr := strings.NewReader(xmlstring)
-	str, err := readXMLFile(sr, 1, 0)
-	return `tbl = { [".__type"] = "document", ` + str + "}", err
+	var out strings.Builder
+	err := readXMLFile(sr, 1, 0, &out)
+	return `tbl = { [".__type"] = "document", ` + out.String() + "}", err
 }
