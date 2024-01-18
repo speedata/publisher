@@ -1935,7 +1935,6 @@ end
 function load_xml(filename,filetype,parameter)
     parameter = parameter or {}
     if newxpath then
-        w([[options.xmlfile %s]],tostring(options.xmlfile))
         if options.xmlfile == "true" then
             filename = splib.createxmlfile(filename)
             ok, msg = loadfile(filename)
