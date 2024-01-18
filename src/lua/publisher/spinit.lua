@@ -260,6 +260,7 @@ function exit(graceful)
     statusfile:close()
     splib.teardown()
     if not graceful then
+        stop_run_cb()
         os.exit()
     end
 end

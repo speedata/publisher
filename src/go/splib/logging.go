@@ -28,6 +28,7 @@ var (
 	warnCount    = 0
 	loglevel     slog.LevelVar
 	repl         = strings.NewReplacer(" ", "-") // for XML attribute names
+	startElement xml.StartElement
 )
 
 type logHandler struct {
@@ -120,7 +121,7 @@ func setupLog(protocol string) error {
 	slog.SetDefault(sl)
 
 	enc = xml.NewEncoder(protocolFile)
-	if err = enc.EncodeToken(xml.StartElement{
+	startElement = xml.StartElement{
 		Name: xml.Name{Local: "log"},
 		Attr: []xml.Attr{
 			{Name: xml.Name{Local: "loglevel"}, Value: loglevel.Level().String()},
@@ -128,7 +129,8 @@ func setupLog(protocol string) error {
 			{Name: xml.Name{Local: "version"}, Value: os.Getenv("PUBLISHERVERSION")},
 			{Name: xml.Name{Local: "pro"}, Value: os.Getenv("SP_PRO")},
 		},
-	}); err != nil {
+	}
+	if err = enc.EncodeToken(startElement); err != nil {
 		return err
 	}
 	enc.EncodeToken(xml.CharData([]byte("\n")))
@@ -137,9 +139,7 @@ func setupLog(protocol string) error {
 }
 
 func teardownLog() error {
-	if err := enc.EncodeToken(xml.EndElement{
-		Name: xml.Name{Local: "log"},
-	}); err != nil {
+	if err := enc.EncodeToken(startElement.End()); err != nil {
 		return err
 	}
 	if err := enc.Flush(); err != nil {

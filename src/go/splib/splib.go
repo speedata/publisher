@@ -335,7 +335,7 @@ func sdReadXMLString(xmlstring *C.char) *C.char {
 func sdTeardown() {
 	err := teardownLog()
 	if err != nil {
-		fmt.Println(err)
+		slog.Error("internal error", "where", "sdTeardown", "message", err.Error())
 	}
 }
 

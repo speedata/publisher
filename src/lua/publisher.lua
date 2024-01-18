@@ -1220,22 +1220,22 @@ function initialize_luatex_and_generate_pdf()
         for _, req in ipairs(r) do
             if req == "lxpath" then
                 if not newxpath then
-                    err("This layout requires the lxpath XML / XPath parser\nPlease see https://doc.speedata.de/publisher/en/lxpath/ how to activate.")
+                    splib.logmessages("error","failed to meet requirement", "requirement","lxpath","message","This layout requires the lxpath XML / XPath parser","help","see https://doc.speedata.de/publisher/en/lxpath/ how to activate")
                     exit(false)
                 end
             elseif req == "luxor" then
                     if newxpath then
-                        err("This layout requires the luxor XML / XPath parser\nPlease see https://doc.speedata.de/publisher/en/xpathfunctions/ how to activate.")
+                        splib.logmessages("error","failed to meet requirement", "requirement","luxor","message","This layout requires the luxor XML / XPath parser","help","see https://doc.speedata.de/publisher/en/xpathfunctions/ how to activate")
                         exit(false)
                     end
             elseif req == "harfbuzz" then
                 if options.fontloader ~= "harfbuzz" then
-                    err("This layout requires the harfbuzz font loader\nPlease see https://doc.speedata.de/publisher/en/configuration/ how to activate.")
+                    splib.logmessages("error","failed to meet requirement", "requirement","harfbuzz","message","This layout requires the harfbuzz font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
                     exit(false)
                 end
             elseif req == "fontforge" then
                 if options.fontloader ~= "fontforge" then
-                    err("This layout requires the fontforge font loader\nPlease see https://doc.speedata.de/publisher/en/configuration/ how to activate.")
+                    splib.logmessages("error","failed to meet requirement", "requirement","fontforge","message","This layout requires the harfbuzz font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
                     exit(false)
                 end
             else

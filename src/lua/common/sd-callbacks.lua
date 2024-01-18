@@ -77,9 +77,18 @@ function print_page_number()
     splib.logmessage("info",string.format("Shipout page %d",publisher.current_pagenumber))
 end
 
+function pluralize(what, count)
+    if count ~= 1 then what = what .. "s" end
+    return string.format("%d %s",count, what)
+end
+
 function stop_run_cb()
-    print(string.format("Finished with %d errors and %d warnings",errcount,warncount))
-    print(string.format("Output written on %s (%d pages, %d bytes)",status.output_file_name,status.total_pages,status.pdf_gone))
+    print(string.format("Finished with %s and %s",pluralize("error",errcount),pluralize("warning",warncount)))
+    if not status.output_file_name then
+        print("No output written")
+    else
+        print(string.format("Output written on %s (%d pages, %d bytes)",status.output_file_name,status.total_pages,status.pdf_gone))
+    end
     print(string.format("Transcript written to %s-protocol.xml",tex.jobname))
 end
 
