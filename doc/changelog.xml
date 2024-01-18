@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.6" date="2024-01-18">
+        <en>Remove debugging message.</en>
+        <de>Entferne Debugging-Nachricht.</de>
+    </entry>
     <entry version="4.17.5" date="2024-01-17">
         <en>Experimental option "xmlfile" to use intermediate files for lxpath (#557).</en>
         <de>Experimentelle Option "xmlfile", um XML Daten in eine Datei zu schreiben (#557).</de>
