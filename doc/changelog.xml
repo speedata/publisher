@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.7" date="2024-01-18">
+        <en>Better output when process exits.</en>
+        <de>Bessere Ausgabe wenn der Publisher beendet wird.</de>
+    </entry>
     <entry version="4.17.6" date="2024-01-18">
         <en>Remove debugging message.</en>
         <de>Entferne Debugging-Nachricht.</de>
