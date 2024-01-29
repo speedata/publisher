@@ -358,12 +358,12 @@ function allocate_cells(self,options)
 
     local grid_conflict = false
     if  x + wd - 1 > self:number_of_columns(areaname) then
-        warning("Object protrudes into the right margin")
+        splib.logmessages("debug","Object protrudes into the right margin")
         show_right = true
         grid_conflict = true
     end
     if y + ht - 1 > self:number_of_rows(areaname) then
-        warning("Object protrudes below the last line of the page")
+        splib.logmessages("debug","Object protrudes below the last line of the page")
         show_bottom = true
         grid_conflict = true
     end
@@ -431,7 +431,7 @@ function allocate_cells(self,options)
         end
     end
     if grid_conflict then
-        warning("Conflict in grid")
+        splib.logmessages("debug","Conflict in grid")
     end
 end
 

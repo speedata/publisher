@@ -236,7 +236,6 @@ func sdLookupFile(cpath *C.char) *C.char {
 		slog.Error("internal error", "where", "splibaux.GetFullPath", "argument", path, "message", err.Error())
 		return s2c(errorpattern + err.Error())
 	}
-	slog.Debug("File lookup", "request", path, "found", ret)
 	return s2c(ret)
 }
 
@@ -313,9 +312,10 @@ func sdSegmentize(originalC *C.char) *C.struct_splitvalues {
 //export sdReadXMLFile
 func sdReadXMLFile(filenameC *C.char) *C.char {
 	filename := C.GoString(filenameC)
-	str, err := splibaux.ReadXMLFile(filename)
 	slog.Debug("Checksum", "filename", filename, "md5", md5calc(filename))
+	str, err := splibaux.ReadXMLFile(filename)
 	if err != nil {
+		slog.Error("Read XML file", "message", err.Error())
 		return s2c(errorpattern + err.Error())
 	}
 	return s2c(str)
@@ -326,6 +326,7 @@ func sdReadXMLString(xmlstring *C.char) *C.char {
 	goXMLString := C.GoString(xmlstring)
 	str, err := splibaux.ReadXMLString(goXMLString)
 	if err != nil {
+		slog.Error("Read XML string", "message", err.Error())
 		return s2c(errorpattern + err.Error())
 	}
 	return s2c(str)

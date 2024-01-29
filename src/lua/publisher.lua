@@ -1931,10 +1931,11 @@ end
 ---       [3] = " "
 ---       [".__local_name"] = "data"
 ---     },
----@return table
+---@return table?
 function load_xml(filename,filetype,parameter)
     parameter = parameter or {}
     if newxpath then
+        -- xmlfile writes the data to an intermediate file and returns the contents of the file.
         if options.xmlfile == "true" then
             filename = splib.createxmlfile(filename)
             ok, msg = loadfile(filename)
@@ -1949,7 +1950,7 @@ function load_xml(filename,filetype,parameter)
         else
             local str
             str = splib.loadxmlfile(filename)
-            if not str then return {} end
+            if not str then return nil end
             splib.logmessages("info", "Load XML", "type", filetype or "file", "filename", filename)
             local ok, msg = load(str)
             if ok then
@@ -7304,8 +7305,7 @@ function imageinfo( filename,page,box,fallback,imageshape )
     if images[new_name] then
         return images[new_name]
     end
-
-    log("Searching for image %q",tostring(filename))
+    splib.logmessages("info","Searching for image","filename",tostring(filename))
     if not find_file(filename) then
         if options.imagenotfounderror then
             err("Image %q not found!",filename or "???")
@@ -7315,6 +7315,7 @@ function imageinfo( filename,page,box,fallback,imageshape )
         filename = get_fallback_image_name(fallback,filename)
         page = 1
     end
+    splib.logmessages("info","found image","filename",tostring(filename))
     -- example is wrong: one based index
     -- <?xml version="1.0" ?>
     -- <imageinfo>

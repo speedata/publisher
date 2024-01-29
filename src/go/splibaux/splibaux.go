@@ -3,6 +3,7 @@ package splibaux
 import (
 	"crypto/md5"
 	"encoding/csv"
+	"errors"
 	"fmt"
 	"io"
 	"log/slog"
@@ -98,11 +99,14 @@ func LookupFile(path string) string {
 			}
 			slog.Debug("Using this file:", "file", ret)
 		}
+		slog.Debug("File lookup", "request", path, "found", ret)
 		return ret
 	}
 	if _, err := os.Stat(path); err == nil {
+		slog.Debug("File lookup", "request", path, "found", path)
 		return path
 	}
+	slog.Debug("File lookup, file not found", "request", path)
 	return ""
 }
 
@@ -290,6 +294,9 @@ func handleXInclude(href string, startindex, indent int, out io.Writer) error {
 	fullpath := LookupFile(href)
 	f, err := os.Open(fullpath)
 	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			slog.Error("File not found", "filename", href)
+		}
 		return err
 	}
 	return readXMLFile(f, startindex, indent, out)

@@ -3403,7 +3403,7 @@ function commands.process_node(layoutxml,dataxml)
         end
         layoutnode = publisher.data_dispatcher[mode][element_name]
         if layoutnode then
-            log("Selecting node: %q, mode=%q, pos=%d",element_name,mode,pos)
+            splib.logmessages("debug","Process node", "node",element_name,"mode",mode,"pos",string.format("%d",pos))
             if publisher.newxpath then
                 dataxml.pos = pos
 
@@ -3492,7 +3492,7 @@ function commands.record( layoutxml )
         elementname = publisher.read_attribute(layoutxml,{},"element","string")
         mode        = publisher.read_attribute(layoutxml,{},"mode","string","")
     end
-
+    splib.logmessages("debug","Record","element",elementname,"mode",mode)
     publisher.data_dispatcher[mode] = publisher.data_dispatcher[mode] or {}
     publisher.data_dispatcher[mode][elementname] = layoutxml
 end

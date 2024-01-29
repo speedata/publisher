@@ -289,6 +289,11 @@ static int lua_logmessages(lua_State *L) {
   const char *loglevel = luaL_checkstring(L, 1);
   const char *message = luaL_checkstring(L, 2);
   int a = lua_gettop(L);
+  if (a < 3){
+    sdLogMessage(loglevel, message);
+    return 0;
+  }
+
   char *arg;
   char *arr[a - 3];
   for (int i = 3; i <= a; i++) {
