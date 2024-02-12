@@ -56,7 +56,7 @@ local function allocated(dataxml, arg)
     return publisher.current_grid:isallocated(x, y, areaname, framenumber)
 end
 
-local function current_page()
+local function current_page(dataxml)
     publisher.setup_page(nil, "layout_functions#current_page",dataxml)
     return publisher.current_pagenumber
 end

@@ -5869,10 +5869,10 @@ function mkstringdest(name)
 end
 
 -- Generate a hlist with necessary nodes for the bookmarks. To be inserted into a vlist that gets shipped out
-function mkbookmarknodes(level,open_p,title)
+function mkbookmarknodes(level,open_p,title,data)
     -- The bookmarks need three values, the level, the name and if it is
     -- open or closed
-    setup_page(nil, "mkbookmarknodes")
+    setup_page(nil, "mkbookmarknodes",data)
     local openclosed
     if open_p then openclosed = 1 else openclosed = 2 end
     level = level or 1

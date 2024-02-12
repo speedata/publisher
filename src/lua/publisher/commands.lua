@@ -465,7 +465,7 @@ function commands.bookmark( layoutxml,dataxml )
     local open_p = publisher.read_attribute(layoutxml,dataxml,"open",  "boolean")
 
 
-    local hlist = publisher.mkbookmarknodes(level,open_p,title)
+    local hlist = publisher.mkbookmarknodes(level,open_p,title,dataxml)
 
     if publisher.intextblockcontext == 0 then
         publisher.setup_page(nil,"commands#bookmark",dataxml)
