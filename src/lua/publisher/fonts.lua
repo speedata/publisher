@@ -504,9 +504,9 @@ do
                     local thisfont = used_fonts[head.font]
                     if thisfont and not thisfont.characters[head.char] then
                         if reportmissingglyphs == "warning" then
-                            warning("Glyph %x (hex) is missing from the font %q",head.char,thisfont.name)
+                            splib.logmessages("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",head.char))
                         else
-                            err("Glyph %x (hex) is missing from the font %q",head.char,thisfont.name)
+                            splib.logmessages("error","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",head.char))
                         end
                     end
                 end

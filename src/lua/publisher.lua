@@ -4803,11 +4803,11 @@ function hbglyphlist(arguments)
             list,cur = node.insert_after(list,cur,g)
         elseif cp == 0 then
             if reportmissingglyphs then
-                local missgingglyph = cluster[thisglyph.cluster]
+                local missingglyph = cluster[thisglyph.cluster]
                 if reportmissingglyphs == "warning" then
-                    warning("Glyph %04x (hex) is missing from the font %q",missgingglyph,thisfont.name)
+                    splib.logmessages("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",missingglyph))
                 else
-                    err("Glyph %04x (hex) is missing from the font %q",missgingglyph,thisfont.name)
+                    splib.logmessages("error","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",missingglyph))
                 end
             end
         else
