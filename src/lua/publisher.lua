@@ -1449,7 +1449,9 @@ function initialize_luatex_and_generate_pdf()
         xpath.set_variable("_jobname", tex.jobname)
         xpath.set_variable("_matter","mainmatter")
         xpath.set_variable("__maxwidth", tex.sp("190mm"))
-        xpath.set_variable("_lastpage", 1)
+        if xpath.get_variable("_lastpage") == nil then
+            xpath.set_variable("_lastpage", 1)
+        end
     end
 
     -- The xml now looks like
