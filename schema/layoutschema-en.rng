@@ -4372,26 +4372,13 @@
       <element name="PDFOptions">
          <a:documentation>Set PDF options like number of copies and such</a:documentation>
          <optional>
-            <attribute name="format">
-               <a:documentation>Set the output format. Currently limited to PDF/X-3, PDF/X-4 and PDF/UA.</a:documentation>
-               <choice>
-                  <value>PDF/X-3</value>
-                  <a:documentation>Set the output to PDF/X-3.</a:documentation>
-                  <value>PDF/X-4</value>
-                  <a:documentation>Set the output to PDF/X-4.</a:documentation>
-                  <value>PDF/UA</value>
-                  <a:documentation>Set the output to PDF/UA.</a:documentation>
-               </choice>
+            <attribute name="author">
+               <a:documentation>Set the author of the document</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="colorprofile">
                <a:documentation>Set the name of the color profile. Has to be defined with DefineColorprofile.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="author">
-               <a:documentation>Set the author of the document</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -4417,6 +4404,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="dpi">
+               <a:documentation>Set the maximum DPI number for PNG/JPEG images (experimental, needs image server)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="duplex">
                <a:documentation>Set viewer preference to one or two page printing. Default: empty.</a:documentation>
                <choice>
@@ -4426,6 +4418,19 @@
                   <a:documentation>Two pages per sheet and flip on short edge</a:documentation>
                   <value>duplexfliplongedge</value>
                   <a:documentation>Two pages per sheet and flip on long edge</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="format">
+               <a:documentation>Set the output format. Currently limited to PDF/X-3, PDF/X-4 and PDF/UA.</a:documentation>
+               <choice>
+                  <value>PDF/X-3</value>
+                  <a:documentation>Set the output to PDF/X-3.</a:documentation>
+                  <value>PDF/X-4</value>
+                  <a:documentation>Set the output to PDF/X-4.</a:documentation>
+                  <value>PDF/UA</value>
+                  <a:documentation>Set the output to PDF/UA.</a:documentation>
                </choice>
             </attribute>
          </optional>

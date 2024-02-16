@@ -4372,26 +4372,13 @@
       <element name="PDFOptions">
          <a:documentation>Setze PDF Optionen wie Anzahl der Kopien</a:documentation>
          <optional>
-            <attribute name="format">
-               <a:documentation>Setzt das Ausgabeformat. Derzeit nur PDF/X-3, PDF/X-4  und PDF/UA möglich.</a:documentation>
-               <choice>
-                  <value>PDF/X-3</value>
-                  <a:documentation>Setzt die Ausgabe auf PDF/X-3.</a:documentation>
-                  <value>PDF/X-4</value>
-                  <a:documentation>Setzt die Ausgabe auf PDF/X-4.</a:documentation>
-                  <value>PDF/UA</value>
-                  <a:documentation>Setzt die Ausgabe auf PDF/UA.</a:documentation>
-               </choice>
+            <attribute name="author">
+               <a:documentation>Legt den Autor des Dokuments fest</a:documentation>
             </attribute>
          </optional>
          <optional>
             <attribute name="colorprofile">
                <a:documentation>Setzt das Farbprofile. Muss mit DefineColorprofile registriert worden sein.</a:documentation>
-            </attribute>
-         </optional>
-         <optional>
-            <attribute name="author">
-               <a:documentation>Legt den Autor des Dokuments fest</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -4417,6 +4404,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="dpi">
+               <a:documentation>Setze die maximale DPI Zahl für PNG/JPEG-Bilder (experimentell, benötigt image server)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="duplex">
                <a:documentation>Setze PDF Anzeigeprogramm auf einseitigen oder doppelseitigen Druck. Voreinstellung: leer.</a:documentation>
                <choice>
@@ -4426,6 +4418,19 @@
                   <a:documentation>Beidseitig und an kurzer Kante umblättern</a:documentation>
                   <value>duplexfliplongedge</value>
                   <a:documentation>Beidseitig und an langer Kante umblättern</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="format">
+               <a:documentation>Setzt das Ausgabeformat. Derzeit nur PDF/X-3, PDF/X-4  und PDF/UA möglich.</a:documentation>
+               <choice>
+                  <value>PDF/X-3</value>
+                  <a:documentation>Setzt die Ausgabe auf PDF/X-3.</a:documentation>
+                  <value>PDF/X-4</value>
+                  <a:documentation>Setzt die Ausgabe auf PDF/X-4.</a:documentation>
+                  <value>PDF/UA</value>
+                  <a:documentation>Setzt die Ausgabe auf PDF/UA.</a:documentation>
                </choice>
             </attribute>
          </optional>

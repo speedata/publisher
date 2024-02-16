@@ -93,6 +93,8 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
     Ignoriere die Groß- und Kleinschreibung für Dateizugriff in der rekursiven Dateiliste.
 `--imagecache=PATH`::
    Setzt das Verzeichnis für den Bildzwischenspeicher (image cache). Das Verzeichnis wird bei Bedarf erstellt.
+`--imageserver=ADDRESS`::
+   Legt die Adresse und den Port für den Imageserver fest. Voreinstellung ist 127.0.0.1:5998.
 `--inkscape=PATH`::
    Set the path to the inkscape program.
 `--layout=NAME`::

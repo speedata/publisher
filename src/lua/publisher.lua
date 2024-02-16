@@ -7256,6 +7256,13 @@ end
 
 
 local images = {}
+
+function reload_image(filename,width,height)
+    splib.logmessages("info","Reload image","width",tostring(width),"height",tostring(height),"filename",filename)
+    local fn = splib.reloadimage({filename = filename,width = width,height = height})
+    return fn
+end
+
 function new_image(filename,page,box,fallback,imageshape)
     return imageinfo(filename,page,box,fallback,imageshape)
 end
@@ -7310,14 +7317,14 @@ function imageinfo( filename,page,box,fallback,imageshape )
     splib.logmessages("info","Searching for image","filename",tostring(filename))
     if not find_file(filename) then
         if options.imagenotfounderror then
-            err("Image %q not found!",filename or "???")
+            splib.logmessages("error","Image not found","filename", filename or "???")
         else
-            warning("Image %q not found!",filename or "???")
+            splib.logmessages("warn","Image not found","filename", filename or "???")
         end
         filename = get_fallback_image_name(fallback,filename)
         page = 1
     end
-    splib.logmessages("info","found image","filename",tostring(filename))
+    splib.logmessages("info","Load image","filename",tostring(filename))
     -- example is wrong: one based index
     -- <?xml version="1.0" ?>
     -- <imageinfo>

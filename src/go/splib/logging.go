@@ -81,7 +81,14 @@ func (lh *logHandler) Handle(_ context.Context, r slog.Record) error {
 			lparen = "("
 			rparen = ")"
 		}
-		fmt.Println(r.Message, lparen+strings.Join(values, ",")+rparen)
+		lvlString := "·  "
+		switch r.Level {
+		case slog.LevelWarn:
+			lvlString = "W: "
+		case slog.LevelError:
+			lvlString = "E: "
+		}
+		fmt.Println(lvlString, r.Message, lparen+strings.Join(values, ",")+rparen)
 	}
 	return nil
 }

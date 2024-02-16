@@ -70,6 +70,8 @@ erkannt. Folgende Optionen werden unterstützt:
   Ordner für zwischengespeicherte Dateien (`file="http(s)://..."` und externe Programme). Voreinstellung: `$TMPDIR/sp/images`.
 `imagehandler`::
   Zuordnungen von Bildtyp zu externen Konvertern. Z.B. `imagehandler="mermaid:(/usr/bin/mmdc -i %%input%% -o %%output%%.pdf)"`. Der Bildtyp _mermaid_ wird mit dem Programm `/usr/bin/mmdc` konvertiert und erhält als Eingabeparameter `-i`, die Eingabedatei, `-o` und die Ausgabedatei mit angehängter Dateiendung `.pdf`. Die Dateinamen werden zur Laufzeit ersetzt und zufällig generiert. Mehrere Einträge werden mit Semikolon getrennt. Siehe auch <<ch-externalconverting>>.
+`imageserver`::
+  Legt die Adresse und den Port für den Imageserver fest. Voreinstellung ist 127.0.0.1:5998.
 `ignore-case`::
   Ignoriere die Groß- und Kleinschreibung für Dateizugriff in der rekursiven Dateiliste.
 `inkscape`::

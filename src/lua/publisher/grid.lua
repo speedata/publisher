@@ -871,7 +871,7 @@ function calculate_number_gridcells(self)
         end
     end
 
-    log("Number of rows: %d, number of columns = %d",self:number_of_rows(), self:number_of_columns(publisher.default_areaname))
+    splib.logmessages("info","Grid","rows",tostring(self:number_of_rows()),"columns",self:number_of_columns(publisher.default_areaname))
 end
 
 -- Sets the used area for the page (used by crop="yes")

@@ -12,6 +12,7 @@ static void stackDump(lua_State *L) {
   int top = lua_gettop(L);
   for (i = 1; i <= top; i++) { /* repeat for each level */
     int t = lua_type(L, i);
+    printf("%d: ",i);
     switch (t) {
       case LUA_TSTRING: /* strings */
         printf("`%s'", lua_tostring(L, i));
@@ -29,10 +30,11 @@ static void stackDump(lua_State *L) {
         printf("%s", lua_typename(L, t));
         break;
     }
-    printf("  "); /* put a separator */
+    printf("\n"); /* put a separator */
   }
   printf("\n"); /* end the listing */
 }
+
 
 int handleerror(lua_State *L, const char *retvalue) {
   const char *errorpattern = "^%*%*err";
@@ -333,6 +335,7 @@ static const struct luaL_Reg myfuncs[] = {
     {"matches", lua_matches},
     {"parse_html_text", lua_parsehtmltext},
     {"parse_html", lua_parsehtml},
+    {"reloadimage",sdReloadImage},
     {"replace", lua_sdreplace},
     {"segmentize", lua_segmentize},
     {"tokenize", lua_tokenize},

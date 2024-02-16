@@ -22,6 +22,13 @@ typedef struct {
 
 #line 3 "splib.go"
 
+#include <lauxlib.h>
+#include <lua.h>
+#include <lualib.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 struct splitvalues {
   char** splitted;
   int* directions;
@@ -109,6 +116,7 @@ extern void* sdLogMessages(const char* level, const char* message,
                            GoSlice arguments);
 extern GoInt sdGetErrCount();
 extern GoInt sdGetWarnCount();
+extern GoInt sdReloadImage(lua_State* p0);
 
 #ifdef __cplusplus
 }

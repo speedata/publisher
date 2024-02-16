@@ -1496,7 +1496,6 @@ function commands.image( layoutxml,dataxml )
     local imageinfo
     imageinfo = publisher.new_image(filename,page,box_lookup[vis_box] or "crop", fallback,imageshape)
 
-
     local image = img.copy(imageinfo.img)
     if rotate then
         if rotate == -90 or rotate == 270 then
@@ -1523,14 +1522,37 @@ function commands.image( layoutxml,dataxml )
 
     if not clip then
         width, height = publisher.calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight,stretch)
+
+
+        local destdpi = tonumber(publisher.options.dpi)
+        if publisher.options.dpi then
+            if not publisher.pro then
+                splib.logmessages("error","Image reduction is a pro feature")
+                publisher.has_pro_error = true
+            else
+                if image.imagetype == "pdf" then
+                    splib.logmessages("info","Unsupported image type PDF for resize","filename",filename)
+                else
+                    local destpx_x = math.round(destdpi * width / publisher.factor / 72,0)
+                    local destpx_y = math.round(destdpi * height / publisher.factor / 72,0)
+
+                    filename = publisher.reload_image(image.filepath,destpx_x, destpx_y)
+                    if filename then
+                        imageinfo = publisher.new_image(filename,page,box_lookup[vis_box] or "crop", fallback,imageshape)
+                        image = img.copy(imageinfo.img)
+                    end
+                end
+            end
+        end
+
         if dpiwarn then
             local inch_x = width / publisher.factor / 72
             local inch_y = height / publisher.factor / 72
             if (image.xsize / inch_x) < dpiwarn then
-                warning("Image dpi value too small (horizontal). Rendered is %d, requested minimum is %d. Filename: %q", math.floor(image.xsize / inch_x),dpiwarn,filename)
+                splib.logmessages("warn","Image DPI value to small (horizontal)","rendered",tostring(math.floor(image.xsize / inch_x)), "requested minimum", tostring(dpiwarn),"filename",filename)
             end
             if (image.ysize / inch_y) < dpiwarn then
-                warning("Image dpi value too small (vertical). Rendered is %d, requested minimum is %d. Filename: %q", math.floor(image.xsize / inch_x),dpiwarn,filename)
+                splib.logmessages("warn","Image DPI value to small (vertical)","rendered",tostring(math.floor(image.ysize / inch_y)), "requested minimum", tostring(dpiwarn),"filename",filename)
             end
         end
     end
@@ -2824,24 +2846,25 @@ end
 --- ------------
 --- Sets number of copies and such. See #57
 function commands.pdfoptions( layoutxml, dataxml )
-    local author       = publisher.read_attribute(layoutxml,dataxml,"author",   "string")
-    local colorprofile = publisher.read_attribute(layoutxml,dataxml,"colorprofile", "string")
-    local creator      = publisher.read_attribute(layoutxml,dataxml,"creator",   "string")
-    local displaymode  = publisher.read_attribute(layoutxml,dataxml,"displaymode", "string")
-    local duplex       = publisher.read_attribute(layoutxml,dataxml,"duplex",   "string")
-    local format       = publisher.read_attribute(layoutxml,dataxml,"format",    "string")
+    local author                = publisher.read_attribute(layoutxml,dataxml,"author",                "string")
+    local colorprofile          = publisher.read_attribute(layoutxml,dataxml,"colorprofile",          "string")
+    local creator               = publisher.read_attribute(layoutxml,dataxml,"creator",               "string")
+    local displaymode           = publisher.read_attribute(layoutxml,dataxml,"displaymode",           "string")
+    local dpi                   = publisher.read_attribute(layoutxml,dataxml,"dpi",                   "number")
+    local duplex                = publisher.read_attribute(layoutxml,dataxml,"duplex",                "string")
+    local format                = publisher.read_attribute(layoutxml,dataxml,"format",                "string")
     local hyperlinksbordercolor = publisher.read_attribute(layoutxml,dataxml,"hyperlinksbordercolor", "string")
-    local hyperlinkbordercolor = publisher.read_attribute(layoutxml,dataxml,"hyperlinkbordercolor", "string",hyperlinksbordercolor)
-    local hyperlinkborderwidth = publisher.read_attribute(layoutxml,dataxml,"hyperlinkborderwidth", "width_sp")
-    local keywords     = publisher.read_attribute(layoutxml,dataxml,"keywords", "string")
-    local nc           = publisher.read_attribute(layoutxml,dataxml,"numcopies", "number")
-    local pagelayout   = publisher.read_attribute(layoutxml,dataxml,"pagelayout", "string")
-    local picktray     = publisher.read_attribute(layoutxml,dataxml,"picktraybypdfsize", "boolean")
-    local printscaling = publisher.read_attribute(layoutxml,dataxml,"printscaling", "string")
-    local showbookmarks = publisher.read_attribute(layoutxml,dataxml,"showbookmarks", "boolean")
-    local showhyperlinks = publisher.read_attribute(layoutxml,dataxml,"showhyperlinks", "boolean", false)
-    local subject      = publisher.read_attribute(layoutxml,dataxml,"subject",  "string")
-    local title        = publisher.read_attribute(layoutxml,dataxml,"title",    "string")
+    local hyperlinkbordercolor  = publisher.read_attribute(layoutxml,dataxml,"hyperlinkbordercolor",  "string",hyperlinksbordercolor)
+    local hyperlinkborderwidth  = publisher.read_attribute(layoutxml,dataxml,"hyperlinkborderwidth",  "width_sp")
+    local keywords              = publisher.read_attribute(layoutxml,dataxml,"keywords",              "string")
+    local nc                    = publisher.read_attribute(layoutxml,dataxml,"numcopies",             "number")
+    local pagelayout            = publisher.read_attribute(layoutxml,dataxml,"pagelayout",            "string")
+    local picktray              = publisher.read_attribute(layoutxml,dataxml,"picktraybypdfsize",     "boolean")
+    local printscaling          = publisher.read_attribute(layoutxml,dataxml,"printscaling",          "string")
+    local showbookmarks         = publisher.read_attribute(layoutxml,dataxml,"showbookmarks",         "boolean")
+    local showhyperlinks        = publisher.read_attribute(layoutxml,dataxml,"showhyperlinks",        "boolean", false)
+    local subject               = publisher.read_attribute(layoutxml,dataxml,"subject",               "string")
+    local title                 = publisher.read_attribute(layoutxml,dataxml,"title",                 "string")
 
     if title then
         publisher.options.documenttitle = title
@@ -2857,6 +2880,9 @@ function commands.pdfoptions( layoutxml, dataxml )
     end
     if keywords then
         publisher.options.documentkeywords = keywords
+    end
+    if dpi then
+        publisher.options.dpi = dpi
     end
     if showhyperlinks then
         publisher.options.showhyperlinks = showhyperlinks

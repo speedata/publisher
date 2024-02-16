@@ -4849,38 +4849,14 @@
       <xs:documentation>Set PDF options like number of copies and such</xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:attribute name="format">
+      <xs:attribute name="author">
         <xs:annotation>
-          <xs:documentation>Set the output format. Currently limited to PDF/X-3, PDF/X-4 and PDF/UA.</xs:documentation>
+          <xs:documentation>Set the author of the document</xs:documentation>
         </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="PDF/X-3">
-              <xs:annotation>
-                <xs:documentation>Set the output to PDF/X-3.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="PDF/X-4">
-              <xs:annotation>
-                <xs:documentation>Set the output to PDF/X-4.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="PDF/UA">
-              <xs:annotation>
-                <xs:documentation>Set the output to PDF/UA.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
-        </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="colorprofile">
         <xs:annotation>
           <xs:documentation>Set the name of the color profile. Has to be defined with DefineColorprofile.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="author">
-        <xs:annotation>
-          <xs:documentation>Set the author of the document</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="creator">
@@ -4922,6 +4898,11 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="dpi">
+        <xs:annotation>
+          <xs:documentation>Set the maximum DPI number for PNG/JPEG images (experimental, needs image server)</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="duplex">
         <xs:annotation>
           <xs:documentation>Set viewer preference to one or two page printing. Default: empty.</xs:documentation>
@@ -4941,6 +4922,30 @@
             <xs:enumeration value="duplexfliplongedge">
               <xs:annotation>
                 <xs:documentation>Two pages per sheet and flip on long edge</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="format">
+        <xs:annotation>
+          <xs:documentation>Set the output format. Currently limited to PDF/X-3, PDF/X-4 and PDF/UA.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="PDF/X-3">
+              <xs:annotation>
+                <xs:documentation>Set the output to PDF/X-3.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="PDF/X-4">
+              <xs:annotation>
+                <xs:documentation>Set the output to PDF/X-4.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="PDF/UA">
+              <xs:annotation>
+                <xs:documentation>Set the output to PDF/UA.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
           </xs:restriction>

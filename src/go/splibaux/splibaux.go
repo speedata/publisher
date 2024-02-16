@@ -3,6 +3,7 @@ package splibaux
 import (
 	"crypto/md5"
 	"encoding/csv"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -23,6 +24,7 @@ var (
 	verbosity   int
 	pathrewrite *strings.Replacer
 	nr          *strings.Replacer
+	imageserver string
 )
 
 func init() {
@@ -46,6 +48,35 @@ func init() {
 		}
 		pathrewrite = strings.NewReplacer(rewrites...)
 	}
+	imageserver = os.Getenv("SP_IMAGESERVER")
+}
+
+// RequestFileFromImageServer gets a new image with the given width and height.
+func RequestFileFromImageServer(filename string, width, height int) (string, error) {
+	req, err := http.NewRequest("GET", "http://"+imageserver+"/v0/get", nil)
+	if err != nil {
+		return "", err
+	}
+	q := req.URL.Query()
+	q.Add("filename", filename)
+	q.Add("width", fmt.Sprintf("%d", width))
+	q.Add("height", fmt.Sprintf("%d", height))
+
+	req.URL.RawQuery = q.Encode()
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return "", err
+	}
+	type answer struct {
+		File string
+	}
+	a := answer{}
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		slog.Error("internal error", "where", "RequestFileFromImageServer", "message", err.Error())
+	}
+	json.Unmarshal(data, &a)
+	return a.File, nil
 }
 
 func downloadFile(resourceURL string, outfile io.Writer) error {

@@ -1,6 +1,13 @@
 package main
 
 /*
+#include <lauxlib.h>
+#include <lua.h>
+#include <lualib.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 
 struct splitvalues {
 	char** splitted;
@@ -9,12 +16,14 @@ struct splitvalues {
 	int direction;
 };
 
+#cgo CFLAGS: -I/opt/homebrew/opt/lua@5.3/include/lua
 */
 import "C"
 
 import (
 	"bytes"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"io"
 	"log/slog"
@@ -23,6 +32,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"syscall"
 	"unsafe"
 
 	"speedatapublisher/splibaux"
@@ -382,6 +392,37 @@ func sdLogMessages(level *C.char, message *C.char, arguments []*C.char) {
 	default:
 		fmt.Println("~~> unknown log level", goLevel)
 	}
+}
+
+//export sdReloadImage
+func sdReloadImage(L *C.lua_State) int {
+	l := LuaState{L}
+	fn, ok := l.getString(1, "filename")
+	if !ok {
+		slog.Error("internal error", "where", "sdReloadImage", "message", "filename is not a string")
+		return 0
+	}
+	wd, ok := l.getInt(1, "width")
+	if !ok {
+		slog.Error("internal error", "where", "sdReloadImage", "message", "width is not a number")
+		return 0
+	}
+	ht, ok := l.getInt(1, "height")
+	if !ok {
+		slog.Error("internal error", "where", "sdReloadImage", "message", "height is not a number")
+		return 0
+	}
+	newfn, err := splibaux.RequestFileFromImageServer(fn, wd, ht)
+	if err != nil {
+		if errors.Is(err, syscall.ECONNREFUSED) {
+			slog.Error("Cannot connect to the image server", "address", "127.0.0.1", "port", "5992")
+		} else {
+			slog.Error("internal error", "where", "sdReloadImage", "message", err)
+		}
+		return 0
+	}
+	l.pushString(newfn)
+	return 1
 }
 
 //export sdGetErrCount

@@ -6949,37 +6949,13 @@
       <para>Setze PDF Optionen wie Anzahl der Kopien</para>
     </description>
     <childelements></childelements>
-    <attribute en="format" optional="yes" since="3.5.7">
+    <attribute en="author" optional="yes" type="text" since="3.1.18">
       <description xml:lang="en">
-        <para>Set the output format. Currently limited to <tt>PDF/X-3</tt>, <tt>PDF/X-4</tt> and <tt>PDF/UA</tt>.</para>
+        <para>Set the author of the document</para>
       </description>
       <description xml:lang="de">
-        <para>Setzt das Ausgabeformat. Derzeit nur <tt>PDF/X-3</tt>, <tt>PDF/X-4</tt>  und <tt>PDF/UA</tt> möglich.</para>
+        <para>Legt den Autor des Dokuments fest</para>
       </description>
-      <choice en="PDF/X-3">
-        <description xml:lang="en">
-          <para>Set the output to <tt>PDF/X-3</tt>.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Setzt die Ausgabe auf <tt>PDF/X-3</tt>.</para>
-        </description>
-      </choice>
-      <choice en="PDF/X-4">
-        <description xml:lang="en">
-          <para>Set the output to <tt>PDF/X-4</tt>.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Setzt die Ausgabe auf <tt>PDF/X-4</tt>.</para>
-        </description>
-      </choice>
-      <choice en="PDF/UA">
-        <description xml:lang="en">
-          <para>Set the output to <tt>PDF/UA</tt>.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Setzt die Ausgabe auf <tt>PDF/UA</tt>.</para>
-        </description>
-      </choice>
     </attribute>
     <attribute en="colorprofile" optional="yes" since="3.5.7">
       <description xml:lang="en">
@@ -6987,14 +6963,6 @@
       </description>
       <description xml:lang="de">
         <para>Setzt das Farbprofile. Muss mit <cmd name="DefineColorprofile"/> registriert worden sein.</para>
-      </description>
-    </attribute>
-    <attribute en="author" optional="yes" type="text" since="3.1.18">
-      <description xml:lang="en">
-        <para>Set the author of the document</para>
-      </description>
-      <description xml:lang="de">
-        <para>Legt den Autor des Dokuments fest</para>
       </description>
     </attribute>
     <attribute en="creator" optional="yes" type="text" since="4.9.2">
@@ -7053,6 +7021,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="dpi" optional="yes" since="4.17.10" allowxpath="yes" type="number">
+      <description xml:lang="en">
+        <para>Set the maximum DPI number for PNG/JPEG images (experimental, needs image server)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze die maximale DPI Zahl für PNG/JPEG-Bilder (experimentell, benötigt image server)</para>
+      </description>
+    </attribute>
     <attribute en="duplex" optional="yes" since="2.3.47">
       <description xml:lang="en">
         <para>Set viewer preference to one or two page printing. Default: empty.</para>
@@ -7082,6 +7058,38 @@
         </description>
         <description xml:lang="de">
           <para>Beidseitig und an langer Kante umblättern</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="format" optional="yes" since="3.5.7">
+      <description xml:lang="en">
+        <para>Set the output format. Currently limited to <tt>PDF/X-3</tt>, <tt>PDF/X-4</tt> and <tt>PDF/UA</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setzt das Ausgabeformat. Derzeit nur <tt>PDF/X-3</tt>, <tt>PDF/X-4</tt>  und <tt>PDF/UA</tt> möglich.</para>
+      </description>
+      <choice en="PDF/X-3">
+        <description xml:lang="en">
+          <para>Set the output to <tt>PDF/X-3</tt>.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setzt die Ausgabe auf <tt>PDF/X-3</tt>.</para>
+        </description>
+      </choice>
+      <choice en="PDF/X-4">
+        <description xml:lang="en">
+          <para>Set the output to <tt>PDF/X-4</tt>.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setzt die Ausgabe auf <tt>PDF/X-4</tt>.</para>
+        </description>
+      </choice>
+      <choice en="PDF/UA">
+        <description xml:lang="en">
+          <para>Set the output to <tt>PDF/UA</tt>.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setzt die Ausgabe auf <tt>PDF/UA</tt>.</para>
         </description>
       </choice>
     </attribute>

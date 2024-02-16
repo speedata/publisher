@@ -72,6 +72,7 @@ func BuildLib(cfg *config.Config, goos string, goarch string) error {
 	if goarch != "" {
 		cmd.Env = append(cmd.Env, "GOARCH="+goarch)
 	}
+	cmd.Env = append(cmd.Env, "CGO_LDFLAGS=-undefined dynamic_lookup")
 	cmd.Env = append(cmd.Env, "CGO_ENABLED=1")
 	outbuf, err := cmd.CombinedOutput()
 	if err != nil {
