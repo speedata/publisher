@@ -105,11 +105,9 @@ extern char* sdLookupFile(const char* cpath);
 extern char** sdListFonts();
 extern char* sdConvertContents(const char* contents, const char* handler);
 extern char* sdConvertImage(const char* filename, const char* handler);
-extern char* sdCreateXMLFile(const char* path);
 extern char* sdConvertSVGImage(const char* path);
 extern struct splitvalues* sdSegmentize(const char* original);
-extern char* sdReadXMLFile(const char* filename);
-extern char* sdReadXMLString(const char* xmlstring);
+extern GoInt sdLoadXMLString(lua_State* p0);
 extern void* sdTeardown();
 extern void* sdLogMessage(const char* level, const char* message);
 extern void* sdLogMessages(const char* level, const char* message,
@@ -117,6 +115,7 @@ extern void* sdLogMessages(const char* level, const char* message,
 extern GoInt sdGetErrCount();
 extern GoInt sdGetWarnCount();
 extern GoInt sdReloadImage(lua_State* p0);
+extern GoInt sdLoadXMLFile(lua_State* p0);
 
 #ifdef __cplusplus
 }

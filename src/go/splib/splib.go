@@ -93,23 +93,6 @@ func sdParseHTML(filenameC *C.char) *C.char {
 	return C.CString(str)
 }
 
-//export sdCreateXMLFile
-func sdCreateXMLFile(filenameC *C.char) *C.char {
-	filename := C.GoString(filenameC)
-	f, err := os.CreateTemp("", "spxmlfile")
-	_ = f
-	if err != nil {
-		slog.Error("internal error", "where", "sdCreateXMLFile", "message", err.Error())
-		return nil
-	}
-	if err = splibaux.WriteXMLToLuaFile(filename, f); err != nil {
-		slog.Error("internal error", "where", "sdCreateXMLFile (2)", "message", err.Error())
-		return nil
-	}
-	f.Close()
-	return C.CString(f.Name())
-}
-
 //export sdContains
 func sdContains(haystackC *C.char, needleC *C.char) *C.char {
 	haystack := C.GoString(haystackC)
@@ -319,27 +302,25 @@ func sdSegmentize(originalC *C.char) *C.struct_splitvalues {
 	return returnStruct
 }
 
-//export sdReadXMLFile
-func sdReadXMLFile(filenameC *C.char) *C.char {
-	filename := C.GoString(filenameC)
-	slog.Debug("Checksum", "filename", filename, "md5", md5calc(filename))
-	str, err := splibaux.ReadXMLFile(filename)
-	if err != nil {
-		slog.Error("Read XML file", "message", err.Error())
-		return s2c(errorpattern + err.Error())
+//export sdLoadXMLString
+func sdLoadXMLString(L *C.lua_State) int {
+	l := newLuaState(L)
+	str, ok := l.getString(1)
+	if !ok {
+		slog.Error("loadxmlstring first argument should be a string")
+		return 0
 	}
-	return s2c(str)
-}
+	sr := strings.NewReader(str)
 
-//export sdReadXMLString
-func sdReadXMLString(xmlstring *C.char) *C.char {
-	goXMLString := C.GoString(xmlstring)
-	str, err := splibaux.ReadXMLString(goXMLString)
+	l.createTable(0, 0)
+	l.addKeyValueToTable(-1, ".__type", "document")
+	err := l.readXMLFile(sr, 1)
 	if err != nil {
-		slog.Error("Read XML string", "message", err.Error())
-		return s2c(errorpattern + err.Error())
+		slog.Error("Parsing XML file failed", "message", err.Error())
+		return 0
 	}
-	return s2c(str)
+
+	return 1
 }
 
 //export sdTeardown
@@ -397,17 +378,17 @@ func sdLogMessages(level *C.char, message *C.char, arguments []*C.char) {
 //export sdReloadImage
 func sdReloadImage(L *C.lua_State) int {
 	l := LuaState{L}
-	fn, ok := l.getString(1, "filename")
+	fn, ok := l.getStringTable(1, "filename")
 	if !ok {
 		slog.Error("internal error", "where", "sdReloadImage", "message", "filename is not a string")
 		return 0
 	}
-	wd, ok := l.getInt(1, "width")
+	wd, ok := l.getIntTable(1, "width")
 	if !ok {
 		slog.Error("internal error", "where", "sdReloadImage", "message", "width is not a number")
 		return 0
 	}
-	ht, ok := l.getInt(1, "height")
+	ht, ok := l.getIntTable(1, "height")
 	if !ok {
 		slog.Error("internal error", "where", "sdReloadImage", "message", "height is not a number")
 		return 0
@@ -433,6 +414,16 @@ func sdGetErrCount() int {
 //export sdGetWarnCount
 func sdGetWarnCount() int {
 	return warnCount
+}
+
+//export sdLoadXMLFile
+func sdLoadXMLFile(L *C.lua_State) int {
+	l := newLuaState(L)
+	err := l.buildXMLTable()
+	if err != nil {
+		return 0
+	}
+	return 1
 }
 
 func main() {}

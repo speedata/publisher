@@ -166,14 +166,6 @@ static int lua_parsehtml(lua_State *L) {
   return 1;
 }
 
-static int lua_createxmlfile(lua_State *L) {
-  const char *input = luaL_checkstring(L, 1);
-  lua_pop(L, 1);
-  const char *ret = sdCreateXMLFile(input);
-  lua_pushstring(L, ret);
-  return 1;
-}
-
 static int lua_htmltoxml(lua_State *L) {
   const char *input = luaL_checkstring(L, 1);
   lua_pop(L, 1);
@@ -191,30 +183,6 @@ static int lua_listfonts(lua_State *L) {
     lua_pushstring(L, c);
     lua_rawseti(L, -2, i);
   }
-  return 1;
-}
-
-static int lua_loadxmlfile(lua_State *L) {
-  const char *filename = luaL_checkstring(L, -1);
-  lua_pop(L, 1);
-
-  const char *ret = sdReadXMLFile(filename);
-  if (handleerror(L, ret) == 1) {
-    return 0;
-  }
-  lua_pushstring(L, ret);
-  return 1;
-}
-
-static int lua_loadxmlstring(lua_State *L) {
-  const char *xmltext = luaL_checkstring(L, -1);
-  lua_pop(L, 1);
-
-  const char *ret = sdReadXMLString(xmltext);
-  if (handleerror(L, ret) == 1) {
-    return 0;
-  }
-  lua_pushstring(L, ret);
   return 1;
 }
 
@@ -325,12 +293,11 @@ static const struct luaL_Reg myfuncs[] = {
     {"contains", lua_contains},
     {"convertcontents", lua_convertcontents},
     {"convertimage", lua_convertimage},
-    {"createxmlfile", lua_createxmlfile},
     {"convert_svg_image", lua_convertsvgimage},
     {"htmltoxml", lua_htmltoxml},
     {"listfonts", lua_listfonts},
-    {"loadxmlfile", lua_loadxmlfile},
-    {"loadxmlstring", lua_loadxmlstring},
+    {"loadxmlstring", sdLoadXMLString},
+    {"load_xmlfile", sdLoadXMLFile},
     {"lookupfile", lua_lookupfile},
     {"matches", lua_matches},
     {"parse_html_text", lua_parsehtmltext},

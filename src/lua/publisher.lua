@@ -1415,16 +1415,7 @@ function initialize_luatex_and_generate_pdf()
     local datafilename = arg[3]
     if datafilename == "-dummy" then
         if newxpath then
-            local str = splib.loadxmlstring("<data />")
-            local ok,msg = load(str)
-            if ok then
-                ok()
-            else
-                log("%s",str)
-                err("%s",msg)
-                return {}
-            end
-            dataxml = tbl
+            dataxml = splib.loadxmlstring("<data />")
         else
             dataxml = luxor.parse_xml("<data />")
         end
@@ -1937,34 +1928,11 @@ end
 function load_xml(filename,filetype,parameter)
     parameter = parameter or {}
     if newxpath then
-        -- xmlfile writes the data to an intermediate file and returns the contents of the file.
-        if options.xmlfile == "true" then
-            filename = splib.createxmlfile(filename)
-            ok, msg = loadfile(filename)
-            if ok then
-                ok()
-            else
-                err("%s", msg)
-                return {}
-            end
-            splib.logmessages("info", "Load XML", "type", filetype or "file", "filename", filename)
-            os.remove(filename)
-        else
-            local str
-            str = splib.loadxmlfile(filename)
-            if not str then return nil end
-            splib.logmessages("info", "Load XML", "type", filetype or "file", "filename", filename)
-            local ok, msg = load(str)
-            if ok then
-                ok()
-            else
-                log("%s", str)
-                err("%s", msg)
-                return {}
-            end
+        splib.logmessages("info", "Load XML", "type", filetype or "file", "filename", filename)
+        local xmltable = splib.load_xmlfile(filename,filetype or "file")
+        if not xmltable then
+            exit(false)
         end
-        ---@diagnostic disable-next-line
-        local xmltable = tbl
         fixup_layoutxml(xmltable,parameter.ignoreeol)
         return xmltable
     else

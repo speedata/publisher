@@ -72,7 +72,16 @@ func BuildLib(cfg *config.Config, goos string, goarch string) error {
 	if goarch != "" {
 		cmd.Env = append(cmd.Env, "GOARCH="+goarch)
 	}
-	cmd.Env = append(cmd.Env, "CGO_LDFLAGS=-undefined dynamic_lookup")
+	switch goos {
+	case "darwin":
+		cmd.Env = append(cmd.Env, "CGO_CFLAGS: -I/opt/homebrew/opt/lua@5.3/include/lua")
+		cmd.Env = append(cmd.Env, "CGO_LDFLAGS=-undefined dynamic_lookup")
+	case "linux":
+		cmd.Env = append(cmd.Env, "CGO_CFLAGS=-I/usr/include/lua5.3")
+	case "windows":
+		cmd.Env = append(cmd.Env, "CGO_CFLAGS=-I/usr/include/lua5.3")
+		cmd.Env = append(cmd.Env, "CGO_LDFLAGS=-llua53w64 -L/luatex-bin/luatex/windows/amd64/default/")
+	}
 	cmd.Env = append(cmd.Env, "CGO_ENABLED=1")
 	outbuf, err := cmd.CombinedOutput()
 	if err != nil {
