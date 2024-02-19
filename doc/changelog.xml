@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.10" date="2024-02-19">
+        <en>New (pro) feature for resizing images (needs the speedata imageserver).</en>
+        <de>Neues Pro-Feature für on-the-fly Bilderneuberechnung (benötigt imageserver).</de>
+    </entry>
+    <entry version="4.17.10" date="2024-02-19">
+        <en>Rewrite Go/Lua XML parser (lxpath).</en>
+        <de>Go/Lua XML Parser neu geschrieben (lxpath).</de>
+    </entry>
     <entry version="4.17.9" date="2024-02-12">
         <en>Bugfix not updating $_lastpage in luxor XML mode (#561).</en>
         <de>Fehlerkorrektur für $_lastpage im luxor XML Modus (#561).</de>
