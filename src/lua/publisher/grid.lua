@@ -358,12 +358,12 @@ function allocate_cells(self,options)
 
     local grid_conflict = false
     if  x + wd - 1 > self:number_of_columns(areaname) then
-        splib.logmessages("debug","Object protrudes into the right margin")
+        splib.log("debug","Object protrudes into the right margin")
         show_right = true
         grid_conflict = true
     end
     if y + ht - 1 > self:number_of_rows(areaname) then
-        splib.logmessages("debug","Object protrudes below the last line of the page")
+        splib.log("debug","Object protrudes below the last line of the page")
         show_bottom = true
         grid_conflict = true
     end
@@ -431,7 +431,7 @@ function allocate_cells(self,options)
         end
     end
     if grid_conflict then
-        splib.logmessages("debug","Conflict in grid")
+        splib.log("debug","Conflict in grid")
     end
 end
 
@@ -871,7 +871,7 @@ function calculate_number_gridcells(self)
         end
     end
 
-    splib.logmessages("info","Grid","rows",tostring(self:number_of_rows()),"columns",self:number_of_columns(publisher.default_areaname))
+    splib.log("info","Grid","rows",tostring(self:number_of_rows()),"columns",self:number_of_columns(publisher.default_areaname))
 end
 
 -- Sets the used area for the page (used by crop="yes")

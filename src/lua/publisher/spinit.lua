@@ -22,7 +22,7 @@ function warning(...)
     else
         unpacked = string.format( "%s",string.format(table.unpack(text)))
     end
-    splib.logmessage("warn",unpacked)
+    splib.log("warn",unpacked)
 end
 
 function err(...)
@@ -57,7 +57,7 @@ end
 function log(...)
     local text = { ... }
     local res = call(string.format,table.unpack(text))
-    splib.logmessage("info",res)
+    splib.log("info",res)
 end
 
 do
@@ -270,12 +270,12 @@ function quit()
 end
 
 local function setup()
-    splib.logmessages("debug","Setting","varname","LUA_PATH", "value", os.getenv("LUA_PATH") or "")
-    splib.logmessages("debug","Setting","varname","SP_EXTRA_DIRS", "value", os.getenv("SP_EXTRA_DIRS") or "")
-    splib.logmessages("debug","Setting","varname","SP_EXTRA_XML", "value", os.getenv("SP_EXTRA_XML") or "")
-    splib.logmessages("debug","Setting","varname","SP_PREPEND_XML", "value", os.getenv("SP_PREPEND_XML") or "")
-    splib.logmessages("debug","Setting","varname","SP_IGNORECASE", "value", os.getenv("SP_IGNORECASE") or "")
-    splib.logmessages("debug","Setting","varname","SP_XMLPARSER", "value", os.getenv("SP_XMLPARSER") or "")
+    splib.log("debug","Setting","varname","LUA_PATH", "value", os.getenv("LUA_PATH") or "")
+    splib.log("debug","Setting","varname","SP_EXTRA_DIRS", "value", os.getenv("SP_EXTRA_DIRS") or "")
+    splib.log("debug","Setting","varname","SP_EXTRA_XML", "value", os.getenv("SP_EXTRA_XML") or "")
+    splib.log("debug","Setting","varname","SP_PREPEND_XML", "value", os.getenv("SP_PREPEND_XML") or "")
+    splib.log("debug","Setting","varname","SP_IGNORECASE", "value", os.getenv("SP_IGNORECASE") or "")
+    splib.log("debug","Setting","varname","SP_XMLPARSER", "value", os.getenv("SP_XMLPARSER") or "")
 
     tex.pdfhorigin = 0
     tex.pdfvorigin = 0

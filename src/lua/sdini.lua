@@ -29,10 +29,10 @@ end
 local luaglue = require("luaglue")
 
 function file_start( filename )
-  luaglue.logmessages("debug","Start file","filename",filename)
+  luaglue.log("debug","Start file","filename",filename)
 end
 function file_end( filename )
-luaglue.logmessages("debug","End file","filename",filename)
+luaglue.log("debug","End file","filename",filename)
 end
 
 

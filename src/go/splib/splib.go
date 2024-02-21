@@ -331,48 +331,39 @@ func sdTeardown() {
 	}
 }
 
-//export sdLogMessage
-func sdLogMessage(level *C.char, message *C.char) {
-	goLevel := C.GoString(level)
-	goMessage := C.GoString(message)
-	switch goLevel {
-	case "notice":
-		slog.Log(nil, LevelNotice, goMessage)
-	case "info":
-		slog.Log(nil, slog.LevelInfo, goMessage)
-	case "debug":
-		slog.Log(nil, slog.LevelDebug, goMessage)
-	case "warning", "warn":
-		slog.Log(nil, slog.LevelWarn, goMessage)
-	case "error":
-		slog.Log(nil, slog.LevelError, goMessage)
-	default:
-		fmt.Println("~~> unknown log level", goLevel)
+//export sdLog
+func sdLog(L *C.lua_State) int {
+	l := newLuaState(L)
+	level, ok := l.getString(1)
+	if !ok {
+		return 0
 	}
-}
+	message, ok := l.getString(2)
+	if !ok {
+		return 0
+	}
 
-//export sdLogMessages
-func sdLogMessages(level *C.char, message *C.char, arguments []*C.char) {
-	goLevel := C.GoString(level)
-	goMessage := C.GoString(message)
-	var argsAny []any
-	for _, arg := range arguments {
-		argsAny = append(argsAny, C.GoString(arg))
+	extraArguments := []any{}
+	max := l.getTop()
+	for i := 3; i <= max; i++ {
+		if arg, ok := l.getAny(i); ok {
+			extraArguments = append(extraArguments, arg)
+		}
 	}
-	switch goLevel {
+	switch level {
 	case "notice":
-		slog.Log(nil, LevelNotice, goMessage, argsAny...)
+		slog.Log(nil, LevelNotice, message, extraArguments...)
 	case "info":
-		slog.Info(goMessage, argsAny...)
+		slog.Info(message, extraArguments...)
 	case "debug":
-		slog.Debug(goMessage, argsAny...)
+		slog.Debug(message, extraArguments...)
 	case "warning", "warn":
-		slog.Warn(goMessage, argsAny...)
+		slog.Warn(message, extraArguments...)
 	case "error":
-		slog.Error(goMessage, argsAny...)
-	default:
-		fmt.Println("~~> unknown log level", goLevel)
+		slog.Error(message, extraArguments...)
 	}
+
+	return 0
 }
 
 //export sdReloadImage

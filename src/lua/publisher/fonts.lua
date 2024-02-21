@@ -135,7 +135,7 @@ function make_font_instance( name,size )
         f = fonts.fontloader.preload_font(filename,size,parameter,parameter.mode or publisher.options.fontloader)
         f.reserved_num = num
         preloaded_fonts[num] = f
-        splib.logmessages("debug","Preload font","name",filename,"size",tostring(math.round(size / publisher.factor,3)),"id",tostring(num))
+        splib.log("debug","Preload font","name",filename,"size",tostring(math.round(size / publisher.factor,3)),"id",tostring(num))
         font_instances[k]=num
         return true, num
     end
@@ -146,7 +146,7 @@ end
 function define_font(instance)
     local mode = instance.requested_mode
     local num = instance.reserved_num
-    splib.logmessages("info","Create font metrics","name",instance.requested_name,"size",math.round(instance.requested_size / publisher.factor,3),"id",num,"mode",mode)
+    splib.log("info","Create font metrics","name",instance.requested_name,"size",math.round(instance.requested_size / publisher.factor,3),"id",num,"mode",mode)
     local f, ok
     if mode == "harfbuzz" then
         ok,f = fonts.fontloader.define_font_hb(instance.requested_name,instance.requested_size,instance.requested_extra_parameter)
@@ -504,9 +504,9 @@ do
                     local thisfont = used_fonts[head.font]
                     if thisfont and not thisfont.characters[head.char] then
                         if reportmissingglyphs == "warning" then
-                            splib.logmessages("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",head.char))
+                            splib.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",head.char))
                         else
-                            splib.logmessages("error","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",head.char))
+                            splib.log("error","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",head.char))
                         end
                     end
                 end

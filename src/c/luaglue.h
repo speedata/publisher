@@ -109,9 +109,7 @@ extern char* sdConvertSVGImage(const char* path);
 extern struct splitvalues* sdSegmentize(const char* original);
 extern GoInt sdLoadXMLString(lua_State* p0);
 extern void* sdTeardown();
-extern void* sdLogMessage(const char* level, const char* message);
-extern void* sdLogMessages(const char* level, const char* message,
-                           GoSlice arguments);
+extern GoInt sdLog(lua_State* p0);
 extern GoInt sdGetErrCount();
 extern GoInt sdGetWarnCount();
 extern GoInt sdReloadImage(lua_State* p0);

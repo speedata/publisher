@@ -503,7 +503,7 @@ setmetatable(colors,{  __index = function (tbl,key)
     if string.sub(key,1,1) ~= "#" and string.sub(key,1,3) ~= "rgb" then
         return nil
     end
-    splib.logmessages("info","Define color","name",key)
+    splib.log("info","Define color","name",key)
     local color = {}
     color.r, color.g, color.b = getrgb(key)
     color.pdfstring = string.format("%g %g %g rg %g %g %g RG", color.r, color.g, color.b, color.r,color.g, color.b)
@@ -757,9 +757,9 @@ function dispatch(layoutxml,dataxml,opts)
                 if options.verbosity > 0 then
                     local lineinfo = ""
                     if newxpath then
-                        splib.logmessages("debug","Call command","name",eltname,"line",j[".__line"])
+                        splib.log("debug","Call command","name",eltname,"line",j[".__line"])
                     else
-                        splib.logmessages("debug","Call command","name",eltname)
+                        splib.log("debug","Call command","name",eltname)
                     end
 
                     -- log("Call %q from layout%s",eltname,lineinfo)
@@ -1151,7 +1151,7 @@ function initialize_luatex_and_generate_pdf()
             end
         elseif k == "pro" then
             pro = true
-            splib.logmessage("info","speedata Publisher Pro")
+            splib.log("info","speedata Publisher Pro")
         end
     end
 
@@ -1220,22 +1220,22 @@ function initialize_luatex_and_generate_pdf()
         for _, req in ipairs(r) do
             if req == "lxpath" then
                 if not newxpath then
-                    splib.logmessages("error","failed to meet requirement", "requirement","lxpath","message","This layout requires the lxpath XML / XPath parser","help","see https://doc.speedata.de/publisher/en/lxpath/ how to activate")
+                    splib.log("error","failed to meet requirement", "requirement","lxpath","message","This layout requires the lxpath XML / XPath parser","help","see https://doc.speedata.de/publisher/en/lxpath/ how to activate")
                     exit(false)
                 end
             elseif req == "luxor" then
                     if newxpath then
-                        splib.logmessages("error","failed to meet requirement", "requirement","luxor","message","This layout requires the luxor XML / XPath parser","help","see https://doc.speedata.de/publisher/en/xpathfunctions/ how to activate")
+                        splib.log("error","failed to meet requirement", "requirement","luxor","message","This layout requires the luxor XML / XPath parser","help","see https://doc.speedata.de/publisher/en/xpathfunctions/ how to activate")
                         exit(false)
                     end
             elseif req == "harfbuzz" then
                 if options.fontloader ~= "harfbuzz" then
-                    splib.logmessages("error","failed to meet requirement", "requirement","harfbuzz","message","This layout requires the harfbuzz font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
+                    splib.log("error","failed to meet requirement", "requirement","harfbuzz","message","This layout requires the harfbuzz font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
                     exit(false)
                 end
             elseif req == "fontforge" then
                 if options.fontloader ~= "fontforge" then
-                    splib.logmessages("error","failed to meet requirement", "requirement","fontforge","message","This layout requires the harfbuzz font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
+                    splib.log("error","failed to meet requirement", "requirement","fontforge","message","This layout requires the harfbuzz font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
                     exit(false)
                 end
             else
@@ -1928,7 +1928,7 @@ end
 function load_xml(filename,filetype,parameter)
     parameter = parameter or {}
     if newxpath then
-        splib.logmessages("info", "Load XML", "type", filetype or "file", "filename", filename)
+        splib.log("info", "Load XML", "type", filetype or "file", "filename", filename)
         local xmltable = splib.load_xmlfile(filename,filetype or "file")
         if not xmltable then
             exit(false)
@@ -1948,7 +1948,7 @@ function load_xml(filename,filetype,parameter)
         if options.verbosity > 0 then
             calculate_md5sum(filename)
         end
-        splib.logmessages("info","Load XML","type",filetype or "file","filename",path)
+        splib.log("info","Load XML","type",filetype or "file","filename",path)
         local parsed_xml = luxor.parse_xml_file(path, parameter,find_file)
         -- if options.verbosity > 0 and filetype == "layout instructions" then
         --     printtable("parsed_xml",parsed_xml)
@@ -2271,7 +2271,7 @@ function detect_pagetype(pagenumber, data)
         local pagetype = masterpages[i]
         if nextpage then
             if pagetype.name == nextpage then
-                splib.logmessages("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
+                splib.log("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
                 nextpage = nil
                 return pagetype.res
             end
@@ -2288,14 +2288,14 @@ function detect_pagetype(pagenumber, data)
                     err(msg)
                 end
                 if ok then
-                    splib.logmessages("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
+                    splib.log("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
                     ret = pagetype.res
                     current_pagenumber = cp
                     return ret
                 end
             else
                 if xpath.parse(data,pagetype.is_pagetype,pagetype.ns) == true then
-                    splib.logmessages("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
+                    splib.log("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
                     ret = pagetype.res
                     xpath.pop_state()
                     current_pagenumber = cp
@@ -4773,9 +4773,9 @@ function hbglyphlist(arguments)
             if reportmissingglyphs then
                 local missingglyph = cluster[thisglyph.cluster]
                 if reportmissingglyphs == "warning" then
-                    splib.logmessages("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",missingglyph))
+                    splib.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",missingglyph))
                 else
-                    splib.logmessages("error","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",missingglyph))
+                    splib.log("error","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",missingglyph))
                 end
             end
         else
@@ -6496,7 +6496,7 @@ function get_language(id_or_locale_or_name)
         return 0
     else
         local filename = string.format("hyph-%s.pat.txt",filename_part)
-        splib.logmessages("debug","Loading hyphenation pattern","filename",filename)
+        splib.log("debug","Loading hyphenation pattern","filename",filename)
         local path = find_file(filename)
         local pattern_file = io.open(path)
         local pattern = pattern_file:read("*all")
@@ -6506,7 +6506,7 @@ function get_language(id_or_locale_or_name)
     end
 
     local id = l:id()
-    splib.logmessages("debug","Language ID","id",id)
+    splib.log("debug","Language ID","id",id)
     local ret = { id = id, l = l, locale = locale }
     languages_id_lang[id] = ret
     languages[locale] = ret
@@ -6763,7 +6763,7 @@ function define_fontfamily( regular,bold,italic,bolditalic, name, size, baseline
     fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
     local fontnumber = #fonts.lookup_fontfamily_number_instance
     fonts.lookup_fontfamily_name_number[name] = fontnumber
-    splib.logmessages("info","Define font family","name",name,"size",math.round(size / factor, 3),"leading",math.round(baselineskip / factor,3), "id",fontnumber)
+    splib.log("info","Define font family","name",name,"size",math.round(size / factor, 3),"leading",math.round(baselineskip / factor,3), "id",fontnumber)
     return fontnumber
 end
 
@@ -7226,7 +7226,7 @@ end
 local images = {}
 
 function reload_image(filename,width,height)
-    splib.logmessages("info","Reload image","width",tostring(width),"height",tostring(height),"filename",filename)
+    splib.log("info","Reload image","width",tostring(width),"height",tostring(height),"filename",filename)
     local fn = splib.reloadimage({filename = filename,width = width,height = height})
     return fn
 end
@@ -7282,17 +7282,17 @@ function imageinfo( filename,page,box,fallback,imageshape )
     if images[new_name] then
         return images[new_name]
     end
-    splib.logmessages("info","Searching for image","filename",tostring(filename))
+    splib.log("info","Searching for image","filename",tostring(filename))
     if not find_file(filename) then
         if options.imagenotfounderror then
-            splib.logmessages("error","Image not found","filename", filename or "???")
+            splib.log("error","Image not found","filename", filename or "???")
         else
-            splib.logmessages("warn","Image not found","filename", filename or "???")
+            splib.log("warn","Image not found","filename", filename or "???")
         end
         filename = get_fallback_image_name(fallback,filename)
         page = 1
     end
-    splib.logmessages("info","Load image","filename",tostring(filename))
+    splib.log("info","Load image","filename",tostring(filename))
     -- example is wrong: one based index
     -- <?xml version="1.0" ?>
     -- <imageinfo>

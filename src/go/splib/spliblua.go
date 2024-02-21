@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log/slog"
 	"unsafe"
 )
 
@@ -32,6 +33,7 @@ func (l *LuaState) setTop(n int) {
 	C.lua_settop(l.l, C.int(n))
 }
 
+// pop removes n elements from the stack
 func (l *LuaState) pop(n int) {
 	l.setTop(-n - 1)
 }
@@ -98,6 +100,35 @@ func (l *LuaState) pushString(str string) {
 
 func (l *LuaState) pushInt(i int) {
 	C.lua_pushinteger(l.l, C.longlong(i))
+}
+
+func (l *LuaState) getAny(idx int) (any, bool) {
+	if l.getTop() == 0 {
+		return nil, false
+	}
+
+	switch l.luaType(idx) {
+	case luaTString:
+		return l.getString(idx)
+	case luaTNumber:
+		return l.getNumber(idx)
+	default:
+		slog.Error("not implemented yet", "where", "getAny", "arg", l.luaType(idx))
+	}
+
+	return nil, false
+}
+
+func (l *LuaState) getNumber(idx int) (float64, bool) {
+	if l.getTop() == 0 {
+		return 0, false
+	}
+	if l.luaType(idx) == luaTNumber {
+		var isnum C.int
+		dbl := C.lua_tonumberx(l.l, C.int(idx), &isnum)
+		return float64(dbl), true
+	}
+	return 0, false
 }
 
 func (l *LuaState) getString(idx int) (string, bool) {

@@ -248,33 +248,6 @@ static int lua_teardown(lua_State *L) {
   return 0;
 }
 
-static int lua_logmessage(lua_State *L) {
-  const char *loglevel = luaL_checkstring(L, 1);
-  const char *message = luaL_checkstring(L, 2);
-  sdLogMessage(loglevel, message);
-  return 0;
-}
-
-static int lua_logmessages(lua_State *L) {
-  const char *loglevel = luaL_checkstring(L, 1);
-  const char *message = luaL_checkstring(L, 2);
-  int a = lua_gettop(L);
-  if (a < 3){
-    sdLogMessage(loglevel, message);
-    return 0;
-  }
-
-  char *arg;
-  char *arr[a - 3];
-  for (int i = 3; i <= a; i++) {
-    arg = luaL_checkstring(L, i);
-    arr[i - 3] = arg;
-  }
-  GoSlice gs = {arr, a - 2, a - 2};
-  sdLogMessages(loglevel, message, gs);
-  return 0;
-}
-
 static int lua_errcount(lua_State *L) {
   int a = sdGetErrCount();
   lua_pushinteger(L, a);
@@ -306,8 +279,7 @@ static const struct luaL_Reg myfuncs[] = {
     {"replace", lua_sdreplace},
     {"segmentize", lua_segmentize},
     {"tokenize", lua_tokenize},
-    {"logmessage", lua_logmessage},
-    {"logmessages", lua_logmessages},
+    {"log", sdLog},
     {"errcount", lua_errcount},
     {"warncount", lua_warncount},
     {"teardown", lua_teardown},

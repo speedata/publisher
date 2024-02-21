@@ -164,7 +164,7 @@ function commands.add_searchpath( layoutxml,dataxml )
         err("AddSearchpath: The path %q does not exist",selection)
         return
     end
-    splib.logmessages("info","Add search path","path",selection)
+    splib.log("info","Add search path","path",selection)
     kpse.add_dir(selection)
 end
 
@@ -742,7 +742,7 @@ function commands.define_color( layoutxml,dataxml )
 
     color.model = model
     color.index = publisher.register_color(name)
-    splib.logmessages("info","Define color","name",name,"index",color.index)
+    splib.log("info","Define color","name",name,"index",color.index)
     publisher.colors[name]=color
 end
 
@@ -1215,9 +1215,9 @@ function commands.group( layoutxml,dataxml )
     local groupname = publisher.read_attribute(layoutxml,dataxml,"name", "string")
 
     if publisher.groups[groupname] == nil then
-        splib.logmessages("debug","Create group","name",groupname)
+        splib.log("debug","Create group","name",groupname)
     else
-        splib.logmessages("debug","Re-use group","name",groupname)
+        splib.log("debug","Re-use group","name",groupname)
         -- The old nodes are still in the group. We should clean the nodes
         -- but this cleans too much.
         node.flush_list(publisher.groups[groupname].contents)
@@ -1527,11 +1527,11 @@ function commands.image( layoutxml,dataxml )
         local destdpi = tonumber(publisher.options.dpi)
         if publisher.options.dpi then
             if not publisher.pro then
-                splib.logmessages("error","Image reduction is a pro feature")
+                splib.log("error","Image reduction is a pro feature")
                 publisher.has_pro_error = true
             else
                 if image.imagetype == "pdf" then
-                    splib.logmessages("info","Unsupported image type PDF for resize","filename",filename)
+                    splib.log("info","Unsupported image type PDF for resize","filename",filename)
                 else
                     local destpx_x = math.round(destdpi * width / publisher.factor / 72,0)
                     local destpx_y = math.round(destdpi * height / publisher.factor / 72,0)
@@ -1549,10 +1549,10 @@ function commands.image( layoutxml,dataxml )
             local inch_x = width / publisher.factor / 72
             local inch_y = height / publisher.factor / 72
             if (image.xsize / inch_x) < dpiwarn then
-                splib.logmessages("warn","Image DPI value to small (horizontal)","rendered",tostring(math.floor(image.xsize / inch_x)), "requested minimum", tostring(dpiwarn),"filename",filename)
+                splib.log("warn","Image DPI value to small (horizontal)","rendered",tostring(math.floor(image.xsize / inch_x)), "requested minimum", tostring(dpiwarn),"filename",filename)
             end
             if (image.ysize / inch_y) < dpiwarn then
-                splib.logmessages("warn","Image DPI value to small (vertical)","rendered",tostring(math.floor(image.ysize / inch_y)), "requested minimum", tostring(dpiwarn),"filename",filename)
+                splib.log("warn","Image DPI value to small (vertical)","rendered",tostring(math.floor(image.ysize / inch_y)), "requested minimum", tostring(dpiwarn),"filename",filename)
             end
         end
     end
@@ -1917,7 +1917,7 @@ function commands.load_fontfile( layoutxml,dataxml )
     end
 
     if publisher.lowercase then filename = unicode.utf8.lower(filename) end
-    splib.logmessages("info","Load font file","filename",filename or "?")
+    splib.log("info","Load font file","filename",filename or "?")
     publisher.fonts.load_fontfile(name,filename,extra_parameter)
 end
 
@@ -1930,11 +1930,11 @@ function commands.load_dataset( layoutxml,dataxml )
     local filename = publisher.read_attribute(layoutxml,dataxml,"filename", "string")
     local name = publisher.read_attribute(layoutxml,dataxml,"name", "string")
     if filename then
-        splib.logmessages("info","Load data file","filename",filename)
+        splib.log("info","Load data file","filename",filename)
         path = publisher.find_file(filename)
     elseif name then
         name = tex.jobname .. "-" .. name .. ".dataxml"
-        splib.logmessages("info","Load data file","filename",name)
+        splib.log("info","Load data file","filename",name)
         path = publisher.find_file(name)
     else
         err("LoadDataset: no (file)name given.")
@@ -2209,9 +2209,9 @@ function commands.message( layoutxml, dataxml )
             publisher.messages[#publisher.messages + 1] = { contents, "message" }
         end
         if publisher.newxpath then
-            splib.logmessages("info","Message","line",layoutxml[".__line"],"message",tostring(contents) or "?")
+            splib.log("info","Message","line",layoutxml[".__line"],"message",tostring(contents) or "?")
         else
-            splib.logmessages("info","Message","message",tostring(contents) or "?")
+            splib.log("info","Message","message",tostring(contents) or "?")
         end
     end
     if exitnow then
@@ -3326,7 +3326,7 @@ function commands.place_object( layoutxml,dataxml)
             end
             -- if the object has no height (for example an Action node), we don't move the cursor
             if height_in_gridcells == 0  then allocate = "no" end
-            splib.logmessages("debug","PlaceObject","type",objecttype,"col",tostring(math.floor(current_column_start)),"row",tostring(math.floor(current_row)),"wd",width_in_gridcells,"ht",height_in_gridcells,"page",onpage or publisher.current_pagenumber)
+            splib.log("debug","PlaceObject","type",objecttype,"col",tostring(math.floor(current_column_start)),"row",tostring(math.floor(current_row)),"wd",width_in_gridcells,"ht",height_in_gridcells,"page",onpage or publisher.current_pagenumber)
             publisher.output_at({
                 nodelist = node.copy(object),
                 x = current_column_start,
@@ -3429,7 +3429,7 @@ function commands.process_node(layoutxml,dataxml)
         end
         layoutnode = publisher.data_dispatcher[mode][element_name]
         if layoutnode then
-            splib.logmessages("debug","Process node", "node",element_name,"mode",mode,"pos",string.format("%d",pos))
+            splib.log("debug","Process node", "node",element_name,"mode",mode,"pos",string.format("%d",pos))
             if publisher.newxpath then
                 dataxml.pos = pos
 
@@ -3518,7 +3518,7 @@ function commands.record( layoutxml )
         elementname = publisher.read_attribute(layoutxml,{},"element","string")
         mode        = publisher.read_attribute(layoutxml,{},"mode","string","")
     end
-    splib.logmessages("debug","Record","element",elementname,"mode",mode)
+    splib.log("debug","Record","element",elementname,"mode",mode)
     publisher.data_dispatcher[mode] = publisher.data_dispatcher[mode] or {}
     publisher.data_dispatcher[mode][elementname] = layoutxml
 end
@@ -3942,7 +3942,7 @@ function commands.setvariable( layoutxml,dataxml )
     end
 
     if trace_p then
-        splib.logmessages("info","SetVariable","varname",varname or "(no variable name)","value",tostring(contents))
+        splib.log("info","SetVariable","varname",varname or "(no variable name)","value",tostring(contents))
         if type(contents) == "table" then
             printtable("SetVariable",contents)
         end
