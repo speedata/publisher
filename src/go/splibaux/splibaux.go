@@ -134,7 +134,12 @@ func LookupFile(path string) string {
 	}
 	if _, err := os.Stat(path); err == nil {
 		slog.Debug("File lookup", "request", path, "found", path)
-		return path
+		abs, err := filepath.Abs(path)
+		if err != nil {
+			slog.Error("File lookup", "err", err.Error())
+			return ""
+		}
+		return abs
 	}
 	slog.Debug("File lookup, file not found", "request", path)
 	return ""

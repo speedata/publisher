@@ -53,9 +53,7 @@ kpse = {}
 --- @param filename string The file name to look up
 --- @return string|nil The full path of the file name or nil if the file is not found.
 function kpse.find_file(filename)
-  local ret = luaglue.lookupfile(filename)
-  if ret == "" then return nil end
-  return ret
+  return luaglue.lookupfile(filename)
 end
 
 function kpse.add_dir(dirname)

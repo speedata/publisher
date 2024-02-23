@@ -101,7 +101,7 @@ extern char* sdReplace(const char* text, const char* rexpr, const char* repl);
 extern char* sdHtmlToXml(const char* input);
 extern void sdBuildFilelist();
 extern void sdAddDir(const char* cpath);
-extern char* sdLookupFile(const char* cpath);
+extern GoInt sdLookupFile(lua_State* L);
 extern char** sdListFonts();
 extern char* sdConvertContents(const char* contents, const char* handler);
 extern char* sdConvertImage(const char* filename, const char* handler);

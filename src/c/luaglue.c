@@ -186,19 +186,6 @@ static int lua_listfonts(lua_State *L) {
   return 1;
 }
 
-static int lua_lookupfile(lua_State *L) {
-  const char *filename = luaL_checkstring(L, -1);
-  lua_pop(L, 1);
-  const char *ret = sdLookupFile(filename);
-
-  if (handleerror(L, ret) == 1) {
-    return 0;
-  }
-
-  lua_pushstring(L, ret);
-  return 1;
-}
-
 static int lua_sdreplace(lua_State *L) {
   const char *text = luaL_checkstring(L, 1);
   const char *rexpr = luaL_checkstring(L, 2);
@@ -271,7 +258,7 @@ static const struct luaL_Reg myfuncs[] = {
     {"listfonts", lua_listfonts},
     {"loadxmlstring", sdLoadXMLString},
     {"load_xmlfile", sdLoadXMLFile},
-    {"lookupfile", lua_lookupfile},
+    {"lookupfile", sdLookupFile},
     {"matches", lua_matches},
     {"parse_html_text", lua_parsehtmltext},
     {"parse_html", lua_parsehtml},

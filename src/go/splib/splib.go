@@ -222,14 +222,20 @@ func sdAddDir(cpath *C.char) {
 }
 
 //export sdLookupFile
-func sdLookupFile(cpath *C.char) *C.char {
-	path := C.GoString(cpath)
-	ret, err := splibaux.GetFullPath(path)
-	if err != nil {
-		slog.Error("internal error", "where", "splibaux.GetFullPath", "argument", path, "message", err.Error())
-		return s2c(errorpattern + err.Error())
+func sdLookupFile(L *C.lua_State) int {
+	l := newLuaState(L)
+	fn, ok := l.getString(1)
+	if !ok {
+		return 0
 	}
-	return s2c(ret)
+	slog.Debug("Lookup file", "filename", fn)
+	ret, err := splibaux.GetFullPath(fn)
+	if err != nil {
+		slog.Error("internal error", "where", "splibaux.GetFullPath", "argument", fn, "message", err.Error())
+		return 0
+	}
+	l.pushString(ret)
+	return 1
 }
 
 //export sdListFonts
