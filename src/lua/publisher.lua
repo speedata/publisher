@@ -7225,9 +7225,9 @@ end
 
 local images = {}
 
-function reload_image(filename,width,height)
+function reload_image(filename,typ,width,height)
     splib.log("info","Reload image","width",tostring(width),"height",tostring(height),"filename",filename)
-    local fn = splib.reloadimage({filename = filename,width = width,height = height})
+    local fn = splib.reloadimage({ filename = filename, imagetype = typ,width = width,height = height})
     return fn
 end
 
@@ -7235,7 +7235,7 @@ function new_image(filename,page,box,fallback,imageshape)
     return imageinfo(filename,page,box,fallback,imageshape)
 end
 
-function validimagetype(filename)
+function validateimagetype(filename)
     local localfilename = find_file(filename)
     local f,errmsg = io.open(localfilename)
     if not f then
@@ -7376,7 +7376,7 @@ function imageinfo( filename,page,box,fallback,imageshape )
             if filename == nil or filename == "" then filename = "filenotfound.pdf" else log("Using converted file %q instead",filename) end
 
         end
-        filename = validimagetype(filename)
+        filename = validateimagetype(filename)
         local image_info = img.scan{filename = filename, pagebox = box, page=page,keepopen=true }
         images[new_name] = { img = image_info, allocate = mt }
     end

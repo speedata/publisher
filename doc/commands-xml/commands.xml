@@ -7021,12 +7021,12 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="dpi" optional="yes" since="4.17.10" allowxpath="yes" type="number">
+    <attribute en="dpi" optional="yes" since="4.17.10" allowxpath="yes" type="number" pro="yes">
       <description xml:lang="en">
-        <para>Set the maximum DPI number for PNG/JPEG images (experimental, needs image server)</para>
+        <para>Set the maximum DPI number for PNG/JPEG images.</para>
       </description>
       <description xml:lang="de">
-        <para>Setze die maximale DPI Zahl für PNG/JPEG-Bilder (experimentell, benötigt image server)</para>
+        <para>Setze die maximale DPI Zahl für PNG/JPEG-Bilder</para>
       </description>
     </attribute>
     <attribute en="duplex" optional="yes" since="2.3.47">

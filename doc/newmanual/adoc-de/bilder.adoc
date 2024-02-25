@@ -372,13 +372,24 @@ Zu MetaPost gibt es ein <<ch-fortgeschrittenethemen-metapostgrafiken,eigenes Kap
 
 Siehe auch das Kapitel über <<ch-fortgeschrittenethemen-metapostgrafiken,MetaPost>> sowie die https://github.com/speedata/examples/tree/master/metapost[MetaPost-Beispiele].
 
+[.profeature]
+== Bildgröße und Auflösung
+
+Große Bilddateien erzeugen auch große PDF-Dateien, wenn sie eingebunden werden, unabhängig davon, wie breit und hoch sie im PDF dargestellt werden.
+Möchte man die Auflösung (und damit die Dateigröße) begrenzen, kann man dies mit der `dpi`-Option bei <<cmd-pdfoptions>> erreichen.
+DPI steht für Punkte pro Zoll (dots per inch) und ist eine Maßeinheit für die Pixeldichte.
+Je geringer die Zahl, desto »schlechter« sieht das Bild aus.
+Durch eine Begrenzung der Auflösung erhält man teilweise wesentlich kleinere Dateien.
+
+Beispiel: soll ein Bild mit der Breite von 720 Pixeln auf einer Papierbreite von 1 Zoll (inch) dargestellt werden, wäre die Auflösung im PDF 720 dpi.
+In der Regel ist eine so hohe Auflösung nicht notwendig.
+Je nach Anwendungsfall (Druck/Onlinebetrachtung) kann z.B. eine Auflösung von 300 dpi oder 120 dpi ausreichend sein.
 
 == Weitere Parameter
 
 * Man kann über die `{padding}`-Angaben festlegen, wie viel Abstand das Bild vom entsprechenden Rand haben soll.
 
 * Mit `dpiwarn` kann eine Warnung herausgegeben werden, wenn die tatsächliche Anzahl der Pixel je Zoll geringer ist, als die Vorgabe.
-
 
 
 // NOTE: Bildumrisse erzeugen?

@@ -6,6 +6,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/alecthomas/chroma v0.10.0
 	github.com/andybalholm/cascadia v1.3.2
+	github.com/anthonynsimon/bild v0.13.0
 	github.com/cjoudrey/gluahttp v0.0.0-20201111170219-25003d9adfa9
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/gammazero/workerpool v1.1.3
@@ -29,5 +30,6 @@ require (
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
 	github.com/google/btree v1.1.2 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
+	golang.org/x/image v0.0.0-20190703141733-d6a02ce849c9 // indirect
 	golang.org/x/sys v0.16.0 // indirect
 )

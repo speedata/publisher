@@ -23,7 +23,6 @@ import "C"
 import (
 	"bytes"
 	"encoding/xml"
-	"errors"
 	"fmt"
 	"io"
 	"log/slog"
@@ -32,7 +31,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"syscall"
 	"unsafe"
 
 	"speedatapublisher/splibaux"
@@ -390,13 +388,15 @@ func sdReloadImage(L *C.lua_State) int {
 		slog.Error("internal error", "where", "sdReloadImage", "message", "height is not a number")
 		return 0
 	}
-	newfn, err := splibaux.RequestFileFromImageServer(fn, wd, ht)
+	imagetype, ok := l.getStringTable(1, "imagetype")
+	if !ok {
+		slog.Error("internal error", "where", "sdReloadImage", "message", "imagetype is not a string")
+		return 0
+	}
+
+	newfn, err := splibaux.ResizeImage(fn, imagetype, wd, ht)
 	if err != nil {
-		if errors.Is(err, syscall.ECONNREFUSED) {
-			slog.Error("Cannot connect to the image server", "address", "127.0.0.1", "port", "5992")
-		} else {
-			slog.Error("internal error", "where", "sdReloadImage", "message", err)
-		}
+		slog.Error("internal error", "where", "sdReloadImage", "message", err)
 		return 0
 	}
 	l.pushString(newfn)

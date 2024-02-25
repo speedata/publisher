@@ -4900,7 +4900,7 @@
       </xs:attribute>
       <xs:attribute name="dpi">
         <xs:annotation>
-          <xs:documentation>Set the maximum DPI number for PNG/JPEG images (experimental, needs image server)</xs:documentation>
+          <xs:documentation>Set the maximum DPI number for PNG/JPEG images.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="duplex">

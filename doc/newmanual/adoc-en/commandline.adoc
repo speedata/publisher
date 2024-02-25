@@ -98,8 +98,6 @@ you can display a list of the allowed commands and parameters.
    Ignore case when accessing files (on a case-insensitive file system) in the recursive file lookup.
 `--imagecache=PATH`::
    Set the image cache
-`--imageserver=ADDRESS`::
-   Set the address of the image server. Defaults to 127.0.0.1:5998.
 `--inkscape=PATH`::
    Set the path to the inkscape program
 `--jobname=NAME`::

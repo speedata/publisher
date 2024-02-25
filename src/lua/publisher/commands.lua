@@ -1536,7 +1536,7 @@ function commands.image( layoutxml,dataxml )
                     local destpx_x = math.round(destdpi * width / publisher.factor / 72,0)
                     local destpx_y = math.round(destdpi * height / publisher.factor / 72,0)
 
-                    filename = publisher.reload_image(image.filepath,destpx_x, destpx_y)
+                    filename = publisher.reload_image(image.filepath,image.imagetype,destpx_x, destpx_y)
                     if filename then
                         imageinfo = publisher.new_image(filename,page,box_lookup[vis_box] or "crop", fallback,imageshape)
                         image = img.copy(imageinfo.img)

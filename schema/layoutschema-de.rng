@@ -4405,7 +4405,7 @@
          </optional>
          <optional>
             <attribute name="dpi">
-               <a:documentation>Setze die maximale DPI Zahl für PNG/JPEG-Bilder (experimentell, benötigt image server)</a:documentation>
+               <a:documentation>Setze die maximale DPI Zahl für PNG/JPEG-Bilder</a:documentation>
             </attribute>
          </optional>
          <optional>

@@ -119,7 +119,6 @@ func init() {
 	options = make(map[string]string)
 	defaults = map[string]string{
 		"address":           "127.0.0.1",
-		"imageserver":       "127.0.0.1:5998",
 		"data":              "data.xml",
 		"fontpath":          "",
 		"grid":              "",
@@ -810,7 +809,6 @@ func main() {
 	op.On("--grid", "Display background grid. Disable with --no-grid", options)
 	op.On("--ignore-case", "Ignore case when accessing files in the recursive file list (on a case-insensitive file system)", options)
 	op.On("--imagecache PATH", "Set the image cache", options)
-	op.On("--imageserver ADDRESS", "Set the address and port of the image server. Default to 127.0.0.1:5998", options)
 	op.On("--inkscape PATH", "Set the path to the inkscape program", options)
 	op.On("--jobname NAME", "The name of the resulting PDF file (without extension), default is 'publisher'", options)
 	op.On("--no-local", "Add local directory to the search path. Default is true", &addLocalPath)
@@ -951,7 +949,6 @@ func main() {
 	os.Setenv("SP_PATH_REWRITE", getOption("pathrewrite"))
 	os.Setenv("SP_INKSCAPE", getOption("inkscape"))
 	os.Setenv("SP_INKSCAPECMD", getOption("inkscape-command"))
-	os.Setenv("SP_IMAGESERVER", getOption("imageserver"))
 
 	if pdfversion := getOption("pdfversion"); pdfversion == "" {
 		os.Setenv("SP_PDFMAJORVERSION", "1")
