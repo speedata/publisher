@@ -885,6 +885,10 @@ function get_colentry_from_name(colorname, default)
             colentry = colors[colorname]
         end
     end
+    if not colentry then
+        splib.log("error","Undefined color, revert to black","value",colorname or "(undefined)")
+        return colors["black"]
+    end
     return setmetatable(colentry, colormetatable)
 end
 
@@ -3234,6 +3238,10 @@ function do_metapostimage(txt,width,height,clip)
     end
 
     local box, bbox = metapost.boxgraphic(width_sp,height_sp,"_image",{},{})
+    if not box then
+        splib.log("error","Could not create metapost image")
+        return
+    end
     local image = {
         xsize = publisher.bp_to_sp(bbox[3] - bbox[1]),
         ysize = publisher.bp_to_sp(bbox[4] - bbox[2])
@@ -3375,6 +3383,11 @@ function mpbox(parameter,width,height)
 
     -- TODO: test, changed code during metapost overhaul
     local instr,bbox = metapost.boxgraphic(width_sp,height_sp,"__htmlbox",extra_parameter)
+    if not instr then
+        splib.log("error","Could not create metapost image")
+        return
+    end
+
     local ret = node.hpack(instr,width,"exactly")
     ret.height = height
     if parameter.shiftdown then

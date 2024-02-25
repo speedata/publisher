@@ -398,6 +398,11 @@ function commands.box( layoutxml,dataxml )
 
     if graphic then
         local instr, bbox = metapost.boxgraphic(width,height,graphic)
+        if not instr then
+            splib.log("error","Could not create metapost image","graphic",graphic)
+            return
+        end
+
         local bx = node.hpack(instr,width,"exactly")
         bx.height = height
         bx = node.vpack(bx)
