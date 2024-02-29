@@ -108,5 +108,5 @@ Run the following layout with `sp --dummy` and you will get a PDF which reproduc
 </Layout>
 -------------------------------------------------------------------------------
 
-The explanation is simple. With `unparsed-text()` the `layout.xml` is loaded without interpretation, then enclosed with `+````+`` (backticks) and line breaks and output as markdown.
+The explanation is simple. With `unparsed-text()` the `layout.xml` is loaded without interpretation, then enclosed with pass:[```] (three backticks) and line breaks and output as markdown.
 The three backticks mean that the content is not interpreted but only placed in the PDF (with all spaces as in the input itself).

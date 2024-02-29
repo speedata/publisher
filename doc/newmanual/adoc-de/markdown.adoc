@@ -108,4 +108,4 @@ Wenn sie das folgende Layout mit `sp --dummy` durchlaufen lassen, erzeugt es ein
 </Layout>
 -------------------------------------------------------------------------------
 
-Die Erklärung ist einfach. Mit `unparsed-text()` wird die `layout.xml` geladen, anschließend mit `+```+` (Backticks) und Zeilenumbruch umrandet und als Markdown ausgegeben. Die drei Backticks bedeuten, dass der Inhalt nicht interpretiert sondern nur ausgegeben wird (mit allen Leerzeichen wie in der Eingabe selber).
+Die Erklärung ist einfach. Mit `unparsed-text()` wird die `layout.xml` geladen, anschließend mit pass:[```] (drei Backticks) und Zeilenumbruch umrandet und als Markdown ausgegeben. Die drei Backticks bedeuten, dass der Inhalt nicht interpretiert sondern nur ausgegeben wird (mit allen Leerzeichen wie in der Eingabe selber).
