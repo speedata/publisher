@@ -13,9 +13,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-
-	"github.com/anthonynsimon/bild/imgio"
-	"github.com/anthonynsimon/bild/transform"
 )
 
 var (
@@ -48,50 +45,6 @@ func init() {
 		}
 		pathrewrite = strings.NewReplacer(rewrites...)
 	}
-}
-
-// ResizeImage gets a new image with the given width and height.
-func ResizeImage(filename string, imagetype string, width, height int) (string, error) {
-	var err error
-
-	fn := filepath.Join(os.TempDir(), "speedata_publisher")
-	if err = os.MkdirAll(fn, 0755); err != nil {
-		return "", err
-	}
-
-	pathPart := filepath.Dir(filename)
-	filenamePart := filepath.Base(filename)
-
-	h := md5.New()
-	io.WriteString(h, pathPart)
-
-	prefix := fmt.Sprintf("%x", h.Sum(nil))
-	destFilename := filepath.Join(fn, fmt.Sprintf("%s_%d_%d_%s", prefix, width, height, filenamePart))
-
-	if _, err = os.Stat(destFilename); err == nil {
-		return destFilename, nil
-	}
-
-	slog.Info("Resize file", "out", destFilename)
-	img, err := imgio.Open(filename)
-	if err != nil {
-		return "", err
-	}
-
-	resized := transform.Resize(img, width, height, transform.Linear)
-	var encoder imgio.Encoder
-
-	switch imagetype {
-	case "png":
-		encoder = imgio.PNGEncoder()
-	case "jpg":
-		encoder = imgio.JPEGEncoder(70)
-	default:
-		return "", fmt.Errorf("Image file type not supported (resize image)")
-	}
-
-	err = imgio.Save(destFilename, resized, encoder)
-	return destFilename, err
 }
 
 func downloadFile(resourceURL string, outfile io.Writer) error {
