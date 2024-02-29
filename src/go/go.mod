@@ -33,6 +33,6 @@ require (
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
 	github.com/google/btree v1.1.2 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
-	golang.org/x/image v0.0.0-20190703141733-d6a02ce849c9 // indirect
+	golang.org/x/image v0.10.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
 )
