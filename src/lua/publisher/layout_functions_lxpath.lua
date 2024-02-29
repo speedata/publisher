@@ -593,6 +593,20 @@ local function sha512(dataxml, arg)
     return { ret }, nil
 end
 
+local function markdown(dataxml, arg)
+    if arg == nil then
+        arg = dataxml
+    end
+    local str = table_textvalue(arg[1])
+    local htmltext = splib.markdown(str)
+    if htmltext then
+        htmltext = publisher.splib.htmltoxml(htmltext)
+        local ret = luxor.parse_xml("<dummy><dummy>" .. htmltext .. "</dummy></dummy>")
+        return { ret }, nil
+    end
+    return {}, nil
+end
+
 local function md5(dataxml, arg)
     local message = table.concat(arg)
     local ret = sha.md5(message)
@@ -843,6 +857,7 @@ local funcs = {
     { "keep-alternating",    sdns, keepalternating,      1, -1 },
     { "lastmark",            sdns, lastmark,             1, 1 },
     { "loremipsum",          sdns, loremipsum,           0, 1 },
+    { "markdown",            sdns, markdown,             1, 1 },
     { "md5",                 sdns, md5,                  1, 1 },
     { "merge-pagenumbers",   sdns, fnMergePagenumbers,   1, 4 },
     { "mode",                sdns, mode,                 1, 1 },

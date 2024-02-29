@@ -17,6 +17,8 @@ local spotcolors = require("spotcolors")
 if os.getenv("SP_XMLPARSER") == "lxpath" then
     xpath = require("lxpath")
     xpath.stringmatch = unicode.utf8.match
+    xpath.find_file = find_file
+    xpath.parse_xml = splib.load_xmlfile
 else
     xpath = do_luafile("xpath.lua")
 end

@@ -3637,6 +3637,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="markdown-extensions">
+               <a:documentation>Set the markdown extensions. Must be a comma seprarated list of one or more of these values: table, strikethrough, linkify, tasklist, gfm, definitionlist, footnote, typographer, cjk.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="randomseed">
                <a:documentation>Set the seed for the random number generator (a positive integer).</a:documentation>
             </attribute>

@@ -1,0 +1,112 @@
+[[ch-markdown]]
+= Markdown
+
+TIP: The markdown support is considered experimental, there will be changes to the code.
+
+You can render text with markdown, a common markup “language” for text. See https://www.markdownguide.org for example if you want to learn about markdown.
+
+To use markdown in your document, just call the `sd:markdown` function:
+
+[source, xml]
+----------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="sd:markdown(.)" />
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+----------------------------------------------------------------------
+
+with the data file:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<data>
+# A title
+
+* one
+* anotherone
+* three
+</data>
+-------------------------------------------------------------------------------
+
+renders a h1 title and a bullet list:
+
+.The vertical spacing is not optimal yet, this will be fixed in a future version of the speedata Publisher.
+image::markdownsimple.png[width=40%]
+
+== Markdown extensions
+
+There are several markdown extensions that are used to create tables, footnotes and other gimmicks. Some of them are supported by the speedata Publisher. The implementation will be improved in due time. Some of the extensions automatically activate others. Just try them out.
+
+[options="header"]
+|=======
+| Feature | Description |
+| `gfm`   | GitHub flavored markdown |
+| `table` | https://github.github.com/gfm/#tables-extension-[Use tables] |
+| `strikethrough` | https://github.github.com/gfm/#strikethrough-extension-[Some helpers for `~` strikethrough] |
+| `linkify` | https://github.github.com/gfm/#autolinks-extension-[Create automatic links] |
+| `definitionlist` |  https://michelf.ca/projects/php-markdown/extra/#def-list[definition lists] |
+| `footnote` | https://michelf.ca/projects/php-markdown/extra/#footnotes[Footnotes ] |
+| `typographer` | This extension substitutes punctuations with typographic entities like https://daringfireball.net/projects/smartypants/[smartypants] |
+| `highlight` | Source code highlighting |
+|=======
+
+These options can be set like
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Options markdown-extensions="highlight,table" />
+-------------------------------------------------------------------------------
+
+
+You can also select the highlight style with the prefix `hlstyle_`, for example
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Options markdown-extensions="highlight,hlstyle_tango" />
+-------------------------------------------------------------------------------
+
+The list of available styles are at https://github.com/alecthomas/chroma/tree/master/styles.
+
+You can also set rendering options with the prefix `hloption_`. Currently only `hloption_withclasses` is supported, which has the effect that classes are used instead of `<span>...</span>` for syntax highlighting.
+
+== A speedata Publisher quine using markdown
+
+This section should be taken with a grain of salt... With markdown it is now easily possible to create a `layout.xml` https://en.wikipedia.org/wiki/Quine_(computing)[quine].
+
+Run the following layout with `sp --dummy` and you will get a PDF which reproduces itself:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Options markdown-extensions="highlight,hlstyle_tango" />
+
+    <Record element="data">
+        <SetVariable
+            variable="raw"
+            select="unparsed-text('layout.xml')" />
+        <SetVariable
+            variable="fenced"
+            select="concat('```xml&#x0a;', $raw ,'&#x0a;```'))"/>
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="sd:markdown($fenced)" />
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+The explanation is simple. With `unparsed-text()` the `layout.xml` is loaded without interpretation, then enclosed with `+````+`` (backticks) and line breaks and output as markdown.
+The three backticks mean that the content is not interpreted but only placed in the PDF (with all spaces as in the input itself).

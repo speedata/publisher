@@ -6,7 +6,9 @@ local M = {
     fnNS = "http://www.w3.org/2005/xpath-functions",
     xsNS = "http://www.w3.org/2001/XMLSchema",
     stringmatch = string.match,
-    stringfind = string.find
+    stringfind = string.find,
+    findfile = function(fn) return fn end,
+    parse_xml = function(fn) return {} end -- dummy
 }
 
 local debuglevel = 0
@@ -600,6 +602,14 @@ local function fnCount(ctx, seq)
     return { #firstarg }, nil
 end
 
+local function fnDoc(ctx, seq)
+    local firstarg = string_value(seq[1])
+    local fn = M.findfile(firstarg)
+    local xmltab = M.parse_xml(fn)
+    ctx.sequence = xmltab[1]
+    return {ctx.sequence}, nil
+end
+
 local function fnEmpty(ctx, seq)
     return { #seq[1] == 0 }, nil
 end
@@ -737,6 +747,12 @@ local function fnRoot(ctx, seq)
     if #seq ~= 0 then
         return nil, "not yet implmented: root(arg)"
     end
+    if not ctx.xmldoc then
+        return nil, "no root found"
+    end
+    if not ctx.xmldoc[1] then
+        return nil, "no root found"
+    end
     for i = 1, #ctx.xmldoc[1] do
         local tab = ctx.xmldoc[1][i]
         if is_element(tab) then
@@ -857,6 +873,18 @@ local function fnTrue(ctx, seq)
     return { true }, nil
 end
 
+local function fnUnparsedText(ctx, seq)
+    local firstarg = string_value(seq[1])
+    local fn = M.findfile(firstarg)
+    local rd,msg = io.open(fn,"r")
+    if not rd then
+        return nil, msg
+    end
+    local txt = rd:read("a")
+    rd:close()
+    return {txt},nil
+end
+
 -- Not unicode aware!
 local function fnUpperCase(ctx, seq)
     local firstarg = seq[1]
@@ -874,6 +902,7 @@ local funcs = {
     { "concat",               M.fnNS, fnConcat,             0, -1 },
     { "contains",             M.fnNS, fnContains,           2, 2 },
     { "count",                M.fnNS, fnCount,              1, 1 },
+    { "doc",                  M.fnNS, fnDoc,                1, 1 },
     { "empty",                M.fnNS, fnEmpty,              1, 1 },
     { "false",                M.fnNS, fnFalse,              0, 0 },
     { "floor",                M.fnNS, fnFloor,              1, 1 },
@@ -900,6 +929,7 @@ local funcs = {
     { "string",               M.fnNS, fnString,             0, 1 },
     { "substring",            M.fnNS, fnSubstring,          2, 3 },
     { "true",                 M.fnNS, fnTrue,               0, 0 },
+    { "unparsed-text",        M.fnNS, fnUnparsedText,       1, 1 },
     { "upper-case",           M.fnNS, fnUpperCase,          1, 1 },
 }
 

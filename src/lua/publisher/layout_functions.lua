@@ -596,6 +596,20 @@ local function tounit(dataxml, arg)
     return math.round(ret, decimal)
 end
 
+local function markdown(dataxml, arg)
+    if arg == nil then
+        arg = dataxml
+    end
+    local str = table_textvalue(arg[1])
+    local htmltext = splib.markdown(str)
+    if htmltext then
+        htmltext = publisher.splib.htmltoxml(htmltext)
+        local ret = luxor.parse_xml("<dummy><dummy>" .. htmltext .. "</dummy></dummy>")
+        return { ret }, nil
+    end
+    return {}, nil
+end
+
 
 -- Turn escaped HTML into table. Uses Go XML parser + CSS
 local function html(dataxml, arg)
@@ -789,6 +803,7 @@ register(sdns, "group-width", groupwidth)
 register(sdns, "groupwidth", groupwidth)
 register(sdns, "imagewidth", imagewidth)
 register(sdns, "imageheight", imageheight)
+register(sdns, "markdown", markdown)
 register(sdns, "mode", mode)
 register(sdns, "allocated", allocated)
 register(sdns, "keep-alternating", keepalternating)

@@ -112,6 +112,7 @@ extern void* sdTeardown();
 extern GoInt sdLog(lua_State* p0);
 extern GoInt sdGetErrCount();
 extern GoInt sdGetWarnCount();
+extern GoInt sdMarkdown(lua_State* p0);
 extern GoInt sdReloadImage(lua_State* p0);
 extern GoInt sdLoadXMLFile(lua_State* p0);
 

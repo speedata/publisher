@@ -2482,6 +2482,10 @@ function commands.options( layoutxml,dataxml )
     local imagenotfound                   = publisher.read_attribute(layoutxml,dataxml,"imagenotfound", "string")
     local mainlanguage                    = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","")
     local default_area                    = publisher.read_attribute(layoutxml,dataxml,"defaultarea","string")
+    local markdownextensions              = publisher.read_attribute(layoutxml,dataxml,"markdown-extensions","string")
+    if markdownextensions then
+        splib.markdownextensions = string.explode(markdownextensions,",")
+    end
 
     if default_area then
         publisher.default_area = default_area
@@ -2806,24 +2810,23 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     end
 
     local params = {
-        fontfamily = fontfamily,
+        allowbreak = allowbreak,
+        bidi = bidi,
         color = colorindex,
         direction = direction,
+        fontfamily = fontfamily,
+        fontoutlinewidth = fontoutlinewidth,
+        html = html,
+        labelleft = labelleft,
+        labelleftalign = labelleftalign,
+        labelleftdistance = labelleftdistance,
+        labelleftwidth = labelleftwidth,
         languagecode = languagecode,
         padding_left = paddingleft,
         padding_right = paddingright,
-        textformat = publisher.textformats[textformat],
-        allowbreak = allowbreak,
-        html = html,
-        labelleft = labelleft,
-        labelleftwidth = labelleftwidth,
-        labelleftalign = labelleftalign,
-        labelleftdistance = labelleftdistance,
-        bidi = bidi,
         role = publisher.get_rolenum(role),
-        fontoutlinewidth = fontoutlinewidth,
+        textformat = publisher.textformats[textformat],
     }
-
 
     local tab = publisher.dispatch(layoutxml,dataxml)
     local p = par:new(nil,"commands.paragraph")
@@ -4885,10 +4888,10 @@ function commands.textblock( layoutxml,dataxml )
 
 
     local options = {
-        textformat = publisher.textformats[textformat],
-        fontfamily = fontfamily,
         color = colorindex,
+        fontfamily = fontfamily,
         languagecode = languagecode,
+        textformat = publisher.textformats[textformat],
     }
 
     local tab = publisher.dispatch(layoutxml,dataxml,options)

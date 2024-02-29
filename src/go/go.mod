@@ -5,6 +5,7 @@ go 1.21
 require (
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/alecthomas/chroma v0.10.0
+	github.com/alecthomas/chroma/v2 v2.12.0
 	github.com/andybalholm/cascadia v1.3.2
 	github.com/anthonynsimon/bild v0.13.0
 	github.com/cjoudrey/gluahttp v0.0.0-20201111170219-25003d9adfa9
@@ -19,13 +20,15 @@ require (
 	github.com/speedata/goxlsx v1.0.2
 	github.com/speedata/hotfolder v0.0.0-20181204121114-5f743a840a92
 	github.com/speedata/optionparser v1.0.2
+	github.com/yuin/goldmark v1.4.15
+	github.com/yuin/goldmark-highlighting/v2 v2.0.0-20230729083705-37449abec8cc
 	github.com/yuin/gopher-lua v1.1.1
 	golang.org/x/net v0.20.0
 	golang.org/x/text v0.14.0
 )
 
 require (
-	github.com/dlclark/regexp2 v1.8.1 // indirect
+	github.com/dlclark/regexp2 v1.10.0 // indirect
 	github.com/gammazero/deque v0.2.1 // indirect
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
 	github.com/google/btree v1.1.2 // indirect

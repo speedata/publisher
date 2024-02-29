@@ -6108,6 +6108,14 @@
       </description>
       <referenceattribute name="languages" />
     </attribute>
+    <attribute en="markdown-extensions" optional="yes" type="text" allowxpath="yes" since="4.17.11">
+      <description xml:lang="en">
+        <para>Set the markdown extensions. Must be a comma seprarated list of one or more of these values: table, strikethrough, linkify, tasklist, gfm, definitionlist, footnote, typographer, cjk.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze die markdown-Erweiterungen. Eine Kommaseparierte Liste der folgenden Werte: table, strikethrough, linkify, tasklist, gfm, definitionlist, footnote, typographer, cjk.</para>
+      </description>
+    </attribute>
     <attribute en="randomseed" optional="yes" allowxpath="yes" since="3.9.24" type="number">
       <description xml:lang="en">
         <para>Set the seed for the random number generator (a positive integer).</para>

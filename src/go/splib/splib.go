@@ -35,6 +35,10 @@ import (
 
 	"speedatapublisher/splibaux"
 
+	"github.com/alecthomas/chroma/v2/formatters/html"
+	"github.com/yuin/goldmark"
+	highlighting "github.com/yuin/goldmark-highlighting/v2"
+	"github.com/yuin/goldmark/extension"
 	"golang.org/x/text/unicode/bidi"
 )
 
@@ -89,6 +93,87 @@ func sdParseHTML(filenameC *C.char) *C.char {
 		return s2c(errorpattern + err.Error())
 	}
 	return C.CString(str)
+}
+
+//export sdMarkdown
+func sdMarkdown(L *C.lua_State) int {
+	mdExtensions := []goldmark.Extender{}
+	hlOptions := []highlighting.Option{}
+	htmlOptions := []html.Option{}
+	mdExtensionsStr := []string{}
+	l := newLuaState(L)
+	mdText, ok := l.getString(1)
+	if !ok {
+		slog.Error("markdown needs string as first argument")
+		return 0
+	}
+	useHighlight := false
+	l.getGlobal("splib")
+	l.pushString("markdownextensions")
+	if l.rawGet(-2) == luaTTable {
+		length := l.len(-1)
+		for i := 1; i <= length; i++ {
+			l.rawGetI(-1, i)
+			arg, ok := l.getString(-1)
+			if ok {
+				switch {
+				case arg == "gfm":
+					mdExtensions = append(mdExtensions, extension.GFM)
+					mdExtensionsStr = append(mdExtensionsStr, arg)
+				case arg == "table":
+					mdExtensions = append(mdExtensions, extension.Table)
+					mdExtensionsStr = append(mdExtensionsStr, arg)
+				case arg == "strikethrough":
+					mdExtensions = append(mdExtensions, extension.Strikethrough)
+					mdExtensionsStr = append(mdExtensionsStr, arg)
+				case arg == "linkify":
+					mdExtensions = append(mdExtensions, extension.Linkify)
+					mdExtensionsStr = append(mdExtensionsStr, arg)
+				case arg == "definitionlist":
+					mdExtensions = append(mdExtensions, extension.DefinitionList)
+					mdExtensionsStr = append(mdExtensionsStr, arg)
+				case arg == "footnote":
+					mdExtensions = append(mdExtensions, extension.Footnote)
+					mdExtensionsStr = append(mdExtensionsStr, arg)
+				case arg == "typographer":
+					mdExtensions = append(mdExtensions, extension.Typographer)
+					mdExtensionsStr = append(mdExtensionsStr, arg)
+				case arg == "cjk":
+					mdExtensions = append(mdExtensions, extension.Linkify)
+					mdExtensionsStr = append(mdExtensionsStr, arg)
+				case arg == "highlight":
+					useHighlight = true
+					mdExtensionsStr = append(mdExtensionsStr, arg)
+				case strings.HasPrefix(arg, "hlstyle_"):
+					suffix, _ := strings.CutPrefix(arg, "hlstyle_")
+					hlOptions = append(hlOptions, highlighting.WithStyle(suffix))
+				case strings.HasPrefix(arg, "hloption_"):
+					suffix, _ := strings.CutPrefix(arg, "hloption_")
+					switch suffix {
+					case "withclasses":
+						htmlOptions = append(htmlOptions, html.WithClasses(true))
+					}
+				default:
+					slog.Warn("markdown extension not supported", "extension", arg)
+				}
+				l.pop(1)
+			}
+		}
+	}
+	if useHighlight {
+		hlOptions = append(hlOptions, highlighting.WithFormatOptions(htmlOptions...))
+		mdExtensions = append(mdExtensions, highlighting.NewHighlighting(hlOptions...))
+	}
+	slog.Debug("Render markdown with extensions", "extensions", strings.Join(mdExtensionsStr, ", "))
+	gm := goldmark.New(goldmark.WithExtensions(mdExtensions...))
+	var out bytes.Buffer
+	err := gm.Convert([]byte(mdText), &out)
+	if err != nil {
+		slog.Error("Could not convert text to markdown", "message", err.Error())
+		return 0
+	}
+	l.pushString(out.String())
+	return 1
 }
 
 //export sdContains
@@ -230,6 +315,9 @@ func sdLookupFile(L *C.lua_State) int {
 	ret, err := splibaux.GetFullPath(fn)
 	if err != nil {
 		slog.Error("internal error", "where", "splibaux.GetFullPath", "argument", fn, "message", err.Error())
+		return 0
+	}
+	if ret == "" {
 		return 0
 	}
 	l.pushString(ret)

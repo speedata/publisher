@@ -33,6 +33,11 @@ func (l *LuaState) setTop(n int) {
 	C.lua_settop(l.l, C.int(n))
 }
 
+func (l *LuaState) getGlobal(name string) lType {
+	i := C.lua_getglobal(l.l, C.CString(name))
+	return lType(i)
+}
+
 // pop removes n elements from the stack
 func (l *LuaState) pop(n int) {
 	l.setTop(-n - 1)
@@ -119,6 +124,18 @@ func (l *LuaState) getAny(idx int) (any, bool) {
 	return nil, false
 }
 
+func (l *LuaState) getInt(idx int) (int, bool) {
+	if l.getTop() == 0 {
+		return 0, false
+	}
+	if l.luaType(idx) == luaTNumber {
+		var isnum C.int
+		dbl := C.lua_tonumberx(l.l, C.int(idx), &isnum)
+		return int(dbl), true
+	}
+	return 0, false
+}
+
 func (l *LuaState) getNumber(idx int) (float64, bool) {
 	if l.getTop() == 0 {
 		return 0, false
@@ -131,13 +148,14 @@ func (l *LuaState) getNumber(idx int) (float64, bool) {
 	return 0, false
 }
 
+// getString returns the string at the index and true, if the value is a string,
+// otherwise the empty string and false. The stack is unchanged.
 func (l *LuaState) getString(idx int) (string, bool) {
 	if l.getTop() == 0 {
 		return "", false
 	}
 	if l.luaType(idx) == luaTString {
-		var length C.size_t
-		str := C.lua_tolstring(l.l, C.int(idx), &length)
+		str := C.lua_tolstring(l.l, C.int(idx), nil)
 		return C.GoString(str), true
 	}
 	return "", false
@@ -187,6 +205,24 @@ func (l *LuaState) createTable(seq int, other int) int {
 // metamethods).
 func (l *LuaState) rawSet(index int) {
 	C.lua_rawset(l.l, C.int(index))
+}
+
+// len returns the length of the item at the index. The stack is unchanged.
+func (l *LuaState) len(index int) int {
+	C.lua_len(l.l, C.int(index))
+	i, _ := l.getInt(-1)
+	l.pop(1)
+	return i
+}
+
+func (l *LuaState) rawGet(index int) lType {
+	return lType(C.lua_rawget(l.l, C.int(index)))
+}
+
+// Pushes onto the stack the value t[n], where t is the table at the given index. The access is raw, that is, it does not invoke the __index metamethod.
+// Returns the type of the pushed value.
+func (l *LuaState) rawGetI(index int, n int) lType {
+	return lType(C.lua_rawgeti(l.l, C.int(index), C.longlong(n)))
 }
 
 // setTable oes the equivalent to t[k] = v, where t is the value at the given

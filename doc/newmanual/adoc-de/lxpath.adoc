@@ -352,6 +352,9 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `true()`::
    Gibt „Wahr“ zurück.
 
+`unparsed-text(<dateiname>)`::
+   Gibt den Inhalt der Datei zurück ohne dass sie interpretiert wird.
+
 `upper-case()`::
 	Wandelt den Text in Großbuchstaben: `upper-case('Text')` ergibt `TEXT`.
 

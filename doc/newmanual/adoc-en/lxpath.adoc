@@ -339,6 +339,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `true()`::
    Return true.
 
+`unparsed-text(<filename>)`::
+   Returns the contents of the file without interpretation.
+
 `upper-case()`::
   Converts the text to capital letters: `upper-case('text')` results in `TEXT`.
 

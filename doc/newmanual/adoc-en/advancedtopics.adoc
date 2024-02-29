@@ -17,6 +17,8 @@ include::groups.adoc[leveloffset=+1]
 
 include::virtualpages.adoc[leveloffset=+1]
 
+include::markdown.adoc[leveloffset=+1]
+
 include::rotatingthings.adoc[leveloffset=+1]
 
 include::sortdata.adoc[leveloffset=+1]

@@ -3846,6 +3846,11 @@
           </xs:union>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="markdown-extensions">
+        <xs:annotation>
+          <xs:documentation>Setze die markdown-Erweiterungen. Eine Kommaseparierte Liste der folgenden Werte: table, strikethrough, linkify, tasklist, gfm, definitionlist, footnote, typographer, cjk.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="randomseed">
         <xs:annotation>
           <xs:documentation>Setze die Startzahl (seed) für den Zufallszahlengenerator (eine positive Ganzzahl).</xs:documentation>
