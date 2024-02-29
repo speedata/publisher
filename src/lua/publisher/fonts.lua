@@ -18,8 +18,6 @@ local font_instances={}
 
 used_fonts={}
 
-
-local glue_spec_node = node.id("glue_spec")
 local glue_node      = node.id("glue")
 local glyph_node     = node.id("glyph")
 local disc_node      = node.id("disc")
@@ -46,8 +44,8 @@ for k,v in pairs(node.whatsits()) do
 end
 
 
---- Every font family ("text", "Chapter"), that is defined by DefineFontfamily gets an internal
---- number. This number is stored here.
+--- Every font family ("text", "Chapter"), that is defined by DefineFontfamily
+--- gets an internal number. This number is stored here.
 lookup_fontfamily_name_number={}
 
 --- Every font family (given by number) has variants like italic, bold etc.

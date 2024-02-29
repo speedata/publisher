@@ -247,6 +247,7 @@ function M.is_function(dataxml,str,pos,ns)
             return true
         else
             M.err = true
+            splib.log("error","XPath function unknown","fname",tostring(fname),"prefix",prefix)
             M.errmsg = string.format("Function %q with prefix %q unknown", tostring(fname),tostring(prefix))
             return true
         end

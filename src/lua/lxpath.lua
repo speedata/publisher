@@ -958,6 +958,7 @@ local function callFunction(fname, seq, ctx)
         fname = fn[2]
     end
     local func = getFunction(namespace, fname)
+    if not func then return {}, string.format("cannot find function with name %s",fname) end
     local minarg, maxarg = func[4], func[5]
 
     if #seq < minarg or (maxarg ~= -1 and #seq > maxarg) then
@@ -1764,8 +1765,9 @@ function parse_and_expr(tl)
     local evaler = function(ctx)
         local ef, msg, ok, seq
         for i = 1, #efs do
+            newcontext = ctx:copy()
             ef = efs[i]
-            seq, msg = ef(ctx)
+            seq, msg = ef(newcontext)
             if msg then return nil, msg end
             ok, msg = boolean_value(seq)
             if msg then return nil, msg end
@@ -2264,9 +2266,9 @@ function parse_relative_path_expr(tl)
             local copysequence = ctx.sequence
             local ef = efs[i]
             ctx.size = #copysequence
-            for i, itm in ipairs(copysequence) do
+            for j, itm in ipairs(copysequence) do
                 ctx.sequence = { itm }
-                ctx.pos = i
+                ctx.pos = j
                 local seq, errmsg = ef(ctx)
                 if errmsg then
                     return nil, errmsg
@@ -2808,7 +2810,8 @@ function parse_function_call(tl)
         -- TODO: save context and restore afterwards
         local seq, errmsg
         for _, ef in ipairs(efs) do
-            seq, errmsg = ef(ctx)
+            local newctx = ctx:copy()
+            seq, errmsg = ef(newctx)
             if errmsg ~= nil then return nil, errmsg end
             arguments[#arguments + 1] = seq
         end

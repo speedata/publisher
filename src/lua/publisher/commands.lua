@@ -5116,7 +5116,10 @@ function commands.value( layoutxml,dataxml )
         if publisher.newxpath then
             local ret = {}
             local seq, msg = dataxml:eval(selection)
-            if msg then err(msg) return end
+            if msg then
+                splib.log("error","xpath error","message",msg)
+                return
+            end
             for i = 1, #seq do
                 ret[#ret+1] = seq[i]
             end

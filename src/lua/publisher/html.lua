@@ -108,7 +108,7 @@ end
 
 local function get_fontfamily( family, size_sp , name, styles )
     local fontfamilynumber = tonumber(styles["font-family-number"])
-    if fontfamilynumber then return fontfamilynumber end
+    if fontfamilynumber and fontfamilynumber > 0 then return fontfamilynumber end
 
     local fontname = family .. "/" .. name
     local predefined_fam = publisher.fonts.lookup_fontfamily_name_number[fontname]
@@ -494,7 +494,7 @@ function set_options_for_mknodes(styles,options)
         -- and font sizes usually don't change (unlike HTML mode)
         -- therefore on "sub" or "super" the font size changes
         -- this should be done in a proper way without fixed "script" fonts
-        if fontfamilynumber then
+        if fontfamilynumber and fontfamilynumber > 0 then
             options.fontsize = "small"
         end
     end

@@ -803,8 +803,7 @@ function dispatch(layoutxml,dataxml,opts)
 end
 
 function find_file(filename)
-    local ret = kpse.find_file(filename)
-    return ret
+    return splib.lookupfile(filename)
 end
 
 local function pdf_draw_pos(x,y)
@@ -1241,7 +1240,7 @@ function initialize_luatex_and_generate_pdf()
                 end
             elseif req == "fontforge" then
                 if options.fontloader ~= "fontforge" then
-                    splib.log("error","failed to meet requirement", "requirement","fontforge","message","This layout requires the harfbuzz font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
+                    splib.log("error","failed to meet requirement", "requirement","fontforge","message","This layout requires the fontforge font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
                     exit(false)
                 end
             else
@@ -1368,14 +1367,13 @@ function initialize_luatex_and_generate_pdf()
     end
 
     local auxfilename = tex.jobname .. "-aux.xml"
-
     -- load help file if it exists
     if find_file(auxfilename) and options.resetmarks == false then
         local mark_tab = load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeol = true })
-        if not mark_tab then return end
-        if newxpath then
+        if newxpath and mark_tab then
             mark_tab = mark_tab[1]
         end
+        mark_tab = mark_tab or {}
         for i=1,#mark_tab do
             local mt = mark_tab[i]
             if type(mt) == "table" then
@@ -1933,11 +1931,11 @@ end
 ---@return table?
 function load_xml(filename,filetype,parameter)
     parameter = parameter or {}
+    splib.log("info", "Load XML", "type", filetype or "file", "filename", filename)
     if newxpath then
-        splib.log("info", "Load XML", "type", filetype or "file", "filename", filename)
         local xmltable = splib.load_xmlfile(filename,filetype or "file")
         if not xmltable then
-            exit(false)
+            return nil
         end
         fixup_layoutxml(xmltable,parameter.ignoreeol)
         return xmltable
@@ -1948,8 +1946,8 @@ function load_xml(filename,filetype,parameter)
 
         local path = find_file(filename)
         if not path then
-            err("Can't find XML file %q. Abort.",filename or "?")
-            return
+            splib.log("error","Can't find XML file. Abort","filename",filename or "?")
+            return nil
         end
         if options.verbosity > 0 then
             calculate_md5sum(filename)
@@ -1966,7 +1964,11 @@ end
 function calculate_md5sum(filename)
     local p = find_file(filename)
     if p then
-        local f = io.open(p)
+        local f,msg = io.open(p)
+        if not f then
+            err(msg)
+            return nil
+        end
         local str = f:read("*a")
         local sum = md5.sumhexa(str)
         f:close()
@@ -4661,12 +4663,13 @@ function hbglyphlist(arguments)
     local stretch = tbl.parameters.space_stretch
     local list, cur
     local n
+    local preserve_whitespace = parameter.whitespace == "pre"
     for i=1,#glyphs do
         local thisglyph = glyphs[i]
         local cp = thisglyph.codepoint
         local uc = tbl.backmap[cp] or cp
         -- skip double space
-        if i > 1 and uc == 32 and cp == glyphs[i-1].codepoint then
+        if i > 1 and uc == 32 and cp == glyphs[i-1].codepoint and not preserve_whitespace then
             goto continue
         end
         if false then
@@ -4725,6 +4728,10 @@ function hbglyphlist(arguments)
             elseif cluster[thiscluster] == 8205 then
                 -- U+200D ZERO WIDTH JOINER
                 -- ignore
+            elseif preserve_whitespace then
+                local tbl = fonts.used_fonts[fontnumber]
+                local n = add_rule(nil,"head",{height = 0 * factor, depth = 0, width = tbl.zerowidth })
+                list,cur = node.insert_after(list,cur,n)
             else
                 n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch},"uc=32")
                 setstyles(n,parameter)
@@ -4984,7 +4991,8 @@ local function ffglyphlist(arguments)
             g = set_glue(nil,{})
             head,last = node.insert_after(head,last,g)
         elseif preserve_whitespace and match(char,"^%s$") then
-            local strut = add_rule(nil,"head",{height = 0 * factor, depth = 0, width = space })
+            local tbl = fonts.used_fonts[fontnumber]
+            local strut = add_rule(nil,"head",{height = 0 * factor, depth = 0, width = tbl.zerowidth })
             head,last = node.insert_after(head,last,strut)
         elseif match(char,"^%s$") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
             -- double space, use the bigger glue
