@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.11" date="2024-02-25">
+        <en>Image resize does not require imageserver anymore.</en>
+        <de>Bild neuberechnen benötigt nicht mehr den Imageserver .</de>
+    </entry>
     <entry version="4.17.10" date="2024-02-19">
         <en>New (pro) feature for resizing images (needs the speedata imageserver).</en>
         <de>Neues Pro-Feature für on-the-fly Bilderneuberechnung (benötigt imageserver).</de>
