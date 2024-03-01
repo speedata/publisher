@@ -436,8 +436,8 @@ func sdLog(L *C.lua_State) int {
 		}
 	}
 	switch level {
-	case "notice":
-		slog.Log(nil, LevelNotice, message, extraArguments...)
+	case "message":
+		slog.Log(nil, LevelMessage, message, extraArguments...)
 	case "info":
 		slog.Info(message, extraArguments...)
 	case "debug":

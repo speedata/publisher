@@ -102,7 +102,7 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 `--logfile=NAME`::
    Logdatei im Server-Modus. Voreinstellung ist 'publisher.protocol'. Benutze STDOUT für Standardausgabe und STDERR für Standardfehlerausgabe.
 `--loglevel=LVL`::
-   Setze den Log-Level, ab dem die Logmeldungen angezeigt werden. Erlaubt ist `debug`, `info`, `warn` und `error`. Die Ausgaben in dem Level und darüber werden in der Protokolldatei ausgegeben.
+   Setze den Log-Level, ab dem die Logmeldungen angezeigt werden. Erlaubt ist `debug`, `info` `message`, `warn` und `error`. Die Ausgaben in dem Level und darüber werden in der Protokolldatei ausgegeben.
 `--jobname=NAME`::
    Bestimmt den Ausgabenamen. Voreinstellung ist `publisher`.
 `--mainlanguage=NAME`::

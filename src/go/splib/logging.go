@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	// LevelNotice is used for messages from Message
-	LevelNotice = slog.Level(2)
+	// LevelMessage is used for messages from Message
+	LevelMessage = slog.Level(3)
 )
 
 var (
@@ -45,8 +45,8 @@ func (lh *logHandler) Enabled(_ context.Context, level slog.Level) bool {
 
 func (lh *logHandler) Handle(_ context.Context, r slog.Record) error {
 	lvlAttr.Value = r.Level.String()
-	if r.Level == LevelNotice {
-		lvlAttr.Value = "NOTICE"
+	if r.Level == LevelMessage {
+		lvlAttr.Value = "MESSAGE"
 	} else if r.Level == -8 {
 		lvlAttr.Value = "TRACE"
 	}
@@ -112,8 +112,8 @@ func setupLog(protocol string) error {
 		loglevel.Set(slog.LevelDebug)
 	case "info":
 		loglevel.Set(slog.LevelInfo)
-	case "notice":
-		loglevel.Set(LevelNotice)
+	case "message":
+		loglevel.Set(LevelMessage)
 	case "warn":
 		loglevel.Set(slog.LevelWarn)
 	case "error":

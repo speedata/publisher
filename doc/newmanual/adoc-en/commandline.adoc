@@ -109,7 +109,7 @@ you can display a list of the allowed commands and parameters.
 `--logfile=NAME`::
    Logfile for server mode. Default `publisher.protocol`. Use STDOUT for standard output and STDERR for standard error.
 `--loglevel=LVL`::
-   Set the log level to one of `debug`, `info`, `warn` and `error`. Messages from this level and above are written to the protocol file.
+   Set the log level to one of `debug`, `info`, `message`, `warn` and `error`. Messages from this level and above are written to the protocol file.
 `--mainlanguage=NAME`::
    The document's main language in locale format, for example `en` or `en_US`.
 `--mode=NAME`::

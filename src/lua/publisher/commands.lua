@@ -2214,9 +2214,9 @@ function commands.message( layoutxml, dataxml )
             publisher.messages[#publisher.messages + 1] = { contents, "message" }
         end
         if publisher.newxpath then
-            splib.log("info","Message","line",layoutxml[".__line"],"message",tostring(contents) or "?")
+            splib.log("message","Message","line",layoutxml[".__line"],"message",tostring(contents) or "?")
         else
-            splib.log("info","Message","message",tostring(contents) or "?")
+            splib.log("message","Message","message",tostring(contents) or "?")
         end
     end
     if exitnow then

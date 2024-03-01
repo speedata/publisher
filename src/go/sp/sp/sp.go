@@ -125,7 +125,7 @@ func init() {
 		"imagecache":        "",
 		"jobname":           "publisher",
 		"layout":            "layout.xml",
-		"loglevel":          "warn",
+		"loglevel":          "message",
 		"port":              "5266",
 		"quiet":             stringFalse,
 		"runs":              "1",

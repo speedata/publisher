@@ -81,7 +81,7 @@ erkannt. Folgende Optionen werden unterstützt:
 `layout`::
   Name des Layoutregelwerks. `layout.xml` ist der voreingestellte Name.
 `loglevel`::
-   Setze die Logausgabe auf ein level of `debug`, `info`, `warn` und `error`.
+   Setze die Logausgabe auf ein level of `debug`, `info`, `message`, `warn` und `error`.
 `luatex`::
   Pfad zum LuaTeX-Programm. Für Entwicklungszwecke.
 `mode`::

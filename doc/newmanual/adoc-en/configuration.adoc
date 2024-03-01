@@ -73,7 +73,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `layout`::
    Name of the layout rule set (XML). The default name is `layout.xml`.
 `loglevel`::
-   Set the log level to one of `debug`, `info`, `warn` and `error`.
+   Set the log level to one of `debug`, `info`, `message`, `warn` and `error`.
 `luatex`::
    Path to the LuaTeX binary. Experimental! This is provided for your experiments, not for production use.
 `mode`::
