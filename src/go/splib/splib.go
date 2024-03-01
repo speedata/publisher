@@ -9,13 +9,6 @@ package main
 #include <string.h>
 
 
-struct splitvalues {
-	char** splitted;
-	int* directions;
-	int count;
-	int direction;
-};
-
 #cgo CFLAGS: -I/opt/homebrew/opt/lua@5.3/include/lua
 */
 import "C"
@@ -363,35 +356,35 @@ func sdConvertSVGImage(pathC *C.char) *C.char {
 	return s2c(ret)
 }
 
-//export sdSegmentize
-func sdSegmentize(originalC *C.char) *C.struct_splitvalues {
-	inputstring := C.GoString(originalC)
+//export sdSegmentizeText
+func sdSegmentizeText(L *C.lua_State) int {
+	l := newLuaState(L)
+	str, ok := l.getString(-1)
+	if !ok {
+		slog.Error("sdSegmentizeText: first argument must be a string")
+		return 0
+	}
 	p := bidi.Paragraph{}
-	p.SetString(inputstring)
+	p.SetString(str)
 	ordering, err := p.Order()
 	if err != nil {
-		panic(err)
+		slog.Error("sdSegmentizeText p.Order error", "msg", err.Error())
+		return 0
 	}
+
 	nr := ordering.NumRuns()
-
-	cLenghtsInt := C.malloc(C.size_t(nr) * C.size_t(unsafe.Sizeof(C.int(0))))
-	cSplittedStrings := C.malloc(C.size_t(nr) * C.size_t(unsafe.Sizeof(uintptr(0))))
-	returnStruct := (*C.struct_splitvalues)(C.malloc(C.size_t(unsafe.Sizeof(C.struct_splitvalues{}))))
-
-	ints := (*[1<<15 - 1]C.int)(cLenghtsInt)[:nr:nr]
-	a := (*[1<<15 - 1]*C.char)(cSplittedStrings)
-
+	l.createTable(nr, 0)
 	for i := 0; i < nr; i++ {
+		l.createTable(2, 0)
 		r := ordering.Run(i)
-		ints[i] = C.int(int(r.Direction()))
-		a[i] = C.CString(r.String())
+		l.pushInt(int(r.Direction()))
+		l.rawSetI(-2, 1)
+		l.pushString(r.String())
+		l.rawSetI(-2, 2)
+		l.rawSetI(-2, i+1)
 	}
 
-	returnStruct.splitted = (**C.char)(cSplittedStrings)
-	returnStruct.directions = (*C.int)(cLenghtsInt)
-	returnStruct.count = C.int(nr)
-
-	return returnStruct
+	return 1
 }
 
 //export sdLoadXMLString

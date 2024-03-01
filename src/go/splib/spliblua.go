@@ -235,6 +235,11 @@ func (l *LuaState) setTable(index int) {
 	C.lua_rawset(l.l, C.int(index))
 }
 
+// Does the equivalent of t[i] = v, where t is the table at the given index and
+// v is the value at the top of the stack.
+//
+// This function pops the value from the stack. The assignment is raw, that is,
+// it does not invoke the __newindex metamethod.
 func (l *LuaState) rawSetI(index int, i int) {
 	C.lua_rawseti(l.l, C.int(index), C.longlong(i))
 }

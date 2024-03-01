@@ -29,13 +29,6 @@ typedef struct {
 #include <stdlib.h>
 #include <string.h>
 
-struct splitvalues {
-  char** splitted;
-  int* directions;
-  int count;
-  int direction;
-};
-
 #line 1 "cgo-generated-wrapper"
 
 /* End of preamble from import "C" comments.  */
@@ -106,12 +99,12 @@ extern char** sdListFonts();
 extern char* sdConvertContents(const char* contents, const char* handler);
 extern char* sdConvertImage(const char* filename, const char* handler);
 extern char* sdConvertSVGImage(const char* path);
-extern struct splitvalues* sdSegmentize(const char* original);
 extern GoInt sdLoadXMLString(lua_State* p0);
 extern void* sdTeardown();
 extern GoInt sdLog(lua_State* p0);
 extern GoInt sdGetErrCount();
 extern GoInt sdGetWarnCount();
+extern GoInt sdSegmentizeText(lua_State* p0);
 extern GoInt sdMarkdown(lua_State* p0);
 extern GoInt sdReloadImage(lua_State* p0);
 extern GoInt sdLoadXMLFile(lua_State* p0);

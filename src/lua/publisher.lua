@@ -5241,7 +5241,7 @@ function mknodes(str,parameter,origin)
     local maindirection
     local segments
     if parameter.bidi and not ( str == "\n" ) then
-        segments = splib.segmentize(str)
+        segments = splib.segmentize_text(str)
         if segments[1][1] == 0 then
             segments.maindirection = "ltr"
         else

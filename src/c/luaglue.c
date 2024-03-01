@@ -195,25 +195,6 @@ static int lua_sdreplace(lua_State *L) {
   return 1;
 }
 
-static int lua_segmentize(lua_State *L) {
-  const char *inputstring = luaL_checkstring(L, 1);
-  lua_pop(L, 1);
-  struct splitvalues *sv = sdSegmentize(inputstring);
-  lua_newtable(L);
-  int j = 0;
-  for (int i = 0; i < sv->count; i++) {
-    j++;
-    lua_newtable(L);
-    lua_pushinteger(L, sv->directions[i]);
-    lua_rawseti(L, -2, 1);
-    lua_pushstring(L, sv->splitted[i]);
-    lua_rawseti(L, -2, 2);
-    lua_rawseti(L, -2, j);
-  }
-
-  return 1;
-}
-
 static int lua_tokenize(lua_State *L) {
   const char *text = luaL_checkstring(L, 1);
   const char *rexpr = luaL_checkstring(L, 2);
@@ -265,7 +246,7 @@ static const struct luaL_Reg myfuncs[] = {
     {"parse_html", lua_parsehtml},
     {"reloadimage",sdReloadImage},
     {"replace", lua_sdreplace},
-    {"segmentize", lua_segmentize},
+    {"segmentize_text", sdSegmentizeText},
     {"tokenize", lua_tokenize},
     {"log", sdLog},
     {"errcount", lua_errcount},
