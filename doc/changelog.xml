@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.12" date="2024-03-01">
+        <en>Unicode left to right and similar markers don't give warning (#565).</en>
+        <de>Unicode links nach rechts und ähnliche Marker geben keine Warnung mehr (#565).</de>
+    </entry>
     <entry version="4.17.11" date="2024-02-29">
         <en>Markdown implementation.</en>
         <de>Markdown Implementierung.</de>
