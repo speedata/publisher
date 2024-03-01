@@ -176,6 +176,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `sd:loremipsum()`::
   Same as `sd:dummytext()`.
 
+`sd:markdown(<text>)::
+   Renders the text as markdown. See <<ch-markdown>>.
+
 `sd:md5(<value>,<value>, …)`::
   Return the MD5 sum of the concatenation of each value as a hex string. Example: `sd:md5('hello ', 'world')` gives the string 5eb63bbbe01eeed093cb22bb8f5acdc3.
 

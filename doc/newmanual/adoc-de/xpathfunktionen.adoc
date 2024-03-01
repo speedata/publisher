@@ -125,6 +125,9 @@ Beispiel: die Funktion `sd:current-row()`  kann auch mit Parameter `sd:current-r
 `sd:loremipsum()`::
    Alias für `sd:dummytext()`
 
+`sd:markdown(<Text>)::
+   Interpretiert den Text als Markdown. Siehe <<ch-markdown>>.
+
 `sd:md5(<Wert>[,<Wert>, ...])`::
    Erzeugt die MD5 Summe der Hintereinanderkettung der Werte als Hex-Zeichenkette. Beispiel: `sd:md5('Hallo ', 'Welt')` ergibt die Zeichenkette `5c372a32c9ae748a4c040ebadc51a829`.
 
