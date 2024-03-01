@@ -5305,7 +5305,9 @@ function mknodes(str,parameter,origin)
             end
 
             local glyphs = buf:get_glyphs()
-
+            if #glyphs == 0 then
+                goto nextsegment
+            end
             thissegment = hbglyphlist({
                 glyphs = glyphs,
                 tbl = tbl,
@@ -5319,8 +5321,6 @@ function mknodes(str,parameter,origin)
                 fontnumber = fontnumber,
                 is_chinese = is_chinese,
             })
-
-
         else
             -- old fontforge code
             thissegment = ffglyphlist({
@@ -5345,6 +5345,7 @@ function mknodes(str,parameter,origin)
         else
             nodelistsegments = thissegment
         end
+        ::nextsegment::
     end
     if maindirection then
         setprop(nodelistsegments,"pardir",maindirection)
