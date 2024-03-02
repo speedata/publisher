@@ -10,29 +10,14 @@
 -- ! in LUA_PATH gets replaced by $PWD
 package.path=os.getenv("LUA_PATH")
 
-local libname
-if os.name == "windows" then
-  libname = "libsplib.dll"
-elseif os.name == "linux" then
-  libname = "libsplib.so"
-elseif os.name == "freebsd" then
-  libname = "libsplib.so"
-else
-  libname = "libsplib.dylib"
-end
 
-local ok, msg = package.loadlib(libname,"*")
-if not ok then
-   print(msg)
-   os.exit(0)
-end
-local luaglue = require("luaglue")
+local splib = require("libsplib")
 
 function file_start( filename )
-  luaglue.log("debug","Start file","filename",filename)
+  splib.log("debug","Start file","filename",filename)
 end
 function file_end( filename )
-luaglue.log("debug","End file","filename",filename)
+splib.log("debug","End file","filename",filename)
 end
 
 
@@ -45,7 +30,7 @@ texconfig.max_print_line=99999
 texconfig.formatname="sd-format"
 texconfig.trace_file_names = false
 
-luaglue.buildfilelist()
+splib.buildfilelist()
 kpse = {}
 
 
@@ -53,11 +38,11 @@ kpse = {}
 --- @param filename string The file name to look up
 --- @return string|nil The full path of the file name or nil if the file is not found.
 function kpse.find_file(filename)
-  return luaglue.lookupfile(filename)
+  return splib.lookupfile(filename)
 end
 
 function kpse.add_dir(dirname)
-    return luaglue.add_dir(dirname)
+    return splib.add_dir(dirname)
 end
 
 function do_luafile(filename)

@@ -1,3 +1,4 @@
 /libsplib.h
 /*.dylib
 luaglue.so
+libsplib.so

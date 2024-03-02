@@ -7,7 +7,7 @@
 --  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 
-splib = require("luaglue")
+splib = require("libsplib")
 
 file_start("spinit.lua")
 local u8fix = require('utf8fix')

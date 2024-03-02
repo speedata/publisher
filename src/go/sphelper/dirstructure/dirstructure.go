@@ -35,7 +35,7 @@ func FillBuildDir(cfg *config.Config, luatexbindir, bindir, sharedir, swdir stri
 		reject []string
 	}{
 		{src: luatexbindir, dest: bindir},
-		{src: filepath.Join(cfg.Basedir(), "lib"), dest: filepath.Join(sharedir, "lib"), reject: []string{".gitignore", "libsplib.h", "libsplib.dll", "libsplib.so", "libsplib.dylib", "trang.jar", "luaglue.so"}},
+		{src: filepath.Join(cfg.Basedir(), "lib"), dest: filepath.Join(sharedir, "lib"), reject: []string{".gitignore", "libsplib.h", "libsplib.dll", "libsplib.so", "libsplib.dylib", "trang.jar"}},
 		{src: filepath.Join(cfg.Basedir(), "schema"), dest: filepath.Join(sharedir, "schema"), reject: []string{"changelog.rng", "readme.txt"}},
 		{src: filepath.Join(cfg.Basedir(), "fonts"), dest: filepath.Join(swdir, "fonts")},
 		{src: filepath.Join(cfg.Basedir(), "img"), dest: filepath.Join(swdir, "img")},

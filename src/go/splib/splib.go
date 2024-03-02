@@ -68,33 +68,54 @@ func toCharArray(s []string) **C.char {
 }
 
 //export sdParseHTMLText
-func sdParseHTMLText(htmltextC *C.char, csstextC *C.char) *C.char {
-	htmltext := C.GoString(htmltextC)
-	csstext := C.GoString(csstextC)
-	str, err := splibaux.ParseHTMLText(htmltext, csstext)
-	if err != nil {
-		return s2c(errorpattern + err.Error())
+func sdParseHTMLText(L *C.lua_State) int {
+	l := newLuaState(L)
+
+	htmltext, ok := l.getString(1)
+	if !ok {
+		slog.Error("sdParseHTMLText first argument must be a string (HTML text)")
+		return 0
 	}
-	return C.CString(str)
+	csstext, ok := l.getString(2)
+	if !ok {
+		slog.Error("sdParseHTMLText second argument must be a string (CSS text)")
+		return 0
+	}
+
+	str, err := splibaux.ParseHTMLText("<body>"+htmltext+"</body>", csstext)
+	if err != nil {
+		slog.Error("sdParseHTMLText could not parse HTML", "msg", err.Error())
+		return 0
+	}
+
+	l.pushString(str)
+	return 1
 }
 
 //export sdParseHTML
-func sdParseHTML(filenameC *C.char) *C.char {
-	filename := C.GoString(filenameC)
+func sdParseHTML(L *C.lua_State) int {
+	l := newLuaState(L)
+	filename, ok := l.getString(1)
+	if !ok {
+		slog.Error("sdParseHTML requires two string arguments")
+		return 0
+	}
 	str, err := splibaux.ParseHTML(filename)
 	if err != nil {
-		return s2c(errorpattern + err.Error())
+		slog.Error("ParseHTML", "msg", err.Error())
+		return 0
 	}
-	return C.CString(str)
+	l.pushString(str)
+	return 1
 }
 
 //export sdMarkdown
 func sdMarkdown(L *C.lua_State) int {
+	l := newLuaState(L)
 	mdExtensions := []goldmark.Extender{}
 	hlOptions := []highlighting.Option{}
 	htmlOptions := []html.Option{}
 	mdExtensionsStr := []string{}
-	l := newLuaState(L)
 	mdText, ok := l.getString(1)
 	if !ok {
 		slog.Error("markdown needs string as first argument")
@@ -170,40 +191,66 @@ func sdMarkdown(L *C.lua_State) int {
 }
 
 //export sdContains
-func sdContains(haystackC *C.char, needleC *C.char) *C.char {
-	haystack := C.GoString(haystackC)
-	needle := C.GoString(needleC)
-	var ret string
-	if strings.Contains(haystack, needle) {
-		ret = "true"
-	} else {
-		ret = "false"
+func sdContains(L *C.lua_State) int {
+	l := newLuaState(L)
+	haystack, ok := l.getString(1)
+	if !ok {
+		slog.Error("sdContains requires two string arguments")
+		return 0
 	}
-	return C.CString(ret)
+	needle, ok := l.getString(2)
+	if !ok {
+		slog.Error("sdContains requires two string arguments")
+		return 0
+	}
+	l.pushBool(strings.Contains(haystack, needle))
+	return 1
 }
 
 //export sdMatches
-func sdMatches(textC, rexprC, flags *C.char) int {
-	text := C.GoString(textC)
-	reString := C.GoString(rexprC)
-	re, err := regexp.Compile(reString)
-	if err != nil {
+func sdMatches(L *C.lua_State) int {
+	l := newLuaState(L)
+	text, ok := l.getString(1)
+	if !ok {
+		slog.Error("sdMatches first argument must be a string (the text)")
 		return 0
 	}
-	r := re.MatchString(text)
-	if r {
-		return 1
+	r, ok := l.getString(2)
+	if !ok {
+		slog.Error("sdMatches second argument must be a string (the regular expression)")
+		return 0
 	}
-	return 0
+	re, err := regexp.Compile(r)
+	if err != nil {
+		slog.Error("Could not compile regular expression", "msg", err.Error(), "regexp", r)
+		return 0
+	}
+	l.pushBool(re.MatchString(text))
+	return 1
 }
 
+// func sdTokenize(textC, rexprC *C.char) **C.char {
+//
 //export sdTokenize
-func sdTokenize(textC, rexprC *C.char) **C.char {
-	text := C.GoString(textC)
-	rexpr := C.GoString(rexprC)
+func sdTokenize(L *C.lua_State) int {
+	l := newLuaState(L)
 
-	r := regexp.MustCompile(rexpr)
-	idx := r.FindAllStringIndex(text, -1)
+	text, ok := l.getString(1)
+	if !ok {
+		slog.Error("sdTokenize first argument must be a string (the text)")
+		return 0
+	}
+	r, ok := l.getString(2)
+	if !ok {
+		slog.Error("sdTokenize second argument must be a string (the regular expression)")
+		return 0
+	}
+	re, err := regexp.Compile(r)
+	if err != nil {
+		slog.Error("sdTokenize could not compile regular expression", "msg", err.Error())
+		return 0
+	}
+	idx := re.FindAllStringIndex(text, -1)
 	pos := 0
 	var res []string
 	for _, v := range idx {
@@ -211,34 +258,63 @@ func sdTokenize(textC, rexprC *C.char) **C.char {
 		pos = v[1]
 	}
 	res = append(res, text[pos:])
-	return toCharArray(res)
+	l.createTable(len(res), 0)
+	for i, str := range res {
+		l.pushString(str)
+		l.rawSetI(-2, i+1)
+	}
+
+	return 1
 }
 
 //export sdReplace
-func sdReplace(textC, rexprC, replC *C.char) *C.char {
-	text := C.GoString(textC)
-	rexpr := C.GoString(rexprC)
-	repl := C.GoString(replC)
+func sdReplace(L *C.lua_State) int {
+	l := newLuaState(L)
+	text, ok := l.getString(1)
+	if !ok {
+		slog.Error("sdReplace first argument must be a string (the text)")
+		return 0
+	}
+	r, ok := l.getString(2)
+	if !ok {
+		slog.Error("sdReplace second argument must be a string (the regular expression)")
+		return 0
+	}
+	repl, ok := l.getString(3)
+	if !ok {
+		slog.Error("sdReplace third argument must be a string (the regular expression)")
+		return 0
+	}
 
-	r := regexp.MustCompile(rexpr)
+	re, err := regexp.Compile(r)
+	if err != nil {
+		slog.Error("sdReplace could not compile regular expression", "msg", err.Error())
+		return 0
+	}
 
 	// xpath uses $12 for $12 or $1, depending on the existence of $12 or $1.
 	// go on the other hand uses $12 for $12 and never for $1, so you have to write
 	// $1 as ${1} if there is text after the $1.
 	// We escape the $n backwards to prevent expansion of $12 to ${1}2
-	for i := r.NumSubexp(); i > 0; i-- {
+	for i := re.NumSubexp(); i > 0; i-- {
 		// first create rexepx that match "$i"
 		x := fmt.Sprintf(`\$(%d)`, i)
 		nummatcher := regexp.MustCompile(x)
 		repl = nummatcher.ReplaceAllString(repl, fmt.Sprintf(`$${%d}`, i))
 	}
-	str := r.ReplaceAllString(text, repl)
-	return C.CString(str)
+	str := re.ReplaceAllString(text, repl)
+	l.pushString(str)
+	return 1
 }
 
 //export sdHtmlToXml
-func sdHtmlToXml(inputC *C.char) *C.char {
-	input := C.GoString(inputC)
+func sdHtmlToXml(L *C.lua_State) int {
+	l := newLuaState(L)
+	input, ok := l.getString(1)
+	if !ok {
+		slog.Error("sdHtmlToXml first argument must be a string (the text)")
+		return 0
+	}
 	input = "<toplevel·toplevel>" + input + "</toplevel·toplevel>"
 	r := strings.NewReader(input)
 	var w bytes.Buffer
@@ -256,7 +332,8 @@ func sdHtmlToXml(inputC *C.char) *C.char {
 		}
 		if err != nil {
 			enc.Flush()
-			return nil
+			slog.Error("html to xml", "msg", err.Error())
+			return 0
 		}
 		switch v := t.(type) {
 		case xml.StartElement:
@@ -274,11 +351,12 @@ func sdHtmlToXml(inputC *C.char) *C.char {
 		}
 	}
 	enc.Flush()
-	return C.CString(w.String())
+	l.pushString(w.String())
+	return 1
 }
 
 //export sdBuildFilelist
-func sdBuildFilelist() {
+func sdBuildFilelist(L *C.lua_State) int {
 	paths := filepath.SplitList(os.Getenv("PUBLISHER_BASE_PATH"))
 	if fp := os.Getenv("SP_FONT_PATH"); fp != "" {
 		for _, p := range filepath.SplitList(fp) {
@@ -289,12 +367,19 @@ func sdBuildFilelist() {
 		paths = append(paths, p)
 	}
 	splibaux.BuildFilelist(paths)
+	return 0
 }
 
 //export sdAddDir
-func sdAddDir(cpath *C.char) {
-	path := C.GoString(cpath)
-	splibaux.AddDir(path)
+func sdAddDir(L *C.lua_State) int {
+	l := newLuaState(L)
+	fn, ok := l.getString(1)
+	if !ok {
+		slog.Error("sdAddDir requires one argument: a string")
+		return 0
+	}
+	splibaux.AddDir(fn)
+	return 0
 }
 
 //export sdLookupFile
@@ -318,42 +403,77 @@ func sdLookupFile(L *C.lua_State) int {
 }
 
 //export sdListFonts
-func sdListFonts() **C.char {
-	res := splibaux.ListFonts()
-	return toCharArray(res)
+func sdListFonts(L *C.lua_State) int {
+	l := newLuaState(L)
+	fonts := splibaux.ListFonts()
+	l.createTable(len(fonts), 0)
+	for i, entry := range fonts {
+		l.pushString(entry)
+		l.rawSetI(-2, i+1)
+	}
+	return 1
 }
 
 //export sdConvertContents
-func sdConvertContents(contentsC, handlerC *C.char) *C.char {
-	contents := C.GoString(contentsC)
-	handler := C.GoString(handlerC)
+func sdConvertContents(L *C.lua_State) int {
+	l := newLuaState(L)
+	contents, ok := l.getString(1)
+	if !ok {
+		slog.Error("First argument to sdConvertContents must be a string")
+		return 0
+	}
+	handler, ok := l.getString(2)
+	if !ok {
+		slog.Error("second argument to sdConvertContents must be a string")
+		return 0
+	}
 	ret, err := splibaux.ConvertContents(contents, handler)
 	if err != nil {
-		return s2c(errorpattern + err.Error())
+		slog.Error("sdConvertContents", "msg", err.Error())
 	}
-	return s2c(ret)
+	l.pushString(ret)
+	return 1
 }
 
 //export sdConvertImage
-func sdConvertImage(filenameC, handlerC *C.char) *C.char {
-	filename := C.GoString(filenameC)
-	handler := C.GoString(handlerC)
+func sdConvertImage(L *C.lua_State) int {
+	l := newLuaState(L)
 
+	filename, ok := l.getString(1)
+	if !ok {
+		slog.Error("First argument to sdConvertImage must be a string")
+		return 0
+	}
+	handler, ok := l.getString(2)
+	if !ok {
+		slog.Error("second argument to sdConvertImage must be a string")
+		return 0
+	}
 	ret, err := splibaux.ConvertImage(filename, handler)
 	if err != nil {
-		return s2c(errorpattern + err.Error())
+		slog.Error("ConvertImage", "msg", err.Error())
+		return 0
 	}
-	return s2c(ret)
+	l.pushString(ret)
+	return 1
 }
 
 //export sdConvertSVGImage
-func sdConvertSVGImage(pathC *C.char) *C.char {
-	path := C.GoString(pathC)
-	ret, err := splibaux.ConvertSVGImage(path)
-	if err != nil {
-		return s2c(errorpattern + err.Error())
+func sdConvertSVGImage(L *C.lua_State) int {
+	l := newLuaState(L)
+	filename, ok := l.getString(1)
+	if !ok {
+		slog.Error("First argument to sdConvertSVGImage must be a string")
+		return 0
 	}
-	return s2c(ret)
+
+	ret, err := splibaux.ConvertSVGImage(filename)
+	if err != nil {
+		slog.Error("ConvertSVGImage", "msg", err.Error())
+		return 0
+	}
+	l.pushString(ret)
+	return 1
 }
 
 //export sdSegmentizeText
@@ -409,11 +529,12 @@ func sdLoadXMLString(L *C.lua_State) int {
 }
 
 //export sdTeardown
-func sdTeardown() {
+func sdTeardown(L *C.lua_State) int {
 	err := teardownLog()
 	if err != nil {
 		slog.Error("internal error", "where", "sdTeardown", "message", err.Error())
 	}
+	return 0
 }
 
 //export sdLog
@@ -485,13 +606,17 @@ func sdReloadImage(L *C.lua_State) int {
 }
 
 //export sdGetErrCount
-func sdGetErrCount() int {
-	return errCount
+func sdGetErrCount(L *C.lua_State) int {
+	l := newLuaState(L)
+	l.pushInt(errCount)
+	return 1
 }
 
 //export sdGetWarnCount
-func sdGetWarnCount() int {
-	return warnCount
+func sdGetWarnCount(L *C.lua_State) int {
+	l := newLuaState(L)
+	l.pushInt(warnCount)
+	return 1
 }
 
 //export sdLoadXMLFile

@@ -2,26 +2,11 @@
 --  sdscripts.lua
 --  speedata publisher
 --
---  Copyright 2010-2023 Patrick Gundlach.
+--  Copyright 2010-2024 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 --
 
-local libname
-if os.name == "windows" then
-  libname = "libsplib.dll"
-elseif os.name == "linux" then
-  libname = "libsplib.so"
-else
-  libname = "libsplib.dylib"
-end
-
-local ok, msg = package.loadlib(libname,"*")
-if not ok then
-   print(msg)
-   os.exit(0)
-end
-
-local luaglue = require("luaglue")
+local splib = require("libsplib")
 
 
 dofile(arg[1])
@@ -37,7 +22,7 @@ local fontlist = {}
 
 
 local shortname
-for _,v in pairs(luaglue.listfonts()) do
+for _,v in pairs(splib.listfonts()) do
     _,shortname,_ = string.match(v, "(.-)([^\\/]-%.?([^%.\\/]*))$")
     fontlist[shortname] = v
 end

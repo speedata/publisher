@@ -103,6 +103,14 @@ func (l *LuaState) pushString(str string) {
 	C.free(unsafe.Pointer(cStr))
 }
 
+func (l *LuaState) pushBool(tf bool) {
+	if tf {
+		C.lua_pushboolean(l.l, 1)
+	} else {
+		C.lua_pushboolean(l.l, 0)
+	}
+}
+
 func (l *LuaState) pushInt(i int) {
 	C.lua_pushinteger(l.l, C.longlong(i))
 }

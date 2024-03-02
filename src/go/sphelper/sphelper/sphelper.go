@@ -116,11 +116,6 @@ func main() {
 			fmt.Println(err)
 			os.Exit(-1)
 		}
-		err = buildlib.BuildCLib(cfg, goos, goarch)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(-1)
-		}
 	case "builddeb":
 		// build debian package
 		if len(op.Extra) != 4 {
@@ -212,22 +207,14 @@ func main() {
 				fmt.Println(err)
 				os.Exit(-1)
 			}
-			err = buildlib.BuildCLib(cfg, platform, arch)
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(-1)
-			}
 
 			switch platform {
 			case "windows":
 				os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dll"), filepath.Join(bindestdir, "libsplib.dll"))
-				os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.dll"), filepath.Join(libdestdir, "luaglue.dll"))
 			case "linux":
 				os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(libdestdir, "libsplib.so"))
-				os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(libdestdir, "luaglue.so"))
 			case "darwin":
-				os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dylib"), filepath.Join(libdestdir, "libsplib.dylib"))
-				os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(libdestdir, "luaglue.so"))
+				os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(libdestdir, "libsplib.so"))
 			}
 
 			os.Chdir(cfg.Builddir)
