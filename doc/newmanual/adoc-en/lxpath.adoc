@@ -3,13 +3,13 @@
 [[ch-lxpath,XPath and Layout Functions]]
 = XPath and Layout Functions (new XPath module)
 
-This page describes the new XPath parser, called “lxpath”. There is also the old XPath module called “luxor”. To switch between these two, you can set the default by setting the xpath configuration, for example on the <<ch-commandline,command line>> with
+This page describes the new (default) XPath parser, called “lxpath”. There is also the old XPath module called “luxor”. To switch between these two, you can set the default by setting the xpath configuration, for example on the <<ch-commandline,command line>> with
 
 [source, shell]
 -------------------------------------------------------------------------------
 sp --xpath luxor
 -------------------------------------------------------------------------------
-(the old one, currently the default)
+(the old one)
 
 or
 
@@ -18,7 +18,7 @@ or
 sp --xpath lxpath
 -------------------------------------------------------------------------------
 
-for the new one. You can also set this in the <<ch-configuration,configuration>> file.
+for the new (default) one. You can also set this in the <<ch-configuration,configuration>> file.
 
 == What is XPath and why are there two different implementations?
 

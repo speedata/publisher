@@ -3,6 +3,24 @@
 [[ch-xpathfunktionen]]
 = XPath- und Layoutfunktionen (alter XPath Parser)
 
+Diese Seite beschreibt den alten XPath-Parser, genannt »luxor«. Es gibt das neue XPath-Modul namens lxpath. Um zwischen diesen beiden Modulen zu wechseln, können Sie die Standardeinstellung in der XPath-Konfiguration festlegen, zum Beispiel auf der Kommandozeile mit
+
+[source, shell]
+-------------------------------------------------------------------------------
+sp --xpath luxor
+-------------------------------------------------------------------------------
+
+(das alte Modul)
+
+oder
+
+[source, shell]
+-------------------------------------------------------------------------------
+sp --xpath lxpath
+-------------------------------------------------------------------------------
+
+für das neue XPath-Modul (Voreinstellung). Sie können diese Einstellung auch in der <<ch-konfiguration,Konfigurationsdatei>> vornehmen.
+
 == XPath Ausdrücke
 
 Der Publisher akzeptiert in den den entsprechend markierten Attributen (zumeist `select` und `test`) XPath Ausdrücke.

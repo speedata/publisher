@@ -3,14 +3,14 @@
 [[ch-lxpath,XPath- und Layoutfunktionen (neuer XPath Parser)]]
 = XPath- und Layoutfunktionen (neuer XPath Parser)
 
-Diese Seite beschreibt den experimentellen neuen XPath-Parser, genannt »lxpath«. Es gibt das Standard-XPath-Modul namens »luxor«. Um zwischen diesen beiden Modulen zu wechseln, können Sie die Standardeinstellung in der XPath-Konfiguration festlegen, zum Beispiel auf der Kommandozeile mit
+Diese Seite beschreibt den neuen XPath-Parser, genannt »lxpath«. Es gibt das alte XPath-Modul namens »luxor«. Um zwischen diesen beiden Modulen zu wechseln, können Sie die Standardeinstellung in der XPath-Konfiguration festlegen, zum Beispiel auf der Kommandozeile mit
 
 [source, shell]
 -------------------------------------------------------------------------------
 sp --xpath luxor
 -------------------------------------------------------------------------------
 
-(das alte, derzeitige Standardmodul)
+(das alte Standardmodul)
 
 oder
 
@@ -19,7 +19,7 @@ oder
 sp --xpath lxpath
 -------------------------------------------------------------------------------
 
-für den neuen XPath. Sie können diese Einstellung auch in der <<ch-konfiguration,Konfigurationsdatei>> vornehmen.
+für den neuen XPath (Voreinstellung). Sie können diese Einstellung auch in der <<ch-konfiguration,Konfigurationsdatei>> vornehmen.
 
 == Was ist XPath und warum gibt es zwei verschiedene Implementierungen?
 
