@@ -4,7 +4,6 @@ package main
 
 import (
 	"bufio"
-	"encoding/xml"
 	"fmt"
 	"io"
 	"log"
@@ -84,21 +83,6 @@ var (
 	versionWithPro string
 	verbose        bool
 )
-
-// The LuaTeX process writes out a file called "publisher.status"
-// which is a valid XML file. Currently the only field is "Errors"
-// with the number of errors occurred during the publisher run.
-type statuserror struct {
-	XMLName xml.Name `xml:"Error"`
-	Code    int      `xml:"code,attr"`
-	Error   string   `xml:",chardata"`
-}
-
-type status struct {
-	XMLName xml.Name `xml:"Status"`
-	Error   []statuserror
-	Errors  int
-}
 
 func init() {
 	var err error
@@ -653,37 +637,12 @@ See https://github.com/speedata/publisher/issues/310 for details.
 
 		if run(ep, cmdline, env) < 0 {
 			exitstatus = -1
-			v := status{}
-			v.Errors = 1
-			v.Error = append(v.Error, statuserror{Error: "Error executing sdluatex (" + ep + ")", Code: 1})
-			data, nerr := xml.Marshal(v)
-			if nerr != nil {
-				log.Fatal(nerr)
-			}
-			err = os.WriteFile(fmt.Sprintf("%s.status", jobname), data, 0600)
-			if err != nil {
-				log.Fatal(err)
-			}
 			writeFinishedfile(fmt.Sprintf("%s.finished", getOption("jobname")))
 			os.Exit(-1)
 			break
 		}
 		if cachemethod != "none" {
 			os.Setenv("CACHEMETHOD", "fast")
-		}
-	}
-	// todo: DRY code -> server/status
-	data, err := os.ReadFile(fmt.Sprintf("%s.status", jobname))
-	if err == nil {
-		v := new(status)
-		err = xml.Unmarshal(data, &v)
-		if err != nil {
-			log.Printf("Error reading status XML: %v", err)
-		} else {
-			for _, er := range v.Error {
-				exitstatus = er.Code
-				break
-			}
 		}
 	}
 

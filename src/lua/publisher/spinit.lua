@@ -241,28 +241,13 @@ function exit(graceful)
     log("Stop processing data")
     log("%d errors occurred",splib.errcount())
     log("Duration: %3f seconds",os.gettimeofday() - starttime)
-
-    statusfile = io.open(string.format("%s.status",tex.jobname),"wb")
-    statusfile:write(string.format("<Status>\n  <Errors>%d</Errors>\n",splib.errcount()))
-    local msgs = publisher.messages
-    for i=1,#msgs do
-        if msgs[i][2] == "error" then
-            statusfile:write(string.format("  <Error code='%d'>%s</Error>\n", msgs[i][3] or 1,fixup_msg(msgs[i][1])))
-        elseif msgs[i][2] == "message" then
-            statusfile:write(string.format("  <Message>%s</Message>\n",fixup_msg(msgs[i][1])))
-        elseif msgs[i][2] == "warning" then
-            statusfile:write(string.format("  <Warning>%s</Warning>\n",fixup_msg(msgs[i][1])))
-        elseif msgs[i][2] == "element" then
-            statusfile:write(string.format("  %s\n",publisher.xml_to_string(msgs[i][1])))
-        end
-    end
-    statusfile:write(string.format("  <DurationSeconds>%d</DurationSeconds>\n",math.ceil(os.gettimeofday() - starttime)))
-    statusfile:write("</Status>")
-    statusfile:close()
     splib.teardown()
+    status.setexitcode(publisher.errorcode)
     if not graceful then
         stop_run_cb()
-        os.exit()
+        if publisher.errorcode ~= 0 then
+            os.exit(publisher.errorcode)
+        end
     end
 end
 

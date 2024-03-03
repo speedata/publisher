@@ -8,6 +8,7 @@ extern int sdConvertContents(lua_State* L);
 extern int sdConvertImage(lua_State* L);
 extern int sdConvertSVGImage(lua_State* L);
 extern int sdGetErrCount(lua_State* p0);
+extern int sdError(lua_State* p0);
 extern int sdGetWarnCount(lua_State* p0);
 extern int sdHtmlToXml(lua_State* L);
 extern int sdListFonts(lua_State* L);
@@ -34,6 +35,7 @@ static const struct luaL_Reg myfuncs[] = {
     {"convertcontents", sdConvertContents},
     {"convertimage", sdConvertImage},
     {"errcount", sdGetErrCount},
+    {"error", sdError},
     {"htmltoxml", sdHtmlToXml},
     {"listfonts", sdListFonts},
     {"load_xmlfile", sdLoadXMLFile},

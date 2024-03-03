@@ -11,6 +11,8 @@ This file gets updated before a stable release. There is a [detailed changelog](
 
 * New defaults for the XPath engine and the font loader (preparation for the version 5)
 * New output / logging backend.
+* Remove Lua glue (now directly mix Go and Lua)
+* Remove publisher.status file (everything is in the log file)
 
 ## Version 4.16
 

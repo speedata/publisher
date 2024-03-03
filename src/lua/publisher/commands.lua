@@ -399,7 +399,7 @@ function commands.box( layoutxml,dataxml )
     if graphic then
         local instr, bbox = metapost.boxgraphic(width,height,graphic)
         if not instr then
-            splib.log("error","Could not create metapost image","graphic",graphic)
+            splib.error("Could not create metapost image","graphic",graphic)
             return
         end
 
@@ -1532,7 +1532,7 @@ function commands.image( layoutxml,dataxml )
         local destdpi = tonumber(publisher.options.dpi)
         if publisher.options.dpi then
             if not publisher.pro then
-                splib.log("error","Image reduction is a pro feature")
+                splib.error("Image reduction is a pro feature")
                 publisher.has_pro_error = true
             else
                 if image.imagetype == "pdf" then
@@ -2174,8 +2174,7 @@ function commands.message( layoutxml, dataxml )
         contents = tab
     end
 
-    local ignore_message = false
-    if type(contents)=="table" then
+    if type(contents) == "table" then
         local ret = {}
         for i=1,#contents do
             local eltname = publisher.elementname(contents[i])
@@ -2198,27 +2197,23 @@ function commands.message( layoutxml, dataxml )
                     err("Message: unknown type in value: %q",type(contents))
                 end
             elseif eltname == "Element" then
-                ignore_message = true
                 ret[#ret + 1] = publisher.xml_stringvalue(contents)
-                publisher.messages[#publisher.messages + 1] = { contents, "element" }
             else
                 err("Unknown element name in <Message> %q",tostring(eltname))
             end
         end
         contents = table.concat(ret)
     end
+
     if errcond then
-        err(errorcode,"%s", tostring(contents) or "?")
+        splib.log("error",contents,"errorcode",errorcode,"from","message")
+        if errorcode > publisher.errorcode then
+            publisher.errorcode = errorcode
+        end
     else
-        if not ignore_message then
-            publisher.messages[#publisher.messages + 1] = { contents, "message" }
-        end
-        if publisher.newxpath then
-            splib.log("message","Message","line",layoutxml[".__line"],"message",tostring(contents) or "?")
-        else
-            splib.log("message","Message","message",tostring(contents) or "?")
-        end
+        splib.log("message",contents)
     end
+
     if exitnow then
         err(-1,"Exiting on user request.")
         quit()
@@ -5117,7 +5112,7 @@ function commands.value( layoutxml,dataxml )
             local ret = {}
             local seq, msg = dataxml:eval(selection)
             if msg then
-                splib.log("error","xpath error","message",msg)
+                splib.error("xpath error","message",msg)
                 return
             end
             for i = 1, #seq do

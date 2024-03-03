@@ -225,6 +225,10 @@ end
 alternating = {}
 alternating_value = {}
 
+
+-- the return value for the LuaTeX process
+errorcode = 0
+
 -- sp --mode foo sets modes.foo = true
 modes = {}
 
@@ -887,7 +891,7 @@ function get_colentry_from_name(colorname, default)
         end
     end
     if not colentry then
-        splib.log("error","Undefined color, revert to black","value",colorname or "(undefined)")
+        splib.error("Undefined color, revert to black","value",colorname or "(undefined)")
         return colors["black"]
     end
     return setmetatable(colentry, colormetatable)
@@ -1225,22 +1229,22 @@ function initialize_luatex_and_generate_pdf()
         for _, req in ipairs(r) do
             if req == "lxpath" then
                 if not newxpath then
-                    splib.log("error","failed to meet requirement", "requirement","lxpath","message","This layout requires the lxpath XML / XPath parser","help","see https://doc.speedata.de/publisher/en/lxpath/ how to activate")
+                    splib.error("failed to meet requirement", "requirement","lxpath","message","This layout requires the lxpath XML / XPath parser","help","see https://doc.speedata.de/publisher/en/lxpath/ how to activate")
                     exit(false)
                 end
             elseif req == "luxor" then
                     if newxpath then
-                        splib.log("error","failed to meet requirement", "requirement","luxor","message","This layout requires the luxor XML / XPath parser","help","see https://doc.speedata.de/publisher/en/xpathfunctions/ how to activate")
+                        splib.error("failed to meet requirement", "requirement","luxor","message","This layout requires the luxor XML / XPath parser","help","see https://doc.speedata.de/publisher/en/xpathfunctions/ how to activate")
                         exit(false)
                     end
             elseif req == "harfbuzz" then
                 if options.fontloader ~= "harfbuzz" then
-                    splib.log("error","failed to meet requirement", "requirement","harfbuzz","message","This layout requires the harfbuzz font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
+                    splib.error("failed to meet requirement", "requirement","harfbuzz","message","This layout requires the harfbuzz font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
                     exit(false)
                 end
             elseif req == "fontforge" then
                 if options.fontloader ~= "fontforge" then
-                    splib.log("error","failed to meet requirement", "requirement","fontforge","message","This layout requires the fontforge font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
+                    splib.error("failed to meet requirement", "requirement","fontforge","message","This layout requires the fontforge font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
                     exit(false)
                 end
             else
@@ -1946,7 +1950,7 @@ function load_xml(filename,filetype,parameter)
 
         local path = find_file(filename)
         if not path then
-            splib.log("error","Can't find XML file. Abort","filename",filename or "?")
+            splib.error("Can't find XML file. Abort","filename",filename or "?")
             return nil
         end
         if options.verbosity > 0 then
@@ -3243,7 +3247,7 @@ function do_metapostimage(txt,width,height,clip)
 
     local box, bbox = metapost.boxgraphic(width_sp,height_sp,"_image",{},{})
     if not box then
-        splib.log("error","Could not create metapost image")
+        splib.error("Could not create metapost image")
         return
     end
     local image = {
@@ -3388,7 +3392,7 @@ function mpbox(parameter,width,height)
     -- TODO: test, changed code during metapost overhaul
     local instr,bbox = metapost.boxgraphic(width_sp,height_sp,"__htmlbox",extra_parameter)
     if not instr then
-        splib.log("error","Could not create metapost image")
+        splib.error("Could not create metapost image")
         return
     end
 
@@ -4797,7 +4801,7 @@ function hbglyphlist(arguments)
                 if reportmissingglyphs == "warning" then
                     splib.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",missingglyph))
                 else
-                    splib.log("error","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",missingglyph))
+                    splib.error("Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",missingglyph))
                 end
             end
         else
@@ -7309,7 +7313,7 @@ function imageinfo( filename,page,box,fallback,imageshape )
     splib.log("info","Searching for image","filename",tostring(filename))
     if not find_file(filename) then
         if options.imagenotfounderror then
-            splib.log("error","Image not found","filename", filename or "???")
+            splib.error("Image not found","filename", filename or "???")
         else
             splib.log("warn","Image not found","filename", filename or "???")
         end

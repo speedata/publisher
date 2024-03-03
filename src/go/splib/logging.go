@@ -44,12 +44,7 @@ func (lh *logHandler) Enabled(_ context.Context, level slog.Level) bool {
 }
 
 func (lh *logHandler) Handle(_ context.Context, r slog.Record) error {
-	lvlAttr.Value = r.Level.String()
-	if r.Level == LevelMessage {
-		lvlAttr.Value = "MESSAGE"
-	} else if r.Level == -8 {
-		lvlAttr.Value = "TRACE"
-	}
+	lvlAttr.Value = getLoglevelString(r.Level)
 	msgAttr.Value = r.Message
 	values := []string{}
 	le := logElement.Copy()
@@ -88,7 +83,11 @@ func (lh *logHandler) Handle(_ context.Context, r slog.Record) error {
 		case slog.LevelError:
 			lvlString = "E: "
 		}
-		fmt.Println(lvlString, r.Message, lparen+strings.Join(values, ",")+rparen)
+		msg := r.Message
+		if r.Level == LevelMessage {
+			msg = "Message: " + msg
+		}
+		fmt.Println(lvlString, msg, lparen+strings.Join(values, ",")+rparen)
 	}
 	return nil
 }
@@ -99,6 +98,24 @@ func (lh *logHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
 
 func (lh *logHandler) WithGroup(name string) slog.Handler {
 	return lh
+}
+
+func getLoglevelString(lvl slog.Level) string {
+	switch lvl {
+	case -8:
+		return "trace"
+	case slog.LevelDebug:
+		return "debug"
+	case slog.LevelInfo:
+		return "info"
+	case LevelMessage:
+		return "message"
+	case slog.LevelWarn:
+		return "warn"
+	case slog.LevelError:
+		return "error"
+	}
+	return ""
 }
 
 // protocol is the name of the XML protocol file
@@ -131,7 +148,7 @@ func setupLog(protocol string) error {
 	startElement = xml.StartElement{
 		Name: xml.Name{Local: "log"},
 		Attr: []xml.Attr{
-			{Name: xml.Name{Local: "loglevel"}, Value: loglevel.Level().String()},
+			{Name: xml.Name{Local: "loglevel"}, Value: getLoglevelString(loglevel.Level())},
 			{Name: xml.Name{Local: "time"}, Value: time.Now().Format(time.Stamp)},
 			{Name: xml.Name{Local: "version"}, Value: os.Getenv("PUBLISHERVERSION")},
 			{Name: xml.Name{Local: "pro"}, Value: os.Getenv("SP_PRO")},
@@ -146,7 +163,29 @@ func setupLog(protocol string) error {
 }
 
 func teardownLog() error {
-	if err := enc.EncodeToken(startElement.End()); err != nil {
+	summaryElement := xml.StartElement{
+		Name: xml.Name{Local: "summary"},
+		Attr: []xml.Attr{
+			{Name: xml.Name{Local: "errors"}, Value: fmt.Sprint(errCount)},
+			{Name: xml.Name{Local: "warnings"}, Value: fmt.Sprint(warnCount)},
+		},
+	}
+	var err error
+
+	if err = enc.EncodeToken(xml.CharData([]byte("  "))); err != nil {
+		return err
+	}
+	if err = enc.EncodeToken(summaryElement); err != nil {
+		return err
+	}
+	if err = enc.EncodeToken(summaryElement.End()); err != nil {
+		return err
+	}
+	if err = enc.EncodeToken(xml.CharData([]byte("\n"))); err != nil {
+		return err
+	}
+
+	if err = enc.EncodeToken(startElement.End()); err != nil {
 		return err
 	}
 	if err := enc.Flush(); err != nil {

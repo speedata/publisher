@@ -530,10 +530,45 @@ func sdLoadXMLString(L *C.lua_State) int {
 
 //export sdTeardown
 func sdTeardown(L *C.lua_State) int {
+	_ = L
 	err := teardownLog()
 	if err != nil {
 		slog.Error("internal error", "where", "sdTeardown", "message", err.Error())
 	}
+	return 0
+}
+
+// sdError logs to the configured logging output and also sets the
+// publisher.errorcode to 1 if not set before.
+//
+//export sdError
+func sdError(L *C.lua_State) int {
+	l := newLuaState(L)
+	l.getGlobal("publisher")
+	errorcode, ok := l.getIntTable(-1, "errorcode")
+	_ = errorcode
+	if ok {
+		if errorcode < 1 {
+			l.pushString("errorcode")
+			l.pushInt(1)
+			l.rawSet(-3)
+		}
+	}
+	l.pop(1)
+	message, ok := l.getString(1)
+	if !ok {
+		return 0
+	}
+
+	extraArguments := []any{}
+	max := l.getTop()
+	for i := 2; i <= max; i++ {
+		if arg, ok := l.getAny(i); ok {
+			extraArguments = append(extraArguments, arg)
+		}
+	}
+	slog.Error(message, extraArguments...)
+
 	return 0
 }
 
@@ -557,7 +592,7 @@ func sdLog(L *C.lua_State) int {
 		}
 	}
 	switch level {
-	case "message":
+	case "message", "notice":
 		slog.Log(nil, LevelMessage, message, extraArguments...)
 	case "info":
 		slog.Info(message, extraArguments...)
@@ -567,6 +602,8 @@ func sdLog(L *C.lua_State) int {
 		slog.Warn(message, extraArguments...)
 	case "error":
 		slog.Error(message, extraArguments...)
+	default:
+		slog.Error("internal error", "unknown log level", level)
 	}
 
 	return 0
