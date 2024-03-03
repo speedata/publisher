@@ -624,7 +624,6 @@ maxdimen = 1073741823
 -- It's convenient to just copy the stretching glue instead of writing
 -- the stretch etc. over and over again.
 glue_stretch2 = set_glue(nil, { stretch = 2^16, stretch_order = 2 })
-messages = {}
 
 -- For attached files. Each of this numbers should appear in the catalog
 filespecnumbers = {}

@@ -10,7 +10,6 @@
 splib = require("libsplib")
 
 file_start("spinit.lua")
-local u8fix = require('utf8fix')
 tex.enableprimitives('',tex.extraprimitives())
 
 function warning(...)
@@ -18,7 +17,6 @@ function warning(...)
     local unpacked
     if publisher then
         unpacked = string.format( "[page %d] ",publisher.current_pagenumber ) .. string.format(table.unpack(text))
-        publisher.messages[#publisher.messages + 1] = { unpacked , "warning" }
     else
         unpacked = string.format( "%s",string.format(table.unpack(text)))
     end
@@ -27,11 +25,6 @@ end
 
 function err(...)
     local text = { ... }
-    local errorcode = 1
-    -- if first arg is a number, this is the error code
-    if type(text[1]) == "number" then
-        errorcode = table.remove(text,1)
-    end
     local unpacked
     if publisher then
         local lineinfo = ""
@@ -39,7 +32,6 @@ function err(...)
             lineinfo = string.format(" line %s",publisher.current_layout_line)
         end
         unpacked = string.format( "[page %d%s] ",publisher.current_pagenumber, lineinfo ) .. string.format(table.unpack(text))
-        publisher.messages[#publisher.messages + 1] = { unpacked , "error", errorcode }
     else
         unpacked = string.format( "%s",string.format(table.unpack(text)))
     end
@@ -221,13 +213,6 @@ function assert( what,msg)
     texio.write_nl(debug.traceback())
   end
   return what
-end
-
-local function fixup_msg(msg)
-    msg = publisher.xml_escape(msg)
-    -- The message can be in a non-UTF-8 encoding. See #65
-    msg = u8fix.sanitize(msg)
-    return msg
 end
 
 ---   I/O, Control flow

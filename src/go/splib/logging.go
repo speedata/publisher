@@ -18,17 +18,20 @@ const (
 )
 
 var (
-	lvl          = new(slog.LevelVar)
-	enc          *xml.Encoder
-	msgAttr      = xml.Attr{Name: xml.Name{Local: "msg"}}
-	lvlAttr      = xml.Attr{Name: xml.Name{Local: "level"}}
-	logElement   = xml.StartElement{Name: xml.Name{Local: "entry"}}
-	protocolFile io.Writer
-	errCount     = 0
-	warnCount    = 0
-	loglevel     slog.LevelVar
-	repl         = strings.NewReplacer(" ", "-") // for XML attribute names
-	startElement xml.StartElement
+	lvl                = new(slog.LevelVar)
+	logEncoder         *xml.Encoder
+	statusEncoder      *xml.Encoder
+	msgAttr            = xml.Attr{Name: xml.Name{Local: "msg"}}
+	lvlAttr            = xml.Attr{Name: xml.Name{Local: "level"}}
+	logElement         = xml.StartElement{Name: xml.Name{Local: "entry"}}
+	protocolWriter     io.Writer
+	statusWriter       io.Writer
+	errCount           = 0
+	warnCount          = 0
+	loglevel           slog.LevelVar
+	repl               = strings.NewReplacer(" ", "-") // for XML attribute names
+	logStartElement    xml.StartElement
+	statusStartElement xml.StartElement
 )
 
 type logHandler struct {
@@ -64,10 +67,10 @@ func (lh *logHandler) Handle(_ context.Context, r slog.Record) error {
 			le.Attr = append(le.Attr, xml.Attr{Name: xml.Name{Local: repl.Replace(a.Key)}, Value: val})
 			return true
 		})
-	enc.EncodeToken(xml.CharData([]byte("  ")))
-	enc.EncodeToken(le)
-	enc.EncodeToken(le.End())
-	enc.EncodeToken(xml.CharData([]byte("\n")))
+	logEncoder.EncodeToken(xml.CharData([]byte("  ")))
+	logEncoder.EncodeToken(le)
+	logEncoder.EncodeToken(le.End())
+	logEncoder.EncodeToken(xml.CharData([]byte("\n")))
 
 	if verbosity > 0 {
 		lparen := ""
@@ -89,6 +92,35 @@ func (lh *logHandler) Handle(_ context.Context, r slog.Record) error {
 		}
 		fmt.Println(lvlString, msg, lparen+strings.Join(values, ",")+rparen)
 	}
+
+	// status file
+	eltName := xml.StartElement{}
+	switch r.Level {
+	case LevelMessage:
+		eltName.Name = xml.Name{Local: "Message"}
+	case slog.LevelWarn:
+		eltName.Name = xml.Name{Local: "Warning"}
+	case slog.LevelError:
+		eltName.Name = xml.Name{Local: "Error"}
+	}
+
+	if r.Level >= LevelMessage {
+		var err error
+		if err = statusEncoder.EncodeToken(xml.CharData([]byte("  "))); err != nil {
+			return err
+		}
+		if err = statusEncoder.EncodeToken(eltName); err != nil {
+			return err
+		}
+		if err = statusEncoder.EncodeToken(xml.CharData(r.Message)); err != nil {
+			return err
+		}
+		if err = statusEncoder.EncodeToken(eltName.End()); err != nil {
+			return err
+		}
+		return statusEncoder.EncodeToken(xml.CharData("\n"))
+	}
+
 	return nil
 }
 
@@ -137,15 +169,15 @@ func setupLog(protocol string) error {
 		loglevel.Set(slog.LevelError)
 	}
 
-	protocolFile, err = os.Create(protocol)
+	protocolWriter, err = os.Create(protocol)
 	if err != nil {
 		return err
 	}
 	sl := slog.New(&logHandler{})
 	slog.SetDefault(sl)
 
-	enc = xml.NewEncoder(protocolFile)
-	startElement = xml.StartElement{
+	logEncoder = xml.NewEncoder(protocolWriter)
+	logStartElement = xml.StartElement{
 		Name: xml.Name{Local: "log"},
 		Attr: []xml.Attr{
 			{Name: xml.Name{Local: "loglevel"}, Value: getLoglevelString(loglevel.Level())},
@@ -154,12 +186,30 @@ func setupLog(protocol string) error {
 			{Name: xml.Name{Local: "pro"}, Value: os.Getenv("SP_PRO")},
 		},
 	}
-	if err = enc.EncodeToken(startElement); err != nil {
+	if err = logEncoder.EncodeToken(logStartElement); err != nil {
 		return err
 	}
-	enc.EncodeToken(xml.CharData([]byte("\n")))
+	logEncoder.EncodeToken(xml.CharData([]byte("\n")))
 
 	return nil
+}
+
+// protocol is the name of the XML protocol file
+func setupStatusfile(protocol string) error {
+	var err error
+	statusWriter, err = os.Create(protocol)
+	if err != nil {
+		return err
+	}
+	statusEncoder = xml.NewEncoder(statusWriter)
+	statusStartElement = xml.StartElement{
+		Name: xml.Name{Local: "Status"},
+	}
+	if err = statusEncoder.EncodeToken(statusStartElement); err != nil {
+		return err
+	}
+
+	return statusEncoder.EncodeToken(xml.CharData("\n"))
 }
 
 func teardownLog() error {
@@ -172,25 +222,90 @@ func teardownLog() error {
 	}
 	var err error
 
-	if err = enc.EncodeToken(xml.CharData([]byte("  "))); err != nil {
+	if err = logEncoder.EncodeToken(xml.CharData([]byte("  "))); err != nil {
 		return err
 	}
-	if err = enc.EncodeToken(summaryElement); err != nil {
+	if err = logEncoder.EncodeToken(summaryElement); err != nil {
 		return err
 	}
-	if err = enc.EncodeToken(summaryElement.End()); err != nil {
+	if err = logEncoder.EncodeToken(summaryElement.End()); err != nil {
 		return err
 	}
-	if err = enc.EncodeToken(xml.CharData([]byte("\n"))); err != nil {
+	if err = logEncoder.EncodeToken(xml.CharData([]byte("\n"))); err != nil {
+		return err
+	}
+	if err = logEncoder.EncodeToken(logStartElement.End()); err != nil {
+		return err
+	}
+	if err := logEncoder.Flush(); err != nil {
+		return err
+	}
+	// status file
+	/*
+		<Errors>0</Errors>
+		<Message>Hello, world!</Message>
+		<Message>1</Message>
+		<DurationSeconds>1</DurationSeconds>
+	*/
+	errCountElt := xml.StartElement{Name: xml.Name{Local: "Errors"}}
+	if err = statusEncoder.EncodeToken(xml.CharData([]byte("  "))); err != nil {
+		return err
+	}
+	if err = statusEncoder.EncodeToken(errCountElt); err != nil {
+		return err
+	}
+	if err = statusEncoder.EncodeToken(xml.CharData(fmt.Sprintf("%d", errCount))); err != nil {
+		return err
+	}
+	if err = statusEncoder.EncodeToken(errCountElt.End()); err != nil {
+		return err
+	}
+	if err = statusEncoder.EncodeToken(xml.CharData([]byte("\n"))); err != nil {
+		return err
+	}
+	warnCountElt := xml.StartElement{Name: xml.Name{Local: "Warnings"}}
+	if err = statusEncoder.EncodeToken(xml.CharData([]byte("  "))); err != nil {
+		return err
+	}
+	if err = statusEncoder.EncodeToken(warnCountElt); err != nil {
+		return err
+	}
+	if err = statusEncoder.EncodeToken(xml.CharData(fmt.Sprintf("%d", warnCount))); err != nil {
+		return err
+	}
+	if err = statusEncoder.EncodeToken(warnCountElt.End()); err != nil {
+		return err
+	}
+	if err = statusEncoder.EncodeToken(xml.CharData([]byte("\n"))); err != nil {
+		return err
+	}
+	durationElt := xml.StartElement{Name: xml.Name{Local: "DurationSeconds"}}
+	if err = statusEncoder.EncodeToken(xml.CharData([]byte("  "))); err != nil {
+		return err
+	}
+	if err = statusEncoder.EncodeToken(durationElt); err != nil {
+		return err
+	}
+	if err = statusEncoder.EncodeToken(xml.CharData(fmt.Sprintf("%f", time.Now().Sub(now).Seconds()))); err != nil {
+		return err
+	}
+	if err = statusEncoder.EncodeToken(durationElt.End()); err != nil {
+		return err
+	}
+	if err = statusEncoder.EncodeToken(xml.CharData([]byte("\n"))); err != nil {
 		return err
 	}
 
-	if err = enc.EncodeToken(startElement.End()); err != nil {
+	if err = statusEncoder.EncodeToken(statusStartElement.End()); err != nil {
 		return err
 	}
-	if err := enc.Flush(); err != nil {
+	if err = statusEncoder.EncodeToken(xml.CharData([]byte("\n"))); err != nil {
 		return err
 	}
+	if err := statusEncoder.Flush(); err != nil {
+		return err
+	}
+
 	return nil
 }
 

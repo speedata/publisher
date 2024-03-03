@@ -24,6 +24,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 	"unsafe"
 
 	"speedatapublisher/splibaux"
@@ -38,17 +39,26 @@ import (
 var (
 	errorpattern     = `**err`
 	protocolFilename string
+	statusFilename   string
 	verbosity        = 0
+	now              time.Time
 )
 
 func init() {
 	protocolFilename = os.Getenv("SP_JOBNAME") + "-protocol.xml"
+	statusFilename = os.Getenv("SP_JOBNAME") + ".status"
 	verbosity, _ = strconv.Atoi(os.Getenv("SP_VERBOSITY"))
+
 	loglevel.Set(slog.LevelInfo)
 	err := setupLog(protocolFilename)
 	if err != nil {
 		panic(err)
 	}
+	err = setupStatusfile(statusFilename)
+	if err != nil {
+		panic(err)
+	}
+	now = time.Now()
 }
 
 func s2c(input string) *C.char {
@@ -533,7 +543,7 @@ func sdTeardown(L *C.lua_State) int {
 	_ = L
 	err := teardownLog()
 	if err != nil {
-		slog.Error("internal error", "where", "sdTeardown", "message", err.Error())
+		fmt.Println("Internal error", err.Error())
 	}
 	return 0
 }

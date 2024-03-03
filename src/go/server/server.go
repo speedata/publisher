@@ -245,8 +245,7 @@ func (s *Server) checkIDExists(id string) string {
 	if err != nil {
 		return ""
 	}
-	if err != nil && os.IsNotExist(err) || !fi.IsDir() {
-		// Does not exist or is not a directory
+	if !fi.IsDir() {
 		return ""
 	}
 	if a, err := filepath.Rel(filepath.Join(publishdir, ".."), s.serverTemp); err != nil && a == "." {
