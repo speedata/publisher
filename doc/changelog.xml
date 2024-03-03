@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.14" date="2024-03-03">
+        <en>Remove status file, better error messages/exit status.</en>
+        <de>Lösche status-Datei, bessere Fehlerbehandlung/Exit Status.</de>
+    </entry>
     <entry version="4.17.13" date="2024-03-02">
         <en>Remove luaglue library.</en>
         <de>Entferne die luaglue Bibliothek.</de>
