@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.15" date="2024-03-04">
+        <en>Re-introduce status file (compatibility in server mode).</en>
+        <de>Statusdatei wiederherstellen (Kompatibilität für den Server-Modus).</de>
+    </entry>
+    <entry version="4.17.15" date="2024-03-04">
+        <en>Update the image processing library (resize).</en>
+        <de>Update der Bildverarbeitungsbibliothek (resize).</de>
+    </entry>
     <entry version="4.17.14" date="2024-03-03">
         <en>Remove status file, better error messages/exit status.</en>
         <de>Lösche status-Datei, bessere Fehlerbehandlung/Exit Status.</de>
