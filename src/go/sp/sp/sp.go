@@ -120,7 +120,6 @@ func init() {
 		"fontloader":        "harfbuzz",
 		"referencefilename": "reference",
 		"xpath":             "lxpath",
-		"xmlfile":           stringFalse,
 	}
 
 	switch runtime.GOOS {
@@ -599,9 +598,6 @@ func runPublisher(cachemethod string, runmode string, filename string) (exitstat
 	}
 	if extensionhandler := getOption("extensionhandler"); extensionhandler != "" {
 		layoutoptionsSlice = append(layoutoptionsSlice, `extensionhandler=`+extensionhandler)
-	}
-	if xmlfile := getOption("xmlfile"); xmlfile != "" {
-		layoutoptionsSlice = append(layoutoptionsSlice, `xmlfile=`+xmlfile)
 	}
 
 	layoutname := getOption("layout")

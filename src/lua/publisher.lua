@@ -1150,7 +1150,6 @@ function initialize_luatex_and_generate_pdf()
 
     for i=4,#arg do
         local k,v = arg[i]:match("^(.+)=(.+)$")
-        if k == "xmlfile" and v == "true" then options.xmlfile = "true" end
         if k == "mode" then -- everything else handled after loading layout
             v = v:gsub("^\"(.*)\"$","%1")
             local _modes = string.explode(v,",")

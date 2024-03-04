@@ -35,7 +35,7 @@ function err(...)
     else
         unpacked = string.format( "%s",string.format(table.unpack(text)))
     end
-    splib.log("error",unpacked)
+    splib.error(unpacked)
 end
 
 function call(...)
