@@ -12,8 +12,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/anthonynsimon/bild/imgio"
-	"github.com/anthonynsimon/bild/transform"
+	"github.com/speedata/bild/imgio"
+	"github.com/speedata/bild/transform"
 )
 
 // Download a file via http / https and save it into a file in the imagecache folder.
