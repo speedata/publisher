@@ -11,7 +11,8 @@ This file gets updated before a stable release. There is a [detailed changelog](
 
 * New defaults for the XPath engine and the font loader (preparation for the version 5)
 * New output / logging backend.
-* Remove Lua glue (now directly mix Go and Lua)
+* New [dpi attribute with PDFOption](https://doc.speedata.de/publisher/en/images/#_image_size_and_resolution) for automatic image resizing.
+* [Markdown](https://doc.speedata.de/publisher/en/advancedtopics/markdown/).
 
 ## Version 4.16
 

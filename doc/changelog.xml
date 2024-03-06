@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.16" date="2024-03-06">
+        <en>Change the default harfbuzz shaper to "ot".</en>
+        <de>Setze den voreingestellten Harfbuzz Shaper auf "ot".</de>
+    </entry>
+    <entry version="4.17.16" date="2024-03-06">
+        <en>Bugfix harfbuzz and newline with some fonts (#566).</en>
+        <de>Fehlerkorrektur Harfbuzz und Zeilenumbruch bei manchen Fonts (#566).</de>
+    </entry>
     <entry version="4.17.15" date="2024-03-04">
         <en>Re-introduce status file (compatibility in server mode).</en>
         <de>Statusdatei wiederherstellen (Kompatibilität für den Server-Modus).</de>
