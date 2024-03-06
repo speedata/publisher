@@ -7918,7 +7918,7 @@ shape = function(tbl, buf, options)
 
     local bufdir = tostring(buf:get_direction())
     local bufscript = tostring(buf:get_script())
-    harfbuzz.shape_full(font, buf, tbl.otfeatures, {})
+    harfbuzz.shape_full(font, buf, tbl.otfeatures, {"ot","graphite2","fallback"})
     if bufdir == "rtl" then
         buf:reverse()
     end
