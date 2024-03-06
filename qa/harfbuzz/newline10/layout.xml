@@ -1,0 +1,27 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Pageformat height="4cm" width="6cm"/>
+    <LoadFontfile name="newathena" filename="newathu5_5.ttf" />
+
+    <DefineFontfamily fontsize="10" leading="12" name="text">
+        <Regular fontface="newathena" />
+    </DefineFontfamily>
+
+    <Record element="data">
+        <PlaceObject allocate="no">
+            <Textblock>
+                <Paragraph>
+                    <ForAll select="element">
+                        <Span language="Other">
+                            <Value select="@attr" />
+                        </Span>
+                        <HSpace leader="." />
+                        <Value select='123' />
+                        <Br />
+                    </ForAll>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

@@ -4680,7 +4680,7 @@ function hbglyphlist(arguments)
             -- ignore
         elseif uc == 32 then
             local thiscluster = thisglyph.cluster
-            if cluster[thiscluster] == 160 then
+            if cluster[thiscluster] == 160 then -- no break space
                 n = node.new("penalty")
                 n.penalty = 10000
                 list,cur = node.insert_after(list,cur,n)
@@ -4757,7 +4757,7 @@ function hbglyphlist(arguments)
             if n then
                 set_attribute(n,"fontfamily",fontfamily)
             end
-        elseif cp == 0 and newlines_at[thisglyph.cluster] then
+        elseif ( cp == 0 or uc == 10 ) and newlines_at[thisglyph.cluster] then
             local dummypenalty
             dummypenalty = node.new("penalty")
             dummypenalty.penalty = 10000
