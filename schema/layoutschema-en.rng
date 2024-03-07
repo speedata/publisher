@@ -2774,7 +2774,7 @@
                      <a:documentation>Set the shaping mode of the font. Defaults to harfbuzz.</a:documentation>
                      <choice>
                         <value>fontforge</value>
-                        <a:documentation>The old and well tested font hanlder. Renders western scripts well, but no right-to-left or other complex scripts.</a:documentation>
+                        <a:documentation>The old and well tested font handler. Renders western scripts well, but no right-to-left or other complex scripts.</a:documentation>
                         <value>harfbuzz</value>
                         <a:documentation>The new renderer that will eventually handle all scripts including right-to-left.</a:documentation>
                      </choice>

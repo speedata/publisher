@@ -4993,7 +4993,7 @@
       </description>
       <choice en="fontforge">
         <description xml:lang="en">
-          <para>The old and well tested font hanlder. Renders western scripts well, but no right-to-left or other complex scripts.</para>
+          <para>The old and well tested font handler. Renders western scripts well, but no right-to-left or other complex scripts.</para>
         </description>
         <description xml:lang="de">
           <para>Der alte und gut funktionierende Fonthandler. Funktioniert gut mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen.</para>
