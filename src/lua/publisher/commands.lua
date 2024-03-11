@@ -5124,8 +5124,10 @@ function commands.value( layoutxml,dataxml )
                 splib.error("xpath error","message",msg)
                 return
             end
-            for i = 1, #seq do
-                ret[#ret+1] = seq[i]
+            if seq then
+                for i = 1, #seq do
+                    ret[#ret+1] = seq[i]
+                end
             end
             return ret
         else

@@ -63,17 +63,19 @@ TIP: Die letzten drei Beispiele müssen in einer Zeile eingegeben werden.
 
 .. Nun kann man mit  `sudo apt update` und `sudo apt install speedata-publisher` den Publisher installieren.
 
-. **Aus den Quellen installieren**: Für die Entwickler, die am Publisher selbst Änderungen vornehmen möchten. Hierzu gibt es ein https://hub.docker.com/r/speedata/development[fertiges Docker-Image auf dockerhub]. Alternativ kann man die Software auch lokal bauen: sie aus dem Quellcode gebaut werden mithilfe des Befehls `rake` erstellt werden.
-Notwendig dafür sind die üblichen Entwicklungswerkzeuge und die Programmiersprache Go (https://golang.org/) in Version 1.11 oder höher.
+. **Aus den Quellen installieren**: Für die Entwickler, die am Publisher selbst Änderungen vornehmen möchten. Man die Software lokal bauen: mithilfe des Befehls `rake` wird der speedata Publisher kompiliert.
+Notwendig dafür sind die üblichen Entwicklungswerkzeuge und die Programmiersprache Go (https://golang.org/) in Version 1.21 oder höher und Lua Headerdateien.
 Auf einem Debian oder Ubuntu GNU/Linux System kann man folgende Befehle nutzen:
 +
 -------------------------------------------------------------------------------
-sudo apt install build-essential git rake golang
+sudo apt install build-essential git rake golang liblua5.3-dev
 git clone https://github.com/speedata/publisher.git
 cd publisher
 rake build
 rake buildlib
 -------------------------------------------------------------------------------
++
+Falls die Lua-Header nicht unter `/usr/include/lua5.3` liegen, muss man die Umgebungsvariable `CGO_CFLAGS` auf einen Wert wie `-I/usr/local/include/lua5.3` setzen. Und für Windows muss man noch die Umgebungsvariable `CGO_LDFLAGS` auf einen Wert wie `-llua53w64 -L/luatex-bin/luatex/windows/amd64/default/` (die Pfad zu dem LuaTeX binary natürlich anpassen).
 +
 Um auch dieses Handbuch bzw. das ebook zu erstellen, wird https://asciidoctor.org/[asciidoctor] benötigt:
 +

@@ -7871,8 +7871,10 @@ function pdfdate(num)
 end
 
 function escape_pdfstring( str )
-    str = string.gsub(str,"%(","\\(")
-    str = string.gsub(str,"%)","\\)")
+    if str then
+        str = string.gsub(str,"%(","\\(")
+        str = string.gsub(str,"%)","\\)")
+    end
     return str
 end
 

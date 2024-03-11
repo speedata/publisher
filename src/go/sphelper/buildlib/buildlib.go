@@ -7,9 +7,22 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"speedatapublisher/sphelper/config"
 )
+
+func setEnvIfNotExists(cmd *exec.Cmd, envVarName, envVarValue string) {
+	// Check if the environment variable already exists in cmd.Env
+	for _, envVar := range cmd.Env {
+		if strings.HasPrefix(envVar, envVarName) {
+			return // Environment variable already exists, no need to set
+		}
+	}
+
+	// If the environment variable doesn't exist, add it to cmd.Env
+	cmd.Env = append(cmd.Env, envVarName+"="+envVarValue)
+}
 
 // BuildLib builds the dynamic library
 func BuildLib(cfg *config.Config, goos string, goarch string) error {
@@ -41,13 +54,13 @@ func BuildLib(cfg *config.Config, goos string, goarch string) error {
 	}
 	switch goos {
 	case "darwin":
-		cmd.Env = append(cmd.Env, "CGO_CFLAGS: -I/opt/homebrew/opt/lua@5.3/include/lua")
-		cmd.Env = append(cmd.Env, "CGO_LDFLAGS=-undefined dynamic_lookup")
-	case "linux":
-		cmd.Env = append(cmd.Env, "CGO_CFLAGS=-I/usr/include/lua5.3")
+		setEnvIfNotExists(cmd, "CGO_CFLAGS", "-I/opt/homebrew/opt/lua@5.3/include/lua")
+		setEnvIfNotExists(cmd, "CGO_LDFLAGS", "-undefined dynamic_lookup")
 	case "windows":
-		cmd.Env = append(cmd.Env, "CGO_CFLAGS=-I/usr/include/lua5.3")
-		cmd.Env = append(cmd.Env, "CGO_LDFLAGS=-llua53w64 -L/luatex-bin/luatex/windows/amd64/default/")
+		setEnvIfNotExists(cmd, "CGO_CFLAGS", "-I/usr/include/lua5.3")
+		setEnvIfNotExists(cmd, "CGO_LDFLAGS", "-llua53w64 -L/luatex-bin/luatex/windows/amd64/default/")
+	default:
+		setEnvIfNotExists(cmd, "CGO_CFLAGS", "-I/usr/include/lua5.3")
 	}
 	cmd.Env = append(cmd.Env, "CGO_ENABLED=1")
 	outbuf, err := cmd.CombinedOutput()

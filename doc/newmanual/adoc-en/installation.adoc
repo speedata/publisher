@@ -38,13 +38,15 @@ TIP: The previous three commands and source codes entries must be on one line.
 
 Now you can run `sudo apt update` and `apt install speedata-publisher` and have a working installation.
 
-. **Build from source**: For developers interested in contributing to speedata Publisher, the program and documentation can be built directly from source. You can choose between a prebuilt docker image on dockerhub or build the software from the git repository using rake. You need to have the Go language version 1.11 or later installed. For example, on Debian or Ubuntu GNU/Linux, where Go is packaged as 'golang', you can use the commands:
+. **Build from source**: For developers interested in contributing to speedata Publisher, the program and documentation can be built directly from source. You need to have the Go language version 1.21 or later and Lua header files installed. For example, on Debian or Ubuntu GNU/Linux, where Go is packaged as 'golang', you can use the commands:
 +
-    sudo apt install build-essential git rake golang
+    sudo apt install build-essential git rake golang liblua5.3-dev
     git clone https://github.com/speedata/publisher.git
     cd publisher
     rake build
     rake buildlib
++
+If the Lua libraries are in another place than `/usr`, you need to set the environment variable `CGO_CFLAGS` to something like `-I/usr/local/include/lua`. And for Windows you need to also set the `CGO_LDFLAGS` to `-llua53w64 -L/luatex-bin/luatex/windows/amd64/default/` (adjust the path to the LuaTeX binary).
 +
 To build the manual and the ebook, you need https://asciidoctor.org/[asciidoctor]:
 +
@@ -61,7 +63,7 @@ If you are building speedata Publisher from source, you will also need to instal
 +
 After installation, you can run `bin/sdluatex --version` to confirm the program version.
 
-TIP: On windows, you might need the https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads[Microsoft Visual C++ compiler] and the VCRuntime140.dll. The installation path of the speedata Publisher must only contain ascii characters and must contain any accented characters.
+TIP: On windows, you might need the https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads[Microsoft Visual C++ compiler] and the VCRuntime140.dll. The installation path of the speedata Publisher must only contain ASCII characters and must contain any accented characters.
 
 
 // EOF

@@ -493,7 +493,13 @@ func getExecutablePath() string {
 		return p
 	}
 
-	// 2 panic!
+	// 2 look in the PATH
+	executableName, err := exec.LookPath("sdluatex" + exeSuffix)
+	if err == nil {
+		return executableName
+	}
+
+	// 3 panic!
 	log.Fatal("Can't find sdluatex binary")
 	return ""
 }
