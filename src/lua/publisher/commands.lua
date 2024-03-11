@@ -15,6 +15,14 @@ local par  = require("par")
 local metapost = require("publisher.metapost")
 do_luafile("css.lua")
 
+local function lineinfo(layout)
+    if publisher.newxpath then
+        return "line",layout[".__line"]
+    else
+        return nil
+    end
+end
+
 -- This module contains the commands in the layout file (the tags)
 commands = {}
 
@@ -2206,12 +2214,12 @@ function commands.message( layoutxml, dataxml )
     end
 
     if errcond then
-        splib.log("error",contents,"errorcode",errorcode,"from","message")
+        splib.log("error",contents,"errorcode",errorcode,"from","message",lineinfo(layoutxml))
         if errorcode > publisher.errorcode then
             publisher.errorcode = errorcode
         end
     else
-        splib.log("message",contents)
+        splib.log("message",contents,lineinfo(layoutxml))
     end
 
     if exitnow then
@@ -4944,6 +4952,7 @@ function commands.textblock( layoutxml,dataxml )
     end
 
     if #objects == 0 then
+        splib.log("warn","Textblock: no objects found", lineinfo(layoutxml))
         warning("Textblock: no objects found!")
         local vrule = {  width = 10 * 2^16, height = -1073741824}
         nodes[1] = publisher.add_rule(nil,"head",vrule)
