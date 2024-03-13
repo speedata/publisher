@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.17" date="2024-03-13">
+        <en>sdluatex binary lookup now in PATH environment variable.</en>
+        <de>sdluatex binary lookup in der PATH Umgebungsvariable.</de>
+    </entry>
+    <entry version="4.17.17" date="2024-03-13">
+        <en>CGO_C/LDFLAGS override for compiling sp library.</en>
+        <de>CGO_C/LDFLAGS überschreiben wenn die sp Bibliothek kompiliert wird.</de>
+    </entry>
     <entry version="4.17.16" date="2024-03-06">
         <en>Change the default harfbuzz shaper to "ot".</en>
         <de>Setze den voreingestellten Harfbuzz Shaper auf "ot".</de>
