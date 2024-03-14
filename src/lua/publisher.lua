@@ -5544,7 +5544,6 @@ function finish_par( nodelist,hsize,parameters )
         lang.hyphenate(nodelist)
     end
 
-    nodelist = hbkern(nodelist)
     local n = node.new("penalty")
     setprop(n,"origin","finishpar")
     n.penalty = 10000
@@ -5555,12 +5554,8 @@ function finish_par( nodelist,hsize,parameters )
     last = n
 
     -- mode harfbuzz sets haskerns, different kind of kerning
-    if options.fontloader == "harfbuzz" then
-        n = hbkern(nodelist)
-    else
-        n = node.kerning(nodelist)
-    end
-
+    n = node.kerning(nodelist)
+    n = hbkern(n)
     -- 15 is a parfillskip
     n,last = add_glue(n,"tail",{ subtype = 15, width = 0, stretch = 2^16, stretch_order = 2})
 end
