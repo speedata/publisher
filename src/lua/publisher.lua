@@ -4601,6 +4601,18 @@ function getprop( n, prop )
     return nil
 end
 
+function clearprop(n, prop)
+    local props = node.getproperty(n)
+    if not props then return nil end
+    if type(props) == "table" then
+        local ret = props[prop]
+        props[prop] = nil
+        return ret
+    end
+    return nil
+end
+
+
 local function setstyles(n,parameter)
     if parameter.bold == 1 then
         set_attribute(n,"font-weight","bold")
@@ -5531,6 +5543,8 @@ function finish_par( nodelist,hsize,parameters )
     if not parameters.disable_hyphenation then
         lang.hyphenate(nodelist)
     end
+
+    nodelist = hbkern(nodelist)
     local n = node.new("penalty")
     setprop(n,"origin","finishpar")
     n.penalty = 10000
@@ -5556,7 +5570,7 @@ function hbkern(nodelist)
     local curkern = 0
     while head do
         if head.id == glyph_node then
-            local k = getprop(head,"kernbefore")
+            local k = clearprop(head,"kernbefore")
             if k and k ~= 0 then
                 curkern = k
             end

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+	<LoadFontfile mode="harfbuzz" name="b" filename="amiri-regular.ttf" />
+
+	<DefineFontfamily name="text" fontsize="20" leading="30">
+		<Regular fontface="b" />
+	</DefineFontfamily>
+
+
+	<Record element="data">
+		<PlaceObject row="1" column="1">
+			<Textblock>
+				<Paragraph language="Other" bidi="yes" direction="rtl" >
+					<Value>الكتاب المقدس باللغة العربية، فان دايك</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+	</Record>
+
+</Layout>
