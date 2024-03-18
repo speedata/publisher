@@ -1,7 +1,13 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
     xmlns:sd="urn:speedata:2009/publisher/functions/en">
-    <Pageformat height="13cm" width="17cm"></Pageformat>
-    <SetGrid height="15mm" width="19mm"></SetGrid>
+    <Pageformat height="14cm" width="17cm"></Pageformat>
+    <Options randomseed="2331" />
+    <SetGrid height="17mm" width="19mm"></SetGrid>
+    <Pagetype name="t" test="true()">
+        <PositioningArea name="text">
+            <PositioningFrame width="{sd:number-of-columns() - 2}" height="{sd:number-of-rows() - 2}" row="1" column="1" />
+        </PositioningArea>
+    </Pagetype>
     <Record element="data">
         <SetVariable variable="sha1" select="sd:sha1('Hallo ', 'Welt')"/>
         <PlaceObject>
@@ -73,6 +79,42 @@
                 <Paragraph>
                     <Value>sd:imageheight('_samplea.pdf',1,'artbox','pt'): </Value>
                     <Value select="sd:imageheight('_samplea.pdf',1,'artbox','pt')"/>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>sd:pagewidth('cm'): </Value>
+                    <Value select="sd:pagewidth('cm')"></Value>
+                </Paragraph>
+                <Paragraph>
+                    <Value>sd:pageheight('mm'): </Value>
+                    <Value select="sd:pageheight('mm')"></Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>sd:number-of-columns('text'): </Value>
+                    <Value select="sd:number-of-columns('text')"></Value>
+                </Paragraph>
+                <Paragraph>
+                    <Value>sd:number-of-rows('text'): </Value>
+                    <Value select="sd:number-of-rows('text')"></Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>sd:randomitem('1','2','3',4,5,6): </Value>
+                    <Value select="sd:randomitem('1','2','3',4,5,6)"></Value>
+                </Paragraph>
+                <Paragraph>
+                    <Value>sd:romannumeral(1234): </Value>
+                    <Value select="sd:romannumeral(1234)" />
                 </Paragraph>
             </Textblock>
         </PlaceObject>

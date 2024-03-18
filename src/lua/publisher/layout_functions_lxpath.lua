@@ -184,8 +184,12 @@ local function reset_alternating(dataxml, arg)
 end
 
 local function fnNumberOfColumns(dataxml, arg)
+    local areaname
+    if #arg > 0 then
+        areaname = publisher.xpath.string_value(arg[1])
+    end
     publisher.setup_page(nil, "layout_functions#number_of_columns", dataxml)
-    return { publisher.current_grid:number_of_columns(arg and arg[1]) }, nil
+    return { publisher.current_grid:number_of_columns(areaname) }
 end
 
 --- Merge numbers like '1,2,3,4,5, 8, 9,10' into '1-5, 8-10'
@@ -746,7 +750,12 @@ local function randomitem(dataxml, arg)
 end
 
 local function romannumeral(dataxml, arg)
-    return { tex.romannumeral(xpath.number_value(arg[1])) }, nil
+    local firstarg = xpath.number_value(arg[1])
+    if not firstarg then
+        splib.error("romannumeral expects a number as the first argument")
+        return {}, "romannumeral expects a number as the first argument"
+    end
+    return { tex.romannumeral(firstarg) }, nil
 end
 
 local function aspectratio(dataxml, arg)
@@ -757,7 +766,7 @@ end
 
 local function pageheight(dataxml, arg)
     publisher.setup_page(nil, "layout_functions#pageheight", dataxml)
-    local unit = arg[1] or "mm"
+    local unit = xpath.string_value(arg[1]) or "mm"
     if unit then
         local width = publisher.current_page.height
         local ret
@@ -789,7 +798,7 @@ end
 
 local function pagewidth(dataxml, arg)
     publisher.setup_page(nil, "layout_functions#pagewidth", dataxml)
-    local unit = arg[1] or "mm"
+    local unit = xpath.string_value(arg[1]) or "mm"
     if unit then
         local width = publisher.current_page.width
         local ret
@@ -885,9 +894,9 @@ local funcs = {
     { "number-of-pages",     sdns, fnNumberOfPages,      1, 1 },
     { "number-of-rows",      sdns, fnNumberOfRows,       0, 1 },
     { "odd",                 sdns, odd,                  1, 1 },
-    { "pageheight",          sdns, pageheight,           0, 0 },
+    { "pageheight",          sdns, pageheight,           0, 1 },
     { "pagenumber",          sdns, fnpagenumber,         1, 1 },
-    { "pagewidth",           sdns, pagewidth,            0, 0 },
+    { "pagewidth",           sdns, pagewidth,            0, 1 },
     { "randomitem",          sdns, randomitem,           1, -1 },
     { "reset-alternating",   sdns, reset_alternating,    1, 1 },
     { "romannumeral",        sdns, romannumeral,         1, 1 },
