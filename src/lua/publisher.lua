@@ -1279,6 +1279,14 @@ function initialize_luatex_and_generate_pdf()
             },
             namespaces = layoutxml[".__ns"]
         }
+
+        local mode_keys = {}
+        for k, _ in pairs(modes) do
+            mode_keys[#mode_keys+1] = k
+        end
+        table.sort(mode_keys)
+        ctxvalue.vars._mode = table.concat(mode_keys,",")
+
         data = xpath.context:new(ctxvalue)
         for k,v in pairs(vars) do
             data.vars[k] = v

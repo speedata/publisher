@@ -3960,6 +3960,9 @@ function commands.setvariable( layoutxml,dataxml )
     end
     if varname == "_mode" then
         publisher.modes = {}
+        if publisher.newxpath then
+            contents = xpath.string_value(contents)
+        end
         local _modes = string.explode(tostring(contents),",")
         for _,m in ipairs(_modes) do
             publisher.modes[m] = true

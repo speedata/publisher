@@ -1,0 +1,80 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="13cm" width="17cm"></Pageformat>
+    <SetGrid height="15mm" width="19mm"></SetGrid>
+    <Record element="data">
+        <SetVariable variable="sha1" select="sd:sha1('Hallo ', 'Welt')"/>
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>sd:md5('hello ', 'world'): </Value>
+                    <Value select="sd:md5('hello ', 'world')"></Value>
+                </Paragraph>
+                <Paragraph>
+                    <Value>sd:sha1('hello ', 'world'): </Value>
+                    <Value select="sd:sha1('hello ', 'world')"></Value>
+                </Paragraph>
+                <Paragraph>
+                    <Value>substring(sd:sha256('hello ', 'world'),1,10): </Value>
+                    <Value select="substring(sd:sha256('hello ', 'world'),1,10)"></Value>
+                </Paragraph>
+                <Paragraph>
+                    <Value>substring(sd:sha512('hello ', 'world'),1,10): </Value>
+                    <Value select="substring(sd:sha512('hello ', 'world'),1,10)"></Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+
+        <Group name="foo">
+            <Contents>
+                <PlaceObject>
+                    <Box height="1" width="1"></Box>
+                </PlaceObject>
+            </Contents>
+        </Group>
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>sd:group-height('foo','mm'): </Value>
+                    <Value select="sd:group-height('foo','mm')"></Value>
+                </Paragraph>
+                <Paragraph>
+                    <Value>sd:group-width('foo','mm'): </Value>
+                    <Value select="sd:group-width('foo','mm')"></Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>sd:tounit('pt','1pc'): </Value>
+                    <Value select="sd:tounit('pt','1pc')"></Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>sd:mode('one','two','three'): </Value>
+                    <Value select="sd:mode('one','two','three')"/>
+                </Paragraph>
+                <Paragraph>
+                    <Value>$_mode: </Value>
+                    <Value select="$_mode"></Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>sd:imagewidth('_samplea.pdf',1,'artbox','pt'): </Value>
+                    <Value select="sd:imagewidth('_samplea.pdf',1,'artbox','pt')"/>
+                </Paragraph>
+                <Paragraph>
+                    <Value>sd:imageheight('_samplea.pdf',1,'artbox','pt'): </Value>
+                    <Value select="sd:imageheight('_samplea.pdf',1,'artbox','pt')"/>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

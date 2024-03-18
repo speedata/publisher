@@ -24,15 +24,16 @@ local function get_filename_pagenum_box_unit_from_arg(arg)
     filename = xpath.string_value(arg[1])
     for i = 2, #arg do
         local ai = arg[i]
-        if tonumber(ai) then
-            pagenumber = tonumber(ai) or 1
-        elseif ai == "cm" or ai == "mm" or ai == "in" or ai == "sp" or ai == "pc" or ai == "pt" or ai == "pp" or ai == "cc" then
-            unit = ai
-        elseif ai == "artbox" or ai == "cropbox" or ai == "bleedbox" or ai == "trimbox" or ai == "mediabox" then
-            box = ai
+        local nv = xpath.number_value(ai)
+        local tv = xpath.string_value(ai)
+        if nv then
+            pagenumber = nv or 1
+        elseif tv == "cm" or tv == "mm" or tv == "in" or tv == "sp" or tv == "pc" or tv == "pt" or tv == "pp" or tv == "cc" then
+            unit = tv
+        elseif tv == "artbox" or tv == "cropbox" or tv == "bleedbox" or tv == "trimbox" or tv == "mediabox" then
+            box = tv
         end
     end
-    -- printtable("{filename,pagenumber,box,unit}",{filename,pagenumber,box,unit})
     return filename, pagenumber, box, unit
 end
 
@@ -162,9 +163,10 @@ end
 
 local function mode(dataxml, arg)
     local entry
-    for _, v in pairs(arg) do
-        entry = publisher.modes[v]
-        if entry == true then return { true }, nil end
+    for i = 1, #arg do
+        local name = xpath.string_value(arg[i])
+        entry = publisher.modes[name]
+        if entry then return { true }, nil end
     end
     return { false }, nil
 end
@@ -576,19 +578,32 @@ end
 
 -- SHA-1
 local function shaone(dataxml, arg)
-    local message = table.concat(arg)
+    local args = {}
+    for i = 1, #arg do
+        args[#args + 1] = xpath.string_value(arg[i])
+    end
+
+    local message = table.concat(args)
     local ret = sha.sha1(message)
     return { ret }, nil
 end
 
 local function sha256(dataxml, arg)
-    local message = table.concat(arg)
+    local args = {}
+    for i = 1, #arg do
+        args[#args + 1] = xpath.string_value(arg[i])
+    end
+    local message = table.concat(args)
     local ret = sha.sha256(message)
     return { ret }, nil
 end
 
 local function sha512(dataxml, arg)
-    local message = table.concat(arg)
+    local args = {}
+    for i = 1, #arg do
+        args[#args + 1] = xpath.string_value(arg[i])
+    end
+    local message = table.concat(args)
     local ret = sha.sha512(message)
     return { ret }, nil
 end
@@ -608,16 +623,22 @@ local function markdown(dataxml, arg)
 end
 
 local function md5(dataxml, arg)
-    local message = table.concat(arg)
+    local args = {}
+    for i = 1, #arg do
+        args[#args + 1] = xpath.string_value(arg[i])
+    end
+
+    local message = table.concat(args)
     local ret = sha.md5(message)
     return { ret }, nil
 end
 
 -- convert a textual dimension (e.g. '2cm') to a scalar in another dimension.
 local function tounit(dataxml, arg)
-    local unit = arg[1]
-    local decimal = arg[3] or 0
-    local width = tex.sp(arg[2])
+    local unit = xpath.string_value(arg[1])
+    local decimal =  xpath.number_value(arg[3]) or 0
+    local width =  tex.sp(xpath.string_value(arg[2]))
+
     local ret
     if unit == "cm" then
         ret = width / publisher.onecm_sp
@@ -847,20 +868,19 @@ local funcs = {
     { "firstmark",           sdns, firstmark,            1, 1 },
     { "format-number",       sdns, format_number,        1, 3 },
     { "format-string",       sdns, format_string,        1, -1 },
-    { "group-height",        sdns, groupheight,          1, 1 },
-    { "group-width",         sdns, groupwidth,           1, 1 },
-    { "groupheight",         sdns, groupheight,          1, 1 },
-    { "groupwidth",          sdns, groupwidth,           1, 1 },
-    { "html",                sdns, html,                 1, 1 },
-    { "imageheight",         sdns, imageheight,          1, 1 },
-    { "imagewidth",          sdns, imagewidth,           1, 1 },
+    { "group-height",        sdns, groupheight,          1, 2 },
+    { "group-width",         sdns, groupwidth,           1, 2 },
+    { "groupheight",         sdns, groupheight,          1, 2 },
+    { "groupwidth",          sdns, groupwidth,           1, 2 },
+    { "imageheight",         sdns, imageheight,          1, 4 },
+    { "imagewidth",          sdns, imagewidth,           1, 4 },
     { "keep-alternating",    sdns, keepalternating,      1, -1 },
     { "lastmark",            sdns, lastmark,             1, 1 },
     { "loremipsum",          sdns, loremipsum,           0, 1 },
     { "markdown",            sdns, markdown,             1, 1 },
-    { "md5",                 sdns, md5,                  1, 1 },
+    { "md5",                 sdns, md5,                  1, -1 },
     { "merge-pagenumbers",   sdns, fnMergePagenumbers,   1, 4 },
-    { "mode",                sdns, mode,                 1, 1 },
+    { "mode",                sdns, mode,                 1, -1 },
     { "number-of-columns",   sdns, fnNumberOfColumns,    0, 1 },
     { "number-of-pages",     sdns, fnNumberOfPages,      1, 1 },
     { "number-of-rows",      sdns, fnNumberOfRows,       0, 1 },
@@ -871,11 +891,11 @@ local funcs = {
     { "randomitem",          sdns, randomitem,           1, -1 },
     { "reset-alternating",   sdns, reset_alternating,    1, 1 },
     { "romannumeral",        sdns, romannumeral,         1, 1 },
-    { "sha1",                sdns, shaone,               1, 1 },
-    { "sha256",              sdns, sha256,               1, 1 },
-    { "sha512",              sdns, sha512,               1, 1 },
-    { "todimen",             sdns, tounit,               1, 1 },
-    { "tounit",              sdns, tounit,               1, 1 },
+    { "sha1",                sdns, shaone,               1, -1 },
+    { "sha256",              sdns, sha256,               1, -1 },
+    { "sha512",              sdns, sha512,               1, -1 },
+    { "todimen",             sdns, tounit,               1, 3 },
+    { "tounit",              sdns, tounit,               1, 3 },
     { "variable-exists",     sdns, variable_exists,      1, 1 },
     { "variable",            sdns, variable,             1, -1 },
     { "visible-pagenumber",  sdns, fnVisiblePagenumber,  1, 1 },
