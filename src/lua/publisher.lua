@@ -4817,9 +4817,9 @@ function hbglyphlist(arguments)
             if reportmissingglyphs then
                 local missingglyph = cluster[thisglyph.cluster]
                 if reportmissingglyphs == "warning" then
-                    splib.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",missingglyph))
+                    splib.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",missingglyph))
                 else
-                    splib.error("Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%4x",missingglyph))
+                    splib.error("Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",missingglyph))
                 end
             end
         else

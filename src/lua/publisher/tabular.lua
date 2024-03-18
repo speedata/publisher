@@ -210,30 +210,34 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
         local padding_right  = td_contents.padding_right or self.padding_right_col[current_column] or self.padding_right
         local cellheight = 0
         for _,blockobject in ipairs(td_contents.objects) do
-            for i=1,#blockobject do
-                local inlineobject = blockobject[i]
-                if type(inlineobject)=="table" and node.is_node(inlineobject.nodelist) then
-                    local wd, ht, dp = node.dimensions(inlineobject.nodelist)
-                    max_wd = math.max(wd + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
-                    min_wd = paragraph.minimal_width_nodelist(inlineobject.nodelist,inlineobject.textformat)
-                    cellheight = cellheight + ht + dp
-                elseif type(inlineobject)=="table" then
-                    if inlineobject.min_width then
-                        local mw = inlineobject:min_width(inlineobject.alignment,{fontfamily = inlineobject.fontfamily or self.fontfamily},self.dataxml)
-                        min_wd = math.max(mw + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
-                    end
-                    if inlineobject.max_width_and_lineheight then
-                        local mw,_ = inlineobject:max_width_and_lineheight({fontfamily = inlineobject.fontfamily or self.fontfamily},self.dataxml)
-                        max_wd = math.max(mw + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
-                    end
-                elseif node.is_node(inlineobject) and node.has_field(inlineobject,"width") then
-                    min_wd = math.max(inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
-                    max_wd = math.max(inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
-                    if node.has_field(inlineobject,"height") then
-                        cellheight = cellheight + inlineobject.height
-                    end
-                    if node.has_field(inlineobject,"depth") then
-                        cellheight = cellheight + inlineobject.depth
+            if type(blockobject) ~= "table" then
+                splib.error("internal error: blockobject is not a table")
+            else
+                for i=1,#blockobject do
+                    local inlineobject = blockobject[i]
+                    if type(inlineobject)=="table" and node.is_node(inlineobject.nodelist) then
+                        local wd, ht, dp = node.dimensions(inlineobject.nodelist)
+                        max_wd = math.max(wd + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
+                        min_wd = paragraph.minimal_width_nodelist(inlineobject.nodelist,inlineobject.textformat)
+                        cellheight = cellheight + ht + dp
+                    elseif type(inlineobject)=="table" then
+                        if inlineobject.min_width then
+                            local mw = inlineobject:min_width(inlineobject.alignment,{fontfamily = inlineobject.fontfamily or self.fontfamily},self.dataxml)
+                            min_wd = math.max(mw + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
+                        end
+                        if inlineobject.max_width_and_lineheight then
+                            local mw,_ = inlineobject:max_width_and_lineheight({fontfamily = inlineobject.fontfamily or self.fontfamily},self.dataxml)
+                            max_wd = math.max(mw + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
+                        end
+                    elseif node.is_node(inlineobject) and node.has_field(inlineobject,"width") then
+                        min_wd = math.max(inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
+                        max_wd = math.max(inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
+                        if node.has_field(inlineobject,"height") then
+                            cellheight = cellheight + inlineobject.height
+                        end
+                        if node.has_field(inlineobject,"depth") then
+                            cellheight = cellheight + inlineobject.depth
+                        end
                     end
                 end
             end

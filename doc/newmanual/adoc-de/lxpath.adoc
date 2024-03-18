@@ -178,7 +178,7 @@ Beispiel: die Funktion `sd:current-row()`  kann auch mit Parameter `sd:current-r
 `sd:loremipsum()`::
    Alias für `sd:dummytext()`
 
-`sd:markdown(<Text>)::
+`sd:markdown(<Text>)`::
    Interpretiert den Text als Markdown. Siehe <<ch-markdown>>.
 
 `sd:md5(<Wert>[,<Wert>, ...])`::
