@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.19" date="2024-03-18">
+        <en>Fix layout functions for lxpath.</en>
+        <de>Korrigiere einige Layoutfunktionen bei lxpath.</de>
+    </entry>
     <entry version="4.17.18" date="2024-03-14">
         <en>Re-introduce kerning in HB mode when fontforge is the default font loader.</en>
         <de>HB Kerning wieder eingeschaltet wenn fontforge der voreingestellter Fontlader ist.</de>
