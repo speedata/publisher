@@ -4691,7 +4691,7 @@ function hbglyphlist(arguments)
         local cp = thisglyph.codepoint
         local uc = tbl.backmap[cp] or cp
         -- skip double space
-        if i > 1 and uc == 32 and cp == glyphs[i-1].codepoint and not preserve_whitespace then
+        if i > 1 and uc == 32 and cp == glyphs[i-1].codepoint and cluster[thisglyph.cluster] ~= 160 and not preserve_whitespace then
             goto continue
         end
         if false then
