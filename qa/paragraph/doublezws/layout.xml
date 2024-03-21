@@ -1,0 +1,15 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Options crop="1mm" />
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock width="6">
+                <Paragraph>
+                    <Value>27 </Value>
+                    <Value>​​Hazar-gada</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

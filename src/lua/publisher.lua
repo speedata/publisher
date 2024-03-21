@@ -4931,6 +4931,28 @@ function hbglyphlist(arguments)
     return list
 end
 
+-- return a glue node
+local function ffgetglue(s,tbl)
+    local n
+    if s == 8194 then
+        n = set_glue(nil,{width = tbl.parameters.enspace },"uc=8194")
+    elseif s == 8195 then -- em space
+        n = set_glue(nil,{width = tbl.parameters.emspace },"uc=8195")
+    elseif s == 8196 then -- three per em space
+        n = set_glue(nil,{width = tbl.parameters.thirdspace },"uc=8196")
+    elseif s == 8197 then -- four per em space
+        n = set_glue(nil,{width = tbl.parameters.quarterspace },"uc=8197")
+    elseif s == 8198 then -- six per em space
+        n = set_glue(nil,{width = tbl.parameters.sixthspace },"uc=8198")
+    elseif s == 8201 then -- thin space
+        n = set_glue(nil,{width = tbl.parameters.thinspace },"uc=8201")
+    elseif s == 8202 then -- hair space
+        n = set_glue(nil,{width = tbl.parameters.hairspace },"uc=8202")
+    elseif s == 8203 then
+        n = set_glue(nil,{width = 0 },"uc=8203")
+    end
+    return n
+end
 
 local function ffglyphlist(arguments)
     local tbl = arguments.tbl
@@ -5018,7 +5040,12 @@ local function ffglyphlist(arguments)
             head,last = node.insert_after(head,last,strut)
         elseif match(char,"^%s$") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
             -- double space, use the bigger glue
-            local tmp = set_glue(nil, {width = space, shrink = shrink, stretch = stretch})
+            local tmp
+            if s >= 8194 and s <= 8198 or s >= 8201 and s <= 8203 then
+                tmp = ffgetglue(s,tbl)
+            else
+                tmp = set_glue(nil, {width = space, shrink = shrink, stretch = stretch},"double glue")
+            end
             local tmp2 = bigger_glue_spec(last,tmp)
             last.width = tmp2.width
             last.stretch = tmp2.stretch
@@ -5066,43 +5093,8 @@ local function ffglyphlist(arguments)
         elseif s == 9 and parameter.tab == 'hspace' then
             local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
             head, last = node.insert_after(head,last,n)
-        elseif s == 8194 then -- en space
-            local n = set_glue(nil,{width = tbl.parameters.enspace },"uc=8194")
-            -- prevent from stretching with ragged shape
-            n.subtype = 1
-            head, last = node.insert_after(head,last,n)
-        elseif s == 8195 then -- em space
-            local n = set_glue(nil,{width = tbl.parameters.emspace },"uc=8195")
-            -- prevent from stretching with ragged shape
-            n.subtype = 1
-            head, last = node.insert_after(head,last,n)
-        elseif s == 8196 then -- three per em space
-            local n = set_glue(nil,{width = tbl.parameters.thirdspace },"uc=8196")
-            -- prevent from stretching with ragged shape
-            n.subtype = 1
-            head, last = node.insert_after(head,last,n)
-        elseif s == 8197 then -- four per em space
-            local n = set_glue(nil,{width = tbl.parameters.quarterspace },"uc=8197")
-            -- prevent from stretching with ragged shape
-            n.subtype = 1
-            head, last = node.insert_after(head,last,n)
-        elseif s == 8198 then -- six per em space
-            local n = set_glue(nil,{width = tbl.parameters.sixthspace },"uc=8198")
-            -- prevent from stretching with ragged shape
-            n.subtype = 1
-            head, last = node.insert_after(head,last,n)
-        elseif s == 8201 then -- thin space
-            local n = set_glue(nil,{width = tbl.parameters.thinspace },"uc=8201")
-            -- prevent from stretching with ragged shape
-            n.subtype = 1
-            head, last = node.insert_after(head,last,n)
-        elseif s == 8202 then -- hair space
-            local n = set_glue(nil,{width = tbl.parameters.hairspace },"uc=8202")
-            -- prevent from stretching with ragged shape
-            n.subtype = 1
-            head, last = node.insert_after(head,last,n)
-        elseif s == 8203 then
-            local n = set_glue(nil,{width = 0 },"uc=8203")
+        elseif s >= 8194 and s <= 8198 or s >= 8201 and s <= 8203 then
+            local n = ffgetglue(s,tbl)
             -- prevent from stretching with ragged shape
             n.subtype = 1
             head, last = node.insert_after(head,last,n)
@@ -5122,7 +5114,7 @@ local function ffglyphlist(arguments)
                 head,last = node.insert_after(head,last,n)
             end
 
-            n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch})
+            n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch},"space")
             setstyles(n,parameter)
             if breakatspace == false then
                 node.set_attribute(n,att_tie_glue,1)
