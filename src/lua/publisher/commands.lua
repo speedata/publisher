@@ -1773,6 +1773,7 @@ function commands.initial( layoutxml,dataxml)
     local box
     box = publisher.mknodes(initialvalue,{fontfamily = fontfamily,color = publisher.get_colorindex_from_name(colorname,"black")})
     box = publisher.addstrut(box,"head","initial")
+    publisher.finish_par(box,nil,{})
     box = node.hpack(box)
     local head = box
     if padding_left and padding_left ~= 0 then
