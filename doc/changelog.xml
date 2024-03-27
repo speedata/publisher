@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.21" date="2024-03-27">
+        <en>Re-introduce C library to fix error on Windows (#570).</en>
+        <de>C-Bibliothek wieder einbauen, damit der speedata Publisher unter Windows funktioniert (#570).</de>
+    </entry>
     <entry version="4.17.20" date="2024-03-21">
         <en>Spacing fixes (kerning in initials, multiple non-breaking-spaces in harfbuzz mode, multiple zero width spaces).</en>
         <de>Verschiedene Korrekturen bzgl. Leerraum (Kerning bei Initialen, mehrfache non-breaking Leerräume im Harfbuzz-Modus, mehrfache 0-Breite Leerräumen (zws)).</de>
