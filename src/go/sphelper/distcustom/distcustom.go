@@ -66,14 +66,22 @@ func CreateCustomBuild(cfg *config.Config, arguments []string) error {
 		fmt.Println(err)
 		os.Exit(-1)
 	}
+	err = buildlib.BuildCLib(cfg, platform, arch)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(-1)
+	}
 
 	switch platform {
 	case "windows":
 		os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dll"), filepath.Join(destdirBin, "libsplib.dll"))
+		os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.dll"), filepath.Join(libBuildDir, "luaglue.dll"))
 	case "linux":
 		os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(libBuildDir, "libsplib.so"))
+		os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(libBuildDir, "luaglue.so"))
 	case "darwin":
 		os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(libBuildDir, "libsplib.so"))
+		os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(libBuildDir, "luaglue.so"))
 	}
 
 	return nil

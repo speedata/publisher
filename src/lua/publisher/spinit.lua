@@ -7,7 +7,7 @@
 --  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 
-splib = require("libsplib")
+splib = require("luaglue")
 
 file_start("spinit.lua")
 tex.enableprimitives('',tex.extraprimitives())

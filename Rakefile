@@ -241,7 +241,7 @@ task :deb => [:sphelper] do
 		cp_r("lib" ,targetlib)
 	end
 	cp_r(Dir.glob("#{builddir}/dylib/libsplib.so"),targetlib)
-
+	cp_r(Dir.glob("#{builddir}/dylib/luaglue.so"),targetlib)
 	cp_r(File.join("schema","layoutschema-en.rng"),targetschema)
 	cp_r(File.join("schema","layoutschema-de.rng"),targetschema)
 	cp_r(File.join("schema","catalog-schema-en.xml"),targetschema)

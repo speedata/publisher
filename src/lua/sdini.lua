@@ -10,8 +10,26 @@
 -- ! in LUA_PATH gets replaced by $PWD
 package.path=os.getenv("LUA_PATH")
 
+local libname
+if os.name == "windows" then
+  libname = "libsplib.dll"
+elseif os.name == "linux" then
+  libname = "libsplib.so"
+elseif os.name == "freebsd" then
+  libname = "libsplib.so"
+else
+  libname = "libsplib.so"
+end
 
-local splib = require("libsplib")
+local ok, msg = package.loadlib(libname,"*")
+if not ok then
+   print(msg)
+   os.exit(0)
+end
+
+-- the library was formally named splib. luaglue is a layer (see #570).
+local splib = require("luaglue")
+
 
 function file_start( filename )
   splib.log("debug","Start file","filename",filename)

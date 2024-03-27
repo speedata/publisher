@@ -239,8 +239,6 @@ func sdMatches(L *C.lua_State) int {
 	return 1
 }
 
-// func sdTokenize(textC, rexprC *C.char) **C.char {
-//
 //export sdTokenize
 func sdTokenize(L *C.lua_State) int {
 	l := newLuaState(L)
@@ -548,9 +546,6 @@ func sdTeardown(L *C.lua_State) int {
 	return 0
 }
 
-// sdError logs to the configured logging output and also sets the
-// publisher.errorcode to 1 if not set before.
-//
 //export sdError
 func sdError(L *C.lua_State) int {
 	l := newLuaState(L)
