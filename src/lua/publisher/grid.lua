@@ -124,6 +124,10 @@ function advance_cursor( self,rows,areaname )
     area.advance_frame = area.advance_frame or 1
     local current_frame = self:framenumber(areaname)
     local ht = area[current_frame].height
+    if not tonumber(ht) then
+        splib.error("area height not set, why?","area",areaname or "(default)")
+        return
+    end
     if area.advance_rows >= ht then
         local overshoot = area.advance_rows - ht
         if current_frame + area.advance_frame - 1 < #area then
@@ -197,7 +201,7 @@ function number_of_rows(self,areaname,framenumber)
     assert(self)
     local areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
-        err("Area %q unknown, using page (number-of-rows)",areaname)
+        splib.error("Area unknown, using page","area",areaname,"location","number_of_rows")
         areaname = publisher.default_areaname
     end
     local current_frame = framenumber or self:framenumber(areaname)
@@ -210,12 +214,15 @@ function number_of_columns(self,areaname)
     assert(self)
     areaname = areaname or publisher.default_area
     if not self.positioning_frames[areaname] then
-        err("Area %q unknown, using page (number-of-columns)",areaname)
+        splib.error("Area unknown, using page","area",areaname,"location","number_of_columns")
         areaname = publisher.default_areaname
     end
     local current_frame = self:framenumber(areaname)
     local area = self.positioning_frames[areaname]
     local width = area[current_frame].width
+    if not width then
+        splib.error("width is nil","location","number_of_columns","area",areaname)
+    end
     return width
 end
 
@@ -496,6 +503,10 @@ function fits_in_row_area(self,column,width,row,areaname)
         else
             -- Todo: find the correct block because they can be of different width/height
             local block = area[self:framenumber(areaname)]
+            if not tonumber(block.row) then
+                splib.error("row not set, why? (1)","area", areaname or "(default)")
+                return
+            end
             frame_margin_left = block.column - 1
             frame_margin_top = block.row - 1
         end
@@ -522,6 +533,10 @@ function find_suitable_row( self,column, width,height,areaname, framenumber)
         else
             framenumber = framenumber or self:framenumber(areaname)
             local block = area[framenumber]
+            if not tonumber(block.row) then
+                splib.error("row not set, why?","area", areaname or "(default)")
+                return
+            end
             frame_margin_left = block.column - 1
             frame_margin_top = block.row - 1
         end
@@ -830,7 +845,15 @@ end
 
 -- Arguments must be in sp (''scaled points'')
 function set_margin(self,left,top,right,bottom)
-    assert(bottom,"Four arguments must be given.")
+    if not tonumber(bottom) then
+        splib.error("Set margin: four arguments must be given.")
+        self.margin_left   = publisher.onecm_sp
+        self.margin_right  = publisher.onecm_sp
+        self.margin_top    = publisher.onecm_sp
+        self.margin_bottom = publisher.onecm_sp
+        return
+    end
+
     self.margin_left   = left
     self.margin_right  = right
     self.margin_top    = top

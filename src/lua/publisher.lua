@@ -6620,6 +6620,10 @@ function get_remaining_height(area,allocate)
         if lastrow >= maxrows then lastrow = nil end
         return (row - firstrow) * current_grid.gridheight, firstrow,lastrow
     end
+    if not tonumber(maxrows) then
+        splib.error("maxrows not set, why?")
+        return
+    end
     if not current_grid:fits_in_row_area(startcol,cols,firstrow,area) then
         while firstrow <= maxrows do
             if current_grid:fits_in_row_area(startcol,cols,firstrow,area) then
@@ -6750,6 +6754,10 @@ function define_default_fontfamily()
 end
 
 function define_fontfamily( regular,bold,italic,bolditalic, name, size, baselineskip )
+    if not tonumber(size) then
+        splib.error("DefineFontfamily needs size value")
+        return
+    end
     local fam={
         size         = size,
         baselineskip = baselineskip,

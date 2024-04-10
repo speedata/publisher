@@ -125,6 +125,8 @@ func (l *LuaState) getAny(idx int) (any, bool) {
 		return l.getString(idx)
 	case luaTNumber:
 		return l.getNumber(idx)
+	case luaTNil:
+		return nil, true
 	default:
 		slog.Error("not implemented yet", "where", "getAny", "arg", l.luaType(idx))
 	}

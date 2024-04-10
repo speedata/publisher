@@ -3154,6 +3154,10 @@ function commands.place_object( layoutxml,dataxml)
 
     -- current_height is the remaining space on the current page in sps
     local maxcells = maxheight or current_grid:number_of_rows(area)
+    if not tonumber(maxcells) then
+        splib.error("Cannot calculate the number of rows in the area","area",area)
+        return
+    end
     local areaheight = maxcells * current_grid.gridheight + ( maxcells - 1 ) * current_grid.grid_dy
     local options = {}
     if publisher.current_group == nil then
@@ -3444,7 +3448,6 @@ function commands.process_node(layoutxml,dataxml)
             splib.log("debug","Process node", "node",element_name,"mode",mode,"pos",string.format("%d",pos))
             if publisher.newxpath then
                 dataxml.pos = pos
-
                 publisher.dispatch(layoutnode,dataxml)
             else
                 publisher.xpath.set_variable("__position",pos)

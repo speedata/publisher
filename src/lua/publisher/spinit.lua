@@ -193,8 +193,7 @@ function tex.sp( number_or_string )
         local tmp = string.gsub(number_or_string,"(%d)pt","%1bp"):gsub("(%d)pp","%1pt")
         local ret = { pcall(orig_texsp,tmp) }
         if ret[1]==false then
-            -- texio.write_nl(debug.traceback())
-            err("Could not convert dimension %q",number_or_string)
+            splib.error("Could not convert dimension","dimen", number_or_string)
             return nil
         end
         return table.unpack(ret,2)

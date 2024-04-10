@@ -83,7 +83,7 @@ function pluralize(what, count)
 end
 
 function stop_run_cb()
-    print(string.format("Finished with %s and %s",pluralize("error",errcount),pluralize("warning",warncount)))
+    print(string.format("Finished with %s and %s",pluralize("error",errcount or 0),pluralize("warning",warncount or 0)))
     if not status.output_file_name then
         print("No output written")
     else
