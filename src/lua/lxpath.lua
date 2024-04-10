@@ -381,6 +381,7 @@ end
 M.is_element = is_element
 M.is_attribute = is_attribute
 
+local string_value
 local function number_value(sequence)
     if type(sequence) == "string" then return tonumber(sequence) end
 
@@ -403,7 +404,7 @@ local function number_value(sequence)
     if is_attribute(sequence[1]) then
         return tonumber(sequence[1].value)
     end
-    return tonumber(sequence[1]), nil
+    return tonumber(string_value(sequence)), nil
 end
 
 local function boolean_value(seq)
@@ -426,7 +427,7 @@ local function boolean_value(seq)
     return ok, nil
 end
 
-local function string_value(seq)
+function string_value(seq)
     local ret = {}
     if type(seq) == "string" then return seq end
     if is_attribute(seq) then return seq.value end
@@ -1718,7 +1719,8 @@ function parse_or_expr(tl)
     local evaler = function(ctx)
         local seq, errmsg
         for _, ef in ipairs(efs) do
-            seq, errmsg = ef(ctx)
+            local newcontext = ctx:copy()
+            seq, errmsg = ef(newcontext)
             if errmsg ~= nil then
                 return nil, errmsg
             end
@@ -1765,8 +1767,8 @@ function parse_and_expr(tl)
     local evaler = function(ctx)
         local ef, msg, ok, seq
         for i = 1, #efs do
-            newcontext = ctx:copy()
             ef = efs[i]
+            local newcontext = ctx:copy()
             seq, msg = ef(newcontext)
             if msg then return nil, msg end
             ok, msg = boolean_value(seq)
@@ -2551,8 +2553,6 @@ function parse_name_test(tl)
         else
             tf = function(itm)
                 if is_element(itm) then
-                    if itm[".__name"] == name then
-                    end
                     return itm[".__name"] == name
                 end
                 return false
