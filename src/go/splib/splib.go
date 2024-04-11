@@ -593,7 +593,9 @@ func sdLog(L *C.lua_State) int {
 	max := l.getTop()
 	for i := 3; i <= max; i++ {
 		if arg, ok := l.getAny(i); ok {
-			extraArguments = append(extraArguments, arg)
+			if arg != nil {
+				extraArguments = append(extraArguments, arg)
+			}
 		}
 	}
 	switch level {
