@@ -5180,9 +5180,23 @@ end
 function commands.while_do( layoutxml,dataxml )
     local test = publisher.read_attribute(layoutxml,dataxml,"test","string")
     assert(test)
-
-    while xpath.parse(dataxml,test,layoutxml[".__ns"]) do
-        publisher.dispatch(layoutxml,dataxml)
+    if publisher.newxpath then
+        while true do
+            local seq, msg = dataxml:eval(test)
+            if msg then
+                splib.error(msg)
+                break
+            end
+            local tf = xpath.boolean_value(seq)
+            if not tf then
+                break
+            end
+            publisher.dispatch(layoutxml,dataxml)
+        end
+    else
+        while xpath.parse(dataxml,test,layoutxml[".__ns"]) do
+            publisher.dispatch(layoutxml,dataxml)
+        end
     end
 end
 
