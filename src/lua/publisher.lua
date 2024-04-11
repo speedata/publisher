@@ -5364,6 +5364,11 @@ function mknodes(str,parameter,origin)
     if maindirection then
         setprop(nodelistsegments,"pardir",maindirection)
     end
+    if not nodelistsegments then
+        local strut = add_rule(nil,"head",{height = 1 * factor, depth = 0, width = 0 })
+        setprop(strut,"pardir",parameter.direction)
+        return strut, parameter.direction
+    end
     return nodelistsegments, maindirection
 end
 
