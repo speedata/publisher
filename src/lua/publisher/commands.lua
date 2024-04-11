@@ -293,7 +293,15 @@ function commands.barcode( layoutxml,dataxml )
     local width          = publisher.read_attribute(layoutxml,dataxml,"width",       "length_sp")
     if fontname then warning("Barcode/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
-    width = width or xpath.get_variable("__maxwidth")
+    if not width then
+        local maxwidth
+        if publisher.newxpath then
+            maxwidth = dataxml.vars["__maxwidth"]
+        else
+            maxwidth = xpath.get_variable("__maxwidth")
+        end
+        width = maxwidth
+    end
 
     local fontfamily
     if fontfamilyname then
@@ -1049,11 +1057,7 @@ function commands.forall( layoutxml,dataxml )
     local tab = {}
     local tmp_tab
     local current_position
-    if publisher.newxpath then
-        current_position = dataxml.vars["__position"]
-    else
-        current_position = publisher.xpath.get_variable("__position")
-    end
+    current_position = publisher.xpath.get_variable("__position")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     if not selection then
         err("Can't iterate over an unknown sequence")
@@ -3405,7 +3409,6 @@ end
 --- string, this function is rather stupid but nevertheless currently the main
 --- function for processing data.
 function commands.process_node(layoutxml,dataxml)
-
     local copysequence
     if publisher.newxpath then
         copysequence = dataxml.sequence
@@ -3844,8 +3847,11 @@ function commands.setvariable( layoutxml,dataxml )
                 save[#save+1] = layoutxml[i]
             end
         end
-
-        publisher.xpath.set_variable(varname, save )
+        if publisher.newxpath then
+            dataxml.vars[varname] = save
+        else
+            publisher.xpath.set_variable(varname, save)
+        end
         return
     else
         if selection then
