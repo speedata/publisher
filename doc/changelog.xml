@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.22" date="2024-04-12">
+        <en>Lots of bug fixes: number(), internal variables and While in new XPath mode, single space in Harfbuzz mode (#570, #573, #574).</en>
+        <de>Verschiedene Fehlerkorrekturen: number(), While und interne Variablen im neuen XPath-Modus, einzelnes Leerzeichen im Harfbuzz Modus (#570, #573, #574).</de>
+    </entry>
     <entry version="4.17.21" date="2024-03-27">
         <en>Re-introduce C library to fix error on Windows (#570).</en>
         <de>C-Bibliothek wieder einbauen, damit der speedata Publisher unter Windows funktioniert (#570).</de>
