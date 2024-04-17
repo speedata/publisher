@@ -191,14 +191,19 @@ function define_font_hb( name, size, extra_parameter )
         elseif uni == 48 then
             f.zerowidth = hadvance * mag
         end
-
+        local glyphname = font:get_glyph_name(gid)
         f.characters[uni] = {
             index = gid,
             width = hadvance * mag,
             hadvance = hadvance,
-            name  = font:get_glyph_name(gid),
+            name  = glyphname,
             expansion_factor = 1000,
         }
+        --- Margin protrusion is enabled in `spinit.lua`.
+        if (glyphname=="hyphen" or glyphname=="period" or glyphname=="comma") and extra_parameter and tonumber(extra_parameter.marginprotrusion) then
+            f.characters[uni]["right_protruding"] = hadvance * extra_parameter.marginprotrusion / 100
+        end
+
         local thischar = f.characters[uni]
         backmap[gid] = uni
         if touni then
