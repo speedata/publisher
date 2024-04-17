@@ -977,7 +977,15 @@ end
 --- -------
 --- Create an element for use with Attribute and SaveDataset
 function commands.element( layoutxml,dataxml )
-    local ret = { [".__local_name"] = publisher.read_attribute(layoutxml,dataxml,"name","string") }
+    local name = publisher.read_attribute(layoutxml,dataxml,"name","string")
+    local ret = {
+        [".__local_name"] = name,
+        [".__name"] = name,
+        [".__attributes"] = {},
+        [".__namespace"] = "",
+        [".__ns"] = {},
+        [".__type"] = "element",
+    }
 
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,v in ipairs(tab) do
@@ -989,6 +997,7 @@ function commands.element( layoutxml,dataxml )
                 for _k,_v in pairs(contents) do
                     if _k ~= ".__type" then
                         ret[_k] = _v
+                        ret[".__attributes"][_k] = _v
                     end
                 end
             elseif eltname == "Value" then
@@ -2090,7 +2099,15 @@ function commands.makeindex( layoutxml,dataxml )
 
             if startletter ~= lastfirstletter then
                 -- create a new section
-                section = { [".__local_name"] = sectionname, name = startletter }
+                section = {
+                    [".__local_name"] = sectionname,
+                    [".__name"] = sectionname,
+                    [".__type"] = "element",
+                    [".__attributes"] = {
+                        name = startletter
+                    },
+                    name = startletter
+                }
                 ret[#ret + 1] = section
             end
             -- Add current entry to this section
