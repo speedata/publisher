@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.23" date="2024-04-17">
+        <en>Fix Makeindex for new xpath mode.</en>
+        <de>Korrigiere Makeindex für neuen XPath-Modus.</de>
+    </entry>
+    <entry version="4.17.23" date="2024-04-17">
+        <en>Marginprotrusion with harfbuzz.</en>
+        <de>Optischer Randausgleich mit harfbuzz.</de>
+    </entry>
     <entry version="4.17.22" date="2024-04-12">
         <en>Lots of bug fixes: number(), internal variables and While in new XPath mode, single space in Harfbuzz mode (#570, #573, #574).</en>
         <de>Verschiedene Fehlerkorrekturen: number(), While und interne Variablen im neuen XPath-Modus, einzelnes Leerzeichen im Harfbuzz Modus (#570, #573, #574).</de>
