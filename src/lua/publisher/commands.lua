@@ -1832,6 +1832,7 @@ function commands.insert_pages( layoutxml,dataxml )
             return
         end
         local thispage = publisher.pages[current_pagenumber]
+        splib.log("info","InsertPages forward mode","pages",pages,"insert at page",current_pagenumber)
         local savenextpage = publisher.nextpage
         publisher.nextpage = nil
         --- If we insert before the first page, we don't need to to anything.
@@ -1856,7 +1857,7 @@ function commands.insert_pages( layoutxml,dataxml )
         publisher.nextpage = nil
         return
     end
-
+    splib.log("info","InsertPages backward mode","name", pagestore_name)
     for i=1,#thispagestore do
         tex.box[666] = thispagestore[i]
         tex.shipout(666)
@@ -3715,8 +3716,9 @@ function commands.save_pages( layoutxml,dataxml )
     local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","string")
 
     if publisher.forward_pagestore[pagestore_name] == nil then
-        local save_current_pagenumber = publisher.current_pagenumber
         -- backwards mode. First save_pages, then insert_pages
+        local save_current_pagenumber = publisher.current_pagenumber
+        splib.log("info","SavePages backwards mode","start page",save_current_pagenumber, "name",pagestore_name)
         publisher.current_pagestore_name = pagestore_name
         publisher.pagestore[pagestore_name] = {}
         local tab = publisher.dispatch(layoutxml,dataxml)
@@ -3734,11 +3736,11 @@ function commands.save_pages( layoutxml,dataxml )
         if publisher.page_initialized_p(publisher.current_pagenumber) then
             publisher.new_page("save_pages forward mode",dataxml)
         end
-
         local save_current_pagenumber = publisher.current_pagenumber
         local ps = publisher.pagestore[pagestore_name]
         local number_of_pages = ps[1]
         local location = ps[2]
+        splib.log("info","SavePages forward mode","number of pages",number_of_pages,"insert location",location)
         -- oldbookmarkspos = the number of bookmarks before the insert pages command
         local oldbookmarkspos = ps[3]
         local bookmarkscount = #publisher.bookmarks
