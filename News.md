@@ -5,9 +5,13 @@ This file gets updated before a stable release. There is a [detailed changelog](
 
 ## Version 5
 
-* New defaults for the XPath engine and the font loader.
+Planned:
+
+* More accessibility features
 
 ## Version 4.18
+
+Released 2024-04-19
 
 * New defaults for the XPath engine and the font loader (preparation for the version 5)
 * New output / logging backend.
