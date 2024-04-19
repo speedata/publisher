@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.17">
+    <entry version="4.17.24" date="2024-04-19">
+        <en>Add SavePages test case.</en>
+        <de>Füge Testfall für SavePages hinzu.</de>
+    </entry>
     <entry version="4.17.23" date="2024-04-17">
         <en>Fix Makeindex for new xpath mode.</en>
         <de>Korrigiere Makeindex für neuen XPath-Modus.</de>
