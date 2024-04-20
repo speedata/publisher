@@ -10,7 +10,7 @@ Diese Seite beschreibt den neuen XPath-Parser, genannt »lxpath«. Es gibt das a
 sp --xpath luxor
 -------------------------------------------------------------------------------
 
-(das alte Standardmodul)
+(das alte Modul)
 
 oder
 
@@ -19,14 +19,14 @@ oder
 sp --xpath lxpath
 -------------------------------------------------------------------------------
 
-für den neuen XPath (Voreinstellung). Sie können diese Einstellung auch in der <<ch-konfiguration,Konfigurationsdatei>> vornehmen.
+für den neuen XPath-Parser (Voreinstellung). Sie können diese Einstellung auch in der <<ch-konfiguration,Konfigurationsdatei>> vornehmen.
 
 == Was ist XPath und warum gibt es zwei verschiedene Implementierungen?
 
 
 Die Eingabe des speedata Publishers sind im XML-Format kodierte Daten.
 XML ist eine hierarchische Datenstruktur, in der es ein Wurzelelement gibt und jedes Element Attribute und Kinder haben kann, die entweder Text oder andere Elemente sind.
-Sie können beispielsweise ein Element _artikelgruppe_ haben, das zehn _artikel_-Elemente enthält.
+Sie können beispielsweise ein Element _Artikelgruppe_ haben, das zehn _Artikel_-Elemente enthält.
 Die Idee von XPath ist es nun, durch den XML-Baum zu navigieren und Fragen zu stellen wie:
 Gib mir alle Artikel, die ein bestimmtes Attribut haben.
 Oder wie viele Artikel habe ich in dieser Artikelgruppe?
@@ -34,17 +34,14 @@ Oder wie viele Artikel habe ich in dieser Artikelgruppe?
 Bisher verwendet der speedata-Publisher eine Ad-hoc-Implementierung eines XML-Parsers, der sich zwar bewährt hat, aber nicht sehr robust ist und nicht viele Fehler mit falschen Daten meldet.
 Auch der XPath-Parser hat hauptsächlich mit regulären Ausdrücken und globalen Zuständen gearbeitet, was ebenfalls nicht sehr robust ist.
 
-Die neue Implementierung verwendet den XML-Parser aus der Standardbibliothek von Go (mit einem kleinen Patch, um die Eingabeposition zu melden) und eine https://github.com/speedata/lxpath[XPath-Implementierung], die neu ist und mit der XPath Grammatik im Hinterkopf entwickelt wurde.
+Die neue Implementierung verwendet den XML-Parser aus der Standardbibliothek von Go und eine https://github.com/speedata/lxpath[XPath-Implementierung], die neu ist und mit der XPath Grammatik im Hinterkopf entwickelt wurde.
 
-Die neue XML/XPath-Implementierung besteht alle 199 Tests in der Testsuite, so dass der aktuelle Stand der Kompatibilität vielversprechend ist.
-
-Im Zweifelsfall verwenden Sie bitte die neue (lxpath) XML/XPath-Implementierung und melden Sie Fehler, wenn Sie einen finden. Sie werden einige Vorteile haben:
+Vorteile der neuen XML/XPath-Implementierung
 
 * Die gesamte Implementierung ist schneller.
 * Es gibt bessere Fehlermeldungen (zum Beispiel sind Zeilennummern Teil der Fehlermeldungen).
 * Sie können <<ch-programmingfunctions,Ihre eigenen Funktionsdefinitionen haben>>.
-* Der neue XPath-Parser wird in speedata Publisher Version 5 standardmäßig verwendet.
-
+* Der neue XPath-Parser wird im speedata Publisher ab Version 4.18 standardmäßig verwendet.
 
 
 == XPath Ausdrücke

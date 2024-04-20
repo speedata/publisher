@@ -573,6 +573,33 @@
     </choice>
   </defineattribute>
 
+  <defineattribute name="roles">
+    <choice en="H1">
+      <description xml:lang="en">
+        <para>Heading level 1</para>
+      </description>
+      <description xml:lang="de">
+        <para>Überschrift Ebene 1</para>
+      </description>
+    </choice>
+    <choice en="H2">
+      <description xml:lang="en">
+        <para>Heading level 2</para>
+      </description>
+      <description xml:lang="de">
+        <para>Überschrift Ebene 2</para>
+      </description>
+    </choice>
+    <choice en="P">
+      <description xml:lang="en">
+        <para>A paragraph.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Ein Absatz</para>
+      </description>
+    </choice>
+  </defineattribute>
+
   <definelist name="languagesshortcodes">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</definelist>
 
   <!--
@@ -6668,22 +6695,7 @@
       <description xml:lang="de">
         <para>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</para>
       </description>
-      <choice en="H1">
-        <description xml:lang="en">
-          <para>Heading level 1</para>
-        </description>
-        <description xml:lang="de">
-          <para>Überschrift Ebene 1</para>
-        </description>
-      </choice>
-      <choice en="P">
-        <description xml:lang="en">
-          <para>A paragraph.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Ein Absatz</para>
-        </description>
-      </choice>
+      <referenceattribute name="roles" />
     </attribute>
     <attribute en="language" optional="yes" allowxpath="yes">
       <description xml:lang="en">

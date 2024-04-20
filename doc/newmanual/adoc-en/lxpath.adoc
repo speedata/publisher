@@ -32,17 +32,15 @@ Or how many articles do I have in this article group?
 Up to now the speedata Publisher uses an ad-hoc implementation of an XML parser that has proven to work, but which is not very robust and does not report many errors with incorrect data.
 Also the XPath parser has worked mostly with regular expressions and global state, which is also not very robust.
 
-The new implementation uses the XML parser from Go's standard library (with a minor patch to report the input position) and an https://github.com/speedata/lxpath[XPath implementation] that is rewritten with the XPath grammar in mind.
+The new implementation uses the XML parser from Go's standard library and an https://github.com/speedata/lxpath[XPath implementation] that is rewritten with the XPath grammar in mind.
 It aims to be fully XPath 2 compliant.
 
-The new XML/XPath implementation passes all 199 tests in the test suite, so the current state of the compatibility is promising.
-
-When in doubt, please use the new (`lxpath`) XML/XPath implementation and report bugs if you find one. You will have a few benefits:
+There are some benefits when using the new XPath parser:
 
 * The overall implementation is faster.
 * There are better error messages (for example line numbers are part of error messages).
 * You can have your own <<cmd-function,function definitions>>.
-* The new XPath parser will be the default in speedata Publisher version 5.
+* The new XPath parser will be the default in speedata Publisher version 4.18 and above.
 
 == XPath expressions
 

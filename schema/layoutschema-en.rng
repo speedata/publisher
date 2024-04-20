@@ -4139,6 +4139,8 @@
                      <choice>
                         <value>H1</value>
                         <a:documentation>Heading level 1</a:documentation>
+                        <value>H2</value>
+                        <a:documentation>Heading level 2</a:documentation>
                         <value>P</value>
                         <a:documentation>A paragraph.</a:documentation>
                      </choice>

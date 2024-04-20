@@ -2,6 +2,7 @@
 
 - [speedata Publisher architecture](#speedata-publisher-architecture)
   - [Overview](#overview)
+  - [Helper libraries](#helper-libraries)
   - [Build system](#build-system)
   - [The sp binary](#the-sp-binary)
   - [File lookup](#file-lookup)
@@ -14,9 +15,13 @@ Hopefully it helps to understand the logical structure of the directories and en
 
 ## Overview
 
-When you start the speedata Publisher, you run `sp(.exe)` on the command line, which is a small piece of software written in Go. This command looks for a LuaTeX binary in the sdluatex directory (provided in the ZIP file) and executes it. The LuaTeX binary loads all the Lua script files and does the typesetting task.
+When you start the speedata Publisher, you run `sp(.exe)` on the command line, which is a small piece of software written in Go. This command looks for a LuaTeX binary (sdluatex) in the bin directory (provided in the ZIP file) and executes it. The LuaTeX binary loads all the Lua script files and does the typesetting task.
 
 ![architecture](doc/images/overview.png)
+
+## Helper libraries
+
+There are two libraries loaded by the LuaTeX process, a Go library that handles XML parsing and resources loading and other stuff and a minimal C library which just makes these functions available to the Lua scripts.
 
 ## Build system
 

@@ -4288,6 +4288,11 @@
                 <xs:documentation>Überschrift Ebene 1</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="H2">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 2</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="P">
               <xs:annotation>
                 <xs:documentation>Ein Absatz</xs:documentation>

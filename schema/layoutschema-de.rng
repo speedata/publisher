@@ -4139,6 +4139,8 @@
                      <choice>
                         <value>H1</value>
                         <a:documentation>Überschrift Ebene 1</a:documentation>
+                        <value>H2</value>
+                        <a:documentation>Überschrift Ebene 2</a:documentation>
                         <value>P</value>
                         <a:documentation>Ein Absatz</a:documentation>
                      </choice>

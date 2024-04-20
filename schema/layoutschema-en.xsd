@@ -4288,6 +4288,11 @@
                 <xs:documentation>Heading level 1</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="H2">
+              <xs:annotation>
+                <xs:documentation>Heading level 2</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="P">
               <xs:annotation>
                 <xs:documentation>A paragraph.</xs:documentation>
