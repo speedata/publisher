@@ -8,6 +8,7 @@ This file gets updated before a stable release. There is a [detailed changelog](
 Planned:
 
 * More accessibility features
+* Enhance Function
 
 ## Version 4.18
 
