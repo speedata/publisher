@@ -940,6 +940,7 @@
         <xs:element ref="en:ForAll"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Switch"/>
+        <xs:element ref="en:Value"/>
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -1795,11 +1796,14 @@
           <xs:element minOccurs="0" ref="en:Message"/>
           <xs:element minOccurs="0" ref="en:NextFrame"/>
           <xs:element minOccurs="0" ref="en:NextRow"/>
+          <xs:element minOccurs="0" ref="en:Paragraph"/>
           <xs:element minOccurs="0" ref="en:PlaceObject"/>
           <xs:element minOccurs="0" ref="en:ProcessNode"/>
           <xs:element minOccurs="0" ref="en:SaveDataset"/>
           <xs:element minOccurs="0" ref="en:SetVariable"/>
           <xs:element minOccurs="0" ref="en:Switch"/>
+          <xs:element minOccurs="0" ref="en:Td"/>
+          <xs:element minOccurs="0" ref="en:Tr"/>
           <xs:element minOccurs="0" ref="en:Value"/>
         </xs:sequence>
       </xs:sequence>

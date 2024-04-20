@@ -1138,6 +1138,7 @@
                      <ref name="e_ForAll"></ref>
                      <ref name="e_Loop"></ref>
                      <ref name="e_Switch"></ref>
+                     <ref name="e_Value"></ref>
                   </choice>
                </oneOrMore>
             </group>
@@ -2151,6 +2152,9 @@
                      <ref name="e_NextRow"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Paragraph"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_PlaceObject"></ref>
                   </optional>
                   <optional>
@@ -2164,6 +2168,12 @@
                   </optional>
                   <optional>
                      <ref name="e_Switch"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Td"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Tr"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Value"></ref>

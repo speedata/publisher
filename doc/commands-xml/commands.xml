@@ -2250,6 +2250,7 @@
           <cmd name="ForAll"/>
           <cmd name="Loop"/>
           <cmd name="Switch"/>
+          <cmd name="Value" />
         </choice>
       </oneOrMore>
     </childelements>
@@ -3769,11 +3770,14 @@
         <optional><cmd name="Message"/></optional>
         <optional><cmd name="NextFrame"/></optional>
         <optional><cmd name="NextRow"/></optional>
+        <optional><cmd name="Paragraph"/></optional>
         <optional><cmd name="PlaceObject"/></optional>
         <optional><cmd name="ProcessNode"/></optional>
         <optional><cmd name="SaveDataset"/></optional>
         <optional><cmd name="SetVariable"/></optional>
         <optional><cmd name="Switch"/></optional>
+        <optional><cmd name="Td"/></optional>
+        <optional><cmd name="Tr"/></optional>
         <optional><cmd name="Value"/></optional>
       </oneOrMore>
     </childelements>

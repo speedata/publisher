@@ -1199,12 +1199,13 @@ function commands.func(layoutxml, dataxml)
             local thiselt = x[i]
             local eltname = publisher.elementname(thiselt)
             if eltname ~= "Param" then
-                res[#res+1] = publisher.element_contents(thiselt)
+                res[#res+1] = thiselt
             end
         end
+
+        res.raw = true
         return res,nil
     end
-
     -- name, namespace, function, minarg, maxarg
     xpath.registerFunction({functionname,ns,fn,#params,#params})
 end
@@ -4296,11 +4297,13 @@ function commands.table( layoutxml,dataxml,options )
     end
     local tab = {}
     local tab_tmp = publisher.dispatch(layoutxml,dataxml)
-    -- printtable("tmp_tab",tab_tmp)
+
     for i=1,#tab_tmp do
         local eltname = publisher.elementname(tab_tmp[i])
         if eltname == "Tr" or eltname == "Columns" or eltname == "Tablehead" or eltname == "Tablefoot" or eltname == "Tablerule" or eltname == "TableNewPage" then
             tab[#tab + 1] = tab_tmp[i]
+        elseif eltname == "Value" then
+            -- ignore
         else
             if eltname and eltname ~= "elementstructure" then
                 warning("Ignore %q in table",eltname)
@@ -5157,8 +5160,12 @@ function commands.value( layoutxml,dataxml )
                 return
             end
             if seq then
-                for i = 1, #seq do
-                    ret[#ret+1] = seq[i]
+                if seq.raw == true then
+                    return seq
+                else
+                    for i = 1, #seq do
+                        ret[#ret+1] = seq[i]
+                    end
                 end
             end
             return ret

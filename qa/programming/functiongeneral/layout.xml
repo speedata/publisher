@@ -1,0 +1,67 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en"
+	xmlns:fn="fn">
+
+	<Pageformat height="10cm" width="6cm"></Pageformat>
+
+	<Function name="fn:para">
+		<Param name="first" />
+		<Param name="second" />
+		<Paragraph>
+			<Value select="$first * $second"></Value>
+			<Value> </Value>
+			<Value select="local-name(*)"></Value>
+		</Paragraph>
+	</Function>
+
+	<Function name="fn:tr">
+		<Param name="first" />
+		<Tr>
+			<Td>
+				<Paragraph><Value select="$first" /></Paragraph>
+			</Td>
+			<Td>
+				<Paragraph><Value select="$first * $first" /></Paragraph>
+			</Td>
+		</Tr>
+	</Function>
+
+	<Function name="fn:columns">
+		<Param name="count" />
+		<Loop select="$count">
+			<Column background-color="lightgray" />
+		</Loop>
+		<Switch>
+			<Case test="$count = 2">
+				<Message select="'Two columns'" />
+			</Case>
+		</Switch>
+	</Function>
+
+	<Record element="data">
+		<PlaceObject>
+			<Textblock>
+				<Value select="fn:para(2,3)"></Value>
+			</Textblock>
+		</PlaceObject>
+
+		<PlaceObject>
+			<Table padding="4pt">
+				<Columns>
+					<Value select="fn:columns(2)" />
+				</Columns>
+				<Tr>
+					<Td>
+						<Paragraph><Value>Value</Value></Paragraph>
+					</Td>
+					<Td>
+						<Paragraph><Value>Squared</Value></Paragraph>
+					</Td>
+				</Tr>
+				<Loop select="5" variable="i">
+					<Value select="fn:tr($i)"></Value>
+				</Loop>
+			</Table>
+		</PlaceObject>
+	</Record>
+</Layout>

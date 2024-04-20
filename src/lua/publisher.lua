@@ -774,7 +774,12 @@ function dispatch(layoutxml,dataxml,opts)
                 end
 
                 tmp = dispatch_table[eltname](j,dataxml,opts)
-
+                -- raw tables come from Function
+                if type(tmp) == "table" and tmp.raw == true then
+                    for i = 1, #tmp do
+                        ret[#ret+1] = tmp[i]
+                    end
+                end
                 -- Copy-of-elements can be resolved immediately
                 if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" or eltname == "Transformation" or eltname == "Frame" or eltname == "Include" or eltname == "Layout" or eltname == "Clip" then
                     if type(tmp)=="table" then
