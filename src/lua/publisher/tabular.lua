@@ -471,6 +471,7 @@ function calculate_columnwidth( self )
             local sum_real_widths = 0
             local count_columns = 0
             local starpattern = "([0-9]+)%*"
+            local has_width = false
             for _,column in ipairs(tr_contents) do
                 if publisher.elementname(column)=="Column" then
                     local column_contents = publisher.element_contents(column)
@@ -480,6 +481,7 @@ function calculate_columnwidth( self )
                         minwidths[i] = column_contents.minwidth
                     end
                     if column_contents.width then
+                        has_width = true
                         -- if I have something written in <column> I don't need
                         -- to calculate column width:
                         if column_contents.width == "max" then
@@ -514,7 +516,7 @@ function calculate_columnwidth( self )
             -- if stretch="no", we don't need to stretch/shrink anything
             -- count_stars == 0 if there are only fixed width columns
             -- given in the <Column width="..."/>  setting.
-            if self.autostretch ~= "max" and count_stars == 0 then
+            if self.autostretch ~= "max" and count_stars == 0 and has_width then
                 self.tablewidth_target = sum_real_widths
             end
             if hasminwidth then
