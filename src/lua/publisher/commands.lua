@@ -1195,15 +1195,19 @@ function commands.func(layoutxml, dataxml)
 
         local x = publisher.dispatch(layoutxml,copy)
         local res = {}
+        local has_value = false
         for i = 1, #x do
             local thiselt = x[i]
             local eltname = publisher.elementname(thiselt)
             if eltname ~= "Param" then
                 res[#res+1] = thiselt
             end
+            if eltname == "Value" then
+                has_value = true
+            end
         end
 
-        res.raw = true
+        res.raw = not has_value
         return res,nil
     end
     -- name, namespace, function, minarg, maxarg

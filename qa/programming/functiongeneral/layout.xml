@@ -1,27 +1,86 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
 	xmlns:sd="urn:speedata:2009/publisher/functions/en"
-	xmlns:fn="fn">
+	xmlns:fn="mynamespace">
 
-	<Pageformat height="10cm" width="6cm"></Pageformat>
+	<Record element="data">
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value select="fn:add(3,4)" />
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<PlaceObject>
+			<Textblock>
+				<Value select="fn:sixelement(2,3)" />
+			</Textblock>
+		</PlaceObject>
 
-	<Function name="fn:para">
+		<PlaceObject>
+			<Table padding="4pt">
+				<Columns>
+					<Value select="fn:columns(2)" />
+				</Columns>
+				<Tr>
+					<Td>
+						<Paragraph>
+							<Value>Value</Value>
+						</Paragraph>
+					</Td>
+					<Td>
+						<Paragraph>
+							<Value>Squared</Value>
+						</Paragraph>
+					</Td>
+				</Tr>
+				<Loop select="5" variable="i">
+					<Value select="fn:tr($i)" />
+				</Loop>
+			</Table>
+		</PlaceObject>
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value select="fn:forall()"></Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+
+	</Record>
+
+	<Function name="fn:add">
+		<Param name="a" />
+		<Param name="b" />
+		<Value select="$a + $b" />
+	</Function>
+
+	<Function name="fn:sixelement">
 		<Param name="first" />
 		<Param name="second" />
 		<Paragraph>
-			<Value select="$first * $second"></Value>
-			<Value> </Value>
-			<Value select="local-name(*)"></Value>
+			<Value select="$first * $second" />
+			<Value />
+			<Value select="local-name(*[1])" />
 		</Paragraph>
 	</Function>
 
+	<SetVariable variable="tablerule">
+		<Tablerule color="black" rulewidth="2pt" />
+	</SetVariable>
+
 	<Function name="fn:tr">
 		<Param name="first" />
+		<Copy-of select="$tablerule" />
 		<Tr>
 			<Td>
-				<Paragraph><Value select="$first" /></Paragraph>
+				<Paragraph>
+					<Value select="$first" />
+				</Paragraph>
 			</Td>
 			<Td>
-				<Paragraph><Value select="$first * $first" /></Paragraph>
+				<Paragraph>
+					<Value select="$first * $first" />
+				</Paragraph>
 			</Td>
 		</Tr>
 	</Function>
@@ -38,30 +97,9 @@
 		</Switch>
 	</Function>
 
-	<Record element="data">
-		<PlaceObject>
-			<Textblock>
-				<Value select="fn:para(2,3)"></Value>
-			</Textblock>
-		</PlaceObject>
-
-		<PlaceObject>
-			<Table padding="4pt">
-				<Columns>
-					<Value select="fn:columns(2)" />
-				</Columns>
-				<Tr>
-					<Td>
-						<Paragraph><Value>Value</Value></Paragraph>
-					</Td>
-					<Td>
-						<Paragraph><Value>Squared</Value></Paragraph>
-					</Td>
-				</Tr>
-				<Loop select="5" variable="i">
-					<Value select="fn:tr($i)"></Value>
-				</Loop>
-			</Table>
-		</PlaceObject>
-	</Record>
+	<Function name="fn:forall">
+		<ForAll select="*">
+			<Value select="local-name(.)"></Value>
+		</ForAll>
+	</Function>
 </Layout>

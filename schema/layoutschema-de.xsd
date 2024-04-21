@@ -1789,6 +1789,7 @@
           <xs:element minOccurs="0" ref="en:ClearPage"/>
           <xs:element minOccurs="0" ref="en:Column"/>
           <xs:element minOccurs="0" ref="en:Columns"/>
+          <xs:element minOccurs="0" ref="en:Copy-of"/>
           <xs:element minOccurs="0" ref="en:ForAll"/>
           <xs:element minOccurs="0" ref="en:Group"/>
           <xs:element minOccurs="0" ref="en:LoadDataset"/>

@@ -3790,6 +3790,7 @@
         <optional><cmd name="ClearPage"/></optional>
         <optional><cmd name="Column"/></optional>
         <optional><cmd name="Columns"/></optional>
+        <optional><cmd name="Copy-of"/></optional>
         <optional><cmd name="ForAll"/></optional>
         <optional><cmd name="Group"/></optional>
         <optional><cmd name="LoadDataset"/></optional>

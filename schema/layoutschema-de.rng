@@ -2131,6 +2131,9 @@
                      <ref name="e_Columns"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Copy-of"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_ForAll"></ref>
                   </optional>
                   <optional>
