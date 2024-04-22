@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.2" date="2024-04-22">
+        <en>Fix autoopen when an error occurs.</en>
+        <de>Korrigiere autoopen im Fehlerfall.</de>
+    </entry>
     <entry version="4.19.1" date="2024-04-21">
         <en>Bug fix: color of table rules when no width is given in Columns (#576).</en>
         <de>Fehlerkorrektur: Farbe der Tabllenzeilien wenn keine Breite in den Spalten vorgegeben ist (#576).</de>
