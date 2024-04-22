@@ -375,7 +375,6 @@ func run(command string, cmdline []string, environ []string) (errorcode int) {
 		stdin.Close()
 	}
 	if err := cmd.Wait(); err != nil {
-		showDuration()
 		log.Print(err)
 		if _, ok := err.(*exec.ExitError); ok {
 			return -1
@@ -550,7 +549,7 @@ func writeFinishedfile(path string) {
 	os.WriteFile(path, []byte("finished\n"), 0600)
 }
 
-func runPublisher(cachemethod string, runmode string, filename string) (exitstatus int) {
+func runPublisher(cachemethod string) (exitstatus int) {
 	if getOption("quiet") != "true" {
 		log.Printf("Run speedata publisher %s", versionWithPro)
 	}
@@ -640,8 +639,7 @@ See https://github.com/speedata/publisher/issues/310 for details.
 		if run(ep, cmdline, env) < 0 {
 			exitstatus = -1
 			writeFinishedfile(fmt.Sprintf("%s.finished", getOption("jobname")))
-			os.Exit(-1)
-			break
+			return exitstatus
 		}
 		if cachemethod != "none" {
 			os.Setenv("CACHEMETHOD", "fast")
@@ -652,7 +650,7 @@ See https://github.com/speedata/publisher/issues/310 for details.
 	p := getOption("outputdir")
 	if p != "" {
 		pdffilename := jobname + ".pdf"
-		protocolfilename := jobname + ".protocol"
+		protocolfilename := jobname + "-protocol.xml"
 		err = copyFile(pdffilename, filepath.Join(p, pdffilename))
 		if err != nil {
 			log.Println(err)
@@ -1018,7 +1016,7 @@ func main() {
 		if exitstatus == 1 {
 			os.Exit(exitstatus)
 		}
-		exitstatus = runPublisher(cachemethod, cmdRun, "")
+		exitstatus = runPublisher(cachemethod)
 		if filterfile != "" {
 			runFinalizerCallback()
 		}
