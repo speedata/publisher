@@ -9262,17 +9262,18 @@
     <childelements>
       <oneOrMore>
         <interleave>
-          <optional><cmd name="Tablehead"/></optional>
-          <optional><cmd name="Tablefoot"/></optional>
-          <optional><cmd name="TableNewPage"/></optional>
           <optional><cmd name="Columns"/></optional>
-          <optional><cmd name="Tr"/></optional>
           <optional><cmd name="Copy-of"/></optional>
-          <optional><cmd name="Tablerule"/></optional>
+          <optional><cmd name="ForAll"/></optional>
+          <optional><cmd name="Loop"/></optional>
           <optional><cmd name="Message"/></optional>
           <optional><cmd name="Switch"/></optional>
-          <optional><cmd name="Loop"/></optional>
-          <optional><cmd name="ForAll"/></optional>
+          <optional><cmd name="Tablefoot"/></optional>
+          <optional><cmd name="Tablehead"/></optional>
+          <optional><cmd name="TableNewPage"/></optional>
+          <optional><cmd name="Tablerule"/></optional>
+          <optional><cmd name="Tr"/></optional>
+          <optional><cmd name="Value" /></optional>
         </interleave>
       </oneOrMore>
     </childelements>
@@ -9559,11 +9560,12 @@
     <childelements>
       <oneOrMore>
         <interleave>
-          <optional><cmd name="Tablerule"/></optional>
           <optional><cmd name="Copy-of"/></optional>
-          <optional><cmd name="Tr"/></optional>
-          <optional><cmd name="Switch"/></optional>
           <optional><cmd name="ForAll"/></optional>
+          <optional><cmd name="Switch"/></optional>
+          <optional><cmd name="Tablerule"/></optional>
+          <optional><cmd name="Tr"/></optional>
+          <optional><cmd name="Value"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>
@@ -9624,6 +9626,7 @@
           <optional><cmd name="Switch"/></optional>
           <optional><cmd name="Tablerule"/></optional>
           <optional><cmd name="Tr"/></optional>
+          <optional><cmd name="Value"/></optional>
         </interleave>
       </oneOrMore>
     </childelements>
@@ -9749,15 +9752,16 @@
           <cmd name="Bookmark"/>
           <cmd name="Box"/>
           <cmd name="Copy-of"/>
+          <cmd name="ForAll"/>
           <cmd name="Frame"/>
           <cmd name="Groupcontents"/>
-          <cmd name="ForAll"/>
           <cmd name="Image"/>
           <cmd name="Loop"/>
           <cmd name="Overlay"/>
           <cmd name="Paragraph"/>
           <cmd name="Switch"/>
           <cmd name="Table"/>
+          <cmd name="Value"/>
           <cmd name="VSpace"/>
         </choice>
       </zeroOrMore>
@@ -10672,20 +10676,13 @@
     </description>
     <childelements>
       <oneOrMore>
-        <optional>
-          <cmd name="Message"/>
-        </optional>
-        <optional>
-          <cmd name="Td"/>
-        </optional>
         <optional><cmd name="Copy-of"/></optional>
-        <optional>
-          <cmd name="Switch"/>
-        </optional>
-        <optional>
-          <cmd name="ForAll"/>
-        </optional>
+        <optional><cmd name="ForAll"/></optional>
         <optional><cmd name="Loop"/></optional>
+        <optional><cmd name="Message"/></optional>
+        <optional><cmd name="Switch"/></optional>
+        <optional><cmd name="Td"/></optional>
+        <optional><cmd name="Value" /></optional>
       </oneOrMore>
     </childelements>
     <attribute en="align" optional="yes">

@@ -5818,25 +5818,16 @@
                <oneOrMore>
                   <interleave>
                      <optional>
-                        <ref name="e_Tablehead"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Tablefoot"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_TableNewPage"></ref>
-                     </optional>
-                     <optional>
                         <ref name="e_Columns"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Tr"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Copy-of"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_Tablerule"></ref>
+                        <ref name="e_ForAll"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Loop"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Message"></ref>
@@ -5845,10 +5836,22 @@
                         <ref name="e_Switch"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_Loop"></ref>
+                        <ref name="e_Tablefoot"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_ForAll"></ref>
+                        <ref name="e_Tablehead"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_TableNewPage"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Tablerule"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Tr"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Value"></ref>
                      </optional>
                   </interleave>
                </oneOrMore>
@@ -5876,19 +5879,22 @@
                <oneOrMore>
                   <interleave>
                      <optional>
-                        <ref name="e_Tablerule"></ref>
-                     </optional>
-                     <optional>
                         <ref name="e_Copy-of"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_Tr"></ref>
+                        <ref name="e_ForAll"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Switch"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_ForAll"></ref>
+                        <ref name="e_Tablerule"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Tr"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Value"></ref>
                      </optional>
                   </interleave>
                </oneOrMore>
@@ -5929,6 +5935,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Tr"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Value"></ref>
                      </optional>
                   </interleave>
                </oneOrMore>
@@ -6119,15 +6128,16 @@
                      <ref name="e_Bookmark"></ref>
                      <ref name="e_Box"></ref>
                      <ref name="e_Copy-of"></ref>
+                     <ref name="e_ForAll"></ref>
                      <ref name="e_Frame"></ref>
                      <ref name="e_Groupcontents"></ref>
-                     <ref name="e_ForAll"></ref>
                      <ref name="e_Image"></ref>
                      <ref name="e_Loop"></ref>
                      <ref name="e_Overlay"></ref>
                      <ref name="e_Paragraph"></ref>
                      <ref name="e_Switch"></ref>
                      <ref name="e_Table"></ref>
+                     <ref name="e_Value"></ref>
                      <ref name="e_VSpace"></ref>
                   </choice>
                </zeroOrMore>
@@ -6580,22 +6590,25 @@
                </optional>
                <oneOrMore>
                   <optional>
-                     <ref name="e_Message"></ref>
-                  </optional>
-                  <optional>
-                     <ref name="e_Td"></ref>
-                  </optional>
-                  <optional>
                      <ref name="e_Copy-of"></ref>
-                  </optional>
-                  <optional>
-                     <ref name="e_Switch"></ref>
                   </optional>
                   <optional>
                      <ref name="e_ForAll"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Loop"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Message"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Switch"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Td"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Value"></ref>
                   </optional>
                </oneOrMore>
             </group>
