@@ -24,7 +24,7 @@
 {{ range $.Command.Attributes }}
 {{if .Pro}}[.profeature]
 {{end }}
-[[{{.Attlink }}]]`{{.Name}}` ({{atttypeinfo . $.Lang}}{{ with .CSS }}, {{ translate $.Lang "CSS property"}}: {{.}}{{end}}{{with .Since}}, _{{translate $.Lang "since version"}} {{.}}_{{end}})::
+[[{{.Attlink }}]]`{{.Name}}` ({{atttypeinfo . $.Lang}}{{ with .CSS }}, {{ translate $.Lang "CSS property"}}: {{.}}{{end}}{{with .Since}}, _{{translate $.Lang "since version"}} {{.}}_{{end}}{{if .Deprecated}}, {{ translate $.Lang "deprecated"}}{{end}})::
   {{.DescriptionAdoc $.Lang }}
 {{ end }}{{else}}({{ translate $.Lang "none" }}){{ end }}
 
@@ -45,6 +45,3 @@
 {{.}}
 {{end}}
 
-
-
-//

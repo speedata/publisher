@@ -1,4 +1,4 @@
-// Package db2html creates HTML files from the docbook documenation.
+// Package db2html creates HTML files from the docbook documentation.
 package db2html
 
 import (

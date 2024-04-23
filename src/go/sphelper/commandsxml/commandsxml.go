@@ -203,6 +203,7 @@ type Attribute struct {
 	CSS           string
 	Since         string
 	Type          string
+	Deprecated    bool
 	Optional      bool
 	AllowXPath    bool
 	Pro           bool
@@ -608,6 +609,8 @@ func (c *Command) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
 						a.AllowXPath = attribute.Value == "yes"
 					case "pro":
 						a.Pro = attribute.Value == "yes"
+					case "deprecated":
+						a.Deprecated = true
 					}
 				}
 

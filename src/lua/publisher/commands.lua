@@ -1043,9 +1043,14 @@ end
 --- --------
 --- Execute the child elements for all elements given by the `select` attribute.
 function commands.forall( layoutxml,dataxml )
-    if publisher.newxpath then
-        local tab = {}
+    local limit = publisher.read_attribute(layoutxml,dataxml,"limit","number")
+    local start = publisher.read_attribute(layoutxml,dataxml,"start","number")
 
+    local tab = {}
+    if publisher.newxpath then
+        if limit or start then
+            splib.error("ForAll: the new xpath parser does not allow limit or start, please use predicates instead.")
+        end
         local copysequence = dataxml.sequence
         local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
         dataxml.size = #selection
@@ -1061,9 +1066,6 @@ function commands.forall( layoutxml,dataxml )
         return tab
     end
 
-    local limit = publisher.read_attribute(layoutxml,dataxml,"limit","number")
-    local start = publisher.read_attribute(layoutxml,dataxml,"start","number")
-    local tab = {}
     local tmp_tab
     local current_position
     current_position = publisher.xpath.get_variable("__position")

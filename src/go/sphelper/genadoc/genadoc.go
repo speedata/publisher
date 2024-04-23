@@ -39,6 +39,8 @@ func translate(lang, text string) string {
 	switch text {
 	case "Attribute index":
 		return "Attribute Index"
+	case "deprecated":
+		return "veraltet"
 	case "Description":
 		return "Beschreibung"
 	case "Commands":

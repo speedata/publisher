@@ -3564,15 +3564,15 @@
         <para>Wählt die Kindelemente aus.</para>
       </description>
     </attribute>
-    <attribute en="limit" type="number" optional="yes">
+    <attribute en="limit" type="number" optional="yes" deprecated="yes">
       <description xml:lang="en">
-        <para>Limits the number of children to the given number.</para>
+        <para>Limits the number of children to the given number. </para>
       </description>
       <description xml:lang="de">
         <para>Die Anzahl der Kinder wird durch die Zahl begrenzt.</para>
       </description>
     </attribute>
-    <attribute en="start" optional="yes" type="number" since="2.3.67">
+    <attribute en="start" optional="yes" type="number" since="2.3.67" deprecated="yes">
       <description xml:lang="en">
         <para>The first entry to process. Default is 1.</para>
       </description>
@@ -3580,6 +3580,11 @@
         <para>Der erste Eintrag der verarbeitet werden soll. Voreinstellung ist 1.</para>
       </description>
     </attribute>
+    <remark xml:lang="en">
+      <para>With the default XPath parser, start and limit are not allowed anymore. Please use predicates instead (expressions in square brackets that filter the result). For example start="4" and limit="8" can be obtained with <tt>element[position() > 3 and position() &amp;lt; 8]</tt> with the new XPath parser.</para>
+    </remark>
+    <remark xml:lang="de">
+      <para>Mit dem aktuellen XPath parser dürfen start und limit nicht mehr angegeben werden. Dafür müssen XPath Prädikate benutzt werden, das sind Ausdrücke in eckigen Klammern. Z.B. start="4" und limit="8" könnte mit <tt>element[position() > 3 and position() &amp;lt; 8]</tt> erreicht werden. </para></remark>
     <example xml:lang="de">
       <listing><![CDATA[<Record element="data">
   <PlaceObject>
@@ -10845,6 +10850,12 @@
         </description>
       </choice>
     </attribute>
+    <remark xml:lang="en">
+      <para>The attribute <tt>background-color</tt> used to be <tt>backgroundcolor</tt> until version 4.16.</para>
+    </remark>
+    <remark xml:lang="de">
+      <para>Das Attribut <tt>background-color</tt> war <tt>backgroundcolor</tt> bis Version 4.16.</para>
+    </remark>
     <example xml:lang="en">
       <listing><![CDATA[<Tr minheight="8mm" background-color="yellow">
   <Td align="center"><Paragraph><Value>A</Value></Paragraph></Td>
