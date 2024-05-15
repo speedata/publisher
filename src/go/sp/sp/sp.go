@@ -120,6 +120,7 @@ func init() {
 		"fontloader":        "harfbuzz",
 		"referencefilename": "reference",
 		"xpath":             "lxpath",
+		"hidespinfo":        stringFalse,
 	}
 
 	switch runtime.GOOS {
@@ -614,6 +615,9 @@ func runPublisher(cachemethod string) (exitstatus int) {
 	}
 	if pro == "yes" {
 		layoutoptionsSlice = append(layoutoptionsSlice, `pro=yes`)
+	}
+	if hidespinfo := getOption("hidespinfo"); hidespinfo != "" {
+		layoutoptionsSlice = append(layoutoptionsSlice, `hidespinfo=`+hidespinfo)
 	}
 	if imagehandler := getOption("imagehandler"); imagehandler != "" {
 		layoutoptionsSlice = append(layoutoptionsSlice, `imagehandler=`+imagehandler)

@@ -4516,6 +4516,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="producer">
+               <a:documentation>Legt die Erzeugeranwendung des Dokuments fest</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="showbookmarks">
                <a:documentation>Zeige Lesezeichen im Adobe Acrobat beim Öffnen des Dokuments. Veraltet - benutze stattedessen displaymode.</a:documentation>
                <choice>

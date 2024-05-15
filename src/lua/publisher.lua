@@ -957,9 +957,21 @@ local function getcreator()
     if options.documentcreator and options.documentcreator ~= "" then
         return options.documentcreator
     elseif sp_suppressinfo then
-        return "speedata Publisher, www.speedata.de"
+        return "speedata Publisher"
     else
-        return string.format("speedata Publisher %s, www.speedata.de",env_publisherversion)
+        return string.format("speedata Publisher %s using LuaTeX",env_publisherversion)
+    end
+end
+
+local function getproducer()
+    if options.documentproducer and options.documentproducer ~= "" then
+        return options.documentproducer
+    elseif options.documentcreator and options.documentcreator ~= "" then
+        return string.format("speedata Publisher %s using LuaTeX",env_publisherversion)
+    elseif sp_suppressinfo then
+        return "LuaTeX"
+    else
+        return string.format("LuaTeX %s (build %s)",luatex_version, status.development_id or "-")
     end
 end
 
@@ -1019,7 +1031,16 @@ function dothings()
 
     initialize_luatex_and_generate_pdf()
     -- The last thing is to put a stamp in the PDF
-    pdf.obj({type="raw",string="(Created with the speedata Publisher - www.speedata.de)", immediate = true, objcompression = false})
+    if options.hidespinfo and options.hidespinfo == "true" or options.hidespinfo == "yes" then
+        -- do nothing
+        if not pro then
+            err("Removing speedata info needs a pro plan")
+            publisher.has_pro_error = true
+            return nil
+        end
+    else
+        pdf.obj({type="raw",string="(Created with the speedata Publisher - www.speedata.de)", immediate = true, objcompression = false})
+    end
 end
 
 function get_extension(fn)
@@ -1621,19 +1642,19 @@ function initialize_luatex_and_generate_pdf()
     -- Author  The name of the person who created the document.
     -- Subject  The subject of the document.
     -- Keywords  Keywords associated with the document.
-    local creator = getcreator()
-    local infos
-    if options.documentcreator and options.documentcreator ~= "" then
-        if sp_suppressinfo then
-            infos = { string.format("/Creator %s /Producer (speedata Publisher using LuaTeX) ",utf8_to_utf16_string_pdf(creator)) }
-        else
-            infos = { string.format("/Creator %s /Producer (speedata Publisher %s using LuaTeX) ",utf8_to_utf16_string_pdf(creator),env_publisherversion) }
-        end
-    elseif sp_suppressinfo then
-        infos = { "/Creator (speedata Publisher) /Producer (LuaTeX)"}
-    else
-        infos = { string.format("/Creator (%s) /Producer (LuaTeX %s (build %s))",creator, luatex_version, status.development_id or "-") }
-    end
+
+    -- Nothing set:
+    -- Creator:         speedata Publisher 4.19.2, www.speedata.de
+    -- Producer:        LuaTeX 1.15.0 (build 7509)
+    --
+    -- Creator set:
+    -- Creator:         CREATOR
+    -- Producer:        speedata Publisher 4.19.2 using LuaTeX
+
+    -- suppressinfo:
+    -- Creator:         speedata Publisher
+    -- Producer:        LuaTeX
+    local infos = { string.format("/Creator %s /Producer %s",utf8_to_utf16_string_pdf(getcreator()), utf8_to_utf16_string_pdf(getproducer())) }
 
     if options.documenttitle and options.documenttitle ~= "" then
         infos[#infos + 1] = string.format("/Title %s",utf8_to_utf16_string_pdf(options.documenttitle))
@@ -7685,7 +7706,7 @@ function getuametadata()
            <xmp:CreatorTool>%s</xmp:CreatorTool>
         </rdf:Description>
         <rdf:Description rdf:about="" xmlns:pdf="http://ns.adobe.com/pdf/1.3/">
-          <pdf:Producer>speedata Publisher</pdf:Producer>
+          <pdf:Producer>%s</pdf:Producer>
         </rdf:Description>
         <rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/">
           <dc:title>
@@ -7696,7 +7717,7 @@ function getuametadata()
         </rdf:Description>
       </rdf:RDF>
     </x:xmpmeta>
-<?xpacket end="r"?>]],"\239\187\191",docid,instanceid, isoformatted,isoformatted,isoformatted,getcreator(),xml_escape(options.documenttitle))
+<?xpacket end="r"?>]],"\239\187\191",docid,instanceid, isoformatted,isoformatted,isoformatted,xml_escape(getcreator()),xml_escape(getproducer()), xml_escape(options.documenttitle))
     return md
 end
 
@@ -7767,7 +7788,7 @@ function getzugferdmetadata( conformancelevel, title, author )
 </dc:description>
 </rdf:Description>
   <rdf:Description xmlns:pdf="http://ns.adobe.com/pdf/1.3/" rdf:about="">
-   <pdf:Producer>speedata Publisher</pdf:Producer>
+   <pdf:Producer>%s</pdf:Producer>
   </rdf:Description>
   <rdf:Description xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about="">
    <xmp:CreatorTool>speedata invoicing platform</xmp:CreatorTool>
@@ -7817,7 +7838,7 @@ function getzugferdmetadata( conformancelevel, title, author )
   rdf:about="" zf:ConformanceLevel="%s" zf:DocumentFileName="ZUGFeRD-invoice.xml" zf:DocumentType="INVOICE" zf:Version="1.0"/>
 </rdf:RDF>
 </x:xmpmeta><?xpacket end="w"?>
-]],"\239\187\191",title,author,conformancelevel)
+]],"\239\187\191",title,author,xml_escape(getproducer()) ,conformancelevel)
 
     return metadata
 end
@@ -7913,7 +7934,7 @@ end
 --- the PDF file. The returned string starts with `<feff` and ends with `>`, unless
 --- the string is a simple string that can be expressed with (...).
 function utf8_to_utf16_string_pdf( str )
-    if str:match("^[a-zA-Z.]+$") then
+    if str:match("^[a-zA-Z. ]+$") then
         return "("..str.. ")"
     end
     local ret = {}

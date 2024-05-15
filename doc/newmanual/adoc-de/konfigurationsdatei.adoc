@@ -66,6 +66,8 @@ erkannt. Folgende Optionen werden unterstützt:
   Setzt den systemweiten Pfad für Fonts. Unter Windows ist dies `%WINDIR%\Fonts`, unter Mac OS X `/Library/Fonts:/System/Library/Fonts`.
 `grid`::
   Bestimmt, ob das Raster angezeigt wird.
+`hidespinfo`::
+   Wenn das auf 'true' gesetzt ist, wird der speedata Publisher die Information `(Created with the speedata Publisher - www.speedata.de)` nicht in die PDF Datei schreiben. Benötigt das Pro-Paket.
 `imagecache`::
   Ordner für zwischengespeicherte Dateien (`file="http(s)://..."` und externe Programme). Voreinstellung: `$TMPDIR/sp/images`.
 `imagehandler`::

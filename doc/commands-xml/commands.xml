@@ -7259,6 +7259,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="producer" optional="yes" type="text" since="4.19.3" pro="yes">
+      <description xml:lang="en">
+        <para>Set the producer of the document</para>
+      </description>
+      <description xml:lang="de">
+        <para>Legt die Erzeugeranwendung des Dokuments fest</para>
+      </description>
+    </attribute>
     <attribute en="showbookmarks" optional="yes" since="3.9.8" type="boolean" deprecated="yes">
       <description xml:lang="en">
         <para>Show bookmarks in the PDF viewer when opening the document. Deprecated - use displaymode instead.</para>

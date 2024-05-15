@@ -4516,6 +4516,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="producer">
+               <a:documentation>Set the producer of the document</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="showbookmarks">
                <a:documentation>Show bookmarks in the PDF viewer when opening the document. Deprecated - use displaymode instead.</a:documentation>
                <choice>

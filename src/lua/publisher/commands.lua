@@ -2902,6 +2902,7 @@ function commands.pdfoptions( layoutxml, dataxml )
     local pagelayout            = publisher.read_attribute(layoutxml,dataxml,"pagelayout",            "string")
     local picktray              = publisher.read_attribute(layoutxml,dataxml,"picktraybypdfsize",     "boolean")
     local printscaling          = publisher.read_attribute(layoutxml,dataxml,"printscaling",          "string")
+    local producer              = publisher.read_attribute(layoutxml,dataxml,"producer",              "string")
     local showbookmarks         = publisher.read_attribute(layoutxml,dataxml,"showbookmarks",         "boolean")
     local showhyperlinks        = publisher.read_attribute(layoutxml,dataxml,"showhyperlinks",        "boolean", false)
     local subject               = publisher.read_attribute(layoutxml,dataxml,"subject",               "string")
@@ -2915,6 +2916,15 @@ function commands.pdfoptions( layoutxml, dataxml )
     end
     if creator then
         publisher.options.documentcreator = creator
+    end
+    if producer then
+        if not publisher.pro then
+            err("Setting the producer needs a pro plan")
+            publisher.has_pro_error = true
+            return nil
+        end
+
+        publisher.options.documentproducer = producer
     end
     if subject then
         publisher.options.documentsubject = subject

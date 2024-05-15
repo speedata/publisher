@@ -58,6 +58,8 @@ The format of the file is important, otherwise it won’t be recognized. The fol
    Set the path for system fonts. On Windows this is `%WINDIR%\Fonts`, on Mac OS X it defaults to `/Library/Fonts:/System/Library/Fonts`.
 `grid`::
    If true, the underlying grid is shown in the PDF file. For debugging purpose only.
+`hidespinfo`::
+   If set to 'true', the speedata Publisher does not add the `(Created with the speedata Publisher - www.speedata.de)` information. Needs a Pro plan.
 `imagecache`::
    Folder for cached images (`href="http://..."` and image processors). Defaults to `$TMPDIR/sp/images`.
 `imagehandler`::

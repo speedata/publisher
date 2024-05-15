@@ -5063,6 +5063,11 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="producer">
+        <xs:annotation>
+          <xs:documentation>Legt die Erzeugeranwendung des Dokuments fest</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="showbookmarks">
         <xs:annotation>
           <xs:documentation>Zeige Lesezeichen im Adobe Acrobat beim Öffnen des Dokuments. Veraltet - benutze stattedessen displaymode.</xs:documentation>

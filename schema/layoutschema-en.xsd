@@ -5063,6 +5063,11 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="producer">
+        <xs:annotation>
+          <xs:documentation>Set the producer of the document</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="showbookmarks">
         <xs:annotation>
           <xs:documentation>Show bookmarks in the PDF viewer when opening the document. Deprecated - use displaymode instead.</xs:documentation>
