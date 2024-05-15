@@ -289,7 +289,24 @@ func setVariable(str string) {
 // Prints the total run time in the log file.
 func showDuration() {
 	if getOption("quiet") != "true" {
-		log.Printf("Total run time: %v\n", time.Now().Sub(starttime))
+		d := time.Now().Sub(starttime)
+		dStart := d
+		var sb strings.Builder
+		if d > time.Minute {
+			wholeMinutes := d.Truncate(time.Minute) / time.Minute
+			fmt.Fprintf(&sb, "%dm", wholeMinutes)
+			d -= d.Truncate(time.Minute)
+		}
+		if d > time.Second {
+			wholeSeconds := d.Truncate(time.Second) / time.Second
+			fmt.Fprintf(&sb, "%ds", wholeSeconds)
+			d -= d.Truncate(time.Second)
+		}
+		if dStart < time.Second {
+			fmt.Fprintf(&sb, "%dms", d.Truncate(time.Millisecond)/time.Millisecond)
+		}
+
+		log.Printf("Total run time: %s\n", sb.String())
 	}
 }
 
