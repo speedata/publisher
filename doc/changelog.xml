@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.9.3" date="2024-05-15">
+        <en>Set PDF producer.</en>
+        <de>Setze PDF producer.</de>
+    </entry>
+    <entry version="4.19.3" date="2024-05-15">
+        <en>Fix sd:(keep-)alternating for new XPath parser.</en>
+        <de>Korrigiere sd:(keep-)alternating für den neuen XPath Parser.</de>
+    </entry>
     <entry version="4.19.2" date="2024-04-22">
         <en>Fix autoopen when an error occurs.</en>
         <de>Korrigiere autoopen im Fehlerfall.</de>
