@@ -102,7 +102,7 @@ local function fnAlternating(dataxml, arg)
     else
         publisher.alternating[alt_type] = math.fmod(publisher.alternating[alt_type], #arg - 1) + 1
     end
-    local val = arg[publisher.alternating[alt_type] + 1]
+    local val = xpath.string_value(arg[publisher.alternating[alt_type] + 1])
     publisher.alternating_value[alt_type] = val
     return { val }
 end
@@ -173,9 +173,9 @@ end
 
 local function keepalternating(dataxml, arg)
     local alt_type = xpath.string_value(arg[1])
-    return { publisher.alternating_value[alt_type] }, nil
+    local val = xpath.string_value(publisher.alternating_value[alt_type])
+    return { val }, nil
 end
-
 
 local function reset_alternating(dataxml, arg)
     local alt_type = xpath.string_value(arg[1])
