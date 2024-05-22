@@ -966,10 +966,10 @@ end
 local function getproducer()
     if options.documentproducer and options.documentproducer ~= "" then
         return options.documentproducer
-    elseif options.documentcreator and options.documentcreator ~= "" then
-        return string.format("speedata Publisher %s using LuaTeX",env_publisherversion)
     elseif options.documentcreator and options.documentcreator ~= "" and sp_suppressinfo then
         return string.format("speedata Publisher using LuaTeX")
+    elseif options.documentcreator and options.documentcreator ~= "" then
+        return string.format("speedata Publisher %s using LuaTeX",env_publisherversion)
     elseif sp_suppressinfo then
         return "LuaTeX"
     else
