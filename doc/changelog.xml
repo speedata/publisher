@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.5" date="2024-05-23">
+        <en>Fix underline in sd:decode-html (#581).</en>
+        <de>Korrigiere Unterstreichen in sd:decode-html (#581).</de>
+    </entry>
     <entry version="4.19.4" date="2024-05-22">
         <en>Allow setting of /Creator with <tt>--suppressinfo</tt> (#577).</en>
         <de>Erlaube das Setzen von /Creator mit <tt>--suppressinfo</tt> (#577).</de>
