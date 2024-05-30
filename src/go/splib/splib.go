@@ -323,6 +323,7 @@ func sdHtmlToXml(L *C.lua_State) int {
 		slog.Error("sdHtmlToXml first argument must be a string (the text)")
 		return 0
 	}
+	rawInput := input
 	input = "<toplevel·toplevel>" + input + "</toplevel·toplevel>"
 	r := strings.NewReader(input)
 	var w bytes.Buffer
@@ -340,7 +341,7 @@ func sdHtmlToXml(L *C.lua_State) int {
 		}
 		if err != nil {
 			enc.Flush()
-			slog.Error("html to xml", "msg", err.Error())
+			slog.Error("html to xml", "message", err.Error(), "source", rawInput)
 			return 0
 		}
 		switch v := t.(type) {

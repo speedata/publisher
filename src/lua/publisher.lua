@@ -298,6 +298,7 @@ options = {
 }
 
 current_layout_line = ""
+current_data_line = ""
 
 if newxpath then
     options.xmlparser = "go"
@@ -628,6 +629,15 @@ glue_stretch2 = set_glue(nil, { stretch = 2^16, stretch_order = 2 })
 -- For attached files. Each of this numbers should appear in the catalog
 filespecnumbers = {}
 
+
+local function lineinfo()
+    if newxpath then
+        return "line_layout", current_layout_line, "line_data" , current_data_line
+    else
+        return nil
+    end
+end
+
 --- The dispatch table maps every element in the layout xml to a command in the `commands.lua` file.
 local dispatch_table = {
     A                       = commands.a,
@@ -771,6 +781,11 @@ function dispatch(layoutxml,dataxml,opts)
                 end
                 if newxpath then
                     current_layout_line = j[".__line"]
+                    if dataxml.sequence and type(dataxml.sequence)  == "table" and dataxml.sequence[1] and type(dataxml.sequence[1]) == "table" and dataxml.sequence[1][".__line"] then
+                        current_data_line = dataxml.sequence[1][".__line"]
+                    else
+                        current_data_line = "(unknown)"
+                    end
                 end
 
                 tmp = dispatch_table[eltname](j,dataxml,opts)
@@ -7367,7 +7382,7 @@ function imageinfo( filename,page,box,fallback,imageshape )
         if options.imagenotfounderror then
             splib.error("Image not found","filename", filename or "???")
         else
-            splib.log("warn","Image not found","filename", filename or "???")
+            splib.log("warn","Image not found","filename", filename or "???", lineinfo())
         end
         filename = get_fallback_image_name(fallback,filename)
         page = 1

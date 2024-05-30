@@ -29,7 +29,7 @@ function err(...)
     if publisher then
         local lineinfo = ""
         if publisher.newxpath then
-            lineinfo = string.format(" line %s",publisher.current_layout_line)
+            lineinfo = string.format(" line %s, data line %s",publisher.current_layout_line, publisher.current_data_line)
         end
         unpacked = string.format( "[page %d%s] ",publisher.current_pagenumber, lineinfo ) .. string.format(table.unpack(text))
     else

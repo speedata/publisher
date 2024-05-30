@@ -964,9 +964,9 @@ local function callFunction(fname, seq, ctx)
 
     if #seq < minarg or (maxarg ~= -1 and #seq > maxarg) then
         if minarg == maxarg then
-            return {}, string.format("function %s requires %d arguments, %d supplied", func[1], minarg, #seq)
+            return {}, string.format("function %s() requires %d arguments, %d supplied", table.concat(fn,':'), minarg, #seq)
         else
-            return {}, string.format("function %s requires %d to %d arguments, %d supplied", func[1], minarg, maxarg,
+            return {}, string.format("function %s() requires %d to %d arguments, %d supplied", table.concat(fn,':'), minarg, maxarg,
                 #seq)
         end
     end
