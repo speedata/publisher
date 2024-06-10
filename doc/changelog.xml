@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.7" date="2024-06-10">
+        <en>Honor jpeg orientation in includes images (#584).</en>
+        <de>Beachte jpeg Orientierung in eingebundenen Bildern (#584).</de>
+    </entry>
     <entry version="4.19.6" date="2024-05-30">
         <en>Better error message for sd:decode-html().</en>
         <de>Bessere Fehlermeldung für sd:decode-html().</de>
