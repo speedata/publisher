@@ -7473,6 +7473,25 @@ function imageinfo( filename,page,box,fallback,imageshape )
         end
         filename = validateimagetype(filename)
         local image_info = img.scan{filename = filename, pagebox = box, page=page,keepopen=true }
+        if image_info.orientation == 0 then
+            -- good, no transformation
+        elseif image_info.orientation == 1 then
+            image_info.transform = 0
+        elseif image_info.orientation == 2 then
+            image_info.transform = 4
+        elseif image_info.orientation == 3 then
+            image_info.transform = 2
+        elseif image_info.orientation == 4 then
+            image_info.transform = 6
+        elseif image_info.orientation == 5 then
+            image_info.transform = 5
+        elseif image_info.orientation == 6 then
+            image_info.transform = 3
+        elseif image_info.orientation == 7 then
+            image_info.transform = 7
+        elseif image_info.orientation == 8 then
+            image_info.transform = 1
+        end
         images[new_name] = { img = image_info, allocate = mt }
     end
     return images[new_name]

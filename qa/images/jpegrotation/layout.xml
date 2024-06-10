@@ -1,0 +1,18 @@
+<Layout
+	xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<!--
+		Image by ren hosoya
+		https://unsplash.com/de/@hosoya_08
+		https://unsplash.com/de/fotos/ein-vogel-der-auf-einem-zweig-eines-kirschblutenbaums-sitzt-G47Mr6j6x9w
+	-->
+	<Pageformat height="12cm" width="7cm" />
+	<Record element="data">
+		<Loop select="9" variable="i">
+			<PlaceObject>
+				<Image file="Portrait_{$i - 1}.jpg" width="5" height="10" clip="yes" />
+			</PlaceObject>
+			<ClearPage />
+		</Loop>
+	</Record>
+</Layout>

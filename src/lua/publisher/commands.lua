@@ -1620,16 +1620,33 @@ function commands.image( layoutxml,dataxml )
     local overshoot
     if clip then
         local stretch_shrink
-        if width / image.xsize > height / image.ysize then
-            stretch_shrink = width / image.xsize
-            overshoot = math.round(  (image.ysize * stretch_shrink - height ) / publisher.factor / 2,3)
-            overshoot = -overshoot
+        if image.orientation > 4 then
+            -- rotated, perhaps mirrored
+            local image_xsize, image_ysize = image.xsize, image.ysize
+            if width / image_xsize > height / image_ysize then
+                stretch_shrink = width / image_ysize
+                overshoot = math.round(  (image_xsize * stretch_shrink - height ) / publisher.factor / 2,3)
+                overshoot = -overshoot
+            else
+                stretch_shrink = height / image_xsize
+                overshoot = math.round(  (image_ysize * stretch_shrink - width) / publisher.factor / 2 ,3)
+            end
+            width = image_ysize  * stretch_shrink
+            height = image_xsize * stretch_shrink
         else
-            stretch_shrink = height / image.ysize
-            overshoot = math.round(  (image.xsize * stretch_shrink - width) / publisher.factor / 2 ,3)
+            -- no rotation, but maybe mirrored
+            if width / image.xsize > height / image.ysize then
+                stretch_shrink = width / image.xsize
+                overshoot = math.round(  (image.ysize * stretch_shrink - height ) / publisher.factor / 2,3)
+                overshoot = -overshoot
+            else
+                stretch_shrink = height / image.ysize
+                overshoot = math.round(  (image.xsize * stretch_shrink - width) / publisher.factor / 2 ,3)
+            end
+
+            width = image.xsize  * stretch_shrink
+            height = image.ysize * stretch_shrink
         end
-        width = image.xsize   * stretch_shrink
-        height = image.ysize * stretch_shrink
     end
 
     local padding_shift_left,padding_shift_up = 0,0
