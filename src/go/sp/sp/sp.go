@@ -932,7 +932,7 @@ func main() {
 
 	if pdfversion := getOption("pdfversion"); pdfversion == "" {
 		os.Setenv("SP_PDFMAJORVERSION", "1")
-		os.Setenv("SP_PDFMINORVERSION", "6")
+		os.Setenv("SP_PDFMINORVERSION", "7")
 	} else {
 		vi := strings.Split(pdfversion, ".")
 		if len(vi) != 2 {
