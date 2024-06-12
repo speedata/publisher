@@ -208,6 +208,9 @@
                      <ref name="e_SortSequence"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_StructureElement"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Switch"></ref>
                   </optional>
                   <optional>
@@ -334,6 +337,9 @@
                   </optional>
                   <optional>
                      <ref name="e_SortSequence"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_StructureElement"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Switch"></ref>
@@ -816,6 +822,9 @@
                      <ref name="e_Span"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_StructureElement"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Sub"></ref>
                   </optional>
                   <optional>
@@ -1267,6 +1276,9 @@
                   </optional>
                   <optional>
                      <ref name="e_SortSequence"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_StructureElement"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Switch"></ref>
@@ -1953,6 +1965,9 @@
                         <ref name="e_Span"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_StructureElement"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Sub"></ref>
                      </optional>
                      <optional>
@@ -2581,6 +2596,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="description">
+                     <a:documentation>Ein alternativer Text für Barrierefreiheit</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="dpiwarn">
                      <a:documentation>Warnung ausgeben, wenn das Bild eine geringere Auflösung bekommt als angegeben.</a:documentation>
                   </attribute>
@@ -2607,6 +2627,11 @@
                         <value>yes</value>
                         <value>no</value>
                      </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="parent">
+                     <a:documentation>Die ID der Elternstruktur für tagged PDF</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -2921,6 +2946,9 @@
                      <ref name="e_Stylesheet"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_StructureElement"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Switch"></ref>
                   </optional>
                   <optional>
@@ -3165,6 +3193,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Span"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_StructureElement"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Sub"></ref>
@@ -3872,6 +3903,9 @@
                      <ref name="e_Span"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_StructureElement"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Sub"></ref>
                   </optional>
                   <optional>
@@ -4127,29 +4161,6 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="padding-left">
-                     <a:documentation>Stelle das padding links ein, also der Innenabstand des Textblocks.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="padding-right">
-                     <a:documentation>Stelle das padding rechts ein, also der Innenabstand des Textblocks.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="role">
-                     <a:documentation>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</a:documentation>
-                     <choice>
-                        <value>H1</value>
-                        <a:documentation>Überschrift Ebene 1</a:documentation>
-                        <value>H2</value>
-                        <a:documentation>Überschrift Ebene 2</a:documentation>
-                        <value>P</value>
-                        <a:documentation>Ein Absatz</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
                   <attribute name="language">
                      <a:documentation>Name der Sprache für die Silbentrennung und Darstellung.</a:documentation>
                      <choice>
@@ -4253,6 +4264,59 @@
                         <a:documentation>Ukrainisch</a:documentation>
                         <value>Welsh</value>
                         <a:documentation>Walisisch</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-left">
+                     <a:documentation>Stelle das padding links ein, also der Innenabstand des Textblocks.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-right">
+                     <a:documentation>Stelle das padding rechts ein, also der Innenabstand des Textblocks.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="parent">
+                     <a:documentation>Die ID der Elternstruktur für tagged PDF</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="role">
+                     <a:documentation>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</a:documentation>
+                     <choice>
+                        <value>Art</value>
+                        <a:documentation>Ein Artikel in einem Dokument.</a:documentation>
+                        <value>Caption</value>
+                        <a:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</a:documentation>
+                        <value>Div</value>
+                        <a:documentation>Div unterteilt ein Dokument ohne semantische Bedeutung.</a:documentation>
+                        <value>Document</value>
+                        <a:documentation>Das Top-Level Element</a:documentation>
+                        <value>H1</value>
+                        <a:documentation>Überschrift Ebene 1</a:documentation>
+                        <value>H2</value>
+                        <a:documentation>Überschrift Ebene 2</a:documentation>
+                        <value>P</value>
+                        <a:documentation>Ein Absatz</a:documentation>
+                        <value>Lbl</value>
+                        <a:documentation>Ein Label</a:documentation>
+                        <value>LBody</value>
+                        <a:documentation>Listen Inhalt</a:documentation>
+                        <value>Part</value>
+                        <a:documentation>Part ist dafür da, um große Dokumente in kleinere Elemente zu unterteilen.</a:documentation>
+                        <value>Sect</value>
+                        <a:documentation>Sect identifiziert einen Abschnitt eines Dokuments, Teils oder Artikels.</a:documentation>
+                        <value>Span</value>
+                        <a:documentation>Span dient der Abgrenzung von Inhalten zum Zwecke der Anwendung semantischer und
+          andere Attribute.</a:documentation>
+                        <value>Table</value>
+                        <a:documentation>Table beinhaltet eine Tabelle.</a:documentation>
+                        <value>TOC</value>
+                        <a:documentation>TOC beinhaltet ein Inhaltsverzeichnis.</a:documentation>
+                        <value>TOCI</value>
+                        <a:documentation>TOCI beinhaltet einen Eintrag eines Inhaltsverzeichnis.</a:documentation>
                      </choice>
                   </attribute>
                </optional>
@@ -5056,6 +5120,9 @@
                      <ref name="e_SortSequence"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_StructureElement"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Switch"></ref>
                   </optional>
                   <optional>
@@ -5277,6 +5344,9 @@
                      </optional>
                      <optional>
                         <ref name="e_SortSequence"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_StructureElement"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Switch"></ref>
@@ -5648,6 +5718,44 @@
                      <a:documentation>Erhöhe Leerraum zwischen Zeichen.</a:documentation>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="role">
+                     <a:documentation>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</a:documentation>
+                     <choice>
+                        <value>Art</value>
+                        <a:documentation>Ein Artikel in einem Dokument.</a:documentation>
+                        <value>Caption</value>
+                        <a:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</a:documentation>
+                        <value>Div</value>
+                        <a:documentation>Div unterteilt ein Dokument ohne semantische Bedeutung.</a:documentation>
+                        <value>Document</value>
+                        <a:documentation>Das Top-Level Element</a:documentation>
+                        <value>H1</value>
+                        <a:documentation>Überschrift Ebene 1</a:documentation>
+                        <value>H2</value>
+                        <a:documentation>Überschrift Ebene 2</a:documentation>
+                        <value>P</value>
+                        <a:documentation>Ein Absatz</a:documentation>
+                        <value>Lbl</value>
+                        <a:documentation>Ein Label</a:documentation>
+                        <value>LBody</value>
+                        <a:documentation>Listen Inhalt</a:documentation>
+                        <value>Part</value>
+                        <a:documentation>Part ist dafür da, um große Dokumente in kleinere Elemente zu unterteilen.</a:documentation>
+                        <value>Sect</value>
+                        <a:documentation>Sect identifiziert einen Abschnitt eines Dokuments, Teils oder Artikels.</a:documentation>
+                        <value>Span</value>
+                        <a:documentation>Span dient der Abgrenzung von Inhalten zum Zwecke der Anwendung semantischer und
+          andere Attribute.</a:documentation>
+                        <value>Table</value>
+                        <a:documentation>Table beinhaltet eine Tabelle.</a:documentation>
+                        <value>TOC</value>
+                        <a:documentation>TOC beinhaltet ein Inhaltsverzeichnis.</a:documentation>
+                        <value>TOCI</value>
+                        <a:documentation>TOCI beinhaltet einen Eintrag eines Inhaltsverzeichnis.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
@@ -5712,6 +5820,67 @@
                <optional>
                   <ref name="e_Otherwise"></ref>
                </optional>
+            </group>
+            <ref name="foreign-nodes"></ref>
+         </interleave>
+      </element>
+   </define>
+   <define name="e_StructureElement">
+      <element name="StructureElement">
+         <a:documentation></a:documentation>
+         <interleave>
+            <group>
+               <optional>
+                  <attribute name="id">
+                     <a:documentation></a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="parent">
+                     <a:documentation></a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="role">
+                     <a:documentation></a:documentation>
+                     <choice>
+                        <value>Art</value>
+                        <a:documentation>Ein Artikel in einem Dokument.</a:documentation>
+                        <value>Caption</value>
+                        <a:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</a:documentation>
+                        <value>Div</value>
+                        <a:documentation>Div unterteilt ein Dokument ohne semantische Bedeutung.</a:documentation>
+                        <value>Document</value>
+                        <a:documentation>Das Top-Level Element</a:documentation>
+                        <value>H1</value>
+                        <a:documentation>Überschrift Ebene 1</a:documentation>
+                        <value>H2</value>
+                        <a:documentation>Überschrift Ebene 2</a:documentation>
+                        <value>P</value>
+                        <a:documentation>Ein Absatz</a:documentation>
+                        <value>Lbl</value>
+                        <a:documentation>Ein Label</a:documentation>
+                        <value>LBody</value>
+                        <a:documentation>Listen Inhalt</a:documentation>
+                        <value>Part</value>
+                        <a:documentation>Part ist dafür da, um große Dokumente in kleinere Elemente zu unterteilen.</a:documentation>
+                        <value>Sect</value>
+                        <a:documentation>Sect identifiziert einen Abschnitt eines Dokuments, Teils oder Artikels.</a:documentation>
+                        <value>Span</value>
+                        <a:documentation>Span dient der Abgrenzung von Inhalten zum Zwecke der Anwendung semantischer und
+          andere Attribute.</a:documentation>
+                        <value>Table</value>
+                        <a:documentation>Table beinhaltet eine Tabelle.</a:documentation>
+                        <value>TOC</value>
+                        <a:documentation>TOC beinhaltet ein Inhaltsverzeichnis.</a:documentation>
+                        <value>TOCI</value>
+                        <a:documentation>TOCI beinhaltet einen Eintrag eines Inhaltsverzeichnis.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <zeroOrMore>
+                  <ref name="e_StructureElement"></ref>
+               </zeroOrMore>
             </group>
             <ref name="foreign-nodes"></ref>
          </interleave>
@@ -6944,6 +7113,9 @@
                         <ref name="e_Span"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_StructureElement"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Sub"></ref>
                      </optional>
                      <optional>
@@ -7258,6 +7430,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Span"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_StructureElement"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Sub"></ref>

@@ -90,6 +90,7 @@ ifndef::backend-docbook5[]
 <<cmd-sortsequence,SortSequence>>  +
 <<cmd-stylesheet,Stylesheet>>  +
 <<cmd-span,Span>>  +
+<<cmd-structureelement,StructureElement>>  +
 <<cmd-sub,Sub>>  +
 <<cmd-sup,Sup>>  +
 <<cmd-switch,Switch>>  +
@@ -655,6 +656,12 @@ include::ref/span.adoc[]
 == Siehe auch
 
 Den Befehl <<cmd-options>> für eine Liste aller unterstützter Sprachen.
+
+include::ref/structureelement.adoc[]
+
+== Siehe auch
+
+Das Kapitel über <<ch-accessibility,Barrierefreiheit>>.
 
 include::ref/sub.adoc[]
 

@@ -122,6 +122,7 @@
         <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
+        <xs:element minOccurs="0" ref="en:StructureElement"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
         <xs:element minOccurs="0" ref="en:Until"/>
         <xs:element minOccurs="0" ref="en:Value"/>
@@ -173,6 +174,7 @@
         <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
+        <xs:element minOccurs="0" ref="en:StructureElement"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
         <xs:element minOccurs="0" ref="en:Until"/>
         <xs:element minOccurs="0" ref="en:Value"/>
@@ -621,6 +623,7 @@
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
         <xs:element minOccurs="0" ref="en:Span"/>
+        <xs:element minOccurs="0" ref="en:StructureElement"/>
         <xs:element minOccurs="0" ref="en:Sub"/>
         <xs:element minOccurs="0" ref="en:Sup"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
@@ -1009,6 +1012,7 @@
         <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
+        <xs:element minOccurs="0" ref="en:StructureElement"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
         <xs:element minOccurs="0" ref="en:Until"/>
         <xs:element minOccurs="0" ref="en:Value"/>
@@ -1657,6 +1661,7 @@
         <xs:element ref="en:SetVariable"/>
         <xs:element ref="en:SortSequence"/>
         <xs:element ref="en:Span"/>
+        <xs:element ref="en:StructureElement"/>
         <xs:element ref="en:Sub"/>
         <xs:element ref="en:Sup"/>
         <xs:element ref="en:Switch"/>
@@ -2527,6 +2532,11 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="description">
+        <xs:annotation>
+          <xs:documentation>Ein alternativer Text für Barrierefreiheit</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="dpiwarn">
         <xs:annotation>
           <xs:documentation>Warnung ausgeben, wenn das Bild eine geringere Auflösung bekommt als angegeben.</xs:documentation>
@@ -2557,6 +2567,11 @@
             <xs:enumeration value="no"/>
           </xs:restriction>
         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="parent">
+        <xs:annotation>
+          <xs:documentation>Die ID der Elternstruktur für tagged PDF</xs:documentation>
+        </xs:annotation>
       </xs:attribute>
       <xs:attribute name="page">
         <xs:annotation>
@@ -2870,6 +2885,7 @@
         <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:Stylesheet"/>
+        <xs:element minOccurs="0" ref="en:StructureElement"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
         <xs:element minOccurs="0" ref="en:Trace"/>
         <xs:element minOccurs="0" ref="en:While"/>
@@ -2988,6 +3004,7 @@
         <xs:element ref="en:SetVariable"/>
         <xs:element ref="en:SortSequence"/>
         <xs:element ref="en:Span"/>
+        <xs:element ref="en:StructureElement"/>
         <xs:element ref="en:Sub"/>
         <xs:element ref="en:Sup"/>
         <xs:element ref="en:Switch"/>
@@ -3975,6 +3992,7 @@
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
         <xs:element minOccurs="0" ref="en:Span"/>
+        <xs:element minOccurs="0" ref="en:StructureElement"/>
         <xs:element minOccurs="0" ref="en:Sub"/>
         <xs:element minOccurs="0" ref="en:Sup"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
@@ -4267,40 +4285,6 @@
         <xs:annotation>
           <xs:documentation>Horizontaler Abstand zwischen Text und Absatz (wenn rechtsbündig).</xs:documentation>
         </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="padding-left">
-        <xs:annotation>
-          <xs:documentation>Stelle das padding links ein, also der Innenabstand des Textblocks.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="padding-right">
-        <xs:annotation>
-          <xs:documentation>Stelle das padding rechts ein, also der Innenabstand des Textblocks.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="role">
-        <xs:annotation>
-          <xs:documentation>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="H1">
-              <xs:annotation>
-                <xs:documentation>Überschrift Ebene 1</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="H2">
-              <xs:annotation>
-                <xs:documentation>Überschrift Ebene 2</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="P">
-              <xs:annotation>
-                <xs:documentation>Ein Absatz</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
-        </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="language">
         <xs:annotation>
@@ -4742,6 +4726,106 @@
               </xs:restriction>
             </xs:simpleType>
           </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="padding-left">
+        <xs:annotation>
+          <xs:documentation>Stelle das padding links ein, also der Innenabstand des Textblocks.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="padding-right">
+        <xs:annotation>
+          <xs:documentation>Stelle das padding rechts ein, also der Innenabstand des Textblocks.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="parent">
+        <xs:annotation>
+          <xs:documentation>Die ID der Elternstruktur für tagged PDF</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="role">
+        <xs:annotation>
+          <xs:documentation>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="Art">
+              <xs:annotation>
+                <xs:documentation>Ein Artikel in einem Dokument.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Caption">
+              <xs:annotation>
+                <xs:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Div">
+              <xs:annotation>
+                <xs:documentation>Div unterteilt ein Dokument ohne semantische Bedeutung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Document">
+              <xs:annotation>
+                <xs:documentation>Das Top-Level Element</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H1">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 1</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H2">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 2</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="P">
+              <xs:annotation>
+                <xs:documentation>Ein Absatz</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Lbl">
+              <xs:annotation>
+                <xs:documentation>Ein Label</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="LBody">
+              <xs:annotation>
+                <xs:documentation>Listen Inhalt</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Part">
+              <xs:annotation>
+                <xs:documentation>Part ist dafür da, um große Dokumente in kleinere Elemente zu unterteilen.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Sect">
+              <xs:annotation>
+                <xs:documentation>Sect identifiziert einen Abschnitt eines Dokuments, Teils oder Artikels.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Span">
+              <xs:annotation>
+                <xs:documentation>Span dient der Abgrenzung von Inhalten zum Zwecke der Anwendung semantischer und
+          andere Attribute.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Table">
+              <xs:annotation>
+                <xs:documentation>Table beinhaltet eine Tabelle.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TOC">
+              <xs:annotation>
+                <xs:documentation>TOC beinhaltet ein Inhaltsverzeichnis.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TOCI">
+              <xs:annotation>
+                <xs:documentation>TOCI beinhaltet einen Eintrag eines Inhaltsverzeichnis.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="textformat">
@@ -5621,6 +5705,7 @@
         <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
+        <xs:element minOccurs="0" ref="en:StructureElement"/>
         <xs:element minOccurs="0" ref="en:Switch"/>
         <xs:element minOccurs="0" ref="en:Until"/>
         <xs:element minOccurs="0" ref="en:Value"/>
@@ -5786,6 +5871,7 @@
         <xs:element ref="en:SetGrid"/>
         <xs:element ref="en:SetVariable"/>
         <xs:element ref="en:SortSequence"/>
+        <xs:element ref="en:StructureElement"/>
         <xs:element ref="en:Switch"/>
         <xs:element ref="en:Until"/>
         <xs:element ref="en:Value"/>
@@ -6517,6 +6603,91 @@
           <xs:documentation>Erhöhe Leerraum zwischen Zeichen.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="role">
+        <xs:annotation>
+          <xs:documentation>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="Art">
+              <xs:annotation>
+                <xs:documentation>Ein Artikel in einem Dokument.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Caption">
+              <xs:annotation>
+                <xs:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Div">
+              <xs:annotation>
+                <xs:documentation>Div unterteilt ein Dokument ohne semantische Bedeutung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Document">
+              <xs:annotation>
+                <xs:documentation>Das Top-Level Element</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H1">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 1</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H2">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 2</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="P">
+              <xs:annotation>
+                <xs:documentation>Ein Absatz</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Lbl">
+              <xs:annotation>
+                <xs:documentation>Ein Label</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="LBody">
+              <xs:annotation>
+                <xs:documentation>Listen Inhalt</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Part">
+              <xs:annotation>
+                <xs:documentation>Part ist dafür da, um große Dokumente in kleinere Elemente zu unterteilen.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Sect">
+              <xs:annotation>
+                <xs:documentation>Sect identifiziert einen Abschnitt eines Dokuments, Teils oder Artikels.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Span">
+              <xs:annotation>
+                <xs:documentation>Span dient der Abgrenzung von Inhalten zum Zwecke der Anwendung semantischer und
+          andere Attribute.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Table">
+              <xs:annotation>
+                <xs:documentation>Table beinhaltet eine Tabelle.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TOC">
+              <xs:annotation>
+                <xs:documentation>TOC beinhaltet ein Inhaltsverzeichnis.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TOCI">
+              <xs:annotation>
+                <xs:documentation>TOCI beinhaltet einen Eintrag eines Inhaltsverzeichnis.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Sub">
@@ -6548,6 +6719,111 @@
         <xs:element maxOccurs="unbounded" ref="en:Case"/>
         <xs:element minOccurs="0" ref="en:Otherwise"/>
       </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StructureElement">
+    <xs:annotation>
+      <xs:documentation/>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="en:StructureElement"/>
+      </xs:sequence>
+      <xs:attribute name="id">
+        <xs:annotation>
+          <xs:documentation/>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="parent">
+        <xs:annotation>
+          <xs:documentation/>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="role">
+        <xs:annotation>
+          <xs:documentation/>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="Art">
+              <xs:annotation>
+                <xs:documentation>Ein Artikel in einem Dokument.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Caption">
+              <xs:annotation>
+                <xs:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Div">
+              <xs:annotation>
+                <xs:documentation>Div unterteilt ein Dokument ohne semantische Bedeutung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Document">
+              <xs:annotation>
+                <xs:documentation>Das Top-Level Element</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H1">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 1</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H2">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 2</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="P">
+              <xs:annotation>
+                <xs:documentation>Ein Absatz</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Lbl">
+              <xs:annotation>
+                <xs:documentation>Ein Label</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="LBody">
+              <xs:annotation>
+                <xs:documentation>Listen Inhalt</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Part">
+              <xs:annotation>
+                <xs:documentation>Part ist dafür da, um große Dokumente in kleinere Elemente zu unterteilen.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Sect">
+              <xs:annotation>
+                <xs:documentation>Sect identifiziert einen Abschnitt eines Dokuments, Teils oder Artikels.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Span">
+              <xs:annotation>
+                <xs:documentation>Span dient der Abgrenzung von Inhalten zum Zwecke der Anwendung semantischer und
+          andere Attribute.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Table">
+              <xs:annotation>
+                <xs:documentation>Table beinhaltet eine Tabelle.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TOC">
+              <xs:annotation>
+                <xs:documentation>TOC beinhaltet ein Inhaltsverzeichnis.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TOCI">
+              <xs:annotation>
+                <xs:documentation>TOCI beinhaltet einen Eintrag eines Inhaltsverzeichnis.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Stylesheet">
@@ -8149,6 +8425,7 @@
         <xs:element ref="en:SetVariable"/>
         <xs:element ref="en:SortSequence"/>
         <xs:element ref="en:Span"/>
+        <xs:element ref="en:StructureElement"/>
         <xs:element ref="en:Sub"/>
         <xs:element ref="en:Sup"/>
         <xs:element ref="en:Switch"/>
@@ -8303,6 +8580,7 @@
         <xs:element ref="en:SetVariable"/>
         <xs:element ref="en:SortSequence"/>
         <xs:element ref="en:Span"/>
+        <xs:element ref="en:StructureElement"/>
         <xs:element ref="en:Sub"/>
         <xs:element ref="en:Sup"/>
         <xs:element ref="en:Switch"/>

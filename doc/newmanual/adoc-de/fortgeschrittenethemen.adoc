@@ -33,6 +33,8 @@ include::hotfolder.adoc[leveloffset=+1]
 
 include::luafilter.adoc[leveloffset=+1]
 
+include::accessibility-de.adoc[leveloffset=+1]
+
 include::schemavalidierung.adoc[leveloffset=+1]
 
 include::qualitaetssicherung.adoc[leveloffset=+1]

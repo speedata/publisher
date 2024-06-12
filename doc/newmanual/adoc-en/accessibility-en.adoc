@@ -1,0 +1,113 @@
+[[ch-accessibility]]
+= Accessibility / tagged PDF
+
+
+The possibility of creating accessible PDFs is still under development. This means that the objects that can be tagged are limited. The same applies to the roles (tag names) and this section of the manual.
+
+== What is tagged PDF?
+
+Tagged PDF is an extension of the PDF file with a logical structure of the content. The tags are used to determine the role of the object to be output, e.g. level 1 heading, a paragraph or an image. This is mainly used to create accessible PDFs, i.e. PDFs that are optimized for screen readers or similar output devices.
+
+For accessible PDFs, not only the technical side must be taken into account (this is what the speedata Publisher is for), but also the logical structure must be created sensibly. For example, images must be output with an alternative text, otherwise their use is restricted.
+
+== Example
+
+In the following example, the document is divided into a section (Sect) and a heading (H1) and an image (Figure) are output in this section.
+
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <PDFOptions format="PDF/UA" />
+
+  <StructureElement role="Document" id="doc">
+    <StructureElement role="Sect" id="sect"/>
+  </StructureElement>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Bookmark level="1" select="'My image collection'"/>
+        <Paragraph role="H1" parent="sect">
+          <Value>My image collection</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+
+    <PlaceObject>
+      <Image parent="sect"
+             description="an ocean"
+             file="ocean.pdf"
+             width="4cm" />
+    </PlaceObject>
+  </Record>
+</Layout>
+----------------
+
+== Hierarchical structure
+
+By default, the role "Document" is defined with the ID `doc`. This corresponds to the following structure:
+
+[source, xml]
+----------------
+<StructureElement role="Document" id="doc" />
+----------------
+
+There are two ways to define further structures. Either these are defined in a nested manner (as in the example above)
+
+[source, xml]
+----------------
+<StructureElement role="Document">
+	<StructureElement role="Art">
+		<StructureElement role="Sect" id="sect1a1"/>
+		<StructureElement role="Sect" id="sect2a1"/>
+	</StructureElement>
+	<StructureElement role="Art">
+		<StructureElement role="Sect" id="sect1a2"/>
+		<StructureElement role="Sect" id="sect2a2"/>
+	</StructureElement>
+</StructureElement>
+----------------
+
+or you can use the parent attribute:
+
+[source, xml]
+----------------
+<StructureElement role="Document" id="doc" />
+<StructureElement role="Art" id="art1" parent="doc" />
+<StructureElement role="Art" id="art2" parent="doc" />
+<StructureElement role="Sect" id="sect1a1" parent="art1"/>
+<StructureElement role="Sect" id="sect2a1" parent="art1"/>
+<StructureElement role="Sect" id="sect1a2" parent="art2"/>
+<StructureElement role="Sect" id="sect2a2" parent="art2"/>
+----------------
+
+
+
+This allows the document to be structured dynamically based on the data.
+
+The `id` attribute is necessary to specify the parent structure for paragraphs and images. In the example above, both elements are output in the `Sect` section.
+
+
+
+== Roles (tag names)
+
+The following role names (tags) are defined in the speedata Publisher. Others can be added on request:
+
+Art, Div, Document, Figure, H1, H2, H3, H4, H5, H6, Lbl, P, Part, Sect, Span, TOC, TOCI
+
+== Checking the document
+
+The following programs can be used to check accessibility:
+
+
+* https://pac.pdf-accessibility.org/de[PAC (PDF accessibility checker)]
+* Adobe Acrobat
+* https://verapdf.org[Vera PDF]
+
+
+
+// EOF
+

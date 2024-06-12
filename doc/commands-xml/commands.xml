@@ -61,6 +61,7 @@
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="SortSequence"/></optional>
     <optional><cmd name="Span"/></optional>
+    <optional><cmd name="StructureElement"/></optional>
     <optional><cmd name="Sub"/></optional>
     <optional><cmd name="Sup"/></optional>
     <optional><cmd name="Switch"/></optional>
@@ -113,6 +114,7 @@
     <optional><cmd name="SetGrid"/></optional>
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="SortSequence"/></optional>
+    <optional><cmd name="StructureElement"/></optional>
     <optional><cmd name="Switch"/></optional>
     <optional><cmd name="Until"/></optional>
     <optional><cmd name="Value"/></optional>
@@ -172,6 +174,7 @@
     <optional><cmd name="SetGrid"/></optional>
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="Stylesheet"/></optional>
+    <optional><cmd name="StructureElement"/></optional>
     <optional><cmd name="Switch"/></optional>
     <optional><cmd name="Trace"/></optional>
     <optional><cmd name="While"/></optional>
@@ -574,6 +577,38 @@
   </defineattribute>
 
   <defineattribute name="roles">
+    <choice en="Art">
+      <description xml:lang="en">
+        <para>An article within a document.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Ein Artikel in einem Dokument.</para>
+      </description>
+    </choice>
+    <choice en="Caption">
+      <description xml:lang="en">
+        <para>A description of a table or figure.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Eine Beschreibung einer Tabelle oder Abbildung.</para>
+      </description>
+    </choice>
+    <choice en="Div">
+      <description xml:lang="en">
+        <para>Div is a division of a document without semantic intent.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Div unterteilt ein Dokument ohne semantische Bedeutung.</para>
+      </description>
+    </choice>
+    <choice en="Document">
+      <description xml:lang="en">
+        <para>The top level structure</para>
+      </description>
+      <description xml:lang="de">
+        <para>Das Top-Level Element</para>
+      </description>
+    </choice>
     <choice en="H1">
       <description xml:lang="en">
         <para>Heading level 1</para>
@@ -598,6 +633,74 @@
         <para>Ein Absatz</para>
       </description>
     </choice>
+    <choice en="Lbl">
+      <description xml:lang="en">
+        <para>A label</para>
+      </description>
+      <description xml:lang="de">
+        <para>Ein Label</para>
+      </description>
+    </choice>
+    <choice en="LBody">
+      <description xml:lang="en">
+        <para>List body</para>
+      </description>
+      <description xml:lang="de">
+        <para>Listen Inhalt</para>
+      </description>
+    </choice>
+    <choice en="Part">
+      <description xml:lang="en">
+        <para>Part is intended to sub-divide a large document into smaller elements.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Part ist dafür da, um große Dokumente in kleinere Elemente zu unterteilen.</para>
+      </description>
+    </choice>
+    <choice en="Sect">
+      <description xml:lang="en">
+        <para>Sect identifies the sections of a document, part or article.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Sect identifiziert einen Abschnitt eines Dokuments, Teils oder Artikels.</para>
+      </description>
+    </choice>
+    <choice en="Span">
+      <description xml:lang="en">
+        <para>Span is to demarcate content for the purpose of applying semantic and
+          other attributes.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Span dient der Abgrenzung von Inhalten zum Zwecke der Anwendung semantischer und
+          andere Attribute.</para>
+      </description>
+    </choice>
+    <choice en="Table">
+      <description xml:lang="en">
+        <para>Table is the container for a table.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Table beinhaltet eine Tabelle.</para>
+      </description>
+    </choice>
+    <choice en="TOC">
+      <description xml:lang="en">
+        <para>TOC is a container for a table of contents.</para>
+      </description>
+      <description xml:lang="de">
+        <para>TOC beinhaltet ein Inhaltsverzeichnis. </para>
+      </description>
+    </choice>
+    <choice en="TOCI">
+      <description xml:lang="en">
+        <para>TOCI is a container for a table of contents entry.</para>
+      </description>
+      <description xml:lang="de">
+        <para>TOCI beinhaltet einen Eintrag eines Inhaltsverzeichnis.</para>
+      </description>
+    </choice>
+
+
   </defineattribute>
 
   <definelist name="languagesshortcodes">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</definelist>
@@ -4572,6 +4675,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="description" optional="yes" since="4.19.8" type="text">
+      <description xml:lang="en">
+        <para>An alternative text for accessibility</para>
+      </description>
+      <description xml:lang="de">
+        <para>Ein alternativer Text für Barrierefreiheit</para>
+      </description>
+    </attribute>
     <attribute en="dpiwarn" type="number" optional="yes">
       <description xml:lang="en">
         <para>Warn if the image gets lower resolution than given.</para>
@@ -4610,6 +4721,14 @@
       </description>
       <description xml:lang="de">
         <para>Versuche Bildumrisse zu laden. Voreinstellung ist nein.</para>
+      </description>
+    </attribute>
+    <attribute en="parent" optional="yes" since="4.19.8" type="text">
+      <description xml:lang="en">
+        <para>The id of the parent structure element for tagged PDF</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die ID der Elternstruktur für tagged PDF</para>
       </description>
     </attribute>
     <attribute en="page" type="number" optional="yes">
@@ -6678,6 +6797,15 @@
         <para>Horizontaler Abstand zwischen Text und Absatz (wenn rechtsbündig).</para>
       </description>
     </attribute>
+    <attribute en="language" optional="yes" allowxpath="yes">
+      <description xml:lang="en">
+        <para>Name of the language for hyphenation and rendering.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name der Sprache für die Silbentrennung und Darstellung.</para>
+      </description>
+      <referenceattribute name="languages" />
+    </attribute>
     <attribute en="padding-left" optional="yes" since="3.9.27" allowxpath="yes" type="length">
       <description xml:lang="en">
         <para>Set the left padding, i.e. the inner distance to the allocated area.</para>
@@ -6694,6 +6822,14 @@
         <para>Stelle das padding rechts ein, also der Innenabstand des Textblocks.</para>
       </description>
     </attribute>
+    <attribute en="parent" optional="yes" since="4.19.8" type="text">
+      <description xml:lang="en">
+        <para>The id of the parent structure element for tagged PDF</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die ID der Elternstruktur für tagged PDF</para>
+      </description>
+    </attribute>
     <attribute en="role" optional="yes" since="3.5.7">
       <description xml:lang="en">
         <para>The role for PDF/UA (accessibility, tagged PDF)</para>
@@ -6702,15 +6838,6 @@
         <para>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</para>
       </description>
       <referenceattribute name="roles" />
-    </attribute>
-    <attribute en="language" optional="yes" allowxpath="yes">
-      <description xml:lang="en">
-        <para>Name of the language for hyphenation and rendering.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Name der Sprache für die Silbentrennung und Darstellung.</para>
-      </description>
-      <referenceattribute name="languages" />
     </attribute>
     <attribute en="textformat" type="text" optional="yes">
       <description xml:lang="en">
@@ -8996,6 +9123,15 @@
         <para>Erhöhe Leerraum zwischen Zeichen.</para>
       </description>
     </attribute>
+    <attribute en="role" optional="yes" since="4.19.8">
+      <description xml:lang="en">
+        <para>The role for PDF/UA (accessibility, tagged PDF)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</para>
+      </description>
+      <referenceattribute name="roles" />
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Stylesheet>
   .green { background-color: lightgreen; }
@@ -9201,6 +9337,86 @@
       <cmd name="Otherwise"/>
     </seealso>
   </command>
+
+  <!--
+      *************************
+      * StructureElement
+      *************************
+  -->
+  <command en="StructureElement" since="4.19.8">
+    <description xml:lang="en">
+      <para>Create a structure hierarchy for tagged PDF.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Erzeugt eine hierarchische Struktur für tagged-PDF</para>
+    </description>
+    <childelements>
+      <zeroOrMore>
+        <cmd name="StructureElement"></cmd>
+      </zeroOrMore>
+    </childelements>
+    <attribute en="id" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>A unique id for this structure element. Used in <cmd name="Paragraph" /> and <cmd name="Image" />.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Eindeutige ID für dieses Strukturelement. Benutzt in in <cmd name="Paragraph" /> und <cmd name="Image" />.</para>
+      </description>
+    </attribute>
+    <attribute en="parent" optional="yes" type="text">
+      <description xml:lang="en">
+        <para>Id of the parent structure.</para>
+      </description>
+      <description xml:lang="de">
+        <para>ID für die Elternstruktur.</para>
+      </description>
+    </attribute>
+    <attribute en="role" optional="no">
+      <description xml:lang="en">
+        <para>Tag name of the element.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Tagname für das Element.</para>
+      </description>
+      <referenceattribute name="roles" />
+    </attribute>
+    <example xml:lang="en">
+      <para>The following example creates a H1 heading within a Section of the Document:</para>
+      <listing><![CDATA[<PDFOptions format="PDF/UA" />
+<StructureElement role="Document">
+	<StructureElement role="Sect" id="sect"/>
+</StructureElement>
+<Record element="data">
+	<PlaceObject>
+		<Textblock>
+			<Paragraph role="H1" parent="sect">
+				<Value>A title</Value>
+			</Paragraph>
+		</Textblock>
+	</PlaceObject>
+</Record>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <para>Das folgende Beispiel erzeugt einen H1 Title in einem Abschnitt des Dokuments:</para>
+      <listing><![CDATA[<PDFOptions format="PDF/UA" />
+<StructureElement role="Document">
+	<StructureElement role="Sect" id="sect"/>
+</StructureElement>
+<Record element="data">
+	<PlaceObject>
+		<Textblock>
+			<Paragraph role="H1" parent="sect">
+				<Value>A title</Value>
+			</Paragraph>
+		</Textblock>
+	</PlaceObject>
+</Record>
+]]></listing>
+    </example>
+    <seealso></seealso>
+  </command>
+
   <!--
       *************************
       * Stylesheet

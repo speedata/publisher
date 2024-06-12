@@ -530,6 +530,7 @@ markers = {}
 -- PDF/UA - the /S /Document StructElem
 local ktree = pdf.reserveobj()
 
+structElements = {}
 
 -- We will have to remember the current group and grid
 current_group = nil
@@ -722,6 +723,7 @@ local dispatch_table = {
     SetVariable             = commands.setvariable,
     SortSequence            = commands.sort_sequence,
     Span                    = commands.span,
+    StructureElement        = commands.structureelement,
     Stylesheet              = commands.stylesheet,
     Sub                     = commands.sub,
     Sup                     = commands.sup,
@@ -992,11 +994,32 @@ local function getproducer()
     end
 end
 
-local roles = { H1 = 1, H2 = 2, H3 = 3, H4 = 4, H5 = 5, H6 = 6, P = 7  }
-local roles_a = {}
-for k,v in pairs(roles) do
-    roles_a[v] = k
+local roles_a = {
+    "Art",
+    "Div",
+    "Document",
+    "Figure",
+    "H1",
+    "H2",
+    "H3",
+    "H4",
+    "H5",
+    "H6",
+    "Lbl",
+    "P",
+    "Part",
+    "Sect",
+    "Span",
+    "TOC",
+    "TOCI",
+}
+local roles = {}
+for k,v in pairs(roles_a) do
+    roles[v] = k
 end
+
+-- unique id for roles
+rolecounter = 0
 
 function get_rolenum( rolestring )
     if not rolestring then return nil end
@@ -1005,6 +1028,51 @@ function get_rolenum( rolestring )
         return ret
     end
     err("Unknown role %q",tostring(rolestring))
+end
+
+local function writeStructElements(itm,parentobjectnumber)
+    local obj = itm.obj
+    local objectnumbers = {}
+    for i = 1, #itm do
+        local thisitm = itm[i]
+        if type(thisitm) == "table" then
+            local onum = writeStructElements(thisitm,obj)
+            objectnumbers[#objectnumbers+1] = onum
+        else
+            objectnumbers[#objectnumbers+1] = string.format("%d",thisitm)
+        end
+    end
+
+    local k
+    if #objectnumbers > 1 then
+        k = string.format("[ %s ]",table.concat(objectnumbers," "))
+    else
+        k = objectnumbers[1]
+    end
+
+    if k then
+        str = {
+            "/Type /StructElem",
+            "/S /" .. itm.role,
+            "/P " .. parentobjectnumber .. " 0 R",
+            "/K "  .. k,
+        }
+        if itm.text then
+            str[#str + 1] = "/Alt " .. utf8_to_utf16_string_pdf(itm.text)
+        end
+        if itm.bbox then
+            local bbox = itm.bbox
+            str[#str+1] = string.format("/A << /BBox [%s %s %s %s] /Placement /Block /O /Layout >>",bbox[1],bbox[2],bbox[3],bbox[4])
+        end
+        if itm.page then
+            str[#str+1] = "/Pg " .. itm.page .. " 0 R"
+        end
+
+        pdf.obj({type = "raw", objnum = obj, immediate = true , string = "<<" ..  table.concat(str, " ") .. ">>" })
+    end
+
+    return string.format("%d 0 R",obj)
+
 end
 
 --- Start the processing (`dothings()`)
@@ -1419,6 +1487,15 @@ function initialize_luatex_and_generate_pdf()
         warning("Options / colorprofile is obsolete. Use DefineColorprofile and PDFOptions / colorprofile instead.")
     end
 
+    if options.format == "PDF/UA" and not structElements[".root"] then
+        structElements[".root"] = {
+            role = "Document",
+            obj = pdf.reserveobj(),
+        }
+        structElements["doc"] = structElements[".root"]
+    end
+
+
     local auxfilename = tex.jobname .. "-aux.xml"
     -- load help file if it exists
     if find_file(auxfilename) and options.resetmarks == false then
@@ -1711,29 +1788,23 @@ function initialize_luatex_and_generate_pdf()
             vp[#vp + 1] = "/DisplayDocTitle true"
 
             local parenttree = pdf.reserveobj()
-
-            local structtreeroot = pdf.obj({ type = "raw", string = string.format("<</Type /StructTreeRoot /K %d 0 R /ParentTree %d 0 R >>",ktree,parenttree), immediate = true})
+            structTreeRootObjectNumber = pdf.reserveobj()
+            writeStructElements(structElements[".root"],structTreeRootObjectNumber)
+            local strObjnum = pdf.obj({ type = "raw", objnum = structTreeRootObjectNumber,  string = string.format("<</Type /StructTreeRoot /K %d 0 R /ParentTree %d 0 R >>",structElements[".root"].obj,parenttree), immediate = true})
             local numentries = { "<< /Nums [" }
             for i,v in ipairs(pdfuapages) do
-                numentries[#numentries + 1] = string.format("%d %d 0 R ",i-1, v.page_structelem_array)
+                numentries[#numentries+1] = tostring(i-1)
+                numentries[#numentries+1] = " [ "
+                for j = 1, #pdfuapages[i].structelementobjects do
+                    numentries[#numentries+1] = pdfuapages[i].structelementobjects[j]
+                end
+                numentries[#numentries+1] = " ] "
+
             end
             numentries[#numentries + 1] = "] >>"
             pdf.obj({type = "raw", string = string.format(table.concat(numentries)), objnum = parenttree, immediate = true})
 
-            -- ktree
-            local ktreeentries = {"<< /K ["}
-
-            for _,v in ipairs(pdfuapages) do
-                for _,w in ipairs(v.structelementobjects) do
-                    ktreeentries[#ktreeentries + 1] = string.format("%d 0 R", w)
-                end
-            end
-            ktreeentries[#ktreeentries + 1] = "] /S /Document /Type /StructElem"
-            ktreeentries[#ktreeentries + 1] = string.format("/P %d 0 R",structtreeroot)
-            ktreeentries[#ktreeentries + 1] = ">>"
-            pdf.obj({type = "raw", string = table.concat( ktreeentries," " ), objnum = ktree, immediate = true})
-
-            pdfcatalog[#pdfcatalog + 1] = string.format("/StructTreeRoot %d 0 R",structtreeroot)
+            pdfcatalog[#pdfcatalog + 1] = string.format("/StructTreeRoot %d 0 R",strObjnum)
         end
 
         if metadataobjnum then
@@ -1865,6 +1936,8 @@ pdfuapages = {}
 do
     local objcount
     local structelementobjects
+    local rcentries = {}
+
     function find_role_attributes( nodelist,parenttree, page )
         local head = nodelist
         while head do
@@ -1873,10 +1946,43 @@ do
                 find_role_attributes(head.list, parenttree, page)
             elseif node.has_attribute(head,att_role) then
                 local r = node.has_attribute(head,att_role)
+                local parentid    = getprop(head,"parentid")
+                local rc          = getprop(head,"rolecounter")
+                local description = getprop(head,"description")
+                local bbox        = getprop(head,"bbox")
                 r = roles_a[r]
+                local parenttbl
+                -- A nested Span should have the parent of the current P
+                if r == "Span" then
+                    parenttbl = rcentries[#rcentries]
+                else
+                    parenttbl = structElements[parentid]
+                end
+                if not parenttbl then
+                    splib.error("Can't find parent table for","parentid",parentid or "?")
+                    return
+                end
+
+                local entry
+                -- reuse the entry tables when interrupted by child elements
+                if rcentries[rc] then
+                    entry = rcentries[rc]
+                else
+                    entry = {
+                        obj = pdf.reserveobj(),
+                        role = r,
+                        parent = parenttbl.obj ,
+                        page = page,
+                        text = description,
+                        bbox = bbox,
+
+                    }
+                    parenttbl[#parenttbl+1] = entry
+                    rcentries[rc] = entry
+                end
+                entry[#entry+1] = objcount
                 head.data = string.format("/%s<</MCID %d>>BDC", r,objcount)
-                local structelement = pdf.obj({type = "raw",string = string.format("<< /Type/StructElem /K %d /P %d 0 R /Pg %d 0 R /S /%s >>", objcount, parenttree, page,r), immediate = true})
-                structelementobjects[#structelementobjects + 1] = structelement
+                structelementobjects[#structelementobjects+1] = string.format("%d 0 R ",entry.obj)
                 objcount = objcount + 1
             end
             head = head.next
@@ -1893,8 +1999,8 @@ do
         find_role_attributes(nodelist,parenttree,thispage)
 
         local thispageobj = pdf.reserveobj()
-        pdf.obj({type = "raw", immediate = true, objnum = thispageobj, string = string.format("[%s 0 R]", table.concat(structelementobjects, " 0 R ") )  })
-        pdfuapages[#pdfuapages + 1] = {pagenumber = pagenumber,page_structelem_array = thispageobj, structelementobjects = structelementobjects }
+        -- pdf.obj({type = "raw", immediate = true, objnum = thispageobj, string = string.format("[%s 0 R]", table.concat(structelementobjects, " 0 R ") )  })
+        pdfuapages[#pdfuapages + 1] = { structelementobjects = structelementobjects }
     end
 end
 
@@ -2309,9 +2415,9 @@ end
 
 function place_at(pagebox,nodelist,x_sp,y_sp)
     local tail = node.tail(pagebox)
-    local n = add_glue( nodelist ,"head",{ width = x_sp })
+    local n = add_glue( nodelist ,"head",{subtype = 1000, width = x_sp })
     n = node.hpack(n)
-    n = add_glue(n, "head", {width = y_sp})
+    n = add_glue(n, "head", { subtype = 1001, width = y_sp})
     n = node.vpack(n)
     n.width  = 0
     n.height = 0
@@ -3799,7 +3905,7 @@ function dothingsbeforeoutput( thispage,data )
 
     local str
     local thispagebox = thispage.pagebox
-    insert_nonmoving_whatsits(thispagebox)
+    insert_nonmoving_whatsits(thispagebox,nil,"vertical",0,0)
     local firstbox
 
     -- for spot colors, if necessary
@@ -4177,15 +4283,16 @@ function set_attributes(nodelist,att_tbl)
 end
 
 --- Look for `user_defined` at end of page (ship-out) and runs actions encoded in them.
-function insert_nonmoving_whatsits( head, parent, blockinline )
+function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury )
     if not head then return end
-    blockinline = blockinline or "vertical"
     local fun
     local prev_hyperlink, prev_fgcolor,prev_role
     local linklevel = 0
+    local currentfont = 1
     while head do
+        -- what is subtype 1?
         if head.id==hlist_node and head.subtype == 1 then
-            insert_nonmoving_whatsits(head.list,head,"horizontal")
+            insert_nonmoving_whatsits(head.list,head,"horizontal",curx,cury)
             local bordernumber = get_attribute(head,"bordernumber")
             if bordernumber then
                 local bordervbox = mpbox(borderattributes[bordernumber],head.width,head.height)
@@ -4197,8 +4304,24 @@ function insert_nonmoving_whatsits( head, parent, blockinline )
                 local bordervbox = mpbox(borderattributes[bordernumber],head.width,head.height + head.depth)
                 parent.head = node.insert_before(parent.head,head,bordervbox)
             end
-            insert_nonmoving_whatsits(head.list,head,"vertical")
+            if head.id == hlist_node then
+                insert_nonmoving_whatsits(head.list,head,"horizontal",curx,cury)
+            else
+                insert_nonmoving_whatsits(head.list,head,"vertical",curx,cury)
+            end
         else
+            if head.id == glue_node then
+                if blockinline == "horizontal" then
+                    curx = curx + head.width
+                else
+                    cury = cury + head.width
+                end
+            elseif head.id == rule_node then
+                if head.subtype == 2 then
+                    setprop(head,"bbox",{ sp_to_bp(curx),sp_to_bp(cury),sp_to_bp(curx + head.width),sp_to_bp(cury + head.height) })
+                end
+            end
+
             local attribs = get_attributes(head)
             local fgcolor = get_attribute(head,"color")
             local bordernumber = get_attribute(head,"bordernumber")
@@ -4209,11 +4332,19 @@ function insert_nonmoving_whatsits( head, parent, blockinline )
                 local bordervbox = mpbox(ba,wd,ht)
                 parent.head = node.insert_before(parent.head,head,bordervbox)
             end
-            local transparency = getprop(head,"opacity")
-            local role = getprop(head,"role")
-
-            if head.id == glyph_node and role and head.next and head.next.id == disc_node then
-                setprop(head.next,"role",role)
+            local transparency  = getprop(head,"opacity")
+            local role          = getprop(head,"role")
+            local parentid      = getprop(head,"parent")
+            local rc            = getprop(head,"rolecounter")
+            local bbox          = getprop(head,"bbox")
+            local description   = getprop(head,"description")
+            if head.id == glyph_node then
+                currentfont = head.font
+                if role and head.next and head.next.id == disc_node then
+                    setprop(head.next,"role",role)
+                    setprop(head.next,"parent",parentid)
+                    setprop(head.next,"rolecounter",rc)
+                end
             end
 
             local insert_startcolor = false
@@ -4305,21 +4436,25 @@ function insert_nonmoving_whatsits( head, parent, blockinline )
                 parent.head = node.insert_before(parent.head,head,colstart)
             end
             if insert_endrole then
-
                 local emc = node.new("whatsit","pdf_literal")
                 emc.data = "EMC"
                 emc.mode = 1
+                setprop(emc,"origin","insert_endrole")
 
-                if role then
-                    parent.head = node.insert_after(parent.head,head,emc)
+                parent.head = node.insert_after(parent.head,head,emc)
+                -- a single item such as an image has insert_startrole as well
+                if not insert_startrole then
                     head = head.next
-                else
-                    parent.head = node.insert_before(parent.head,head,emc)
                 end
             end
             if insert_startrole then
                 local bdc = node.new("whatsit","pdf_literal")
-                node.set_attribute(bdc,publisher.att_role, role)
+                node.set_attribute(bdc,att_role, role)
+                setprop(bdc,"parentid", parentid)
+                setprop(bdc,"rolecounter", rc)
+                setprop(bdc,"bbox",bbox)
+                setprop(bdc,"description",description)
+                setprop(bdc,"origin","insert_startrole")
                 bdc.data = ""
                 bdc.mode = 1
                 parent.head = node.insert_before(parent.head,head,bdc)
@@ -4445,10 +4580,12 @@ function insert_nonmoving_whatsits( head, parent, blockinline )
                         end
                     end
                 end
-            elseif head.id == glue_node and head.subtype == 0 and blockinline == "horizontal" and options.format == "PDF/UA" then
+            elseif head.id == glue_node and head.subtype == 0 and blockinline == "horizontal" and options.format == "PDF/UA" and head.subtype < 1000 then
+                -- a space in PDF/UA should be a real glyph
+                -- subtype >= 1000 is assigend to glue for arranging pages
                 local g = node.new("glyph")
                 g.subtype = 1
-                g.font = 1
+                g.font = currentfont
                 g.char = 32
                 g.width = head.width
                 parent.head = node.insert_before(parent.head,head,g)
@@ -4708,6 +4845,12 @@ local function setstyles(n,parameter)
     end
     if parameter.role then
         setprop(n,"role",parameter.role)
+    end
+    if parameter.parent then
+        setprop(n,"parent",parameter.parent)
+    end
+    if parameter.rolecounter then
+        setprop(n,"rolecounter",parameter.rolecounter)
     end
 end
 

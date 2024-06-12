@@ -33,6 +33,8 @@ include::hotfolder.adoc[leveloffset=+1]
 
 include::preprocessing.adoc[leveloffset=+1]
 
+include::accessibility-en.adoc[leveloffset=+1]
+
 include::schemavalidation.adoc[leveloffset=+1]
 
 include::qualityassurance.adoc[leveloffset=+1]

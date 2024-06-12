@@ -1423,12 +1423,14 @@ function commands.image( layoutxml,dataxml )
     local width     = publisher.read_attribute(layoutxml,dataxml,"width",      "string")
     local height    = publisher.read_attribute(layoutxml,dataxml,"height",     "string")
     local bleed     = publisher.read_attribute(layoutxml,dataxml,"bleed" ,     "string")
+    local description = publisher.read_attribute(layoutxml,dataxml,"description", "string")
     local minwidth  = publisher.read_attribute(layoutxml,dataxml,"minwidth",   "string")
     local minheight = publisher.read_attribute(layoutxml,dataxml,"minheight",  "string")
     local maxwidth  = publisher.read_attribute(layoutxml,dataxml,"maxwidth",   "string")
     local maxheight = publisher.read_attribute(layoutxml,dataxml,"maxheight",  "string")
     local clip      = publisher.read_attribute(layoutxml,dataxml,"clip",       "boolean")
     local page      = publisher.read_attribute(layoutxml,dataxml,"page",       "number")
+    local parent    = publisher.read_attribute(layoutxml,dataxml,"parent",     "string")
     local stretch   = publisher.read_attribute(layoutxml,dataxml,"stretch",    "boolean",false)
     local imageshape = publisher.read_attribute(layoutxml,dataxml,"imageshape",    "boolean",false)
     -- deprecated since 2.7.5
@@ -1671,6 +1673,13 @@ function commands.image( layoutxml,dataxml )
     image.height = height
 
     local imagenode = img.node(image)
+    local figrole = publisher.get_rolenum("Figure")
+    publisher.setprop(imagenode,"role",figrole)
+    publisher.setprop(imagenode,"parent",parent)
+    publisher.rolecounter = publisher.rolecounter + 1
+    publisher.setprop(imagenode,"rolecounter",publisher.rolecounter)
+    publisher.setprop(imagenode,"description",description)
+
     if opacity then
         publisher.transparentcolorstack()
         publisher.setprop(imagenode,"opacity",opacity)
@@ -2826,6 +2835,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local paddingleft       = publisher.read_attribute(layoutxml,dataxml,"padding-left",       "width_sp")
     local paddingright      = publisher.read_attribute(layoutxml,dataxml,"padding-right",      "width_sp")
     local role              = publisher.read_attribute(layoutxml,dataxml,"role",               "string")
+    local parent            = publisher.read_attribute(layoutxml,dataxml,"parent",               "string")
     local textformat        = publisher.read_attribute(layoutxml,dataxml,"textformat",         "string")
     if fontname then warning("Paragraph/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
     if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
@@ -2858,6 +2868,10 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     if fontoutline then
         fontoutlinewidth = fontoutline
     end
+    if role and not parent then
+        parent = "doc"
+    end
+    publisher.rolecounter = publisher.rolecounter + 1
 
     local params = {
         allowbreak = allowbreak,
@@ -2875,6 +2889,8 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
         padding_left = paddingleft,
         padding_right = paddingright,
         role = publisher.get_rolenum(role),
+        rolecounter = publisher.rolecounter,
+        parent = parent,
         textformat = publisher.textformats[textformat],
     }
 
@@ -4135,6 +4151,7 @@ function commands.span( layoutxml,dataxml )
     local class              = publisher.read_attribute(layoutxml,dataxml,"class",                    "string")
     local id                 = publisher.read_attribute(layoutxml,dataxml,"id",                       "string")
     local css_rules          = publisher.css:matches({element = 'span', class=class,id=id}) or {}
+    local role               = publisher.read_attribute(layoutxml,dataxml,"role",                     "string")
 
 
     if letterspacing == nil then
@@ -4167,8 +4184,8 @@ function commands.span( layoutxml,dataxml )
         languagecode = publisher.get_languagecode(language_name)
     end
 
+    publisher.rolecounter = publisher.rolecounter + 1
     local params = {
-        underline = underline,
         allowbreak = publisher.allowbreak,
         direction = direction,
         fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname],
@@ -4177,6 +4194,8 @@ function commands.span( layoutxml,dataxml )
         bg_padding_bottom = bg_padding_bottom,
         letterspacing = letterspacing,
         languagecode = languagecode,
+        role = publisher.get_rolenum(role),
+        rolecounter = publisher.rolecounter
     }
 
     local p = par:new(nil,"span2")
@@ -4188,6 +4207,42 @@ function commands.span( layoutxml,dataxml )
 
     return p
 end
+
+
+function commands.structureelement( layoutxml,dataxml )
+    local analyzeStructureElement
+    analyzeStructureElement = function (lx,parenttable)
+        local role = publisher.read_attribute(lx,dataxml,"role", "string")
+        local id = publisher.read_attribute(lx,dataxml,"id", "string")
+        local parent = publisher.read_attribute(lx,dataxml,"parent", "string")
+        if parent then
+            parenttable = publisher.structElements[parent]
+        end
+        local entry = {
+            role = role,
+            parent = parenttable,
+            obj = pdf.reserveobj(),
+        }
+        if not parenttable then
+            publisher.structElements[".root"] = entry
+        else
+            parenttable[#parenttable+1] = entry
+        end
+        id = id or string.sub(tostring(entry),8)
+        publisher.structElements[id] = entry
+        for i = 1, #lx do
+            local l = lx[i]
+            if type(l) == "table" then
+                local cld = analyzeStructureElement(l,entry)
+            end
+        end
+
+        return entry
+    end
+
+    analyzeStructureElement(layoutxml,nil)
+end
+
 --- Stylesheet
 --- ----------
 --- Load a CSS file or read the command's value.

@@ -208,6 +208,9 @@
                      <ref name="e_SortSequence"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_StructureElement"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Switch"></ref>
                   </optional>
                   <optional>
@@ -334,6 +337,9 @@
                   </optional>
                   <optional>
                      <ref name="e_SortSequence"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_StructureElement"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Switch"></ref>
@@ -816,6 +822,9 @@
                      <ref name="e_Span"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_StructureElement"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Sub"></ref>
                   </optional>
                   <optional>
@@ -1267,6 +1276,9 @@
                   </optional>
                   <optional>
                      <ref name="e_SortSequence"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_StructureElement"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Switch"></ref>
@@ -1953,6 +1965,9 @@
                         <ref name="e_Span"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_StructureElement"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Sub"></ref>
                      </optional>
                      <optional>
@@ -2581,6 +2596,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="description">
+                     <a:documentation>An alternative text for accessibility</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="dpiwarn">
                      <a:documentation>Warn if the image gets lower resolution than given.</a:documentation>
                   </attribute>
@@ -2607,6 +2627,11 @@
                         <value>yes</value>
                         <value>no</value>
                      </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="parent">
+                     <a:documentation>The id of the parent structure element for tagged PDF</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -2921,6 +2946,9 @@
                      <ref name="e_Stylesheet"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_StructureElement"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Switch"></ref>
                   </optional>
                   <optional>
@@ -3165,6 +3193,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Span"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_StructureElement"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Sub"></ref>
@@ -3872,6 +3903,9 @@
                      <ref name="e_Span"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_StructureElement"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Sub"></ref>
                   </optional>
                   <optional>
@@ -4127,29 +4161,6 @@
                   </attribute>
                </optional>
                <optional>
-                  <attribute name="padding-left">
-                     <a:documentation>Set the left padding, i.e. the inner distance to the allocated area.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="padding-right">
-                     <a:documentation>Set the right padding, i.e. the inner distance to the allocated area.</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="role">
-                     <a:documentation>The role for PDF/UA (accessibility, tagged PDF)</a:documentation>
-                     <choice>
-                        <value>H1</value>
-                        <a:documentation>Heading level 1</a:documentation>
-                        <value>H2</value>
-                        <a:documentation>Heading level 2</a:documentation>
-                        <value>P</value>
-                        <a:documentation>A paragraph.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
-               <optional>
                   <attribute name="language">
                      <a:documentation>Name of the language for hyphenation and rendering.</a:documentation>
                      <choice>
@@ -4253,6 +4264,59 @@
                         <a:documentation>Ukrainian</a:documentation>
                         <value>Welsh</value>
                         <a:documentation>Welsh</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-left">
+                     <a:documentation>Set the left padding, i.e. the inner distance to the allocated area.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-right">
+                     <a:documentation>Set the right padding, i.e. the inner distance to the allocated area.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="parent">
+                     <a:documentation>The id of the parent structure element for tagged PDF</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="role">
+                     <a:documentation>The role for PDF/UA (accessibility, tagged PDF)</a:documentation>
+                     <choice>
+                        <value>Art</value>
+                        <a:documentation>An article within a document.</a:documentation>
+                        <value>Caption</value>
+                        <a:documentation>A description of a table or figure.</a:documentation>
+                        <value>Div</value>
+                        <a:documentation>Div is a division of a document without semantic intent.</a:documentation>
+                        <value>Document</value>
+                        <a:documentation>The top level structure</a:documentation>
+                        <value>H1</value>
+                        <a:documentation>Heading level 1</a:documentation>
+                        <value>H2</value>
+                        <a:documentation>Heading level 2</a:documentation>
+                        <value>P</value>
+                        <a:documentation>A paragraph.</a:documentation>
+                        <value>Lbl</value>
+                        <a:documentation>A label</a:documentation>
+                        <value>LBody</value>
+                        <a:documentation>List body</a:documentation>
+                        <value>Part</value>
+                        <a:documentation>Part is intended to sub-divide a large document into smaller elements.</a:documentation>
+                        <value>Sect</value>
+                        <a:documentation>Sect identifies the sections of a document, part or article.</a:documentation>
+                        <value>Span</value>
+                        <a:documentation>Span is to demarcate content for the purpose of applying semantic and
+          other attributes.</a:documentation>
+                        <value>Table</value>
+                        <a:documentation>Table is the container for a table.</a:documentation>
+                        <value>TOC</value>
+                        <a:documentation>TOC is a container for a table of contents.</a:documentation>
+                        <value>TOCI</value>
+                        <a:documentation>TOCI is a container for a table of contents entry.</a:documentation>
                      </choice>
                   </attribute>
                </optional>
@@ -5056,6 +5120,9 @@
                      <ref name="e_SortSequence"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_StructureElement"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Switch"></ref>
                   </optional>
                   <optional>
@@ -5277,6 +5344,9 @@
                      </optional>
                      <optional>
                         <ref name="e_SortSequence"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_StructureElement"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Switch"></ref>
@@ -5648,6 +5718,44 @@
                      <a:documentation>Increase spacing between glyphs.</a:documentation>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="role">
+                     <a:documentation>The role for PDF/UA (accessibility, tagged PDF)</a:documentation>
+                     <choice>
+                        <value>Art</value>
+                        <a:documentation>An article within a document.</a:documentation>
+                        <value>Caption</value>
+                        <a:documentation>A description of a table or figure.</a:documentation>
+                        <value>Div</value>
+                        <a:documentation>Div is a division of a document without semantic intent.</a:documentation>
+                        <value>Document</value>
+                        <a:documentation>The top level structure</a:documentation>
+                        <value>H1</value>
+                        <a:documentation>Heading level 1</a:documentation>
+                        <value>H2</value>
+                        <a:documentation>Heading level 2</a:documentation>
+                        <value>P</value>
+                        <a:documentation>A paragraph.</a:documentation>
+                        <value>Lbl</value>
+                        <a:documentation>A label</a:documentation>
+                        <value>LBody</value>
+                        <a:documentation>List body</a:documentation>
+                        <value>Part</value>
+                        <a:documentation>Part is intended to sub-divide a large document into smaller elements.</a:documentation>
+                        <value>Sect</value>
+                        <a:documentation>Sect identifies the sections of a document, part or article.</a:documentation>
+                        <value>Span</value>
+                        <a:documentation>Span is to demarcate content for the purpose of applying semantic and
+          other attributes.</a:documentation>
+                        <value>Table</value>
+                        <a:documentation>Table is the container for a table.</a:documentation>
+                        <value>TOC</value>
+                        <a:documentation>TOC is a container for a table of contents.</a:documentation>
+                        <value>TOCI</value>
+                        <a:documentation>TOCI is a container for a table of contents entry.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
@@ -5712,6 +5820,67 @@
                <optional>
                   <ref name="e_Otherwise"></ref>
                </optional>
+            </group>
+            <ref name="foreign-nodes"></ref>
+         </interleave>
+      </element>
+   </define>
+   <define name="e_StructureElement">
+      <element name="StructureElement">
+         <a:documentation></a:documentation>
+         <interleave>
+            <group>
+               <optional>
+                  <attribute name="id">
+                     <a:documentation></a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="parent">
+                     <a:documentation></a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="role">
+                     <a:documentation></a:documentation>
+                     <choice>
+                        <value>Art</value>
+                        <a:documentation>An article within a document.</a:documentation>
+                        <value>Caption</value>
+                        <a:documentation>A description of a table or figure.</a:documentation>
+                        <value>Div</value>
+                        <a:documentation>Div is a division of a document without semantic intent.</a:documentation>
+                        <value>Document</value>
+                        <a:documentation>The top level structure</a:documentation>
+                        <value>H1</value>
+                        <a:documentation>Heading level 1</a:documentation>
+                        <value>H2</value>
+                        <a:documentation>Heading level 2</a:documentation>
+                        <value>P</value>
+                        <a:documentation>A paragraph.</a:documentation>
+                        <value>Lbl</value>
+                        <a:documentation>A label</a:documentation>
+                        <value>LBody</value>
+                        <a:documentation>List body</a:documentation>
+                        <value>Part</value>
+                        <a:documentation>Part is intended to sub-divide a large document into smaller elements.</a:documentation>
+                        <value>Sect</value>
+                        <a:documentation>Sect identifies the sections of a document, part or article.</a:documentation>
+                        <value>Span</value>
+                        <a:documentation>Span is to demarcate content for the purpose of applying semantic and
+          other attributes.</a:documentation>
+                        <value>Table</value>
+                        <a:documentation>Table is the container for a table.</a:documentation>
+                        <value>TOC</value>
+                        <a:documentation>TOC is a container for a table of contents.</a:documentation>
+                        <value>TOCI</value>
+                        <a:documentation>TOCI is a container for a table of contents entry.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <zeroOrMore>
+                  <ref name="e_StructureElement"></ref>
+               </zeroOrMore>
             </group>
             <ref name="foreign-nodes"></ref>
          </interleave>
@@ -6944,6 +7113,9 @@
                         <ref name="e_Span"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_StructureElement"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Sub"></ref>
                      </optional>
                      <optional>
@@ -7258,6 +7430,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Span"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_StructureElement"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Sub"></ref>

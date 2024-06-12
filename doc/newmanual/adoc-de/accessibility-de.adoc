@@ -1,0 +1,108 @@
+[[ch-accessibility]]
+= Barrierefreie PDFs / tagged PDF
+
+TIP: Die Möglichkeit, Barrierefreie PDFs zu erzeugen, ist noch im Aufbau. D.h. die Objekte, die mit Tags versehen werden können, sind beschränkt. Ebenso die Rollen (Tagnamen), sowie dieser Abschnitt des Handbuchs.
+
+== Was ist tagged PDF?
+
+Tagged PDF ist eine Erweiterung der PDF Datei um eine logische Struktur der Inhalte. Mit den Tags wird bestimmt, was das auszugebende Objekt für eine Rolle hat, z.B. Überschrift der Ebene 1, ein Absatz oder eine Abbildung. Das dient hauptsächlich dazu, barrierefreie PDFs zu erzeugen, also PDFs die für Screenreader oder ähnliche Ausgabegeräte optimiert sind.
+
+Für barrierefreie PDFs muss man nicht nur die technische Seite beachten (dafür ist der speedata Publisher da), sondern auch die logische Struktur sinnvoll erzeugen. Beispielsweise müssen Bilder mit einem alternativen Text ausgegeben werden, sonst ist die Nutzung eingeschränkt.
+
+== Beispiel
+
+Im folgenden Beispiel wird das Dokument in einen Abschnitt (Sect) unterteilt und in diesem Abschnitt wird eine Überschrift (H1) und ein Bild (Figure) ausgegeben.
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <PDFOptions format="PDF/UA" />
+
+  <StructureElement role="Document" id="doc">
+    <StructureElement role="Sect" id="sect"/>
+  </StructureElement>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Bookmark level="1" select="'My image collection'"/>
+        <Paragraph role="H1" parent="sect">
+          <Value>My image collection</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+
+    <PlaceObject>
+      <Image parent="sect"
+             description="an ocean"
+             file="ocean.pdf"
+             width="4cm" />
+    </PlaceObject>
+  </Record>
+</Layout>
+----------------
+
+
+== Hierarchische Struktur
+
+Also Voreinstellung ist die Rolle »Document« definiert mit der ID `doc`. Dies entspricht der folgenden Struktur:
+
+[source, xml]
+----------------
+<StructureElement role="Document" id="doc" />
+----------------
+
+Um weitergehende Strukturen zu definieren gibt es zwei Möglichkeiten. Entweder werden diese geschachtelt definiert (wie oben im Beispiel)
+
+[source, xml]
+----------------
+<StructureElement role="Document">
+	<StructureElement role="Art">
+		<StructureElement role="Sect" id="sect1a1"/>
+		<StructureElement role="Sect" id="sect2a1"/>
+	</StructureElement>
+	<StructureElement role="Art">
+		<StructureElement role="Sect" id="sect1a2"/>
+		<StructureElement role="Sect" id="sect2a2"/>
+	</StructureElement>
+</StructureElement>
+----------------
+
+oder man nutzt das parent-Attribut:
+
+[source, xml]
+----------------
+<StructureElement role="Document" id="doc" />
+<StructureElement role="Art" id="art1" parent="doc" />
+<StructureElement role="Art" id="art2" parent="doc" />
+<StructureElement role="Sect" id="sect1a1" parent="art1"/>
+<StructureElement role="Sect" id="sect2a1" parent="art1"/>
+<StructureElement role="Sect" id="sect1a2" parent="art2"/>
+<StructureElement role="Sect" id="sect2a2" parent="art2"/>
+----------------
+
+Das erlaubt die dynamische Strukturierung des Dokuments aufgrund der Daten.
+
+Das Attribut `id` ist notwendig, um bei Absätzen (Paragraph) und Bildern die Elternstruktur vorzugeben. Im Beispiel oben werden beide Elemente im Abschnitt `Sect` ausgegeben.
+
+
+
+== Rollen (Tagnamen)
+
+Folgende Rollennamen (Tags) sind im speedata Publisher definiert. Weitere werden auf Wunsch eingebaut:
+
+Art, Div, Document, Figure, H1, H2, H3, H4, H5, H6, Lbl, P, Part, Sect, Span, TOC, TOCI
+
+== Überprüfen des Dokuments
+
+Um die Barrierefreiheit zu überprüfen, bieten sich folgende Programme an:
+
+* https://pac.pdf-accessibility.org/de[PAC (PDF accessibility checker)]
+* Adobe Acrobat
+* https://verapdf.org[Vera PDF]
+
+
+
+// EOF
