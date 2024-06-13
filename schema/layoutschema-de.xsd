@@ -2250,6 +2250,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Sanskrit">
+                  <xs:annotation>
+                    <xs:documentation>Sanskrit (auch transliteritert)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian">
                   <xs:annotation>
                     <xs:documentation>Serbisch</xs:documentation>
@@ -3786,6 +3795,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Sanskrit">
+                  <xs:annotation>
+                    <xs:documentation>Sanskrit (auch transliteritert)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian">
                   <xs:annotation>
                     <xs:documentation>Serbisch</xs:documentation>
@@ -4640,6 +4658,15 @@
                 <xs:enumeration value="Russian">
                   <xs:annotation>
                     <xs:documentation>Russisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Sanskrit">
+                  <xs:annotation>
+                    <xs:documentation>Sanskrit (auch transliteritert)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -6516,6 +6543,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Sanskrit">
+                  <xs:annotation>
+                    <xs:documentation>Sanskrit (auch transliteritert)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Serbian">
                   <xs:annotation>
                     <xs:documentation>Serbisch</xs:documentation>
@@ -6723,7 +6759,7 @@
   </xs:element>
   <xs:element name="StructureElement">
     <xs:annotation>
-      <xs:documentation/>
+      <xs:documentation>Erzeugt eine hierarchische Struktur für tagged-PDF</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
@@ -6731,17 +6767,17 @@
       </xs:sequence>
       <xs:attribute name="id">
         <xs:annotation>
-          <xs:documentation/>
+          <xs:documentation>Eindeutige ID für dieses Strukturelement. Benutzt in in Paragraph und Image.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="parent">
         <xs:annotation>
-          <xs:documentation/>
+          <xs:documentation>ID für die Elternstruktur.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="role">
+      <xs:attribute name="role" use="required">
         <xs:annotation>
-          <xs:documentation/>
+          <xs:documentation>Tagname für das Element.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -7750,6 +7786,15 @@
                 <xs:enumeration value="Russian">
                   <xs:annotation>
                     <xs:documentation>Russisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Sanskrit">
+                  <xs:annotation>
+                    <xs:documentation>Sanskrit (auch transliteritert)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>

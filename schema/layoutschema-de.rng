@@ -2357,6 +2357,8 @@
                         <a:documentation>Rumänisch</a:documentation>
                         <value>Russian</value>
                         <a:documentation>Russisch</a:documentation>
+                        <value>Sanskrit</value>
+                        <a:documentation>Sanskrit (auch transliteritert)</a:documentation>
                         <value>Serbian</value>
                         <a:documentation>Serbisch</a:documentation>
                         <value>Serbian (cyrillic)</value>
@@ -3659,6 +3661,8 @@
                   <a:documentation>Rumänisch</a:documentation>
                   <value>Russian</value>
                   <a:documentation>Russisch</a:documentation>
+                  <value>Sanskrit</value>
+                  <a:documentation>Sanskrit (auch transliteritert)</a:documentation>
                   <value>Serbian</value>
                   <a:documentation>Serbisch</a:documentation>
                   <value>Serbian (cyrillic)</value>
@@ -4246,6 +4250,8 @@
                         <a:documentation>Rumänisch</a:documentation>
                         <value>Russian</value>
                         <a:documentation>Russisch</a:documentation>
+                        <value>Sanskrit</value>
+                        <a:documentation>Sanskrit (auch transliteritert)</a:documentation>
                         <value>Serbian</value>
                         <a:documentation>Serbisch</a:documentation>
                         <value>Serbian (cyrillic)</value>
@@ -5692,6 +5698,8 @@
                         <a:documentation>Rumänisch</a:documentation>
                         <value>Russian</value>
                         <a:documentation>Russisch</a:documentation>
+                        <value>Sanskrit</value>
+                        <a:documentation>Sanskrit (auch transliteritert)</a:documentation>
                         <value>Serbian</value>
                         <a:documentation>Serbisch</a:documentation>
                         <value>Serbian (cyrillic)</value>
@@ -5827,57 +5835,55 @@
    </define>
    <define name="e_StructureElement">
       <element name="StructureElement">
-         <a:documentation></a:documentation>
+         <a:documentation>Erzeugt eine hierarchische Struktur für tagged-PDF</a:documentation>
          <interleave>
             <group>
                <optional>
                   <attribute name="id">
-                     <a:documentation></a:documentation>
+                     <a:documentation>Eindeutige ID für dieses Strukturelement. Benutzt in in Paragraph und Image.</a:documentation>
                   </attribute>
                </optional>
                <optional>
                   <attribute name="parent">
-                     <a:documentation></a:documentation>
+                     <a:documentation>ID für die Elternstruktur.</a:documentation>
                   </attribute>
                </optional>
-               <optional>
-                  <attribute name="role">
-                     <a:documentation></a:documentation>
-                     <choice>
-                        <value>Art</value>
-                        <a:documentation>Ein Artikel in einem Dokument.</a:documentation>
-                        <value>Caption</value>
-                        <a:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</a:documentation>
-                        <value>Div</value>
-                        <a:documentation>Div unterteilt ein Dokument ohne semantische Bedeutung.</a:documentation>
-                        <value>Document</value>
-                        <a:documentation>Das Top-Level Element</a:documentation>
-                        <value>H1</value>
-                        <a:documentation>Überschrift Ebene 1</a:documentation>
-                        <value>H2</value>
-                        <a:documentation>Überschrift Ebene 2</a:documentation>
-                        <value>P</value>
-                        <a:documentation>Ein Absatz</a:documentation>
-                        <value>Lbl</value>
-                        <a:documentation>Ein Label</a:documentation>
-                        <value>LBody</value>
-                        <a:documentation>Listen Inhalt</a:documentation>
-                        <value>Part</value>
-                        <a:documentation>Part ist dafür da, um große Dokumente in kleinere Elemente zu unterteilen.</a:documentation>
-                        <value>Sect</value>
-                        <a:documentation>Sect identifiziert einen Abschnitt eines Dokuments, Teils oder Artikels.</a:documentation>
-                        <value>Span</value>
-                        <a:documentation>Span dient der Abgrenzung von Inhalten zum Zwecke der Anwendung semantischer und
+               <attribute name="role">
+                  <a:documentation>Tagname für das Element.</a:documentation>
+                  <choice>
+                     <value>Art</value>
+                     <a:documentation>Ein Artikel in einem Dokument.</a:documentation>
+                     <value>Caption</value>
+                     <a:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</a:documentation>
+                     <value>Div</value>
+                     <a:documentation>Div unterteilt ein Dokument ohne semantische Bedeutung.</a:documentation>
+                     <value>Document</value>
+                     <a:documentation>Das Top-Level Element</a:documentation>
+                     <value>H1</value>
+                     <a:documentation>Überschrift Ebene 1</a:documentation>
+                     <value>H2</value>
+                     <a:documentation>Überschrift Ebene 2</a:documentation>
+                     <value>P</value>
+                     <a:documentation>Ein Absatz</a:documentation>
+                     <value>Lbl</value>
+                     <a:documentation>Ein Label</a:documentation>
+                     <value>LBody</value>
+                     <a:documentation>Listen Inhalt</a:documentation>
+                     <value>Part</value>
+                     <a:documentation>Part ist dafür da, um große Dokumente in kleinere Elemente zu unterteilen.</a:documentation>
+                     <value>Sect</value>
+                     <a:documentation>Sect identifiziert einen Abschnitt eines Dokuments, Teils oder Artikels.</a:documentation>
+                     <value>Span</value>
+                     <a:documentation>Span dient der Abgrenzung von Inhalten zum Zwecke der Anwendung semantischer und
           andere Attribute.</a:documentation>
-                        <value>Table</value>
-                        <a:documentation>Table beinhaltet eine Tabelle.</a:documentation>
-                        <value>TOC</value>
-                        <a:documentation>TOC beinhaltet ein Inhaltsverzeichnis.</a:documentation>
-                        <value>TOCI</value>
-                        <a:documentation>TOCI beinhaltet einen Eintrag eines Inhaltsverzeichnis.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
+                     <value>Table</value>
+                     <a:documentation>Table beinhaltet eine Tabelle.</a:documentation>
+                     <value>TOC</value>
+                     <a:documentation>TOC beinhaltet ein Inhaltsverzeichnis.</a:documentation>
+                     <value>TOCI</value>
+                     <a:documentation>TOCI beinhaltet einen Eintrag eines Inhaltsverzeichnis.</a:documentation>
+                  </choice>
+               </attribute>
                <zeroOrMore>
                   <ref name="e_StructureElement"></ref>
                </zeroOrMore>
@@ -6476,6 +6482,8 @@
                         <a:documentation>Rumänisch</a:documentation>
                         <value>Russian</value>
                         <a:documentation>Russisch</a:documentation>
+                        <value>Sanskrit</value>
+                        <a:documentation>Sanskrit (auch transliteritert)</a:documentation>
                         <value>Serbian</value>
                         <a:documentation>Serbisch</a:documentation>
                         <value>Serbian (cyrillic)</value>

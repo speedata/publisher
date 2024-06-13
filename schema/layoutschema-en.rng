@@ -2357,6 +2357,8 @@
                         <a:documentation>Romanian</a:documentation>
                         <value>Russian</value>
                         <a:documentation>Russian</a:documentation>
+                        <value>Sanskrit</value>
+                        <a:documentation>Sanskrit (also transliterated)</a:documentation>
                         <value>Serbian</value>
                         <a:documentation>Serbian</a:documentation>
                         <value>Serbian (cyrillic)</value>
@@ -3659,6 +3661,8 @@
                   <a:documentation>Romanian</a:documentation>
                   <value>Russian</value>
                   <a:documentation>Russian</a:documentation>
+                  <value>Sanskrit</value>
+                  <a:documentation>Sanskrit (also transliterated)</a:documentation>
                   <value>Serbian</value>
                   <a:documentation>Serbian</a:documentation>
                   <value>Serbian (cyrillic)</value>
@@ -4246,6 +4250,8 @@
                         <a:documentation>Romanian</a:documentation>
                         <value>Russian</value>
                         <a:documentation>Russian</a:documentation>
+                        <value>Sanskrit</value>
+                        <a:documentation>Sanskrit (also transliterated)</a:documentation>
                         <value>Serbian</value>
                         <a:documentation>Serbian</a:documentation>
                         <value>Serbian (cyrillic)</value>
@@ -5692,6 +5698,8 @@
                         <a:documentation>Romanian</a:documentation>
                         <value>Russian</value>
                         <a:documentation>Russian</a:documentation>
+                        <value>Sanskrit</value>
+                        <a:documentation>Sanskrit (also transliterated)</a:documentation>
                         <value>Serbian</value>
                         <a:documentation>Serbian</a:documentation>
                         <value>Serbian (cyrillic)</value>
@@ -5827,57 +5835,55 @@
    </define>
    <define name="e_StructureElement">
       <element name="StructureElement">
-         <a:documentation></a:documentation>
+         <a:documentation>Create a structure hierarchy for tagged PDF.</a:documentation>
          <interleave>
             <group>
                <optional>
                   <attribute name="id">
-                     <a:documentation></a:documentation>
+                     <a:documentation>A unique id for this structure element. Used in Paragraph and Image.</a:documentation>
                   </attribute>
                </optional>
                <optional>
                   <attribute name="parent">
-                     <a:documentation></a:documentation>
+                     <a:documentation>Id of the parent structure.</a:documentation>
                   </attribute>
                </optional>
-               <optional>
-                  <attribute name="role">
-                     <a:documentation></a:documentation>
-                     <choice>
-                        <value>Art</value>
-                        <a:documentation>An article within a document.</a:documentation>
-                        <value>Caption</value>
-                        <a:documentation>A description of a table or figure.</a:documentation>
-                        <value>Div</value>
-                        <a:documentation>Div is a division of a document without semantic intent.</a:documentation>
-                        <value>Document</value>
-                        <a:documentation>The top level structure</a:documentation>
-                        <value>H1</value>
-                        <a:documentation>Heading level 1</a:documentation>
-                        <value>H2</value>
-                        <a:documentation>Heading level 2</a:documentation>
-                        <value>P</value>
-                        <a:documentation>A paragraph.</a:documentation>
-                        <value>Lbl</value>
-                        <a:documentation>A label</a:documentation>
-                        <value>LBody</value>
-                        <a:documentation>List body</a:documentation>
-                        <value>Part</value>
-                        <a:documentation>Part is intended to sub-divide a large document into smaller elements.</a:documentation>
-                        <value>Sect</value>
-                        <a:documentation>Sect identifies the sections of a document, part or article.</a:documentation>
-                        <value>Span</value>
-                        <a:documentation>Span is to demarcate content for the purpose of applying semantic and
+               <attribute name="role">
+                  <a:documentation>Tag name of the element.</a:documentation>
+                  <choice>
+                     <value>Art</value>
+                     <a:documentation>An article within a document.</a:documentation>
+                     <value>Caption</value>
+                     <a:documentation>A description of a table or figure.</a:documentation>
+                     <value>Div</value>
+                     <a:documentation>Div is a division of a document without semantic intent.</a:documentation>
+                     <value>Document</value>
+                     <a:documentation>The top level structure</a:documentation>
+                     <value>H1</value>
+                     <a:documentation>Heading level 1</a:documentation>
+                     <value>H2</value>
+                     <a:documentation>Heading level 2</a:documentation>
+                     <value>P</value>
+                     <a:documentation>A paragraph.</a:documentation>
+                     <value>Lbl</value>
+                     <a:documentation>A label</a:documentation>
+                     <value>LBody</value>
+                     <a:documentation>List body</a:documentation>
+                     <value>Part</value>
+                     <a:documentation>Part is intended to sub-divide a large document into smaller elements.</a:documentation>
+                     <value>Sect</value>
+                     <a:documentation>Sect identifies the sections of a document, part or article.</a:documentation>
+                     <value>Span</value>
+                     <a:documentation>Span is to demarcate content for the purpose of applying semantic and
           other attributes.</a:documentation>
-                        <value>Table</value>
-                        <a:documentation>Table is the container for a table.</a:documentation>
-                        <value>TOC</value>
-                        <a:documentation>TOC is a container for a table of contents.</a:documentation>
-                        <value>TOCI</value>
-                        <a:documentation>TOCI is a container for a table of contents entry.</a:documentation>
-                     </choice>
-                  </attribute>
-               </optional>
+                     <value>Table</value>
+                     <a:documentation>Table is the container for a table.</a:documentation>
+                     <value>TOC</value>
+                     <a:documentation>TOC is a container for a table of contents.</a:documentation>
+                     <value>TOCI</value>
+                     <a:documentation>TOCI is a container for a table of contents entry.</a:documentation>
+                  </choice>
+               </attribute>
                <zeroOrMore>
                   <ref name="e_StructureElement"></ref>
                </zeroOrMore>
@@ -6476,6 +6482,8 @@
                         <a:documentation>Romanian</a:documentation>
                         <value>Russian</value>
                         <a:documentation>Russian</a:documentation>
+                        <value>Sanskrit</value>
+                        <a:documentation>Sanskrit (also transliterated)</a:documentation>
                         <value>Serbian</value>
                         <a:documentation>Serbian</a:documentation>
                         <value>Serbian (cyrillic)</value>
