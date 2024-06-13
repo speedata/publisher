@@ -83,7 +83,7 @@ function commands.a( layoutxml,dataxml )
         local ch = #publisher.hyperlinks
         for _,j in ipairs(tab) do
             local c = publisher.element_contents(j)
-            p:append(c,{hyperlink = ch , allowbreak=publisher.allowbreak})
+            p:append(c,{hyperlink = ch})
         end
 
         return p
@@ -339,7 +339,7 @@ function commands.bold( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
-        p:append(c,{bold = 1, allowbreak=publisher.allowbreak})
+        p:append(c,{bold = 1})
     end
 
     return p
@@ -598,7 +598,7 @@ function commands.color( layoutxml, dataxml )
 
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
-        p:append(c,{color = colorindex, allowbreak=publisher.allowbreak})
+        p:append(c,{color = colorindex})
     end
 
     return p
@@ -1032,7 +1032,7 @@ function commands.fontface( layoutxml,dataxml )
         local tab = publisher.dispatch(layoutxml,dataxml)
         for _,j in ipairs(tab) do
             local c = publisher.element_contents(j)
-            p:append(c,{fontfamily = familynumber, allowbreak=publisher.allowbreak})
+            p:append(c,{fontfamily = familynumber})
         end
 
         return p
@@ -1908,7 +1908,7 @@ function commands.italic( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
-        p:append(c,{italic = 1, allowbreak=publisher.allowbreak})
+        p:append(c,{italic = 1})
     end
     return p
 end
@@ -1921,7 +1921,7 @@ function commands.li(layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
-        p:append(c,{allowbreak=publisher.allowbreak,padding_left = 0})
+        p:append(c,{padding_left = 0})
     end
     return p
 end
@@ -4263,7 +4263,7 @@ function commands.sub( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
-        p:append(c,{verticalalign = "sub", fontsize = "small", allowbreak=publisher.allowbreak})
+        p:append(c,{verticalalign = "sub", fontsize = "small"})
     end
     return p
 end
@@ -4276,7 +4276,7 @@ function commands.sup( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
-        p:append(c,{verticalalign = "super", fontsize = "small", allowbreak=publisher.allowbreak})
+        p:append(c,{verticalalign = "super", fontsize = "small"})
     end
     return p
 end
@@ -5164,7 +5164,7 @@ function commands.underline( layoutxml,dataxml )
 
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
-        p:append(c,{textdecorationline = "underline", textdecorationstyle = tds, allowbreak=publisher.allowbreak})
+        p:append(c,{textdecorationline = "underline", textdecorationstyle = tds})
     end
     return p
 end
