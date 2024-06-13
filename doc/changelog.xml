@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.8" date="2024-06-13">
+        <en>Add Sanskrit hyphenation patterns.</en>
+        <de>Füge Sanskrit Trennmuster hinzu.</de>
+    </entry>
+    <entry version="4.19.8" date="2024-06-13">
+        <en>The PDF version is now 1.7 as the default.</en>
+        <de>Die PDF-Version ist nun 1.7 als Voreinstellung.</de>
+    </entry>
+    <entry version="4.19.8" date="2024-06-13">
+        <en>Better support for tagged PDF.</en>
+        <de>Bessere Unterstützung für barrierefreies PDF.</de>
+    </entry>
     <entry version="4.19.7" date="2024-06-10">
         <en>Honor jpeg orientation in includes images (#584).</en>
         <de>Beachte jpeg Orientierung in eingebundenen Bildern (#584).</de>
