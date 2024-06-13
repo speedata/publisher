@@ -1614,6 +1614,8 @@ function commands.image( layoutxml,dataxml )
             if height == publisher.options.pageheight then
                 tab.padding_bottom = (tab.padding_bottom or 0) - ( publisher.options.trim or 0 )
             end
+        elseif publisher.options.pageheight - row - height < 100 then
+            tab.padding_bottom = (tab.padding_bottom or 0) - ( publisher.options.trim or 0 )
         end
 
     end
