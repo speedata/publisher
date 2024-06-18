@@ -5904,14 +5904,14 @@ function fix_justification(nodelist,alignment,parent,direction)
     return nodelist
 end
 
-local function check_if_a_line_exeeds(nodelist,wd,glue_set,glue_sign,glue_order)
+local function check_if_a_line_exeeds(nodelist,wd)
     local head = nodelist
     while head do
         if head.id == vlist_node then
-            return check_if_a_line_exeeds(head.head,wd,glue_set,glue_sign,glue_order)
+            return check_if_a_line_exeeds(head.head,wd)
         elseif head.id == hlist_node then
-            local width = node.dimensions(glue_set,glue_sign,glue_order,head.head)
-            if width > wd then
+            local width = node.dimensions(head.glue_set,head.glue_sign,head.glue_order,head.head)
+            if width > wd + 400 then
                 return true
             end
         end
@@ -5958,7 +5958,7 @@ function do_linebreak( nodelist,hsize,parameters )
     local c = 0
     while true do
         j = tex.linebreak(node.copy_list(nodelist),default_parameters)
-        if not check_if_a_line_exeeds(j,hsize,j.glue_set, j.glue_sign,j.glue_order) then
+        if not check_if_a_line_exeeds(j,hsize) then
             break
         end
         default_parameters.emergencystretch = default_parameters.emergencystretch + 0.1 * hsize
