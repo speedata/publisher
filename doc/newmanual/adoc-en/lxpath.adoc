@@ -171,6 +171,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `sd:lastmark(pagenumber)`::
    The first marker of the given page number. Useful for headings in dictionaries where the first and the last entry of a page is given.
 
+`sd:length(<what>[,<unit>])`::
+  Get the length of _what_ in number of units (but without the unit). For example `sd:length('_bleed','mm')` returns `3` if the bleed value is set to 3mm. This function initializes a page. The unit defaults to 'mm'. *what* can be `_bleed`, `_pagewidth` or `_pageheight` (Since version 4.19.10.)
+
 `sd:loremipsum()`::
   Same as `sd:dummytext()`.
 

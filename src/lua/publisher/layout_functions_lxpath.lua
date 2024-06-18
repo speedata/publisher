@@ -827,6 +827,45 @@ local function pagewidth(dataxml, arg)
     end
 end
 
+local function fnLength(dataxml, arg)
+    publisher.setup_page(nil, "layout_functions#length", dataxml)
+    local value = xpath.string_value(arg[1])
+    local unit = 'mm'
+    if #arg > 1 then
+        unit = xpath.string_value(arg[2]) or "mm"
+    end
+    if unit then
+        local width = tex.sp(dataxml.vars[value])
+
+        local ret
+        if unit == "cm" then
+            ret = width / publisher.tenmm_sp
+        elseif unit == "mm" then
+            ret = width / publisher.onemm_sp
+        elseif unit == "in" then
+            ret = width / publisher.onein_sp
+        elseif unit == "sp" then
+            ret = width
+        elseif unit == "pc" then
+            ret = width / publisher.onepc_sp
+        elseif unit == "pt" then
+            ret = width / publisher.onept_sp
+        elseif unit == "pp" then
+            ret = width / publisher.onepp_sp
+        elseif unit == "dd" then
+            ret = width / publisher.onedd_sp
+        elseif unit == "cc" then
+            ret = width / publisher.onecc_sp
+        else
+            err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
+        end
+        return { math.round(ret, 0) }, nil
+    end
+    return {}, "unsupported unit, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'"
+end
+
+
+
 local function fnVisiblePagenumber(dataxml, arg)
     local firstarg = xpath.string_value(arg[1])
     local vpn = visiblepagenumber(firstarg)
@@ -885,6 +924,7 @@ local funcs = {
     { "imagewidth",          sdns, imagewidth,           1, 4 },
     { "keep-alternating",    sdns, keepalternating,      1, -1 },
     { "lastmark",            sdns, lastmark,             1, 1 },
+    { "length",              sdns, fnLength,             1, 2 },
     { "loremipsum",          sdns, loremipsum,           0, 1 },
     { "markdown",            sdns, markdown,             1, 1 },
     { "md5",                 sdns, md5,                  1, -1 },

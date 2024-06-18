@@ -7,7 +7,7 @@ Diese Variablen beginnen immer mit einem Unterstrich, daher sollten eigene Varia
 Sonst könnten Kollisionen bei der Namensvergabe entstehen.
 
 `_bleed`::
-  Der Wert der Beschnittzugabe.
+  Der Wert der Beschnittzugabe (z.B. `0mm` oder `3mm`). Bitte `sd:length('_bleed')` benutzen, anstatt auf die Variable direkt zuzugreifen.
 
 `_jobname`::
   Der Wert der auf der Kommandozeile angegeben ist.

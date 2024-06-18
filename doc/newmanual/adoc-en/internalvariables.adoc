@@ -7,7 +7,7 @@ These variables always begin with an underscore, so your own variables should no
 Otherwise there could be collisions when assigning names.
 
 `_bleed`::
-  The value of the bleed.
+  The value of the bleed (for example `0mm` or `3mm`). Please use `sd:length('_bleed')` instead of directly accessing the variable.
 
 `_jobname`::
   The value specified on the command line.

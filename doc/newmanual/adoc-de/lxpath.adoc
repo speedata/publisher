@@ -172,6 +172,9 @@ Beispiel: die Funktion `sd:current-row()`  kann auch mit Parameter `sd:current-r
 `sd:lastmark(<pagenumber>)`::
    Der letzte Marker der angegebenen Seitenzahl. Hilfreich z.B. in Wörterbüchern, wo der erste und der letzte Begriff einer Seite ausgegeben werden.
 
+`sd:length(was>[,<einheit>])`::
+  Gibt die Länge von _was_ in Einheiten an (aber ohne die Einheit). Zum Beispiel `sd:length('_bleed','mm')` gibt den Wert `3`  zurick, falls der Anschnitt (bleed) auf 3mm gesetzt ist. Diese Funktion initialisiert eine Seite. Die Einheit ist auf 'mm' voreingestellt. *was*  kann eines der Werte von `_bleed`, `_pagewidth` oder `_pageheight` (Seit Version 4.19.10.)
+
 `sd:loremipsum()`::
    Alias für `sd:dummytext()`
 
