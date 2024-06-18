@@ -5956,9 +5956,11 @@ function do_linebreak( nodelist,hsize,parameters )
     -- longer than expected
     local j
     local c = 0
+    local line_exceeds_right_margin = true
     while true do
         j = tex.linebreak(node.copy_list(nodelist),default_parameters)
         if not check_if_a_line_exeeds(j,hsize) then
+            line_exceeds_right_margin = false
             break
         end
         default_parameters.emergencystretch = default_parameters.emergencystretch + 0.1 * hsize
@@ -5967,6 +5969,14 @@ function do_linebreak( nodelist,hsize,parameters )
             break
         end
         node.flush_list(j)
+    end
+
+    if line_exceeds_right_margin and options.overfulllineerror ~= nil then
+        if options.overfulllineerror then
+            splib.error("Overfull line found","page",current_pagenumber,lineinfo())
+        else
+            splib.log("warn","Overfull line found","page",current_pagenumber,lineinfo())
+        end
     end
     node.flush_list(nodelist)
 

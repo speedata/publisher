@@ -3896,6 +3896,30 @@
           <xs:documentation>Set the seed for the random number generator (a positive integer).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="overfull-line">
+        <xs:annotation>
+          <xs:documentation>Raise a warning or an error if a text line is too wide for a text block.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="warning">
+              <xs:annotation>
+                <xs:documentation>Show a warning</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="error">
+              <xs:annotation>
+                <xs:documentation>Raise an error</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="ignore">
+              <xs:annotation>
+                <xs:documentation>Ignore this case (default).</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="resetmarks">
         <xs:annotation>
           <xs:documentation>Yes: ignore the marks file from previous run.</xs:documentation>

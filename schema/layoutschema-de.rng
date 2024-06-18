@@ -3695,6 +3695,19 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="overfull-line">
+               <a:documentation>Gib eine Warnung oder einen Fehler aus, wenn eine Textzeile zu lang ist.</a:documentation>
+               <choice>
+                  <value>warning</value>
+                  <a:documentation>Eine Warnung ausgeben</a:documentation>
+                  <value>error</value>
+                  <a:documentation>Fehler ausgeben</a:documentation>
+                  <value>ignore</value>
+                  <a:documentation>Ignoriere diesen Fall.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="resetmarks">
                <a:documentation>Wenn &#39;yes&#39;, werden die Marker des letzten Laufs ignoriert.</a:documentation>
                <choice>

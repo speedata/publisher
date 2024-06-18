@@ -2500,7 +2500,7 @@ end
 
 --- Options
 --- -------
---- This is a top-level element in the layout definition file. It saves the options such as `show-grid`.
+--- This is a top-level element in the layout definition file. It saves the options such as `trim` and `mainlanguage`.
 function commands.options( layoutxml,dataxml )
     -- deprecated:
     publisher.options.showhyphenation    = publisher.read_attribute(layoutxml,dataxml,"show-hyphenation","boolean")
@@ -2540,6 +2540,7 @@ function commands.options( layoutxml,dataxml )
     local randomseed                      = publisher.read_attribute(layoutxml,dataxml,"randomseed",  "number")
     local reportmissingglyphs             = publisher.read_attribute(layoutxml,dataxml,"reportmissingglyphs", "string")
     publisher.options.interaction         = publisher.read_attribute(layoutxml,dataxml,"interaction", "boolean", publisher.options.interaction)
+    local overfullline                    = publisher.read_attribute(layoutxml,dataxml,"overfull-line", "string")
     local imagenotfound                   = publisher.read_attribute(layoutxml,dataxml,"imagenotfound", "string")
     local mainlanguage                    = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","")
     local default_area                    = publisher.read_attribute(layoutxml,dataxml,"defaultarea","string")
@@ -2554,6 +2555,12 @@ function commands.options( layoutxml,dataxml )
 
     if imagenotfound == "warning" or imagenotfound == "error" then
         publisher.options.imagenotfounderror = (imagenotfound == "error")
+    end
+
+    if overfullline == "warning" or overfullline == "error"  then
+        publisher.options.overfulllineerror = (overfullline == "error")
+    elseif overfullline == "ignore" then
+        publisher.options.overfulllineerror = nil
     end
 
     if mainlanguage ~= "" then

@@ -3896,6 +3896,30 @@
           <xs:documentation>Setze die Startzahl (seed) für den Zufallszahlengenerator (eine positive Ganzzahl).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="overfull-line">
+        <xs:annotation>
+          <xs:documentation>Gib eine Warnung oder einen Fehler aus, wenn eine Textzeile zu lang ist.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="warning">
+              <xs:annotation>
+                <xs:documentation>Eine Warnung ausgeben</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="error">
+              <xs:annotation>
+                <xs:documentation>Fehler ausgeben</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="ignore">
+              <xs:annotation>
+                <xs:documentation>Ignoriere diesen Fall.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="resetmarks">
         <xs:annotation>
           <xs:documentation>Wenn 'yes', werden die Marker des letzten Laufs ignoriert.</xs:documentation>

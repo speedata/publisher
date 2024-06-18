@@ -3695,6 +3695,19 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="overfull-line">
+               <a:documentation>Raise a warning or an error if a text line is too wide for a text block.</a:documentation>
+               <choice>
+                  <value>warning</value>
+                  <a:documentation>Show a warning</a:documentation>
+                  <value>error</value>
+                  <a:documentation>Raise an error</a:documentation>
+                  <value>ignore</value>
+                  <a:documentation>Ignore this case (default).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="resetmarks">
                <a:documentation>Yes: ignore the marks file from previous run.</a:documentation>
                <choice>

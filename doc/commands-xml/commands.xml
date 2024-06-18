@@ -6288,6 +6288,38 @@
         <para>Setze die Startzahl (seed) für den Zufallszahlengenerator (eine positive Ganzzahl).</para>
       </description>
     </attribute>
+    <attribute en="overfull-line" optional="yes" since="4.19.10">
+      <description xml:lang="en">
+        <para>Raise a warning or an error if a text line is too wide for a text block.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Gib eine Warnung oder einen Fehler aus, wenn eine Textzeile zu lang ist.</para>
+      </description>
+      <choice en="warning">
+        <description xml:lang="en">
+          <para>Show a warning</para>
+        </description>
+        <description xml:lang="de">
+          <para>Eine Warnung ausgeben</para>
+        </description>
+      </choice>
+      <choice en="error">
+        <description xml:lang="en">
+          <para>Raise an error</para>
+        </description>
+        <description xml:lang="de">
+          <para>Fehler ausgeben</para>
+        </description>
+      </choice>
+      <choice en="ignore">
+        <description xml:lang="en">
+          <para>Ignore this case (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Ignoriere diesen Fall.</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="resetmarks" optional="yes">
       <description xml:lang="en">
         <para>Yes: ignore the marks file from previous run.</para>
