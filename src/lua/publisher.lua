@@ -4631,7 +4631,7 @@ function short_newline(fam)
     local list, cur
     list, cur = dummypenalty,dummypenalty
 
-    local strut = node.new("rule")
+    local strut = node.new(rule_node)
     -- set to 60000 for example for debugging
     strut.width=0
     strut.height = strutheight*0.75
@@ -4655,7 +4655,7 @@ function newline(fam)
     local list, cur
     list, cur = dummypenalty,dummypenalty
 
-    local strut = node.new("rule")
+    local strut = node.new(rule_node)
     -- set to 60000 for example for debugging
     strut.width=0
     strut.height = strutheight*0.75
@@ -5596,13 +5596,13 @@ function setsegmentdir(nodelist,direction, maindirection)
 end
 
 -- head_or_tail = "head" oder "tail" (default: tail). Return new head (perhaps same as nodelist)
-function add_rule( nodelist,head_or_tail,parameters)
-    parameters = parameters or {}
+function add_rule( nodelist,head_or_tail,parameter)
+    parameter = parameter or {}
 
-    local n=node.new("rule")
-    n.width  = parameters.width
-    n.height = parameters.height
-    n.depth  = parameters.depth
+    local n=node.new(rule_node)
+    n.width  = parameter.width
+    n.height = parameter.height
+    n.depth  = parameter.depth
     if not nodelist then return n end
 
     if head_or_tail=="head" then
@@ -6903,7 +6903,7 @@ end
 
 
 function emergency_block()
-    local r = node.new("rule")
+    local r = node.new(rule_node)
     r.width = 5 * 2^16
     r.height = 5 * 2^16
     r.depth = 0
