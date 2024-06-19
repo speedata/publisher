@@ -150,7 +150,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
   If hyperlinks is set to `true()`, the page numbers become active. The default is `false()`. The function will show the user visible page numbers, which correspond to the logical page numbers by default.
 
 `sd:mode(<string>[,<string>...])`::
-  Returns true (`true()`) if one of the specified modes is set. A mode can be set from the command line or from the configuration file. See  <<ch-advanced-cotrollayout>>
+  Returns true (`true()`) if one of the specified modes is set. A mode can be set from the command line or from the configuration file. See  <<ch-advanced-controllayout>>
 
 `sd:number-of-columns()`::
   Number of columns in the current grid.

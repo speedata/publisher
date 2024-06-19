@@ -1,4 +1,4 @@
-[[ch-advanced-cotrollayout]]
+[[ch-advanced-controllayout]]
 = Control of the layout when calling the Publisher
 
 

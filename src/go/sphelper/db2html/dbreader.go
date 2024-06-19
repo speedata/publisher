@@ -76,7 +76,7 @@ func init() {
 		"datenstrukturierung", "structuredatafile",
 		"objekteausgeben", "outputtingobjects",
 		"advancedtopics", "fortgeschrittenethemen",
-		"advanced-cotrollayout", "fortgeschrittenethemen-steuerunglayout",
+		"advanced-controllayout", "fortgeschrittenethemen-steuerunglayout",
 		"metapostgrafiken", "metapostgraphics",
 		"preprocessing", "luafilter",
 		"schemavalidation", "schemavalidierung",

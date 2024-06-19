@@ -79,7 +79,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `luatex`::
    Path to the LuaTeX binary. Experimental! This is provided for your experiments, not for production use.
 `mode`::
-   Set the layout mode. See <<ch-advanced-cotrollayout>>.
+   Set the layout mode. See <<ch-advanced-controllayout>>.
 `opencommand`::
    Command that will be run to open the documentation and the PDF file. For MacOS X this should be `open`, for Linux `xdg-open` or `exo-open` (xfce).
 `pathrewrite`::
