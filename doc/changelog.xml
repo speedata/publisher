@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.11" date="2024-06-23">
+        <en>Make white background configurable (#590).</en>
+        <de>Mache weißen Hintergrund konfigurierbar (#590).</de>
+    </entry>
     <entry version="4.19.10" date="2024-06-18">
         <en>New XPath function for getting lengths (#587).</en>
         <de>Neue XPath Funktion für den Zugriff auf Längen (#587).</de>
