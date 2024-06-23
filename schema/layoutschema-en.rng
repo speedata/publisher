@@ -3508,6 +3508,11 @@
       <element name="Options">
          <a:documentation>Set publisher specific options.</a:documentation>
          <optional>
+            <attribute name="background-color">
+               <a:documentation>Render colored background behind each page. Defaults to &#39;white&#39;. State a color name or &#39;-&#39; for no background.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="bleed">
                <a:documentation>The amount of bleed. Defaults to 0mm.</a:documentation>
             </attribute>

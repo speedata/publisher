@@ -3333,6 +3333,11 @@
       <xs:documentation>Setzt Publisher-spezifische Optionen.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
+      <xs:attribute name="background-color">
+        <xs:annotation>
+          <xs:documentation>Füge einen farbigen Hintergrund hinter jede Seite ein. Voreinstellung ist 'white'. Farbname oder '-' für keinen Hintergrund.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="bleed">
         <xs:annotation>
           <xs:documentation>Die Größe des Anschnitts (bleed). Voreinstellung ist 0mm.</xs:documentation>

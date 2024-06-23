@@ -6135,6 +6135,14 @@
       <para>Setzt Publisher-spezifische Optionen.</para>
     </description>
     <childelements/>
+    <attribute en="background-color" type="text" optional="yes" since="4.19.11">
+      <description xml:lang="en">
+        <para>Render colored background behind each page. Defaults to 'white'. State a color name or '-' for no background.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Füge einen farbigen Hintergrund hinter jede Seite ein. Voreinstellung ist 'white'. Farbname oder '-' für keinen Hintergrund.</para>
+      </description>
+    </attribute>
     <attribute en="bleed" type="length" optional="yes" pro="yes">
       <description xml:lang="en">
         <para>The amount of bleed. Defaults to 0mm.</para>

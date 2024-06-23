@@ -2522,6 +2522,7 @@ function commands.options( layoutxml,dataxml )
         publisher.options.trace = trace
     end
 
+    publisher.options.background          = publisher.read_attribute(layoutxml,dataxml,"background-color", "string", publisher.options.background)
     publisher.options.cutmarks            = publisher.read_attribute(layoutxml,dataxml,"cutmarks",    "boolean",publisher.options.cutmarks)
     publisher.options.trimmarks           = publisher.read_attribute(layoutxml,dataxml,"trimmarks",   "boolean",publisher.options.trimmarks)
     publisher.options.trimmarks           = publisher.read_attribute(layoutxml,dataxml,"bleedmarks",  "boolean",publisher.options.trimmarks)

@@ -3927,9 +3927,21 @@ function dothingsbeforeoutput( thispage,data )
     end
 
     -- White background
-    if options.format ~= "PDF/UA" then
+    if options.format ~= "PDF/UA" and options.background ~= '-' then
+        local colentry = get_colentry_from_name(options.background,"white")
+        if not colentry then
+            err("Color %q is not defined",tostring(options.background))
+            colentry = colors["white"]
+        end
+        local pdfcolorstring = colentry.pdfstring
+
+        -- backwards compatibility:
+        if options.background == nil then
+            pdfcolorstring = "0 0 0 0 k "
+        end
+
         firstbox = node.new("whatsit","pdf_literal")
-        firstbox.data = string.format("q 0 0 0 0 k  1 0 0 1 0 0 cm %g %g %g %g re f Q",sp_to_bp(x), sp_to_bp(y),wd ,ht)
+        firstbox.data = string.format("q %s 1 0 0 1 0 0 cm %g %g %g %g re f Q",pdfcolorstring, sp_to_bp(x), sp_to_bp(y),wd ,ht)
         firstbox.mode = 1
     end
 

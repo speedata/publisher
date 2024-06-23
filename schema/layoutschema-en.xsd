@@ -3333,6 +3333,11 @@
       <xs:documentation>Set publisher specific options.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
+      <xs:attribute name="background-color">
+        <xs:annotation>
+          <xs:documentation>Render colored background behind each page. Defaults to 'white'. State a color name or '-' for no background.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="bleed">
         <xs:annotation>
           <xs:documentation>The amount of bleed. Defaults to 0mm.</xs:documentation>
