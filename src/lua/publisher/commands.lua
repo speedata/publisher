@@ -1675,12 +1675,14 @@ function commands.image( layoutxml,dataxml )
     image.height = height
 
     local imagenode = img.node(image)
-    local figrole = publisher.get_rolenum("Figure")
-    publisher.setprop(imagenode,"role",figrole)
-    publisher.setprop(imagenode,"parent",parent)
-    publisher.rolecounter = publisher.rolecounter + 1
-    publisher.setprop(imagenode,"rolecounter",publisher.rolecounter)
-    publisher.setprop(imagenode,"description",description)
+    if publisher.options.format == "PDF/UA" then
+        local figrole = publisher.get_rolenum("Figure")
+        publisher.setprop(imagenode,"role",figrole)
+        publisher.setprop(imagenode,"parent",parent)
+        publisher.rolecounter = publisher.rolecounter + 1
+        publisher.setprop(imagenode,"rolecounter",publisher.rolecounter)
+        publisher.setprop(imagenode,"description",description)
+    end
 
     if opacity then
         publisher.transparentcolorstack()
@@ -2881,7 +2883,6 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     if role and not parent then
         parent = "doc"
     end
-    publisher.rolecounter = publisher.rolecounter + 1
 
     local params = {
         allowbreak = allowbreak,
@@ -2898,11 +2899,16 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
         languagecode = languagecode,
         padding_left = paddingleft,
         padding_right = paddingright,
-        role = publisher.get_rolenum(role),
-        rolecounter = publisher.rolecounter,
-        parent = parent,
         textformat = publisher.textformats[textformat],
     }
+
+    if publisher.options.format == "PDF/UA" then
+        publisher.rolecounter = publisher.rolecounter + 1
+        params.rolecounter = publisher.rolecounter
+        params.role = publisher.get_rolenum(role)
+        params.parent = parent
+    end
+
 
     local tab = publisher.dispatch(layoutxml,dataxml)
     local p = par:new(nil,"commands.paragraph")
@@ -4194,7 +4200,6 @@ function commands.span( layoutxml,dataxml )
         languagecode = publisher.get_languagecode(language_name)
     end
 
-    publisher.rolecounter = publisher.rolecounter + 1
     local params = {
         allowbreak = publisher.allowbreak,
         direction = direction,
@@ -4204,9 +4209,12 @@ function commands.span( layoutxml,dataxml )
         bg_padding_bottom = bg_padding_bottom,
         letterspacing = letterspacing,
         languagecode = languagecode,
-        role = publisher.get_rolenum(role),
-        rolecounter = publisher.rolecounter
     }
+    if publisher.options.format == "PDF/UA" then
+        publisher.rolecounter = publisher.rolecounter + 1
+        params.role = publisher.get_rolenum(role)
+        params.rolecounter = publisher.rolecounter
+    end
 
     local p = par:new(nil,"span2")
     local tab = publisher.dispatch(layoutxml,dataxml)

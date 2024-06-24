@@ -110,12 +110,12 @@ local function mktextnode(self,text,options)
     if options.fontfamily and publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily] then
         local fontheight = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily].baselineskip
         local col = publisher.get_attribute(nodes,"color")
+        local hl = publisher.get_attribute(nodes,"hyperlink")
         nodes = publisher.add_rule(nodes,"head",{height = 0.75 * fontheight, depth = 0.25 * fontheight, width = 0 })
         node.setproperty(nodes,tmp)
         publisher.set_attribute(nodes,"fontfamily",options.fontfamily)
-        if col then
-            publisher.set_attribute(nodes,"color",col)
-        end
+        if col then publisher.set_attribute(nodes,"color",col)   end
+        if hl then publisher.set_attribute(nodes,"hyperlink",hl) end
     end
     if options.newline then
         publisher.setprop(nodes,"newline",true)

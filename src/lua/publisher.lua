@@ -4823,7 +4823,7 @@ local function setstyles(n,parameter)
         setprop(n,"font-weight","bold")
     end
     if parameter.italic == 1 then
-        publisher.set_attribute(n,"font-style","italic")
+        set_attribute(n,"font-style","italic")
     end
     if parameter.textdecorationline then
         set_attribute(n,"text-decoration-line",parameter.textdecorationline)
