@@ -1,0 +1,23 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+	<Pageformat height="10cm" width="11cm"></Pageformat>
+	<DefineFontfamily fontsize="30pt" leading="40pt" name="foo">
+		<Regular fontface="sans"></Regular>
+	</DefineFontfamily>
+
+
+	<Record element="data">
+		<PlaceObject>
+			<Textblock>
+				<Paragraph fontfamily="foo">
+					<Image file="_samplea.pdf" width="200pt" ></Image>
+					<Value>&#8205;</Value>
+				</Paragraph>
+				<Paragraph>
+					<Value>Hello world</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+	</Record>
+</Layout>
