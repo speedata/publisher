@@ -17,7 +17,7 @@ do_luafile("css.lua")
 
 local function lineinfo(layout)
     if publisher.newxpath then
-        return "line",layout[".__line"]
+        return "line",layout[".__line"], "page", publisher.current_pagenumber
     else
         return nil
     end
@@ -3420,7 +3420,7 @@ function commands.place_object( layoutxml,dataxml)
                     -- the current grid is different when in a group
                     current_row = current_grid:find_suitable_row(current_column_start,width_in_gridcells,height_in_gridcells,area)
                     if not current_row then
-                        warning("No suitable row found for %s",objecttype)
+                        splib.log("warn","No suitable row found","type", objecttype,lineinfo(layoutxml))
                         publisher.next_area(area,nil, dataxml)
                         publisher.setup_page(nil,"commands#PlaceObject",dataxml)
                         current_grid = publisher.current_grid
