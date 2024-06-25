@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.12" date="2024-06-25">
+        <en>Bugfix for space below Image in Paragraph (#591).</en>
+        <de>Fehlerkorrektur für Leerraum unterhalb von Image in Paragraph (#591).</de>
+    </entry>
+    <entry version="4.19.12" date="2024-06-25">
+        <en>Overflow objects start in column 1.</en>
+        <de>Objekte die zu groß sind werden in Spalte 1 ausgegeben.</de>
+    </entry>
     <entry version="4.19.11" date="2024-06-23">
         <en>Make white background configurable (#590).</en>
         <de>Mache weißen Hintergrund konfigurierbar (#590).</de>
