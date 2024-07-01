@@ -1,10 +1,52 @@
 [[ch-fakelists]]
-= Imitate bulleted lists
+= Enumeration lists
 
 
-The Publisher does not (currently) have any special skills to create bulleted lists. This is also because they can be imitated quite easily via text formats.
+The publisher has various options for creating enumeration lists.
 
-To do this, you define a text format with a hanging indent and use the one with the bulleted text:
+== Enumeration lists with Ol and Ul
+
+
+Numbered and unnumbered lists can be created with <<cmd-ul,`<Ul>`>> and <<cmd-ol,`<Ol>`>>:
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Ol>
+                    <Li><Value>Lorem ipsum</Value></Li>
+                    <Li><Value>dolor sit amet</Value></Li>
+                    <Li><Value>consectetur adipisicing elit</Value></Li>
+                    <Li><Value>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Value></Li>
+                </Ol>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Textblock>
+                <Ul>
+                    <Li><Value>Lorem ipsum</Value></Li>
+                    <Li><Value>dolor sit amet</Value></Li>
+                    <Li><Value>consectetur adipisicing elit</Value></Li>
+                    <Li><Value>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Value></Li>
+                </Ul>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+----------------
+
+These enumeration lists cannot be nested within one another.
+
+image::olulstandard.png[]
+
+
+== Enumeration lists with textformat
+
+You can set a left margin or a hanging indent for text formats. This allows you to output bulleted lists:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -26,11 +68,11 @@ To do this, you define a text format with a hanging indent and use the one with 
 -------------------------------------------------------------------------------
 
 
-image::olulwithtext.png[width=50%]
+image::olulwithtext.png[]
 
-This works very well in practice. The obvious disadvantage is that you have to measure how wide the left edge should be.
+== Enumeration lists with tables
 
-Nested lists can be realized by using tables, but you have to keep in mind that it is not possible to wrap within the table cells.
+
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -74,4 +116,143 @@ Nested lists can be realized by using tables, but you have to keep in mind that 
 
 image::olulwithtables.png[width=90%]
 
+
+
+== Enumeration lists with labels in Paragraph
+
+The command <<cmd-paragraph,`<paragraph>`>> can display characters to the left of the paragraph:
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Pageformat width="100mm" height="100mm" />
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph label-left="•" label-left-distance="2mm" padding-left="4mm">
+                    <Value>Lorem ipsum</Value>
+                </Paragraph>
+                <Paragraph label-left="•" label-left-distance="2mm" padding-left="4mm">
+                    <Value>Lorem ipsum</Value>
+                </Paragraph>
+                <Paragraph label-left="•" label-left-distance="2mm" padding-left="4mm">
+                    <Value>dolor sit amet</Value>
+                </Paragraph>
+                <Paragraph label-left="•" label-left-distance="2mm" padding-left="4mm">
+                    <Value>consectetur adipisicing elit</Value>
+                </Paragraph>
+                <Paragraph label-left="•" label-left-distance="2mm" padding-left="4mm">
+                    <Value>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+
+</Layout>
+----------------
+
+This can also be used for bulleted lists. This has the advantage that paragraphs can also be wrapped in the <<cmd-output,`<output>`>> command.
+
+image::olulparlabel.png[]
+
+
+== Enumeration lists with HTML formatting
+
+Here you have the option of nesting and specially formatting lists:
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Pageformat width="100mm" height="100mm" />
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="." />
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+----------------
+
+[source, xml]
+----------------
+<data>
+   <ul>
+      <li>Lorem ipsum</li>
+      <li>dolor sit amet</li>
+      <li>consectetur adipisicing elit</li>
+      <li>
+         <ol>
+            <li>sed do eiusmod tempor incididunt ut labore et
+               dolore magna aliqua.</li>
+            <li>Lorem ipsum</li>
+            <li>dolor sit amet</li>
+         </ol>
+      </li>
+   </ul>
+</data>
+----------------
+
+image::olulhtmlnested.png[]
+
+For the styling, you can use CSS:
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Pageformat width="100mm" height="100mm" />
+    <Stylesheet >
+        ul {
+            list-style: none;
+            padding-left: 1em;
+        }
+
+        ul li::before {
+            content: "\25e6";
+            color: red;
+            display: inline-block;
+            width:1em;
+        }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="." />
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+
+</Layout>
+----------------
+
+and the following data file:
+
+[source, xml]
+----------------
+<data>
+   <ul>
+      <li>Lorem ipsum</li>
+      <li>dolor sit amet</li>
+      <li>consectetur adipisicing elit</li>
+   </ul>
+</data>
+----------------
+
+
+image::olulhtmlcolor.png[]
+
 // EOF
+

@@ -11,8 +11,6 @@ include::mehrseitigepdf.adoc[leveloffset=+1]
 
 include::optimierungmitgruppen.adoc[leveloffset=+1]
 
-include::fakinglists.adoc[leveloffset=+1]
-
 [[ch-verzeichnisseerstellen-marker]]
 == Verzeichnisse erstellen
 

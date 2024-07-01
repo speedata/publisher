@@ -12,8 +12,6 @@ include::multipagepdf.adoc[leveloffset=+1]
 
 include::optimizingwithgroups.adoc[leveloffset=+1]
 
-include::fakinglists.adoc[leveloffset=+1]
-
 
 [[ch-directories-marker]]
 == Automatically generated directories
