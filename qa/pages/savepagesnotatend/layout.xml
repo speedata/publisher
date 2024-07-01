@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Record element="data">
+		<InsertPages name="toc" pages="1" />
+		<ClearPage />
+
+		<PlaceObject allocate="yes" column="0mm" row="0mm">
+			<Box height="297mm" width="210mm" background-color="-" />
+		</PlaceObject>
+		<ClearPage></ClearPage>
+		<SetGrid nx="2" ny="3" />
+
+		<Loop select="13" variable="b">
+
+			<Message select="$b"></Message>
+			<PlaceObject>
+				<Box height="1" width="1" background-color="lightgreen" />
+			</PlaceObject>
+		</Loop>
+
+		<SavePages name="toc">
+			<PlaceObject>
+				<Textblock>
+					<Paragraph>
+						<Value>hello toc!</Value>
+					</Paragraph>
+				</Textblock>
+			</PlaceObject>
+		</SavePages>
+
+		<Loop select="4" variable="i">
+			<Message select="$i"></Message>
+			<PlaceObject>
+				<Textblock>
+					<Paragraph>
+						<Value>hello world</Value>
+					</Paragraph>
+				</Textblock>
+			</PlaceObject>
+		</Loop>
+	</Record>
+</Layout>

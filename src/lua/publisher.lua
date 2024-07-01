@@ -241,9 +241,9 @@ pagenum_tbl = setmetatable({1}, {
     __index=function(tbl, idx)
         local max = 0
         for k, v in next, tbl do
-          if k <= idx then max = v - k end
+            if k <= idx and k > max then max = k end
         end
-        return idx + max
+        return rawget(tbl,max) + idx - max
       end })
 
 forward_pagestore = {}

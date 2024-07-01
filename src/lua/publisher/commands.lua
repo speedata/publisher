@@ -3817,11 +3817,13 @@ function commands.save_pages( layoutxml,dataxml )
         -- since the callback for page ordering is called after
         -- each shipout.
         local ppt = publisher.pagenum_tbl
-
+        local k, v
         for i=1,number_of_pages do
-            ppt[save_current_pagenumber + i - publisher.total_inserted_pages - 1] = location + i - 1
+            k = save_current_pagenumber + i - publisher.total_inserted_pages - 1
+            v = location + i - 1
+            ppt[k] = v
         end
-
+        ppt[k+1] = k+1
         publisher.nextpage = ps.pagetype
         local tab = publisher.dispatch(layoutxml,dataxml)
 
