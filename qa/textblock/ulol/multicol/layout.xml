@@ -1,0 +1,19 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Pageformat width="100mm" height="100mm"/>
+
+    <Record element="data">
+        <PlaceObject allocate-bottom="1">
+            <Textblock columns="2">
+                <Ol>
+                    <Li><Value>A</Value></Li>
+                    <Li><Value>B</Value></Li>
+                    <Li><Value>C</Value></Li>
+                    <Li><Value>The quick brown fox jumps</Value></Li>
+                </Ol>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+
+</Layout>

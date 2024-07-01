@@ -5109,9 +5109,9 @@ function commands.textblock( layoutxml,dataxml )
         local number_of_rows = 0
         local new_nodes = {}
         for i=1,#nodes do
-            for n in node.traverse_id(0,nodes[i].list) do
+            for n in node.traverse_id(publisher.hlist_node,nodes[i].list) do
                 number_of_rows = number_of_rows + 1
-                rows[number_of_rows] = n
+                rows[number_of_rows] = node.vpack(node.copy(n))
             end
         end
 
@@ -5132,7 +5132,9 @@ function commands.textblock( layoutxml,dataxml )
                 end
             end
             tail.next = nil
-            new_nodes[#new_nodes + 1] = node.hpack(hbox_current_row)
+            local tmp = node.hpack(hbox_current_row)
+            publisher.setprop(tmp,"origin","columns > 1")
+            new_nodes[#new_nodes + 1] = tmp
         end
         nodes=new_nodes
     end
