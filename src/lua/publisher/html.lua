@@ -1076,7 +1076,7 @@ function resolve_list_style_type(styles, olcounter)
         set_image_dimensions(it,styles,0,styles.fontsize_sp * 0.9)
         return img.node(it)
     end
-    local counter  = olcounter[styles.ollevel]
+    local counter  = olcounter[styles.listlevel]
     local ullevel = styles.ullevel
     local str = ""
     if liststyletype == "decimal" then
