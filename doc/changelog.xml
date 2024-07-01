@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.13" date="2024-07-01">
+        <en>Bugfix SavePages in forward mode and contents after SavePages (#592).</en>
+        <de>Fehlerkorrektur SavePages im zukünftigen Modus und Inhalt nach SavePages (#592).</de>
+    </entry>
     <entry version="4.19.12" date="2024-06-25">
         <en>Bugfix for space below Image in Paragraph (#591).</en>
         <de>Fehlerkorrektur für Leerraum unterhalb von Image in Paragraph (#591).</de>
