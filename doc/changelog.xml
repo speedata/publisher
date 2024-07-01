@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.14" date="2024-07-01">
+        <en>Bugfix Lists and multicolumn (#593).</en>
+        <de>Fehlerkorrektur Listen und mehrspaltiger Text (#593).</de>
+    </entry>
+    <entry version="4.19.14" date="2024-07-01">
+        <en>Bugfix nested HTML ul/ol list.</en>
+        <de>Fehlerkorrektur verschachtelte HTML Liste (ul/ol).</de>
+    </entry>
     <entry version="4.19.13" date="2024-07-01">
         <en>Bugfix SavePages in forward mode and contents after SavePages (#592).</en>
         <de>Fehlerkorrektur SavePages im zukünftigen Modus und Inhalt nach SavePages (#592).</de>
