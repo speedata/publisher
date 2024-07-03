@@ -140,7 +140,7 @@ end
 # The task looks for a directory named "default" and uses the binary files in that directory
 desc "Make ZIP files for all platforms and installer for windows"
 task :dist => [:sphelper] do
-	sh "#{installdir}/bin/sphelper dist windows/amd64 linux/amd64"
+	sh "#{installdir}/bin/sphelper dist windows/amd64 linux/amd64 linux/arm64"
 end
 
 desc "Create a customized directory strcuture for distribution"

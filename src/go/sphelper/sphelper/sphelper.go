@@ -75,6 +75,7 @@ func main() {
 	op.Command("build", "Build go binary")
 	op.Command("builddeb", "Build sp binary for debian (/usr/)")
 	op.Command("buildlib", "Build sp library")
+	op.Command("buildlibarch", "Build sp library for specific architecture")
 	op.Command("dbmanual", "Generate docbook based documentation")
 	op.Command("dist", "Generate zip files and windows installers")
 	op.Command("distcustom", "Generate custom directory structure for distribution")
@@ -110,12 +111,29 @@ func main() {
 		}
 	case "buildlib":
 		// build the library
+		fmt.Println(runtime.GOARCH)
 		goos, goarch := runtime.GOOS, runtime.GOARCH
 		err := buildlib.BuildLib(cfg, goos, goarch)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(-1)
 		}
+		err = buildlib.BuildCLib(cfg, goos, goarch)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(-1)
+		}
+	case "buildlibarch":
+		// build the library for a specific architecture / OS
+		osArch := strings.Split(op.Extra[1], "/")
+		goos := osArch[0]
+		goarch := osArch[1]
+		err := buildlib.BuildLib(cfg, goos, goarch)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(-1)
+		}
+
 		err = buildlib.BuildCLib(cfg, goos, goarch)
 		if err != nil {
 			fmt.Println(err)
