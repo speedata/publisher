@@ -39,6 +39,11 @@
           <xs:documentation>Setze die Rahmenfarbe des links (nur Adobe Acrobat)</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="description">
+        <xs:annotation>
+          <xs:documentation>Ein alternativer Text für Barrierefreiheit</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="embedded">
         <xs:annotation>
           <xs:documentation>Link zu einer eingebetteten Datei. Um eine andere Seite als die erste Seite zu öffnen, setze das page-Attribute auf die Seitenzahl. Um eine named destination anzusteuern, nutze das link-Attribut.</xs:documentation>
@@ -4835,6 +4840,26 @@
                 <xs:documentation>Überschrift Ebene 2</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="H3">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 3</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H4">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 4</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H5">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 5</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H6">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 6</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="P">
               <xs:annotation>
                 <xs:documentation>Ein Absatz</xs:documentation>
@@ -6704,6 +6729,26 @@
                 <xs:documentation>Überschrift Ebene 2</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="H3">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 3</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H4">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 4</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H5">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 5</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H6">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 6</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="P">
               <xs:annotation>
                 <xs:documentation>Ein Absatz</xs:documentation>
@@ -6838,6 +6883,26 @@
             <xs:enumeration value="H2">
               <xs:annotation>
                 <xs:documentation>Überschrift Ebene 2</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H3">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 3</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H4">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 4</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H5">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 5</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H6">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 6</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="P">

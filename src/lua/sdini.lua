@@ -72,4 +72,13 @@ end
 do_luafile("sd-debug.lua")
 do_luafile("sd-callbacks.lua")
 
+
+table.keys = function(tbl)
+    local keyset={}
+    for k,v in pairs(tbl) do
+        keyset[#keyset+1]=k
+    end
+    return keyset
+end
+
 file_end("sdini.lua")

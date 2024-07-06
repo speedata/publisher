@@ -454,6 +454,7 @@ func (d *DocBook) collectContents() error {
 		filenamePagemap[page.Pagename] = page
 		page.Index = i
 	}
+	var class string
 	var sectionRole string
 	var figureid string
 	var figuretitle string
@@ -547,6 +548,11 @@ getContents:
 				}
 				omitP = true
 			case "figure":
+				if cls := attr(elt, "role"); cls != "" {
+					class = fmt.Sprintf(`class="%s"`, cls)
+				} else {
+					class = ""
+				}
 				figureid = attr(elt, "id")
 				inFigure = true
 			case "formalpara":
@@ -593,6 +599,11 @@ getContents:
 					}
 				}
 			case "informalfigure":
+				if cls := attr(elt, "role"); cls != "" {
+					class = fmt.Sprintf(`class="%s"`, cls)
+				} else {
+					class = ""
+				}
 				imagedata = ""
 				contentwidth = ""
 				phrase = ""
@@ -792,13 +803,12 @@ getContents:
 				}
 				imagedata = assetsTrim.ReplaceAllString(imagedata, "$2")
 				src := d.linkToPage("/static/"+imagedata, *curpage)
-
 				curOutput.WriteString(fmt.Sprintf(`<div id="%s" class="imageblock">
 				<div class="content">
-				<a href="%s" class="glightbox"><img src="%s" %s%s></a>
+				<a href="%s" class="glightbox"><img %s src="%s" %s%s></a>
 				</div>
 				<div class="caption">%s</div>
-				</div>`, figureid, src, src, alt, wd, figuretitle))
+				</div>`, figureid, src, class, src, alt, wd, figuretitle))
 				inFigure = false
 			case "formalpara":
 				curOutput.WriteString(fmt.Sprintf(`</div><div class="caption">%s</div></div>`, figuretitle))
@@ -815,7 +825,7 @@ getContents:
 				}
 				imagedata = assetsTrim.ReplaceAllString(imagedata, "$2")
 				src := d.linkToPage("/static/"+imagedata, *curpage)
-				curOutput.WriteString(fmt.Sprintf("\n<a href='%s' class='glightbox'><img src='%s'%s%s></a>", src, src, wd, alt))
+				curOutput.WriteString(fmt.Sprintf("\n<a href='%s' class='glightbox'><img %s src='%s'%s%s></a>", src, class, src, wd, alt))
 			case "itemizedlist":
 				curlist := listlevel[len(listlevel)-1]
 				listlevel = listlevel[:len(listlevel)-1]

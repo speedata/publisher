@@ -106,13 +106,13 @@ local function mktextnode(self,text,options)
     end
 
     self.direction = self.direction or newdir
-    local tmp = node.getproperty(nodes)
     if options.fontfamily and publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily] then
+        local node_properties = node.getproperty(nodes)
         local fontheight = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily].baselineskip
         local col = publisher.get_attribute(nodes,"color")
         local hl = publisher.get_attribute(nodes,"hyperlink")
         nodes = publisher.add_rule(nodes,"head",{height = 0.75 * fontheight, depth = 0.25 * fontheight, width = 0 })
-        node.setproperty(nodes,tmp)
+        node.setproperty(nodes,node_properties)
         publisher.set_attribute(nodes,"fontfamily",options.fontfamily)
         if col then publisher.set_attribute(nodes,"color",col)   end
         if hl then publisher.set_attribute(nodes,"hyperlink",hl) end
@@ -133,6 +133,18 @@ local function flatten(self,items,options,data)
         local thisself = items[i]
         local typ_thisself = type(thisself)
         local new_options = publisher.copy_table_from_defaults(options)
+
+        if options.role == 0 then
+            new_options.role = options.parentrole
+            new_options.id = options.parentid
+        elseif options.role then
+            new_options.id = publisher.roles_a[options.role] .. "_" .. tostring(options.rolecounter)
+            new_options.parent = options.id or options.parent
+        else
+            -- ignore
+        end
+        new_options.parentrole = options.role
+        new_options.parentid = options.id
         new_options.direction = new_options.direction or self.direction
         if typ_thisself == "table" and thisself.contents then
             -- w("par/flatten: type: table with contents")

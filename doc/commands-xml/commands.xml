@@ -633,6 +633,38 @@
         <para>Überschrift Ebene 2</para>
       </description>
     </choice>
+    <choice en="H3">
+      <description xml:lang="en">
+        <para>Heading level 3</para>
+      </description>
+      <description xml:lang="de">
+        <para>Überschrift Ebene 3</para>
+      </description>
+    </choice>
+    <choice en="H4">
+      <description xml:lang="en">
+        <para>Heading level 4</para>
+      </description>
+      <description xml:lang="de">
+        <para>Überschrift Ebene 4</para>
+      </description>
+    </choice>
+    <choice en="H5">
+      <description xml:lang="en">
+        <para>Heading level 5</para>
+      </description>
+      <description xml:lang="de">
+        <para>Überschrift Ebene 5</para>
+      </description>
+    </choice>
+    <choice en="H6">
+      <description xml:lang="en">
+        <para>Heading level 6</para>
+      </description>
+      <description xml:lang="de">
+        <para>Überschrift Ebene 6</para>
+      </description>
+    </choice>
     <choice en="P">
       <description xml:lang="en">
         <para>A paragraph.</para>
@@ -741,6 +773,14 @@
       </description>
       <description xml:lang="de">
         <para>Setze die Rahmenfarbe des links (nur Adobe Acrobat)</para>
+      </description>
+    </attribute>
+    <attribute en="description" optional="yes" since="4.19.12" type="text">
+      <description xml:lang="en">
+        <para>An alternative text for accessibility</para>
+      </description>
+      <description xml:lang="de">
+        <para>Ein alternativer Text für Barrierefreiheit</para>
       </description>
     </attribute>
     <attribute en="embedded" optional="yes" since="4.15.11" type="text">

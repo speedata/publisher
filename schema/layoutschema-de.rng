@@ -18,6 +18,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="description">
+                     <a:documentation>Ein alternativer Text für Barrierefreiheit</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="embedded">
                      <a:documentation>Link zu einer eingebetteten Datei. Um eine andere Seite als die erste Seite zu öffnen, setze das page-Attribute auf die Seitenzahl. Um eine named destination anzusteuern, nutze das link-Attribut.</a:documentation>
                   </attribute>
@@ -4322,6 +4327,14 @@
                         <a:documentation>Überschrift Ebene 1</a:documentation>
                         <value>H2</value>
                         <a:documentation>Überschrift Ebene 2</a:documentation>
+                        <value>H3</value>
+                        <a:documentation>Überschrift Ebene 3</a:documentation>
+                        <value>H4</value>
+                        <a:documentation>Überschrift Ebene 4</a:documentation>
+                        <value>H5</value>
+                        <a:documentation>Überschrift Ebene 5</a:documentation>
+                        <value>H6</value>
+                        <a:documentation>Überschrift Ebene 6</a:documentation>
                         <value>P</value>
                         <a:documentation>Ein Absatz</a:documentation>
                         <value>Lbl</value>
@@ -5760,6 +5773,14 @@
                         <a:documentation>Überschrift Ebene 1</a:documentation>
                         <value>H2</value>
                         <a:documentation>Überschrift Ebene 2</a:documentation>
+                        <value>H3</value>
+                        <a:documentation>Überschrift Ebene 3</a:documentation>
+                        <value>H4</value>
+                        <a:documentation>Überschrift Ebene 4</a:documentation>
+                        <value>H5</value>
+                        <a:documentation>Überschrift Ebene 5</a:documentation>
+                        <value>H6</value>
+                        <a:documentation>Überschrift Ebene 6</a:documentation>
                         <value>P</value>
                         <a:documentation>Ein Absatz</a:documentation>
                         <value>Lbl</value>
@@ -5881,6 +5902,14 @@
                      <a:documentation>Überschrift Ebene 1</a:documentation>
                      <value>H2</value>
                      <a:documentation>Überschrift Ebene 2</a:documentation>
+                     <value>H3</value>
+                     <a:documentation>Überschrift Ebene 3</a:documentation>
+                     <value>H4</value>
+                     <a:documentation>Überschrift Ebene 4</a:documentation>
+                     <value>H5</value>
+                     <a:documentation>Überschrift Ebene 5</a:documentation>
+                     <value>H6</value>
+                     <a:documentation>Überschrift Ebene 6</a:documentation>
                      <value>P</value>
                      <a:documentation>Ein Absatz</a:documentation>
                      <value>Lbl</value>

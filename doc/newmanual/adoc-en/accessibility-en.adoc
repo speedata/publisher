@@ -12,7 +12,7 @@ For accessible PDFs, not only the technical side must be taken into account (thi
 
 == Example
 
-In the following example, the document is divided into a section (Sect) and a heading (H1) and an image (Figure) are output in this section.
+In the following example, the document is not further divided into sub structures. A heading (H1) and an image (Figure) are output in this section.
 
 
 [source, xml]
@@ -22,22 +22,20 @@ In the following example, the document is divided into a section (Sect) and a he
 
   <PDFOptions format="PDF/UA" />
 
-  <StructureElement role="Document" id="doc">
-    <StructureElement role="Sect" id="sect"/>
-  </StructureElement>
+  <StructureElement role="Document" id="doc" />
 
   <Record element="data">
     <PlaceObject>
       <Textblock>
         <Bookmark level="1" select="'My image collection'"/>
-        <Paragraph role="H1" parent="sect">
+        <Paragraph role="H1" parent="doc">
           <Value>My image collection</Value>
         </Paragraph>
       </Textblock>
     </PlaceObject>
 
     <PlaceObject>
-      <Image parent="sect"
+      <Image parent="doc"
              description="an ocean"
              file="ocean.pdf"
              width="4cm" />
@@ -55,7 +53,7 @@ By default, the role "Document" is defined with the ID `doc`. This corresponds t
 <StructureElement role="Document" id="doc" />
 ----------------
 
-There are two ways to define further structures. Either these are defined in a nested manner (as in the example above)
+There are two ways to define further structures. Either these are defined in a nested manner (both examples create the same structure):
 
 [source, xml]
 ----------------
@@ -85,7 +83,6 @@ or you can use the parent attribute:
 ----------------
 
 
-
 This allows the document to be structured dynamically based on the data.
 
 The `id` attribute is necessary to specify the parent structure for paragraphs and images. In the example above, both elements are output in the `Sect` section.
@@ -98,6 +95,87 @@ The following role names (tags) are defined in the speedata Publisher. Others ca
 
 Art, Div, Document, Figure, H1, H2, H3, H4, H5, H6, Lbl, P, Part, Sect, Span, TOC, TOCI
 
+
+== From the examples repository
+
+This layout can also be found in the https://github.com/speedata/examples/tree/master/accessibility[examples repository] and creates a PDF/UA-compliant PDF that fulfils the requirements for accessibility. Below the top level Document there is a section Sect, which contains a heading, a paragraph without special features and a paragraph with a hyperlink, as well as an image.
+
+(Run the speedata Publisher with `sp --dummy`, as variable data is not used here).
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <PDFOptions format="PDF/UA" />
+
+  <StructureElement role="Document">
+    <StructureElement role="Sect" id="section" />
+  </StructureElement>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph role="H1" parent="section">
+          <B>
+            <Value>A very short story</Value>
+          </B>
+        </Paragraph>
+        <Paragraph role="P" parent="section">
+          <Value>Once upon a time....</Value>
+        </Paragraph>
+        <Paragraph role="P" parent="section">
+          <Value>This is a </Value>
+          <A href="https://www.speedata.de"
+             description="link to speedata.de">
+            <Value>link to speedata.de</Value>
+          </A>
+          <Value>.</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <PlaceObject>
+      <Image
+          width="8"
+          file="ocean.pdf"
+          parent="section"
+          description="An image of an ocean" />
+    </PlaceObject>
+  </Record>
+</Layout>
+----------------
+
+The output from the layout above is as expected.
+[role="framed"]
+image::ay11output.png[]
+
+Various tools can be used to check the structure of the document:
+
+
+.The accessibility checker outputs exactly the specified structure. The b-tag in the heading is not displayed in the structure.
+image::ay11structure.png[]
+
+
+.In addition to a detailed review, Adobe Acrobat also provides a visual view of the structure.
+image::ay11acrobat.png[]
+
+You can use https://github.com/speedata/pdfuaanalyze[pdfuaanalyze] to display the structure as an XML tree.
+
+
+[source, xml]
+----------------
+<Document>
+  <Sect>
+    <H1></H1>
+    <P></P>
+    <P>
+      <Link></Link>
+    </P>
+    <Figure></Figure>
+  </Sect>
+</Document>
+----------------
+
+
 == Checking the document
 
 The following programs can be used to check accessibility:
@@ -106,6 +184,7 @@ The following programs can be used to check accessibility:
 * https://pac.pdf-accessibility.org/de[PAC (PDF accessibility checker)]
 * Adobe Acrobat
 * https://verapdf.org[Vera PDF]
+* https://github.com/speedata/pdfuaanalyze[pdfuaanalyze] shows the structure of the document as XML.
 
 
 

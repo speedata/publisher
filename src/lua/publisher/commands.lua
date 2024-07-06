@@ -38,11 +38,12 @@ function commands.a( layoutxml,dataxml )
         return tab
     end
     local bordercolor = publisher.read_attribute(layoutxml,dataxml,"bordercolor","string")
+    local description = publisher.read_attribute(layoutxml,dataxml,"description","string","-")
     local href = publisher.read_attribute(layoutxml,dataxml,"href","string")
     local link = publisher.read_attribute(layoutxml,dataxml,"link","string")
     local page = publisher.read_attribute(layoutxml,dataxml,"page","number")
     local embedded = publisher.read_attribute(layoutxml,dataxml,"embedded","string")
-
+    local structelemobjnum = pdf.reserveobj()
     if false then
     elseif embedded then
         publisher.hlembed(embedded,page,link,bordercolor)
@@ -50,6 +51,11 @@ function commands.a( layoutxml,dataxml )
         publisher.hllink(link,bordercolor)
     elseif href then
         publisher.hlurl(href,bordercolor)
+        if publisher.options.format == "PDF/UA" then
+            publisher.hyperlinks[#publisher.hyperlinks]["/StructParent "] = #publisher.struct_root_numtree
+            publisher.hyperlinks[#publisher.hyperlinks]["/Contents "] = publisher.utf8_to_utf16_string_pdf(description)
+            publisher.struct_root_numtree[#publisher.struct_root_numtree + 1] =  setmetatable({ string.format("%d 0 R",structelemobjnum ) }, {__tostring = function(tbl) return rawget(tbl,1) end } )
+        end
     elseif page then
         publisher.hlpage(page,bordercolor)
     end
@@ -83,7 +89,15 @@ function commands.a( layoutxml,dataxml )
         local ch = #publisher.hyperlinks
         for _,j in ipairs(tab) do
             local c = publisher.element_contents(j)
-            p:append(c,{hyperlink = ch})
+            local params = {hyperlink = ch}
+            if publisher.options.format == "PDF/UA" then
+                params.role = publisher.get_rolenum("Link")
+                params.structelemobjnum = structelemobjnum
+                publisher.rolecounter = publisher.rolecounter + 1
+                params.rolecounter = publisher.rolecounter
+                params.parent = ""
+            end
+            p:append(c, params )
         end
 
         return p
@@ -339,7 +353,7 @@ function commands.bold( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
-        p:append(c,{bold = 1})
+        p:append(c,{bold = 1, role = 0})
     end
 
     return p
@@ -3059,7 +3073,6 @@ function commands.pdfoptions( layoutxml, dataxml )
 
     if format then
         publisher.options.format = format
-        pdf.setcompresslevel(0)
         if format == "PDF/X-3" or format == "PDF/X-4" or format == "PDF/UA" then
             pdf.setobjcompresslevel(0)
             if not title then publisher.options.documenttitle = "document" end

@@ -11,31 +11,29 @@ Für barrierefreie PDFs muss man nicht nur die technische Seite beachten (dafür
 
 == Beispiel
 
-Im folgenden Beispiel wird das Dokument in einen Abschnitt (Sect) unterteilt und in diesem Abschnitt wird eine Überschrift (H1) und ein Bild (Figure) ausgegeben.
+Im folgenden Beispiel wird das Dokument nicht weiter unterteilt. Es wird eine Überschrift (H1) und ein Bild (Figure) ausgegeben.
 
 [source, xml]
 ----------------
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
-	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
   <PDFOptions format="PDF/UA" />
 
-  <StructureElement role="Document" id="doc">
-    <StructureElement role="Sect" id="sect"/>
-  </StructureElement>
+  <StructureElement role="Document" id="doc" />
 
   <Record element="data">
     <PlaceObject>
       <Textblock>
         <Bookmark level="1" select="'My image collection'"/>
-        <Paragraph role="H1" parent="sect">
+        <Paragraph role="H1" parent="doc">
           <Value>My image collection</Value>
         </Paragraph>
       </Textblock>
     </PlaceObject>
 
     <PlaceObject>
-      <Image parent="sect"
+      <Image parent="doc"
              description="an ocean"
              file="ocean.pdf"
              width="4cm" />
@@ -54,7 +52,7 @@ Also Voreinstellung ist die Rolle »Document« definiert mit der ID `doc`. Dies 
 <StructureElement role="Document" id="doc" />
 ----------------
 
-Um weitergehende Strukturen zu definieren gibt es zwei Möglichkeiten. Entweder werden diese geschachtelt definiert (wie oben im Beispiel)
+Um weitergehende Strukturen zu definieren gibt es zwei Möglichkeiten. Entweder werden diese geschachtelt definiert (beide Beispiele definieren die identische Struktur):
 
 [source, xml]
 ----------------
@@ -95,6 +93,86 @@ Folgende Rollennamen (Tags) sind im speedata Publisher definiert. Weitere werden
 
 Art, Div, Document, Figure, H1, H2, H3, H4, H5, H6, Lbl, P, Part, Sect, Span, TOC, TOCI
 
+
+== Aus dem Beispiele-Repository
+
+Dieses Layout ist auch im https://github.com/speedata/examples/tree/master/accessibility[Beispiele-Repository] zu finden und erstellt ein PDF/UA konformes PDF, das den Ansprüchen für die Barrierefreiheit genügt. Unterhalb der obersten Ebene Document gibt es einen Abschnitt Sect, das eine Überschrift, einen Absatz ohne Besonderheiten und einen Absatz mit einem Hyperlink, sowie eine Abbildung enthält.
+
+(Aufruf mit `sp --dummy`, da hier auf variable Daten verzichtet wird.)
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <PDFOptions format="PDF/UA" />
+
+  <StructureElement role="Document">
+    <StructureElement role="Sect" id="section" />
+  </StructureElement>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph role="H1" parent="section">
+          <B>
+            <Value>A very short story</Value>
+          </B>
+        </Paragraph>
+        <Paragraph role="P" parent="section">
+          <Value>Once upon a time....</Value>
+        </Paragraph>
+        <Paragraph role="P" parent="section">
+          <Value>This is a </Value>
+          <A href="https://www.speedata.de"
+             description="link to speedata.de">
+            <Value>link to speedata.de</Value>
+          </A>
+          <Value>.</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <PlaceObject>
+      <Image
+          width="8"
+          file="ocean.pdf"
+          parent="section"
+          description="An image of an ocean" />
+    </PlaceObject>
+  </Record>
+</Layout>
+----------------
+
+
+.Die Ausgabe aus dem Layout oben ist wie erwartet.
+[role="framed"]
+image::ay11output.png[]
+
+Mit verschiedenen Werkzeugen kann man prüfen, wie die Struktur des Dokuments aufgebaut ist:
+
+.Der Accessibility checker gibt genau die vorgegebene Struktur aus. Das b-Tag in der Überschrift wird nicht in der Struktur angezeigt.
+image::ay11structure.png[]
+
+
+.Der Adobe Acrobat gibt neben einer detaillierten Überprüfung auch eine visuelle Ansicht der Struktur.
+image::ay11acrobat.png[]
+
+Mit https://github.com/speedata/pdfuaanalyze[pdfuaanalyze] kann man sich die Struktur als XML-Baum ausgeben lassen.
+
+
+[source, xml]
+----------------
+<Document>
+  <Sect>
+    <H1></H1>
+    <P></P>
+    <P>
+      <Link></Link>
+    </P>
+    <Figure></Figure>
+  </Sect>
+</Document>
+----------------
+
 == Überprüfen des Dokuments
 
 Um die Barrierefreiheit zu überprüfen, bieten sich folgende Programme an:
@@ -102,6 +180,7 @@ Um die Barrierefreiheit zu überprüfen, bieten sich folgende Programme an:
 * https://pac.pdf-accessibility.org/de[PAC (PDF accessibility checker)]
 * Adobe Acrobat
 * https://verapdf.org[Vera PDF]
+* https://github.com/speedata/pdfuaanalyze[pdfuaanalyze] gibt die Struktur des PDFs als XML-Baum aus
 
 
 

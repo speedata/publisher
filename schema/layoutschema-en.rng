@@ -18,6 +18,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="description">
+                     <a:documentation>An alternative text for accessibility</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="embedded">
                      <a:documentation>Link to an attached file. To open a page other than the first page, set the page attribute, to open a named destination, set the link attribute.</a:documentation>
                   </attribute>
@@ -4322,6 +4327,14 @@
                         <a:documentation>Heading level 1</a:documentation>
                         <value>H2</value>
                         <a:documentation>Heading level 2</a:documentation>
+                        <value>H3</value>
+                        <a:documentation>Heading level 3</a:documentation>
+                        <value>H4</value>
+                        <a:documentation>Heading level 4</a:documentation>
+                        <value>H5</value>
+                        <a:documentation>Heading level 5</a:documentation>
+                        <value>H6</value>
+                        <a:documentation>Heading level 6</a:documentation>
                         <value>P</value>
                         <a:documentation>A paragraph.</a:documentation>
                         <value>Lbl</value>
@@ -5760,6 +5773,14 @@
                         <a:documentation>Heading level 1</a:documentation>
                         <value>H2</value>
                         <a:documentation>Heading level 2</a:documentation>
+                        <value>H3</value>
+                        <a:documentation>Heading level 3</a:documentation>
+                        <value>H4</value>
+                        <a:documentation>Heading level 4</a:documentation>
+                        <value>H5</value>
+                        <a:documentation>Heading level 5</a:documentation>
+                        <value>H6</value>
+                        <a:documentation>Heading level 6</a:documentation>
                         <value>P</value>
                         <a:documentation>A paragraph.</a:documentation>
                         <value>Lbl</value>
@@ -5881,6 +5902,14 @@
                      <a:documentation>Heading level 1</a:documentation>
                      <value>H2</value>
                      <a:documentation>Heading level 2</a:documentation>
+                     <value>H3</value>
+                     <a:documentation>Heading level 3</a:documentation>
+                     <value>H4</value>
+                     <a:documentation>Heading level 4</a:documentation>
+                     <value>H5</value>
+                     <a:documentation>Heading level 5</a:documentation>
+                     <value>H6</value>
+                     <a:documentation>Heading level 6</a:documentation>
                      <value>P</value>
                      <a:documentation>A paragraph.</a:documentation>
                      <value>Lbl</value>

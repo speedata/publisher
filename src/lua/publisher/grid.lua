@@ -933,6 +933,9 @@ function trimbox( self, crop, extrapageattributes )
     elseif tonumber(crop) then
         attrstring[#attrstring + 1] = string.format("/CropBox [%g %g %g %g]", sp_to_bp(self.dimensions[1] - 2*crop), sp_to_bp(tex.pageheight - self.dimensions[2] + 2* crop), sp_to_bp(self.dimensions[3] + 2*crop), sp_to_bp(tex.pageheight - self.dimensions[4] - 2*crop))
     end
+    if publisher.options.format == "PDF/UA" then
+        attrstring[#attrstring+1] = "/Tabs /S"
+    end
 
     pdf.setpageattributes(table.concat(attrstring, " "))
 end
