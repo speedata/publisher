@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.16" date="2024-07-07">
+        <en>Enhance accessibility options.</en>
+        <de>Erweitere Möglichkeiten für Barrierefreiheit.</de>
+    </entry>
     <entry version="4.19.15" date="2024-07-04">
         <en>New platform support: Linux ARM 64 bit (experimental).</en>
         <de>Neue Plattform: Linux ARM 64 Bit (experimentell).</de>
