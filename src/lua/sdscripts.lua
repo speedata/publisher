@@ -6,8 +6,25 @@
 --  See file COPYING in the root directory for license info.
 --
 
-local splib = require("libsplib")
 
+local libname
+if os.name == "windows" then
+  libname = "libsplib.dll"
+elseif os.name == "linux" then
+  libname = "libsplib.so"
+elseif os.name == "freebsd" then
+  libname = "libsplib.so"
+else
+  libname = "libsplib.so"
+end
+
+local ok, msg = package.loadlib(libname,"*")
+if not ok then
+   print(msg)
+   os.exit(0)
+end
+
+local splib = require("luaglue")
 
 dofile(arg[1])
 
