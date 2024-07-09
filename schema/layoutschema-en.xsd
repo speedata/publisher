@@ -2868,6 +2868,21 @@
           <xs:documentation>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="stretch">
+        <xs:annotation>
+          <xs:documentation>Set the maximum stretch factor of the fonts. Default is disabled. Values divided by 10 = percent. For example 20 means stretch by maxium of 2%.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="shrink">
+        <xs:annotation>
+          <xs:documentation>Set the maximum shrinkage factor of the fonts. Default is disabled. Values divided by 10 = percent. For example 20 means shrink by maxium of 2%.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="step">
+        <xs:annotation>
+          <xs:documentation>Set the step values for shrinkage / stretching. Value divided by 10 is step in percentage. For example: a value of 20 means increase / decrease size in 2% steps. Default 10.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Layout">
@@ -3976,6 +3991,45 @@
       <xs:attribute name="startpage">
         <xs:annotation>
           <xs:documentation>Set the number of the first page.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontexpansion">
+        <xs:annotation>
+          <xs:documentation>Allow glyph stretching and shrinking. Default is 'yes'.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="no">
+              <xs:annotation>
+                <xs:documentation>Do not allow font stretching or shrinking.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="some">
+              <xs:annotation>
+                <xs:documentation>Stretching and shrinking is applied after the line break.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="yes">
+              <xs:annotation>
+                <xs:documentation>Stretching and shrinking is applied before linebreak, so the line breaking algorithm has more possible break points thus leading to a “better” visual appearance.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="fontstretch">
+        <xs:annotation>
+          <xs:documentation>Set the default maximum stretch factor of the fonts. Default is disabled. Values divided by 10 = percent. For example 20 means stretch by maxium of 2%.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontshrink">
+        <xs:annotation>
+          <xs:documentation>Set the default maximum shrinkage factor of the fonts. Default is disabled. Values divided by 10 = percent. For example 20 means shrink by maxium of 2%.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontstep">
+        <xs:annotation>
+          <xs:documentation>Set the default step values for shrinkage / stretching. Value divided by 10 is step in percentage. For example: a value of 20 means increase / decrease size in 2% steps. Default 10.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>

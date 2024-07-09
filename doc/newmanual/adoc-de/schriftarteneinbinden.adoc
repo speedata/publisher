@@ -2,8 +2,7 @@
 = Einbinden von Schriftarten
 
 Das Einbinden von ((Schriftarten)) in den gängigen Formaten ist sehr einfach.
-Unterstützt werden die Formate Type1 (Dateien `.pfb` und `.afm`) sowie
-TrueType und OpenType (Dateien `.ttf` und `.otf`).
+Unterstützt werden die Formate TrueType und OpenType (Dateien `.ttf` und `.otf`).
 // TrueType collections sind
 // prinzipiell möglich, aber noch nicht freigeschaltet (hier hätte ich gerne ein
 // paar Testfälle).
@@ -23,7 +22,7 @@ Im zweiten Schritt nutzt man dann diese internen Namen, um Familien zu definiere
 
 [source,xml]
 -------
-<DefineFontfamily name="textfont" fontsize="9" leading="11">
+<DefineFontfamily name="textfont" fontsize="9pt" leading="11pt">
   <Regular fontface="MinionRegular"/>
   <Bold fontface="MinionBold"/>
   <Italic fontface="MinionItalic"/>
@@ -32,7 +31,7 @@ Im zweiten Schritt nutzt man dann diese internen Namen, um Familien zu definiere
 -------
 
 Die lezten drei Schnitte (Fett, Kursiv und Fettkursiv) müssen nicht angegeben werden, wenn sie im Layout nicht benutzt werden.
-`fontsize` bezeichnet die Schrifthöhe in Punkt, `leading` den Abstand zwischen zwei Grundlinien.
+`fontsize` bezeichnet die Schrifthöhe, `leading` den Abstand zwischen zwei Grundlinien.
 
 
 .Schriftgröße und Zeilenabstand
@@ -247,59 +246,8 @@ Eine Beschreibung aller OpenType Features findet sich unter
 https://docs.microsoft.com/en-us/typography/opentype/spec/featurelist.
 Die voreingestellten Features sind die, die im  https://harfbuzz.github.io/shaping-opentype-features.html[Harfbuzz Handbuch] beschrieben sind, ohne `liga`.
 
-[[ch-optischerrandausgleich]]
-== Optischer Randausgleich
+TIP: Inzwischen ist der Harfbuzz-Modus voreingestellt. Umschalten kann man mit `mode="fontforge"`
 
-
-Mit dem Parameter `marginprotrusion` (Prozentangabe) beim Befehl `<LoadFontfile>`  kann man bestimmen, wie weit bestimmte Zeichen (Komma, Punkt und
-Bindestrich) rechts in den Rand hineinragen. Damit kann man einen optisch
-ruhigeren Rand bei Blocksatz erreichen:
-
-[source, xml]
--------------------------------------------------------------------------------
-<Layout
-  xmlns="urn:speedata.de:2009/publisher/en"
-  xmlns:sd="urn:speedata:2009/publisher/functions/en">
-
-  <Options mainlanguage="German" />
-  <LoadFontfile name="main"
-                filename="MinionPro-Regular.otf"
-                marginprotrusion="100" />
-
-  <DefineFontfamily name="text" fontsize="10" leading="12">
-    <Regular fontface="main"/>
-  </DefineFontfamily>
-
-
-  <Record element="data">
-    <PlaceObject>
-      <Textblock width="4">
-        <Paragraph>
-          <Value select="."/>
-        </Paragraph>
-      </Textblock>
-    </PlaceObject>
-  </Record>
-</Layout>
--------------------------------------------------------------------------------
-
-
-Die dazugehörige Datendatei (`data.xml`) ist folgende:
-
-[source, xml]
--------------------------------------------------------------------------------
-<data>A wonderful serenity has taken possession of my entire
-  soul, like these sweet mornings of spring which I enjoy
-  with my whole heart. I am alone, and feel the charm of
-  existence in this spot, which was created for the bliss of
-  souls like mine. I am so happy, my dear friend, so
-  absorbed in the exquisite sense of mere tranquil
-  existence, that I neglect my talents.</data>
--------------------------------------------------------------------------------
-
-
-.Links: Komma, Punkt und Bindestrich ragen in den rechten Rand hinein. Rechts: ohne optischen Randausgleich.
-image::marginprotrusion.png[width=100%]
 
 
 [[sec-fontverzeichnis,Speicherort]]

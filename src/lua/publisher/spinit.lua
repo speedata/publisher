@@ -272,7 +272,6 @@ local function setup()
             pdf.setobjcompresslevel(9)
         end
     end
-    tex.pdfadjustspacing = 2
     tex.adjustspacing = 2
     tex.pdfpageheight = tex.sp("29.7cm")
     tex.pdfpagewidth  = tex.sp("21cm")

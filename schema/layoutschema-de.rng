@@ -2853,6 +2853,21 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="stretch">
+                     <a:documentation>Setze den maximalen Dehnungsfaktor der Schriftart. Voreinstellung ist ausgeschaltet. Wert geteilt durch 10 = Prozent. Beispiel: 20 bedeutet eine maximale Dehnung von 2%.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="shrink">
+                     <a:documentation>Setze den maximalen Stauchfaktor der Schriftart. Voreinstellung ist ausgeschaltet. Wert geteilt durch 10 = Prozent. Beispiel: 20 bedeutet eine maximale Stauchung von 2%.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="step">
+                     <a:documentation>Setze die Schritte für stauchen und dehnen. Wert geteilt durch 10 = Prozent. Beispiel: 20 erhöht/verringert die Schriftgröße bei Bedarf um 2%. Voreinstellung: 10</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <oneOrMore>
                      <ref name="e_Fallback"></ref>
                   </oneOrMore>
@@ -3744,6 +3759,34 @@
          <optional>
             <attribute name="startpage">
                <a:documentation>Gibt den Nummer der ersten Seite an.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fontexpansion">
+               <a:documentation>Erlaube dehnen und stauchen von Zeichen. Voreinstellung ist &#39;yes&#39;.</a:documentation>
+               <choice>
+                  <value>no</value>
+                  <a:documentation>Dehnen und stauchen nicht erlauben.</a:documentation>
+                  <value>some</value>
+                  <a:documentation>Dehnen und stauchen wird nach dem Textumbruch angewendet.</a:documentation>
+                  <value>yes</value>
+                  <a:documentation>Dehnen und stauchen wird vor dem Zeilenumbruch angewendet. Dadurch hat der Umbruchalgorithmus mehr Möglichkeiten und erzeugt damit einen besseren Textsatz.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fontstretch">
+               <a:documentation>Setze den voreingestellten maximalen Dehnungsfaktor der Schriftart. Voreinstellung ist ausgeschaltet. Wert geteilt durch 10 = Prozent. Beispiel: 20 bedeutet eine maximale Dehnung von 2%.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fontshrink">
+               <a:documentation>Setze den voreingestellten maximalen Stauchfaktor der Schriftart. Voreinstellung ist ausgeschaltet. Wert geteilt durch 10 = Prozent. Beispiel: 20 bedeutet eine maximale Stauchung von 2%.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fontstep">
+               <a:documentation>Setze die voreingestellten Schritte für stauchen und dehnen. Wert geteilt durch 10 = Prozent. Beispiel: 20 erhöht/verringert die Schriftgröße bei Bedarf um 2%. Voreinstellung: 10</a:documentation>
             </attribute>
          </optional>
          <empty></empty>

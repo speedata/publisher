@@ -6629,7 +6629,7 @@ function xml_to_string( xml_element, level )
     end
     level = level or 0
     local eltname = xml_element[".__name"] or xml_element[".__local_name"] or ""
-    if level == 0 and eltname == "" then eltname = "xxx" end
+    if level == 0 and eltname == "" then eltname = "undefined" end
     if eltname ~= "" then
         str = str ..  "<" .. eltname
         for k,v in pairs(xml_element) do
@@ -6688,7 +6688,7 @@ xml_stringvalue_mt = {
 --- ---------------------------------
 
 --- We map from symbolic names to (part of) file names. The hyphenation pattern files are
---- in the format `hyph-XXX.pat.txt` and we need to find out that `XXX` part.
+--- in the format `hyph-XYZ.pat.txt` and we need to find out that `XYZ` part.
 language_mapping = {
     ["Ancient Greek"]                = "grc",
     ["Armenian"]                     = "hy",

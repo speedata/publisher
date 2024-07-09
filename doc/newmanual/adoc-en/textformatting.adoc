@@ -53,8 +53,101 @@
 .Various text markups
 image::textauszeichnungen.png[width=100%]
 
+
+[[ch-microtypography]]
+== Microtypography
+
+This section contains settings that can change small, sometimes inconspicuous details.
+
+
+=== Line breaking and font expansion
+
+In the default setting of the speedata Publisher, characters may be stretched or compressed a little so that a paragraph can wrap better. This usually only occurs in very narrow columns if there are too many spaces between the words. This behaviour can be controlled using the command <<cmd-options,`<options>`>>.
+
+[source, xml]
+----------------
+<Options fontexpansion="yes" />
+----------------
+
+The following settings are allowed:
+
+`no`::
+  All characters retain the width specified by the font designer.
+`some`::
+  The line break is carried out with the original widths, after the break the characters can be changed slightly in width so that the spaces between the words are slightly reduced.
+`yes`::
+  (default setting) The paragraph break is tried out with different character widths and then the best result is used.
+
+There are also the following attributes at <<cmd-options,`<options>`>> to set the degree of character expansion:
+
+`fontstretch`::
+  Specifies the percentage by which the characters may be stretched. Specification is in 0.1 per cent: a value of 20 means 2%. The default setting is 40 (= 4%).
+`fontshrink`::
+  Like `fontstretch`, only as an indication of the compression. The default setting is 30 (= 3%).
+`fontstep`::
+  The steps in which the wrapping algorithm "tries out" the stretching or compression. The default setting is 10.
+
+Here are some examples in German. German texts are famous for their long words which is especially painful in narrow columns.
+
+.If `fontexpansion="some"` is switched on, the wrapped paragraph differs only slightly. On the right, both paragraphs are superimposed, the paragraph for which `fontexpansion` is set to `some` is green.
+image::fontexpansionsome.png[width=100%]
+
+.With `fontexpansion="yes"` you have to experiment a little to determine a good degree of stretching and compression so that the paragraphs also look "good". On the left, `fontexpansion` is set to `no`, for the other two to `yes`. The paragraph on the right is set with the values 5% stretch and 3% compress (50 and 30 for `fontstretch` and `fontshrink`).
+image::fontexpansionyes.png[width=100%]
+
+
+[[ch-marginprotrusion]]
+=== Optical margin alignment
+
+With the parameter marginprotrusion (percentage) at the command `<LoadFontfile>` you can determine how far certain characters (comma, dot and hyphen) protrude into the right margin. This can be used to achieve an optically smoother margin in justified text:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options mainlanguage="German" />
+  <LoadFontfile name="main"
+                filename="MinionPro-Regular.otf"
+                marginprotrusion="100" />
+
+  <DefineFontfamily name="text" fontsize="10" leading="12">
+    <Regular fontface="main"/>
+  </DefineFontfamily>
+
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="4">
+        <Paragraph>
+          <Value select="."/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+The associated data file (`data.xml`) is as follows:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<data>A wonderful serenity has taken possession of my entire
+  soul, like these sweet mornings of spring which I enjoy
+  with my whole heart. I am alone, and feel the charm of
+  existence in this spot, which was created for the bliss of
+  souls like mine. I am so happy, my dear friend, so
+  absorbed in the exquisite sense of mere tranquil
+  existence, that I neglect my talents.</data>
+-------------------------------------------------------------------------------
+
+.Left: Comma, period and hyphen protrude into the right margin. Right: without optical margin alignment.
+image::marginprotrusion.png[width=100%]
+
+
 [[ch-spacing,Space characters]]
-== Space characters
+=== Space characters
 
 The following Unicode space characters are interpreted by the speedata Publisher:
 
@@ -98,7 +191,7 @@ Instead of a paragraph, an enumeration list can also appear. This is specified w
 
 image::olul.png[width=20%,scaledwidth=30%]
 
-TIP: This feature is not really robust yet. The lists cannot (currently) be nested. It is recommended to check if the lists are output correctly.
+There is a <<ch-fakelists,chapter on the various possibilities for enumeration lists>>.
 
 [[ch-textformatting-nobreak]]
 == Prevent text wrapping

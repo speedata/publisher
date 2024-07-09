@@ -138,9 +138,9 @@ function define_font_hb( name, size, extra_parameter )
     f.type          = 'real'
     f.encodingbytes = 2
     f.tounicode     = 1
-    f.stretch       = 40
-    f.shrink        = 30
-    f.step          = 10
+    f.stretch       = publisher.options.fontstretch or extra_parameter.stretch or 40
+    f.shrink        = publisher.options.fontshrink or extra_parameter.shrink or 30
+    f.step          = publisher.options.fontstep or extra_parameter.step or 10
     f.auto_expand   = true
     f.embedding     = "subset"
     f.format        = guess_fonttype(name)
@@ -336,9 +336,9 @@ function define_font(name, size,extra_parameter)
     f.type          = 'real'
     f.encodingbytes = 2
     f.tounicode     = 0
-    f.stretch       = 40
-    f.shrink        = 30
-    f.step          = 10
+    f.stretch       = publisher.options.fontstretch or extra_parameter.stretch or 40
+    f.shrink        = publisher.options.fontshrink or extra_parameter.shrink or 30
+    f.step          = publisher.options.fontstep or extra_parameter.step or 10
     f.auto_expand   = true
 
     f.parameters    = {

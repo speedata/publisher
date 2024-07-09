@@ -2853,6 +2853,21 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="stretch">
+                     <a:documentation>Set the maximum stretch factor of the fonts. Default is disabled. Values divided by 10 = percent. For example 20 means stretch by maxium of 2%.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="shrink">
+                     <a:documentation>Set the maximum shrinkage factor of the fonts. Default is disabled. Values divided by 10 = percent. For example 20 means shrink by maxium of 2%.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="step">
+                     <a:documentation>Set the step values for shrinkage / stretching. Value divided by 10 is step in percentage. For example: a value of 20 means increase / decrease size in 2% steps. Default 10.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <oneOrMore>
                      <ref name="e_Fallback"></ref>
                   </oneOrMore>
@@ -3744,6 +3759,34 @@
          <optional>
             <attribute name="startpage">
                <a:documentation>Set the number of the first page.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fontexpansion">
+               <a:documentation>Allow glyph stretching and shrinking. Default is &#39;yes&#39;.</a:documentation>
+               <choice>
+                  <value>no</value>
+                  <a:documentation>Do not allow font stretching or shrinking.</a:documentation>
+                  <value>some</value>
+                  <a:documentation>Stretching and shrinking is applied after the line break.</a:documentation>
+                  <value>yes</value>
+                  <a:documentation>Stretching and shrinking is applied before linebreak, so the line breaking algorithm has more possible break points thus leading to a “better” visual appearance.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fontstretch">
+               <a:documentation>Set the default maximum stretch factor of the fonts. Default is disabled. Values divided by 10 = percent. For example 20 means stretch by maxium of 2%.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fontshrink">
+               <a:documentation>Set the default maximum shrinkage factor of the fonts. Default is disabled. Values divided by 10 = percent. For example 20 means shrink by maxium of 2%.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="fontstep">
+               <a:documentation>Set the default step values for shrinkage / stretching. Value divided by 10 is step in percentage. For example: a value of 20 means increase / decrease size in 2% steps. Default 10.</a:documentation>
             </attribute>
          </optional>
          <empty></empty>

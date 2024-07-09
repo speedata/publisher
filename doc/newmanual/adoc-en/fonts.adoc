@@ -2,7 +2,7 @@
 = Using fonts
 
 
-Embedding fonts in the common formats is very easy. The formats Type1 (files .pfb and .afm) as well as TrueType and OpenType (files .ttf and .otf) are supported.
+Embedding fonts in the common formats is very easy. The formats TrueType and OpenType (files .ttf and .otf) are supported.
 
 To make fonts known and used by the publisher, two steps are necessary. The first step is to load a font file:
 
@@ -15,7 +15,7 @@ This assigns the file name MinionPro-Regular.otf the internal name MinionRegular
 
 [source,xml]
 -------
-<DefineFontfamily name="textfont" fontsize="9" leading="11">
+<DefineFontfamily name="textfont" fontsize="9pt" leading="11pt">
   <Regular fontface="MinionRegular"/>
   <Bold fontface="MinionBold"/>
   <Italic fontface="MinionItalic"/>
@@ -23,7 +23,7 @@ This assigns the file name MinionPro-Regular.otf the internal name MinionRegular
 </DefineFontfamily>
 -------
 
-The last three cuts (bold, italic and bold italic) do not have to be specified if they are not used in the layout. fontsize is the font height in points, leading is the distance between two baselines.
+The last three cuts (bold, italic and bold italic) do not have to be specified if they are not used in the layout. fontsize is the font height, leading is the distance between two baselines.
 
 .Font size and line spacing
 image::14-fontsize-leading.png[width=100%]
@@ -226,55 +226,7 @@ A complete description of the OpenType features can be found on
 https://docs.microsoft.com/en-us/typography/opentype/spec/featurelist.
 The default features are the ones that are mentioned in the  https://harfbuzz.github.io/shaping-opentype-features.html[harfbuzz manual] but without `liga`.
 
-
-[[ch-marginprotrusion]]
-== Optical margin alignment
-
-With the parameter marginprotrusion (percentage) at the command `<LoadFontfile>` you can determine how far certain characters (comma, dot and hyphen) protrude into the right margin. This can be used to achieve an optically smoother margin in justified text:
-
-[source, xml]
--------------------------------------------------------------------------------
-<Layout
-  xmlns="urn:speedata.de:2009/publisher/en"
-  xmlns:sd="urn:speedata:2009/publisher/functions/en">
-
-  <Options mainlanguage="German" />
-  <LoadFontfile name="main"
-                filename="MinionPro-Regular.otf"
-                marginprotrusion="100" />
-
-  <DefineFontfamily name="text" fontsize="10" leading="12">
-    <Regular fontface="main"/>
-  </DefineFontfamily>
-
-
-  <Record element="data">
-    <PlaceObject>
-      <Textblock width="4">
-        <Paragraph>
-          <Value select="."/>
-        </Paragraph>
-      </Textblock>
-    </PlaceObject>
-  </Record>
-</Layout>
--------------------------------------------------------------------------------
-
-The associated data file (`data.xml`) is as follows:
-
-[source, xml]
--------------------------------------------------------------------------------
-<data>A wonderful serenity has taken possession of my entire
-  soul, like these sweet mornings of spring which I enjoy
-  with my whole heart. I am alone, and feel the charm of
-  existence in this spot, which was created for the bliss of
-  souls like mine. I am so happy, my dear friend, so
-  absorbed in the exquisite sense of mere tranquil
-  existence, that I neglect my talents.</data>
--------------------------------------------------------------------------------
-
-.Left: Comma, period and hyphen protrude into the right margin. Right: without optical margin alignment.
-image::marginprotrusion.png[width=100%]
+TIP: The default mode is now the Harfbuzz mode. Set the old mode with `mode="fontforge"`.
 
 == In which directory must the font files be located?
 

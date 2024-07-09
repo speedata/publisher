@@ -5268,6 +5268,30 @@
         <para>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße.</para>
       </description>
     </attribute>
+    <attribute en="stretch" optional="yes" type="number" since="4.19.17">
+      <description xml:lang="en">
+        <para>Set the maximum stretch factor of the fonts. Default is disabled. Values divided by 10 = percent. For example 20 means stretch by maxium of 2%.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze den maximalen Dehnungsfaktor der Schriftart. Voreinstellung ist ausgeschaltet. Wert geteilt durch 10 = Prozent. Beispiel: 20 bedeutet eine maximale Dehnung von 2%.</para>
+      </description>
+    </attribute>
+    <attribute en="shrink" optional="yes" type="number" since="4.19.17">
+      <description xml:lang="en">
+        <para>Set the maximum shrinkage factor of the fonts. Default is disabled. Values divided by 10 = percent. For example 20 means shrink by maxium of 2%.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze den maximalen Stauchfaktor der Schriftart. Voreinstellung ist ausgeschaltet. Wert geteilt durch 10 = Prozent. Beispiel: 20 bedeutet eine maximale Stauchung von 2%.</para>
+      </description>
+    </attribute>
+    <attribute en="step" optional="yes" type="number" since="4.19.17">
+      <description xml:lang="en">
+        <para>Set the step values for shrinkage / stretching. Value divided by 10 is step in percentage. For example: a value of 20 means increase / decrease size in 2% steps. Default 10.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze die Schritte für stauchen und dehnen. Wert geteilt durch 10 = Prozent. Beispiel: 20 erhöht/verringert die Schriftgröße bei Bedarf um 2%. Voreinstellung: 10</para>
+      </description>
+    </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<LoadFontfile name="Helvetica" filename="texgyreheros-regular.otf" />
 <LoadFontfile name="Helvetica Fett" filename="texgyreheros-bold.otf" />
@@ -6418,6 +6442,62 @@
       </description>
       <description xml:lang="de">
         <para>Gibt den Nummer der ersten Seite an.</para>
+      </description>
+    </attribute>
+    <attribute en="fontexpansion" optional="yes" since="4.19.17">
+      <description xml:lang="en">
+        <para>Allow glyph stretching and shrinking. Default is 'yes'.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Erlaube dehnen und stauchen von Zeichen. Voreinstellung ist 'yes'.</para>
+      </description>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Do not allow font stretching or shrinking.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Dehnen und stauchen nicht erlauben.</para>
+        </description>
+      </choice>
+      <choice en="some">
+        <description xml:lang="en">
+          <para>Stretching and shrinking is applied after the line break.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Dehnen und stauchen wird nach dem Textumbruch angewendet.</para>
+        </description>
+      </choice>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Stretching and shrinking is applied before linebreak, so the line breaking algorithm has more possible break points thus leading to a “better” visual appearance.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Dehnen und stauchen wird vor dem Zeilenumbruch angewendet. Dadurch hat der Umbruchalgorithmus mehr Möglichkeiten und erzeugt damit einen besseren Textsatz.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="fontstretch" optional="yes" type="number" since="4.19.17">
+      <description xml:lang="en">
+        <para>Set the default maximum stretch factor of the fonts. Default is disabled. Values divided by 10 = percent. For example 20 means stretch by maxium of 2%.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze den voreingestellten maximalen Dehnungsfaktor der Schriftart. Voreinstellung ist ausgeschaltet. Wert geteilt durch 10 = Prozent. Beispiel: 20 bedeutet eine maximale Dehnung von 2%.</para>
+      </description>
+    </attribute>
+    <attribute en="fontshrink" optional="yes" type="number" since="4.19.17">
+      <description xml:lang="en">
+        <para>Set the default maximum shrinkage factor of the fonts. Default is disabled. Values divided by 10 = percent. For example 20 means shrink by maxium of 2%.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze den voreingestellten maximalen Stauchfaktor der Schriftart. Voreinstellung ist ausgeschaltet. Wert geteilt durch 10 = Prozent. Beispiel: 20 bedeutet eine maximale Stauchung von 2%.</para>
+      </description>
+    </attribute>
+    <attribute en="fontstep" optional="yes" type="number" since="4.19.17">
+      <description xml:lang="en">
+        <para>Set the default step values for shrinkage / stretching. Value divided by 10 is step in percentage. For example: a value of 20 means increase / decrease size in 2% steps. Default 10.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze die voreingestellten Schritte für stauchen und dehnen. Wert geteilt durch 10 = Prozent. Beispiel: 20 erhöht/verringert die Schriftgröße bei Bedarf um 2%. Voreinstellung: 10</para>
       </description>
     </attribute>
     <remark xml:lang="en">

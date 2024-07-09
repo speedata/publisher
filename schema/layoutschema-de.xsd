@@ -2868,6 +2868,21 @@
           <xs:documentation>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="stretch">
+        <xs:annotation>
+          <xs:documentation>Setze den maximalen Dehnungsfaktor der Schriftart. Voreinstellung ist ausgeschaltet. Wert geteilt durch 10 = Prozent. Beispiel: 20 bedeutet eine maximale Dehnung von 2%.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="shrink">
+        <xs:annotation>
+          <xs:documentation>Setze den maximalen Stauchfaktor der Schriftart. Voreinstellung ist ausgeschaltet. Wert geteilt durch 10 = Prozent. Beispiel: 20 bedeutet eine maximale Stauchung von 2%.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="step">
+        <xs:annotation>
+          <xs:documentation>Setze die Schritte für stauchen und dehnen. Wert geteilt durch 10 = Prozent. Beispiel: 20 erhöht/verringert die Schriftgröße bei Bedarf um 2%. Voreinstellung: 10</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Layout">
@@ -3976,6 +3991,45 @@
       <xs:attribute name="startpage">
         <xs:annotation>
           <xs:documentation>Gibt den Nummer der ersten Seite an.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontexpansion">
+        <xs:annotation>
+          <xs:documentation>Erlaube dehnen und stauchen von Zeichen. Voreinstellung ist 'yes'.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="no">
+              <xs:annotation>
+                <xs:documentation>Dehnen und stauchen nicht erlauben.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="some">
+              <xs:annotation>
+                <xs:documentation>Dehnen und stauchen wird nach dem Textumbruch angewendet.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="yes">
+              <xs:annotation>
+                <xs:documentation>Dehnen und stauchen wird vor dem Zeilenumbruch angewendet. Dadurch hat der Umbruchalgorithmus mehr Möglichkeiten und erzeugt damit einen besseren Textsatz.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="fontstretch">
+        <xs:annotation>
+          <xs:documentation>Setze den voreingestellten maximalen Dehnungsfaktor der Schriftart. Voreinstellung ist ausgeschaltet. Wert geteilt durch 10 = Prozent. Beispiel: 20 bedeutet eine maximale Dehnung von 2%.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontshrink">
+        <xs:annotation>
+          <xs:documentation>Setze den voreingestellten maximalen Stauchfaktor der Schriftart. Voreinstellung ist ausgeschaltet. Wert geteilt durch 10 = Prozent. Beispiel: 20 bedeutet eine maximale Stauchung von 2%.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fontstep">
+        <xs:annotation>
+          <xs:documentation>Setze die voreingestellten Schritte für stauchen und dehnen. Wert geteilt durch 10 = Prozent. Beispiel: 20 erhöht/verringert die Schriftgröße bei Bedarf um 2%. Voreinstellung: 10</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>

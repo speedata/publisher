@@ -1950,14 +1950,17 @@ end
 --- Load a given font file (`name`).
 --- Actually the font file is not loaded yet, only stored in a table. See `publisher.font#load_fontfile()`.
 function commands.load_fontfile( layoutxml,dataxml )
-    local marginprotrusion = publisher.read_attribute(layoutxml,dataxml,"marginprotrusion","number")
-    local space            = publisher.read_attribute(layoutxml,dataxml,"space",           "number")
-    local smcp             = publisher.read_attribute(layoutxml,dataxml,"smallcaps",       "string")
+    local features         = publisher.read_attribute(layoutxml,dataxml,"features",        "string")
     local filename         = publisher.read_attribute(layoutxml,dataxml,"filename",        "string")
+    local marginprotrusion = publisher.read_attribute(layoutxml,dataxml,"marginprotrusion","number")
+    local mode             = publisher.read_attribute(layoutxml,dataxml,"mode",            "string", publisher.options.fontloader)
     local name             = publisher.read_attribute(layoutxml,dataxml,"name",            "string")
     local osf              = publisher.read_attribute(layoutxml,dataxml,"oldstylefigures", "boolean")
-    local features         = publisher.read_attribute(layoutxml,dataxml,"features",        "string")
-    local mode             = publisher.read_attribute(layoutxml,dataxml,"mode",            "string", publisher.options.fontloader)
+    local shrink           = publisher.read_attribute(layoutxml,dataxml,"shrink",          "number")
+    local smcp             = publisher.read_attribute(layoutxml,dataxml,"smallcaps",       "string")
+    local space            = publisher.read_attribute(layoutxml,dataxml,"space",           "number")
+    local step             = publisher.read_attribute(layoutxml,dataxml,"step",            "number")
+    local stretch          = publisher.read_attribute(layoutxml,dataxml,"stretch",         "number")
 
     local fallbacks = {}
     for _,v in ipairs(layoutxml) do
@@ -1974,6 +1977,9 @@ function commands.load_fontfile( layoutxml,dataxml )
         marginprotrusion = marginprotrusion or 0,
         fallbacks        = fallbacks,
         mode             = mode,
+        shrink           = shrink,
+        stretch          = stretch,
+        step             = step,
         otfeatures       = {
             smcp = smcp == "yes",
             onum = osf == true,
@@ -2548,6 +2554,19 @@ function commands.options( layoutxml,dataxml )
         log("Set page number to %d",num)
     end
 
+    publisher.options.fontstretch         = publisher.read_attribute(layoutxml,dataxml,"fontstretch", "number", publisher.options.fontstretch)
+    publisher.options.fontshrink          = publisher.read_attribute(layoutxml,dataxml,"fontshrink",  "number", publisher.options.fontshrink)
+    publisher.options.fontstep            = publisher.read_attribute(layoutxml,dataxml,"fontstep",    "number", publisher.options.fontstep)
+    local fontexpansion                   = publisher.read_attribute(layoutxml,dataxml,"fontexpansion", "string")
+    if fontexpansion ~= nil then
+        if fontexpansion == "yes" then
+            tex.adjustspacing = 2
+        elseif fontexpansion == "some" then
+            tex.adjustspacing = 1
+        else
+            tex.adjustspacing = 0
+        end
+    end
     publisher.options.trim                = publisher.read_attribute(layoutxml,dataxml,"trim",        "length", publisher.options.trim)
     publisher.options.trim                = publisher.read_attribute(layoutxml,dataxml,"bleed",       "length", publisher.options.trim)
     publisher.options.ignoreeol           = publisher.read_attribute(layoutxml,dataxml,"ignoreeol",   "boolean",publisher.options.ignoreeol)

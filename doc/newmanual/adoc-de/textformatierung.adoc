@@ -55,8 +55,102 @@ Mit einer ähnlichen Funktionalität gibt es die folgenden Befehle:
 .Verschiedene Textauszeichnungen
 image::textauszeichnungen.png[width=100%]
 
+
+[[ch-microtypography]]
+== Mikrotypographie
+
+Unter diesem Punkt finden sich Einstellungen, die kleine, manchmal unscheinbare Details verändern können.
+
+=== Absatzumbruch und Zeichenerweiterung
+
+In der Voreinstellung des speedata Publishers, dürfen Zeichen ein wenig gestreckt oder gestaucht werden, damit ein Absatz besser umbrechen kann. Das tritt in der Regel nur in sehr schmalen Spalten auf, wenn zu große Leerräume zwischen den Wörtern entstehen würden. Dieses Verhalten kann man über den Befehl <<cmd-options,`<Options>`>> steuern.
+
+[source, xml]
+----------------
+<Options fontexpansion="yes" />
+----------------
+
+Die folgenden Werte sind erlaubt:
+
+`no`::
+  Alle Zeichen behalten ihre durch den Schriftdesigner vorgegebene Breite.
+`some`::
+  Der Zeilenumbruch wird mit den ursprünglichen Breiten durchgeführt, nach dem Umbruch können die Zeichen in ihrer Breite etwas verändert werden, damit die Leerräume zwischen den Wörtern etwas verkleinert werden.
+`yes`::
+  (Voreinstellung) Der Absatzumbruch wird mit verschiedenen Zeichenbreiten ausprobiert und dann das beste Ergebnis genommen.
+
+Es gibt noch folgende Attribute bei <<cmd-options,`<Options>`>>, um den Grad der Zeichenerweiterung einzustellen:
+
+`fontstretch`::
+  Die Angabe, um wie viel Prozent die Zeichen gestreckt werden dürfen. Angabe ist in 0,1 Prozent: ein Wert von 20 bedeutet 2%. Voreinstellung ist 40 (= 4%).
+`fontshrink`::
+  Wie `fontstretch`, nur als Angabe der Stauchung. Voreinstellung ist 30 (= 3%).
+`fontstep`::
+  Die Stufen, in denen der Umbruchalgorithmus die Dehnung oder Stauchung »ausprobiert«. Voreinstellung ist 10.
+
+.Wenn `fontexpansion="some"` angeschaltet ist, unterscheidet sich der umbrochene Absatz nur wenig. Rechts sind beide Absätze übereinander gelegt, grün ist der Absatz bei dem `fontexpansion` auf `some` eingestellt ist.
+image::fontexpansionsome.png[width=100%]
+
+.Bei `fontexpansion="yes"` muss man etwas experimentieren, um ein gutes Maß an Streckung und Stauchung festzulegen so dass die Absätze auch »gut« aussehen. Links ist `fontexpansion` auf `no` gesetzt, bei den beiden anderen auf `yes`. Der rechte Absatz ist mit den Werten 5% strecken und 3% stauchen (50 und 30 bei `fontstretch` und `fontshrink`) gesetzt.
+image::fontexpansionyes.png[width=100%]
+
+
+[[ch-optischerrandausgleich]]
+=== Optischer Randausgleich
+
+
+Mit dem Parameter `marginprotrusion` (Prozentangabe) beim Befehl `<LoadFontfile>`  kann man bestimmen, wie weit bestimmte Zeichen (Komma, Punkt und
+Bindestrich) rechts in den Rand hineinragen. Damit kann man einen optisch
+ruhigeren Rand bei Blocksatz erreichen:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options mainlanguage="German" />
+  <LoadFontfile name="main"
+                filename="MinionPro-Regular.otf"
+                marginprotrusion="100" />
+
+  <DefineFontfamily name="text" fontsize="10" leading="12">
+    <Regular fontface="main"/>
+  </DefineFontfamily>
+
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="4">
+        <Paragraph>
+          <Value select="."/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+-------------------------------------------------------------------------------
+
+
+Die dazugehörige Datendatei (`data.xml`) ist folgende:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<data>A wonderful serenity has taken possession of my entire
+  soul, like these sweet mornings of spring which I enjoy
+  with my whole heart. I am alone, and feel the charm of
+  existence in this spot, which was created for the bliss of
+  souls like mine. I am so happy, my dear friend, so
+  absorbed in the exquisite sense of mere tranquil
+  existence, that I neglect my talents.</data>
+-------------------------------------------------------------------------------
+
+
+.Links: Komma, Punkt und Bindestrich ragen in den rechten Rand hinein. Rechts: ohne optischen Randausgleich.
+image::marginprotrusion.png[width=100%]
+
 [[ch-spacing,Leerzeichen]]
-== Leerzeichen
+=== Leerzeichen
 
 Folgende Unicode-Leerzeichen werden vom speedata Publisher interpretiert:
 
@@ -74,6 +168,7 @@ Folgende Unicode-Leerzeichen werden vom speedata Publisher interpretiert:
 | `&amp;#x200B;`  | ZERO WIDTH SPACE   | 1000&#x200B;×&#x200B;500     | ohne Breite
 | (Leerzeichen)   | SPACE              | 1000 × 500                   | Variabel
 |=======
+
 
 
 [[ch-aufzaehlungslisten,Aufzählungslisten]]
@@ -102,7 +197,7 @@ Die einzelnen Punkte müssen mit `<Li>` ausgezeichnet werden.
 image::olul.png[width=20%,scaledwidth=30%]
 
 
-TIP: Dieses Feature ist noch nicht wirklich robust. Die Listen können (derzeit) nicht geschachtelt werden. Es empfiehlt sich zu schauen, ob die Listen auch korrekt ausgegeben werden.
+Es gibt einen <<ch-fakelists,eigenen Abschnitt über Aufzählungslisten>>.
 
 [[ch-nobreak]]
 == Verhindern von Textumbruch
