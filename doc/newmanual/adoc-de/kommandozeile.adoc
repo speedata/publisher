@@ -84,7 +84,7 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 `-x`, `--extra-dir=DIR`::
    Bindet zusätzliche Verzeichnisse in den Publisherlauf ein. In diesen  Verzeichnissen werden alle Daten gesucht: Bilddaten, Layoutregelwerke,  Datendateien und Schriftdateien. Dieses Argument kann mehrfach  angegeben werden und per Konfigurationsdatei mit Werten vorbelegt werden. Mehrere Verzeichnisse können auch in einem Parameter und mit den systemweiten Trenner (Semikolon für Windows und Doppelpunkt für alle anderen Betriebssysteme) getrennt angegeben werden.
 `--extra-xml=NAME` ::
-   Diese Datei den Layoutanweisungen hinzufügen. Ähnlich wie das Einbinden einer Datei über xinclude. Mehrere Dateien werden mit Komma separiert.
+   Diese Datei den Layoutanweisungen hinzufügen. Ähnlich wie das Einbinden einer Datei über xinclude. Mehrere Dateien werden mit Komma separiert. Wird im neuen XPath-Parser nicht mehr unterstützt, stattdessen ist xinclude zu benutzen.
 `--filter=FILTER`::
    Führt die angegebene Lua-Datei aus. Siehe Kapitel <<luafilter>>.
 `--grid`::
@@ -116,9 +116,9 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 `--port=PORT` ::
    Portnummer für den Servermodus. Voreinstellung ist 5266.
 `--prepend-xml=NAME`::
-   Diese Datei vor der Layout-XML einfügen.
+   Diese Datei vor der Layout-XML einfügen. Wird im neuen XPath-Parser nicht mehr unterstützt, stattdessen ist xinclude zu benutzen.
 `--pdfversion=VERSION`::
-   Setzt die PDF Version. Voreinstellung ist 1.6.
+   Setzt die PDF Version. Voreinstellung ist 1.7.
 `--quiet`::
    Unterdrückt alle Ausgaben des Publishers.
 `--runs = NUM`::

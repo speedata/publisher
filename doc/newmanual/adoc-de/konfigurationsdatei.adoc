@@ -55,11 +55,11 @@ erkannt. Folgende Optionen werden unterstützt:
 `extensionhandler`::
   Zuordnung von Dateiendungen zu in `imagehandler` definierten Konvertern. Um Grafiken on-the-fly zu konvertieren. Beispiel: `extensionhandler="mmd:mermaid"`. Mehrere Einträge werden mit Semikolon getrennt. Siehe auch `imagehandler`. (Seit Version 3.9.1, experimentell.)
 `extraxml`::
-  Diese XML-Dateien zu den Layoutanweisungen hinzufügen. Kommaseparierte Liste (`extraxml=datei1.xml,datei2.xml`).
+  Diese XML-Dateien zu den Layoutanweisungen hinzufügen. Kommaseparierte Liste (`extraxml=datei1.xml,datei2.xml`). Wird im neuen XPath-Parser nicht mehr unterstützt, stattdessen ist xinclude zu benutzen.
 `fontloader`::
    Setze den Fontlader auf `fontforge` (Voreinstellung bis Version 4.16) oder `harfbuzz` (Voreinstellung ab Version 4.18).
 `prependxml`::
-  Diese XML-Dateien vor den Layoutanweisungen hinzufügen. Kommaseparierte Liste (`prependxml=datei1.xml,datei2.xml`).
+  Diese XML-Dateien vor den Layoutanweisungen hinzufügen. Kommaseparierte Liste (`prependxml=datei1.xml,datei2.xml`). Wird im neuen XPath-Parser nicht mehr unterstützt, stattdessen ist xinclude zu benutzen.
 `filter`::
   Führt die angegebene Datei als Lua-Filter aus. Siehe Abschnitt <<luafilter>>.
 `fontpath`::

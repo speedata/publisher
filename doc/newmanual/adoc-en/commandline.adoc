@@ -89,7 +89,7 @@ you can display a list of the allowed commands and parameters.
 `-x`, `--extra-dir=DIR`::
    Additional directory for file search.
 `--extra-xml=NAME`::
-   Add this file to the layout file
+   Add this file to the layout file. Not supported with the new XPath module. Use xinclude instead.
 `--filter=FILTER`::
    Run Lua filter before publishing starts
 `--grid`::
@@ -119,9 +119,9 @@ you can display a list of the allowed commands and parameters.
 `--outputdir=DIR`::
    Copy PDF and protocol to this directory.
 `--pdfversion=VERSION`::
-   Set the PDF version. Default is 1.6.
+   Set the PDF version. Default is 1.7.
 `--prepend-xml=NAME`::
-   Add this file in front of the layout file
+   Add this file in front of the layout file. Not supported with the new XPath module. Use xinclude instead.
 `--port=PORT`::
    Port to be used for the server mode. Defaults to 5266
 `--quiet`::

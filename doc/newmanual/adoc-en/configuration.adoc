@@ -49,7 +49,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `extensionhandler`::
    Assignment of file extensions to converters defined in 'imagehandler'. To convert graphics on-the-fly. Example: `extensionhandler="mmd:mermaid"`. Multiple entries are separated by semicolon. See also `imagehandler`. (Since version 3.9.1.)
 `extraxml`::
-   Add this XML file to the layout instructions. List of comma separated file names (`extraxml=file1.xml,file2.xml`).
+   Add this XML file to the layout instructions. List of comma separated file names (`extraxml=file1.xml,file2.xml`). Not supported with the new XPath module. Use xinclude instead.
 `fontloader`::
    Set the fontloader to `fontforge` (default until version 4.16) or `harfbuzz` (default starting from version 4.18).
 `filter`::
@@ -87,7 +87,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `pdfversion`::
   The PDF version that gets written. For example `1.7`.
 `prependxml`::
-   Add this XML file in front of the layout instructions. List of comma separated file names (`prependxml=file1.xml,file2.xml`).
+   Add this XML file in front of the layout instructions. List of comma separated file names (`prependxml=file1.xml,file2.xml`). Not supported with the new XPath module. Use xinclude instead.
 `reportmissingglyphs`::
    Should requested but missing glyphs be reported as an error or as a warning? The allowed values are `true`, `false`, or `warning`. `false` disables the reporting.
 `runs`::

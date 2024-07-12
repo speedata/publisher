@@ -1368,7 +1368,16 @@ function initialize_luatex_and_generate_pdf()
             end
         end
     end
-    if not newxpath then
+    if newxpath then
+        tmp = os.getenv("SP_PREPEND_XML")
+        if tmp and tmp ~= "" then
+            splib.error("--prepend-xml is not supported with the new XPath mode. Use xinclude instead.")
+        end
+        tmp = os.getenv("SP_EXTRA_XML")
+        if tmp and tmp ~= "" then
+            splib.error("--extra-xml is not supported with the new XPath mode. Use xinclude instead.")
+        end
+    else
         tmp = os.getenv("SP_PREPEND_XML")
         if tmp and tmp ~= "" then
             for i,v in ipairs(string.explode(tmp,",")) do
