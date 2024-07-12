@@ -200,7 +200,7 @@ function define_font_hb( name, size, extra_parameter )
             expansion_factor = 1000,
         }
         --- Margin protrusion is enabled in `spinit.lua`.
-        if (glyphname=="hyphen" or glyphname=="period" or glyphname=="comma") and extra_parameter and tonumber(extra_parameter.marginprotrusion) then
+        if (uni == 44  or uni == 45 or uni == 46) and extra_parameter and tonumber(extra_parameter.marginprotrusion) then
             f.characters[uni]["right_protruding"] = hadvance * extra_parameter.marginprotrusion / 100
         end
 

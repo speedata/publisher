@@ -6874,7 +6874,9 @@ function set_mainlanguage( mainlanguage )
 end
 
 
---- Return the language numbers used in this nodelist. Used before `do_linebreak()` to change pre-hyphenchar temporarily.
+--- Return the language numbers used in this nodelist.
+--- Used before `do_linebreak()` to change pre-hyphenchar
+--- temporarily.
 function get_languages_used( nodelist )
     local langs = {}
     for n in node.traverse_id(glyph_node,nodelist) do
