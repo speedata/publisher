@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.17" date="2024-07-12">
+        <en>Allow setting of font expansion parameter.</en>
+        <de>Schriftbreiten-Parameter konfigurierbar machen.</de>
+    </entry>
+    <entry version="4.19.17" date="2024-07-12">
+        <en>sp list-fonts works again.</en>
+        <de>sp list-fonts funktioniert wieder.</de>
+    </entry>
     <entry version="4.19.16" date="2024-07-07">
         <en>Enhance accessibility options.</en>
         <de>Erweitere Möglichkeiten für Barrierefreiheit.</de>
