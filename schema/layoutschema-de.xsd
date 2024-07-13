@@ -2904,6 +2904,7 @@
         <xs:element minOccurs="0" ref="en:Function"/>
         <xs:element minOccurs="0" ref="en:Hyphenation"/>
         <xs:element minOccurs="0" ref="en:LoadFontfile"/>
+        <xs:element minOccurs="0" ref="en:Message"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
         <xs:element minOccurs="0" ref="en:Options"/>
         <xs:element minOccurs="0" ref="en:Pageformat"/>

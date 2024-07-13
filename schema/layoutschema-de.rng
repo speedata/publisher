@@ -2938,6 +2938,9 @@
                      <ref name="e_LoadFontfile"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Message"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Loop"></ref>
                   </optional>
                   <optional>

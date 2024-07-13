@@ -164,6 +164,7 @@
     <optional><cmd name="Function"></cmd></optional>
     <optional><cmd name="Hyphenation"/></optional>
     <optional><cmd name="LoadFontfile"/></optional>
+    <optional><cmd name="Message"/></optional>
     <optional><cmd name="Loop"/></optional>
     <optional><cmd name="Options"/></optional>
     <optional><cmd name="Pageformat"/></optional>
