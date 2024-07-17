@@ -21,6 +21,12 @@
             <Value select="'The quick brown fox jumps over the lazy dog.'"></Value>
           </NoBreak>
         </Paragraph>
+        <Paragraph>
+          <NoBreak reduce="fontsize" factor="0.7">
+            <!-- prevent error on empty input -->
+            <Value select=""></Value>
+          </NoBreak>
+        </Paragraph>
       </Textblock>
     </PlaceObject>
 

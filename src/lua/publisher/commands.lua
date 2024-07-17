@@ -2426,6 +2426,9 @@ function commands.nobreak( layoutxml, dataxml )
                     tmppar:append(publisher.deepcopy(c),thisoptions)
                 end
                 tmppar:mknodelist(thisoptions,dataxml)
+                if #tmppar.objects == 0 then
+                    return tmppar
+                end
                 nl = node.copy_list(tmppar.objects[1])
                 nl = node.hpack(nl)
                 nl = node.insert_before(nl, nl , node.copy(strut))
