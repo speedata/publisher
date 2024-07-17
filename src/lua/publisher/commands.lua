@@ -2416,15 +2416,14 @@ function commands.nobreak( layoutxml, dataxml )
                 tmppar = par:new(nil,"nobreak(fontsize 1)")
                 loops = loops + 1
                 if loops > 10 then
-                    err("Nobreak: More than 100 loops, giving up")
+                    err("Nobreak: More than 10 loops, giving up")
                     break
                 end
                 local thisoptions = publisher.copy_table_from_defaults(options)
                 thisoptions.fontfamily = fam
-                foo = par:new(nil,"nobreak(fontsize 2)")
                 for _,j in ipairs(thiselt) do
                     local c = publisher.element_contents(j)
-                    tmppar:append(publisher.copy_table_from_defaults(c),thisoptions)
+                    tmppar:append(publisher.deepcopy(c),thisoptions)
                 end
                 tmppar:mknodelist(thisoptions,dataxml)
                 nl = node.copy_list(tmppar.objects[1])
