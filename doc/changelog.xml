@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.18" date="2024-07-17">
+        <en>Fix NoBreak/fontsize and dynamic data (#598).</en>
+        <de>Korrigiere NoBreak/fontsize und dynamische Daten (#598).</de>
+    </entry>
+    <entry version="4.19.18" date="2024-07-17">
+        <en>Error message and documentation for <tt>--prepend-xml</tt> and <tt>--extra-xml</tt> in lxpath-mode (#597).</en>
+        <de>Fehlermeldung und Dokumentation bei <tt>--prepend-xml</tt> oder <tt>--extra-xml</tt> im lxpath-Modus (#597).</de>
+    </entry>
+    <entry version="4.19.18" date="2024-07-17">
+        <en>Enable margin protrusion in harfbuzz mode (#595).</en>
+        <de>Optischer Randausgleich auch im Harfbuzz Modus (#595).</de>
+    </entry>
     <entry version="4.19.17" date="2024-07-12">
         <en>Allow setting of font expansion parameter.</en>
         <de>Schriftbreiten-Parameter konfigurierbar machen.</de>
