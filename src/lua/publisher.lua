@@ -3431,7 +3431,7 @@ function circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp)
     return v
 end
 
-function do_metapostimage(txt,width,height,clip)
+function do_metapostimage(dataxml,txt,width,height,clip)
     metapostgraphics["_image"] = txt
     local cp = publisher.current_page
     local width_sp, height_sp
@@ -3459,12 +3459,12 @@ function do_metapostimage(txt,width,height,clip)
     image.width = image.xsize
     image.height = image.ysize
 
-    height    = set_image_length(height,   "height") or image.height
-    width     = set_image_length(width,    "width" ) or image.width
-    minheight = set_image_length(minheight,"height") or 0
-    minwidth  = set_image_length(minwidth, "width" ) or 0
-    maxheight = set_image_length(maxheight,"height") or maxdimen
-    maxwidth  = set_image_length(maxwidth, "width" ) or maxdimen
+    height    = set_image_length(dataxml,height,   "height") or image.height
+    width     = set_image_length(dataxml,width,    "width" ) or image.width
+    minheight = set_image_length(dataxml,minheight,"height") or 0
+    minwidth  = set_image_length(dataxml,minwidth, "width" ) or 0
+    maxheight = set_image_length(dataxml,maxheight,"height") or maxdimen
+    maxwidth  = set_image_length(dataxml,maxwidth, "width" ) or maxdimen
 
     if not clip then
         width, height = calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight,stretch)
@@ -7487,11 +7487,15 @@ end
 --- Image handling
 --- --------------
 
-function set_image_length(len,width_or_height)
+function set_image_length(dataxml,len,width_or_height)
     if len == nil or len == "auto" then
         return nil
     elseif len == "100%" and width_or_height == "width" then
-        return xpath.get_variable("__maxwidth")
+        if newxpath then
+            return dataxml.vars["__maxwidth"]
+        else
+            return xpath.get_variable("__maxwidth")
+        end
     elseif tonumber(len) then
         if width_or_height == "width" then
             return current_grid:width_sp(len)

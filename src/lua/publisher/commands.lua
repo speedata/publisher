@@ -1512,7 +1512,7 @@ function commands.image( layoutxml,dataxml )
             err("Cannot handle image without imagetype")
             filename = nil
         elseif imagetype == "metapost" then
-            return publisher.do_metapostimage(children[1].contents,width,height,clip)
+            return publisher.do_metapostimage(dataxml,children[1].contents,width,height,clip)
         else
             log("Image: found %q contents",imagetype or "?")
             local elt = children[1]
@@ -1539,7 +1539,7 @@ function commands.image( layoutxml,dataxml )
         end
         local contents = mpfile:read("*a")
         mpfile:close()
-        return publisher.do_metapostimage(contents,width,height,clip)
+        return publisher.do_metapostimage(dataxml,contents,width,height,clip)
     end
 
     local imageinfo
@@ -1562,12 +1562,12 @@ function commands.image( layoutxml,dataxml )
         end
     end
 
-    height    = publisher.set_image_length(height,   "height") or image.height
-    width     = publisher.set_image_length(width,    "width" ) or image.width
-    minheight = publisher.set_image_length(minheight,"height") or 0
-    minwidth  = publisher.set_image_length(minwidth, "width" ) or 0
-    maxheight = publisher.set_image_length(maxheight,"height") or publisher.maxdimen
-    maxwidth  = publisher.set_image_length(maxwidth, "width" ) or publisher.maxdimen
+    height    = publisher.set_image_length(dataxml,height,   "height") or image.height
+    width     = publisher.set_image_length(dataxml,width,    "width" ) or image.width
+    minheight = publisher.set_image_length(dataxml,minheight,"height") or 0
+    minwidth  = publisher.set_image_length(dataxml,minwidth, "width" ) or 0
+    maxheight = publisher.set_image_length(dataxml,maxheight,"height") or publisher.maxdimen
+    maxwidth  = publisher.set_image_length(dataxml,maxwidth, "width" ) or publisher.maxdimen
 
     if not clip then
         width, height = publisher.calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight,stretch)
