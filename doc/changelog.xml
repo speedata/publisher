@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.19" date="2024-07-24">
+        <en>Bug fix Image and width="100%" and lxpath mode (#600).</en>
+        <de>Fehlerkorrektur Image und width="100%" und lxpath Modus (#600).</de>
+    </entry>
+    <entry version="4.19.19" date="2024-07-24">
+        <en>Bug fix NoBreak/fontsize and empty input (#598).</en>
+        <de>Fehlerkorrektur NoBreak/fontsize und leere Eingabe (#598).</de>
+    </entry>
     <entry version="4.19.18" date="2024-07-17">
         <en>Fix NoBreak/fontsize and dynamic data (#598).</en>
         <de>Korrigiere NoBreak/fontsize und dynamische Daten (#598).</de>
