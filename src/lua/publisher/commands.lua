@@ -1890,7 +1890,7 @@ function commands.insert_pages( layoutxml,dataxml )
         --- Otherwise finish the current page.
         --- This duplicates code in publisher#initialize_luatex_and_generate_pdf
         if publisher.page_initialized_p(current_pagenumber) and current_pagenumber > 1 then
-            publisher.dothingsbeforeoutput(thispage)
+            publisher.dothingsbeforeoutput(thispage,dataxml)
             local n = node.vpack(publisher.pages[current_pagenumber].pagebox)
             publisher.shipout(n,current_pagenumber)
             current_pagenumber = current_pagenumber + 1
