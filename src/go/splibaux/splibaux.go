@@ -278,18 +278,21 @@ func ConvertSVGImage(filename string) (string, error) {
 
 	binaryname := os.Getenv("SP_INKSCAPE")
 	if binaryname == "" {
-		fmt.Println("SP_INKSCAPE should be set. Why is it empty?")
+		slog.Error("SP_INKSCAPE not set")
 		binaryname = "inkscape"
 	}
 	argument := os.Getenv("SP_INKSCAPECMD")
 
-	fmt.Print("Running inkscape on ", svgfile, "...")
+	slog.Info("Run inkscape", "arg", argument, "pdffile", pdffile, "filename", svgfile)
 	cmd := exec.Command(binaryname, argument, pdffile, svgfile)
 	out, err := cmd.CombinedOutput()
-	fmt.Println("done. Output follows (if any):")
-	fmt.Println(string(out))
 	if err != nil {
+		if exitError, ok := err.(*exec.ExitError); ok {
+			slog.Error("inkscape failed", "exit code", exitError.ExitCode(), "output", string(out))
+		}
 		return "", err
 	}
+	slog.Debug("Inkscape", "output", string(out))
+
 	return pdffile, nil
 }

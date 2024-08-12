@@ -116,7 +116,7 @@ func init() {
 		"tempdir":           os.TempDir(),
 		"cache":             "optimal",
 		"inkscape":          "inkscape",
-		"inkscape-command":  "--export-pdf",
+		"inkscape-command":  "--export-filename",
 		"fontloader":        "harfbuzz",
 		"referencefilename": "reference",
 		"xpath":             "lxpath",

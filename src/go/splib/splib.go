@@ -478,7 +478,7 @@ func sdConvertSVGImage(L *C.lua_State) int {
 
 	ret, err := splibaux.ConvertSVGImage(filename)
 	if err != nil {
-		slog.Error("ConvertSVGImage", "msg", err.Error())
+		slog.Error("ConvertSVGImage", "errmsg", err.Error())
 		return 0
 	}
 	l.pushString(ret)
