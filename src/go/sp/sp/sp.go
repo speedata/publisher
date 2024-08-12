@@ -748,7 +748,7 @@ func scaffold(extra ...string) error {
 func showCredits() {
 	fmt.Println("This is the speedata Publisher, version", versionWithPro)
 	fmt.Println(`
-Copyright 2009-2021 speedata GmbH, Berlin. Licensed under
+Copyright 2009-2024 speedata, Berlin. Licensed under
 the GNU Affero GPL License, see
   https://raw.githubusercontent.com/speedata/publisher/develop/COPYING
 for details.
