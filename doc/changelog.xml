@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.20" date="2024-08-14">
+        <en>Assume inkscape &gt; version 1.0 for SVG conversion.</en>
+        <de>SVG-Konvertierung nun Inkscape 1.0 voreingestellt.</de>
+    </entry>
+    <entry version="4.19.20" date="2024-08-14">
+        <en>Remove superfluous ET/BT/EMC command in page stream (#602).</en>
+        <de>Entferne überflüssige ET/BT/EMC Befehle im Pagestream (#602).</de>
+    </entry>
     <entry version="4.19.19" date="2024-07-24">
         <en>Bug fix Image and width="100%" and lxpath mode (#600).</en>
         <de>Fehlerkorrektur Image und width="100%" und lxpath Modus (#600).</de>
