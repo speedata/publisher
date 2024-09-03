@@ -4450,7 +4450,7 @@ function commands.table( layoutxml,dataxml,options )
             -- ignore
         else
             if eltname and eltname ~= "elementstructure" then
-                warning("Ignore %q in table",eltname)
+                splib.log("debug","Ignore command in table","cmd",eltname)
             end
         end
     end
