@@ -495,12 +495,12 @@ local function docomparefunc(op, leftitem, rightitem)
     if is_attribute(leftitem) then leftitem = leftitem.value end
     if is_attribute(rightitem) then rightitem = rightitem.value end
 
-    local ln, rn
-    ln, _ = number_value(leftitem)
-    rn, _ = number_value(rightitem)
 
-    if type(ln) == "number" and type(rn) == "number" then
-        local x, errmsg = docomparenumber(op, ln, rn)
+    if type(leftitem) == "boolean" or type(rightitem) == "boolean" then
+        local x, errmsg = docomparestring(op, string_value({ leftitem }), string_value({ rightitem }))
+        return x, errmsg
+    elseif type(number_value(leftitem)) == "number" and type(number_value(rightitem)) == "number" then
+        local x, errmsg = docomparenumber(op, number_value(leftitem), number_value(rightitem))
         return x, errmsg
     elseif type(leftitem) == "string" or type(rightitem) == "string" then
         local x, errmsg = docomparestring(op, string_value({ leftitem }), string_value({ rightitem }))
