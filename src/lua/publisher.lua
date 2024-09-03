@@ -4994,15 +4994,17 @@ function hbglyphlist(arguments)
         local thisglyph = glyphs[i]
         local cp = thisglyph.codepoint
         local uc = tbl.backmap[cp] or cp
+        local tabregularspace = ( cp == 0 and cluster[thisglyph.cluster] == 9 and parameter.tab ~= "hspace")
+
         -- skip double space
-        if i > 1 and uc == 32 and cp == glyphs[i-1].codepoint and cluster[thisglyph.cluster] ~= 160 and not preserve_whitespace then
+        if i > 1 and ( uc == 32 or tabregularspace) and cp == glyphs[i-1].codepoint and cluster[thisglyph.cluster] ~= 160 and not preserve_whitespace then
             goto continue
         end
         if false then
             -- just for simple adding at the beginning
         elseif uc == 160 and #glyphs == 1 then
             -- ignore
-        elseif uc == 32 then
+        elseif uc == 32 or tabregularspace then
             local thiscluster = thisglyph.cluster
             if cluster[thiscluster] == 160 then -- no break space
                 n = node.new("penalty")
@@ -5118,12 +5120,21 @@ function hbglyphlist(arguments)
             g = set_glue(nil,{})
             list,cur = node.insert_after(list,cur,g)
         elseif cp == 0 then
-            if reportmissingglyphs then
-                local missingglyph = cluster[thisglyph.cluster]
-                if reportmissingglyphs == "warning" then
-                    splib.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",missingglyph))
+            local code = cluster[thisglyph.cluster]
+            if code == 9 then
+                if parameter.tab == 'hspace' then
+                    local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
+                    list, cur = node.insert_after(list,cur,n)
                 else
-                    splib.error("Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",missingglyph))
+                    -- a regular space, handled above (tabregularspace)
+                end
+            else
+                if reportmissingglyphs then
+                    if reportmissingglyphs == "warning" then
+                        splib.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",code))
+                    else
+                        splib.error("Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",code))
+                    end
                 end
             end
         else

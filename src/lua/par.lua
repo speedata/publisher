@@ -462,8 +462,7 @@ function Par:format( width_sp, options,data )
     options.maxwidth_sp = width_sp
     publisher.remove_first_whitespace(self)
     publisher.remove_last_whitespace(self)
-    self:mknodelist(options,data)
-    local parameter = {}
+
     local current_textformat = self.textformat or options.textformat
     if not current_textformat then
         if self.textformat or options.textformat then
@@ -471,6 +470,10 @@ function Par:format( width_sp, options,data )
         end
         current_textformat = publisher.textformats.text
     end
+    options.tab = current_textformat.tab
+
+    self:mknodelist(options,data)
+    local parameter = {}
     if self.width then
         width_sp = self.width
     end
