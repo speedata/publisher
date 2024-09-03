@@ -722,7 +722,7 @@ function commands.define_color( layoutxml,dataxml )
         local invalid = "[^a-zA-Z]"
         if string.find(str,invalid) then
             local mpcolorname = string.gsub(str,invalid,"")
-            warning("The color %q has characters in it that confuse\n the metapost interpreter, therefore I have renamed the color\n for metapost to colors.%s",str, mpcolorname)
+            publisher.metapostcolorwarnings[#publisher.metapostcolorwarnings+1] = {str,mpcolorname}
             return mpcolorname
         end
         return str

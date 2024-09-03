@@ -340,6 +340,7 @@ marker_id_value = {}
 metapostgraphics = {}
 metapostcolors = {}
 metapostvariables = {}
+metapostcolorwarnings = {}
 
 -- The spot colors used in the document (even when discarded)
 used_spotcolors = {}

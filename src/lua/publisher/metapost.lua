@@ -711,6 +711,14 @@ end
 
 -- Return a pdf_whatsit node
 function prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
+    local colorwarnings = publisher.metapostcolorwarnings
+    if #colorwarnings > 0 then
+        for i = 1, #colorwarnings do
+            local str,mpcolorname = table.unpack(colorwarnings[i])
+            splib.log("warn","A color has characters in it that confuse the metapost interpreter, therefore I have renamed the color for metapost","color", str, "dest", "colors." .. mpcolorname)
+        end
+        publisher.metapostcolorwarnings = {}
+    end
     if not publisher.metapostgraphics[graphicname] then
         err("MetaPost graphic %s not defined", graphicname)
         return nil
