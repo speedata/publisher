@@ -1068,6 +1068,7 @@ function commands.forall( layoutxml,dataxml )
         local copysequence = dataxml.sequence
         local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
         dataxml.size = #selection
+        local savepos = dataxml.pos
         for i = 1, #selection do
             dataxml.pos = i
             dataxml.sequence = {selection[i]}
@@ -1076,6 +1077,7 @@ function commands.forall( layoutxml,dataxml )
                 tab[#tab+1] = tmp_tab[j]
             end
         end
+        dataxml.pos = savepos
         dataxml.sequence = copysequence
         return tab
     end
