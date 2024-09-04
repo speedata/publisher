@@ -5551,8 +5551,10 @@
     </attribute>
     <example xml:lang="en">
       <para>Index generation works in two steps: First, collect all the entries in a <cmd name="Element"/> structure, then, while saving the generated structure, sort the keys and group them with this command.</para>
-      <listing><![CDATA[  <Record element="data">
-    <LoadDataset name="index" />
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+	<Record element="data">
     <SetVariable variable="indexentries">
       <Element name="indexentry">
         <Attribute name="name" select="'Home'" />
@@ -5571,9 +5573,12 @@
         <Attribute name="page" select="4" />
       </Element>
     </SetVariable>
-    <SaveDataset name="index" elementname="Index">
-      <Makeindex select="$indexentries" sortkey="name" section="part" />
-    </SaveDataset>
+		<SetVariable variable="index">
+			<Element name="Index">
+				<Makeindex select="$indexentries/indexentry" sortkey="name" section="part" />
+			</Element>
+		</SetVariable>
+		<ProcessNode select="$index/Index"/>
   </Record>
 
   <Record element="Index">
@@ -5597,60 +5602,75 @@
           </ForAll>
         </Table>
       </PlaceObject>
+			<NextRow />
     </ForAll>
   </Record>
-]]></listing>
+</Layout>]]></listing>
     </example>
     <example xml:lang="de">
       <para>Die Indexerstellung funktioniert in zwei Schritten. Im ersten Schritt werden die Daten in eine Elementstruktur gespeichert und mit diesem Befehl sortiert. Im zweiten Schritt wird die Elementstruktur ausgegeben (<cmd name="LoadDataset"/>).</para>
-      <listing><![CDATA[  <Record element="data">
-     <LoadDataset name="index"/>
-    <SetVariable variable="indexeinträge">
-      <Element name="indexeintrag">
-        <Attribute name="name" select="'Giraffe'"/>
-        <Attribute name="page" select="1"/>
-      </Element>
-      <Element name="indexeintrag">
-        <Attribute name="name" select="'Garage'"/>
-        <Attribute name="page" select="2"/>
-      </Element>
-      <Element name="indexeintrag">
-        <Attribute name="name" select="'Grußwort'"/>
-        <Attribute name="page" select="3"/>
-      </Element>
-      <Element name="indexeintrag">
-        <Attribute name="name" select="'Aufzug'"/>
-        <Attribute name="page" select="4"/>
-      </Element>
-    </SetVariable>
-    <SaveDataset name="index" elementname="Index">
-      <Makeindex select="$indexeinträge" sortkey="name" section="teil"/>
-    </SaveDataset>
-  </Record>
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <Record element="Index">
-    <ForAll select="teil">
-      <PlaceObject>
-        <Table width="3" stretch="max">
-          <Tr>
-            <Td border-bottom="0.4pt" colspan="2">
-              <Paragraph><Value select="@name"></Value></Paragraph>
-            </Td>
-          </Tr>
-          <ForAll select="indexeintrag">
-            <Tr>
-              <Td>
-                <Paragraph><Value select="@name"/></Paragraph>
-              </Td>
-              <Td>
-                <Paragraph><Value select="@page"/></Paragraph>
-              </Td>
-            </Tr>
-          </ForAll>
-        </Table>
-      </PlaceObject>
-    </ForAll>
-  </Record>
+	<Record element="data">
+		<SetVariable variable="indexeinträge">
+			<Element name="indexeintrag">
+				<Attribute name="name" select="'Giraffe'" />
+				<Attribute name="page" select="1" />
+			</Element>
+			<Element name="indexeintrag">
+				<Attribute name="name" select="'Garage'" />
+				<Attribute name="page" select="2" />
+			</Element>
+			<Element name="indexeintrag">
+				<Attribute name="name" select="'Grußwort'" />
+				<Attribute name="page" select="3" />
+			</Element>
+			<Element name="indexeintrag">
+				<Attribute name="name" select="'Aufzug'" />
+				<Attribute name="page" select="4" />
+			</Element>
+		</SetVariable>
+
+		<SetVariable variable="index">
+			<Element name="Index">
+				<Makeindex select="$indexeinträge/indexeintrag" sortkey="name" section="teil" />
+			</Element>
+		</SetVariable>
+		<ProcessNode select="$index/Index"></ProcessNode>
+	</Record>
+
+	<Record element="Index">
+		<ForAll select="teil">
+			<PlaceObject>
+				<Table width="3" stretch="max">
+					<Tr>
+						<Td border-bottom="0.4pt" colspan="2">
+							<Paragraph>
+								<Value select="@name" />
+							</Paragraph>
+						</Td>
+					</Tr>
+					<ForAll select="indexeintrag">
+						<Tr>
+							<Td>
+								<Paragraph>
+									<Value select="@name" />
+								</Paragraph>
+							</Td>
+							<Td>
+								<Paragraph>
+									<Value select="@page" />
+								</Paragraph>
+							</Td>
+						</Tr>
+					</ForAll>
+				</Table>
+			</PlaceObject>
+			<NextRow />
+		</ForAll>
+	</Record>
+</Layout>
 ]]></listing>
     </example>
     <seealso>

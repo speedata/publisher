@@ -26,7 +26,7 @@ The following structure could be useful for an article list:
 </articlelist>
 -------------------------------------------------------------------------------
 
-To create this structure in the layout rules, it must be composed of the commands `<Element>' and `<Attributes>' as follows
+To create this structure in the layout rules, it must be composed of the commands `<Element>` and `<Attributes>` as follows
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------

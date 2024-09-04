@@ -670,9 +670,15 @@ function commands.copy_of( layoutxml,dataxml )
             end
             selection = {}
             for i, itm in ipairs(seq) do
-                selection[#selection+1] = itm
+                if #itm > 0 then
+                    for j = 1, #itm do
+                        selection[#selection+1] = itm[j]
+                    end
+                else
+                    selection[#selection+1] = itm
+                end
             end
-            if type(selection) == "table" and selection[1] == "expand"  then
+            if type(selection) == "table" and selection[1] == "expand" then
                 local tmp = publisher.dispatch(selection,dataxml)
                 return tmp
             end
@@ -3999,6 +4005,7 @@ function commands.setvariable( layoutxml,dataxml )
     if publisher.newxpath then
         if type(contents) == "table" then
             local ret
+            local has_element = false
             for i=1,#contents do
                 local thiscontents = contents[i]
                 if type(thiscontents) == "table" and thiscontents.elementname then
@@ -4033,13 +4040,18 @@ function commands.setvariable( layoutxml,dataxml )
                             ret[#ret + 1] = element_contents[j]
                         end
                     elseif eltname == "Element" then
+                        has_element = true
                         ret = ret or {}
                         ret[#ret + 1] = element_contents
                     end
                end
             end
             if ret then
-                contents = ret
+                if has_element then
+                    contents = {ret}
+                else
+                    contents = ret
+                end
             end
         end
     else

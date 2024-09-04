@@ -14,7 +14,7 @@ image::stichwortverzeichnis.png[width=30%,scaledwidth=50%]
 
 By their nature, the examples are always somewhat contrived, and that is especially the case here.
 The index is compiled differently in practice, of course.
-Since only the sorting is to be shown here, the keyword and the page number are given:
+Since only the sorting is to be shown here, the keyword and the page number are given. You can find all the files in the https://github.com/speedata/examples/tree/master/technical/index[examples repository].
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -62,12 +62,12 @@ The section `data` is the first part from the previous listing:.
 
     <SetVariable variable="index">  <!--2-->
       <Element name="index">
-        <Makeindex select="$indexentries" sortkey="name" section="section"
+        <Makeindex select="$indexentries/indexentry" sortkey="name" section="section"
                    pagenumber="page" />
       </Element>
     </SetVariable>
 
-    <ProcessNode select="$index"/>  <!--3-->
+    <ProcessNode select="$index/index"/>  <!--3-->
   </Record>
 -------------------------------------------------------------------------------
 <1> An empty variable `indexentries` is declared. This is filled with the individual elements in the record `keyword` (see below).
