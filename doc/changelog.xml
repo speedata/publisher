@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.21" date="2024-09-04">
+        <en>Backward incompatible change: Change XPath variable semantics (#612).</en>
+        <de>Rückwärts inkompatible Änderung: Ändere XPath Variablen Semantik (#612).</de>
+    </entry>
+    <entry version="4.19.21" date="2024-09-04">
+        <en>Fix tab="hspace" for harfbuzz mode.</en>
+        <de>Korrigiere tab="hspace" in harfbuzz Modus.</de>
+    </entry>
+    <entry version="4.19.21" date="2024-09-04">
+        <en>Reduce logging noise.</en>
+        <de>Reduziere unnötige Logging-Informationen.</de>
+    </entry>
     <entry version="4.19.20" date="2024-08-14">
         <en>Assume inkscape &gt; version 1.0 for SVG conversion.</en>
         <de>SVG-Konvertierung nun Inkscape 1.0 voreingestellt.</de>
