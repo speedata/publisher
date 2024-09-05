@@ -112,6 +112,7 @@ attributes = {
     ["paddingtop"] = true,
     ["paddingbottom"] = true,
     ["rows"] = true,
+    ["spaceglue"] = true,
     ["text-decoration-color"] = true,
     ["text-decoration-line"] = {"underline","overline","line-through"},
     ["text-decoration-style"] = {"solid","double","dotted","dashed","wavy"},
@@ -4684,7 +4685,7 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                         end
                     end
                 end
-            elseif head.id == glue_node and head.subtype == 0 and blockinline == "horizontal" and options.format == "PDF/UA" and head.subtype < 1000 then
+            elseif options.format == "PDF/UA" and head.id == glue_node and get_attribute(head,"spaceglue") == 1 then
                 -- a space in PDF/UA should be a real glyph
                 -- subtype >= 1000 is assigend to glue for arranging pages
                 local g = node.new("glyph")
@@ -5063,6 +5064,7 @@ function hbglyphlist(arguments)
             else
                 n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch},"uc=32")
                 setstyles(n,parameter)
+                set_attribute(n,"spaceglue",1)
                 list,cur = node.insert_after(list,cur,n)
             end
             if parameter.textdecorationline then
