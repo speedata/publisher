@@ -3101,7 +3101,7 @@ function frame(obj)
     if rw == 0 then
         rule[#rule + 1] = "n"
     else
-        rule[#rule + 1] = "f* s"
+        rule[#rule + 1] = "f*"
     end
     rule[#rule + 1] = "Q"
 
