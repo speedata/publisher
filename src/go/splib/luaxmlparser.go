@@ -8,6 +8,8 @@ import (
 	"log/slog"
 	"os"
 	"speedatapublisher/splibaux"
+
+	"golang.org/x/net/html/charset"
 )
 
 func (l *LuaState) buildXMLTable() error {
@@ -49,7 +51,16 @@ func (l *LuaState) readXMLFile(r io.Reader, startindex int) error {
 
 	stackcounter := []int{startindex}
 
-	dec := xml.NewDecoder(r)
+	// Handle other encodings besides UTF-8. This is tested against UTF-8 and
+	// UTF-16.
+	nr, err := charset.NewReader(r, "text/xml;charset=utf-8")
+	if err != nil {
+		return err
+	}
+	dec := xml.NewDecoder(nr)
+	dec.CharsetReader = func(label string, input io.Reader) (io.Reader, error) {
+		return input, nil
+	}
 	dec.Entity = xml.HTMLEntity
 	indentlevel := 0
 	for {
