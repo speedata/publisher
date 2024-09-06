@@ -1000,6 +1000,7 @@ end
 
 roles_a = {
     "Art",
+    "Artifact",
     "Div",
     "Document",
     "Figure",
@@ -2001,19 +2002,21 @@ do
                     end
                 end
                 local parentStructElem = structElements[parentid]
-                if not parentStructElem then
-                    entry.parent = parents[parentid].obj
-                    local pt = parents[parentid]
-                    pt[#pt+1] = entry
-                else
-                    parentStructElem.added_tables = parentStructElem.added_tables or {}
-                    if parentStructElem.added_tables[roleid] then
-                        -- ignore
+                if parentid then
+                    if not parentStructElem then
+                        entry.parent = parents[parentid].obj
+                        local pt = parents[parentid]
+                        pt[#pt+1] = entry
                     else
-                        if roleid then
-                            parentStructElem.added_tables[roleid] = true
+                        parentStructElem.added_tables = parentStructElem.added_tables or {}
+                        if parentStructElem.added_tables[roleid] then
+                            -- ignore
+                        else
+                            if roleid then
+                                parentStructElem.added_tables[roleid] = true
+                            end
+                            parentStructElem[#parentStructElem+1] = entry
                         end
-                        parentStructElem[#parentStructElem+1] = entry
                     end
                 end
                 -- roleid can be nil on Figure for example
@@ -3620,6 +3623,7 @@ function box( width_sp,height_sp,colorname )
         local _width   = sp_to_bp(width_sp)
         local _height  = sp_to_bp(height_sp)
         local paint = node.new("whatsit","pdf_literal")
+        setprop(paint,"role",get_rolenum("Artifact"))
         local colentry = colors[colorname]
         if not colentry then
             err("Color %q unknown, reverting to black",colorname or "(no color name given)")
@@ -4390,15 +4394,17 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                 parent.head = node.insert_before(parent.head,head,bordervbox)
             end
             local transparency  = getprop(head,"opacity")
-            local role          = getprop(head,"role")
-            local structelemobjnum           = getprop(head,"structelemobjnum")
-            local parentid      = getprop(head,"parent")
-            local rc            = getprop(head,"rolecounter")
-            local id            = getprop(head,"id")
             local bbox          = getprop(head,"bbox")
             local description   = getprop(head,"description")
             local hl            = get_attribute(head,"hyperlink") or getprop(head,"hyperlink")
-
+            local role, structelemobjnum, id, parentid, rc
+            if options.format == "PDF/UA" then
+                role          = getprop(head,"role")
+                structelemobjnum = getprop(head,"structelemobjnum")
+                id            = getprop(head,"id")
+                parentid      = getprop(head,"parent")
+                rc            = getprop(head,"rolecounter")
+            end
             if head.id == glyph_node then
                 currentfont = head.font
                 if role and head.next and head.next.id == disc_node then

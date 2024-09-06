@@ -133,18 +133,19 @@ local function flatten(self,items,options,data)
         local thisself = items[i]
         local typ_thisself = type(thisself)
         local new_options = publisher.copy_table_from_defaults(options)
-
-        if options.role == 0 then
-            new_options.role = options.parentrole
-            new_options.id = options.parentid
-        elseif options.role then
-            new_options.id = publisher.roles_a[options.role] .. "_" .. tostring(options.rolecounter)
-            new_options.parent = options.id or options.parent
-        else
-            -- ignore
+        if publisher.options.format == "PDF/UA" then
+            if options.role == 0 then
+                new_options.role = options.parentrole
+                new_options.id = options.parentid
+            elseif options.role then
+                new_options.id = publisher.roles_a[options.role] .. "_" .. tostring(options.rolecounter)
+                new_options.parent = options.id or options.parent
+            else
+                -- ignore
+            end
+            new_options.parentrole = options.role
+            new_options.parentid = options.id
         end
-        new_options.parentrole = options.role
-        new_options.parentid = options.id
         new_options.direction = new_options.direction or self.direction
         if typ_thisself == "table" and thisself.contents then
             -- w("par/flatten: type: table with contents")

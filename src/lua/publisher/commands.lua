@@ -353,7 +353,10 @@ function commands.bold( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
-        p:append(c,{bold = 1})
+        p:append(c,{
+            bold = 1,
+            role = 0,
+        })
     end
 
     return p
