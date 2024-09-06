@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.22" date="2024-09-06">
+        <en>PDF/UA enhancements.</en>
+        <de>PDF/UA Verbesserungen.</de>
+    </entry>
+    <entry version="4.19.22" date="2024-09-06">
+        <en>Handle UTF-16 XML files.</en>
+        <de>Verarbeite UTF-16 Dateien.</de>
+    </entry>
     <entry version="4.19.21" date="2024-09-04">
         <en>Backward incompatible change: Change XPath variable semantics (#612).</en>
         <de>Rückwärts inkompatible Änderung: Ändere XPath Variablen Semantik (#612).</de>
