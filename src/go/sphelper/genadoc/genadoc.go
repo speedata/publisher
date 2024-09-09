@@ -125,6 +125,7 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) string {
 		"yesnonumber":            "yes, no oder eine Zahl",
 		"numberorlength":         "Zahl oder Längenangabe",
 		"numberlengthorstar":     "Zahl, Maßangabe oder *-Angaben",
+		"topcurnumber":           "top, cur oder Zahl",
 		"zerotohundred":          "0 bis 100",
 		"zerohundredtwofivefive": "0 bis 100 bzw. 0 bis 255",
 	}
@@ -133,6 +134,7 @@ func atttypeinfo(att *commandsxml.Attribute, lang string) string {
 		"xpath":                  `<<ch-lxpath,XPath expression>>`,
 		"numberorlength":         "number or length",
 		"numberlengthorstar":     "Number, length or *-numbers",
+		"topcurnumber":           "top, cur or number",
 		"yesnolength":            "yes, no or length",
 		"zerotohundred":          "0 up to 100",
 		"zerohundredtwofivefive": "0 to 100 or 0 to 255",

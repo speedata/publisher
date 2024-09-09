@@ -49,12 +49,20 @@ function commands.a( layoutxml,dataxml )
         publisher.hlembed(embedded,page,link,bordercolor)
     elseif link then
         publisher.hllink(link,bordercolor)
+        if publisher.options.format == "PDF/UA" then
+            publisher.hyperlinks[#publisher.hyperlinks]["/StructParent "] = #publisher.struct_root_numtree
+            publisher.hyperlinks[#publisher.hyperlinks]["/Contents "] = publisher.utf8_to_utf16_string_pdf(description)
+            local tbl = setmetatable({ string.format("%d 0 R",structelemobjnum ) }, {__tostring = function(tbl) return rawget(tbl,1) end } )
+            publisher.struct_root_numtree[#publisher.struct_root_numtree + 1] = tbl
+        end
+
     elseif href then
         publisher.hlurl(href,bordercolor)
         if publisher.options.format == "PDF/UA" then
             publisher.hyperlinks[#publisher.hyperlinks]["/StructParent "] = #publisher.struct_root_numtree
             publisher.hyperlinks[#publisher.hyperlinks]["/Contents "] = publisher.utf8_to_utf16_string_pdf(description)
-            publisher.struct_root_numtree[#publisher.struct_root_numtree + 1] =  setmetatable({ string.format("%d 0 R",structelemobjnum ) }, {__tostring = function(tbl) return rawget(tbl,1) end } )
+            local tbl = setmetatable({ string.format("%d 0 R",structelemobjnum ) }, {__tostring = function(tbl) return rawget(tbl,1) end } )
+            publisher.struct_root_numtree[#publisher.struct_root_numtree + 1] = tbl
         end
     elseif page then
         publisher.hlpage(page,bordercolor)
@@ -95,7 +103,7 @@ function commands.a( layoutxml,dataxml )
                 params.structelemobjnum = structelemobjnum
                 publisher.rolecounter = publisher.rolecounter + 1
                 params.rolecounter = publisher.rolecounter
-                params.parent = ""
+                params.parent = 0
             end
             p:append(c, params )
         end
@@ -1445,38 +1453,38 @@ local box_lookup = {
 --- -----
 --- Load an image from a file. To be used in a table cell and PlaceObject.
 function commands.image( layoutxml,dataxml )
-    local width     = publisher.read_attribute(layoutxml,dataxml,"width",      "string")
-    local height    = publisher.read_attribute(layoutxml,dataxml,"height",     "string")
-    local bleed     = publisher.read_attribute(layoutxml,dataxml,"bleed" ,     "string")
-    local description = publisher.read_attribute(layoutxml,dataxml,"description", "string")
-    local minwidth  = publisher.read_attribute(layoutxml,dataxml,"minwidth",   "string")
-    local minheight = publisher.read_attribute(layoutxml,dataxml,"minheight",  "string")
-    local maxwidth  = publisher.read_attribute(layoutxml,dataxml,"maxwidth",   "string")
-    local maxheight = publisher.read_attribute(layoutxml,dataxml,"maxheight",  "string")
-    local clip      = publisher.read_attribute(layoutxml,dataxml,"clip",       "boolean")
-    local page      = publisher.read_attribute(layoutxml,dataxml,"page",       "number")
-    local parent    = publisher.read_attribute(layoutxml,dataxml,"parent",     "string")
-    local stretch   = publisher.read_attribute(layoutxml,dataxml,"stretch",    "boolean",false)
-    local imageshape = publisher.read_attribute(layoutxml,dataxml,"imageshape",    "boolean",false)
-    -- deprecated since 2.7.5
-    local max_box   = publisher.read_attribute(layoutxml,dataxml,"maxsize",    "string")
-    local vis_box   = publisher.read_attribute(layoutxml,dataxml,"visiblebox", "string")
-    local filename  = publisher.read_attribute(layoutxml,dataxml,"file",       "string")
-    local url       = publisher.read_attribute(layoutxml,dataxml,"href",       "string")
-    local dpiwarn   = publisher.read_attribute(layoutxml,dataxml,"dpiwarn",    "number")
-    local rotate    = publisher.read_attribute(layoutxml,dataxml,"rotate",     "number")
-    local fallback  = publisher.read_attribute(layoutxml,dataxml,"fallback",   "string")
-    local imagetype = publisher.read_attribute(layoutxml,dataxml,"imagetype",  "string")
-    local opacity   = publisher.read_attribute(layoutxml,dataxml,"opacity",     "number")
-    local class = publisher.read_attribute(layoutxml,dataxml,"class","string")
-    local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "string")
-    local css_rules = publisher.css:matches({element = 'img', class=class,id=id}) or {}
-
-    local margin_right = publisher.read_attribute(layoutxml,dataxml,"margin-right","length_sp")
-    local margin_left = publisher.read_attribute(layoutxml,dataxml,"margin-left","length_sp")
-    local margin_top = publisher.read_attribute(layoutxml,dataxml,"margin-top","length_sp")
+    local bleed        = publisher.read_attribute(layoutxml,dataxml,"bleed" ,      "string")
+    local class        = publisher.read_attribute(layoutxml,dataxml,"class",       "string")
+    local clip         = publisher.read_attribute(layoutxml,dataxml,"clip",        "boolean")
+    local description  = publisher.read_attribute(layoutxml,dataxml,"description", "string")
+    local dpiwarn      = publisher.read_attribute(layoutxml,dataxml,"dpiwarn",     "number")
+    local fallback     = publisher.read_attribute(layoutxml,dataxml,"fallback",    "string")
+    local filename     = publisher.read_attribute(layoutxml,dataxml,"file",        "string")
+    local height       = publisher.read_attribute(layoutxml,dataxml,"height",      "string")
+    local id           = publisher.read_attribute(layoutxml,dataxml,"id",          "string")
+    local imageshape   = publisher.read_attribute(layoutxml,dataxml,"imageshape",  "boolean",false)
+    local imagetype    = publisher.read_attribute(layoutxml,dataxml,"imagetype",   "string")
     local margin_bottom = publisher.read_attribute(layoutxml,dataxml,"margin-bottom","length_sp")
+    local margin_left  = publisher.read_attribute(layoutxml,dataxml,"margin-left", "length_sp")
+    local margin_right = publisher.read_attribute(layoutxml,dataxml,"margin-right","length_sp")
+    local margin_top   = publisher.read_attribute(layoutxml,dataxml,"margin-top",  "length_sp")
+    -- deprecated since 2.7.5:
+    local max_box      = publisher.read_attribute(layoutxml,dataxml,"maxsize",     "string")
+    local maxheight    = publisher.read_attribute(layoutxml,dataxml,"maxheight",   "string")
+    local maxwidth     = publisher.read_attribute(layoutxml,dataxml,"maxwidth",    "string")
+    local minheight    = publisher.read_attribute(layoutxml,dataxml,"minheight",   "string")
+    local minwidth     = publisher.read_attribute(layoutxml,dataxml,"minwidth",    "string")
+    local opacity      = publisher.read_attribute(layoutxml,dataxml,"opacity",     "number")
+    local page         = publisher.read_attribute(layoutxml,dataxml,"page",        "number")
+    local parent       = publisher.read_attribute(layoutxml,dataxml,"parent",      "string")
+    local role         = publisher.read_attribute(layoutxml,dataxml,"role",        "string", "Figure")
+    local rotate       = publisher.read_attribute(layoutxml,dataxml,"rotate",      "number")
+    local stretch      = publisher.read_attribute(layoutxml,dataxml,"stretch",     "boolean",false)
+    local url          = publisher.read_attribute(layoutxml,dataxml,"href",        "string")
+    local vis_box      = publisher.read_attribute(layoutxml,dataxml,"visiblebox",  "string")
+    local width        = publisher.read_attribute(layoutxml,dataxml,"width",       "string")
 
+    local css_rules    = publisher.css:matches({element = 'img', class=class,id=id}) or {}
 
     -- fallback for older versions (< 2.7.5)
     vis_box = vis_box or max_box
@@ -1701,12 +1709,14 @@ function commands.image( layoutxml,dataxml )
 
     local imagenode = img.node(image)
     if publisher.options.format == "PDF/UA" then
-        local figrole = publisher.get_rolenum("Figure")
+        local figrole = publisher.get_rolenum(role)
         publisher.setprop(imagenode,"role",figrole)
-        publisher.setprop(imagenode,"parent",parent)
+        if parent then
+            publisher.setprop(imagenode,"parent",parent)
+        end
         publisher.rolecounter = publisher.rolecounter + 1
         publisher.setprop(imagenode,"rolecounter",publisher.rolecounter)
-        publisher.setprop(imagenode,"description",description)
+        publisher.setprop(imagenode,"alttext",description)
     end
 
     if opacity then
@@ -2880,6 +2890,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local allowbreak        = publisher.read_attribute(layoutxml,dataxml,"allowbreak",         "string")
     local bidi              = publisher.read_attribute(layoutxml,dataxml,"bidi",               "boolean")
     local colorname         = publisher.read_attribute(layoutxml,dataxml,"color",              "string")
+    local actualtext        = publisher.read_attribute(layoutxml,dataxml,"actualtext",         "string")
     local direction         = publisher.read_attribute(layoutxml,dataxml,"direction",          "string")
     local fontname          = publisher.read_attribute(layoutxml,dataxml,"fontface",           "string")
     local fontfamilyname    = publisher.read_attribute(layoutxml,dataxml,"fontfamily",         "string",fontname)
@@ -2893,7 +2904,8 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local paddingleft       = publisher.read_attribute(layoutxml,dataxml,"padding-left",       "width_sp")
     local paddingright      = publisher.read_attribute(layoutxml,dataxml,"padding-right",      "width_sp")
     local role              = publisher.read_attribute(layoutxml,dataxml,"role",               "string")
-    local parent            = publisher.read_attribute(layoutxml,dataxml,"parent",               "string")
+    local parent            = publisher.read_attribute(layoutxml,dataxml,"parent",             "string")
+    local structpos         = publisher.read_attribute(layoutxml,dataxml,"structpos",          "string","cur")
     local textformat        = publisher.read_attribute(layoutxml,dataxml,"textformat",         "string")
     if fontname then warning("Paragraph/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
     if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
@@ -2953,6 +2965,8 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
         params.rolecounter = publisher.rolecounter
         params.role = publisher.get_rolenum(role)
         params.parent = parent
+        params.structpos = structpos
+        params.actualtext = actualtext
     end
 
 
@@ -2962,6 +2976,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     if #tab == 1 and tab[1].contents == "" then
         tab[1].contents = " " -- U+00A0, non breaking space
     end
+
     for i=1,#tab do
         local thischild = tab[i]
         local eltname = publisher.elementname(thischild)
@@ -2975,7 +2990,19 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
             p:append(contents,params)
         end
     end
-
+    if publisher.options.format == "PDF/UA" then
+        params.role = params.role or publisher.get_rolenum("P")
+        if not params.role then
+            splib.error("Paragraph: role unknown",lineinfo(layoutxml))
+        else
+            p.parent = params.parent
+            p.role = params.role
+            p.rolecounter = params.rolecounter
+            p.id = publisher.roles_a[params.role] .. "_" .. tostring(params.rolecounter)
+            p.structpos = params.structpos
+            p.actualtext = params.actualtext
+        end
+    end
     return p
 end
 
@@ -4269,6 +4296,7 @@ function commands.span( layoutxml,dataxml )
         publisher.rolecounter = publisher.rolecounter + 1
         params.role = publisher.get_rolenum(role)
         params.rolecounter = publisher.rolecounter
+        params.parent = 0
     end
 
     local p = par:new(nil,"span2")
@@ -4409,6 +4437,9 @@ function commands.table( layoutxml,dataxml,options )
     local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",      "string", "__leftaligned")
     local width          = publisher.read_attribute(layoutxml,dataxml,"width",           "length")
     local vexcess        = publisher.read_attribute(layoutxml,dataxml,"vexcess",         "string", "stretch")
+    local parent         = publisher.read_attribute(layoutxml,dataxml,"parent",          "string")
+    local role           = publisher.read_attribute(layoutxml,dataxml,"role",            "string")
+
     if fontname then warning("Table/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     -- FIXME: leading -> row distance or so
@@ -4513,6 +4544,17 @@ function commands.table( layoutxml,dataxml,options )
     end
 
     local n = tabular:make_table(dataxml)
+    if publisher.options.format == "PDF/UA" and role then
+        if not parent then
+            parent = "doc"
+        end
+        publisher.setprop(n[1],"role", publisher.get_rolenum(role))
+        publisher.setprop(n[1],"parentid", parent)
+        publisher.setprop(n[1],"rolecounter", publisher.rolecounter)
+        local tblid = role .. "_" .. publisher.rolecounter
+        publisher.setprop(n[1],"id", tblid)
+        node.set_attribute(n[1],publisher.att_role,publisher.get_rolenum(role))
+    end
     if not node.is_node(n) then
         n.balance = balance
     end
@@ -4600,8 +4642,11 @@ function commands.tr( layoutxml,dataxml )
     local tab = {}
     local tab_tmp = publisher.dispatch(layoutxml,dataxml)
 
-    local class = publisher.read_attribute(layoutxml,dataxml,"class","string")
-    local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "string")
+    local class  = publisher.read_attribute(layoutxml,dataxml,"class",  "string")
+    local id     = publisher.read_attribute(layoutxml,dataxml,"id",     "string")
+    local parent = publisher.read_attribute(layoutxml,dataxml,"parent", "string")
+    local role   = publisher.read_attribute(layoutxml,dataxml,"role",   "string")
+
     local css_rules = publisher.css:matches({element = "tr", class=class,id=id})
 
     if css_rules and type(css_rules) == "table" then
@@ -4625,15 +4670,17 @@ function commands.tr( layoutxml,dataxml )
             tab[#tab + 1] = tab_tmp[i]
         end
     end
+    tab.role = role
+    tab.parent = parent
 
     local attribute = {
-        ["data"]            = "xpath",
-        ["valign"]          = "string",
+        ["data"]             = "xpath",
+        ["valign"]           = "string",
         ["background-color"] = "string",
-        ["backgroundcolor"] = "string",
-        ["minheight"]       = "length",
-        ["top-distance"]    = "string",
-        ["break-below"]     = "string",
+        ["backgroundcolor"]  = "string",
+        ["minheight"]        = "length",
+        ["top-distance"]     = "string",
+        ["break-below"]      = "string",
     }
 
     local tmpattr
@@ -4710,6 +4757,8 @@ end
 --- A table cell. Can have anything in it that is a horizontal box.
 function commands.td( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
+    local parent    = publisher.read_attribute(layoutxml,dataxml,"parent", "string")
+    local role      = publisher.read_attribute(layoutxml,dataxml,"role",   "string")
 
     local class = publisher.read_attribute(layoutxml,dataxml,"class","string")
     local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "string")
@@ -4781,6 +4830,8 @@ function commands.td( layoutxml,dataxml )
         end
     end
 
+    tab.role    = role
+    tab.parent  = parent
     -- backwards compatibility. Used to be graphics, but should be without "s" (#457)
     if tab.graphics then
         warning("deprecation note: attribute graphics on Td should be graphic (without s)")
@@ -5143,6 +5194,16 @@ function commands.textblock( layoutxml,dataxml )
         else
             -- new <Par> mode
             local fmt = paragraph:format(width_sp,options,dataxml)
+            if publisher.options.format == "PDF/UA" then
+                publisher.setprop(fmt,"role", paragraph.role)
+                local parent = paragraph.parent or "doc"
+                publisher.setprop(fmt,"parentid", parent)
+                publisher.setprop(fmt,"rolecounter", paragraph.rolecounter)
+                publisher.setprop(fmt,"id", paragraph.id)
+                publisher.setprop(fmt,"strutpos", paragraph.strutpos)
+                publisher.setprop(fmt,"actualtext",paragraph.actualtext)
+                node.set_attribute(fmt,publisher.att_role,paragraph.role)
+            end
             table.insert( nodes, fmt )
         end
     end

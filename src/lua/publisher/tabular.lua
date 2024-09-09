@@ -792,6 +792,17 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
                         end
 
                         local v = inlineobject:format(format_width,{textformat = inlineobject.textformat,fontfamily = inlineobject.fontfamily or self.fontfamily }, self.dataxml)
+                        if publisher.options.format == "PDF/UA" then
+                            publisher.setprop(v,"role", inlineobject.role)
+                            publisher.setprop(v,"parentid", inlineobject.parent)
+                            publisher.setprop(v,"rolecounter", inlineobject.rolecounter)
+                            publisher.setprop(v,"structpos", inlineobject.structpos)
+                            publisher.setprop(v,"actualtext", inlineobject.actualtext)
+                            publisher.setprop(v,"alttext", inlineobject.alttext)
+                            publisher.setprop(v,"id", inlineobject.id)
+                            node.set_attribute(v,publisher.att_role,inlineobject.role)
+                        end
+
                         cell = node.insert_after(cell,node.tail(cell),v)
                     else
                         w("no width given in paragraph")
@@ -1160,6 +1171,19 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
             cell = self:pack_cell(td_contents.objects,current_column_width - padding_left - padding_right - td_borderleft - td_borderright,alignment)
             cell = cell.head
         end
+
+        if publisher.options.format == "PDF/UA" then
+            if td_contents.role then
+                local rn = publisher.get_rolenum(td_contents.role)
+                local id = td_contents.role .. '_' .. tostring(publisher.rolecounter)
+                node.set_attribute(cell,publisher.att_role,rn)
+                publisher.setprop(cell,"role",rn)
+                publisher.setprop(cell,"id",id)
+                publisher.setprop(cell,"rolecounter",publisher.rolecounter)
+                publisher.rolecounter = publisher.rolecounter + 1
+                publisher.setprop(cell,"parentid",td_contents.parent)
+            end
+        end
         -- The cell is a vlist with minimum height. We need to repack the contents of the
         -- cell in order to use the aligns and VSpaces in the table cell
 
@@ -1519,6 +1543,20 @@ function typeset_table(self,dataxml)
             current_row = current_row + 1
             rows[#rows + 1] = self:typeset_row(tr_contents,current_row,self.skiptables.body,self.rowheights.body)
             -- We allow data to be attached to a table row.
+            local thisrow = rows[#rows]
+            publisher.setprop(thisrow,"origin","tr")
+            if publisher.options.format == "PDF/UA" and tr_contents.role then
+                local rn = publisher.get_rolenum(tr_contents.role)
+                local id = tr_contents.role .. '_' .. tostring(publisher.rolecounter)
+                node.set_attribute(thisrow,publisher.att_role,rn)
+                publisher.setprop(thisrow,"role",rn)
+                publisher.setprop(thisrow,"id",id)
+                publisher.setprop(thisrow,"rolecounter",publisher.rolecounter)
+                publisher.rolecounter = publisher.rolecounter + 1
+                publisher.setprop(thisrow,"parentid",tr_contents.parent)
+                publisher.setprop(thisrow,"actualtext",tr_contents.actualtext)
+                publisher.setprop(thisrow,"alttext",tr_contents.alttext)
+            end
             if tr_contents.data then
                 dynamic_data[#dynamic_data + 1] = tr_contents.data
                 node.set_attribute(rows[#rows],publisher.att_tr_dynamic_data,#dynamic_data)

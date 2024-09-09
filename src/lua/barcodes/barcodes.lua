@@ -450,6 +450,9 @@ local function make_code(size,matrix,pdfcolorstring)
   local n = node.new("whatsit","pdf_literal")
   n.data = table.concat(bc," ")
   n.mode = 0
+  publisher.setprop(n,"origin","qrcode")
+  publisher.setprop(n,"role",publisher.get_rolenum("Artifact"))
+
   -- Avoid underfull boxes message:
   n = publisher.add_glue(n,"tail",{width = 0, stretch = 1, stretch_order = 3})
   local h = node.hpack(n,size,"exactly")

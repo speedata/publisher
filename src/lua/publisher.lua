@@ -534,6 +534,32 @@ markers = {}
 -- PDF/UA - the /S /Document StructElem
 local ktree = pdf.reserveobj()
 
+-- This is a sample data structure in the structElements table:
+-- ["doc"] = {
+    -- ["added_tables"] = {
+        -- ["P_2"] = "true"
+    -- },
+    -- ["obj"] = "2"
+    -- ["role"] = "Document"
+    -- [1] = {
+        -- ["bbox"] = {
+            -- [1] = "28.346"
+            -- [2] = "733.369"
+            -- [3] = "141.732"
+            -- [4] = "813.54"
+        -- },
+        -- ["obj"] = "7"
+        -- ["page"] = "6"
+        -- ["role"] = "Figure"
+        -- ["text"] = "A figure"
+        -- [1] = "0"
+    -- },
+    -- [2] = {
+        -- ["obj"] = "8"
+        -- ["page"] = "6"
+        -- ["role"] = "P"
+        -- [1] = "1"
+    -- },
 structElements = {}
 
 -- We will have to remember the current group and grid
@@ -1016,6 +1042,10 @@ roles_a = {
     "Part",
     "Sect",
     "Span",
+    "Table",
+    "TR",
+    "TD",
+    "TH",
     "TOC",
     "TOCI",
 }
@@ -1060,14 +1090,21 @@ local function writeStructElements(itm,parentobjectnumber)
     end
 
     if k then
+        if not itm.role then
+            splib.log("error","Unknown role in structure")
+        end
         str = {
             "/Type /StructElem",
-            "/S /" .. itm.role,
+            "/S /" .. (itm.role or "???"),
             "/P " .. parentobjectnumber .. " 0 R",
             "/K "  .. k,
         }
-        if itm.text then
-            str[#str + 1] = "/Alt " .. utf8_to_utf16_string_pdf(itm.text)
+        if itm.actualtext then
+            str[#str + 1] = "/ActualText " .. utf8_to_utf16_string_pdf(itm.actualtext)
+        end
+
+        if itm.alttext then
+            str[#str + 1] = "/Alt " .. utf8_to_utf16_string_pdf(itm.alttext)
         end
         if itm.bbox then
             local bbox = itm.bbox
@@ -1076,7 +1113,6 @@ local function writeStructElements(itm,parentobjectnumber)
         if itm.page then
             str[#str+1] = "/Pg " .. itm.page .. " 0 R"
         end
-
         pdf.obj({type = "raw", objnum = obj, immediate = true , string = "<<" ..  table.concat(str, " ") .. ">>" })
     end
 
@@ -1956,27 +1992,63 @@ end
 do
     local objcount
     local structelementobjects
-    local parents = {}
 
-    function find_role_attributes( nodelist,parenttree, page )
+    function find_role_attributes( nodelist,parenttree, page, curid )
         local head = nodelist
         while head do
             entry = nil
             if head.id == hlist_node or head.id == vlist_node then
-                find_role_attributes(head.list, parenttree, page)
+                if head.list then
+                    local r = node.has_attribute(head,att_role)
+                    local parentid    = getprop(head,"parentid")
+
+                    -- parentdid == "" is a maker for inheritance
+                    if parentid == "" or parentid == nil then
+                        parentid = curid
+                    end
+                    -- roleid is role, underscore, rolecounter, for example P_1
+                    local roleid = getprop(head,"id")
+                    if roleid then
+                        local actualtext = getprop(head,"actualtext")
+                        local alttext = getprop(head,"alttext")
+                        local rolename = roles_a[r]
+                        if rolename ~= "Artifact" then
+                            local structpos = getprop(head,"structpos")
+                            entry = {
+                                obj = pdf.reserveobj(),
+                                role = rolename,
+                                page = page,
+                                actualtext = actualtext,
+                                alttext = alttext,
+                            }
+                            local parenttable = structElements[parentid]
+                            if parenttable then
+                                if structpos == "top" then
+                                    table.insert(parenttable,1,entry)
+                                elseif tonumber(structpos) then
+                                    table.insert(parenttable,tonumber(structpos),entry)
+                                else
+                                    parenttable[#parenttable+1] = entry
+                                end
+                            end
+                            structElements[roleid] = entry
+                        end
+                    end
+                    find_role_attributes(head.list, parenttree, page, roleid or curid)
+                end
             elseif node.has_attribute(head,att_role) then
                 local r = node.has_attribute(head,att_role)
                 local parentid    = getprop(head,"parentid")
                 local roleid      = getprop(head,"id")
-                local description = getprop(head,"description")
+                local actualtext  = getprop(head,"actualtext")
+                local alttext     = getprop(head,"alttext")
                 local bbox        = getprop(head,"bbox")
-
+                -- role number to role name
                 r = roles_a[r]
-                -- A nested Span should have the parent of the current P
 
                 local entry
-                if parents[roleid] then
-                    entry = parents[roleid]
+                if structElements[roleid] then
+                    entry = structElements[roleid]
                 else
                     if r == "Link" then
                         local linkobjnum = getprop(head,"linkobjnum")
@@ -1987,46 +2059,65 @@ do
                             obj = structelemobjnum,
                             role = r,
                             page = page,
-                            text = description,
+                            actualtext = actualtext,
+                            alttext = alttext,
                             bbox = bbox,
                             linkobjects = { linkobjnum }
                         }
                     else
                         entry = {
-                            obj = pdf.reserveobj(),
-                            role = r,
-                            page = page,
-                            text = description,
-                            bbox = bbox,
-                        }
+                                obj = pdf.reserveobj(),
+                                role = r,
+                                page = page,
+                                actualtext = actualtext,
+                                alttext = alttext,
+                                bbox = bbox,
+                            }
                     end
-                end
-                local parentStructElem = structElements[parentid]
-                if parentid then
-                    if not parentStructElem then
-                        entry.parent = parents[parentid].obj
-                        local pt = parents[parentid]
-                        pt[#pt+1] = entry
+                    -- The parent needs links to the children, but only one for each. Therefore
+                    -- the parent contains a table (added_tables) which records all roleids
+                    -- that are already part of the structure.
+                    -- Example:
+                    -- Object 2 is: <</Type /StructElem /S /Document /P 16 0 R /K 8 0 R>>
+                    -- Object 8 is: <</Type /StructElem /S /P /P 2 0 R /K [ 0 5 0 R ] /Pg 7 0 R>>
+                    -- Object 7 is: << /Type /Page /Contents ... >>
+                    -- Object 6 (not shown here): <</Type /StructElem /S /P /P 2 0 R /K 0 /Pg 5 0 R>>
+                    -- Object 2 (the root) has one child: the P_1 (obj 6)
+                    -- parentStructElem = {
+                    --     ["added_tables"] = {
+                    --         ["P_1"] = "true"
+                    --     },
+                    --     ["obj"] = "2"
+                    --     ["role"] = "Document"
+                    --     [1] = {
+                    --          ["obj"] = "8"
+                    --          ["page"] = "7"
+                    --          ["role"] = "P"
+                    --     },
+                    -- },
+                    if not parentid then
+                        splib.log("debug","Structure entry has no parent id","roleid",roleid or "(none)","role",r)
                     else
-                        parentStructElem.added_tables = parentStructElem.added_tables or {}
-                        if parentStructElem.added_tables[roleid] then
-                            -- ignore
-                        else
-                            if roleid then
-                                parentStructElem.added_tables[roleid] = true
+                        if r ~= "Artifact" then
+                            local parenttable = structElements[parentid]
+                            if parenttable then
+                                parenttable[#parenttable+1] = entry
+                            else
+                                splib.log("debug","Structure entry has no parent table","parentid",parentid or "(none)","role",r)
                             end
-                            parentStructElem[#parentStructElem+1] = entry
                         end
                     end
                 end
-                -- roleid can be nil on Figure for example
-                if roleid then
-                    parents[roleid] = entry
-                end
-                entry[#entry+1] = objcount
 
-                head.data = string.format("/%s<</MCID %d>>BDC", r,objcount)
                 structelementobjects[#structelementobjects+1] = entry.obj
+                local str
+                if r == "Artifact" then
+                    str = "/Artifact<<>>BDC"
+                else
+                    str = string.format("/%s<</MCID %d>>BDC", r,objcount)
+                end
+                head.data = str
+                entry[#entry+1] = objcount
                 objcount = objcount + 1
             end
             head = head.next
@@ -2035,6 +2126,7 @@ do
 
     -- called once for each page
     function insert_struct_elements( nodelist,page )
+        -- structelementobjects contains struct tree object numbers for this page.
         structelementobjects = {}
         objcount = 0
         local parenttree = ktree
@@ -2042,6 +2134,7 @@ do
         find_role_attributes(nodelist,parenttree,thispage)
 
         page.structparents = #struct_root_numtree
+        -- ntmetafunctostring returns object references in brackets for __tostring
         struct_root_numtree[#struct_root_numtree + 1] = setmetatable(structelementobjects,{__tostring = ntmetafunctostring })
      end
 end
@@ -2544,12 +2637,12 @@ function initialize_page(pagenumber,data)
             current_grid=pages[current_pagenumber].grid
             return
         end
-
     end
 
     if not pagenumber then
         thispage = current_pagenumber
     end
+
     local trim_amount = tex.sp(options.trim or 0)
     local extra_margin
     if options.cutmarks or options.trimmarks then
@@ -2924,6 +3017,7 @@ function background( box, colorname )
     local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
     n = node.new("whatsit","pdf_literal")
     setprop(n,"origin","background")
+    setprop(n,"role",get_rolenum("Artifact"))
     n.data = string.format("q %s 0 -%g %g %g re f Q",pdfcolorstring,dp,wd,ht + dp)
     n.mode = 0
     if colentry.alpha then
@@ -3113,10 +3207,20 @@ function frame(obj)
         setprop(n,"opacity",colentry.alpha)
     end
 
+    setprop(n,"origin","frame")
+    setprop(n,"role",get_rolenum("Artifact"))
+
+
     if obj.clip then
         n_clip.data = table.concat(rule_clip, " ")
         node.setproperty(n_clip,{origin = "frame/clip"})
     end
+
+    if n_clip and node.is_node(n_clip) then
+        setprop(n_clip,"origin","frame")
+        setprop(n_clip,"role",get_rolenum("Artifact"))
+    end
+
 
     local pdf_save    = node.new("whatsit","pdf_save")
     local pdf_restore = node.new("whatsit","pdf_restore")
@@ -3193,7 +3297,7 @@ function clip(obj)
 
     n_clip = node.new("whatsit","pdf_literal")
     n_clip.data = table.concat(rule_clip, " ")
-    node.setproperty(n_clip,{origin = "frame/clip"})
+    node.setproperty(n_clip,{origin = "frame/clip (2)"})
 
     local pdf_save    = node.new("whatsit","pdf_save")
     local pdf_restore = node.new("whatsit","pdf_restore")
@@ -4343,7 +4447,8 @@ end
 function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewidth, pageheight )
     if not head then return end
     local fun
-    local prev_hyperlink, prev_fgcolor,prev_role
+    local prev_hyperlink, prev_fgcolor, prev_role
+    local nonextnode = false
     local linklevel = 0
     local currentfont = 1
     while head do
@@ -4395,10 +4500,11 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
             end
             local transparency  = getprop(head,"opacity")
             local bbox          = getprop(head,"bbox")
-            local description   = getprop(head,"description")
             local hl            = get_attribute(head,"hyperlink") or getprop(head,"hyperlink")
-            local role, structelemobjnum, id, parentid, rc
+            local role, structelemobjnum, id, parentid, rc, actualtext, alttext
             if options.format == "PDF/UA" then
+                actualtext    = getprop(head,"actualtext")
+                alttext       = getprop(head,"alttext")
                 role          = getprop(head,"role")
                 structelemobjnum = getprop(head,"structelemobjnum")
                 id            = getprop(head,"id")
@@ -4446,13 +4552,13 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                 prev_fgcolor = fgcolor
             end
 
-            if role and head.next == nil then
+            if role and ( head.next == nil or head.next.id == vlist_node or head.next.id == hlist_node )  then
                 -- at end insert endrole if in role mode
                 if prev_role == nil  then
                     insert_startrole = true
                 end
                 insert_endrole = true
-                prev_role = nil
+                nonextnode = true
             elseif role ~= prev_role then
                 -- 1: role nil and prev_role != nil
                 -- 2: role val and prev_role diff val
@@ -4469,7 +4575,7 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                     insert_startrole = true
                 end
             end
-                        -- case 1: link ends at the end of the list
+            -- case 1: link ends at the end of the list
             --         this is due to a (line-) broken link
             --         => end link
             --  case 2: hyperlink value of the node changes
@@ -4530,7 +4636,7 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                     setprop(bdc,"rolecounter", rc)
                     setprop(bdc,"id",id)
                     setprop(bdc,"bbox",bbox)
-                    setprop(bdc,"description",description)
+                    setprop(bdc,"actualtext",actualtext)
                     setprop(bdc,"origin","insert_startrole")
                     setprop(bdc,"structelemobjnum",structelemobjnum)
                     setprop(bdc,"linkobjnum",stl.objnum)
@@ -4582,15 +4688,30 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                 emc.data = "EMC"
                 emc.mode = 1
                 setprop(emc,"origin","insert_endrole")
-
-                if prev_role then
-                    parent.head = node.insert_before(parent.head,head,emc)
-                else
+                if nonextnode and prev_role then
                     parent.head = node.insert_after(parent.head,head,emc)
                     head = head.next
-                end
-                if insert_startrole then
-                    head = head.prev
+                elseif prev_role then
+                    parent.head = node.insert_before(parent.head,head,emc)
+                else
+                    -- single item?
+                    local bdc = node.new("whatsit","pdf_literal")
+                    node.set_attribute(bdc,att_role, role)
+                    setprop(bdc,"parentid", parentid)
+                    setprop(bdc,"rolecounter", rc)
+                    setprop(bdc,"bbox",bbox)
+                    setprop(bdc,"id",id)
+                    setprop(bdc,"actualtext",actualtext)
+                    setprop(bdc,"alttext",alttext)
+                    setprop(bdc,"rolename",tostring(roles_a[role]))
+                    setprop(bdc,"origin","insert_startrole")
+                    bdc.data = ""
+                    bdc.mode = 1
+                    parent.head = node.insert_before(parent.head,head,bdc)
+
+                    parent.head = node.insert_after(parent.head,head,emc)
+                    head = emc
+                    insert_startrole = false
                 end
             end
             if insert_startrole then
@@ -4600,15 +4721,13 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                 setprop(bdc,"rolecounter", rc)
                 setprop(bdc,"bbox",bbox)
                 setprop(bdc,"id",id)
-                setprop(bdc,"description",description)
+                setprop(bdc,"actualtext",actualtext)
+                setprop(bdc,"alttext",alttext)
                 setprop(bdc,"rolename",tostring(roles_a[role]))
                 setprop(bdc,"origin","insert_startrole")
                 bdc.data = ""
                 bdc.mode = 1
                 parent.head = node.insert_before(parent.head,head,bdc)
-                if insert_endrole then
-                    role = nil
-                end
             end
             prev_role = role
 
@@ -4959,6 +5078,12 @@ local function setstyles(n,parameter)
     end
     if parameter.structelemobjnum then
         setprop(n,"structelemobjnum",parameter.structelemobjnum)
+    end
+    if parameter.actualtext then
+        setprop(n,"actualtext", parameter.actualtext)
+    end
+    if parameter.alttext then
+        setprop(n,"alttext", parameter.alttext)
     end
     if parameter.parent then
         if parameter.parent == "" then
@@ -5864,12 +5989,46 @@ function make_glue( parameter )
     return set_glue(nil, parameter)
 end
 
+local function add_properties_to_discnodes(head)
+    while head do
+        if head.id == glyph_node and head.next and head.next.id == disc_node then
+            local role = getprop(head,"role")
+            local parent = getprop(head,"parent")
+            local rolecounter = getprop(head,"rolecounter")
+            local id = getprop(head,"id")
+            if head.next.pre then
+                setprop(head.next.pre,"role",role)
+                setprop(head.next.pre,"parent",parent)
+                setprop(head.next.pre,"rolecounter",rolecounter)
+                setprop(head.next.pre,"id",id)
+            end
+            if head.next.post then
+                setprop(head.next.post,"role",role)
+                setprop(head.next.post,"parent",parent)
+                setprop(head.next.post,"rolecounter",rolecounter)
+                setprop(head.next.post,"id",id)
+            end
+            if head.next.replace then
+                setprop(head.next.replace,"role",role)
+                setprop(head.next.replace,"parent",parent)
+                setprop(head.next.replace,"rolecounter",rolecounter)
+                setprop(head.next.replace,"id",id)
+            end
+
+        end
+        head = head.next
+    end
+end
+
 function finish_par( nodelist,hsize,parameters )
     assert(nodelist)
     node.slide(nodelist)
 
     if not parameters.disable_hyphenation then
         lang.hyphenate(nodelist)
+        if options.format == "PDF/UA" then
+            add_properties_to_discnodes(nodelist)
+        end
     end
 
     local n = node.new("penalty")
@@ -6421,6 +6580,9 @@ function colorbar( wd,ht,dp,color,origin )
     if colorname ~= "-" then
         rule_start.mode = 0
         rule_start.data = "q "..colors[colorname].pdfstring .. string.format(" %g w 0 %g m  %g %g l s Q ",sp_to_bp(ht),sp_to_bp(ht / 2) , sp_to_bp(wd),sp_to_bp(ht / 2))
+        setprop(rule_start,"origin","colorbar")
+        setprop(rule_start,"role",get_rolenum("Artifact"))
+
     end
     local h = node.hpack(rule_start)
     h.width = wd
@@ -7884,6 +8046,8 @@ local function sortedkeys(tab)
     return keys
 end
 
+-- get the key and values always in the same order to get
+-- reproducable PDFs
 local marshal_ordered = {__tostring = function(tbl)
     local ret = {}
     for _, key in ipairs(sortedkeys(tbl)) do
@@ -7915,8 +8079,15 @@ function hlpage(pagenumber,bordercolor)
 end
 
 function hllink(link,bordercolor)
-    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoTo/D %s>>",get_border_for_link(bordercolor),publisher.utf8_to_utf16_string_pdf(string.format("mark%s",link)))
-    hyperlinks[#hyperlinks + 1] = str
+    local hl = {
+        ["/Subtype"] = "/Link",
+        ["/A"] = string.format("<</Type/Action/S/GoTo/D %s>>",publisher.utf8_to_utf16_string_pdf(string.format("mark%s",link)))
+    }
+    for key, value in pairs(get_border_for_link_table(bordercolor)) do
+        hl[key] = value
+    end
+
+    hyperlinks[#hyperlinks + 1] = setmetatable(hl,marshal_ordered)
     return #hyperlinks
 end
 

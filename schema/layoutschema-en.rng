@@ -2122,6 +2122,9 @@
                      <optional>
                         <ref name="e_Frame"></ref>
                      </optional>
+                     <optional>
+                        <ref name="e_Switch"></ref>
+                     </optional>
                   </interleave>
                </oneOrMore>
             </group>
@@ -2722,6 +2725,60 @@
                      <choice>
                         <value>yes</value>
                         <value>no</value>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="role">
+                     <a:documentation>The role for PDF/UA (accessibility, tagged PDF)</a:documentation>
+                     <choice>
+                        <value>Art</value>
+                        <a:documentation>An article within a document.</a:documentation>
+                        <value>Artifact</value>
+                        <a:documentation>An element on the page without semantic meaning.</a:documentation>
+                        <value>Caption</value>
+                        <a:documentation>A description of a table or figure.</a:documentation>
+                        <value>Div</value>
+                        <a:documentation>Div is a division of a document without semantic intent.</a:documentation>
+                        <value>Document</value>
+                        <a:documentation>The top level structure</a:documentation>
+                        <value>Figure</value>
+                        <a:documentation>An illustration.</a:documentation>
+                        <value>H1</value>
+                        <a:documentation>Heading level 1</a:documentation>
+                        <value>H2</value>
+                        <a:documentation>Heading level 2</a:documentation>
+                        <value>H3</value>
+                        <a:documentation>Heading level 3</a:documentation>
+                        <value>H4</value>
+                        <a:documentation>Heading level 4</a:documentation>
+                        <value>H5</value>
+                        <a:documentation>Heading level 5</a:documentation>
+                        <value>H6</value>
+                        <a:documentation>Heading level 6</a:documentation>
+                        <value>P</value>
+                        <a:documentation>A paragraph.</a:documentation>
+                        <value>Lbl</value>
+                        <a:documentation>A label</a:documentation>
+                        <value>LBody</value>
+                        <a:documentation>List body</a:documentation>
+                        <value>Part</value>
+                        <a:documentation>Part is intended to sub-divide a large document into smaller elements.</a:documentation>
+                        <value>Sect</value>
+                        <a:documentation>Sect identifies the sections of a document, part or article.</a:documentation>
+                        <value>Span</value>
+                        <a:documentation>Span is to demarcate content for the purpose of applying semantic and
+          other attributes.</a:documentation>
+                        <value>Table</value>
+                        <a:documentation>Table is the container for a table.</a:documentation>
+                        <value>TD</value>
+                        <a:documentation>A table cell</a:documentation>
+                        <value>TR</value>
+                        <a:documentation>A table row</a:documentation>
+                        <value>TOC</value>
+                        <a:documentation>TOC is a container for a table of contents.</a:documentation>
+                        <value>TOCI</value>
+                        <a:documentation>TOCI is a container for a table of contents entry.</a:documentation>
                      </choice>
                   </attribute>
                </optional>
@@ -4156,6 +4213,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="actualtext">
+                     <a:documentation>Set the text for screen readers.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="allowbreak">
                      <a:documentation>(Experimental!) list of characters where a line break is possible. Space character is not implied when this attribute is set.</a:documentation>
                   </attribute>
@@ -4354,21 +4416,28 @@
                </optional>
                <optional>
                   <attribute name="parent">
-                     <a:documentation>The id of the parent structure element for tagged PDF</a:documentation>
+                     <a:documentation>The id of the parent structure element for tagged PDF. If left empty, the software tries to derive the parent id from the layout structure.</a:documentation>
                   </attribute>
                </optional>
                <optional>
                   <attribute name="role">
                      <a:documentation>The role for PDF/UA (accessibility, tagged PDF)</a:documentation>
                      <choice>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
                         <value>Art</value>
                         <a:documentation>An article within a document.</a:documentation>
+                        <value>Artifact</value>
+                        <a:documentation>An element on the page without semantic meaning.</a:documentation>
                         <value>Caption</value>
                         <a:documentation>A description of a table or figure.</a:documentation>
                         <value>Div</value>
                         <a:documentation>Div is a division of a document without semantic intent.</a:documentation>
                         <value>Document</value>
                         <a:documentation>The top level structure</a:documentation>
+                        <value>Figure</value>
+                        <a:documentation>An illustration.</a:documentation>
                         <value>H1</value>
                         <a:documentation>Heading level 1</a:documentation>
                         <value>H2</value>
@@ -4396,11 +4465,20 @@
           other attributes.</a:documentation>
                         <value>Table</value>
                         <a:documentation>Table is the container for a table.</a:documentation>
+                        <value>TD</value>
+                        <a:documentation>A table cell</a:documentation>
+                        <value>TR</value>
+                        <a:documentation>A table row</a:documentation>
                         <value>TOC</value>
                         <a:documentation>TOC is a container for a table of contents.</a:documentation>
                         <value>TOCI</value>
                         <a:documentation>TOCI is a container for a table of contents entry.</a:documentation>
                      </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="structpos">
+                     <a:documentation>Set the position of the tag in the structure hierarchy for PDF/UA. Default is &#39;cur&#39;, which inserts the element at the current position (the current “bottom”). &#39;top&#39; (or 1) inserts the element at the beginning of the structure. Use any other number to control the insertion.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -5809,12 +5887,16 @@
                      <choice>
                         <value>Art</value>
                         <a:documentation>An article within a document.</a:documentation>
+                        <value>Artifact</value>
+                        <a:documentation>An element on the page without semantic meaning.</a:documentation>
                         <value>Caption</value>
                         <a:documentation>A description of a table or figure.</a:documentation>
                         <value>Div</value>
                         <a:documentation>Div is a division of a document without semantic intent.</a:documentation>
                         <value>Document</value>
                         <a:documentation>The top level structure</a:documentation>
+                        <value>Figure</value>
+                        <a:documentation>An illustration.</a:documentation>
                         <value>H1</value>
                         <a:documentation>Heading level 1</a:documentation>
                         <value>H2</value>
@@ -5842,6 +5924,10 @@
           other attributes.</a:documentation>
                         <value>Table</value>
                         <a:documentation>Table is the container for a table.</a:documentation>
+                        <value>TD</value>
+                        <a:documentation>A table cell</a:documentation>
+                        <value>TR</value>
+                        <a:documentation>A table row</a:documentation>
                         <value>TOC</value>
                         <a:documentation>TOC is a container for a table of contents.</a:documentation>
                         <value>TOCI</value>
@@ -5938,12 +6024,16 @@
                   <choice>
                      <value>Art</value>
                      <a:documentation>An article within a document.</a:documentation>
+                     <value>Artifact</value>
+                     <a:documentation>An element on the page without semantic meaning.</a:documentation>
                      <value>Caption</value>
                      <a:documentation>A description of a table or figure.</a:documentation>
                      <value>Div</value>
                      <a:documentation>Div is a division of a document without semantic intent.</a:documentation>
                      <value>Document</value>
                      <a:documentation>The top level structure</a:documentation>
+                     <value>Figure</value>
+                     <a:documentation>An illustration.</a:documentation>
                      <value>H1</value>
                      <a:documentation>Heading level 1</a:documentation>
                      <value>H2</value>
@@ -5971,6 +6061,10 @@
           other attributes.</a:documentation>
                      <value>Table</value>
                      <a:documentation>Table is the container for a table.</a:documentation>
+                     <value>TD</value>
+                     <a:documentation>A table cell</a:documentation>
+                     <value>TR</value>
+                     <a:documentation>A table row</a:documentation>
                      <value>TOC</value>
                      <a:documentation>TOC is a container for a table of contents.</a:documentation>
                      <value>TOCI</value>
@@ -6065,6 +6159,65 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="parent">
+                     <a:documentation>The id of the parent structure element for tagged PDF</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="role">
+                     <a:documentation>The role for PDF/UA (accessibility, tagged PDF)</a:documentation>
+                     <choice>
+                        <value>Art</value>
+                        <a:documentation>An article within a document.</a:documentation>
+                        <value>Artifact</value>
+                        <a:documentation>An element on the page without semantic meaning.</a:documentation>
+                        <value>Caption</value>
+                        <a:documentation>A description of a table or figure.</a:documentation>
+                        <value>Div</value>
+                        <a:documentation>Div is a division of a document without semantic intent.</a:documentation>
+                        <value>Document</value>
+                        <a:documentation>The top level structure</a:documentation>
+                        <value>Figure</value>
+                        <a:documentation>An illustration.</a:documentation>
+                        <value>H1</value>
+                        <a:documentation>Heading level 1</a:documentation>
+                        <value>H2</value>
+                        <a:documentation>Heading level 2</a:documentation>
+                        <value>H3</value>
+                        <a:documentation>Heading level 3</a:documentation>
+                        <value>H4</value>
+                        <a:documentation>Heading level 4</a:documentation>
+                        <value>H5</value>
+                        <a:documentation>Heading level 5</a:documentation>
+                        <value>H6</value>
+                        <a:documentation>Heading level 6</a:documentation>
+                        <value>P</value>
+                        <a:documentation>A paragraph.</a:documentation>
+                        <value>Lbl</value>
+                        <a:documentation>A label</a:documentation>
+                        <value>LBody</value>
+                        <a:documentation>List body</a:documentation>
+                        <value>Part</value>
+                        <a:documentation>Part is intended to sub-divide a large document into smaller elements.</a:documentation>
+                        <value>Sect</value>
+                        <a:documentation>Sect identifies the sections of a document, part or article.</a:documentation>
+                        <value>Span</value>
+                        <a:documentation>Span is to demarcate content for the purpose of applying semantic and
+          other attributes.</a:documentation>
+                        <value>Table</value>
+                        <a:documentation>Table is the container for a table.</a:documentation>
+                        <value>TD</value>
+                        <a:documentation>A table cell</a:documentation>
+                        <value>TR</value>
+                        <a:documentation>A table row</a:documentation>
+                        <value>TOC</value>
+                        <a:documentation>TOC is a container for a table of contents.</a:documentation>
+                        <value>TOCI</value>
+                        <a:documentation>TOCI is a container for a table of contents entry.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="textformat">
                      <a:documentation>The text format for the table. Defaults to __leftaligned if no align attribute is given.</a:documentation>
                   </attribute>
@@ -6104,6 +6257,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Message"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_SetVariable"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Switch"></ref>
@@ -6367,6 +6523,60 @@
                <optional>
                   <attribute name="padding-right">
                      <a:documentation>Set the inner distance (width between contents and the border) to the right edge.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="role">
+                     <a:documentation>The role for PDF/UA (accessibility, tagged PDF)</a:documentation>
+                     <choice>
+                        <value>Art</value>
+                        <a:documentation>An article within a document.</a:documentation>
+                        <value>Artifact</value>
+                        <a:documentation>An element on the page without semantic meaning.</a:documentation>
+                        <value>Caption</value>
+                        <a:documentation>A description of a table or figure.</a:documentation>
+                        <value>Div</value>
+                        <a:documentation>Div is a division of a document without semantic intent.</a:documentation>
+                        <value>Document</value>
+                        <a:documentation>The top level structure</a:documentation>
+                        <value>Figure</value>
+                        <a:documentation>An illustration.</a:documentation>
+                        <value>H1</value>
+                        <a:documentation>Heading level 1</a:documentation>
+                        <value>H2</value>
+                        <a:documentation>Heading level 2</a:documentation>
+                        <value>H3</value>
+                        <a:documentation>Heading level 3</a:documentation>
+                        <value>H4</value>
+                        <a:documentation>Heading level 4</a:documentation>
+                        <value>H5</value>
+                        <a:documentation>Heading level 5</a:documentation>
+                        <value>H6</value>
+                        <a:documentation>Heading level 6</a:documentation>
+                        <value>P</value>
+                        <a:documentation>A paragraph.</a:documentation>
+                        <value>Lbl</value>
+                        <a:documentation>A label</a:documentation>
+                        <value>LBody</value>
+                        <a:documentation>List body</a:documentation>
+                        <value>Part</value>
+                        <a:documentation>Part is intended to sub-divide a large document into smaller elements.</a:documentation>
+                        <value>Sect</value>
+                        <a:documentation>Sect identifies the sections of a document, part or article.</a:documentation>
+                        <value>Span</value>
+                        <a:documentation>Span is to demarcate content for the purpose of applying semantic and
+          other attributes.</a:documentation>
+                        <value>Table</value>
+                        <a:documentation>Table is the container for a table.</a:documentation>
+                        <value>TD</value>
+                        <a:documentation>A table cell</a:documentation>
+                        <value>TR</value>
+                        <a:documentation>A table row</a:documentation>
+                        <value>TOC</value>
+                        <a:documentation>TOC is a container for a table of contents.</a:documentation>
+                        <value>TOCI</value>
+                        <a:documentation>TOCI is a container for a table of contents entry.</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <optional>
@@ -6824,6 +7034,65 @@
                <optional>
                   <attribute name="minheight">
                      <a:documentation>Minimum row height in grid cells or length.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="parent">
+                     <a:documentation>The id of the parent structure element for tagged PDF</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="role">
+                     <a:documentation>The role for PDF/UA (accessibility, tagged PDF)</a:documentation>
+                     <choice>
+                        <value>Art</value>
+                        <a:documentation>An article within a document.</a:documentation>
+                        <value>Artifact</value>
+                        <a:documentation>An element on the page without semantic meaning.</a:documentation>
+                        <value>Caption</value>
+                        <a:documentation>A description of a table or figure.</a:documentation>
+                        <value>Div</value>
+                        <a:documentation>Div is a division of a document without semantic intent.</a:documentation>
+                        <value>Document</value>
+                        <a:documentation>The top level structure</a:documentation>
+                        <value>Figure</value>
+                        <a:documentation>An illustration.</a:documentation>
+                        <value>H1</value>
+                        <a:documentation>Heading level 1</a:documentation>
+                        <value>H2</value>
+                        <a:documentation>Heading level 2</a:documentation>
+                        <value>H3</value>
+                        <a:documentation>Heading level 3</a:documentation>
+                        <value>H4</value>
+                        <a:documentation>Heading level 4</a:documentation>
+                        <value>H5</value>
+                        <a:documentation>Heading level 5</a:documentation>
+                        <value>H6</value>
+                        <a:documentation>Heading level 6</a:documentation>
+                        <value>P</value>
+                        <a:documentation>A paragraph.</a:documentation>
+                        <value>Lbl</value>
+                        <a:documentation>A label</a:documentation>
+                        <value>LBody</value>
+                        <a:documentation>List body</a:documentation>
+                        <value>Part</value>
+                        <a:documentation>Part is intended to sub-divide a large document into smaller elements.</a:documentation>
+                        <value>Sect</value>
+                        <a:documentation>Sect identifies the sections of a document, part or article.</a:documentation>
+                        <value>Span</value>
+                        <a:documentation>Span is to demarcate content for the purpose of applying semantic and
+          other attributes.</a:documentation>
+                        <value>Table</value>
+                        <a:documentation>Table is the container for a table.</a:documentation>
+                        <value>TD</value>
+                        <a:documentation>A table cell</a:documentation>
+                        <value>TR</value>
+                        <a:documentation>A table row</a:documentation>
+                        <value>TOC</value>
+                        <a:documentation>TOC is a container for a table of contents.</a:documentation>
+                        <value>TOCI</value>
+                        <a:documentation>TOCI is a container for a table of contents entry.</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <optional>

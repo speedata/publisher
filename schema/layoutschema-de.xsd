@@ -1716,6 +1716,7 @@
         <xs:element ref="en:Table"/>
         <xs:element ref="en:Transformation"/>
         <xs:element ref="en:Frame"/>
+        <xs:element ref="en:Switch"/>
       </xs:choice>
       <xs:attribute name="background-color">
         <xs:annotation>
@@ -2670,6 +2671,131 @@
           <xs:restriction base="xs:token">
             <xs:enumeration value="yes"/>
             <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="role">
+        <xs:annotation>
+          <xs:documentation>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="Art">
+              <xs:annotation>
+                <xs:documentation>Ein Artikel in einem Dokument.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Artifact">
+              <xs:annotation>
+                <xs:documentation>Ein Seitenelement ohne semantische Bedeutung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Caption">
+              <xs:annotation>
+                <xs:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Div">
+              <xs:annotation>
+                <xs:documentation>Div unterteilt ein Dokument ohne semantische Bedeutung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Document">
+              <xs:annotation>
+                <xs:documentation>Das Top-Level Element</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Figure">
+              <xs:annotation>
+                <xs:documentation>Eine Abbildung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H1">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 1</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H2">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 2</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H3">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 3</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H4">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 4</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H5">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 5</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H6">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 6</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="P">
+              <xs:annotation>
+                <xs:documentation>Ein Absatz</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Lbl">
+              <xs:annotation>
+                <xs:documentation>Ein Label</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="LBody">
+              <xs:annotation>
+                <xs:documentation>Listen Inhalt</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Part">
+              <xs:annotation>
+                <xs:documentation>Part ist dafür da, um große Dokumente in kleinere Elemente zu unterteilen.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Sect">
+              <xs:annotation>
+                <xs:documentation>Sect identifiziert einen Abschnitt eines Dokuments, Teils oder Artikels.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Span">
+              <xs:annotation>
+                <xs:documentation>Span dient der Abgrenzung von Inhalten zum Zwecke der Anwendung semantischer und
+          andere Attribute.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Table">
+              <xs:annotation>
+                <xs:documentation>Table beinhaltet eine Tabelle.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TD">
+              <xs:annotation>
+                <xs:documentation>Eine Tabellenzelle</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TR">
+              <xs:annotation>
+                <xs:documentation>Eine Tabellenzeile</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TOC">
+              <xs:annotation>
+                <xs:documentation>TOC beinhaltet ein Inhaltsverzeichnis.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TOCI">
+              <xs:annotation>
+                <xs:documentation>TOCI beinhaltet einen Eintrag eines Inhaltsverzeichnis.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
@@ -4278,6 +4404,11 @@
           <xs:documentation>CSS id für diesen Absatz.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="actualtext">
+        <xs:annotation>
+          <xs:documentation>Setze den Text für Bildschirmlesegeräte.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="allowbreak">
         <xs:annotation>
           <xs:documentation>(Experimentell) Liste der Zeichen, bei denen ein Umbruch möglich ist. Das Leerzeichen wird nicht automatisch als Umbruchbunkt erkannt, wenn das Attribut angegeben ist.</xs:documentation>
@@ -4856,7 +4987,7 @@
       </xs:attribute>
       <xs:attribute name="parent">
         <xs:annotation>
-          <xs:documentation>Die ID der Elternstruktur für tagged PDF</xs:documentation>
+          <xs:documentation>Die ID der Elternstruktur für tagged PDF. Wenn leer (''), dann wird versucht, die implizite Rollen-ID des Elternelements im Layout-XML zu nutzen.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="role">
@@ -4864,105 +4995,227 @@
           <xs:documentation>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="Art">
-              <xs:annotation>
-                <xs:documentation>Ein Artikel in einem Dokument.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="Caption">
-              <xs:annotation>
-                <xs:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="Div">
-              <xs:annotation>
-                <xs:documentation>Div unterteilt ein Dokument ohne semantische Bedeutung.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="Document">
-              <xs:annotation>
-                <xs:documentation>Das Top-Level Element</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="H1">
-              <xs:annotation>
-                <xs:documentation>Überschrift Ebene 1</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="H2">
-              <xs:annotation>
-                <xs:documentation>Überschrift Ebene 2</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="H3">
-              <xs:annotation>
-                <xs:documentation>Überschrift Ebene 3</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="H4">
-              <xs:annotation>
-                <xs:documentation>Überschrift Ebene 4</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="H5">
-              <xs:annotation>
-                <xs:documentation>Überschrift Ebene 5</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="H6">
-              <xs:annotation>
-                <xs:documentation>Überschrift Ebene 6</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="P">
-              <xs:annotation>
-                <xs:documentation>Ein Absatz</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="Lbl">
-              <xs:annotation>
-                <xs:documentation>Ein Label</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="LBody">
-              <xs:annotation>
-                <xs:documentation>Listen Inhalt</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="Part">
-              <xs:annotation>
-                <xs:documentation>Part ist dafür da, um große Dokumente in kleinere Elemente zu unterteilen.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="Sect">
-              <xs:annotation>
-                <xs:documentation>Sect identifiziert einen Abschnitt eines Dokuments, Teils oder Artikels.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="Span">
-              <xs:annotation>
-                <xs:documentation>Span dient der Abgrenzung von Inhalten zum Zwecke der Anwendung semantischer und
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Art">
+                  <xs:annotation>
+                    <xs:documentation>Ein Artikel in einem Dokument.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Artifact">
+                  <xs:annotation>
+                    <xs:documentation>Ein Seitenelement ohne semantische Bedeutung.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Caption">
+                  <xs:annotation>
+                    <xs:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Div">
+                  <xs:annotation>
+                    <xs:documentation>Div unterteilt ein Dokument ohne semantische Bedeutung.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Document">
+                  <xs:annotation>
+                    <xs:documentation>Das Top-Level Element</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Figure">
+                  <xs:annotation>
+                    <xs:documentation>Eine Abbildung.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="H1">
+                  <xs:annotation>
+                    <xs:documentation>Überschrift Ebene 1</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="H2">
+                  <xs:annotation>
+                    <xs:documentation>Überschrift Ebene 2</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="H3">
+                  <xs:annotation>
+                    <xs:documentation>Überschrift Ebene 3</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="H4">
+                  <xs:annotation>
+                    <xs:documentation>Überschrift Ebene 4</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="H5">
+                  <xs:annotation>
+                    <xs:documentation>Überschrift Ebene 5</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="H6">
+                  <xs:annotation>
+                    <xs:documentation>Überschrift Ebene 6</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="P">
+                  <xs:annotation>
+                    <xs:documentation>Ein Absatz</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Lbl">
+                  <xs:annotation>
+                    <xs:documentation>Ein Label</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="LBody">
+                  <xs:annotation>
+                    <xs:documentation>Listen Inhalt</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Part">
+                  <xs:annotation>
+                    <xs:documentation>Part ist dafür da, um große Dokumente in kleinere Elemente zu unterteilen.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Sect">
+                  <xs:annotation>
+                    <xs:documentation>Sect identifiziert einen Abschnitt eines Dokuments, Teils oder Artikels.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Span">
+                  <xs:annotation>
+                    <xs:documentation>Span dient der Abgrenzung von Inhalten zum Zwecke der Anwendung semantischer und
           andere Attribute.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="Table">
-              <xs:annotation>
-                <xs:documentation>Table beinhaltet eine Tabelle.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="TOC">
-              <xs:annotation>
-                <xs:documentation>TOC beinhaltet ein Inhaltsverzeichnis.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="TOCI">
-              <xs:annotation>
-                <xs:documentation>TOCI beinhaltet einen Eintrag eines Inhaltsverzeichnis.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Table">
+                  <xs:annotation>
+                    <xs:documentation>Table beinhaltet eine Tabelle.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="TD">
+                  <xs:annotation>
+                    <xs:documentation>Eine Tabellenzelle</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="TR">
+                  <xs:annotation>
+                    <xs:documentation>Eine Tabellenzeile</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="TOC">
+                  <xs:annotation>
+                    <xs:documentation>TOC beinhaltet ein Inhaltsverzeichnis.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="TOCI">
+                  <xs:annotation>
+                    <xs:documentation>TOCI beinhaltet einen Eintrag eines Inhaltsverzeichnis.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="structpos">
+        <xs:annotation>
+          <xs:documentation>Bestimme die Position des Tags in der Strukturhierarchie für PDF/UA. Voreinstellung ist 'cur', das Element wird in der aktuellen Postion (also am aktuellen Ende) eingefügt. 'top' oder 1 fügt das Element am Anfang der Struktur ein. Andere Zahlen bestimmen die Position des Elements.</xs:documentation>
+        </xs:annotation>
       </xs:attribute>
       <xs:attribute name="textformat">
         <xs:annotation>
@@ -6759,6 +7012,11 @@
                 <xs:documentation>Ein Artikel in einem Dokument.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="Artifact">
+              <xs:annotation>
+                <xs:documentation>Ein Seitenelement ohne semantische Bedeutung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="Caption">
               <xs:annotation>
                 <xs:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</xs:documentation>
@@ -6772,6 +7030,11 @@
             <xs:enumeration value="Document">
               <xs:annotation>
                 <xs:documentation>Das Top-Level Element</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Figure">
+              <xs:annotation>
+                <xs:documentation>Eine Abbildung.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="H1">
@@ -6838,6 +7101,16 @@
             <xs:enumeration value="Table">
               <xs:annotation>
                 <xs:documentation>Table beinhaltet eine Tabelle.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TD">
+              <xs:annotation>
+                <xs:documentation>Eine Tabellenzelle</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TR">
+              <xs:annotation>
+                <xs:documentation>Eine Tabellenzeile</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="TOC">
@@ -6915,6 +7188,11 @@
                 <xs:documentation>Ein Artikel in einem Dokument.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="Artifact">
+              <xs:annotation>
+                <xs:documentation>Ein Seitenelement ohne semantische Bedeutung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="Caption">
               <xs:annotation>
                 <xs:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</xs:documentation>
@@ -6928,6 +7206,11 @@
             <xs:enumeration value="Document">
               <xs:annotation>
                 <xs:documentation>Das Top-Level Element</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Figure">
+              <xs:annotation>
+                <xs:documentation>Eine Abbildung.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="H1">
@@ -6996,6 +7279,16 @@
                 <xs:documentation>Table beinhaltet eine Tabelle.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
+            <xs:enumeration value="TD">
+              <xs:annotation>
+                <xs:documentation>Eine Tabellenzelle</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TR">
+              <xs:annotation>
+                <xs:documentation>Eine Tabellenzeile</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="TOC">
               <xs:annotation>
                 <xs:documentation>TOC beinhaltet ein Inhaltsverzeichnis.</xs:documentation>
@@ -7034,6 +7327,7 @@
         <xs:element ref="en:ForAll"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Message"/>
+        <xs:element ref="en:SetVariable"/>
         <xs:element ref="en:Switch"/>
         <xs:element ref="en:Tablefoot"/>
         <xs:element ref="en:Tablehead"/>
@@ -7119,6 +7413,136 @@
             <xs:enumeration value="no">
               <xs:annotation>
                 <xs:documentation>Die Tabelle nimmt den kleinstmöglichen Platz ein.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="parent">
+        <xs:annotation>
+          <xs:documentation>Die ID der Elternstruktur für tagged PDF</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="role">
+        <xs:annotation>
+          <xs:documentation>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="Art">
+              <xs:annotation>
+                <xs:documentation>Ein Artikel in einem Dokument.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Artifact">
+              <xs:annotation>
+                <xs:documentation>Ein Seitenelement ohne semantische Bedeutung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Caption">
+              <xs:annotation>
+                <xs:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Div">
+              <xs:annotation>
+                <xs:documentation>Div unterteilt ein Dokument ohne semantische Bedeutung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Document">
+              <xs:annotation>
+                <xs:documentation>Das Top-Level Element</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Figure">
+              <xs:annotation>
+                <xs:documentation>Eine Abbildung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H1">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 1</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H2">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 2</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H3">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 3</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H4">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 4</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H5">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 5</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H6">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 6</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="P">
+              <xs:annotation>
+                <xs:documentation>Ein Absatz</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Lbl">
+              <xs:annotation>
+                <xs:documentation>Ein Label</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="LBody">
+              <xs:annotation>
+                <xs:documentation>Listen Inhalt</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Part">
+              <xs:annotation>
+                <xs:documentation>Part ist dafür da, um große Dokumente in kleinere Elemente zu unterteilen.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Sect">
+              <xs:annotation>
+                <xs:documentation>Sect identifiziert einen Abschnitt eines Dokuments, Teils oder Artikels.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Span">
+              <xs:annotation>
+                <xs:documentation>Span dient der Abgrenzung von Inhalten zum Zwecke der Anwendung semantischer und
+          andere Attribute.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Table">
+              <xs:annotation>
+                <xs:documentation>Table beinhaltet eine Tabelle.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TD">
+              <xs:annotation>
+                <xs:documentation>Eine Tabellenzelle</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TR">
+              <xs:annotation>
+                <xs:documentation>Eine Tabellenzeile</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TOC">
+              <xs:annotation>
+                <xs:documentation>TOC beinhaltet ein Inhaltsverzeichnis.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TOCI">
+              <xs:annotation>
+                <xs:documentation>TOCI beinhaltet einen Eintrag eines Inhaltsverzeichnis.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
           </xs:restriction>
@@ -7442,6 +7866,131 @@
         <xs:annotation>
           <xs:documentation>Bestimmt den Innenabstand einer Tabelle (rechts)</xs:documentation>
         </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="role">
+        <xs:annotation>
+          <xs:documentation>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="Art">
+              <xs:annotation>
+                <xs:documentation>Ein Artikel in einem Dokument.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Artifact">
+              <xs:annotation>
+                <xs:documentation>Ein Seitenelement ohne semantische Bedeutung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Caption">
+              <xs:annotation>
+                <xs:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Div">
+              <xs:annotation>
+                <xs:documentation>Div unterteilt ein Dokument ohne semantische Bedeutung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Document">
+              <xs:annotation>
+                <xs:documentation>Das Top-Level Element</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Figure">
+              <xs:annotation>
+                <xs:documentation>Eine Abbildung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H1">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 1</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H2">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 2</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H3">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 3</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H4">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 4</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H5">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 5</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H6">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 6</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="P">
+              <xs:annotation>
+                <xs:documentation>Ein Absatz</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Lbl">
+              <xs:annotation>
+                <xs:documentation>Ein Label</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="LBody">
+              <xs:annotation>
+                <xs:documentation>Listen Inhalt</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Part">
+              <xs:annotation>
+                <xs:documentation>Part ist dafür da, um große Dokumente in kleinere Elemente zu unterteilen.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Sect">
+              <xs:annotation>
+                <xs:documentation>Sect identifiziert einen Abschnitt eines Dokuments, Teils oder Artikels.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Span">
+              <xs:annotation>
+                <xs:documentation>Span dient der Abgrenzung von Inhalten zum Zwecke der Anwendung semantischer und
+          andere Attribute.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Table">
+              <xs:annotation>
+                <xs:documentation>Table beinhaltet eine Tabelle.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TD">
+              <xs:annotation>
+                <xs:documentation>Eine Tabellenzelle</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TR">
+              <xs:annotation>
+                <xs:documentation>Eine Tabellenzeile</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TOC">
+              <xs:annotation>
+                <xs:documentation>TOC beinhaltet ein Inhaltsverzeichnis.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TOCI">
+              <xs:annotation>
+                <xs:documentation>TOCI beinhaltet einen Eintrag eines Inhaltsverzeichnis.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="rowspan">
         <xs:annotation>
@@ -8356,6 +8905,136 @@
         <xs:annotation>
           <xs:documentation>Die Mindesthöhe der Zeile in Rasterzellen oder als Längenangabe.</xs:documentation>
         </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="parent">
+        <xs:annotation>
+          <xs:documentation>Die ID der Elternstruktur für tagged PDF</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="role">
+        <xs:annotation>
+          <xs:documentation>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="Art">
+              <xs:annotation>
+                <xs:documentation>Ein Artikel in einem Dokument.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Artifact">
+              <xs:annotation>
+                <xs:documentation>Ein Seitenelement ohne semantische Bedeutung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Caption">
+              <xs:annotation>
+                <xs:documentation>Eine Beschreibung einer Tabelle oder Abbildung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Div">
+              <xs:annotation>
+                <xs:documentation>Div unterteilt ein Dokument ohne semantische Bedeutung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Document">
+              <xs:annotation>
+                <xs:documentation>Das Top-Level Element</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Figure">
+              <xs:annotation>
+                <xs:documentation>Eine Abbildung.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H1">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 1</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H2">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 2</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H3">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 3</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H4">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 4</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H5">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 5</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="H6">
+              <xs:annotation>
+                <xs:documentation>Überschrift Ebene 6</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="P">
+              <xs:annotation>
+                <xs:documentation>Ein Absatz</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Lbl">
+              <xs:annotation>
+                <xs:documentation>Ein Label</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="LBody">
+              <xs:annotation>
+                <xs:documentation>Listen Inhalt</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Part">
+              <xs:annotation>
+                <xs:documentation>Part ist dafür da, um große Dokumente in kleinere Elemente zu unterteilen.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Sect">
+              <xs:annotation>
+                <xs:documentation>Sect identifiziert einen Abschnitt eines Dokuments, Teils oder Artikels.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Span">
+              <xs:annotation>
+                <xs:documentation>Span dient der Abgrenzung von Inhalten zum Zwecke der Anwendung semantischer und
+          andere Attribute.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Table">
+              <xs:annotation>
+                <xs:documentation>Table beinhaltet eine Tabelle.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TD">
+              <xs:annotation>
+                <xs:documentation>Eine Tabellenzelle</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TR">
+              <xs:annotation>
+                <xs:documentation>Eine Tabellenzeile</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TOC">
+              <xs:annotation>
+                <xs:documentation>TOC beinhaltet ein Inhaltsverzeichnis.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="TOCI">
+              <xs:annotation>
+                <xs:documentation>TOCI beinhaltet einen Eintrag eines Inhaltsverzeichnis.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="sethead">
         <xs:annotation>

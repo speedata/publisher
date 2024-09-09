@@ -594,6 +594,14 @@
         <para>Ein Artikel in einem Dokument.</para>
       </description>
     </choice>
+    <choice en="Artifact">
+      <description xml:lang="en">
+        <para>An element on the page without semantic meaning.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Ein Seitenelement ohne semantische Bedeutung.</para>
+      </description>
+    </choice>
     <choice en="Caption">
       <description xml:lang="en">
         <para>A description of a table or figure.</para>
@@ -616,6 +624,14 @@
       </description>
       <description xml:lang="de">
         <para>Das Top-Level Element</para>
+      </description>
+    </choice>
+    <choice en="Figure">
+      <description xml:lang="en">
+        <para>An illustration.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Eine Abbildung.</para>
       </description>
     </choice>
     <choice en="H1">
@@ -722,6 +738,22 @@
       </description>
       <description xml:lang="de">
         <para>Table beinhaltet eine Tabelle.</para>
+      </description>
+    </choice>
+    <choice en="TD">
+      <description xml:lang="en">
+        <para>A table cell</para>
+      </description>
+      <description xml:lang="de">
+        <para>Eine Tabellenzelle</para>
+      </description>
+    </choice>
+    <choice en="TR">
+      <description xml:lang="en">
+        <para>A table row</para>
+      </description>
+      <description xml:lang="de">
+        <para>Eine Tabellenzeile</para>
       </description>
     </choice>
     <choice en="TOC">
@@ -3797,6 +3829,7 @@
           <optional><cmd name="Table"/></optional>
           <optional><cmd name="Transformation"/></optional>
           <optional><cmd name="Frame"/></optional>
+          <optional><cmd name="Switch"></cmd></optional>
         </interleave>
       </oneOrMore>
     </childelements>
@@ -4907,6 +4940,15 @@
       <description xml:lang="de">
         <para>Dehnt das Bild bis eine der Angaben von maxheight und maxwidth erreich ist. Hilfreich um Bilder so groß wie möglich aber innerhalb gewisser Grenzen anzeigen zu lassen.</para>
       </description>
+    </attribute>
+    <attribute en="role" optional="yes" since="4.19.23">
+      <description xml:lang="en">
+        <para>The role for PDF/UA (accessibility, tagged PDF)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</para>
+      </description>
+      <referenceattribute name="roles" />
     </attribute>
     <attribute en="rotate" type="number" optional="yes">
       <description xml:lang="en">
@@ -6842,6 +6884,14 @@
         <para>CSS id für diesen Absatz.</para>
       </description>
     </attribute>
+    <attribute en="actualtext" optional="yes" type="text" allowxpath="yes" since="4.19.23">
+      <description xml:lang="en">
+        <para>Set the text for screen readers.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setze den Text für Bildschirmlesegeräte.</para>
+      </description>
+    </attribute>
     <attribute en="allowbreak" type="text" optional="yes">
       <description xml:lang="en">
         <para>(Experimental!) list of characters where a line break is possible. Space character is not implied when this attribute is set.</para>
@@ -7013,13 +7063,13 @@
     </attribute>
     <attribute en="parent" optional="yes" since="4.19.8" type="text">
       <description xml:lang="en">
-        <para>The id of the parent structure element for tagged PDF</para>
+        <para>The id of the parent structure element for tagged PDF. If left empty, the software tries to derive the parent id from the layout structure.</para>
       </description>
       <description xml:lang="de">
-        <para>Die ID der Elternstruktur für tagged PDF</para>
+        <para>Die ID der Elternstruktur für tagged PDF. Wenn leer (''), dann wird versucht, die implizite Rollen-ID des Elternelements im Layout-XML zu nutzen.</para>
       </description>
     </attribute>
-    <attribute en="role" optional="yes" since="3.5.7">
+    <attribute en="role" optional="yes" since="3.5.7" allowxpath="yes">
       <description xml:lang="en">
         <para>The role for PDF/UA (accessibility, tagged PDF)</para>
       </description>
@@ -7027,6 +7077,14 @@
         <para>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</para>
       </description>
       <referenceattribute name="roles" />
+    </attribute>
+    <attribute en="structpos" optional="yes" since="4.19.23" type="topcurnumber">
+      <description xml:lang="en">
+        <para>Set the position of the tag in the structure hierarchy for PDF/UA. Default is 'cur', which inserts the element at the current position (the current “bottom”). 'top' (or 1) inserts the element at the beginning of the structure. Use any other number to control the insertion.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimme die Position des Tags in der Strukturhierarchie für PDF/UA. Voreinstellung ist 'cur', das Element wird in der aktuellen Postion (also am aktuellen Ende) eingefügt. 'top' oder 1 fügt das Element am Anfang der Struktur ein. Andere Zahlen bestimmen die Position des Elements.</para>
+      </description>
     </attribute>
     <attribute en="textformat" type="text" optional="yes">
       <description xml:lang="en">
@@ -9685,6 +9743,7 @@
           <optional><cmd name="ForAll"/></optional>
           <optional><cmd name="Loop"/></optional>
           <optional><cmd name="Message"/></optional>
+          <optional><cmd name="SetVariable"/></optional>
           <optional><cmd name="Switch"/></optional>
           <optional><cmd name="Tablefoot"/></optional>
           <optional><cmd name="Tablehead"/></optional>
@@ -9806,6 +9865,23 @@
           <para>Die Tabelle nimmt den kleinstmöglichen Platz ein.</para>
         </description>
       </choice>
+    </attribute>
+    <attribute en="parent" optional="yes" since="4.19.23" type="text">
+      <description xml:lang="en">
+        <para>The id of the parent structure element for tagged PDF</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die ID der Elternstruktur für tagged PDF</para>
+      </description>
+    </attribute>
+    <attribute en="role" optional="yes" since="4.19.23">
+      <description xml:lang="en">
+        <para>The role for PDF/UA (accessibility, tagged PDF)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</para>
+      </description>
+      <referenceattribute name="roles" />
     </attribute>
     <attribute en="textformat" optional="yes" since="3.7.23" type="text" allowxpath="yes">
       <description xml:lang="en">
@@ -10423,6 +10499,15 @@
       <description xml:lang="de">
         <para>Bestimmt den Innenabstand einer Tabelle (rechts)</para>
       </description>
+    </attribute>
+    <attribute en="role" optional="yes" since="4.19.23">
+      <description xml:lang="en">
+        <para>The role for PDF/UA (accessibility, tagged PDF)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</para>
+      </description>
+      <referenceattribute name="roles" />
     </attribute>
     <attribute en="rowspan" type="number" optional="yes">
       <description xml:lang="en">
@@ -11190,6 +11275,23 @@
       <description xml:lang="de">
         <para>Die Mindesthöhe der Zeile in Rasterzellen oder als Längenangabe.</para>
       </description>
+    </attribute>
+    <attribute en="parent" optional="yes" since="4.19.23" type="text">
+      <description xml:lang="en">
+        <para>The id of the parent structure element for tagged PDF</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die ID der Elternstruktur für tagged PDF</para>
+      </description>
+    </attribute>
+    <attribute en="role" optional="yes" since="4.19.23">
+      <description xml:lang="en">
+        <para>The role for PDF/UA (accessibility, tagged PDF)</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Rolle für PDF/UA (barrierefreiheit, tagged PDF)</para>
+      </description>
+      <referenceattribute name="roles" />
     </attribute>
     <attribute en="sethead" optional="yes" allowxpath="yes">
       <description xml:lang="en">

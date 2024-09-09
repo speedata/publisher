@@ -136,12 +136,12 @@ local function flatten(self,items,options,data)
         if publisher.options.format == "PDF/UA" then
             if options.role == 0 then
                 new_options.role = options.parentrole
-                new_options.id = options.parentid
+                new_options.id = publisher.roles_a[options.parentrole] .. "_" .. tostring(options.rolecounter)
             elseif options.role then
                 new_options.id = publisher.roles_a[options.role] .. "_" .. tostring(options.rolecounter)
                 new_options.parent = options.id or options.parent
             else
-                -- ignore
+                new_options.id = self.id
             end
             new_options.parentrole = options.role
             new_options.parentid = options.id
@@ -235,7 +235,7 @@ local function flatten(self,items,options,data)
                         end
                     end
                     options.override_alignment = true
-                    local blocks = publisher.parse_html(csshtmltree, options, data) or {}
+                    local blocks = publisher.parse_html(csshtmltree, new_options, data) or {}
                     blocks = publisher.flatten_boxes(blocks)
                     -- printtable("blocks",blocks)
 
