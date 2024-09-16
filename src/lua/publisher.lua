@@ -8478,7 +8478,7 @@ end
 --- the PDF file. The returned string starts with `<feff` and ends with `>`, unless
 --- the string is a simple string that can be expressed with (...).
 function utf8_to_utf16_string_pdf( str )
-    if str:match("^[a-zA-Z. ]+$") then
+    if str:match("^[a-zA-Z.0-9 ]+$") then
         return "("..str.. ")"
     end
     local ret = {}
