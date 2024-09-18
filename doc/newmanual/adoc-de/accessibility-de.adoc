@@ -91,8 +91,19 @@ Das Attribut `id` ist notwendig, um bei Absätzen (Paragraph) und Bildern die El
 
 Folgende Rollennamen (Tags) sind im speedata Publisher definiert. Weitere werden auf Wunsch eingebaut:
 
-Art, Div, Document, Figure, H1, H2, H3, H4, H5, H6, Lbl, P, Part, Sect, Span, TOC, TOCI
+Art, Artifact, Div, Document, Figure, H1, H2, H3, H4, H5, H6, Lbl, Link, P, Part, Sect, Span, Table, TD, TH, TOC, TOCI, TR.
 
+== Reihenfolge der Strukturelemente
+
+Die hierarchische Struktur wird in der Reihenfolge aufgebaut, wie sie auch im Publisher ausgegeben werden. D.h. zuerst ausgegebene Objekte erscheinen höher in der Struktur. Möchte man aber beispielsweise eine H1 Überschrift erst nach anderen Objekten ausgeben, so erscheint sie in der Dokumentstruktur weiter unten. Um die Reihenfolge zu ändern, kann man bei dem Befehl die Position angeben (Attribut `structpos`). Die Angabe `top` (oder äquivalent `1`) fügt den Absatz an die erste Stelle in der Struktur ein, unterhalb der angegebenen Eltern-ID (section im Beispiel unten). Alternativ kann auch eine andere Position angegeben werden, die aber kleiner sein muss als die Anzahl der aktuellen Kindelemente.
+
+== »Unwichtige« Texte und Bilder
+
+Texte und Bilder, die nicht in der Hierarchie auftreten sollen, können als Artifact (Rolle) markiert werden.
+
+== Alternativ-Texte und Bildbeschreibungen
+
+Bilder sollten mit einer Beschreibung versehen werden, damit diese in der Hierarchie anstelle des Bildes erscheint. Bei Absätzen ist es auch möglich, den »echten Text« (actual text) einzufügen. Dieser wird in der Hierarchie anstelle des Textes innerhalb von `<Value>` angezeigt.
 
 == Aus dem Beispiele-Repository
 
@@ -183,5 +194,13 @@ Um die Barrierefreiheit zu überprüfen, bieten sich folgende Programme an:
 * https://github.com/speedata/pdfuaanalyze[pdfuaanalyze] gibt die Struktur des PDFs als XML-Baum aus
 
 
+== Bekannte Einschränkungen
+
+Folgende Einschränkungen sind bekannt und werden sobald wie möglich behoben:
+
+* Output/Text unterstützt keine Barrierefreiheit
+* SavePages/InsertPages erzeugt eine falsche Strukturhierarchie
+
+Die aktuellen Probleme können https://github.com/speedata/publisher/issues?q=is%3Aissue+is%3Aopen+label%3APDF%2FUA[auf GitHub angesehen werden].
 
 // EOF

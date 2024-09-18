@@ -93,7 +93,19 @@ The `id` attribute is necessary to specify the parent structure for paragraphs a
 
 The following role names (tags) are defined in the speedata Publisher. Others can be added on request:
 
-Art, Div, Document, Figure, H1, H2, H3, H4, H5, H6, Lbl, P, Part, Sect, Span, TOC, TOCI
+Art, Artifact, Div, Document, Figure, H1, H2, H3, H4, H5, H6, Lbl, Link, P, Part, Sect, Span, Table, TD, TH, TOC, TOCI, TR.
+
+== Order of the structure elements
+
+The hierarchical structure is created in the order in which they are output in the Publisher. This means that objects that are output first appear higher in the structure. However, if you want to output an H1 heading after other objects, for example, it will appear further down in the document structure. To change the order, you can specify the position in the command (attribute `structpos`). The specification `top` (or equivalent `1`) inserts the paragraph at the first position in the structure, below the specified parent ID (section in the example below). Alternatively, a different position can be specified, but it must be smaller than the number of current child elements.
+
+== ‘Unimportant’ texts and images
+
+Texts and images that should not appear in the hierarchy can be marked as an artifact (role).
+
+== Alternative texts and image descriptions
+
+Images should be provided with a description so that this appears in the hierarchy instead of the image. For paragraphs, it is also possible to insert the ‘real text’ (actual text). This is displayed in the hierarchy instead of the text within `<Value>`.
 
 
 == From the examples repository
@@ -186,7 +198,14 @@ The following programs can be used to check accessibility:
 * https://verapdf.org[Vera PDF]
 * https://github.com/speedata/pdfuaanalyze[pdfuaanalyze] shows the structure of the document as XML.
 
+== Known limitations
 
+The following limitations are known and will be fixed as soon as possible:
+
+* Output/Text does not support accessibility
+* SavePages/InsertPages creates an incorrect structure hierarchy
+
+The current issues can be viewed https://github.com/speedata/publisher/issues?q=is%3Aissue+is%3Aopen+label%3APDF%2FUA[on GitHub].
 
 // EOF
 
