@@ -1,8 +1,6 @@
 [[ch-accessibility]]
 = Barrierefreie PDFs / tagged PDF
 
-TIP: Die Möglichkeit, Barrierefreie PDFs zu erzeugen, ist noch im Aufbau. D.h. die Objekte, die mit Tags versehen werden können, sind beschränkt. Ebenso die Rollen (Tagnamen), sowie dieser Abschnitt des Handbuchs.
-
 == Was ist tagged PDF?
 
 Tagged PDF ist eine Erweiterung der PDF Datei um eine logische Struktur der Inhalte. Mit den Tags wird bestimmt, was das auszugebende Objekt für eine Rolle hat, z.B. Überschrift der Ebene 1, ein Absatz oder eine Abbildung. Das dient hauptsächlich dazu, barrierefreie PDFs zu erzeugen, also PDFs die für Screenreader oder ähnliche Ausgabegeräte optimiert sind.

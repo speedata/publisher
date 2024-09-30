@@ -1043,11 +1043,11 @@ roles_a = {
     "Sect",
     "Span",
     "Table",
-    "TR",
     "TD",
     "TH",
     "TOC",
     "TOCI",
+    "TR",
 }
 local roles = {}
 for k,v in pairs(roles_a) do
@@ -6368,7 +6368,8 @@ function mkstringdest(name)
     return d
 end
 
--- Generate a hlist with necessary nodes for the bookmarks. To be inserted into a vlist that gets shipped out
+-- Generate a hlist with necessary nodes for the bookmarks. To be inserted into
+-- a vlist that gets shipped out
 function mkbookmarknodes(level,open_p,title,data)
     -- The bookmarks need three values, the level, the name and if it is
     -- open or closed

@@ -2,8 +2,6 @@
 = Accessibility / tagged PDF
 
 
-The possibility of creating accessible PDFs is still under development. This means that the objects that can be tagged are limited. The same applies to the roles (tag names) and this section of the manual.
-
 == What is tagged PDF?
 
 Tagged PDF is an extension of the PDF file with a logical structure of the content. The tags are used to determine the role of the object to be output, e.g. level 1 heading, a paragraph or an image. This is mainly used to create accessible PDFs, i.e. PDFs that are optimized for screen readers or similar output devices.
