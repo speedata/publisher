@@ -736,7 +736,8 @@ local function decode_base64(dataxml, arg)
 end
 
 local function count_saved_pages(dataxml, arg)
-    local tmp = publisher.pagestore[arg[1]]
+    local firstarg = xpath.string_value(arg[1])
+    local tmp = publisher.pagestore[firstarg]
     if not tmp then
         return { 0 }, "count-saved-pages(): no saved pages found. Return 0"
     else
