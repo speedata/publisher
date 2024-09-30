@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.24" date="2024-09-30">
+        <en>Bugfix sd:count-saved-pages and new xpath mode.</en>
+        <de>Fehlerkorrektur sd:count-saved-pages und neuer XPath-Modus.</de>
+    </entry>
     <entry version="4.19.23" date="2024-09-16">
         <en>PDF/UA enhancements.</en>
         <de>PDF/UA Verbesserungen.</de>
