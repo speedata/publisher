@@ -1889,13 +1889,6 @@ function commands.insert_pages( layoutxml,dataxml )
     local pages          = publisher.read_attribute(layoutxml,dataxml,"pages","number")
 
     local current_pagenumber = publisher.current_pagenumber
-
-    local tmp = publisher.pages[publisher.current_pagenumber]
-    if not tmp and not publisher.pages_shippedout[current_pagenumber - 1] then
-        publisher.setup_page(publisher.current_pagenumber,"insert_pages",dataxml)
-        current_pagenumber = publisher.current_pagenumber
-    end
-
     local thispagestore = publisher.pagestore[pagestore_name]
     if not thispagestore then
         -- Forward mode: re-order pages
@@ -1923,15 +1916,20 @@ function commands.insert_pages( layoutxml,dataxml )
         publisher.total_inserted_pages = publisher.total_inserted_pages + pages
         local new_pagenumber = current_pagenumber + pages
         publisher.current_pagenumber = new_pagenumber
-        publisher.pagenum_tbl[current_pagenumber] = new_pagenumber
         publisher.pagestore[pagestore_name] = {pages,current_pagenumber,#publisher.bookmarks,pagetype = savenextpage}
         publisher.forward_pagestore[pagestore_name] = true
         publisher.nextpage = nil
         return
     end
+    local tmp = publisher.pages[publisher.current_pagenumber]
+    if not tmp and not publisher.pages_shippedout[current_pagenumber - 1] then
+        publisher.setup_page(publisher.current_pagenumber,"insert_pages",dataxml)
+        current_pagenumber = publisher.current_pagenumber
+    end
     splib.log("info","InsertPages backward mode","name", pagestore_name)
     for i=1,#thispagestore do
         tex.box[666] = thispagestore[i]
+        publisher.pagenum_tbl[#publisher.pagenum_tbl+1] = current_pagenumber
         tex.shipout(666)
     end
     publisher.pagestore[pagestore_name] = nil
@@ -3888,14 +3886,6 @@ function commands.save_pages( layoutxml,dataxml )
         -- We need to set the destination before the pages are created
         -- since the callback for page ordering is called after
         -- each shipout.
-        local ppt = publisher.pagenum_tbl
-        local k, v
-        for i=1,number_of_pages do
-            k = save_current_pagenumber + i - publisher.total_inserted_pages - 1
-            v = location + i - 1
-            ppt[k] = v
-        end
-        ppt[k+1] = k+1
         publisher.nextpage = ps.pagetype
         local tab = publisher.dispatch(layoutxml,dataxml)
 
@@ -3906,7 +3896,6 @@ function commands.save_pages( layoutxml,dataxml )
         end
 
         -- for next pages, if any:
-        ppt[save_current_pagenumber] = save_current_pagenumber
         publisher.new_page("save_pages forward mode 2",dataxml)
 
         -- If bookmarks are used in SavePages, we need to insert them at the

@@ -46,11 +46,11 @@
             </Paragraph>
         </Textblock>
     </PlaceObject>
-    <NewPage />
+    <ClearPage />
   </Record>
 
   <Record element="data">
-    <NewPage skippagetype="empty" pagetype="empty" openon="right"/>
+    <ClearPage skippagetype="empty" pagetype="empty" openon="right" force="yes"/>
     <InsertPages name="insert" pages="1"  />
     <ProcessNode select="chapter" />
     <SavePages name="insert">

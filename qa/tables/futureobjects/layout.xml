@@ -8,17 +8,17 @@
   <Record element="data">
 
     <PlaceObject page="next" column="1">
-      <Box width="10" height="2" backgroundcolor="yellow"/>
+      <Box width="10" height="2" background-color="yellow"/>
     </PlaceObject>
     <PlaceObject page="3" column="1">
-      <Box width="10" height="3"  backgroundcolor="yellow"/>
+      <Box width="10" height="3"  background-color="yellow"/>
     </PlaceObject>
     <PlaceObject column="1">
       <Table stretch="max" >
         <Columns>
-          <Column align="left" backgroundcolor="lightgreen" />
-          <Column align="center" backgroundcolor="green"/>
-          <Column align="right" backgroundcolor="darkgreen"/>
+          <Column align="left" background-color="lightgreen" />
+          <Column align="center" background-color="green"/>
+          <Column align="right" background-color="darkgreen"/>
         </Columns>
         <Loop select="20">
           <Tr>

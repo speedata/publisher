@@ -1,0 +1,12 @@
+<data>
+    <page></page>
+    <page></page>
+    <insertsubtoc type="toc2"></insertsubtoc>
+    <insertsubtoc type="toc3"></insertsubtoc>
+    <inserttoc></inserttoc>
+    <page></page>
+    <page></page>
+    <toc></toc>
+    <subtoc type="toc2"></subtoc>
+    <subtoc type="toc3"></subtoc>
+</data>

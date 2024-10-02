@@ -741,6 +741,8 @@ local function count_saved_pages(dataxml, arg)
     if not tmp then
         return { 0 }, "count-saved-pages(): no saved pages found. Return 0"
     else
+        -- in backwards mode, tmp contains one entry for each page (a node list)
+        -- in forward mode, tmp contains four elements: the number of pages, the position, #publisher.bookmarks, and the page type
         return { #tmp }, nil
     end
 end

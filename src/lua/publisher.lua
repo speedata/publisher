@@ -237,18 +237,9 @@ modes = {}
 
 -- page numbers go from 1 to n. If reordering is necessary, we insert
 -- a different index into the pagenum_tbl.
--- The value of a key is usually the successor of the previous entry
--- 1,2,3,4 but can be changed by setting a single entry. E.g. setting
--- entry 3 to 5 gives the array 1,2,5,6,7,8...
-pagenum_tbl = setmetatable({1}, {
-    __index=function(tbl, idx)
-        local max = 0
-        for k, v in next, tbl do
-            if k <= idx and k > max then max = k end
-        end
-        return rawget(tbl,max) + idx - max
-      end })
-
+-- A value of {1,2,6,7,3,4,5} means place page 1 on position one, page 2 on
+-- position two, page 6 on position three and so on
+pagenum_tbl = {}
 forward_pagestore = {}
 total_inserted_pages = 0
 
@@ -2141,6 +2132,8 @@ end
 
 function shipout(nodelist, pagenumber,dataxml)
     pages_shippedout[pagenumber] = true
+    pagenum_tbl[#pagenum_tbl+1] = pagenumber
+
     local cp = pages[pagenumber]
     local colorname = cp.defaultcolor
     if not matters[cp.matter] then
@@ -2623,7 +2616,7 @@ function detect_pagetype(pagenumber, data)
     return false
 end
 
-function initialize_page(pagenumber,data)
+function initialize_page(pagenumber,data, from)
     local thispage
 
     if pagenumber then
@@ -2855,7 +2848,7 @@ function setup_page(pagenumber,fromwhere,dataxml)
         nextpage = tmp.pagetype
     end
 
-     initialize_page(pagenumber,dataxml)
+     initialize_page(pagenumber,dataxml,fromwhere)
 end
 
 --- Switch to the next frame in the given area.

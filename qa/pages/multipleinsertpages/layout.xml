@@ -1,0 +1,70 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Record element="data">
+        <ProcessNode select="*" />
+    </Record>
+
+    <Record element="inserttoc">
+        <InsertPages name="toc" pages="2" />
+    </Record>
+
+    <Record element="insertsubtoc">
+        <InsertPages name="{@type}" pages="1" />
+    </Record>
+
+    <Record element="page">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>Page </Value>
+                    <Value select="sd:current-page()" />
+                    <Value>, visible: </Value>
+                    <Value select="sd:visible-pagenumber(sd:current-page())" />
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <ClearPage />
+    </Record>
+
+    <Record element="toc">
+        <Message select="'********************'"></Message>
+        <SavePages name="toc">
+            <PlaceObject>
+                <Textblock>
+                    <Paragraph>
+                        <Value>TOC </Value>
+                        <Value select="sd:current-page()" />
+                        <Value>, visible: </Value>
+                        <Value select="sd:visible-pagenumber(sd:current-page())" />
+                    </Paragraph>
+                </Textblock>
+            </PlaceObject>
+            <ClearPage />
+            <PlaceObject>
+                <Textblock>
+                    <Paragraph>
+                        <Value>Second page in toc</Value>
+                    </Paragraph>
+                </Textblock>
+            </PlaceObject>
+        </SavePages>
+    </Record>
+
+    <Record element="subtoc">
+        <SavePages name="{@type}">
+            <PlaceObject>
+                <Textblock>
+                    <Paragraph>
+                        <Value>subtoc, </Value>
+                        <Value select="@type"/>
+                        <Value>, page: </Value>
+                        <Value select="sd:current-page()" />
+                        <Value>, visible: </Value>
+                        <Value select="sd:visible-pagenumber(sd:current-page())" />
+                    </Paragraph>
+                </Textblock>
+            </PlaceObject>
+        </SavePages>
+    </Record>
+</Layout>
