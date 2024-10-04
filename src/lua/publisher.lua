@@ -8073,9 +8073,10 @@ function hlpage(pagenumber,bordercolor)
 end
 
 function hllink(link,bordercolor)
+    local formatted = string.format("mark%s",link)
     local hl = {
         ["/Subtype"] = "/Link",
-        ["/A"] = string.format("<</Type/Action/S/GoTo/D %s>>",publisher.utf8_to_utf16_string_pdf(string.format("mark%s",link)))
+        ["/A"] = string.format("<</Type/Action/S/GoTo/D %s>>",publisher.utf8_to_utf16_string_pdf(formatted))
     }
     for key, value in pairs(get_border_for_link_table(bordercolor)) do
         hl[key] = value
@@ -8472,7 +8473,7 @@ end
 --- the PDF file. The returned string starts with `<feff` and ends with `>`, unless
 --- the string is a simple string that can be expressed with (...).
 function utf8_to_utf16_string_pdf( str )
-    if str:match("^[a-zA-Z.0-9 ]+$") then
+    if str:match("^[a-zA-Z.0-9- ]+$") then
         return "("..str.. ")"
     end
     local ret = {}
