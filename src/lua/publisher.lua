@@ -2900,7 +2900,13 @@ function clearpage(options)
     if thispage then
         dothingsbeforeoutput(thispage,data)
         local n = node.vpack(pages[current_pagenumber].pagebox)
-        shipout(n,current_pagenumber,options.dataxml)
+        if current_pagestore_name then
+            local thispagestore = pagestore[current_pagestore_name]
+            thispagestore[#thispagestore + 1] = n
+        else
+            shipout(n,current_pagenumber,options.dataxml)
+        end
+
         current_pagenumber = current_pagenumber + 1
     else
         if options.force then

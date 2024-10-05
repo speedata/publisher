@@ -3891,7 +3891,7 @@ function commands.save_pages( layoutxml,dataxml )
 
         local realpagecount = publisher.current_pagenumber - location + 1
         if realpagecount ~= number_of_pages then
-            err("SavePages: incorrect number of pages. Expected %d, got %d",number_of_pages, realpagecount)
+            splib.error("SavePages: incorrect number of pages.","expected",number_of_pages, "got", realpagecount)
             return tab
         end
 
