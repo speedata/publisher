@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.26" date="2024-10-05">
+        <en>Bugfix ClearPage within SavePages (#617).</en>
+        <de>Fehlerkorrektur ClearPage in SavePages (#617).</de>
+    </entry>
     <entry version="4.19.25" date="2024-10-02">
         <en>Fix multiple InsertPages in forward mode.</en>
         <de>Korrigiere mehrfache InsertPages im »zukünftigen Modus«.</de>
