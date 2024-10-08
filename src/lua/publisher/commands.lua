@@ -3947,6 +3947,7 @@ function commands.set_grid(layoutxml,dataxml)
             err("Gridwidth not set")
         else
             publisher.options.gridwidth = tex.sp(wd)
+            publisher.options.gridcells_x = 0
         end
     end
     if _ny then
@@ -3958,6 +3959,7 @@ function commands.set_grid(layoutxml,dataxml)
             ht = "1cm"
         end
         publisher.options.gridheight  = tex.sp(ht)
+        publisher.options.gridcells_y = 0
     end
 end
 

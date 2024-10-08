@@ -1,0 +1,29 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Record element="data">
+        <Pageformat height="6cm" width="7cm" />
+
+        <SetGrid nx="2" ny="2" />
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="sd:number-of-columns()" />
+                    <Value>, </Value>
+                    <Value select="sd:number-of-rows()" />
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <ClearPage />
+        <SetGrid width="1cm" height="1cm" />
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="sd:number-of-columns()" />
+                    <Value>, </Value>
+                    <Value select="sd:number-of-rows()" />
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
