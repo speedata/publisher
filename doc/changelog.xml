@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.27" date="2024-10-23">
+        <en>Data XML now available in the root layout XML element (#621).</en>
+        <de>Daten XML nun im Wurzelelement des Layouts verfügbar (#621).</de>
+    </entry>
+    <entry version="4.19.27" date="2024-10-23">
+        <en>Bugfix: SetGrid with width/height after nx/ny (#619).</en>
+        <de>Fehlerkorrektur: SetGrid mit width/height nach nx/ny (#619).</de>
+    </entry>
     <entry version="4.19.26" date="2024-10-05">
         <en>Bugfix ClearPage within SavePages (#617).</en>
         <de>Fehlerkorrektur ClearPage in SavePages (#617).</de>
