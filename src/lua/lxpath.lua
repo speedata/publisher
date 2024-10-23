@@ -2456,6 +2456,9 @@ function parse_forward_step(tl)
     end
     local evaler = function(ctx)
         if not tf then return nil, nil end
+        if not ctx.xmldoc then
+            return nil, "XML not set, aborting"
+        end
         if stepAxis == axisSelf then
             -- do nothing
         elseif stepAxis == axisChild then

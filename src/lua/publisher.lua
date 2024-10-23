@@ -1422,30 +1422,59 @@ function initialize_luatex_and_generate_pdf()
         end
     end
 
-    if newxpath then
-        local ctxvalue = {
-            vars = {
-                _bleed = "0mm",
-                _pageheight = "297mm",
-                _pagewidth = "210mm",
-                _jobname =  tex.jobname,
-                _matter = "mainmatter",
-                __maxwidth = tex.sp("190mm"),
-                _lastpage = 1,
-            },
-            namespaces = layoutxml[".__ns"]
-        }
+    -- We allow the use of a dummy xml file for testing purpose
+    local dataxml
+    local datafilename = arg[3]
+    if datafilename == "-dummy" then
+        if newxpath then
+            dataxml = splib.loadxmlstring("<data />")
+        else
+            dataxml = luxor.parse_xml("<data />")
+        end
+    elseif datafilename == "-" then
+        log("Reading from stdin")
+        dataxml = luxor.parse_xml(io.stdin:read("*a"),{htmlentities = true})
+    else
+        dataxml = load_xml(datafilename,"data file",{ htmlentities = true, ignoreeol = ( options.ignoreeol or false ) })
+    end
+    if type(dataxml) ~= "table" then
+        err("Something is wrong with the data: dataxml is not a table")
+        exit()
+    end
 
+    if newxpath then
+        local defaults = {
+            _bleed = "0mm",
+            _pageheight = "297mm",
+            _pagewidth = "210mm",
+            _jobname =  tex.jobname,
+            _matter = "mainmatter",
+            __maxwidth = tex.sp("190mm"),
+            _lastpage = 1,
+        }
+        data = xpath.context:new()
+        data.xmldoc = {dataxml}
+        data.sequence = {dataxml}
+        data.namespaces = layoutxml[".__ns"]
+
+        for k, v in pairs(defaults) do
+            data.vars[k] = v
+        end
+
+        -- from command line or publisher.cfg:
+        for k, v in pairs(vars) do
+            data.vars[k] = v
+        end
         local mode_keys = {}
         for k, _ in pairs(modes) do
             mode_keys[#mode_keys+1] = k
         end
         table.sort(mode_keys)
-        ctxvalue.vars._mode = table.concat(mode_keys,",")
+        data.vars._mode = table.concat(mode_keys,",")
 
-        data = xpath.context:new(ctxvalue)
-        for k,v in pairs(vars) do
-            data.vars[k] = v
+        seq, msg = data:execute("root()")
+        if msg then
+            err(msg)
         end
     else
         for k,v in pairs(vars) do
@@ -1454,6 +1483,11 @@ function initialize_luatex_and_generate_pdf()
     end
 
     dispatch(layoutxml,data)
+
+    -- options.ignoreeol is now set
+    if newxpath then
+        fixup_xmlfile(dataxml, options.ignoreeol or false)
+    end
 
     -- We define two graphic states for overprinting on and off.
     GS_State_OP_On  = pdf.immediateobj([[<< /Type/ExtGState /OP true /OPM 1 >>]])
@@ -1589,29 +1623,8 @@ function initialize_luatex_and_generate_pdf()
         end
     end
 
-    -- We allow the use of a dummy xml file for testing purpose
-    local dataxml
-    local datafilename = arg[3]
-    if datafilename == "-dummy" then
-        if newxpath then
-            dataxml = splib.loadxmlstring("<data />")
-        else
-            dataxml = luxor.parse_xml("<data />")
-        end
-    elseif datafilename == "-" then
-        log("Reading from stdin")
-        dataxml = luxor.parse_xml(io.stdin:read("*a"),{htmlentities = true})
-    else
-        dataxml = load_xml(datafilename,"data file",{ htmlentities = true, ignoreeol = ( options.ignoreeol or false ) })
-    end
-    if type(dataxml) ~= "table" then
-        err("Something is wrong with the data: dataxml is not a table")
-        exit()
-    end
 
     if newxpath then
-        data.xmldoc = {dataxml}
-        data.sequence = {dataxml}
     else
         xpath.set_variable("_bleed", "0mm")
         xpath.set_variable("_pageheight", "297mm")
@@ -2177,14 +2190,14 @@ function shipout(nodelist, pagenumber,dataxml)
 end
 
 -- adds index metatble for namespace lookup to layout xml
-function fixup_layoutxml(tbl,ignoreeol,parent)
+function fixup_xmlfile(tbl,ignoreeol,parent)
     setmetatable(tbl,xml_stringvalue_mt)
     if parent then
         setmetatable(tbl[".__ns"],{__index = parent[".__ns"]})
     end
     for i = 1, #tbl do
         if type(tbl[i]) == "table" then
-            fixup_layoutxml(tbl[i],ignoreeol,tbl)
+            fixup_xmlfile(tbl[i],ignoreeol,tbl)
         elseif ignoreeol and type(tbl[i]) == "string" then
             tbl[i] = string.gsub(tbl[i],"\n"," ")
         end
@@ -2233,7 +2246,6 @@ function load_xml(filename,filetype,parameter)
         if not xmltable then
             return nil
         end
-        fixup_layoutxml(xmltable,parameter.ignoreeol)
         return xmltable
     else
         if options.verbosity > 0 then
