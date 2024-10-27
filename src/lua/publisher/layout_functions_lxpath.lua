@@ -455,8 +455,8 @@ local function groupheight(dataxml, arg)
     publisher.setup_page(nil, "layout_functions#groupheight", dataxml)
     local groupname = xpath.string_value(arg[1])
     if not publisher.groups[groupname] then
-        err("Can't find group with the name %q", groupname)
-        return 0
+        splib.error("Can't find group","groupname",groupname)
+        return { }, "Can't find group"
     end
 
     local groupcontents = publisher.groups[groupname].contents

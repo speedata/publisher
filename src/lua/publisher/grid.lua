@@ -323,7 +323,12 @@ function set_width_height(self, options)
     self.grid_dy    = options.dy or 0
     calculate_number_gridcells(self)
     self.allocation_x_y = {}
-    for i=1,self:number_of_columns(publisher.default_areaname) do
+    local noc = self:number_of_columns(publisher.default_areaname)
+    if not noc then
+        splib.error("number of columns not set, why?")
+        return
+    end
+    for i=1, noc do
         self.allocation_x_y[i] = {}
     end
 end
@@ -634,6 +639,10 @@ function height_in_gridcells_sp(self,height_sp,options)
     local threshold = 500
     if options.floor then threshold = 0 end
     if height_sp == 0 then return 0,0 end
+    if not self.gridheight then
+        splib.error("grid height not set, why?")
+        return
+    end
     local ht_sp = height_sp - self.gridheight
     if ht_sp <= 0 then return 1, self.gridheight + ht_sp end
 
@@ -716,6 +725,10 @@ function draw_grid(self)
     end
     x = math.round(sp_to_bp(self.extra_margin - self.trim), 2)
     local count_row = self:number_of_rows()
+    if not count_row then
+        splib.error("number of rows not set, why?")
+        return
+    end
     for i=0, count_row do
         -- every 5 grid cells draw a gray rule
         if (i % 5 == 0) then color = gray1 else color = gray2 end
@@ -869,6 +882,10 @@ function calculate_number_gridcells(self)
         -- a group
         -- This is an ugly workaround. We should not make the group height 10 times the current page height.
         -- FIXME!!
+        if not ( self.gridwidth and self.gridheight ) then
+            splib.error("grid width or height not set, why?")
+            return
+        end
         self:set_number_of_columns(math.ceil(math.round( (tex.pagewidth  - self.margin_left - self.margin_right - 2 * self.extra_margin) / self.gridwidth,4)))
         self:set_number_of_rows(math.ceil(math.round( ( 10 * tex.pageheight - self.margin_top  - self.margin_bottom  - 2 * self.extra_margin) /  self.gridheight ,4)))
     else
@@ -890,7 +907,11 @@ function calculate_number_gridcells(self)
             local sum_distances = ( self.grid_ny - 1 )  * self.grid_dy
             self.gridheight = math.floor( ( pagearea_y - sum_distances ) /  self.grid_ny, 0)
         else
-            self:set_number_of_rows(math.ceil(math.round( pagearea_y /  self.gridheight ,4)))
+            if not self.gridheight then
+                splib.error("grid height not set, why?")
+            else
+                self:set_number_of_rows(math.ceil(math.round( pagearea_y /  self.gridheight ,4)))
+            end
         end
     end
 

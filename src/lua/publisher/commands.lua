@@ -3929,7 +3929,10 @@ function commands.set_grid(layoutxml,dataxml)
     local ny = publisher.read_attribute(layoutxml,dataxml,"ny",    "string")
     local dx = publisher.read_attribute(layoutxml,dataxml,"dx",    "length_sp")
     local dy = publisher.read_attribute(layoutxml,dataxml,"dy",    "length_sp")
-
+    if not (wd or ht or nx or ny) then
+        splib.error("SetGrid: you must set nx and ny or width and height", lineinfo(layoutxml))
+        return
+    end
     publisher.options.gridcells_dx = dx
     publisher.options.gridcells_dy = dy
 
@@ -3944,7 +3947,7 @@ function commands.set_grid(layoutxml,dataxml)
             wd = "1cm"
         end
         if wd == nil then
-            err("Gridwidth not set")
+            splib.error("Grid width not set",lineinfo(layoutxml))
         else
             publisher.options.gridwidth = tex.sp(wd)
             publisher.options.gridcells_x = 0
