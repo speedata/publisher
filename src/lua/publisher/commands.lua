@@ -2413,6 +2413,7 @@ function commands.nobreak( layoutxml, dataxml )
     local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth",   "length_sp", maxwidth)
     local fontname         = publisher.read_attribute(layoutxml,dataxml,"fontface",   "string")
     local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce",     "string", "keeptogether")
+    local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor",     "string",0.9)
     local text             = publisher.read_attribute(layoutxml,dataxml,"text",       "string")
     if fontname then warning("Nobreak/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
@@ -2426,11 +2427,49 @@ function commands.nobreak( layoutxml, dataxml )
             local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[fam]
             local strut
             strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 })
+            local loops = 0
+            local nl
+
+            local tmppar
+            repeat
+                tmppar = par:new(nil,"nobreak(fontsize 1)")
+                loops = loops + 1
+                if loops > 10 then
+                    err("Nobreak: More than 10 loops, giving up")
+                    break
+                end
+                local thisoptions = publisher.copy_table_from_defaults(options)
+                thisoptions.fontfamily = fam
+                for _,j in ipairs(thiselt) do
+                    local c = publisher.element_contents(j)
+                    tmppar:append(publisher.deepcopy(c),thisoptions)
+                end
+                tmppar:mknodelist(thisoptions,dataxml)
+                if #tmppar.objects == 0 then
+                    return tmppar
+                end
+                nl = node.copy_list(tmppar.objects[1])
+                nl = node.hpack(nl)
+                nl = node.insert_before(nl, nl , node.copy(strut))
+                fam = publisher.fonts.clone_family(fam, {size = shrinkfactor})
+                local wd = node.dimensions(nl)
+            until wd <= current_maxwidth
+
+            return tmppar
+        end
+        return p
+    elseif strategy == "fontfit" then
+        p:append(tab,{})
+        p.flatten_callback = function(thiselt,options)
+            local fam = options.fontfamily
+            local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[fam]
+            local strut
+            strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 })
             local nl
 
             local tmppar
             for i = 1, 2 do
-                tmppar = par:new(nil,"nobreak(fontsize " .. i .. ")")
+                tmppar = par:new(nil,"nobreak(fontfit " .. i .. ")")
                 local thisoptions = publisher.copy_table_from_defaults(options)
                 thisoptions.fontfamily = fam
                 for _,j in ipairs(thiselt) do

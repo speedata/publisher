@@ -6117,12 +6117,20 @@
       <description xml:lang="de">
         <para>Verringere die Textgröße falls notwendig.</para>
       </description>
-      <choice en="fontsize">
+      <choice en="fontfit" since="4.19.28">
         <description xml:lang="en">
-          <para>Reduces the text by decreasing the font size.</para>
+          <para>Reduces the text by scaling down the font size so the text exactly fits the available space.</para>
         </description>
         <description xml:lang="de">
-          <para>Verkleinert durch Verringerung der Schriftgröße.</para>
+          <para>Verkleinert durch Verringerung der Schriftgröße, sodass der verfügbare Platz genau gefüllt wird.</para>
+        </description>
+      </choice>
+      <choice en="fontsize">
+        <description xml:lang="en">
+          <para>Reduces the text by decreasing the font size in steps.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Verkleinert durch stufenweise Verringerung der Schriftgröße.</para>
         </description>
       </choice>
       <choice en="cut" since="2.3.53">
@@ -6152,10 +6160,10 @@
     </attribute>
     <attribute en="factor" optional="yes" type="number">
       <description xml:lang="en">
-        <para>This attribute is obsolete.</para>
+        <para>Multiplier for the font size when reduce=fontsize. Default value: 0.9. That means the font size gets decreased by 0.9 until the text fits the objects width.</para>
       </description>
       <description xml:lang="de">
-        <para>Dieses Attribut ist obsolet.</para>
+        <para>Multiplikator für die Schriftgröße, wenn reduce=fontsize. Voreinstellung: 0.9. Das bedeutet, dass die Schriftgröße um 0,9 reduziert wird, bis der Text in die vorgegebene Breite hineinpasst.</para>
       </description>
     </attribute>
     <attribute en="fontfamily" type="text" optional="yes">
