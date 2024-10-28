@@ -3424,9 +3424,14 @@
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
+            <xs:enumeration value="fontfit">
+              <xs:annotation>
+                <xs:documentation>Verkleinert durch Verringerung der Schriftgröße, sodass der verfügbare Platz genau gefüllt wird.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="fontsize">
               <xs:annotation>
-                <xs:documentation>Verkleinert durch Verringerung der Schriftgröße.</xs:documentation>
+                <xs:documentation>Verkleinert durch stufenweise Verringerung der Schriftgröße.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="cut">

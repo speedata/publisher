@@ -2458,6 +2458,38 @@ function commands.nobreak( layoutxml, dataxml )
             return tmppar
         end
         return p
+    elseif strategy == "fontfit" then
+        p:append(tab,{})
+        p.flatten_callback = function(thiselt,options)
+            local fam = options.fontfamily
+            local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[fam]
+            local strut
+            strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 })
+            local nl
+
+            local tmppar
+            for i = 1, 2 do
+                tmppar = par:new(nil,"nobreak(fontfit " .. i .. ")")
+                local thisoptions = publisher.copy_table_from_defaults(options)
+                thisoptions.fontfamily = fam
+                for _,j in ipairs(thiselt) do
+                    local c = publisher.element_contents(j)
+                    tmppar:append(publisher.deepcopy(c),thisoptions)
+                end
+                tmppar:mknodelist(thisoptions,dataxml)
+                if #tmppar.objects == 0 then
+                    return tmppar
+                end
+                nl = node.copy_list(tmppar.objects[1])
+                nl = node.hpack(nl)
+                nl = node.insert_before(nl, nl , node.copy(strut))
+                local factor = math.min(1, current_maxwidth/node.dimensions(nl))
+                fam = publisher.fonts.clone_family(fam, {size = factor})
+            end
+
+            return tmppar
+        end
+        return p
     elseif strategy == "cut" then
         p:append(tab,{})
         p.flatten_callback = function(thiselt,options)

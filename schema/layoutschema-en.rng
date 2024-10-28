@@ -3504,8 +3504,10 @@
                   <attribute name="reduce">
                      <a:documentation>Reduce the text size if necessary.</a:documentation>
                      <choice>
+                        <value>fontfit</value>
+                        <a:documentation>Reduces the text by scaling down the font size so the text exactly fits the available space.</a:documentation>
                         <value>fontsize</value>
-                        <a:documentation>Reduces the text by decreasing the font size.</a:documentation>
+                        <a:documentation>Reduces the text by decreasing the font size in steps.</a:documentation>
                         <value>cut</value>
                         <a:documentation>Inserts text given in the attribute text if the paragraph is too long.</a:documentation>
                         <value>keeptogether</value>

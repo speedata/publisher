@@ -3504,8 +3504,10 @@
                   <attribute name="reduce">
                      <a:documentation>Verringere die Textgröße falls notwendig.</a:documentation>
                      <choice>
+                        <value>fontfit</value>
+                        <a:documentation>Verkleinert durch Verringerung der Schriftgröße, sodass der verfügbare Platz genau gefüllt wird.</a:documentation>
                         <value>fontsize</value>
-                        <a:documentation>Verkleinert durch Verringerung der Schriftgröße.</a:documentation>
+                        <a:documentation>Verkleinert durch stufenweise Verringerung der Schriftgröße.</a:documentation>
                         <value>cut</value>
                         <a:documentation>Fügt den Text im Attribut text als Platzhalter ein, wenn der Paragraph zu lang ist.</a:documentation>
                         <value>keeptogether</value>
