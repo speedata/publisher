@@ -6152,10 +6152,10 @@
     </attribute>
     <attribute en="factor" optional="yes" type="number">
       <description xml:lang="en">
-        <para>Multiplier for the font size when reduce=fontsize. Default value: 0.9. That means the font size gets decreased by 0.9 until the text fits the objects width.</para>
+        <para>This attribute is obsolete.</para>
       </description>
       <description xml:lang="de">
-        <para>Multiplikator für die Schriftgröße, wenn reduce=fontsize. Voreinstellung: 0.9. Das bedeutet, dass die Schriftgröße um 0,9 reduziert wird, bis der Text in die vorgegebene Breite hineinpasst.</para>
+        <para>Dieses Attribut ist obsolet.</para>
       </description>
     </attribute>
     <attribute en="fontfamily" type="text" optional="yes">
