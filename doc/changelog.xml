@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.29" date="2024-10-29">
+        <en>New Margin parameters inner and outer instead of left and right.</en>
+        <de>Neue Margin Parameter inner und outer anstelle von links und rechts.</de>
+    </entry>
     <entry version="4.19.28" date="2024-10-28">
         <en>New strategy <cmd>&lt;NoBreak reduce="fontfit" /></cmd> (#622).</en>
         <de>Neue Strategie <cmd>&lt;NoBreak reduce="fontfit" /></cmd> (#622).</de>
