@@ -3,10 +3,15 @@
   xmlns:sd="urn:speedata:2009/publisher/functions/en"
   xmlns="urn:speedata.de:2009/publisher/en">
   <Pageformat width="150mm" height="150mm"/>
-  
+
   <DefineColor name="gray" model="gray" g="40"/>
   <Record element="data">
     <SetVariable variable="foo" select="12345.678"/>
+    <SetVariable variable="foo1">
+        <Element name="foo"></Element>
+        <Element name="foo"></Element>
+        <Element name="foo"></Element>
+    </SetVariable>
     <Group name="img">
       <Contents>
         <PlaceObject>
@@ -72,6 +77,10 @@
         <Paragraph>
           <Value>Some variable: </Value>
           <Value select="sd:variable('foo')"/>
+        </Paragraph>
+        <Paragraph>
+          <Value>Complex variable: </Value>
+          <Value select="count(sd:variable('foo',1)/foo)"/>
         </Paragraph>
         <Paragraph>
           <Value>Format number: </Value>

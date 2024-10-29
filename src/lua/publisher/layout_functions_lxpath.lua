@@ -566,7 +566,8 @@ local function variable(dataxml, arg)
     end
     local varname = table.concat(args)
     local var = dataxml.vars[varname]
-    return {var}, nil
+    if type(var) == "table" then return var, nil end
+    return { var }, nil
 end
 
 local function attr(dataxml, arg)
