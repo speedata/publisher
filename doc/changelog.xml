@@ -1,12 +1,16 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.30" date="2024-10-29">
+        <en>Bugfix sd:variable() and new XPath parser (#623).</en>
+        <de>Fehlerkorrektur sd:variable() und neuer XPath Parser (#623).</de>
+    </entry>
     <entry version="4.19.29" date="2024-10-29">
         <en>New Margin parameters inner and outer instead of left and right.</en>
         <de>Neue Margin Parameter inner und outer anstelle von links und rechts.</de>
     </entry>
     <entry version="4.19.28" date="2024-10-28">
-        <en>New strategy <cmd>&lt;NoBreak reduce="fontfit" /></cmd> (#622).</en>
-        <de>Neue Strategie <cmd>&lt;NoBreak reduce="fontfit" /></cmd> (#622).</de>
+        <en>New strategy <tt>&lt;NoBreak reduce="fontfit" /></tt> (#622).</en>
+        <de>Neue Strategie <tt>&lt;NoBreak reduce="fontfit" /></tt> (#622).</de>
     </entry>
     <entry version="4.19.27" date="2024-10-23">
         <en>Data XML now available in the root layout XML element (#621).</en>
