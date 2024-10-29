@@ -3222,14 +3222,24 @@
       <xs:documentation>Enthält die Angaben über den Seitenrand des zu druckbaren Bereich.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:attribute name="left" use="required">
+      <xs:attribute name="left">
         <xs:annotation>
           <xs:documentation>Rand links</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="right" use="required">
+      <xs:attribute name="right">
         <xs:annotation>
           <xs:documentation>Rand rechts</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="inner">
+        <xs:annotation>
+          <xs:documentation>Rand innen</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="outer">
+        <xs:annotation>
+          <xs:documentation>Rand außen</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="top" use="required">

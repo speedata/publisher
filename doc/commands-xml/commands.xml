@@ -5732,7 +5732,7 @@
       <para>Enthält die Angaben über den Seitenrand des zu druckbaren Bereich.</para>
     </description>
     <childelements/>
-    <attribute en="left" type="length" optional="no">
+    <attribute en="left" type="length" optional="yes">
       <description xml:lang="en">
         <para>Left margin</para>
       </description>
@@ -5740,12 +5740,28 @@
         <para>Rand links</para>
       </description>
     </attribute>
-    <attribute en="right" type="length" optional="no">
+    <attribute en="right" type="length" optional="yes">
       <description xml:lang="en">
         <para>Right margin</para>
       </description>
       <description xml:lang="de">
         <para>Rand rechts</para>
+      </description>
+    </attribute>
+    <attribute en="inner" type="length" optional="yes" since="4.19.29">
+      <description xml:lang="en">
+        <para>Inner margin</para>
+      </description>
+      <description xml:lang="de">
+        <para>Rand innen</para>
+      </description>
+    </attribute>
+    <attribute en="outer" type="length" optional="yes" since="4.19.29">
+      <description xml:lang="en">
+        <para>Outer margin</para>
+      </description>
+      <description xml:lang="de">
+        <para>Rand außen</para>
       </description>
     </attribute>
     <attribute en="top" type="length" optional="no">

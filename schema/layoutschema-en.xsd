@@ -3222,14 +3222,24 @@
       <xs:documentation>Set the margin of the document or master page.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:attribute name="left" use="required">
+      <xs:attribute name="left">
         <xs:annotation>
           <xs:documentation>Left margin</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="right" use="required">
+      <xs:attribute name="right">
         <xs:annotation>
           <xs:documentation>Right margin</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="inner">
+        <xs:annotation>
+          <xs:documentation>Inner margin</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="outer">
+        <xs:annotation>
+          <xs:documentation>Outer margin</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="top" use="required">

@@ -3357,12 +3357,26 @@
    <define name="e_Margin">
       <element name="Margin">
          <a:documentation>Set the margin of the document or master page.</a:documentation>
-         <attribute name="left">
-            <a:documentation>Left margin</a:documentation>
-         </attribute>
-         <attribute name="right">
-            <a:documentation>Right margin</a:documentation>
-         </attribute>
+         <optional>
+            <attribute name="left">
+               <a:documentation>Left margin</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="right">
+               <a:documentation>Right margin</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="inner">
+               <a:documentation>Inner margin</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="outer">
+               <a:documentation>Outer margin</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="top">
             <a:documentation>Top margin</a:documentation>
          </attribute>

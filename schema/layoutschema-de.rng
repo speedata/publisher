@@ -3357,12 +3357,26 @@
    <define name="e_Margin">
       <element name="Margin">
          <a:documentation>Enthält die Angaben über den Seitenrand des zu druckbaren Bereich.</a:documentation>
-         <attribute name="left">
-            <a:documentation>Rand links</a:documentation>
-         </attribute>
-         <attribute name="right">
-            <a:documentation>Rand rechts</a:documentation>
-         </attribute>
+         <optional>
+            <attribute name="left">
+               <a:documentation>Rand links</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="right">
+               <a:documentation>Rand rechts</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="inner">
+               <a:documentation>Rand innen</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="outer">
+               <a:documentation>Rand außen</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="top">
             <a:documentation>Rand oben</a:documentation>
          </attribute>

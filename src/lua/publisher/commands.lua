@@ -2215,8 +2215,21 @@ function commands.margin( layoutxml,dataxml )
     local right  = publisher.read_attribute(layoutxml,dataxml,"right","length_sp")
     local top    = publisher.read_attribute(layoutxml,dataxml,"top",  "length_sp")
     local bottom = publisher.read_attribute(layoutxml,dataxml,"bottom", "length_sp")
+    local inner  = publisher.read_attribute(layoutxml,dataxml,"inner", "length_sp")
+    local outer  = publisher.read_attribute(layoutxml,dataxml,"outer", "length_sp")
 
-    return function(_page) _page.grid:set_margin(left,top,right,bottom) end
+    return function(_page)
+        if inner or outer then
+            if _page.grid.pagenumber % 2 == 0 then
+                left = outer
+                right = inner
+            else
+                left = inner
+                right = outer
+            end
+        end
+         _page.grid:set_margin(left,top,right,bottom)
+    end
 end
 
 --- Mark
