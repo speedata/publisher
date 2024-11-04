@@ -1236,17 +1236,32 @@
       </xs:choice>
       <xs:attribute name="fontsize" use="required">
         <xs:annotation>
-          <xs:documentation>Schriftgröße in pt (PostScript-Punkte, DTP-Punkte). Zahl ohne Einheit.</xs:documentation>
+          <xs:documentation>Schriftgröße. Ohne Einheit wird DTP Punkte angenommen.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="leading" use="required">
         <xs:annotation>
-          <xs:documentation>Abstand zwischen zwei Grundlinien in pt (PostScript-Punkte).</xs:documentation>
+          <xs:documentation>Abstand zwischen zwei Grundlinien. Ohne Einheit wird DTP Punkte erwartet.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="name" use="required">
         <xs:annotation>
           <xs:documentation>Interner Name, unter dem die Schriftfamilie später angesprochen wird.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="scriptsize">
+        <xs:annotation>
+          <xs:documentation>Schriftgröße der kleingestellten Zeichen. Voreingestellt sind 80% der Schriftgröße.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="subshift">
+        <xs:annotation>
+          <xs:documentation>Verschiebung der tiefgestellten Zeichen. 0pt ist auf der Grundlinie, positive Werte verschieben nach unten. Voreinstellung ist 30% der Schriftgröße.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="supershift">
+        <xs:annotation>
+          <xs:documentation>Verschiebung der hochgestellten Zeichen. 0pt ist auf der Grundlinie, positive Werte verschieben nach unten. Voreinstellung ist 30% der Schriftgröße.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>

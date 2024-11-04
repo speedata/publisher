@@ -5291,9 +5291,9 @@ function hbglyphlist(arguments)
             n.right = parameter.right or tex.righthyphenmin
             local famtab = fonts.lookup_fontfamily_number_instance[fontfamily]
             if parameter.verticalalign == "sub" then
-                n.yoffset = -famtab.scriptshift
+                n.yoffset = -famtab.subshift
             elseif parameter.verticalalign == "super" then
-                n.yoffset = famtab.scriptshift
+                n.yoffset = famtab.supershift
             end
 
             if thisglyph.x_offset ~= 0 then
@@ -5609,9 +5609,9 @@ local function ffglyphlist(arguments)
 
             local famtab = fonts.lookup_fontfamily_number_instance[fontfamily]
             if parameter.verticalalign == "sub" then
-                n.yoffset = -famtab.scriptshift
+                n.yoffset = -famtab.subshift
             elseif parameter.verticalalign == "super" then
-                n.yoffset = famtab.scriptshift
+                n.yoffset = famtab.supershift
             end
 
             if parameter.letterspacing then
@@ -7269,7 +7269,16 @@ function define_default_fontfamily()
     fontaliases["monospace-bolditalic"] = "CamingoCode-BoldItalic"
 end
 
-function define_fontfamily( regular,bold,italic,bolditalic, name, size, baselineskip )
+function define_fontfamily( regular,bold,italic,bolditalic, name, size, baselineskip,scriptsize,supershift,subshift)
+    if not scriptsize then
+        scriptsize = math.round(size * 0.8,0)
+    end
+    if not supershift then
+        supershift = math.round(size * 0.3,0)
+    end
+    if not subshift then
+        subshift = math.round(size * 0.3,0)
+    end
     if not tonumber(size) then
         splib.error("DefineFontfamily needs size value")
         return
@@ -7277,8 +7286,9 @@ function define_fontfamily( regular,bold,italic,bolditalic, name, size, baseline
     local fam={
         size         = size,
         baselineskip = baselineskip,
-        scriptsize   = math.round(size * 0.8,0),
-        scriptshift  = math.round(size * 0.3,0),
+        scriptsize   = scriptsize,
+        supershift   = supershift,
+        subshift     = subshift,
         name = name
     }
     local ok,tmp

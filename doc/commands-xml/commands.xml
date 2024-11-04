@@ -3076,18 +3076,18 @@
     </childelements>
     <attribute en="fontsize" type="number" optional="no">
       <description xml:lang="en">
-        <para>Font size in pt (PostScript points). Number without unit.</para>
+        <para>Font size. Without unit, DTP points are assumed.</para>
       </description>
       <description xml:lang="de">
-        <para>Schriftgröße in pt (PostScript-Punkte, DTP-Punkte). Zahl ohne Einheit.</para>
+        <para>Schriftgröße. Ohne Einheit wird DTP Punkte angenommen.</para>
       </description>
     </attribute>
     <attribute en="leading" type="number" optional="no">
       <description xml:lang="en">
-        <para>Distance between two baselines in pt (PostScript points). Without unit.</para>
+        <para>Distance between two baselines. Without unit, DTP points are expected.</para>
       </description>
       <description xml:lang="de">
-        <para>Abstand zwischen zwei Grundlinien in pt (PostScript-Punkte).</para>
+        <para>Abstand zwischen zwei Grundlinien. Ohne Einheit wird DTP Punkte erwartet.</para>
       </description>
     </attribute>
     <attribute en="name" type="text" optional="no">
@@ -3096,6 +3096,30 @@
       </description>
       <description xml:lang="de">
         <para>Interner Name, unter dem die Schriftfamilie später angesprochen wird.</para>
+      </description>
+    </attribute>
+    <attribute en="scriptsize" type="length" optional="yes" since="4.19.31">
+      <description xml:lang="en">
+        <para>Super/subscript font size. Defautlts to 80% of the font size.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Schriftgröße der kleingestellten Zeichen. Voreingestellt sind 80% der Schriftgröße.</para>
+      </description>
+    </attribute>
+    <attribute en="subshift" type="length" optional="yes" since="4.19.31">
+      <description xml:lang="en">
+        <para>(Down-)shift of subscript. 0pt is on the base line, positive values move down. Defaults to 30% of the font size.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Verschiebung der tiefgestellten Zeichen. 0pt ist auf der Grundlinie, positive Werte verschieben nach unten. Voreinstellung ist 30% der Schriftgröße.</para>
+      </description>
+    </attribute>
+    <attribute en="supershift" type="length" optional="yes" since="4.19.31">
+      <description xml:lang="en">
+        <para>(Up-)shift of superscript. 0pt is on the base line, positive values move up. Defaults to 30% of the font size.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Verschiebung der hochgestellten Zeichen. 0pt ist auf der Grundlinie, positive Werte verschieben nach unten. Voreinstellung ist 30% der Schriftgröße.</para>
       </description>
     </attribute>
     <remark xml:lang="en">

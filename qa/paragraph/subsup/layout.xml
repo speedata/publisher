@@ -1,6 +1,8 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
-  xmlns:sd="urn:speedata:2009/publisher/functions/en"
-  version="3.1.5">
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <DefineFontfamily fontsize="10pt" leading="12pt" name="customtext" scriptsize="6pt" subshift="1pt" supershift="6pt">
+    <Regular fontface="sans" />
+  </DefineFontfamily>
   <Options crop="2mm"/>
   <Record element="data">
     <PlaceObject>
@@ -13,6 +15,22 @@
             <Paragraph>
               <Value>X</Value>
               <Fontface fontfamily="text"><Sup><Value>x</Value></Sup><Sub><Value>x</Value></Sub></Fontface>
+              <Value>X</Value>
+            </Paragraph>
+          </Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+    <PlaceObject>
+      <Table fontfamily="customtext">
+        <Tr>
+          <Td>
+            <Paragraph>
+              <Value select="foo"/>
+            </Paragraph>
+            <Paragraph>
+              <Value>X</Value>
+              <Fontface fontfamily="customtext"><Sup><Value>x</Value></Sup><Sub><Value>x</Value></Sub></Fontface>
               <Value>X</Value>
             </Paragraph>
           </Td>

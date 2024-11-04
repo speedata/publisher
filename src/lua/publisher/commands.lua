@@ -950,6 +950,9 @@ function commands.define_fontfamily( layoutxml,dataxml )
     -- Concrete font instances are created here. fontsize and baselineskip are known
     local name         = publisher.read_attribute(layoutxml,dataxml,"name",    "string" )
     local size         = publisher.read_attribute(layoutxml,dataxml,"fontsize","string")
+    local scriptsize   = publisher.read_attribute(layoutxml,dataxml,"scriptsize","length_sp")
+    local supershift   = publisher.read_attribute(layoutxml,dataxml,"supershift","length_sp")
+    local subshift     = publisher.read_attribute(layoutxml,dataxml,"subshift","length_sp")
     local baselineskip = publisher.read_attribute(layoutxml,dataxml,"leading", "string")
     if size == nil then
         err("DefineFontfamily: no size given.")
@@ -991,7 +994,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
             bolditalic = fontface
         end
     end
-    local fam = publisher.define_fontfamily(regular,bold,italic,bolditalic,name,size,baselineskip)
+    local fam = publisher.define_fontfamily(regular,bold,italic,bolditalic,name,size,baselineskip,scriptsize,supershift,subshift)
 end
 
 --- DefineMatter

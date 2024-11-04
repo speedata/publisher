@@ -553,7 +553,6 @@ function clone_family( fam, params )
     --   ["baselineskip"] = "789372"
     --   ["name"] = "text"
     --   ["normalscript"] = "10"
-    --   ["scriptshift"] = "197343"
     --   ["scriptsize"] = "526248"
     --   ["normal"] = "9"
     --   ["size"] = "657810"
@@ -565,7 +564,6 @@ function clone_family( fam, params )
         newfam[k] = v
     end
     newfam.name = "cloned"
-    local normal = used_fonts[fam_tbl.normal]
 
     local ok,b = make_font_instance(newfam.fontfaceregular, params.size * newfam.size )
     if not ok then

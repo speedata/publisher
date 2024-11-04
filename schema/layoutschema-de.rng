@@ -1462,14 +1462,29 @@
          <interleave>
             <group>
                <attribute name="fontsize">
-                  <a:documentation>Schriftgröße in pt (PostScript-Punkte, DTP-Punkte). Zahl ohne Einheit.</a:documentation>
+                  <a:documentation>Schriftgröße. Ohne Einheit wird DTP Punkte angenommen.</a:documentation>
                </attribute>
                <attribute name="leading">
-                  <a:documentation>Abstand zwischen zwei Grundlinien in pt (PostScript-Punkte).</a:documentation>
+                  <a:documentation>Abstand zwischen zwei Grundlinien. Ohne Einheit wird DTP Punkte erwartet.</a:documentation>
                </attribute>
                <attribute name="name">
                   <a:documentation>Interner Name, unter dem die Schriftfamilie später angesprochen wird.</a:documentation>
                </attribute>
+               <optional>
+                  <attribute name="scriptsize">
+                     <a:documentation>Schriftgröße der kleingestellten Zeichen. Voreingestellt sind 80% der Schriftgröße.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="subshift">
+                     <a:documentation>Verschiebung der tiefgestellten Zeichen. 0pt ist auf der Grundlinie, positive Werte verschieben nach unten. Voreinstellung ist 30% der Schriftgröße.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="supershift">
+                     <a:documentation>Verschiebung der hochgestellten Zeichen. 0pt ist auf der Grundlinie, positive Werte verschieben nach unten. Voreinstellung ist 30% der Schriftgröße.</a:documentation>
+                  </attribute>
+               </optional>
                <interleave>
                   <optional>
                      <ref name="e_Regular"></ref>
