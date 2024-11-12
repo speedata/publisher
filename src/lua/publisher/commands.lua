@@ -1244,9 +1244,21 @@ function commands.func(layoutxml, dataxml)
                 has_value = true
             end
         end
-
-        res.raw = not has_value
-        return res,nil
+        local ret
+        if has_value then
+            ret = {}
+            for i = 1, #res do
+                local tmp = res[i]
+                if type(tmp) == "table" and tmp["elementname"] == "Value" then
+                    ret[#ret+1] = tmp
+                end
+            end
+        else
+            ret = res
+        end
+        -- ret.raw is used in <Value>
+        ret.raw = not has_value
+        return ret,nil
     end
     -- name, namespace, function, minarg, maxarg
     xpath.registerFunction({functionname,ns,fn,#params,#params})

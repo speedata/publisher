@@ -45,8 +45,27 @@
 				</Paragraph>
 			</Textblock>
 		</PlaceObject>
+		<SetVariable variable="sum" select="fn:addloop(3.7, 5)" />
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="$sum + 5" />
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
 
 	</Record>
+
+	<Function name="fn:addloop">
+        <Param name="p1" />
+        <Param name="p2" />
+        <SetVariable variable="result" select="$p1 + $p2" />
+        <Loop select="5">
+            <SetVariable variable="result" select="$result + 5" />
+        </Loop>
+        <Value select="$result" />
+    </Function>
+
 
 	<Function name="fn:add">
 		<Param name="a" />
