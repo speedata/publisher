@@ -1201,7 +1201,8 @@ local spotcolors =  {
 }
 
 
--- The color profile defaults to 'ISO coated v2'. This is obsolete and only for backwards compatibility
+-- The color profile defaults to 'ISO coated v2'. This is obsolete and only for
+-- backwards compatibility
 function set_colorprofile_filename(fn)
     for k,v in pairs(colorprofiles) do
         if v.filename == fn then
@@ -1255,7 +1256,7 @@ function write_colorprofile()
 end
 
 -- DefineColor registers the colors
-function register( colorname,c,m,y,k )
+function register( colorname,c,m,y,k,usecolorprofile )
     colorobjects[#colorobjects + 1] = { colorname, 0 }
     local rawname
     _,_, rawname = string.find(string.lower(colorname),"^(.-)%s*[cmunkez]?%s*$")
@@ -1269,6 +1270,7 @@ function register( colorname,c,m,y,k )
         end
 
     end
+    spotcolors[rawname].usecolorprofile=usecolorprofile
     return #colorobjects
 end
 
@@ -1303,10 +1305,15 @@ function use_color(colorname)
         return
     end
     local pdfcolorname = "/" .. string.gsub(colorname," ","#20")
-    local cp = write_colorprofile()
     local c,m,y,k = table.unpack(cmyktable)
-    local tmp = string.format([==[[/Separation %s [ /ICCBased %d 0 R ]  << /FunctionType 2 /C0 [ 0 0 0 0 ] /C1 [ %g %g %g %g ] /Domain [ 0 1 ] /N 1 >> ]]==],pdfcolorname,cp,c/100,m/100,y/100,k/100)
-    return pdf.immediateobj(tmp)
+    local separationobjnum
+    if cmyktable.usecolorprofile then
+        local cp = write_colorprofile()
+        separationobjnum = string.format([==[[/Separation %s [ /ICCBased %d 0 R ]  << /FunctionType 2 /C0 [ 0 0 0 0 ] /C1 [ %g %g %g %g ] /Domain [ 0 1 ] /N 1 >> ]]==],pdfcolorname,cp,c/100,m/100,y/100,k/100)
+    else
+        separationobjnum = string.format([==[[/Separation %s /DeviceCMYK << /FunctionType 2 /C0 [ 0 0 0 0 ] /C1 [ %g %g %g %g ] /Domain [ 0 1 ] /N 1 >> ]]==],pdfcolorname,c/100,m/100,y/100,k/100)
+    end
+    return pdf.immediateobj(separationobjnum)
 end
 
 return {

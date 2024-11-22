@@ -1152,6 +1152,17 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="usecolorprofile">
+        <xs:annotation>
+          <xs:documentation>Wenn 'yes', dann wird für die Farbe ein Farbprofil eingebettet. (Voreinstellung)</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="value">
         <xs:annotation>
           <xs:documentation>Der Hexwert der Farbe, wie beispielsweise #FA5 oder #FFAA55 oder rgb(255,170,85) oder rgba(255,170,85,1).</xs:documentation>

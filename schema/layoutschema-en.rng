@@ -1388,6 +1388,15 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="usecolorprofile">
+               <a:documentation>If yes, make this color definition based on an ICC profile (default).</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="value">
                <a:documentation>Hex value of the color, such as #FA5 or #FFAA55 or rgb(255,170,85) or rgba(255,170,85,1).</a:documentation>
             </attribute>

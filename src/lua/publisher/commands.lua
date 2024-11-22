@@ -720,6 +720,7 @@ function commands.define_color( layoutxml,dataxml )
     local model = publisher.read_attribute(layoutxml,dataxml,"model","string")
     local colorname = publisher.read_attribute(layoutxml,dataxml,"colorname","string")
     local overprint = publisher.read_attribute(layoutxml,dataxml,"overprint","boolean")
+    local usecolorprofile = publisher.read_attribute(layoutxml,dataxml,"usecolorprofile","boolean",true)
 
     local color = setmetatable({}, publisher.colormetatable)
     color.overprint = overprint
@@ -778,7 +779,7 @@ function commands.define_color( layoutxml,dataxml )
         local m = publisher.read_attribute(layoutxml,dataxml,"m","number")
         local y = publisher.read_attribute(layoutxml,dataxml,"y","number")
         local k = publisher.read_attribute(layoutxml,dataxml,"k","number")
-        color.colornum = spotcolors.register(colorname,c,m,y,k)
+        color.colornum = spotcolors.register(colorname,c,m,y,k,usecolorprofile)
     elseif value then
         local calpha
         color.r,color.g,color.b,calpha = publisher.getrgb(value)

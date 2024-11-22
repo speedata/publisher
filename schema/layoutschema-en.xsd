@@ -1152,6 +1152,17 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="usecolorprofile">
+        <xs:annotation>
+          <xs:documentation>If yes, make this color definition based on an ICC profile (default).</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="value">
         <xs:annotation>
           <xs:documentation>Hex value of the color, such as #FA5 or #FFAA55 or rgb(255,170,85) or rgba(255,170,85,1).</xs:documentation>

@@ -1388,6 +1388,15 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="usecolorprofile">
+               <a:documentation>Wenn &#39;yes&#39;, dann wird für die Farbe ein Farbprofil eingebettet. (Voreinstellung)</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="value">
                <a:documentation>Der Hexwert der Farbe, wie beispielsweise #FA5 oder #FFAA55 oder rgb(255,170,85) oder rgba(255,170,85,1).</a:documentation>
             </attribute>

@@ -2864,6 +2864,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="usecolorprofile" optional="yes" since="4.19.33" type="boolean">
+      <description xml:lang="en">
+        <para>If yes, make this color definition based on an ICC profile (default).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn 'yes', dann wird für die Farbe ein Farbprofil eingebettet. (Voreinstellung)</para>
+      </description>
+    </attribute>
     <attribute en="value" type="text" optional="yes">
       <description xml:lang="en">
         <para>Hex value of the color, such as <tt>#FA5</tt> or <tt>#FFAA55</tt> or <tt>rgb(255,170,85)</tt> or <tt>rgba(255,170,85,1)</tt>.</para>
