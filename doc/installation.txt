@@ -1,4 +1,4 @@
-Welcome to speedata Publisher {{.Version}}
+Welcome to speedata Publisher {{.Version}} for {{if eq .Os "windows"}}Windows{{else if eq .Os "darwin"}}macOS{{else}}Linux{{end}}
 
 How to install the speedata Publisher (ZIP file)
 ================================================
