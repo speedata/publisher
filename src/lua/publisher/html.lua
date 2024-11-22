@@ -505,7 +505,7 @@ function set_options_for_mknodes(styles,options)
 
 end
 
-function set_image_dimensions(image,styles,width_sp,height_sp)
+function set_image_dimensions(image,styles,width_sp,height_sp,dataxml)
     local orig_imagewidth, orig_imageheight = image.width, image.height
     local imagewidth, imageheight = orig_imagewidth, orig_imageheight
     -- Todo: check if width _and_ height are set
@@ -523,9 +523,14 @@ function set_image_dimensions(image,styles,width_sp,height_sp)
         imagewidth = orig_imagewidth / factor
         imageheight = orig_imageheight / factor
     end
-
-    local maxwd = xpath.get_variable("__maxwidth")
-    local maxht = xpath.get_variable("__maxheight")
+    local maxwd, maxht
+    if publisher.newxpath then
+        maxwd = dataxml.vars["__maxwidth"]
+        maxht = dataxml.vars["__maxheight"]
+    else
+        maxwd = xpath.get_variable("__maxwidth")
+        maxht = xpath.get_variable("__maxheight")
+    end
     maxht = maxht - styles.fontsize_sp * 0.25
     local calc_width, calc_height = publisher.calculate_image_width_height(image,imagewidth,imageheight,0,0,maxwd,maxht)
     image.width = calc_width
@@ -535,7 +540,7 @@ end
 
 
 -- collect horizontal nodes returns a table with nodelists (glyphs for example)
-function collect_horizontal_nodes( elt,parameter,before_box,origin )
+function collect_horizontal_nodes( elt,parameter,before_box,origin,dataxml )
     -- w("collect_horizontal_nodes %s",origin or "?")
     parameter = parameter or {}
     if elt.elementname == "br" then
@@ -586,7 +591,7 @@ function collect_horizontal_nodes( elt,parameter,before_box,origin )
                      wd = styles.calculated_width
                 end
                 local height = getsize(attributes.height)
-                local calc_width, calc_height = set_image_dimensions(it,styles,wd,height or 0)
+                local calc_width, calc_height = set_image_dimensions(it,styles,wd,height or 0,dataxml)
                 local box = publisher.box(calc_width,calc_height,"-")
                 node.set_attribute(box,publisher.att_dontadjustlineheight,1)
                 node.set_attribute(box,publisher.att_ignore_orphan_widowsetting,1)
@@ -595,7 +600,7 @@ function collect_horizontal_nodes( elt,parameter,before_box,origin )
             elseif eltname == "wbr" then
                 thisret[#thisret + 1] = "\xE2\x80\x8B"
             end
-            local n = collect_horizontal_nodes(thiselt,options,before_box,string.format("collect horizontal mode element %s",eltname))
+            local n = collect_horizontal_nodes(thiselt,options,before_box,string.format("collect horizontal mode element %s",eltname),dataxml)
             for i=1,#n do
                 thisret[#thisret + 1] = n[i]
             end
@@ -887,7 +892,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 tf.disable_hyphenation = true
             end
             options.textformat = tf
-            local n = collect_horizontal_nodes(thiselt,options,before_box,"build nodelist horizontal mode")
+            local n = collect_horizontal_nodes(thiselt,options,before_box,"build nodelist horizontal mode",dataxml)
 
             local a = par:new(tf,"html.lua (horizontal)")
             local appended = false
@@ -996,7 +1001,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 n, prevdir = build_nodelist(thiselt,options,before_box,"build_nodelist/ li",prevdir,dataxml)
                 before_box = nil
                 -- n is a table of box and / or par
-                local str = resolve_list_style_type(styles,olcounter)
+                local str = resolve_list_style_type(styles,olcounter,dataxml)
                 for i=1,#n do
                     local a = n[i]
                     local wd = styles.listindent
@@ -1066,14 +1071,14 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
     return ret, prevdir
 end
 
-function resolve_list_style_type(styles, olcounter)
+function resolve_list_style_type(styles, olcounter,dataxml)
     local liststyletype = styles["list-style-type"]
     local liststyleimage = styles["list-style-image"]
     if liststyleimage then
         local filename = string.match(liststyleimage,"url%((.*)%)")
         local it = publisher.new_image(filename,1,nil,nil)
         it = img.copy(it.img)
-        set_image_dimensions(it,styles,0,styles.fontsize_sp * 0.9)
+        set_image_dimensions(it,styles,0,styles.fontsize_sp * 0.9,dataxml)
         return img.node(it)
     end
     local counter  = olcounter[styles.listlevel]
@@ -1101,7 +1106,7 @@ function resolve_list_style_type(styles, olcounter)
     return str
 end
 
-function handle_pages( pages,maxwidth_sp,data )
+function handle_pages( pages,maxwidth_sp,dataxml )
     -- defaults:
     local pagewd = tex.pagewidth
     if publisher.newxpath then
@@ -1117,7 +1122,7 @@ function handle_pages( pages,maxwidth_sp,data )
         if masterpage.width then
             wd = tex.sp(masterpage.width)
             if publisher.newxpath then
-                data.vars["_pagewidth"] = masterpage.width
+                dataxml.vars["_pagewidth"] = masterpage.width
             else
                 xpath.set_variable("_pagewidth",masterpage.width)
             end
@@ -1139,7 +1144,7 @@ function handle_pages( pages,maxwidth_sp,data )
         if ml then margin_left = tex.sp(ml) end
         pagewd = pagewd - margin_left - margin_right
         if publisher.newxpath then
-            data.vars["__maxwidth"] = pagewd
+            dataxml.vars["__maxwidth"] = pagewd
         else
             xpath.set_variable("__maxwidth",pagewd)
         end
@@ -1154,7 +1159,7 @@ function handle_pages( pages,maxwidth_sp,data )
             pagewd = pagewd - margin_left - margin_right
         end
         if publisher.newxpath then
-            data.vars["__maxwidth"] = pagewd
+            dataxml.vars["__maxwidth"] = pagewd
         else
             xpath.set_variable("__maxwidth",pagewd)
         end
