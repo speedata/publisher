@@ -250,7 +250,11 @@ func main() {
 
 			os.Chdir(cfg.Builddir)
 			mkreadme(cfg, platform, destdir)
-			zipname := fmt.Sprintf("%s-%s-%s-%s.zip", filename, platform, arch, cfg.Publisherversion)
+			platformname := platform
+			if platform == "darwin" {
+				platformname = "macos"
+			}
+			zipname := fmt.Sprintf("%s-%s-%s-%s.zip", filename, platformname, arch, cfg.Publisherversion)
 			os.Remove(zipname)
 			exec.Command("zip", "-rq", zipname, filename).Run()
 
