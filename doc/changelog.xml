@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.32" date="2024-11-22">
+        <en>Bugfix image dimensions in HTML mode and new XPath mode.</en>
+        <de>Fehlerkorrektur Bildgrößen in HTML und neuem XPath-Modus.</de>
+    </entry>
+    <entry version="4.19.32" date="2024-11-22">
+        <en>Function: now mixed commands and values are allowed (#627).</en>
+        <de>Funktionen: gemischte Anweisungen und Werte sind erlaubt (#627).</de>
+    </entry>
     <entry version="4.19.31" date="2024-11-04">
         <en>Add option to control script size and offsets (#625).</en>
         <de>Option um Abstände und Größe der hoch/tiefgestellten Zeichen einzustellen (#625).</de>
