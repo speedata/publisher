@@ -53,8 +53,8 @@ var (
 		"xmlediting":       "basics/writelayoutfile",
 		"xpath":            "xpathfunctions",
 	}
-	rp    *strings.Replacer
-	refrp *strings.Replacer
+	replacer = make(map[string]string)
+	refrp    *strings.Replacer
 )
 
 func init() {
@@ -66,7 +66,7 @@ func init() {
 		"configuration", "konfiguration",
 		"commandline", "kommandozeile",
 		"compatibilitylist", "kompatibilitaet",
-		"cookbook-tcoinonerun", "kochbuch-verzeichnisseeindurchlauf",
+		"cookbook-tocinonerun", "kochbuch-verzeichnisseeindurchlauf",
 		"filenames", "dateinamen",
 		"defaults", "voreinstellungenimpublisher",
 		"glossary", "glossar",
@@ -75,8 +75,8 @@ func init() {
 		"erstellenlayoutwerk", "writelayoutfile",
 		"datenstrukturierung", "structuredatafile",
 		"objekteausgeben", "outputtingobjects",
-		"advancedtopics", "fortgeschrittenethemen",
 		"advanced-controllayout", "fortgeschrittenethemen-steuerunglayout",
+		"advancedtopics", "fortgeschrittenethemen",
 		"metapostgrafiken", "metapostgraphics",
 		"preprocessing", "luafilter",
 		"schemavalidation", "schemavalidierung",
@@ -111,15 +111,14 @@ func init() {
 		"lengthsunits", "massangaben",
 		"qa", "qualitaetssicherung",
 	}
-	// replace will be a, b, b, a, c, d, d, c, ...
-	replace := make([]string, len(pairs)*2)
+
 	for i := 0; i < len(pairs)/2; i++ {
-		replace[i*4] = pairs[i*2+1]
-		replace[i*4+1] = pairs[i*2]
-		replace[i*4+2] = pairs[i*2]
-		replace[i*4+3] = pairs[i*2+1]
+		en := pairs[i*2]
+		de := pairs[i*2+1]
+		replacer[en] = de
+		replacer[de] = en
 	}
-	rp = strings.NewReplacer(replace...)
+
 	refrp = strings.NewReplacer("befehlsreferenz", "commandreference", "commandreference", "befehlsreferenz")
 }
 
@@ -1044,7 +1043,9 @@ func (d *DocBook) otherManual(page section) string {
 			if strings.Contains(page.Link, "befehlsreferenz") || strings.Contains(page.Link, "commandreference") {
 				linkparts[i] = refrp.Replace(b)
 			} else {
-				linkparts[i] = rp.Replace(b)
+				if translation, found := replacer[linkparts[i]]; found {
+					linkparts[i] = translation
+				}
 			}
 		}
 	}

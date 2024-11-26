@@ -21,7 +21,7 @@ Die ersten beiden Editoren bieten hervorragende Cross-Plattform Unterstützung f
 
 -   https://www.altova.com/xml-editor/[XMLSpy] (Windows)
 -   https://www.xmlblueprint.com/[XML Blueprint] (Windows)
--   https://www.gnu.org/software/emacs/[GNU Emacs] mit http://www.thaiopensource.com/nxml-mode/[nxml-mode] (alle Betriebssysteme, kostenlos)
+-   https://www.gnu.org/software/emacs/[GNU Emacs] mit https://www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html[nxml-mode] (alle Betriebssysteme, kostenlos)
 -   http://www.jedit.org[jEdit] (Mac, Windows, Linux, kostenlos)
 
 Die Schemadateien für das Layoutregelwerk liegen in der ZIP-Datei im Verzeichnis `share/schema/` unter den Dateinamen

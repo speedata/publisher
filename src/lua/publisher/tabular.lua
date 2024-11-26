@@ -909,7 +909,7 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup,skiptab
     last_shiftup = last_shiftup or 0
     local rowheight
     local rowspan,colspan
-    local wd,parameter
+    local wd
     local rowspans = {}
     local shiftup = 0
 

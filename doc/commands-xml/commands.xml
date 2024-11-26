@@ -6878,7 +6878,7 @@
   </Table>
 </PlaceObject>]]></listing>
       <para>which gives the following output</para>
-      <image file="overlay.png"/>
+      <image file="ref-overlay.png"/>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<PlaceObject>

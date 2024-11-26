@@ -101,8 +101,11 @@ task :cleanqa do
 	FileUtils.rm Dir.glob("qa/**/publisher.vars")
 	FileUtils.rm Dir.glob("qa/**/publisher.status")
 	FileUtils.rm Dir.glob("qa/**/publisher.finished")
+	FileUtils.rm Dir.glob("qa/**/publisher-protocol.xml")
+	FileUtils.rm Dir.glob("qa/**/publisher-aux.xml")
 	FileUtils.rm Dir.glob("qa/**/publisher.protocol")
 	FileUtils.rm Dir.glob("qa/**/publisher.pdf")
+	FileUtils.rm Dir.glob("qa/**/compare-report.html")
 end
 
 desc "Regenerate reference.pdf for qa"

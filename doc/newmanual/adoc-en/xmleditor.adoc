@@ -18,7 +18,7 @@ The first two editors provide excellent cross-platform support for the schema.
 
 -   https://www.altova.com/xml-editor/[XMLSpy] (Windows)
 -   https://www.xmlblueprint.com/[XML Blueprint] (Windows)
--   https://www.gnu.org/software/emacs/[GNU Emacs] with http://www.thaiopensource.com/nxml-mode/[nxml-mode] (cross platform, free)
+-   https://www.gnu.org/software/emacs/[GNU Emacs] with https://www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html[nxml-mode] (cross platform, free)
 -   http://www.jedit.org[jEdit] (Mac, Windows, Linux, free)
 
 
