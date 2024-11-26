@@ -1083,6 +1083,7 @@ function commands.forall( layoutxml,dataxml )
 
     local tab = {}
     if publisher.newxpath then
+        local save_size = dataxml.size
         if limit or start then
             splib.error("ForAll: the new xpath parser does not allow limit or start, please use predicates instead.")
         end
@@ -1099,6 +1100,7 @@ function commands.forall( layoutxml,dataxml )
             end
         end
         dataxml.pos = savepos
+        dataxml.size = save_size
         dataxml.sequence = copysequence
         return tab
     end
@@ -3653,6 +3655,11 @@ function commands.process_node(layoutxml,dataxml)
         limit = #dataxml_selection
     end
     local items = dataxml_selection
+    local save_size
+    if publisher.newxpath then
+        save_size = dataxml.size
+        dataxml.size = limit
+    end
     for i=1, limit do
         element_name = dataxml_selection[i][".__local_name"]
         if publisher.newxpath then
@@ -3682,6 +3689,7 @@ function commands.process_node(layoutxml,dataxml)
     if publisher.newxpath then
         dataxml.sequence = copysequence
         dataxml.pos = current_position
+        dataxml.size = save_size
     else
         publisher.xpath.set_variable("__position",current_position)
     end
