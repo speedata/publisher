@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.34" date="2024-11-26">
+        <en>Fix value of last() in new XPath parser when called with ProcessNode.</en>
+        <de>Korrigiere den Wert von last() im neuen XPath-Parser bei ProcessNode.</de>
+    </entry>
     <entry version="4.19.33" date="2024-11-24">
         <en>Option to switch off color profile for spot colors.</en>
         <de>Option um Farbprofile bei Sonderfarben abzuschalten.</de>
