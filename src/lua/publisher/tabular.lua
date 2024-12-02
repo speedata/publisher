@@ -359,13 +359,12 @@ function adjust_borderwidths_collapse(self,tr_contents,tablearea)
     local maxcol = 0
 
     for i = 1,#tr_contents do
-        local eltname = publisher.elementname(tr_contents[i])
+        eltname = publisher.elementname(tr_contents[i])
         local tr = publisher.element_contents(tr_contents[i])
         if eltname == "Tr" then
             row = row + 1
             tablematrix[row] = tablematrix[row] or {}
-
-            local col = 0
+            local count_columns = 0
             local colstart = 1
             for j = 1, #tr do
                 local td = publisher.element_contents(tr[j])
@@ -376,18 +375,18 @@ function adjust_borderwidths_collapse(self,tr_contents,tablearea)
                     end
                 end
 
-                col = colstart + ( td.colspan or 1 ) - 1
-                colstart = col + 1
+                count_columns = colstart + ( td.colspan or 1 ) - 1
+                colstart = count_columns + 1
             end
             tablematrix[row] = {}
-            for i = 1, col do
-                tablematrix[row][i] = {}
+            for j = 1, count_columns do
+                tablematrix[row][j] = {}
             end
         end
     end
     row = 0
     for i = 1,#tr_contents do
-        local eltname = publisher.elementname(tr_contents[i])
+        eltname = publisher.elementname(tr_contents[i])
         local tr = publisher.element_contents(tr_contents[i])
         if eltname == "Tr" then
             row = row + 1
@@ -409,6 +408,7 @@ function adjust_borderwidths_collapse(self,tr_contents,tablearea)
                         r = r + 1
                     end
                 end
+                col = col + ( td.colspan or 1 ) - 1
             end
         end
     end

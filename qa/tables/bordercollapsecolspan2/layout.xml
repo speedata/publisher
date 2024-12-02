@@ -1,0 +1,40 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="4cm" width="6cm" />
+
+    <Record element="data">
+        <PlaceObject>
+            <Table border-collapse="collapse">
+                <Columns>
+                    <Column width="2*"></Column>
+                    <Column width="1*"></Column>
+                    <Column width="1*"></Column>
+                </Columns>
+                <Tr>
+                    <Td colspan="2" border-bottom="2pt" border-bottom-color="blue">
+                        <Paragraph>
+                            <Value>BBB</Value>
+                        </Paragraph>
+                    </Td>
+                    <Td border-bottom="2pt" border-bottom-color="blue">
+                        <Paragraph>
+                            <Value>BBB</Value>
+                        </Paragraph>
+                    </Td>
+                </Tr>
+                <Tr>
+                    <Td>
+                        <Paragraph>
+                            <Value>BBB</Value>
+                        </Paragraph>
+                    </Td>
+                    <Td colspan="2">
+                        <Paragraph>
+                            <Value>BBB</Value>
+                        </Paragraph>
+                    </Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>
