@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.35" date="2024-12-02">
+        <en>Bugfix border collapse and colspan (#636).</en>
+        <de>Fehlerkorrektur Border collapse und Colspan (#636).</de>
+    </entry>
     <entry version="4.19.34" date="2024-11-26">
         <en>Fix value of last() in new XPath parser when called with ProcessNode.</en>
         <de>Korrigiere den Wert von last() im neuen XPath-Parser bei ProcessNode.</de>
