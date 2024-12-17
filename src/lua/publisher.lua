@@ -8438,9 +8438,21 @@ function attach_file_pdf(filecontents,description,mimetype,modificationtime,dest
   /UF %s
 >>]],descPDF, fileobjectnum,fileobjectnum,utf8_to_utf16_string_pdf(destfilename),utf8_to_utf16_string_pdf(destfilename)))
     if is_zugferd then
-        local conformancelevel = string.match(filecontents, "urn:ferd:CrossIndustryDocument:invoice:1p0:(.-)<")
+        local conformancelevel
+        local a = string.find(filecontents, "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended",1,true)
+        if string.find(filecontents,"urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended",1,true) or string.find(filecontents,"urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended",1,true) or string.find(filecontents,"urn:ferd:CrossIndustryDocument:invoice:1p0:extended",1,true) then
+            conformancelevel = "extended"
+        elseif string.find(filecontents,"urn:cen.eu:en16931:2017",1,true) then
+            conformancelevel = "comfort" -- EN16931
+        elseif string.find(filecontents,"urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic",1,true) or string.find(filecontents,"urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic",1,true) then
+            conformancelevel = "basic"
+        elseif string.find(filecontents,"urn:factur-x.eu:1p0:basicwl",1,true) then
+            conformancelevel = "basicwl"
+        elseif string.find(filecontents,"urn:factur-x.eu:1p0:minimum",1,true) or string.find(filecontents,"urn:zugferd.de:2p0:minimum",1,true) then
+            conformancelevel = "minimum"
+        end
         if not conformancelevel then
-            err("No ZUGFeRD contents found")
+            err("No ZUGFeRD conformance level found")
             return
         else
             conformancelevel = string.upper(conformancelevel)
