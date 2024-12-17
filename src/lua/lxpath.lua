@@ -668,6 +668,28 @@ local function fnLowerCase(ctx, seq)
     return { string.lower(x) }, nil
 end
 
+local function fnNamespaceURI(ctx, seq)
+    local input_seq = ctx.sequence
+    if #seq == 1 then
+        input_seq = seq[1]
+    end
+    -- first item
+    seq = input_seq
+    if #seq == 0 then
+        return { "" }, nil
+    end
+    if #seq > 1 then
+        return {}, "sequence too long"
+    end
+    -- first element
+    seq = seq[1]
+
+    if is_element(seq) then
+        return { seq[".__namespace"] }, nil
+    end
+
+    return { "" }, nil
+end
 
 local function fnMax(ctx, seq)
     local firstarg = seq[1]
@@ -910,6 +932,7 @@ local funcs = {
     { "last",                 M.fnNS, fnLast,               0, 0 },
     { "local-name",           M.fnNS, fnLocalName,          0, 1 },
     { "lower-case",           M.fnNS, fnLowerCase,          1, 1 },
+    { "namespace-uri",        M.fnNS, fnNamespaceURI,       0, 1 },
     { "max",                  M.fnNS, fnMax,                1, 1 },
     { "matches",              M.fnNS, fnMatches,            2, 3 },
     { "min",                  M.fnNS, fnMin,                1, 1 },

@@ -301,6 +301,9 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `min(<Zahl>[, <Zahl>, ...])`::
 	Liefert das Minimum der Werte zurück: `min(1.1,2.2,3.3,4.4)` ergibt `1.1`.
 
+`namespace-uri([nodeset])`::
+   Gibt den Namensraum des ersten Knotens der Sequenz zurück. Voreinstellung der Sequenz ist der aktuelle Kontext.
+
 `normalize-space(<text>)`::
    Gibt den Text ohne führende und nachstehende Leerzeichen zurück. Alle Zeilenvorschübe werden durch Leerzeichen ersetzt. Mehrfach hintereinander auftretende Leerzeichen/Zeilenvorschübe werden durch ein einzelnes Leerzeichen ersetzt.
 
