@@ -34,9 +34,9 @@ To attach an electronic invoice, the value at type must be exactly the string ZU
 -------------------------------------------------------------------------------
 
 
-The output filename is automatically set to ZUGFeRD-invoice.xml and the document conforms to the PDF/A-3 standard.
+The output filename is automatically set to factur-x.xml and the document conforms to the PDF/A-3 standard.
 
-.The file name is changed to ZUGFeRD-invoice.xml.
+.The file name is changed to factur-x.xml.
 image::attachfile-zugferd.png[]
 
 // EOF

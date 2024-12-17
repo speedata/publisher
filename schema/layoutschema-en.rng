@@ -382,7 +382,7 @@
          </attribute>
          <optional>
             <attribute name="name">
-               <a:documentation>Set the name of the attached file in the PDF document. Defaults to ZUGFeRD-invoice.xml if the attached file type is ZUGFeRD invoice.</a:documentation>
+               <a:documentation>Set the name of the attached file in the PDF document. Defaults to factur-x.xml if the attached file type is ZUGFeRD invoice.</a:documentation>
             </attribute>
          </optional>
          <optional>

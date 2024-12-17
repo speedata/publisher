@@ -1182,10 +1182,10 @@
     </attribute>
     <attribute en="name" type="text" optional="yes" since="3.7.3">
       <description xml:lang="en">
-        <para>Set the name of the attached file in the PDF document. Defaults to <tt>ZUGFeRD-invoice.xml</tt> if the attached file type is <tt>ZUGFeRD invoice</tt>.</para>
+        <para>Set the name of the attached file in the PDF document. Defaults to <tt>factur-x.xml</tt> if the attached file type is <tt>ZUGFeRD invoice</tt>.</para>
       </description>
       <description xml:lang="de">
-        <para>Name der eingebunden Datei im PDF. Voreinstellung ist <tt>ZUGFeRD-invoice.xml</tt> falls der Typ <tt>ZUGFeRD invoice</tt> ist.</para>
+        <para>Name der eingebunden Datei im PDF. Voreinstellung ist <tt>factur-x.xml</tt> falls der Typ <tt>ZUGFeRD invoice</tt> ist.</para>
       </description>
     </attribute>
       <attribute en="select" type="xpath" optional="yes" since="3.7.2">

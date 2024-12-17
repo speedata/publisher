@@ -8329,7 +8329,7 @@ function getmetadata()
     return md
 end
 
-function getzugferdmetadata( conformancelevel, title, author )
+function getzugferdmetadata( conformancelevel, title, author, filename )
     local metadata = string.format([[<?xpacket begin=%q id="W5M0MpCehiHzreSzNTczkc9d"?>
 <x:xmpmeta xmlns:x="adobe:ns:meta/">
  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -8402,10 +8402,10 @@ function getzugferdmetadata( conformancelevel, title, author )
 </pdfaExtension:schemas>
 </rdf:Description>
 <rdf:Description xmlns:zf="urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#"
-  rdf:about="" zf:ConformanceLevel="%s" zf:DocumentFileName="ZUGFeRD-invoice.xml" zf:DocumentType="INVOICE" zf:Version="1.0"/>
+  rdf:about="" zf:ConformanceLevel="%s" zf:DocumentFileName="%s" zf:DocumentType="INVOICE" zf:Version="1.0"/>
 </rdf:RDF>
 </x:xmpmeta><?xpacket end="w"?>
-]],"\239\187\191",title,author,xml_escape(getproducer()) ,conformancelevel)
+]],"\239\187\191",title,author,xml_escape(getproducer()) ,conformancelevel,filename)
 
     return metadata
 end
@@ -8460,12 +8460,12 @@ function attach_file_pdf(filecontents,description,mimetype,modificationtime,dest
 
         -- BASIC, COMFORT, EXTENDED
         local metadataobjnum = pdf.obj({type = "stream",
-                     string = getzugferdmetadata(conformancelevel, options.documenttitle or "ZUGFeRD Rechnung",options.documentauthor or "The Author"),
+                     string = getzugferdmetadata(conformancelevel, options.documenttitle or "ZUGFeRD Rechnung",options.documentauthor or "The Author",destfilename),
                      immediate = true,
                      attr = [[  /Subtype /XML /Type /Metadata  ]],
                      compresslevel = 0,
                      })
-        filespecnumbers[#filespecnumbers + 1] = {filespecnum,metadataobjnum,"ZUGFeRD-invoice.xml"}
+        filespecnumbers[#filespecnumbers + 1] = {filespecnum,metadataobjnum,destfilename}
     else
         filespecnumbers[#filespecnumbers + 1] = {filespecnum,nil,destfilename}
     end

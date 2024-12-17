@@ -33,9 +33,9 @@ Um eine elektronische Rechnung anzuhängen, muss der Wert bei `type` genau die Z
             filename="invoice.pdf" />
 -------------------------------------------------------------------------------
 
-Der Ausgabedateiname wird automatisch auf `ZUGFeRD-invoice.xml` gesetzt und das Dokument entspricht dem PDF/A-3 Standard.
+Der Ausgabedateiname wird automatisch auf `factur-x.xml` gesetzt und das Dokument entspricht dem PDF/A-3 Standard.
 
-.Der Dateiname wird automatisch auf ZUGFeRD-invoice.xml gesetzt.
+.Der Dateiname wird automatisch auf factur-x.xml gesetzt.
 image::attachfile-zugferd.png[]
 
 // EOF

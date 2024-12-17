@@ -219,7 +219,7 @@ end
 
 
 function commands.attachfile( layoutxml,dataxml )
-    -- destfilename is optional. It defaults to 'ZUGFeRD-invoice.xml' when
+    -- destfilename is optional. It defaults to "factur-x.xml" when
     -- attaching a ZUGFeRD file or to the input file name otherwise.
     local inputfilename = publisher.read_attribute(layoutxml,dataxml,"filename","string")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
@@ -235,8 +235,8 @@ function commands.attachfile( layoutxml,dataxml )
         end
 
         if not destfilename then
-            warning("AttachFile: please provide a filename for the attachment by setting the attribute name.")
-            destfilename = "ZUGFeRD-invoice.xml"
+            splib.log("info","AttachFile: no filename proivded, using 'factur-x.xml'.")
+            destfilename = "factur-x.xml"
         end
     end
 

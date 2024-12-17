@@ -382,7 +382,7 @@
          </attribute>
          <optional>
             <attribute name="name">
-               <a:documentation>Name der eingebunden Datei im PDF. Voreinstellung ist ZUGFeRD-invoice.xml falls der Typ ZUGFeRD invoice ist.</a:documentation>
+               <a:documentation>Name der eingebunden Datei im PDF. Voreinstellung ist factur-x.xml falls der Typ ZUGFeRD invoice ist.</a:documentation>
             </attribute>
          </optional>
          <optional>
