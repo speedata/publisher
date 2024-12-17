@@ -1222,7 +1222,7 @@ function commands.func(layoutxml, dataxml)
 
     for i = 1, #layoutxml do
         local thisitem = layoutxml[i]
-        if xpath.is_element(thisitem) and thisitem[".__name"] == "Param" then
+        if xpath.is_element(thisitem) and thisitem[".__local_name"] == "Param" then
             local attr = thisitem[".__attributes"]
             params[#params+1] = attr.name
         end
