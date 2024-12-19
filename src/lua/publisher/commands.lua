@@ -235,7 +235,7 @@ function commands.attachfile( layoutxml,dataxml )
         end
 
         if not destfilename then
-            splib.log("info","AttachFile: no filename proivded, using 'factur-x.xml'.")
+            splib.log("info","AttachFile: no filename provided, using 'factur-x.xml'.")
             destfilename = "factur-x.xml"
         end
     end
@@ -2706,7 +2706,11 @@ function commands.options( layoutxml,dataxml )
         publisher.options.reportmissingglyphs = "warning"
     end
 
-
+    local ns = publisher.read_attribute(layoutxml,dataxml,"namespaces",  "string", publisher.options.namespaces)
+    if ns == "lax" and publisher.newxpath then
+        xpath.ignoreNS = true
+    end
+    publisher.options.namespaces = ns
 end
 
 --- Output
@@ -3661,7 +3665,13 @@ function commands.process_node(layoutxml,dataxml)
         dataxml.size = limit
     end
     for i=1, limit do
-        element_name = dataxml_selection[i][".__local_name"]
+        local elt = dataxml_selection[i]
+        if publisher.options.namespaces == "strict" then
+            element_name = "{" .. elt[".__namespace"]  .. "}" .. elt[".__local_name"]
+        else
+            element_name = elt[".__local_name"]
+        end
+
         if publisher.newxpath then
             dataxml.sequence = {items[i]}
         end
@@ -3671,6 +3681,7 @@ function commands.process_node(layoutxml,dataxml)
             return
         end
         layoutnode = publisher.data_dispatcher[mode][element_name]
+
         if layoutnode then
             splib.log("debug","Process node", "node",element_name,"mode",mode,"pos",string.format("%d",pos))
             if publisher.newxpath then
@@ -3752,7 +3763,7 @@ end
 --- Record
 --- ------
 --- Matches an element name of the data file. To be called from ProcessNodes
-function commands.record( layoutxml )
+function commands.record( layoutxml,dataxml )
     local elementname, mode = "", ""
     if publisher.newxpath then
         elementname = layoutxml[".__attributes"].element
@@ -3761,6 +3772,20 @@ function commands.record( layoutxml )
         elementname = publisher.read_attribute(layoutxml,{},"element","string")
         mode        = publisher.read_attribute(layoutxml,{},"mode","string","")
     end
+
+    if string.find(elementname,":") and publisher.options.namespaces == "lax" then
+        elementname = string.match(elementname,':(.*)$')
+    elseif publisher.options.namespaces == "strict" then
+        local ns = dataxml.namespaces
+        local has_prefix = false
+        local prefix, suffix = string.match(elementname,"^(.*):(.*)$")
+        if prefix then
+            elementname = "{" .. ns[prefix] .. "}" .. suffix
+        else
+            elementname = "{" .. ns[""] .. "}" .. elementname
+        end
+    end
+
     splib.log("debug","Record","element",elementname,"mode",mode)
     publisher.data_dispatcher[mode] = publisher.data_dispatcher[mode] or {}
     publisher.data_dispatcher[mode][elementname] = layoutxml

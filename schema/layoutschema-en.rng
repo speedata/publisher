@@ -3815,6 +3815,17 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="namespaces">
+               <a:documentation>Controls the handling of XML namespaces. The default is &#39;lax&#39; which ignores all namespaces with Record and ProcessNode.</a:documentation>
+               <choice>
+                  <value>lax</value>
+                  <a:documentation>This is the default. XML namespaces in the data file are ignored.</a:documentation>
+                  <value>strict</value>
+                  <a:documentation>Record and ProcessNode are namespace sensitive.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="randomseed">
                <a:documentation>Set the seed for the random number generator (a positive integer).</a:documentation>
             </attribute>

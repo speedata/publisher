@@ -12,6 +12,55 @@ import (
 	"golang.org/x/net/html/charset"
 )
 
+// a stack map is a map where writes after push don't erase writes before push.
+type stackmap struct {
+	m []map[string]string
+}
+
+func (sm *stackmap) Set(key string, value string) {
+	if len(sm.m) == 0 {
+		sm.m = append(sm.m, make(map[string]string))
+	}
+
+	sm.m[len(sm.m)-1][key] = value
+}
+
+func (sm *stackmap) Get(key string) (string, bool) {
+	if len(sm.m) == 0 {
+		return "", false
+	}
+	val, ok := sm.m[len(sm.m)-1][key]
+	return val, ok
+}
+
+// get the whole map from the top entry
+func (sm *stackmap) GetMap() map[string]string {
+	if len(sm.m) == 0 {
+		return make(map[string]string)
+	}
+	return sm.m[len(sm.m)-1]
+}
+
+func (sm *stackmap) Push() {
+	if len(sm.m) == 0 {
+		return
+	}
+	newmap := make(map[string]string)
+	oldmap := sm.m[len(sm.m)-1]
+	for key, value := range oldmap {
+		newmap[key] = value
+	}
+	sm.m = append(sm.m, newmap)
+}
+
+func (sm *stackmap) Pop() error {
+	if len(sm.m) == 0 {
+		return fmt.Errorf("StackMap is empty")
+	}
+	sm.m = sm.m[:len(sm.m)-1]
+	return nil
+}
+
 func (l *LuaState) buildXMLTable() error {
 	var xmlfilename string
 	xmltype := "(unknown)"
@@ -49,6 +98,8 @@ func (l *LuaState) buildXMLTable() error {
 func (l *LuaState) readXMLFile(r io.Reader, startindex int) error {
 	i := 1
 
+	// FIXME, a map is not a good data structure for this
+	ns := stackmap{}
 	stackcounter := []int{startindex}
 
 	// Handle other encodings besides UTF-8. This is tested against UTF-8 and
@@ -77,6 +128,7 @@ func (l *LuaState) readXMLFile(r io.Reader, startindex int) error {
 
 		switch v := tok.(type) {
 		case xml.StartElement:
+			ns.Push()
 			var href string
 			if v.Name.Space == "http://www.w3.org/2001/XInclude" && v.Name.Local == "include" {
 				for _, attr := range v.Attr {
@@ -92,7 +144,24 @@ func (l *LuaState) readXMLFile(r io.Reader, startindex int) error {
 				// no xinclude
 				l.pushInt(stackcounter[indentlevel])
 				l.createTable(0, 8)
-				l.addKeyValueToTable(-1, ".__name", v.Name.Local)
+				namespaces := map[string]string{}
+				for _, attr := range v.Attr {
+					if attr.Name.Space == "xmlns" {
+						ns.Set(attr.Value, attr.Name.Local)
+						namespaces[attr.Name.Local] = attr.Value
+					} else if attr.Name.Local == "xmlns" {
+						ns.Set(attr.Value, "")
+						namespaces[""] = attr.Value
+					}
+				}
+				elementname := v.Name.Local
+				if sp := v.Name.Space; sp != "" {
+					val, _ := ns.Get(sp)
+					if val != "" {
+						elementname = val + ":" + elementname
+					}
+				}
+				l.addKeyValueToTable(-1, ".__name", elementname)
 				l.addKeyValueToTable(-1, ".__local_name", v.Name.Local)
 				l.addKeyValueToTable(-1, ".__type", "element")
 				l.addKeyValueToTable(-1, ".__id", i)
@@ -101,24 +170,24 @@ func (l *LuaState) readXMLFile(r io.Reader, startindex int) error {
 				l.addKeyValueToTable(-1, ".__line", line)
 				l.addKeyValueToTable(-1, ".__namespace", v.Name.Space)
 				i++
-				namespaces := map[string]string{}
 
 				l.pushString(".__attributes")
 				l.createTable(0, 0)
 				for _, attr := range v.Attr {
 					if attr.Name.Space == "xmlns" {
-						namespaces[attr.Name.Local] = attr.Value
+						// handled above
 					} else if attr.Name.Local == "xmlns" {
-						namespaces[""] = attr.Value
+						// handled above
 					} else {
 						l.addKeyValueToTable(-1, attr.Name.Local, attr.Value)
 					}
 				}
 				l.rawSet(-3)
 				l.pushString(".__ns")
-				l.createTable(0, len(namespaces))
-				for k, v := range namespaces {
-					l.addKeyValueToTable(-1, k, v)
+				nsMap := ns.GetMap()
+				l.createTable(0, len(nsMap))
+				for k, v := range nsMap {
+					l.addKeyValueToTable(-1, v, k)
 				}
 				l.rawSet(-3)
 			}
@@ -135,6 +204,7 @@ func (l *LuaState) readXMLFile(r io.Reader, startindex int) error {
 				l.rawSet(-3)
 			}
 		case xml.EndElement:
+			ns.Pop()
 			if v.Name.Space == "http://www.w3.org/2001/XInclude" && v.Name.Local == "include" {
 				// ignore
 			} else {

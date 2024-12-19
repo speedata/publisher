@@ -19,6 +19,7 @@ if os.getenv("SP_XMLPARSER") == "lxpath" then
     xpath.stringmatch = unicode.utf8.match
     xpath.find_file = find_file
     xpath.parse_xml = splib.load_xmlfile
+    xpath.ignoreNS = true
 else
     xpath = do_luafile("xpath.lua")
 end
@@ -289,6 +290,7 @@ options = {
     fontloader = os.getenv("SP_FONTLOADER") or "harfbuzz",
     xmlparser = os.getenv("SP_XMLPARSER") or "lua",
     hyperlinkborderwidth = tex.sp("1pt"),
+    namespaces = "lax",
 }
 
 current_layout_line = ""
@@ -1483,6 +1485,10 @@ function initialize_luatex_and_generate_pdf()
     end
 
     dispatch(layoutxml,data)
+    if newxpath then
+        -- for namespace mode == strict
+        data.namespaces = dataxml[1][".__ns"]
+    end
 
     -- options.ignoreeol is now set
     if newxpath then
@@ -1680,11 +1686,25 @@ function initialize_luatex_and_generate_pdf()
         if msg then
             err(msg)
         end
-        seq, msg = data:eval("local-name()")
-        if msg then
-            err(msg)
+        if options.namespaces == "strict" then
+            seq, msg = data:eval("local-name()")
+            if msg then
+                err(msg)
+            end
+            name = xpath.string_value(seq)
+            seq, msg = data:eval("namespace-uri()")
+            if msg then
+                err(msg)
+            end
+            local namespace_element = xpath.string_value(seq)
+            name = "{" .. namespace_element .. "}" .. name
+        else
+            seq, msg = data:eval("local-name()")
+            if msg then
+                err(msg)
+            end
+            name = xpath.string_value(seq)
         end
-        name = xpath.string_value(seq)
     else
         name = dataxml[".__local_name"]
         xpath.set_variable("__position", 1)
@@ -1695,15 +1715,24 @@ function initialize_luatex_and_generate_pdf()
         err("Can't find any “Record” commands in the layout file.")
         exit()
     end
+
     tmp = data_dispatcher[""][name]
     if tmp then
         if newxpath then
+            -- For data:eval, the namespaces must be set the layout namespaces
+            data.namespaces = layoutxml[".__ns"]
             dispatch(tmp,data)
         else
             dispatch(tmp,dataxml)
         end
     else
-        err("Can't find “Record” command for the root node %q.",name or "")
+        name = name or ""
+        local elt_ns, elt_localname = string.match(name,"{(.*)}(.*)")
+        if elt_ns then
+            splib.error("Can't find “Record” command for the root node","namespace",elt_ns,"elementname",elt_localname)
+        else
+            splib.error("Can't find “Record” command for the root node","elementname",name)
+        end
         exit()
     end
 

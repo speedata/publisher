@@ -3815,6 +3815,17 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="namespaces">
+               <a:documentation>Kontrolliert die Handhabung von XML Namensräumen. Die Voreinstellung ist &#39;lax&#39;, das alle Namensräume bei den Befehlen Record und ProcessNode ignoriert.</a:documentation>
+               <choice>
+                  <value>lax</value>
+                  <a:documentation>Voreinstellung. XML Namensräume aus der Datendatei werden ignoriert.</a:documentation>
+                  <value>strict</value>
+                  <a:documentation>Record und ProcessNode beachten Namensräume.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="randomseed">
                <a:documentation>Setze die Startzahl (seed) für den Zufallszahlengenerator (eine positive Ganzzahl).</a:documentation>
             </attribute>

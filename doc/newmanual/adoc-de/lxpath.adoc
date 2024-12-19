@@ -86,6 +86,83 @@ Angabe der Breite wird auf den Inhalt der Variablen `breite` zurückgegriffen, d
 Immer noch im Unklaren, wie XPath funktioniert? Bei https://www.w3schools.com/xml/xpath_intro.asp[W3Schools gibt es ein gutes Tutorial].
 
 
+== XPath und Namensräume
+
+Der speedata Publisher ignoriert https://de.wikipedia.org/wiki/Namensraum_(XML)[XML-Namensräume] in der Voreinstellung. Das ist in der Regel sehr hilfreich, da Namensräume nicht immer leicht zu handhaben sind.
+
+Die XML-Datei:
+
+[source, xml]
+----------------
+<bar:data xmlns:bar="somenamespace">
+    <bar:child>
+        <bar:sub>sub</bar:sub>
+    </bar:child>
+</bar:data>
+----------------
+
+kann im Layout wie folgt angesprochen werden:
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Record element="data">
+      ...
+----------------
+
+obwohl der Namensraum des Wurzelelements `somenamespace` ist.
+
+Mit `<Options namespaces="strict" />` stellt man das um, so dass der Namensraum bei <<cmd-record,`<Record>`>> und bei <<cmd-processnode,`<ProcessNode>`>> anzugeben ist:
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    xmlns:sn="somenamespace">
+
+    <Options namespaces="strict" />
+
+    <Record element="sn:data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="local-name()"></Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+----------------
+
+Wichtig ist, dass der Namensraum übereinstimmt, der Präfix (hier: `sn`) ist frei wählbar, solange er mit dem Namensraum verbunden ist.
+
+<<cmd-processnode,`<ProcessNode>`>> funktioniert ähnlich:
+
+[source, xml]
+----------------
+<ProcessNode select="*:child" />
+<ProcessNode select="sn:child" />
+<ProcessNode select="sn:*" />
+<ProcessNode select="*" />
+----------------
+
+rufen das Kindelement `bar:child` auf, da die Namensräume von `sn` (aus dem Layout) und `bar` (aus den Daten) übereinstimmen. `*` ist hier eine »Wildcard«, passt also auf alle Namen.
+
+`<ProcessNode select="child" />` wird im obigen Fall nicht funktionieren, da der leere Namensraum aus dem Layout `urn:speedata.de:2009/publisher/en` ist und nicht mit dem Namensraum aus den Daten übereinstimmt.
+
+Ebenfalls muss man in den XPath-Abfragen Namensräume benutzen, wenn sie in den Daten vorgegeben sind:
+
+[source, xml]
+----------------
+<Message select="count(sn:sub)" />
+----------------
+
+schreibt 1 in die Protokolldatei. Ohne Namensraum eine 0, da kein Element sub mit dem voreingestellten Namensraum gefunden wird.
+
+
+
 
 == Layout-Funktionen
 

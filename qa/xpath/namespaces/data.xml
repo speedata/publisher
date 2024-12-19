@@ -1,0 +1,5 @@
+<bar:data xmlns:bar="somenamespace">
+    <bar:child>
+        <bar:sub>sub</bar:sub>
+    </bar:child>
+</bar:data>

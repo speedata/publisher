@@ -6471,6 +6471,30 @@
         <para>Setze die markdown-Erweiterungen. Eine Kommaseparierte Liste der folgenden Werte: table, strikethrough, linkify, tasklist, gfm, definitionlist, footnote, typographer, cjk.</para>
       </description>
     </attribute>
+    <attribute en="namespaces" optional="yes" since="4.19.37">
+      <description xml:lang="en">
+        <para>Controls the handling of XML namespaces. The default is 'lax' which ignores all namespaces with <cmd name="Record"/> and <cmd name="ProcessNode"/>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Kontrolliert die Handhabung von XML Namensräumen. Die Voreinstellung ist 'lax', das alle Namensräume bei den Befehlen <cmd name="Record"/> und <cmd name="ProcessNode"/> ignoriert.</para>
+      </description>
+      <choice en="lax">
+        <description xml:lang="en">
+          <para>This is the default. XML namespaces in the data file are ignored.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Voreinstellung. XML Namensräume aus der Datendatei werden ignoriert.</para>
+        </description>
+      </choice>
+      <choice en="strict">
+        <description xml:lang="en">
+          <para><cmd name="Record"/> and <cmd name="ProcessNode"/> are namespace sensitive.</para>
+        </description>
+        <description xml:lang="de">
+          <para><cmd name="Record"/> und <cmd name="ProcessNode"/> beachten Namensräume.</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="randomseed" optional="yes" allowxpath="yes" since="3.9.24" type="number">
       <description xml:lang="en">
         <para>Set the seed for the random number generator (a positive integer).</para>

@@ -83,7 +83,85 @@ the symbol `>`  may be written as `\&gt;`. Example: `$number > 6`. Can be used i
 See the https://github.com/speedata/lxpath/blob/main/lxpath_test.lua[test file of lxpath] if in doubt.
 
 If you are still uncertain about XPath, please follow https://www.w3schools.com/xml/xpath_intro.asp[the good tutorial at W3Schools].
-See the https://github.com/speedata/lxpath/blob/main/lxpath_test.lua[test file of lxpath] if in doubt
+
+
+== XPath and namespaces
+
+The speedata Publisher ignores XML namespaces by default. This is usually very helpful, as namespaces are not always easy to handle.
+
+The XML file:
+
+[source, xml]
+----------------
+<bar:data xmlns:bar="somenamespace">
+    <bar:child>
+        <bar:sub>sub</bar:sub>
+    </bar:child>
+</bar:data>
+----------------
+
+can be addressed in the layout as follows:
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Record element="data">
+      ...
+----------------
+
+although the namespace of the root element is `somenamespace`.
+
+With `<Options namespaces="strict" />` you can change this so that the namespace must be specified for <<cmd-record,`<Record>`>> and <<cmd-processnode,`<ProcessNode>`>>:
+
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    xmlns:sn="somenamespace">
+
+    <Options namespaces="strict" />
+
+    <Record element="sn:data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="local-name()"></Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+----------------
+
+It is important that the namespace matches, the prefix (here: `sn`) is freely selectable as long as it is linked to the namespace.
+
+<<cmd-processnode,`<ProcessNode>`>> works similar:
+
+[source, xml]
+----------------
+<ProcessNode select="*:child" />
+<ProcessNode select="sn:child" />
+<ProcessNode select="sn:*" />
+<ProcessNode select="*" />
+----------------
+
+call the child element `bar:child`, as the namespaces of `sn` (from the layout) and `bar` (from the data) match. `*` is a ‘wildcard’ here, so it matches all names.
+
+`<ProcessNode select="child" />` will not work in the above case, as the empty namespace from the layout is `urn:speedata.de:2009/publisher/en` and does not match the namespace from the data.
+
+You must also use namespaces in the XPath queries if they are specified in the data:
+
+[source, xml]
+----------------
+<Message select="count(sn:sub)" />
+----------------
+
+writes 1 to the log file. Without namespace a 0, as no element sub with the preset namespace is found.
+
+
 
 == The following XPath functions are known to the system:
 

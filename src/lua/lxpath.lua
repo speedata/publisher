@@ -8,7 +8,8 @@ local M = {
     stringmatch = string.match,
     stringfind = string.find,
     findfile = function(fn) return fn end,
-    parse_xml = function(fn) return {} end -- dummy
+    parse_xml = function(fn) return {} end, -- dummy
+    ignoreNS = false,
 }
 
 local debuglevel = 0
@@ -49,9 +50,10 @@ local function get_qname(runes)
     while true do
         r, eof = read_rune(runes)
         if eof then break end
-        if is_letter(r) or is_digit(r) or r == '_' or r == '-' or r == '·' or r == '‿' or r == '⁀' then
+        if is_letter(r) or is_digit(r) or r == '_' or r == '-' or r == '·' or r == '‿' or r == '⁀' or r == '*' then
             word[#word + 1] = r
         elseif r == ":" then
+            -- double colon must not be part of a qname
             if hasColon then
                 unread_rune(runes)
                 break
@@ -63,7 +65,8 @@ local function get_qname(runes)
             break
         end
     end
-    return table.concat(word)
+    local word_str = table.concat(word)
+    return word_str
 end
 M.private.get_qname = get_qname
 
@@ -232,6 +235,12 @@ end
 function tokenlist:nextTokIsType(typ)
     if self.pos > #self then return false end
     local t = self:peek()
+    -- tokQName main contain '*', which is incorrect.
+    if typ == "tokQName" then
+        if string.find(t[1],'*',1,true) then
+            return false
+        end
+    end
     return t[2] == typ
 end
 
@@ -283,7 +292,20 @@ function M.string_to_tokenlist(str)
                 unread_rune(runes)
                 tokens[#tokens + 1] = { '.', "tokOperator" }
             end
-        elseif r == '+' or r == '-' or r == '*' or r == '?' or r == '@' or r == '|' or r == '=' then
+        elseif r == '*' then
+            nextrune, eof = read_rune(runes)
+            if eof then
+                tokens[#tokens + 1] = { r, "tokOperator" }
+                break
+            end
+            unread_rune(runes)
+            if nextrune == ':' then
+                local word = '*' .. get_qname(runes)
+                tokens[#tokens + 1] = { word, "tokQName" }
+            else
+                tokens[#tokens + 1] = { r, "tokOperator" }
+            end
+        elseif r == '+' or r == '-' or r == '?' or r == '@' or r == '|' or r == '=' then
             tokens[#tokens + 1] = { r, "tokOperator" }
         elseif r == "," then
             tokens[#tokens + 1] = { r, "tokComma" }
@@ -668,6 +690,29 @@ local function fnLowerCase(ctx, seq)
     return { string.lower(x) }, nil
 end
 
+local function fnName(ctx, seq)
+    local input_seq = ctx.sequence
+    if #seq == 1 then
+        input_seq = seq[1]
+    end
+    -- first item
+    seq = input_seq
+    if #seq == 0 then
+        return { "" }, nil
+    end
+    if #seq > 1 then
+        return {}, "sequence too long"
+    end
+    -- first element
+    seq = seq[1]
+
+    if is_element(seq) then
+        return { seq[".__name"] }, nil
+    end
+
+    return { "" }, nil
+end
+
 local function fnNamespaceURI(ctx, seq)
     local input_seq = ctx.sequence
     if #seq == 1 then
@@ -936,6 +981,7 @@ local funcs = {
     { "max",                  M.fnNS, fnMax,                1, 1 },
     { "matches",              M.fnNS, fnMatches,            2, 3 },
     { "min",                  M.fnNS, fnMin,                1, 1 },
+    { "name",                 M.fnNS, fnName,               0, 1 },
     { "normalize-space",      M.fnNS, fnNormalizeSpace,     1, 1 },
     { "not",                  M.fnNS, fnNot,                1, 1 },
     { "number",               M.fnNS, fnNumber,             1, 1 },
@@ -1120,7 +1166,7 @@ function context:attributeaixs(testfunc)
                     value = value,
                     [".__type"] = "attribute",
                 }
-                if testfunc(x) then
+                if testfunc(self,x) then
                     seq[#seq + 1] = x
                 end
             end
@@ -1138,7 +1184,7 @@ function context:childaxis(testfunc)
                 if is_element(child) then
                     child[".__parent"] = elt
                 end
-                if testfunc(child) then
+                if testfunc(self,child) then
                     seq[#seq + 1] = child
                 end
             end
@@ -1159,7 +1205,7 @@ function context:descendant(testfunc)
                         child[".__parent"] = elt
                     end
                     if is_element(child) then
-                        if testfunc(child) then
+                        if testfunc(self,child) then
                             seq[#seq + 1] = child
                         end
                         local newself = self:copy()
@@ -1171,7 +1217,7 @@ function context:descendant(testfunc)
                             seq[#seq + 1] = s[j]
                         end
                     else
-                        if testfunc(child) then
+                        if testfunc(self,child) then
                             seq[#seq + 1] = child
                         end
                     end
@@ -1220,7 +1266,7 @@ function context:followingSibling(testfunc)
                         startCollecting = true
                     end
                 end
-                if startCollecting and testfunc(sibling) then
+                if startCollecting and testfunc(self,sibling) then
                     seq[#seq + 1] = sibling
                 end
             end
@@ -1235,7 +1281,7 @@ function context:descendantOrSelf(testfunc)
     for _, elt in ipairs(self.sequence) do
         if type(elt) == "table" then
             if is_element(elt) or is_document(elt) then
-                if testfunc(elt) then
+                if testfunc(self,elt) then
                     seq[#seq + 1] = elt
                 end
                 for i = 1, #elt do
@@ -1250,7 +1296,7 @@ function context:descendantOrSelf(testfunc)
                             seq[#seq + 1] = s[j]
                         end
                     else
-                        if testfunc(child) then
+                        if testfunc(self,child) then
                             seq[#seq + 1] = child
                         end
                     end
@@ -1273,7 +1319,7 @@ function context:parentAxis(testfunc)
     for _, elt in ipairs(self.sequence) do
         if is_element(elt) then
             local parent = elt[".__parent"]
-            if testfunc(parent) then
+            if testfunc(self,parent) then
                 seq[#seq + 1] = parent
             end
         end
@@ -1296,7 +1342,7 @@ function context:ancestorAxis(testfunc)
                     seq[#seq + 1] = itm
                 end
             end
-            if testfunc(parent) then
+            if testfunc(self,parent) then
                 seq[#seq + 1] = parent
             end
         end
@@ -1320,7 +1366,7 @@ function context:ancestorOrSelfAxis(testfunc)
                 end
             end
         end
-        if testfunc(elt) then
+        if testfunc(self,elt) then
             seq[#seq + 1] = elt
         end
     end
@@ -1342,7 +1388,7 @@ function context:precedingSiblingAxis(testfunc)
                         startCollecting = false
                     end
                 end
-                if startCollecting and testfunc(sibling) then
+                if startCollecting and testfunc(self,sibling) then
                     seq[#seq + 1] = sibling
                 end
             end
@@ -2304,7 +2350,7 @@ function parse_relative_path_expr(tl)
             end
             ctx.sequence = retseq
             if i <= #ops and ops[i] == "//" then
-                ctx:descendantOrSelf(function(itm) return is_element(itm) end)
+                ctx:descendantOrSelf(function(ctx,itm) return is_element(itm) end)
             end
         end
         return retseq, nil
@@ -2573,13 +2619,20 @@ function parse_name_test(tl)
         end
         local name = n[1]
         if tl.attributeMode then
-            tf = function(itm)
+            tf = function(ctx, itm)
                 return itm.name == name
             end
         else
-            tf = function(itm)
+            tf = function(ctx, itm)
                 if is_element(itm) then
-                    return itm[".__name"] == name
+                    if M.ignoreNS then
+                        return itm[".__local_name"] == name
+                    end
+                    local prefix, locname = string.match(name,"(.*):(.*)")
+                    prefix = prefix or ""
+                    locname = locname or name
+                    local ns = ctx.namespaces[prefix]
+                    return itm[".__local_name"] == locname and itm[".__namespace"] == ( ns or "" )
                 end
                 return false
             end
@@ -2603,15 +2656,30 @@ function parse_wild_card(tl)
     local str = nexttok[1]
     if str == "*" or str:match("^%*:") or str:match(":%*$") then
         if tl.attributeMode then
-            tf = function(itm)
+            tf = function(ctx, itm)
                 if is_attribute(itm) then
                     return true
                 end
             end
         else
-            tf = function(itm)
-                if is_element(itm) then
+            tf = function(ctx,itm)
+                if not is_element(itm) then
+                    return false
+                end
+                if str == '*' then
                     return true
+                end
+                local prefix, locname = string.match(str,"(.*):(.*)")
+                if prefix == "*" then
+                    if itm[".__local_name"] == locname then
+                        return true
+                    end
+                end
+                if locname == "*" then
+                    local reqns = ctx.namespaces[prefix]
+                    if itm[".__namespace"] == reqns then
+                        return true
+                    end
                 end
             end
         end
@@ -2900,7 +2968,7 @@ function parse_any_kind_test(tl)
                 tl:read()
                 tl:read()
                 tl:read()
-                local tf = function(itm)
+                local tf = function(ctx, itm)
                     return true, nil
                 end
                 leaveStep(tl, "55 parse_any_kind_test")
@@ -2929,7 +2997,7 @@ function parse_element_test(tl)
                 tl:read()
                 tl:read()
                 tl:read()
-                local tf = function(itm)
+                local tf = function(ctx,itm)
                     return is_element(itm), nil
                 end
                 leaveStep(tl, "64 parse_element_test")
@@ -2958,7 +3026,7 @@ function parse_text_test(tl)
                 tl:read()
                 tl:read()
                 tl:read()
-                local tf = function(itm)
+                local tf = function(ctx, itm)
                     return type(itm) == "string", nil
                 end
                 leaveStep(tl, "57 parse_text_test")

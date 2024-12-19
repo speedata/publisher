@@ -4084,6 +4084,25 @@
           <xs:documentation>Setze die markdown-Erweiterungen. Eine Kommaseparierte Liste der folgenden Werte: table, strikethrough, linkify, tasklist, gfm, definitionlist, footnote, typographer, cjk.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="namespaces">
+        <xs:annotation>
+          <xs:documentation>Kontrolliert die Handhabung von XML Namensräumen. Die Voreinstellung ist 'lax', das alle Namensräume bei den Befehlen Record und ProcessNode ignoriert.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="lax">
+              <xs:annotation>
+                <xs:documentation>Voreinstellung. XML Namensräume aus der Datendatei werden ignoriert.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="strict">
+              <xs:annotation>
+                <xs:documentation>Record und ProcessNode beachten Namensräume.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="randomseed">
         <xs:annotation>
           <xs:documentation>Setze die Startzahl (seed) für den Zufallszahlengenerator (eine positive Ganzzahl).</xs:documentation>

@@ -1,0 +1,28 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    xmlns:sn="somenamespace">
+    <Pageformat height="5cm" width="6cm"></Pageformat>
+    <Options namespaces="strict" />
+
+    <Record element="sn:data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="local-name()"></Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+
+        <ProcessNode select="*" />
+    </Record>
+
+    <Record element="sn:child">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="name()"></Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
