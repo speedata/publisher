@@ -336,7 +336,7 @@ func timeoutCatcher(seconds int) {
 }
 
 func sigIntCatcher() {
-	ch := make(chan os.Signal)
+	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
 	sig := <-ch
 	log.Printf("Signal received: %v", sig)
