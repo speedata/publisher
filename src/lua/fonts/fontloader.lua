@@ -96,6 +96,7 @@ end
 
 -- The harfbuzz version of the fontloader.
 function define_font_hb( name, size, extra_parameter )
+    local glyphname_uni = {}
     if not hasharfbuzz then
         err("Can't use mode=\"harfbuzz\" on LoadFontfile without harfbuzz library")
         return define_font(name,size,extra_parameter)
@@ -170,11 +171,10 @@ function define_font_hb( name, size, extra_parameter )
     end
     f.otfeatures = features
     local unicodes = face:collect_unicodes()
-    local characters = {}
     local glyph_uni = {}
     for _, uni in next, unicodes do
-        characters[uni] = font:get_nominal_glyph(uni)
-        glyph_uni[characters[uni]] = uni
+        local gid = font:get_nominal_glyph(uni)
+        glyph_uni[gid] = uni
     end
 
     for gid = 0, face:get_glyph_count() - 1 do
@@ -192,6 +192,9 @@ function define_font_hb( name, size, extra_parameter )
             f.zerowidth = hadvance * mag
         end
         local glyphname = font:get_glyph_name(gid)
+
+        glyphname_uni[glyphname] = uni
+
         f.characters[uni] = {
             index = gid,
             width = hadvance * mag,
@@ -213,6 +216,21 @@ function define_font_hb( name, size, extra_parameter )
             thischar.height = ge.y_bearing * mag
             thischar.depth = (ge.height + ge.y_bearing) * -1 * mag
         end
+    end
+
+    for gid = 0, face:get_glyph_count() - 1 do
+        local touni = glyph_uni[gid]
+        local uni = touni or ( 0x110000 + gid )
+        local glyphname = font:get_glyph_name(gid)
+
+        if string.find(glyphname,".",1,true) then
+            local basename = string.match(glyphname,"^(.*)%.")
+            thischar = f.characters[uni]
+            if thischar then
+                thischar.tounicode = glyphname_uni[basename]
+            end
+        end
+
     end
     f.backmap = backmap
     return true,f
