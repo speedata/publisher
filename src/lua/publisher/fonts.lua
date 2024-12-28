@@ -152,7 +152,7 @@ function define_font(instance)
         ok,f = fonts.fontloader.define_font(instance.requested_name,instance.requested_size,instance.requested_extra_parameter)
     end
     if not ok then
-        err("Failed to load font %s",instance.requested_name)
+        splib.error("Failed to load font","requested name",instance.requested_name,"errormessage",f or "")
         return false
     end
     preloaded_fonts[num] = f

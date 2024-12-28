@@ -443,14 +443,12 @@ function define_font(name, size,extra_parameter)
     if extra_parameter.fallbacks then
         for i=#extra_parameter.fallbacks,1,-1 do
             local fnt = extra_parameter.fallbacks[i]
-            local tmp, newfont = define_font(fnt,size)
-            if tmp then
-                local num = font.define(newfont)
-                newfont.fontnum = num
-                fallback_fontdefinitions[#fallback_fontdefinitions + 1] = newfont
-            else
-                return nil, newfont
-            end
+            splib.log("info","Create font metrics for fallback font","name",fnt,"size",math.round(size / publisher.factor,3))
+            local tmp, newfont_or_msg = define_font(fnt,size)
+            if not tmp then return nil, newfont_or_msg end
+            local num = font.define(newfont_or_msg)
+            newfont_or_msg.fontnum = num
+            fallback_fontdefinitions[#fallback_fontdefinitions + 1] = newfont_or_msg
         end
     end
 
