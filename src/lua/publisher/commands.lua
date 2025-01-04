@@ -2709,6 +2709,8 @@ function commands.options( layoutxml,dataxml )
     local ns = publisher.read_attribute(layoutxml,dataxml,"namespaces",  "string", publisher.options.namespaces)
     if ns == "lax" and publisher.newxpath then
         xpath.ignoreNS = true
+    elseif ns == "strict" and publisher.newxpath then
+        xpath.ignoreNS = false
     end
     publisher.options.namespaces = ns
 end

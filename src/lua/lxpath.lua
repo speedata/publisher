@@ -2626,6 +2626,8 @@ function parse_name_test(tl)
             tf = function(ctx, itm)
                 if is_element(itm) then
                     if M.ignoreNS then
+                        -- name might have a namespace prefix
+                        name = string.gsub(name,"^(.*:)","")
                         return itm[".__local_name"] == name
                     end
                     local prefix, locname = string.match(name,"(.*):(.*)")
