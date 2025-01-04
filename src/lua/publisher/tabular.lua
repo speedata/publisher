@@ -601,6 +601,10 @@ function calculate_columnwidth( self )
             elseif starcols[i] then
                 count_stars = count_stars + starcols[i]
             else
+                if i > #self.colwidths then
+                    splib.error("Something is wrong with the number of coumns in the table")
+                    return
+                end
                 total_stars_width = total_stars_width - self.colwidths[i]
             end
         end
