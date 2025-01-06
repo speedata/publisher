@@ -228,6 +228,7 @@ function commands.attachfile( layoutxml,dataxml )
 
 
     if filetype == "ZUGFeRD invoice" then
+        publisher.options.format = "PDF/A-3"
         if not publisher.pro then
             err("attaching ZUGReRD files need a pro plan")
             publisher.has_pro_error = true

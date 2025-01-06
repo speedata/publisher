@@ -1869,6 +1869,17 @@ function initialize_luatex_and_generate_pdf()
             local outputintentsarrayobjnum = pdf.obj({type="raw", string = string.format("[ %d 0 R ]",outputintentsobjnum), immediate = true })
             pdfcatalog[#pdfcatalog + 1] = string.format("/OutputIntents %d 0 R",outputintentsarrayobjnum )
         end
+        if options.format == "PDF/A-3" then
+            local colorprofileobjnum = spotcolors.write_colorprofile()
+            local cp = spotcolors.get_colorprofile()
+            local outputintentsobjnum = pdf.obj({type = "raw",  immediate = true , string = string.format([[<<  /DestOutputProfile %d 0 R /Info %s /OutputCondition %s    /OutputConditionIdentifier %s   /RegistryName %s    /S /GTS_PDFA1   /Type /OutputIntent  >>]],colorprofileobjnum,
+ utf8_to_utf16_string_pdf(cp.info),
+ utf8_to_utf16_string_pdf(cp.condition),
+ utf8_to_utf16_string_pdf(cp.identifier),
+ utf8_to_utf16_string_pdf(cp.registry))})
+            local outputintentsarrayobjnum = pdf.obj({type="raw", string = string.format("[ %d 0 R ]",outputintentsobjnum), immediate = true })
+            pdfcatalog[#pdfcatalog + 1] = string.format("/OutputIntents %d 0 R",outputintentsarrayobjnum )
+        end
         if options.format == "PDF/UA" then
             pdfcatalog[#pdfcatalog + 1] = string.format(" /MarkInfo <<  /Marked true >> ")
             metadataobjnum = pdf.obj({ type="stream", string = getuametadata(), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0,})
@@ -3382,7 +3393,6 @@ function setpageresources(thispage)
     end
     local gstateresource = string.format(" /ExtGState << %s/GS0 %d 0 R /GS1 %d 0 R >>", transparenttextresources, GS_State_OP_On, GS_State_OP_Off)
 
-    -- LuaTeX has setpageresources
     if #used_spotcolors > 0 then
         pdf.setpageresources("/ColorSpace << " .. spotcolors.getresource(used_spotcolors) .. " >>" .. gstateresource )
     else
