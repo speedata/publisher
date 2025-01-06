@@ -281,8 +281,6 @@ You can see that the frame works as a clipping path, the parts outside are hidde
 image::eagle-frame.png[width=50%]
 
 
-
-
 [[ch-outputtingobjects-transformation]]
 == Transformation
 
@@ -321,6 +319,24 @@ There are the following basic transformation types (see figure The four basic tr
 .Shifting and scaling by the transformation matrix.
 image::eagle-transform.png[width=50%,scaledwidth=100%]
 //~
+
+
+[[ch-outputtingobjectds-flipping]]
+== Flipping objects
+
+Objects can also be mirrored using the Transformation command. This can be controlled either with the transformation matrix or with the ‘flip’ attribute:
+
+[source, xml]
+----------------
+<PlaceObject>
+    <Transformation flip="vertical">
+        <Image width="3cm" file="ocean.pdf" />
+    </Transformation>
+</PlaceObject>
+----------------
+
+The allowed attributes are `none`, `horizontal`, `vertical` and `both`.
+
 
 [.profeature]
 [[ch-barcodes]]

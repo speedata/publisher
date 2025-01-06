@@ -4812,6 +4812,29 @@ function commands.transformation( layoutxml,dataxml )
     local matrix   = publisher.read_attribute(layoutxml,dataxml,"matrix",  "string")
     local origin_x = publisher.read_attribute(layoutxml,dataxml,"origin-x","string", "50", "origin")
     local origin_y = publisher.read_attribute(layoutxml,dataxml,"origin-y","string", "50", "origin")
+    local flip = publisher.read_attribute(layoutxml,dataxml,"flip","string","none")
+
+    local mirrorx, mirrory = false, false
+    if flip == "none" then
+        -- good, nothing to do
+    elseif flip == "horizontal" then
+        mirrorx = true
+    elseif flip == "vertical" then
+        mirrory = true
+    elseif flip == "both" then
+        mirrorx = true
+        mirrory = true
+    end
+
+    if mirrorx or mirrory then
+        local m = {1, 0, 0, 1, 0, 0}
+        if mirrorx then m[1] = -1 end
+        if mirrory then
+            m[4] = -1
+        end
+        origin_y = -50
+        matrix = table.concat(m," ")
+    end
     if origin_x == "left" then
         origin_x = 0
     elseif origin_x == "center" then

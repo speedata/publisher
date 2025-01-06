@@ -6695,7 +6695,7 @@ end
 
 --- Apply transformation matrix to object given at _nodelist_. Called from commands#transformation.
 function matrix( nodelist,matrix,origin_x,origin_y )
-    local wd,ht = nodelist.width, nodelist.height + nodelist.depth
+    local wd,ht = nodelist.width, nodelist.height
     local tbl = explode(matrix,"[^\t ]+")
 
     origin_x = 100 - origin_x
@@ -6706,7 +6706,7 @@ function matrix( nodelist,matrix,origin_x,origin_y )
     local pdf_literal_q = node.new("whatsit","pdf_literal")
     local pdf_literal_Q = node.new("whatsit","pdf_literal")
 
-    pdf_literal_q.data = string.format("q 1 0 0 1 %g -%g cm  q %g %g %g %g %g %g cm q 1 0 0 1 -%g %g cm ",x,y,tbl[1],tbl[2],tbl[3],tbl[4],tbl[5],tbl[6],x,y )
+    pdf_literal_q.data = string.format("q 1 0 0 1 %g %g cm q %g %g %g %g %g %g cm q 1 0 0 1 %g %g cm ",x,-1 * y,tbl[1],tbl[2],tbl[3],tbl[4],tbl[5],tbl[6],x * -1,y )
     pdf_literal_Q.data = "Q Q Q"
 
     local pdf_save    = node.new("whatsit","pdf_save")

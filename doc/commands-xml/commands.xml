@@ -11509,6 +11509,46 @@
         <para>Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte Zeichenkette mit sechs Werten.</para>
       </description>
     </attribute>
+    <attribute en="flip" optional="yes" since="4.19.37">
+      <description xml:lang="en">
+        <para>Flip object.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Objekt spiegeln</para>
+      </description>
+      <choice en="horizontal">
+        <description xml:lang="en">
+          <para>Flip object horizontally (left becomes right)</para>
+        </description>
+        <description xml:lang="de">
+          <para>Objekt horizontal spiegeln (links wird zu rechts)</para>
+        </description>
+      </choice>
+      <choice en="vertical">
+        <description xml:lang="en">
+          <para>Mirror object on the vertical axes (top/bottom)</para>
+        </description>
+        <description xml:lang="de">
+          <para>Objekt vertikal spiegeln: Oben wird zu unten</para>
+        </description>
+      </choice>
+      <choice en="both">
+        <description xml:lang="en">
+          <para>Flip object on both axes</para>
+        </description>
+        <description xml:lang="de">
+          <para>Objekt auf beiden Achsen spiegeln</para>
+        </description>
+      </choice>
+      <choice en="none">
+        <description xml:lang="en">
+          <para>Don't flip the object</para>
+        </description>
+        <description xml:lang="de">
+          <para>Objekt nicht spiegeln</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="origin-x" optional="yes" type="text">
       <description xml:lang="en">
         <para>The origin for matrix transformation. Must be left, center or right or a number from 0 to 100 (0 = left, 100 = right).</para>

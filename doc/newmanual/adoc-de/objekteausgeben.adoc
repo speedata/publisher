@@ -362,8 +362,6 @@ Den Rahmen (`rulewidth`) kann man auch auf Null setzen und somit unsichtbar mach
 image::eagle-frame.png[width=50%]
 
 
-
-
 [[ch-objekteausgeben-transformation]]
 == Transformation
 
@@ -414,6 +412,22 @@ endif::[]
 .Verschiefung und Skalierung durch die Transformationsmatrix.
 image::eagle-transform.png[width=50%,scaledwidth=100%]
 //~
+
+[[ch-objekteausgeben-flip]]
+== Spiegeln von Objekten
+
+Mit dem Befehl Transformation können Objekte auch gespiegelt werden. Das kann man entweder mit der Transformationsmatrix oder mit dem Attribut `flip` steuern:
+
+[source, xml]
+----------------
+<PlaceObject>
+    <Transformation flip="vertical">
+        <Image width="3cm" file="ocean.pdf" />
+    </Transformation>
+</PlaceObject>
+----------------
+
+Erlaubt sind die Werte `none`, `horizontal`, `vertical` und `both`.
 
 
 

@@ -7222,6 +7222,21 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="flip">
+                     <a:documentation>Objekt spiegeln</a:documentation>
+                     <choice>
+                        <value>horizontal</value>
+                        <a:documentation>Objekt horizontal spiegeln (links wird zu rechts)</a:documentation>
+                        <value>vertical</value>
+                        <a:documentation>Objekt vertikal spiegeln: Oben wird zu unten</a:documentation>
+                        <value>both</value>
+                        <a:documentation>Objekt auf beiden Achsen spiegeln</a:documentation>
+                        <value>none</value>
+                        <a:documentation>Objekt nicht spiegeln</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="origin-x">
                      <a:documentation>Der Ursprung für Matrix-Transformation. Muss links, mitte oder rechts oder eine Zahl von 0 bis 100 (0 = links, 100 = rechts) sein.</a:documentation>
                   </attribute>

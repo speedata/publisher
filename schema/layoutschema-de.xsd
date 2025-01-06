@@ -9206,6 +9206,35 @@
           <xs:documentation>Die Transformations-Matrix für das Objekt. Erwartet wird eine Leerzeichen-separierte Zeichenkette mit sechs Werten.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="flip">
+        <xs:annotation>
+          <xs:documentation>Objekt spiegeln</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="horizontal">
+              <xs:annotation>
+                <xs:documentation>Objekt horizontal spiegeln (links wird zu rechts)</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="vertical">
+              <xs:annotation>
+                <xs:documentation>Objekt vertikal spiegeln: Oben wird zu unten</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="both">
+              <xs:annotation>
+                <xs:documentation>Objekt auf beiden Achsen spiegeln</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="none">
+              <xs:annotation>
+                <xs:documentation>Objekt nicht spiegeln</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="origin-x">
         <xs:annotation>
           <xs:documentation>Der Ursprung für Matrix-Transformation. Muss links, mitte oder rechts oder eine Zahl von 0 bis 100 (0 = links, 100 = rechts) sein.</xs:documentation>
