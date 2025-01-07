@@ -219,34 +219,21 @@ end
 
 
 function commands.attachfile( layoutxml,dataxml )
-    -- destfilename is optional. It defaults to "factur-x.xml" when
-    -- attaching a ZUGFeRD file or to the input file name otherwise.
+    -- destfilename is optional. It defaults to "factur-x.xml" when attaching a
+    -- ZUGFeRD file version 2, "ZUGFeRD-invoice.xml" in version 1 or to the
+    -- input file name otherwise.
     local inputfilename = publisher.read_attribute(layoutxml,dataxml,"filename","string")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     local destfilename = publisher.read_attribute(layoutxml,dataxml,"name","string")
     local filetype = publisher.read_attribute(layoutxml,dataxml,"type","string","application/octet-stream")
 
-
-    if filetype == "ZUGFeRD invoice" then
-        publisher.options.format = "PDF/A-3"
-        if not publisher.pro then
-            err("attaching ZUGReRD files need a pro plan")
-            publisher.has_pro_error = true
-            return nil
-        end
-
-        if not destfilename then
-            splib.log("info","AttachFile: no filename provided, using 'factur-x.xml'.")
-            destfilename = "factur-x.xml"
-        end
-    end
-
     local filecontents
     local modificationtime
     if selection ~= nil then
-        filecontents = publisher.xml_to_string(selection[1],0)
-        if not destfilename then
-            err("AttachFile: you must provide a file name when reading from selection")
+        if publisher.newxpath then
+            filecontents = publisher.xml_to_string_newxpath(selection[1],0)
+        else
+            filecontents = publisher.xml_to_string(selection[1],0)
         end
         modificationtime = os.time()
     else
@@ -271,6 +258,29 @@ function commands.attachfile( layoutxml,dataxml )
         filecontents = attachfile:read("*all")
         attachfile:close()
     end
+
+    if filetype == "ZUGFeRD invoice" then
+        publisher.options.format = "PDF/A-3"
+        if not publisher.pro then
+            err("attaching ZUGReRD files need a pro plan")
+            publisher.has_pro_error = true
+            return nil
+        end
+        publisher.options.default_zugferdfile = "factur-x.xml"
+        if string.find(filecontents,"urn:factur-x.eu:1p0:",1,true) then
+            publisher.options.default_zugferdfile = "ZUGFeRD-invoice.xml"
+        end
+
+        if not destfilename then
+            splib.log("info","AttachFile: no filename provided, using the default.","default",publisher.options.default_zugferdfile)
+            destfilename = publisher.options.default_zugferdfile
+        end
+    end
+
+    if not destfilename then
+        err("AttachFile: you must provide a file name")
+    end
+
     local description = publisher.read_attribute(layoutxml,dataxml,"description","string")
     publisher.attach_file_pdf(filecontents,description,filetype,modificationtime,destfilename)
 end
@@ -2213,6 +2223,9 @@ function commands.makeindex( layoutxml,dataxml )
                     err("Can't find the page number in the index entries. Did you set the pagenumber attribute in Makeindex?")
                 else
                     selection[lastindex][pagenumbername] = selection[lastindex][pagenumbername] .. ", " .. selection[i][pagenumbername]
+                    if publisher.newxpath then
+                        selection[lastindex][".__attributes"][pagenumbername] = selection[lastindex][".__attributes"][pagenumbername] .. ", " .. selection[i][".__attributes"][pagenumbername]
+                    end
                 end
             else
                 lastindex = i
@@ -3939,7 +3952,11 @@ function commands.save_dataset( layoutxml,dataxml )
     tmp[".__local_name"] = elementname
     local full_filename = tex.jobname .. "-" .. name .. ".dataxml"
     local file = io.open(full_filename,"wb")
-    towrite = publisher.xml_to_string(tmp)
+    if publisher.newxpath then
+        towrite = publisher.xml_to_string_newxpath(tmp)
+    else
+        towrite = publisher.xml_to_string(tmp)
+    end
     file:write(towrite)
     file:close()
 end

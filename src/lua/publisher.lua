@@ -6859,6 +6859,60 @@ function xml_escape( str )
     return ret
 end
 
+
+--- See commands#save_dataset() for  documentation on the data structure for `xml_element`.
+function xml_to_string_newxpath( xml_element, level,namespace_written)
+    local new_namespaces = copy_table_from_defaults(namespace_written or {})
+    local str = ""
+    if type(xml_element) == "string" then
+        return xml_escape(xml_element)
+    end
+    if type(xml_element) ~= "table" then
+        err("xml_to_string is not a table, but a %s %q",type(xml_element),tostring(xml_element))
+        return "error in publisher run"
+    end
+    level = level or 0
+    local eltname = xml_element[".__name"] or xml_element[".__local_name"] or ""
+    if level == 0 and eltname == "" then eltname = "undefined" end
+    if eltname ~= "" then
+        str = str ..  "<" .. eltname
+        if type(xml_element[".__attributes"]) == "table" then
+            for k,v in pairs(xml_element[".__attributes"]) do
+                str = str .. string.format(" %s=%q", k,xml_escape(v))
+            end
+        end
+        if xml_element[".__ns"] then
+            for k,v in pairs(xml_element[".__ns"]) do
+                local key = k
+                if new_namespaces[k] == nil then
+                    if type(k) == "string" then
+                        if k == "" then
+                            k = "xmlns"
+                        else
+                            k = "xmlns:" .. k
+                        end
+                        str = str .. string.format(" %s=%q", k,xml_escape(v))
+                    end
+                end
+                new_namespaces[key] = true
+            end
+        end
+        str = str .. ">"
+    end
+    for i,v in ipairs(xml_element) do
+        if type(v) == "string" and v == "" then
+            -- ok, nothing do do
+        else
+            str = str .. xml_to_string_newxpath(v,level + 1,new_namespaces)
+        end
+    end
+    if eltname ~= "" then
+        str = str ..  "</" .. eltname .. ">"
+    end
+    return str
+end
+
+
 --- See commands#save_dataset() for  documentation on the data structure for `xml_element`.
 function xml_to_string( xml_element, level )
     local str = ""
@@ -8478,10 +8532,9 @@ function attach_file_pdf(filecontents,description,mimetype,modificationtime,dest
 >>]],descPDF, fileobjectnum,fileobjectnum,utf8_to_utf16_string_pdf(destfilename),utf8_to_utf16_string_pdf(destfilename)))
     if is_zugferd then
         local conformancelevel
-        local a = string.find(filecontents, "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended",1,true)
         if string.find(filecontents,"urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended",1,true) or string.find(filecontents,"urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended",1,true) or string.find(filecontents,"urn:ferd:CrossIndustryDocument:invoice:1p0:extended",1,true) then
             conformancelevel = "extended"
-        elseif string.find(filecontents,"urn:cen.eu:en16931:2017",1,true) then
+        elseif string.find(filecontents,"urn:ferd:CrossIndustryDocument:invoice:1p0:comfort",1,true) or string.find(filecontents,"urn:cen.eu:en16931:2017",1,true) then
             conformancelevel = "comfort" -- EN16931
         elseif string.find(filecontents,"urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic",1,true) or string.find(filecontents,"urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic",1,true) then
             conformancelevel = "basic"
