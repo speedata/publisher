@@ -4719,12 +4719,14 @@
          </optional>
          <optional>
             <attribute name="format">
-               <a:documentation>Set the output format. Currently limited to PDF/X-3, PDF/X-4 and PDF/UA.</a:documentation>
+               <a:documentation>Set the output format.</a:documentation>
                <choice>
                   <value>PDF/X-3</value>
                   <a:documentation>Set the output to PDF/X-3.</a:documentation>
                   <value>PDF/X-4</value>
                   <a:documentation>Set the output to PDF/X-4.</a:documentation>
+                  <value>PDF/A-3</value>
+                  <a:documentation>Set the output to PDF/A-3.</a:documentation>
                   <value>PDF/UA</value>
                   <a:documentation>Set the output to PDF/UA.</a:documentation>
                </choice>

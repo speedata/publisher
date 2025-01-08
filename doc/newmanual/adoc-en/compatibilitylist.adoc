@@ -48,8 +48,8 @@ This section summarizes experience reports about compatibility. If something is 
 | File type | Allowed formats | Remarks
 | Images  | PDF, JPEG, PNG |
 | Fonts | PostScript Type1, TrueType, OpenType (ttf, otf) | Not all fontloaders might support all formats.
-| PDF-Output | PDF/X-3, PDF/X-4, PDF/UA | PDF/UA only partly
-| ZUGFeRD  | Version 1 | Electronic invoice
+| PDF-Output | PDF/X-3, PDF/X-4, PDF/A-3, PDF/UA |
+| ZUGFeRD  | Version 1 and 2 | Electronic invoice
 |=======
 
 

@@ -7547,10 +7547,10 @@
     </attribute>
     <attribute en="format" optional="yes" since="3.5.7">
       <description xml:lang="en">
-        <para>Set the output format. Currently limited to <tt>PDF/X-3</tt>, <tt>PDF/X-4</tt> and <tt>PDF/UA</tt>.</para>
+        <para>Set the output format.</para>
       </description>
       <description xml:lang="de">
-        <para>Setzt das Ausgabeformat. Derzeit nur <tt>PDF/X-3</tt>, <tt>PDF/X-4</tt>  und <tt>PDF/UA</tt> möglich.</para>
+        <para>Setzt das Ausgabeformat.</para>
       </description>
       <choice en="PDF/X-3">
         <description xml:lang="en">
@@ -7566,6 +7566,14 @@
         </description>
         <description xml:lang="de">
           <para>Setzt die Ausgabe auf <tt>PDF/X-4</tt>.</para>
+        </description>
+      </choice>
+      <choice en="PDF/A-3">
+        <description xml:lang="en">
+          <para>Set the output to <tt>PDF/A-3</tt>.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Setzt die Ausgabe auf <tt>PDF/A-3</tt>.</para>
         </description>
       </choice>
       <choice en="PDF/UA">

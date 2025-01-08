@@ -1870,6 +1870,7 @@ function initialize_luatex_and_generate_pdf()
             pdfcatalog[#pdfcatalog + 1] = string.format("/OutputIntents %d 0 R",outputintentsarrayobjnum )
         end
         if options.format == "PDF/A-3" then
+            pdf.setomitcidset(1)
             local colorprofileobjnum = spotcolors.write_colorprofile()
             local cp = spotcolors.get_colorprofile()
             local outputintentsobjnum = pdf.obj({type = "raw",  immediate = true , string = string.format([[<<  /DestOutputProfile %d 0 R /Info %s /OutputCondition %s    /OutputConditionIdentifier %s   /RegistryName %s    /S /GTS_PDFA1   /Type /OutputIntent  >>]],colorprofileobjnum,
@@ -4128,7 +4129,7 @@ function dothingsbeforeoutput( thispage,data )
     end
 
     -- White background
-    if options.format ~= "PDF/UA" and options.background ~= '-' then
+    if options.format ~= "PDF/UA" and options.format ~= "PDF/A-3" and options.background ~= '-' then
         local colentry = get_colentry_from_name(options.background,"white")
         if not colentry then
             err("Color %q is not defined",tostring(options.background))
