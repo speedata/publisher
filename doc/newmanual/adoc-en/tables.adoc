@@ -9,8 +9,6 @@
 [[ch-tables2]]
 = Tables
 
-
-
 The table model used in the Publisher is basically the same as that of HTML.
 
 == Basic structure of a table
@@ -737,6 +735,37 @@ The specification is always observed on the last page of a table, since the prev
 
 If a table is larger than the available space on the page, the table is continued on the next page or in the next placement frame.
 <<cmd-tablenewpage,The command `<TableNewPage>`>> is used to force such a page change.
+
+== Tables and font sizes
+
+To typeset tables with small font sizes, you need to set a small fontfamily in the table definition:
+
+[source, xml]
+----------------
+<DefineFontfamily fontsize="6pt" leading="6pt" name="mini">
+    <Regular fontface="sans" />
+</DefineFontfamily>
+<Trace objects="yes" />
+<Record element="data">
+    <PlaceObject>
+        <Table fontfamily="mini">
+            <Loop select="4">
+                <Tr>
+                    <Loop select="4">
+                        <Td>
+                            <Paragraph fontfamily="mini">
+                                <Value>Covfefe</Value>
+                            </Paragraph>
+                        </Td>
+                    </Loop>
+                </Tr>
+            </Loop>
+        </Table>
+    </PlaceObject>
+</Record>
+----------------
+
+If the fontfamily is omitted in the `<Table>` command, larger vertical will be the result. This is only important for font families smaller than the family `text`, which has the size 10pt/12pt as the default size.
 
 
 // EOF

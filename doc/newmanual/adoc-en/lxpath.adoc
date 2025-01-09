@@ -316,8 +316,8 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `sd:variable-exists(<name>)`::
   True if variable name exists. Example: `sd:variable-exists('my_bar')` checks whether `$my_bar` is defined (variable names in this function have to be enclosed in single quotation marks if double quotation marks are used to delimit the XPath attribute).
 
-`sd:visible-pagenumber(<number>)`::
-  Return the user visible page number (as defined by matters) for the given real page number.
+`sd:visible-pagenumber([<number>])`::
+  Return the user visible page number (as defined by matters) for the given real page number. Without argument, the current page number is used.
 
 == XPath functions
 

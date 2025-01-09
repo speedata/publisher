@@ -296,8 +296,7 @@ include::ref/definematter.adoc[]
 
 == See also
 
-The command <<cmd-pageformat>>.
-
+The chapter <<ch-pagetypes-matters,on sections or matters>>.
 
 include::ref/definetextformat.adoc[]
 

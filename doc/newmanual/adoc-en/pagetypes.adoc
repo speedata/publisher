@@ -165,4 +165,76 @@ In the ((log file)) (`publisher-protocol.xml`) you can see which page types are 
 -------------------------------------------------------------------------------
 
 
+[[ch-pagetypes-pagenumbers]]
+== Pagenumbers
+
+
+The page number of the current page can be determined with `sd:current-page()`. This function returns the number 1 on the first page, the number 2 on the second page and so on. The `startpage` attribute at <<cmd-options,`<options>`>> can be used to set the start page number:
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Options startpage="4"></Options>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <!-- prints out sd:current-page() = 4 -->
+                    <Value>sd:current-page() = </Value>
+                    <Value select="sd:current-page()" />
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+----------------
+
+[[ch-pagetypes-matters]]
+== Sections or matters
+
+A document can be divided into sections (matters) that have their own numbering. The numbering of the sections does _not_ change the numbering with `sd:current-page()`, rather they have “visible page numbers”. The visible page number can be determined with the function `sd:visible-pagenumber()`. A number must be passed to this function, otherwise it takes the current page. Without custom matters, the output is identical:
+
+
+[source, xml]
+----------------
+<!-- prints out sd:current-page() = 1 -->
+<Value>sd:current-page() = </Value>
+<Value select="sd:current-page()" />
+<Br/>
+<!-- sd:visible‐pagenumber(sd:current‐page()) = 1 -->
+<Value>sd:visible-pagenumber(sd:current-page()) = </Value>
+<Value select="sd:visible-pagenumber(sd:current-page())" />
+----------------
+
+If you define and use your own sections or use a predefined section, this can change:
+
+[source, xml]
+----------------
+<ClearPage matter="frontmatter" />
+<PlaceObject>
+    <Textblock>
+        <Paragraph>
+            <!-- prints out sd:current-page() = 1 -->
+            <Value>sd:current-page() = </Value>
+            <Value select="sd:current-page()" />
+            <Br/>
+            <!-- sd:visible‐pagenumber(sd:current‐page()) = i -->
+            <Value>sd:visible-pagenumber(sd:current-page()) = </Value>
+            <Value select="sd:visible-pagenumber(sd:current-page())" />
+        </Paragraph>
+    </Textblock>
+</PlaceObject>
+----------------
+
+
+Here (with <<cmd-clearpage,`<Clearpage>`>>) the matter `frontmatter` is used for the following pages. This causes the visible page number to be output as a Roman numeral in lower case, as this section has been defined as follows:
+
+[source, xml]
+----------------
+<DefineMatter name="frontmatter" label="lowercase-romannumeral" />
+----------------
+
+Matters can only start with the command <<cmd-clearpage,`<Clearpage>`>>.
+
 // EOF

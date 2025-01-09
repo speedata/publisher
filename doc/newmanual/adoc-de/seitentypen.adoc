@@ -167,5 +167,74 @@ In der ((Logdatei)) (`publisher-protocol.xml`) sieht man, welche Seitentypen gew
 <entry level="INFO" msg="Shipout page 3"></entry>
 -------------------------------------------------------------------------------
 
+== Nummerierung von Seiten
+
+Die Seitenzahl der aktuellen Seite kann mit `sd:current-page()` ermittelt werden. Diese Funktion gibt afu der ersten Seite die Zahl 1 zurück, auf der zweiten Seite die Zahl 2 und so fort. Mit dem `startpage`-Attribut bei <<cmd-options,`<Options>`>> kann man die Startseitenzahl setzen:
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Options startpage="4"></Options>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <!-- prints out sd:current-page() = 4 -->
+                    <Value>sd:current-page() = </Value>
+                    <Value select="sd:current-page()" />
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+----------------
+
+
+[[ch-seitentypen-matters]]
+== Abschnitte
+
+Ein Dokument kann in Abschnitte unterteilt werden, die eine eigene Nummerierung haben. Die Nummerierung der Abschnitte ändern _nicht_ die Nummerierung mit `sd:current-page()`, vielmehr haben sie »sichtbare Seitenzahl« (im speedata Publisher-Jargon: visible page numbers). Die sichtbare Seitenzahl kann mit dem Befehl `sd:visible-pagenumber()` ermittelt werden. Dieser Funktion muss eine Zahl übergeben werden, ansonsten nimmt sie die aktuelle Seite. _Ohne_ eigene Abschnitte ist die Ausgabe identisch:
+
+[source, xml]
+----------------
+<!-- prints out sd:current-page() = 1 -->
+<Value>sd:current-page() = </Value>
+<Value select="sd:current-page()" />
+<Br/>
+<!-- sd:visible‐pagenumber(sd:current‐page()) = 1 -->
+<Value>sd:visible-pagenumber(sd:current-page()) = </Value>
+<Value select="sd:visible-pagenumber(sd:current-page())" />
+----------------
+
+Werden eigene Abschnitte definiert und benutzt oder ein vordefinierter Abschnitt verwendet, kann sich das ändern:
+
+[source, xml]
+----------------
+<ClearPage matter="frontmatter" />
+<PlaceObject>
+    <Textblock>
+        <Paragraph>
+            <!-- prints out sd:current-page() = 1 -->
+            <Value>sd:current-page() = </Value>
+            <Value select="sd:current-page()" />
+            <Br/>
+            <!-- sd:visible‐pagenumber(sd:current‐page()) = i -->
+            <Value>sd:visible-pagenumber(sd:current-page()) = </Value>
+            <Value select="sd:visible-pagenumber(sd:current-page())" />
+        </Paragraph>
+    </Textblock>
+</PlaceObject>
+----------------
+
+Hier (mit <<cmd-clearpage,`<Clearpage>`>>) wird der Abschnitt `frontmatter` für die folgenden Seiten benutzt. Das bewirkt die Ausgabe der sichtbaren Seitenzahl als römische Ziffer in Kleinbuchstaben, da dieser Abschnitt wie folgt definiert wurde:
+
+[source, xml]
+----------------
+<DefineMatter name="frontmatter" label="lowercase-romannumeral" />
+----------------
+
+Abschnitte können nur mit dem Befehl <<cmd-clearpage,`<Clearpage>`>> eingeleitet werden.
+
 
 // EOF

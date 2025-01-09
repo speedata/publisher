@@ -47,7 +47,7 @@ In diesem Abschnitt werden Erfahrungsberichte über die Kompatibilität zusammen
 | Dateityp | Erlaubte Formate | Bemerkung
 | Bilder  | PDF, JPEG, PNG |
 | Fonts | PostScript Type1, TrueType, OpenType (ttf, otf) | Ggf. unterstützen nicht alle Fontloader alle Formate.
-| PDF-Ausgabe | PDF/X-3, PDF/X-4, PDF/A-3, PDF/UA
+| PDF-Ausgabe | PDF/X-3, PDF/X-4, PDF/A-3, PDF/UA |
 | ZUGFeRD  | Version 1 und 2 |
 |=======
 

@@ -75,7 +75,7 @@ rake build
 rake buildlib
 -------------------------------------------------------------------------------
 +
-Falls die Lua-Header nicht unter `/usr/include/lua5.3` liegen, muss man die Umgebungsvariable `CGO_CFLAGS` auf einen Wert wie `-I/usr/local/include/lua5.3` setzen. Und für Windows muss man noch die Umgebungsvariable `CGO_LDFLAGS` auf einen Wert wie `-llua53w64 -L/luatex-bin/luatex/windows/amd64/default/` (die Pfad zu dem LuaTeX binary natürlich anpassen).
+Falls die Lua-Header nicht unter `/usr/include/lua5.3` liegen, muss man die Umgebungsvariable `CGO_CFLAGS` auf einen Wert wie `-I/usr/local/include/lua5.3` setzen. Und für Windows muss man noch die Umgebungsvariable `CGO_LDFLAGS` auf einen Wert wie `-llua53w64 -L/luatex-bin/luatex/windows/amd64/default/` (die Pfad zu dem LuaTeX binary natürlich anpassen). Wenn man für andere Betriebssysteme außer Linux/AMD64, Windows/AMD64 und macOS/ARM kompilieren will, muss zusätzlich eine Umgebungsvariable mit der folgenden Form gesetzt werden `CC_plattform_os`, die auf den zu benutzenden Compiler zeigt, Z.B.:  `CC_arm64_linux=/usr/bin/aarch64-linux-gnu-gcc`. Siehe auch https://github.com/speedata/publisher/issues/607#issuecomment-2304523560[den Eintrag] im Forum.
 +
 Um auch dieses Handbuch bzw. das ebook zu erstellen, wird https://asciidoctor.org/[asciidoctor] benötigt:
 +

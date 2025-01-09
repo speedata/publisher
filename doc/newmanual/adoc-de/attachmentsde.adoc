@@ -22,7 +22,7 @@ image::attachfile.png[]
 
 
 [.profeature]
-== ZUGFeRD Rechnungen anhängen
+== ZUGFeRD /Factur-X Rechnungen anhängen
 
 Um eine elektronische Rechnung anzuhängen, muss der Wert bei `type` genau die Zeichenkette `ZUGFeRD invoice` sein:
 
@@ -33,7 +33,19 @@ Um eine elektronische Rechnung anzuhängen, muss der Wert bei `type` genau die Z
             filename="invoice.pdf" />
 -------------------------------------------------------------------------------
 
-Der Ausgabedateiname wird automatisch auf `factur-x.xml` gesetzt und das Dokument entspricht dem PDF/A-3 Standard.
+Der Ausgabedateiname wird automatisch auf `factur-x.xml` gesetzt für ZUGFeRD Version 2 und `ZUGFeRD-invoice.xml` für Version 1. Dieser Name kann mit `name="..."` überschrieben werden.
+
+Die PDF-Ausgabe muss noch auf PDF/A-3 gestellt werden:
+
+[source, xml]
+----------------
+<PDFOptions format="PDF/A-3" />
+----------------
+
+Das passiert automatisch, sofern der Befehl <<cmd-attachfile,`<AttachFile>`>> am Anfang des Dokuments (vor der ersten Seitenausgabe) ausgeführt wird.
+
+TIP: Damit ein PDF-Dokument mit PDF/A-3 konform ist, müssen die Farben passend zu den Farbprofilen benutzt werden. In der PDF/A-3 Voreinstellung wird ein OutputIntent für ein CMYK-Farbprofil definiert. Entsprechend müssen die Farben im Dokument in diesem Farbraum definiert werden. Oder es muss ein anderes Farbprofil eingebettet werden.
+
 
 .Der Dateiname wird automatisch auf factur-x.xml gesetzt.
 image::attachfile-zugferd.png[]

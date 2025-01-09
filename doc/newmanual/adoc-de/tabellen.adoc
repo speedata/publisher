@@ -853,5 +853,36 @@ Ist eine Tabelle größer als der zur Verfügung stehende Platz auf der Seite, s
 
 
 
+== Tabellen und Schriftgröße
+
+Um Tabellen mit keiner Schriftgröße zu setzen, muss die Schriftfamilie in der Tabellendefinition auf eine kleine Schriftfamilie gesetzt werden:
+
+[source, xml]
+----------------
+<DefineFontfamily fontsize="6pt" leading="6pt" name="mini">
+    <Regular fontface="sans" />
+</DefineFontfamily>
+<Trace objects="yes" />
+<Record element="data">
+    <PlaceObject>
+        <Table fontfamily="mini">
+            <Loop select="4">
+                <Tr>
+                    <Loop select="4">
+                        <Td>
+                            <Paragraph fontfamily="mini">
+                                <Value>Covfefe</Value>
+                            </Paragraph>
+                        </Td>
+                    </Loop>
+                </Tr>
+            </Loop>
+        </Table>
+    </PlaceObject>
+</Record>
+----------------
+
+Falls das Attribut `fontfamily` im Befehl `<Table>` nicht angegeben wird, vergrößert sich der vertikale Leerraum. Das ist nur wichtig für Schriftgrößen kleiner als die Schriftfamilie `text` (10pt/12pt in der Voreinstellung).
+
 
 // Ende

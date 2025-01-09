@@ -298,7 +298,7 @@ include::ref/definematter.adoc[]
 
 == Siehe auch
 
-Der Befehl <<cmd-pageformat>>.
+Im Handbuch <<ch-seitentypen-matters,den Teil über Abschnitte>>.
 
 
 include::ref/definetextformat.adoc[]

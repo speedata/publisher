@@ -46,7 +46,7 @@ Now you can run `sudo apt update` and `apt install speedata-publisher` and have 
     rake build
     rake buildlib
 +
-If the Lua libraries are in another place than `/usr`, you need to set the environment variable `CGO_CFLAGS` to something like `-I/usr/local/include/lua`. And for Windows you need to also set the `CGO_LDFLAGS` to `-llua53w64 -L/luatex-bin/luatex/windows/amd64/default/` (adjust the path to the LuaTeX binary).
+If the Lua libraries are in another place than `/usr`, you need to set the environment variable `CGO_CFLAGS` to something like `-I/usr/local/include/lua`. And for Windows you need to also set the `CGO_LDFLAGS` to `-llua53w64 -L/luatex-bin/luatex/windows/amd64/default/` (adjust the path to the LuaTeX binary). If you need to compile for operating systems other than Linux/AMD64, Windows/AMD64 or macOS/ARM, you need to set the environment variable in this form CC_platform_os to point to the compiler. For example `CC_arm64_linux=/usr/bin/aarch64-linux-gnu-gcc`. See https://github.com/speedata/publisher/issues/607#issuecomment-2304523560[this enry] in the discussion thread.
 +
 To build the manual and the ebook, you need https://asciidoctor.org/[asciidoctor]:
 +
