@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.38" date="2025-01-09">
+        <en>Fix filename detection and ZUGFeRD attachments.</en>
+        <de>Korrigiere Dateinamen bei ZUGFeRD-Anhängen.</de>
+    </entry>
+    <entry version="4.19.38" date="2025-01-09">
+        <en>Allow PDF/A-3 as an output format.</en>
+        <de>PDF/A-3 als Ausgabeformat erlauben.</de>
+    </entry>
     <entry version="4.19.37" date="2025-01-07">
         <en>Better ZUGFeRD version detection.</en>
         <de>Bessere ZUGFeRD Versionserkennung.</de>
