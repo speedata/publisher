@@ -244,10 +244,12 @@ function commands.attachfile( layoutxml,dataxml )
         end
         local stat = lfs.attributes(path)
         local filename_extension = inputfilename:match("^.*%.(.+)$"):lower()
-        destfilename = destfilename or inputfilename
-        if destfilename:match("^.*%.(.+)$") == nil then
-            warning("AttachFile: name attribute has no file extension, take from source.")
-            destfilename = string.format("%s.%s",destfilename,filename_extension)
+        if filetype ~= "ZUGFeRD invoice" then
+            destfilename = destfilename or inputfilename
+            if destfilename:match("^.*%.(.+)$") == nil then
+                warning("AttachFile: name attribute has no file extension, take from source.")
+                destfilename = string.format("%s.%s",destfilename,filename_extension)
+            end
         end
         modificationtime = stat.modification
         local attachfile,msg = io.open(path,"rb")
