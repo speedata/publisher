@@ -871,7 +871,15 @@ end
 
 
 local function fnVisiblePagenumber(dataxml, arg)
-    local firstarg = xpath.string_value(arg[1])
+    local firstarg
+    if #arg > 0 then
+        firstarg = xpath.string_value(arg[1])
+    else
+        if not publisher.in_init_page then
+            publisher.setup_page(nil, "layout_functions#current_page", dataxml)
+        end
+        firstarg = tostring(publisher.current_pagenumber)
+    end
     local vpn = visiblepagenumber(firstarg)
     return { vpn }, nil
 end
@@ -951,7 +959,7 @@ local funcs = {
     { "tounit",              sdns, tounit,               1, 3 },
     { "variable-exists",     sdns, variable_exists,      1, 1 },
     { "variable",            sdns, variable,             1, -1 },
-    { "visible-pagenumber",  sdns, fnVisiblePagenumber,  1, 1 },
+    { "visible-pagenumber",  sdns, fnVisiblePagenumber,  0, 1 },
 }
 
 local register = publisher.xpath.registerFunction
