@@ -193,7 +193,9 @@ function define_font_hb( name, size, extra_parameter )
         end
         local glyphname = font:get_glyph_name(gid)
 
-        glyphname_uni[glyphname] = uni
+        if glyphname then
+            glyphname_uni[glyphname] = uni
+        end
 
         f.characters[uni] = {
             index = gid,
@@ -222,8 +224,7 @@ function define_font_hb( name, size, extra_parameter )
         local touni = glyph_uni[gid]
         local uni = touni or ( 0x110000 + gid )
         local glyphname = font:get_glyph_name(gid)
-
-        if string.find(glyphname,".",1,true) then
+        if glyphname and string.find(glyphname,".",1,true) then
             local basename = string.match(glyphname,"^(.*)%.")
             thischar = f.characters[uni]
             if thischar then
