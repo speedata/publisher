@@ -88,7 +88,12 @@ function bp_to_sp( bp )
     return math.round(bp * 65782 , 3)
 end
 
-
+function table.not_empty(t)
+    for key, value in pairs(t) do
+        return true
+    end
+    return false
+end
 --- Sum up the contents of the array entries. `first` and `last` are optional.
 function table.sum( tbl, first, last )
     local sum = 0

@@ -3393,8 +3393,7 @@ function setpageresources(thispage)
         transparenttextresources = table.concat(tmp,"")
     end
     local gstateresource = string.format(" /ExtGState << %s/GS0 %d 0 R /GS1 %d 0 R >>", transparenttextresources, GS_State_OP_On, GS_State_OP_Off)
-
-    if #used_spotcolors > 0 then
+    if table.not_empty(used_spotcolors) then
         pdf.setpageresources("/ColorSpace << " .. spotcolors.getresource(used_spotcolors) .. " >>" .. gstateresource )
     else
         pdf.setpageresources(gstateresource)
