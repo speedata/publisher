@@ -727,12 +727,13 @@ end
 --- -----------
 --- Colors can be in model cmyk or rgb.
 function commands.define_color( layoutxml,dataxml )
-    local name  = publisher.read_attribute(layoutxml,dataxml,"name","string")
-    local value = publisher.read_attribute(layoutxml,dataxml,"value","string")
-    local alpha = publisher.read_attribute(layoutxml,dataxml,"alpha","number")
-    local model = publisher.read_attribute(layoutxml,dataxml,"model","string")
-    local colorname = publisher.read_attribute(layoutxml,dataxml,"colorname","string")
-    local overprint = publisher.read_attribute(layoutxml,dataxml,"overprint","boolean")
+    local name       = publisher.read_attribute(layoutxml,dataxml,"name","string")
+    local value      = publisher.read_attribute(layoutxml,dataxml,"value","string")
+    local alpha      = publisher.read_attribute(layoutxml,dataxml,"alpha","number")
+    local saturation = publisher.read_attribute(layoutxml,dataxml,"saturation","number","1")
+    local model      = publisher.read_attribute(layoutxml,dataxml,"model","string")
+    local colorname  = publisher.read_attribute(layoutxml,dataxml,"colorname","string")
+    local overprint  = publisher.read_attribute(layoutxml,dataxml,"overprint","boolean")
     local usecolorprofile = publisher.read_attribute(layoutxml,dataxml,"usecolorprofile","boolean",true)
 
     local color = setmetatable({}, publisher.colormetatable)
@@ -793,6 +794,8 @@ function commands.define_color( layoutxml,dataxml )
         local y = publisher.read_attribute(layoutxml,dataxml,"y","number")
         local k = publisher.read_attribute(layoutxml,dataxml,"k","number")
         color.colornum = spotcolors.register(colorname,c,m,y,k,usecolorprofile)
+        color.saturation = saturation
+
     elseif value then
         local calpha
         color.r,color.g,color.b,calpha = publisher.getrgb(value)

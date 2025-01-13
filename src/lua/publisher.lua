@@ -3405,6 +3405,7 @@ end
 function colentry_index_function(tbl,idx)
     local model = rawget(tbl,"model")
     if model == "spotcolor" then
+        local saturation = math.round(tbl.saturation,3)
         if idx == "pdfstring" then
             usespotcolor(tbl.colornum)
             local op
@@ -3413,7 +3414,8 @@ function colentry_index_function(tbl,idx)
             else
                 op = ""
             end
-            return string.format("%s /CS%d CS /CS%d cs 1 scn ",op,tbl.colornum, tbl.colornum)
+            local ret = string.format("%s /CS%d CS /CS%d cs %g scn ",op,tbl.colornum, tbl.colornum,saturation)
+            return ret
         elseif idx == "pdfstring_stroking" then
             usespotcolor(tbl.colornum)
             local op
@@ -3422,7 +3424,7 @@ function colentry_index_function(tbl,idx)
             else
                 op = ""
             end
-            local ret = string.format("%s /CS%d CS 1 scn ",op,tbl.colornum)
+            local ret = string.format("%s /CS%d CS %g scn ",op,tbl.colornum,saturation)
             return ret
         elseif idx == "pdfstring_fill" then
             usespotcolor(tbl.colornum)
@@ -3432,7 +3434,7 @@ function colentry_index_function(tbl,idx)
             else
                 op = ""
             end
-            local ret = string.format("%s /CS%d cs 1 scn ",op,tbl.colornum)
+            local ret = string.format("%s /CS%d cs %g scn ",op,tbl.colornum,saturation)
             return ret
         end
     elseif idx == "pdfstring_stroking" then

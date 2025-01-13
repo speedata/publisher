@@ -1152,6 +1152,11 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="saturation">
+        <xs:annotation>
+          <xs:documentation>Die Farbmenge für Sonderfarben. Bereich von 0 (keine Farbe) bis 1 (voller Farbauftrag). Voreinstellung ist 1.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="usecolorprofile">
         <xs:annotation>
           <xs:documentation>Wenn 'yes', dann wird für die Farbe ein Farbprofil eingebettet. (Voreinstellung)</xs:documentation>

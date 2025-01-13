@@ -1388,6 +1388,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="saturation">
+               <a:documentation>The amount of color printed for the spot color (range from 0 = no color to 1 = full color). Defaults to 1</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="usecolorprofile">
                <a:documentation>If yes, make this color definition based on an ICC profile (default).</a:documentation>
                <choice>
