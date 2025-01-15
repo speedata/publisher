@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.19">
+    <entry version="4.19.40" date="2025-01-15">
+        <en>Saturation for spot colors.</en>
+        <de>Sättigung für Sonderfarben.</de>
+    </entry>
     <entry version="4.19.39" date="2025-01-13">
         <en>Bugfix Harfbuzz: make OSF and other non-standard glyphs copy-able in PDF.</en>
         <de>Fehlerkorrektur Harfbuzz: mache Old-Style Ziffern und andere nicht-Standard Zeichen kopierbar im PDF.</de>
