@@ -218,6 +218,17 @@ func genRelaxNGSchema(commands *commandsXML, lang string, allowForeignNodes bool
 				enc.EncodeToken(valueElement.Copy())
 				enc.EncodeToken(xml.CharData("no"))
 				enc.EncodeToken(valueElement.End())
+				if attr.AllowXPath == "yes" {
+					data := xml.StartElement{Name: xml.Name{Local: "data"}}
+					data.Attr = []xml.Attr{{Name: xml.Name{Local: "type"}, Value: "string"}}
+					enc.EncodeToken(data)
+					param := xml.StartElement{Name: xml.Name{Local: "param"}}
+					param.Attr = []xml.Attr{{Name: xml.Name{Local: "name"}, Value: "pattern"}}
+					enc.EncodeToken(param)
+					enc.EncodeToken(xml.CharData(`\{.+\}`))
+					enc.EncodeToken(param.End())
+					enc.EncodeToken(data.End())
+				}
 				enc.EncodeToken(choiceElement.End())
 			}
 

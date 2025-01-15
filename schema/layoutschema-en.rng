@@ -2225,6 +2225,15 @@
                      <ref name="e_Switch"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Tablehead"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Tablefoot"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Tablerule"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Td"></ref>
                   </optional>
                   <optional>
@@ -6711,6 +6720,9 @@
                <choice>
                   <value>yes</value>
                   <value>no</value>
+                  <data type="string">
+                     <param name="pattern">\{.+\}</param>
+                  </data>
                </choice>
             </attribute>
          </optional>

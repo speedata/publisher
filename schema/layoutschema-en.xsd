@@ -1845,6 +1845,9 @@
           <xs:element minOccurs="0" ref="en:SaveDataset"/>
           <xs:element minOccurs="0" ref="en:SetVariable"/>
           <xs:element minOccurs="0" ref="en:Switch"/>
+          <xs:element minOccurs="0" ref="en:Tablehead"/>
+          <xs:element minOccurs="0" ref="en:Tablefoot"/>
+          <xs:element minOccurs="0" ref="en:Tablerule"/>
           <xs:element minOccurs="0" ref="en:Td"/>
           <xs:element minOccurs="0" ref="en:Tr"/>
           <xs:element minOccurs="0" ref="en:Value"/>
@@ -8140,10 +8143,23 @@
           <xs:documentation>Allow break below the table rule?</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="yes"/>
-            <xs:enumeration value="no"/>
-          </xs:restriction>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
         </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="class">

@@ -4040,6 +4040,9 @@
         <optional><cmd name="SaveDataset"/></optional>
         <optional><cmd name="SetVariable"/></optional>
         <optional><cmd name="Switch"/></optional>
+        <optional><cmd name="Tablehead"/></optional>
+        <optional><cmd name="Tablefoot"/></optional>
+        <optional><cmd name="Tablerule"/></optional>
         <optional><cmd name="Td"/></optional>
         <optional><cmd name="Tr"/></optional>
         <optional><cmd name="Value"/></optional>
@@ -10748,7 +10751,7 @@
         <para>Die erste Spalte der Linie. Voreinstellung ist 1.</para>
       </description>
     </attribute>
-    <attribute en="break-below" optional="yes" type="boolean" since="3.5.2">
+    <attribute en="break-below" optional="yes" type="boolean" since="3.5.2" allowxpath="yes">
       <description xml:lang="en">
         <para>Allow break below the table rule?</para>
       </description>
