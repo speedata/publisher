@@ -5,10 +5,20 @@ This file gets updated before a stable release. There is a [detailed changelog](
 
 ## Version 5
 
-Planned:
+Planned: a few more bug fixes, no more features
 
-* More accessibility features
-* Enhance Function
+## Version 4.20
+
+Released 2025-01-15
+
+Hopefully the last version before 5
+
+* Fully accessible documents
+* Make new XPath parser robust
+* ZUGFeRD attachment enhancements
+* Ability to flip (mirror) objects
+* Strict namespace handling (optional)
+* Spot color saturation
 
 ## Version 4.18
 
