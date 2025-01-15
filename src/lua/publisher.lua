@@ -7291,6 +7291,14 @@ function next_row(rownumber,areaname,rows,dataxml)
         if grid:current_column(areaname) > 1 then
             dec = 1
         end
+        local grid_number_of_rows = grid:number_of_rows(areaname)
+        if current_row + rows - dec > grid_number_of_rows then
+            next_area(areaname,nil, dataxml)
+            setup_page(nil,"next_row",dataxml)
+            grid = current_page.grid
+            grid:set_current_row(1)
+            return
+        end
         grid:set_current_row(current_row + rows - dec,areaname)
         grid:set_current_column(1,areaname)
     end
