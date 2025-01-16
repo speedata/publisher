@@ -469,6 +469,11 @@
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
+            <xs:enumeration value="auto">
+              <xs:annotation>
+                <xs:documentation>Vergrößere aufgrund der Position der Box.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="top">
               <xs:annotation>
                 <xs:documentation>Vergrößere nach oben.</xs:documentation>

@@ -581,6 +581,8 @@
             <attribute name="bleed">
                <a:documentation>Lässt die Box am Rand größer werden. Wird z.B. für Daumenregister benutzt, die inkl. Beschnitt ganz zum Rand gehen sollen. Inhalt ist eine Ortsangabe bestehend aus den Werten »top«, »bottom«, »left« oder »right« bzw. eine Kombination wie »top,right«.</a:documentation>
                <choice>
+                  <value>auto</value>
+                  <a:documentation>Vergrößere aufgrund der Position der Box.</a:documentation>
                   <value>top</value>
                   <a:documentation>Vergrößere nach oben.</a:documentation>
                   <value>left</value>

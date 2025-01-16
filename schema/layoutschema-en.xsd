@@ -469,6 +469,11 @@
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
+            <xs:enumeration value="auto">
+              <xs:annotation>
+                <xs:documentation>Increase the size depending on the position.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
             <xs:enumeration value="top">
               <xs:annotation>
                 <xs:documentation>Increase the size to the top.</xs:documentation>

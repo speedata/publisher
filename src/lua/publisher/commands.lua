@@ -86,11 +86,12 @@ function commands.a( layoutxml,dataxml )
         stl.depth = -1073741824
 
         local enl = node.new("whatsit","pdf_end_link")
-
+        local shift_up, shift_left = node.get_attribute(c, publisher.att_shift_up),node.get_attribute(c, publisher.att_shift_left)
         c = node.insert_after(c,c,enl)
         c = node.insert_before(c,c,stl)
         c = node.hpack(c)
-
+        node.set_attribute(c,publisher.att_shift_left, shift_left)
+        node.set_attribute(c,publisher.att_shift_up, shift_up)
         return c
     else
         p = par:new(nil,"a")
@@ -484,18 +485,49 @@ function commands.box( layoutxml,dataxml )
 
     if bleed then
         local trim = publisher.options.trim or 0
-        local positions = string.explode(bleed,",")
-        for i,v in ipairs(positions) do
-            if v == "top" then
-                height = height + trim
-                shift_up = trim
-            elseif v == "right" then
-                width = width + trim
-            elseif v == "bottom" then
-                height = height + trim
-            elseif v == "left" then
+        if bleed == "auto" then
+            local col, row
+            if publisher.newxpath then
+                col = dataxml.vars["__column"]
+                row = dataxml.vars["__row"]
+            else
+                col = xpath.get_variable("__column")
+                row = xpath.get_variable("__row")
+            end
+            if col == 0 then
+                if width == publisher.options.pagewidth then
+                    width = width + trim
+                end
                 width = width + trim
                 shift_left = trim
+            elseif publisher.options.pagewidth - col - width < 100 then
+                width = width + trim
+            end
+
+            if row == 0 then
+                if height == publisher.options.pageheight then
+                    height = height + trim
+                end
+                height = height + trim
+                shift_up = trim
+            elseif publisher.options.pageheight - row - height < 100 then
+                height = height + trim
+            end
+
+        else
+            local positions = string.explode(bleed,",")
+            for i,v in ipairs(positions) do
+                if v == "top" then
+                    height = height + trim
+                    shift_up = trim
+                elseif v == "right" then
+                    width = width + trim
+                elseif v == "bottom" then
+                    height = height + trim
+                elseif v == "left" then
+                    width = width + trim
+                    shift_left = trim
+                end
             end
         end
     end

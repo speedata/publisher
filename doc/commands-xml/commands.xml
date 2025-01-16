@@ -1710,6 +1710,14 @@
       <description xml:lang="de">
         <para>Lässt die Box am Rand größer werden. Wird z.B. für Daumenregister benutzt, die inkl. Beschnitt ganz zum Rand gehen sollen. Inhalt ist eine Ortsangabe bestehend aus den Werten »top«, »bottom«, »left« oder »right« bzw. eine Kombination wie »top,right«.</para>
       </description>
+      <choice en="auto">
+        <description xml:lang="en">
+          <para>Increase the size depending on the position.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Vergrößere aufgrund der Position der Box.</para>
+        </description>
+      </choice>
       <choice en="top">
         <description xml:lang="en">
           <para>Increase the size to the top.</para>
