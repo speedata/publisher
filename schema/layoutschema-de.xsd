@@ -71,9 +71,10 @@
       <xs:documentation>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt. Die Aktion kann man sich als unsichtbares Zeichen vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in der Aktion ausgeführt.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="en:Mark"/>
-      </xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="en:Mark"/>
+        <xs:element ref="en:Switch"/>
+      </xs:choice>
     </xs:complexType>
   </xs:element>
   <xs:element name="AddSearchpath">
@@ -608,6 +609,7 @@
         <xs:element minOccurs="0" ref="en:LoadDataset"/>
         <xs:element minOccurs="0" ref="en:LoadFontfile"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
+        <xs:element minOccurs="0" ref="en:Mark"/>
         <xs:element minOccurs="0" ref="en:Message"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
         <xs:element minOccurs="0" ref="en:NextRow"/>
@@ -1677,6 +1679,7 @@
         <xs:element ref="en:LoadDataset"/>
         <xs:element ref="en:LoadFontfile"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Mark"/>
         <xs:element ref="en:Message"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
@@ -3174,6 +3177,7 @@
         <xs:element ref="en:LoadDataset"/>
         <xs:element ref="en:LoadFontfile"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Mark"/>
         <xs:element ref="en:Message"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
@@ -4273,6 +4277,7 @@
         <xs:element minOccurs="0" ref="en:LoadDataset"/>
         <xs:element minOccurs="0" ref="en:LoadFontfile"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
+        <xs:element minOccurs="0" ref="en:Mark"/>
         <xs:element minOccurs="0" ref="en:Message"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
         <xs:element minOccurs="0" ref="en:NextRow"/>
@@ -9393,6 +9398,7 @@
         <xs:element ref="en:LoadDataset"/>
         <xs:element ref="en:LoadFontfile"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Mark"/>
         <xs:element ref="en:Message"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
@@ -9548,6 +9554,7 @@
         <xs:element ref="en:LoadDataset"/>
         <xs:element ref="en:LoadFontfile"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Mark"/>
         <xs:element ref="en:Message"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>

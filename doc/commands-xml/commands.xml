@@ -41,6 +41,7 @@
     <optional><cmd name="LoadDataset"/></optional>
     <optional><cmd name="LoadFontfile"/></optional>
     <optional><cmd name="Loop"/></optional>
+    <optional><cmd name="Mark"/></optional>
     <optional><cmd name="Message"/></optional>
     <optional><cmd name="NextFrame"/></optional>
     <optional><cmd name="NextRow"/></optional>
@@ -932,7 +933,10 @@
     </description>
     <childelements>
       <oneOrMore>
-        <cmd name="Mark"/>
+        <interleave>
+          <optional><cmd name="Mark"/></optional>
+          <optional><cmd name="Switch"/></optional>
+        </interleave>
       </oneOrMore>
     </childelements>
     <example xml:lang="en">
@@ -8750,10 +8754,10 @@
     </childelements>
     <attribute en="name" type="text" optional="no">
       <description xml:lang="en">
-        <para>Name of the file. Example: toc</para>
+        <para>Name of the file. Example: toc. The resulting filename will be $jobname-$name.xml</para>
       </description>
       <description xml:lang="de">
-        <para>Name der Dateisatzdatei. Beispiel: toc</para>
+        <para>Name der Dateisatzdatei. Beispiel: toc. Der resultierende Dateiname ist $jobname-$name.xml.</para>
       </description>
     </attribute>
     <attribute en="elementname" type="text" optional="no">

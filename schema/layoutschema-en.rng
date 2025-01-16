@@ -86,7 +86,14 @@
          <interleave>
             <group>
                <oneOrMore>
-                  <ref name="e_Mark"></ref>
+                  <interleave>
+                     <optional>
+                        <ref name="e_Mark"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Switch"></ref>
+                     </optional>
+                  </interleave>
                </oneOrMore>
             </group>
             <ref name="foreign-nodes"></ref>
@@ -765,6 +772,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Loop"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Mark"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Message"></ref>
@@ -1937,6 +1947,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Loop"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Mark"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Message"></ref>
@@ -3255,6 +3268,9 @@
                         <ref name="e_Loop"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Mark"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Message"></ref>
                      </optional>
                      <optional>
@@ -4036,6 +4052,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Loop"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Mark"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Message"></ref>
@@ -7508,6 +7527,9 @@
                         <ref name="e_Loop"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Mark"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Message"></ref>
                      </optional>
                      <optional>
@@ -7825,6 +7847,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Loop"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Mark"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Message"></ref>
