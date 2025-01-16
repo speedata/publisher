@@ -2103,7 +2103,7 @@ function commands.load_dataset( layoutxml,dataxml )
         splib.log("info","Load data file","filename",filename)
         path = publisher.find_file(filename)
     elseif name then
-        name = tex.jobname .. "-" .. name .. ".dataxml"
+        name = tex.jobname .. "-" .. name .. ".xml"
         splib.log("info","Load data file","filename",name)
         path = publisher.find_file(name)
     else
@@ -3987,7 +3987,7 @@ function commands.save_dataset( layoutxml,dataxml )
     ---      },
     ---    },
     tmp[".__local_name"] = elementname
-    local full_filename = tex.jobname .. "-" .. name .. ".dataxml"
+    local full_filename = tex.jobname .. "-" .. name .. ".xml"
     local file = io.open(full_filename,"wb")
     if publisher.newxpath then
         towrite = publisher.xml_to_string_newxpath(tmp)
