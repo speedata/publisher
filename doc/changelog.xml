@@ -1,4 +1,14 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="4.21">
+    <entry version="4.21.0" date="2025-01-16">
+        <en>Add bleed="auto" for Box.</en>
+        <de>bleed="auto" neu bei Box.</de>
+    </entry>
+    <entry version="4.21.0" date="2025-01-16">
+        <en>Rename extension from intermediate files (now .xml instead of .dataxml).</en>
+        <de>Neue Dateiendung für temporäre Dateien (nun .xml anstelle von .dataxml).</de>
+    </entry>
+  </chapter>
   <chapter version="4.20" date="2025-01-15">
     <entry version="4.20.0" date="2025-01-15">
         <en>Release Version 4.20.</en>
