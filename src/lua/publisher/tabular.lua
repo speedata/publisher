@@ -122,7 +122,7 @@ function attach_objects_row( self, tab, current_row,skiptable )
                 elseif eltname == "Message" or eltname == "Bookmark" then
                     -- ignore
                 else
-                    warning("Unknown object in table: %s",eltname or "???")
+                    -- warning("Unknown object in table: %s",eltname or "???")
                 end
             end
             if #inline > 0 then
