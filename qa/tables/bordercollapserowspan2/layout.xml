@@ -1,0 +1,50 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="7cm" width="6cm"></Pageformat>
+    <Record element="data">
+        <PlaceObject>
+            <Table stretch="max" border-collapse="collapse">
+                    <Tr background-color="white">
+                        <Td border-top="0.5pt" border-left="0.5pt" border-bottom="0.5pt" border-right="0.5pt" rowspan="2">
+                            <Paragraph>
+                                <Value>Dummy text</Value>
+                            </Paragraph>
+                        </Td>
+                        <Td border-top="0.5pt" border-left="0.5pt" border-bottom="0.5pt" border-right="0.5pt">
+                            <Paragraph>
+                                <Value>Dummy text</Value>
+                            </Paragraph>
+                        </Td>
+                    </Tr>
+                    <Tr background-color="white">
+
+                        <Td border-top="0.5pt" border-left="0.5pt" border-bottom="0.5pt" border-right="0.5pt">
+                            <Paragraph>
+                                <Value>Dummy text</Value>
+                            </Paragraph>
+                        </Td>
+                    </Tr>
+                    <Tr background-color="white">
+                        <Td border-top="0.5pt" border-left="0.5pt" border-bottom="0.5pt" border-right="0.5pt" rowspan="2">
+                            <Paragraph>
+                                <Value>Dummy text</Value>
+                            </Paragraph>
+                        </Td>
+                        <Td border-top="0.5pt" border-left="0.5pt" border-bottom="0.5pt" border-right="0.5pt">
+                            <Paragraph>
+                                <Value>Dummy text</Value>
+                            </Paragraph>
+                        </Td>
+                    </Tr>
+                    <Tr background-color="white">
+
+                        <Td border-top="0.5pt" border-left="0.5pt" border-bottom="0.5pt" border-right="0.5pt">
+                            <Paragraph>
+                                <Value>Dummy text</Value>
+                            </Paragraph>
+                        </Td>
+                    </Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>
