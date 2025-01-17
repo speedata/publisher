@@ -8191,7 +8191,14 @@ function hlurl(href,bordercolor)
     for key, value in pairs(get_border_for_link_table(bordercolor)) do
         hl[key] = value
     end
-    hyperlinks[#hyperlinks+1] = setmetatable(hl,marshal_ordered)
+    local tab = setmetatable(hl,marshal_ordered)
+    -- tab now looks like this:
+    -- tab = {
+        -- ["/A"] = "<</Type/Action/S/URI/URI(https://www.example.com)>>"
+        -- ["/Border"] = "[0 0 0]"
+        -- ["/Subtype"] = "/Link"
+    -- },
+    hyperlinks[#hyperlinks+1] = tostring(tab)
     return #hyperlinks
 end
 
