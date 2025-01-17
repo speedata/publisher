@@ -18,11 +18,14 @@ local function scalebox(scalefactor,box)
     local hbox = node.hpack(box)
     hbox = node.insert_before(hbox,hbox,pdf_setmatrix)
     hbox = node.insert_before(hbox,pdf_setmatrix,pdf_save)
+    publisher.setprop(hbox,"origin","scalebox 1")
 
     hbox = node.hpack(hbox)
     hbox.height = box.height * scalefactor
     hbox.width = box.width * scalefactor
     hbox.depth = 0
+    publisher.setprop(hbox,"origin","scalebox 2")
+
     node.insert_after(hbox,node.tail(hbox),pdf_restore)
 
     local newbox = node.vpack(hbox)
@@ -109,6 +112,7 @@ local function mkglyph( char,fontnumber, destwd )
     local nl = publisher.add_glue(g,"head",{width = 0, stretch = 2^16, stretch_order = 2})
     nl = publisher.add_glue(nl,"tail",{width = 0, stretch = 2^16, stretch_order = 2})
     nl = node.hpack(nl,destwd,"exactly")
+    publisher.setprop(hbox,"origin","mkglyph")
     return nl
 end
 
@@ -191,6 +195,8 @@ local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor,ke
     end
     -- barcode_top will become the vbox
     local barcode_top = node.hpack(nodelist)
+    publisher.setprop(barcode_top,"origin","ean13 barcode_top")
+
     if showtext then
         nodelist = nil
         -- split_number returns three parts x xxxxxx xxxxxx
@@ -205,6 +211,7 @@ local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor,ke
           end
         end
         local barcode_bottom = node.hpack(nodelist)
+        publisher.setprop(barcode_bottom,"origin","ean13 barcode_bottom")
         -- barcode_top now has three elements: the hbox
         -- from the rules and kerns, the kern of -1.7mm
         -- and the hbox with the digits below the bars.
@@ -324,6 +331,8 @@ local function code128_make_nodelist(pattern,wd,ht)
     end)
   end
   local hbox = node.hpack(nodelist)
+  publisher.setprop(hbox,"origin","code128")
+
   return hbox
 end
 
@@ -393,6 +402,9 @@ local function code128(width,height,fontfamily,text,showtext)
   else
     vbox = node.vpack(code_hbox)
   end
+  publisher.setprop(vbox,"origin","code128 vbox")
+  node.set_attribute(vbox,publisher.att_dontadjustlineheight,1)
+
 
   return vbox
 end
@@ -458,6 +470,7 @@ local function make_code(size,matrix,pdfcolorstring)
   local h = node.hpack(n,size,"exactly")
   h = publisher.add_glue(h,"tail",{stretch = 1, stretch_order = 3})
   local v = node.vpack(h,size,"exactly")
+  node.set_attribute(v,publisher.att_dontadjustlineheight,1)
   return v
 end
 

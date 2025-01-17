@@ -68,7 +68,7 @@ function commands.a( layoutxml,dataxml )
         publisher.hlpage(page,bordercolor)
     end
 
-    if eltname == "Image" or eltname == "Box" then
+    if eltname == "Image" or eltname == "Box" or eltname == "Barcode" then
         local c
         if eltname == "Image" then
             c = tab[1].contents[1]
@@ -92,6 +92,7 @@ function commands.a( layoutxml,dataxml )
         c = node.hpack(c)
         node.set_attribute(c,publisher.att_shift_left, shift_left)
         node.set_attribute(c,publisher.att_shift_up, shift_up)
+        node.set_attribute(c,publisher.att_dontadjustlineheight, 1)
         return c
     else
         p = par:new(nil,"a")
