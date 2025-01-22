@@ -30,7 +30,7 @@ Um eine elektronische Rechnung anzuhängen, muss der Wert bei `type` genau die Z
 -------------------------------------------------------------------------------
 <AttachFile description="Electronic invoice"
             type="ZUGFeRD invoice"
-            filename="invoice.pdf" />
+            filename="invoice.xml" />
 -------------------------------------------------------------------------------
 
 Der Ausgabedateiname wird automatisch auf `factur-x.xml` gesetzt für ZUGFeRD Version 2 und `ZUGFeRD-invoice.xml` für Version 1. Dieser Name kann mit `name="..."` überschrieben werden.

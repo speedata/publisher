@@ -4236,6 +4236,17 @@
           <xs:documentation>Set the default step values for shrinkage / stretching. Value divided by 10 is step in percentage. For example: a value of 20 means increase / decrease size in 2% steps. Default 10.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="tablerulefix">
+        <xs:annotation>
+          <xs:documentation>Re-draw rules in table so they appear on top of the table. This fixes a display bug in Adobe Acrobat when colored backgrounds are used.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Otherwise">
@@ -6282,7 +6293,7 @@
       </xs:sequence>
       <xs:attribute name="name" use="required">
         <xs:annotation>
-          <xs:documentation>Name of the file. Example: toc</xs:documentation>
+          <xs:documentation>Name of the file. Example: toc. The resulting filename will be $jobname-$name.xml</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="elementname" use="required">

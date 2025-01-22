@@ -222,6 +222,8 @@ for k,v in pairs(node.whatsits()) do
         pdf_dest_whatsit = k
     elseif v == "pdf_start_link" then
         pdf_start_link_whatsit = k
+    elseif v == "pdf_literal" then
+        pdf_literal_whatsit = k
     end
 end
 
@@ -291,6 +293,7 @@ options = {
     xmlparser = os.getenv("SP_XMLPARSER") or "lua",
     hyperlinkborderwidth = tex.sp("1pt"),
     namespaces = "lax",
+    tablerulefix = false,
 }
 
 current_layout_line = ""
@@ -4108,7 +4111,18 @@ function dothingsbeforeoutput( thispage,data )
     end
 
     local nodelist = thispage.pagebox
-    insert_nonmoving_whatsits(nodelist,nil,"vertical",0,0,thispage.width,thispage.height)
+    local rules = insert_nonmoving_whatsits(nodelist,nil,"vertical",0,0,thispage.width,thispage.height)
+    -- nodetree = require("nodetree")
+    -- nodetree.analyze(nodelist)
+    for _, rule in pairs(rules) do
+        -- @class whatsit_node
+        local wr = node.new("whatsit","pdf_literal")
+        wr.data = rule[3]
+        wr.mode = 0
+        setprop(wr,"origin","tr-later")
+        output_absolute_position({x = rule[1], y = rule[2], nodelist = wr})
+    end
+
     local firstbox
 
     -- for spot colors, if necessary
@@ -4492,21 +4506,27 @@ end
 
 --- Look for `user_defined` at end of page (ship-out) and runs actions encoded in them.
 function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewidth, pageheight )
-    if not head then return end
+    local firsthead = head
+    if not head then return {} end
     local fun
     local prev_hyperlink, prev_fgcolor, prev_role
     local nonextnode = false
     local linklevel = 0
     local currentfont = 1
+    local rules = {}
     while head do
         -- what is subtype 1?
         if head.id==hlist_node and head.subtype == 1 then
-            insert_nonmoving_whatsits(head.list,head,"horizontal",curx,cury,pagewidth, pageheight)
+            local r = insert_nonmoving_whatsits(head.list,head,"horizontal",curx,cury,pagewidth, pageheight)
+            for _, rule in ipairs(r) do
+                rules[#rules+1] = rule
+            end
             local bordernumber = get_attribute(head,"bordernumber")
             if bordernumber then
                 local bordervbox = mpbox(borderattributes[bordernumber],head.width,head.height)
                 parent.head = node.insert_before(parent.head,head,bordervbox)
             end
+            if blockinline == "vertical" then cury = cury + head.height + head.depth else curx = curx + head.width end
         elseif head.id==hlist_node or head.id == vlist_node then
             local bordernumber = get_attribute(head,"bordernumber")
             if bordernumber then
@@ -4514,10 +4534,17 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                 parent.head = node.insert_before(parent.head,head,bordervbox)
             end
             if head.id == hlist_node then
-                insert_nonmoving_whatsits(head.list,head,"horizontal",curx,cury,pagewidth, pageheight)
+                local r = insert_nonmoving_whatsits(head.list,head,"horizontal",curx,cury,pagewidth, pageheight)
+                for _, rule in ipairs(r) do
+                    rules[#rules+1] = rule
+                end
             else
-                insert_nonmoving_whatsits(head.list,head,"vertical",curx,cury,pagewidth, pageheight)
+                local r = insert_nonmoving_whatsits(head.list,head,"vertical",curx,cury,pagewidth, pageheight)
+                for _, rule in ipairs(r) do
+                    rules[#rules+1] = rule
+                end
             end
+            if blockinline == "vertical" then cury = cury + head.height + head.depth else curx = curx + head.width end
         else
             if head.id == glue_node then
                 if blockinline == "horizontal" then
@@ -4533,6 +4560,7 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                     local top = pageheight - cury
                     setprop(head,"bbox",{ sp_to_bp(left),sp_to_bp(bot),sp_to_bp(right),sp_to_bp(top )})
                 end
+                if blockinline == "vertical" then cury = cury + head.height + head.depth else curx = curx + head.width end
             end
 
             local attribs = get_attributes(head)
@@ -4856,6 +4884,12 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                             markers[marker]["page"] = tostring(markers[marker]["page"]) .. "," ..  tostring(current_pagenumber)
                         end
                     end
+                elseif head.subtype == pdf_literal_whatsit then
+                    local data = getprop(head,"data")
+                    if data then
+                        head.data = ""
+                        rules[#rules+1] = { curx, cury, data }
+                    end
                 end
             elseif options.format == "PDF/UA" and head.id == glue_node and get_attribute(head,"spaceglue") == 1 then
                 -- a space in PDF/UA should be a real glyph
@@ -4871,7 +4905,7 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
         end
         head = head.next
     end
-    return
+    return rules
 end
 
 --- Node(list) creation
@@ -6609,7 +6643,7 @@ function break_url( nodelist )
     return nodelist
 end
 
-function colorbar( wd,ht,dp,color,origin )
+function colorbar( wd,ht,dp,color,origin,orientation)
     local colorname = color
     if color == "-" then
         -- ok, ignore
@@ -6626,11 +6660,26 @@ function colorbar( wd,ht,dp,color,origin )
     local rule_start = node.new("whatsit","pdf_literal")
     setprop(rule_start,"origin","colorbar")
     if colorname ~= "-" then
+        local ht_bp = sp_to_bp(ht)
+        local wd_bp = sp_to_bp(wd)
         rule_start.mode = 0
-        rule_start.data = "q "..colors[colorname].pdfstring .. string.format(" %g w 0 %g m  %g %g l s Q ",sp_to_bp(ht),sp_to_bp(ht / 2) , sp_to_bp(wd),sp_to_bp(ht / 2))
-        setprop(rule_start,"origin","colorbar")
+        local data = "q "..colors[colorname].pdfstring
+        if not options.tablerulefix then
+            data = data .. string.format(" %g w 0 %g m  %g %g l s Q ",ht_bp,ht_bp / 2 , wd_bp , ht_bp / 2)
+        else
+            if orientation == "horizontal" then
+                -- draw horiztontal line a bit lower
+                data = data .. string.format(" %g w 0 %g m  %g %g l s Q ", ht_bp,-ht_bp / 2 , wd_bp , - ht_bp / 2)
+            else
+                -- draw the vertical borders in negative direction
+                data = data .. string.format(" %g w 0 %g m %g %g l s Q ",ht_bp,-ht_bp / 2 , wd_bp , - ht_bp / 2)
+            end
+        end
+        rule_start.data = data
+        if options.tablerulefix then
+            setprop(rule_start,"data", data)
+        end
         setprop(rule_start,"role",get_rolenum("Artifact"))
-
     end
     local h = node.hpack(rule_start)
     h.width = wd

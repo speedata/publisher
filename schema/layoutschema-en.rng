@@ -3932,6 +3932,15 @@
                <a:documentation>Set the default step values for shrinkage / stretching. Value divided by 10 is step in percentage. For example: a value of 20 means increase / decrease size in 2% steps. Default 10.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="tablerulefix">
+               <a:documentation>Re-draw rules in table so they appear on top of the table. This fixes a display bug in Adobe Acrobat when colored backgrounds are used.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -5443,7 +5452,7 @@
          <interleave>
             <group>
                <attribute name="name">
-                  <a:documentation>Name of the file. Example: toc</a:documentation>
+                  <a:documentation>Name of the file. Example: toc. The resulting filename will be $jobname-$name.xml</a:documentation>
                </attribute>
                <attribute name="elementname">
                   <a:documentation>Name of the root element that surrounds the elements given by the child elements.</a:documentation>

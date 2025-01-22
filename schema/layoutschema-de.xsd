@@ -4236,6 +4236,17 @@
           <xs:documentation>Setze die voreingestellten Schritte für stauchen und dehnen. Wert geteilt durch 10 = Prozent. Beispiel: 20 erhöht/verringert die Schriftgröße bei Bedarf um 2%. Voreinstellung: 10</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="tablerulefix">
+        <xs:annotation>
+          <xs:documentation>Zeichne die Tablellenlinien neu über der Tabelle. Das behebt einen Darstellungsfehler im Adobe Acrobat, wenn farbige Hintergründe benutzt werden.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Otherwise">
@@ -6282,7 +6293,7 @@
       </xs:sequence>
       <xs:attribute name="name" use="required">
         <xs:annotation>
-          <xs:documentation>Name der Dateisatzdatei. Beispiel: toc</xs:documentation>
+          <xs:documentation>Name der Dateisatzdatei. Beispiel: toc. Der resultierende Dateiname ist $jobname-$name.xml.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="elementname" use="required">

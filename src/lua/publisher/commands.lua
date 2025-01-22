@@ -2662,6 +2662,7 @@ end
 function commands.options( layoutxml,dataxml )
     -- deprecated:
     publisher.options.showhyphenation    = publisher.read_attribute(layoutxml,dataxml,"show-hyphenation","boolean")
+    publisher.options.tablerulefix       = publisher.read_attribute(layoutxml,dataxml,"tablerulefix","boolean",publisher.options.tablerulefix)
     local showgrid                       = publisher.read_attribute(layoutxml,dataxml,"show-grid",   "boolean")
     local showgridallocation             = publisher.read_attribute(layoutxml,dataxml,"show-gridallocation","boolean")
     local trace                          = publisher.read_attribute(layoutxml,dataxml,"trace",       "boolean")

@@ -30,11 +30,11 @@ To attach an electronic invoice, the value at type must be exactly the string `Z
 -------------------------------------------------------------------------------
 <AttachFile description="Electronic invoice"
             type="ZUGFeRD invoice"
-            filename="invoice.pdf" />
+            filename="invoice.xml" />
 -------------------------------------------------------------------------------
 
 
-The output filename is set to `factur-x.xml` for ZUGFeRD  version 2 and `ZUGFeRD-invoice.xml` for version 1.
+The output filename is set to `factur-x.xml` for ZUGFeRD version 2 and `ZUGFeRD-invoice.xml` for version 1.
 
 The PDF output must be set to PDF/A-3:
 

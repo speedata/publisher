@@ -694,6 +694,7 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
                             if cellrow then
                                 if cellrow.next then
                                     tmp = node.hpack(cellrow)
+                                    publisher.setprop(tmp,"origin","attach objects")
                                 else
                                     tmp = cellrow
                                 end
@@ -720,6 +721,7 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
             local tmp
             if cellrow.next then
                 tmp = node.hpack(cellrow)
+                publisher.setprop(tmp,"origin","cellrow")
             else
                 tmp = cellrow
             end
@@ -1028,7 +1030,7 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
         end
 
         local g = set_glue(nil,{width = padding_top})
-        publisher.setprop(g,"origin","align_top")
+        publisher.setprop(g,"origin","padding_top")
 
         local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
         if valign ~= "top" then
@@ -1070,7 +1072,7 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
         cell.prev = tail
 
         local g = set_glue(nil,{width = padding_bottom})
-        publisher.setprop(g,"origin","align_bottom")
+        publisher.setprop(g,"origin","align_padding")
 
         local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
         if valign ~= "bottom" then
@@ -1086,6 +1088,8 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
         ---
         --- Now we need to add the left and the right glue
         g = set_glue(nil,{width = padding_left})
+        publisher.setprop(g,"origin","padding_left")
+
 
         cell_start = g
         local ht_border = 0
@@ -1096,7 +1100,7 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
         ht_border = ht_border - td_bordertop - td_borderbottom - self.rowsep
 
         if td_borderleft ~= 0 then
-            local start = publisher.colorbar(td_borderleft,ht_border,0,td_contents["border-left-color"])
+            local start = publisher.colorbar(td_borderleft,ht_border,0,td_contents["border-left-color"],"borderleft","vertical")
             local stop = node.tail(start)
             stop.next = g
             cell_start = start
@@ -1107,11 +1111,12 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
         current = vlist
 
         g = set_glue(nil,{width = padding_right})
+        publisher.setprop(g,"origin","padding_right")
 
         current.next = g
         current = g
         if td_borderright ~= 0 then
-            local rule = publisher.colorbar(td_borderright,ht_border,0,td_contents["border-right-color"])
+            local rule = publisher.colorbar(td_borderright,ht_border,0,td_contents["border-right-color"],"borderright","vertical")
             g.next = rule
         end
 
@@ -1161,19 +1166,20 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
 
         local head = hlist
         if td_bordertop > 0 then
-            local rule = publisher.colorbar(current_column_width,td_bordertop,0,td_contents["border-top-color"])
+            local rule = publisher.colorbar(current_column_width,td_bordertop,0,td_contents["border-top-color"],"border top","horizontal")
             -- rule is: whatsit, rule, whatsit
             node.tail(rule).next = hlist
             head = rule
         end
 
         if td_borderbottom > 0 then
-            local rule = publisher.colorbar(current_column_width,td_borderbottom,0,td_contents["border-bottom-color"])
+            local rule = publisher.colorbar(current_column_width,td_borderbottom,0,td_contents["border-bottom-color"],"border bottom","horizontal")
             hlist.next = rule
         end
 
         -- What is this for?
         local gl = set_glue(nil,{width = 0, shrink = 2^16, shrink_order = 2})
+        publisher.setprop(gl,"origin","unknown")
         node.slide(head).next = gl
 
         --- This is our table cell now:
@@ -1191,7 +1197,7 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
 
     if current_column == 0 then
         v = publisher.create_empty_hbox_with_width(self.tablewidth_target)
-        v = publisher.add_glue(v,"head",fill) -- otherwise we get an underfull vbox
+        v = publisher.add_glue(v,"head",fill,"empty") -- otherwise we get an underfull vbox
         row[1] = node.vpack(v,rowheightarea[current_row],"exactly")
     end
 
@@ -1205,13 +1211,14 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
     current = cell_start
     if row[1] then
         for z=2,#row do
-            _,current = publisher.add_glue(current,"tail",{ width = self.colsep })
+            _,current = publisher.add_glue(current,"tail",{ width = self.colsep },"colsep")
             if row[z] then
                 current.next = row[z]
                 current = row[z]
             end
         end
         row = node.hpack(cell_start)
+        publisher.setprop(row,"origin","row")
     else
         err("(Internal error) Table is not complete.")
     end
@@ -1244,15 +1251,17 @@ local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current
             current_row = current_row + 1
             current_tablehead_type[#current_tablehead_type + 1] = self:typeset_row(row_contents,current_row,self.skiptables[tablearea] or {},self.rowheights[tablearea])
         elseif row_elementname == "Tablerule" then
-            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,"tablerule")
-            current_tablehead_type[#current_tablehead_type + 1] = node.hpack(tmp)
+            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,"tablerule","horizontal")
+            tmp = node.hpack(tmp)
+            publisher.setprop(tmp,"origin","tablerule tablehead")
+            current_tablehead_type[#current_tablehead_type + 1] = tmp
         end
     end
     if #current_tablehead_type == 0 then
         table.insert(current_tablehead_type,node.new("hlist"))
     end
     if self.rowsep ~= 0 then
-        publisher.add_glue(current_tablehead_type[#current_tablehead_type], "tail", {width=self.rowsep})
+        publisher.add_glue(current_tablehead_type[#current_tablehead_type], "tail", {width=self.rowsep},"rowsep")
     end
 
     return current_row
@@ -1281,8 +1290,10 @@ local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_
             current_row = current_row + 1
             current_tablefoot_type[#current_tablefoot_type + 1] = self:typeset_row(row_contents,current_row,self.skiptables[tablearea] or {},self.rowheights[tablearea])
         elseif row_elementname == "Tablerule" then
-            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,"tablerule")
-            current_tablefoot_type[#current_tablefoot_type + 1] = node.hpack(tmp)
+            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,"tablerule","horizontal")
+            tmp = node.hpack(tmp)
+            publisher.setprop(tmp,"origin","tablerule_make_tablefoot")
+            current_tablefoot_type[#current_tablefoot_type + 1] = tmp
         end
     end
     if #current_tablefoot_type == 0 then
@@ -1297,13 +1308,13 @@ end
 local function calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
     -- We connect all but the last row with the next row and remember the height in ht_header
     for z = 1,#tablehead_first - 1 do
-        _,tmp = publisher.add_glue(tablehead_first[z],"tail",{ width = self.rowsep })
+        _,tmp = publisher.add_glue(tablehead_first[z],"tail",{ width = self.rowsep },"rowsep tablehead")
         tmp.next = tablehead_first[z+1]
         tablehead_first[z+1].prev = tmp
     end
 
     for z = 1,#tablehead - 1 do
-        _,tmp = publisher.add_glue(tablehead[z],"tail",{ width = self.rowsep })
+        _,tmp = publisher.add_glue(tablehead[z],"tail",{ width = self.rowsep },"rowsep tablehead (2)")
         tmp.next = tablehead[z+1]
         tablehead[z+1].prev = tmp
     end
@@ -1314,7 +1325,7 @@ local function calculate_height_and_connect_tablefoot(self,tablefoot,tablefoot_l
     for z = 1,#tablefoot - 1 do
         ht_footer = ht_footer + tablefoot[z].height  -- Tr or Tablerule
         -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
-        _,tmp = publisher.add_glue(tablefoot[z],"tail",{ width = self.rowsep })
+        _,tmp = publisher.add_glue(tablefoot[z],"tail",{ width = self.rowsep },"rowsep tablefoot (1)")
         tmp.next = tablefoot[z+1]
         tablefoot[z+1].prev = tmp
     end
@@ -1322,7 +1333,7 @@ local function calculate_height_and_connect_tablefoot(self,tablefoot,tablefoot_l
     for z = 1,#tablefoot_last - 1 do
         ht_footer_last = ht_footer_last + tablefoot_last[z].height  -- Tr or Tablerule
         -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
-        _,tmp = publisher.add_glue(tablefoot_last[z],"tail",{ width = self.rowsep })
+        _,tmp = publisher.add_glue(tablefoot_last[z],"tail",{ width = self.rowsep },"rowsep tablefoot (2)")
         tmp.next = tablefoot_last[z+1]
         tablefoot_last[z+1].prev = tmp
     end
@@ -1389,8 +1400,8 @@ function typeset_table(self,dataxml)
                 end
                 offset = sum
             end
-            tmp = publisher.colorbar(self.tablewidth_target - offset,tex.sp(tr_contents.rulewidth or "0.25pt"),0,tr_contents.color,"tablerule")
-            tmp = publisher.add_glue(tmp,"head",{width = offset})
+            tmp = publisher.colorbar(self.tablewidth_target - offset,tex.sp(tr_contents.rulewidth or "0.25pt"),0,tr_contents.color,"tablerule","horizontal")
+            tmp = publisher.add_glue(tmp,"head",{width = offset},"offset tablerule")
             tmp = node.hpack(tmp)
             publisher.setprop(tmp,"origin","tablerule")
             rows[#rows + 1] = tmp

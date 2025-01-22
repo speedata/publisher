@@ -3932,6 +3932,15 @@
                <a:documentation>Setze die voreingestellten Schritte für stauchen und dehnen. Wert geteilt durch 10 = Prozent. Beispiel: 20 erhöht/verringert die Schriftgröße bei Bedarf um 2%. Voreinstellung: 10</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="tablerulefix">
+               <a:documentation>Zeichne die Tablellenlinien neu über der Tabelle. Das behebt einen Darstellungsfehler im Adobe Acrobat, wenn farbige Hintergründe benutzt werden.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -5443,7 +5452,7 @@
          <interleave>
             <group>
                <attribute name="name">
-                  <a:documentation>Name der Dateisatzdatei. Beispiel: toc</a:documentation>
+                  <a:documentation>Name der Dateisatzdatei. Beispiel: toc. Der resultierende Dateiname ist $jobname-$name.xml.</a:documentation>
                </attribute>
                <attribute name="elementname">
                   <a:documentation>Name des Wurzelelements, das erzeugt wird.</a:documentation>

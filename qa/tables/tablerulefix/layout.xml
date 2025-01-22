@@ -1,0 +1,29 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="5cm" width="10cm"></Pageformat>
+    <Options tablerulefix="yes" />
+    <Record element="data">
+        <PlaceObject>
+            <Table stretch="max">
+                <Tr background-color="white">
+                    <Td border-left="2pt" border-left-color="green">
+                        <Paragraph>
+                            <Value>1</Value>
+                        </Paragraph>
+                    </Td>
+                </Tr>
+                <Tablerule rulewidth="2pt" />
+                <Loop select="2">
+                    <Tr background-color="white">
+                        <Td>
+                            <Paragraph>
+                                <Value>Dummy text</Value>
+                            </Paragraph>
+                        </Td>
+                    </Tr>
+                    <Tablerule />
+                </Loop>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>

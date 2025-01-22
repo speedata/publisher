@@ -6672,6 +6672,14 @@
         <para>Setze die voreingestellten Schritte für stauchen und dehnen. Wert geteilt durch 10 = Prozent. Beispiel: 20 erhöht/verringert die Schriftgröße bei Bedarf um 2%. Voreinstellung: 10</para>
       </description>
     </attribute>
+    <attribute en="tablerulefix" optional="yes" since="4.21.3" type="boolean">
+      <description xml:lang="en">
+        <para>Re-draw rules in table so they appear on top of the table. This fixes a display bug in Adobe Acrobat when colored backgrounds are used.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zeichne die Tablellenlinien neu über der Tabelle. Das behebt einen Darstellungsfehler im Adobe Acrobat, wenn farbige Hintergründe benutzt werden.</para>
+      </description>
+    </attribute>
     <remark xml:lang="en">
       <para>Bleed used to be 'trim' in version 2.7.6 and before.</para>
     </remark>
