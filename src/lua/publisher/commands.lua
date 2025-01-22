@@ -2052,7 +2052,11 @@ function commands.load_fontfile( layoutxml,dataxml )
     for _,v in ipairs(layoutxml) do
         if type(v) == "table" then
             if v[".__local_name"] == "Fallback" then
-               fallbacks[#fallbacks + 1] = v[".__attributes"].filename
+                if publisher.newxpath then
+                   fallbacks[#fallbacks + 1] = v[".__attributes"].filename
+                else
+                    fallbacks[#fallbacks + 1] = v.filename
+                end
             end
         end
     end
