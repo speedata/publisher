@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.21">
+    <entry version="4.21.4" date="2025-01-22">
+        <en>Bugfix: font fallbacks and old XPath mode.</en>
+        <de>Fehlerkorrektur: font fallbacks und alter XPath-Modus.</de>
+    </entry>
     <entry version="4.21.3" date="2025-01-22">
         <en>Fix display error for table rules in Adobe Acrobat (#644).</en>
         <de>Behebe Darstellungsfehler bei Tabellenlinien im Adobe Acrobat (#644).</de>
