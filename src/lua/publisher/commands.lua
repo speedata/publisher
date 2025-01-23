@@ -3517,7 +3517,7 @@ function commands.place_object( layoutxml,dataxml)
 
 
         if background == "full" or css_rules["background-color"] then
-            object = publisher.background(object,backgroundcolor or css_rules["background-color"])
+            object = publisher.background(object,backgroundcolor or css_rules["background-color"],"PlaceObject")
         end
         if frame == "solid" then
             framewidth = rulewidth_sp
@@ -3790,6 +3790,20 @@ function commands.positioning_frame( layoutxml, dataxml )
     local row    = publisher.read_attribute(layoutxml,dataxml,"row" ,"number")
     local width  = publisher.read_attribute(layoutxml,dataxml,"width","number")
     local height = publisher.read_attribute(layoutxml,dataxml,"height"  ,"number")
+    if row == nil or column == nil or width == nil or height == nil then
+        if not row then
+            splib.error("row not set in PositioningFrame")
+        end
+        if not column then
+            splib.error("column not set in PositioningFrame")
+        end
+        if not width then
+            splib.error("width not set in PositioningFrame")
+        end
+        if not height then
+            splib.error("height not set in PositioningFrame")
+        end
+    end
     return {
         column = column,
         row    = row,
@@ -5100,7 +5114,7 @@ function commands.text(layoutxml,dataxml)
     local colorindex
     if colorname then
         if not publisher.colors[colorname] then
-            err("Color %q is not defined.",colorname)
+            splib.error("Color is not defined","name",tostring(colorname))
         else
             colorindex = publisher.colors[colorname].index
         end
@@ -5287,7 +5301,7 @@ function commands.textblock( layoutxml,dataxml )
     local colorindex
     if colorname then
         if not publisher.colors[colorname] then
-            err("Color %q is not defined.",colorname)
+            splib.error("Color is not defined","name",tostring(colorname))
         else
             colorindex = publisher.colors[colorname].index
         end

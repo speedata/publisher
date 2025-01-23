@@ -763,11 +763,13 @@ function draw_grid(self)
             pdfcolorstring = " 1 0 0 RG "
         end
         for _,frame in ipairs(area) do
-            x      = sp_to_bp(( frame.column - 1) * ( self.gridwidth  + self.grid_dx) + self.extra_margin + self.margin_left)
-            y      = sp_to_bp(( frame.row    - 1) * ( self.gridheight + self.grid_dy) + self.margin_top )
-            width  = sp_to_bp(frame.width  * self.gridwidth  + (frame.width  - 1) * self.grid_dx)
-            height = sp_to_bp(frame.height * self.gridheight + (frame.height - 1) * self.grid_dy)
-            ret[#ret + 1] = string.format("q %s %g w %g %g %g %g re S Q", pdfcolorstring,0.5, x,math.round(paperheight_bp - y,2),width,-height)
+            if frame.width and frame.height then
+                x      = sp_to_bp(( frame.column - 1) * ( self.gridwidth  + self.grid_dx) + self.extra_margin + self.margin_left)
+                y      = sp_to_bp(( frame.row    - 1) * ( self.gridheight + self.grid_dy) + self.margin_top )
+                width  = sp_to_bp(frame.width  * self.gridwidth  + (frame.width  - 1) * self.grid_dx)
+                height = sp_to_bp(frame.height * self.gridheight + (frame.height - 1) * self.grid_dy)
+                ret[#ret + 1] = string.format("q %s %g w %g %g %g %g re S Q", pdfcolorstring,0.5, x,math.round(paperheight_bp - y,2),width,-height)
+            end
         end
     end
     ret[#ret + 1] = "Q"

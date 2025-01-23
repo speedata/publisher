@@ -929,7 +929,7 @@ function get_colentry_from_name(colorname, default)
     if colorname then
         if not colors[colorname] then
             if default then
-                err("Color %q is not defined yet.",colorname)
+                splib.error("Color is not defined yet","name",colorname)
             else
                 colentry = nil
             end
@@ -2209,7 +2209,7 @@ function shipout(nodelist, pagenumber,dataxml)
     }
     if colorname then
         if not colors[colorname] then
-            err("Pagetype / defaultcolor: color %q is not defined yet.",colorname)
+            splib.error("Pagetype / defaultcolor: color is not defined yet.","name",colorname)
         else
             local colorindex = colors[colorname].index
             nodelist = set_color_if_necessary(nodelist,colorindex)
@@ -3059,11 +3059,15 @@ function bgtext( box, textstring, angle, colorname, fontfamily, bgsize)
 end
 
 --- Draw a background behind the rectangular (box) object.
-function background( box, colorname )
+function background( box, colorname,origin )
     -- color '-' means 'no color'
     if colorname == "-" then return box end
     if not colors[colorname] then
-        warning("Background: Color %q is not defined",colorname)
+        if origin then
+            splib.log("warn","Background: color is not defined","name",colorname,"from",origin)
+        else
+            splib.log("warn","Background: color is not defined","name",colorname)
+        end
         return box
     end
     local colentry = colors[colorname]
@@ -3125,7 +3129,7 @@ function frame(obj)
 
     local colentry = get_colentry_from_name(obj.colorname,"black")
     if not colentry then
-        err("Color %q is not defined",tostring(obj.colorname))
+        splib.error("Color is not defined","name",tostring(obj.colorname))
         colentry = colors["black"]
     end
     local pdfcolorstring = colentry.pdfstring
@@ -4147,7 +4151,7 @@ function dothingsbeforeoutput( thispage,data )
     if options.background and options.background ~= '-' then
         local colentry = get_colentry_from_name(options.background,"white")
         if not colentry then
-            err("Color %q is not defined",tostring(options.background))
+            splib.error("Color is not defined","name",tostring(options.backgroun))
             colentry = colors["white"]
         end
         local pdfcolorstring = colentry.pdfstring
@@ -7211,7 +7215,7 @@ function get_languagecode( locale_or_name )
 end
 
 function set_mainlanguage( mainlanguage )
-    log("Setting default language to %q",mainlanguage or "?")
+    splib.log("info","Setting default language","lang",mainlanguage or "?")
     defaultlanguage = get_languagecode(mainlanguage)
 end
 
@@ -7315,7 +7319,12 @@ function next_row(rownumber,areaname,rows,dataxml)
     end
 
     local current_row
-    current_row = grid:find_suitable_row(1,grid:number_of_columns(areaname),rows,areaname)
+    local noc = grid:number_of_columns(areaname)
+    if noc == nil then
+        splib.error("number of columns is not set for area","area",areaname)
+        return
+    end
+    current_row = grid:find_suitable_row(1,noc,rows,areaname)
     if not current_row then
         next_area(areaname,nil, dataxml)
         setup_page(nil,"next_row",dataxml)
