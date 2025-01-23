@@ -3824,7 +3824,7 @@ function commands.positioning_area( layoutxml,dataxml )
     tab.colorname = colorname
     tab.layoutxml = layoutxml
     if publisher.newxpath then
-        tab.dataxml = dataxml:copy()
+        tab.dataxml = dataxml
     else
         tab.dataxml = dataxml
     end
