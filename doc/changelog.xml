@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.21">
+    <entry version="4.21.5" date="2025-01-23">
+        <en>Allow variables in Pagetype and new XPath mode.</en>
+        <de>Erlaube Variablen in Pagetype und neuem XPath-Modus.</de>
+    </entry>
     <entry version="4.21.4" date="2025-01-22">
         <en>Bugfix: font fallbacks and old XPath mode.</en>
         <de>Fehlerkorrektur: font fallbacks und alter XPath-Modus.</de>
