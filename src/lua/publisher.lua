@@ -6669,11 +6669,11 @@ function colorbar( wd,ht,dp,color,origin,orientation)
         rule_start.mode = 0
         local data = "q "..colors[colorname].pdfstring
         if not options.tablerulefix then
-            data = data .. string.format(" %g w 0 %g m  %g %g l s Q ",ht_bp,ht_bp / 2 , wd_bp , ht_bp / 2)
+            data = data .. string.format(" %g w 0 %g m %g %g l s Q ",ht_bp,ht_bp / 2 , wd_bp , ht_bp / 2)
         else
             if orientation == "horizontal" then
                 -- draw horiztontal line a bit lower
-                data = data .. string.format(" %g w 0 %g m  %g %g l s Q ", ht_bp,-ht_bp / 2 , wd_bp , - ht_bp / 2)
+                data = data .. string.format(" %g w 0 %g m %g %g l s Q ", ht_bp,-ht_bp / 2 , wd_bp , - ht_bp / 2)
             else
                 -- draw the vertical borders in negative direction
                 data = data .. string.format(" %g w 0 %g m %g %g l s Q ",ht_bp,-ht_bp / 2 , wd_bp , - ht_bp / 2)
