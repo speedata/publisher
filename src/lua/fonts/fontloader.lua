@@ -106,14 +106,15 @@ function define_font_hb( name, size, extra_parameter )
     filename_with_path = publisher.find_file(name)
     if not filename_with_path then return false, string.format("Fontfile '%s' not found.", name) end
     local face = harfbuzz.Face.new(filename_with_path)
-    local font = harfbuzz.Font.new(face)
+    local fnt = harfbuzz.Font.new(face)
     fonttable = {
         face = face,
-        font = font
+        font = fnt
     }
+
     lookup_fonttable_from_filename[name] = fonttable
-    local face = fonttable.face
-    local font = fonttable.font
+    face = fonttable.face
+    fnt = fonttable.font
 
     if (size < 0) then size = (- 655.36) * size end
 
@@ -127,7 +128,7 @@ function define_font_hb( name, size, extra_parameter )
     f.mode          = "harfbuzz"
     f.units_per_em  = upem
     f.face          = face
-    f.font          = font
+    f.font          = fnt
     f.characters    = {}
     f.otfeatures    = {}
     f.name          = face:get_name(6)
@@ -173,15 +174,15 @@ function define_font_hb( name, size, extra_parameter )
     local unicodes = face:collect_unicodes()
     local glyph_uni = {}
     for _, uni in next, unicodes do
-        local gid = font:get_nominal_glyph(uni)
+        local gid = fnt:get_nominal_glyph(uni)
         glyph_uni[gid] = uni
     end
 
     for gid = 0, face:get_glyph_count() - 1 do
         local touni = glyph_uni[gid]
         local uni = touni or ( 0x110000 + gid )
-        local ge = font:get_glyph_extents(gid)
-        local hadvance = font:get_glyph_h_advance(gid)
+        local ge = fnt:get_glyph_extents(gid)
+        local hadvance = fnt:get_glyph_h_advance(gid)
         if uni == 160 then -- U+00A0 NO-BREAK SPACE
             uni = 32
         elseif uni == 173 then -- U+00AD SOFT HYPHEN
@@ -191,7 +192,7 @@ function define_font_hb( name, size, extra_parameter )
         elseif uni == 48 then
             f.zerowidth = hadvance * mag
         end
-        local glyphname = font:get_glyph_name(gid)
+        local glyphname = fnt:get_glyph_name(gid)
 
         if glyphname then
             glyphname_uni[glyphname] = uni
@@ -223,7 +224,7 @@ function define_font_hb( name, size, extra_parameter )
     for gid = 0, face:get_glyph_count() - 1 do
         local touni = glyph_uni[gid]
         local uni = touni or ( 0x110000 + gid )
-        local glyphname = font:get_glyph_name(gid)
+        local glyphname = fnt:get_glyph_name(gid)
         if glyphname and string.find(glyphname,".",1,true) then
             local basename = string.match(glyphname,"^(.*)%.")
             thischar = f.characters[uni]
@@ -234,6 +235,23 @@ function define_font_hb( name, size, extra_parameter )
 
     end
     f.backmap = backmap
+
+
+    local fallback_fontdefinitions = {}
+    if extra_parameter.fallbacks then
+        for i=#extra_parameter.fallbacks,1,-1 do
+            local fnt = extra_parameter.fallbacks[i]
+            splib.log("info","Create font metrics for fallback font","name",fnt,"size",math.round(size / publisher.factor,3))
+            local tmp, newfont_or_msg = define_font_hb(fnt,size,{})
+            if not tmp then return nil, newfont_or_msg end
+            local num = font.define(newfont_or_msg)
+            newfont_or_msg.fontnum = num
+            fallback_fontdefinitions[#fallback_fontdefinitions + 1] = newfont_or_msg
+        end
+    end
+
+    f.fallback_fontdefinitions = fallback_fontdefinitions
+
     return true,f
 end
 

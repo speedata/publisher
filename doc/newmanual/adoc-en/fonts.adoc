@@ -283,6 +283,8 @@ Alternatively, you can also specify a replacement font at `<LoadFontfile>`, whic
 
 First the font `texgyreheros-regular.otf` is searched, then `fontawesome-webfont.ttf` and finally `line-awesome.ttf`.
 
+TIP: Using the HarfBuzz-Modus together with the Fallback command is still experimental and must only contain one Fallback font.
+
 == Aliases
 
 There is a command to add an alternate name for an existing font name to the list of known font names:

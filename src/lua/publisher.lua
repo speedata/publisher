@@ -4116,8 +4116,6 @@ function dothingsbeforeoutput( thispage,data )
 
     local nodelist = thispage.pagebox
     local rules = insert_nonmoving_whatsits(nodelist,nil,"vertical",0,0,thispage.width,thispage.height)
-    -- nodetree = require("nodetree")
-    -- nodetree.analyze(nodelist)
     for _, rule in pairs(rules) do
         -- @class whatsit_node
         local wr = node.new("whatsit","pdf_literal")
@@ -5185,6 +5183,53 @@ local function setstyles(n,parameter)
     end
 end
 
+function getfallbacks(cluster,glyphslist,fallback_fontdefinitions)
+    local fontnum
+    local ret = {}
+    local fallback = fallback_fontdefinitions[1]
+    fontnum = fallback.fontnum
+    local tbl = fallback
+    local i = 1
+
+    while i <= #glyphslist do
+        local buf = harfbuzz.Buffer.new()
+        local pos = glyphslist[i][1]
+        local thisglyph = glyphslist[i][2]
+        ret[#ret+1] = {
+            pos = pos,
+            fonttable = tbl,
+            fontnumber = fontnum,
+        }
+        local curret = ret[#ret]
+        -- the cluster may have more than one unicode character, so I
+        -- create a list
+        local uclist = {}
+        local uc = cluster[thisglyph.cluster]
+        uclist[#uclist+1] = uc
+        buf:add_utf8(unicode.utf8.char(uc))
+        while #glyphslist > i and glyphslist[i+1][1] == pos + 1 do
+            i = i + 1
+            pos = pos + 1
+            thisglyph = glyphslist[i][2]
+            uc = cluster[thisglyph.cluster]
+            uclist[#uclist+1] = uc
+            buf:add_utf8(unicode.utf8.char(uc))
+        end
+
+        shape(tbl,buf)
+        local nglyphs = buf:get_glyphs()
+        for j = 1, #nglyphs do
+            curret[#curret + 1] = {
+                glyph = nglyphs[j],
+                uc = uclist[j],
+                codepoint = nglyphs[j].codepoint,
+            }
+        end
+        i = i + 1
+    end
+    return ret
+end
+
 function hbglyphlist(arguments)
     local tbl = arguments.tbl
     local glyphs = arguments.glyphs
@@ -5207,10 +5252,50 @@ function hbglyphlist(arguments)
     local list, cur
     local n
     local preserve_whitespace = parameter.whitespace == "pre"
+    local zeroglyphs = {}
+
     for i=1,#glyphs do
         local thisglyph = glyphs[i]
+        if thisglyph.codepoint == 0 then
+            zeroglyphs[#zeroglyphs+1] = {i,thisglyph}
+        end
+    end
+
+    local fallbacks
+    -- fallacks: remove all glyph entries that are covered by fallbacks, then
+    -- re-insert a more complex table at these positions.
+    -- detect the other table type in the loop below (for i=1,#glyphs do .. end)
+    if #zeroglyphs > 0 and #tbl.fallback_fontdefinitions > 0 then
+        fallbacks = getfallbacks(cluster,zeroglyphs,tbl.fallback_fontdefinitions)
+        for i = #fallbacks, 1, -1 do
+            local fb = fallbacks[i]
+            for j = 1, #fb do
+                table.remove(glyphs,fb.pos)
+            end
+            for j = #fb, 1, -1 do
+                table.insert(glyphs,fb.pos,{pos = fb.pos, fonttable = fb.fonttable,  fontnumber = fb.fontnumber, glyph = fb[j].glyph, codepoint = fb[j].codepoint, uc = fb[j].uc })
+            end
+        end
+
+    end
+    for i=1,#glyphs do
+        local thistbl = tbl
+        local thisfontnumber = fontnumber
+        local thisglyph = glyphs[i]
         local cp = thisglyph.codepoint
-        local uc = tbl.backmap[cp] or cp
+        local uc
+        if thisglyph.pos then
+            -- a special table from fallback
+            thisfontnumber = thisglyph.fontnumber
+            thistbl = thisglyph.fonttable
+            uc = thisglyph.uc
+            cp = thisglyph.codepoint
+            thisglyph = thisglyph.glyph
+        else
+            uc = thistbl.backmap[cp] or cp
+        end
+
+        -- FIXME cp == 0 doesn't look right
         local tabregularspace = ( cp == 0 and cluster[thisglyph.cluster] == 9 and parameter.tab ~= "hspace")
 
         -- skip double space
@@ -5231,37 +5316,37 @@ function hbglyphlist(arguments)
                 node.set_attribute(n,att_tie_glue,1)
                 list,cur = node.insert_after(list,cur,n)
             elseif cluster[thiscluster] == 8194 then -- en space
-                n = set_glue(nil,{width = tbl.parameters.enspace },"uc=8194")
+                n = set_glue(nil,{width = thistbl.parameters.enspace },"uc=8194")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
                 list,cur = node.insert_after(list,cur,n)
             elseif cluster[thiscluster] == 8195 then -- em space
-                n = set_glue(nil,{width = tbl.parameters.emspace },"uc=8195")
+                n = set_glue(nil,{width = thistbl.parameters.emspace },"uc=8195")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
                 list,cur = node.insert_after(list,cur,n)
             elseif cluster[thiscluster] == 8196 then -- three per em space
-                n = set_glue(nil,{width = tbl.parameters.thirdspace },"uc=8196")
+                n = set_glue(nil,{width = thistbl.parameters.thirdspace },"uc=8196")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
                 list,cur = node.insert_after(list,cur,n)
             elseif cluster[thiscluster] == 8197 then -- four per em space
-                n = set_glue(nil,{width = tbl.parameters.quarterspace },"uc=8197")
+                n = set_glue(nil,{width = thistbl.parameters.quarterspace },"uc=8197")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
                 list,cur = node.insert_after(list,cur,n)
             elseif cluster[thiscluster] == 8198 then -- six per em space
-                n = set_glue(nil,{width = tbl.parameters.sixthspace },"uc=8198")
+                n = set_glue(nil,{width = thistbl.parameters.sixthspace },"uc=8198")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
                 list,cur = node.insert_after(list,cur,n)
             elseif cluster[thiscluster] == 8201 then -- thin space
-                n = set_glue(nil,{width = tbl.parameters.thinspace },"uc=8201")
+                n = set_glue(nil,{width = thistbl.parameters.thinspace },"uc=8201")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
                 list,cur = node.insert_after(list,cur,n)
             elseif cluster[thiscluster] == 8202 then -- hair space
-                n = set_glue(nil,{width = tbl.parameters.hairspace},"uc=8202")
+                n = set_glue(nil,{width = thistbl.parameters.hairspace},"uc=8202")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
                 list,cur = node.insert_after(list,cur,n)
@@ -5274,8 +5359,7 @@ function hbglyphlist(arguments)
                 -- U+200D ZERO WIDTH JOINER
                 -- ignore
             elseif preserve_whitespace then
-                local tbl = fonts.used_fonts[fontnumber]
-                local n = add_rule(nil,"head",{height = 0 * factor, depth = 0, width = tbl.zerowidth })
+                local n = add_rule(nil,"head",{height = 0 * factor, depth = 0, width = thistbl.zerowidth })
                 list,cur = node.insert_after(list,cur,n)
             else
                 n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch},"uc=32")
@@ -5357,7 +5441,7 @@ function hbglyphlist(arguments)
             end
         else
             n = node.new("glyph")
-            n.font = fontnumber
+            n.font = thisfontnumber
             n.subtype = 1
             n.char = uc
             n.uchyph = 1
@@ -5373,10 +5457,10 @@ function hbglyphlist(arguments)
             if thisglyph.x_offset ~= 0 then
                 local dir = 1
                 if direction == "rtl" then dir = -1 end
-                n.xoffset = dir * thisglyph.x_offset * tbl.mag
+                n.xoffset = dir * thisglyph.x_offset * thistbl.mag
             end
             if thisglyph.y_offset ~= 0 then
-                n.yoffset = thisglyph.y_offset * tbl.mag
+                n.yoffset = thisglyph.y_offset * thistbl.mag
             end
             set_attribute(n,"fontfamily",fontfamily)
             setstyles(n,parameter)
@@ -5402,7 +5486,7 @@ function hbglyphlist(arguments)
                     -- add breaking point between this glyph and next glyph unless prohibited
                     if i < #glyphs then
                         local nextchar = glyphs[i+1].codepoint
-                        local nextuc = tbl.backmap[nextchar] or nextchar
+                        local nextuc = thistbl.backmap[nextchar] or nextchar
                         if not prohibited_at_beginning[thislang][unicode.utf8.char(nextuc)] then
                             local pen = node.new("penalty")
                             pen.penalty = 0
@@ -5421,7 +5505,7 @@ function hbglyphlist(arguments)
             -- characters that must not appear at the end of a line
             -- $(£¥·'"〈《「『【〔〖〝﹙﹛＄（．［｛￡￥
 
-            local diff = thisglyph.x_advance - tbl.characters[uc].hadvance
+            local diff = thisglyph.x_advance - thistbl.characters[uc].hadvance
             if diff ~= 0 then
                 local property = "kernafter"
                 if direction == "rtl" then property = "kernbefore" end
@@ -5817,7 +5901,6 @@ function mknodes(str,parameter,origin)
         end
         local thissegment
         if tbl.face then
-            -- w("hb mode")
             local script = nil
             if thislang == "--" then
                 thislang = nil

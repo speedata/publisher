@@ -317,6 +317,7 @@ Alternativ dazu kann man auch bei  <<cmd-loadfontfile,`<LoadFontfile>`>> eine Er
 
 So wird erst die Schriftart `texgyreheros-regular.otf` durchsucht, anschließend `fontawesome-webfont.ttf` und zum Schluss  `line-awesome.ttf`.
 
+TIP: Im HarfBuzz-Modus befindet sich der Fallback-Befehl noch im Teststadium und darf derzeit nur ein Fallback enthalten.
 
 == Aliasnamen
 
