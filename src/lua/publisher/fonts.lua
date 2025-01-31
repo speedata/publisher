@@ -86,18 +86,6 @@ function table.find(tab,key)
     return nil
 end
 
-function get_fontname( localname, url )
-    localname = publisher.get_fontname(localname)
-    -- w("get_fontname, localname %q",tostring(localname))
-    if localname and lookup_fontname_filename[localname] then
-        return localname
-    elseif url then
-        load_fontfile(url,url)
-        return url
-    end
-    return nil
-end
-
 local preloaded_fonts = {}
 
 
@@ -115,7 +103,7 @@ function make_font_instance( name,size )
     end
     local filename,parameter = table.unpack(lookup_fontname_filename[name])
     assert(filename)
-    local k = {filename = filename, fontsize = size, space = parameter.space, mode = parameter.mode or publisher.options.fontloader}
+    local k = {filename = filename, fontsize = size, space = parameter.space, mode = parameter.mode or publisher.options.fontloader,fallbacks = parameter.fallbacks}
 
     if parameter.otfeatures then
         for fea,enabled in pairs(parameter.otfeatures) do

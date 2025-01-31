@@ -84,8 +84,8 @@ end
 
 --- LuaTeX's fontloader (function `to_table()`) returns a rather complex table
 --- with all kinds of information. Loading this table is expensive (_todo:
---- measure it_), so we  don't load it over and over agin if the user
---- requests the same font in a different size. We also cache  the `to_unicode` mapping.
+--- measure it_), so we  don't load it over and over again if the user
+--- requests the same font in a different size. We also cache the `to_unicode` mapping.
 --- Only the size dependent values are computed.
 local lookup_fonttable_from_filename = {}
 

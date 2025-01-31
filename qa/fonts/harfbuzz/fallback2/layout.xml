@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="6cm" width="6cm"></Pageformat>
+	<LoadFontfile name="liberation" filename="liberationsansnarrow-regular.ttf"  />
+
+	<LoadFontfile name="liberationfallback" filename="liberationsansnarrow-regular.ttf">
+		<Fallback filename="ezra_sil.ttf" />
+	</LoadFontfile>
+
+    <!-- this used to confuse the speedata Publisher -->
+	<DefineFontfamily name="dummy" fontsize="9" leading="12"><Regular fontface="liberation" /></DefineFontfamily>
+
+	<DefineFontfamily name="text" fontsize="9.0000" leading="12.54">
+		<Regular fontface="liberationfallback" />
+	</DefineFontfamily>
+
+	<Record element="data">
+		<Output>
+			<Text>
+				<Paragraph bidi="yes">
+					<Value>B'resheet Elohim bara' ·In the beginning of the beginning, God created from nothingness· את the heavens את and the earth.</Value>
+				</Paragraph>
+			</Text>
+		</Output>
+	</Record>
+
+
+</Layout>

@@ -5215,6 +5215,9 @@ function getfallbacks(cluster,glyphslist,fallback_fontdefinitions)
             uclist[#uclist+1] = uc
             buf:add_utf8(unicode.utf8.char(uc))
         end
+        buf:set_cluster_level(buf.CLUSTER_LEVEL_MONOTONE_CHARACTERS)
+        buf:set_flags(harfbuzz.Buffer.FLAG_REMOVE_DEFAULT_IGNORABLES)
+        buf:guess_segment_properties()
 
         shape(tbl,buf)
         local nglyphs = buf:get_glyphs()
