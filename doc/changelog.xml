@@ -1,8 +1,12 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.21">
+    <entry version="4.21.7" date="2025-01-31">
+        <en>Bugfix for Fallback command in HarfBuzz mode.</en>
+        <de>Fehlerkorrektur für Fallback im HarfBuzz-Modus.</de>
+    </entry>
     <entry version="4.21.6" date="2025-01-30">
-        <en>Start Fallback command for fonts in Harfbuzz mode (#603).</en>
-        <de>Beginne Fallback für Schriftarten im Harfbuzz-Modus (#603).</de>
+        <en>Start Fallback command for fonts in HarfBuzz mode (#603).</en>
+        <de>Beginne Fallback für Schriftarten im HarfBuzz-Modus (#603).</de>
     </entry>
     <entry version="4.21.5" date="2025-01-23">
         <en>Allow variables in Pagetype and new XPath mode.</en>
