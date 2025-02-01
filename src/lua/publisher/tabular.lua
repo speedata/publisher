@@ -1619,7 +1619,6 @@ function typeset_table(self,dataxml)
                         local ht = self.getheight(idx,self.dataxml)
                         if ht then
                             val = ht - ht_head - footerheight
-                            tbl[idx] = val
                             return val
                         end
                     end
