@@ -1476,11 +1476,14 @@ function parse_expr(tl)
         return efs[1], nil
     end
     local evaler = function(ctx)
+        local newcontext = ctx:copy()
+        local copysequence = newcontext.sequence
         local ret = {}
         local seq
         local errmsg
-        for _, ef in ipairs(efs) do
-            seq, errmsg = ef(ctx)
+        for i, ef in ipairs(efs) do
+            newcontext.sequence = copysequence
+            seq, errmsg = ef(newcontext)
             if errmsg then
                 return nil, errmsg
             end
@@ -1488,6 +1491,7 @@ function parse_expr(tl)
                 ret[#ret + 1] = itm
             end
         end
+        newcontext.sequence = copysequence
         return ret, nil
     end
 
