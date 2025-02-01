@@ -705,8 +705,6 @@ end
 
 function commands.compatibility( layoutxml,dataxml )
     local movecursoronrightedge = publisher.read_attribute(layoutxml,dataxml,"movecursoronplaceobject", "boolean","yes")
-    publisher.compatibility.luaxmlreader = publisher.read_attribute(layoutxml,dataxml,"luaxmlreader", "boolean","no")
-
     publisher.compatibility.movecursoronrightedge = movecursoronrightedge
 end
 
@@ -2419,7 +2417,7 @@ end
 --- Switch to the next frame of the given positioning area.
 function commands.next_frame( layoutxml,dataxml )
     local areaname = publisher.read_attribute(layoutxml,dataxml,"area","string")
-    publisher.next_area(areaname,nil, dataxml)
+    publisher.next_area(areaname,nil, dataxml,"cmd next_frame")
 end
 
 --- Next Row
@@ -2885,7 +2883,7 @@ function commands.output( layoutxml,dataxml )
                 local obj2 = state.split
                 local ht = current_grid:height_in_gridcells_sp(obj.height)
                 publisher.output_at({nodelist = obj1, x = 1, y = row, allocate = true, area = area})
-                publisher.next_area(area,nil,dataxml)
+                publisher.next_area(area,nil,dataxml,"output split")
                 publisher.output_at({nodelist = obj2, x = 1, y = row, allocate = true, area = area})
                 current_grid:set_framenumber(area,1)
             else
@@ -2899,7 +2897,7 @@ function commands.output( layoutxml,dataxml )
                     publisher.next_row(nextfreerow,area,0,dataxml)
                 else
                     if more_to_follow then
-                        publisher.next_area(area,nil,dataxml)
+                        publisher.next_area(area,nil,dataxml,"output (2)")
                     else
                         -- We need to go down a bit to ensure that the next
                         -- current row for allocation detection is not
@@ -3618,7 +3616,7 @@ function commands.place_object( layoutxml,dataxml)
                     current_row = current_grid:find_suitable_row(current_column_start,width_in_gridcells,height_in_gridcells,area)
                     if not current_row then
                         splib.log("warn","No suitable row found","type", objecttype,lineinfo(layoutxml))
-                        publisher.next_area(area,nil, dataxml)
+                        publisher.next_area(area,nil, dataxml, "place_object no current row")
                         publisher.setup_page(nil,"commands#PlaceObject",dataxml)
                         current_grid = publisher.current_grid
                         current_row = current_grid:current_row(area)
@@ -3657,7 +3655,7 @@ function commands.place_object( layoutxml,dataxml)
         if i < #objects then
             -- don't switch when inside a group
             if publisher.current_group == nil then
-                publisher.next_area(area,nil,dataxml)
+                publisher.next_area(area,nil,dataxml,"place_object not in group")
                 publisher.setup_page(nil,"commands#PlaceObject",dataxml)
             end
         else

@@ -84,7 +84,7 @@ function current_column( self,area )
     return self.positioning_frames[area].current_column or 1
 end
 
-function set_current_row( self,row,areaname )
+function set_current_row( self,row,areaname,origin )
     assert(self)
     local areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
@@ -155,7 +155,7 @@ function get_advanced_cursor( self,areaname )
     local current_frame = self:framenumber(areaname)
     local ht = area[current_frame].height
     if not area.current_row then
-        self:set_current_row(1,areaname)
+        self:set_current_row(1,areaname,"get_advanced_cursor")
     end
     local nextframe = current_frame + 1
     if nextframe > #area then
@@ -361,11 +361,12 @@ function allocate_cells(self,options)
         if col > self:number_of_columns(areaname) and publisher.compatibility.movecursoronrightedge then
             col = 1
             rows = 1
-            self:set_current_row(math.ceil(y + rows + ht  - 1) ,areaname)
+            local c = math.ceil(y + rows + ht  - 1)
+            self:set_current_row(c,areaname,"allocate_cells")
         else
-            self:set_current_row(y,areaname)
+            self:set_current_row(y,areaname,"allocate_cells 2")
         end
-        self:set_current_column(col,areaname)
+        self:set_current_column(col,areaname,"allocate_cells")
     end
 
     local grid_conflict = false
@@ -551,7 +552,7 @@ function find_suitable_row( self,column, width,height,areaname, framenumber)
     if self:number_of_rows(areaname) < self:current_row(areaname) + height - 1 then
         -- doesn't fit, so we try on the next area
         if self:number_of_frames(areaname) > self:framenumber(areaname) then
-            publisher.next_area(areaname,self)
+            publisher.next_area(areaname,self,nil,"find_suitable_row")
             return self:find_suitable_row(column, width,height,areaname)
         else
             return

@@ -2908,7 +2908,7 @@ function setup_page(pagenumber,fromwhere,dataxml)
 end
 
 --- Switch to the next frame in the given area.
-function next_area( areaname, grid, dataxml )
+function next_area( areaname, grid, dataxml,origin )
     grid = grid or current_grid
     local current_framenumber = grid:framenumber(areaname)
     if not current_framenumber then
@@ -2920,8 +2920,8 @@ function next_area( areaname, grid, dataxml )
     else
         grid:set_framenumber(areaname, current_framenumber + 1)
     end
-    grid:set_current_row(1,areaname)
-    grid:set_current_column(1,areaname)
+    grid:set_current_row(1,areaname,"next_area")
+    grid:set_current_column(1,areaname,"next_area")
 end
 
 --- Switch to a new page and ship out the current page.
@@ -7400,7 +7400,7 @@ function next_row(rownumber,areaname,rows,dataxml)
     local grid = current_grid
 
     if rownumber then
-        grid:set_current_row(rownumber,areaname)
+        grid:set_current_row(rownumber,areaname,"next_row")
         return
     end
 
@@ -7412,10 +7412,10 @@ function next_row(rownumber,areaname,rows,dataxml)
     end
     current_row = grid:find_suitable_row(1,noc,rows,areaname)
     if not current_row then
-        next_area(areaname,nil, dataxml)
+        next_area(areaname,nil, dataxml,"next_row")
         setup_page(nil,"next_row",dataxml)
         grid = current_page.grid
-        grid:set_current_row(1)
+        grid:set_current_row(1,areaname,"cannot find suitable row")
     else
         -- Version 2.7.3 and before had the problem that the cursor is past the right
         -- edge. See bug #105 (https://github.com/speedata/publisher/issues/105) for
@@ -7432,13 +7432,13 @@ function next_row(rownumber,areaname,rows,dataxml)
         end
         local grid_number_of_rows = grid:number_of_rows(areaname)
         if current_row + rows - dec > grid_number_of_rows then
-            next_area(areaname,nil, dataxml)
+            next_area(areaname,nil, dataxml,"next_row 2")
             setup_page(nil,"next_row",dataxml)
             grid = current_page.grid
-            grid:set_current_row(1)
+            grid:set_current_row(1,areaname,"next_row -> next_area")
             return
         end
-        grid:set_current_row(current_row + rows - dec,areaname)
+        grid:set_current_row(current_row + rows - dec,areaname,"next_row has_current_row")
         grid:set_current_column(1,areaname)
     end
 end

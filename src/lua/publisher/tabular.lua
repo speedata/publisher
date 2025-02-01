@@ -1491,7 +1491,6 @@ function typeset_table(self,dataxml)
         largest_index = 0
     }
     local function get_tableheads_extra( idx, maxrow )
-        -- maxrow = maxrow or
         idx = idx - 1
         if idx < 1 then return nil end
         local maxidx = tableheads_extra.largest_index
@@ -1651,7 +1650,7 @@ function typeset_table(self,dataxml)
     local final_split_tables = {}
     local pagegoal = 0
 
-    local ht_row,space_above,too_high
+    local ht_row,space_above
     --- splits is a table which includes the number of the rows each page has in a multi-page table
     ---
     ---     splits = {
