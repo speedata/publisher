@@ -7962,6 +7962,14 @@
         <para>Radius der Ecke unten links.</para>
       </description>
     </attribute>
+    <attribute en="clipatmargin" optional="yes" since="4.21.9" type="boolean" allowxpath="yes">
+      <description xml:lang="en">
+        <para>Clip objects at page margin.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Schneide Objekte am Seitenrand ab.</para>
+      </description>
+    </attribute>
     <attribute en="column" type="numberorlength" optional="yes">
       <description xml:lang="en">
         <para>If contents is a number: the grid cell from the left margin of the area. If it is a length: the absolute position from the left paper margin. If this attribute is omitted, the system tries to place the object by itself.</para>

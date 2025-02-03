@@ -3274,6 +3274,7 @@ function commands.place_object( layoutxml,dataxml)
     local row              = publisher.read_attribute(layoutxml,dataxml,"row",            "string")
     local area             = publisher.read_attribute(layoutxml,dataxml,"area",           "string")
     local allocate         = publisher.read_attribute(layoutxml,dataxml,"allocate",       "string")
+    local clipatmargin     = publisher.read_attribute(layoutxml,dataxml,"clipatmargin",   "boolean",false)
     local framecolor       = publisher.read_attribute(layoutxml,dataxml,"framecolor",     "string")
     local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"background-color","string")
     backgroundcolor        = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string",backgroundcolor)
@@ -3564,9 +3565,7 @@ function commands.place_object( layoutxml,dataxml)
             end
             publisher.output_absolute_position({
                 nodelist = object,
-                x        = column + current_grid.extra_margin,
-                y        = top,
-                rotate   = rotate,
+                clipatmargin = clipatmargin,
                 origin_x = origin_x,
                 origin_y = origin_y,
                 allocate = allocate == "yes",
@@ -3575,7 +3574,11 @@ function commands.place_object( layoutxml,dataxml)
                 allocate_right  = allocate_right,
                 allocate_top    = allocate_top,
                 allocate_bottom = allocate_bottom,
+                grid = current_grid,
                 keepposition = keepposition,
+                rotate   = rotate,
+                x        = column + current_grid.extra_margin,
+                y        = top,
             })
         else
             -- Look for a place for the object
@@ -3655,6 +3658,7 @@ function commands.place_object( layoutxml,dataxml)
                 allocate_top    = allocate_top,
                 allocate_bottom = allocate_bottom,
                 vreference = vreference,
+                clipatmargin = clipatmargin,
                 })
             row = nil -- the current rows is not valid anymore because an object is already rendered
             node.flush_list(object)

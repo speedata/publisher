@@ -4954,6 +4954,18 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="clipatmargin">
+                     <a:documentation>Schneide Objekte am Seitenrand ab.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <value>no</value>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="column">
                      <a:documentation>Zahl: Die Spalte im Raster, in der das Objekt ausgegeben wird. Wird die Spalte nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe: die Position von der linken Blattkante.</a:documentation>
                   </attribute>

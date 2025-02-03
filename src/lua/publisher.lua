@@ -2335,6 +2335,7 @@ end
 --- nodelist        | The box to be placed
 --- x               | The horizontal distance from the left edge in grid cells
 --- y               | The vertical distance form the top edge in grid cells
+--- clipatmargin    | Clip objects so they don't appear in the page margin
 --- rotate          | Rotation counter clockwise in degrees (0-360).
 --- origin_x        | Origin X for rotation. Left is 0 and right is 100
 --- origin_y        | Origin Y for rotation. Top is 0 and bottom is 100
@@ -2344,7 +2345,7 @@ function output_absolute_position(param)
     local y = param.y
     local nodelist = param.nodelist
     local keepposition = param.keepposition
-
+    local r = param.grid or current_grid
     if param.allocate then
         local additional_width,additional_height = 0,0
 
@@ -2404,6 +2405,28 @@ function output_absolute_position(param)
         nodelist = rotate(nodelist,param.rotate, param.origin_x or 0, param.origin_y or 0)
     end
 
+    if param.clipatmargin then
+        local wd = nodelist.width
+        local ht = nodelist.height + nodelist.depth
+
+        local clipleft = math.max(r.margin_left + r.extra_margin - x,0)
+        local cliptop = math.max(r.extra_margin + r.margin_top - y, 0)
+        local clipright = math.max(-1 *(tex.pagewidth - r.extra_margin - r.margin_right - x - wd),0)
+        local pageframe = r.positioning_frames._page[1]
+        local maxht = r.extra_margin + r.margin_top + pageframe.height * r.gridheight + (pageframe.height - 1) * r.grid_dy
+        local clipbottom = math.max(-1 *( maxht - y - ht),0)
+
+        nodelist = clip({
+            box = nodelist,
+            clip_top_sp = cliptop,
+            clip_bottom_sp = clipbottom,
+            clip_left_sp = clipleft,
+            clip_right_sp = clipright,
+            clip_width_sp = 0,
+            clip_height_sp = 0,
+            method = "frame",
+        })
+    end
     local n = add_glue( nodelist ,"head",{ width = x })
     n = node.hpack(n)
     n = add_glue(n, "head", {width = y})
@@ -2443,6 +2466,7 @@ end
 --- y               | The vertical distance form the top edge in grid cells
 --- allocate        | Mark these cells as 'occupied'
 --- area            | The area on which the object should be placed. Defaults to the page area.
+--- clipatmargin    | Clip objects so they don't appear in the page margin
 --- valign          |
 --- halign          |
 --- allocate_matrix | For image-shapes
@@ -2525,6 +2549,25 @@ function output_at( param )
     if node.has_attribute(nodelist,att_shift_left) then
         delta_x = delta_x - node.has_attribute(nodelist,att_shift_left)
         delta_y = delta_y - node.has_attribute(nodelist,att_shift_up)
+    end
+    if param.clipatmargin then
+        local clipleft = math.max(r.margin_left + r.extra_margin - delta_x,0)
+        local cliptop = math.max(r.extra_margin + r.margin_top - delta_y, 0)
+        local clipright = math.max(-1 *(tex.pagewidth - r.extra_margin - r.margin_right - delta_x - wd),0)
+        local pageframe = r.positioning_frames._page[1]
+        local maxht = r.extra_margin + r.margin_top + pageframe.height * r.gridheight + (pageframe.height - 1) * r.grid_dy
+        local clipbottom = math.max(-1 *( maxht - delta_y - ht),0)
+
+        nodelist = clip({
+            box = nodelist,
+            clip_top_sp = cliptop,
+            clip_bottom_sp = clipbottom,
+            clip_left_sp = clipleft,
+            clip_right_sp = clipright,
+            clip_width_sp = 0,
+            clip_height_sp = 0,
+            method = "frame",
+        })
     end
 
 

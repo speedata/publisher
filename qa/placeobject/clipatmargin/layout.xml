@@ -1,0 +1,33 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en"
+	version="4.21.9">
+	<Record element="data">
+		<PlaceObject column="0" row="0" clipatmargin="yes">
+			<Image width="6" file="ocean.pdf" />
+		</PlaceObject>
+		<PlaceObject column="15" row="0" clipatmargin="yes">
+			<Image width="6" file="ocean.pdf" />
+		</PlaceObject>
+		<PlaceObject column="0" row="25" clipatmargin="yes">
+			<Image width="6" file="ocean.pdf" />
+		</PlaceObject>
+		<PlaceObject column="15" row="25" clipatmargin="yes">
+			<Image width="6" file="ocean.pdf" />
+		</PlaceObject>
+
+		<ClearPage />
+
+		<PlaceObject column="0mm" row="0mm" clipatmargin="yes">
+			<Image width="6" file="ocean.pdf" />
+		</PlaceObject>
+		<PlaceObject column="15cm" row="0mm" clipatmargin="yes">
+			<Image width="6" file="ocean.pdf" />
+		</PlaceObject>
+		<PlaceObject column="0mm" row="25cm" clipatmargin="yes">
+			<Image width="6" file="ocean.pdf" />
+		</PlaceObject>
+		<PlaceObject column="15cm" row="25cm" clipatmargin="yes">
+			<Image width="6" file="ocean.pdf" />
+		</PlaceObject>
+	</Record>
+</Layout>

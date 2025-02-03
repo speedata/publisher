@@ -5791,6 +5791,30 @@
           <xs:documentation>Radius der Ecke unten links.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="clipatmargin">
+        <xs:annotation>
+          <xs:documentation>Schneide Objekte am Seitenrand ab.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="column">
         <xs:annotation>
           <xs:documentation>Zahl: Die Spalte im Raster, in der das Objekt ausgegeben wird. Wird die Spalte nicht angegeben, so sucht sich das System selbständig eine passende freie Zeile für das Objekt. Maßangabe: die Position von der linken Blattkante.</xs:documentation>
