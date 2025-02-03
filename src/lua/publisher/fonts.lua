@@ -98,7 +98,7 @@ function make_font_instance( name,size )
     assert(tonumber(size))
     if not lookup_fontname_filename[name] then
         local msg = string.format("Font instance '%s' is not defined!", name)
-        err(msg)
+        splib.error("Make font istance: filename is not defined","filename",name)
         return false, msg
     end
     local filename,parameter = table.unpack(lookup_fontname_filename[name])
@@ -553,16 +553,37 @@ function clone_family( fam, params )
     end
     newfam.name = "cloned"
 
-    local ok,b = make_font_instance(newfam.fontfaceregular, params.size * newfam.size )
+    local ok,r = make_font_instance(newfam.fontfaceregular, params.size * newfam.size )
+    if not ok then
+        err(r)
+        return fam
+    end
+
+    local ok,b = make_font_instance(newfam.fontfacebold, params.size * newfam.size )
     if not ok then
         err(b)
         return fam
-    else
-        newfam.normal = b
-        newfam.size = math.floor(params.size * newfam.size)
-        lookup_fontfamily_number_instance[#lookup_fontfamily_number_instance + 1] = newfam
-        return #lookup_fontfamily_number_instance
     end
+
+    local ok,i = make_font_instance(newfam.fontfaceitalic, params.size * newfam.size )
+    if not ok then
+        err(i)
+        return fam
+    end
+
+    local ok,bi = make_font_instance(newfam.fontfacebolditalic, params.size * newfam.size )
+    if not ok then
+        err(bi)
+        return fam
+    end
+
+    newfam.normal = r
+    newfam.bold = b
+    newfam.italic = i
+    newfam.bolditalic = bi
+    newfam.size = math.floor(params.size * newfam.size)
+    lookup_fontfamily_number_instance[#lookup_fontfamily_number_instance + 1] = newfam
+    return #lookup_fontfamily_number_instance
 end
 
 file_end("fonts.lua")

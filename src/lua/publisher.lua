@@ -7548,6 +7548,7 @@ function define_fontfamily( regular,bold,italic,bolditalic, name, size, baseline
         ok,tmp = fonts.make_font_instance(bold,fam.size)
         if not ok then return false, tmp end
         fam.bold = tmp
+        fam.fontfacebold = bold
         ok,tmp = fonts.make_font_instance(bold,fam.scriptsize)
         if not ok then return false, tmp end
         fam.boldscript = tmp
@@ -7557,6 +7558,7 @@ function define_fontfamily( regular,bold,italic,bolditalic, name, size, baseline
         ok,tmp = fonts.make_font_instance(italic,fam.size)
         if not ok then return false, tmp end
         fam.italic = tmp
+        fam.fontfaceitalic = italic
         ok,tmp = fonts.make_font_instance(italic,fam.scriptsize)
         if not ok then return false, tmp end
         fam.italicscript = tmp
@@ -7566,6 +7568,7 @@ function define_fontfamily( regular,bold,italic,bolditalic, name, size, baseline
         ok,tmp = fonts.make_font_instance(bolditalic,fam.size)
         if not ok then return false, tmp end
         fam.bolditalic = tmp
+        fam.fontfacebolditalic = bolditalic
         ok,tmp = fonts.make_font_instance(bolditalic,fam.scriptsize)
         if not ok then return false, tmp end
         fam.bolditalicscript = tmp

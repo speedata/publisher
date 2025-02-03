@@ -2514,13 +2514,13 @@ function commands.nobreak( layoutxml, dataxml )
             strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 })
             local loops = 0
             local nl
-
+            local maxloops = 10
             local tmppar
             repeat
                 tmppar = par:new(nil,"nobreak(fontsize 1)")
                 loops = loops + 1
-                if loops > 10 then
-                    err("Nobreak: More than 10 loops, giving up")
+                if loops > maxloops then
+                    splib.error("Nobreak, giving up, too many loops","maxloops",maxloops)
                     break
                 end
                 local thisoptions = publisher.copy_table_from_defaults(options)
