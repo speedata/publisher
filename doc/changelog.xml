@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.21">
+    <entry version="4.21.8" date="2025-02-03">
+        <en>Various bug fixes, documentation fixes (#582, #594, #611, #629, #630).</en>
+        <de>Diverse Fehlerkorrekturen und Dokumentationskorrekturen (#582, #594, #611, #629, #630).</de>
+    </entry>
+    <entry version="4.21.8" date="2025-02-03">
+        <en>Allow grid tracing of groups (#569).</en>
+        <de>Erlaube Debugausgabe des Rasters (#569).</de>
+    </entry>
     <entry version="4.21.7" date="2025-01-31">
         <en>Bugfix for Fallback command in HarfBuzz mode.</en>
         <de>Fehlerkorrektur für Fallback im HarfBuzz-Modus.</de>
