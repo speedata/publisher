@@ -65,3 +65,44 @@ Richtig benutzt sind sie ein mächtiges Werkzeug.
 Ein Hinweis auf das Kapitel <<ch-optimierung-mit-gruppen>> sei noch erlaubt.
 Dort wird die Optimierung mit einem Beispiel beschrieben.
 
+
+== Tracing
+
+Um das Debuggen des Layouts innerhalb einer Gruppe zu erleichtern, können Sie die Rastervisualisierung einschalten:
+
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat height="6cm" width="9cm"></Pageformat>
+  <Trace groups="yes" />
+
+  <Record element="data">
+    <Group name="foo">
+      <Grid width="4mm" height="4mm"></Grid>
+      <Contents>
+        <PlaceObject>
+          <Textblock width="11">
+            <Paragraph>
+              <Value>Hello world</Value>
+            </Paragraph>
+          </Textblock>
+        </PlaceObject>
+        <PlaceObject column="1" row="4">
+          <Image width="3" file="_samplea.pdf" />
+        </PlaceObject>
+      </Contents>
+    </Group>
+    <PlaceObject groupname="foo" column="2" row="2" />
+  </Record>
+</Layout>
+----------------
+
+Das wird so angezeigt:
+
+.Das Raster in der Gruppe kann angezeigt werden.
+image::group-tracing.png[width=50%,scaledwidth=80%]
+
+
+// EOF

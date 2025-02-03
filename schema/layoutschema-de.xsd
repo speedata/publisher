@@ -8826,6 +8826,25 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="groups">
+        <xs:annotation>
+          <xs:documentation>Wenn 'yes', dann zeichnet der Publisher das zugrunde liegende Raster in den Gruppen.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes">
+              <xs:annotation>
+                <xs:documentation>Zeige das Raster.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="no">
+              <xs:annotation>
+                <xs:documentation>Das Raster wird nicht angezeigt (Voreinstellung).</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="hyphenation">
         <xs:annotation>
           <xs:documentation>Bei 'yes' markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</xs:documentation>

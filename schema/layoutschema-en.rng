@@ -7030,6 +7030,17 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="groups">
+               <a:documentation>Draw the grid inside all groups.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Show the grid.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Don&#39;t show the grid (default).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="hyphenation">
                <a:documentation>Draw little marks to show all hyphenation points.</a:documentation>
                <choice>

@@ -11162,6 +11162,30 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="groups" optional="yes" since="4.21.8">
+      <description xml:lang="en">
+        <para>Draw the grid inside all groups.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn 'yes', dann zeichnet der Publisher das zugrunde liegende Raster in den Gruppen.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Show the grid.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Zeige das Raster.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Don't show the grid (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Raster wird nicht angezeigt (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="hyphenation" optional="yes">
       <description xml:lang="en">
         <para>Draw little marks to show all hyphenation points.</para>

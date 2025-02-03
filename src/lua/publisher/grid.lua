@@ -688,6 +688,48 @@ function draw_frame(self,frame,width_sp)
     return table.concat(ret,"\n")
 end
 
+function draw_grid_group(group)
+    local ht = group.contents.height
+    local wd = group.contents.width
+    local ret = {"q 0.4 w [2] 1 d "}
+    local gray1 = "0.6"
+    local gray2 = "0.8"
+    local gray3 = "0.2"
+    local color = gray3
+    local g = group.grid
+    local gridwidth = g.gridwidth
+    local gridheight = g.gridheight
+    local x = 0
+    local y = 0
+    local i = 0
+    while x <= wd do
+        -- every 5 grid cells draw a gray rule
+        if (i % 5 == 0) then color = gray1 else color = gray2 end
+        -- every 10 grid cells draw a black rule
+        if (i % 10 == 0) then color = gray3 end
+        i = i + 1
+
+        ret[#ret+1] = string.format("%g G %g %g m %g %g l S", color, sp_to_bp(x), sp_to_bp(y), sp_to_bp(x), sp_to_bp(y - ht) )
+        x = x + gridwidth
+    end
+    x = 0
+    y = 0
+    local i = 0
+    while y <= ht do
+        -- every 5 grid cells draw a gray rule
+        if (i % 5 == 0) then color = gray1 else color = gray2 end
+        -- every 10 grid cells draw a black rule
+        if (i % 10 == 0) then color = gray3 end
+        i = i + 1
+
+        ret[#ret+1] = string.format("%g G %g %g m %g %g l S", color, 0, sp_to_bp(-1 * y), sp_to_bp(wd), sp_to_bp( -1 * y) )
+        y = y + gridheight
+    end
+
+    ret[#ret+1] = string.format("Q q 0 0 %g %g re S",sp_to_bp(wd),-1 * sp_to_bp(ht))
+    ret[#ret + 1] = "Q"
+    return string.format(table.concat(ret,"\n"))
+end
 
 -- Draw internal grid (return PDF-strings)
 function draw_grid(self)

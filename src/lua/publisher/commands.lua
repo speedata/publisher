@@ -3477,11 +3477,18 @@ function commands.place_object( layoutxml,dataxml)
         if not publisher.groups[groupname] then
             err("Unknown group %q in PlaceObject",groupname)
         else
-            objects[1] = { object = node.copy(publisher.groups[groupname].contents),
-                objecttype = string.format("Group (%s)", groupname)}
+            local g = publisher.groups[groupname]
+            objects[1] = { object = node.copy(g.contents),objecttype = string.format("Group (%s)", groupname)}
+            if publisher.options.showgroups then
+                local p = node.new(publisher.whatsit_node,publisher.pdf_literal_whatsit)
+                p.data = publisher.grid.draw_grid_group(g)
+                publisher.setprop(p,"origin","trace group")
+                objects[1].object.head = node.insert_before(objects[1].object.head,objects[1].object.head,p)
+
+            end
         end
     else
-        for i,j in ipairs(tab) do
+        for _,j in ipairs(tab) do
             object = publisher.element_contents(j)
             objecttype = publisher.elementname(j)
             if objecttype == "Image" then
@@ -5054,6 +5061,7 @@ function commands.trace(layoutxml,dataxml)
     local assignments      = publisher.read_attribute(layoutxml,dataxml,"assignments",   "boolean")
     local debug            = publisher.read_attribute(layoutxml,dataxml,"debug",         "boolean")
     local grid             = publisher.read_attribute(layoutxml,dataxml,"grid",          "boolean")
+    local groups           = publisher.read_attribute(layoutxml,dataxml,"groups",        "boolean")
     local gridallocation   = publisher.read_attribute(layoutxml,dataxml,"gridallocation","boolean")
     local gridlocation     = publisher.read_attribute(layoutxml,dataxml,"gridlocation",  "string")
     local hyphenation      = publisher.read_attribute(layoutxml,dataxml,"hyphenation",   "boolean")
@@ -5067,6 +5075,9 @@ function commands.trace(layoutxml,dataxml)
     end
     if debug ~= nil then
         publisher.options.showdebug = debug
+    end
+    if groups ~= nil then
+        publisher.options.showgroups = groups
     end
     if grid ~= nil then
         publisher.options.showgrid = grid

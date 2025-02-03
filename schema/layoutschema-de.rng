@@ -7030,6 +7030,17 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="groups">
+               <a:documentation>Wenn &#39;yes&#39;, dann zeichnet der Publisher das zugrunde liegende Raster in den Gruppen.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Zeige das Raster.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Das Raster wird nicht angezeigt (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="hyphenation">
                <a:documentation>Bei &#39;yes&#39; markiert der speedata Publisher die möglichen Trennstellen für die Silbentrennung.</a:documentation>
                <choice>

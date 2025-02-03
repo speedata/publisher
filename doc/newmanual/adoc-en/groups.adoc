@@ -66,4 +66,42 @@ Used correctly, they are a powerful tool.
 See the chapter <<ch-layoutoptimizationusinggroups>> for an example how to optimize layout using groups.
 
 
+== Tracing
+
+Do help debugging the layout within a group, you can turn on the grid visualization:
+
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat height="6cm" width="9cm"></Pageformat>
+  <Trace groups="yes" />
+
+  <Record element="data">
+    <Group name="foo">
+      <Grid width="4mm" height="4mm"></Grid>
+      <Contents>
+        <PlaceObject>
+          <Textblock width="11">
+            <Paragraph>
+              <Value>Hello world</Value>
+            </Paragraph>
+          </Textblock>
+        </PlaceObject>
+        <PlaceObject column="1" row="4">
+          <Image width="3" file="_samplea.pdf" />
+        </PlaceObject>
+      </Contents>
+    </Group>
+    <PlaceObject groupname="foo" column="2" row="2" />
+  </Record>
+</Layout>
+----------------
+
+which gets rendered as
+
+.The grid within the group gets displayed.
+image::group-tracing.png[width=50%,scaledwidth=80%]
+
+
 // EOF
