@@ -77,7 +77,7 @@ function commands.a( layoutxml,dataxml )
         end
         local ai = publisher.get_action_node(3)
         local data = publisher.hyperlinks[#publisher.hyperlinks]
-        ai.data = data
+        ai.data = tostring(data)
 
         local stl = node.new("whatsit","pdf_start_link")
         stl.action = ai

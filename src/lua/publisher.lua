@@ -8383,7 +8383,8 @@ function hlurl(href,bordercolor)
         -- ["/Border"] = "[0 0 0]"
         -- ["/Subtype"] = "/Link"
     -- },
-    hyperlinks[#hyperlinks+1] = tostring(tab)
+    -- hyperlinks must be a table, PDF/UA adds entries to the table
+    hyperlinks[#hyperlinks+1] = tab
     return #hyperlinks
 end
 
