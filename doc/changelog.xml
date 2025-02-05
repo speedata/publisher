@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.21">
+    <entry version="4.21.10" date="2025-02-05">
+        <en>Allow clipping of objects at page margin (#640).</en>
+        <de>Objekte können am Seitenrand abgeschnitten werde (#640).</de>
+    </entry>
     <entry version="4.21.8" date="2025-02-03">
         <en>Various bug fixes, documentation fixes (#582, #594, #611, #629, #630).</en>
         <de>Diverse Fehlerkorrekturen und Dokumentationskorrekturen (#582, #594, #611, #629, #630).</de>
