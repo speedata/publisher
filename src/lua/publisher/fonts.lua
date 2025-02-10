@@ -545,7 +545,6 @@ function clone_family( fam, params )
     --   ["normal"] = "9"
     --   ["size"] = "657810"
     -- },
-
     local fam_tbl = lookup_fontfamily_number_instance[fam]
     local newfam = {}
     for k,v in pairs(fam_tbl) do
@@ -553,34 +552,42 @@ function clone_family( fam, params )
     end
     newfam.name = "cloned"
 
-    local ok,r = make_font_instance(newfam.fontfaceregular, params.size * newfam.size )
-    if not ok then
-        err(r)
-        return fam
+    if newfam.fontfaceregular then
+        local ok,r = make_font_instance(newfam.fontfaceregular, params.size * newfam.size )
+        if not ok then
+            err(r)
+            return fam
+        end
+        newfam.normal = r
     end
 
-    local ok,b = make_font_instance(newfam.fontfacebold, params.size * newfam.size )
-    if not ok then
-        err(b)
-        return fam
+    if newfam.fontfacebold then
+        local ok,b = make_font_instance(newfam.fontfacebold, params.size * newfam.size )
+        if not ok then
+            err(b)
+            return fam
+        end
+        newfam.bold = b
     end
 
-    local ok,i = make_font_instance(newfam.fontfaceitalic, params.size * newfam.size )
-    if not ok then
-        err(i)
-        return fam
+    if newfam.fontfaceitalic then
+        local ok,i = make_font_instance(newfam.fontfaceitalic, params.size * newfam.size )
+        if not ok then
+            err(i)
+            return fam
+        end
+        newfam.italic = i
+        end
+
+    if newfam.fontfacebolditalic then
+        local ok,bi = make_font_instance(newfam.fontfacebolditalic, params.size * newfam.size )
+        if not ok then
+            err(bi)
+            return fam
+        end
+        newfam.bolditalic = bi
     end
 
-    local ok,bi = make_font_instance(newfam.fontfacebolditalic, params.size * newfam.size )
-    if not ok then
-        err(bi)
-        return fam
-    end
-
-    newfam.normal = r
-    newfam.bold = b
-    newfam.italic = i
-    newfam.bolditalic = bi
     newfam.size = math.floor(params.size * newfam.size)
     lookup_fontfamily_number_instance[#lookup_fontfamily_number_instance + 1] = newfam
     return #lookup_fontfamily_number_instance

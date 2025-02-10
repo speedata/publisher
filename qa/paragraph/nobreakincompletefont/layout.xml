@@ -1,0 +1,23 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  version="4.19.31">
+  <Pageformat height="5cm" width="8cm"></Pageformat>
+
+  <DefineFontfamily fontsize="10pt" leading="12pt" name="dummy">
+    <Regular fontface="sans" />
+    <Bold fontface="sans-bold" />
+  </DefineFontfamily>
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="5" fontfamily="dummy">
+        <Paragraph>
+          <NoBreak reduce="fontsize" factor="0.9">
+            <B>
+              <Value select="'The quick brown fox jumps over the'" />
+            </B>
+          </NoBreak>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
