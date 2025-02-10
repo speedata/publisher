@@ -5655,9 +5655,9 @@
     <example xml:lang="en">
       <para>Index generation works in two steps: First, collect all the entries in a <cmd name="Element"/> structure, then, while saving the generated structure, sort the keys and group them with this command.</para>
       <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
-	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-	<Record element="data">
+  <Record element="data">
     <SetVariable variable="indexentries">
       <Element name="indexentry">
         <Attribute name="name" select="'Home'" />
@@ -5676,12 +5676,12 @@
         <Attribute name="page" select="4" />
       </Element>
     </SetVariable>
-		<SetVariable variable="index">
-			<Element name="Index">
-				<Makeindex select="$indexentries/indexentry" sortkey="name" section="part" />
-			</Element>
-		</SetVariable>
-		<ProcessNode select="$index/Index"/>
+    <SetVariable variable="index">
+      <Element name="Index">
+        <Makeindex select="$indexentries/indexentry" sortkey="name" section="part" />
+      </Element>
+    </SetVariable>
+    <ProcessNode select="$index/Index"/>
   </Record>
 
   <Record element="Index">
@@ -5705,7 +5705,7 @@
           </ForAll>
         </Table>
       </PlaceObject>
-			<NextRow />
+      <NextRow />
     </ForAll>
   </Record>
 </Layout>]]></listing>
@@ -5713,66 +5713,66 @@
     <example xml:lang="de">
       <para>Die Indexerstellung funktioniert in zwei Schritten. Im ersten Schritt werden die Daten in eine Elementstruktur gespeichert und mit diesem Befehl sortiert. Im zweiten Schritt wird die Elementstruktur ausgegeben (<cmd name="LoadDataset"/>).</para>
       <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
-	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-	<Record element="data">
-		<SetVariable variable="indexeinträge">
-			<Element name="indexeintrag">
-				<Attribute name="name" select="'Giraffe'" />
-				<Attribute name="page" select="1" />
-			</Element>
-			<Element name="indexeintrag">
-				<Attribute name="name" select="'Garage'" />
-				<Attribute name="page" select="2" />
-			</Element>
-			<Element name="indexeintrag">
-				<Attribute name="name" select="'Grußwort'" />
-				<Attribute name="page" select="3" />
-			</Element>
-			<Element name="indexeintrag">
-				<Attribute name="name" select="'Aufzug'" />
-				<Attribute name="page" select="4" />
-			</Element>
-		</SetVariable>
+  <Record element="data">
+    <SetVariable variable="indexeinträge">
+      <Element name="indexeintrag">
+        <Attribute name="name" select="'Giraffe'" />
+        <Attribute name="page" select="1" />
+      </Element>
+      <Element name="indexeintrag">
+        <Attribute name="name" select="'Garage'" />
+        <Attribute name="page" select="2" />
+      </Element>
+      <Element name="indexeintrag">
+        <Attribute name="name" select="'Grußwort'" />
+        <Attribute name="page" select="3" />
+      </Element>
+      <Element name="indexeintrag">
+        <Attribute name="name" select="'Aufzug'" />
+        <Attribute name="page" select="4" />
+      </Element>
+    </SetVariable>
 
-		<SetVariable variable="index">
-			<Element name="Index">
-				<Makeindex select="$indexeinträge/indexeintrag" sortkey="name" section="teil" />
-			</Element>
-		</SetVariable>
-		<ProcessNode select="$index/Index"></ProcessNode>
-	</Record>
+    <SetVariable variable="index">
+      <Element name="Index">
+        <Makeindex select="$indexeinträge/indexeintrag" sortkey="name" section="teil" />
+      </Element>
+    </SetVariable>
+    <ProcessNode select="$index/Index"></ProcessNode>
+  </Record>
 
-	<Record element="Index">
-		<ForAll select="teil">
-			<PlaceObject>
-				<Table width="3" stretch="max">
-					<Tr>
-						<Td border-bottom="0.4pt" colspan="2">
-							<Paragraph>
-								<Value select="@name" />
-							</Paragraph>
-						</Td>
-					</Tr>
-					<ForAll select="indexeintrag">
-						<Tr>
-							<Td>
-								<Paragraph>
-									<Value select="@name" />
-								</Paragraph>
-							</Td>
-							<Td>
-								<Paragraph>
-									<Value select="@page" />
-								</Paragraph>
-							</Td>
-						</Tr>
-					</ForAll>
-				</Table>
-			</PlaceObject>
-			<NextRow />
-		</ForAll>
-	</Record>
+  <Record element="Index">
+    <ForAll select="teil">
+      <PlaceObject>
+        <Table width="3" stretch="max">
+          <Tr>
+            <Td border-bottom="0.4pt" colspan="2">
+              <Paragraph>
+                <Value select="@name" />
+              </Paragraph>
+            </Td>
+          </Tr>
+          <ForAll select="indexeintrag">
+            <Tr>
+              <Td>
+                <Paragraph>
+                  <Value select="@name" />
+                </Paragraph>
+              </Td>
+              <Td>
+                <Paragraph>
+                  <Value select="@page" />
+                </Paragraph>
+              </Td>
+            </Tr>
+          </ForAll>
+        </Table>
+      </PlaceObject>
+      <NextRow />
+    </ForAll>
+  </Record>
 </Layout>
 ]]></listing>
     </example>
@@ -9764,16 +9764,16 @@
       <para>The following example creates a H1 heading within a Section of the Document:</para>
       <listing><![CDATA[<PDFOptions format="PDF/UA" />
 <StructureElement role="Document">
-	<StructureElement role="Sect" id="sect"/>
+  <StructureElement role="Sect" id="sect"/>
 </StructureElement>
 <Record element="data">
-	<PlaceObject>
-		<Textblock>
-			<Paragraph role="H1" parent="sect">
-				<Value>A title</Value>
-			</Paragraph>
-		</Textblock>
-	</PlaceObject>
+  <PlaceObject>
+    <Textblock>
+      <Paragraph role="H1" parent="sect">
+        <Value>A title</Value>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
 </Record>
 ]]></listing>
     </example>
@@ -9781,16 +9781,16 @@
       <para>Das folgende Beispiel erzeugt einen H1 Title in einem Abschnitt des Dokuments:</para>
       <listing><![CDATA[<PDFOptions format="PDF/UA" />
 <StructureElement role="Document">
-	<StructureElement role="Sect" id="sect"/>
+  <StructureElement role="Sect" id="sect"/>
 </StructureElement>
 <Record element="data">
-	<PlaceObject>
-		<Textblock>
-			<Paragraph role="H1" parent="sect">
-				<Value>A title</Value>
-			</Paragraph>
-		</Textblock>
-	</PlaceObject>
+  <PlaceObject>
+    <Textblock>
+      <Paragraph role="H1" parent="sect">
+        <Value>A title</Value>
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
 </Record>
 ]]></listing>
     </example>
@@ -10116,13 +10116,13 @@
       <para>Using the following data:</para>
       <listing><![CDATA[<data>
   <entry pos="1" name="Paris Saint-Germain FC" p="6"
-  	  tw="5" td="0" tl="1" tf="14" ta="3" tpm="11" pts="15" />
+      tw="5" td="0" tl="1" tf="14" ta="3" tpm="11" pts="15" />
   <entry pos="2" name="FC Porto" p="6"
-  	  tw="4" td="1" tl="1" tf="10" ta="4" tpm="6" pts="13" />
+      tw="4" td="1" tl="1" tf="10" ta="4" tpm="6" pts="13" />
   <entry pos="3" name="FC Dynamo Kyiv" p="6"
-  	  tw="1" td="2" tl="3" tf="6"  ta="10" tpm="-4" pts="5" />
+      tw="1" td="2" tl="3" tf="6"  ta="10" tpm="-4" pts="5" />
   <entry pos="4" name="GNK Dinamo Zagreb" p="6"
-  	  tw="0" td="1" tl="5" tf="1"  ta="14" tpm="-13" pts="1" />
+      tw="0" td="1" tl="5" tf="1"  ta="14" tpm="-13" pts="1" />
 </data>]]></listing>
       <image file="ref-table-en.png"/>
     </example>
