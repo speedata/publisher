@@ -133,7 +133,7 @@ The images can also be loaded from a web server using http(s) protocol. The synt
 
   <Record element="data">
     <PlaceObject>
-      <Image file="http://placekitten.com/g/400/300" width="5"/>
+      <Image file="https://picsum.photos/400/300" width="5"/>
     </PlaceObject>
   </Record>
 </Layout>

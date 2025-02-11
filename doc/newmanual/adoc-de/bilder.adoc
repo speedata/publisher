@@ -170,7 +170,7 @@ Die Syntax ist analog zum Beispiel mit dem absoluten Pfad:
 
   <Record element="data">
     <PlaceObject>
-      <Image file="http://placekitten.com/g/400/300" width="5"/>
+      <Image file="https://picsum.photos/400/300" width="5"/>
     </PlaceObject>
   </Record>
 </Layout>
