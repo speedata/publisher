@@ -1,0 +1,135 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="8cm" width="11cm"></Pageformat>
+
+    <SetGrid width="40pt" height="12pt"></SetGrid>
+    <Stylesheet>
+        td { border-right: 0.25pt; border-left: 0.25pt; border-top: 0.25pt; border-bottom: 0.25pt; }
+    </Stylesheet>
+    <Record element="data">
+        <PlaceObject>
+            <Table stretch="max" width="240pt" border-collapse="collapse">
+                <Columns>
+                    <Column width="40pt" />
+                    <Column width="?" />
+                    <Column width="?" />
+                </Columns>
+                <Tr>
+                    <Td>
+                        <Paragraph><Value>40pt</Value></Paragraph>
+                    </Td>
+                    <Td>
+                        <Paragraph><Value>The quick</Value></Paragraph>
+                    </Td>
+                    <Td>
+                        <Paragraph><Value>The quick freezer jumps into the kitchen and ate the brown fox.</Value></Paragraph>
+                    </Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+
+        <PlaceObject>
+            <Table stretch="max" width="240pt" border-collapse="collapse">
+                <Columns>
+                    <Column width="40pt" />
+                    <Column width="?" />
+                    <Column width="?" />
+                </Columns>
+                <Tr>
+                    <Td>
+                        <Paragraph><Value>40pt</Value></Paragraph>
+                    </Td>
+                    <Td>
+                        <Paragraph><Value>The quick</Value></Paragraph>
+                    </Td>
+                    <Td>
+                        <Paragraph><Value>The very quick fox.</Value></Paragraph>
+                    </Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+
+        <PlaceObject>
+            <Table stretch="max" width="240pt" border-collapse="collapse" columndistance="10pt">
+                <Columns>
+                    <Column width="40pt" />
+                    <Column width="?" />
+                    <Column width="?" />
+                    <Column width="40pt" />
+                </Columns>
+                <Tr>
+                    <Td>
+                        <Paragraph><Value>40pt</Value></Paragraph>
+                    </Td>
+                    <Td>
+                        <Paragraph><Value>The quick</Value></Paragraph>
+                    </Td>
+                    <Td>
+                        <Paragraph><Value>The quick freezer jumps into the kitchen and.</Value></Paragraph>
+                    </Td>
+                    <Td>
+                        <Paragraph><Value>40pt</Value></Paragraph>
+                    </Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+
+        <PlaceObject>
+            <Table stretch="max" width="240pt" border-collapse="collapse" columndistance="10pt">
+                <Columns>
+                    <Column width="40pt" />
+                    <Column width="?" />
+                    <Column width="?" />
+                </Columns>
+                <Tr>
+                    <Td>
+                        <Paragraph><Value>40pt</Value></Paragraph>
+                    </Td>
+                    <Td>
+                        <Paragraph><Value>The quick</Value></Paragraph>
+                    </Td>
+                    <Td>
+                        <Paragraph><Value>The very quick fox.</Value></Paragraph>
+                    </Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+
+        <PlaceObject>
+            <Table stretch="max" width="240pt" border-collapse="collapse">
+                <Columns>
+                    <Column width="40pt" />
+                    <Column width="?" />
+                    <Column width="40pt" />
+                </Columns>
+                <Tr>
+                    <Td colspan="3">
+                        <Table width="240pt" stretch="max">
+                            <Columns>
+                                <Column width="1*"></Column>
+                            </Columns>
+                            <Tr>
+                                <Td border-bottom="0pt" border-left="0pt" border-right="0pt" border-top="0pt">
+                                    <Paragraph>
+                                        <Value>AA</Value>
+                                    </Paragraph>
+                                </Td>
+                            </Tr>
+                        </Table>
+                    </Td>
+                </Tr>
+                <Tr>
+                    <Td>
+                        <Paragraph><Value>40pt</Value></Paragraph>
+                    </Td>
+                    <Td>
+                        <Paragraph><Value>The quick</Value></Paragraph>
+                    </Td>
+                    <Td>
+                        <Paragraph><Value>40pt</Value></Paragraph>
+                    </Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>

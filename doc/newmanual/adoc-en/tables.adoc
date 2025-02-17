@@ -281,6 +281,42 @@ image::tab-min-max.png[width=40%,scaledwidth=100%]
 
 In addition to specifying `min` or `max` for column widths, you can also use `minwidth` to specify the minimum width of a column.
 
+
+The available space can also be calculated using the natural width of the content with a “?” specification for the column. This is useful in connection with fixed column specifications:
+
+[source, xml]
+----------------
+<PlaceObject>
+    <Table stretch="max" width="240pt" border-collapse="collapse">
+        <Columns>
+            <Column width="40pt" />
+            <Column width="?" />
+            <Column width="?" />
+        </Columns>
+        <Tr>
+            <Td>
+                <Paragraph><Value>40pt</Value></Paragraph>
+            </Td>
+            <Td>
+                <Paragraph><Value>The quick</Value></Paragraph>
+            </Td>
+            <Td>
+                <Paragraph>
+                  <Value>The quick freezer jumps into the
+                   kitchen and ate the brown fox.</Value>
+                </Paragraph>
+            </Td>
+        </Tr>
+    </Table>
+</PlaceObject>
+----------------
+
+[[fig-questionmark-table]]
+.With ?-columns the widths of some cells can be calculated while other cells have a fixed width.
+image::tab-questionmark.png[width=40%,scaledwidth=100%]
+
+
+
 In the `Column` command, you can also define further specifications for the column: the horizontal and vertical alignment and the background color can be specified. A specification for a cell overwrites the default.
 
 == Table wraps

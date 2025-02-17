@@ -283,7 +283,7 @@ Der Befehl dazu lautet `Columns` und wird direkt als erster Befehl innerhalb von
 -------------------------------------------------------------------------------
 
 Hier wird festgelegt, dass die Tabelle drei Spalten hat.
-Die erste Spalte hat eine Breite von 2mm, die zweite und die dritte Spalte teilen sich die übrige Breite im Verhältnis von 1 zu 3 auf.
+Die erste Spalte hat eine Breite von 2mm, die zweite und die dritte Spalte teilen sich die übrige Breite im Verhältnis von 1 zu 3 auf. Es wird die Anzahl der Stern-Angaben berechnet und dann wird er verfügbare Platz anhand der Spaltenangaben im Verhältnis aufgeteilt.
 
 Anstelle einer festen Breite oder eine Stern-Angabe kann man auch die Schlüsselwörter `min` und `max` angeben:
 
@@ -317,6 +317,40 @@ image::tab-min-max.png[width=40%,scaledwidth=100%]
 `min` bei der Breitenangabe bedeutet dass die Spalte so schmal wie möglich wird, `max` bedeutet, dass die Spalte so breit wie nötig wird.
 
 Zusätzlich zur Angabe von `min` oder `max` bei Spaltenbreiten kann man auch mit `minwidth` die minimale Breite einer Spalte bestimmen.
+
+Ebenso kann mit einer "?" Angabe bei der Spalte der verfügbare Platz anhand der natürlichen Breite der Inhalte berechnet werden. Das ist im Zusammenhang mit festen Spaltenangaben sinnvoll:
+
+[source, xml]
+----------------
+<PlaceObject>
+    <Table stretch="max" width="240pt" border-collapse="collapse">
+        <Columns>
+            <Column width="40pt" />
+            <Column width="?" />
+            <Column width="?" />
+        </Columns>
+        <Tr>
+            <Td>
+                <Paragraph><Value>40pt</Value></Paragraph>
+            </Td>
+            <Td>
+                <Paragraph><Value>The quick</Value></Paragraph>
+            </Td>
+            <Td>
+                <Paragraph>
+                  <Value>The quick freezer jumps into the
+                   kitchen and ate the brown fox.</Value>
+                </Paragraph>
+            </Td>
+        </Tr>
+    </Table>
+</PlaceObject>
+----------------
+
+[[fig-questionmark-table]]
+.Angaben von ?-Spalten lässt die Breiten wieder dynamisch berechnen
+image::tab-questionmark.png[width=40%,scaledwidth=100%]
+
 
 Im Befehl `Column` kann man noch weitere Angaben für die Spalte festlegen: die horizontale und vertikale Ausrichtung und die Hintergrundfarbe können vorgegeben werden.
 Eine Angabe bei einer Zelle überschreibt die Vorgabe.

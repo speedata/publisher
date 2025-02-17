@@ -283,6 +283,10 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
         if colspan > 1 then
             colspans[#colspans + 1] = { start = current_column, stop = current_column + colspan - 1, max_wd = max_wd, min_wd = min_wd }
             current_column = current_column + colspan - 1
+        elseif self.colwidths[current_column] then
+            -- a predefined width
+            colmax[current_column] = self.colwidths[current_column]
+            colmin[current_column] = self.colwidths[current_column]
         else
             colmax[current_column] = math.max(colmax[current_column] or 0,max_wd)
             colmin[current_column] = math.max(colmin[current_column] or 0,min_wd)
@@ -317,10 +321,10 @@ end
 function calculate_columnwidth( self )
     local colspans = {}
     local minwidths,col_shrink,starcols,colmax,colmin = {},{},{},{},{}
-    local hasminwidth = false
+    local has_min_or_max_width = false
     local current_row = 0
     self.tablewidth_target = self.width
-    local columnwidths_given = false
+    local columnwidths_given = nil
 
     for _,tr in ipairs(self.tab) do
         local tr_contents      = publisher.element_contents(tr)
@@ -360,12 +364,16 @@ function calculate_columnwidth( self )
                         -- to calculate column width:
                         if column_contents.width == "max" then
                             col_shrink[i] = 1
-                            hasminwidth = true
+                            has_min_or_max_width = true
                         elseif column_contents.width == "min" then
                             col_shrink[i] = 2
-                            hasminwidth = true
+                            has_min_or_max_width = true
+                        elseif column_contents.width == "?" then
+                            columnwidths_given = false
                         else
-                            columnwidths_given = true
+                            -- columnwidths_given can be false with a "?" width. This must
+                            -- not be set to true again
+                            if columnwidths_given == nil then columnwidths_given = true end
                             local width_stars = string.match(column_contents.width,starpattern)
                             if width_stars then
                                 starcols[i] = tonumber(width_stars,10)
@@ -393,7 +401,7 @@ function calculate_columnwidth( self )
             if self.autostretch ~= "max" and count_stars == 0 and has_width then
                 self.tablewidth_target = sum_real_widths
             end
-            if hasminwidth then
+            if has_min_or_max_width then
                 columnwidths_given = false
                 break
             end
@@ -451,20 +459,19 @@ function calculate_columnwidth( self )
         end -- if it's really a row
     end -- ∀ rows / rules
 
-    if hasminwidth then
+    if has_min_or_max_width then
         local stretch = {}
-        local count_stretch = 0
         local sum_stretch = 0
         local total_stars_width = self.width
         local count_stars = 0
         for i = 1, #colmin do
             stretch[i] = 0
             if col_shrink[i] then
+                -- this column has min or max
                 if col_shrink[i] == 1 then
                     -- width="max"
                     if colmax[i] > minwidths[i] then
                         stretch[i] = colmax[i] - minwidths[i]
-                        count_stretch = count_stretch + 1
                         sum_stretch = sum_stretch + stretch[i]
                     end
                 else
@@ -529,7 +536,7 @@ function calculate_columnwidth( self )
     ---
     --- Phase II: include colspan
     --- -------------------------
-    for i,colspan in pairs(colspans) do
+    for _,colspan in pairs(colspans) do
         local sum_min,sum_max = 0,0
         local r -- stretch factor = wd(colspan)/wd(sum_start_end)
 
@@ -540,8 +547,21 @@ function calculate_columnwidth( self )
             err("Not enough columns found for colspan")
             return -1
         end
-        sum_max = table.sum(colmax,colspan.start,colspan.stop)
-        sum_min = table.sum(colmin,colspan.start,colspan.stop)
+
+        for i = colspan.start, colspan.stop do
+            if not self.colwidths[i] then
+                sum_max = sum_max + colmax[i]
+            else
+                colspan.max_wd = colspan.max_wd - self.colwidths[i]
+            end
+        end
+        for i = colspan.start, colspan.stop do
+            if not self.colwidths[i] then
+                sum_min = sum_min + colmin[i]
+            else
+                colspan.min_wd = colspan.min_wd - self.colwidths[i]
+            end
+        end
 
         --- If the colspan requires more room than the rest of the table, we have to increase
         --- the width of all columns in the table accordingly. We stretch the columns by
@@ -553,14 +573,18 @@ function calculate_columnwidth( self )
         if colspan.max_wd > sum_max + width_of_colsep then
             r = ( colspan.max_wd - width_of_colsep ) / sum_max
             for j=colspan.start,colspan.stop do
-                colmax[j] = colmax[j] * r
+                if not self.colwidths[j] then
+                    colmax[j] = colmax[j] * r
+                end
             end
         end -- colspan.max_wd > sum_max?
 
         if colspan.min_wd > sum_min + width_of_colsep then
             r = ( colspan.min_wd - width_of_colsep ) / sum_min
             for j=colspan.start,colspan.stop do
-                colmin[j] = colmin[j] * r
+                if not self.colwidths[j] then
+                    colmin[j] = colmin[j] * r
+                end
             end
         end -- colspan.min_wd > sum_min?
     end -- ∀ colspans
@@ -575,7 +599,6 @@ function calculate_columnwidth( self )
     -- FIXME: we should use column_distances[i] instead of self.colsep
     local colsep = (#colmax - 1) * self.colsep
     local tablewidth_is = table.sum(colmax) + colsep
-
     --- 1. calculate natural (max) width / total width for each column.
     ---
     --- If stretch="no" is set, we can encounter the case that the table is too wide. Then it
@@ -595,36 +618,49 @@ function calculate_columnwidth( self )
         local shrink_factor = {}
         local sum_shrinkfactor = 0
         local excess = 0
-        local r = ( self.tablewidth_target - colsep )  / ( tablewidth_is - colsep)
-        for i=1,#colmax do
-            -- actually:
-            -- r[i] = colmax[i] / tablewidth_is
-            -- to get to the row width we need to multiply with tablewidth_target
-            col_r[i] = colmax[i] * r
 
-            -- if the calculated width is less than the minimal width, the cell needs to be wider
-            -- and the total width must be reduced by the excess.
-            if col_r[i] < colmin[i] then
-                excess = excess + colmin[i] - col_r[i]
-                self.colwidths[i] = colmin[i]
-            end
-            if col_r[i] > colmin[i] then
-                -- this column can be shrunk if necessary. The factor is col_r[i] / colmin[i]
-                shrink_factor[i] = col_r[i] / colmin[i]
-                sum_shrinkfactor = sum_shrinkfactor + shrink_factor[i]
+        local tablewidth_target = self.tablewidth_target
+        for i=1,#colmax do
+            local cwi = self.colwidths[i]
+            if cwi then
+                tablewidth_target = tablewidth_target - cwi
+                tablewidth_is = tablewidth_is - cwi
             end
         end
+        local r = ( tablewidth_target - colsep ) / ( tablewidth_is - colsep)
+        for i=1,#colmax do
+            if not self.colwidths[i] then
+                -- actually:
+                -- r[i] = colmax[i] / tablewidth_is
+                -- to get to the row width we need to multiply with tablewidth_target
+                col_r[i] = colmax[i] * r
+
+                -- if the calculated width is less than the minimal width, the cell needs to be wider
+                -- and the total width must be reduced by the excess.
+                if col_r[i] < colmin[i] then
+                    excess = excess + colmin[i] - col_r[i]
+                    self.colwidths[i] = colmin[i]
+                end
+                if col_r[i] > colmin[i] then
+                    -- this column can be shrunk if necessary. The factor is col_r[i] / colmin[i]
+                    shrink_factor[i] = col_r[i] / colmin[i]
+                    sum_shrinkfactor = sum_shrinkfactor + shrink_factor[i]
+                end
+            end
+        end
+
         -- the excess must be subtracted partly from the columns that are to wide
         for i=1,#colmax do
-            if shrink_factor[i] then
-                self.colwidths[i] = col_r[i] -  shrink_factor[i] / sum_shrinkfactor * excess
-            elseif colmax[i] == 0 then
-                self.colwidths[i] = 0
+            if not self.colwidths[i] then
+                if shrink_factor[i] then
+                    self.colwidths[i] = col_r[i] - shrink_factor[i] / sum_shrinkfactor * excess
+                elseif colmax[i] == 0 then
+                    self.colwidths[i] = 0
+                end
             end
         end
         return
     end
-
     -- if stretch="no", we don't need to stretch/shrink anything
     if self.autostretch ~= "max" then
         self.tablewidth_target = tablewidth_is
@@ -639,9 +675,21 @@ function calculate_columnwidth( self )
     -- if the table is too narrow, we must make it wider
     if tablewidth_is < self.tablewidth_target then
         -- table must get wider
-        local r = ( self.tablewidth_target - colsep ) / ( tablewidth_is - colsep )
+
+        local tablewidth_target = self.tablewidth_target
         for i=1,#colmax do
-            self.colwidths[i] = colmax[i] * r
+            local cwi = self.colwidths[i]
+            if cwi then
+                tablewidth_target = tablewidth_target - cwi
+                tablewidth_is = tablewidth_is - cwi
+            end
+        end
+        local r = ( tablewidth_target - colsep ) / ( tablewidth_is - colsep)
+
+        for i=1,#colmax do
+            if not self.colwidths[i] then
+                self.colwidths[i] = colmax[i] * r
+            end
         end
     end
 end
