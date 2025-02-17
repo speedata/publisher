@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.21">
+    <entry version="4.21.12" date="2025-02-17">
+        <en>Column width in tables allow fixed widths and dynamic width calculation (#648).</en>
+        <de>Spaltenbreiten in Tabellen können dynamisch und fest sein (#648).</de>
+    </entry>
     <entry version="4.21.11" date="2025-02-10">
         <en>Bugfix NoBreak and incomplete font family (#646).</en>
         <de>Fehlerkorrektur NoBreak und unvollständige Fontfamilie (#646).</de>
