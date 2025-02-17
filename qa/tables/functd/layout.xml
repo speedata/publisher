@@ -1,0 +1,32 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    xmlns:sf="speedata functions"
+    >
+    <Pageformat height="4cm" width="7cm"></Pageformat>
+
+    <Function name="sf:td">
+        <Param name="count" />
+        <Param name="param"/>
+        <Loop select="$count">
+            <Td>
+                <Paragraph>
+                    <Value select="$param" />
+                </Paragraph>
+            </Td>
+        </Loop>
+    </Function>
+
+    <Record element="data">
+        <PlaceObject>
+            <Table padding="4pt">
+                <Tr>
+                    <Value select="sf:td(2,'Hello, world!')" />
+                </Tr>
+                <Tr>
+                    <Td><Paragraph><Value>dummy</Value></Paragraph></Td>
+                    <Td><Paragraph><Value>dummy</Value></Paragraph></Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>

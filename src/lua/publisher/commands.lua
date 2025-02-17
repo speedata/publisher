@@ -4839,8 +4839,9 @@ function commands.tr( layoutxml,dataxml )
     -- filter things like <Message ...> that don't give sensible output
     for i=1,#tab_tmp do
         eltname = publisher.elementname(tab_tmp[i])
-
-        if eltname ~= "elementstructure" and eltname ~= "Message" then
+        if eltname == "Value" or eltname == "elementstructure" or eltname == "Message" then
+            -- ignore
+        else
             tab[#tab + 1] = tab_tmp[i]
         end
     end
