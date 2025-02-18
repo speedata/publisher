@@ -98,7 +98,7 @@ function make_font_instance( name,size )
     assert(tonumber(size))
     if not lookup_fontname_filename[name] then
         local msg = string.format("Font instance '%s' is not defined!", name)
-        splib.error("Make font istance: filename is not defined","filename",name)
+        splib.error("Make font instance: filename is not defined","filename",name)
         return false, msg
     end
     local filename,parameter = table.unpack(lookup_fontname_filename[name])

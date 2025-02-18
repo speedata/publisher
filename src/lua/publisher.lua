@@ -8391,6 +8391,9 @@ end
 function hlpage(pagenumber,bordercolor)
     pagenumber = tonumber(pagenumber)
     local pageobjnum = pdf.getpageref(pagenumber)
+    if pageobjnum == nil then
+        return 0
+    end
     local str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoTo/D [ %d 0 R /Fit ] >>",get_border_for_link(bordercolor),pageobjnum)
     hyperlinks[#hyperlinks + 1] = str
     return #hyperlinks
