@@ -1,0 +1,21 @@
+<Layout
+    xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Pageformat height="5cm" width="8cm"></Pageformat>
+    <DefineColor name="mycol" model="cmyk" c="10" m="30" y="44" k="12"/>
+    <SetVariable variable="curcol" type="mp:cmykcolor" select="'colors.mycol'"></SetVariable>
+
+    <DefineGraphic name="dottedbox">
+      pickup pencircle scaled 1mm;
+      draw (0,0) -- (box.width,0) -- (box.width, box.height) --
+        (box.width, box.height) -- (0, box.height ) -- cycle
+        dashed withdots withcolor curcol ;
+    </DefineGraphic>
+
+    <Record element="data">
+        <PlaceObject row="1" column="1">
+            <Box height="2" width="5" graphic="dottedbox" />
+        </PlaceObject>
+    </Record>
+</Layout>

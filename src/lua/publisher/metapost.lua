@@ -226,7 +226,11 @@ function newbox(width_sp, height_sp)
                 expr = string.format("%s %s ; %s := %q ;", v.typ, name, name, v[1])
             end
         else
-            expr = string.format("%s %s ; %s := %s ;", v.typ, name, name, v[1])
+            if publisher.newxpath then
+                expr = string.format("%s %s ; %s := %s ;", v.typ, name, name, xpath.string_value(v))
+            else
+                expr = string.format("%s %s ; %s := %s ;", v.typ, name, name, v[1])
+            end
         end
         execute(mpobj, expr)
     end
