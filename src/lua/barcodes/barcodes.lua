@@ -50,6 +50,10 @@ local function mkpattern( str )
     number[i] = tonumber(string.sub(str,i,i))
   end
 
+  if #number == 0 then
+      splib.error("Barcode: no code provided")
+      return
+  end
   -- The first digit in a barcode determines how the next six digit patterns are displayed.
   local prefix = table.remove(number,1)
   local mirror_str = mirror_t[prefix + 1]
@@ -112,7 +116,7 @@ local function mkglyph( char,fontnumber, destwd )
     local nl = publisher.add_glue(g,"head",{width = 0, stretch = 2^16, stretch_order = 2})
     nl = publisher.add_glue(nl,"tail",{width = 0, stretch = 2^16, stretch_order = 2})
     nl = node.hpack(nl,destwd,"exactly")
-    publisher.setprop(hbox,"origin","mkglyph")
+    publisher.setprop(nl,"origin","mkglyph")
     return nl
 end
 
@@ -182,6 +186,9 @@ local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor,ke
 
 	local nodelist
     local pattern = mkpattern(digits)
+    if pattern == nil then
+      return nil
+    end
     -- pattern is now a string such as "801011141222321121132122211310101321122212221113211141132010"
     local wd,dp
     for i=1,string.len(pattern) do
