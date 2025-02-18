@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.21">
+    <entry version="4.21.13" date="2025-02-18">
+        <en>Various bugfixes (EAN13 barcodes, metapost colors and new XPath parser).</en>
+        <de>Verschiedene Fehlerkorrekturen (EAN13 Strichcodes, MetaPost Farben und neuer XPath Parser).</de>
+    </entry>
+    <entry version="4.21.13" date="2025-02-18">
+        <en>Value/Function can be used to create a table cell (#647).</en>
+        <de>Value/Function kann benutzt werden, um eine Tabellenzelle zu erzeugen (#647).</de>
+    </entry>
     <entry version="4.21.12" date="2025-02-17">
         <en>Column width in tables allow fixed widths and dynamic width calculation (#648).</en>
         <de>Spaltenbreiten in Tabellen können dynamisch und fest sein (#648).</de>
