@@ -28,12 +28,12 @@ import (
 	"unsafe"
 
 	"speedatapublisher/splibaux"
+	"speedatapublisher/text/unicode/bidi"
 
 	"github.com/alecthomas/chroma/v2/formatters/html"
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting/v2"
 	"github.com/yuin/goldmark/extension"
-	"golang.org/x/text/unicode/bidi"
 )
 
 var (
@@ -488,16 +488,32 @@ func sdConvertSVGImage(L *C.lua_State) int {
 //export sdSegmentizeText
 func sdSegmentizeText(L *C.lua_State) int {
 	l := newLuaState(L)
-	str, ok := l.getString(-1)
+	str, ok := l.getString(1)
 	if !ok {
 		slog.Error("sdSegmentizeText: first argument must be a string")
 		return 0
 	}
+	dir, ok := l.getInt(2)
+	defaultDir := bidi.Neutral
+	if ok {
+		switch dir {
+		case 0:
+			// ok, neutral
+		case 1:
+			defaultDir = bidi.LeftToRight
+		case 2:
+			defaultDir = bidi.RightToLeft
+		}
+	}
 	p := bidi.Paragraph{}
-	p.SetString(str)
+	_, err := p.SetString(str, bidi.DefaultDirection(defaultDir))
+	if err != nil {
+		slog.Error("sdSegmentize SetString", "errmsg", err.Error())
+		return 0
+	}
 	ordering, err := p.Order()
 	if err != nil {
-		slog.Error("sdSegmentizeText p.Order error", "msg", err.Error())
+		slog.Error("sdSegmentizeText p.Order", "msg", err.Error())
 		return 0
 	}
 
@@ -506,7 +522,12 @@ func sdSegmentizeText(L *C.lua_State) int {
 	for i := 0; i < nr; i++ {
 		l.createTable(2, 0)
 		r := ordering.Run(i)
-		l.pushInt(int(r.Direction()))
+		switch r.Direction() {
+		case bidi.LeftToRight:
+			l.pushInt(0)
+		case bidi.RightToLeft:
+			l.pushInt(1)
+		}
 		l.rawSetI(-2, 1)
 		l.pushString(r.String())
 		l.rawSetI(-2, 2)

@@ -24,7 +24,7 @@ require (
 	github.com/yuin/goldmark-highlighting/v2 v2.0.0-20230729083705-37449abec8cc
 	github.com/yuin/gopher-lua v1.1.1
 	golang.org/x/net v0.24.0
-	golang.org/x/text v0.16.0
+	golang.org/x/text v0.22.0
 )
 
 require (

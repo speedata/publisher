@@ -1,0 +1,19 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="5cm" width="7cm" />
+    <LoadFontfile name="EzraSIL" filename="ezra_sil.ttf" />
+
+    <DefineFontfamily fontsize="10pt" leading="12pt" name="text">
+        <Regular fontface="EzraSIL"></Regular>
+    </DefineFontfamily>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph bidi="yes" direction="ltr">
+                    <Value>תא the heavens</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
