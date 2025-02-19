@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.21">
+    <entry version="4.21.14" date="2025-02-19">
+        <en>Fix incorrect ordering in bidi (#649).</en>
+        <de>Korrigiere fehlerhafte Orientierung in bidi (#649).</de>
+    </entry>
     <entry version="4.21.13" date="2025-02-18">
         <en>Various bugfixes (EAN13 barcodes, metapost colors and new XPath parser).</en>
         <de>Verschiedene Fehlerkorrekturen (EAN13 Strichcodes, MetaPost Farben und neuer XPath Parser).</de>
