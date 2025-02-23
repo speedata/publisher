@@ -6658,6 +6658,38 @@
           <xs:documentation>The bottom padding of the background color (can be negative)</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="direction">
+        <xs:annotation>
+          <xs:documentation>The text direction (ltr or rtl)</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="ltr">
+                  <xs:annotation>
+                    <xs:documentation>Left to right text.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="rtl">
+                  <xs:annotation>
+                    <xs:documentation>Right to left text.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>The name of the font family to switch to.</xs:documentation>

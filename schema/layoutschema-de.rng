@@ -5872,6 +5872,20 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="direction">
+                     <a:documentation>Die Laufrichtung des Textes (ltr oder rtl)</a:documentation>
+                     <choice>
+                        <value>ltr</value>
+                        <a:documentation>Links nach rechts Text</a:documentation>
+                        <value>rtl</value>
+                        <a:documentation>Rechts nach links Text</a:documentation>
+                        <data type="string">
+                           <param name="pattern">\{.+\}</param>
+                        </data>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="fontfamily">
                      <a:documentation>Schaltet auf die angegebene Schriftfamilie um.</a:documentation>
                   </attribute>
