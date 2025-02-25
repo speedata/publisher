@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.21">
+    <entry version="4.21.16" date="2025-02-25">
+        <en>Bugfix: break-before="page" and break-below="no" in DefineTextformat has no effect.</en>
+        <de>Fehlerkorrektur: break-before="page" und break-below="no" in DefineTextformat ohne Effekt.</de>
+    </entry>
     <entry version="4.21.15" date="2025-02-25">
         <en>Textformat: force page break before element.</en>
         <de>Textformat: erzwinge Seitenumbruch vor Element.</de>
