@@ -60,7 +60,39 @@ Um Umbrüche an diesen Stellen zu unterbinden, kann die Textformat-Eigenschaft `
 .Ausgabe einer Überschrift. Das Textformat mit der Eigenschaft break-below verhindert einen Umbruch unter der Überschrift.
 image::textmitueberschrift.png[width=50%,scaledwidth=100%]
 
-Die Eigenschaft `break-below="no"` wird allerdings nur innerhalb einer Textausgabe (`<Output>`) berücksichtigt.
+
+
+== Umbruch innerhalb eines Textes
+
+Umbrüche innerhalb eines Textes können durch die Eigenschaft `break-before` erzwungen werden. Das ist beispielsweise bei einer Überschrift sinnvoll, die immer auf einer neuen Seite beginnen soll. Dazu wird das Textformat der Überschrift angepasst:
+
+.Um zu erzwingen, dass die Überschrift immer auf einer neuen Seite beginnt, muss das Attribut `break-before` auf `page` gesetzt werden.
+[source, xml]
+----------------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <DefineTextformat name="h1" break-before="page" />
+    <Record element="data">
+        <Output>
+            <Text>
+                <Paragraph>
+                    <Value>Page one</Value>
+                </Paragraph>
+                <Paragraph textformat="h1">
+                    <Value>H1 on page two</Value>
+                </Paragraph>
+                <Paragraph>
+                    <Value>Some text</Value>
+                </Paragraph>
+            </Text>
+        </Output>
+    </Record>
+</Layout>
+----------------
+
+
+Die Eigenschaften `break-below="no"` und `break-above="yes"` werden allerdings nur innerhalb einer Textausgabe (`<Output>`) berücksichtigt.
 Zwischen zwei Textausgaben kann sehr wohl ein Seitenumbruch eingefügt werden, das lässt sich nicht verhindern.
 Um dennoch einen Text an einem Stück auszugeben, der erst aus den Daten zusammengesetzt werden muss, speichert man die einzelnen Inhalte in Variablen und gibt sie dann an einem Stück aus.
 

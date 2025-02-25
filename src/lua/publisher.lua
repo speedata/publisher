@@ -161,6 +161,7 @@ att_ignore_orphan_widowsetting = 407
 att_margin_top = 450
 att_margin_bottom = 451
 
+att_break_before = 452
 
 --- `att_is_table_row` is used in `tabular.lua` and if set to 1, it denotes
 --- a regular table row, and not a spacer. Spacers must not appear
@@ -7913,6 +7914,8 @@ function vsplit( objects_t, parameter )
     while not area_filled do
         for i=1,#hlist do
             local hbox = table.remove(hlist,1)
+            local break_before = node.has_attribute(hbox,publisher.att_break_before)
+            node.set_attribute(hbox,publisher.att_break_before,nil)
             if #thisarea == 0 then
                 -- This is for a different margin-top at the beginning of a new column.
                 if hbox.id == publisher.vlist_node then
@@ -7947,7 +7950,7 @@ function vsplit( objects_t, parameter )
                     w("unknown node 1: %d",hbox.id)
                 end
                 -- 20 is some rounding error
-                if accumulated_height + lineheight <= goal + 20 then
+                if accumulated_height + lineheight <= goal + 20 and break_before ~= 1 then
                     thisarea[#thisarea + 1] = hbox
                     accumulated_height = accumulated_height + lineheight
                     lineheight = 0

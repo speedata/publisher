@@ -899,6 +899,7 @@ function commands.define_textformat(layoutxml,dataxml)
     local colpaddingtop = publisher.read_attribute(layoutxml,dataxml,"column-padding-top", "length_sp")
     local paddingbottom = publisher.read_attribute(layoutxml,dataxml,"padding-bottom","string")
     local breakbelow    = publisher.read_attribute(layoutxml,dataxml,"break-below",   "boolean", true)
+    local breakbefore   = publisher.read_attribute(layoutxml,dataxml,"break-before",  "string")
     local orphan        = publisher.read_attribute(layoutxml,dataxml,"orphan",        "booleanornumber", false)
     local widow         = publisher.read_attribute(layoutxml,dataxml,"widow",         "booleanornumber", false)
     local hyphenate     = publisher.read_attribute(layoutxml,dataxml,"hyphenate",     "boolean", true)
@@ -911,6 +912,10 @@ function commands.define_textformat(layoutxml,dataxml)
         htmlverticalspacing = htmlverticalspacing,
         name = name,
     }
+
+    if breakbefore == "page" then
+        fmt.break_before = "page"
+    end
 
     if alignment == "leftaligned" or alignment == "rightaligned" or alignment == "centered" or alignment == "start" or alignment == "end" then
         fmt.alignment = alignment

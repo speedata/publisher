@@ -1416,9 +1416,41 @@
           <xs:documentation>Die Dicke der Linie unter dem Text</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="break-before">
+        <xs:annotation>
+          <xs:documentation>Umbruch überhalb des Textes erzwingen. Das funktioniert nur wenn der vorherige Text innerhalb derselben Output Umgebung ist.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="auto">
+                  <xs:annotation>
+                    <xs:documentation>Voreinstellung: Seitenumbruch nicht erzwingen.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="page">
+                  <xs:annotation>
+                    <xs:documentation>Erzwinge einene Seitenumbruch vor dem Text.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="break-below">
         <xs:annotation>
-          <xs:documentation>Umbruch unterhalb des Textes verbieten/erlauben. Das funktioniert nur, wenn der nachfolgende Text innerhalb derselben PlaceObject oder Output Umgebung enthalten ist.</xs:documentation>
+          <xs:documentation>Umbruch unterhalb des Textes verbieten/erlauben. Das funktioniert nur innerhalb derselben Output Umgebung.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">

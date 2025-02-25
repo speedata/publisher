@@ -3390,12 +3390,36 @@
         <para>Die Dicke der Linie unter dem Text</para>
       </description>
     </attribute>
-    <attribute en="break-below" optional="yes">
+    <attribute en="break-before" optional="yes" allowxpath="yes" since="4.21.15">
       <description xml:lang="en">
-        <para>(Dis-)Allow break below the text. This only works if the following text is placed within the same <cmd name="PlaceObject"/> or <cmd name="Output"/> container.</para>
+        <para>Force break before the text. This only works within an <cmd name="Output"/> container.</para>
       </description>
       <description xml:lang="de">
-        <para>Umbruch unterhalb des Textes verbieten/erlauben. Das funktioniert nur, wenn der nachfolgende Text innerhalb derselben <cmd name="PlaceObject"/> oder <cmd name="Output"/> Umgebung enthalten ist.</para>
+        <para>Umbruch überhalb des Textes erzwingen. Das funktioniert nur wenn der vorherige Text innerhalb derselben <cmd name="Output" /> Umgebung ist.</para>
+      </description>
+      <choice en="auto">
+        <description xml:lang="en">
+          <para>Default: don't force a page break.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Voreinstellung: Seitenumbruch nicht erzwingen.</para>
+        </description>
+      </choice>
+      <choice en="page">
+        <description xml:lang="en">
+          <para>Force page break above</para>
+        </description>
+        <description xml:lang="de">
+          <para>Erzwinge einene Seitenumbruch vor dem Text.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="break-below" optional="yes">
+      <description xml:lang="en">
+        <para>(Dis-)Allow break below the text. This only works within an <cmd name="Output"/> container.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Umbruch unterhalb des Textes verbieten/erlauben. Das funktioniert nur innerhalb derselben <cmd name="Output"/> Umgebung.</para>
       </description>
       <choice en="yes">
         <description xml:lang="en">

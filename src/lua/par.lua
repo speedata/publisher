@@ -845,6 +845,10 @@ function Par:format( width_sp, options,data )
                 node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,5)
             end
 
+            if current_textformat.break_before == "page" then
+                node.set_attribute(nodelist.list,publisher.att_break_before,1)
+            end
+
             if self.padding_bottom and self.padding_bottom > 0 then
                 local glue
                 nodelist.list, glue = publisher.add_glue(nodelist.list,"tail",{width = self.padding_bottom, attributes},"par.lua/self.padding_bottom" )

@@ -1416,9 +1416,41 @@
           <xs:documentation>The thickness of the rule below the text.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="break-before">
+        <xs:annotation>
+          <xs:documentation>Force break before the text. This only works within an Output container.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="auto">
+                  <xs:annotation>
+                    <xs:documentation>Default: don't force a page break.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="page">
+                  <xs:annotation>
+                    <xs:documentation>Force page break above</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="break-below">
         <xs:annotation>
-          <xs:documentation>(Dis-)Allow break below the text. This only works if the following text is placed within the same PlaceObject or Output container.</xs:documentation>
+          <xs:documentation>(Dis-)Allow break below the text. This only works within an Output container.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">

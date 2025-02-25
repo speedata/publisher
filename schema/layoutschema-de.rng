@@ -1612,8 +1612,22 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="break-before">
+               <a:documentation>Umbruch überhalb des Textes erzwingen. Das funktioniert nur wenn der vorherige Text innerhalb derselben Output Umgebung ist.</a:documentation>
+               <choice>
+                  <value>auto</value>
+                  <a:documentation>Voreinstellung: Seitenumbruch nicht erzwingen.</a:documentation>
+                  <value>page</value>
+                  <a:documentation>Erzwinge einene Seitenumbruch vor dem Text.</a:documentation>
+                  <data type="string">
+                     <param name="pattern">\{.+\}</param>
+                  </data>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="break-below">
-               <a:documentation>Umbruch unterhalb des Textes verbieten/erlauben. Das funktioniert nur, wenn der nachfolgende Text innerhalb derselben PlaceObject oder Output Umgebung enthalten ist.</a:documentation>
+               <a:documentation>Umbruch unterhalb des Textes verbieten/erlauben. Das funktioniert nur innerhalb derselben Output Umgebung.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>Umbruch unterhalb des Textes erlauben (Voreinstellung).</a:documentation>

@@ -1612,8 +1612,22 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="break-before">
+               <a:documentation>Force break before the text. This only works within an Output container.</a:documentation>
+               <choice>
+                  <value>auto</value>
+                  <a:documentation>Default: don&#39;t force a page break.</a:documentation>
+                  <value>page</value>
+                  <a:documentation>Force page break above</a:documentation>
+                  <data type="string">
+                     <param name="pattern">\{.+\}</param>
+                  </data>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="break-below">
-               <a:documentation>(Dis-)Allow break below the text. This only works if the following text is placed within the same PlaceObject or Output container.</a:documentation>
+               <a:documentation>(Dis-)Allow break below the text. This only works within an Output container.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>Allow a break below this text (default).</a:documentation>
