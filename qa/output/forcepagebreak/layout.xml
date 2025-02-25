@@ -2,6 +2,7 @@
     xmlns:sd="urn:speedata:2009/publisher/functions/en">
     <Pageformat height="5cm" width="6cm" />
     <DefineTextformat name="h1" break-before="page" />
+    <DefineTextformat name="h2" break-before="page" break-below="no" />
     <Record element="data">
         <Output>
             <Text>
@@ -13,6 +14,12 @@
                 </Paragraph>
                 <Paragraph>
                     <Value>Some text</Value>
+                </Paragraph>
+                <Paragraph textformat="h2">
+                    <Value>H2</Value>
+                </Paragraph>
+                <Paragraph>
+                    <Value>Third page</Value>
                 </Paragraph>
             </Text>
         </Output>

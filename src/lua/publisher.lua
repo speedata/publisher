@@ -7819,7 +7819,8 @@ function vsplit( objects_t, parameter )
             end
             head.prev = nil
             local break_below_forbidden = node.has_attribute(head,publisher.att_break_below_forbidden)
-            if break_below_forbidden then
+            local break_before = node.has_attribute(head,publisher.att_break_before)
+            if break_below_forbidden and break_before ~= 1 then
                 node.unset_attribute(head,publisher.att_margin_newcolumn)
                 tmplist[#tmplist + 1] = head
                 local tmp = head.next

@@ -85,7 +85,7 @@ Line breaks within a text can be forced by the property `break-before`. This is 
 ----------------
 
 
-However, the break-below="no" property is only taken into account within a text output (<Output>). You can insert a page break between two text outputs, but this cannot be prevented. In order to output a text in one piece nevertheless, which first has to be assembled from the data, one stores the individual contents in variables and then outputs them in one piece.
+However, the `break-below="no"` and `break-before="page"` properties are only taken into account within a text output (`<Output>`). You can insert a page break between two text outputs, but this cannot be prevented. In order to output a text in one piece nevertheless, which first has to be assembled from the data, one stores the individual contents in variables and then outputs them in one piece.
 
 .With variables and `<Copy-of>` you can compose texts and output them in one piece.
 [source, xml,indent=0]
