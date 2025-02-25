@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.21">
+    <entry version="4.21.15" date="2025-02-25">
+        <en>Textformat: force page break before element.</en>
+        <de>Textformat: erzwinge Seitenumbruch vor Element.</de>
+    </entry>
     <entry version="4.21.14" date="2025-02-19">
         <en>Fix incorrect ordering in bidi (#649).</en>
         <de>Korrigiere fehlerhafte Orientierung in bidi (#649).</de>
