@@ -92,7 +92,7 @@ Umbrüche innerhalb eines Textes können durch die Eigenschaft `break-before` er
 ----------------
 
 
-Die Eigenschaften `break-below="no"` und `break-before="yes"` werden allerdings nur innerhalb einer Textausgabe (`<Output>`) berücksichtigt.
+Die Eigenschaften `break-below="no"` und `break-before="page"` werden allerdings nur innerhalb einer Textausgabe (`<Output>`) berücksichtigt.
 Zwischen zwei Textausgaben kann sehr wohl ein Seitenumbruch eingefügt werden, das lässt sich nicht verhindern.
 Um dennoch einen Text an einem Stück auszugeben, der erst aus den Daten zusammengesetzt werden muss, speichert man die einzelnen Inhalte in Variablen und gibt sie dann an einem Stück aus.
 
