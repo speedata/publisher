@@ -880,9 +880,9 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
             alignment = "justified"
         end
 
+        local tf
         if thiselt.mode == "horizontal" then
             -- when called from Paragraph, we use that textformat
-            local tf
             if options.override_alignment then
                 tf = options.textformat
             else
