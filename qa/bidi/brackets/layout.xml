@@ -1,0 +1,18 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="5cm" width="4cm"></Pageformat>
+    <LoadFontfile name="amiri" filename="amiri-bold.ttf"/>
+    <DefineFontfamily fontsize="10pt" leading="12pt" name="text">
+        <Regular fontface="amiri"></Regular>
+    </DefineFontfamily>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph direction="rtl" bidi="yes">
+                    <Value>م</Value>
+                    <Value> a (a)</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
