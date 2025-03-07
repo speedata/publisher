@@ -10,6 +10,21 @@
 splib = require("luaglue")
 
 file_start("spinit.lua")
+loglevel_str = os.getenv("SD_LOGLEVEL")
+
+loglevel = 0
+if loglevel_str == "debug" then
+    loglevel = -4
+elseif loglevel_str == "info" then
+    loglevel = 0
+elseif loglevel_str == "message" then
+    loglevel = 3
+elseif loglevel_str == "warn" then
+    loglevel = 4
+elseif loglevel_str == "error" then
+    loglevel = 8
+end
+
 tex.enableprimitives('',tex.extraprimitives())
 
 function warning(...)
@@ -357,10 +372,41 @@ prohibited_at_beginning = {zh = {["!"] = true,["%"] = true,[")"] = true,[","] = 
 require("publisher")
 
 
+local function traceback(what)
+    -- get message from what
+    local msg = string.gsub(what,".*:%d+: (.*)", "%1")
+    splib.error("Lua error:","msg",msg)
+    print("Internal error: " .. msg)
+    print("Stack trace:")
+    local lvl = 2
+    local src
+    local functioninfo
+    while true do
+        local info = debug.getinfo(lvl,"nSl")
+        if not info then break end
+        if lvl > 9 then print("...") break end
+        -- strip first 1 character from info.source
+        if info.source:sub(1,1) == "@" then
+            src = string.gsub(info.source,"^.*src/lua/(.*)$","%1")
+            if info.name and info.name ~= "?" then
+                functioninfo = info.name
+            else
+                functioninfo = ""
+            end
+            splib.log("message","stacktrace","source",src,"line",info.currentline,"function",info.name)
+            if loglevel > 4 then
+                print(src .. ":" .. info.currentline .. ": in function " .. functioninfo)
+            end
+        end
+        lvl = lvl + 1
+    end
+    print("Please report this error to the speedata Publisher developers.")
+end
+
 function main_loop()
     log("Start processing")
     setup()
-    publisher.dothings()
+    xpcall(publisher.dothings,traceback)
     exit(true)
 end
 
