@@ -1934,7 +1934,7 @@ function commands.initial( layoutxml,dataxml)
     if padding_left and padding_left ~= 0 then
         head = node.insert_before(box,box,publisher.make_glue({width = padding_left}))
     end
-    if padding_right and pading_right ~= 0 then
+    if padding_right and padding_right ~= 0 then
         head = node.insert_after(head,box,publisher.make_glue({width = padding_right}))
     end
     box = node.hpack(head)
@@ -1943,7 +1943,7 @@ function commands.initial( layoutxml,dataxml)
     if padding_top and padding_top ~= 0 then
         head = node.insert_before(box,box,publisher.make_glue({width = padding_top}))
     end
-    if padding_bottom and pading_bottom ~= 0 then
+    if padding_bottom and padding_bottom ~= 0 then
         head = node.insert_after(head,box,publisher.make_glue({width = padding_bottom}))
     end
     box = node.vpack(head)
