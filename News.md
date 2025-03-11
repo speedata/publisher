@@ -3,15 +3,30 @@
 This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/).
 
 
+## Version
+
 ## Version 5
 
-Planned: a few more bug fixes, no more features
+Released 2025-03-11
+
+This software is now completely error free ;-)
+
+Now it is time to make a good release, and then add some more features.
+
+Major changes from version 4:
+
+* New default XML and XPath parser
+* New default Text shaper (Harfbuzz) with left-to-right, right-to-left and mixed typesetting
+* Accessibility support (PDF/UA)
+* speedata Pro package
+* And much more, see below
+
 
 ## Version 4.20
 
 Released 2025-01-15
 
-Hopefully the last version before 5
+The last version before 5
 
 * Fully accessible documents
 * Make new XPath parser robust
