@@ -4421,7 +4421,6 @@ function commands.span( layoutxml,dataxml )
     local backgroundcolor    = publisher.read_attribute(layoutxml,dataxml,"background-color",         "string")
     local bg_padding_top     = publisher.read_attribute(layoutxml,dataxml,"background-padding-top",   "length_sp")
     local bg_padding_bottom  = publisher.read_attribute(layoutxml,dataxml,"background-padding-bottom","length_sp")
-    local direction          = publisher.read_attribute(layoutxml,dataxml,"direction",                "string")
     local fontfamilyname     = publisher.read_attribute(layoutxml,dataxml,"fontfamily",               "string")
     local language_name      = publisher.read_attribute(layoutxml,dataxml,"language",                 "string")
     local letterspacing      = publisher.read_attribute(layoutxml,dataxml,"letter-spacing",           "booleanorlength")
@@ -4463,7 +4462,6 @@ function commands.span( layoutxml,dataxml )
 
     local params = {
         allowbreak = publisher.allowbreak,
-        direction = direction,
         fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname],
         backgroundcolor = colornumber,
         bg_padding_top = bg_padding_top,

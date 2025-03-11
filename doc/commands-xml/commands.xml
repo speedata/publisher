@@ -9502,30 +9502,6 @@
         <para>Der Innenabstand (unten) der Hintergrundfarbe (kann negativ sein)</para>
       </description>
     </attribute>
-    <attribute en="direction" optional="yes" allowxpath="yes">
-      <description xml:lang="en">
-        <para>The text direction (ltr or rtl)</para>
-      </description>
-      <description xml:lang="de">
-        <para>Die Laufrichtung des Textes (ltr oder rtl)</para>
-      </description>
-      <choice en="ltr">
-        <description xml:lang="en">
-          <para>Left to right text.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Links nach rechts Text</para>
-        </description>
-      </choice>
-      <choice en="rtl">
-        <description xml:lang="en">
-          <para>Right to left text.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Rechts nach links Text</para>
-        </description>
-      </choice>
-    </attribute>
     <attribute en="fontfamily" type="text" optional="yes" since="4.1.14">
       <description xml:lang="en">
         <para>The name of the font family to switch to.</para>
