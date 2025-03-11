@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="4.21">
+    <entry version="4.21.20" date="2025-03-11">
+        <en>Remove direction attribute on Span.</en>
+        <de>Entferne direction-Attribut bei Span.</de>
+    </entry>
     <entry version="4.21.19" date="2025-03-10">
         <en>Better error messages for internal Lua errors.</en>
         <de>Bessere Fehlermeldungen für interne Lua-Fehler.</de>
