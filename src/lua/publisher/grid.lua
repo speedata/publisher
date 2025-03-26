@@ -199,7 +199,7 @@ end
 
 function number_of_rows(self,areaname,framenumber)
     assert(self)
-    local areaname = areaname or publisher.default_areaname
+    areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
         splib.error("Area unknown, using page","area",areaname,"location","number_of_rows")
         areaname = publisher.default_areaname
@@ -942,7 +942,7 @@ function calculate_number_gridcells(self)
             -- See the image
             self:set_number_of_columns( self.grid_nx )
             local sum_distances = ( self.grid_nx - 1 )  * self.grid_dx
-            self.gridwidth = math.floor( ( pagearea_x - sum_distances ) /  self.grid_nx, 0)
+            self.gridwidth = math.floor( ( pagearea_x - sum_distances ) /  self.grid_nx)
         else
             self:set_number_of_columns(self:width_in_gridcells_sp(pagearea_x))
         end
@@ -950,12 +950,12 @@ function calculate_number_gridcells(self)
         if self.grid_ny and self.grid_ny ~= 0 then
             self:set_number_of_rows( self.grid_ny )
             local sum_distances = ( self.grid_ny - 1 )  * self.grid_dy
-            self.gridheight = math.floor( ( pagearea_y - sum_distances ) /  self.grid_ny, 0)
+            self.gridheight = math.floor( ( pagearea_y - sum_distances ) /  self.grid_ny)
         else
             if not self.gridheight then
                 splib.error("grid height not set, why?")
             else
-                self:set_number_of_rows(math.ceil(math.round( pagearea_y /  self.gridheight ,4)))
+                self:set_number_of_rows(math.ceil(math.round(pagearea_y /  self.gridheight, 2)))
             end
         end
     end

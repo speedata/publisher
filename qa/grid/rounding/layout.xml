@@ -1,0 +1,18 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+	<SetGrid width="3mm" height="3mm" />
+
+	<Record element="data">
+		<Pagetype name="deckblatt" test="true()">
+			<Margin left="3mm" right="3mm" top="3mm" bottom="3mm" />
+		</Pagetype>
+		<Output>
+			<Text>
+				<Paragraph>
+					<Value select="sd:number-of-rows()" />
+				</Paragraph>
+			</Text>
+		</Output>
+	</Record>
+</Layout>
