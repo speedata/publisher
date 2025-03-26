@@ -1779,7 +1779,7 @@ function initialize_luatex_and_generate_pdf()
                 -- ignore
             else
                 -- A ZUGFeRD file
-                -- warning: the metadata entry should be written when we now which metadata to write.
+                -- warning: the metadata entry should be written when we know which metadata to write.
                 pdfcatalog[#pdfcatalog + 1] = string.format([[ /Metadata %d 0 R ]],metadataobj)
             end
         end

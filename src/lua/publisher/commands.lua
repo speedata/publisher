@@ -782,7 +782,7 @@ function commands.define_color( layoutxml,dataxml )
     end
 
     local mpname = function(str)
-        local invalid = "[^a-zA-Z]"
+        local invalid = "[^a-z_A-Z]"
         if string.find(str,invalid) then
             local mpcolorname = string.gsub(str,invalid,"")
             publisher.metapostcolorwarnings[#publisher.metapostcolorwarnings+1] = {str,mpcolorname}
