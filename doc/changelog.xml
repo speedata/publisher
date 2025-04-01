@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.0.1" date="2025-04-01">
+        <en>Bugfix: rounding error in some grid configurations.</en>
+        <de>Fehlerkorrektur: Rundungsfehler in manchen Rasterkonfigurationen.</de>
+    </entry>
     <entry version="5.0.0" date="2025-03-11">
         <en>Release Version 5.0.</en>
         <de>Veröffentliche Version 5.0.</de>
