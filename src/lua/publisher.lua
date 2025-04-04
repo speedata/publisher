@@ -1188,7 +1188,7 @@ function define_image_callback( extensionhandler )
         local handler = imagehandler[handlername]
 
         if handler then
-            log("Convert image (extension: %q) with handler %s",ext,handlername)
+            splib.log("info","Convert image", "extension",ext, "handler",handlername)
             file = splib.convertimage(file,handler)
         end
         return file
@@ -7562,6 +7562,10 @@ function define_default_fontfamily()
 end
 
 function define_fontfamily( regular,bold,italic,bolditalic, name, size, baselineskip,scriptsize,supershift,subshift)
+    if not size then
+        splib.error("DefineFontfamily needs size value")
+        return
+    end
     if not scriptsize then
         scriptsize = math.round(size * 0.8,0)
     end

@@ -250,7 +250,10 @@ func ConvertContents(contents, handler string) (string, error) {
 // ConvertImage runs an external program to convert the image into a file
 // format suitable for the speedata Publisher.
 func ConvertImage(filename, handler string) (string, error) {
-	return convertFile(filename, "outfilename", handler)
+	var base = filepath.Base(filename)
+	var extension = filepath.Ext(base)
+	var outfilename = base[0 : len(base)-len(extension)]
+	return convertFile(filename, outfilename, handler)
 }
 
 // ConvertSVGImage runs inkscape to convert an SVG image to PDF.
