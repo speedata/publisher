@@ -5421,6 +5421,11 @@
           </xs:union>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="background-color">
+        <xs:annotation>
+          <xs:documentation>Der Name der Hintergrundfarbe (überschreibt Voreinstellung). Die Farbe '-' löscht die Voreinstellung.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="defaultcolor">
         <xs:annotation>
           <xs:documentation>Die Textfarbe der Seite, sofern sie nicht in Textblock oder Paragraph überschrieben wird. Voreinstellung ist 'black'.</xs:documentation>
@@ -6689,38 +6694,6 @@
         <xs:annotation>
           <xs:documentation>Der Innenabstand (unten) der Hintergrundfarbe (kann negativ sein)</xs:documentation>
         </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="direction">
-        <xs:annotation>
-          <xs:documentation>Die Laufrichtung des Textes (ltr oder rtl)</xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-          <xs:union>
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="ltr">
-                  <xs:annotation>
-                    <xs:documentation>Links nach rechts Text</xs:documentation>
-                  </xs:annotation>
-                </xs:enumeration>
-              </xs:restriction>
-            </xs:simpleType>
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="rtl">
-                  <xs:annotation>
-                    <xs:documentation>Rechts nach links Text</xs:documentation>
-                  </xs:annotation>
-                </xs:enumeration>
-              </xs:restriction>
-            </xs:simpleType>
-            <xs:simpleType>
-              <xs:restriction base="xs:string">
-                <xs:pattern value="\{.+\}"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:union>
-        </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>

@@ -2853,6 +2853,7 @@ function initialize_page(pagenumber,data, from)
         end
     end
     current_page.graphic = pagetype.graphic
+    current_page.backgroundcolor = pagetype.backgroundcolor
     local columnordering = pagetype.columnordering
     for _,j in ipairs(pagetype) do
         local eltname = elementname(j)
@@ -2887,7 +2888,24 @@ function initialize_page(pagenumber,data, from)
             for i=1,#tmp do
                 table.insert(current_positioning_area,tmp[i])
             end
-            -- current_positioning_area[#current_positioning_area + 1] =
+            local bgcolor = element_contents(j).bgcolor
+            if bgcolor then
+                for _, tbl in ipairs(tmp) do
+                    local x = current_grid:posx_sp(tbl.column - 1) + current_grid.extra_margin + current_grid.margin_left
+                    local y = current_grid:posy_sp(tbl.row - 1) + current_grid.extra_margin + current_grid.margin_top
+                    local wd = current_grid:posx_sp(tbl.width)
+                    local ht = current_grid:posy_sp(tbl.height)
+
+                    local nl = box(wd,ht,bgcolor)
+
+                    output_absolute_position({
+                        nodelist = nl,
+                        x = x,
+                        y = y,
+                        allocate = false,
+                    })
+                end
+            end
             current_positioning_area.colorname = element_contents(j).colorname
         else
             err("Element name %q unknown (setup_page())",eltname or "<create_page>")
@@ -4190,8 +4208,12 @@ function dothingsbeforeoutput( thispage,data )
     end
 
     -- White background
-    if options.background and options.background ~= '-' then
-        local colentry = get_colentry_from_name(options.background,"white")
+    if ( options.background and options.background ~= '-' ) or ( thispage.backgroundcolor and thispage.backgroundcolor ~= "-" ) then
+        local col = thispage.backgroundcolor or options.background
+        if col == "-" then
+            goto skipbgcolor
+        end
+        local colentry = get_colentry_from_name(col ,"white")
         if not colentry then
             splib.error("Color is not defined","name",tostring(options.backgroun))
             colentry = colors["white"]
@@ -4202,6 +4224,7 @@ function dothingsbeforeoutput( thispage,data )
         firstbox.data = string.format("q %s 1 0 0 1 0 0 cm %g %g %g %g re f Q",pdfcolorstring, sp_to_bp(x), sp_to_bp(y),wd ,ht)
         firstbox.mode = 1
     end
+    ::skipbgcolor::
 
     if options.showgridallocation then
         local lit = node.new("whatsit","pdf_literal")

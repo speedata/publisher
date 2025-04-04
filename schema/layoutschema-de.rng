@@ -4670,6 +4670,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="background-color">
+                     <a:documentation>Der Name der Hintergrundfarbe (überschreibt Voreinstellung). Die Farbe &#39;-&#39; löscht die Voreinstellung.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="defaultcolor">
                      <a:documentation>Die Textfarbe der Seite, sofern sie nicht in Textblock oder Paragraph überschrieben wird. Voreinstellung ist &#39;black&#39;.</a:documentation>
                   </attribute>
@@ -5883,20 +5888,6 @@
                <optional>
                   <attribute name="background-padding-bottom">
                      <a:documentation>Der Innenabstand (unten) der Hintergrundfarbe (kann negativ sein)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="direction">
-                     <a:documentation>Die Laufrichtung des Textes (ltr oder rtl)</a:documentation>
-                     <choice>
-                        <value>ltr</value>
-                        <a:documentation>Links nach rechts Text</a:documentation>
-                        <value>rtl</value>
-                        <a:documentation>Rechts nach links Text</a:documentation>
-                        <data type="string">
-                           <param name="pattern">\{.+\}</param>
-                        </data>
-                     </choice>
                   </attribute>
                </optional>
                <optional>

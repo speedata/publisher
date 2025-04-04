@@ -4670,6 +4670,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="background-color">
+                     <a:documentation>The name of the background color (overrides default). The color &#39;-&#39; removes the default.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="defaultcolor">
                      <a:documentation>The default text color for this page (unless overridden in Paragraph or Textblock). Defaults to &#39;black&#39;.</a:documentation>
                   </attribute>
@@ -5883,20 +5888,6 @@
                <optional>
                   <attribute name="background-padding-bottom">
                      <a:documentation>The bottom padding of the background color (can be negative)</a:documentation>
-                  </attribute>
-               </optional>
-               <optional>
-                  <attribute name="direction">
-                     <a:documentation>The text direction (ltr or rtl)</a:documentation>
-                     <choice>
-                        <value>ltr</value>
-                        <a:documentation>Left to right text.</a:documentation>
-                        <value>rtl</value>
-                        <a:documentation>Right to left text.</a:documentation>
-                        <data type="string">
-                           <param name="pattern">\{.+\}</param>
-                        </data>
-                     </choice>
                   </attribute>
                </optional>
                <optional>

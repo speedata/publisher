@@ -7376,6 +7376,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="background-color" type="text" optional="yes" since="5.1.0">
+      <description xml:lang="en">
+        <para>The name of the background color (overrides default). The color '-' removes the default.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Name der Hintergrundfarbe (überschreibt Voreinstellung). Die Farbe '-' löscht die Voreinstellung.</para>
+      </description>
+    </attribute>
     <attribute en="defaultcolor" optional="yes" type="text" since="2.9.3">
       <description xml:lang="en">
         <para>The default text color for this page (unless overridden in Paragraph or Textblock). Defaults to 'black'.</para>

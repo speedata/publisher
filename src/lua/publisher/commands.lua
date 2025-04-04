@@ -2980,6 +2980,7 @@ function commands.pagetype(layoutxml,dataxml)
     local test           = publisher.read_attribute(layoutxml,dataxml,"test","string")
     local pagetypename   = publisher.read_attribute(layoutxml,dataxml,"name","string")
     local part           = publisher.read_attribute(layoutxml,dataxml,"part","string")
+    local backgroundcolor = publisher.read_attribute(layoutxml,dataxml,"background-color","string")
 
     local width  = publisher.read_attribute(layoutxml,dataxml,"width","length")
     local height = publisher.read_attribute(layoutxml,dataxml,"height","length")
@@ -2990,6 +2991,7 @@ function commands.pagetype(layoutxml,dataxml)
         height = height,
         columnordering = columnordering,
         part = part,
+        backgroundcolor = backgroundcolor,
     }
     -- evaluate the default color for this page later on, so we can set it dynamically (XPath)
 
@@ -3834,9 +3836,11 @@ function commands.positioning_area( layoutxml,dataxml )
     -- might depend on values on the _current_ page, which is not set!
     local colorname = publisher.read_attribute(layoutxml,dataxml,"framecolor", "string")
     local name      = publisher.read_attribute(layoutxml,dataxml,"name","string")
+    local bgcolor   = publisher.read_attribute(layoutxml,dataxml,"background-color","string")
     local tab = {}
     tab.colorname = colorname
     tab.layoutxml = layoutxml
+    tab.bgcolor = bgcolor
     if publisher.newxpath then
         tab.dataxml = dataxml
     else
