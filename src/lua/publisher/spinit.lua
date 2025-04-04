@@ -375,16 +375,18 @@ require("publisher")
 local function traceback(what)
     -- get message from what
     local msg = string.gsub(what,".*:%d+: (.*)", "%1")
-    splib.error("Lua error:","msg",msg)
+    splib.error("Lua error:","message",msg)
     print("Internal error: " .. msg)
-    print("Stack trace:")
+    if loglevel > 4 then
+        print("Stack trace:")
+    end
     local lvl = 2
     local src
     local functioninfo
     while true do
         local info = debug.getinfo(lvl,"nSl")
         if not info then break end
-        if lvl > 9 then print("...") break end
+        if lvl > 9 and loglevel > 4 then print("...") break end
         -- strip first 1 character from info.source
         if info.source:sub(1,1) == "@" then
             src = string.gsub(info.source,"^.*src/lua/(.*)$","%1")
@@ -393,14 +395,14 @@ local function traceback(what)
             else
                 functioninfo = ""
             end
-            splib.log("message","stacktrace","source",src,"line",info.currentline,"function",info.name)
+            splib.log("message","stacktrace","source",src or "?","line",info.currentline or "?","function",info.name or "?")
             if loglevel > 4 then
                 print(src .. ":" .. info.currentline .. ": in function " .. functioninfo)
             end
         end
         lvl = lvl + 1
     end
-    print("Please report this error to the speedata Publisher developers.")
+    print("Please report this error to the speedata Publisher developers.\nSee the protocol file (publisher-protocol.xml) for more information.")
 end
 
 function main_loop()
