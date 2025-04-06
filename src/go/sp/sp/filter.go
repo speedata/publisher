@@ -154,11 +154,16 @@ func execute(l *lua.LState) int {
 	command := exec.Command(cmd, arguments...)
 	command.Stdout = os.Stdout
 	command.Stdin = os.Stdin
-	err := command.Run()
-	if err != nil {
+	if err := command.Run(); err != nil {
+		if exitError, ok := err.(*exec.ExitError); ok {
+			l.Push(lua.LFalse)
+			l.Push(lua.LNumber(exitError.ExitCode()))
+			return 2
+		}
 		return lerr(err.Error())
 	}
 	l.Push(lua.LTrue)
+	l.Push(lua.LNumber(0))
 	return 1
 }
 

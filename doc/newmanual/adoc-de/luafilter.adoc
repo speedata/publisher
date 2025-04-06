@@ -308,7 +308,9 @@ Führt ein Programm aus und gibt dessen Ausgabe in die Konsole aus. Um den speed
 runtime.execute({"sp","--runs","2"})
 -------------------------------------------------------------------------------
 +
-If necessary, the first parameter (the program name) must be specified with absolute path of the program. On Windows, forward slashes (`/`) also work as separators instead of backward slashes (`\`).
+Falls erforderlich, muss der erste Parameter (der Programmname) mit dem absoluten Pfad des Programms angegeben werden. Unter Windows funktionieren auch Schrägstriche (`/`) als Trennzeichen anstelle von umgekehrten Schrägstrichen (`\`).
++
+Der Rückgabewert ist ein bool (success), Wert 2 ist der Fehlercode, wenn der erste Wert `false` ist.
 
 `find_file(‹Dateiname oder URL›)`::
 Findet die angegebene Datei im Publisher-Suchpfad und gibt den absoluten Pfad zurück. Bei nicht gefunden: nil bzw. false und eine Fehlermeldung.
