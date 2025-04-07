@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.1" date="2025-04-07">
+        <en>Lua-preprocessor: runtime.execute returns success/exit code.</en>
+        <de>Lua Präprozessor: runtime.execute liefert den Erfolg bzw. den Exit-Code zurück.</de>
+    </entry>
     <entry version="5.1.0" date="2025-04-04">
         <en>Set background-color for each page.</en>
         <de>Setze Hintergrundfarbe für jede Seite.</de>
