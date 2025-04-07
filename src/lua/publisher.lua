@@ -6827,15 +6827,30 @@ function colorbar( wd,ht,dp,color,origin,orientation)
         local wd_bp = sp_to_bp(wd)
         rule_start.mode = 0
         local data = "q "..colors[colorname].pdfstring
+        local rule_width_bp, rule_length_bp
+
         if not options.tablerulefix then
-            data = data .. string.format(" %g w 0 %g m %g %g l s Q ",ht_bp,ht_bp / 2 , wd_bp , ht_bp / 2)
+            if orientation == "horizontal" then
+                -- draw horizontal line
+                rule_width_bp = ht_bp
+                rule_length_bp = wd_bp
+                data = data .. string.format(" %g w 0 %g m %g %g l s Q ", rule_width_bp, rule_width_bp / 2, rule_length_bp, rule_width_bp / 2)
+            else
+                rule_width_bp = wd_bp
+                rule_length_bp = ht_bp
+                data = data .. string.format(" %g w %g %g m %g %g l s Q ", rule_width_bp, rule_width_bp /2, rule_length_bp, rule_width_bp / 2, 0)
+            end
         else
             if orientation == "horizontal" then
+                rule_width_bp = ht_bp
+                rule_length_bp = wd_bp
                 -- draw horiztontal line a bit lower
-                data = data .. string.format(" %g w 0 %g m %g %g l s Q ", ht_bp,-ht_bp / 2 , wd_bp , - ht_bp / 2)
+                data = data .. string.format(" %g w %g %g m %g %g l s Q ", rule_width_bp, 0 , rule_width_bp / -2, rule_length_bp, rule_width_bp / -2)
             else
+                rule_width_bp = wd_bp
+                rule_length_bp = ht_bp
                 -- draw the vertical borders in negative direction
-                data = data .. string.format(" %g w 0 %g m %g %g l s Q ",ht_bp,-ht_bp / 2 , wd_bp , - ht_bp / 2)
+                data = data .. string.format(" %g w %g %g m %g %g l s Q ", rule_width_bp, rule_width_bp / 2 , -1 * rule_length_bp, rule_width_bp / 2 , 0)
             end
         end
         rule_start.data = data
