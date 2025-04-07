@@ -2,7 +2,6 @@ package splibaux
 
 import (
 	"crypto/md5"
-	"encoding/csv"
 	"fmt"
 	"io"
 	"log/slog"
@@ -205,27 +204,18 @@ func convertFile(inputfilename, baseoutputfilename, handler string) (string, err
 	}
 
 	outfile := filepath.Join(rawimgcache, baseoutputfilename)
-	replaced := strings.NewReplacer("%%input%%", inputfilename, "%%output%%", outfile).Replace(handler)
-	r := csv.NewReader(strings.NewReader(replaced))
-	r.Comma = ' '
-
-	record, err := r.Read()
-	if err != nil {
-		return "", err
-	}
-
-	replacedHandler := record
-	executableFile := replacedHandler[0]
-	replacedHandler = replacedHandler[1:]
-	for _, itm := range replacedHandler {
-		if strings.HasPrefix(itm, outfile) {
-			outfile = itm
+	replacer := strings.NewReplacer("%%input%%", inputfilename, "%%output%%", outfile)
+	res := strings.Split(handler, " ")
+	for i := 0; i < len(res); i++ {
+		res[i] = replacer.Replace(res[i])
+		if strings.HasPrefix(res[i], outfile) {
+			outfile = res[i]
 		}
 	}
-	cmd := exec.Command(executableFile, replacedHandler...)
-	if verbosity > 0 {
-		fmt.Println("command for image conversion:", cmd)
-	}
+
+	executableFile := res[0]
+	cmd := exec.Command(executableFile, res[1:]...)
+	slog.Debug("Command for image conversion", "cmd", fmt.Sprintf("%#v", cmd.Args))
 	err = cmd.Run()
 	return outfile, err
 }
