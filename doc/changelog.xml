@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.2" date="2025-04-07">
+        <en>Change then width and the height for vertical rules. Internal change, should not create visible changes.</en>
+        <de>Ändere die Breite und Höhe für vertikale Linien. Sollte keine Auswirkungen auf das Erscheinungsbild haben.</de>
+    </entry>
     <entry version="5.1.1" date="2025-04-07">
         <en>Lua-preprocessor: runtime.execute returns success/exit code.</en>
         <de>Lua Präprozessor: runtime.execute liefert den Erfolg bzw. den Exit-Code zurück.</de>
