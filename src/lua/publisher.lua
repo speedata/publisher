@@ -2347,97 +2347,144 @@ function output_absolute_position(param)
     local nodelist = param.nodelist
     local keepposition = param.keepposition
     local r = param.grid or current_grid
-    if param.allocate then
-        local additional_width,additional_height = 0,0
+    --- We don't necessarily output things on a page, we can output them in a virtual page, called _group_.
+    if current_group then
+        -- Put the contents of the nodelist into the current group
+        local group = groups[current_group]
+        assert(group)
 
-        local startcol_sp = x - current_grid.margin_left
-        local startrow_sp = y - current_grid.margin_top
+        local n = add_glue( nodelist ,"head",{ width = delta_x })
+        n = node.hpack(n)
+        n = add_glue(n, "head", {width = delta_y})
+        n = node.vpack(n)
 
-        if param.allocate_left then
-          startcol_sp = startcol_sp - param.allocate_left
-          additional_width = additional_width + param.allocate_left
+        if group.contents then
+            -- There is already something in the group, we must add the new nodelist.
+            -- The size of the new group: max(size of old group, size of new nodelist)
+            local new_width, new_height
+            new_width  = math.max(n.width, group.contents.width)
+            new_height = math.max(n.height + n.depth, group.contents.height + group.contents.depth)
+
+            group.contents.width  = 0
+            group.contents.height = 0
+            group.contents.depth  = 0
+
+            local tail = node.tail(group.contents)
+            tail.next = n
+            n.prev = tail
+
+            group.contents = node.vpack(group.contents)
+            group.contents.width  = new_width
+            group.contents.height = new_height
+            group.contents.depth  = 0
+        else
+            -- group is empty
+            group.contents = n
         end
-        if param.allocate_right then
-          additional_width = additional_width + param.allocate_right
+        if allocate then
+            r:allocate_cells({
+                posx = x - shift_left,
+                posy = y - shift_up,
+                width_gridcells = width_gridcells,
+                height_gridcells = height_gridcells,
+                allocate_matrix = allocate_matrix,
+            })
         end
-        if param.allocate_top then
-          startrow_sp = startrow_sp - param.allocate_top
-          additional_height = additional_height + param.allocate_top
-        end
-        if param.allocate_bottom then
-          additional_height = additional_height + param.allocate_bottom
+    else
+        if param.allocate then
+            local additional_width,additional_height = 0,0
+
+            local startcol_sp = x - current_grid.margin_left
+            local startrow_sp = y - current_grid.margin_top
+
+            if param.allocate_left then
+              startcol_sp = startcol_sp - param.allocate_left
+              additional_width = additional_width + param.allocate_left
+            end
+            if param.allocate_right then
+              additional_width = additional_width + param.allocate_right
+            end
+            if param.allocate_top then
+              startrow_sp = startrow_sp - param.allocate_top
+              additional_height = additional_height + param.allocate_top
+            end
+            if param.allocate_bottom then
+              additional_height = additional_height + param.allocate_bottom
+            end
+
+            local startcol  = math.floor(math.round( (startcol_sp - current_grid.extra_margin) / current_grid.gridwidth ,3)) + 1
+            local delta_x = startcol_sp - current_grid:width_sp(startcol - 1)
+            if delta_x < 100 then delta_x = 0 end
+
+            local wd_grid = current_grid:width_in_gridcells_sp(nodelist.width + delta_x + additional_width - current_grid.extra_margin)
+            local startrow  = math.floor(math.round( (startrow_sp - current_grid.extra_margin) / current_grid.gridheight ,3)) + 1
+            local delta_y = startrow_sp - current_grid:height_sp(startrow - 1)
+            if delta_y < 100 then delta_y = 0 end
+            local ht_grid = current_grid:height_in_gridcells_sp(nodelist.height + delta_y + additional_height - current_grid.extra_margin)
+            local _x,_y,_wd,_ht = startcol,startrow,wd_grid,ht_grid
+            if _x < 1 then
+                _wd = _wd + _x - 1
+                _x = 1
+            end
+            if _y < 1 then
+                _ht = _ht + _y - 1
+                _y = 1
+            end
+
+            current_grid:allocate_cells({
+                posx = _x,
+                posy = _y,
+                width_gridcells = _wd,
+                height_gridcells = _ht,
+                keepposition = keepposition,
+                allocate_matrix = param.allocate_matrix})
         end
 
-        local startcol  = math.floor(math.round( (startcol_sp - current_grid.extra_margin) / current_grid.gridwidth ,3)) + 1
-        local delta_x = startcol_sp - current_grid:width_sp(startcol - 1)
-        if delta_x < 100 then delta_x = 0 end
 
-        local wd_grid = current_grid:width_in_gridcells_sp(nodelist.width + delta_x + additional_width - current_grid.extra_margin)
-        local startrow  = math.floor(math.round( (startrow_sp - current_grid.extra_margin) / current_grid.gridheight ,3)) + 1
-        local delta_y = startrow_sp - current_grid:height_sp(startrow - 1)
-        if delta_y < 100 then delta_y = 0 end
-        local ht_grid = current_grid:height_in_gridcells_sp(nodelist.height + delta_y + additional_height - current_grid.extra_margin)
-        local _x,_y,_wd,_ht = startcol,startrow,wd_grid,ht_grid
-        if _x < 1 then
-            _wd = _wd + _x - 1
-            _x = 1
-        end
-        if _y < 1 then
-            _ht = _ht + _y - 1
-            _y = 1
+        if node.has_attribute(nodelist,att_shift_left) then
+            x = x - ( node.has_attribute(nodelist,att_shift_left) or 0)
+            y = y - ( node.has_attribute(nodelist,att_shift_up) or 0)
         end
 
-        current_grid:allocate_cells({
-            posx = _x,
-            posy = _y,
-            width_gridcells = _wd,
-            height_gridcells = _ht,
-            keepposition = keepposition,
-            allocate_matrix = param.allocate_matrix})
+        if param.rotate then
+            nodelist = rotate(nodelist,param.rotate, param.origin_x or 0, param.origin_y or 0)
+        end
+
+        if param.clipatmargin then
+            local wd = nodelist.width
+            local ht = nodelist.height + nodelist.depth
+
+            local clipleft = math.max(r.margin_left + r.extra_margin - x,0)
+            local cliptop = math.max(r.extra_margin + r.margin_top - y, 0)
+            local clipright = math.max(-1 *(tex.pagewidth - r.extra_margin - r.margin_right - x - wd),0)
+            local pageframe = r.positioning_frames._page[1]
+            local maxht = r.extra_margin + r.margin_top + pageframe.height * r.gridheight + (pageframe.height - 1) * r.grid_dy
+            local clipbottom = math.max(-1 *( maxht - y - ht),0)
+
+            nodelist = clip({
+                box = nodelist,
+                clip_top_sp = cliptop,
+                clip_bottom_sp = clipbottom,
+                clip_left_sp = clipleft,
+                clip_right_sp = clipright,
+                clip_width_sp = 0,
+                clip_height_sp = 0,
+                method = "frame",
+            })
+        end
+
+
+        local n = add_glue( nodelist ,"head",{ width = x })
+        n = node.hpack(n)
+        n = add_glue(n, "head", {width = y})
+        n = node.vpack(n)
+        n.width  = 0
+        n.height = 0
+        n.depth  = 0
+        local tail = node.tail(pages[current_pagenumber].pagebox)
+        tail.next = n
+        n.prev = tail
     end
-
-
-    if node.has_attribute(nodelist,att_shift_left) then
-        x = x - ( node.has_attribute(nodelist,att_shift_left) or 0)
-        y = y - ( node.has_attribute(nodelist,att_shift_up) or 0)
-    end
-
-    if param.rotate then
-        nodelist = rotate(nodelist,param.rotate, param.origin_x or 0, param.origin_y or 0)
-    end
-
-    if param.clipatmargin then
-        local wd = nodelist.width
-        local ht = nodelist.height + nodelist.depth
-
-        local clipleft = math.max(r.margin_left + r.extra_margin - x,0)
-        local cliptop = math.max(r.extra_margin + r.margin_top - y, 0)
-        local clipright = math.max(-1 *(tex.pagewidth - r.extra_margin - r.margin_right - x - wd),0)
-        local pageframe = r.positioning_frames._page[1]
-        local maxht = r.extra_margin + r.margin_top + pageframe.height * r.gridheight + (pageframe.height - 1) * r.grid_dy
-        local clipbottom = math.max(-1 *( maxht - y - ht),0)
-
-        nodelist = clip({
-            box = nodelist,
-            clip_top_sp = cliptop,
-            clip_bottom_sp = clipbottom,
-            clip_left_sp = clipleft,
-            clip_right_sp = clipright,
-            clip_width_sp = 0,
-            clip_height_sp = 0,
-            method = "frame",
-        })
-    end
-    local n = add_glue( nodelist ,"head",{ width = x })
-    n = node.hpack(n)
-    n = add_glue(n, "head", {width = y})
-    n = node.vpack(n)
-    n.width  = 0
-    n.height = 0
-    n.depth  = 0
-    local tail = node.tail(pages[current_pagenumber].pagebox)
-    tail.next = n
-    n.prev = tail
 end
 
 -- annotate_nodelist is used for tooltips when debugging text formats.
