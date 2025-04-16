@@ -5278,6 +5278,9 @@ function commands.textblock( layoutxml,dataxml )
     local width          = publisher.read_attribute(layoutxml,dataxml,"width",         "length_sp")
     if fontname then warning("Textblock/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
+    if publisher.current_group and not width then
+        splib.log("warn","Textblock: width not set, but within a group. Expect strange results.")
+    end
     local save_width
     if publisher.newxpath then
         save_width = dataxml.vars["__maxwidth"]
