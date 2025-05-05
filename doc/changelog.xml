@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.4" date="2025-05-05">
+        <en>Bugfix: table split in AtPageShipout (#659).</en>
+        <de>Fehlerkurrektur: Tabellenumbruch in AtPageShipout (#659).</de>
+    </entry>
+    <entry version="5.1.4" date="2025-05-05">
+        <en>Absolute positioning within a group.</en>
+        <de>Absolute Positionierung innerhalb einer Gruppe.</de>
+    </entry>
     <entry version="5.1.3" date="2025-04-07">
         <en>Fix spaces in imagehandler.</en>
         <de>Korrigiere Leerzeichen im imagehandler.</de>
