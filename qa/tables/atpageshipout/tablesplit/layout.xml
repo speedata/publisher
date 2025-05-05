@@ -1,0 +1,26 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Pagetype name="t" test="true()">
+      <AtPageShipout>
+        <PlaceObject row="{sd:number-of-rows()}">
+          <Table stretch="max">
+            <Loop select="5" variable="i">
+              <Tr>
+                <Td><Paragraph><Value>Row </Value><Value select="$i"></Value></Paragraph></Td>
+              </Tr>
+            </Loop>
+          </Table>
+        </PlaceObject>
+      </AtPageShipout>
+    </Pagetype>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>Hello world</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

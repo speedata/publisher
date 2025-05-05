@@ -593,7 +593,7 @@ end
 --- ---------
 --- Finishes the current page
 function commands.clearpage( layoutxml,dataxml)
-    local matter = publisher.read_attribute(layoutxml,dataxml,"matter","string")
+    local matter       = publisher.read_attribute(layoutxml,dataxml,"matter","string")
     local pagetype     = publisher.read_attribute(layoutxml,dataxml,"pagetype","string")
     local skippagetype = publisher.read_attribute(layoutxml,dataxml,"skippagetype","string")
     local openon       = publisher.read_attribute(layoutxml,dataxml,"openon","string")
@@ -3466,7 +3466,9 @@ function commands.place_object( layoutxml,dataxml)
         options.ht_max = publisher.maxdimen
         options.current_height = publisher.maxdimen
     end
-    if allocate == "no" then
+
+    -- no table splitting in AtPageShipout
+    if allocate == "no" or publisher.pagebreak_impossible then
         options.current_height = areaheight
     end
 
