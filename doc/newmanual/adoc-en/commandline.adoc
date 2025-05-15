@@ -44,6 +44,8 @@ you can display a list of the allowed commands and parameters.
 
 `clean`::
    Deletes all generated intermediate files and keeps the PDF file.
+`checkupdate`::
+   Checks if a new version of the Publisher is available. Return code is 0 if the version is up to date. 1 if a new version is available.
 `clearcache`::
   Removes files from the image cache.
 `compare`::

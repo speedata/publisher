@@ -4,9 +4,11 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
+	"net/http"
 	"os"
 	"os/exec"
 	"os/signal"
@@ -24,21 +26,23 @@ import (
 	"speedatapublisher/sp"
 	"speedatapublisher/splibaux"
 
+	"github.com/Masterminds/semver"
 	"github.com/speedata/hotfolder"
 	"github.com/speedata/optionparser"
 )
 
 const (
-	cmdRun        = "run"
-	cmdServer     = "server"
-	cmdCompare    = "compare"
-	cmdClean      = "clean"
-	cmdClearcache = "clearcache"
-	cmdDoc        = "doc"
-	cmdListFonts  = "list-fonts"
-	cmdNew        = "new"
-	cmdWatch      = "watch"
-	cmdHelp       = "help"
+	cmdRun         = "run"
+	cmdServer      = "server"
+	cmdCompare     = "compare"
+	cmdClean       = "clean"
+	cmdCheckUpdate = "checkupdate"
+	cmdClearcache  = "clearcache"
+	cmdDoc         = "doc"
+	cmdListFonts   = "list-fonts"
+	cmdNew         = "new"
+	cmdWatch       = "watch"
+	cmdHelp        = "help"
 
 	osWindows = "windows"
 	osLinux   = "linux"
@@ -822,6 +826,7 @@ func main() {
 	op.Command(cmdHelp, "Show usage help")
 	op.Command(cmdClean, "Remove publisher generated files")
 	op.Command(cmdCompare, "Compare files for quality assurance")
+	op.Command(cmdCheckUpdate, "Check for updates")
 	op.Command(cmdClearcache, "Clear image cache")
 	op.Command(cmdDoc, "Open documentation")
 	op.Command(cmdListFonts, "List installed fonts (use together with --xml for copy/paste)")
@@ -1069,6 +1074,45 @@ func main() {
 	case cmdClearcache:
 		ic := getOption("imagecache")
 		os.RemoveAll(ic)
+	case cmdCheckUpdate:
+		url := "https://download.speedata.de/versioninfo"
+		// Get the data
+		resp, err := http.Get(url)
+		if err != nil {
+			log.Fatal(err)
+		}
+		var data []byte
+		if data, err = io.ReadAll(resp.Body); err != nil {
+			log.Fatal(err)
+		}
+		resp.Body.Close()
+
+		var vi map[string]string
+		if err = json.Unmarshal(data, &vi); err != nil {
+			log.Fatal(err)
+		}
+
+		dev := semver.MustParse(vi["Development"])
+		stable := semver.MustParse(vi["Stable"])
+		cur := semver.MustParse(version)
+		needsUpdate := false
+		if dev.GreaterThan(cur) {
+			needsUpdate = true
+		}
+		if stable.GreaterThan(cur) {
+			needsUpdate = true
+		}
+		if needsUpdate {
+			fmt.Println("Update available")
+			fmt.Println("Installed version:", version)
+			fmt.Println("Development version:", dev)
+			fmt.Println("Stable version:", stable)
+			fmt.Println("\nPlease visit https://download.speedata.de/ for the latest version.")
+			os.Exit(1)
+		} else {
+			fmt.Println("No update available")
+			os.Exit(0)
+		}
 	case cmdClean:
 		jobname := getOption("jobname")
 		files, err := filepath.Glob(jobname + "*")

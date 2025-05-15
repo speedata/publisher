@@ -46,6 +46,8 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
   Löscht alle generierten Zwischendateien und behält die PDF-Datei.
 `clearcache`::
   Löscht den Bildcache.
+`checkupdate`::
+   Prüft, ob eine neue Version des Publishers verfügbar ist. Rückgabecode ist 0, wenn die Version aktuell ist. 1, wenn eine neue Version verfügbar ist.
 `compare`::
   Vergleicht PDF-Dateien für die Qualitätssicherung. Siehe <<ch-qualitaetssicherung>>.
 `doc`::
