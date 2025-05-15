@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.6" date="2025-05-15">
+        <en>New command <tt>sp checkversion</tt> to see if a newer version is available (#660).</en>
+        <de>Neuer Befehl <tt>sp checkversion</tt>, um auf Aktualisierungen zu prüfen (#660).</de>
+    </entry>
     <entry version="5.1.5" date="2025-05-05">
         <en>Update to new LuaTeX binaries (1.22.0).</en>
         <de>Aktualisiere auf neue LuaTeX binaries (1.22.0).</de>
@@ -10,7 +14,7 @@
     </entry>
     <entry version="5.1.4" date="2025-05-05">
         <en>Bugfix: table split in AtPageShipout (#659).</en>
-        <de>Fehlerkurrektur: Tabellenumbruch in AtPageShipout (#659).</de>
+        <de>Fehlerkorrektur: Tabellenumbruch in AtPageShipout (#659).</de>
     </entry>
     <entry version="5.1.4" date="2025-05-05">
         <en>Absolute positioning within a group.</en>
