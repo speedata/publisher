@@ -265,7 +265,8 @@ func ConvertSVGImage(filename string) (string, error) {
 	hashedFilename := fmt.Sprintf("%x", md5.Sum([]byte(svgfile)))
 	pdffile := filepath.Join(rawimgcache, hashedFilename+".pdf")
 
-	if _, err := os.Stat(pdffile); err == nil {
+	cachemethod := os.Getenv("CACHEMETHOD")
+	if _, err := os.Stat(pdffile); err == nil && cachemethod != "none" {
 		return pdffile, nil
 	}
 

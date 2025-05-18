@@ -77,7 +77,7 @@ you can display a list of the allowed commands and parameters.
 `--autoopen`::
    Open the PDF file. Can be set in the <<ch-configuration>>.
 `--cache=METHOD`::
-   Use cache method. One of `none`, `fast` or `optimal`. Default is `optimal`.
+   Use cache method. One of `none`, `fast` or `optimal`. Default is `optimal`. See the description in the <<ch-configuration>>.
 `-c`, `--config=NAME`::
    Read the config file with the given NAME. Default: `publisher.cfg`
 `--credits`::

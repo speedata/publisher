@@ -45,7 +45,7 @@ erkannt. Folgende Optionen werden unterstützt:
 `autoopen`::
   wenn hier `true` anstelle von `false` steht, wird das PDF nach dem Publisher Durchlauf automatisch geöffnet. Derselbe Effekt lässt sich über die Kommandozeile mit `--autoopen` erreichen.
 `cache`::
-  Caching-Strategie für http(s) Dateien. Entweder `fast`, dann wird nur geschaut, ob die Datei im Dateisystem vorhanden ist oder `optimal`, dann wird bei jedem Zugriff auf die Datei geprüft, ob sie aktualisiert werden muss. Vollständig ausschalten kann man den Cache mit `none`.
+  Caching-Strategie für http(s) Dateien. Entweder `fast`, dann wird nur geschaut, ob die Datei im Dateisystem vorhanden ist oder `optimal`, dann wird bei jedem Zugriff auf die Datei geprüft, ob sie aktualisiert werden muss. Vollständig ausschalten kann man den Cache mit `none`. `none` funktioniert auch für SVG-Konvertierungen. In diesem Fall wird bei jedem Zugriff auf die Datei eine PDF-Datei erzeugt. Voreinstellung ist `optimal`.
 `data`::
   Name der XML-Daten. Wenn nicht vorhanden, wird die Datei `data.xml` geladen.
 `dummy`::
