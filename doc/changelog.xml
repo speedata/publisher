@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.8" date="2025-05-22">
+        <en>Bugfix: layout function sd:current-framenumber() and new XPath parser.</en>
+        <de>Fehlerkorrektur Layoutfunktion sd:current-framenumber() und neuer XPath parser.</de>
+    </entry>
     <entry version="5.1.7" date="2025-05-18">
         <en>cache=none works for SVG conversion (#622).</en>
         <de>cache=none funktioniert auch bei SVG Konvertierung (#622).</de>
