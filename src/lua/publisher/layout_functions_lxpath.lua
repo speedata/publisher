@@ -445,7 +445,7 @@ end
 
 local function current_frame_number(dataxml, arg)
     publisher.setup_page(nil, "layout_functions#current_framenumber", dataxml)
-    local framename = arg[1]
+    local framename = xpath.string_value(arg[1])
     if framename == nil then return { 1 }, nil end
     local current_framenumber = publisher.current_grid:framenumber(framename)
     return { current_framenumber }, nil
