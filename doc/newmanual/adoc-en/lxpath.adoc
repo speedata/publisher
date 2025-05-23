@@ -304,8 +304,11 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `sd:sha256(<value>,<value>, …)`::
   Return the SHA-256 sum of the concatenation of each value as a hex string. Example: `sd:sha256('hello ', 'world')` gives the string b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9.
 
-`sd:sha512(<value>,<value>, …)`::
+`sd:sha512(<value>[,<value>] …)`::
   Return the SHA-512 sum of the concatenation of each value as a hex string. Example: `sd:sha512('hello ', 'world')` gives the string 309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f.
+
+`sd:symbol(<value>[,<value>] …)`::
+  Returns a symbol from the current font. Example: `sd:symbol(123, 444)` returns the characters with the glyph numbers (glyph id) 123 and 444. The glyph number can be determined e.g. with https://opentype.js.org/glyph-inspector.html (since version 5.1.10.)
 
 `sd:tounit(<string>,<string>[,<number>])`::
   Return a scalar of the unit given in the second argument converted to the unit given in the first argument rounded to the digits in the third argument (defaults to 0 - return integer values). Example: `sd:tounit('pt','1pc')` returns 12, because there are 12pt in 1pc (pica point).

@@ -180,7 +180,7 @@ function define_font_hb( name, size, extra_parameter )
 
     for gid = 0, face:get_glyph_count() - 1 do
         local touni = glyph_uni[gid]
-        local uni = touni or ( 0x110000 + gid )
+        local uni = touni or ( publisher.puastart + gid )
         local ge = fnt:get_glyph_extents(gid)
         local hadvance = fnt:get_glyph_h_advance(gid)
         if uni == 160 then -- U+00A0 NO-BREAK SPACE
@@ -223,7 +223,7 @@ function define_font_hb( name, size, extra_parameter )
 
     for gid = 0, face:get_glyph_count() - 1 do
         local touni = glyph_uni[gid]
-        local uni = touni or ( 0x110000 + gid )
+        local uni = touni or ( publisher.puastart + gid )
         local glyphname = fnt:get_glyph_name(gid)
         if glyphname and string.find(glyphname,".",1,true) then
             local basename = string.match(glyphname,"^(.*)%.")

@@ -613,6 +613,15 @@ local function sha512(dataxml, arg)
     return { ret }, nil
 end
 
+local function symbol(dataxml,arg)
+    local p = par:new(nil, "symbol")
+    for _, v in ipairs(arg) do
+        local thisarg = xpath.number_value(v)
+        p:append( utf8.char(publisher.puastart + thisarg))
+    end
+    return p, nil
+end
+
 local function markdown(dataxml, arg)
     if arg == nil then
         arg = dataxml
@@ -955,6 +964,7 @@ local funcs = {
     { "sha1",                sdns, shaone,               1, -1 },
     { "sha256",              sdns, sha256,               1, -1 },
     { "sha512",              sdns, sha512,               1, -1 },
+    { "symbol",              sdns, symbol,               1, -1 },
     { "todimen",             sdns, tounit,               1, 3 },
     { "tounit",              sdns, tounit,               1, 3 },
     { "variable-exists",     sdns, variable_exists,      1, 1 },

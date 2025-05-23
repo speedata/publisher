@@ -650,6 +650,13 @@ end
 -- A very large length
 maxdimen = 1073741823
 
+
+-- this should be 0x100000 (= 1048576), but this is easier to work with in the
+-- layout. For example you want to insert a glyph id 467, then you can write
+-- &#1100467; in the layout xml. Let me not make this public until I proof that
+-- it works.
+puastart = 1100000
+
 -- It's convenient to just copy the stretching glue instead of writing
 -- the stretch etc. over and over again.
 glue_stretch2 = set_glue(nil, { stretch = 2^16, stretch_order = 2 })
@@ -5396,11 +5403,16 @@ function hbglyphlist(arguments)
         end
 
     end
+    local thistbl = tbl
+
     for i=1,#glyphs do
-        local thistbl = tbl
         local thisfontnumber = fontnumber
         local thisglyph = glyphs[i]
         local cp = thisglyph.codepoint
+        local cpcluster = cluster[thisglyph.cluster]
+        if cpcluster and cp == 0 and cpcluster > puastart then
+            cp = cpcluster - puastart
+        end
         local uc
         if thisglyph.pos then
             -- a special table from fallback
@@ -5623,6 +5635,10 @@ function hbglyphlist(arguments)
             -- characters that must not appear at the end of a line
             -- $(£¥·'"〈《「『【〔〖〝﹙﹛＄（．［｛￡￥
 
+            -- glyph ids inserted by sd:symbol()
+            if  uc > puastart and thisglyph.codepoint == 0 then
+                thisglyph.x_advance = thistbl.characters[uc].hadvance
+            end
             local diff = thisglyph.x_advance - thistbl.characters[uc].hadvance
             if diff ~= 0 then
                 local property = "kernafter"
@@ -5630,7 +5646,7 @@ function hbglyphlist(arguments)
                 publisher.setprop(cur,property, diff * tbl.mag)
             end
             if uc == -1 then
-            elseif uc > 0x110000 then
+            elseif uc > puastart then
                 -- ignore
             elseif ( uc == 45 or uc == 8211) and lastitemwasglyph and string.find(allowbreak, "-",1,true) then
                 -- only break if allowbreak contains the hyphen char
