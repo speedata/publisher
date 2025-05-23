@@ -3861,6 +3861,15 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="mpcolorwarning">
+               <a:documentation>Gibt eine Warnung aus, wenn der Farbname nicht mit MetaPost kompatibel ist.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="namespaces">
                <a:documentation>Kontrolliert die Handhabung von XML Namensräumen. Die Voreinstellung ist &#39;lax&#39;, das alle Namensräume bei den Befehlen Record und ProcessNode ignoriert.</a:documentation>
                <choice>

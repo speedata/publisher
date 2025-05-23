@@ -1293,6 +1293,7 @@ function initialize_luatex_and_generate_pdf()
         options.verbosity = tonumber(os.getenv("SP_VERBOSITY"))
     end
 
+    options.mpcolorwarning = true
     --- The default page type has 1cm margin
     masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(tenmm_sp,tenmm_sp,tenmm_sp,tenmm_sp) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
 

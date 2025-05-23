@@ -4133,6 +4133,17 @@
           <xs:documentation>Set the markdown extensions. Must be a comma seprarated list of one or more of these values: table, strikethrough, linkify, tasklist, gfm, definitionlist, footnote, typographer, cjk.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="mpcolorwarning">
+        <xs:annotation>
+          <xs:documentation>Show a warning if the color name is not compatible with MetaPost.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="namespaces">
         <xs:annotation>
           <xs:documentation>Controls the handling of XML namespaces. The default is 'lax' which ignores all namespaces with Record and ProcessNode.</xs:documentation>

@@ -722,7 +722,9 @@ function prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
     if #colorwarnings > 0 then
         for i = 1, #colorwarnings do
             local str,mpcolorname = table.unpack(colorwarnings[i])
-            splib.log("warn","A color has characters in it that confuse the metapost interpreter, therefore I have renamed the color for metapost","color", str, "dest", "colors." .. mpcolorname)
+            if publisher.options.mpcolorwarning then
+                splib.log("warn","A color has characters in it that confuse the metapost interpreter, therefore I have renamed the color for metapost","color", str, "dest", "colors." .. mpcolorname)
+            end
         end
         publisher.metapostcolorwarnings = {}
     end

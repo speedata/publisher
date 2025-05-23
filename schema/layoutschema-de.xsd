@@ -4133,6 +4133,17 @@
           <xs:documentation>Setze die markdown-Erweiterungen. Eine Kommaseparierte Liste der folgenden Werte: table, strikethrough, linkify, tasklist, gfm, definitionlist, footnote, typographer, cjk.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="mpcolorwarning">
+        <xs:annotation>
+          <xs:documentation>Gibt eine Warnung aus, wenn der Farbname nicht mit MetaPost kompatibel ist.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="namespaces">
         <xs:annotation>
           <xs:documentation>Kontrolliert die Handhabung von XML Namensräumen. Die Voreinstellung ist 'lax', das alle Namensräume bei den Befehlen Record und ProcessNode ignoriert.</xs:documentation>

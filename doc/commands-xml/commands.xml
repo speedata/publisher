@@ -6524,6 +6524,14 @@
         <para>Setze die markdown-Erweiterungen. Eine Kommaseparierte Liste der folgenden Werte: table, strikethrough, linkify, tasklist, gfm, definitionlist, footnote, typographer, cjk.</para>
       </description>
     </attribute>
+    <attribute en="mpcolorwarning" optional="yes" type="boolean" since="5.1.9">
+      <description xml:lang="en">
+        <para>Show a warning if the color name is not compatible with MetaPost.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Gibt eine Warnung aus, wenn der Farbname nicht mit MetaPost kompatibel ist.</para>
+      </description>
+    </attribute>
     <attribute en="namespaces" optional="yes" since="4.19.37">
       <description xml:lang="en">
         <para>Controls the handling of XML namespaces. The default is 'lax' which ignores all namespaces with <cmd name="Record"/> and <cmd name="ProcessNode"/>.</para>
