@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.9" date="2025-05-23">
+        <en>New option 'addlocalpath' in the configuration file for turning off recursive search of the working directory.</en>
+        <de>Neue Option 'addlocalpath' in der Konfigurationsdatei, damit das Arbeitsverzeichnis nicht rekursiv durchsucht wird.</de>
+    </entry>
+    <entry version="5.1.9" date="2025-05-23">
+        <en>New Option mpcolorwarning to show the MetaPost color warning (defaults to true).</en>
+        <de>Neue Option mpcolorwarning um die Farb-Warnungen von MetaPost zu zeigen (Voreinstellung ist 'true') .</de>
+    </entry>
     <entry version="5.1.8" date="2025-05-22">
         <en>Bugfix: layout function sd:current-framenumber() and new XPath parser.</en>
         <de>Fehlerkorrektur Layoutfunktion sd:current-framenumber() und neuer XPath parser.</de>
