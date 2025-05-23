@@ -187,6 +187,9 @@ function newbox(width_sp, height_sp)
     end
     if width_sp and width_sp ~= 0 then
         execute(mpobj, string.format("box.width = %fbp;", width_sp / 65782))
+    else
+        splib.log("warn","MetaPost: width is 0, setting to 1bp")
+        execute(mpobj, "box.width = 1bp;")
     end
     if height_sp and height_sp ~= 0 then
         execute(mpobj, string.format("box.height = %fbp;", height_sp / 65782))
