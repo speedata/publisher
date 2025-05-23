@@ -903,7 +903,7 @@ func main() {
 
 	os.Setenv("SD_LOGLEVEL", getOption("loglevel"))
 
-	if addLocalPath {
+	if addLocalPath && getOption("addlocalpath") != "false" {
 		extradir(pwd)
 	}
 

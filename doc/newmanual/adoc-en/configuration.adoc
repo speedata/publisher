@@ -38,6 +38,8 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 
 `autoopen`::
    if true, the publisher opens the PDF file. Default: false. The same effect can be achieved if you run sp --autoopen.
+`addlocalpath`::
+   If true, the publisher adds the current working directory to the path. Default: true.
 `cache`::
    Caching-strategy for http(s) image requests and external image processors. Use `fast` for file system lookup only or `optimal` for checking on each request. Use `none` for no caching. `none` works also for SVG conversion. In this case, PDF is generated on each request. The default is `optimal`.
 `data`::

@@ -25,7 +25,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"unsafe"
 
 	"speedatapublisher/splibaux"
 	"speedatapublisher/text/unicode/bidi"
@@ -45,8 +44,12 @@ var (
 )
 
 func init() {
-	protocolFilename = os.Getenv("SP_JOBNAME") + "-protocol.xml"
-	statusFilename = os.Getenv("SP_JOBNAME") + ".status"
+	jobname := os.Getenv("SP_JOBNAME")
+	if jobname == "" {
+		jobname = "publisher"
+	}
+	protocolFilename = jobname + "-protocol.xml"
+	statusFilename = jobname + ".status"
 	verbosity, _ = strconv.Atoi(os.Getenv("SP_VERBOSITY"))
 
 	loglevel.Set(slog.LevelInfo)
@@ -59,22 +62,6 @@ func init() {
 		panic(err)
 	}
 	now = time.Now()
-}
-
-func s2c(input string) *C.char {
-	return C.CString(input)
-}
-
-// Convert a string slice to a C char* array and add a NULL pointer.
-func toCharArray(s []string) **C.char {
-	cArray := C.malloc(C.size_t(len(s)+1) * C.size_t(unsafe.Sizeof(uintptr(0))))
-	a := (*[1<<29 - 1]*C.char)(cArray)
-	for idx, substring := range s {
-		a[idx] = C.CString(substring)
-	}
-	// add sentinel
-	a[len(s)] = nil
-	return (**C.char)(cArray)
 }
 
 //export sdParseHTMLText
