@@ -51,8 +51,7 @@ endif::[]
 - <<ch-kommandozeile,Starten des Publishers über die Kommandozeile>>
 - <<ch-konfiguration,Konfiguration des Publishers>>
 - <<app-massangaben,Längenangaben und Maßeinheiten>>
-- <<ch-xpathfunktionen,XPath- und Layoutfunktionen (alter XPath Parser)>>
-- <<ch-lxpath,XPath- und Layoutfunktionen (neuer XPath Parser)>>
+- <<ch-lxpath,XPath- und Layoutfunktionen>>
 - <<ch-internevariablen,Interne Variablen>>
 - <<ch-changelog,Liste der Änderungen>>
 - <<ch-anhang-schemazuweisen>>
@@ -85,7 +84,6 @@ include::voreinstellungen.adoc[]
 include::kommandozeile.adoc[]
 include::konfigurationsdatei.adoc[]
 include::massangaben.adoc[]
-include::xpathfunktionen.adoc[]
 include::lxpath.adoc[]
 include::variablen.adoc[]
 include::schemazuweisen.adoc[]

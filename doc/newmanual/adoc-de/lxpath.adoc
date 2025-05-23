@@ -1,27 +1,9 @@
 :ast: *
 [appendix]
-[[ch-lxpath,XPath- und Layoutfunktionen (neuer XPath Parser)]]
-= XPath- und Layoutfunktionen (neuer XPath Parser)
+[[ch-lxpath,XPath- und Layoutfunktionen]]
+= XPath- und Layoutfunktionen
 
-Diese Seite beschreibt den neuen XPath-Parser, genannt »lxpath«. Es gibt das alte XPath-Modul namens »luxor«. Um zwischen diesen beiden Modulen zu wechseln, können Sie die Standardeinstellung in der XPath-Konfiguration festlegen, zum Beispiel auf der Kommandozeile mit
-
-[source, shell]
--------------------------------------------------------------------------------
-sp --xpath luxor
--------------------------------------------------------------------------------
-
-(das alte Modul)
-
-oder
-
-[source, shell]
--------------------------------------------------------------------------------
-sp --xpath lxpath
--------------------------------------------------------------------------------
-
-für den neuen XPath-Parser (Voreinstellung). Sie können diese Einstellung auch in der <<ch-konfiguration,Konfigurationsdatei>> vornehmen.
-
-== Was ist XPath und warum gibt es zwei verschiedene Implementierungen?
+== Was ist XPath?
 
 
 Die Eingabe des speedata Publishers sind im XML-Format kodierte Daten.
@@ -31,27 +13,14 @@ Die Idee von XPath ist es nun, durch den XML-Baum zu navigieren und Fragen zu st
 Gib mir alle Artikel, die ein bestimmtes Attribut haben.
 Oder wie viele Artikel habe ich in dieser Artikelgruppe?
 
-Bisher verwendet der speedata-Publisher eine Ad-hoc-Implementierung eines XML-Parsers, der sich zwar bewährt hat, aber nicht sehr robust ist und nicht viele Fehler mit falschen Daten meldet.
-Auch der XPath-Parser hat hauptsächlich mit regulären Ausdrücken und globalen Zuständen gearbeitet, was ebenfalls nicht sehr robust ist.
-
-Die neue Implementierung verwendet den XML-Parser aus der Standardbibliothek von Go und eine https://github.com/speedata/lxpath[XPath-Implementierung], die neu ist und mit der XPath Grammatik im Hinterkopf entwickelt wurde.
-
-Vorteile der neuen XML/XPath-Implementierung
-
-* Die gesamte Implementierung ist schneller.
-* Es gibt bessere Fehlermeldungen (zum Beispiel sind Zeilennummern Teil der Fehlermeldungen).
-* Sie können <<ch-programmingfunctions,Ihre eigenen Funktionsdefinitionen haben>>.
-* Der neue XPath-Parser wird im speedata Publisher ab Version 4.18 standardmäßig verwendet.
-
 
 == XPath Ausdrücke
 
-Der Publisher akzeptiert in den den entsprechend markierten Attributen (zumeist `select` und `test`) XPath Ausdrücke.
+Der Publisher akzeptiert in den den Attributen `select` und `test` XPath-Ausdrücke.
 In allen anderen Attributen kann durch die geschweiften Klammern (`{` und `}`) ein XPath Ausdruck erzwungen werden.
 Siehe https://github.com/speedata/examples/blob/master/technical/fontshrinking/layout.xml#L16[z.B. das Layout im examples-Repository für Optimierung mit Gruppen].
 In diesem Beispiel werden im Attribut `width` und im Element `Value` die Werte dynamisch erzeugt, d. h. für die
 Angabe der Breite wird auf den Inhalt der Variablen `breite` zurückgegriffen, der Inhalt des Absatzes ist der Inhalt (Textwert) des gerade aktuellen Datenknotens.
-
 
 
 [source, xml]
