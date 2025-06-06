@@ -5563,9 +5563,9 @@ function hbglyphlist(arguments)
             else
                 if reportmissingglyphs then
                     if reportmissingglyphs == "warning" then
-                        splib.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",code))
+                        splib.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",code),"loc","hbglyphlist")
                     else
-                        splib.error("Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",code))
+                        splib.error("Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",code),"loc","hbglyphlist")
                     end
                 end
             end

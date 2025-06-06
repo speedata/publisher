@@ -5187,7 +5187,7 @@ function commands.text(layoutxml,dataxml)
                 objects[#objects + 1] = contents[i]
             end
         else
-            err("Unknown element in Text: %q",eltname or "?")
+            splib.log("info","Unknown element in Text","eltname",eltname or "?")
         end
     end
     tab = objects
