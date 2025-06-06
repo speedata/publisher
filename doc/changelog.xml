@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.10" date="2025-06-06">
+        <en>Better log messages.</en>
+        <de>Bessere Log-Meldungen.</de>
+    </entry>
+    <entry version="5.1.10" date="2025-06-06">
+        <en>New XPath function sd:symbol() to enter a glyph id.</en>
+        <de>Neue XPath-Funktion sd:symbol() um eine Glyph-ID einzugeben.</de>
+    </entry>
+    <entry version="5.1.10" date="2025-06-06">
+        <en>Remove old XPath documentation.</en>
+        <de>Lösche alte XPath-Dokumentation.</de>
+    </entry>
     <entry version="5.1.9" date="2025-05-23">
         <en>New option 'addlocalpath' in the configuration file for turning off recursive search of the working directory.</en>
         <de>Neue Option 'addlocalpath' in der Konfigurationsdatei, damit das Arbeitsverzeichnis nicht rekursiv durchsucht wird.</de>
