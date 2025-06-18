@@ -5,6 +5,7 @@ package splibaux
 
 import (
 	"crypto/md5"
+	"errors"
 	"fmt"
 	"io"
 	"log/slog"
@@ -50,6 +51,11 @@ func saveFileFromURL(parsedURL *url.URL, rawURL string) (string, error) {
 	// filename (it is basically a md5 sum of the URL, but this is not guaranteed).
 	resultingFilename, err := getFilenameAndDoCaching(rawimgcache, destfile, rawURL)
 	if err != nil {
+		if errors.Is(err, ErrResourceNotFound) {
+			// If the resource is not found, we return an empty string
+			// so that the LuaTeX process can handle this.
+			return "", nil
+		}
 		return "", err
 	}
 	if cachemethod != "none" {

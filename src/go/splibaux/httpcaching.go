@@ -15,6 +15,8 @@ import (
 var (
 	cachemethod string
 	client      *http.Client
+	// ErrResourceNotFound is returned when a resource is not found (HTTP 404).
+	ErrResourceNotFound = fmt.Errorf("Resource not found (404)")
 )
 
 func init() {
@@ -47,7 +49,7 @@ func getFilenameAndDoCaching(cachedir, outfilename, url string) (string, error) 
 		return "", err
 	}
 	if resp.StatusCode == http.StatusNotFound {
-		return "", fmt.Errorf("Resource not found (404): %q", url)
+		return "", fmt.Errorf("%w: %q", ErrResourceNotFound, url)
 	}
 	outf, err := os.CreateTemp(cachedir, "download")
 	if err != nil {
