@@ -445,6 +445,8 @@ local function boolean_value(seq)
         ok = val
     elseif is_element(val) then
         return true
+    elseif is_attribute(val) then
+        return true
     end
     return ok, nil
 end
@@ -1169,6 +1171,10 @@ function context:attributeaixs(testfunc)
                 if testfunc(self,x) then
                     seq[#seq + 1] = x
                 end
+            end
+        elseif is_attribute(itm) then
+            if testfunc(self,itm) then
+                seq[#seq + 1] = itm
             end
         end
     end
