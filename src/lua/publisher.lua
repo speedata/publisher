@@ -5401,10 +5401,9 @@ function hbglyphlist(arguments)
                 table.insert(glyphs,fb.pos,{pos = fb.pos, fonttable = fb.fonttable,  fontnumber = fb.fontnumber, glyph = fb[j].glyph, codepoint = fb[j].codepoint, uc = fb[j].uc })
             end
         end
-
     end
-    local thistbl = tbl
 
+    local thistbl = tbl
     for i=1,#glyphs do
         local thisfontnumber = fontnumber
         local thisglyph = glyphs[i]
@@ -5422,18 +5421,20 @@ function hbglyphlist(arguments)
             cp = thisglyph.codepoint
             thisglyph = thisglyph.glyph
         else
+            thistbl = tbl
             uc = thistbl.backmap[cp] or cp
         end
 
         -- FIXME cp == 0 doesn't look right
         local tabregularspace = ( cp == 0 and cluster[thisglyph.cluster] == 9 and parameter.tab ~= "hspace")
-
         -- skip double space
         if i > 1 and ( uc == 32 or tabregularspace) and cp == glyphs[i-1].codepoint and cluster[thisglyph.cluster] ~= 160 and not preserve_whitespace then
             goto continue
         end
         if false then
             -- just for simple adding at the beginning
+        elseif uc == 127 then
+            -- ignore DEL
         elseif uc == 160 and #glyphs == 1 then
             -- ignore
         elseif uc == 32 or tabregularspace then
