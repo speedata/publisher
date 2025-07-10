@@ -2236,6 +2236,9 @@
                      <ref name="e_NextRow"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Output"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Paragraph"></ref>
                   </optional>
                   <optional>
@@ -5788,6 +5791,9 @@
                         <ref name="e_Loop"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Ol"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Output"></ref>
                      </optional>
                      <optional>
@@ -5797,7 +5803,16 @@
                         <ref name="e_PlaceObject"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_SortSequence"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Switch"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Table"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Tablehead"></ref>
                      </optional>
                      <optional>
                         <ref name="e_TableNewPage"></ref>
@@ -5806,19 +5821,13 @@
                         <ref name="e_Tablerule"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_Tablehead"></ref>
-                     </optional>
-                     <optional>
                         <ref name="e_Td"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Tr"></ref>
                      </optional>
                      <optional>
-                        <ref name="e_SortSequence"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Switch"></ref>
+                        <ref name="e_Ul"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Value"></ref>
