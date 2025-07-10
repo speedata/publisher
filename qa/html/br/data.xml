@@ -1,7 +1,7 @@
 <data>
     <case>
         <!-- three br -->
-        A<br/><br/><br/>B
+        A<br/><Br/><br/>B
     </case>
     <case>
         <!-- par and two br-->

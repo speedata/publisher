@@ -58,6 +58,7 @@ local void_elements = {area = true, base = true, br = true, col = true, hr = tru
 
 local function reconstruct_html_text(elt)
     local eltname = elt[".__local_name"]
+    eltname = string.lower(eltname)
     local ret = {}
     table.insert(ret,"<")
     table.insert(ret,eltname)
