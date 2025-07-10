@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.14" date="2025-07-10">
+        <en>Bugfix HTML and uppercase tags.</en>
+        <de>Fehlerkorrektur HTML und großgeschriebene Tags.</de>
+    </entry>
     <entry version="5.1.13" date="2025-07-03">
         <en>Ignore DEL (decimal 127) control character in input (#663).</en>
         <de>Ignoriere DEL (Dezimal 127) Zeichen in der Eingabe (#663).</de>
