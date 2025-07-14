@@ -8821,7 +8821,7 @@ function getzugferdmetadata( conformancelevel, title, author, filename )
   rdf:about="" zf:ConformanceLevel="%s" zf:DocumentFileName="%s" zf:DocumentType="INVOICE" zf:Version="1.0"/>
 </rdf:RDF>
 </x:xmpmeta><?xpacket end="w"?>
-]],"\239\187\191",title,author,xml_escape(getproducer()) ,conformancelevel,filename)
+]],"\239\187\191",xml_escape(title),xml_escape(author),xml_escape(getproducer()) ,conformancelevel,xml_escape(filename))
 
     return metadata
 end
