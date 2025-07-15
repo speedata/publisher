@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.16" date="2025-07-15">
+        <en>Fix sd:format-number (#664).</en>
+        <de>Korrigiere sd:format-number (#664).</de>
+    </entry>
     <entry version="5.1.15" date="2025-07-14">
         <en>Proper escaping of XML metadata in ZUGFeRD attachments.</en>
         <de>Korrekte XML-Kodierung von Metadaten bei ZUGFeRD Anhängen.</de>
