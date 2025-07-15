@@ -395,7 +395,7 @@ end
 local function format_number(dataxml, arg)
     local num, thousandssep, commasep
     local msg
-    num, msg = xpath.number_value(arg[1])
+    num, msg = xpath.string_value(arg[1])
     if msg then return nil, msg end
     thousandssep, msg = xpath.string_value(arg[2])
     if msg then return nil, msg end

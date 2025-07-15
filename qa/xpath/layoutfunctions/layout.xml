@@ -87,6 +87,10 @@
           <Value select="sd:format-number($foo,',','.')"></Value>
         </Paragraph>
         <Paragraph>
+          <Value>Format number: </Value>
+          <Value select="sd:format-number('12.00', '.', ',')"/>
+        </Paragraph>
+        <Paragraph>
           <Value>Format string: </Value>
           <Value select="sd:format-string($foo,'%.2f')"></Value>
         </Paragraph>
