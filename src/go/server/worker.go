@@ -95,6 +95,9 @@ func (w worker) Start() {
 						params = append(params, p)
 					}
 				}
+				if ll := w.Server.LogLevel; ll != "" {
+					params = append(params, "--loglevel", ll)
+				}
 				if f := w.Server.Filter; f != "" {
 					params = append(params, "--filter", f)
 				}

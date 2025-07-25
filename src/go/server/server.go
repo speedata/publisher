@@ -420,7 +420,6 @@ func (s *Server) v0StatusfileHandler(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) writeInternalError(w http.ResponseWriter) {
 	fmt.Fprintln(w, "Internal error")
-	return
 }
 
 // write necessary files encoded in the POST json
@@ -526,7 +525,6 @@ func (s *Server) v0CreatePDFHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, err.Error())
 		return
 	}
-
 }
 
 // Start a publishing process. Accepted parameter:
@@ -564,8 +562,6 @@ func (s *Server) v0PublishHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusCreated)
 	w.Write(buf)
-
-	return
 }
 
 var (
@@ -698,7 +694,6 @@ func (s *Server) v0GetAllStatusHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusOK)
 	w.Write(buf)
-	return
 }
 
 // Get the status of the PDF (finished?)
@@ -744,18 +739,17 @@ func (s *Server) v0StatusHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusOK)
 	w.Write(buf)
-	return
 }
 
 func (s *Server) available(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	return
 }
 
 // Server configuration
 type Server struct {
 	Address        string
 	ClientExtraDir []string
+	LogLevel       string
 	Port           string
 	Filter         string
 	Verbose        bool

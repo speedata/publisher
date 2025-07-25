@@ -12,6 +12,7 @@ import (
 type Server struct {
 	Address        string
 	ClientExtraDir []string
+	LogLevel       string
 	Port           string
 	Filter         string
 	Verbose        bool

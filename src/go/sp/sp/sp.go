@@ -1183,6 +1183,7 @@ func main() {
 		s := server.NewServer()
 		s.Verbose = verbose
 		s.ClientExtraDir = strings.Split(getOptionSection("extra-dir", "server"), string(filepath.ListSeparator))
+		s.LogLevel = getOptionSection("loglevel", "server")
 		s.Port = getSectionOptionWithWarning("port", "server")
 		s.Filter = getOptionSection("filter", "server")
 		s.Address = getSectionOptionWithWarning("address", "server")

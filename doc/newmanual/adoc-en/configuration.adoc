@@ -123,6 +123,8 @@ The format of the file is important, otherwise it won’t be recognized. The fol
   Lua script to run before processing the publishing runs (like a call to `sp --filter ...`).
 `logfile`::
   File name for the log. `STDOUT` for standard output and `STDERR` for standard error.
+`loglevel`::
+  Set the log level to one of `debug`, `info`, `message`, `warn` and `error`.
 `port`::
   Port to which a connection can be established.
 `runs`::

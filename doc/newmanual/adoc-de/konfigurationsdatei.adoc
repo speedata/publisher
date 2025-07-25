@@ -127,6 +127,8 @@ erkannt. Folgende Optionen werden unterstützt:
   Lua-Skript, das vor dem Verarbeiten der Publishing-Läufe ausgeführt werden soll (wie ein Aufruf `sp --filter ...`).
 `logfile`::
   Dateiname für das Protokoll. `STDOUT` für Standardausgabe und `STDERR` für Standardfehlerausgabe.
+`loglevel`::
+  Setzt die Logausgabe auf ein level of `debug`, `info`, `message`, `warn` und `error`.
 `port`::
   Port, zu dem eine Verbindung aufgebaut werden kann.
 `runs`::
