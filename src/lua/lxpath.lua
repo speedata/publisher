@@ -434,7 +434,6 @@ local function boolean_value(seq)
         return seq
     end
     if #seq == 0 then return false, nil end
-    if #seq > 1 then return false, "invalid argument for boolean value" end
     local val = seq[1]
     local ok = false
     if type(val) == "string" then
