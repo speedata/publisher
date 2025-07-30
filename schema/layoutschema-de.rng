@@ -2344,6 +2344,15 @@
          <empty></empty>
       </element>
    </define>
+   <define name="e_HTML">
+      <element name="HTML">
+         <a:documentation>Erzeugt HTML-Ausgabe. Experimentell.</a:documentation>
+         <attribute name="select">
+            <a:documentation>Das HTML-Element</a:documentation>
+         </attribute>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Hyphenation">
       <element name="Hyphenation">
          <a:documentation>Erzeugt einen Trennvorschlag für die automatische Silbentrennung. Die Trennvorschläge werden dann benutzt, wenn die automatische Silbentrennung fehlerhaft trennt. Alle Trennstellen müssen mit eine Bindestrich (-) markiert werden (s. Beispiel).</a:documentation>
@@ -7020,6 +7029,7 @@
                      <ref name="e_Image"></ref>
                      <ref name="e_Loop"></ref>
                      <ref name="e_Ol"></ref>
+                     <ref name="e_HTML"></ref>
                      <ref name="e_Paragraph"></ref>
                      <ref name="e_Switch"></ref>
                      <ref name="e_Ul"></ref>

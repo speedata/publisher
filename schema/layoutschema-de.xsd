@@ -1966,6 +1966,18 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
+  <xs:element name="HTML">
+    <xs:annotation>
+      <xs:documentation>Erzeugt HTML-Ausgabe. Experimentell.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name="select" use="required">
+        <xs:annotation>
+          <xs:documentation>Das HTML-Element</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Hyphenation">
     <xs:annotation>
       <xs:documentation>Erzeugt einen Trennvorschlag für die automatische Silbentrennung. Die Trennvorschläge werden dann benutzt, wenn die automatische Silbentrennung fehlerhaft trennt. Alle Trennstellen müssen mit eine Bindestrich (-) markiert werden (s. Beispiel).</xs:documentation>
@@ -8798,6 +8810,7 @@
         <xs:element ref="en:Image"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Ol"/>
+        <xs:element ref="en:HTML"/>
         <xs:element ref="en:Paragraph"/>
         <xs:element ref="en:Switch"/>
         <xs:element ref="en:Ul"/>

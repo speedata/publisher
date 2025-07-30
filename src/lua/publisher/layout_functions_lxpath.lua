@@ -629,9 +629,8 @@ local function markdown(dataxml, arg)
     local str = table_textvalue(arg[1])
     local htmltext = splib.markdown(str)
     if htmltext then
-        htmltext = publisher.splib.htmltoxml(htmltext)
-        local ret = luxor.parse_xml("<dummy><dummy>" .. htmltext .. "</dummy></dummy>")
-        return { ret }, nil
+        htmltext = publisher.splib.htmltoxml("<html><body>" .. htmltext .. "</body></html>")
+        return { htmltext }, nil
     end
     return {}, nil
 end

@@ -19,6 +19,7 @@ static const struct luaL_Reg myfuncs[] = {
     {"lookupfile", sdLookupFile},
     {"markdown", sdMarkdown},
     {"matches", sdMatches},
+    {"parse_raw_html_text", sdParseRawHTMLText},
     {"parse_html_text", sdParseHTMLText},
     {"parse_html", sdParseHTML},
     {"reloadimage",sdReloadImage},

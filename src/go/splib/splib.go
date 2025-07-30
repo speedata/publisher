@@ -64,6 +64,30 @@ func init() {
 	now = time.Now()
 }
 
+//export sdParseRawHTMLText
+func sdParseRawHTMLText(L *C.lua_State) int {
+	l := newLuaState(L)
+
+	htmltext, ok := l.getString(1)
+	if !ok {
+		slog.Error("sdParseRawHTMLText first argument must be a string (HTML text)")
+		return 0
+	}
+	csstext, ok := l.getString(2)
+	if !ok {
+		slog.Error("sdParseRawHTMLText second argument must be a string (CSS text)")
+		return 0
+	}
+
+	str, err := splibaux.ParseHTMLText(htmltext, csstext)
+	if err != nil {
+		slog.Error("sdParseRawHTMLText could not parse HTML", "msg", err.Error())
+		return 0
+	}
+	l.pushString(str)
+	return 1
+}
+
 //export sdParseHTMLText
 func sdParseHTMLText(L *C.lua_State) int {
 	l := newLuaState(L)

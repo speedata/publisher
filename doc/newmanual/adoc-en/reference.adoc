@@ -45,6 +45,7 @@ ifndef::backend-docbook5[]
 <<cmd-group,Group>>  +
 <<cmd-groupcontents,Groupcontents>>  +
 <<cmd-hspace,HSpace>>  +
+<<cmd-html,HTML>>  +
 <<cmd-hyphenation,Hyphenation>>  +
 <<cmd-i,I>>  +
 <<cmd-image,Image>>  +
@@ -368,11 +369,13 @@ include::ref/hspace.adoc[]
 
 The section <<ch-textformatting,text formatting>>.
 
-// include::ref/html.adoc[]
+include::ref/html.adoc[]
 
-// == See also
+== See also
 
-// The examples repository at https://github.com/speedata/examples/tree/master/technical/html
+(The HTML command is still experimental.)
+
+
 
 include::ref/hyphenation.adoc[]
 

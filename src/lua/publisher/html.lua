@@ -501,7 +501,7 @@ function set_options_for_mknodes(styles,options)
             options.fontsize = "small"
         end
     end
-
+    return options
 
 end
 
@@ -717,7 +717,8 @@ function build_html_table( elt, dataxml )
 
     local tabular = publisher.tabular:new()
     tabular.width = styles.calculated_width
-    if elt.attributes.width then
+
+    if tablecontents.styles.width == "100%" then
         tabular.autostretch = "max"
     end
     local tab = {}
@@ -975,7 +976,8 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 end
                 local attribs = thiselt.attributes
                 if attribs and attribs.start then
-                    olcounter[styles.listlevel] = attribs.start - 1
+                    local i = math.tointeger(attribs.start - 1)
+                    olcounter[styles.listlevel] = i
                 else
                     olcounter[styles.listlevel] = 0
                 end
@@ -1005,7 +1007,8 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 for i=1,#n do
                     local a = n[i]
                     local wd = styles.listindent
-                    local x = { str,wd,{fontfamily=fam} }
+                    local opt = set_options_for_mknodes(styles)
+                    local x = { str,wd,opt }
                     a:prepend(x)
                     -- label only for the first
                     str = ""
@@ -1181,6 +1184,7 @@ function parse_html_new( elt, options, data )
     options = options or {}
     local maxwidth_sp = options.maxwidth_sp
     handle_pages(elt.pages,maxwidth_sp, data)
+    -- global fontfamilies
     fontfamilies = elt.fontfamilies
     elt.fontfamilies = nil
     local att = elt[1].styles

@@ -57,7 +57,7 @@ func TestSimple(t *testing.T) {
 
 	tmp := map[string]string{
 		"cow.pdf": testimgAbs,
-		testimg:   testimg,
+		testimg:   testimgAbs,
 		"file://" + filepath.FromSlash(testimgAbs): testimgAbs,
 		filepath.Join(basedir, `doesnotexist.txt`): "",
 		ts.URL + "/path/cow.pdf?foo=bar":           filepath.Join(os.TempDir(), "imagecache", md5sum),

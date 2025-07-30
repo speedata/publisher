@@ -222,7 +222,7 @@ local function flatten(self,items,options,data)
                     if a then a() else err(b) return end
                 end
                 local startnewline = 0
-                local body = csshtmltree[1]
+                local body = csshtmltree[1][2]
                 -- printtable("body",body)
                 local firstelement = body[1]
                 if firstelement then

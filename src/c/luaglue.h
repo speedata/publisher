@@ -87,6 +87,7 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
+extern int sdParseRawHTMLText(lua_State* L);
 extern int sdParseHTMLText(lua_State* L);
 extern int sdParseHTML(lua_State* L);
 extern int sdMarkdown(lua_State* L);

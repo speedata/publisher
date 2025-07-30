@@ -4369,6 +4369,50 @@
   </command>
   <!--
       *************************
+      * HTML
+      *************************
+  -->
+  <command en="HTML" since="5.1.17">
+    <description xml:lang="en">
+      <para >Create HTML output. Experimental</para>
+    </description>
+    <description xml:lang="de">
+      <para>Erzeugt HTML-Ausgabe. Experimentell.</para>
+    </description>
+    <childelements></childelements>
+    <attribute en="select" optional="no" type="xpath">
+      <description xml:lang="en">
+        <para>The HTML selection</para>
+      </description>
+      <description xml:lang="de">
+        <para>Das HTML-Element</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Output>
+  <Text>
+    <HTML select="html" />
+  </Text>
+</Output>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Output>
+  <Text>
+    <HTML select="html" />
+  </Text>
+</Output>]]></listing>
+    </example>
+    <info xml:lang="en">
+      <para>This command will change its semantic, don't use in production.</para>
+    </info>
+    <info xml:lang="de">
+      <para>Dieser Befehl wird seine Semantik ändern, nicht in der Produktion verwenden.</para>
+    </info>
+    <seealso><cmd name="Output"></cmd></seealso>
+  </command>
+
+  <!--
+      *************************
       * Hyphenation
       *************************
   -->
@@ -7302,7 +7346,7 @@
     <seealso></seealso>
   </command>
 
- <!--
+  <!--
       *************************
       * Pageformat
       *************************
@@ -11033,6 +11077,7 @@
           <cmd name="Image"/>
           <cmd name="Loop"/>
           <cmd name="Ol"/>
+          <cmd name="HTML"/>
           <cmd name="Paragraph"/>
           <cmd name="Switch"/>
           <cmd name="Ul"/>

@@ -1419,18 +1419,20 @@ end
 --- ------
 --- Collect paragraphs to insert into the text stream (Textblock/Text)
 function commands.html( layoutxml,dataxml)
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local selection = publisher.read_attribute(layoutxml,dataxml,"select", "xpathraw")
+    local htmltext = publisher.xpath.string_value(selection)
     local ret = {}
-    if publisher.htmlfilename then
-        return publisher.htmlblocks
+    local csstext = publisher.css:gettext()
+    local tab = splib.parse_raw_html_text(htmltext,csstext)
+    if type(tab) == "string" then
+        local a,b = load(tab)
+        if a then a() else err(b) return end
     end
-    for i=1,#tab do
-        local contents = publisher.element_contents(tab[i])
-        local blocks = publisher.parse_html(contents[1], dataxml) or {}
-        for b=1,#blocks do
-            local thisblock = blocks[b]
-            ret[#ret + 1] = thisblock
-        end
+    local blocks = publisher.parse_html(csshtmltree,{}, dataxml)
+    blocks = publisher.flatten_boxes(blocks)
+    for b=1,#blocks do
+        local thisblock = blocks[b]
+        ret[#ret + 1] = thisblock
     end
     return ret
 end
