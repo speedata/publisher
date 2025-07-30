@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.17" date="2025-07-30">
+        <en>Bugfix lxpath mode and new XPath parser.</en>
+        <de>Fehlerkorrektur lxpath Modus und neuer XPath Parser.</de>
+    </entry>
+    <entry version="5.1.17" date="2025-07-30">
+        <en>Re-implemented HTML mode.</en>
+        <de>HTML Modus neu implementiert.</de>
+    </entry>
+    <entry version="5.1.17" date="2025-07-30">
+        <en>Set log level in server mode.</en>
+        <de>Log-Level im Server-Modus.</de>
+    </entry>
     <entry version="5.1.16" date="2025-07-15">
         <en>Fix sd:format-number (#664).</en>
         <de>Korrigiere sd:format-number (#664).</de>
