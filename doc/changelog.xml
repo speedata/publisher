@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.18" date="2025-08-01">
+        <en>Bugfix PlaceObject/rotate and vreference.</en>
+        <de>Fehlerkorrektur: PlaceObject/rotate und vreference.</de>
+    </entry>
     <entry version="5.1.17" date="2025-07-30">
         <en>Bugfix lxpath mode and new XPath parser.</en>
         <de>Fehlerkorrektur lxpath Modus und neuer XPath Parser.</de>
