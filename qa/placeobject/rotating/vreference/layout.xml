@@ -1,0 +1,26 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Pageformat height="8cm" width="8cm"></Pageformat>
+	<Record element="data">
+
+		<Group name="tmp">
+			<Contents>
+				<PlaceObject>
+					<Table>
+						<Tr>
+							<Td>
+								<Paragraph>
+									<Value>Hello world</Value>
+								</Paragraph>
+							</Td>
+						</Tr>
+					</Table>
+				</PlaceObject>
+			</Contents>
+		</Group>
+		<PlaceObject groupname="tmp" frame="solid" row="30mm" column="10mm" rotate="90" vreference="bottom" />
+		<PlaceObject groupname="tmp" frame="solid" row="30mm" column="40mm" rotate="-90" vreference="bottom" />
+		<PlaceObject groupname="tmp" frame="solid" row="30mm" column="50mm" rotate="90" vreference="top" />
+		<PlaceObject groupname="tmp" frame="solid" row="30mm" column="70mm" rotate="-90" vreference="top" />
+	</Record>
+</Layout>

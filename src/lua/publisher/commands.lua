@@ -3571,9 +3571,19 @@ function commands.place_object( layoutxml,dataxml)
             end
             local top = row + current_grid.extra_margin
             if vreference == "bottom" then
-                top = top - object.height
+                if rotate == -90 then
+                    -- ok, no adjustment
+                elseif rotate == 90 then
+                    top = top - object.width
+                else
+                    top = top - object.height
+                end
             elseif vreference == "middle" then
                 top = top - object.height / 2
+            elseif vreference == "top" then
+                if rotate == -90 then
+                    top = top + object.width
+                end
             end
             publisher.output_absolute_position({
                 nodelist = object,
