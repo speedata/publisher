@@ -8721,8 +8721,9 @@ function getmetadata()
             xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
             xmlns:pdfxid="http://www.npes.org/pdfx/ns/id/"
             xmlns:pdfx="http://ns.adobe.com/pdfx/1.3/">
-         <xmp:CreateDate>%s</xmp:CreateDate>
          <xmp:CreatorTool>%s</xmp:CreatorTool>
+         <pdf:Producer>%s</pdf:Producer>
+         <xmp:CreateDate>%s</xmp:CreateDate>
          <xmp:ModifyDate>%s</xmp:ModifyDate>
          <xmp:MetadataDate>%s</xmp:MetadataDate>
          <pdf:Trapped>False</pdf:Trapped>
@@ -8741,7 +8742,7 @@ function getmetadata()
       </rdf:Description>
    </rdf:RDF>
 </x:xmpmeta>
-]],"\239\187\191",isoformatted,getcreator(), isoformatted,isoformatted,xml_escape(options.documenttitle),docid,instanceid,fmt,fmt)
+]],"\239\187\191",xml_escape(getcreator()),xml_escape(getproducer()),isoformatted, isoformatted,isoformatted,xml_escape(options.documenttitle),docid,instanceid,fmt,fmt)
     return md
 end
 

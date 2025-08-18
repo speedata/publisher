@@ -851,12 +851,12 @@ end
 --- -----------
 --- Associate a name with a color profile.
 function commands.define_colorprofile( layoutxml,dataxml )
-    local condition  = publisher.read_attribute(layoutxml,dataxml,"condition", "string")
+    local condition  = publisher.read_attribute(layoutxml,dataxml,"condition", "string", "None")
     local colors     = publisher.read_attribute(layoutxml,dataxml,"colors",    "number" , 4)
     local filename   = publisher.read_attribute(layoutxml,dataxml,"filename",  "string")
-    local identifier = publisher.read_attribute(layoutxml,dataxml,"identifier","string")
-    local info       = publisher.read_attribute(layoutxml,dataxml,"info",      "string")
-    local name       = publisher.read_attribute(layoutxml,dataxml,"name",      "string")
+    local identifier = publisher.read_attribute(layoutxml,dataxml,"identifier","string", "identifier")
+    local info       = publisher.read_attribute(layoutxml,dataxml,"info",      "string", "info")
+    local name       = publisher.read_attribute(layoutxml,dataxml,"name",      "string", "default")
     local registry   = publisher.read_attribute(layoutxml,dataxml,"registry",  "string","http://www.color.org")
     spotcolors.register_colorprofile(name,{filename = filename, identifier = identifier, condition = condition, registry = registry, colors = colors, info = info })
 end
