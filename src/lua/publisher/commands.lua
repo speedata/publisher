@@ -2807,11 +2807,11 @@ function commands.output( layoutxml,dataxml )
     local row      = publisher.read_attribute(layoutxml,dataxml,"row","number")
     local balance  = publisher.read_attribute(layoutxml,dataxml,"balance", "boolean", false)
     local valignlast = publisher.read_attribute(layoutxml,dataxml,"valign-last","string")
+    local width    = publisher.read_attribute(layoutxml,dataxml,"width","length_sp")
     local lastpaddingbottommax = publisher.read_attribute(layoutxml,dataxml,"last-padding-bottom-max","length_sp")
 
-    local maxwidth = publisher.current_grid:width_sp(publisher.current_grid:number_of_columns(area))
+    local maxwidth = width or publisher.current_grid:width_sp(publisher.current_grid:number_of_columns(area))
     local maxheight = publisher.current_grid:height_sp(publisher.current_grid:number_of_rows(area))
-
     local current_maxwidth
     if publisher.newxpath then
         current_maxwidth = dataxml.vars["__maxwidth"]
@@ -5228,7 +5228,7 @@ function commands.text(layoutxml,dataxml)
                 for i=1,#tab do
                     local contents = tab[i]
                     local dont_format = 0
-                    if  node.is_node(contents.nodelist) then
+                    if node.is_node(contents.nodelist) then
                         dont_format = node.has_attribute(contents.nodelist,publisher.att_dont_format)
                     end
                     if dont_format == 1 then

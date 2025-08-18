@@ -171,7 +171,7 @@ end
 -- Return a table {a,b} where a is the first column
 -- (distance in sp from the left edge)
 -- and b is the width of the paragraph for the given row
-function get_parshape( self,row,areaname,framenumber )
+function get_parshape( self,row,areaname,framenumber, maxwd_sp )
     local frame_margin_left, frame_margin_top
     local area = self.positioning_frames[areaname]
     local block = area[framenumber]
@@ -192,9 +192,9 @@ function get_parshape( self,row,areaname,framenumber )
         return 0
     end
     local x_start = ( first_free_column - 1) * self.gridwidth
-    local x_end = ( last_free_column - first_free_column + 1 ) * self.gridwidth
-    -- w("get_parshape framenumber %d, row %d, {%d , %d}", framenumber, row, first_free_column - 1,last_free_column - first_free_column + 1)
-    return {x_start,x_end}
+    local max_last_column_sp = math.min(last_free_column * self.gridwidth, maxwd_sp)
+    local x_width = max_last_column_sp - (first_free_column - 1 ) * self.gridwidth
+    return {x_start,x_width}
 end
 
 function number_of_rows(self,areaname,framenumber)
@@ -389,7 +389,6 @@ function allocate_cells(self,options)
             err("Area %q not known, expect many errors",tostring(areaname))
             return
         end
-        local current_row = self:current_row(areaname)
         local block = area[self:framenumber(areaname)]
         frame_margin_left = block.column - 1
         frame_margin_top = block.row - 1
@@ -931,7 +930,12 @@ function calculate_number_gridcells(self)
             splib.error("grid width or height not set, why?")
             return
         end
-        self:set_number_of_columns(math.ceil(math.round( (tex.pagewidth  - self.margin_left - self.margin_right - 2 * self.extra_margin) / self.gridwidth,4)))
+        local current_page = publisher.pages[publisher.current_pagenumber]
+        local pagewidth = current_page.width
+        local margin_left = current_page.grid.margin_left
+        local margin_right = current_page.grid.margin_right
+        local noc = math.floor(math.round( (pagewidth  - margin_left - margin_right - 2 * self.extra_margin) / self.gridwidth,4))
+        self:set_number_of_columns(noc)
         self:set_number_of_rows(math.ceil(math.round( ( 10 * tex.pageheight - self.margin_top  - self.margin_bottom  - 2 * self.extra_margin) /  self.gridheight ,4)))
     else
         local pagearea_x, pagearea_y

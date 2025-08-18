@@ -4482,6 +4482,11 @@
               </xs:restriction>
             </xs:simpleType>
           </xs:attribute>
+          <xs:attribute name="width">
+            <xs:annotation>
+              <xs:documentation>Breite des Textes</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>

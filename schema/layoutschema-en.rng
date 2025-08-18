@@ -4275,6 +4275,11 @@
                      </choice>
                   </attribute>
                </optional>
+               <optional>
+                  <attribute name="width">
+                     <a:documentation>Width of the text</a:documentation>
+                  </attribute>
+               </optional>
                <ref name="e_Text"></ref>
             </group>
             <ref name="foreign-nodes"></ref>

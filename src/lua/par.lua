@@ -537,7 +537,7 @@ function Par:format( width_sp, options,data )
         -- Get the par shape
         local lineheight = get_lineheight(self.objects[1])
         if lineheight > 0 then
-            local cg = publisher.pages[current_pagenumber].grid
+            local cg = publisher.current_grid
             local max_width = math.min(width_sp,cg:width_sp(cg:number_of_columns(areaname)))
 
             local gridheight = cg.gridheight
@@ -560,7 +560,11 @@ function Par:format( width_sp, options,data )
             -- See bug #75 on github
             local maxparshape
             while publisher.pages[current_pagenumber] do
-                cg = publisher.pages[current_pagenumber].grid
+                if publisher.current_group then
+                    cg = publisher.current_grid
+                else
+                    cg = publisher.pages[current_pagenumber].grid
+                end
                 local grid_lower = gridheight
                 local framenumber, startrow_grid =  cg:get_advanced_cursor(areaname)
                 -- Let's assume that the already typeset text ends at the next page
@@ -585,7 +589,7 @@ function Par:format( width_sp, options,data )
                         local rows = {}
                         -- maxparshape is only "active" when placed on future, non-initialized pages
                         -- Hack!
-                        local ps = maxparshape or cg:get_parshape(grid_row,areaname,framenumber)
+                        local ps = maxparshape or cg:get_parshape(grid_row,areaname,framenumber,width_sp)
                         -- ps is 0 when the line is completely allocated
                         if ps ~= 0 then
                             -- accumulated_height starts with 0

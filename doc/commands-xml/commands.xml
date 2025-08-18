@@ -6923,6 +6923,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="width" optional="yes" since="5.1.19" type="numberorlength">
+      <description xml:lang="en">
+        <para>Width of the text</para>
+      </description>
+      <description xml:lang="de">
+        <para>Breite des Textes</para>
+      </description>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Pagetype name="page" test="true()">
     <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>

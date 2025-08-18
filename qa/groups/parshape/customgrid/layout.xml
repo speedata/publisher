@@ -1,0 +1,31 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+	<Pageformat height="10cm" width="220pt" />
+	<SetGrid width="10pt" height="10pt" />
+	<Pagetype name="t" test="true()">
+		<Margin top="10pt" bottom="10pt" inner="10pt" outer="10pt" />
+	</Pagetype>
+	<DefineFontfamily fontsize="8pt" leading="10pt" name="text">
+		<Regular fontface="sans" />
+	</DefineFontfamily>
+
+	<Record element="data">
+		<Group name="foo">
+			<Grid width="5pt" height="5pt"/>
+			<Contents>
+				<PlaceObject>
+					<Image file="_samplea.pdf" width="9" height="5" margin-right="1" />
+				</PlaceObject>
+				<Output allocate="auto" row="1" width="190pt">
+					<Text>
+						<Paragraph>
+							<Value>Also schön, Guido Heffels, nachfolgend meine Textempfehlung für das Blindtextbuch. Nachfolgend meine Textempfehlung für das Blindtextbuch. Textempfehlung für das Blindtextbuch. </Value>
+						</Paragraph>
+					</Text>
+				</Output>
+			</Contents>
+		</Group>
+		<PlaceObject groupname="foo" />
+	</Record>
+</Layout>
