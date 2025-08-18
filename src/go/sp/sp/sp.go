@@ -534,6 +534,30 @@ func versioninfo() {
 // copy a file from srcpath to destpath and make
 // directory if necessary
 func copyFile(srcpath, destpath string) error {
+	// check if srcpath and destpath are the same
+	if srcpath == destpath {
+		if verbose {
+			log.Printf("Source and destination are the same: %s", srcpath)
+		}
+		return nil
+	}
+	if fileExists(destpath) {
+		srcFi, err := os.Stat(srcpath)
+		if err != nil {
+			return err
+		}
+		destFi, err := os.Stat(destpath)
+		if err != nil {
+			return err
+		}
+		if os.SameFile(srcFi, destFi) {
+			// src and dest are the same file, so we don't need to copy
+			if verbose {
+				log.Printf("Source and destination are the same: %s", srcpath)
+			}
+			return nil
+		}
+	}
 
 	dir := filepath.Dir(destpath)
 	err := os.MkdirAll(dir, os.ModePerm)
