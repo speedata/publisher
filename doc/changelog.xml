@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.20" date="2025-08-19">
+        <en>Set trapped to false in PDF for preflight check.</en>
+        <de>Setze trapped auf false im PDF für Preflight.</de>
+    </entry>
+    <entry version="5.1.20" date="2025-08-19">
+        <en>Do some safeguards to prevent Go/Lua thread errors.</en>
+        <de>Schutzmaßnahmen gegen Go/Lua Thread-Fehler.</de>
+    </entry>
     <entry version="5.1.19" date="2025-08-18">
         <en>Allow paragraph shape in groups.</en>
         <de>Erlaube Absatzform in Gruppen.</de>
