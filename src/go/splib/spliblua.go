@@ -34,13 +34,18 @@ func (l *LuaState) setTop(n int) {
 }
 
 func (l *LuaState) getGlobal(name string) lType {
-	i := C.lua_getglobal(l.l, C.CString(name))
-	return lType(i)
+	c := C.CString(name)
+	defer C.free(unsafe.Pointer(c))
+	return lType(C.lua_getglobal(l.l, c))
 }
 
 // pop removes n elements from the stack
 func (l *LuaState) pop(n int) {
-	l.setTop(-n - 1)
+	top := l.getTop()
+	if n > top {
+		n = top
+	}
+	C.lua_settop(l.l, C.int(top-n))
 }
 
 func (l *LuaState) rotate(idx, n int) {
@@ -112,38 +117,33 @@ func (l *LuaState) pushBool(tf bool) {
 }
 
 func (l *LuaState) pushInt(i int) {
-	C.lua_pushinteger(l.l, C.longlong(i))
+	C.lua_pushinteger(l.l, C.lua_Integer(i))
 }
 
 func (l *LuaState) getAny(idx int) (any, bool) {
-	if l.getTop() == 0 {
+	t := C.lua_type(l.l, C.int(idx))
+	switch t {
+	case C.LUA_TNONE:
 		return nil, false
-	}
-
-	switch l.luaType(idx) {
-	case luaTString:
-		return l.getString(idx)
-	case luaTNumber:
-		return l.getNumber(idx)
-	case luaTNil:
+	case C.LUA_TNIL:
 		return nil, true
+	case C.LUA_TSTRING:
+		return l.getString(idx)
+	case C.LUA_TNUMBER:
+		return l.getNumber(idx)
 	default:
 		slog.Error("not implemented yet", "where", "getAny", "arg", l.luaType(idx))
 	}
-
 	return nil, false
 }
 
 func (l *LuaState) getInt(idx int) (int, bool) {
-	if l.getTop() == 0 {
+	var isnum C.int
+	v := C.lua_tointegerx(l.l, C.int(idx), &isnum)
+	if isnum == 0 {
 		return 0, false
 	}
-	if l.luaType(idx) == luaTNumber {
-		var isnum C.int
-		dbl := C.lua_tonumberx(l.l, C.int(idx), &isnum)
-		return int(dbl), true
-	}
-	return 0, false
+	return int(v), true
 }
 
 func (l *LuaState) getNumber(idx int) (float64, bool) {
@@ -174,7 +174,9 @@ func (l *LuaState) getString(idx int) (string, bool) {
 // getField pushes the value of the table key onto the stack. The table is at
 // index idx.
 func (l *LuaState) getField(idx int, key string) {
-	C.lua_getfield(l.l, C.int(idx), C.CString(key))
+	c := C.CString(key)
+	defer C.free(unsafe.Pointer(c))
+	C.lua_getfield(l.l, C.int(idx), c)
 }
 
 // getStringTable returns the string value of the table entry t[key] of the
