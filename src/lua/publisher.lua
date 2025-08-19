@@ -1852,7 +1852,9 @@ function initialize_luatex_and_generate_pdf()
     -- Creator:         CREATOR
     -- Producer:        speedata Publisher using LuaTeX
     local infos = { string.format("/Creator %s /Producer %s",utf8_to_utf16_string_pdf(getcreator()), utf8_to_utf16_string_pdf(getproducer())) }
-
+    if not sp_suppressinfo then
+        infos[#infos+1] = "/Trapped /False"
+    end
     if options.documenttitle and options.documenttitle ~= "" then
         infos[#infos + 1] = string.format("/Title %s",utf8_to_utf16_string_pdf(options.documenttitle))
     end
