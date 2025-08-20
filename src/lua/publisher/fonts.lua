@@ -415,6 +415,7 @@ do
         local bg_padding_top = 0
         local bg_padding_bottom = 0
         local reportmissingglyphs = publisher.options.reportmissingglyphs
+        local lasthead = nil
         while head do
             local pd = publisher.getprop(head,"pardir")
             if pd and #curdir == 0 then
@@ -542,7 +543,14 @@ do
                     end
                 end
             end
+            lasthead = head
             head = head.next
+        end
+        if start_bgcolor then
+            -- If we have a bgcolor, we must insert it at the end of the list
+            -- first we must add a dummy item
+            local _, dummy = publisher.add_rule(lasthead,"tail",{width = 0, height = 0, depth = 0})
+            insert_backgroundcolor(list_head, dummy, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
         end
         return head
     end
