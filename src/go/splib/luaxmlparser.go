@@ -227,5 +227,6 @@ func (l *LuaState) handleXInclude(href string, startindex int) error {
 		}
 		return err
 	}
+	defer f.Close()
 	return l.readXMLFile(f, startindex)
 }

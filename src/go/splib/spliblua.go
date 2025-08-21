@@ -234,7 +234,7 @@ func (l *LuaState) rawGet(index int) lType {
 // Pushes onto the stack the value t[n], where t is the table at the given index. The access is raw, that is, it does not invoke the __index metamethod.
 // Returns the type of the pushed value.
 func (l *LuaState) rawGetI(index int, n int) lType {
-	return lType(C.lua_rawgeti(l.l, C.int(index), C.longlong(n)))
+	return lType(C.lua_rawgeti(l.l, C.int(index), C.lua_Integer(n)))
 }
 
 // setTable oes the equivalent to t[k] = v, where t is the value at the given
@@ -244,7 +244,7 @@ func (l *LuaState) rawGetI(index int, n int) lType {
 // This function pops both the key and the value from the stack. As in Lua, this
 // function may trigger a metamethod for the "newindex" event (see §2.4).
 func (l *LuaState) setTable(index int) {
-	C.lua_rawset(l.l, C.int(index))
+	C.lua_settable(l.l, C.int(index))
 }
 
 // Does the equivalent of t[i] = v, where t is the table at the given index and
@@ -253,7 +253,7 @@ func (l *LuaState) setTable(index int) {
 // This function pops the value from the stack. The assignment is raw, that is,
 // it does not invoke the __newindex metamethod.
 func (l *LuaState) rawSetI(index int, i int) {
-	C.lua_rawseti(l.l, C.int(index), C.longlong(i))
+	C.lua_rawseti(l.l, C.int(index), C.lua_Integer(i))
 }
 
 func (l *LuaState) stackDump() {
