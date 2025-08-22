@@ -707,6 +707,15 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
                 local inlineobject = blockobject[i]
                 if type(inlineobject) == "table" then
                     if width then
+                        local save_width
+                        if publisher.newxpath then
+                            save_width = self.dataxml.vars["__maxwidth"]
+                            self.dataxml.vars["__maxwidth"] = width
+                        else
+                            save_width = xpath.get_variable("__maxwidth")
+                            xpath.set_variable("__maxwidth",width)
+                        end
+
                         local angle_rad = -1 * math.rad(blockobjects.rotate or 0)
                         local sin_angle = math.sin( angle_rad )
                         local format_width = width
@@ -730,6 +739,11 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
                         end
 
                         cell = node.insert_after(cell,node.tail(cell),v)
+                        if publisher.newxpath then
+                            self.dataxml.vars["__maxwidth"] = save_width
+                        else
+                            xpath.set_variable("__maxwidth",save_width)
+                        end
                     else
                         w("no width given in paragraph")
                     end

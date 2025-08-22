@@ -2496,25 +2496,25 @@ end
 --- -------
 --- Don't allow a line break of the contents. Reduce font size if necessary
 function commands.nobreak( layoutxml, dataxml )
-    local maxwidth
-    if publisher.newxpath then
-        maxwidth = dataxml.vars["__maxwidth"]
-    else
-        maxwidth = xpath.get_variable("__maxwidth")
-    end
-    local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth",   "length_sp", maxwidth)
     local fontname         = publisher.read_attribute(layoutxml,dataxml,"fontface",   "string")
     local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce",     "string", "keeptogether")
     local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor",     "string",0.9)
     local text             = publisher.read_attribute(layoutxml,dataxml,"text",       "string")
     if fontname then warning("Nobreak/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
-
     local p = par:new(nil,"nobreak")
     local tab = publisher.dispatch(layoutxml,dataxml)
 
     if strategy == "fontsize" then
         p:append(tab,{})
         p.flatten_callback = function(thiselt,options)
+            local maxwidth
+            if publisher.newxpath then
+                maxwidth = dataxml.vars["__maxwidth"]
+            else
+                maxwidth = xpath.get_variable("__maxwidth")
+            end
+            local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth",   "length_sp", maxwidth)
+
             local fam = options.fontfamily
             local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[fam]
             local strut
@@ -2553,6 +2553,13 @@ function commands.nobreak( layoutxml, dataxml )
     elseif strategy == "fontfit" then
         p:append(tab,{})
         p.flatten_callback = function(thiselt,options)
+            local maxwidth
+            if publisher.newxpath then
+                maxwidth = dataxml.vars["__maxwidth"]
+            else
+                maxwidth = xpath.get_variable("__maxwidth")
+            end
+            local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth", "length_sp", maxwidth)
             local fam = options.fontfamily
             local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[fam]
             local strut
@@ -2585,6 +2592,14 @@ function commands.nobreak( layoutxml, dataxml )
     elseif strategy == "cut" then
         p:append(tab,{})
         p.flatten_callback = function(thiselt,options)
+            local maxwidth
+            if publisher.newxpath then
+                maxwidth = dataxml.vars["__maxwidth"]
+            else
+                maxwidth = xpath.get_variable("__maxwidth")
+            end
+            local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth", "length_sp", maxwidth)
+
             tmppar = par:new(nil,"cut")
             for _,j in ipairs(thiselt) do
                 local c = publisher.element_contents(j)
