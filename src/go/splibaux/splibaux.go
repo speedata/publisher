@@ -241,8 +241,7 @@ func ConvertContents(contents, handler string) (string, error) {
 // format suitable for the speedata Publisher.
 func ConvertImage(filename, handler string) (string, error) {
 	var base = filepath.Base(filename)
-	var extension = filepath.Ext(base)
-	var outfilename = base[0 : len(base)-len(extension)]
+	var outfilename = base
 	return convertFile(filename, outfilename, handler)
 }
 

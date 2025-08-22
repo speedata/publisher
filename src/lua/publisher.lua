@@ -1201,7 +1201,6 @@ function define_image_callback( extensionhandler )
         return file
     end
     callback.register('find_image_file',find_image_file)
-
 end
 
 borderattributes = {}
