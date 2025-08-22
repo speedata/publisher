@@ -7736,6 +7736,10 @@ function define_fontfamily( regular,bold,italic,bolditalic, name, size, baseline
     local fontnumber = #fonts.lookup_fontfamily_number_instance
     fonts.lookup_fontfamily_name_number[name] = fontnumber
     splib.log("info","Define font family","name",name,"size",math.round(size / factor, 3),"leading",math.round(baselineskip / factor,3), "id",fontnumber)
+    if regular then splib.log("debug", "Instance created", "instance", "regular", "name", regular,"id",fam.normal) end
+    if bold then splib.log("debug", "Instance created", "instance", "bold", "name", bold,"id",fam.bold) end
+    if italic then splib.log("debug", "Instance created", "instance", "italic", "name", italic,"id",fam.italic) end
+    if bolditalic then splib.log("debug", "Instance created", "instance", "bolditalic", "name", bolditalic,"id",fam.bolditalic) end
     return fontnumber
 end
 
