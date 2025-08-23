@@ -1038,12 +1038,21 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 before_box = nil
                 -- n is a table of box and / or par
                 local str = resolve_list_style_type(styles,olcounter,dataxml)
+                local pos = styles["list-style-position"] or "outside"
                 for i=1,#n do
                     local a = n[i]
-                    local wd = styles.listindent
                     local opt = set_options_for_mknodes(styles)
-                    local x = { str,wd,opt }
-                    a:prepend(x)
+                    if pos == "inside" then
+                        local nl = publisher.mknodes(str .. " ", opt)
+                        nl = node.hpack(nl)
+                        local a_head = a[1].contents
+                        a_head = node.insert_before(a_head,a_head,nl)
+                        a[1].contents = a_head
+                    else
+                        local wd = styles.listindent
+                        local x = { str, wd, opt }
+                        a:prepend(x)
+                    end
                     -- label only for the first
                     str = ""
                     ret[#ret + 1] = a
@@ -1118,8 +1127,7 @@ function resolve_list_style_type(styles, olcounter,dataxml)
         set_image_dimensions(it,styles,0,styles.fontsize_sp * 0.9,dataxml)
         return img.node(it)
     end
-    local counter  = olcounter[styles.listlevel]
-    local ullevel = styles.ullevel
+    local counter = olcounter[styles.listlevel]
     local str = ""
     if liststyletype == "decimal" then
         str = tostring(counter) .. "."
