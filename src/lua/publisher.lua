@@ -3841,17 +3841,17 @@ function mpbox(parameter,width,height)
             color col; col = bordercolor;
             string str;
             str = "withcolor col withpen pencircle scaled " & decimal bwd ;
-            if style == "dashed":
+            if style = "dashed":
                 str := str & " dashed dashpattern(on 4bp off 5bp)"
-            elseif ( style == "inset" )  and  (  (pos == "top" )  or (pos == "left") ):
+            elseif ( style = "inset" )  and  (  (pos = "top" )  or (pos = "left") ):
                 if isdarkcolor(col):
                     str := str & " withcolor 0.2[col, white] ";
                 else:
                     str := str & " withcolor 0.5[col, black] ";
                 fi;
-            elseif ( style == "inset" ) and isdarkcolor(col) and ( (pos == "bottom" ) or (pos == "right") ):
+            elseif ( style = "inset" ) and isdarkcolor(col) and ( (pos = "bottom" ) or (pos = "right") ):
                 str := str & " withcolor 0.5[col, white] ";
-            elseif ( style == "outset" )  and  (  (pos == "right" ) or (pos == "bottom") ):
+            elseif ( style = "outset" )  and  (  (pos = "right" ) or (pos = "bottom") ):
                 str := str & " withcolor 0.5[col, black] ";
             fi;
             drawoptions(scantokens(str));
@@ -4648,7 +4648,7 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
             end
             local bordernumber = get_attribute(head,"bordernumber")
             if bordernumber then
-                local bordervbox = mpbox(borderattributes[bordernumber],head.width,head.height)
+                local bordervbox = mpbox(borderattributes[bordernumber],head.width,head.height + head.depth)
                 parent.head = node.insert_before(parent.head,head,bordervbox)
             end
             if blockinline == "vertical" then cury = cury + head.height + head.depth else curx = curx + head.width end

@@ -24,6 +24,7 @@ local stylesstackmetatable = {
 inherited = {
     width = false,
     fontsize_sp = true,
+    rootfontsize_sp = true,
     lineheight_sp = true,
     calculated_width = true,
     ollevel = true,
@@ -84,11 +85,14 @@ local levelmt = {
 local styles = setmetatable({}, levelmt)
 stylesstack[#stylesstack + 1] = styles
 
-local function getsize(size,fontsize)
+local function getsize(styles,size,fontsize)
     if size == nil then return 0 end
     size = size or 0
     local ret
-    if string.match(size, "em$") then
+    if string.match(size, "rem$") then
+        local amount = string.gsub(size, "^(.*)rem$", "%1")
+        ret = math.round(styles.rootfontsize_sp * amount)
+    elseif string.match(size, "em$") then
         local amount = string.gsub(size, "^(.*)r?em$", "%1")
         ret = math.round(fontsize * amount)
     elseif tonumber(size) then
@@ -100,10 +104,11 @@ local function getsize(size,fontsize)
 end
 
 local function familyname( fontfamily )
-    if fontfamilies[fontfamily] then
-        return fontfamilies[fontfamily]
-    elseif publisher.fontgroup[fontfamily] then
-        return publisher.fontgroup[fontfamily]
+    local ff = remove_quotes(fontfamily)
+    if fontfamilies[ff] then
+        return fontfamilies[ff]
+    elseif publisher.fontgroup[ff] then
+        return publisher.fontgroup[ff]
     else
         return publisher.fontgroup["sans-serif"]
     end
@@ -396,13 +401,17 @@ end
 function copy_attributes( styles,attributes )
     local remember_currentcolor = {}
     for k, v in pairs(attributes) do
-        if type(v) == "string" then
-            v = string.lower( tostring(v))
+        if type(v) == "string" and not has_quotes(v) then
+            v = string.lower(tostring(v))
         end
         if k == "font-size" then
             local fontsize
-            if string.match(v, "em$") then
-                local amount = string.gsub(v, "^(.*)r?em$", "%1")
+            if string.match(v, "rem$") then
+                local amount = string.gsub(v, "^(.*)rem$", "%1")
+                local fontsize = math.round(styles.rootfontsize_sp * amount)
+                styles.fontsize_sp = fontsize
+            elseif string.match(v, "em$") then
+                local amount = string.gsub(v, "^(.*)em$", "%1")
                 local fontsize = math.round(styles.fontsize_sp * amount)
                 styles.fontsize_sp = fontsize
             elseif string.match(v,"%d+%%$") then
@@ -590,7 +599,7 @@ function collect_horizontal_nodes( elt,parameter,before_box,origin,dataxml )
                 if attributes.width then
                      wd = styles.calculated_width
                 end
-                local height = getsize(attributes.height)
+                local height = getsize(styles,attributes.height)
                 local calc_width, calc_height = set_image_dimensions(it,styles,wd,height or 0,dataxml)
                 local box = publisher.box(calc_width,calc_height,"-")
                 node.set_attribute(box,publisher.att_dontadjustlineheight,1)
@@ -757,6 +766,28 @@ function build_html_table( elt, dataxml )
     return n[1]
 end
 
+function remove_quotes( str )
+    if type(str) ~= "string" then return str end
+    if string.sub(str,1,1) == '"' and string.sub(str,-1,-1) == '"' then
+        return string.sub(str,2,-2)
+    elseif string.sub(str,1,1) == "'" and string.sub(str,-1,-1) == "'" then
+        return string.sub(str,2,-2)
+    else
+        return str
+    end
+end
+
+function has_quotes( str )
+    if type(str) ~= "string" then return false end
+    if string.sub(str,1,1) == '"' and string.sub(str,-1,-1) == '"' then
+        return true
+    elseif string.sub(str,1,1) == "'" and string.sub(str,-1,-1) == "'" then
+        return true
+    else
+        return false
+    end
+end
+
 local olcounter = {}
 function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
     -- w("html: build nodelist from %s, prevdir = %s", caller or "?",prevdir or "?")
@@ -776,7 +807,6 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
             styles.listlevel = 0
         end
 
-        local attributes = thiselt.attributes or {}
         local thiselt_styles = thiselt.styles or {}
 
         local before_styles = {}
@@ -797,8 +827,9 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
 
             local before_options = {}
             set_options_for_mknodes(styles,before_options)
-            local nl = publisher.mknodes(styles.content,before_options)
-            local margin_left = getsize(styles["margin-left"],styles.fontsize_sp)
+            local content = remove_quotes(styles.content)
+            local nl = publisher.mknodes(content,before_options)
+            local margin_left = getsize(styles,styles["margin-left"],styles.fontsize_sp)
 
             local hss = publisher.hss_glue()
             local ml_box = node.hpack(hss,margin_left,"exactly")
@@ -815,25 +846,28 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
         end
         copy_attributes(styles,thiselt_styles)
         local styles_fontsize_sp = styles.fontsize_sp
-        local margin_top = getsize(styles["margin-top"],styles_fontsize_sp)
-        local margin_right = getsize(styles["margin-right"],styles_fontsize_sp)
-        local margin_bottom = getsize(styles["margin-bottom"],styles_fontsize_sp)
-        local margin_left = getsize(styles["margin-left"],styles_fontsize_sp)
+        if thiseltname == "html" then
+            styles.rootfontsize_sp = styles.fontsize_sp
+        end
+        local margin_top = getsize(styles,styles["margin-top"],styles_fontsize_sp)
+        local margin_right = getsize(styles,styles["margin-right"],styles_fontsize_sp)
+        local margin_bottom = getsize(styles,styles["margin-bottom"],styles_fontsize_sp)
+        local margin_left = getsize(styles,styles["margin-left"],styles_fontsize_sp)
 
-        local padding_top = getsize(styles["padding-top"],styles_fontsize_sp)
-        local padding_right = getsize(styles["padding-right"],styles_fontsize_sp)
-        local padding_bottom = getsize(styles["padding-bottom"],styles_fontsize_sp)
-        local padding_left = getsize(styles["padding-left"],styles_fontsize_sp)
+        local padding_top = getsize(styles,styles["padding-top"],styles_fontsize_sp)
+        local padding_right = getsize(styles,styles["padding-right"],styles_fontsize_sp)
+        local padding_bottom = getsize(styles,styles["padding-bottom"],styles_fontsize_sp)
+        local padding_left = getsize(styles,styles["padding-left"],styles_fontsize_sp)
 
         local border_top_style = thiselt_styles["border-top-style"] or "none"
         local border_right_style = thiselt_styles["border-right-style"] or "none"
         local border_bottom_style = thiselt_styles["border-bottom-style"] or "none"
         local border_left_style = thiselt_styles["border-left-style"] or "none"
 
-        local border_top_width = getsize(styles["border-top-width"],styles_fontsize_sp)
-        local border_right_width = getsize(styles["border-right-width"],styles_fontsize_sp)
-        local border_bottom_width = getsize(styles["border-bottom-width"],styles_fontsize_sp)
-        local border_left_width = getsize(styles["border-left-width"],styles_fontsize_sp)
+        local border_top_width = getsize(styles,styles["border-top-width"],styles_fontsize_sp)
+        local border_right_width = getsize(styles,styles["border-right-width"],styles_fontsize_sp)
+        local border_bottom_width = getsize(styles,styles["border-bottom-width"],styles_fontsize_sp)
+        local border_left_width = getsize(styles,styles["border-left-width"],styles_fontsize_sp)
 
         local border_top_color = styles["border-top-color"]
         local border_right_color = styles["border-right-color"]
@@ -1027,7 +1061,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 ret[#ret + 1] = a
             prevdir = "vertical"
             elseif thiseltname == "hr" then
-                local ht = getsize(styles.height,styles.fontsize_sp)
+                local ht = getsize(styles,styles.height,styles.fontsize_sp)
                 ht = ht + border_top_width + border_bottom_width
                 local bx = publisher.create_empty_vbox_width_width_height(styles.calculated_width,ht)
                 local a = par:new(tf,"html.lua (hr)")

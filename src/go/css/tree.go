@@ -18,13 +18,13 @@ var (
 	level              int
 	out                io.Writer
 	dimen              *regexp.Regexp
-	zeroDimen          *regexp.Regexp
 	style              *regexp.Regexp
 	reInsideWS         *regexp.Regexp
 	reLeadcloseWhtsp   *regexp.Regexp
 	toprightbottomleft [4]string
 	isSpace            *regexp.Regexp
 	quoteString        *strings.Replacer
+	zeroDimen          = regexp.MustCompile(`^0+(px|mm|cm|in|pt|pc|ch|em|ex|lh|rem)?$`)
 )
 
 type mode int
@@ -44,7 +44,6 @@ const (
 func init() {
 	toprightbottomleft = [...]string{"top", "right", "bottom", "left"}
 	dimen = regexp.MustCompile(`px|mm|cm|in|pt|pc|ch|em|ex|lh|rem|0`)
-	zeroDimen = regexp.MustCompile(`^0+(px|mm|cm|in|pt|pc|ch|em|ex|lh|rem)?`)
 	style = regexp.MustCompile(`^none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset$`)
 	reLeadcloseWhtsp = regexp.MustCompile(`^[\s\p{Zs}]+|[\s\p{Zs}]+$`)
 	reInsideWS = regexp.MustCompile(`\n|[\s\p{Zs}]{2,}`) //to match 2 or more whitespace symbols inside a string or NL
@@ -65,8 +64,10 @@ func stringValue(toks tokenstream) string {
 		prevNegative = negative
 		negative = false
 		switch tok.Type {
-		case scanner.Ident, scanner.String:
+		case scanner.Ident:
 			ret = append(ret, tok.Value)
+		case scanner.String:
+			ret = append(ret, "\""+tok.Value+"\"")
 		case scanner.Number, scanner.Dimension:
 			if prevNegative {
 				ret = append(ret, "-"+tok.Value)
