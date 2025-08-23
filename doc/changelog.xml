@@ -1,5 +1,21 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.21" date="2025-08-23">
+        <en>NoBreak with background color.</en>
+        <de>NoBreak mit Hintergrundfarbe.</de>
+    </entry>
+    <entry version="5.1.21" date="2025-08-23">
+        <en>NoBreak in table cells (#670).</en>
+        <de>NoBreak in Tabellenzellen (#670).</de>
+    </entry>
+    <entry version="5.1.21" date="2025-08-23">
+        <en>Bugfix image conversion with same filename and different extensions.</en>
+        <de>Fehlerkorrektur Bildkonvertierung mit gleichem Dateinamen und unterschiedlicher Dateiendung.</de>
+    </entry>
+    <entry version="5.1.21" date="2025-08-23">
+        <en>Extend basic HTML features (custom fonts, border, rem size).</en>
+        <de>Erweitere grundlegende HTML Eigenschaften (Eigene Schriftarten, Rahmen, rem-Größen).</de>
+    </entry>
     <entry version="5.1.20" date="2025-08-19">
         <en>Set trapped to false in PDF for preflight check.</en>
         <de>Setze trapped auf false im PDF für Preflight.</de>
