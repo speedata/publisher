@@ -75,7 +75,7 @@ Variables for MetaPost can be set with `<SetVariable>`.
     select="'colors_mycolor'"/>
 -------------------------------------------------------------------------------
 
-The assignment is evaluated at the beginning of the MetaPost context. Thus `curcol` is available at the beginning of the graphics.
+The assignment is evaluated at the beginning of the MetaPost context. Thus `curcol` is available at the beginning of the graphics. Variables may contain the following characters: A-Z, a-z and _ (underscore).
 
 == Predefined values
 
