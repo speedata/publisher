@@ -103,36 +103,75 @@ local function getsize(styles,size,fontsize)
     return ret
 end
 
-local function familyname( fontfamily )
-    local ff = remove_quotes(fontfamily)
-    if fontfamilies[ff] then
-        return fontfamilies[ff]
-    elseif publisher.fontgroup[ff] then
-        return publisher.fontgroup[ff]
-    else
-        return publisher.fontgroup["sans-serif"]
+-- given a table of font family names, return the first one that is known
+-- otherwise return sans-serif
+local function familyname( fontfamily_table )
+    for _, fontfamily in ipairs(fontfamily_table) do
+        local ff
+        if not has_quotes(fontfamily) then
+            ff = string.lower(fontfamily)
+        else
+            ff = remove_quotes(fontfamily)
+        end
+        if fontfamilies[ff] then
+            return fontfamily, fontfamilies[ff]
+        elseif publisher.fontgroup[ff] then
+            return fontfamily, publisher.fontgroup[ff]
+        end
     end
+    return "sans-serif", publisher.fontgroup["sans-serif"]
 end
 
-local function get_fontfamily( family, size_sp , name, styles )
+local function split_string_quote(inputstr)
+    -- split at comma, respect quotes
+    local t = {}
+    local inquote = false
+    local buf = ""
+    for i=1,#inputstr do
+        local c = string.sub(inputstr,i,i)
+        if c == '"' or c == "'" then
+            buf = buf .. c
+            inquote = not inquote
+        elseif c == "," and not inquote then
+            t[#t + 1] = buf
+            buf = ""
+        else
+            if c ~= " " or inquote then
+                buf = buf .. c
+            end
+        end
+    end
+    t[#t + 1] = buf
+    return t
+end
+
+-- families is a string with comma separated font family names
+-- size_sp is the fontsize in scaled points
+-- name is the font name (like "12pt")
+-- styles is the styles table
+-- return a font family number
+local function get_fontfamily( families, size_sp , name, styles )
     local fontfamilynumber = tonumber(styles["font-family-number"])
     if fontfamilynumber and fontfamilynumber > 0 then return fontfamilynumber end
-
-    local fontname = family .. "/" .. name
-    local predefined_fam = publisher.fonts.lookup_fontfamily_name_number[fontname]
-    if predefined_fam then
-        return predefined_fam
+    local family_table = split_string_quote(families)
+    if #family_table == 1 then
+        local fontname = families .. "/" .. name
+        local predefined_fam = publisher.fonts.lookup_fontfamily_name_number[fontname]
+        if predefined_fam then
+            return predefined_fam
+        end
     end
-    family = familyname(family)
+    local singlefont, familiestab = familyname(family_table)
+    singlefont = singlefont .. "/" .. name
     local regular,bold,italic,bolditalic
-    for weightstyle,name in pairs(family) do
+    for weightstyle,name in pairs(familiestab) do
         local fontname = publisher.fonts.get_fontname(name["local"],name["url"])
         if weightstyle == "regular" then regular = fontname end
         if weightstyle == "bold" then bold = fontname end
         if weightstyle == "italic" then italic = fontname end
         if weightstyle == "bolditalic" then bolditalic = fontname end
     end
-    local fam = publisher.define_fontfamily(regular,bold,italic,bolditalic,fontname,size_sp,size_sp * 1.12)
+    local fam = publisher.define_fontfamily(regular,bold,italic,bolditalic,singlefont,size_sp,size_sp * 1.12)
     return fam
 end
 
@@ -280,11 +319,7 @@ end
 function copy_attributes( styles,attributes )
     local remember_currentcolor = {}
     for k, v in pairs(attributes) do
-        if type(v) == "string" and not has_quotes(v) then
-            v = string.lower(tostring(v))
-        end
         if k == "font-size" then
-            local fontsize
             if string.match(v, "rem$") then
                 local amount = string.gsub(v, "^(.*)rem$", "%1")
                 local fontsize = math.round(styles.rootfontsize_sp * amount)
