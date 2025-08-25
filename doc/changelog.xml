@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.22" date="2025-08-25">
+        <en>More HTML/CSS features (pseudo classes, padding in tables and borders).</en>
+        <de>Mehr HTML/CSS Features (Pseudoklassen, Padding in Tabellen und Rahmen).</de>
+    </entry>
     <entry version="5.1.21" date="2025-08-23">
         <en>NoBreak with background color.</en>
         <de>NoBreak mit Hintergrundfarbe.</de>
