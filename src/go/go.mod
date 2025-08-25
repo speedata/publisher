@@ -16,7 +16,7 @@ require (
 	github.com/russross/blackfriday v1.6.0
 	github.com/speedata/bild v0.0.0-20240628091728-dd063a632b14
 	github.com/speedata/config v0.0.0-20181203093101-3a3f44982ec4
-	github.com/speedata/css/scanner v0.0.0-20201005071706-2ed32c3ce553
+	github.com/speedata/css/scanner v0.0.0-20250825095519-68d469dc62c4
 	github.com/speedata/go-epub v0.5.5
 	github.com/speedata/goxlsx v1.0.2
 	github.com/speedata/hotfolder v0.0.0-20181204121114-5f743a840a92

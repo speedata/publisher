@@ -263,13 +263,6 @@ local function pen_characteristics(object)
     return not (sx == 1 and rx == 0 and ry == 0 and sy == 1 and tx == 0 and ty == 0), t.width
 end
 
-local function pdf_textfigure(font, size, text, width, height, depth)
-    text = text:gsub(".", function(c)
-        return string.format("\\hbox{\\char%i}", string.byte(c)) -- kerning happens in metapost
-    end)
-    texsprint(string.format("\\mplibtextext{%s}{%f}{%s}{%s}{%f}", font, size, text, 0, -(7200 / 7227) / 65536 * depth))
-end
-
 local bend_tolerance = 131 / 65536
 
 local function curved(ith, pth)
@@ -743,6 +736,11 @@ function prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
         elseif k == "strings" and type(v) == "table" then
             for col, val in pairs(v) do
                 local fmt = string.format("string %s; %s = %q;", col, col, val)
+                execute(mpobj, fmt)
+            end
+        elseif k == "boolean" and type(v) == "table" then
+            for col, val in pairs(v) do
+                local fmt = string.format("boolean %s; %s = %s;", col, col, tostring(val))
                 execute(mpobj, fmt)
             end
         else

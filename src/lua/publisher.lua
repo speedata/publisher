@@ -3792,8 +3792,24 @@ function mpbox(parameter,width,height)
     extra_parameter.borderbottomwidth = sp_to_bp(parameter.border_bottom_width) .. "bp"
     extra_parameter.borderleftwidth = sp_to_bp(parameter.border_left_width) .. "bp"
     extra_parameter.borderrightwidth = sp_to_bp(parameter.border_right_width) .. "bp"
+    -- no width if style is none
+    if parameter.border_top_style == "none" then
+        extra_parameter.bordertopwidth = "0bp"
+    end
+    if parameter.border_bottom_style == "none" then
+        extra_parameter.borderbottomwidth = "0bp"
+    end
+    if parameter.border_left_style == "none" then
+        extra_parameter.borderleftwidth = "0bp"
+    end
+    if parameter.border_right_style == "none" then
+        extra_parameter.borderrightwidth = "0bp"
+    end
+
     extra_parameter.paddingtop = sp_to_bp(parameter.padding_top or 0) .. "bp"
     extra_parameter.paddingbottom = sp_to_bp(parameter.padding_bottom or 0) .. "bp"
+    extra_parameter.paddingleft = sp_to_bp(parameter.padding_left or 0) .. "bp"
+    extra_parameter.paddingright = sp_to_bp(parameter.padding_right or 0) .. "bp"
 
     extra_parameter.colors = {
         bordertopcolor = parameter.border_top_color,
@@ -3807,20 +3823,22 @@ function mpbox(parameter,width,height)
         borderleftstyle = parameter.border_left_style,
         borderrightstyle = parameter.border_right_style
     }
+    extra_parameter.boolean = {
+        debug = parameter.debug == true,
+    }
 
     local mptext = [[
-        linecap := butt;
         wd = box.width  ;
         ht = box.height - bordertopwidth - borderbottomwidth ;
         if ht < 0: ht := 0; fi;
         if wd < 0: wd := 0; fi;
-        z1 = (0,0);
+        z1 = (0,-borderbottomwidth - paddingbottom);
         x2 = borderleftwidth;
-        x3 = x2 + wd;
+        x3 = x2 + wd + paddingleft + paddingright;
         x4 = x3 + borderrightwidth;
 
         y2 = y1 + borderbottomwidth;
-        y3 = y2 + ht;
+        y3 = y2 + ht + borderbottomwidth + bordertopwidth + paddingtop + paddingbottom;
         y4 = y3 + bordertopwidth;
 
         % draw z1 -- (x4,y1) -- z4 -- (x1,y4) -- cycle;
@@ -3838,6 +3856,9 @@ function mpbox(parameter,width,height)
         enddef;
 
         def drawborder(expr bordercolor, bwd, style, a, b, clippath, pos) =
+            begingroup;
+            interim linecap := butt;
+
             color col; col = bordercolor;
             string str;
             str = "withcolor col withpen pencircle scaled " & decimal bwd ;
@@ -3859,6 +3880,7 @@ function mpbox(parameter,width,height)
             draw a -- b ;
             clip currentpicture to clippath ;
             addto border also currentpicture ;
+            endgroup;
         enddef;
 
         y34 = 0.5[y3,y4];
@@ -3872,11 +3894,16 @@ function mpbox(parameter,width,height)
         drawborder(borderrightcolor,borderrightwidth, borderrightstyle,(x34,y1),(x34,y4), clip_right, "right" );
 
         currentpicture := border;
-
+        if debug:
+            drawoptions(scaled 3bp withcolor black );
+            drawdot(z1) withcolor blue;
+            drawdot(z2) withcolor red;
+            drawdot(z3) withcolor red;
+            drawdot(z4) withcolor blue;
+        fi;
     ]]
     metapostgraphics.__htmlbox = mptext
 
-    -- TODO: test, changed code during metapost overhaul
     local instr,bbox = metapost.boxgraphic(width_sp,height_sp,"__htmlbox",extra_parameter)
     if not instr then
         splib.error("Could not create metapost image")

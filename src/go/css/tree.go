@@ -264,17 +264,17 @@ func resolveAttributes(attrs []html.Attribute) (map[string]string, map[string]st
 				}
 			}
 		case "border-top", "border-right", "border-bottom", "border-left":
-			resolved[attr.Key+"-width"] = "1pt"
-			resolved[attr.Key+"-style"] = "none"
-			resolved[attr.Key+"-color"] = "currentcolor"
+			resolved[key+"-width"] = "1pt"
+			resolved[key+"-style"] = "none"
+			resolved[key+"-color"] = "currentcolor"
 
 			for _, part := range strings.Split(attr.Val, " ") {
 				if ok, str := isDimension(part); ok {
-					resolved[attr.Key+"-width"] = str
+					resolved[key+"-width"] = str
 				} else if ok, str := isBorderStyle(part); ok {
-					resolved[attr.Key+"-style"] = str
+					resolved[key+"-style"] = str
 				} else {
-					resolved[attr.Key+"-color"] = str
+					resolved[key+"-color"] = str
 				}
 			}
 		case "border-color":

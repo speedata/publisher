@@ -225,127 +225,6 @@ function calculate_height( attribute_height, original_size )
     end
 end
 
--- function draw_border(nodelists, attributes,styles)
---     if not attributes then
---         return nodelists
---     end
---     if not attributes.has_border then return nodelists end
---     local ret = {}
-
---     lineheight = styles.lineheight_sp
---     local factor = publisher.factor
-
---     local padding_top = attributes["padding-top"] or 0
---     local padding_right = attributes["padding-right"] or 0
---     local padding_bottom = attributes["padding-bottom"] or 0
---     local padding_left = attributes["padding-left"] or 0
-
---     local margin_top = attributes["margin-top"] or 0
---     local margin_right = attributes["margin-right"] or 0
---     local margin_bottom = attributes["margin-bottom"] or 0
---     local margin_left = attributes["margin-left"] or 0
-
---     padding_top = tex.sp(padding_top)
---     padding_right = tex.sp(padding_right)
---     padding_bottom = tex.sp(padding_bottom)
---     padding_left = tex.sp(padding_left)
-
---     margin_top = tex.sp(margin_top)
---     margin_right = tex.sp(margin_right)
---     margin_bottom = tex.sp(margin_bottom)
---     margin_left = tex.sp(margin_left)
-
---     local border_top_style = attributes["border-top-style"] or "none"
---     local border_right_style = attributes["border-right-style"] or "none"
---     local border_bottom_style = attributes["border-bottom-style"] or "none"
---     local border_left_style = attributes["border-left-style"] or "none"
-
---     local border_top_width = attributes["border-top-width"] or 0
---     local border_right_width = attributes["border-right-width"] or 0
---     local border_bottom_width = attributes["border-bottom-width"] or 0
---     local border_left_width = attributes["border-left-width"] or 0
-
---     local border_top_color = styles["border-top-color"]
---     local border_right_color = styles["border-right-color"]
---     local border_bottom_color = styles["border-bottom-color"]
---     local border_left_color = styles["border-left-color"]
-
---     local border_bottom_right_radius = attributes["border-bottom-right-radius"] or 0
---     local border_bottom_left_radius = attributes["border-bottom-left-radius"] or 0
---     local border_top_right_radius = attributes["border-top-right-radius"] or 0
---     local border_top_left_radius = attributes["border-top-left-radius"] or 0
-
-
---     local border_top_width, border_right_width, border_bottom_width, border_left_width = 0, 0, 0, 0
---     if border_top_style ~= "none" then
---         border_top_width = tex.sp(border_top_width)
---     end
---     if border_right_style ~= "none" then
---         border_right_width = tex.sp(border_right_width)
---     end
---     if border_left_style ~= "none" then
---         border_left_width = tex.sp(border_left_width)
---     end
---     if border_bottom_style ~= "none" then
---         border_bottom_width = tex.sp(border_bottom_width)
---     end
---     local firstlist = nodelists[1]
---     local lastlist = nodelists[#nodelists]
---     local wd, wd_bp = firstlist.width, firstlist.width / factor
---     local ht, ht_bp = firstlist.height, ( firstlist.height or 0 ) / factor
---     local dp, dp_bp = firstlist.depth, ( firstlist.depth or 0 ) / factor
-
---     local kernleft = node.new(publisher.kern_node)
---     local kernright = node.new(publisher.kern_node)
---     kernleft.kern = border_left_width + padding_left + margin_left
---     kernright.kern = border_right_width + padding_right + margin_right + padding_left
-
---     firstlist = node.insert_before(firstlist,firstlist,kernleft)
---     local tail = node.tail(lastlist)
---     node.insert_after(lastlist,tail,kernright)
-
---     node.setproperty(firstlist,{
---         borderstart = true,
---         border_top_style = border_top_style,
---         border_right_style = border_right_style,
---         border_bottom_style = border_bottom_style,
---         border_left_style = border_left_style,
---         padding_top = padding_top,
---         padding_right = padding_right,
---         padding_bottom = padding_bottom,
---         padding_left = padding_left,
---         border_top_width = border_top_width,
---         border_right_width = border_right_width,
---         border_bottom_width = border_bottom_width,
---         border_left_width = border_left_width,
---         border_top_color = border_top_color,
---         border_right_color = border_right_color,
---         border_bottom_color = border_bottom_color,
---         border_left_color = border_left_color,
---         border_bottom_right_radius = tex.sp(border_bottom_right_radius),
---         border_bottom_left_radius = tex.sp(border_bottom_left_radius),
---         border_top_right_radius = tex.sp(border_top_right_radius),
---         border_top_left_radius = tex.sp(border_top_left_radius),
---         margin_top = margin_top,
---         margin_right = margin_right,
---         margin_bottom = margin_bottom,
---         margin_left = margin_left,
---         height = lineheight * 0.75,
---         depth = lineheight * 0.25,
---         lineheight = lineheight,
---     })
-
---     node.setproperty(kernright,{
---         borderend = true,
---     })
---     nodelists[1] = firstlist
---     if #nodelists > 1 then
---         nodelists[#nodelists] = lastlist
---     end
---     return nodelists
--- end
-
-
 function set_calculated_width(styles)
     if type(styles.calculated_width) == "number" then
     end
@@ -672,7 +551,7 @@ function build_html_table_tbody(tbody)
                             local newtd = { elementname = "Paragraph" , contents = r[i] }
                             table.insert(newcontents,newtd)
                         end
-                        local att = td.attributes
+                        local att = td_styles
                         if att then
                             local bbw = att["border-bottom-width"]
                             local btw = att["border-top-width"]
@@ -682,6 +561,14 @@ function build_html_table_tbody(tbody)
                             if btw then newcontents["border-top"] = btw end
                             if blw then newcontents["border-left"] = blw end
                             if brw then newcontents["border-right"] = brw end
+                            local pt = att["padding-top"]
+                            local pb = att["padding-bottom"]
+                            local pl = att["padding-left"]
+                            local pr = att["padding-right"]
+                            if pt then newcontents.padding_top = getsize(styles,pt,styles.fontsize_sp) end
+                            if pb then newcontents.padding_bottom = getsize(styles,pb,styles.fontsize_sp) end
+                            if pl then newcontents.padding_left = getsize(styles,pl,styles.fontsize_sp) end
+                            if pr then newcontents.padding_right = getsize(styles,pr,styles.fontsize_sp) end
                         end
                         tdtab[#tdtab + 1] = { elementname = "Td", contents = newcontents }
                     end
@@ -985,8 +872,10 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                     margin_right = margin_right,
                     margin_bottom = margin_bottom,
                     margin_left = margin_left,
+                    debug = ( styles["sp-debugbox"] == "border" ) or false,
                 }
             end
+
             if thiseltname == "table" then
                 prevdir = "vertical"
                 -- w("html/table")
@@ -1248,6 +1137,7 @@ function parse_html_new( elt, options, data )
         publisher.set_mainlanguage(lang)
     end
     parse_html_inner(elt[1])
+    -- printtable("elt[1]",elt[1])
     local block = build_nodelist(elt,options,nil,"parse_html_new","vertical",data)
     return block
 end
