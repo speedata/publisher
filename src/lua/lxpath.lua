@@ -841,6 +841,7 @@ local function fnRound(ctx, seq)
     if errmsg then
         return nil, errmsg
     end
+    if not n then return { nan }, nil end
     return { math.floor(n + 0.5) }, nil
 end
 
