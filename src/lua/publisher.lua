@@ -11,7 +11,7 @@
 file_start("publisher.lua")
 barcodes = do_luafile("barcodes.lua")
 local luxor = do_luafile("luxor.lua")
-
+local xmlbuilder = require("xmlbuilder")
 local spotcolors = require("spotcolors")
 
 if os.getenv("SP_XMLPARSER") == "lxpath" then
@@ -1766,7 +1766,6 @@ function initialize_luatex_and_generate_pdf()
     if sp_suppressinfo then
         pdf.settrailerid(" [ <FA052949448907805BA83C1E78896398> <FA052949448907805BA83C1E78896398> ]")
     end
-
     -- file attachment
     if #filespecnumbers > 0 then
         local afstring = {}
@@ -1780,15 +1779,8 @@ function initialize_luatex_and_generate_pdf()
         for i = 1, #filespecnumbers do
             local filespecnum = filespecnumbers[i][1]
             local filename = filespecnumbers[i][3]
-            local metadataobj = filespecnumbers[i][2]
+            local conformancelevel = filespecnumbers[i][2]
             names[#names+1] = string.format([[%s %d 0 R]],utf8_to_utf16_string_pdf(filename),filespecnum)
-            if metadataobj == nil then
-                -- ignore
-            else
-                -- A ZUGFeRD file
-                -- warning: the metadata entry should be written when we know which metadata to write.
-                pdfcatalog[#pdfcatalog + 1] = string.format([[ /Metadata %d 0 R ]],metadataobj)
-            end
         end
         pdfcatalog[#pdfcatalog + 1] = string.format([[ /Names << /EmbeddedFiles <<  /Names [%s] >> >> ]],table.concat(names," "))
         pdfcatalog[#pdfcatalog + 1] = string.format([[ /AF %s ]],af)
@@ -1871,7 +1863,7 @@ function initialize_luatex_and_generate_pdf()
         local metadataobjnum
         if options.format == "PDF/X-3:2002" or options.format == "PDF/X-4" then
             infos[#infos + 1] = string.format("/GTS_PDFXVersion (%s)",options.format)
-            metadataobjnum = pdf.obj({ type="stream", string = getmetadata(), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0,})
+            metadataobjnum = pdf.obj({ type="stream", string = getmetadata(), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0})
             local colorprofileobjnum = spotcolors.write_colorprofile()
             local cp = spotcolors.get_colorprofile()
             local outputintentsobjnum = pdf.obj({type = "raw",  immediate = true , string = string.format([[<<  /DestOutputProfile %d 0 R /Info %s /OutputCondition %s    /OutputConditionIdentifier %s   /RegistryName %s    /S /GTS_PDFX   /Type /OutputIntent  >>]],colorprofileobjnum,
@@ -1883,6 +1875,7 @@ function initialize_luatex_and_generate_pdf()
             pdfcatalog[#pdfcatalog + 1] = string.format("/OutputIntents %d 0 R",outputintentsarrayobjnum )
         end
         if options.format == "PDF/A-3" then
+            metadataobjnum = pdf.obj({ type="stream", string = getmetadata(filespecnumbers), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0})
             pdf.setomitcidset(1)
             local colorprofileobjnum = spotcolors.write_colorprofile()
             local cp = spotcolors.get_colorprofile()
@@ -1896,7 +1889,7 @@ function initialize_luatex_and_generate_pdf()
         end
         if options.format == "PDF/UA" then
             pdfcatalog[#pdfcatalog + 1] = string.format(" /MarkInfo <<  /Marked true >> ")
-            metadataobjnum = pdf.obj({ type="stream", string = getuametadata(), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0,})
+            metadataobjnum = pdf.obj({ type="stream", string = getmetadata(), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0,})
             vp[#vp + 1] = "/DisplayDocTitle true"
 
             local parenttree = pdf.reserveobj()
@@ -8697,166 +8690,136 @@ function string_random(length)
   end
 end
 
-function getuametadata()
-    local docid = uuid()
-    local instanceid = uuid()
-    local now = pdf.getcreationdate()
-
-    local isoformatted = string.format("%s-%s-%sT%s:%s:%s+%s:%s",string.sub(now,3,6),string.sub(now,7,8),string.sub(now,9,10),string.sub(now,11,12),string.sub(now,13,14),string.sub(now,15,16),string.sub(now,18,19),string.sub(now,21,22))
-
-    md = string.format([[<?xpacket begin=%q id="W5M0MpCehiHzreSzNTczkc9d"?>
-       <x:xmpmeta xmlns:x="adobe:ns:meta/">
-      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-        <rdf:Description rdf:about="" xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/">
-          <xmpMM:DocumentID>uuid:%s</xmpMM:DocumentID>
-          <xmpMM:InstanceID>uuid:%s</xmpMM:InstanceID>
-        </rdf:Description>
-        <rdf:Description rdf:about="" xmlns:pdfuaid="http://www.aiim.org/pdfua/ns/id/">
-          <pdfuaid:part>1</pdfuaid:part>
-        </rdf:Description>
-        <rdf:Description rdf:about="" xmlns:xmp="http://ns.adobe.com/xap/1.0/">
-           <xmp:CreateDate>%s</xmp:CreateDate>
-           <xmp:ModifyDate>%s</xmp:ModifyDate>
-           <xmp:MetadataDate>%s</xmp:MetadataDate>
-           <xmp:CreatorTool>%s</xmp:CreatorTool>
-        </rdf:Description>
-        <rdf:Description rdf:about="" xmlns:pdf="http://ns.adobe.com/pdf/1.3/">
-          <pdf:Producer>%s</pdf:Producer>
-        </rdf:Description>
-        <rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/">
-          <dc:title>
-            <rdf:Alt>
-              <rdf:li xml:lang="x-default">%s</rdf:li>
-            </rdf:Alt>
-          </dc:title>
-        </rdf:Description>
-      </rdf:RDF>
-    </x:xmpmeta>
-<?xpacket end="r"?>]],"\239\187\191",docid,instanceid, isoformatted,isoformatted,isoformatted,xml_escape(getcreator()),xml_escape(getproducer()), xml_escape(options.documenttitle))
-    return md
-end
-
-
-function getmetadata()
+function getmetadata(filespecnumbers)
+    local zugferd_level = nil
+    local zugferd_filename = nil
+    if filespecnumbers and type(filespecnumbers) == "table" then
+        for _,v in ipairs(filespecnumbers) do
+            if type(v) == "table" and v[2] ~= nil then
+                zugferd_level = v[2]
+                zugferd_filename = v[3]
+            end
+        end
+    end
     local now = pdf.getcreationdate()
     local isoformatted = string.format("%s-%s-%sT%s:%s:%s+%s:%s",string.sub(now,3,6),string.sub(now,7,8),string.sub(now,9,10),string.sub(now,11,12),string.sub(now,13,14),string.sub(now,15,16),string.sub(now,18,19),string.sub(now,21,22))
     local docid = uuid()
     local instanceid = uuid()
     local fmt = options.format
-    local md = string.format([[<?xpacket begin=%q id="W5M0MpCehiHzreSzNTczkc9d"?>
-<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c015 91.163280, 2018/06/22-11:31:03        ">
-   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-      <rdf:Description rdf:about=""
-            xmlns:xmp="http://ns.adobe.com/xap/1.0/"
-            xmlns:pdf="http://ns.adobe.com/pdf/1.3/"
-            xmlns:dc="http://purl.org/dc/elements/1.1/"
-            xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
-            xmlns:pdfxid="http://www.npes.org/pdfx/ns/id/"
-            xmlns:pdfx="http://ns.adobe.com/pdfx/1.3/">
-         <xmp:CreatorTool>%s</xmp:CreatorTool>
-         <pdf:Producer>%s</pdf:Producer>
-         <xmp:CreateDate>%s</xmp:CreateDate>
-         <xmp:ModifyDate>%s</xmp:ModifyDate>
-         <xmp:MetadataDate>%s</xmp:MetadataDate>
-         <pdf:Trapped>False</pdf:Trapped>
-         <dc:format>application/pdf</dc:format>
-         <dc:title>
-            <rdf:Alt>
-               <rdf:li xml:lang="x-default">%s</rdf:li>
-            </rdf:Alt>
-         </dc:title>
-         <xmpMM:DocumentID>uuid:%s</xmpMM:DocumentID>
-         <xmpMM:InstanceID>uuid:%s</xmpMM:InstanceID>
-         <xmpMM:RenditionClass>default</xmpMM:RenditionClass>
-         <xmpMM:VersionID>1</xmpMM:VersionID>
-         <pdfxid:GTS_PDFXVersion>%s</pdfxid:GTS_PDFXVersion>
-         <pdfx:GTS_PDFXVersion>%s</pdfx:GTS_PDFXVersion>
-      </rdf:Description>
-   </rdf:RDF>
-</x:xmpmeta>
-]],"\239\187\191",xml_escape(getcreator()),xml_escape(getproducer()),isoformatted, isoformatted,isoformatted,xml_escape(options.documenttitle),docid,instanceid,fmt,fmt)
-    return md
-end
 
-function getzugferdmetadata( conformancelevel, title, author, filename )
-    local metadata = string.format([[<?xpacket begin=%q id="W5M0MpCehiHzreSzNTczkc9d"?>
-<x:xmpmeta xmlns:x="adobe:ns:meta/">
- <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-  <rdf:Description xmlns:pdfaid="http://www.aiim.org/pdfa/ns/id/" rdf:about="">
-   <pdfaid:part>3</pdfaid:part>
-   <pdfaid:conformance>B</pdfaid:conformance>
-  </rdf:Description>
-  <rdf:Description xmlns:dc="http://purl.org/dc/elements/1.1/" rdf:about="">
-   <dc:title>
-    <rdf:Alt>
-     <rdf:li xml:lang="x-default">%s</rdf:li>
-    </rdf:Alt>
-   </dc:title>
-   <dc:creator>
-    <rdf:Seq>
-    <rdf:li>%s</rdf:li>
-</rdf:Seq>
-   </dc:creator>
-  <dc:description>
-<rdf:Alt>
-<rdf:li xml:lang="x-default"/>
-</rdf:Alt>
-</dc:description>
-</rdf:Description>
-  <rdf:Description xmlns:pdf="http://ns.adobe.com/pdf/1.3/" rdf:about="">
-   <pdf:Producer>%s</pdf:Producer>
-  </rdf:Description>
-  <rdf:Description xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about="">
-   <xmp:CreatorTool>speedata invoicing platform</xmp:CreatorTool>
-   <xmp:CreateDate>2014-06-24T14:01:21+02:00</xmp:CreateDate>
-  <xmp:ModifyDate>2014-10-06T16:13:53+02:00</xmp:ModifyDate>
-</rdf:Description>
- <rdf:Description xmlns:pdfaExtension="http://www.aiim.org/pdfa/ns/extension/" xmlns:pdfaField="http://www.aiim.org/pdfa/ns/field#" xmlns:pdfaProperty="http://www.aiim.org/pdfa/ns/property#" xmlns:pdfaSchema="http://www.aiim.org/pdfa/ns/schema#" xmlns:pdfaType="http://www.aiim.org/pdfa/ns/type#" rdf:about="">
-<pdfaExtension:schemas>
-<rdf:Bag>
-<rdf:li rdf:parseType="Resource">
-<pdfaSchema:schema>ZUGFeRD PDFA Extension Schema</pdfaSchema:schema>
-<pdfaSchema:namespaceURI>urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#</pdfaSchema:namespaceURI>
-<pdfaSchema:prefix>zf</pdfaSchema:prefix>
-<pdfaSchema:property>
-<rdf:Seq>
-<rdf:li rdf:parseType="Resource">
-<pdfaProperty:name>DocumentFileName</pdfaProperty:name>
-<pdfaProperty:valueType>Text</pdfaProperty:valueType>
-<pdfaProperty:category>external</pdfaProperty:category>
-<pdfaProperty:description>name of the embedded XML invoice file</pdfaProperty:description>
-</rdf:li>
-<rdf:li rdf:parseType="Resource">
-<pdfaProperty:name>DocumentType</pdfaProperty:name>
-<pdfaProperty:valueType>Text</pdfaProperty:valueType>
-<pdfaProperty:category>external</pdfaProperty:category>
-<pdfaProperty:description>INVOICE</pdfaProperty:description>
-</rdf:li>
-<rdf:li rdf:parseType="Resource">
-<pdfaProperty:name>Version</pdfaProperty:name>
-<pdfaProperty:valueType>Text</pdfaProperty:valueType>
-<pdfaProperty:category>external</pdfaProperty:category>
-<pdfaProperty:description>The actual version of the ZUGFeRD data</pdfaProperty:description>
-</rdf:li>
-<rdf:li rdf:parseType="Resource">
-<pdfaProperty:name>ConformanceLevel</pdfaProperty:name>
-<pdfaProperty:valueType>Text</pdfaProperty:valueType>
-<pdfaProperty:category>external</pdfaProperty:category>
-<pdfaProperty:description>The conformance level of the ZUGFeRD data</pdfaProperty:description>
-</rdf:li>
-</rdf:Seq>
-</pdfaSchema:property>
-</rdf:li>
-</rdf:Bag>
-</pdfaExtension:schemas>
-</rdf:Description>
-<rdf:Description xmlns:zf="urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#"
-  rdf:about="" zf:ConformanceLevel="%s" zf:DocumentFileName="%s" zf:DocumentType="INVOICE" zf:Version="1.0"/>
-</rdf:RDF>
-</x:xmpmeta><?xpacket end="w"?>
-]],"\239\187\191",xml_escape(title),xml_escape(author),xml_escape(getproducer()) ,conformancelevel,xml_escape(filename))
+    local doc = xmlbuilder.new_document()
+    doc:add_pi("xpacket", "begin=\"\239\187\191\" id=\"W5M0MpCehiHzreSzNTczkc9d\"")
 
-    return metadata
+    local meta = doc:add_element("x:xmpmeta")
+    meta:set_attr("xmlns:x", "adobe:ns:meta/")
+
+    local rdf = meta:add_element("rdf:RDF")
+    rdf:set_attr("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+
+    local desc = rdf:add_element("rdf:Description")
+    desc:set_attr("rdf:about", "")
+    desc:set_attr("xmlns:xmpMM", "http://ns.adobe.com/xap/1.0/mm/")
+    desc:set_attr("xmlns:pdfuaid","http://www.aiim.org/pdfua/ns/id/")
+    desc:set_attr("xmlns:xmp",   "http://ns.adobe.com/xap/1.0/")
+    desc:set_attr("xmlns:pdf",   "http://ns.adobe.com/pdf/1.3/")
+    desc:set_attr("xmlns:dc",    "http://purl.org/dc/elements/1.1/")
+    desc:set_attr("xmlns:pdfaid", "http://www.aiim.org/pdfa/ns/id/")
+
+    if fmt == "PDF/A-3" then
+        desc:add_element("xmpMM:RenditionClass"):set_text("default")
+        desc:add_element("pdfaid:part"):set_text("3")
+        desc:add_element("pdfaid:conformance"):set_text("B")
+    elseif fmt == "PDF/UA" then
+        desc:add_element("pdfuaid:part"):set_text("1")
+    elseif fmt == "PDF/X-4" or fmt == "PDF/X-3:2002" then
+        desc:add_element("xmpMM:RenditionClass"):set_text("default")
+        desc:add_element("xmpMM:VersionID"):set_text("1")
+        desc:add_element("pdf:Trapped"):set_text("False")
+        if fmt == "PDF/X-3:2002" then
+            desc:set_attr("xmlns:pdfx", "http://ns.adobe.com/pdfx/1.3/")
+            desc:add_element("pdfx:GTS_PDFXVersion"):set_text("PDF/X-3:2002")
+        elseif fmt == "PDF/X-4" then
+            desc:set_attr("xmlns:pdfxid", "http://www.npes.org/pdfx/ns/id/")
+            desc:add_element("pdfxid:GTS_PDFXVersion"):set_text("PDF/X-4")
+        end
+    end
+    -- common metadata
+    desc:add_element("xmpMM:DocumentID"):set_text("uuid:" .. docid)
+    desc:add_element("xmpMM:InstanceID"):set_text("uuid:" .. instanceid)
+    desc:add_element("xmp:CreateDate"):set_text(isoformatted)
+    desc:add_element("xmp:ModifyDate"):set_text(isoformatted)
+    desc:add_element("xmp:MetadataDate"):set_text(isoformatted)
+    desc:add_element("xmp:CreatorTool"):set_text(getcreator())
+    desc:add_element("pdf:Producer"):set_text(getproducer())
+
+    -- title
+    if options.documenttitle and options.documenttitle ~= "" then
+      if fmt == "PDF/A-3" or fmt == "PDF/UA" then
+        local li = desc:add_element("dc:title")
+                      :add_element("rdf:Alt")
+                      :add_element("rdf:li")
+        li:set_attr("xml:lang", "x-default")
+          :set_text(options.documenttitle)
+      else
+        desc:add_element("dc:title"):set_text(options.documenttitle)
+      end
+    end
+
+    -- author/creator
+    if options.documentauthor and options.documentauthor ~= "" then
+      if fmt == "PDF/A-3" or fmt == "PDF/UA" then
+        desc:add_element("dc:creator")
+            :add_element("rdf:Seq")
+            :add_element("rdf:li")
+            :set_text(options.documentauthor)
+      else
+        desc:add_element("dc:creator"):set_text(options.documentauthor)
+      end
+    end
+
+    if fmt == "PDF/A-3" and zugferd_level and zugferd_filename then
+        desc:set_attr("xmlns:pdfaExtension", "http://www.aiim.org/pdfa/ns/extension/")
+        desc:set_attr("xmlns:pdfaField", "http://www.aiim.org/pdfa/ns/field#")
+        desc:set_attr("xmlns:pdfaProperty", "http://www.aiim.org/pdfa/ns/property#")
+        desc:set_attr("xmlns:pdfaSchema", "http://www.aiim.org/pdfa/ns/schema#")
+        desc:set_attr("xmlns:pdfaType", "http://www.aiim.org/pdfa/ns/type#")
+
+        local ext = desc:add_element("pdfaExtension:schemas")
+        local bag = ext:add_element("rdf:Bag")
+        local li = bag:add_element("rdf:li")
+        li:set_attr("rdf:parseType", "Resource")
+        li:add_element("pdfaSchema:schema"):set_text("ZUGFeRD PDFA Extension Schema")
+        li:add_element("pdfaSchema:namespaceURI"):set_text("urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#")
+        li:add_element("pdfaSchema:prefix"):set_text("zf")
+        local prop = li:add_element("pdfaSchema:property")
+        local seq = prop:add_element("rdf:Seq")
+
+        local function add_zugferd_property(name, valuetype, category, description)
+            local li = seq:add_element("rdf:li")
+            li:set_attr("rdf:parseType", "Resource")
+            li:add_element("pdfaProperty:name"):set_text(name)
+            li:add_element("pdfaProperty:valueType"):set_text(valuetype)
+            li:add_element("pdfaProperty:category"):set_text(category)
+            li:add_element("pdfaProperty:description"):set_text(description)
+        end
+
+        add_zugferd_property("DocumentFileName", "Text", "external", "name of the embedded XML invoice file")
+        add_zugferd_property("DocumentType", "Text", "external", "INVOICE")
+        add_zugferd_property("Version", "Text", "external", "The actual version of the ZUGFeRD data")
+        add_zugferd_property("ConformanceLevel", "Text", "external", "The conformance level of the ZUGFeRD data")
+
+        local rdfdesc = rdf:add_element("rdf:Description")
+        rdfdesc:set_attr("xmlns:zf", "urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#")
+        rdfdesc:set_attr("rdf:about", "")
+        rdfdesc:set_attr("zf:ConformanceLevel", zugferd_level)
+        rdfdesc:set_attr("zf:DocumentFileName", zugferd_filename)
+        rdfdesc:set_attr("zf:DocumentType", "INVOICE")
+        rdfdesc:set_attr("zf:Version", "1.0")
+
+    end
+    doc:add_pi("xpacket", [[end="r"]])
+
+    return doc:to_string({ pretty = true, indent = "  " })
 end
 
 ---@para filecontents data Contents of the file.
@@ -8906,14 +8869,7 @@ function attach_file_pdf(filecontents,description,mimetype,modificationtime,dest
             conformancelevel = string.upper(conformancelevel)
         end
 
-        -- BASIC, COMFORT, EXTENDED
-        local metadataobjnum = pdf.obj({type = "stream",
-                     string = getzugferdmetadata(conformancelevel, options.documenttitle or "ZUGFeRD Rechnung",options.documentauthor or "The Author",destfilename),
-                     immediate = true,
-                     attr = [[  /Subtype /XML /Type /Metadata  ]],
-                     compresslevel = 0,
-                     })
-        filespecnumbers[#filespecnumbers + 1] = {filespecnum,metadataobjnum,destfilename}
+        filespecnumbers[#filespecnumbers + 1] = {filespecnum,conformancelevel,destfilename}
     else
         filespecnumbers[#filespecnumbers + 1] = {filespecnum,nil,destfilename}
     end
