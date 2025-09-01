@@ -13,6 +13,7 @@ require (
 	github.com/gammazero/workerpool v1.1.3
 	github.com/gorilla/mux v1.8.1
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
+	github.com/inconshreveable/mousetrap v1.1.0
 	github.com/russross/blackfriday v1.6.0
 	github.com/speedata/bild v0.0.0-20240628091728-dd063a632b14
 	github.com/speedata/config v0.0.0-20181203093101-3a3f44982ec4

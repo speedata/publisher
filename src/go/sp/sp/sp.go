@@ -802,6 +802,8 @@ or see the web page
 }
 
 func main() {
+	// check if the user calls this program from Windows GUI such as double-clicking
+	CheckWindowsGUIDoubleClick()
 	op := optionparser.NewOptionParser()
 	op.On("--address IPADDRESS", "Address to be used for the server mode. Defaults to 127.0.0.1", options)
 	op.On("--autoopen", "Open the PDF file", options)

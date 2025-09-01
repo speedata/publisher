@@ -5,3 +5,6 @@ package main
 func FontFolder() (string, error) {
 	return "", nil
 }
+
+func CheckWindowsGUIDoubleClick() {
+}
