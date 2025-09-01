@@ -21,6 +21,8 @@ func BuildGo(cfg *config.Config, destbin, goos, goarch, targettype, location, ex
 
 	if goos != "" {
 		os.Setenv("GOOS", goos)
+	} else {
+		goos = os.Getenv("GOOS")
 	}
 
 	publisherversion := cfg.Publisherversion.String()
