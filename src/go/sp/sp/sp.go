@@ -294,7 +294,7 @@ func setVariable(str string) {
 // Prints the total run time in the log file.
 func showDuration() {
 	if getOption("quiet") != "true" {
-		d := time.Now().Sub(starttime)
+		d := time.Since(starttime)
 		dStart := d
 		var sb strings.Builder
 		if d > time.Minute {
@@ -330,13 +330,11 @@ func timeoutCatcher(seconds int) {
 		time.Sleep(time.Duration(seconds) * time.Second)
 		timeout <- true
 	}()
-	select {
-	case <-timeout:
-		log.Printf("\n\nTimeout after %d seconds", seconds)
-		killallProcesses()
-		showDuration()
-		os.Exit(-1)
-	}
+	<-timeout
+	log.Printf("\n\nTimeout after %d seconds", seconds)
+	killallProcesses()
+	showDuration()
+	os.Exit(-1)
 }
 
 func sigIntCatcher() {
@@ -802,7 +800,6 @@ or see the web page
 }
 
 func main() {
-	// check if the user calls this program from Windows GUI such as double-clicking
 	CheckWindowsGUIDoubleClick()
 	op := optionparser.NewOptionParser()
 	op.On("--address IPADDRESS", "Address to be used for the server mode. Defaults to 127.0.0.1", options)
@@ -930,14 +927,22 @@ func main() {
 	os.Setenv("SD_LOGLEVEL", getOption("loglevel"))
 
 	if addLocalPath && getOption("addlocalpath") != "false" {
-		extradir(pwd)
+		if homeDir, err := os.UserHomeDir(); err == nil && pwd == homeDir {
+			// don't add the home directory, it takes too long
+			log.Printf("Not adding home directory %q to search path,\n", homeDir)
+			log.Println(" this would result in long startup times. To add the home directroy")
+			log.Println(" anyway, use --no-local and add it manually with --extra-dir.")
+		} else {
+			extradir(pwd)
+		}
 	}
 
 	// if the user sets systemfonts=true in the config file, we should honor this.
 	if optSystemfonts := getOption("systemfonts"); optSystemfonts != "" {
-		if optSystemfonts == "true" {
+		switch optSystemfonts {
+		case stringTrue:
 			useSystemFonts = true
-		} else if optSystemfonts == stringFalse {
+		case stringFalse:
 			useSystemFonts = false
 		}
 	}
@@ -1220,11 +1225,12 @@ func main() {
 			logfilename = fn
 		}
 		var protocolFile io.Writer
-		if logfilename == "STDOUT" {
+		switch logfilename {
+		case "STDOUT":
 			protocolFile = os.Stdout
-		} else if logfilename == "STDERR" {
+		case "STDERR":
 			protocolFile = os.Stderr
-		} else {
+		default:
 			protocolFile, err = os.Create(logfilename)
 			if err != nil {
 				log.Fatal(err)
