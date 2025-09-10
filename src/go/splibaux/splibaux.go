@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 var (
@@ -192,6 +193,35 @@ func writeContentsToTempfile(contents string) (string, error) {
 	return filename, nil
 }
 
+func splitArgs(input string) []string {
+	var args []string
+	var current strings.Builder
+	inQuotes := false
+
+	for i, r := range input {
+		switch {
+		case r == '\'':
+			// Toggle quote mode, aber Quote-Zeichen nicht übernehmen
+			inQuotes = !inQuotes
+		case unicode.IsSpace(r) && !inQuotes:
+			// Token-Ende, falls wir gerade etwas gesammelt haben
+			if current.Len() > 0 {
+				args = append(args, current.String())
+				current.Reset()
+			}
+		default:
+			current.WriteRune(r)
+		}
+
+		// Falls letzter Char → flush
+		if i == len(input)-1 && current.Len() > 0 {
+			args = append(args, current.String())
+		}
+	}
+
+	return args
+}
+
 func convertFile(inputfilename, baseoutputfilename, handler string) (string, error) {
 	var err error
 	rawimgcache := os.Getenv("IMGCACHE")
@@ -202,10 +232,22 @@ func convertFile(inputfilename, baseoutputfilename, handler string) (string, err
 	if err != nil {
 		return "", err
 	}
-
 	outfile := filepath.Join(rawimgcache, baseoutputfilename)
+
+	if cachemethod := os.Getenv("CACHEMETHOD"); cachemethod != "none" {
+		if _, err = os.Stat(outfile); err == nil {
+			slog.Debug("convertFile: output file already exists", "file", outfile)
+			return outfile, nil
+		}
+	}
+
 	replacer := strings.NewReplacer("%%input%%", inputfilename, "%%output%%", outfile)
-	res := strings.Split(handler, " ")
+
+	// split the handler into command and arguments
+	// "magick %%input%% 'foo bar' %%output%%.png"
+	// becomes
+	// "magick" "%%input%%" "foo bar" "%%output%%.png"
+	res := splitArgs(handler)
 	for i := 0; i < len(res); i++ {
 		res[i] = replacer.Replace(res[i])
 		if strings.HasPrefix(res[i], outfile) {

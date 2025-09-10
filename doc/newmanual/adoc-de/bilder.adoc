@@ -373,6 +373,7 @@ Zu MetaPost gibt es ein <<ch-fortgeschrittenethemen-metapostgrafiken,eigenes Kap
 Siehe auch das Kapitel über <<ch-fortgeschrittenethemen-metapostgrafiken,MetaPost>> sowie die https://github.com/speedata/examples/tree/master/metapost[MetaPost-Beispiele].
 
 [.profeature]
+[[ch-dpioption]]
 == Bildgröße und Auflösung
 
 Große Bilddateien erzeugen auch große PDF-Dateien, wenn sie eingebunden werden, unabhängig davon, wie breit und hoch sie im PDF dargestellt werden.
@@ -385,14 +386,33 @@ Beispiel: soll ein Bild mit der Breite von 720 Pixeln auf einer Papierbreite von
 In der Regel ist eine so hohe Auflösung nicht notwendig.
 Je nach Anwendungsfall (Druck/Onlinebetrachtung) kann z.B. eine Auflösung von 300 dpi oder 120 dpi ausreichend sein.
 
+=== Konfiguration des Resizehandlers
+
+Zusätzlich zu den normalen `imagehandler`-Einträgen in der Konfigurationsdatei gibt es einen `resizehandler`, der die Bildgröße an die gewünschte DPI-Zahl anpasst. Wird der resizehandler nicht gesetzt, nutzt der Publisher eine eingebaute Bibliothek, die die Bildgröße ändert.
+
+Der resizehandler wird intern vom Publisher genutzt, wenn die Bildgröße anhand der `dpi`-Einstellung reduziert werden soll.
+
+Die Definition funktioniert analog zu einem `imagehandler`, jedoch stehen die Platzhalter `%%width%%` und `%%height%%` für die automatisch ermittelte Zielgröße zur Verfügung. Der Benutzer gibt diese Werte nicht selbst an – sie werden vom Publisher anhand der Ausgabegröße und der eingestellten Auflösung (`dpi`) berechnet.
+
+Beispiel mit ImageMagick:
+
+[source, ini]
+-------------------------------------------------------------------------------
+resizehandler="jpegimage:(magick %%input%% -resize %%width%%x%%height%%! %%output%%)"
+-------------------------------------------------------------------------------
+
+In diesem Beispiel wird für JPEG-Dateien der Befehl `magick` (ImageMagick) aufgerufen, um das Bild intern auf die vom Publisher berechnete Größe herunterskalieren. Das Ausrufezeichen (`!`) erzwingt die exakte Zielgröße.
+Diese Mechanik stellt sicher, dass die Ausgabegröße und die gewünschte Auflösung eingehalten werden, ohne dass der Benutzer manuell eingreifen muss.
+
+Wichtig ist, das auch ein extensionhandler für die Dateiendung (im Beispiel `jpg` oder `jpeg`) gesetzt ist, damit der resizehandler auch genutzt wird.
+
+
 == Weitere Parameter
 
 * Man kann über die `{padding}`-Angaben festlegen, wie viel Abstand das Bild vom entsprechenden Rand haben soll.
 
 * Mit `dpiwarn` kann eine Warnung herausgegeben werden, wenn die tatsächliche Anzahl der Pixel je Zoll geringer ist, als die Vorgabe.
 
-
-// NOTE: Bildumrisse erzeugen?
 
 
 

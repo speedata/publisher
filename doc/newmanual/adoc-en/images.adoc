@@ -323,6 +323,7 @@ There is an <<ch-advancedtopics-metapostgraphics,extra chapter>> for MetaPost gr
 See also the chapter on <<ch-advancedtopics-metapostgraphics,MetaPost>> and the examples at https://github.com/speedata/examples/tree/master/metapost[the examples repository].
 
 [.profeature]
+[[ch-dpioption]]
 == Image size and resolution
 
 Large image files also generate large PDF files when they are included, regardless of how wide and high they are displayed in the PDF.
@@ -334,6 +335,26 @@ By limiting the resolution, you can sometimes obtain much smaller files.
 Example: if an image with a width of 720 pixels is to be displayed on a paper width of 1 inch, the resolution in the PDF would be 720 dpi.
 As a rule, such a high resolution is not necessary.
 Depending on the application (print/online viewing), a resolution of 300 dpi or 120 dpi may be sufficient, for example.
+
+=== Configuration of the Resize Handler
+
+In addition to the regular `imagehandler` entries in the configuration file, there is a `resizehandler` that adjusts the image size to the desired DPI value. If no resize handler is defined, the Publisher uses a built-in library to change the image size.
+
+The resize handler is used internally by the Publisher whenever the image size needs to be reduced according to the `dpi` setting.
+
+The definition works in the same way as an `imagehandler`, but the placeholders `%%width%%` and `%%height%%` are available for the automatically determined target size. These values are not specified by the user – they are calculated by the Publisher based on the output size and the configured resolution (`dpi`).
+
+Example using ImageMagick:
+
+[source, ini]
+-------------------------------------------------------------------------------
+resizehandler="jpegimage:(magick %%input%% -resize %%width%%x%%height%%! %%output%%)"
+-------------------------------------------------------------------------------
+
+In this example, the `magick` (ImageMagick) command is used for JPEG files to downscale the image internally to the size calculated by the Publisher. The exclamation mark (`!`) forces the exact target size.
+This mechanism ensures that the output size and the required resolution are respected without any manual user intervention.
+
+It is important to also define an `extensionhandler` for the file extension (e.g. `jpg` or `jpeg` in the example), so that the resize handler will actually be used.
 
 
 

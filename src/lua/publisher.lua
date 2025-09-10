@@ -320,6 +320,7 @@ compatibility = {
 
 -- for external image conversion software
 imagehandler = {}
+resizehandler = {}
 
 viewerpreferences = {}
 
@@ -1184,18 +1185,20 @@ end
 function define_image_callback( extensionhandler )
     local extensions = {}
     local ext,handler
-    for _,v in ipairs(string.explode(extensionhandler,";")) do
-        _,_,ext,handler = string.find(v,"^(.*):(.*)$")
-        extensions[ext] = handler
+    if extensionhandler and extensionhandler ~= "" then
+        for _,v in ipairs(string.explode(extensionhandler,";")) do
+            _,_,ext,handler = string.find(v,"^(.*):(.*)$")
+            extensions[ext] = handler
+        end
     end
+
     local function find_image_file( asked_name )
         local file = find_file(asked_name)
         local ext = get_extension(asked_name)
         local handlername = extensions[ext]
-        local handler = imagehandler[handlername]
-
+        local handler = imagehandler[handlername or "*"]
         if handler then
-            splib.log("info","Convert image", "extension",ext, "handler",handlername)
+            splib.log("info","Convert image", "extension",ext, "handler",handlername or "*")
             file = splib.convertimage(file,handler)
         end
         return file
@@ -1558,14 +1561,18 @@ function initialize_luatex_and_generate_pdf()
     end
 
     if options.imagehandler then
-        string.gsub(options.imagehandler,"(%w+):%((.-)%);?", function( imagetype,cmdline )
+        string.gsub(options.imagehandler,"([a-zA-Z*]+):%((.-)%);?", function( imagetype,cmdline )
             imagehandler[imagetype] = cmdline
         end)
     end
 
-    if options.extensionhandler then
-        define_image_callback(options.extensionhandler)
+    if options.resizehandler then
+        string.gsub(options.resizehandler,"([a-zA-Z*]+):%((.-)%);?", function( imagetype,cmdline )
+            resizehandler[imagetype] = cmdline
+        end)
     end
+
+    define_image_callback(options.extensionhandler or "")
 
     --- Set the starting page (which must be a number)
     if options.startpage then
@@ -8230,7 +8237,19 @@ local images = {}
 
 function reload_image(filename,typ,width,height)
     splib.log("info","Reload image","width",tostring(width),"height",tostring(height),"filename",filename)
-    local fn = splib.reloadimage({ filename = filename, imagetype = typ,width = width,height = height})
+    local filename_extension = get_extension(filename)
+    local handlername_for_extension
+    if options.extensionhandler and options.extensionhandler ~= "" then
+        for _,v in ipairs(string.explode(options.extensionhandler,";")) do
+            local _,_,ext,handler = string.find(v,"^(.*):(.*)$")
+            if ext == filename_extension then
+                handlername_for_extension = handler
+                break
+            end
+        end
+    end
+    local rh = resizehandler[handlername_for_extension or "*"]
+    local fn = splib.reloadimage({ filename = filename, imagetype = typ,width = width,height = height, resizehandler = rh})
     return fn
 end
 

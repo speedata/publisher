@@ -55,7 +55,7 @@ erkannt. Folgende Optionen werden unterstützt:
 `extra-dir`::
   Ein Verzeichnis im Dateisystem, das Dateien für den Publisherlauf enthält. Dazu gehören die Schriftdateien, die XML-Dateien (Daten und Layoutregelwerk) sowie die einzubindenden Bilddateien. Sollen mehrere Verzeichnisse hinzugefügt werden, müssen diese mit `:` oder `;` getrennt werden, je nach Betriebssystem (Windows: `;`, alle anderen: `:`). Das aktuelle Verzeichnis wird automatisch eingebunden. Beispiel unter Windows: `extra-dir=c:\myfonts`.
 `extensionhandler`::
-  Zuordnung von Dateiendungen zu in `imagehandler` definierten Konvertern. Um Grafiken on-the-fly zu konvertieren. Beispiel: `extensionhandler="mmd:mermaid"`. Mehrere Einträge werden mit Semikolon getrennt. Siehe auch `imagehandler`. (Seit Version 3.9.1, experimentell.)
+  Zuordnung von Dateiendungen zu in `imagehandler` definierten Konvertern. Um Grafiken on-the-fly zu konvertieren. Beispiel: `extensionhandler="mmd:mermaid"`. Mehrere Einträge werden mit Semikolon getrennt. Siehe auch `imagehandler`.
 `extraxml`::
   Diese XML-Dateien zu den Layoutanweisungen hinzufügen. Kommaseparierte Liste (`extraxml=datei1.xml,datei2.xml`). Wird im neuen XPath-Parser nicht mehr unterstützt, stattdessen ist xinclude zu benutzen.
 `fontloader`::
@@ -98,6 +98,8 @@ erkannt. Folgende Optionen werden unterstützt:
    Die Versionsnummer des PDFs, das geschrieben wird. Beispiel: `1.7`.
 `reportmissingglyphs`::
    Sollen angeforderte aber fehlende Zeichen als Fehler oder als Warnung gemeldet werden? Die erlaubten Werte sind `true`, `false`, und `warning`. `false` schaltet die Ausgabe aus.
+`resizehandler`::
+  Zuordnung von Bildtyp zu externen Konvertern, die die Bildgröße an die gewünschte DPI-Zahl anpassen. Z.B. `resizehandler="jpegimage:(magick %%input%% -resize %%width%%x%%height%%! %%output%%)"`. Siehe auch <<ch-dpioption>>. (Seit Version 5.1.23.)
 `runs`::
   Setzt die Anzahl der Durchläufe fest.
 `startpage`::

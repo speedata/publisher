@@ -11,7 +11,9 @@ import (
 	"log/slog"
 	"net/url"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/speedata/bild/imgio"
 	"github.com/speedata/bild/transform"
@@ -86,22 +88,67 @@ func saveFileFromURL(parsedURL *url.URL, rawURL string) (string, error) {
 }
 
 // ResizeImage gets a new image with the given width and height.
-func ResizeImage(filename string, imagetype string, width, height int) (string, error) {
+func ResizeImage(filename string, imagetype string, width, height int, resizehandler string) (string, error) {
 	var err error
-
-	fn := filepath.Join(os.TempDir(), "speedata_publisher")
-	if err = os.MkdirAll(fn, 0755); err != nil {
-		return "", err
-	}
-
 	pathPart := filepath.Dir(filename)
-	filenamePart := filepath.Base(filename)
-
 	h := md5.New()
 	io.WriteString(h, pathPart)
 
+	filenamePart := filepath.Base(filename)
 	prefix := fmt.Sprintf("%x", h.Sum(nil))
-	destFilename := filepath.Join(fn, fmt.Sprintf("%s_%d_%d_%s", prefix, width, height, filenamePart))
+
+	rawimgcache := os.Getenv("IMGCACHE")
+	if rawimgcache == "" {
+		rawimgcache = filepath.Join(os.TempDir(), "imagecache")
+	}
+	if err = os.MkdirAll(rawimgcache, 0755); err != nil {
+		return "", err
+	}
+	destFilename := filepath.Join(rawimgcache, fmt.Sprintf("%s_%d_%d_%s", prefix, width, height, filenamePart))
+
+	if cachemethod := os.Getenv("CACHEMETHOD"); cachemethod != "none" {
+		if _, err = os.Stat(destFilename); err == nil {
+			slog.Debug("ResizeImage: output file already exists", "file", destFilename)
+			return destFilename, nil
+		}
+	}
+
+	// if a resizehandler is given, we use that
+	if resizehandler != "" {
+		slog.Debug("Resize file via handler", "handler", resizehandler, "width", width, "height", height, "in", filename)
+		// resizehandler is of the form
+		// command %%input%% %%width%% %%height%% %%output%%)
+		// where
+		// command is the command to execute
+		// %%input%% is replaced by the input filename
+		// %%width%% is replaced by the width
+		// %%height%% is replaced by the height
+		// %%output%% is replaced by the output filename
+
+		// split the handler into command and arguments
+		// "magick %%input%% 'foo bar' %%output%%.png"
+		// becomes
+		// "magick" "%%input%%" "foo bar" "%%output%%.png"
+		handlerArgs := splitArgs(resizehandler)
+		replacer := strings.NewReplacer("%%input%%", filename, "%%output%%", destFilename, "%%width%%", fmt.Sprintf("%d", width), "%%height%%", fmt.Sprintf("%d", height))
+		for i := 0; i < len(handlerArgs); i++ {
+			handlerArgs[i] = replacer.Replace(handlerArgs[i])
+		}
+
+		executableFile := handlerArgs[0]
+		cmd := exec.Command(executableFile, handlerArgs[1:]...)
+		slog.Debug("Command for image resizing", "cmd", fmt.Sprintf("%#v", cmd.Args))
+		err = cmd.Run()
+		if err != nil {
+			slog.Error("Error running resize handler", "handler", resizehandler, "error", err)
+			return "", err
+		}
+		if _, err = os.Stat(destFilename); err == nil {
+			return destFilename, nil
+		}
+		slog.Error("Error running resize handler: output file not created", "handler", resizehandler, "out", destFilename)
+		return "", fmt.Errorf("Resize handler did not create output file")
+	}
 
 	if _, err = os.Stat(destFilename); err == nil {
 		return destFilename, nil

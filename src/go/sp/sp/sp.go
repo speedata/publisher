@@ -651,6 +651,9 @@ func runPublisher(cachemethod string) (exitstatus int) {
 	if extensionhandler := getOption("extensionhandler"); extensionhandler != "" {
 		layoutoptionsSlice = append(layoutoptionsSlice, `extensionhandler=`+extensionhandler)
 	}
+	if resizehandler := getOption("resizehandler"); resizehandler != "" {
+		layoutoptionsSlice = append(layoutoptionsSlice, `resizehandler=`+resizehandler)
+	}
 
 	layoutname := getOption("layout")
 	dataname := getOption("data")
@@ -982,6 +985,7 @@ func main() {
 	ic := getOption("imagecache")
 	if ic == "" {
 		options["imagecache"] = filepath.Join(getOption("tempdir"), "sp", "images")
+		ic = options["imagecache"]
 	}
 	if finfo, err := os.Stat(ic); err == nil {
 		if !finfo.IsDir() {
@@ -990,7 +994,6 @@ func main() {
 			os.Exit(1)
 		}
 	}
-
 	os.Setenv("IMGCACHE", ic)
 	cachemethod := getOption("cache")
 	os.Setenv("CACHEMETHOD", cachemethod)

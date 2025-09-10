@@ -92,6 +92,8 @@ The format of the file is important, otherwise it won’t be recognized. The fol
    Add this XML file in front of the layout instructions. List of comma separated file names (`prependxml=file1.xml,file2.xml`). Not supported with the new XPath module. Use xinclude instead.
 `reportmissingglyphs`::
    Should requested but missing glyphs be reported as an error or as a warning? The allowed values are `true`, `false`, or `warning`. `false` disables the reporting.
+`resizehandler`::
+  Assignment of screen type to external converters that resize images to the desired DPI. For example, `resizehandler="jpegimage:(magick %%input%% -resize %%width%%x%%height%%! %%output%%)"`. See also <<ch-dpioption>>. (Since version 5.1.23.)
 `runs`::
    Set the number of runs.
 `startpage`::

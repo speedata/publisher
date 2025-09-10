@@ -686,6 +686,11 @@ func sdLog(L *C.lua_State) int {
 
 //export sdReloadImage
 func sdReloadImage(L *C.lua_State) int {
+	// arguments are
+	// filename, width, height, imagetype, and an optional resizehandler
+	// returns new filename
+	// uses splibaux.ResizeImage
+
 	return luaEntry(L, func(l *LuaState) int {
 		fn, ok := l.getStringTable(1, "filename")
 		if !ok {
@@ -707,8 +712,13 @@ func sdReloadImage(L *C.lua_State) int {
 			slog.Error("internal error", "where", "sdReloadImage", "message", "imagetype is not a string")
 			return 0
 		}
+		// resizehandler is optional
+		resizehandler, ok := l.getStringTable(1, "resizehandler")
+		if !ok {
+			resizehandler = ""
+		}
 
-		newfn, err := splibaux.ResizeImage(fn, imagetype, wd, ht)
+		newfn, err := splibaux.ResizeImage(fn, imagetype, wd, ht,resizehandler)
 		if err != nil {
 			slog.Error("internal error", "where", "sdReloadImage", "message", err)
 			return 0
@@ -739,6 +749,7 @@ func sdLoadXMLFile(L *C.lua_State) int {
 	return luaEntry(L, func(l *LuaState) int {
 		err := l.buildXMLTable()
 		if err != nil {
+			slog.Error("sdLoadXMLFile", "msg", err.Error())
 			return 0
 		}
 		return 1

@@ -13,6 +13,6 @@ func saveFileFromURL(parsedURL *url.URL, rawURL string) (string, error) {
 }
 
 // ResizeImage gets a new image with the given width and height.
-func ResizeImage(filename string, imagetype string, width, height int) (string, error) {
+func ResizeImage(filename string, imagetype string, width, height int, resizehandler string) (string, error) {
 	return "", nil
 }
