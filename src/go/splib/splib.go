@@ -718,7 +718,7 @@ func sdReloadImage(L *C.lua_State) int {
 			resizehandler = ""
 		}
 
-		newfn, err := splibaux.ResizeImage(fn, imagetype, wd, ht,resizehandler)
+		newfn, err := splibaux.ResizeImage(fn, imagetype, wd, ht, resizehandler)
 		if err != nil {
 			slog.Error("internal error", "where", "sdReloadImage", "message", err)
 			return 0

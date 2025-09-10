@@ -4429,7 +4429,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
     end
 
     local val,num,ret
-    if typ ~= "xpath" and typ ~= "xpathraw" then
+    if typ ~= "xpath" and typ ~= "xpathraw" and typ ~= "rawstring" then
         val = string.gsub(attr,"{(.-)}", function (x)
             if newxpath then
                 local copysequence = dataxml.sequence
@@ -4487,7 +4487,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
                 return tmp
             end
         end
-    elseif typ=="string" then
+    elseif typ=="string" or typ == "rawstring" then
         return tostring(val or default)
     elseif typ=="number" then
         return tonumber(val)
