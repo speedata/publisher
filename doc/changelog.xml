@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.23" date="2025-09-10">
+        <en>Optional resizehandler for DPI setting (configuration file).</en>
+        <de>Optionaler resizehandler für DPI-Einstellung (Konfigurationsdatei).</de>
+    </entry>
+    <entry version="5.1.23" date="2025-09-10">
+        <en>CSS font-family can now have multiple entries.</en>
+        <de>CSS font-family darf nun mehrere Einträge haben.</de>
+    </entry>
     <entry version="5.1.22" date="2025-08-25">
         <en>More HTML/CSS features (pseudo classes, padding in tables and borders).</en>
         <de>Mehr HTML/CSS Features (Pseudoklassen, Padding in Tabellen und Rahmen).</de>
