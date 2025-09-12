@@ -323,6 +323,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `floor()`::
    Returns the largest number with no fractional part that is not greater than the value of the argument.
 
+`format-number(<number>, <pattern>)`::
+   Format the number according to the pattern. Example: `format-number(12345.67, '#,##0.00')` returns the string `12,345.67`.
+
 `last()`::
    Return the number of elements of the same named sibling elements. Not yet XPath conform.
 
@@ -365,9 +368,11 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `round(<number>,<number>)`::
     Return the argument in the first parameter rounded to number of decimal places in the second parameter. The second parameter defaults to 0.
 
+`round-half-to-even(<number>,<number>)`::
+    Return the argument in the first parameter rounded to number of decimal places in the second parameter. The second parameter defaults to 0. If the number ends in .5, it is rounded to the next even number (Banker's Rounding).
+
 `ends-with ( <string>, <string>)`::
     Return true if the first string ends with the second string. Example: `ends-with ( "tattoo", "too")` returns `true`.
-
 
 `starts-with ( <string>, <string>)`::
     Return true if the first string starts with the second string. Example: `starts-with ( "tattoo", "tat")` returns `true`.

@@ -332,6 +332,9 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `floor()`::
    Gibt den nächst niedrigeren Wert als Ganzzahl zurück.
 
+`format-number(<Zahl>, <Muster>)`::
+   Formatiert die Zahl nach dem Muster. Beispiel: `format-number(12345.67, '#,##0.00')` ergibt die Zeichenkette `12,345.67`.
+
 `last()`::
    Gibt die Anzahl der Datensätze der gleichnamigen Geschwister-Elemente zurück.
 
@@ -370,6 +373,9 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 
 `round(<Zahl>,<Zahl>`)`::
    Rundet die angegebene Zahl im ersten Argument auf die Anzahl der Nachkommastellen im zweiten Argument.
+
+`round-half-to-even(<Zahl>,<Zahl>`)`::
+   Rundet die angegebene Zahl im ersten Argument auf die Anzahl der Nachkommastellen im zweiten Argument. Bei .5 wird auf die nächste gerade Zahl gerundet (Banker's Rounding).
 
 `root(<element>)`::
     Gibt das Wurzelelement des Elements zurück.
