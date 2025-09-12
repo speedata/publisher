@@ -94,9 +94,8 @@ func LookupFile(path string) string {
 	if ret, ok := files[path]; ok {
 		if dupes, ok := duplicates[path]; ok {
 			for _, dupe := range dupes {
-				slog.Warn("Found duplicate entry in file lookup", "file", dupe)
+				slog.Warn("Found duplicate entry in file lookup", "file", dupe, "using", ret)
 			}
-			slog.Debug("Using this file:", "file", ret)
 		}
 		slog.Debug("File lookup", "request", path, "found", ret)
 		return ret

@@ -1946,8 +1946,11 @@ function initialize_luatex_and_generate_pdf()
     for i = 1,#visible_pagenumbers do
         tab[#tab + 1] = string.format("  <pagelabel pagenumber=%q visible=%q />",tostring(i),xml_escape(tostring(visible_pagenumbers[i])))
     end
-    local file = io.open(auxfilename,"wb")
-    if file == nil then return end
+    local file, errmsg = io.open(auxfilename,"wb")
+    if file == nil then
+        splib.error("Could not open aux file for writing", "filename", auxfilename, "message", errmsg)
+        return
+    end
     file:write("<marker>\n")
     file:write(table.concat(tab,"\n"))
     file:write(string.format("\n <lastpage page='%d' />",lastpage))
