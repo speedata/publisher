@@ -5371,15 +5371,20 @@ function getfallbacks(cluster,glyphslist,fallback_fontdefinitions)
         buf:set_cluster_level(buf.CLUSTER_LEVEL_MONOTONE_CHARACTERS)
         buf:set_flags(harfbuzz.Buffer.FLAG_REMOVE_DEFAULT_IGNORABLES)
         buf:guess_segment_properties()
-
         shape(tbl,buf)
         local nglyphs = buf:get_glyphs()
+        curret.remove_len = #uclist
         for j = 1, #nglyphs do
             curret[#curret + 1] = {
                 glyph = nglyphs[j],
-                uc = uclist[j],
                 codepoint = nglyphs[j].codepoint,
             }
+            local jcp = nglyphs[j].codepoint
+            if jcp == 0 then
+                curret[#curret].uc = uclist[j]
+            else
+                curret[#curret].uc = tbl.backmap[jcp]
+            end
         end
         i = i + 1
     end
@@ -5425,13 +5430,19 @@ function hbglyphlist(arguments)
         fallbacks = getfallbacks(cluster,zeroglyphs,tbl.fallback_fontdefinitions)
         for i = #fallbacks, 1, -1 do
             local fb = fallbacks[i]
-            for j = 1, #fb do
-                table.remove(glyphs,fb.pos)
+            for j = 1, fb.remove_len do
+                table.remove(glyphs, fb.pos)
             end
             for j = #fb, 1, -1 do
-                table.insert(glyphs,fb.pos,{pos = fb.pos, fonttable = fb.fonttable,  fontnumber = fb.fontnumber, glyph = fb[j].glyph, codepoint = fb[j].codepoint, uc = fb[j].uc })
+                table.insert(glyphs, fb.pos, {pos = fb.pos,
+                fonttable = fb.fonttable,
+                  fontnumber = fb.fontnumber,
+                  glyph = fb[j].glyph,
+                  codepoint = fb[j].codepoint,
+                  uc = fb[j].uc
+                })
             end
-        end
+          end
     end
 
     local thistbl = tbl
