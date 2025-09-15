@@ -365,9 +365,45 @@ local function setup()
     end
 end
 
-prohibited_at_end = {zh = {["$"] = true,["("] = true,["£"] = true,["¥"] = true,["·"] = true,["'"] = true,["\""] = true,["〈"] = true,["《"] = true,["「"] = true,["『"] = true,["【"] = true,["〔"] = true,["〖"] = true,["〝"] = true,["﹙"] = true,["﹛"] = true,["＄"] = true,["（"] = true,["．"] = true,["［"] = true,["｛"] = true,["￡"] = true,["￥"] = true}}
-prohibited_at_beginning = {zh = {["!"] = true,["%"] = true,[")"] = true,[","] = true,["."] = true,[":"] = true,[";"] = true,["?"] = true,["]"] = true,["}"] = true,["¢"] = true,["°"] = true,["·"] = true,["'"] = true,['"'] = true,["†"] = true,["‡"] = true,["›"] = true,["℃"] = true,["∶"] = true,["、"] = true,["。"] = true,["〃"] = true,["〆"] = true,["〕"] = true,["〗"] = true,["〞"] = true,["﹚"] = true,["﹜"] = true,["！"] = true,["＂"] = true,["％"] = true,["＇"] = true,["）"] = true,["，"] = true,["．"] = true,["："] = true,["；"] = true,["？"] = true,["！"] = true,["］"] = true,["｝"] = true,["～"] = true}}
+prohibited_at_end = {
+  zh = {
+    ["$"] = true,["("] = true,["£"] = true,["¥"] = true,["·"] = true,
+    ["'"] = true,["\""] = true,["〈"] = true,["《"] = true,["「"] = true,
+    ["『"] = true,["【"] = true,["〔"] = true,["〖"] = true,["〝"] = true,
+    ["﹙"] = true,["﹛"] = true,["＄"] = true,["（"] = true,["．"] = true,
+    ["［"] = true,["｛"] = true,["￡"] = true,["￥"] = true
+  },
+  ja = {
+    ["("] = true,["["] = true,["{"] = true,
+    ["〈"] = true,["《"] = true,["「"] = true,["『"] = true,["【"] = true,
+    ["〔"] = true,["〖"] = true,["〝"] = true,
+    ["（"] = true,["［"] = true,["｛"] = true,
+    -- typical additionally prohibited
+    ["『"] = true,["「"] = true,["〘"] = true,["〚"] = true
+  }
+}
 
+prohibited_at_beginning = {
+  zh = {
+    ["!"] = true,["%"] = true,[")"] = true,[","] = true,["."] = true,
+    [":"] = true,[";"] = true,["?"] = true,["]"] = true,["}"] = true,
+    ["¢"] = true,["°"] = true,["·"] = true,["'"] = true,['"'] = true,
+    ["†"] = true,["‡"] = true,["›"] = true,["℃"] = true,["∶"] = true,
+    ["、"] = true,["。"] = true,["〃"] = true,["〆"] = true,["〕"] = true,
+    ["〗"] = true,["〞"] = true,["﹚"] = true,["﹜"] = true,["！"] = true,
+    ["＂"] = true,["％"] = true,["＇"] = true,["）"] = true,["，"] = true,
+    ["．"] = true,["："] = true,["；"] = true,["？"] = true,["］"] = true,
+    ["｝"] = true,["～"] = true
+  },
+  ja = {
+    ["、"] = true,["。"] = true,["，"] = true,["．"] = true,
+    ["!"] = true,["?"] = true,["！"] = true,["？"] = true,
+    [")"] = true,["]"] = true,["}"] = true,["）"] = true,["］"] = true,["｝"] = true,
+    ["〕"] = true,["〗"] = true,["〞"] = true,
+    -- special cases japanese
+    ["ー"] = true,["ゝ"] = true,["ゞ"] = true,["々"] = true,["仝"] = true,["〆"] = true
+  }
+}
 --- This is the entry point in the publishing run and called from the TeX file (`publisher.tex`).
 require("publisher")
 

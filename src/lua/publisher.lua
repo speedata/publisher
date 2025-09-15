@@ -5402,7 +5402,7 @@ function hbglyphlist(arguments)
     local direction = arguments.direction
     local thislang = arguments.thislang
     local fontnumber = arguments.fontnumber
-    local is_chinese = arguments.is_chinese
+    local is_cjk = arguments.is_cjk
 
     local thisfont = fonts.used_fonts[fontnumber]
     local reportmissingglyphs = options.reportmissingglyphs
@@ -5651,7 +5651,7 @@ function hbglyphlist(arguments)
             end
 
             -- CJK
-            if is_chinese and i < #glyphs and uc > 12032 then
+            if is_cjk and i < #glyphs and uc > 12032 then
                 -- don't break within non-cjk words
                 if prohibited_at_end[thislang][unicode.utf8.char(uc)] then
                     -- ignore
@@ -6108,13 +6108,15 @@ function mknodes(str,parameter,origin)
             if direction == 0 then direction = "ltr" elseif direction == 1 then direction = "rtl" end
             -- shape returns the guessed script and direction from the buffer
             script, direction = shape(tbl,buf, { language = thislang, script = script, direction = direction } )
-
-            local is_chinese = false
-            if script == "Hans" or script == "Hant" or script == "Hani" then
-                is_chinese = true
+            local is_cjk = false
+            if script == "Hans" or script == "Hira" or script == "Hant" or script == "Hani" then
+                is_cjk = true
                 -- script can be guessed from buffer and thislang could be empty, so
                 -- lang must be set again.
                 thislang = "zh"
+            elseif script == "Kana" then
+                is_cjk = true
+                thislang = "ja"
             end
 
             local glyphs = buf:get_glyphs()
@@ -6132,7 +6134,7 @@ function mknodes(str,parameter,origin)
                 direction = direction or maindirection,
                 thislang = thislang,
                 fontnumber = fontnumber,
-                is_chinese = is_chinese,
+                is_cjk = is_cjk,
             })
         else
             -- old fontforge code
