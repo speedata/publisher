@@ -1,5 +1,25 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.24" date="2025-09-15">
+        <en>Warning when empty hyperlink.</en>
+        <de>Warnung bei leerem Hyperlink.</de>
+    </entry>
+    <entry version="5.1.24" date="2025-09-15">
+        <en>Improved error message for empty group/trace.</en>
+        <de>Verbesserte Fehlermeldung bei leerer Gruppe/Trace.</de>
+    </entry>
+    <entry version="5.1.24" date="2025-09-12">
+        <en>Improved error messages for duplicate files and errors writing aux-file.</en>
+        <de>Verbesserte Fehlermeldungen bei doppelten Dateien und Fehlern beim Schreiben der Aux-Datei.</de>
+    </entry>
+    <entry version="5.1.24" date="2025-09-12">
+        <en>XPath: Added format-number() and round-half-to-even().</en>
+        <de>XPath: Neu: format-number() und round-half-to-even().</de>
+    </entry>
+    <entry version="5.1.24" date="2025-09-10">
+        <en>New attribute type "rawstring" without {} escaping.</en>
+        <de>Neuer Attributtyp „rawstring“ ohne {}-Maskierung.</de>
+    </entry>
     <entry version="5.1.23" date="2025-09-10">
         <en>Optional resizehandler for DPI setting (configuration file).</en>
         <de>Optionaler resizehandler für DPI-Einstellung (Konfigurationsdatei).</de>
