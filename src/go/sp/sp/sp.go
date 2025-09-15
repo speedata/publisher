@@ -688,9 +688,8 @@ See https://github.com/speedata/publisher/issues/310 for details.
 
 		if run(ep, cmdline, env) < 0 {
 			exitstatus = -1
-			writeFinishedfile(fmt.Sprintf("%s.finished", getOption("jobname")))
-			return exitstatus
 		}
+
 		if cachemethod != "none" {
 			os.Setenv("CACHEMETHOD", "fast")
 		}
