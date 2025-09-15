@@ -688,6 +688,7 @@ function draw_frame(self,frame,width_sp)
 end
 
 function draw_grid_group(group)
+    splib.log("debug","draw_grid_group","width",group.contents.width or -1,"height",group.contents.height or -1)
     local ht = group.contents.height
     local wd = group.contents.width
     local ret = {"q 0.4 w [2] 1 d "}

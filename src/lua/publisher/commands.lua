@@ -3509,10 +3509,13 @@ function commands.place_object( layoutxml,dataxml)
             objects[1] = { object = node.copy(g.contents),objecttype = string.format("Group (%s)", groupname)}
             if publisher.options.showgroups then
                 local p = node.new(publisher.whatsit_node,publisher.pdf_literal_whatsit)
-                p.data = publisher.grid.draw_grid_group(g)
-                publisher.setprop(p,"origin","trace group")
-                objects[1].object.head = node.insert_before(objects[1].object.head,objects[1].object.head,p)
-
+                if g.contents == nil then
+                    splib.error("Group contents is nil","groupname",groupname)
+                else
+                    p.data = publisher.grid.draw_grid_group(g)
+                    publisher.setprop(p,"origin","trace group")
+                    objects[1].object.head = node.insert_before(objects[1].object.head,objects[1].object.head,p)
+                end
             end
         end
     else
