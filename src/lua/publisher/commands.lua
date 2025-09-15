@@ -44,8 +44,7 @@ function commands.a( layoutxml,dataxml )
     local page = publisher.read_attribute(layoutxml,dataxml,"page","number")
     local embedded = publisher.read_attribute(layoutxml,dataxml,"embedded","string")
     local structelemobjnum = pdf.reserveobj()
-    if false then
-    elseif embedded then
+    if embedded then
         publisher.hlembed(embedded,page,link,bordercolor)
     elseif link then
         publisher.hllink(link,bordercolor)
@@ -66,6 +65,10 @@ function commands.a( layoutxml,dataxml )
         end
     elseif page then
         publisher.hlpage(page,bordercolor)
+    else
+        splib.log("warn","A: You must provide either href, link, page or embedded attribute", lineinfo(layoutxml))
+        p = par:new(nil,"a")
+        return p
     end
 
     if eltname == "Image" or eltname == "Box" or eltname == "Barcode" then

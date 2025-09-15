@@ -420,11 +420,8 @@ local function number_value(sequence)
         return sequence[1]
     end
 
-    if not sequence then
-        return nil, "empty sequence"
-    end
-    if #sequence == 0 then
-        return nil, "empty sequence"
+    if not sequence or #sequence == 0 then
+        return nan, nil
     end
     if #sequence > 1 then
         return nil, "number value, # must be 1"
