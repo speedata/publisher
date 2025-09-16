@@ -313,18 +313,23 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 `concat(<Wert>,<Wert>, ...)`::
    Erzeugt einen neuen Text aus der Verkettung der einzelnen Werte.
 
-
 `contains(<heuhaufen>,<nadel>)`::
    Wahr, wenn `heuhaufen` `nadel` enthält. Beispiel: `contains('bana','na')` ergibt `true()`.
 
 `count()`::
    Zählt alle Kindelemente mit dem angegebenen Namen. Beispiel: `count(eintrag)` zählt, wie viele Kindelemente mit den Namen `eintrag` existieren.
 
+`distinct-values(<Sequenz>)`::
+   Gibt die eindeutigen Werte der Sequenz zurück. Beispiel: `distinct-values((1,2,2,3,3,3))` ergibt die Sequenz `(1,2,3)`.
+
 `doc(<string>)`::
    Öffnet die Datei mit dem angegebenen Dateinamen und gibt den Inhalt der Datei zurück.
 
 `empty(<Attribut>)`::
    Ergibt wahr, wenn die Sequenz leer ist, z.B. wenn ein Attribut oder ein Element nicht vorhanden ist. `empty(@doesnotexist)` ergibt `true()` und `empty(@nonempty)` ergibt `false()` bei folgendem Element: `<elt nonempty="..." />`.
+
+`ends-with( <string>, <string>)`::
+   Gibt wahr (true) zurück, wenn die erste Zeichenkette mit der zweiten endet. Beispiel: `ends-with ( "tattoo", "too")` ergibt `true`.
 
 `false()`::
    Gibt „Falsch“ zurück.
@@ -379,9 +384,6 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 
 `root(<element>)`::
     Gibt das Wurzelelement des Elements zurück.
-
-`ends-with( <string>, <string>)`::
-   Gibt wahr (true) zurück, wenn die erste Zeichenkette mit der zweiten endet. Beispiel: `ends-with ( "tattoo", "too")` ergibt `true`.
 
 `starts-with( <string>, <string>)`::
    Gibt wahr (true) zurück, wenn die erste Zeichenkette mit der zweiten anfängt. Beispiel: `ends-with ( "tattoo", "tat")` ergibt `true`.

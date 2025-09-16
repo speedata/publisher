@@ -314,8 +314,17 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `count(<text>)`::
    Counts all child elements with the given name. Example: `count(article)` counts how many child elements with the name `article` exist.
 
+`distinct-values(<sequence>)`::
+   Returns the distinct values of the sequence. Example: `distinct-values((1,2,2,3,3,3))` results in the sequence `(1,2,3)`.
+
+`doc(<string>)`::
+   Opens the file with the given filename and returns the contents of the file.
+
 `empty( <sequence> )`::
    Checks, if the sequence is empty. For example non existing child elements or non existing attributes are “empty”.
+
+`ends-with ( <string>, <string>)`::
+    Return true if the first string ends with the second string. Example: `ends-with ( "tattoo", "too")` returns `true`.
 
 `false()`::
    Return false.
@@ -371,9 +380,6 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 `round-half-to-even(<number>,<number>)`::
     Return the argument in the first parameter rounded to number of decimal places in the second parameter. The second parameter defaults to 0. If the number ends in .5, it is rounded to the next even number (Banker's Rounding).
 
-`ends-with ( <string>, <string>)`::
-    Return true if the first string ends with the second string. Example: `ends-with ( "tattoo", "too")` returns `true`.
-
 `starts-with ( <string>, <string>)`::
     Return true if the first string starts with the second string. Example: `starts-with ( "tattoo", "tat")` returns `true`.
 
@@ -385,6 +391,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 
 `string-length(<string>)`::
    Return the length of the string in characters. Multi-byte UTF-8 sequences are counted as 1.
+
+`string-to-codepoints( <string> )`::
+   Convert the string to a sequence of code points.
 
 `substring(<input>,<start>,<length>)`::
    Return the part of the string input that starts at start and optionally has the given length. start can be (in contrast to the XPath specification) negative which counts from the end of the input.
