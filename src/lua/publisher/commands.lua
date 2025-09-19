@@ -242,9 +242,13 @@ function commands.attachfile( layoutxml,dataxml )
         end
         modificationtime = os.time()
     else
+        if not inputfilename then
+            splib.error("AttachFile: You must provide either a filename or select attribute")
+            return
+        end
         local path = publisher.find_file(inputfilename)
         if path == nil then
-            err("Cannot find file %q",inputfilename)
+            splib.error("Cannot find file","filename",inputfilename)
             return
         end
         local stat = lfs.attributes(path)
