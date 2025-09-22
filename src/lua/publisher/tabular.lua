@@ -26,13 +26,16 @@ file_start("tabular.lua")
 
 
 
-module(...,package.seeall)
 
 local metapost = require("publisher.metapost")
 
+local tabular = {}
+
 local dynamic_data = {}
 
-function new( self )
+--- Create a new tabular object.
+---@return table New tabular object
+function tabular:new()
     assert(self)
     local t = {
         rowheights        = {},
@@ -68,7 +71,11 @@ end
 ---
 --- ![Objects in a table](../img/objectsintable.svg)
 --- The table is stored in the objects
-function attach_objects_row( self, tab, current_row,skiptable )
+--- Attach objects to a single table row, organizing block and inline objects.
+---@param tab table Table row data
+---@param current_row integer Current row index
+---@param skiptable table Table of skipped cells (rowspans/colspans)
+function tabular:attach_objects_row(tab, current_row, skiptable)
     -- For each block object (container) there is one row in block
     local td_elementname
     local td_contents
@@ -151,7 +158,7 @@ function attach_objects_row( self, tab, current_row,skiptable )
             td_contents.objects = block
             td_contents.objects.rotate = td_contents.rotate
         elseif td_elementname == "Tr" then -- probably from tablefoot/head
-            attach_objects_row(self,td_contents,current_row, skiptable)
+            self:attach_objects_row(td_contents,current_row, skiptable)
         elseif td_elementname == "Column" or td_elementname == "Tablerule" or td_elementname == "TableNewPage" then
             -- ignore, they don't have objects
         else
@@ -160,21 +167,24 @@ function attach_objects_row( self, tab, current_row,skiptable )
     end
 end
 
-function attach_objects( self, tab, row )
+--- Attach objects to all rows in the table, including table head and foot.
+---@param tab table Table data
+---@param row? integer Row index (optional)
+function tabular:attach_objects(tab, row)
     row = row or 1
     for _,tr in ipairs(tab) do
         local eltname = publisher.elementname(tr)
         local tr_contents = publisher.element_contents(tr)
         if eltname == "Tr" then
             local skiptable = self.skiptables.body
-            attach_objects_row(self, publisher.element_contents(tr), row,skiptable)
+            self:attach_objects_row(publisher.element_contents(tr), row,skiptable)
             row = row + 1
         elseif eltname == "Tablehead" or eltname == "Tablefoot" then
             local area
             if eltname == "Tablehead" then area = "tablehead" else area = "tablefoot" end
             area = area .. (tr_contents.page or "")
             local skiptable = self.skiptables[area] or {}
-            attach_objects_row(self, publisher.element_contents(tr), row,skiptable)
+            self:attach_objects_row(publisher.element_contents(tr), row,skiptable)
         end
     end
 end
@@ -193,7 +203,14 @@ end
 --- side didn't have a border. In that case we need to adjust the border colors. Beware: the result is slightly undefined
 --- if both sides have different colors.
 -- Calculate the width for each column in the row.
-function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,colmin,colmax,skiptable )
+--- Calculate the minimum and maximum column widths for a single row.
+---@param tr_contents table Row contents
+---@param current_row integer Current row index
+---@param colspans table Table to store colspan info
+---@param colmin table Table to store minimum column widths
+---@param colmax table Table to store maximum column widths
+---@param skiptable table Table of skipped cells
+function tabular:calculate_columnwidths_for_row(tr_contents, current_row, colspans, colmin, colmax, skiptable)
     local current_column = 0
     local max_wd, min_wd -- maximum and minimum width of a table cell (Td)
     -- first we go through all rows/cells and look, how wide the columns
@@ -260,20 +277,8 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
                     end
                 end
             end
-            if not ( min_wd and max_wd) then
-                if node.has_field(inlineobject,"width") then
-                    if inlineobject.width then
-                        min_wd = inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright
-                        max_wd = inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright
-                    else
-                        warning("Could not determine min_wd and max_wd")
-                        assert(false)
-                    end
-                else
-                    min_wd = 0
-                    max_wd = 0
-                end
-            end
+            if min_wd == nil then min_wd = 0 end
+            if max_wd == nil then max_wd = 0 end
         end
         -- colspan?
         min_wd = min_wd or 0
@@ -294,7 +299,8 @@ function calculate_columnwidths_for_row(self, tr_contents,current_row,colspans,c
     end  -- ∀ columns
 end
 
-function collect_alignments( self )
+--- Collect alignment and padding information from column definitions.
+function tabular:collect_alignments()
     for _,tr in ipairs(self.tab) do
         local tr_contents    = publisher.element_contents(tr)
         local tr_elementname = publisher.elementname(tr)
@@ -318,7 +324,8 @@ end
 
 --- Calculate the widths of the columns for the table.
 --- -------------------------------------------------
-function calculate_columnwidth( self )
+--- Calculate the widths of all columns in the table.
+function tabular:calculate_columnwidth()
     local colspans = {}
     local minwidths,col_shrink,starcols,colmax,colmin = {},{},{},{},{}
     local has_min_or_max_width = false
@@ -376,8 +383,9 @@ function calculate_columnwidth( self )
                             if columnwidths_given == nil then columnwidths_given = true end
                             local width_stars = string.match(column_contents.width,starpattern)
                             if width_stars then
-                                starcols[i] = tonumber(width_stars,10)
-                                count_stars = count_stars + width_stars
+                                local n = tonumber(width_stars,10)
+                                starcols[i] = n
+                                count_stars = count_stars + n
                             else
                                 if tonumber(column_contents.width) then
                                     self.colwidths[i] = publisher.current_grid:width_sp(column_contents.width)
@@ -417,9 +425,12 @@ function calculate_columnwidth( self )
                     if publisher.elementname(column)=="Column" then
                         local column_contents = publisher.element_contents(column)
                         i = i + 1
-                        local width_stars = string.match(column_contents.width,starpattern)
+                        local width_stars = string.match(column_contents.width, starpattern)
                         if width_stars then
-                            self.colwidths[i] = math.round( to_distribute *  width_stars / count_stars ,0)
+                            local n = tonumber(width_stars, 10)
+                            if n and count_stars > 0 then
+                                self.colwidths[i] = math.floor((to_distribute * n / count_stars) + 0.5)
+                            end
                         end
                     end
                 end
@@ -568,7 +579,7 @@ function calculate_columnwidth( self )
         --- a factor r. r is calculated by the contents.
         ---
         --- We do that once for the maximum width and once for the minimum width
-        local width_of_colsep = table.sum(self.column_distances,colspan.start,colspan.start)
+        local width_of_colsep = table.sum(self.column_distances,colspan.start,colspan.stop - 1)
 
         if colspan.max_wd > sum_max + width_of_colsep then
             r = ( colspan.max_wd - width_of_colsep ) / sum_max
@@ -695,7 +706,11 @@ function calculate_columnwidth( self )
 end
 
 -- Typeset a table cell. Return a vlist, tightly packed (i.e. all vspace are 0).
-function pack_cell(self, blockobjects, width, horizontal_alignment)
+--- Pack block and inline objects into a table cell, applying width and alignment.
+---@param blockobjects table List of block objects
+---@param width number Target cell width
+---@param horizontal_alignment string Alignment for cell content
+function tabular:pack_cell(blockobjects, width, horizontal_alignment)
     local cell
     for _,blockobject in ipairs(blockobjects) do
         local cellrow = nil
@@ -847,7 +862,15 @@ function pack_cell(self, blockobjects, width, horizontal_alignment)
 end
 
 --- last\_shiftup is for vertical border-collapse.
-function calculate_rowheight( self,tr_contents, current_row,last_shiftup,skiptable )
+--- Calculate the height of a table row, considering rowspans and minimum height.
+---@param tr_contents table Row contents
+---@param current_row integer Current row index
+---@param last_shiftup? number Last shift-up value
+---@param skiptable table Table of skipped cells
+---@return number Row height
+---@return table Rowspans
+---@return number Shift-up value
+function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, skiptable)
     last_shiftup = last_shiftup or 0
     local rowheight
     local rowspan,colspan
@@ -935,10 +958,12 @@ function calculate_rowheight( self,tr_contents, current_row,last_shiftup,skiptab
 end
 
 
-function calculate_rowheights(self)
+--- Calculate the heights for all rows in the table, including head and foot.
+function tabular:calculate_rowheights()
     -- rowspans is the concatenation of each rowspan for a table row
     local rowspans = {}
     local _rowspans
+    local rowheight
     local rowheightarea
     local tablearea
     local rowcounter = {}
@@ -997,7 +1022,10 @@ function calculate_rowheights(self)
     end
 end
 
-function adjust_row_heights_for_rowspans(self,rowspans,area)
+--- Adjust row heights to account for rowspans.
+---@param rowspans table Table of rowspans
+---@param area table Table of row heights
+function tabular:adjust_row_heights_for_rowspans(rowspans, area)
     -- Adjust row heights. We have to do calculations on all row heights, before the rows can get their
     -- final heights
     for i,rowspan in pairs(rowspans) do
@@ -1035,7 +1063,13 @@ end
 --- ---------------------
 --- First, we create a complete table with all rows. Splitting into pages is done later on
 -- Return one row (an hlist)
-function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
+--- Typeset a single table row and return a horizontal list (hlist).
+---@param tr_contents table Row contents
+---@param current_row integer Current row index
+---@param skiptable table Table of skipped cells
+---@param rowheightarea table Table of row heights
+---@return table Horizontal list node for the row
+function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
     local current_column
     local current_column_width, ht
     local row = {}
@@ -1136,7 +1170,7 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
         local g = set_glue(nil,{width = padding_bottom})
         publisher.setprop(g,"origin","align_padding")
 
-        local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
+        valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
         if valign ~= "bottom" then
             set_glue_values(g,{stretch = 2^16, stretch_order = 2})
         end
@@ -1254,7 +1288,6 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
         end
 
         row[#row + 1] = hlist
-
     end -- stop td
 
     if current_column == 0 then
@@ -1290,7 +1323,13 @@ function typeset_row(self, tr_contents,current_row,skiptable,rowheightarea )
 end
 
 -- Gets called for each <Tablehead> element. second_run is for dynamic table head
-local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current_row,second_run)
+--- Build the table head structure for typesetting.
+---@param tr_contents table Table head contents
+---@param tablehead_first table Table for first page head
+---@param tablehead table Table for subsequent page heads
+---@param current_row integer Current row index
+---@param second_run? boolean True if this is the second run
+function tabular:make_tablehead(tr_contents, tablehead_first, tablehead, current_row, second_run)
     local current_tablehead_type
     if tr_contents.page == "first" then
         current_tablehead_type = tablehead_first
@@ -1307,13 +1346,13 @@ local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current
     local tablearea = "tablehead" .. (tr_contents.page or "")
 
     for _,row in ipairs(tr_contents) do
-        row_contents = publisher.element_contents(row)
-        row_elementname = publisher.elementname(row)
+        local row_contents = publisher.element_contents(row)
+        local row_elementname = publisher.elementname(row)
         if row_elementname == "Tr" then
             current_row = current_row + 1
             current_tablehead_type[#current_tablehead_type + 1] = self:typeset_row(row_contents,current_row,self.skiptables[tablearea] or {},self.rowheights[tablearea])
         elseif row_elementname == "Tablerule" then
-            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,"tablerule","horizontal")
+            local tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,"tablerule","horizontal")
             tmp = node.hpack(tmp)
             publisher.setprop(tmp,"origin","tablerule tablehead")
             current_tablehead_type[#current_tablehead_type + 1] = tmp
@@ -1330,7 +1369,13 @@ local function make_tablehead(self,tr_contents,tablehead_first,tablehead,current
 end
 
 -- second run is for dynamic table foot
-local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_row,second_run)
+--- Build the table foot structure for typesetting.
+---@param tr_contents table Table foot contents
+---@param tablefoot_last table Table for last page foot
+---@param tablefoot table Table for other page foots
+---@param current_row integer Current row index
+---@param second_run? boolean True if this is the second run
+function tabular:make_tablefoot(tr_contents, tablefoot_last, tablefoot, current_row, second_run)
     local current_tablefoot_type
     if tr_contents.page == "last" then
         current_tablefoot_type = tablefoot_last
@@ -1344,15 +1389,15 @@ local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_
         end
     end
     for _,row in ipairs(tr_contents) do
-        row_contents = publisher.element_contents(row)
-        row_elementname = publisher.elementname(row)
+        local row_contents = publisher.element_contents(row)
+        local row_elementname = publisher.elementname(row)
 
         local tablearea = "tablefoot" .. (tr_contents.page or "")
         if row_elementname == "Tr" then
             current_row = current_row + 1
             current_tablefoot_type[#current_tablefoot_type + 1] = self:typeset_row(row_contents,current_row,self.skiptables[tablearea] or {},self.rowheights[tablearea])
         elseif row_elementname == "Tablerule" then
-            tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,"tablerule","horizontal")
+            local tmp = publisher.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,"tablerule","horizontal")
             tmp = node.hpack(tmp)
             publisher.setprop(tmp,"origin","tablerule_make_tablefoot")
             current_tablefoot_type[#current_tablefoot_type + 1] = tmp
@@ -1366,8 +1411,10 @@ local function make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,current_
 end
 --------------------------------------------------------------------------
 
--- TODO: rename function: we don't calculate the height here
-local function calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
+--- Calculate height and connect table head rows.
+---@param tablehead_first table Table for first page head
+---@param tablehead table Table for subsequent page heads
+function tabular:connect_tablehead_first_all(tablehead_first, tablehead)
     -- We connect all but the last row with the next row and remember the height in ht_header
     for z = 1,#tablehead_first - 1 do
         _,tmp = publisher.add_glue(tablehead_first[z],"tail",{ width = self.rowsep },"rowsep tablehead")
@@ -1382,7 +1429,12 @@ local function calculate_height_and_connect_tablehead(self,tablehead_first,table
     end
 end
 
-local function calculate_height_and_connect_tablefoot(self,tablefoot,tablefoot_last)
+--- Calculate height and connect table foot rows.
+---@param tablefoot table Table for other page foots
+---@param tablefoot_last table Table for last page foot
+---@return number Height of table foot for other pages
+---@return number Height of table foot for last page
+function tabular:calculate_height_and_connect_tablefoot(tablefoot, tablefoot_last)
     local ht_footer, ht_footer_last = 0, 0
     for z = 1,#tablefoot - 1 do
         ht_footer = ht_footer + tablefoot[z].height  -- Tr or Tablerule
@@ -1429,7 +1481,9 @@ function remove_bookmark_nodes( nodelist )
     return nodelist
 end
 
-function typeset_table(self,dataxml)
+--- Typeset the entire table, including head, body, and foot.
+---@param dataxml table XML data for the table
+function tabular:typeset_table(dataxml)
     local current_row
     local tablehead_first = {}
     local tablehead = {}
@@ -1479,7 +1533,7 @@ function typeset_table(self,dataxml)
             end
 
         elseif eltname == "Tablehead" then
-            make_tablehead(self,tr_contents,tablehead_first,tablehead,current_row)
+            self:make_tablehead(tr_contents,tablehead_first,tablehead,current_row)
             if tr_contents.page == "first" then
                 filter.tablehead_force_first = true
             elseif tr_contents.page == "odd" or tr_contents.page == "even" then
@@ -1489,7 +1543,7 @@ function typeset_table(self,dataxml)
             end
 
         elseif eltname == "Tablefoot" then
-            make_tablefoot(self,tr_contents,tablefoot_last,tablefoot,0)
+            self:make_tablefoot(tr_contents,tablefoot_last,tablefoot,0)
         elseif eltname == "Tr" then
             current_row = current_row + 1
             rows[#rows + 1] = self:typeset_row(tr_contents,current_row,self.skiptables.body,self.rowheights.body)
@@ -1585,8 +1639,8 @@ function typeset_table(self,dataxml)
         tableheads_extra[idx][#tableheads_extra[idx] + 1]  = { nodelist = nodelist, rownumber = rownumber }
     end
 
-    calculate_height_and_connect_tablehead(self,tablehead_first,tablehead)
-    local ht_footer,  ht_footer_last = calculate_height_and_connect_tablefoot(self,tablefoot,tablefoot_last)
+    self:connect_tablehead_first_all(tablehead_first,tablehead)
+    local ht_footer,  ht_footer_last = self:calculate_height_and_connect_tablefoot(tablefoot,tablefoot_last)
 
     if not tablehead[1] then
         tablehead[1] = node.new("hlist") -- empty tablehead
@@ -1916,7 +1970,7 @@ function typeset_table(self,dataxml)
     --- each split. We omit the repetition, if the top entry in a frame is already
     --- a dynamic head.
     for i=2,#splits - 1 do
-        r = splits[i]
+        local r = splits[i]
         if rows[r+1] then
             if node.has_attribute(rows[r + 1],publisher.att_use_as_head) == 1 then
                 omit_head_on_pages[i] = true
@@ -1951,7 +2005,7 @@ function typeset_table(self,dataxml)
             else
                 publisher.xpath.set_variable("_last_tr_data",val)
             end
-            local tmp1,tmp2 = reformat_head(self,s - 1)
+            local tmp1,tmp2 = self:reformat_head(s - 1)
             if s == 2 then
                 -- first page
                 thissplittable[#thissplittable + 1] = node.copy_list(tmp1)
@@ -1994,7 +2048,7 @@ function typeset_table(self,dataxml)
                 publisher.xpath.set_variable("_last_tr_data",val)
             end
 
-            local tmp_tablefoot_last,tmp_tablefoot_all = reformat_foot(self,s - 1,#splits - 1)
+            local tmp_tablefoot_last,tmp_tablefoot_all = self:reformat_foot(s - 1,#splits - 1)
             if s < #splits then
                 thissplittable[#thissplittable + 1] = node.copy_list(tmp_tablefoot_all)
             else
@@ -2023,7 +2077,12 @@ function typeset_table(self,dataxml)
     return final_split_tables
 end -- typeset table
 
-function reformat_foot( self,pagenumber,max_splits)
+--- Reformat the table foot for a given page, handling splits.
+---@param pagenumber integer Current page number
+---@param max_splits integer Maximum number of splits
+---@return table Table foot nodes for the first page
+---@return table Table foot nodes for other pages
+function tabular:reformat_foot(pagenumber, max_splits)
     local rownumber,y
     if pagenumber == max_splits and self.tablefoot_last_contents then
         y         = self.tablefoot_last_contents[1]
@@ -2035,23 +2094,27 @@ function reformat_foot( self,pagenumber,max_splits)
     local x = publisher.dispatch(y._layoutxml,y._dataxml)
     local page = publisher.read_attribute(y._layoutxml,y._dataxml,"page","string","all")
     x.page = page
-    attach_objects(self, x)
+    self:attach_objects(x)
     local tmp_tablefoot_last,tmp_tablefoot_all = {},{}
-    make_tablefoot(self,x,tmp_tablefoot_last,tmp_tablefoot_all,rownumber,true)
-    calculate_height_and_connect_tablefoot(self,tmp_tablefoot_last,tmp_tablefoot_all)
+    self:make_tablefoot(x,tmp_tablefoot_last,tmp_tablefoot_all,rownumber,true)
+    self:calculate_height_and_connect_tablefoot(tmp_tablefoot_last,tmp_tablefoot_all)
     return tmp_tablefoot_last[1],tmp_tablefoot_all[1]
 end
 
-function reformat_head( self,pagenumber)
+--- Reformat the table head for a given page.
+---@param pagenumber integer Current page number
+---@return table Table head nodes for first page
+---@return table Table head nodes for other pages
+function tabular:reformat_head(pagenumber)
     local y = self.tablehead_contents[1]
     local rownumber = self.tablehead_contents[2]
     local x = publisher.dispatch(y._layoutxml,y._dataxml)
-    attach_objects( self, x)
+    self:attach_objects(x)
     local tmp1,tmp2 = {}, {}
     local page = publisher.read_attribute(y._layoutxml,y._dataxml,"page","string","all")
     x.page = page
-    make_tablehead(self,x,tmp1,tmp2,rownumber,true)
-    calculate_height_and_connect_tablehead(self,tmp1,tmp2)
+    self:make_tablehead(x,tmp1,tmp2,rownumber,true)
+    self:connect_tablehead_first_all(tmp1,tmp2)
     return tmp1[1],tmp2[1]
 end
 
@@ -2065,7 +2128,7 @@ function dump_table(tbl)
     end
 end
 
-function ajust_border(tbl)
+function adjust_border(tbl)
     for _, row in ipairs(tbl) do
         for _, col in ipairs(row) do
             for _, nxt in ipairs(col.nextcol) do
@@ -2098,7 +2161,10 @@ function ajust_border(tbl)
     end
 end
 
-function do_bordercollapse(self,tab,area)
+--- Perform border collapsing for the table, recalculating border widths.
+---@param tab table Table data
+---@param area? string Table area (e.g., 'body', 'tablehead')
+function tabular:do_bordercollapse(tab, area)
     area = area or "body"
     local tablematrix = {}
     local current_row, current_column = 1, nil
@@ -2107,10 +2173,10 @@ function do_bordercollapse(self,tab,area)
         local tr_eltname = publisher.elementname(tr)
         if tr_eltname == "Tablehead" then
             local tr_contents = publisher.element_contents(tr)
-            do_bordercollapse(self,tr_contents,"tablehead" .. tr_contents.page)
+            self:do_bordercollapse(tr_contents,"tablehead" .. tr_contents.page)
         elseif tr_eltname == "Tablefoot" then
             local tr_contents = publisher.element_contents(tr)
-            do_bordercollapse(self,tr_contents,"tablefoot" .. tr_contents.page)
+            self:do_bordercollapse(tr_contents,"tablefoot" .. tr_contents.page)
         elseif tr_eltname == "Tr" then
             current_column = 1
             local tr_contents = publisher.element_contents(tr)
@@ -2122,7 +2188,7 @@ function do_bordercollapse(self,tab,area)
                         tablematrix[current_row][current_column] = tablematrix[current_row - 1][current_column]
                         current_column = current_column + 1
                     end
-                    td_contents = publisher.element_contents(td)
+                    local td_contents = publisher.element_contents(td)
                     tablematrix[current_row][current_column] = td_contents
                     td_contents.name = string.format([[%2d / %2d]], current_row,current_column)
                     local colspan = td_contents.colspan
@@ -2182,10 +2248,14 @@ function do_bordercollapse(self,tab,area)
         end
     end
 
-    ajust_border(tablematrix)
+    adjust_border(tablematrix)
 end
 
-function set_skip_table_elt(tr_contents,curskiptable,current_row)
+--- Mark cells as skipped in the skiptable for rowspans and colspans.
+---@param tr_contents table Row contents
+---@param curskiptable table Current skiptable
+---@param current_row integer Current row index
+function set_skip_table_elt(tr_contents, curskiptable, current_row)
     local rowspan
     local colspan
     local current_column = 0
@@ -2216,7 +2286,8 @@ function set_skip_table_elt(tr_contents,curskiptable,current_row)
 end
 
 
-function set_skip_table( self )
+--- Build the skiptable for the table, marking all skipped cells.
+function tabular:set_skip_table()
     self.skiptables={ body = { name = "body"}, tablehead = { name = "tablehead"}, tablefoot = { name = "tablefoot"}}
     local rowcounter = {}
     local current_row_body = 0
@@ -2245,29 +2316,33 @@ function set_skip_table( self )
     end
 end
 
-function make_table( self,dataxml )
+--- Main entry point to create and typeset the table.
+---@param dataxml table XML data for the table
+function tabular:make_table(dataxml)
     setmetatable(self.column_distances,{ __index = function() return self.colsep or 0 end })
-    set_skip_table(self)
+    self:set_skip_table()
     if self.bordercollapse then
-        do_bordercollapse(self,self.tab,"body")
+        self:do_bordercollapse(self.tab,"body")
     end
 
-    collect_alignments(self)
-    attach_objects(self, self.tab)
-    if calculate_columnwidth(self) ~= nil then
+    self:collect_alignments()
+    self:attach_objects(self.tab)
+    if self:calculate_columnwidth() ~= nil then
         err("Cannot print table")
         local x = node.new("vlist")
         return x
     end
 
-    calculate_rowheights(self)
+    self:calculate_rowheights()
     if publisher.newxpath then
         dataxml.vars["_last_tr_data"] = ""
     else
         publisher.xpath.set_variable("_last_tr_data","")
     end
 
-    return typeset_table(self,dataxml)
+    return self:typeset_table(dataxml)
 end
 
 file_end("tabular.lua")
+
+return tabular

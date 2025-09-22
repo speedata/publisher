@@ -4723,8 +4723,8 @@ function commands.table( layoutxml,dataxml,options )
             end
         end
     end
-
-    local tabular = publisher.tabular:new()
+    local t = require("publisher.tabular")
+    local tabular = t:new()
 
     tabular.tab = tab
     tabular.getheight      = publisher.getheight

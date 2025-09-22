@@ -645,8 +645,8 @@ function build_html_table( elt, dataxml )
         end
         table.remove(stylesstack)
     end
-
-    local tabular = publisher.tabular:new()
+    local t = require("publisher.tabular")
+    local tabular = t:new()
     tabular.width = styles.calculated_width
 
     if tablecontents.styles.width == "100%" then
