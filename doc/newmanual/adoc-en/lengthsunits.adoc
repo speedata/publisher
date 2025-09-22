@@ -9,14 +9,15 @@ The lengths can be given in one of these units: `pp`, `pc`, `in`, `pt`, `cm`, `m
 |=======
 |Unit |	Description
 |pp |	Pica Point
-|pc |	pica (12 pp)
-|in |	inch (72.27 pp)
+|pc |	Pica (12 pp)
+|in |	Inch (72.27 pp)
+|px |   Pixel (1/96 inch)
 |pt |	Big point (72 bp = 1 in) PostScript point, DTP-point
 |cm |	Centimeter
 |mm |	Millimeter
 |dd |	Didot point
-|cc |	cicero (12 dd)
-|sp |   scaled point, 1pp = 65536sp
+|cc |	Cicero (12 dd)
+|sp |   Scaled point, 1pp = 65536sp
 |=======
 
 [discrete]

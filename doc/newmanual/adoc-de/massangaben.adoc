@@ -14,6 +14,7 @@ Ist die Zahl ohne Einheit, so wird in der Regel die Anzahl an Rasterzellen genom
 | pc |  Pica (12 pp)
 | in |  Zoll / Inch (72.27 pp)
 | pt |  DTP-Punkt (72 pt = 1 in)
+| px |  Pixel (1/96 Zoll)
 | cm |  Zentimeter
 | mm |  Millimeter
 | dd |  Didot Punkte
