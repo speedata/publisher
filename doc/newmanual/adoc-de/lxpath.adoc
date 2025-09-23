@@ -320,7 +320,7 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
    Zählt alle Kindelemente mit dem angegebenen Namen. Beispiel: `count(eintrag)` zählt, wie viele Kindelemente mit den Namen `eintrag` existieren.
 
 `distinct-values(<Sequenz>)`::
-   Gibt die eindeutigen Werte der Sequenz zurück. Beispiel: `distinct-values((1,2,2,3,3,3))` ergibt die Sequenz `(1,2,3)`.
+   Gibt die eindeutigen Werte der Sequenz zurück. Beispiel: `distinct-values((1,2,2,3,3,3))` ergibt die Sequenz `(1,2,3)`. (Seit Version 5.1.26.)
 
 `doc(<string>)`::
    Öffnet die Datei mit dem angegebenen Dateinamen und gibt den Inhalt der Datei zurück.
@@ -338,7 +338,7 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
    Gibt den nächst niedrigeren Wert als Ganzzahl zurück.
 
 `format-number(<Zahl>, <Muster>)`::
-   Formatiert die Zahl nach dem Muster. Beispiel: `format-number(12345.67, '#,##0.00')` ergibt die Zeichenkette `12,345.67`.
+   Formatiert die Zahl nach dem Muster. Beispiel: `format-number(12345.67, '#,##0.00')` ergibt die Zeichenkette `12,345.67`. (Seit Version 5.1.25.)
 
 `last()`::
    Gibt die Anzahl der Datensätze der gleichnamigen Geschwister-Elemente zurück.
@@ -380,7 +380,7 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
    Rundet die angegebene Zahl im ersten Argument auf die Anzahl der Nachkommastellen im zweiten Argument.
 
 `round-half-to-even(<Zahl>,<Zahl>`)`::
-   Rundet die angegebene Zahl im ersten Argument auf die Anzahl der Nachkommastellen im zweiten Argument. Bei .5 wird auf die nächste gerade Zahl gerundet (Banker's Rounding).
+   Rundet die angegebene Zahl im ersten Argument auf die Anzahl der Nachkommastellen im zweiten Argument. Bei .5 wird auf die nächste gerade Zahl gerundet (Banker's Rounding). (Seit Version 5.1.25.)
 
 `root(<element>)`::
     Gibt das Wurzelelement des Elements zurück.
@@ -411,6 +411,9 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
 
 `tokenize(<Eingabe>,<Regexp>)`::
    Die Rückgabe ist eine Sequenz von Zeichenketten. Die Eingabe wird von links nach rechts gelesen. Sobald eine Stelle gefunden wird, auf die der Reguläre Ausdruck passt, wird die bisherige Eingabe zurück gegeben. Beispiel (aus M. Kays XPath / XSLT-Buch): `tokenize("Go home, Jack!", "\W+")` ergibt die Sequenz `"Go", "home", "Jack", ""`.
+
+`translate(<input>,<from>,<to>)`::
+   Ersetzt alle Zeichen in `input`, die in `from` vorkommen durch das entsprechende Zeichen in `to`. Beispiel: `translate('banana','an','uo')` ergibt `buouou`. Wenn `to` kürzer als `from` ist, werden die überzähligen Zeichen in `from` gelöscht. Beispiel: `translate('banana','an','u')` ergibt `buu`. (Seit Version 5.1.26)
 
 `true()`::
    Gibt „Wahr“ zurück.

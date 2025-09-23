@@ -315,7 +315,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
    Counts all child elements with the given name. Example: `count(article)` counts how many child elements with the name `article` exist.
 
 `distinct-values(<sequence>)`::
-   Returns the distinct values of the sequence. Example: `distinct-values((1,2,2,3,3,3))` results in the sequence `(1,2,3)`.
+   Returns the distinct values of the sequence. Example: `distinct-values((1,2,2,3,3,3))` results in the sequence `(1,2,3)`. (Since version 5.1.26.)
 
 `doc(<string>)`::
    Opens the file with the given filename and returns the contents of the file.
@@ -333,7 +333,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
    Returns the largest number with no fractional part that is not greater than the value of the argument.
 
 `format-number(<number>, <pattern>)`::
-   Format the number according to the pattern. Example: `format-number(12345.67, '#,##0.00')` returns the string `12,345.67`.
+   Format the number according to the pattern. Example: `format-number(12345.67, '#,##0.00')` returns the string `12,345.67`. (Since version 5.1.25.)
 
 `last()`::
    Return the number of elements of the same named sibling elements. Not yet XPath conform.
@@ -378,7 +378,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
     Return the argument in the first parameter rounded to number of decimal places in the second parameter. The second parameter defaults to 0.
 
 `round-half-to-even(<number>,<number>)`::
-    Return the argument in the first parameter rounded to number of decimal places in the second parameter. The second parameter defaults to 0. If the number ends in .5, it is rounded to the next even number (Banker's Rounding).
+    Return the argument in the first parameter rounded to number of decimal places in the second parameter. The second parameter defaults to 0. If the number ends in .5, it is rounded to the next even number (Banker's Rounding). (Since version 5.1.25.)
 
 `starts-with ( <string>, <string>)`::
     Return true if the first string starts with the second string. Example: `starts-with ( "tattoo", "tat")` returns `true`.
@@ -406,6 +406,9 @@ The standard functions should behave like documented by the XPath 2.0 standard.
 
 `tokenize(<input>,<regexp>)`::
    This function returns a sequence of strings. The input text is read from left to right. When the regular expression matches the current position, the text read so far from the last match is returned. Example (from the great XPath / XSLT book by M. Key): `tokenize("Go home, Jack!", "\W+")` returns the sequence `"Go", "home", "Jack", ""`.
+
+`translate(<input>,<from>,<to>)`::
+   Replace all characters in `input` that are in `from` by the corresponding character in `to`. Example: `translate('banana','an','uo')` results in `buouou`. If `to` is shorter than `from`, the extra characters in `from` are deleted. Example: `translate('banana','an','u')` results in `buu`. (Since version 5.1.26)
 
 `true()`::
    Return true.

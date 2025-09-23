@@ -1197,6 +1197,72 @@ local function fnSubstringBefore(ctx, seq)
 end
 
 
+-- XPath fn:translate(arg as xs:string?, from as xs:string, to as xs:string) as xs:string
+-- Requirements:
+-- - For each character in arg:
+--   * if not in 'from' -> copy unchanged
+--   * if in 'from' at position P and |to| >= P -> replace with to[P]
+--   * if in 'from' at position P and |to| <  P -> remove character
+-- - Duplicates in 'from': only the first occurrence counts; later entries (and corresponding entries in 'to')
+--   are ignored.
+-- - Excess characters in 'to' are ignored.
+-- - Must handle UTF-8 / Unicode correctly (Lua 5.3+ utf8.*)
+
+local function fnTranslate(ctx, seq)
+    -- fetch arguments in the same style as other functions
+    local s, err1 = string_value(seq[1])   -- xs:string?  -> may be nil
+    if err1 then return err1 end
+    if s == nil then return { "" }, nil end
+
+    local from, err2 = string_value(seq[2])
+    if err2 then return err2 end
+
+    local to, err3 = string_value(seq[3])
+    if err3 then return err3 end
+
+    -- Collect codepoints of 'to' into an array (1-based index corresponds to position P)
+    local to_cps = {}
+    for _, cp in utf8.codes(to) do
+        to_cps[#to_cps + 1] = cp
+    end
+
+    -- Build mapping: codepoint_in_from -> replacement_codepoint or false (delete)
+    -- Only the FIRST occurrence of a codepoint in 'from' is considered
+    local map = {}   -- map[codepoint] = replacement_cp (number) or false (delete); nil = unchanged
+    local p = 0
+    for _, cp in utf8.codes(from) do
+        p = p + 1
+        if map[cp] == nil then
+            local rep = to_cps[p]
+            if rep ~= nil then
+                map[cp] = rep       -- replace with to[p]
+            else
+                map[cp] = false     -- delete
+            end
+        end
+        -- If cp already seen: ignore (duplicates in 'from' are ignored)
+    end
+
+    -- Translate 's'
+    local out = {}
+    for _, cp in utf8.codes(s) do
+        local m = map[cp]
+        if m == nil then
+            -- not in 'from' -> unchanged
+            out[#out + 1] = utf8.char(cp)
+        elseif m ~= false then
+            -- replacement
+            out[#out + 1] = utf8.char(m)
+        else
+            -- delete -> append nothing
+        end
+    end
+
+    return { table.concat(out) }, nil
+end
+
+
+
 local function fnTrue(ctx, seq)
     return { true }, nil
 end
@@ -1261,6 +1327,7 @@ local funcs = {
     { "string-to-codepoints", M.fnNS, fnStringToCodepoints, 1, 1 },
     { "string",               M.fnNS, fnString,             0, 1 },
     { "substring",            M.fnNS, fnSubstring,          2, 3 },
+    { "translate",            M.fnNS, fnTranslate,          3, 3 },
     { "true",                 M.fnNS, fnTrue,               0, 0 },
     { "unparsed-text",        M.fnNS, fnUnparsedText,       1, 1 },
     { "upper-case",           M.fnNS, fnUpperCase,          1, 1 },
