@@ -655,7 +655,7 @@ local function fnDoc(ctx, seq)
     local firstarg = string_value(seq[1])
     local fn = M.findfile(firstarg)
     local xmltab = M.parse_xml(fn)
-    ctx.sequence = xmltab[1]
+    ctx.sequence = xmltab
     return {ctx.sequence}, nil
 end
 
