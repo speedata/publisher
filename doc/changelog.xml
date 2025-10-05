@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.0" date="2025-03-11">
+    <entry version="5.1.28" date="2025-10-05">
+        <en>Fix PDF metadata / ISO dates.</en>
+        <de>Korrigiere PDF-Metadaten / ISO-Datumsformat.</de>
+    </entry>
     <entry version="5.1.27" date="2025-10-04">
         <en>Bugfix XPath function doc() returns root node instead of document node.</en>
         <de>Fehlerkorrektur: XPath-Funktion doc() gibt den Wurzelknoten zurück statt des Dokumentknotens.</de>
