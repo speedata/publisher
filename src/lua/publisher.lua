@@ -8725,6 +8725,27 @@ function string_random(length)
   end
 end
 
+local function pdf_to_iso(s)
+  -- input: D:YYYYMMDDHHmmSS[Z|+/-HH['?]mm['?]]
+  local Y,M,D,h,mi,se,sign,th,tm =
+    s:match("^D:(%d%d%d%d)(%d%d)(%d%d)(%d%d)(%d%d)(%d%d)([Z+-]?)(%d?%d?)'?([%d%?]?%d?)'?$")
+  if not Y then return nil, "Unbekanntes PDF-Datum" end
+
+  local iso = string.format("%s-%s-%sT%s:%s:%s", Y,M,D,h,mi,se)
+
+  if sign == "Z" then
+    return iso .. "Z"
+  elseif sign == "+" or sign == "-" then
+    -- timezone given
+    th = (#th==2) and th or (th=="" and "00" or (th.."0"))
+    tm = (#tm==2) and tm or (tm=="" and "00" or (tm.."0"))
+    return string.format("%s%s%s:%s", iso, sign, th, tm)
+  else
+    -- no timezone given, assume local time
+    return iso
+  end
+end
+
 function getmetadata(filespecnumbers)
     local zugferd_level = nil
     local zugferd_filename = nil
@@ -8736,8 +8757,7 @@ function getmetadata(filespecnumbers)
             end
         end
     end
-    local now = pdf.getcreationdate()
-    local isoformatted = string.format("%s-%s-%sT%s:%s:%s+%s:%s",string.sub(now,3,6),string.sub(now,7,8),string.sub(now,9,10),string.sub(now,11,12),string.sub(now,13,14),string.sub(now,15,16),string.sub(now,18,19),string.sub(now,21,22))
+    local isoformatted = pdf_to_iso(pdf.getcreationdate())
     local docid = uuid()
     local instanceid = uuid()
     local fmt = options.format
