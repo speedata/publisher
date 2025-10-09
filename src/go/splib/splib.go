@@ -749,7 +749,7 @@ func sdLoadXMLFile(L *C.lua_State) int {
 	return luaEntry(L, func(l *LuaState) int {
 		err := l.buildXMLTable()
 		if err != nil {
-			slog.Error("sdLoadXMLFile", "msg", err.Error())
+			slog.Error(err.Error(), "where", "sdLoadXMLFile")
 			return 0
 		}
 		return 1

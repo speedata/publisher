@@ -251,12 +251,7 @@ function tabular:calculate_columnwidths_for_row(tr_contents, current_row, colspa
             else
                 for i=1,#blockobject do
                     local inlineobject = blockobject[i]
-                    if type(inlineobject)=="table" and node.is_node(inlineobject.nodelist) then
-                        local wd, ht, dp = node.dimensions(inlineobject.nodelist)
-                        max_wd = math.max(wd + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
-                        min_wd = paragraph.minimal_width_nodelist(inlineobject.nodelist,inlineobject.textformat)
-                        cellheight = cellheight + ht + dp
-                    elseif type(inlineobject)=="table" then
+                    if type(inlineobject)=="table" then
                         if inlineobject.min_width then
                             local mw = inlineobject:min_width(inlineobject.alignment,{fontfamily = inlineobject.fontfamily or self.fontfamily},self.dataxml)
                             min_wd = math.max(mw + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
@@ -882,11 +877,17 @@ function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, ski
     local min_lineheight = fam.baselineskip
 
     if tr_contents.minheight then
+        ---@type number
         local minht
         if tonumber(tr_contents.minheight) then
             minht = publisher.current_grid:height_sp(tr_contents.minheight)
         else
-            minht = tex.sp(tr_contents.minheight)
+            local ht = tex.sp(tr_contents.minheight)
+            if ht == nil then
+                splib.log("error","Cannot parse minheight", "ht",tr_contents.minheight or "?")
+                ht = 0
+            end
+            minht = ht
         end
         minht = minht or 0
         rowheight = math.max(minht, min_lineheight)
@@ -1494,6 +1495,7 @@ function tabular:typeset_table(dataxml)
     local rows = {}
     local break_above = true
     local filter = {}
+    ---@type number
     local startpage = publisher.current_pagenumber
     local tablepart_absolute = 1
 
@@ -1661,7 +1663,7 @@ function tabular:typeset_table(dataxml)
     local pagegoals = {}
 
     -- Return a boolean if we need to show the static header on this page
-    local function showheader_static( tablepart )
+    local function showheader_static()
         if tablepart_absolute == 1 and filter.tablehead_force_first then return true end
         if filter.tablehead == nil then return false end
         if filter.tablehead == "none" then return true end
@@ -1696,7 +1698,7 @@ function tabular:typeset_table(dataxml)
     --- and to get the height of these headers
     local function get_height_header(i)
         local ht = 0
-        if showheader_static(i) then
+        if showheader_static() then
             if i == 1 then
                 local x = node.vpack(tablehead_first[1])
                 ht = x.height
@@ -1713,7 +1715,7 @@ function tabular:typeset_table(dataxml)
 
     local maxpages = 0
 
-    setmetatable(pagegoals, { __index = function(tbl,idx)
+    setmetatable(pagegoals, { __index = function(_,idx)
                 local footerheight = ht_footer
                 if idx == maxpages then
                     footerheight = ht_footer_last
@@ -1782,6 +1784,8 @@ function tabular:typeset_table(dataxml)
         local accumulated_height = 0
         local extra_height = 0
 
+        local att_break_above
+
         splits = {0}
         for i=1,#rows do
             -- We can mark a row as "use_as_head" to turn the row into a dynamic head
@@ -1797,10 +1801,10 @@ function tabular:typeset_table(dataxml)
             end
             pagegoal = pagegoals[current_page]
             ht_row = rows[i].height + rows[i].depth
-            break_above = node.has_attribute(rows[i],publisher.att_break_above) or -1
+            att_break_above = node.has_attribute(rows[i],publisher.att_break_above) or -1
             space_above = node.has_attribute(rows[i],publisher.att_space_amount) or 0
 
-            local break_above_allowed = break_above ~= 1
+            local break_above_allowed = att_break_above ~= 1
 
             if break_above_allowed then
                 last_possible_split_is_after_line = i - 1
@@ -1894,7 +1898,7 @@ function tabular:typeset_table(dataxml)
         local last_possible_split_is_after_line_t = {}
         -- first, we remove the split marks for the used frames.
         -- (If we omitted the rest of the balance routine, the resulting table would be empty for that page.)
-        for i=1,used_frames  do
+        for _=1,used_frames  do
             -- the entry in omit_head_on_pages for this split is not valid anymore
             omit_head_on_pages[#splits] = nil
             table.remove(splits)
@@ -2005,7 +2009,7 @@ function tabular:typeset_table(dataxml)
             else
                 publisher.xpath.set_variable("_last_tr_data",val)
             end
-            local tmp1,tmp2 = self:reformat_head(s - 1)
+            local tmp1,tmp2 = self:reformat_head()
             if s == 2 then
                 -- first page
                 thissplittable[#thissplittable + 1] = node.copy_list(tmp1)
@@ -2014,7 +2018,7 @@ function tabular:typeset_table(dataxml)
                 thissplittable[#thissplittable + 1] = node.copy_list(tmp2)
             end
         else
-            if showheader_static(s-1) then
+            if showheader_static() then
                 thissplittable[#thissplittable + 1] = get_tablehead_static(s-1)
             end
             if showheader(s-1, splits[s]) then
@@ -2102,10 +2106,9 @@ function tabular:reformat_foot(pagenumber, max_splits)
 end
 
 --- Reformat the table head for a given page.
----@param pagenumber integer Current page number
 ---@return table Table head nodes for first page
 ---@return table Table head nodes for other pages
-function tabular:reformat_head(pagenumber)
+function tabular:reformat_head()
     local y = self.tablehead_contents[1]
     local rownumber = self.tablehead_contents[2]
     local x = publisher.dispatch(y._layoutxml,y._dataxml)
@@ -2133,7 +2136,7 @@ function adjust_border(tbl)
         for _, col in ipairs(row) do
             for _, nxt in ipairs(col.nextcol) do
                 local td_borderright = tex.sp(col["border-right"] or 0)
-                local td_borderleft  = tex.sp(nxt["border-left"] or 0)
+                local td_borderleft  = tex.sp(nxt["border-left"] or 0) or 0
                 local new_borderwidth = math.max(td_borderleft,td_borderright) / 2
                 col.td_borderright_calculated = math.max(col.td_borderright_calculated or 0, new_borderwidth )
                 nxt.td_borderleft_calculated = math.max(nxt.td_borderleft_calculated or 0, new_borderwidth )
@@ -2145,7 +2148,7 @@ function adjust_border(tbl)
                 end
             end
             for _, nxt in ipairs(col.nextrow) do
-                local td_borderbottom  = tex.sp(col["border-bottom"]  or 0)
+                local td_borderbottom  = tex.sp(col["border-bottom"] or 0) or 0
                 local td_bordertop = tex.sp(nxt["border-top"]  or 0)
                 local new_borderwidth = math.max(td_borderbottom,td_bordertop) / 2
                 nxt.td_bordertop_calculated = math.max(nxt.td_bordertop_calculated or 0, new_borderwidth )
@@ -2294,7 +2297,6 @@ function tabular:set_skip_table()
     for _,tr in ipairs(self.tab) do
         local tr_contents = publisher.element_contents(tr)
         local eltname = publisher.elementname(tr)
-        local page = tr_contents.page or ""
         if eltname == "Tr" then
             current_row_body = current_row_body + 1
             set_skip_table_elt(tr_contents,self.skiptables.body,current_row_body)

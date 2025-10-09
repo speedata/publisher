@@ -192,33 +192,77 @@ end
 --- This is like the original `tex.sp` except that it changes `pt` to `bp` and `pp` to `pt`.
 --- We do that because in the dtp world when we say 12pt, we always mean 12*1/72 inch.
 local orig_texsp = tex.sp
-function tex.sp( number_or_string )
-    if not number_or_string then
-        return
-    end
-    if number_or_string == "0" or number_or_string == 0 or number_or_string == "" then
-        return 0
-    end
-    if string.match( number_or_string,"px$") then
-        local val = string.gsub( number_or_string,"px$","" )
-        local num = tonumber(val)
-        if not num then
-            err("Could not resolve dimension %q",number_or_string)
-            return 0
-        end
-        return num * 72 / 96 * publisher.factor
-    end
 
-    if type(number_or_string) == "string" then
-        local tmp = string.gsub(number_or_string,"(%d)pt","%1bp"):gsub("(%d)pp","%1pt")
-        local ret = { pcall(orig_texsp,tmp) }
-        if ret[1]==false then
-            splib.error("Could not convert dimension","dimen", number_or_string)
+--- Convert a number or string to scaled points (sp).
+--- Returns an integer (rounded) or nil on error.
+--- Prints a splib.error message only when TeX dimension conversion fails.
+---@param number_or_string number|string|nil
+---@return integer|nil
+function tex.sp(number_or_string)
+    ---Helper: safely round to nearest integer
+    ---@param x number|string|nil
+    ---@return integer|nil
+    local function toint(x)
+        local n = tonumber(x)
+        if not n or n ~= n or n == math.huge or n == -math.huge then
             return nil
         end
-        return table.unpack(ret,2)
+        n = math.floor(n + 0.5) -- round half up
+        return (math.tointeger and math.tointeger(n)) or n
     end
-    return orig_texsp(number_or_string)
+
+    -- trivial / nil cases
+    if number_or_string == nil then
+        return nil
+    end
+    if number_or_string == 0 or number_or_string == "0" then
+        return 0
+    end
+
+    -- numeric input: direct conversion
+    if type(number_or_string) == "number" then
+        if orig_texsp then
+            local ok, val = pcall(orig_texsp, number_or_string)
+            if not ok then return nil end
+            return toint(val)
+        end
+        return toint(number_or_string)
+    end
+
+    -- string input
+    local s = tostring(number_or_string):match("^%s*(.-)%s*$") -- trim whitespace
+    if s == "" then
+        return nil
+    end
+    if s == "0" then
+        return 0
+    end
+
+    -- handle "px" units (requires publisher.factor)
+    local pxnum = s:match("^([+-]?%d*%.?%d+)%s*px$")
+    if pxnum then
+        local num = tonumber(pxnum)
+        if not num or not publisher or not publisher.factor then
+            return nil
+        end
+        local sp = num * 72 / 96 * publisher.factor
+        return toint(sp)
+    end
+
+    -- fallback: try TeX dimension parser
+    if orig_texsp then
+        -- perform legacy replacements before calling tex.sp
+        local tmp = s:gsub("(%d)pt", "%1bp"):gsub("(%d)pp", "%1pt")
+        local ok, val = pcall(orig_texsp, tmp)
+        if not ok then
+            splib.error("Could not convert dimension", "dimen", number_or_string)
+            return nil
+        end
+        return toint(val)
+    end
+
+    -- no parser available
+    return nil
 end
 
 -- return rounded number of dtp points

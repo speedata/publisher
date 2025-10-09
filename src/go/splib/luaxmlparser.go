@@ -76,10 +76,12 @@ func (l *LuaState) buildXMLTable() error {
 	slog.Info("Read XML file", "type", xmltype)
 	ret, err := splibaux.GetFullPath(xmlfilename)
 	if err != nil {
+		slog.Error("Cannot get full path", "filename", xmlfilename)
 		return err
 	}
 	xmlReader, err := os.Open(ret)
 	if err != nil {
+		slog.Error("File not found", "filename", xmlfilename)
 		return err
 	}
 	defer xmlReader.Close()

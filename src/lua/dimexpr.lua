@@ -22,12 +22,6 @@ local function is_space(str)
     return string.match(str, "%s")
 end
 
-local function is_digit(str)
-    return string.match(str, "[0-9]")
-end
-
-
-
 
 ---@return string
 ---@return boolean
@@ -42,21 +36,6 @@ local function unread_rune(tbl)
     tbl.pos = tbl.pos - 1
 end
 
-local function get_varname(runes)
-    local word = {}
-    local r, eof
-    while true do
-        r, eof = read_rune(runes)
-        if eof then break end
-        if is_letter(r) or is_digit(r) or r == '_' or r == '-' or r == '·' or r == '‿' or r == '⁀' then
-            word[#word + 1] = r
-        else
-            unread_rune(runes)
-            break
-        end
-    end
-    return table.concat(word)
-end
 
 local function read_number(tbl)
     local collect = {}

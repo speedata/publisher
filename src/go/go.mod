@@ -39,3 +39,6 @@ require (
 	golang.org/x/image v0.18.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+
+replace github.com/speedata/optionparser => /Users/patrick/prog/go/github.com/speedata/optionparser

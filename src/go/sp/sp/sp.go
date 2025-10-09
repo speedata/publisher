@@ -5,6 +5,7 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -646,6 +647,7 @@ func runPublisher(cachemethod string) (exitstatus int) {
 		layoutoptionsSlice = append(layoutoptionsSlice, `hidespinfo=`+hidespinfo)
 	}
 	if imagehandler := getOption("imagehandler"); imagehandler != "" {
+		fmt.Println(`~~> imagehandler`, imagehandler)
 		layoutoptionsSlice = append(layoutoptionsSlice, `imagehandler=`+imagehandler)
 	}
 	if extensionhandler := getOption("extensionhandler"); extensionhandler != "" {
@@ -860,6 +862,11 @@ func main() {
 	op.Command(cmdServer, "Run as http-api server on localhost port 5266 (configure with --address and --port)")
 	op.Command(cmdWatch, "Start watchdog / hotfolder")
 	err := op.Parse()
+
+	if errors.Is(err, optionparser.ErrHelp) {
+		os.Exit(0)
+	}
+
 	if err != nil {
 		log.Fatal("Parse error: ", err)
 	}

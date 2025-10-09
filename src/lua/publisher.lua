@@ -1454,7 +1454,7 @@ function initialize_luatex_and_generate_pdf()
         dataxml = load_xml(datafilename,"data file",{ htmlentities = true, ignoreeol = ( options.ignoreeol or false ) })
     end
     if type(dataxml) ~= "table" then
-        err("Something is wrong with the data: dataxml is not a table")
+        splib.error("Something is wrong with the data: dataxml is not a table")
         exit()
     end
 
@@ -1490,7 +1490,7 @@ function initialize_luatex_and_generate_pdf()
 
         seq, msg = data:execute("root()")
         if msg then
-            err(msg)
+            splib.error(msg)
         end
     else
         for k,v in pairs(vars) do
@@ -1581,7 +1581,7 @@ function initialize_luatex_and_generate_pdf()
             current_pagenumber = tonumber(num)
             log("Set page number to %d",num)
         else
-            err("Can't recognize starting page number %q",options.startpage)
+            splib.error("Can't recognize starting page number", "startpage", options.startpage or "(not set)")
         end
     end
 
@@ -1702,24 +1702,24 @@ function initialize_luatex_and_generate_pdf()
         local seq, msg
         seq, msg = data:execute("root()")
         if msg then
-            err(msg)
+            splib.error(msg)
         end
         if options.namespaces == "strict" then
             seq, msg = data:eval("local-name()")
             if msg then
-                err(msg)
+                splib.error(msg)
             end
             name = xpath.string_value(seq)
             seq, msg = data:eval("namespace-uri()")
             if msg then
-                err(msg)
+                splib.error(msg)
             end
             local namespace_element = xpath.string_value(seq)
             name = "{" .. namespace_element .. "}" .. name
         else
             seq, msg = data:eval("local-name()")
             if msg then
-                err(msg)
+                splib.error(msg)
             end
             name = xpath.string_value(seq)
         end
@@ -1730,7 +1730,7 @@ function initialize_luatex_and_generate_pdf()
 
     --- The rare case that the user has not any `Record` commands in the layout file:
     if not data_dispatcher[""] then
-        err("Can't find any “Record” commands in the layout file.")
+        splib.error("Can't find any “Record” commands in the layout file.")
         exit()
     end
 
@@ -2331,7 +2331,7 @@ function calculate_md5sum(filename)
     if p then
         local f,msg = io.open(p)
         if not f then
-            err(msg)
+            splib.error(msg)
             return nil
         end
         local str = f:read("*a")
@@ -2602,7 +2602,7 @@ function output_at( param )
 
     if not delta_x then
         -- if delta_x is nil, delta_y has the error message
-        err(delta_y)
+        splib.error(delta_y)
         exit()
     end
 

@@ -38,9 +38,10 @@ type logHandler struct {
 }
 
 func (lh *logHandler) Enabled(_ context.Context, level slog.Level) bool {
-	if level == slog.LevelError {
+	switch level {
+	case slog.LevelError:
 		errCount++
-	} else if level == slog.LevelWarn {
+	case slog.LevelWarn:
 		warnCount++
 	}
 	return level >= loglevel.Level()
