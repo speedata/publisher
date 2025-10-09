@@ -242,6 +242,13 @@ The file name extension `.tiff` is assigned to the handler `tiffimage` (line 2).
 imagehandler="tiffimage:("/path/with space/convert" "%%input%%" "%%output%%.pdf")"
 -------------------------------------------------------------------------------
 
+You can also specify several handlers, separated by semicolons:
+
+[source, ini]
+-------------------------------------------------------------------------------
+imagehandler="tiffimage:(...);gifimage:(...)"
+extensionhandler="tiff:tiffimage;gif:gifimage"
+-------------------------------------------------------------------------------
 
 == Images from textual descriptions
 

@@ -2,8 +2,6 @@
 [.profeature]
 = Publisher Webservice API
 
-TIP: The speedata Webservice REST API is now available (but still beta).
-
 The speedata Publisher can be used without local installation.
 For this purpose, a so-called Software-as-a-Service solution is available at https://api.speedata.de, which can be used via a REST interface.
 
@@ -44,7 +42,22 @@ Returns HTTP status 200.
 [[saasapi-method-versions]]
 === `/v0/versions`
 
-List all available versions. Return is a JSON array in the form `["1.3.12", "1.4.1"]` The version can be used as query parameter in `/v0/publish`.
+List all available versions. The response is a JSON array in the following form:
+
+[source,json]
+-------
+["1.3.12", "1.4.1", "1.5.0-dev"]
+-------
+
+The version can be used as a query parameter for `/v0/publish`. The following versions are supported:
+
+* All stable versions (e.g. 5.0.2)
+* All development versions released since the last stable version (e.g. 5.1.22)
+
+Version numbers with an odd minor number (the second position) are development versions (e.g. 5.1.22).
+All others are stable versions (e.g. 5.0.2).
+
+The default is always the latest development version.
 
 
 [[saasapi-method-publish]]

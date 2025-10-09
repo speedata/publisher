@@ -2,7 +2,6 @@
 [[ch-saasapi]]
 = Publisher Webservice API
 
-TIP: Der speedata Webservice steht als Beta-Version zur Verfügung.
 
 Der speedata Publisher kann auch ohne lokale Installation benutzt werden.
 Dafür steht unter https://api.speedata.de eine sogenannte Software-as-a-Service Lösung zur Verfügung, die über eine REST-Schnittstelle benutzt werden kann.
@@ -44,7 +43,24 @@ Gibt den HTTP-Status 200 zurück.
 [[saasapi-method-versions]]
 === `/v0/versions`
 
-Liste alle verfügbare Versionen auf. Rückgabe ist ein JSON-Array in der Form `["1.3.12","1.4.1"]` Die Version kann als Query-Parameter bei `/v0/publish` benutzt werden.
+Liste alle verfügbaren Versionen auf. Die Rückgabe ist ein JSON-Array in der Form:
+
+[source,json]
+-----
+["1.3.12", "1.4.1", "1.5.0-dev"]
+-----
+
+Die Version kann als Query-Parameter bei /v0/publish benutzt werden.
+
+Unterstützt werden:
+
+* Alle stabilen Versionen (z. B. 5.0.2)
+* Alle Entwicklungsversionen seit der letzten stabilen Version (z. B. 5.1.22)
+
+Die Versionsnummern, die an der zweiten Stelle eine ungerade Zahl haben, sind Entwicklungsversionen (z. B. 5.1.22). Alle anderen sind stabile Versionen (z. B. 5.0.2).
+
+Die Voreinstellung ist immer die neueste Entwicklungsversion.
+
 
 [[saasapi-method-publish]]
 === `/v0/publish`

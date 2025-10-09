@@ -293,6 +293,15 @@ Der Dateinamenendung `.tiff` wird der Handler `tiffimage` zugeordnet (Zeile 2). 
 imagehandler="tiffimage:("/path/with space/convert" "%%input%%" "%%output%%.pdf")"
 -------------------------------------------------------------------------------
 
+Man kann auch mehrere Handler für verschiedene Dateitypen angeben:
+
+[source, ini]
+-------------------------------------------------------------------------------
+imagehandler="tiffimage:(...);gifimage:(...)"
+extensionhandler="tiff:tiffimage;gif:gifimage"
+-------------------------------------------------------------------------------
+
+
 == Bilder aus textuellen Beschreibungen
 
 Es gibt unzählige Bildbeschreibungssprachen, in denen Bilder nicht mit einem externen Programm gezeichnet oder gemalt werden, sondern textuell beschrieben werden. Z.B. »zeichne ein Quadrat mit der Kantenlänge 4cm« oder »erstelle ein Tortendiagramm mit den folgenden Werten: ....«.
