@@ -17,7 +17,7 @@ do_luafile("css.lua")
 
 local function lineinfo(layout)
     if publisher.newxpath then
-        return "line",layout[".__line"], "page", publisher.current_pagenumber
+        return "line",layout[".__line"], "file", layout[".__file"], "page", publisher.current_pagenumber
     else
         return nil
     end
@@ -2358,7 +2358,7 @@ function commands.message( layoutxml, dataxml )
             local copysequence = dataxml.sequence
             local seq, msg = dataxml:eval(selection)
             if msg then
-                err(msg)
+                splib.error(msg,lineinfo(layoutxml))
                 return
             end
             contents = xpath.string_value(seq)
@@ -4242,7 +4242,7 @@ function commands.setvariable( layoutxml,dataxml )
             if publisher.newxpath then
                 local seq, msg = dataxml:eval(selection)
                 if msg then
-                    err(msg)
+                    splib.error(msg,lineinfo(layoutxml))
                 end
                 dataxml.vars[varname] = seq
                 contents = seq

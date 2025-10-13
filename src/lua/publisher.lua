@@ -298,6 +298,7 @@ options = {
 }
 
 current_layout_line = ""
+current_layout_file = ""
 current_data_line = ""
 
 if newxpath then
@@ -668,7 +669,7 @@ filespecnumbers = {}
 
 local function lineinfo()
     if newxpath then
-        return "line_layout", current_layout_line, "line_data" , current_data_line
+        return "line_layout", current_layout_line, "file", current_layout_file, "line_data" , current_data_line
     else
         return nil
     end
@@ -807,17 +808,15 @@ function dispatch(layoutxml,dataxml,opts)
             local eltname = j[".__local_name"]
             if dispatch_table[eltname] ~= nil then
                 if options.verbosity > 0 then
-                    local lineinfo = ""
                     if newxpath then
                         splib.log("debug","Call command","name",eltname,"line",j[".__line"])
                     else
                         splib.log("debug","Call command","name",eltname)
                     end
-
-                    -- log("Call %q from layout%s",eltname,lineinfo)
                 end
                 if newxpath then
                     current_layout_line = j[".__line"]
+                    current_layout_file = j[".__file"]
                     if dataxml.sequence and type(dataxml.sequence)  == "table" and dataxml.sequence[1] and type(dataxml.sequence[1]) == "table" and dataxml.sequence[1][".__line"] then
                         current_data_line = dataxml.sequence[1][".__line"]
                     else
@@ -8323,7 +8322,7 @@ function imageinfo( filename,page,box,fallback,imageshape )
     splib.log("info","Searching for image","filename",tostring(filename))
     if not find_file(filename) then
         if options.imagenotfounderror then
-            splib.error("Image not found","filename", filename or "???")
+            splib.error("Image not found","filename", filename or "???", lineinfo())
         else
             splib.log("warn","Image not found","filename", filename or "???", lineinfo())
         end

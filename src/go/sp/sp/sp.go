@@ -647,7 +647,6 @@ func runPublisher(cachemethod string) (exitstatus int) {
 		layoutoptionsSlice = append(layoutoptionsSlice, `hidespinfo=`+hidespinfo)
 	}
 	if imagehandler := getOption("imagehandler"); imagehandler != "" {
-		fmt.Println(`~~> imagehandler`, imagehandler)
 		layoutoptionsSlice = append(layoutoptionsSlice, `imagehandler=`+imagehandler)
 	}
 	if extensionhandler := getOption("extensionhandler"); extensionhandler != "" {

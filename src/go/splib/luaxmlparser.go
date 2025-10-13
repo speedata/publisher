@@ -1,234 +1,72 @@
 package main
 
 import (
-	"encoding/xml"
-	"errors"
 	"fmt"
 	"io"
 	"log/slog"
 	"os"
+	"speedatapublisher/splib/xmltree"
 	"speedatapublisher/splibaux"
-
-	"golang.org/x/net/html/charset"
 )
 
-// a stack map is a map where writes after push don't erase writes before push.
-type stackmap struct {
-	m []map[string]string
-}
+type luaAdapter struct{ l *LuaState }
 
-func (sm *stackmap) Set(key string, value string) {
-	if len(sm.m) == 0 {
-		sm.m = append(sm.m, make(map[string]string))
-	}
-
-	sm.m[len(sm.m)-1][key] = value
+func (a luaAdapter) CreateTable(narr, nrec int) { a.l.createTable(narr, nrec) }
+func (a luaAdapter) AddKeyValueToTable(idx int, key string, v any) {
+	a.l.addKeyValueToTable(idx, key, v)
 }
-
-func (sm *stackmap) Get(key string) (string, bool) {
-	if len(sm.m) == 0 {
-		return "", false
-	}
-	val, ok := sm.m[len(sm.m)-1][key]
-	return val, ok
-}
-
-// get the whole map from the top entry
-func (sm *stackmap) GetMap() map[string]string {
-	if len(sm.m) == 0 {
-		return make(map[string]string)
-	}
-	return sm.m[len(sm.m)-1]
-}
-
-func (sm *stackmap) Push() {
-	if len(sm.m) == 0 {
-		return
-	}
-	newmap := make(map[string]string)
-	oldmap := sm.m[len(sm.m)-1]
-	for key, value := range oldmap {
-		newmap[key] = value
-	}
-	sm.m = append(sm.m, newmap)
-}
-
-func (sm *stackmap) Pop() error {
-	if len(sm.m) == 0 {
-		return fmt.Errorf("StackMap is empty")
-	}
-	sm.m = sm.m[:len(sm.m)-1]
-	return nil
-}
+func (a luaAdapter) RawSet(idx int)      { a.l.rawSet(idx) }
+func (a luaAdapter) PushInt(v int)       { a.l.pushInt(v) }
+func (a luaAdapter) PushString(s string) { a.l.pushString(s) }
 
 func (l *LuaState) buildXMLTable() error {
-	var xmlfilename string
-	xmltype := "(unknown)"
-	var ok bool
-	xmlfilename, ok = l.getString(1)
+	xmlfilename, ok := l.getString(1)
 	if ok {
 		l.remove(1)
-		xmltype, ok = l.getString(1)
-		if ok {
-			l.remove(1)
-		}
+	}
+	xmltype := "(unknown)"
+	if t, ok := l.getString(1); ok {
+		xmltype = t
+		l.remove(1)
 	}
 	slog.Info("Read XML file", "type", xmltype)
-	ret, err := splibaux.GetFullPath(xmlfilename)
-	if err != nil {
-		slog.Error("Cannot get full path", "filename", xmlfilename)
-		return err
-	}
-	xmlReader, err := os.Open(ret)
-	if err != nil {
-		slog.Error("File not found", "filename", xmlfilename)
-		return err
-	}
-	defer xmlReader.Close()
 
-	l.createTable(0, 0)
-	l.addKeyValueToTable(-1, ".__type", "document")
-	err = l.readXMLFile(xmlReader, 1)
-	if err != nil {
-		slog.Error("Parsing XML file failed", "message", err.Error())
-		return err
-	}
-
-	return nil
-}
-
-func (l *LuaState) readXMLFile(r io.Reader, startindex int) error {
-	i := 1
-
-	// FIXME, a map is not a good data structure for this
-	ns := stackmap{}
-	stackcounter := []int{startindex}
-
-	// Handle other encodings besides UTF-8. This is tested against UTF-8 and
-	// UTF-16.
-	nr, err := charset.NewReader(r, "text/xml;charset=utf-8")
+	full, err := splibaux.GetFullPath(xmlfilename)
 	if err != nil {
 		return err
 	}
-	dec := xml.NewDecoder(nr)
-	dec.CharsetReader = func(label string, input io.Reader) (io.Reader, error) {
-		return input, nil
-	}
-	dec.Entity = xml.HTMLEntity
-	indentlevel := 0
-	for {
-		tok, err := dec.Token()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			if f, ok := r.(*os.File); ok {
-				return fmt.Errorf("%w, file name %s", err, f.Name())
-			}
-			return err
-		}
 
-		switch v := tok.(type) {
-		case xml.StartElement:
-			ns.Push()
-			var href string
-			if v.Name.Space == "http://www.w3.org/2001/XInclude" && v.Name.Local == "include" {
-				for _, attr := range v.Attr {
-					if attr.Name.Local == "href" {
-						href = attr.Value
-					}
-				}
-				err := l.handleXInclude(href, stackcounter[indentlevel])
-				if err != nil {
-					return err
-				}
-			} else {
-				// no xinclude
-				l.pushInt(stackcounter[indentlevel])
-				l.createTable(0, 8)
-				namespaces := map[string]string{}
-				for _, attr := range v.Attr {
-					if attr.Name.Space == "xmlns" {
-						ns.Set(attr.Value, attr.Name.Local)
-						namespaces[attr.Name.Local] = attr.Value
-					} else if attr.Name.Local == "xmlns" {
-						ns.Set(attr.Value, "")
-						namespaces[""] = attr.Value
-					}
-				}
-				elementname := v.Name.Local
-				if sp := v.Name.Space; sp != "" {
-					val, _ := ns.Get(sp)
-					if val != "" {
-						elementname = val + ":" + elementname
-					}
-				}
-				l.addKeyValueToTable(-1, ".__name", elementname)
-				l.addKeyValueToTable(-1, ".__local_name", v.Name.Local)
-				l.addKeyValueToTable(-1, ".__type", "element")
-				l.addKeyValueToTable(-1, ".__id", i)
-				line, col := dec.InputPos()
-				l.addKeyValueToTable(-1, ".__col", col)
-				l.addKeyValueToTable(-1, ".__line", line)
-				l.addKeyValueToTable(-1, ".__namespace", v.Name.Space)
-				i++
-
-				l.pushString(".__attributes")
-				l.createTable(0, 0)
-				for _, attr := range v.Attr {
-					if attr.Name.Space == "xmlns" {
-						// handled above
-					} else if attr.Name.Local == "xmlns" {
-						// handled above
-					} else {
-						l.addKeyValueToTable(-1, attr.Name.Local, attr.Value)
-					}
-				}
-				l.rawSet(-3)
-				l.pushString(".__ns")
-				nsMap := ns.GetMap()
-				l.createTable(0, len(nsMap))
-				for k, v := range nsMap {
-					l.addKeyValueToTable(-1, v, k)
-				}
-				l.rawSet(-3)
-			}
-			stackcounter[indentlevel]++
-			indentlevel++
-			stackcounter = append(stackcounter, 1)
-		case xml.CharData:
-			if indentlevel > 0 {
-				index := stackcounter[indentlevel]
-				stackcounter[indentlevel] = index + 1
-
-				l.pushInt(index)
-				l.pushString(string(v.Copy()))
-				l.rawSet(-3)
-			}
-		case xml.EndElement:
-			ns.Pop()
-			if v.Name.Space == "http://www.w3.org/2001/XInclude" && v.Name.Local == "include" {
-				// ignore
-			} else {
-				l.rawSet(-3)
-			}
-
-			stackcounter = stackcounter[:len(stackcounter)-1]
-			indentlevel--
-		}
-	}
-	return nil
-}
-
-func (l *LuaState) handleXInclude(href string, startindex int) error {
-	fullpath := splibaux.LookupFile(href)
-	f, err := os.Open(fullpath)
+	f, err := os.Open(full)
 	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			slog.Error("File not found", "filename", href)
-		}
 		return err
 	}
 	defer f.Close()
-	return l.readXMLFile(f, startindex)
+
+	doc, err := xmltree.ParseXMLWithOptionsAndFilename(f, &xmltree.Options{
+		ResolveInclude: func(href string) (io.ReadCloser, error) {
+			// Deine bisherige Logik:
+			full := splibaux.LookupFile(href)
+			return os.Open(full)
+		},
+	}, xmlfilename)
+	if err != nil {
+		return fmt.Errorf("Cannot parse XML file %s (%w)", xmlfilename, err)
+	}
+	xmltree.RenderToLua(luaAdapter{l: l}, doc)
+	return nil
+}
+
+func (l *LuaState) readXMLFile(r io.Reader, _ int) error {
+	doc, err := xmltree.ParseXMLWithOptions(r, &xmltree.Options{
+		ResolveInclude: func(href string) (io.ReadCloser, error) {
+			// Deine bisherige Logik:
+			full := splibaux.LookupFile(href)
+			return os.Open(full)
+		},
+	})
+	if err != nil {
+		return err
+	}
+	xmltree.RenderToLua(luaAdapter{l: l}, doc)
+	return nil
 }
