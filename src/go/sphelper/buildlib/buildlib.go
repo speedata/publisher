@@ -111,5 +111,4 @@ func BuildLib(cfg *config.Config, goos string, goarch string) error {
 		return err
 	}
 	return nil
-
 }

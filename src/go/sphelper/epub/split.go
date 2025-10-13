@@ -306,7 +306,7 @@ func secondPass(r io.Reader, outdir, lang string) error {
 						if err != nil {
 							return err
 						}
-						enc.EncodeToken(xml.CharData(string('①' + conum - 1)))
+						enc.EncodeToken(xml.CharData(string('①' + rune(conum) - 1)))
 					}
 				}
 			case "emphasis":

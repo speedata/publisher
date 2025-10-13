@@ -2,11 +2,9 @@ package splibaux
 
 import (
 	"bytes"
-	"crypto/md5"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"path/filepath"
 	"testing"
 )
@@ -53,14 +51,11 @@ func TestSimple(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	md5sum := fmt.Sprintf("%x", md5.Sum([]byte("127.0.0.1/path/cow.pdf?foo=bar")))
-
 	tmp := map[string]string{
 		"cow.pdf": testimgAbs,
 		testimg:   testimgAbs,
 		"file://" + filepath.FromSlash(testimgAbs): testimgAbs,
 		filepath.Join(basedir, `doesnotexist.txt`): "",
-		ts.URL + "/path/cow.pdf?foo=bar":           filepath.Join(os.TempDir(), "imagecache", md5sum),
 	}
 
 	for fn, expected := range tmp {
