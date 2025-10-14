@@ -61,8 +61,8 @@ github.com/speedata/goxlsx v1.0.2 h1:hi00xy1EQhqrag4HNIc9hVEtVmTGrh3z9C1AH9ysg74
 github.com/speedata/goxlsx v1.0.2/go.mod h1:7eXkL4ZUZ2uUlnBBAmh0iwOdhOkqqstW/FmkEe2IPMY=
 github.com/speedata/hotfolder v0.0.0-20181204121114-5f743a840a92 h1:X9JJkHmcQlWmDzN5m11u8+44iXf+ggmOdprrU4z5eTA=
 github.com/speedata/hotfolder v0.0.0-20181204121114-5f743a840a92/go.mod h1:rsc2+nghpGmXpyXMj/zuke7fphLxMvAmgcO6WCeBuic=
-github.com/speedata/optionparser v1.0.2 h1:AzdBomgOBVjH1KyxvoFnEHjiqLch+B1PVxEWYske+aI=
-github.com/speedata/optionparser v1.0.2/go.mod h1:JzOMd1kGlM5gtPBy7reOayfHsTXCvd6P4JU8BW0LicE=
+github.com/speedata/optionparser v1.1.0 h1:z6Ly7NrcpUaxnM4zl2y6RuFtbBvj5n4Wv85qksr7xc8=
+github.com/speedata/optionparser v1.1.0/go.mod h1:JzOMd1kGlM5gtPBy7reOayfHsTXCvd6P4JU8BW0LicE=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.7.0 h1:nwc3DEeHmmLAfoZucVR881uASk0Mfjw8xYJ99tb5CcY=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
