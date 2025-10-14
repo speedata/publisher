@@ -3,7 +3,44 @@
 This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/).
 
 
-## Version
+## Planned for version 5.4
+
+* Rewrite Go dynamic runtime library in Rust (to remove cgo dependency))
+* More unit testing and refactoring
+* Speed improvements
+* More HTML/CSS support
+* More XPath functions
+
+## Version 5.2
+
+Released 2025-10-14
+
+Major changes from version 5.1:
+
+* New XML parser
+The XML parser has been completely reimplemented. It is now more robust, includes automated tests, and records source file information (.__file) for better XInclude handling and error diagnostics.
+* Improved XPath functions
+Added several new XPath functions, including translate() and distinct-values().
+The doc() function now returns the document node instead of the root element for more standard-compliant behavior.
+Numeric and boolean functions (format-number(), round-half-to-even()) and general boolean logic have been improved for more consistent results.
+* Better international and typographic support
+Added initial Japanese typesetting support and improved multi-character fallback handling.
+* Enhanced HTML/CSS rendering
+    * Many refinements to the internal HTML/CSS engine:
+    * Support for pseudo-class selectors and list-style-position
+    * Better handling of borders, padding, and spacing
+    * font-family now accepts multiple fallbacks
+    * Improved custom @font-face and font-size calculations (rem, px)
+* PDF metadata improvements
+Dates in PDF metadata now use ISO format, and additional metadata fields (like “Producer” and color profile defaults) are included automatically.
+* Reliability and diagnostics
+* Improved logging and clearer error messages
+* Multi-run behavior continues even after previous errors, when needed
+* Safer handling of file attachments and image conversions
+* More detailed debug output for troubleshooting
+* Stability and maintainability
+Numerous internal cleanups, documentation improvements, and test enhancements make this release more stable and easier to maintain.
+
 
 ## Version 5
 

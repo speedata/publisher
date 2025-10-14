@@ -1,5 +1,11 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="5.0" date="2025-03-11">
+  <chapter version="5.2" date="2025-10-14">
+    <entry version="5.2.0" date="2025-10-14">
+        <en>Release Version 5.2.</en>
+        <de>Veröffentliche Version 5.2.</de>
+    </entry>
+  </chapter>
+  <chapter version="5.1" date="2025-10-14">
     <entry version="5.1.29" date="2025-10-14">
         <en>Rewrite parts of the Go-XML parser.</en>
         <de>Go-XML-Parser tlw. neu geschrieben.</de>
@@ -216,6 +222,8 @@
         <en>Set background-color for each page.</en>
         <de>Setze Hintergrundfarbe für jede Seite.</de>
     </entry>
+  </chapter>
+  <chapter version="5.0" date="2025-04-04">
     <entry version="5.0.2" date="2025-04-04">
         <en>Bugfix image handler automatic conversion.</en>
         <de>Fehlerkorrektur: Dateiname image hander bei automatischer Umwandlung.</de>
