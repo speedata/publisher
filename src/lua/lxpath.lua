@@ -437,6 +437,7 @@ local function boolean_value(seq)
     if type(seq) == "boolean" then
         return seq
     end
+    if not seq then return false, nil end
     if #seq == 0 then return false, nil end
     local val = seq[1]
     local ok = false
