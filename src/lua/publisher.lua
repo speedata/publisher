@@ -513,7 +513,7 @@ setmetatable(colors,{  __index = function (tbl,key)
     if string.sub(key,1,1) ~= "#" and string.sub(key,1,3) ~= "rgb" then
         return nil
     end
-    splib.log("info","Define color","name",key)
+    main.log("info","Define color","name",key)
     local color = {}
     color.r, color.g, color.b = getrgb(key)
     color.pdfstring = string.format("%g %g %g rg %g %g %g RG", color.r, color.g, color.b, color.r,color.g, color.b)
@@ -809,9 +809,9 @@ function dispatch(layoutxml,dataxml,opts)
             if dispatch_table[eltname] ~= nil then
                 if options.verbosity > 0 then
                     if newxpath then
-                        splib.log("debug","Call command","name",eltname,"line",j[".__line"])
+                        main.log("debug","Call command","name",eltname,"line",j[".__line"])
                     else
-                        splib.log("debug","Call command","name",eltname)
+                        main.log("debug","Call command","name",eltname)
                     end
                 end
                 if newxpath then
@@ -933,7 +933,7 @@ function get_colentry_from_name(colorname, default)
     if colorname then
         if not colors[colorname] then
             if default then
-                splib.error("Color is not defined yet","name",colorname)
+                main.log("error","Color is not defined yet","name",colorname)
             else
                 colentry = nil
             end
@@ -942,7 +942,7 @@ function get_colentry_from_name(colorname, default)
         end
     end
     if not colentry then
-        splib.error("Undefined color, revert to black","value",colorname or "(undefined)")
+        main.log("error","Undefined color, revert to black","value",colorname or "(undefined)")
         return colors["black"]
     end
     return setmetatable(colentry, colormetatable)
@@ -1091,7 +1091,7 @@ local function writeStructElements(itm,parentobjectnumber)
 
     if k then
         if not itm.role then
-            splib.log("error","Unknown role in structure")
+            main.log("error","Unknown role in structure")
         end
         str = {
             "/Type /StructElem",
@@ -1193,7 +1193,7 @@ function define_image_callback( extensionhandler )
         local handlername = extensions[ext]
         local handler = imagehandler[handlername or "*"]
         if handler then
-            splib.log("info","Convert image", "extension",ext, "handler",handlername or "*")
+            main.log("info","Convert image", "extension",ext, "handler",handlername or "*")
             file = splib.convertimage(file,handler)
         end
         return file
@@ -1316,7 +1316,7 @@ function initialize_luatex_and_generate_pdf()
             end
         elseif k == "pro" then
             pro = true
-            splib.log("info","speedata Publisher Pro")
+            main.log("info","speedata Publisher Pro")
         end
     end
 
@@ -1385,22 +1385,22 @@ function initialize_luatex_and_generate_pdf()
         for _, req in ipairs(r) do
             if req == "lxpath" then
                 if not newxpath then
-                    splib.error("failed to meet requirement", "requirement","lxpath","message","This layout requires the lxpath XML / XPath parser","help","see https://doc.speedata.de/publisher/en/lxpath/ how to activate")
+                    main.log("error","failed to meet requirement", "requirement","lxpath","message","This layout requires the lxpath XML / XPath parser","help","see https://doc.speedata.de/publisher/en/lxpath/ how to activate")
                     exit(false)
                 end
             elseif req == "luxor" then
                     if newxpath then
-                        splib.error("failed to meet requirement", "requirement","luxor","message","This layout requires the luxor XML / XPath parser","help","see https://doc.speedata.de/publisher/en/xpathfunctions/ how to activate")
+                        main.log("error","failed to meet requirement", "requirement","luxor","message","This layout requires the luxor XML / XPath parser","help","see https://doc.speedata.de/publisher/en/xpathfunctions/ how to activate")
                         exit(false)
                     end
             elseif req == "harfbuzz" then
                 if options.fontloader ~= "harfbuzz" then
-                    splib.error("failed to meet requirement", "requirement","harfbuzz","message","This layout requires the harfbuzz font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
+                    main.log("error","failed to meet requirement", "requirement","harfbuzz","message","This layout requires the harfbuzz font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
                     exit(false)
                 end
             elseif req == "fontforge" then
                 if options.fontloader ~= "fontforge" then
-                    splib.error("failed to meet requirement", "requirement","fontforge","message","This layout requires the fontforge font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
+                    main.log("error","failed to meet requirement", "requirement","fontforge","message","This layout requires the fontforge font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
                     exit(false)
                 end
             else
@@ -1412,11 +1412,11 @@ function initialize_luatex_and_generate_pdf()
     if newxpath then
         tmp = os.getenv("SP_PREPEND_XML")
         if tmp and tmp ~= "" then
-            splib.error("--prepend-xml is not supported with the new XPath mode. Use xinclude instead.")
+            main.log("error","--prepend-xml is not supported with the new XPath mode. Use xinclude instead.")
         end
         tmp = os.getenv("SP_EXTRA_XML")
         if tmp and tmp ~= "" then
-            splib.error("--extra-xml is not supported with the new XPath mode. Use xinclude instead.")
+            main.log("error","--extra-xml is not supported with the new XPath mode. Use xinclude instead.")
         end
     else
         tmp = os.getenv("SP_PREPEND_XML")
@@ -1449,7 +1449,7 @@ function initialize_luatex_and_generate_pdf()
         dataxml = load_xml(datafilename,"data file",{ htmlentities = true, ignoreeol = ( options.ignoreeol or false ) })
     end
     if type(dataxml) ~= "table" then
-        splib.error("Something is wrong with the data: dataxml is not a table")
+        main.log("error","Something is wrong with the data: dataxml is not a table")
         exit()
     end
 
@@ -1485,7 +1485,7 @@ function initialize_luatex_and_generate_pdf()
 
         seq, msg = data:execute("root()")
         if msg then
-            splib.error(msg)
+            main.log("error",msg)
         end
     else
         for k,v in pairs(vars) do
@@ -1576,7 +1576,7 @@ function initialize_luatex_and_generate_pdf()
             current_pagenumber = tonumber(num)
             log("Set page number to %d",num)
         else
-            splib.error("Can't recognize starting page number", "startpage", options.startpage or "(not set)")
+            main.log("error","Can't recognize starting page number", "startpage", options.startpage or "(not set)")
         end
     end
 
@@ -1697,24 +1697,24 @@ function initialize_luatex_and_generate_pdf()
         local seq, msg
         seq, msg = data:execute("root()")
         if msg then
-            splib.error(msg)
+            main.log("error",msg)
         end
         if options.namespaces == "strict" then
             seq, msg = data:eval("local-name()")
             if msg then
-                splib.error(msg)
+                main.log("error",msg)
             end
             name = xpath.string_value(seq)
             seq, msg = data:eval("namespace-uri()")
             if msg then
-                splib.error(msg)
+                main.log("error",msg)
             end
             local namespace_element = xpath.string_value(seq)
             name = "{" .. namespace_element .. "}" .. name
         else
             seq, msg = data:eval("local-name()")
             if msg then
-                splib.error(msg)
+                main.log("error",msg)
             end
             name = xpath.string_value(seq)
         end
@@ -1725,7 +1725,7 @@ function initialize_luatex_and_generate_pdf()
 
     --- The rare case that the user has not any `Record` commands in the layout file:
     if not data_dispatcher[""] then
-        splib.error("Can't find any “Record” commands in the layout file.")
+        main.log("error","Can't find any “Record” commands in the layout file.")
         exit()
     end
 
@@ -1742,9 +1742,9 @@ function initialize_luatex_and_generate_pdf()
         name = name or ""
         local elt_ns, elt_localname = string.match(name,"{(.*)}(.*)")
         if elt_ns then
-            splib.error("Can't find “Record” command for the root node","namespace",elt_ns,"elementname",elt_localname)
+            main.log("error","Can't find “Record” command for the root node","namespace",elt_ns,"elementname",elt_localname)
         else
-            splib.error("Can't find “Record” command for the root node","elementname",name)
+            main.log("error","Can't find “Record” command for the root node","elementname",name)
         end
         exit()
     end
@@ -1943,7 +1943,7 @@ function initialize_luatex_and_generate_pdf()
     end
     local file, errmsg = io.open(auxfilename,"wb")
     if file == nil then
-        splib.error("Could not open aux file for writing", "filename", auxfilename, "message", errmsg)
+        main.log("error","Could not open aux file for writing", "filename", auxfilename, "message", errmsg)
         return
     end
     file:write("<marker>\n")
@@ -2152,14 +2152,14 @@ do
                     --     },
                     -- },
                     if not parentid then
-                        splib.log("debug","Structure entry has no parent id","roleid",roleid or "(none)","role",r)
+                        main.log("debug","Structure entry has no parent id","roleid",roleid or "(none)","role",r)
                     else
                         if r ~= "Artifact" then
                             local parenttable = structElements[parentid]
                             if parenttable then
                                 parenttable[#parenttable+1] = entry
                             else
-                                splib.log("debug","Structure entry has no parent table","parentid",parentid or "(none)","role",r)
+                                main.log("debug","Structure entry has no parent table","parentid",parentid or "(none)","role",r)
                             end
                         end
                     end
@@ -2217,7 +2217,7 @@ function shipout(nodelist, pagenumber,dataxml)
     }
     if colorname then
         if not colors[colorname] then
-            splib.error("Pagetype / defaultcolor: color is not defined yet.","name",colorname)
+            main.log("error","Pagetype / defaultcolor: color is not defined yet.","name",colorname)
         else
             local colorindex = colors[colorname].index
             nodelist = set_color_if_necessary(nodelist,colorindex)
@@ -2292,7 +2292,7 @@ end
 ---@return table?
 function load_xml(filename,filetype,parameter)
     parameter = parameter or {}
-    splib.log("info", "Load XML", "type", filetype or "file", "filename", filename)
+    main.log("info", "Load XML", "type", filetype or "file", "filename", filename)
     if newxpath then
         local xmltable = splib.load_xmlfile(filename,filetype or "file")
         if not xmltable then
@@ -2306,13 +2306,13 @@ function load_xml(filename,filetype,parameter)
 
         local path = kpse.find_file(filename)
         if not path then
-            splib.error("Can't find XML file. Abort","filename",filename or "?")
+            main.log("error","Can't find XML file. Abort","filename",filename or "?")
             return nil
         end
         if options.verbosity > 0 then
             calculate_md5sum(filename)
         end
-        splib.log("info","Load XML","type",filetype or "file","filename",path)
+        main.log("info","Load XML","type",filetype or "file","filename",path)
         local parsed_xml = luxor.parse_xml_file(path, parameter,kpse.find_file)
         -- if options.verbosity > 0 and filetype == "layout instructions" then
         --     printtable("parsed_xml",parsed_xml)
@@ -2326,7 +2326,7 @@ function calculate_md5sum(filename)
     if p then
         local f,msg = io.open(p)
         if not f then
-            splib.error(msg)
+            main.log("error",msg)
             return nil
         end
         local str = f:read("*a")
@@ -2597,7 +2597,7 @@ function output_at( param )
 
     if not delta_x then
         -- if delta_x is nil, delta_y has the error message
-        splib.error(delta_y)
+        main.log("error",delta_y)
         exit()
     end
 
@@ -2729,7 +2729,7 @@ function detect_pagetype(pagenumber, data)
         local pagetype = masterpages[i]
         if nextpage then
             if pagetype.name == nextpage then
-                splib.log("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
+                main.log("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
                 nextpage = nil
                 return pagetype.res
             end
@@ -2746,14 +2746,14 @@ function detect_pagetype(pagenumber, data)
                     err(msg)
                 end
                 if ok then
-                    splib.log("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
+                    main.log("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
                     ret = pagetype.res
                     current_pagenumber = cp
                     return ret
                 end
             else
                 if xpath.parse(data,pagetype.is_pagetype,pagetype.ns) == true then
-                    splib.log("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
+                    main.log("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
                     ret = pagetype.res
                     xpath.pop_state()
                     current_pagenumber = cp
@@ -3180,9 +3180,9 @@ function background( box, colorname,origin )
     if colorname == "-" then return box end
     if not colors[colorname] then
         if origin then
-            splib.log("warn","Background: color is not defined","name",colorname,"from",origin)
+            main.log("warn","Background: color is not defined","name",colorname,"from",origin)
         else
-            splib.log("warn","Background: color is not defined","name",colorname)
+            main.log("warn","Background: color is not defined","name",colorname)
         end
         return box
     end
@@ -3245,7 +3245,7 @@ function frame(obj)
 
     local colentry = get_colentry_from_name(obj.colorname,"black")
     if not colentry then
-        splib.error("Color is not defined","name",tostring(obj.colorname))
+        main.log("error","Color is not defined","name",tostring(obj.colorname))
         colentry = colors["black"]
     end
     local pdfcolorstring = colentry.pdfstring
@@ -3732,7 +3732,7 @@ function do_metapostimage(dataxml,txt,width,height,clip)
 
     local box, bbox = metapost.boxgraphic(width_sp,height_sp,"_image",{},{})
     if not box then
-        splib.error("Could not create metapost image")
+        main.log("error","Could not create metapost image")
         return
     end
     local image = {
@@ -3904,7 +3904,7 @@ function mpbox(parameter,width,height)
 
     local instr,bbox = metapost.boxgraphic(width_sp,height_sp,"__htmlbox",extra_parameter)
     if not instr then
-        splib.error("Could not create metapost image")
+        main.log("error","Could not create metapost image")
         return
     end
 
@@ -4296,7 +4296,7 @@ function dothingsbeforeoutput( thispage,data )
         end
         local colentry = get_colentry_from_name(col ,"white")
         if not colentry then
-            splib.error("Color is not defined","name",tostring(options.backgroun))
+            main.log("error","Color is not defined","name",tostring(options.backgroun))
             colentry = colors["white"]
         end
         local pdfcolorstring = colentry.pdfstring
@@ -4557,7 +4557,7 @@ end
 -- Return the element name of the given element (elt)
 function elementname(elt)
     if not elt then
-        splib.error("Could not get element name",lineinfo())
+        main.log("error","Could not get element name",lineinfo())
         return nil
     end
     return elt.elementname
@@ -5601,9 +5601,9 @@ function hbglyphlist(arguments)
             else
                 if reportmissingglyphs then
                     if reportmissingglyphs == "warning" then
-                        splib.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",code),"loc","hbglyphlist")
+                        main.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",code),"loc","hbglyphlist")
                     else
-                        splib.error("Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",code),"loc","hbglyphlist")
+                        main.log("error","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",code),"loc","hbglyphlist")
                     end
                 end
             end
@@ -6613,9 +6613,9 @@ function do_linebreak( nodelist,hsize,parameters )
 
     if line_exceeds_right_margin and options.overfulllineerror ~= nil then
         if options.overfulllineerror then
-            splib.error("Overfull line found","page",current_pagenumber,lineinfo())
+            main.log("error","Overfull line found","page",current_pagenumber,lineinfo())
         else
-            splib.log("warn","Overfull line found","page",current_pagenumber,lineinfo())
+            main.log("warn","Overfull line found","page",current_pagenumber,lineinfo())
         end
     end
     node.flush_list(nodelist)
@@ -7466,7 +7466,7 @@ function get_language(id_or_locale_or_name)
         return 0
     else
         local filename = string.format("hyph-%s.pat.txt",filename_part)
-        splib.log("debug","Loading hyphenation pattern","filename",filename)
+        main.log("debug","Loading hyphenation pattern","filename",filename)
         local path = kpse.find_file(filename)
         local pattern_file = io.open(path)
         local pattern = pattern_file:read("*all")
@@ -7476,7 +7476,7 @@ function get_language(id_or_locale_or_name)
     end
 
     local id = l:id()
-    splib.log("debug","Language ID","id",id)
+    main.log("debug","Language ID","id",id)
     local ret = { id = id, l = l, locale = locale }
     languages_id_lang[id] = ret
     languages[locale] = ret
@@ -7493,7 +7493,7 @@ function get_languagecode( locale_or_name )
 end
 
 function set_mainlanguage( mainlanguage )
-    splib.log("info","Setting default language","lang",mainlanguage or "?")
+    main.log("info","Setting default language","lang",mainlanguage or "?")
     defaultlanguage = get_languagecode(mainlanguage)
 end
 
@@ -7558,7 +7558,7 @@ function get_remaining_height(area,allocate)
         return (row - firstrow) * current_grid.gridheight, firstrow,lastrow
     end
     if not tonumber(maxrows) then
-        splib.error("maxrows not set, why?")
+        main.log("error","maxrows not set, why?")
         return
     end
     if not current_grid:fits_in_row_area(startcol,cols,firstrow,area) then
@@ -7599,7 +7599,7 @@ function next_row(rownumber,areaname,rows,dataxml)
     local current_row
     local noc = grid:number_of_columns(areaname)
     if noc == nil then
-        splib.error("number of columns is not set for area","area",areaname)
+        main.log("error","number of columns is not set for area","area",areaname)
         return
     end
     current_row = grid:find_suitable_row(1,noc,rows,areaname)
@@ -7705,7 +7705,7 @@ end
 
 function define_fontfamily( regular,bold,italic,bolditalic, name, size, baselineskip,scriptsize,supershift,subshift)
     if not size then
-        splib.error("DefineFontfamily needs size value")
+        main.log("error","DefineFontfamily needs size value")
         return
     end
     if not scriptsize then
@@ -7718,7 +7718,7 @@ function define_fontfamily( regular,bold,italic,bolditalic, name, size, baseline
         subshift = math.round(size * 0.3,0)
     end
     if not tonumber(size) then
-        splib.error("DefineFontfamily needs size value")
+        main.log("error","DefineFontfamily needs size value")
         return
     end
     local fam={
@@ -7773,11 +7773,11 @@ function define_fontfamily( regular,bold,italic,bolditalic, name, size, baseline
     fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
     local fontnumber = #fonts.lookup_fontfamily_number_instance
     fonts.lookup_fontfamily_name_number[name] = fontnumber
-    splib.log("info","Define font family","name",name,"size",math.round(size / factor, 3),"leading",math.round(baselineskip / factor,3), "id",fontnumber)
-    if regular then splib.log("debug", "Instance created", "instance", "regular", "name", regular,"id",fam.normal) end
-    if bold then splib.log("debug", "Instance created", "instance", "bold", "name", bold,"id",fam.bold) end
-    if italic then splib.log("debug", "Instance created", "instance", "italic", "name", italic,"id",fam.italic) end
-    if bolditalic then splib.log("debug", "Instance created", "instance", "bolditalic", "name", bolditalic,"id",fam.bolditalic) end
+    main.log("info","Define font family","name",name,"size",math.round(size / factor, 3),"leading",math.round(baselineskip / factor,3), "id",fontnumber)
+    if regular then main.log("debug", "Instance created", "instance", "regular", "name", regular,"id",fam.normal) end
+    if bold then main.log("debug", "Instance created", "instance", "bold", "name", bold,"id",fam.bold) end
+    if italic then main.log("debug", "Instance created", "instance", "italic", "name", italic,"id",fam.italic) end
+    if bolditalic then main.log("debug", "Instance created", "instance", "bolditalic", "name", bolditalic,"id",fam.bolditalic) end
     return fontnumber
 end
 
@@ -8247,7 +8247,7 @@ end
 local images = {}
 
 function reload_image(filename,typ,width,height)
-    splib.log("info","Reload image","width",tostring(width),"height",tostring(height),"filename",filename)
+    main.log("info","Reload image","width",tostring(width),"height",tostring(height),"filename",filename)
     local filename_extension = get_extension(filename)
     local handlername_for_extension
     if options.extensionhandler and options.extensionhandler ~= "" then
@@ -8285,7 +8285,7 @@ end
 
 function get_fallback_image_name( filename, missingfilename )
     if filename then
-        splib.log("info","Using fallback","fallback",filename or "(filename)", "requested",missingfilename or "(empty)")
+        main.log("info","Using fallback","fallback",filename or "(filename)", "requested",missingfilename or "(empty)")
         if not kpse.find_file(filename) then
             err("fallback image %q not found",filename or "<filename>")
             return "filenotfound.pdf"
@@ -8315,17 +8315,17 @@ function imageinfo( filename,page,box,fallback,imageshape )
     if images[new_name] then
         return images[new_name]
     end
-    splib.log("info","Searching for image","filename",tostring(filename))
+    main.log("info","Searching for image","filename",tostring(filename))
     if not kpse.find_file(filename) then
         if options.imagenotfounderror then
-            splib.error("Image not found","filename", filename or "???", lineinfo())
+            main.log("error","Image not found","filename", filename or "???", lineinfo())
         else
-            splib.log("warn","Image not found","filename", filename or "???", lineinfo())
+            main.log("warn","Image not found","filename", filename or "???", lineinfo())
         end
         filename = get_fallback_image_name(fallback,filename)
         page = 1
     end
-    splib.log("info","Load image","filename",tostring(filename))
+    main.log("info","Load image","filename",tostring(filename))
     -- example is wrong: one based index
     -- <?xml version="1.0" ?>
     -- <imageinfo>

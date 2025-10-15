@@ -188,7 +188,7 @@ function newbox(width_sp, height_sp)
     if width_sp and width_sp ~= 0 then
         execute(mpobj, string.format("box.width = %fbp;", width_sp / 65782))
     else
-        splib.log("warn","MetaPost: width is 0, setting to 1bp")
+        main.log("warn","MetaPost: width is 0, setting to 1bp")
         execute(mpobj, "box.width = 1bp;")
     end
     if height_sp and height_sp ~= 0 then
@@ -716,7 +716,7 @@ function prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
         for i = 1, #colorwarnings do
             local str,mpcolorname = table.unpack(colorwarnings[i])
             if publisher.options.mpcolorwarning then
-                splib.log("warn","A color has characters in it that confuse the metapost interpreter, therefore I have renamed the color for metapost","color", str, "dest", "colors." .. mpcolorname)
+                main.log("warn","A color has characters in it that confuse the metapost interpreter, therefore I have renamed the color for metapost","color", str, "dest", "colors." .. mpcolorname)
             end
         end
         publisher.metapostcolorwarnings = {}

@@ -74,7 +74,7 @@ end
 
 
 function print_page_number()
-    splib.log("info","Shipout page", "page",tostring(publisher.current_pagenumber))
+    main.log("info","Shipout page", "page",tostring(publisher.current_pagenumber))
 end
 
 function pluralize(what, count)

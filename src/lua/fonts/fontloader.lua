@@ -241,7 +241,7 @@ function define_font_hb( name, size, extra_parameter )
     if extra_parameter.fallbacks then
         for i=#extra_parameter.fallbacks,1,-1 do
             local fnt = extra_parameter.fallbacks[i]
-            splib.log("info","Create font metrics for fallback font","name",fnt,"size",math.round(size / publisher.factor,3))
+            main.log("info","Create font metrics for fallback font","name",fnt,"size",math.round(size / publisher.factor,3))
             local tmp, newfont_or_msg = define_font_hb(fnt,size,{})
             if not tmp then return nil, newfont_or_msg end
             local num = font.define(newfont_or_msg)
@@ -462,7 +462,7 @@ function define_font(name, size,extra_parameter)
     if extra_parameter.fallbacks then
         for i=#extra_parameter.fallbacks,1,-1 do
             local fnt = extra_parameter.fallbacks[i]
-            splib.log("info","Create font metrics for fallback font","name",fnt,"size",math.round(size / publisher.factor,3))
+            main.log("info","Create font metrics for fallback font","name",fnt,"size",math.round(size / publisher.factor,3))
             local tmp, newfont_or_msg = define_font(fnt,size)
             if not tmp then return nil, newfont_or_msg end
             local num = font.define(newfont_or_msg)

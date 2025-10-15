@@ -42,6 +42,12 @@ end
 file_start("sdini.lua")
 callback.register('start_run',function() return true end)
 
+main = {}
+
+function main.log(...)
+    splib.log(...)
+end
+
 
 texconfig.kpse_init=false
 texconfig.max_print_line=99999
@@ -49,9 +55,8 @@ texconfig.formatname="sd-format"
 texconfig.trace_file_names = false
 
 splib.buildfilelist()
+
 kpse = {}
-
-
 
 --- @param filename string The file name to look up
 --- @return string|nil The full path of the file name or nil if the file is not found.

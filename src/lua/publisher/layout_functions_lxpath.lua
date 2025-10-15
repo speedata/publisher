@@ -455,7 +455,7 @@ local function groupheight(dataxml, arg)
     publisher.setup_page(nil, "layout_functions#groupheight", dataxml)
     local groupname = xpath.string_value(arg[1])
     if not publisher.groups[groupname] then
-        splib.error("Can't find group","groupname",groupname)
+        main.log("error","Can't find group","groupname",groupname)
         return { }, "Can't find group"
     end
 
@@ -764,7 +764,7 @@ end
 local function romannumeral(dataxml, arg)
     local firstarg = xpath.number_value(arg[1])
     if not firstarg then
-        splib.error("romannumeral expects a number as the first argument")
+        main.log("error","romannumeral expects a number as the first argument")
         return {}, "romannumeral expects a number as the first argument"
     end
     return { tex.romannumeral(firstarg) }, nil

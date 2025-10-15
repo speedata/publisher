@@ -51,7 +51,7 @@ local function mkpattern( str )
   end
 
   if #number == 0 then
-      splib.error("Barcode: no code provided")
+      main.log("error","Barcode: no code provided")
       return
   end
   -- The first digit in a barcode determines how the next six digit patterns are displayed.

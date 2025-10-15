@@ -111,7 +111,7 @@ function make_font_instance( name,size )
     assert(tonumber(size))
     if not lookup_fontname_filename[name] then
         local msg = string.format("Font instance '%s' is not defined!", name)
-        splib.error("Make font instance: filename is not defined","filename",name)
+        main.log("error","Make font instance: filename is not defined","filename",name)
         return false, msg
     end
     local filename,parameter = table.unpack(lookup_fontname_filename[name])
@@ -134,7 +134,7 @@ function make_font_instance( name,size )
         f = fonts.fontloader.preload_font(filename,size,parameter,parameter.mode or publisher.options.fontloader)
         f.reserved_num = num
         preloaded_fonts[num] = f
-        splib.log("debug","Preload font","name",filename,"size",tostring(math.round(size / publisher.factor,3)),"id",tostring(num))
+        main.log("debug","Preload font","name",filename,"size",tostring(math.round(size / publisher.factor,3)),"id",tostring(num))
         font_instances[k]=num
         return true, num
     end
@@ -145,7 +145,7 @@ end
 function define_font(instance)
     local mode = instance.requested_mode
     local num = instance.reserved_num
-    splib.log("info","Create font metrics","name",instance.requested_name,"size",math.round(instance.requested_size / publisher.factor,3),"id",num,"mode",mode)
+    main.log("info","Create font metrics","name",instance.requested_name,"size",math.round(instance.requested_size / publisher.factor,3),"id",num,"mode",mode)
     local f, ok
     if mode == "harfbuzz" then
         ok,f = fonts.fontloader.define_font_hb(instance.requested_name,instance.requested_size,instance.requested_extra_parameter)
@@ -153,7 +153,7 @@ function define_font(instance)
         ok,f = fonts.fontloader.define_font(instance.requested_name,instance.requested_size,instance.requested_extra_parameter)
     end
     if not ok then
-        splib.error("Failed to load font","requested name",instance.requested_name,"errormessage",f or "")
+        main.log("error","Failed to load font","requested name",instance.requested_name,"errormessage",f or "")
         return false
     end
     preloaded_fonts[num] = f
@@ -504,9 +504,9 @@ do
                     local thisfont = used_fonts[head.font]
                     if thisfont and not thisfont.characters[head.char] then
                         if reportmissingglyphs == "warning" then
-                            splib.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",head.char))
+                            main.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",head.char))
                         else
-                            splib.log("error","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",head.char))
+                            main.log("error","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",head.char))
                         end
                     end
                 end

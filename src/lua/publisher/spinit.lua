@@ -35,7 +35,7 @@ function warning(...)
     else
         unpacked = string.format( "%s",string.format(table.unpack(text)))
     end
-    splib.log("warn",unpacked)
+    main.log("warn",unpacked)
 end
 
 function err(...)
@@ -50,7 +50,7 @@ function err(...)
     else
         unpacked = string.format( "%s",string.format(table.unpack(text)))
     end
-    splib.error(unpacked)
+    main.log("error",unpacked)
 end
 
 function call(...)
@@ -65,7 +65,7 @@ end
 function log(...)
     local text = { ... }
     local res = call(string.format,table.unpack(text))
-    splib.log("info",res)
+    main.log("info",res)
 end
 
 do
@@ -255,7 +255,7 @@ function tex.sp(number_or_string)
         local tmp = s:gsub("(%d)pt", "%1bp"):gsub("(%d)pp", "%1pt")
         local ok, val = pcall(orig_texsp, tmp)
         if not ok then
-            splib.error("Could not convert dimension", "dimen", number_or_string)
+            main.log("error","Could not convert dimension", "dimen", number_or_string)
             return nil
         end
         return toint(val)
@@ -304,12 +304,12 @@ function quit()
 end
 
 local function setup()
-    splib.log("debug","Setting","varname","LUA_PATH", "value", os.getenv("LUA_PATH") or "")
-    splib.log("debug","Setting","varname","SP_EXTRA_DIRS", "value", os.getenv("SP_EXTRA_DIRS") or "")
-    splib.log("debug","Setting","varname","SP_EXTRA_XML", "value", os.getenv("SP_EXTRA_XML") or "")
-    splib.log("debug","Setting","varname","SP_PREPEND_XML", "value", os.getenv("SP_PREPEND_XML") or "")
-    splib.log("debug","Setting","varname","SP_IGNORECASE", "value", os.getenv("SP_IGNORECASE") or "")
-    splib.log("debug","Setting","varname","SP_XMLPARSER", "value", os.getenv("SP_XMLPARSER") or "")
+    main.log("debug","Setting","varname","LUA_PATH", "value", os.getenv("LUA_PATH") or "")
+    main.log("debug","Setting","varname","SP_EXTRA_DIRS", "value", os.getenv("SP_EXTRA_DIRS") or "")
+    main.log("debug","Setting","varname","SP_EXTRA_XML", "value", os.getenv("SP_EXTRA_XML") or "")
+    main.log("debug","Setting","varname","SP_PREPEND_XML", "value", os.getenv("SP_PREPEND_XML") or "")
+    main.log("debug","Setting","varname","SP_IGNORECASE", "value", os.getenv("SP_IGNORECASE") or "")
+    main.log("debug","Setting","varname","SP_XMLPARSER", "value", os.getenv("SP_XMLPARSER") or "")
 
     tex.pdfhorigin = 0
     tex.pdfvorigin = 0
@@ -455,7 +455,7 @@ require("publisher")
 local function traceback(what)
     -- get message from what
     local msg = string.gsub(what,".*:%d+: (.*)", "%1")
-    splib.error("Lua error:","message",msg)
+    main.log("error","Lua error:","message",msg)
     print("Internal error: " .. msg)
     if loglevel > 4 then
         print("Stack trace:")
@@ -475,7 +475,7 @@ local function traceback(what)
             else
                 functioninfo = ""
             end
-            splib.log("message","stacktrace","source",src or "?","line",info.currentline or "?","function",info.name or "?")
+            main.log("message","stacktrace","source",src or "?","line",info.currentline or "?","function",info.name or "?")
             if loglevel > 4 then
                 print(src .. ":" .. info.currentline .. ": in function " .. functioninfo)
             end

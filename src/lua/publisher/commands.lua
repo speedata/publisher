@@ -66,7 +66,7 @@ function commands.a( layoutxml,dataxml )
     elseif page then
         publisher.hlpage(page,bordercolor)
     else
-        splib.log("warn","A: You must provide either href, link, page or embedded attribute", lineinfo(layoutxml))
+        main.log("warn","A: You must provide either href, link, page or embedded attribute", lineinfo(layoutxml))
         p = par:new(nil,"a")
         return p
     end
@@ -199,7 +199,7 @@ function commands.add_searchpath( layoutxml,dataxml )
         err("AddSearchpath: The path %q does not exist",selection)
         return
     end
-    splib.log("info","Add search path","path",selection)
+    main.log("info","Add search path","path",selection)
     kpse.add_dir(selection)
 end
 
@@ -243,12 +243,12 @@ function commands.attachfile( layoutxml,dataxml )
         modificationtime = os.time()
     else
         if not inputfilename then
-            splib.error("AttachFile: You must provide either a filename or select attribute")
+            main.log("error","AttachFile: You must provide either a filename or select attribute")
             return
         end
         local path = kpse.find_file(inputfilename)
         if path == nil then
-            splib.error("Cannot find file","filename",inputfilename)
+            main.log("error","Cannot find file","filename",inputfilename)
             return
         end
         local stat = lfs.attributes(path)
@@ -283,7 +283,7 @@ function commands.attachfile( layoutxml,dataxml )
         end
 
         if not destfilename then
-            splib.log("info","AttachFile: no filename provided, using the default.","default",publisher.options.default_zugferdfile)
+            main.log("info","AttachFile: no filename provided, using the default.","default",publisher.options.default_zugferdfile)
             destfilename = publisher.options.default_zugferdfile
         end
     end
@@ -462,7 +462,7 @@ function commands.box( layoutxml,dataxml )
     if graphic then
         local instr, bbox = metapost.boxgraphic(width,height,graphic)
         if not instr then
-            splib.error("Could not create metapost image","graphic",graphic)
+            main.log("error","Could not create metapost image","graphic",graphic)
             return
         end
 
@@ -849,7 +849,7 @@ function commands.define_color( layoutxml,dataxml )
 
     color.model = model
     color.index = publisher.register_color(name)
-    splib.log("info","Define color","name",name,"index",color.index)
+    main.log("info","Define color","name",name,"index",color.index)
     publisher.colors[name]=color
 end
 
@@ -1144,7 +1144,7 @@ function commands.forall( layoutxml,dataxml )
     if publisher.newxpath then
         local save_size = dataxml.size
         if limit or start then
-            splib.error("ForAll: the new xpath parser does not allow limit or start, please use predicates instead.")
+            main.log("error","ForAll: the new xpath parser does not allow limit or start, please use predicates instead.")
         end
         local copysequence = dataxml.sequence
         local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
@@ -1358,9 +1358,9 @@ function commands.group( layoutxml,dataxml )
     local groupname = publisher.read_attribute(layoutxml,dataxml,"name", "string")
 
     if publisher.groups[groupname] == nil then
-        splib.log("debug","Create group","name",groupname)
+        main.log("debug","Create group","name",groupname)
     else
-        splib.log("debug","Re-use group","name",groupname)
+        main.log("debug","Re-use group","name",groupname)
         -- The old nodes are still in the group. We should clean the nodes
         -- but this cleans too much.
         node.flush_list(publisher.groups[groupname].contents)
@@ -1674,11 +1674,11 @@ function commands.image( layoutxml,dataxml )
         local destdpi = tonumber(publisher.options.dpi)
         if publisher.options.dpi then
             if not publisher.pro then
-                splib.error("Image reduction is a pro feature")
+                main.log("error","Image reduction is a pro feature")
                 publisher.has_pro_error = true
             else
                 if image.imagetype == "pdf" then
-                    splib.log("info","Unsupported image type PDF for resize","filename",filename)
+                    main.log("info","Unsupported image type PDF for resize","filename",filename)
                 else
                     local destpx_x = math.round(destdpi * width / publisher.factor / 72,0)
                     local destpx_y = math.round(destdpi * height / publisher.factor / 72,0)
@@ -1696,10 +1696,10 @@ function commands.image( layoutxml,dataxml )
             local inch_x = width / publisher.factor / 72
             local inch_y = height / publisher.factor / 72
             if (image.xsize / inch_x) < dpiwarn then
-                splib.log("warn","Image DPI value to small (horizontal)","rendered",tostring(math.floor(image.xsize / inch_x)), "requested minimum", tostring(dpiwarn),"filename",filename)
+                main.log("warn","Image DPI value to small (horizontal)","rendered",tostring(math.floor(image.xsize / inch_x)), "requested minimum", tostring(dpiwarn),"filename",filename)
             end
             if (image.ysize / inch_y) < dpiwarn then
-                splib.log("warn","Image DPI value to small (vertical)","rendered",tostring(math.floor(image.ysize / inch_y)), "requested minimum", tostring(dpiwarn),"filename",filename)
+                main.log("warn","Image DPI value to small (vertical)","rendered",tostring(math.floor(image.ysize / inch_y)), "requested minimum", tostring(dpiwarn),"filename",filename)
             end
         end
     end
@@ -1976,7 +1976,7 @@ function commands.insert_pages( layoutxml,dataxml )
             return
         end
         local thispage = publisher.pages[current_pagenumber]
-        splib.log("info","InsertPages forward mode","pages",pages,"insert at page",current_pagenumber)
+        main.log("info","InsertPages forward mode","pages",pages,"insert at page",current_pagenumber)
         local savenextpage = publisher.nextpage
         publisher.nextpage = nil
         --- If we insert before the first page, we don't need to to anything.
@@ -2005,7 +2005,7 @@ function commands.insert_pages( layoutxml,dataxml )
         publisher.setup_page(publisher.current_pagenumber,"insert_pages",dataxml)
         current_pagenumber = publisher.current_pagenumber
     end
-    splib.log("info","InsertPages backward mode","name", pagestore_name)
+    main.log("info","InsertPages backward mode","name", pagestore_name)
     for i=1,#thispagestore do
         tex.box[666] = thispagestore[i]
         publisher.pagenum_tbl[#publisher.pagenum_tbl+1] = current_pagenumber
@@ -2104,7 +2104,7 @@ function commands.load_fontfile( layoutxml,dataxml )
     end
 
     if publisher.lowercase then filename = unicode.utf8.lower(filename) end
-    splib.log("info","Load font file","filename",filename or "?")
+    main.log("info","Load font file","filename",filename or "?")
     publisher.fonts.load_fontfile(name,filename,extra_parameter)
 end
 
@@ -2117,11 +2117,11 @@ function commands.load_dataset( layoutxml,dataxml )
     local filename = publisher.read_attribute(layoutxml,dataxml,"filename", "string")
     local name = publisher.read_attribute(layoutxml,dataxml,"name", "string")
     if filename then
-        splib.log("info","Load data file","filename",filename)
+        main.log("info","Load data file","filename",filename)
         path = kpse.find_file(filename)
     elseif name then
         name = tex.jobname .. "-" .. name .. ".xml"
-        splib.log("info","Load data file","filename",name)
+        main.log("info","Load data file","filename",name)
         path = kpse.find_file(name)
     else
         err("LoadDataset: no (file)name given.")
@@ -2358,7 +2358,7 @@ function commands.message( layoutxml, dataxml )
             local copysequence = dataxml.sequence
             local seq, msg = dataxml:eval(selection)
             if msg then
-                splib.error(msg,lineinfo(layoutxml))
+                main.log("error",msg,lineinfo(layoutxml))
                 return
             end
             contents = xpath.string_value(seq)
@@ -2412,12 +2412,12 @@ function commands.message( layoutxml, dataxml )
     end
 
     if errcond then
-        splib.log("error",contents,"errorcode",errorcode,"from","message",lineinfo(layoutxml))
+        main.log("error",contents,"errorcode",errorcode,"from","message",lineinfo(layoutxml))
         if errorcode > publisher.errorcode then
             publisher.errorcode = errorcode
         end
     else
-        splib.log("message",contents,lineinfo(layoutxml))
+        main.log("message",contents,lineinfo(layoutxml))
     end
 
     if exitnow then
@@ -2534,7 +2534,7 @@ function commands.nobreak( layoutxml, dataxml )
                 tmppar = par:new(nil,"nobreak(fontsize 1)")
                 loops = loops + 1
                 if loops > maxloops then
-                    splib.error("Nobreak, giving up, too many loops","maxloops",maxloops)
+                    main.log("error","Nobreak, giving up, too many loops","maxloops",maxloops)
                     break
                 end
                 local thisoptions = publisher.copy_table_from_defaults(options)
@@ -3147,7 +3147,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     if publisher.options.format == "PDF/UA" then
         params.role = params.role or publisher.get_rolenum("P")
         if not params.role then
-            splib.error("Paragraph: role unknown",lineinfo(layoutxml))
+            main.log("error","Paragraph: role unknown",lineinfo(layoutxml))
         else
             p.parent = params.parent
             p.role = params.role
@@ -3471,7 +3471,7 @@ function commands.place_object( layoutxml,dataxml)
     -- current_height is the remaining space on the current page in sps
     local maxcells = maxheight or current_grid:number_of_rows(area)
     if not tonumber(maxcells) then
-        splib.error("Cannot calculate the number of rows in the area","area",area)
+        main.log("error","Cannot calculate the number of rows in the area","area",area)
         return
     end
     local areaheight = maxcells * current_grid.gridheight + ( maxcells - 1 ) * current_grid.grid_dy
@@ -3517,7 +3517,7 @@ function commands.place_object( layoutxml,dataxml)
             if publisher.options.showgroups then
                 local p = node.new(publisher.whatsit_node,publisher.pdf_literal_whatsit)
                 if g.contents == nil then
-                    splib.error("Group contents is nil","groupname",groupname)
+                    main.log("error","Group contents is nil","groupname",groupname)
                 else
                     p.data = publisher.grid.draw_grid_group(g)
                     publisher.setprop(p,"origin","trace group")
@@ -3672,7 +3672,7 @@ function commands.place_object( layoutxml,dataxml)
                     -- the current grid is different when in a group
                     current_row = current_grid:find_suitable_row(current_column_start,width_in_gridcells,height_in_gridcells,area)
                     if not current_row then
-                        splib.log("warn","No suitable row found","type", objecttype,lineinfo(layoutxml))
+                        main.log("warn","No suitable row found","type", objecttype,lineinfo(layoutxml))
                         publisher.next_area(area,nil, dataxml, "place_object no current row")
                         publisher.setup_page(nil,"commands#PlaceObject",dataxml)
                         current_grid = publisher.current_grid
@@ -3683,7 +3683,7 @@ function commands.place_object( layoutxml,dataxml)
             end
             -- if the object has no height (for example an Action node), we don't move the cursor
             if height_in_gridcells == 0  then allocate = "no" end
-            splib.log("debug","PlaceObject","type",objecttype,"col",tostring(math.floor(current_column_start)),"row",tostring(math.floor(current_row)),"wd",width_in_gridcells,"ht",height_in_gridcells,"page",onpage or publisher.current_pagenumber)
+            main.log("debug","PlaceObject","type",objecttype,"col",tostring(math.floor(current_column_start)),"row",tostring(math.floor(current_row)),"wd",width_in_gridcells,"ht",height_in_gridcells,"page",onpage or publisher.current_pagenumber)
             publisher.output_at({
                 nodelist = node.copy(object),
                 x = current_column_start,
@@ -3798,7 +3798,7 @@ function commands.process_node(layoutxml,dataxml)
         layoutnode = publisher.data_dispatcher[mode][element_name]
 
         if layoutnode then
-            splib.log("debug","Process node", "node",element_name,"mode",mode,"pos",string.format("%d",pos))
+            main.log("debug","Process node", "node",element_name,"mode",mode,"pos",string.format("%d",pos))
             if publisher.newxpath then
                 dataxml.pos = pos
                 publisher.dispatch(layoutnode,dataxml)
@@ -3848,16 +3848,16 @@ function commands.positioning_frame( layoutxml, dataxml )
     local height = publisher.read_attribute(layoutxml,dataxml,"height"  ,"number")
     if row == nil or column == nil or width == nil or height == nil then
         if not row then
-            splib.error("row not set in PositioningFrame")
+            main.log("error","row not set in PositioningFrame")
         end
         if not column then
-            splib.error("column not set in PositioningFrame")
+            main.log("error","column not set in PositioningFrame")
         end
         if not width then
-            splib.error("width not set in PositioningFrame")
+            main.log("error","width not set in PositioningFrame")
         end
         if not height then
-            splib.error("height not set in PositioningFrame")
+            main.log("error","height not set in PositioningFrame")
         end
     end
     return {
@@ -3917,7 +3917,7 @@ function commands.record( layoutxml,dataxml )
         end
     end
 
-    splib.log("debug","Record","element",elementname,"mode",mode)
+    main.log("debug","Record","element",elementname,"mode",mode)
     publisher.data_dispatcher[mode] = publisher.data_dispatcher[mode] or {}
     publisher.data_dispatcher[mode][elementname] = layoutxml
 end
@@ -4085,7 +4085,7 @@ function commands.save_pages( layoutxml,dataxml )
     if publisher.forward_pagestore[pagestore_name] == nil then
         -- backwards mode. First save_pages, then insert_pages
         local save_current_pagenumber = publisher.current_pagenumber
-        splib.log("info","SavePages backwards mode","start page",save_current_pagenumber, "name",pagestore_name)
+        main.log("info","SavePages backwards mode","start page",save_current_pagenumber, "name",pagestore_name)
         publisher.current_pagestore_name = pagestore_name
         publisher.pagestore[pagestore_name] = {}
         local tab = publisher.dispatch(layoutxml,dataxml)
@@ -4107,7 +4107,7 @@ function commands.save_pages( layoutxml,dataxml )
         local ps = publisher.pagestore[pagestore_name]
         local number_of_pages = ps[1]
         local location = ps[2]
-        splib.log("info","SavePages forward mode","number of pages",number_of_pages,"insert location",location)
+        main.log("info","SavePages forward mode","number of pages",number_of_pages,"insert location",location)
         -- oldbookmarkspos = the number of bookmarks before the insert pages command
         local oldbookmarkspos = ps[3]
         local bookmarkscount = #publisher.bookmarks
@@ -4120,7 +4120,7 @@ function commands.save_pages( layoutxml,dataxml )
 
         local realpagecount = publisher.current_pagenumber - location + 1
         if realpagecount ~= number_of_pages then
-            splib.error("SavePages: incorrect number of pages.","expected",number_of_pages, "got", realpagecount)
+            main.log("error","SavePages: incorrect number of pages.","expected",number_of_pages, "got", realpagecount)
             return tab
         end
 
@@ -4159,7 +4159,7 @@ function commands.set_grid(layoutxml,dataxml)
     local dx = publisher.read_attribute(layoutxml,dataxml,"dx",    "length_sp")
     local dy = publisher.read_attribute(layoutxml,dataxml,"dy",    "length_sp")
     if not (wd or ht or nx or ny) then
-        splib.error("SetGrid: you must set nx and ny or width and height", lineinfo(layoutxml))
+        main.log("error","SetGrid: you must set nx and ny or width and height", lineinfo(layoutxml))
         return
     end
     publisher.options.gridcells_dx = dx
@@ -4176,7 +4176,7 @@ function commands.set_grid(layoutxml,dataxml)
             wd = "1cm"
         end
         if wd == nil then
-            splib.error("Grid width not set",lineinfo(layoutxml))
+            main.log("error","Grid width not set",lineinfo(layoutxml))
         else
             publisher.options.gridwidth = tex.sp(wd)
             publisher.options.gridcells_x = 0
@@ -4242,7 +4242,7 @@ function commands.setvariable( layoutxml,dataxml )
             if publisher.newxpath then
                 local seq, msg = dataxml:eval(selection)
                 if msg then
-                    splib.error(msg,lineinfo(layoutxml))
+                    main.log("error",msg,lineinfo(layoutxml))
                 end
                 dataxml.vars[varname] = seq
                 contents = seq
@@ -4353,7 +4353,7 @@ function commands.setvariable( layoutxml,dataxml )
     end
 
     if trace_p then
-        splib.log("info","SetVariable","varname",varname or "(no variable name)","value",tostring(contents))
+        main.log("info","SetVariable","varname",varname or "(no variable name)","value",tostring(contents))
         if type(contents) == "table" then
             printtable("SetVariable",contents)
         end
@@ -4719,7 +4719,7 @@ function commands.table( layoutxml,dataxml,options )
             -- ignore
         else
             if eltname and eltname ~= "elementstructure" then
-                splib.log("debug","Ignore command in table","cmd",eltname)
+                main.log("debug","Ignore command in table","cmd",eltname)
             end
         end
     end
@@ -5175,7 +5175,7 @@ function commands.text(layoutxml,dataxml)
     local colorindex
     if colorname then
         if not publisher.colors[colorname] then
-            splib.error("Color is not defined","name",tostring(colorname))
+            main.log("error","Color is not defined","name",tostring(colorname))
         else
             colorindex = publisher.colors[colorname].index
         end
@@ -5224,7 +5224,7 @@ function commands.text(layoutxml,dataxml)
                 objects[#objects + 1] = contents[i]
             end
         else
-            splib.log("info","Unknown element in Text","eltname",eltname or "?")
+            main.log("info","Unknown element in Text","eltname",eltname or "?")
         end
     end
     tab = objects
@@ -5319,7 +5319,7 @@ function commands.textblock( layoutxml,dataxml )
     if fontname then warning("Textblock/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     if publisher.current_group and not width then
-        splib.log("warn","Textblock: width not set, but within a group. Expect strange results.")
+        main.log("warn","Textblock: width not set, but within a group. Expect strange results.")
     end
     local save_width
     if publisher.newxpath then
@@ -5365,7 +5365,7 @@ function commands.textblock( layoutxml,dataxml )
     local colorindex
     if colorname then
         if not publisher.colors[colorname] then
-            splib.error("Color is not defined","name",tostring(colorname))
+            main.log("error","Color is not defined","name",tostring(colorname))
         else
             colorindex = publisher.colors[colorname].index
         end
@@ -5461,7 +5461,7 @@ function commands.textblock( layoutxml,dataxml )
     end
 
     if #objects == 0 then
-        splib.log("warn","Textblock: no objects found", lineinfo(layoutxml))
+        main.log("warn","Textblock: no objects found", lineinfo(layoutxml))
         warning("Textblock: no objects found!")
         local vrule = {  width = 10 * 2^16, height = -1073741824}
         nodes[1] = publisher.add_rule(nil,"head",vrule)
@@ -5632,7 +5632,7 @@ function commands.value( layoutxml,dataxml )
             local ret = {}
             local seq, msg = dataxml:eval(selection)
             if msg then
-                splib.error("xpath error","message",msg)
+                main.log("error","xpath error","message",msg)
                 return
             end
             if seq then
@@ -5692,7 +5692,7 @@ function commands.while_do( layoutxml,dataxml )
         while true do
             local seq, msg = dataxml:eval(test)
             if msg then
-                splib.error(msg)
+                main.log("error",msg)
                 break
             end
             local tf = xpath.boolean_value(seq)

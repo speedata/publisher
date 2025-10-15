@@ -247,7 +247,7 @@ function tabular:calculate_columnwidths_for_row(tr_contents, current_row, colspa
         local cellheight = 0
         for _,blockobject in ipairs(td_contents.objects) do
             if type(blockobject) ~= "table" then
-                splib.error("internal error: blockobject is not a table")
+                main.log("error","internal error: blockobject is not a table")
             else
                 for i=1,#blockobject do
                     local inlineobject = blockobject[i]
@@ -489,7 +489,7 @@ function tabular:calculate_columnwidth()
                 count_stars = count_stars + starcols[i]
             else
                 if i > #self.colwidths then
-                    splib.error("Something is wrong with the number of coumns in the table")
+                    main.log("error","Something is wrong with the number of coumns in the table")
                     return
                 end
                 total_stars_width = total_stars_width - self.colwidths[i]
@@ -884,7 +884,7 @@ function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, ski
         else
             local ht = tex.sp(tr_contents.minheight)
             if ht == nil then
-                splib.log("error","Cannot parse minheight", "ht",tr_contents.minheight or "?")
+                main.log("error","Cannot parse minheight", "ht",tr_contents.minheight or "?")
                 ht = 0
             end
             minht = ht
