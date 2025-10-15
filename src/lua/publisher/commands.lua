@@ -246,7 +246,7 @@ function commands.attachfile( layoutxml,dataxml )
             splib.error("AttachFile: You must provide either a filename or select attribute")
             return
         end
-        local path = publisher.find_file(inputfilename)
+        local path = kpse.find_file(inputfilename)
         if path == nil then
             splib.error("Cannot find file","filename",inputfilename)
             return
@@ -2118,11 +2118,11 @@ function commands.load_dataset( layoutxml,dataxml )
     local name = publisher.read_attribute(layoutxml,dataxml,"name", "string")
     if filename then
         splib.log("info","Load data file","filename",filename)
-        path = publisher.find_file(filename)
+        path = kpse.find_file(filename)
     elseif name then
         name = tex.jobname .. "-" .. name .. ".xml"
         splib.log("info","Load data file","filename",name)
-        path = publisher.find_file(name)
+        path = kpse.find_file(name)
     else
         err("LoadDataset: no (file)name given.")
     end

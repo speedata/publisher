@@ -388,7 +388,7 @@ local function file_exists(dataxml, arg)
     local filename = xpath.string_value(arg[1])
     if not filename then return { false }, nil end
     if filename == "" then return { false }, nil end
-    return { publisher.find_file(filename) ~= nil }, nil
+    return { kpse.find_file(filename) ~= nil }, nil
 end
 
 --- Insert 1000's separator and comma separator

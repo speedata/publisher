@@ -103,7 +103,7 @@ function define_font_hb( name, size, extra_parameter )
     end
     local fonttable
     local filename_with_path
-    filename_with_path = publisher.find_file(name)
+    filename_with_path = kpse.find_file(name)
     if not filename_with_path then return false, string.format("Fontfile '%s' not found.", name) end
     local face = harfbuzz.Face.new(filename_with_path)
     local fnt = harfbuzz.Font.new(face)
@@ -279,7 +279,7 @@ function define_font(name, size,extra_parameter)
         local lookup_codepoint_by_name   = {}
         local lookup_codepoint_by_number = {}
 
-        filename_with_path = publisher.find_file(name)
+        filename_with_path = kpse.find_file(name)
         if not filename_with_path then return false, string.format("Fontfile '%s' not found.", name) end
         local font, err = fontloader.open(filename_with_path)
         if not font then
