@@ -21,7 +21,6 @@ var (
 	ignorefile  string
 	verbosity   int
 	pathrewrite *strings.Replacer
-	nr          *strings.Replacer
 )
 
 func init() {
@@ -30,7 +29,6 @@ func init() {
 	if v := os.Getenv("SP_VERBOSITY"); v != "" {
 		verbosity, _ = strconv.Atoi(v)
 	}
-	nr = strings.NewReplacer("\n", `\n`, `"`, `\"`, `\`, `\\`)
 
 	if rewriteString := os.Getenv("SP_PATH_REWRITE"); rewriteString != "" {
 		var rewrites = []string{}

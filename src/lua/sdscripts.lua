@@ -6,26 +6,7 @@
 --  See file COPYING in the root directory for license info.
 --
 
-
-local libname
-if os.name == "windows" then
-  libname = "libsplib.dll"
-elseif os.name == "linux" then
-  libname = "libsplib.so"
-elseif os.name == "freebsd" then
-  libname = "libsplib.so"
-else
-  libname = "libsplib.so"
-end
-
-local ok, msg = package.loadlib(libname,"*")
-if not ok then
-   print(msg)
-   os.exit(0)
-end
-
-local splib = require("luaglue")
-
+-- libs are already loaded in sdini.lua
 dofile(arg[1])
 
 function get_ps_name( filename )
@@ -36,12 +17,17 @@ end
 local cmd = arg[2]
 
 local fontlist = {}
-
-
 local shortname
-for _,v in pairs(splib.listfonts()) do
+if rlib then
+  for _,v in pairs(rlib.aux.list_fonts()) do
     _,shortname,_ = string.match(v, "(.-)([^\\/]-%.?([^%.\\/]*))$")
     fontlist[shortname] = v
+  end
+else
+  for _,v in pairs(splib.listfonts()) do
+    _,shortname,_ = string.match(v, "(.-)([^\\/]-%.?([^%.\\/]*))$")
+    fontlist[shortname] = v
+  end
 end
 
 if cmd=="list-fonts" then

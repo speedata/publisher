@@ -43,7 +43,7 @@ end
 function find_write_file(id_number,asked_name)
     return asked_name
 end
-local function read_xxx_file(name)
+local function read_other_file(name)
     return true,"",0
 end
 
@@ -69,7 +69,7 @@ for _,t in ipairs({"find_font_file",'find_vf_file','find_format_file','find_map_
   callback.register(t,find_generic_file)
 end
 for _,t in ipairs({'read_vf_file','read_sdf_file','read_pk_file','read_data_file','read_font_file','read_map_file'}) do
-  callback.register(t, read_xxx_file )
+  callback.register(t, read_other_file )
 end
 
 

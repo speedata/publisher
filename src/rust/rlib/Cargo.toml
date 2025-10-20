@@ -1,0 +1,39 @@
+[package]
+name = "rlib"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[features]
+default = []
+pro = ["dep:reqwest"]
+
+[dependencies]
+mlua = { version = "0.11", features = ["module", "lua53"] }
+chrono = "0.4"
+anyhow = "1"
+regex = "1"
+url = "2"
+thiserror = "2"
+md5 = "0.7"
+unicode-bidi = "0.3"
+comrak = { version = "0.22", default-features = false, features = ["syntect"] }
+markup5ever = "0.12"
+syntect = { version = "5", default-features = false, features = ["html", "default-fancy"] }
+image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
+html5ever = "=0.27.0"
+markup5ever_rcdom = "=0.3.0"
+kuchiki = "0.8"
+selectors = "0.24"           # (indirekt via kuchiki, aber wir nutzen Typen/Traits optional direkt)
+cssparser = "0.31"           # simple CSS-Deklarations-Parser
+lightningcss  = "1.0.0-alpha.68"
+
+
+# pro-only
+reqwest = { version = "0.12", default-features = false, features = ["blocking","rustls-tls"], optional = true }
+xmlparser = "0.13"
+walkdir = "2"
+
+

@@ -2,3 +2,4 @@
 /*.dylib
 luaglue.so
 libsplib.so
+rlib.so

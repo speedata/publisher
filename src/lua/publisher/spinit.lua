@@ -7,7 +7,6 @@
 --  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 
-splib = require("luaglue")
 
 file_start("spinit.lua")
 loglevel_str = os.getenv("SD_LOGLEVEL")
@@ -65,7 +64,11 @@ end
 function log(...)
     local text = { ... }
     local res = call(string.format,table.unpack(text))
-    main.log("info",res)
+    if rlib then
+        rlib.log.log("info",res)
+    else
+        splib.log("info",res)
+    end
 end
 
 do
@@ -284,13 +287,24 @@ end
 --- Stop the data processing and write PDF. If `graceful` is not given or `false` then
 --- `os.exit()` gets called. This is the last function to be called.
 function exit(graceful)
-    errcount = splib.errcount()
-    warncount = splib.warncount()
+    if rlib then
+        errcount = rlib.log.errcount()
+        warncount = rlib.log.warncount()
+    else
+        errcount = splib.errcount()
+        warncount = splib.warncount()
+    end
     log("Stop processing data")
-    log("%d errors occurred",splib.errcount())
+    log("%d errors occurred",errcount)
     log("Duration: %3f seconds",os.gettimeofday() - starttime)
-    splib.teardown()
+
     status.setexitcode(publisher.errorcode)
+
+    if rlib then
+        rlib.log.close()
+    else
+        splib.teardown()
+    end
     if not graceful then
         stop_run_cb()
         if publisher.errorcode ~= 0 then
@@ -304,12 +318,21 @@ function quit()
 end
 
 local function setup()
-    main.log("debug","Setting","varname","LUA_PATH", "value", os.getenv("LUA_PATH") or "")
-    main.log("debug","Setting","varname","SP_EXTRA_DIRS", "value", os.getenv("SP_EXTRA_DIRS") or "")
-    main.log("debug","Setting","varname","SP_EXTRA_XML", "value", os.getenv("SP_EXTRA_XML") or "")
-    main.log("debug","Setting","varname","SP_PREPEND_XML", "value", os.getenv("SP_PREPEND_XML") or "")
-    main.log("debug","Setting","varname","SP_IGNORECASE", "value", os.getenv("SP_IGNORECASE") or "")
-    main.log("debug","Setting","varname","SP_XMLPARSER", "value", os.getenv("SP_XMLPARSER") or "")
+    if rlib then
+        rlib.log.log("debug","Setting","varname","LUA_PATH", "value", os.getenv("LUA_PATH") or "")
+        rlib.log.log("debug","Setting","varname","SP_EXTRA_DIRS", "value", os.getenv("SP_EXTRA_DIRS") or "")
+        rlib.log.log("debug","Setting","varname","SP_EXTRA_XML", "value", os.getenv("SP_EXTRA_XML") or "")
+        rlib.log.log("debug","Setting","varname","SP_PREPEND_XML", "value", os.getenv("SP_PREPEND_XML") or "")
+        rlib.log.log("debug","Setting","varname","SP_IGNORECASE", "value", os.getenv("SP_IGNORECASE") or "")
+        rlib.log.log("debug","Setting","varname","SP_XMLPARSER", "value", os.getenv("SP_XMLPARSER") or "")
+    else
+        splib.log("debug","Setting","varname","LUA_PATH", "value", os.getenv("LUA_PATH") or "")
+        splib.log("debug","Setting","varname","SP_EXTRA_DIRS", "value", os.getenv("SP_EXTRA_DIRS") or "")
+        splib.log("debug","Setting","varname","SP_EXTRA_XML", "value", os.getenv("SP_EXTRA_XML") or "")
+        splib.log("debug","Setting","varname","SP_PREPEND_XML", "value", os.getenv("SP_PREPEND_XML") or "")
+        splib.log("debug","Setting","varname","SP_IGNORECASE", "value", os.getenv("SP_IGNORECASE") or "")
+        splib.log("debug","Setting","varname","SP_XMLPARSER", "value", os.getenv("SP_XMLPARSER") or "")
+    end
 
     tex.pdfhorigin = 0
     tex.pdfvorigin = 0
@@ -455,7 +478,11 @@ require("publisher")
 local function traceback(what)
     -- get message from what
     local msg = string.gsub(what,".*:%d+: (.*)", "%1")
-    main.log("error","Lua error:","message",msg)
+    if rlib then
+        rlib.log.error("Lua error: " .. msg)
+    else
+        splib.log("error", "Lua error:","message",msg)
+    end
     print("Internal error: " .. msg)
     if loglevel > 4 then
         print("Stack trace:")

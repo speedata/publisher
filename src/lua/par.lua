@@ -216,14 +216,22 @@ local function flatten(self,items,options,data)
                 -- todo: add  white-space: pre; if publisher.options.ignoreeol == false
                 -- csstext = string.format("body {font-family-number: %d ;} ",options.fontfamily)
                 csstext = " a { text-decoration: none; color: black}" ..  csstext .. string.format(" body {font-family-number: %d ;}",options.fontfamily)
-                local tab = splib.parse_html_text(htmltext,csstext)
-                if type(tab) == "string" then
-                    local a,b = load(tab)
-                    if a then a() else err(b) return end
+                local body
+
+                if rlib then
+                    local csshtmltree = rlib.html.parse_raw_text(htmltext,csstext,publisher.cssdefaults)
+                    body = csshtmltree[1][1]
+                    body.block = nil
+                else
+                    local tab = splib.parse_html_text(htmltext,csstext)
+                    if type(tab) == "string" then
+                        local a,b = load(tab)
+                        if a then a() else err(b) return end
+                        body = csshtmltree[1][2]
+                    end
                 end
+
                 local startnewline = 0
-                local body = csshtmltree[1][2]
-                -- printtable("body",body)
                 local firstelement = body[1]
                 if firstelement then
                     if type(firstelement) == "string" and not string.match( firstelement ,"^%s*$")  then

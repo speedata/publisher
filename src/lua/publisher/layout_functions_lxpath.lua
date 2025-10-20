@@ -627,9 +627,18 @@ local function markdown(dataxml, arg)
         arg = dataxml
     end
     local str = table_textvalue(arg[1])
-    local htmltext = splib.markdown(str)
+    local htmltext
+    if rlib then
+        htmltext = rlib.html.markdown(str,publisher.options.markdownextensions)
+    else
+        htmltext = splib.markdown(str)
+    end
     if htmltext then
-        htmltext = publisher.splib.htmltoxml("<html><body>" .. htmltext .. "</body></html>")
+        if rlib then
+            htmltext = rlib.xml.html_to_xml(htmltext)
+        else
+            htmltext = publisher.splib.htmltoxml("<html><body>" .. htmltext .. "</body></html>")
+        end
         return { htmltext }, nil
     end
     return {}, nil
@@ -715,14 +724,25 @@ local function decode_html(dataxml, arg)
     end
     local firstarg = xpath.string_value(arg[1])
     if type(firstarg) == "string" then
-        local msg = publisher.splib.htmltoxml(firstarg)
-        if msg == nil then
-            err("decode-html failed")
-            return nil
+        if rlib then
+            local msg = rlib.xml.html_to_xml(firstarg)
+            if msg == nil then
+                err("decode-html failed")
+                return nil
+            end
+            -- two dummy tags because xpath.parse_raw removes the surrounding table
+            local ret = luxor.parse_xml("<dummy>" .. msg .. "</dummy>")
+            return ret
+        else
+            local msg = publisher.splib.htmltoxml(firstarg)
+            if msg == nil then
+                err("decode-html failed")
+                return nil
+            end
+            -- two dummy tags because xpath.parse_raw removes the surrounding table
+            local ret = luxor.parse_xml("<dummy><dummy>" .. msg .. "</dummy></dummy>")
+            return ret
         end
-        -- two dummy tags because xpath.parse_raw removes the surrounding table
-        local ret = luxor.parse_xml("<dummy><dummy>" .. msg .. "</dummy></dummy>")
-        return ret
     end
 end
 
@@ -976,19 +996,24 @@ for _, func in ipairs(funcs) do
     register(func)
 end
 
+local libprefix = publisher.splib
+
+if rlib then
+    libprefix = rlib.str
+end
 
 -- Contains
 local function fnContains(dataxml, arg)
     local firstarg = xpath.string_value(arg[1])
     local secondarg = xpath.string_value(arg[2])
-    return { publisher.splib.contains(firstarg, secondarg) }, nil
+    return { libprefix.contains(firstarg, secondarg) }, nil
 end
 
 -- Matches
 local function fnMatches(dataxml, arg)
     local firstarg = xpath.string_value(arg[1])
     local secondarg = xpath.string_value(arg[2])
-    return { publisher.splib.matches(firstarg, secondarg) }, nil
+    return { libprefix.matches(firstarg, secondarg) }, nil
 end
 
 -- Replace
@@ -996,7 +1021,7 @@ local function fnReplace(dataxml, arg)
     local firstarg = xpath.string_value(arg[1])
     local secondarg = xpath.string_value(arg[2])
     local thirdarg = xpath.string_value(arg[3])
-    return { publisher.splib.replace(firstarg, secondarg, thirdarg) }, nil
+    return { libprefix.replace(firstarg, secondarg, thirdarg) }, nil
 end
 
 -- Tokenize is the first function we ask 'splib' for help
@@ -1007,7 +1032,7 @@ local function fnTokenize(dataxml, arg)
         err("tokenize: one of the arguments is empty")
         return { "" }, nil
     end
-    local seq = publisher.splib.tokenize(firstarg, secondarg)
+    local seq = libprefix.tokenize(firstarg, secondarg)
     return seq, nil
 end
 

@@ -76,6 +76,16 @@ Sie können den Markierungsstil auch mit dem Präfix `hlstyle_` auswählen, zum 
 
 Die Liste der verfügbaren Stile ist unter https://github.com/alecthomas/chroma/tree/master/styles zu finden.
 
+// in der Rust-Bibliothek gibt es folgende:
+//
+// [1] = "InspiredGitHub"
+// [2] = "Solarized (dark)"
+// [3] = "Solarized (light)"
+// [4] = "base16-eighties.dark"
+// [5] = "base16-mocha.dark"
+// [6] = "base16-ocean.dark"
+// [7] = "base16-ocean.light"
+//
 Man kann auch Optionen für die Umwandlung mit dem Präfix `hloption_` setzen. Derzeit wird nur `hloption_withclasses` unterstützt, das dazu führt, das Syntaxhervorhebung  mit CSS-Klassen anstelle von `<span>...</span>` erzeugt wird.
 
 == Ein speedata Publisher quine mit Markdown

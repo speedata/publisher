@@ -21,7 +21,7 @@ require (
 	github.com/speedata/go-epub v0.5.5
 	github.com/speedata/goxlsx v1.0.2
 	github.com/speedata/hotfolder v0.0.0-20181204121114-5f743a840a92
-	github.com/speedata/optionparser v1.1.0
+	github.com/speedata/optionparser v1.1.1
 	github.com/yuin/goldmark v1.7.1
 	github.com/yuin/goldmark-highlighting/v2 v2.0.0-20230729083705-37449abec8cc
 	github.com/yuin/gopher-lua v1.1.1
