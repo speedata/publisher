@@ -209,7 +209,7 @@ func init() {
 		extradir(filepath.Join(installdir, "fonts"))
 		extradir(filepath.Join(installdir, "img"))
 	}
-	os.Setenv("LUA_CPATH", libdir+"/?.so;"+libdir+"/?.dll;")
+	os.Setenv("LUA_CPATH", libdir+"/?.so;"+libdir+"/?.dll;"+bindir+"/?.dll;")
 	inifile = filepath.Join(srcdir, "lua/sdini.lua")
 	os.Setenv("PUBLISHERVERSION", version)
 	os.Setenv("LD_LIBRARY_PATH", libdir)

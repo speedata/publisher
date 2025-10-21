@@ -217,10 +217,10 @@ local function flatten(self,items,options,data)
                 -- csstext = string.format("body {font-family-number: %d ;} ",options.fontfamily)
                 csstext = " a { text-decoration: none; color: black}" ..  csstext .. string.format(" body {font-family-number: %d ;}",options.fontfamily)
                 local body
-
+                local htmltree
                 if rlib then
-                    local csshtmltree = rlib.html.parse_raw_text(htmltext,csstext,publisher.cssdefaults)
-                    body = csshtmltree[1][1]
+                    htmltree = rlib.html.parse_raw_text(htmltext,csstext,publisher.cssdefaults)
+                    body = htmltree[1][1]
                     body.block = nil
                 else
                     local tab = splib.parse_html_text(htmltext,csstext)
@@ -228,6 +228,7 @@ local function flatten(self,items,options,data)
                         local a,b = load(tab)
                         if a then a() else err(b) return end
                         body = csshtmltree[1][2]
+                        htmltree = csshtmltree
                     end
                 end
 
@@ -244,7 +245,7 @@ local function flatten(self,items,options,data)
                         end
                     end
                     options.override_alignment = true
-                    local blocks = publisher.parse_html(csshtmltree, new_options, data) or {}
+                    local blocks = publisher.parse_html(htmltree, new_options, data) or {}
                     blocks = publisher.flatten_boxes(blocks)
                     -- printtable("blocks",blocks)
 

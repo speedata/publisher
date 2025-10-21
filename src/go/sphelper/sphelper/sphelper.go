@@ -255,7 +255,7 @@ func main() {
 			case "windows":
 				os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dll"), filepath.Join(bindestdir, "libsplib.dll"))
 				os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.dll"), filepath.Join(libdestdir, "luaglue.dll"))
-				os.Rename(filepath.Join(cfg.Builddir, "dylib", "rlib.dll"), filepath.Join(libdestdir, "rlib.dll"))
+				os.Rename(filepath.Join(cfg.Builddir, "dylib", "rlib.dll"), filepath.Join(bindestdir, "rlib.dll"))
 			case "linux":
 				os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(libdestdir, "libsplib.so"))
 				os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(libdestdir, "luaglue.so"))

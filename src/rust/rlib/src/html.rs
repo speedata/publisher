@@ -19,9 +19,9 @@ use lightningcss::traits::ToCss;
 // Markdown (comrak + syntect)
 // ===============================
 
-/// Normalize theme names for fuzzy matching:
-/// - lowercase
-/// - keep only ASCII alphanumerics (strip spaces, dots, brackets, dashes, underscores)
+// Normalize theme names for fuzzy matching:
+// - lowercase
+// - keep only ASCII alphanumerics (strip spaces, dots, brackets, dashes, underscores)
 fn norm_theme_key<S: AsRef<str>>(s: S) -> String {
     s.as_ref()
         .chars()
@@ -30,8 +30,8 @@ fn norm_theme_key<S: AsRef<str>>(s: S) -> String {
         .collect()
 }
 
-/// Resolve a theme key case-insensitively and tolerant to punctuation.
-/// Falls back to "base16-ocean.dark".
+// Resolve a theme key case-insensitively and tolerant to punctuation.
+// Falls back to "base16-ocean.dark" if nothing matches.
 fn resolve_theme_key<'a>(
     input: Option<&str>,
     themes: &'a syntect::highlighting::ThemeSet,
@@ -50,7 +50,7 @@ fn resolve_theme_key<'a>(
     Cow::Borrowed("base16-ocean.dark")
 }
 
-/// Internal representation of Markdown extensions and options.
+// Internal representation of Markdown extensions and options.
 struct ExtCfg {
     exts: Vec<String>,
     use_highlight: bool,
@@ -111,7 +111,7 @@ fn parse_extensions(val: Option<LuaValue>) -> ExtCfg {
     cfg
 }
 
-/// Lua: html.markdown(text, extensions?)
+// Lua: html.markdown(text, extensions?)
 fn markdown(_lua: &Lua, args: Variadic<LuaValue>) -> LuaResult<String> {
     // 1) Input validation
     let md_text = match args.get(0) {
@@ -150,9 +150,6 @@ fn markdown(_lua: &Lua, args: Variadic<LuaValue>) -> LuaResult<String> {
     if cfg.exts.iter().any(|e| e == "linkify") {
         options.extension.autolink = true;
     }
-    if cfg.exts.iter().any(|e| e == "footnote") {
-        options.extension.footnotes = true;
-    }
     if cfg.exts.iter().any(|e| e == "definitionlist") {
         options.extension.description_lists = true;
     }
@@ -180,7 +177,7 @@ fn markdown(_lua: &Lua, args: Variadic<LuaValue>) -> LuaResult<String> {
     let themes = syntect::highlighting::ThemeSet::load_defaults();
     let theme_key_cow = resolve_theme_key(cfg.theme_name.as_deref(), &themes);
 
-    let adapter = SyntectAdapter::new(Some(&theme_key_cow));
+    let adapter = SyntectAdapter::new(Some(theme_key_cow.as_ref()));
     let mut plugins = Plugins::default();
     plugins.render.codefence_syntax_highlighter = Some(&adapter);
 
@@ -191,7 +188,7 @@ fn markdown(_lua: &Lua, args: Variadic<LuaValue>) -> LuaResult<String> {
     Ok(String::from_utf8_lossy(&out).into_owned())
 }
 
-/// Optionally generate CSS for a Syntect theme (useful if you later switch to class-based highlighting).
+// Optionally generate CSS for a Syntect theme (useful if you later switch to class-based highlighting).
 fn highlight_css(_lua: &Lua, theme: Option<String>) -> LuaResult<String> {
     use syntect::highlighting::ThemeSet;
     use syntect::html::ClassStyle;
@@ -335,7 +332,7 @@ struct StyleRuleFlat {
     specificity: (u16, u16, u16), // (IDs, classes/pseudos, type selectors)
 }
 
-/// Crude specificity estimator (sufficient for cascade sorting here).
+// Crude specificity estimator (sufficient for cascade sorting here).
 fn estimate_specificity(sel: &str) -> (u16, u16, u16) {
     let mut a = 0;
     let mut b = 0;
@@ -682,8 +679,8 @@ fn expand_shorthand_into(map: &mut BTreeMap<String, String>, key: &str, value: &
     }
 }
 
-/// Minimal CSS string unescaper for string literal contents:
-/// turns \XXXX (hex) into the corresponding Unicode character.
+// Minimal CSS string unescaper for string literal contents:
+// turns \XXXX (hex) into the corresponding Unicode character.
 fn css_unescape_string_literal(s: &str) -> String {
     // Expect a quoted string like "\"\\2022\"" or "'\\2022'".
     let bytes = s.as_bytes();
@@ -727,7 +724,7 @@ fn css_unescape_string_literal(s: &str) -> String {
     s.to_string()
 }
 
-/// Expand shorthands in a decl map; later entries override earlier ones.
+// Expand shorthands in a decl map; later entries override earlier ones.
 fn expand_all_shorthands(input: &BTreeMap<String, String>) -> BTreeMap<String, String> {
     let mut out = BTreeMap::new();
     for (k, v) in input {
@@ -922,7 +919,7 @@ fn apply_styles_inline(document: &kuchiki::NodeRef, rules: &[StyleRuleFlat]) {
                 if let Some(el) = m.as_node().as_element() {
                     let mut attrs = el.attributes.borrow_mut();
 
-                    // 1) Decide the target storage: @style or data-rlib-(before|after)
+                    // 1) Choose where to store declarations: @style or data-rlib-(before|after)
                     let (store_attr, existing_map_raw) = match pseudo {
                         Some("before") => {
                             let raw = attrs
@@ -979,15 +976,61 @@ fn is_inline_display_value(d: &str) -> bool {
     )
 }
 
-fn is_inline_by_default(tag: &str) -> bool {
-    // Common inline elements (not exhaustive, but practical).
+fn is_block_by_default(tag: &str) -> bool {
+    matches!(
+        tag,
+        // classic block-level elements
+        "address"
+            | "article"
+            | "aside"
+            | "blockquote"
+            | "br"
+            | "body"
+            | "canvas"
+            | "data"
+            | "div"
+            | "dl"
+            | "fieldset"
+            | "figcaption"
+            | "figure"
+            | "footer"
+            | "form"
+            | "h1"
+            | "h2"
+            | "h3"
+            | "h4"
+            | "h5"
+            | "h6"
+            | "header"
+            | "hr"
+            | "html"
+            | "li"
+            | "main"
+            | "nav"
+            | "noscript"
+            | "ol"
+            | "p"
+            | "pre"
+            | "section"
+            | "table"
+            | "tbody"
+            | "thead"
+            | "tfoot"
+            | "tr"
+            | "td"
+            | "th"
+            | "ul"
+            | "video"
+    )
+}
+
+fn is_inline_known_by_default(tag: &str) -> bool {
     matches!(
         tag,
         "a" | "abbr"
             | "b"
             | "bdi"
             | "bdo"
-            | "br"
             | "cite"
             | "code"
             | "dfn"
@@ -1017,59 +1060,67 @@ fn is_inline_by_default(tag: &str) -> bool {
             | "input"
             | "select"
             | "textarea"
+            | "br"
     )
 }
 
-/// Decide if an element runs in inline direction ("→").
-/// Priority:
-/// 1) explicit `display` in styles
-/// 2) tag default
-fn is_inline_direction(tag: &str, styles: &std::collections::BTreeMap<String, String>) -> bool {
+fn decide_direction_for_element(
+    tag: &str,
+    styles: &std::collections::BTreeMap<String, String>,
+    incoming_ctx_inline: bool,
+) -> bool {
+    // Returns true = inline context, false = block context.
     if let Some(d) = styles.get("display") {
         return is_inline_display_value(d);
     }
-    is_inline_by_default(tag)
+    if is_block_by_default(tag) {
+        return false; // block
+    }
+    if is_inline_known_by_default(tag) {
+        return true; // inline
+    }
+    // Unknown tag: inherit the incoming context.
+    incoming_ctx_inline
 }
 
-fn node_to_lua(lua: &Lua, node: &NodeRef) -> LuaResult<LuaValue> {
-    // Convert a DOM node into the Lua shape expected by the Go/Lua side.
+fn node_to_lua_with_ctx(
+    lua: &Lua,
+    node: &NodeRef,
+    incoming_ctx_inline: bool,
+) -> LuaResult<LuaValue> {
+    // Text node → collapse pure whitespace to a single space, keep other text as-is.
     if let Some(text) = node.as_text() {
         let s = text.borrow();
         if s.trim().is_empty() {
-            return Ok(LuaValue::String(lua.create_string(" ")?)); // preserve whitespace as single space
+            return Ok(LuaValue::String(lua.create_string(" ")?));
         }
         return Ok(LuaValue::String(lua.create_string(s.as_str())?));
     }
+
+    // Element node
     if let Some(el) = node.as_element() {
         let mut name = el.name.local.to_string();
         if name.eq_ignore_ascii_case("x-title") {
             name = "title".to_string();
         }
-
-        // Drop <head> entirely; only body-relevant content is exposed downstream.
         if name.eq_ignore_ascii_case("head") {
+            // Ignore <head> subtree when emitting Lua tree.
             return Ok(LuaValue::Nil);
         }
 
         let tbl = lua.create_table()?;
         tbl.set("elementname", name.as_str())?;
 
-        // --- Collect styles from inline + previously inlined rules ---
+        // Gather styles (inline + synthesized pseudo storage attrs).
         let mut kv = BTreeMap::<String, String>::new();
-
-        // Parse @style attribute into map
         if let Some(attr) = el.attributes.borrow().get("style") {
             for (k, v) in parse_declarations(attr) {
                 kv.insert(k, v);
             }
         }
-
-        // --- Pseudo-element styles from data-rlib-before/after ---
-        // We import them into 'styles' with "before::"/"after::" prefixes.
         if let Some(attr) = el.attributes.borrow().get("data-rlib-before") {
             for (k, mut v) in parse_declarations(attr) {
                 if k.eq_ignore_ascii_case("content") {
-                    // Unescape CSS string into real Unicode for Lua consumption.
                     v = css_unescape_string_literal(&v);
                 }
                 kv.insert(format!("before::{}", k), v);
@@ -1084,10 +1135,11 @@ fn node_to_lua(lua: &Lua, node: &NodeRef) -> LuaResult<LuaValue> {
             }
         }
 
-        // Build 'styles' table (quote font-family if missing quotes for deterministic downstream)
+        // Emit styles table
         let st_tbl = lua.create_table()?;
         for (k, v) in &kv {
             if k == "font-family" {
+                // Ensure font-family values are quoted for the downstream pipeline.
                 let needs_quotes = !(v.starts_with('"') && v.ends_with('"'));
                 if needs_quotes {
                     st_tbl.set(k.as_str(), format!("\"{}\"", v))?;
@@ -1098,24 +1150,23 @@ fn node_to_lua(lua: &Lua, node: &NodeRef) -> LuaResult<LuaValue> {
                 st_tbl.set(k.as_str(), v.as_str())?;
             }
         }
+        // Provide a default family index if font-family exists but no number is present.
         if kv.contains_key("font-family") && !kv.contains_key("font-family-number") {
             st_tbl.set("font-family-number", 0)?;
         }
         st_tbl.set("has_border", false)?;
         tbl.set("styles", st_tbl)?;
 
-        // Direction heuristic based on computed styles (or tag default).
-        let is_inline = is_inline_direction(name.as_str(), &kv);
-        tbl.set("direction", if is_inline { "→" } else { "↓" })?;
+        // Determine layout direction (inline vs block) with context.
+        let is_inline_here = decide_direction_for_element(name.as_str(), &kv, incoming_ctx_inline);
+        tbl.set("direction", if is_inline_here { "→" } else { "↓" })?;
 
-        // Export attributes except @style and our internal pseudo storage.
+        // Export attributes (excluding internal style/pseudo storage).
         let at_tbl = lua.create_table()?;
         for (k, v) in el.attributes.borrow().map.iter() {
             let key = k.local.to_string();
-            if key.eq_ignore_ascii_case("style") {
-                continue;
-            }
-            if key.eq_ignore_ascii_case("data-rlib-before")
+            if key.eq_ignore_ascii_case("style")
+                || key.eq_ignore_ascii_case("data-rlib-before")
                 || key.eq_ignore_ascii_case("data-rlib-after")
             {
                 continue;
@@ -1124,45 +1175,51 @@ fn node_to_lua(lua: &Lua, node: &NodeRef) -> LuaResult<LuaValue> {
         }
         tbl.set("attributes", at_tbl)?;
 
-        // Set a "block" flag for obvious block-level elements (loosely curated list).
-        if matches!(
-            name.as_str(),
-            "body"
-                | "div"
-                | "p"
-                | "h1"
-                | "h2"
-                | "h3"
-                | "h4"
-                | "h5"
-                | "h6"
-                | "ul"
-                | "ol"
-                | "table"
-                | "thead"
-                | "tbody"
-                | "tfoot"
-                | "tr"
-                | "td"
-                | "th"
-                | "section"
-                | "article"
-                | "nav"
-                | "aside"
-                | "header"
-                | "footer"
-                | "pre"
-        ) {
+        // Mark classic block elements explicitly (hint for consumers).
+        if is_block_by_default(name.as_str()) {
             tbl.set("block", true)?;
         }
 
-        // Recurse into children; attach them directly to this table (1-based).
+        // Build children with a running context:
+        // Start context inside this element: inline if this element is inline, else block.
+        let mut child_ctx_inline = is_inline_here;
         let mut idx = 1i64;
+
         for c in node.children() {
-            let v = node_to_lua(lua, &c)?;
-            if !matches!(v, LuaValue::Nil) {
-                tbl.raw_set(idx, v)?;
-                idx += 1;
+            if c.as_text().is_some() {
+                // 1) build child value
+                let v = node_to_lua_with_ctx(lua, &c, child_ctx_inline)?;
+
+                // 2) inspect before moving it into the table (avoid borrow-after-move)
+                if let LuaValue::String(s) = &v {
+                    if let Ok(ts) = s.to_str() {
+                        if !ts.trim().is_empty() {
+                            child_ctx_inline = true;
+                        }
+                    }
+                }
+
+                // 3) finally insert (move) if not Nil
+                if !matches!(v, LuaValue::Nil) {
+                    tbl.raw_set(idx, v)?;
+                    idx += 1;
+                }
+            } else if c.as_element().is_some() {
+                // Element child: recurse and adjust running context from its own direction.
+                let child_val = node_to_lua_with_ctx(lua, &c, child_ctx_inline)?;
+                if let LuaValue::Table(t) = &child_val {
+                    if let Ok(dir) = t.get::<String>("direction") {
+                        if dir == "→" {
+                            child_ctx_inline = true;
+                        }
+                    }
+                }
+                if !matches!(child_val, LuaValue::Nil) {
+                    tbl.raw_set(idx, child_val)?;
+                    idx += 1;
+                }
+            } else {
+                // Ignore other node kinds.
             }
         }
 
@@ -1298,10 +1355,10 @@ fn build_lua_csshtmltree(
 
     // Root element (typically <html>)
     if let Some(root_el) = first_element_child_k(&doc.clone()) {
-        let node_tbl = node_to_lua(lua, &root_el)?;
+        // Start in document context (block).
+        let node_tbl = node_to_lua_with_ctx(lua, &root_el, false)?;
         out.raw_set(1, node_tbl)?;
     }
-
     Ok(out)
 }
 
@@ -1312,7 +1369,7 @@ fn protect_title_tags(src: &str) -> String {
         .replace("</title>", "</x-title>")
 }
 
-/// Lua: html.highlight_themes() -> array of available Syntect theme names
+// Lua: html.highlight_themes() -> array of available Syntect theme names
 fn list_highlight_themes(_lua: &Lua, _: ()) -> LuaResult<Vec<String>> {
     let themes = syntect::highlighting::ThemeSet::load_defaults();
     let mut keys: Vec<String> = themes.themes.keys().cloned().collect();
@@ -1322,14 +1379,14 @@ fn list_highlight_themes(_lua: &Lua, _: ()) -> LuaResult<Vec<String>> {
 
 // -------- Public Lua API --------
 
-/// parse_raw_text(html, css_text, css_defaults)
+// parse_raw_text(html, css_text, css_defaults)
 fn parse_raw_text(
     lua: &Lua,
     (html, css_text, css_defaults): (String, String, String),
 ) -> LuaResult<LuaValue> {
     let base = None::<Url>;
 
-    // Protect <title> so it stays where it originally appears.
+    // Keep <title> at its original position.
     let html_protected = protect_title_tags(&html);
 
     // Collect and parse CSS using the protected HTML.
@@ -1344,7 +1401,7 @@ fn parse_raw_text(
     Ok(LuaValue::Table(out))
 }
 
-/// parse_text(html_fragment_without_body, css_text, css_defaults)
+// parse_text(html_fragment_without_body, css_text, css_defaults)
 fn parse_text(
     lua: &Lua,
     (frag, css_text, css_defaults): (String, String, String),
@@ -1356,7 +1413,7 @@ fn parse_text(
     )
 }
 
-/// parse_file(filename, css_text, css_defaults)
+// parse_file(filename, css_text, css_defaults)
 fn parse_file(
     lua: &Lua,
     (filename, css_text, css_defaults): (String, String, String),
@@ -1384,7 +1441,7 @@ fn parse_file(
     Ok(LuaValue::Table(out))
 }
 
-/// Exposed Lua subtable
+// Exposed Lua subtable
 pub fn lua_subtable(lua: &Lua) -> LuaResult<LuaTable> {
     let tbl = lua.create_table()?;
     // Markdown
