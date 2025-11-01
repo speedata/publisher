@@ -5163,19 +5163,10 @@ function short_newline(fam)
     set_attribute(dummypenalty,"newline",1)
 
     local list, cur
-    list, cur = dummypenalty,dummypenalty
-
-    local strut = node.new(rule_node)
-    -- set to 60000 for example for debugging
-    strut.width=0
-    strut.height = strutheight*0.75
-    strut.depth = strutheight*0.25
-    list,cur = node.insert_after(list,cur,strut)
-
-    g = set_glue(nil,{})
-    list,cur = node.insert_after(list,cur,g)
+    add_rule(list,"tail",{height = 0.75 * strutheight, depth = 0.25 * strutheight,width = 0}, "short_newline")
+    g = set_glue(nil,{},"short_newline")
+    list,cur = node.insert_after(list,node.tail(list),g)
     return list, cur
-
 end
 
 -- newline returns a nodelist that behaves as a new line in TeX
@@ -5253,10 +5244,7 @@ function addstrut(nodelist,where,origin)
     local fi = fonts.lookup_fontfamily_number_instance[fontfamily]
     strutheight = math.max(fi.baselineskip, strutheight)
     -- for debugging purposes set width to 20000:
-    local strut = add_rule(nodelist,"head",{height = 0.75 * strutheight, depth = 0.25 * strutheight, width = 0 })
-    if origin then
-        setprop(strut,"origin",origin)
-    end
+    local strut = add_rule(nodelist,"head",{height = 0.75 * strutheight, depth = 0.25 * strutheight, width = 0 },origin or "addstrut")
     return strut
 end
 
@@ -5600,7 +5588,7 @@ function hbglyphlist(arguments)
                 -- U+200D ZERO WIDTH JOINER
                 -- ignore
             elseif preserve_whitespace then
-                local n = add_rule(nil,"head",{height = 0 * factor, depth = 0, width = thistbl.zerowidth })
+                local n = add_rule(nil,"head",{height = 0 * factor, depth = 0, width = thistbl.zerowidth },"preserve_whitespace")
                 list,cur = node.insert_after(list,cur,n)
             else
                 n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch},"uc=32")
@@ -5634,7 +5622,7 @@ function hbglyphlist(arguments)
             list,cur = node.insert_after(list,cur,dummypenalty)
 
             local ht = fonts.lookup_fontfamily_number_instance[fontfamily].size
-            local strut = add_rule(nil,"head",{height = ht * 0.75, depth = 0.25 * ht, width = 0 })
+            local strut = add_rule(nil,"head",{height = ht * 0.75, depth = 0.25 * ht, width = 0 }, "newline")
             set_attribute(strut,"newline",1)
             setprop(strut,"origin","strut newline hb")
             list,cur = node.insert_after(list,cur,strut)
@@ -5867,8 +5855,7 @@ local function ffglyphlist(arguments)
                 return
             end
             local ht = ff.size
-            local strut = add_rule(nil,"head",{height = ht * 0.75, depth = ht * 0.25, width = 0 })
-            setprop(strut,"origin","strut newline ff")
+            local strut = add_rule(nil,"head",{height = ht * 0.75, depth = ht * 0.25, width = 0 }, "newline")
             set_attribute(strut,"newline",1)
             head,last = node.insert_after(head,last,strut)
 
@@ -5898,7 +5885,7 @@ local function ffglyphlist(arguments)
             head,last = node.insert_after(head,last,g)
         elseif preserve_whitespace and match(char,"^%s$") then
             local tbl = fonts.used_fonts[fontnumber]
-            local strut = add_rule(nil,"head",{height = 0 * factor, depth = 0, width = tbl.zerowidth })
+            local strut = add_rule(nil,"head",{height = 0 * factor, depth = 0, width = tbl.zerowidth }, "preserve_whitespace")
             head,last = node.insert_after(head,last,strut)
         elseif match(char,"^%s$") and last and last.id == glue_node and not node.has_attribute(last,att_tie_glue,1) then
             -- double space, use the bigger glue
@@ -6100,8 +6087,8 @@ function mknodes(str,parameter,origin)
     -- if it's an empty string, we make a zero-width rule
     if not str or string.len(str) == 0 then
         -- a space char can have a width, so we return a zero width something
-        local strut = add_rule(nil,"head",{height = 1 * factor, depth = 0, width = 0 })
-        setprop(strut,"pardir",parameter.direction)
+        local strut = add_rule(nil,"head",{height = 1 * factor, depth = 0, width = 0 }, "pardir")
+        setprop(strut, "pardir", parameter.direction)
         return strut, parameter.direction
     end
     parameter = parameter or {}
@@ -6238,8 +6225,7 @@ function mknodes(str,parameter,origin)
         setprop(nodelistsegments,"pardir",maindirection)
     end
     if not nodelistsegments then
-        local strut = add_rule(nil,"head",{height = 1 * factor, depth = 0, width = 0 })
-        setprop(strut,"pardir",parameter.direction)
+        local strut = add_rule(nil,"head",{height = 1 * factor, depth = 0, width = 0 }, "pardir")
         return strut, parameter.direction
     end
     return nodelistsegments, maindirection
@@ -6279,13 +6265,14 @@ function setsegmentdir(nodelist,direction, maindirection)
 end
 
 -- head_or_tail = "head" oder "tail" (default: tail). Return new head (perhaps same as nodelist)
-function add_rule( nodelist,head_or_tail,parameter)
+function add_rule( nodelist,head_or_tail,parameter,origin)
     parameter = parameter or {}
 
     local n=node.new(rule_node)
     n.width  = parameter.width
     n.height = parameter.height
     n.depth  = parameter.depth
+    if origin then setprop(n,"origin",origin) end
     if not nodelist then return n end
 
     if head_or_tail=="head" then

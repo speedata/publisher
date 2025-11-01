@@ -2535,7 +2535,7 @@ function commands.nobreak( layoutxml, dataxml )
             local fam = options.fontfamily
             local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[fam]
             local strut
-            strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 })
+            strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 },"nobreak/fontsize")
             local loops = 0
             local nl
             local maxloops = 10
@@ -2580,7 +2580,7 @@ function commands.nobreak( layoutxml, dataxml )
             local fam = options.fontfamily
             local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[fam]
             local strut
-            strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 })
+            strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 },"nobreak/fontfit")
             local nl
 
             local tmppar
@@ -2655,7 +2655,7 @@ function commands.nobreak( layoutxml, dataxml )
             local nl = tmppar.objects[1]
             local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily]
             local lineheight = fam_tbl.baselineskip
-            local strut = publisher.add_rule(nil,"head",{height = lineheight * 0.75 , depth = lineheight * 0.25 , width = 0 })
+            local strut = publisher.add_rule(nil,"head",{height = lineheight * 0.75 , depth = lineheight * 0.25 , width = 0 },"nobreak/keeptogether")
             nl = node.hpack(nl)
             nl = node.insert_before(nl,nl,strut)
             tmppar.objects[1] = nl
@@ -4709,7 +4709,7 @@ function commands.table( layoutxml,dataxml,options )
     end
     if not width then
         err("Can't get the width of the table!")
-        rule = publisher.add_rule(nil,"head",{height=100*2^16,width=100*2^16})
+        rule = publisher.add_rule(nil,"head",{height=100*2^16,width=100*2^16},"width error")
         local v = node.vpack(rule)
         return v
     end
@@ -5349,7 +5349,7 @@ function commands.textblock( layoutxml,dataxml )
     end
     if not width then
         err("Can't evaluate width in textblock")
-        rule = publisher.add_rule(nil,"head",{height=100*2^16,width=100*2^16})
+        rule = publisher.add_rule(nil,"head",{height=100*2^16,width=100*2^16},"width error")
         local v = node.vpack(rule)
         return v
     end
@@ -5478,7 +5478,7 @@ function commands.textblock( layoutxml,dataxml )
         main.log("warn","Textblock: no objects found", lineinfo(layoutxml))
         warning("Textblock: no objects found!")
         local vrule = {  width = 10 * 2^16, height = -1073741824}
-        nodes[1] = publisher.add_rule(nil,"head",vrule)
+        nodes[1] = publisher.add_rule(nil,"head",vrule,"empty textblock")
     end
 
     --- Multi column typesetting

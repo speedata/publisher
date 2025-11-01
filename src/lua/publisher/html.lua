@@ -150,9 +150,14 @@ end
 -- name is the font name (like "12pt")
 -- styles is the styles table
 -- return a font family number
-local function get_fontfamily( families, size_sp , name, styles )
+local function get_fontfamily( families, size_sp, name, styles )
     local fontfamilynumber = tonumber(styles["font-family-number"])
-    if fontfamilynumber and fontfamilynumber > 0 then return fontfamilynumber end
+    if fontfamilynumber and fontfamilynumber > 0 then
+        -- the problem here is that the font family number might be set, but the user
+        -- changed the font size, so we need to check if the size matches
+        -- probably we need to check other parameters as well...
+        return fontfamilynumber
+    end
     local family_table = split_string_quote(families)
     if #family_table == 1 then
         local fontname = families .. "/" .. name
@@ -368,7 +373,6 @@ function set_options_for_mknodes(styles,options)
     options = options or {}
     local fontfamily = styles["font-family"]
     local fontsize = styles["font-size"]
-    local hasff = options.fontfamily ~= nil
     options.fontfamily = get_fontfamily(fontfamily,styles.fontsize_sp, fontsize,styles)
     local fontstyle = styles["font-style"]
     local fontweight = styles["font-weight"]
@@ -805,21 +809,6 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
         local border_bottom_left_radius = thiselt_styles["border-bottom-left-radius"] or 0
         local border_top_right_radius = thiselt_styles["border-top-right-radius"] or 0
         local border_top_left_radius = thiselt_styles["border-top-left-radius"] or 0
-
-
-        -- local border_top_width, border_right_width, border_bottom_width, border_left_width = 0, 0, 0, 0
-        -- if border_top_style ~= "none" then
-        --     border_top_width = tex.sp(border_top_width)
-        -- end
-        -- if border_right_style ~= "none" then
-        --     border_right_width = tex.sp(border_right_width)
-        -- end
-        -- if border_left_style ~= "none" then
-        --     border_left_width = tex.sp(border_left_width)
-        -- end
-        -- if border_bottom_style ~= "none" then
-        --     border_bottom_width = tex.sp(border_bottom_width)
-        -- end
 
         local fontfamily = styles["font-family"]
         local fontsize = styles["font-size"]

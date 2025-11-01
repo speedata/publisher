@@ -266,7 +266,6 @@ function pre_linebreak( head )
         elseif head.id == penalty_node then -- penalty
         elseif head.id == glyph_node then -- glyph
             local ff = publisher.get_attribute(head,"fontfamily")
-            local va = publisher.get_attribute(head,"vertical-align")
             if ff then
                 -- not local, so that we can access fontfamily later
                 fontfamily=ff
@@ -549,7 +548,7 @@ do
         if start_bgcolor then
             -- If we have a bgcolor, we must insert it at the end of the list
             -- first we must add a dummy item
-            local _, dummy = publisher.add_rule(lasthead,"tail",{width = 0, height = 0, depth = 0})
+            local _, dummy = publisher.add_rule(lasthead,"tail",{width = 0, height = 0, depth = 0},"bgcolor dummy")
             insert_backgroundcolor(list_head, dummy, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
         end
         return head

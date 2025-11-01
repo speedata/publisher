@@ -112,7 +112,7 @@ local function mktextnode(self,text,options)
         local fontheight = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily].baselineskip
         local col = publisher.get_attribute(nodes,"color")
         local hl = publisher.get_attribute(nodes,"hyperlink")
-        nodes = publisher.add_rule(nodes,"head",{height = 0.75 * fontheight, depth = 0.25 * fontheight, width = 0 })
+        nodes = publisher.add_rule(nodes,"head",{height = 0.75 * fontheight, depth = 0.25 * fontheight, width = 0 },"mktextnode fontfamily")
         node.setproperty(nodes,node_properties)
         publisher.set_attribute(nodes,"fontfamily",options.fontfamily)
         if col then publisher.set_attribute(nodes,"color",col)   end
@@ -497,7 +497,8 @@ function Par:format( width_sp, options,data )
     if self.padding_right > 0 then
         width_sp = width_sp - self.padding_right
     end
-    -- w("self.padding_left %s %gpt",self.origin,self.padding_left / publisher.factor)
+    -- w("self.padding_right %s %gpt",self.origin, self.padding_right / publisher.factor)
+    -- w("self.padding_left %s %gpt",self.origin, self.padding_left / publisher.factor)
     for i=1,#self do
         self[i] = nil
     end
@@ -656,9 +657,16 @@ function Par:format( width_sp, options,data )
     local orig_width_sp = width_sp
     if #objects == 0 then return node.new("vlist") end
     local objectrow = 0
+
+    local tf = current_textformat
     for i=1,#objects do
         nodelist = objects[i]
-        if publisher.getprop(nodelist,"br") ~= true then
+        if publisher.getprop(nodelist, "br") == true then
+            tf = publisher.new_textformat("",current_textformat)
+            tf.rows = 9999
+            tf.margintop = current_textformat.margintop
+            tf.indent = current_textformat.indent
+        else
             objectrow = objectrow + 1
         end
         local pardir = publisher.getprop(nodelist,"pardir")
@@ -669,10 +677,10 @@ function Par:format( width_sp, options,data )
             tex.shapemode = 0
         end
         local has_margin_top, has_margin_bottom
-        if current_textformat.htmlverticalspacing == "inner" and i > 1 or current_textformat.htmlverticalspacing == "all" then
+        if tf.htmlverticalspacing == "inner" and i > 1 or tf.htmlverticalspacing == "all" then
             has_margin_top = publisher.getprop(nodelist,"margin_top")
         end
-        if current_textformat.htmlverticalspacing == "inner" and i < #objects or current_textformat.htmlverticalspacing == "all" then
+        if tf.htmlverticalspacing == "inner" and i < #objects or tf.htmlverticalspacing == "all" then
             has_margin_bottom = publisher.getprop(nodelist,"margin_bottom")
         end
         width_sp = orig_width_sp
@@ -685,13 +693,13 @@ function Par:format( width_sp, options,data )
         end
         local langs_num,langs
         langs = {}
-        if current_textformat.hyphenchar then
+        if tf.hyphenchar then
             langs_num = publisher.get_languages_used(nodelist)
             for i,v in ipairs(langs_num) do
                 local l = publisher.get_language(v)
                 langs[#langs + 1] = l
                 l.prehyphenchar = lang.prehyphenchar(l.l)
-                lang.prehyphenchar(l.l,unicode.utf8.byte(current_textformat.hyphenchar))
+                lang.prehyphenchar(l.l,unicode.utf8.byte(tf.hyphenchar))
             end
         end
 
@@ -699,7 +707,6 @@ function Par:format( width_sp, options,data )
         if nodelist.id == publisher.penalty_node and nodelist.next and nodelist.next.id == publisher.hlist_node and nodelist.next.next and nodelist.next.next.id == publisher.penalty_node and nodelist.next.next.next then
             nodelist = nodelist.next
         end
-
         publisher.fonts.pre_linebreak(nodelist)
 
         -- both are set only for ul/ol lists
@@ -708,17 +715,16 @@ function Par:format( width_sp, options,data )
         parameter.hangindent = indent
 
         -- indent and rows
-        if current_textformat.indent and current_textformat.rows then
-            if objectrow <= current_textformat.rows or current_textformat.rows < 0 then
-                parameter.hangindent = parameter.hangindent + current_textformat.indent
+        if tf.indent and tf.rows then
+            if objectrow <= tf.rows or tf.rows < 0 then
+                parameter.hangindent = parameter.hangindent + tf.indent
             end
         end
-        parameter.hangafter = rows  or current_textformat.rows  or 0
+        parameter.hangafter = rows or tf.rows or 0
         if self.startendborder or self.startborder then
             local ba = publisher.borderattributes[self.borderstart or self.startendborder]
             thispaddingleft = thispaddingleft + ba.border_left_width
         end
-
 
         if self.initial then
             parameter.hangindent =  parameter.hangindent + self.initial.width
@@ -745,10 +751,10 @@ function Par:format( width_sp, options,data )
         end
 
         parameter.hangafter = parameter.hangafter * -1
-        parameter.disable_hyphenation = current_textformat.disable_hyphenation
+        parameter.disable_hyphenation = tf.disable_hyphenation
         local prepend = publisher.getprop(nodelist,"prependlist") or self.prependlist
         local ragged_shape
-        if current_textformat.alignment == "leftaligned" or current_textformat.alignment == "rightaligned" or current_textformat.alignment == "centered" or current_textformat.alignment == "start" or current_textformat.alignment == "end" then
+        if tf.alignment == "leftaligned" or tf.alignment == "rightaligned" or tf.alignment == "centered" or tf.alignment == "start" or tf.alignment == "end" then
             ragged_shape = true
         else
             ragged_shape = false
@@ -783,7 +789,7 @@ function Par:format( width_sp, options,data )
 
                 tex.pdfadjustspacing = adjspace
                 tex.adjustspacing = adjspace
-                publisher.fix_justification(nodelist,current_textformat.alignment,nil,pardir)
+                publisher.fix_justification(nodelist,tf.alignment,nil,pardir)
             else
                 nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
             end
@@ -815,12 +821,12 @@ function Par:format( width_sp, options,data )
             local c = 0
             while line do
                 c = c + 1
-                if c < current_textformat.orphan and line.next then
+                if c < tf.orphan and line.next then
                     if line.head and not node.has_attribute(line.head,publisher.att_ignore_orphan_widowsetting) then
                         node.set_attribute(line,publisher.att_break_below_forbidden,1)
                     end
                 end
-                if publisher.less_or_equal_than_n_lines(line, current_textformat.widow) then
+                if publisher.less_or_equal_than_n_lines(line, tf.widow) then
                     if line.head and not node.has_attribute(line.head,publisher.att_ignore_orphan_widowsetting) then
                         node.set_attribute(line,publisher.att_break_below_forbidden,2)
                     end
@@ -842,24 +848,24 @@ function Par:format( width_sp, options,data )
                 nodelist.list = publisher.add_glue(nodelist.list,"head",{width = self.padding_top, attributes},"par.lua/self.padding_top" )
                 publisher.set_attribute(nodelist.list,"paddingtop",1)
             end
-            if current_textformat.paddingtop and current_textformat.paddingtop ~= 0 then
-                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.paddingtop})
+            if tf.paddingtop and tf.paddingtop ~= 0 then
+                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = tf.paddingtop})
                 node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,3)
             end
-            if current_textformat.bordertop and current_textformat.bordertop ~= 0 then
-                nodelist.list = publisher.add_rule(nodelist.list,"head",{width = -1073741824, height = current_textformat.bordertop})
+            if tf.bordertop and tf.bordertop ~= 0 then
+                nodelist.list = publisher.add_rule(nodelist.list,"head",{width = -1073741824, height = tf.bordertop},"par.lua/tf.bordertop")
                 node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,4)
             end
-            if current_textformat.margintop and current_textformat.margintop ~= 0 then
-                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = current_textformat.margintop})
-                node.set_attribute(nodelist.list,publisher.att_margin_top_boxstart,current_textformat.margintopboxstart)
+            if tf.margintop and tf.margintop ~= 0 then
+                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = tf.margintop})
+                node.set_attribute(nodelist.list,publisher.att_margin_top_boxstart,tf.margintopboxstart)
                 node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,6)
             end
-            if current_textformat.breakbelow == false then
+            if tf.breakbelow == false then
                 node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,5)
             end
 
-            if current_textformat.break_before == "page" then
+            if tf.break_before == "page" then
                 node.set_attribute(nodelist.list,publisher.att_break_before,1)
             end
 
@@ -869,12 +875,12 @@ function Par:format( width_sp, options,data )
                 publisher.set_attribute(glue,"paddingbottom",1)
             end
 
-            if current_textformat.borderbottom and current_textformat.borderbottom ~= 0 then
-                nodelist.list = publisher.add_rule(nodelist.list,"tail",{width = width_sp, height = current_textformat.borderbottom},"par.lua/tf.borderbottom")
+            if tf.borderbottom and tf.borderbottom ~= 0 then
+                nodelist.list = publisher.add_rule(nodelist.list,"tail",{width = width_sp, height = tf.borderbottom},"par.lua/tf.borderbottom")
                 node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,6)
             end
-            if current_textformat.marginbottom and current_textformat.marginbottom ~= 0 then
-                nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = current_textformat.marginbottom},"par.lua/tf.marginbottom")
+            if tf.marginbottom and tf.marginbottom ~= 0 then
+                nodelist.list = publisher.add_glue(nodelist.list,"tail",{width = tf.marginbottom},"par.lua/tf.marginbottom")
                 node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
             end
             if self.margin_bottom and self.margin_bottom > 0 then
@@ -886,9 +892,8 @@ function Par:format( width_sp, options,data )
                 node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
             end
 
-            node.set_attribute(nodelist.list,publisher.att_margin_newcolumn, current_textformat.colpaddingtop or 0)
-
-            if current_textformat.breakbelow == false then
+            node.set_attribute(nodelist.list,publisher.att_margin_newcolumn, tf.colpaddingtop or 0)
+            if tf.breakbelow == false then
                 node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,7)
             end
             objects[i] = nodelist.list
