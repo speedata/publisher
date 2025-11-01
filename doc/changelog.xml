@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.2" date="2025-10-14">
+    <entry version="5.3.2" date="2025-11-01">
+        <en>Fix indentation after br newline.</en>
+        <de>Korrigiere Einrückung nach einem br.</de>
+    </entry>
     <entry version="5.3.1" date="2025-10-21">
         <en>Fix Windows/Rust loading.</en>
         <de>Korrigiere Windows/Rust laden.</de>
