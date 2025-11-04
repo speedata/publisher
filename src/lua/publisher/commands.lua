@@ -5639,7 +5639,13 @@ end
 --- -----
 --- Get the value of an xpath expression (attribute `select`) or of the literal string.
 function commands.value( layoutxml,dataxml )
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
+    local selection
+    if publisher.newxpath then
+        selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
+    else
+        -- backwards compatibility, see commit e5d28aeccd and #680
+        selection = publisher.read_attribute(layoutxml,dataxml,"select","string")
+    end
     local tab
     if selection then
         if publisher.newxpath then
