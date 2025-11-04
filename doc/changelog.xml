@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.2" date="2025-10-14">
+    <entry version="5.3.3" date="2025-11-04">
+        <en>Reinstate old curly brace syntax for Value/select and old xpath parser (#680).</en>
+        <de>Führe alte Syntax mit geschweiften Klammern wieder ein bei Value/select und dem alten XPath parser (#680) .</de>
+    </entry>
+    <entry version="5.3.3" date="2025-11-04">
+        <en>Remove building of Rust library (#678).</en>
+        <de>Entferne die Rust-Bibliothek aus dem Build-Prozess (#678).</de>
+    </entry>
     <entry version="5.3.2" date="2025-11-01">
         <en>Fix indentation after br newline.</en>
         <de>Korrigiere Einrückung nach einem br.</de>
