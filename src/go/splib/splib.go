@@ -27,6 +27,8 @@ import (
 	"strings"
 	"time"
 
+	"speedatapublisher/css"
+	"speedatapublisher/splib/csslua"
 	"speedatapublisher/splibaux"
 	"speedatapublisher/text/unicode/bidi"
 
@@ -75,7 +77,7 @@ func luaEntry(L *C.lua_State, f func(l *LuaState) int) (ret int) {
 	defer func() {
 		if r := recover(); r != nil {
 			slog.Error("panic in Lua glue", "panic", r)
-			ret = 0 // keine Ergebnisse
+			ret = 0
 		}
 	}()
 	return f(&LuaState{L})
@@ -96,12 +98,15 @@ func sdParseRawHTMLText(L *C.lua_State) int {
 			return 0
 		}
 
-		str, err := splibaux.ParseHTMLText(htmltext, csstext)
+		c := css.NewCSSParser()
+		cssResult, err := c.ParseHTMLFragment(htmltext, csstext)
+
 		if err != nil {
 			slog.Error("sdParseRawHTMLText could not parse HTML", "msg", err.Error())
 			return 0
 		}
-		l.pushString(str)
+
+		csslua.Render(luaAdapter{l: l}, cssResult)
 		return 1
 	})
 }
@@ -119,32 +124,14 @@ func sdParseHTMLText(L *C.lua_State) int {
 			slog.Error("sdParseHTMLText second argument must be a string (CSS text)")
 			return 0
 		}
-
-		str, err := splibaux.ParseHTMLText("<body>"+htmltext+"</body>", csstext)
+		c := css.NewCSSParser()
+		cssresult, err := c.ParseHTMLFragment("<body>"+htmltext+"</body>", csstext)
 		if err != nil {
-			slog.Error("sdParseHTMLText could not parse HTML", "msg", err.Error())
+			slog.Error("sdParseRawHTMLText could not parse HTML", "msg", err.Error())
 			return 0
 		}
 
-		l.pushString(str)
-		return 1
-	})
-}
-
-//export sdParseHTML
-func sdParseHTML(L *C.lua_State) int {
-	return luaEntry(L, func(l *LuaState) int {
-		filename, ok := l.getString(1)
-		if !ok {
-			slog.Error("sdParseHTML requires two string arguments")
-			return 0
-		}
-		str, err := splibaux.ParseHTML(filename)
-		if err != nil {
-			slog.Error("ParseHTML", "msg", err.Error())
-			return 0
-		}
-		l.pushString(str)
+		csslua.Render(luaAdapter{l: l}, cssresult)
 		return 1
 	})
 }

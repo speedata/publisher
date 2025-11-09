@@ -223,13 +223,9 @@ local function flatten(self,items,options,data)
                     body = htmltree[1][1]
                     body.block = nil
                 else
-                    local tab = splib.parse_html_text(htmltext,csstext)
-                    if type(tab) == "string" then
-                        local a,b = load(tab)
-                        if a then a() else err(b) return end
-                        body = csshtmltree[1][2]
-                        htmltree = csshtmltree
-                    end
+                    htmltree = splib.parse_html_text(htmltext,csstext)
+                    body = htmltree[1][2]
+                    body.block = nil
                 end
 
                 local startnewline = 0

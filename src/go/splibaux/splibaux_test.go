@@ -17,13 +17,6 @@ func init() {
 	BuildFilelist([]string{"_testdata"})
 }
 
-func TestParseHTML(t *testing.T) {
-	_, err := ParseHTML(filepath.Join(basedir, "sample.html"))
-	if err != nil {
-		t.Error(err)
-	}
-}
-
 func TestHTTPGet(t *testing.T) {
 	expected := "teststring"
 

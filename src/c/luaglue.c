@@ -21,7 +21,6 @@ static const struct luaL_Reg myfuncs[] = {
     {"matches", sdMatches},
     {"parse_raw_html_text", sdParseRawHTMLText},
     {"parse_html_text", sdParseHTMLText},
-    {"parse_html", sdParseHTML},
     {"reloadimage",sdReloadImage},
     {"replace", sdReplace},
     {"segmentize_text", sdSegmentizeText},

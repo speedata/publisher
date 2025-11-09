@@ -2,59 +2,20 @@ package css
 
 import (
 	"fmt"
-	"io"
 	"regexp"
-	"sort"
 	"strings"
 
 	"golang.org/x/net/html"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/andybalholm/cascadia"
 	"github.com/speedata/css/scanner"
 )
 
 var (
-	level              int
-	out                io.Writer
-	dimen              *regexp.Regexp
-	style              *regexp.Regexp
-	reInsideWS         *regexp.Regexp
-	reLeadcloseWhtsp   *regexp.Regexp
-	toprightbottomleft [4]string
-	isSpace            *regexp.Regexp
-	quoteString        *strings.Replacer
-	zeroDimen          = regexp.MustCompile(`^0+(px|mm|cm|in|pt|pc|ch|em|ex|lh|rem)?$`)
+	dimen              *regexp.Regexp = regexp.MustCompile(`px|mm|cm|in|pt|pc|ch|em|ex|lh|rem|0`)
+	style              *regexp.Regexp = regexp.MustCompile(`^none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset$`)
+	toprightbottomleft                = [4]string{"top", "right", "bottom", "left"}
 )
-
-type mode int
-
-func (m mode) String() string {
-	if m == modeHorizontal {
-		return "→"
-	}
-	return "↓"
-}
-
-const (
-	modeHorizontal mode = iota
-	modeVertical
-)
-
-func init() {
-	toprightbottomleft = [...]string{"top", "right", "bottom", "left"}
-	dimen = regexp.MustCompile(`px|mm|cm|in|pt|pc|ch|em|ex|lh|rem|0`)
-	style = regexp.MustCompile(`^none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset$`)
-	reLeadcloseWhtsp = regexp.MustCompile(`^[\s\p{Zs}]+|[\s\p{Zs}]+$`)
-	reInsideWS = regexp.MustCompile(`\n|[\s\p{Zs}]{2,}`) //to match 2 or more whitespace symbols inside a string or NL
-	isSpace = regexp.MustCompile(`^\s*$`)
-	// go %s must escape quotes and newlines for Lua
-	quoteString = strings.NewReplacer(`"`, `\"`, "\n", `\n`, `\`, `\\`)
-}
-
-func normalizespace(input string) string {
-	return strings.Join(strings.Fields(input), " ")
-}
 
 func stringValue(toks tokenstream) string {
 	ret := []string{}
@@ -91,12 +52,12 @@ func stringValue(toks tokenstream) string {
 			case "-":
 				negative = true
 			default:
-				w("unhandled delimiter", tok)
+				fmt.Println("unhandled delimiter", tok)
 			}
 		case scanner.URI:
 			ret = append(ret, "url("+tok.Value+")")
 		default:
-			w("unhandled token", tok)
+			fmt.Println("unhandled token", tok)
 		}
 	}
 	return strings.Join(ret, " ")
@@ -139,18 +100,6 @@ func keyValueFromToks(toks tokenstream) map[string]string {
 		}
 	}
 	return kv
-}
-
-// Recurse through the HTML tree and resolve the style attribute
-func resolveStyle(_ int, sel *goquery.Selection) {
-	a, b := sel.Attr("style")
-	if b {
-		for k, v := range keyValueFromToks(parseCSSString(a)) {
-			sel.SetAttr("!"+k, v)
-		}
-		sel.RemoveAttr("style")
-	}
-	sel.Children().Each(resolveStyle)
 }
 
 func isDimension(str string) (bool, string) {
@@ -197,7 +146,67 @@ func getFourValues(str string) map[string]string {
 	return fourvalues
 }
 
-// Change "margin: 1cm;" into "margin-left: 1cm; margin-right: 1cm; ..."
+// resolveAttributes expands shorthand CSS-style attributes into their
+// longhand form and separates "computed style" properties from ordinary
+// HTML attributes.
+//
+// It takes the attribute list from an HTML element — typically including
+// both regular attributes (like `class`, `id`, `href`, ...) and internally
+// prefixed style attributes (like `!margin`, `!border`, `!font`, ...),
+// which represent inline styles or merged CSS rules.
+//
+// The function returns two maps:
+//
+//  1. resolved (map[string]string)
+//     Fully expanded style properties. Shorthands such as
+//     "margin", "padding", "border", "font", or "list-style" are split
+//     into their directional or property-specific equivalents
+//     (e.g. "margin-top", "border-left-width", etc.).
+//     Default values are added where appropriate, for example
+//     `border-style: none` and `border-width: 1pt` when `border` is used
+//     without explicit subproperties. The helper also normalizes certain
+//     values (e.g. `font`, `text-decoration`, or `background`) to match
+//     CSS2.1 semantics.
+//
+//  2. attributes (map[string]string)
+//     Non-style HTML attributes that do not start with the internal
+//     `!` prefix. These are passed through unchanged and preserved
+//     for the renderer (e.g. "class", "src", "alt", ...).
+//
+// The order in which attributes appear in the input slice is significant:
+// later declarations override earlier ones, matching CSS cascade behavior.
+//
+// This function is used only during the *CSS-to-tree normalization phase*,
+// when the engine builds the computed style maps for each HTML node
+// (`Result.Styles` and `Result.Attributes`). The renderer should never
+// call this function again — it consumes the already computed maps
+// without further interpretation.
+//
+// Example:
+//
+//	Input:  [ {Key:"!margin", Val:"1cm"} ]
+//	Output: (
+//	    map[string]string{
+//	        "margin-top": "1cm",
+//	        "margin-right": "1cm",
+//	        "margin-bottom": "1cm",
+//	        "margin-left": "1cm",
+//	    },
+//	    map[string]string{} // no plain HTML attributes
+//	)
+//
+// In the following example, the color="blue" attribute has no exclamation mark,
+// the other style attributes have them.
+//
+//		<h1 style="color: green;">h1</h1>
+//		<p color="blue">This is a paragraph with text.</p>
+//
+//	 The return value would is:
+//	     resolved map[font-size:1em margin-bottom:1.5em margin-left:0 margin-right:0 margin-top:1.5em]
+//	     attributes map[color:blue]
+//
+// since the default style for <p> includes the margin and font-size properties:
+// p { font-size: 1em; margin: 1.5em 0 }
 func resolveAttributes(attrs []html.Attribute) (map[string]string, map[string]string) {
 	resolved := make(map[string]string)
 	attributes := make(map[string]string)
@@ -329,13 +338,13 @@ func resolveAttributes(attrs []html.Attribute) (map[string]string, map[string]st
 		// font-stretch: ultra-condensed; extra-condensed; condensed; semi-condensed; normal; semi-expanded; expanded; extra-expanded; ultra-expanded;
 		case "text-decoration":
 			for _, part := range strings.Split(attr.Val, " ") {
-				if part == "none" || part == "underline" || part == "overline" || part == "line-through" {
+				switch part {
+				case "none", "underline", "overline", "line-through":
 					resolved["text-decoration-line"] = part
-				} else if part == "solid" || part == "double" || part == "dotted" || part == "dashed" || part == "wavy" {
+				case "solid", "double", "dotted", "dashed", "wavy":
 					resolved["text-decoration-style"] = part
 				}
 			}
-
 		case "background":
 			// background-clip, background-color, background-image, background-origin, background-position, background-repeat, background-size, and background-attachment
 			for _, part := range strings.Split(attr.Val, " ") {
@@ -349,289 +358,6 @@ func resolveAttributes(attrs []html.Attribute) (map[string]string, map[string]st
 		resolved["text-decoration-style"] = "solid"
 	}
 	return resolved, attributes
-}
-
-var preserveWhitespace = []bool{false}
-
-func hasBorder(attrs map[string]string) bool {
-	var borderwidthKey, borderstyleKey string
-	for _, loc := range toprightbottomleft {
-		borderwidthKey = "border-" + loc + "-width"
-		borderstyleKey = "border-" + loc + "-style"
-		if wd, ok := attrs[borderwidthKey]; ok {
-			if st, ok := attrs[borderstyleKey]; ok {
-				if st != "none" {
-					if !zeroDimen.MatchString(wd) {
-						return true
-					}
-				}
-			}
-		}
-	}
-	return false
-}
-
-// luaescape writes unicode runes > 127 as an escaped UTF8 sequence.
-// For example U+F8FF will be written as `\239\163\191`.
-func luaescape(in string) string {
-	var out strings.Builder
-	for _, b := range []byte(in) {
-		if b == 34 {
-			// a " (quote)
-			out.WriteString(`\"`)
-		} else if b == 92 {
-			// a backslash
-			out.WriteString(`\\`)
-		} else if b > 127 {
-			// \123 must be exactly three digits, but a byte > 127
-			// will be three digits anyway.
-			fmt.Fprintf(&out, "\\%d", b)
-		} else {
-			out.WriteByte(b)
-		}
-	}
-
-	return out.String()
-}
-
-func dumpElement(thisNode *html.Node, level int, direction mode) {
-	indent := strings.Repeat("  ", level)
-	newDir := direction
-	for {
-		if thisNode == nil {
-			break
-		}
-
-		switch thisNode.Type {
-		case html.CommentNode:
-			// ignore
-		case html.TextNode:
-			ws := preserveWhitespace[len(preserveWhitespace)-1]
-			txt := thisNode.Data
-			if !ws {
-				if isSpace.MatchString(txt) {
-					txt = " "
-				}
-			}
-			if !isSpace.MatchString(txt) {
-				if direction == modeVertical {
-					newDir = modeHorizontal
-				}
-			}
-			if txt != "" {
-				if !ws {
-					txt = reLeadcloseWhtsp.ReplaceAllString(txt, " ")
-					txt = reInsideWS.ReplaceAllString(txt, " ")
-				}
-				fmt.Fprintf(out, `%s "%s",`, indent, quoteString.Replace(txt))
-				fmt.Fprintf(out, "\n")
-			}
-
-		case html.ElementNode:
-			ws := preserveWhitespace[len(preserveWhitespace)-1]
-			eltname := thisNode.Data
-			if eltname == "body" || eltname == "address" || eltname == "article" || eltname == "aside" || eltname == "blockquote" || eltname == "br" || eltname == "canvas" || eltname == "dd" || eltname == "div" || eltname == "dl" || eltname == "dt" || eltname == "fieldset" || eltname == "figcaption" || eltname == "figure" || eltname == "footer" || eltname == "form" || eltname == "h1" || eltname == "h2" || eltname == "h3" || eltname == "h4" || eltname == "h5" || eltname == "h6" || eltname == "header" || eltname == "hr" || eltname == "li" || eltname == "main" || eltname == "nav" || eltname == "noscript" || eltname == "ol" || eltname == "p" || eltname == "pre" || eltname == "section" || eltname == "table" || eltname == "tfoot" || eltname == "thead" || eltname == "tbody" || eltname == "tr" || eltname == "td" || eltname == "th" || eltname == "ul" || eltname == "video" {
-				newDir = modeVertical
-			} else if eltname == "b" || eltname == "big" || eltname == "i" || eltname == "small" || eltname == "tt" || eltname == "abbr" || eltname == "acronym" || eltname == "cite" || eltname == "code" || eltname == "dfn" || eltname == "em" || eltname == "kbd" || eltname == "strong" || eltname == "samp" || eltname == "var" || eltname == "a" || eltname == "bdo" || eltname == "img" || eltname == "map" || eltname == "object" || eltname == "q" || eltname == "script" || eltname == "span" || eltname == "sub" || eltname == "sup" || eltname == "button" || eltname == "input" || eltname == "label" || eltname == "select" || eltname == "textarea" {
-				newDir = modeHorizontal
-			} else {
-				// keep dir
-			}
-			isBlock := false
-			if eltname == "address" || eltname == "article" || eltname == "aside" || eltname == "audio" || eltname == "video" || eltname == "blockquote" || eltname == "canvas" || eltname == "dd" || eltname == "div" || eltname == "dl" || eltname == "fieldset" || eltname == "figcaption" || eltname == "figure" || eltname == "footer" || eltname == "form" || eltname == "h1" || eltname == "h2" || eltname == "h3" || eltname == "h4" || eltname == "h5" || eltname == "h6" || eltname == "header" || eltname == "hgroup" || eltname == "hr" || eltname == "noscript" || eltname == "ol" || eltname == "output" || eltname == "p" || eltname == "pre" || eltname == "section" || eltname == "table" || eltname == "tfoot" || eltname == "ul" {
-				isBlock = true
-			}
-			fmt.Fprintf(out, "%s { elementname = %q, direction = %q,", indent, eltname, newDir)
-			if isBlock {
-				fmt.Fprint(out, " block=true,")
-			}
-			fmt.Fprintln(out)
-			attributes := thisNode.Attr
-			if len(attributes) > 0 {
-				fmt.Fprintf(out, "%s  styles = {", indent)
-				resolvedStyles, resolvedAttributes := resolveAttributes(attributes)
-				for key, value := range resolvedStyles {
-					if key == "white-space" {
-						if value == "pre" {
-							ws = true
-						} else {
-							ws = false
-						}
-					}
-					fmt.Fprintf(out, "[%q] = \"%s\" ,", key, luaescape(value))
-				}
-				if _, ok := resolvedStyles["font-family"]; ok {
-					if _, ok = resolvedStyles["font-family-number"]; !ok {
-						fmt.Fprint(out, "[\"font-family-number\"] = 0, ")
-					}
-				}
-				fmt.Fprintf(out, "has_border = %t ,", hasBorder(resolvedStyles))
-				fmt.Fprintf(out, "%s  }, attributes = {", indent)
-				for key, value := range resolvedAttributes {
-					fmt.Fprintf(out, "[%q] = \"%s\" ,", key, luaescape(value))
-				}
-				fmt.Fprintln(out, "},")
-			}
-			preserveWhitespace = append(preserveWhitespace, ws)
-			dumpElement(thisNode.FirstChild, level+1, newDir)
-			preserveWhitespace = preserveWhitespace[:len(preserveWhitespace)-1]
-			fmt.Fprintln(out, indent, "},")
-		default:
-			fmt.Println(thisNode.Type)
-		}
-		thisNode = thisNode.NextSibling
-	}
-}
-
-func (c *CSS) dumpTree(outfile io.Writer) {
-	out = outfile
-	type selRule struct {
-		selector cascadia.Sel
-		rule     []qrule
-	}
-
-	rules := map[int][]selRule{}
-	c.document.Each(resolveStyle)
-	for _, stylesheet := range c.Stylesheet {
-		for _, block := range stylesheet.Blocks {
-			selector := block.ComponentValues.String()
-			selectors, err := cascadia.ParseGroupWithPseudoElements(selector)
-			if err != nil {
-				fmt.Println(err)
-			} else {
-				for _, sel := range selectors {
-					selSpecificity := sel.Specificity()
-					s := selSpecificity[0]*100 + selSpecificity[1]*10 + selSpecificity[2]
-					rules[s] = append(rules[s], selRule{selector: sel, rule: block.Rules})
-				}
-			}
-		}
-	}
-	// sort map keys
-	n := len(rules)
-	keys := make([]int, 0, n)
-	for k := range rules {
-		keys = append(keys, k)
-	}
-	sort.Ints(keys)
-	doc := c.document.Get(0)
-	for _, k := range keys {
-		for _, r := range rules[k] {
-			for _, singlerule := range r.rule {
-				for _, node := range cascadia.QueryAll(doc, r.selector) {
-					var prefix string
-					if pe := r.selector.PseudoElement(); pe != "" {
-						prefix = pe + "::"
-					}
-					node.Attr = append(node.Attr, html.Attribute{Key: "!" + prefix + stringValue(singlerule.Key), Val: stringValue(singlerule.Value)})
-				}
-			}
-		}
-	}
-	html := c.document.Find(":root")
-	var lang string
-	if langattr, ok := html.Attr("lang"); ok {
-		lang = fmt.Sprintf("lang='%s',", langattr)
-	}
-
-	elt := c.document.Find(":root").Nodes[0]
-	fmt.Fprintf(out, "csshtmltree = { typ = 'csshtmltree', %s\n", lang)
-	c.dumpFonts()
-	c.dumpPages()
-
-	dumpElement(elt, 0, modeVertical)
-
-	fmt.Fprintln(out, "}")
-}
-
-func (c *CSS) dumpPages() {
-	fmt.Fprintln(out, "  pages = {")
-	for k, v := range c.Pages {
-		if k == "" {
-			k = "*"
-		}
-		fmt.Fprintf(out, "    [%q] = {", k)
-		styles, _ := resolveAttributes(v.attributes)
-		for k, v := range styles {
-			fmt.Fprintf(out, "[%q]=%q,", k, v)
-		}
-		wd, ht := papersize(v.papersize)
-		fmt.Fprintf(out, "       width = %q, height = %q,\n", wd, ht)
-		for paname, parea := range v.pagearea {
-			fmt.Fprintf(out, "       [%q] = {\n", paname)
-			for _, rule := range parea {
-				fmt.Fprintf(out, "           [%q] = %q ,\n", rule.Key, stringValue(rule.Value))
-			}
-			fmt.Fprintln(out, "       },")
-		}
-		fmt.Fprintln(out, "     },")
-	}
-
-	fmt.Fprintln(out, "  },")
-}
-
-func (c *CSS) dumpFonts() {
-	fmt.Fprintln(out, " fontfamilies = {")
-	for name, ff := range c.Fontfamilies {
-		fmt.Fprintf(out, "     [%q] = { regular = %s, bold=%s, bolditalic=%s, italic=%s },\n", name, ff.Regular, ff.Bold, ff.BoldItalic, ff.Italic)
-	}
-	fmt.Fprintln(out, " },")
-}
-
-func papersize(typ string) (string, string) {
-	typ = strings.ToLower(typ)
-	var width, height string
-	portrait := true
-	for i, e := range strings.Fields(typ) {
-		switch e {
-		case "portrait":
-			// good, nothing to do
-		case "landscape":
-			portrait = false
-		case "a5":
-			width = "148mm"
-			height = "210mm"
-		case "a4":
-			width = "210mm"
-			height = "297mm"
-		case "a3":
-			width = "297mm"
-			height = "420mm"
-		case "b5":
-			width = "176mm"
-			height = "250mm"
-		case "b4":
-			width = "250mm"
-			height = "353mm"
-		case "jis-b5":
-			width = "182mm"
-			height = "257mm"
-		case "jis-b4":
-			width = "257mm"
-			height = "364mm"
-		case "letter":
-			width = "8.5in"
-			height = "11in"
-		case "legal":
-			width = "8.5in"
-			height = "14in"
-		case "ledger":
-			width = "11in"
-			height = "17in"
-		default:
-			if i == 0 {
-				width = e
-				height = e
-			} else {
-				height = e
-			}
-		}
-	}
-
-	if portrait {
-		return width, height
-	}
-	return height, width
 }
 
 func (c *CSS) readHTMLChunk(htmltext string) error {

@@ -9,13 +9,59 @@ import (
 	"golang.org/x/net/html"
 )
 
+// FontFamilyFiles lists the font file paths for the four standard text styles.
+type FontFamilyFiles struct {
+	Regular    string
+	Bold       string
+	BoldItalic string
+	Italic     string
+}
+
+// PageAreaRule stores a single CSS key/value pair for a named @page area.
+type PageAreaRule struct {
+	Key   string
+	Value tokenstream // du hast bereits stringValue()
+}
+
+// Page is the normalized representation of the parsed @page rule.
+type Page struct {
+	Attributes []html.Attribute
+	Papersize  string
+	Pagearea   map[string][]PageAreaRule
+}
+
+// Result contains the computed DOM, language, fonts, pages, and per-node styles.
+type Result struct {
+	Root         *html.Node
+	Lang         string
+	Fontfamilies map[string]FontFamily
+	Pages        map[string]Page
+
+	// resolved style and attributes per node
+	Styles     map[*html.Node]map[string]string
+	Attributes map[*html.Node]map[string]string
+}
+
+// tokenstream contains the raw tokens emitted by the CSS scanner.
 type tokenstream []*scanner.Token
 
+// String concatenates all token values; useful when the tokens represent
+// identifiers or numbers that should be read without whitespace.
+func (t tokenstream) String() string {
+	ret := []string{}
+	for _, tok := range t {
+		ret = append(ret, tok.Value)
+	}
+	return strings.Join(ret, "")
+}
+
+// qrule represents a CSS declaration (key/value pair) without any post-processing.
 type qrule struct {
 	Key   tokenstream
 	Value tokenstream
 }
 
+// sBlock models a segment of the stylesheet, either a qualified rule or an at-rule.
 type sBlock struct {
 	Name            string      // only set if this is an at-rule
 	ComponentValues tokenstream // the "selector"
@@ -24,13 +70,14 @@ type sBlock struct {
 	Rules           []qrule     // the key-value pairs
 }
 
+// cssPage represents the intermediate state of a parsed @page rule before export.
 type cssPage struct {
 	pagearea   map[string][]qrule
 	attributes []html.Attribute
 	papersize  string
 }
 
-// CSS has all the information
+// CSS encapsulates the parsed stylesheet, document, and derived metadata.
 type CSS struct {
 	dirstack     []string
 	document     *goquery.Document
@@ -39,12 +86,13 @@ type CSS struct {
 	Pages        map[string]cssPage
 }
 
-// FontSource has URL/file names for fonts
+// FontSource holds the origin of a font as parsed from a @font-face src list.
 type FontSource struct {
 	Local string
 	URL   string
 }
 
+// String renders the source in Lua table syntax as expected by the consumer.
 func (f FontSource) String() string {
 	ret := []string{}
 	if f.Local != "" {
@@ -56,7 +104,7 @@ func (f FontSource) String() string {
 	return "{" + strings.Join(ret, ",") + "}"
 }
 
-// A FontFamily consists of the four standard shapes: regular, bold, italic, bolditalic
+// FontFamily bundles the four commonly used style variants of a font family.
 type FontFamily struct {
 	Regular    FontSource
 	Bold       FontSource
@@ -64,6 +112,7 @@ type FontFamily struct {
 	BoldItalic FontSource
 }
 
+// cssdefaults defines the built-in UA stylesheet that seeds every parsed document.
 var cssdefaults = `
 :root           { font-family: sans-serif;  font-size: 10pt; line-height: 1.2; }
 a               { text-decoration: underline; color: blue; }
@@ -120,7 +169,7 @@ center          { text-align: center }
 
 // :link           { text-decoration: underline }
 
-// Return the position of the matching closing brace "}"
+// findClosingBrace returns the index of the token following the matching '}'.
 func findClosingBrace(toks tokenstream) int {
 	level := 1
 	for i, t := range toks {
@@ -139,7 +188,7 @@ func findClosingBrace(toks tokenstream) int {
 	return len(toks)
 }
 
-// fixupComponentValues changes DELIM[.] + IDENT[foo] to IDENT[.foo]
+// fixupComponentValues merges punctuation tokens with identifiers (e.g. ".foo").
 func fixupComponentValues(toks tokenstream) tokenstream {
 	toks = trimSpace(toks)
 	var combineNext bool
@@ -160,6 +209,7 @@ func fixupComponentValues(toks tokenstream) tokenstream {
 	return toks
 }
 
+// trimSpace removes leading whitespace tokens from the provided slice.
 func trimSpace(toks tokenstream) tokenstream {
 	i := 0
 	for {
@@ -176,8 +226,8 @@ func trimSpace(toks tokenstream) tokenstream {
 	return toks
 }
 
-// Get the contents of a block. The name (in case of an at-rule)
-// and the selector will be added later on
+// consumeBlock parses the body between matching braces and returns a structured
+// sBlock; it does not set the at-rule name or selector, those are added later.
 func consumeBlock(toks tokenstream, inblock bool) sBlock {
 	// This is the whole block between the opening { and closing }
 	if len(toks) <= 1 {
@@ -260,6 +310,7 @@ func consumeBlock(toks tokenstream, inblock bool) sBlock {
 	return b
 }
 
+// doFontFace updates the Fontfamilies map with the sources defined in @font-face.
 func (c *CSS) doFontFace(ff []qrule) {
 	var fontfamily, fontstyle, fontweight string
 	var fontsource FontSource
@@ -300,6 +351,7 @@ func (c *CSS) doFontFace(ff []qrule) {
 	c.Fontfamilies[fontfamily] = fam
 }
 
+// doPage captures the parsed @page rule and stores it in the Pages map.
 func (c *CSS) doPage(block *sBlock) {
 	selector := block.ComponentValues.String()
 	pg := c.Pages[selector]
@@ -321,6 +373,7 @@ func (c *CSS) doPage(block *sBlock) {
 	c.Pages[selector] = pg
 }
 
+// processAtRules walks the stylesheet blocks and extracts structured metadata.
 func (c *CSS) processAtRules() {
 	c.Fontfamilies = make(map[string]FontFamily)
 	c.Pages = make(map[string]cssPage)
@@ -337,39 +390,48 @@ func (c *CSS) processAtRules() {
 	}
 }
 
+// Findfunc locates external resources and returns their textual contents.
 type Findfunc func(string) (string, error)
 
-func NewCssParser() *CSS {
+// NewCSSParser returns an empty CSS parser instance ready for incremental use.
+func NewCSSParser() *CSS {
 	return &CSS{}
 }
 
-// ParseHTMLFragment takes the HTML text and the CSS text and returns a
-// Lua table as a string and perhaps an error.
-func (c *CSS) ParseHTMLFragment(htmltext, csstext string) (string, error) {
+// ParseHTMLFragment parses DOM and CSS snippets, computes all rules, and returns
+// a Result ready for downstream processing.
+func (c *CSS) ParseHTMLFragment(htmlfrag, csstext string) (*Result, error) {
 	c.Stylesheet = append(c.Stylesheet, consumeBlock(parseCSSString(cssdefaults), false))
 	c.Stylesheet = append(c.Stylesheet, consumeBlock(parseCSSString(csstext), false))
-	err := c.readHTMLChunk(htmltext)
-	if err != nil {
-		return "", err
+
+	if err := c.readHTMLChunk(htmlfrag); err != nil {
+		return nil, err
 	}
 	c.processAtRules()
-	var b strings.Builder
-	c.dumpTree(&b)
-	return b.String(), nil
-}
 
-// Run returns a Lua tree
-func (c *CSS) Run(htmlfilename string) (string, error) {
-	var err error
-	c.Stylesheet = append(c.Stylesheet, consumeBlock(parseCSSString(cssdefaults), false))
-
-	err = c.openHTMLFile(htmlfilename)
-	if err != nil {
-		return "", err
+	roots := c.document.Find(":root").Nodes
+	if len(roots) == 0 {
+		return nil, fmt.Errorf("no :root element found")
 	}
-	c.processAtRules()
-	var b strings.Builder
-	c.dumpTree(&b)
+	r := &Result{
+		Root:         roots[0],
+		Lang:         "",
+		Fontfamilies: c.Fontfamilies, // same type as CSS.Fontfamilies
+		Pages:        map[string]Page{},
+		Styles:       map[*html.Node]map[string]string{},
+		Attributes:   map[*html.Node]map[string]string{},
+	}
+	if lang, ok := c.document.Find(":root").Attr("lang"); ok {
+		r.Lang = lang
+	}
 
-	return b.String(), nil
+	// Compute final styles/attributes (no DOM mutation)
+	if err := c.FillComputedMaps(r); err != nil {
+		return nil, err
+	}
+
+	// You can also normalize pages here if desired (expand shorthands once):
+	// for k, v := range c.Pages { ... } -> r.Pages[k] = normalized Page
+
+	return r, nil
 }

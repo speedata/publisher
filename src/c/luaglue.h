@@ -89,7 +89,6 @@ extern "C" {
 
 extern int sdParseRawHTMLText(lua_State* L);
 extern int sdParseHTMLText(lua_State* L);
-extern int sdParseHTML(lua_State* L);
 extern int sdMarkdown(lua_State* L);
 extern int sdContains(lua_State* L);
 extern int sdMatches(lua_State* L);

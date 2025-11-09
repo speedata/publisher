@@ -1374,7 +1374,6 @@ function commands.group( layoutxml,dataxml )
         end
     end
 
-
     local r = publisher.grid:new(-999)
     r:set_margin(0,0,0,0)
     if grid then
@@ -1436,11 +1435,7 @@ function commands.html( layoutxml,dataxml)
         blocks = publisher.parse_html(csshtmltree,{}, dataxml)
     else
         local tab = splib.parse_raw_html_text(htmltext,csstext)
-        if type(tab) == "string" then
-            local a,b = load(tab)
-            if a then a() else err(b) return end
-        end
-        blocks = publisher.parse_html(csshtmltree,{}, dataxml)
+        blocks = publisher.parse_html(tab,{}, dataxml)
     end
     blocks = publisher.flatten_boxes(blocks)
     for b=1,#blocks do

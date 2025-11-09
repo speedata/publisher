@@ -286,6 +286,8 @@ func (l *LuaState) pushAny(value any) {
 		l.pushString(t)
 	case int:
 		l.pushInt(t)
+	case bool:
+		l.pushBool(t)
 	default:
 		fmt.Printf("~~> t %#T\n", t)
 		panic("l.pushAny()")

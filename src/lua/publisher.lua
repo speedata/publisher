@@ -38,11 +38,10 @@ end
 local commands     = require("publisher.commands")
 local page         = require("publisher.page")
 local fontloader   = require("fonts.fontloader")
-local html         = require("publisher.html")
 local fonts        = require("publisher.fonts")
 local uuid         = require("uuid")
-
-par = require("par")
+local html         = require("html")
+par                = require("par")
 uuid.randomseed(tex.randomseed)
 
 local env_publisherversion = os.getenv("PUBLISHERVERSION")
@@ -4650,10 +4649,22 @@ marker.value = 1
 
 --- Convert `<b>`, `<u>` and `<i>` in text to publisher recognized elements.
 -- The 'new' HTML parse is in the file html.lua
-function parse_html( elt, parameter, data )
+function parse_html(elt, parameter, data)
     parameter = parameter or {}
+
     if elt.typ == "csshtmltree" then
-        return html.parse_html_new(elt, parameter, data)
+        -- Provide the runtime environment for the modular parser
+        local env = {
+            publisher = publisher,
+            tex       = tex,
+            node      = node,
+            img       = img,
+            xpath     = xpath,
+            math      = math,
+            err       = err,
+        }
+        -- New modular entry point (same call site for you)
+        return html.parse_html_new(elt, parameter, data, env)
     else
         err("This should not happen (parse_html)")
     end
