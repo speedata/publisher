@@ -298,6 +298,9 @@ function exit(graceful)
     log("%d errors occurred",errcount)
     log("Duration: %3f seconds",os.gettimeofday() - starttime)
 
+    if errcount > 0 then
+        publisher.errorcode = math.max(publisher.errorcode,1)
+    end
     status.setexitcode(publisher.errorcode)
 
     if rlib then
