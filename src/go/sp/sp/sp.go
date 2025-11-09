@@ -1108,7 +1108,10 @@ func main() {
 				log.Fatal(err)
 			}
 			// true = write HTML file to $TEMPDIR
-			sp.DoCompare(absDir, true, verbose, getOption("referencefilename"))
+			if err = sp.DoCompare(absDir, true, verbose, getOption("referencefilename")); err != nil {
+				fmt.Println(err)
+				exitstatus = 1
+			}
 		} else {
 			log.Println("Please give one directory")
 		}
