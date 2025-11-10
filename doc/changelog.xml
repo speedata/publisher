@@ -1,5 +1,21 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.2" date="2025-10-14">
+    <entry version="5.3.4" date="2025-11-10">
+      <en>HTML: add support for more list style types (lower-alpha, upper-alpha, etc.).</en>
+      <de>HTML: Unterstützung für weitere Nummerierungsarten in Listen hinzugefügt (lower-alpha, upper-alpha usw.).</de>
+    </entry>
+    <entry version="5.3.4" date="2025-11-09">
+      <en>Set exit code when error count is greater than zero.</en>
+      <de>Setze Exit-Code ungleich Null, wenn Fehler aufgetreten sind.</de>
+    </entry>
+    <entry version="5.3.4" date="2025-11-09">
+      <en>Compare tool: refactor for stability and improved HTML report (checksums, build errors, thumbnails, sorting).</en>
+      <de>Compare-Tool: Überarbeitung für mehr Stabilität und verbesserten HTML-Report (Prüfsummen, Build-Fehler, Vorschaubilder, Sortierung).</de>
+    </entry>
+    <entry version="5.3.4" date="2025-11-09">
+      <en>Refactor HTML → Lua rendering pipeline for structured output and cleaner CSS separation.</en>
+      <de>HTML-zu-Lua-Rendering-Pipeline überarbeitet für strukturierte Ausgabe und klarere Trennung von CSS-Berechnung.</de>
+    </entry>
     <entry version="5.3.3" date="2025-11-04">
         <en>Reinstate old curly brace syntax for Value/select and old xpath parser (#680).</en>
         <de>Führe alte Syntax mit geschweiften Klammern wieder ein bei Value/select und dem alten XPath parser (#680) .</de>
