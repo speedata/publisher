@@ -10946,6 +10946,7 @@
           <cmd name="Bookmark"/>
           <cmd name="Copy-of"/>
           <cmd name="ForAll"/>
+          <cmd name="HTML" />
           <cmd name="Loop"/>
           <cmd name="Ol"/>
           <cmd name="Paragraph"/>
