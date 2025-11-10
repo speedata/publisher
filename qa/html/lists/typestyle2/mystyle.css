@@ -1,0 +1,22 @@
+@font-face {
+  font-family: "DejaVu Serif Condensed";
+  src: url("DejaVuSerifCondensed.ttf") format("truetype");
+}
+
+:root {
+  font-family: "DejaVu Serif Condensed";
+  font-size: 8pt;
+}
+
+ol, ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.list-alpha {
+    list-style:lower-alpha;
+}
+
+.list-circle {
+    list-style:circle;
+}

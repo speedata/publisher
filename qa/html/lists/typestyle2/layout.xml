@@ -1,0 +1,18 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+	<Pageformat height="10cm" width="9cm"></Pageformat>
+	<Stylesheet filename="mystyle.css" />
+	<SetGrid nx="10" height="9pt"></SetGrid>
+
+	<Record element="data">
+		<ProcessNode select="*" />
+	</Record>
+	<Record element="Paragraph">
+		<PlaceObject>
+			<Textblock>
+				<HTML select="." />
+			</Textblock>
+		</PlaceObject>
+	</Record>
+</Layout>

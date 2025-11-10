@@ -1,6 +1,7 @@
 package csslua
 
 import (
+	"sort"
 	"strings"
 
 	"golang.org/x/net/html"
@@ -39,7 +40,6 @@ func Render(l LuaStater, res *csspkg.Result) {
 	if res.Lang != "" {
 		l.AddKeyValueToTable(-1, "lang", res.Lang)
 	}
-
 	pushFontFamilies(l, res)
 	pushPages(l, res)
 
@@ -50,42 +50,57 @@ func Render(l LuaStater, res *csspkg.Result) {
 }
 
 func pushFontFamilies(l LuaStater, res *csspkg.Result) {
-	// key "fontfamilies"
+	// Push "fontfamilies" table
 	l.PushString("fontfamilies")
 	l.CreateTable(0, len(res.Fontfamilies))
-	for name, ff := range res.Fontfamilies {
-		l.PushString(name)
-		// Create nested table; record count is a hint only
-		count := 0
-		if ff.Regular.URL != "" {
-			count++
-		}
-		if ff.Bold.URL != "" {
-			count++
-		}
-		if ff.BoldItalic.URL != "" {
-			count++
-		}
-		if ff.Italic.URL != "" {
-			count++
-		}
-		l.CreateTable(0, count)
 
-		if ff.Regular.URL != "" {
-			l.AddKeyValueToTable(-1, "regular", ff.Regular)
-		}
-		if ff.Bold.URL != "" {
-			l.AddKeyValueToTable(-1, "bold", ff.Bold)
-		}
-		if ff.BoldItalic.URL != "" {
-			l.AddKeyValueToTable(-1, "bolditalic", ff.BoldItalic)
-		}
-		if ff.Italic.URL != "" {
-			l.AddKeyValueToTable(-1, "italic", ff.Italic)
-		}
-
-		l.RawSet(-3)
+	// Optional: deterministic order
+	names := make([]string, 0, len(res.Fontfamilies))
+	for n := range res.Fontfamilies {
+		names = append(names, n)
 	}
+	sort.Strings(names)
+
+	for _, name := range names {
+		ff := res.Fontfamilies[name]
+
+		l.PushString(name)
+		// Always create the 4 variants as keys: regular, bold, bolditalic, italic
+		l.CreateTable(0, 4)
+
+		emitFontVariant(l, "regular", ff.Regular)
+		emitFontVariant(l, "bold", ff.Bold)
+		emitFontVariant(l, "bolditalic", ff.BoldItalic)
+		emitFontVariant(l, "italic", ff.Italic)
+
+		l.RawSet(-3) // set family table
+	}
+
+	l.RawSet(-3) // set "fontfamilies"
+}
+
+// emitFontVariant creates a nested table for a single font variant.
+// It always creates a table (even if empty) to match the desired shape.
+func emitFontVariant(l LuaStater, key string, src csspkg.FontSource) {
+	l.PushString(key)
+	// We may have up to 2 fields: url, local. Create empty table if none.
+	// (record count is just a hint)
+	rec := 0
+	if src.URL != "" {
+		rec++
+	}
+	if src.Local != "" {
+		rec++
+	}
+	l.CreateTable(0, rec)
+
+	if src.URL != "" {
+		l.AddKeyValueToTable(-1, "url", src.URL)
+	}
+	if src.Local != "" {
+		l.AddKeyValueToTable(-1, "local", src.Local)
+	}
+
 	l.RawSet(-3)
 }
 

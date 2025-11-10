@@ -1,0 +1,46 @@
+<data>
+    <Paragraph textformat="p">
+        <![CDATA[
+        <ol class="list-alpha" start="25">
+            <li>CSS syntax – numbered with y.</li>
+            <li>CSS syntax – numbered with z.</li>
+            <li>CSS syntax – numbered with aa.</li>
+            <li>CSS syntax – numbered with ab.</li>
+        </ol>]]>
+    </Paragraph>
+    <Paragraph textformat="p">
+        <![CDATA[
+        <ol type="a" start="3">
+            <li>HTML syntax – numbered with c.</li>
+            <li>HTML syntax – numbered with d.</li>
+        </ol>]]>
+    </Paragraph>
+    <Paragraph textformat="p">
+        <![CDATA[
+        <Ol Type="a" Start="3">
+            <Li>speedata syntax – numbered with c.</Li>
+            <Li>speedata syntax – numbered with d.</Li>
+        </Ol>]]>
+    </Paragraph>
+    <Paragraph textformat="p">
+        <![CDATA[
+        <ul class="list-circle">
+            <li>CSS syntax – numbered with (circle)</li>
+            <li>CSS syntax – numbered with (circle)</li>
+        </ul>]]>
+    </Paragraph>
+    <Paragraph textformat="p">
+        <![CDATA[
+        <ul type="circle">
+            <li>HTML syntax – numbered with (circle)</li>
+            <li>HTML syntax – numbered with (circle)</li>
+        </ul>]]>
+    </Paragraph>
+    <Paragraph textformat="p">
+        <![CDATA[
+        <Ul Type="circle">
+            <Li>speedata syntax – numbered with (circle)</Li>
+            <Li>speedata syntax – numbered with (circle)</Li>
+        </Ul>]]>
+    </Paragraph>
+</data>
