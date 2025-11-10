@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="5.2" date="2025-10-14">
+  <chapter version="5.3">
+    <entry version="5.3.5" date="2025-11-10">
+      <en>Fix @font-face in CSS (fatal crash).</en>
+      <de>Korrigiere @font-face in CSS (fataler Absturz).</de>
+    </entry>
     <entry version="5.3.4" date="2025-11-10">
       <en>HTML: add support for more list style types (lower-alpha, upper-alpha, etc.).</en>
       <de>HTML: Unterstützung für weitere Nummerierungsarten in Listen hinzugefügt (lower-alpha, upper-alpha usw.).</de>
@@ -36,6 +40,8 @@
         <en>Alternative Rust library for dynamic binding.</en>
         <de>Alternative Rust-Bibliothek für dynamische Bindung.</de>
     </entry>
+  </chapter>
+  <chapter version="5.2" date="2025-10-14">
     <entry version="5.2.0" date="2025-10-14">
         <en>Release Version 5.2.</en>
         <de>Veröffentliche Version 5.2.</de>
