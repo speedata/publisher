@@ -194,8 +194,9 @@ function collect_horizontal_nodes( elt,parameter,before_box,origin,dataxml )
 end
 
 
---
 local olcounter = {}
+local oltype = {}
+
 function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
     -- w("html: build nodelist from %s, prevdir = %s", caller or "?",prevdir or "?")
     options = options or {}
@@ -405,11 +406,17 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                     styles.ullevel = styles.ullevel + 1
                 end
                 local attribs = thiselt.attributes
-                if attribs and attribs.start then
-                    local i = math.tointeger(attribs.start - 1)
-                    olcounter[styles.listlevel] = i
-                else
-                    olcounter[styles.listlevel] = 0
+                oltype[styles.listlevel] = nil
+                if attribs then
+                    if attribs.start then
+                        local i = math.tointeger(attribs.start - 1)
+                        olcounter[styles.listlevel] = i
+                    else
+                        olcounter[styles.listlevel] = 0
+                    end
+                    if attribs.type then
+                        oltype[styles.listlevel] = attribs.type
+                    end
                 end
                 local n
                 n, prevdir = build_nodelist(thiselt,options,before_box,"build_nodelist/ ol/ul",prevdir,dataxml)
@@ -433,7 +440,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 n, prevdir = build_nodelist(thiselt,options,before_box,"build_nodelist/ li",prevdir,dataxml)
                 before_box = nil
                 -- n is a table of box and / or par
-                local str = lists.resolve_list_style_type(styles,olcounter,dataxml)
+                local str = lists.resolve_list_style_type(styles,olcounter,oltype[styles.listlevel],dataxml)
                 local pos = styles["list-style-position"] or "outside"
                 for i=1,#n do
                     local a = n[i]

@@ -1,0 +1,22 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+	<Pageformat height="10cm" width="9cm"></Pageformat>
+	<Stylesheet>
+		.list-alpha  { list-style:lower-alpha; }
+		.list-circle { list-style:circle; }
+	</Stylesheet>
+
+	<Record element="data">
+		<ProcessNode select="*" />
+	</Record>
+	<Record element="Paragraph">
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value select="."></Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+	</Record>
+</Layout>

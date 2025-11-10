@@ -4,12 +4,28 @@ local images = require("html.images")
 
 local M = {}
 
+
+-- format lower-alpha returns a-z, aa-az, ba-bz, ...
+local function format_lower_alpha(counter)
+    local result = ""
+    local n = counter
+    while n > 0 do
+        n = n - 1
+        local remainder = n % 26
+        result = string.char(97 + remainder) .. result
+        n = math.floor(n / 26)
+    end
+    return result
+end
+
+
 ---Resolve list-style-type or list-style-image to a string or image node.
 ---@param styles table            -- CSS style table
 ---@param olcounter table         -- current list-level counters
+---@param oltype table            -- current list-level type
 ---@param dataxml table           -- data context (needed for image sizing)
 ---@return string|any             -- list marker text or image node
-function M.resolve_list_style_type(styles, olcounter, dataxml)
+function M.resolve_list_style_type(styles, olcounter, oltype, dataxml)
     local liststyletype  = styles["list-style-type"]
     local liststyleimage = styles["list-style-image"]
 
@@ -26,6 +42,20 @@ function M.resolve_list_style_type(styles, olcounter, dataxml)
     local counter = olcounter[styles.listlevel]
     local str = ""
 
+    if oltype == "A" then
+        liststyletype = "upper-alpha"
+    elseif oltype == "a" then
+        liststyletype = "lower-alpha"
+    elseif oltype == "I" then
+        liststyletype = "upper-roman"
+    elseif oltype == "i" then
+        liststyletype = "lower-roman"
+    elseif oltype == "1" then
+        liststyletype = "decimal"
+    elseif oltype == "circle" then -- not standard
+        liststyletype = "circle"
+    end
+
     if liststyletype == "decimal" then
         str = tostring(counter) .. "."
     elseif liststyletype == "none" then
@@ -34,6 +64,10 @@ function M.resolve_list_style_type(styles, olcounter, dataxml)
         str = string.format("%02d.", counter)
     elseif liststyletype == "lower-roman" then
         str = tex.romannumeral(counter) .. "."
+    elseif liststyletype == "lower-alpha" then
+        str = format_lower_alpha(counter) .. "."
+    elseif liststyletype == "upper-alpha" then
+        str = string.upper(format_lower_alpha(counter)) .. "."
     elseif liststyletype == "upper-roman" then
         str = string.upper(tex.romannumeral(counter)) .. "."
     elseif liststyletype == "disc" then
