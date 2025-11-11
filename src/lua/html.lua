@@ -407,6 +407,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 end
                 local attribs = thiselt.attributes
                 oltype[styles.listlevel] = nil
+                olcounter[styles.listlevel] = 0
                 if attribs then
                     if attribs.start then
                         local i = math.tointeger(attribs.start - 1)

@@ -1,0 +1,21 @@
+<data>
+    <Paragraph textformat="p">
+        <ol type="a" start="3">
+            <li>Starts with c.</li>
+            <li>Starts with d.</li>
+        </ol>
+    </Paragraph>
+    <Paragraph textformat="p">
+        <ol>
+            <li>Starts with 1.</li>
+            <li>Starts with 2.</li>
+        </ol>
+    </Paragraph>
+    <Paragraph textformat="p">
+        <ol>
+            <li>Starts with 1.</li>
+            <li>Starts with 2.</li>
+        </ol>
+    </Paragraph>
+
+</data>
