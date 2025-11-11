@@ -172,6 +172,9 @@
                      <ref name="e_LoadDataset"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_LoadFontfile"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Loop"></ref>
                   </optional>
                   <optional>
@@ -301,6 +304,9 @@
                   </optional>
                   <optional>
                      <ref name="e_LoadDataset"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_LoadFontfile"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Loop"></ref>
@@ -1245,6 +1251,9 @@
                   </optional>
                   <optional>
                      <ref name="e_LoadDataset"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_LoadFontfile"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Loop"></ref>
@@ -5387,6 +5396,9 @@
                      <ref name="e_LoadDataset"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_LoadFontfile"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Loop"></ref>
                   </optional>
                   <optional>
@@ -5611,6 +5623,9 @@
                      </optional>
                      <optional>
                         <ref name="e_LoadDataset"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_LoadFontfile"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Loop"></ref>

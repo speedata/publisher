@@ -112,6 +112,7 @@
         <xs:element minOccurs="0" ref="en:InsertPages"/>
         <xs:element minOccurs="0" ref="en:Layout"/>
         <xs:element minOccurs="0" ref="en:LoadDataset"/>
+        <xs:element minOccurs="0" ref="en:LoadFontfile"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
         <xs:element minOccurs="0" ref="en:Message"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
@@ -164,6 +165,7 @@
         <xs:element minOccurs="0" ref="en:InsertPages"/>
         <xs:element minOccurs="0" ref="en:Layout"/>
         <xs:element minOccurs="0" ref="en:LoadDataset"/>
+        <xs:element minOccurs="0" ref="en:LoadFontfile"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
         <xs:element minOccurs="0" ref="en:Message"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
@@ -1008,6 +1010,7 @@
         <xs:element minOccurs="0" ref="en:InsertPages"/>
         <xs:element minOccurs="0" ref="en:Layout"/>
         <xs:element minOccurs="0" ref="en:LoadDataset"/>
+        <xs:element minOccurs="0" ref="en:LoadFontfile"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
         <xs:element minOccurs="0" ref="en:Message"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
@@ -6262,6 +6265,7 @@
         <xs:element minOccurs="0" ref="en:InsertPages"/>
         <xs:element minOccurs="0" ref="en:Layout"/>
         <xs:element minOccurs="0" ref="en:LoadDataset"/>
+        <xs:element minOccurs="0" ref="en:LoadFontfile"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
         <xs:element minOccurs="0" ref="en:Message"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
@@ -6428,6 +6432,7 @@
         <xs:element ref="en:InsertPages"/>
         <xs:element ref="en:Layout"/>
         <xs:element ref="en:LoadDataset"/>
+        <xs:element ref="en:LoadFontfile"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Message"/>
         <xs:element ref="en:NextFrame"/>

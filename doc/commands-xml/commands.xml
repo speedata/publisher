@@ -99,6 +99,7 @@
     <optional><cmd name="InsertPages"/></optional>
     <optional><cmd name="Layout"/></optional>
     <optional><cmd name="LoadDataset"/></optional>
+    <optional><cmd name="LoadFontfile" /></optional>
     <optional><cmd name="Loop"/></optional>
     <optional><cmd name="Message"/></optional>
     <optional><cmd name="NextFrame"/></optional>
