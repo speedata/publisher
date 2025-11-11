@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.6" date="2025-11-11">
+        <en>Bugfix reset ul counter.</en>
+        <de>Fehlerkorrektur: UL-Zähler zurücksetzen.</de>
+    </entry>
     <entry version="5.3.5" date="2025-11-10">
       <en>Fix @font-face in CSS (fatal crash).</en>
       <de>Korrigiere @font-face in CSS (fataler Absturz).</de>
