@@ -118,7 +118,7 @@ func isBorderStyle(str string) (bool, string) {
 }
 
 func getFourValues(str string) map[string]string {
-	fields := strings.Fields(str)
+	fields := splitCSSParts(str)
 	fourvalues := make(map[string]string)
 	switch len(fields) {
 	case 1:
@@ -144,6 +144,48 @@ func getFourValues(str string) map[string]string {
 	}
 
 	return fourvalues
+}
+
+// splitCSSParts splits a shorthand value into parts, but keeps anything inside
+// parentheses together (e.g. "rgb(164, 164, 127)" stays one token).
+func splitCSSParts(s string) []string {
+	var parts []string
+	var buf strings.Builder
+	depth := 0 // parenthesis depth
+
+	flush := func() {
+		if buf.Len() == 0 {
+			return
+		}
+		part := strings.TrimSpace(buf.String())
+		if part != "" {
+			parts = append(parts, part)
+		}
+		buf.Reset()
+	}
+
+	for _, r := range s {
+		switch r {
+		case '(':
+			depth++
+			buf.WriteRune(r)
+		case ')':
+			buf.WriteRune(r)
+			depth--
+		case ' ', '\t', '\n', '\r':
+			if depth == 0 {
+				// split here
+				flush()
+			} else {
+				// inside parentheses, keep whitespace
+				buf.WriteRune(r)
+			}
+		default:
+			buf.WriteRune(r)
+		}
+	}
+	flush()
+	return parts
 }
 
 // resolveAttributes expands shorthand CSS-style attributes into their
@@ -255,7 +297,7 @@ func resolveAttributes(attrs []html.Attribute) (map[string]string, map[string]st
 			}
 
 			// This does not work with colors such as rgb(1 , 2 , 4) which have spaces in them
-			for _, part := range strings.Split(attr.Val, " ") {
+			for _, part := range splitCSSParts(attr.Val) {
 				for _, border := range toprightbottomleft {
 					if ok, str := isBorderStyle(part); ok {
 						resolved["border-"+border+"-style"] = str
@@ -277,13 +319,13 @@ func resolveAttributes(attrs []html.Attribute) (map[string]string, map[string]st
 			resolved[key+"-style"] = "none"
 			resolved[key+"-color"] = "currentcolor"
 
-			for _, part := range strings.Split(attr.Val, " ") {
+			for _, part := range splitCSSParts(attr.Val) {
 				if ok, str := isDimension(part); ok {
 					resolved[key+"-width"] = str
 				} else if ok, str := isBorderStyle(part); ok {
 					resolved[key+"-style"] = str
 				} else {
-					resolved[key+"-color"] = str
+					resolved[key+"-color"] = part
 				}
 			}
 		case "border-color":

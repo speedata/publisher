@@ -387,7 +387,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                         -- callback which uses the existing build_nodelist
                         return build_nodelist(elt, options, before_box, caller, prevdir, dataxml_inner)
                     end
-                    }, dataxml)
+                    }, dataxml,stylesstack)
                 local tabpar = par:new(nil,"html table (a)")
                 tabpar.margin_top = margin_top
                 node.set_attribute(nl,publisher.att_lineheight,nl.height)
