@@ -178,13 +178,19 @@ function collect_horizontal_nodes( elt,parameter,before_box,origin,dataxml )
                 thisret[#thisret + 1] = n[i]
             end
         end
-        if attributes.has_border then
-            local tmp = draw_border(thisret,attributes,styles)
-            thisret = {}
-            for i=1,#tmp do
-                thisret[#thisret + 1] = tmp[i]
+
+        if styles.has_border then
+            publisher.setprop(thisret[1],"borderstart",1)
+            local ff = options.fontfamily
+            local ht = publisher.fonts.lookup_fontfamily_number_instance[ff].size
+
+            publisher.setprop(thisret[1],"lineheight", ht)
+            for index, value in pairs(options.border) do
+                publisher.setprop(thisret[1],index,value)
             end
+            publisher.setprop(node.tail(thisret[1],""),"borderend",1)
         end
+
         for i=1,#thisret do
             ret[#ret + 1] = thisret[i]
         end

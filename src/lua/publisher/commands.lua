@@ -4501,7 +4501,7 @@ function commands.span( layoutxml,dataxml )
     end
     if bg_padding_bottom == nil then
         if css_rules["background-padding-bottom"] then
-            bg_padding_bottom =  tex.sp(css_rules["background-padding-bottom"])
+            bg_padding_bottom = tex.sp(css_rules["background-padding-bottom"])
         end
     end
     local colornumber = nil

@@ -227,7 +227,6 @@ local function flatten(self,items,options,data)
                     body = htmltree[1][2]
                     body.block = nil
                 end
-
                 local startnewline = 0
                 local firstelement = body[1]
                 if firstelement then
@@ -259,11 +258,25 @@ local function flatten(self,items,options,data)
                             if tbc then
                                 if startblock or is_newline then
                                     publisher.setprop(tbc,"split",true)
-                                    publisher.setprop(tbc,"padding_left",thisblock.padding_left)
+                                    local padding_left = thisblock.padding_left or 0
+                                    local margin_top = thisblock.margin_top or 0
                                     publisher.setprop(tbc,"prependnodelist",thisblock.prependnodelist)
                                     publisher.setprop(tbc,"prependlist",thisblock.prependlist)
-                                    publisher.setprop(tbc,"margin_top",thisblock.margin_top)
                                     publisher.setprop(tbc,"margin_bottom",thisblock.margin_bottom)
+                                    if thisblock.startendborder then
+                                        local border_attributes = publisher.borderattributes[thisblock.startendborder]
+                                        publisher.set_attribute(tbc,"bordernumber",thisblock.startendborder)
+                                        local wd, ht, dp = node.dimensions(tbc)
+                                        publisher.set_attribute(tbc,"borderwd",wd)
+                                        publisher.set_attribute(tbc,"borderht",ht + dp)
+                                        if border_attributes then
+                                            padding_left = padding_left + border_attributes.border_left_width
+                                            margin_top = margin_top + border_attributes.border_top_width + border_attributes.padding_top
+                                        end
+
+                                    end
+                                    publisher.setprop(tbc,"margin_top",margin_top)
+                                    publisher.setprop(tbc,"padding_left",padding_left)
                                 end
                                 table.insert(ret,tbc)
                                 this_block_has_contents = true

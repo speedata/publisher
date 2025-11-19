@@ -3908,7 +3908,7 @@ function mpbox(parameter,width,height)
         x4 = x3 + borderrightwidth;
 
         y2 = y1 + borderbottomwidth;
-        y3 = y2 + ht + borderbottomwidth + bordertopwidth + paddingtop + paddingbottom;
+        y3 = y2 + ht + borderbottomwidth + paddingtop + paddingbottom;
         y4 = y3 + bordertopwidth;
 
         % draw z1 -- (x4,y1) -- z4 -- (x1,y4) -- cycle;
@@ -4063,6 +4063,10 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
     ---      1    /                              \   2  y3
     ---          1--------------------------------2
     ---      x0      x1                       x2     x3
+    ---
+    --- Baseline is at 0
+    --- depth is negative downwards
+    --- height is positive upwards
     local colorstring
 
     local function get_rule(x1, y1, x2, y2, x3, y3, x4, y4)
@@ -4080,40 +4084,59 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
     local b_t_r_radius = properties.border_top_right_radius
     local b_t_l_radius = properties.border_top_left_radius
 
-    local border_top_width = properties.border_top_width
-    local border_right_width = properties.border_right_width
+    local border_top_width    = properties.border_top_width
+    local border_right_width  = properties.border_right_width
     local border_bottom_width = properties.border_bottom_width
-    local border_left_width = properties.border_left_width
+    local border_left_width   = properties.border_left_width
+
+    local padding_top    = properties.padding_top
+    local padding_bottom = properties.padding_bottom
+    local padding_left   = properties.padding_left
+
+    local margin_bottom  = properties.margin_bottom
+    local margin_left    = properties.margin_left
 
     -- ht == y3, wd == x3
-
-    depth_sp = math.max(depth_sp,properties.depth)
+    depth_sp = math.max(depth_sp,properties.depth or 0)
     height_sp = properties.lineheight - depth_sp
     local sp_x0, sp_x1, sp_x2, wd
     local sp_y0, sp_y1, sp_y2, ht
 
-    local padding_top = properties.padding_top
+
     if dirmode == "horizontal" then
-        local shift_down = border_bottom_width + depth_sp + properties.padding_bottom
-        sp_y1 = height_sp + properties.padding_bottom + padding_top + properties.margin_bottom
-        sp_y0 = sp_y1 + border_top_width
-        ht = properties.margin_bottom - shift_down
-        sp_y2 = ht + border_bottom_width
-        sp_x0 = properties.margin_left
+        local content_top    = height_sp
+        local content_bottom = -depth_sp
+
+        sp_y0 = content_top + padding_top + border_top_width
+        sp_y1 = content_top + padding_top
+        ht    = content_bottom - padding_bottom - border_bottom_width
+        sp_y2 = content_bottom - padding_bottom
+
+        sp_x0 = -1 * (padding_left  +  border_left_width)
         sp_x1 = sp_x0 + border_left_width
-        sp_x2 = width_sp + properties.padding_left
-        wd = sp_x2 + border_right_width
+        sp_x2 = sp_x1 + width_sp
+        wd    = sp_x2 + border_right_width
     else
-        local shift_down = properties.lineheight
-        sp_y1 = properties.padding_bottom + padding_top + properties.margin_bottom
-        sp_y0 = sp_y1 + border_top_width
-        ht = properties.margin_bottom - shift_down
-        sp_y2 = ht + border_bottom_width
-        sp_x0 = properties.margin_left
-        sp_x1 = sp_x0 + border_left_width
-        sp_x2 = width_sp + properties.padding_left
-        wd = sp_x2 + border_right_width
+        local content_top    = height_sp
+        local content_bottom = -depth_sp
+
+        -- vertical
+        sp_y0 = content_top + padding_top + border_top_width
+        sp_y1 = content_top + padding_top
+        ht    = content_bottom - padding_bottom - border_bottom_width
+        sp_y2 = content_bottom - padding_bottom
+
+        -- horizontal
+        local content_left  = 0
+        local content_right = width_sp
+
+        sp_x0 = content_left - padding_left - border_left_width
+        sp_x1 = content_left - padding_left
+        sp_x2 = content_right + padding_left
+        wd    = sp_x2 + border_right_width
+
     end
+
     --- The trapezoids must extend closer to the center of the border, because if the border
     --- radius is larger than the border width, the border goes "into" the surrounding object.
     -- 3 might not be correct. TODO: what is the correct factor? Should depend on the radius
@@ -4122,16 +4145,16 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
     local extend_bottom = 0
     local extend_left = 0
     if b_t_l_radius > 0 or b_t_r_radius > 0 then
-        local extend_top = 3
+        extend_top = 3
     end
     if b_t_r_radius > 0 or b_b_r_radius > 0 then
-        local extend_right = 3
+        extend_right = 3
     end
     if b_b_l_radius > 0 or b_b_r_radius > 0 then
-        local extend_bottom = 3
+        extend_bottom = 3
     end
     if b_t_l_radius > 0 or b_b_l_radius > 0 then
-        local extend_left = 3
+        extend_left = 3
     end
     local inner_top = sp_y1 - extend_top *  border_top_width
     local inner_right = sp_x2  - extend_right * border_right_width
@@ -4160,6 +4183,7 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
     local circle_bezier = 0.551915024494
 
     -- xn, yn = outer path, xin, yin = inner path used for clipping
+    local x0, y0   = sp_x0                              , ht + b_b_l_radius
     local x1, y1   = sp_x0 + b_b_l_radius   , ht
     local x2, y2   = wd - b_b_r_radius                , y1
     local x3, y3   = x2 + circle_bezier * b_b_r_radius, y1
@@ -4171,10 +4195,10 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
     local x8, y8   = x9 + circle_bezier * b_t_r_radius, y9
     local x10, y10 = sp_x0 + b_t_l_radius   , y9
     local x11, y11 = x10 - circle_bezier * b_t_l_radius, y9
-    local x13, y13 = 0                                 ,y9 - b_t_l_radius
-    local x12, y12 = 0                                ,y13 + circle_bezier * b_t_l_radius
-    local x14, y14 = 0                                , y1 + b_b_l_radius
-    local x15, y15 = 0                                , y14 - b_b_l_radius * circle_bezier
+    local x13, y13 = sp_x0                              ,y9 - b_t_l_radius
+    local x12, y12 = sp_x0                             ,y13 + circle_bezier * b_t_l_radius
+    local x14, y14 = sp_x0                             , y1 + b_b_l_radius
+    local x15, y15 = sp_x0                             , y14 - b_b_l_radius * circle_bezier
     local x16, y16 = x1 - circle_bezier * b_b_l_radius, y1
 
     local b_b_r_inner_radius_x = math.max(0, b_b_r_radius - border_right_width )
@@ -4187,7 +4211,7 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
     local b_t_l_inner_radius_y = math.max(0, b_t_l_radius - border_top_width)
 
     -- bottom left
-    local xi14, yi14 = border_left_width                     ,math.max(ht + border_bottom_width, y14)
+    local xi14, yi14 = sp_x0 + border_left_width             ,math.max(ht + border_bottom_width, y14)
     local xi1, yi1   = math.max(x1,sp_x0 + border_left_width),ht + border_bottom_width
 
     -- bottom right
@@ -4254,21 +4278,21 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
     rules_clip[#rules_clip + 1] = pdf_lineto(xi14,yi14)
     rules_clip[#rules_clip + 1] = pdf_curveto(xi15,yi15,xi16,yi16,xi1,yi1)
 
-    if debug_htmlbox > 2 then
+    if debug_htmlbox > 0 then
         rules[#rules + 1] = "q 0.3 w"
-        rules[#rules + 1] = pdf_moveto(0,0)
+        rules[#rules + 1] = pdf_moveto(x0,0)
         rules[#rules + 1] = pdf_lineto(wd,0)
         rules[#rules + 1] = "S"
-        rules[#rules + 1] = pdf_moveto(0,-depth_sp)
+        rules[#rules + 1] = pdf_moveto(x0,-depth_sp)
         rules[#rules + 1] = pdf_lineto(wd,-depth_sp)
         rules[#rules + 1] = "S"
-        rules[#rules + 1] = pdf_moveto(0,height_sp)
+        rules[#rules + 1] = pdf_moveto(x0,height_sp)
         rules[#rules + 1] = pdf_lineto(wd,height_sp)
         rules[#rules + 1] = "S"
         rules[#rules + 1] = "Q"
     end
 
-    if debug_htmlbox > 2 then
+    if debug_htmlbox > 1 then
         rules[#rules + 1] = "q 0.3 w"
         rules[#rules + 1] = pdf_moveto(x1,y1)
         rules[#rules + 1] = pdf_lineto(x2,y2)
@@ -4293,7 +4317,7 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
         rules[#rules + 1] = "S Q"
     end
 
-    rules_clip[#rules_clip + 1] = "h W* n"
+    rules_clip[#rules_clip + 1] = "h n"
 
     local n_clip = node.new("whatsit","pdf_literal")
     setprop(n_clip,"origin","htmlbox.clip")
@@ -4800,12 +4824,42 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
             local attribs = get_attributes(head)
             local fgcolor = get_attribute(head,"color")
             local bordernumber = get_attribute(head,"bordernumber")
+
             if bordernumber then
-                local wd,ht = get_attribute(head,"borderwd"),get_attribute(head,"borderht")
                 local ba = borderattributes[bordernumber]
-                wd = wd - ba.border_right_width - ba.margin_right + ba.padding_right
-                local bordervbox = mpbox(ba,wd,ht)
-                parent.head = node.insert_before(parent.head,head,bordervbox)
+                local wd,ht = get_attribute(head,"borderwd"),get_attribute(head,"borderht")
+                ht = parent.height + parent.depth
+                wd = parent.width - ba.border_left_width - ba.border_right_width - ba.margin_left - ba.margin_right
+                setprop(head,"border_bottom_color",ba.border_bottom_color)
+                setprop(head,"border_bottom_left_radius",ba.border_bottom_left_radius)
+                setprop(head,"border_bottom_right_radius",ba.border_bottom_right_radius)
+                setprop(head,"border_bottom_style",ba.border_bottom_style)
+                setprop(head,"border_bottom_width",ba.border_bottom_width)
+                setprop(head,"border_left_color",ba.border_left_color)
+                setprop(head,"border_left_style",ba.border_left_style)
+                setprop(head,"border_left_width",ba.border_left_width)
+                setprop(head,"border_right_color",ba.border_right_color)
+                setprop(head,"border_right_style",ba.border_right_style)
+                setprop(head,"border_right_width",ba.border_right_width)
+                setprop(head,"border_top_color",ba.border_top_color)
+                setprop(head,"border_top_left_radius",ba.border_top_left_radius)
+                setprop(head,"border_top_right_radius",ba.border_top_right_radius)
+                setprop(head,"border_top_style",ba.border_top_style)
+                setprop(head,"border_top_width",ba.border_top_width)
+                setprop(head,"borderstart","true")
+                setprop(head,"debug","false")
+                setprop(head,"margin_bottom",ba.margin_bottom)
+                setprop(head,"margin_left",ba.margin_left)
+                setprop(head,"margin_right",ba.margin_right)
+                setprop(head,"margin_top",ba.margin_top)
+                setprop(head,"padding_bottom",ba.padding_bottom)
+                setprop(head,"padding_left",ba.padding_left)
+                setprop(head,"padding_right",ba.padding_right)
+                setprop(head,"padding_top",ba.padding_top)
+                setprop(head,"lineheight",ht)
+                local boxnode = htmlbox(head, wd, parent.height,parent.depth)
+                parent.head = node.insert_before(parent.head,head,boxnode)
+                setprop(head,"borderstart",false)
             end
             local transparency  = getprop(head,"opacity")
             local bbox          = getprop(head,"bbox")
@@ -5063,6 +5117,7 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                     while cur do
                         local cur_properties = node.getproperty(cur)
                         if cur_properties and cur_properties.borderend then
+                            if cur.next then cur = cur.next end
                             break
                         end
                         cur = cur.next

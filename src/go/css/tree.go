@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	dimen              *regexp.Regexp = regexp.MustCompile(`px|mm|cm|in|pt|pc|ch|em|ex|lh|rem|0`)
+	dimen                             = regexp.MustCompile(`^(-?\d*\.?\d+)(px|mm|cm|in|pt|pc|ch|em|ex|lh|rem)?$`)
 	style              *regexp.Regexp = regexp.MustCompile(`^none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset$`)
 	toprightbottomleft                = [4]string{"top", "right", "bottom", "left"}
 )
@@ -111,8 +111,13 @@ func isDimension(str string) (bool, string) {
 	case "thin":
 		return true, "0.5pt"
 	}
-	return dimen.MatchString(str), str
+
+	if dimen.MatchString(str) {
+		return true, str
+	}
+	return false, str
 }
+
 func isBorderStyle(str string) (bool, string) {
 	return style.MatchString(str), str
 }

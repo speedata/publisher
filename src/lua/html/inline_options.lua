@@ -2,6 +2,7 @@
 --- Extracted from the legacy set_options_for_mknodes implementation.
 
 local fonts = require("html.fonts")
+local units = require("html.units")
 
 local M = {}
 
@@ -26,6 +27,73 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
         publisher,
         fontfamilies
     )
+
+    if styles.has_border then
+        local styles_fontsize_sp = styles.fontsize_sp
+        local margin_top = units.getsize(styles,styles["margin-top"],styles_fontsize_sp)
+        local margin_right = units.getsize(styles,styles["margin-right"],styles_fontsize_sp)
+        local margin_bottom = units.getsize(styles,styles["margin-bottom"],styles_fontsize_sp)
+        local margin_left = units.getsize(styles,styles["margin-left"],styles_fontsize_sp)
+
+        local padding_top = units.getsize(styles,styles["padding-top"],styles_fontsize_sp)
+        local padding_right = units.getsize(styles,styles["padding-right"],styles_fontsize_sp)
+        local padding_bottom = units.getsize(styles,styles["padding-bottom"],styles_fontsize_sp)
+        local padding_left = units.getsize(styles,styles["padding-left"],styles_fontsize_sp)
+
+        local border_top_style = styles["border-top-style"] or "none"
+        local border_right_style = styles["border-right-style"] or "none"
+        local border_bottom_style = styles["border-bottom-style"] or "none"
+        local border_left_style = styles["border-left-style"] or "none"
+
+        local border_top_width = units.getsize(styles,styles["border-top-width"],styles_fontsize_sp)
+        local border_right_width = units.getsize(styles,styles["border-right-width"],styles_fontsize_sp)
+        local border_bottom_width = units.getsize(styles,styles["border-bottom-width"],styles_fontsize_sp)
+        local border_left_width = units.getsize(styles,styles["border-left-width"],styles_fontsize_sp)
+
+        local border_top_color = styles["border-top-color"]
+        local border_right_color = styles["border-right-color"]
+        local border_bottom_color = styles["border-bottom-color"]
+        local border_left_color = styles["border-left-color"]
+
+        border_top_color = border_top_color or styles.color or "black"
+        border_right_color = border_right_color or styles.color or "black"
+        border_bottom_color = border_bottom_color or styles.color or "black"
+        border_left_color = border_left_color or styles.color or "black"
+
+        local border_bottom_right_radius = styles["border-bottom-right-radius"] or 0
+        local border_bottom_left_radius = styles["border-bottom-left-radius"] or 0
+        local border_top_right_radius = styles["border-top-right-radius"] or 0
+        local border_top_left_radius = styles["border-top-left-radius"] or 0
+
+        options.border = {
+            borderstart = true,
+            border_top_style = border_top_style,
+            border_right_style = border_right_style,
+            border_bottom_style = border_bottom_style,
+            border_left_style = border_left_style,
+            padding_top = padding_top,
+            padding_right = padding_right,
+            padding_bottom = padding_bottom,
+            padding_left = padding_left,
+            border_top_width = border_top_width,
+            border_right_width = border_right_width,
+            border_bottom_width = border_bottom_width,
+            border_left_width = border_left_width,
+            border_top_color = border_top_color,
+            border_right_color = border_right_color,
+            border_bottom_color = border_bottom_color,
+            border_left_color = border_left_color,
+            border_bottom_right_radius = tex.sp(border_bottom_right_radius),
+            border_bottom_left_radius = tex.sp(border_bottom_left_radius),
+            border_top_right_radius = tex.sp(border_top_right_radius),
+            border_top_left_radius = tex.sp(border_top_left_radius),
+            margin_top = margin_top,
+            margin_right = margin_right,
+            margin_bottom = margin_bottom,
+            margin_left = margin_left,
+            debug = ( styles["sp-debugbox"] == "border" ) or false,
+        }
+    end
 
     -- Font style & weight
     local fontstyle    = styles["font-style"]

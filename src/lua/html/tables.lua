@@ -35,7 +35,7 @@ function M.build_html_table_tbody(tbody, cb, dataxml, stylesstack)
                     styles_mod.copy_attributes(styles, td_styles)
                     -- Build nodelist for td contents using the host's build_nodelist
                     local r = cb.build_nodelist(td, {["font-weight"] = styles["font-weight"]}, nil, "build_html_table_tbody/td", nil, dataxml)
-                    -- In deinem Original: r = publisher.flatten_boxes(r)
+
                     r = publisher.flatten_boxes(r)
 
                     -- Transform each line/box into Paragraph nodes expected by tabular
