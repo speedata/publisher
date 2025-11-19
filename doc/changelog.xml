@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.7" date="2025-11-19">
+        <en>Rewrite HTML border.</en>
+        <de>HTML Border überarbeitet.</de>
+    </entry>
+    <entry version="5.3.7" date="2025-11-19">
+        <en>Allow styles in HTML tables.</en>
+        <de>Styles in HTML-Tabellen.</de>
+    </entry>
     <entry version="5.3.6" date="2025-11-11">
         <en>Bugfix reset ul counter.</en>
         <de>Fehlerkorrektur: UL-Zähler zurücksetzen.</de>
