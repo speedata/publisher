@@ -60,10 +60,12 @@ function M.build_html_table_tbody(tbody, cb, dataxml, stylesstack)
                         local btc = att["border-top-color"]
                         local brc = att["border-right-color"]
                         local blc = att["border-left-color"]
-                        if bbc then newcontents["border-bottom-color"] = bbc end
-                        if btc then newcontents["border-top-color"] = btc end
-                        if blc then newcontents["border-left-color"] = blc end
-                        if brc then newcontents["border-right-color"] = brc end
+
+                        local currentcolor = att.color or "black"
+                        if bbc then if bbc == "currentcolor" then bbc = currentcolor end newcontents["border-bottom-color"] = bbc end
+                        if btc then if btc == "currentcolor" then btc = currentcolor end newcontents["border-top-color"] = btc end
+                        if blc then if blc == "currentcolor" then blc = currentcolor end newcontents["border-left-color"] = blc end
+                        if brc then if brc == "currentcolor" then brc = currentcolor end newcontents["border-right-color"] = brc end
                         local pt = att["padding-top"]
                         local pb = att["padding-bottom"]
                         local pl = att["padding-left"]
