@@ -19,11 +19,7 @@ if os.getenv("SP_XMLPARSER") == "lxpath" then
     xpath = require("lxpath")
     xpath.stringmatch = unicode.utf8.match
     xpath.find_file = kpse.find_file
-    if rlib then
-        xpath.parse_xml = rlib.xml.parse
-    else
-        xpath.parse_xml = splib.load_xmlfile
-    end
+    xpath.parse_xml = splib.load_xmlfile
     xpath.ignoreNS = true
 else
     xpath = do_luafile("xpath.lua")
@@ -671,60 +667,6 @@ glue_stretch2 = set_glue(nil, { stretch = 2^16, stretch_order = 2 })
 -- For attached files. Each of this numbers should appear in the catalog
 filespecnumbers = {}
 
-cssdefaults = [[
-:root           { font-family: sans-serif;  font-size: 10pt; line-height: 1.2; }
-a               { text-decoration: underline; color: blue; }
-li              { display: list-item; padding-inline-start: 40pt; }
-head            { display: none }
-table           { display: table }
-tr              { display: table-row }
-thead           { display: table-header-group }
-tbody           { display: table-row-group }
-tfoot           { display: table-footer-group }
-td, th          { display: table-cell }
-caption         { display: table-caption }
-th              { font-weight: bold; text-align: center }
-caption         { text-align: center }
-body            { margin: 0pt; hyphens: auto; }
-h1              { font-size: 2em; margin: .67em 0 }
-h2              { font-size: 1.5em; margin: .75em 0 }
-h3              { font-size: 1.17em; margin: .83em 0 }
-h4, p,
-blockquote, ul,
-fieldset, form,
-ol, dl, dir,
-h5              { font-size: 1em; margin: 1.5em 0 }
-h6              { font-size: .75em; margin: 1.67em 0 }
-h1, h2, h3, h4,
-h5, h6, b,
-strong          { font-weight: bold }
-blockquote      { margin-left: 40px; margin-right: 40px }
-i, cite, em,
-var, address    { font-style: italic }
-pre, tt, code,
-kbd, samp       { font-family: monospace }
-pre             { white-space: pre; margin: 1em 0px; }
-button, textarea,
-input, select   { display: inline-block }
-big             { font-size: 1.17em }
-small, sub, sup { font-size: .83em }
-sub             { vertical-align: sub }
-sup             { vertical-align: super }
-table           { border-spacing: 2pt; }
-thead, tbody,
-tfoot           { vertical-align: middle }
-td, th, tr      { vertical-align: inherit }
-s, strike, del  { text-decoration: line-through }
-hr              { border: 1px inset }
-ol, ul, dir, dd { padding-left: 20pt }
-ol              { list-style-type: decimal }
-ul              { list-style-type: disc }
-ol ul, ul ol,
-ul ul, ol ol    { margin-top: 0; margin-bottom: 0 }
-u, ins          { text-decoration: underline }
-center          { text-align: center }
-]]
-
 local function lineinfo()
     if newxpath then
         return "line_layout", current_layout_line, "file", current_layout_file, "line_data" , current_data_line
@@ -1252,11 +1194,7 @@ function define_image_callback( extensionhandler )
         local handler = imagehandler[handlername or "*"]
         if handler then
             main.log("info","Convert image", "extension",ext, "handler",handlername or "*")
-            if rlib then
-                file = rlib.image.convert(file,handler)
-            else
-                file = splib.convertimage(file,handler)
-            end
+            file = splib.convertimage(file,handler)
         end
         return file
     end
@@ -1512,11 +1450,7 @@ function initialize_luatex_and_generate_pdf()
     local datafilename = arg[3]
     if datafilename == "-dummy" then
         if newxpath then
-            if rlib then
-                dataxml = rlib.xml.parse_string("<data />")
-            else
-                dataxml = splib.loadxmlstring("<data />")
-            end
+            dataxml = splib.loadxmlstring("<data />")
         else
             dataxml = luxor.parse_xml("<data />")
         end
@@ -2373,14 +2307,9 @@ function load_xml(filename,filetype,parameter)
     main.log("info", "Load XML", "type", filetype or "file", "filename", filename)
     if newxpath then
         local xmltable
-        if rlib then
-            rlib.log.log("info","Use rust-API based XML reader")
-            xmltable = rlib.xml.parse(filename)
-        else
-            xmltable = splib.load_xmlfile(filename,filetype or "file")
-            if not xmltable then
-               return nil
-            end
+        xmltable = splib.load_xmlfile(filename,filetype or "file")
+        if not xmltable then
+            return nil
         end
         return xmltable
     else
@@ -6245,11 +6174,7 @@ function mknodes(str,parameter,origin)
         elseif parameter.direction == "rtl" then
             dir = 2
         end
-        if rlib then
-            segments = rlib.text.segmentize_text(str,dir)
-        else
-            segments = splib.segmentize_text(str,dir)
-        end
+        segments = splib.segmentize_text(str,dir)
         if segments[1][1] == 0 then
             segments.maindirection = "ltr"
         else
@@ -8460,11 +8385,7 @@ function reload_image(filename,typ,width,height)
     end
     local rh = resizehandler[handlername_for_extension or "*"]
     local fn
-    if rlib then
-        fn = rlib.image.reload_image({ filename = filename, imagetype = typ,width = width,height = height, resizehandler = rh})
-    else
-        fn = splib.reloadimage({ filename = filename, imagetype = typ,width = width,height = height, resizehandler = rh})
-    end
+    fn = splib.reloadimage({ filename = filename, imagetype = typ,width = width,height = height, resizehandler = rh})
     return fn
 end
 
@@ -8481,11 +8402,7 @@ function validateimagetype(filename)
     end
     local whatever = f:read(5)
     if string.match(whatever,"<svg") then
-        if rlib then
-            localfilename = rlib.image.convert_svg_image(localfilename)
-        else
-            localfilename = splib.convert_svg_image(localfilename)
-        end
+        localfilename = splib.convert_svg_image(localfilename)
     end
     f:close()
     return localfilename
@@ -8613,11 +8530,7 @@ function imageinfo( filename,page,box,fallback,imageshape )
 
     if not images[new_name] then
         if string.match(filename, ".svg$") then
-            if rlib then
-                filename = rlib.image.convert_svg_image(filename)
-            else
-                filename = splib.convert_svg_image(filename)
-            end
+            filename = splib.convert_svg_image(filename)
             if filename == nil or filename == "" then filename = "filenotfound.pdf" else log("Using converted file %q instead",filename) end
 
         end

@@ -125,7 +125,6 @@ func init() {
 		"fontloader":        "harfbuzz",
 		"referencefilename": "reference",
 		"xpath":             "lxpath",
-		"lib":               "go",
 		"hidespinfo":        stringFalse,
 	}
 
@@ -1029,7 +1028,6 @@ func main() {
 
 	os.Setenv("SP_EXTRA_XML", strings.Join(extraxml, ","))
 	os.Setenv("SP_PREPEND_XML", strings.Join(prependxml, ","))
-	os.Setenv("SP_LIB", getOption("lib"))
 
 	if getOption("ignore-case") == stringTrue {
 		os.Setenv("SP_IGNORECASE", "1")

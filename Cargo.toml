@@ -1,6 +1,0 @@
-[workspace]
-members = [
-    "src/rust/rlib",
-]
-resolver = "2"
-

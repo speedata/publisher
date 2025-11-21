@@ -18,16 +18,9 @@ local cmd = arg[2]
 
 local fontlist = {}
 local shortname
-if rlib then
-  for _,v in pairs(rlib.aux.list_fonts()) do
+for _,v in pairs(splib.listfonts()) do
     _,shortname,_ = string.match(v, "(.-)([^\\/]-%.?([^%.\\/]*))$")
     fontlist[shortname] = v
-  end
-else
-  for _,v in pairs(splib.listfonts()) do
-    _,shortname,_ = string.match(v, "(.-)([^\\/]-%.?([^%.\\/]*))$")
-    fontlist[shortname] = v
-  end
 end
 
 if cmd=="list-fonts" then

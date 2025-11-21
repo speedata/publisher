@@ -3,7 +3,6 @@ package buildlib
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -59,91 +58,6 @@ func BuildCLib(cfg *config.Config, goos string, goarch string) error {
 	outbuf, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Println(string(outbuf))
-		return err
-	}
-	return nil
-}
-
-// BuildRustLib builds the dynamic rust library
-func BuildRustLib(cfg *config.Config, goos string, goarch string) error {
-	fmt.Println("Building dynamic rust library for", goos, goarch)
-	srcdir := cfg.Srcdir
-	os.Chdir(filepath.Join(srcdir, "rust", "rlib"))
-	args := []string{"build", "--release"}
-
-	if cfg.IsPro {
-		args = append(args, "--features", "pro")
-	}
-	if goos == "windows" {
-		args = append(args, "--target", "x86_64-pc-windows-gnu")
-	} else {
-		if goarch == "arm64" && goos == "linux" {
-			args = append(args, "--target", "aarch64-unknown-linux-gnu")
-		}
-	}
-	cmd := exec.Command("cargo", args...)
-	cmd.Env = os.Environ()
-	if goos != runtime.GOOS || goarch != runtime.GOARCH {
-		ccenv := os.Getenv("CC_" + goarch + "_" + goos)
-		cmd.Env = append(cmd.Env, "CC="+ccenv)
-		cmd.Env = append(cmd.Env, "GOOS="+goos)
-		fmt.Println("Looking for environment variable", "CC_"+goarch+"_"+goos, "found value", ccenv)
-	}
-
-	if goarch != "" {
-		cmd.Env = append(cmd.Env, "GOARCH="+goarch)
-	}
-	outbuf, err := cmd.CombinedOutput()
-	if err != nil {
-		fmt.Println(string(outbuf))
-		return err
-	}
-	// Now copy the resulting library to the build dir
-	var libraryextension, librarydestextension string
-	switch goos {
-	case "darwin":
-		libraryextension = "dylib"
-		librarydestextension = "so"
-	case "windows":
-		libraryextension = "dll"
-		librarydestextension = "dll"
-	default:
-		libraryextension = "so"
-		librarydestextension = "so"
-	}
-	var targetdir string
-	if goos == "windows" {
-		targetdir = filepath.Join(cfg.Basedir(), "target", "x86_64-pc-windows-gnu", "release")
-	} else {
-		if goarch == "arm64" && goos == "linux" {
-			targetdir = filepath.Join(cfg.Basedir(), "target", "aarch64-unknown-linux-gnu", "release")
-		} else {
-			targetdir = filepath.Join(cfg.Basedir(), "target", "release")
-		}
-	}
-	dylibbuild := filepath.Join(cfg.Builddir, "dylib")
-	var inputlib string
-	switch goos {
-	case "windows":
-		inputlib = filepath.Join(targetdir, "rlib.dll")
-	default:
-		inputlib = filepath.Join(targetdir, "librlib."+libraryextension)
-	}
-	outputlib := filepath.Join(dylibbuild, "rlib."+librarydestextension)
-	input, err := os.Open(inputlib)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-	defer input.Close()
-	output, err := os.Create(outputlib)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-	defer output.Close()
-	_, err = io.Copy(output, input)
-	if err != nil {
 		return err
 	}
 	return nil

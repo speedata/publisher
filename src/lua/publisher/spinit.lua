@@ -64,11 +64,7 @@ end
 function log(...)
     local text = { ... }
     local res = call(string.format,table.unpack(text))
-    if rlib then
-        rlib.log.log("info",res)
-    else
-        splib.log("info",res)
-    end
+    splib.log("info",res)
 end
 
 do
@@ -287,13 +283,8 @@ end
 --- Stop the data processing and write PDF. If `graceful` is not given or `false` then
 --- `os.exit()` gets called. This is the last function to be called.
 function exit(graceful)
-    if rlib then
-        errcount = rlib.log.errcount()
-        warncount = rlib.log.warncount()
-    else
-        errcount = splib.errcount()
-        warncount = splib.warncount()
-    end
+    errcount = splib.errcount()
+    warncount = splib.warncount()
     log("Stop processing data")
     log("%d errors occurred",errcount)
     log("Duration: %3f seconds",os.gettimeofday() - starttime)
@@ -303,11 +294,7 @@ function exit(graceful)
     end
     status.setexitcode(publisher.errorcode)
 
-    if rlib then
-        rlib.log.close()
-    else
-        splib.teardown()
-    end
+    splib.teardown()
     if not graceful then
         stop_run_cb()
         if publisher.errorcode ~= 0 then
@@ -321,21 +308,12 @@ function quit()
 end
 
 local function setup()
-    if rlib then
-        rlib.log.log("debug","Setting","varname","LUA_PATH", "value", os.getenv("LUA_PATH") or "")
-        rlib.log.log("debug","Setting","varname","SP_EXTRA_DIRS", "value", os.getenv("SP_EXTRA_DIRS") or "")
-        rlib.log.log("debug","Setting","varname","SP_EXTRA_XML", "value", os.getenv("SP_EXTRA_XML") or "")
-        rlib.log.log("debug","Setting","varname","SP_PREPEND_XML", "value", os.getenv("SP_PREPEND_XML") or "")
-        rlib.log.log("debug","Setting","varname","SP_IGNORECASE", "value", os.getenv("SP_IGNORECASE") or "")
-        rlib.log.log("debug","Setting","varname","SP_XMLPARSER", "value", os.getenv("SP_XMLPARSER") or "")
-    else
-        splib.log("debug","Setting","varname","LUA_PATH", "value", os.getenv("LUA_PATH") or "")
-        splib.log("debug","Setting","varname","SP_EXTRA_DIRS", "value", os.getenv("SP_EXTRA_DIRS") or "")
-        splib.log("debug","Setting","varname","SP_EXTRA_XML", "value", os.getenv("SP_EXTRA_XML") or "")
-        splib.log("debug","Setting","varname","SP_PREPEND_XML", "value", os.getenv("SP_PREPEND_XML") or "")
-        splib.log("debug","Setting","varname","SP_IGNORECASE", "value", os.getenv("SP_IGNORECASE") or "")
-        splib.log("debug","Setting","varname","SP_XMLPARSER", "value", os.getenv("SP_XMLPARSER") or "")
-    end
+    splib.log("debug","Setting","varname","LUA_PATH", "value", os.getenv("LUA_PATH") or "")
+    splib.log("debug","Setting","varname","SP_EXTRA_DIRS", "value", os.getenv("SP_EXTRA_DIRS") or "")
+    splib.log("debug","Setting","varname","SP_EXTRA_XML", "value", os.getenv("SP_EXTRA_XML") or "")
+    splib.log("debug","Setting","varname","SP_PREPEND_XML", "value", os.getenv("SP_PREPEND_XML") or "")
+    splib.log("debug","Setting","varname","SP_IGNORECASE", "value", os.getenv("SP_IGNORECASE") or "")
+    splib.log("debug","Setting","varname","SP_XMLPARSER", "value", os.getenv("SP_XMLPARSER") or "")
 
     tex.pdfhorigin = 0
     tex.pdfvorigin = 0
@@ -481,11 +459,7 @@ require("publisher")
 local function traceback(what)
     -- get message from what
     local msg = string.gsub(what,".*:%d+: (.*)", "%1")
-    if rlib then
-        rlib.log.error("Lua error: " .. msg)
-    else
-        splib.log("error", "Lua error:","message",msg)
-    end
+    splib.log("error", "Lua error:","message",msg)
     print("Internal error: " .. msg)
     if loglevel > 4 then
         print("Stack trace:")

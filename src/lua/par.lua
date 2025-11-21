@@ -218,15 +218,9 @@ local function flatten(self,items,options,data)
                 csstext = " a { text-decoration: none; color: black}" ..  csstext .. string.format(" body {font-family-number: %d ;}",options.fontfamily)
                 local body
                 local htmltree
-                if rlib then
-                    htmltree = rlib.html.parse_raw_text(htmltext,csstext,publisher.cssdefaults)
-                    body = htmltree[1][1]
-                    body.block = nil
-                else
-                    htmltree = splib.parse_html_text(htmltext,csstext)
-                    body = htmltree[1][2]
-                    body.block = nil
-                end
+                htmltree = splib.parse_html_text(htmltext,csstext)
+                body = htmltree[1][2]
+                body.block = nil
                 local startnewline = 0
                 local firstelement = body[1]
                 if firstelement then

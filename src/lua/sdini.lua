@@ -9,56 +9,36 @@
 -- BUG on windows: http://lua-users.org/lists/lua-l/2012-08/msg00052.html
 -- ! in LUA_PATH gets replaced by $PWD
 package.path=os.getenv("LUA_PATH")
-local lib_to_use = os.getenv("SP_LIB")
 local jobname = os.getenv("JOBNAME") or "publisher"
-rlib = nil
 splib = nil
 
-if lib_to_use == "rust" then
-    rlib = require("rlib")
-    rlib.log.init{
-      path    = jobname .. "-protocol.xml",
-      level   = os.getenv("SD_LOGLEVEL") or "info",
-      verbose = ( os.getenv("SP_VERBOSITY") == "1" ),
-    }
+local libname
+if os.name == "windows" then
+    libname = "libsplib.dll"
+elseif os.name == "linux" then
+    libname = "libsplib.so"
+elseif os.name == "freebsd" then
+    libname = "libsplib.so"
 else
-    local libname
-    if os.name == "windows" then
-      libname = "libsplib.dll"
-    elseif os.name == "linux" then
-      libname = "libsplib.so"
-    elseif os.name == "freebsd" then
-      libname = "libsplib.so"
-    else
-      libname = "libsplib.so"
-    end
-
-
-    local ok, msg = package.loadlib(libname,"*")
-    if not ok then
-        print(msg)
-        os.exit(0)
-    end
-    -- the library was formally named splib. luaglue is a layer (see #570).
-    splib = require("luaglue")
-
+    libname = "libsplib.so"
 end
+
+
+local ok, msg = package.loadlib(libname,"*")
+if not ok then
+    print(msg)
+    os.exit(0)
+end
+-- the library was formally named splib. luaglue is a layer (see #570).
+splib = require("luaglue")
 
 
 function file_start( filename )
-    if rlib then
-        rlib.log.log("debug","Start file","filename",filename)
-    else
-        splib.log("debug","Start file","filename",filename)
-    end
+    splib.log("debug","Start file","filename",filename)
 end
 
 function file_end( filename )
-    if rlib then
-        rlib.log.log("debug","End file","filename",filename)
-    else
-        splib.log("debug","End file","filename",filename)
-    end
+    splib.log("debug","End file","filename",filename)
 end
 
 
@@ -68,11 +48,7 @@ callback.register('start_run',function() return true end)
 main = {}
 
 function main.log(...)
-    if rlib then
-        rlib.log.log(...)
-    else
-        splib.log(...)
-    end
+    splib.log(...)
 end
 
 
@@ -81,26 +57,16 @@ texconfig.max_print_line=99999
 texconfig.formatname="sd-format"
 texconfig.trace_file_names = false
 
-if rlib then
-    rlib.aux.sdBuildFilelist()
-else
-    splib.buildfilelist()
-end
+splib.buildfilelist()
 kpse = {}
 
 --- @param filename string The file name to look up
 --- @return string|nil The full path of the file name or nil if the file is not found.
 function kpse.find_file(filename)
-  if rlib then
-      return rlib.aux.lookup_file(filename)
-  end
   return splib.lookupfile(filename)
 end
 
 function kpse.add_dir(dirname)
-    if rlib then
-        return rlib.aux.add_dir(dirname)
-    end
     return splib.add_dir(dirname)
 end
 

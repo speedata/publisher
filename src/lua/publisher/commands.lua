@@ -1430,13 +1430,8 @@ function commands.html( layoutxml,dataxml)
     local ret = {}
     local csstext = publisher.css:gettext()
     local blocks
-    if rlib then
-        csshtmltree = rlib.html.parse_raw_text(htmltext, csstext,publisher.cssdefaults)
-        blocks = publisher.parse_html(csshtmltree,{}, dataxml)
-    else
-        local tab = splib.parse_raw_html_text(htmltext,csstext)
-        blocks = publisher.parse_html(tab,{}, dataxml)
-    end
+    local tab = splib.parse_raw_html_text(htmltext,csstext)
+    blocks = publisher.parse_html(tab,{}, dataxml)
     blocks = publisher.flatten_boxes(blocks)
     for b=1,#blocks do
         local thisblock = blocks[b]
@@ -1623,11 +1618,7 @@ function commands.image( layoutxml,dataxml )
             if not ih then
                 err("No imagehandler for image type %s found.",imagetype)
             else
-                if rlib then
-                    filename = rlib.image.convert_contents(contents,ih)
-                else
-                    filename = splib.convertcontents(contents,ih)
-                end
+                filename = splib.convertcontents(contents,ih)
             end
         end
     end
@@ -2756,11 +2747,7 @@ function commands.options( layoutxml,dataxml )
     local default_area                    = publisher.read_attribute(layoutxml,dataxml,"defaultarea","string")
     local markdownextensions              = publisher.read_attribute(layoutxml,dataxml,"markdown-extensions","string")
     if markdownextensions then
-        if rlib then
-            publisher.options.markdownextensions = string.explode(markdownextensions,",")
-        else
-            splib.markdownextensions = string.explode(markdownextensions,",")
-        end
+        splib.markdownextensions = string.explode(markdownextensions,",")
     end
 
     if default_area then

@@ -76,15 +76,12 @@ func CreateCustomBuild(cfg *config.Config, arguments []string) error {
 	case "windows":
 		os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dll"), filepath.Join(destdirBin, "libsplib.dll"))
 		os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.dll"), filepath.Join(libBuildDir, "luaglue.dll"))
-		// os.Rename(filepath.Join(cfg.Builddir, "dylib", "rlib.dll"), filepath.Join(libBuildDir, "rlib.dll"))
 	case "linux":
 		os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(libBuildDir, "libsplib.so"))
 		os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(libBuildDir, "luaglue.so"))
-		// os.Rename(filepath.Join(cfg.Builddir, "dylib", "rlib.so"), filepath.Join(libBuildDir, "rlib.dll"))
 	case "darwin":
 		os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(libBuildDir, "libsplib.so"))
 		os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(libBuildDir, "luaglue.so"))
-		// os.Rename(filepath.Join(cfg.Builddir, "dylib", "rlib.dylib"), filepath.Join(libBuildDir, "rlib.dll"))
 	}
 
 	return nil

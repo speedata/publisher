@@ -628,17 +628,9 @@ local function markdown(dataxml, arg)
     end
     local str = table_textvalue(arg[1])
     local htmltext
-    if rlib then
-        htmltext = rlib.html.markdown(str,publisher.options.markdownextensions)
-    else
-        htmltext = splib.markdown(str)
-    end
+    htmltext = splib.markdown(str)
     if htmltext then
-        if rlib then
-            htmltext = rlib.xml.html_to_xml(htmltext)
-        else
-            htmltext = publisher.splib.htmltoxml("<html><body>" .. htmltext .. "</body></html>")
-        end
+        htmltext = publisher.splib.htmltoxml("<html><body>" .. htmltext .. "</body></html>")
         return { htmltext }, nil
     end
     return {}, nil
@@ -724,25 +716,14 @@ local function decode_html(dataxml, arg)
     end
     local firstarg = xpath.string_value(arg[1])
     if type(firstarg) == "string" then
-        if rlib then
-            local msg = rlib.xml.html_to_xml(firstarg)
-            if msg == nil then
-                err("decode-html failed")
-                return nil
-            end
-            -- two dummy tags because xpath.parse_raw removes the surrounding table
-            local ret = luxor.parse_xml("<dummy>" .. msg .. "</dummy>")
-            return ret
-        else
-            local msg = publisher.splib.htmltoxml(firstarg)
-            if msg == nil then
-                err("decode-html failed")
-                return nil
-            end
-            -- two dummy tags because xpath.parse_raw removes the surrounding table
-            local ret = luxor.parse_xml("<dummy><dummy>" .. msg .. "</dummy></dummy>")
-            return ret
+        local msg = publisher.splib.htmltoxml(firstarg)
+        if msg == nil then
+            err("decode-html failed")
+            return nil
         end
+        -- two dummy tags because xpath.parse_raw removes the surrounding table
+        local ret = luxor.parse_xml("<dummy><dummy>" .. msg .. "</dummy></dummy>")
+        return ret
     end
 end
 
@@ -997,10 +978,6 @@ for _, func in ipairs(funcs) do
 end
 
 local libprefix = publisher.splib
-
-if rlib then
-    libprefix = rlib.str
-end
 
 -- Contains
 local function fnContains(dataxml, arg)
