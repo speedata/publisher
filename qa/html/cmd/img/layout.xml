@@ -4,6 +4,7 @@
 	<Stylesheet>
 		h1 { margin: 3px 6px; }
 		img { width: 3cm; }
+		p { margin: 5pt 0 ; }
 	</Stylesheet>
 	<Pageformat height="6cm" width="10cm"></Pageformat>
 	<Record element="data">

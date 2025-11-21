@@ -347,6 +347,8 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
             box.eltname = thiseltname
             box.margintop = margin_top or 0
             box.marginbottom = margin_bottom or 0
+            box.border_top_width = border_top_width
+            box.border_bottom_width = border_bottom_width
             box.indent_amount = margin_left + padding_left
             styles.calculated_width = styles.calculated_width - margin_left - padding_left - border_left_width - border_right_width
             box.width = styles.calculated_width
@@ -531,8 +533,8 @@ end
 -- Entry point for HTML parsing
 function parse_html_new( elt, options, data )
     options = options or {}
-    local maxwidth_sp = options.maxwidth_sp
-    pages_mod.handle_pages(elt.pages,maxwidth_sp, data)
+    -- local maxwidth_sp = options.maxwidth_sp
+    -- pages_mod.handle_pages(elt.pages,maxwidth_sp, data)
     -- global fontfamilies
     fontfamilies = elt.fontfamilies
     elt.fontfamilies = nil

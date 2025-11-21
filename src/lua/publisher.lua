@@ -1336,10 +1336,22 @@ do
                     prependbox = nil
                 end
                 if i == 1 then
-                    thisbox.margin_top = box.margintop
+                    thisbox.firstbox = true
+                    if box.border_top_width then
+                        thisbox.border_top_width = box.border_top_width
+                    end
+                    if box.margintop then
+                        thisbox.margin_top = box.margintop
+                    end
                 end
                 if i == #box then
-                    thisbox.margin_bottom = box.marginbottom
+                    thisbox.lastbox = true
+                    if box.marginbottom then
+                        thisbox.margin_bottom = box.marginbottom
+                    end
+                    if box.border_bottom_width then
+                        thisbox.border_bottom_width = box.border_bottom_width
+                    end
                 end
 
                 ret[#ret + 1] = thisbox
@@ -4028,16 +4040,12 @@ end
 
 
 -- Draw a box with HTML properties given at head
-function htmlbox( head, width_sp, height_sp, depth_sp)
+function htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
     local debug_htmlbox = 0
     local properties = node.getproperty(head)
     if not properties then
         err("Internal error: htmlbox() - no properties given")
         return
-    end
-    local dirmode = "horizontal"
-    if head.id == vlist_node then
-        dirmode = "vertical"
     end
     local rules = {}
     rules[#rules + 1] = "q"
@@ -4078,7 +4086,6 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
         return ret
     end
 
-
     local b_b_r_radius = properties.border_bottom_right_radius
     local b_b_l_radius = properties.border_bottom_left_radius
     local b_t_r_radius = properties.border_top_right_radius
@@ -4093,26 +4100,23 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
     local padding_bottom = properties.padding_bottom
     local padding_left   = properties.padding_left
 
-    local margin_bottom  = properties.margin_bottom
-    local margin_left    = properties.margin_left
-
+    local margin_left   = properties.margin_left or 0
     -- ht == y3, wd == x3
     depth_sp = math.max(depth_sp,properties.depth or 0)
     height_sp = properties.lineheight - depth_sp
     local sp_x0, sp_x1, sp_x2, wd
     local sp_y0, sp_y1, sp_y2, ht
 
-
     if dirmode == "horizontal" then
-        local content_top    = height_sp
-        local content_bottom = -depth_sp
+        local content_top    = height_sp  + (properties.shiftdown or 0)
+        local content_bottom = -depth_sp  + (properties.shiftdown or 0)
 
         sp_y0 = content_top + padding_top + border_top_width
         sp_y1 = content_top + padding_top
         ht    = content_bottom - padding_bottom - border_bottom_width
         sp_y2 = content_bottom - padding_bottom
 
-        sp_x0 = -1 * (padding_left  +  border_left_width)
+        sp_x0 = -1 * (padding_left + border_left_width)
         sp_x1 = sp_x0 + border_left_width
         sp_x2 = sp_x1 + width_sp
         wd    = sp_x2 + border_right_width
@@ -4127,14 +4131,13 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
         sp_y2 = content_bottom - padding_bottom
 
         -- horizontal
-        local content_left  = 0
-        local content_right = width_sp
+        local content_left  = properties.shiftright or 0
+        local content_right = width_sp + (properties.shiftright or 0) + margin_left
 
         sp_x0 = content_left - padding_left - border_left_width
         sp_x1 = content_left - padding_left
         sp_x2 = content_right + padding_left
         wd    = sp_x2 + border_right_width
-
     end
 
     --- The trapezoids must extend closer to the center of the border, because if the border
@@ -4317,12 +4320,13 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
         rules[#rules + 1] = "S Q"
     end
 
-    rules_clip[#rules_clip + 1] = "h n"
+    rules_clip[#rules_clip + 1] = "h W* n"
 
     local n_clip = node.new("whatsit","pdf_literal")
     setprop(n_clip,"origin","htmlbox.clip")
     local n_clip_data = table.concat(rules_clip," ")
-    n_clip_data = n_clip_data .. " " .. table.concat(rules," ")
+    local concat_rules = table.concat(rules, " ")
+    n_clip_data = n_clip_data .. " " .. concat_rules
     n_clip.data = n_clip_data
 
     local pdf_save    = node.new("whatsit","pdf_save")
@@ -4335,7 +4339,17 @@ function htmlbox( head, width_sp, height_sp, depth_sp)
     node.insert_after(hvbox,node.tail(hvbox),pdf_restore)
     hvbox = node.vpack(hvbox)
     node.setproperty(hvbox,{origin="hvbox"})
-    return hvbox
+
+    if dirmode == "horizontal" then
+        return hvbox
+    end
+    local vbox = node.vpack(hvbox)
+    local shiftdown = properties.shiftdown or 0
+    local g = set_glue(nil, { width = shiftdown})
+    vbox.head = node.insert_before(vbox.head,vbox.head,g)
+    vbox.height = 0
+    vbox.depth = 0
+    return vbox
 end
 
 --- After everything is ready for page ship-out, we add debug output and crop marks if necessary
@@ -4762,7 +4776,9 @@ function set_attributes(nodelist,att_tbl)
     end
 end
 
---- Look for `user_defined` at end of page (ship-out) and runs actions encoded in them.
+--- Look for `user_defined` at end of page (ship-out) and runs actions encoded
+--  in them. This is the fixed page layout, do not change it. Inserting nodes is
+--  okay, as long as the page structure is kept intact.
 function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewidth, pageheight )
     local firsthead = head
     if not head then return {} end
@@ -4781,15 +4797,57 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
             end
             local bordernumber = get_attribute(head,"bordernumber")
             if bordernumber then
-                local bordervbox = mpbox(borderattributes[bordernumber],head.width,head.height + head.depth)
-                parent.head = node.insert_before(parent.head,head,bordervbox)
+                local ba = borderattributes[bordernumber]
+                local wd,ht = get_attribute(head,"borderwd"),get_attribute(head,"borderht")
+                wd = wd - ba.border_left_width - ba.margin_right + ba.padding_left
+                setprop(head,"border_bottom_color",ba.border_bottom_color)
+                setprop(head,"border_bottom_left_radius",ba.border_bottom_left_radius)
+                setprop(head,"border_bottom_right_radius",ba.border_bottom_right_radius)
+                setprop(head,"border_bottom_style",ba.border_bottom_style)
+                setprop(head,"border_bottom_width",ba.border_bottom_width)
+                setprop(head,"border_left_color",ba.border_left_color)
+                setprop(head,"border_left_style",ba.border_left_style)
+                setprop(head,"border_left_width",ba.border_left_width)
+                setprop(head,"border_right_color",ba.border_right_color)
+                setprop(head,"border_right_style",ba.border_right_style)
+                setprop(head,"border_right_width",ba.border_right_width)
+                setprop(head,"border_top_color",ba.border_top_color)
+                setprop(head,"border_top_left_radius",ba.border_top_left_radius)
+                setprop(head,"border_top_right_radius",ba.border_top_right_radius)
+                setprop(head,"border_top_style",ba.border_top_style)
+                setprop(head,"border_top_width",ba.border_top_width)
+                setprop(head,"borderstart","true")
+                setprop(head,"debug","false")
+                setprop(head,"margin_bottom",ba.margin_bottom)
+                setprop(head,"margin_left",ba.margin_left)
+                setprop(head,"margin_right",ba.margin_right)
+                setprop(head,"margin_top",ba.margin_top)
+                setprop(head,"padding_bottom",ba.padding_bottom)
+                setprop(head,"padding_left",ba.padding_left)
+                setprop(head,"padding_right",ba.padding_right)
+                setprop(head,"padding_top",ba.padding_top)
+                setprop(head,"lineheight",ht)
+                setprop(head,"depth", parent.depth)
+                w("htmlbox (a)")
+                local boxnode = htmlbox("horizontal", head, wd, parent.height, parent.depth)
+                local hbox = node.hpack(boxnode)
+                local g
+                g = set_glue(nil, { width = ba.border_left_width + ba.margin_left + ba.padding_left })
+                hbox.head = node.insert_before(hbox.head,boxnode,g)
+                g = set_glue(nil, { width = parent.height })
+                local vl = node.vpack(g)
+                node.insert_after(vl,g,hbox)
+                g = set_glue(nil, { width = -parent.height })
+                node.insert_after(vl,hbox,g)
+                vl.height = 0
+                parent.head = node.insert_before(parent.head,head,vl)
             end
             if blockinline == "vertical" then cury = cury + head.height + head.depth else curx = curx + head.width end
         elseif head.id==hlist_node or head.id == vlist_node then
             local bordernumber = get_attribute(head,"bordernumber")
             if bordernumber then
-                local bordervbox = mpbox(borderattributes[bordernumber],head.width,head.height + head.depth)
-                parent.head = node.insert_before(parent.head,head,bordervbox)
+                local boxnode = mpbox(borderattributes[bordernumber],head.width,head.height + head.depth)
+                parent.head = node.insert_before(parent.head,head,boxnode)
             end
             if head.id == hlist_node then
                 local r = insert_nonmoving_whatsits(head.list,head,"horizontal",curx,cury,pagewidth, pageheight)
@@ -4827,9 +4885,9 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
 
             if bordernumber then
                 local ba = borderattributes[bordernumber]
-                local wd,ht = get_attribute(head,"borderwd"),get_attribute(head,"borderht")
-                ht = parent.height + parent.depth
-                wd = parent.width - ba.border_left_width - ba.border_right_width - ba.margin_left - ba.margin_right
+                local wd, ht
+                wd =  get_attribute(head,"borderwd")
+                ht = get_attribute(head,"borderht")
                 setprop(head,"border_bottom_color",ba.border_bottom_color)
                 setprop(head,"border_bottom_left_radius",ba.border_bottom_left_radius)
                 setprop(head,"border_bottom_right_radius",ba.border_bottom_right_radius)
@@ -4857,7 +4915,18 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                 setprop(head,"padding_right",ba.padding_right)
                 setprop(head,"padding_top",ba.padding_top)
                 setprop(head,"lineheight",ht)
-                local boxnode = htmlbox(head, wd, parent.height,parent.depth)
+                if blockinline == "vertical" then
+                    wd = wd - ba.border_left_width - ba.margin_left - ba.padding_left - ba.margin_right
+                    setprop(head,"shiftdown",ht + ba.padding_top + ba.border_top_width + ba.margin_top)
+                    setprop(head,"shiftright",ba.border_left_width + ba.margin_left + ba.padding_left)
+                else
+                    ht = parent.height + parent.depth
+                    setprop(head,"shiftdown",ba.border_top_width)
+                    wd = parent.width - ba.border_left_width - ba.margin_left - ba.border_right_width - ba.margin_right
+                    ht = head.height + head.depth
+                end
+
+                local boxnode = htmlbox(blockinline, head, wd, parent.height,parent.depth)
                 parent.head = node.insert_before(parent.head,head,boxnode)
                 setprop(head,"borderstart",false)
             end
@@ -5123,7 +5192,7 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                         cur = cur.next
                     end
                     local wd,ht,dp = node.dimensions(head,cur)
-                    local boxnode = htmlbox(head,wd,ht,dp)
+                    local boxnode = htmlbox(blockinline,head,wd,ht,dp)
                     parent.head = node.insert_before(parent.head,head,boxnode)
                 end
             end
@@ -9154,4 +9223,3 @@ end
 
 
 file_end("publisher.lua")
-
