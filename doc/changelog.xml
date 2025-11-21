@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.8" date="2025-11-21">
+        <en>Fix HTML borders and currentcolor in table rules.</en>
+        <de>Korrigiere HTML Border und currentcolor in Tabellenlinien.</de>
+    </entry>
     <entry version="5.3.7" date="2025-11-19">
         <en>Rewrite HTML border.</en>
         <de>HTML Border überarbeitet.</de>
