@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.2" date="2025-10-14">
+    <entry version="5.2.1" date="2025-11-24">
+        <en>Remove jline library which prevents code signing on macOS.</en>
+        <de>Entferne jline Bibliothek, die Code-Signierung auf macOS verhindert hat.</de>
+    </entry>
     <entry version="5.2.0" date="2025-10-14">
         <en>Release Version 5.2.</en>
         <de>Veröffentliche Version 5.2.</de>
