@@ -1,5 +1,25 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.9" date="2025-11-25">
+      <en>Allow text formats to use the font size defined in CSS for HTML content.</en>
+      <de>Ermögliche Textformaten, für HTML-Inhalte die in CSS definierte Schriftgröße zu verwenden.</de>
+    </entry>
+    <entry version="5.3.9" date="2025-11-25">
+      <en>Fix handling of relative (em) font sizes based on the current font size.</en>
+      <de>Korrigiere die Verarbeitung relativer (em) Schriftgrößen auf Basis der aktuellen Schriftgröße.</de>
+    </entry>
+    <entry version="5.3.9" date="2025-11-25">
+      <en>Fix HTML border rendering in regular paragraph mode.</en>
+      <de>Korrigiere die Darstellung von HTML-Rahmen im normalen Absatzmodus.</de>
+    </entry>
+    <entry version="5.3.9" date="2025-11-24">
+        <en>Update to latest Saxon HE.</en>
+        <de>Aktualisiere auf die neuste Saxon HE Version.</de>
+    </entry>
+    <entry version="5.3.9" date="2025-11-24">
+        <en>Remove Rust source code.</en>
+        <de>Lösche Rust Quellcode.</de>
+    </entry>
     <entry version="5.3.8" date="2025-11-21">
         <en>Fix HTML borders and currentcolor in table rules.</en>
         <de>Korrigiere HTML Border und currentcolor in Tabellenlinien.</de>
