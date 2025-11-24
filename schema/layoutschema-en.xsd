@@ -605,6 +605,7 @@
         <xs:element minOccurs="0" ref="en:Frame"/>
         <xs:element minOccurs="0" ref="en:Group"/>
         <xs:element minOccurs="0" ref="en:HSpace"/>
+        <xs:element minOccurs="0" ref="en:HTML"/>
         <xs:element minOccurs="0" ref="en:Hyphenation"/>
         <xs:element minOccurs="0" ref="en:I"/>
         <xs:element minOccurs="0" ref="en:Image"/>
@@ -1475,6 +1476,17 @@
           <xs:documentation>The height of the padding that is inserted in a column (at the top) with Output/Text.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="cssfontsize">
+        <xs:annotation>
+          <xs:documentation>If yes, the fontsize is interpreted as CSS fontsize (e.g. 1.2em, 150%, etc.). If no, the font size is taken from the font family setting. Default is no.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="fill-last-line">
         <xs:annotation>
           <xs:documentation>Ensure the length of the last line in a paragraph. Values from 0 (no change) to 100 (last line is full). Handle with care. Default is 0.</xs:documentation>
@@ -1708,6 +1720,7 @@
         <xs:element ref="en:Frame"/>
         <xs:element ref="en:Group"/>
         <xs:element ref="en:HSpace"/>
+        <xs:element ref="en:HTML"/>
         <xs:element ref="en:Hyphenation"/>
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>
@@ -3219,6 +3232,7 @@
         <xs:element ref="en:Frame"/>
         <xs:element ref="en:Group"/>
         <xs:element ref="en:HSpace"/>
+        <xs:element ref="en:HTML"/>
         <xs:element ref="en:Hyphenation"/>
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>
@@ -4341,6 +4355,7 @@
         <xs:element minOccurs="0" ref="en:Frame"/>
         <xs:element minOccurs="0" ref="en:Group"/>
         <xs:element minOccurs="0" ref="en:HSpace"/>
+        <xs:element minOccurs="0" ref="en:HTML"/>
         <xs:element minOccurs="0" ref="en:Hyphenation"/>
         <xs:element minOccurs="0" ref="en:I"/>
         <xs:element minOccurs="0" ref="en:Image"/>
@@ -9521,6 +9536,7 @@
         <xs:element ref="en:Frame"/>
         <xs:element ref="en:Group"/>
         <xs:element ref="en:HSpace"/>
+        <xs:element ref="en:HTML"/>
         <xs:element ref="en:Hyphenation"/>
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>
@@ -9677,6 +9693,7 @@
         <xs:element ref="en:Frame"/>
         <xs:element ref="en:Group"/>
         <xs:element ref="en:HSpace"/>
+        <xs:element ref="en:HTML"/>
         <xs:element ref="en:Hyphenation"/>
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>

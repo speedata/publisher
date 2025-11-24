@@ -605,6 +605,7 @@
         <xs:element minOccurs="0" ref="en:Frame"/>
         <xs:element minOccurs="0" ref="en:Group"/>
         <xs:element minOccurs="0" ref="en:HSpace"/>
+        <xs:element minOccurs="0" ref="en:HTML"/>
         <xs:element minOccurs="0" ref="en:Hyphenation"/>
         <xs:element minOccurs="0" ref="en:I"/>
         <xs:element minOccurs="0" ref="en:Image"/>
@@ -1475,6 +1476,17 @@
           <xs:documentation>Die Höhe des Innenabstands in einer Spalte (oben) mit Output/Text.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="cssfontsize">
+        <xs:annotation>
+          <xs:documentation>Wenn »yes«, wird die Schriftgröße als CSS Schriftgröße interpretiert (z.B. 1.2em, 150%, etc.). Wenn »nein«, wird die Schriftgröße aus der Fontfamilie genommen. Voreinstellung ist »no«.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="fill-last-line">
         <xs:annotation>
           <xs:documentation>Mindestlänge der letzten Zeile im Absatz. Prozentangabe (0 bis 100). Mit Vorsicht anzuwenden. Voreinstellung ist 0.</xs:documentation>
@@ -1708,6 +1720,7 @@
         <xs:element ref="en:Frame"/>
         <xs:element ref="en:Group"/>
         <xs:element ref="en:HSpace"/>
+        <xs:element ref="en:HTML"/>
         <xs:element ref="en:Hyphenation"/>
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>
@@ -3219,6 +3232,7 @@
         <xs:element ref="en:Frame"/>
         <xs:element ref="en:Group"/>
         <xs:element ref="en:HSpace"/>
+        <xs:element ref="en:HTML"/>
         <xs:element ref="en:Hyphenation"/>
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>
@@ -4341,6 +4355,7 @@
         <xs:element minOccurs="0" ref="en:Frame"/>
         <xs:element minOccurs="0" ref="en:Group"/>
         <xs:element minOccurs="0" ref="en:HSpace"/>
+        <xs:element minOccurs="0" ref="en:HTML"/>
         <xs:element minOccurs="0" ref="en:Hyphenation"/>
         <xs:element minOccurs="0" ref="en:I"/>
         <xs:element minOccurs="0" ref="en:Image"/>
@@ -9521,6 +9536,7 @@
         <xs:element ref="en:Frame"/>
         <xs:element ref="en:Group"/>
         <xs:element ref="en:HSpace"/>
+        <xs:element ref="en:HTML"/>
         <xs:element ref="en:Hyphenation"/>
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>
@@ -9677,6 +9693,7 @@
         <xs:element ref="en:Frame"/>
         <xs:element ref="en:Group"/>
         <xs:element ref="en:HSpace"/>
+        <xs:element ref="en:HTML"/>
         <xs:element ref="en:Hyphenation"/>
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>

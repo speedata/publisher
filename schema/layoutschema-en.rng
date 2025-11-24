@@ -749,6 +749,9 @@
                      <ref name="e_HSpace"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_HTML"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Hyphenation"></ref>
                   </optional>
                   <optional>
@@ -1651,6 +1654,15 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="cssfontsize">
+               <a:documentation>If yes, the fontsize is interpreted as CSS fontsize (e.g. 1.2em, 150%, etc.). If no, the font size is taken from the font family setting. Default is no.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <value>no</value>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="fill-last-line">
                <a:documentation>Ensure the length of the last line in a paragraph. Values from 0 (no change) to 100 (last line is full). Handle with care. Default is 0.</a:documentation>
             </attribute>
@@ -1939,6 +1951,9 @@
                      </optional>
                      <optional>
                         <ref name="e_HSpace"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_HTML"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Hyphenation"></ref>
@@ -3272,6 +3287,9 @@
                         <ref name="e_HSpace"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_HTML"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Hyphenation"></ref>
                      </optional>
                      <optional>
@@ -4074,6 +4092,9 @@
                   </optional>
                   <optional>
                      <ref name="e_HSpace"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_HTML"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Hyphenation"></ref>
@@ -7596,6 +7617,9 @@
                         <ref name="e_HSpace"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_HTML"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Hyphenation"></ref>
                      </optional>
                      <optional>
@@ -7916,6 +7940,9 @@
                      </optional>
                      <optional>
                         <ref name="e_HSpace"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_HTML"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Hyphenation"></ref>

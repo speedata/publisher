@@ -30,6 +30,7 @@
     <optional><cmd name="Frame"/></optional>
     <optional><cmd name="Group"/></optional>
     <optional><cmd name="HSpace"/></optional>
+    <optional><cmd name="HTML"/></optional>
     <optional><cmd name="Hyphenation"/></optional>
     <optional><cmd name="I"></cmd></optional>
     <optional><cmd name="Image"/></optional>
@@ -3445,6 +3446,14 @@
       </description>
       <description xml:lang="de">
         <para>Die Höhe des Innenabstands in einer Spalte (oben) mit Output/Text.</para>
+      </description>
+    </attribute>
+    <attribute en="cssfontsize" optional="yes" since="5.3.9" type="boolean">
+      <description xml:lang="en">
+        <para>If yes, the fontsize is interpreted as CSS fontsize (e.g. 1.2em, 150%, etc.). If no, the font size is taken from the font family setting. Default is no.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn »yes«, wird die Schriftgröße als CSS Schriftgröße interpretiert (z.B. 1.2em, 150%, etc.). Wenn »nein«, wird die Schriftgröße aus der Fontfamilie genommen. Voreinstellung ist »no«.</para>
       </description>
     </attribute>
     <attribute en="fill-last-line" optional="yes" since="3.3.11" type="zerotohundred">

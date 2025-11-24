@@ -4850,7 +4850,7 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                     setprop(head,"shiftright",ba.border_left_width + ba.margin_left + ba.padding_left)
                 else
                     ht = parent.height + parent.depth
-                    setprop(head,"shiftdown",ba.border_top_width)
+                    setprop(head,"lineheight",ht)
                     wd = parent.width - ba.border_left_width - ba.margin_left - ba.border_right_width - ba.margin_right
                     ht = head.height + head.depth
                 end

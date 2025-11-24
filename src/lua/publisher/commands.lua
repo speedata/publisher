@@ -894,30 +894,32 @@ end
 --- * use the textformat `text` end
 function commands.define_textformat(layoutxml,dataxml)
     local alignment    = publisher.read_attribute(layoutxml,dataxml,"alignment",   "string")
-    local indentation  = publisher.read_attribute(layoutxml,dataxml,"indentation", "length")
-    local name         = publisher.read_attribute(layoutxml,dataxml,"name",        "string")
-    local rows         = publisher.read_attribute(layoutxml,dataxml,"rows",        "number")
-    local bordertop    = publisher.read_attribute(layoutxml,dataxml,"border-top",  "string")
     local borderbottom = publisher.read_attribute(layoutxml,dataxml,"border-bottom","string")
-    local htmlverticalspacing = publisher.read_attribute(layoutxml,dataxml,"html-vertical-spacing","string")
-    local margintop     = publisher.read_attribute(layoutxml,dataxml,"margin-top",    "string")
-    local marginbottom  = publisher.read_attribute(layoutxml,dataxml,"margin-bottom", "string")
-    local paddingtop    = publisher.read_attribute(layoutxml,dataxml,"padding-top",   "string")
-    local colpaddingtop = publisher.read_attribute(layoutxml,dataxml,"column-padding-top", "length_sp")
-    local paddingbottom = publisher.read_attribute(layoutxml,dataxml,"padding-bottom","string")
-    local breakbelow    = publisher.read_attribute(layoutxml,dataxml,"break-below",   "boolean", true)
+    local bordertop    = publisher.read_attribute(layoutxml,dataxml,"border-top",  "string")
     local breakbefore   = publisher.read_attribute(layoutxml,dataxml,"break-before",  "string")
-    local orphan        = publisher.read_attribute(layoutxml,dataxml,"orphan",        "booleanornumber", false)
-    local widow         = publisher.read_attribute(layoutxml,dataxml,"widow",         "booleanornumber", false)
+    local breakbelow    = publisher.read_attribute(layoutxml,dataxml,"break-below",   "boolean", true)
+    local colpaddingtop = publisher.read_attribute(layoutxml,dataxml,"column-padding-top", "length_sp")
+    local filllastline  = publisher.read_attribute(layoutxml,dataxml,"fill-last-line","number")
+    local htmlverticalspacing = publisher.read_attribute(layoutxml,dataxml,"html-vertical-spacing","string")
     local hyphenate     = publisher.read_attribute(layoutxml,dataxml,"hyphenate",     "boolean", true)
     local hyphenchar    = publisher.read_attribute(layoutxml,dataxml,"hyphenchar",    "string")
-    local tab           = publisher.read_attribute(layoutxml,dataxml,"tab",           "string")
-    local filllastline  = publisher.read_attribute(layoutxml,dataxml,"fill-last-line","number")
+    local indentation  = publisher.read_attribute(layoutxml,dataxml,"indentation", "length")
+    local marginbottom  = publisher.read_attribute(layoutxml,dataxml,"margin-bottom", "string")
+    local margintop     = publisher.read_attribute(layoutxml,dataxml,"margin-top",    "string")
     local margintopboxstart  = publisher.read_attribute(layoutxml,dataxml,"margin-top-box-start","length_sp")
+    local name         = publisher.read_attribute(layoutxml,dataxml,"name",        "string")
+    local orphan        = publisher.read_attribute(layoutxml,dataxml,"orphan",        "booleanornumber", false)
+    local cssfontsize = publisher.read_attribute(layoutxml,dataxml,"cssfontsize","boolean", false)
+    local paddingbottom = publisher.read_attribute(layoutxml,dataxml,"padding-bottom","string")
+    local paddingtop    = publisher.read_attribute(layoutxml,dataxml,"padding-top",   "string")
+    local rows         = publisher.read_attribute(layoutxml,dataxml,"rows",        "number")
+    local tab           = publisher.read_attribute(layoutxml,dataxml,"tab",           "string")
+    local widow         = publisher.read_attribute(layoutxml,dataxml,"widow",         "booleanornumber", false)
     local fmt = {
         colpaddingtop = colpaddingtop,
         htmlverticalspacing = htmlverticalspacing,
         name = name,
+        cssfontsize = cssfontsize,
     }
 
     if breakbefore == "page" then

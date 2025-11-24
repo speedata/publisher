@@ -215,10 +215,14 @@ local function flatten(self,items,options,data)
                 local csstext = publisher.css:gettext()
                 -- todo: add  white-space: pre; if publisher.options.ignoreeol == false
                 -- csstext = string.format("body {font-family-number: %d ;} ",options.fontfamily)
-                csstext = " a { text-decoration: none; color: black}" ..  csstext .. string.format(" body {font-family-number: %d ;}",options.fontfamily)
+                csstext = " a { text-decoration: none; color: black}" ..  csstext
+                if self.textformat and self.textformat.cssfontsize == true then
+                    -- ignore
+                else
+                    csstext = csstext .. string.format(" body {font-family-number: %d ;}",options.fontfamily)
+                end
                 local body
-                local htmltree
-                htmltree = splib.parse_html_text(htmltext,csstext)
+                local htmltree = splib.parse_html_text(htmltext,csstext)
                 body = htmltree[1][2]
                 body.block = nil
                 local startnewline = 0
