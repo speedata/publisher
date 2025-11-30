@@ -15,12 +15,18 @@ type selRule struct {
 	rule     []qrule
 }
 
+// nodeVirtAttrs is a per-call scratch pad mapping nodes to their "virtual attributes".
+// Keep it unexported and reset per FillComputedMaps call (not global state).
+var nodeVirtAttrs = map[*html.Node][]html.Attribute{}
+
 // FillComputedMaps populates r.Styles and r.Attributes based on:
 // - original attributes (non-style),
 // - inline style attribute,
 // - stylesheet rules applied by ascending specificity.
 // It does NOT mutate the DOM.
 func (c *CSS) FillComputedMaps(r *Result) error {
+	nodeVirtAttrs := make(map[*html.Node][]html.Attribute)
+
 	if c.document == nil {
 		return fmt.Errorf("document not loaded")
 	}
@@ -155,7 +161,3 @@ func (c *CSS) FillComputedMaps(r *Result) error {
 	}
 	return nil
 }
-
-// nodeVirtAttrs is a per-call scratch pad mapping nodes to their "virtual attributes".
-// Keep it unexported and reset per FillComputedMaps call (not global state).
-var nodeVirtAttrs = map[*html.Node][]html.Attribute{}
