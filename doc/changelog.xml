@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.10" date="2025-11-30">
+      <en>Fix CSS/HTML rendering slowdown.</en>
+      <de>Behebt Verlangsamung im CSS/HTML-Rendering.</de>
+    </entry>
     <entry version="5.3.9" date="2025-11-25">
       <en>Allow text formats to use the font size defined in CSS for HTML content.</en>
       <de>Ermögliche Textformaten, für HTML-Inhalte die in CSS definierte Schriftgröße zu verwenden.</de>
