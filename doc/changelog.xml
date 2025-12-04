@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.11" date="2025-12-04">
+      <en>Improve typesetting performance with early exits, cached lookups, and leaner attribute handling in mknodes.</en>
+      <de>Beschleunigt den Schriftsatz mit frühen Abbrüchen, gecachten Zugriffen und schlankerer Attributbehandlung in mknodes.</de>
+    </entry>
+    <entry version="5.3.11" date="2025-12-04">
+      <en>Modularize publisher.lua into color, links, and metadata modules to reduce file size.</en>
+      <de>Modularisiert publisher.lua in die Module color, links und metadata, um die Datei zu verkleinern.</de>
+    </entry>
+    <entry version="5.3.11" date="2025-12-04">
+      <en>Update qrencode to the latest upstream version.</en>
+      <de>Aktualisiert qrencode auf die aktuelle Upstream-Version.</de>
+    </entry>
     <entry version="5.3.10" date="2025-11-30">
       <en>Fix CSS/HTML rendering slowdown.</en>
       <de>Behebt Verlangsamung im CSS/HTML-Rendering.</de>
