@@ -11,6 +11,7 @@
 
 module(..., package.seeall)
 
+local colors_module = require("publisher.colors")
 
 -- helper
 
@@ -92,7 +93,7 @@ local function process_color (str)
             str = string.format("{%s}",str)
         end
         str = str:match("{(.*)}")
-        local colentry = publisher.get_colentry_from_name(str)
+        local colentry = colors_module.get_colentry_from_name(str)
         local transparency = ""
         if colentry.alpha then
             transparency = string.format('withprescript "tr_alternative=1" withprescript "tr_transparency=%g"',colentry.alpha)

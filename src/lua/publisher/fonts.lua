@@ -11,6 +11,9 @@
 file_start("fonts.lua")
 
 require("fonts.fontloader")
+
+local colors_module = require("publisher.colors")
+
 module(...,package.seeall)
 
 local lookup_fontname_filename={}
@@ -345,8 +348,8 @@ function insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding_t
     local ht = parent.height
     local dp = parent.depth
 
-    local colorname = publisher.colortable[bgcolorindex]
-    local pdfstring = publisher.colors[colorname].pdfstring
+    local colorname = colors_module.colortable[bgcolorindex]
+    local pdfstring = colors_module.colors[colorname].pdfstring
 
     -- wd, ht and dp are now in pdf points
     wd = wd / publisher.factor
@@ -370,7 +373,7 @@ function insert_underline( parent, head, start, typ, style, colornumber)
     local ht = parent.height
     local dp = parent.depth
     local dashpattern = ""
-    local pdfstring = publisher.pdfstring_from_color(colornumber)
+    local pdfstring = colors_module.pdfstring_from_color(colornumber)
 
     -- wd, ht and dp are now in pdf points
     wd = wd / publisher.factor

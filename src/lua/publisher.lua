@@ -31,18 +31,25 @@ if not hasharfbuzz then
 end
 
 
-local commands     = require("publisher.commands")
-local page         = require("publisher.page")
-local fontloader   = require("fonts.fontloader")
-local fonts        = require("publisher.fonts")
-local uuid         = require("uuid")
-local html         = require("html")
-par                = require("par")
+local commands      = require("publisher.commands")
+local page          = require("publisher.page")
+local fontloader    = require("fonts.fontloader")
+local fonts         = require("publisher.fonts")
+local uuid          = require("uuid")
+local html          = require("html")
+local colors_module = require("publisher.colors")
+local metadata      = require("publisher.metadata")
+local links_module  = require("publisher.links")
+par                 = require("par")
 uuid.randomseed(tex.randomseed)
 
 local env_publisherversion = os.getenv("PUBLISHERVERSION")
 
 module(...,package.seeall)
+
+-- expose helpers from submodules
+utf8_to_utf16_string_pdf = metadata.utf8_to_utf16_string_pdf
+
 
 newxpath = false
 
@@ -326,9 +333,9 @@ resizehandler = {}
 
 viewerpreferences = {}
 
--- All hyperlinks from HTML data are stored here in this array
--- to be inserted later on in pre shipout filter
-hyperlinks = {}
+-- Hyperlinks are stored in publisher.links (links_module) to be inserted later
+-- in the pre shipout filter.
+links_module.reset()
 
 -- marker counter. Each mark will get its unique counter, so we can determine the
 -- order in which markers appear.
@@ -343,189 +350,11 @@ metapostcolors = {}
 metapostvariables = {}
 metapostcolorwarnings = {}
 
--- The spot colors used in the document (even when discarded)
-used_spotcolors = {}
-
 -- The current foreground color (used in underline)
 current_fgcolor = nil
 
--- The predefined colors. index = 1 because we "know" that black will be the first registered color.
-colors  = {
-  black = { model="gray", g = "0", pdfstring = " 0 G 0 g ", index = 1 },
-  aliceblue = { model="rgb", r="0.941" , g="0.973" , b="1" , pdfstring = "0.941 0.973 1 rg 0.941 0.973 1 RG", index = 2},
-  orange = { model="rgb", r="1" , g="0.647" , b="0" , pdfstring = "1 0.647 0 rg 1 0.647 0 RG", index = 3},
-  rebeccapurple = { model="rgb", r="0.4" , g="0.2" , b="0.6" , pdfstring = "0.4 0.2 0.6 rg 0.4 0.2 0.6 RG", index = 4},
-  antiquewhite = { model="rgb", r="0.98" , g="0.922" , b="0.843" , pdfstring = "0.98 0.922 0.843 rg 0.98 0.922 0.843 RG", index = 5},
-  aqua = { model="rgb", r="0" , g="1" , b="1" , pdfstring = "0 1 1 rg 0 1 1 RG", index = 6},
-  aquamarine = { model="rgb", r="0.498" , g="1" , b="0.831" , pdfstring = "0.498 1 0.831 rg 0.498 1 0.831 RG", index = 7},
-  azure = { model="rgb", r="0.941" , g="1" , b="1" , pdfstring = "0.941 1 1 rg 0.941 1 1 RG", index = 8},
-  beige = { model="rgb", r="0.961" , g="0.961" , b="0.863" , pdfstring = "0.961 0.961 0.863 rg 0.961 0.961 0.863 RG", index = 9},
-  bisque = { model="rgb", r="1" , g="0.894" , b="0.769" , pdfstring = "1 0.894 0.769 rg 1 0.894 0.769 RG", index = 10},
-  blanchedalmond = { model="rgb", r="1" , g="0.894" , b="0.769" , pdfstring = "1 0.894 0.769 rg 1 0.894 0.769 RG", index = 11},
-  blue = { model="rgb", r="0" , g="0" , b="1" , pdfstring = "0 0 1 rg 0 0 1 RG", index = 12},
-  blueviolet = { model="rgb", r="0.541" , g="0.169" , b="0.886" , pdfstring = "0.541 0.169 0.886 rg 0.541 0.169 0.886 RG", index = 13},
-  brown = { model="rgb", r="0.647" , g="0.165" , b="0.165" , pdfstring = "0.647 0.165 0.165 rg 0.647 0.165 0.165 RG", index = 14},
-  burlywood = { model="rgb", r="0.871" , g="0.722" , b="0.529" , pdfstring = "0.871 0.722 0.529 rg 0.871 0.722 0.529 RG", index = 15},
-  cadetblue = { model="rgb", r="0.373" , g="0.62" , b="0.627" , pdfstring = "0.373 0.62 0.627 rg 0.373 0.62 0.627 RG", index = 16},
-  chartreuse = { model="rgb", r="0.498" , g="1" , b="0" , pdfstring = "0.498 1 0 rg 0.498 1 0 RG", index = 17},
-  chocolate = { model="rgb", r="0.824" , g="0.412" , b="0.118" , pdfstring = "0.824 0.412 0.118 rg 0.824 0.412 0.118 RG", index = 18},
-  coral = { model="rgb", r="1" , g="0.498" , b="0.314" , pdfstring = "1 0.498 0.314 rg 1 0.498 0.314 RG", index = 19},
-  cornflowerblue = { model="rgb", r="0.392" , g="0.584" , b="0.929" , pdfstring = "0.392 0.584 0.929 rg 0.392 0.584 0.929 RG", index = 20},
-  cornsilk = { model="rgb", r="1" , g="0.973" , b="0.863" , pdfstring = "1 0.973 0.863 rg 1 0.973 0.863 RG", index = 21},
-  crimson = { model="rgb", r="0.863" , g="0.078" , b="0.235" , pdfstring = "0.863 0.078 0.235 rg 0.863 0.078 0.235 RG", index = 22},
-  darkblue = { model="rgb", r="0" , g="0" , b="0.545" , pdfstring = "0 0 0.545 rg 0 0 0.545 RG", index = 23},
-  darkcyan = { model="rgb", r="0" , g="0.545" , b="0.545" , pdfstring = "0 0.545 0.545 rg 0 0.545 0.545 RG", index = 24},
-  darkgoldenrod = { model="rgb", r="0.722" , g="0.525" , b="0.043" , pdfstring = "0.722 0.525 0.043 rg 0.722 0.525 0.043 RG", index = 25},
-  darkgray = { model="rgb", r="0.663" , g="0.663" , b="0.663" , pdfstring = "0.663 0.663 0.663 rg 0.663 0.663 0.663 RG", index = 26},
-  darkgreen = { model="rgb", r="0" , g="0.392" , b="0" , pdfstring = "0 0.392 0 rg 0 0.392 0 RG", index = 27},
-  darkgrey = { model="rgb", r="0.663" , g="0.663" , b="0.663" , pdfstring = "0.663 0.663 0.663 rg 0.663 0.663 0.663 RG", index = 28},
-  darkkhaki = { model="rgb", r="0.741" , g="0.718" , b="0.42" , pdfstring = "0.741 0.718 0.42 rg 0.741 0.718 0.42 RG", index = 29},
-  darkmagenta = { model="rgb", r="0.545" , g="0" , b="0.545" , pdfstring = "0.545 0 0.545 rg 0.545 0 0.545 RG", index = 30},
-  darkolivegreen = { model="rgb", r="0.333" , g="0.42" , b="0.184" , pdfstring = "0.333 0.42 0.184 rg 0.333 0.42 0.184 RG", index = 31},
-  darkorange = { model="rgb", r="1" , g="0.549" , b="0" , pdfstring = "1 0.549 0 rg 1 0.549 0 RG", index = 32},
-  darkorchid = { model="rgb", r="0.6" , g="0.196" , b="0.8" , pdfstring = "0.6 0.196 0.8 rg 0.6 0.196 0.8 RG", index = 33},
-  darkred = { model="rgb", r="0.545" , g="0" , b="0" , pdfstring = "0.545 0 0 rg 0.545 0 0 RG", index = 34},
-  darksalmon = { model="rgb", r="0.914" , g="0.588" , b="0.478" , pdfstring = "0.914 0.588 0.478 rg 0.914 0.588 0.478 RG", index = 35},
-  darkseagreen = { model="rgb", r="0.561" , g="0.737" , b="0.561" , pdfstring = "0.561 0.737 0.561 rg 0.561 0.737 0.561 RG", index = 36},
-  darkslateblue = { model="rgb", r="0.282" , g="0.239" , b="0.545" , pdfstring = "0.282 0.239 0.545 rg 0.282 0.239 0.545 RG", index = 37},
-  darkslategray = { model="rgb", r="0.184" , g="0.31" , b="0.31" , pdfstring = "0.184 0.31 0.31 rg 0.184 0.31 0.31 RG", index = 38},
-  darkslategrey = { model="rgb", r="0.184" , g="0.31" , b="0.31" , pdfstring = "0.184 0.31 0.31 rg 0.184 0.31 0.31 RG", index = 39},
-  darkturquoise = { model="rgb", r="0" , g="0.808" , b="0.82" , pdfstring = "0 0.808 0.82 rg 0 0.808 0.82 RG", index = 40},
-  darkviolet = { model="rgb", r="0.58" , g="0" , b="0.827" , pdfstring = "0.58 0 0.827 rg 0.58 0 0.827 RG", index = 41},
-  deeppink = { model="rgb", r="1" , g="0.078" , b="0.576" , pdfstring = "1 0.078 0.576 rg 1 0.078 0.576 RG", index = 42},
-  deepskyblue = { model="rgb", r="0" , g="0.749" , b="1" , pdfstring = "0 0.749 1 rg 0 0.749 1 RG", index = 43},
-  dimgray = { model="rgb", r="0.412" , g="0.412" , b="0.412" , pdfstring = "0.412 0.412 0.412 rg 0.412 0.412 0.412 RG", index = 44},
-  dimgrey = { model="rgb", r="0.412" , g="0.412" , b="0.412" , pdfstring = "0.412 0.412 0.412 rg 0.412 0.412 0.412 RG", index = 45},
-  dodgerblue = { model="rgb", r="0.118" , g="0.565" , b="1" , pdfstring = "0.118 0.565 1 rg 0.118 0.565 1 RG", index = 46},
-  firebrick = { model="rgb", r="0.698" , g="0.133" , b="0.133" , pdfstring = "0.698 0.133 0.133 rg 0.698 0.133 0.133 RG", index = 47},
-  floralwhite = { model="rgb", r="1" , g="0.98" , b="0.941" , pdfstring = "1 0.98 0.941 rg 1 0.98 0.941 RG", index = 48},
-  forestgreen = { model="rgb", r="0.133" , g="0.545" , b="0.133" , pdfstring = "0.133 0.545 0.133 rg 0.133 0.545 0.133 RG", index = 49},
-  fuchsia = { model="rgb", r="1" , g="0" , b="1" , pdfstring = "1 0 1 rg 1 0 1 RG", index = 50},
-  gainsboro = { model="rgb", r="0.863" , g="0.863" , b="0.863" , pdfstring = "0.863 0.863 0.863 rg 0.863 0.863 0.863 RG", index = 51},
-  ghostwhite = { model="rgb", r="0.973" , g="0.973" , b="1" , pdfstring = "0.973 0.973 1 rg 0.973 0.973 1 RG", index = 52},
-  gold = { model="rgb", r="1" , g="0.843" , b="0" , pdfstring = "1 0.843 0 rg 1 0.843 0 RG", index = 53},
-  goldenrod = { model="rgb", r="0.855" , g="0.647" , b="0.125" , pdfstring = "0.855 0.647 0.125 rg 0.855 0.647 0.125 RG", index = 54},
-  gray = { model="rgb", r="0.502" , g="0.502" , b="0.502" , pdfstring = "0.502 0.502 0.502 rg 0.502 0.502 0.502 RG", index = 55},
-  green = { model="rgb", r="0" , g="0.502" , b="0" , pdfstring = "0 0.502 0 rg 0 0.502 0 RG", index = 56},
-  greenyellow = { model="rgb", r="0.678" , g="1" , b="0.184" , pdfstring = "0.678 1 0.184 rg 0.678 1 0.184 RG", index = 57},
-  grey = { model="rgb", r="0.502" , g="0.502" , b="0.502" , pdfstring = "0.502 0.502 0.502 rg 0.502 0.502 0.502 RG", index = 58},
-  honeydew = { model="rgb", r="0.941" , g="1" , b="0.941" , pdfstring = "0.941 1 0.941 rg 0.941 1 0.941 RG", index = 59},
-  hotpink = { model="rgb", r="1" , g="0.412" , b="0.706" , pdfstring = "1 0.412 0.706 rg 1 0.412 0.706 RG", index = 60},
-  indianred = { model="rgb", r="0.804" , g="0.361" , b="0.361" , pdfstring = "0.804 0.361 0.361 rg 0.804 0.361 0.361 RG", index = 61},
-  indigo = { model="rgb", r="0.294" , g="0" , b="0.51" , pdfstring = "0.294 0 0.51 rg 0.294 0 0.51 RG", index = 62},
-  ivory = { model="rgb", r="1" , g="1" , b="0.941" , pdfstring = "1 1 0.941 rg 1 1 0.941 RG", index = 63},
-  khaki = { model="rgb", r="0.941" , g="0.902" , b="0.549" , pdfstring = "0.941 0.902 0.549 rg 0.941 0.902 0.549 RG", index = 64},
-  lavender = { model="rgb", r="0.902" , g="0.902" , b="0.98" , pdfstring = "0.902 0.902 0.98 rg 0.902 0.902 0.98 RG", index = 65},
-  lavenderblush = { model="rgb", r="1" , g="0.941" , b="0.961" , pdfstring = "1 0.941 0.961 rg 1 0.941 0.961 RG", index = 66},
-  lawngreen = { model="rgb", r="0.486" , g="0.988" , b="0" , pdfstring = "0.486 0.988 0 rg 0.486 0.988 0 RG", index = 67},
-  lemonchiffon = { model="rgb", r="1" , g="0.98" , b="0.804" , pdfstring = "1 0.98 0.804 rg 1 0.98 0.804 RG", index = 68},
-  lightblue = { model="rgb", r="0.678" , g="0.847" , b="0.902" , pdfstring = "0.678 0.847 0.902 rg 0.678 0.847 0.902 RG", index = 69},
-  lightcoral = { model="rgb", r="0.941" , g="0.502" , b="0.502" , pdfstring = "0.941 0.502 0.502 rg 0.941 0.502 0.502 RG", index = 70},
-  lightcyan = { model="rgb", r="0.878" , g="1" , b="1" , pdfstring = "0.878 1 1 rg 0.878 1 1 RG", index = 71},
-  lightgoldenrodyellow = { model="rgb", r="0.98" , g="0.98" , b="0.824" , pdfstring = "0.98 0.98 0.824 rg 0.98 0.98 0.824 RG", index = 72},
-  lightgray = { model="rgb", r="0.827" , g="0.827" , b="0.827" , pdfstring = "0.827 0.827 0.827 rg 0.827 0.827 0.827 RG", index = 73},
-  lightgreen = { model="rgb", r="0.565" , g="0.933" , b="0.565" , pdfstring = "0.565 0.933 0.565 rg 0.565 0.933 0.565 RG", index = 74},
-  lightgrey = { model="rgb", r="0.827" , g="0.827" , b="0.827" , pdfstring = "0.827 0.827 0.827 rg 0.827 0.827 0.827 RG", index = 75},
-  lightpink = { model="rgb", r="1" , g="0.714" , b="0.757" , pdfstring = "1 0.714 0.757 rg 1 0.714 0.757 RG", index = 76},
-  lightsalmon = { model="rgb", r="1" , g="0.627" , b="0.478" , pdfstring = "1 0.627 0.478 rg 1 0.627 0.478 RG", index = 77},
-  lightseagreen = { model="rgb", r="0.125" , g="0.698" , b="0.667" , pdfstring = "0.125 0.698 0.667 rg 0.125 0.698 0.667 RG", index = 78},
-  lightskyblue = { model="rgb", r="0.529" , g="0.808" , b="0.98" , pdfstring = "0.529 0.808 0.98 rg 0.529 0.808 0.98 RG", index = 79},
-  lightslategray = { model="rgb", r="0.467" , g="0.533" , b="0.6" , pdfstring = "0.467 0.533 0.6 rg 0.467 0.533 0.6 RG", index = 80},
-  lightslategrey = { model="rgb", r="0.467" , g="0.533" , b="0.6" , pdfstring = "0.467 0.533 0.6 rg 0.467 0.533 0.6 RG", index = 81},
-  lightsteelblue = { model="rgb", r="0.69" , g="0.769" , b="0.871" , pdfstring = "0.69 0.769 0.871 rg 0.69 0.769 0.871 RG", index = 82},
-  lightyellow = { model="rgb", r="1" , g="1" , b="0.878" , pdfstring = "1 1 0.878 rg 1 1 0.878 RG", index = 83},
-  lime = { model="rgb", r="0" , g="1" , b="0" , pdfstring = "0 1 0 rg 0 1 0 RG", index = 84},
-  limegreen = { model="rgb", r="0.196" , g="0.804" , b="0.196" , pdfstring = "0.196 0.804 0.196 rg 0.196 0.804 0.196 RG", index = 85},
-  linen = { model="rgb", r="0.98" , g="0.941" , b="0.902" , pdfstring = "0.98 0.941 0.902 rg 0.98 0.941 0.902 RG", index = 86},
-  maroon = { model="rgb", r="0.502" , g="0" , b="0" , pdfstring = "0.502 0 0 rg 0.502 0 0 RG", index = 87},
-  mediumaquamarine = { model="rgb", r="0.4" , g="0.804" , b="0.667" , pdfstring = "0.4 0.804 0.667 rg 0.4 0.804 0.667 RG", index = 88},
-  mediumblue = { model="rgb", r="0" , g="0" , b="0.804" , pdfstring = "0 0 0.804 rg 0 0 0.804 RG", index = 89},
-  mediumorchid = { model="rgb", r="0.729" , g="0.333" , b="0.827" , pdfstring = "0.729 0.333 0.827 rg 0.729 0.333 0.827 RG", index = 90},
-  mediumpurple = { model="rgb", r="0.576" , g="0.439" , b="0.859" , pdfstring = "0.576 0.439 0.859 rg 0.576 0.439 0.859 RG", index = 91},
-  mediumseagreen = { model="rgb", r="0.235" , g="0.702" , b="0.443" , pdfstring = "0.235 0.702 0.443 rg 0.235 0.702 0.443 RG", index = 92},
-  mediumslateblue = { model="rgb", r="0.482" , g="0.408" , b="0.933" , pdfstring = "0.482 0.408 0.933 rg 0.482 0.408 0.933 RG", index = 93},
-  mediumspringgreen = { model="rgb", r="0" , g="0.98" , b="0.604" , pdfstring = "0 0.98 0.604 rg 0 0.98 0.604 RG", index = 94},
-  mediumturquoise = { model="rgb", r="0.282" , g="0.82" , b="0.8" , pdfstring = "0.282 0.82 0.8 rg 0.282 0.82 0.8 RG", index = 95},
-  mediumvioletred = { model="rgb", r="0.78" , g="0.082" , b="0.522" , pdfstring = "0.78 0.082 0.522 rg 0.78 0.082 0.522 RG", index = 96},
-  midnightblue = { model="rgb", r="0.098" , g="0.098" , b="0.439" , pdfstring = "0.098 0.098 0.439 rg 0.098 0.098 0.439 RG", index = 97},
-  mintcream = { model="rgb", r="0.961" , g="1" , b="0.98" , pdfstring = "0.961 1 0.98 rg 0.961 1 0.98 RG", index = 98},
-  mistyrose = { model="rgb", r="1" , g="0.894" , b="0.882" , pdfstring = "1 0.894 0.882 rg 1 0.894 0.882 RG", index = 99},
-  moccasin = { model="rgb", r="1" , g="0.894" , b="0.71" , pdfstring = "1 0.894 0.71 rg 1 0.894 0.71 RG", index = 100},
-  navajowhite = { model="rgb", r="1" , g="0.871" , b="0.678" , pdfstring = "1 0.871 0.678 rg 1 0.871 0.678 RG", index = 101},
-  navy = { model="rgb", r="0" , g="0" , b="0.502" , pdfstring = "0 0 0.502 rg 0 0 0.502 RG", index = 102},
-  oldlace = { model="rgb", r="0.992" , g="0.961" , b="0.902" , pdfstring = "0.992 0.961 0.902 rg 0.992 0.961 0.902 RG", index = 103},
-  olive = { model="rgb", r="0.502" , g="0.502" , b="0" , pdfstring = "0.502 0.502 0 rg 0.502 0.502 0 RG", index = 104},
-  olivedrab = { model="rgb", r="0.42" , g="0.557" , b="0.137" , pdfstring = "0.42 0.557 0.137 rg 0.42 0.557 0.137 RG", index = 105},
-  orangered = { model="rgb", r="1" , g="0.271" , b="0" , pdfstring = "1 0.271 0 rg 1 0.271 0 RG", index = 106},
-  orchid = { model="rgb", r="0.855" , g="0.439" , b="0.839" , pdfstring = "0.855 0.439 0.839 rg 0.855 0.439 0.839 RG", index = 107},
-  palegoldenrod = { model="rgb", r="0.933" , g="0.91" , b="0.667" , pdfstring = "0.933 0.91 0.667 rg 0.933 0.91 0.667 RG", index = 108},
-  palegreen = { model="rgb", r="0.596" , g="0.984" , b="0.596" , pdfstring = "0.596 0.984 0.596 rg 0.596 0.984 0.596 RG", index = 109},
-  paleturquoise = { model="rgb", r="0.686" , g="0.933" , b="0.933" , pdfstring = "0.686 0.933 0.933 rg 0.686 0.933 0.933 RG", index = 110},
-  palevioletred = { model="rgb", r="0.859" , g="0.439" , b="0.576" , pdfstring = "0.859 0.439 0.576 rg 0.859 0.439 0.576 RG", index = 111},
-  papayawhip = { model="rgb", r="1" , g="0.937" , b="0.835" , pdfstring = "1 0.937 0.835 rg 1 0.937 0.835 RG", index = 112},
-  peachpuff = { model="rgb", r="1" , g="0.855" , b="0.725" , pdfstring = "1 0.855 0.725 rg 1 0.855 0.725 RG", index = 113},
-  peru = { model="rgb", r="0.804" , g="0.522" , b="0.247" , pdfstring = "0.804 0.522 0.247 rg 0.804 0.522 0.247 RG", index = 114},
-  pink = { model="rgb", r="1" , g="0.753" , b="0.796" , pdfstring = "1 0.753 0.796 rg 1 0.753 0.796 RG", index = 115},
-  plum = { model="rgb", r="0.867" , g="0.627" , b="0.867" , pdfstring = "0.867 0.627 0.867 rg 0.867 0.627 0.867 RG", index = 116},
-  powderblue = { model="rgb", r="0.69" , g="0.878" , b="0.902" , pdfstring = "0.69 0.878 0.902 rg 0.69 0.878 0.902 RG", index = 117},
-  purple = { model="rgb", r="0.502" , g="0" , b="0.502" , pdfstring = "0.502 0 0.502 rg 0.502 0 0.502 RG", index = 118},
-  red = { model="rgb", r="1" , g="0" , b="0" , pdfstring = "1 0 0 rg 1 0 0 RG", index = 119},
-  rosybrown = { model="rgb", r="0.737" , g="0.561" , b="0.561" , pdfstring = "0.737 0.561 0.561 rg 0.737 0.561 0.561 RG", index = 120},
-  royalblue = { model="rgb", r="0.255" , g="0.412" , b="0.882" , pdfstring = "0.255 0.412 0.882 rg 0.255 0.412 0.882 RG", index = 121},
-  saddlebrown = { model="rgb", r="0.545" , g="0.271" , b="0.075" , pdfstring = "0.545 0.271 0.075 rg 0.545 0.271 0.075 RG", index = 122},
-  salmon = { model="rgb", r="0.98" , g="0.502" , b="0.447" , pdfstring = "0.98 0.502 0.447 rg 0.98 0.502 0.447 RG", index = 123},
-  sandybrown = { model="rgb", r="0.957" , g="0.643" , b="0.376" , pdfstring = "0.957 0.643 0.376 rg 0.957 0.643 0.376 RG", index = 124},
-  seagreen = { model="rgb", r="0.18" , g="0.545" , b="0.341" , pdfstring = "0.18 0.545 0.341 rg 0.18 0.545 0.341 RG", index = 125},
-  seashell = { model="rgb", r="1" , g="0.961" , b="0.933" , pdfstring = "1 0.961 0.933 rg 1 0.961 0.933 RG", index = 126},
-  sienna = { model="rgb", r="0.627" , g="0.322" , b="0.176" , pdfstring = "0.627 0.322 0.176 rg 0.627 0.322 0.176 RG", index = 127},
-  silver = { model="rgb", r="0.753" , g="0.753" , b="0.753" , pdfstring = "0.753 0.753 0.753 rg 0.753 0.753 0.753 RG", index = 128},
-  skyblue = { model="rgb", r="0.529" , g="0.808" , b="0.922" , pdfstring = "0.529 0.808 0.922 rg 0.529 0.808 0.922 RG", index = 129},
-  slateblue = { model="rgb", r="0.416" , g="0.353" , b="0.804" , pdfstring = "0.416 0.353 0.804 rg 0.416 0.353 0.804 RG", index = 130},
-  slategray = { model="rgb", r="0.439" , g="0.502" , b="0.565" , pdfstring = "0.439 0.502 0.565 rg 0.439 0.502 0.565 RG", index = 131},
-  slategrey = { model="rgb", r="0.439" , g="0.502" , b="0.565" , pdfstring = "0.439 0.502 0.565 rg 0.439 0.502 0.565 RG", index = 132},
-  snow = { model="rgb", r="1" , g="0.98" , b="0.98" , pdfstring = "1 0.98 0.98 rg 1 0.98 0.98 RG", index = 133},
-  springgreen = { model="rgb", r="0" , g="1" , b="0.498" , pdfstring = "0 1 0.498 rg 0 1 0.498 RG", index = 134},
-  steelblue = { model="rgb", r="0.275" , g="0.51" , b="0.706" , pdfstring = "0.275 0.51 0.706 rg 0.275 0.51 0.706 RG", index = 135},
-  tan = { model="rgb", r="0.824" , g="0.706" , b="0.549" , pdfstring = "0.824 0.706 0.549 rg 0.824 0.706 0.549 RG", index = 136},
-  teal = { model="rgb", r="0" , g="0.502" , b="0.502" , pdfstring = "0 0.502 0.502 rg 0 0.502 0.502 RG", index = 137},
-  thistle = { model="rgb", r="0.847" , g="0.749" , b="0.847" , pdfstring = "0.847 0.749 0.847 rg 0.847 0.749 0.847 RG", index = 138},
-  tomato = { model="rgb", r="1" , g="0.388" , b="0.278" , pdfstring = "1 0.388 0.278 rg 1 0.388 0.278 RG", index = 139},
-  turquoise = { model="rgb", r="0.251" , g="0.878" , b="0.816" , pdfstring = "0.251 0.878 0.816 rg 0.251 0.878 0.816 RG", index = 140},
-  violet = { model="rgb", r="0.933" , g="0.51" , b="0.933" , pdfstring = "0.933 0.51 0.933 rg 0.933 0.51 0.933 RG", index = 141},
-  wheat = { model="rgb", r="0.961" , g="0.871" , b="0.702" , pdfstring = "0.961 0.871 0.702 rg 0.961 0.871 0.702 RG", index = 142},
-  white = { model="gray", g="1" , pdfstring = "1 G 1 g", index = 143},
-  whitesmoke = { model="rgb", r="0.961" , g="0.961" , b="0.961" , pdfstring = "0.961 0.961 0.961 rg 0.961 0.961 0.961 RG", index = 144},
-  yellow = { model="rgb", r="1" , g="1" , b="0" , pdfstring = "1 1 0 rg 1 1 0 RG", index = 145},
-  yellowgreen = { model="rgb", r="0.604" , g="0.804" , b="0.196" , pdfstring = "0.604 0.804 0.196 rg 0.604 0.804 0.196 RG", index = 146},
-  ["-"] = { pdfstring = " ", index = 147 }
-}
-
--- An array of defined colors
-colortable = {"black","aliceblue", "orange", "rebeccapurple", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "blanchedalmond", "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkgrey", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange", "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkslategrey", "darkturquoise", "darkviolet", "deeppink", "deepskyblue", "dimgray", "dimgrey", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold", "goldenrod", "gray", "green", "greenyellow", "grey", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush", "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgray", "lightgreen", "lightgrey", "lightpink", "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightslategrey", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue", "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy", "oldlace", "olive", "olivedrab", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred", "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon", "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "slategrey", "snow", "springgreen", "steelblue", "tan", "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen", "-"}
-
 -- The color stack to use
 defaultcolorstack = 0
-
-setmetatable(colors,{  __index = function (tbl,key)
-    if not key then
-        err("Empty color")
-        return tbl["black"]
-    end
-    if string.sub(key,1,1) ~= "#" and string.sub(key,1,3) ~= "rgb" then
-        return nil
-    end
-    main.log("info","Define color","name",key)
-    local color = {}
-    color.r, color.g, color.b = getrgb(key)
-    color.pdfstring = string.format("%g %g %g rg %g %g %g RG", color.r, color.g, color.b, color.r,color.g, color.b)
-    color.overprint = false
-    color.model = "rgb"
-    colortable[#colortable + 1] = key
-    color.index = #colortable
-    rawset(tbl,key,color)
-    return color
-end
- })
 
 data_dispatcher = {}
 user_defined_functions = { last = 0}
@@ -916,45 +745,6 @@ local function pdf_lineto_bp( x,y )
     return string.format("%g %g l",x,y)
 end
 
-function pdfstring_from_color(colorname_or_number)
-    local colno = tonumber(colorname_or_number)
-    if colno then
-        colorname = colortable[colno]
-    else
-        colorname = colorname_or_number
-    end
-    local colentry = get_colentry_from_name(colorname,"black")
-    if colentry then return colentry.pdfstring else return nil end
-end
-
-function get_colentry_from_name(colorname, default)
-    colorname = colorname or default
-    local colentry
-    if colorname then
-        if not colors[colorname] then
-            if default then
-                main.log("error","Color is not defined yet","name",colorname)
-            else
-                colentry = nil
-            end
-        else
-            colentry = colors[colorname]
-        end
-    end
-    if not colentry then
-        main.log("error","Undefined color, revert to black","value",colorname or "(undefined)")
-        return colors["black"]
-    end
-    return setmetatable(colentry, colormetatable)
-end
-
-function get_colorindex_from_name(colorname, default)
-    if not colorname then return nil end
-    if colorname == "nil" then return nil end
-    local colentry = get_colentry_from_name(colorname,default)
-    if colentry then return colentry.index else return nil end
-end
-
 function transparentcolorstack()
     if defaultcolorstack == 0 then
         defaultcolorstack = pdf.newcolorstack("0 g 0 G/TRP1 gs","direct",true)
@@ -998,30 +788,6 @@ function get_action_node( action_type )
     local ai = node.new("whatsit",pdf_action_whatsit)
     ai.action_type = action_type
     return ai
-end
-
-local function getcreator()
-    if options.documentcreator and options.documentcreator ~= "" then
-        return options.documentcreator
-    elseif sp_suppressinfo then
-        return "speedata Publisher"
-    else
-        return string.format("speedata Publisher %s using LuaTeX",env_publisherversion)
-    end
-end
-
-local function getproducer()
-    if options.documentproducer and options.documentproducer ~= "" then
-        return options.documentproducer
-    elseif options.documentcreator and options.documentcreator ~= "" and sp_suppressinfo then
-        return string.format("speedata Publisher using LuaTeX")
-    elseif options.documentcreator and options.documentcreator ~= "" then
-        return string.format("speedata Publisher %s using LuaTeX",env_publisherversion)
-    elseif sp_suppressinfo then
-        return "LuaTeX"
-    else
-        return string.format("LuaTeX %s (build %s)",luatex_version, status.development_id or "-")
-    end
 end
 
 roles_a = {
@@ -1856,7 +1622,7 @@ function initialize_luatex_and_generate_pdf()
     -- suppressinfo / Creator set:
     -- Creator:         CREATOR
     -- Producer:        speedata Publisher using LuaTeX
-    local infos = { string.format("/Creator %s /Producer %s",utf8_to_utf16_string_pdf(getcreator()), utf8_to_utf16_string_pdf(getproducer())) }
+    local infos = { string.format("/Creator %s /Producer %s",utf8_to_utf16_string_pdf(metadata.getcreator(options)), utf8_to_utf16_string_pdf(metadata.getproducer(options))) }
     if not sp_suppressinfo then
         infos[#infos+1] = "/Trapped /False"
     end
@@ -1877,7 +1643,7 @@ function initialize_luatex_and_generate_pdf()
         local metadataobjnum
         if options.format == "PDF/X-3:2002" or options.format == "PDF/X-4" then
             infos[#infos + 1] = string.format("/GTS_PDFXVersion (%s)",options.format)
-            metadataobjnum = pdf.obj({ type="stream", string = getmetadata(), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0})
+            metadataobjnum = pdf.obj({ type="stream", string = metadata.getmetadata(filespecnumbers,options), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0})
             local colorprofileobjnum = spotcolors.write_colorprofile()
             local cp = spotcolors.get_colorprofile()
             local outputintentsobjnum = pdf.obj({type = "raw",  immediate = true , string = string.format([[<<  /DestOutputProfile %d 0 R /Info %s /OutputCondition %s    /OutputConditionIdentifier %s   /RegistryName %s    /S /GTS_PDFX   /Type /OutputIntent  >>]],colorprofileobjnum,
@@ -1889,7 +1655,7 @@ function initialize_luatex_and_generate_pdf()
             pdfcatalog[#pdfcatalog + 1] = string.format("/OutputIntents %d 0 R",outputintentsarrayobjnum )
         end
         if options.format == "PDF/A-3" then
-            metadataobjnum = pdf.obj({ type="stream", string = getmetadata(filespecnumbers), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0})
+            metadataobjnum = pdf.obj({ type="stream", string = metadata.getmetadata(filespecnumbers,options), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0})
             pdf.setomitcidset(1)
             local colorprofileobjnum = spotcolors.write_colorprofile()
             local cp = spotcolors.get_colorprofile()
@@ -1903,7 +1669,7 @@ function initialize_luatex_and_generate_pdf()
         end
         if options.format == "PDF/UA" then
             pdfcatalog[#pdfcatalog + 1] = string.format(" /MarkInfo <<  /Marked true >> ")
-            metadataobjnum = pdf.obj({ type="stream", string = getmetadata(), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0,})
+            metadataobjnum = pdf.obj({ type="stream", string = metadata.getmetadata(filespecnumbers, options), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0,})
             vp[#vp + 1] = "/DisplayDocTitle true"
 
             local parenttree = pdf.reserveobj()
@@ -2228,10 +1994,10 @@ function shipout(nodelist, pagenumber,dataxml)
         matter = cp.matter,
     }
     if colorname then
-        if not colors[colorname] then
+        if not colors_module.colors[colorname] then
             main.log("error","Pagetype / defaultcolor: color is not defined yet.","name",colorname)
         else
-            local colorindex = colors[colorname].index
+            local colorindex = colors_module.colors[colorname].index
             nodelist = set_color_if_necessary(nodelist,colorindex)
             nodelist = node.vpack(nodelist)
         end
@@ -3148,7 +2914,7 @@ end
 
 -- Place a text in the background
 function bgtext( box, textstring, angle, colorname, fontfamily, bgsize)
-    local colorindex = colors[colorname].index
+    local colorindex = colors_module.colors[colorname].index
     local boxheight, boxwidth = box.height, box.width
     local angle_rad = -1 * math.rad(angle)
     local sin = math.sin(angle_rad)
@@ -3191,7 +2957,7 @@ end
 function background( box, colorname,origin )
     -- color '-' means 'no color'
     if colorname == "-" then return box end
-    if not colors[colorname] then
+    if not colors_module.colors[colorname] then
         if origin then
             main.log("warn","Background: color is not defined","name",colorname,"from",origin)
         else
@@ -3199,7 +2965,7 @@ function background( box, colorname,origin )
         end
         return box
     end
-    local colentry = colors[colorname]
+    local colentry = colors_module.colors[colorname]
 
     local pdfcolorstring = colentry.pdfstring
     local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
@@ -3256,11 +3022,12 @@ function frame(obj)
     -- 0.551915024494
     local circle_bezier = 0.551915024494
 
-    local colentry = get_colentry_from_name(obj.colorname,"black")
+    local colentry = colors_module.get_colentry_from_name(obj.colorname,"black")
     if not colentry then
         main.log("error","Color is not defined","name",tostring(obj.colorname))
-        colentry = colors["black"]
+        colentry = colors_module.colors["black"]
     end
+
     local pdfcolorstring = colentry.pdfstring
     local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
     local rw = math.round(width / factor,3) -- width of stroke
@@ -3507,12 +3274,6 @@ function clip(obj)
     return hvbox
 end
 
-
--- collect all spot colors used so far to create proper page resources
-function usespotcolor(num)
-    used_spotcolors[num] = true
-end
-
 -- Set the PDF page-resources for the current page.
 function setpageresources(thispage)
     if next(thispage.transparenttext) ~= nil and defaultcolorstack == 0 then
@@ -3529,75 +3290,11 @@ function setpageresources(thispage)
         transparenttextresources = table.concat(tmp,"")
     end
     local gstateresource = string.format(" /ExtGState << %s/GS0 %d 0 R /GS1 %d 0 R >>", transparenttextresources, GS_State_OP_On, GS_State_OP_Off)
-    if table.not_empty(used_spotcolors) then
-        pdf.setpageresources("/ColorSpace << " .. spotcolors.getresource(used_spotcolors) .. " >>" .. gstateresource )
+    if table.not_empty(colors_module.used_spotcolors) then
+        pdf.setpageresources("/ColorSpace << " .. spotcolors.getresource(colors_module.used_spotcolors) .. " >>" .. gstateresource )
     else
         pdf.setpageresources(gstateresource)
     end
-end
-
--- index metatable for colentry.pdfstring
-function colentry_index_function(tbl,idx)
-    local model = rawget(tbl,"model")
-    if model == "spotcolor" then
-        local saturation = math.round(tbl.saturation,3)
-        if idx == "pdfstring" then
-            usespotcolor(tbl.colornum)
-            local op
-            if tbl.overprint then
-                op = "/GS0 gs"
-            else
-                op = ""
-            end
-            local ret = string.format("%s /CS%d CS /CS%d cs %g scn ",op,tbl.colornum, tbl.colornum,saturation)
-            return ret
-        elseif idx == "pdfstring_stroking" then
-            usespotcolor(tbl.colornum)
-            local op
-            if tbl.overprint then
-                op = "/GS0 gs"
-            else
-                op = ""
-            end
-            local ret = string.format("%s /CS%d CS %g scn ",op,tbl.colornum,saturation)
-            return ret
-        elseif idx == "pdfstring_fill" then
-            usespotcolor(tbl.colornum)
-            local op
-            if tbl.overprint then
-                op = "/GS0 gs"
-            else
-                op = ""
-            end
-            local ret = string.format("%s /CS%d cs %g scn ",op,tbl.colornum,saturation)
-            return ret
-        end
-    elseif idx == "pdfstring_stroking" then
-        local _,b = fill_stroke_color(rawget(tbl,"pdfstring"))
-        return b
-    elseif idx == "pdfstring_fill" then
-        local a,_ = fill_stroke_color(rawget(tbl,"pdfstring"))
-        return a
-    -- elseif idx == "pdfstring" then
-    --     return rawget(tbl,"pdfstring")
-    end
-end
-
--- used in DefineColor
-colormetatable = {__index = colentry_index_function}
-
--- return the fill and stroke color of the given color string
-function fill_stroke_color( pdfcolor )
-    local a,b = string.match(pdfcolor,"^(.*rg)(.*RG)")
-    if a ~= nil then
-        return a,b
-    end
-    a,b = string.match(pdfcolor,"^(.*k)(.*K)")
-    if a ~= nil then
-        return a,b
-    end
-    a,b = string.match(pdfcolor,"^(.*G)(.*g)")
-    return a,b
 end
 
 --- Get PDF string for circle
@@ -3705,16 +3402,16 @@ function circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp)
     if rulewidth_sp < 5 then
         framecolorname = colorname
     end
-    local colentry = get_colentry_from_name(colorname)
+    local colentry = colors_module.get_colentry_from_name(colorname)
     if not colentry then
         err("Color %q unknown, reverting to black",colorname or "(no color name given)")
-        colentry = colors["black"]
+        colentry = colors_module.colors["black"]
     end
-    local framecolentry = get_colentry_from_name(framecolorname)
+    local framecolentry = colors_module.get_colentry_from_name(framecolorname)
 
     if not framecolentry then
         err("Color %q unknown, reverting to black",framecolorname or "(no color name given)")
-        framecolentry = colors["black"]
+        framecolentry = colors_module.colors["black"]
     end
     local fillcolor   = colentry.pdfstring_fill
     local bordercolor = framecolentry.pdfstring_stroking
@@ -3943,15 +3640,15 @@ function box( width_sp,height_sp,colorname )
         local _height  = sp_to_bp(height_sp)
         local paint = node.new("whatsit","pdf_literal")
         setprop(paint,"role",get_rolenum("Artifact"))
-        local colentry = colors[colorname]
+        local colentry = colors_module.colors[colorname]
         if not colentry then
             err("Color %q unknown, reverting to black",colorname or "(no color name given)")
-            colentry = colors["black"]
+            colentry = colors_module.colors["black"]
         end
         paint.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colentry.pdfstring,_width,_height)
         paint.mode = 0
         if colentry.alpha then
-            set_attribute(paint,"color",get_colorindex_from_name(colorname))
+            set_attribute(paint,"color",colors_module.get_colorindex_from_name(colorname))
         end
         local hglue = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3 })
         h = node.insert_after(paint,paint,hglue)
@@ -4094,19 +3791,19 @@ function htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
     local inner_left = sp_x1 + extend_left * border_left_width
 
     if properties.border_top_style ~= "none" and border_top_width > 0 then
-        colorstring = colors[properties.border_top_color].pdfstring
+        colorstring = colors_module.colors[properties.border_top_color].pdfstring
         rules[#rules + 1] = get_rule(inner_left,inner_top, inner_right, inner_top, wd, sp_y0, sp_x0, sp_y0)
     end
     if properties.border_right_style ~= "none" and border_right_width > 0 then
-        colorstring = colors[properties.border_right_color].pdfstring
+        colorstring = colors_module.colors[properties.border_right_color].pdfstring
         rules[#rules + 1] = get_rule(inner_right,inner_bottom, wd, ht, wd, sp_y0, inner_right,inner_top)
     end
     if properties.border_bottom_style ~= "none" and border_bottom_width > 0 then
-        colorstring = colors[properties.border_bottom_color].pdfstring
+        colorstring = colors_module.colors[properties.border_bottom_color].pdfstring
         rules[#rules + 1] = get_rule(sp_x0, ht, wd, ht,inner_right,inner_bottom , inner_left,inner_bottom)
     end
     if properties.border_left_style ~= "none" and border_left_width > 0 then
-        colorstring = colors[properties.border_left_color].pdfstring
+        colorstring = colors_module.colors[properties.border_left_color].pdfstring
         rules[#rules + 1] = get_rule(sp_x0, ht, inner_left, inner_bottom, inner_left, inner_top, sp_x0, sp_y0)
     end
     rules[#rules + 1] = "Q"
@@ -4333,10 +4030,10 @@ function dothingsbeforeoutput( thispage,data )
         if col == "-" then
             goto skipbgcolor
         end
-        local colentry = get_colentry_from_name(col ,"white")
+        local colentry = colors_module.get_colentry_from_name(col ,"white")
         if not colentry then
             main.log("error","Color is not defined","name",tostring(options.backgroun))
-            colentry = colors["white"]
+            colentry = colors_module.colors["white"]
         end
         local pdfcolorstring = colentry.pdfstring
 
@@ -4973,7 +4670,7 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                 linklevel = linklevel + 1
                 -- 3 = user
                 local ai = get_action_node(3)
-                ai.data = tostring(hyperlinks[hl])
+                ai.data = tostring(links_module.get(hl))
                 local stl = node.new("whatsit","pdf_start_link")
                 stl.action = ai
                 stl.width = -1073741824
@@ -5027,8 +4724,8 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
             if insert_startcolor then
                 local colstart = node.new("whatsit","pdf_colorstack")
                 set_attributes(colstart,attribs)
-                local colorname = colortable[fgcolor]
-                local colorentry = colors[colorname]
+                local colorname = colors_module.colortable[fgcolor]
+                local colorentry = colors_module.colors[colorname]
                 local col = colorentry.pdfstring
                 local alpha = colorentry.alpha
                 if alpha then
@@ -6893,54 +6590,6 @@ function boxit( box )
     return box
 end
 
--- We have an array of color names to be used in attributes. Every color needs to get registered!
-function register_color( name )
-    if colors[name] ~= nil then
-        return colors[name].index
-    end
-    colortable[#colortable + 1] = name
-    return #colortable
-end
-
--- Get r,g,b and alpha values (#f0f,#ff00ff,rgb(0,255,0) or rgb(0,255,0,1))
-function getrgb( colorvalue )
-    local r,g,b,a
-    local model = "rgb"
-    local rgbstr = "^rgba?%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*%)$"
-    local rgbastr = "^rgba?%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d%.%d)%s*%)$"
-    if string.sub(colorvalue,1,3) == "rgb" then
-        if string.match(colorvalue, rgbstr) then
-            r,g,b = string.match(colorvalue, rgbstr)
-        elseif string.match(colorvalue, rgbastr) then
-            r,g,b,a = string.match(colorvalue, rgbastr)
-        else
-            -- w("don't know")
-        end
-        if r == nil then
-            err("Could not parse color %q",colorvalue)
-            return 0,0,0
-        end
-        r = math.round(r / 255 , 3)
-        g = math.round(g / 255 , 3)
-        b = math.round(b / 255 , 3)
-        if a then a = a * 100 end
-    elseif #colorvalue == 7 then
-        r,g,b = string.match(colorvalue,"#?(%x%x)(%x%x)(%x%x)")
-        r = math.round(tonumber(r,16) / 255, 3)
-        g = math.round(tonumber(g,16) / 255, 3)
-        b = math.round(tonumber(b,16) / 255, 3)
-    elseif #colorvalue == 4 then
-        r,g,b = string.match(colorvalue,"#?(%x)(%x)(%x)")
-        r = math.round(tonumber(r,16) / 15, 3)
-        g = math.round(tonumber(g,16) / 15, 3)
-        b = math.round(tonumber(b,16) / 15, 3)
-    else
-        err("Could not parse color %q",colorvalue)
-        return 0,0,0
-    end
-    return r,g,b,a
-end
-
 -- color is an integer
 function set_color_if_necessary( nodelist,color )
     local dontformat = node.has_attribute(nodelist,att_dont_format)
@@ -6951,7 +6600,7 @@ function set_color_if_necessary( nodelist,color )
     if color == -1 then
         colorname = "black"
     else
-        colorname = colortable[color]
+        colorname = colors_module.colortable[color]
     end
     -- When we uncomment the if .. end here, the typesetting
     -- process is much slower. See #143
@@ -6959,7 +6608,7 @@ function set_color_if_necessary( nodelist,color )
     local colstart, colstop
     colstart = node.new("whatsit","pdf_colorstack")
     colstop  = node.new("whatsit","pdf_colorstack")
-    colstart.data = colors[colorname].pdfstring
+    colstart.data = colors_module.colors[colorname].pdfstring
     colstop.data  = ""
     colstart.command = 1
     colstop.command  = 2
@@ -7042,7 +6691,7 @@ function colorbar( wd,ht,dp,color,origin,orientation)
         if not colorname or colorname == "" then
             colorname = "black"
         end
-        if not colors[colorname] then
+        if not colors_module.colors[colorname] then
             err("Color %q not found",color)
             colorname = "black"
         end
@@ -7054,7 +6703,7 @@ function colorbar( wd,ht,dp,color,origin,orientation)
         local ht_bp = sp_to_bp(ht)
         local wd_bp = sp_to_bp(wd)
         rule_start.mode = 0
-        local data = "q "..colors[colorname].pdfstring
+        local data = "q ".. colors_module.colors[colorname].pdfstring
         local rule_width_bp, rule_length_bp
 
         if not options.tablerulefix then
@@ -8560,157 +8209,6 @@ function imageinfo( filename,page,box,fallback,imageshape )
     return images[new_name]
 end
 
--- getBordercolor turns a color into a three RGB (0-1) value to be used for the /C array.
--- The PDF viewers only support RGB (three values in the /C array).
-function getBordercolor(colorname)
-    local entry = get_colentry_from_name(colorname,"black")
-    if entry == nil then
-        return "0 0 0"
-    end
-    if entry.model == "rgb" then
-        return string.format("%g %g %g",entry.r,entry.g,entry.b)
-    elseif entry.model == "gray" then
-        return string.format("%g %g %g",entry.g,entry.g,entry.g)
-    elseif entry.model == "cmyk" then
-        local hundredminusk = ( 100 - entry.k) / 100
-        local r = (100 - entry.c) * hundredminusk / 100
-        local g = (100 - entry.m) * hundredminusk / 100
-        local b = (100 - entry.y) * hundredminusk / 100
-        return string.format("%g %g %g",r,g,b)
-    end
-    return "0 0 0"
-end
-
-local function char_to_hex(c)
-    return string.format("%%%02X", string.byte(c))
-end
-
-local function urlencode(url)
-    if url == nil then
-        return
-    end
-    url = url:gsub("\n", "\r\n")
-    url = url:gsub("([^%w _%-%.~:/%%=%?&#])", char_to_hex)
-    url = url:gsub(" ", "+")
-    return url
-end
-
-local function get_border_for_link(color)
-    -- no border:
-    local border = "/Border[0 0 0]"
-    local border_thickness = options.hyperlinkborderwidth
-    if options.showhyperlinks then
-        local thickness = ""
-        if border_thickness ~= 0 then
-            thickness = string.format("/Border[0 0 %d]",sp_to_bp(border_thickness))
-        end
-        border = string.format("%s/C [%s]",thickness,getBordercolor(color or options.hyperlinkbordercolor))
-    end
-    return border
-end
-
-local function get_border_for_link_table(color)
-    -- no border:
-    local border = {["/Border"] = "[0 0 0]" }
-    local border_thickness = options.hyperlinkborderwidth
-    if options.showhyperlinks then
-        local thickness = ""
-        if border_thickness ~= 0 then
-            border["/Border"] = string.format("[0 0 %d]",sp_to_bp(border_thickness))
-        end
-        border["/C"] = string.format("[%s]",getBordercolor(color or options.hyperlinkbordercolor))
-    end
-    return border
-end
-
-local function parse_embed_filename(filename, page, link)
-    local parsed_url = { fn = utf8_to_utf16_string_pdf(filename) }
-    if page then
-        parsed_url.dest = string.format("[%s /Fit]", tonumber(page) - 1)
-    elseif link then
-        parsed_url.dest = utf8_to_utf16_string_pdf(link)
-    else
-        parsed_url.dest = "[0 /Fit]"
-    end
-    return parsed_url
-end
-
-function hlembed(filename, page, link, bordercolor)
-    local parsed_url = parse_embed_filename(filename, page, link)
-    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoToE/NewWindow true/D %s /T<</R/C/N%s >> >>", get_border_for_link(bordercolor), parsed_url.dest, parsed_url.fn)
-    hyperlinks[#hyperlinks + 1] = str
-    return #hyperlinks
-end
-
-
-local function sortedkeys(tab)
-    local keys, s = { }, 0
-    for key,_ in next, tab do
-        s = s + 1
-        keys[s] = key
-    end
-    table.sort(keys)
-    return keys
-end
-
--- get the key and values always in the same order to get
--- reproducable PDFs
-local marshal_ordered = {__tostring = function(tbl)
-    local ret = {}
-    for _, key in ipairs(sortedkeys(tbl)) do
-        ret[#ret+1] = key .. tbl[key]
-    end
-    return table.concat(ret, "")
- end
-}
-function hlurl(href,bordercolor)
-    href = urlencode(href)
-    href = escape_pdfstring(href)
-    local hl = {
-        ["/Subtype" ] = "/Link",
-        ["/A"] = string.format("<</Type/Action/S/URI/URI(%s)>>",href),
-    }
-    for key, value in pairs(get_border_for_link_table(bordercolor)) do
-        hl[key] = value
-    end
-    local tab = setmetatable(hl,marshal_ordered)
-    -- tab now looks like this:
-    -- tab = {
-        -- ["/A"] = "<</Type/Action/S/URI/URI(https://www.example.com)>>"
-        -- ["/Border"] = "[0 0 0]"
-        -- ["/Subtype"] = "/Link"
-    -- },
-    -- hyperlinks must be a table, PDF/UA adds entries to the table
-    hyperlinks[#hyperlinks+1] = tab
-    return #hyperlinks
-end
-
-function hlpage(pagenumber,bordercolor)
-    pagenumber = tonumber(pagenumber)
-    local pageobjnum = pdf.getpageref(pagenumber)
-    if pageobjnum == nil then
-        return 0
-    end
-    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoTo/D [ %d 0 R /Fit ] >>",get_border_for_link(bordercolor),pageobjnum)
-    hyperlinks[#hyperlinks + 1] = str
-    return #hyperlinks
-end
-
-function hllink(link,bordercolor)
-    local formatted = string.format("mark%s",link)
-    local hl = {
-        ["/Subtype"] = "/Link",
-        ["/A"] = string.format("<</Type/Action/S/GoTo/D %s>>",publisher.utf8_to_utf16_string_pdf(formatted))
-    }
-    for key, value in pairs(get_border_for_link_table(bordercolor)) do
-        hl[key] = value
-    end
-
-    hyperlinks[#hyperlinks + 1] = setmetatable(hl,marshal_ordered)
-    return #hyperlinks
-end
-
-
 --- Sorting
 --- -------
 --- The sorting code is currently used for index generation (commands#makeindex)
@@ -8845,263 +8343,6 @@ function string_random(length)
   end
 end
 
-local function pdf_to_iso(s)
-  -- input: D:YYYYMMDDHHmmSS[Z|+/-HH['?]mm['?]]
-  local Y,M,D,h,mi,se,sign,th,tm =
-    s:match("^D:(%d%d%d%d)(%d%d)(%d%d)(%d%d)(%d%d)(%d%d)([Z+-]?)(%d?%d?)'?([%d%?]?%d?)'?$")
-  if not Y then return nil, "Unbekanntes PDF-Datum" end
-
-  local iso = string.format("%s-%s-%sT%s:%s:%s", Y,M,D,h,mi,se)
-
-  if sign == "Z" then
-    return iso .. "Z"
-  elseif sign == "+" or sign == "-" then
-    -- timezone given
-    th = (#th==2) and th or (th=="" and "00" or (th.."0"))
-    tm = (#tm==2) and tm or (tm=="" and "00" or (tm.."0"))
-    return string.format("%s%s%s:%s", iso, sign, th, tm)
-  else
-    -- no timezone given, assume local time
-    return iso
-  end
-end
-
-function getmetadata(filespecnumbers)
-    local zugferd_level = nil
-    local zugferd_filename = nil
-    if filespecnumbers and type(filespecnumbers) == "table" then
-        for _,v in ipairs(filespecnumbers) do
-            if type(v) == "table" and v[2] ~= nil then
-                zugferd_level = v[2]
-                zugferd_filename = v[3]
-            end
-        end
-    end
-    local isoformatted = pdf_to_iso(pdf.getcreationdate())
-    local docid = uuid()
-    local instanceid = uuid()
-    local fmt = options.format
-
-    local doc = xmlbuilder.new_document()
-    doc:add_pi("xpacket", "begin=\"\239\187\191\" id=\"W5M0MpCehiHzreSzNTczkc9d\"")
-
-    local meta = doc:add_element("x:xmpmeta")
-    meta:set_attr("xmlns:x", "adobe:ns:meta/")
-
-    local rdf = meta:add_element("rdf:RDF")
-    rdf:set_attr("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-
-    local desc = rdf:add_element("rdf:Description")
-    desc:set_attr("rdf:about", "")
-    desc:set_attr("xmlns:xmpMM", "http://ns.adobe.com/xap/1.0/mm/")
-    desc:set_attr("xmlns:pdfuaid","http://www.aiim.org/pdfua/ns/id/")
-    desc:set_attr("xmlns:xmp",   "http://ns.adobe.com/xap/1.0/")
-    desc:set_attr("xmlns:pdf",   "http://ns.adobe.com/pdf/1.3/")
-    desc:set_attr("xmlns:dc",    "http://purl.org/dc/elements/1.1/")
-    desc:set_attr("xmlns:pdfaid", "http://www.aiim.org/pdfa/ns/id/")
-
-    if fmt == "PDF/A-3" then
-        desc:add_element("xmpMM:RenditionClass"):set_text("default")
-        desc:add_element("pdfaid:part"):set_text("3")
-        desc:add_element("pdfaid:conformance"):set_text("B")
-    elseif fmt == "PDF/UA" then
-        desc:add_element("pdfuaid:part"):set_text("1")
-    elseif fmt == "PDF/X-4" or fmt == "PDF/X-3:2002" then
-        desc:add_element("xmpMM:RenditionClass"):set_text("default")
-        desc:add_element("xmpMM:VersionID"):set_text("1")
-        desc:add_element("pdf:Trapped"):set_text("False")
-        if fmt == "PDF/X-3:2002" then
-            desc:set_attr("xmlns:pdfx", "http://ns.adobe.com/pdfx/1.3/")
-            desc:add_element("pdfx:GTS_PDFXVersion"):set_text("PDF/X-3:2002")
-        elseif fmt == "PDF/X-4" then
-            desc:set_attr("xmlns:pdfxid", "http://www.npes.org/pdfx/ns/id/")
-            desc:add_element("pdfxid:GTS_PDFXVersion"):set_text("PDF/X-4")
-        end
-    end
-    -- common metadata
-    desc:add_element("xmpMM:DocumentID"):set_text("uuid:" .. docid)
-    desc:add_element("xmpMM:InstanceID"):set_text("uuid:" .. instanceid)
-    desc:add_element("xmp:CreateDate"):set_text(isoformatted)
-    desc:add_element("xmp:ModifyDate"):set_text(isoformatted)
-    desc:add_element("xmp:MetadataDate"):set_text(isoformatted)
-    desc:add_element("xmp:CreatorTool"):set_text(getcreator())
-    desc:add_element("pdf:Producer"):set_text(getproducer())
-
-    -- title
-    if options.documenttitle and options.documenttitle ~= "" then
-      if fmt == "PDF/A-3" or fmt == "PDF/UA" then
-        local li = desc:add_element("dc:title")
-                      :add_element("rdf:Alt")
-                      :add_element("rdf:li")
-        li:set_attr("xml:lang", "x-default")
-          :set_text(options.documenttitle)
-      else
-        desc:add_element("dc:title"):set_text(options.documenttitle)
-      end
-    end
-
-    -- author/creator
-    if options.documentauthor and options.documentauthor ~= "" then
-      if fmt == "PDF/A-3" or fmt == "PDF/UA" then
-        desc:add_element("dc:creator")
-            :add_element("rdf:Seq")
-            :add_element("rdf:li")
-            :set_text(options.documentauthor)
-      else
-        desc:add_element("dc:creator"):set_text(options.documentauthor)
-      end
-    end
-
-    if fmt == "PDF/A-3" and zugferd_level and zugferd_filename then
-        desc:set_attr("xmlns:pdfaExtension", "http://www.aiim.org/pdfa/ns/extension/")
-        desc:set_attr("xmlns:pdfaField", "http://www.aiim.org/pdfa/ns/field#")
-        desc:set_attr("xmlns:pdfaProperty", "http://www.aiim.org/pdfa/ns/property#")
-        desc:set_attr("xmlns:pdfaSchema", "http://www.aiim.org/pdfa/ns/schema#")
-        desc:set_attr("xmlns:pdfaType", "http://www.aiim.org/pdfa/ns/type#")
-
-        local ext = desc:add_element("pdfaExtension:schemas")
-        local bag = ext:add_element("rdf:Bag")
-        local li = bag:add_element("rdf:li")
-        li:set_attr("rdf:parseType", "Resource")
-        li:add_element("pdfaSchema:schema"):set_text("ZUGFeRD PDFA Extension Schema")
-        li:add_element("pdfaSchema:namespaceURI"):set_text("urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#")
-        li:add_element("pdfaSchema:prefix"):set_text("zf")
-        local prop = li:add_element("pdfaSchema:property")
-        local seq = prop:add_element("rdf:Seq")
-
-        local function add_zugferd_property(name, valuetype, category, description)
-            local li = seq:add_element("rdf:li")
-            li:set_attr("rdf:parseType", "Resource")
-            li:add_element("pdfaProperty:name"):set_text(name)
-            li:add_element("pdfaProperty:valueType"):set_text(valuetype)
-            li:add_element("pdfaProperty:category"):set_text(category)
-            li:add_element("pdfaProperty:description"):set_text(description)
-        end
-
-        add_zugferd_property("DocumentFileName", "Text", "external", "name of the embedded XML invoice file")
-        add_zugferd_property("DocumentType", "Text", "external", "INVOICE")
-        add_zugferd_property("Version", "Text", "external", "The actual version of the ZUGFeRD data")
-        add_zugferd_property("ConformanceLevel", "Text", "external", "The conformance level of the ZUGFeRD data")
-
-        local rdfdesc = rdf:add_element("rdf:Description")
-        rdfdesc:set_attr("xmlns:zf", "urn:ferd:pdfa:CrossIndustryDocument:invoice:1p0#")
-        rdfdesc:set_attr("rdf:about", "")
-        rdfdesc:set_attr("zf:ConformanceLevel", zugferd_level)
-        rdfdesc:set_attr("zf:DocumentFileName", zugferd_filename)
-        rdfdesc:set_attr("zf:DocumentType", "INVOICE")
-        rdfdesc:set_attr("zf:Version", "1.0")
-
-    end
-    doc:add_pi("xpacket", [[end="r"]])
-
-    return doc:to_string({ pretty = true, indent = "  " })
-end
-
----@para filecontents data Contents of the file.
-function attach_file_pdf(filecontents,description,mimetype,modificationtime,destfilename)
-    local is_zugferd = false
-    if mimetype == "ZUGFeRD invoice" then
-        is_zugferd = true
-        mimetype = "text/xml"
-    end
-    local fileobjectnum = pdf.immediateobj("stream",
-        filecontents,
-        string.format([[/Params <</ModDate (%s) /Size %d >> /Subtype /%s /Type /EmbeddedFile ]],
-            pdfdate(modificationtime),
-            #filecontents,
-            escape_pdfname(mimetype)))
-    local descPDF = ""
-    if description then
-        descPDF = string.format("/Desc %s\n  ",utf8_to_utf16_string_pdf(description))
-    end
-    local filespecnum = pdf.immediateobj(string.format([[<<
-  /AFRelationship /Alternative
-  %s/EF <<
-    /F %d 0 R
-    /UF %d 0 R
-  >>
-  /F %s
-  /Type /Filespec
-  /UF %s
->>]],descPDF, fileobjectnum,fileobjectnum,utf8_to_utf16_string_pdf(destfilename),utf8_to_utf16_string_pdf(destfilename)))
-    if is_zugferd then
-        local conformancelevel
-        if string.find(filecontents,"urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended",1,true) or string.find(filecontents,"urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended",1,true) or string.find(filecontents,"urn:ferd:CrossIndustryDocument:invoice:1p0:extended",1,true) then
-            conformancelevel = "extended"
-        elseif string.find(filecontents,"urn:ferd:CrossIndustryDocument:invoice:1p0:comfort",1,true) or string.find(filecontents,"urn:cen.eu:en16931:2017",1,true) then
-            conformancelevel = "comfort" -- EN16931
-        elseif string.find(filecontents,"urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic",1,true) or string.find(filecontents,"urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic",1,true) then
-            conformancelevel = "basic"
-        elseif string.find(filecontents,"urn:factur-x.eu:1p0:basicwl",1,true) then
-            conformancelevel = "basicwl"
-        elseif string.find(filecontents,"urn:factur-x.eu:1p0:minimum",1,true) or string.find(filecontents,"urn:zugferd.de:2p0:minimum",1,true) then
-            conformancelevel = "minimum"
-        end
-        if not conformancelevel then
-            err("No ZUGFeRD conformance level found")
-            return
-        else
-            conformancelevel = string.upper(conformancelevel)
-        end
-
-        filespecnumbers[#filespecnumbers + 1] = {filespecnum,conformancelevel,destfilename}
-    else
-        filespecnumbers[#filespecnumbers + 1] = {filespecnum,nil,destfilename}
-    end
-end
-
--- %a  abbreviated weekday name (e.g., Wed)
--- %A  full weekday name (e.g., Wednesday)
--- %b  abbreviated month name (e.g., Sep)
--- %B  full month name (e.g., September)
--- %c  date and time (e.g., 09/16/98 23:48:10)
--- %d  day of the month (16) [01-31]
--- %H  hour, using a 24-hour clock (23) [00-23]
--- %I  hour, using a 12-hour clock (11) [01-12]
--- %M  minute (48) [00-59]
--- %m  month (09) [01-12]
--- %p  either "am" or "pm" (pm)
--- %S  second (10) [00-61]
--- %w  weekday (3) [0-6 = Sunday-Saturday]
--- %x  date (e.g., 09/16/98)
--- %X  time (e.g., 23:48:10)
--- %Y  full year (1998)
--- %y  two-digit year (98) [00-99]
--- %%  the character `%´
-
--- Return a string that is a valid PDF date entry such as "D:20170721195500+02'00'"
--- Input is an epoch number such as 1500645681
-function pdfdate(num)
-    local ret = os.date("D:%Y%m%d%H%M%S+00'00'",num)
-    return ret
-end
-
-function escape_pdfstring( str )
-    if str then
-        str = string.gsub(str,"%(","\\(")
-        str = string.gsub(str,"%)","\\)")
-    end
-    return str
-end
-
-function escape_pdfname( str )
-    return string.gsub(str,'/','#2f')
-end
-
---- Convert the argument `str` (in UTF-8) to a string suitable for writing into
---- the PDF file. The returned string starts with `<feff` and ends with `>`, unless
---- the string is a simple string that can be expressed with (...).
-function utf8_to_utf16_string_pdf( str )
-    if str:match("^[a-zA-Z.0-9- ]+$") then
-        return "("..str.. ")"
-    end
-    local ret = {}
-    for s in string.utfvalues(str) do
-        ret[#ret + 1] = fontloader.to_utf16(s)
-    end
-    local utf16str = "<feff" .. table.concat(ret) .. ">"
-    return utf16str
-end
 
 shape = function(tbl, buf, options)
     local font = tbl.font

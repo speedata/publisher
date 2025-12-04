@@ -6,6 +6,7 @@
 --  Copyright 2012 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
+local colors_module = require("publisher.colors")
 
 local function scalebox(scalefactor,box)
     local pdf_save, pdf_restore, pdf_setmatrix
@@ -482,7 +483,7 @@ local function make_code(size,matrix,pdfcolorstring)
 end
 
 local function qrcode(width,height,codeword,eclevel,colorname)
-  local pdfcolorstring = publisher.colors[colorname or "black"].pdfstring
+  local pdfcolorstring = colors_module.colors[colorname or "black"].pdfstring
   if not barcodes_qrencode then barcodes_qrencode = do_luafile("qrencode.lua") end
   local ok, tab_or_message =  barcodes_qrencode.qrcode(codeword,eclevel)
   if not ok then

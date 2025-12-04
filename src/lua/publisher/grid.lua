@@ -9,6 +9,8 @@ file_start("grid.lua")
 
 module(...,package.seeall)
 
+local colors_module = require("publisher.colors")
+
 _M.__index = _M
 
 local function to_sp(arg)
@@ -669,10 +671,10 @@ function draw_frame(self,frame,width_sp)
     local x,y
     local width,height
     local colorname = frame.draw.color
-    local colentry = publisher.colors[colorname]
+    local colentry = colors_module.colors[colorname]
     if not colentry then
         err("Color %q unknown, reverting to black",colorname or "(no color name given)")
-        colentry = publisher.colors["black"]
+        colentry = colors_module.colors["black"]
     end
 
 
@@ -800,7 +802,7 @@ function draw_grid(self)
     local width,height
     for _,area in pairs(self.positioning_frames) do
         if area.colorname then
-            pdfcolorstring = publisher.colors[area.colorname].pdfstring
+            pdfcolorstring = colors_module.colors[area.colorname].pdfstring
         else
             -- This is the default in the publisher
             pdfcolorstring = " 1 0 0 RG "

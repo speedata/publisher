@@ -9,6 +9,7 @@
 file_start("layout_functions_lxpath.lua")
 
 local de = require("dimexpr")
+local links_module = require("publisher.links")
 
 
 local luxor      = do_luafile("luxor.lua")
@@ -238,7 +239,7 @@ local function fnMergePagenumbers(dataxml, arg)
     publisher.stable_sort(withoutdupes, function(elta, eltb) return tonumber(elta) < tonumber(eltb) end)
     local gethyperlink
     if interaction then
-        gethyperlink = function(pagenum) return { hyperlink = publisher.hlpage(pagenum) } end
+        gethyperlink = function(pagenum) return { hyperlink = links_module.hlpage(publisher.options, pagenum) } end
     else
         gethyperlink = function(pagenum) return nil end
     end

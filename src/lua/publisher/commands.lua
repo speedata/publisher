@@ -11,6 +11,9 @@ file_start("commands.lua")
 require("publisher.fonts")
 require("publisher.tabular")
 local spotcolors = require("spotcolors")
+local metadata = require("publisher.metadata")
+local colors_module = require("publisher.colors")
+local links_module = require("publisher.links")
 local par  = require("par")
 local metapost = require("publisher.metapost")
 do_luafile("css.lua")
@@ -44,32 +47,41 @@ function commands.a( layoutxml,dataxml )
     local page = publisher.read_attribute(layoutxml,dataxml,"page","number")
     local embedded = publisher.read_attribute(layoutxml,dataxml,"embedded","string")
     local structelemobjnum = pdf.reserveobj()
+    local hyperlink_index
     if embedded then
-        publisher.hlembed(embedded,page,link,bordercolor)
+        -- hyperlinks, options, filename, page, link, bordercolor
+        links_module.hlembed(publisher.options, embedded, page, link, bordercolor)
     elseif link then
-        publisher.hllink(link,bordercolor)
+        links_module.hllink(publisher.options, link,bordercolor)
+        hyperlink_index = links_module.count()
         if publisher.options.format == "PDF/UA" then
-            publisher.hyperlinks[#publisher.hyperlinks]["/StructParent "] = #publisher.struct_root_numtree
-            publisher.hyperlinks[#publisher.hyperlinks]["/Contents "] = publisher.utf8_to_utf16_string_pdf(description)
+            links_module.set_fields(hyperlink_index, {
+                ["/StructParent "] = #publisher.struct_root_numtree,
+                ["/Contents "] = publisher.utf8_to_utf16_string_pdf(description),
+            })
             local tbl = setmetatable({ string.format("%d 0 R",structelemobjnum ) }, {__tostring = function(tbl) return rawget(tbl,1) end } )
             publisher.struct_root_numtree[#publisher.struct_root_numtree + 1] = tbl
         end
 
     elseif href then
-        publisher.hlurl(href,bordercolor)
+        links_module.hlurl(publisher.options, href, bordercolor)
+        hyperlink_index = links_module.count()
         if publisher.options.format == "PDF/UA" then
-            publisher.hyperlinks[#publisher.hyperlinks]["/StructParent "] = #publisher.struct_root_numtree
-            publisher.hyperlinks[#publisher.hyperlinks]["/Contents "] = publisher.utf8_to_utf16_string_pdf(description)
+            links_module.set_fields(hyperlink_index, {
+                ["/StructParent "] = #publisher.struct_root_numtree,
+                ["/Contents "] = publisher.utf8_to_utf16_string_pdf(description),
+            })
             local tbl = setmetatable({ string.format("%d 0 R",structelemobjnum ) }, {__tostring = function(tbl) return rawget(tbl,1) end } )
             publisher.struct_root_numtree[#publisher.struct_root_numtree + 1] = tbl
         end
     elseif page then
-        publisher.hlpage(page,bordercolor)
+        links_module.hlpage(publisher.options, page,bordercolor)
     else
         main.log("warn","A: You must provide either href, link, page or embedded attribute", lineinfo(layoutxml))
         p = par:new(nil,"a")
         return p
     end
+    hyperlink_index = hyperlink_index or links_module.count()
 
     if eltname == "Image" or eltname == "Box" or eltname == "Barcode" then
         local c
@@ -79,7 +91,7 @@ function commands.a( layoutxml,dataxml )
             c = tab[1].contents
         end
         local ai = publisher.get_action_node(3)
-        local data = publisher.hyperlinks[#publisher.hyperlinks]
+        local data = links_module.get(hyperlink_index)
         ai.data = tostring(data)
 
         local stl = node.new("whatsit","pdf_start_link")
@@ -99,7 +111,7 @@ function commands.a( layoutxml,dataxml )
         return c
     else
         p = par:new(nil,"a")
-        local ch = #publisher.hyperlinks
+        local ch = hyperlink_index
         for _,j in ipairs(tab) do
             local c = publisher.element_contents(j)
             local params = {hyperlink = ch}
@@ -293,7 +305,7 @@ function commands.attachfile( layoutxml,dataxml )
     end
 
     local description = publisher.read_attribute(layoutxml,dataxml,"description","string")
-    publisher.attach_file_pdf(filecontents,description,filetype,modificationtime,destfilename)
+    metadata.attach_file_pdf(filecontents,description,filetype,modificationtime,destfilename, publisher.filespecnumbers)
 end
 
 --- AtPageCreation
@@ -665,7 +677,7 @@ end
 --- Set the color of the enclosed text.
 function commands.color( layoutxml, dataxml )
     local colorname = publisher.read_attribute(layoutxml,dataxml,"name","string")
-    local colorindex = publisher.get_colorindex_from_name(colorname,"black")
+    local colorindex = colors_module.get_colorindex_from_name(colorname,"black")
 
     local p = par:new(nil,"color")
 
@@ -774,7 +786,7 @@ function commands.define_color( layoutxml,dataxml )
     local overprint  = publisher.read_attribute(layoutxml,dataxml,"overprint","boolean")
     local usecolorprofile = publisher.read_attribute(layoutxml,dataxml,"usecolorprofile","boolean",true)
 
-    local color = setmetatable({}, publisher.colormetatable)
+    local color = setmetatable({}, colors_module.colormetatable)
     color.overprint = overprint
     if alpha then
         publisher.transparentcolorstack()
@@ -836,7 +848,7 @@ function commands.define_color( layoutxml,dataxml )
 
     elseif value then
         local calpha
-        color.r,color.g,color.b,calpha = publisher.getrgb(value)
+        color.r,color.g,color.b,calpha = colors_module.getrgb(value)
         if calpha then
             color.alpha = calpha
         end
@@ -848,9 +860,9 @@ function commands.define_color( layoutxml,dataxml )
     end
 
     color.model = model
-    color.index = publisher.register_color(name)
+    color.index = colors_module.register_color(name)
     main.log("info","Define color","name",name,"index",color.index)
-    publisher.colors[name]=color
+    colors_module.colors[name]=color
 end
 
 
@@ -1933,7 +1945,7 @@ function commands.initial( layoutxml,dataxml)
         end
     end
     local box
-    box = publisher.mknodes(initialvalue,{fontfamily = fontfamily,color = publisher.get_colorindex_from_name(colorname,"black")})
+    box = publisher.mknodes(initialvalue,{fontfamily = fontfamily,color = colors_module.get_colorindex_from_name(colorname,"black")})
     box = publisher.addstrut(box,"head","initial")
     publisher.finish_par(box,nil,{})
     box = node.hpack(box)
@@ -3078,7 +3090,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     else
         fontfamily = nil
     end
-    local colorindex = publisher.get_colorindex_from_name(colorname)
+    local colorindex = colors_module.get_colorindex_from_name(colorname)
     local languagecode
     if language_name then
         languagecode = publisher.get_languagecode(language_name)
@@ -3971,7 +3983,7 @@ function commands.rule( layoutxml,dataxml )
     else
         dashpattern = ""
     end
-    local colentry = publisher.get_colentry_from_name(colorname,"black")
+    local colentry = colors_module.get_colentry_from_name(colorname,"black")
     if direction == "horizontal" then
         n.data = string.format("q %g w %s %s 0 0 m %g 0 l S Q",rulewidth, dashpattern, colentry.pdfstring,length)
     elseif direction == "vertical" then
@@ -4495,7 +4507,7 @@ function commands.span( layoutxml,dataxml )
     end
     local colornumber = nil
     if backgroundcolor then
-        colornumber = publisher.colors[backgroundcolor].index
+        colornumber = colors_module.colors[backgroundcolor].index
     end
     local languagecode
     if language_name then
@@ -5172,10 +5184,10 @@ function commands.text(layoutxml,dataxml)
 
     local colorindex
     if colorname then
-        if not publisher.colors[colorname] then
+        if not colors_module.colors[colorname] then
             main.log("error","Color is not defined","name",tostring(colorname))
         else
-            colorindex = publisher.colors[colorname].index
+            colorindex = colors_module.colors[colorname].index
         end
     end
     local save_color = publisher.current_fgcolor
@@ -5362,10 +5374,10 @@ function commands.textblock( layoutxml,dataxml )
 
     local colorindex
     if colorname then
-        if not publisher.colors[colorname] then
+        if not colors_module.colors[colorname] then
             main.log("error","Color is not defined","name",tostring(colorname))
         else
-            colorindex = publisher.colors[colorname].index
+            colorindex = colors_module.colors[colorname].index
         end
     end
 
@@ -5714,4 +5726,3 @@ end
 
 file_end("commands.lua")
 return commands
-

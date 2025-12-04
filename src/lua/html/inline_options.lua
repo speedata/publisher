@@ -3,6 +3,7 @@
 
 local fonts = require("html.fonts")
 local units = require("html.units")
+local colors_module = require("publisher.colors")
 
 local M = {}
 
@@ -104,13 +105,13 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
     -- Colors (foreground + background)
     local bg = styles["background-color"]
     if styles.color then
-        local fg_index = publisher.colors[styles.color].index
+        local fg_index = colors_module.colors[styles.color].index
         options.color = fg_index
         options.textdecorationcolor = fg_index
         styles.currentcolor = styles.color
     end
     if bg then
-        options.backgroundcolor = publisher.colors[bg].index
+        options.backgroundcolor = colors_module.colors[bg].index
     end
 
     -- Background paddings (publisher-specific extensions)

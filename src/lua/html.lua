@@ -9,6 +9,8 @@
 
 -- This is for the new HTML parser
 
+local links_module = require("publisher.links")
+
 local fonts = require("html.fonts")
 local images = require("html.images")
 local inherit = require("html.inherit")
@@ -166,7 +168,7 @@ function collect_horizontal_nodes( elt,parameter,before_box,origin,dataxml )
             local eltname = thiselt.elementname
             if eltname == "a" then
                 local href = attributes["href"]
-                options.add_attributes = { { "hyperlink", publisher.hlurl(href) } }
+                options.add_attributes = { { "hyperlink", links_module.hlurl(publisher.options, href) } }
             elseif eltname == "img" then
                 local box = inline_images.build_image_box(styles, attributes, dataxml)
                 thisret[#thisret + 1] = box
