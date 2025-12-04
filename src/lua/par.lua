@@ -130,24 +130,53 @@ end
 local function flatten(self,items,options,data)
     options = options or {}
     local ret = {}
+    local ret_len = 0
+    local opts_pool = {}
+    local function take_options(src)
+        local opts = table.remove(opts_pool) or {}
+        for k in pairs(opts) do opts[k] = nil end
+        for k,v in next,src,nil do opts[k] = v end
+        return opts
+    end
+    local function release_options(opts)
+        for k in pairs(opts) do opts[k] = nil end
+        opts_pool[#opts_pool + 1] = opts
+    end
+    local function append(v)
+        ret_len = ret_len + 1
+        ret[ret_len] = v
+    end
+    local copy_defaults = publisher.copy_table_from_defaults
+    local roles_a = publisher.roles_a
+    local pdf_ua = publisher.options.format == "PDF/UA"
+    local text_options_shared
     for i=1,#items do
         local thisself = items[i]
         local typ_thisself = type(thisself)
-        local new_options = publisher.copy_table_from_defaults(options)
-        if publisher.options.format == "PDF/UA" then
-            if options.role == 0 then
-                new_options.role = options.parentrole
-                new_options.id = publisher.roles_a[options.parentrole] .. "_" .. tostring(options.rolecounter)
-            elseif options.role then
-                new_options.id = publisher.roles_a[options.role] .. "_" .. tostring(options.rolecounter)
-                new_options.parent = options.id or options.parent
-            else
-                new_options.id = self.id
+        local reuse_text_opts = (typ_thisself == "string" or typ_thisself == "number" or typ_thisself == "boolean")
+        local new_options
+        if reuse_text_opts and text_options_shared then
+            new_options = text_options_shared
+        else
+            new_options = take_options(options)
+            if pdf_ua then
+                if options.role == 0 then
+                    new_options.role = options.parentrole
+                    new_options.id = roles_a[options.parentrole] .. "_" .. tostring(options.rolecounter)
+                elseif options.role then
+                    new_options.id = roles_a[options.role] .. "_" .. tostring(options.rolecounter)
+                    new_options.parent = options.id or options.parent
+                else
+                    new_options.id = self.id
+                end
+                new_options.parentrole = options.role
+                new_options.parentid = options.id
             end
-            new_options.parentrole = options.role
-            new_options.parentid = options.id
+            new_options.direction = new_options.direction or self.direction
+            if reuse_text_opts then
+                text_options_shared = new_options
+            end
         end
-        new_options.direction = new_options.direction or self.direction
         if typ_thisself == "table" and thisself.contents then
             -- w("par/flatten: type: table with contents")
             if thisself.options then
@@ -160,32 +189,32 @@ local function flatten(self,items,options,data)
                 if thisself.contents.id == publisher.whatsit_node and thisself.contents.subtype == publisher.user_defined_whatsit then
                     if type(thisself.contents.value) == "function" then
                         -- leaders and break_url
-                        table.insert(ret,thisself.contents.value(new_options))
+                        append(thisself.contents.value(new_options))
                     else
-                        table.insert(ret,thisself.contents)
+                        append(thisself.contents)
                     end
                     -- action node for example
                 else
-                    table.insert(ret,thisself.contents)
+                    append(thisself.contents)
                 end
             elseif type(thisself.contents) == "table" and thisself.contents.flatten_callback then
                 local f = thisself.contents.flatten_callback
                 thisself.contents.flatten_callback = nil
                 local tmp = f(thisself.contents,new_options)
                 for i=1,#tmp.objects do
-                    table.insert(ret,tmp.objects[i])
+                    append(tmp.objects[i])
                 end
             elseif type(thisself.contents) == "string" or type(thisself.contents) == "number" or type(thisself.contents) == "boolean" then
-                table.insert(ret,mktextnode(self,thisself.contents,new_options))
+                append(mktextnode(self,thisself.contents,new_options))
             else
                 local tmp = flatten(self,thisself.contents,new_options,data)
                 for i=1,#tmp do
-                    table.insert(ret,tmp[i])
+                    append(tmp[i])
                 end
             end
         elseif typ_thisself == "string" or typ_thisself == "number" or typ_thisself == "boolean" then
             -- w("par/flatten: type: string or similar")
-            table.insert(ret,mktextnode(self,thisself,new_options))
+            append(mktextnode(self,thisself,new_options))
         elseif typ_thisself == "table" and thisself[".__type"] == "element" and new_options.html ~= "off" then
             -- w("par/flatten: type: HTML")
             -- Now this is a bit strange and I should explain. The XML parser (luxor.lua)
@@ -208,7 +237,7 @@ local function flatten(self,items,options,data)
                 local text = thisself
                 local tmp = flatten(self,{text},new_options,data)
                 for j=1,#tmp do
-                    table.insert(ret,tmp[j])
+                    append(tmp[j])
                 end
             else
                 local htmltext = reconstruct_html_text(thisself)
@@ -276,7 +305,7 @@ local function flatten(self,items,options,data)
                                     publisher.setprop(tbc,"margin_top",margin_top)
                                     publisher.setprop(tbc,"padding_left",padding_left)
                                 end
-                                table.insert(ret,tbc)
+                                append(tbc)
                                 this_block_has_contents = true
                             end
                         end
@@ -291,12 +320,12 @@ local function flatten(self,items,options,data)
             if thisself.id == publisher.whatsit_node and thisself.subtype == publisher.user_defined_whatsit then
                 if type(thisself.value) == "function" then
                     -- leaders and break_url
-                    table.insert(ret,thisself.value(new_options))
+                    append(thisself.value(new_options))
                 else
-                    table.insert(ret,thisself)
+                    append(thisself)
                 end
             else
-                 table.insert(ret,thisself)
+                 append(thisself)
             end
         elseif typ_thisself == "table" and thisself.elementname == "SetVariable" then
             -- w("par/flatten: type: setvariable - ignore")
@@ -312,17 +341,20 @@ local function flatten(self,items,options,data)
                 tmp = flatten(self,{table_textvalue(thisself)},new_options, data)
             end
             for j=1,#tmp do
-                table.insert(ret,tmp[j])
+                append(tmp[j])
             end
         else
             -- w("par/flatten: type: unknown")
             -- w("typ_thisself %s",typ_thisself)
         end
+        if not (reuse_text_opts and new_options == text_options_shared) then
+            release_options(new_options)
+        end
     end
     for i=#items,1,-1 do
         items[i] = nil
     end
-    for i=1,#ret do
+    for i=1,ret_len do
         items[i] = ret[i]
     end
     return items

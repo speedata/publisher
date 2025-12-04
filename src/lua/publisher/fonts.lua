@@ -407,6 +407,18 @@ end
 do
     local curdir = {}
     function post_linebreak( head, list_head)
+        local get_attr = publisher.get_attribute
+        local get_attrs = publisher.get_attributes
+        local insert_bgcolor = insert_backgroundcolor
+        local insert_ul = insert_underline
+        local opts = publisher.options
+        local attr_table = {}
+        local attnum_td_line = publisher.attribute_name_number["text-decoration-line"]
+        local attnum_td_style = publisher.attribute_name_number["text-decoration-style"]
+        local attnum_td_color = publisher.attribute_name_number["text-decoration-color"]
+        local attnum_bgcolor = publisher.attribute_name_number["background-color"]
+        local attnum_bgpad_top = publisher.attribute_name_number["bgpaddingtop"]
+        local attnum_bgpad_bottom = publisher.attribute_name_number["bgpaddingbottom"]
         local underlinetype = nil
         local underlinestyle = nil
         local start_underline = nil
@@ -416,8 +428,9 @@ do
         local bgcolor_reverse = false
         local bg_padding_top = 0
         local bg_padding_bottom = 0
-        local reportmissingglyphs = publisher.options.reportmissingglyphs
+        local reportmissingglyphs = opts.reportmissingglyphs
         local lasthead = nil
+        local fast_path = not (opts.showhyphenation or opts.showkerning or reportmissingglyphs)
         while head do
             local pd = publisher.getprop(head,"pardir")
             if pd and #curdir == 0 then
@@ -433,19 +446,20 @@ do
                 local ldir
                 if texdir == "TLT" then ldir = "ltr" else ldir = "rtl" end
                 if mode == "+" then
-                    table.insert(curdir,ldir)
+                    curdir[#curdir + 1] = ldir
                 elseif mode == "-" then
-                    local x = table.remove(curdir)
+                    local x = curdir[#curdir]
+                    curdir[#curdir] = nil
                     if x ~= ldir then
                         warning("paragraph direction incorrect, found %s, expected %s",ldir,x)
                     end
                 end
                 if start_bgcolor then
-                    insert_backgroundcolor(list_head, head, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                    insert_bgcolor(list_head, head, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
                     start_bgcolor = nil
                 end
             elseif head.id == disc_node then -- disc
-                if publisher.options.showhyphenation then
+                if opts.showhyphenation then
                     -- Insert a small tick where the disc node is
                     local n = node.new("whatsit","pdf_literal")
                     n.mode = 0
@@ -455,21 +469,25 @@ do
                     node.insert_before(list_head,head,n)
                 end
             elseif head.id == kern_node then
-                local ul = publisher.get_attribute(head,"text-decoration-line")
-                local bgcolor = publisher.get_attribute(head,"background-color")
+                if fast_path and not start_underline and not start_bgcolor then
+                    goto continue_loop
+                end
+                local attrs = get_attrs(head, attr_table)
+                local ul = attrs[attnum_td_line]
+                local bgcolor = attrs[attnum_bgcolor]
                 if ul == nil then
                     if start_underline then
-                        insert_underline(list_head, head, start_underline,underlinetype,underlinestyle,underline_color)
+                        insert_ul(list_head, head, start_underline,underlinetype,underlinestyle,underline_color)
                         start_underline = nil
                     end
                 end
                 if bgcolor == nil then
                     if start_bgcolor then
-                        insert_backgroundcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                        insert_bgcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
                         start_bgcolor = nil
                     end
                 end
-                if publisher.options.showkerning then
+                if opts.showkerning then
                     -- Insert a small tick where the disc node is
                     local n = node.new("whatsit","pdf_literal")
                     n.mode = 0
@@ -477,15 +495,16 @@ do
                     node.insert_before(list_head,head,n)
                 end
             elseif head.id == glue_node then -- glue
-                local ul = publisher.get_attribute(head,"text-decoration-line")
-                local bgcolor = publisher.get_attribute(head,"background-color")
-                local paddingtop = publisher.get_attribute(head,"bgpaddingtop")
-                local paddingbottom = publisher.get_attribute(head,"bgpaddingbottom")
+                local attrs = get_attrs(head, attr_table)
+                local ul = attrs[attnum_td_line]
+                local bgcolor = attrs[attnum_bgcolor]
+                local paddingtop = attrs[attnum_bgpad_top]
+                local paddingbottom = attrs[attnum_bgpad_bottom]
 
                 -- at rightskip we must underline (if start exists)
                 if ul == nil or head.subtype == 9 then
                     if start_underline then
-                        insert_underline(list_head, head, start_underline,underlinetype,underlinestyle,underline_color)
+                        insert_ul(list_head, head, start_underline,underlinetype,underlinestyle,underline_color)
                         start_underline = nil
                     end
                 end
@@ -497,11 +516,17 @@ do
                     bg_padding_bottom = paddingbottom
             elseif bgcolor == nil or head.subtype == 9 then -- 9 == rightskip
                     if start_bgcolor then
-                        insert_backgroundcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                        insert_bgcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
                         start_bgcolor = nil
                     end
                 end
             elseif head.id == glyph_node then -- glyph
+                local attrs = get_attrs(head, attr_table)
+                local ul = attrs[attnum_td_line]
+                local bgcolor = attrs[attnum_bgcolor]
+                local underlinecolor = attrs[attnum_td_color]
+                local paddingtop = attrs[attnum_bgpad_top]
+                local paddingbottom = attrs[attnum_bgpad_bottom]
                 if reportmissingglyphs then
                     local thisfont = used_fonts[head.font]
                     if thisfont and not thisfont.characters[head.char] then
@@ -512,21 +537,16 @@ do
                         end
                     end
                 end
-                local ul = publisher.get_attribute(head,"text-decoration-line")
-                local bgcolor = publisher.get_attribute(head,"background-color")
-                local underlinecolor = publisher.get_attribute(head, "text-decoration-color")
-                local paddingtop = publisher.get_attribute(head,"bgpaddingtop")
-                local paddingbottom = publisher.get_attribute(head,"bgpaddingbottom")
                 if ul then
                     if not start_underline then
-                        underlinetype = publisher.get_attribute(head,"text-decoration-line")
-                        underlinestyle = publisher.get_attribute(head,"text-decoration-style")
+                        underlinetype = ul
+                        underlinestyle = attrs[attnum_td_style]
                         start_underline = head
                         underline_color = underlinecolor
                     end
                 else
                     if start_underline then
-                        insert_underline(list_head, head, start_underline, underlinetype,underlinestyle,underline_color)
+                        insert_ul(list_head, head, start_underline, underlinetype,underlinestyle,underline_color)
                         start_underline = nil
                     end
                 end
@@ -540,19 +560,20 @@ do
                     end
                 else
                     if start_bgcolor then
-                        insert_backgroundcolor(list_head, head, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                        insert_bgcolor(list_head, head, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
                         start_bgcolor = nil
                     end
                 end
             end
             lasthead = head
             head = head.next
+            ::continue_loop::
         end
         if start_bgcolor then
             -- If we have a bgcolor, we must insert it at the end of the list
             -- first we must add a dummy item
             local _, dummy = publisher.add_rule(lasthead,"tail",{width = 0, height = 0, depth = 0},"bgcolor dummy")
-            insert_backgroundcolor(list_head, dummy, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+            insert_bgcolor(list_head, dummy, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
         end
         return head
     end

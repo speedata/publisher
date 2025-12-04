@@ -4334,12 +4334,22 @@ function parse_html(elt, parameter, data)
     end
 end
 
-function get_attributes(nodelist)
-    local attributes = {}
-    local n = nodelist.attr
+-- Hot-path locals to avoid repeated global lookups
+local attribute_name_number_map = attribute_name_number
+local attributes_map = attributes
+
+function get_attributes(nodelist, reuse_table)
+    local attributes = reuse_table or {}
+    if reuse_table then
+        for k in pairs(reuse_table) do
+            reuse_table[k] = nil
+        end
+    end
+    local n = nodelist and nodelist.attr
     while n do
-        if n.number then
-            attributes[n.number] = n.value
+        local num = n.number
+        if num then
+            attributes[num] = n.value
         end
         n = n.next
     end
@@ -4349,24 +4359,25 @@ end
 -- Get an attribute value. If the attribute table entry has a table, return the
 -- string value of the attribute
 function get_attribute(nodelist,attribute_name)
-    local a = get_attributes(nodelist) or {}
-    local att_number = attribute_name_number[attribute_name]
-    local entry = attributes[attribute_name]
-    local val = a[att_number]
-    if not val then return nil end
+    if not nodelist then return nil end
+    local att_number = attribute_name_number_map[attribute_name]
+    if not att_number then return nil end
+    local entry = attributes_map[attribute_name]
+    local val = node.has_attribute(nodelist, att_number)
+    if val == nil then return nil end
     if type(entry) == "table" then
         return entry[val]
     end
-    return a[att_number]
+    return val
 end
 
 -- set_attribute sets an attribute for this node. The attribute name must be
 -- present in the global attribute list or a number from the list attribute_name_number.
 -- The value must be a number or a string value
 function set_attribute(nodelist,attribute_name,value)
-    local att_number = attribute_name_number[attribute_name]
+    local att_number = attribute_name_number_map[attribute_name]
     if not att_number then err("Internal error: attribute %s unknown",attribute_name or "?") return end
-    local entry = attributes[attribute_name]
+    local entry = attributes_map[attribute_name]
     local att_value
     if type(entry) == "table" then
         for k,v in ipairs(entry) do
@@ -4383,15 +4394,15 @@ function set_attribute(nodelist,attribute_name,value)
 end
 
 function clear_attribute(nodelist,attribute_name)
-    local att_number = attribute_name_number[attribute_name]
+    local att_number = attribute_name_number_map[attribute_name]
     if not att_number then err("Internal error: attribute %s unknown",attribute_name or "?") return end
-    local entry = attribute_name_number[attribute_name]
-    node.unset_attribute(nodelist,entry)
+    node.unset_attribute(nodelist,att_number)
 end
 
 
 -- list of attributes { key = val, key = val }
 function set_attributes(nodelist,att_tbl)
+    if att_tbl == nil then return end
     for k, v in pairs(att_tbl) do
         if k and v then
             local num = k
@@ -4406,6 +4417,29 @@ end
 --  in them. This is the fixed page layout, do not change it. Inserting nodes is
 --  okay, as long as the page structure is kept intact.
 function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewidth, pageheight )
+    local get_attr = get_attribute
+    local insert_nm = insert_nonmoving_whatsits
+    local setp = setprop
+    local getp = getprop
+    local set_attrs = set_attributes
+    local default_stack = defaultcolorstack
+    local opt_format = options.format
+    local links_get = links_module.get
+    local node_new = node.new
+    local node_insert_before = node.insert_before
+    local node_insert_after = node.insert_after
+    local node_set_attr = node.set_attribute
+    local attr_num_color = attribute_name_number_map["color"]
+    local attr_num_hyperlink = attribute_name_number_map["hyperlink"]
+    local roles_lookup = roles_a
+    local pdf_reserveobj = pdf.reserveobj
+    local spbp = sp_to_bp
+    local pages_tbl = pages
+    local attr_table_reuse = {}
+    local empty_attr_table = {}
+    local borderattrs = borderattributes
+    local colors = colors_module.colors
+    local colorname_table = colors_module.colortable
     local firsthead = head
     if not head then return {} end
     local fun
@@ -4415,46 +4449,53 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
     local currentfont = 1
     local rules = {}
     while head do
+        local attr_table
+        if head.attr then
+            attr_table = get_attributes(head, attr_table_reuse)
+            attr_table_reuse = attr_table
+        else
+            attr_table = empty_attr_table
+        end
         -- what is subtype 1?
         if head.id==hlist_node and head.subtype == 1 then
-            local r = insert_nonmoving_whatsits(head.list,head,"horizontal",curx,cury,pagewidth, pageheight)
+            local r = insert_nm(head.list,head,"horizontal",curx,cury,pagewidth, pageheight)
             for _, rule in ipairs(r) do
                 rules[#rules+1] = rule
             end
-            local bordernumber = get_attribute(head,"bordernumber")
+            local bordernumber = attr_table[attribute_name_number_map["bordernumber"]]
             if bordernumber then
-                local ba = borderattributes[bordernumber]
-                local wd,ht = get_attribute(head,"borderwd"),get_attribute(head,"borderht")
+                local ba = borderattrs[bordernumber]
+                local wd = attr_table[attribute_name_number_map["borderwd"]]
+                local ht = attr_table[attribute_name_number_map["borderht"]]
                 wd = wd - ba.border_left_width - ba.margin_right + ba.padding_left
-                setprop(head,"border_bottom_color",ba.border_bottom_color)
-                setprop(head,"border_bottom_left_radius",ba.border_bottom_left_radius)
-                setprop(head,"border_bottom_right_radius",ba.border_bottom_right_radius)
-                setprop(head,"border_bottom_style",ba.border_bottom_style)
-                setprop(head,"border_bottom_width",ba.border_bottom_width)
-                setprop(head,"border_left_color",ba.border_left_color)
-                setprop(head,"border_left_style",ba.border_left_style)
-                setprop(head,"border_left_width",ba.border_left_width)
-                setprop(head,"border_right_color",ba.border_right_color)
-                setprop(head,"border_right_style",ba.border_right_style)
-                setprop(head,"border_right_width",ba.border_right_width)
-                setprop(head,"border_top_color",ba.border_top_color)
-                setprop(head,"border_top_left_radius",ba.border_top_left_radius)
-                setprop(head,"border_top_right_radius",ba.border_top_right_radius)
-                setprop(head,"border_top_style",ba.border_top_style)
-                setprop(head,"border_top_width",ba.border_top_width)
-                setprop(head,"borderstart","true")
-                setprop(head,"debug","false")
-                setprop(head,"margin_bottom",ba.margin_bottom)
-                setprop(head,"margin_left",ba.margin_left)
-                setprop(head,"margin_right",ba.margin_right)
-                setprop(head,"margin_top",ba.margin_top)
-                setprop(head,"padding_bottom",ba.padding_bottom)
-                setprop(head,"padding_left",ba.padding_left)
-                setprop(head,"padding_right",ba.padding_right)
-                setprop(head,"padding_top",ba.padding_top)
-                setprop(head,"lineheight",ht)
-                setprop(head,"depth", parent.depth)
-                w("htmlbox (a)")
+                setp(head,"border_bottom_color",ba.border_bottom_color)
+                setp(head,"border_bottom_left_radius",ba.border_bottom_left_radius)
+                setp(head,"border_bottom_right_radius",ba.border_bottom_right_radius)
+                setp(head,"border_bottom_style",ba.border_bottom_style)
+                setp(head,"border_bottom_width",ba.border_bottom_width)
+                setp(head,"border_left_color",ba.border_left_color)
+                setp(head,"border_left_style",ba.border_left_style)
+                setp(head,"border_left_width",ba.border_left_width)
+                setp(head,"border_right_color",ba.border_right_color)
+                setp(head,"border_right_style",ba.border_right_style)
+                setp(head,"border_right_width",ba.border_right_width)
+                setp(head,"border_top_color",ba.border_top_color)
+                setp(head,"border_top_left_radius",ba.border_top_left_radius)
+                setp(head,"border_top_right_radius",ba.border_top_right_radius)
+                setp(head,"border_top_style",ba.border_top_style)
+                setp(head,"border_top_width",ba.border_top_width)
+                setp(head,"borderstart","true")
+                setp(head,"debug","false")
+                setp(head,"margin_bottom",ba.margin_bottom)
+                setp(head,"margin_left",ba.margin_left)
+                setp(head,"margin_right",ba.margin_right)
+                setp(head,"margin_top",ba.margin_top)
+                setp(head,"padding_bottom",ba.padding_bottom)
+                setp(head,"padding_left",ba.padding_left)
+                setp(head,"padding_right",ba.padding_right)
+                setp(head,"padding_top",ba.padding_top)
+                setp(head,"lineheight",ht)
+                setp(head,"depth", parent.depth)
                 local boxnode = htmlbox("horizontal", head, wd, parent.height, parent.depth)
                 local hbox = node.hpack(boxnode)
                 local g
@@ -4470,18 +4511,18 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
             end
             if blockinline == "vertical" then cury = cury + head.height + head.depth else curx = curx + head.width end
         elseif head.id==hlist_node or head.id == vlist_node then
-            local bordernumber = get_attribute(head,"bordernumber")
+            local bordernumber = attr_table[attribute_name_number_map["bordernumber"]]
             if bordernumber then
-                local boxnode = mpbox(borderattributes[bordernumber],head.width,head.height + head.depth)
-                parent.head = node.insert_before(parent.head,head,boxnode)
+                local boxnode = mpbox(borderattrs[bordernumber],head.width,head.height + head.depth)
+                parent.head = node_insert_before(parent.head,head,boxnode)
             end
             if head.id == hlist_node then
-                local r = insert_nonmoving_whatsits(head.list,head,"horizontal",curx,cury,pagewidth, pageheight)
+                local r = insert_nm(head.list,head,"horizontal",curx,cury,pagewidth, pageheight)
                 for _, rule in ipairs(r) do
                     rules[#rules+1] = rule
                 end
             else
-                local r = insert_nonmoving_whatsits(head.list,head,"vertical",curx,cury,pagewidth, pageheight)
+                local r = insert_nm(head.list,head,"vertical",curx,cury,pagewidth, pageheight)
                 for _, rule in ipairs(r) do
                     rules[#rules+1] = rule
                 end
@@ -4500,74 +4541,73 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                     local bot = pageheight - cury - head.height
                     local right = head.width + curx
                     local top = pageheight - cury
-                    setprop(head,"bbox",{ sp_to_bp(left),sp_to_bp(bot),sp_to_bp(right),sp_to_bp(top )})
-                end
-                if blockinline == "vertical" then cury = cury + head.height + head.depth else curx = curx + head.width end
+                setp(head,"bbox",{ sp_to_bp(left),sp_to_bp(bot),sp_to_bp(right),sp_to_bp(top )})
             end
+            if blockinline == "vertical" then cury = cury + head.height + head.depth else curx = curx + head.width end
+        end
 
-            local attribs = get_attributes(head)
-            local fgcolor = get_attribute(head,"color")
-            local bordernumber = get_attribute(head,"bordernumber")
+            local fgcolor = attr_table[attr_num_color]
+            local bordernumber = attr_table[attribute_name_number_map["bordernumber"]]
 
             if bordernumber then
-                local ba = borderattributes[bordernumber]
+                local ba = borderattrs[bordernumber]
                 local wd, ht
-                wd =  get_attribute(head,"borderwd")
-                ht = get_attribute(head,"borderht")
-                setprop(head,"border_bottom_color",ba.border_bottom_color)
-                setprop(head,"border_bottom_left_radius",ba.border_bottom_left_radius)
-                setprop(head,"border_bottom_right_radius",ba.border_bottom_right_radius)
-                setprop(head,"border_bottom_style",ba.border_bottom_style)
-                setprop(head,"border_bottom_width",ba.border_bottom_width)
-                setprop(head,"border_left_color",ba.border_left_color)
-                setprop(head,"border_left_style",ba.border_left_style)
-                setprop(head,"border_left_width",ba.border_left_width)
-                setprop(head,"border_right_color",ba.border_right_color)
-                setprop(head,"border_right_style",ba.border_right_style)
-                setprop(head,"border_right_width",ba.border_right_width)
-                setprop(head,"border_top_color",ba.border_top_color)
-                setprop(head,"border_top_left_radius",ba.border_top_left_radius)
-                setprop(head,"border_top_right_radius",ba.border_top_right_radius)
-                setprop(head,"border_top_style",ba.border_top_style)
-                setprop(head,"border_top_width",ba.border_top_width)
-                setprop(head,"borderstart","true")
-                setprop(head,"debug","false")
-                setprop(head,"margin_bottom",ba.margin_bottom)
-                setprop(head,"margin_left",ba.margin_left)
-                setprop(head,"margin_right",ba.margin_right)
-                setprop(head,"margin_top",ba.margin_top)
-                setprop(head,"padding_bottom",ba.padding_bottom)
-                setprop(head,"padding_left",ba.padding_left)
-                setprop(head,"padding_right",ba.padding_right)
-                setprop(head,"padding_top",ba.padding_top)
-                setprop(head,"lineheight",ht)
+                wd =  attr_table[attribute_name_number_map["borderwd"]]
+                ht = attr_table[attribute_name_number_map["borderht"]]
+                setp(head,"border_bottom_color",ba.border_bottom_color)
+                setp(head,"border_bottom_left_radius",ba.border_bottom_left_radius)
+                setp(head,"border_bottom_right_radius",ba.border_bottom_right_radius)
+                setp(head,"border_bottom_style",ba.border_bottom_style)
+                setp(head,"border_bottom_width",ba.border_bottom_width)
+                setp(head,"border_left_color",ba.border_left_color)
+                setp(head,"border_left_style",ba.border_left_style)
+                setp(head,"border_left_width",ba.border_left_width)
+                setp(head,"border_right_color",ba.border_right_color)
+                setp(head,"border_right_style",ba.border_right_style)
+                setp(head,"border_right_width",ba.border_right_width)
+                setp(head,"border_top_color",ba.border_top_color)
+                setp(head,"border_top_left_radius",ba.border_top_left_radius)
+                setp(head,"border_top_right_radius",ba.border_top_right_radius)
+                setp(head,"border_top_style",ba.border_top_style)
+                setp(head,"border_top_width",ba.border_top_width)
+                setp(head,"borderstart","true")
+                setp(head,"debug","false")
+                setp(head,"margin_bottom",ba.margin_bottom)
+                setp(head,"margin_left",ba.margin_left)
+                setp(head,"margin_right",ba.margin_right)
+                setp(head,"margin_top",ba.margin_top)
+                setp(head,"padding_bottom",ba.padding_bottom)
+                setp(head,"padding_left",ba.padding_left)
+                setp(head,"padding_right",ba.padding_right)
+                setp(head,"padding_top",ba.padding_top)
+                setp(head,"lineheight",ht)
                 if blockinline == "vertical" then
                     wd = wd - ba.border_left_width - ba.margin_left - ba.padding_left - ba.margin_right
-                    setprop(head,"shiftdown",ht + ba.padding_top + ba.border_top_width + ba.margin_top)
-                    setprop(head,"shiftright",ba.border_left_width + ba.margin_left + ba.padding_left)
+                    setp(head,"shiftdown",ht + ba.padding_top + ba.border_top_width + ba.margin_top)
+                    setp(head,"shiftright",ba.border_left_width + ba.margin_left + ba.padding_left)
                 else
                     ht = parent.height + parent.depth
-                    setprop(head,"lineheight",ht)
+                    setp(head,"lineheight",ht)
                     wd = parent.width - ba.border_left_width - ba.margin_left - ba.border_right_width - ba.margin_right
                     ht = head.height + head.depth
                 end
 
                 local boxnode = htmlbox(blockinline, head, wd, parent.height,parent.depth)
-                parent.head = node.insert_before(parent.head,head,boxnode)
-                setprop(head,"borderstart",false)
+                parent.head = node_insert_before(parent.head,head,boxnode)
+                setp(head,"borderstart",false)
             end
-            local transparency  = getprop(head,"opacity")
-            local bbox          = getprop(head,"bbox")
-            local hl            = get_attribute(head,"hyperlink") or getprop(head,"hyperlink")
+            local transparency  = getp(head,"opacity")
+            local bbox          = getp(head,"bbox")
+            local hl            = attr_table[attr_num_hyperlink] or getp(head,"hyperlink")
             local role, structelemobjnum, id, parentid, rc, actualtext, alttext
-            if options.format == "PDF/UA" then
-                actualtext    = getprop(head,"actualtext")
-                alttext       = getprop(head,"alttext")
-                role          = getprop(head,"role")
-                structelemobjnum = getprop(head,"structelemobjnum")
-                id            = getprop(head,"id")
-                parentid      = getprop(head,"parent")
-                rc            = getprop(head,"rolecounter")
+            if opt_format == "PDF/UA" then
+                actualtext    = getp(head,"actualtext")
+                alttext       = getp(head,"alttext")
+                role          = getp(head,"role")
+                structelemobjnum = getp(head,"structelemobjnum")
+                id            = getp(head,"id")
+                parentid      = getp(head,"parent")
+                rc            = getp(head,"rolecounter")
             end
             if head.id == glyph_node then
                 currentfont = head.font
@@ -4578,230 +4618,236 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                 end
             end
 
-            local insert_startlink = false
-            local insert_endlink = false
-            local insert_startcolor = false
-            local insert_endcolor = false
-            local insert_startrole = false
-            local insert_endrole = false
+            -- Fast path: skip annotation work when no colors/links/roles/opacity are present
+            local needs_annotations = fgcolor or prev_fgcolor or hl or prev_hyperlink or role or prev_role or transparency
+            if needs_annotations then
+                local insert_startlink = false
+                local insert_endlink = false
+                local insert_startcolor = false
+                local insert_endcolor = false
+                local insert_startrole = false
+                local insert_endrole = false
 
-            if fgcolor and head.next == nil then
-                -- at end insert endcolor if in color mode
-                if prev_fgcolor == nil  then
-                    insert_startcolor = true
-                end
-                insert_endcolor = true
-                prev_fgcolor = nil
-            elseif fgcolor ~= prev_fgcolor then
-                -- 1: fgcolor nil and prev_fgcolor != nil
-                -- 2: fgcolor val and prev_fgcolor diff val
-                -- 3: fgcolor val and prev_fgcolor nil
-                if fgcolor == nil and prev_fgcolor then
-                    -- 1
+                if fgcolor and head.next == nil then
+                    -- at end insert endcolor if in color mode
+                    if prev_fgcolor == nil  then
+                        insert_startcolor = true
+                    end
                     insert_endcolor = true
-                elseif fgcolor and prev_fgcolor then
-                    -- 2
-                    insert_endcolor = true
-                    insert_startcolor = true
-                else
-                    -- 3
-                    insert_startcolor = true
+                    prev_fgcolor = nil
+                elseif fgcolor ~= prev_fgcolor then
+                    -- 1: fgcolor nil and prev_fgcolor != nil
+                    -- 2: fgcolor val and prev_fgcolor diff val
+                    -- 3: fgcolor val and prev_fgcolor nil
+                    if fgcolor == nil and prev_fgcolor then
+                        -- 1
+                        insert_endcolor = true
+                    elseif fgcolor and prev_fgcolor then
+                        -- 2
+                        insert_endcolor = true
+                        insert_startcolor = true
+                    else
+                        -- 3
+                        insert_startcolor = true
+                    end
+                    prev_fgcolor = fgcolor
                 end
-                prev_fgcolor = fgcolor
-            end
 
-            if role and ( head.next == nil or head.next.id == vlist_node or head.next.id == hlist_node )  then
-                -- at end insert endrole if in role mode
-                if prev_role == nil  then
-                    insert_startrole = true
-                end
-                insert_endrole = true
-                nonextnode = true
-            elseif role ~= prev_role then
-                -- 1: role nil and prev_role != nil
-                -- 2: role val and prev_role diff val
-                -- 3: role val and prev_role nil
-                if role == nil and prev_role then
-                    -- 1
+                if role and ( head.next == nil or head.next.id == vlist_node or head.next.id == hlist_node )  then
+                    -- at end insert endrole if in role mode
+                    if prev_role == nil  then
+                        insert_startrole = true
+                    end
                     insert_endrole = true
-                elseif role and prev_role then
-                    -- 2
-                    insert_endrole = true
-                    insert_startrole = true
-                else
-                    -- 3
-                    insert_startrole = true
+                    nonextnode = true
+                elseif role ~= prev_role then
+                    -- 1: role nil and prev_role != nil
+                    -- 2: role val and prev_role diff val
+                    -- 3: role val and prev_role nil
+                    if role == nil and prev_role then
+                        -- 1
+                        insert_endrole = true
+                    elseif role and prev_role then
+                        -- 2
+                        insert_endrole = true
+                        insert_startrole = true
+                    else
+                        -- 3
+                        insert_startrole = true
+                    end
                 end
-            end
-            -- case 1: link ends at the end of the list
-            --         this is due to a (line-) broken link
-            --         => end link
-            --  case 2: hyperlink value of the node changes
-            --         either insert a start link or an end link marker
-            if hl and head.next == nil and linklevel > 0 then
-                insert_endlink = true
-                prev_hyperlink = nil
-            elseif hl ~= prev_hyperlink then
-                if hl ~= nil then
-                    insert_startlink = true
-                    prev_hyperlink = hl
-                else
+                -- case 1: link ends at the end of the list
+                --         this is due to a (line-) broken link
+                --         => end link
+                --  case 2: hyperlink value of the node changes
+                --         either insert a start link or an end link marker
+                if hl and head.next == nil and linklevel > 0 then
                     insert_endlink = true
                     prev_hyperlink = nil
+                elseif hl ~= prev_hyperlink then
+                    if hl ~= nil then
+                        insert_startlink = true
+                        prev_hyperlink = hl
+                    else
+                        insert_endlink = true
+                        prev_hyperlink = nil
+                    end
                 end
-            end
-            if head.next == nil then
-                insert_startlink = false
-            end
-            if insert_endlink then
-                linklevel = linklevel - 1
-                local enl = node.new("whatsit","pdf_end_link")
-                parent.head = node.insert_before(parent.head,head,enl)
-                if insert_endrole then
-                    local emc = node.new("whatsit","pdf_literal")
-                    emc.data = "EMC"
-                    emc.mode = 1
-                    setprop(emc,"origin","insert_endrole")
-                    node.insert_after(parent.head,enl,emc)
-                    insert_endrole = false
+                if head.next == nil then
+                    insert_startlink = false
                 end
-            end
-            if insert_startlink then
-                linklevel = linklevel + 1
-                -- 3 = user
-                local ai = get_action_node(3)
-                ai.data = tostring(links_module.get(hl))
-                local stl = node.new("whatsit","pdf_start_link")
-                stl.action = ai
-                stl.width = -1073741824
-                stl.height = -1073741824
-                stl.depth = -1073741824
-                stl.objnum = pdf.reserveobj()
-                parent.head = node.insert_before(parent.head,head,stl)
-                if insert_endrole then
-                    local emc = node.new("whatsit","pdf_literal")
-                    emc.data = "EMC"
-                    emc.mode = 1
-                    setprop(emc,"origin","insert_endrole")
-                    parent.head = node.insert_before(parent.head,stl,emc)
-                    insert_endrole = false
+                if insert_endlink then
+                    linklevel = linklevel - 1
+                    local enl = node_new("whatsit","pdf_end_link")
+                    parent.head = node_insert_before(parent.head,head,enl)
+                    if insert_endrole then
+                        local emc = node_new("whatsit","pdf_literal")
+                        emc.data = "EMC"
+                        emc.mode = 1
+                        setp(emc,"origin","insert_endrole")
+                        node_insert_after(parent.head,enl,emc)
+                        insert_endrole = false
+                    end
+                end
+                if insert_startlink then
+                    linklevel = linklevel + 1
+                    -- 3 = user
+                    local ai = get_action_node(3)
+                    ai.data = tostring(links_get(hl))
+                    local stl = node_new("whatsit","pdf_start_link")
+                    stl.action = ai
+                    stl.width = -1073741824
+                    stl.height = -1073741824
+                    stl.depth = -1073741824
+                    stl.objnum = pdf_reserveobj()
+                    parent.head = node_insert_before(parent.head,head,stl)
+                    if insert_endrole then
+                        local emc = node_new("whatsit","pdf_literal")
+                        emc.data = "EMC"
+                        emc.mode = 1
+                        setp(emc,"origin","insert_endrole")
+                        parent.head = node_insert_before(parent.head,stl,emc)
+                        insert_endrole = false
+                    end
+
+                    if insert_startrole then
+                        local bdc = node_new("whatsit","pdf_literal")
+                        node_set_attr(bdc,att_role, role)
+                        setp(bdc,"parentid", parentid)
+                        setp(bdc,"rolecounter", rc)
+                        setp(bdc,"id",id)
+                        setp(bdc,"bbox",bbox)
+                        setp(bdc,"actualtext",actualtext)
+                        setp(bdc,"origin","insert_startrole")
+                        setp(bdc,"structelemobjnum",structelemobjnum)
+                        setp(bdc,"linkobjnum",stl.objnum)
+                        bdc.data = ""
+                        bdc.mode = 1
+                        parent.head = node_insert_before(parent.head,stl,bdc)
+                        head = head.next
+                        insert_startrole = false
+                    end
+
                 end
 
+                -- refresh attribute table once per node for color stacks
+                attr_table = attr_table -- already refreshed above
+                if insert_endcolor then
+                    local colstop = node_new("whatsit","pdf_colorstack")
+                    set_attrs(colstop,attr_table)
+                    colstop.data = ""
+                    colstop.command = 2
+                    colstop.stack = default_stack
+                    setp(colstop,"origin","setcolor")
+                    if fgcolor and not prev_fgcolor then
+                        parent.head = node_insert_after(parent.head,head,colstop)
+                        head = head.next
+                    else
+                        parent.head = node_insert_before(parent.head,head,colstop)
+                    end
+                end
+                if insert_startcolor then
+                    local colstart = node_new("whatsit","pdf_colorstack")
+                    set_attrs(colstart,attr_table)
+                    local colorname = colorname_table[fgcolor]
+                    local colorentry = colors[colorname]
+                    local col = colorentry.pdfstring
+                    local alpha = colorentry.alpha
+                    if alpha then
+                        local thispage = pages[current_pagenumber]
+                        thispage.transparenttext = thispage.transparenttext or {}
+                        thispage.transparenttext[alpha] = true
+                        col = col .. string.format("/TRP%d gs",alpha )
+                    end
+                    colstart.data = col
+                    colstart.command = 1
+                    colstart.stack = default_stack
+
+                    setp(colstart,"origin","setcolor")
+                    parent.head = node_insert_before(parent.head,head,colstart)
+                end
+                if insert_endrole then
+                    local emc = node_new("whatsit","pdf_literal")
+                    emc.data = "EMC"
+                    emc.mode = 1
+                    setp(emc,"origin","insert_endrole")
+                    if nonextnode and prev_role then
+                        parent.head = node_insert_after(parent.head,head,emc)
+                        head = head.next
+                    elseif prev_role then
+                        parent.head = node_insert_before(parent.head,head,emc)
+                    else
+                        -- single item?
+                        local bdc = node_new("whatsit","pdf_literal")
+                        node_set_attr(bdc,att_role, role)
+                        setp(bdc,"parentid", parentid)
+                        setp(bdc,"rolecounter", rc)
+                        setp(bdc,"bbox",bbox)
+                        setp(bdc,"id",id)
+                        setp(bdc,"actualtext",actualtext)
+                        setp(bdc,"alttext",alttext)
+                        setp(bdc,"rolename",tostring(roles_lookup[role]))
+                        setp(bdc,"origin","insert_startrole")
+                        bdc.data = ""
+                        bdc.mode = 1
+                        parent.head = node_insert_before(parent.head,head,bdc)
+
+                        parent.head = node_insert_after(parent.head,head,emc)
+                        head = emc
+                        insert_startrole = false
+                    end
+                end
                 if insert_startrole then
-                    local bdc = node.new("whatsit","pdf_literal")
-                    node.set_attribute(bdc,att_role, role)
-                    setprop(bdc,"parentid", parentid)
-                    setprop(bdc,"rolecounter", rc)
-                    setprop(bdc,"id",id)
-                    setprop(bdc,"bbox",bbox)
-                    setprop(bdc,"actualtext",actualtext)
-                    setprop(bdc,"origin","insert_startrole")
-                    setprop(bdc,"structelemobjnum",structelemobjnum)
-                    setprop(bdc,"linkobjnum",stl.objnum)
+                    local bdc = node_new("whatsit","pdf_literal")
+                    node_set_attr(bdc,att_role, role)
+                    setp(bdc,"parentid", parentid)
+                    setp(bdc,"rolecounter", rc)
+                    setp(bdc,"bbox",bbox)
+                    setp(bdc,"id",id)
+                    setp(bdc,"actualtext",actualtext)
+                    setp(bdc,"alttext",alttext)
+                    setp(bdc,"rolename",tostring(roles_lookup[role]))
+                    setp(bdc,"origin","insert_startrole")
                     bdc.data = ""
                     bdc.mode = 1
-                    parent.head = node.insert_before(parent.head,stl,bdc)
+                    parent.head = node_insert_before(parent.head,head,bdc)
+                end
+                prev_role = role
+
+                if transparency then
+                    local colstart = node_new("whatsit","pdf_colorstack")
+                    colstart.data = string.format("/TRP%d gs",transparency )
+                    colstart.command = 1
+                    colstart.stack = default_stack
+                    current_page.transparenttext[transparency] = true
+
+                    local colend = node_new("whatsit","pdf_colorstack")
+                    colend.command = 2
+                    colend.stack = default_stack
+                    parent.head = node_insert_before(parent.head,head,colstart)
+                    node_insert_after(parent.head,head,colend)
                     head = head.next
-                    insert_startrole = false
                 end
-
-            end
-
-            if insert_endcolor then
-                local colstop = node.new("whatsit","pdf_colorstack")
-                set_attributes(colstop,attribs)
-                colstop.data = ""
-                colstop.command = 2
-                colstop.stack = defaultcolorstack
-                setprop(colstop,"origin","setcolor")
-                if fgcolor and not prev_fgcolor then
-                    parent.head = node.insert_after(parent.head,head,colstop)
-                    head = head.next
-                else
-                    parent.head = node.insert_before(parent.head,head,colstop)
-                end
-            end
-            if insert_startcolor then
-                local colstart = node.new("whatsit","pdf_colorstack")
-                set_attributes(colstart,attribs)
-                local colorname = colors_module.colortable[fgcolor]
-                local colorentry = colors_module.colors[colorname]
-                local col = colorentry.pdfstring
-                local alpha = colorentry.alpha
-                if alpha then
-                    local thispage = pages[current_pagenumber]
-                    thispage.transparenttext = thispage.transparenttext or {}
-                    thispage.transparenttext[alpha] = true
-                    col = col .. string.format("/TRP%d gs",alpha )
-                end
-                colstart.data = col
-                colstart.command = 1
-                colstart.stack = defaultcolorstack
-
-                setprop(colstart,"origin","setcolor")
-                parent.head = node.insert_before(parent.head,head,colstart)
-            end
-            if insert_endrole then
-                local emc = node.new("whatsit","pdf_literal")
-                emc.data = "EMC"
-                emc.mode = 1
-                setprop(emc,"origin","insert_endrole")
-                if nonextnode and prev_role then
-                    parent.head = node.insert_after(parent.head,head,emc)
-                    head = head.next
-                elseif prev_role then
-                    parent.head = node.insert_before(parent.head,head,emc)
-                else
-                    -- single item?
-                    local bdc = node.new("whatsit","pdf_literal")
-                    node.set_attribute(bdc,att_role, role)
-                    setprop(bdc,"parentid", parentid)
-                    setprop(bdc,"rolecounter", rc)
-                    setprop(bdc,"bbox",bbox)
-                    setprop(bdc,"id",id)
-                    setprop(bdc,"actualtext",actualtext)
-                    setprop(bdc,"alttext",alttext)
-                    setprop(bdc,"rolename",tostring(roles_a[role]))
-                    setprop(bdc,"origin","insert_startrole")
-                    bdc.data = ""
-                    bdc.mode = 1
-                    parent.head = node.insert_before(parent.head,head,bdc)
-
-                    parent.head = node.insert_after(parent.head,head,emc)
-                    head = emc
-                    insert_startrole = false
-                end
-            end
-            if insert_startrole then
-                local bdc = node.new("whatsit","pdf_literal")
-                node.set_attribute(bdc,att_role, role)
-                setprop(bdc,"parentid", parentid)
-                setprop(bdc,"rolecounter", rc)
-                setprop(bdc,"bbox",bbox)
-                setprop(bdc,"id",id)
-                setprop(bdc,"actualtext",actualtext)
-                setprop(bdc,"alttext",alttext)
-                setprop(bdc,"rolename",tostring(roles_a[role]))
-                setprop(bdc,"origin","insert_startrole")
-                bdc.data = ""
-                bdc.mode = 1
-                parent.head = node.insert_before(parent.head,head,bdc)
-            end
-            prev_role = role
-
-            if transparency then
-                local colstart = node.new("whatsit","pdf_colorstack")
-                colstart.data = string.format("/TRP%d gs",transparency )
-                colstart.command = 1
-                colstart.stack = defaultcolorstack
-                current_page.transparenttext[transparency] = true
-
-                local colend = node.new("whatsit","pdf_colorstack")
-                colend.command = 2
-                colend.stack = defaultcolorstack
-                parent.head = node.insert_before(parent.head,head,colstart)
-                node.insert_after(parent.head,head,colend)
-                head = head.next
             end
 
             -- HTML inline border
@@ -5220,6 +5266,8 @@ function hbglyphlist(arguments)
     local thislang = arguments.thislang
     local fontnumber = arguments.fontnumber
     local is_cjk = arguments.is_cjk
+    local decoration_active = parameter.textdecorationline ~= nil
+    local background_active = parameter.backgroundcolor ~= nil
 
     local thisfont = fonts.used_fonts[fontnumber]
     local reportmissingglyphs = options.reportmissingglyphs
@@ -5298,54 +5346,55 @@ function hbglyphlist(arguments)
             -- ignore
         elseif uc == 32 or tabregularspace then
             local thiscluster = thisglyph.cluster
-            if cluster[thiscluster] == 160 then -- no break space
+            local thisclustervalue = cluster[thiscluster]
+            if thisclustervalue == 160 then -- no break space
                 n = node.new("penalty")
                 n.penalty = 10000
                 list,cur = node.insert_after(list,cur,n)
                 n = set_glue(nil,{width = space, shrink = shrink, stretch = stretch},"uc=32,160")
                 node.set_attribute(n,att_tie_glue,1)
                 list,cur = node.insert_after(list,cur,n)
-            elseif cluster[thiscluster] == 8194 then -- en space
+            elseif thisclustervalue == 8194 then -- en space
                 n = set_glue(nil,{width = thistbl.parameters.enspace },"uc=8194")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
                 list,cur = node.insert_after(list,cur,n)
-            elseif cluster[thiscluster] == 8195 then -- em space
+            elseif thisclustervalue == 8195 then -- em space
                 n = set_glue(nil,{width = thistbl.parameters.emspace },"uc=8195")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
                 list,cur = node.insert_after(list,cur,n)
-            elseif cluster[thiscluster] == 8196 then -- three per em space
+            elseif thisclustervalue == 8196 then -- three per em space
                 n = set_glue(nil,{width = thistbl.parameters.thirdspace },"uc=8196")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
                 list,cur = node.insert_after(list,cur,n)
-            elseif cluster[thiscluster] == 8197 then -- four per em space
+            elseif thisclustervalue == 8197 then -- four per em space
                 n = set_glue(nil,{width = thistbl.parameters.quarterspace },"uc=8197")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
                 list,cur = node.insert_after(list,cur,n)
-            elseif cluster[thiscluster] == 8198 then -- six per em space
+            elseif thisclustervalue == 8198 then -- six per em space
                 n = set_glue(nil,{width = thistbl.parameters.sixthspace },"uc=8198")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
                 list,cur = node.insert_after(list,cur,n)
-            elseif cluster[thiscluster] == 8201 then -- thin space
+            elseif thisclustervalue == 8201 then -- thin space
                 n = set_glue(nil,{width = thistbl.parameters.thinspace },"uc=8201")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
                 list,cur = node.insert_after(list,cur,n)
-            elseif cluster[thiscluster] == 8202 then -- hair space
+            elseif thisclustervalue == 8202 then -- hair space
                 n = set_glue(nil,{width = thistbl.parameters.hairspace},"uc=8202")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
                 list,cur = node.insert_after(list,cur,n)
-            elseif cluster[thiscluster] == 8203 then
+            elseif thisclustervalue == 8203 then
                 -- U+200B ZERO WIDTH SPACE
                 p = node.new("penalty")
                 p.penalty = -10
                 list,cur = node.insert_after(list,cur,p)
-            elseif cluster[thiscluster] == 8205 then
+            elseif thisclustervalue == 8205 then
                 -- U+200D ZERO WIDTH JOINER
                 -- ignore
             elseif preserve_whitespace then
@@ -5357,13 +5406,13 @@ function hbglyphlist(arguments)
                 set_attribute(n,"spaceglue",1)
                 list,cur = node.insert_after(list,cur,n)
             end
-            if parameter.textdecorationline then
+            if decoration_active then
                 set_attribute(n,"text-decoration-line",parameter.textdecorationline)
                 set_attribute(n,"text-decoration-style",parameter.textdecorationstyle)
                 set_attribute(n,"text-decoration-color",current_fgcolor)
             end
 
-            if parameter.backgroundcolor then
+            if background_active then
                 set_attribute(n,"background-color",parameter.backgroundcolor)
                 if parameter.bg_padding_top then
                     set_attribute(n,"bgpaddingtop",parameter.bg_padding_top)
