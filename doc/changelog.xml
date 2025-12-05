@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.12" date="2025-12-05">
+      <en>Add global html option in Options command and --option html=off command line flag to control HTML parsing.</en>
+      <de>Füge globale html-Option im Options-Befehl und --option html=off Kommandozeilen-Flag hinzu, um HTML-Parsing zu steuern.</de>
+    </entry>
     <entry version="5.3.11" date="2025-12-04">
       <en>Improve typesetting performance with early exits, cached lookups, and leaner attribute handling in mknodes.</en>
       <de>Beschleunigt den Schriftsatz mit frühen Abbrüchen, gecachten Zugriffen und schlankerer Attributbehandlung in mknodes.</de>
