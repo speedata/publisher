@@ -12,3 +12,5 @@ src/lua/nodetree.lua
 TODO
 /rakelib
 /target
+CLAUDE.md
+settings.local.json
