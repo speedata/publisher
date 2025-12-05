@@ -134,7 +134,13 @@ attribute_name_number = {}
 attribute_number_name = {}
 do
     local c = 1
+    local sorted_keys = {}
+    -- attribute sorting is just for debugging purposes
     for k, _ in pairs(attributes) do
+        sorted_keys[#sorted_keys + 1] = k
+    end
+    table.sort(sorted_keys)
+    for _, k in ipairs(sorted_keys) do
         attribute_name_number[k] = c
         attribute_number_name[c] = k
         c = c + 1

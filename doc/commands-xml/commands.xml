@@ -6530,6 +6530,38 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="html" optional="yes" since="5.3.12">
+      <description xml:lang="en">
+        <para>Default setting for HTML parsing in paragraphs. Can be overridden locally in <cmd name="Paragraph"/>. Setting this to 'off' can significantly improve typesetting performance when HTML tags like &lt;b&gt; or &lt;i&gt; are not used.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Voreinstellung für HTML-Parsing in Absätzen. Kann lokal in <cmd name="Paragraph"/> überschrieben werden. Das Setzen auf 'off' kann die Performance deutlich verbessern, wenn keine HTML-Tags wie &lt;b&gt; oder &lt;i&gt; verwendet werden.</para>
+      </description>
+      <choice en="all">
+        <description xml:lang="en">
+          <para>Parse HTML in all paragraphs (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>HTML in allen Absätzen parsen (Voreinstellung).</para>
+        </description>
+      </choice>
+      <choice en="inner">
+        <description xml:lang="en">
+          <para>Parse HTML only in child elements of the current data element.</para>
+        </description>
+        <description xml:lang="de">
+          <para>HTML nur in Kindelementen des aktuellen Datenelements parsen.</para>
+        </description>
+      </choice>
+      <choice en="off">
+        <description xml:lang="en">
+          <para>Disable HTML parsing in paragraphs.</para>
+        </description>
+        <description xml:lang="de">
+          <para>HTML-Parsing in Absätzen deaktivieren.</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="imagenotfound" optional="yes" since="2.3.43">
       <description xml:lang="en">
         <para>When an image is not found: should the publisher raise an error?</para>

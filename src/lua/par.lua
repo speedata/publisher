@@ -150,10 +150,19 @@ local function flatten(self,items,options,data)
     local roles_a = publisher.roles_a
     local pdf_ua = publisher.options.format == "PDF/UA"
     local text_options_shared
-    for i=1,#items do
+    local items_len = #items
+    -- Cache type strings to avoid repeated string comparisons
+    local type_string = "string"
+    local type_number = "number"
+    local type_boolean = "boolean"
+    local type_table = "table"
+    local type_userdata = "userdata"
+    local type_function = "function"
+    local default_css_text = publisher.css:gettext()
+    for i=1,items_len do
         local thisself = items[i]
         local typ_thisself = type(thisself)
-        local reuse_text_opts = (typ_thisself == "string" or typ_thisself == "number" or typ_thisself == "boolean")
+        local reuse_text_opts = (typ_thisself == type_string or typ_thisself == type_number or typ_thisself == type_boolean)
         local new_options
         if reuse_text_opts and text_options_shared then
             new_options = text_options_shared
@@ -177,7 +186,7 @@ local function flatten(self,items,options,data)
                 text_options_shared = new_options
             end
         end
-        if typ_thisself == "table" and thisself.contents then
+        if typ_thisself == type_table and thisself.contents then
             -- w("par/flatten: type: table with contents")
             if thisself.options then
                 for key,value in next,thisself.options,nil do
@@ -197,14 +206,14 @@ local function flatten(self,items,options,data)
                 else
                     append(thisself.contents)
                 end
-            elseif type(thisself.contents) == "table" and thisself.contents.flatten_callback then
+            elseif type(thisself.contents) == type_table and thisself.contents.flatten_callback then
                 local f = thisself.contents.flatten_callback
                 thisself.contents.flatten_callback = nil
                 local tmp = f(thisself.contents,new_options)
                 for i=1,#tmp.objects do
                     append(tmp.objects[i])
                 end
-            elseif type(thisself.contents) == "string" or type(thisself.contents) == "number" or type(thisself.contents) == "boolean" then
+            elseif type(thisself.contents) == type_string or type(thisself.contents) == type_number or type(thisself.contents) == type_boolean then
                 append(mktextnode(self,thisself.contents,new_options))
             else
                 local tmp = flatten(self,thisself.contents,new_options,data)
@@ -212,10 +221,10 @@ local function flatten(self,items,options,data)
                     append(tmp[i])
                 end
             end
-        elseif typ_thisself == "string" or typ_thisself == "number" or typ_thisself == "boolean" then
+        elseif typ_thisself == type_string or typ_thisself == type_number or typ_thisself == type_boolean then
             -- w("par/flatten: type: string or similar")
             append(mktextnode(self,thisself,new_options))
-        elseif typ_thisself == "table" and thisself[".__type"] == "element" and new_options.html ~= "off" then
+        elseif typ_thisself == type_table and thisself[".__type"] == "element" and new_options.html ~= "off" then
             -- w("par/flatten: type: HTML")
             -- Now this is a bit strange and I should explain. The XML parser (luxor.lua)
             -- creates a table structure from the XML text, but for HTML parsing, we need the
@@ -233,7 +242,7 @@ local function flatten(self,items,options,data)
                 end
                 thisself = thisself[c]
             end
-            if type(thisself) == "string" then
+            if type(thisself) == type_string then
                 local text = thisself
                 local tmp = flatten(self,{text},new_options,data)
                 for j=1,#tmp do
@@ -241,10 +250,8 @@ local function flatten(self,items,options,data)
                 end
             else
                 local htmltext = reconstruct_html_text(thisself)
-                local csstext = publisher.css:gettext()
-                -- todo: add  white-space: pre; if publisher.options.ignoreeol == false
-                -- csstext = string.format("body {font-family-number: %d ;} ",options.fontfamily)
-                csstext = " a { text-decoration: none; color: black}" ..  csstext
+                local csstext = " a { text-decoration: none; color: black}" ..  default_css_text
+
                 if self.textformat and self.textformat.cssfontsize == true then
                     -- ignore
                 else
@@ -315,10 +322,10 @@ local function flatten(self,items,options,data)
                     end
                 end
             end
-        elseif typ_thisself == "userdata" and node.is_node(thisself) then
+        elseif typ_thisself == type_userdata and node.is_node(thisself) then
             -- w("par/flatten: type: userdata")
             if thisself.id == publisher.whatsit_node and thisself.subtype == publisher.user_defined_whatsit then
-                if type(thisself.value) == "function" then
+                if type(thisself.value) == type_function then
                     -- leaders and break_url
                     append(thisself.value(new_options))
                 else
@@ -327,10 +334,10 @@ local function flatten(self,items,options,data)
             else
                  append(thisself)
             end
-        elseif typ_thisself == "table" and thisself.elementname == "SetVariable" then
+        elseif typ_thisself == type_table and thisself.elementname == "SetVariable" then
             -- w("par/flatten: type: setvariable - ignore")
             -- ignore
-        elseif typ_thisself == "table" then
+        elseif typ_thisself == type_table then
             -- w("par/flatten: type: table")
             local tmp
             if publisher.newxpath then
@@ -351,11 +358,13 @@ local function flatten(self,items,options,data)
             release_options(new_options)
         end
     end
-    for i=#items,1,-1 do
-        items[i] = nil
-    end
+    -- Optimized: directly overwrite items, then clear extras
     for i=1,ret_len do
         items[i] = ret[i]
+    end
+    -- Only clear items beyond ret_len
+    for i=ret_len+1,items_len do
+        items[i] = nil
     end
     return items
 end
@@ -459,6 +468,23 @@ function Par:mknodelist( options, data )
             table.insert(objects,nodelist)
         end
     end
+    if self.html == "off" then
+        for i = 1, #objects do
+            local thisobject = objects[i]
+            local cur = thisobject
+            while cur do
+                if cur.id == publisher.rule_node then
+                    local prev_node = cur.prev
+                    local next_node = cur.next
+                    if prev_node and prev_node.id == publisher.glue_node and next_node and next_node.id == publisher.glue_node then
+                        cur = node.remove(thisobject,cur)
+                    end
+                end
+                cur = cur.next
+            end
+        end
+    end
+
     self.objects = objects
 end
 
@@ -694,11 +720,32 @@ function Par:format( width_sp, options,data )
     end
     local objects = self.objects
     local orig_width_sp = width_sp
-    if #objects == 0 then return node.new("vlist") end
+    local objects_len = #objects
+    if objects_len == 0 then return node.new("vlist") end
     local objectrow = 0
 
+    -- Cache frequently accessed self fields
+    local self_padding_left = self.padding_left
+    local self_padding_right = self.padding_right
+    local self_prependlist = self.prependlist
+    local self_initial = self.initial
+    local self_startendborder = self.startendborder
+    local self_startborder = self.startborder
+    local self_margin_top = self.margin_top
+    local self_border_top_width = self.border_top_width
+    local self_padding_top = self.padding_top
+
+    -- Cache publisher node/attribute IDs
+    local penalty_node_id = publisher.penalty_node
+    local hlist_node_id = publisher.hlist_node
+    local glue_node_id = publisher.glue_node
+    local att_rows = publisher.att_rows
+    local att_ignore_orphan = publisher.att_ignore_orphan_widowsetting
+    local att_break_below = publisher.att_break_below_forbidden
+    local att_margin_top_boxstart = publisher.att_margin_top_boxstart
+
     local tf = current_textformat
-    for i=1,#objects do
+    for i=1,objects_len do
         nodelist = objects[i]
         if publisher.getprop(nodelist, "br") == true then
             tf = publisher.new_textformat("",current_textformat)
@@ -708,24 +755,31 @@ function Par:format( width_sp, options,data )
         else
             objectrow = objectrow + 1
         end
-        local pardir = publisher.getprop(nodelist,"pardir")
-        if pardir == "rtl" then
+        -- Cache property accesses at loop start
+        local prop_pardir = publisher.getprop(nodelist,"pardir")
+        local prop_margin_top, prop_margin_bottom, prop_padding_left
+        local tf_htmlvspace = tf.htmlverticalspacing
+        if tf_htmlvspace == "inner" and i > 1 or tf_htmlvspace == "all" then
+            prop_margin_top = publisher.getprop(nodelist,"margin_top")
+        end
+        if tf_htmlvspace == "inner" and i < objects_len or tf_htmlvspace == "all" then
+            prop_margin_bottom = publisher.getprop(nodelist,"margin_bottom")
+        end
+        prop_padding_left = publisher.getprop(nodelist,"padding_left")
+        local prop_prependlist = publisher.getprop(nodelist,"prependlist")
+
+        if prop_pardir == "rtl" then
             tex.shapemode = 1
             parameter.pardir = "TRT"
         else
             tex.shapemode = 0
         end
-        local has_margin_top, has_margin_bottom
-        if tf.htmlverticalspacing == "inner" and i > 1 or tf.htmlverticalspacing == "all" then
-            has_margin_top = publisher.getprop(nodelist,"margin_top")
-        end
-        if tf.htmlverticalspacing == "inner" and i < #objects or tf.htmlverticalspacing == "all" then
-            has_margin_bottom = publisher.getprop(nodelist,"margin_bottom")
-        end
+        local has_margin_top = prop_margin_top
+        local has_margin_bottom = prop_margin_bottom
         width_sp = orig_width_sp
-        local thispaddingleft = self.padding_left
-        local thispaddingright = self.padding_right
-        local this_object_padding_left = publisher.getprop(nodelist,"padding_left")
+        local thispaddingleft = self_padding_left
+        local thispaddingright = self_padding_right
+        local this_object_padding_left = prop_padding_left
         if this_object_padding_left then
             thispaddingleft = thispaddingleft + this_object_padding_left
             width_sp = width_sp - this_object_padding_left
@@ -742,15 +796,15 @@ function Par:format( width_sp, options,data )
             end
         end
 
-        -- see #338 - penalty - hlist - penalty gives an error “Assertion ``varmem[(o)].hh.v.RH == cur_p`` failed”
-        if nodelist.id == publisher.penalty_node and nodelist.next and nodelist.next.id == publisher.hlist_node and nodelist.next.next and nodelist.next.next.id == publisher.penalty_node and nodelist.next.next.next then
+        -- see #338 - penalty - hlist - penalty gives an error "Assertion ``varmem[(o)].hh.v.RH == cur_p`` failed"
+        if nodelist.id == penalty_node_id and nodelist.next and nodelist.next.id == hlist_node_id and nodelist.next.next and nodelist.next.next.id == penalty_node_id and nodelist.next.next.next then
             nodelist = nodelist.next
         end
         publisher.fonts.pre_linebreak(nodelist)
 
         -- both are set only for ul/ol lists
         local indent = publisher.get_attribute(nodelist,"indent") or 0
-        local rows   = node.has_attribute(nodelist,publisher.att_rows)
+        local rows   = node.has_attribute(nodelist,att_rows)
         parameter.hangindent = indent
 
         -- indent and rows
@@ -760,14 +814,14 @@ function Par:format( width_sp, options,data )
             end
         end
         parameter.hangafter = rows or tf.rows or 0
-        if self.startendborder or self.startborder then
-            local ba = publisher.borderattributes[self.borderstart or self.startendborder]
+        if self_startendborder or self_startborder then
+            local ba = publisher.borderattributes[self.borderstart or self_startendborder]
             thispaddingleft = thispaddingleft + ba.border_left_width
         end
 
-        if self.initial then
-            parameter.hangindent =  parameter.hangindent + self.initial.width
-            local i_ht = self.initial.height + self.initial.depth
+        if self_initial then
+            parameter.hangindent =  parameter.hangindent + self_initial.width
+            local i_ht = self_initial.height + self_initial.depth
             local ht_nodelist = get_lineheight(nodelist)
 
             local maxindent = 0
@@ -781,8 +835,8 @@ function Par:format( width_sp, options,data )
             if parameter.parshape then
                 for i=1,math.round(i_ht / ht_nodelist,0) do
                     curindent = maxindent - parameter.parshape[i][1]
-                    parameter.parshape[i][1] = maxindent + self.initial.width
-                    parameter.parshape[i][2] = parameter.parshape[i][2] - self.initial.width - curindent
+                    parameter.parshape[i][1] = maxindent + self_initial.width
+                    parameter.parshape[i][2] = parameter.parshape[i][2] - self_initial.width - curindent
                 end
             else
                 parameter.hangafter = math.max( parameter.hangafter, math.ceil(math.round(i_ht / ht_nodelist,1)))
@@ -791,13 +845,10 @@ function Par:format( width_sp, options,data )
 
         parameter.hangafter = parameter.hangafter * -1
         parameter.disable_hyphenation = tf.disable_hyphenation
-        local prepend = publisher.getprop(nodelist,"prependlist") or self.prependlist
-        local ragged_shape
-        if tf.alignment == "leftaligned" or tf.alignment == "rightaligned" or tf.alignment == "centered" or tf.alignment == "start" or tf.alignment == "end" then
-            ragged_shape = true
-        else
-            ragged_shape = false
-        end
+        local prepend = prop_prependlist or self_prependlist
+        -- Cache alignment check
+        local tf_alignment = tf.alignment
+        local ragged_shape = (tf_alignment == "leftaligned" or tf_alignment == "rightaligned" or tf_alignment == "centered" or tf_alignment == "start" or tf_alignment == "end")
 
         -- if the last items are newline nodes, clear them (see #142)
         local tail = node.slide(nodelist)
@@ -828,7 +879,7 @@ function Par:format( width_sp, options,data )
 
                 tex.pdfadjustspacing = adjspace
                 tex.adjustspacing = adjspace
-                publisher.fix_justification(nodelist,tf.alignment,nil,pardir)
+                publisher.fix_justification(nodelist,tf_alignment,nil,prop_pardir)
             else
                 nodelist = publisher.do_linebreak(nodelist,width_sp,parameter)
             end
@@ -847,7 +898,7 @@ function Par:format( width_sp, options,data )
             -- it's always 0 anyway (hopefully!)
             local line = nodelist.head
             while line do
-                if line.id == publisher.glue_node then
+                if line.id == glue_node_id then
                     line.prev.next = line.next
                     if line.next then
                         line.next.prev = line.prev
@@ -856,55 +907,58 @@ function Par:format( width_sp, options,data )
                 line = line.next
             end
 
+            -- Cache tf fields for orphan/widow control
+            local tf_orphan = tf.orphan
+            local tf_widow = tf.widow
             line = nodelist.head
             local c = 0
             while line do
                 c = c + 1
-                if c < tf.orphan and line.next then
-                    if line.head and not node.has_attribute(line.head,publisher.att_ignore_orphan_widowsetting) then
-                        node.set_attribute(line,publisher.att_break_below_forbidden,1)
+                if c < tf_orphan and line.next then
+                    if line.head and not node.has_attribute(line.head,att_ignore_orphan) then
+                        node.set_attribute(line,att_break_below,1)
                     end
                 end
-                if publisher.less_or_equal_than_n_lines(line, tf.widow) then
-                    if line.head and not node.has_attribute(line.head,publisher.att_ignore_orphan_widowsetting) then
-                        node.set_attribute(line,publisher.att_break_below_forbidden,2)
+                if publisher.less_or_equal_than_n_lines(line, tf_widow) then
+                    if line.head and not node.has_attribute(line.head,att_ignore_orphan) then
+                        node.set_attribute(line,att_break_below,2)
                     end
                 end
                 line = line.next
             end
 
             publisher.fonts.post_linebreak(nodelist)
-            if self.margin_top then
-                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = self.margin_top},"par.lua/if self.margin_top")
+            if self_margin_top then
+                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = self_margin_top},"par.lua/if self.margin_top")
                 publisher.set_attribute(nodelist.list,"margintop",1)
             end
-            if self.border_top_width and self.border_top_width > 0 then
-                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = self.border_top_width},"par.lua/if self.border_top_width")
+            if self_border_top_width and self_border_top_width > 0 then
+                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = self_border_top_width},"par.lua/if self.border_top_width")
                 publisher.set_attribute(nodelist.list,"margintop",1)
             end
             if has_margin_top then
                 nodelist.list = publisher.add_glue(nodelist.list,"head",{width = has_margin_top},"par.lua/if has_margin_top")
                 publisher.set_attribute(nodelist.list,"margintop",1)
             end
-            if self.padding_top and self.padding_top > 0 then
-                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = self.padding_top, attributes},"par.lua/self.padding_top" )
+            if self_padding_top and self_padding_top > 0 then
+                nodelist.list = publisher.add_glue(nodelist.list,"head",{width = self_padding_top, attributes},"par.lua/self.padding_top" )
                 publisher.set_attribute(nodelist.list,"margintop",1)
             end
             if tf.paddingtop and tf.paddingtop ~= 0 then
                 nodelist.list = publisher.add_glue(nodelist.list,"head",{width = tf.paddingtop})
-                node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,3)
+                node.set_attribute(nodelist.list,att_break_below,3)
             end
             if tf.bordertop and tf.bordertop ~= 0 then
                 nodelist.list = publisher.add_rule(nodelist.list,"head",{width = -1073741824, height = tf.bordertop},"par.lua/tf.bordertop")
-                node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,4)
+                node.set_attribute(nodelist.list,att_break_below,4)
             end
             if tf.margintop and tf.margintop ~= 0 then
                 nodelist.list = publisher.add_glue(nodelist.list,"head",{width = tf.margintop})
-                node.set_attribute(nodelist.list,publisher.att_margin_top_boxstart,tf.margintopboxstart)
-                node.set_attribute(nodelist.list,publisher.att_break_below_forbidden,6)
+                node.set_attribute(nodelist.list,att_margin_top_boxstart,tf.margintopboxstart)
+                node.set_attribute(nodelist.list,att_break_below,6)
             end
             if tf.breakbelow == false then
-                node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,5)
+                node.set_attribute(node.tail(nodelist.list),att_break_below,5)
             end
 
             if tf.break_before == "page" then

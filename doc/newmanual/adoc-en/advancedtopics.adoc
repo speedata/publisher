@@ -49,4 +49,6 @@ include::controllayout.adoc[leveloffset=+1]
 
 include::metapostgraphics.adoc[leveloffset=+1]
 
+include::performance.adoc[leveloffset=+1]
+
 // EOF

@@ -3766,6 +3766,19 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="html">
+               <a:documentation>Voreinstellung für HTML-Parsing in Absätzen. Kann lokal in Paragraph überschrieben werden. Das Setzen auf &#39;off&#39; kann die Performance deutlich verbessern, wenn keine HTML-Tags wie &lt;b&gt; oder &lt;i&gt; verwendet werden.</a:documentation>
+               <choice>
+                  <value>all</value>
+                  <a:documentation>HTML in allen Absätzen parsen (Voreinstellung).</a:documentation>
+                  <value>inner</value>
+                  <a:documentation>HTML nur in Kindelementen des aktuellen Datenelements parsen.</a:documentation>
+                  <value>off</value>
+                  <a:documentation>HTML-Parsing in Absätzen deaktivieren.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="imagenotfound">
                <a:documentation>Falls ein Bild nicht gefunden wird: soll eine Warnung oder ein Fehler ausgegeben werden?</a:documentation>
                <choice>

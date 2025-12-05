@@ -3677,6 +3677,30 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="html">
+        <xs:annotation>
+          <xs:documentation>Voreinstellung für HTML-Parsing in Absätzen. Kann lokal in Paragraph überschrieben werden. Das Setzen auf 'off' kann die Performance deutlich verbessern, wenn keine HTML-Tags wie &lt;b&gt; oder &lt;i&gt; verwendet werden.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="all">
+              <xs:annotation>
+                <xs:documentation>HTML in allen Absätzen parsen (Voreinstellung).</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="inner">
+              <xs:annotation>
+                <xs:documentation>HTML nur in Kindelementen des aktuellen Datenelements parsen.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="off">
+              <xs:annotation>
+                <xs:documentation>HTML-Parsing in Absätzen deaktivieren.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="imagenotfound">
         <xs:annotation>
           <xs:documentation>Falls ein Bild nicht gefunden wird: soll eine Warnung oder ein Fehler ausgegeben werden?</xs:documentation>

@@ -655,6 +655,9 @@ func runPublisher(cachemethod string) (exitstatus int) {
 	if resizehandler := getOption("resizehandler"); resizehandler != "" {
 		layoutoptionsSlice = append(layoutoptionsSlice, `resizehandler=`+resizehandler)
 	}
+	if html := getOption("html"); html != "" {
+		layoutoptionsSlice = append(layoutoptionsSlice, `html=`+html)
+	}
 
 	layoutname := getOption("layout")
 	dataname := getOption("data")

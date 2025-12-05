@@ -3766,6 +3766,19 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="html">
+               <a:documentation>Default setting for HTML parsing in paragraphs. Can be overridden locally in Paragraph. Setting this to &#39;off&#39; can significantly improve typesetting performance when HTML tags like &lt;b&gt; or &lt;i&gt; are not used.</a:documentation>
+               <choice>
+                  <value>all</value>
+                  <a:documentation>Parse HTML in all paragraphs (default).</a:documentation>
+                  <value>inner</value>
+                  <a:documentation>Parse HTML only in child elements of the current data element.</a:documentation>
+                  <value>off</value>
+                  <a:documentation>Disable HTML parsing in paragraphs.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="imagenotfound">
                <a:documentation>When an image is not found: should the publisher raise an error?</a:documentation>
                <choice>

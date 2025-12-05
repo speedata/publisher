@@ -2793,6 +2793,8 @@ function commands.options( layoutxml,dataxml )
         local uuid = require "uuid"
         uuid.randomseed(randomseed)
     end
+    publisher.options.html = publisher.read_attribute(layoutxml,dataxml,"html", "string", publisher.options.html)
+
     if reportmissingglyphs == true or reportmissingglyphs == "yes" then
         publisher.options.reportmissingglyphs = true
     elseif reportmissingglyphs == false or reportmissingglyphs == "no" then
@@ -2801,7 +2803,7 @@ function commands.options( layoutxml,dataxml )
         publisher.options.reportmissingglyphs = "warning"
     end
 
-    local ns = publisher.read_attribute(layoutxml,dataxml,"namespaces",  "string", publisher.options.namespaces)
+    local ns = publisher.read_attribute(layoutxml,dataxml,"namespaces", "string", publisher.options.namespaces)
     if ns == "lax" and publisher.newxpath then
         xpath.ignoreNS = true
     elseif ns == "strict" and publisher.newxpath then
@@ -3059,7 +3061,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local fontname          = publisher.read_attribute(layoutxml,dataxml,"fontface",           "string")
     local fontfamilyname    = publisher.read_attribute(layoutxml,dataxml,"fontfamily",         "string",fontname)
     local fontoutline       = publisher.read_attribute(layoutxml,dataxml,"font-outline",       "width_sp")
-    local html              = publisher.read_attribute(layoutxml,dataxml,"html",               "string","all")
+    local html              = publisher.read_attribute(layoutxml,dataxml,"html",               "string",publisher.options.html or "all")
     local language_name     = publisher.read_attribute(layoutxml,dataxml,"language",           "string")
     local labelleft         = publisher.read_attribute(layoutxml,dataxml,"label-left",         "string")
     local labelleftwidth    = publisher.read_attribute(layoutxml,dataxml,"label-left-width",   "width_sp")
@@ -3137,6 +3139,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local tab = publisher.dispatch(layoutxml,dataxml)
     local p = par:new(nil,"commands.paragraph")
     p.fontfamily = fontfamily
+    p.html = html
     if #tab == 1 and tab[1].contents == "" then
         tab[1].contents = " " -- U+00A0, non breaking space
     end

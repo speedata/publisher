@@ -3677,6 +3677,30 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="html">
+        <xs:annotation>
+          <xs:documentation>Default setting for HTML parsing in paragraphs. Can be overridden locally in Paragraph. Setting this to 'off' can significantly improve typesetting performance when HTML tags like &lt;b&gt; or &lt;i&gt; are not used.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="all">
+              <xs:annotation>
+                <xs:documentation>Parse HTML in all paragraphs (default).</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="inner">
+              <xs:annotation>
+                <xs:documentation>Parse HTML only in child elements of the current data element.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="off">
+              <xs:annotation>
+                <xs:documentation>Disable HTML parsing in paragraphs.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="imagenotfound">
         <xs:annotation>
           <xs:documentation>When an image is not found: should the publisher raise an error?</xs:documentation>
