@@ -4237,6 +4237,7 @@ function read_attribute( layoutxml,dataxml,attname,typ,default,context)
         -- same as before, just changed to scaled points
     elseif typ=="length_sp" then
         num = tonumber(val or default)
+        if num == 0 then return 0 end
         if num then -- most likely really a number, we need to multiply with grid width
             ret = current_grid:width_sp(num)
         else
