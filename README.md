@@ -1,4 +1,4 @@
-[![Join the chat at https://matrix.to/#/#speedata_publisher:gitter.im](https://img.shields.io/gitter/room/speedata/publisher?color=yellow)](https://matrix.to/#/#speedata_publisher:gitter.im)&nbsp;[![Fund the development](https://img.shields.io/badge/Sponsor-Fund%20development-yellow)](https://github.com/sponsors/speedata)&nbsp;[![Platforms](https://img.shields.io/badge/Platform-Mac%2FLinux%2FWindows-lightgrey)](https://doc.speedata.de/publisher/en/installation/)
+[![Platforms](https://img.shields.io/badge/Platform-Mac%2FLinux%2FWindows-lightgrey)](https://doc.speedata.de/publisher/en/installation/) [![Manual](https://img.shields.io/badge/Manual-online-blue)](https://doc.speedata.de/)
 
 speedata Publisher
 ==================
@@ -27,16 +27,6 @@ Can I use this in production?
 
 Yes. Absolutely. We release stable (long term support) versions once in a while which are heavily tested in commercial environments and we release development versions often. Note that these development are still safe to use, they just might contain some experimental new features.
 
-Funding
--------
-
-This project heavily depends on business and user funding.
-Every bug report is welcome and every feature request is carefully considered.
-But without time to spend, this is very hard for me to work on.
-I might add the “needs funding” label on a bug report or feature request once in a while if I think that I can't implement this while doing other things.
-
-To support the sustainable development of the speedata Publisher, please consider clicking on the [“sponsor” button](https://github.com/sponsors/speedata) or request a support and maintenance pack by contacting [speedata](https://www.speedata.de/imprint/).
-
 For a list of upcoming and recent features see the [news file](News.md).
 
 Installation
@@ -47,7 +37,7 @@ Just get one of the ready-to-run packages from <https://download.speedata.de/> a
 
 Manual
 ------
-Our documentation is available online: <https://doc.speedata.de/> and included in the distribution (`sp doc`).
+The documentation is available online: <https://doc.speedata.de/>.
 
 
 Bugs
@@ -60,6 +50,8 @@ License / Contributing
 ----------------------
 
 The license is AGPLv3, see the file COPYING in the root directory.
+
+Third-party software: speedata Publisher relies on LuaTeX for PDF generation, which is licensed under the GNU General Public License ([GPLv2 or later](https://www.gnu.org/licenses/)). LuaTeX is included in the packages at [download.speedata.de](https://download.speedata.de). Get the source code of LuaTeX from [www.luatex.org](https://www.luatex.org/). See also the file [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) in the root directory.
 
 We welcome contributions. Just [follow the GitHub procedure (fork, pull requests)](https://help.github.com/articles/using-pull-requests/). The [installation manual](https://doc.speedata.de/publisher/en/installation/) has a section on building the binary from the source code.
 
