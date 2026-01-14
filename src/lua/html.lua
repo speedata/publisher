@@ -392,18 +392,26 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 prevdir = "vertical"
                 -- w("html/table")
                 local wd = styles.calculated_width
-                local nl = tables_mod.build_html_table(thiselt, wd, {
+                local nl_array = tables_mod.build_html_table(thiselt, wd, {
                     build_nodelist = function(elt, options, before_box, caller, prevdir, dataxml_inner)
                         -- callback which uses the existing build_nodelist
                         return build_nodelist(elt, options, before_box, caller, prevdir, dataxml_inner)
                     end
-                    }, dataxml,stylesstack)
-                local tabpar = par:new(nil,"html table (a)")
-                tabpar.margin_top = margin_top
-                node.set_attribute(nl,publisher.att_lineheight,nl.height)
-                publisher.setprop(nl,"origin","html table")
-                tabpar:append(nl,{dontformat=true})
-                box[#box + 1] = tabpar
+                    }, dataxml, stylesstack)
+
+                -- Process all table parts (for multi-page tables)
+                for i = 1, #nl_array do
+                    local nl = nl_array[i]
+                    local tabpar = par:new(nil,"html table (a)")
+                    -- Only apply margin_top to the first table part
+                    if i == 1 then
+                        tabpar.margin_top = margin_top
+                    end
+                    node.set_attribute(nl,publisher.att_lineheight,nl.height)
+                    publisher.setprop(nl,"origin","html table")
+                    tabpar:append(nl,{dontformat=true})
+                    box[#box + 1] = tabpar
+                end
                 ret[#ret + 1] = box
             elseif thiseltname == "ol" or thiseltname == "ul" then
                 prevdir = "vertical"

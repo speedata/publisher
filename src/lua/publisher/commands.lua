@@ -5295,11 +5295,11 @@ function commands.text(layoutxml,dataxml)
 
             if #state.objects > 0 then
                 local obj1, obj2 = publisher.vsplit(state.objects,parameter)
-                -- if state.prevobj1 == obj1 then
-                --     err("Internal error vsplit / objects too high. Some objects are discarded from the output.")
-                --     state.objects = {}
-                --     return obj1,state,false
-                -- end
+                if state.prevobj1 == obj1 then
+                    err("Output loop detected in vsplit: Object cannot be placed and would cause infinite loop. Some objects are discarded from the output. This usually happens when content (e.g., a table with ht_max set too high) cannot be split properly. Consider reducing table size or using a more conservative ht_max value (e.g., 550pt).")
+                    state.objects = {}
+                    return obj1,state,false
+                end
                 if obj2 then
                     state.split = obj2
                     return obj1, state, false

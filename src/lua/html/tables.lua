@@ -101,7 +101,7 @@ end
 ---@param cb HtmlTableCallbacks          -- callbacks including build_nodelist
 ---@param dataxml table
 ---@param stylesstack table              -- styles inheritance stack
----@return any                           -- a single node (the constructed table box)
+---@return any                           -- array of table nodes (split across pages)
 function M.build_html_table(table_elt, width, cb, dataxml, stylesstack)
     assert(dataxml, "build_html_table requires dataxml")
 
@@ -149,7 +149,8 @@ function M.build_html_table(table_elt, width, cb, dataxml, stylesstack)
     tabular.fontfamily = fontfamily
 
     -- Original default options / paddings / borders
-    tabular.options = { ht_max = 99999 * 2^16 }
+    tabular.options = { ht_max = publisher.getheight(1,dataxml) } -- a heuristic
+    tabular.getheight      = publisher.getheight
     tabular.padding_left   = 0
     tabular.padding_top    = 0
     tabular.padding_right  = 0
@@ -161,7 +162,7 @@ function M.build_html_table(table_elt, width, cb, dataxml, stylesstack)
     tabular.dataxml = dataxml
 
     local n = tabular:make_table(dataxml)
-    return n[1]
+    return n
 end
 
 return M

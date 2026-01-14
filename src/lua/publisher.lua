@@ -7662,6 +7662,7 @@ function getheight( relative_framenumber,dataxml )
     else
         areaname = xpath.get_variable("__currentarea")
     end
+    areaname = areaname or default_areaname
     local current_framenumber = grid:framenumber(areaname)
     cfn = current_framenumber
 
