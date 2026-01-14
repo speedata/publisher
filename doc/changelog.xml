@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.13" date="2026-01-14">
+        <en>Remove infinite loop in HTML tables.</en>
+        <de>Löse Endlosschleife in HTML-Tabellen.</de>
+    </entry>
     <entry version="5.3.12" date="2025-12-05">
       <en>Add global html option in Options command and --option html=off command line flag to control HTML parsing.</en>
       <de>Füge globale html-Option im Options-Befehl und --option html=off Kommandozeilen-Flag hinzu, um HTML-Parsing zu steuern.</de>
