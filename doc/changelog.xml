@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.14" date="2026-01-15">
+        <en>HTML can now wrap across multiple pages.</en>
+        <de>HTML kann nun auf mehrere Seiten umbrechen.</de>
+    </entry>
     <entry version="5.3.13" date="2026-01-14">
         <en>Remove infinite loop in HTML tables.</en>
         <de>Löse Endlosschleife in HTML-Tabellen.</de>
