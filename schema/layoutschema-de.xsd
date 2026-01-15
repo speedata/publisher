@@ -1984,14 +1984,29 @@
   </xs:element>
   <xs:element name="HTML">
     <xs:annotation>
-      <xs:documentation>Erzeugt HTML-Ausgabe. Experimentell.</xs:documentation>
+      <xs:documentation>Erzeugt HTML-Ausgabe</xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:attribute name="select" use="required">
-        <xs:annotation>
-          <xs:documentation>Das HTML-Element</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attribute name="expand-text">
+            <xs:annotation>
+              <xs:documentation>Bei "yes" werden Ausdrücke in geschweiften Klammern {expr} im HTML-Inhalt als XPath-Ausdrücke ausgewertet (ähnlich wie XSLT 3.0 Text Value Templates). Für literale geschweifte Klammern {{ und }} verwenden. Standard ist "no".</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="select">
+            <xs:annotation>
+              <xs:documentation>Das HTML-Element</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
     </xs:complexType>
   </xs:element>
   <xs:element name="Hyphenation">
@@ -4437,100 +4452,100 @@
       <xs:documentation>Dieser Befehl ist ähnlich zu PlaceObject und dient derzeit nur dazu, Text auszugeben, der auf mehrere Seite umbrochen werden kann und sich dem freien Platz auf der Seite anpassen kann.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:complexContent>
-        <xs:extension base="en:e_Text">
-          <xs:attribute name="allocate">
-            <xs:annotation>
-              <xs:documentation>Soll Text um schon vorhandene (belegte) Bereiche fließen? Die Rasterhöhe muss gleich dem Zeilenabstand der Textschriftart sein. Außerdem funktioniert dies nur auf der aktuellen Seite.</xs:documentation>
-            </xs:annotation>
-            <xs:simpleType>
-              <xs:union>
-                <xs:simpleType>
-                  <xs:restriction base="xs:token">
-                    <xs:enumeration value="yes">
-                      <xs:annotation>
-                        <xs:documentation>Normales Verhalten, der Text hat eine rechteckige Form.</xs:documentation>
-                      </xs:annotation>
-                    </xs:enumeration>
-                  </xs:restriction>
-                </xs:simpleType>
-                <xs:simpleType>
-                  <xs:restriction base="xs:token">
-                    <xs:enumeration value="auto">
-                      <xs:annotation>
-                        <xs:documentation>Text fließt um belegte Bereiche.</xs:documentation>
-                      </xs:annotation>
-                    </xs:enumeration>
-                  </xs:restriction>
-                </xs:simpleType>
-                <xs:simpleType>
-                  <xs:restriction base="xs:string">
-                    <xs:pattern value="\{.+\}"/>
-                  </xs:restriction>
-                </xs:simpleType>
-              </xs:union>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="area">
-            <xs:annotation>
-              <xs:documentation>Der Name des Platzierungsbereichs für den Text.</xs:documentation>
-            </xs:annotation>
-          </xs:attribute>
-          <xs:attribute name="balance">
-            <xs:annotation>
-              <xs:documentation>Text auf der letzten Seite ausbalancieren (experimentell)</xs:documentation>
-            </xs:annotation>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="en:Text"/>
+        <xs:element minOccurs="0" ref="en:HTML"/>
+      </xs:sequence>
+      <xs:attribute name="allocate">
+        <xs:annotation>
+          <xs:documentation>Soll Text um schon vorhandene (belegte) Bereiche fließen? Die Rasterhöhe muss gleich dem Zeilenabstand der Textschriftart sein. Außerdem funktioniert dies nur auf der aktuellen Seite.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:union>
             <xs:simpleType>
               <xs:restriction base="xs:token">
                 <xs:enumeration value="yes">
                   <xs:annotation>
-                    <xs:documentation>Letzte Seite ausbalancieren</xs:documentation>
-                  </xs:annotation>
-                </xs:enumeration>
-                <xs:enumeration value="no">
-                  <xs:annotation>
-                    <xs:documentation>Letzte Seite nicht ausbalancieren (Voreinstellung)</xs:documentation>
+                    <xs:documentation>Normales Verhalten, der Text hat eine rechteckige Form.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
             </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="last-padding-bottom-max">
-            <xs:annotation>
-              <xs:documentation>Der maximale Innenabstand auf der letzten Seite, wenn valign-last auf 'bottom' gesetzt ist.</xs:documentation>
-            </xs:annotation>
-          </xs:attribute>
-          <xs:attribute name="row">
-            <xs:annotation>
-              <xs:documentation>Die Startzeile für den Text</xs:documentation>
-            </xs:annotation>
-          </xs:attribute>
-          <xs:attribute name="valign-last">
-            <xs:annotation>
-              <xs:documentation>Wenn Spaltenausgleich eingeschaltet ist: Ausrichtung der letzten Seite oben oder unten (experimentell).</xs:documentation>
-            </xs:annotation>
             <xs:simpleType>
               <xs:restriction base="xs:token">
-                <xs:enumeration value="top">
+                <xs:enumeration value="auto">
                   <xs:annotation>
-                    <xs:documentation>Oben ausrichten (Voreinstellung)</xs:documentation>
-                  </xs:annotation>
-                </xs:enumeration>
-                <xs:enumeration value="bottom">
-                  <xs:annotation>
-                    <xs:documentation>Unten ausrichten</xs:documentation>
+                    <xs:documentation>Text fließt um belegte Bereiche.</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
             </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="width">
-            <xs:annotation>
-              <xs:documentation>Breite des Textes</xs:documentation>
-            </xs:annotation>
-          </xs:attribute>
-        </xs:extension>
-      </xs:complexContent>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="\{.+\}"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="area">
+        <xs:annotation>
+          <xs:documentation>Der Name des Platzierungsbereichs für den Text.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="balance">
+        <xs:annotation>
+          <xs:documentation>Text auf der letzten Seite ausbalancieren (experimentell)</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes">
+              <xs:annotation>
+                <xs:documentation>Letzte Seite ausbalancieren</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="no">
+              <xs:annotation>
+                <xs:documentation>Letzte Seite nicht ausbalancieren (Voreinstellung)</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="last-padding-bottom-max">
+        <xs:annotation>
+          <xs:documentation>Der maximale Innenabstand auf der letzten Seite, wenn valign-last auf 'bottom' gesetzt ist.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="row">
+        <xs:annotation>
+          <xs:documentation>Die Startzeile für den Text</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="valign-last">
+        <xs:annotation>
+          <xs:documentation>Wenn Spaltenausgleich eingeschaltet ist: Ausrichtung der letzten Seite oben oder unten (experimentell).</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="top">
+              <xs:annotation>
+                <xs:documentation>Oben ausrichten (Voreinstellung)</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="bottom">
+              <xs:annotation>
+                <xs:documentation>Unten ausrichten</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="width">
+        <xs:annotation>
+          <xs:documentation>Breite des Textes</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Overlay">
@@ -8842,11 +8857,6 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="e_Text">
-    <xs:sequence>
-      <xs:element ref="en:Text"/>
-    </xs:sequence>
-  </xs:complexType>
   <xs:element name="Text">
     <xs:annotation>
       <xs:documentation>Erzeugt einen Text, der über die Grenzen von Positionierungsrahmen umbrechen kann. Wird mit Output benutzt.</xs:documentation>
@@ -8860,7 +8870,6 @@
         <xs:element ref="en:Image"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Ol"/>
-        <xs:element ref="en:HTML"/>
         <xs:element ref="en:Paragraph"/>
         <xs:element ref="en:Switch"/>
         <xs:element ref="en:Ul"/>
@@ -9773,6 +9782,179 @@
           <xs:documentation>Für jedes Mal, das die Schleife durchlaufen werden soll, muss die Bedingung im Attribut erfüllt sein. Die Bedingung wird am Anfang der Schleife überprüft. Eine Schleife, bei der die Bedingung am Ende der Schleife geprüft wird, ist Until.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <!-- allow HTML in <Value> ... </Value> -->
+  <xs:attributeGroup name="htmlclassidstyle">
+    <xs:attribute name="class"/>
+    <xs:attribute name="id"/>
+    <xs:attribute name="style"/>
+  </xs:attributeGroup>
+  <xs:complexType name="html" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element ref="en:a"/>
+      <xs:element ref="en:h1"/>
+      <xs:element ref="en:h2"/>
+      <xs:element ref="en:h3"/>
+      <xs:element ref="en:h4"/>
+      <xs:element ref="en:h5"/>
+      <xs:element ref="en:b"/>
+      <xs:element ref="en:br"/>
+      <xs:element ref="en:code"/>
+      <xs:element ref="en:i"/>
+      <xs:element ref="en:kbd"/>
+      <xs:element ref="en:li"/>
+      <xs:element ref="en:p"/>
+      <xs:element ref="en:span"/>
+      <xs:element ref="en:table"/>
+      <xs:element ref="en:u"/>
+      <xs:element ref="en:ul"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:element name="a">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attribute name="href" use="required"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="h1">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="h2">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="h3">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="h4">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="h5">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="b" type="en:html"/>
+  <xs:element name="code" type="en:html"/>
+  <xs:element name="i" type="en:html"/>
+  <xs:element name="kbd" type="en:html"/>
+  <xs:element name="li" type="en:html"/>
+  <xs:element name="p">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="span">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:anyAttribute processContents="skip"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="table" type="en:htmltable"/>
+  <xs:element name="u" type="en:html"/>
+  <xs:element name="ul" type="en:html"/>
+  <xs:complexType name="htmltable">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" ref="en:colgroup"/>
+      <xs:element minOccurs="0" ref="en:thead"/>
+      <xs:choice>
+        <xs:element minOccurs="0" ref="en:tbody"/>
+        <xs:element maxOccurs="unbounded" ref="en:tr"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attributeGroup ref="en:htmlclassidstyle"/>
+  </xs:complexType>
+  <xs:element name="thead">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="en:tr"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="en:htmlclassidstyle"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tbody">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="en:tr"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="en:htmlclassidstyle"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="colgroup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="en:col"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="col">
+    <xs:complexType>
+      <xs:attribute name="width" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="tr">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="en:td"/>
+        <xs:element ref="en:th"/>
+      </xs:choice>
+      <xs:attributeGroup ref="en:htmlclassidstyle"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="td">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="th">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
     </xs:complexType>
   </xs:element>
 </xs:schema>

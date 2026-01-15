@@ -2370,11 +2370,27 @@
    </define>
    <define name="e_HTML">
       <element name="HTML">
-         <a:documentation>Erzeugt HTML-Ausgabe. Experimentell.</a:documentation>
-         <attribute name="select">
-            <a:documentation>Das HTML-Element</a:documentation>
-         </attribute>
-         <empty></empty>
+         <a:documentation>Erzeugt HTML-Ausgabe</a:documentation>
+         <interleave>
+            <group>
+               <optional>
+                  <attribute name="expand-text">
+                     <a:documentation>Bei &#34;yes&#34; werden Ausdrücke in geschweiften Klammern {expr} im HTML-Inhalt als XPath-Ausdrücke ausgewertet (ähnlich wie XSLT 3.0 Text Value Templates). Für literale geschweifte Klammern {{ und }} verwenden. Standard ist &#34;no&#34;.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <value>no</value>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="select">
+                     <a:documentation>Das HTML-Element</a:documentation>
+                  </attribute>
+               </optional>
+               <ref name="html"></ref>
+            </group>
+            <ref name="foreign-nodes"></ref>
+         </interleave>
       </element>
    </define>
    <define name="e_Hyphenation">
@@ -4323,7 +4339,12 @@
                      <a:documentation>Breite des Textes</a:documentation>
                   </attribute>
                </optional>
-               <ref name="e_Text"></ref>
+               <optional>
+                  <ref name="e_Text"></ref>
+               </optional>
+               <optional>
+                  <ref name="e_HTML"></ref>
+               </optional>
             </group>
             <ref name="foreign-nodes"></ref>
          </interleave>
@@ -7084,7 +7105,6 @@
                      <ref name="e_Image"></ref>
                      <ref name="e_Loop"></ref>
                      <ref name="e_Ol"></ref>
-                     <ref name="e_HTML"></ref>
                      <ref name="e_Paragraph"></ref>
                      <ref name="e_Switch"></ref>
                      <ref name="e_Ul"></ref>
@@ -8111,6 +8131,96 @@
          </interleave>
       </element>
    </define>
+	<!-- allow HTML in <Value> ... </Value> -->
+    <define name="htmlclassidstyle">
+        <optional><attribute name="class"/></optional>
+        <optional><attribute name="id"/></optional>
+        <optional><attribute name="style"/></optional>
+    </define>
+	<define name="html">
+		<zeroOrMore>
+		    <choice>
+			    <element name="a">
+				    <attribute name="href"/>
+				    <ref name="html"/>
+			    </element>
+				<element name="h1"><ref name="htmlclassidstyle"/><ref name="html" /></element>
+				<element name="h2"><ref name="htmlclassidstyle"/><ref name="html" /></element>
+				<element name="h3"><ref name="htmlclassidstyle"/><ref name="html" /></element>
+				<element name="h4"><ref name="htmlclassidstyle"/><ref name="html" /></element>
+				<element name="h5"><ref name="htmlclassidstyle"/><ref name="html" /></element>
+				<element name="b"><ref name="html" /></element>
+			    <element name="br"><empty /></element>
+			    <element name="code"><ref name="html" /></element>
+			    <element name="i"><ref name="html" /></element>
+			    <element name="kbd"><ref name="html" /></element>
+			    <element name="li"><ref name="html" /></element>
+			    <element name="p">
+					<ref name="htmlclassidstyle"/>
+				<ref name="html" /></element>
+			    <element name="span"><ref name="html" /><oneOrMore><attribute><anyName/></attribute></oneOrMore></element>
+                <element name="table"><ref name="htmltable" /></element>
+			    <element name="u"><ref name="html" /></element>
+			    <element name="ul"><ref name="html" /></element>
+			    <text></text>
+		    </choice>
+		</zeroOrMore>
+	</define>
+    <define name="htmltable">
+        <ref name="htmlclassidstyle"/>
+        <zeroOrMore>
+            <ref name="colgroup"/>
+        </zeroOrMore>
+        <optional>
+            <element name="thead">
+                <ref name="htmlclassidstyle" />
+                <oneOrMore>
+                    <ref name="tr"/>
+                </oneOrMore>
+            </element>
+        </optional>
+        <choice>
+            <optional>
+                <element name="tbody">
+                    <ref name="htmlclassidstyle" />
+                    <oneOrMore>
+                        <ref name="tr"/>
+                    </oneOrMore>
+                </element>
+            </optional>
+            <oneOrMore>
+                <ref name="tr"/>
+            </oneOrMore>
+        </choice>
+    </define>
+    <define name="colgroup">
+        <element name="colgroup">
+            <oneOrMore>
+                <element name="col">
+                    <attribute name="width"/>
+                    <empty />
+                </element>
+            </oneOrMore>
+        </element>
+    </define>
+    <define name="tr">
+        <element name="tr">
+            <ref name="htmlclassidstyle"/>
+            <oneOrMore>
+                <choice>
+                    <element name="td">
+                        <ref name="htmlclassidstyle"></ref>
+                        <ref name="html"/>
+                    </element>
+                    <element name="th">
+                        <ref name="htmlclassidstyle"></ref>
+                        <ref name="html"/>
+                    </element>
+                </choice>
+            </oneOrMore>
+        </element>
+    </define>
+
 	<!-- This pattern allows any element from any namespace -->
 	<define name="anything">
       <zeroOrMore>

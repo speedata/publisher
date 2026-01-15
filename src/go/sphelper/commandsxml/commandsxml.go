@@ -1261,8 +1261,9 @@ func getchildren(c *Commands, dec *xml.Decoder) []*Command {
 						refname = attribute.Value
 					}
 				}
-				{
-					dec = xml.NewDecoder(bytes.NewReader(c.defines[refname].Text))
+				// Skip pseudo-references like "html" that are only used for schema generation
+				if def := c.defines[refname]; def != nil {
+					dec = xml.NewDecoder(bytes.NewReader(def.Text))
 					x := getchildren(c, dec)
 					for _, command := range x {
 						cmds = append(cmds, command)
@@ -1307,6 +1308,14 @@ func (c *Command) Childelements() []*Command {
 	c.children["en"] = cmds
 	mutex.Unlock()
 	return cmds
+}
+
+// HasHTMLChildren returns true if this command allows HTML elements as children
+func (c *Command) HasHTMLChildren() bool {
+	if c == nil || c.childelement == nil {
+		return false
+	}
+	return bytes.Contains(c.childelement.Text, []byte(`name="html"`))
 }
 
 // GetDefineText returns the byte value of a define section in the commands xml

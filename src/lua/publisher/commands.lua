@@ -1437,20 +1437,358 @@ end
 
 --- HTML
 --- ------
---- Collect paragraphs to insert into the text stream (Textblock/Text)
+--- Collect paragraphs to insert into the text stream (Textblock/Text).
+--- When used directly in Output, implements pull-interface with incremental element parsing
+--- to ensure correct position tracking for tables.
 function commands.html( layoutxml,dataxml)
     local selection = publisher.read_attribute(layoutxml,dataxml,"select", "xpathraw")
-    local htmltext = publisher.xpath.string_value(selection)
-    local ret = {}
+    local expand_text = publisher.read_attribute(layoutxml,dataxml,"expand-text", "string", "no")
     local csstext = publisher.css:gettext()
-    local blocks
-    local tab = splib.parse_raw_html_text(htmltext,csstext)
-    blocks = publisher.parse_html(tab,{}, dataxml)
-    blocks = publisher.flatten_boxes(blocks)
-    for b=1,#blocks do
-        local thisblock = blocks[b]
-        ret[#ret + 1] = thisblock
+    local tab
+
+    -- Check if selection is already an XML structure (e.g., from sd:decode-html)
+    -- decode-html returns a luxor structure with .__local_name, .__type etc.
+    local function get_local_name(t)
+        if type(t) ~= "table" then return nil end
+        return t[".__local_name"] or t["local"] or t.elementname
     end
+
+    -- Expand XPath expressions in curly braces: {expr} -> evaluated value
+    local function expand_xpath(text)
+        if expand_text ~= "yes" then return text end
+        -- Match {expr} but not {{ (escaped braces)
+        local result = string.gsub(text, "%{%{", "\0DOUBLE_OPEN\0")
+        result = string.gsub(result, "%}%}", "\0DOUBLE_CLOSE\0")
+        result = string.gsub(result, "%{([^}]+)%}", function(expr)
+            local val
+            if publisher.newxpath then
+                local seq, msg = dataxml:eval(expr)
+                if msg then
+                    splib.log("warn", "XPath evaluation failed", "expression", expr, "message", msg)
+                    return "{" .. expr .. "}"
+                end
+                val = publisher.xpath.string_value(seq)
+            else
+                local ok, res = xpath.parse_raw(dataxml, expr, layoutxml[".__ns"])
+                if not ok then
+                    splib.log("warn", "XPath evaluation failed", "expression", expr)
+                    return "{" .. expr .. "}"
+                end
+                val = publisher.xpath.string_value(res)
+            end
+            -- Escape HTML entities in the result
+            val = string.gsub(val, "&", "&amp;")
+            val = string.gsub(val, "<", "&lt;")
+            val = string.gsub(val, ">", "&gt;")
+            return val
+        end)
+        result = string.gsub(result, "\0DOUBLE_OPEN\0", "{")
+        result = string.gsub(result, "\0DOUBLE_CLOSE\0", "}")
+        return result
+    end
+
+    -- Convert XML/luxor structure to HTML string
+    local function xml_to_html(node)
+        if type(node) ~= "table" then
+            -- Text node - escape HTML entities
+            local s = tostring(node)
+            s = expand_xpath(s)  -- Expand before escaping (expand_xpath does its own escaping)
+            if expand_text ~= "yes" then
+                s = string.gsub(s, "&", "&amp;")
+                s = string.gsub(s, "<", "&lt;")
+                s = string.gsub(s, ">", "&gt;")
+            end
+            return s
+        end
+        local name = node[".__local_name"]
+        if not name then return "" end
+
+        local html = "<" .. name
+        -- Add attributes if present
+        if node[".__attributes"] then
+            for k, v in pairs(node[".__attributes"]) do
+                local attr_val = expand_xpath(tostring(v))
+                html = html .. " " .. k .. '="' .. attr_val .. '"'
+            end
+        end
+        html = html .. ">"
+
+        -- Add children
+        for i = 1, #node do
+            html = html .. xml_to_html(node[i])
+        end
+
+        html = html .. "</" .. name .. ">"
+        return html
+    end
+
+    -- No select attribute: use inline children of <HTML> element
+    if selection == nil then
+        local htmltext = ""
+        for i = 1, #layoutxml do
+            htmltext = htmltext .. xml_to_html(layoutxml[i])
+        end
+        tab = splib.parse_raw_html_text(htmltext, csstext)
+    elseif type(selection) == "table" and selection[1] and type(selection[1]) == "table" then
+        local inner = selection[1]
+        local inner_name = get_local_name(inner)
+
+        if inner_name == "dummy" then
+            -- decode-html result: children of dummy are the HTML elements
+            local htmltext = ""
+            for i = 1, #inner do
+                htmltext = htmltext .. xml_to_html(inner[i])
+            end
+            tab = splib.parse_raw_html_text(htmltext, csstext)
+        elseif inner[".__local_name"] then
+            -- Check if children are XML elements or just text (CDATA)
+            local has_element_children = false
+            for i = 1, #inner do
+                if type(inner[i]) == "table" and inner[i][".__local_name"] then
+                    has_element_children = true
+                    break
+                end
+            end
+
+            if has_element_children then
+                -- XML element with element children (e.g., <kursiv><i>text</i></kursiv>)
+                -- Convert children to HTML string
+                local htmltext = ""
+                for i = 1, #inner do
+                    htmltext = htmltext .. xml_to_html(inner[i])
+                end
+                tab = splib.parse_raw_html_text(htmltext, csstext)
+            else
+                -- XML element with only text children (CDATA) - use string_value
+                local htmltext = publisher.xpath.string_value(selection)
+                tab = splib.parse_raw_html_text(htmltext, csstext)
+            end
+        else
+            -- Unknown structure, try string conversion
+            local htmltext = publisher.xpath.string_value(selection)
+            tab = splib.parse_raw_html_text(htmltext, csstext)
+        end
+    else
+        -- Normal path: selection is a string or can be converted to one
+        local htmltext = publisher.xpath.string_value(selection)
+        -- Parse the raw HTML structure (but don't build nodes yet - lazy parsing)
+        tab = splib.parse_raw_html_text(htmltext,csstext)
+    end
+
+    -- Create a lazy proxy object that only parses when accessed
+    -- This avoids early parsing which would create pages before pull() is called
+    local ret = {}
+    local parsed_blocks = nil
+
+    -- Helper function to parse on demand (for non-pull contexts like Textblock/Text)
+    local function ensure_parsed()
+        if parsed_blocks == nil then
+            parsed_blocks = publisher.parse_html(tab, {}, dataxml)
+            parsed_blocks = publisher.flatten_boxes(parsed_blocks)
+        end
+        return parsed_blocks
+    end
+
+    -- Metatable for lazy access to parsed blocks
+    setmetatable(ret, {
+        __index = function(t, k)
+            if type(k) == "number" then
+                local blocks = ensure_parsed()
+                return blocks[k]
+            end
+            return rawget(t, k)
+        end,
+        __len = function(t)
+            local blocks = ensure_parsed()
+            return #blocks
+        end,
+        __ipairs = function(t)
+            local blocks = ensure_parsed()
+            return ipairs(blocks)
+        end,
+        __pairs = function(t)
+            local blocks = ensure_parsed()
+            return pairs(blocks)
+        end
+    })
+
+    -- Helper function to extract top-level block elements from HTML tree
+    -- Returns an array of {element_tree, is_table} for sequential parsing
+    local function extract_toplevel_elements(html_tree)
+        local elements = {}
+        -- Navigate to body content: html_tree[1] is html, find body inside
+        local root = html_tree[1]
+        if not root then return elements end
+
+        -- Find body element (or process root directly if no body)
+        local body = nil
+        for i = 1, #root do
+            if type(root[i]) == "table" and root[i].elementname == "body" then
+                body = root[i]
+                break
+            end
+        end
+
+        local container = body or root
+        for i = 1, #container do
+            local elt = container[i]
+            if type(elt) == "table" and elt.elementname then
+                local is_table = (elt.elementname == "table")
+                elements[#elements + 1] = {
+                    index = i,
+                    elementname = elt.elementname,
+                    is_table = is_table
+                }
+            end
+        end
+        return elements, container
+    end
+
+    -- Pull-interface for use in Output command.
+    -- Uses incremental element parsing: each element is parsed when needed,
+    -- ensuring tables get correct ht_max based on actual cursor position.
+    ret.pull = function(parameter, state)
+        local cg = publisher.current_grid
+        local areaname = parameter.area or publisher.default_areaname
+
+        if not state then
+            state = {}
+            state.objects = {}
+            state.next_index = 1
+            state.extra_accumulated = 0
+            state.formatted_height = 0
+            state.original_getheight = publisher.getheight
+
+            -- Save fontfamilies before first parse (html.lua removes it after first use)
+            state.fontfamilies = tab.fontfamilies
+
+            -- Extract info about top-level elements for incremental parsing
+            state.elements, state.container = extract_toplevel_elements(tab)
+
+            -- If no elements found, fall back to normal parsing
+            if #state.elements == 0 then
+                local all_blocks = publisher.parse_html(tab, {}, dataxml)
+                all_blocks = publisher.flatten_boxes(all_blocks)
+                state.blocks = all_blocks
+                state.use_incremental = false
+            else
+                state.blocks = {}
+                state.use_incremental = true
+                state.parsed_up_to = 0
+            end
+        end
+
+        -- For incremental parsing: parse elements one at a time
+        if state.use_incremental then
+            while state.parsed_up_to < #state.elements and
+                  state.next_index > #state.blocks do
+
+                local elem_info = state.elements[state.parsed_up_to + 1]
+                local current_row = cg:current_row(areaname) or 1
+
+                -- For tables: set getheight to return remaining height based on current cursor
+                -- Subtract a small buffer (about 3mm) to account for thead/tfoot overhead during splits
+                if elem_info.is_table then
+                    local remaining = cg:remaining_height_sp(current_row, areaname)
+                    local buffer = 200000  -- ~3mm safety margin for split overhead
+                    remaining = math.max(remaining - buffer, 0)
+                    publisher.getheight = function(relative_framenumber, dxml)
+                        return remaining
+                    end
+                end
+
+                -- Temporarily replace all elements except the current one with dummies
+                -- We need to preserve array indices, so we replace with empty tables
+                local saved_elements = {}
+                local container_len = #state.container
+                for i = 1, container_len do
+                    if i ~= elem_info.index then
+                        saved_elements[i] = state.container[i]
+                        -- Replace with minimal dummy that won't produce output
+                        state.container[i] = { elementname = "_dummy_" }
+                    end
+                end
+
+                -- Restore fontfamilies before each parse (html.lua consumes it)
+                tab.fontfamilies = state.fontfamilies
+
+                -- Parse the modified tree
+                local parsed = publisher.parse_html(tab, {}, dataxml)
+                parsed = publisher.flatten_boxes(parsed)
+
+                -- Restore the original elements
+                for i, elt in pairs(saved_elements) do
+                    state.container[i] = elt
+                end
+
+                -- Restore original getheight
+                publisher.getheight = state.original_getheight
+
+                -- Add parsed blocks to state (filter out empty/dummy results)
+                for i = 1, #parsed do
+                    if parsed[i] then
+                        state.blocks[#state.blocks + 1] = parsed[i]
+                    end
+                end
+
+                state.parsed_up_to = state.parsed_up_to + 1
+            end
+        end
+
+        local blocks_to_use = state.blocks
+
+        -- Format elements one at a time
+        while state.next_index <= #blocks_to_use do
+            if state.formatted_height > parameter.maxheight then
+                break
+            end
+
+            local contents = blocks_to_use[state.next_index]
+            local obj = contents:format(parameter.width, parameter, dataxml)
+            state.objects[#state.objects + 1] = obj
+            state.formatted_height = state.formatted_height + (obj.height or 0) + (obj.depth or 0)
+
+            -- Move current_row so next element sees correct available height
+            local ht_rows, extra = cg:height_in_gridcells_sp(
+                obj.height + obj.depth + state.extra_accumulated,
+                {extrathreshold = -100}
+            )
+            state.extra_accumulated = extra
+            local current = cg:current_row(areaname) or 1
+            local max_rows = cg:number_of_rows(areaname)
+
+            if current + ht_rows <= max_rows then
+                cg:set_current_row(current + ht_rows, areaname, "html pull")
+            end
+
+            state.next_index = state.next_index + 1
+
+            if obj.height + obj.depth > parameter.maxheight then
+                break
+            end
+        end
+
+        if #state.objects > 0 then
+            local obj1, obj2 = publisher.vsplit(state.objects, parameter)
+            if state.prevobj1 ~= nil and state.prevobj1 == obj1 and #state.objects > 0 then
+                err("Output loop detected in HTML vsplit.")
+                state.objects = {}
+                return obj1, state, false
+            end
+            if obj2 then
+                state.split = obj2
+                return obj1, state, false
+            else
+                state.prevobj1 = obj1
+                state.formatted_height = 0
+                local more_to_follow = #state.objects > 0 or state.next_index <= #blocks_to_use
+                return obj1, state, more_to_follow
+            end
+        else
+            return nil, nil, false
+        end
+    end
+
     return ret
 end
 

@@ -4384,13 +4384,23 @@
   -->
   <command en="HTML" since="5.1.17">
     <description xml:lang="en">
-      <para >Create HTML output. Experimental</para>
+      <para >Create HTML output</para>
     </description>
     <description xml:lang="de">
-      <para>Erzeugt HTML-Ausgabe. Experimentell.</para>
+      <para>Erzeugt HTML-Ausgabe</para>
     </description>
-    <childelements></childelements>
-    <attribute en="select" optional="no" type="xpath">
+    <childelements>
+      <reference name="html" />
+    </childelements>
+    <attribute en="expand-text" type="boolean" optional="yes">
+      <description xml:lang="en">
+        <para>If set to "yes", expressions in curly braces {expr} within the HTML content are evaluated as XPath expressions (similar to XSLT 3.0 text value templates). Use {{ and }} for literal curly braces. Default is "no".</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bei "yes" werden Ausdrücke in geschweiften Klammern {expr} im HTML-Inhalt als XPath-Ausdrücke ausgewertet (ähnlich wie XSLT 3.0 Text Value Templates). Für literale geschweifte Klammern {{ und }} verwenden. Standard ist "no".</para>
+      </description>
+    </attribute>
+    <attribute en="select" optional="yes" type="xpath">
       <description xml:lang="en">
         <para>The HTML selection</para>
       </description>
@@ -4400,24 +4410,26 @@
     </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Output>
-  <Text>
-    <HTML select="html" />
-  </Text>
+  <HTML select="html" />
+</Output>]]></listing>
+      <para>Inline HTML with XPath expansion:</para>
+      <listing><![CDATA[<Output>
+  <HTML expand-text="yes">
+    <p>Article <b>{@nr}</b> costs {$price} Euro.</p>
+  </HTML>
 </Output>]]></listing>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Output>
-  <Text>
-    <HTML select="html" />
-  </Text>
+  <HTML select="html" />
+</Output>]]></listing>
+      <para>Inline-HTML mit XPath-Ersetzung:</para>
+      <listing><![CDATA[<Output>
+  <HTML expand-text="yes">
+    <p>Der Artikel <b>{@nr}</b> kostet {$preis} Euro.</p>
+  </HTML>
 </Output>]]></listing>
     </example>
-    <info xml:lang="en">
-      <para>This command will change its semantic, don't use in production.</para>
-    </info>
-    <info xml:lang="de">
-      <para>Dieser Befehl wird seine Semantik ändern, nicht in der Produktion verwenden.</para>
-    </info>
     <seealso><cmd name="Output"></cmd></seealso>
   </command>
 
@@ -6867,7 +6879,12 @@
       <para>Dieser Befehl ist ähnlich zu <cmd name="PlaceObject"/> und dient derzeit nur dazu, Text auszugeben, der auf mehrere Seite umbrochen werden kann und sich dem freien Platz auf der Seite anpassen kann.</para>
     </description>
     <childelements>
-      <cmd name="Text"/>
+      <optional>
+        <cmd name="Text" />
+      </optional>
+      <optional>
+        <cmd name="HTML"/>
+      </optional>
     </childelements>
     <attribute en="allocate" optional="yes" allowxpath="yes">
       <description xml:lang="en">
@@ -11128,7 +11145,6 @@
           <cmd name="Image"/>
           <cmd name="Loop"/>
           <cmd name="Ol"/>
-          <cmd name="HTML"/>
           <cmd name="Paragraph"/>
           <cmd name="Switch"/>
           <cmd name="Ul"/>

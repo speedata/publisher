@@ -1,0 +1,145 @@
+[[ch-html]]
+= HTML
+
+Der speedata Publisher kann HTML-Inhalte verarbeiten und als PDF ausgeben. Dieses Kapitel beschreibt die verschiedenen Möglichkeiten, HTML zu verwenden, und die unterstützten Funktionen.
+
+== HTML verwenden
+
+Es gibt mehrere Möglichkeiten, HTML-Inhalte in das Layout einzubinden:
+
+=== Direktes HTML in Output
+
+Am einfachsten ist die Verwendung des `<HTML>`-Befehls direkt innerhalb von `<Output>`:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Output>
+  <HTML>
+    <h1>Überschrift</h1>
+    <p>Ein Absatz mit <b>fettem</b> und <i>kursivem</i> Text.</p>
+    <ul>
+      <li>Punkt 1</li>
+      <li>Punkt 2</li>
+    </ul>
+  </HTML>
+</Output>
+-------------------------------------------------------------------------------
+
+=== HTML aus Daten mit select
+
+HTML-Inhalte können aus der Datendatei mit dem `select`-Attribut geladen werden:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Output>
+  <HTML select="content" />
+</Output>
+-------------------------------------------------------------------------------
+
+Wenn das HTML als maskierter Text (z.B. `&lt;p&gt;`) oder in einem CDATA-Abschnitt gespeichert ist, wird der `<HTML>`-Befehl es korrekt parsen.
+
+=== HTML in Paragraph
+
+HTML kann auch innerhalb von `<Paragraph>`-Elementen in einem `<Textblock>` oder `<Text>` verwendet werden. Das ist nützlich, wenn HTML mit anderen Publisher-Elementen gemischt werden soll:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Record element="Paragraph">
+  <PlaceObject>
+    <Textblock>
+      <Paragraph>
+        <Value select="sd:decode-html(.)" />
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+-------------------------------------------------------------------------------
+
+Mit Daten, die HTML in CDATA enthalten:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph><![CDATA[<ol><li>Erster Punkt</li><li>Zweiter Punkt</li></ol>]]></Paragraph>
+-------------------------------------------------------------------------------
+
+=== XPath-Ersetzung mit expand-text
+
+Bei Inline-HTML können XPath-Ausdrücke in geschweiften Klammern verwendet werden, wenn `expand-text="yes"` gesetzt ist:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Output>
+  <HTML expand-text="yes">
+    <p>Artikel <b>{@nr}</b> kostet {$preis} Euro.</p>
+  </HTML>
+</Output>
+-------------------------------------------------------------------------------
+
+Für literale geschweifte Klammern `{{` und `}}` verwenden.
+
+== Unterstützte HTML-Elemente
+
+Die folgenden HTML-Elemente werden unterstützt:
+
+* Überschriften: `<h1>` bis `<h6>`
+* Absätze: `<p>`
+* Textformatierung: `<b>`, `<i>`, `<u>`, `<code>`, `<kbd>`, `<span>`
+* Links: `<a href="...">`
+* Listen: `<ul>`, `<ol>`, `<li>`
+* Tabellen: `<table>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>`
+* Zeilenumbrüche: `<br>`
+
+== CSS-Styling
+
+HTML-Elemente können mit CSS gestaltet werden. CSS kann über den `<Stylesheet>`-Befehl eingebunden werden:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Stylesheet>
+  h1 { color: blue; font-size: 24pt; }
+  p { margin-bottom: 12pt; }
+  .highlight { background-color: yellow; }
+</Stylesheet>
+-------------------------------------------------------------------------------
+
+Oder CSS aus einer Datei laden:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Stylesheet filename="styles.css" />
+-------------------------------------------------------------------------------
+
+=== Unterstützte CSS-Eigenschaften
+
+Der speedata Publisher unterstützt eine Teilmenge von CSS-Eigenschaften, darunter:
+
+* Schrifteigenschaften: `font-family`, `font-size`, `font-weight`, `font-style`
+* Texteigenschaften: `color`, `text-align`, `text-decoration`, `line-height`
+* Box-Modell: `margin`, `padding`, `border`, `width`, `height`
+* Hintergrund: `background-color`
+* Listenstil: `list-style-type`, `list-style`
+
+Eine vollständige Liste der unterstützten CSS-Eigenschaften ist im CSS-Abschnitt unter <<ch-css>> zu finden.
+
+== Tabellen in HTML
+
+HTML-Tabellen werden vollständig unterstützt, einschließlich Kopf- und Fußzeilen, die bei Seitenumbrüchen wiederholt werden:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<HTML>
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Preis</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Produkt A</td><td>10,00</td></tr>
+      <tr><td>Produkt B</td><td>20,00</td></tr>
+    </tbody>
+  </table>
+</HTML>
+-------------------------------------------------------------------------------
+
+Tabellen können sich über mehrere Seiten erstrecken, wobei der `<thead>`-Inhalt oben auf jeder Seite wiederholt wird.
+
+// EOF

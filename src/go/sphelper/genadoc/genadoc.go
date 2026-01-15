@@ -102,14 +102,23 @@ func parentelements(lang string, cmd *commandsxml.Command) string {
 	return strings.Join(ret, ", ")
 }
 
-func childelements(lang string, children []*commandsxml.Command) string {
+func childelements(lang string, cmd *commandsxml.Command) string {
+	// Check for HTML children (pseudo-reference)
+	if cmd.HasHTMLChildren() {
+		if lang == "de" {
+			return "HTML-Elemente"
+		}
+		return "HTML elements"
+	}
+
+	children := cmd.Childelements()
 	if len(children) == 0 {
 		return string("(" + translate(lang, "none") + ")")
 	}
 
 	var ret []string
-	for _, cmd := range children {
-		ret = append(ret, fmt.Sprintf("<<%s,`%s`>>", cmd.CmdLink(), cmd.Name))
+	for _, c := range children {
+		ret = append(ret, fmt.Sprintf("<<%s,`%s`>>", c.CmdLink(), c.Name))
 	}
 	return strings.Join(ret, ", ")
 }

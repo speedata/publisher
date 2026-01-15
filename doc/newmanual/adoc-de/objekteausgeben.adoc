@@ -163,7 +163,43 @@ Die Syntax dafür ist
 Neben der Besonderheit, dass dieser Text auf mehrere Seiten umbrechen kann, ist er auch in der Lage, Objekte zu umfließen.
 Eine detaillierte Beschreibung dieser Eigenschaft ist im Abschnitt <<ch-umfliessenvonbildern>> gegeben.
 
+[[ch-objekteausgeben-html]]
+== HTML
 
+HTML-Inhalte können auf verschiedene Arten ausgegeben werden. Am einfachsten ist die Verwendung des `<HTML>`-Befehls direkt innerhalb von `<Output>`:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Output>
+  <HTML>
+    <p>Ein Absatz mit <b>fettem</b> und <i>kursivem</i> Text.</p>
+  </HTML>
+</Output>
+-------------------------------------------------------------------------------
+
+HTML kann auch innerhalb von `<Paragraph>` in einem `<Textblock>` oder `<Text>` verwendet werden. In diesem Fall kommt das HTML aus den Daten:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Record element="Paragraph">
+  <PlaceObject>
+    <Textblock>
+      <Paragraph>
+        <Value select="." />
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+-------------------------------------------------------------------------------
+
+Mit Daten wie:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph><![CDATA[<ul><li>Punkt 1</li><li>Punkt 2</li></ul>]]></Paragraph>
+-------------------------------------------------------------------------------
+
+Eine ausführliche Beschreibung der HTML-Funktionen einschließlich CSS-Styling ist im Abschnitt <<ch-html>> zu finden.
 
 
 

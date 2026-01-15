@@ -124,6 +124,44 @@ Texts with a page break are not output with <PlaceObject> like the other objects
 
 Besides the special feature that this text can wrap around several pages, it is also able to wrap around objects. A detailed description of this property is given in the section Flowing around images.
 
+[[ch-outputobjects-html]]
+== HTML
+
+HTML content can be output in different ways. The simplest is to use the `<HTML>` command directly within `<Output>`:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Output>
+  <HTML>
+    <p>A paragraph with <b>bold</b> and <i>italic</i> text.</p>
+  </HTML>
+</Output>
+-------------------------------------------------------------------------------
+
+HTML can also be used within `<Paragraph>` in a `<Textblock>` or `<Text>`. In this case, the HTML comes from the data:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Record element="Paragraph">
+  <PlaceObject>
+    <Textblock>
+      <Paragraph>
+        <Value select="." />
+      </Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+-------------------------------------------------------------------------------
+
+With data like:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph><![CDATA[<ul><li>Item 1</li><li>Item 2</li></ul>]]></Paragraph>
+-------------------------------------------------------------------------------
+
+A detailed description of the HTML features including CSS styling is given in the section <<ch-html>>.
+
 [[ch-intro-tables]]
 == Introduction to tables
 

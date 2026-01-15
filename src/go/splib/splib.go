@@ -23,14 +23,13 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
-	"strconv"
-	"strings"
-	"time"
-
 	"speedatapublisher/css"
 	"speedatapublisher/splib/csslua"
 	"speedatapublisher/splibaux"
 	"speedatapublisher/text/unicode/bidi"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/alecthomas/chroma/v2/formatters/html"
 	"github.com/yuin/goldmark"
@@ -86,7 +85,6 @@ func luaEntry(L *C.lua_State, f func(l *LuaState) int) (ret int) {
 //export sdParseRawHTMLText
 func sdParseRawHTMLText(L *C.lua_State) int {
 	return luaEntry(L, func(l *LuaState) int {
-
 		htmltext, ok := l.getString(1)
 		if !ok {
 			slog.Error("sdParseRawHTMLText first argument must be a string (HTML text)")
@@ -100,7 +98,6 @@ func sdParseRawHTMLText(L *C.lua_State) int {
 
 		c := css.NewCSSParser()
 		cssResult, err := c.ParseHTMLFragment(htmltext, csstext)
-
 		if err != nil {
 			slog.Error("sdParseRawHTMLText could not parse HTML", "msg", err.Error())
 			return 0
@@ -262,7 +259,6 @@ func sdMatches(L *C.lua_State) int {
 //export sdTokenize
 func sdTokenize(L *C.lua_State) int {
 	return luaEntry(L, func(l *LuaState) int {
-
 		text, ok := l.getString(1)
 		if !ok {
 			slog.Error("sdTokenize first argument must be a string (the text)")
@@ -474,7 +470,6 @@ func sdConvertContents(L *C.lua_State) int {
 //export sdConvertImage
 func sdConvertImage(L *C.lua_State) int {
 	return luaEntry(L, func(l *LuaState) int {
-
 		filename, ok := l.getString(1)
 		if !ok {
 			slog.Error("First argument to sdConvertImage must be a string")

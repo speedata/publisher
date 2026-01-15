@@ -11,7 +11,7 @@
 [.Flushleft]
 == {{ translate .Lang "Child elements" }}
 
-{{ childelements .Lang (.Command.Childelements ) }}
+{{ childelements .Lang .Command }}
 
 [.Flushleft]
 == {{ translate .Lang "Parent elements" }}

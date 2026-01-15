@@ -134,9 +134,30 @@ function M.build_html_table(table_elt, width, cb, dataxml, stylesstack)
     end
 
     local tab = {}
-    for i = 1, #head do tab[#tab + 1] = head[i] end
+
+    -- Wrap thead rows in Tablehead structure so they repeat on each page
+    if #head > 0 then
+        local tablehead_contents = {}
+        for i = 1, #head do
+            tablehead_contents[i] = head[i]
+        end
+        tablehead_contents.page = "all"
+        tab[#tab + 1] = { elementname = "Tablehead", contents = tablehead_contents }
+    end
+
+    -- Body rows go directly into tab
     for i = 1, #body do tab[#tab + 1] = body[i] end
-    for i = 1, #foot do tab[#tab + 1] = foot[i] end
+
+    -- Wrap tfoot rows in Tablefoot structure so they repeat on each page
+    if #foot > 0 then
+        local tablefoot_contents = {}
+        for i = 1, #foot do
+            tablefoot_contents[i] = foot[i]
+        end
+        tablefoot_contents.page = "all"
+        tab[#tab + 1] = { elementname = "Tablefoot", contents = tablefoot_contents }
+    end
+
     tabular.tab = tab
 
     -- Fontfamily "text" fallback wie im Original
@@ -149,8 +170,9 @@ function M.build_html_table(table_elt, width, cb, dataxml, stylesstack)
     tabular.fontfamily = fontfamily
 
     -- Original default options / paddings / borders
+    -- Use publisher.getheight directly - it may be replaced for HTML-in-Output
     tabular.options = { ht_max = publisher.getheight(1,dataxml) } -- a heuristic
-    tabular.getheight      = publisher.getheight
+    tabular.getheight      = function(...) return publisher.getheight(...) end
     tabular.padding_left   = 0
     tabular.padding_top    = 0
     tabular.padding_right  = 0
