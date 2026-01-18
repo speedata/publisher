@@ -1,0 +1,25 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="8cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; }
+        div { background-color: lightgray; margin-bottom: 5pt; padding: 3pt; }
+        .left { text-align: left; }
+        .right { text-align: right; }
+        .center { text-align: center; }
+        .justify { text-align: justify; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <div class="left">text-align: left - Lorem ipsum dolor sit amet</div>
+                    <div class="right">text-align: right - Lorem ipsum dolor sit amet</div>
+                    <div class="center">text-align: center - Lorem ipsum dolor sit amet</div>
+                    <div class="justify">text-align: justify - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                        magna aliqua.</div>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

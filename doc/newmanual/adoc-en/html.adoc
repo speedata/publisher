@@ -1,7 +1,7 @@
 [[ch-html]]
 = HTML
 
-The speedata Publisher can process HTML content and render it to PDF. This chapter describes the different ways to use HTML and the supported features.
+The speedata Publisher can process HTML content and render it to PDF. This chapter describes the different ways to use HTML and the supported features. These features are still under development and the HTML support is continuously being improved.
 
 == Using HTML
 
@@ -141,5 +141,46 @@ HTML tables are fully supported including headers and footers that repeat on pag
 -------------------------------------------------------------------------------
 
 Tables can span multiple pages, with the `<thead>` content repeating at the top of each page.
+
+== Test Status
+
+In the repository, there is a set of HTML/CSS tests under `qa/htmloutput` that verify the various features and their support in the speedata Publisher.
+
+=== Working
+
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/break-after[*break-after*] – Page breaks after HTML elements
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/break-before[*break-before*] – Page breaks before HTML elements
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/color[*color*] – Text color rendering with different color formats
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/font-style-weight[*font-style-weight*] – Font style (italic) and font weight (bold) rendering and combinations
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/list-style-type[*list-style-type*] – Various list marker types (disc, circle, square, decimal, alpha, roman) (may require font with corresponding glyphs)
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/table-border[*table-border*] – Table cell borders and various formatting options
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/table-border-collapse[*table-border-collapse*] – Differences between border-collapse separate and collapse modes
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/tablebreak[*tablebreak*] – Multi-page table rendering with repeating table header
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/text-align[*text-align*] – Text alignment options (left, right, center, justify)
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/vertical-align[*vertical-align*] – Superscript and subscript rendering (*check: font size*)
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/white-space[*white-space*] – White-space handling (normal, pre)
+
+=== Partially Working
+
+Tests that pass but may need improvements:
+
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/border-color[*border-color*] – Border color rendering with individual side colors and currentcolor support
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/border-radius[*border-radius*] – Border radius rendering with uniform and individual corner radius values
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/border-shorthand[*border-shorthand*] – Border shorthand property with various styles, widths, and colors
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/border-width[*border-width*] – Border width rendering in different units and with individual values per side
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/box-margin[*box-margin*] – Margin rendering with shorthand notation and individual values per side
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/box-padding[*box-padding*] – Padding rendering with shorthand notation and individual values per side
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/font-size[*font-size*] – Various font size units (pt, px, em, rem, %, keywords). *Top margin on 2nd page is too small.*
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/list-style-position[*list-style-position*] – List marker position (outside, inside). *Markers are probably not correctly positioned.*
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/text-decoration[*text-decoration*] – Text decoration (underline, line-through, various styles and colors). *Only underline is supported.*
+
+=== Broken
+
+Tests that currently don't work correctly:
+
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/background-color[*background-color*] – Background color rendering with different color formats (named colors, hex, RGB)
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/border-style[*border-style*] – Various border styles (none, solid, dashed, dotted, double, groove, ridge, inset, outset)
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/box-width-height[*box-width-height*] – Width and height rendering with percentage, pixel, and em units
+* https://github.com/speedata/publisher/tree/develop/qa/htmloutput/line-height[*line-height*] – Various line height values (normal, numeric, percentage, points)
 
 // EOF

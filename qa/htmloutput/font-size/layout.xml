@@ -1,0 +1,29 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="10cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; font-size: 10pt; }
+        .pt8 { font-size: 8pt; }
+        .pt12 { font-size: 12pt; }
+        .pt16 { font-size: 16pt; }
+        .em2 { font-size: 2em; }
+        .rem15 { font-size: 1.5rem; }
+        .percent150 { font-size: 150%; }
+        .small { font-size: small; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <p class="pt8">font-size: 8pt</p>
+                    <p class="pt12">font-size: 12pt</p>
+                    <p class="pt16">font-size: 16pt</p>
+                    <p class="em2">font-size: 2em</p>
+                    <p class="rem15">font-size: 1.5rem</p>
+                    <p class="percent150">font-size: 150%</p>
+                    <p class="small">font-size: small</p>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

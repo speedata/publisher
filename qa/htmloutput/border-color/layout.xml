@@ -1,0 +1,26 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="8cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; font-size: 9pt; }
+        div { margin: 5pt; padding: 5pt; border-style: solid; border-width: 2pt; }
+        .red { border-color: red; }
+        .hex { border-color: #00ff00; }
+        .rgb { border-color: rgb(0, 0, 255); }
+        .mixed { border-top-color: red; border-right-color: green; border-bottom-color: blue; border-left-color: yellow; }
+        .current { color: purple; border-color: currentcolor; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <div class="red">border-color: red</div>
+                    <div class="hex">border-color: #00ff00</div>
+                    <div class="rgb">border-color: rgb(0, 0, 255)</div>
+                    <div class="mixed">border-color: individual sides</div>
+                    <div class="current">border-color: currentcolor</div>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

@@ -1,0 +1,24 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="10cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; }
+        div { background-color: lightblue; margin-bottom: 5pt; border: 1pt solid blue; }
+        .w-50 { width: 50%; }
+        .w-100px { width: 100px; }
+        .w-5em { width: 5em; }
+        .w-auto { width: auto; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <div class="w-50">width: 50%</div>
+                    <div class="w-100px">width: 100px</div>
+                    <div class="w-5em">width: 5em</div>
+                    <div class="w-auto">width: auto (default)</div>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

@@ -1,0 +1,19 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="6cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; font-size: 12pt; }
+        .super { vertical-align: super; font-size: 8pt; }
+        .sub { vertical-align: sub; font-size: 8pt; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <p>Normal text with <span class="super">superscript</span> and <span class="sub">subscript</span> text.</p>
+                    <p>E = mc<span class="super">2</span> and H<span class="sub">2</span>O</p>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

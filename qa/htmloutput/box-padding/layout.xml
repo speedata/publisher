@@ -1,0 +1,30 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="8cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; }
+        div { background-color: lightblue; margin-bottom: 5pt; border: 0.5pt solid black; }
+        .p-all { padding: 15pt; }
+        .p-top { padding-top: 20pt; }
+        .p-right { padding-right: 30pt; }
+        .p-bottom { padding-bottom: 10pt; }
+        .p-left { padding-left: 25pt; }
+        .p-shorthand-2 { padding: 10pt 20pt; }
+        .p-shorthand-4 { padding: 5pt 10pt 15pt 20pt; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <div class="p-all">padding: 15pt (all sides)</div>
+                    <div class="p-top">padding-top: 20pt</div>
+                    <div class="p-right">padding-right: 30pt</div>
+                    <div class="p-bottom">padding-bottom: 10pt</div>
+                    <div class="p-left">padding-left: 25pt</div>
+                    <div class="p-shorthand-2">padding: 10pt 20pt</div>
+                    <div class="p-shorthand-4">padding: 5pt 10pt 15pt 20pt</div>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

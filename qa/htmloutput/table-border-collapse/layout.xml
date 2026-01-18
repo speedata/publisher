@@ -1,0 +1,33 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="10cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; font-size: 9pt; }
+        table { width: 100%; margin-bottom: 15pt; }
+        td, th { border: 1pt solid black; padding: 3pt; }
+        .separate { border-collapse: separate; border-spacing: 5pt; }
+        .collapse { border-collapse: collapse; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <p>border-collapse: separate (default, with spacing)</p>
+                    <table class="separate">
+                        <tbody>
+                            <tr><td>A</td><td>B</td><td>C</td></tr>
+                            <tr><td>D</td><td>E</td><td>F</td></tr>
+                        </tbody>
+                    </table>
+                    <p>border-collapse: collapse</p>
+                    <table class="collapse">
+                        <tbody>
+                            <tr><td>A</td><td>B</td><td>C</td></tr>
+                            <tr><td>D</td><td>E</td><td>F</td></tr>
+                        </tbody>
+                    </table>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

@@ -1,0 +1,22 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="6cm" width="8cm" />
+    <Stylesheet>
+        body { margin: 0; }
+        h1 { break-before: always; }
+        h2 { break-before: page; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <p>Page 1: Intro text</p>
+                    <h1>H1 with break-before: always</h1>
+                    <p>Page 2: Text after H1</p>
+                    <h2>H2 with break-before: page</h2>
+                    <p>Page 3: Text after H2</p>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

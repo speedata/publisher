@@ -9793,13 +9793,13 @@
   <xs:complexType name="html" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:element ref="en:a"/>
+      <xs:element ref="en:br"/>
       <xs:element ref="en:h1"/>
       <xs:element ref="en:h2"/>
       <xs:element ref="en:h3"/>
       <xs:element ref="en:h4"/>
       <xs:element ref="en:h5"/>
       <xs:element ref="en:b"/>
-      <xs:element ref="en:br"/>
       <xs:element ref="en:code"/>
       <xs:element ref="en:i"/>
       <xs:element ref="en:kbd"/>
@@ -9809,6 +9809,8 @@
       <xs:element ref="en:table"/>
       <xs:element ref="en:u"/>
       <xs:element ref="en:ul"/>
+      <xs:element ref="en:ol"/>
+      <xs:element ref="en:body"/>
     </xs:choice>
   </xs:complexType>
   <xs:element name="a">
@@ -9865,11 +9867,51 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:element name="b" type="en:html"/>
-  <xs:element name="code" type="en:html"/>
-  <xs:element name="i" type="en:html"/>
-  <xs:element name="kbd" type="en:html"/>
-  <xs:element name="li" type="en:html"/>
+  <xs:element name="b">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="code">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="i">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="kbd">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="li">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="p">
     <xs:complexType>
       <xs:complexContent>
@@ -9883,14 +9925,56 @@
     <xs:complexType>
       <xs:complexContent>
         <xs:extension base="en:html">
-          <xs:anyAttribute processContents="skip"/>
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:element name="table" type="en:htmltable"/>
-  <xs:element name="u" type="en:html"/>
-  <xs:element name="ul" type="en:html"/>
+  <xs:element name="table">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:htmltable">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="u">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ul">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ol">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="body">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:html">
+          <xs:attributeGroup ref="en:htmlclassidstyle"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:complexType name="htmltable">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="en:colgroup"/>
@@ -9900,7 +9984,6 @@
         <xs:element maxOccurs="unbounded" ref="en:tr"/>
       </xs:choice>
     </xs:sequence>
-    <xs:attributeGroup ref="en:htmlclassidstyle"/>
   </xs:complexType>
   <xs:element name="thead">
     <xs:complexType>

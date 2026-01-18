@@ -1,0 +1,27 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="10cm" width="10cm" />
+    <Stylesheet>
+        ul { background-color: lightgray; margin: 10pt; }
+        .outside { list-style-position: outside; }
+        .inside { list-style-position: inside; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <p>text before which wraps to the next line. It needs more words for the line wrap.</p>
+                <ul class="outside">
+                    <li>list-style-position: outside</li>
+                    <li>Marker is outside the content box.</li>
+                    <li>The long text wraps to the next line. It needs more words for the line wrap.</li>
+                </ul>
+                <ul class="inside">
+                    <li>list-style-position: inside</li>
+                    <li>Marker is inside the content box</li>
+                    <li>The long text wraps to the next line. It needs more words for the line wrap.</li>
+                </ul>
+                <p>Text after which wraps to the next line. It needs more words for the line wrap.</p>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

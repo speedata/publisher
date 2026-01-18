@@ -113,6 +113,7 @@ task :regenerateqa do
 	Dir.glob("qa/**/") do |d|
 		Dir.chdir(d) do
 			if test(?f,"layout.xml") then
+				puts "=== #{d} ==="
 				sh "sp -s --jobname reference"
 				sh "sp --jobname reference clean"
 			end

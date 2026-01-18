@@ -1,0 +1,24 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="8cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; }
+        div { padding: 5pt; margin-bottom: 5pt; }
+        .red { background-color: red; }
+        .hex { background-color: #00ff00; }
+        .rgb { background-color: rgb(200, 200, 255); }
+        .named { background-color: lightyellow; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <div class="red">background-color: red</div>
+                    <div class="hex">background-color: #00ff00</div>
+                    <div class="rgb">background-color: rgb(200, 200, 255)</div>
+                    <div class="named">background-color: lightyellow</div>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

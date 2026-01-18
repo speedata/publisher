@@ -1,0 +1,28 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="8cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; font-size: 9pt; }
+        div { margin: 5pt; padding: 5pt; }
+        .short1 { border: 2pt solid red; }
+        .short2 { border: 3pt dashed blue; }
+        .top { border-top: 2pt solid green; }
+        .right { border-right: 2pt dotted purple; }
+        .bottom { border-bottom: 2pt double orange; }
+        .left { border-left: 3pt solid black; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <div class="short1">border: 2pt solid red</div>
+                    <div class="short2">border: 3pt dashed blue</div>
+                    <div class="top">border-top: 2pt solid green</div>
+                    <div class="right">border-right: 2pt dotted purple</div>
+                    <div class="bottom">border-bottom: 2pt double orange</div>
+                    <div class="left">border-left: 3pt solid black</div>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

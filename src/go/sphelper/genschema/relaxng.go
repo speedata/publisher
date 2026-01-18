@@ -318,34 +318,30 @@ func genRelaxNGSchema(commands *commandsXML, lang string, allowForeignNodes bool
 	<define name="html">
 		<zeroOrMore>
 		    <choice>
-			    <element name="a">
-				    <attribute name="href"/>
-				    <ref name="html"/>
-			    </element>
+			    <element name="a"><attribute name="href"/><ref name="html"/></element>
+				<element name="br"><empty /></element>
 				<element name="h1"><ref name="htmlclassidstyle"/><ref name="html" /></element>
 				<element name="h2"><ref name="htmlclassidstyle"/><ref name="html" /></element>
 				<element name="h3"><ref name="htmlclassidstyle"/><ref name="html" /></element>
 				<element name="h4"><ref name="htmlclassidstyle"/><ref name="html" /></element>
 				<element name="h5"><ref name="htmlclassidstyle"/><ref name="html" /></element>
-				<element name="b"><ref name="html" /></element>
-			    <element name="br"><empty /></element>
-			    <element name="code"><ref name="html" /></element>
-			    <element name="i"><ref name="html" /></element>
-			    <element name="kbd"><ref name="html" /></element>
-			    <element name="li"><ref name="html" /></element>
-			    <element name="p">
-					<ref name="htmlclassidstyle"/>
-				<ref name="html" /></element>
-			    <element name="span"><ref name="html" /><oneOrMore><attribute><anyName/></attribute></oneOrMore></element>
-                <element name="table"><ref name="htmltable" /></element>
-			    <element name="u"><ref name="html" /></element>
-			    <element name="ul"><ref name="html" /></element>
+				<element name="b"><ref name="htmlclassidstyle"/><ref name="html" /></element>
+			    <element name="code"><ref name="htmlclassidstyle"/><ref name="html" /></element>
+			    <element name="i"><ref name="htmlclassidstyle"/><ref name="html" /></element>
+			    <element name="kbd"><ref name="htmlclassidstyle"/><ref name="html" /></element>
+			    <element name="li"><ref name="htmlclassidstyle"/><ref name="html" /></element>
+			    <element name="p"><ref name="htmlclassidstyle"/><ref name="html" /></element>
+			    <element name="span"><ref name="htmlclassidstyle"/><ref name="html" /></element>
+                <element name="table"><ref name="htmlclassidstyle"/><ref name="htmltable" /></element>
+			    <element name="u"><ref name="htmlclassidstyle"/><ref name="html" /></element>
+			    <element name="ul"><ref name="htmlclassidstyle"/><ref name="html" /></element>
+			    <element name="ol"><ref name="htmlclassidstyle"/><ref name="html" /></element>
+			    <element name="body"><ref name="htmlclassidstyle"/><ref name="html" /></element>
 			    <text></text>
 		    </choice>
 		</zeroOrMore>
 	</define>
     <define name="htmltable">
-        <ref name="htmlclassidstyle"/>
         <zeroOrMore>
             <ref name="colgroup"/>
         </zeroOrMore>

@@ -1612,182 +1612,474 @@ function commands.html( layoutxml,dataxml)
         end
     })
 
-    -- Helper function to extract top-level block elements from HTML tree
-    -- Returns an array of {element_tree, is_table} for sequential parsing
-    local function extract_toplevel_elements(html_tree)
-        local elements = {}
-        -- Navigate to body content: html_tree[1] is html, find body inside
-        local root = html_tree[1]
-        if not root then return elements end
 
-        -- Find body element (or process root directly if no body)
-        local body = nil
-        for i = 1, #root do
-            if type(root[i]) == "table" and root[i].elementname == "body" then
-                body = root[i]
-                break
+    -- Direct output method for HTML - outputs elements one at a time at absolute positions
+    -- Key improvement: each element is parsed individually, so tables get the correct
+    -- available height at parse time (not a pre-computed value)
+    -- Elements are parsed only once and their output blocks are cached for multi-page handling
+    ret.output_direct = function(parameters, dataxml)
+        local cg = parameters.current_grid
+        local areaname = parameters.area or publisher.default_areaname
+        local maxwidth = parameters.width
+
+        -- Initialize state on first call
+        if not ret._initialized then
+            ret._initialized = true
+            ret._element_index = 1
+            ret._block_index = 1
+            ret._prev_margin_bottom = 0
+            ret._fontfamilies = tab.fontfamilies
+            ret._parsed_elements = {}  -- Cache for parsed elements
+            ret._pending_output = nil  -- Buffer for elements with break-after: avoid
+
+            -- Normalize tree once (required for proper element structure)
+            local tree_mod = require("html.tree")
+            tree_mod.normalize_html_tree(tab[1])
+
+            -- Extract top-level elements from body
+            ret._elements = {}
+            local root = tab[1]
+            ret._body = nil
+            for i = 1, #root do
+                if type(root[i]) == "table" and root[i].elementname == "body" then
+                    ret._body = root[i]
+                    break
+                end
+            end
+            local container = ret._body or root
+            for i = 1, #container do
+                local elt = container[i]
+                if type(elt) == "table" and elt.elementname then
+                    ret._elements[#ret._elements + 1] = elt
+                end
             end
         end
 
-        local container = body or root
-        for i = 1, #container do
-            local elt = container[i]
-            if type(elt) == "table" and elt.elementname then
+        local elements = ret._elements
+        local current_y_sp = parameters.start_y_sp
+        local margin_top = cg.margin_top or 0
+        local margin_left = cg.margin_left or 0
+        local extra_margin = cg.extra_margin or 0
+
+        -- Save original getheight
+        local original_getheight = publisher.getheight
+
+        while ret._element_index <= #elements do
+            -- Check if this element was already parsed
+            if not ret._parsed_elements[ret._element_index] then
+                local elt = elements[ret._element_index]
                 local is_table = (elt.elementname == "table")
-                elements[#elements + 1] = {
-                    index = i,
-                    elementname = elt.elementname,
-                    is_table = is_table
-                }
-            end
-        end
-        return elements, container
-    end
 
-    -- Pull-interface for use in Output command.
-    -- Uses incremental element parsing: each element is parsed when needed,
-    -- ensuring tables get correct ht_max based on actual cursor position.
-    ret.pull = function(parameter, state)
-        local cg = publisher.current_grid
-        local areaname = parameter.area or publisher.default_areaname
+                -- Calculate remaining height on current page
+                local remaining_height = parameters.page_height_sp - current_y_sp
 
-        if not state then
-            state = {}
-            state.objects = {}
-            state.next_index = 1
-            state.extra_accumulated = 0
-            state.formatted_height = 0
-            state.original_getheight = publisher.getheight
-
-            -- Save fontfamilies before first parse (html.lua removes it after first use)
-            state.fontfamilies = tab.fontfamilies
-
-            -- Extract info about top-level elements for incremental parsing
-            state.elements, state.container = extract_toplevel_elements(tab)
-
-            -- If no elements found, fall back to normal parsing
-            if #state.elements == 0 then
-                local all_blocks = publisher.parse_html(tab, {}, dataxml)
-                all_blocks = publisher.flatten_boxes(all_blocks)
-                state.blocks = all_blocks
-                state.use_incremental = false
-            else
-                state.blocks = {}
-                state.use_incremental = true
-                state.parsed_up_to = 0
-            end
-        end
-
-        -- For incremental parsing: parse elements one at a time
-        if state.use_incremental then
-            while state.parsed_up_to < #state.elements and
-                  state.next_index > #state.blocks do
-
-                local elem_info = state.elements[state.parsed_up_to + 1]
-                local current_row = cg:current_row(areaname) or 1
-
-                -- For tables: set getheight to return remaining height based on current cursor
-                -- Subtract a small buffer (about 3mm) to account for thead/tfoot overhead during splits
-                if elem_info.is_table then
-                    local remaining = cg:remaining_height_sp(current_row, areaname)
-                    local buffer = 200000  -- ~3mm safety margin for split overhead
-                    remaining = math.max(remaining - buffer, 0)
+                -- For tables: override getheight to return correct remaining height
+                if is_table then
+                    local current_remaining = remaining_height
+                    local page_content_height = parameters.page_height_sp - margin_top
                     publisher.getheight = function(relative_framenumber, dxml)
-                        return remaining
+                        if relative_framenumber == 1 then
+                            return current_remaining
+                        else
+                            -- Subsequent pages: full content height
+                            return page_content_height
+                        end
                     end
                 end
 
-                -- Temporarily replace all elements except the current one with dummies
-                -- We need to preserve array indices, so we replace with empty tables
-                local saved_elements = {}
-                local container_len = #state.container
-                for i = 1, container_len do
-                    if i ~= elem_info.index then
-                        saved_elements[i] = state.container[i]
-                        -- Replace with minimal dummy that won't produce output
-                        state.container[i] = { elementname = "_dummy_" }
-                    end
+                -- Create a temporary tree with just this element for parsing
+                -- Use body's styles (not html's) for proper CSS inheritance
+                local body_styles = ret._body and ret._body.styles or tab[1].styles
+                local temp_body = {
+                    elementname = "body",
+                    styles = body_styles,
+                    attributes = ret._body and ret._body.attributes or {},
+                    [1] = elt
+                }
+                local temp_html = {
+                    elementname = "html",
+                    styles = tab[1].styles,
+                    attributes = tab[1].attributes or {},
+                    [1] = temp_body
+                }
+                local temp_tree = {
+                    typ = "csshtmltree",
+                    fontfamilies = ret._fontfamilies,
+                    [1] = temp_html
+                }
+
+                -- Set calculated_width for this element
+                if publisher.newxpath then
+                    temp_html.styles.calculated_width = dataxml.vars["__maxwidth"] or maxwidth
+                else
+                    temp_html.styles.calculated_width = xpath.get_variable("__maxwidth") or maxwidth
                 end
 
-                -- Restore fontfamilies before each parse (html.lua consumes it)
-                tab.fontfamilies = state.fontfamilies
-
-                -- Parse the modified tree
-                local parsed = publisher.parse_html(tab, {}, dataxml)
+                -- Parse this single element (only once!)
+                local parsed = publisher.parse_html(temp_tree, {}, dataxml)
                 parsed = publisher.flatten_boxes(parsed)
 
-                -- Restore the original elements
-                for i, elt in pairs(saved_elements) do
-                    state.container[i] = elt
-                end
-
                 -- Restore original getheight
-                publisher.getheight = state.original_getheight
+                publisher.getheight = original_getheight
 
-                -- Add parsed blocks to state (filter out empty/dummy results)
-                for i = 1, #parsed do
-                    if parsed[i] then
-                        state.blocks[#state.blocks + 1] = parsed[i]
+                -- Format all blocks immediately (they can only be formatted once!)
+                local formatted_objects = {}
+                for bi = 1, #parsed do
+                    local block = parsed[bi]
+                    local obj = block:format(maxwidth, parameters, dataxml)
+                    if obj then
+                        formatted_objects[#formatted_objects + 1] = {
+                            obj = obj,
+                            -- Note: flatten_boxes uses margin_top/margin_bottom (with underscore)
+                            margintop = block.margin_top or block.margintop or 0,
+                            marginbottom = block.margin_bottom or block.marginbottom or 0,
+                            break_before = block.break_before,
+                            break_after = block.break_after,
+                        }
                     end
                 end
 
-                state.parsed_up_to = state.parsed_up_to + 1
-            end
-        end
+                -- Cache the formatted objects for this element
+                ret._parsed_elements[ret._element_index] = {
+                    objects = formatted_objects,
+                    obj_index = 1
+                }
 
-        local blocks_to_use = state.blocks
-
-        -- Format elements one at a time
-        while state.next_index <= #blocks_to_use do
-            if state.formatted_height > parameter.maxheight then
-                break
-            end
-
-            local contents = blocks_to_use[state.next_index]
-            local obj = contents:format(parameter.width, parameter, dataxml)
-            state.objects[#state.objects + 1] = obj
-            state.formatted_height = state.formatted_height + (obj.height or 0) + (obj.depth or 0)
-
-            -- Move current_row so next element sees correct available height
-            local ht_rows, extra = cg:height_in_gridcells_sp(
-                obj.height + obj.depth + state.extra_accumulated,
-                {extrathreshold = -100}
-            )
-            state.extra_accumulated = extra
-            local current = cg:current_row(areaname) or 1
-            local max_rows = cg:number_of_rows(areaname)
-
-            if current + ht_rows <= max_rows then
-                cg:set_current_row(current + ht_rows, areaname, "html pull")
+                -- Check if this element has break-after: avoid
+                -- Look at the last object to determine this
+                if #formatted_objects > 0 then
+                    local last_obj = formatted_objects[#formatted_objects]
+                    if last_obj.break_after == "avoid" then
+                        ret._parsed_elements[ret._element_index].has_break_after_avoid = true
+                    end
+                end
             end
 
-            state.next_index = state.next_index + 1
+            -- Get cached formatted objects
+            local elem_state = ret._parsed_elements[ret._element_index]
+            local objects = elem_state.objects
 
-            if obj.height + obj.depth > parameter.maxheight then
-                break
-            end
-        end
+            -- If this element has break-after: avoid and we're just starting to process it,
+            -- store all objects in pending buffer instead of outputting them
+            if elem_state.has_break_after_avoid and elem_state.obj_index == 1 then
+                -- First, flush any existing pending output
+                if ret._pending_output then
+                    local x_sp = margin_left + extra_margin
+                    for pi = 1, #ret._pending_output do
+                        local pitem = ret._pending_output[pi]
+                        local pobj = pitem.obj
+                        local pheight = pobj.height + pobj.depth
+                        local pmargin_top = pitem.margintop
+                        local pmargin_bottom = pitem.marginbottom
 
-        if #state.objects > 0 then
-            local obj1, obj2 = publisher.vsplit(state.objects, parameter)
-            if state.prevobj1 ~= nil and state.prevobj1 == obj1 and #state.objects > 0 then
-                err("Output loop detected in HTML vsplit.")
-                state.objects = {}
-                return obj1, state, false
+                        local margin_overlap = math.min(ret._prev_margin_bottom, pmargin_top)
+                        local pactual_y = current_y_sp - margin_overlap
+
+                        -- Check if it fits
+                        local remaining_height = parameters.page_height_sp - pactual_y
+                        if pheight > remaining_height and parameters.page_has_content then
+                            return {
+                                need_new_page = true,
+                                continue_y_sp = margin_top + extra_margin,
+                            }
+                        end
+
+                        publisher.output_absolute_position({
+                            nodelist = pobj,
+                            x = x_sp,
+                            y = pactual_y,
+                            allocate = (parameters.allocate ~= "no"),
+                            grid = cg,
+                        })
+
+                        current_y_sp = pactual_y + pheight
+                        ret._prev_margin_bottom = pmargin_bottom
+                        parameters.page_has_content = true
+                    end
+                end
+
+                -- Store this element's objects as pending
+                ret._pending_output = objects
+                -- Mark all objects as processed
+                elem_state.obj_index = #objects + 1
+                -- Move to next element
+                ret._element_index = ret._element_index + 1
+                -- Continue with next element (which will check pending)
+                goto continue_outer_loop
             end
-            if obj2 then
-                state.split = obj2
-                return obj1, state, false
+
+            -- Check if there's pending output from previous element with break-after: avoid
+            -- We need to check BEFORE processing this element's objects
+            if ret._pending_output and elem_state.obj_index == 1 and #objects > 0 then
+                -- Calculate height of first object of current element
+                local first_item = objects[1]
+                local first_obj = first_item.obj
+                local first_height = first_obj.height + first_obj.depth
+                local first_margin_top = first_item.margintop
+
+                -- Calculate total height of pending objects
+                local pending_height = 0
+                local pending_margin_bottom = 0
+                for pi = 1, #ret._pending_output do
+                    local pitem = ret._pending_output[pi]
+                    local pobj = pitem.obj
+                    pending_height = pending_height + pobj.height + pobj.depth
+                    pending_margin_bottom = pitem.marginbottom
+                end
+
+                -- Margin collapse between pending and first item
+                local margin_overlap_pending = math.min(pending_margin_bottom, first_margin_top)
+                local combined_height = pending_height + first_height - margin_overlap_pending
+
+                -- Calculate actual starting position with margin collapse from what's already on page
+                local pending_margin_top = ret._pending_output[1] and ret._pending_output[1].margintop or 0
+                local margin_overlap_prev = math.min(ret._prev_margin_bottom, pending_margin_top)
+                local actual_y = current_y_sp - margin_overlap_prev
+                local remaining_height = parameters.page_height_sp - actual_y
+
+                -- If combined doesn't fit and page has content, break to new page
+                if combined_height > remaining_height and parameters.page_has_content then
+                    -- Don't output pending yet - return for new page
+                    return {
+                        need_new_page = true,
+                        continue_y_sp = margin_top + extra_margin,
+                    }
+                end
+
+                -- Output pending objects now (they will fit with the first object of current element)
+                local x_sp = margin_left + extra_margin
+                for pi = 1, #ret._pending_output do
+                    local pitem = ret._pending_output[pi]
+                    local pobj = pitem.obj
+                    local pheight = pobj.height + pobj.depth
+                    local pmargin_top = pitem.margintop
+                    local pmargin_bottom = pitem.marginbottom
+
+                    local margin_overlap = math.min(ret._prev_margin_bottom, pmargin_top)
+                    local pactual_y = current_y_sp - margin_overlap
+
+                    publisher.output_absolute_position({
+                        nodelist = pobj,
+                        x = x_sp,
+                        y = pactual_y,
+                        allocate = (parameters.allocate ~= "no"),
+                        grid = cg,
+                    })
+
+                    current_y_sp = pactual_y + pheight
+                    ret._prev_margin_bottom = pmargin_bottom
+                    parameters.page_has_content = true
+                end
+
+                -- Clear pending
+                ret._pending_output = nil
+            end
+
+            -- Process formatted objects for this element (may span multiple pages)
+            while elem_state.obj_index <= #objects do
+                local item = objects[elem_state.obj_index]
+                local obj = item.obj
+
+                local obj_height = obj.height + obj.depth
+                local margin_top_block = item.margintop
+                local margin_bottom_block = item.marginbottom
+
+                -- Margin collapse: margins are already built into the objects as glue
+                -- For proper collapse, we need to subtract the smaller margin (the overlap)
+                -- Example: h1 has margin-bottom: 20pt (built in), p has margin-top: 20pt (built in)
+                -- Without correction: 20pt + 20pt = 40pt gap
+                -- With collapse: should be max(20pt, 20pt) = 20pt gap
+                -- So we subtract min(20pt, 20pt) = 20pt to get the correct gap
+                local margin_overlap = math.min(ret._prev_margin_bottom, margin_top_block)
+
+                -- Calculate actual Y position with margin collapse correction
+                local actual_y = current_y_sp - margin_overlap
+
+                -- Check for page break conditions
+                local break_before = publisher.getprop(obj, "break_before") or item.break_before
+                local remaining_height = parameters.page_height_sp - actual_y
+
+                -- Handle break-before: page/always
+                -- - "page": force a page break, but not if already at page start
+                -- - "always": always force a page break (may create empty page)
+                -- Use a flag to prevent infinite loop: once we've triggered a break
+                -- for this element, don't trigger again
+                if break_before == "page" or break_before == "always" then
+                    if not item.break_before_done then
+                        if break_before == "always" or parameters.page_has_content then
+                            item.break_before_done = true
+                            return {
+                                need_new_page = true,
+                                continue_y_sp = margin_top + extra_margin,
+                            }
+                        end
+                    end
+                end
+
+                -- Check if object fits on current page
+                if obj_height > remaining_height then
+                    -- Object doesn't fit - try to split it
+                    if obj.id == publisher.vlist_node and remaining_height > 0 then
+                        -- Use vsplit to split the object
+                        local split_param = {
+                            maxheight = remaining_height,
+                            balance = 1,
+                        }
+                        local objects_for_split = {obj}
+                        local first_part = publisher.vsplit(objects_for_split, split_param)
+
+                        if first_part and first_part.height > 0 then
+                            -- Output the first part
+                            local x_sp = margin_left + extra_margin
+                            publisher.output_absolute_position({
+                                nodelist = first_part,
+                                x = x_sp,
+                                y = actual_y,
+                                allocate = (parameters.allocate ~= "no"),
+                                grid = cg,
+                            })
+                            current_y_sp = actual_y + first_part.height + first_part.depth
+                            parameters.page_has_content = true
+
+                            -- If there's remaining content, store it for next page
+                            if objects_for_split[1] then
+                                item.obj = objects_for_split[1]
+                                -- Don't increment obj_index - we'll continue with the rest
+                                return {
+                                    need_new_page = true,
+                                    continue_y_sp = margin_top + extra_margin,
+                                }
+                            else
+                                -- All content fit after split
+                                ret._prev_margin_bottom = margin_bottom_block
+                                elem_state.obj_index = elem_state.obj_index + 1
+                            end
+                        else
+                            -- Couldn't split (e.g., single line too tall) - go to new page
+                            -- But we must update item.obj with the remaining content from vsplit
+                            -- because vsplit may have consumed/modified the original node
+                            if objects_for_split[1] then
+                                item.obj = objects_for_split[1]
+                            end
+                            if parameters.page_has_content then
+                                return {
+                                    need_new_page = true,
+                                    continue_y_sp = margin_top + extra_margin,
+                                }
+                            end
+                            -- If page is empty, output anyway (avoid infinite loop)
+                            local x_sp = margin_left + extra_margin
+                            publisher.output_absolute_position({
+                                nodelist = obj,
+                                x = x_sp,
+                                y = actual_y,
+                                allocate = (parameters.allocate ~= "no"),
+                                grid = cg,
+                            })
+                            current_y_sp = actual_y + obj_height
+                            ret._prev_margin_bottom = margin_bottom_block
+                            parameters.page_has_content = true
+                            elem_state.obj_index = elem_state.obj_index + 1
+                        end
+                    elseif parameters.page_has_content then
+                        -- Can't split (not a vbox) and page has content - go to new page
+                        return {
+                            need_new_page = true,
+                            continue_y_sp = margin_top + extra_margin,
+                        }
+                    else
+                        -- Page is empty, output anyway to avoid infinite loop
+                        local x_sp = margin_left + extra_margin
+                        publisher.output_absolute_position({
+                            nodelist = obj,
+                            x = x_sp,
+                            y = actual_y,
+                            allocate = (parameters.allocate ~= "no"),
+                            grid = cg,
+                        })
+                        current_y_sp = actual_y + obj_height
+                        ret._prev_margin_bottom = margin_bottom_block
+                        parameters.page_has_content = true
+                        elem_state.obj_index = elem_state.obj_index + 1
+                    end
+                else
+                    -- Object fits - output it normally
+                    local x_sp = margin_left + extra_margin
+                    publisher.output_absolute_position({
+                        nodelist = obj,
+                        x = x_sp,
+                        y = actual_y,
+                        allocate = (parameters.allocate ~= "no"),
+                        grid = cg,
+                    })
+
+                    -- Update position for next object
+                    current_y_sp = actual_y + obj_height
+                    ret._prev_margin_bottom = margin_bottom_block
+                    parameters.page_has_content = true
+                    elem_state.obj_index = elem_state.obj_index + 1
+                end
+            end
+
+            -- Move to next element only if all objects of current element are done
+            if elem_state.obj_index > #objects then
+                ret._element_index = ret._element_index + 1
             else
-                state.prevobj1 = obj1
-                state.formatted_height = 0
-                local more_to_follow = #state.objects > 0 or state.next_index <= #blocks_to_use
-                return obj1, state, more_to_follow
+                -- Still have objects to output, but we hit a page break
+                -- Don't increment element_index, continue with remaining objects next time
+                break
             end
-        else
-            return nil, nil, false
+
+            ::continue_outer_loop::
         end
+
+        -- Flush any remaining pending output at the end
+        if ret._pending_output and ret._element_index > #elements then
+            local x_sp = margin_left + extra_margin
+            for pi = 1, #ret._pending_output do
+                local pitem = ret._pending_output[pi]
+                local pobj = pitem.obj
+                local pheight = pobj.height + pobj.depth
+                local pmargin_top = pitem.margintop
+                local pmargin_bottom = pitem.marginbottom
+
+                local margin_overlap = math.min(ret._prev_margin_bottom, pmargin_top)
+                local pactual_y = current_y_sp - margin_overlap
+
+                -- Check if it fits
+                local remaining_height = parameters.page_height_sp - pactual_y
+                if pheight > remaining_height and parameters.page_has_content then
+                    return {
+                        need_new_page = true,
+                        continue_y_sp = margin_top + extra_margin,
+                    }
+                end
+
+                publisher.output_absolute_position({
+                    nodelist = pobj,
+                    x = x_sp,
+                    y = pactual_y,
+                    allocate = (parameters.allocate ~= "no"),
+                    grid = cg,
+                })
+
+                current_y_sp = pactual_y + pheight
+                ret._prev_margin_bottom = pmargin_bottom
+                parameters.page_has_content = true
+            end
+            ret._pending_output = nil
+        end
+
+        -- Check if all elements are done (and no pending output left)
+        local all_done = ret._element_index > #elements and not ret._pending_output
+        return {
+            done = all_done,
+            final_y_sp = current_y_sp,
+        }
     end
+
+    -- Mark this as HTML content for Output command detection
+    ret.is_html_content = true
 
     return ret
 end
@@ -3219,6 +3511,60 @@ function commands.output( layoutxml,dataxml )
     local state
     for i=1,#tab do
         local contents = publisher.element_contents(tab[i])
+        local eltname = publisher.elementname(tab[i])
+
+        -- Check if this is HTML content that should use direct output
+        if eltname == "HTML" and contents.is_html_content and contents.output_direct then
+            -- Use direct HTML output mechanism for precise positioning
+            publisher.setup_page(nil,"commands#output html direct",dataxml)
+            current_grid = publisher.current_grid
+            local current_row = current_grid:current_row(area)
+
+            -- Calculate starting Y position in sp
+            local start_y_sp = current_grid.margin_top + current_grid.extra_margin
+            if current_row > 1 then
+                start_y_sp = start_y_sp + current_grid:height_sp(current_row - 1)
+            end
+
+            -- Calculate page height for overflow detection
+            local page_height_sp = current_grid.margin_top + current_grid.extra_margin +
+                current_grid:height_sp(current_grid:number_of_rows(area))
+
+            local page_has_content = (current_row > 1)
+
+            while true do
+                local result = contents.output_direct({
+                    area = area,
+                    width = maxwidth,
+                    current_grid = current_grid,
+                    allocate = allocate,
+                    start_y_sp = start_y_sp,
+                    page_height_sp = page_height_sp,
+                    page_has_content = page_has_content,
+                }, dataxml)
+
+                if result.done then
+                    -- All HTML output complete, update grid position
+                    local final_row = current_grid:height_in_gridcells_sp(
+                        result.final_y_sp - current_grid.margin_top - current_grid.extra_margin
+                    ) + 1
+                    current_grid:set_current_row(final_row, area)
+                    break
+                elseif result.need_new_page then
+                    -- Go to next page and continue
+                    publisher.next_area(area, nil, dataxml, "output html direct new page")
+                    publisher.setup_page(nil, "commands#output html direct newpage", dataxml)
+                    current_grid = publisher.current_grid
+                    start_y_sp = current_grid.margin_top + current_grid.extra_margin
+                    page_height_sp = current_grid.margin_top + current_grid.extra_margin +
+                        current_grid:height_sp(current_grid:number_of_rows(area))
+                    page_has_content = false
+                else
+                    break
+                end
+            end
+        else
+            -- Original pull-based mechanism for non-HTML content
 
         local parameters
         local more_to_follow
@@ -3287,6 +3633,7 @@ function commands.output( layoutxml,dataxml )
                 end
             end
         end
+        end -- end of else (pull-based mechanism)
     end
     -- reset the current maxwidth
     if publisher.newxpath then
@@ -4924,7 +5271,14 @@ function commands.stylesheet( layoutxml,dataxml )
     if filename then
         publisher.css:parse(filename)
     else
-        publisher.css:parsetxt(layoutxml[1])
+        -- Concatenate all text nodes in layoutxml (handles XML comments splitting text)
+        local css_content = ""
+        for i = 1, #layoutxml do
+            if type(layoutxml[i]) == "string" then
+                css_content = css_content .. layoutxml[i]
+            end
+        end
+        publisher.css:parsetxt(css_content)
     end
 end
 
@@ -5632,6 +5986,9 @@ function commands.text(layoutxml,dataxml)
             end
 
             if #state.objects > 0 then
+                -- Check if page already has content (for break-before: page logic)
+                local current_row = cg:current_row(parameter.area) or 1
+                parameter.page_has_content = (current_row > 1)
                 local obj1, obj2 = publisher.vsplit(state.objects,parameter)
                 if state.prevobj1 == obj1 then
                     err("Output loop detected in vsplit: Object cannot be placed and would cause infinite loop. Some objects are discarded from the output. This usually happens when content (e.g., a table with ht_max set too high) cannot be split properly. Consider reducing table size or using a more conservative ht_max value (e.g., 550pt).")

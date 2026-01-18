@@ -1,0 +1,23 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="8cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; }
+        .red { color: red; }
+        .hex { color: #00ff00; }
+        .rgb { color: rgb(0, 0, 255); }
+        .named { color: darkviolet; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <p class="red">color: red</p>
+                    <p class="hex">color: #00ff00</p>
+                    <p class="rgb">color: rgb(0, 0, 255)</p>
+                    <p class="named">color: darkviolet</p>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

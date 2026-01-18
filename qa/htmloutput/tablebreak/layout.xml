@@ -1,0 +1,47 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Pageformat height="10cm" width="10cm"></Pageformat>
+	<Stylesheet>
+		body { font-family: serif; }
+		h1 { margin-bottom: 0.5em; }
+		table { border-collapse: collapse; width: 100%; }
+		td, th { border: 1px solid black; padding: 4pt; }
+		th { background-color: #eee; border-bottom: 0; }
+		td:nth-child(4) { text-align: right; }
+	</Stylesheet>
+
+	<Record element="data">
+		<Output>
+			<HTML>
+				<h1>Product Catalog</h1>
+				<p>The following table lists all available products in our inventory.</p>
+				<table>
+					<thead>
+						<tr><th>#</th><th>Item</th><th>Description</th><th>Price</th></tr>
+					</thead>
+					<tr><td>1</td><td>Widget A</td><td>Standard widget</td><td>$9.99</td></tr>
+					<tr><td>2</td><td>Widget B</td><td>Enhanced widget</td><td>$14.99</td></tr>
+					<tr><td>3</td><td>Gadget X</td><td>Compact gadget</td><td>$19.99</td></tr>
+					<tr><td>4</td><td>Gadget Y</td><td>Premium gadget</td><td>$29.99</td></tr>
+					<tr><td>5</td><td>Tool Alpha</td><td>Essential tool</td><td>$24.99</td></tr>
+					<tr><td>6</td><td>Tool Beta</td><td>Heavy-duty tool</td><td>$39.99</td></tr>
+					<tr><td>7</td><td>Part 101</td><td>Replacement part A</td><td>$4.99</td></tr>
+					<tr><td>8</td><td>Part 102</td><td>Replacement part B</td><td>$6.99</td></tr>
+					<tr><td>9</td><td>Part 103</td><td>Universal adapter</td><td>$7.99</td></tr>
+					<tr><td>10</td><td>Kit Standard</td><td>Starter kit</td><td>$49.99</td></tr>
+					<tr><td>11</td><td>Kit Pro</td><td>Professional kit</td><td>$99.99</td></tr>
+					<tr><td>12</td><td>Cable Short</td><td>30cm cable</td><td>$3.99</td></tr>
+					<tr><td>13</td><td>Cable Long</td><td>2m cable</td><td>$8.99</td></tr>
+					<tr><td>14</td><td>Mount Basic</td><td>Wall mount</td><td>$12.99</td></tr>
+					<tr><td>15</td><td>Mount Pro</td><td>Adjustable mount</td><td>$22.99</td></tr>
+					<tr><td>16</td><td>Case Small</td><td>Small case</td><td>$11.99</td></tr>
+					<tr><td>17</td><td>Case Large</td><td>Large case</td><td>$16.99</td></tr>
+					<tr><td>18</td><td>Battery AA</td><td>4x AA batteries</td><td>$5.99</td></tr>
+					<tr><td>19</td><td>Battery AAA</td><td>4x AAA batteries</td><td>$5.99</td></tr>
+					<tr><td>20</td><td>Charger USB</td><td>USB charger</td><td>$14.99</td></tr>
+				</table>
+				<p>All prices are subject to change. Contact us for bulk orders and special discounts.</p>
+			</HTML>
+		</Output>
+	</Record>
+</Layout>

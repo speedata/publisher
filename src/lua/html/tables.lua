@@ -15,8 +15,9 @@ local M = {}
 ---@param cb HtmlTableCallbacks           -- callbacks including build_nodelist
 ---@param dataxml table                   -- data context
 ---@param stylesstack table               -- styles inheritance stack
+---@param border_collapse boolean|nil     -- true if border-collapse: collapse is set
 ---@return table                          -- array of Tr{ contents = { Td{...}, ... } }
-function M.build_html_table_tbody(tbody, cb, dataxml, stylesstack)
+function M.build_html_table_tbody(tbody, cb, dataxml, stylesstack, border_collapse)
     local trtab = {}
 
     for row = 1, #tbody do
@@ -74,6 +75,11 @@ function M.build_html_table_tbody(tbody, cb, dataxml, stylesstack)
                         if pb then newcontents.padding_bottom = units.getsize(styles, pb, styles.fontsize_sp) end
                         if pl then newcontents.padding_left   = units.getsize(styles, pl, styles.fontsize_sp) end
                         if pr then newcontents.padding_right  = units.getsize(styles, pr, styles.fontsize_sp) end
+                        -- Background color for cell
+                        local bgcolor = att["background-color"]
+                        if bgcolor then
+                            newcontents.backgroundcolor = bgcolor
+                        end
                     end
                     inherit.pop(stylesstack)
                     tdtab[#tdtab + 1] = { elementname = "Td", contents = newcontents }
@@ -108,6 +114,10 @@ function M.build_html_table(table_elt, width, cb, dataxml, stylesstack)
     local tablecontents = table_elt
     local head, foot, body = {}, {}, {}
 
+    -- Check for border-collapse before building sections
+    local table_styles = tablecontents.styles
+    local border_collapse = table_styles and table_styles["border-collapse"] == "collapse"
+
     -- Decompose into sections
     for i = 1, #tablecontents do
         local thiselt = tablecontents[i]
@@ -115,11 +125,11 @@ function M.build_html_table(table_elt, width, cb, dataxml, stylesstack)
         if typ == "table" then
             local eltname = thiselt.elementname
             if eltname == "tbody" then
-                body = M.build_html_table_tbody(thiselt, cb, dataxml, stylesstack)
+                body = M.build_html_table_tbody(thiselt, cb, dataxml, stylesstack, border_collapse)
             elseif eltname == "tfoot" then
-                foot = M.build_html_table_tbody(thiselt, cb, dataxml, stylesstack)
+                foot = M.build_html_table_tbody(thiselt, cb, dataxml, stylesstack, border_collapse)
             elseif eltname == "thead" then
-                head = M.build_html_table_tbody(thiselt, cb, dataxml, stylesstack)
+                head = M.build_html_table_tbody(thiselt, cb, dataxml, stylesstack, border_collapse)
             end
         end
     end
@@ -179,8 +189,14 @@ function M.build_html_table(table_elt, width, cb, dataxml, stylesstack)
     tabular.padding_bottom = 0
     tabular.colsep         = 0
     tabular.rowsep         = 0
-    tabular.bordercollapse_horizontal = true
-    tabular.bordercollapse_vertical   = true
+
+    -- For border-collapse: set all three flags for proper visual rendering
+    if border_collapse then
+        tabular.bordercollapse_horizontal = true
+        tabular.bordercollapse_vertical   = true
+        tabular.bordercollapse = true
+    end
+
     tabular.dataxml = dataxml
 
     local n = tabular:make_table(dataxml)

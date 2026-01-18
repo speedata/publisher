@@ -1,0 +1,30 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="8cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; }
+        p { border: 0.5pt solid black; }
+        .m-all { margin: 20pt; background-color: lightblue; }
+        .m-top { margin-top: 15pt; background-color: lightgreen; }
+        .m-right { margin-right: 30pt; background-color: lightyellow; }
+        .m-bottom { margin-bottom: 10pt; background-color: lightpink; }
+        .m-left { margin-left: 40pt; background-color: lightgray; }
+        .m-shorthand-2 { margin: 10pt 30pt; background-color: lightcoral; }
+        .m-shorthand-4 { margin: 5pt 10pt 15pt 20pt; background-color: lavender; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <p class="m-all">margin: 20pt (all sides)</p>
+                    <p class="m-top">margin-top: 15pt</p>
+                    <p class="m-right">margin-right: 30pt</p>
+                    <p class="m-bottom">margin-bottom: 10pt</p>
+                    <p class="m-left">margin-left: 40pt</p>
+                    <p class="m-shorthand-2">margin: 10pt 30pt (vertical horizontal)</p>
+                    <p class="m-shorthand-4">margin: 5pt 10pt 15pt 20pt (top right bottom left)</p>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

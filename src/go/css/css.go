@@ -50,7 +50,12 @@ type tokenstream []*scanner.Token
 func (t tokenstream) String() string {
 	ret := []string{}
 	for _, tok := range t {
-		ret = append(ret, tok.Value)
+		if tok.Type == scanner.Function {
+			// Function tokens need opening parenthesis (e.g., "nth-child" -> "nth-child(")
+			ret = append(ret, tok.Value+"(")
+		} else {
+			ret = append(ret, tok.Value)
+		}
 	}
 	return strings.Join(ret, "")
 }
@@ -188,7 +193,8 @@ func findClosingBrace(toks tokenstream) int {
 	return len(toks)
 }
 
-// fixupComponentValues merges punctuation tokens with identifiers (e.g. ".foo").
+// fixupComponentValues merges punctuation tokens with identifiers (e.g. ".foo")
+// and pseudo-class functions (e.g. ":nth-child(4)").
 func fixupComponentValues(toks tokenstream) tokenstream {
 	toks = trimSpace(toks)
 	var combineNext bool
@@ -198,6 +204,10 @@ func fixupComponentValues(toks tokenstream) tokenstream {
 			toks[i+1].Value = "." + toks[i+1].Value
 			combineNext = true
 		} else if toks[i].Type == scanner.Delim && toks[i].Value == ":" && toks[i+1].Type == scanner.Ident {
+			toks[i+1].Value = ":" + toks[i+1].Value
+			combineNext = true
+		} else if toks[i].Type == scanner.Delim && toks[i].Value == ":" && toks[i+1].Type == scanner.Function {
+			// Handle pseudo-class functions like :nth-child(), :not(), etc.
 			toks[i+1].Value = ":" + toks[i+1].Value
 			combineNext = true
 		}

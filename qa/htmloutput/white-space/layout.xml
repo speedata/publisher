@@ -1,0 +1,22 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="8cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; }
+        div { background-color: lightgray; margin-bottom: 10pt; padding: 5pt; }
+        .normal { white-space: normal; }
+        .pre { white-space: pre; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <div class="normal">white-space: normal - Multiple   spaces   are   collapsed.</div>
+                    <div class="pre">white-space: pre - Multiple   spaces   are   preserved.
+And line breaks
+are preserved too.</div>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

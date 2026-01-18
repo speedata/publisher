@@ -536,6 +536,16 @@ function Par:format( width_sp, options,data )
     -- w("call format %s",self.origin)
     options = options or {}
     options.maxwidth_sp = width_sp
+
+    -- If this par contains a single preformatted node (e.g., HTML table),
+    -- return it directly without wrapping in another vpack
+    if #self == 1 and self[1].options and self[1].options.dontformat then
+        local content = self[1].contents
+        if node.is_node(content) then
+            return content
+        end
+    end
+
     publisher.remove_first_whitespace(self)
     publisher.remove_last_whitespace(self)
 
@@ -957,12 +967,15 @@ function Par:format( width_sp, options,data )
                 node.set_attribute(nodelist.list,att_margin_top_boxstart,tf.margintopboxstart)
                 node.set_attribute(nodelist.list,att_break_below,6)
             end
-            if tf.breakbelow == false then
+            if tf.breakbelow == false or self.break_after == "avoid" then
                 node.set_attribute(node.tail(nodelist.list),att_break_below,5)
             end
 
-            if tf.break_before == "page" then
+            local break_before = tf.break_before or self.break_before
+            if break_before == "page" then
                 node.set_attribute(nodelist.list,publisher.att_break_before,1)
+            elseif break_before == "always" then
+                node.set_attribute(nodelist.list,publisher.att_break_before,2)
             end
 
             if self.padding_bottom and self.padding_bottom > 0 then
@@ -992,7 +1005,7 @@ function Par:format( width_sp, options,data )
             end
 
             node.set_attribute(nodelist.list,publisher.att_margin_newcolumn, tf.colpaddingtop or 0)
-            if tf.breakbelow == false then
+            if tf.breakbelow == false or self.break_after == "avoid" then
                 node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,7)
             end
             objects[i] = nodelist.list
@@ -1087,6 +1100,10 @@ function Par:format( width_sp, options,data )
     end
     self.objects = nil
     self.nodelist = nodelist
+    -- Mark vbox if it should be kept with the next block (for break-after: avoid)
+    if self.break_after == "avoid" then
+        publisher.setprop(nodelist, "keep_with_next", true)
+    end
     return nodelist
 end
 

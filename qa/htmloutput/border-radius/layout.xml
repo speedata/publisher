@@ -1,0 +1,24 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="8cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; font-size: 9pt; }
+        div { margin: 5pt; padding: 10pt; border: 2pt solid blue; background-color: lightblue; }
+        .r5 { border-radius: 5pt; }
+        .r10 { border-radius: 10pt; }
+        .r20 { border-radius: 20pt; }
+        .corners { border-top-left-radius: 5pt; border-top-right-radius: 10pt; border-bottom-right-radius: 15pt; border-bottom-left-radius: 20pt; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <div class="r5">border-radius: 5pt</div>
+                    <div class="r10">border-radius: 10pt</div>
+                    <div class="r20">border-radius: 20pt</div>
+                    <div class="corners">individual corner radii</div>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

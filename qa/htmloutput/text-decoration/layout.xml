@@ -1,0 +1,29 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="8cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; }
+        p { margin: 5pt 0; }
+        .underline { text-decoration: underline; }
+        .linethrough { text-decoration: line-through; }
+        .underline-dashed { text-decoration-line: underline; text-decoration-style: dashed; }
+        .underline-dotted { text-decoration-line: underline; text-decoration-style: dotted; }
+        .underline-wavy { text-decoration-line: underline; text-decoration-style: wavy; }
+        .underline-color { text-decoration: underline; text-decoration-color: red; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <span a="b"></span>
+                    <p class="underline">text-decoration: underline</p>
+                    <p class="linethrough">text-decoration: line-through</p>
+                    <p class="underline-dashed">text-decoration-style: dashed</p>
+                    <p class="underline-dotted">text-decoration-style: dotted</p>
+                    <p class="underline-wavy">text-decoration-style: wavy</p>
+                    <p class="underline-color">text-decoration-color: red</p>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

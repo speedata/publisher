@@ -1,0 +1,20 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Pageformat height="10cm" width="10cm"></Pageformat>
+	<Stylesheet>
+		body{ font-family: serif; }
+		h2 { break-after: avoid; }
+	</Stylesheet>
+
+	<Record element="data">
+		<Output>
+			<HTML>
+				<h1>Autobahnwahn</h1>
+				<p>Seit zwei Jahren ist meine Arbeit in Düsseldorf. Meine Familie lebt dagegen in Hamburg. Und dazwischen ich, aber ganz cool. Vollbremskombination aus Ampel oder Einfädeln oder beides auf einmal. Geht nur mit Tricks. Eben noch kurz auf die A 52. Schon vielversprechend lebhaft. Hinter dem
+					Breitscheider Kreuz geht es richtig los. Stau auf der A 3 bis Oberhausen. Danach entspannt es sich auch nur deshalb, weil enge Baustellen mit rüden Geschwindigkeitsbegrenzungen zum gleichmäßigen Rollen zwingen. Es wird links überholt, es wird rechts überholt. </p>
+				<h2>H2</h2>
+				<p>Text </p>
+			</HTML>
+		</Output>
+	</Record>
+</Layout>

@@ -150,7 +150,7 @@ function collect_horizontal_nodes( elt,parameter,before_box,origin,dataxml )
 
         local attributes = thiselt.attributes or {}
         local thiselt_styles = thiselt.styles or {}
-        styles_mod.copy_attributes(styles,thiselt_styles)
+        styles_mod.copy_attributes(styles,thiselt_styles, thiselt.elementname or "(string)")
 
         inline_options.set_options_for_mknodes(styles, options, publisher, fontfamilies)
 
@@ -235,7 +235,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
 
         if has_before_styles then
             local styles = inherit.push(stylesstack)
-            styles_mod.copy_attributes(styles,before_styles)
+            styles_mod.copy_attributes(styles,before_styles, thiseltname .. "::before")
 
             local before_options = {}
             inline_options.set_options_for_mknodes(styles, before_options, publisher, fontfamilies)
@@ -256,7 +256,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
 
             inherit.pop(stylesstack)
         end
-        styles_mod.copy_attributes(styles,thiselt_styles)
+        styles_mod.copy_attributes(styles,thiselt_styles, thiseltname)
         local styles_fontsize_sp = styles.fontsize_sp
         if thiseltname == "html" then
             styles.rootfontsize_sp = styles.fontsize_sp
@@ -303,6 +303,8 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
 
         local textalign = styles["text-align"]
         local hyphens = styles.hyphens
+        local break_before = styles["break-before"]
+        local break_after = styles["break-after"]
         local alignment = "leftaligned"
         if textalign == "right" then
             alignment = "rightaligned"
@@ -322,6 +324,12 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
             end
             if hyphens == "none" or hyphens == "manual" then
                 tf.disable_hyphenation = true
+            end
+            if break_before == "page" or break_before == "always" then
+                tf.break_before = break_before
+            end
+            if break_after == "avoid" then
+                tf.breakbelow = false
             end
             options.textformat = tf
             local n = collect_horizontal_nodes(thiselt,options,before_box,"build nodelist horizontal mode",dataxml)
@@ -357,6 +365,12 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
             box.draw_border = thiselt_styles.has_border
             box.padding_top = padding_top
             box.padding_bottom = padding_bottom
+            if break_before == "page" or break_before == "always" then
+                box.break_before = break_before
+            end
+            if break_after == "avoid" then
+                box.break_after = "avoid"
+            end
             if thiselt_styles.has_border then
                 box.border = {
                     borderstart = true,

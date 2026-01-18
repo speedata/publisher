@@ -1,0 +1,23 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="6cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; }
+        .normal { font-style: normal; font-weight: normal; }
+        .italic { font-style: italic; }
+        .bold { font-weight: bold; }
+        .bolditalic { font-style: italic; font-weight: bold; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <p class="normal">font-style: normal, font-weight: normal</p>
+                    <p class="italic">font-style: italic</p>
+                    <p class="bold">font-weight: bold</p>
+                    <p class="bolditalic">font-style: italic, font-weight: bold</p>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>

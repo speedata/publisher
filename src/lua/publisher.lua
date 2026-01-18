@@ -1022,6 +1022,13 @@ do
             local thisbox = box[i]
             if not thisbox.min_width then
                 -- a box with paragraphs inside
+                -- Pass break_before to first child, break_after to last child
+                if i == 1 and box.break_before then
+                    thisbox.break_before = box.break_before
+                end
+                if i == #box and box.break_after then
+                    thisbox.break_after = box.break_after
+                end
                 flatten_boxes(thisbox,new_parameter,ret)
                 if thisbox.mode == "block" then ret.mode = "block" end
             else
@@ -1053,6 +1060,9 @@ do
                     if box.margintop then
                         thisbox.margin_top = box.margintop
                     end
+                    if box.break_before then
+                        thisbox.break_before = box.break_before
+                    end
                 end
                 if i == #box then
                     thisbox.lastbox = true
@@ -1061,6 +1071,9 @@ do
                     end
                     if box.border_bottom_width then
                         thisbox.border_bottom_width = box.border_bottom_width
+                    end
+                    if box.break_after then
+                        thisbox.break_after = box.break_after
                     end
                 end
 
@@ -7795,12 +7808,13 @@ function vsplit( objects_t, parameter )
 
             if i == count_lists and head.next == nil then
                 -- the last object must not be in the tmplist
+                -- But don't reset extend_to_next_block - we need it to persist for break-after: avoid
                 node.unset_attribute(head,publisher.att_break_below_forbidden)
             end
             head.prev = nil
             local break_below_forbidden = node.has_attribute(head,publisher.att_break_below_forbidden)
             local break_before = node.has_attribute(head,publisher.att_break_before)
-            if break_below_forbidden and break_before ~= 1 then
+            if break_below_forbidden and not break_before then
                 node.unset_attribute(head,publisher.att_margin_newcolumn)
                 tmplist[#tmplist + 1] = head
                 local tmp = head.next
@@ -7931,7 +7945,11 @@ function vsplit( objects_t, parameter )
                     w("unknown node 1: %d",hbox.id)
                 end
                 -- 20 is some rounding error
-                if accumulated_height + lineheight <= goal + 20 and break_before ~= 1 then
+                -- break_before: 1 = "page" (only if not at top), 2 = "always" (force break)
+                -- Use page_has_content from parameter if available, otherwise fall back to #thisarea
+                local page_has_content = parameter.page_has_content or (#thisarea > 0)
+                local force_break = (break_before == 2) or (break_before == 1 and page_has_content)
+                if accumulated_height + lineheight <= goal + 20 and not force_break then
                     thisarea[#thisarea + 1] = hbox
                     accumulated_height = accumulated_height + lineheight
                     lineheight = 0
@@ -7963,6 +7981,7 @@ function vsplit( objects_t, parameter )
     --- too high for the row. So we return an empty list and hope that the calling function
     --- is clever enough to detect this case. (Well, it's not too difficult to detect, as
     --- the `objects_t` table is not empty yet.)
+
     return join_table_to_box(thisarea,"return") or publisher.empty_block()
 end
 

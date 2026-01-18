@@ -1,0 +1,26 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+    <Pageformat height="12cm" width="10cm" />
+    <Stylesheet>
+        body { margin: 0; font-size: 10pt; }
+        div { background-color: lightblue; margin-bottom: 10pt; }
+        .lh-normal { line-height: normal; }
+        .lh-1 { line-height: 1; }
+        .lh-15 { line-height: 1.5; }
+        .lh-2 { line-height: 2; }
+        .lh-20pt { line-height: 20pt; }
+    </Stylesheet>
+
+    <Record element="data">
+        <Output>
+            <HTML>
+                <body>
+                    <div class="lh-normal">line-height: normal - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</div>
+                    <div class="lh-1">line-height: 1 - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</div>
+                    <div class="lh-15">line-height: 1.5 - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</div>
+                    <div class="lh-2">line-height: 2 - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</div>
+                    <div class="lh-20pt">line-height: 20pt - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</div>
+                </body>
+            </HTML>
+        </Output>
+    </Record>
+</Layout>
