@@ -413,20 +413,26 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                     end
                     }, dataxml, stylesstack)
 
-                -- Process all table parts (for multi-page tables)
-                for i = 1, #nl_array do
-                    local nl = nl_array[i]
-                    local tabpar = par:new(nil,"html table (a)")
-                    -- Only apply margin_top to the first table part
-                    if i == 1 then
-                        tabpar.margin_top = margin_top
+                -- Handle case where table has no content (returns single node)
+                if type(nl_array) == "userdata" then
+                    -- Single node (e.g., empty table) - skip adding to box
+                    -- The table warning is already issued by tabular.lua
+                elseif type(nl_array) == "table" then
+                    -- Process all table parts (for multi-page tables)
+                    for i = 1, #nl_array do
+                        local nl = nl_array[i]
+                        local tabpar = par:new(nil,"html table (a)")
+                        -- Only apply margin_top to the first table part
+                        if i == 1 then
+                            tabpar.margin_top = margin_top
+                        end
+                        node.set_attribute(nl,publisher.att_lineheight,nl.height)
+                        publisher.setprop(nl,"origin","html table")
+                        tabpar:append(nl,{dontformat=true})
+                        box[#box + 1] = tabpar
                     end
-                    node.set_attribute(nl,publisher.att_lineheight,nl.height)
-                    publisher.setprop(nl,"origin","html table")
-                    tabpar:append(nl,{dontformat=true})
-                    box[#box + 1] = tabpar
+                    ret[#ret + 1] = box
                 end
-                ret[#ret + 1] = box
             elseif thiseltname == "ol" or thiseltname == "ul" then
                 prevdir = "vertical"
                 styles.olullisttype = thiseltname
