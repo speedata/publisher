@@ -1,0 +1,17 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Pageformat height="10cm" width="5cm"></Pageformat>
+	<Record element="data">
+		<SetVariable variable="i" select="0" />
+		<Until test="$i > 5">
+			<SetVariable variable="i" select="$i + 1" />
+			<PlaceObject>
+				<Textblock>
+					<Paragraph>
+						<Value select="$i" />
+					</Paragraph>
+				</Textblock>
+			</PlaceObject>
+		</Until>
+	</Record>
+</Layout>

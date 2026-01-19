@@ -6303,9 +6303,22 @@ end
 function commands.until_do( layoutxml,dataxml )
     local test = publisher.read_attribute(layoutxml,dataxml,"test","string")
     assert(test)
-    repeat
-        publisher.dispatch(layoutxml,dataxml)
-    until xpath.parse(dataxml,test,layoutxml[".__ns"])
+    if publisher.newxpath then
+        repeat
+            publisher.dispatch(layoutxml,dataxml)
+            local seq, msg = dataxml:eval(test)
+            if msg then
+                main.log("error",msg)
+                break
+            end
+            local tf = xpath.boolean_value(seq)
+        until tf
+    else
+        repeat
+            publisher.dispatch(layoutxml,dataxml)
+        until xpath.parse(dataxml,test,layoutxml[".__ns"])
+    end
+
 end
 
 
