@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.15" date="2026-01-19">
+        <en>Bugfix for empty HTML tables.</en>
+        <de>Fehlerkorrektur für leere HTML-Tabellen.</de>
+    </entry>
+    <entry version="5.3.15" date="2026-01-19">
+        <en>Implement Until for the new XPath parser.</en>
+        <de>Implementiere Until für den neuen XPath-Parser.</de>
+    </entry>
+    <entry version="5.3.15" date="2026-01-19">
+        <en>HTML enhancements (including documentation).</en>
+        <de>HTML-Verbesserungen (einschließlich Dokumentation).</de>
+    </entry>
     <entry version="5.3.14" date="2026-01-15">
         <en>HTML can now wrap across multiple pages.</en>
         <de>HTML kann nun auf mehrere Seiten umbrechen.</de>
