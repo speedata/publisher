@@ -387,7 +387,7 @@ function tabular:calculate_columnwidth()
                                 else
                                     self.colwidths[i] = tex.sp(column_contents.width)
                                 end
-                                sum_real_widths = sum_real_widths + self.colwidths[i]
+                                sum_real_widths = sum_real_widths + ( self.colwidths[i] or 0 )
                             end
                         end
                     end
