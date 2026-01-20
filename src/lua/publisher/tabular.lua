@@ -1598,7 +1598,7 @@ function tabular:typeset_table(dataxml)
         end -- if it's a table cell
     end
 
-    if #rows == 0 then
+    if #rows == 0 and not tablehead[1] and not tablefoot[1] then
         warning("table without contents")
         return publisher.empty_block()
     end
