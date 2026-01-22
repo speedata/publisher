@@ -325,6 +325,14 @@ func killallProcesses() {
 	}
 }
 
+// exitProgram ensures all child processes are killed before exiting.
+// This should be used instead of os.Exit() to prevent orphaned processes.
+func exitProgram(code int) {
+	killallProcesses()
+	showDuration()
+	os.Exit(code)
+}
+
 func timeoutCatcher(seconds int) {
 	timeout := make(chan bool, 1)
 	go func() {
@@ -333,9 +341,7 @@ func timeoutCatcher(seconds int) {
 	}()
 	<-timeout
 	log.Printf("\n\nTimeout after %d seconds", seconds)
-	killallProcesses()
-	showDuration()
-	os.Exit(-1)
+	exitProgram(-1)
 }
 
 func sigIntCatcher() {
@@ -343,9 +349,7 @@ func sigIntCatcher() {
 	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
 	sig := <-ch
 	log.Printf("Signal received: %v", sig)
-	killallProcesses()
-	showDuration()
-	os.Exit(0)
+	exitProgram(0)
 }
 
 func isASCII(s string) bool {
@@ -362,6 +366,8 @@ func run(command string, cmdline []string, environ []string) (errorcode int) {
 	errorcode = 0
 	cmd := exec.Command(command, cmdline...)
 	cmd.Env = append(os.Environ(), environ...)
+	// Set platform-specific process attributes (e.g., Pdeathsig on Linux/FreeBSD)
+	setSysProcAttr(cmd)
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		log.Fatal(err)
@@ -410,7 +416,7 @@ func readVariables() {
 		f, err := os.Open(fn)
 		if err != nil {
 			fmt.Println("File", fn, "not found. Exit.")
-			os.Exit(-1)
+			exitProgram(-1)
 		}
 		fmt.Print("Read file ", fn, "...")
 		s := bufio.NewScanner(f)
@@ -527,7 +533,7 @@ func getExecutablePath() string {
 // Print version information
 func versioninfo() {
 	log.Printf("Version: %s", versionWithPro)
-	os.Exit(0)
+	exitProgram(0)
 }
 
 // copy a file from srcpath to destpath and make
@@ -802,7 +808,7 @@ Contact:
 or see the web page
    https://www.speedata.de/imprint/`)
 
-	os.Exit(0)
+	exitProgram(0)
 }
 
 func main() {
@@ -866,7 +872,7 @@ func main() {
 	err := op.Parse()
 
 	if errors.Is(err, optionparser.ErrHelp) {
-		os.Exit(0)
+		exitProgram(0)
 	}
 
 	if err != nil {
@@ -984,7 +990,7 @@ func main() {
 		vi := strings.Split(pdfversion, ".")
 		if len(vi) != 2 {
 			fmt.Println("The option pdfversion must have the format X.Y where X is the major version and Y is the minor version number.")
-			os.Exit(-1)
+			exitProgram(-1)
 		}
 		os.Setenv("SP_PDFMAJORVERSION", vi[0])
 		os.Setenv("SP_PDFMINORVERSION", vi[1])
@@ -999,7 +1005,7 @@ func main() {
 		if !finfo.IsDir() {
 			fmt.Println("Image cache is not a directory. Please remove it before running sp")
 			fmt.Println(ic)
-			os.Exit(1)
+			exitProgram(1)
 		}
 	}
 	os.Setenv("IMGCACHE", ic)
@@ -1082,7 +1088,7 @@ func main() {
 			}
 		}
 		if exitstatus == 1 {
-			os.Exit(exitstatus)
+			exitProgram(exitstatus)
 		}
 		exitstatus = runPublisher(cachemethod)
 		if filterfile != "" {
@@ -1153,10 +1159,10 @@ func main() {
 			fmt.Println("Development version:", dev)
 			fmt.Println("Stable version:", stable)
 			fmt.Println("\nPlease visit https://download.speedata.de/ for the latest version.")
-			os.Exit(1)
+			exitProgram(1)
 		} else {
 			fmt.Println("No update available")
-			os.Exit(0)
+			exitProgram(0)
 		}
 	case cmdClean:
 		jobname := getOption("jobname")
@@ -1183,7 +1189,7 @@ func main() {
 		}
 	case cmdDoc:
 		openWebPage("https://doc.speedata.de")
-		os.Exit(0)
+		exitProgram(0)
 	case cmdListFonts:
 		var xml string
 		if getOption("xml") == stringTrue {
@@ -1196,7 +1202,7 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		os.Exit(0)
+		exitProgram(0)
 	case cmdWatch:
 		if pro != "yes" {
 			fmt.Println("The hotfolder is part of the Pro package. See https://doc.speedata.de/publisher/en/speedatapro/")
@@ -1256,8 +1262,8 @@ func main() {
 		s.ProtocolFile = protocolFile
 		s.Run()
 	default:
-		log.Fatal("unknown command:", command)
+		log.Print("unknown command:", command)
+		exitProgram(1)
 	}
-	showDuration()
-	os.Exit(exitstatus)
+	exitProgram(exitstatus)
 }
