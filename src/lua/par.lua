@@ -559,6 +559,16 @@ function Par:format( width_sp, options,data )
     options.tab = current_textformat.tab
 
     self:mknodelist(options,data)
+
+    -- Check if the only object has att_dont_format attribute (e.g., split HTML table)
+    -- In this case, return it directly without further formatting
+    if #self.objects == 1 then
+        local obj = self.objects[1]
+        if node.is_node(obj) and node.has_attribute(obj, publisher.att_dont_format) then
+            return obj
+        end
+    end
+
     local parameter = {}
     if self.width then
         width_sp = self.width

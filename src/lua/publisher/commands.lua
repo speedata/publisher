@@ -1660,6 +1660,11 @@ function commands.html( layoutxml,dataxml)
         local margin_top = cg.margin_top or 0
         local margin_left = cg.margin_left or 0
         local extra_margin = cg.extra_margin or 0
+        local fn = cg:framenumber(areaname)
+        thisframe = cg.positioning_frames[areaname][fn]
+
+        local offset_x = margin_left + extra_margin + (thisframe.column - 1) * cg.gridwidth
+        local offset_y = (thisframe.row - 1) * cg.gridheight
 
         -- Save original getheight
         local original_getheight = publisher.getheight
@@ -1764,7 +1769,7 @@ function commands.html( layoutxml,dataxml)
             if elem_state.has_break_after_avoid and elem_state.obj_index == 1 then
                 -- First, flush any existing pending output
                 if ret._pending_output then
-                    local x_sp = margin_left + extra_margin
+                    local x_sp = 0
                     for pi = 1, #ret._pending_output do
                         local pitem = ret._pending_output[pi]
                         local pobj = pitem.obj
@@ -1786,8 +1791,8 @@ function commands.html( layoutxml,dataxml)
 
                         publisher.output_absolute_position({
                             nodelist = pobj,
-                            x = x_sp,
-                            y = pactual_y,
+                            x = offset_x,
+                            y = pactual_y + offset_y,
                             allocate = (parameters.allocate ~= "no"),
                             grid = cg,
                         })
@@ -1847,7 +1852,7 @@ function commands.html( layoutxml,dataxml)
                 end
 
                 -- Output pending objects now (they will fit with the first object of current element)
-                local x_sp = margin_left + extra_margin
+                local x_sp = 0
                 for pi = 1, #ret._pending_output do
                     local pitem = ret._pending_output[pi]
                     local pobj = pitem.obj
@@ -1860,8 +1865,8 @@ function commands.html( layoutxml,dataxml)
 
                     publisher.output_absolute_position({
                         nodelist = pobj,
-                        x = x_sp,
-                        y = pactual_y,
+                        x = x_sp + offset_x,
+                        y = pactual_y + offset_y,
                         allocate = (parameters.allocate ~= "no"),
                         grid = cg,
                     })
@@ -1918,8 +1923,11 @@ function commands.html( layoutxml,dataxml)
 
                 -- Check if object fits on current page
                 if obj_height > remaining_height then
-                    -- Object doesn't fit - try to split it
-                    if obj.id == publisher.vlist_node and remaining_height > 0 then
+                    -- Check if object has dont_format attribute (e.g. table parts that shouldn't be split)
+                    local dont_split = node.has_attribute(obj, publisher.att_dont_format)
+
+                    -- Object doesn't fit - try to split it (unless dont_split is set)
+                    if obj.id == publisher.vlist_node and remaining_height > 0 and not dont_split then
                         -- Use vsplit to split the object
                         local split_param = {
                             maxheight = remaining_height,
@@ -1930,11 +1938,11 @@ function commands.html( layoutxml,dataxml)
 
                         if first_part and first_part.height > 0 then
                             -- Output the first part
-                            local x_sp = margin_left + extra_margin
+                            local x_sp = 0
                             publisher.output_absolute_position({
                                 nodelist = first_part,
-                                x = x_sp,
-                                y = actual_y,
+                                x = x_sp + offset_x,
+                                y = actual_y + offset_y,
                                 allocate = (parameters.allocate ~= "no"),
                                 grid = cg,
                             })
@@ -1968,11 +1976,11 @@ function commands.html( layoutxml,dataxml)
                                 }
                             end
                             -- If page is empty, output anyway (avoid infinite loop)
-                            local x_sp = margin_left + extra_margin
+                            local x_sp = 0
                             publisher.output_absolute_position({
                                 nodelist = obj,
-                                x = x_sp,
-                                y = actual_y,
+                                x = x_sp + offset_x,
+                                y = actual_y + offset_y,
                                 allocate = (parameters.allocate ~= "no"),
                                 grid = cg,
                             })
@@ -1989,11 +1997,11 @@ function commands.html( layoutxml,dataxml)
                         }
                     else
                         -- Page is empty, output anyway to avoid infinite loop
-                        local x_sp = margin_left + extra_margin
+                        local x_sp = 0
                         publisher.output_absolute_position({
                             nodelist = obj,
-                            x = x_sp,
-                            y = actual_y,
+                            x = x_sp + offset_x,
+                            y = actual_y + offset_y,
                             allocate = (parameters.allocate ~= "no"),
                             grid = cg,
                         })
@@ -2004,11 +2012,11 @@ function commands.html( layoutxml,dataxml)
                     end
                 else
                     -- Object fits - output it normally
-                    local x_sp = margin_left + extra_margin
+                    local x_sp = 0
                     publisher.output_absolute_position({
                         nodelist = obj,
-                        x = x_sp,
-                        y = actual_y,
+                        x = x_sp + offset_x,
+                        y = actual_y + offset_y,
                         allocate = (parameters.allocate ~= "no"),
                         grid = cg,
                     })
@@ -2035,7 +2043,7 @@ function commands.html( layoutxml,dataxml)
 
         -- Flush any remaining pending output at the end
         if ret._pending_output and ret._element_index > #elements then
-            local x_sp = margin_left + extra_margin
+            local x_sp = 0
             for pi = 1, #ret._pending_output do
                 local pitem = ret._pending_output[pi]
                 local pobj = pitem.obj
@@ -2057,8 +2065,8 @@ function commands.html( layoutxml,dataxml)
 
                 publisher.output_absolute_position({
                     nodelist = pobj,
-                    x = x_sp,
-                    y = pactual_y,
+                    x = x_sp + offset_x,
+                    y = pactual_y + offset_y,
                     allocate = (parameters.allocate ~= "no"),
                     grid = cg,
                 })

@@ -2078,6 +2078,10 @@ function tabular:typeset_table(dataxml)
         end
         final_split_tables[i] = node.vpack(final_split_tables[i][1])
     end
+    for i = 1, #final_split_tables do
+        local thissplittable = final_split_tables[i]
+        node.set_attribute(thissplittable,publisher.att_dont_format,1)
+    end
     return final_split_tables
 end -- typeset table
 
