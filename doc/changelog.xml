@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.17" date="2026-01-23">
+        <en>Fix infinite loop in HTML tables.</en>
+        <de>Korrigiere Endlosschleife in HTML-Tabellen.</de>
+    </entry>
+    <entry version="5.3.17" date="2026-01-23">
+        <en>Better handling of killing child processes in sp.</en>
+        <de>Verbessere das Beenden von Kindprozessen in sp.</de>
+    </entry>
     <entry version="5.3.16" date="2026-01-20">
         <en>HTML tables with only header or footer (empty body) are now rendered correctly.</en>
         <de>HTML-Tabellen mit nur Header oder Footer (leerer Body) werden jetzt korrekt ausgegeben.</de>
