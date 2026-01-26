@@ -3504,6 +3504,14 @@
         <para>Die Länge des Absatzeinzugs.</para>
       </description>
     </attribute>
+    <attribute en="letter-spacing" type="number" optional="yes" since="5.3.18">
+      <description xml:lang="en">
+        <para>Additional space between characters in 1/1000 em. For example, a value of 50 adds 0.05 em between each character. This is font-size independent and scales with the text.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zusätzlicher Abstand zwischen Zeichen in 1/1000 em. Beispiel: Ein Wert von 50 fügt 0,05 em zwischen jedem Zeichen ein. Der Wert ist schriftgrößenunabhängig und skaliert mit dem Text.</para>
+      </description>
+    </attribute>
     <attribute en="margin-bottom" type="length" optional="yes">
       <description xml:lang="en">
         <para>Distance between the bottom rule and the text of the next paragraph.</para>

@@ -6,6 +6,52 @@ Hierüber lassen sich verschiedene Dinge wie Texteinzug, Textausrichtung, Hurenk
 
 Die einzelnen Parameter werden in der Referenz unter <<cmd-definetextformat,`<DefineTextformat>`>> beschrieben.
 
+== Übersicht aller Attribute
+
+[cols="2,4"]
+|===
+|Attribut |Beschreibung
+
+|`alignment`
+|Textausrichtung: `justified` (Blocksatz), `leftaligned`, `rightaligned`, `centered`, `start`, `end`
+
+|`border-top`, `border-bottom`
+|Dicke der Linie über/unter dem Text
+
+|`break-before`
+|Seitenumbruch vor dem Text erzwingen (`page`)
+
+|`break-below`
+|Umbruch unter dem Text erlauben/verbieten (`yes`/`no`)
+
+|`hyphenate`
+|Silbentrennung an/aus (`yes`/`no`)
+
+|`hyphenchar`
+|Trennzeichen (Voreinstellung: `-`)
+
+|`indentation`
+|Einzug der ersten Zeile(n)
+
+|`letter-spacing`
+|Zeichenabstand in 1/1000 em (z.B. `50` = 0,05 em)
+
+|`margin-top`, `margin-bottom`
+|Außenabstand oben/unten
+
+|`padding-top`, `padding-bottom`
+|Innenabstand oben/unten
+
+|`orphan`, `widow`
+|Schusterjungen/Hurenkinder verhindern
+
+|`rows`
+|Anzahl der eingerückten Zeilen
+
+|`tab`
+|Verhalten bei Tabulator (`space`/`hspace`)
+|===
+
 Das Textformat mit dem Namen `text` ist im Publisher vorgegeben und wird an allen Stellen benutzt, wo kein anderes Textformat angegeben wird.
 Es ist wie folgt definiert:
 

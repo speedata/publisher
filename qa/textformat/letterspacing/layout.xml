@@ -1,0 +1,25 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Pageformat height="5cm" width="7cm"></Pageformat>
+	<DefineTextformat name="letterspacing" letter-spacing="10" />
+	<DefineFontfamily fontsize="22" leading="25" name="h1">
+		<Regular fontface="sans" />
+	</DefineFontfamily>
+
+	<Record element="data">
+		<PlaceObject>
+			<Textblock fontfamily="h1">
+				<Paragraph textformat="letterspacing">
+					<Value>Heading</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<PlaceObject>
+			<Textblock>
+				<Paragraph textformat="letterspacing">
+					<Value>Hello nice world</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+	</Record>
+</Layout>

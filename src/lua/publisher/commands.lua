@@ -915,7 +915,8 @@ function commands.define_textformat(layoutxml,dataxml)
     local htmlverticalspacing = publisher.read_attribute(layoutxml,dataxml,"html-vertical-spacing","string")
     local hyphenate     = publisher.read_attribute(layoutxml,dataxml,"hyphenate",     "boolean", true)
     local hyphenchar    = publisher.read_attribute(layoutxml,dataxml,"hyphenchar",    "string")
-    local indentation  = publisher.read_attribute(layoutxml,dataxml,"indentation", "length")
+    local indentation   = publisher.read_attribute(layoutxml,dataxml,"indentation",   "length")
+    local letterspacing = publisher.read_attribute(layoutxml,dataxml,"letter-spacing","number")
     local marginbottom  = publisher.read_attribute(layoutxml,dataxml,"margin-bottom", "string")
     local margintop     = publisher.read_attribute(layoutxml,dataxml,"margin-top",    "string")
     local margintopboxstart  = publisher.read_attribute(layoutxml,dataxml,"margin-top-box-start","length_sp")
@@ -961,6 +962,7 @@ function commands.define_textformat(layoutxml,dataxml)
 
     fmt.disable_hyphenation = not hyphenate
     fmt.hyphenchar = hyphenchar
+    fmt.letterspacing = letterspacing
 
     if indentation then
         fmt.indent = tex.sp(indentation)

@@ -5931,6 +5931,14 @@ function mknodes(str,parameter,origin)
     local fontnumber = fonts.get_fontinstance(fontfamily,getinstancename(parameter))
     local tbl = fonts.used_fonts[fontnumber]
 
+    -- Convert letterspacing_em (in 1/1000 em) to absolute letterspacing based on font size
+    if parameter.letterspacing_em and not parameter.letterspacing then
+        local fam_instance = fonts.lookup_fontfamily_number_instance[fontfamily]
+        if fam_instance and fam_instance.size then
+            parameter.letterspacing = parameter.letterspacing_em * fam_instance.size / 1000
+        end
+    end
+
     local maindirection
     local segments
     if parameter.bidi and not ( str == "\n" ) then

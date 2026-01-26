@@ -1521,6 +1521,11 @@
           <xs:documentation>Die Länge des Absatzeinzugs.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="letter-spacing">
+        <xs:annotation>
+          <xs:documentation>Zusätzlicher Abstand zwischen Zeichen in 1/1000 em. Beispiel: Ein Wert von 50 fügt 0,05 em zwischen jedem Zeichen ein. Der Wert ist schriftgrößenunabhängig und skaliert mit dem Text.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="margin-bottom">
         <xs:annotation>
           <xs:documentation>Abstand zwischen der Linie unten und dem nachfolgenden Absatz.</xs:documentation>

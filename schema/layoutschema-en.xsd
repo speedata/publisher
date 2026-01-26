@@ -1521,6 +1521,11 @@
           <xs:documentation>The amount of indentation.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="letter-spacing">
+        <xs:annotation>
+          <xs:documentation>Additional space between characters in 1/1000 em. For example, a value of 50 adds 0.05 em between each character. This is font-size independent and scales with the text.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="margin-bottom">
         <xs:annotation>
           <xs:documentation>Distance between the bottom rule and the text of the next paragraph.</xs:documentation>

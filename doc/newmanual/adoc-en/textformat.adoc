@@ -4,7 +4,53 @@
 
 Text formats are used to control the paragraphs. You can use them to control various things like text indents, text alignment, orphan and widow lines, pagination and more.
 
-The individual parameters are described in the reference under <DefineTextformat>.
+The individual parameters are described in the reference under <<cmd-definetextformat,`<DefineTextformat>`>>.
+
+== Attribute overview
+
+[cols="2,4"]
+|===
+|Attribute |Description
+
+|`alignment`
+|Text alignment: `justified`, `leftaligned`, `rightaligned`, `centered`, `start`, `end`
+
+|`border-top`, `border-bottom`
+|Thickness of the rule above/below the text
+
+|`break-before`
+|Force page break before the text (`page`)
+
+|`break-below`
+|Allow/prevent break below the text (`yes`/`no`)
+
+|`hyphenate`
+|Enable/disable hyphenation (`yes`/`no`)
+
+|`hyphenchar`
+|Hyphenation character (default: `-`)
+
+|`indentation`
+|Indentation of the first line(s)
+
+|`letter-spacing`
+|Character spacing in 1/1000 em (e.g. `50` = 0.05 em)
+
+|`margin-top`, `margin-bottom`
+|Outer spacing above/below
+
+|`padding-top`, `padding-bottom`
+|Inner spacing above/below
+
+|`orphan`, `widow`
+|Prevent orphans/widows
+
+|`rows`
+|Number of indented rows
+
+|`tab`
+|Tab character behavior (`space`/`hspace`)
+|===
 
 The text format called text is predefined in the Publisher and is used in all places where no other text format is specified. It is defined as follows:
 
