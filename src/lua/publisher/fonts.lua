@@ -565,9 +565,9 @@ do
                     end
                 end
             end
+            ::continue_loop::
             lasthead = head
             head = head.next
-            ::continue_loop::
         end
         if start_bgcolor then
             -- If we have a bgcolor, we must insert it at the end of the list
