@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.20" date="2026-01-29">
+        <en>Bugfix: calculate remaining height in PlaceObject / absolute positioning.</en>
+        <de>Fehlerkorrektur: Berechnung der verbleibenden Höhe in PlaceObject / absolute Positionierung.</de>
+    </entry>
     <entry version="5.3.19" date="2026-01-29">
         <en>Fix panic on sp --help / --version.</en>
         <de>Korrigiere Programmabbruch bei sp --help / --version.</de>
