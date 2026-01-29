@@ -17,15 +17,14 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
-	"strconv"
-	"strings"
-	"syscall"
-	"time"
-
 	"speedatapublisher/configurator"
 	"speedatapublisher/server"
 	"speedatapublisher/sp"
 	"speedatapublisher/splibaux"
+	"strconv"
+	"strings"
+	"syscall"
+	"time"
 
 	"github.com/Masterminds/semver"
 	"github.com/speedata/hotfolder"
@@ -203,7 +202,8 @@ func init() {
 			filepath.Join(srcdir, "colorprofiles"),
 			filepath.Join(srcdir, "tex"),
 			filepath.Join(srcdir, "metapost"),
-			filepath.Join(srcdir, "hyphenation")}, string(os.PathListSeparator)))
+			filepath.Join(srcdir, "hyphenation"),
+		}, string(os.PathListSeparator)))
 		os.Setenv("LUA_PATH", srcdir+"/lua/?.lua;"+installdir+"/lib/?.lua;"+srcdir+"/lua/common/?.lua;")
 		extradir(filepath.Join(installdir, "fonts"))
 		extradir(filepath.Join(installdir, "img"))
@@ -533,7 +533,7 @@ func getExecutablePath() string {
 // Print version information
 func versioninfo() {
 	log.Printf("Version: %s", versionWithPro)
-	exitProgram(0)
+	os.Exit(0)
 }
 
 // copy a file from srcpath to destpath and make
@@ -1058,6 +1058,7 @@ func main() {
 	switch command {
 	case cmdHelp:
 		op.Help()
+		os.Exit(0)
 	case cmdRun:
 		os.Setenv("SP_PRO", pro)
 		jobname := getOption("jobname")
