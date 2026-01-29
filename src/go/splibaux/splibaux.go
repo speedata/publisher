@@ -31,7 +31,7 @@ func init() {
 	}
 
 	if rewriteString := os.Getenv("SP_PATH_REWRITE"); rewriteString != "" {
-		var rewrites = []string{}
+		rewrites := []string{}
 
 		elements := strings.Split(rewriteString, ",")
 		for _, elt := range elements {
@@ -67,15 +67,16 @@ func GetFullPath(filename string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if u.Scheme == "http" || u.Scheme == "https" {
+	switch u.Scheme {
+	case "http", "https":
 		return saveFileFromURL(u, filename)
-	} else if u.Scheme == "file" {
+	case "file":
 		fn := u.Path
 		if hn := u.Hostname(); hn != "" {
 			fn = hn + ":" + fn
 		}
 		return LookupFile(fn), nil
-	} else {
+	default:
 		return LookupFile(filename), nil
 	}
 }
@@ -170,7 +171,6 @@ func ListFonts() []string {
 		}
 	}
 	return res
-
 }
 
 func writeContentsToTempfile(contents string) (string, error) {
@@ -279,8 +279,8 @@ func ConvertContents(contents, handler string) (string, error) {
 // ConvertImage runs an external program to convert the image into a file
 // format suitable for the speedata Publisher.
 func ConvertImage(filename, handler string) (string, error) {
-	var base = filepath.Base(filename)
-	var outfilename = base
+	base := filepath.Base(filename)
+	outfilename := base
 	return convertFile(filename, outfilename, handler)
 }
 
