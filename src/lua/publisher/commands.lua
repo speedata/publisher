@@ -4193,7 +4193,12 @@ function commands.place_object( layoutxml,dataxml)
             -- absolute positioning
             options.current_height = areaheight
         else
-            options.current_height = math.min(current_grid:remaining_height_sp(row,area,tonumber(column)),areaheight)
+            if absolute_positioning then
+                options.current_height = areaheight - row
+            else
+                local remaining_height = current_grid:remaining_height_sp(row,area,tonumber(column))
+                options.current_height = math.min(remaining_height,areaheight)
+            end
         end
     else
         options.ht_max = publisher.maxdimen
