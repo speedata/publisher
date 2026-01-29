@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.19" date="2026-01-29">
+        <en>Fix panic on sp --help / --version.</en>
+        <de>Korrigiere Programmabbruch bei sp --help / --version.</de>
+    </entry>
     <entry version="5.3.18" date="2026-01-26">
         <en>Add letter-spacing attribute to DefineTextformat (in 1/1000 em).</en>
         <de>Füge letter-spacing Attribut zu DefineTextformat hinzu (in 1/1000 em).</de>
