@@ -5525,13 +5525,6 @@ function hbglyphlist(arguments)
             setstyles(n,parameter)
             list,cur = node.insert_after(list,cur,n)
 
-            if parameter.letterspacing then
-                local k = node.new("kern")
-                setstyles(k,parameter)
-                k.kern = parameter.letterspacing
-                list,cur = node.insert_after(list,cur,k)
-                lastitemwasglyph = true
-            end
             if cur and cur.prev and cur.prev.id == glyph_node then
                 lastitemwasglyph = true
             end
@@ -5569,10 +5562,14 @@ function hbglyphlist(arguments)
                 thisglyph.x_advance = thistbl.characters[uc].hadvance
             end
             local diff = thisglyph.x_advance - thistbl.characters[uc].hadvance
-            if diff ~= 0 then
+            local kernvalue = diff * tbl.mag
+            if parameter.letterspacing then
+                kernvalue = kernvalue + parameter.letterspacing
+            end
+            if kernvalue ~= 0 then
                 local property = "kernafter"
                 if direction == "rtl" then property = "kernbefore" end
-                publisher.setprop(cur,property, diff * tbl.mag)
+                publisher.setprop(cur,property, kernvalue)
             end
             if uc == -1 then
             elseif uc > puastart then

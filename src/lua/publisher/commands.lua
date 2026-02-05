@@ -4570,7 +4570,7 @@ function commands.positioning_frame( layoutxml, dataxml )
             main.log("error","width not set in PositioningFrame")
         end
         if not height then
-            main.log("error","height not set in PositioningFrame")
+            main.log("error","height not set in PositioningFrame", lineinfo(layoutxml))
         end
     end
     return {
