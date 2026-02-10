@@ -3052,7 +3052,7 @@
       </xs:attribute>
       <xs:attribute name="marginprotrusion">
         <xs:annotation>
-          <xs:documentation>The amount of protrusion glyphs like -, . and - stick into the right margin. Highly font dependent. Defaults to 0.</xs:documentation>
+          <xs:documentation>The amount of protrusion glyphs like -, . and - stick into the right margin. Defaults to 0. The value is multiplied with 0.001em from the current font, so a setting of 200 allows these characters to stick out of the margin 0.2em.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="mode">

@@ -3052,7 +3052,7 @@
       </xs:attribute>
       <xs:attribute name="marginprotrusion">
         <xs:annotation>
-          <xs:documentation>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark abhängig von der benutzten Schriftart.</xs:documentation>
+          <xs:documentation>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Voreinstellung ist 0. Der Wert wird mit 0,001em der aktuellen Schrift multipliziert, eine Einstellung von 200 erlaubt also, dass diese Zeichen 0,2em über den Rand hinausragen.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="mode">

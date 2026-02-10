@@ -207,7 +207,7 @@ function define_font_hb( name, size, extra_parameter )
         }
         --- Margin protrusion is enabled in `spinit.lua`.
         if (uni == 44  or uni == 45 or uni == 46) and extra_parameter and tonumber(extra_parameter.marginprotrusion) then
-            f.characters[uni]["right_protruding"] = hadvance * extra_parameter.marginprotrusion / 100
+            f.characters[uni]["right_protruding"] = extra_parameter.marginprotrusion
         end
 
         local thischar = f.characters[uni]
@@ -440,7 +440,7 @@ function define_font(name, size,extra_parameter)
 
             --- Margin protrusion is enabled in `spinit.lua`.
             if (glyph.name=="hyphen" or glyph.name=="period" or glyph.name=="comma") and extra_parameter and type(extra_parameter.marginprotrusion) == "number" then
-                f.characters[codepoint]["right_protruding"] = glyph.width * extra_parameter.marginprotrusion / 100
+                f.characters[codepoint]["right_protruding"] = extra_parameter.marginprotrusion
             end
 
             --- We do kerning by default. In the future we could turn it off.

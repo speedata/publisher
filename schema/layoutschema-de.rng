@@ -2992,7 +2992,7 @@
                </attribute>
                <optional>
                   <attribute name="marginprotrusion">
-                     <a:documentation>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark abhängig von der benutzten Schriftart.</a:documentation>
+                     <a:documentation>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Voreinstellung ist 0. Der Wert wird mit 0,001em der aktuellen Schrift multipliziert, eine Einstellung von 200 erlaubt also, dass diese Zeichen 0,2em über den Rand hinausragen.</a:documentation>
                   </attribute>
                </optional>
                <optional>

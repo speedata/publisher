@@ -5385,10 +5385,10 @@
     </attribute>
     <attribute en="marginprotrusion" type="zerotohundred" optional="yes">
       <description xml:lang="en">
-        <para>The amount of protrusion glyphs like -, . and - stick into the right margin. Highly font dependent. Defaults to 0.</para>
+        <para>The amount of protrusion glyphs like -, . and - stick into the right margin. Defaults to 0. The value is multiplied with 0.001em from the current font, so a setting of 200 allows these characters to stick out of the margin 0.2em.</para>
       </description>
       <description xml:lang="de">
-        <para>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Stark abhängig von der benutzten Schriftart.</para>
+        <para>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Voreinstellung ist 0. Der Wert wird mit 0,001em der aktuellen Schrift multipliziert, eine Einstellung von 200 erlaubt also, dass diese Zeichen 0,2em über den Rand hinausragen.</para>
       </description>
     </attribute>
     <attribute en="mode" optional="yes" since="3.9.29">
