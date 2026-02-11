@@ -4531,20 +4531,34 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
             end
             if blockinline == "vertical" then cury = cury + head.height + head.depth else curx = curx + head.width end
         elseif head.id==hlist_node or head.id == vlist_node then
-            local bordernumber = attr_table[attribute_name_number_map["bordernumber"]]
-            if bordernumber then
-                local boxnode = mpbox(borderattrs[bordernumber],head.width,head.height + head.depth)
-                parent.head = node_insert_before(parent.head,head,boxnode)
-            end
-            if head.id == hlist_node then
-                local r = insert_nm(head.list,head,"horizontal",curx,cury,pagewidth, pageheight)
-                for _, rule in ipairs(r) do
-                    rules[#rules+1] = rule
+            -- Check if this is a paragraph vlist from par:format with no features that need processing
+            local skip_descent = false
+            if head.id == vlist_node then
+                local props = node.getproperty(head)
+                if props and props.origin == "par:format"
+                    and not props.has_color
+                    and not props.has_hyperlink
+                    and not props.has_role
+                    and not props.has_special_nodes then
+                    skip_descent = true
                 end
-            else
-                local r = insert_nm(head.list,head,"vertical",curx,cury,pagewidth, pageheight)
-                for _, rule in ipairs(r) do
-                    rules[#rules+1] = rule
+            end
+            if not skip_descent then
+                local bordernumber = attr_table[attribute_name_number_map["bordernumber"]]
+                if bordernumber then
+                    local boxnode = mpbox(borderattrs[bordernumber],head.width,head.height + head.depth)
+                    parent.head = node_insert_before(parent.head,head,boxnode)
+                end
+                if head.id == hlist_node then
+                    local r = insert_nm(head.list,head,"horizontal",curx,cury,pagewidth, pageheight)
+                    for _, rule in ipairs(r) do
+                        rules[#rules+1] = rule
+                    end
+                else
+                    local r = insert_nm(head.list,head,"vertical",curx,cury,pagewidth, pageheight)
+                    for _, rule in ipairs(r) do
+                        rules[#rules+1] = rule
+                    end
                 end
             end
             if blockinline == "vertical" then cury = cury + head.height + head.depth else curx = curx + head.width end

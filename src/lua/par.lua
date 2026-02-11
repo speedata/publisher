@@ -159,6 +159,13 @@ local function flatten(self,items,options,data)
     local type_userdata = "userdata"
     local type_function = "function"
     local default_css_text = publisher.css:gettext()
+    -- Feature flag tracking: detect which features are used so that
+    -- insert_nonmoving_whatsits can skip clean paragraphs
+    local function mark_color() self.has_color = true end
+    local function mark_hyperlink() self.has_hyperlink = true end
+    local function mark_role() self.has_role = true end
+    local function mark_special() self.has_special_nodes = true end
+
     for i=1,items_len do
         local thisself = items[i]
         local typ_thisself = type(thisself)
@@ -199,6 +206,7 @@ local function flatten(self,items,options,data)
             if new_options.padding_left and not self.padding_left then self.padding_left = new_options.padding_left end
             if node.is_node(thisself.contents) then
                 if thisself.contents.id == publisher.whatsit_node and thisself.contents.subtype == publisher.user_defined_whatsit then
+                    mark_special()
                     if type(thisself.contents.value) == "function" then
                         -- leaders and break_url
                         append(thisself.contents.value(new_options))
@@ -207,9 +215,12 @@ local function flatten(self,items,options,data)
                     end
                     -- action node for example
                 else
+                    -- Direct node with potentially pre-set attributes (e.g. from HTML/CSS)
+                    mark_special()
                     append(thisself.contents)
                 end
             elseif type(thisself.contents) == type_table and thisself.contents.flatten_callback then
+                mark_special()
                 local f = thisself.contents.flatten_callback
                 thisself.contents.flatten_callback = nil
                 local tmp = f(thisself.contents,new_options)
@@ -217,6 +228,9 @@ local function flatten(self,items,options,data)
                     append(tmp.objects[i])
                 end
             elseif type(thisself.contents) == type_string or type(thisself.contents) == type_number or type(thisself.contents) == type_boolean then
+                if new_options.color and new_options.color ~= 1 then mark_color() end
+                if new_options.hyperlink then mark_hyperlink() end
+                if new_options.role then mark_role() end
                 append(mktextnode(self,thisself.contents,new_options))
             else
                 local tmp = flatten(self,thisself.contents,new_options,data)
@@ -226,8 +240,13 @@ local function flatten(self,items,options,data)
             end
         elseif typ_thisself == type_string or typ_thisself == type_number or typ_thisself == type_boolean then
             -- w("par/flatten: type: string or similar")
+            if new_options.color and new_options.color ~= 1 then mark_color() end
+            if new_options.hyperlink then mark_hyperlink() end
+            if new_options.role then mark_role() end
             append(mktextnode(self,thisself,new_options))
         elseif typ_thisself == type_table and thisself[".__type"] == "element" and new_options.html ~= "off" then
+            -- HTML content can have any features, mark conservatively
+            mark_color() mark_hyperlink() mark_role() mark_special()
             -- w("par/flatten: type: HTML")
             -- Now this is a bit strange and I should explain. The XML parser (luxor.lua)
             -- creates a table structure from the XML text, but for HTML parsing, we need the
@@ -328,6 +347,7 @@ local function flatten(self,items,options,data)
         elseif typ_thisself == type_userdata and node.is_node(thisself) then
             -- w("par/flatten: type: userdata")
             if thisself.id == publisher.whatsit_node and thisself.subtype == publisher.user_defined_whatsit then
+                mark_special()
                 if type(thisself.value) == type_function then
                     -- leaders and break_url
                     append(thisself.value(new_options))
@@ -335,6 +355,8 @@ local function flatten(self,items,options,data)
                     append(thisself)
                 end
             else
+                 -- Direct node with potentially pre-set attributes (e.g. from HTML/CSS)
+                 mark_special()
                  append(thisself)
             end
         elseif typ_thisself == type_table and thisself.elementname == "SetVariable" then
@@ -1091,6 +1113,11 @@ function Par:format( width_sp, options,data )
         publisher.set_attribute(nodelist.list,"borderht",ht)
     end
     publisher.setprop(nodelist,"origin","par:format")
+    -- Transfer feature flags from Par to the vlist so insert_nonmoving_whatsits can skip clean paragraphs
+    if self.has_color then publisher.setprop(nodelist,"has_color",true) end
+    if self.has_hyperlink then publisher.setprop(nodelist,"has_hyperlink",true) end
+    if self.has_role then publisher.setprop(nodelist,"has_role",true) end
+    if self.has_special_nodes then publisher.setprop(nodelist,"has_special_nodes",true) end
 
     if self.initial then
         local ht_nodelist = get_lineheight(nodelist)
