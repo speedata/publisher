@@ -158,8 +158,8 @@ Folgende Unicode-Leerzeichen werden vom speedata Publisher interpretiert:
 |=======
 | Code            | Name | Example | Width
 | `&amp;#x00A0;`  | NO-BREAK SPACE     | 1000 × 500                   | Variabel
-| `&amp;#x2002;`  | EN SPACE           | 1000&#x2002;×&#x2002;500     | 1 em
-| `&amp;#x2003;`  | EM SPACE           | 1000&#x2003;×&#x2003;500     | 1/2 em
+| `&amp;#x2002;`  | EN SPACE           | 1000&#x2002;×&#x2002;500     | 1/2 em
+| `&amp;#x2003;`  | EM SPACE           | 1000&#x2003;×&#x2003;500     | 1 em
 | `&amp;#x2004;`  | THREE-PER-EM SPACE | 1000&#x2004;×&#x2004;500     | 1/3 em
 | `&amp;#x2005;`  | FOUR-PER-EM  SPACE | 1000&#x2005;×&#x2005;500     | 1/4em
 | `&amp;#x2006;`  | SIX-PER-EM SPACE   | 1000&#x2006;×&#x2006;500     | 1/6 em
