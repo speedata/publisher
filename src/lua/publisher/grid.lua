@@ -424,22 +424,20 @@ function allocate_cells(self,options)
         -- No allocate matrix (default)
         local max_x = frame_margin_left + math.min(self:number_of_columns(areaname), x + wd - 1)
         local max_y = frame_margin_top  + math.min(self:number_of_rows(areaname),    y + ht - 1)
+        local allocation = self.allocation_x_y
         for _x = x + frame_margin_left, max_x do
-            for _y = y + frame_margin_top, max_y do
-                if self.allocation_x_y[_x] == nil then
-                    grid_conflict = true
-                else
-                    if self.allocation_x_y[_x][_y] then
+            local col = allocation[_x]
+            if col == nil then
+                grid_conflict = true
+            else
+                local right_edge = show_right and _x == max_x
+                for _y = y + frame_margin_top, max_y do
+                    local cell = col[_y]
+                    if cell then
                         grid_conflict = true
-                        self.allocation_x_y[_x][_y] = self.allocation_x_y[_x][_y] + 1
+                        col[_y] = cell + 1
                     else
-                        local color = 1
-                        if _x == max_x and show_right then
-                            color = 3
-                        elseif _y == max_y and show_bottom then
-                            color = 3
-                        end
-                        self.allocation_x_y[_x][_y] = color
+                        col[_y] = (right_edge or (show_bottom and _y == max_y)) and 3 or 1
                     end
                 end
             end
@@ -457,8 +455,9 @@ function fits_in_row(self,column,width,row)
     if not column then return false end
     if column + width - 1 > self:number_of_columns(publisher.default_areaname) then return false end
     local max_x = column + width - 1
+    local allocation = self.allocation_x_y
     for x = column, max_x  do
-        if self.allocation_x_y[x][row] then return false end
+        if allocation[x][row] then return false end
     end
     return true
 end
@@ -550,8 +549,8 @@ function find_suitable_row( self,column, width,height,areaname, framenumber)
         end
     end
 
-    -- FIXME: inefficient algorithm
-    if self:number_of_rows(areaname) < self:current_row(areaname) + height - 1 then
+    local maxrows = self:number_of_rows(areaname)
+    if maxrows < self:current_row(areaname) + height - 1 then
         -- doesn't fit, so we try on the next area
         if self:number_of_frames(areaname) > self:framenumber(areaname) then
             publisher.next_area(areaname,self,nil,"find_suitable_row")
@@ -560,24 +559,35 @@ function find_suitable_row( self,column, width,height,areaname, framenumber)
             return
         end
     end
-    for z = self:current_row(areaname,framenumber) + frame_margin_top, self:number_of_rows(areaname) + frame_margin_top do
+    local col_adj = column + frame_margin_left
+    local max_z = maxrows + frame_margin_top
+    local allocation = self.allocation_x_y
+    local max_col = col_adj + width - 1
+    local z = self:current_row(areaname,framenumber) + frame_margin_top
+    while z <= max_z do
         local row = z - frame_margin_top - 1
-        if self:fits_in_row(column + frame_margin_left,width,z) then
-            local maxrows = self:number_of_rows(areaname)
-            -- when the object is too high, it can't fit, even if the page is empty
-            if maxrows - row - height < 0 then
-                return nil
-            else
-                local fits = true
-                for current_row = z, z + height - 1 do
-                    if not self:fits_in_row(column + frame_margin_left,width,current_row) then
-                        fits = false
-                    end
-                end
-                if fits then
-                    return z - frame_margin_top
+        -- when the object is too high, it can't fit, even if the page is empty
+        if maxrows - row - height < 0 then
+            return nil
+        end
+        -- check all height rows, break and skip ahead on first conflict
+        local fits = true
+        for r = z, z + height - 1 do
+            local blocked = false
+            for x = col_adj, max_col do
+                if allocation[x][r] then
+                    blocked = true
+                    break
                 end
             end
+            if blocked then
+                fits = false
+                z = r + 1
+                break
+            end
+        end
+        if fits then
+            return z - frame_margin_top
         end
     end
     if self.pageheight_known == false then
