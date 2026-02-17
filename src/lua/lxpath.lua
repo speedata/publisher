@@ -1451,19 +1451,34 @@ end
 
 ---@return context
 function context:copy()
-    local newcontexttab = {
+    -- Follow proxy chain to the real vars table so pairs() works in __newindex.
+    -- Proxies with pending COW are empty tables with __index pointing up the chain.
+    -- Once a proxy's __newindex fires, its metatable is removed, so it becomes a
+    -- regular table and the chain stops there.
+    local real_vars = self.vars
+    local mt = getmetatable(real_vars)
+    while mt and mt.__index do
+        real_vars = mt.__index
+        mt = getmetatable(real_vars)
+    end
+    local vars_proxy = setmetatable({}, {
+        __index = real_vars,
+        __newindex = function(t, k, v)
+            for key, val in pairs(real_vars) do
+                rawset(t, key, val)
+            end
+            setmetatable(t, nil)
+            t[k] = v
+        end,
+    })
+    return setmetatable({
         xmldoc = self.xmldoc,
         sequence = self.sequence,
-        vars = {},
+        vars = vars_proxy,
         pos = self.pos,
         size = self.size,
         namespaces = self.namespaces,
-    }
-    for key, value in pairs(self.vars) do
-        newcontexttab.vars[key] = value
-    end
-    local newcontext = context:new(newcontexttab)
-    return newcontext
+    }, context)
 end
 
 ---@alias xmlelement table
