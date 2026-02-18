@@ -931,7 +931,16 @@ function dothings()
     --- Define a basic font family with name `text`:
     define_default_fontfamily()
 
+    local _sampler
+    if os.getenv("SP_PROFILE") then
+        _sampler = require "sampler"
+        _sampler.start(tonumber(os.getenv("SP_PROFILE")) or 10000)
+    end
     initialize_luatex_and_generate_pdf()
+    if _sampler then
+        _sampler.stop()
+        _sampler.report("profile.txt")
+    end
     -- The last thing is to put a stamp in the PDF
     if options.hidespinfo and options.hidespinfo == "true" or options.hidespinfo == "yes" then
         -- do nothing
