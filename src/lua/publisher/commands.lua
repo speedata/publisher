@@ -1158,25 +1158,24 @@ function commands.forall( layoutxml,dataxml )
 
     local tab = {}
     if publisher.newxpath then
-        local save_size = dataxml.size
         if limit or start then
             main.log("error","ForAll: the new xpath parser does not allow limit or start, please use predicates instead.")
         end
-        local copysequence = dataxml.sequence
         local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
-        dataxml.size = #selection
-        local savepos = dataxml.pos
         for i = 1, #selection do
-            dataxml.pos = i
-            dataxml.sequence = {selection[i]}
-            local tmp_tab = publisher.dispatch(layoutxml,dataxml)
+            local iterdata = {}
+            for k, v in pairs(dataxml) do
+                iterdata[k] = v
+            end
+            setmetatable(iterdata, getmetatable(dataxml))
+            iterdata.pos = i
+            iterdata.sequence = {selection[i]}
+            iterdata.size = #selection
+            local tmp_tab = publisher.dispatch(layoutxml, iterdata)
             for j = 1, #tmp_tab do
                 tab[#tab+1] = tmp_tab[j]
             end
         end
-        dataxml.pos = savepos
-        dataxml.size = save_size
-        dataxml.sequence = copysequence
         return tab
     end
 
@@ -3734,7 +3733,7 @@ function commands.pagetype(layoutxml,dataxml)
         if eltname=="Margin" or eltname == "AtPageShipout" or eltname == "AtPageCreation" or eltname=="Grid" or eltname=="PositioningArea" then
             tmp_tab [#tmp_tab + 1] = j
         else
-            err("Element %q in “Pagetype” unknown",tostring(eltname))
+            main.log("info","Element in “Pagetype” unknown","name",tostring(eltname),lineinfo(layoutxml))
             tmp_tab [#tmp_tab + 1] = j
         end
     end
@@ -4594,11 +4593,7 @@ function commands.positioning_area( layoutxml,dataxml )
     tab.colorname = colorname
     tab.layoutxml = layoutxml
     tab.bgcolor = bgcolor
-    if publisher.newxpath then
-        tab.dataxml = dataxml
-    else
-        tab.dataxml = dataxml
-    end
+    tab.dataxml = dataxml
     tab.name = name
     return tab
 end
