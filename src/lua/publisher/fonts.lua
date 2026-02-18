@@ -196,110 +196,150 @@ end
 --- At this time we must adjust the contents of the paragraph how we would
 --- like it. For example the (sub/sup)script glyphs still have the width of
 --- the regular characters and need
-function pre_linebreak( head )
-    local first_head = head
+-- node.direct locals for pre_linebreak hot loop
+local d              = node.direct
+local d_todirect     = d.todirect
+local d_tonode       = d.tonode
+local d_getnext      = d.getnext
+local d_getprev      = d.getprev
+local d_getid        = d.getid
+local d_getsubtype   = d.getsubtype
+local d_getchar      = d.getchar
+local d_setchar      = d.setchar
+local d_getfont      = d.getfont
+local d_getlist      = d.getlist
+local d_getleader    = d.getleader
+local d_has_attribute = d.has_attribute
+local d_set_attribute = d.set_attribute
+local d_setfield     = d.setfield
+local d_getfield     = d.getfield
+local d_setnext      = d.setnext
+local d_setprev      = d.setprev
+local d_new          = d.new
+local d_insert_after = d.insert_after
+local d_insert_before = d.insert_before
+local d_vpack        = d.vpack
+local d_hpack        = d.hpack
+local d_tail         = d.tail
+local d_getproperty  = d.getproperty
+local d_setproperty  = d.setproperty
 
+-- Pre-resolved attribute numbers for pre_linebreak hot loop
+local plb_att_fontfamily
+local plb_att_fontstyle
+local plb_att_fontweight
+local plb_attval_italic  -- index of "italic" in font-style table
+local plb_attval_bold    -- index of "bold" in font-weight table
+
+local function pre_linebreak_direct( head )
+    -- Cache for consecutive same-font glyphs
+    local cache_ff, cache_fs, cache_fw
+    local cache_fontnum, cache_is_fontforge, cache_f
     while head do
-        if head.id == hlist_node then -- hlist
-            pre_linebreak(head.list)
-        elseif head.id == vlist_node then -- vlist
-            pre_linebreak(head.list)
-        elseif head.id == rule_node then
+        local id = d_getid(head)
+        if id == hlist_node then
+            pre_linebreak_direct(d_getlist(head))
+        elseif id == vlist_node then
+            pre_linebreak_direct(d_getlist(head))
+        elseif id == rule_node then
             -- ignore
-        elseif head.id == dir_node then
+        elseif id == dir_node then
             -- ignore
-        elseif head.id == disc_node then -- discretionary
-            pre_linebreak(head.pre)
-            pre_linebreak(head.post)
-            pre_linebreak(head.replace)
-        elseif head.id == whatsit_node then -- whatsit
-            if head.subtype == pdf_dest_whatsit then
-                local dest_fontfamily = publisher.get_attribute(head,"fontfamily")
+        elseif id == disc_node then
+            local pre, post, replace = d.getdisc(head)
+            pre_linebreak_direct(pre)
+            pre_linebreak_direct(post)
+            pre_linebreak_direct(replace)
+        elseif id == whatsit_node then
+            if d_getsubtype(head) == pdf_dest_whatsit then
+                local dest_fontfamily = d_has_attribute(head, plb_att_fontfamily)
                 if dest_fontfamily then
-                    local tmpnext = head.next
-                    local tmpprev = head.prev
-                    head.next = nil
-                    head.prev = nil
+                    local tmpnext = d_getnext(head)
+                    local tmpprev = d_getprev(head)
+                    d_setnext(head, nil)
+                    d_setprev(head, nil)
                     local instance = lookup_fontfamily_number_instance[dest_fontfamily]
                     local f = used_fonts[instance.normal]
-                    local g = publisher.make_glue({width = f.size})
+                    local g = d_todirect(publisher.make_glue({width = f.size}))
 
-                    local h = node.insert_after(head,head,g)
-
-                    h = node.vpack(h)
+                    local h = d_insert_after(head, head, g)
+                    h = d_vpack(h)
 
                     if tmpprev then
-                        tmpprev.next = h
-                        h.prev = tmpprev
+                        d_setnext(tmpprev, h)
+                        d_setprev(h, tmpprev)
                     end
-
                     if tmpnext then
-                        tmpnext.prev = h
-                        h.next = tmpnext
+                        d_setprev(tmpnext, h)
+                        d_setnext(h, tmpnext)
                     end
                 end
             end
-        elseif head.id == glue_node then -- glue
-            if head.subtype == 100 then -- leader
-                local l = head.leader
-                local wd = node.has_attribute(l,publisher.att_leaderwd)
+        elseif id == glue_node then
+            if d_getsubtype(head) == 100 then -- leader
+                local l = d_getleader(head)
+                local wd = d_has_attribute(l, publisher.att_leaderwd)
 
                 -- Set the font for the leader
-                pre_linebreak(l)
+                pre_linebreak_direct(l)
 
                 local tmpbox
                 if wd == -1 then
-                    tmpbox = node.hpack(l)
+                    tmpbox = d_hpack(l)
                 else
                     -- \hbox{ 1fil, text, 1fil }
-                    local l1,l2
-                    l1 = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 2, shrink = 2^16, shrink_order = 2})
-                    l2 = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 2, shrink = 2^16, shrink_order = 2})
-                    local newhead = node.insert_before(l,l,l1)
-
-                    local endoftext = node.tail(l)
-                    newhead = node.insert_after(newhead,endoftext,l2)
-                    tmpbox = node.hpack(newhead,wd,"exactly")
+                    local l1 = d_todirect(set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 2, shrink = 2^16, shrink_order = 2}))
+                    local l2 = d_todirect(set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 2, shrink = 2^16, shrink_order = 2}))
+                    local newhead = d_insert_before(l, l, l1)
+                    local endoftext = d_tail(l)
+                    newhead = d_insert_after(newhead, endoftext, l2)
+                    tmpbox = d_hpack(newhead, wd, "exactly")
                 end
-                node.set_attribute(tmpbox,publisher.att_leaderwd,wd)
-                head.leader = tmpbox
-
+                d_set_attribute(tmpbox, publisher.att_leaderwd, wd)
+                d_setfield(head, "leader", tmpbox)
             end
-        elseif head.id == kern_node then -- kern
-        elseif head.id == penalty_node then -- penalty
-        elseif head.id == glyph_node then -- glyph
-            local ff = publisher.get_attribute(head,"fontfamily")
+        elseif id == kern_node then -- kern
+        elseif id == penalty_node then -- penalty
+        elseif id == glyph_node then
+            local ff = d_has_attribute(head, plb_att_fontfamily)
             if ff then
                 -- not local, so that we can access fontfamily later
-                fontfamily=ff
+                fontfamily = ff
 
                 -- Last resort
                 if fontfamily == 0 then fontfamily = 1 warning("Undefined fontfamily, set fontfamily to 1") end
 
-                local fontstyle = publisher.get_attribute(head,"font-style")
-                local fontweight = publisher.get_attribute(head,"font-weight")
+                local fontstyle = d_has_attribute(head, plb_att_fontstyle)
+                local fontweight = d_has_attribute(head, plb_att_fontweight)
 
-                local instancename = nil
-                if fontstyle == "italic" and fontweight ~= "bold" then
-                    instancename = "italic"
-                elseif fontstyle == "italic" and fontweight == "bold" then
-                    instancename = "bolditalic"
-                elseif fontweight == "bold" then
-                    instancename = "bold"
-                else
-                    instancename = "normal"
+                if ff ~= cache_ff or fontstyle ~= cache_fs or fontweight ~= cache_fw then
+                    local instancename
+                    if fontstyle == plb_attval_italic and fontweight ~= plb_attval_bold then
+                        instancename = "italic"
+                    elseif fontstyle == plb_attval_italic and fontweight == plb_attval_bold then
+                        instancename = "bolditalic"
+                    elseif fontweight == plb_attval_bold then
+                        instancename = "bold"
+                    else
+                        instancename = "normal"
+                    end
+                    cache_fontnum = get_fontinstance(fontfamily, instancename)
+                    cache_f = used_fonts[cache_fontnum]
+                    cache_is_fontforge = cache_f and cache_f.mode == "fontforge" and cache_f.otfeatures
+                    cache_ff = ff
+                    cache_fs = fontstyle
+                    cache_fw = fontweight
                 end
 
-                local tmp_fontnum = get_fontinstance(fontfamily,instancename)
-
-                -- check for font features
-                local f = used_fonts[tmp_fontnum]
-                if f and f.mode == "fontforge" and f.otfeatures then
+                -- check for font features (fontforge mode only)
+                if cache_is_fontforge then
+                    local f = cache_f
+                    local headchar = d_getchar(head)
                     for _,featuretable in ipairs(f.otfeatures) do
                         local glyphno,lookups
                         local glyph_lookuptable
-                        if f.characters[head.char] then
-                            glyphno = f.characters[head.char].index
+                        if f.characters[headchar] then
+                            glyphno = f.characters[headchar].index
                             lookups = f.fontloader.glyphs[glyphno].lookups
                             for _,v in ipairs(featuretable) do
                                 if lookups then
@@ -307,37 +347,50 @@ function pre_linebreak( head )
                                     if glyph_lookuptable then
                                         local glt1 = glyph_lookuptable[1]
                                         if glt1.type == "substitution" then
-                                            head.char=f.fontloader.lookup_codepoint_by_name[glt1.specification.variant]
+                                            d_setchar(head, f.fontloader.lookup_codepoint_by_name[glt1.specification.variant])
+                                            headchar = d_getchar(head)
                                         elseif glt1.type == "multiple" then
-                                            local lastnode
-                                            for i,v in ipairs(string.explode(glt1.specification.components)) do
+                                            for i,comp in ipairs(string.explode(glt1.specification.components)) do
                                                 if i==1 then
-                                                    head.char=f.fontloader.lookup_codepoint_by_name[v]
+                                                    d_setchar(head, f.fontloader.lookup_codepoint_by_name[comp])
+                                                    headchar = d_getchar(head)
                                                 else
-                                                    local n = node.new("glyph")
-                                                    n.next = head.next
-                                                    n.font = tmp_fontnum
-                                                    n.lang = 0
-                                                    n.char = f.fontloader.lookup_codepoint_by_name[v]
-                                                    head.next = n
+                                                    local n = d_new(glyph_node)
+                                                    d_setnext(n, d_getnext(head))
+                                                    d_setfield(n, "font", cache_fontnum)
+                                                    d_setfield(n, "lang", 0)
+                                                    d_setchar(n, f.fontloader.lookup_codepoint_by_name[comp])
+                                                    d_setnext(head, n)
                                                     head = n
                                                 end
                                             end
                                         end
                                     end
                                 end
-                            end -- if f.characters[head.char]
+                            end
                         end
-                    end -- for featuretable, enabled in pairs
-                end -- if  f and otffeatures
-            end -- fontfamily?
+                    end
+                end
+            end
         else
-            warning("Unknown node: %q",head.id)
+            warning("Unknown node: %q", d_getid(head))
         end
-        head = head.next
+        head = d_getnext(head)
     end
-
     return true
+end
+
+function pre_linebreak( head )
+    if not plb_att_fontfamily then
+        plb_att_fontfamily = publisher.attribute_name_number["fontfamily"]
+        plb_att_fontstyle  = publisher.attribute_name_number["font-style"]
+        plb_att_fontweight = publisher.attribute_name_number["font-weight"]
+        local fs = publisher.attributes["font-style"]
+        for i,v in ipairs(fs) do if v == "italic" then plb_attval_italic = i break end end
+        local fw = publisher.attributes["font-weight"]
+        for i,v in ipairs(fw) do if v == "bold" then plb_attval_bold = i break end end
+    end
+    return pre_linebreak_direct(d_todirect(head))
 end
 
 function insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding_top, bg_padding_bottom, reverse )
@@ -406,19 +459,17 @@ end
 --- decoration now.
 do
     local curdir = {}
-    function post_linebreak( head, list_head)
-        local get_attr = publisher.get_attribute
-        local get_attrs = publisher.get_attributes
+    local plb_attnum_td_line
+    local plb_attnum_td_style
+    local plb_attnum_td_color
+    local plb_attnum_bgcolor
+    local plb_attnum_bgpad_top
+    local plb_attnum_bgpad_bottom
+
+    local function post_linebreak_direct( head, list_head_d )
         local insert_bgcolor = insert_backgroundcolor
         local insert_ul = insert_underline
         local opts = publisher.options
-        local attr_table = {}
-        local attnum_td_line = publisher.attribute_name_number["text-decoration-line"]
-        local attnum_td_style = publisher.attribute_name_number["text-decoration-style"]
-        local attnum_td_color = publisher.attribute_name_number["text-decoration-color"]
-        local attnum_bgcolor = publisher.attribute_name_number["background-color"]
-        local attnum_bgpad_top = publisher.attribute_name_number["bgpaddingtop"]
-        local attnum_bgpad_bottom = publisher.attribute_name_number["bgpaddingbottom"]
         local underlinetype = nil
         local underlinestyle = nil
         local start_underline = nil
@@ -432,17 +483,22 @@ do
         local lasthead = nil
         local fast_path = not (opts.showhyphenation or opts.showkerning or reportmissingglyphs)
         while head do
-            local pd = publisher.getprop(head,"pardir")
-            if pd and #curdir == 0 then
-                curdir = {pd}
+            local id = d_getid(head)
+            local props = d_getproperty(head)
+            if props then
+                local pd = props.pardir
+                if pd and #curdir == 0 then
+                    curdir = {pd}
+                end
             end
-            if head.id == hlist_node then -- hlist
-                post_linebreak(head.list,head)
-            elseif head.id == vlist_node then -- vlist
-                post_linebreak(head.list,head)
-            elseif head.id == dir_node then
-                local mode = string.sub(head.dir,1,1)
-                local texdir = string.sub(head.dir,2,4)
+            if id == hlist_node then
+                post_linebreak_direct(d_getlist(head), head)
+            elseif id == vlist_node then
+                post_linebreak_direct(d_getlist(head), head)
+            elseif id == dir_node then
+                local dirval = d_getfield(head, "dir")
+                local mode = string.sub(dirval,1,1)
+                local texdir = string.sub(dirval,2,4)
                 local ldir
                 if texdir == "TLT" then ldir = "ltr" else ldir = "rtl" end
                 if mode == "+" then
@@ -455,56 +511,54 @@ do
                     end
                 end
                 if start_bgcolor then
-                    insert_bgcolor(list_head, head, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                    insert_bgcolor(d_tonode(list_head_d), d_tonode(head), d_tonode(start_bgcolor), bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
                     start_bgcolor = nil
                 end
-            elseif head.id == disc_node then -- disc
+            elseif id == disc_node then
                 if opts.showhyphenation then
-                    -- Insert a small tick where the disc node is
                     local n = node.new("whatsit","pdf_literal")
                     n.mode = 0
                     n.data = "q 0.3 w 0 2 m 0 7 l S Q"
-                    -- We don't assign back the list head as we assume(!?!) that
-                    -- hyphenation does not start right at the beginning of the list...
-                    node.insert_before(list_head,head,n)
+                    node.insert_before(d_tonode(list_head_d), d_tonode(head), n)
                 end
-            elseif head.id == kern_node then
+            elseif id == kern_node then
                 if fast_path and not start_underline and not start_bgcolor then
                     goto continue_loop
                 end
-                local attrs = get_attrs(head, attr_table)
-                local ul = attrs[attnum_td_line]
-                local bgcolor = attrs[attnum_bgcolor]
+                local ul = d_has_attribute(head, plb_attnum_td_line)
+                local bgcolor = d_has_attribute(head, plb_attnum_bgcolor)
                 if ul == nil then
                     if start_underline then
-                        insert_ul(list_head, head, start_underline,underlinetype,underlinestyle,underline_color)
+                        insert_ul(d_tonode(list_head_d), d_tonode(head), d_tonode(start_underline),underlinetype,underlinestyle,underline_color)
                         start_underline = nil
                     end
                 end
                 if bgcolor == nil then
                     if start_bgcolor then
-                        insert_bgcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                        insert_bgcolor(d_tonode(list_head_d), d_tonode(head), d_tonode(start_bgcolor),bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
                         start_bgcolor = nil
                     end
                 end
                 if opts.showkerning then
-                    -- Insert a small tick where the disc node is
                     local n = node.new("whatsit","pdf_literal")
                     n.mode = 0
                     n.data = "q .4 G 0.3 w 0 2 m 0 7 l S Q"
-                    node.insert_before(list_head,head,n)
+                    node.insert_before(d_tonode(list_head_d), d_tonode(head), n)
                 end
-            elseif head.id == glue_node then -- glue
-                local attrs = get_attrs(head, attr_table)
-                local ul = attrs[attnum_td_line]
-                local bgcolor = attrs[attnum_bgcolor]
-                local paddingtop = attrs[attnum_bgpad_top]
-                local paddingbottom = attrs[attnum_bgpad_bottom]
+            elseif id == glue_node then
+                -- Fast path: skip when no decoration/bgcolor active or pending
+                if fast_path and not start_underline and not start_bgcolor then
+                    if not d_has_attribute(head, plb_attnum_td_line) and not d_has_attribute(head, plb_attnum_bgcolor) then
+                        goto continue_loop
+                    end
+                end
+                local ul = d_has_attribute(head, plb_attnum_td_line)
+                local bgcolor = d_has_attribute(head, plb_attnum_bgcolor)
 
                 -- at rightskip we must underline (if start exists)
-                if ul == nil or head.subtype == 9 then
+                if ul == nil or d_getsubtype(head) == 9 then
                     if start_underline then
-                        insert_ul(list_head, head, start_underline,underlinetype,underlinestyle,underline_color)
+                        insert_ul(d_tonode(list_head_d), d_tonode(head), d_tonode(start_underline),underlinetype,underlinestyle,underline_color)
                         start_underline = nil
                     end
                 end
@@ -512,70 +566,80 @@ do
                     bgcolor_reverse = ( curdir[#curdir] == "rtl" )
                     bgcolorindex = bgcolor
                     start_bgcolor = head
-                    bg_padding_top = paddingtop
-                    bg_padding_bottom = paddingbottom
-            elseif bgcolor == nil or head.subtype == 9 then -- 9 == rightskip
+                    bg_padding_top = d_has_attribute(head, plb_attnum_bgpad_top)
+                    bg_padding_bottom = d_has_attribute(head, plb_attnum_bgpad_bottom)
+            elseif bgcolor == nil or d_getsubtype(head) == 9 then -- 9 == rightskip
                     if start_bgcolor then
-                        insert_bgcolor(list_head, head, start_bgcolor,bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                        insert_bgcolor(d_tonode(list_head_d), d_tonode(head), d_tonode(start_bgcolor),bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
                         start_bgcolor = nil
                     end
                 end
-            elseif head.id == glyph_node then -- glyph
-                local attrs = get_attrs(head, attr_table)
-                local ul = attrs[attnum_td_line]
-                local bgcolor = attrs[attnum_bgcolor]
-                local underlinecolor = attrs[attnum_td_color]
-                local paddingtop = attrs[attnum_bgpad_top]
-                local paddingbottom = attrs[attnum_bgpad_bottom]
+            elseif id == glyph_node then
+                local ul = d_has_attribute(head, plb_attnum_td_line)
+                local bgcolor = d_has_attribute(head, plb_attnum_bgcolor)
+                -- Fast path: skip when no decoration/bgcolor active or pending
+                if fast_path and not ul and not bgcolor and not start_underline and not start_bgcolor then
+                    goto continue_loop
+                end
                 if reportmissingglyphs then
-                    local thisfont = used_fonts[head.font]
-                    if thisfont and not thisfont.characters[head.char] then
+                    local thisfont = used_fonts[d_getfont(head)]
+                    if thisfont and not thisfont.characters[d_getchar(head)] then
                         if reportmissingglyphs == "warning" then
-                            main.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",head.char))
+                            main.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",d_getchar(head)))
                         else
-                            main.log("error","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",head.char))
+                            main.log("error","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",d_getchar(head)))
                         end
                     end
                 end
                 if ul then
                     if not start_underline then
                         underlinetype = ul
-                        underlinestyle = attrs[attnum_td_style]
+                        underlinestyle = d_has_attribute(head, plb_attnum_td_style)
                         start_underline = head
-                        underline_color = underlinecolor
+                        underline_color = d_has_attribute(head, plb_attnum_td_color)
                     end
                 else
                     if start_underline then
-                        insert_ul(list_head, head, start_underline, underlinetype,underlinestyle,underline_color)
+                        insert_ul(d_tonode(list_head_d), d_tonode(head), d_tonode(start_underline), underlinetype,underlinestyle,underline_color)
                         start_underline = nil
                     end
                 end
                 if bgcolor and bgcolor > 0 then
                     if not start_bgcolor then
                         bgcolorindex = bgcolor
-                        bg_padding_top    = paddingtop
-                        bg_padding_bottom = paddingbottom
+                        bg_padding_top    = d_has_attribute(head, plb_attnum_bgpad_top)
+                        bg_padding_bottom = d_has_attribute(head, plb_attnum_bgpad_bottom)
                         start_bgcolor = head
                         bgcolor_reverse = ( curdir[#curdir] == "rtl" )
                     end
                 else
                     if start_bgcolor then
-                        insert_bgcolor(list_head, head, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                        insert_bgcolor(d_tonode(list_head_d), d_tonode(head), d_tonode(start_bgcolor), bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
                         start_bgcolor = nil
                     end
                 end
             end
             ::continue_loop::
             lasthead = head
-            head = head.next
+            head = d_getnext(head)
         end
         if start_bgcolor then
-            -- If we have a bgcolor, we must insert it at the end of the list
-            -- first we must add a dummy item
-            local _, dummy = publisher.add_rule(lasthead,"tail",{width = 0, height = 0, depth = 0},"bgcolor dummy")
-            insert_bgcolor(list_head, dummy, start_bgcolor, bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+            local _, dummy = publisher.add_rule(d_tonode(lasthead),"tail",{width = 0, height = 0, depth = 0},"bgcolor dummy")
+            insert_bgcolor(d_tonode(list_head_d), dummy, d_tonode(start_bgcolor), bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
         end
         return head
+    end
+
+    function post_linebreak( head, list_head )
+        if not plb_attnum_td_line then
+            plb_attnum_td_line    = publisher.attribute_name_number["text-decoration-line"]
+            plb_attnum_td_style   = publisher.attribute_name_number["text-decoration-style"]
+            plb_attnum_td_color   = publisher.attribute_name_number["text-decoration-color"]
+            plb_attnum_bgcolor    = publisher.attribute_name_number["background-color"]
+            plb_attnum_bgpad_top  = publisher.attribute_name_number["bgpaddingtop"]
+            plb_attnum_bgpad_bottom = publisher.attribute_name_number["bgpaddingbottom"]
+        end
+        return post_linebreak_direct(d_todirect(head), list_head and d_todirect(list_head))
     end
 end
 

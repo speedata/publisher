@@ -477,6 +477,17 @@ function Par:mknodelist( options, data )
         else
             -- just objects to be appended to the node list
             local tail = node.tail(nodelist)
+            -- Remove strut rule between two glues inline at join points
+            -- (strut rules from mktextnode are always at the fragment head).
+            if self.html == "off" and thisself.id == publisher.rule_node
+               and tail.id == publisher.glue_node
+               and thisself.next and thisself.next.id == publisher.glue_node then
+                local after_rule = thisself.next
+                after_rule.prev = nil
+                thisself.next = nil
+                node.free(thisself)
+                thisself = after_rule
+            end
             tail.next = thisself
             thisself.prev = tail
         end
@@ -487,29 +498,22 @@ function Par:mknodelist( options, data )
         local split = publisher.getprop(nodelist,"split")
         if #objects > 0 and not split then
             local tail = node.tail(objects[#objects])
+            -- Remove strut rule between two glues at final join point
+            if self.html == "off" and nodelist.id == publisher.rule_node
+               and tail.id == publisher.glue_node
+               and nodelist.next and nodelist.next.id == publisher.glue_node then
+                local after_rule = nodelist.next
+                after_rule.prev = nil
+                nodelist.next = nil
+                node.free(nodelist)
+                nodelist = after_rule
+            end
             tail.next = nodelist
             nodelist.prev = tail
         else
             table.insert(objects,nodelist)
         end
     end
-    if self.html == "off" then
-        for i = 1, #objects do
-            local thisobject = objects[i]
-            local cur = thisobject
-            while cur do
-                if cur.id == publisher.rule_node then
-                    local prev_node = cur.prev
-                    local next_node = cur.next
-                    if prev_node and prev_node.id == publisher.glue_node and next_node and next_node.id == publisher.glue_node then
-                        cur = node.remove(thisobject,cur)
-                    end
-                end
-                cur = cur.next
-            end
-        end
-    end
-
     self.objects = objects
 end
 
