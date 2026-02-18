@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.22" date="2026-02-18">
+        <en>Massive speed improvement.</en>
+        <de>Massive Geschwindigkeitsverbesserungen.</de>
+    </entry>
+    <entry version="5.3.22" date="2026-02-18">
+        <en>Margin protrusion setting is now in 1/1000 em.</en>
+        <de>Optischer Randausgleich Wert ist 1/1000 em.</de>
+    </entry>
     <entry version="5.3.21" date="2026-02-05">
         <en>Bugfix: hyphenation now works correctly with letter-spacing.</en>
         <de>Fehlerkorrektur: Silbentrennung funktioniert jetzt korrekt mit letter-spacing.</de>
