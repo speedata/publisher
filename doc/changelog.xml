@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.23" date="2026-02-19">
+        <en>Bugfix ForAll keeping the context.</en>
+        <de>Fehlerkorrektur: ForAll behält Kontext.</de>
+    </entry>
     <entry version="5.3.22" date="2026-02-18">
         <en>Massive speed improvement.</en>
         <de>Massive Geschwindigkeitsverbesserungen.</de>
