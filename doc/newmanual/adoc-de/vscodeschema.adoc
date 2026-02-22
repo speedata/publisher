@@ -1,20 +1,14 @@
 [[ch-schema-vscode]]
 = Visual Studio Code
 
-Der kostenlose (und unter einer freien Lizenz stehende) Texteditor https://code.visualstudio.com[Visual Studio Code] (kurz: VS Code) kann dank zahlreicher Extensions für sehr viele Programmiersprachen benutzt werden. Um das speedata Layout-Schema zu benutzen, wird die XML Erweiterung von Red Hat benötigt:
+Der kostenlose (und unter einer freien Lizenz stehende) Texteditor https://code.visualstudio.com[Visual Studio Code] (kurz: VS Code) kann dank zahlreicher Extensions für sehr viele Programmiersprachen benutzt werden. Um das speedata Layout-Schema zu benutzen, wird die Extension „speedata Publisher" benötigt:
 
-.Den Marktplatz für Erweiterungen öffnen und nach `xml` suchen. Die Erweiterung von Red Hat ist die richtige.
-image::vscode-xml-redhat.png[width=50%]
+.Den Marktplatz für Erweiterungen öffnen und nach `speedata` suchen. Die Erweiterung „Speedata Publisher" installieren.
+image::vscode-speedata-extension.png[width=50%]
 
-Diese Erweiterung wird über sogenannte https://de.wikipedia.org/wiki/XML_Catalogs[XML Kataloge] gesteuert.
-In diesen wird eine Zuordnung von Namensraum zu einem Schema erstellt.
-Zwei vorgefertigte Kataloge werden mit dem speedata Publisher geliefert, die den speedata Namensraum mit den entsprechenden Schemadateien verknüpfen.
-So muss man nur den Katalog einbinden:
-
-.In den Einstellungen kann die Variable `xml.catalogs` geändert werden. Dieser muss auf `catalog-schema-en.xml` bzw. `catalog-schema-de.xml` gesetzt werden. Der Pfad muss natürlich angepasst werden. Unter Windows wäre es `C:\\Users\\path\\to\\catalog.xml`.
-image::vscode-xml-catalog.png[]
-
-Es gibt zwei verschiedene Schemadateien, die in je zwei Sprachen dokumentiert sind. Für die englischsprachige Dokumentation muss `catalog-schema-en.xml` benutzt werden, für die deutschsprachige Dokumentation `catalog-schema-de.xml`.
+Nach der Installation der Erweiterung werden Layoutdateien des speedata Publishers automatisch erkannt.
+Eine manuelle Zuordnung zu einem Schema ist nicht mehr notwendig.
+Die Erweiterung bietet Autovervollständigung und Validierung auf Basis von RELAX NG.
 
 Hat alles geklappt, kommt bei einem Layout mit dem Namensraum `urn:speedata.de:2009/publisher/en` die Autovervollständigung mit Beschreibung:
 

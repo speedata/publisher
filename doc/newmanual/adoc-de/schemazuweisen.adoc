@@ -5,7 +5,8 @@
 
 Die meisten XML-Editoren können mit RELAX NG Schema oder mit XML Schema eine sinnvolle Eingabeunterstützung bieten (siehe <<ch-schemavalidierung>>).
 
-Die Idee ist im Prinzip immer dasselbe: entweder weist man dem speedata Namensraum (`urn:speedata.de:2009/publisher/en`)  grundsätzlich eine Schemadatei zu, oder man verknüpft jede Datei separat mit dem Schema.
+Für Visual Studio Code gibt es die Erweiterung „speedata Publisher", die die Schemadateien automatisch zuordnet.
+Bei anderen Editoren ist die Idee im Prinzip immer dasselbe: entweder weist man dem speedata Namensraum (`urn:speedata.de:2009/publisher/en`) grundsätzlich eine Schemadatei zu, oder man verknüpft jede Datei separat mit dem Schema.
 
 
 

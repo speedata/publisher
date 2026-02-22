@@ -5,7 +5,8 @@
 
 Most XML editors can provide useful input support with RELAX NG schema or with XML schema (see <<ch-schemavalidation>>).
 
-The idea is basically always the same: either you assign a schema file to the speedata namespace (`urn:speedata.de:2009/publisher/en`) in principle, or you link each file to the schema separately.
+For Visual Studio Code, the "speedata Publisher" extension automatically associates the schema files.
+For other editors, the idea is basically always the same: either you assign a schema file to the speedata namespace (`urn:speedata.de:2009/publisher/en`) in principle, or you link each file to the schema separately.
 
 
 include::vscodeschema.adoc[leveloffset=+1]
