@@ -589,6 +589,7 @@ local dispatch_table = {
     Rule                    = commands.rule,
     SaveDataset             = commands.save_dataset,
     SavePages               = commands.save_pages,
+    Section                 = commands.section,
     Sequence                = commands.sequence,
     SetGrid                 = commands.set_grid,
     SetVariable             = commands.setvariable,
@@ -667,7 +668,7 @@ function dispatch(layoutxml,dataxml,opts)
                     end
                 end
                 -- Copy-of-elements can be resolved immediately
-                if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" or eltname == "Transformation" or eltname == "Frame" or eltname == "Include" or eltname == "Layout" or eltname == "Clip" then
+                if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" or eltname == "Transformation" or eltname == "Frame" or eltname == "Include" or eltname == "Layout" or eltname == "Clip" or eltname == "Section" then
                     if type(tmp)=="table" then
                         for i=1,#tmp do
                             if tmp[i].contents then

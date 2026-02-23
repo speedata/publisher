@@ -62,6 +62,7 @@
     <optional><cmd name="SetGrid"/></optional>
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="SortSequence"/></optional>
+    <optional><cmd name="Section"/></optional>
     <optional><cmd name="Span"/></optional>
     <optional><cmd name="StructureElement"/></optional>
     <optional><cmd name="Sub"/></optional>
@@ -114,6 +115,7 @@
     <optional><cmd name="ProcessNode"/></optional>
     <optional><cmd name="SaveDataset"/></optional>
     <optional><cmd name="SavePages"/></optional>
+    <optional><cmd name="Section"/></optional>
     <optional><cmd name="SetGrid"/></optional>
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="SortSequence"/></optional>
@@ -175,6 +177,7 @@
     <optional><cmd name="PlaceObject"/></optional>
     <optional><cmd name="PDFOptions"></cmd></optional>
     <optional><cmd name="Record"/></optional>
+    <optional><cmd name="Section"/></optional>
     <optional><cmd name="SetGrid"/></optional>
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="Stylesheet"/></optional>
@@ -195,6 +198,7 @@
     <optional><cmd name="Pageformat"/></optional>
     <optional><cmd name="Pagetype"/></optional>
     <optional><cmd name="Record"/></optional>
+    <optional><cmd name="Section"/></optional>
     <optional><cmd name="SetGrid"/></optional>
     <optional><cmd name="SetVariable"/></optional>
     <optional><cmd name="Stylesheet"/></optional>
@@ -9135,6 +9139,84 @@
 </Layout>]]></listing>
     </example>
     <seealso><cmd name="InsertPages"/></seealso>
+  </command>
+  <!--
+      *************************
+      * Section
+      *************************
+  -->
+  <command en="Section" since="5.3.24">
+    <description xml:lang="en">
+      <para>Groups layout instructions. This element has no effect on the output and is used solely for organizing the layout file, e.g. for code folding in text editors.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Gruppiert Layoutanweisungen. Dieses Element hat keinen Einfluss auf die Ausgabe und dient ausschließlich der Organisation der Layoutdatei, z.B. für Code-Faltung im Texteditor.</para>
+    </description>
+    <childelements>
+      <oneOrMore>
+        <reference name="Toplevel"/>
+      </oneOrMore>
+    </childelements>
+    <attribute en="name" type="text" optional="no">
+      <description xml:lang="en">
+        <para>A name for this section. Used only for documentation purposes.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Ein Name für diesen Abschnitt. Dient nur zur Dokumentation.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Section name="Fonts and colors">
+    <LoadFontfile name="title" filename="title.otf" />
+    <DefineFontfamily name="title" fontsize="14" leading="16">
+      <Regular fontface="title"/>
+    </DefineFontfamily>
+    <DefineColor name="highlight" value="#cc0000" />
+  </Section>
+
+  <Section name="Page setup">
+    <Pageformat width="210mm" height="297mm" />
+    <SetGrid height="12pt" width="5mm" />
+  </Section>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph><Value>Hello</Value></Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Section name="Schriften und Farben">
+    <LoadFontfile name="titel" filename="titel.otf" />
+    <DefineFontfamily name="titel" fontsize="14" leading="16">
+      <Regular fontface="titel"/>
+    </DefineFontfamily>
+    <DefineColor name="hervorhebung" value="#cc0000" />
+  </Section>
+
+  <Section name="Seiteneinstellungen">
+    <Pageformat width="210mm" height="297mm" />
+    <SetGrid height="12pt" width="5mm" />
+  </Section>
+
+  <Record element="daten">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph><Value>Hallo</Value></Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>]]></listing>
+    </example>
   </command>
   <!--
       *************************

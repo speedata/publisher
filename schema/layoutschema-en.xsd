@@ -126,6 +126,7 @@
         <xs:element minOccurs="0" ref="en:ProcessNode"/>
         <xs:element minOccurs="0" ref="en:SaveDataset"/>
         <xs:element minOccurs="0" ref="en:SavePages"/>
+        <xs:element minOccurs="0" ref="en:Section"/>
         <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
@@ -179,6 +180,7 @@
         <xs:element minOccurs="0" ref="en:ProcessNode"/>
         <xs:element minOccurs="0" ref="en:SaveDataset"/>
         <xs:element minOccurs="0" ref="en:SavePages"/>
+        <xs:element minOccurs="0" ref="en:Section"/>
         <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
@@ -637,6 +639,7 @@
         <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
+        <xs:element minOccurs="0" ref="en:Section"/>
         <xs:element minOccurs="0" ref="en:Span"/>
         <xs:element minOccurs="0" ref="en:StructureElement"/>
         <xs:element minOccurs="0" ref="en:Sub"/>
@@ -1025,6 +1028,7 @@
         <xs:element minOccurs="0" ref="en:ProcessNode"/>
         <xs:element minOccurs="0" ref="en:SaveDataset"/>
         <xs:element minOccurs="0" ref="en:SavePages"/>
+        <xs:element minOccurs="0" ref="en:Section"/>
         <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
@@ -1757,6 +1761,7 @@
         <xs:element ref="en:SetGrid"/>
         <xs:element ref="en:SetVariable"/>
         <xs:element ref="en:SortSequence"/>
+        <xs:element ref="en:Section"/>
         <xs:element ref="en:Span"/>
         <xs:element ref="en:StructureElement"/>
         <xs:element ref="en:Sub"/>
@@ -2548,6 +2553,7 @@
         <xs:element minOccurs="0" ref="en:Pageformat"/>
         <xs:element minOccurs="0" ref="en:Pagetype"/>
         <xs:element minOccurs="0" ref="en:Record"/>
+        <xs:element minOccurs="0" ref="en:Section"/>
         <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:Stylesheet"/>
@@ -3161,6 +3167,7 @@
         <xs:element minOccurs="0" ref="en:PlaceObject"/>
         <xs:element minOccurs="0" ref="en:PDFOptions"/>
         <xs:element minOccurs="0" ref="en:Record"/>
+        <xs:element minOccurs="0" ref="en:Section"/>
         <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:Stylesheet"/>
@@ -3284,6 +3291,7 @@
         <xs:element ref="en:SetGrid"/>
         <xs:element ref="en:SetVariable"/>
         <xs:element ref="en:SortSequence"/>
+        <xs:element ref="en:Section"/>
         <xs:element ref="en:Span"/>
         <xs:element ref="en:StructureElement"/>
         <xs:element ref="en:Sub"/>
@@ -4431,6 +4439,7 @@
         <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
+        <xs:element minOccurs="0" ref="en:Section"/>
         <xs:element minOccurs="0" ref="en:Span"/>
         <xs:element minOccurs="0" ref="en:StructureElement"/>
         <xs:element minOccurs="0" ref="en:Sub"/>
@@ -6338,6 +6347,7 @@
         <xs:element minOccurs="0" ref="en:ProcessNode"/>
         <xs:element minOccurs="0" ref="en:SaveDataset"/>
         <xs:element minOccurs="0" ref="en:SavePages"/>
+        <xs:element minOccurs="0" ref="en:Section"/>
         <xs:element minOccurs="0" ref="en:SetGrid"/>
         <xs:element minOccurs="0" ref="en:SetVariable"/>
         <xs:element minOccurs="0" ref="en:SortSequence"/>
@@ -6505,6 +6515,7 @@
         <xs:element ref="en:ProcessNode"/>
         <xs:element ref="en:SaveDataset"/>
         <xs:element ref="en:SavePages"/>
+        <xs:element ref="en:Section"/>
         <xs:element ref="en:SetGrid"/>
         <xs:element ref="en:SetVariable"/>
         <xs:element ref="en:SortSequence"/>
@@ -6517,6 +6528,49 @@
       <xs:attribute name="name" use="required">
         <xs:annotation>
           <xs:documentation>The name of the discarded output (1) or for the reserved pages (2). For later/earlier retrieval with InsertPages.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Section">
+    <xs:annotation>
+      <xs:documentation>Groups layout instructions. This element has no effect on the output and is used solely for organizing the layout file, e.g. for code folding in text editors.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence maxOccurs="unbounded">
+        <xs:element minOccurs="0" ref="en:AttachFile"/>
+        <xs:element minOccurs="0" ref="en:AddSearchpath"/>
+        <xs:element minOccurs="0" ref="en:Compatibility"/>
+        <xs:element minOccurs="0" ref="en:DefineColor"/>
+        <xs:element minOccurs="0" ref="en:DefineColorprofile"/>
+        <xs:element minOccurs="0" ref="en:DefineFontalias"/>
+        <xs:element minOccurs="0" ref="en:DefineGraphic"/>
+        <xs:element minOccurs="0" ref="en:DefineFontfamily"/>
+        <xs:element minOccurs="0" ref="en:DefineTextformat"/>
+        <xs:element minOccurs="0" ref="en:DefineMatter"/>
+        <xs:element minOccurs="0" ref="en:Function"/>
+        <xs:element minOccurs="0" ref="en:Hyphenation"/>
+        <xs:element minOccurs="0" ref="en:LoadFontfile"/>
+        <xs:element minOccurs="0" ref="en:Message"/>
+        <xs:element minOccurs="0" ref="en:Loop"/>
+        <xs:element minOccurs="0" ref="en:Options"/>
+        <xs:element minOccurs="0" ref="en:Pageformat"/>
+        <xs:element minOccurs="0" ref="en:Pagetype"/>
+        <xs:element minOccurs="0" ref="en:PlaceObject"/>
+        <xs:element minOccurs="0" ref="en:PDFOptions"/>
+        <xs:element minOccurs="0" ref="en:Record"/>
+        <xs:element minOccurs="0" ref="en:Section"/>
+        <xs:element minOccurs="0" ref="en:SetGrid"/>
+        <xs:element minOccurs="0" ref="en:SetVariable"/>
+        <xs:element minOccurs="0" ref="en:Stylesheet"/>
+        <xs:element minOccurs="0" ref="en:StructureElement"/>
+        <xs:element minOccurs="0" ref="en:Switch"/>
+        <xs:element minOccurs="0" ref="en:Trace"/>
+        <xs:element minOccurs="0" ref="en:While"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required">
+        <xs:annotation>
+          <xs:documentation>A name for this section. Used only for documentation purposes.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
@@ -9606,6 +9660,7 @@
         <xs:element ref="en:SetGrid"/>
         <xs:element ref="en:SetVariable"/>
         <xs:element ref="en:SortSequence"/>
+        <xs:element ref="en:Section"/>
         <xs:element ref="en:Span"/>
         <xs:element ref="en:StructureElement"/>
         <xs:element ref="en:Sub"/>
@@ -9763,6 +9818,7 @@
         <xs:element ref="en:SetGrid"/>
         <xs:element ref="en:SetVariable"/>
         <xs:element ref="en:SortSequence"/>
+        <xs:element ref="en:Section"/>
         <xs:element ref="en:Span"/>
         <xs:element ref="en:StructureElement"/>
         <xs:element ref="en:Sub"/>

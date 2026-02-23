@@ -427,6 +427,8 @@ Befehl <<cmd-definefontfamily,`DefineFontfamily`>>, Kapitel <<ch-einbindungschri
 
 
 include::ref/layout.adoc[]
+
+
 include::ref/li.adoc[]
 
 == Siehe auch
@@ -627,6 +629,12 @@ include::ref/savepages.adoc[]
 == Siehe auch
 
 Den Befehl <<cmd-insertpages,`<InsertPages>`>>, die Abschnitte <<ch-savepages,Virtuelle Seiten>> und <<ch-kochbuch-verzeichnisseeindurchlauf>>.
+
+include::ref/section.adoc[]
+
+== Siehe auch
+
+<<ch-section>>.
 
 include::ref/setgrid.adoc[]
 

@@ -4599,6 +4599,13 @@ function commands.positioning_area( layoutxml,dataxml )
 end
 
 
+--- Section
+--- -------
+--- Grouping element for organizing layout instructions. Has no effect on execution.
+function commands.section( layoutxml,dataxml,opts )
+    return publisher.dispatch(layoutxml,dataxml,opts)
+end
+
 --- Record
 --- ------
 --- Matches an element name of the data file. To be called from ProcessNodes

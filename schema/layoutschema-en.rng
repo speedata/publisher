@@ -214,6 +214,9 @@
                      <ref name="e_SavePages"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Section"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_SetGrid"></ref>
                   </optional>
                   <optional>
@@ -346,6 +349,9 @@
                   </optional>
                   <optional>
                      <ref name="e_SavePages"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Section"></ref>
                   </optional>
                   <optional>
                      <ref name="e_SetGrid"></ref>
@@ -845,6 +851,9 @@
                      <ref name="e_SortSequence"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Section"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Span"></ref>
                   </optional>
                   <optional>
@@ -1296,6 +1305,9 @@
                   </optional>
                   <optional>
                      <ref name="e_SavePages"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Section"></ref>
                   </optional>
                   <optional>
                      <ref name="e_SetGrid"></ref>
@@ -2054,6 +2066,9 @@
                         <ref name="e_SortSequence"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Section"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Span"></ref>
                      </optional>
                      <optional>
@@ -2622,6 +2637,9 @@
                <ref name="e_Record"></ref>
             </optional>
             <optional>
+               <ref name="e_Section"></ref>
+            </optional>
+            <optional>
                <ref name="e_SetGrid"></ref>
             </optional>
             <optional>
@@ -3143,6 +3161,9 @@
                      <ref name="e_Record"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Section"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_SetGrid"></ref>
                   </optional>
                   <optional>
@@ -3402,6 +3423,9 @@
                      </optional>
                      <optional>
                         <ref name="e_SortSequence"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Section"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Span"></ref>
@@ -4222,6 +4246,9 @@
                   </optional>
                   <optional>
                      <ref name="e_SortSequence"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Section"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Span"></ref>
@@ -5498,6 +5525,9 @@
                      <ref name="e_SavePages"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Section"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_SetGrid"></ref>
                   </optional>
                   <optional>
@@ -5727,6 +5757,9 @@
                         <ref name="e_SavePages"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Section"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_SetGrid"></ref>
                      </optional>
                      <optional>
@@ -5751,6 +5784,108 @@
                         <ref name="e_While"></ref>
                      </optional>
                   </interleave>
+               </oneOrMore>
+            </group>
+            <ref name="foreign-nodes"></ref>
+         </interleave>
+      </element>
+   </define>
+   <define name="e_Section">
+      <element name="Section">
+         <a:documentation>Groups layout instructions. This element has no effect on the output and is used solely for organizing the layout file, e.g. for code folding in text editors.</a:documentation>
+         <interleave>
+            <group>
+               <attribute name="name">
+                  <a:documentation>A name for this section. Used only for documentation purposes.</a:documentation>
+               </attribute>
+               <oneOrMore>
+                  <optional>
+                     <ref name="e_AttachFile"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_AddSearchpath"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Compatibility"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_DefineColor"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_DefineColorprofile"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_DefineFontalias"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_DefineGraphic"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_DefineFontfamily"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_DefineTextformat"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_DefineMatter"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Function"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Hyphenation"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_LoadFontfile"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Message"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Loop"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Options"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Pageformat"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Pagetype"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_PlaceObject"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_PDFOptions"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Record"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Section"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_SetGrid"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_SetVariable"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Stylesheet"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_StructureElement"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Switch"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Trace"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_While"></ref>
+                  </optional>
                </oneOrMore>
             </group>
             <ref name="foreign-nodes"></ref>
@@ -7751,6 +7886,9 @@
                         <ref name="e_SortSequence"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Section"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Span"></ref>
                      </optional>
                      <optional>
@@ -8074,6 +8212,9 @@
                      </optional>
                      <optional>
                         <ref name="e_SortSequence"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Section"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Span"></ref>

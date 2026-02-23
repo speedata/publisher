@@ -630,6 +630,12 @@ include::ref/savepages.adoc[]
 
 The command <<cmd-insertpages,`<InsertPages>`>>, the section <<ch-savepages>> and <<ch-cookbook-tocinonerun>>.
 
+include::ref/section.adoc[]
+
+== See also
+
+<<ch-section>>.
+
 include::ref/setgrid.adoc[]
 
 == See also

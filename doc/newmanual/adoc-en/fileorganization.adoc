@@ -63,6 +63,40 @@ This file can then be included with
 
 The namespace for XInclude must be declared as above, otherwise there will be a syntax error in the XML file.
 
+[[ch-section]]
+== Grouping layout instructions with Section
+
+The `<Section>` element allows you to group layout instructions without affecting the output.
+This is useful for organizing large layout files, e.g. for code folding in text editors.
+The element has an `name` attribute that serves as a label.
+
+[source,xml]
+-------
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Section name="Fonts and colors">
+    <LoadFontfile name="title" filename="title.otf" />
+    <DefineFontfamily name="title" fontsize="14"pt leading="16pt">
+      <Regular fontface="title"/>
+    </DefineFontfamily>
+    <DefineColor name="highlight" value="#cc0000" />
+  </Section>
+
+  <Section name="Page setup">
+    <Pageformat width="210mm" height="297mm" />
+    <SetGrid height="12pt" width="5mm" />
+  </Section>
+
+  <Record element="data">
+    ...
+  </Record>
+</Layout>
+-------
+
+`<Section>` can also be used inside `<Record>` or other elements.
+It can be freely combined with `<xi:include>`.
+
 == Splitting data into individual files
 
 The data file can also be split into several files. XInclude is used for this.
