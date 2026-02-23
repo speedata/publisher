@@ -366,9 +366,10 @@ func (a *Attribute) DescriptionAdoc(lang string) string {
 			desc = c.descriptionDe.Adoc()
 		}
 		if c.Pro {
-			ret = append(ret, "[.profeature]")
+			ret = append(ret, "\n[.profeature]#`"+name+"`#:::\n"+desc)
+		} else {
+			ret = append(ret, "\n`"+name+"`:::\n"+desc)
 		}
-		ret = append(ret, "\n`"+name+"`:::\n"+desc)
 	}
 	return string(strings.Join(ret, "\n"))
 }

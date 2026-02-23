@@ -863,6 +863,10 @@ getContents:
 			case "phrase":
 				if phraserole != "" {
 					curOutput.WriteString(`</span>`)
+					if phraserole == "profeature" {
+						curOutput.WriteString(fmt.Sprintf(`<a href="https://www.speedata.de/%s" class="prolink" data-tooltip="%s" data-flow="top">PRO</a>`, d.translate(d.Lang, "en/product/prices/"), d.translate(d.Lang, "Available in the PRO plan")))
+					}
+					phraserole = ""
 				} else {
 					phrase = switchOutputGetString()
 				}
