@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.3">
+    <entry version="5.3.24" date="2026-02-23">
+        <en>New command Section to organize layout files (without affecting formatting).</en>
+        <de>Neuer Befehl Section, um Layoutdateien zu organisieren (ohne Auswirkung auf Formatierung).</de>
+    </entry>
     <entry version="5.3.23" date="2026-02-19">
         <en>Bugfix ForAll keeping the context.</en>
         <de>Fehlerkorrektur: ForAll behält Kontext.</de>
