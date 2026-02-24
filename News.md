@@ -3,13 +3,18 @@
 This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/en/).
 
 
-## Planned for version 5.4
+## Version 5.4
 
-* Rewrite Go dynamic runtime library in Rust (to remove cgo dependency))
+* Massive speed improvements!
 * More unit testing and refactoring
-* Speed improvements
 * More HTML/CSS support
 * More XPath functions
+* Section element to structure layout
+* New VScode extension (separate repository)
+* Fix margin protrusion
+* Letterspacing
+
+The planned rust library is not part of this release.
 
 ## Version 5.2
 
