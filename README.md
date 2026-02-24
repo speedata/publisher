@@ -65,4 +65,3 @@ We offer commercial support for the speedata Publisher. You can find the contact
 Source: <https://github.com/speedata/publisher/> <br>
 News: <https://news.speedata.de/> <br>
 Webpage: <https://www.speedata.de/> <br>
-Chat: <https://matrix.to/#/#speedata_publisher:gitter.im>

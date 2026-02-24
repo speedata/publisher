@@ -122,7 +122,6 @@ A more detailed log file (`publisher-protocol.xml`) is also written, which conta
 
 If all troubleshooting fails or if you have questions or comments that you want to share with others, you can use the following resources:
 
-* Chat on gitter: https://matrix.to/#/#speedata_publisher:gitter.im
 * Discussions on Github: https://github.com/speedata/publisher/discussions
 * Issues on Github: https://github.com/speedata/publisher/issues
 * Stackoverflow with tag `speedatapublisher`: https://stackoverflow.com/questions/tagged/speedatapublisher

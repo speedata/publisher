@@ -136,7 +136,6 @@ Ebenso wird eine etwas ausführlichere Protokolldatei (`publisher-protocol.xml`)
 
 Wenn alle Fehlersuche fehlschlägt oder wenn Sie Fragen oder Kommentare haben, die Sie mit anderen teilen möchten, können Sie die folgenden Ressourcen nutzen:
 
-* Chat auf Gitter: https://matrix.to/#/#speedata_publisher:gitter.im
 * Diskussionen auf Github: https://github.com/speedata/publisher/discussions
 * Issues auf Github: https://github.com/speedata/publisher/issues
 * Stackoverflow mit dem Tag `speedatapublisher`: https://stackoverflow.com/questions/tagged/speedatapublisher
