@@ -438,10 +438,14 @@ end
 function Par:max_width_and_lineheight(options,data)
     local newpar = publisher.deepcopy(self)
     newpar.origin = "max_width_and_lineheight"
+    local orig_letterspacing = newpar.textformat and newpar.textformat.letterspacing
     newpar.textformat = nil
     options = options or {}
     local new_options = publisher.copy_table_from_defaults(options)
     new_options.textformat = publisher.textformats["__leftaligned"]
+    if orig_letterspacing then
+        new_options.letterspacing_em = orig_letterspacing
+    end
     local nl = newpar:format(publisher.maxdimen,new_options,data)
     local maxwd = 0
     local hlist = nl.head
