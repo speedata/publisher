@@ -1,7 +1,7 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
 	xmlns:sd="urn:speedata:2009/publisher/functions/en">
 	<Pageformat height="5cm" width="7cm"></Pageformat>
-	<DefineTextformat name="letterspacing" letter-spacing="10" />
+	<DefineTextformat name="letterspacing" letter-spacing="50" />
 	<DefineFontfamily fontsize="22" leading="25" name="h1">
 		<Regular fontface="sans" />
 	</DefineFontfamily>

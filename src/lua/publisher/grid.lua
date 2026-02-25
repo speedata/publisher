@@ -563,6 +563,11 @@ function find_suitable_row( self,column, width,height,areaname, framenumber)
     local max_z = maxrows + frame_margin_top
     local allocation = self.allocation_x_y
     local max_col = col_adj + width - 1
+    local grid_max_col = self:number_of_columns(areaname) + frame_margin_left
+    if max_col > grid_max_col then
+        main.log("warn","Object too wide for page grid","requested columns",max_col,"available columns",grid_max_col)
+        max_col = grid_max_col
+    end
     local z = self:current_row(areaname,framenumber) + frame_margin_top
     while z <= max_z do
         local row = z - frame_margin_top - 1
@@ -575,6 +580,7 @@ function find_suitable_row( self,column, width,height,areaname, framenumber)
         for r = z, z + height - 1 do
             local blocked = false
             for x = col_adj, max_col do
+                if not allocation[x] then break end
                 if allocation[x][r] then
                     blocked = true
                     break

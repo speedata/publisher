@@ -5623,6 +5623,11 @@ function hbglyphlist(arguments)
                 apply_styles(n)
                 node_set_attribute(n,att_spaceglue,1)
                 list,cur = node.insert_after(list,cur,n)
+                if parameter.letterspacing then
+                    local k = node.new("kern")
+                    k.kern = parameter.letterspacing
+                    list,cur = node.insert_after(list,cur,k)
+                end
             end
             if decoration_active then
                 node_set_attribute(n,att_td_line,attval_td_line[parameter.textdecorationline])
@@ -6003,6 +6008,12 @@ local function ffglyphlist(arguments)
             end
             set_attribute(n,"fontfamily",fontfamily)
             head,last = node.insert_after(head,last,n)
+            if parameter.letterspacing then
+                local k = node.new("kern")
+                k.kern = parameter.letterspacing
+                setstyles(k,parameter)
+                head,last = node.insert_after(head,last,k)
+            end
         else
             -- A regular character?!?
             n = node.new("glyph")
