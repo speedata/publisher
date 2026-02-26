@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.4">
+    <entry version="5.4.1" date="2026-02-26">
+        <en>Bugfix for letter spacing in tables.</en>
+        <de>Fehlerkorrektur für letter-spacing in Tabellen.</de>
+    </entry>
     <entry version="5.4.0" date="2026-02-24">
         <en>Release stable version 5.4.</en>
         <de>Veröffentliche stabile Version 5.4.</de>
