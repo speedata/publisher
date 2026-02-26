@@ -596,9 +596,11 @@ end
 local function docompare(op, lhs, rhs)
     local evaler = function(ctx)
         local left, right, errmsg, ok
+        local saved_sequence = ctx.sequence
         left, errmsg = lhs(ctx)
         if errmsg ~= nil then return nil, errmsg end
-        right, errmsg = rhs(ctx)
+        ctx.sequence = saved_sequence
+        right, errmsg = rhs(ctx:copy())
         if errmsg ~= nil then return nil, errmsg end
         for _, leftitem in ipairs(left) do
             for _, rightitem in ipairs(right) do
@@ -2264,9 +2266,11 @@ function parse_range_expr(tl)
 
     local evaler = function(ctx)
         local lhs, rhs, msg
+        local saved_sequence = ctx.sequence
         lhs, msg = efs[1](ctx)
         if msg then return nil, msg end
-        rhs, msg = efs[2](ctx)
+        ctx.sequence = saved_sequence
+        rhs, msg = efs[2](ctx:copy())
         if msg then return nil, msg end
         local lhsn, rhsn
         lhsn, msg = number_value(lhs)
@@ -2309,13 +2313,15 @@ function parse_additive_expr(tl)
     end
 
     local evaler = function(ctx)
+        local saved_sequence = ctx.sequence
         local s0, errmsg = efs[1](ctx)
         if errmsg ~= nil then return nil, errmsg end
         local sum
         sum, errmsg = number_value(s0)
         if errmsg ~= nil then return nil, errmsg end
         for i = 2, #efs do
-            s0, errmsg = efs[i](ctx)
+            ctx.sequence = saved_sequence
+            s0, errmsg = efs[i](ctx:copy())
             if errmsg ~= nil then return nil, errmsg end
             local val
             val, errmsg = number_value(s0)
@@ -2360,6 +2366,7 @@ function parse_multiplicative_expr(tl)
     end
 
     local evaler = function(ctx)
+        local saved_sequence = ctx.sequence
         local s0, errmsg = efs[1](ctx)
         if errmsg ~= nil then return nil, errmsg end
         local result
@@ -2367,7 +2374,8 @@ function parse_multiplicative_expr(tl)
         if errmsg ~= nil then return nil, errmsg end
         if not result then return nil, "number expected" end
         for i = 2, #efs do
-            s0, errmsg = efs[i](ctx)
+            ctx.sequence = saved_sequence
+            s0, errmsg = efs[i](ctx:copy())
             if errmsg ~= nil then return nil, errmsg end
             local val
             val, errmsg = number_value(s0)
