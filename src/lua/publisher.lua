@@ -43,8 +43,7 @@ local links_module  = require("publisher.links")
 par                 = require("par")
 uuid.randomseed(tex.randomseed)
 
-local env_publisherversion = os.getenv("PUBLISHERVERSION")
-
+env_publisherversion = os.getenv("PUBLISHERVERSION")
 module(...,package.seeall)
 
 -- expose helpers from submodules
