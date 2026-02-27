@@ -2448,6 +2448,14 @@ function commands.image( layoutxml,dataxml )
     end
 
     if opacity then
+        -- Wrap the image in a Form XObject with a transparency group so that
+        -- the external opacity setting applies to the entire image as a unit,
+        -- rather than being overridden by graphics state changes inside the
+        -- embedded PDF.
+        local ibox = node.hpack(imagenode)
+        local group_attr = "/Group << /Type /Group /S /Transparency /I true /CS /DeviceRGB >>"
+        local idx = tex.saveboxresource(ibox, group_attr, nil, true)
+        imagenode = tex.useboxresource(idx, width, height, 0)
         publisher.transparentcolorstack()
         publisher.setprop(imagenode,"opacity",opacity)
     end
