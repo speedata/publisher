@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="5.4">
+  <chapter version="5.5">
+    <entry version="5.5.1" date="2026-03-02">
+        <en>Bug fixe for image inclusion (opacity), attribute context handling and Creator version.</en>
+        <de>Fehlerkorrektur für Bildeinbindung (Transparenz), Attribut Kontext und Creator Version.</de>
+    </entry>
     <entry version="5.5.0" date="2026-02-26">
         <en>Bugfix letter-spacing in tables.</en>
         <de>Fehlerkorrektur letter-spacing in Tabellen.</de>
