@@ -35,7 +35,9 @@ func (l *LuaState) buildXMLTable() error {
 	if err != nil {
 		return err
 	}
-
+	if full == "" {
+		return fmt.Errorf("Cannot find file %s: %w", xmlfilename, os.ErrNotExist)
+	}
 	f, err := os.Open(full)
 	if err != nil {
 		return err

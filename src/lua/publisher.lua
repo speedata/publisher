@@ -1254,6 +1254,10 @@ function initialize_luatex_and_generate_pdf()
     else
         dataxml = load_xml(datafilename,"data file",{ htmlentities = true, ignoreeol = ( options.ignoreeol or false ) })
     end
+    if not dataxml then
+        main.log("error","Could not read data")
+        exit()
+    end
     if type(dataxml) ~= "table" then
         main.log("error","Something is wrong with the data: dataxml is not a table")
         exit()
@@ -2097,6 +2101,10 @@ end
 ---     },
 ---@return table?
 function load_xml(filename,filetype,parameter)
+    if not filename or filename == "" then
+        main.log("error","Load XML: no file name given")
+        return
+    end
     parameter = parameter or {}
     main.log("info", "Load XML", "type", filetype or "file", "filename", filename)
     if newxpath then
