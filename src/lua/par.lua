@@ -189,8 +189,9 @@ local function flatten(self,items,options,data)
                 new_options.parentid = options.id
             end
             new_options.direction = new_options.direction or self.direction
-            if not new_options.letterspacing and self.textformat and self.textformat.letterspacing then
-                new_options.letterspacing_em = self.textformat.letterspacing
+            local effective_textformat = self.textformat or options.textformat
+            if not new_options.letterspacing and effective_textformat and effective_textformat.letterspacing then
+                new_options.letterspacing_em = effective_textformat.letterspacing
             end
             if reuse_text_opts then
                 text_options_shared = new_options
