@@ -6172,7 +6172,7 @@ function commands.textblock( layoutxml,dataxml )
                 publisher.set_fontfamily_if_necessary(nodelist,fontfamily)
                 paragraph.nodelist = publisher.set_color_if_necessary(nodelist,colorindex)
                 node.slide(nodelist)
-                nodelist = paragraph:format(width_sp,{textformat = textformat},dataxml)
+                nodelist = paragraph:format(width_sp,{textformat = publisher.textformats[textformat]},dataxml)
             end
 
             nodes[#nodes + 1] = nodelist

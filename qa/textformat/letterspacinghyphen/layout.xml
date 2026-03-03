@@ -1,0 +1,15 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Options mainlanguage="German" />
+	<Pageformat height="7cm" width="7cm" />
+	<DefineTextformat name="text" letter-spacing="50" />
+	<Record element="data">
+		<PlaceObject>
+			<Textblock width="5">
+				<Paragraph>
+					<Value>Seit zwei Jahren ist meine Arbeit in Düsseldorf. Meine Familie lebt dagegen in Hamburg. Und dazwischen ich, aber ganz cool. Vollbremskombination aus Ampel oder Einfädeln oder beides auf einmal. Geht nur mit Tricks. </Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+	</Record>
+</Layout>
