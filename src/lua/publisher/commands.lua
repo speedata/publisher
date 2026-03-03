@@ -1278,6 +1278,10 @@ end
 --- -----
 ---
 function commands.func(layoutxml, dataxml)
+    if not publisher.newxpath then
+        main.log("error","For function definitions you need the new XPath parser")
+        return
+    end
     local name = publisher.read_attribute(layoutxml, dataxml, "name", "string")
     local params = {}
 
