@@ -57,10 +57,20 @@ func validateRelaxNG(l *lua.LState) int {
 	return 1
 }
 
+func saxonClasspath() string {
+	sep := string(os.PathListSeparator)
+	cp := filepath.Join(libdir, "saxon-he-12.9.jar")
+	jars, _ := filepath.Glob(filepath.Join(libdir, "lib", "*.jar"))
+	for _, jar := range jars {
+		cp += sep + jar
+	}
+	return cp
+}
+
 func runSaxon(l *lua.LState) int {
 	numberArguments := l.GetTop()
 	var command []string
-	command = []string{"-jar", filepath.Join(libdir, "saxon-he-12.9.jar")}
+	command = []string{"-cp", saxonClasspath(), "net.sf.saxon.Transform"}
 	if numberArguments == 1 {
 		// hopefully a table
 		lv := l.Get(-1)
