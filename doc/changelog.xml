@@ -1,8 +1,16 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.4">
+    <entry version="5.4.3" date="2026-03-04">
+        <en>Bug fix for java classpath and saxon (see #685).</en>
+        <de>Fehlerkorrektur für java Classpath und Saxon (#685).</de>
+    </entry>
+    <entry version="5.4.3" date="2026-03-04">
+        <en>Bug fix: letter-spacing and hyphenation.</en>
+        <de>Fehlerkorrektur: letter-spacing und Silbentrennung.</de>
+    </entry>
     <entry version="5.4.2" date="2026-02-27">
-        <en>Bug fixe for image inclusion (opacity), attribute context handling and Creator version.</en>
-        <de>Fehlerkorrektur für Bildeinbindung (Tranparenz), Attribut Kontext und Creator Version.</de>
+        <en>Bug fix for image inclusion (opacity), attribute context handling and Creator version.</en>
+        <de>Fehlerkorrektur für Bildeinbindung (Transparenz), Attribut Kontext und Creator Version.</de>
     </entry>
     <entry version="5.4.1" date="2026-02-26">
         <en>Bugfix for letter spacing in tables.</en>
