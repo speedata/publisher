@@ -838,6 +838,54 @@ function get_rolenum( rolestring )
     err("Unknown role %q",tostring(rolestring))
 end
 
+-- Get the page position of a structure element child for sorting.
+-- Returns a page number from page_map for table children (struct elements),
+-- or math.huge for number children (MCIDs, keep relative order).
+local function get_struct_page_position(child, page_map)
+    if type(child) == "number" then
+        return math.huge
+    end
+    if child.page then
+        return page_map[child.page] or math.huge
+    end
+    -- No page field: recurse into first child that has a page
+    for i = 1, #child do
+        local pos = get_struct_page_position(child[i], page_map)
+        if pos ~= math.huge then
+            return pos
+        end
+    end
+    return math.huge
+end
+
+-- Sort the children of each structure element by page order (reading order).
+-- Only reorders when pages were rearranged (InsertPages/SavePages).
+local function sort_struct_tree_by_page_order(elem, page_ref_to_pagenumber)
+    if type(elem) ~= "table" then return end
+    -- First recurse into sub-elements
+    for i = 1, #elem do
+        if type(elem[i]) == "table" then
+            sort_struct_tree_by_page_order(elem[i], page_ref_to_pagenumber)
+        end
+    end
+    -- Now sort children of this element
+    if #elem < 2 then return end
+    -- Tag each child with its original index for stable sort
+    local tagged = {}
+    for i = 1, #elem do
+        tagged[i] = { child = elem[i], orig = i, page_pos = get_struct_page_position(elem[i], page_ref_to_pagenumber) }
+    end
+    stable_sort(tagged, function(a, b)
+        if a.page_pos ~= b.page_pos then
+            return a.page_pos < b.page_pos
+        end
+        return a.orig < b.orig
+    end)
+    for i = 1, #elem do
+        elem[i] = tagged[i].child
+    end
+end
+
 local function writeStructElements(itm,parentobjectnumber)
     local obj = itm.obj
     local objectnumbers = {}
@@ -1706,6 +1754,23 @@ function initialize_luatex_and_generate_pdf()
 
             local parenttree = pdf.reserveobj()
             structTreeRootObjectNumber = pdf.reserveobj()
+            -- Sort structure tree by reading order if pages were reordered (InsertPages/SavePages)
+            local needs_reorder = false
+            for i = 1, #pagenum_tbl do
+                if pagenum_tbl[i] ~= i then
+                    needs_reorder = true
+                    break
+                end
+            end
+            if needs_reorder then
+                -- Map page object ref → output position (reading order).
+                -- pagenum_tbl[k] = output position for internal page k (shipout order).
+                local page_ref_to_num = {}
+                for k = 1, #pagenum_tbl do
+                    page_ref_to_num[pdf.getpageref(k)] = pagenum_tbl[k]
+                end
+                sort_struct_tree_by_page_order(structElements[".root"], page_ref_to_num)
+            end
             writeStructElements(structElements[".root"],structTreeRootObjectNumber)
             local strObjnum = pdf.obj({ type = "raw", objnum = structTreeRootObjectNumber,  string = string.format("<</Type /StructTreeRoot /K %d 0 R /ParentTree %d 0 R >>",structElements[".root"].obj,parenttree), immediate = true})
             local numentries = { "<< /Nums [" }
@@ -1996,7 +2061,9 @@ do
         structelementobjects = {}
         objcount = 0
         local parenttree = ktree
-        local thispage = pdf.getpageref(page.grid.pagenumber)
+        -- Use shipout index (#pagenum_tbl) instead of logical page number,
+        -- because pdf.getpageref uses internal page numbering (shipout order).
+        local thispage = pdf.getpageref(#pagenum_tbl)
         find_role_attributes(nodelist,parenttree,thispage)
 
         page.structparents = #struct_root_numtree

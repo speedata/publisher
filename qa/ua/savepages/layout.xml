@@ -1,0 +1,30 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Trace dump-structtree="yes" />
+    <Pageformat height="7cm" width="6cm" />
+    <PDFOptions format="PDF/UA" />
+    <StructureElement role="Document" id="doc" />
+
+    <Record element="data">
+        <InsertPages name="foo" pages="1" />
+        <ClearPage />
+        <PlaceObject>
+            <Textblock>
+                <Paragraph role="P" parent="doc">
+                    <Value>pppp</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+
+
+        <SavePages name="foo">
+            <PlaceObject>
+                <Textblock>
+                    <Paragraph role="H1" parent="doc">
+                        <Value>hhhh</Value>
+                    </Paragraph>
+                </Textblock>
+            </PlaceObject>
+        </SavePages>
+    </Record>
+</Layout>
