@@ -117,8 +117,10 @@ func addFileToList(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() {
 			if ignorefile != path {
 				fb := filepath.Base(path)
-				if _, found := files[fb]; found {
-					duplicates[fb] = append(duplicates[fb], path)
+				if existing, found := files[fb]; found {
+					if existing != path {
+						duplicates[fb] = append(duplicates[fb], path)
+					}
 				} else {
 					files[fb] = path
 				}
