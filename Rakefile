@@ -105,6 +105,7 @@ task :cleanqa do
 	FileUtils.rm Dir.glob("qa/**/publisher-aux.xml")
 	FileUtils.rm Dir.glob("qa/**/publisher.protocol")
 	FileUtils.rm Dir.glob("qa/**/publisher.pdf")
+	FileUtils.rm Dir.glob("qa/**/publisher-struct.xml")
 	FileUtils.rm Dir.glob("qa/**/compare-report.html")
 end
 

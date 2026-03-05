@@ -25,14 +25,15 @@ import (
 )
 
 type compareStatus struct {
-	Path          string
-	Badpages      []int
-	Delta         float64
-	CompareNeeded bool   // true if checksums differ and image comparison ran
-	ChecksumEqual bool   // true if publisher.pdf and reference.pdf have same SHA-256
-	PreviewPage   int    // page index for preview (max delta)
-	BuildError    bool   // true if running 'sp' failed for this path
-	BuildErrorMsg string // short textual message from 'sp' failure
+	Path           string
+	Badpages       []int
+	Delta          float64
+	CompareNeeded  bool   // true if checksums differ and image comparison ran
+	ChecksumEqual  bool   // true if publisher.pdf and reference.pdf have same SHA-256
+	PreviewPage    int    // page index for preview (max delta)
+	BuildError     bool   // true if running 'sp' failed for this path
+	BuildErrorMsg  string // short textual message from 'sp' failure
+	StructMismatch int    // 0 = no reference-struct.xml, 1 = match, 2 = mismatch
 }
 
 var (
@@ -234,6 +235,24 @@ func runComparison(path string, statuschan chan []compareStatus) {
 	cs.CompareNeeded = !checksumEqual
 	all.CompareNeeded = !checksumEqual
 
+	// Compare structure tree XML if reference exists
+	refStruct := filepath.Join(path, "reference-struct.xml")
+	pubStruct := filepath.Join(path, "publisher-struct.xml")
+	if fileExists(refStruct) {
+		ph, err1 := calculateHash(pubStruct)
+		rh, err2 := calculateHash(refStruct)
+		if err1 != nil || err2 != nil {
+			cs.StructMismatch = 2
+			all.StructMismatch = 2
+		} else if bytes.Equal(ph, rh) {
+			cs.StructMismatch = 1
+			all.StructMismatch = 1
+		} else {
+			cs.StructMismatch = 2
+			all.StructMismatch = 2
+		}
+	}
+
 	if checksumEqual {
 		// No image comparison required; everything matches.
 		if verbose {
@@ -410,9 +429,10 @@ func mkWebPage(onlyErrorPages bool) error {
         <th style="width:32%;">Path</th>
         <th class="num" style="width:8%;">Delta</th>
         <th style="width:12%;">Publisher</th>
-        <th style="width:12%;">Checksum</th>
-        <th style="width:12%;">Compare</th>
-        <th style="width:12%;">Bad pages</th>
+        <th style="width:10%;">Checksum</th>
+        <th style="width:8%;">Struct</th>
+        <th style="width:10%;">Compare</th>
+        <th style="width:10%;">Bad pages</th>
         <th style="width:12%;">Preview</th>
       </tr>
     </thead>
@@ -444,6 +464,15 @@ func mkWebPage(onlyErrorPages bool) error {
             <span class="badge ok">equal</span>
           {{ else }}
             <span class="badge warn">unequal</span>
+          {{ end }}
+        </td>
+        <td>
+          {{ if eq .StructMismatch 0 }}
+            <span class="muted">—</span>
+          {{ else if eq .StructMismatch 1 }}
+            <span class="badge ok">ok</span>
+          {{ else }}
+            <span class="badge err">mismatch</span>
           {{ end }}
         </td>
         <td>
@@ -547,7 +576,7 @@ func getCompareStatus(statuschan <-chan []compareStatus) {
 		// st[1] = "all pages" entry, st[0] = per-dir entry (only added to cs if there are bad pages or build error)
 		allPages = append(allPages, st[1])
 
-		if len(st[0].Badpages) > 0 || st[0].BuildError {
+		if len(st[0].Badpages) > 0 || st[0].BuildError || st[0].StructMismatch == 2 {
 			mutex.Lock()
 			cs = append(cs, st[0])
 			mutex.Unlock()
@@ -559,8 +588,13 @@ func getCompareStatus(statuschan <-chan []compareStatus) {
 			if st[0].BuildError {
 				fmt.Println("Publisher failed.")
 			} else {
-				fmt.Println("Comparison failed. Bad pages are:", st[0].Badpages)
-				fmt.Println("Max delta is", fmt.Sprintf("%.2f", st[0].Delta))
+				if len(st[0].Badpages) > 0 {
+					fmt.Println("Comparison failed. Bad pages are:", st[0].Badpages)
+					fmt.Println("Max delta is", fmt.Sprintf("%.2f", st[0].Delta))
+				}
+				if st[0].StructMismatch == 2 {
+					fmt.Println("Structure tree mismatch.")
+				}
 			}
 		}
 	}

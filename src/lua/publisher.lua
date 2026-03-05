@@ -886,6 +886,57 @@ local function sort_struct_tree_by_page_order(elem, page_ref_to_pagenumber)
     end
 end
 
+local function struct_xml_escape(s)
+    s = string.gsub(s, "&", "&amp;")
+    s = string.gsub(s, "<", "&lt;")
+    s = string.gsub(s, ">", "&gt;")
+    s = string.gsub(s, '"', "&quot;")
+    return s
+end
+
+local function dump_struct_tree_xml(elem, indent, page_ref_to_num)
+    indent = indent or ""
+    local lines = {}
+    local role = elem.role or "Unknown"
+    local attrs = ""
+    if elem.page then
+        local pagenum = page_ref_to_num and page_ref_to_num[tonumber(elem.page)] or elem.page
+        attrs = attrs .. string.format(' page="%s"', tostring(pagenum))
+    end
+    if elem.actualtext then
+        attrs = attrs .. string.format(' actualtext="%s"', struct_xml_escape(elem.actualtext))
+    end
+    if elem.alttext then
+        attrs = attrs .. string.format(' alttext="%s"', struct_xml_escape(elem.alttext))
+    end
+
+    -- Collect MCIDs (integer children) and sub-elements (table children)
+    local mcids = {}
+    local children = {}
+    for i = 1, #elem do
+        local child = elem[i]
+        if type(child) == "table" then
+            children[#children + 1] = child
+        else
+            mcids[#mcids + 1] = tostring(child)
+        end
+    end
+
+    if #children == 0 and #mcids == 0 then
+        lines[#lines + 1] = indent .. "<" .. role .. attrs .. "/>"
+    else
+        lines[#lines + 1] = indent .. "<" .. role .. attrs .. ">"
+        for _, mcid in ipairs(mcids) do
+            lines[#lines + 1] = indent .. "  <MCID>" .. mcid .. "</MCID>"
+        end
+        for _, child in ipairs(children) do
+            lines[#lines + 1] = dump_struct_tree_xml(child, indent .. "  ", page_ref_to_num)
+        end
+        lines[#lines + 1] = indent .. "</" .. role .. ">"
+    end
+    return table.concat(lines, "\n")
+end
+
 local function writeStructElements(itm,parentobjectnumber)
     local obj = itm.obj
     local objectnumbers = {}
@@ -1770,6 +1821,24 @@ function initialize_luatex_and_generate_pdf()
                     page_ref_to_num[pdf.getpageref(k)] = pagenum_tbl[k]
                 end
                 sort_struct_tree_by_page_order(structElements[".root"], page_ref_to_num)
+            end
+            if options.dumpstructtree then
+                -- Build page object ref → logical page number mapping
+                local pageref_to_num = {}
+                for k = 1, #pagenum_tbl do
+                    pageref_to_num[pdf.getpageref(k)] = pagenum_tbl[k]
+                end
+                local xmlstr = '<?xml version="1.0" encoding="UTF-8"?>\n' .. dump_struct_tree_xml(structElements[".root"], nil, pageref_to_num)
+                local fn = tex.jobname .. "-struct.xml"
+                local f = io.open(fn, "w")
+                if f then
+                    f:write(xmlstr)
+                    f:write("\n")
+                    f:close()
+                    main.log("info","Structure tree written to " .. fn)
+                else
+                    main.log("error","Cannot open " .. fn .. " for writing")
+                end
             end
             writeStructElements(structElements[".root"],structTreeRootObjectNumber)
             local strObjnum = pdf.obj({ type = "raw", objnum = structTreeRootObjectNumber,  string = string.format("<</Type /StructTreeRoot /K %d 0 R /ParentTree %d 0 R >>",structElements[".root"].obj,parenttree), immediate = true})

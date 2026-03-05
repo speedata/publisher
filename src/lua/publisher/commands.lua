@@ -5855,6 +5855,7 @@ function commands.trace(layoutxml,dataxml)
     local objects          = publisher.read_attribute(layoutxml,dataxml,"objects",       "boolean")
     local verbose          = publisher.read_attribute(layoutxml,dataxml,"verbose",       "boolean")
     local textformat       = publisher.read_attribute(layoutxml,dataxml,"textformat",    "boolean")
+    local dumpstructtree   = publisher.read_attribute(layoutxml,dataxml,"dump-structtree","boolean")
 
     if assignments ~= nil then
         publisher.options.showassignments = assignments
@@ -5885,6 +5886,9 @@ function commands.trace(layoutxml,dataxml)
     end
     if textformat ~= nil then
         publisher.options.showtextformat = textformat
+    end
+    if dumpstructtree ~= nil then
+        publisher.options.dumpstructtree = dumpstructtree
     end
     if gridlocation ~= nil then
         if gridlocation == "foreground" or gridlocation == "background" then

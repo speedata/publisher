@@ -185,6 +185,14 @@ You can use https://github.com/speedata/pdfuaanalyze[pdfuaanalyze] to display th
 </Document>
 ----------------
 
+The speedata Publisher can also dump the structure tree to an XML file by using the `Trace` command with the attribute `dump-structtree`:
+
+[source, xml]
+----------------
+<Trace dump-structtree="yes" />
+----------------
+
+This writes the file `publisher-struct.xml` which contains the structure tree of the PDF document. This is useful for debugging and for automated testing of the document structure.
 
 == Checking the document
 
@@ -201,7 +209,6 @@ The following programs can be used to check accessibility:
 The following limitations are known and will be fixed as soon as possible:
 
 * Output/Text does not support accessibility
-* SavePages/InsertPages creates an incorrect structure hierarchy
 
 The current issues can be viewed https://github.com/speedata/publisher/issues?q=is%3Aissue+is%3Aopen+label%3APDF%2FUA[on GitHub].
 

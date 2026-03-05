@@ -7369,6 +7369,17 @@
                </choice>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="dump-structtree">
+               <a:documentation>Schreibt den PDF/UA-Strukturbaum als XML-Datei.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Strukturbaum in Datei schreiben.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Strukturbaum nicht schreiben (Voreinstellung).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>

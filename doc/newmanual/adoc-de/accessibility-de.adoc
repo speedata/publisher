@@ -182,6 +182,15 @@ Mit https://github.com/speedata/pdfuaanalyze[pdfuaanalyze] kann man sich die Str
 </Document>
 ----------------
 
+Der speedata Publisher kann den Strukturbaum auch als XML-Datei ausgeben. Dazu wird der Befehl `Trace` mit dem Attribut `dump-structtree` verwendet:
+
+[source, xml]
+----------------
+<Trace dump-structtree="yes" />
+----------------
+
+Damit wird die Datei `publisher-struct.xml` geschrieben, die den Strukturbaum des PDF-Dokuments enthält. Das ist nützlich zum Debuggen und für automatisierte Tests der Dokumentstruktur.
+
 == Überprüfen des Dokuments
 
 Um die Barrierefreiheit zu überprüfen, bieten sich folgende Programme an:
@@ -197,7 +206,6 @@ Um die Barrierefreiheit zu überprüfen, bieten sich folgende Programme an:
 Folgende Einschränkungen sind bekannt und werden sobald wie möglich behoben:
 
 * Output/Text unterstützt keine Barrierefreiheit
-* SavePages/InsertPages erzeugt eine falsche Strukturhierarchie
 
 Die aktuellen Probleme können https://github.com/speedata/publisher/issues?q=is%3Aissue+is%3Aopen+label%3APDF%2FUA[auf GitHub angesehen werden].
 

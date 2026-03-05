@@ -11559,6 +11559,30 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="dump-structtree" optional="yes" since="4.19.8">
+      <description xml:lang="en">
+        <para>Dump the PDF/UA structure tree to an XML file.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Schreibt den PDF/UA-Strukturbaum als XML-Datei.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>Write structure tree to file.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Strukturbaum in Datei schreiben.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Don't write structure tree (default).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Strukturbaum nicht schreiben (Voreinstellung).</para>
+        </description>
+      </choice>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Trace textformat="yes"/>]]></listing>
     </example>
