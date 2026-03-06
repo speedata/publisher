@@ -5509,6 +5509,7 @@ function commands.table( layoutxml,dataxml,options )
         local tblid = role .. "_" .. publisher.rolecounter
         publisher.setprop(n[1],"id", tblid)
         node.set_attribute(n[1],publisher.att_role,publisher.get_rolenum(role))
+        publisher.rolecounter = publisher.rolecounter + 1
     end
     if not node.is_node(n) then
         n.balance = balance

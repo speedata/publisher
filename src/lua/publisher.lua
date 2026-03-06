@@ -2038,8 +2038,11 @@ do
                 end
             elseif node.has_attribute(head,att_role) then
                 local r = node.has_attribute(head,att_role)
-                local parentid    = getprop(head,"parentid")
                 local roleid      = getprop(head,"id")
+                local parentid    = getprop(head,"parentid")
+                if parentid == nil or parentid == "" or parentid == 0 or parentid == roleid then
+                    parentid = curid
+                end
                 local actualtext  = getprop(head,"actualtext")
                 local alttext     = getprop(head,"alttext")
                 local bbox        = getprop(head,"bbox")

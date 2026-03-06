@@ -1,0 +1,22 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<PDFOptions format="PDF/UA" />
+	<Trace dump-structtree="yes" />
+	<Pageformat height="6cm" width="7cm" />
+	<StructureElement role="Document" id="doc" />
+
+	<Record element="data">
+		<PlaceObject>
+			<Table role="Table" parent="doc">
+				<Tr role="TR">
+					<Td role="TD">
+						<Paragraph>
+							<A href="{Url}">
+								<Value select="Url/@display" />
+							</A>
+						</Paragraph>
+					</Td>
+				</Tr>
+			</Table>
+		</PlaceObject>
+	</Record>
+</Layout>

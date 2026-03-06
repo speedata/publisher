@@ -1149,16 +1149,13 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
             cell = cell.head
         end
 
+        -- PDF/UA role for Td is set below on the outermost vpack (after borders/padding)
+        local td_role_num, td_role_id
         if publisher.options.format == "PDF/UA" then
             if td_contents.role then
-                local rn = publisher.get_rolenum(td_contents.role)
-                local id = td_contents.role .. '_' .. tostring(publisher.rolecounter)
-                node.set_attribute(cell,publisher.att_role,rn)
-                publisher.setprop(cell,"role",rn)
-                publisher.setprop(cell,"id",id)
-                publisher.setprop(cell,"rolecounter",publisher.rolecounter)
+                td_role_num = publisher.get_rolenum(td_contents.role)
+                td_role_id = td_contents.role .. '_' .. tostring(publisher.rolecounter)
                 publisher.rolecounter = publisher.rolecounter + 1
-                publisher.setprop(cell,"parentid",td_contents.parent)
             end
         end
         -- The cell is a vlist with minimum height. We need to repack the contents of the
@@ -1286,6 +1283,13 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
 
         if publisher.options.showobjects then
             publisher.boxit(hlist)
+        end
+
+        if td_role_num then
+            node.set_attribute(hlist,publisher.att_role,td_role_num)
+            publisher.setprop(hlist,"role",td_role_num)
+            publisher.setprop(hlist,"id",td_role_id)
+            publisher.setprop(hlist,"parentid",td_contents.parent)
         end
 
         row[#row + 1] = hlist
