@@ -52,7 +52,7 @@ The layout file consists of three sections, which are explained individually.
 <2> Here the entries are stored individually in the variable `indexentries`.
 <3> The sorted entries are output in a table.
 
-The section `data` is the first part from the previous listing:.
+The `data` record is the first part of the previous listing:
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------

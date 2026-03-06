@@ -181,7 +181,7 @@ variable =
 damit wird der neue Wert an die vorherigen angehängt.
 
 
-.Ein Beispiel für Copy-of in der Praxis ist das Zusammenbauen von XML-Strukturen, mit denen Informationen gespeichert werden können. Ausführlich beschreiben wird dieses Beispiel im Kochbuch (Kaptiel 8), dort im Abschnitt Verzeichnisse erstellen (XML-Struktur).
+.Ein Beispiel für Copy-of in der Praxis ist das Zusammenbauen von XML-Strukturen, mit denen Informationen gespeichert werden können. Ausführlich beschrieben wird dieses Beispiel im Kochbuch (Kapitel 8), dort im Abschnitt Verzeichnisse erstellen (XML-Struktur).
 [source, xml]
 -------------------------------------------------------------------------------
 <SetVariable variable="chapter">

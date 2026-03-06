@@ -244,7 +244,7 @@ endif::[]
 .A colored box, output with `<Box>`
 image::zitronengruen.png[width=30%]
 
-Boxes are often used for colored areas behind a text or table. In this case the allocation of the raster cells must be switched off (`allocate="no"` at `<PlaceObject>`), otherwise a warning will be issued because of the double allocation of the area in the PDF (see section <<ch-grid>>). An example for the use of boxes as background can be found in the section about grip marks. There, the parameter bleed is also explained, which is used to enlarge the box in one or more directions, if they are located at the page margin.
+Boxes are often used for colored areas behind a text or table. In this case the allocation of the raster cells must be switched off (`allocate="no"` at `<PlaceObject>`), otherwise a warning will be issued because of the double allocation of the area in the PDF (see section <<ch-grid>>). An example for the use of boxes as background can be found in the section about crop marks. There, the parameter bleed is also explained, which is used to enlarge the box in one or more directions, if they are located at the page margin.
 
 [[ch-outputtingobjects-circle]]
 == Circle
@@ -341,7 +341,7 @@ There are the following basic transformation types (see figure The four basic tr
 . Displacements (translation) are described with the values 1 0 0 1 t~x~ t~y~ . Scaling is specified with s~x~ 0 0 0 s~y~ 0 0 0
 . Rotation can be achieved with cos θ sin θ -sin θ cos θ 0 0
 . Displacements (skew) are described with 1 tan α tan β 1 0 0
-. The unchanging transformation is 1 0 0 1 0 0 (identical figure).
+. The identity transformation is 1 0 0 1 0 0.
 
 [source, xml]
 -------------------------------------------------------------------------------

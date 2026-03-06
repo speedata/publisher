@@ -76,7 +76,7 @@ Die Angabe in der Konfigurationsdatei ist:
 mode=online
 -------------------------------------------------------------------------------
 
-Die Namen des Modus ist frei wählbar, sollte aber keine Leerzeichen oder Komma enthalten.
+Der Name des Modus ist frei wählbar, sollte aber keine Leerzeichen oder Komma enthalten.
 
 Mehrere Modi kann man mit Komma separiert angeben:
 
@@ -86,7 +86,7 @@ sp --mode a,b,c
 
 aktiviert diese drei Modi.
 
-Die Interne Variable `_mode` hat ebenfalls eine kommaseparierte List der Modi, genau wie auf der Kommandozeile angegeben.
+Die interne Variable `_mode` hat ebenfalls eine kommaseparierte Liste der Modi, genau wie auf der Kommandozeile angegeben.
 
 [source, xml]
 -------------------------------------------------------------------------------

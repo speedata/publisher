@@ -27,7 +27,7 @@ The speedata Publisher is a non-interactive publishing software. This means ther
 
 == Where can I get the software and how is it run?
 
-The software can be downloaded for free (see chapter <<ch-installation,Installation>>) and is started via the console or shell. The command to start the Publisher is called `sp`. Therewith, all functionality can be used. Parameters can be specified via the command line or a configuration file.
+The software can be downloaded for free (see chapter <<ch-installation,Installation>>) and is started via the console or shell. The command to start the Publisher is called `sp`. With it, all functionality can be used. Parameters can be specified via the command line or a configuration file.
 
 [source,shell,subs="verbatim,quotes"]
 -------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ See the <<ch-commandline,command line section>> for explanations on how to start
 
 == Examples
 
-You can find some examples of real world documents https://showcase.speedata.de/[in the showcase].  If you need hands-on examples, you can find them in a separate repository on Github (https://github.com/speedata/examples). There you can find complete documents, which you can use to try out different functionality.
+You can find some examples of real-world documents https://showcase.speedata.de/[in the showcase]. If you need hands-on examples, you can find them in a separate repository on GitHub (https://github.com/speedata/examples). There you can find complete documents that you can use to try out different functionality.
 
 
 .Examples from the repository

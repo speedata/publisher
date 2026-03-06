@@ -18,7 +18,7 @@ auf der Kommandozeile. Der Servermodus bietet die Möglichkeit
 WARNING: Der Server-Modus ist für eine nicht-öffentliche Umgebung gedacht. Es gibt keine Authentifizierungsmethoden und keine Mechanismen, Dokumente zu schützen.
 
 Der Server baut die Verbindung auf der IP-Adresse `127.0.0.1` und dem Port `5266` auf.
-Die Adresse kann mit den Parameter `address` und `port` in der Konfigurationsdatei bzw. auf der Kommandozeile geändert werden, siehe <<ch-konfiguration,den Anhang über die Konfiguration>>.
+Die Adresse kann mit den Parametern `address` und `port` in der Konfigurationsdatei bzw. auf der Kommandozeile geändert werden, siehe <<ch-konfiguration,den Anhang über die Konfiguration>>.
 
 Beispiel für eine Konfigurationsdatei:
 
@@ -43,8 +43,8 @@ Falls es zukünftig inkompatible Änderungen gibt, sind diese in der Versionsnum
 | GET | <<api-method-v0-publish-get,`/v0/publish/<id>`>> | Prüfe, ob ein Publishing-Lauf beendet ist.
 | GET | <<api-method-v0-pdf,`/v0/pdf/<id>`>> | Warte auf die Fertigstellung eines PDF.
 | POST | <<api-method-v0-pdf-post,`/v0/pdf`>> | Sende Daten und warte auf die Fertigstellung eines PDFs.
-| GET | <<api-method-v0-data,`/v0/data/<id>`>> | Lade die `data.xml` aus dem Pubishing-Lauf.
-| GET | <<api-method-v0-layout,`/v0/layout/<id>`>> | Lade die `layout.xml` aus dem Pubishing-Lauf.
+| GET | <<api-method-v0-data,`/v0/data/<id>`>> | Lade die `data.xml` aus dem Publishing-Lauf.
+| GET | <<api-method-v0-layout,`/v0/layout/<id>`>> | Lade die `layout.xml` aus dem Publishing-Lauf.
 | GET | <<api-method-v0-statusfile,`/v0/statusfile/<id>`>> | Lade die Statusdatei (`publisher.status`) aus dem Publishing-Lauf.
 | GET | <<api-method-v0-status,`/v0/status`>> | Übersicht über die laufenden Publishing-Prozesse.
 | GET | <<api-method-v0-statusid,`/v0/status/<id>`>> | Übersicht über einen Publishing-Prozess.
@@ -169,7 +169,7 @@ Ein Post-Request um Daten an den Server zu schicken und in demselben Request ein
 [[api-method-v0-pdf]]
 == `/v0/pdf/<id>`
 
-Ein GET-Request mit der id aus dem POST-Request von `/v0/publish`. Es wird im Erfolgsfall die PDF-Datei mit dem Statuscode 200 und dem Dateinamen `publisher.pdf` zurückgegeben. Der Request wartet auf die Fertigstellung des Publishing Prozesses. Im Fehlerfall wird nur ein Fehlercode zurück gegeben (Rückgabewert und Beschreibung):
+Ein GET-Request mit der id aus dem POST-Request von `/v0/publish`. Es wird im Erfolgsfall die PDF-Datei mit dem Statuscode 200 und dem Dateinamen `publisher.pdf` zurückgegeben. Der Request wartet auf die Fertigstellung des Publishing Prozesses. Im Fehlerfall wird nur ein Fehlercode zurückgegeben (Rückgabewert und Beschreibung):
 
 200 OK::
    PDF wurde fehlerfrei generiert

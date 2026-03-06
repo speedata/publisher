@@ -15,7 +15,7 @@ Unter der Annahme, dass die Datendatei (`data.xml`) wie folgt aussieht:
 </data>
 -------------------------------------------------------------------------------
 
-Kann nun mit `<SortSequence>` sortiert werden. Die ursprünglichen Daten werden dabei nicht verändert:
+Die Daten können nun mit `<SortSequence>` sortiert werden. Die ursprünglichen Daten werden dabei nicht verändert:
 
 
 [source, xml]

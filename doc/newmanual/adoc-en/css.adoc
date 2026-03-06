@@ -5,7 +5,7 @@
 
 CSS (Cascading Stylesheets) is a language mainly used on the web to determine the appearance of objects.
 The idea is to separate formatting from content.
-On the web - so the pure teaching - the content is described in HTML, while the appearance is determined by CSS.
+On the web - at least in theory - the content is described in HTML, while the appearance is determined by CSS.
 With the speedata Publisher the separation is even clearer.
 The data usually contains no information about the appearance, while the layout rules have no information about the data.
 
@@ -80,7 +80,7 @@ As known from HTML, the CSS instructions are assigned to certain elements with s
   <Tr minheight="4">
     <Td class="myclass" id="myid">
       <Paragraph>
-        <Value>Hallo Welt</Value>
+        <Value>Hello World</Value>
       </Paragraph>
     </Td>
   </Tr>
@@ -118,10 +118,10 @@ The first case is via the 'id' attribute, which must be unique in the layout rul
 The second case is addressed via the class `class="..."`.
 The class can be the same for several elements in the layout set of rules.
 The third case refers to all elements 'Td' in the layout set of rules.
-Here the usual specificity rules for CSS apply, but `!important' is not supported.
+Here the usual specificity rules for CSS apply, but `!important` is not supported.
 
 
-== CSS and and elements in data
+== CSS and elements in data
 
 Text markup in the data works as follows:
 

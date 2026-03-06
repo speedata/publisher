@@ -92,7 +92,7 @@ It is possible to create outlines of images with non-rectangular shapes. For thi
 </Layout>
 -------------------------------------------------------------------------------
 
-The file `pocketwatch.pdf` file can have an outline file with the same name and the extension xml, which is structured as follows
+The file `pocketwatch.pdf` can have an outline file with the same name and the extension xml, which is structured as follows
 
 .The segments determine the occupied area. The specifications refer to the (arbitrary) unit of 75x100 units.
 [source, xml]

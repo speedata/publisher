@@ -7,7 +7,7 @@ The second one was the way to go until version 3.9.26 and can be used as a refer
 
 == The simple way: `$_lastpage`
 
-Just use the <<ch-internalvariables,internal variable>> `$_lastpage` to get the pagenumber of the last page of the previous run.
+Just use the <<ch-internalvariables,internal variable>> `$_lastpage` to get the page number of the last page of the previous run.
 That means that you have to use at least two runs to get the correct value for the variable.
 This works since version 3.9.26.
 

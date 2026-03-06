@@ -1,6 +1,6 @@
 [appendix]
 [[app-lengthsunits]]
-= Lenghts and units
+= Lengths and units
 
 
 The lengths can be given in one of these units: `pp`, `pc`, `in`, `pt`, `cm`, `mm`, `dd`, `cc`. Without the unit, lengths will be in grid cells.
@@ -26,15 +26,15 @@ The lengths can be given in one of these units: `pp`, `pc`, `in`, `pt`, `cm`, `m
 [options="header"]
 |=======
 | Unit  | Unit
-| 1  Pica-point | 0,35147 mm
-| 1  Pica-point | 1/72,27 inch
+| 1  Pica-point | 0.35147 mm
+| 1  Pica-point | 1/72.27 inch
 | 1  Pica-point | 0.013837 inch
-| 1  Pica-point | 0,93457 Didot-point
-| 1  Pica |	4,2176 mm
+| 1  Pica-point | 0.93457 Didot-point
+| 1  Pica |	4.2176 mm
 | 1  Pica |	1/6 inch
 | 1  Pica |	12 Pica point
-| 1  PostScript Point (Adobe, DTP-point) | 1,00375001 Pica Point = 1pt
-| 1  mm |	0,237 Pica = 2,845 Pica-point
+| 1  PostScript Point (Adobe, DTP-point) | 1.00375001 Pica Point = 1pt
+| 1  mm |	0.237 Pica = 2,845 Pica-point
 |=======
 
 To convert units you can use the layout function `sd:tounit()`

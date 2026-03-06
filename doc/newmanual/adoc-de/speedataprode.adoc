@@ -18,13 +18,13 @@ Ein Vergleich von speedata Standard und Pro ist https://www.speedata.de/de/produ
 == Wie bekomme ich das Pro Paket?
 
 . Unter https://download.speedata.de/register kann man einen Account im Downloadbereich erstellen
-. Nach erfolgreicher Registrierung muss man das passende Paket auswählen (monatliche / jährliche zahlweise)
+. Nach erfolgreicher Registrierung muss man das passende Paket auswählen (monatliche / jährliche Zahlweise)
 
 
 
-Um das Pro-Paket herunter zu laden, gibt es zwei Möglichkeiten (ein gültiges Abonnement des Pro-Pakets vorausgesetzt):
+Um das Pro-Paket herunterzuladen, gibt es zwei Möglichkeiten (ein gültiges Abonnement des Pro-Pakets vorausgesetzt):
 
-. Ist man im Downloadbereich angemeldet, dann kann man über die Download-Links die ZIP-Dateien oder die Installationspakete herunter laden.
+. Ist man im Downloadbereich angemeldet, dann kann man über die Download-Links die ZIP-Dateien oder die Installationspakete herunterladen.
 
 . Per Kommandozeile (z.B. wget oder curl) kann man die Pakete herunterladen. Dafür muss im Login Bereich ein Token erzeugt werden und als Authentifizierung mit übergeben werden:
 +
@@ -42,7 +42,7 @@ wget --auth-no-challenge  --user sdapi_...  \
    --password ""  https://download.speedata.de/dl/speedata-publisherpro-linux-amd64-latest.zip
 -------------------------------------------------------------------------------
 
-Die Standardpakete können wie gehabt ohne Login oder Token herunter geladen werden.
+Die Standardpakete können wie gehabt ohne Login oder Token heruntergeladen werden.
 
 == Überprüfen der Version
 

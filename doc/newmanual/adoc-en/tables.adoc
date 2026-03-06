@@ -158,10 +158,10 @@ Unlike the text formats in texts (see the section on text formats), the default 
 [options="header"]
 |=======
 | Alignment for <Td> | Text | Format Description
-| `left` | `__leftaligned` | Left-aligned, flutter set right
-| `right` | `__rightaligned` | Right-aligned, flutter set left
-| `center` | `__centered` | Centered, flutter set on both sides
-| `justify` | `__justified` | Justified justified justified right and left
+| `left` | `__leftaligned` | Left-aligned, ragged right
+| `right` | `__rightaligned` | Right-aligned, ragged left
+| `center` | `__centered` | Centered, ragged on both sides
+| `justify` | `__justified` | Justified on both sides
 |=======
 
 This means that the two examples are identical:
@@ -186,7 +186,7 @@ For example, by changing the text format `__leftaligned`, all table cells can be
 
 == Colspan and Rowspan
 
-The natural property of a table is that all cells in a row are the same height and all cells in a column are the same width. However, cells can extend over several columns and rows. The number of overlapping columns is specified with `colspan`, the default here is 1. The number of rows is specified with `rowspan`, the default here is 1 as well. Here, you must ensure that the sum of the columns in a row equals the total number. In the following example, the second row contains only two cells, but it extends over two columns. The third row even has only one cell definition, the rest of the row is occupied by the two cell wide image from the row above (`rowspan="2"`).
+The natural property of a table is that all cells in a row are the same height and all cells in a column are the same width. However, cells can extend over several columns and rows. The number of spanned columns is specified with `colspan`, the default here is 1. The number of rows is specified with `rowspan`, the default here is 1 as well. Here, you must ensure that the sum of the columns in a row equals the total number. In the following example, the second row contains only two cells, but it extends over two columns. The third row even has only one cell definition, the rest of the row is occupied by the two cell wide image from the row above (`rowspan="2"`).
 
 .A somewhat more complex example. The background color of the image is determined by the second line.
 [source, xml,indent=0]
@@ -408,7 +408,7 @@ With this variant you can not only define the (repeating) table header, but also
 </Tablefoot>
 -------------------------------------------------------------------------------
 
-Table headers and footers do not have to consist of only one line. They can also contain lines and multiple lines. If some parts are left empty, this the output will be discarded.
+Table headers and footers do not have to consist of only one line. They can also contain lines and multiple lines. If some parts are left empty, the output will be discarded.
 
 .The table foot will not be shown on the last page, because the upper element (`page="last"`) is empty.
 [source, xml,indent=0]
@@ -612,7 +612,7 @@ The check now takes place by creating the table in a group and then checking the
 A more detailed description can be found in the section <<ch-layoutoptimizationusinggroups>>.
 
 == Alternating line colors
-Changing row colors are often used in tables with many columns to help the eye read the table. The row color can be specified by `background-color="..."` at `<Tr>`.
+Alternating row colors are often used in tables with many columns to help the eye read the table. The row color can be specified by `background-color="..."` at `<Tr>`.
 
 .Changing line colors. The first argument of the function sd:alternating() is an identifier to distinguish different alternations in a document.
 [source, xml, indent=0]
@@ -622,7 +622,7 @@ Changing row colors are often used in tables with many columns to help the eye r
     <Tr background-color="{sd:alternating('tab', 'white', 'gray')}">
       <Td>
         <Paragraph>
-          <Value>Zeile </Value>
+          <Value>Row </Value>
           <Value select="$i"/>
         </Paragraph>
       </Td>

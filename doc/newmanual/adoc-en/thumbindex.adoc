@@ -3,7 +3,7 @@
 
 
 [[abb-25-marke]]
-.Left: thumb indexes in the phone book (that still exists!). Right: Lines are less obtrusive, yet practical..
+.Left: thumb indexes in the phone book (that still exists!). Right: Lines are less obtrusive, yet practical.
 image::25-griffmarken.jpg[width=100%]
 
 Thumb indexes are marks on the outer edge of a catalog or reference book that indicate the current chapter. A characteristic of the thumb index is that it extends beyond the right or left edge of the paper. This means that the cut edge of the paper is in the colored area, so that the color can be seen even when the paper is closed.
@@ -55,7 +55,7 @@ There is nothing special about thumb indexes at first, they are either created w
 
 
 In the example, the chapter number is stored in the variable 'chapter no.' and output in a loop.
-In practice, this would of course be inserted into the page type (`AtPageShipout') and only one handle marker would be output at a time.
+In practice, this would of course be inserted into the page type (`AtPageShipout') and only one thumb index marker would be output at a time.
 
 
 

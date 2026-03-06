@@ -9,7 +9,7 @@ This allows you to answer questions such as "Does the article (with picture and 
 reduce font size so that all the text fits on an A4 page?".
 
 It is also possible to provide this virtual area with its own page grid.
-This allows, for example, to position objects more finely than is possible with a coarser side grid of the main page.
+This allows, for example, to position objects more finely than is possible with a coarser page grid of the main page.
 
 There are a few things to consider when using the groups:
 
@@ -68,7 +68,7 @@ See the chapter <<ch-layoutoptimizationusinggroups>> for an example how to optim
 
 == Tracing
 
-Do help debugging the layout within a group, you can turn on the grid visualization:
+To help debug the layout within a group, you can turn on the grid visualization:
 
 [source, xml]
 ----------------

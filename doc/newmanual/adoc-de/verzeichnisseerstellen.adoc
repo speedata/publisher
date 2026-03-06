@@ -6,7 +6,7 @@ In diesem Kapitel wird ein Mechanismus benutzt, der etwas mehr manuelle Arbeit b
 
 Der speedata Publisher kann beliebige Verzeichnistypen erstellen.
 Ob Inhaltsverzeichnis, Artikelliste oder Stichwortindex – alle Listen funktionieren nach demselben Prinzip:
-die notwendigen Daten (z. B. Seitenzahlen, Artikelnummern) werden explizit in einer eigenen Datenstruktur gespeichert, auf Festplatte geschrieben.
+die notwendigen Daten (z. B. Seitenzahlen, Artikelnummern) werden explizit in einer eigenen Datenstruktur gespeichert, auf die Festplatte geschrieben.
 Beim nächsten Lauf des Publishers werden diese Daten eingelesen und stehen zur Verfügung.
 
 == Schritt 1: Sammeln der Informationen
@@ -88,7 +88,7 @@ Das ist dasselbe Beispiel wie aus dem vorherigen Abschnitt (<<ch-verzeichnisseer
 </data>
 -------------------------------------------------------------------------------
 
-Die mit dem folgenden Layout ausgegeben wird:
+Diese Daten werden mit dem folgenden Layout ausgegeben:
 
 .Grundgerüst für die Ausgabe eines Inhaltsverzeichnisses über die XML-Struktur. Der Code wird im Laufe des Abschnitts ergänzt.
 [source, xml]
@@ -159,7 +159,7 @@ Im Abschnitt `chapter` (Punkt 3 im Layout oben) wird oben der Code eingefügt, u
 -------------------------------------------------------------------------------
 
 
-Es wird also mittels `<Copy-of>` jeweils etwas neues zu einer Variablen hinzugefügt.
+Es wird also mittels `<Copy-of>` jeweils etwas Neues zu einer Variablen hinzugefügt.
 
 // A Ende
 

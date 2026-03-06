@@ -50,7 +50,7 @@ This minimal sample shows the difference:
 </Layout>
 -------------------------------------------------------------------------------
 
-Bear in mind that this rotation might also affect to some given image dimensions.
+Bear in mind that this rotation might also affect some given image dimensions.
 
 [discrete]
 == Rotate via transformation

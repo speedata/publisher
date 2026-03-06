@@ -7,7 +7,7 @@ Man kann Regeln angeben, was passiert, wenn eine bestimmte Datei in dieses Verze
 
 WARNING: Der Publisher löscht die XML-Datei aus dem Verzeichnis, sobald sie verarbeitet wird.
 
-Der Hotfolder wird wie die der Publisher über die Datei `publisher.cfg` konfiguriert.
+Der Hotfolder wird wie der Publisher über die Datei `publisher.cfg` konfiguriert.
 
 -------------------------------------------------------------------------------
 [hotfolder]

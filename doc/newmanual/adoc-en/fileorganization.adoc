@@ -68,7 +68,7 @@ The namespace for XInclude must be declared as above, otherwise there will be a 
 
 The `<Section>` element allows you to group layout instructions without affecting the output.
 This is useful for organizing large layout files, e.g. for code folding in text editors.
-The element has an `name` attribute that serves as a label.
+The element has a `name` attribute that serves as a label.
 
 [source,xml]
 -------

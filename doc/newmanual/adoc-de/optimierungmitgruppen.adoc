@@ -4,7 +4,7 @@
 
 
 Ein typischer Fall beim Database Publishing ist, dass man nicht weiß, welche Daten zu erwarten sind.
-Texte sind unterschiedlich lang, Bilder haben andere Seitenverhältnisse, die Anzahl der Daten im Datensatz sind variabel und so fort.
+Texte sind unterschiedlich lang, Bilder haben andere Seitenverhältnisse, die Anzahl der Daten im Datensatz ist variabel und so fort.
 Um trotzdem eine Darstellung zu erzeugen, die ansprechend ist (also gewissen Regeln folgt), kann man Abfragen stellen.
 Neben statischen Fragen wie »Wie viele Artikel sind in der Artikelgruppe enthalten?« können dynamische Fragen beantwortet werden.
 

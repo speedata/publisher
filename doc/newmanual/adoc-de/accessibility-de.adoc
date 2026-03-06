@@ -43,14 +43,14 @@ Im folgenden Beispiel wird das Dokument nicht weiter unterteilt. Es wird eine Ü
 
 == Hierarchische Struktur
 
-Also Voreinstellung ist die Rolle »Document« definiert mit der ID `doc`. Dies entspricht der folgenden Struktur:
+Als Voreinstellung ist die Rolle »Document« definiert mit der ID `doc`. Dies entspricht der folgenden Struktur:
 
 [source, xml]
 ----------------
 <StructureElement role="Document" id="doc" />
 ----------------
 
-Um weitergehende Strukturen zu definieren gibt es zwei Möglichkeiten. Entweder werden diese geschachtelt definiert (beide Beispiele definieren die identische Struktur):
+Um weitergehende Strukturen zu definieren, gibt es zwei Möglichkeiten. Entweder werden diese geschachtelt definiert (beide Beispiele definieren die identische Struktur):
 
 [source, xml]
 ----------------
@@ -105,7 +105,7 @@ Bilder sollten mit einer Beschreibung versehen werden, damit diese in der Hierar
 
 == Aus dem Beispiele-Repository
 
-Dieses Layout ist auch im https://github.com/speedata/examples/tree/master/accessibility[Beispiele-Repository] zu finden und erstellt ein PDF/UA konformes PDF, das den Ansprüchen für die Barrierefreiheit genügt. Unterhalb der obersten Ebene Document gibt es einen Abschnitt Sect, das eine Überschrift, einen Absatz ohne Besonderheiten und einen Absatz mit einem Hyperlink, sowie eine Abbildung enthält.
+Dieses Layout ist auch im https://github.com/speedata/examples/tree/master/accessibility[Beispiele-Repository] zu finden und erstellt ein PDF/UA konformes PDF, das den Ansprüchen für die Barrierefreiheit genügt. Unterhalb der obersten Ebene Document gibt es einen Abschnitt Sect, das eine Überschrift, einen Absatz ohne Besonderheiten und einen Absatz mit einem Hyperlink sowie eine Abbildung enthält.
 
 (Aufruf mit `sp --dummy`, da hier auf variable Daten verzichtet wird.)
 

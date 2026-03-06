@@ -9,9 +9,9 @@ Nun hat PDF aber eine ganz nette Eigenschaft: man kann die Seiten in einer belie
 image::pagetree.png[width=100%]
 
 
-Es ist möglich, die Reihenfolge der Seiten nachträglich zu ändern, in dem die Liste der Seiten geändert wird.
+Es ist möglich, die Reihenfolge der Seiten nachträglich zu ändern, indem die Liste der Seiten geändert wird.
 
-.Der Seitenbaum muss nicht in der Reihenfolge der geschriebenen Seiten entsprechen.
+.Der Seitenbaum muss nicht der Reihenfolge der geschriebenen Seiten entsprechen.
 image::pagetree-insert.png[width=100%]
 
 

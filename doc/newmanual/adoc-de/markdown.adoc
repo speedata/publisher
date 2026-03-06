@@ -86,13 +86,13 @@ Die Liste der verfügbaren Stile ist unter https://github.com/alecthomas/chroma/
 // [6] = "base16-ocean.dark"
 // [7] = "base16-ocean.light"
 //
-Man kann auch Optionen für die Umwandlung mit dem Präfix `hloption_` setzen. Derzeit wird nur `hloption_withclasses` unterstützt, das dazu führt, das Syntaxhervorhebung  mit CSS-Klassen anstelle von `<span>...</span>` erzeugt wird.
+Man kann auch Optionen für die Umwandlung mit dem Präfix `hloption_` setzen. Derzeit wird nur `hloption_withclasses` unterstützt, das dazu führt, dass Syntaxhervorhebung  mit CSS-Klassen anstelle von `<span>...</span>` erzeugt wird.
 
 == Ein speedata Publisher quine mit Markdown
 
 Dieser Abschnitt darf nicht zu ernst genommen werden... Mit Markdown ist es nun leicht möglich, ein `layout.xml` https://de.wikipedia.org/wiki/Quine_(Computerprogramm)[quine] zu erstellen.
 
-Wenn sie das folgende Layout mit `sp --dummy` durchlaufen lassen, erzeugt es ein PDF mit »sich selbst« als Eingabe:
+Wenn Sie das folgende Layout mit `sp --dummy` durchlaufen lassen, erzeugt es ein PDF mit »sich selbst« als Eingabe:
 
 [source, xml]
 -------------------------------------------------------------------------------

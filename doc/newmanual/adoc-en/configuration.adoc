@@ -11,7 +11,7 @@ The speedata publisher can be configured in several ways:
 
 == The file `publisher.cfg`
 
-The file publisher.cfg (`/etc/speedata/publisher.cfg`, `$HOME/.publisher.cfg` and in the current working directory) is a text file, that is read at the beginning of the publisher run. The default file looks like this:
+The file publisher.cfg (`/etc/speedata/publisher.cfg`, `$HOME/.publisher.cfg` and in the current working directory) is a text file that is read at the beginning of the publisher run. The default file looks like this:
 
 ------------------------------
 data      = data.xml
@@ -55,7 +55,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `fontloader`::
    Set the fontloader to `fontforge` (default until version 4.16) or `harfbuzz` (default starting from version 4.18).
 `filter`::
-   Run the given file as an Lua-Filter. See the section <<ch-preprocessing>>.
+   Run the given file as a Lua filter. See the section <<ch-preprocessing>>.
 `fontpath`::
    Set the path for system fonts. On Windows this is `%WINDIR%\Fonts`, on Mac OS X it defaults to `/Library/Fonts:/System/Library/Fonts`.
 `grid`::
@@ -120,7 +120,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `address`::
   IP address to which the server should open the port. Default is 127.0.0.1.
 `extra-dir`::
-  Extra directories for the publishing runs to be includes.
+  Extra directories for the publishing runs to be included.
 `filter`::
   Lua script to run before processing the publishing runs (like a call to `sp --filter ...`).
 `logfile`::

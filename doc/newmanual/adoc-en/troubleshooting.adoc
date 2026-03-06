@@ -60,7 +60,7 @@ The output appears in the log file (`publisher-protocol.xml`)
 <entry level="INFO" msg="Message" line="6" message="1"></entry>
 -------------------------------------------------------------------------------
 
-The command `<Message>` can be instructed with `error="yes"` to output an error message (instead of a message). You can also specify the error code that will be returned when you exit the Publisher. See <<cmd-message,the command `<Message>` in the reference>> command in the reference.
+The command `<Message>` can be instructed with `error="yes"` to output an error message (instead of a message). You can also specify the error code that will be returned when you exit the Publisher. See <<cmd-message,the command `<Message>` in the reference>>.
 
 == Status File and Log File
 

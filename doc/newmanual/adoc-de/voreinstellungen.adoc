@@ -67,7 +67,7 @@ Die Schriftfamilie `text`, die die voreingestellte Schriftart für Text ist:
 -------------------------------------------------------------------------------
 
 
-Durch überschreiben der Schriftfamilie `text` kann eine andere Voreinstellung festgelegt werden.
+Durch Überschreiben der Schriftfamilie `text` kann eine andere Voreinstellung festgelegt werden.
 
 Die Fontaliase sind auch für die Standardschrift definiert:
 

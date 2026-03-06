@@ -29,7 +29,7 @@ und viele andere Dokumente, bei denen es darauf ankommt, reproduzierbar, schnell
 Der speedata Publisher ist eine nicht-interaktive Publishing-Software.
 Das heißt, es gibt keine graphische Oberfläche (GUI).
 Alle Anweisungen müssen vor dem Publikationsprozess feststehen und legen fest, wie die Daten im PDF angeordnet werden.
-Durch die einzigartige Kombination von ausgefeilten Algorithmen und Programmierbarkeit lassen sich äußerst flexible Layouts realisieren, die bisher nur interaktiven Desktop-Publishing (DTP) Programmen wie InDesign von Adobe vorbehalten war.
+Durch die einzigartige Kombination von ausgefeilten Algorithmen und Programmierbarkeit lassen sich äußerst flexible Layouts realisieren, die bisher nur interaktiven Desktop-Publishing-Programmen (DTP) wie InDesign von Adobe vorbehalten waren.
 
 
 

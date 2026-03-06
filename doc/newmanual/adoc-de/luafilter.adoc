@@ -28,7 +28,7 @@ Im Folgenden werden die Anwendungsmöglichkeiten beschrieben, ganz zum Schluss g
 
 == Validieren von Eingabedaten
 
-Um RELAX NG-Dateien zu validieren gibt es mehrere Möglichkeiten. Neben einen Variante, direkt im XML Editor das Schema zu validieren (siehe den entsprechenden <<ch-schemavalidierung, Abschnitt im Handbuch>>) gibt es die Möglichkeit,  ein externes Programm dafür zu nutzen.
+Um RELAX NG-Dateien zu validieren gibt es mehrere Möglichkeiten. Neben einer Variante, direkt im XML Editor das Schema zu validieren (siehe den entsprechenden <<ch-schemavalidierung, Abschnitt im Handbuch>>) gibt es die Möglichkeit,  ein externes Programm dafür zu nutzen.
 Eines davon ist Jing. Es wird mit dem Publisher mitgeliefert.
 
 In der Lua-Vorverarbeitung gibt es eine Funktion, die die Validierung übernimmt:
@@ -281,13 +281,13 @@ Tabelle mit Konfigurationswerten (siehe <<ch-konfiguration>>). Kann sowohl zum L
 `validate_relaxng(‹xmldatei›,‹schemadatei›)`::
 
 Diese Funktion validiert die angegebene XML-Datei mit dem im zweiten Parameter angegebenen RELAX NG (XML-Syntax) Schema.
-Die Rückgabe ist ein boolean-Wert, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurück gegeben, der die Fehlermeldung enthält.
+Die Rückgabe ist ein boolean-Wert, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurückgegeben, der die Fehlermeldung enthält.
 
 `run_saxon(‹XSL›,‹Quelldatei›,‹Ausgabedatei›,‹Parameter›)`::
-Diese Funktion ruft das zum Publisher mitgelieferte Programm `saxon` auf. Sie erwartet drei string-Argumente (das Stylesheet, die Eingabe- und die Ausgabedatei) und ein optionales Argument das als Parameter an saxon übergeben wird. Die Rückgabe ist ein boolean-Wert, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurück gegeben, der die Fehlermeldung enthält. Der Parameter hat die Form `keyword=value`.
+Diese Funktion ruft das zum Publisher mitgelieferte Programm `saxon` auf. Sie erwartet drei string-Argumente (das Stylesheet, die Eingabe- und die Ausgabedatei) und ein optionales Argument das als Parameter an saxon übergeben wird. Die Rückgabe ist ein boolean-Wert, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurückgegeben, der die Fehlermeldung enthält. Der Parameter hat die Form `keyword=value`.
 
 `run_saxon(‹tabelle›)`::
-Diese Funktion ruft das zum Publisher mitgelieferte Programm `saxon` auf. Sie erwartet eine Tabelle als Argument mit den Schlüsselwörtern, die unten aufgelistet sind. Die Rückgabe ist ein boolean-Wert, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurück gegeben, der die Fehlermeldung enthält.
+Diese Funktion ruft das zum Publisher mitgelieferte Programm `saxon` auf. Sie erwartet eine Tabelle als Argument mit den Schlüsselwörtern, die unten aufgelistet sind. Die Rückgabe ist ein boolean-Wert, der true ist, wenn der Befehl fehlerfrei ausgeführt wurde. Ansonsten wird ein zweiter Rückgabewert (string) zurückgegeben, der die Fehlermeldung enthält.
 +
 [options="header"]
 |=======
@@ -385,7 +385,7 @@ Das `spreadsheet`-Objekt beinhaltet die einzelnen Arbeitsblätter. Die Anzahl de
 +
 Die einzelnen Arbeitsblätter können als Funktion mit zwei Parametern benutzt werden (siehe Beispiel oben).
 Die Parameter sind die x und y Koordinaten der auszulesenden Zelle, die erste Zelle oben links hat die Koordinate 1,1.
-Die Ausmaße des Inhalts kann über die Parameter `minrow`, `maxrow`, `mincol` und und `maxcol` ermittelt werden.
+Die Ausmaße des Inhalts kann über die Parameter `minrow`, `maxrow`, `mincol` und `maxcol` ermittelt werden.
 Der Name ist im Parameter `name` enthalten.
 
 
@@ -408,4 +408,4 @@ Rückgabe ist eine Tabelle mit den Schlüsseln `day`, `month`, `year`, `hour`, `
 
 === `http`
 
-Die HTTP-Bibiliothek ist unter https://github.com/cjoudrey/gluahttp beschrieben.
+Die HTTP-Bibliothek ist unter https://github.com/cjoudrey/gluahttp beschrieben.

@@ -82,7 +82,7 @@ Which is output with the following layout:
 </Layout>
 -------------------------------------------------------------------------------
 
-The Publisher now assigns the chapters to the page number. You can now output the directory in the next pass:
+The Publisher now assigns the chapters to the page number. You can now output the table of contents on the next pass:
 
 .This part is inserted into the layout above to output the table of contents.
 [source, xml]

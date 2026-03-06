@@ -52,7 +52,7 @@ Die Layoutdatei besteht aus drei Abschnitten, die einzeln erläutert werden.
 <2> Hier werden die Einträge einzeln in der Variablen `indexeinträge` gespeichert.
 <3> Die sortierten Einträge werden in einer Tabelle ausgegeben.
 
-Der Abschnitt `data` ist der erste Teil aus dem vorherigen Listing:.
+Der Abschnitt `data` ist der erste Teil aus dem vorherigen Listing:
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ Der Abschnitt `data` ist der erste Teil aus dem vorherigen Listing:.
 <3> Hier wird der Inhalt der Variablen `$index` als Datenstruktur interpretiert und ausgeführt (siehe die Ergänzung unten).
 
 
-Der Befehl `<Makeindex>` sortiert und gruppiert die Daten, die im Attribut `select` übergeben werden. Die Sortierung erfolgt anhand des Attributs, der bei `sortkey` angegeben ist. Die Gruppierung erfolgt anhand des ersten Buchstabens des Sortierschlüssels. Die Elementstruktur, die mit dem Befehl `<Makeindex>` aufgebaut wird, ist folgende:
+Der Befehl `<Makeindex>` sortiert und gruppiert die Daten, die im Attribut `select` übergeben werden. Die Sortierung erfolgt anhand des Attributs, das bei `sortkey` angegeben ist. Die Gruppierung erfolgt anhand des ersten Buchstabens des Sortierschlüssels. Die Elementstruktur, die mit dem Befehl `<Makeindex>` aufgebaut wird, ist folgende:
 
 
 [source, xml]

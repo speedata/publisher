@@ -4,7 +4,7 @@
 
 
 
-The output of colors in speedata Publisher is very simple. Usually one specification for the object to be output is sufficient:
+Using colors in the speedata Publisher is straightforward. Usually one specification for the object to be output is sufficient:
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------

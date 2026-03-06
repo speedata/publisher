@@ -1,7 +1,7 @@
 [[ch-attachments]]
 = Dateien an das PDF anhängen
 
-Das PDF Dateiformat bietet die Möglichkeit, Dateien in das Dokument einzubetten, so dass diese dann als eigenständige Dokumente herunter geladen werden können.
+Das PDF Dateiformat bietet die Möglichkeit, Dateien in das Dokument einzubetten, so dass diese dann als eigenständige Dokumente heruntergeladen werden können.
 Elektronische Rechnungen können z.B. als »menschenlesbares« PDF mit einer angehängten computerlesbaren Beschreibung (als XML) verschickt werden.
 
 Es können beliebig viele Dateien angehängt werden, jedoch nur eine ZUGFeRD-Rechnung.

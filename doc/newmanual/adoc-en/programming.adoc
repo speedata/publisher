@@ -63,7 +63,7 @@ In variables not only simple values can be stored, but also complex XML sections
 </Record>
 -------------------------------------------------------------------------------
 
-Results in the expected issue of "Hello world!". A use case is to store table width declarations:
+This produces the expected output of "Hello world!". A use case is to store table width declarations:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -201,7 +201,7 @@ In XPath you can perform simple if-then queries. The syntax for this is `if (con
 [[ch-programming-case]]
 == Case distinctions
 
-Case distinctions correspond to the construction switch/case from C-like programming languages. They are applied in the Publisher as follows:
+Case distinctions are similar to the switch/case construct in C-like programming languages. They are applied in the Publisher as follows:
 
 
 [source, xml]
@@ -258,7 +258,7 @@ Besides the simple loop there are also loops with conditions:
 -------------------------------------------------------------------------------
 
 
-The expression `$i &amp;lt;= 4` must be read as `$i \<= 4`, because the opening angle bracket at this point in the XML is a syntax error. The loop above is executed as often as the content of the variable i is less than or equal to 4. Don't forget to increase the variable as well, otherwise an endless loop is created.
+The expression `$i &amp;lt;= 4` must be read as `$i \<= 4`, because the opening angle bracket at this point in the XML is a syntax error. The loop above is executed as often as the content of the variable i is less than or equal to 4. Don't forget to increase the variable as well, otherwise an infinite loop will result.
 
 In addition to the while loop, there is also the until loop, which works in the same way:
 
@@ -339,7 +339,7 @@ The namespace for the function must be defined in the root element (here: `xmlns
 
 == Data Structures
 
-The speedata Publisher does not offer direct support for data structures such as arrays (fields) or dictionaries (hashes or dictionaries). These can be simulated using variables. The field a1, a2, ..., ai could be filled as follows:
+The speedata Publisher does not offer direct support for data structures such as arrays (fields) or dictionaries (hashes or dictionaries). These can be simulated using variables. The array elements a1, a2, ..., ai could be populated as follows:
 
 [source, xml]
 -------------------------------------------------------------------------------

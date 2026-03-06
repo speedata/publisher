@@ -101,9 +101,9 @@ Page breaks, for example after a heading, are undesirable. To prevent page break
 image::textmitueberschrift.png[width=50%,scaledwidth=100%]
 
 
-== Line breaks within a text
+== Page breaks within a text
 
-Line breaks within a text can be forced by the property `break-before`. This is useful, for example, for a heading that should always start on a new page. To do this, the text format of the heading is adjusted:
+Page breaks within a text can be forced by the property `break-before`. This is useful, for example, for a heading that should always start on a new page. To do this, the text format of the heading is adjusted:
 
 .To force the heading to always start on a new page, the attribute `break-before` must be set to `page`.
 [source, xml]

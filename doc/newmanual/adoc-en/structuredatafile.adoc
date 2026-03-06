@@ -63,11 +63,11 @@ Since the data file can be structured as you like, special commands are needed t
 -------------------------------------------------------------------------------
 <catalog>
   <article nr="12345" price="99,95" quantity="1">
-    <description>Text for atricle 12345</description>
+    <description>Text for article 12345</description>
     <image mainimage="yes">art12345.pdf</image>
   </article>
   <article nr="56789" price="45,95" quantity="5">
-    <description>Text for atricle 56789</description>
+    <description>Text for article 56789</description>
     <image>art56789.pdf</image>
   </article>
 </catalog>

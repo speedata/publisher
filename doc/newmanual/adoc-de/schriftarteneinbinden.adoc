@@ -30,7 +30,7 @@ Im zweiten Schritt nutzt man dann diese internen Namen, um Familien zu definiere
 </DefineFontfamily>
 -------
 
-Die lezten drei Schnitte (Fett, Kursiv und Fettkursiv) müssen nicht angegeben werden, wenn sie im Layout nicht benutzt werden.
+Die letzten drei Schnitte (Fett, Kursiv und Fettkursiv) müssen nicht angegeben werden, wenn sie im Layout nicht benutzt werden.
 `fontsize` bezeichnet die Schrifthöhe, `leading` den Abstand zwischen zwei Grundlinien.
 
 
@@ -284,7 +284,7 @@ $ sp list-fonts --xml
 -------
 
 
-TIP: Wenn keine Schriftart für einen Absatz oder einen Textblock (etc.) angegeben wird, nutzt das System die Schriftfamilie `text`, die im Publisher auch vordefiniert ist und überschrieben werden kann. Sie den Anhang <<app-voreinstellungenimpublisher,Voreinstellungen im Publisher>>.
+TIP: Wenn keine Schriftart für einen Absatz oder einen Textblock (etc.) angegeben wird, nutzt das System die Schriftfamilie `text`, die im Publisher auch vordefiniert ist und überschrieben werden kann. Siehe den Anhang <<app-voreinstellungenimpublisher,Voreinstellungen im Publisher>>.
 
 
 == Fehlende Zeichen und Ersatzschriftarten
@@ -292,7 +292,7 @@ TIP: Wenn keine Schriftart für einen Absatz oder einen Textblock (etc.) angegeb
 Die Zeichenvorräte in den Schriftdateien sind meist sehr begrenzt.
 Beispielsweise wird der speedata Publisher mit der freien Schriftart »TeXGyreHeros« (einem sehr guten Helvetica-Klon) ausgeliefert.
 In der Schriftdatei sind aber nur Zeichen enthalten, die westliche Sprachen abdecken, aber z.B. nicht Griechisch, Arabisch, Chinesisch etc.
-Auch die den ganzen Unicode-Sonderzeichen wie U+2685 DIE FACE-6 (⚅) sind nicht enthalten.
+Auch die ganzen Unicode-Sonderzeichen wie U+2685 DIE FACE-6 (⚅) sind nicht enthalten.
 Wird ein Zeichen angefordert, das in der Schriftart nicht enthalten ist, gibt es eine Fehlermeldung.
 
 -------
@@ -362,6 +362,6 @@ erlauben es nun, die Schriftfamilien allgemein wie folgt zu definieren:
 -------
 
 also unabhängig von der tatsächlich genutzten Schriftart.
-Mit den im Abschnitt <<ch-include>> beschriebenen Möglichkeiten kann man nun die Fontdefinition in eine separate Datei auslagern und bei Bedarf schnell zwischen verschiedenen Schriftarten wählen, in dem die gewünschten Dateien eingebunden werden.
+Mit den im Abschnitt <<ch-include>> beschriebenen Möglichkeiten kann man nun die Fontdefinition in eine separate Datei auslagern und bei Bedarf schnell zwischen verschiedenen Schriftarten wählen, indem die gewünschten Dateien eingebunden werden.
 
 // Ende

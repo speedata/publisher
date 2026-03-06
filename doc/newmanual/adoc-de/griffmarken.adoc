@@ -10,11 +10,11 @@ Daumenregister sind Markierungen an der Außenkante eines Katalogs oder eines Na
 ifdef::backend-docbook99[]
 Beispiele finden sich in der Abbildung <<abb-25-marke>>.
 endif::[]
-Eine Eigenschaft des Daumenregisters ist, dass es über den rechten oder über den linken Rand des Papiers hinaus geht.
+Eine Eigenschaft des Daumenregisters ist, dass es über den rechten oder über den linken Rand des Papiers hinausgeht.
 Das heißt, die Schnittkante des Papiers ist im farbigen Bereich, so dass die Farbe auch im zugeklappten Zustand zu erkennen ist.
 
 
-An Daumenregistern ist erst einmal nichts besonders, sie werden entweder mit Boxen oder Linien in einer bestimmten Farbe erzeugt.
+An Daumenregistern ist erst einmal nichts Besonderes, sie werden entweder mit Boxen oder Linien in einer bestimmten Farbe erzeugt.
 Es folgt ein Beispiel für Kapitelnummern in einer quadratischen Box.
 
 

@@ -47,7 +47,7 @@ Dies sind (mit Voreinstellung):
   Markiert die Stellen, an denen die Schriftart Unterschneidungen einfügt.
 
 `textformat`::
-  Erzeugt über jeder Textzeile einen Tooltip, der das benutzte Textformat anzeigt. Siehe das Beispiel im Abschnit <<ch-textformate-tracing,Textformate>>.
+  Erzeugt über jeder Textzeile einen Tooltip, der das benutzte Textformat anzeigt. Siehe das Beispiel im Abschnitt <<ch-textformate-tracing,Textformate>>.
 
 
 ==  Nachrichten

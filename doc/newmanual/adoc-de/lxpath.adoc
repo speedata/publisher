@@ -16,7 +16,7 @@ Oder wie viele Artikel habe ich in dieser Artikelgruppe?
 
 == XPath Ausdrücke
 
-Der Publisher akzeptiert in den den Attributen `select` und `test` XPath-Ausdrücke.
+Der Publisher akzeptiert in den Attributen `select` und `test` XPath-Ausdrücke.
 In allen anderen Attributen kann durch die geschweiften Klammern (`{` und `}`) ein XPath Ausdruck erzwungen werden.
 Siehe https://github.com/speedata/examples/blob/master/technical/fontshrinking/layout.xml#L16[z.B. das Layout im examples-Repository für Optimierung mit Gruppen].
 In diesem Beispiel werden im Attribut `width` und im Element `Value` die Werte dynamisch erzeugt, d. h. für die
@@ -144,7 +144,7 @@ Beispiel: die Funktion `sd:current-row()`  kann auch mit Parameter `sd:current-r
    Gibt wahr zurück, wenn die Zelle belegt ist (seit 2.3.71).
 
 `sd:alternating(<typ>, <text>[,<text>,...])`::
-   Bei jedem Aufruf wird das nächste Argument zurück gegeben. Wert des Typs ist beliebig, muss aber eindeutig sein. Beispiel: `sd:alternating("tbl", "Weiß","Grau")` könnte für die Hintergrundfarbe von Tabellen benutzt werden. Beispiel siehe <<ch-wechselnde-zeilenfarben>>.
+   Bei jedem Aufruf wird das nächste Argument zurückgegeben. Wert des Typs ist beliebig, muss aber eindeutig sein. Beispiel: `sd:alternating("tbl", "Weiß","Grau")` könnte für die Hintergrundfarbe von Tabellen benutzt werden. Beispiel siehe <<ch-wechselnde-zeilenfarben>>.
 
 `sd:aspectratio(<Bildname>,[Seitenzahl],[pdfbox])`::
    Gibt das Ergebnis der Division Bildbreite / Bildhöhe zurück. (D. h. < 1 für Hochkantbilder, > 1 für Querformat.) Die Parameter können die Seitenzahl und die PDF-Box enthalten, siehe <<ch-imagearguments>>.
@@ -218,8 +218,8 @@ Beispiel: die Funktion `sd:current-row()`  kann auch mit Parameter `sd:current-r
 `sd:lastmark(<pagenumber>)`::
    Der letzte Marker der angegebenen Seitenzahl. Hilfreich z.B. in Wörterbüchern, wo der erste und der letzte Begriff einer Seite ausgegeben werden.
 
-`sd:length(was>[,<einheit>])`::
-  Gibt die Länge von _was_ in Einheiten an (aber ohne die Einheit). Zum Beispiel `sd:length('_bleed','mm')` gibt den Wert `3`  zurick, falls der Anschnitt (bleed) auf 3mm gesetzt ist. Diese Funktion initialisiert eine Seite. Die Einheit ist auf 'mm' voreingestellt. *was*  kann eines der Werte von `_bleed`, `_pagewidth` oder `_pageheight` (Seit Version 4.19.10.)
+`sd:length(<was>[,<einheit>])`::
+  Gibt die Länge von _was_ in Einheiten an (aber ohne die Einheit). Zum Beispiel `sd:length('_bleed','mm')` gibt den Wert `3` zurück, falls der Anschnitt (bleed) auf 3mm gesetzt ist. Diese Funktion initialisiert eine Seite. Die Einheit ist auf 'mm' voreingestellt. *was*  kann eines der Werte von `_bleed`, `_pagewidth` oder `_pageheight` (Seit Version 4.19.10.)
 
 `sd:loremipsum()`::
    Alias für `sd:dummytext()`
@@ -292,7 +292,7 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
    ist dasselbe wie `$Name`, nur mit der Möglichkeit den Namen auch dynamisch zu erzeugen. Falls `$i` den Wert 3 enthält, liest `sd:variable('foo',$i)` den Inhalt der Variablen `$foo3`. Damit lassen sich Arrays abbilden.
 
 `sd:visible-pagenumber([<Zahl>])`::
-   Liefert die Benutzerdefinerte Seitenzahl für die angegebene echte Seitenzahl zurück. Benutzerdefinierte Seitenzahlen können mit <<cmd-definematter>> erzeugt werden. Ohne Argument wird die aktuelle Seitenzahl benutzt.
+   Liefert die Benutzerdefinierte Seitenzahl für die angegebene echte Seitenzahl zurück. Benutzerdefinierte Seitenzahlen können mit <<cmd-definematter>> erzeugt werden. Ohne Argument wird die aktuelle Seitenzahl benutzt.
 
 
 == XPath-Funktionen
@@ -386,7 +386,7 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
     Gibt das Wurzelelement des Elements zurück.
 
 `starts-with( <string>, <string>)`::
-   Gibt wahr (true) zurück, wenn die erste Zeichenkette mit der zweiten anfängt. Beispiel: `ends-with ( "tattoo", "tat")` ergibt `true`.
+   Gibt wahr (true) zurück, wenn die erste Zeichenkette mit der zweiten anfängt. Beispiel: `starts-with ( "tattoo", "tat")` ergibt `true`.
 
 `string(<Sequenz>)`::
    Gibt den Textwert der Sequenz zurück, d. h. den Inhalt der Elemente.
@@ -410,7 +410,7 @@ Gibt Wahr (`true()`) zurück, wenn einer der angegebenen Modi gesetzt ist. Ein M
    Gibt den Inhalt der ersten Zeichenkette zurück, der bis zur zweiten Zeichenkette geht: Beispiel: `substring-before ( "tattoo", "attoo")` ergibt `"t"`.
 
 `tokenize(<Eingabe>,<Regexp>)`::
-   Die Rückgabe ist eine Sequenz von Zeichenketten. Die Eingabe wird von links nach rechts gelesen. Sobald eine Stelle gefunden wird, auf die der Reguläre Ausdruck passt, wird die bisherige Eingabe zurück gegeben. Beispiel (aus M. Kays XPath / XSLT-Buch): `tokenize("Go home, Jack!", "\W+")` ergibt die Sequenz `"Go", "home", "Jack", ""`.
+   Die Rückgabe ist eine Sequenz von Zeichenketten. Die Eingabe wird von links nach rechts gelesen. Sobald eine Stelle gefunden wird, auf die der Reguläre Ausdruck passt, wird die bisherige Eingabe zurückgegeben. Beispiel (aus M. Kays XPath / XSLT-Buch): `tokenize("Go home, Jack!", "\W+")` ergibt die Sequenz `"Go", "home", "Jack", ""`.
 
 `translate(<input>,<from>,<to>)`::
    Ersetzt alle Zeichen in `input`, die in `from` vorkommen durch das entsprechende Zeichen in `to`. Beispiel: `translate('banana','an','uo')` ergibt `buouou`. Wenn `to` kürzer als `from` ist, werden die überzähligen Zeichen in `from` gelöscht. Beispiel: `translate('banana','an','u')` ergibt `buu`. (Seit Version 5.1.26)

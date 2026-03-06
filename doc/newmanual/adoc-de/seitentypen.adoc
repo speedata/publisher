@@ -169,7 +169,7 @@ In der ((Logdatei)) (`publisher-protocol.xml`) sieht man, welche Seitentypen gew
 
 == Nummerierung von Seiten
 
-Die Seitenzahl der aktuellen Seite kann mit `sd:current-page()` ermittelt werden. Diese Funktion gibt afu der ersten Seite die Zahl 1 zurück, auf der zweiten Seite die Zahl 2 und so fort. Mit dem `startpage`-Attribut bei <<cmd-options,`<Options>`>> kann man die Startseitenzahl setzen:
+Die Seitenzahl der aktuellen Seite kann mit `sd:current-page()` ermittelt werden. Diese Funktion gibt auf der ersten Seite die Zahl 1 zurück, auf der zweiten Seite die Zahl 2 und so fort. Mit dem `startpage`-Attribut bei <<cmd-options,`<Options>`>> kann man die Startseitenzahl setzen:
 
 [source, xml]
 ----------------

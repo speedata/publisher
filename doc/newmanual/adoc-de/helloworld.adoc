@@ -19,7 +19,7 @@ Die Datendatei für das »Hallo Welt« Beispiel mit dem Namen `data.xml`:
 -------------------------------------------------------------------------------
 
 Das reicht für das einfache Beispiel aus.
-Die Layoutdatei ist etwas umfangreicher (speichern unter `layout.xml)`:
+Die Layoutdatei ist etwas umfangreicher (speichern unter `layout.xml`):
 
 [source, xml]
 -------------------------------------------------------------------------------

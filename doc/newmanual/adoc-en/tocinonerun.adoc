@@ -125,7 +125,7 @@ The `chapter` section stores the page number and title of the chapter and prints
 <2> By `pdftarget="yes"` a target for internal hyperlinks is created.
 
 Here follows the core and entry point for data processing.
-After a page is reserved for the table of contents, the chapters are output and finally the table of contents is generated. The speedata Publisher inserts the directory in the correct position.
+After a page is reserved for the table of contents, the chapters are output and finally the table of contents is generated. The speedata Publisher inserts the table of contents in the correct position.
 
 [source, xml]
 -------------------------------------------------------------------------------

@@ -53,7 +53,7 @@ you can display a list of the allowed commands and parameters.
 `doc`::
   Opens the reference manual in the browser (local HTML files).
 `list-fonts`::
-  Lists all font files found in the Publisher directories. Together with `--xml` this command allows to copy&paste the output into the layout rules. See <<ch-fonts>>.
+  Lists all font files found in the Publisher directories. Together with `--xml` this command allows you to copy and paste the output into the layout rules. See <<ch-fonts>>.
 // <<ch-einbindungschriftarten>>.
 `new [DIRECTORY]`::
    Create simple layout and data file to start. Provide optional directory.
@@ -155,7 +155,7 @@ you can display a list of the allowed commands and parameters.
 `--wd=DIR`::
    Change working directory
 `--xpath`::
-   Set the XML and XPath parser to one of `luxor` or `lxpath`. Default is 'lxpath'. The old `luxor` is less robust and has fewer capabilities.
+   Set the XML and XPath parser. Valid values are `luxor` and `lxpath`. Default is 'lxpath'. The old `luxor` is less robust and has fewer capabilities.
 `--xml`::
    Output as (pseudo-)XML (for list-fonts)
 

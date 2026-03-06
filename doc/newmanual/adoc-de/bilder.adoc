@@ -19,13 +19,13 @@ Bilder in das PDF einfügen ist sehr einfach, es reicht ein kurzer Befehl:
 Das Bild  `{samplea}` ist (wie `{sampleb}`) Bestandteil des Publishers und für Testzwecke gut nutzbar.
 Als Bildformate sind PDF, PNG und JPEG möglich.
 Andere Formate müssen vor der Verarbeitung in eines dieser Formate konvertiert werden.
-Wenn das Programm inkscape installiert ist, wird das genutzt um Dateien im SVG-Format automatisch nach PDF zu konviertieren (siehe dazu den Abschnitt über <<ch-konfiguration,Konfiguration>> - dort können auch die Kommandozeilenparameter für die Konvertierung gesetzt werden).
+Wenn das Programm inkscape installiert ist, wird das genutzt um Dateien im SVG-Format automatisch nach PDF zu konvertieren (siehe dazu den Abschnitt über <<ch-konfiguration,Konfiguration>> - dort können auch die Kommandozeilenparameter für die Konvertierung gesetzt werden).
 Das Format, das in der Praxis am wenigsten Probleme
-bereitet ist PDF. Hier können auch Farbprofile eingebettet werden.
+bereitet, ist PDF. Hier können auch Farbprofile eingebettet werden.
 
 Die Bilder werden bei der Verarbeitung im Publisher nicht verändert, das heißt, sie behalten unter anderem ihre ursprüngliche (Datei-)Größe bei.
 Bei sehr großen Bildern ist die Verarbeitungsgeschwindigkeit geringer und die Größe der resultierenden PDF-Datei nimmt natürlich zu.
-Daher kann es sich lohnen, für die Verarbeitung spezielle Versionen mit kleineren Dateigrößen bereit zu halten.
+Daher kann es sich lohnen, für die Verarbeitung spezielle Versionen mit kleineren Dateigrößen bereitzuhalten.
 
 [[ch-breite-hoehe-bilder]]
 == Breite und Höhe der Bilder
@@ -83,7 +83,7 @@ genommen, die gegebenenfalls ohne Aussagekraft ist (s.o.).
 [[ch-bilder-maxheight]]
 == Maximale Höhe und Breite, minimale Höhe und Breite
 
-Um die natürliche Größe zu benutzen, aber Einschränkungen anzugeben, gibt es die vier Kombination aus min/max und width/height. Das Bild in dem folgenden Beispiel wird nicht breiter als 10 Rasterzellen und nicht höher als 3. Das Seitenverhältnis bleibt erhalten:
+Um die natürliche Größe zu benutzen, aber Einschränkungen anzugeben, gibt es die vier Kombinationen aus min/max und width/height. Das Bild in dem folgenden Beispiel wird nicht breiter als 10 Rasterzellen und nicht höher als 3. Das Seitenverhältnis bleibt erhalten:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ image::18-maxheight.png[width=50%,scaledwidth=100%]
 
 == Drehen von Bildern
 
-Mit dem Attribut `rotate` kann man Bilder in 90 Grad Schritten drehen (positive Werte: im Uhrzeigersinn).
+Mit dem Attribut `rotate` kann man Bilder in 90-Grad-Schritten drehen (positive Werte: im Uhrzeigersinn).
 Das nachfolgende Beispiel dreht ein Bild um 90 Grad gegen den Uhrzeigersinn, wenn es sich um ein Hochformat-Bild handelt.
 Mit dem XPath-Befehl `sd:aspectratio(<Dateiname>)` kann man das Seitenverhältnis eines Bildes ermitteln.
 Wenn es größer als 1 ist, dann handelt es sich um ein Bild im Querformat.
@@ -157,7 +157,7 @@ Im Dateisystem können sie entweder mit einem absoluten Pfad angesprochen werden
 -------------------------------------------------------------------------------
 
 oder als Datei in einem der Unterverzeichnisse des Suchpfads, wie in den Beispielen oben.
-Beispielweise können die Bilder in dem Unterverzeichnis `images` liegen.
+Beispielsweise können die Bilder in dem Unterverzeichnis `images` liegen.
 Siehe dazu den Abschnitt über <<ch-organisationdaten,Dateiorganisation>>.
 
 
@@ -180,10 +180,10 @@ Die Syntax ist analog zum Beispiel mit dem absoluten Pfad:
 == Caching
 
 Die Bilder, die über http und https geladen werden, werden auf der Festplatte zwischengespeichert.
-Bei jedem Request wird überprüft, ob das Bild noch aktuell ist und ggf. nicht herunter geladen.
+Bei jedem Request wird überprüft, ob das Bild noch aktuell ist und ggf. nicht erneut heruntergeladen.
 Ist das Bild auf dem Server gelöscht, wird es auch im lokalen System gelöscht.
 
-Mit `sp --cache=fast` kann man auf die schnelle Caching-Methode zurückgreifen, die das Bild nur einmal vom Server herunter lädt und dann nicht wieder auf Aktualität prüft.
+Mit `sp --cache=fast` kann man auf die schnelle Caching-Methode zurückgreifen, die das Bild nur einmal vom Server herunterlädt und dann nicht wieder auf Aktualität prüft.
 
 Mit dem Befehl `sp clearcache` wird der Zwischenspeicher gelöscht.
 
@@ -241,7 +241,7 @@ bedeutet, dass die »artbox« in der Größe 210mm × 297mm dargestellt wird.
 
 
 Das Attribut `page` wird auch im Abschnitt <<ch-mehrseitigepdf>> beschrieben.
-Er dient dazu, die Seite auszuwählen, wenn eine PDF-Datei eingebunden wird.
+Es dient dazu, die Seite auszuwählen, wenn eine PDF-Datei eingebunden wird.
 Mit `sd:number-of-pages(‹Dateiname›)` kann ermittelt werden, wie viele Seiten eine PDF-Datei enthält.
 
 [[ch-imagearguments]]
@@ -342,7 +342,7 @@ Notwendig ist natürlich die Konfiguration, wie der externe Konverter aufgerufen
 imagehandler="mermaid:(/usr/bin/mmdc -i %%input%% -o %%output%%.pdf)"
 -------------------------------------------------------------------------------
 
-Das Ergebnis ist Ein Sequenzdiagramm, von `mermaid` erzeugt und nach PDF konvertiert.
+Das Ergebnis ist ein Sequenzdiagramm, von `mermaid` erzeugt und nach PDF konvertiert.
 
 image::mermaid.png[]
 
@@ -410,10 +410,10 @@ Beispiel mit ImageMagick:
 resizehandler="jpegimage:(magick %%input%% -resize %%width%%x%%height%%! %%output%%)"
 -------------------------------------------------------------------------------
 
-In diesem Beispiel wird für JPEG-Dateien der Befehl `magick` (ImageMagick) aufgerufen, um das Bild intern auf die vom Publisher berechnete Größe herunterskalieren. Das Ausrufezeichen (`!`) erzwingt die exakte Zielgröße.
+In diesem Beispiel wird für JPEG-Dateien der Befehl `magick` (ImageMagick) aufgerufen, um das Bild intern auf die vom Publisher berechnete Größe herunterzuskalieren. Das Ausrufezeichen (`!`) erzwingt die exakte Zielgröße.
 Diese Mechanik stellt sicher, dass die Ausgabegröße und die gewünschte Auflösung eingehalten werden, ohne dass der Benutzer manuell eingreifen muss.
 
-Wichtig ist, das auch ein extensionhandler für die Dateiendung (im Beispiel `jpg` oder `jpeg`) gesetzt ist, damit der resizehandler auch genutzt wird.
+Wichtig ist, dass auch ein extensionhandler für die Dateiendung (im Beispiel `jpg` oder `jpeg`) gesetzt ist, damit der resizehandler auch genutzt wird.
 
 
 == Weitere Parameter

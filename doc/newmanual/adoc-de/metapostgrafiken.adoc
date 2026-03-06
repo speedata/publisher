@@ -103,7 +103,7 @@ Die Zuweisung wird zu Beginn des MetaPost-Kontexts ausgewertet. Damit steht `cur
 
 * CSS Level 3 Farben sind im RGB-Farbraum vordefiniert.
 * Die Breite und Höhe der umgebenden Fläche können mit `box.width` und `box.height` abgefragt werden.
-* Der Pfad `box` ist für die Außmaße der Fläche definiert (siehe das Beispiel oben).
+* Der Pfad `box` ist für die Ausmaße der Fläche definiert (siehe das Beispiel oben).
 * Hans Hagens Metafun-Makros sind teilweise eingebunden.
 * Bei Seitentypen stehen zusätzlich folgende Variablen zur Verfügung:
 +

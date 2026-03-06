@@ -51,7 +51,7 @@ erkannt. Folgende Optionen werden unterstützt:
 `data`::
   Name der XML-Daten. Wenn nicht vorhanden, wird die Datei `data.xml` geladen.
 `dummy`::
-  Wenn `true`, dann wird die Datendatei nicht eingelesen. Anstatt dessen wird wird der folgende Inhalt angenommen: `<data />`. Das dient zum einfachen Testen von Layoutregelwerken. Es muss also ein `<Record element="data">` im Layout vorhanden sein.
+  Wenn `true`, dann wird die Datendatei nicht eingelesen. Anstatt dessen wird der folgende Inhalt angenommen: `<data />`. Das dient zum einfachen Testen von Layoutregelwerken. Es muss also ein `<Record element="data">` im Layout vorhanden sein.
 `extra-dir`::
   Ein Verzeichnis im Dateisystem, das Dateien für den Publisherlauf enthält. Dazu gehören die Schriftdateien, die XML-Dateien (Daten und Layoutregelwerk) sowie die einzubindenden Bilddateien. Sollen mehrere Verzeichnisse hinzugefügt werden, müssen diese mit `:` oder `;` getrennt werden, je nach Betriebssystem (Windows: `;`, alle anderen: `:`). Das aktuelle Verzeichnis wird automatisch eingebunden. Beispiel unter Windows: `extra-dir=c:\myfonts`.
 `extensionhandler`::
@@ -85,11 +85,11 @@ erkannt. Folgende Optionen werden unterstützt:
 `layout`::
   Name des Layoutregelwerks. `layout.xml` ist der voreingestellte Name.
 `loglevel`::
-   Setze die Logausgabe auf ein level of `debug`, `info`, `message`, `warn` und `error`.
+   Setze die Logausgabe auf einen Level. Erlaubt ist `debug`, `info`, `message`, `warn` und `error`.
 `luatex`::
   Pfad zum LuaTeX-Programm. Für Entwicklungszwecke.
 `mode`::
-  Setzt einen Modus für die Verabeitung. Kann im Layout mit <<ch-lxpath,`sd:mode()`>> abgefragt werden. Mehrere Modi werden durch Komma getrennt angegeben. Siehe <<ch-fortgeschrittenethemen-steuerunglayout>>.
+  Setzt einen Modus für die Verarbeitung. Kann im Layout mit <<ch-lxpath,`sd:mode()`>> abgefragt werden. Mehrere Modi werden durch Komma getrennt angegeben. Siehe <<ch-fortgeschrittenethemen-steuerunglayout>>.
 `opencommand`::
   Kommando für das automatische Öffnen der Dokumentation bzw. PDF-Datei. Für MacOS X sollte das `open` sein, für Linux `xdg-open` oder `exo-open` (xfce).
 `pathrewrite`::
@@ -130,7 +130,7 @@ erkannt. Folgende Optionen werden unterstützt:
 `logfile`::
   Dateiname für das Protokoll. `STDOUT` für Standardausgabe und `STDERR` für Standardfehlerausgabe.
 `loglevel`::
-  Setzt die Logausgabe auf ein level of `debug`, `info`, `message`, `warn` und `error`.
+  Setzt die Logausgabe auf einen Level. Erlaubt ist `debug`, `info`, `message`, `warn` und `error`.
 `port`::
   Port, zu dem eine Verbindung aufgebaut werden kann.
 `runs`::

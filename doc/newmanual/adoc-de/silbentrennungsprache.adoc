@@ -100,7 +100,7 @@ Für einzelne Absätze kann man die automatische Silbentrennung ausschalten, in 
 <DefineTextformat name="nohyphen" hyphenate="no"/>
 -------------------------------------------------------------------------------
 
-In so markierten Absätze werden keine Wörter getrennt.
+In so markierten Absätzen werden keine Wörter getrennt.
 Die Anwendung von Textformaten ist in einem <<ch-textformate,eigenen Abschnitt>> beschrieben.
 
 Das Zeichen für die Silbentrennung kann man ebenfalls über ein Textformat verändern:
@@ -245,7 +245,7 @@ image::rtl-text.png[width=100%]
 
 == Gemischter Text (rechts-nach-links und links-nach-rechts)
 
-Wird Text ausgegeben, der sowohl von rechts nach links (rtl, right to left) als auch von links nach recht (ltr) läuft, muss der Absatz in einzelne Segmente unterteilt werden und zwischen den Segmenten die Schreibrichtung geändert werden. Dieser sogenannte »Bidi-Algorithmus« ist im speedata Publisher eingebaut
+Wird Text ausgegeben, der sowohl von rechts nach links (rtl, right to left) als auch von links nach rechts (ltr) läuft, muss der Absatz in einzelne Segmente unterteilt werden und zwischen den Segmenten die Schreibrichtung geändert werden. Dieser sogenannte »Bidi-Algorithmus« ist im speedata Publisher eingebaut
 und wird mit `bidi="yes"` aktiviert:
 
 [source, xml]

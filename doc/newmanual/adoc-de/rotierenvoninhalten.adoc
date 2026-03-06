@@ -1,8 +1,8 @@
-[[ch-rotierenvoninahlten]]
+[[ch-rotierenvoninhalten]]
 = Rotieren von Inhalten
 
 Objekte, die mit `PlaceObject` ausgegeben werden, können gedreht werden.
-Dazu gibt es das Attribut `rotate`, das einen Winkel (in Grad) erwartet, wobei positive Werte eine Drehung mit den Uhrzeigersinn bewirken.
+Dazu gibt es das Attribut `rotate`, das einen Winkel (in Grad) erwartet, wobei positive Werte eine Drehung im Uhrzeigersinn bewirken.
 
 
 [source, xml,indent=0]

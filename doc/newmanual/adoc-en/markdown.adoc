@@ -74,7 +74,7 @@ You can also select the highlight style with the prefix `hlstyle_`, for example
 <Options markdown-extensions="highlight,hlstyle_tango" />
 -------------------------------------------------------------------------------
 
-The list of available styles are at https://github.com/alecthomas/chroma/tree/master/styles.
+The list of available styles is at https://github.com/alecthomas/chroma/tree/master/styles.
 
 You can also set rendering options with the prefix `hloption_`. Currently only `hloption_withclasses` is supported, which has the effect that classes are used instead of `<span>...</span>` for syntax highlighting.
 

@@ -117,7 +117,7 @@ The request to
 http://127.0.0.1:5266/v0/publish?vars=myvar%3D12345&mode=a4paper%2Cprint
 ----
 
-sets `myvar` to `1234` and enables the modes `a4paper` and `print`.
+sets `myvar` to `12345` and enables the modes `a4paper` and `print`.
 
 [[api-method-v0-publish-get]]
 == `/v0/publish/<id>`

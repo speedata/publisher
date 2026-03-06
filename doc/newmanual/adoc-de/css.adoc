@@ -18,7 +18,7 @@ Derzeit können die Befehle `<Box>`, `<Circle>`, `<Frame>`, `<Paragraph>`, `<Rul
 TIP: Die CSS-Implementierung im speedata Publisher hat eher den Charakter eines »Proof-of-Concepts« bzw. eines Prototyps. Die Befehle und die Eigenschaften, die sich über CSS steuern lassen, sind sehr begrenzt.
 
 Ein CSS-Stylesheet kann als externe Datei vorliegen und eingebunden werden.
-Alternativ kann man auch CSS-Anweisung direkt in das Layoutregelwerk schreiben.
+Alternativ kann man auch CSS-Anweisungen direkt in das Layoutregelwerk schreiben.
 `<Stylesheet>` lautet der Befehl für beide Varianten:
 
 
@@ -119,9 +119,9 @@ Der dritte Fall bezieht sich auf alle Elemente `Td` im Layoutregelwerk.
 Hier gelten die üblichen Spezifitätsregeln für CSS, `!important` wird jedoch nicht unterstützt.
 
 
-== CSS und und Elemente in Daten
+== CSS und Elemente in Daten
 
-Textauszeichnungen in den Daten funktioniert wie folgt:
+Textauszeichnungen in den Daten funktionieren wie folgt:
 
 
 [source, xml]

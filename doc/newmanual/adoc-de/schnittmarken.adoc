@@ -10,7 +10,7 @@ Format::
   Beschnittmarken und Beschnittzugabe können separat gesteuert werden (siehe unten bzw. den Befehl <<cmd-options,`<Options>`>>)
 
 Farben::
-  Da Druckfarben fast immer auf weißem Papier aufgebracht werden, müssen diese anders angegeben werden als auf dem Bildschirm, die auf dunklem Untergrund LEDs zum leuchten bringen.
+  Da Druckfarben fast immer auf weißem Papier aufgebracht werden, müssen diese anders angegeben werden als auf dem Bildschirm, die auf dunklem Untergrund LEDs zum Leuchten bringen.
   Es sollte darauf geachtet werden, alle Farben entweder im CMYK-Farbraum zu definieren oder im Graustufenmodus.
   Man kann zwar rechnerisch RGB-Werte in CMYK umwandeln, doch in der Praxis funktioniert das nur mäßig gut.
 

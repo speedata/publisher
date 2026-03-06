@@ -1,7 +1,7 @@
 [[ch-umfliessenvonbildern,Umfließen von Bildern]]
 = Umfließen von Bildern
 
-Text, der über den Befehl `<Output allocate="auto">` ausgegeben wird, umfließt zuvor platzierte Objekte. Es bietet sich daher an, Objekte, die umflossen werden sollen, zuerst auch auf zukünftige Seiten zu platzieren. Die Erreicht man mit dem Attribut `page` im Befehl `<PlaceObject>`.
+Text, der über den Befehl `<Output allocate="auto">` ausgegeben wird, umfließt zuvor platzierte Objekte. Es bietet sich daher an, Objekte, die umflossen werden sollen, zuerst auch auf zukünftige Seiten zu platzieren. Das erreicht man mit dem Attribut `page` im Befehl `<PlaceObject>`.
 In dem Attribut muss man entweder eine konkrete Seitenzahl oder `next` für die nächste Seite angeben.
 Damit der Cursor bei der Ausgabe nicht verändert wird, empfiehlt es sich, das Attribut `keepposition` auf `yes` zu setzen.
 
@@ -52,7 +52,7 @@ Das vollständige Beispiel ist unter https://github.com/speedata/examples/tree/m
 
 
 [[abb-umfliessenvonbildern]]
-.Automatisches umfließen von Objekten, die vorher ausgegeben wurden.
+.Automatisches Umfließen von Objekten, die vorher ausgegeben wurden.
 image::umfliessenvonbildern.png[width=80%,scaledwidth=100%]
 
 == Komplexe Formen
@@ -122,7 +122,7 @@ image::taschenuhr.png[width=50%,scaledwidth=100%]
 
 TIP: Diese Funktionalität ist noch experimentell. Die nächsten Versionen des Publishers haben wahrscheinlich Verbesserungen bei diesem Feature. Der Umriss eines Bildes kann mit dem Programm `imageshaper` unter <https://github.com/speedata/imageshaper> erzeugt werden.
 
-Ein vollständige Beispiel ist unter https://github.com/speedata/examples/tree/master/imageshape zu finden.
+Ein vollständiges Beispiel ist unter https://github.com/speedata/examples/tree/master/imageshape zu finden.
 
 
 // Ende

@@ -88,7 +88,7 @@ Diese sind im Anhang in der  <<cmd-table,Referenz für den Befehl `<Table>`>> be
 === Tabellenzeilen
 
 Anweisungen in Tabellenzeilen (`<Tr>`) bestimmen Eigenschaften für alle Zellen in dieser Zeile, sofern sie nicht in der Zelle selber überschreiben werden. Z. B.  legen `align` und `valign` die horizontale und vertikale Ausrichtung der Zellen fest.
-Dh. in der Zeile
+D. h. in der Zeile
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -150,7 +150,7 @@ image::tab-inline-block.png[width=50%,scaledwidth=100%]
 // Diese Objekte sind inline-Elemente: Barcodes, Bilder, Overlays, alle anderen Objekte sind Block-Objekte und werden untereinander ausgerichtet.
 
 Steht die Zeilenhöhe beispielsweise durch eine andere Zelle oder durch die Angabe von `minheight` im Zeilenanfang fest, so kann man mit `VSpace` einen vertikalen Leerraum einfügen.
-Damit wird der Teil oberhalb des Leerraums soweit wie möglich nach oben geschoben und der unter Teil nach unten, eine Angabe von `valign` in dieser Zelle hat dann keine Auswirkung mehr.
+Damit wird der Teil oberhalb des Leerraums soweit wie möglich nach oben geschoben und der untere Teil nach unten, eine Angabe von `valign` in dieser Zelle hat dann keine Auswirkung mehr.
 
 
 [discrete]
@@ -434,7 +434,7 @@ Man kann die Kopfzeile für die erste Seite separat definieren, in dem man das A
 <2> Wenn `page="first"` wie hier definiert wird, gilt die obige Definition (1) für alle Seiten, jedoch nicht für die erste Seite, denn hier gilt (2).
 
 Mit dieser Variante kann man nicht nur den (sich wiederholenden) Tabellenkopf bestimmen, sondern auch den Tabellenfuß.
-Das geht analog zu `<Tablehead>`, nur dass die Seitenauswahl anstelle von `first` `last` erlaubt.
+Das geht analog zu `<Tablehead>`, nur dass bei der Seitenauswahl anstelle von `first` der Wert `last` erlaubt ist.
 
 [source, xml,indent=0]
 -------------------------------------------------------------------------------
@@ -482,7 +482,7 @@ Sie können auch Linien und mehrere Zeilen enthalten. Werden bestimmte Kopf- ode
 
 
 Im vorherigen Abschnitt wird der Tabellenkopf über `<Tablehead>` (und dem Gegenstück `<Tablefoot>`) erzeugt.
-Im Gegensatz dazu wird hier gezeigt, wie ein dynamischer Tabllenkopf erzeugt wird.
+Im Gegensatz dazu wird hier gezeigt, wie ein dynamischer Tabellenkopf erzeugt wird.
 Beide Varianten können kombiniert werden.
 
 
@@ -558,7 +558,7 @@ endif::[]
 // ~
 
 [[abb-03-dyntabellenkopf]]
-.Die Abschnitte werden mit `sethead="yes" markiert und werden im Tabellenkopf wiederholt`.
+.Die Abschnitte werden mit `sethead="yes"` markiert und werden im Tabellenkopf wiederholt.
 image::03-dyntabellenkopf.png[width=80%,scaledwidth=100%]
 
 
@@ -889,7 +889,7 @@ Ist eine Tabelle größer als der zur Verfügung stehende Platz auf der Seite, s
 
 == Tabellen und Schriftgröße
 
-Um Tabellen mit keiner Schriftgröße zu setzen, muss die Schriftfamilie in der Tabellendefinition auf eine kleine Schriftfamilie gesetzt werden:
+Um Tabellen mit kleiner Schriftgröße zu setzen, muss die Schriftfamilie in der Tabellendefinition auf eine kleine Schriftfamilie gesetzt werden:
 
 [source, xml]
 ----------------

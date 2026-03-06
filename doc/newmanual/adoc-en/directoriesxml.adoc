@@ -1,10 +1,10 @@
 [[ch-directoriesxml]]
-= Create directories (XML structure)
+= Creating lists (XML structure)
 
-In the previous chapter, directories were created about the markers.
+In the previous chapter, lists were created using markers.
 In this chapter a mechanism is used which means a bit more manual work, but is more flexible.
 
-The speedata Publisher can create any directory type.
+The speedata Publisher can create any type of list or index.
 Whether table of contents, article list or keyword index - all lists work on the same principle:
 the necessary data (e.g. page numbers, article numbers) are explicitly stored in a separate data structure, written to disk.
 The next time the Publisher is run, this data is read in and is available.

@@ -3,7 +3,7 @@
 = Cookbook
 
 
-In this section concrete applications are shown, with designed data, but with requirements occurring in practice. Three chapters (Table of Contents, Index, and Page X of Y) are implemented using the same mechanism with the XML element structure (chapter Creating XML Structures).
+In this section concrete applications are shown, with sample data, but with requirements that occur in practice. Three chapters (Table of Contents, Index, and Page X of Y) are implemented using the same mechanism with the XML element structure (chapter Creating XML Structures).
 
 
 include::thumbindex.adoc[leveloffset=+1]

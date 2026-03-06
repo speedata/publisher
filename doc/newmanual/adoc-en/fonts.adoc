@@ -23,12 +23,12 @@ This assigns the file name MinionPro-Regular.otf the internal name MinionRegular
 </DefineFontfamily>
 -------
 
-The last three cuts (bold, italic and bold italic) do not have to be specified if they are not used in the layout. fontsize is the font height, leading is the distance between two baselines.
+The last three styles (bold, italic, and bold italic) do not have to be specified if they are not used in the layout. fontsize is the font height, leading is the distance between two baselines.
 
 .Font size and line spacing
 image::14-fontsize-leading.png[width=100%]
 
-The font is used in different ways: in the commands `<Textblock>`, `<Text>`, `<Paragraph>`, `<Table>`, `<NoBreak>` and `<Barcode>`, a font can be specified with the attribute fontfamily, e.g. `<Paragraph fontfamily="text font">`. Temporarily you can switch to another family with the command `<Fontface fontfamily="...">`:
+The font is used in different ways: in the commands `<Textblock>`, `<Text>`, `<Paragraph>`, `<Table>`, `<NoBreak>` and `<Barcode>`, a font can be specified with the attribute fontfamily, e.g. `<Paragraph fontfamily="text font">`. You can temporarily switch to another family with the command `<Fontface fontfamily="...">`:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ The font is used in different ways: in the commands `<Textblock>`, `<Text>`, `<P
 
 == Text markup in the layout rules
 
-There are several ways to switch to the cuts bold, italic and bold-italic. The most direct one is to switch with the commands `<B>` and `<I>`, these can also be nested within each other:
+There are several ways to switch to bold, italic, and bold-italic styles. The most direct one is to switch with the commands `<B>` and `<I>`, these can also be nested within each other:
 
 [source,xml]
 -------
@@ -138,7 +138,7 @@ The OpenType format knows so-called OpenType features, such as old style figures
 </Layout>
 -------
 
-.Text figures (above) often make reading the numbers more pleasant. Real small caps (below) differ significantly from mathematically reduced capital letters. The line width and proportions must be adjusted. Depending on the font used, smallcaps also switches to "old style figures".
+.Text figures (above) often make reading the numbers more pleasant. Real small caps (below) differ significantly from mathematically reduced capital letters. The stroke weight and proportions must be adjusted. Depending on the font used, smallcaps also switches to "old style figures".
 image::osfsmcp.png[width=100%]
 
 == Outline font
@@ -170,7 +170,7 @@ It activates the library of the same name, which not only loads the font files, 
 This is not as important for western writing systems as for e.g. Arabic.
 A side effect of the harfbuzz library is the extensive support for OpenType features.
 
-Using the harfbuzz mode is as follows:
+The HarfBuzz mode is used as follows:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -230,7 +230,7 @@ TIP: The default mode is now the Harfbuzz mode. Set the old mode with `mode="fon
 
 == In which directory must the font files be located?
 
-The organization of the files, and thus the fonts, is described in the directory File Organization. With `sp --systemfonts` when calling the publisher, you can access the system-wide font files.
+The organization of the files, and thus the fonts, is described in the section File Organization. With `sp --systemfonts` when calling the publisher, you can access the system-wide font files.
 
 == Tips and tricks
 
@@ -254,7 +254,7 @@ $ sp list-fonts --xml
 -------
 
 
-TIP: If no font is specified for a paragraph or text block (etc.), the system uses the text font family, which is also predefined in the Publisher and can be overwritten. See the Preferences in the Publisher appendix.
+TIP: If no font is specified for a paragraph or text block (etc.), the system uses the text font family, which is also predefined in the Publisher and can be overridden. See the Preferences in the Publisher appendix.
 
 == Missing characters and replacement fonts
 
@@ -283,7 +283,7 @@ Alternatively, you can also specify a replacement font at `<LoadFontfile>`, whic
 
 First the font `texgyreheros-regular.otf` is searched, then `fontawesome-webfont.ttf` and finally `line-awesome.ttf`.
 
-TIP: Using the HarfBuzz-Modus together with the Fallback command is still experimental and must only contain one Fallback font.
+TIP: Using the HarfBuzz mode together with the Fallback command is still experimental and must only contain one Fallback font.
 
 == Aliases
 
@@ -326,7 +326,7 @@ now allow to define font families in general as follows:
 </DefineFontfamily>
 -------
 
-i.e. independent of the font actually used. With the options described in the section <<ch-splitlayout>>, you can now swap the font definition into a separate file and, if necessary, quickly choose between different fonts by including the desired files.
+i.e. independent of the font actually used. With the options described in the section <<ch-splitlayout>>, you can now move the font definition into a separate file and, if necessary, quickly choose between different fonts by including the desired files.
 
 
 // EOF

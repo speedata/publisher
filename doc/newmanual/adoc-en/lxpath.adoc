@@ -177,7 +177,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
   Interprets the expression as a calculation and return the value as a scalar in the unit. Interprets variables. For example, say that `$twocm` is set to the string `2cm`, `sd:dimexpr('cm',' (40mm + $twocm) / 2 ')` returns the number 3.0.
 
 `sd:dummytext([<count>])`::
-  Return a “Lorem ispum... ” dummy text. The count defaults to 1.
+  Return a “Lorem ipsum... “ dummy text. The count defaults to 1.
 
 `sd:even(<number>)`::
   True if number is even. Example: `sd:even(sd:current-page())`.
@@ -216,7 +216,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
   Use the current value of `sd:alternating(<type>)` without changing the value.
 
 `sd:lastmark(pagenumber)`::
-   The first marker of the given page number. Useful for headings in dictionaries where the first and the last entry of a page is given.
+   The last marker of the given page number. Useful for headings in dictionaries where the first and the last entry of a page is given.
 
 `sd:length(<what>[,<unit>])`::
   Get the length of _what_ in number of units (but without the unit). For example `sd:length('_bleed','mm')` returns `3` if the bleed value is set to 3mm. This function initializes a page. The unit defaults to 'mm'. *what* can be `_bleed`, `_pagewidth` or `_pageheight` (Since version 4.19.10.)
@@ -303,7 +303,7 @@ The standard functions should behave like documented by the XPath 2.0 standard.
     Convert the sequence of code points to a string.
 
 `ceiling()`::
-  Round to the higher integer. `ceiling(-1.34)` returns 1, `ceiling(1.34)` returns 2.
+  Round to the higher integer. `ceiling(-1.34)` returns -1, `ceiling(1.34)` returns 2.
 
 `concat( <value>,<value>, … )`::
    Create a new text value by concatenating the arguments.

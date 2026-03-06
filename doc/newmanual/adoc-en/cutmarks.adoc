@@ -51,7 +51,7 @@ The distance results from the specification at the attribute 'bleed'.
 
 The created PDF file always contains the following boxes:
 outside is the *MediaBox*, the bleed is marked by the *BleedBox* and the actual page is marked by the *TrimBox*.
-If no bleed is specified, the *BleedBox* and the *TrimBox* fall on top of each other.
+If no bleed is specified, the *BleedBox* and the *TrimBox* coincide.
 If no trim marks are created, the *MediaBox* coincides with the *TrimBox*, so that all three boxes have the same dimensions without specifying trim marks and bleed.
 
 [discrete]

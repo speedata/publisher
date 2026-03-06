@@ -3,7 +3,7 @@
 [[app-massangaben]]
 = Längenangaben und Maßeinheiten
 
-Längenangaben im Layoutregelwerk können in den Folgenden Einheiten angegeben werden: `pp`, `pc`, `in`, `pt`, `cm`, `mm`, `dd`, `cc`, `sp`.
+Längenangaben im Layoutregelwerk können in den folgenden Einheiten angegeben werden: `pp`, `pc`, `in`, `pt`, `cm`, `mm`, `dd`, `cc`, `sp`.
 Ist die Zahl ohne Einheit, so wird in der Regel die Anzahl an Rasterzellen genommen.
 
 
@@ -33,7 +33,7 @@ Die Punkt-Größe orientiert sich an den PDF-Einheiten (1 DTP-Punkt ist 1/72 Zol
 | Einheit | Beschreibung
 | 1 Pica-Punkt |  0,35147 mm
 | 1 Pica-Punkt |  1/72,27 Zoll
-| 1 Pica-Punkt |  0.013837 Zoll
+| 1 Pica-Punkt |  0,013837 Zoll
 | 1 Pica-Punkt |  0,93457 Didot-Punkt
 | 1 Pica |  4,2176 mm
 | 1 Pica |  1/6 inch

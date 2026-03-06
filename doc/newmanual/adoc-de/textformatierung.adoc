@@ -17,7 +17,7 @@ Mit einer ähnlichen Funktionalität gibt es die folgenden Befehle:
    Gibt den eingeschlossenen Text in einer anderen Farbe aus.
 
 `<A>`::
-   Erzeugt ein Hyperlink.
+   Erzeugt einen Hyperlink.
 
 `<HSpace>`::
    Fügt einen dehnbaren Leerraum (mit oder ohne Punkte) ein.

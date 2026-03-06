@@ -281,7 +281,7 @@ endif::[]
 .Objekte suchen sich automatisch den nächsten freien Platz, sofern nichts anderes angegeben wird.
 image::twoimages.png[width=50%,scaledwidth=100%]
 
-TIP: Absolut platzierte Objekte belegen in der Voreinstellung keine Flächen im Raster. In dem Fall ist `allocate="no"` gesetzt. Mit `allocate="yes"` kann das Verhalten den im Rater platzierten Objekten gleich gesetzt werden.
+TIP: Absolut platzierte Objekte belegen in der Voreinstellung keine Flächen im Raster. In dem Fall ist `allocate="no"` gesetzt. Mit `allocate="yes"` kann das Verhalten den im Raster platzierten Objekten gleich gesetzt werden.
 
 == Eigene Raster in Gruppen
 

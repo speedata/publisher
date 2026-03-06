@@ -100,7 +100,7 @@ If the grid does not fit completely into the type area, e.g. with a grid width o
 
 == What is the grid needed for?
 
-If you call `sp` with the `--show-gridallocation` option, you can see immediately what the grid is for. Occupied cells are marked internally, so that no other object can be placed in this area.  At least not without an error message or the hint that no area should be kept free for it (`allocate="no"` in `<PlaceObject>`).
+If you call `sp` with the `--show-gridallocation` option, you can see immediately what the grid is for. Occupied cells are marked internally, so that no other object can be placed in this area.  At least not without an error message or the instruction that no area needs to be reserved for it (`allocate="no"` in `<PlaceObject>`).
 
 [source, xml]
 ----
@@ -143,7 +143,7 @@ If you add the lines
 the following grid assignment results:
 
 [[abb-08-raster3]]
-.Double occupied grid. Areas that share (overlap) several objects are marked red.
+.Double occupied grid. Areas where multiple objects overlap are marked in red.
 image::08-raster3.png[width=50%,scaledwidth=100%]
 
 and a warning:

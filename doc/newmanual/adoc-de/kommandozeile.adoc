@@ -74,7 +74,7 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 `--cache=METHOD`::
    Caching-Strategie für http(s) Bilddateien. Entweder `fast`, dann wird nur geschaut, ob die Bilddatei im Dateisystem vorhanden ist oder `optimal` (Voreinstellung), dann wird bei jedem Zugriff auf das Bild geprüft, ob das Bild aktualisiert werden muss. Bei `none` werden die Bilder immer herunter geladen. Siehe auch <<ch-konfiguration,Konfigurationsdatei>>.
 `-c, --config=NAME`::
-   Liest die angegebene Konfigurationsdatei ein. Voreinstllung ist `publisher.cfg`.
+   Liest die angegebene Konfigurationsdatei ein. Voreinstellung ist `publisher.cfg`.
 `--credits`::
    Zeigt credits an und beendet das Programm.
 `--[no]-cutmarks`::
@@ -96,7 +96,7 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 `--imagecache=PATH`::
    Setzt das Verzeichnis für den Bildzwischenspeicher (image cache). Das Verzeichnis wird bei Bedarf erstellt.
 `--inkscape=PATH`::
-   Set the path to the inkscape program.
+   Setzt den Pfad zum Inkscape-Programm.
 `--layout=NAME`::
    Gibt den Namen des Layoutregelwerks an. Voreinstellung ist `layout.xml`. Es kann auch eine externe Ressource angegeben werden (`http://`).
 `--[no]-local`::
@@ -104,13 +104,13 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 `--logfile=NAME`::
    Logdatei im Server-Modus. Voreinstellung ist 'publisher.protocol'. Benutze STDOUT für Standardausgabe und STDERR für Standardfehlerausgabe.
 `--loglevel=LVL`::
-   Setze den Log-Level, ab dem die Logmeldungen angezeigt werden. Erlaubt ist `debug`, `info` `message`, `warn` und `error`. Die Ausgaben in dem Level und darüber werden in der Protokolldatei ausgegeben.
+   Setze den Log-Level, ab dem die Logmeldungen angezeigt werden. Erlaubt ist `debug`, `info`, `message`, `warn` und `error`. Die Ausgaben in dem Level und darüber werden in der Protokolldatei ausgegeben.
 `--jobname=NAME`::
    Bestimmt den Ausgabenamen. Voreinstellung ist `publisher`.
 `--mainlanguage=NAME`::
    Bestimmt die Hauptsprache des Dokuments für die Silbentrennung. Mögliche Werte sind: `af`, `as`, `bg`, `ca`, `cs`, `cy`, `da`, `de`, `el`, `en`, `en_GB`, `en_US`, `eo`, `es`, `et`, `eu`, `fi`, `fr`,`ga`, `gl`, `gu`, `hi`, `hr`, `hu`, `hy`, `ia`, `id`, `is`, `it`,`ku`, `kn`, `la`, `lo`, `lt`, `ml`, `lv`, `ml`, `mn`, `mr`, `nb`, `nl`, `nn`, `or`, `pa`, `pl`, `pt`, `ro`, `ru`, `sa`, `sk`, `sl`,`sr`, `sv`, `ta`, `te`, `tk`, `tr`, `uk` und `zh`. Siehe http://www.loc.gov/standards/iso639-2/php/code_list.php[Codeliste der Sprachen].
 `--mode=NAME[,NAME...]`::
-   Setzt einen Modus für die Verabeitung. Kann im Layout mit <<ch-lxpath,`sd:mode()`>> abgefragt werden. Mehrere Modi werden durch Komma getrennt angegeben. Siehe <<ch-fortgeschrittenethemen-steuerunglayout>>.
+   Setzt einen Modus für die Verarbeitung. Kann im Layout mit <<ch-lxpath,`sd:mode()`>> abgefragt werden. Mehrere Modi werden durch Komma getrennt angegeben. Siehe <<ch-fortgeschrittenethemen-steuerunglayout>>.
 `--option=OPTION`::
    Setze Optionen, die keine eigenen Kommandozeilenparameter haben.
 `--outputdir=VERZEICHNIS`::
@@ -130,7 +130,7 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 `--show-gridallocation`::
    Markiert die belegten Rasterzellen in Gelb. Doppelt belegte Zellen werden rot gekennzeichnet. Siehe den <<cmd-trace,Befehl `<Trace>`>>.
 `-s`, `--suppressinfo`::
-   Unterdrücke optionale Informationen (Zeitstempel) and benutze eine festgelegte Dokumenten-ID.
+   Unterdrücke optionale Informationen (Zeitstempel) und benutze eine festgelegte Dokumenten-ID.
 `--systemfonts`::
    Lädt zusätzlich Systemschriftarten. Funktioniert nicht unter Windows XP.
 `--tempdir` ::
@@ -148,7 +148,7 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 `--wd=DIR`::
    Wechselt in das angegebene Verzeichnis. Verhält sich genau so, als ob man vorher mit cd in dieses Verzeichnis gewechselt hat.
 `--xpath`::
-   Setze den XML und XPath Parser auf eine Option aus `luxor` und `lxpath`. Die Voreinstellung ist der neue 'lxpath'. Diese Variante ist robuster und hat erweiterte Fähigkeiten.
+   Setze den XML- und XPath-Parser. Mögliche Werte sind `luxor` und `lxpath`. Die Voreinstellung ist der neue `lxpath`. Diese Variante ist robuster und hat erweiterte Fähigkeiten.
 `--xml`::
    Die Ausgabe des Befehls `list-fonts` werden als (Pseudo-)XML dargestellt, um sie in das Layoutregelwerk zu übernehmen.
 

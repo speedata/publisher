@@ -144,7 +144,7 @@ Nun folgt die Entscheidung über virtuelle Seiten.
 <7> Jetzt werden die gespeicherten Seiten ausgegeben.
 
 
-Was jetzt noch fehlt ist ist die Ausgabe des Textes.
+Was jetzt noch fehlt, ist die Ausgabe des Textes.
 Die wird oben in `<ProcessNode select="article"/>` angestoßen.
 Da dies ein Beispiel ist, erzeugen wir einen Absatz in einer Schleife.
 

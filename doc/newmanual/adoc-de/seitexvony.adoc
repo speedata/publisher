@@ -48,7 +48,7 @@ Das dient als Basis für die Ergänzungen.
 </Layout>
 -------------------------------------------------------------------------------
 
-Am Ende der letzte Seite kann die Information mithilfe von `<SaveDataset>` für den nächsten Lauf zwischengespeichert werden:
+Am Ende der letzten Seite kann die Information mithilfe von `<SaveDataset>` für den nächsten Lauf zwischengespeichert werden:
 
 [source, xml]
 -------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ Am Ende der letzte Seite kann die Information mithilfe von `<SaveDataset>` für 
 -------------------------------------------------------------------------------
 
 `<SaveDataset>` erwartet eine XML-Struktur  bei der
-Attribute im Element `<Attribute>` und, Elemente in `<Element>` gespeichert werden, wobei dieser Befehl wiederum `<Attribute>` als Kindelemente haben kann.
+Attribute im Element `<Attribute>` und Elemente in `<Element>` gespeichert werden, wobei dieser Befehl wiederum `<Attribute>` als Kindelemente haben kann.
 Diese Struktur wird als XML auf die Festplatte gespeichert und hat in diesem Beispiel die folgende Form:
 
 [source, xml]
