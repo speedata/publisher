@@ -181,7 +181,7 @@ local function flatten(self,items,options,data)
                     new_options.id = roles_a[options.parentrole] .. "_" .. tostring(options.rolecounter)
                 elseif options.role then
                     new_options.id = roles_a[options.role] .. "_" .. tostring(options.rolecounter)
-                    new_options.parent = options.id or options.parent
+                    new_options.parent = options.parent
                 else
                     new_options.id = self.id
                 end
@@ -1127,6 +1127,16 @@ function Par:format( width_sp, options,data )
     if self.has_hyperlink then publisher.setprop(nodelist,"has_hyperlink",true) end
     if self.has_role then publisher.setprop(nodelist,"has_role",true) end
     if self.has_special_nodes then publisher.setprop(nodelist,"has_special_nodes",true) end
+    -- Transfer PDF/UA structure properties to the vlist
+    if publisher.options.format == "PDF/UA" and self.role then
+        publisher.setprop(nodelist,"role", self.role)
+        publisher.setprop(nodelist,"parentid", self.parent or "doc")
+        publisher.setprop(nodelist,"rolecounter", self.rolecounter)
+        publisher.setprop(nodelist,"id", self.id)
+        publisher.setprop(nodelist,"structpos", self.structpos)
+        publisher.setprop(nodelist,"actualtext", self.actualtext)
+        node.set_attribute(nodelist,publisher.att_role,self.role)
+    end
 
     if self.initial then
         local ht_nodelist = get_lineheight(nodelist)

@@ -206,10 +206,6 @@ The following programs can be used to check accessibility:
 
 == Known limitations
 
-The following limitations are known and will be fixed as soon as possible:
-
-* Output/Text does not support accessibility
-
 The current issues can be viewed https://github.com/speedata/publisher/issues?q=is%3Aissue+is%3Aopen+label%3APDF%2FUA[on GitHub].
 
 // EOF

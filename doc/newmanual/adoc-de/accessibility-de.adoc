@@ -203,10 +203,6 @@ Um die Barrierefreiheit zu überprüfen, bieten sich folgende Programme an:
 
 == Bekannte Einschränkungen
 
-Folgende Einschränkungen sind bekannt und werden sobald wie möglich behoben:
-
-* Output/Text unterstützt keine Barrierefreiheit
-
 Die aktuellen Probleme können https://github.com/speedata/publisher/issues?q=is%3Aissue+is%3Aopen+label%3APDF%2FUA[auf GitHub angesehen werden].
 
 // EOF

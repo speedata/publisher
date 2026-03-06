@@ -1,0 +1,19 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<PDFOptions format="PDF/UA" />
+	<Trace dump-structtree="yes" />
+	<Pageformat height="6cm" width="7cm" />
+	<StructureElement role="Document" id="doc" />
+
+	<Record element="data">
+		<Output>
+			<Text>
+				<Paragraph role="H1">
+					<Value>H1</Value>
+				</Paragraph>
+				<Paragraph role="P">
+					<Value>Text</Value>
+				</Paragraph>
+			</Text>
+		</Output>
+	</Record>
+</Layout>
