@@ -1,5 +1,37 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.5">
+    <entry version="5.5.2" date="2026-03-06">
+        <en>Correct lots of spelling mistakes in the documentation.</en>
+        <de>Viele Rechtschreibkorrekturen in der Dokumentation.</de>
+    </entry>
+    <entry version="5.5.2" date="2026-03-06">
+        <en>Implement accessibility for Output/Text (#614).</en>
+        <de>Barrierefreiheit für Output/Text (#614).</de>
+    </entry>
+    <entry version="5.5.2" date="2026-03-06">
+        <en>PDF/UA structure tree.</en>
+        <de>PDF/UA Strukturbaum.</de>
+    </entry>
+    <entry version="5.5.2" date="2026-03-06">
+        <en>Fix PDF/UA and InsertPages / SavePages (#613).</en>
+        <de>Korrektur PDF/UA und InsertPages / SavePages (#613).</de>
+    </entry>
+    <entry version="5.5.2" date="2026-03-06">
+        <en>Add search path, don't duplicate files.</en>
+        <de>Suchpfad hinzufügen, Dateien nicht duplizieren.</de>
+    </entry>
+    <entry version="5.5.2" date="2026-03-06">
+        <en>Better error message for function calls and old XPath parser.</en>
+        <de>Bessere Fehlermeldungen für Funktionsaufrufe und alten XPath-Parser.</de>
+    </entry>
+    <entry version="5.5.2" date="2026-03-06">
+        <en>Bugfix letter-spacing and hyphenation.</en>
+        <de>Fehlerkorrektur letter-spacing und Silbentrennung.</de>
+    </entry>
+    <entry version="5.5.2" date="2026-03-06">
+        <en>Filter: set classpath for Saxon correctly, including all required JAR files.</en>
+        <de>Filter: Klassenpfad für Saxon korrekt setzen, einschließlich aller benötigten JAR-Dateien.</de>
+    </entry>
     <entry version="5.5.1" date="2026-03-02">
         <en>Bug fixe for image inclusion (opacity), attribute context handling and Creator version.</en>
         <de>Fehlerkorrektur für Bildeinbindung (Transparenz), Attribut Kontext und Creator Version.</de>
