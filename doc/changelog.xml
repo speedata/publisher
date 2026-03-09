@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.5">
+    <entry version="5.5.3" date="2026-03-09">
+        <en>Server mode: add endpoint to retrieve publisher-protocol.xml.</en>
+        <de>Servermodus: Endpunkt zum Abrufen der publisher-protocol.xml hinzugefügt.</de>
+    </entry>
     <entry version="5.5.2" date="2026-03-06">
         <en>Correct lots of spelling mistakes in the documentation.</en>
         <de>Viele Rechtschreibkorrekturen in der Dokumentation.</de>
