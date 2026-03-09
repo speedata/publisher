@@ -418,6 +418,13 @@ func (s *Server) v0StatusfileHandler(w http.ResponseWriter, r *http.Request) {
 	s.sendFile(id, "publisher.status", w, r)
 }
 
+// send the file publisher-protocol.xml
+func (s *Server) v0ProtocolHandler(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	fmt.Fprintf(s.ProtocolFile, "/v0/protocol/%s\n", id)
+	s.sendFile(id, "publisher-protocol.xml", w, r)
+}
+
 func (s *Server) writeInternalError(w http.ResponseWriter) {
 	fmt.Fprintln(w, "Internal error")
 }
@@ -790,6 +797,7 @@ func (s *Server) Run() {
 	v0.HandleFunc("/data/{id}", s.v0DataHandler).Methods("GET")
 	v0.HandleFunc("/layout/{id}", s.v0LayoutHandler).Methods("GET")
 	v0.HandleFunc("/statusfile/{id}", s.v0StatusfileHandler).Methods("GET")
+	v0.HandleFunc("/protocol/{id}", s.v0ProtocolHandler).Methods("GET")
 	http.Handle("/", r)
 	fmt.Fprintf(s.ProtocolFile, "Listen on http://%s:%s\n", s.Address, s.Port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", s.Address, s.Port), nil))

@@ -48,6 +48,7 @@ If there will be incompatible changes in the future, these can be reached in the
 | GET | <<api-method-v0-data,`/v0/data/<id>`>> | Load the `data.xml` from the publishing run.
 | GET | <<api-method-v0-layout,`/v0/layout/<id>`>> | Load the `layout.xml` from the publishing run
 | GET | <<api-method-v0-statusfile,`/v0/statusfile/<id>`>> | Load the status file (`publisher.status`) from the publishing run.
+| GET | <<api-method-v0-protocol,`/v0/protocol/<id>`>> | Load the protocol file (`publisher-protocol.xml`) from the publishing run.
 | GET | <<api-method-v0-status,`/v0/status`>> | Overview of the current publishing processes.
 | GET | <<api-method-v0-statusid,`/v0/status/<id>`>> | Overview of a publishing process.
 | GET | <<api-method-v0-delete,`/v0/delete/<id>`>> | Delete a publishing run.
@@ -228,6 +229,21 @@ Returns the `publisher.status` file created by the run. The format can be specif
 
 (not specified)::
    Writes an XML file (`<Status>...</Status>`)
+
+
+[[api-method-v0-protocol]]
+== `/v0/protocol/<id>`
+
+Returns the `publisher-protocol.xml` file created by the run. The format can be specified using the URL parameter `format`, (example as in `/v0/data/<id>`).
+
+`json` or `JSON`::
+   Returns a JSON file in the format `{"contents":"<XML Text>"}`.
+
+`base64`::
+   Results in an XML file that is base64 encoded (`PGRhdGE+CiAgICA8...hPgo=`)
+
+(not specified)::
+   Writes an XML file
 
 
 [[api-method-v0-status]]

@@ -46,6 +46,7 @@ Falls es zukünftig inkompatible Änderungen gibt, sind diese in der Versionsnum
 | GET | <<api-method-v0-data,`/v0/data/<id>`>> | Lade die `data.xml` aus dem Publishing-Lauf.
 | GET | <<api-method-v0-layout,`/v0/layout/<id>`>> | Lade die `layout.xml` aus dem Publishing-Lauf.
 | GET | <<api-method-v0-statusfile,`/v0/statusfile/<id>`>> | Lade die Statusdatei (`publisher.status`) aus dem Publishing-Lauf.
+| GET | <<api-method-v0-protocol,`/v0/protocol/<id>`>> | Lade die Protokolldatei (`publisher-protocol.xml`) aus dem Publishing-Lauf.
 | GET | <<api-method-v0-status,`/v0/status`>> | Übersicht über die laufenden Publishing-Prozesse.
 | GET | <<api-method-v0-statusid,`/v0/status/<id>`>> | Übersicht über einen Publishing-Prozess.
 | GET | <<api-method-v0-delete,`/v0/delete/<id>`>> | Lösche einen Publishing-Lauf.
@@ -228,6 +229,21 @@ Liefert die Datei `publisher.status`, die durch den Lauf erzeugt wurde. Das Form
 
 (keine Angabe)::
    Schreibt eine XML Datei (`<Status>...</Status>`)
+
+
+[[api-method-v0-protocol]]
+== `/v0/protocol/<id>`
+
+Liefert die Datei `publisher-protocol.xml`, die durch den Lauf erzeugt wurde. Das Format kann über den URL-Parameter `format` angegeben werden, (Beispiel wie unter `/v0/data/<id>`).
+
+`json` oder `JSON`::
+   Liefert eine JSON-Datei im Format `{"contents":"<XML Text>"}`
+
+`base64`::
+   Ergibt eine XML Datei, die base64 kodiert ist (`PGRhdGE+CiAgICA8....hPgo=`)
+
+(keine Angabe)::
+   Schreibt eine XML Datei
 
 
 [[api-method-v0-status]]
