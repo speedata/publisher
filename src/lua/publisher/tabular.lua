@@ -1503,6 +1503,10 @@ function tabular:typeset_table(dataxml)
     local startpage = publisher.current_pagenumber
     local tablepart_absolute = 1
 
+    -- Track which rows-array indices are inside an active rowspan (from above).
+    -- Used in calculate_splits() to prevent page breaks inside rowspans.
+    local row_in_rowspan = {}
+
     current_row = 0
     for _,tr in ipairs(self.tab) do
         local tr_contents = publisher.element_contents(tr)
@@ -1553,6 +1557,16 @@ function tabular:typeset_table(dataxml)
         elseif eltname == "Tr" then
             current_row = current_row + 1
             rows[#rows + 1] = self:typeset_row(tr_contents,current_row,self.skiptables.body,self.rowheights.body)
+            -- Mark if this row is inside a rowspan from a previous row
+            local skip_row = self.skiptables.body[current_row]
+            if skip_row then
+                for _,v in pairs(skip_row) do
+                    if v then
+                        row_in_rowspan[#rows] = true
+                        break
+                    end
+                end
+            end
             -- We allow data to be attached to a table row.
             local thisrow = rows[#rows]
             publisher.setprop(thisrow,"origin","tr")
@@ -1809,6 +1823,11 @@ function tabular:typeset_table(dataxml)
             space_above = node.has_attribute(rows[i],publisher.att_space_amount) or 0
 
             local break_above_allowed = att_break_above ~= 1
+
+            -- Do not allow page breaks inside active rowspans
+            if break_above_allowed and row_in_rowspan[i] then
+                break_above_allowed = false
+            end
 
             if break_above_allowed then
                 last_possible_split_is_after_line = i - 1
