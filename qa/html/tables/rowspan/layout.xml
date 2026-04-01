@@ -1,0 +1,49 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Pageformat height="10cm" width="10cm"></Pageformat>
+	<Stylesheet>
+		body { font-family: serif; }
+		table { border-collapse: collapse; width: 100%; }
+		td, th { border: 1px solid black; padding: 4pt; }
+		th { background-color: #eee; }
+	</Stylesheet>
+
+	<Record element="data">
+		<Output>
+			<HTML>
+				<table>
+					<thead>
+						<tr><th>Category</th><th>Item</th><th>Unit</th><th>Stock</th></tr>
+					</thead>
+					<tbody>
+						<tr><td colspan="4">Fresh Produce</td></tr>
+						<tr><td>Fruit</td><td>Apple</td><td>kg</td><td>120</td></tr>
+						<tr><td>Fruit</td><td>Banana</td><td>kg</td><td>85</td></tr>
+						<tr><td>Fruit</td><td>Cherry</td><td>box</td><td>200</td></tr>
+						<tr><td>Fruit</td><td>Pear</td><td>kg</td><td>60</td></tr>
+						<tr><td>Fruit</td><td>Grape</td><td>kg</td><td>95</td></tr>
+						<tr><td>Fruit</td><td>Plum</td><td>kg</td><td>40</td></tr>
+						<tr>
+							<td rowspan="3">Dairy</td>
+							<td>Milk</td><td>liter</td><td>300</td>
+						</tr>
+						<tr><td>Cheese</td><td>kg</td><td>150</td></tr>
+						<tr><td>Butter</td><td>pack</td><td>90</td></tr>
+						<tr><td colspan="2">Bakery goods</td><td colspan="2">limited supply</td></tr>
+						<tr><td>Bakery</td><td>Bread</td><td>loaf</td><td>75</td></tr>
+						<tr><td>Bakery</td><td>Cake</td><td>piece</td><td>30</td></tr>
+						<tr>
+							<td rowspan="3">Vegetables</td>
+							<td>Carrot</td><td>kg</td><td>180</td>
+						</tr>
+						<tr><td>Potato</td><td>kg</td><td>250</td></tr>
+						<tr><td>Onion</td><td>kg</td><td>160</td></tr>
+						<tr><td colspan="4">Beverages</td></tr>
+						<tr><td>Beverage</td><td>Water</td><td>bottle</td><td>500</td></tr>
+						<tr><td>Beverage</td><td>Juice</td><td>bottle</td><td>110</td></tr>
+					</tbody>
+				</table>
+			</HTML>
+		</Output>
+	</Record>
+</Layout>
