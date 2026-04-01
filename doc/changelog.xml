@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.5">
+    <entry version="5.5.4" date="2026-04-01">
+        <en>HTML tables: honor rowspan and colospan, Prevent rowspan at bottom of page.</en>
+        <de>HTML-Tabellen: beachte rowspan und colspan. Verhindere rowspan am Ende der Seite.</de>
+    </entry>
     <entry version="5.5.3" date="2026-03-09">
         <en>Server mode: add endpoint to retrieve publisher-protocol.xml.</en>
         <de>Servermodus: Endpunkt zum Abrufen der publisher-protocol.xml hinzugefügt.</de>
