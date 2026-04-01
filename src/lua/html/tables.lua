@@ -75,8 +75,10 @@ function M.build_html_table_tbody(tbody, cb, dataxml, stylesstack, border_collap
                         if pb then newcontents.padding_bottom = units.getsize(styles, pb, styles.fontsize_sp) end
                         if pl then newcontents.padding_left   = units.getsize(styles, pl, styles.fontsize_sp) end
                         if pr then newcontents.padding_right  = units.getsize(styles, pr, styles.fontsize_sp) end
-                        -- Background color for cell
+                        -- Background color for cell, with fallback to tr and thead/tbody
                         local bgcolor = att["background-color"]
+                            or (tr.styles and tr.styles["background-color"])
+                            or (tbody.styles and tbody.styles["background-color"])
                         if bgcolor then
                             newcontents.backgroundcolor = bgcolor
                         end
