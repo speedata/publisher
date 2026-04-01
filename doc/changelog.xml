@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.5">
+    <entry version="5.5.5" date="2026-04-01">
+        <en>Fix minimum width in tables with colspan and rowspan.</en>
+        <de>Korrigiere minimale Breite in Tabellen mit colspan und rowspan.</de>
+    </entry>
+    <entry version="5.5.5" date="2026-04-01">
+        <en>Fix CSS inheritance on td/tr.</en>
+        <de>Korrigiere CSS Vererbung bei td/tr.</de>
+    </entry>
     <entry version="5.5.4" date="2026-04-01">
         <en>HTML tables: honor rowspan and colospan, Prevent rowspan at bottom of page.</en>
         <de>HTML-Tabellen: beachte rowspan und colspan. Verhindere rowspan am Ende der Seite.</de>
