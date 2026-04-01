@@ -46,7 +46,7 @@ function M.build_html_table_tbody(tbody, cb, dataxml, stylesstack, border_collap
                         table.insert(newcontents, newtd)
                     end
 
-                    -- Copy cell border and padding styles onto the container (as in your original)
+                    -- Copy cell border and padding styles onto the container
                     local att = td_styles
                     if att then
                         local bbw = att["border-bottom-width"]
@@ -81,6 +81,13 @@ function M.build_html_table_tbody(tbody, cb, dataxml, stylesstack, border_collap
                             newcontents.backgroundcolor = bgcolor
                         end
                     end
+                    -- Copy colspan/rowspan from HTML attributes
+                    local td_attr = td.attributes
+                    if td_attr then
+                        if td_attr.colspan then newcontents.colspan = td_attr.colspan end
+                        if td_attr.rowspan then newcontents.rowspan = td_attr.rowspan end
+                    end
+
                     inherit.pop(stylesstack)
                     tdtab[#tdtab + 1] = { elementname = "Td", contents = newcontents }
                 end
