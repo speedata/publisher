@@ -438,24 +438,29 @@ function tabular:calculate_columnwidth()
     --- Phase I
     --- -------
     --- Calculate max\_wd, min\_wd. We do this in a separate function for each row.
+    --- Use separate row counters for body and each head/foot area to match the
+    --- numbering used in set_skip_table().
+    local current_row_body = 0
+    local rowcounter_areas = {}
     for _,tr in ipairs(self.tab) do
         local tr_contents      = publisher.element_contents(tr)
         local tr_elementname = publisher.elementname(tr)
         if tr_elementname == "Tr" then
-            current_row = current_row + 1
-            self:calculate_columnwidths_for_row(tr_contents,current_row,colspans,colmin,colmax,self.skiptables.body)
+            current_row_body = current_row_body + 1
+            self:calculate_columnwidths_for_row(tr_contents,current_row_body,colspans,colmin,colmax,self.skiptables.body)
         elseif tr_elementname == "Tablerule" then
             -- ignore
         elseif tr_elementname == "Tablehead" or tr_elementname == "Tablefoot" then
             local area
             if tr_elementname == "Tablehead" then area = "tablehead" else area = "tablefoot" end
             area = area .. (tr_contents.page or "")
+            rowcounter_areas[area] = rowcounter_areas[area] or 0
             for _,row in ipairs(tr_contents) do
                 local row_contents    = publisher.element_contents(row)
                 local row_elementname = publisher.elementname(row)
                 if row_elementname == "Tr" then
-                    current_row = current_row + 1
-                    self:calculate_columnwidths_for_row(row_contents,current_row,colspans,colmin,colmax,self.skiptables[area])
+                    rowcounter_areas[area] = rowcounter_areas[area] + 1
+                    self:calculate_columnwidths_for_row(row_contents,rowcounter_areas[area],colspans,colmin,colmax,self.skiptables[area])
                 end
             end
         elseif tr_elementname == "Columns" or tr_elementname == "TableNewPage" then
@@ -597,7 +602,6 @@ function tabular:calculate_columnwidth()
 
     -- Now colmin and colmax are calculated for all columns. colspans are included.
 
-
     --- Phase III: Stretch or shrink table
     --- ----------------------------------
 
@@ -659,7 +663,7 @@ function tabular:calculate_columnwidth()
         for i=1,#colmax do
             if not self.colwidths[i] then
                 if shrink_factor[i] then
-                    self.colwidths[i] = col_r[i] - shrink_factor[i] / sum_shrinkfactor * excess
+                    self.colwidths[i] = math.max(col_r[i] - shrink_factor[i] / sum_shrinkfactor * excess, colmin[i])
                 elseif colmax[i] == 0 then
                     self.colwidths[i] = 0
                 end
