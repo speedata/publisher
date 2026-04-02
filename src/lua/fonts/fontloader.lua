@@ -172,10 +172,15 @@ function define_font_hb( name, size, extra_parameter )
     end
     f.otfeatures = features
     local unicodes = face:collect_unicodes()
-    local glyph_uni = {}
+    local glyph_uni = {}      -- gid -> primary unicode (lowest codepoint)
+    local glyph_all_uni = {}  -- gid -> { [uni1]=true, [uni2]=true, ... }
     for _, uni in next, unicodes do
         local gid = fnt:get_nominal_glyph(uni)
-        glyph_uni[gid] = uni
+        if not glyph_all_uni[gid] then glyph_all_uni[gid] = {} end
+        glyph_all_uni[gid][uni] = true
+        if not glyph_uni[gid] or uni < glyph_uni[gid] then
+            glyph_uni[gid] = uni
+        end
     end
 
     for gid = 0, face:get_glyph_count() - 1 do
@@ -185,10 +190,6 @@ function define_font_hb( name, size, extra_parameter )
         local hadvance = fnt:get_glyph_h_advance(gid)
         if uni == 160 then -- U+00A0 NO-BREAK SPACE
             uni = 32
-        elseif uni == 173 then -- U+00AD SOFT HYPHEN
-            uni = 45
-        elseif uni == 8208 then -- U+2010 HYPHEN
-            uni = 45
         elseif uni == 48 then
             f.zerowidth = hadvance * mag
         end
@@ -218,6 +219,29 @@ function define_font_hb( name, size, extra_parameter )
         if ge then
             thischar.height = ge.y_bearing * mag
             thischar.depth = (ge.height + ge.y_bearing) * -1 * mag
+        end
+
+        -- Create separate entries for all other unicodes sharing this glyph
+        if glyph_all_uni[gid] then
+            for other_uni, _ in pairs(glyph_all_uni[gid]) do
+                if other_uni ~= uni and not f.characters[other_uni] then
+                    f.characters[other_uni] = {
+                        index = gid,
+                        width = hadvance * mag,
+                        hadvance = hadvance,
+                        name  = glyphname,
+                        expansion_factor = 1000,
+                        tounicode = other_uni,
+                    }
+                    if (other_uni == 44 or other_uni == 45 or other_uni == 46) and extra_parameter and tonumber(extra_parameter.marginprotrusion) then
+                        f.characters[other_uni]["right_protruding"] = extra_parameter.marginprotrusion
+                    end
+                    if ge then
+                        f.characters[other_uni].height = ge.y_bearing * mag
+                        f.characters[other_uni].depth = (ge.height + ge.y_bearing) * -1 * mag
+                    end
+                end
+            end
         end
     end
 
