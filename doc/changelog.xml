@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.5">
+    <entry version="5.5.7" date="2026-04-02">
+        <en>Bugfix table shrink algorithm.</en>
+        <de>Fehlerkorrektur Tabellenstauch-Algorithmus.</de>
+    </entry>
     <entry version="5.5.6" date="2026-04-02">
         <en>Bugfix PDF copy/paste hyphen minus.</en>
         <de>Fehlerkorrektur PDF copy/paste hyphen minus.</de>
