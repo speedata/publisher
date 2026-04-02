@@ -624,11 +624,6 @@ function tabular:calculate_columnwidth()
 
     -- if the table is too wide, we need to shrink some columns
     if tablewidth_is > self.tablewidth_target then
-        local col_r = {} -- temporary column width after shrinking
-        local shrink_factor = {}
-        local sum_shrinkfactor = 0
-        local excess = 0
-
         local tablewidth_target = self.tablewidth_target
         for i=1,#colmax do
             local cwi = self.colwidths[i]
@@ -637,36 +632,41 @@ function tabular:calculate_columnwidth()
                 tablewidth_is = tablewidth_is - cwi
             end
         end
-        local r = ( tablewidth_target - colsep ) / ( tablewidth_is - colsep)
-        for i=1,#colmax do
-            if not self.colwidths[i] then
-                -- actually:
-                -- r[i] = colmax[i] / tablewidth_is
-                -- to get to the row width we need to multiply with tablewidth_target
-                col_r[i] = colmax[i] * r
 
-                -- if the calculated width is less than the minimal width, the cell needs to be wider
-                -- and the total width must be reduced by the excess.
-                if col_r[i] < colmin[i] then
-                    excess = excess + colmin[i] - col_r[i]
-                    self.colwidths[i] = colmin[i]
-                end
-                if col_r[i] > colmin[i] then
-                    -- this column can be shrunk if necessary. The factor is col_r[i] / colmin[i]
-                    shrink_factor[i] = col_r[i] / colmin[i]
-                    sum_shrinkfactor = sum_shrinkfactor + shrink_factor[i]
+        -- Iterative shrink: distribute available width proportionally,
+        -- respecting colmin. Columns that hit colmin are fixed and the
+        -- remaining width is redistributed among the other columns.
+        local fixed = {}
+        local available = tablewidth_target - colsep
+        local remaining_natural = tablewidth_is - colsep
+
+        for _iteration = 1, #colmax do
+            local changed = false
+            for i = 1, #colmax do
+                if not self.colwidths[i] and not fixed[i] then
+                    local proportional = colmax[i] / remaining_natural * available
+                    if proportional < colmin[i] then
+                        self.colwidths[i] = colmin[i]
+                        fixed[i] = true
+                        available = available - colmin[i]
+                        remaining_natural = remaining_natural - colmax[i]
+                        changed = true
+                    end
                 end
             end
+            if not changed then break end
         end
 
-        -- the excess must be subtracted partly from the columns that are to wide
-        for i=1,#colmax do
-            if not self.colwidths[i] then
-                if shrink_factor[i] then
-                    self.colwidths[i] = math.max(col_r[i] - shrink_factor[i] / sum_shrinkfactor * excess, colmin[i])
-                elseif colmax[i] == 0 then
-                    self.colwidths[i] = 0
+        -- Assign remaining columns their proportional share
+        for i = 1, #colmax do
+            if not self.colwidths[i] and not fixed[i] then
+                if remaining_natural > 0 then
+                    self.colwidths[i] = colmax[i] / remaining_natural * available
+                else
+                    self.colwidths[i] = colmin[i]
                 end
+            elseif colmax[i] == 0 and not self.colwidths[i] then
+                self.colwidths[i] = 0
             end
         end
         return
