@@ -35,7 +35,7 @@ local vlist_node     = node.id("vlist")
 
 for k,v in pairs(node.whatsits()) do
     if v == "user_defined" then
-        -- for action/mark command
+        -- for mark command
         user_defined_whatsit = k
     elseif v == "pdf_refximage" then
         pdf_refximage_whatsit = k

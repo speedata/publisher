@@ -105,10 +105,8 @@ Der Abschnitt `chapter` speichert die Seitenzahl und den Titel des Kapitels und 
           <B>
             <Value select="@title" />
           </B>
-          <Action>
-            <!--2-->
-            <Mark select="concat('chapter',position())" pdftarget="yes" />
-          </Action>
+          <!--2-->
+          <Mark select="concat('chapter',position())" pdftarget="yes" />
         </Paragraph>
         <Loop select="@paragraphs">
           <Paragraph>

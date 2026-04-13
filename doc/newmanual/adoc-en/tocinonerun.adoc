@@ -106,10 +106,8 @@ The `chapter` section stores the page number and title of the chapter and prints
           <B>
             <Value select="@title" />
           </B>
-          <Action>
-            <!--2-->
-            <Mark select="concat('chapter',position())" pdftarget="yes" />
-          </Action>
+          <!--2-->
+          <Mark select="concat('chapter',position())" pdftarget="yes" />
         </Paragraph>
         <Loop select="@paragraphs">
           <Paragraph>

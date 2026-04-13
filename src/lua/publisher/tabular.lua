@@ -145,6 +145,12 @@ function tabular:attach_objects_row(tab, current_row, skiptable)
                         inline = {}
                     end
                     block[#block + 1] = eltcontents
+                elseif eltname == "Action" then
+                    -- inline (contains mark whatsit nodes)
+                    inline[#inline + 1] = eltcontents
+                elseif eltname == "Mark" then
+                    -- Mark as direct child of Td (without Action wrapper)
+                    inline[#inline + 1] = commands.mark_to_par(eltcontents)
                 elseif eltname == "Message" or eltname == "Bookmark" then
                     -- ignore
                 else

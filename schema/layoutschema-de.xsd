@@ -5820,6 +5820,7 @@
         <xs:element ref="en:Clip"/>
         <xs:element ref="en:Frame"/>
         <xs:element ref="en:Image"/>
+        <xs:element ref="en:Mark"/>
         <xs:element ref="en:Overlay"/>
         <xs:element ref="en:Rule"/>
         <xs:element ref="en:Switch"/>
@@ -7990,6 +7991,7 @@
         <xs:element ref="en:Groupcontents"/>
         <xs:element ref="en:Image"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Mark"/>
         <xs:element ref="en:Overlay"/>
         <xs:element ref="en:Paragraph"/>
         <xs:element ref="en:Switch"/>
@@ -8422,6 +8424,7 @@
         <xs:element ref="en:ForAll"/>
         <xs:element ref="en:HTML"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Mark"/>
         <xs:element ref="en:Ol"/>
         <xs:element ref="en:Paragraph"/>
         <xs:element ref="en:Switch"/>

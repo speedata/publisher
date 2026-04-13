@@ -9,9 +9,7 @@ Der Aufbau ist folgendermaßen:
 -------------------------------------------------------------------------------
 <PlaceObject>
   <Textblock>
-    <Action>
-      <Mark select="'textstart'"/>
-    </Action>
+    <Mark select="'textstart'"/>
     <Paragraph>
       <Value>
       Row
@@ -66,9 +64,7 @@ Die mit dem folgenden Layout ausgegeben wird:
   <Record element="chapter">
     <PlaceObject>
       <Textblock>
-        <Action>
-          <Mark select="@title"/>
-        </Action>
+        <Mark select="@title"/>
         <Paragraph fontfamily="title">
           <Value select="@title"/>
         </Paragraph>

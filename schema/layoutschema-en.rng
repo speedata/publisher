@@ -5279,6 +5279,9 @@
                         <ref name="e_Image"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Mark"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Overlay"></ref>
                      </optional>
                      <optional>
@@ -6991,6 +6994,7 @@
                      <ref name="e_Groupcontents"></ref>
                      <ref name="e_Image"></ref>
                      <ref name="e_Loop"></ref>
+                     <ref name="e_Mark"></ref>
                      <ref name="e_Overlay"></ref>
                      <ref name="e_Paragraph"></ref>
                      <ref name="e_Switch"></ref>
@@ -7209,6 +7213,7 @@
                      <ref name="e_ForAll"></ref>
                      <ref name="e_HTML"></ref>
                      <ref name="e_Loop"></ref>
+                     <ref name="e_Mark"></ref>
                      <ref name="e_Ol"></ref>
                      <ref name="e_Paragraph"></ref>
                      <ref name="e_Switch"></ref>

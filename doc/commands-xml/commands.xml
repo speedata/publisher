@@ -4,7 +4,6 @@
   >
   <define name="Switchcontents">
     <optional><cmd name="A"/></optional>
-    <optional><cmd name="Action"/></optional>
     <optional><cmd name="AddSearchpath"/></optional>
     <optional><cmd name="AttachFile"/></optional>
     <optional><cmd name="Attribute"/></optional>
@@ -130,7 +129,6 @@
     <zeroOrMore>
       <choice>
         <cmd name="A"/>
-        <cmd name="Action"/>
         <cmd name="B"/>
         <cmd name="Barcode"/>
         <cmd name="Br"/>
@@ -844,7 +842,7 @@
         <para>The target of the document link (a Mark). Example: <tt>article123</tt>. When linking to embedded files, the link attribute may contain the named destination of the target.</para>
       </description>
       <description xml:lang="de">
-        <para>Das Ziel des Dokumentlinks. Beispiel: <tt>article123</tt>. Ziele werden mit Action/Mark erzeugt. Bei Links auf eingebettete Dateien, kann das link-Attribut den Namen des Ziels beinhalten.</para>
+        <para>Das Ziel des Dokumentlinks. Beispiel: <tt>article123</tt>. Ziele werden mit Mark erzeugt. Bei Links auf eingebettete Dateien, kann das link-Attribut den Namen des Ziels beinhalten.</para>
       </description>
     </attribute>
     <attribute en="page" optional="yes" since="4.3.5" type="number">
@@ -925,94 +923,8 @@
     </example>
     <seealso/>
   </command>
-  <!--
-      *************************
-      * Action
-      *************************
-  -->
-  <command en="Action">
-    <description xml:lang="en">
-      <para>Associates an action with a text. Once the text is placed on the page, the associated action will be executed. The action can be compared to an invisible character. When the publisher outputs the character, the corresponding instructions will be run.</para>
-    </description>
-    <description xml:lang="de">
-      <para>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt. Die Aktion kann man sich als unsichtbares Zeichen vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in der Aktion ausgeführt.</para>
-    </description>
-    <childelements>
-      <oneOrMore>
-        <interleave>
-          <optional><cmd name="Mark"/></optional>
-          <optional><cmd name="Switch"/></optional>
-        </interleave>
-      </oneOrMore>
-    </childelements>
-    <example xml:lang="en">
-      <listing><![CDATA[<Pageformat width="210mm" height="4cm"/>
 
-<Record element="data">
-  <PlaceObject>
-    <Textblock>
-      <Paragraph>
-        <Value>
-          Row
-          Row
-          Row
-          Row
-        </Value>
-      </Paragraph>
-    </Textblock>
-    <Textblock>
-      <Action>
-        <Mark select="'textstart'"/>
-      </Action>
-      <Paragraph>
-        <Value>
-          Row
-          Row
-          Row
-        </Value>
-      </Paragraph>
-    </Textblock>
-  </PlaceObject>
-  <ClearPage/>
-  <Message select="sd:pagenumber('textstart')"></Message>
-</Record>
-]]></listing>
-    </example>
-    <example xml:lang="de">
-      <listing><![CDATA[<Pageformat width="210mm" height="4cm"/>
 
-<Record element="data">
-  <PlaceObject>
-    <Textblock>
-      <Paragraph>
-        <Value>
-        Zeile
-        Zeile
-        Zeile
-        Zeile
-        </Value>
-      </Paragraph>
-    </Textblock>
-    <Textblock>
-      <Action>
-        <Mark select="'Textanfang'"/>
-      </Action>
-      <Paragraph>
-        <Value>
-          Zeile
-          Zeile
-          Zeile
-        </Value>
-      </Paragraph>
-    </Textblock>
-  </PlaceObject>
-  <ClearPage/>
-  <Message select="sd:pagenumber('Textanfang')"/>
-</Record>
-]]></listing>
-    </example>
-    <seealso><cmd name="Textblock"/>, <cmd name="Mark"/></seealso>
-  </command>
   <!--
       *************************
       * AddSearchpath
@@ -6029,9 +5941,7 @@
       </Paragraph>
     </Textblock>
     <Textblock>
-      <Action>
-        <Mark select="'textstart'"/>
-      </Action>
+      <Mark select="'textstart'"/>
       <Paragraph>
         <Value>
           Row
@@ -6062,9 +5972,7 @@
       </Paragraph>
     </Textblock>
     <Textblock>
-      <Action>
-        <Mark select="'Textanfang'"/>
-      </Action>
+      <Mark select="'Textanfang'"/>
       <Paragraph>
         <Value>
           Zeile
@@ -6085,7 +5993,7 @@
     <info xml:lang="de">
       <para>Marker werden für nachfolgende Läufe gespeichert.</para>
     </info>
-    <seealso><cmd name="Action"/></seealso>
+    <seealso></seealso>
   </command>
   <!--
       *************************
@@ -7989,6 +7897,7 @@
           <optional><cmd name="Clip"/></optional>
           <optional><cmd name="Frame"/></optional>
           <optional><cmd name="Image"/></optional>
+          <optional><cmd name="Mark"/></optional>
           <optional><cmd name="Overlay"/></optional>
           <optional><cmd name="Rule"/></optional>
           <optional><cmd name="Switch"/></optional>
@@ -10664,6 +10573,7 @@
           <cmd name="Groupcontents"/>
           <cmd name="Image"/>
           <cmd name="Loop"/>
+          <cmd name="Mark"/>
           <cmd name="Overlay"/>
           <cmd name="Paragraph"/>
           <cmd name="Switch"/>
@@ -11127,12 +11037,12 @@
     <childelements>
       <oneOrMore>
         <choice>
-          <cmd name="Action"/>
           <cmd name="Bookmark"/>
           <cmd name="Copy-of"/>
           <cmd name="ForAll"/>
           <cmd name="HTML" />
           <cmd name="Loop"/>
+          <cmd name="Mark"/>
           <cmd name="Ol"/>
           <cmd name="Paragraph"/>
           <cmd name="Switch"/>
@@ -11264,7 +11174,6 @@
     <childelements>
       <oneOrMore>
         <choice>
-          <cmd name="Action"/>
           <cmd name="Bookmark"/>
           <cmd name="Copy-of"/>
           <cmd name="ForAll"/>

@@ -137,6 +137,78 @@ end
 --- really know in advance which elements are put on a page and which are
 --- broken to the next page. This way we can find out exactly where something
 --- is  placed.
+-- Helper: convert Mark contents into whatsit nodes appended to a par
+local function append_mark_to_par(p, mark_contents)
+    for _,v in ipairs(mark_contents) do
+        local n = node.new("whatsit","user_defined")
+        if v.append == true then
+            n.user_id = publisher.user_defined_mark_append -- a magic number
+        else
+            n.user_id = publisher.user_defined_mark
+        end
+        n.type = 115  -- type 115: "value is a string"
+        n.value = v.selection
+        if v.pdftarget then
+            local d = publisher.mkstringdest("mark" .. tostring(v.selection))
+            if v.shiftup ~= nil then
+                d = node.hpack(d)
+                d.shift = -1 * tex.sp(v.shiftup)
+            end
+            p:append(d)
+        end
+        p:append(n)
+    end
+end
+
+-- Helper: create a par from Mark contents (used when Mark appears directly)
+local function mark_to_par(mark_contents)
+    local p = par:new(nil,"action")
+    append_mark_to_par(p, mark_contents)
+    return p
+end
+
+-- Helper: create a zero-width hbox from Mark contents (for PlaceObject context)
+local function mark_to_hbox(mark_contents)
+    local head
+    local tail
+    for _,v in ipairs(mark_contents) do
+        local n = node.new("whatsit","user_defined")
+        if v.append == true then
+            n.user_id = publisher.user_defined_mark_append
+        else
+            n.user_id = publisher.user_defined_mark
+        end
+        n.type = 115
+        n.value = v.selection
+        if v.pdftarget then
+            local d = publisher.mkstringdest("mark" .. tostring(v.selection))
+            if v.shiftup ~= nil then
+                d = node.hpack(d)
+                d.shift = -1 * tex.sp(v.shiftup)
+            end
+            if head then
+                tail.next = d
+                tail = d
+            else
+                head = d
+                tail = d
+            end
+        end
+        if head then
+            tail.next = n
+            tail = n
+        else
+            head = n
+            tail = n
+        end
+    end
+    local hbox = node.hpack(head, 0, "exactly")
+    return hbox
+end
+
+commands.mark_to_par = mark_to_par
+commands.mark_to_hbox = mark_to_hbox
+
 function commands.action( layoutxml,dataxml)
     local tab = publisher.dispatch(layoutxml,dataxml)
     p = par:new(nil,"action")
@@ -150,26 +222,7 @@ function commands.action( layoutxml,dataxml)
             n.value = publisher.element_contents(j) -- pointer to the function (int)
             p:append(n)
         elseif eltname == "Mark" then
-            local tab = publisher.element_contents(j)
-            for _,v in ipairs(tab) do
-                local n = node.new("whatsit","user_defined")
-                if v.append == true then
-                    n.user_id = publisher.user_defined_mark_append -- a magic number
-                else
-                    n.user_id = publisher.user_defined_mark
-                end
-                n.type = 115  -- type 115: "value is a string"
-                n.value = v.selection
-                if v.pdftarget then
-                    local d = publisher.mkstringdest("mark" .. tostring(v.selection))
-                    if v.shiftup ~= nil then
-                        d = node.hpack(d)
-                        d.shift = -1 * tex.sp(v.shiftup)
-                    end
-                    p:append(d)
-                end
-                p:append(n)
-            end
+            append_mark_to_par(p, publisher.element_contents(j))
         end
     end
     return p
@@ -4256,6 +4309,25 @@ function commands.place_object( layoutxml,dataxml)
             if objecttype == "Image" then
                 -- return value is a table, #1 is the image, #2 is the allocation grid
                 objects[#objects + 1] = {object = object[1], objecttype = objecttype, allocate_matrix = object[2] }
+            elseif objecttype == "Mark" then
+                -- Mark as direct child of PlaceObject (without Action wrapper)
+                objects[#objects + 1] = {object = mark_to_hbox(object), objecttype = "Action" }
+            elseif objecttype == "Action" then
+                -- Action contains Mark/AddToList whatsit nodes in a par, pack into zero-width hbox
+                local head, tail
+                for i = 1, #object do
+                    local n = object[i].contents
+                    if n then
+                        if head then
+                            tail.next = n
+                        else
+                            head = n
+                        end
+                        tail = node.tail(n)
+                    end
+                end
+                local hbox = node.hpack(head, 0, "exactly")
+                objects[#objects + 1] = {object = hbox, objecttype = objecttype }
             else
                 if type(object)=="table" then
                     -- last page of balanced objects must not change active frame
@@ -5999,6 +6071,8 @@ function commands.text(layoutxml,dataxml)
             assert(false)
         elseif eltname == "Action" then
             objects[#objects + 1] = contents
+        elseif eltname == "Mark" then
+            objects[#objects + 1] = mark_to_par(contents)
         elseif eltname == "Bookmark" then
             objects[#objects + 1] = contents
         elseif eltname == "HTML" then
@@ -6199,6 +6273,8 @@ function commands.textblock( layoutxml,dataxml )
             end
         elseif eltname == "Action" then
             objects[#objects + 1] = contents
+        elseif eltname == "Mark" then
+            objects[#objects + 1] = mark_to_par(contents)
         elseif eltname == "Bookmark" then
             objects[#objects + 1] = contents
         elseif eltname == "HTML" then

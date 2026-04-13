@@ -6,7 +6,6 @@ ifndef::backend-docbook5[]
 
 [.multicol]
 <<cmd-a,A>>  +
-<<cmd-action,Action>>  +
 <<cmd-addsearchpath,Addsearchpath>>  +
 <<cmd-atpagecreation,AtPageCreation>>  +
 <<cmd-atpageshipout,AtPageShipout>>  +
@@ -123,12 +122,6 @@ include::ref/a.adoc[]
 == Siehe auch
 
 Das Kapitel <<ch-textformatierung,Textformatierung>>.
-
-include::ref/action.adoc[]
-
-== Siehe auch
-
-Den Befehl <<cmd-mark,`Mark`>> und das Kapitel <<ch-verzeichnisseerstellen-marker,Verzeichnisse erstellen (Marker)>>
 
 
 include::ref/addsearchpath.adoc[]
@@ -471,7 +464,7 @@ include::ref/mark.adoc[]
 
 == Siehe auch
 
-Den Befehl <<cmd-action,`Action`>> und das Kapitel <<ch-verzeichnisseerstellen-marker,Verzeichnisse erstellen (Marker)>>.
+Das Kapitel <<ch-verzeichnisseerstellen-marker,Verzeichnisse erstellen (Marker)>>.
 
 include::ref/message.adoc[]
 

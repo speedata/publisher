@@ -20,6 +20,7 @@ func CheckWindowsGUIDoubleClick() {
 	if mousetrap.StartedByExplorer() {
 		fmt.Println("This program is a command-line tool.")
 		fmt.Println("Please run it from Command Prompt or PowerShell.")
+		fmt.Println("See https://doc.speedata.de/publisher/en/installation/ for installation and usage instructions.")
 		fmt.Println("Press Enter to exit...")
 		fmt.Scanln()
 		return
