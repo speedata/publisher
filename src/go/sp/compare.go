@@ -576,7 +576,8 @@ func getCompareStatus(statuschan <-chan []compareStatus) {
 		// st[1] = "all pages" entry, st[0] = per-dir entry (only added to cs if there are bad pages or build error)
 		allPages = append(allPages, st[1])
 
-		if len(st[0].Badpages) > 0 || st[0].BuildError || st[0].StructMismatch == 2 {
+		checksumMismatch := !st[0].ChecksumEqual && st[0].CompareNeeded
+		if len(st[0].Badpages) > 0 || st[0].BuildError || st[0].StructMismatch == 2 || checksumMismatch {
 			mutex.Lock()
 			cs = append(cs, st[0])
 			mutex.Unlock()
@@ -591,6 +592,9 @@ func getCompareStatus(statuschan <-chan []compareStatus) {
 				if len(st[0].Badpages) > 0 {
 					fmt.Println("Comparison failed. Bad pages are:", st[0].Badpages)
 					fmt.Println("Max delta is", fmt.Sprintf("%.2f", st[0].Delta))
+				}
+				if checksumMismatch && len(st[0].Badpages) == 0 {
+					fmt.Println("Checksum mismatch (visually ok).")
 				}
 				if st[0].StructMismatch == 2 {
 					fmt.Println("Structure tree mismatch.")
