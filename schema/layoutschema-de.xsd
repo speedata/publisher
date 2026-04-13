@@ -6357,9 +6357,14 @@
         <xs:element minOccurs="0" ref="en:Value"/>
         <xs:element minOccurs="0" ref="en:While"/>
       </xs:sequence>
-      <xs:attribute name="element" use="required">
+      <xs:attribute name="element">
         <xs:annotation>
-          <xs:documentation>Der Name des Elements der auf den Datensatz passt.</xs:documentation>
+          <xs:documentation>Der Name des Elements der auf den Datensatz passt. Kann nicht zusammen mit 'match' verwendet werden.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="match">
+        <xs:annotation>
+          <xs:documentation>Ein XPath-ähnliches Pattern zum Abgleich von Datenelementen. Unterstützt einfache Elementnamen, Wildcards (*), Prädikate (item[@type='book']), Eltern/Kind-Muster (catalog/product) und Vorfahren-Muster (catalog//item). Kann nicht zusammen mit 'element' verwendet werden. Benötigt den lxpath XML-Parser.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="mode">

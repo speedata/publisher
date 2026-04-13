@@ -2,8 +2,6 @@
 [[ch-programmierung]]
 = Programmierung
 
-// Record == Daten getriebener Funktionsaufruf TODO
-
 Die sicherlich bedeutendste Eigenschaft des Publishers ist die Fähigkeit, sehr flexible Layoutanforderungen umzusetzen.
 Das wird hauptsächlich durch die eingebaute Programmiersprache in Zusammenhang mit den Abfragemöglichkeiten des Publishers erreicht.
 
@@ -14,6 +12,123 @@ Das unterscheidet den Publisher von anderer Software zur Erstellung von PDF-Date
 
 Es sind grundlegende Programmierkenntnisse vonnöten, um die volle Funktionalität des Publishers auszureizen.
 Die Programmiersprache wurde so einfach wie möglich gehalten, um die Lesbarkeit des Layouts zu erhalten.
+
+== Datenverarbeitung mit Record und ProcessNode
+
+Die Grundlage der Datenverarbeitung im speedata Publisher bildet das Zusammenspiel von `<<cmd-record,Record>>` und `<<cmd-processnode,ProcessNode>>`.
+Ähnlich wie `xsl:template match` und `xsl:apply-templates` in XSLT definiert `Record` Verarbeitungsregeln für Datenelemente und `ProcessNode` ruft diese auf.
+
+Der Publisher verarbeitet die XML-Daten, indem er für jedes Datenelement den passenden `Record` sucht und die darin enthaltenen Anweisungen ausführt.
+Der `Record` für das Wurzelelement der Datendatei wird automatisch aufgerufen, alle weiteren Datenelemente müssen explizit mit `ProcessNode` verarbeitet werden.
+
+.Einfaches Beispiel: Elementname
+[source, xml]
+-------------------------------------------------------------------------------
+<Record element="product">
+  <PlaceObject>
+    <Textblock>
+      <Paragraph><Value select="@name" /></Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+-------------------------------------------------------------------------------
+
+Dieser Record wird ausgeführt, wenn ein `<product>`-Element verarbeitet wird.
+
+=== Pattern-Matching mit dem match-Attribut
+
+Seit Version 5.5.8 kann anstelle von `element` das Attribut `match` verwendet werden.
+Damit können Verarbeitungsregeln anhand von XPath-ähnlichen Patterns zugeordnet werden, nicht nur anhand des Elementnamens.
+
+Ein einfacher Elementname in `match` ist gleichbedeutend mit `element`:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<!-- Diese beiden Zeilen sind gleichwertig: -->
+<Record element="product">
+<Record match="product">
+-------------------------------------------------------------------------------
+
+Darüber hinaus unterstützt `match` weitere Muster:
+
+Prädikate::
+Ermöglichen die Unterscheidung von Elementen anhand ihrer Attribute oder ihres Inhalts.
++
+[source, xml]
+-------------------------------------------------------------------------------
+<Record match="item[@type='book']">
+  <!-- Wird nur für item-Elemente mit type="book" ausgeführt -->
+</Record>
+-------------------------------------------------------------------------------
+
+Eltern/Kind-Muster::
+Ermöglichen kontextabhängiges Matching basierend auf dem Elternelement.
++
+[source, xml]
+-------------------------------------------------------------------------------
+<Record match="catalog/product">
+  <!-- Nur für product-Elemente, deren Elternelement catalog ist -->
+</Record>
+-------------------------------------------------------------------------------
+
+Vorfahren-Muster::
+Matching über beliebig tiefe Verschachtelung.
++
+[source, xml]
+-------------------------------------------------------------------------------
+<Record match="catalog//item">
+  <!-- Für item-Elemente, die irgendwo unterhalb von catalog liegen -->
+</Record>
+-------------------------------------------------------------------------------
+
+Wildcards::
+Matchen auf beliebige Elemente, nützlich als Fallback-Regel.
++
+[source, xml]
+-------------------------------------------------------------------------------
+<Record match="*">
+  <!-- Wird für alle Elemente aufgerufen, für die kein spezifischerer
+       Record existiert -->
+</Record>
+-------------------------------------------------------------------------------
+
+Wildcards mit Prädikaten::
++
+[source, xml]
+-------------------------------------------------------------------------------
+<Record match="*[starts-with(local-name(), 'chap')]">
+  <!-- Matcht alle Elemente, deren Name mit "chap" beginnt -->
+</Record>
+-------------------------------------------------------------------------------
+
+=== Prioritäten bei mehreren passenden Records
+
+Wenn für ein Datenelement mehrere Records passen, wird der spezifischste ausgewählt.
+Ein Record mit `element` (oder `match` mit einfachem Elementnamen) hat immer Vorrang vor Pattern-basierten Records.
+Bei den Patterns gilt: Muster mit Prädikaten oder Pfadangaben haben eine höhere Priorität als die Wildcard (`*`).
+
+=== Modi
+
+Mit dem Attribut `mode` können unterschiedliche Verarbeitungsregeln für dasselbe Element definiert werden.
+Der Modus in `ProcessNode` muss mit dem Modus im zugehörigen `Record` übereinstimmen.
+`mode` funktioniert sowohl mit `element` als auch mit `match`.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Record match="product" mode="summary">
+  <!-- Kurzdarstellung -->
+</Record>
+
+<Record match="product" mode="detail">
+  <!-- Detaildarstellung -->
+</Record>
+-------------------------------------------------------------------------------
+
+[source, xml]
+-------------------------------------------------------------------------------
+<ProcessNode select="product" mode="summary" />
+<ProcessNode select="product" mode="detail" />
+-------------------------------------------------------------------------------
 
 == Variablen
 

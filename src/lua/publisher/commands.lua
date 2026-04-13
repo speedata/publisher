@@ -4514,12 +4514,19 @@ function commands.process_node(layoutxml,dataxml)
         if publisher.newxpath then
             dataxml.sequence = {items[i]}
         end
+        -- Fast path: direct lookup by mode + element name
         local modeselector = publisher.data_dispatcher[mode]
-        if modeselector == nil then
+        layoutnode = modeselector and modeselector[element_name]
+
+        -- Pattern matching fallback (newxpath only)
+        if not layoutnode and publisher.newxpath then
+            layoutnode = publisher.find_matching_pattern(mode, elt, dataxml)
+        end
+
+        if not layoutnode and not modeselector then
             err("No combination of mode %q element name %q is defined.",mode,element_name)
             return
         end
-        layoutnode = publisher.data_dispatcher[mode][element_name]
 
         if layoutnode then
             main.log("debug","Process node", "node",element_name,"mode",mode,"pos",string.format("%d",pos))
@@ -4620,15 +4627,51 @@ end
 
 --- Record
 --- ------
---- Matches an element name of the data file. To be called from ProcessNodes
+--- Matches an element name of the data file. To be called from ProcessNodes.
+--- Supports both element="..." (exact name, fast lookup) and match="..." (pattern matching).
 function commands.record( layoutxml,dataxml )
-    local elementname, mode = "", ""
+    local elementname, match, mode = "", nil, ""
     if publisher.newxpath then
         elementname = layoutxml[".__attributes"].element
+        match       = layoutxml[".__attributes"].match
         mode        = layoutxml[".__attributes"].mode or ""
     else
         elementname = publisher.read_attribute(layoutxml,{},"element","string")
         mode        = publisher.read_attribute(layoutxml,{},"mode","string","")
+    end
+
+    if match and elementname then
+        err("Record: attributes 'element' and 'match' are mutually exclusive.")
+        return
+    end
+
+    if match and publisher.newxpath then
+        local matchfunc, priority, fastpath_name = publisher.compile_match_pattern(match)
+        if fastpath_name then
+            -- Simple element name pattern: use fast path
+            main.log("debug","Record","match (fast path)",fastpath_name,"mode",mode)
+            publisher.data_dispatcher[mode] = publisher.data_dispatcher[mode] or {}
+            publisher.data_dispatcher[mode][fastpath_name] = layoutxml
+        else
+            main.log("debug","Record","match (pattern)",match,"mode",mode)
+            publisher.data_dispatcher_patterns[mode] = publisher.data_dispatcher_patterns[mode] or {}
+            table.insert(publisher.data_dispatcher_patterns[mode], {
+                pattern   = match,
+                priority  = priority,
+                layoutxml = layoutxml,
+                matchfunc = matchfunc,
+            })
+            -- Sort by priority descending so highest priority is checked first
+            table.sort(publisher.data_dispatcher_patterns[mode], function(a, b)
+                return a.priority > b.priority
+            end)
+        end
+        return
+    end
+
+    if not elementname or elementname == "" then
+        err("Record: attribute 'element' or 'match' required.")
+        return
     end
 
     if string.find(elementname,":") and publisher.options.namespaces == "lax" then

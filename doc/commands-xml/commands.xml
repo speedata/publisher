@@ -8706,22 +8706,30 @@
   -->
   <command en="Record">
     <description xml:lang="en">
-      <para>Contains the instructions when the publisher processes the element in the data file with the given name. The record matching the root element will be called by the software automatically, all further data handling must be done by the user.</para>
+      <para>Contains the instructions when the publisher processes the element in the data file with the given name. The record matching the root element will be called by the software automatically, all further data handling must be done by the user. Either the attribute <tt>element</tt> or <tt>match</tt> must be given, but not both.</para>
     </description>
     <description xml:lang="de">
-      <para>Enthält die Anweisungen, die bei dem angegebenen Datensatz ausgeführt werden sollen. Der oberste Datensatz (d.h. direkt unterhalb des Wurzelelements) wird vom Publisher aufgerufen, alle nachfolgenden Datensätze müssen über das Element BearbeiteKnoten aufgerufen werden.</para>
+      <para>Enthält die Anweisungen, die bei dem angegebenen Datensatz ausgeführt werden sollen. Der oberste Datensatz (d.h. direkt unterhalb des Wurzelelements) wird vom Publisher aufgerufen, alle nachfolgenden Datensätze müssen über das Element BearbeiteKnoten aufgerufen werden. Es muss entweder das Attribut <tt>element</tt> oder <tt>match</tt> angegeben werden, aber nicht beide gleichzeitig.</para>
     </description>
     <childelements>
       <oneOrMore>
         <reference name="Commands"/>
       </oneOrMore>
     </childelements>
-    <attribute en="element" type="text" optional="no">
+    <attribute en="element" type="text" optional="yes">
       <description xml:lang="en">
-        <para>The name of the element the record matches.</para>
+        <para>The name of the element the record matches. Mutually exclusive with <tt>match</tt>.</para>
       </description>
       <description xml:lang="de">
-        <para>Der Name des Elements der auf den Datensatz passt.</para>
+        <para>Der Name des Elements der auf den Datensatz passt. Kann nicht zusammen mit <tt>match</tt> verwendet werden.</para>
+      </description>
+    </attribute>
+    <attribute en="match" type="text" optional="yes" since="5.5.8">
+      <description xml:lang="en">
+        <para>An XPath-like pattern to match data elements. Supports simple element names (<tt>foo</tt>), wildcards (<tt>*</tt>), predicates (<tt>item[@type='book']</tt>), parent/child patterns (<tt>catalog/product</tt>), and ancestor patterns (<tt>catalog//item</tt>). A simple element name is equivalent to using <tt>element</tt>. When multiple patterns match, the most specific one wins. Mutually exclusive with <tt>element</tt>. Requires the lxpath XML parser.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Ein XPath-ähnliches Pattern zum Abgleich von Datenelementen. Unterstützt einfache Elementnamen (<tt>foo</tt>), Wildcards (<tt>*</tt>), Prädikate (<tt>item[@type='book']</tt>), Eltern/Kind-Muster (<tt>catalog/product</tt>) und Vorfahren-Muster (<tt>catalog//item</tt>). Ein einfacher Elementname ist gleichbedeutend mit <tt>element</tt>. Bei mehreren passenden Patterns gewinnt das spezifischste. Kann nicht zusammen mit <tt>element</tt> verwendet werden. Benötigt den lxpath XML-Parser.</para>
       </description>
     </attribute>
     <attribute en="mode" type="text" optional="yes">
@@ -8742,6 +8750,20 @@
     </Textblock>
   </PlaceObject>
 </Record>
+
+<!-- Pattern matching examples -->
+<Record match="item[@type='book']">
+  ...
+</Record>
+
+<Record match="catalog/product">
+  ...
+</Record>
+
+<Record match="*">
+  <!-- Fallback for unmatched elements -->
+  ...
+</Record>
 ]]></listing>
     </example>
     <example xml:lang="de">
@@ -8753,6 +8775,20 @@
       </Paragraph>
     </Textblock>
   </PlaceObject>
+</Record>
+
+<!-- Beispiele für Pattern-Matching -->
+<Record match="item[@type='book']">
+  ...
+</Record>
+
+<Record match="catalog/product">
+  ...
+</Record>
+
+<Record match="*">
+  <!-- Fallback für nicht zugeordnete Elemente -->
+  ...
 </Record>
 ]]></listing>
     </example>

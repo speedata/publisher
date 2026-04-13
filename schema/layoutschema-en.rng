@@ -5419,12 +5419,17 @@
    </define>
    <define name="e_Record">
       <element name="Record">
-         <a:documentation>Contains the instructions when the publisher processes the element in the data file with the given name. The record matching the root element will be called by the software automatically, all further data handling must be done by the user.</a:documentation>
+         <a:documentation>Contains the instructions when the publisher processes the element in the data file with the given name. The record matching the root element will be called by the software automatically, all further data handling must be done by the user. Either the attribute 'element' or 'match' must be given, but not both.</a:documentation>
          <interleave>
             <group>
-               <attribute name="element">
-                  <a:documentation>The name of the element the record matches.</a:documentation>
-               </attribute>
+               <choice>
+                  <attribute name="element">
+                     <a:documentation>The name of the element the record matches. Mutually exclusive with 'match'.</a:documentation>
+                  </attribute>
+                  <attribute name="match">
+                     <a:documentation>An XPath-like pattern to match data elements. Supports simple element names, wildcards (*), predicates (item[@type='book']), parent/child patterns (catalog/product), and ancestor patterns (catalog//item). Mutually exclusive with 'element'. Requires the lxpath XML parser.</a:documentation>
+                  </attribute>
+               </choice>
                <optional>
                   <attribute name="mode">
                      <a:documentation>Name of the mode that matches the mode in ProcessNode.</a:documentation>

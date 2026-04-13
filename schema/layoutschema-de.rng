@@ -5419,12 +5419,17 @@
    </define>
    <define name="e_Record">
       <element name="Record">
-         <a:documentation>Enthält die Anweisungen, die bei dem angegebenen Datensatz ausgeführt werden sollen. Der oberste Datensatz (d.h. direkt unterhalb des Wurzelelements) wird vom Publisher aufgerufen, alle nachfolgenden Datensätze müssen über das Element BearbeiteKnoten aufgerufen werden.</a:documentation>
+         <a:documentation>Enthält die Anweisungen, die bei dem angegebenen Datensatz ausgeführt werden sollen. Der oberste Datensatz (d.h. direkt unterhalb des Wurzelelements) wird vom Publisher aufgerufen, alle nachfolgenden Datensätze müssen über das Element BearbeiteKnoten aufgerufen werden. Es muss entweder das Attribut 'element' oder 'match' angegeben werden, aber nicht beide gleichzeitig.</a:documentation>
          <interleave>
             <group>
-               <attribute name="element">
-                  <a:documentation>Der Name des Elements der auf den Datensatz passt.</a:documentation>
-               </attribute>
+               <choice>
+                  <attribute name="element">
+                     <a:documentation>Der Name des Elements der auf den Datensatz passt. Kann nicht zusammen mit 'match' verwendet werden.</a:documentation>
+                  </attribute>
+                  <attribute name="match">
+                     <a:documentation>Ein XPath-ähnliches Pattern zum Abgleich von Datenelementen. Unterstützt einfache Elementnamen, Wildcards (*), Prädikate (item[@type='book']), Eltern/Kind-Muster (catalog/product) und Vorfahren-Muster (catalog//item). Kann nicht zusammen mit 'element' verwendet werden. Benötigt den lxpath XML-Parser.</a:documentation>
+                  </attribute>
+               </choice>
                <optional>
                   <attribute name="mode">
                      <a:documentation>Name des Modus der mit dem in ProcessNode übereinstimmt.</a:documentation>

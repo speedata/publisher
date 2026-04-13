@@ -1,0 +1,42 @@
+<Layout
+    xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="8cm" width="6cm" />
+
+    <!-- match with simple name (fast path, equivalent to element="data") -->
+    <Record match="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Value>Root matched</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <ProcessNode select="*" />
+    </Record>
+
+    <!-- match with predicate: only items with type="book" -->
+    <Record match="item[@type='book']">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Value>Book: </Value><Value select="@name" /></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+
+    <!-- match with parent/child pattern -->
+    <Record match="data/item[@type='other']">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Value>Other: </Value><Value select="@name" /></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+
+    <!-- wildcard fallback -->
+    <Record match="*">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Value>Fallback: </Value><Value select="@name" /></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

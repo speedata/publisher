@@ -362,7 +362,101 @@ current_fgcolor = nil
 defaultcolorstack = 0
 
 data_dispatcher = {}
+data_dispatcher_patterns = {}
 user_defined_functions = { last = 0}
+
+--- Compile a match pattern string into a test function and priority.
+--- Simple element names (no special chars) return nil to signal the fast path.
+--- Supported patterns:
+---   "foo"           -> fast path (nil)
+---   "*"             -> matches any element, priority -0.5
+---   "foo[pred]"     -> self::foo[pred], priority 0.5
+---   "*[pred]"       -> self::*[pred], priority 0.5
+---   "parent/child"  -> self::child[parent::parent], priority 0.5
+---   "anc//desc"     -> self::desc[ancestor::anc], priority 0.5
+---@param pattern string
+---@return function|nil matchfunc  nil means use fast path
+---@return number priority
+---@return string|nil elementname  for fast path only
+function compile_match_pattern(pattern)
+    -- Simple element name: no /, [, ], *
+    if not string.find(pattern, "[/%[%]%*]") then
+        return nil, 0, pattern
+    end
+    -- Wildcard: just "*"
+    if pattern == "*" then
+        return function(ctx, node)
+            return xpath.is_element(node)
+        end, -0.5, nil
+    end
+    -- Convert pattern to self-test XPath expression
+    local selftest = convert_pattern_to_selftest(pattern)
+    return function(ctx, node)
+        local testctx = xpath.context:new({
+            xmldoc = ctx.xmldoc,
+            sequence = {node},
+            namespaces = ctx.namespaces or {},
+            vars = ctx.vars or {},
+        })
+        local seq, err = testctx:eval(selftest)
+        if err then
+            main.log("error","match pattern evaluation failed","pattern",pattern,"error",err)
+            return false
+        end
+        return seq and #seq > 0
+    end, 0.5, nil
+end
+
+--- Convert a match pattern to a self:: XPath expression.
+--- "foo[pred]"    -> "self::foo[pred]"
+--- "*[pred]"      -> "self::*[pred]"
+--- "parent/child" -> "self::child[parent::parent]"
+--- "anc//desc"    -> "self::desc[ancestor::anc]"
+---@param pattern string
+---@return string
+function convert_pattern_to_selftest(pattern)
+    -- Check for "//" (ancestor pattern)
+    local ancestor, desc = string.match(pattern, "^([^/]+)//(.+)$")
+    if ancestor and desc then
+        local descname, descpred = string.match(desc, "^([^%[]+)(.*)")
+        local ancname = string.match(ancestor, "^([^%[]+)")
+        return "self::" .. descname .. "[ancestor::" .. ancname .. "]" .. descpred
+    end
+    -- Check for "/" (parent/child pattern)
+    local parent, child = string.match(pattern, "^([^/]+)/([^/]+)$")
+    if parent and child then
+        local childname, childpred = string.match(child, "^([^%[]+)(.*)")
+        local parentname = string.match(parent, "^([^%[]+)")
+        return "self::" .. childname .. "[parent::" .. parentname .. "]" .. childpred
+    end
+    -- Name with predicate: "foo[...]" or "*[...]"
+    local name, pred = string.match(pattern, "^([^%[]+)(.*)")
+    if name then
+        return "self::" .. name .. pred
+    end
+    return "self::" .. pattern
+end
+
+--- Find the best matching pattern-based record for a given mode and data node.
+---@param mode string
+---@param datanode table  the XML data element
+---@param ctx table  the lxpath context (for xmldoc, namespaces, vars)
+---@return table|nil layoutxml
+function find_matching_pattern(mode, datanode, ctx)
+    local patterns = data_dispatcher_patterns[mode]
+    if not patterns then return nil end
+    local best_match = nil
+    local best_priority = -math.huge
+    for _, entry in ipairs(patterns) do
+        if entry.priority > best_priority then
+            if entry.matchfunc(ctx, datanode) then
+                best_match = entry.layoutxml
+                best_priority = entry.priority
+            end
+        end
+    end
+    return best_match
+end
 markers = {}
 
 -- PDF/UA - the /S /Document StructElem
@@ -1633,12 +1727,19 @@ function initialize_luatex_and_generate_pdf()
     end
 
     --- The rare case that the user has not any `Record` commands in the layout file:
-    if not data_dispatcher[""] then
+    if not data_dispatcher[""] and not data_dispatcher_patterns[""] then
         main.log("error","Can't find any “Record” commands in the layout file.")
         exit()
     end
 
-    tmp = data_dispatcher[""][name]
+    tmp = data_dispatcher[""] and data_dispatcher[""][name]
+    -- Pattern matching fallback for root element (newxpath only)
+    if not tmp and newxpath then
+        local rootnode = data.sequence and data.sequence[1]
+        if rootnode then
+            tmp = find_matching_pattern("", rootnode, data)
+        end
+    end
     if tmp then
         if newxpath then
             -- For data:eval, the namespaces must be set the layout namespaces

@@ -8,6 +8,122 @@ Certainly the most important feature of the Publisher is the ability to implemen
 TIP: The program execution runs simultaneously with the creation of the PDF. Therefore, the speedata Publisher can react very flexibly to the input data. Queries such as “Is there still enough space for this object?” are thus possible. This distinguishes the Publisher from other software for creating PDF files.
 Basic programming knowledge is required to use the full functionality of the Publisher. The programming language has been kept as simple as possible to maintain the readability of the layout.
 
+== Data processing with Record and ProcessNode
+
+The foundation of data processing in the speedata Publisher is the interplay between `<<cmd-record,Record>>` and `<<cmd-processnode,ProcessNode>>`.
+Similar to `xsl:template match` and `xsl:apply-templates` in XSLT, `Record` defines processing rules for data elements and `ProcessNode` invokes them.
+
+The Publisher processes XML data by finding the matching `Record` for each data element and executing the instructions it contains.
+The `Record` for the root element of the data file is called automatically; all other data elements must be processed explicitly using `ProcessNode`.
+
+.Simple example: element name
+[source, xml]
+-------------------------------------------------------------------------------
+<Record element=”product”>
+  <PlaceObject>
+    <Textblock>
+      <Paragraph><Value select=”@name” /></Paragraph>
+    </Textblock>
+  </PlaceObject>
+</Record>
+-------------------------------------------------------------------------------
+
+This Record is executed when a `<product>` element is processed.
+
+=== Pattern matching with the match attribute
+
+Since version 5.5.8, the `match` attribute can be used instead of `element`.
+This allows processing rules to be assigned based on XPath-like patterns, not just the element name.
+
+A simple element name in `match` is equivalent to `element`:
+
+[source, xml]
+-------------------------------------------------------------------------------
+<!-- These two lines are equivalent: -->
+<Record element=”product”>
+<Record match=”product”>
+-------------------------------------------------------------------------------
+
+Beyond that, `match` supports additional patterns:
+
+Predicates::
+Allow distinguishing elements based on their attributes or content.
++
+[source, xml]
+-------------------------------------------------------------------------------
+<Record match=”item[@type='book']”>
+  <!-- Only executed for item elements with type=”book” -->
+</Record>
+-------------------------------------------------------------------------------
+
+Parent/child patterns::
+Enable context-dependent matching based on the parent element.
++
+[source, xml]
+-------------------------------------------------------------------------------
+<Record match=”catalog/product”>
+  <!-- Only for product elements whose parent is catalog -->
+</Record>
+-------------------------------------------------------------------------------
+
+Ancestor patterns::
+Match across arbitrary nesting depth.
++
+[source, xml]
+-------------------------------------------------------------------------------
+<Record match=”catalog//item”>
+  <!-- For item elements anywhere below catalog -->
+</Record>
+-------------------------------------------------------------------------------
+
+Wildcards::
+Match any element, useful as a fallback rule.
++
+[source, xml]
+-------------------------------------------------------------------------------
+<Record match=”*”>
+  <!-- Called for all elements that have no more specific Record -->
+</Record>
+-------------------------------------------------------------------------------
+
+Wildcards with predicates::
++
+[source, xml]
+-------------------------------------------------------------------------------
+<Record match=”*[starts-with(local-name(), 'chap')]”>
+  <!-- Matches all elements whose name starts with “chap” -->
+</Record>
+-------------------------------------------------------------------------------
+
+=== Priorities with multiple matching Records
+
+When multiple Records match a data element, the most specific one is selected.
+A Record with `element` (or `match` with a simple element name) always takes precedence over pattern-based Records.
+Among patterns: patterns with predicates or path expressions have higher priority than the wildcard (`*`).
+
+=== Modes
+
+The `mode` attribute allows defining different processing rules for the same element.
+The mode in `ProcessNode` must match the mode in the corresponding `Record`.
+`mode` works with both `element` and `match`.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Record match=”product” mode=”summary”>
+  <!-- Short representation -->
+</Record>
+
+<Record match=”product” mode=”detail”>
+  <!-- Detailed representation -->
+</Record>
+-------------------------------------------------------------------------------
+
+[source, xml]
+-------------------------------------------------------------------------------
+<ProcessNode select=”product” mode=”summary” />
+<ProcessNode select=”product” mode=”detail” />
+-------------------------------------------------------------------------------
+
 == Variables
 
 All variables are globally visible. This means that a variable never becomes invalid. Here's an example:

@@ -6357,9 +6357,14 @@
         <xs:element minOccurs="0" ref="en:Value"/>
         <xs:element minOccurs="0" ref="en:While"/>
       </xs:sequence>
-      <xs:attribute name="element" use="required">
+      <xs:attribute name="element">
         <xs:annotation>
-          <xs:documentation>The name of the element the record matches.</xs:documentation>
+          <xs:documentation>The name of the element the record matches. Mutually exclusive with 'match'.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="match">
+        <xs:annotation>
+          <xs:documentation>An XPath-like pattern to match data elements. Supports simple element names, wildcards (*), predicates (item[@type='book']), parent/child patterns (catalog/product), and ancestor patterns (catalog//item). Mutually exclusive with 'element'. Requires the lxpath XML parser.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="mode">
