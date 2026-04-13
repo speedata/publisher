@@ -142,9 +142,16 @@ function M.getmetadata(filespecnumbers, opts)
             end
         end
     end
-    local isoformatted = pdf_to_iso(pdf.getcreationdate())
-    local docid = uuid()
-    local instanceid = uuid()
+    local isoformatted, docid, instanceid
+    if sp_suppressinfo then
+        isoformatted = "2000-01-01T00:00:00Z"
+        docid = "00000000-0000-0000-0000-000000000000"
+        instanceid = "00000000-0000-0000-0000-000000000000"
+    else
+        isoformatted = pdf_to_iso(pdf.getcreationdate())
+        docid = uuid()
+        instanceid = uuid()
+    end
     local fmt = opts and opts.format
 
     local doc = xmlbuilder.new_document()
