@@ -32,17 +32,6 @@ function M.set_calculated_width(styles)
         else
             styles.height = nil
         end
-
-        ---Subtract a TeX length field from cw if present.
-        ---@param key string
-        local function sub_len(key)
-            local v = styles[key]
-            if v then cw = cw - tex.sp(v) end
-        end
-
-        sub_len("padding-left"); sub_len("padding-right")
-        sub_len("margin-left"); sub_len("margin-right")
-        sub_len("border-left-width"); sub_len("border-right-width")
     elseif tonumber(sw) then
         cw = tex.sp(string.format("%spx", sw))
     elseif type(sw) == "string" and tex.sp(sw) then
