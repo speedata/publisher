@@ -1,5 +1,37 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.5">
+    <entry version="5.5.8" date="2026-04-14">
+        <en>Honor box height in lines (line height).</en>
+        <de>Berücksichtige Box-Höhe in Zeilen (Zeilenhöhe).</de>
+    </entry>
+    <entry version="5.5.8" date="2026-04-14">
+        <en>Box border.</en>
+        <de>Box-Rahmen.</de>
+    </entry>
+    <entry version="5.5.8" date="2026-04-14">
+        <en>Vertical align for Box in paragraph mode.</en>
+        <de>Vertikale Ausrichtung für Box im Absatzmodus.</de>
+    </entry>
+    <entry version="5.5.8" date="2026-04-14">
+        <en>Images: vertical alignment in Paragraph.</en>
+        <de>Bilder: vertikale Ausrichtung im Absatz.</de>
+    </entry>
+    <entry version="5.5.8" date="2026-04-14">
+        <en>Remove action command.</en>
+        <de>Action-Befehl entfernt.</de>
+    </entry>
+    <entry version="5.5.8" date="2026-04-14">
+        <en>Suppressinfo for metadata.</en>
+        <de>Suppressinfo für Metadaten.</de>
+    </entry>
+    <entry version="5.5.8" date="2026-04-14">
+        <en>Show sum mismatch in sp compare.</en>
+        <de>Prüfsummenunterschied in sp compare anzeigen.</de>
+    </entry>
+    <entry version="5.5.8" date="2026-04-14">
+        <en>New attribute match on Record.</en>
+        <de>Neues Attribut match bei Record.</de>
+    </entry>
     <entry version="5.5.7" date="2026-04-02">
         <en>Bugfix table shrink algorithm.</en>
         <de>Fehlerkorrektur Tabellenstauch-Algorithmus.</de>
