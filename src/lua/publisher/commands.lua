@@ -470,13 +470,15 @@ end
 --- ----
 --- Draw a rectangular filled area
 function commands.box( layoutxml,dataxml )
-    local bleed     = publisher.read_attribute(layoutxml,dataxml,"bleed",          "string")
-    local colorname = publisher.read_attribute(layoutxml,dataxml,"background-color","string")
-    colorname       = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string",colorname)
-    local graphic   = publisher.read_attribute(layoutxml,dataxml,"graphic",        "string")
-    local height    = publisher.read_attribute(layoutxml,dataxml,"height",         "length")
-    local valign    = publisher.read_attribute(layoutxml,dataxml,"vertical-align", "string")
-    local width     = publisher.read_attribute(layoutxml,dataxml,"width",          "length")
+    local bleed        = publisher.read_attribute(layoutxml,dataxml,"bleed",          "string")
+    local border_color = publisher.read_attribute(layoutxml,dataxml,"border-color",   "string")
+    local border_width = publisher.read_attribute(layoutxml,dataxml,"border-width",   "length")
+    local colorname    = publisher.read_attribute(layoutxml,dataxml,"background-color","string")
+    colorname          = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string",colorname)
+    local graphic      = publisher.read_attribute(layoutxml,dataxml,"graphic",        "string")
+    local height       = publisher.read_attribute(layoutxml,dataxml,"height",         "length")
+    local valign       = publisher.read_attribute(layoutxml,dataxml,"vertical-align", "string")
+    local width        = publisher.read_attribute(layoutxml,dataxml,"width",          "length")
 
     local class     = publisher.read_attribute(layoutxml,dataxml,"class",          "string")
     local id        = publisher.read_attribute(layoutxml,dataxml,"id",             "string")
@@ -606,7 +608,8 @@ function commands.box( layoutxml,dataxml )
         end
     end
 
-    local n = publisher.box(width,height,colorname)
+    local border_width_sp = border_width and tex.sp(border_width) or nil
+    local n = publisher.box(width,height,colorname,border_color,border_width_sp)
     node.set_attribute(n, publisher.att_shift_left, shift_left)
     node.set_attribute(n, publisher.att_shift_up  , shift_up )
     if valign then

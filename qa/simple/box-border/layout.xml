@@ -1,0 +1,33 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat width="6cm" height="8cm" />
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Value>No border:</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Box background-color="green" width="2cm" height="1cm" />
+        </PlaceObject>
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Value>With border:</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Box background-color="green" width="2cm" height="1cm"
+                border-color="red" border-width="2pt" />
+        </PlaceObject>
+        <PlaceObject>
+            <Textblock>
+                <Paragraph><Value>Border only:</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject>
+            <Box background-color="-" width="2cm" height="1cm"
+                border-color="blue" border-width="1pt" />
+        </PlaceObject>
+    </Record>
+</Layout>

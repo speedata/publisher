@@ -3909,26 +3909,59 @@ function mpbox(parameter,width,height)
 end
 
 --- Create a colored area. width and height are in scaled points.
-function box( width_sp,height_sp,colorname )
+--- Optional border_color (color name) and border_width (in sp) draw a stroke
+--- rectangle at the outer edge; the fill area shrinks inward by border_width.
+function box( width_sp,height_sp,colorname,border_color,border_width_sp )
     local h,v
+    local _width   = sp_to_bp(width_sp)
+    local _height  = sp_to_bp(height_sp)
+    local pdfcmds = {}
+
+    -- Border stroke (full size, centered on edge → offset inward by half line width)
+    if border_color and border_width_sp and border_width_sp > 0 then
+        local bw = sp_to_bp(border_width_sp)
+        local half = bw / 2
+        local border_colentry = colors_module.colors[border_color]
+        if not border_colentry then
+            err("Color %q unknown, reverting to black",border_color or "(no color name given)")
+            border_colentry = colors_module.colors["black"]
+        end
+        pdfcmds[#pdfcmds+1] = string.format("q %s %g w %g %g %g %g re S Q",
+            border_colentry.pdfstring, bw,
+            half, -half, _width - bw, -(_height - bw))
+    end
+
+    -- Fill (shrunk by border width on each side)
     if colorname ~= "-" then
-        local _width   = sp_to_bp(width_sp)
-        local _height  = sp_to_bp(height_sp)
-        local paint = node.new("whatsit","pdf_literal")
-        setprop(paint,"role",get_rolenum("Artifact"))
         local colentry = colors_module.colors[colorname]
         if not colentry then
             err("Color %q unknown, reverting to black",colorname or "(no color name given)")
             colentry = colors_module.colors["black"]
         end
-        paint.data = string.format("q %s 1 0 0 1 0 0 cm 0 0 %g -%g re f Q",colentry.pdfstring,_width,_height)
+        local bw = border_width_sp and sp_to_bp(border_width_sp) or 0
+        local fill_x = bw
+        local fill_y = -bw
+        local fill_w = _width - 2 * bw
+        local fill_h = _height - 2 * bw
+        if fill_w > 0 and fill_h > 0 then
+            pdfcmds[#pdfcmds+1] = string.format("q %s 1 0 0 1 0 0 cm %g %g %g %g re f Q",
+                colentry.pdfstring, fill_x, fill_y, fill_w, -fill_h)
+        end
+    end
+
+    if #pdfcmds > 0 then
+        local paint = node.new("whatsit","pdf_literal")
+        setprop(paint,"role",get_rolenum("Artifact"))
+        paint.data = table.concat(pdfcmds, " ")
         paint.mode = 0
-        if colentry.alpha then
-            set_attribute(paint,"color",colors_module.get_colorindex_from_name(colorname))
+        if colorname ~= "-" then
+            local colentry = colors_module.colors[colorname]
+            if colentry and colentry.alpha then
+                set_attribute(paint,"color",colors_module.get_colorindex_from_name(colorname))
+            end
         end
         local hglue = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3 })
         h = node.insert_after(paint,paint,hglue)
-
         h = node.hpack(h,width_sp,"exactly")
     else
         h = create_empty_hbox_with_width(width_sp)

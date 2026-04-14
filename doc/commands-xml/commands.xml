@@ -1621,6 +1621,22 @@
         <para>Farbe der Box. Wird für die Farbe ein Strich angegeben (<tt>-</tt>), ist der Hintergrund transparent.</para>
       </description>
     </attribute>
+    <attribute en="border-color" type="text" optional="yes" since="5.5.8">
+      <description xml:lang="en">
+        <para>Color of the border. Must be used together with <tt>border-width</tt>. The border is drawn inside the box dimensions, shrinking the fill area accordingly.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Farbe des Rahmens. Muss zusammen mit <tt>border-width</tt> verwendet werden. Der Rahmen wird innerhalb der Box-Abmessungen gezeichnet und verkleinert die Füllfläche entsprechend.</para>
+      </description>
+    </attribute>
+    <attribute en="border-width" type="length" optional="yes" since="5.5.8">
+      <description xml:lang="en">
+        <para>Width of the border. Must be used together with <tt>border-color</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Breite des Rahmens. Muss zusammen mit <tt>border-color</tt> verwendet werden.</para>
+      </description>
+    </attribute>
     <attribute en="bleed" optional="yes">
       <description xml:lang="en">
         <para>Lets the box increase its size by the amount of trim given in the options. Useful for thumb indexes. The contents of the attribute is either »left«, »right«, »top« or »bottom« or any combination such as »top,right«.</para>
