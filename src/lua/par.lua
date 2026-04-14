@@ -470,7 +470,7 @@ function Par:mknodelist( options, data )
         if nodelist == nil then
             -- the beginning of a new line (perhaps the first new line)
             nodelist = thisself
-        elseif thisself.id == publisher.vlist_node or publisher.getprop(thisself,"split") then
+        elseif (thisself.id == publisher.vlist_node and publisher.getprop(thisself,"origin") ~= "image") or publisher.getprop(thisself,"split") then
             -- text right after a  newline, so push stuff that we have into the objects list and
             -- put what we have into the node list
             if nodelist.id == publisher.glue_node and nodelist.prev == nil and nodelist.next == nil then

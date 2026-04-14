@@ -10,7 +10,6 @@
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:choice>
           <xs:element ref="en:A"/>
-          <xs:element ref="en:Action"/>
           <xs:element ref="en:B"/>
           <xs:element ref="en:Barcode"/>
           <xs:element ref="en:Br"/>
@@ -64,17 +63,6 @@
           <xs:documentation>Link to a (logical) page number. When linking to embedded files, the page attribute may contain the page number of the target.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="Action">
-    <xs:annotation>
-      <xs:documentation>Associates an action with a text. Once the text is placed on the page, the associated action will be executed. The action can be compared to an invisible character. When the publisher outputs the character, the corresponding instructions will be run.</xs:documentation>
-    </xs:annotation>
-    <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="en:Mark"/>
-        <xs:element ref="en:Switch"/>
-      </xs:choice>
     </xs:complexType>
   </xs:element>
   <xs:element name="AddSearchpath">
@@ -253,7 +241,6 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:A"/>
-        <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
@@ -581,7 +568,6 @@
     <xs:complexType>
       <xs:sequence maxOccurs="unbounded">
         <xs:element minOccurs="0" ref="en:A"/>
-        <xs:element minOccurs="0" ref="en:Action"/>
         <xs:element minOccurs="0" ref="en:AddSearchpath"/>
         <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Attribute"/>
@@ -841,7 +827,6 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:A"/>
-        <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
@@ -1667,7 +1652,6 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:A"/>
-        <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
@@ -1703,7 +1687,6 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:A"/>
-        <xs:element ref="en:Action"/>
         <xs:element ref="en:AddSearchpath"/>
         <xs:element ref="en:AttachFile"/>
         <xs:element ref="en:Attribute"/>
@@ -2513,7 +2496,6 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:A"/>
-        <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
@@ -2992,6 +2974,35 @@
           </xs:union>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="vertical-align">
+        <xs:annotation>
+          <xs:documentation>Vertical alignment of the image when used inline in a paragraph. Only effective when multiple images (or images and text) appear in the same paragraph. Default is baseline.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="baseline">
+              <xs:annotation>
+                <xs:documentation>Align the bottom of the image at the text baseline (default). Each image extends upward from the baseline.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="top">
+              <xs:annotation>
+                <xs:documentation>Align the top edges of all images. The baseline is at the bottom of the tallest image. Text sits on the baseline.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="middle">
+              <xs:annotation>
+                <xs:documentation>Align the vertical centers of all images. The baseline is at the center of the tallest image.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="hanging">
+              <xs:annotation>
+                <xs:documentation>The top of the image is placed on the baseline. The image hangs below the text. Each image extends downward independently.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="width">
         <xs:annotation>
           <xs:documentation>Image width. One of 'auto' (default, take image width), '100%' (whole area width), length (such as '3cm') or number (in grid cells).</xs:documentation>
@@ -3202,7 +3213,6 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:A"/>
-        <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
@@ -3233,7 +3243,6 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:A"/>
-        <xs:element ref="en:Action"/>
         <xs:element ref="en:AddSearchpath"/>
         <xs:element ref="en:AttachFile"/>
         <xs:element ref="en:Attribute"/>
@@ -3534,7 +3543,6 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:A"/>
-        <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
@@ -4381,7 +4389,6 @@
     <xs:complexType>
       <xs:sequence maxOccurs="unbounded">
         <xs:element minOccurs="0" ref="en:A"/>
-        <xs:element minOccurs="0" ref="en:Action"/>
         <xs:element minOccurs="0" ref="en:AddSearchpath"/>
         <xs:element minOccurs="0" ref="en:AttachFile"/>
         <xs:element minOccurs="0" ref="en:Attribute"/>
@@ -4592,7 +4599,6 @@
         <xs:element minOccurs="0" ref="en:Initial"/>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:element ref="en:A"/>
-          <xs:element ref="en:Action"/>
           <xs:element ref="en:B"/>
           <xs:element ref="en:Barcode"/>
           <xs:element ref="en:Br"/>
@@ -6313,7 +6319,7 @@
   </xs:element>
   <xs:element name="Record">
     <xs:annotation>
-      <xs:documentation>Contains the instructions when the publisher processes the element in the data file with the given name. The record matching the root element will be called by the software automatically, all further data handling must be done by the user.</xs:documentation>
+      <xs:documentation>Contains the instructions when the publisher processes the element in the data file with the given name. The record matching the root element will be called by the software automatically, all further data handling must be done by the user. Either the attribute element or match must be given, but not both.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:sequence maxOccurs="unbounded">
@@ -6360,12 +6366,12 @@
       </xs:sequence>
       <xs:attribute name="element">
         <xs:annotation>
-          <xs:documentation>The name of the element the record matches. Mutually exclusive with 'match'.</xs:documentation>
+          <xs:documentation>The name of the element the record matches. Mutually exclusive with match.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="match">
         <xs:annotation>
-          <xs:documentation>An XPath-like pattern to match data elements. Supports simple element names, wildcards (*), predicates (item[@type='book']), parent/child patterns (catalog/product), and ancestor patterns (catalog//item). Mutually exclusive with 'element'. Requires the lxpath XML parser.</xs:documentation>
+          <xs:documentation>An XPath-like pattern to match data elements. Supports simple element names (foo), wildcards (*), predicates (item[@type='book']), parent/child patterns (catalog/product), and ancestor patterns (catalog//item). A simple element name is equivalent to using element. When multiple patterns match, the most specific one wins. Mutually exclusive with element. Requires the lxpath XML parser.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="mode">
@@ -6803,7 +6809,6 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:A"/>
-        <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
@@ -8418,7 +8423,6 @@
     </xs:annotation>
     <xs:complexType>
       <xs:choice maxOccurs="unbounded">
-        <xs:element ref="en:Action"/>
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Copy-of"/>
         <xs:element ref="en:ForAll"/>
@@ -8930,7 +8934,6 @@
     </xs:annotation>
     <xs:complexType>
       <xs:choice maxOccurs="unbounded">
-        <xs:element ref="en:Action"/>
         <xs:element ref="en:Bookmark"/>
         <xs:element ref="en:Copy-of"/>
         <xs:element ref="en:ForAll"/>
@@ -9553,7 +9556,6 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:A"/>
-        <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
@@ -9629,7 +9631,6 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:A"/>
-        <xs:element ref="en:Action"/>
         <xs:element ref="en:AddSearchpath"/>
         <xs:element ref="en:AttachFile"/>
         <xs:element ref="en:Attribute"/>
@@ -9721,7 +9722,6 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:A"/>
-        <xs:element ref="en:Action"/>
         <xs:element ref="en:B"/>
         <xs:element ref="en:Barcode"/>
         <xs:element ref="en:Br"/>
@@ -9787,7 +9787,6 @@
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element ref="en:A"/>
-        <xs:element ref="en:Action"/>
         <xs:element ref="en:AddSearchpath"/>
         <xs:element ref="en:AttachFile"/>
         <xs:element ref="en:Attribute"/>

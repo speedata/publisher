@@ -416,6 +416,70 @@ Diese Mechanik stellt sicher, dass die Ausgabegröße und die gewünschte Auflö
 Wichtig ist, dass auch ein extensionhandler für die Dateiendung (im Beispiel `jpg` oder `jpeg`) gesetzt ist, damit der resizehandler auch genutzt wird.
 
 
+== Vertikale Ausrichtung von Bildern im Absatz
+
+Bilder können innerhalb eines `<<cmd-paragraph,Paragraph>>`-Elements inline platziert werden, zusammen mit Text oder anderen Bildern.
+Standardmäßig stehen alle Bilder auf der Textgrundlinie und ragen mit ihrer gesamten Höhe nach oben.
+Bei Bildern unterschiedlicher Höhe kann das ungleichmäßig aussehen.
+
+Das Attribut `vertical-align` auf `<<cmd-image,Image>>` steuert, wie Bilder zueinander und zum Text ausgerichtet werden.
+Vier Modi stehen zur Verfügung:
+
+=== baseline (Standard)
+
+Jedes Bild steht auf der Textgrundlinie. Höhere Bilder ragen weiter nach oben, niedrigere weniger weit. Die Oberkanten sind nicht ausgerichtet.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph>
+    <Image width="1cm" file="_samplea.pdf" />
+    <Image width="1cm" height="2cm" file="_sampleb.pdf" />
+    <Value>Text</Value>
+</Paragraph>
+-------------------------------------------------------------------------------
+
+=== top
+
+Alle Oberkanten liegen auf einer horizontalen Linie. Die Grundlinie verschiebt sich an die Unterkante des höchsten Bildes, sodass Text unten erscheint.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph>
+    <Image width="1cm" file="_samplea.pdf" vertical-align="top" />
+    <Image width="1cm" height="2cm" file="_sampleb.pdf" vertical-align="top" />
+    <Value>Text</Value>
+</Paragraph>
+-------------------------------------------------------------------------------
+
+=== middle
+
+Die vertikalen Mitten aller Bilder sind ausgerichtet. Die Grundlinie liegt auf halber Höhe des höchsten Bildes.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph>
+    <Image width="1cm" file="_samplea.pdf" vertical-align="middle" />
+    <Image width="1cm" height="2cm" file="_sampleb.pdf" vertical-align="middle" />
+    <Value>Text</Value>
+</Paragraph>
+-------------------------------------------------------------------------------
+
+=== hanging
+
+Jedes Bild hängt unterhalb der Textgrundlinie. Die Oberkante jedes Bildes liegt auf der Grundlinie und das Bild ragt nach unten. Das ist nützlich, wenn Text über einer Bildreihe stehen soll.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph>
+    <Image width="1cm" file="_samplea.pdf" vertical-align="hanging" />
+    <Image width="1cm" height="2cm" file="_sampleb.pdf" vertical-align="hanging" />
+    <Value>Text</Value>
+</Paragraph>
+-------------------------------------------------------------------------------
+
+NOTE: Das Attribut `vertical-align` wirkt nur, wenn Bilder inline in einem Absatz verwendet werden. Bei direkter Platzierung über `<<cmd-placeobject,PlaceObject>>` hat es keine Auswirkung.
+
+
 == Weitere Parameter
 
 * Man kann über die `{padding}`-Angaben festlegen, wie viel Abstand das Bild vom entsprechenden Rand haben soll.

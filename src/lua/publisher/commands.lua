@@ -2266,6 +2266,7 @@ function commands.image( layoutxml,dataxml )
     local rotate       = publisher.read_attribute(layoutxml,dataxml,"rotate",      "number")
     local stretch      = publisher.read_attribute(layoutxml,dataxml,"stretch",     "boolean",false)
     local url          = publisher.read_attribute(layoutxml,dataxml,"href",        "string")
+    local valign       = publisher.read_attribute(layoutxml,dataxml,"vertical-align","string")
     local vis_box      = publisher.read_attribute(layoutxml,dataxml,"visiblebox",  "string")
     local width        = publisher.read_attribute(layoutxml,dataxml,"width",       "string")
 
@@ -2609,6 +2610,9 @@ function commands.image( layoutxml,dataxml )
         node.set_attribute(box, publisher.att_shift_up  , padding_shift_up  )
         box.width = box.width - padding_shift_left
         box.height = box.height - padding_shift_up
+    end
+    if valign then
+        publisher.setprop(box,"vertical-align",valign)
     end
     return {box,imageinfo.allocate}
 end
@@ -3901,6 +3905,43 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     p.html = html
     if #tab == 1 and tab[1].contents == "" then
         tab[1].contents = " " -- U+00A0, non breaking space
+    end
+
+    -- Adjust vertically aligned images.
+    -- top:     all tops aligned, baseline at bottom of tallest image
+    -- middle:  all centers aligned, baseline at center of tallest image
+    -- hanging: top on baseline, image hangs below (per-image, no group logic)
+    local max_top_height = 0
+    local max_mid_height = 0
+    for i=1,#tab do
+        if publisher.elementname(tab[i]) == "Image" then
+            local imgbox = publisher.element_contents(tab[i])[1]
+            local va = publisher.getprop(imgbox,"vertical-align")
+            local h = imgbox.height + imgbox.depth
+            if va == "top" and h > max_top_height then
+                max_top_height = h
+            elseif va == "middle" and h > max_mid_height then
+                max_mid_height = h
+            end
+        end
+    end
+    for i=1,#tab do
+        if publisher.elementname(tab[i]) == "Image" then
+            local imgbox = publisher.element_contents(tab[i])[1]
+            local va = publisher.getprop(imgbox,"vertical-align")
+            local h = imgbox.height + imgbox.depth
+            if va == "top" and max_top_height > 0 then
+                imgbox.height = max_top_height
+                imgbox.depth = 0
+            elseif va == "middle" and max_mid_height > 0 then
+                local half_max = math.floor(max_mid_height / 2)
+                imgbox.height = half_max + math.floor(h / 2)
+                imgbox.depth = 0
+            elseif va == "hanging" then
+                imgbox.depth = h
+                imgbox.height = 0
+            end
+        end
     end
 
     for i=1,#tab do

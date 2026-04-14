@@ -5082,6 +5082,46 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="vertical-align" optional="yes" since="5.5.8">
+      <description xml:lang="en">
+        <para>Vertical alignment of the image when used inline in a paragraph. Only effective when multiple images (or images and text) appear in the same paragraph. Default is baseline.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Vertikale Ausrichtung des Bildes bei Verwendung als Inline-Element in einem Absatz. Wirkt nur, wenn mehrere Bilder (oder Bilder und Text) im selben Absatz stehen. Standard ist baseline.</para>
+      </description>
+      <choice en="baseline">
+        <description xml:lang="en">
+          <para>Align the bottom of the image at the text baseline (default). Each image extends upward from the baseline.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Unterkante des Bildes auf der Grundlinie ausrichten (Standard). Jedes Bild ragt nach oben.</para>
+        </description>
+      </choice>
+      <choice en="top">
+        <description xml:lang="en">
+          <para>Align the top edges of all images. The baseline is at the bottom of the tallest image. Text sits on the baseline.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Oberkanten aller Bilder auf einer Linie ausrichten. Die Grundlinie liegt an der Unterkante des höchsten Bildes. Text steht auf der Grundlinie.</para>
+        </description>
+      </choice>
+      <choice en="middle">
+        <description xml:lang="en">
+          <para>Align the vertical centers of all images. The baseline is at the center of the tallest image.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die vertikalen Mitten aller Bilder auf einer Linie ausrichten. Die Grundlinie liegt auf halber Höhe des höchsten Bildes.</para>
+        </description>
+      </choice>
+      <choice en="hanging">
+        <description xml:lang="en">
+          <para>The top of the image is placed on the baseline. The image hangs below the text. Each image extends downward independently.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Oberkante des Bildes liegt auf der Grundlinie. Das Bild hängt unter dem Text. Jedes Bild ragt unabhängig nach unten.</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="width" type="numberorlength" optional="yes">
       <description xml:lang="en">
         <para>Image width. One of 'auto' (default, take image width), '100%' (whole area width), length (such as '3cm') or number (in grid cells).</para>

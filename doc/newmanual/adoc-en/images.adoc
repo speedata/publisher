@@ -365,6 +365,70 @@ It is important to also define an `extensionhandler` for the file extension (e.g
 
 
 
+== Vertical alignment of images in a paragraph
+
+Images can be placed inline within a `<<cmd-paragraph,Paragraph>>`, alongside text or other images.
+By default, all images sit on the text baseline with their full height extending upward.
+When images of different heights appear together, this can look uneven.
+
+The `vertical-align` attribute on `<<cmd-image,Image>>` controls how images are aligned relative to each other and the text.
+Four modes are available:
+
+=== baseline (default)
+
+Each image sits on the text baseline. Taller images extend further upward, shorter images less so. The top edges are not aligned.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph>
+    <Image width="1cm" file="_samplea.pdf" />
+    <Image width="1cm" height="2cm" file="_sampleb.pdf" />
+    <Value>Text</Value>
+</Paragraph>
+-------------------------------------------------------------------------------
+
+=== top
+
+All top edges are aligned on the same horizontal line. The baseline moves to the bottom of the tallest image, so text appears at the bottom.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph>
+    <Image width="1cm" file="_samplea.pdf" vertical-align="top" />
+    <Image width="1cm" height="2cm" file="_sampleb.pdf" vertical-align="top" />
+    <Value>Text</Value>
+</Paragraph>
+-------------------------------------------------------------------------------
+
+=== middle
+
+The vertical centers of all images are aligned. The baseline is at the center of the tallest image.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph>
+    <Image width="1cm" file="_samplea.pdf" vertical-align="middle" />
+    <Image width="1cm" height="2cm" file="_sampleb.pdf" vertical-align="middle" />
+    <Value>Text</Value>
+</Paragraph>
+-------------------------------------------------------------------------------
+
+=== hanging
+
+Each image hangs below the text baseline. The top edge of each image is on the baseline, and the image extends downward. This is useful when text should appear above a row of images.
+
+[source, xml]
+-------------------------------------------------------------------------------
+<Paragraph>
+    <Image width="1cm" file="_samplea.pdf" vertical-align="hanging" />
+    <Image width="1cm" height="2cm" file="_sampleb.pdf" vertical-align="hanging" />
+    <Value>Text</Value>
+</Paragraph>
+-------------------------------------------------------------------------------
+
+NOTE: The `vertical-align` attribute only takes effect when images are used inline within a paragraph. It has no effect when an image is placed directly via `<<cmd-placeobject,PlaceObject>>`.
+
+
 == Other parameters
 
 * You can use the padding-* specifications to define how much distance the image should have from the corresponding border.

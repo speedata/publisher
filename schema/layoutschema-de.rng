@@ -34,7 +34,7 @@
                </optional>
                <optional>
                   <attribute name="link">
-                     <a:documentation>Das Ziel des Dokumentlinks. Beispiel: article123. Ziele werden mit Action/Mark erzeugt. Bei Links auf eingebettete Dateien, kann das link-Attribut den Namen des Ziels beinhalten.</a:documentation>
+                     <a:documentation>Das Ziel des Dokumentlinks. Beispiel: article123. Ziele werden mit Mark erzeugt. Bei Links auf eingebettete Dateien, kann das link-Attribut den Namen des Ziels beinhalten.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -47,7 +47,6 @@
                      <zeroOrMore>
                         <choice>
                            <ref name="e_A"></ref>
-                           <ref name="e_Action"></ref>
                            <ref name="e_B"></ref>
                            <ref name="e_Barcode"></ref>
                            <ref name="e_Br"></ref>
@@ -72,26 +71,6 @@
                      </zeroOrMore>
                      <optional>
                         <ref name="e_Box"></ref>
-                     </optional>
-                  </interleave>
-               </oneOrMore>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
-      </element>
-   </define>
-   <define name="e_Action">
-      <element name="Action">
-         <a:documentation>Assoziiert eine Aktion mit einem Text. Sobald der Text auf einer Seite platziert wird, wird die dazugehörige Aktion ausgeführt. Die Aktion kann man sich als unsichtbares Zeichen vorstellen. Wenn der Publisher das unsichtbare Zeichen ausgibt, werden die Anweisungen in der Aktion ausgeführt.</a:documentation>
-         <interleave>
-            <group>
-               <oneOrMore>
-                  <interleave>
-                     <optional>
-                        <ref name="e_Mark"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Switch"></ref>
                      </optional>
                   </interleave>
                </oneOrMore>
@@ -432,7 +411,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -675,9 +653,6 @@
                <oneOrMore>
                   <optional>
                      <ref name="e_A"></ref>
-                  </optional>
-                  <optional>
-                     <ref name="e_Action"></ref>
                   </optional>
                   <optional>
                      <ref name="e_AddSearchpath"></ref>
@@ -1085,7 +1060,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -1840,7 +1814,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -1890,9 +1863,6 @@
                   <interleave>
                      <optional>
                         <ref name="e_A"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Action"></ref>
                      </optional>
                      <optional>
                         <ref name="e_AddSearchpath"></ref>
@@ -2569,7 +2539,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -2950,6 +2919,21 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="vertical-align">
+                     <a:documentation>Vertikale Ausrichtung des Bildes bei Verwendung als Inline-Element in einem Absatz. Wirkt nur, wenn mehrere Bilder (oder Bilder und Text) im selben Absatz stehen. Standard ist baseline.</a:documentation>
+                     <choice>
+                        <value>baseline</value>
+                        <a:documentation>Die Unterkante des Bildes auf der Grundlinie ausrichten (Standard). Jedes Bild ragt nach oben.</a:documentation>
+                        <value>top</value>
+                        <a:documentation>Oberkanten aller Bilder auf einer Linie ausrichten. Die Grundlinie liegt an der Unterkante des höchsten Bildes. Text steht auf der Grundlinie.</a:documentation>
+                        <value>middle</value>
+                        <a:documentation>Die vertikalen Mitten aller Bilder auf einer Linie ausrichten. Die Grundlinie liegt auf halber Höhe des höchsten Bildes.</a:documentation>
+                        <value>hanging</value>
+                        <a:documentation>Die Oberkante des Bildes liegt auf der Grundlinie. Das Bild hängt unter dem Text. Jedes Bild ragt unabhängig nach unten.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="width">
                      <a:documentation>Bildbreite. Angabe in der Form &#39;auto&#39; (Voreinstellung, natürliche Bildbreite), &#39;100%&#39; (Breite des aktuellen Platzierungsbereichs), Längenangabe wie &#39;4cm&#39; oder Zahl (Anzahl von Rasterspalten)</a:documentation>
                   </attribute>
@@ -3204,7 +3188,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -3249,9 +3232,6 @@
                   <interleave>
                      <optional>
                         <ref name="e_A"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Action"></ref>
                      </optional>
                      <optional>
                         <ref name="e_AddSearchpath"></ref>
@@ -3701,7 +3681,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -4072,9 +4051,6 @@
                <oneOrMore>
                   <optional>
                      <ref name="e_A"></ref>
-                  </optional>
-                  <optional>
-                     <ref name="e_Action"></ref>
                   </optional>
                   <optional>
                      <ref name="e_AddSearchpath"></ref>
@@ -4723,7 +4699,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -5422,17 +5397,19 @@
    </define>
    <define name="e_Record">
       <element name="Record">
-         <a:documentation>Enthält die Anweisungen, die bei dem angegebenen Datensatz ausgeführt werden sollen. Der oberste Datensatz (d.h. direkt unterhalb des Wurzelelements) wird vom Publisher aufgerufen, alle nachfolgenden Datensätze müssen über das Element BearbeiteKnoten aufgerufen werden. Es muss entweder das Attribut 'element' oder 'match' angegeben werden, aber nicht beide gleichzeitig.</a:documentation>
+         <a:documentation>Enthält die Anweisungen, die bei dem angegebenen Datensatz ausgeführt werden sollen. Der oberste Datensatz (d.h. direkt unterhalb des Wurzelelements) wird vom Publisher aufgerufen, alle nachfolgenden Datensätze müssen über das Element BearbeiteKnoten aufgerufen werden. Es muss entweder das Attribut element oder match angegeben werden, aber nicht beide gleichzeitig.</a:documentation>
          <interleave>
             <group>
-               <choice>
+               <optional>
                   <attribute name="element">
-                     <a:documentation>Der Name des Elements der auf den Datensatz passt. Kann nicht zusammen mit 'match' verwendet werden.</a:documentation>
+                     <a:documentation>Der Name des Elements der auf den Datensatz passt. Kann nicht zusammen mit match verwendet werden.</a:documentation>
                   </attribute>
+               </optional>
+               <optional>
                   <attribute name="match">
-                     <a:documentation>Ein XPath-ähnliches Pattern zum Abgleich von Datenelementen. Unterstützt einfache Elementnamen, Wildcards (*), Prädikate (item[@type='book']), Eltern/Kind-Muster (catalog/product) und Vorfahren-Muster (catalog//item). Kann nicht zusammen mit 'element' verwendet werden. Benötigt den lxpath XML-Parser.</a:documentation>
+                     <a:documentation>Ein XPath-ähnliches Pattern zum Abgleich von Datenelementen. Unterstützt einfache Elementnamen (foo), Wildcards (*), Prädikate (item[@type=&#39;book&#39;]), Eltern/Kind-Muster (catalog/product) und Vorfahren-Muster (catalog//item). Ein einfacher Elementname ist gleichbedeutend mit element. Bei mehreren passenden Patterns gewinnt das spezifischste. Kann nicht zusammen mit element verwendet werden. Benötigt den lxpath XML-Parser.</a:documentation>
                   </attribute>
-               </choice>
+               </optional>
                <optional>
                   <attribute name="mode">
                      <a:documentation>Name des Modus der mit dem in ProcessNode übereinstimmt.</a:documentation>
@@ -6316,7 +6293,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -7207,7 +7183,6 @@
                </optional>
                <oneOrMore>
                   <choice>
-                     <ref name="e_Action"></ref>
                      <ref name="e_Bookmark"></ref>
                      <ref name="e_Copy-of"></ref>
                      <ref name="e_ForAll"></ref>
@@ -7248,7 +7223,6 @@
                </optional>
                <oneOrMore>
                   <choice>
-                     <ref name="e_Action"></ref>
                      <ref name="e_Bookmark"></ref>
                      <ref name="e_Copy-of"></ref>
                      <ref name="e_ForAll"></ref>
@@ -7666,7 +7640,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -7731,9 +7704,6 @@
                   <interleave>
                      <optional>
                         <ref name="e_A"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Action"></ref>
                      </optional>
                      <optional>
                         <ref name="e_AddSearchpath"></ref>
@@ -7978,7 +7948,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -8059,9 +8028,6 @@
                   <interleave>
                      <optional>
                         <ref name="e_A"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Action"></ref>
                      </optional>
                      <optional>
                         <ref name="e_AddSearchpath"></ref>

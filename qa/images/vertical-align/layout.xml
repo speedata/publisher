@@ -1,0 +1,39 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Pageformat height="16cm" width="8cm" />
+
+	<Record element="data">
+		<PlaceObject>
+			<Textblock>
+				<Paragraph><Value>baseline:</Value></Paragraph>
+				<Paragraph>
+					<Image width="1cm" file="_samplea.pdf"></Image>
+					<Image width="1cm" height="2cm" file="_sampleb.pdf"></Image>
+					<Image width="1cm" file="_samplea.pdf"></Image>
+					<Value>X</Value>
+				</Paragraph>
+				<Paragraph><Value>top:</Value></Paragraph>
+				<Paragraph>
+					<Image width="1cm" file="_samplea.pdf" vertical-align="top"></Image>
+					<Image width="1cm" height="2cm" file="_sampleb.pdf" vertical-align="top"></Image>
+					<Image width="1cm" file="_samplea.pdf" vertical-align="top"></Image>
+					<Value>X</Value>
+				</Paragraph>
+				<Paragraph><Value>middle:</Value></Paragraph>
+				<Paragraph>
+					<Image width="1cm" file="_samplea.pdf" vertical-align="middle"></Image>
+					<Image width="1cm" height="2cm" file="_sampleb.pdf" vertical-align="middle"></Image>
+					<Image width="1cm" file="_samplea.pdf" vertical-align="middle"></Image>
+					<Value>X</Value>
+				</Paragraph>
+				<Paragraph><Value>hanging:</Value></Paragraph>
+				<Paragraph>
+					<Image width="1cm" file="_samplea.pdf" vertical-align="hanging"></Image>
+					<Image width="1cm" height="2cm" file="_sampleb.pdf" vertical-align="hanging"></Image>
+					<Image width="1cm" file="_samplea.pdf" vertical-align="hanging"></Image>
+					<Value>X</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+	</Record>
+</Layout>

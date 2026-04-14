@@ -47,7 +47,6 @@
                      <zeroOrMore>
                         <choice>
                            <ref name="e_A"></ref>
-                           <ref name="e_Action"></ref>
                            <ref name="e_B"></ref>
                            <ref name="e_Barcode"></ref>
                            <ref name="e_Br"></ref>
@@ -72,26 +71,6 @@
                      </zeroOrMore>
                      <optional>
                         <ref name="e_Box"></ref>
-                     </optional>
-                  </interleave>
-               </oneOrMore>
-            </group>
-            <ref name="foreign-nodes"></ref>
-         </interleave>
-      </element>
-   </define>
-   <define name="e_Action">
-      <element name="Action">
-         <a:documentation>Associates an action with a text. Once the text is placed on the page, the associated action will be executed. The action can be compared to an invisible character. When the publisher outputs the character, the corresponding instructions will be run.</a:documentation>
-         <interleave>
-            <group>
-               <oneOrMore>
-                  <interleave>
-                     <optional>
-                        <ref name="e_Mark"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Switch"></ref>
                      </optional>
                   </interleave>
                </oneOrMore>
@@ -432,7 +411,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -675,9 +653,6 @@
                <oneOrMore>
                   <optional>
                      <ref name="e_A"></ref>
-                  </optional>
-                  <optional>
-                     <ref name="e_Action"></ref>
                   </optional>
                   <optional>
                      <ref name="e_AddSearchpath"></ref>
@@ -1085,7 +1060,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -1840,7 +1814,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -1890,9 +1863,6 @@
                   <interleave>
                      <optional>
                         <ref name="e_A"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Action"></ref>
                      </optional>
                      <optional>
                         <ref name="e_AddSearchpath"></ref>
@@ -2569,7 +2539,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -2950,6 +2919,21 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="vertical-align">
+                     <a:documentation>Vertical alignment of the image when used inline in a paragraph. Only effective when multiple images (or images and text) appear in the same paragraph. Default is baseline.</a:documentation>
+                     <choice>
+                        <value>baseline</value>
+                        <a:documentation>Align the bottom of the image at the text baseline (default). Each image extends upward from the baseline.</a:documentation>
+                        <value>top</value>
+                        <a:documentation>Align the top edges of all images. The baseline is at the bottom of the tallest image. Text sits on the baseline.</a:documentation>
+                        <value>middle</value>
+                        <a:documentation>Align the vertical centers of all images. The baseline is at the center of the tallest image.</a:documentation>
+                        <value>hanging</value>
+                        <a:documentation>The top of the image is placed on the baseline. The image hangs below the text. Each image extends downward independently.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="width">
                      <a:documentation>Image width. One of &#39;auto&#39; (default, take image width), &#39;100%&#39; (whole area width), length (such as &#39;3cm&#39;) or number (in grid cells).</a:documentation>
                   </attribute>
@@ -3204,7 +3188,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -3249,9 +3232,6 @@
                   <interleave>
                      <optional>
                         <ref name="e_A"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Action"></ref>
                      </optional>
                      <optional>
                         <ref name="e_AddSearchpath"></ref>
@@ -3701,7 +3681,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -4072,9 +4051,6 @@
                <oneOrMore>
                   <optional>
                      <ref name="e_A"></ref>
-                  </optional>
-                  <optional>
-                     <ref name="e_Action"></ref>
                   </optional>
                   <optional>
                      <ref name="e_AddSearchpath"></ref>
@@ -4723,7 +4699,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -5422,17 +5397,19 @@
    </define>
    <define name="e_Record">
       <element name="Record">
-         <a:documentation>Contains the instructions when the publisher processes the element in the data file with the given name. The record matching the root element will be called by the software automatically, all further data handling must be done by the user. Either the attribute 'element' or 'match' must be given, but not both.</a:documentation>
+         <a:documentation>Contains the instructions when the publisher processes the element in the data file with the given name. The record matching the root element will be called by the software automatically, all further data handling must be done by the user. Either the attribute element or match must be given, but not both.</a:documentation>
          <interleave>
             <group>
-               <choice>
+               <optional>
                   <attribute name="element">
-                     <a:documentation>The name of the element the record matches. Mutually exclusive with 'match'.</a:documentation>
+                     <a:documentation>The name of the element the record matches. Mutually exclusive with match.</a:documentation>
                   </attribute>
+               </optional>
+               <optional>
                   <attribute name="match">
-                     <a:documentation>An XPath-like pattern to match data elements. Supports simple element names, wildcards (*), predicates (item[@type='book']), parent/child patterns (catalog/product), and ancestor patterns (catalog//item). Mutually exclusive with 'element'. Requires the lxpath XML parser.</a:documentation>
+                     <a:documentation>An XPath-like pattern to match data elements. Supports simple element names (foo), wildcards (*), predicates (item[@type=&#39;book&#39;]), parent/child patterns (catalog/product), and ancestor patterns (catalog//item). A simple element name is equivalent to using element. When multiple patterns match, the most specific one wins. Mutually exclusive with element. Requires the lxpath XML parser.</a:documentation>
                   </attribute>
-               </choice>
+               </optional>
                <optional>
                   <attribute name="mode">
                      <a:documentation>Name of the mode that matches the mode in ProcessNode.</a:documentation>
@@ -6316,7 +6293,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -7207,7 +7183,6 @@
                </optional>
                <oneOrMore>
                   <choice>
-                     <ref name="e_Action"></ref>
                      <ref name="e_Bookmark"></ref>
                      <ref name="e_Copy-of"></ref>
                      <ref name="e_ForAll"></ref>
@@ -7248,7 +7223,6 @@
                </optional>
                <oneOrMore>
                   <choice>
-                     <ref name="e_Action"></ref>
                      <ref name="e_Bookmark"></ref>
                      <ref name="e_Copy-of"></ref>
                      <ref name="e_ForAll"></ref>
@@ -7666,7 +7640,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -7731,9 +7704,6 @@
                   <interleave>
                      <optional>
                         <ref name="e_A"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Action"></ref>
                      </optional>
                      <optional>
                         <ref name="e_AddSearchpath"></ref>
@@ -7978,7 +7948,6 @@
                <zeroOrMore>
                   <choice>
                      <ref name="e_A"></ref>
-                     <ref name="e_Action"></ref>
                      <ref name="e_B"></ref>
                      <ref name="e_Barcode"></ref>
                      <ref name="e_Br"></ref>
@@ -8059,9 +8028,6 @@
                   <interleave>
                      <optional>
                         <ref name="e_A"></ref>
-                     </optional>
-                     <optional>
-                        <ref name="e_Action"></ref>
                      </optional>
                      <optional>
                         <ref name="e_AddSearchpath"></ref>
