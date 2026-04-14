@@ -475,6 +475,7 @@ function commands.box( layoutxml,dataxml )
     colorname       = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string",colorname)
     local graphic   = publisher.read_attribute(layoutxml,dataxml,"graphic",        "string")
     local height    = publisher.read_attribute(layoutxml,dataxml,"height",         "length")
+    local valign    = publisher.read_attribute(layoutxml,dataxml,"vertical-align", "string")
     local width     = publisher.read_attribute(layoutxml,dataxml,"width",          "length")
 
     local class     = publisher.read_attribute(layoutxml,dataxml,"class",          "string")
@@ -608,6 +609,9 @@ function commands.box( layoutxml,dataxml )
     local n = publisher.box(width,height,colorname)
     node.set_attribute(n, publisher.att_shift_left, shift_left)
     node.set_attribute(n, publisher.att_shift_up  , shift_up )
+    if valign then
+        publisher.setprop(n,"vertical-align",valign)
+    end
     return n
 end
 
@@ -3907,39 +3911,68 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
         tab[1].contents = " " -- U+00A0, non breaking space
     end
 
-    -- Adjust vertically aligned images.
-    -- top:     all tops aligned, baseline at bottom of tallest image
-    -- middle:  all centers aligned, baseline at center of tallest image
-    -- hanging: top on baseline, image hangs below (per-image, no group logic)
+    -- Adjust vertically aligned inline elements (Image, Box).
+    -- top:     all tops aligned, baseline at bottom of tallest element
+    -- middle:  all centers aligned, baseline at center of tallest element
+    -- hanging: top on baseline, element hangs below (per-element, no group logic)
+    -- bottom:  bottom of element at bottom of line box (baseline - font descender)
+    local function get_valign_box(tab_entry)
+        local eltname = publisher.elementname(tab_entry)
+        if eltname == "Image" then
+            return publisher.element_contents(tab_entry)[1]
+        elseif eltname == "Box" then
+            return publisher.element_contents(tab_entry)
+        end
+        return nil
+    end
+
     local max_top_height = 0
     local max_mid_height = 0
     for i=1,#tab do
-        if publisher.elementname(tab[i]) == "Image" then
-            local imgbox = publisher.element_contents(tab[i])[1]
-            local va = publisher.getprop(imgbox,"vertical-align")
-            local h = imgbox.height + imgbox.depth
-            if va == "top" and h > max_top_height then
-                max_top_height = h
-            elseif va == "middle" and h > max_mid_height then
-                max_mid_height = h
+        local box = get_valign_box(tab[i])
+        if box then
+            local va = publisher.getprop(box,"vertical-align")
+            if va then
+                local h = box.height + box.depth
+                if va == "top" and h > max_top_height then
+                    max_top_height = h
+                elseif va == "middle" and h > max_mid_height then
+                    max_mid_height = h
+                end
             end
         end
     end
+
+    -- Get font descender for vertical-align="bottom"
+    local font_descender = 0
+    local fi = publisher.fonts.lookup_fontfamily_number_instance[fontfamily or publisher.current_fontfamily]
+    if fi then
+        local f = publisher.fonts.used_fonts[fi.normal]
+        if f and f.size then
+            font_descender = math.floor(f.size * 0.25)
+        end
+    end
+
     for i=1,#tab do
-        if publisher.elementname(tab[i]) == "Image" then
-            local imgbox = publisher.element_contents(tab[i])[1]
-            local va = publisher.getprop(imgbox,"vertical-align")
-            local h = imgbox.height + imgbox.depth
-            if va == "top" and max_top_height > 0 then
-                imgbox.height = max_top_height
-                imgbox.depth = 0
-            elseif va == "middle" and max_mid_height > 0 then
-                local half_max = math.floor(max_mid_height / 2)
-                imgbox.height = half_max + math.floor(h / 2)
-                imgbox.depth = 0
-            elseif va == "hanging" then
-                imgbox.depth = h
-                imgbox.height = 0
+        local box = get_valign_box(tab[i])
+        if box then
+            local va = publisher.getprop(box,"vertical-align")
+            if va then
+                local h = box.height + box.depth
+                if va == "top" and max_top_height > 0 then
+                    box.height = max_top_height
+                    box.depth = 0
+                elseif va == "middle" and max_mid_height > 0 then
+                    local half_max = math.floor(max_mid_height / 2)
+                    box.height = half_max + math.floor(h / 2)
+                    box.depth = 0
+                elseif va == "hanging" then
+                    box.depth = h
+                    box.height = 0
+                elseif va == "bottom" and font_descender > 0 then
+                    box.height = h - font_descender
+                    box.depth = font_descender
+                end
             end
         end
     end

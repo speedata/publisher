@@ -1765,6 +1765,22 @@
         <para>Bestimmt den Innenabstand der Box (rechts)</para>
       </description>
     </attribute>
+    <attribute en="vertical-align" optional="yes" since="5.5.8">
+      <description xml:lang="en">
+        <para>Vertical alignment of the box when used inline in a paragraph. Only effective when the box appears inside a paragraph together with text or other inline elements.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Vertikale Ausrichtung der Box bei Verwendung als Inline-Element in einem Absatz. Wirkt nur, wenn die Box zusammen mit Text oder anderen Inline-Elementen in einem Absatz steht.</para>
+      </description>
+      <choice en="bottom">
+        <description xml:lang="en">
+          <para>Align the bottom of the box with the bottom of the line box (below the text baseline, at the descender line).</para>
+        </description>
+        <description xml:lang="de">
+          <para>Die Unterkante der Box an der Unterkante der Zeilenbox ausrichten (unterhalb der Grundlinie, an der Unterlängenlinie).</para>
+        </description>
+      </choice>
+    </attribute>
     <attribute en="width" type="numberorlength" optional="no">
       <description xml:lang="en">
         <para>Width of the box in grid cells or in absolute values.</para>
