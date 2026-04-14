@@ -3989,6 +3989,10 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
         elseif eltname == "Image" then
             node.set_attribute(contents[1],publisher.att_dontadjustlineheight,1)
             p:append(contents[1],params)
+        elseif eltname == "Box" then
+            publisher.setprop(contents,"inline",true)
+            node.set_attribute(contents,publisher.att_lineheight,contents.height)
+            p:append(contents,params)
         else
             p:append(contents,params)
         end
