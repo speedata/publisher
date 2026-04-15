@@ -2621,6 +2621,9 @@ function commands.image( layoutxml,dataxml )
     if valign then
         publisher.setprop(box,"vertical-align",valign)
     end
+    if publisher.options.showobjects then
+        box = publisher.boxit(box)
+    end
     return {box,imageinfo.allocate}
 end
 

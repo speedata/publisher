@@ -1,6 +1,5 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
-  <Trace grid="no" objects="yes"/>
 
   <Record element="data">
     <PlaceObject>
