@@ -522,6 +522,9 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                             ms["font-family-number"] = 0
                         end
                         marker_opt = inline_options.set_options_for_mknodes(ms, {}, publisher, fontfamilies)
+                        if marker_styles["padding-bottom"] then
+                            marker_opt.marker_shift = -units.getsize(ms, marker_styles["padding-bottom"], ms.fontsize_sp)
+                        end
                         inherit.pop(stylesstack)
                     else
                         marker_opt = inline_options.set_options_for_mknodes(styles,{},publisher,fontfamilies)

@@ -1067,6 +1067,9 @@ function Par:format( width_sp, options,data )
                         label = str
                     end
                     if label then
+                        if options.marker_shift then
+                            label.shift = options.marker_shift
+                        end
                         local wd = thisprepend[2] or node.dimensions(label)
                         local labeldistance = thisprepend[4] or tex.sp("5pt")
                         local labelalign = thisprepend[5] or "right"

@@ -1,0 +1,25 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<LoadFontfile name="fnt" filename="FiraSans-Regular.otf" />
+	<Pageformat height="4cm" width="4cm" />
+
+	<DefineFontfamily fontsize="10pt" leading="12pt" name="text">
+		<Regular fontface="fnt" />
+	</DefineFontfamily>
+
+	<Stylesheet>
+		li::marker {
+            content: "\2022";
+			padding-bottom: -0.5pt;
+        }
+	</Stylesheet>
+
+	<Record element="data">
+		<PlaceObject>
+			<Textblock fontfamily="text">
+				<Paragraph>
+					<Value select="sd:decode-html(.)" />
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+	</Record>
+</Layout>
