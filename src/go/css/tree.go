@@ -17,6 +17,16 @@ var (
 	toprightbottomleft                = [4]string{"top", "right", "bottom", "left"}
 )
 
+// trimQuotes removes surrounding matching double or single quotes from s.
+func trimQuotes(s string) string {
+	if len(s) >= 2 {
+		if (s[0] == '"' && s[len(s)-1] == '"') || (s[0] == '\'' && s[len(s)-1] == '\'') {
+			return s[1 : len(s)-1]
+		}
+	}
+	return s
+}
+
 func stringValue(toks tokenstream) string {
 	ret := []string{}
 	negative := false
@@ -285,7 +295,7 @@ func resolveAttributes(attrs []html.Attribute) (map[string]string, map[string]st
 					if strings.HasPrefix(part, "url") {
 						resolved["list-style-image"] = part
 					} else {
-						resolved["list-style-type"] = part
+						resolved["list-style-type"] = trimQuotes(part)
 					}
 				}
 			}
@@ -397,6 +407,8 @@ func resolveAttributes(attrs []html.Attribute) (map[string]string, map[string]st
 			for _, part := range strings.Split(attr.Val, " ") {
 				resolved["background-color"] = part
 			}
+		case "content", "list-style-type":
+			resolved[key] = trimQuotes(attr.Val)
 		default:
 			resolved[key] = attr.Val
 		}

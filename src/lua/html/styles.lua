@@ -62,8 +62,10 @@ function M.copy_attributes(styles, attributes, elementname)
             elseif type(v) == "string" and string.match(v, "%d+%%$") then
                 local amount = string.match(v, "(%d+)%%$")
                 styles.fontsize_sp = math.round(styles.fontsize_sp * tonumber(amount) / 100, 0)
-            elseif v == "small" then
+            elseif v == "small" or v == "smaller" then
                 styles.fontsize_sp = math.round(styles.fontsize_sp * 0.8)
+            elseif v == "larger" then
+                styles.fontsize_sp = math.round(styles.fontsize_sp * 1.2)
             else
                 styles.fontsize_sp = tex.sp(v)
             end

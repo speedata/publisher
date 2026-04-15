@@ -224,12 +224,19 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
 
         local before_styles = {}
         local has_before_styles = false
+        local marker_styles = {}
+        local has_marker_styles = false
         for k,v in pairs(thiselt_styles) do
             if string.match(k,"^before::") then
                 local rawstyle = string.gsub(k,"^before::(.*)","%1")
                 before_styles[rawstyle] = v
                 thiselt_styles[k] = nil
                 has_before_styles = true
+            elseif string.match(k,"^marker::") then
+                local rawstyle = string.gsub(k,"^marker::(.*)","%1")
+                marker_styles[rawstyle] = v
+                thiselt_styles[k] = nil
+                has_marker_styles = true
             end
         end
 
@@ -239,7 +246,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
 
             local before_options = {}
             inline_options.set_options_for_mknodes(styles, before_options, publisher, fontfamilies)
-            local content = strings.remove_quotes(styles.content)
+            local content = styles.content
             local nl = publisher.mknodes(content,before_options)
             local margin_left = units.getsize(styles,styles["margin-left"],styles.fontsize_sp)
 
@@ -479,20 +486,55 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 n, prevdir = build_nodelist(thiselt,options,before_box,"build_nodelist/ li",prevdir,dataxml)
                 before_box = nil
                 -- n is a table of box and / or par
-                local str = lists.resolve_list_style_type(styles,olcounter,oltype[styles.listlevel],dataxml)
+                -- ::marker content overrides list-style-type
+                local str
+                if has_marker_styles and marker_styles.content then
+                    str = marker_styles.content
+                else
+                    str = lists.resolve_list_style_type(styles,olcounter,oltype[styles.listlevel],dataxml)
+                end
                 local pos = styles["list-style-position"] or "outside"
                 for i=1,#n do
                     local a = n[i]
-                    local opt = inline_options.set_options_for_mknodes(styles,{},publisher,fontfamilies)
+                    -- Apply ::marker styles to the marker options
+                    local marker_opt
+                    if has_marker_styles then
+                        local ms = inherit.push(stylesstack)
+                        local inherited_fam = styles["font-family-number"]
+                        styles_mod.copy_attributes(ms, marker_styles, "li::marker")
+                        if marker_styles["font-size"] and inherited_fam and tonumber(inherited_fam) > 0 then
+                            -- Re-define the inherited font family at the new marker size
+                            local fam_inst = publisher.fonts.lookup_fontfamily_number_instance[tonumber(inherited_fam)]
+                            if fam_inst then
+                                local marker_name = (fam_inst.name or "marker") .. "/marker"
+                                local cached = publisher.fonts.lookup_fontfamily_name_number[marker_name]
+                                if cached then
+                                    ms["font-family-number"] = cached
+                                else
+                                    local new_fam = publisher.define_fontfamily(
+                                        fam_inst.fontfaceregular, fam_inst.fontfacebold,
+                                        fam_inst.fontfaceitalic, fam_inst.fontfacebolditalic,
+                                        marker_name, ms.fontsize_sp, ms.fontsize_sp * 1.12)
+                                    ms["font-family-number"] = new_fam
+                                end
+                            end
+                        elseif marker_styles["font-family"] then
+                            ms["font-family-number"] = 0
+                        end
+                        marker_opt = inline_options.set_options_for_mknodes(ms, {}, publisher, fontfamilies)
+                        inherit.pop(stylesstack)
+                    else
+                        marker_opt = inline_options.set_options_for_mknodes(styles,{},publisher,fontfamilies)
+                    end
                     if pos == "inside" then
-                        local nl = publisher.mknodes(str .. " ", opt)
+                        local nl = publisher.mknodes(str .. " ", marker_opt)
                         nl = node.hpack(nl)
                         local a_head = a[1].contents
                         a_head = node.insert_before(a_head,a_head,nl)
                         a[1].contents = a_head
                     else
                         local wd = styles.listindent
-                        local x = { str, wd, opt }
+                        local x = { str, wd, marker_opt }
                         a:prepend(x)
                     end
                     -- label only for the first

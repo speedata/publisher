@@ -1059,6 +1059,7 @@ function Par:format( width_sp, options,data )
                     local thisprepend = prepend[j]
                     local options = thisprepend[3] or options
                     local str = thisprepend[1]
+                    if options.color and options.color ~= 1 then self.has_color = true end
                     local label
                     if type(str) == "string" then
                         label = node.hpack(publisher.mknodes(str,options,"par prepend"))

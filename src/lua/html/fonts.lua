@@ -54,6 +54,12 @@ function M.get_fontfamily(families, size_sp, name, styles, publisher, fontfamili
     local chosen, def = familyname(fontfamilies, publisher.fontgroup, family_table)
     local singlefont = chosen .. "/" .. name
 
+    -- Already defined at this size?
+    local predefined = publisher.fonts.lookup_fontfamily_name_number[singlefont]
+    if predefined then
+        return predefined
+    end
+
     -- Collect style variants
     local regular, bold, italic, bolditalic
     for weightstyle, rec in pairs(def) do

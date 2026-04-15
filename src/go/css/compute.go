@@ -125,8 +125,13 @@ func (c *CSS) FillComputedMaps(r *Result) error {
 				}
 				virt := nodeVirtAttrs[n]
 				for _, single := range sr.rule {
-					k := prefix + stringValue(single.Key)
+					bareKey := stringValue(single.Key)
+					k := prefix + bareKey
 					v := stringValue(single.Value)
+					switch bareKey {
+					case "content", "list-style-type":
+						v = trimQuotes(v)
+					}
 					virt = append(virt, html.Attribute{
 						Key: "!" + k,
 						Val: v,

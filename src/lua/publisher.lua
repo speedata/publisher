@@ -5128,6 +5128,9 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                     attr_table = get_attributes(head, attr_table_reuse)
                     attr_table_reuse = attr_table
                 end
+                -- Save original head for startcolor insertion, because
+                -- endcolor processing may advance head past the colored node.
+                local startcolor_before = head
                 if insert_endcolor then
                     local colstop = node_new("whatsit","pdf_colorstack")
                     set_attrs(colstop,attr_table)
@@ -5160,7 +5163,7 @@ function insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewi
                     colstart.stack = default_stack
 
                     setp(colstart,"origin","setcolor")
-                    parent.head = node_insert_before(parent.head,head,colstart)
+                    parent.head = node_insert_before(parent.head,startcolor_before,colstart)
                 end
                 if insert_endrole then
                     local emc = node_new("whatsit","pdf_literal")
