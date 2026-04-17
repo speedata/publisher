@@ -137,6 +137,13 @@ function tabular:attach_objects_row(tab, current_row, skiptable)
                         inline = {}
                     end
                     block[#block + 1] = {eltcontents}
+                elseif eltname == "Textblock" then
+                    -- block (pre-formatted to its own width)
+                    if #inline > 0 then
+                        block[#block + 1] = inline
+                        inline = {}
+                    end
+                    block[#block + 1] = {eltcontents}
                 elseif eltname == "Table" or eltname == "Groupcontents" then
                     -- block
                     if #inline > 0 then

@@ -7482,9 +7482,9 @@ function rotateTd( nodelist,angle, width_sp)
     _,Q = node.insert_after(q,nodelist,Q)
     q = node.vpack(q)
 
-    q.width  = math.abs(_wd * cos) + math.abs(_ht * sin)
-    q.height = math.abs(_ht * cos) + math.abs(_wd * sin)
-    q.depth  = _dp
+    q.width  = math.abs(_wd * cos) + math.abs(ht * sin)
+    q.height = math.abs(ht * cos) + math.abs(_wd * sin)
+    q.depth  = 0
 
     return q
 end

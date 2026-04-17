@@ -1,0 +1,21 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<DefineTextformat name="left" hyphenate="yes" />
+	<Pageformat height="5cm" width="10cm" />
+	<Record element="data">
+		<PlaceObject>
+			<Table>
+				<Tr>
+					<ForAll select="color">
+						<Td border-right="0.5pt" border-bottom="0.5pt" rotate="-90" align="center" valign="top">
+							<Textblock width="20mm" textformat="left">
+								<Paragraph allowbreak="/">
+									<Value select="@name" />
+								</Paragraph>
+							</Textblock>
+						</Td>
+					</ForAll>
+				</Tr>
+			</Table>
+		</PlaceObject>
+	</Record>
+</Layout>

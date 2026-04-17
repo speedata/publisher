@@ -10650,6 +10650,7 @@
           <cmd name="Paragraph"/>
           <cmd name="Switch"/>
           <cmd name="Table"/>
+          <cmd name="Textblock"/>
           <cmd name="Value"/>
           <cmd name="VSpace"/>
         </choice>
