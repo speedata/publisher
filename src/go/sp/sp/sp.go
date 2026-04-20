@@ -401,11 +401,26 @@ func run(command string, cmdline []string, environ []string) (errorcode int) {
 		io.Copy(stdin, os.Stdin)
 		stdin.Close()
 	}
+	startTime := time.Now()
 	if err := cmd.Wait(); err != nil {
-		log.Print(err)
-		if _, ok := err.(*exec.ExitError); ok {
+		if exitErr, ok := err.(*exec.ExitError); ok {
+			// On Windows, Go shared libraries can crash during DLL unload
+			// (STATUS_ACCESS_VIOLATION). If the PDF was written after we
+			// started the process, treat it as success.
+			if runtime.GOOS == osWindows && exitErr.ExitCode() == 0xc0000005 {
+				outfile := getOption("jobname")
+				if outfile == "" {
+					outfile = "publisher"
+				}
+				if fi, ferr := os.Stat(outfile + ".pdf"); ferr == nil && fi.ModTime().After(startTime) {
+					log.Print("Ignoring Windows DLL cleanup crash (exit 0xc0000005), PDF was created successfully.")
+					return 0
+				}
+			}
+			log.Print(err)
 			return -1
 		}
+		log.Print(err)
 	}
 	return
 }
