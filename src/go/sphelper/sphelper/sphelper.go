@@ -37,7 +37,6 @@ func main() {
 	op := optionparser.NewOptionParser()
 	op.On("--basedir DIR", "Base dir", &commandlinebasedir)
 	op.Command("build", "Build go binary")
-	op.Command("builddeb", "Build sp binary for debian (/usr/)")
 	op.Command("buildlib", "Build sp library")
 	op.Command("buildlibarch", "Build sp library for specific architecture")
 	op.Command("dist", "Generate zip files and windows installers")
@@ -96,17 +95,6 @@ func main() {
 		}
 
 		err = buildlib.BuildCLib(cfg, goos, goarch)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(-1)
-		}
-	case "builddeb":
-		// build debian package
-		if len(op.Extra) != 4 {
-			fmt.Println("Need three arguments: sphelper builddeb <platform> <arch> <dest>")
-			os.Exit(-1)
-		}
-		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), op.Extra[1], op.Extra[2], "linux-usr", op.Extra[3], "")
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(-1)

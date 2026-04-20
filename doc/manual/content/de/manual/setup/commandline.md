@@ -8,7 +8,6 @@ type: docs
 Der speedata Publisher wird über die Kommandozeile (auch: Terminal, Befehlsfenster) gestartet.
 Einerseits gibt es _Befehle_, anderseits lassen sich die Befehle über _Parameter_ steuern.
 
-{{< icon "light-bulb" >}}
 
 ```shell
 $ sp <Befehl>  <Parameter> <Parameter> ...
@@ -52,7 +51,7 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 : Prüft, ob eine neue Version des Publishers verfügbar ist. Rückgabecode ist 0, wenn die Version aktuell ist. 1, wenn eine neue Version verfügbar ist.
 
 `compare`
-: Vergleicht PDF-Dateien für die Qualitätssicherung. Siehe [qualitaetssicherung]({{% relref "qualityassurance" %}}).
+: Vergleicht PDF-Dateien für die Qualitätssicherung. Siehe [Qualitätssicherung]({{% relref "qualityassurance" %}}).
 
 `doc`
 : Öffnet das Referenzhandbuch im Browser (lokale HTML-Dateien).
