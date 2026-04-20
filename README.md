@@ -20,7 +20,7 @@ Examples
 
 There are some examples in the [example repository on GitHub](https://github.com/speedata/examples). Also, there are lots of small examples in the `qa` subdirectory that is used for quality assurance. See also our [showcase](https://www.speedata.de/en/#showcase).
 
-<img src="https://doc.speedata.de/publisher/static/img/beispiele.png">
+<img src="https://doc.speedata.de/publisher/img/beispiele.png">
 
 Can I use this in production?
 -----------------------------
@@ -32,7 +32,7 @@ For a list of upcoming and recent features see the [news file](News.md).
 Installation
 ------------
 
-Just get one of the ready-to-run packages from <https://download.speedata.de/> and follow the directions inside the ZIP file (=just extract and set the PATH variable). See the [installation instructions in the manual](https://doc.speedata.de/publisher/en/installation/).
+Just get one of the ready-to-run packages from <https://download.speedata.de/> and follow the directions inside the ZIP file (=just extract and set the PATH variable). See the [installation instructions in the manual](https://doc.speedata.de/publisher/en/manual/setup/installation/).
 
 
 Manual
@@ -53,7 +53,7 @@ The license is AGPLv3, see the file COPYING in the root directory.
 
 Third-party software: speedata Publisher relies on LuaTeX for PDF generation, which is licensed under the GNU General Public License ([GPLv2 or later](https://www.gnu.org/licenses/)). LuaTeX is included in the packages at [download.speedata.de](https://download.speedata.de). Get the source code of LuaTeX from [www.luatex.org](https://www.luatex.org/). See also the file [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) in the root directory.
 
-We welcome contributions. Just [follow the GitHub procedure (fork, pull requests)](https://help.github.com/articles/using-pull-requests/). The [installation manual](https://doc.speedata.de/publisher/en/installation/) has a section on building the binary from the source code.
+We welcome contributions. Just [follow the GitHub procedure (fork, pull requests)](https://help.github.com/articles/using-pull-requests/). The file [BUILDING.md](BUILDING.md) has instructions on building the binary from the source code.
 
 Contact / Support
 -----------------

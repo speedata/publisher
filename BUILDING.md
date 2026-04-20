@@ -62,6 +62,8 @@ Verify with `bin/sdluatex --version`.
 
 ## Documentation
 
+You need [Hugo](https://gohugo.io)
+
 ```sh
 rake doc
 ```
