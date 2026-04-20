@@ -43,22 +43,9 @@ task :buildlib => [:sphelper] do
 	FileUtils.cp_r("#{builddir}/dylib/.","#{installdir}/lib/")
 end
 
-desc "Generate EPUB only"
-task :epub => [:sphelper] do
-	sh "#{installdir}/bin/sphelper epub"
-	puts "done"
-end
-
-desc "Generate documentation"
+desc "Generate documentation (reference docs and changelog for Hugo)"
 task :doc => [:sphelper] do
 	sh "#{installdir}/bin/sphelper doc"
-	puts "done"
-end
-
-# without ugly urls
-desc "Generate site documentation"
-task :sitedoc => [:sphelper] do
-	sh "#{installdir}/bin/sphelper sitedoc"
 	puts "done"
 end
 

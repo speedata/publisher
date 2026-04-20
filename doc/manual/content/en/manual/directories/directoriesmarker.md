@@ -1,0 +1,102 @@
+---
+title: "Markers"
+weight: 45
+type: docs
+---
+
+
+Markers are invisible characters that are inserted into the text.
+A name is always assigned to these characters.
+After the character is output on a page, you can ask the Publisher for the page number.
+The structure is as follows:
+
+```xml
+<PlaceObject>
+  <Textblock>
+    <Mark select="'textstart'"/>
+    <Paragraph>
+      <Value>
+      Row
+      Row
+      Row
+      Row
+       </Value>
+    </Paragraph>
+  </Textblock>
+</PlaceObject>
+```
+
+After outputting the page, the page number can now be determined with `sd:pagenumber('textstart')`.
+
+The markers are automatically stored in an internal auxiliary file `publisher.aux` so that when the page numbers are scanned again with `sd:pagenumber()`, they are available before the page is placed.
+A simple text structure is used as an example (it is the same example as in the next section):
+
+```xml
+<data>
+  <chapter titel="Foreword">
+    <text>...</text>
+  </chapter>
+  <chapter titel="Introduction">
+    <text>...</text>
+  </chapter>
+  <chapter titel="Conclusion">
+    <text>...</text>
+  </chapter>
+</data>
+```
+
+Which is output with the following layout:
+
+```xml
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <DefineFontfamily name="title" fontsize="18" leading="20">
+    <Regular fontface="sans"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <!-- This point will be completed further below -->
+    <ProcessNode select="chapter"/>
+  </Record>
+
+  <Record element="chapter">
+    <PlaceObject>
+      <Textblock>
+        <Mark select="@title"/>
+        <Paragraph fontfamily="title">
+          <Value select="@title"/>
+        </Paragraph>
+        <Paragraph>
+          <Value select="text"/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <ClearPage/>
+  </Record>
+</Layout>
+```
+{{% codecaption %}}The basic framework for the markers. The place for the table of contents will be extended later (see comment).{{% /codecaption %}}
+
+The Publisher now assigns the chapters to the page number. You can now output the table of contents on the next pass:
+
+```xml
+  <PlaceObject>
+    <Table padding="5pt">
+      <ForAll select="chapter">
+        <Tr>
+          <Td><Paragraph><Value select="@title"/></Paragraph></Td>
+          <Td><Paragraph>
+               <Value select="sd:pagenumber(@title)"/> <!--1-->
+          </Paragraph></Td>
+        </Tr>
+      </ForAll>
+    </Table>
+  </PlaceObject>
+  <ClearPage/>
+```
+{{% codecaption %}}This part is inserted into the layout above to output the table of contents.{{% /codecaption %}}
+
+1. In a further pass, the page numbers are available before the actual chapters are written to the following pages.
+

@@ -1,0 +1,131 @@
+---
+title: "Troubleshooting / Debugging"
+weight: 67
+type: docs
+---
+
+
+
+The output does not always work as it should. Sometimes objects are too wide, sometimes the wrong text format is used and sometimes the table does not look as it should. In order to prevent troubleshooting from becoming too difficult, the speedata Publisher provides various aids. For this there is the command <Trace>, which offers different switches. These are (by default):
+
+```xml
+<Trace
+    assignments="no"
+    objects="no"
+    verbose="no"
+    grid="no"
+    gridallocation="no"
+    hyphenation="no"
+    kerning="no"
+    textformat="no"
+    />
+```
+
+`assignments`
+: Displays the value of the assignment (<SetVariable>) on the console.
+
+`objects`
+: Draws a line around individual objects.
+
+`verbose`
+: Increases the output on the console (log file).
+
+`grid`
+: Draws the grid. See section [Grid]({{% relref "/manual/basics/grid" %}}).
+
+`gridallocation`
+: Draws the grid allocation. See section [Grid]({{% relref "/manual/basics/grid" %}}).
+
+`hyphenation`
+: Marks the places where the words may be hyphenated.
+
+`kerning`
+: Mark the place where the font inserts a kerning (HarfBuzz mode).
+
+`text format`
+: Creates a tooltip above each line of text, showing the text format used. See the example in the Text Formats section.
+
+## Messages
+
+Besides the possibilities provided by the command `<Trace>`, there is also the possibility to output messages in the log file:
+
+```xml
+<Message select="'Hello, world!'"/>
+<Message select="sd:current-page()"/>
+```
+
+The output appears in the log file (`publisher-protocol.xml`)
+
+```xml
+<entry level="INFO" msg="Message" line="5" message="Hello, world"></entry>
+<entry level="INFO" msg="Message" line="6" message="1"></entry>
+```
+
+The command `<Message>` can be instructed with `error="yes"` to output an error message (instead of a message). You can also specify the error code that will be returned when you exit the Publisher. See [the command `<Message>` in the reference]({{< relref "/reference/message" >}}).
+
+## Status File and Log File
+
+At the end of the run, two files are written to the hard disk that can be helpful for troubleshooting. The publisher.status file is an XML file that contains the error messages and other messages (via the <Message> command). The example above with the two messages results in the following file:
+
+```xml
+<Status>
+  <Errors>0</Errors>
+  <Message>Hello, world!</Message>
+  <Message>1</Message>
+  <DurationSeconds>1</DurationSeconds>
+</Status>
+```
+
+A more detailed log file (`publisher-protocol.xml`) is also written, which contains various information. You can set the log level to debug (`sp --loglevel debug`) to get more information.
+
+```xml
+<log loglevel="DEBUG" time="Jan 10 12:30:02" version="4.17.0" pro="yes">
+  <entry level="DEBUG" msg="Start file" filename="sdini.lua"></entry>
+  [...]
+  <entry level="INFO" msg="Start processing"></entry>
+  [...]
+  <entry level="INFO" msg="Running LuaTeX version 1.15.0 on macosx"></entry>
+  <entry level="DEBUG" msg="Loading hyphenation pattern" filename="hyph-en-gb.pat.txt"></entry>
+  <entry level="DEBUG" msg="File lookup" source="hyph-en-gb.pat.txt" found="/home/user/work/software/publisher/src/hyphenation/hyph-en-gb.pat.txt"></entry>
+  <entry level="DEBUG" msg="Language ID" id="0"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-regular.otf" size="10.0" id="1"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-regular.otf" size="8.0" id="2"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-bold.otf" size="10.0" id="3"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-bold.otf" size="8.0" id="4"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-italic.otf" size="10.0" id="5"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-italic.otf" size="8.0" id="6"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-bolditalic.otf" size="10.0" id="7"></entry>
+  <entry level="DEBUG" msg="Preload font" name="texgyreheros-bolditalic.otf" size="8.0" id="8"></entry>
+  <entry level="INFO" msg="Define font family" name="text" size="10.0" leading="12.0" id="1"></entry>
+  <entry level="INFO" msg="speedata Publisher Pro"></entry>
+  <entry level="DEBUG" msg="Checksum" filename="layout.xml" md5="d5251dcca6e8bc94331d395f9ee4ea69"></entry>
+  <entry level="DEBUG" msg="File lookup" source="publisher-aux.xml" found="/home/user/work/software/publisher/spielwiese/publisher-aux.xml"></entry>
+  <entry level="DEBUG" msg="Checksum" filename="publisher-aux.xml" md5="81c05dd1e89a65fc2a8a31348f5ccb7c"></entry>
+  <entry level="DEBUG" msg="Using this file:" file="/home/user/work/software/publisher/spielwiese/data.xml"></entry>
+  <entry level="DEBUG" msg="Checksum" filename="data.xml" md5="cbe30e8afae15473d28be5d8272ddf95"></entry>
+  <entry level="INFO" msg="Create page" type="Default Page" pagenumber="1"></entry>
+  <entry level="INFO" msg="Number of rows: 28, number of columns = 19"></entry>
+  <entry level="INFO" msg="Create font metrics" name="texgyreheros-regular.otf" size="10.0" id="1" mode="harfbuzz"></entry>
+  <entry level="DEBUG" msg="File lookup" source="texgyreheros-regular.otf" found="/home/user/work/software/publisher/fonts/texgyreheros/texgyreheros-regular.otf"></entry>
+  <entry level="DEBUG" msg="PlaceObject" type="Textblock" col="1" row="1" wd="19" ht="1" page="1"></entry>
+  <entry level="INFO" msg="Shipout page 1"></entry>
+  <entry level="INFO" msg="Stop processing data"></entry>
+  <entry level="INFO" msg="0 errors occurred"></entry>
+  <entry level="INFO" msg="Duration: 0.014821 seconds"></entry>
+</log>
+```
+
+## How to get help
+
+If all troubleshooting fails or if you have questions or comments that you want to share with others, you can use the following resources:
+
+* Discussions on Github: https://github.com/speedata/publisher/discussions
+* Issues on Github: https://github.com/speedata/publisher/issues
+* Stackoverflow with tag `speedatapublisher`: https://stackoverflow.com/questions/tagged/speedatapublisher
+
+Any feedback is welcome and helpful. Notice however: Paid support is _always_ prioritized over unpaid support. So if you have a feature request or the need of a bug-fix, please consider buying a support plan to get into the fast lane.
+
+Feature requests on Github will all be seen and written down on a non-public list but closed from Github eventually, to keep the issue list clean.
+
+If you have a bug report: please follow the simple guideline: Make an example that is as small as possible but shows the error. Otherwise I can't see what is going wrong.
+

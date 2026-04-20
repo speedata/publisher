@@ -15,10 +15,8 @@ import (
 	"speedatapublisher/sphelper/buildlib"
 	"speedatapublisher/sphelper/buildsp"
 	"speedatapublisher/sphelper/config"
-	"speedatapublisher/sphelper/db2html"
 	"speedatapublisher/sphelper/dirstructure"
 	"speedatapublisher/sphelper/distcustom"
-	"speedatapublisher/sphelper/epub"
 	"speedatapublisher/sphelper/fileutils"
 	"speedatapublisher/sphelper/genadoc"
 	"speedatapublisher/sphelper/genschema"
@@ -31,40 +29,6 @@ var (
 	basedir string
 )
 
-// sitedoc: true: needs webserver, false: standalone HTML files
-func makedoc(cfg *config.Config, sitedoc bool) error {
-	var err error
-	err = os.RemoveAll(filepath.Join(cfg.Builddir, "manual"))
-	if err != nil {
-		return err
-	}
-
-	for _, lang := range []string{"en", "de"} {
-		err = genadoc.DoThings(cfg, lang)
-		if err != nil {
-			return err
-		}
-		var manualfile string
-		switch lang {
-		case "en":
-			manualfile = "publishermanual"
-		case "de":
-			manualfile = "publisherhandbuch"
-		}
-		err = db2html.DoThings(cfg, manualfile, sitedoc)
-		if err != nil {
-			return err
-		}
-	}
-
-	// Let's try to generate an EPUB
-	err = epub.GenerateEpub(cfg)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 func main() {
 	cfg := config.NewConfig(basedir)
 	cfg.IsPro = os.Getenv("SDPRO") == "yes"
@@ -76,14 +40,11 @@ func main() {
 	op.Command("builddeb", "Build sp binary for debian (/usr/)")
 	op.Command("buildlib", "Build sp library")
 	op.Command("buildlibarch", "Build sp library for specific architecture")
-	op.Command("dbmanual", "Generate docbook based documentation")
 	op.Command("dist", "Generate zip files and windows installers")
 	op.Command("distcustom", "Generate custom directory structure for distribution")
-	op.Command("doc", "Generate speedata Publisher documentation (standalone)")
-	op.Command("epub", "Generate EPUB documentation")
+	op.Command("doc", "Generate reference docs and changelog for Hugo")
 	op.Command("genschema", "Generate schema (layoutschema-en.xml)")
 	op.Command("mkreadme", "Make readme for installation/distribution")
-	op.Command("sitedoc", "Generate speedata Publisher documentation to be used with a web server")
 	op.Command("sourcedoc", "Generate the source documentation")
 	err := op.Parse()
 	if err != nil {
@@ -151,20 +112,17 @@ func main() {
 			os.Exit(-1)
 		}
 	case "doc":
-		err = makedoc(cfg, false)
-		if err != nil {
-			log.Fatal(err)
+		for _, lang := range []string{"en", "de"} {
+			err = genadoc.GenerateMarkdownFiles(cfg, lang)
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = genadoc.GenerateChangelogMarkdown(cfg, lang)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
-	case "epub":
-		err = epub.GenerateEpub(cfg)
-		if err != nil {
-			log.Fatal(err)
-		}
-	case "sitedoc":
-		err = makedoc(cfg, true)
-		if err != nil {
-			log.Fatal(err)
-		}
+		fmt.Println("Hugo reference docs and changelog generated.")
 	case "genschema":
 		err = genschema.DoThings(cfg)
 		if err != nil {

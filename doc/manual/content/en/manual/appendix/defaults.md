@@ -1,0 +1,148 @@
+---
+title: "speedata Publisher defaults"
+weight: 10
+type: docs
+---
+
+
+The speedata Publisher defines some default settings that can be changed in the layout file. These defaults concern the colors, fonts and page size and margins.
+
+## Fonts
+The distribution includes the free font family TeXGyreHeros, a high quality clone of Helvetica. It comes in the variants regular, bold, italic and bolditalic. It is defined as follows:
+
+```xml
+<LoadFontfile
+       name="TeXGyreHeros-Regular"
+       filename="texgyreheros-regular.otf" />
+<LoadFontfile
+       name="TeXGyreHeros-Bold"
+       filename="texgyreheros-bold.otf" />
+<LoadFontfile
+       name="TeXGyreHeros-Italic"
+       filename="texgyreheros-italic.otf" />
+<LoadFontfile
+       name="TeXGyreHeros-BoldItalic"
+       filename="texgyreheros-bolditalic.otf" />
+
+<LoadFontfile
+       name="CamingoCode-Bold"
+       filename="CamingoCode-Bold.ttf" />
+<LoadFontfile
+       name="CamingoCode-BoldItalic"
+       filename="CamingoCode-BoldItalic.ttf" />
+<LoadFontfile
+       name="CamingoCode-Italic"
+       filename="CamingoCode-Italic.ttf" />
+<LoadFontfile
+       name="CamingoCode-Regular"
+       filename="CamingoCode-Regular.ttf" />
+
+<LoadFontfile
+       name="CrimsonPro-Bold"
+       filename="CrimsonPro-Bold.ttf" />
+<LoadFontfile
+       name="CrimsonPro-BoldItalic"
+       filename="CrimsonPro-BoldItalic.ttf" />
+<LoadFontfile
+       name="CrimsonPro-Italic"
+       filename="CrimsonPro-Italic.ttf" />
+<LoadFontfile
+       name="CrimsonPro-Regular"
+       filename="CrimsonPro-Regular.ttf" />
+```
+
+The corresponding font family is defined as:
+
+```xml
+<DefineFontfamily name="text" fontsize="10" leading="12">
+  <Regular    fontface="TeXGyreHeros-Regular"/>
+  <Bold       fontface="TeXGyreHeros-Bold"/>
+  <Italic     fontface="TeXGyreHeros-Italic"/>
+  <BoldItalic fontface="TeXGyreHeros-BoldItalic"/>
+</DefineFontfamily>
+```
+
+and since the font family named text is taken as the default for the paragraphs, without any change the text appears in Helvetica 10pt/12pt. With re-defining the font family text you can change the document font.
+
+The font aliases are defined for the default font:
+
+* `TeXGyreHeros-Regular` -> sans
+* `TeXGyreHeros-Bold` -> sans-bold
+* `TeXGyreHeros-Italic` -> sans-italic
+* `TeXGyreHeros-BoldItalic` -> sans-bolditalic
+
+* `CrimsonPro-Regular` -> serif
+* `CrimsonPro-Bold` -> serif-bold
+* `CrimsonPro-Italic` -> serif-italic
+* `CrimsonPro-BoldItalic` -> serif-bolditalic
+
+* `CamingoCode-Regular` -> monospace
+* `CamingoCode-Bold` -> monospace-bold
+* `CamingoCode-Italic` -> monospace-italic
+* `CamingoCode-BoldItalic` -> monospace-bolditalic
+
+The OpenType features activated with the `harfbuzz` mode are:
+
+| Feature | Description |
+| --- | --- |
+| `abvm` | Above-base Mark Positioning |
+| `blwm` | Below-base Mark Positioning |
+| `calt` | Contextual Alternates |
+| `ccmp` | Glyph Composition/Decomposition |
+| `clig` | Contextual Ligatures |
+| `curs` | Cursive Positioning |
+| `dist` | Distances |
+| `kern` | Kerning |
+| `locl` | Localized Forms |
+| `mark` | Mark Positioning |
+| `mkmk` | Mark to Mark Positioning |
+| `rclt` | Required Contextual Alternates |
+| `rlig` | Required Ligatures |
+
+
+## Textformats
+
+The following text formats are predefined:
+
+```xml
+<DefineTextformat name="text" alignment="justified"/>
+<DefineTextformat name="centered" alignment="centered" />
+<DefineTextformat name="left" alignment="leftaligned"/>
+<DefineTextformat name="right" alignment="rightaligned"/>
+
+<DefineTextformat name="__justified" alignment="justified"/>
+<DefineTextformat name="__centered" alignment="centered" />
+<DefineTextformat name="__leftaligned" alignment="leftaligned"/>
+<DefineTextformat name="__rightaligned" alignment="rightaligned"/>
+```
+
+The last four are used in tables. See [the section on text formats in tables]({{< relref "textformat" >}}).
+
+## Page size and margin
+
+The page size defaults to A4 (210mm × 297mm).
+
+The master page for all pages is defined as follows:
+
+```xml
+<Pagetype name="Default Page" test="true()">
+  <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+</Pagetype>
+```
+
+The page grid is set to 10mm × 10mm.
+
+## Colors
+The known CSS colors are defined in the RGB color space. The colors 'black' and 'white' are defined in the grayscale color space. See also the command [`DefineColor`]({{< relref "/reference/definecolor" >}}), there the predefined colors are listed.
+
+The special colors HKS 1-97 and many Pantone colors are already defined with their CMYK values.
+
+## Matters
+
+There are two sections defined:
+
+```xml
+<DefineMatter name="mainmatter" label="decimal" resetbefore="yes" />
+<DefineMatter name="frontmatter" label="lowercase-romannumeral" />
+```
+

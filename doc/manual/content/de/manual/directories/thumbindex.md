@@ -1,0 +1,62 @@
+---
+title: "Griffmarken"
+weight: 61
+type: docs
+---
+
+
+![Links: Daumenregister im Telefonbuch (das gibt es noch!). Rechts: Linien sind weniger aufdringlich, trotzdem praktisch.](/img/25-griffmarken.jpg)
+
+Daumenregister sind Markierungen an der Außenkante eines Katalogs oder eines Nachschlagewerks, die das aktuelle Kapitel anzeigen.
+Beispiele finden sich in der Abbildung .
+Eine Eigenschaft des Daumenregisters ist, dass es über den rechten oder über den linken Rand des Papiers hinausgeht.
+Das heißt, die Schnittkante des Papiers ist im farbigen Bereich, so dass die Farbe auch im zugeklappten Zustand zu erkennen ist.
+
+An Daumenregistern ist erst einmal nichts Besonderes, sie werden entweder mit Boxen oder Linien in einer bestimmten Farbe erzeugt.
+Es folgt ein Beispiel für Kapitelnummern in einer quadratischen Box.
+
+```xml
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options bleed="3mm"/> <!--1-->
+
+  <DefineFontfamily name="thumbindex" fontsize="15" leading="15">
+    <Regular fontface="sans-bold"/>
+  </DefineFontfamily>
+  <Record element="data">
+    <Loop select="4" variable="chapter">
+      <PlaceObject column="200mm"
+          row="{20 + 20 * $chapter}mm"> <!--2-->
+
+        <Box width="1cm" height="1cm" background-color="black"
+             bleed="right"/> <!--3-->
+      </PlaceObject>
+
+      <!--4-->
+      <PlaceObject column="200mm" row="{20 + 20 * $chapter}mm">
+        <Table width="1cm" stretch="max">
+          <Tr valign="middle" minheight="1">
+            <Td align="center">
+              <Paragraph fontfamily="thumbindex" color="white">
+                <Value select="$chapter"/>
+              </Paragraph>
+            </Td>
+          </Tr>
+        </Table>
+      </PlaceObject>
+    </Loop>
+  </Record>
+</Layout>
+```
+1. Der Anschnitt ist auf 3mm festgelegt.
+2. Vertikaler Versatz. Die Box ist 10mm hoch, dadurch beträgt der Abstand zwischen jeder Box ebenfalls 10mm.
+3. Die Box liegt am rechten Rand und ragt in den Anschnitt hinein. Dafür ist der Parameter `bleed="right"` gesetzt. Hiermit erstreckt sich die Box um die Beschnittzugabe nach rechts.
+4. Anschließend wird die Kapitelnummer eingedruckt.
+
+Im Beispiel wird die Kapitelnummer in der Variablen `kapitelnr` gespeichert und in einer Schleife ausgegeben.
+In der Praxis würde man das natürlich in den Seitentyp (`AtPageShipout`) einfügen und immer nur eine Griffmarke ausgeben.
+
+![Die grüne Linie zeigt das Endformat, die blaue Linie die Außenkante des unbeschnittenen Papiers](/img/25-publisher.png)
+

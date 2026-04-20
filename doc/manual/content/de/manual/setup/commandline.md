@@ -1,0 +1,202 @@
+---
+title: "Starten des Publishers auf der Kommandozeile"
+weight: 20
+type: docs
+---
+
+
+Der speedata Publisher wird über die Kommandozeile (auch: Terminal, Befehlsfenster) gestartet.
+Einerseits gibt es _Befehle_, anderseits lassen sich die Befehle über _Parameter_ steuern.
+
+{{< icon "light-bulb" >}}
+
+```shell
+$ sp <Befehl>  <Parameter> <Parameter> ...
+```
+
+{{< callout >}}
+Unter Windows/PowerShell muss man `sp.exe` angeben, da `sp` ein interner Befehl der PowerShell ist.
+{{< /callout >}}
+
+Der Standardbefehl ist `run`. So ist der Aufruf von
+
+```shell
+$ sp
+```
+
+dasselbe wie
+
+```shell
+$ sp run
+```
+
+Neben dem Befehl `run` gibt es noch weitere Befehle (s.u.).
+
+Mit
+
+```shell
+$ sp --help
+```
+
+kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
+
+## Erklärung der Befehle
+
+`clean`
+: Löscht alle generierten Zwischendateien und behält die PDF-Datei.
+
+`clearcache`
+: Löscht den Bildcache.
+
+`checkupdate`
+: Prüft, ob eine neue Version des Publishers verfügbar ist. Rückgabecode ist 0, wenn die Version aktuell ist. 1, wenn eine neue Version verfügbar ist.
+
+`compare`
+: Vergleicht PDF-Dateien für die Qualitätssicherung. Siehe [qualitaetssicherung]({{% relref "qualityassurance" %}}).
+
+`doc`
+: Öffnet das Referenzhandbuch im Browser (lokale HTML-Dateien).
+
+`list-fonts`
+: Listet alle Schriftdateien auf, die in den Publisher-Verzeichnissen gefunden werden. Zusammen mit `--xml` erlaubt dieses Kommando die Ausgabe per Copy&Paste in das Layoutregelwerk zu übernehmen. Siehe [einbindungschriftarten]({{% relref "fonts" %}}).
+
+`new [VERZEICHNIS]`
+: Erstellt ein einfaches Gerüst (`layout.xml` und `data.xml`) für einen Publishing-Lauf im aktuellen Verzeichnis, sofern kein anderes angegeben ist.
+
+`run`
+: Startet den Publisher Lauf. Das ist die Voreinstellung, so dass das Kommando `sp` reicht, um den Publikationsprozess zu starten.
+
+`server`
+: Startet im Servermodus. Siehe [den Abschnitt Servermodus]({{% relref "servermode" %}}).
+
+`watch`
+: Startet den internen Hotfolder. Siehe [Publisher über Hotfolder starten]({{% relref "hotfolder" %}}).
+
+## Erklärung der Kommandozeilenparameter
+
+`--address=IPADDRESS`
+: Adresse des Servers für den Servermodus. Voreingestellt ist 127.0.0.1
+
+`--autoopen`
+: Öffnet die PDF-Datei nach dem Publisher-Durchlauf. Kann auch in der [Konfigurationsdatei]({{% relref "configuration" %}}) eingestellt werden.
+
+`--cache=METHOD`
+: Caching-Strategie für http(s) Bilddateien. Entweder `fast`, dann wird nur geschaut, ob die Bilddatei im Dateisystem vorhanden ist oder `optimal` (Voreinstellung), dann wird bei jedem Zugriff auf das Bild geprüft, ob das Bild aktualisiert werden muss. Bei `none` werden die Bilder immer herunter geladen. Siehe auch [Konfigurationsdatei]({{% relref "configuration" %}}).
+
+`-c, --config=NAME`
+: Liest die angegebene Konfigurationsdatei ein. Voreinstellung ist `publisher.cfg`.
+
+`--credits`
+: Zeigt credits an und beendet das Programm.
+
+`--[no]-cutmarks`
+: Zeigt die Schnittmarken an. Einstellbar im [Layout (Befehl Options)]({{% relref "/reference/options" %}}).
+
+`--data=NAME`
+: Gibt den Namen der XML-Daten an. Voreinstellung ist `data.xml`. Wird als Dateiname ein Strich (`-`) angegeben, liest der Publisher die XML-Daten aus der Standard-Eingabe (STDIN). Es kann auch eine externe Ressource angegeben werden (`http://`).
+
+`--dummy`
+: Führt nur das Layoutregelwerk aus. Als Dateninhalt wird `<data />` angenommen. Dient zum schnellen Testen von Layoutregelwerken.
+
+`-x`, `--extra-dir=DIR`
+: Bindet zusätzliche Verzeichnisse in den Publisherlauf ein. In diesen  Verzeichnissen werden alle Daten gesucht: Bilddaten, Layoutregelwerke,  Datendateien und Schriftdateien. Dieses Argument kann mehrfach  angegeben werden und per Konfigurationsdatei mit Werten vorbelegt werden. Mehrere Verzeichnisse können auch in einem Parameter und mit den systemweiten Trenner (Semikolon für Windows und Doppelpunkt für alle anderen Betriebssysteme) getrennt angegeben werden.
+
+`--extra-xml=NAME`
+: Diese Datei den Layoutanweisungen hinzufügen. Ähnlich wie das Einbinden einer Datei über xinclude. Mehrere Dateien werden mit Komma separiert. Wird im neuen XPath-Parser nicht mehr unterstützt, stattdessen ist xinclude zu benutzen.
+
+`--filter=FILTER`
+: Führt die angegebene Lua-Datei aus. Siehe Kapitel [Lua-Filter / Vorverarbeitung]({{% relref "preprocessing" %}}).
+
+`--grid`
+: Zeichnet das Raster. Mit `--no-grid` wird es ausgeschaltet. Konfigurierbar auch im [Layout]({{% relref "/reference/trace" %}}) über den Befehl `<Trace>`.
+
+`--ignore-case`
+: Ignoriere die Groß- und Kleinschreibung für Dateizugriff in der rekursiven Dateiliste.
+
+`--imagecache=PATH`
+: Setzt das Verzeichnis für den Bildzwischenspeicher (image cache). Das Verzeichnis wird bei Bedarf erstellt.
+
+`--inkscape=PATH`
+: Setzt den Pfad zum Inkscape-Programm.
+
+`--layout=NAME`
+: Gibt den Namen des Layoutregelwerks an. Voreinstellung ist `layout.xml`. Es kann auch eine externe Ressource angegeben werden (`http://`).
+
+`--[no]-local`
+: Das aktuelle Verzeichnis wird (nicht) rekursiv dem Suchpfad hinzugefügt. Voreingestellt ist, dass das aktuelle Verzeichnis und seine Unterverzeichnisse beachtet werden.
+
+`--logfile=NAME`
+: Logdatei im Server-Modus. Voreinstellung ist 'publisher.protocol'. Benutze STDOUT für Standardausgabe und STDERR für Standardfehlerausgabe.
+
+`--loglevel=LVL`
+: Setze den Log-Level, ab dem die Logmeldungen angezeigt werden. Erlaubt ist `debug`, `info`, `message`, `warn` und `error`. Die Ausgaben in dem Level und darüber werden in der Protokolldatei ausgegeben.
+
+`--jobname=NAME`
+: Bestimmt den Ausgabenamen. Voreinstellung ist `publisher`.
+
+`--mainlanguage=NAME`
+: Bestimmt die Hauptsprache des Dokuments für die Silbentrennung. Mögliche Werte sind: `af`, `as`, `bg`, `ca`, `cs`, `cy`, `da`, `de`, `el`, `en`, `en_GB`, `en_US`, `eo`, `es`, `et`, `eu`, `fi`, `fr`,`ga`, `gl`, `gu`, `hi`, `hr`, `hu`, `hy`, `ia`, `id`, `is`, `it`,`ku`, `kn`, `la`, `lo`, `lt`, `ml`, `lv`, `ml`, `mn`, `mr`, `nb`, `nl`, `nn`, `or`, `pa`, `pl`, `pt`, `ro`, `ru`, `sa`, `sk`, `sl`,`sr`, `sv`, `ta`, `te`, `tk`, `tr`, `uk` und `zh`. Siehe [Codeliste der Sprachen](http://www.loc.gov/standards/iso639-2/php/code_list.php).
+
+`--mode=NAME[,NAME...]`
+: Setzt einen Modus für die Verarbeitung. Kann im Layout mit [`sd:mode()`]({{% relref "xpath" %}}) abgefragt werden. Mehrere Modi werden durch Komma getrennt angegeben. Siehe [fortgeschrittenethemen-steuerunglayout]({{% relref "controllayout" %}}).
+
+`--option=OPTION`
+: Setze Optionen, die keine eigenen Kommandozeilenparameter haben.
+
+`--outputdir=VERZEICHNIS`
+: Die resultierende PDF-Datei und Protokolldatei wird in das angegebene Verzeichnis kopiert. Das Verzeichnis wird erstellt, falls es noch nicht existiert.
+
+`--port=PORT`
+: Portnummer für den Servermodus. Voreinstellung ist 5266.
+
+`--prepend-xml=NAME`
+: Diese Datei vor der Layout-XML einfügen. Wird im neuen XPath-Parser nicht mehr unterstützt, stattdessen ist xinclude zu benutzen.
+
+`--pdfversion=VERSION`
+: Setzt die PDF Version. Voreinstellung ist 1.7.
+
+`--quiet`
+: Unterdrückt alle Ausgaben des Publishers.
+
+`--runs = NUM`
+: Überschreibt die Anzahl der Durchläufe des Publishers.
+
+`--startpage = NUM`
+: Die Seitennummer der ersten Seite.
+
+`--show-gridallocation`
+: Markiert die belegten Rasterzellen in Gelb. Doppelt belegte Zellen werden rot gekennzeichnet. Siehe den [Befehl `<Trace>`]({{% relref "/reference/trace" %}}).
+
+`-s`, `--suppressinfo`
+: Unterdrücke optionale Informationen (Zeitstempel) und benutze eine festgelegte Dokumenten-ID.
+
+`--systemfonts`
+: Lädt zusätzlich Systemschriftarten. Funktioniert nicht unter Windows XP.
+
+`--tempdir`
+: Benutze dieses Verzeichnis anstelle des Systemverzeichnisses für temporäre Dateien.
+
+`--timeout=SEC`
+: Beendet den Lauf nach SEC Sekunden mit Statuscode 1, sofern er nicht vorher fertig ist.
+
+`--trace`
+: Gibt zusätzliche Ausgaben auf der Standardausgabe aus.
+
+`-v`, `--var=value`
+: Übergibt zusätzliche Variablen an den Publisher-Lauf. Diese können wie üblich mit `select="$variable"` benutzt werden. Beispiel: `sp --var myvar=hello` setzt `$myvar` auf `hello`.
+
+`--varsfile=NAME`
+: Liest eine Datei ein, in der in jeder Zeile in der Form `variable=wert` Variablen definiert werden. Zeilen, die mit `#` anfangen, werden ignoriert.
+
+`--verbose`
+: Gibt die Informationen, die in der Protokolldatei erscheinen, zusätzlich auf der Standardausgabe aus.
+
+`--wd=DIR`
+: Wechselt in das angegebene Verzeichnis. Verhält sich genau so, als ob man vorher mit cd in dieses Verzeichnis gewechselt hat.
+
+`--xpath`
+: Setze den XML- und XPath-Parser. Mögliche Werte sind `luxor` und `lxpath`. Die Voreinstellung ist der neue `lxpath`. Diese Variante ist robuster und hat erweiterte Fähigkeiten.
+
+`--xml`
+: Die Ausgabe des Befehls `list-fonts` werden als (Pseudo-)XML dargestellt, um sie in das Layoutregelwerk zu übernehmen.
+

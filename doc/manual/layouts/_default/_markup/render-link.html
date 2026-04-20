@@ -1,0 +1,3 @@
+{{- $isExternal := strings.HasPrefix .Destination "http" -}}
+<a href="{{ .Destination | safeURL }}"{{ if $isExternal }} target="_blank" rel="noreferrer"{{ end }}{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>
+{{- "" -}}

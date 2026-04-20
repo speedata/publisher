@@ -1,0 +1,10 @@
+{{/* Render raw svg icon from hugo.Data */}}
+{{- $icon := index site.Data.icons .name -}}
+{{- if not $icon -}}
+  {{ errorf "icon %q not found" .name }}
+{{- end -}}
+{{- $icon = $icon | safeHTML -}}
+{{- if .attributes -}}
+  {{- $icon = replaceRE "<svg" (printf "<svg %s" .attributes) $icon -}}
+{{- end -}}
+{{- return ($icon | safeHTML) -}}

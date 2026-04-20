@@ -1,0 +1,134 @@
+---
+title: "Text formats"
+weight: 42
+type: docs
+---
+
+
+
+Text formats are used to control the paragraphs. You can use them to control various things like text indents, text alignment, orphan and widow lines, pagination and more.
+
+The individual parameters are described in the reference under [`<DefineTextformat>`]({{< relref "/reference/definetextformat" >}}).
+
+## Attribute overview
+
+| Attribute | Description |
+| --- | --- |
+|`alignment` |Text alignment: `justified`, `leftaligned`, `rightaligned`, `centered`, `start`, `end`
+|`border-top`, `border-bottom`|Thickness of the rule above/below the text
+|`break-before`|Force page break before the text (`page`)
+|`break-below`|Allow/prevent break below the text (`yes`/`no`)
+|`hyphenate`|Enable/disable hyphenation (`yes`/`no`)
+|`hyphenchar`|Hyphenation character (default: `-`)
+|`indentation`|Indentation of the first line(s)
+|`letter-spacing`|Character spacing in 1/1000 em (e.g. `50` = 0.05 em)
+|`margin-top`, `margin-bottom`|Outer spacing above/below
+|`padding-top`, `padding-bottom`|Inner spacing above/below
+|`orphan`, `widow`|Prevent orphans/widows
+|`rows`|Number of indented rows
+|`tab`|Tab character behavior (`space`/`hspace`)
+
+The text format called text is predefined in the Publisher and is used in all places where no other text format is specified. It is defined as follows:
+
+```xml
+<DefineTextformat name="text" alignment="justified"/>
+```
+
+This will output all texts in justified text and with hyphenation, without indentation and without spaces at the top and bottom, as long as
+
+1. the format text is not redefined or
+2. another text format is specified at `<Paragraph>` or `<Textblock>` (the attribute for this is called text format).
+
+## Page breaks between texts
+
+Page breaks, for example after a heading, are undesirable. To prevent page breaks at these points, the text format property break-below can be switched off:
+
+```xml
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="100mm" height="70mm"/>
+  <Trace textformat="yes"/>
+
+  <DefineTextformat name="keeptogether" break-below="no"/>
+
+  <DefineFontfamily name="h1" fontsize="18" leading="20">
+    <Regular fontface="sans-bold"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <Output>
+      <Text>
+        <Paragraph fontfamily="h1" textformat="keeptogether">
+          <Value>A Title</Value>
+        </Paragraph>
+        <Paragraph>
+          <Value select="sd:dummytext()"/>
+        </Paragraph>
+      </Text>
+    </Output>
+  </Record>
+</Layout>
+```
+{{% codecaption %}}To prevent a page break from being inserted between the heading and the text, you need to adjust the text format of the heading.{{% /codecaption %}}
+
+![Output of a heading. The text format with the break-below property prevents wrapping under the heading.](/img/textmitueberschrift.png)
+
+## Page breaks within a text
+
+Page breaks within a text can be forced by the property `break-before`. This is useful, for example, for a heading that should always start on a new page. To do this, the text format of the heading is adjusted:
+
+```xml
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <DefineTextformat name="h1" break-before="page" />
+    <Record element="data">
+        <Output>
+            <Text>
+                <Paragraph>
+                    <Value>Page one</Value>
+                </Paragraph>
+                <Paragraph textformat="h1">
+                    <Value>H1 on page two</Value>
+                </Paragraph>
+                <Paragraph>
+                    <Value>Some text</Value>
+                </Paragraph>
+            </Text>
+        </Output>
+    </Record>
+</Layout>
+```
+{{% codecaption %}}To force the heading to always start on a new page, the attribute `break-before` must be set to `page`.{{% /codecaption %}}
+
+However, the `break-below="no"` and `break-before="page"` properties are only taken into account within a text output (`<Output>`). You can insert a page break between two text outputs, but this cannot be prevented. In order to output a text in one piece nevertheless, which first has to be assembled from the data, one stores the individual contents in variables and then outputs them in one piece.
+
+```xml
+  <Record element="data">
+    <SetVariable variable="mytitle">
+      <Paragraph fontfamily="h1" textformat="keeptogether">
+        <Value>A Title</Value>
+      </Paragraph>
+    </SetVariable>
+
+    <SetVariable variable="mytext">
+      <Paragraph>
+        <Value select="sd:dummytext()"/>
+      </Paragraph>
+    </SetVariable>
+
+    <Output>
+      <Text>
+        <Copy-of select="$mytitle"/>
+        <Copy-of select="$mytext"/>
+      </Text>
+    </Output>
+  </Record>
+```
+{{% codecaption %}}With variables and `<Copy-of>` you can compose texts and output them in one piece.{{% /codecaption %}}
+
+## Tracing
+
+The command `<Trace textformat="yes"/>` activates "tooltips" in the PDF above the texts that output the text format used there.
+
+![Tooltip with the text format](/img/tracetextformat.png)

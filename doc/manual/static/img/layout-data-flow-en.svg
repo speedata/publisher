@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 240" font-family="'Sana', 'SanaAlt', system-ui, -apple-system, sans-serif">
+  <style>
+    text { font-size: 13px; fill: #111; }
+    .title { font-size: 15px; font-weight: 500; }
+    .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; }
+    .step { font-size: 20px; font-weight: 500; fill: #fff; }
+    .arrow { fill: none; stroke: #111; stroke-width: 1.5; marker-end: url(#arrowhead); }
+    .arrow-dashed { fill: none; stroke: #111; stroke-width: 1.5; stroke-dasharray: 5,4; marker-end: url(#arrowhead); }
+    .box { fill: #fff; stroke: #d4c870; stroke-width: 1.5; rx: 6; }
+    .box-highlight { fill: #fffaee; stroke: #FFC72C; stroke-width: 2; rx: 6; }
+    .badge { fill: #FFC72C; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#111"/>
+    </marker>
+  </defs>
+
+  <!-- data.xml box -->
+  <rect class="box" x="20" y="10" width="280" height="210"/>
+  <text class="title" x="40" y="38">data.xml</text>
+  <line x1="20" y1="48" x2="300" y2="48" stroke="#d4c870" stroke-width="1"/>
+
+  <text class="mono" x="40" y="72">&lt;productlist&gt;</text>
+  <text class="mono" x="60" y="96">&lt;product name="Lamp"</text>
+  <text class="mono" x="100" y="114">price="29.95" /&gt;</text>
+  <text class="mono" x="60" y="138">&lt;product name="Chair"</text>
+  <text class="mono" x="100" y="156">price="79.00" /&gt;</text>
+  <text class="mono" x="60" y="180">&lt;product ... /&gt;</text>
+  <text class="mono" x="40" y="200">&lt;/productlist&gt;</text>
+
+  <!-- layout.xml box -->
+  <rect class="box" x="420" y="10" width="280" height="210"/>
+  <text class="title" x="440" y="38">layout.xml</text>
+  <line x1="420" y1="48" x2="700" y2="48" stroke="#d4c870" stroke-width="1"/>
+
+  <!-- Record productlist -->
+  <rect class="box-highlight" x="435" y="58" width="250" height="60"/>
+  <text class="mono" x="450" y="78">Record "productlist"</text>
+  <text class="mono" x="460" y="98">ProcessNode "product"</text>
+
+  <!-- Record product -->
+  <rect class="box-highlight" x="435" y="132" width="250" height="72"/>
+  <text class="mono" x="450" y="152">Record "product"</text>
+  <text class="mono" x="460" y="172">output @name, @price</text>
+
+  <!-- Step 1: productlist -> Badge 1 (solid arrow) -->
+  <rect class="badge" x="322" y="62" width="24" height="24" rx="12"/>
+  <text class="step" x="334" y="78" text-anchor="middle">1</text>
+  <path class="arrow" d="M 140,70 L 320,74"/>
+  <!-- Badge 1 -> Record productlist (dashed) -->
+  <path class="arrow-dashed" d="M 346,74 L 448,74"/>
+
+  <!-- ProcessNode -> product elements (dashed lines back to data) -->
+  <path class="arrow-dashed" d="M 455,95 Q 400,118 220,96"/>
+  <path class="arrow-dashed" d="M 455,95 Q 400,130 220,138"/>
+
+  <!-- product elements -> Badge 2 (solid arrows) -->
+  <rect class="badge" x="322" y="150" width="24" height="24" rx="12"/>
+  <text class="step" x="334" y="167" text-anchor="middle">2</text>
+  <path class="arrow" d="M 220,110 Q 290,120 320,158"/>
+  <path class="arrow" d="M 220,150 Q 290,148 320,160"/>
+  <!-- Badge 2 -> Record product (dashed) -->
+  <path class="arrow-dashed" d="M 346,162 L 445,148"/>
+</svg>

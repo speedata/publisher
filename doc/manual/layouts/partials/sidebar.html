@@ -1,0 +1,71 @@
+{{- $page := . -}}
+{{- $pageURL := .RelPermalink -}}
+{{- $navRoot := cond (eq site.Home.Type "docs") site.Home .FirstSection -}}
+
+<nav id="sidebar">
+  {{/* Suche */}}
+  {{ if site.Params.search.enable }}
+  <div id="sidebar-search">
+    {{ partial "search.html" . }}
+  </div>
+  {{ end }}
+
+  {{/* Navigation */}}
+  <div id="sidebar-nav">
+    {{ template "sidebar-tree" (dict "context" $navRoot "page" $page "pageURL" $pageURL "level" 0) }}
+  </div>
+
+  {{/* Footer: Sprachschalter */}}
+  <div id="sidebar-footer">
+    {{ if hugo.IsMultilingual }}
+      <div class="lang-switch">
+        {{ range site.Languages }}
+          {{ $langLink := partial "utils/lang-link.html" (dict "lang" .Lang "context" $page) }}
+          {{ if eq .Lang site.Language.Lang }}
+            <span class="lang-current">{{ .LanguageName }}</span>
+          {{ else }}
+            <a href="{{ $langLink }}">{{ .LanguageName }}</a>
+          {{ end }}
+        {{ end }}
+      </div>
+    {{ end }}
+  </div>
+</nav>
+
+{{- define "sidebar-tree" -}}
+  {{- if ge .level 4 -}}{{- return -}}{{- end -}}
+  {{- $context := .context -}}
+  {{- $page := .page -}}
+  {{- $pageURL := .pageURL -}}
+  {{- $level := .level -}}
+  {{- $items := where (union $context.RegularPages $context.Sections) "Params.sidebar.exclude" "!=" true -}}
+
+  {{- if $items -}}
+    <ul>
+      {{- range $items.ByWeight -}}
+        {{- $active := eq $pageURL .RelPermalink -}}
+        {{- $isAncestor := .IsAncestor $page -}}
+        {{- $hasChildren := or .RegularPages .Sections -}}
+        {{- $title := partial "utils/title.html" . -}}
+
+        {{- if $hasChildren -}}
+          <li class="nav-section{{ if or $active $isAncestor }} open{{ end }}">
+            <div class="nav-section-title">
+              <a href="{{ .RelPermalink }}"{{ if $active }} class="active"{{ end }}>{{ $title }}</a>
+              <button class="nav-section-toggle" aria-label="Untermenü ein-/ausklappen">
+                <svg class="nav-section-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+            <div class="nav-section-children">
+              {{ template "sidebar-tree" (dict "context" . "page" $page "pageURL" $pageURL "level" (add $level 1)) }}
+            </div>
+          </li>
+        {{- else -}}
+          <li>
+            <a href="{{ .RelPermalink }}"{{ if $active }} class="active"{{ end }}>{{ $title }}</a>
+          </li>
+        {{- end -}}
+      {{- end -}}
+    </ul>
+  {{- end -}}
+{{- end -}}

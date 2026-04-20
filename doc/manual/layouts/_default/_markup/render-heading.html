@@ -1,0 +1,7 @@
+<h{{ .Level }}>
+  {{- .Text | safeHTML -}}
+  {{- if gt .Level 1 -}}
+    <span id="{{ .Anchor | safeURL }}" style="position:absolute;margin-top:-5rem;"></span>
+    <a href="#{{ .Anchor | safeURL }}" class="heading-anchor" aria-hidden="true"></a>
+  {{- end -}}
+</h{{ .Level }}>

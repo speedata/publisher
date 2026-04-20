@@ -18,7 +18,7 @@ Think of it as “XSL-FO on steroids” or “server side InDesign”.
 Examples
 --------
 
-There are some examples in the [example repository on GitHub](https://github.com/speedata/examples). Also, there are lots of small examples in the `qa` subdirectory that is used for quality assurance. See also our [showcase](https://showcase.speedata.de/).
+There are some examples in the [example repository on GitHub](https://github.com/speedata/examples). Also, there are lots of small examples in the `qa` subdirectory that is used for quality assurance. See also our [showcase](https://www.speedata.de/en/#showcase).
 
 <img src="https://doc.speedata.de/publisher/static/img/beispiele.png">
 

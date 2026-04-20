@@ -1,0 +1,6 @@
+{{- $type := .Get "type" | default "note" -}}
+{{- $icon := "" -}}
+{{- if eq $type "warning" -}}{{- $icon = "exclamation-triangle" -}}{{- end -}}
+{{- if eq $type "info" -}}{{- $icon = "information-circle" -}}{{- end -}}
+{{- if eq $type "note" -}}{{- $icon = "light-bulb" -}}{{- end -}}
+{{- partial "shortcodes/callout.html" (dict "content" (.Inner | markdownify) "icon" $icon) -}}

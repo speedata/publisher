@@ -1,0 +1,43 @@
+---
+title: "Interne Variablen"
+weight: 170
+type: docs
+---
+
+
+Der Publisher setzt interne Variablen, die man im Layoutregelwerk nutzen kann.
+Diese Variablen beginnen immer mit einem Unterstrich, daher sollten eigene Variablen den Unterstrich nicht als erstes Zeichen haben.
+Sonst könnten Kollisionen bei der Namensvergabe entstehen.
+
+`_bleed`
+: Der Wert der Beschnittzugabe (z.B. `0mm` oder `3mm`). Bitte `sd:length('_bleed')` benutzen, anstatt auf die Variable direkt zuzugreifen.
+
+`_jobname`
+: Der Wert der auf der Kommandozeile angegeben ist.
+
+`_lastpage`
+: Die Seitenzahl der letzten Seite. Verfügbar ab dem zweiten Durchlauf. (Seit Version 3.9.26.)
+
+`_last_tr_data`
+: Der letzte Wert (`data="..."`) in einer Tabellenzeile.  Siehe Abschnitt [Kopf- und Fußzeilen mit Übertrag]({{% relref "tables#kopf--und-fußzeilen-mit-übertrag" %}}).
+
+`_loopcounter`
+: Der Durchlauf in einer `<Loop>`-Schleife.
+
+`_matter`
+: Der voreingestellte Abschnitt für das Dokument (`mainmatter` ist der Anfangswert).
+
+`_mode`
+: Der Modus für den Durchlauf. Kommasepariert.
+
+`_pagewidth` und `_pageheight`
+: Die Breite und Höhe der Seite. Vorgabe ist 210mm und 297mm. Diese Variablen dürfen nur benutzt werden, wenn die Seite korrekt initialisiert wurde, z.B. durch Ausgeben eines Objekts. Es wird empfohlen, die Funktionen `sd:pagewidth('mm')` und `sd:pageheight('mm')` zu benutzen.
+
+`_page`
+: Der Name des Textbereichs der ganzen Seite.
+
+Erwähnenswert sind noch:
+
+`_samplea.pdf` und `_sampleb.pdf`
+: Bilddateien, die im Publisher enthalten sind. Können zu Testzwecken genutzt werden.
+

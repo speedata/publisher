@@ -1,0 +1,140 @@
+---
+title: "Textformate"
+weight: 42
+type: docs
+---
+
+
+Textformate dienen zur Steuerung der Absätze.
+Hierüber lassen sich verschiedene Dinge wie Texteinzug, Textausrichtung, Hurenkinder und Schusterjungen, Umbruchverhalten und mehr steuern.
+
+Die einzelnen Parameter werden in der Referenz unter [`<DefineTextformat>`]({{< relref "/reference/definetextformat" >}}) beschrieben.
+
+## Übersicht aller Attribute
+
+|  Attribut |  Beschreibung |
+| --- | --- |
+|`alignment` |Textausrichtung: `justified` (Blocksatz), `leftaligned`, `rightaligned`, `centered`, `start`, `end`
+|`border-top`, `border-bottom`|Dicke der Linie über/unter dem Text
+|`break-before`|Seitenumbruch vor dem Text erzwingen (`page`)
+|`break-below` |Umbruch unter dem Text erlauben/verbieten (`yes`/`no`)
+|`hyphenate`|Silbentrennung an/aus (`yes`/`no`)
+|`hyphenchar`|Trennzeichen (Voreinstellung: `-`)
+|`indentation`|Einzug der ersten Zeile(n)
+|`letter-spacing`|Zeichenabstand in 1/1000 em (z.B. `50` = 0,05 em)
+|`margin-top`, `margin-bottom`|Außenabstand oben/unten
+|`padding-top`, `padding-bottom`|Innenabstand oben/unten
+|`orphan`, `widow`|Schusterjungen/Hurenkinder verhindern
+|`rows`|Anzahl der eingerückten Zeilen
+|`tab`|Verhalten bei Tabulator (`space`/`hspace`)
+
+
+Das Textformat mit dem Namen `text` ist im Publisher vorgegeben und wird an allen Stellen benutzt, wo kein anderes Textformat angegeben wird.
+Es ist wie folgt definiert:
+
+```xml
+<DefineTextformat name="text" alignment="justified"/>
+```
+
+Damit werden alle Texte in Blocksatz und mit Silbentrennung, ohne Einzug und ohne Abstände oben und unten ausgegeben, solange
+
+1. das Format `text` nicht neu definiert wird oder
+2. ein anderes Textformat bei  `<Paragraph>` oder `<Textblock>` angegeben wird (das Attribut dazu heißt `textformat`).
+
+## Umbruch zwischen Texten
+
+Seitenumbrüche beispielsweise nach einer Überschrift sind unerwünscht.
+Um Umbrüche an diesen Stellen zu unterbinden, kann die Textformat-Eigenschaft `break-below` ausgeschaltet werden:
+
+```xml
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="100mm" height="70mm"/>
+  <Trace textformat="yes"/>
+
+  <DefineTextformat name="keeptogether" break-below="no"/>
+
+  <DefineFontfamily name="h1" fontsize="18" leading="20">
+    <Regular fontface="sans-bold"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <Output>
+      <Text>
+        <Paragraph fontfamily="h1" textformat="keeptogether">
+          <Value>A Title</Value>
+        </Paragraph>
+        <Paragraph>
+          <Value select="sd:dummytext()"/>
+        </Paragraph>
+      </Text>
+    </Output>
+  </Record>
+</Layout>
+```
+{{% codecaption %}}Um zu verhindern, dass zwischen der Überschrift und dem Text ein Seitenumbruch eingefügt wird, muss man das Textformat der Überschrift anpassen.{{% /codecaption %}}
+
+![Ausgabe einer Überschrift. Das Textformat mit der Eigenschaft break-below verhindert einen Umbruch unter der Überschrift.](/img/textmitueberschrift.png)
+
+## Umbruch innerhalb eines Textes
+
+Umbrüche innerhalb eines Textes können durch die Eigenschaft `break-before` erzwungen werden. Das ist beispielsweise bei einer Überschrift sinnvoll, die immer auf einer neuen Seite beginnen soll. Dazu wird das Textformat der Überschrift angepasst:
+
+```xml
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <DefineTextformat name="h1" break-before="page" />
+    <Record element="data">
+        <Output>
+            <Text>
+                <Paragraph>
+                    <Value>Page one</Value>
+                </Paragraph>
+                <Paragraph textformat="h1">
+                    <Value>H1 on page two</Value>
+                </Paragraph>
+                <Paragraph>
+                    <Value>Some text</Value>
+                </Paragraph>
+            </Text>
+        </Output>
+    </Record>
+</Layout>
+```
+{{% codecaption %}}Um zu erzwingen, dass die Überschrift immer auf einer neuen Seite beginnt, muss das Attribut `break-before` auf `page` gesetzt werden.{{% /codecaption %}}
+
+Die Eigenschaften `break-below="no"` und `break-before="page"` werden allerdings nur innerhalb einer Textausgabe (`<Output>`) berücksichtigt.
+Zwischen zwei Textausgaben kann sehr wohl ein Seitenumbruch eingefügt werden, das lässt sich nicht verhindern.
+Um dennoch einen Text an einem Stück auszugeben, der erst aus den Daten zusammengesetzt werden muss, speichert man die einzelnen Inhalte in Variablen und gibt sie dann an einem Stück aus.
+
+```xml
+  <Record element="data">
+    <SetVariable variable="mytitle">
+      <Paragraph fontfamily="h1" textformat="keeptogether">
+        <Value>A Title</Value>
+      </Paragraph>
+    </SetVariable>
+
+    <SetVariable variable="mytext">
+      <Paragraph>
+        <Value select="sd:dummytext()"/>
+      </Paragraph>
+    </SetVariable>
+
+    <Output>
+      <Text>
+        <Copy-of select="$mytitle"/>
+        <Copy-of select="$mytext"/>
+      </Text>
+    </Output>
+  </Record>
+```
+{{% codecaption %}}Mit Variablen und <Copy-of> kann man Texte zusammensetzen und an einem Stück ausgeben.{{% /codecaption %}}
+
+## Tracing
+
+Der Befehl `<Trace textformat="yes"/>` aktiviert »tooltips« im PDF über den Texten, die das dort verwendete Textformat ausgeben.
+
+![Tooltip mit dem Textformat](/img/tracetextformat.png)
+

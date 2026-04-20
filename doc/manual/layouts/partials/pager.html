@@ -1,0 +1,52 @@
+{{- /* Build a flat list of all pages under /manual/, sorted by weight, for linear prev/next navigation */ -}}
+{{- $manual := site.GetPage "/manual" -}}
+{{- $allPages := slice -}}
+{{- if $manual -}}
+  {{- range $manual.Sections.ByWeight -}}
+    {{- $section := . -}}
+    {{- $allPages = $allPages | append $section -}}
+    {{- range $section.Pages.ByWeight -}}
+      {{- $allPages = $allPages | append . -}}
+      {{- /* One level deeper (e.g. associateschema) */ -}}
+      {{- if .IsSection -}}
+        {{- range .Pages.ByWeight -}}
+          {{- $allPages = $allPages | append . -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $prev := false -}}
+{{- $next := false -}}
+{{- $found := false -}}
+{{- range $i, $p := $allPages -}}
+  {{- if eq $p.RelPermalink $.RelPermalink -}}
+    {{- $found = true -}}
+    {{- if gt $i 0 -}}
+      {{- $prev = index $allPages (sub $i 1) -}}
+    {{- end -}}
+    {{- if lt (add $i 1) (len $allPages) -}}
+      {{- $next = index $allPages (add $i 1) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{ if or $prev $next }}
+<nav class="pager">
+  {{ if $prev }}
+    <a class="pager-prev" href="{{ $prev.RelPermalink }}">
+      <span class="pager-label">← {{ if eq site.Language.Lang "de" }}Vorherige{{ else }}Previous{{ end }}</span>
+      <span class="pager-title">{{ $prev.LinkTitle }}</span>
+    </a>
+  {{ else }}
+    <div></div>
+  {{ end }}
+  {{ if $next }}
+    <a class="pager-next" href="{{ $next.RelPermalink }}">
+      <span class="pager-label">{{ if eq site.Language.Lang "de" }}Nächste{{ else }}Next{{ end }} →</span>
+      <span class="pager-title">{{ $next.LinkTitle }}</span>
+    </a>
+  {{ end }}
+</nav>
+{{ end }}

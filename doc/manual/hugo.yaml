@@ -1,0 +1,38 @@
+# Hugo configuration file
+title: speedata Publisher
+
+defaultContentLanguage: en
+defaultContentLanguageInSubdir: true
+
+languages:
+  en:
+    languageName: English
+    weight: 1
+    contentDir: content/en
+  de:
+    languageName: Deutsch
+    weight: 2
+    contentDir: content/de
+
+refLinksErrorLevel: WARNING
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+    extensions:
+      passthrough:
+        delimiters:
+          block: [['\[', '\]'], ["$$", "$$"]]
+          inline: [['\(', '\)']]
+        enable: true
+  highlight:
+    noClasses: false
+  tableOfContents:
+    startLevel: 2
+    endLevel: 4
+
+params:
+  search:
+    enable: true
+  math: true

@@ -1,0 +1,110 @@
+---
+title: "Markdown"
+weight: 77
+type: docs
+---
+
+
+{{< callout >}}
+Die Markdown-Unterstützung wird als experimentell angesehen, es wird Änderungen am Code geben.
+{{< /callout >}}
+
+Sie können Text mit Markdown wiedergeben, einer gebräuchlichen »Auszeichnungssprache« für Text. Siehe zum Beispiel https://www.markdownguide.org, wenn Sie mehr über Markdown erfahren möchten.
+
+Um Markdown in Ihrem Dokument zu verwenden, rufen Sie einfach die Funktion `sd:markdown` auf:
+
+```xml
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="sd:markdown(.)" />
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+```
+
+mit dieser Datendatei:
+
+```xml
+<data>
+# A title
+
+* one
+* anotherone
+* three
+</data>
+```
+
+erzeugt eine h1-Überschrift mit einer Aufzählungsliste:
+
+![Die vertikalen Abstände sind noch nicht optimal, dies wird in einer zukünftigen Version des speedata Publishers behoben.](/img/markdownsimple.png)
+
+## Markdown Erweiterungen
+
+Es gibt verschiedene Markdown-Erweiterungen, mit denen man Tabellen, Fußnoten und andere Spielereien erstellen kann. Einige davon werden vom speedata Publisher unterstützt. Die Implementierung wird zu gegebener Zeit verbessert werden. Einige der Erweiterungen aktivieren automatisch andere. Probieren Sie sie einfach aus.
+
+| Feature | Beschreibung |
+| --- | --- |
+| `gfm` | GitHub flavored Markdown |
+| `table` | [Tabellen](https://github.github.com/gfm/#tables-extension-) |
+| `strikethrough` | [Helfer für durchstreichen mit `~`](https://github.github.com/gfm/#strikethrough-extension-) |
+| `linkify` | [Erzeuge automatische Links](https://github.github.com/gfm/#autolinks-extension-) |
+| `definitionlist` | [Definitionslisten](https://michelf.ca/projects/php-markdown/extra/#def-list) |
+| `footnote` | [Fußnoten](https://michelf.ca/projects/php-markdown/extra/#footnotes) |
+| `typographer` | Diese Erweiterung ersetzt Interpunktionen durch typografische Einheiten wie [smartypants](https://daringfireball.net/projects/smartypants/) |
+| `highlight` | Quelltext farbig hervorheben |
+
+
+Diese Optionen können gesetzt werden wie folgt:
+
+```xml
+<Options markdown-extensions="highlight,table" />
+```
+
+Sie können den Markierungsstil auch mit dem Präfix `hlstyle_` auswählen, zum Beispiel
+
+```xml
+<Options markdown-extensions="highlight,hlstyle_tango" />
+```
+
+Die Liste der verfügbaren Stile ist unter https://github.com/alecthomas/chroma/tree/master/styles zu finden.
+
+
+Man kann auch Optionen für die Umwandlung mit dem Präfix `hloption_` setzen. Derzeit wird nur `hloption_withclasses` unterstützt, das dazu führt, dass Syntaxhervorhebung  mit CSS-Klassen anstelle von `<span>...</span>` erzeugt wird.
+
+## Ein speedata Publisher quine mit Markdown
+
+Dieser Abschnitt darf nicht zu ernst genommen werden... Mit Markdown ist es nun leicht möglich, ein `layout.xml` [quine](https://de.wikipedia.org/wiki/Quine_(Computerprogramm)) zu erstellen.
+
+Wenn Sie das folgende Layout mit `sp --dummy` durchlaufen lassen, erzeugt es ein PDF mit »sich selbst« als Eingabe:
+
+```xml
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Options markdown-extensions="highlight,hlstyle_tango" />
+
+    <Record element="data">
+        <SetVariable
+            variable="raw"
+            select="unparsed-text('layout.xml')" />
+        <SetVariable
+            variable="fenced"
+            select="concat('```xml&#x0a;', $raw ,'&#x0a;```'))"/>
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="sd:markdown($fenced)" />
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
+```
+
+Die Erklärung ist einfach. Mit `unparsed-text()` wird die `layout.xml` geladen, anschließend mit pass:[```] (drei Backticks) und Zeilenumbruch umrandet und als Markdown ausgegeben. Die drei Backticks bedeuten, dass der Inhalt nicht interpretiert sondern nur ausgegeben wird (mit allen Leerzeichen wie in der Eingabe selber).

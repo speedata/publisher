@@ -1,0 +1,17 @@
+{{- $placeholder := "Suche..." -}}
+{{- if eq .Site.Language.Lang "en" -}}
+  {{- $placeholder = "Search..." -}}
+{{- end -}}
+
+<div class="search-wrapper hextra-search-wrapper">
+  <input
+    type="search"
+    class="search-input hextra-search-input"
+    placeholder="{{ $placeholder }}"
+    autocomplete="off"
+    spellcheck="false"
+  />
+  <kbd class="search-shortcut">Ctrl K</kbd>
+  <ul class="search-results hextra-search-results hx:hidden" aria-label="Suchergebnisse"></ul>
+  <div class="hextra-search-status" aria-live="polite" role="status" style="position:absolute;width:1px;height:1px;overflow:hidden;"></div>
+</div>

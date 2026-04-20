@@ -1,0 +1,10 @@
+{{ define "main" }}
+<main id="content">
+  {{ partial "content-header.html" . }}
+  {{ if .Title }}<h1>{{ .Title }}</h1>{{ end }}
+  <div class="content">
+    {{ .Content }}
+  </div>
+  {{ partial "pager.html" . }}
+</main>
+{{ end }}

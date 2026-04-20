@@ -1,0 +1,10 @@
+---
+title: "{{ translate .Lang "Attribute index" }}"
+weight: 1
+type: docs
+---
+
+{{ range $.AttributeNames }}
+**{{ . }}**
+: {{ range (index $.AttributeMap . ) }}[{{ .Name }}]({{`{{% relref "`}}{{ .Mdlink }}{{`" %}}`}}) {{ end }}
+{{ end }}

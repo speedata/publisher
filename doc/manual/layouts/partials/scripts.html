@@ -1,0 +1,17 @@
+{{/* Main JS */}}
+{{ $js := resources.Get "js/main.js" }}
+{{ if hugo.IsProduction }}
+  {{ $js = $js | minify | fingerprint }}
+{{ end }}
+<script defer src="{{ $js.RelPermalink }}"></script>
+
+{{/* FlexSearch */}}
+{{ if site.Params.search.enable }}
+  {{- $jsSearchScript := printf "%s.search.js" .Language.Lang -}}
+  {{- $jsSearch := resources.Get "js/flexsearch.js" | resources.ExecuteAsTemplate $jsSearchScript . -}}
+  {{ if hugo.IsProduction }}
+    {{ $jsSearch = $jsSearch | minify | fingerprint }}
+  {{ end }}
+  <script src="https://cdn.jsdelivr.net/npm/flexsearch@0.8.143/dist/flexsearch.bundle.min.js" crossorigin="anonymous"></script>
+  <script defer src="{{ $jsSearch.RelPermalink }}"></script>
+{{ end }}

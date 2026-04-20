@@ -1,0 +1,41 @@
+---
+linktitle: "{{ .Command.Name }}"
+weight: {{ .Weight }}
+type: docs
+---
+
+# `{{ .Command.Name }}`{{ if .Command.Pro }} {{`{{< profeature "`}}{{ translate $.Lang "profeature tooltip" }}{{`" >}}`}}{{ end }}
+{{ with .Command.Since }}_{{ translate $.Lang "since version" }} {{ . }}_{{ end }}
+
+{{ .Command.DescriptionMarkdown .Lang }}
+
+## {{ translate .Lang "Child elements" }}
+
+{{ childelemsMarkdown .Lang .Command }}
+
+## {{ translate .Lang "Parent elements" }}
+
+{{ parentelemsMarkdown .Lang .Command }}
+
+## {{ translate $.Lang "Attributes" }}
+{{ with .Command.Attributes }}
+{{ range $.Command.Attributes }}
+`{{ .Name }}` ({{ atttypeinfoMarkdown . $.Lang }}{{ with .CSS }}, {{ translate $.Lang "CSS property"}}: {{ . }}{{ end }}{{ with .Since }}, _{{ translate $.Lang "since version" }} {{ . }}_{{ end }}{{ if .Deprecated }}, {{ translate $.Lang "deprecated" }}{{ end }})
+: {{ .DescriptionMarkdown $.Lang }}
+{{ end }}{{ else }}({{ translate $.Lang "none" }}){{ end }}
+
+{{ with (.Command.RemarkMarkdown $.Lang) }}
+## {{ translate $.Lang "Remarks" }}
+
+{{ . }}
+{{ end }}
+
+## {{ translate .Lang "Example" }}
+
+{{ .Command.ExampleMarkdown .Lang }}
+
+{{ with (.Command.InfoMarkdown $.Lang) }}
+## {{ translate $.Lang "Info" }}
+
+{{ . }}
+{{ end }}

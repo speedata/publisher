@@ -1,0 +1,43 @@
+---
+title: "Internal variables"
+weight: 170
+type: docs
+---
+
+
+The Publisher sets internal variables that can be used in the layout rules.
+These variables always begin with an underscore, so your own variables should not have the underscore as the first character.
+Otherwise there could be collisions when assigning names.
+
+`_bleed`
+: The value of the bleed (for example `0mm` or `3mm`). Please use `sd:length('_bleed')` instead of directly accessing the variable.
+
+`_jobname`
+: The value specified on the command line.
+
+`_lastpage`
+: The number of the last page. Available after the first run. (Since version 3.9.26.)
+
+`_last_tr_data`
+: The last value (`data="..."`) in a table line.  See section [Headers and footers with running sum]({{% relref "tables#headers-and-footers-with-running-sum" %}}).
+
+`_loopcounter`
+: The pass in a `<Loop>` loop.
+
+`_matter`
+: The current default matter for the document (`mainmatter` is the initial value).
+
+`_mode`
+: The mode for the pass. Separated by commas.
+
+`_pagewidth` and `_pageheight`
+: The width and height of the page. Default is 210mm and 297mm. These variables must not be used unless the page is initialized correctly (for example with placing objects on the page). It is suggested to use the variables `sd:pagewidth('mm')` and `sd:pageheight('mm')` instead.
+
+`_page`
+: The name of the text area of the whole page.
+
+Also worth mentioning:
+
+`_samplea.pdf` and `_sampleb.pdf`
+: Image files included in the Publisher. Can be used for testing purposes.
+

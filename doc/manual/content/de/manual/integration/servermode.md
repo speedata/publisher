@@ -1,0 +1,273 @@
+---
+linktitle: "Server-Modus (REST API)"
+weight: 64
+type: docs
+---
+
+# Server-Modus (REST API) {{< profeature "Verfügbar im PRO-Paket" >}}
+
+Der Publisher bietet eine Schnittstelle an, mit der über HTTP Aufträge zur Dokumentenerzeugung übergeben werden können. Gestartet wird der Servermodus mit
+
+```
+sp server
+```
+
+auf der Kommandozeile. Der Servermodus bietet die Möglichkeit
+
+* Daten zum Server zu übertragen und einen Lauf zu starten
+* Status des Laufs zu ermitteln (läuft der Prozess noch?)
+* fertige PDF-Dateien herunterzuladen
+* Sonstige Statusdateien zu lesen
+
+{{< callout type="warning" >}}
+Der Server-Modus ist für eine nicht-öffentliche Umgebung gedacht. Es gibt keine Authentifizierungsmethoden und keine Mechanismen, Dokumente zu schützen.
+{{< /callout >}}
+
+Der Server baut die Verbindung auf der IP-Adresse `127.0.0.1` und dem Port `5266` auf.
+Die Adresse kann mit den Parametern `address` und `port` in der Konfigurationsdatei bzw. auf der Kommandozeile geändert werden, siehe [den Anhang über die Konfiguration]({{< relref "configuration" >}}).
+
+Beispiel für eine Konfigurationsdatei:
+
+```
+[server]
+port = 9999
+address = 0.0.0.0
+extra-dir = /var/projects/fonts:/var/projects/images
+filter = convertdata.lua
+```
+
+Es folgt ein Überblick über alle API Methoden.
+Die aktuelle Versionsnummer der API ist 0, also werden alle Methoden über `http://127.0.0.1:5266/v0/..`  angesprochen.
+Falls es zukünftig inkompatible Änderungen gibt, sind diese in der Versionsnummer `/v1/...` erreichbar, die vorhandenen Methoden werden weiterhin über `/v0` aufrufbar sein.
+
+| Methode | URL | Kurzbeschreibung |
+| --- | --- | --- |
+| GET | [`/available`]({{< relref "servermode#api-method-available" >}}) | Gib 200 zurück, um zu prüfen, ob der Server läuft. |
+| POST | [`/v0/publish`]({{< relref "servermode#api-method-v0-publish-post" >}}) | Sende Daten an den Server, um einen Publishing-Lauf zu starten. |
+| GET | `/v0/publish/<id>` | Prüfe, ob ein Publishing-Lauf beendet ist. |
+| GET | `/v0/pdf/<id>` | Warte auf die Fertigstellung eines PDF. |
+| POST | [`/v0/pdf`]({{< relref "servermode#api-method-v0-pdf-post" >}}) | Sende Daten und warte auf die Fertigstellung eines PDFs. |
+| GET | `/v0/data/<id>` | Lade die `data.xml` aus dem Publishing-Lauf. |
+| GET | `/v0/layout/<id>` | Lade die `layout.xml` aus dem Publishing-Lauf. |
+| GET | `/v0/statusfile/<id>` | Lade die Statusdatei (`publisher.status`) aus dem Publishing-Lauf. |
+| GET | `/v0/protocol/<id>` | Lade die Protokolldatei (`publisher-protocol.xml`) aus dem Publishing-Lauf. |
+| GET | [`/v0/status`]({{< relref "servermode#api-method-v0-status" >}}) | Übersicht über die laufenden Publishing-Prozesse. |
+| GET | `/v0/status/<id>` | Übersicht über einen Publishing-Prozess. |
+| GET | `/v0/delete/<id>` | Lösche einen Publishing-Lauf. |
+
+
+## `/available`
+
+Ohne Versionsnummer.
+Gibt den HTTP-Status 200 zurück.
+
+## `/v0/publish`
+
+Wird die URL mit einem POST-Request aufgerufen, erwartet der speedata Publisher eine JSON-Datei im folgenden Format:
+
+```
+{<dateiname>:<base64 kodierter Inhalt>,
+ <dateiname>:<base64 kodierter Inhalt>,
+ ...
+ }
+```
+
+also z. B.
+
+```
+{"layout.xml":"PD94bWwgdmVyc2lv....",
+ "data.xml":"PGRhdGE+CiAgICA8Y29udGVudHM+PCFbQ0RBVEFbPHV..." }
+```
+
+Diese Dateien werden auf dem Server in ein leeres Verzeichnis kopiert und dort wird `sp` aufgerufen.
+Die Rückgabe ist in der Form
+
+```
+{"id":"752869708"}
+```
+
+mit einem HTTP-Statuscode 201 (Created).
+
+Falls die JSON-Datei fehlerhaft ist, wird ein HTTP-Statuscode 400 (Bad
+Request) zurückgegeben, mit dem textuellen Inhalt der Fehlermeldung, z. B.:
+
+```
+illegal base64 data at input byte 0
+```
+
+### Parameter
+
+Folgende URL-Parameter können beim POST-Request angegeben werden:
+
+`jobname`
+: Setzt den Namen der Ausgabe, der beim Herunterladen der PDF-Datei vorgegeben wird (HTTP-Header `Content-Disposition`).
+: Alternativ wird er aus der Datei `publisher.cfg` bzw. der Voreinstellung `publisher` genommen.
+
+`vars`
+: Setzt Variablen für den Publisher-Lauf. Angabe in der Form `var1=wert1,var2=wert2,var3=wert3...`, jedoch URL-kodiert.
+
+`mode`
+: Setzt den Modus für den Lauf. Angabe in der Form `mode1,mode2,mode3...`, aber URL-kodiert.
+
+### Beispiel
+
+Ein Request auf
+
+```
+http://127.0.0.1:5266/v0/publish?vars=myvar%3D12345&mode=a4paper%2Cprint
+```
+
+setzt `myvar` auf `1234` und schaltet die Modi `a4paper` und `print` ein.
+
+## `/v0/publish/<id>`
+
+Ein GET-Request an diese URL mit einer id aus dem oben beschriebenen POST-Request liefert eine JSON-Datei, mit dem Inhalt:
+
+```json
+{"status":"ok",
+ "path":"/pfad/zu/publisher.pdf",
+ "blob":"<base64 kodiertes PDF>",
+ "finished":"2015-03-03T13:12:55+01:00",
+ "output":"<Nicht kodierte Ausgabe des sp-Laufs>"
+}
+```
+
+oder, im Fehlerfall, falls die id unbekannt ist:
+
+```json
+{"status":"error","path":"","blob":"id unknown"}
+```
+
+Falls die PDF-Datei noch nicht fertig geschrieben wurde:
+
+```json
+{"status":"error","path":"","blob":"in progress"}
+```
+
+Falls andere Fehler auftauchen:
+
+```json
+{"status": "error", "path":"", "output": "some helpful output"}
+```
+
+Das Verzeichnis mit der PDF-Datei wird nach diesem Request gelöscht, es sei denn, die URL enthält den Parameter `delete` mit dem Wert `false`.
+
+Zukünftige Versionen können weitere Felder in der JSON-Antwort haben.
+
+## `/v0/pdf`
+
+Ein Post-Request um Daten an den Server zu schicken und in demselben Request ein PDF zu erhalten. Die Kodierung der Daten entspricht der von [`/v0/publish`]({{< relref "servermode#api-method-v0-publish-post" >}}) und die Rückgabewerte entsprechen denen aus `/v0/pdf/<id>`.
+
+## `/v0/pdf/<id>`
+
+Ein GET-Request mit der id aus dem POST-Request von `/v0/publish`. Es wird im Erfolgsfall die PDF-Datei mit dem Statuscode 200 und dem Dateinamen `publisher.pdf` zurückgegeben. Der Request wartet auf die Fertigstellung des Publishing Prozesses. Im Fehlerfall wird nur ein Fehlercode zurückgegeben (Rückgabewert und Beschreibung):
+
+200 OK
+: PDF wurde fehlerfrei generiert
+
+404 Not Found
+: id ungültig
+
+406  Not Acceptable
+: PDF wurde fehlerhaft generiert
+
+Das Verzeichnis mit der PDF-Datei wird nach diesem Request gelöscht, es sei denn, die URL enthält den Parameter `delete` mit dem Wert `false`.
+
+## `/v0/data/<id>`
+
+Liefert die Daten-Datei, die vorab auf den Server kopiert wurde. Das Format kann über den URL-Parameter `format` angegeben werden, zum Beispiel `\http://127.0.0.1:5266/v0/data/1347678770?format=base64`:
+
+`json` oder `JSON`
+: Liefert eine JSON-Datei im Format `{"contents":"<XML Text>"}`
+
+`base64`
+: Ergibt eine XML Datei, die base64 kodiert ist (`PGRhdGE+CiAgICA8....hPgo=`)
+
+(keine Angabe)
+: Schreibt eine XML Datei (`<data>...</data>`)
+
+## `/v0/layout/<id>`
+Liefert das Layout XML, die vorab auf den Server kopiert wurde. Das Format kann über den URL-Parameter `format` angegeben werden. Beispiel wie oben.
+
+`json` oder `JSON`
+: Liefert eine JSON-Datei im Format `{"contents":"<XML Text>"}`
+
+`base64`
+: Ergibt eine XML Datei, die base64 kodiert ist (`PGRhdGE+CiAgICA8....hPgo=`)
+
+(keine Angabe)
+: Schreibt eine XML Datei (`<Layout>...</Layout>`)
+
+## `/v0/statusfile/<id>`
+
+Liefert die Datei `publisher.status`, die durch den Lauf erzeugt wurde. Das Format kann über den URL-Parameter `format` angegeben werden, (Beispiel wie unter `/v0/data/<id>`).
+
+`json` oder `JSON`
+: Liefert eine JSON-Datei im Format `{"contents":"<XML Text>"}`
+
+`base64`
+: Ergibt eine XML Datei, die base64 kodiert ist (`PGRhdGE+CiAgICA8....hPgo=`)
+
+(keine Angabe)
+: Schreibt eine XML Datei (`<Status>...</Status>`)
+
+## `/v0/protocol/<id>`
+
+Liefert die Datei `publisher-protocol.xml`, die durch den Lauf erzeugt wurde. Das Format kann über den URL-Parameter `format` angegeben werden, (Beispiel wie unter `/v0/data/<id>`).
+
+`json` oder `JSON`
+: Liefert eine JSON-Datei im Format `{"contents":"<XML Text>"}`
+
+`base64`
+: Ergibt eine XML Datei, die base64 kodiert ist (`PGRhdGE+CiAgICA8....hPgo=`)
+
+(keine Angabe)
+: Schreibt eine XML Datei
+
+## `/v0/status`
+
+Liefert den Status aller Publishing-Läufe zurück, die mit `/v0/publish` gestartet wurden.
+
+Die zurückgegebene JSON-Datei hat das folgende Format:
+
+```json
+{
+  "1997009134": {
+    "errorstatus": "ok",
+    "result": "finished",
+    "message": "no errors found",
+    "finished": "2016-05-23T11:14:14+02:00"
+  },
+  "1997329145": {
+    "errorstatus": "ok",
+    "result": "finished",
+    "message": "no errors found",
+    "finished": "2016-05-23T11:14:14+02:00"
+  }
+}
+```
+
+Die einzelnen Felder haben dieselbe Bedeutung wie unter `/v0/status/<id>` beschrieben.
+
+## `/v0/status/<id>`
+
+Ermittelt den Status des Publisher-Laufs, der per POST-Request an `/v0/publish` gesendet wurde.
+
+Die zurückgegebene JSON Datei hat folgende Schlüssel:
+
+`errorstatus`
+: Ist die Anfrage gültig? Mögliche Antworten `error` und `ok`. Wenn `error`, dann enthält der Schlüssel `message` den Grund für den Fehler, das Feld `result` ist in dem Fall ohne Bedeutung. Wenn `ok`, dann enthält das Feld `result` den Wert `not finished`, falls die PDF-Datei noch nicht erzeugt wurde.
+
+`result`
+: Nach der Erzeugung der PDF-Datei enthält das Feld `result` den Wert `failed`, falls bei der PDF-Erzeugung Fehler aufgetreten sind, `not finished`, falls der Publishing-Prozess noch fortdauert, ansonsten `ok`.
+
+`message`
+: Enthält eine informelle Nachricht zum Ergebnis. Bsp. `no errors found` oder `2 errors occurred during publishing run`.
+
+`finished`
+: Enthält den Zeitstempel, zu dem das PDF fertig gestellt wurde. Format entspricht RFC3339, zum Beispiel `2015-12-25T12:03:04+01:00`.
+
+## `/v0/delete/<id>`
+
+GET: Löscht das Verzeichnis mit dieser id. Gibt 200 zurück, wenn die id vorhanden ist, 404 falls nicht.
+

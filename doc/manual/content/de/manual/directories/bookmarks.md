@@ -1,0 +1,39 @@
+---
+title: "Lesezeichen"
+weight: 49
+type: docs
+---
+
+
+PDF-Lesezeichen kann man als alternatives Inhaltsverzeichnis für das PDF-Anzeigeprogramm (z. B. Adobe Reader) nutzen.
+Fast alle dieser Programme können Lesezeichen anzeigen.
+Mit ihnen kann man direkt an bestimmte Stellen im Dokument springen.
+Eine Besonderheit der Lesezeichen ist, dass sie hierarchisch angeordnet werden (level).
+Für jedes Lesezeichen kann man mit dem Attribut `open` bestimmen, ob es »geöffnet« oder »geschlossen« dargestellt werden soll.
+
+Lesezeichen werden in Texten oder auf der Ebene von `<Record>` ausgegeben.
+
+```xml
+<PlaceObject>
+  <Bookmark select="'Content'" level="1"/>
+  <Textblock>
+    <Bookmark select="'Introduction'" level="1" open="yes"/>
+    <Paragraph>
+      <Value>...</Value>
+    </Paragraph>
+  </Textblock>
+</PlaceObject>
+<PlaceObject>
+  <Textblock>
+    <Bookmark select="'One'" level="2" open="yes"/>
+    <Paragraph>
+      <Value>...</Value>
+    </Paragraph>
+  </Textblock>
+</PlaceObject>
+```
+
+![Lesezeichen dienen als schnelle Navigation in einem PDF-Dokument. Links ein Ausschnitt aus dem PDF-Viewer Skim und rechts Adobe Acrobat Reader.](/img/bookmarks.png)
+
+Wichtig: Die Ebenen müssen aufeinanderfolgend sein. Auf ein Level 1 Bookmark darf nur ein weiteres Level 1 Bookmark folgen (für den nächsten Abschnitt) oder eines auf Level 2 (Unterabschnitt).
+

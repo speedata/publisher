@@ -1193,7 +1193,7 @@
   -->
   <command en="B">
     <description xml:lang="en">
-      <para>Switch to font weight »bold«</para>
+      <para>Switch to font weight “bold”</para>
     </description>
     <description xml:lang="de">
       <para>Schaltet auf »Fett« um.</para>
@@ -1353,7 +1353,7 @@
       </description>
       <choice en="QRCode">
         <description xml:lang="en">
-          <para>Create an »optimal« QR code in terms of error correction and size.</para>
+          <para>Create an “optimal” QR code in terms of error correction and size.</para>
         </description>
         <description xml:lang="de">
           <para>Erzeugt einen QR-Code, der für den Inhalt die kleinstmögliche Größe und den besten Fehlerkorrekturwert hat, sofern kein Fehlerkorrekturlevel angegeben ist.</para>
@@ -1431,7 +1431,7 @@
   -->
   <command en="Bold">
     <description xml:lang="en">
-      <para>Name of the font face that should be used when switching to »bold«.</para>
+      <para>Name of the font face that should be used when switching to “bold”.</para>
     </description>
     <description xml:lang="de">
       <para>Name der Schriftart, die für den Schnitt Fett benutzt werden soll.</para>
@@ -1484,7 +1484,7 @@
   -->
   <command en="BoldItalic">
     <description xml:lang="en">
-      <para>Name of the font face that should be used when switching to »bold italic«. </para>
+      <para>Name of the font face that should be used when switching to “bold italic”. </para>
     </description>
     <description xml:lang="de">
       <para>Name der Schriftart, die für den Schnitt Fett-Kursiv benutzt werden soll.</para>
@@ -1639,7 +1639,7 @@
     </attribute>
     <attribute en="bleed" optional="yes">
       <description xml:lang="en">
-        <para>Lets the box increase its size by the amount of trim given in the options. Useful for thumb indexes. The contents of the attribute is either »left«, »right«, »top« or »bottom« or any combination such as »top,right«.</para>
+        <para>Lets the box increase its size by the amount of trim given in the options. Useful for thumb indexes. The contents of the attribute is either “left”, “right”, “top” or “bottom” or any combination such as “top,right”.</para>
       </description>
       <description xml:lang="de">
         <para>Lässt die Box am Rand größer werden. Wird z.B. für Daumenregister benutzt, die inkl. Beschnitt ganz zum Rand gehen sollen. Inhalt ist eine Ortsangabe bestehend aus den Werten »top«, »bottom«, »left« oder »right« bzw. eine Kombination wie »top,right«.</para>
@@ -1870,7 +1870,7 @@
   -->
   <command en="Case">
     <description xml:lang="en">
-      <para>Part of a <cmd name="Switch"/> construct. All cases up to the first case which evaluates to »true« will be executed. If no cases match and there is a <cmd name="Otherwise"/>, this will be executed instead.</para>
+      <para>Part of a <cmd name="Switch"/> construct. All cases up to the first case which evaluates to “true” will be executed. If no cases match and there is a <cmd name="Otherwise"/>, this will be executed instead.</para>
     </description>
     <description xml:lang="de">
       <para>Stellt einen Fall einer Fallunterscheidung (<cmd name="Switch"/>) dar. Der erste Fall, der zutrifft, wird ausgeführt. Weitere Fälle werden nicht betrachtet. Wird kein Fall erfüllt, dann wird, falls vorhanden, das Element <cmd name="Otherwise"/> ausgeführt.</para>
@@ -2428,7 +2428,7 @@
       </oneOrMore>
     </childelements>
     <remark xml:lang="en">
-      <para>The <tt>*</tt> widths in the command »Column« allow dynamic cell widths. For that the total width of the table must be set and the attribute (on <cmd name="Table"/>) <tt>stretch</tt> must be set to <tt>max</tt>.
+      <para>The <tt>*</tt> widths in the command “Column” allow dynamic cell widths. For that the total width of the table must be set and the attribute (on <cmd name="Table"/>) <tt>stretch</tt> must be set to <tt>max</tt>.
         The widths of the columns are calculated as follows: first the absolute widths are taken into account. After that, the <tt>*</tt> columns are distributed across the remaining space. The
         numbers before the <tt>*</tt> denote the fraction of the space. In the example below the third column gets 1/6 of the remaining width, the fourth column get 5/6.</para>
     </remark>
@@ -2740,7 +2740,7 @@
     </attribute>
     <attribute en="colorname" type="text" optional="yes">
       <description xml:lang="en">
-        <para>The name of the spot color if model is »spotcolor«. The name must match the required color name, such as »PANTONE 116 C«.</para>
+        <para>The name of the spot color if model is “spotcolor”. The name must match the required color name, such as “PANTONE 116 C”.</para>
       </description>
       <description xml:lang="de">
         <para>Der Name der Sonderfarbe wenn das Modell auf »spotcolor« eingestellt ist. Der muss den offiziellen Namen tragen, wie z.B. »PANTONE 116 C«.</para>
@@ -3107,7 +3107,7 @@
       </description>
     </attribute>
     <remark xml:lang="en">
-      <para>The default fontface is named »text« and it can be redefined by defining a new font family called »text«.</para>
+      <para>The default fontface is named “text” and it can be redefined by defining a new font family called “text”.</para>
       <para>The variants bold, italic and bold italic are optional. </para>
     </remark>
     <remark xml:lang="de">
@@ -4641,7 +4641,7 @@
     </attribute>
     <attribute en="fontfamily" optional="yes" type="text">
       <description xml:lang="en">
-        <para>Choose the font family. Only »Regular« shape is used at the moment.</para>
+        <para>Choose the font family. Only “Regular” shape is used at the moment.</para>
       </description>
       <description xml:lang="de">
         <para>Wähle die Fontfamilie. Derzeit wird nur der Schnitt Regular verwendet.</para>
@@ -4963,7 +4963,7 @@
     </attribute>
     <attribute en="maxwidth" type="numberorlength" optional="yes">
       <description xml:lang="en">
-        <para>The maximum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value »100%« for full width image.</para>
+        <para>The maximum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value “100%” for full width image.</para>
       </description>
       <description xml:lang="de">
         <para>Die maximale Breite des Bilds. Nur, wenn clip="no". Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</para>
@@ -4979,7 +4979,7 @@
     </attribute>
     <attribute en="minwidth" type="numberorlength" optional="yes">
       <description xml:lang="en">
-        <para>The minimum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value »100%« for full width image.</para>
+        <para>The minimum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value “100%” for full width image.</para>
       </description>
       <description xml:lang="de">
         <para>Die minimale Breite des Bilds. Nur, wenn clip="no". Angabe in absoluten Längen, Rasterzellen oder »100%« für volle Breite.</para>
@@ -5405,7 +5405,7 @@
     </attribute>
     <attribute en="oldstylefigures" optional="yes">
       <description xml:lang="en">
-        <para>Use oldstyle figures if the font includes them. (OpenType feature »onum«)</para>
+        <para>Use oldstyle figures if the font includes them. (OpenType feature “onum”)</para>
       </description>
       <description xml:lang="de">
         <para>Schalter, ob auf Mediävalziffern umgeschaltet wird (OpenType Feature »onum«).</para>
@@ -6328,7 +6328,7 @@
     </attribute>
     <attribute en="fontfamily" type="text" optional="yes">
       <description xml:lang="en">
-        <para>The name of the fontface for text to be reduced. The default is »text« (lowercase t).</para>
+        <para>The name of the fontface for text to be reduced. The default is “text” (lowercase t).</para>
       </description>
       <description xml:lang="de">
         <para>Name der Schriftart für den Text, der verkürzt werden soll. Voreinstellung ist »text« (mit kleinem t).</para>
@@ -6385,7 +6385,7 @@
     </childelements>
     <attribute en="fontfamily" type="text" optional="yes" since="4.3.1">
       <description xml:lang="en">
-        <para>The name of the font family for the paragraph. The default is »text« (lowercase t).</para>
+        <para>The name of the font family for the paragraph. The default is “text” (lowercase t).</para>
       </description>
       <description xml:lang="de">
         <para>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</para>
@@ -7032,7 +7032,7 @@
   -->
   <command en="Overlay" since="2.3.26">
     <description xml:lang="en">
-      <para>Overlays the first element with the following »positions«.</para>
+      <para>Overlays the first element with the following “positions”.</para>
     </description>
     <description xml:lang="de">
       <para>Überlagert das erste Element mit den nachfolgenden »Positionen«.</para>
@@ -7195,7 +7195,7 @@
     </attribute>
     <attribute en="fontfamily" css="font-family" type="text" optional="yes">
       <description xml:lang="en">
-        <para>The name of the font family for the paragraph. The default is »text« (lowercase t).</para>
+        <para>The name of the font family for the paragraph. The default is “text” (lowercase t).</para>
       </description>
       <description xml:lang="de">
         <para>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</para>
@@ -7449,7 +7449,7 @@
   -->
   <command en="Pagetype">
     <description xml:lang="en">
-      <para>Define a master page. A master page is chosen depending on the criterion given with the attribute »test«.</para>
+      <para>Define a master page. A master page is chosen depending on the criterion given with the attribute “test”.</para>
     </description>
     <description xml:lang="de">
       <para>Definiert eine Seitenvorlage. Anhand der Kriterien, die im Attribut test angegeben werden, wählt das System eine Seitenvorlage aus.</para>
@@ -7981,7 +7981,7 @@
     </childelements>
     <attribute en="allocate" optional="yes">
       <description xml:lang="en">
-        <para>Determines if the area of the object is marked as »allocated«. With <tt>allocate="no"</tt>, the cursor position is not changed.</para>
+        <para>Determines if the area of the object is marked as “allocated”. With <tt>allocate="no"</tt>, the cursor position is not changed.</para>
       </description>
       <description xml:lang="de">
         <para>Bestimmt, ob im Raster der Platz für das Objekt als »belegt« markiert wird. Bei <tt>allocate="no"</tt> wird auch die aktuelle Zeile im Raster nicht verändert.</para>
@@ -8325,7 +8325,7 @@
     </attribute>
     <attribute en="page" type="number" optional="yes">
       <description xml:lang="en">
-        <para>The page (later in the PDF), the object should appear on. Number of the keyword »next« for the next page.</para>
+        <para>The page (later in the PDF), the object should appear on. Number of the keyword “next” for the next page.</para>
       </description>
       <description xml:lang="de">
         <para>Die Seite (später im PDF), auf der das Objekt erscheinen soll. Angabe als Zahl oder »next« für die nächste Seite.</para>
@@ -9939,7 +9939,7 @@
 </Record>]]></listing>
     </example>
     <info xml:lang="en">
-      <para>You have to be careful to encode the test with the rules of XML: that is »less« must be written as <tt>&amp;lt;</tt>, since <tt>&lt;</tt> must not be part of text contents.</para>
+      <para>You have to be careful to encode the test with the rules of XML: that is “less” must be written as <tt>&amp;lt;</tt>, since <tt>&lt;</tt> must not be part of text contents.</para>
       <para>A Switch may be part of nearly all commands. It dissolves and only the contents of the Case or Otherwise gets replaced by the whole construct.</para>
     </info>
     <info xml:lang="de">
@@ -10520,7 +10520,7 @@
     </childelements>
     <attribute en="page" optional="yes">
       <description xml:lang="en">
-        <para>The page the table head should appear on. Defaults to »all«</para>
+        <para>The page the table head should appear on. Defaults to “all”</para>
       </description>
       <description xml:lang="de">
         <para>Die Seite, auf der der Tabellenkopf erscheinen soll. Voreinstellung ist »alle«</para>
@@ -10535,7 +10535,7 @@
       </choice>
       <choice en="all">
         <description xml:lang="en">
-          <para>All pages. If »first« is defined, the tablehead appears on all pages but the first.</para>
+          <para>All pages. If “first” is defined, the tablehead appears on all pages but the first.</para>
         </description>
         <description xml:lang="de">
           <para>Auf allen Seiten. Falls »first« definiert, erscheint der Tabellenkopf auf allen Seiten bis auf der ersten.</para>
@@ -12073,7 +12073,7 @@
    </childelements>
    <attribute en="fontfamily" type="text" optional="yes" since="4.3.1">
     <description xml:lang="en">
-      <para>The name of the font family for the paragraph. The default is »text« (lowercase t).</para>
+      <para>The name of the font family for the paragraph. The default is “text” (lowercase t).</para>
     </description>
     <description xml:lang="de">
       <para>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</para>

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 200" font-family="'Sana', 'SanaAlt', system-ui, -apple-system, sans-serif">
+  <style>
+    .label { font-size: 13px; fill: #111; font-weight: 500; }
+    .sublabel { font-size: 11px; fill: #666; }
+    .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px; fill: #888; }
+    .box { rx: 8; stroke-width: 1.5; }
+    .arrow { fill: none; stroke: #111; stroke-width: 1.5; marker-end: url(#arr); }
+  </style>
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#111"/>
+    </marker>
+  </defs>
+
+  <!-- data.xml (top left) -->
+  <rect class="box" x="10" y="10" width="160" height="70" fill="#fff" stroke="#d4c870"/>
+  <rect x="10" y="10" width="160" height="24" rx="8" fill="#ffeebf" stroke="none"/>
+  <rect x="10" y="28" width="160" height="6" rx="0" fill="#ffeebf" stroke="none"/>
+  <text class="label" x="90" y="28" text-anchor="middle">data.xml</text>
+  <text class="mono" x="24" y="50">&lt;catalog&gt;</text>
+  <text class="mono" x="34" y="62">&lt;product .../&gt; ...</text>
+  <text class="mono" x="24" y="74">&lt;/catalog&gt;</text>
+  <text class="sublabel" x="90" y="98" text-anchor="middle">Daten</text>
+
+  <!-- layout.xml (bottom left) -->
+  <rect class="box" x="10" y="110" width="160" height="70" fill="#fff" stroke="#d4c870"/>
+  <rect x="10" y="110" width="160" height="24" rx="8" fill="#ffeebf" stroke="none"/>
+  <rect x="10" y="128" width="160" height="6" rx="0" fill="#ffeebf" stroke="none"/>
+  <text class="label" x="90" y="128" text-anchor="middle">layout.xml</text>
+  <text class="mono" x="24" y="150">&lt;Record ...&gt;</text>
+  <text class="mono" x="34" y="162">&lt;PlaceObject&gt; ...</text>
+  <text class="mono" x="24" y="174">&lt;/Record&gt;</text>
+  <text class="sublabel" x="90" y="198" text-anchor="middle">Layoutregeln</text>
+
+  <!-- sp (Publisher) -->
+  <rect x="310" y="65" width="100" height="60" rx="10" fill="#FFC72C" stroke="none"/>
+  <text x="360" y="92" text-anchor="middle" font-size="18" font-weight="500" fill="#111">sp</text>
+  <text x="360" y="110" text-anchor="middle" font-size="10" fill="#555">Publisher</text>
+
+  <!-- Arrow: data.xml → sp -->
+  <path class="arrow" d="M 170,45 Q 240,45 308,82"/>
+
+  <!-- Arrow: layout.xml → sp -->
+  <path class="arrow" d="M 170,145 Q 240,145 308,108"/>
+
+  <!-- Arrow: sp → PDF -->
+  <path class="arrow" d="M 410,95 L 470,95"/>
+
+  <!-- PDF output -->
+  <rect class="box" x="475" y="30" width="115" height="145" fill="#fff" stroke="#ccc"/>
+  <rect x="485" y="42" width="60" height="6" rx="2" fill="#ddd"/>
+  <rect x="485" y="52" width="95" height="3" rx="1" fill="#eee"/>
+  <rect x="485" y="59" width="95" height="3" rx="1" fill="#eee"/>
+  <rect x="485" y="66" width="80" height="3" rx="1" fill="#eee"/>
+  <rect x="485" y="76" width="35" height="30" rx="2" fill="#e0e0e0"/>
+  <rect x="525" y="76" width="55" height="3" rx="1" fill="#eee"/>
+  <rect x="525" y="83" width="55" height="3" rx="1" fill="#eee"/>
+  <rect x="525" y="90" width="55" height="3" rx="1" fill="#eee"/>
+  <rect x="525" y="97" width="40" height="3" rx="1" fill="#eee"/>
+  <rect x="485" y="112" width="95" height="3" rx="1" fill="#eee"/>
+  <rect x="485" y="119" width="95" height="3" rx="1" fill="#eee"/>
+  <rect x="485" y="126" width="70" height="3" rx="1" fill="#eee"/>
+  <rect x="485" y="136" width="95" height="3" rx="1" fill="#eee"/>
+  <rect x="485" y="143" width="95" height="3" rx="1" fill="#eee"/>
+  <rect x="485" y="150" width="50" height="3" rx="1" fill="#eee"/>
+  <!-- Corner fold -->
+  <path d="M 565,30 L 590,30 L 590,55 Z" fill="#eee" stroke="#ccc" stroke-width="1"/>
+  <path d="M 565,30 L 565,55 L 590,55" fill="#f8f8f8" stroke="#ccc" stroke-width="1"/>
+  <text class="sublabel" x="532" y="193" text-anchor="middle">PDF</text>
+</svg>

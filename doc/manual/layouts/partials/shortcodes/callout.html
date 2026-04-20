@@ -1,0 +1,18 @@
+{{- $content := .content -}}
+{{- $icon := .icon -}}
+{{- $emoji := .emoji -}}
+
+<div class="admonitionblock">
+  <table><tbody><tr>
+    <td class="icon">
+      {{- with $emoji -}}
+        <span>{{ . }}</span>
+      {{- else -}}
+        {{- with $icon -}}
+          {{ partial "utils/icon.html" (dict "name" . "attributes" `height="1.5em"`) }}
+        {{- end -}}
+      {{- end -}}
+    </td>
+    <td class="content">{{ $content }}</td>
+  </tr></tbody></table>
+</div>

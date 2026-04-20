@@ -1,0 +1,47 @@
+---
+title: "Starting the Publisher via the Hotfolder"
+weight: 65
+type: docs
+---
+
+
+The speedata Publisher can monitor a directory as a “watchdog” in order to start automatically when changes are made.
+Such a directory is also called hotfolder.
+You can specify rules about what happens when a certain file is written to this directory.
+
+{{< callout type="warning" >}}
+The Publisher deletes the XML file from the directory as soon as it is processed.
+{{< /callout >}}
+
+The hotfolder is configured in the same way as the Publisher using the publisher.cfg file.
+
+```
+[hotfolder]
+hotfolder = /Users/speedata/tmp/hotfolder
+events = layout\.xml:run(runpublisher);data\.xml:run(runpublisher)
+```
+
+The configuration consists of two parts: The hotfolder entry points to the (empty) directory where the files are written to. The entries under events follow the pattern:
+
+```
+<Regular expression>:run(<programname>)
+```
+
+Several entries are separated by semicolon.
+
+In the example, if one of the files `layout.xml` or `data.xml` is written to the `/Users/speedata/tmp/hotfolder` directory, the `runpublisher` program is triggered. The `runpublisher` program could be a shell script that calls the Publisher:
+
+```shell
+#!/bin/sh
+
+{
+ echo "Running speedata Publisher ($1)"
+ cd /Users/speedata/tmp/hotfolder
+ sp
+} > /tmp/publisher.log 2> /tmp/publisher.err
+```
+
+Usually this is of course somewhat more extensive, for simple applications this is sufficient. The program configured in `run()` gets the full path to the file in the hotfolder as the only argument.
+
+It doesn't have to be just XML files to which the Publisher's watchdog reacts. They can be any files specified using the regular expression.
+

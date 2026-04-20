@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="{{ site.Language.Lang }}">
+{{ partial "head.html" . }}
+<body>
+  {{ partial "sidebar.html" . }}
+
+  <div id="main-wrapper">
+    {{ block "main" . }}{{ end }}
+    <div id="right-column">
+      <a id="content-header-logo" href="{{ relLangURL "" }}">
+        <img src="{{ "speedata.png" | relURL }}" alt="{{ site.Title }}" />
+      </a>
+      {{ partial "toc.html" . }}
+    </div>
+  </div>
+
+  {{ partial "scripts.html" . }}
+</body>
+</html>

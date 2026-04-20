@@ -1,0 +1,237 @@
+---
+title: "Bilder mit MetaPost erstellen"
+weight: 62
+type: docs
+---
+
+
+MetaPost ist eine Programmiersprache, mit der man Grafiken erstellen kann.
+So erzeugt man beispielsweise aus folgendem Programmcode:
+
+```text
+beginfig(1)
+    for a=0 upto 9:
+      draw (0,0){dir 45}..{dir -10a}(6cm,0);
+    endfor
+endfig;
+```
+
+diese Grafik:
+
+![mp-first.png](/img/mp-first.png)
+
+## MetaPost im speedata Publisher
+
+Die Idee ist nun, diese Bilder auch im speedata Publisher nutzen zu können.
+Dazu definiert man erst eine Grafik und benutzt sie später bei dem Box-Befehl:
+
+```xml
+<Layout
+    xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- beginfig() ... endfig nicht notwendig -->
+    <DefineGraphic name="dottedbox">
+      pickup pencircle scaled 1mm;
+      draw (0,0) -- (box.width,0) -- (box.width, box.height) --
+        (box.width, box.height) -- (0, box.height ) -- cycle
+        dashed withdots withcolor 0.7red ;
+    </DefineGraphic>
+
+    <!-- dasselbe, nutzt aber den vordefinierten Pfad box: -->
+    <DefineGraphic name="dottedboxsimple">
+        pickup pencircle scaled 1mm;
+        draw box dashed withdots withcolor 0.7red ;
+    </DefineGraphic>
+
+    <Record element="data">
+        <PlaceObject row="1" column="1">
+            <Box height="2" width="5" graphic="dottedbox" />
+        </PlaceObject>
+    </Record>
+</Layout>
+```
+
+Die Breite der Box und die Höhe der Box sind mit den Variablen `box.width` und `box.height` in MetaPost definiert.
+Damit kann man die Grafik an die Vorgaben im Publisher anpassen.
+
+![Die gepunkteten Linien entsprechen den Vorgaben der Box. Die Rasterdarstellung wurde eingeschaltet, damit das sichtbar wird.](/img/mp-dotted.png)
+
+Alternativ kann die Grafik auch bei dem `<Image>` Befehl aus einer Datei mit der Endung `.mp` geladen werden.
+
+## Koordinaten
+
+Der Ursprung des Koordinatensystems liegt in der linken unteren Ecke der Box, positive Werte gehen also in die Richtung rechts und oben.
+
+## Variablen
+
+Es können mit `<SetVariable>` Variablen für MetaPost gesetzt werden.
+
+```xml
+<SetVariable
+    variable="curcol"
+    type="mp:rgbcolor"
+    select="'colors.mycolor'"/>
+```
+
+Die Zuweisung wird zu Beginn des MetaPost-Kontexts ausgewertet. Damit steht `curcol` am Anfang der Grafiken zur Verfügung. Variablen dürfen folgende Zeichen enthalten: A-Z, a-z und _ (Unterstrich).
+
+## Vordefinierte Werte
+
+* Alle Farben, die im Layout definiert werden, können mit dem Präfix `colors.` in MetaPost benutzt werden:
+```xml
+<DefineColor name="mycolor" value="#FF4E00"/>
+
+<DefineGraphic name="dots">
+    pickup pencircle scaled 3mm;
+    for i=0 upto 3:
+        draw (i * 1cm, i * 1cm) withcolor colors.mycolor ;
+    endfor;
+</DefineGraphic>
+
+<Record element="data">
+    <PlaceObject row="1" column="1">
+        <Box height="5" width="1" graphic="dots" />
+    </PlaceObject>
+</Record>
+```
+
+* CSS Level 3 Farben sind im RGB-Farbraum vordefiniert.
+* Die Breite und Höhe der umgebenden Fläche können mit `box.width` und `box.height` abgefragt werden.
+* Der Pfad `box` ist für die Ausmaße der Fläche definiert (siehe das Beispiel oben).
+* Hans Hagens Metafun-Makros sind teilweise eingebunden.
+* Bei Seitentypen stehen zusätzlich folgende Variablen zur Verfügung:
+| Variable | Beschreibung |
+| --- | --- |
+| `page.width` | Seitenbreite |
+| `page.height` | Seitenhöhe |
+| `page.margin.left` | Rand links |
+| `page.margin.right` | Rand rechts |
+| `page.margin.top` | Rand oben |
+| `page.margin.bottom` | Rand unten |
+| `page.trim` | Beschnittzugabe |
+
+
+## Text in MetaPost
+
+```
+sptext("Hello, world!","text","regular")
+```
+
+Die Argumente sind folgende: der zu druckende Text, die Schriftfamilie und der Schnitt, wobei die möglichen Werte für Schnitt folgende sind: `regular`, `bold`, `italic` und `bolditalic`.
+
+Beispiel in der Nutzung von Label:
+
+```
+label.top(sptext("origin","text","regular"),(0,0));
+```
+
+Alternativ zu diesem »langen« Makro gibt es auch die kurze Variante:
+
+```
+defaultfontfamily := "mptext";
+defaultfontstyle := "bold";
+
+draw txt("Hello, world!");
+```
+
+Gibt den Text in der Variante Fett der Familie `mptext` aus.
+
+## Transparenz
+
+Um einen Transparenzeffekt zu nutzen, kann man eine Farbangabe mit `withalpha` um einen Faktor ergänzen. Dieser liegt zwischen 0 (unsichtbar) und 1 (voller Farbauftrag).
+
+```text
+fill box scaled 0.5 shifted (-20,-20);
+fill box withcolor rebeccapurple withalpha 0.6;
+```
+
+## Verfügbare Makros (mit Beispielen)
+
+Die in dem Format »plain« enthaltenen Makros sind im speedata Publisher enthalten. Daneben noch folgende (tlw. aus MetaFun).
+
+### Verschiebungen etc.
+
+`xshifted`, `yshifted`
+: Verschiebung in einer Richtung.
+
+    draw unitsquare xshifted 3cm;
+
+`xyscaled`
+: Skalierung mit unterschiedlichen Werten
+
+    draw unitsquare xyscaled (2cm,5cm);
+
+`randomshifted`
+: Verschiebung mit zufälligen Werten
+
+    draw unitsquare randomshifted (2cm,5cm);
+
+`superellipsed`
+: Transformation zu einer »Superellipse«
+
+    draw box superellipsed 0.9;
+
+`roundedsquare`
+: Rechteck mit abgerundeten Ecken
+
+    draw roundedsquare(box.width,box.height,.25cm);
+
+`withalpha`
+: Veränderung des Farbauftrags (1.0 = voller Farbauftrag, 0 = kein Farbauftrag)
+
+    fill unitsquare withalpha 0.7;
+
+`randomized`
+: Veränderung verschiedener Objekte um einen bestimmten Wert.
+
+    draw box randomized 2cm;
+
+### Pfade
+
+`box`
+: Rechteck mit der Seitenlänge aus dem Layout.
+
+    draw box;
+
+### Bildbefehle
+
+`drawdot`
+: Zeichnet einen Punkt an eine bestimmte Stelle.
+
+    drawdot origin;
+
+`spcolor`
+: Wählt eine Farbe aus den vordefinierten Farben aus. Kann nur mit `withcolor` benutzt werden. Der Unterschied zu den Farben aus `colors.`  ist, dass der Farbraum erhalten bleibt.
+
+    fill box withcolor spcolor("mycolor");
+
+### Text
+
+`sptext`
+: Text mit Angaben zur Schriftart und der Variante. Die möglichen Werte sind unter `defaultfontfamily` und `defaultfontstyle` beschrieben.
+
+    draw sptext("Hello","text","bold");
+
+`txt`
+: Text, der die Voreinstellungen `defaultfontfamily` und `defaultfontstyle` nutzt.
+
+### Optionen
+
+`defaultfontfamily`
+: Font-Familie, die bei `txt()` benutzt wird. Die Familie muss zuvor im Layout definiert worden sein.
+
+`defaultfontstyle`
+: Font-Stil, der bei `txt()`  benutzt wird. Mögliche Stile: `regular`, `bold`, `italic`, `bolditalic`.
+
+## MetaPost Ressourcen
+
+Es gibt eine Reihe englischer Handbücher und Tutorials für MetaPost:
+
+* Das MetaPost Handbuch (mpman) ist auf CTAN zu finden: http://mirrors.ctan.org/systems/doc/metapost/mpman.pdf
+* Learning MetaPost by doing von André Heck: https://staff.fnwi.uva.nl/a.j.p.heck/Courses/mptut.pdf
+* MetaPost Beispiele: http://tex.loria.fr/prod-graph/zoonekynd/metapost/metapost.html
+* A Beginner’s Guide to MetaPost for Creating High-Quality Graphics http://www.tug.org/pracjourn/2006-4/henderson/henderson.pdf
+* Puzzling graphics in MetaPost https://www.pragma-ade.com/articles/art-puzz.pdf
+* MetaFun (ein Makropaket, das auf MetaPost aufsetzt - nicht alle Befehle sind im speedata Publisher verfügbar) https://www.pragma-ade.com/general/manuals/metafun-p.pdf
+

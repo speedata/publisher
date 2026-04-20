@@ -1,0 +1,46 @@
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ with .Title }}{{ . }} – {{ end }}{{ site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ .Description | default (.Summary | plainify | truncate 160) }}" />
+
+  {{/* CSS */}}
+  {{ $typography := resources.Get "css/typography.css" }}
+  {{ $main := resources.Get "css/main.css" }}
+  {{ $syntax := resources.Get "css/syntax.css" }}
+
+  {{ if hugo.IsProduction }}
+    {{ $all := slice $typography $main $syntax | resources.Concat "css/all.css" | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ $all.RelPermalink }}" integrity="{{ $all.Data.Integrity }}" />
+  {{ else }}
+    <link rel="stylesheet" href="{{ $typography.RelPermalink }}" />
+    <link rel="stylesheet" href="{{ $main.RelPermalink }}" />
+    <link rel="stylesheet" href="{{ $syntax.RelPermalink }}" />
+  {{ end }}
+
+  {{/* KaTeX — nur wenn Seite Math enthält */}}
+  {{ if .Store.Get "hasMath" }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css" crossorigin="anonymous" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/auto-render.min.js"
+      crossorigin="anonymous"
+      onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]})">
+    </script>
+  {{ end }}
+
+  <link rel="icon" href="/favicon.ico" sizes="48x48" />
+  <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+  <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <link rel="canonical" href="{{ .Permalink }}" />
+
+  {{ if hugo.IsMultilingual }}
+    {{ range site.Languages }}
+      {{ $langLink := partial "utils/lang-link.html" (dict "lang" .Lang "context" $) }}
+      <link rel="alternate" hreflang="{{ .Lang }}" href="{{ absURL $langLink }}" />
+    {{ end }}
+  {{ end }}
+
+  {{ partial "custom/head-end.html" . }}
+</head>

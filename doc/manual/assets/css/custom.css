@@ -1,0 +1,218 @@
+
+.code-caption {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: -0.5em;
+  margin-bottom: 1.5em;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   Sidebar
+   ========================================================================== */
+
+.hextra-sidebar-container {
+  font-weight: 300;
+}
+
+/* ==========================================================================
+   Figures & Images
+   ========================================================================== */
+
+figure {
+  margin: 1.5em 0;
+}
+
+figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+figure figcaption {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 0.4em;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   PRO feature badge
+   ========================================================================== */
+
+.prolink {
+  content: "PRO";
+  font-size: 50%;
+  vertical-align: super;
+  margin-left: 10px;
+  padding: 4px;
+  background-color: #ffc800;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #000;
+  position: relative;
+}
+
+.prolink:hover {
+  color: #000 !important;
+  text-decoration: none;
+}
+
+[data-tooltip] {
+  position: relative;
+  cursor: pointer;
+}
+
+[data-tooltip]:before,
+[data-tooltip]:after {
+  line-height: 1;
+  font-size: .9em;
+  pointer-events: none;
+  position: absolute;
+  box-sizing: border-box;
+  display: none;
+  opacity: 0;
+}
+
+[data-tooltip]:before {
+  content: "";
+  border: 5px solid transparent;
+  z-index: 100;
+}
+
+[data-tooltip]:after {
+  content: attr(data-tooltip);
+  text-align: center;
+  min-width: 3em;
+  max-width: 21em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 6px 8px;
+  border-radius: 3px;
+  background: #ffc800;
+  color: #000;
+  z-index: 99;
+}
+
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+  display: block;
+  opacity: 1;
+}
+
+[data-tooltip][data-flow="top"]::before {
+  bottom: 100%;
+  border-bottom-width: 0;
+  border-top-color: #ffc800;
+}
+
+[data-tooltip][data-flow="top"]::after {
+  bottom: calc(100% + 5px);
+}
+
+[data-tooltip][data-flow="top"]::before,
+[data-tooltip][data-flow="top"]::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ==========================================================================
+   Callouts
+   ========================================================================== */
+
+.admonitionblock {
+  margin: 1.5em 0;
+
+  table, thead, tbody, tr, td, th {
+    border: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-collapse: collapse;
+    background: none !important;
+  }
+
+  td.icon {
+    vertical-align: middle;
+    text-align: center;
+    padding: 0.5em 1em;
+    border-right: 1px solid #ccc !important;
+
+    svg {
+      width: 2.5em;
+      height: 2.5em;
+      color: #333;
+      transition: transform 0.6s ease;
+    }
+  }
+
+  &:hover td.icon svg {
+    transform: rotate(360deg);
+  }
+
+  td.content {
+    vertical-align: top;
+    padding: 0.5em 0 0.5em 1em;
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+/* ==========================================================================
+   Definition lists
+   ========================================================================== */
+
+dt {
+  background-color: #efefef;
+  padding: 3px;
+}
+
+dd {
+  margin-left: 40px;
+}
+
+dd p {
+  margin-top: 0 !important;
+}
+
+
+
+.admonitionblock {
+  margin: 1.5em 0;
+
+  table, thead, tbody, tr, td, th {
+    border: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-collapse: collapse;
+    background: none !important;
+  }
+
+  td.icon {
+    vertical-align: middle;
+    text-align: center;
+    padding: 0.5em 1em;
+    border-right: 1px solid #ccc !important;
+
+    svg {
+      width: 2.5em;
+      height: 2.5em;
+      color: #333;
+      transition: transform 0.6s ease;
+    }
+  }
+
+  &:hover td.icon svg {
+    transform: rotate(360deg);
+  }
+
+  td.content {
+    vertical-align: top;
+    padding: 0.5em 0 0.5em 1em;
+
+    p {
+      margin: 0;
+    }
+  }
+}

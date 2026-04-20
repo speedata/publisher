@@ -1,0 +1,11 @@
+{{- $link := .Get "link" -}}
+{{- $title := .Get "title" -}}
+{{- $subtitle := .Get "subtitle" -}}
+{{- $linkURL := $link -}}
+{{- with .Page.GetPage $link -}}
+  {{- $linkURL = .RelPermalink -}}
+{{- end -}}
+<a class="card" href="{{ $linkURL | relURL }}">
+  <div class="card-title">{{ $title }}</div>
+  {{ with $subtitle }}<div class="card-subtitle">{{ . }}</div>{{ end }}
+</a>

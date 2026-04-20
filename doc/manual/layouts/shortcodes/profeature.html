@@ -1,0 +1,1 @@
+<a href="{{ if eq site.Language.Lang "de" }}https://www.speedata.de/de/preise/{{ else }}https://www.speedata.de/en/prices/{{ end }}" class="prolink" data-tooltip="{{ with .Get 0 }}{{ . }}{{ else }}Available in the Pro plan{{ end }}" data-flow="top">PRO</a>

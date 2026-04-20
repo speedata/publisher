@@ -1,0 +1,6 @@
+{{ with .TableOfContents }}
+<div id="toc-container">
+  <h4>{{ if eq site.Language.Lang "de" }}Inhalt{{ else }}On this page{{ end }}</h4>
+  {{ . | replaceRE `HAHAHUGOSHORTCODE.*?HBHB` "" | safeHTML }}
+</div>
+{{ end }}

@@ -1,0 +1,29 @@
+---
+title: "OxygenXML"
+weight: 10
+type: docs
+---
+
+
+The editor [oXygen XML](https://www.oxygenxml.com) is a special XML editor that provides excellent support for editing the layout rules.
+To get this support, the schema must be assigned to the speedata layout namespace (`urn:speedata.de:2009/publisher/en`).
+
+![In the settings you select the assignment of the document types (Document Type Association). Then click on "New" to create a new association](/img/oxygen-schema-doctypeassociation.png)
+
+![In the first tab you have to click on the '+' to create an assignment.](/img/oxygen-schema-doctypeassociation-1.png)
+
+![In this window you enter the namespace of the layout (`urn:speedata.de:2009/publisher/en`).](/img/29-doczuordnung1.png)
+
+![Now you can set RELAX NG + Schematron and select the scheme. In the ZIP file it is located under `share/schema/layoutschema-en.rng` or `...-de.rng`, depending on the desired language for the short description.](/img/29-doczuordnung2.png)
+
+From now on, for every layout in the namespace
+
+```xml
+xmlns="urn:speedata.de:2009/publisher/en"
+```
+
+the schema should be associated with the layout.
+This can be checked by the fact that a selection of commands now appears when you enter an opening angle bracket (<).
+
+![If the scheme is correctly integrated, a selection list appears as soon as a command is entered.](/img/29-liste.png)
+
