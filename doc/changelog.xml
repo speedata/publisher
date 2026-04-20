@@ -1,5 +1,25 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.5">
+    <entry version="5.5.9" date="2026-04-20">
+        <en>Documentation: move to Hugo static site generator, reorganize structure.</en>
+        <de>Dokumentation: Umstellung auf Hugo, Struktur neu organisiert.</de>
+    </entry>
+    <entry version="5.5.9" date="2026-04-20">
+        <en>Allow Textblock in Td for better control with rotation.</en>
+        <de>Erlaube Textblock in Td für bessere Kontrolle bei Rotation.</de>
+    </entry>
+    <entry version="5.5.9" date="2026-04-20">
+        <en>Support css ::marker.</en>
+        <de>Unterstützung für CSS ::marker.</de>
+    </entry>
+    <entry version="5.5.9" date="2026-04-20">
+        <en>Images are drawn when trace objects="yes".</en>
+        <de>Bilder werden bei trace objects="yes" gezeichnet.</de>
+    </entry>
+    <entry version="5.5.9" date="2026-04-20">
+        <en>Bug fix HTML borders width calculation.</en>
+        <de>Fehlerkorrektur HTML Rahmen Breitenberechnung.</de>
+    </entry>
     <entry version="5.5.8" date="2026-04-14">
         <en>Honor box height in lines (line height).</en>
         <de>Berücksichtige Box-Höhe in Zeilen (Zeilenhöhe).</de>
