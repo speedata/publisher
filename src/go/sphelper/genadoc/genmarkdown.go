@@ -236,44 +236,71 @@ func GenerateMarkdownFiles(cfg *config.Config, lang string) error {
 	return nil
 }
 
-// GenerateChangelogMarkdown reads changelog.xml and writes a Markdown file
-// for use with Hugo in doc/manual/content/{lang}/manual/changelog.md.
+// GenerateChangelogMarkdown reads changelog.xml and writes Markdown files
+// split by major version into doc/manual/content/{lang}/manual/changelog/.
 func GenerateChangelogMarkdown(cfg *config.Config, lang string) error {
 	cl, err := changelog.ReadChangelog(cfg)
 	if err != nil {
 		return err
 	}
 
-	destpath := filepath.Join(cfg.Basedir(), "doc", "manual", "content", lang, "manual")
+	destpath := filepath.Join(cfg.Basedir(), "doc", "manual", "content", lang, "manual", "changelog")
 	err = os.MkdirAll(destpath, 0755)
 	if err != nil {
 		return err
 	}
 
-	fullpath := filepath.Join(destpath, "changelog.md")
-	f, err := os.Create(fullpath)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
+	// Remove old single-file changelog if it exists
+	oldFile := filepath.Join(cfg.Basedir(), "doc", "manual", "content", lang, "manual", "changelog.md")
+	os.Remove(oldFile)
 
-	title := "Changelog"
+	sectionTitle := "Changelog"
 	if lang == "de" {
-		title = "Liste der Änderungen"
+		sectionTitle = "Liste der Änderungen"
 	}
-	fmt.Fprintf(f, "---\ntitle: \"%s\"\nweight: 900\ntype: docs\n---\n\n", title)
 
-	ghIssueRe := regexp.MustCompile(`#(\d+)`)
-	ttRepl := strings.NewReplacer(`<tt>`, "`", `</tt>`, "`")
+	// Group chapters by major version
+	type entryText struct {
+		summary string
+		detail  string
+	}
 
 	type release struct {
 		date    time.Time
 		version string
-		entries []string
+		entries []entryText
 	}
 
+	type chapterSummary struct {
+		version string
+		date    string
+		summary string
+	}
+
+	type majorVersionData struct {
+		major     string
+		summaries []chapterSummary
+		chapters  []struct {
+			version  string
+			releases []release
+		}
+	}
+
+	ghIssueRe := regexp.MustCompile(`#(\d+)`)
+	ttRepl := strings.NewReplacer(`<tt>`, "`", `</tt>`, "`")
+
+	majorVersions := []majorVersionData{}
+	majorIndex := map[string]int{}
+
 	for _, chap := range cl.Chapter {
-		fmt.Fprintf(f, "## %s\n\n", chap.Version)
+		major := strings.SplitN(chap.Version, ".", 2)[0]
+		idx, exists := majorIndex[major]
+		if !exists {
+			idx = len(majorVersions)
+			majorIndex[major] = idx
+			majorVersions = append(majorVersions, majorVersionData{major: major})
+		}
+
 		version := ""
 		var rr []release
 		var r release
@@ -289,29 +316,109 @@ func GenerateChangelogMarkdown(cfg *config.Config, lang string) error {
 				r = release{date: d, version: entry.Version}
 				version = entry.Version
 			}
-			var e string
+			var summaryAttr, text string
 			if lang == "en" {
-				e = entry.En.Text
+				summaryAttr = entry.En.Summary
+				text = entry.En.Text
 			} else {
-				e = entry.De.Text
+				summaryAttr = entry.De.Summary
+				text = entry.De.Text
 			}
-			e = ghIssueRe.ReplaceAllString(e, `[#$1](https://github.com/speedata/publisher/issues/$1)`)
-			e = ttRepl.Replace(e)
-			r.entries = append(r.entries, e)
+			text = strings.TrimSpace(text)
+			text = ghIssueRe.ReplaceAllString(text, `[#$1](https://github.com/speedata/publisher/issues/$1)`)
+			text = ttRepl.Replace(text)
+			summary := text
+			detail := ""
+			if summaryAttr != "" {
+				summary = summaryAttr
+				summary = ghIssueRe.ReplaceAllString(summary, `[#$1](https://github.com/speedata/publisher/issues/$1)`)
+				summary = ttRepl.Replace(summary)
+				detail = text
+			}
+			r.entries = append(r.entries, entryText{summary: summary, detail: detail})
 		}
 		rr = append(rr, r)
 
-		for _, r := range rr {
+		if chap.Summary != nil {
+			var summaryText string
 			if lang == "en" {
-				fmt.Fprintf(f, "### %s (%s)\n\n", r.version, r.date.Format("2006-01-02"))
+				summaryText = chap.Summary.En.Text
 			} else {
-				fmt.Fprintf(f, "### %s (%s)\n\n", r.version, r.date.Format("2.1.2006"))
+				summaryText = chap.Summary.De.Text
 			}
-			for _, e := range r.entries {
-				fmt.Fprintf(f, "- %s\n", e)
+			summaryText = strings.TrimSpace(summaryText)
+			if summaryText != "" {
+				majorVersions[idx].summaries = append(majorVersions[idx].summaries, chapterSummary{
+					version: chap.Version,
+					date:    chap.Date,
+					summary: summaryText,
+				})
 			}
-			fmt.Fprintln(f)
 		}
+
+		chapData := struct {
+			version  string
+			releases []release
+		}{version: chap.Version, releases: rr}
+		majorVersions[idx].chapters = append(majorVersions[idx].chapters, chapData)
+	}
+
+	// Write _index.md with summaries
+	idxPath := filepath.Join(destpath, "_index.md")
+	idxFile, err := os.Create(idxPath)
+	if err != nil {
+		return err
+	}
+	fmt.Fprintf(idxFile, "---\ntitle: \"%s\"\nweight: 900\ntype: docs\n---\n\n", sectionTitle)
+
+	for _, mv := range majorVersions {
+		if len(mv.summaries) == 0 {
+			continue
+		}
+		fmt.Fprintf(idxFile, "## [Version %s](version-%s/)\n\n", mv.major, mv.major)
+		for _, s := range mv.summaries {
+			fmt.Fprintf(idxFile, "### %s\n\n", s.version)
+			fmt.Fprintf(idxFile, "%s\n\n", s.summary)
+		}
+	}
+	idxFile.Close()
+
+	// Write one file per major version
+	for i, mv := range majorVersions {
+		title := fmt.Sprintf("Version %s", mv.major)
+		filename := filepath.Join(destpath, fmt.Sprintf("version-%s.md", mv.major))
+		f, err := os.Create(filename)
+		if err != nil {
+			return err
+		}
+
+		// Lower weight = shown first; newest major version first
+		weight := (i + 1) * 10
+		if i == 0 {
+			fmt.Fprintf(f, "---\ntitle: \"%s\"\nweight: %d\ntype: docs\naliases:\n  - latest\n---\n\n", title, weight)
+		} else {
+			fmt.Fprintf(f, "---\ntitle: \"%s\"\nweight: %d\ntype: docs\n---\n\n", title, weight)
+		}
+
+		for _, chap := range mv.chapters {
+			fmt.Fprintf(f, "## %s\n\n", chap.version)
+			for _, r := range chap.releases {
+				if lang == "en" {
+					fmt.Fprintf(f, "### %s (%s)\n\n", r.version, r.date.Format("2006-01-02"))
+				} else {
+					fmt.Fprintf(f, "### %s (%s)\n\n", r.version, r.date.Format("2.1.2006"))
+				}
+				for _, e := range r.entries {
+					if e.detail != "" {
+						fmt.Fprintf(f, "- %s<br>\n  %s\n", e.summary, e.detail)
+					} else {
+						fmt.Fprintf(f, "- %s\n", e.summary)
+					}
+				}
+				fmt.Fprintln(f)
+			}
+		}
+		f.Close()
 	}
 	return nil
 }

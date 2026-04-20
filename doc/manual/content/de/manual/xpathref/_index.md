@@ -11,5 +11,4 @@ XPath-Ausdrücke und Funktionen für den Zugriff auf Daten und die Steuerung des
   {{< card link="layoutfunctions" title="Layoutfunktionen" subtitle="sd:-Funktionen für Seiten, Bilder, Text und mehr" >}}
   {{< card link="xpathfunctions" title="XPath-Standardfunktionen" subtitle="String-, Zahlen- und Sequenzfunktionen" >}}
   {{< card link="lengthsunits" title="Längen & Einheiten" subtitle="Maßeinheiten und Umrechner" >}}
-  {{< card link="internalvariables" title="Interne Variablen" subtitle="Vom Publisher gesetzte Variablen" >}}
 {{< /cards >}}

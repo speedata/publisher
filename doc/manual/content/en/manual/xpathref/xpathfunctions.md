@@ -91,11 +91,11 @@ In addition, there are the Publisher-specific [layout functions]({{< relref "lay
 `format-number(<number>, <pattern>)`
 : Format the number according to the pattern. Example: `format-number(12345.67, '#,##0.00')` returns `12,345.67`.
 
-`max(<values>)`
-: Return the maximum. `max(1.1, 2.2, 3.3)` returns `3.3`.
+`max(<sequence>)`
+: Return the maximum. `max((1.1, 2.2, 3.3))` returns `3.3`.
 
-`min(<values>)`
-: Return the minimum. `min(1.1, 2.2, 3.3)` returns `1.1`.
+`min(<sequence>)`
+: Return the minimum. `min((1.1, 2.2, 3.3))` returns `1.1`.
 
 
 ## Boolean Functions

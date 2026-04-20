@@ -91,11 +91,11 @@ Daneben gibt es die Publisher-spezifischen [Layoutfunktionen]({{< relref "layout
 `format-number(<Zahl>, <Muster>)`
 : Formatiert die Zahl nach dem Muster. Beispiel: `format-number(12345.67, '#,##0.00')` ergibt `12,345.67`.
 
-`max(<Werte>)`
-: Gibt das Maximum zurück. `max(1.1, 2.2, 3.3)` ergibt `3.3`.
+`max(<Sequenz>)`
+: Gibt das Maximum zurück. `max((1.1, 2.2, 3.3))` ergibt `3.3`.
 
-`min(<Werte>)`
-: Gibt das Minimum zurück. `min(1.1, 2.2, 3.3)` ergibt `1.1`.
+`min(<Sequenz>)`
+: Gibt das Minimum zurück. `min((1.1, 2.2, 3.3))` ergibt `1.1`.
 
 
 ## Boolesche Funktionen

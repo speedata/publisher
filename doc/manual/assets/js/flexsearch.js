@@ -23,6 +23,18 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchDataURL = '{{ $searchData.RelPermalink }}';
   const resultsFoundTemplate = '{{ (T "resultsFound") | default "%d results found" }}';
 
+  // Strip HTML tags and decode HTML entities, but preserve non-HTML angle brackets like <id>
+  const htmlTagPattern = /<\/?(?:code|strong|em|span|a|p|br|div|ul|ol|li|h[1-6]|pre|blockquote|table|tr|td|th|thead|tbody|sup|sub|del|ins|img|hr|dl|dt|dd|figure|figcaption|section|nav|header|footer|main|article|aside|details|summary|mark|small|b|i|u|s|q|abbr|cite|dfn|kbd|samp|var|time|wbr)\b[^>]*>/gi;
+  function stripHTML(str) {
+    if (!str) return '';
+    // Remove known HTML tags but keep angle brackets in non-HTML contexts like <id>
+    str = str.replace(htmlTagPattern, ' ');
+    // Decode HTML entities (&lt; &gt; &amp; etc.)
+    const el = document.createElement('textarea');
+    el.innerHTML = str;
+    return el.value.replace(/\s+/g, ' ').trim();
+  }
+
   const inputElements = document.querySelectorAll('.hextra-search-input');
   for (const el of inputElements) {
     el.addEventListener('focus', init);
@@ -199,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // https://github.com/TryGhost/Ghost/pull/21148
     const regex = new RegExp(
-      `[\u{4E00}-\u{9FFF}\u{3040}-\u{309F}\u{30A0}-\u{30FF}\u{AC00}-\u{D7A3}\u{3400}-\u{4DBF}\u{20000}-\u{2A6DF}\u{2A700}-\u{2B73F}\u{2B740}-\u{2B81F}\u{2B820}-\u{2CEAF}\u{2CEB0}-\u{2EBEF}\u{30000}-\u{3134F}\u{31350}-\u{323AF}\u{2EBF0}-\u{2EE5F}\u{F900}-\u{FAFF}\u{2F800}-\u{2FA1F}]|[0-9A-Za-zа-я\u00C0-\u017F\u0400-\u04FF\u0600-\u06FF\u0980-\u09FF\u1E00-\u1EFF\u0590-\u05FF]+`,
+      `[\u{4E00}-\u{9FFF}\u{3040}-\u{309F}\u{30A0}-\u{30FF}\u{AC00}-\u{D7A3}\u{3400}-\u{4DBF}\u{20000}-\u{2A6DF}\u{2A700}-\u{2B73F}\u{2B740}-\u{2B81F}\u{2B820}-\u{2CEAF}\u{2CEB0}-\u{2EBEF}\u{30000}-\u{3134F}\u{31350}-\u{323AF}\u{2EBF0}-\u{2EE5F}\u{F900}-\u{FAFF}\u{2F800}-\u{2FA1F}]|[0-9A-Za-zа-я\u00C0-\u017F\u0400-\u04FF\u0600-\u06FF\u0980-\u09FF\u1E00-\u1EFF\u0590-\u05FF-]+`,
       'mug'
     );
     const encode = (str) => { return ('' + str).toLowerCase().match(regex) ?? []; }
@@ -231,6 +243,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const resp = await fetch(searchDataURL);
     const data = await resp.json();
+    window.searchData = data;
+    window.pageIdToRoute = {};
     let pageId = 0;
     for (const route in data) {
       let pageContent = '';
@@ -263,11 +277,14 @@ document.addEventListener("DOMContentLoaded", function () {
       for (const heading in data[route].data) {
         const [hash, text] = heading.split('#');
         const url = route.trimEnd('/') + (hash ? '#' + hash : '');
-        const cleanText = text ? text.replace(/HAHAHUGOSHORTCODE.*?HBHB/g, '').trim() : text;
-        const title = cleanText || data[route].title;
+        const cleanText = text ? stripHTML(text.replace(/HAHAHUGOSHORTCODE.*?HBHB/g, '')) : text;
+        const title = stripHTML(cleanText || data[route].title);
 
         const content = data[route].data[heading] || '';
         const paragraphs = content.split('\n').filter(Boolean);
+
+        const cleanContent = stripHTML(content);
+        const cleanParagraphs = cleanContent.split('\n').filter(Boolean);
 
         sectionIndex.add({
           id: url,
@@ -276,26 +293,27 @@ document.addEventListener("DOMContentLoaded", function () {
           crumb,
           pageId: `page_${pageId}`,
           content: title,
-          ...(paragraphs[0] && { display: paragraphs[0] })
+          ...(cleanParagraphs[0] && { display: cleanParagraphs[0] })
         });
 
-        for (let i = 0; i < paragraphs.length; i++) {
+        for (let i = 0; i < cleanParagraphs.length; i++) {
           sectionIndex.add({
             id: `${url}_${i}`,
             url,
             title,
             crumb,
             pageId: `page_${pageId}`,
-            content: paragraphs[i]
+            content: cleanParagraphs[i]
           });
         }
 
-        pageContent += ` ${title} ${content}`;
+        pageContent += ` ${title} ${cleanContent}`;
       }
 
+      window.pageIdToRoute[pageId] = route;
       window.pageIndex.add({
         id: pageId,
-        title: data[route].title,
+        title: stripHTML(data[route].title),
         crumb,
         content: pageContent
       });
@@ -322,56 +340,96 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Configurable search limits with sensible defaults
     const maxPageResults = parseInt('{{- site.Params.search.flexsearch.maxPageResults | default 20 -}}', 10);
-    const maxSectionResults = parseInt('{{- site.Params.search.flexsearch.maxSectionResults | default 10 -}}', 10);
-    const pageResults = window.pageIndex.search(query, maxPageResults, { enrich: true, suggest: true })[0]?.result || [];
-
-    // Show one result per page: pick the best matching section
     const queryLower = query.toLowerCase();
     const results = [];
 
+    const pageResults = window.pageIndex.search(query, maxPageResults, { enrich: true, suggest: true })[0]?.result || [];
+
     for (let i = 0; i < pageResults.length; i++) {
       const result = pageResults[i];
-      const pageTitle = result.doc.title || '';
+      const pageTitle = stripHTML(result.doc.title || '');
+      const crumb = result.doc.crumb || '';
 
-      const sectionResults = window.sectionIndex.search(query,
-        { enrich: true, suggest: true, tag: { 'pageId': `page_${result.id}` } })[0]?.result || [];
+      // Find the best matching section and display text from the raw search data.
+      // We use the raw data directly because FlexSearch's tag-based section filtering
+      // is unreliable and can return results from other pages.
+      let bestHeading = '';
+      let bestUrl = '';
+      let bestDisplayText = '';
+      let hasContentMatch = false;
 
-      // Find the best section: prefer one whose title matches the query
-      let bestDoc = null;
-      for (let j = 0; j < Math.min(sectionResults.length, maxSectionResults); j++) {
-        const { doc } = sectionResults[j];
-        if (!bestDoc) {
-          bestDoc = doc;
-        }
-        // Prefer a section whose title contains the query
-        const docTitle = (doc.title || '').toLowerCase();
-        const bestTitle = (bestDoc.title || '').toLowerCase();
-        if (docTitle.includes(queryLower) && !bestTitle.includes(queryLower)) {
-          bestDoc = doc;
-          break;
+      const pageRoute = window.pageIdToRoute[result.id] || '';
+      const rawPage = pageRoute ? window.searchData[pageRoute] : null;
+
+      if (rawPage) {
+        for (const heading in rawPage.data) {
+          const [hash, text] = heading.split('#');
+          const url = pageRoute.replace(/\/$/, '') + (hash ? '#' + hash : '');
+          const cleanText = text ? stripHTML(text.replace(/HAHAHUGOSHORTCODE.*?HBHB/g, '')) : text;
+          const headingTitle = stripHTML(cleanText || rawPage.title);
+
+          // Check heading title
+          if (headingTitle.toLowerCase().includes(queryLower)) {
+            if (!hasContentMatch) {
+              bestHeading = headingTitle;
+              bestUrl = url;
+              const paras = (rawPage.data[heading] || '').split('\n').filter(Boolean);
+              bestDisplayText = stripHTML(paras[0] || '');
+            }
+          }
+
+          // Check paragraphs for a direct content match
+          const paragraphs = stripHTML(rawPage.data[heading] || '').split('\n').filter(Boolean);
+          for (const para of paragraphs) {
+            const matchIdx = para.toLowerCase().indexOf(queryLower);
+            if (matchIdx !== -1) {
+              bestHeading = headingTitle;
+              bestUrl = url;
+              // Extract a snippet around the match so the query term is visible
+              const snippetStart = Math.max(0, para.lastIndexOf(' ', Math.max(0, matchIdx - 1)) + 1);
+              const snippetEnd = Math.min(para.length, para.indexOf('. ', matchIdx + queryLower.length) + 1 || para.length);
+              bestDisplayText = (snippetStart > 0 ? '…' : '') + para.substring(snippetStart, snippetEnd).trim();
+              hasContentMatch = true;
+              break;
+            }
+          }
+          if (hasContentMatch) break;
         }
       }
 
-      const content = bestDoc ? (bestDoc.display || bestDoc.content) : '';
-      const sectionTitle = bestDoc ? bestDoc.title : '';
-      // Show section title if different from page title, otherwise show page title
-      const title = (sectionTitle && sectionTitle !== pageTitle) ? sectionTitle : pageTitle;
-      const url = bestDoc ? bestDoc.url : '';
+      // Fallback: if raw data lookup didn't find anything, use first section result
+      if (!bestUrl) {
+        const sectionResults = window.sectionIndex.search(query, 5,
+          { enrich: true, suggest: true, tag: { 'pageId': `page_${result.id}` } })[0]?.result || [];
+        if (sectionResults.length > 0) {
+          const doc = sectionResults[0].doc;
+          bestHeading = stripHTML(doc.title || '');
+          bestUrl = doc.url || '';
+          bestDisplayText = stripHTML(doc.display || doc.content || '');
+        }
+      }
 
-      // Boost: exact title match > partial title match > no match
+      const title = (bestHeading && bestHeading !== pageTitle) ? bestHeading : pageTitle;
+
+      // Boost: exact title > partial title > no match; extra boost if content matches query
       const titleLower = pageTitle.toLowerCase();
       let boost = 0;
-      if (titleLower === queryLower) boost = 2;
-      else if (titleLower.includes(queryLower)) boost = 1;
+      if (titleLower === queryLower) boost = 3;
+      else if (titleLower.includes(queryLower)) boost = 2;
+      if (hasContentMatch) boost += 1;
+
+      // Demote changelog pages so they appear at the end
+      if (bestUrl && bestUrl.includes('/changelog/')) boost -= 5;
 
       results.push({
         _boost: boost,
         _page_rk: i,
-        route: url || result.doc.crumb,
-        prefix: result.doc.crumb,
-        children: { title, content }
+        route: bestUrl || crumb,
+        prefix: crumb,
+        children: { title, content: bestDisplayText }
       });
     }
+
 
     const sortedResults = results
       .sort((a, b) => {

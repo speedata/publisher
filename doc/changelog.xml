@@ -9,8 +9,8 @@
         <de>Erlaube Textblock in Td für bessere Kontrolle bei Rotation.</de>
     </entry>
     <entry version="5.5.9" date="2026-04-20">
-        <en>Support css ::marker.</en>
-        <de>Unterstützung für CSS ::marker.</de>
+        <en summary="Support css ::marker.">CSS ::marker pseudo-element is now supported for list styling, including custom content and colors.</en>
+        <de summary="Unterstützung für CSS ::marker.">Das CSS-Pseudoelement ::marker wird nun für die Listengestaltung unterstützt, einschließlich eigener Inhalte und Farben.</de>
     </entry>
     <entry version="5.5.9" date="2026-04-20">
         <en>Images are drawn when trace objects="yes".</en>
@@ -113,6 +113,40 @@
         <de>Fehlerkorrektur für Bildeinbindung (Transparenz), Attribut Kontext und Creator Version.</de>
     </entry>
     <entry version="5.5.0" date="2026-02-26">
+        <en>Bugfix letter-spacing in tables.</en>
+        <de>Fehlerkorrektur letter-spacing in Tabellen.</de>
+    </entry>
+  </chapter>
+  <chapter version="5.4" date="2026-03-04">
+    <summary>
+      <en>Massive speed improvements, more HTML/CSS support, letterspacing, more XPath functions, Section element, new VSCode extension, margin protrusion fix.</en>
+      <de>Massive Geschwindigkeitsverbesserungen, mehr HTML/CSS-Unterstützung, Laufweite (letter-spacing), mehr XPath-Funktionen, Section-Befehl, neue VSCode-Erweiterung, Korrektur optischer Randausgleich.</de>
+    </summary>
+    <entry version="5.4.3" date="2026-03-04">
+        <en>Bugfix letter-spacing and hyphenation.</en>
+        <de>Fehlerkorrektur letter-spacing und Silbentrennung.</de>
+    </entry>
+    <entry version="5.4.3" date="2026-03-04">
+        <en>Better error message for function calls and old XPath parser.</en>
+        <de>Bessere Fehlermeldungen für Funktionsaufrufe und alten XPath-Parser.</de>
+    </entry>
+    <entry version="5.4.3" date="2026-03-04">
+        <en>Filter: set classpath for Saxon correctly, including all required JAR files.</en>
+        <de>Filter: Klassenpfad für Saxon korrekt setzen, einschließlich aller benötigten JAR-Dateien.</de>
+    </entry>
+    <entry version="5.4.2" date="2026-02-27">
+        <en>Fix attribute context handling.</en>
+        <de>Fehlerkorrektur Attribut Kontext.</de>
+    </entry>
+    <entry version="5.4.2" date="2026-02-27">
+        <en>Fix transparent PDF inclusion.</en>
+        <de>Fehlerkorrektur Bildeinbindung (Transparenz).</de>
+    </entry>
+    <entry version="5.4.2" date="2026-02-27">
+        <en>Fix Creator/Producer version in PDF metadata.</en>
+        <de>Fehlerkorrektur Creator/Producer Version in PDF-Metadaten.</de>
+    </entry>
+    <entry version="5.4.1" date="2026-02-26">
         <en>Bugfix letter-spacing in tables.</en>
         <de>Fehlerkorrektur letter-spacing in Tabellen.</de>
     </entry>
@@ -288,6 +322,10 @@
     </entry>
   </chapter>
   <chapter version="5.2" date="2025-10-14">
+    <summary>
+      <en>New XML parser, improved XPath functions, enhanced HTML/CSS rendering, better international and typographic support, PDF metadata improvements.</en>
+      <de>Neuer XML-Parser, verbesserte XPath-Funktionen, verbessertes HTML/CSS-Rendering, bessere internationale und typografische Unterstützung, PDF-Metadaten-Verbesserungen.</de>
+    </summary>
     <entry version="5.2.0" date="2025-10-14">
         <en>Release Version 5.2.</en>
         <de>Veröffentliche Version 5.2.</de>
@@ -512,6 +550,10 @@
     </entry>
   </chapter>
   <chapter version="5.0" date="2025-04-04">
+    <summary>
+      <en>New default XML/XPath parser, HarfBuzz text shaper with bidirectional typesetting, PDF/UA accessibility support, speedata Pro package.</en>
+      <de>Neuer Standard-XML/XPath-Parser, HarfBuzz-Textgestaltung mit bidirektionalem Satz, PDF/UA-Barrierefreiheit, speedata-Pro-Paket.</de>
+    </summary>
     <entry version="5.0.2" date="2025-04-04">
         <en>Bugfix image handler automatic conversion.</en>
         <de>Fehlerkorrektur: Dateiname image hander bei automatischer Umwandlung.</de>
@@ -624,6 +666,10 @@
     </entry>
   </chapter>
   <chapter version="4.20" date="2025-01-15">
+    <summary>
+      <en>Fully accessible documents, robust XPath parser, ZUGFeRD attachment enhancements, object mirroring, strict namespace handling, spot color saturation.</en>
+      <de>Vollständig barrierefreie Dokumente, robuster XPath-Parser, ZUGFeRD-Anhangsverbesserungen, Objektspiegelung, strikte Namensraumbehandlung, Sonderfarbensättigung.</de>
+    </summary>
     <entry version="4.20.0" date="2025-01-15">
         <en>Release Version 4.20.</en>
         <de>Veröffentliche Version 4.20.</de>
@@ -900,6 +946,10 @@
     </entry>
   </chapter>
   <chapter version="4.18" date="2024-04-19">
+    <summary>
+      <en>New defaults for XPath engine and font loader, new logging backend, automatic image resizing, Markdown support.</en>
+      <de>Neue Voreinstellungen für XPath-Engine und Fontloader, neues Logging-Backend, automatische Bildgrößenanpassung, Markdown-Unterstützung.</de>
+    </summary>
     <entry version="4.18.0" date="2024-04-19">
         <en>Release version 4.18.0</en>
         <de>Veröffentliche Version 4.18.0.</de>
@@ -1044,6 +1094,10 @@
     </entry>
   </chapter>
   <chapter version="4.16" date="2024-01-07">
+    <summary>
+      <en>Complete overhaul of MetaPost integration, new optional XPath engine.</en>
+      <de>Vollständige Überarbeitung der MetaPost-Integration, neue optionale XPath-Engine.</de>
+    </summary>
     <entry version="4.16.0" date="2024-01-07">
         <en>Release version 4.16.0.</en>
         <de>Veröffentliche Version 4.16.0.</de>
@@ -1204,6 +1258,10 @@
     </entry>
   </chapter>
   <chapter version="4.14" date="2023-07-03">
+    <summary>
+      <en>New filename syntax for images, outline fonts, table column minwidth, XPath matches() function, Pro package.</en>
+      <de>Neue Dateinamen-Syntax für Bilder, Konturschrift, Tabellenspalten-Mindestbreite, XPath-Funktion matches(), Pro-Paket.</de>
+    </summary>
     <entry version="4.14.0" date="2023-07-03">
         <en>Release version 4.14.</en>
         <de>Veröffentliche Version 4.14.</de>
@@ -1376,6 +1434,10 @@
     </entry>
   </chapter>
   <chapter version="4.12" date="2022-09-30">
+    <summary>
+      <en>PDFOptions displaymode, delayed SetVariable execution, hyperlink border colors, SHA256/SHA512 functions, Clip command.</en>
+      <de>PDFOptions-Anzeigemodus, verzögerte SetVariable-Ausführung, Hyperlink-Rahmenfarben, SHA256/SHA512-Funktionen, Clip-Befehl.</de>
+    </summary>
     <entry version="4.12.0" date="2022-09-30">
         <en>Release version 4.12.0.</en>
         <de>Veröffentliche Version 4.12.0.</de>
@@ -1448,6 +1510,10 @@
     </entry>
   </chapter>
   <chapter version="4.10" date="2022-07-07">
+    <summary>
+      <en>Bug fixes, runtime.execute() and xml.decode_xml() in Lua filter. Last stable version with LuaJIT/FFI.</en>
+      <de>Fehlerkorrekturen, runtime.execute() und xml.decode_xml() im Lua-Filter. Letzte stabile Version mit LuaJIT/FFI.</de>
+    </summary>
     <entry version="4.10.0" date="2022-07-07">
         <en>Release version 4.10.</en>
         <de>Veröffentliche Version 4.10.</de>
@@ -1516,6 +1582,10 @@
     </entry>
   </chapter>
   <chapter version="4.8" date="2022-05-02">
+    <summary>
+      <en>Bug fixes, Tablerule color="-", VSpace with height and minheight attributes.</en>
+      <de>Fehlerkorrekturen, Tablerule color="-", VSpace mit height- und minheight-Attributen.</de>
+    </summary>
     <entry version="4.8.0" date="2022-05-02">
         <en>Release version 4.8.</en>
         <de>Veröffentliche Version 4.8.</de>
@@ -1608,6 +1678,10 @@
     </entry>
   </chapter>
   <chapter version="4.6" date="2021-11-10">
+    <summary>
+      <en>Enhanced REST API, NewPage deprecation, macOS 12 compatibility, color profile in distribution, Go-based XML parser.</en>
+      <de>Erweiterte REST-API, NewPage veraltet, macOS-12-Kompatibilität, Farbprofil in der Distribution, Go-basierter XML-Parser.</de>
+    </summary>
     <entry version="4.6.0" date="2021-11-10">
         <en>Release version 4.6.</en>
         <de>Veröffentliche Version 4.6.</de>
@@ -1712,6 +1786,10 @@
     </entry>
   </chapter>
   <chapter version="4.4" date="2021-05-11">
+    <summary>
+      <en>Transparency for text and images, MetaPost integration, Windows 64-bit, document separation, logical page numbering, improved hyperlinks.</en>
+      <de>Transparenz für Text und Bilder, MetaPost-Integration, Windows 64-Bit, Dokumenttrennung, logische Seitennummerierung, verbesserte Hyperlinks.</de>
+    </summary>
     <entry version="4.4.1" date="2021-05-25">
         <en>Bugfix for InsertPages (#335).</en>
         <de>Fehlerkorrektur für InsertPages (#335).</de>
@@ -1908,6 +1986,10 @@
     </entry>
   </chapter>
   <chapter version="4.2" date="2021-01-09">
+    <summary>
+      <en>Better OpenType font support, basic print CSS, new paragraph builder, HarfBuzz font shaper, CJK and Arabic script support, bidirectional typesetting.</en>
+      <de>Bessere OpenType-Schriftunterstützung, einfaches Print-CSS, neuer Absatzumbruch, HarfBuzz-Schriftgestaltung, CJK- und arabische Schrift, bidirektionaler Satz.</de>
+    </summary>
     <entry version="4.2.0" date="2021-01-09">
       <en>Release version 4.2</en>
       <de>Veröffentliche Version 4.2</de>
@@ -2156,6 +2238,10 @@
     </entry>
   </chapter>
   <chapter version="4.0" date="2020-09-07">
+    <summary>
+      <en>New paragraph builder, firstmark/lastmark functions, improved server mode, HTML mode, new English manual, external image conversion tools.</en>
+      <de>Neuer Absatzumbruch, firstmark/lastmark-Funktionen, verbesserter Servermodus, HTML-Modus, neues englisches Handbuch, externe Bildkonvertierungswerkzeuge.</de>
+    </summary>
     <entry version="4.0.0" date="2020-09-07">
         <en>Release stable version 4.0.0.</en>
         <de>Veröffentliche stabile Version 4.0.0.</de>

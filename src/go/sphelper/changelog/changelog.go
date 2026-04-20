@@ -10,7 +10,8 @@ import (
 )
 
 type clText struct {
-	Text string `xml:",innerxml"`
+	Summary string `xml:"summary,attr"`
+	Text    string `xml:",innerxml"`
 }
 
 type clEntry struct {
@@ -20,10 +21,17 @@ type clEntry struct {
 	De      clText `xml:"de"`
 }
 
+// ClSummary holds a bilingual summary for a chapter.
+type ClSummary struct {
+	En clText `xml:"en"`
+	De clText `xml:"de"`
+}
+
 type clChapter struct {
-	Version string    `xml:"version,attr"`
-	Date    string    `xml:"date,attr"`
-	Entries []clEntry `xml:"entry"`
+	Version string     `xml:"version,attr"`
+	Date    string     `xml:"date,attr"`
+	Summary *ClSummary `xml:"summary"`
+	Entries []clEntry  `xml:"entry"`
 }
 
 // Changelog is a sequence of chapters.
