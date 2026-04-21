@@ -178,7 +178,11 @@ function define_font_hb( name, size, extra_parameter )
         local gid = fnt:get_nominal_glyph(uni)
         if not glyph_all_uni[gid] then glyph_all_uni[gid] = {} end
         glyph_all_uni[gid][uni] = true
-        if not glyph_uni[gid] or uni < glyph_uni[gid] then
+        local prev = glyph_uni[gid]
+        if not prev
+            or (prev < 32 and uni >= 32)
+            or (uni >= 32 and uni < prev)
+            or (uni < 32 and prev < 32 and uni < prev) then
             glyph_uni[gid] = uni
         end
     end
