@@ -724,6 +724,10 @@ end
 ---@param horizontal_alignment string Alignment for cell content
 function tabular:pack_cell(blockobjects, width, horizontal_alignment)
     local cell
+    if not blockobjects then
+        splib.log("warning","no objects found in table cell")
+        return
+    end
     for _,blockobject in ipairs(blockobjects) do
         local cellrow = nil
         local current_width = 0
@@ -959,9 +963,12 @@ function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, ski
         --        in the height calculation also border-top and border-bottom
         local alignment = td_contents.align or tr_contents.align or self.align[current_column]
         local cell = self:pack_cell(td_contents.objects,wd - padding_left - padding_right - td_borderleft - td_borderright,alignment)
+        if not cell then
+            splib.log("warning","no table cell found")
+            return
+        end
         td_contents.cell = cell
         local tmp = cell.height + cell.depth
-        local _w, _h, _d = node.dimensions(cell)
 
         tmp = tmp + padding_top + padding_bottom + td_borderbottom + td_bordertop
         if rowspan > 1 then
@@ -1019,6 +1026,9 @@ function tabular:calculate_rowheights()
                     rowcounter[tablearea] = rowcounter[tablearea] + 1
                     current_row = rowcounter[tablearea]
                     rowheight, _rowspans,last_shiftup = self:calculate_rowheight(cellcontents,current_row,last_shiftup,self.skiptables[tablearea])
+                    if not rowheight then
+                        return
+                    end
                     rowheightarea[current_row] = rowheight
                     rowspans[tablearea] = table.__concat(rowspans[tablearea],_rowspans)
                 end
@@ -1163,7 +1173,9 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         else
             local alignment = td_contents.align or tr_contents.align or self.align[current_column]
             cell = self:pack_cell(td_contents.objects,current_column_width - padding_left - padding_right - td_borderleft - td_borderright,alignment)
-            cell = cell.head
+            if not cell then
+                return
+            end
         end
 
         -- PDF/UA role for Td is set below on the outermost vpack (after borders/padding)

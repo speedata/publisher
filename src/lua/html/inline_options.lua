@@ -105,10 +105,15 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
     -- Colors (foreground + background)
     local bg = styles["background-color"]
     if styles.color then
-        local fg_index = colors_module.colors[styles.color].index
-        options.color = fg_index
-        options.textdecorationcolor = fg_index
-        styles.currentcolor = styles.color
+        local col = colors_module.colors[styles.color]
+        if col then
+            local fg_index = col.index
+            options.color = fg_index
+            options.textdecorationcolor = fg_index
+            styles.currentcolor = styles.color
+        else
+            splib.log("warning","HTML: color not defined", "color", styles.color)
+        end
     end
     if bg then
         options.backgroundcolor = colors_module.colors[bg].index
