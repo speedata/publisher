@@ -656,6 +656,44 @@ Um sicherzustellen, dass wieder bei dem ersten Wert angefangen wird, kann man be
 
 Damit wird der Zähler für die angegebene Kennung (`tab`) zurückgesetzt.
 
+### Abwechselnde Farben bei Seitenumbrüchen
+
+Wenn eine Tabelle mit wechselnden Zeilenfarben über mehrere Seiten geht, werden die Farben in der Erzeugungsreihenfolge fortgesetzt. Das bedeutet, dass die erste Zeile auf einer neuen Seite mit der falschen Farbe beginnen kann. Um das Farbmuster auf jeder Seite neu zu starten, kann das Attribut `eval-on-split` am `<Table>`-Element verwendet werden:
+
+```xml
+<Table eval-on-split="sd:reset-alternating('tab')">
+  <Loop select="100" variable="i">
+    <Tr background-color="{sd:alternating('tab', 'white', 'gray')}">
+      <Td>
+        <Paragraph>
+          <Value>Zeile </Value>
+          <Value select="$i"/>
+        </Paragraph>
+      </Td>
+    </Tr>
+  </Loop>
+</Table>
+```
+
+Der Ausdruck in `eval-on-split` wird bei jedem Seitenumbruch ausgewertet, bevor die Tabelle fortgesetzt wird. Er setzt den Alternierungszähler zurück, sodass `sd:alternating()` auf jeder neuen Seite wieder mit dem ersten Wert beginnt. Nach der Auswertung wird das `background-color`-Attribut jeder `<Tr>`-Zeile auf der neuen Seite aus dem Original-Layout-XML neu ausgewertet.
+
+Dies funktioniert auch mit dynamischen Kopfzeilen (`sethead="yes"`) und Abschnittsüberschriften. Um z.B. eine graue Abschnittsüberschrift zu haben, die den Alternierungszähler zurücksetzt, wird der Reset direkt in das `background-color`-Attribut geschrieben:
+
+```xml
+<Tr background-color="{sd:reset-alternating('tab')}lightgray"
+    sethead="yes">
+  <Td>
+    <Paragraph><Value>Abschnittsüberschrift</Value></Paragraph>
+  </Td>
+</Tr>
+```
+
+Hier wird `{sd:reset-alternating('tab')}` ausgewertet (als Seiteneffekt wird der Zähler zurückgesetzt) und der Ergebnis-String ist leer. Danach wird `lightgray` als eigentlicher Farbwert angehängt. Da `eval-on-split` das `background-color`-Attribut jeder Zeile neu auswertet, wird der Reset auch ausgeführt, wenn die Überschrift auf einer neuen Seite wiederholt wird.
+
+{{< callout >}}
+`eval-on-split` wertet nur das `background-color`-Attribut von `<Tr>`-Elementen neu aus. Wenn die Alternierungsfarbe auf `<Td>`-Ebene oder über `<SetVariable>` gesetzt wird, wird sie bei Seitenumbrüchen nicht neu berechnet. Damit `eval-on-split` funktioniert, muss der `sd:alternating()`-Aufruf im `background-color`-Attribut des `<Tr>`-Elements stehen.
+{{< /callout >}}
+
 ## Hintergrund in Tabellenzeilen
 
 ### Text im Hintergrund

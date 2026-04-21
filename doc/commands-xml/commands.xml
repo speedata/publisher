@@ -10212,6 +10212,14 @@
         <para>Wertet den angegebenen XPath-Ausdruck aus und ignoriert dessen Ausgabe.</para>
       </description>
     </attribute>
+    <attribute en="eval-on-split" type="xpath" optional="yes" since="5.5.10">
+      <description xml:lang="en">
+        <para>XPath expression that is evaluated at each table split (page break). This expression is evaluated before the background colors of the body rows are re-evaluated. Can be used e.g. with <tt>sd:reset-alternating()</tt> to restart alternating row colors on each page.</para>
+      </description>
+      <description xml:lang="de">
+        <para>XPath-Ausdruck, der bei jedem Tabellenumbruch (Seitenumbruch) ausgewertet wird. Dieser Ausdruck wird vor der Neuberechnung der Hintergrundfarben der Tabellenzeilen ausgewertet. Kann z.B. mit <tt>sd:reset-alternating()</tt> verwendet werden, um alternierende Zeilenfarben auf jeder Seite neu zu starten.</para>
+      </description>
+    </attribute>
     <attribute en="fontfamily" type="text" optional="yes">
       <description xml:lang="en">
         <para>Name of the font family for the table. If not given, the font face ‘text’ is used.</para>

@@ -5675,6 +5675,11 @@ function commands.table( layoutxml,dataxml,options )
     tabular.autostretch    = autostretch
     tabular.vexcess        = vexcess
     tabular.bordercollapse = collapse == "collapse"
+    local eval_on_split_raw = publisher.read_attribute(layoutxml,dataxml,"eval-on-split","string")
+    if eval_on_split_raw then
+        tabular.eval_on_split_layoutxml = layoutxml
+        tabular.eval_on_split_dataxml = dataxml
+    end
 
     if columndistance > 0 then tabular.bordercollapse_horizontal = false end
     if rowdistance    > 0 then tabular.bordercollapse_vertical   = false end
@@ -5848,6 +5853,8 @@ function commands.tr( layoutxml,dataxml )
         end
     end
 
+    tab._layoutxml = layoutxml
+    tab._dataxml = dataxml
     tab.align = publisher.read_attribute(layoutxml,dataxml,"align","string",nil,"align")
     local sethead = publisher.read_attribute(layoutxml,dataxml,"sethead","string")
     if sethead == "yes" then

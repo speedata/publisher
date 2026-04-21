@@ -1089,8 +1089,13 @@ end
 --- Width calculation is now finished, we can typeset the table
 --- Typesetting the table
 --- ---------------------
---- First, we create a complete table with all rows. Splitting into pages is done later on
--- Return one row (an hlist)
+--- First, we create a complete table with all rows. Splitting into pages is done later on.
+--- Background colors are NOT applied during row creation. Instead, the resolved color
+--- names are stored in `deferred_bgcolors` (a table mapping cell index to color name)
+--- on the row hbox via node properties. The actual pdf_literal background nodes are
+--- inserted later by `apply_deferred_backgrounds()`, after split points are known.
+--- This allows `eval-on-split` to re-evaluate row colors at page breaks.
+---
 --- Typeset a single table row and return a horizontal list (hlist).
 ---@param tr_contents table Row contents
 ---@param current_row integer Current row index
@@ -1101,6 +1106,9 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
     local current_column
     local current_column_width, ht
     local row = {}
+    --- Collects background colors per cell (indexed by cell position).
+    --- Stored on the row hbox after packing, applied later by apply_deferred_backgrounds().
+    local deferred_bgcolors = {}
     local rowspan, colspan
     local v,vlist,hlist
     local fill = { width = 0, stretch = 2^16, stretch_order = 3}
@@ -1244,9 +1252,11 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         end
 
         hlist = node.hpack(cell_start,current_column_width,"exactly")
-        --- The cell is now almost complete. We can set the background color and add the top and bottom rule.
+        --- The cell is now almost complete. Resolve the background color but do NOT
+        --- apply it yet — store it in deferred_bg_color for later application.
         ---
         --- ![Table cell vertical](../img/tablecell2.svg)
+        local deferred_bg_color
         if tr_contents.backgroundcolor or td_contents.backgroundcolor or self.backgroundcolumncolors[current_column] then
             -- prio: Td.backgroundcolor, then Tr.backgroundcolor, then Column.backgroundcolor
             local color = self.backgroundcolumncolors[current_column]
@@ -1263,7 +1273,7 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
                 color = nil
             end
             if color and color ~= "-" then
-                hlist = publisher.background(hlist,color)
+                deferred_bg_color = color
             end
         end
 
@@ -1286,6 +1296,13 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
             hlist = node.hpack(hlist)
         end
 
+        -- Store the resolved color indexed by cell position. The background will
+        -- be materialized as a pdf_literal by apply_deferred_backgrounds() after
+        -- page-split points have been determined. Using #row + 1 because the cell
+        -- vbox hasn't been appended to row[] yet at this point.
+        if deferred_bg_color then
+            deferred_bgcolors[#row + 1] = deferred_bg_color
+        end
 
         local head = hlist
         if td_bordertop > 0 then
@@ -1348,6 +1365,12 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         end
         row = node.hpack(cell_start)
         publisher.setprop(row,"origin","row")
+        -- Attach deferred background colors to the row hbox. Stored here (top-level
+        -- node) rather than on inner cell hlists because node.copy_list() only
+        -- preserves properties on directly copied nodes, not on deeply nested children.
+        if next(deferred_bgcolors) then
+            publisher.setprop(row,"deferred_bgcolors", deferred_bgcolors)
+        end
     else
         err("(Internal error) Table is not complete.")
     end
@@ -1515,6 +1538,64 @@ function remove_bookmark_nodes( nodelist )
     return nodelist
 end
 
+--- Apply deferred background colors to all cells in a linked node list.
+--- Called after split points are known and all entries (head, body rows, foot)
+--- have been connected into a single linked list.
+---
+--- The node structure at this point:
+---
+---     linked list (head → glue → row_hbox → glue → row_hbox → ... → foot)
+---                                  │
+---                            row_hbox.list
+---                       ┌────────┼────────────┐
+---                    vbox(cell1) glue(colsep) vbox(cell2) ...
+---                       │
+---                  cell vbox.list
+---            ┌──────────┼───────────┐
+---     hlist(border-top) hlist(content) hlist(border-bottom)
+---       origin="border top"  origin=nil   origin="border bottom"
+---
+--- For each row hbox with a "deferred_bgcolors" property, we iterate its
+--- cell vboxes and find the content hlist (identified by having no "origin"
+--- property — border hlists from colorbar always have one). Then we call
+--- publisher.background() to insert the pdf_literal background rectangle.
+local function apply_deferred_backgrounds(head)
+    local n = head
+    while n do
+        if node.type(n.id) == "hlist" then
+            local bgcolors = publisher.getprop(n, "deferred_bgcolors")
+            if bgcolors then
+                local cell = n.list
+                local cell_idx = 0
+                while cell do
+                    if node.type(cell.id) == "vlist" then
+                        cell_idx = cell_idx + 1
+                        local bgcolor = bgcolors[cell_idx]
+                        if bgcolor then
+                            -- Find the cell content hlist: the one without an
+                            -- "origin" property (border hlists have origins like
+                            -- "border top", "borderright", etc.)
+                            local inner = cell.list
+                            while inner do
+                                if node.type(inner.id) == "hlist" then
+                                    local origin = publisher.getprop(inner, "origin")
+                                    if origin == nil then
+                                        publisher.background(inner, bgcolor)
+                                        break
+                                    end
+                                end
+                                inner = inner.next
+                            end
+                        end
+                    end
+                    cell = cell.next
+                end
+            end
+        end
+        n = n.next
+    end
+end
+
 --- Typeset the entire table, including head, body, and foot.
 ---@param dataxml table XML data for the table
 function tabular:typeset_table(dataxml)
@@ -1599,6 +1680,10 @@ function tabular:typeset_table(dataxml)
             -- We allow data to be attached to a table row.
             local thisrow = rows[#rows]
             publisher.setprop(thisrow,"origin","tr")
+            if tr_contents._layoutxml then
+                publisher.setprop(thisrow,"tr_layoutxml", tr_contents._layoutxml)
+                publisher.setprop(thisrow,"tr_dataxml", tr_contents._dataxml)
+            end
             if publisher.options.format == "PDF/UA" and tr_contents.role then
                 local rn = publisher.get_rolenum(tr_contents.role)
                 local id = tr_contents.role .. '_' .. tostring(publisher.rolecounter)
@@ -2078,6 +2163,26 @@ function tabular:typeset_table(dataxml)
             end
         end
 
+        --- eval-on-split: re-evaluate background colors for page breaks
+        --- ─────────────────────────────────────────────────────────────
+        --- When the Table attribute eval-on-split is set and this is not the first
+        --- split (s > 2), we:
+        ---   1. Evaluate the eval-on-split XPath expression. This typically calls
+        ---      sd:reset-alternating() to restart the color cycle.
+        ---   2. For each body row, re-read the Tr's background-color attribute from
+        ---      the original layoutxml. Because the alternating counter was just
+        ---      reset, sd:alternating() now returns the correct color for this
+        ---      row's position within the new page.
+        ---   3. Override deferred_bgcolors on the row with the new color, so that
+        ---      apply_deferred_backgrounds() will use the updated value.
+        ---
+        --- Note: only Tr-level background-color is re-evaluated, not Td-level.
+        --- To use eval-on-split with alternating colors, the alternating expression
+        --- must be in the Tr background-color attribute (not in Td or SetVariable).
+        if s > 2 and self.eval_on_split_layoutxml then
+            publisher.read_attribute(self.eval_on_split_layoutxml, self.eval_on_split_dataxml, "eval-on-split", "xpath")
+        end
+
         for i = first_row_in_new_table,splits[s]  do
             if i > first_row_in_new_table then
                 space_above = node.has_attribute(rows[i],publisher.att_space_amount) or 0
@@ -2086,6 +2191,29 @@ function tabular:typeset_table(dataxml)
             end
             thissplittable[#thissplittable + 1] = publisher.make_glue({ width = space_above})
             thissplittable[#thissplittable + 1] = rows[i]
+
+            if s > 2 and self.eval_on_split_layoutxml and node.has_attribute(rows[i], publisher.att_is_table_row) then
+                local tr_layoutxml = publisher.getprop(rows[i], "tr_layoutxml")
+                local tr_dataxml = publisher.getprop(rows[i], "tr_dataxml")
+                if tr_layoutxml then
+                    local new_bgcolor = publisher.read_attribute(tr_layoutxml, tr_dataxml, "background-color", "string")
+                        or publisher.read_attribute(tr_layoutxml, tr_dataxml, "backgroundcolor", "string")
+                    if new_bgcolor and new_bgcolor ~= "-" then
+                        local bgcolors = {}
+                        local cell_idx = 0
+                        local cell = rows[i].list
+                        while cell do
+                            if node.type(cell.id) == "vlist" then
+                                cell_idx = cell_idx + 1
+                                bgcolors[cell_idx] = new_bgcolor
+                            end
+                            cell = cell.next
+                        end
+                        publisher.setprop(rows[i], "deferred_bgcolors", bgcolors)
+                    end
+                end
+            end
+
             -- the last rowsep at the end of a split should be omitted.
             if ( i < #rows and i < splits[s] ) or self.tablefoot_contents then
                 thissplittable[#thissplittable + 1] = publisher.make_glue({width = self.rowsep})
@@ -2120,7 +2248,12 @@ function tabular:typeset_table(dataxml)
         end
     end
 
-    -- now connect the entries in the split_tables
+    --- Final assembly: connect entries and apply deferred backgrounds
+    --- ─────────────────────────────────────────────────────────────
+    --- Each split table is an array of disconnected nodes (head rows, glue,
+    --- body rows, foot rows). We connect them into a single linked list,
+    --- then call apply_deferred_backgrounds() to insert the pdf_literal
+    --- background rectangles, and finally vpack everything into a vbox.
     local tail
     for i=1,#final_split_tables do
         for j=1,#final_split_tables[i] - 1 do
@@ -2128,6 +2261,7 @@ function tabular:typeset_table(dataxml)
             tail.next = final_split_tables[i][j+1]
             final_split_tables[i][j+1].prev = tail
         end
+        apply_deferred_backgrounds(final_split_tables[i][1])
         final_split_tables[i] = node.vpack(final_split_tables[i][1])
     end
     for i = 1, #final_split_tables do

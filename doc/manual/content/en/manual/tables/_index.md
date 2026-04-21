@@ -598,6 +598,44 @@ After the table has been output, there is no guarantee that the next call to `sd
 
 This resets the counter for the specified identifier (tab).
 
+### Alternating colors with page breaks
+
+When a table with alternating row colors spans multiple pages, the color pattern continues from the creation order. This means the first row on a new page may start with the wrong color. To restart the alternating pattern on each page, use the `eval-on-split` attribute on the `<Table>` element:
+
+```xml
+<Table eval-on-split="sd:reset-alternating('tab')">
+  <Loop select="100" variable="i">
+    <Tr background-color="{sd:alternating('tab', 'white', 'gray')}">
+      <Td>
+        <Paragraph>
+          <Value>Row </Value>
+          <Value select="$i"/>
+        </Paragraph>
+      </Td>
+    </Tr>
+  </Loop>
+</Table>
+```
+
+The expression given in `eval-on-split` is evaluated at each page break before the table continues. It resets the alternating counter so that `sd:alternating()` starts again from the first value on each new page. After the expression is evaluated, the `background-color` attribute of each `<Tr>` in the new page is re-evaluated from the original layout XML.
+
+This also works with dynamic headers (`sethead="yes"`) and section headings. For example, to have a gray section heading that resets the alternating counter, put the reset directly into the `background-color` attribute:
+
+```xml
+<Tr background-color="{sd:reset-alternating('tab')}lightgray"
+    sethead="yes">
+  <Td>
+    <Paragraph><Value>Section heading</Value></Paragraph>
+  </Td>
+</Tr>
+```
+
+Here, `{sd:reset-alternating('tab')}` evaluates to an empty string (as a side effect, the counter is reset), and `lightgray` is appended as the actual color value. Because `eval-on-split` re-evaluates each row's `background-color` attribute, the reset also fires when the heading is repeated on a new page.
+
+{{< callout >}}
+`eval-on-split` only re-evaluates the `background-color` attribute of `<Tr>` elements. If the alternating color is set on `<Td>` or via `<SetVariable>`, it will not be re-evaluated at page breaks. To use `eval-on-split`, the `sd:alternating()` call must be in the `<Tr>` `background-color` attribute.
+{{< /callout >}}
+
 ## Background in table rows
 
 ### Text in the background
