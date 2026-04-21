@@ -24,6 +24,15 @@ function M.normalize_html_tree(elt)
 
         -- Group horizontal runs (strings or → direction)
         if typ == "string" or (typ == "table" and thiselt.direction == "→") then
+            -- Strip whitespace-only strings between block elements (CSS behavior)
+            if typ == "string" and string.match(thiselt, "^%s*$") and lasthorizontal == nil then
+                -- Check if next sibling is a block element
+                local next = elt[i + 1]
+                if next == nil or (type(next) == "table" and next.direction == "↓") then
+                    delete[#delete + 1] = i
+                    goto continue
+                end
+            end
             if lasthorizontal then
                 -- Append to previous horizontal group
                 local lasthorizontalelt = elt[lasthorizontal]
@@ -35,6 +44,7 @@ function M.normalize_html_tree(elt)
                 lasthorizontal = i
             end
         end
+        ::continue::
     end
 
     -- Remove merged entries (from end to start)
