@@ -118,6 +118,32 @@ Der speedata Publisher unterstützt eine Teilmenge von CSS-Eigenschaften, darunt
 
 Eine vollständige Liste der unterstützten CSS-Eigenschaften ist im CSS-Abschnitt unter [CSS verwenden]({{< relref "css" >}}) zu finden.
 
+## Listen in HTML
+
+HTML-Listen (`<ul>`, `<ol>`, `<li>`) werden unterstützt. Der Einzug der Liste wird über `padding-left` auf `<ul>` oder `<ol>` gesteuert. Der Listenmarker (Aufzählungszeichen, Nummerierung) wird im Einzugsbereich platziert.
+
+### Marker-Styling mit `::marker`
+
+Mit dem CSS-Pseudo-Element `li::marker` kann der Listenmarker gestaltet werden. Folgende Eigenschaften werden unterstützt:
+
+* `content` – Eigener Marker-Text (z.B. `content: "→"`)
+* `color` – Farbe des Markers
+* `font-family` – Schriftart des Markers
+* `font-size` – Schriftgröße des Markers
+* `padding-right` – Abstand zwischen Marker und Text (Standard: 5pt)
+* `padding-bottom` – Vertikale Verschiebung des Markers nach oben
+
+### Beispiel
+
+```xml
+<Stylesheet>
+  ul { padding-left: 14pt; }
+  li::marker { color: red; padding-right: 2pt; }
+</Stylesheet>
+```
+
+Damit wird der Aufzählungspunkt rot dargestellt und der Abstand zwischen Marker und Text auf 2pt verringert.
+
 ## Tabellen in HTML
 
 HTML-Tabellen werden vollständig unterstützt, einschließlich Kopf- und Fußzeilen, die bei Seitenumbrüchen wiederholt werden:

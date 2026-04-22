@@ -118,6 +118,32 @@ The speedata Publisher supports a subset of CSS properties including:
 
 For a complete list of supported CSS properties, see the CSS section in [CSS verwenden]({{< relref "css" >}}).
 
+## Lists in HTML
+
+HTML lists (`<ul>`, `<ol>`, `<li>`) are supported. The list indentation is controlled via `padding-left` on `<ul>` or `<ol>`. The list marker (bullet, number) is placed within the indentation area.
+
+### Marker styling with `::marker`
+
+The CSS pseudo-element `li::marker` can be used to style the list marker. The following properties are supported:
+
+* `content` – Custom marker text (e.g. `content: "→"`)
+* `color` – Marker color
+* `font-family` – Marker font family
+* `font-size` – Marker font size
+* `padding-right` – Gap between marker and text (default: 5pt)
+* `padding-bottom` – Vertical shift of the marker upwards
+
+### Example
+
+```xml
+<Stylesheet>
+  ul { padding-left: 14pt; }
+  li::marker { color: red; padding-right: 2pt; }
+</Stylesheet>
+```
+
+This renders the bullet in red and reduces the gap between marker and text to 2pt.
+
 ## Tables in HTML
 
 HTML tables are fully supported including headers and footers that repeat on page breaks:

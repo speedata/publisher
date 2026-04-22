@@ -537,7 +537,11 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                         a[1].contents = a_head
                     else
                         local wd = styles.listindent
-                        local x = { str, wd, marker_opt }
+                        local labeldistance
+                        if has_marker_styles and marker_styles["padding-right"] then
+                            labeldistance = units.getsize(styles, marker_styles["padding-right"], styles.fontsize_sp)
+                        end
+                        local x = { str, wd, marker_opt, labeldistance }
                         a:prepend(x)
                     end
                     -- label only for the first
