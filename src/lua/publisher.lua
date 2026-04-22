@@ -8136,7 +8136,7 @@ function deepcopy(t)
     for k,v in pairs(t) do
         typ = type(v)
         if typ == 'table' then
-            if k ~= ".__parent" and k ~= ".__context" then
+            if k ~= ".__parent" and k ~= ".__context" and k ~= "_layoutxml" and k ~= "_dataxml" then
                 v = deepcopy(v)
             end
         else

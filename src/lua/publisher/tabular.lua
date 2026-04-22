@@ -1109,6 +1109,9 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
     --- Collects background colors per cell (indexed by cell position).
     --- Stored on the row hbox after packing, applied later by apply_deferred_backgrounds().
     local deferred_bgcolors = {}
+    --- Set to false if any cell has colspan > 1 or rowspan > 1, which
+    --- prevents row-level background optimization.
+    local row_bg_simple = true
     local rowspan, colspan
     local v,vlist,hlist
     local fill = { width = 0, stretch = 2^16, stretch_order = 3}
@@ -1124,6 +1127,9 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         end
         rowspan = tonumber(td_contents.rowspan) or 1
         colspan = tonumber(td_contents.colspan) or 1
+        if rowspan > 1 or colspan > 1 then
+            row_bg_simple = false
+        end
 
         -- FIXME: am I sure that I am in the corerct column?  (colspan...)?
         local td_borderleft   = td_contents.td_borderleft_calculated   or tex.sp(td_contents["border-left"]   or 0)
@@ -1370,6 +1376,11 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         -- preserves properties on directly copied nodes, not on deeply nested children.
         if next(deferred_bgcolors) then
             publisher.setprop(row,"deferred_bgcolors", deferred_bgcolors)
+            -- Row-level background is only safe when there is no column distance
+            -- and no colspan/rowspan in this row.
+            if row_bg_simple and self.colsep == 0 then
+                publisher.setprop(row,"row_bg_simple", true)
+            end
         end
     else
         err("(Internal error) Table is not complete.")
@@ -1555,40 +1566,72 @@ end
 ---     hlist(border-top) hlist(content) hlist(border-bottom)
 ---       origin="border top"  origin=nil   origin="border bottom"
 ---
---- For each row hbox with a "deferred_bgcolors" property, we iterate its
---- cell vboxes and find the content hlist (identified by having no "origin"
---- property — border hlists from colorbar always have one). Then we call
---- publisher.background() to insert the pdf_literal background rectangle.
+--- For each row hbox with a "deferred_bgcolors" property, we apply the
+--- background colors. When all cells share the same color AND the row
+--- is simple (no columndistance, no colspan/rowspan), a single background
+--- rectangle is drawn on the row hbox — this avoids hairline rendering
+--- artifacts between adjacent cells in some PDF viewers. Otherwise,
+--- each cell gets its own background on its content hlist (identified
+--- by having no "origin" property).
 local function apply_deferred_backgrounds(head)
     local n = head
     while n do
         if node.type(n.id) == "hlist" then
             local bgcolors = publisher.getprop(n, "deferred_bgcolors")
             if bgcolors then
-                local cell = n.list
-                local cell_idx = 0
-                while cell do
-                    if node.type(cell.id) == "vlist" then
-                        cell_idx = cell_idx + 1
-                        local bgcolor = bgcolors[cell_idx]
-                        if bgcolor then
-                            -- Find the cell content hlist: the one without an
-                            -- "origin" property (border hlists have origins like
-                            -- "border top", "borderright", etc.)
-                            local inner = cell.list
-                            while inner do
-                                if node.type(inner.id) == "hlist" then
-                                    local origin = publisher.getprop(inner, "origin")
-                                    if origin == nil then
-                                        publisher.background(inner, bgcolor)
-                                        break
-                                    end
-                                end
-                                inner = inner.next
+                local use_row_bg = false
+
+                -- Row-level background: only for simple rows (no colsep,
+                -- no colspan/rowspan) where all cells share the same color
+                if publisher.getprop(n, "row_bg_simple") then
+                    local cell_count = 0
+                    local uniform_color = nil
+                    local all_same = true
+                    local cell = n.list
+                    while cell do
+                        if node.type(cell.id) == "vlist" then
+                            cell_count = cell_count + 1
+                            local c = bgcolors[cell_count]
+                            if c == nil then
+                                all_same = false
+                            elseif uniform_color == nil then
+                                uniform_color = c
+                            elseif c ~= uniform_color then
+                                all_same = false
                             end
                         end
+                        cell = cell.next
                     end
-                    cell = cell.next
+                    if all_same and uniform_color and cell_count > 0 then
+                        publisher.background(n, uniform_color)
+                        use_row_bg = true
+                    end
+                end
+
+                if not use_row_bg then
+                    -- Per-cell backgrounds
+                    local cell = n.list
+                    local cell_idx = 0
+                    while cell do
+                        if node.type(cell.id) == "vlist" then
+                            cell_idx = cell_idx + 1
+                            local bgcolor = bgcolors[cell_idx]
+                            if bgcolor then
+                                local inner = cell.list
+                                while inner do
+                                    if node.type(inner.id) == "hlist" then
+                                        local origin = publisher.getprop(inner, "origin")
+                                        if origin == nil then
+                                            publisher.background(inner, bgcolor)
+                                            break
+                                        end
+                                    end
+                                    inner = inner.next
+                                end
+                            end
+                        end
+                        cell = cell.next
+                    end
                 end
             end
         end
