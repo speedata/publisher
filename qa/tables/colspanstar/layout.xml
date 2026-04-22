@@ -1,0 +1,38 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="5cm" width="6cm"  />
+    <Record element="data">
+        <PlaceObject>
+            <Table>
+                <Tr align="center">
+                    <Td>
+                        <Paragraph>
+                            <Value>first</Value>
+                        </Paragraph>
+                    </Td>
+                    <Td>
+                        <Paragraph>
+                            <Value>second</Value>
+                        </Paragraph>
+                    </Td>
+                    <Td>
+                        <Paragraph>
+                            <Value>third</Value>
+                        </Paragraph>
+                    </Td>
+                </Tr>
+                <Tr align="center">
+                    <Td>
+                        <Paragraph>
+                            <Value>2/1</Value>
+                        </Paragraph>
+                    </Td>
+                    <Td colspan="*">
+                        <Paragraph>
+                            <Value>*-colspan</Value>
+                        </Paragraph>
+                    </Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>

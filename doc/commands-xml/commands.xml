@@ -10848,12 +10848,12 @@
         <para>Die Farbe der Linie unten.</para>
       </description>
     </attribute>
-    <attribute en="colspan" type="number" optional="yes">
+    <attribute en="colspan" type="text" optional="yes">
       <description xml:lang="en">
-        <para>The number of columns this cell spans. Defaults to 1.</para>
+        <para>The number of columns this cell spans. Defaults to 1. Use <tt>*</tt> to span all remaining columns.</para>
       </description>
       <description xml:lang="de">
-        <para>Die Anzahl der Spalten, die die Zelle überdecken soll. Voreinstellung ist 1.</para>
+        <para>Die Anzahl der Spalten, die die Zelle überdecken soll. Voreinstellung ist 1. Mit <tt>*</tt> werden alle verbleibenden Spalten überdeckt.</para>
       </description>
     </attribute>
     <attribute en="graphic" type="text" optional="yes" since="4.3.12">

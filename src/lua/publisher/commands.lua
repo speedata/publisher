@@ -5979,7 +5979,7 @@ function commands.td( layoutxml,dataxml )
     end
 
     local attribute = {
-        ["colspan"]          = "number",
+        ["colspan"]          = "string",
         ["rowspan"]          = "number",
         ["padding"]          = "length",
         ["padding-top"]      = "length",

@@ -140,7 +140,7 @@ It is possible to specify the start column.
 
 Unlike the text formats in texts (see the section on text formats), the default text format (and thus the text alignment) depends on the alignment of the table cell.
 
-| Alignment for <Td> | Text | Format Description |
+| Alignment for `<Td>` | Text | Format Description |
 | --- | --- | --- |
 | `left` | `__leftaligned` | Left-aligned, ragged right |
 | `right` | `__rightaligned` | Right-aligned, ragged left |
@@ -169,39 +169,41 @@ For example, by changing the text format `__leftaligned`, all table cells can be
 
 ## Colspan and Rowspan
 
-The natural property of a table is that all cells in a row are the same height and all cells in a column are the same width. However, cells can extend over several columns and rows. The number of spanned columns is specified with `colspan`, the default here is 1. The number of rows is specified with `rowspan`, the default here is 1 as well. Here, you must ensure that the sum of the columns in a row equals the total number. In the following example, the second row contains only two cells, but it extends over two columns. The third row even has only one cell definition, the rest of the row is occupied by the two cell wide image from the row above (`rowspan="2"`).
+The natural property of a table is that all cells in a row are the same height and all cells in a column are the same width. However, cells can extend over several columns and rows. The number of spanned columns is specified with `colspan`, the default here is 1. The number of rows is specified with `rowspan`, the default here is 1 as well. Here, you must ensure that the sum of the columns in a row equals the total number. Instead of a fixed number, you can use `colspan="*"` to span all remaining columns from the current position. This is useful when the number of columns may change and you want a cell to always fill the rest of the row.
+
+In the following example, the second row contains only two cells, but it extends over two columns. The third row even has only one cell definition, the rest of the row is occupied by the two cell wide image from the row above (`rowspan="2"`).
 
 ```xml
-    <PlaceObject>
-      <Table width="10"
-        columndistance="3mm"
-        leading="2mm">
-        <Tr>
-          <Td padding-bottom="2mm">
-            <Paragraph><Value>1/1</Value></Paragraph>
-          </Td>
-          <Td padding-left="1mm">
-            <Paragraph><Value>1/2</Value></Paragraph>
-          </Td>
-          <Td align="center">
-            <Paragraph><Value>1/3</Value></Paragraph>
-          </Td>
-        </Tr>
-        <Tr background-color="yellow">
-          <Td>
-            <Paragraph><Value>2/1</Value></Paragraph>
-          </Td>
-          <Td rowspan="2" colspan="2" >
-            <Image width="5" file="ocean.pdf"/>
-          </Td>
-        </Tr>
-        <Tr align="center">
-          <Td>
-            <Paragraph><Value>3/1</Value></Paragraph>
-          </Td>
-        </Tr>
-      </Table>
-    </PlaceObject>
+<PlaceObject>
+  <Table width="10"
+    columndistance="3mm"
+    leading="2mm">
+    <Tr>
+      <Td padding-bottom="2mm">
+        <Paragraph><Value>1/1</Value></Paragraph>
+      </Td>
+      <Td padding-left="1mm">
+        <Paragraph><Value>1/2</Value></Paragraph>
+      </Td>
+      <Td align="center">
+        <Paragraph><Value>1/3</Value></Paragraph>
+      </Td>
+    </Tr>
+    <Tr background-color="yellow">
+      <Td>
+        <Paragraph><Value>2/1</Value></Paragraph>
+      </Td>
+      <Td rowspan="2" colspan="2" >
+        <Image width="5" file="ocean.pdf"/>
+      </Td>
+    </Tr>
+    <Tr align="center">
+      <Td>
+        <Paragraph><Value>3/1</Value></Paragraph>
+      </Td>
+    </Tr>
+  </Table>
+</PlaceObject>
 ```
 {{% codecaption %}}A somewhat more complex example. The background color of the image is determined by the second line.{{% /codecaption %}}
 
@@ -212,16 +214,16 @@ The natural property of a table is that all cells in a row are the same height a
 In the previous examples the widths of the cells are automatically determined by the content. You can also specify fixed column widths. The command for this is called `Columns` and is listed directly as the first command within `Table`:
 
 ```xml
-      <Table stretch="max">
-        <Columns>
-          <Column width="2mm"/>
-          <Column width="1*"/>
-          <Column width="3*"/>
-        </Columns>
-        <Tr>
-          ...
-        </Tr>
-      </Table>
+<Table stretch="max">
+  <Columns>
+    <Column width="2mm"/>
+    <Column width="1*"/>
+    <Column width="3*"/>
+  </Columns>
+  <Tr>
+    ...
+  </Tr>
+</Table>
 ```
 
 Here it is specified that the table has three columns. The first column has a width of 2mm, the second and third columns divide the remaining width in a ratio of 1 to 3.
@@ -529,37 +531,37 @@ Where `$this` line is a table line with start and end tag `<Tr> .. </Tr>` and `$
 The check now takes place by creating the table in a group and then checking the height of the group, for example:
 
 ```xml
-    <Group name="tbl">
-      <Contents>
-        <PlaceObject>
-          <Table width="...">
-            <Copy-of select="$tablerowsnew"/>
-          </Table>
-        </PlaceObject>
-      </Contents>
-    </Group>
+<Group name="tbl">
+  <Contents>
+    <PlaceObject>
+      <Table width="...">
+        <Copy-of select="$tablerowsnew"/>
+      </Table>
+    </PlaceObject>
+  </Contents>
+</Group>
 
-    <Switch>
-      <Case test="sd:group-height('tbl') > ...">
-        <!-- too large, print table without the last row -->
-        <PlaceObject>
-          <Table width="...">
-            <Copy-of select="$tablerows"/>
-          </Table>
-        </PlaceObject>
-        <!-- last line is now as carry forward for the next table -->
-        <SetVariable variable="tablerows">
-          <Copy-of select="$thisrow"/>
-        </SetVariable>
-      </Case>
-      <Otherwise>
-        <!-- fits, output table, set variable -->
-        <PlaceObject groupname="tbl"/>
-        <SetVariable variable="tablerows">
-            <Copy-of select="$tablerowsnew"/>
-        </SetVariable>
-      </Otherwise>
-    </Switch>
+<Switch>
+  <Case test="sd:group-height('tbl') > ...">
+    <!-- too large, print table without the last row -->
+    <PlaceObject>
+      <Table width="...">
+        <Copy-of select="$tablerows"/>
+      </Table>
+    </PlaceObject>
+    <!-- last line is now as carry forward for the next table -->
+    <SetVariable variable="tablerows">
+      <Copy-of select="$thisrow"/>
+    </SetVariable>
+  </Case>
+  <Otherwise>
+    <!-- fits, output table, set variable -->
+    <PlaceObject groupname="tbl"/>
+    <SetVariable variable="tablerows">
+        <Copy-of select="$tablerowsnew"/>
+    </SetVariable>
+  </Otherwise>
+</Switch>
 ```
 {{% codecaption %}}With this pattern you can enlarge and measure a table line by line{{% /codecaption %}}
 

@@ -33,6 +33,18 @@ local tabular = {}
 
 local dynamic_data = {}
 
+--- Resolve a colspan value. Handles "*" (all remaining columns) and numeric values.
+---@param value string|number The colspan attribute value
+---@param current_column number The current column position (1-based)
+---@param total_columns number The total number of columns in the table
+---@return number The resolved colspan value
+local function resolve_colspan(value, current_column, total_columns)
+    if value == "*" then
+        return total_columns - current_column + 1
+    end
+    return tonumber(value) or 1
+end
+
 --- Create a new tabular object.
 ---@return table New tabular object
 function tabular:new()
@@ -87,7 +99,7 @@ function tabular:attach_objects_row(tab, current_row, skiptable)
         if td_elementname == "Td" then
             local block = {}
             local inline = {}
-            local colspan = tonumber(td_contents.colspan) or 1
+            local colspan = resolve_colspan(td_contents.colspan, current_column, self.total_columns)
             local thiscolumn = current_column
             current_column = current_column + colspan - 1
             while skiptable[current_row] and skiptable[current_row][current_column] do
@@ -248,7 +260,7 @@ function tabular:calculate_columnwidths_for_row(tr_contents, current_row, colspa
         -- fill skip, colspan and colmax-tables for this cell
         current_column = current_column + 1
         min_wd,max_wd = nil,nil
-        local colspan = tonumber(td_contents.colspan) or 1
+        local colspan = resolve_colspan(td_contents.colspan, current_column, self.total_columns)
 
         -- When I am on a skip column (because of a row span), we jump over to the next column
         while skiptable[current_row] and skiptable[current_row][current_column] do current_column = current_column + 1 end
@@ -939,7 +951,7 @@ function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, ski
         local padding_bottom = td_contents.padding_bottom or self.padding_bottom
 
         rowspan = tonumber(td_contents.rowspan) or 1
-        colspan = tonumber(td_contents.colspan) or 1
+        colspan = resolve_colspan(td_contents.colspan, current_column, self.total_columns)
         wd = 0
 
         -- There might be a rowspan in the row above, so we need to find the correct
@@ -1126,7 +1138,7 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
             return publisher.emergency_block()
         end
         rowspan = tonumber(td_contents.rowspan) or 1
-        colspan = tonumber(td_contents.colspan) or 1
+        colspan = resolve_colspan(td_contents.colspan, current_column, self.total_columns)
         if rowspan > 1 or colspan > 1 then
             row_bg_simple = false
         end
@@ -2491,7 +2503,7 @@ end
 ---@param tr_contents table Row contents
 ---@param curskiptable table Current skiptable
 ---@param current_row integer Current row index
-function set_skip_table_elt(tr_contents, curskiptable, current_row)
+function set_skip_table_elt(tr_contents, curskiptable, current_row, total_columns)
     local rowspan
     local colspan
     local current_column = 0
@@ -2506,7 +2518,7 @@ function set_skip_table_elt(tr_contents, curskiptable, current_row)
 
         local td_contents = publisher.element_contents(td)
         rowspan = tonumber(td_contents.rowspan) or 1
-        colspan = tonumber(td_contents.colspan) or 1
+        colspan = resolve_colspan(td_contents.colspan, current_column, total_columns)
 
         for z = current_row + 1, current_row + rowspan - 1 do
             for y = current_column, current_column + colspan - 1 do
@@ -2532,7 +2544,7 @@ function tabular:set_skip_table()
         local eltname = publisher.elementname(tr)
         if eltname == "Tr" then
             current_row_body = current_row_body + 1
-            set_skip_table_elt(tr_contents,self.skiptables.body,current_row_body)
+            set_skip_table_elt(tr_contents,self.skiptables.body,current_row_body,self.total_columns)
         elseif eltname == "Tablehead" or eltname == "Tablefoot" then
             local tablearea
             if eltname == "Tablehead" then tablearea = "tablehead" else tablearea = "tablefoot" end
@@ -2544,7 +2556,7 @@ function tabular:set_skip_table()
                 local inner_contents = publisher.element_contents(tr_inner)
                 if inner_eltname == "Tr" then
                     rowcounter[tablearea] = rowcounter[tablearea] + 1
-                    set_skip_table_elt(inner_contents,self.skiptables[tablearea],rowcounter[tablearea])
+                    set_skip_table_elt(inner_contents,self.skiptables[tablearea],rowcounter[tablearea],self.total_columns)
                 end
             end
         end
@@ -2555,6 +2567,38 @@ end
 ---@param dataxml table XML data for the table
 function tabular:make_table(dataxml)
     setmetatable(self.column_distances,{ __index = function() return self.colsep or 0 end })
+
+    -- Determine total number of columns from <Columns> or max cells per row
+    self.total_columns = 0
+    for _,tr in ipairs(self.tab) do
+        local tr_elementname = publisher.elementname(tr)
+        if tr_elementname == "Columns" then
+            local tr_contents = publisher.element_contents(tr)
+            for _,column in ipairs(tr_contents) do
+                if publisher.elementname(column) == "Column" then
+                    self.total_columns = self.total_columns + 1
+                end
+            end
+            break
+        end
+    end
+    if self.total_columns == 0 then
+        -- No <Columns> found, count max cells per row
+        for _,tr in ipairs(self.tab) do
+            local tr_elementname = publisher.elementname(tr)
+            if tr_elementname == "Tr" then
+                local tr_contents = publisher.element_contents(tr)
+                local count = 0
+                for _,td in ipairs(tr_contents) do
+                    if publisher.elementname(td) == "Td" then
+                        count = count + 1
+                    end
+                end
+                if count > self.total_columns then self.total_columns = count end
+            end
+        end
+    end
+
     self:set_skip_table()
     if self.bordercollapse then
         self:do_bordercollapse(self.tab,"body")

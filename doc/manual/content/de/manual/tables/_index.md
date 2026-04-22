@@ -190,41 +190,43 @@ Zellen können sich aber über mehrere Spalten und Zeilen erstrecken.
 Die Anzahl der überdeckten Spalten wird mit `colspan` angegeben, die Voreinstellung ist hier 1.
 Die Anzahl der Zeilen wird mit `rowspan` angegeben, auch hier ist die Voreinstellung 1.
 Hier muss beachtet werden, dass die Summe der Spalten in einer Zeile der Gesamtzahl entspricht.
+Anstelle einer festen Zahl kann auch `colspan="*"` angegeben werden, um alle verbleibenden Spalten ab der aktuellen Position zu überdecken. Das ist nützlich, wenn sich die Anzahl der Spalten ändern kann und eine Zelle immer den Rest der Zeile ausfüllen soll.
+
 Im nachfolgenden Beispiel enthält die zweite Zeile zwar nur zwei Zellen, diese erstreckt sich aber über zwei Spalten.
 Die dritte Zeile hat sogar nur eine Zelldefinition, der Rest der Zeile wird durch das zwei Zellen breite Bild aus der Zeile darüber belegt (`rowspan="2"`).
 
 
 ```xml
-    <PlaceObject>
-      <Table width="10"
-        columndistance="3mm"
-        leading="2mm">
-        <Tr>
-          <Td padding-bottom="2mm">
-            <Paragraph><Value>1/1</Value></Paragraph>
-          </Td>
-          <Td padding-left="1mm">
-            <Paragraph><Value>1/2</Value></Paragraph>
-          </Td>
-          <Td align="center">
-            <Paragraph><Value>1/3</Value></Paragraph>
-          </Td>
-        </Tr>
-        <Tr background-color="yellow">
-          <Td>
-            <Paragraph><Value>2/1</Value></Paragraph>
-          </Td>
-          <Td rowspan="2" colspan="2" >
-            <Image width="5" file="ocean.pdf"/>
-          </Td>
-        </Tr>
-        <Tr align="center">
-          <Td>
-            <Paragraph><Value>3/1</Value></Paragraph>
-          </Td>
-        </Tr>
-      </Table>
-    </PlaceObject>
+<PlaceObject>
+  <Table width="10"
+    columndistance="3mm"
+    leading="2mm">
+    <Tr>
+      <Td padding-bottom="2mm">
+        <Paragraph><Value>1/1</Value></Paragraph>
+      </Td>
+      <Td padding-left="1mm">
+        <Paragraph><Value>1/2</Value></Paragraph>
+      </Td>
+      <Td align="center">
+        <Paragraph><Value>1/3</Value></Paragraph>
+      </Td>
+    </Tr>
+    <Tr background-color="yellow">
+      <Td>
+        <Paragraph><Value>2/1</Value></Paragraph>
+      </Td>
+      <Td rowspan="2" colspan="2" >
+        <Image width="5" file="ocean.pdf"/>
+      </Td>
+    </Tr>
+    <Tr align="center">
+      <Td>
+        <Paragraph><Value>3/1</Value></Paragraph>
+      </Td>
+    </Tr>
+  </Table>
+</PlaceObject>
 ```
 {{% codecaption %}}Ein etwas komplexeres Beispiel. Die Hintergrundfarbe des Bildes bestimmt sich aus der zweiten Zeile.{{% /codecaption %}}
 
@@ -237,16 +239,16 @@ Man kann auch die Spaltenbreiten fest vorgeben.
 Der Befehl dazu lautet `Columns` und wird direkt als erster Befehl innerhalb von `Table` angeführt:
 
 ```xml
-      <Table stretch="max">
-        <Columns>
-          <Column width="2mm"/>
-          <Column width="1*"/>
-          <Column width="3*"/>
-        </Columns>
-        <Tr>
-          ...
-        </Tr>
-      </Table>
+<Table stretch="max">
+  <Columns>
+    <Column width="2mm"/>
+    <Column width="1*"/>
+    <Column width="3*"/>
+  </Columns>
+  <Tr>
+    ...
+  </Tr>
+</Table>
 ```
 
 Hier wird festgelegt, dass die Tabelle drei Spalten hat.
@@ -581,37 +583,37 @@ Wobei `$diesezeile` jeweils eine Tabellenzeile mit Start- und Endetag `<Tr> .. <
 Geprüft wird nun, in dem die Tabelle in einer Gruppe erzeugt wird und anschließend z. B die Höhe der Gruppe überprüft wird:
 
 ```xml
-    <Group name="tbl">
-      <Contents>
-        <PlaceObject>
-          <Table width="...">
-            <Copy-of select="$tabellenzeilenneu"/>
-          </Table>
-        </PlaceObject>
-      </Contents>
-    </Group>
+<Group name="tbl">
+  <Contents>
+    <PlaceObject>
+      <Table width="...">
+        <Copy-of select="$tabellenzeilenneu"/>
+      </Table>
+    </PlaceObject>
+  </Contents>
+</Group>
 
-    <Switch>
-      <Case test="sd:group-height('tbl') > ...">
-        <!-- zu groß, Tabelle ohne die letzte Zeile ausgeben -->
-        <PlaceObject>
-          <Table width="...">
-            <Copy-of select="$tabellenzeilen"/>
-          </Table>
-        </PlaceObject>
-        <!-- letzte Zeile ist nun als Übertrag für die nächste Tabelle -->
-        <SetVariable variable="tabellenzeilen">
-          <Copy-of select="$diesezeile"/>
-        </SetVariable>
-      </Case>
-      <Otherwise>
-        <!-- passt, Tabelle ausgeben, Variable setzen -->
-        <PlaceObject groupname="tbl"/>
-        <SetVariable variable="tabellenzeilen">
-            <Copy-of select="$tabellenzeilenneu"/>
-        </SetVariable>
-      </Otherwise>
-    </Switch>
+<Switch>
+  <Case test="sd:group-height('tbl') > ...">
+    <!-- zu groß, Tabelle ohne die letzte Zeile ausgeben -->
+    <PlaceObject>
+      <Table width="...">
+        <Copy-of select="$tabellenzeilen"/>
+      </Table>
+    </PlaceObject>
+    <!-- letzte Zeile ist nun als Übertrag für die nächste Tabelle -->
+    <SetVariable variable="tabellenzeilen">
+      <Copy-of select="$diesezeile"/>
+    </SetVariable>
+  </Case>
+  <Otherwise>
+    <!-- passt, Tabelle ausgeben, Variable setzen -->
+    <PlaceObject groupname="tbl"/>
+    <SetVariable variable="tabellenzeilen">
+        <Copy-of select="$tabellenzeilenneu"/>
+    </SetVariable>
+  </Otherwise>
+</Switch>
 ```
 {{% codecaption %}}Mit diesem Muster kann man eine Tabelle zeilenweise vergrößern und ausmessen{{% /codecaption %}}
 
