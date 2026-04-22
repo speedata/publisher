@@ -17,6 +17,7 @@ type clText struct {
 type clEntry struct {
 	Version string `xml:"version,attr"`
 	Date    string `xml:"date,attr"`
+	SHA1    string `xml:"sha1,attr"`
 	En      clText `xml:"en"`
 	De      clText `xml:"de"`
 }

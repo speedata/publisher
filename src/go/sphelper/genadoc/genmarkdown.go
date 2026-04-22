@@ -263,6 +263,7 @@ func GenerateChangelogMarkdown(cfg *config.Config, lang string) error {
 	type entryText struct {
 		summary string
 		detail  string
+		sha1    string
 	}
 
 	type release struct {
@@ -288,6 +289,30 @@ func GenerateChangelogMarkdown(cfg *config.Config, lang string) error {
 
 	ghIssueRe := regexp.MustCompile(`#(\d+)`)
 	ttRepl := strings.NewReplacer(`<tt>`, "`", `</tt>`, "`")
+	// mdEscape escapes Markdown special characters in changelog text,
+	// preserving <tt>...</tt> blocks (which become backtick code spans).
+	mdEscapeRepl := strings.NewReplacer(
+		`\`, `\\`,
+		`*`, `\*`,
+		`_`, `\_`,
+		`[`, `\[`,
+		`]`, `\]`,
+		`<`, `\<`,
+		`>`, `\>`,
+	)
+	ttBlockRe := regexp.MustCompile(`<tt>.*?</tt>`)
+	mdEscape := func(s string) string {
+		// Split around <tt>...</tt> blocks and only escape text outside them
+		var result strings.Builder
+		last := 0
+		for _, loc := range ttBlockRe.FindAllStringIndex(s, -1) {
+			result.WriteString(mdEscapeRepl.Replace(s[last:loc[0]]))
+			result.WriteString(s[loc[0]:loc[1]])
+			last = loc[1]
+		}
+		result.WriteString(mdEscapeRepl.Replace(s[last:]))
+		return result.String()
+	}
 
 	majorVersions := []majorVersionData{}
 	majorIndex := map[string]int{}
@@ -325,17 +350,19 @@ func GenerateChangelogMarkdown(cfg *config.Config, lang string) error {
 				text = entry.De.Text
 			}
 			text = strings.TrimSpace(text)
+			text = mdEscape(text)
 			text = ghIssueRe.ReplaceAllString(text, `[#$1](https://github.com/speedata/publisher/issues/$1)`)
 			text = ttRepl.Replace(text)
 			summary := text
 			detail := ""
 			if summaryAttr != "" {
 				summary = summaryAttr
+				summary = mdEscape(summary)
 				summary = ghIssueRe.ReplaceAllString(summary, `[#$1](https://github.com/speedata/publisher/issues/$1)`)
 				summary = ttRepl.Replace(summary)
 				detail = text
 			}
-			r.entries = append(r.entries, entryText{summary: summary, detail: detail})
+			r.entries = append(r.entries, entryText{summary: summary, detail: detail, sha1: entry.SHA1})
 		}
 		rr = append(rr, r)
 
@@ -347,6 +374,7 @@ func GenerateChangelogMarkdown(cfg *config.Config, lang string) error {
 				summaryText = chap.Summary.De.Text
 			}
 			summaryText = strings.TrimSpace(summaryText)
+			summaryText = mdEscape(summaryText)
 			if summaryText != "" {
 				majorVersions[idx].summaries = append(majorVersions[idx].summaries, chapterSummary{
 					version: chap.Version,
@@ -409,10 +437,14 @@ func GenerateChangelogMarkdown(cfg *config.Config, lang string) error {
 					fmt.Fprintf(f, "### %s (%s)\n\n", r.version, r.date.Format("2.1.2006"))
 				}
 				for _, e := range r.entries {
+					commitLink := ""
+					if e.sha1 != "" {
+						commitLink = fmt.Sprintf(" [↗](https://github.com/speedata/publisher/commit/%s)", e.sha1)
+					}
 					if e.detail != "" {
-						fmt.Fprintf(f, "- %s<br>\n  %s\n", e.summary, e.detail)
+						fmt.Fprintf(f, "- %s%s<br>\n  %s\n", e.summary, commitLink, e.detail)
 					} else {
-						fmt.Fprintf(f, "- %s\n", e.summary)
+						fmt.Fprintf(f, "- %s%s\n", e.summary, commitLink)
 					}
 				}
 				fmt.Fprintln(f)
