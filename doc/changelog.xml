@@ -1,5 +1,45 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.5">
+    <entry version="5.5.10" date="2026-04-22" sha1="d50ca30095896eacae44648bb47affb7fe8361ac">
+        <en summary="Allow colspan=&quot;*&quot; in table cells.">Use <tt>colspan="*"</tt> on a Td element to automatically span all remaining columns from the current position, removing the need to hard-code the column count.</en>
+        <de summary="colspan=&quot;*&quot; in Tabellenzellen erlauben.">Mit <tt>colspan="*"</tt> auf einem Td-Element werden automatisch alle verbleibenden Spalten ab der aktuellen Position überdeckt, ohne die Spaltenanzahl fest angeben zu müssen.</de>
+    </entry>
+    <entry version="5.5.10" date="2026-04-22" sha1="f2b0e752b04dfef4b5c3fa695c8633f27afb7aa9">
+        <en summary="Remove Debian package generation.">It is too much work to keep the Debian packages maintained.</en>
+        <de summary="Entferne Erzeugung der Debian-Pakete." >Es ist zu viel Arbeit, die Debian-Pakete aktuell zu halten.</de>
+    </entry>
+    <entry version="5.5.10" date="2026-04-22" sha1="75f9b0c7">
+        <en summary="Configurable list marker gap via CSS.">The gap between list marker and text is now configurable via li::marker { padding-right: ... } in CSS. The default remains 5pt.</en>
+        <de summary="Abstand bei Listenmarkern per CSS einstellbar.">Der Abstand zwischen Listenmarker und Text ist nun per li::marker { padding-right: ... } in CSS konfigurierbar. Der Standardwert bleibt 5pt.</de>
+    </entry>
+    <entry version="5.5.10" date="2026-04-22" sha1="ea433dc7">
+        <en summary="Alternating row colors restart on each page.">Background colors in table cells are now deferred until after page splitting. The new Table attribute eval-on-split allows alternating row colors to restart correctly on each new page.</en>
+        <de summary="Alternierende Zeilenfarben starten auf jeder Seite neu.">Hintergrundfarben in Tabellenzellen werden nun erst nach dem Seitenumbruch gesetzt. Das neue Tabellen-Attribut eval-on-split ermöglicht es, alternierende Zeilenfarben auf jeder neuen Seite korrekt neu zu beginnen.</de>
+    </entry>
+    <entry version="5.5.10" date="2026-04-22" sha1="8670178e">
+        <en summary="Fix hairline artifacts between table cells.">When all cells in a row share the same background color, the background is now drawn as a single rectangle, eliminating hairline rendering artifacts between adjacent cells in some PDF viewers.</en>
+        <de summary="Haarlinien-Artefakte zwischen Tabellenzellen behoben.">Wenn alle Zellen einer Zeile dieselbe Hintergrundfarbe haben, wird der Hintergrund nun als einzelnes Rechteck gezeichnet. Das beseitigt Haarlinien-Artefakte zwischen benachbarten Zellen in einigen PDF-Betrachtern.</de>
+    </entry>
+    <entry version="5.5.10" date="2026-04-22" sha1="e3b90eec">
+        <en summary="Fix empty lines between HTML block elements.">Whitespace-only text nodes between HTML block elements (e.g. between two paragraphs) are no longer rendered as empty lines.</en>
+        <de summary="Leere Zeilen zwischen HTML-Blockelementen behoben.">Leerraum zwischen HTML-Blockelementen (z.B. zwischen zwei Absätzen) wird nicht mehr als leere Zeile dargestellt.</de>
+    </entry>
+    <entry version="5.5.10" date="2026-04-22" sha1="63c98ecf">
+        <en summary="Fix space rendering in some fonts.">Font backmap now prefers printable characters when multiple codepoints share a glyph ID, fixing broken space rendering in some fonts like HelveticaNeue-Bold.</en>
+        <de summary="Leerzeichendarstellung in einigen Schriften korrigiert.">Die Font-Backmap bevorzugt jetzt druckbare Zeichen, wenn mehrere Codepoints dieselbe Glyph-ID haben. Das korrigiert fehlerhafte Leerzeichendarstellung in einigen Schriften wie HelveticaNeue-Bold.</de>
+    </entry>
+    <entry version="5.5.10" date="2026-04-22" sha1="86c0bab8">
+        <en summary="Better error handling for undefined colors.">The layout now shows a warning instead of crashing with a Lua error when encountering problems like undefined colors.</en>
+        <de summary="Bessere Fehlerbehandlung bei undefinierten Farben.">Das Layout zeigt nun eine Warnung statt mit einem Lua-Fehler abzubrechen, wenn Probleme wie undefinierte Farben auftreten.</de>
+    </entry>
+    <entry version="5.5.10" date="2026-04-22" sha1="98c76a38">
+        <en summary="Security: update Go dependencies.">Update golang.org/x/net and golang.org/x/image to fix CVEs (XSS, HTTP proxy bypass, OOM via crafted TIFF).</en>
+        <de summary="Sicherheit: Go-Abhängigkeiten aktualisiert.">Aktualisierung von golang.org/x/net und golang.org/x/image zur Behebung von CVEs (XSS, HTTP-Proxy-Bypass, OOM durch manipuliertes TIFF).</de>
+    </entry>
+    <entry version="5.5.10" date="2026-04-22" sha1="8456f88d">
+        <en summary="Fix Windows DLL cleanup crash.">Work around a Go runtime issue where the shared library cleanup on Windows caused an access violation (0xc0000005) even though the PDF was generated successfully.</en>
+        <de summary="Windows-DLL-Crash beim Aufräumen behoben.">Umgehung eines Go-Runtime-Problems, bei dem das Aufräumen der DLL unter Windows eine Zugriffsverletzung (0xc0000005) verursachte, obwohl die PDF-Erzeugung erfolgreich war.</de>
+    </entry>
     <entry version="5.5.9" date="2026-04-20">
         <en>Documentation: move to Hugo static site generator, reorganize structure.</en>
         <de>Dokumentation: Umstellung auf Hugo, Struktur neu organisiert.</de>
