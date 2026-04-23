@@ -1,7 +1,7 @@
 package css
 
 import (
-	"fmt"
+	"log/slog"
 	"regexp"
 	"strings"
 
@@ -61,13 +61,15 @@ func stringValue(toks tokenstream) string {
 				ret = append(ret, tok.Value)
 			case "-":
 				negative = true
+			case `\`:
+				// ignore, often from line-continuation in style attributes
 			default:
-				fmt.Println("unhandled delimiter", tok)
+				slog.Warn("unhandled CSS delimiter", "delimiter", tok.Value)
 			}
 		case scanner.URI:
 			ret = append(ret, "url("+tok.Value+")")
 		default:
-			fmt.Println("unhandled token", tok)
+			slog.Warn("unhandled CSS token", "type", tok.Type, "value", tok.Value)
 		}
 	}
 	return strings.Join(ret, " ")
