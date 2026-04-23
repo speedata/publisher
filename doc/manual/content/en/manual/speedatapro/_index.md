@@ -29,15 +29,15 @@ There are two ways to download the Pro plan (assuming a valid Pro plan):
 1. If you are logged in to you account in the download area, then you can use the download links to download the ZIP files or the installation packages.
 
 2. Via command line (e.g. wget or curl) you can download the package. For this you have to create a token in the login area and pass it as authentication:
-```shell
-curl -u sdapi_....:  \
-  -O https://download.speedata.de/dl/speedata-publisherpro-linux-amd64-latest.zip
-```
-oder with wget:
-```shell
-wget --auth-no-challenge  --user sdapi_...  \
-   --password ""  https://download.speedata.de/dl/speedata-publisherpro-linux-amd64-latest.zip
-```
+    ```shell
+    curl -u sdapi_....:  \
+      -O https://download.speedata.de/dl/speedata-publisherpro-linux-amd64-latest.zip
+    ```
+    or with wget:
+    ```shell
+    wget --auth-no-challenge  --user sdapi_...  \
+       --password ""  https://download.speedata.de/dl/speedata-publisherpro-linux-amd64-latest.zip
+    ```
 
 The standard packages can be downloaded as usual without login or token.
 

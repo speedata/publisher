@@ -29,15 +29,15 @@ Um das Pro-Paket herunterzuladen, gibt es zwei Möglichkeiten (ein gültiges Abo
 1. Ist man im Downloadbereich angemeldet, dann kann man über die Download-Links die ZIP-Dateien oder die Installationspakete herunterladen.
 
 2. Per Kommandozeile (z.B. wget oder curl) kann man die Pakete herunterladen. Dafür muss im Login Bereich ein Token erzeugt werden und als Authentifizierung mit übergeben werden:
-```shell
-curl -u sdapi_....:  \
-  -O https://download.speedata.de/dl/speedata-publisherpro-linux-amd64-latest.zip
-```
-oder per wget:
-```shell
-wget --auth-no-challenge  --user sdapi_...  \
-   --password ""  https://download.speedata.de/dl/speedata-publisherpro-linux-amd64-latest.zip
-```
+    ```shell
+    curl -u sdapi_....:  \
+      -O https://download.speedata.de/dl/speedata-publisherpro-linux-amd64-latest.zip
+    ```
+    oder per wget:
+    ```shell
+    wget --auth-no-challenge  --user sdapi_...  \
+       --password ""  https://download.speedata.de/dl/speedata-publisherpro-linux-amd64-latest.zip
+    ```
 
 Die Standardpakete können wie gehabt ohne Login oder Token heruntergeladen werden.
 

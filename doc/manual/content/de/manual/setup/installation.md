@@ -4,29 +4,33 @@ weight: 10
 type: docs
 ---
 
+Den speedata Publisher gibt es als fertiges Binärpaket für macOS, Windows und GNU/Linux.
+Er kann in zwei Varianten heruntergeladen werden: Standard und Professional.
+Die Professional-Variante bietet zusätzliche Features für die professionelle Druckausgabe.
 
+## Stable oder Development?
 
-{{< callout >}}
-Den speedata Publisher kann man in zwei Versionen herunterladen: `stable` und `development`.
-Beide Versionen sind problemlos zu benutzen.
-Eine umfangreiche Qualitätssicherung verhindert, dass sich unentdeckt Fehler einschleichen.
-In der Entwicklungsversion kann die Dokumentation dem aktuellen Stand hinterher sein.
-Zum Ausprobieren lädt man sich in der Regel die Development-Version herunter.
-Ebenso gibt es den speedata Publisher in zwei Paketen: Standard und Professional.
-Die Professional-Variante hat zusätzliche Features, die im professionellen Umfeld für die Druckausgabe hilfreich sind.
+Auf der [Download-Seite](https://download.speedata.de/) stehen jeweils zwei Versionslinien zur Auswahl:
+
+- Stable: Getestet und bewährt. Diese Version eignet sich für den produktiven Einsatz.
+- Development: Enthält immer die neuesten Features. Durch neue Funktionalität können vereinzelt Fehler auftreten, die erst einige Versionen später auffallen. Wer neue Features zeitnah nutzen möchte, greift zur Development-Version.
+
+![Die Download-Seite](/img/download-page.png)
+
+## Installation
+
+Auf der [Download-Seite](https://download.speedata.de/) die passende ZIP-Datei für das eigene Betriebssystem herunterladen und an einem beliebigen Ort entpacken.
+Administratorrechte sind dafür nicht notwendig.
+
+{{< callout type="warning" >}}
+Die entpackte Verzeichnisstruktur darf nicht verändert werden — der speedata Publisher erwartet das vorgegebene Dateilayout.
 {{< /callout >}}
 
-Es gibt zwei Methoden, den Publisher zu installieren.
+Für Windows gibt es zusätzlich Installationspakete (.exe), die den Suchpfad automatisch setzen.
+Damit ist `sp.exe` direkt in der Kommandozeile verfügbar.
 
-## Binärpakete (der empfohlene Weg)
+Auf macOS und Linux muss das `bin`-Verzeichnis aus dem entpackten Archiv manuell zum `PATH` hinzugefügt werden, oder man ruft `sp` mit dem vollständigen Pfad auf.
 
-Auf der [Download-Seite](https://download.speedata.de/) (https://download.speedata.de/) sind für macOS, Windows und GNU/Linux ZIP-Dateien zu finden, die man einfach extrahieren kann.
-Dafür sind keine Administratorrechte notwendig.
-Für Windows gibt es zusätzlich Installationspakete, die den Suchpfad korrekt setzen.
-Damit ist in der Windows-Shell das Programm `sp.exe` überall aufrufbar.
-Die aus dem ZIP extrahierte Struktur darf nicht verändert werden (z.B. verschieben des Binaries), der speedata Publisher erwartet das vorgegebene Dateilayout.
-Nur hier kann das Pro-Paket heruntergeladen werden.
-
-## Aus den Quellen bauen
-
-Wer den Publisher selbst kompilieren möchte, findet die Anleitung in [BUILDING.md](https://github.com/speedata/publisher/blob/develop/BUILDING.md) im GitHub-Repository.
+{{< callout >}}
+Wer den Publisher selbst aus den Quellen kompilieren möchte, findet die Anleitung in [BUILDING.md](https://github.com/speedata/publisher/blob/develop/BUILDING.md) im GitHub-Repository.
+{{< /callout >}}

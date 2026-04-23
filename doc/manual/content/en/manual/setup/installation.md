@@ -4,17 +4,31 @@ weight: 10
 type: docs
 ---
 
+The speedata Publisher is available as a pre-built binary package for macOS, Windows and GNU/Linux.
+It comes in two plans: Standard and Professional.
+The Professional plan offers additional features for professional PDF generation.
 
-{{< callout >}}
-The speedata Publisher can be downloaded in two versions: `stable` and `development`. Both versions are easy to use. Extensive quality assurance prevents errors from creeping in undetected. In the development version, the documentation may be behind the current status. To try it out, you can usually download the development version. The speedata Publisher also comes with a Standard and a Pro plan. The Pro plan offers additional features that are helpful for professional PDF generation.
+## Stable or Development?
+
+The [download page](https://download.speedata.de/) offers two release lines:
+
+- Stable: Tested and proven. This version is recommended for production use.
+- Development: Always contains the latest features. Occasionally, new functionality may introduce bugs that are only noticed a few versions later. Choose the development version if you want early access to new features.
+
+![The download page](/img/download-page.png)
+
+## Installation
+
+Download the appropriate ZIP file for your operating system from the [download page](https://download.speedata.de/) and extract it to any location. No administrator rights are required.
+
+{{< callout type="warning" >}}
+Do not modify the extracted directory structure — the speedata Publisher expects the original file layout.
 {{< /callout >}}
 
-There are two ways to install speedata Publisher:
+On Windows, there are additional installer packages (.exe) that automatically set the search path, making `sp.exe` available directly from the command line.
 
-## Binary packages (The recommended way)
+On macOS and Linux, you need to add the `bin` directory from the extracted archive to your `PATH`, or call `sp` using its full path.
 
-Go to our [download page](https://download.speedata.de/) and download the latest package for your operating system. You can unzip the file anywhere in the filesystem you want. You don't need root/administrator rights to use the Publisher this way. There are extra installer packages for windows, if you don't want to set the `PATH` variable yourself. This is the method if you want to install the [speedata Publisher Pro plan]({{< relref "speedatapro" >}}) software.
-
-## Build from source
-
+{{< callout >}}
 If you want to build the Publisher from source, see [BUILDING.md](https://github.com/speedata/publisher/blob/develop/BUILDING.md) in the GitHub repository.
+{{< /callout >}}
