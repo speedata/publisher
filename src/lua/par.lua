@@ -64,12 +64,12 @@ local function reconstruct_html_text(elt)
     table.insert(ret,eltname)
     if publisher.newxpath and elt[".__attributes"]  then
         for key, value in pairs(elt[".__attributes"]) do
-            table.insert(ret,string.format(" %s=%q",key,value))
+            table.insert(ret,string.format(' %s="%s"',key,publisher.xml_escape(value)))
         end
     else
         for key,value in next,elt,nil do
             if type(key) == "string" and not string.match( key,"^.__" ) then
-                table.insert(ret,string.format(" %s=%q",key,value))
+                table.insert(ret,string.format(' %s="%s"',key,publisher.xml_escape(value)))
             end
         end
     end
