@@ -1337,6 +1337,74 @@ local function fnUpperCase(ctx, seq)
     return { string_upper(x) }, nil
 end
 
+local function xml_escape(s)
+    s = string.gsub(s, "&", "&amp;")
+    s = string.gsub(s, "<", "&lt;")
+    s = string.gsub(s, ">", "&gt;")
+    return s
+end
+
+local function xml_escape_attr(s)
+    s = xml_escape(s)
+    s = string.gsub(s, '"', "&quot;")
+    return s
+end
+
+local function serialize_item(itm)
+    if type(itm) == "string" then
+        return xml_escape(itm)
+    elseif type(itm) == "number" then
+        return tostring(itm)
+    elseif type(itm) == "boolean" then
+        return itm and "true" or "false"
+    elseif is_attribute(itm) then
+        return itm.value or ""
+    elseif is_element(itm) then
+        local ret = {}
+        local name = itm[".__name"] or itm[".__local_name"] or "unknown"
+        ret[#ret + 1] = "<" .. name
+        local attrs = itm[".__attributes"]
+        if attrs then
+            local keys = {}
+            for k in pairs(attrs) do
+                keys[#keys + 1] = k
+            end
+            table.sort(keys)
+            for _, k in ipairs(keys) do
+                ret[#ret + 1] = " " .. k .. '="' .. xml_escape_attr(attrs[k]) .. '"'
+            end
+        end
+        if #itm == 0 then
+            ret[#ret + 1] = "/>"
+        else
+            ret[#ret + 1] = ">"
+            for i = 1, #itm do
+                ret[#ret + 1] = serialize_item(itm[i])
+            end
+            ret[#ret + 1] = "</" .. name .. ">"
+        end
+        return table_concat(ret)
+    elseif type(itm) == "table" then
+        return string_value(itm)
+    end
+    return tostring(itm)
+end
+
+local function fnSerialize(ctx, seq)
+    local input_seq = seq[1]
+    if input_seq == nil then
+        input_seq = ctx.sequence
+    end
+    if type(input_seq) ~= "table" then
+        return { tostring(input_seq) }, nil
+    end
+    local ret = {}
+    for _, itm in ipairs(input_seq) do
+        ret[#ret + 1] = serialize_item(itm)
+    end
+    return { table_concat(ret) }, nil
+end
+
 local funcs = {
     -- function name, namespace, function, minarg, maxarg
     { "abs",                  M.fnNS, fnAbs,                1, 1 },
@@ -1369,6 +1437,7 @@ local funcs = {
     { "root",                 M.fnNS, fnRoot,               0, 1 },
     { "round",                M.fnNS, fnRound,              1, 1 },
     { "round-half-to-even",   M.fnNS, fnRoundHalfToEven,    1, 2 },
+    { "serialize",            M.fnNS, fnSerialize,          1, 1 },
     { "starts-with",          M.fnNS, fnStartsWith,         2, 2 },
     { "ends-with",            M.fnNS, fnEndsWith,           2, 2 },
     { "substring-after",      M.fnNS, fnSubstringAfter,     2, 2 },
