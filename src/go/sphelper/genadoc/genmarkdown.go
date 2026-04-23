@@ -439,7 +439,14 @@ func GenerateChangelogMarkdown(cfg *config.Config, lang string) error {
 				for _, e := range r.entries {
 					commitLink := ""
 					if e.sha1 != "" {
-						commitLink = fmt.Sprintf(" [↗](https://github.com/speedata/publisher/commit/%s)", e.sha1)
+						var links []string
+						for _, sha := range strings.Split(e.sha1, ",") {
+							sha = strings.TrimSpace(sha)
+							if sha != "" {
+								links = append(links, fmt.Sprintf("[↗](https://github.com/speedata/publisher/commit/%s)", sha))
+							}
+						}
+						commitLink = " " + strings.Join(links, " ")
 					}
 					if e.detail != "" {
 						fmt.Fprintf(f, "- %s%s<br>\n  %s\n", e.summary, commitLink, e.detail)
