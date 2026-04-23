@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.5">
+    <entry version="5.5.11" date="2026-04-23" sha1="b3bca5b4c62b0a64d9f1c448a7512fec915c09bf">
+        <en summary="Implement fn:serialize() in XPath.">The XPath function <tt>fn:serialize()</tt> converts a node set into its XML string representation.</en>
+        <de summary="fn:serialize() in XPath implementiert.">Die XPath-Funktion <tt>fn:serialize()</tt> wandelt ein Node-Set in seine XML-Stringdarstellung um.</de>
+    </entry>
+    <entry version="5.5.11" date="2026-04-23" sha1="a688a67c69fbf3e2c1a4e5aa5bb2c549b4429b94,1aa4ac0c166631152d10a8a371366e2779ef9f9a">
+        <en summary="Fix HTML/CSS processing of inline style attributes.">Fix incorrect quoting of HTML attributes during reconstruction (Lua's <tt>%q</tt> introduced backslashes before newlines) and fix element detection in <tt>Copy-of</tt> and <tt>SetVariable</tt>.</en>
+        <de summary="HTML/CSS-Verarbeitung von Inline-Styles korrigiert.">Fehlerhaftes Quoting von HTML-Attributen bei der Rekonstruktion behoben (Luas <tt>%q</tt> erzeugte Backslashes vor Zeilenumbrüchen) und Elementerkennung in <tt>Copy-of</tt> und <tt>SetVariable</tt> korrigiert.</de>
+    </entry>
     <entry version="5.5.10" date="2026-04-22" sha1="d50ca30095896eacae44648bb47affb7fe8361ac">
         <en summary="Allow colspan=&quot;*&quot; in table cells.">Use <tt>colspan="*"</tt> on a Td element to automatically span all remaining columns from the current position, removing the need to hard-code the column count.</en>
         <de summary="colspan=&quot;*&quot; in Tabellenzellen erlauben.">Mit <tt>colspan="*"</tt> auf einem Td-Element werden automatisch alle verbleibenden Spalten ab der aktuellen Position überdeckt, ohne die Spaltenanzahl fest angeben zu müssen.</de>
