@@ -148,7 +148,72 @@ Daneben gibt es die Publisher-spezifischen [Layoutfunktionen]({{< relref "layout
 `doc(<Dateiname>)`
 : Öffnet die Datei und gibt den Inhalt als XML-Baum zurück.
 
+`serialize(<Knoten>)`
+: Gibt die XML-Serialisierung des Knotens als Zeichenkette zurück. Beispiel: Wenn das aktuelle Element `<item color="red">Text</item>` ist, ergibt `serialize(.)` die Zeichenkette `<item color="red">Text</item>`. Sonderzeichen werden korrekt escaped (`&amp;`, `&lt;`, `&gt;`, `&quot;`).
+
 `unparsed-text(<Dateiname>)`
 : Gibt den Inhalt der Datei als uninterpretierten Text zurück.
 
-`concat` ist unter _Zeichenketten_ aufgeführt.
+
+## Arrays
+
+Alle Array-Funktionen befinden sich im Namensraum `array:` (`http://www.w3.org/2005/xpath-functions/array`).
+Dieser Namensraum muss im Wurzelelement deklariert werden: `xmlns:array="http://www.w3.org/2005/xpath-functions/array"`.
+Siehe auch [Arrays und Maps]({{< relref "datastructures" >}}).
+
+`array:size(<Array>)`
+: Anzahl der Members.
+
+`array:get(<Array>, <Position>)`
+: Member an der Position (1-basiert).
+
+`array:append(<Array>, <Wert>)`
+: Neues Array mit angehängtem Member.
+
+`array:put(<Array>, <Position>, <Wert>)`
+: Neues Array mit ersetztem Member.
+
+`array:remove(<Array>, <Position>)`
+: Neues Array ohne das Member an der Position.
+
+`array:subarray(<Array>, <Start>[, <Länge>])`
+: Teilarray ab der Startposition.
+
+`array:join(<Array-Sequenz>)`
+: Verbindet mehrere Arrays zu einem.
+
+`array:flatten(<Array>)`
+: Löst verschachtelte Arrays rekursiv auf und gibt eine flache Sequenz zurück.
+
+
+## Maps
+
+Alle Map-Funktionen befinden sich im Namensraum `map:` (`http://www.w3.org/2005/xpath-functions/map`).
+Dieser Namensraum muss im Wurzelelement deklariert werden: `xmlns:map="http://www.w3.org/2005/xpath-functions/map"`.
+Siehe auch [Arrays und Maps]({{< relref "datastructures" >}}).
+
+`map:size(<Map>)`
+: Anzahl der Einträge.
+
+`map:keys(<Map>)`
+: Sequenz der Schlüssel.
+
+`map:get(<Map>, <Schlüssel>)`
+: Wert zum Schlüssel (leere Sequenz, wenn nicht vorhanden).
+
+`map:contains(<Map>, <Schlüssel>)`
+: `true()` wenn der Schlüssel existiert.
+
+`map:put(<Map>, <Schlüssel>, <Wert>)`
+: Neue Map mit eingefügtem oder ersetztem Eintrag.
+
+`map:remove(<Map>, <Schlüssel>)`
+: Neue Map ohne den Eintrag.
+
+`map:merge(<Map-Sequenz>)`
+: Führt mehrere Maps zusammen (letzte Werte gewinnen).
+
+`map:entry(<Schlüssel>, <Wert>)`
+: Map mit einem einzigen Eintrag.
+
+

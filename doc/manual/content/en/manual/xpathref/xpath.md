@@ -33,6 +33,7 @@ The Publisher accepts XPath expressions in two places:
 
 * **Numbers and text**: `"5"`, `'hello world'` — returned directly.
 * **Arithmetic operations**: `*`, `div`, `idiv`, `+`, `-`, `mod`. Example: `( 6 + 4.5 ) * 2`
+* **String concatenation**: `||` concatenates strings. Example: `'Hello' || ' ' || 'World'` returns `Hello World`.
 * **Variables**: `$column + 2`
 * **Current node** (dot operator): `. + 2`
 * **Child elements**: `productdata`, `*`, `foo/bar`, `node()`
@@ -42,6 +43,8 @@ The Publisher accepts XPath expressions in two places:
 * **Comparisons**: `<`, `>`, `<=`, `>=`, `=`, `!=`. Note: `<` must be written as `&lt;` in XML.
 * **If/then/else**: `if (...) then ... else ...`
 * **For expressions**: `for $i in (1,2,3) return $i * 2` or `for $i in 1 to 3 return $i * 2`
+* **Arrays**: `[1, 2, 3]` or `array { 1 to 3 }`. Access via lookup: `$arr?2`. See [Arrays and Maps]({{< relref "datastructures" >}}).
+* **Maps**: `map { 'name': 'value' }`. Access via lookup: `$map?name`. See [Arrays and Maps]({{< relref "datastructures" >}}).
 * **Axes**: `preceding-sibling`, `parent`, `descendant-or-self`, `following-sibling` etc.
 
 

@@ -33,6 +33,7 @@ Der Publisher akzeptiert XPath-Ausdrücke an zwei Stellen:
 
 * **Zahlen und Text**: `"5"`, `'hello world'` — werden direkt zurückgegeben.
 * **Rechenoperationen**: `*`, `div`, `idiv`, `+`, `-`, `mod`. Beispiel: `( 6 + 4.5 ) * 2`
+* **String-Verkettung**: `||` verkettet Zeichenketten. Beispiel: `'Hallo' || ' ' || 'Welt'` ergibt `Hallo Welt`.
 * **Variablen**: `$spalte + 2`
 * **Aktueller Knoten** (Punkt-Operator): `. + 2`
 * **Kindelemente**: `produktdaten`, `*`, `foo/bar`, `node()`
@@ -42,6 +43,8 @@ Der Publisher akzeptiert XPath-Ausdrücke an zwei Stellen:
 * **Vergleiche**: `<`, `>`, `<=`, `>=`, `=`, `!=`. Achtung: `<` muss in XML als `&lt;` geschrieben werden.
 * **If/then/else**: `if (...) then ... else ...`
 * **For-Ausdrücke**: `for $i in (1,2,3) return $i * 2` oder `for $i in 1 to 3 return $i * 2`
+* **Arrays**: `[1, 2, 3]` oder `array { 1 to 3 }`. Zugriff per Lookup: `$arr?2`. Siehe [Arrays und Maps]({{< relref "datastructures" >}}).
+* **Maps**: `map { 'name': 'Wert' }`. Zugriff per Lookup: `$map?name`. Siehe [Arrays und Maps]({{< relref "datastructures" >}}).
 * **Achsen**: `preceding-sibling`, `parent`, `descendant-or-self`, `following-sibling` usw.
 
 

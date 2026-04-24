@@ -5129,7 +5129,7 @@ end
 --- Assign a value to a variable.
 function commands.setvariable( layoutxml,dataxml )
     local trace_p   = publisher.options.showassignments or publisher.read_attribute(layoutxml,dataxml,"trace","boolean")
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select","string")
+    local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
     local varname   = publisher.read_attribute(layoutxml,dataxml,"variable","string")
     local typ       = publisher.read_attribute(layoutxml,dataxml,"type","string","sd")
     local execute   = publisher.read_attribute(layoutxml,dataxml,"execute", "string","now")

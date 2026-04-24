@@ -148,5 +148,70 @@ In addition, there are the Publisher-specific [layout functions]({{< relref "lay
 `doc(<filename>)`
 : Open the file and return its content as an XML tree.
 
+`serialize(<node>)`
+: Return the XML serialization of the node as a string. Example: if the current element is `<item color="red">Text</item>`, `serialize(.)` returns the string `<item color="red">Text</item>`. Special characters are properly escaped (`&amp;`, `&lt;`, `&gt;`, `&quot;`).
+
 `unparsed-text(<filename>)`
 : Return the file content as uninterpreted text.
+
+
+## Arrays
+
+All array functions are in the `array:` namespace (`http://www.w3.org/2005/xpath-functions/array`).
+This namespace must be declared in the root element: `xmlns:array="http://www.w3.org/2005/xpath-functions/array"`.
+See also [Arrays and Maps]({{< relref "datastructures" >}}).
+
+`array:size(<array>)`
+: Number of members.
+
+`array:get(<array>, <position>)`
+: Member at the given position (1-based).
+
+`array:append(<array>, <value>)`
+: New array with appended member.
+
+`array:put(<array>, <position>, <value>)`
+: New array with replaced member.
+
+`array:remove(<array>, <position>)`
+: New array without the member at the given position.
+
+`array:subarray(<array>, <start>[, <length>])`
+: Sub-array starting at the given position.
+
+`array:join(<array-sequence>)`
+: Concatenate multiple arrays into one.
+
+`array:flatten(<array>)`
+: Recursively flatten nested arrays into a flat sequence.
+
+
+## Maps
+
+All map functions are in the `map:` namespace (`http://www.w3.org/2005/xpath-functions/map`).
+This namespace must be declared in the root element: `xmlns:map="http://www.w3.org/2005/xpath-functions/map"`.
+See also [Arrays and Maps]({{< relref "datastructures" >}}).
+
+`map:size(<map>)`
+: Number of entries.
+
+`map:keys(<map>)`
+: Sequence of keys.
+
+`map:get(<map>, <key>)`
+: Value for the key (empty sequence if not found).
+
+`map:contains(<map>, <key>)`
+: `true()` if the key exists.
+
+`map:put(<map>, <key>, <value>)`
+: New map with inserted or replaced entry.
+
+`map:remove(<map>, <key>)`
+: New map without the entry.
+
+`map:merge(<map-sequence>)`
+: Merge multiple maps (last values win).
+
+`map:entry(<key>, <value>)`
+: Map with a single entry.

@@ -29,6 +29,8 @@ local M = {
     funcs = {},
     fnNS = "http://www.w3.org/2005/xpath-functions",
     xsNS = "http://www.w3.org/2001/XMLSchema",
+    arrayNS = "http://www.w3.org/2005/xpath-functions/array",
+    mapNS = "http://www.w3.org/2005/xpath-functions/map",
     stringmatch = string.match,
     stringfind = string.find,
     findfile = function(fn) return fn end,
@@ -326,10 +328,24 @@ function M.string_to_tokenlist(str)
                 tokens[#tokens + 1] = { '*', "tokOperator" }
             end
 
-        elseif b == 43 or b == 45 or b == 63 or b == 64 or b == 124 or b == 61 then
-            -- '+', '-', '?', '@', '|', '='
+        elseif b == 43 or b == 45 or b == 63 or b == 64 or b == 61 then
+            -- '+', '-', '?', '@', '='
             tokens[#tokens + 1] = { string_sub(sstr, sc.pos, sc.pos), "tokOperator" }
             sc.pos = sc.pos + 1
+
+        elseif b == 124 then -- '|'
+            sc.pos = sc.pos + 1
+            if sc.pos > slen then
+                tokens[#tokens + 1] = { '|', "tokOperator" }
+                break
+            end
+            local nb = string_byte(sstr, sc.pos)
+            if nb == 124 then -- '||'
+                tokens[#tokens + 1] = { '||', "tokOperator" }
+                sc.pos = sc.pos + 1
+            else
+                tokens[#tokens + 1] = { '|', "tokOperator" }
+            end
 
         elseif b == 44 then  -- ','
             tokens[#tokens + 1] = { ',', "tokComma" }
@@ -425,6 +441,14 @@ function M.string_to_tokenlist(str)
             tokens[#tokens + 1] = { ")", "tokCloseParen" }
             sc.pos = sc.pos + 1
 
+        elseif b == 123 then -- '{'
+            tokens[#tokens + 1] = { '{', "tokOpenCurly" }
+            sc.pos = sc.pos + 1
+
+        elseif b == 125 then -- '}'
+            tokens[#tokens + 1] = { '}', "tokCloseCurly" }
+            sc.pos = sc.pos + 1
+
         else
             return nil, string_format("Invalid char for xpath expression %q", string_sub(sstr, sc.pos, sc.pos))
         end
@@ -445,8 +469,30 @@ local function is_attribute(itm)
     return type(itm) == "table" and itm[".__type"] == "attribute"
 end
 
+local function is_array(itm)
+    return type(itm) == "table" and itm[".__type"] == "array"
+end
+
+local function is_map(itm)
+    return type(itm) == "table" and itm[".__type"] == "map"
+end
+
+local function make_array(members)
+    local a = { [".__type"] = "array" }
+    for i, m in ipairs(members) do a[i] = m end
+    return a
+end
+
+local function make_map(entries)
+    return { [".__type"] = "map", [".__entries"] = entries }
+end
+
 M.is_element = is_element
 M.is_attribute = is_attribute
+M.is_array = is_array
+M.is_map = is_map
+M.make_array = make_array
+M.make_map = make_map
 
 local string_value
 local function number_value(sequence)
@@ -503,6 +549,7 @@ end
 function string_value(seq)
     local ret = {}
     if type(seq) == "string" then return seq end
+    if is_array(seq) or is_map(seq) then return "[array/map]" end
     if type(seq) == "number" then
         if seq ~= seq then
             return "NaN"
@@ -1405,6 +1452,196 @@ local function fnSerialize(ctx, seq)
     return { table_concat(ret) }, nil
 end
 
+-- Array functions
+local function fnArraySize(ctx, seq)
+    local arr = seq[1]
+    if #arr == 1 and is_array(arr[1]) then arr = arr[1] end
+    if not is_array(arr) then return nil, "array:size expects an array" end
+    return { #arr * 1.0 }, nil
+end
+
+local function fnArrayGet(ctx, seq)
+    local arr = seq[1]
+    if #arr == 1 and is_array(arr[1]) then arr = arr[1] end
+    if not is_array(arr) then return nil, "array:get expects an array" end
+    local pos = number_value(seq[2])
+    if not pos or pos < 1 or pos > #arr then return nil, "array:get index out of bounds" end
+    return arr[math_floor(pos)], nil
+end
+
+local function fnArrayPut(ctx, seq)
+    local arr = seq[1]
+    if #arr == 1 and is_array(arr[1]) then arr = arr[1] end
+    if not is_array(arr) then return nil, "array:put expects an array" end
+    local pos = math_floor(number_value(seq[2]))
+    local val = seq[3]
+    if pos < 1 or pos > #arr then return nil, "array:put index out of bounds" end
+    local members = {}
+    for i = 1, #arr do
+        if i == pos then
+            members[i] = val
+        else
+            members[i] = arr[i]
+        end
+    end
+    return { make_array(members) }, nil
+end
+
+local function fnArrayAppend(ctx, seq)
+    local arr = seq[1]
+    if #arr == 1 and is_array(arr[1]) then arr = arr[1] end
+    if not is_array(arr) then return nil, "array:append expects an array" end
+    local val = seq[2]
+    local members = {}
+    for i = 1, #arr do members[i] = arr[i] end
+    members[#members + 1] = val
+    return { make_array(members) }, nil
+end
+
+local function fnArraySubarray(ctx, seq)
+    local arr = seq[1]
+    if #arr == 1 and is_array(arr[1]) then arr = arr[1] end
+    if not is_array(arr) then return nil, "array:subarray expects an array" end
+    local start = math_floor(number_value(seq[2]))
+    local len = seq[3] and math_floor(number_value(seq[3])) or (#arr - start + 1)
+    if start < 1 or start + len - 1 > #arr then return nil, "array:subarray out of bounds" end
+    local members = {}
+    for i = start, start + len - 1 do
+        members[#members + 1] = arr[i]
+    end
+    return { make_array(members) }, nil
+end
+
+local function fnArrayRemove(ctx, seq)
+    local arr = seq[1]
+    if #arr == 1 and is_array(arr[1]) then arr = arr[1] end
+    if not is_array(arr) then return nil, "array:remove expects an array" end
+    local pos = math_floor(number_value(seq[2]))
+    if pos < 1 or pos > #arr then return nil, "array:remove index out of bounds" end
+    local members = {}
+    for i = 1, #arr do
+        if i ~= pos then members[#members + 1] = arr[i] end
+    end
+    return { make_array(members) }, nil
+end
+
+local function fnArrayJoin(ctx, seq)
+    local input = seq[1]
+    local members = {}
+    for _, itm in ipairs(input) do
+        if is_array(itm) then
+            for i = 1, #itm do
+                members[#members + 1] = itm[i]
+            end
+        end
+    end
+    return { make_array(members) }, nil
+end
+
+local function fnArrayFlatten(ctx, seq)
+    local ret = {}
+    local function flatten(val)
+        if is_array(val) then
+            for i = 1, #val do
+                for _, v in ipairs(val[i]) do
+                    flatten(v)
+                end
+            end
+        else
+            ret[#ret + 1] = val
+        end
+    end
+    for _, itm in ipairs(seq[1]) do
+        flatten(itm)
+    end
+    return ret, nil
+end
+
+-- Map functions
+local function fnMapSize(ctx, seq)
+    local m = seq[1]
+    if #m == 1 and is_map(m[1]) then m = m[1] end
+    if not is_map(m) then return nil, "map:size expects a map" end
+    local count = 0
+    for _ in pairs(m[".__entries"]) do count = count + 1 end
+    return { count * 1.0 }, nil
+end
+
+local function fnMapKeys(ctx, seq)
+    local m = seq[1]
+    if #m == 1 and is_map(m[1]) then m = m[1] end
+    if not is_map(m) then return nil, "map:keys expects a map" end
+    local ret = {}
+    for k in pairs(m[".__entries"]) do
+        ret[#ret + 1] = k
+    end
+    table.sort(ret, function(a, b) return tostring(a) < tostring(b) end)
+    return ret, nil
+end
+
+local function fnMapContains(ctx, seq)
+    local m = seq[1]
+    if #m == 1 and is_map(m[1]) then m = m[1] end
+    if not is_map(m) then return nil, "map:contains expects a map" end
+    local key = seq[2][1]
+    return { m[".__entries"][key] ~= nil }, nil
+end
+
+local function fnMapGet(ctx, seq)
+    local m = seq[1]
+    if #m == 1 and is_map(m[1]) then m = m[1] end
+    if not is_map(m) then return nil, "map:get expects a map" end
+    local key = seq[2][1]
+    local entry = m[".__entries"][key]
+    if entry then return entry, nil end
+    return {}, nil
+end
+
+local function fnMapPut(ctx, seq)
+    local m = seq[1]
+    if #m == 1 and is_map(m[1]) then m = m[1] end
+    if not is_map(m) then return nil, "map:put expects a map" end
+    local key = seq[2][1]
+    local val = seq[3]
+    local new_entries = {}
+    for k, v in pairs(m[".__entries"]) do
+        new_entries[k] = v
+    end
+    new_entries[key] = val
+    return { make_map(new_entries) }, nil
+end
+
+local function fnMapRemove(ctx, seq)
+    local m = seq[1]
+    if #m == 1 and is_map(m[1]) then m = m[1] end
+    if not is_map(m) then return nil, "map:remove expects a map" end
+    local key = seq[2][1]
+    local new_entries = {}
+    for k, v in pairs(m[".__entries"]) do
+        if k ~= key then new_entries[k] = v end
+    end
+    return { make_map(new_entries) }, nil
+end
+
+local function fnMapMerge(ctx, seq)
+    local input = seq[1]
+    local new_entries = {}
+    for _, itm in ipairs(input) do
+        if is_map(itm) then
+            for k, v in pairs(itm[".__entries"]) do
+                new_entries[k] = v
+            end
+        end
+    end
+    return { make_map(new_entries) }, nil
+end
+
+local function fnMapEntry(ctx, seq)
+    local key = seq[1][1]
+    local val = seq[2]
+    return { make_map({ [key] = val }) }, nil
+end
+
 local funcs = {
     -- function name, namespace, function, minarg, maxarg
     { "abs",                  M.fnNS, fnAbs,                1, 1 },
@@ -1451,6 +1688,24 @@ local funcs = {
     { "true",                 M.fnNS, fnTrue,               0, 0 },
     { "unparsed-text",        M.fnNS, fnUnparsedText,       1, 1 },
     { "upper-case",           M.fnNS, fnUpperCase,          1, 1 },
+    -- array functions
+    { "size",     M.arrayNS, fnArraySize,     1, 1 },
+    { "get",      M.arrayNS, fnArrayGet,      2, 2 },
+    { "put",      M.arrayNS, fnArrayPut,      3, 3 },
+    { "append",   M.arrayNS, fnArrayAppend,   2, 2 },
+    { "subarray", M.arrayNS, fnArraySubarray, 2, 3 },
+    { "remove",   M.arrayNS, fnArrayRemove,   2, 2 },
+    { "join",     M.arrayNS, fnArrayJoin,     1, 1 },
+    { "flatten",  M.arrayNS, fnArrayFlatten,  1, 1 },
+    -- map functions
+    { "size",     M.mapNS, fnMapSize,     1, 1 },
+    { "keys",     M.mapNS, fnMapKeys,     1, 1 },
+    { "contains", M.mapNS, fnMapContains, 2, 2 },
+    { "get",      M.mapNS, fnMapGet,      2, 2 },
+    { "put",      M.mapNS, fnMapPut,      3, 3 },
+    { "remove",   M.mapNS, fnMapRemove,   2, 2 },
+    { "merge",    M.mapNS, fnMapMerge,    1, 1 },
+    { "entry",    M.mapNS, fnMapEntry,    2, 2 },
 }
 
 local function registerFunction(func)
@@ -1534,7 +1789,7 @@ local function filter(ctx, f)
                     ctx.sequence = {}
                     return {}, nil
                 end
-                if idx == i then
+                if idx == ctx.pos then
                     ctx.sequence = { itm }
                     return { itm }, nil
                 end
@@ -1868,15 +2123,14 @@ function context:precedingSiblingAxis(testfunc)
         if is_element(elt) then
             local curid = elt[".__id"]
             local parent = elt[".__parent"]
-            local startCollecting = true
             for i = 1, #parent do
                 local sibling = parent[i]
                 if is_element(sibling) then
                     if sibling[".__id"] >= curid then
-                        startCollecting = false
+                        break
                     end
                 end
-                if startCollecting and testfunc(self,sibling) then
+                if testfunc(self, sibling) then
                     seq[#seq + 1] = sibling
                 end
             end
@@ -1906,7 +2160,7 @@ end
 M.context = context
 -------------------------
 
-local parse_expr, parse_expr_single, parse_or_expr, parse_and_expr, parse_comparison_expr, parse_range_expr, parse_additive_expr, parse_multiplicative_expr
+local parse_expr, parse_expr_single, parse_or_expr, parse_and_expr, parse_comparison_expr, parse_string_concat_expr, parse_range_expr, parse_additive_expr, parse_multiplicative_expr
 
 ---@type table sequence
 
@@ -2284,7 +2538,7 @@ end
 ---@return evalfunc?
 ---@return string? error
 function parse_comparison_expr(tl)
-    local lhs, errmsg = parse_range_expr(tl)
+    local lhs, errmsg = parse_string_concat_expr(tl)
     if errmsg ~= nil then
         return nil, errmsg
     end
@@ -2300,12 +2554,56 @@ function parse_comparison_expr(tl)
     end
 
     local rhs
-    rhs, errmsg = parse_range_expr(tl)
+    rhs, errmsg = parse_string_concat_expr(tl)
     if errmsg ~= nil then
         return nil, errmsg
     end
 
     return docompare(op[1], lhs, rhs)
+end
+
+-- StringConcatExpr ::= RangeExpr ("||" RangeExpr)*
+--
+---@param tl tokenlist
+---@return evalfunc?
+---@return string? error
+function parse_string_concat_expr(tl)
+    local ef, errmsg = parse_range_expr(tl)
+    if errmsg ~= nil then
+        return nil, errmsg
+    end
+    local op
+    op, errmsg = tl:readNexttokIfIsOneOfValue({ "||" })
+    if errmsg ~= nil then
+        return nil, errmsg
+    end
+    if not op then
+        return ef, nil
+    end
+    local efs = { ef }
+    while true do
+        local ref
+        ref, errmsg = parse_range_expr(tl)
+        if errmsg ~= nil then
+            return nil, errmsg
+        end
+        efs[#efs + 1] = ref
+        op, errmsg = tl:readNexttokIfIsOneOfValue({ "||" })
+        if errmsg ~= nil then
+            return nil, errmsg
+        end
+        if not op then break end
+    end
+    local evaler = function(ctx)
+        local parts = {}
+        for i, e in ipairs(efs) do
+            local seq, err = e(ctx:copy())
+            if err then return nil, err end
+            parts[i] = string_value(seq)
+        end
+        return { table_concat(parts) }, nil
+    end
+    return evaler, nil
 end
 
 -- [11] RangeExpr  ::=  AdditiveExpr ( "to" AdditiveExpr )?
@@ -2729,7 +3027,11 @@ function parse_relative_path_expr(tl)
             for j, itm in ipairs(copysequence) do
                 ctx.sequence = { itm }
                 ctx.pos = j
+                local saved_pos = ctx.pos
+                local saved_size = ctx.size
                 local seq, errmsg = ef(ctx)
+                ctx.pos = saved_pos
+                ctx.size = saved_size
                 if errmsg then
                     return nil, errmsg
                 end
@@ -2933,11 +3235,18 @@ function parse_forward_step(tl)
         local ret = {}
         ctx.positions = {}
         ctx.lengths = {}
+        local reverseAxis = stepAxis == axisParent or stepAxis == axisAncestor or stepAxis == axisAncestorOrSelf or stepAxis == axisPrecedingSibling or stepAxis == axisPreceding
         local c = 1
         for _, itm in ipairs(ctx.sequence) do
             ctx.positions[#ctx.positions + 1] = c
             c = c + 1
             ret[#ret + 1] = itm
+        end
+        if reverseAxis then
+            local n = #ret
+            for i = 1, n do
+                ctx.positions[i] = n - i + 1
+            end
         end
         for i = 1, #ret do
             ctx.lengths[#ctx.lengths + 1] = #ret
@@ -3055,6 +3364,84 @@ function parse_wild_card(tl)
     end
 end
 
+-- Lookup helper: perform lookup on a sequence with a key
+local function do_lookup(seq, key_ef, ctx)
+    local ret = {}
+    -- key_ef returns: {value} for a specific key, or "wildcard" sentinel
+    local key_seq, kerr = key_ef(ctx:copy())
+    if kerr then return nil, kerr end
+
+    for _, itm in ipairs(seq) do
+        if is_array(itm) then
+            if key_seq == "*" then
+                -- wildcard: return all members flattened
+                for i = 1, #itm do
+                    for _, v in ipairs(itm[i]) do
+                        ret[#ret + 1] = v
+                    end
+                end
+            else
+                local idx = number_value(key_seq)
+                if idx and itm[idx] then
+                    for _, v in ipairs(itm[idx]) do
+                        ret[#ret + 1] = v
+                    end
+                end
+            end
+        elseif is_map(itm) then
+            if key_seq == "*" then
+                -- wildcard: return all values
+                for _, v in pairs(itm[".__entries"]) do
+                    for _, vi in ipairs(v) do
+                        ret[#ret + 1] = vi
+                    end
+                end
+            else
+                local key = key_seq[1]
+                if type(key) == "number" then key = key end
+                local entry = itm[".__entries"][key]
+                if entry then
+                    for _, v in ipairs(entry) do
+                        ret[#ret + 1] = v
+                    end
+                end
+            end
+        end
+    end
+    return ret, nil
+end
+
+-- KeySpecifier ::= NCName | IntegerLiteral | ParenthesizedExpr | "*"
+local function parse_key_specifier(tl)
+    local tok, eof = tl:peek()
+    if eof then return nil, "key specifier expected" end
+
+    if tok[2] == "tokOperator" and tok[1] == "*" then
+        tl:read()
+        return function(ctx) return "*", nil end, nil
+    end
+    if tok[2] == "tokNumber" then
+        tl:read()
+        local num = tok[1]
+        return function(ctx) return { num }, nil end, nil
+    end
+    if tok[2] == "tokQName" then
+        tl:read()
+        local name = tok[1]
+        return function(ctx) return { name }, nil end, nil
+    end
+    if tok[2] == "tokOpenParen" then
+        tl:read()
+        local ef, err = parse_expr(tl)
+        if err then return nil, err end
+        if not tl:skipType("tokCloseParen") then
+            return nil, ") expected in key specifier"
+        end
+        return ef, nil
+    end
+    return nil, "key specifier expected, got " .. tok[2]
+end
+
 -- [38] FilterExpr ::= PrimaryExpr PredicateList
 -- [39] PredicateList ::= Predicate*
 --
@@ -3069,25 +3456,34 @@ function parse_filter_expr(tl)
     while true do
         if tl:nextTokIsType("tokOpenBracket") then
             tl:read()
-            local f, errmsg = parse_expr(tl)
-            if errmsg ~= nil then
-                return nil, errmsg
+            local f, ferr = parse_expr(tl)
+            if ferr ~= nil then
+                return nil, ferr
             end
             if not tl:skipType("tokCloseBracket") then
                 return nil, "] expected"
             end
-            local filterfunc = function(ctx)
-                local seq, errmsg = ef(ctx)
-                if errmsg then
-                    return nil, errmsg
+            local prev_ef = ef
+            ef = function(ctx)
+                local seq, serr = prev_ef(ctx)
+                if serr then
+                    return nil, serr
                 end
-
                 ctx.sequence = seq
                 return filter(ctx, f)
             end
-            return filterfunc, nil
+        elseif tl:readNexttokIfIsOneOfValue({"?"}, "tokOperator") then
+            local key_ef, kerr = parse_key_specifier(tl)
+            if kerr then return nil, kerr end
+            local prev_ef = ef
+            ef = function(ctx)
+                local seq, serr = prev_ef(ctx:copy())
+                if serr then return nil, serr end
+                return do_lookup(seq, key_ef, ctx)
+            end
+        else
+            break
         end
-        break
     end
     return ef, nil
 end
@@ -3131,9 +3527,10 @@ function parse_primary_expr(tl)
         local evaler = function(ctx)
             local varname = nexttok[1]
             local value = ctx.vars[varname]
+            if value == nil then return nil, string_format("variable %s does not exist", varname) end
+            if is_array(value) or is_map(value) then return { value }, nil end
             if type(value) == "table" then return value, nil end
-            if not ctx.vars[varname] then return nil, string_format("variable %s does not exist", varname) end
-            return { ctx.vars[varname] }, nil
+            return { value }, nil
         end
         return evaler, nil
     end
@@ -3146,8 +3543,113 @@ function parse_primary_expr(tl)
         return evaler, nil
     end
 
-    -- FunctionCall
+    -- Unary lookup ?key (context item)
+    if nexttok[2] == "tokOperator" and nexttok[1] == "?" then
+        local key_ef, key_err = parse_key_specifier(tl)
+        if key_err then return nil, key_err end
+        local evaler = function(ctx)
+            return do_lookup(ctx.sequence, key_ef, ctx)
+        end
+        return evaler, nil
+    end
+
+    -- SquareArrayConstructor: "[" (ExprSingle ("," ExprSingle)*)? "]"
+    if nexttok[2] == "tokOpenBracket" then
+        if tl:nextTokIsType("tokCloseBracket") then
+            tl:read()
+            return function(ctx) return { make_array({}) }, nil end, nil
+        end
+        local members = {}
+        while true do
+            local mef, merr = parse_expr_single(tl)
+            if merr then return nil, merr end
+            members[#members + 1] = mef
+            if not tl:nextTokIsType("tokComma") then break end
+            tl:read()
+        end
+        if not tl:skipType("tokCloseBracket") then
+            return nil, "] expected in array constructor"
+        end
+        local evaler = function(ctx)
+            local arr_members = {}
+            for _, mef in ipairs(members) do
+                local seq, err = mef(ctx:copy())
+                if err then return nil, err end
+                arr_members[#arr_members + 1] = seq
+            end
+            return { make_array(arr_members) }, nil
+        end
+        return evaler, nil
+    end
+
+    -- FunctionCall, array{}, map{}
     if nexttok[2] == "tokQName" then
+        -- CurlyArrayConstructor: array { Expr }
+        if nexttok[1] == "array" and tl:nextTokIsType("tokOpenCurly") then
+            tl:read() -- consume '{'
+            if tl:nextTokIsType("tokCloseCurly") then
+                tl:read()
+                return function(ctx) return { make_array({}) }, nil end, nil
+            end
+            local ef
+            ef, errmsg = parse_expr(tl)
+            if errmsg then return nil, errmsg end
+            if not tl:skipType("tokCloseCurly") then
+                return nil, "} expected in array constructor"
+            end
+            local evaler = function(ctx)
+                local seq, err = ef(ctx:copy())
+                if err then return nil, err end
+                local members = {}
+                for _, itm in ipairs(seq) do
+                    members[#members + 1] = { itm }
+                end
+                return { make_array(members) }, nil
+            end
+            return evaler, nil
+        end
+
+        -- MapConstructor: map { ExprSingle ":" ExprSingle (, ...)* }
+        if nexttok[1] == "map" and tl:nextTokIsType("tokOpenCurly") then
+            tl:read() -- consume '{'
+            if tl:nextTokIsType("tokCloseCurly") then
+                tl:read()
+                return function(ctx) return { make_map({}) }, nil end, nil
+            end
+            local entries = {} -- list of {key_ef, value_ef}
+            while true do
+                local key_ef, kerr = parse_expr_single(tl)
+                if kerr then return nil, kerr end
+                -- expect ':' separator
+                local colon = tl:readNexttokIfIsOneOfValue({ ":" })
+                if not colon then
+                    return nil, ": expected in map constructor"
+                end
+                local val_ef, verr = parse_expr_single(tl)
+                if verr then return nil, verr end
+                entries[#entries + 1] = { key_ef, val_ef }
+                if not tl:nextTokIsType("tokComma") then break end
+                tl:read()
+            end
+            if not tl:skipType("tokCloseCurly") then
+                return nil, "} expected in map constructor"
+            end
+            local evaler = function(ctx)
+                local map_entries = {}
+                for _, entry in ipairs(entries) do
+                    local kseq, kerr = entry[1](ctx:copy())
+                    if kerr then return nil, kerr end
+                    local vseq, verr = entry[2](ctx:copy())
+                    if verr then return nil, verr end
+                    local key = kseq[1]
+                    if type(key) == "table" then key = string_value(key) end
+                    map_entries[key] = vseq
+                end
+                return { make_map(map_entries) }, nil
+            end
+            return evaler, nil
+        end
+
         if tl:nextTokIsType("tokOpenParen") then
             local fnname = nexttok[1]
             if fnname == "node" or fnname == "element" or fnname == "text" or fnname == "comment" or fnname == "schema-attribute" or fnname == "schema-element" or fnname == "attribute" or fnname == "document" or fnname == "processing-instruction" then

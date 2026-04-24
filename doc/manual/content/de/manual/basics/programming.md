@@ -443,33 +443,18 @@ Der Namensraum für die Funktion muss im Wurzelelement definiert werden (hier: `
 
 ## Datenstrukturen
 
-Der speedata Publisher bietet keine direkte Unterstützung für Datenstrukturen wie Arrays (Felder) oder Dictionaries (Hashes oder Wörterbücher).
-Diese können über Variablen simuliert werden.
-Das Feld a1, a2, ..., ai könnte wie folgt belegt werden:
+Der speedata Publisher unterstützt [Arrays und Maps]({{< relref "/manual/xpathref/datastructures" >}}) als native Datenstrukturen:
 
 ```xml
-<SetVariable variable="{ concat('a',1) }" select="'Value for a1'"/>
-<SetVariable variable="{ concat('a',2) }" select="'Value for a2'"/>
-...
+<!-- Array: geordnete Liste -->
+<SetVariable variable="farben" select="['rot', 'grün', 'blau']"/>
+<Value select="$farben?2"/>  <!-- ergibt: grün -->
+
+<!-- Map: Schlüssel-Wert-Paare -->
+<SetVariable variable="preise" select="map { 'Apfel': 1.50, 'Birne': 2.30 }"/>
+<Value select="$preise?Apfel"/>  <!-- ergibt: 1.5 -->
 ```
 
-Natürlich könnte hier auch direkt `a1` als Variablenname angegeben werden.
-In diesem Beispiel könnte sowohl der Präfix als auch der Suffix dynamisch erzeugt werden:
-
-```xml
-<SetVariable variable="prefix" select="'a'" />
-<SetVariable variable="{ concat($prefix,1) }" select="'Value for a1'"/>
-<SetVariable variable="{ concat($prefix,2) }" select="'Value for a2'"/>
-...
-```
-
-Der lesende Zugriff geht über `sd:variable(...):`
-
-```xml
-<SetVariable variable="prefix" select="'a'" />
-<Message select="sd:variable($prefix,1)"/>
-<Message select="sd:variable($prefix,2)"/>
-...
-```
-
-Die Funktion `sd:variable()` konkateniert alle Argumente als Zeichenkette und nimmt das Ergebnis als Variablennamen.
+Für Arrays stehen Funktionen wie `array:size()`, `array:append()` und `array:flatten()` zur Verfügung.
+Für Maps gibt es `map:keys()`, `map:get()`, `map:put()` und weitere.
+Alle Details und Praxisbeispiele finden sich im Kapitel [Arrays und Maps]({{< relref "/manual/xpathref/datastructures" >}}).
