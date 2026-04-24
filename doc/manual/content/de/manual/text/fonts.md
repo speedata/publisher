@@ -33,7 +33,7 @@ Die letzten drei Schnitte (Fett, Kursiv und Fettkursiv) müssen nicht angegeben 
 
 ![Schriftgröße und Zeilenabstand](/img/14-fontsize-leading.png)
 
-Benutzt wird die Schriftart auf verschiedene Weise: in den Befehlen  `<Textblock>`, `<Text>`, `<Paragraph>`, `<Table>`, `<NoBreak>` und `<Barcode>` kann mit dem Attribut `fontfamily` eine Schriftart mitgegeben werden, z. B. `<Paragraph fontfamily="textschrift">`.
+Benutzt wird die Schriftart auf verschiedene Weise: in den Befehlen  `<Textblock>`, `<Text>`, `<Paragraph>`, `<Table>`, `<NoBreak>` und `<Barcode>` kann mit dem Attribut `fontfamily` eine Schriftart mitgegeben werden, z. B. `<Paragraph fontfamily="textschrift">`.
 Temporär kann mit dem Befehl `<Fontface fontfamily="...">` auf eine andere Familie umgeschaltet werden:
 
 ```xml
@@ -71,7 +71,7 @@ Die direkteste ist mit den Befehlen `B` und `I` umzuschalten, diese können auch
 
 ## Textauszeichnung in den Daten
 
-Sind in den Daten Auszeichnungen vorhanden (z. B. als HTML-Tags), dann geht das prinzipiell genau so:
+Sind in den Daten Auszeichnungen vorhanden (z. B. als HTML-Tags), dann geht das prinzipiell genau so:
 
 ```xml
 <PlaceObject>
@@ -115,9 +115,21 @@ Mit dem Attribut `font-outline` kann man die Linienstärke für eine Konturschri
 
 ![Eine Konturschrift erzeugt man mit der Angabe einer Liniendicke mit dem Attribut `font-outline` bei Paragraph.](/img/outlinehelloworld.png)
 
+## Zeichen über Glyph-ID ausgeben
+
+Mit der Funktion `sd:symbol()` können einzelne Glyphen anhand ihrer ID aus dem aktuellen Font ausgegeben werden. Das ist nützlich, wenn ein Zeichen nicht über Unicode erreichbar ist, z.B. bei Symbolfonts oder dekorativen Schriften:
+
+```xml
+<Paragraph>
+  <Value select="sd:symbol(123, 444)" />
+</Paragraph>
+```
+
+Die Glyph-IDs können z.B. mit Fonttools oder einem Fonteditor ermittelt werden.
+
 ## OpenType Features
 
-Das OpenType Format kennt sogenannte OpenType Features, wie z. B. Mediävalziffern oder Kapitälchen.
+Das OpenType Format kennt sogenannte OpenType Features, wie z. B. Mediävalziffern oder Kapitälchen.
 Manche dieser Features können bei `<LoadFontfile>` aktiviert werden.
 
 ```xml
@@ -125,13 +137,13 @@ Manche dieser Features können bei `<LoadFontfile>` aktiviert werden.
   xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <!-- Oldstyle figures / text figures -->
+  <!-- Mediävalziffern -->
   <LoadFontfile
     name="MinionRegular-osf"
     filename="MinionPro-Regular.otf"
     oldstylefigures="yes" />
 
-  <!-- Small caps -->
+  <!-- Kapitälchen -->
   <LoadFontfile
     name="MinionRegular-smcp"
     filename="MinionPro-Regular.otf"
@@ -162,57 +174,14 @@ Manche dieser Features können bei `<LoadFontfile>` aktiviert werden.
 
 ![Mediävalziffern (oben) machen das Lesen der Ziffern oftmals angenehmer. Echte Kapitälchen (unten) unterscheiden sich deutlich von rechnerisch verkleinerten Großbuchstaben. Die Strichstärke und Proportionen müssen angepasst werden. Je nach verwendeter Schriftart schaltet `smallcaps` auch auf  »Mediävalziffern« um.](/img/osfsmcp.png)
 
-## Harfbuzz
-
-Seit Version 4 des speedata Publishers gibt es einen neuen Modus zum Laden von Schriftdateien: Harfbuzz.
-Er aktiviert die gleichnamige Bibliothek, die nicht nur die Schriftdateien lädt, sondern auch für Anordnung der Zeichen in einem Wort zuständig ist.
-Das ist für lateinische (westliche) Schreibsysteme nicht so wichtig wie für z.B. das Arabische.
-Ein Nebeneffekt der Harfbuzz-Bibliothek ist die umfangreiche Unterstützung für OpenType Features.
-
-Die Benutzung des Harfbuzz Modus ist wie folgt:
+Darüber hinaus können weitere OpenType Features mit dem Attribut `features` eingestellt werden, z.B.
 
 ```xml
-<LoadFontfile
-  name="..."
-  filename="..."
-  mode="harfbuzz" />
-```
-
-Die OpenType features können mit dem Attribut `features` eingestellt werden, also z.B.
-
-```xml
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-    xmlns:sd="urn:speedata:2009/publisher/functions/en"
-    >
-
-    <LoadFontfile name="CrimsonPro-Regular"
-      filename="CrimsonPro-Regular.ttf"
-      mode="harfbuzz" />
-    <LoadFontfile name="CrimsonPro-Regular-frac"
-      filename="CrimsonPro-Regular.ttf"
-      mode="harfbuzz"
-      features="+frac" />
-
-    <DefineFontfamily fontsize="10" leading="12" name="regular">
-        <Regular fontface="CrimsonPro-Regular" />
-    </DefineFontfamily>
-    <DefineFontfamily fontsize="10" leading="12" name="frac">
-        <Regular fontface="CrimsonPro-Regular-frac" />
-    </DefineFontfamily>
-
-    <Record element="data">
-        <PlaceObject>
-            <Textblock>
-                <Paragraph fontfamily="regular">
-                    <Value>Use 1/4 cup of milk.</Value>
-                </Paragraph>
-                <Paragraph fontfamily="frac">
-                    <Value>Use 1/4 cup of milk.</Value>
-                </Paragraph>
-            </Textblock>
-        </PlaceObject>
-    </Record>
-</Layout>
+<LoadFontfile name="CrimsonPro-Regular"
+  filename="CrimsonPro-Regular.ttf" />
+<LoadFontfile name="CrimsonPro-Regular-frac"
+  filename="CrimsonPro-Regular.ttf"
+  features="+frac" />
 ```
 
 ![Oben der Text ohne das OpenType feature `frac`, unten mit.](/img/frac-feature-hb.png)
@@ -221,9 +190,62 @@ Eine Beschreibung aller OpenType Features findet sich unter
 https://docs.microsoft.com/en-us/typography/opentype/spec/featurelist.
 Die voreingestellten Features sind die, die im  [Harfbuzz Handbuch](https://harfbuzz.github.io/shaping-opentype-features.html) beschrieben sind, ohne `liga`.
 
-{{< callout >}}
-Inzwischen ist der Harfbuzz-Modus voreingestellt. Umschalten kann man mit `mode="fontforge"`
-{{< /callout >}}
+## Variable Fonts
+
+Variable Fonts sind Schriftdateien, die mehrere Designachsen in einer einzigen Datei enthalten.
+Anstatt für jeden Schnitt (z.B. Thin, Regular, Bold, Black) eine separate Datei zu benötigen, kann man aus einer einzigen Datei beliebig viele Instanzen mit verschiedenen Achsenwerten erzeugen.
+
+Häufige Achsen sind:
+
+- `wght` – Gewicht (z.B. 100 = Thin, 400 = Regular, 700 = Bold, 900 = Black)
+- `wdth` – Breite (z.B. 75 = Condensed, 100 = Normal, 125 = Expanded)
+- `opsz` – Optische Größe
+- `ital` – Kursiv
+- `slnt` – Neigung
+
+Für die häufigsten Achsen `wght` und `wdth` gibt es Abkürzungen als Attribute:
+
+```xml
+<LoadFontfile name="MyFont-Thin"
+  filename="MyFont-Variable.ttf" weight="100" />
+<LoadFontfile name="MyFont-Regular"
+  filename="MyFont-Variable.ttf" weight="400" />
+<LoadFontfile name="MyFont-Bold"
+  filename="MyFont-Variable.ttf" weight="700" />
+```
+
+Für beliebige Achsen (auch benutzerdefinierte) kann das Kind-Element `<Axis>` verwendet werden:
+
+```xml
+<LoadFontfile name="MyFont-SemiboldCondensed"
+              filename="MyFont-Variable.ttf">
+  <Axis name="wght" value="600" />
+  <Axis name="wdth" value="75" />
+</LoadFontfile>
+```
+
+Beide Varianten können kombiniert werden. Die Attribute `weight` und `width` haben bei Konflikten Vorrang vor gleichnamigen `<Axis>`-Elementen:
+
+```xml
+<LoadFontfile name="MyFont-LightOptical12"
+              filename="MyFont-Variable.ttf" weight="300">
+  <Axis name="opsz" value="12" />
+</LoadFontfile>
+```
+
+Die erzeugten Instanzen verhalten sich danach wie normale statische Schriftdateien und können in `<DefineFontfamily>` wie gewohnt verwendet werden:
+
+```xml
+<LoadFontfile name="Text-Regular"
+  filename="MyFont-Variable.ttf" weight="400" />
+<LoadFontfile name="Text-Bold"
+  filename="MyFont-Variable.ttf" weight="700" />
+
+<DefineFontfamily name="text" fontsize="10pt" leading="12pt">
+  <Regular fontface="Text-Regular" />
+  <Bold fontface="Text-Bold" />
+</DefineFontfamily>
+```
 
 ## In welchem Verzeichnis müssen die Schriftdateien liegen?
 
@@ -285,10 +307,6 @@ Alternativ dazu kann man auch bei  [`<LoadFontfile>`]({{< relref "/reference/loa
 
 So wird erst die Schriftart `texgyreheros-regular.otf` durchsucht, anschließend `fontawesome-webfont.ttf` und zum Schluss  `line-awesome.ttf`.
 
-{{< callout >}}
-Im HarfBuzz-Modus befindet sich der Fallback-Befehl noch im Teststadium und darf derzeit nur ein Fallback enthalten.
-{{< /callout >}}
-
 ## Aliasnamen
 
 Es gibt einen Befehl,  um einen alternativen Namen für einen existierenden Fontnamen zu der Liste der bekannten Fontnamen hinzuzufügen:
@@ -329,4 +347,3 @@ erlauben es nun, die Schriftfamilien allgemein wie folgt zu definieren:
 
 also unabhängig von der tatsächlich genutzten Schriftart.
 Mit den im Abschnitt [Include]({{< relref "include" >}}) beschriebenen Möglichkeiten kann man nun die Fontdefinition in eine separate Datei auslagern und bei Bedarf schnell zwischen verschiedenen Schriftarten wählen, indem die gewünschten Dateien eingebunden werden.
-

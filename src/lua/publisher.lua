@@ -30,6 +30,9 @@ if not hasharfbuzz then
     warning("harfbuzz library not found")
 end
 
+hasharfbuzzsubset, harfbuzzsubset = pcall(require,'luaharfbuzzsubset')
+
+
 
 local commands      = require("publisher.commands")
 local page          = require("publisher.page")

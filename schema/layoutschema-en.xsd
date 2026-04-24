@@ -217,6 +217,23 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
+  <xs:element name="Axis">
+    <xs:annotation>
+      <xs:documentation>Set a design axis of a variable font to a specific value. Use as a child element of LoadFontfile to create a static font instance from a variable font. Any OpenType variation axis can be specified, such as wght (weight), wdth (width), opsz (optical size), ital (italic), slnt (slant), or custom axes.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name="name" use="required">
+        <xs:annotation>
+          <xs:documentation>The four-letter tag of the variation axis (e.g. wght, wdth, opsz).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="value" use="required">
+        <xs:annotation>
+          <xs:documentation>The value to set for the axis.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Attribute">
     <xs:annotation>
       <xs:documentation>Create an attribute for the Element data structure that can be saved to the hard drive with SaveDataset.</xs:documentation>
@@ -236,7 +253,7 @@
   </xs:element>
   <xs:element name="B">
     <xs:annotation>
-      <xs:documentation>Switch to font weight »bold«</xs:documentation>
+      <xs:documentation>Switch to font weight “bold”</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -361,7 +378,7 @@
           <xs:restriction base="xs:token">
             <xs:enumeration value="QRCode">
               <xs:annotation>
-                <xs:documentation>Create an »optimal« QR code in terms of error correction and size.</xs:documentation>
+                <xs:documentation>Create an “optimal” QR code in terms of error correction and size.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="Code128">
@@ -386,7 +403,7 @@
   </xs:element>
   <xs:element name="Bold">
     <xs:annotation>
-      <xs:documentation>Name of the font face that should be used when switching to »bold«.</xs:documentation>
+      <xs:documentation>Name of the font face that should be used when switching to “bold”.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:attribute name="fontface" use="required">
@@ -398,7 +415,7 @@
   </xs:element>
   <xs:element name="BoldItalic">
     <xs:annotation>
-      <xs:documentation>Name of the font face that should be used when switching to »bold italic«.</xs:documentation>
+      <xs:documentation>Name of the font face that should be used when switching to “bold italic”.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:attribute name="fontface" use="required">
@@ -454,9 +471,19 @@
           <xs:documentation>Color of the box. If the color name is a dash (-), a transparent background is used.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="border-color">
+        <xs:annotation>
+          <xs:documentation>Color of the border. Must be used together with border-width. The border is drawn inside the box dimensions, shrinking the fill area accordingly.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="border-width">
+        <xs:annotation>
+          <xs:documentation>Width of the border. Must be used together with border-color.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="bleed">
         <xs:annotation>
-          <xs:documentation>Lets the box increase its size by the amount of trim given in the options. Useful for thumb indexes. The contents of the attribute is either »left«, »right«, »top« or »bottom« or any combination such as »top,right«.</xs:documentation>
+          <xs:documentation>Lets the box increase its size by the amount of trim given in the options. Useful for thumb indexes. The contents of the attribute is either “left”, “right”, “top” or “bottom” or any combination such as “top,right”.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -548,6 +575,20 @@
           <xs:documentation>Set the inner distance (width between contents and the border) to the right edge.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="vertical-align">
+        <xs:annotation>
+          <xs:documentation>Vertical alignment of the box when used inline in a paragraph. Only effective when the box appears inside a paragraph together with text or other inline elements.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="bottom">
+              <xs:annotation>
+                <xs:documentation>Align the bottom of the box with the bottom of the line box (below the text baseline, at the descender line).</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
       <xs:attribute name="width" use="required">
         <xs:annotation>
           <xs:documentation>Width of the box in grid cells or in absolute values.</xs:documentation>
@@ -563,7 +604,7 @@
   </xs:element>
   <xs:element name="Case">
     <xs:annotation>
-      <xs:documentation>Part of a Switch construct. All cases up to the first case which evaluates to »true« will be executed. If no cases match and there is a Otherwise, this will be executed instead.</xs:documentation>
+      <xs:documentation>Part of a Switch construct. All cases up to the first case which evaluates to “true” will be executed. If no cases match and there is a Otherwise, this will be executed instead.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:sequence maxOccurs="unbounded">
@@ -1091,7 +1132,7 @@
       </xs:attribute>
       <xs:attribute name="colorname">
         <xs:annotation>
-          <xs:documentation>The name of the spot color if model is »spotcolor«. The name must match the required color name, such as »PANTONE 116 C«.</xs:documentation>
+          <xs:documentation>The name of the spot color if model is “spotcolor”. The name must match the required color name, such as “PANTONE 116 C”.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="model">
@@ -2559,7 +2600,7 @@
       </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
-          <xs:documentation>Choose the font family. Only »Regular« shape is used at the moment.</xs:documentation>
+          <xs:documentation>Choose the font family. Only “Regular” shape is used at the moment.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="padding-left">
@@ -2726,7 +2767,7 @@
       </xs:attribute>
       <xs:attribute name="maxwidth">
         <xs:annotation>
-          <xs:documentation>The maximum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value »100%« for full width image.</xs:documentation>
+          <xs:documentation>The maximum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value “100%” for full width image.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="maxheight">
@@ -2736,7 +2777,7 @@
       </xs:attribute>
       <xs:attribute name="minwidth">
         <xs:annotation>
-          <xs:documentation>The minimum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value »100%« for full width image.</xs:documentation>
+          <xs:documentation>The minimum width of the image. Only used when clip="no". Value is a number (grid cells), a length or the value “100%” for full width image.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="minheight">
@@ -3051,6 +3092,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="en:Fallback"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="en:Axis"/>
       </xs:sequence>
       <xs:attribute name="name" use="required">
         <xs:annotation>
@@ -3093,7 +3135,7 @@
       </xs:attribute>
       <xs:attribute name="oldstylefigures">
         <xs:annotation>
-          <xs:documentation>Use oldstyle figures if the font includes them. (OpenType feature »onum«)</xs:documentation>
+          <xs:documentation>Use oldstyle figures if the font includes them. (OpenType feature “onum”)</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -3147,6 +3189,16 @@
       <xs:attribute name="step">
         <xs:annotation>
           <xs:documentation>Set the step values for shrinkage / stretching. Value divided by 10 is step in percentage. For example: a value of 20 means increase / decrease size in 2% steps. Default 10.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="weight">
+        <xs:annotation>
+          <xs:documentation>Set the weight axis (wght) of a variable font. This is a shortcut for using the Axis child element with name="wght". Common values are 100 (Thin), 400 (Regular), 700 (Bold), 900 (Black).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="width">
+        <xs:annotation>
+          <xs:documentation>Set the width axis (wdth) of a variable font. This is a shortcut for using the Axis child element with name="wdth". A value of 100 is normal width, lower values are condensed, higher values are expanded.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
@@ -3610,7 +3662,7 @@
       </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
-          <xs:documentation>The name of the fontface for text to be reduced. The default is »text« (lowercase t).</xs:documentation>
+          <xs:documentation>The name of the fontface for text to be reduced. The default is “text” (lowercase t).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
@@ -3626,7 +3678,7 @@
       </xs:choice>
       <xs:attribute name="fontfamily">
         <xs:annotation>
-          <xs:documentation>The name of the font family for the paragraph. The default is »text« (lowercase t).</xs:documentation>
+          <xs:documentation>The name of the font family for the paragraph. The default is “text” (lowercase t).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
@@ -4571,7 +4623,7 @@
   </xs:element>
   <xs:element name="Overlay">
     <xs:annotation>
-      <xs:documentation>Overlays the first element with the following »positions«.</xs:documentation>
+      <xs:documentation>Overlays the first element with the following “positions”.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
@@ -4685,7 +4737,7 @@
       </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
-          <xs:documentation>The name of the font family for the paragraph. The default is »text« (lowercase t).</xs:documentation>
+          <xs:documentation>The name of the font family for the paragraph. The default is “text” (lowercase t).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="font-outline">
@@ -5482,7 +5534,7 @@
   </xs:element>
   <xs:element name="Pagetype">
     <xs:annotation>
-      <xs:documentation>Define a master page. A master page is chosen depending on the criterion given with the attribute »test«.</xs:documentation>
+      <xs:documentation>Define a master page. A master page is chosen depending on the criterion given with the attribute “test”.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
@@ -5836,7 +5888,7 @@
       </xs:choice>
       <xs:attribute name="allocate">
         <xs:annotation>
-          <xs:documentation>Determines if the area of the object is marked as »allocated«. With allocate="no", the cursor position is not changed.</xs:documentation>
+          <xs:documentation>Determines if the area of the object is marked as “allocated”. With allocate="no", the cursor position is not changed.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -6149,7 +6201,7 @@
       </xs:attribute>
       <xs:attribute name="page">
         <xs:annotation>
-          <xs:documentation>The page (later in the PDF), the object should appear on. Number of the keyword »next« for the next page.</xs:documentation>
+          <xs:documentation>The page (later in the PDF), the object should appear on. Number of the keyword “next” for the next page.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="row">
@@ -7699,6 +7751,11 @@
           <xs:documentation>Evaluates the given XPath expression and discards its output.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
+      <xs:attribute name="eval-on-split">
+        <xs:annotation>
+          <xs:documentation>XPath expression that is evaluated at each table split (page break). This expression is evaluated before the background colors of the body rows are re-evaluated. Can be used e.g. with sd:reset-alternating() to restart alternating row colors on each page.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
           <xs:documentation>Name of the font family for the table. If not given, the font face ‘text’ is used.</xs:documentation>
@@ -7956,7 +8013,7 @@
       </xs:choice>
       <xs:attribute name="page">
         <xs:annotation>
-          <xs:documentation>The page the table head should appear on. Defaults to »all«</xs:documentation>
+          <xs:documentation>The page the table head should appear on. Defaults to “all”</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -7967,7 +8024,7 @@
             </xs:enumeration>
             <xs:enumeration value="all">
               <xs:annotation>
-                <xs:documentation>All pages. If »first« is defined, the tablehead appears on all pages but the first.</xs:documentation>
+                <xs:documentation>All pages. If “first” is defined, the tablehead appears on all pages but the first.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
           </xs:restriction>
@@ -8001,6 +8058,7 @@
         <xs:element ref="en:Paragraph"/>
         <xs:element ref="en:Switch"/>
         <xs:element ref="en:Table"/>
+        <xs:element ref="en:Textblock"/>
         <xs:element ref="en:Value"/>
         <xs:element ref="en:VSpace"/>
       </xs:choice>
@@ -8150,7 +8208,7 @@
       </xs:attribute>
       <xs:attribute name="colspan">
         <xs:annotation>
-          <xs:documentation>The number of columns this cell spans. Defaults to 1.</xs:documentation>
+          <xs:documentation>The number of columns this cell spans. Defaults to 1. Use * to span all remaining columns.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="graphic">
@@ -9619,7 +9677,7 @@
       </xs:choice>
       <xs:attribute name="fontfamily">
         <xs:annotation>
-          <xs:documentation>The name of the font family for the paragraph. The default is »text« (lowercase t).</xs:documentation>
+          <xs:documentation>The name of the font family for the paragraph. The default is “text” (lowercase t).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>

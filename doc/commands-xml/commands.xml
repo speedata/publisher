@@ -1140,6 +1140,53 @@
   </command>
   <!--
       *************************
+      * Axis
+      *************************
+  -->
+  <command en="Axis" since="5.5.12">
+    <description xml:lang="en">
+      <para>Set a design axis of a variable font to a specific value. Use as a child element of <cmd name="LoadFontfile"/> to create a static font instance from a variable font. Any OpenType variation axis can be specified, such as <tt>wght</tt> (weight), <tt>wdth</tt> (width), <tt>opsz</tt> (optical size), <tt>ital</tt> (italic), <tt>slnt</tt> (slant), or custom axes.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Setzt eine Designachse einer variablen Schriftart auf einen bestimmten Wert. Wird als Kind-Element von <cmd name="LoadFontfile"/> verwendet, um eine statische Schriftinstanz aus einer variablen Schriftart zu erzeugen. Jede OpenType-Variationsachse kann angegeben werden, z.B. <tt>wght</tt> (Gewicht), <tt>wdth</tt> (Breite), <tt>opsz</tt> (optische Größe), <tt>ital</tt> (Kursiv), <tt>slnt</tt> (Neigung) oder benutzerdefinierte Achsen.</para>
+    </description>
+    <childelements></childelements>
+    <attribute en="name" optional="no" type="text">
+      <description xml:lang="en">
+        <para>The four-letter tag of the variation axis (e.g. <tt>wght</tt>, <tt>wdth</tt>, <tt>opsz</tt>).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der vierstellige Tag der Variationsachse (z.B. <tt>wght</tt>, <tt>wdth</tt>, <tt>opsz</tt>).</para>
+      </description>
+    </attribute>
+    <attribute en="value" optional="no" type="number">
+      <description xml:lang="en">
+        <para>The value to set for the axis.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Der Wert, auf den die Achse gesetzt werden soll.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<LoadFontfile name="MyFont Semibold Condensed"
+              filename="MyFont-Variable.ttf">
+  <Axis name="wght" value="600" />
+  <Axis name="wdth" value="75" />
+</LoadFontfile>
+]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<LoadFontfile name="MeineSchrift Halbfett Schmal"
+              filename="MeineSchrift-Variable.ttf">
+  <Axis name="wght" value="600" />
+  <Axis name="wdth" value="75" />
+</LoadFontfile>
+]]></listing>
+    </example>
+    <seealso><cmd name="LoadFontfile"/></seealso>
+  </command>
+  <!--
+      *************************
       * Attribute
       *************************
   -->
@@ -5346,6 +5393,11 @@
           <cmd name="Fallback"/>
         </oneOrMore>
       </optional>
+      <optional>
+        <oneOrMore>
+          <cmd name="Axis"/>
+        </oneOrMore>
+      </optional>
     </childelements>
     <attribute en="name" type="text" optional="no">
       <description xml:lang="en">
@@ -5388,18 +5440,18 @@
       </description>
       <choice en="fontforge">
         <description xml:lang="en">
-          <para>The old and well tested font handler. Renders western scripts well, but no right-to-left or other complex scripts.</para>
+          <para>The old font handler. Renders western scripts, but no right-to-left or other complex scripts.</para>
         </description>
         <description xml:lang="de">
-          <para>Der alte und gut funktionierende Fonthandler. Funktioniert gut mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen.</para>
+          <para>Der alte Fonthandler. Funktioniert mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen.</para>
         </description>
       </choice>
       <choice en="harfbuzz">
         <description xml:lang="en">
-          <para>The new renderer that will eventually handle all scripts including right-to-left.</para>
+          <para>The renderer that handles all scripts including right-to-left (default).</para>
         </description>
         <description xml:lang="de">
-          <para>Der neue Fonthandler der Arabisch und andere komplexen Schreibsysteme verarbeiten kann.</para>
+          <para>Der Fonthandler, der Arabisch und andere komplexen Schreibsysteme verarbeiten kann (Voreinstellung).</para>
         </description>
       </choice>
     </attribute>
@@ -5483,11 +5535,53 @@
         <para>Setze die Schritte für stauchen und dehnen. Wert geteilt durch 10 = Prozent. Beispiel: 20 erhöht/verringert die Schriftgröße bei Bedarf um 2%. Voreinstellung: 10</para>
       </description>
     </attribute>
+    <attribute en="weight" optional="yes" type="number" since="5.5.12">
+      <description xml:lang="en">
+        <para>Set the weight axis (wght) of a variable font. This is a shortcut for using the <cmd name="Axis"/> child element with <tt>name="wght"</tt>. Common values are 100 (Thin), 400 (Regular), 700 (Bold), 900 (Black).</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setzt die Gewichtsachse (wght) einer variablen Schriftart. Dies ist eine Abkürzung für das Kind-Element <cmd name="Axis"/> mit <tt>name="wght"</tt>. Gängige Werte sind 100 (Thin), 400 (Regular), 700 (Bold), 900 (Black).</para>
+      </description>
+    </attribute>
+    <attribute en="width" optional="yes" type="number" since="5.5.12">
+      <description xml:lang="en">
+        <para>Set the width axis (wdth) of a variable font. This is a shortcut for using the <cmd name="Axis"/> child element with <tt>name="wdth"</tt>. A value of 100 is normal width, lower values are condensed, higher values are expanded.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setzt die Breitenachse (wdth) einer variablen Schriftart. Dies ist eine Abkürzung für das Kind-Element <cmd name="Axis"/> mit <tt>name="wdth"</tt>. Ein Wert von 100 ist die normale Breite, niedrigere Werte sind schmaler, höhere Werte sind breiter.</para>
+      </description>
+    </attribute>
     <example xml:lang="de">
       <listing><![CDATA[<LoadFontfile name="Helvetica" filename="texgyreheros-regular.otf" />
 <LoadFontfile name="Helvetica Fett" filename="texgyreheros-bold.otf" />
 <LoadFontfile name="Helvetica Kursiv" filename="texgyreheros-italic.otf" />
-<LoadFontfile name="Helvetica Fett Kursiv" filename="texgyreheros-bolditalic.otf" />]]></listing>
+<LoadFontfile name="Helvetica Fett Kursiv" filename="texgyreheros-bolditalic.otf" />
+
+<!-- Variable Font mit Gewichts-Abkürzung -->
+<LoadFontfile name="MeineSchrift Regular" filename="MeineSchrift-Variable.ttf" weight="400" />
+<LoadFontfile name="MeineSchrift Fett" filename="MeineSchrift-Variable.ttf" weight="700" />
+
+<!-- Variable Font mit generischen Achsen -->
+<LoadFontfile name="MeineSchrift Spezial" filename="MeineSchrift-Variable.ttf">
+  <Axis name="wght" value="600" />
+  <Axis name="wdth" value="75" />
+</LoadFontfile>]]></listing>
+    </example>
+    <example xml:lang="en">
+      <listing><![CDATA[<LoadFontfile name="Helvetica" filename="texgyreheros-regular.otf" />
+<LoadFontfile name="Helvetica Bold" filename="texgyreheros-bold.otf" />
+<LoadFontfile name="Helvetica Italic" filename="texgyreheros-italic.otf" />
+<LoadFontfile name="Helvetica Bold Italic" filename="texgyreheros-bolditalic.otf" />
+
+<!-- Variable font with weight shortcut -->
+<LoadFontfile name="MyFont Regular" filename="MyFont-Variable.ttf" weight="400" />
+<LoadFontfile name="MyFont Bold" filename="MyFont-Variable.ttf" weight="700" />
+
+<!-- Variable font with generic axes -->
+<LoadFontfile name="MyFont Custom" filename="MyFont-Variable.ttf">
+  <Axis name="wght" value="600" />
+  <Axis name="wdth" value="75" />
+</LoadFontfile>]]></listing>
     </example>
     <info xml:lang="en">
       <para>The fonts are optionally taken from the local search path. On Windows the path <tt>%WINDIR%\Fonts</tt> (usually <tt>C:\Windows\Fonts</tt>) and on Mac OS X the paths <tt>/Library/Fonts</tt> and <tt>/System/Library/Fonts</tt> can be used as fallbacks for fonts. This can be configured with the setting <tt>fontpath</tt>.</para>
@@ -5496,7 +5590,7 @@
       <para>Die Schriftdateien werden aus dem lokalen Suchpfad geladen. Unter Windows wird der Pfad <tt>%WINDIR%\Fonts</tt> (normalerweise <tt>C:\Windows\Fonts</tt>) und auf Mac OS X die Pfade <tt>/Library/Fonts</tt> und <tt>/System/Library/Fonts</tt> können als Ergänzung des lokalen Suchpfads dienen. Das kann mit der Option <tt>fontpath</tt> in der Konfigurationsdatei gesetzt werden.</para>
     </info>
     <seealso>
-      <cmd name="DefineFontfamily"/>, <cmd name="Fallback"/> <ref name="fonts"/></seealso>
+      <cmd name="DefineFontfamily"/>, <cmd name="Fallback"/>, <cmd name="Axis"/> <ref name="fonts"/></seealso>
   </command>
 
   <!--

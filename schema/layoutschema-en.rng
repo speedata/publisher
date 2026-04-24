@@ -391,6 +391,18 @@
          <empty></empty>
       </element>
    </define>
+   <define name="e_Axis">
+      <element name="Axis">
+         <a:documentation>Set a design axis of a variable font to a specific value. Use as a child element of LoadFontfile to create a static font instance from a variable font. Any OpenType variation axis can be specified, such as wght (weight), wdth (width), opsz (optical size), ital (italic), slnt (slant), or custom axes.</a:documentation>
+         <attribute name="name">
+            <a:documentation>The four-letter tag of the variation axis (e.g. wght, wdth, opsz).</a:documentation>
+         </attribute>
+         <attribute name="value">
+            <a:documentation>The value to set for the axis.</a:documentation>
+         </attribute>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Attribute">
       <element name="Attribute">
          <a:documentation>Create an attribute for the Element data structure that can be saved to the hard drive with SaveDataset.</a:documentation>
@@ -405,7 +417,7 @@
    </define>
    <define name="e_B">
       <element name="B">
-         <a:documentation>Switch to font weight »bold«</a:documentation>
+         <a:documentation>Switch to font weight “bold”</a:documentation>
          <interleave>
             <group>
                <zeroOrMore>
@@ -503,7 +515,7 @@
             <a:documentation>Type of the barcode. One of EAN13, Code128 or QRCode.</a:documentation>
             <choice>
                <value>QRCode</value>
-               <a:documentation>Create an »optimal« QR code in terms of error correction and size.</a:documentation>
+               <a:documentation>Create an “optimal” QR code in terms of error correction and size.</a:documentation>
                <value>Code128</value>
                <a:documentation>Generate a code 128 barcode for numbers and text.</a:documentation>
                <value>EAN13</value>
@@ -520,7 +532,7 @@
    </define>
    <define name="e_Bold">
       <element name="Bold">
-         <a:documentation>Name of the font face that should be used when switching to »bold«.</a:documentation>
+         <a:documentation>Name of the font face that should be used when switching to “bold”.</a:documentation>
          <attribute name="fontface">
             <a:documentation>Name of the font for bold.</a:documentation>
          </attribute>
@@ -529,7 +541,7 @@
    </define>
    <define name="e_BoldItalic">
       <element name="BoldItalic">
-         <a:documentation>Name of the font face that should be used when switching to »bold italic«.</a:documentation>
+         <a:documentation>Name of the font face that should be used when switching to “bold italic”.</a:documentation>
          <attribute name="fontface">
             <a:documentation>Name of the font for bold italic.</a:documentation>
          </attribute>
@@ -568,8 +580,18 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="border-color">
+               <a:documentation>Color of the border. Must be used together with border-width. The border is drawn inside the box dimensions, shrinking the fill area accordingly.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="border-width">
+               <a:documentation>Width of the border. Must be used together with border-color.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="bleed">
-               <a:documentation>Lets the box increase its size by the amount of trim given in the options. Useful for thumb indexes. The contents of the attribute is either »left«, »right«, »top« or »bottom« or any combination such as »top,right«.</a:documentation>
+               <a:documentation>Lets the box increase its size by the amount of trim given in the options. Useful for thumb indexes. The contents of the attribute is either “left”, “right”, “top” or “bottom” or any combination such as “top,right”.</a:documentation>
                <choice>
                   <value>auto</value>
                   <a:documentation>Increase the size depending on the position.</a:documentation>
@@ -630,6 +652,15 @@
                <a:documentation>Set the inner distance (width between contents and the border) to the right edge.</a:documentation>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="vertical-align">
+               <a:documentation>Vertical alignment of the box when used inline in a paragraph. Only effective when the box appears inside a paragraph together with text or other inline elements.</a:documentation>
+               <choice>
+                  <value>bottom</value>
+                  <a:documentation>Align the bottom of the box with the bottom of the line box (below the text baseline, at the descender line).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <attribute name="width">
             <a:documentation>Width of the box in grid cells or in absolute values.</a:documentation>
          </attribute>
@@ -644,7 +675,7 @@
    </define>
    <define name="e_Case">
       <element name="Case">
-         <a:documentation>Part of a Switch construct. All cases up to the first case which evaluates to »true« will be executed. If no cases match and there is a Otherwise, this will be executed instead.</a:documentation>
+         <a:documentation>Part of a Switch construct. All cases up to the first case which evaluates to “true” will be executed. If no cases match and there is a Otherwise, this will be executed instead.</a:documentation>
          <interleave>
             <group>
                <attribute name="test">
@@ -1363,7 +1394,7 @@
          </optional>
          <optional>
             <attribute name="colorname">
-               <a:documentation>The name of the spot color if model is »spotcolor«. The name must match the required color name, such as »PANTONE 116 C«.</a:documentation>
+               <a:documentation>The name of the spot color if model is “spotcolor”. The name must match the required color name, such as “PANTONE 116 C”.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -2635,7 +2666,7 @@
                </optional>
                <optional>
                   <attribute name="fontfamily">
-                     <a:documentation>Choose the font family. Only »Regular« shape is used at the moment.</a:documentation>
+                     <a:documentation>Choose the font family. Only “Regular” shape is used at the moment.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -2782,7 +2813,7 @@
                </optional>
                <optional>
                   <attribute name="maxwidth">
-                     <a:documentation>The maximum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value »100%« for full width image.</a:documentation>
+                     <a:documentation>The maximum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value “100%” for full width image.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -2792,7 +2823,7 @@
                </optional>
                <optional>
                   <attribute name="minwidth">
-                     <a:documentation>The minimum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value »100%« for full width image.</a:documentation>
+                     <a:documentation>The minimum width of the image. Only used when clip=&#34;no&#34;. Value is a number (grid cells), a length or the value “100%” for full width image.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -3010,7 +3041,7 @@
                </optional>
                <optional>
                   <attribute name="oldstylefigures">
-                     <a:documentation>Use oldstyle figures if the font includes them. (OpenType feature »onum«)</a:documentation>
+                     <a:documentation>Use oldstyle figures if the font includes them. (OpenType feature “onum”)</a:documentation>
                      <choice>
                         <value>yes</value>
                         <a:documentation>Use oldstyle figures.</a:documentation>
@@ -3051,8 +3082,23 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="weight">
+                     <a:documentation>Set the weight axis (wght) of a variable font. This is a shortcut for using the Axis child element with name=&#34;wght&#34;. Common values are 100 (Thin), 400 (Regular), 700 (Bold), 900 (Black).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="width">
+                     <a:documentation>Set the width axis (wdth) of a variable font. This is a shortcut for using the Axis child element with name=&#34;wdth&#34;. A value of 100 is normal width, lower values are condensed, higher values are expanded.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <oneOrMore>
                      <ref name="e_Fallback"></ref>
+                  </oneOrMore>
+               </optional>
+               <optional>
+                  <oneOrMore>
+                     <ref name="e_Axis"></ref>
                   </oneOrMore>
                </optional>
             </group>
@@ -3675,7 +3721,7 @@
                </optional>
                <optional>
                   <attribute name="fontfamily">
-                     <a:documentation>The name of the fontface for text to be reduced. The default is »text« (lowercase t).</a:documentation>
+                     <a:documentation>The name of the fontface for text to be reduced. The default is “text” (lowercase t).</a:documentation>
                   </attribute>
                </optional>
                <zeroOrMore>
@@ -3715,7 +3761,7 @@
             <group>
                <optional>
                   <attribute name="fontfamily">
-                     <a:documentation>The name of the font family for the paragraph. The default is »text« (lowercase t).</a:documentation>
+                     <a:documentation>The name of the font family for the paragraph. The default is “text” (lowercase t).</a:documentation>
                   </attribute>
                </optional>
                <oneOrMore>
@@ -4360,7 +4406,7 @@
    </define>
    <define name="e_Overlay">
       <element name="Overlay">
-         <a:documentation>Overlays the first element with the following »positions«.</a:documentation>
+         <a:documentation>Overlays the first element with the following “positions”.</a:documentation>
          <interleave>
             <group>
                <optional>
@@ -4455,7 +4501,7 @@
                </optional>
                <optional>
                   <attribute name="fontfamily">
-                     <a:documentation>The name of the font family for the paragraph. The default is »text« (lowercase t).</a:documentation>
+                     <a:documentation>The name of the font family for the paragraph. The default is “text” (lowercase t).</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -4749,7 +4795,7 @@
    </define>
    <define name="e_Pagetype">
       <element name="Pagetype">
-         <a:documentation>Define a master page. A master page is chosen depending on the criterion given with the attribute »test«.</a:documentation>
+         <a:documentation>Define a master page. A master page is chosen depending on the criterion given with the attribute “test”.</a:documentation>
          <interleave>
             <group>
                <optional>
@@ -4996,7 +5042,7 @@
             <group>
                <optional>
                   <attribute name="allocate">
-                     <a:documentation>Determines if the area of the object is marked as »allocated«. With allocate=&#34;no&#34;, the cursor position is not changed.</a:documentation>
+                     <a:documentation>Determines if the area of the object is marked as “allocated”. With allocate=&#34;no&#34;, the cursor position is not changed.</a:documentation>
                      <choice>
                         <value>yes</value>
                         <a:documentation>Occupy space in the grid (default for grid positioning).</a:documentation>
@@ -5183,7 +5229,7 @@
                </optional>
                <optional>
                   <attribute name="page">
-                     <a:documentation>The page (later in the PDF), the object should appear on. Number of the keyword »next« for the next page.</a:documentation>
+                     <a:documentation>The page (later in the PDF), the object should appear on. Number of the keyword “next” for the next page.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -6487,6 +6533,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="eval-on-split">
+                     <a:documentation>XPath expression that is evaluated at each table split (page break). This expression is evaluated before the background colors of the body rows are re-evaluated. Can be used e.g. with sd:reset-alternating() to restart alternating row colors on each page.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="fontfamily">
                      <a:documentation>Name of the font family for the table. If not given, the font face ‘text’ is used.</a:documentation>
                   </attribute>
@@ -6693,12 +6744,12 @@
             <group>
                <optional>
                   <attribute name="page">
-                     <a:documentation>The page the table head should appear on. Defaults to »all«</a:documentation>
+                     <a:documentation>The page the table head should appear on. Defaults to “all”</a:documentation>
                      <choice>
                         <value>first</value>
                         <a:documentation>Only appear on the first page.</a:documentation>
                         <value>all</value>
-                        <a:documentation>All pages. If »first« is defined, the tablehead appears on all pages but the first.</a:documentation>
+                        <a:documentation>All pages. If “first” is defined, the tablehead appears on all pages but the first.</a:documentation>
                      </choice>
                   </attribute>
                </optional>
@@ -6846,7 +6897,7 @@
                </optional>
                <optional>
                   <attribute name="colspan">
-                     <a:documentation>The number of columns this cell spans. Defaults to 1.</a:documentation>
+                     <a:documentation>The number of columns this cell spans. Defaults to 1. Use * to span all remaining columns.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -6975,6 +7026,7 @@
                      <ref name="e_Paragraph"></ref>
                      <ref name="e_Switch"></ref>
                      <ref name="e_Table"></ref>
+                     <ref name="e_Textblock"></ref>
                      <ref name="e_Value"></ref>
                      <ref name="e_VSpace"></ref>
                   </choice>
@@ -7674,7 +7726,7 @@
             <group>
                <optional>
                   <attribute name="fontfamily">
-                     <a:documentation>The name of the font family for the paragraph. The default is »text« (lowercase t).</a:documentation>
+                     <a:documentation>The name of the font family for the paragraph. The default is “text” (lowercase t).</a:documentation>
                   </attribute>
                </optional>
                <oneOrMore>

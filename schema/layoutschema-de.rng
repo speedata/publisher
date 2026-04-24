@@ -391,6 +391,18 @@
          <empty></empty>
       </element>
    </define>
+   <define name="e_Axis">
+      <element name="Axis">
+         <a:documentation>Setzt eine Designachse einer variablen Schriftart auf einen bestimmten Wert. Wird als Kind-Element von LoadFontfile verwendet, um eine statische Schriftinstanz aus einer variablen Schriftart zu erzeugen. Jede OpenType-Variationsachse kann angegeben werden, z.B. wght (Gewicht), wdth (Breite), opsz (optische Größe), ital (Kursiv), slnt (Neigung) oder benutzerdefinierte Achsen.</a:documentation>
+         <attribute name="name">
+            <a:documentation>Der vierstellige Tag der Variationsachse (z.B. wght, wdth, opsz).</a:documentation>
+         </attribute>
+         <attribute name="value">
+            <a:documentation>Der Wert, auf den die Achse gesetzt werden soll.</a:documentation>
+         </attribute>
+         <empty></empty>
+      </element>
+   </define>
    <define name="e_Attribute">
       <element name="Attribute">
          <a:documentation>Erzeugt ein Attribut für die Element Datenstruktur, die mithilfe von SaveDataset auf Festplatte gespeichert werden kann.</a:documentation>
@@ -568,6 +580,16 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="border-color">
+               <a:documentation>Farbe des Rahmens. Muss zusammen mit border-width verwendet werden. Der Rahmen wird innerhalb der Box-Abmessungen gezeichnet und verkleinert die Füllfläche entsprechend.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="border-width">
+               <a:documentation>Breite des Rahmens. Muss zusammen mit border-color verwendet werden.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="bleed">
                <a:documentation>Lässt die Box am Rand größer werden. Wird z.B. für Daumenregister benutzt, die inkl. Beschnitt ganz zum Rand gehen sollen. Inhalt ist eine Ortsangabe bestehend aus den Werten »top«, »bottom«, »left« oder »right« bzw. eine Kombination wie »top,right«.</a:documentation>
                <choice>
@@ -628,6 +650,15 @@
          <optional>
             <attribute name="padding-right">
                <a:documentation>Bestimmt den Innenabstand der Box (rechts)</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="vertical-align">
+               <a:documentation>Vertikale Ausrichtung der Box bei Verwendung als Inline-Element in einem Absatz. Wirkt nur, wenn die Box zusammen mit Text oder anderen Inline-Elementen in einem Absatz steht.</a:documentation>
+               <choice>
+                  <value>bottom</value>
+                  <a:documentation>Die Unterkante der Box an der Unterkante der Zeilenbox ausrichten (unterhalb der Grundlinie, an der Unterlängenlinie).</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <attribute name="width">
@@ -3051,8 +3082,23 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="weight">
+                     <a:documentation>Setzt die Gewichtsachse (wght) einer variablen Schriftart. Dies ist eine Abkürzung für das Kind-Element Axis mit name=&#34;wght&#34;. Gängige Werte sind 100 (Thin), 400 (Regular), 700 (Bold), 900 (Black).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="width">
+                     <a:documentation>Setzt die Breitenachse (wdth) einer variablen Schriftart. Dies ist eine Abkürzung für das Kind-Element Axis mit name=&#34;wdth&#34;. Ein Wert von 100 ist die normale Breite, niedrigere Werte sind schmaler, höhere Werte sind breiter.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <oneOrMore>
                      <ref name="e_Fallback"></ref>
+                  </oneOrMore>
+               </optional>
+               <optional>
+                  <oneOrMore>
+                     <ref name="e_Axis"></ref>
                   </oneOrMore>
                </optional>
             </group>
@@ -6487,6 +6533,11 @@
                   </attribute>
                </optional>
                <optional>
+                  <attribute name="eval-on-split">
+                     <a:documentation>XPath-Ausdruck, der bei jedem Tabellenumbruch (Seitenumbruch) ausgewertet wird. Dieser Ausdruck wird vor der Neuberechnung der Hintergrundfarben der Tabellenzeilen ausgewertet. Kann z.B. mit sd:reset-alternating() verwendet werden, um alternierende Zeilenfarben auf jeder Seite neu zu starten.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="fontfamily">
                      <a:documentation>Name der Schriftfamilie, die benutzt werden soll. Wenn keine Schriftart angegeben ist, wird auf die Schriftart ›text‹ umgeschaltet.</a:documentation>
                   </attribute>
@@ -6846,7 +6897,7 @@
                </optional>
                <optional>
                   <attribute name="colspan">
-                     <a:documentation>Die Anzahl der Spalten, die die Zelle überdecken soll. Voreinstellung ist 1.</a:documentation>
+                     <a:documentation>Die Anzahl der Spalten, die die Zelle überdecken soll. Voreinstellung ist 1. Mit * werden alle verbleibenden Spalten überdeckt.</a:documentation>
                   </attribute>
                </optional>
                <optional>
@@ -6975,6 +7026,7 @@
                      <ref name="e_Paragraph"></ref>
                      <ref name="e_Switch"></ref>
                      <ref name="e_Table"></ref>
+                     <ref name="e_Textblock"></ref>
                      <ref name="e_Value"></ref>
                      <ref name="e_VSpace"></ref>
                   </choice>

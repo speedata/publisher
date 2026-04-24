@@ -90,6 +90,34 @@ The result is the same as above. The tags can also be written in capital letters
 If the data is not in well-formed XML but in HTML format for example, you can use the layout function `sd:decode-html()` to interpret it.
 {{< /callout >}}
 
+## Outline font
+
+The `font-outline` attribute can be used to specify the line width for an outline font:
+
+```xml
+<PlaceObject>
+    <Textblock>
+        <Paragraph font-outline="0.3pt">
+            <Value>Hello nice world</Value>
+        </Paragraph>
+    </Textblock>
+</PlaceObject>
+```
+
+![An outline font is created by specifying a line thickness with the `font-outline` attribute at Paragraph.](/img/outlinehelloworld.png)
+
+## Accessing glyphs by ID
+
+The function `sd:symbol()` can be used to output individual glyphs by their ID from the current font. This is useful when a character is not accessible via Unicode, e.g. with symbol fonts or decorative typefaces:
+
+```xml
+<Paragraph>
+  <Value select="sd:symbol(123, 444)" />
+</Paragraph>
+```
+
+Glyph IDs can be determined using tools like fonttools or a font editor.
+
 ## OpenType Features
 
 The OpenType format knows so-called OpenType features, such as old style figures or small caps. Some of these features can be activated at `<LoadFontfile>`.
@@ -136,73 +164,14 @@ The OpenType format knows so-called OpenType features, such as old style figures
 
 ![Text figures (above) often make reading the numbers more pleasant. Real small caps (below) differ significantly from mathematically reduced capital letters. The stroke weight and proportions must be adjusted. Depending on the font used, smallcaps also switches to "old style figures".](/img/osfsmcp.png)
 
-## Outline font
-
-The `font-outline` attribute can be used to specify the line width for an outline font:
+Additional OpenType features can be set with the `features` attribute, for example
 
 ```xml
-<PlaceObject>
-    <Textblock>
-        <Paragraph font-outline="0.3pt">
-            <Value>Hello nice world</Value>
-        </Paragraph>
-    </Textblock>
-</PlaceObject>
-```
-
-![An outline font is created by specifying a line thickness with the `font-outline` attribute at Paragraph.](/img/outlinehelloworld.png)
-
-## Harfbuzz
-
-Since version 4 of speedata Publisher there is a new mode for loading font files: HarfBuzz.
-It activates the library of the same name, which not only loads the font files, but is also responsible for the arrangement of characters in a word (text shaping).
-This is not as important for western writing systems as for e.g. Arabic.
-A side effect of the harfbuzz library is the extensive support for OpenType features.
-
-The HarfBuzz mode is used as follows:
-
-```xml
-<LoadFontfile
-  name="..."
-  filename="..."
-  mode="harfbuzz" />
-```
-
-The OpenType features can be set with the `features` attribute, for example
-
-```xml
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-    xmlns:sd="urn:speedata:2009/publisher/functions/en"
-    >
-
-    <LoadFontfile name="CrimsonPro-Regular"
-      filename="CrimsonPro-Regular.ttf"
-      mode="harfbuzz" />
-    <LoadFontfile name="CrimsonPro-Regular-frac"
-      filename="CrimsonPro-Regular.ttf"
-      mode="harfbuzz"
-      features="+frac" />
-
-    <DefineFontfamily fontsize="10" leading="12" name="regular">
-        <Regular fontface="CrimsonPro-Regular" />
-    </DefineFontfamily>
-    <DefineFontfamily fontsize="10" leading="12" name="frac">
-        <Regular fontface="CrimsonPro-Regular-frac" />
-    </DefineFontfamily>
-
-    <Record element="data">
-        <PlaceObject>
-            <Textblock>
-                <Paragraph fontfamily="regular">
-                    <Value>Use 1/4 cup of milk.</Value>
-                </Paragraph>
-                <Paragraph fontfamily="frac">
-                    <Value>Use 1/4 cup of milk.</Value>
-                </Paragraph>
-            </Textblock>
-        </PlaceObject>
-    </Record>
-</Layout>
+<LoadFontfile name="CrimsonPro-Regular"
+  filename="CrimsonPro-Regular.ttf" />
+<LoadFontfile name="CrimsonPro-Regular-frac"
+  filename="CrimsonPro-Regular.ttf"
+  features="+frac" />
 ```
 
 ![Upper text without the `frac` feature, lower text with the feature.](/img/frac-feature-hb.png)
@@ -211,9 +180,62 @@ A complete description of the OpenType features can be found on
 https://docs.microsoft.com/en-us/typography/opentype/spec/featurelist.
 The default features are the ones that are mentioned in the  [harfbuzz manual](https://harfbuzz.github.io/shaping-opentype-features.html) but without `liga`.
 
-{{< callout >}}
-The default mode is now the Harfbuzz mode. Set the old mode with `mode="fontforge"`.
-{{< /callout >}}
+## Variable Fonts
+
+Variable fonts are font files that contain multiple design axes in a single file.
+Instead of requiring a separate file for each style (e.g. Thin, Regular, Bold, Black), you can create any number of instances with different axis values from a single file.
+
+Common axes are:
+
+- `wght` – Weight (e.g. 100 = Thin, 400 = Regular, 700 = Bold, 900 = Black)
+- `wdth` – Width (e.g. 75 = Condensed, 100 = Normal, 125 = Expanded)
+- `opsz` – Optical size
+- `ital` – Italic
+- `slnt` – Slant
+
+For the most common axes `wght` and `wdth`, there are shortcut attributes:
+
+```xml
+<LoadFontfile name="MyFont-Thin"
+  filename="MyFont-Variable.ttf" weight="100" />
+<LoadFontfile name="MyFont-Regular"
+  filename="MyFont-Variable.ttf" weight="400" />
+<LoadFontfile name="MyFont-Bold"
+  filename="MyFont-Variable.ttf" weight="700" />
+```
+
+For arbitrary axes (including custom ones), the `<Axis>` child element can be used:
+
+```xml
+<LoadFontfile name="MyFont-SemiboldCondensed"
+              filename="MyFont-Variable.ttf">
+  <Axis name="wght" value="600" />
+  <Axis name="wdth" value="75" />
+</LoadFontfile>
+```
+
+Both approaches can be combined. The `weight` and `width` attributes take precedence over `<Axis>` elements with the same tag:
+
+```xml
+<LoadFontfile name="MyFont-LightOptical12"
+              filename="MyFont-Variable.ttf" weight="300">
+  <Axis name="opsz" value="12" />
+</LoadFontfile>
+```
+
+The resulting instances behave like regular static font files and can be used in `<DefineFontfamily>` as usual:
+
+```xml
+<LoadFontfile name="Text-Regular"
+  filename="MyFont-Variable.ttf" weight="400" />
+<LoadFontfile name="Text-Bold"
+  filename="MyFont-Variable.ttf" weight="700" />
+
+<DefineFontfamily name="text" fontsize="10pt" leading="12pt">
+  <Regular fontface="Text-Regular" />
+  <Bold fontface="Text-Bold" />
+</DefineFontfamily>
+```
 
 ## In which directory must the font files be located?
 
@@ -269,10 +291,6 @@ Alternatively, you can also specify a replacement font at `<LoadFontfile>`, whic
 
 First the font `texgyreheros-regular.otf` is searched, then `fontawesome-webfont.ttf` and finally `line-awesome.ttf`.
 
-{{< callout >}}
-Using the HarfBuzz mode together with the Fallback command is still experimental and must only contain one Fallback font.
-{{< /callout >}}
-
 ## Aliases
 
 There is a command to add an alternate name for an existing font name to the list of known font names:
@@ -312,4 +330,3 @@ now allow to define font families in general as follows:
 ```
 
 i.e. independent of the font actually used. With the options described in the section [splitlayout]({{< relref "controllayout" >}}), you can now move the font definition into a separate file and, if necessary, quickly choose between different fonts by including the desired files.
-

@@ -2781,8 +2781,11 @@ function commands.load_fontfile( layoutxml,dataxml )
     local space            = publisher.read_attribute(layoutxml,dataxml,"space",           "number")
     local step             = publisher.read_attribute(layoutxml,dataxml,"step",            "number")
     local stretch          = publisher.read_attribute(layoutxml,dataxml,"stretch",         "number")
+    local weight           = publisher.read_attribute(layoutxml,dataxml,"weight",          "number")
+    local width            = publisher.read_attribute(layoutxml,dataxml,"width",           "number")
 
     local fallbacks = {}
+    local axes = {}
     for _,v in ipairs(layoutxml) do
         if type(v) == "table" then
             if v[".__local_name"] == "Fallback" then
@@ -2791,10 +2794,70 @@ function commands.load_fontfile( layoutxml,dataxml )
                 else
                     fallbacks[#fallbacks + 1] = v.filename
                 end
+            elseif v[".__local_name"] == "Axis" then
+                local axis_name, axis_value
+                if publisher.newxpath then
+                    axis_name  = v[".__attributes"].name
+                    axis_value = tonumber(v[".__attributes"].value)
+                else
+                    axis_name  = v.name
+                    axis_value = tonumber(v.value)
+                end
+                if axis_name and axis_value then
+                    axes[axis_name] = axis_value
+                end
             end
         end
     end
 
+    -- Shortcut attributes override Axis child elements
+    if weight then axes["wght"] = weight end
+    if width  then axes["wdth"] = width  end
+
+    -- Variable font: pin axes via harfbuzz subsetting
+    if next(axes) then
+        if not hasharfbuzzsubset then
+            err("Variable fonts require the luaharfbuzzsubset library")
+        else
+            if publisher.lowercase then filename = unicode.utf8.lower(filename) end
+            local filepath = kpse.find_file(filename)
+            if not filepath then
+                err("Variable font file %q not found",filename)
+            else
+                local face = harfbuzz.Face.new(filepath)
+                local input = harfbuzzsubset.SubsetInput.new()
+                input:keep_everything()
+
+                for axis_tag, axis_val in pairs(axes) do
+                    local tag = harfbuzz.Tag.new(axis_tag)
+                    input:pin_axis_location(face, tag, axis_val)
+                end
+
+                local new_face = harfbuzzsubset.subset(face, input)
+                local blob = new_face:blob()
+
+                local tmpdir = os.getenv("SP_TEMPDIR")
+                if tmpdir then
+                    lfs.mkdir(tmpdir)
+                    local outname = name:gsub("[^%w%-_]","_") .. ".ttf"
+                    local outpath = tmpdir .. publisher.os_separator .. outname
+                    local fh, e = io.open(outpath, "wb")
+                    if fh then
+                        fh:write(blob:get_data())
+                        fh:close()
+                        filename = outpath
+                        local axis_desc = {}
+                        for k,v in pairs(axes) do axis_desc[#axis_desc+1] = k .. "=" .. v end
+                        main.log("info","Variable font instance created","axes",table.concat(axis_desc,","),"file",outpath)
+                    else
+                        err("Could not write variable font instance: %s", e)
+                    end
+                else
+                    err("SP_TEMPDIR not set, cannot create variable font instance")
+                end
+            end
+        end
+    end
 
     local extra_parameter = {
         space            = space or 25,
