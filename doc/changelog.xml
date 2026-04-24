@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.5">
+    <entry version="5.5.12" date="2026-04-24" sha1="bd1879f6b2d0e0564dd1237bc95928f0fb7edc0d">
+        <en summary="Variable font support.">Load variable fonts and pin design axes (weight, width, optical size, etc.) to create static font instances using harfbuzz subsetting. Adds <tt>weight</tt> and <tt>width</tt> shortcut attributes and a generic <tt>Axis</tt> child element to <tt>LoadFontfile</tt>.</en>
+        <de summary="Unterstützung für variable Schriftarten.">Variable Fonts laden und Designachsen (Gewicht, Breite, optische Größe usw.) per Harfbuzz-Subsetting auf feste Werte setzen. Neue Attribute <tt>weight</tt> und <tt>width</tt> sowie das Kind-Element <tt>Axis</tt> bei <tt>LoadFontfile</tt>.</de>
+    </entry>
+    <entry version="5.5.12" date="2026-04-24" sha1="bb05e8735938af432c496de701f422a25a4ca60a">
+        <en summary="Reduce memory usage for large data XML files by ~50%.">Streaming SAX parser builds Lua tables directly without an intermediate Go tree, omits unused metadata fields in data mode, handles ignoreeol during parsing, and fixes createTable size hints to avoid repeated hash table resizes.</en>
+        <de summary="Speicherverbrauch bei großen Daten-XML-Dateien um ca. 50% reduziert.">Der Streaming-SAX-Parser erzeugt Lua-Tabellen direkt ohne Go-Zwischenbaum, lässt im Datenmodus ungenutzte Metadaten-Felder weg, behandelt ignoreeol bereits beim Parsen und nutzt korrekte createTable-Größenhinweise, um wiederholte Hash-Tabellen-Resizes zu vermeiden.</de>
+    </entry>
+    <entry version="5.5.12" date="2026-04-24" sha1="c91ee9df85268be7f9602fb1e34236393b5900a4">
+        <en summary="XPath 3.1 arrays, maps, lookup operator and string concatenation.">Add arrays (<tt>[1,2,3]</tt>, <tt>array { 1 to 3 }</tt>), maps (<tt>map { 'key': value }</tt>), the lookup operator (<tt>?</tt>), and the <tt>||</tt> string concatenation operator to XPath. Includes <tt>array:</tt> and <tt>map:</tt> function libraries (size, get, put, append, keys, contains, merge, etc.).</en>
+        <de summary="XPath 3.1 Arrays, Maps, Lookup-Operator und String-Verkettung.">Arrays (<tt>[1,2,3]</tt>, <tt>array { 1 to 3 }</tt>), Maps (<tt>map { 'key': value }</tt>), der Lookup-Operator (<tt>?</tt>) und der <tt>||</tt>-Operator zur String-Verkettung wurden in XPath hinzugefügt. Enthält <tt>array:</tt>- und <tt>map:</tt>-Funktionsbibliotheken (size, get, put, append, keys, contains, merge, usw.).</de>
+    </entry>
     <entry version="5.5.11" date="2026-04-23" sha1="b3bca5b4c62b0a64d9f1c448a7512fec915c09bf">
         <en summary="Implement fn:serialize() in XPath.">The XPath function <tt>fn:serialize()</tt> converts a node set into its XML string representation.</en>
         <de summary="fn:serialize() in XPath implementiert.">Die XPath-Funktion <tt>fn:serialize()</tt> wandelt ein Node-Set in seine XML-Stringdarstellung um.</de>

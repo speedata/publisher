@@ -3,7 +3,23 @@
 This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/en/).
 
 
+# Version 5.5
+
+* XPath Support for arrays and maps, fn:serialize()
+* New documentation
+* PDF/UA (accessibility) enhancements
+* HTML/CSS enhancements (colspan/rowspan in tables,..)
+* New match attribute in Record (similar to XSLT template matching)
+* Tables: alternating row colors restart on each page.
+* Tables: colspan="*"
+* Remove Debian package generation
+* Memory usage reduction
+* Variable fonts
+
+
 ## Version 5.4
+
+Released 2026-03-04
 
 * Massive speed improvements!
 * More unit testing and refactoring
