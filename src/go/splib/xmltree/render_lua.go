@@ -13,7 +13,7 @@ type LuaStater interface {
 // RenderToLua converts a parsed XML tree (Node) into a Lua table representation
 // following your original format (. __type, . __ns, numbered children, etc.).
 func RenderToLua(l LuaStater, doc *Node) {
-	l.CreateTable(0, 1)
+	l.CreateTable(len(doc.Children), 1)
 	l.AddKeyValueToTable(-1, ".__type", "document")
 
 	// Add child elements or text nodes as numbered indices
@@ -33,7 +33,7 @@ func RenderToLua(l LuaStater, doc *Node) {
 
 // pushElement builds a Lua table for a single XML element node.
 func pushElement(l LuaStater, n *Node) {
-	l.CreateTable(0, 8)
+	l.CreateTable(len(n.Children), 10)
 
 	l.AddKeyValueToTable(-1, ".__type", "element")
 	l.AddKeyValueToTable(-1, ".__id", n.ID)

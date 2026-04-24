@@ -1502,9 +1502,15 @@ function initialize_luatex_and_generate_pdf()
         data.namespaces = dataxml[1][".__ns"]
     end
 
-    -- options.ignoreeol is now set
+    -- options.ignoreeol is now set.
+    -- In DataMode (newxpath), element metatables are already set during
+    -- Go XML parsing, so fixup_xmlfile only needs to run if ignoreeol
+    -- was set in the layout (after loading) and wasn't handled by Go.
     if newxpath then
-        fixup_xmlfile(dataxml, options.ignoreeol or false)
+        local needs_eol = (options.ignoreeol or false) and not dataxml.ignoreeol_done
+        if needs_eol then
+            fixup_xmlfile(dataxml, true)
+        end
     end
 
     -- We define two graphic states for overprinting on and off.
@@ -2294,7 +2300,7 @@ end
 -- adds index metatble for namespace lookup to layout xml
 function fixup_xmlfile(tbl,ignoreeol,parent)
     setmetatable(tbl,xml_stringvalue_mt)
-    if parent then
+    if parent and tbl[".__ns"] then
         setmetatable(tbl[".__ns"],{__index = parent[".__ns"]})
     end
     for i = 1, #tbl do
@@ -2349,9 +2355,13 @@ function load_xml(filename,filetype,parameter)
     main.log("info", "Load XML", "type", filetype or "file", "filename", filename)
     if newxpath then
         local xmltable
-        xmltable = splib.load_xmlfile(filename,filetype or "file")
+        local ignoreeol_str = parameter.ignoreeol and "true" or nil
+        xmltable = splib.load_xmlfile(filename,filetype or "file", ignoreeol_str)
         if not xmltable then
             return nil
+        end
+        if parameter.ignoreeol then
+            xmltable.ignoreeol_done = true
         end
         return xmltable
     else
@@ -7650,8 +7660,6 @@ end
 xml_stringvalue_mt = {
     __tostring = xml_stringvalue
 }
-
-
 
 --- Hyphenation and language handling
 --- ---------------------------------

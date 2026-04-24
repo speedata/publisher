@@ -72,6 +72,14 @@ type Options struct {
 	// ResolveInclude should open and return the content for a given href.
 	// Return (nil, nil) to skip/leave the xi:include unexpanded.
 	ResolveInclude func(href string) (io.ReadCloser, error)
+
+	// DataMode omits metadata fields that are only needed for layout XML
+	// (.__file, .__col) to reduce memory usage for large data files.
+	DataMode bool
+
+	// IgnoreEOL replaces newline characters with spaces in text nodes
+	// during parsing, avoiding a separate post-processing pass.
+	IgnoreEOL bool
 }
 
 // ParseXML is a convenience wrapper for ParseXMLWithOptions with nil options.

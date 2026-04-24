@@ -29,6 +29,11 @@ func (l *LuaState) buildXMLTable() error {
 		xmltype = t
 		l.remove(1)
 	}
+	ignoreEOL := false
+	if s, ok := l.getString(1); ok && s == "true" {
+		ignoreEOL = true
+		l.remove(1)
+	}
 	slog.Info("Read XML file", "type", xmltype)
 
 	full, err := splibaux.GetFullPath(xmlfilename)
@@ -44,31 +49,26 @@ func (l *LuaState) buildXMLTable() error {
 	}
 	defer f.Close()
 
-	doc, err := xmltree.ParseXMLWithOptionsAndFilename(f, &xmltree.Options{
+	isDataMode := xmltype != "layout instructions"
+	err = xmltree.ParseXMLToLua(f, luaAdapter{l: l}, &xmltree.Options{
 		ResolveInclude: func(href string) (io.ReadCloser, error) {
-			// Deine bisherige Logik:
 			full := splibaux.LookupFile(href)
 			return os.Open(full)
 		},
+		DataMode:  isDataMode,
+		IgnoreEOL: isDataMode && ignoreEOL,
 	}, xmlfilename)
 	if err != nil {
 		return fmt.Errorf("Cannot parse XML file %s (%w)", xmlfilename, err)
 	}
-	xmltree.RenderToLua(luaAdapter{l: l}, doc)
 	return nil
 }
 
 func (l *LuaState) readXMLFile(r io.Reader, _ int) error {
-	doc, err := xmltree.ParseXMLWithOptions(r, &xmltree.Options{
+	return xmltree.ParseXMLToLua(r, luaAdapter{l: l}, &xmltree.Options{
 		ResolveInclude: func(href string) (io.ReadCloser, error) {
-			// Deine bisherige Logik:
 			full := splibaux.LookupFile(href)
 			return os.Open(full)
 		},
-	})
-	if err != nil {
-		return err
-	}
-	xmltree.RenderToLua(luaAdapter{l: l}, doc)
-	return nil
+	}, "")
 }

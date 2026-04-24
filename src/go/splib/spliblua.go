@@ -209,7 +209,7 @@ func (l *LuaState) getIntTable(idx int, key string) (int, bool) {
 }
 
 func (l *LuaState) createTable(seq int, other int) int {
-	C.lua_createtable(l.l, 0, 0)
+	C.lua_createtable(l.l, C.int(seq), C.int(other))
 	return l.getTop()
 }
 

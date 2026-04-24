@@ -4656,7 +4656,7 @@ function commands.process_node(layoutxml,dataxml)
     for i=1, limit do
         local elt = dataxml_selection[i]
         if publisher.options.namespaces == "strict" then
-            element_name = "{" .. elt[".__namespace"]  .. "}" .. elt[".__local_name"]
+            element_name = "{" .. (elt[".__namespace"] or "")  .. "}" .. elt[".__local_name"]
         else
             element_name = elt[".__local_name"]
         end

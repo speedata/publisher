@@ -1028,7 +1028,7 @@ local function fnName(ctx, seq)
     seq = seq[1]
 
     if is_element(seq) then
-        return { seq[".__name"] }, nil
+        return { seq[".__name"] or seq[".__local_name"] or "" }, nil
     end
 
     return { "" }, nil
@@ -1051,7 +1051,7 @@ local function fnNamespaceURI(ctx, seq)
     seq = seq[1]
 
     if is_element(seq) then
-        return { seq[".__namespace"] }, nil
+        return { seq[".__namespace"] or "" }, nil
     end
 
     return { "" }, nil
@@ -3311,7 +3311,7 @@ function parse_name_test(tl)
                     prefix = prefix or ""
                     locname = locname or name
                     local ns = ctx.namespaces[prefix]
-                    return itm[".__local_name"] == locname and itm[".__namespace"] == ( ns or "" )
+                    return itm[".__local_name"] == locname and (itm[".__namespace"] or "") == ( ns or "" )
                 end
                 return false
             end
@@ -3352,7 +3352,7 @@ function parse_wild_card(tl)
                 end
                 if locname == "*" then
                     local reqns = ctx.namespaces[prefix]
-                    if itm[".__namespace"] == reqns then
+                    if (itm[".__namespace"] or "") == reqns then
                         return true
                     end
                 end
