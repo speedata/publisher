@@ -800,6 +800,17 @@ func (s *Server) Run() {
 	v0.HandleFunc("/layout/{id}", s.v0LayoutHandler).Methods("GET")
 	v0.HandleFunc("/statusfile/{id}", s.v0StatusfileHandler).Methods("GET")
 	v0.HandleFunc("/protocol/{id}", s.v0ProtocolHandler).Methods("GET")
+
+	v1 := r.PathPrefix("/v1").Subrouter()
+	v1.HandleFunc("/available", s.v1AvailableHandler).Methods("GET")
+	v1.HandleFunc("/jobs", s.v1CreateJobHandler).Methods("POST")
+	v1.HandleFunc("/jobs", s.v1ListJobsHandler).Methods("GET")
+	v1.HandleFunc("/jobs/{id}", s.v1GetJobHandler).Methods("GET")
+	v1.HandleFunc("/jobs/{id}/pdf", s.v1GetPDFHandler).Methods("GET")
+	v1.HandleFunc("/jobs/{id}/files/{filename}", s.v1GetFileHandler).Methods("GET")
+	v1.HandleFunc("/jobs/{id}", s.v1DeleteJobHandler).Methods("DELETE")
+	v1.HandleFunc("/pdf", s.v1CreatePDFHandler).Methods("POST")
+
 	http.Handle("/", r)
 	fmt.Fprintf(s.ProtocolFile, "Listen on http://%s:%s\n", s.Address, s.Port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", s.Address, s.Port), nil))

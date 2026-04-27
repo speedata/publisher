@@ -12,15 +12,20 @@ The Publisher provides an interface that can be used to pass requests for docume
 sp server
 ```
 
-on the command line. The server mode offers the option
+on the command line. The server mode offers the option to
 
 * transfer data to the server and start a run
-* Determine status of the run (is the process still running?)
+* determine status of the run (is the process still running?)
 * download finished PDF files
-* Other status files to read
+* retrieve protocol and other files from the working directory
 
 {{< callout type="warning" >}}
 Server mode is intended for a non-public environment. There are no authentication methods and no mechanisms to protect documents.
+{{< /callout >}}
+
+{{< callout type="info" >}}
+API version 0 (`/v0/...`) is still available but no longer actively developed.
+New integrations should use API version 1 (`/v1/...`).
 {{< /callout >}}
 
 The server establishes the connection on the IP address `127.0.0.1` and port `5266`.
@@ -37,237 +42,232 @@ filter = convertdata.lua
 ```
 
 An overview of all API methods follows.
-The current version number of the API is 0, so all methods are addressed via `\http://127.0.0.1:5266/v0/..`.
-If there will be incompatible changes in the future, these can be reached in the version number `/v1/...`, the existing methods will still be accessible via `/v0`.
+The current version number of the API is 1, so all methods are addressed via `http://127.0.0.1:5266/v1/..`.
 
 | Method | URL | Short description |
 | --- | --- | --- |
-| GET | [`/available`]({{< relref "servermode#api-method-available" >}}) | Return 200 to check if the server is running. |
-| POST | [`/v0/publish`]({{< relref "servermode#api-method-v0-publish-post" >}}) | Send data to the server to start a publishing run. |
-| GET | `/v0/publish/<id>` | Check if a publishing run is finished. |
-| GET | `/v0/pdf/<id>` | Wait for the completion of a PDF. |
-| POST | [`/v0/pdf`]({{< relref "servermode#api-method-v0-pdf-post" >}}) | Send data and wait for the completion of a PDF. |
-| GET | `/v0/data/<id>` | Load the `data.xml` from the publishing run. |
-| GET | `/v0/layout/<id>` | Load the `layout.xml` from the publishing run |
-| GET | `/v0/statusfile/<id>` | Load the status file (`publisher.status`) from the publishing run. |
-| GET | `/v0/protocol/<id>` | Load the protocol file (`publisher-protocol.xml`) from the publishing run. |
-| GET | [`/v0/status`]({{< relref "servermode#api-method-v0-status" >}}) | Overview of the current publishing processes. |
-| GET | `/v0/status/<id>` | Overview of a publishing process. |
-| GET | `/v0/delete/<id>` | Delete a publishing run. |
+| GET | [`/v1/available`](#available) | Check if the server is running. |
+| POST | [`/v1/jobs`](#post-v1jobs) | Start a publishing run. |
+| GET | [`/v1/jobs`](#get-v1jobs) | Overview of all publishing runs. |
+| GET | [`/v1/jobs/{id}`](#get-v1jobsid) | Status of a publishing run. |
+| GET | [`/v1/jobs/{id}/pdf`](#get-v1jobsidpdf) | Retrieve PDF of a publishing run. |
+| POST | [`/v1/pdf`](#post-v1pdf) | Send data and receive PDF in one request. |
+| GET | [`/v1/jobs/{id}/files/{filename}`](#get-v1jobsidfilesfilename) | Retrieve a file from the working directory. |
+| DELETE | [`/v1/jobs/{id}`](#delete-v1jobsid) | Delete a publishing run. |
 
+### Error format
 
-## `/available`
+All error responses from the v1 API use the [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) format (Problem Details for HTTP APIs) with Content-Type `application/problem+json`:
 
-Without version number.
-Returns the HTTP status 200.
-
-## `/v0/publish`
-
-If the URL is called with a POST request, the speedata Publisher expects a JSON file in the following format
-
+```json
+{
+  "type": "about:blank",
+  "title": "Job not found",
+  "status": 404,
+  "detail": "No job with id \"123\" exists",
+  "instance": "/v1/jobs/123"
+}
 ```
-{<filename>:<base64 coded content>,
- <filename>:<base64 coded content>,
- ...
- }
+
+## `/v1/available`
+
+GET: Returns HTTP status 200 with a JSON response:
+
+```json
+{"status": "ok"}
+```
+
+## `POST /v1/jobs`
+
+Starts a new publishing run. The request body can optionally contain a JSON file in the following format:
+
+```json
+{
+  "<filename>": "<base64 encoded content>",
+  "<filename>": "<base64 encoded content>"
+}
 ```
 
 such as
 
+```json
+{
+  "layout.xml": "PD94bWwgdmVyc2lv....",
+  "data.xml": "PGRhdGE+CiAgICA8Y29udGVudHM+PCFbQ0RBVEFbPHV..."
+}
 ```
-{"layout.xml": "PD94bWwgdmVyc2lv..."
- "data.xml": "PGRhdGE+CiAgICA8Y29udGVudHM+PCFbQ0RBVEFbPHV..." }
-```
+
+The body can also be empty if no files need to be transferred (e.g. when layout and data are provided via `extra-dir`).
 
 These files are copied to an empty directory on the server and `sp` is called there.
 The return is in the form
 
-```
+```json
 {"id": "752869708"}
 ```
 
 with an HTTP status code 201 (Created).
 
-If the JSON file is incorrect, an HTTP status code 400 (Bad
-Request) is returned with the textual content of the error message, for example
-
-```
-illegal base64 data at input byte 0
-```
-
-### Parameter
+### Parameters
 
 The following URL parameters can be specified in the POST request:
 
-`jobname`
-: Sets the name of the output, which is specified when the PDF file is downloaded (HTTP header `Content-Disposition`).
-: Alternatively it is taken from the file `publisher.cfg` or the default `publisher`.
-
 `vars`
-: Sets variables for the Publisher run. Specification in the form `var1=value1,var2=value2,var3=value3...`, but URL-coded.
+: Sets variables for the Publisher run. Specification in the form `var1=value1,var2=value2,var3=value3...`, but URL-encoded.
 
 `mode`
-: Set the mode for the run. Specification in the form `mode1,mode2,mode3...`, but URL-encoded.
+: Sets the mode for the run. Specification in the form `mode1,mode2,mode3...`, but URL-encoded.
 
 ### Example
 
-The request to
-
-```
-http://127.0.0.1:5266/v0/publish?vars=myvar%3D12345&mode=a4paper%2Cprint
+```bash
+curl -X POST "http://127.0.0.1:5266/v1/jobs?vars=myvar%3D12345&mode=a4paper%2Cprint"
 ```
 
-sets `myvar` to `12345` and enables the modes `a4paper` and `print`.
-
-## `/v0/publish/<id>`
-
-A GET request to this URL with an id from the POST request described above returns a JSON file with the content:
+sets `myvar` to `12345` and enables the modes `a4paper` and `print`. The response contains the job ID:
 
 ```json
-{"status": "ok",
- "path":"/path/to/publisher.pdf",
- "blob": "<base64 encoded PDF>",
- "finished": "2015-03-03T13:12:55+01:00",
- "output": "<unencoded output from the sp command>"
- }
+{"id": "752869708"}
 ```
 
-or, in case of error, if the id is unknown:
+## `GET /v1/jobs`
 
-```json
-{"status": "error", "path":"", "blob": "id unknown"}
-```
-
-If the PDF file has not yet been written:
-
-```json
-{"status": "error", "path":"", "blob": "in progress"}
-```
-
-If any other error occurs:
-
-```json
-{"status": "error", "path":"", "output": "some helpful output"}
-```
-
-The directory containing the PDF file will be deleted after this request, unless the URL contains the `delete` parameter with the value `false`.
-
-There can be more fields in the JSON file in future versions.
-
-## `/v0/pdf`
-
-A POST request to send data to the server and receive a PDF. See the data layout in the description of [`/v0/publish`]({{< relref "servermode#api-method-v0-publish-post" >}}) and the return codes in the section `/v0/pdf/<id>`.
-
-## `/v0/pdf/<id>`
-
-A GET request with the id from the POST request of `/v0/publish`. If successful, the PDF file with status code 200 and the file name `publisher.pdf` is returned. The request is waiting for the publishing process to be completed. In case of an error only an error code is returned (return value and description):
-
-200 OK
-: PDF was generated without errors
-
-404 Not Found
-: id invalid
-
-406 Not Acceptable
-: PDF was generated incorrectly
-
-The directory containing the PDF file will be deleted after this request, unless the URL contains the `delete` parameter with the value `false`.
-
-## `/v0/data/<id>`
-
-Returns the data file that was previously copied to the server. The format can be specified using the URL parameter `format`, for example `\http://127.0.0.1:5266/v0/data/1347678770?format=base64`:
-
-`json` or `JSON`
-: Returns a JSON file in the format `{"contents":"<XML Text>"}`
-
-`base64`
-: Results in an XML file that is base64 encoded (`PGRhdGE+CiAgICA8...hPgo=`)
-
-(not specified)
-: Writes an XML file (`<data>...</data>`)
-
-## `/v0/layout/<id>`
-Returns the layout XML that was previously copied to the server. The format can be specified using the URL parameter `format`. Example as above.
-
-`json` or `JSON`
-: Returns a JSON file in the format `{"contents":"<XML Text>"}`
-
-`base64`
-: Results in an XML file that is base64 encoded (`PGRhdGE+CiAgICA8...hPgo=`)
-
-(not specified)
-: Writes an XML file (`<Layout>...</Layout>`)
-
-## `/v0/statusfile/<id>`
-
-Returns the `publisher.status` file created by the run. The format can be specified using the URL parameter `format`, (example as in `/v0/data/<id>`).
-
-`json` or `JSON`
-: Returns a JSON file in the format `{"contents":"<XML Text>"}`.
-
-`base64`
-: Results in an XML file that is base64 encoded (`PGRhdGE+CiAgICA8...hPgo=`)
-
-(not specified)
-: Writes an XML file (`<Status>...</Status>`)
-
-## `/v0/protocol/<id>`
-
-Returns the `publisher-protocol.xml` file created by the run. The format can be specified using the URL parameter `format`, (example as in `/v0/data/<id>`).
-
-`json` or `JSON`
-: Returns a JSON file in the format `{"contents":"<XML Text>"}`.
-
-`base64`
-: Results in an XML file that is base64 encoded (`PGRhdGE+CiAgICA8...hPgo=`)
-
-(not specified)
-: Writes an XML file
-
-## `/v0/status`
-
-Returns the status of all publishing runs started with `/v0/publish`.
-
-The returned JSON file has the following format
+Returns the status of all publishing runs.
 
 ```json
 {
-  "1997009134": {
-    "error status": "ok",
-    "result": "finished",
-    "message": "no errors found",
-    "finished": "2016-05-23T11:14:14+02:00"
-  },
-  "1997329145": {
-    "error status": "ok",
-    "result": "finished",
-    "message": "no errors found",
-    "finished": "2016-05-23T11:14:14+02:00"
-  }
+  "jobs": [
+    {
+      "id": "1997009134",
+      "status": "finished",
+      "message": "no errors found",
+      "finished": "2016-05-23T11:14:14+02:00"
+    },
+    {
+      "id": "1997329145",
+      "status": "processing"
+    }
+  ]
 }
 ```
 
-The individual fields have the same meaning as described under `/v0/status/<id>`.
+Possible values for `status`: `finished`, `failed`, `processing`, `error`.
 
-## `/v0/status/<id>`
+## `GET /v1/jobs/{id}`
 
-Determines the status of the publisher run that was sent to `/v0/publish` via POST request.
+Returns the status of a single publishing run.
 
-The returned JSON file has the following keys:
+If the run is still in progress, HTTP status code **202 (Accepted)** is returned:
 
-`errorstatus`
-: Is the request valid? Possible answers are `error` and `ok`. If `error`, then the `message` key contains the reason for the error, the `result` field is irrelevant in this case. If `ok`, then the field `result` contains the value `not finished` if the PDF file has not yet been created.
+```json
+{
+  "id": "752869708",
+  "status": "processing"
+}
+```
 
-`result`
-: After the PDF file has been created, the `result` field contains the value `failed` if errors occurred during PDF creation, `not finished` if the publishing process is still going on, otherwise `ok`.
+If the run is complete, HTTP status code **200 (OK)** is returned:
 
-`message`
-: Contains an informal message about the result. For example, `no errors found` or `2 errors occurred during publishing run`.
+```json
+{
+  "id": "752869708",
+  "status": "finished",
+  "message": "no errors found",
+  "finished": "2015-12-25T12:03:04+01:00"
+}
+```
 
-`finished`
-: Contains the timestamp when the PDF was finished. Format corresponds to RFC3339, for example `2015-12-25T12:03:04+01:00`.
+If the ID is unknown, HTTP status code **404** is returned with an RFC 9457 error response.
 
-## `/v0/delete/<id>`
+## `GET /v1/jobs/{id}/pdf`
 
-GET: Deletes the directory with this id. Returns 200 if the id exists, 404 if not.
+Returns the generated PDF file. The request waits for the publishing process to complete.
 
+### Parameters
+
+`jobname`
+: Sets the filename of the PDF output in the HTTP `Content-Disposition` header. Defaults to `publisher.pdf` if not specified.
+
+`keep`
+: Set to `true` to keep the working directory after download. By default, the directory is automatically deleted after the PDF is retrieved.
+
+### Example
+
+```bash
+curl "http://127.0.0.1:5266/v1/jobs/752869708/pdf?jobname=Contract2026" -o contract.pdf
+```
+
+### Return values
+
+200 OK
+: PDF was generated without errors. The file is returned with `Content-Type: application/pdf` and a `Content-Disposition` header. The working directory is deleted afterwards, unless `keep=true` is specified.
+
+404 Not Found
+: ID invalid.
+
+406 Not Acceptable
+: PDF was generated with errors.
+
+## `POST /v1/pdf`
+
+Sends data to the server and receives the PDF in the same request. The data encoding corresponds to [`POST /v1/jobs`](#post-v1jobs), the return values correspond to [`GET /v1/jobs/{id}/pdf`](#get-v1jobsidpdf).
+
+## `GET /v1/jobs/{id}/files/{filename}`
+
+Returns any file from the working directory of a publishing run. Useful e.g. for the protocol file:
+
+```bash
+curl "http://127.0.0.1:5266/v1/jobs/752869708/files/publisher-protocol.xml"
+```
+
+200 OK
+: The file is returned with an automatically detected Content-Type.
+
+404 Not Found
+: ID or filename invalid.
+
+## `DELETE /v1/jobs/{id}`
+
+Deletes the working directory of a publishing run.
+
+204 No Content
+: Successfully deleted.
+
+404 Not Found
+: ID invalid.
+
+### Example
+
+```bash
+curl -X DELETE "http://127.0.0.1:5266/v1/jobs/752869708"
+```
+
+## Complete example
+
+A typical workflow with the v1 API:
+
+```bash
+# 1. Start a job
+ID=$(curl -s -X POST "http://127.0.0.1:5266/v1/jobs?vars=mode%3DCONTRACT" | jq -r '.id')
+echo "Job started with ID: $ID"
+
+# 2. Check status (HTTP 202 = still running, 200 = finished)
+curl -s "http://127.0.0.1:5266/v1/jobs/$ID"
+
+# 3. Download PDF (waits for completion)
+#    The working directory is automatically deleted afterwards.
+curl -s "http://127.0.0.1:5266/v1/jobs/$ID/pdf?jobname=Contract" -o Contract.pdf
+```
+
+If you also need the protocol file, keep the working directory with `keep=true`:
+
+```bash
+# 3a. Download PDF, keep working directory
+curl -s "http://127.0.0.1:5266/v1/jobs/$ID/pdf?jobname=Contract&keep=true" -o Contract.pdf
+
+# 4. Retrieve protocol file
+curl -s "http://127.0.0.1:5266/v1/jobs/$ID/files/publisher-protocol.xml" -o protocol.xml
+
+# 5. Manually delete working directory
+curl -s -X DELETE "http://127.0.0.1:5266/v1/jobs/$ID"
+```

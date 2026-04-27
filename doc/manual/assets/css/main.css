@@ -942,10 +942,29 @@ dd p {
   font-weight: 500;
 }
 
-/* Einrückung für h3 */
-#toc-container li.toc-h3 a {
+/* h2-Einträge als Gruppenüberschriften */
+#toc-container > nav > ul > li {
+  margin-top: 0.5rem;
+}
+#toc-container > nav > ul > li:first-child {
+  margin-top: 0;
+}
+#toc-container > nav > ul > li > a {
+  font-weight: 500;
+  color: #333;
+}
+
+/* h3-Einträge unterordnen */
+#toc-container > nav > ul > li > ul > li > a {
   padding-left: 1.2rem;
   font-size: 0.78rem;
+  color: #888;
+}
+#toc-container > nav > ul > li > ul > li > a:hover {
+  color: var(--color-text);
+}
+#toc-container > nav > ul > li > ul > li > a.active {
+  color: var(--color-text);
 }
 
 /* PRO-Badge im TOC ausblenden */
