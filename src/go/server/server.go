@@ -438,10 +438,12 @@ func (s *Server) writeFiles(w http.ResponseWriter, r *http.Request) (string, err
 		return "", fmt.Errorf("Internal error 011")
 	}
 
-	err = json.Unmarshal(data, &files)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return "", fmt.Errorf("JSON encoding error")
+	if len(data) > 0 {
+		err = json.Unmarshal(data, &files)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return "", fmt.Errorf("JSON encoding error")
+		}
 	}
 	err = s.makePublisherTemp()
 	if err != nil {
