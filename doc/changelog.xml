@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.5">
+    <entry version="5.5.13" date="2026-04-27" sha1="1352cad0">
+        <en summary="Publishing API v1.">New server API version 1 with improved endpoints for publishing runs, status queries, and PDF retrieval.</en>
+        <de summary="Publishing API v1.">Neue Server-API Version 1 mit verbesserten Endpunkten für Publishing-Läufe, Statusabfragen und PDF-Abruf.</de>
+    </entry>
+    <entry version="5.5.13" date="2026-04-27" sha1="ff9a18fd">
+        <en summary="Show progress with sp --progress.">New command line option <tt>--progress</tt> that displays the typesetting progress during a publishing run.</en>
+        <de summary="Fortschritt anzeigen mit sp --progress.">Neue Kommandozeilenoption <tt>--progress</tt>, die den Satzfortschritt während eines Publishing-Laufs anzeigt.</de>
+    </entry>
+    <entry version="5.5.12" date="2026-04-27">
+        <en>Update to LuaTeX version 1.24.0.</en>
+        <de>Aktualisiere auf LuaTeX Version 1.24.0.</de>
+    </entry>
     <entry version="5.5.12" date="2026-04-24" sha1="bd1879f6b2d0e0564dd1237bc95928f0fb7edc0d">
         <en summary="Variable font support.">Load variable fonts and pin design axes (weight, width, optical size, etc.) to create static font instances using harfbuzz subsetting. Adds <tt>weight</tt> and <tt>width</tt> shortcut attributes and a generic <tt>Axis</tt> child element to <tt>LoadFontfile</tt>.</en>
         <de summary="Unterstützung für variable Schriftarten.">Variable Fonts laden und Designachsen (Gewicht, Breite, optische Größe usw.) per Harfbuzz-Subsetting auf feste Werte setzen. Neue Attribute <tt>weight</tt> und <tt>width</tt> sowie das Kind-Element <tt>Axis</tt> bei <tt>LoadFontfile</tt>.</de>
