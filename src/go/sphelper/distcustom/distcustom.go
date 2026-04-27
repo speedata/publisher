@@ -47,7 +47,7 @@ func CreateCustomBuild(cfg *config.Config, arguments []string) error {
 	platform := osArch[0]
 	arch := osArch[1]
 	fmt.Println(platform, arch)
-	luatexdir, err := dirstructure.GetLuaTeXDir(platform, arch)
+	luatexdir, err := dirstructure.GetLuaTeXDir(platform, arch, cfg.LuatexVersion)
 	if err != nil {
 		log.Fatal(err)
 	}

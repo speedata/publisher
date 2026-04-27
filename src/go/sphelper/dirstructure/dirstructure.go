@@ -11,12 +11,21 @@ import (
 )
 
 // GetLuaTeXDir returns the directory with the LuaTeX binaries for the specific
-// platform.
-func GetLuaTeXDir(platform, arch string) (string, error) {
+// platform. If version is non-empty and the corresponding directory exists, it
+// is used; otherwise the "default" symlink is followed.
+func GetLuaTeXDir(platform, arch, version string) (string, error) {
 	var srcbindir string
 	if srcbindir = os.Getenv("LUATEX_BIN"); srcbindir == "" || !fileutils.IsDir(srcbindir) {
 		fmt.Println("Error: environment variable LUATEX_BIN not set or does not point to a directory")
 		os.Exit(-1)
+	}
+
+	if version != "" {
+		d := filepath.Join(srcbindir, platform, arch, version)
+		if fileutils.IsDir(d) {
+			return d, nil
+		}
+		fmt.Printf("LuaTeX version directory %s not found, falling back to default\n", d)
 	}
 
 	d := filepath.Join(srcbindir, platform, arch, "default")

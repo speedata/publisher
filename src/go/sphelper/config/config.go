@@ -14,6 +14,7 @@ type Config struct {
 	basedir                  string
 	Srcdir, Builddir, Libdir string
 	Publisherversion         Version
+	LuatexVersion            string
 	IsPro                    bool
 	SearchAPIKey             string
 }
@@ -47,8 +48,23 @@ func NewConfig(basedir string) *Config {
 	cfg := &Config{}
 	cfg.SetBasedir(basedir)
 	cfg.Publisherversion = readVersion("publisher", basedir)
+	cfg.LuatexVersion = readStringValue("luatex_version", basedir)
 	cfg.SearchAPIKey = os.Getenv("SP_SEARCH_API_KEY")
 	return cfg
+}
+
+// readStringValue reads a key=value pair from the version file and returns the value as string
+func readStringValue(key string, basedir string) string {
+	buf, err := os.ReadFile(filepath.Join(basedir, "version"))
+	if err != nil {
+		return ""
+	}
+	for _, v := range strings.Split(string(buf), "\n") {
+		if strings.HasPrefix(v, key+"=") {
+			return strings.TrimSpace(strings.SplitN(v, "=", 2)[1])
+		}
+	}
+	return ""
 }
 
 // Read the file `version' and parse the information
