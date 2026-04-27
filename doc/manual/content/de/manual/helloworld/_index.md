@@ -16,6 +16,8 @@ Am besten erstellt man sie mit einem XML-Editor oder dem kostenfreien Editor [Vi
 Wer das »Hallo Welt« Beispiel sofort ausprobieren möchte: `sp new helloworld` erstellt ein Verzeichnis mit den beiden Dateien. Mit `cd helloworld` und `sp` wird daraus ein PDF.
 {{< /callout >}}
 
+![Hello World Beispiel auf der Kommandozeile](/img/helloworld.gif)
+
 ## Die beiden Dateien
 
 Die Datendatei (`data.xml`) enthält die Daten — hier nur ein kurzer Text:

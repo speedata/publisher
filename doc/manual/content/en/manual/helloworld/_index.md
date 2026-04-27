@@ -16,6 +16,8 @@ A good choice for editing them is an XML editor or the free [Visual Studio Code]
 Want to try this right away? Run `sp new helloworld` to create a directory with both files. Then `cd helloworld` and `sp` to generate the PDF.
 {{< /callout >}}
 
+![Hello World example on the command line](/img/helloworld.gif)
+
 ## The two files
 
 The data file (`data.xml`) contains the data — here just a short text:
