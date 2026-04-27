@@ -851,6 +851,7 @@ func main() {
 	op.On("--pdfversion=VERSION", "Set the PDF version. Default is 1.6", options)
 	op.On("--prepend-xml NAME", "Add this file in front of the layout file", prependXML)
 	op.On("--port PORT", "Port to be used for the server mode. Defaults to 5266", options)
+	op.On("--progress", "Show progress information on standard output", options)
 	op.On("--quiet", "Run publisher in silent mode", options)
 	op.On("--runs NUM", "Number of publishing runs ", options)
 	op.On("--startpage NUM", "The first page number", layoutoptions)
@@ -945,7 +946,9 @@ func main() {
 			cfg.ReadFile(filepath.Join(pwd, configfilename))
 		}
 	}
-	if getOption("verbose") == "true" {
+	if getOption("progress") == "true" {
+		os.Setenv("SP_PROGRESS", "1")
+	} else if getOption("verbose") == "true" {
 		verbose = true
 		os.Setenv("SP_VERBOSITY", "1")
 		fmt.Println("Config files read: ", strings.Join(cfg.Filenames, ", "))

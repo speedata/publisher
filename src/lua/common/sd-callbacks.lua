@@ -73,8 +73,36 @@ for _,t in ipairs({'read_vf_file','read_sdf_file','read_pk_file','read_data_file
 end
 
 
+local show_progress = os.getenv("SP_PROGRESS") == "1" and os.getenv("SP_VERBOSITY") == nil
+local progress_start_time = os.clock()
+
+local function format_duration(seconds)
+    local m = math.floor(seconds / 60)
+    local s = math.floor(seconds % 60)
+    return string.format("%d:%02d", m, s)
+end
+
 function print_page_number()
     main.log("info","Shipout page", "page",tostring(publisher.current_pagenumber))
+    if show_progress then
+        local page = publisher.current_pagenumber
+        local elapsed = os.clock() - progress_start_time
+        local line
+        if publisher.expected_pages and publisher.expected_pages > 0 then
+            local pct = math.floor(page / publisher.expected_pages * 100)
+            if pct > 100 then pct = 100 end
+            line = string.format("\rPage %d/%d (%d%%) -- %s",
+                page, publisher.expected_pages, pct, format_duration(elapsed))
+            if publisher.previous_duration then
+                line = line .. "/" .. format_duration(publisher.previous_duration)
+            end
+        else
+            line = string.format("\rPage %d -- %s", page, format_duration(elapsed))
+        end
+        -- pad with spaces to clear previous longer line
+        io.write(line .. "          ")
+        io.flush()
+    end
 end
 
 function pluralize(what, count)
@@ -83,6 +111,11 @@ function pluralize(what, count)
 end
 
 function stop_run_cb()
+    if show_progress then
+        -- clear the progress line
+        io.write("\r                                                            \r")
+        io.flush()
+    end
     print(string.format("Finished with %s and %s",pluralize("error",errcount or 0),pluralize("warning",warncount or 0)))
     if not status.output_file_name then
         print("No output written")

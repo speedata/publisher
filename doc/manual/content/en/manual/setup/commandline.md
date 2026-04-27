@@ -156,6 +156,9 @@ you can display a list of the allowed commands and parameters.
 `--port=PORT`
 : Port to be used for the server mode. Defaults to 5266
 
+`--progress`
+: Show progress information on standard output. Displays the current page number and elapsed time during a publishing run. If the publisher has been run before, it also shows the expected total number of pages (from the previous run) and the previous run duration. This option disables `--verbose`. Cannot be used together with `--verbose`.
+
 `--quiet`
 : Run publisher in silent mode
 

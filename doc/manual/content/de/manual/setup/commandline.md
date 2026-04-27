@@ -148,6 +148,9 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 `--port=PORT`
 : Portnummer für den Servermodus. Voreinstellung ist 5266.
 
+`--progress`
+: Zeigt Fortschrittsinformationen auf der Standardausgabe an. Während des Publishing-Laufs werden die aktuelle Seitenzahl und die verstrichene Zeit angezeigt. Wurde der Publisher zuvor bereits ausgeführt, werden auch die erwartete Gesamtseitenzahl (aus dem vorherigen Lauf) und die vorherige Laufzeit angezeigt. Diese Option deaktiviert `--verbose`.
+
 `--prepend-xml=NAME`
 : Diese Datei vor der Layout-XML einfügen. Wird im neuen XPath-Parser nicht mehr unterstützt, stattdessen ist xinclude zu benutzen.
 

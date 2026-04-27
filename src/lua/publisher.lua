@@ -286,6 +286,12 @@ defaultlanguage = 0
 -- Start page
 current_pagenumber = 1
 
+-- Expected number of pages (from previous run's aux file), nil if unknown
+expected_pages = nil
+
+-- Previous run duration in seconds (from status file), nil if unknown
+previous_duration = nil
+
 pages = {}
 
 -- page n shipped out to PDF?
@@ -1649,11 +1655,23 @@ function initialize_luatex_and_generate_pdf()
                     else
                         xpath.set_variable("_lastpage", attributes.page )
                     end
+                    expected_pages = tonumber(attributes.page)
                 end
             end
         end
     end
 
+    -- Read previous run duration from status file
+    local statusfilename = tex.jobname .. ".status"
+    local statusfile = io.open(statusfilename, "r")
+    if statusfile then
+        local content = statusfile:read("*all")
+        statusfile:close()
+        local dur = content:match("<DurationSeconds>([%d%.]+)</DurationSeconds>")
+        if dur then
+            previous_duration = tonumber(dur)
+        end
+    end
 
     if newxpath then
     else
