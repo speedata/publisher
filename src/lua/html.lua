@@ -25,13 +25,13 @@ local tables_mod = require("html.tables")
 local tree = require("html.tree")
 local units = require("html.units")
 
-module(...,package.seeall)
+local M = {}
 require("box")
 
 
 local fontfamilies = {}
 
-inherited = {
+local inherited = {
     width = false,
     fontsize_sp = true,
     rootfontsize_sp = true,
@@ -130,7 +130,7 @@ local stylesstack = inherit.new_stack(inherited)
 -- (attributes not shown)
 
 -- collect horizontal nodes returns a table with nodelists (glyphs for example)
-function collect_horizontal_nodes( elt,parameter,before_box,origin,dataxml )
+function M.collect_horizontal_nodes( elt,parameter,before_box,origin,dataxml )
     -- w("collect_horizontal_nodes %s",origin or "?")
     parameter = parameter or {}
     if elt.elementname == "br" then
@@ -175,7 +175,7 @@ function collect_horizontal_nodes( elt,parameter,before_box,origin,dataxml )
             elseif eltname == "wbr" then
                 thisret[#thisret + 1] = "\xE2\x80\x8B"
             end
-            local n = collect_horizontal_nodes(thiselt,options,before_box,string.format("collect horizontal mode element %s",eltname),dataxml)
+            local n = M.collect_horizontal_nodes(thiselt,options,before_box,string.format("collect horizontal mode element %s",eltname),dataxml)
             for i=1,#n do
                 thisret[#thisret + 1] = n[i]
             end
@@ -205,7 +205,7 @@ end
 local olcounter = {}
 local oltype = {}
 
-function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
+function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
     -- w("html: build nodelist from %s, prevdir = %s", caller or "?",prevdir or "?")
     options = options or {}
     -- ret is a nested table of boxes and paragraphs
@@ -339,7 +339,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 tf.breakbelow = false
             end
             options.textformat = tf
-            local n = collect_horizontal_nodes(thiselt,options,before_box,"build nodelist horizontal mode",dataxml)
+            local n = M.collect_horizontal_nodes(thiselt,options,before_box,"build nodelist horizontal mode",dataxml)
 
             local a = par:new(tf,"html.lua (horizontal)")
             local appended = false
@@ -416,7 +416,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 local nl_array = tables_mod.build_html_table(thiselt, wd, {
                     build_nodelist = function(elt, options, before_box, caller, prevdir, dataxml_inner)
                         -- callback which uses the existing build_nodelist
-                        return build_nodelist(elt, options, before_box, caller, prevdir, dataxml_inner)
+                        return M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml_inner)
                     end
                     }, dataxml, stylesstack)
 
@@ -465,7 +465,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                     end
                 end
                 local n
-                n, prevdir = build_nodelist(thiselt,options,before_box,"build_nodelist/ ol/ul",prevdir,dataxml)
+                n, prevdir = M.build_nodelist(thiselt,options,before_box,"build_nodelist/ ol/ul",prevdir,dataxml)
                 before_box = nil
                 if thiseltname == "ol" then
                     styles.ollevel = styles.ollevel - 1
@@ -483,7 +483,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 olcounter[styles.listlevel] = olcounter[styles.listlevel] or 0
                 olcounter[styles.listlevel] = olcounter[styles.listlevel] + 1
                 local n
-                n, prevdir = build_nodelist(thiselt,options,before_box,"build_nodelist/ li",prevdir,dataxml)
+                n, prevdir = M.build_nodelist(thiselt,options,before_box,"build_nodelist/ li",prevdir,dataxml)
                 before_box = nil
                 -- n is a table of box and / or par
                 -- ::marker content overrides list-style-type
@@ -576,7 +576,7 @@ function build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 elseif thiseltname == "p" then
                     nloptions.role = publisher.get_rolenum("P")
                 end
-                n, prevdir = build_nodelist(thiselt,options,before_box,string.format("build_nodelist/ any element name %q",thiseltname),prevdir,dataxml)
+                n, prevdir = M.build_nodelist(thiselt,options,before_box,string.format("build_nodelist/ any element name %q",thiseltname),prevdir,dataxml)
                 if thiselt.block then prevdir = "vertical" end
                 before_box = nil
                 local mode
@@ -610,7 +610,7 @@ end
 
 
 -- Entry point for HTML parsing
-function parse_html_new( elt, options, data )
+function M.parse_html_new( elt, options, data )
     options = options or {}
     -- local maxwidth_sp = options.maxwidth_sp
     -- pages_mod.handle_pages(elt.pages,maxwidth_sp, data)
@@ -637,6 +637,8 @@ function parse_html_new( elt, options, data )
     end
     tree.normalize_html_tree(elt[1])
     -- printtable("elt[1]",elt[1])
-    local block = build_nodelist(elt,options,nil,"parse_html_new","vertical",data)
+    local block = M.build_nodelist(elt,options,nil,"parse_html_new","vertical",data)
     return block
 end
+
+return M

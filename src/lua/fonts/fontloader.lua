@@ -10,12 +10,12 @@
 
 file_start("fontloader.lua")
 
-module(...,package.seeall)
+local M = {}
 
 --- Return `truetype`, `opentype` or `type1` depending on the string
 --- `filename`. If not recognized form  the file name, return _nil_.
 --- This function simply looks at the last three letters.
-function guess_fonttype( filename )
+function M.guess_fonttype( filename )
     local f=filename:lower()
     if f:match(".*%.ttf$") then return "truetype"
     elseif f:match(".*%.otf$") then return "opentype"
@@ -35,7 +35,7 @@ end
 ---       },
 ---       ["script"] = "latn"
 ---     },
-function features_scripts_matches( tab,script,lang )
+function M.features_scripts_matches( tab,script,lang )
     local lang   = string.lower(lang)
     local script = string.lower(script)
     for i=1,#tab do
@@ -52,7 +52,7 @@ function features_scripts_matches( tab,script,lang )
 end
 
 --- Convert codepoint to a UTF-16 string.
-function to_utf16(codepoint)
+function M.to_utf16(codepoint)
     assert(codepoint)
     if codepoint < 65536 then
         return string.format("%04X",codepoint)
@@ -63,7 +63,7 @@ end
 
 --- Return the string that is responsible for the OpenType feature `featurename`.
 --- Currently only gsub lookups are supported for script `latn` and language `dflt`.
-function find_feature_string(f,featurename)
+function M.find_feature_string(f,featurename)
     local ret = {}
     if f.gsub==nil then
         return ret
@@ -73,7 +73,7 @@ function find_feature_string(f,featurename)
         if gsub_table.features then
             for j = 1,#gsub_table.features do
                 local gtf = gsub_table.features[j]
-                if gtf.tag==featurename and features_scripts_matches(gtf.scripts,"latn","dflt") then
+                if gtf.tag==featurename and M.features_scripts_matches(gtf.scripts,"latn","dflt") then
                     ret[#ret + 1] = gsub_table.subtables[1].name
                 end
             end
@@ -89,17 +89,17 @@ end
 --- Only the size dependent values are computed.
 local lookup_fonttable_from_filename = {}
 
-function preload_font(name, size,extra_parameter,mode)
+function M.preload_font(name, size,extra_parameter,mode)
     local f = { requested_mode = mode, loaded = false, requested_name = name, requested_size = size, requested_extra_parameter = extra_parameter }
     return f
 end
 
 -- The harfbuzz version of the fontloader.
-function define_font_hb( name, size, extra_parameter )
+function M.define_font_hb( name, size, extra_parameter )
     local glyphname_uni = {}
     if not hasharfbuzz then
         err("Can't use mode=\"harfbuzz\" on LoadFontfile without harfbuzz library")
-        return define_font(name,size,extra_parameter)
+        return M.define_font(name,size,extra_parameter)
     end
     local fonttable
     local filename_with_path
@@ -145,7 +145,7 @@ function define_font_hb( name, size, extra_parameter )
     f.step          = publisher.options.fontstep or extra_parameter.step or 10
     f.auto_expand   = true
     f.embedding     = "subset"
-    f.format        = guess_fonttype(name)
+    f.format        = M.guess_fonttype(name)
     f.parameters    = {
         slant         = 0,
         space         = ( extra_parameter.space or 25 ) / 100  * size,
@@ -270,7 +270,7 @@ function define_font_hb( name, size, extra_parameter )
         for i=#extra_parameter.fallbacks,1,-1 do
             local fnt = extra_parameter.fallbacks[i]
             main.log("info","Create font metrics for fallback font","name",fnt,"size",math.round(size / publisher.factor,3))
-            local tmp, newfont_or_msg = define_font_hb(fnt,size,{})
+            local tmp, newfont_or_msg = M.define_font_hb(fnt,size,{})
             if not tmp then return nil, newfont_or_msg end
             local num = font.define(newfont_or_msg)
             newfont_or_msg.fontnum = num
@@ -293,7 +293,7 @@ end
 ---         ["smcp"] = "true"
 ---       },
 ---     },
-function define_font(name, size,extra_parameter)
+function M.define_font(name, size,extra_parameter)
     local extra_parameter = extra_parameter or {}
     local fonttable
     local missing_features = {}
@@ -423,7 +423,7 @@ function define_font(name, size,extra_parameter)
         extra_space   = 0
     }
 
-    f.format = guess_fonttype(name)
+    f.format = M.guess_fonttype(name)
     if f.format==nil then return false,"Could not determine the type of the font '".. fonttable.filename_with_path .."'." end
 
     f.embedding = "subset"
@@ -461,7 +461,7 @@ function define_font(name, size,extra_parameter)
                 local destname = glyph.name:gsub("^([^%.]*)%..*$","%1")
                 local cp = fonttable.lookup_codepoint_by_name[destname]
                 if cp then
-                    f.characters[codepoint].tounicode=to_utf16(cp)
+                    f.characters[codepoint].tounicode=M.to_utf16(cp)
                 end
             end
 
@@ -491,7 +491,7 @@ function define_font(name, size,extra_parameter)
         for i=#extra_parameter.fallbacks,1,-1 do
             local fnt = extra_parameter.fallbacks[i]
             main.log("info","Create font metrics for fallback font","name",fnt,"size",math.round(size / publisher.factor,3))
-            local tmp, newfont_or_msg = define_font(fnt,size)
+            local tmp, newfont_or_msg = M.define_font(fnt,size)
             if not tmp then return nil, newfont_or_msg end
             local num = font.define(newfont_or_msg)
             newfont_or_msg.fontnum = num
@@ -509,7 +509,7 @@ function define_font(name, size,extra_parameter)
                     missing_features[#missing_features + 1] = of
                     needs_virtual_font = true
                 else
-                    local featuret = find_feature_string(fonttable,of)
+                    local featuret = M.find_feature_string(fonttable,of)
                     if featuret and #featuret > 0 then
                         f.otfeatures[#f.otfeatures + 1] = featuret
                     else
@@ -586,7 +586,7 @@ function define_font(name, size,extra_parameter)
         -- now we can add features to the font
         for _,feature in ipairs(missing_features) do
             if feature == "lnum" then
-                local featuret = find_feature_string(fonttable,"lnum")
+                local featuret = M.find_feature_string(fonttable,"lnum")
                 if featuret and #featuret > 0 then
                     featuret = featuret[1]
                 end
@@ -629,4 +629,6 @@ function define_font(name, size,extra_parameter)
 end
 
 file_end("fontloader.lua")
+
+return M
 -- End of file

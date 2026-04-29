@@ -9,13 +9,13 @@
 -- is released under the GPL 2.
 
 
-module(..., package.seeall)
+local M = {}
 
 local colors_module = require("publisher.colors")
 
 -- helper
 
-function extra_page_parameter(current_page)
+function M.extra_page_parameter(current_page)
     return {
         ["page.margin.top"]    = sp_to_bp(current_page.grid.margin_top),
         ["page.margin.left"]   = sp_to_bp(current_page.grid.margin_left),
@@ -151,7 +151,7 @@ local function put_tex_boxes(object, prescript)
     end
 end
 
-function execute(mpobj, str)
+function M.execute(mpobj, str)
     if not str then
         err("Empty metapost string for execute")
         return false
@@ -165,7 +165,7 @@ function execute(mpobj, str)
     return true
 end
 
-function newbox(width_sp, height_sp)
+function M.newbox(width_sp, height_sp)
     local mp = mplib.new({
         mem_name = 'plain',
         find_file = finder,
@@ -181,22 +181,22 @@ function newbox(width_sp, height_sp)
         height = height_sp,
     }
     for _, v in pairs({ "plain", "csscolors", "sp" }) do
-        if not execute(mpobj, string.format("input %s;", v)) then
+        if not M.execute(mpobj, string.format("input %s;", v)) then
             err("Cannot start metapost.")
             return nil
         end
     end
     if width_sp and width_sp ~= 0 then
-        execute(mpobj, string.format("box.width = %fbp;", width_sp / 65782))
+        M.execute(mpobj, string.format("box.width = %fbp;", width_sp / 65782))
     else
         main.log("warn","MetaPost: width is 0, setting to 1bp")
-        execute(mpobj, "box.width = 1bp;")
+        M.execute(mpobj, "box.width = 1bp;")
     end
     if height_sp and height_sp ~= 0 then
-        execute(mpobj, string.format("box.height = %fbp;", height_sp / 65782))
+        M.execute(mpobj, string.format("box.height = %fbp;", height_sp / 65782))
     end
     if height_sp and width_sp and height_sp ~= 0 and width_sp ~= 0 then
-        execute(mpobj, [[path box; box = (0,0) -- (box.width,0) -- (box.width,box.height) -- (0,box.height) -- cycle ;]])
+        M.execute(mpobj, [[path box; box = (0,0) -- (box.width,0) -- (box.width,box.height) -- (0,box.height) -- cycle ;]])
     end
 
 
@@ -207,15 +207,15 @@ function newbox(width_sp, height_sp)
             local decl = string.format("cmykcolor colors.%s;", varname)
             if not declarations[decl] then
                 declarations[decl] = true
-                execute(mpobj, decl)
+                M.execute(mpobj, decl)
             end
             local mpstatement = string.format("colors.%s := (%g, %g, %g, %g);", name, v.c, v.m, v.y, v.k)
 
-            execute(mpobj, mpstatement)
+            M.execute(mpobj, mpstatement)
         elseif v.model == "rgb" then
-            execute(mpobj, string.format("rgbcolor colors.%s; colors.%s := (%g, %g, %g);", name, name, v.r, v.g, v.b))
+            M.execute(mpobj, string.format("rgbcolor colors.%s; colors.%s := (%g, %g, %g);", name, name, v.r, v.g, v.b))
         elseif v.model == "gray" then
-            execute(mpobj, string.format("rgbcolor colors.%s; colors.%s := (%g, %g, %g);", name, name, v.k, v.k, v.k))
+            M.execute(mpobj, string.format("rgbcolor colors.%s; colors.%s := (%g, %g, %g);", name, name, v.k, v.k, v.k))
         else
             err("metapost: model %q not supported", v.model)
         end
@@ -236,7 +236,7 @@ function newbox(width_sp, height_sp)
                 expr = string.format("%s %s ; %s := %s ;", v.typ, name, name, v[1])
             end
         end
-        execute(mpobj, expr)
+        M.execute(mpobj, expr)
     end
     return mpobj
 end
@@ -686,7 +686,7 @@ local function convert(result)
 end
 
 
-function finish(mpobj)
+function M.finish(mpobj)
     pdfcode = {}
     pdfcodepointer = 1
     transparency_values = {}
@@ -711,7 +711,7 @@ function finish(mpobj)
 end
 
 -- Return a pdf_whatsit node
-function prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
+function M.prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
     local colorwarnings = publisher.metapostcolorwarnings
     if #colorwarnings > 0 then
         for i = 1, #colorwarnings do
@@ -726,32 +726,32 @@ function prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
         err("MetaPost graphic %s not defined", graphicname)
         return nil
     end
-    local mpobj = newbox(width_sp, height_sp)
-    execute(mpobj, "beginfig(1);")
+    local mpobj = M.newbox(width_sp, height_sp)
+    M.execute(mpobj, "beginfig(1);")
     for k, v in pairs(extra_parameter or {}) do
         if k == "colors" and type(v) == "table" then
             for col, val in pairs(v) do
                 local fmt = string.format("color %s; %s = %s;", col, col, val)
-                execute(mpobj, fmt)
+                M.execute(mpobj, fmt)
             end
         elseif k == "strings" and type(v) == "table" then
             for col, val in pairs(v) do
                 local fmt = string.format("string %s; %s = %q;", col, col, val)
-                execute(mpobj, fmt)
+                M.execute(mpobj, fmt)
             end
         elseif k == "boolean" and type(v) == "table" then
             for col, val in pairs(v) do
                 local fmt = string.format("boolean %s; %s = %s;", col, col, tostring(val))
-                execute(mpobj, fmt)
+                M.execute(mpobj, fmt)
             end
         else
             local fmt = string.format("%s = %s ;", k, v)
-            execute(mpobj, fmt)
+            M.execute(mpobj, fmt)
         end
     end
-    execute(mpobj, publisher.metapostgraphics[graphicname])
-    execute(mpobj, "endfig;")
-    local nl, tv, bbox = finish(mpobj);
+    M.execute(mpobj, publisher.metapostgraphics[graphicname])
+    M.execute(mpobj, "endfig;")
+    local nl, tv, bbox = M.finish(mpobj);
     local thispage = publisher.pages[publisher.current_pagenumber]
     thispage.transparenttext = thispage.transparenttext or {}
     for key in pairs(tv) do
@@ -769,7 +769,9 @@ end
 ---@param parameter table
 ---@return Node
 ---@return table bounding box
-function boxgraphic(width_sp, height_sp, graphicname, extra_parameter, parameter)
-    local mpobj, a, bbox = prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
+function M.boxgraphic(width_sp, height_sp, graphicname, extra_parameter, parameter)
+    local mpobj, a, bbox = M.prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
     return a, bbox
 end
+
+return M

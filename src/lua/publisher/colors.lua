@@ -2,7 +2,7 @@
 --  colors.lua
 --  speedata publisher
 --
---  Color definitions and helpers extracted from publisher.lua.
+--  Color definitions and helpers.
 --
 
 file_start("publisher/colors.lua")

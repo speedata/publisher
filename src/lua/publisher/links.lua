@@ -2,7 +2,7 @@
 --  links.lua
 --  speedata publisher
 --
---  Hyperlink helpers extracted from publisher.lua.
+--  Hyperlink helpers.
 --
 
 file_start("publisher/links.lua")

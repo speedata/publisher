@@ -2,7 +2,7 @@
 --  metadata.lua
 --  speedata publisher
 --
---  PDF metadata/XMP helpers extracted from publisher.lua.
+--  PDF metadata/XMP helpers.
 --
 
 file_start("publisher/metadata.lua")

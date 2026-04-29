@@ -10,16 +10,17 @@
 --- requires post processing at various stages.
 file_start("fonts.lua")
 
-require("fonts.fontloader")
+local fontloader_mod = require("fonts.fontloader")
 
 local colors_module = require("publisher.colors")
 
-module(...,package.seeall)
+local M = {}
 
 local lookup_fontname_filename={}
 local font_instances={}
 
-used_fonts={}
+M.used_fonts = {}
+local used_fonts = M.used_fonts
 
 local glue_node      = node.id("glue")
 local glyph_node     = node.id("glyph")
@@ -33,6 +34,10 @@ local hlist_node     = node.id("hlist")
 local vlist_node     = node.id("vlist")
 
 
+local user_defined_whatsit
+local pdf_refximage_whatsit
+local pdf_action_whatsit
+local pdf_dest_whatsit
 for k,v in pairs(node.whatsits()) do
     if v == "user_defined" then
         -- for mark command
@@ -49,7 +54,8 @@ end
 
 --- Every font family ("text", "Chapter"), that is defined by DefineFontfamily
 --- gets an internal number. This number is stored here.
-lookup_fontfamily_name_number={}
+M.lookup_fontfamily_name_number = {}
+local lookup_fontfamily_name_number = M.lookup_fontfamily_name_number
 
 --- Every font family (given by number) has variants like italic, bold etc.
 --- These are stored as a table in this table.
@@ -61,10 +67,11 @@ lookup_fontfamily_name_number={}
 ---  * bold
 ---  * baselineskip
 ---  * size
-lookup_fontfamily_number_instance={}
+M.lookup_fontfamily_number_instance = {}
+local lookup_fontfamily_number_instance = M.lookup_fontfamily_number_instance
 
 
-function load_fontfile(name, filename, parameter_tab)
+function M.load_fontfile(name, filename, parameter_tab)
     assert(filename)
     assert(name)
     lookup_fontname_filename[name]={filename,parameter_tab or {}}
@@ -93,13 +100,13 @@ local preloaded_fonts = {}
 
 
 -- called from html.lua
-function get_fontname( localname, url )
+function M.get_fontname( localname, url )
     localname = publisher.get_fontname(localname)
     -- w("get_fontname, localname %q",tostring(localname))
     if localname and lookup_fontname_filename[localname] then
         return localname
     elseif url then
-        load_fontfile(url,url)
+        M.load_fontfile(url,url)
         return url
     end
     return nil
@@ -108,7 +115,7 @@ end
 -- Return false, error message in case of failure, true, number otherwise. number
 -- is the internal font number. After calling this method, the font can be used
 -- with the key {filename,size}
-function make_font_instance( name,size )
+function M.make_font_instance( name,size )
     -- Name is something like "TeXGyreHeros-Regular", the visible name of the font file
     assert(name)
     assert(tonumber(size))
@@ -134,7 +141,7 @@ function make_font_instance( name,size )
     else
         local f
         local num = font.nextid(true)
-        f = fonts.fontloader.preload_font(filename,size,parameter,parameter.mode or publisher.options.fontloader)
+        f = fontloader_mod.preload_font(filename,size,parameter,parameter.mode or publisher.options.fontloader)
         f.reserved_num = num
         preloaded_fonts[num] = f
         main.log("debug","Preload font","name",filename,"size",tostring(math.round(size / publisher.factor,3)),"id",tostring(num))
@@ -145,15 +152,15 @@ function make_font_instance( name,size )
 end
 
 -- Define font from preloaded font
-function define_font(instance)
+function M.define_font(instance)
     local mode = instance.requested_mode
     local num = instance.reserved_num
     main.log("info","Create font metrics","name",instance.requested_name,"size",math.round(instance.requested_size / publisher.factor,3),"id",num,"mode",mode)
     local f, ok
     if mode == "harfbuzz" then
-        ok,f = fonts.fontloader.define_font_hb(instance.requested_name,instance.requested_size,instance.requested_extra_parameter)
+        ok,f = fontloader_mod.define_font_hb(instance.requested_name,instance.requested_size,instance.requested_extra_parameter)
     else
-        ok,f = fonts.fontloader.define_font(instance.requested_name,instance.requested_size,instance.requested_extra_parameter)
+        ok,f = fontloader_mod.define_font(instance.requested_name,instance.requested_size,instance.requested_extra_parameter)
     end
     if not ok then
         main.log("error","Failed to load font","requested name",instance.requested_name,"errormessage",f or "")
@@ -166,7 +173,7 @@ function define_font(instance)
 end
 
 -- Return instance number from fontfamily number and instance name
-function get_fontinstance(fontfamily,instancename)
+function M.get_fontinstance(fontfamily,instancename)
     local instance
     if fontfamily and fontfamily > 0 then
         instance = lookup_fontfamily_number_instance[fontfamily][instancename]
@@ -185,9 +192,9 @@ function get_fontinstance(fontfamily,instancename)
     end
     local pe = preloaded_fonts[instance]
     if pe.loaded == false then
-        local ok = define_font(pe)
+        local ok = M.define_font(pe)
         if not ok then
-            return get_fontinstance(1,"normal")
+            return M.get_fontinstance(1,"normal")
         end
     end
     return instance
@@ -323,7 +330,7 @@ local function pre_linebreak_direct( head )
                     else
                         instancename = "normal"
                     end
-                    cache_fontnum = get_fontinstance(fontfamily, instancename)
+                    cache_fontnum = M.get_fontinstance(fontfamily, instancename)
                     cache_f = used_fonts[cache_fontnum]
                     cache_is_fontforge = cache_f and cache_f.mode == "fontforge" and cache_f.otfeatures
                     cache_ff = ff
@@ -380,7 +387,7 @@ local function pre_linebreak_direct( head )
     return true
 end
 
-function pre_linebreak( head )
+function M.pre_linebreak( head )
     if not plb_att_fontfamily then
         plb_att_fontfamily = publisher.attribute_name_number["fontfamily"]
         plb_att_fontstyle  = publisher.attribute_name_number["font-style"]
@@ -393,7 +400,7 @@ function pre_linebreak( head )
     return pre_linebreak_direct(d_todirect(head))
 end
 
-function insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding_top, bg_padding_bottom, reverse )
+function M.insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding_top, bg_padding_bottom, reverse )
     reverse = reverse or false
     bg_padding_top    = bg_padding_top or 0
     bg_padding_bottom = bg_padding_bottom or 0
@@ -419,7 +426,7 @@ function insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding_t
 end
 
 --- Insert a horizontal rule in the nodelist that is used for underlining. typ is 1 (solid) or 2 (dashed)
-function insert_underline( parent, head, start, typ, style, colornumber)
+function M.insert_underline( parent, head, start, typ, style, colornumber)
     colornumber = colornumber or 1
     if colornumber == 0 then colornumber = 1 end
     local wd = node.dimensions(parent.glue_set,parent.glue_sign, parent.glue_order,start,head)
@@ -467,8 +474,8 @@ do
     local plb_attnum_bgpad_bottom
 
     local function post_linebreak_direct( head, list_head_d )
-        local insert_bgcolor = insert_backgroundcolor
-        local insert_ul = insert_underline
+        local insert_bgcolor = M.insert_backgroundcolor
+        local insert_ul = M.insert_underline
         local opts = publisher.options
         local underlinetype = nil
         local underlinestyle = nil
@@ -630,7 +637,7 @@ do
         return head
     end
 
-    function post_linebreak( head, list_head )
+    function M.post_linebreak( head, list_head )
         if not plb_attnum_td_line then
             plb_attnum_td_line    = publisher.attribute_name_number["text-decoration-line"]
             plb_attnum_td_style   = publisher.attribute_name_number["text-decoration-style"]
@@ -644,7 +651,7 @@ do
 end
 
 -- fam is a number
-function clone_family( fam, params )
+function M.clone_family( fam, params )
     -- fam_tbl = {
     --   ["baselineskip"] = "789372"
     --   ["name"] = "text"
@@ -661,7 +668,7 @@ function clone_family( fam, params )
     newfam.name = "cloned"
 
     if newfam.fontfaceregular then
-        local ok,r = make_font_instance(newfam.fontfaceregular, params.size * newfam.size )
+        local ok,r = M.make_font_instance(newfam.fontfaceregular, params.size * newfam.size )
         if not ok then
             err(r)
             return fam
@@ -670,7 +677,7 @@ function clone_family( fam, params )
     end
 
     if newfam.fontfacebold then
-        local ok,b = make_font_instance(newfam.fontfacebold, params.size * newfam.size )
+        local ok,b = M.make_font_instance(newfam.fontfacebold, params.size * newfam.size )
         if not ok then
             err(b)
             return fam
@@ -679,7 +686,7 @@ function clone_family( fam, params )
     end
 
     if newfam.fontfaceitalic then
-        local ok,i = make_font_instance(newfam.fontfaceitalic, params.size * newfam.size )
+        local ok,i = M.make_font_instance(newfam.fontfaceitalic, params.size * newfam.size )
         if not ok then
             err(i)
             return fam
@@ -688,7 +695,7 @@ function clone_family( fam, params )
         end
 
     if newfam.fontfacebolditalic then
-        local ok,bi = make_font_instance(newfam.fontfacebolditalic, params.size * newfam.size )
+        local ok,bi = M.make_font_instance(newfam.fontfacebolditalic, params.size * newfam.size )
         if not ok then
             err(bi)
             return fam
@@ -702,3 +709,8 @@ function clone_family( fam, params )
 end
 
 file_end("fonts.lua")
+
+_G.publisher = _G.publisher or {}
+_G.publisher.fonts = M
+
+return M

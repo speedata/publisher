@@ -16,6 +16,7 @@ local colors_module = require("publisher.colors")
 local links_module = require("publisher.links")
 local par  = require("par")
 local metapost = require("publisher.metapost")
+local grid_module = require("publisher.grid")
 do_luafile("css.lua")
 
 local function lineinfo(layout)
@@ -495,12 +496,12 @@ function commands.box( layoutxml,dataxml )
 
     -- Todo: document length or number
     if tonumber(width) ~= nil then
-        width  = current_grid:width_sp(width)
+        width  = publisher.current_grid:width_sp(width)
     else
         width = tex.sp(width)
     end
     if tonumber(height) ~= nil then
-        height = current_grid:height_sp(tonumber(height))
+        height = publisher.current_grid:height_sp(tonumber(height))
     else
         height = tex.sp(height)
     end
@@ -1447,7 +1448,7 @@ function commands.group( layoutxml,dataxml )
         end
     end
 
-    local r = publisher.grid:new(-999)
+    local r = grid_module.new(grid_module, -999)
     r:set_margin(0,0,0,0)
     if grid then
         if grid.nx or grid.ny then
@@ -4292,9 +4293,7 @@ function commands.place_object( layoutxml,dataxml)
     end
 
     publisher.setup_page(onpage,"commands#PlaceObject",dataxml)
-    -- current_grid should be local. But then the test tables/future objects fails
-    -- FIXME: check why the test fails
-    -- local current_grid
+    local current_grid
     if onpage then
         current_grid = publisher.pages[onpage].grid
     else
@@ -4437,7 +4436,7 @@ function commands.place_object( layoutxml,dataxml)
                 if g.contents == nil then
                     main.log("error","Group contents is nil","groupname",groupname)
                 else
-                    p.data = publisher.grid.draw_grid_group(g)
+                    p.data = grid_module.draw_grid_group(g)
                     publisher.setprop(p,"origin","trace group")
                     objects[1].object.head = node.insert_before(objects[1].object.head,objects[1].object.head,p)
                 end
