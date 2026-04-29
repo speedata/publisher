@@ -5,21 +5,25 @@ import (
 	"io"
 	"os"
 
-	lua "github.com/yuin/gopher-lua"
+	"speedatapublisher/sp/sp/lualib"
+
+	lua "github.com/speedata/go-lua"
 )
 
-func decodeXML(l *lua.LState) int {
-	filename := l.CheckString(1)
+func decodeXML(l *lua.State) int {
+	filename := lua.CheckString(l, 1)
 	f, err := os.Open(filename)
 	if err != nil {
-		return lerr(l, err.Error())
+		return lualib.PushError(l, err.Error())
 	}
-
 	defer f.Close()
 
 	dec := xml.NewDecoder(f)
 
-	var curtbl, root *lua.LTable
+	// childCounters[i] = next array index for the element table at depth i.
+	var childCounters []int
+	hasRoot := false
+
 done:
 	for {
 		tok, err := dec.Token()
@@ -27,41 +31,43 @@ done:
 			if err == io.EOF {
 				break done
 			}
-			return lerr(l, err.Error())
+			return lualib.PushError(l, err.Error())
 		}
 		switch t := tok.(type) {
 		case xml.StartElement:
-			elttbl := &lua.LTable{}
-			elttbl.RawSetString("_type", lua.LString("element"))
-			elttbl.RawSetString("_name", lua.LString(t.Name.Local))
-
+			l.NewTable()
+			lualib.SetFieldString(l, -1, "_type", "element")
+			lualib.SetFieldString(l, -1, "_name", t.Name.Local)
 			for _, attr := range t.Attr {
-				elttbl.RawSetString(attr.Name.Local, lua.LString(attr.Value))
+				lualib.SetFieldString(l, -1, attr.Name.Local, attr.Value)
 			}
-
-			if root == nil {
-				root = elttbl
+			if len(childCounters) > 0 {
+				l.PushValue(-2)
+				l.SetField(-2, ".__parent")
 			}
-
-			if curtbl != nil {
-				elttbl.RawSetString(".__parent", curtbl)
-				curtbl.Append(elttbl)
-			}
-			curtbl = elttbl
+			childCounters = append(childCounters, 0)
+			hasRoot = true
 		case xml.CharData:
-			if curtbl != nil {
-				curtbl.Append(lua.LString(t.Copy()))
+			if n := len(childCounters); n > 0 {
+				l.PushString(string(t.Copy()))
+				childCounters[n-1]++
+				l.RawSetInt(-2, childCounters[n-1])
 			}
 		case xml.EndElement:
-			entry := curtbl.RawGetString(".__parent")
-			if tbl, ok := entry.(*lua.LTable); ok {
-				// lv is LTable
-				curtbl = tbl
+			n := len(childCounters)
+			if n > 1 {
+				childCounters[n-2]++
+				l.RawSetInt(-2, childCounters[n-2])
 			}
-
+			childCounters = childCounters[:n-1]
 		}
 	}
-	l.Push(lua.LTrue)
-	l.Push(root)
+
+	l.PushBoolean(true)
+	if hasRoot {
+		l.Insert(-2)
+	} else {
+		l.PushNil()
+	}
 	return 2
 }

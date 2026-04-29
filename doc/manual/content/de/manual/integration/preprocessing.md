@@ -11,6 +11,10 @@ Lua ist eine einfache, aber mächtige Programmiersprache, die dafür vorgesehen 
 
 Im [Beispiele-Repository](https://github.com/speedata/examples/tree/master/technical) sind drei Anwendungsfälle zu finden.
 
+{{< callout >}}
+Seit Version 5.5.14 läuft die Filter-Vorverarbeitung unter Lua 5.4 (vorher Lua 5.1). Skripte, die `setfenv`/`getfenv`, `unpack(...)` (statt `table.unpack`), `loadstring` oder `module(...)` nutzen, müssen entsprechend angepasst werden.
+{{< /callout >}}
+
 ## Aufruf des Lua-Skripts
 
 Gestartet wird der Filter entweder über die Kommandozeile
@@ -279,7 +283,7 @@ Führt ein Programm aus und gibt dessen Ausgabe in die Konsole aus. Um den speed
 runtime.execute({"sp","--runs","2"})
 ```
 Falls erforderlich, muss der erste Parameter (der Programmname) mit dem absoluten Pfad des Programms angegeben werden. Unter Windows funktionieren auch Schrägstriche (`/`) als Trennzeichen anstelle von umgekehrten Schrägstrichen (`\`).
-Der Rückgabewert ist ein bool (success), Wert 2 ist der Fehlercode, wenn der erste Wert `false` ist.
+Der erste Rückgabewert ist ein bool (success). Im Fehlerfall ist der zweite Rückgabewert ein Fehlercode (Zahl, falls das Programm mit einem Exit-Code ungleich 0 beendet wurde) oder eine Fehlermeldung (String, falls das Programm gar nicht gestartet werden konnte). Bei Erfolg gibt es keinen zweiten Wert.
 
 `find_file(‹Dateiname oder URL›)`
 Findet die angegebene Datei im Publisher-Suchpfad und gibt den absoluten Pfad zurück. Bei nicht gefunden: nil bzw. false und eine Fehlermeldung.
@@ -365,4 +369,56 @@ Rückgabe ist eine Tabelle mit den Schlüsseln `day`, `month`, `year`, `hour`, `
 
 ### `http`
 
-Die HTTP-Bibliothek ist unter https://github.com/cjoudrey/gluahttp beschrieben.
+Das `http`-Modul stellt einen einfachen HTTP-Client bereit. Für jede HTTP-Methode gibt es eine eigene Funktion sowie einen generischen `request`-Aufruf:
+
+```lua
+http = require("http")
+response, err = http.get(‹url›[, ‹optionen›])
+response, err = http.post(‹url›[, ‹optionen›])
+response, err = http.put(‹url›[, ‹optionen›])
+response, err = http.delete(‹url›[, ‹optionen›])
+response, err = http.head(‹url›[, ‹optionen›])
+response, err = http.patch(‹url›[, ‹optionen›])
+response, err = http.request(‹methode›, ‹url›[, ‹optionen›])
+```
+
+Im Erfolgsfall wird ein Response-Objekt zurückgegeben, im Fehlerfall `nil` und eine Fehlermeldung. Die Optionen werden als Tabelle übergeben:
+
+| Schlüssel | Wert |
+| --- | --- |
+| `query` | Query-String (z.B. `"a=1&b=2"`); wird an die URL angehängt |
+| `body` | String mit dem Request-Body |
+| `form` | String wie `body`, setzt zusätzlich `Content-Type: application/x-www-form-urlencoded` |
+| `headers` | Tabelle mit Header-Namen → Werten |
+| `cookies` | Tabelle mit Cookie-Namen → Werten |
+| `auth` | Tabelle `{user = ..., pass = ...}` für HTTP Basic Auth |
+| `timeout` | Zahl (Sekunden) oder String (Go-Duration, z.B. `"500ms"`) |
+
+Auf das Response-Objekt kann mit den folgenden Feldern zugegriffen werden:
+
+| Feld | Beschreibung |
+| --- | --- |
+| `status_code` | HTTP-Statuscode (Zahl) |
+| `body` | Response-Body als String |
+| `body_size` | Größe des Bodys in Bytes |
+| `headers` | Tabelle mit Response-Headern |
+| `cookies` | Tabelle mit Response-Cookies |
+| `url` | finale URL nach Redirects |
+
+Beispiel:
+
+```lua
+http = require("http")
+response, err = http.post("https://api.example.com/users", {
+    headers = { ["Content-Type"] = "application/json" },
+    body    = '{"name":"Alice"}',
+    timeout = 10,
+})
+if not response then
+    print(err)
+    os.exit(-1)
+end
+if response.status_code == 200 then
+    print(response.body)
+end
+```

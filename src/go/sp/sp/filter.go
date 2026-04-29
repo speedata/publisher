@@ -11,49 +11,43 @@ import (
 	"strings"
 
 	"speedatapublisher/sp/sp/luacsv"
+	"speedatapublisher/sp/sp/luahttp"
+	"speedatapublisher/sp/sp/lualib"
 	"speedatapublisher/sp/sp/luaxlsx"
 	"speedatapublisher/sp/sp/luaxml"
 	"speedatapublisher/splibaux"
 
-	"github.com/cjoudrey/gluahttp"
-	lua "github.com/yuin/gopher-lua"
+	lua "github.com/speedata/go-lua"
 )
 
 var (
-	l *lua.LState
+	l *lua.State
 )
 
-func lerr(errormessage string) int {
-	l.SetTop(0)
-	l.Push(lua.LFalse)
-	l.Push(lua.LString(errormessage))
-	return 2
-}
-
-func validateRelaxNG(l *lua.LState) int {
-	xmlfile := l.CheckString(1)
-	rngfile := l.CheckString(2)
+func validateRelaxNG(l *lua.State) int {
+	xmlfile := lua.CheckString(l, 1)
+	rngfile := lua.CheckString(l, 2)
 
 	cmd := exec.Command("java", "-jar", filepath.Join(libdir, "jing.jar"), rngfile, xmlfile)
 
 	stdoutPipe, err := cmd.StdoutPipe()
 	if err != nil {
-		return lerr(err.Error())
+		return lualib.PushError(l, err.Error())
 	}
 	var b bytes.Buffer
 
 	err = cmd.Start()
 	if err != nil {
-		return lerr(err.Error())
+		return lualib.PushError(l, err.Error())
 	}
 
 	go io.Copy(&b, stdoutPipe)
 	err = cmd.Wait()
 	if err != nil {
-		return lerr(b.String())
+		return lualib.PushError(l, b.String())
 	}
 
-	l.Push(lua.LTrue)
+	l.PushBoolean(true)
 	return 1
 }
 
@@ -67,51 +61,50 @@ func saxonClasspath() string {
 	return cp
 }
 
-func runSaxon(l *lua.LState) int {
-	numberArguments := l.GetTop()
-	var command []string
-	command = []string{"-cp", saxonClasspath(), "net.sf.saxon.Transform"}
-	if numberArguments == 1 {
-		// hopefully a table
-		lv := l.Get(-1)
-		if tbl, ok := lv.(*lua.LTable); ok {
-			m := map[string]string{
-				"initialtemplate": "-it:%s",
-				"source":          "-s:%s",
-				"stylesheet":      "-xsl:%s",
-				"out":             "-o:%s",
-			}
-			for k, val := range m {
-				if str := tbl.RawGetString(k); str.Type() == lua.LTString {
-					command = append(command, fmt.Sprintf(val, str.String()))
-				}
-			}
-			// parameters at the end
-			if str := tbl.RawGetString("params"); str.Type() == lua.LTString {
-				command = append(command, str.String())
-			} else if tbl := tbl.RawGetString("params"); tbl.Type() == lua.LTTable {
-				if paramtbl, ok := tbl.(*lua.LTable); ok {
-					paramtbl.ForEach(func(key lua.LValue, value lua.LValue) {
-						command = append(command, fmt.Sprintf("%s=%s", key.String(), value.String()))
-					})
-				}
-			}
-
-		} else {
-			return lerr("The single argument must be a table (run_saxon)")
+func runSaxon(l *lua.State) int {
+	n := l.Top()
+	command := []string{"-cp", saxonClasspath(), "net.sf.saxon.Transform"}
+	if n == 1 {
+		if l.TypeOf(1) != lua.TypeTable {
+			return lualib.PushError(l, "The single argument must be a table (run_saxon)")
 		}
-	} else if numberArguments < 3 {
-		return lerr("command requires 3 or 4 arguments")
+		m := map[string]string{
+			"initialtemplate": "-it:%s",
+			"source":          "-s:%s",
+			"stylesheet":      "-xsl:%s",
+			"out":             "-o:%s",
+		}
+		for k, fmtStr := range m {
+			if v, ok := lualib.FieldString(l, 1, k); ok {
+				command = append(command, fmt.Sprintf(fmtStr, v))
+			}
+		}
+		// params can be a string or a table
+		l.Field(1, "params")
+		switch l.TypeOf(-1) {
+		case lua.TypeString:
+			s, _ := l.ToString(-1)
+			command = append(command, s)
+		case lua.TypeTable:
+			pIdx := l.AbsIndex(-1)
+			l.PushNil()
+			for l.Next(pIdx) {
+				k, _ := l.ToString(-2)
+				v, _ := l.ToString(-1)
+				command = append(command, fmt.Sprintf("%s=%s", k, v))
+				l.Pop(1)
+			}
+		}
+		l.Pop(1)
+	} else if n < 3 {
+		return lualib.PushError(l, "command requires 3 or 4 arguments")
 	} else {
-		xsl := l.CheckString(1)
-		src := l.CheckString(2)
-		out := l.CheckString(3)
-
+		xsl := lua.CheckString(l, 1)
+		src := lua.CheckString(l, 2)
+		out := lua.CheckString(l, 3)
 		command = append(command, fmt.Sprintf("-xsl:%s", xsl), fmt.Sprintf("-s:%s", src), fmt.Sprintf("-o:%s", out))
-
-		// fourth argument param is optional
-		if numberArguments > 3 {
-			command = append(command, l.CheckString(4))
+		if n > 3 {
+			command = append(command, lua.CheckString(l, 4))
 		}
 	}
 	if verbose {
@@ -120,45 +113,43 @@ func runSaxon(l *lua.LState) int {
 	env := []string{}
 	exitcode := run("java", command, env)
 
-	if exitcode == 0 {
-		l.Push(lua.LTrue)
-	} else {
-		l.Push(lua.LFalse)
-	}
-	l.Push(lua.LString("java " + strings.Join(command, " ")))
+	l.PushBoolean(exitcode == 0)
+	l.PushString("java " + strings.Join(command, " "))
 	return 2
 }
 
-func findFile(l *lua.LState) int {
-	numberArguments := l.GetTop()
-	if numberArguments != 1 {
-		return lerr("find_file requires 1 argument: the file to find")
+func findFile(l *lua.State) int {
+	if l.Top() != 1 {
+		return lualib.PushError(l, "find_file requires 1 argument: the file to find")
 	}
-	fn := l.CheckString(1)
+	fn := lua.CheckString(l, 1)
 	abspath, err := splibaux.GetFullPath(fn)
 	if abspath == "" {
 		if err != nil {
-			l.Push(lua.LNil)
-			l.Push(lua.LString(err.Error()))
+			l.PushNil()
+			l.PushString(err.Error())
 			return 2
 		}
-		l.Push(lua.LNil)
+		l.PushNil()
 		return 1
 	}
-	l.Push(lua.LString(abspath))
+	l.PushString(abspath)
 	return 1
 }
-func execute(l *lua.LState) int {
-	cmdline := l.CheckTable(1)
+
+func execute(l *lua.State) int {
+	lua.CheckType(l, 1, lua.TypeTable)
+	n := l.RawLength(1)
 	var cmd string
 	var arguments []string
-
-	for i := 1; i <= cmdline.Len(); i++ {
-		val := cmdline.RawGetInt(i)
+	for i := 1; i <= n; i++ {
+		l.RawGetInt(1, i)
+		s, _ := l.ToString(-1)
+		l.Pop(1)
 		if i == 1 {
-			cmd = val.String()
+			cmd = s
 		} else {
-			arguments = append(arguments, val.String())
+			arguments = append(arguments, s)
 		}
 	}
 	command := exec.Command(cmd, arguments...)
@@ -166,113 +157,109 @@ func execute(l *lua.LState) int {
 	command.Stdin = os.Stdin
 	if err := command.Run(); err != nil {
 		if exitError, ok := err.(*exec.ExitError); ok {
-			l.Push(lua.LFalse)
-			l.Push(lua.LNumber(exitError.ExitCode()))
+			l.PushBoolean(false)
+			l.PushInteger(exitError.ExitCode())
 			return 2
 		}
-		return lerr(err.Error())
+		return lualib.PushError(l, err.Error())
 	}
-	l.Push(lua.LTrue)
-	l.Push(lua.LNumber(0))
+	l.PushBoolean(true)
 	return 1
 }
 
-var exports = map[string]lua.LGFunction{
-	"validate_relaxng": validateRelaxNG,
-	"run_saxon":        runSaxon,
-	"find_file":        findFile,
-	"execute":          execute,
+var runtimeExports = []lua.RegistryFunction{
+	{Name: "validate_relaxng", Function: validateRelaxNG},
+	{Name: "run_saxon", Function: runSaxon},
+	{Name: "find_file", Function: findFile},
+	{Name: "execute", Function: execute},
 }
 
-func runtimeLoader(l *lua.LState) int {
-	mod := l.SetFuncs(l.NewTable(), exports)
-	fillRuntimeModule(mod)
-	l.Push(mod)
-	return 1
+func runtimeLoader(l *lua.State) int {
+	lua.NewLibrary(l, runtimeExports)
 
-}
-
-// set projectdir and variables table
-func fillRuntimeModule(mod lua.LValue) {
-	lvars := l.NewTable()
+	// runtime.variables
+	l.NewTable()
 	for k, v := range variables {
-		lvars.RawSetString(k, lua.LString(v))
+		l.PushString(v)
+		l.SetField(-2, k)
 	}
-	l.SetField(mod, "variables", lvars)
-	l.SetField(mod, "options", getOptionsTable((l)))
+	l.SetField(-2, "variables")
+
+	// runtime.options (table with __index/__newindex metatable)
+	l.NewTable()
+	l.NewTable()
+	l.PushGoFunction(indexOptions)
+	l.SetField(-2, "__index")
+	l.PushGoFunction(newIndexOptions)
+	l.SetField(-2, "__newindex")
+	l.SetMetaTable(-2)
+	l.SetField(-2, "options")
+
+	// runtime.projectdir
 	wd, _ := os.Getwd()
-	l.SetField(mod, "projectdir", lua.LString(wd))
+	l.PushString(wd)
+	l.SetField(-2, "projectdir")
+
+	return 1
 }
 
-func getOptionsTable(l *lua.LState) *lua.LTable {
-	options := l.NewTable()
-	mt := l.NewTable()
-	l.SetField(mt, "__index", l.NewFunction(indexOptions))
-	l.SetField(mt, "__newindex", l.NewFunction(newIndexOptions))
-	l.SetMetatable(options, mt)
-	return options
-}
-
-// Set string
-func newIndexOptions(l *lua.LState) int {
-	numberArguments := l.GetTop()
-	if numberArguments < 3 {
-		l.Push(lua.LNil)
+// __newindex(table, key, value)
+func newIndexOptions(l *lua.State) int {
+	if l.Top() < 3 {
+		l.PushNil()
 		return 1
 	}
-	// 1: tbl
-	// 2: key
-	// 3: value
-	optionName := l.CheckString(2)
-	optionValue := l.CheckString(3)
-	options[optionName] = optionValue
+	name := lua.CheckString(l, 2)
+	value := lua.CheckString(l, 3)
+	options[name] = value
 	return 0
 }
 
-func indexOptions(l *lua.LState) int {
-	numberArguments := l.GetTop()
-	if numberArguments < 2 {
-		l.Push(lua.LNil)
+// __index(table, key)
+func indexOptions(l *lua.State) int {
+	if l.Top() < 2 {
+		l.PushNil()
 		return 1
 	}
-	// 1: tbl
-	// 2: key
-	optionName := l.CheckString(2)
-	l.Push(lua.LString(getOption(optionName)))
+	name := lua.CheckString(l, 2)
+	l.PushString(getOption(name))
 	return 1
 }
 
-// When runtime.finalizer is set, call that function after
-// the publishing run
+// runFinalizerCallback runs runtime.finalizer (if defined) after the
+// publishing run.
 func runFinalizerCallback() {
-	val := l.GetGlobal("runtime")
-	if val == nil {
+	if l == nil {
 		return
 	}
-
-	tbl, ok := val.(*lua.LTable)
-	if !ok {
+	l.Global("runtime")
+	if !l.IsTable(-1) {
+		l.Pop(1)
 		return
 	}
-	fun := tbl.RawGetString("finalizer")
-	if fn, ok := fun.(*lua.LFunction); ok {
-		l.Push(fn)
-		l.Call(0, 0)
+	l.Field(-1, "finalizer")
+	if !l.IsFunction(-1) {
+		l.Pop(2)
+		return
 	}
+	l.Call(0, 0)
+	l.Pop(1)
 }
 
 func runLuaScript(filename string) bool {
 	if l == nil {
 		l = lua.NewState()
+		httpModule := luahttp.New(&http.Client{})
+		lua.OpenLibraries(l,
+			lua.RegistryFunction{Name: "runtime", Function: runtimeLoader},
+			lua.RegistryFunction{Name: "csv", Function: luacsv.Open},
+			lua.RegistryFunction{Name: "xml", Function: luaxml.Open},
+			lua.RegistryFunction{Name: "xlsx", Function: luaxlsx.Open},
+			lua.RegistryFunction{Name: "http", Function: httpModule.Loader},
+		)
 	}
 
-	l.PreloadModule("runtime", runtimeLoader)
-	l.PreloadModule("csv", luacsv.Open)
-	l.PreloadModule("xml", luaxml.Open)
-	l.PreloadModule("xlsx", luaxlsx.Open)
-	l.PreloadModule("http", gluahttp.NewHttpModule(&http.Client{}).Loader)
-
-	if err := l.DoFile(filename); err != nil {
+	if err := lua.DoFile(l, filename); err != nil {
 		fmt.Println(err)
 		return false
 	}

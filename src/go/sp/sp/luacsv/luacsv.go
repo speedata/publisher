@@ -8,46 +8,43 @@ import (
 	"os"
 	"regexp"
 
-	lua "github.com/yuin/gopher-lua"
+	"speedatapublisher/sp/sp/lualib"
+
+	lua "github.com/speedata/go-lua"
 	"golang.org/x/text/encoding/charmap"
 )
 
-func lerr(l *lua.LState, errormessage string) int {
-	l.SetTop(0)
-	l.Push(lua.LFalse)
-	l.Push(lua.LString(errormessage))
-	return 2
-}
-
-func decode(l *lua.LState) int {
-	if l.GetTop() < 1 {
-		return lerr(l, "The first argument of decode must be the filename of the CSV.")
+func decode(l *lua.State) int {
+	if l.Top() < 1 {
+		return lualib.PushError(l, "The first argument of decode must be the filename of the CSV.")
 	}
-	filename := l.CheckString(1)
+	filename := lua.CheckString(l, 1)
 
 	columns := []int{}
 	var charset, separator string
 
-	if l.GetTop() > 1 {
-		if tbl := l.CheckTable(-1); tbl.Type() == lua.LTTable {
-			val := tbl.RawGetString("charset")
-			if val.Type() == lua.LTString {
-				charset = val.String()
-			}
-			val = tbl.RawGetString("separator")
-			if val.Type() == lua.LTString {
-				separator = val.String()
-			}
-			val = tbl.RawGetString("columns")
-			if cols, ok := val.(*lua.LTable); ok {
-				for i := 1; i <= cols.Len(); i++ {
-					val = cols.RawGetInt(i)
-					if f, ok := val.(lua.LNumber); ok {
-						columns = append(columns, int(f))
+	if l.Top() > 1 {
+		lua.CheckType(l, -1, lua.TypeTable)
+		if v, ok := lualib.FieldString(l, -1, "charset"); ok {
+			charset = v
+		}
+		if v, ok := lualib.FieldString(l, -1, "separator"); ok {
+			separator = v
+		}
+		l.Field(-1, "columns")
+		if l.IsTable(-1) {
+			n := l.RawLength(-1)
+			for i := 1; i <= n; i++ {
+				l.RawGetInt(-1, i)
+				if l.IsNumber(-1) {
+					if v, ok := l.ToInteger(-1); ok {
+						columns = append(columns, v)
 					}
 				}
+				l.Pop(1)
 			}
 		}
+		l.Pop(1)
 	}
 
 	var err error
@@ -55,10 +52,9 @@ func decode(l *lua.LState) int {
 
 	rd, err = os.Open(filename)
 	if err != nil {
-		return lerr(l, err.Error())
+		return lualib.PushError(l, err.Error())
 	}
 
-	// Currently only latin-1 is supported
 	switch charset {
 	case "ISO-8859-1":
 		rd = charmap.ISO8859_1.NewDecoder().Reader(rd)
@@ -66,7 +62,7 @@ func decode(l *lua.LState) int {
 
 	data, err := io.ReadAll(rd)
 	if err != nil {
-		return lerr(l, err.Error())
+		return lualib.PushError(l, err.Error())
 	}
 
 	re := regexp.MustCompile(`\r`)
@@ -81,35 +77,34 @@ func decode(l *lua.LState) int {
 
 	records, err := reader.ReadAll()
 	if err != nil {
-		return lerr(l, err.Error())
+		return lualib.PushError(l, err.Error())
 	}
-	rows := l.NewTable()
+	l.NewTable()
 	for i, row := range records {
 		if i == 0 && len(columns) == 0 {
 			for z := 1; z <= len(row); z++ {
 				columns = append(columns, z)
 			}
 		}
-		col := l.NewTable()
+		l.NewTable()
 		for j, entry := range columns {
 			if entry-1 < 0 || entry > len(row) {
-				return lerr(l, fmt.Sprintf("Column %d out of range. Must be between 1 and %d (# of columns)", entry, len(row)))
+				return lualib.PushError(l, fmt.Sprintf("Column %d out of range. Must be between 1 and %d (# of columns)", entry, len(row)))
 			}
-			col.RawSetInt(j+1, lua.LString(row[entry-1]))
+			l.PushString(row[entry-1])
+			l.RawSetInt(-2, j+1)
 		}
-		rows.RawSetInt(i+1, col)
+		l.RawSetInt(-2, i+1)
 	}
-
-	l.Push(rows)
 	return 1
 }
 
-var exports = map[string]lua.LGFunction{
-	"decode": decode,
+var exports = []lua.RegistryFunction{
+	{Name: "decode", Function: decode},
 }
 
-func Open(l *lua.LState) int {
-	mod := l.SetFuncs(l.NewTable(), exports)
-	l.Push(mod)
+// Open is the loader for the csv module.
+func Open(l *lua.State) int {
+	lua.NewLibrary(l, exports)
 	return 1
 }

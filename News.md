@@ -15,6 +15,7 @@ This file gets updated before a stable release. There is a [detailed changelog](
 * Remove Debian package generation
 * Memory usage reduction
 * Variable fonts
+* `sp filter` scripts now run on Lua 5.4 (was Lua 5.1). The Lua VM was switched from gopher-lua to speedata/go-lua.
 
 
 ## Version 5.4

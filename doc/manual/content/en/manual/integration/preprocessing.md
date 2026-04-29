@@ -12,6 +12,10 @@ Lua is a simple but powerful programming language that is intended to be built i
 
 Three use cases can be found in [examples repository](https://github.com/speedata/examples/tree/master/technical).
 
+{{< callout >}}
+Since version 5.5.14 the filter pre-processing runs on Lua 5.4 (previously Lua 5.1). Scripts that use `setfenv`/`getfenv`, `unpack(...)` (instead of `table.unpack`), `loadstring` or `module(...)` need to be adjusted accordingly.
+{{< /callout >}}
+
 ## Calling the Lua script
 
 The filter is started either via the command line
@@ -279,7 +283,7 @@ Runs a program and prints its output to the console. For example, to start the s
 runtime.execute({"sp","--runs","2"})
 ```
 If necessary, the first parameter (the program name) must be specified with absolute path of the program. Under Windows, forward slashes (/) also work as separators instead of backward slashes (\).
-The first return value is a boolean value that is true if the command was executed without errors. Otherwise a second return value (int) is returned, which contains the return code.
+The first return value is a boolean (success). On failure, the second return value is an exit code (number, if the program ran but exited with a non-zero status) or an error message (string, if the program could not be started at all). On success there is no second value.
 
 `find_file(‹filename or URL›)`
 Find the resource and return a full path on the local disk to access the resource. Returns nil or false and perhaps an error message if it can't find the resource.
@@ -365,5 +369,57 @@ Returned is a table with the keys `day`, `month`, `year`, `hour`, `minute` and `
 
 ### `http`
 
-The HTTP library is described at https://github.com/cjoudrey/gluahttp.
+The `http` module provides a simple HTTP client. There is a function for each HTTP method, plus a generic `request` call:
+
+```lua
+http = require("http")
+response, err = http.get(‹url›[, ‹options›])
+response, err = http.post(‹url›[, ‹options›])
+response, err = http.put(‹url›[, ‹options›])
+response, err = http.delete(‹url›[, ‹options›])
+response, err = http.head(‹url›[, ‹options›])
+response, err = http.patch(‹url›[, ‹options›])
+response, err = http.request(‹method›, ‹url›[, ‹options›])
+```
+
+On success a response object is returned, on error `nil` and an error message. The options are passed as a table:
+
+| Key | Value |
+| --- | --- |
+| `query` | Query string (e.g. `"a=1&b=2"`); appended to the URL |
+| `body` | String with the request body |
+| `form` | Same as `body`, but additionally sets `Content-Type: application/x-www-form-urlencoded` |
+| `headers` | Table mapping header names to values |
+| `cookies` | Table mapping cookie names to values |
+| `auth` | Table `{user = ..., pass = ...}` for HTTP basic auth |
+| `timeout` | Number (seconds) or string (Go duration, e.g. `"500ms"`) |
+
+The response object exposes the following fields:
+
+| Field | Description |
+| --- | --- |
+| `status_code` | HTTP status code (number) |
+| `body` | Response body as a string |
+| `body_size` | Size of the body in bytes |
+| `headers` | Table with response headers |
+| `cookies` | Table with response cookies |
+| `url` | Final URL after redirects |
+
+Example:
+
+```lua
+http = require("http")
+response, err = http.post("https://api.example.com/users", {
+    headers = { ["Content-Type"] = "application/json" },
+    body    = '{"name":"Alice"}',
+    timeout = 10,
+})
+if not response then
+    print(err)
+    os.exit(-1)
+end
+if response.status_code == 200 then
+    print(response.body)
+end
+```
 

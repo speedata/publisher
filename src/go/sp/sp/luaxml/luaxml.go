@@ -6,132 +6,122 @@ import (
 	"fmt"
 	"os"
 
-	lua "github.com/yuin/gopher-lua"
+	"speedatapublisher/sp/sp/lualib"
+
+	lua "github.com/speedata/go-lua"
 )
 
-func lerr(l *lua.LState, errormessage string) int {
-	l.SetTop(0)
-	l.Push(lua.LFalse)
-	l.Push(lua.LString(errormessage))
-	return 2
-}
-
-func encodeComment(tbl *lua.LTable, enc *xml.Encoder) error {
-	var comment string
-	val := tbl.RawGetString("_value")
-	if val.Type() == lua.LTString {
-		comment = val.String()
-	} else {
+// encodeComment serializes the table at idx as an XML comment.
+func encodeComment(l *lua.State, idx int, enc *xml.Encoder) error {
+	idx = l.AbsIndex(idx)
+	comment, ok := lualib.FieldString(l, idx, "_value")
+	if !ok {
 		return fmt.Errorf("error reading comment")
 	}
-
 	c := xml.Comment([]byte(comment))
 	return enc.EncodeToken(c)
 }
 
-func encodeElement(tbl *lua.LTable, enc *xml.Encoder) error {
-	var localName, namespace string
-	val := tbl.RawGetString("_name")
-	if val.Type() == lua.LTString {
-		localName = val.String()
+// encodeElement serializes the table at idx as an XML element.
+func encodeElement(l *lua.State, idx int, enc *xml.Encoder) error {
+	idx = l.AbsIndex(idx)
+
+	var localName string
+	if v, ok := lualib.FieldString(l, idx, "_name"); ok {
+		localName = v
 	}
-	// namespace not used yet
 	start := xml.StartElement{
-		Name: xml.Name{
-			Local: localName,
-			Space: namespace,
-		},
+		Name: xml.Name{Local: localName},
 	}
-	// attributes
-	tbl.ForEach(func(key lua.LValue, value lua.LValue) {
-		if str, ok := key.(lua.LString); ok {
-			if string(str)[0] != '_' {
-				attr := xml.Attr{
-					Value: value.String(),
-					Name: xml.Name{
-						Local: str.String(),
-						Space: "",
-					},
+
+	// Attributes: string keys not starting with "_".
+	l.PushNil()
+	for l.Next(idx) {
+		if l.TypeOf(-2) == lua.TypeString {
+			keyStr, _ := l.ToString(-2)
+			if len(keyStr) > 0 && keyStr[0] != '_' {
+				if valStr, ok := l.ToString(-1); ok {
+					start.Attr = append(start.Attr, xml.Attr{
+						Value: valStr,
+						Name:  xml.Name{Local: keyStr},
+					})
 				}
-				start.Attr = append(start.Attr, attr)
 			}
 		}
-	})
-	err := enc.EncodeToken(start)
-	if err != nil {
+		l.Pop(1)
+	}
+
+	if err := enc.EncodeToken(start); err != nil {
 		fmt.Println(err)
 		return err
 	}
-	// children
-	tbl.ForEach(func(key lua.LValue, value lua.LValue) {
-		if _, ok := key.(lua.LNumber); ok {
-			switch val := value.Type(); val {
-			case lua.LTTable:
-				err := encodeItem(value.(*lua.LTable), enc)
-				if err != nil {
-					fmt.Println(err)
-				}
-			case lua.LTString:
-				enc.EncodeToken(xml.CharData([]byte(value.String())))
-			default:
-				fmt.Println("unknown type")
+
+	// Children: integer keys 1..n.
+	n := l.RawLength(idx)
+	for i := 1; i <= n; i++ {
+		l.RawGetInt(idx, i)
+		switch l.TypeOf(-1) {
+		case lua.TypeTable:
+			if err := encodeItem(l, -1, enc); err != nil {
+				fmt.Println(err)
 			}
+		case lua.TypeString:
+			s, _ := l.ToString(-1)
+			enc.EncodeToken(xml.CharData([]byte(s)))
+		default:
+			fmt.Println("unknown type")
 		}
-	})
+		l.Pop(1)
+	}
 
 	enc.EncodeToken(start.End())
 	return nil
 }
 
-func encodeItem(tbl *lua.LTable, enc *xml.Encoder) error {
-	var typ string
-	val := tbl.RawGetString("_type")
-	if val.Type() == lua.LTString {
-		typ = val.String()
-	} else {
-		typ = "element"
+func encodeItem(l *lua.State, idx int, enc *xml.Encoder) error {
+	idx = l.AbsIndex(idx)
+	typ := "element"
+	if v, ok := lualib.FieldString(l, idx, "_type"); ok {
+		typ = v
 	}
-	// get the name of the element
 	switch typ {
 	case "element":
-		return encodeElement(tbl, enc)
+		return encodeElement(l, idx, enc)
 	case "comment":
-		return encodeComment(tbl, enc)
+		return encodeComment(l, idx, enc)
 	}
 	return nil
 }
 
-// Encode the table given in the first argument to an XML file and
-// write this to the hard drive with the name `data.xml`
-func encodeTable(l *lua.LState) int {
+// encodeTable encodes the table given in the first argument to an XML file
+// and writes it under the file name passed as the second argument
+// (default: data.xml).
+func encodeTable(l *lua.State) int {
 	filename := "data.xml"
-	if l.GetTop() > 1 {
-		filename = l.CheckString(2)
+	if l.Top() > 1 {
+		filename = lua.CheckString(l, 2)
 	}
 	var b bytes.Buffer
 	enc := xml.NewEncoder(&b)
-	if tbl := l.CheckTable(1); tbl.Type() == lua.LTTable {
-		err := encodeItem(tbl, enc)
-		if err != nil {
-			fmt.Println(err)
-			return lerr(l, err.Error())
-		}
+	lua.CheckType(l, 1, lua.TypeTable)
+	if err := encodeItem(l, 1, enc); err != nil {
+		fmt.Println(err)
+		return lualib.PushError(l, err.Error())
 	}
 	l.SetTop(0)
-	l.Push(lua.LTrue)
+	l.PushBoolean(true)
 	enc.Flush()
 	os.WriteFile(filename, b.Bytes(), 0644)
 	return 1
 }
 
-var exports = map[string]lua.LGFunction{
-	"encode_table": encodeTable,
-	"decode_xml":   decodeXML,
+var exports = []lua.RegistryFunction{
+	{Name: "encode_table", Function: encodeTable},
+	{Name: "decode_xml", Function: decodeXML},
 }
 
-// Open starts this lua instance
-func Open(l *lua.LState) int {
-	mod := l.SetFuncs(l.NewTable(), exports)
-	l.Push(mod)
+// Open is the loader for the xml module.
+func Open(l *lua.State) int {
+	lua.NewLibrary(l, exports)
 	return 1
 }
