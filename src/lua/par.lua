@@ -981,6 +981,17 @@ function Par:format( width_sp, options,data )
                 line = line.next
             end
 
+            if publisher.options.showtextformat then
+                local tfname = tf.name or "text"
+                local ln = nodelist.head
+                while ln do
+                    if ln.id == hlist_node_id and ln.head then
+                        ln.head = publisher.annotate_nodelist(ln, tfname)
+                    end
+                    ln = ln.next
+                end
+            end
+
             publisher.fonts.post_linebreak(nodelist)
             if self_margin_top then
                 nodelist.list = publisher.add_glue(nodelist.list,"head",{width = self_margin_top},"par.lua/if self.margin_top")
