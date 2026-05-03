@@ -283,6 +283,9 @@ end
 --- Stop the data processing and write PDF. If `graceful` is not given or `false` then
 --- `os.exit()` gets called. This is the last function to be called.
 function exit(graceful)
+    if publisher.fonts and publisher.fonts.summarize_missing_glyphs then
+        publisher.fonts.summarize_missing_glyphs()
+    end
     errcount = splib.errcount()
     warncount = splib.warncount()
     log("Stop processing data")

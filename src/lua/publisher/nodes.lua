@@ -1085,6 +1085,14 @@ function M.hbglyphlist(arguments)
         local thisfontnumber = fontnumber
         local thisglyph = glyphs[i]
         local cp = thisglyph.codepoint
+        -- HarfBuzz emits a sentinel codepoint 0xFFFF with x_advance = 0 for
+        -- glyphs that have been removed during complex shaping (e.g. Khmer
+        -- reordering). These are invisible and have no entry in the font's
+        -- characters table, so skip them to avoid producing dead glyph nodes
+        -- and triggering thousands of bogus "missing glyph" warnings later.
+        if cp == 65535 and (thisglyph.x_advance == 0 or thisglyph.x_advance == nil) then
+            goto continue
+        end
         local cpcluster = cluster[thisglyph.cluster]
         if cpcluster and cp == 0 and cpcluster > publisher.puastart then
             cp = cpcluster - publisher.puastart
@@ -1244,11 +1252,8 @@ function M.hbglyphlist(arguments)
                 end
             else
                 if reportmissingglyphs then
-                    if reportmissingglyphs == "warning" then
-                        main.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",code),"loc","hbglyphlist")
-                    else
-                        main.log("error","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",code),"loc","hbglyphlist")
-                    end
+                    local lvl = reportmissingglyphs == "warning" and "warn" or "error"
+                    fonts.report_missing_glyph(lvl, thisfont.name, code, "loc", "hbglyphlist")
                 end
             end
         else
@@ -1305,10 +1310,16 @@ function M.hbglyphlist(arguments)
             -- $(£¥·'"〈《「『【〔〖〝﹙﹛＄（．［｛￡￥
 
             -- glyph ids inserted by sd:symbol()
-            if  uc > publisher.puastart and thisglyph.codepoint == 0 then
-                thisglyph.x_advance = thistbl.characters[uc].hadvance
+            local thischar = thistbl.characters[uc]
+            if  uc > publisher.puastart and thisglyph.codepoint == 0 and thischar then
+                thisglyph.x_advance = thischar.hadvance
             end
-            local diff = thisglyph.x_advance - thistbl.characters[uc].hadvance
+
+            -- thischar can be nil for glyphs produced by complex shaping (e.g. Khmer
+            -- subscript consonant stacks) whose backmapped codepoint has no entry in
+            -- the font's characters table. In that case there is no font-defined
+            -- advance to compare against, so skip the kerning correction.
+            local diff = thischar and (thisglyph.x_advance - thischar.hadvance) or 0
             local kernvalue = diff * tbl.mag
             if parameter.letterspacing then
                 kernvalue = kernvalue + parameter.letterspacing

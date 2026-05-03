@@ -22,6 +22,12 @@ local font_instances={}
 M.used_fonts = {}
 local used_fonts = M.used_fonts
 
+-- Tracks missing-glyph reports: missing_glyph_counts[font_name][code] = count.
+-- Filled by report_missing_glyph(); flushed by summarize_missing_glyphs() at
+-- the end of the run. We emit the warning only on first occurrence and then
+-- print a "(N times)" summary for repeats, instead of flooding the log.
+M.missing_glyph_counts = {}
+
 local glue_node      = node.id("glue")
 local glyph_node     = node.id("glyph")
 local disc_node      = node.id("disc")
@@ -591,11 +597,8 @@ do
                 if reportmissingglyphs then
                     local thisfont = used_fonts[d_getfont(head)]
                     if thisfont and not thisfont.characters[d_getchar(head)] then
-                        if reportmissingglyphs == "warning" then
-                            main.log("warn","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",d_getchar(head)))
-                        else
-                            main.log("error","Glyph is missing from the font","font",thisfont.name,"glyph_hex",string.format("%04x",d_getchar(head)))
-                        end
+                        local lvl = reportmissingglyphs == "warning" and "warn" or "error"
+                        M.report_missing_glyph(lvl, thisfont.name, d_getchar(head))
                     end
                 end
                 if ul then
@@ -706,6 +709,52 @@ function M.clone_family( fam, params )
     newfam.size = math.floor(params.size * newfam.size)
     lookup_fontfamily_number_instance[#lookup_fontfamily_number_instance + 1] = newfam
     return #lookup_fontfamily_number_instance
+end
+
+--- Report a missing glyph, deduplicated by (font, code).
+--- The first occurrence is logged immediately at `level` ("warn" or "error");
+--- subsequent occurrences only increment the counter. summarize_missing_glyphs()
+--- emits a "(N times)" summary line for codes seen more than once.
+--- Extra arguments are passed through to the immediate log call only.
+function M.report_missing_glyph(level, font_name, code, ...)
+    local per_font = M.missing_glyph_counts[font_name]
+    if not per_font then
+        per_font = {}
+        M.missing_glyph_counts[font_name] = per_font
+    end
+    local prev = per_font[code]
+    if prev then
+        per_font[code] = prev + 1
+        return
+    end
+    per_font[code] = 1
+    main.log(level, "Glyph is missing from the font",
+        "font", font_name,
+        "glyph_hex", string.format("%04x", code),
+        ...)
+end
+
+function M.summarize_missing_glyphs()
+    local rows = {}
+    for font_name, per_font in next, M.missing_glyph_counts do
+        for code, count in next, per_font do
+            if count > 1 then
+                rows[#rows + 1] = { font = font_name, code = code, count = count }
+            end
+        end
+    end
+    if #rows == 0 then return end
+    table.sort(rows, function(a, b)
+        if a.count ~= b.count then return a.count > b.count end
+        if a.font ~= b.font then return a.font < b.font end
+        return a.code < b.code
+    end)
+    for _, r in ipairs(rows) do
+        main.log("warn", "Glyph is missing from the font (repeated)",
+            "font", r.font,
+            "glyph_hex", string.format("%04x", r.code),
+            "count", tostring(r.count))
+    end
 end
 
 file_end("fonts.lua")
