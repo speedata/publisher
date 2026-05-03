@@ -6190,7 +6190,7 @@ function commands.text(layoutxml,dataxml)
     publisher.current_fgcolor = save_color
 
     if not fontfamilyname then fontfamilyname = "text" end
-    fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
+    local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
     if fontfamily == nil then
         err("Fontfamily %q not found.",fontfamilyname or "???")
         fontfamily = 1
