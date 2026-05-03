@@ -5,18 +5,20 @@ This file gets updated before a stable release. There is a [detailed changelog](
 
 # Version 5.5
 
-* XPath Support for arrays and maps, fn:serialize()
+* XPath Support for arrays and maps, fn:serialize(), || concatenation
 * New documentation
 * PDF/UA (accessibility) enhancements
 * HTML/CSS enhancements (colspan/rowspan in tables,..)
 * New match attribute in Record (similar to XSLT template matching)
 * Tables: alternating row colors restart on each page.
 * Tables: colspan="*"
-* Remove Debian package generation
+* Remove Debian package generation + macOS Intel packages
 * Memory usage reduction
 * Variable fonts
-* `sp filter` scripts now run on Lua 5.4 (was Lua 5.1). The Lua VM was switched from gopher-lua to speedata/go-lua.
-
+* `sp filter` scripts now run on Lua 5.4 (was Lua 5.1).
+* Update to LuaTeX 1.24.0
+* New API version 1 (v0 still remains)
+* Progress bar
 
 ## Version 5.4
 

@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.5">
+    <entry version="5.5.14" date="2026-05-03" sha1="7e851204">
+        <en summary="Fix crash and excessive warnings during complex-script shaping.">Avoid an indexing crash in <tt>hbglyphlist</tt> when a backmapped codepoint has no entry in the font's characters table (triggered e.g. by Khmer subscript consonant stacks), skip HarfBuzz sentinel glyphs (codepoint <tt>0xFFFF</tt> with <tt>x_advance=0</tt>) emitted during complex reordering, and deduplicate "Glyph is missing from the font" warnings: each <tt>(font, codepoint)</tt> pair is reported only on first occurrence, with a count-based summary at the end of the run.</en>
+        <de summary="Crash und übermäßige Warnungen beim Satz komplexer Schriftsysteme behoben.">Indexierungs-Crash in <tt>hbglyphlist</tt> vermieden, wenn ein backgemappter Codepoint nicht in der characters-Tabelle der Schrift vorhanden ist (z.B. ausgelöst durch Khmer-Subscript-Konsonantenstapel). HarfBuzz-Sentinel-Glyphen (Codepoint <tt>0xFFFF</tt> mit <tt>x_advance=0</tt>), die beim komplexen Reordering entstehen, werden übersprungen. „Glyph is missing from the font"-Warnungen werden dedupliziert: Jede <tt>(Font, Codepoint)</tt>-Kombination wird nur beim ersten Auftreten gemeldet, am Laufende folgt eine Zusammenfassung mit der Häufigkeit.</de>
+    </entry>
+    <entry version="5.5.14" date="2026-04-29" sha1="40f6e479">
+        <en summary="sp filter scripts now run on Lua 5.4.">The Lua VM for <tt>sp filter</tt> scripts was switched from yuin/gopher-lua (Lua 5.1) to speedata/go-lua (Lua 5.4), bringing it closer to the LuaTeX side and consolidating Lua tooling. Includes a new in-tree <tt>luahttp</tt> module as a replacement for cjoudrey/gluahttp.</en>
+        <de summary="sp-filter-Skripte laufen jetzt auf Lua 5.4.">Die Lua-VM für <tt>sp filter</tt>-Skripte wurde von yuin/gopher-lua (Lua 5.1) auf speedata/go-lua (Lua 5.4) umgestellt — näher am LuaTeX-Stack und mit konsolidiertem Lua-Tooling. Enthält ein neues, hauseigenes <tt>luahttp</tt>-Modul als Ersatz für cjoudrey/gluahttp.</de>
+    </entry>
     <entry version="5.5.13" date="2026-04-27" sha1="1352cad0">
         <en summary="Publishing API v1.">New server API version 1 with improved endpoints for publishing runs, status queries, and PDF retrieval.</en>
         <de summary="Publishing API v1.">Neue Server-API Version 1 mit verbesserten Endpunkten für Publishing-Läufe, Statusabfragen und PDF-Abruf.</de>
