@@ -316,8 +316,7 @@ local function pre_linebreak_direct( head )
         elseif id == glyph_node then
             local ff = d_has_attribute(head, plb_att_fontfamily)
             if ff then
-                -- not local, so that we can access fontfamily later
-                fontfamily = ff
+                local fontfamily = ff
 
                 -- Last resort
                 if fontfamily == 0 then fontfamily = 1 warning("Undefined fontfamily, set fontfamily to 1") end
