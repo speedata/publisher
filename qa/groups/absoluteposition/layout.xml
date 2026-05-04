@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <DefineColor name="yellow" model="cmyk" c="0" m="0" y="100" k="0" alpha="20" />
+    <Record element="data">
+        <Group name="foo">
+            <Contents>
+                <PlaceObject column="1">
+                    <Textblock width="5">
+                        <Paragraph>
+                            <Value>before</Value>
+                        </Paragraph>
+                    </Textblock>
+                </PlaceObject>
+                <PlaceObject column="15mm" row="3mm">
+                    <Box height="3" width="3" background-color="yellow" />
+                </PlaceObject>
+                <PlaceObject column="1">
+                    <Textblock width="5">
+                        <Paragraph>
+                            <Value>after</Value>
+                        </Paragraph>
+                    </Textblock>
+                </PlaceObject>
+            </Contents>
+        </Group>
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>hello</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <PlaceObject groupname="foo"/>
+    </Record>
+</Layout>

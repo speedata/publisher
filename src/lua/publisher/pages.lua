@@ -89,9 +89,9 @@ function M.output_absolute_position(param)
         local group = publisher.groups[publisher.current_group]
         assert(group)
 
-        local n = publisher.add_glue( nodelist ,"head",{ width = param.delta_x })
+        local n = publisher.add_glue( nodelist ,"head",{ width = x })
         n = node.hpack(n)
-        n = publisher.add_glue(n, "head", {width = param.delta_y})
+        n = publisher.add_glue(n, "head", {width = y})
         n = node.vpack(n)
 
         if group.contents then
