@@ -10,6 +10,8 @@
 -- requires post processing at various stages.
 file_start("fonts.lua")
 
+local publisher = require("publisher")
+
 local fontloader_mod = require("fonts.fontloader")
 
 local colors_module = require("publisher.colors")
@@ -816,7 +818,6 @@ end
 
 file_end("fonts.lua")
 
-_G.publisher = _G.publisher or {}
-_G.publisher.fonts = M
+publisher.fonts = M
 
 return M

@@ -15,6 +15,9 @@
 ---@field condition? string
 
 ---@type table<string, ColorProfile>
+
+local publisher = require("publisher")
+
 local colorprofiles = {
    ["FOGRA39"] =  { identifier = "FOGRA39", objectid = 0, registry = "http://www.color.org", info = "Coated FOGRA39 (ISO 12647-2:2004)", condition = "Offset printing, according to ISO 12647-2:2004/Amd 1, OFCOM, paper type 1 or 2 = coated art, 115 g/m2, tone value increase curves A (CMY) and B (K)", filename = "ISOcoated_v2_eci.icc", colors = 4 }
 }

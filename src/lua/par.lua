@@ -2,6 +2,8 @@
 
 file_start("par.lua")
 
+local publisher = require("publisher")
+
 ---@class Par
 ---@field textformat string Name of the assigned textformat.
 ---@field origin? string Caller identifier (debugging only).
@@ -401,7 +403,7 @@ local function flatten(self,items,options,data)
             -- w("par/flatten: type: table")
             local tmp
             if publisher.newxpath then
-                local x, msg = xpath.string_value(thisself)
+                local x, msg = publisher.xpath.string_value(thisself)
                 if msg then err(msg) end
                 tmp = flatten(self,{x},new_options, data)
             else

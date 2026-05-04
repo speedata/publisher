@@ -8,6 +8,8 @@
 
 file_start("fontfamilies.lua")
 
+local publisher = require("publisher")
+
 ---@class fontfamilies_module
 local M = {}
 

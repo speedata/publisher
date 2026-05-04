@@ -7,6 +7,8 @@
 
 file_start("publisher/metadata.lua")
 
+local publisher = require("publisher")
+
 ---@class metadata_module
 local M = {}
 
@@ -63,7 +65,7 @@ function M.getcreator(opts)
     elseif sp_suppressinfo then
         return "speedata Publisher"
     else
-        return string.format("speedata Publisher %s using LuaTeX",env_publisherversion)
+        return string.format("speedata Publisher %s using LuaTeX",publisher.env_publisherversion)
     end
 end
 
@@ -78,7 +80,7 @@ function M.getproducer(opts)
     elseif opts and opts.documentcreator and opts.documentcreator ~= "" and sp_suppressinfo then
         return string.format("speedata Publisher using LuaTeX")
     elseif opts and opts.documentcreator and opts.documentcreator ~= "" then
-        return string.format("speedata Publisher %s using LuaTeX",env_publisherversion)
+        return string.format("speedata Publisher %s using LuaTeX",publisher.env_publisherversion)
     elseif sp_suppressinfo then
         return "LuaTeX"
     else

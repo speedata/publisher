@@ -1,6 +1,9 @@
 --- Table building helpers for the HTML parser.
 --- Minimal extraction of build_html_table_tbody and build_html_table.
 --- Relies on global `publisher`, `tex`, and uses a callback to build child nodelists.
+
+local publisher = require("publisher")
+
 local units      = require("html.units")
 local styles_mod = require("html.styles")
 local inherit    = require("html.inherit")

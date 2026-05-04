@@ -8,6 +8,8 @@
 
 file_start("dispatch.lua")
 
+local publisher = require("publisher")
+
 ---@class dispatch_module
 local M = {}
 
@@ -148,12 +150,12 @@ function M.compile_match_pattern(pattern)
     -- Wildcard: just "*"
     if pattern == "*" then
         return function(ctx, node)
-            return xpath.is_element(node)
+            return publisher.xpath.is_element(node)
         end, -0.5, nil
     end
     local selftest = M.convert_pattern_to_selftest(pattern)
     return function(ctx, node)
-        local testctx = xpath.context:new({
+        local testctx = publisher.xpath.context:new({
             xmldoc = ctx.xmldoc,
             sequence = {node},
             namespaces = ctx.namespaces or {},

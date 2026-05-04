@@ -1,6 +1,8 @@
 --- Font resolution helpers for the HTML parser.
 --- Provides get_fontfamily(), which maps CSS family + size to a Publisher family number.
 
+local publisher = require("publisher")
+
 local strings = require("html.strings")
 
 local M = {}

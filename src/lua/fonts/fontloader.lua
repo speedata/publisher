@@ -10,6 +10,8 @@
 
 file_start("fontloader.lua")
 
+local publisher = require("publisher")
+
 local M = {}
 
 --- Return `truetype`, `opentype` or `type1` depending on the string
@@ -97,7 +99,7 @@ end
 -- The harfbuzz version of the fontloader.
 function M.define_font_hb( name, size, extra_parameter )
     local glyphname_uni = {}
-    if not hasharfbuzz then
+    if not publisher.hasharfbuzz then
         err("Can't use mode=\"harfbuzz\" on LoadFontfile without harfbuzz library")
         return M.define_font(name,size,extra_parameter)
     end
@@ -105,8 +107,8 @@ function M.define_font_hb( name, size, extra_parameter )
     local filename_with_path
     filename_with_path = kpse.find_file(name)
     if not filename_with_path then return false, string.format("Fontfile '%s' not found.", name) end
-    local face = harfbuzz.Face.new(filename_with_path)
-    local fnt = harfbuzz.Font.new(face)
+    local face = publisher.harfbuzz.Face.new(filename_with_path)
+    local fnt = publisher.harfbuzz.Font.new(face)
     fonttable = {
         face = face,
         font = fnt
@@ -167,7 +169,7 @@ function M.define_font_hb( name, size, extra_parameter )
         for fea,enabled in pairs(extra_parameter.otfeatures) do
             local firstletter
             if enabled then firstletter = "+" else firstletter = "-" end
-            table.insert(features,harfbuzz.Feature.new(firstletter .. fea))
+            table.insert(features,publisher.harfbuzz.Feature.new(firstletter .. fea))
         end
     end
     f.otfeatures = features

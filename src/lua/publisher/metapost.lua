@@ -10,6 +10,9 @@
 
 
 ---@class metapost_module
+
+local publisher = require("publisher")
+
 local M = {}
 
 local colors_module = require("publisher.colors")
@@ -277,13 +280,13 @@ function M.newbox(width_sp, height_sp)
         local expr
         if v.typ == "string" then
             if publisher.newxpath then
-                expr = string.format("%s %s ; %s := %q ;", v.typ, name, name, xpath.string_value(v[1]))
+                expr = string.format("%s %s ; %s := %q ;", v.typ, name, name, publisher.xpath.string_value(v[1]))
             else
                 expr = string.format("%s %s ; %s := %q ;", v.typ, name, name, v[1])
             end
         else
             if publisher.newxpath then
-                expr = string.format("%s %s ; %s := %s ;", v.typ, name, name, xpath.string_value(v))
+                expr = string.format("%s %s ; %s := %s ;", v.typ, name, name, publisher.xpath.string_value(v))
             else
                 expr = string.format("%s %s ; %s := %s ;", v.typ, name, name, v[1])
             end

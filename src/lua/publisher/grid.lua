@@ -7,6 +7,8 @@
 
 file_start("grid.lua")
 
+local publisher = require("publisher")
+
 ---@class PositioningFrame
 ---@field row integer 1-based row of the top-left corner.
 ---@field column integer 1-based column of the top-left corner.

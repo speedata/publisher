@@ -8,6 +8,8 @@
 
 file_start("pages.lua")
 
+local publisher = require("publisher")
+
 ---@class pages_module
 local M = {}
 
@@ -39,9 +41,9 @@ function M.shipout(nodelist, pagenumber,dataxml)
     if not publisher.matters[cp.matter] then
         local defaultmatter
         if publisher.newxpath then
-            defaultmatter = xpath.string_value(dataxml.vars["_matter"])
+            defaultmatter = publisher.xpath.string_value(dataxml.vars["_matter"])
         else
-            defaultmatter = xpath.get_variable("_matter")
+            defaultmatter = publisher.xpath.get_variable("_matter")
         end
         err("matter %q unknown, revert to %s",cp.matter or "-", defaultmatter )
         cp.matter = defaultmatter
@@ -458,7 +460,7 @@ end
 function M.detect_pagetype(pagenumber, data)
     -- ugly hack. file global variables are a bad idea.
     if not publisher.newxpath then
-        xpath.push_state()
+        publisher.xpath.push_state()
     end
     local cp = publisher.current_pagenumber
     publisher.current_pagenumber = pagenumber
@@ -479,7 +481,7 @@ function M.detect_pagetype(pagenumber, data)
                     err(msg)
                 end
                 local ok
-                ok, msg = xpath.boolean_value(seq)
+                ok, msg = publisher.xpath.boolean_value(seq)
                 if msg then
                     err(msg)
                 end
@@ -490,10 +492,10 @@ function M.detect_pagetype(pagenumber, data)
                     return ret
                 end
             else
-                if xpath.parse(data,pagetype.is_pagetype,pagetype.ns) == true then
+                if publisher.xpath.parse(data,pagetype.is_pagetype,pagetype.ns) == true then
                     main.log("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
                     ret = pagetype.res
-                    xpath.pop_state()
+                    publisher.xpath.pop_state()
                     publisher.current_pagenumber = cp
                     return ret
                 end
@@ -503,7 +505,7 @@ function M.detect_pagetype(pagenumber, data)
     err("Can't find correct page type!")
     publisher.current_pagenumber = cp
     if not publisher.newxpath then
-        xpath.pop_state()
+        publisher.xpath.pop_state()
     end
     return false
 end
@@ -580,8 +582,8 @@ function M.initialize_page(pagenumber,data, from)
             data.vars["_pagewidth"] =  pagetype.width
             data.vars["_pageheight"] = pagetype.height
         else
-            xpath.set_variable("_pagewidth", pagetype.width)
-            xpath.set_variable("_pageheight", pagetype.height)
+            publisher.xpath.set_variable("_pagewidth", pagetype.width)
+            publisher.xpath.set_variable("_pageheight", pagetype.height)
         end
         M.set_pageformat(current_page.width,current_page.height)
     else
@@ -592,16 +594,16 @@ function M.initialize_page(pagenumber,data, from)
             data.vars["_pagewidth"] = tostring(math.round(pagewd,0)) .. "mm"
             data.vars["_pageheight"] = tostring(math.round(pageht,0)) .. "mm"
         else
-            xpath.set_variable("_pagewidth", tostring(math.round(pagewd,0)) .. "mm")
-            xpath.set_variable("_pageheight", tostring(math.round(pageht,0)) .. "mm")
+            publisher.xpath.set_variable("_pagewidth", tostring(math.round(pagewd,0)) .. "mm")
+            publisher.xpath.set_variable("_pageheight", tostring(math.round(pageht,0)) .. "mm")
         end
     end
 
     local mattername
     if publisher.newxpath then
-        mattername = pagetype.part or xpath.string_value(data.vars["_matter"])
+        mattername = pagetype.part or publisher.xpath.string_value(data.vars["_matter"])
     else
-        mattername = pagetype.part or xpath.get_variable("_matter")
+        mattername = pagetype.part or publisher.xpath.get_variable("_matter")
     end
     current_page.matter = mattername
 
@@ -874,7 +876,7 @@ function M.clearpage(options)
         if publisher.newxpath then
             options.dataxml.vars["_matter"] = options.matter
         else
-            xpath.set_variable("_matter",options.matter)
+            publisher.xpath.set_variable("_matter",options.matter)
         end
     end
     if options.pagetype then
@@ -1257,7 +1259,7 @@ function M.getheight( relative_framenumber,dataxml )
     if publisher.newxpath then
         areaname = dataxml.vars["__currentarea"]
     else
-        areaname = xpath.get_variable("__currentarea")
+        areaname = publisher.xpath.get_variable("__currentarea")
     end
     areaname = areaname or publisher.default_areaname
     local current_framenumber = grid:framenumber(areaname)

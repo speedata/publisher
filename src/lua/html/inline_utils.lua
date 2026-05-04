@@ -1,5 +1,8 @@
 --- Inline/whitespace utilities for HTML node handling.
 --- Relies on global `node` and `publisher` like legacy code.
+
+local publisher = require("publisher")
+
 local M = {}
 
 ---Trim trailing interword space (glue) at the end of a node list.

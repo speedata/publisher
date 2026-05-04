@@ -6,6 +6,11 @@
 --  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 
+-- This file is loaded from sdini.lua, which runs before publisher.lua
+-- finishes setting itself up. The helpers below only run during typesetting,
+-- so they require publisher lazily on first call.
+local publisher
+
 function w( ... )
   local ok,fmt = pcall(string.format,...)
   if ok == false then
@@ -96,6 +101,7 @@ end
 --   end
 -- end
 function tracetable( name,tbl )
+  publisher = publisher or require("publisher")
   if publisher.options and publisher.options.trace and type(tbl)=="table" then
     printtable(name,tbl)
   end
@@ -103,6 +109,7 @@ end
 
 
 function nodelist_tostring( head )
+    publisher = publisher or require("publisher")
     local ret = {}
     while head do
         if head.id == publisher.hlist_node or head.id == publisher.vlist_node then

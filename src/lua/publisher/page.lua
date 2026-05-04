@@ -6,6 +6,8 @@
 --  See file COPYING in the root directory for license info.
 
 
+local publisher = require("publisher")
+
 local grid = require("publisher.grid")
 
 ---@class Page

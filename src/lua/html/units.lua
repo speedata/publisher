@@ -1,5 +1,8 @@
 --- Unit conversion helpers (em/rem/px/sp/percent) for HTML parser.
 --- Relies on global `tex`, `math`, `err` like the legacy code.
+
+local publisher = require("publisher")
+
 local M = {}
 
 ---@class HtmlStyles

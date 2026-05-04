@@ -1,5 +1,8 @@
 --- Image sizing helpers for the HTML parser.
 --- Depends on global `tex` and the provided `publisher`/`xpath` via runtime.
+
+local publisher = require("publisher")
+
 local units = require("html.units")
 
 local M = {}
@@ -43,8 +46,8 @@ function M.set_image_dimensions(image, styles, width_sp, height_sp, dataxml)
         maxwd = dataxml.vars["__maxwidth"]
         maxht = dataxml.vars["__maxheight"]
     else
-        maxwd = xpath.get_variable("__maxwidth")
-        maxht = xpath.get_variable("__maxheight")
+        maxwd = publisher.xpath.get_variable("__maxwidth")
+        maxht = publisher.xpath.get_variable("__maxheight")
     end
 
     -- small headroom below line box

@@ -8,6 +8,8 @@
 
 file_start("nodes.lua")
 
+local publisher = require("publisher")
+
 ---@class nodes_module
 local M = {}
 
@@ -83,7 +85,7 @@ function M.parse_html(elt, parameter, data)
             tex       = tex,
             node      = node,
             img       = img,
-            xpath     = xpath,
+            xpath     = publisher.xpath,
             math      = math,
             err       = err,
         }
@@ -734,7 +736,7 @@ end
 ---@param tbl table Paragraph table (array of segments).
 ---@return table tbl
 function M.remove_first_whitespace( tbl )
-    if publisher.newxpath and xpath.is_attribute(tbl) then
+    if publisher.newxpath and publisher.xpath.is_attribute(tbl) then
         tbl.value = string.gsub(tbl.value,"^[\n\t]*(.-)$","%1")
         return true
     end
@@ -914,7 +916,7 @@ function M.getfallbacks(cluster,glyphslist,fallback_fontdefinitions)
     local i = 1
 
     while i <= #glyphslist do
-        local buf = harfbuzz.Buffer.new()
+        local buf = publisher.harfbuzz.Buffer.new()
         local pos = glyphslist[i][1]
         local thisglyph = glyphslist[i][2]
         ret[#ret+1] = {
@@ -938,7 +940,7 @@ function M.getfallbacks(cluster,glyphslist,fallback_fontdefinitions)
             buf:add_utf8(unicode.utf8.char(uc))
         end
         buf:set_cluster_level(buf.CLUSTER_LEVEL_MONOTONE_CHARACTERS)
-        buf:set_flags(harfbuzz.Buffer.FLAG_REMOVE_DEFAULT_IGNORABLES)
+        buf:set_flags(publisher.harfbuzz.Buffer.FLAG_REMOVE_DEFAULT_IGNORABLES)
         buf:guess_segment_properties()
         publisher.shape(tbl,buf)
         local nglyphs = buf:get_glyphs()
@@ -1837,7 +1839,7 @@ function M.mknodes(str,parameter,origin)
                 end
                 pos = pos + #c
             end
-            local buf = harfbuzz.Buffer.new()
+            local buf = publisher.harfbuzz.Buffer.new()
             buf:add_utf8(str)
             if direction == 0 then direction = "ltr" elseif direction == 1 then direction = "rtl" end
             -- shape returns the guessed script and direction from the buffer

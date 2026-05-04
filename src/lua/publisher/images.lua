@@ -8,6 +8,8 @@
 
 file_start("images.lua")
 
+local publisher = require("publisher")
+
 ---@class images_module
 local M = {}
 
@@ -36,7 +38,7 @@ function M.set_image_length(dataxml, len, width_or_height)
         if publisher.newxpath then
             return dataxml.vars["__maxwidth"]
         else
-            return xpath.get_variable("__maxwidth")
+            return publisher.xpath.get_variable("__maxwidth")
         end
     elseif tonumber(len) then
         if width_or_height == "width" then

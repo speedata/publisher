@@ -8,6 +8,8 @@
 
 file_start("commands.lua")
 
+local publisher = require("publisher")
+
 require("publisher.fonts")
 require("publisher.tabular")
 local spotcolors = require("spotcolors")
@@ -94,7 +96,7 @@ function commands.a( layoutxml,dataxml )
         links_module.hlpage(publisher.options, page,bordercolor)
     else
         main.log("warn","A: You must provide either href, link, page or embedded attribute", lineinfo(layoutxml))
-        local p = par:new(nil,"a")
+        local p = publisher.par:new(nil,"a")
         return p
     end
     hyperlink_index = hyperlink_index or links_module.count()
@@ -126,7 +128,7 @@ function commands.a( layoutxml,dataxml )
         node.set_attribute(c,publisher.att_dontadjustlineheight, 1)
         return c
     else
-        local p = par:new(nil,"a")
+        local p = publisher.par:new(nil,"a")
         local ch = hyperlink_index
         for _,j in ipairs(tab) do
             local c = publisher.element_contents(j)
@@ -187,7 +189,7 @@ end
 ---@param mark_contents table
 ---@return table par
 local function mark_to_par(mark_contents)
-    local p = par:new(nil,"action")
+    local p = publisher.par:new(nil,"action")
     append_mark_to_par(p, mark_contents)
     return p
 end
@@ -243,7 +245,7 @@ commands.mark_to_hbox = mark_to_hbox
 ---@return any
 function commands.action( layoutxml,dataxml)
     local tab = publisher.dispatch(layoutxml,dataxml)
-    local p = par:new(nil,"action")
+    local p = publisher.par:new(nil,"action")
 
     for _,j in ipairs(tab) do
         local eltname = publisher.elementname(j)
@@ -274,7 +276,7 @@ function commands.add_to_list( layoutxml,dataxml )
     local listname   = publisher.read_attribute(layoutxml,dataxml,"list","string")
     local selection  = publisher.read_attribute(layoutxml,dataxml,"select","string")
 
-    local value = xpath.parse(dataxml,selection,layoutxml[".__ns"])
+    local value = publisher.xpath.parse(dataxml,selection,layoutxml[".__ns"])
     local var = publisher.xpath.get_variable(listname)
     if not var then var = {} end
     publisher.xpath.set_variable(listname,var)
@@ -321,9 +323,9 @@ function commands.attribute( layoutxml,dataxml )
     -- Escaping the xpath.textvalue makes & into &amp; etc.
     local ret
     if publisher.newxpath then
-        ret = { [".__type"]="attribute", [attname] = xpath.string_value(selection) }
+        ret = { [".__type"]="attribute", [attname] = publisher.xpath.string_value(selection) }
     else
-        ret = { [".__type"]="attribute", [attname] = xpath.textvalue(selection) }
+        ret = { [".__type"]="attribute", [attname] = publisher.xpath.textvalue(selection) }
     end
     return ret
 end
@@ -460,7 +462,7 @@ function commands.barcode( layoutxml,dataxml )
         if publisher.newxpath then
             maxwidth = dataxml.vars["__maxwidth"]
         else
-            maxwidth = xpath.get_variable("__maxwidth")
+            maxwidth = publisher.xpath.get_variable("__maxwidth")
         end
         width = maxwidth
     end
@@ -476,9 +478,9 @@ function commands.barcode( layoutxml,dataxml )
         fontfamily = 1
     end
     if typ=="Code128" then
-        return barcodes.code128(width,height,fontfamily,selection,showtext)
+        return publisher.barcodes.code128(width,height,fontfamily,selection,showtext)
     elseif typ=="EAN13" then
-        return barcodes.ean13(width,height,fontfamily,selection,showtext,overshoot,keepfontsize)
+        return publisher.barcodes.ean13(width,height,fontfamily,selection,showtext,overshoot,keepfontsize)
     elseif typ=="QRCode" then
         if eclevel == "L" then eclevel = 1
         elseif eclevel == "M" then eclevel = 2
@@ -487,7 +489,7 @@ function commands.barcode( layoutxml,dataxml )
         else
             eclevel = nil
         end
-        return barcodes.qrcode(width,height,selection,eclevel,colorname)
+        return publisher.barcodes.qrcode(width,height,selection,eclevel,colorname)
     else
         err("Unknown barcode type %q", typ or "?")
     end
@@ -500,7 +502,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.bold( layoutxml,dataxml )
-    local p = par:new(nil,"b")
+    local p = publisher.par:new(nil,"b")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
@@ -520,7 +522,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.br( layoutxml,dataxml )
-    local a = par:new(nil,"br")
+    local a = publisher.par:new(nil,"br")
     a:append("\n",{})
     return a
 end
@@ -629,8 +631,8 @@ function commands.box( layoutxml,dataxml )
                 col = dataxml.vars["__column"]
                 row = dataxml.vars["__row"]
             else
-                col = xpath.get_variable("__column")
-                row = xpath.get_variable("__row")
+                col = publisher.xpath.get_variable("__column")
+                row = publisher.xpath.get_variable("__row")
             end
             if col == 0 then
                 if width == publisher.options.pagewidth then
@@ -707,7 +709,7 @@ function commands.bookmark( layoutxml,dataxml )
         publisher.setup_page(nil,"commands#bookmark",dataxml)
         publisher.output_absolute_position({nodelist = hlist, x = 0, y = 0})
     else
-        local p = par:new(nil,"bookmark")
+        local p = publisher.par:new(nil,"bookmark")
         p:append(hlist)
         return p
     end
@@ -816,7 +818,7 @@ function commands.color( layoutxml, dataxml )
     local colorname = publisher.read_attribute(layoutxml,dataxml,"name","string")
     local colorindex = colors_module.get_colorindex_from_name(colorname,"black")
 
-    local p = par:new(nil,"color")
+    local p = publisher.par:new(nil,"color")
 
     local prev_fgcolor = publisher.current_fgcolor
     publisher.current_fgcolor = colorindex
@@ -902,7 +904,7 @@ function commands.copy_of( layoutxml,dataxml )
         else
             selection = publisher.read_attribute(layoutxml,dataxml,"select", "string")
             local ok
-                ok,selection = xpath.parse_raw(dataxml,selection,layoutxml[".__ns"])
+                ok,selection = publisher.xpath.parse_raw(dataxml,selection,layoutxml[".__ns"])
             if not ok then
                 err(selection)
                 return nil
@@ -1039,7 +1041,7 @@ function commands.define_graphic(layoutxml,dataxml)
     local name = publisher.read_attribute(layoutxml,dataxml,"name","string")
     local code
     if publisher.newxpath then
-        code = xpath.string_value(layoutxml)
+        code = publisher.xpath.string_value(layoutxml)
     else
         code = layoutxml[1]
     end
@@ -1308,7 +1310,7 @@ function commands.fontface( layoutxml,dataxml )
     if not familynumber then
         err("font: family %q unknown",fontfamily)
     else
-        local p = par:new(nil,"fontface")
+        local p = publisher.par:new(nil,"fontface")
         local tab = publisher.dispatch(layoutxml,dataxml)
         for _,j in ipairs(tab) do
             local c = publisher.element_contents(j)
@@ -1479,7 +1481,7 @@ function commands.func(layoutxml, dataxml)
 
     for i = 1, #layoutxml do
         local thisitem = layoutxml[i]
-        if xpath.is_element(thisitem) and thisitem[".__local_name"] == "Param" then
+        if publisher.xpath.is_element(thisitem) and thisitem[".__local_name"] == "Param" then
             local attr = thisitem[".__attributes"]
             params[#params+1] = attr.name
         end
@@ -1521,7 +1523,7 @@ function commands.func(layoutxml, dataxml)
         return ret,nil
     end
     -- name, namespace, function, minarg, maxarg
-    xpath.registerFunction({functionname,ns,fn,#params,#params})
+    publisher.xpath.registerFunction({functionname,ns,fn,#params,#params})
 end
 
 -- Param
@@ -1668,7 +1670,7 @@ function commands.html( layoutxml,dataxml)
                 end
                 val = publisher.xpath.string_value(seq)
             else
-                local ok, res = xpath.parse_raw(dataxml, expr, layoutxml[".__ns"])
+                local ok, res = publisher.xpath.parse_raw(dataxml, expr, layoutxml[".__ns"])
                 if not ok then
                     splib.log("warn", "XPath evaluation failed", "expression", expr)
                     return "{" .. expr .. "}"
@@ -1916,7 +1918,7 @@ function commands.html( layoutxml,dataxml)
                 if publisher.newxpath then
                     temp_html.styles.calculated_width = dataxml.vars["__maxwidth"] or maxwidth
                 else
-                    temp_html.styles.calculated_width = xpath.get_variable("__maxwidth") or maxwidth
+                    temp_html.styles.calculated_width = publisher.xpath.get_variable("__maxwidth") or maxwidth
                 end
 
                 -- Parse this single element (only once!)
@@ -2302,7 +2304,7 @@ function commands.hspace( layoutxml,dataxml )
     local minwidth   = publisher.read_attribute(layoutxml,dataxml,"minwidth", "length_sp")
     local leadertext = publisher.read_attribute(layoutxml,dataxml,"leader", "string")
     local leaderwd   = publisher.read_attribute(layoutxml,dataxml,"leader-width", "length_sp")
-    local a = par:new(nil,"hspace")
+    local a = publisher.par:new(nil,"hspace")
 
     -- We insert a function that gets called in paragraph creation
     local ud = node.new("whatsit","user_defined")
@@ -2569,8 +2571,8 @@ function commands.image( layoutxml,dataxml )
             col = dataxml.vars["__column"]
             row = dataxml.vars["__row"]
         else
-            col = xpath.get_variable("__column")
-            row = xpath.get_variable("__row")
+            col = publisher.xpath.get_variable("__column")
+            row = publisher.xpath.get_variable("__row")
         end
         if col == 0 then
             tab.padding_left = (tab.padding_left or 0 ) - ( publisher.options.trim or 0 )
@@ -2802,7 +2804,7 @@ function commands.initial( layoutxml,dataxml)
     for i,j in ipairs(tab) do
         if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
             if publisher.newxpath then
-                initialvalue = xpath.string_value(publisher.element_contents(j))
+                initialvalue = publisher.xpath.string_value(publisher.element_contents(j))
             else
                 initialvalue = table.concat(publisher.element_contents(j))
             end
@@ -2902,7 +2904,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.italic( layoutxml,dataxml )
-    local p = par:new(nil,"I")
+    local p = publisher.par:new(nil,"I")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
@@ -2918,7 +2920,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.li(layoutxml,dataxml )
-    local p = par:new(nil,"li")
+    local p = publisher.par:new(nil,"li")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
@@ -2982,7 +2984,7 @@ function commands.load_fontfile( layoutxml,dataxml )
 
     -- Variable font: pin axes via harfbuzz subsetting
     if next(axes) then
-        if not hasharfbuzzsubset then
+        if not publisher.hasharfbuzzsubset then
             err("Variable fonts require the luaharfbuzzsubset library")
         else
             if publisher.lowercase then filename = unicode.utf8.lower(filename) end
@@ -2990,16 +2992,16 @@ function commands.load_fontfile( layoutxml,dataxml )
             if not filepath then
                 err("Variable font file %q not found",filename)
             else
-                local face = harfbuzz.Face.new(filepath)
-                local input = harfbuzzsubset.SubsetInput.new()
+                local face = publisher.harfbuzz.Face.new(filepath)
+                local input = publisher.harfbuzzsubset.SubsetInput.new()
                 input:keep_everything()
 
                 for axis_tag, axis_val in pairs(axes) do
-                    local tag = harfbuzz.Tag.new(axis_tag)
+                    local tag = publisher.harfbuzz.Tag.new(axis_tag)
                     input:pin_axis_location(face, tag, axis_val)
                 end
 
-                local new_face = harfbuzzsubset.subset(face, input)
+                local new_face = publisher.harfbuzzsubset.subset(face, input)
                 local blob = new_face:blob()
 
                 local tmpdir = os.getenv("SP_TEMPDIR")
@@ -3088,7 +3090,7 @@ function commands.load_dataset( layoutxml,dataxml )
     local root_name
     if publisher.newxpath then
         local tmp_data = publisher.load_xml(name or filename)
-        local tmpctx = xpath.context:new()
+        local tmpctx = publisher.xpath.context:new()
         tmpctx.xmldoc = { tmp_data}
         tmpctx.sequence = { tmp_data }
 
@@ -3099,7 +3101,7 @@ function commands.load_dataset( layoutxml,dataxml )
         end
         local copysequence = dataxml.sequence
         local copyxmldoc = dataxml.xmldoc
-        root_name = xpath.string_value(seq)
+        root_name = publisher.xpath.string_value(seq)
         tmpctx:execute("root()")
         dataxml.xmldoc = tmpctx.xmldoc
         dataxml.sequence = tmpctx.sequence
@@ -3131,7 +3133,7 @@ function commands.loop( layoutxml, dataxml )
         local seq, msg = dataxml:eval(numstr)
         dataxml.sequence = copysequence
         if msg then return nil, msg end
-        num, msg = xpath.number_value(seq)
+        num, msg = publisher.xpath.number_value(seq)
         if msg then return nil, msg end
     else
         local numstr = publisher.read_attribute(layoutxml,dataxml,"select","xpath")
@@ -3299,7 +3301,7 @@ function commands.mark( layoutxml,dataxml )
     if type(selection) == "table" then
         if publisher.newxpath then
             for _,v in ipairs(selection) do
-                ret[#ret + 1] = { selection = xpath.string_value(v) , append = append, pdftarget = pdftarget, shiftup = shiftup }
+                ret[#ret + 1] = { selection = publisher.xpath.string_value(v) , append = append, pdftarget = pdftarget, shiftup = shiftup }
             end
         else
             for _,v in ipairs(selection) do
@@ -3333,7 +3335,7 @@ function commands.message( layoutxml, dataxml )
                 main.log("error",msg,lineinfo(layoutxml))
                 return
             end
-            contents = xpath.string_value(seq)
+            contents = publisher.xpath.string_value(seq)
             dataxml.sequence = copysequence
         else
             local ret = {}
@@ -3492,7 +3494,7 @@ function commands.nobreak( layoutxml, dataxml )
     local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor",     "string",0.9)
     local text             = publisher.read_attribute(layoutxml,dataxml,"text",       "string")
     if fontname then warning("Nobreak/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
-    local p = par:new(nil,"nobreak")
+    local p = publisher.par:new(nil,"nobreak")
     local tab = publisher.dispatch(layoutxml,dataxml)
 
     if strategy == "fontsize" then
@@ -3502,7 +3504,7 @@ function commands.nobreak( layoutxml, dataxml )
             if publisher.newxpath then
                 maxwidth = dataxml.vars["__maxwidth"]
             else
-                maxwidth = xpath.get_variable("__maxwidth")
+                maxwidth = publisher.xpath.get_variable("__maxwidth")
             end
             local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth",   "length_sp", maxwidth)
 
@@ -3515,7 +3517,7 @@ function commands.nobreak( layoutxml, dataxml )
             local maxloops = 10
             local tmppar
             repeat
-                tmppar = par:new(nil,"nobreak(fontsize 1)")
+                tmppar = publisher.par:new(nil,"nobreak(fontsize 1)")
                 loops = loops + 1
                 if loops > maxloops then
                     main.log("error","Nobreak, giving up, too many loops","maxloops",maxloops)
@@ -3548,7 +3550,7 @@ function commands.nobreak( layoutxml, dataxml )
             if publisher.newxpath then
                 maxwidth = dataxml.vars["__maxwidth"]
             else
-                maxwidth = xpath.get_variable("__maxwidth")
+                maxwidth = publisher.xpath.get_variable("__maxwidth")
             end
             local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth", "length_sp", maxwidth)
             local fam = options.fontfamily
@@ -3559,7 +3561,7 @@ function commands.nobreak( layoutxml, dataxml )
 
             local tmppar
             for i = 1, 2 do
-                tmppar = par:new(nil,"nobreak(fontfit " .. i .. ")")
+                tmppar = publisher.par:new(nil,"nobreak(fontfit " .. i .. ")")
                 local thisoptions = publisher.copy_table_from_defaults(options)
                 thisoptions.fontfamily = fam
                 for _,j in ipairs(thiselt) do
@@ -3587,11 +3589,11 @@ function commands.nobreak( layoutxml, dataxml )
             if publisher.newxpath then
                 maxwidth = dataxml.vars["__maxwidth"]
             else
-                maxwidth = xpath.get_variable("__maxwidth")
+                maxwidth = publisher.xpath.get_variable("__maxwidth")
             end
             local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth", "length_sp", maxwidth)
 
-            local tmppar = par:new(nil,"cut")
+            local tmppar = publisher.par:new(nil,"cut")
             for _,j in ipairs(thiselt) do
                 local c = publisher.element_contents(j)
                 tmppar:append(c,options)
@@ -3623,7 +3625,7 @@ function commands.nobreak( layoutxml, dataxml )
     elseif strategy == "keeptogether" then
         p:append(tab,{})
         p.flatten_callback = function(thiselt,options)
-            local tmppar = par:new(nil,"keeptogether")
+            local tmppar = publisher.par:new(nil,"keeptogether")
             tmppar:append(thiselt)
             tmppar:mknodelist(options,dataxml)
             local nl = tmppar.objects[1]
@@ -3665,7 +3667,7 @@ function commands.ol(layoutxml,dataxml )
     local labelwidth = tex.sp("5mm")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
-        local a = par:new(nil,"ol")
+        local a = publisher.par:new(nil,"ol")
         a:append(publisher.number_hbox(i,labelwidth,{fontfamily = fontfamily}))
         a:append(publisher.element_contents(j),{})
         ret[#ret + 1] = a
@@ -3765,7 +3767,7 @@ function commands.options( layoutxml,dataxml )
         if publisher.newxpath then
             dataxml.vars["_bleed"] = publisher.options.trim
         else
-            xpath.set_variable("_bleed",publisher.options.trim)
+            publisher.xpath.set_variable("_bleed",publisher.options.trim)
         end
         publisher.options.trim = tex.sp(publisher.options.trim)
     end
@@ -3785,9 +3787,9 @@ function commands.options( layoutxml,dataxml )
 
     local ns = publisher.read_attribute(layoutxml,dataxml,"namespaces", "string", publisher.options.namespaces)
     if ns == "lax" and publisher.newxpath then
-        xpath.ignoreNS = true
+        publisher.xpath.ignoreNS = true
     elseif ns == "strict" and publisher.newxpath then
-        xpath.ignoreNS = false
+        publisher.xpath.ignoreNS = false
     end
     publisher.options.namespaces = ns
 end
@@ -3835,9 +3837,9 @@ function commands.output( layoutxml,dataxml )
         dataxml.vars["__maxwidth"] = maxwidth
         dataxml.vars["__maxheight"] = maxheight
     else
-        current_maxwidth = xpath.get_variable("__maxwidth")
-        xpath.set_variable("__maxwidth", maxwidth)
-        xpath.set_variable("__maxheight", maxheight)
+        current_maxwidth = publisher.xpath.get_variable("__maxwidth")
+        publisher.xpath.set_variable("__maxwidth", maxwidth)
+        publisher.xpath.set_variable("__maxheight", maxheight)
     end
 
     local tab  = publisher.dispatch(layoutxml,dataxml)
@@ -3990,7 +3992,7 @@ function commands.output( layoutxml,dataxml )
     if publisher.newxpath then
         dataxml.vars["__maxwidth"] = current_maxwidth
     else
-        xpath.set_variable("__maxwidth",current_maxwidth)
+        publisher.xpath.set_variable("__maxwidth",current_maxwidth)
     end
     _,row,_ = publisher.get_remaining_height(area,allocate)
     current_grid:set_current_row(row,area)
@@ -4043,8 +4045,8 @@ function commands.page_format(layoutxml,dataxml,options)
         dataxml.vars["_pagewidth"] = width
         dataxml.vars["_pageheight"] = height
     else
-        xpath.set_variable("_pagewidth",width)
-        xpath.set_variable("_pageheight",height)
+        publisher.xpath.set_variable("_pagewidth",width)
+        publisher.xpath.set_variable("_pageheight",height)
     end
     publisher.set_pageformat(wd_sp,ht_sp)
     publisher.options.default_pagewidth = wd_sp
@@ -4186,7 +4188,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
 
 
     local tab = publisher.dispatch(layoutxml,dataxml)
-    local p = par:new(nil,"commands.paragraph")
+    local p = publisher.par:new(nil,"commands.paragraph")
     p.fontfamily = fontfamily
     p.html = html
     if #tab == 1 and tab[1].contents == "" then
@@ -4502,8 +4504,8 @@ function commands.place_object( layoutxml,dataxml)
         save_current_area = dataxml.vars["__currentarea"]
         dataxml.vars["__currentarea"] = area
     else
-        save_current_area = xpath.get_variable("__currentarea")
-        xpath.set_variable("__currentarea", area)
+        save_current_area = publisher.xpath.get_variable("__currentarea")
+        publisher.xpath.set_variable("__currentarea", area)
     end
     framecolor = framecolor or "black"
 
@@ -4561,9 +4563,9 @@ function commands.place_object( layoutxml,dataxml)
         dataxml.vars["__column"] = column
         current_maxwidth = dataxml.vars["__maxwidth"]
     else
-        xpath.set_variable("__row", row)
-        xpath.set_variable("__column", column)
-        current_maxwidth = xpath.get_variable("__maxwidth")
+        publisher.xpath.set_variable("__row", row)
+        publisher.xpath.set_variable("__column", column)
+        current_maxwidth = publisher.xpath.get_variable("__maxwidth")
     end
 
     local mw = current_grid:number_of_columns(area)
@@ -4590,8 +4592,8 @@ function commands.place_object( layoutxml,dataxml)
         dataxml.vars["__maxwidth"] = mw
         dataxml.vars["__maxheight"] = mh
     else
-        xpath.set_variable("__maxwidth", mw)
-        xpath.set_variable("__maxwheight", mh)
+        publisher.xpath.set_variable("__maxwidth", mw)
+        publisher.xpath.set_variable("__maxwheight", mh)
     end
 
     local current_row_start  = current_grid:current_row(area)
@@ -4644,7 +4646,7 @@ function commands.place_object( layoutxml,dataxml)
     if publisher.newxpath then
         dataxml.vars["__maxwidth"] = current_maxwidth
     else
-        xpath.set_variable("__maxwidth",current_maxwidth)
+        publisher.xpath.set_variable("__maxwidth",current_maxwidth)
     end
     local objects = {}
     local object, objecttype
@@ -4899,7 +4901,7 @@ function commands.place_object( layoutxml,dataxml)
     if publisher.newxpath then
         dataxml.vars["__currentarea"] = save_current_area
     else
-        xpath.set_variable("__currentarea",save_current_area)
+        publisher.xpath.set_variable("__currentarea",save_current_area)
     end
 end
 
@@ -5259,7 +5261,7 @@ function commands.save_dataset( layoutxml,dataxml )
             tab = seq
         else
             local ok
-            ok, tab = xpath.parse_raw(dataxml,selection,layoutxml[".__ns"])
+            ok, tab = publisher.xpath.parse_raw(dataxml,selection,layoutxml[".__ns"])
             if not ok then err(tab) return end
         end
     else
@@ -5492,7 +5494,7 @@ function commands.setvariable( layoutxml,dataxml )
                 dataxml.vars[varname] = seq
                 contents = seq
             else
-                contents = xpath.parse(dataxml,selection,layoutxml[".__ns"])
+                contents = publisher.xpath.parse(dataxml,selection,layoutxml[".__ns"])
             end
         else
             local tab = publisher.dispatch(layoutxml,dataxml)
@@ -5609,7 +5611,7 @@ function commands.setvariable( layoutxml,dataxml )
     if varname == "_mode" then
         publisher.modes = {}
         if publisher.newxpath then
-            contents = xpath.string_value(contents)
+            contents = publisher.xpath.string_value(contents)
         end
         local _modes = string.explode(tostring(contents),",")
         for _,m in ipairs(_modes) do
@@ -5650,7 +5652,7 @@ function commands.sort_sequence( layoutxml,dataxml )
         sequence, msg = dataxml:eval(selection)
         if msg then err(msg) end
     else
-        sequence = xpath.parse(dataxml,selection,layoutxml[".__ns"])
+        sequence = publisher.xpath.parse(dataxml,selection,layoutxml[".__ns"])
     end
     local tmp = {}
     if #sequence == 0 then
@@ -5774,7 +5776,7 @@ function commands.span( layoutxml,dataxml )
         params.parent = 0
     end
 
-    local p = par:new(nil,"span2")
+    local p = publisher.par:new(nil,"span2")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
@@ -5851,7 +5853,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.sub( layoutxml,dataxml )
-    local p = par:new(nil,"sub")
+    local p = publisher.par:new(nil,"sub")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
@@ -5867,7 +5869,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.sup( layoutxml,dataxml )
-    local p = par:new(nil,"sup")
+    local p = publisher.par:new(nil,"sup")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
         local c = publisher.element_contents(j)
@@ -5892,13 +5894,13 @@ function commands.switch( layoutxml,dataxml )
             if publisher.newxpath then
                 local seq, msg = dataxml:eval(test)
                 if msg then err(msg) return nil end
-                case_matched = xpath.boolean_value(seq)
+                case_matched = publisher.xpath.boolean_value(seq)
                 if case_matched then
                     ret = publisher.dispatch(case_or_otherwise_element, dataxml)
                 end
             else
             -- newxpath!!
-                local ok, tab = xpath.parse_raw(dataxml,test,layoutxml[".__ns"])
+                local ok, tab = publisher.xpath.parse_raw(dataxml,test,layoutxml[".__ns"])
                 if not ok then
                     err(tab)
                 elseif tab[1] then
@@ -5961,11 +5963,11 @@ function commands.table( layoutxml,dataxml,options )
                 width = 50 * 2^16
             end
         else
-            if xpath.get_variable("__maxwidth") == nil then
+            if publisher.xpath.get_variable("__maxwidth") == nil then
                 err("Can't determine the current width. Tables in groups and data cells must contain explicit widths.")
                 width = 50 * 2^16
             else
-                width = xpath.get_variable("__maxwidth")
+                width = publisher.xpath.get_variable("__maxwidth")
             end
         end
     else
@@ -6037,7 +6039,7 @@ function commands.table( layoutxml,dataxml,options )
         if publisher.newxpath then
             current_area = dataxml.vars["__currentarea"]
         else
-            current_area = xpath.get_variable("__currentarea")
+            current_area = publisher.xpath.get_variable("__currentarea")
         end
         tabular.split = publisher.current_grid:number_of_frames(current_area)
     else
@@ -6048,7 +6050,7 @@ function commands.table( layoutxml,dataxml,options )
     if publisher.newxpath then
         dataxml.vars["_last_tr_data"] = ""
     else
-        xpath.set_variable("_last_tr_data","")
+        publisher.xpath.set_variable("_last_tr_data","")
     end
 
     local n = tabular:make_table(dataxml)
@@ -6525,7 +6527,7 @@ function commands.text(layoutxml,dataxml)
         elseif eltname == "Par" then
             objects[#objects + 1] = contents
         elseif eltname == "Image" then
-            local a = par:new(nil,"text")
+            local a = publisher.par:new(nil,"text")
             local c = contents[1]
             node.set_attribute(c,publisher.att_dontadjustlineheight,1)
             a:append(c)
@@ -6655,13 +6657,13 @@ function commands.textblock( layoutxml,dataxml )
     if publisher.newxpath then
         save_width = dataxml.vars["__maxwidth"]
     else
-        save_width = xpath.get_variable("__maxwidth")
+        save_width = publisher.xpath.get_variable("__maxwidth")
     end
     width = width or save_width
     if publisher.newxpath then
         dataxml.vars["__maxwidth"] = width
     else
-        xpath.set_variable("__maxwidth", width)
+        publisher.xpath.set_variable("__maxwidth", width)
     end
     if not width then
         err("Can't evaluate width in textblock")
@@ -6853,7 +6855,7 @@ function commands.textblock( layoutxml,dataxml )
     if publisher.newxpath then
         dataxml.vars["__maxwidth"] = save_width
     else
-        xpath.set_variable("__maxwidth", save_width)
+        publisher.xpath.set_variable("__maxwidth", save_width)
     end
     publisher.intextblockcontext = publisher.intextblockcontext - 1
     if minheight then
@@ -6878,7 +6880,7 @@ function commands.underline( layoutxml,dataxml )
     local css_rules = publisher.css:matches({element = 'u', class=class,id=id}) or {}
     if dashed == nil then dashed = ( css_rules["border-style"] == "dashed") end
 
-    local p = par:new(nil,"underline")
+    local p = publisher.par:new(nil,"underline")
     local tds = "solid"
     if dashed then
         tds = "dashed"
@@ -6919,7 +6921,7 @@ function commands.ul(layoutxml,dataxml )
     local labelwidth = tex.sp("5mm")
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
-        local a = par:new(nil,"ul")
+        local a = publisher.par:new(nil,"ul")
         a:append(publisher.bullet_hbox(labelwidth,{fontfamily = fontfamily}))
         a:append(publisher.element_contents(j),{})
         ret[#ret + 1] = a
@@ -6946,12 +6948,12 @@ function commands.until_do( layoutxml,dataxml )
                 main.log("error",msg)
                 break
             end
-            local tf = xpath.boolean_value(seq)
+            local tf = publisher.xpath.boolean_value(seq)
         until tf
     else
         repeat
             publisher.dispatch(layoutxml,dataxml)
-        until xpath.parse(dataxml,test,layoutxml[".__ns"])
+        until publisher.xpath.parse(dataxml,test,layoutxml[".__ns"])
     end
 
 end
@@ -6964,7 +6966,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.url(layoutxml,dataxml)
-    local a = par:new(nil,"URL")
+    local a = publisher.par:new(nil,"URL")
     local strings = {}
     local tab = publisher.dispatch(layoutxml,dataxml)
     for i = 1, #tab do
@@ -7015,7 +7017,7 @@ function commands.value( layoutxml,dataxml )
             return ret
         else
             local ok
-            ok, tab = xpath.parse_raw(dataxml,selection,layoutxml[".__ns"])
+            ok, tab = publisher.xpath.parse_raw(dataxml,selection,layoutxml[".__ns"])
             if not ok then err(tab) return end
             -- tab can now contain markup coming from data.xml such as <sup>...</sup>
         end
@@ -7069,14 +7071,14 @@ function commands.while_do( layoutxml,dataxml )
                 main.log("error",msg)
                 break
             end
-            local tf = xpath.boolean_value(seq)
+            local tf = publisher.xpath.boolean_value(seq)
             if not tf then
                 break
             end
             publisher.dispatch(layoutxml,dataxml)
         end
     else
-        while xpath.parse(dataxml,test,layoutxml[".__ns"]) do
+        while publisher.xpath.parse(dataxml,test,layoutxml[".__ns"]) do
             publisher.dispatch(layoutxml,dataxml)
         end
     end

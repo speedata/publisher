@@ -8,6 +8,8 @@
 
 file_start("utilities.lua")
 
+local publisher = require("publisher")
+
 ---@class utilities_module
 local M = {}
 
@@ -185,7 +187,7 @@ function M.flush_variable( varname )
     if publisher.newxpath then
         x = publisher.data.vars[varname]
     else
-        x = xpath.get_variable(varname)
+        x = publisher.xpath.get_variable(varname)
     end
     if type(x) == "table" then
         M.flush_table(x)

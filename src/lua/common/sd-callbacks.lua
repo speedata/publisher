@@ -9,6 +9,14 @@
 --  See file COPYING in the root directory for license info.
 
 
+-- This file is loaded from sdini.lua, which runs before publisher.lua
+-- and before spinit.lua finishes wiring up tex.sp etc. So we cannot
+-- `require("publisher")` here at module-load time — the require would
+-- recursively load publisher.lua too early. The callbacks themselves
+-- only fire at typesetting time (long after publisher.lua has loaded),
+-- so they require it lazily on first invocation.
+local publisher
+
 -- necessary callbacks if we want to use LuaTeX without kpathsea
 
 local function reader( asked_name )
@@ -48,6 +56,7 @@ local function read_other_file(name)
 end
 
 callback.register("page_order_index",function(pagenum)
+    publisher = publisher or require("publisher")
     local ppt = publisher.pagenum_tbl
     return ppt[pagenum]
 end)
@@ -83,6 +92,7 @@ local function format_duration(seconds)
 end
 
 function print_page_number()
+    publisher = publisher or require("publisher")
     main.log("info","Shipout page", "page",tostring(publisher.current_pagenumber))
     if show_progress then
         local page = publisher.current_pagenumber

@@ -8,6 +8,8 @@
 
 file_start("xml_helpers.lua")
 
+local publisher = require("publisher")
+
 ---@class xml_helpers_module
 local M = {}
 

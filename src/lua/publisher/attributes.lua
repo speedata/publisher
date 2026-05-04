@@ -8,6 +8,8 @@
 
 file_start("attributes.lua")
 
+local publisher = require("publisher")
+
 ---@class attributes_module
 local M = {}
 
@@ -67,7 +69,7 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
                     return nil
                 end
                 local txt
-                txt, msg = xpath.string_value(seq)
+                txt, msg = publisher.xpath.string_value(seq)
                 if msg then
                     err(msg)
                     return nil
@@ -75,12 +77,12 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
                 dataxml.sequence = copysequence
                 return txt
             else
-                local ok, xp = xpath.parse_raw(dataxml, x, namespaces)
+                local ok, xp = publisher.xpath.parse_raw(dataxml, x, namespaces)
                 if not ok then
                     err(xp)
                     return nil
                 end
-                return xpath.textvalue(xp[1])
+                return publisher.xpath.textvalue(xp[1])
             end
         end)
     else
@@ -95,9 +97,9 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
                 err(msg)
                 return nil
             end
-            return xpath.string_value(seq)
+            return publisher.xpath.string_value(seq)
         else
-            return xpath.textvalue(xpath.parse(dataxml, val, namespaces))
+            return publisher.xpath.textvalue(publisher.xpath.parse(dataxml, val, namespaces))
         end
     elseif typ == "xpathraw" then
         if publisher.newxpath then
@@ -108,7 +110,7 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
             end
             return seq
         else
-            local ok, tmp = xpath.parse_raw(dataxml, val, namespaces)
+            local ok, tmp = publisher.xpath.parse_raw(dataxml, val, namespaces)
             if not ok then
                 err(tmp)
                 return nil

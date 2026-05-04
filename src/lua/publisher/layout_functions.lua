@@ -8,6 +8,8 @@
 
 file_start("layout_functions.lua")
 
+local publisher = require("publisher")
+
 local links_module = require("publisher.links")
 
 local luxor      = do_luafile("luxor.lua")
@@ -62,9 +64,9 @@ end
 -- Evaluate the string arg as a dimension. The return value is a string with the dimension "sp".
 local function dimexpression(dataxml, arg)
     arg = table.concat(arg)
-    xpath.push_state()
-    local ret = xpath.parse(dataxml, arg, "")
-    xpath.pop_state()
+    publisher.xpath.push_state()
+    local ret = publisher.xpath.parse(dataxml, arg, "")
+    publisher.xpath.pop_state()
     return ret
 end
 
@@ -217,7 +219,7 @@ local function merge_pagenumbers(dataxml, arg)
         gethyperlink = function(pagenum) return nil end
     end
 
-    local p = par:new(nil, "merge-pagenumbers")
+    local p = publisher.par:new(nil, "merge-pagenumbers")
     if mergechar == "" then
         local pagenumber
         for i = 1, #withoutdupes - 1 do

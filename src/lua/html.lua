@@ -9,6 +9,8 @@
 
 -- This is for the new HTML parser
 
+local publisher = require("publisher")
+
 local links_module = require("publisher.links")
 
 local fonts = require("html.fonts")
@@ -360,7 +362,7 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
             options.textformat = tf
             local n = M.collect_horizontal_nodes(thiselt,options,before_box,"build nodelist horizontal mode",dataxml)
 
-            local a = par:new(tf,"html.lua (horizontal)")
+            local a = publisher.par:new(tf,"html.lua (horizontal)")
             local appended = false
             for i=1,#n do
                 local thisn = n[i]
@@ -447,7 +449,7 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                     -- Process all table parts (for multi-page tables)
                     for i = 1, #nl_array do
                         local nl = nl_array[i]
-                        local tabpar = par:new(nil,"html table (a)")
+                        local tabpar = publisher.par:new(nil,"html table (a)")
                         -- Only apply margin_top to the first table part
                         if i == 1 then
                             tabpar.margin_top = margin_top
@@ -571,7 +573,7 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 -- tf is nil here (only set in the `mode == "horizontal"`
                 -- branch above); Par:format() falls back to
                 -- options.textformat — see par.lua's `current_textformat`.
-                local a = par:new(tf,"html.lua (br)") -- luacheck: ignore tf
+                local a = publisher.par:new(tf,"html.lua (br)") -- luacheck: ignore tf
                 local list
                 if prevdir == "vertical" then
                     list = publisher.newline(fam)
@@ -588,7 +590,7 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 local bx = publisher.create_empty_vbox_width_width_height(styles.calculated_width,ht)
                 -- tf is nil here (set only in horizontal mode); Par:format
                 -- falls back to options.textformat.
-                local a = par:new(tf,"html.lua (hr)") -- luacheck: ignore tf
+                local a = publisher.par:new(tf,"html.lua (hr)") -- luacheck: ignore tf
                 a:append(bx)
                 box[#box + 1] = a
                 ret[#ret + 1] = box
@@ -609,7 +611,7 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                     local list = publisher.newline(fam)
                     -- tf is nil here (set only in horizontal mode);
                     -- Par:format falls back to options.textformat.
-                    local a = par:new(tf,"html.lua (p)") -- luacheck: ignore tf
+                    local a = publisher.par:new(tf,"html.lua (p)") -- luacheck: ignore tf
                     a:append(list)
                     box[#box + 1] = a
                 end
@@ -661,7 +663,7 @@ function M.parse_html_new( elt, options, data )
     if publisher.newxpath then
         elt[1].styles.calculated_width = data.vars["__maxwidth"]
     else
-        elt[1].styles.calculated_width = xpath.get_variable("__maxwidth")
+        elt[1].styles.calculated_width = publisher.xpath.get_variable("__maxwidth")
     end
     local lang = elt.lang
     if lang then

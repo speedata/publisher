@@ -8,6 +8,8 @@
 
 file_start("language.lua")
 
+local publisher = require("publisher")
+
 ---@class language_module
 local M = {}
 

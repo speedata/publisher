@@ -9,6 +9,7 @@
 
 
 file_start("spinit.lua")
+
 loglevel_str = os.getenv("SD_LOGLEVEL")
 
 loglevel = 0
@@ -25,6 +26,12 @@ elseif loglevel_str == "error" then
 end
 
 tex.enableprimitives('',tex.extraprimitives())
+
+-- The actual `require("publisher")` is deferred to further down (after
+-- the tex.sp override and other setup that publisher.lua's main chunk
+-- depends on). Declare the upvalue here so the helper functions defined
+-- below close over it; it gets assigned once the require runs.
+local publisher
 
 function warning(...)
     local text = { ... }
@@ -457,7 +464,7 @@ prohibited_at_beginning = {
   }
 }
 --- This is the entry point in the publishing run and called from the TeX file (`publisher.tex`).
-require("publisher")
+publisher = require("publisher")
 
 
 local function traceback(what)

@@ -6,6 +6,8 @@
 --  Copyright 2012 Patrick Gundlach.
 --  See file COPYING in the root directory for license info.
 
+local publisher = require("publisher")
+
 local colors_module = require("publisher.colors")
 
 local function scalebox(scalefactor,box)

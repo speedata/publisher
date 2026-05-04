@@ -7,6 +7,8 @@
 
 file_start("tabular.lua")
 
+local publisher = require("publisher")
+
 -- Table typesetting has six steps:
 -- 1. set_skip_table()
 -- This analyzes the table and stores rowspans and colspans, so the next steps can take these
@@ -760,8 +762,8 @@ function tabular:pack_cell(blockobjects, width, horizontal_alignment)
                             save_width = self.dataxml.vars["__maxwidth"]
                             self.dataxml.vars["__maxwidth"] = width
                         else
-                            save_width = xpath.get_variable("__maxwidth")
-                            xpath.set_variable("__maxwidth",width)
+                            save_width = publisher.xpath.get_variable("__maxwidth")
+                            publisher.xpath.set_variable("__maxwidth",width)
                         end
 
                         local angle_rad = -1 * math.rad(blockobjects.rotate or 0)
@@ -790,7 +792,7 @@ function tabular:pack_cell(blockobjects, width, horizontal_alignment)
                         if publisher.newxpath then
                             self.dataxml.vars["__maxwidth"] = save_width
                         else
-                            xpath.set_variable("__maxwidth",save_width)
+                            publisher.xpath.set_variable("__maxwidth",save_width)
                         end
                     else
                         w("no width given in paragraph")

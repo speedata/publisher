@@ -10,26 +10,41 @@
 
 
 file_start("publisher.lua")
-barcodes = do_luafile("barcodes.lua")
+
+---@class publisher
+local M = {}
+-- Publish M into package.loaded right away so that submodules required
+-- below can `local publisher = require("publisher")` and get a usable
+-- reference even though publisher.lua's main chunk has not finished yet
+-- (Lua otherwise re-enters the loader on circular requires and recurses
+-- to death).
+package.loaded["publisher"] = M
+-- splib is set up in sdini.lua and stays a plain _G global for the few
+-- entry points (sdscripts.lua, sdini.lua) that don't go through the
+-- publisher namespace. Mirror it onto M so other code can read it as
+-- publisher.splib without the metatable trick we just removed.
+M.splib = splib
+
+M.barcodes = do_luafile("barcodes.lua")
 local luxor = do_luafile("luxor.lua")
 local spotcolors = require("spotcolors")
 
 if os.getenv("SP_XMLPARSER") == "lxpath" then
-    xpath = require("lxpath")
-    xpath.stringmatch = unicode.utf8.match
-    xpath.find_file = kpse.find_file
-    xpath.parse_xml = splib.load_xmlfile
-    xpath.ignoreNS = true
+    M.xpath = require("lxpath")
+    M.xpath.stringmatch = unicode.utf8.match
+    M.xpath.find_file = kpse.find_file
+    M.xpath.parse_xml = splib.load_xmlfile
+    M.xpath.ignoreNS = true
 else
-    xpath = do_luafile("xpath.lua")
+    M.xpath = do_luafile("xpath.lua")
 end
 
-hasharfbuzz, harfbuzz = pcall(require,'luaharfbuzz')
-if not hasharfbuzz then
+M.hasharfbuzz, M.harfbuzz = pcall(require,'luaharfbuzz')
+if not M.hasharfbuzz then
     warning("harfbuzz library not found")
 end
 
-hasharfbuzzsubset, harfbuzzsubset = pcall(require,'luaharfbuzzsubset')
+M.hasharfbuzzsubset, M.harfbuzzsubset = pcall(require,'luaharfbuzzsubset')
 
 
 
@@ -39,19 +54,10 @@ local uuid          = require("uuid")
 local colors_module = require("publisher.colors")
 local metadata      = require("publisher.metadata")
 local links_module  = require("publisher.links")
-par                 = require("par")
+M.par               = require("par")
 uuid.randomseed(tex.randomseed)
 
-env_publisherversion = os.getenv("PUBLISHERVERSION")
-
----@class publisher
-local M = _G.publisher or {}
-_G.publisher = M
--- M falls back to _G so that pre-M globals set in the section above
--- (xpath, barcodes, par, hasharfbuzz, …) remain reachable as
--- `publisher.<name>` from other files that still rely on the legacy
--- namespace.
-setmetatable(M, {__index = _G})
+M.env_publisherversion = os.getenv("PUBLISHERVERSION")
 
 -- expose helpers from submodules
 M.utf8_to_utf16_string_pdf = metadata.utf8_to_utf16_string_pdf
@@ -1000,7 +1006,7 @@ function M.initialize_luatex_and_generate_pdf()
     end
     if version then
         local version_mismatch = false
-        local publisher_version = string.explode(env_publisherversion,".")
+        local publisher_version = string.explode(M.env_publisherversion,".")
         local requested_version = string.explode(version,".")
 
         if publisher_version[1] ~= requested_version[1] then
@@ -1014,7 +1020,7 @@ function M.initialize_luatex_and_generate_pdf()
             version_mismatch = true
         end
         if version_mismatch then
-            err("Version mismatch. speedata Publisher is at version %s, requested version %s", env_publisherversion, version)
+            err("Version mismatch. speedata Publisher is at version %s, requested version %s", M.env_publisherversion, version)
             exit()
         end
     end
@@ -1105,7 +1111,7 @@ function M.initialize_luatex_and_generate_pdf()
             __maxwidth = tex.sp("190mm"),
             _lastpage = 1,
         }
-        M.data = xpath.context:new()
+        M.data = M.xpath.context:new()
         M.data.xmldoc = {dataxml}
         M.data.sequence = {dataxml}
         M.data.namespaces = layoutxml[".__ns"]
@@ -1131,7 +1137,7 @@ function M.initialize_luatex_and_generate_pdf()
         end
     else
         for k,v in pairs(vars) do
-            xpath.set_variable(k,v)
+            M.xpath.set_variable(k,v)
         end
     end
 
@@ -1283,7 +1289,7 @@ function M.initialize_luatex_and_generate_pdf()
                     if M.newxpath then
                         M.data.vars["_lastpage"] = attributes.page
                     else
-                        xpath.set_variable("_lastpage", attributes.page )
+                        M.xpath.set_variable("_lastpage", attributes.page )
                     end
                     M.expected_pages = tonumber(attributes.page)
                 end
@@ -1305,14 +1311,14 @@ function M.initialize_luatex_and_generate_pdf()
 
     if M.newxpath then
     else
-        xpath.set_variable("_bleed", "0mm")
-        xpath.set_variable("_pageheight", "297mm")
-        xpath.set_variable("_pagewidth", "210mm")
-        xpath.set_variable("_jobname", tex.jobname)
-        xpath.set_variable("_matter","mainmatter")
-        xpath.set_variable("__maxwidth", tex.sp("190mm"))
-        if xpath.get_variable("_lastpage") == nil then
-            xpath.set_variable("_lastpage", 1)
+        M.xpath.set_variable("_bleed", "0mm")
+        M.xpath.set_variable("_pageheight", "297mm")
+        M.xpath.set_variable("_pagewidth", "210mm")
+        M.xpath.set_variable("_jobname", tex.jobname)
+        M.xpath.set_variable("_matter","mainmatter")
+        M.xpath.set_variable("__maxwidth", tex.sp("190mm"))
+        if M.xpath.get_variable("_lastpage") == nil then
+            M.xpath.set_variable("_lastpage", 1)
         end
     end
 
@@ -1364,23 +1370,23 @@ function M.initialize_luatex_and_generate_pdf()
             if msg then
                 main.log("error",msg)
             end
-            name = xpath.string_value(seq)
+            name = M.xpath.string_value(seq)
             seq, msg = M.data:eval("namespace-uri()")
             if msg then
                 main.log("error",msg)
             end
-            local namespace_element = xpath.string_value(seq)
+            local namespace_element = M.xpath.string_value(seq)
             name = "{" .. namespace_element .. "}" .. name
         else
             seq, msg = M.data:eval("local-name()")
             if msg then
                 main.log("error",msg)
             end
-            name = xpath.string_value(seq)
+            name = M.xpath.string_value(seq)
         end
     else
         name = dataxml[".__local_name"]
-        xpath.set_variable("__position", 1)
+        M.xpath.set_variable("__position", 1)
     end
 
     -- The rare case that the user has not any `Record` commands in the layout file:
@@ -1419,13 +1425,13 @@ function M.initialize_luatex_and_generate_pdf()
 
     -- emit last page if necessary
     -- current_pagestore_name is set when in SavePages and nil otherwise
-    if M.page_initialized_p(M.current_pagenumber) and current_pagestore_name == nil then
+    if M.page_initialized_p(M.current_pagenumber) and M.current_pagestore_name == nil then
         M.dothingsbeforeoutput(M.pages[M.current_pagenumber],M.data)
         local n = node.vpack(M.pages[M.current_pagenumber].pagebox)
         M.shipout(n,M.current_pagenumber,dataxml)
     end
     local lastpage = M.current_pagenumber
-    while not(M.page_initialized_p(lastpage)) and lastpage > 0 and current_pagestore_name == nil do
+    while not(M.page_initialized_p(lastpage)) and lastpage > 0 and M.current_pagestore_name == nil do
         lastpage = lastpage - 1
     end
 
@@ -2264,24 +2270,24 @@ M.shape = function(tbl, buf, options)
     local hblang, script, dir
 
     if options.language then
-        hblang = harfbuzz.Language.new(options.language)
+        hblang = M.harfbuzz.Language.new(options.language)
         buf:set_language(hblang)
     end
     if options.script then
-        script = harfbuzz.Script.new(options.script)
+        script = M.harfbuzz.Script.new(options.script)
         buf:set_script(script)
     end
     if options.direction then
-        dir = harfbuzz.Direction.new(options.direction)
+        dir = M.harfbuzz.Direction.new(options.direction)
         buf:set_direction(dir)
     end
     buf:set_cluster_level(buf.CLUSTER_LEVEL_MONOTONE_CHARACTERS)
-    buf:set_flags(harfbuzz.Buffer.FLAG_REMOVE_DEFAULT_IGNORABLES)
+    buf:set_flags(M.harfbuzz.Buffer.FLAG_REMOVE_DEFAULT_IGNORABLES)
     buf:guess_segment_properties()
 
     local bufdir = tostring(buf:get_direction())
     local bufscript = tostring(buf:get_script())
-    harfbuzz.shape_full(font, buf, tbl.otfeatures, {"ot","graphite2","fallback"})
+    M.harfbuzz.shape_full(font, buf, tbl.otfeatures, {"ot","graphite2","fallback"})
     if bufdir == "rtl" then
         buf:reverse()
     end

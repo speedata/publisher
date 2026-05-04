@@ -1,6 +1,8 @@
 --- Inline image helper for the HTML parser.
 --- Builds a TeX box for <img> using styles and attributes.
 
+local publisher = require("publisher")
+
 local units  = require("html.units")
 local images = require("html.images")
 

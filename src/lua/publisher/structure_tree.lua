@@ -8,6 +8,8 @@
 
 file_start("structure_tree.lua")
 
+local publisher = require("publisher")
+
 ---@class structure_tree_module
 local M = {}
 

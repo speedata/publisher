@@ -3,6 +3,9 @@
 --
 --  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
+
+local publisher = require("publisher")
+
 local string = unicode.utf8
 
 local stack = {}

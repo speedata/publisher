@@ -8,6 +8,8 @@
 
 file_start("layout_functions_lxpath.lua")
 
+local publisher = require("publisher")
+
 local de = require("dimexpr")
 local links_module = require("publisher.links")
 
@@ -22,11 +24,11 @@ local function get_filename_pagenum_box_unit_from_arg(arg)
     local filename, box, unit
     box = "cropbox"
     local pagenumber = 1
-    filename = xpath.string_value(arg[1])
+    filename = publisher.xpath.string_value(arg[1])
     for i = 2, #arg do
         local ai = arg[i]
-        local nv = xpath.number_value(ai)
-        local tv = xpath.string_value(ai)
+        local nv = publisher.xpath.number_value(ai)
+        local tv = publisher.xpath.string_value(ai)
         if nv then
             pagenumber = nv or 1
         elseif tv == "cm" or tv == "mm" or tv == "in" or tv == "sp" or tv == "pc" or tv == "pt" or tv == "pp" or tv == "cc" then
@@ -46,13 +48,13 @@ end
 
 local function fnAllocated(dataxml, arg)
     local x, y, areaname, framenumber
-    x = xpath.number_value(arg[1])
-    y = xpath.number_value(arg[2])
+    x = publisher.xpath.number_value(arg[1])
+    y = publisher.xpath.number_value(arg[2])
     if #arg > 2 then
-        areaname = xpath.string_value(arg[3])
+        areaname = publisher.xpath.string_value(arg[3])
     end
     if #arg > 3 then
-        framenumber = xpath.number_value(arg[4])
+        framenumber = publisher.xpath.number_value(arg[4])
     end
 
     publisher.setup_page(nil, "layout_functions#allocated", dataxml)
@@ -78,7 +80,7 @@ end
 
 --- Get the page number of a marker
 local function fnpagenumber(dataxml, arg)
-    local firstarg = xpath.string_value(arg[1])
+    local firstarg = publisher.xpath.string_value(arg[1])
     local m = publisher.markers[firstarg]
     if m then
         return { m.page }, nil
@@ -91,19 +93,19 @@ local function current_column(dataxml, arg)
     publisher.setup_page(nil, "layout_functions#current_column", dataxml)
     local firstarg
     if #arg > 0 then
-        firstarg = xpath.string_value(arg[1])
+        firstarg = publisher.xpath.string_value(arg[1])
     end
     return { publisher.current_grid:current_column(firstarg) }, nil
 end
 
 local function fnAlternating(dataxml, arg)
-    local alt_type = xpath.string_value(arg[1])
+    local alt_type = publisher.xpath.string_value(arg[1])
     if not publisher.alternating[alt_type] then
         publisher.alternating[alt_type] = 1
     else
         publisher.alternating[alt_type] = math.fmod(publisher.alternating[alt_type], #arg - 1) + 1
     end
-    local val = xpath.string_value(arg[publisher.alternating[alt_type] + 1])
+    local val = publisher.xpath.string_value(arg[publisher.alternating[alt_type] + 1])
     publisher.alternating_value[alt_type] = val
     return { val }
 end
@@ -111,7 +113,7 @@ end
 local function first_free_row(dataxml, arg)
     local firstarg
     if #arg > 0 then
-        firstarg = xpath.string_value(arg[1])
+        firstarg = publisher.xpath.string_value(arg[1])
     else
         firstarg = publisher.default_areaname
     end
@@ -121,7 +123,7 @@ end
 
 -- Get the first mark of a page (for example used in the head of dictionaries)
 local function firstmark(dataxml, arg)
-    local pagenumber = xpath.number_value(arg[1])
+    local pagenumber = publisher.xpath.number_value(arg[1])
     if not tonumber(pagenumber) then err("firstmark: cannot get page number") end
     local minid = publisher.marker_min[pagenumber]
     if not minid then return "" end
@@ -130,7 +132,7 @@ end
 
 -- Get the last mark of a page (for example used in the head of dictionaires)
 local function lastmark(dataxml, arg)
-    local pagenumber = xpath.number_value(arg[1])
+    local pagenumber = publisher.xpath.number_value(arg[1])
     if not tonumber(pagenumber) then err("lasttmark: cannot get page number") end
     local maxid = publisher.marker_max[pagenumber]
     if not maxid then return "" end
@@ -155,7 +157,7 @@ local function filecontents(dataxml, arg)
         err("Could not write filecontents into temp directory: %q", e)
         return nil
     end
-    local firstarg = xpath.string_value(arg[1])
+    local firstarg = publisher.xpath.string_value(arg[1])
     file:write(firstarg)
     file:close()
     return { path }
@@ -164,7 +166,7 @@ end
 local function mode(dataxml, arg)
     local entry
     for i = 1, #arg do
-        local name = xpath.string_value(arg[i])
+        local name = publisher.xpath.string_value(arg[i])
         entry = publisher.modes[name]
         if entry then return { true }, nil end
     end
@@ -172,13 +174,13 @@ local function mode(dataxml, arg)
 end
 
 local function keepalternating(dataxml, arg)
-    local alt_type = xpath.string_value(arg[1])
-    local val = xpath.string_value(publisher.alternating_value[alt_type])
+    local alt_type = publisher.xpath.string_value(arg[1])
+    local val = publisher.xpath.string_value(publisher.alternating_value[alt_type])
     return { val }, nil
 end
 
 local function reset_alternating(dataxml, arg)
-    local alt_type = xpath.string_value(arg[1])
+    local alt_type = publisher.xpath.string_value(arg[1])
     publisher.alternating[alt_type] = 0
     return {}, nil
 end
@@ -195,15 +197,15 @@ end
 --- Merge numbers like '1,2,3,4,5, 8, 9,10' into '1-5, 8-10'
 local function fnMergePagenumbers(dataxml, arg)
     local firstarg, secondarg, thirdarg, fourtharg
-    firstarg = xpath.string_value(arg[1])
+    firstarg = publisher.xpath.string_value(arg[1])
     if #arg > 1 then
-        secondarg = xpath.string_value(arg[2])
+        secondarg = publisher.xpath.string_value(arg[2])
     end
     if #arg > 2 then
-        thirdarg = xpath.string_value(arg[3])
+        thirdarg = publisher.xpath.string_value(arg[3])
     end
     if #arg > 3 then
-        fourtharg = xpath.string_value(arg[4])
+        fourtharg = publisher.xpath.string_value(arg[4])
     end
 
     local pagenumbers_string = string.gsub(firstarg or "", "%s", "")
@@ -243,7 +245,7 @@ local function fnMergePagenumbers(dataxml, arg)
         gethyperlink = function(pagenum) return nil end
     end
 
-    local p = par:new(nil, "merge-pagenumbers")
+    local p = publisher.par:new(nil, "merge-pagenumbers")
     if mergechar == "" then
         local pagenumber
         for i = 1, #withoutdupes - 1 do
@@ -306,7 +308,7 @@ local function fnNumberOfRows(dataxml, arg)
 end
 
 local function fnNumberOfPages(dataxml, arg)
-    local filename = xpath.string_value(arg[1])
+    local filename = publisher.xpath.string_value(arg[1])
     local img = publisher.imageinfo(filename)
     return { img.img.pages }, nil
 end
@@ -385,7 +387,7 @@ local function imageheight(dataxml, arg)
 end
 
 local function file_exists(dataxml, arg)
-    local filename = xpath.string_value(arg[1])
+    local filename = publisher.xpath.string_value(arg[1])
     if not filename then return { false }, nil end
     if filename == "" then return { false }, nil end
     return { kpse.find_file(filename) ~= nil }, nil
@@ -395,11 +397,11 @@ end
 local function format_number(dataxml, arg)
     local num, thousandssep, commasep
     local msg
-    num, msg = xpath.string_value(arg[1])
+    num, msg = publisher.xpath.string_value(arg[1])
     if msg then return nil, msg end
-    thousandssep, msg = xpath.string_value(arg[2])
+    thousandssep, msg = publisher.xpath.string_value(arg[2])
     if msg then return nil, msg end
-    commasep, msg = xpath.string_value(arg[3])
+    commasep, msg = publisher.xpath.string_value(arg[3])
     if msg then return nil, msg end
 
     local sign, digits, commadigits = string.match(tostring(num), "([%-%+]?)(%d*)%.?(%d*)")
@@ -422,20 +424,20 @@ end
 local function format_string(dataxml, arg)
     local argument = {}
     for i = 1, #arg - 1 do
-        argument[#argument + 1] = xpath.string_value(arg[i])
+        argument[#argument + 1] = publisher.xpath.string_value(arg[i])
     end
     local unpacked = table.unpack(argument)
     if unpacked == nil or unpacked == "" then
         err("format-string: first arguments are empty")
         return ""
     end
-    local ret = string.format(xpath.string_value(arg[#arg]), unpacked)
+    local ret = string.format(publisher.xpath.string_value(arg[#arg]), unpacked)
     return { ret }
 end
 
 
 local function even(dataxml, arg)
-    local firstarg = xpath.number_value(arg[1])
+    local firstarg = publisher.xpath.number_value(arg[1])
     if not tonumber(firstarg) then
         err("sd:even() - argument is not a number")
         return false
@@ -445,7 +447,7 @@ end
 
 local function current_frame_number(dataxml, arg)
     publisher.setup_page(nil, "layout_functions#current_framenumber", dataxml)
-    local framename = xpath.string_value(arg[1])
+    local framename = publisher.xpath.string_value(arg[1])
     if framename == nil then return { 1 }, nil end
     local current_framenumber = publisher.current_grid:framenumber(framename)
     return { current_framenumber }, nil
@@ -453,7 +455,7 @@ end
 
 local function groupheight(dataxml, arg)
     publisher.setup_page(nil, "layout_functions#groupheight", dataxml)
-    local groupname = xpath.string_value(arg[1])
+    local groupname = publisher.xpath.string_value(arg[1])
     if not publisher.groups[groupname] then
         main.log("error","Can't find group","groupname",groupname)
         return { }, "Can't find group"
@@ -467,7 +469,7 @@ local function groupheight(dataxml, arg)
     local height
     local unit = arg[2]
     if unit then
-        unit = xpath.string_value(arg[2])
+        unit = publisher.xpath.string_value(arg[2])
         height = groupcontents.height
         local ret
         if unit == "cm" then
@@ -501,7 +503,7 @@ end
 
 local function groupwidth(dataxml, arg)
     publisher.setup_page(nil, "layout_functions#groupwidth", dataxml)
-    local groupname = xpath.string_value(arg[1])
+    local groupname = publisher.xpath.string_value(arg[1])
     if not publisher.groups[groupname] then
         err("Can't find group with the name %q", groupname)
         return 0
@@ -515,7 +517,7 @@ local function groupwidth(dataxml, arg)
     local unit = arg[2]
     local width
     if unit then
-        unit = xpath.string_value(arg[2])
+        unit = publisher.xpath.string_value(arg[2])
         width = groupcontents.width
         local ret
         if unit == "cm" then
@@ -550,7 +552,7 @@ end
 
 local function odd(dataxml, arg)
     local firstarg = arg[1]
-    local num, msg = xpath.number_value(firstarg)
+    local num, msg = publisher.xpath.number_value(firstarg)
     if msg then return nil, msg end
     if not tonumber(num) then
         err("sd:odd() - argument is not a number")
@@ -562,7 +564,7 @@ end
 local function variable(dataxml, arg)
     local args = {}
     for i = 1, #arg do
-        args[#args + 1] = xpath.string_value(arg[i])
+        args[#args + 1] = publisher.xpath.string_value(arg[i])
     end
     local varname = table.concat(args)
     local var = dataxml.vars[varname]
@@ -577,7 +579,7 @@ local function attr(dataxml, arg)
 end
 
 local function variable_exists(dataxml, arg)
-    local varname = xpath.string_value(arg[1])
+    local varname = publisher.xpath.string_value(arg[1])
     return { dataxml.vars[varname] ~= nil }, nil
 end
 
@@ -585,7 +587,7 @@ end
 local function shaone(dataxml, arg)
     local args = {}
     for i = 1, #arg do
-        args[#args + 1] = xpath.string_value(arg[i])
+        args[#args + 1] = publisher.xpath.string_value(arg[i])
     end
 
     local message = table.concat(args)
@@ -596,7 +598,7 @@ end
 local function sha256(dataxml, arg)
     local args = {}
     for i = 1, #arg do
-        args[#args + 1] = xpath.string_value(arg[i])
+        args[#args + 1] = publisher.xpath.string_value(arg[i])
     end
     local message = table.concat(args)
     local ret = sha.sha256(message)
@@ -606,7 +608,7 @@ end
 local function sha512(dataxml, arg)
     local args = {}
     for i = 1, #arg do
-        args[#args + 1] = xpath.string_value(arg[i])
+        args[#args + 1] = publisher.xpath.string_value(arg[i])
     end
     local message = table.concat(args)
     local ret = sha.sha512(message)
@@ -614,9 +616,9 @@ local function sha512(dataxml, arg)
 end
 
 local function symbol(dataxml,arg)
-    local p = par:new(nil, "symbol")
+    local p = publisher.par:new(nil, "symbol")
     for _, v in ipairs(arg) do
-        local thisarg = xpath.number_value(v)
+        local thisarg = publisher.xpath.number_value(v)
         p:append( utf8.char(publisher.puastart + thisarg))
     end
     return p, nil
@@ -639,7 +641,7 @@ end
 local function md5(dataxml, arg)
     local args = {}
     for i = 1, #arg do
-        args[#args + 1] = xpath.string_value(arg[i])
+        args[#args + 1] = publisher.xpath.string_value(arg[i])
     end
 
     local message = table.concat(args)
@@ -649,9 +651,9 @@ end
 
 -- convert a textual dimension (e.g. '2cm') to a scalar in another dimension.
 local function tounit(dataxml, arg)
-    local unit = xpath.string_value(arg[1])
-    local decimal =  xpath.number_value(arg[3]) or 0
-    local width =  tex.sp(xpath.string_value(arg[2]))
+    local unit = publisher.xpath.string_value(arg[1])
+    local decimal =  publisher.xpath.number_value(arg[3]) or 0
+    local width =  tex.sp(publisher.xpath.string_value(arg[2]))
 
     local ret
     if unit == "cm" then
@@ -679,8 +681,8 @@ local function tounit(dataxml, arg)
 end
 
 local function fnDimexpr(dataxml, arg)
-    local unit = xpath.string_value(arg[1])
-    local secondarg = xpath.string_value(arg[2])
+    local unit = publisher.xpath.string_value(arg[1])
+    local secondarg = publisher.xpath.string_value(arg[2])
     local ret = de.string_to_tokenlist(secondarg,dataxml)
     local fun = load(" value = " .. ret)
     if not fun then return nil, "error in sd:dimexpr" end
@@ -714,7 +716,7 @@ local function decode_html(dataxml, arg)
     if arg == nil then
         arg = dataxml
     end
-    local firstarg = xpath.string_value(arg[1])
+    local firstarg = publisher.xpath.string_value(arg[1])
     if type(firstarg) == "string" then
         local msg = publisher.splib.htmltoxml(firstarg)
         if msg == nil then
@@ -729,7 +731,7 @@ end
 
 local function decode_base64(dataxml, arg)
     local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-    local data = xpath.string_value(arg[1])
+    local data = publisher.xpath.string_value(arg[1])
     data = string.gsub(data, '[^' .. b .. '=]', '')
     local a = (data:gsub('.', function(x)
         if (x == '=') then return '' end
@@ -746,7 +748,7 @@ local function decode_base64(dataxml, arg)
 end
 
 local function count_saved_pages(dataxml, arg)
-    local firstarg = xpath.string_value(arg[1])
+    local firstarg = publisher.xpath.string_value(arg[1])
     local tmp = publisher.pagestore[firstarg]
     if not tmp then
         return { 0 }, "count-saved-pages(): no saved pages found. Return 0"
@@ -763,7 +765,7 @@ local function randomitem(dataxml, arg)
 end
 
 local function romannumeral(dataxml, arg)
-    local firstarg = xpath.number_value(arg[1])
+    local firstarg = publisher.xpath.number_value(arg[1])
     if not firstarg then
         main.log("error","romannumeral expects a number as the first argument")
         return {}, "romannumeral expects a number as the first argument"
@@ -779,7 +781,7 @@ end
 
 local function pageheight(dataxml, arg)
     publisher.setup_page(nil, "layout_functions#pageheight", dataxml)
-    local unit = xpath.string_value(arg[1]) or "mm"
+    local unit = publisher.xpath.string_value(arg[1]) or "mm"
     if unit then
         local width = publisher.current_page.height
         local ret
@@ -811,7 +813,7 @@ end
 
 local function pagewidth(dataxml, arg)
     publisher.setup_page(nil, "layout_functions#pagewidth", dataxml)
-    local unit = xpath.string_value(arg[1]) or "mm"
+    local unit = publisher.xpath.string_value(arg[1]) or "mm"
     if unit then
         local width = publisher.current_page.width
         local ret
@@ -842,10 +844,10 @@ end
 
 local function fnLength(dataxml, arg)
     publisher.setup_page(nil, "layout_functions#length", dataxml)
-    local value = xpath.string_value(arg[1])
+    local value = publisher.xpath.string_value(arg[1])
     local unit = 'mm'
     if #arg > 1 then
-        unit = xpath.string_value(arg[2]) or "mm"
+        unit = publisher.xpath.string_value(arg[2]) or "mm"
     end
     if unit then
         local width = tex.sp(dataxml.vars[value])
@@ -882,7 +884,7 @@ end
 local function fnVisiblePagenumber(dataxml, arg)
     local firstarg
     if #arg > 0 then
-        firstarg = xpath.string_value(arg[1])
+        firstarg = publisher.xpath.string_value(arg[1])
     else
         if not publisher.in_init_page then
             publisher.setup_page(nil, "layout_functions#current_page", dataxml)
@@ -896,7 +898,7 @@ end
 local function loremipsum(dataxml, arg)
     local count = 1
     if #arg == 1 then
-        local num, msg = xpath.number_value(arg[1])
+        local num, msg = publisher.xpath.number_value(arg[1])
         if msg then return nil, msg end
         count = num
     end
@@ -981,30 +983,30 @@ local libprefix = publisher.splib
 
 -- Contains
 local function fnContains(dataxml, arg)
-    local firstarg = xpath.string_value(arg[1])
-    local secondarg = xpath.string_value(arg[2])
+    local firstarg = publisher.xpath.string_value(arg[1])
+    local secondarg = publisher.xpath.string_value(arg[2])
     return { libprefix.contains(firstarg, secondarg) }, nil
 end
 
 -- Matches
 local function fnMatches(dataxml, arg)
-    local firstarg = xpath.string_value(arg[1])
-    local secondarg = xpath.string_value(arg[2])
+    local firstarg = publisher.xpath.string_value(arg[1])
+    local secondarg = publisher.xpath.string_value(arg[2])
     return { libprefix.matches(firstarg, secondarg) }, nil
 end
 
 -- Replace
 local function fnReplace(dataxml, arg)
-    local firstarg = xpath.string_value(arg[1])
-    local secondarg = xpath.string_value(arg[2])
-    local thirdarg = xpath.string_value(arg[3])
+    local firstarg = publisher.xpath.string_value(arg[1])
+    local secondarg = publisher.xpath.string_value(arg[2])
+    local thirdarg = publisher.xpath.string_value(arg[3])
     return { libprefix.replace(firstarg, secondarg, thirdarg) }, nil
 end
 
 -- Tokenize is the first function we ask 'splib' for help
 local function fnTokenize(dataxml, arg)
-    local firstarg = xpath.string_value(arg[1])
-    local secondarg = xpath.string_value(arg[2])
+    local firstarg = publisher.xpath.string_value(arg[1])
+    local secondarg = publisher.xpath.string_value(arg[2])
     if firstarg == nil or secondarg == nil then
         err("tokenize: one of the arguments is empty")
         return { "" }, nil
@@ -1014,10 +1016,10 @@ local function fnTokenize(dataxml, arg)
 end
 
 funcs = {
-    { "contains", xpath.fnNS, fnContains, 2, 2 },
-    { "matches",  xpath.fnNS, fnMatches,  1, 2 },
-    { "tokenize", xpath.fnNS, fnTokenize, 1, 2 },
-    { "replace",  xpath.fnNS, fnReplace,  1, 3 },
+    { "contains", publisher.xpath.fnNS, fnContains, 2, 2 },
+    { "matches",  publisher.xpath.fnNS, fnMatches,  1, 2 },
+    { "tokenize", publisher.xpath.fnNS, fnTokenize, 1, 2 },
+    { "replace",  publisher.xpath.fnNS, fnReplace,  1, 3 },
 }
 
 for _, func in ipairs(funcs) do

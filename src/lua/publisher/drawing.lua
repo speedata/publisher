@@ -8,6 +8,8 @@
 
 file_start("drawing.lua")
 
+local publisher = require("publisher")
+
 ---@class drawing_module
 local M = {}
 

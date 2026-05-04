@@ -1,5 +1,8 @@
 --- List handling helpers for the HTML parser.
 --- Provides resolve_list_style_type().
+
+local publisher = require("publisher")
+
 local images = require("html.images")
 
 local M = {}

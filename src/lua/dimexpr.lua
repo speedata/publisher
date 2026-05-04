@@ -1,3 +1,5 @@
+local publisher = require("publisher")
+
 ---@class dimexpr_module
 ---@field private table<string, function> Module-private helpers exposed for tests.
 local M = {
@@ -129,7 +131,7 @@ end
 function M.string_to_tokenlist(str,ctx)
     if str == nil then return {} end
     -- replace all variables
-    str = string.gsub(str,"%$([a-zA-Z-_]+)",function(input) return xpath.string_value(ctx.vars[input]) end)
+    str = string.gsub(str,"%$([a-zA-Z-_]+)",function(input) return publisher.xpath.string_value(ctx.vars[input]) end)
     local tokens = tokenlist:new()
     local nextrune
     local eof
