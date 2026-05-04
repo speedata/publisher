@@ -19,7 +19,6 @@ local function split_chars(str)
 end
 M.private.split_chars = split_chars
 
-
 ---@param str string
 ---@return string?
 local function is_letter(str)
@@ -32,7 +31,6 @@ local function is_space(str)
     return string.match(str, "%s")
 end
 
-
 -- Reads the next rune from `tbl` and advances the cursor.
 ---@param tbl string[] Rune array as produced by `split_chars`.
 ---@return string rune
@@ -40,7 +38,9 @@ end
 local function read_rune(tbl)
     local r = tbl[tbl.pos]
     tbl.pos = tbl.pos + 1
-    if tbl.pos > #tbl + 1 then return r, true end
+    if tbl.pos > #tbl + 1 then
+        return r, true
+    end
     return r, false
 end
 
@@ -50,7 +50,6 @@ end
 local function unread_rune(tbl)
     tbl.pos = tbl.pos - 1
 end
-
 
 -- Reads a signed number with optional unit (`5mm`, `12.5pt`, `-3`) from
 -- the rune buffer. Numbers with units are converted via `tex.sp`,
@@ -63,17 +62,21 @@ local function read_number(tbl)
     local unit_found = false
     local r, eof
     r, eof = read_rune(tbl)
-    if eof then return tonumber(table.concat(collect)) end
+    if eof then
+        return tonumber(table.concat(collect))
+    end
     if r == "-" or r == "+" then
-        collect[#collect+1] = r
+        collect[#collect + 1] = r
     else
         unread_rune(tbl)
     end
     while true do
         r, eof = read_rune(tbl)
-        if eof then break end
-        if '0' <= r and r <= '9' or r == "." then
-            collect[#collect+1] = r
+        if eof then
+            break
+        end
+        if "0" <= r and r <= "9" or r == "." then
+            collect[#collect + 1] = r
         else
             number_read = true
             unread_rune(tbl)
@@ -81,7 +84,9 @@ local function read_number(tbl)
         if number_read then
             while true do
                 r, eof = read_rune(tbl)
-                if eof then break end
+                if eof then
+                    break
+                end
                 if is_space(r) then
                     if unit_found then
                         break
@@ -89,7 +94,7 @@ local function read_number(tbl)
                     -- ok, ignore
                 elseif is_letter(r) then
                     unit_found = true
-                    collect[#collect+1] = r
+                    collect[#collect + 1] = r
                 else
                     unread_rune(tbl)
                     goto skip
@@ -99,16 +104,14 @@ local function read_number(tbl)
     end
     ::skip::
     if unit_found then
-       return tex.sp(table.concat(collect))
+        return tex.sp(table.concat(collect))
     else
         return tonumber(table.concat(collect))
     end
 end
 
-
 ---@class DimexprTokenlist
 local tokenlist = {}
-
 
 -- Creates a fresh tokenlist instance.
 ---@param self DimexprTokenlist
@@ -121,17 +124,19 @@ function tokenlist:new(o)
     return o
 end
 
-
-
 -- Parses a dimension expression into a normalized space-separated string
 -- with `$variables` substituted from `ctx.vars`.
 ---@param str string? Source expression.
 ---@param ctx table XPath context with `vars`.
 ---@return string|table tokens Normalized expression, or `{}` if `str` is nil.
-function M.string_to_tokenlist(str,ctx)
-    if str == nil then return {} end
+function M.string_to_tokenlist(str, ctx)
+    if str == nil then
+        return {}
+    end
     -- replace all variables
-    str = string.gsub(str,"%$([a-zA-Z-_]+)",function(input) return publisher.xpath.string_value(ctx.vars[input]) end)
+    str = string.gsub(str, "%$([a-zA-Z-_]+)", function(input)
+        return publisher.xpath.string_value(ctx.vars[input])
+    end)
     local tokens = tokenlist:new()
     local nextrune
     local eof
@@ -140,7 +145,9 @@ function M.string_to_tokenlist(str,ctx)
     while true do
         local r
         r, eof = read_rune(runes)
-        if eof then break end
+        if eof then
+            break
+        end
         if is_space(r) then
             -- ignore
         elseif r == "+" or r == "-" then
@@ -149,19 +156,19 @@ function M.string_to_tokenlist(str,ctx)
                 unread_rune(runes)
                 unread_rune(runes)
                 num = read_number(runes)
-                tokens[#tokens+1] = num
+                tokens[#tokens + 1] = num
             else
-                tokens[#tokens+1] = r
+                tokens[#tokens + 1] = r
             end
-        elseif '0' <= r and r <= '9' then
+        elseif "0" <= r and r <= "9" then
             unread_rune(runes)
             num = read_number(runes)
-            tokens[#tokens+1] = num
+            tokens[#tokens + 1] = num
         else
-            tokens[#tokens+1] = r
+            tokens[#tokens + 1] = r
         end
     end
-    return table.concat(tokens," ")
+    return table.concat(tokens, " ")
 end
 
 return M

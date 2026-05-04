@@ -19,19 +19,21 @@ local luxor = do_luafile("luxor.lua")
 -- Tables are concatenated first; non-string, non-table inputs return `""`.
 ---@param str string|string[]|nil
 ---@return string
-function M.xml_escape( str )
+function M.xml_escape(str)
     if type(str) == "table" then
         str = table.concat(str)
     end
-    if not str then return "" end
+    if not str then
+        return ""
+    end
     local replace = {
         [">"] = "&gt;",
         ["<"] = "&lt;",
-        ["\""] = "&quot;",
+        ['"'] = "&quot;",
         ["&"] = "&amp;",
     }
     -- FIXME, str can be bool
-    local ret = string.gsub(str,".",replace)
+    local ret = string.gsub(str, ".", replace)
     return ret
 end
 
@@ -42,28 +44,33 @@ end
 ---@param level? integer Recursion depth (used internally).
 ---@param namespace_written? table<string, true> Namespaces already emitted in an ancestor.
 ---@return string
-function M.xml_to_string_newxpath( xml_element, level, namespace_written )
+function M.xml_to_string_newxpath(xml_element, level, namespace_written)
     local new_namespaces = publisher.utilities.copy_table_from_defaults(namespace_written or {})
     local str = ""
     if type(xml_element) == "string" then
         return M.xml_escape(xml_element)
     end
     if type(xml_element) ~= "table" then
-        main.log("error", string.format("xml_to_string is not a table, but a %s %q", type(xml_element), tostring(xml_element)))
+        main.log(
+            "error",
+            string.format("xml_to_string is not a table, but a %s %q", type(xml_element), tostring(xml_element))
+        )
         return "error in publisher run"
     end
     level = level or 0
     local eltname = xml_element[".__name"] or xml_element[".__local_name"] or ""
-    if level == 0 and eltname == "" then eltname = "undefined" end
+    if level == 0 and eltname == "" then
+        eltname = "undefined"
+    end
     if eltname ~= "" then
-        str = str ..  "<" .. eltname
+        str = str .. "<" .. eltname
         if type(xml_element[".__attributes"]) == "table" then
-            for k,v in pairs(xml_element[".__attributes"]) do
-                str = str .. string.format(" %s=%q", k,M.xml_escape(v))
+            for k, v in pairs(xml_element[".__attributes"]) do
+                str = str .. string.format(" %s=%q", k, M.xml_escape(v))
             end
         end
         if xml_element[".__ns"] then
-            for k,v in pairs(xml_element[".__ns"]) do
+            for k, v in pairs(xml_element[".__ns"]) do
                 local key = k
                 if new_namespaces[k] == nil then
                     if type(k) == "string" then
@@ -72,7 +79,7 @@ function M.xml_to_string_newxpath( xml_element, level, namespace_written )
                         else
                             k = "xmlns:" .. k
                         end
-                        str = str .. string.format(" %s=%q", k,M.xml_escape(v))
+                        str = str .. string.format(" %s=%q", k, M.xml_escape(v))
                     end
                 end
                 new_namespaces[key] = true
@@ -80,15 +87,15 @@ function M.xml_to_string_newxpath( xml_element, level, namespace_written )
         end
         str = str .. ">"
     end
-    for i,v in ipairs(xml_element) do
+    for i, v in ipairs(xml_element) do
         if type(v) == "string" and v == "" then
             -- ok, nothing to do
         else
-            str = str .. M.xml_to_string_newxpath(v,level + 1,new_namespaces)
+            str = str .. M.xml_to_string_newxpath(v, level + 1, new_namespaces)
         end
     end
     if eltname ~= "" then
-        str = str ..  "</" .. eltname .. ">"
+        str = str .. "</" .. eltname .. ">"
     end
     return str
 end
@@ -97,48 +104,53 @@ end
 ---@param xml_element table|string
 ---@param level? integer Recursion depth (used internally).
 ---@return string
-function M.xml_to_string( xml_element, level )
+function M.xml_to_string(xml_element, level)
     local str = ""
     if type(xml_element) == "string" then
         return M.xml_escape(xml_element)
     end
     if type(xml_element) ~= "table" then
-        main.log("error", string.format("xml_to_string is not a table, but a %s %q", type(xml_element), tostring(xml_element)))
+        main.log(
+            "error",
+            string.format("xml_to_string is not a table, but a %s %q", type(xml_element), tostring(xml_element))
+        )
         return "error in publisher run"
     end
     level = level or 0
     local eltname = xml_element[".__name"] or xml_element[".__local_name"] or ""
-    if level == 0 and eltname == "" then eltname = "undefined" end
+    if level == 0 and eltname == "" then
+        eltname = "undefined"
+    end
     if eltname ~= "" then
-        str = str ..  "<" .. eltname
-        for k,v in pairs(xml_element) do
+        str = str .. "<" .. eltname
+        for k, v in pairs(xml_element) do
             if type(k) == "string" and not k:match("^%.") then
-                str = str .. string.format(" %s=%q", k,M.xml_escape(v))
+                str = str .. string.format(" %s=%q", k, M.xml_escape(v))
             end
         end
         if xml_element[".__ns"] then
-            for k,v in pairs(xml_element[".__ns"]) do
+            for k, v in pairs(xml_element[".__ns"]) do
                 if type(k) == "string" then
                     if k == "" then
                         k = "xmlns"
                     else
                         k = "xmlns:" .. k
                     end
-                    str = str .. string.format(" %s=%q", k,M.xml_escape(v))
+                    str = str .. string.format(" %s=%q", k, M.xml_escape(v))
                 end
             end
         end
         str = str .. ">"
     end
-    for i,v in ipairs(xml_element) do
+    for i, v in ipairs(xml_element) do
         if type(v) == "string" and v == "" then
             -- ok, nothing to do
         else
-            str = str .. M.xml_to_string(v,level + 1)
+            str = str .. M.xml_to_string(v, level + 1)
         end
     end
     if eltname ~= "" then
-        str = str ..  "</" .. eltname .. ">"
+        str = str .. "</" .. eltname .. ">"
     end
     return str
 end
@@ -147,10 +159,12 @@ end
 -- Used as the `__tostring` metamethod via `xml_stringvalue_mt`.
 ---@param self table|string
 ---@return string
-function M.xml_stringvalue( self )
-    if type(self) == "string" then return self end
+function M.xml_stringvalue(self)
+    if type(self) == "string" then
+        return self
+    end
     local ret = {}
-    for i=1,#self do
+    for i = 1, #self do
         local val = self[i]
         if type(val) == "table" then
             ret[#ret + 1] = M.xml_stringvalue(val)
@@ -163,7 +177,7 @@ end
 
 ---@type metatable
 M.xml_stringvalue_mt = {
-    __tostring = M.xml_stringvalue
+    __tostring = M.xml_stringvalue,
 }
 
 -- Walks a parsed XML tree and (a) attaches `xml_stringvalue_mt` so elements
@@ -177,7 +191,7 @@ M.xml_stringvalue_mt = {
 function M.fixup_xmlfile(tbl, ignoreeol, parent)
     setmetatable(tbl, M.xml_stringvalue_mt)
     if parent and tbl[".__ns"] then
-        setmetatable(tbl[".__ns"], {__index = parent[".__ns"]})
+        setmetatable(tbl[".__ns"], { __index = parent[".__ns"] })
     end
     for i = 1, #tbl do
         if type(tbl[i]) == "table" then
@@ -197,7 +211,7 @@ end
 ---@return table? xmltree Parsed XML, or `nil` on error.
 function M.load_xml(filename, filetype, parameter)
     if not filename or filename == "" then
-        main.log("error","Load XML: no file name given")
+        main.log("error", "Load XML: no file name given")
         return
     end
     parameter = parameter or {}
@@ -219,13 +233,13 @@ function M.load_xml(filename, filetype, parameter)
         end
         local path = kpse.find_file(filename)
         if not path then
-            main.log("error","Can't find XML file. Abort","filename",filename or "?")
+            main.log("error", "Can't find XML file. Abort", "filename", filename or "?")
             return nil
         end
         if publisher.options.verbosity > 0 then
             M.calculate_md5sum(filename)
         end
-        main.log("info","Load XML","type",filetype or "file","filename",path)
+        main.log("info", "Load XML", "type", filetype or "file", "filename", path)
         local parsed_xml = luxor.parse_xml_file(path, parameter, kpse.find_file)
         return parsed_xml
     end
@@ -255,7 +269,7 @@ end
 ---@return string?
 function M.elementname(elt)
     if not elt then
-        main.log("error","Could not get element name", publisher.lineinfo())
+        main.log("error", "Could not get element name", publisher.lineinfo())
         return nil
     end
     return elt.elementname
@@ -264,7 +278,7 @@ end
 -- Returns the contents of a dispatch entry (as produced by `dispatch()`).
 ---@param elt { contents: any }
 ---@return any
-function M.element_contents( elt )
+function M.element_contents(elt)
     return elt.contents
 end
 

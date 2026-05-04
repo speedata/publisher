@@ -16,7 +16,9 @@ local M = {}
 ---@param fontsize_sp number
 ---@return number sp
 function M.getsize(styles, size, fontsize_sp)
-    if size == nil then return 0 end
+    if size == nil then
+        return 0
+    end
     if type(size) == "string" then
         if string.match(size, "rem$") then
             local amount = string.gsub(size, "^(.*)rem$", "%1")

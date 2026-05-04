@@ -7,7 +7,6 @@ local images = require("html.images")
 
 local M = {}
 
-
 -- format lower-alpha returns a-z, aa-az, ba-bz, ...
 local function format_lower_alpha(counter)
     local result = ""
@@ -21,7 +20,6 @@ local function format_lower_alpha(counter)
     return result
 end
 
-
 ---Resolve list-style-type or list-style-image to a string or image node.
 ---@param styles table            -- CSS style table
 ---@param olcounter table         -- current list-level counters
@@ -29,7 +27,7 @@ end
 ---@param dataxml table           -- data context (needed for image sizing)
 ---@return string|any             -- list marker text or image node
 function M.resolve_list_style_type(styles, olcounter, oltype, dataxml)
-    local liststyletype  = styles["list-style-type"]
+    local liststyletype = styles["list-style-type"]
     local liststyleimage = styles["list-style-image"]
 
     -- If list-style-image is given, it overrides list-style-type

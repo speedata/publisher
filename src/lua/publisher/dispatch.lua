@@ -13,118 +13,116 @@ local publisher = require("publisher")
 ---@class dispatch_module
 local M = {}
 
-
 -- The dispatch table maps every element in the layout xml to a command in the `commands.lua` file.
 ---@type table<string, fun(layoutxml: table, dataxml: table, opts?: table): any>
 local dispatch_table = {
-    A                       = commands.a,
-    Action                  = commands.action,
-    AddToList               = commands.add_to_list,
-    AddSearchpath           = commands.add_searchpath,
-    AtPageCreation          = commands.atpagecreation,
-    AtPageShipout           = commands.atpageshipout,
-    Attribute               = commands.attribute,
-    AttachFile              = commands.attachfile,
-    B                       = commands.bold,
-    Barcode                 = commands.barcode,
-    Bookmark                = commands.bookmark,
-    Box                     = commands.box,
-    Br                      = commands.br,
-    Circle                  = commands.circle,
-    ClearPage               = commands.clearpage,
-    Clip                    = commands.clip,
-    Color                   = commands.color,
-    Column                  = commands.column,
-    Columns                 = commands.columns,
-    Compatibility           = commands.compatibility,
-    ["Copy-of"]             = commands.copy_of,
-    DefineColor             = commands.define_color,
-    DefineColorprofile      = commands.define_colorprofile,
-    DefineFontfamily        = commands.define_fontfamily,
-    DefineFontalias         = commands.define_fontalias,
-    DefineGraphic           = commands.define_graphic,
-    DefineTextformat        = commands.define_textformat,
-    DefineMatter            = commands.definematter,
-    Element                 = commands.element,
-    EmptyLine               = commands.emptyline,
-    Fontface                = commands.fontface,
-    ForAll                  = commands.forall,
-    Frame                   = commands.frame,
-    Function                = commands.func,
-    Grid                    = commands.grid,
-    Group                   = commands.group,
-    Groupcontents           = commands.groupcontents,
-    HTML                    = commands.html,
-    HSpace                  = commands.hspace,
-    Hyphenation             = commands.hyphenation,
-    I                       = commands.italic,
-    Image                   = commands.image,
-    Include                 = commands.include,
-    Layout                  = commands.include,
-    Initial                 = commands.initial,
-    InsertPages             = commands.insert_pages,
-    Li                      = commands.li,
-    LoadDataset             = commands.load_dataset,
-    LoadFontfile            = commands.load_fontfile,
-    Loop                    = commands.loop,
-    Makeindex               = commands.makeindex,
-    Margin                  = commands.margin,
-    Mark                    = commands.mark,
-    Message                 = commands.message,
-    NewPage                 = commands.new_page,
-    NextFrame               = commands.next_frame,
-    NextRow                 = commands.next_row,
-    NoBreak                 = commands.nobreak,
-    Ol                      = commands.ol,
-    Options                 = commands.options,
-    Output                  = commands.output,
-    Overlay                 = commands.overlay,
-    Pageformat              = commands.page_format,
-    Pagetype                = commands.pagetype,
-    Paragraph               = commands.paragraph,
-    Param                   = commands.param,
-    PDFOptions              = commands.pdfoptions,
-    PlaceObject             = commands.place_object,
-    Position                = commands.position,
-    PositioningArea         = commands.positioning_area,
-    PositioningFrame        = commands.positioning_frame,
-    ProcessNode             = commands.process_node,
-    ProcessRecord           = commands.process_node,
-    Record                  = commands.record,
-    Rule                    = commands.rule,
-    SaveDataset             = commands.save_dataset,
-    SavePages               = commands.save_pages,
-    Section                 = commands.section,
-    Sequence                = commands.sequence,
-    SetGrid                 = commands.set_grid,
-    SetVariable             = commands.setvariable,
-    SortSequence            = commands.sort_sequence,
-    Span                    = commands.span,
-    StructureElement        = commands.structureelement,
-    Stylesheet              = commands.stylesheet,
-    Sub                     = commands.sub,
-    Sup                     = commands.sup,
-    Switch                  = commands.switch,
-    Table                   = commands.table,
-    TableNewPage            = commands.talbenewpage,
-    Tablefoot               = commands.tablefoot,
-    Tablehead               = commands.tablehead,
-    Tablerule               = commands.tablerule,
-    Td                      = commands.td,
-    Textblock               = commands.textblock,
-    Text                    = commands.text,
-    Tr                      = commands.tr,
-    Trace                   = commands.trace,
-    Transformation          = commands.transformation,
-    U                       = commands.underline,
-    Ul                      = commands.ul,
-    Until                   = commands.until_do,
-    URL                     = commands.url,
-    Value                   = commands.value,
-    VSpace                  = commands.vspace,
-    While                   = commands.while_do,
+    A = commands.a,
+    Action = commands.action,
+    AddToList = commands.add_to_list,
+    AddSearchpath = commands.add_searchpath,
+    AtPageCreation = commands.atpagecreation,
+    AtPageShipout = commands.atpageshipout,
+    Attribute = commands.attribute,
+    AttachFile = commands.attachfile,
+    B = commands.bold,
+    Barcode = commands.barcode,
+    Bookmark = commands.bookmark,
+    Box = commands.box,
+    Br = commands.br,
+    Circle = commands.circle,
+    ClearPage = commands.clearpage,
+    Clip = commands.clip,
+    Color = commands.color,
+    Column = commands.column,
+    Columns = commands.columns,
+    Compatibility = commands.compatibility,
+    ["Copy-of"] = commands.copy_of,
+    DefineColor = commands.define_color,
+    DefineColorprofile = commands.define_colorprofile,
+    DefineFontfamily = commands.define_fontfamily,
+    DefineFontalias = commands.define_fontalias,
+    DefineGraphic = commands.define_graphic,
+    DefineTextformat = commands.define_textformat,
+    DefineMatter = commands.definematter,
+    Element = commands.element,
+    EmptyLine = commands.emptyline,
+    Fontface = commands.fontface,
+    ForAll = commands.forall,
+    Frame = commands.frame,
+    Function = commands.func,
+    Grid = commands.grid,
+    Group = commands.group,
+    Groupcontents = commands.groupcontents,
+    HTML = commands.html,
+    HSpace = commands.hspace,
+    Hyphenation = commands.hyphenation,
+    I = commands.italic,
+    Image = commands.image,
+    Include = commands.include,
+    Layout = commands.include,
+    Initial = commands.initial,
+    InsertPages = commands.insert_pages,
+    Li = commands.li,
+    LoadDataset = commands.load_dataset,
+    LoadFontfile = commands.load_fontfile,
+    Loop = commands.loop,
+    Makeindex = commands.makeindex,
+    Margin = commands.margin,
+    Mark = commands.mark,
+    Message = commands.message,
+    NewPage = commands.new_page,
+    NextFrame = commands.next_frame,
+    NextRow = commands.next_row,
+    NoBreak = commands.nobreak,
+    Ol = commands.ol,
+    Options = commands.options,
+    Output = commands.output,
+    Overlay = commands.overlay,
+    Pageformat = commands.page_format,
+    Pagetype = commands.pagetype,
+    Paragraph = commands.paragraph,
+    Param = commands.param,
+    PDFOptions = commands.pdfoptions,
+    PlaceObject = commands.place_object,
+    Position = commands.position,
+    PositioningArea = commands.positioning_area,
+    PositioningFrame = commands.positioning_frame,
+    ProcessNode = commands.process_node,
+    ProcessRecord = commands.process_node,
+    Record = commands.record,
+    Rule = commands.rule,
+    SaveDataset = commands.save_dataset,
+    SavePages = commands.save_pages,
+    Section = commands.section,
+    Sequence = commands.sequence,
+    SetGrid = commands.set_grid,
+    SetVariable = commands.setvariable,
+    SortSequence = commands.sort_sequence,
+    Span = commands.span,
+    StructureElement = commands.structureelement,
+    Stylesheet = commands.stylesheet,
+    Sub = commands.sub,
+    Sup = commands.sup,
+    Switch = commands.switch,
+    Table = commands.table,
+    TableNewPage = commands.talbenewpage,
+    Tablefoot = commands.tablefoot,
+    Tablehead = commands.tablehead,
+    Tablerule = commands.tablerule,
+    Td = commands.td,
+    Textblock = commands.textblock,
+    Text = commands.text,
+    Tr = commands.tr,
+    Trace = commands.trace,
+    Transformation = commands.transformation,
+    U = commands.underline,
+    Ul = commands.ul,
+    Until = commands.until_do,
+    URL = commands.url,
+    Value = commands.value,
+    VSpace = commands.vspace,
+    While = commands.while_do,
 }
-
 
 -- Compiles a match pattern string into a test function and priority.
 -- Simple element names (no special chars) return `nil` to signal the fast
@@ -157,17 +155,19 @@ function M.compile_match_pattern(pattern)
     return function(ctx, node)
         local testctx = publisher.xpath.context:new({
             xmldoc = ctx.xmldoc,
-            sequence = {node},
+            sequence = { node },
             namespaces = ctx.namespaces or {},
             vars = ctx.vars or {},
         })
         local seq, evalerr = testctx:eval(selftest)
         if evalerr then
-            main.log("error","match pattern evaluation failed","pattern",pattern,"error",evalerr)
+            main.log("error", "match pattern evaluation failed", "pattern", pattern, "error", evalerr)
             return false
         end
         return seq and #seq > 0
-    end, 0.5, nil
+    end,
+        0.5,
+        nil
 end
 
 -- Converts a match pattern to a `self::` XPath expression.
@@ -207,7 +207,9 @@ end
 ---@return table? layoutxml
 function M.find_matching_pattern(mode, datanode, ctx)
     local patterns = publisher.data_dispatcher_patterns[mode]
-    if not patterns then return nil end
+    if not patterns then
+        return nil
+    end
     local best_match = nil
     local best_priority = -math.huge
     for _, entry in ipairs(patterns) do
@@ -229,7 +231,9 @@ end
 ---@param options_arg table? Per-call overrides merged on top of the base.
 ---@return Textformat
 function M.new_textformat(name, base, options_arg)
-    if name == "" then name = publisher.utilities.string_random(10) end
+    if name == "" then
+        name = publisher.utilities.string_random(10)
+    end
     local textformats = publisher.textformats
     local baseformat = textformats[base] or textformats.text
     options_arg = options_arg or {}
@@ -283,15 +287,21 @@ function M.dispatch(layoutxml, dataxml, opts)
             if dispatch_table[eltname] ~= nil then
                 if options.verbosity > 0 then
                     if newxpath then
-                        main.log("debug","Call command","name",eltname,"line",j[".__line"])
+                        main.log("debug", "Call command", "name", eltname, "line", j[".__line"])
                     else
-                        main.log("debug","Call command","name",eltname)
+                        main.log("debug", "Call command", "name", eltname)
                     end
                 end
                 if newxpath then
                     publisher.current_layout_line = j[".__line"]
                     publisher.current_layout_file = j[".__file"]
-                    if dataxml.sequence and type(dataxml.sequence) == "table" and dataxml.sequence[1] and type(dataxml.sequence[1]) == "table" and dataxml.sequence[1][".__line"] then
+                    if
+                        dataxml.sequence
+                        and type(dataxml.sequence) == "table"
+                        and dataxml.sequence[1]
+                        and type(dataxml.sequence[1]) == "table"
+                        and dataxml.sequence[1][".__line"]
+                    then
                         publisher.current_data_line = dataxml.sequence[1][".__line"]
                     else
                         publisher.current_data_line = "(unknown)"
@@ -304,7 +314,18 @@ function M.dispatch(layoutxml, dataxml, opts)
                         ret[#ret + 1] = tmp[i]
                     end
                 end
-                if eltname == "Copy-of" or eltname == "Switch" or eltname == "ForAll" or eltname == "Loop" or eltname == "Transformation" or eltname == "Frame" or eltname == "Include" or eltname == "Layout" or eltname == "Clip" or eltname == "Section" then
+                if
+                    eltname == "Copy-of"
+                    or eltname == "Switch"
+                    or eltname == "ForAll"
+                    or eltname == "Loop"
+                    or eltname == "Transformation"
+                    or eltname == "Frame"
+                    or eltname == "Include"
+                    or eltname == "Layout"
+                    or eltname == "Clip"
+                    or eltname == "Section"
+                then
                     if type(tmp) == "table" then
                         for i = 1, #tmp do
                             if tmp[i].contents then
@@ -323,7 +344,10 @@ function M.dispatch(layoutxml, dataxml, opts)
                     prefix = ""
                 end
                 if j[".__ns"][prefix] == "urn:speedata.de:2009/publisher/en" then
-                    main.log("error", string.format("Unknown element found in layoutfile: %q", j[".__local_name"] or "???"))
+                    main.log(
+                        "error",
+                        string.format("Unknown element found in layoutfile: %q", j[".__local_name"] or "???")
+                    )
                 end
             end
         end

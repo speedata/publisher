@@ -3,10 +3,10 @@
 
 local publisher = require("publisher")
 
-local units  = require("html.units")
+local units = require("html.units")
 local images = require("html.images")
 
-local M      = {}
+local M = {}
 
 ---Build a box node for an <img> element.
 ---Mirrors the legacy <img> handling from collect_horizontal_nodes.

@@ -26,9 +26,6 @@ local publisher = require("publisher")
 -- 6.typeset_table()
 -- This typesets the table
 
-
-
-
 local metapost = require("publisher.metapost")
 
 ---@class tabular_module
@@ -54,14 +51,14 @@ end
 function tabular:new()
     assert(self)
     local t = {
-        rowheights        = {},
-        colwidths         = {},
-        align             = {},
-        valign            = {},
-        padding_left_col  = {},
+        rowheights = {},
+        colwidths = {},
+        align = {},
+        valign = {},
+        padding_left_col = {},
         padding_right_col = {},
-        skip              = {},
-        backgroundcolumncolors  = {},
+        skip = {},
+        backgroundcolumncolors = {},
         -- The distance between column i and i+1
         column_distances = {},
         -- number of frames the table is split across, initialize to a sane default value
@@ -96,10 +93,10 @@ function tabular:attach_objects_row(tab, current_row, skiptable)
     local td_elementname
     local td_contents
     local current_column = 0
-    for _,td in ipairs(tab) do
+    for _, td in ipairs(tab) do
         current_column = current_column + 1
         td_elementname = publisher.xml_helpers.elementname(td)
-        td_contents    = publisher.xml_helpers.element_contents(td)
+        td_contents = publisher.xml_helpers.element_contents(td)
         if td_elementname == "Td" then
             local block = {}
             local inline = {}
@@ -110,8 +107,8 @@ function tabular:attach_objects_row(tab, current_row, skiptable)
                 thiscolumn = thiscolumn + 1
                 current_column = current_column + 1
             end
-            for i,j in ipairs(td_contents) do
-                local eltname     = publisher.xml_helpers.elementname(j)
+            for i, j in ipairs(td_contents) do
+                local eltname = publisher.xml_helpers.elementname(j)
                 local eltcontents = publisher.xml_helpers.element_contents(j)
                 if eltname == "Image" then
                     -- inline
@@ -128,21 +125,27 @@ function tabular:attach_objects_row(tab, current_row, skiptable)
                         block[#block + 1] = inline
                         inline = {}
                     end
-                    block[#block + 1] = {eltcontents}
+                    block[#block + 1] = { eltcontents }
                 elseif eltname == "Paragraph" or eltname == "Box" then
                     -- the text format for the whole table
                     local default_textformat_name = self.textformat
                     -- td align=..., tr align=... and columns align=...
                     local alignment = td_contents.align or tab.align or self.align[thiscolumn]
-                    if     alignment=="center"  then  default_textformat_name = "__centered"
-                    elseif alignment=="left"    then  default_textformat_name = "__leftaligned"
-                    elseif alignment=="right"   then  default_textformat_name = "__rightaligned"
-                    elseif alignment=="justify" then  default_textformat_name = "__justified"
+                    if alignment == "center" then
+                        default_textformat_name = "__centered"
+                    elseif alignment == "left" then
+                        default_textformat_name = "__leftaligned"
+                    elseif alignment == "right" then
+                        default_textformat_name = "__rightaligned"
+                    elseif alignment == "justify" then
+                        default_textformat_name = "__justified"
                     end
                     -- box doesn't have field textformat
                     if type(eltcontents) == "table" then
                         -- if <Paragraph> has its own text format then use this, instead of the td... one above
-                        local tfname = ( eltcontents.textformat and eltcontents.textformat.name) or default_textformat_name or "__leftaligned"
+                        local tfname = (eltcontents.textformat and eltcontents.textformat.name)
+                            or default_textformat_name
+                            or "__leftaligned"
                         eltcontents.textformat = publisher.textformats[tfname]
                         eltcontents.rotate = eltcontents.rotate
                     end
@@ -152,14 +155,14 @@ function tabular:attach_objects_row(tab, current_row, skiptable)
                         block[#block + 1] = inline
                         inline = {}
                     end
-                    block[#block + 1] = {eltcontents}
+                    block[#block + 1] = { eltcontents }
                 elseif eltname == "Textblock" then
                     -- block (pre-formatted to its own width)
                     if #inline > 0 then
                         block[#block + 1] = inline
                         inline = {}
                     end
-                    block[#block + 1] = {eltcontents}
+                    block[#block + 1] = { eltcontents }
                 elseif eltname == "Table" or eltname == "Groupcontents" then
                     -- block
                     if #inline > 0 then
@@ -187,11 +190,11 @@ function tabular:attach_objects_row(tab, current_row, skiptable)
             td_contents.objects = block
             td_contents.objects.rotate = td_contents.rotate
         elseif td_elementname == "Tr" then -- probably from tablefoot/head
-            self:attach_objects_row(td_contents,current_row, skiptable)
+            self:attach_objects_row(td_contents, current_row, skiptable)
         elseif td_elementname == "Column" or td_elementname == "Tablerule" or td_elementname == "TableNewPage" then
             -- ignore, they don't have objects
         else
-           -- w("unknown element name %s",td_elementname)
+            -- w("unknown element name %s",td_elementname)
         end
     end
 end
@@ -201,19 +204,23 @@ end
 ---@param row? integer Row index (optional)
 function tabular:attach_objects(tab, row)
     row = row or 1
-    for _,tr in ipairs(tab) do
+    for _, tr in ipairs(tab) do
         local eltname = publisher.xml_helpers.elementname(tr)
         local tr_contents = publisher.xml_helpers.element_contents(tr)
         if eltname == "Tr" then
             local skiptable = self.skiptables.body
-            self:attach_objects_row(publisher.xml_helpers.element_contents(tr), row,skiptable)
+            self:attach_objects_row(publisher.xml_helpers.element_contents(tr), row, skiptable)
             row = row + 1
         elseif eltname == "Tablehead" or eltname == "Tablefoot" then
             local area
-            if eltname == "Tablehead" then area = "tablehead" else area = "tablefoot" end
+            if eltname == "Tablehead" then
+                area = "tablehead"
+            else
+                area = "tablefoot"
+            end
             area = area .. (tr_contents.page or "")
             local skiptable = self.skiptables[area] or {}
-            self:attach_objects_row(publisher.xml_helpers.element_contents(tr), row,skiptable)
+            self:attach_objects_row(publisher.xml_helpers.element_contents(tr), row, skiptable)
         end
     end
 end
@@ -258,51 +265,76 @@ function tabular:calculate_columnwidths_for_row(tr_contents, current_row, colspa
     --
     -- ![maximum width](../img/calculate_longtext.svg)
     --
-    for _,td in ipairs(tr_contents) do
+    for _, td in ipairs(tr_contents) do
         local td_contents = publisher.xml_helpers.element_contents(td)
         -- all columms (table cells)
         -- fill skip, colspan and colmax-tables for this cell
         current_column = current_column + 1
-        min_wd,max_wd = nil,nil
+        min_wd, max_wd = nil, nil
         local colspan = resolve_colspan(td_contents.colspan, current_column, self.total_columns)
 
         -- When I am on a skip column (because of a row span), we jump over to the next column
-        while skiptable[current_row] and skiptable[current_row][current_column] do current_column = current_column + 1 end
+        while skiptable[current_row] and skiptable[current_row][current_column] do
+            current_column = current_column + 1
+        end
 
-        local td_borderleft  = td_contents.td_borderleft_calculated or tex.sp(td_contents["border-left"]  or 0)
+        local td_borderleft = td_contents.td_borderleft_calculated or tex.sp(td_contents["border-left"] or 0)
         local td_borderright = td_contents.td_borderright_calculated or tex.sp(td_contents["border-right"] or 0)
-        local padding_left   = td_contents.padding_left  or self.padding_left_col[current_column]  or self.padding_left
-        local padding_right  = td_contents.padding_right or self.padding_right_col[current_column] or self.padding_right
+        local padding_left = td_contents.padding_left or self.padding_left_col[current_column] or self.padding_left
+        local padding_right = td_contents.padding_right or self.padding_right_col[current_column] or self.padding_right
         local cellheight = 0
-        for _,blockobject in ipairs(td_contents.objects) do
+        for _, blockobject in ipairs(td_contents.objects) do
             if type(blockobject) ~= "table" then
-                main.log("error","internal error: blockobject is not a table")
+                main.log("error", "internal error: blockobject is not a table")
             else
-                for i=1,#blockobject do
+                for i = 1, #blockobject do
                     local inlineobject = blockobject[i]
-                    if type(inlineobject)=="table" then
+                    if type(inlineobject) == "table" then
                         if inlineobject.min_width then
-                            local mw = inlineobject:min_width(inlineobject.alignment,{fontfamily = inlineobject.fontfamily or self.fontfamily},self.dataxml)
-                            min_wd = math.max(mw + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
+                            local mw = inlineobject:min_width(
+                                inlineobject.alignment,
+                                { fontfamily = inlineobject.fontfamily or self.fontfamily },
+                                self.dataxml
+                            )
+                            min_wd = math.max(
+                                mw + padding_left + padding_right + td_borderleft + td_borderright,
+                                min_wd or 0
+                            )
                         end
                         if inlineobject.max_width_and_lineheight then
-                            local mw,_ = inlineobject:max_width_and_lineheight({fontfamily = inlineobject.fontfamily or self.fontfamily},self.dataxml)
-                            max_wd = math.max(mw + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
+                            local mw, _ = inlineobject:max_width_and_lineheight(
+                                { fontfamily = inlineobject.fontfamily or self.fontfamily },
+                                self.dataxml
+                            )
+                            max_wd = math.max(
+                                mw + padding_left + padding_right + td_borderleft + td_borderright,
+                                max_wd or 0
+                            )
                         end
-                    elseif node.is_node(inlineobject) and node.has_field(inlineobject,"width") then
-                        min_wd = math.max(inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright, min_wd or 0)
-                        max_wd = math.max(inlineobject.width + padding_left  + padding_right + td_borderleft + td_borderright, max_wd or 0)
-                        if node.has_field(inlineobject,"height") then
+                    elseif node.is_node(inlineobject) and node.has_field(inlineobject, "width") then
+                        min_wd = math.max(
+                            inlineobject.width + padding_left + padding_right + td_borderleft + td_borderright,
+                            min_wd or 0
+                        )
+                        max_wd = math.max(
+                            inlineobject.width + padding_left + padding_right + td_borderleft + td_borderright,
+                            max_wd or 0
+                        )
+                        if node.has_field(inlineobject, "height") then
                             cellheight = cellheight + inlineobject.height
                         end
-                        if node.has_field(inlineobject,"depth") then
+                        if node.has_field(inlineobject, "depth") then
                             cellheight = cellheight + inlineobject.depth
                         end
                     end
                 end
             end
-            if min_wd == nil then min_wd = 0 end
-            if max_wd == nil then max_wd = 0 end
+            if min_wd == nil then
+                min_wd = 0
+            end
+            if max_wd == nil then
+                max_wd = 0
+            end
         end
         -- colspan?
         min_wd = min_wd or 0
@@ -310,17 +342,18 @@ function tabular:calculate_columnwidths_for_row(tr_contents, current_row, colspa
         local angle_rad = -1 * math.rad(td_contents.rotate or 0)
         max_wd = math.abs(max_wd * math.cos(angle_rad)) + math.abs(cellheight * math.sin(angle_rad))
         if colspan > 1 then
-            colspans[#colspans + 1] = { start = current_column, stop = current_column + colspan - 1, max_wd = max_wd, min_wd = min_wd }
+            colspans[#colspans + 1] =
+                { start = current_column, stop = current_column + colspan - 1, max_wd = max_wd, min_wd = min_wd }
             current_column = current_column + colspan - 1
         elseif self.colwidths[current_column] then
             -- a predefined width
             colmax[current_column] = self.colwidths[current_column]
             colmin[current_column] = self.colwidths[current_column]
         else
-            colmax[current_column] = math.max(colmax[current_column] or 0,max_wd)
-            colmin[current_column] = math.max(colmin[current_column] or 0,min_wd)
+            colmax[current_column] = math.max(colmax[current_column] or 0, max_wd)
+            colmin[current_column] = math.max(colmin[current_column] or 0, min_wd)
         end
-    end  -- ∀ columns
+    end -- ∀ columns
 end
 
 -- Collects alignment and padding information from `<Columns>`/`<Column>`
@@ -328,18 +361,18 @@ end
 -- `self.padding_left_col` and `self.padding_right_col`.
 ---@return nil
 function tabular:collect_alignments()
-    for _,tr in ipairs(self.tab) do
-        local tr_contents    = publisher.xml_helpers.element_contents(tr)
+    for _, tr in ipairs(self.tab) do
+        local tr_contents = publisher.xml_helpers.element_contents(tr)
         local tr_elementname = publisher.xml_helpers.elementname(tr)
         if tr_elementname == "Columns" then
             local i = 0
-            for _,column in ipairs(tr_contents) do
-                if publisher.xml_helpers.elementname(column)=="Column" then
+            for _, column in ipairs(tr_contents) do
+                if publisher.xml_helpers.elementname(column) == "Column" then
                     local column_contents = publisher.xml_helpers.element_contents(column)
                     i = i + 1
-                    self.align[i]             = column_contents.align
-                    self.valign[i]            = column_contents.valign
-                    self.padding_left_col[i]  = column_contents.padding_left
+                    self.align[i] = column_contents.align
+                    self.valign[i] = column_contents.valign
+                    self.padding_left_col[i] = column_contents.padding_left
                     self.padding_right_col[i] = column_contents.padding_right
                 end
             end
@@ -347,21 +380,19 @@ function tabular:collect_alignments()
     end
 end
 
-
-
 -- Calculates the final widths for every column in the table. Honors
 -- explicit widths, `*` (proportional), `min-width`/`max-width`, colspans
 -- and shrink/grow when the table has a fixed total width target.
 ---@return nil
 function tabular:calculate_columnwidth()
     local colspans = {}
-    local minwidths,col_shrink,starcols,colmax,colmin = {},{},{},{},{}
+    local minwidths, col_shrink, starcols, colmax, colmin = {}, {}, {}, {}, {}
     local has_min_or_max_width = false
     self.tablewidth_target = self.width
     local columnwidths_given = nil
 
-    for _,tr in ipairs(self.tab) do
-        local tr_contents      = publisher.xml_helpers.element_contents(tr)
+    for _, tr in ipairs(self.tab) do
+        local tr_contents = publisher.xml_helpers.element_contents(tr)
         local tr_elementname = publisher.xml_helpers.elementname(tr)
 
         -- When the user gives us column widths, we use them for calculation. There are two ways to
@@ -384,8 +415,8 @@ function tabular:calculate_columnwidth()
             local count_columns = 0
             local starpattern = "([0-9]+)%*"
             local has_width = false
-            for _,column in ipairs(tr_contents) do
-                if publisher.xml_helpers.elementname(column)=="Column" then
+            for _, column in ipairs(tr_contents) do
+                if publisher.xml_helpers.elementname(column) == "Column" then
                     local column_contents = publisher.xml_helpers.element_contents(column)
                     i = i + 1
                     minwidths[i] = 0
@@ -407,10 +438,12 @@ function tabular:calculate_columnwidth()
                         else
                             -- columnwidths_given can be false with a "?" width. This must
                             -- not be set to true again
-                            if columnwidths_given == nil then columnwidths_given = true end
-                            local width_stars = string.match(column_contents.width,starpattern)
+                            if columnwidths_given == nil then
+                                columnwidths_given = true
+                            end
+                            local width_stars = string.match(column_contents.width, starpattern)
                             if width_stars then
-                                local n = tonumber(width_stars,10)
+                                local n = tonumber(width_stars, 10)
                                 starcols[i] = n
                                 count_stars = count_stars + n
                             else
@@ -419,7 +452,7 @@ function tabular:calculate_columnwidth()
                                 else
                                     self.colwidths[i] = tex.sp(column_contents.width)
                                 end
-                                sum_real_widths = sum_real_widths + ( self.colwidths[i] or 0 )
+                                sum_real_widths = sum_real_widths + (self.colwidths[i] or 0)
                             end
                         end
                     end
@@ -441,15 +474,19 @@ function tabular:calculate_columnwidth()
                 break
             end
 
-            if columnwidths_given and count_stars == 0 then return end
+            if columnwidths_given and count_stars == 0 then
+                return
+            end
 
             if count_stars > 0 then
                 -- now we know the number of *-columns and the sum of the fix columns, so that
                 -- we can distribute the remaining space
-                local to_distribute = self.tablewidth_target - sum_real_widths - table.sum(self.column_distances,1,count_columns - 1)
+                local to_distribute = self.tablewidth_target
+                    - sum_real_widths
+                    - table.sum(self.column_distances, 1, count_columns - 1)
                 i = 0
-                for _,column in ipairs(tr_contents) do
-                    if publisher.xml_helpers.elementname(column)=="Column" then
+                for _, column in ipairs(tr_contents) do
+                    if publisher.xml_helpers.elementname(column) == "Column" then
                         local column_contents = publisher.xml_helpers.element_contents(column)
                         i = i + 1
                         local width_stars = string.match(column_contents.width, starpattern)
@@ -465,7 +502,9 @@ function tabular:calculate_columnwidth()
         end
     end
 
-    if columnwidths_given then return end
+    if columnwidths_given then
+        return
+    end
 
     -- Phase I
     -- -------
@@ -474,25 +513,43 @@ function tabular:calculate_columnwidth()
     -- numbering used in set_skip_table().
     local current_row_body = 0
     local rowcounter_areas = {}
-    for _,tr in ipairs(self.tab) do
-        local tr_contents      = publisher.xml_helpers.element_contents(tr)
+    for _, tr in ipairs(self.tab) do
+        local tr_contents = publisher.xml_helpers.element_contents(tr)
         local tr_elementname = publisher.xml_helpers.elementname(tr)
         if tr_elementname == "Tr" then
             current_row_body = current_row_body + 1
-            self:calculate_columnwidths_for_row(tr_contents,current_row_body,colspans,colmin,colmax,self.skiptables.body)
+            self:calculate_columnwidths_for_row(
+                tr_contents,
+                current_row_body,
+                colspans,
+                colmin,
+                colmax,
+                self.skiptables.body
+            )
         elseif tr_elementname == "Tablerule" then
             -- ignore
         elseif tr_elementname == "Tablehead" or tr_elementname == "Tablefoot" then
             local area
-            if tr_elementname == "Tablehead" then area = "tablehead" else area = "tablefoot" end
+            if tr_elementname == "Tablehead" then
+                area = "tablehead"
+            else
+                area = "tablefoot"
+            end
             area = area .. (tr_contents.page or "")
             rowcounter_areas[area] = rowcounter_areas[area] or 0
-            for _,row in ipairs(tr_contents) do
-                local row_contents    = publisher.xml_helpers.element_contents(row)
+            for _, row in ipairs(tr_contents) do
+                local row_contents = publisher.xml_helpers.element_contents(row)
                 local row_elementname = publisher.xml_helpers.elementname(row)
                 if row_elementname == "Tr" then
                     rowcounter_areas[area] = rowcounter_areas[area] + 1
-                    self:calculate_columnwidths_for_row(row_contents,rowcounter_areas[area],colspans,colmin,colmax,self.skiptables[area])
+                    self:calculate_columnwidths_for_row(
+                        row_contents,
+                        rowcounter_areas[area],
+                        colspans,
+                        colmin,
+                        colmax,
+                        self.skiptables[area]
+                    )
                 end
             end
         elseif tr_elementname == "Columns" or tr_elementname == "TableNewPage" then
@@ -526,7 +583,7 @@ function tabular:calculate_columnwidth()
                 count_stars = count_stars + starcols[i]
             else
                 if i > #self.colwidths then
-                    main.log("error","Something is wrong with the number of coumns in the table")
+                    main.log("error", "Something is wrong with the number of coumns in the table")
                     return
                 end
                 total_stars_width = total_stars_width - self.colwidths[i]
@@ -555,7 +612,6 @@ function tabular:calculate_columnwidth()
             if starcols[i] then
                 self.colwidths[i] = total_stars_width * starcols[i]
             end
-
         end
         return
     end
@@ -579,8 +635,8 @@ function tabular:calculate_columnwidth()
     --
     -- Phase II: include colspan
     -- -------------------------
-    for _,colspan in pairs(colspans) do
-        local sum_min,sum_max = 0,0
+    for _, colspan in pairs(colspans) do
+        local sum_min, sum_max = 0, 0
         local r -- stretch factor = wd(colspan)/wd(sum_start_end)
 
         -- First we calculate how wide the columns are that are covered by colspan, but without
@@ -611,11 +667,11 @@ function tabular:calculate_columnwidth()
         -- a factor r. r is calculated by the contents.
         --
         -- We do that once for the maximum width and once for the minimum width
-        local width_of_colsep = table.sum(self.column_distances,colspan.start,colspan.stop - 1)
+        local width_of_colsep = table.sum(self.column_distances, colspan.start, colspan.stop - 1)
 
         if colspan.max_wd > sum_max + width_of_colsep then
-            r = ( colspan.max_wd - width_of_colsep ) / sum_max
-            for j=colspan.start,colspan.stop do
+            r = (colspan.max_wd - width_of_colsep) / sum_max
+            for j = colspan.start, colspan.stop do
                 if not self.colwidths[j] then
                     colmax[j] = colmax[j] * r
                 end
@@ -623,8 +679,8 @@ function tabular:calculate_columnwidth()
         end -- colspan.max_wd > sum_max?
 
         if colspan.min_wd > sum_min + width_of_colsep then
-            r = ( colspan.min_wd - width_of_colsep ) / sum_min
-            for j=colspan.start,colspan.stop do
+            r = (colspan.min_wd - width_of_colsep) / sum_min
+            for j = colspan.start, colspan.stop do
                 if not self.colwidths[j] then
                     colmin[j] = colmin[j] * r
                 end
@@ -648,7 +704,7 @@ function tabular:calculate_columnwidth()
 
     -- highly unlikely that the table matches the size exactly
     if tablewidth_is == self.tablewidth_target then
-        for i=1,#colmax do
+        for i = 1, #colmax do
             self.colwidths[i] = colmax[i]
         end
         return
@@ -657,7 +713,7 @@ function tabular:calculate_columnwidth()
     -- if the table is too wide, we need to shrink some columns
     if tablewidth_is > self.tablewidth_target then
         local tablewidth_target = self.tablewidth_target
-        for i=1,#colmax do
+        for i = 1, #colmax do
             local cwi = self.colwidths[i]
             if cwi then
                 tablewidth_target = tablewidth_target - cwi
@@ -686,7 +742,9 @@ function tabular:calculate_columnwidth()
                     end
                 end
             end
-            if not changed then break end
+            if not changed then
+                break
+            end
         end
 
         -- Assign remaining columns their proportional share
@@ -706,29 +764,28 @@ function tabular:calculate_columnwidth()
     -- if stretch="no", we don't need to stretch/shrink anything
     if self.autostretch ~= "max" then
         self.tablewidth_target = tablewidth_is
-        for i=1,#colmax do
+        for i = 1, #colmax do
             self.colwidths[i] = colmax[i]
         end
 
         return
     end
 
-
     -- if the table is too narrow, we must make it wider
     if tablewidth_is < self.tablewidth_target then
         -- table must get wider
 
         local tablewidth_target = self.tablewidth_target
-        for i=1,#colmax do
+        for i = 1, #colmax do
             local cwi = self.colwidths[i]
             if cwi then
                 tablewidth_target = tablewidth_target - cwi
                 tablewidth_is = tablewidth_is - cwi
             end
         end
-        local r = ( tablewidth_target - colsep ) / ( tablewidth_is - colsep)
+        local r = (tablewidth_target - colsep) / (tablewidth_is - colsep)
 
-        for i=1,#colmax do
+        for i = 1, #colmax do
             if not self.colwidths[i] then
                 self.colwidths[i] = colmax[i] * r
             end
@@ -744,16 +801,16 @@ end
 function tabular:pack_cell(blockobjects, width, horizontal_alignment)
     local cell
     if not blockobjects then
-        splib.log("warning","no objects found in table cell")
+        splib.log("warning", "no objects found in table cell")
         return
     end
-    for _,blockobject in ipairs(blockobjects) do
+    for _, blockobject in ipairs(blockobjects) do
         local cellrow = nil
         local current_width = 0
         if node.is_node(blockobject) then
-            cellrow = node.insert_after(cellrow,node.tail(cellrow),blockobject)
+            cellrow = node.insert_after(cellrow, node.tail(cellrow), blockobject)
         else
-            for i=1,#blockobject do
+            for i = 1, #blockobject do
                 local inlineobject = blockobject[i]
                 if type(inlineobject) == "table" then
                     if width then
@@ -763,67 +820,71 @@ function tabular:pack_cell(blockobjects, width, horizontal_alignment)
                             self.dataxml.vars["__maxwidth"] = width
                         else
                             save_width = publisher.xpath.get_variable("__maxwidth")
-                            publisher.xpath.set_variable("__maxwidth",width)
+                            publisher.xpath.set_variable("__maxwidth", width)
                         end
 
                         local angle_rad = -1 * math.rad(blockobjects.rotate or 0)
-                        local sin_angle = math.sin( angle_rad )
+                        local sin_angle = math.sin(angle_rad)
                         local format_width = width
                         if sin_angle ~= 0 then
                             -- The width is not 100% accurate yet. Multi-line paragraphs for example
                             -- are not yet taken into account.
-                            local mw = inlineobject:max_width_and_lineheight({fontfamily = inlineobject.fontfamily or self.fontfamily})
-                            format_width = math.max(format_width, mw * sin_angle )
+                            local mw = inlineobject:max_width_and_lineheight({
+                                fontfamily = inlineobject.fontfamily or self.fontfamily,
+                            })
+                            format_width = math.max(format_width, mw * sin_angle)
                         end
 
-                        local v = inlineobject:format(format_width,{textformat = inlineobject.textformat,fontfamily = inlineobject.fontfamily or self.fontfamily }, self.dataxml)
+                        local v = inlineobject:format(format_width, {
+                            textformat = inlineobject.textformat,
+                            fontfamily = inlineobject.fontfamily or self.fontfamily,
+                        }, self.dataxml)
                         if publisher.options.format == "PDF/UA" then
-                            publisher.attribute_helpers.setprop(v,"role", inlineobject.role)
-                            publisher.attribute_helpers.setprop(v,"parentid", inlineobject.parent)
-                            publisher.attribute_helpers.setprop(v,"rolecounter", inlineobject.rolecounter)
-                            publisher.attribute_helpers.setprop(v,"structpos", inlineobject.structpos)
-                            publisher.attribute_helpers.setprop(v,"actualtext", inlineobject.actualtext)
-                            publisher.attribute_helpers.setprop(v,"alttext", inlineobject.alttext)
-                            publisher.attribute_helpers.setprop(v,"id", inlineobject.id)
-                            node.set_attribute(v,publisher.att_role,inlineobject.role)
+                            publisher.attribute_helpers.setprop(v, "role", inlineobject.role)
+                            publisher.attribute_helpers.setprop(v, "parentid", inlineobject.parent)
+                            publisher.attribute_helpers.setprop(v, "rolecounter", inlineobject.rolecounter)
+                            publisher.attribute_helpers.setprop(v, "structpos", inlineobject.structpos)
+                            publisher.attribute_helpers.setprop(v, "actualtext", inlineobject.actualtext)
+                            publisher.attribute_helpers.setprop(v, "alttext", inlineobject.alttext)
+                            publisher.attribute_helpers.setprop(v, "id", inlineobject.id)
+                            node.set_attribute(v, publisher.att_role, inlineobject.role)
                         end
 
-                        cell = node.insert_after(cell,node.tail(cell),v)
+                        cell = node.insert_after(cell, node.tail(cell), v)
                         if publisher.newxpath then
                             self.dataxml.vars["__maxwidth"] = save_width
                         else
-                            publisher.xpath.set_variable("__maxwidth",save_width)
+                            publisher.xpath.set_variable("__maxwidth", save_width)
                         end
                     else
                         w("no width given in paragraph")
                     end
                 elseif node.is_node(inlineobject) then
                     -- an image for example
-                    if node.has_field(inlineobject,"width") then
+                    if node.has_field(inlineobject, "width") then
                         -- insert a line break if the row is too wide
                         if current_width + inlineobject.width > width then
                             local tmp
                             if cellrow then
                                 if cellrow.next then
                                     tmp = node.hpack(cellrow)
-                                    publisher.attribute_helpers.setprop(tmp,"origin","attach objects")
+                                    publisher.attribute_helpers.setprop(tmp, "origin", "attach objects")
                                 else
                                     tmp = cellrow
                                 end
                             end
-                            cell = node.insert_after(cell,node.tail(cell),tmp)
+                            cell = node.insert_after(cell, node.tail(cell), tmp)
                             cellrow = inlineobject
                             current_width = inlineobject.width
                         else
                             current_width = current_width + inlineobject.width
-                            cellrow = node.insert_after(cellrow,node.tail(cellrow),inlineobject)
+                            cellrow = node.insert_after(cellrow, node.tail(cellrow), inlineobject)
                         end
                     else
-                        cellrow = node.insert_after(cellrow,node.tail(cellrow),inlineobject)
+                        cellrow = node.insert_after(cellrow, node.tail(cellrow), inlineobject)
                     end
-
                 else
-                    w("unknown %s",type(inlineobject))
+                    w("unknown %s", type(inlineobject))
                 end
             end
         end
@@ -833,18 +894,18 @@ function tabular:pack_cell(blockobjects, width, horizontal_alignment)
             local tmp
             if cellrow.next then
                 tmp = node.hpack(cellrow)
-                publisher.attribute_helpers.setprop(tmp,"origin","cellrow")
+                publisher.attribute_helpers.setprop(tmp, "origin", "cellrow")
             else
                 tmp = cellrow
             end
-            cell = node.insert_after(cell,node.tail(cell),tmp)
+            cell = node.insert_after(cell, node.tail(cell), tmp)
         end
     end
 
     -- if there are no objects in a row, we create a dummy object
     -- so the row can be created and vpack does not fall over a nil
     cell = cell or node.new("hlist")
-    cell = publisher.drawing.rotateTd(cell,blockobjects.rotate or 0,width)
+    cell = publisher.drawing.rotateTd(cell, blockobjects.rotate or 0, width)
 
     local n = cell
     while n do
@@ -858,23 +919,23 @@ function tabular:pack_cell(blockobjects, width, horizontal_alignment)
             if horizontal_alignment == "center" or horizontal_alignment == "justify" then
                 glue_left = node.copy(publisher.glue_stretch2)
                 glue_right = node.copy(publisher.glue_stretch2)
-            elseif horizontal_alignment=="left" or horizontal_alignment == nil then
+            elseif horizontal_alignment == "left" or horizontal_alignment == nil then
                 glue_left = nil
                 glue_right = node.copy(publisher.glue_stretch2)
-            elseif horizontal_alignment=="right"   then
+            elseif horizontal_alignment == "right" then
                 glue_left = node.copy(publisher.glue_stretch2)
                 glue_right = nil
             end
 
             if glue_left then
-                publisher.attribute_helpers.setprop(glue_left,"origin","align_left")
-                tmp = node.insert_before(tmp,n,glue_left)
+                publisher.attribute_helpers.setprop(glue_left, "origin", "align_left")
+                tmp = node.insert_before(tmp, n, glue_left)
             end
             if glue_right then
-                publisher.attribute_helpers.setprop(glue_right,"origin","align_right")
-                tmp = node.insert_after(tmp,n,glue_right)
+                publisher.attribute_helpers.setprop(glue_right, "origin", "align_right")
+                tmp = node.insert_after(tmp, n, glue_right)
             end
-            tmp = node.hpack(tmp,width,"exactly")
+            tmp = node.hpack(tmp, width, "exactly")
 
             if n_prev then
                 n_prev.next = tmp
@@ -908,7 +969,7 @@ end
 function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, skiptable)
     last_shiftup = last_shiftup or 0
     local rowheight
-    local rowspan,colspan
+    local rowspan, colspan
     local wd
     local rowspans = {}
     local shiftup = 0
@@ -924,7 +985,7 @@ function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, ski
         else
             local ht = tex.sp(tr_contents.minheight)
             if ht == nil then
-                main.log("error","Cannot parse minheight", "ht",tr_contents.minheight or "?")
+                main.log("error", "Cannot parse minheight", "ht", tr_contents.minheight or "?")
                 ht = 0
             end
             minht = ht
@@ -940,21 +1001,21 @@ function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, ski
     -- The first cell is in column 1, the second cell is in column 4
     local current_column = 0
 
-    for _,td in ipairs(tr_contents) do
+    for _, td in ipairs(tr_contents) do
         local td_contents = publisher.xml_helpers.element_contents(td)
         if td_contents == nil then
             main.log("error", "No contents in Td")
-            return rowheight,rowspans,shiftup
+            return rowheight, rowspans, shiftup
         end
         current_column = current_column + 1
 
-        local td_borderleft   = td_contents.td_borderleft_calculated   or tex.sp(td_contents["border-left"]   or 0)
-        local td_borderright  = td_contents.td_borderright_calculated  or tex.sp(td_contents["border-right"]  or 0)
-        local td_bordertop    = td_contents.td_bordertop_calculated    or tex.sp(td_contents["border-top"]    or 0)
+        local td_borderleft = td_contents.td_borderleft_calculated or tex.sp(td_contents["border-left"] or 0)
+        local td_borderright = td_contents.td_borderright_calculated or tex.sp(td_contents["border-right"] or 0)
+        local td_bordertop = td_contents.td_bordertop_calculated or tex.sp(td_contents["border-top"] or 0)
         local td_borderbottom = td_contents.td_borderbottom_calculated or tex.sp(td_contents["border-bottom"] or 0)
-        local padding_left   = td_contents.padding_left   or self.padding_left_col[current_column]  or self.padding_left
-        local padding_right  = td_contents.padding_right  or self.padding_right_col[current_column] or self.padding_right
-        local padding_top    = td_contents.padding_top    or self.padding_top
+        local padding_left = td_contents.padding_left or self.padding_left_col[current_column] or self.padding_left
+        local padding_right = td_contents.padding_right or self.padding_right_col[current_column] or self.padding_right
+        local padding_top = td_contents.padding_top or self.padding_top
         local padding_bottom = td_contents.padding_bottom or self.padding_bottom
 
         rowspan = tonumber(td_contents.rowspan) or 1
@@ -967,7 +1028,7 @@ function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, ski
         while skiptable[current_row] and skiptable[current_row][current_column] do
             current_column = current_column + 1
         end
-        for s = current_column,current_column + colspan - 1 do
+        for s = current_column, current_column + colspan - 1 do
             if self.colwidths[s] == nil then
                 main.log("error", "Something went wrong with the number of columns in the table (calculate_rowheight)")
             else
@@ -976,14 +1037,18 @@ function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, ski
         end
         current_column = current_column + colspan - 1
         -- FIXME: use column_distances[i] instead of self.colsep
-        wd = wd + ( colspan - 1 ) * self.colsep
+        wd = wd + (colspan - 1) * self.colsep
 
         -- FIXME: take border-left and border-right into account
         --        in the height calculation also border-top and border-bottom
         local alignment = td_contents.align or tr_contents.align or self.align[current_column]
-        local cell = self:pack_cell(td_contents.objects,wd - padding_left - padding_right - td_borderleft - td_borderright,alignment)
+        local cell = self:pack_cell(
+            td_contents.objects,
+            wd - padding_left - padding_right - td_borderleft - td_borderright,
+            alignment
+        )
         if not cell then
-            splib.log("warning","no table cell found")
+            splib.log("warning", "no table cell found")
             return
         end
         td_contents.cell = cell
@@ -991,16 +1056,15 @@ function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, ski
 
         tmp = tmp + padding_top + padding_bottom + td_borderbottom + td_bordertop
         if rowspan > 1 then
-            rowspans[#rowspans + 1] =  { start = current_row, stop = current_row + rowspan - 1, ht = tmp }
+            rowspans[#rowspans + 1] = { start = current_row, stop = current_row + rowspan - 1, ht = tmp }
             td_contents.rowspan_internal = rowspans[#rowspans]
         else
-            rowheight = math.max(rowheight,tmp)
+            rowheight = math.max(rowheight, tmp)
         end
     end
     tr_contents.shiftup = last_shiftup
-    return rowheight,rowspans,shiftup
+    return rowheight, rowspans, shiftup
 end
-
 
 -- Calculates row heights for every row in the body, head and foot,
 -- delegating per-row work to `calculate_rowheight` and accumulating
@@ -1018,7 +1082,7 @@ function tabular:calculate_rowheights()
 
     local last_shiftup = 0
 
-    for _,tr in ipairs(self.tab) do
+    for _, tr in ipairs(self.tab) do
         local tr_contents = publisher.xml_helpers.element_contents(tr)
         local eltname = publisher.xml_helpers.elementname(tr)
         if eltname == "Tablerule" or eltname == "Columns" or eltname == "TableNewPage" then
@@ -1041,34 +1105,36 @@ function tabular:calculate_rowheights()
             -- ignore
         elseif eltname == "Tablehead" or eltname == "Tablefoot" then
             local last_shiftup = 0
-            for _,row in ipairs(tr_contents) do
-                local cellcontents  = publisher.xml_helpers.element_contents(row)
+            for _, row in ipairs(tr_contents) do
+                local cellcontents = publisher.xml_helpers.element_contents(row)
                 local cell_elementname = publisher.xml_helpers.elementname(row)
                 if cell_elementname == "Tr" then
                     rowcounter[tablearea] = rowcounter[tablearea] + 1
                     current_row = rowcounter[tablearea]
-                    rowheight, _rowspans,last_shiftup = self:calculate_rowheight(cellcontents,current_row,last_shiftup,self.skiptables[tablearea])
+                    rowheight, _rowspans, last_shiftup =
+                        self:calculate_rowheight(cellcontents, current_row, last_shiftup, self.skiptables[tablearea])
                     if not rowheight then
                         return
                     end
                     rowheightarea[current_row] = rowheight
-                    rowspans[tablearea] = table.__concat(rowspans[tablearea],_rowspans)
+                    rowspans[tablearea] = table.__concat(rowspans[tablearea], _rowspans)
                 end
             end
         elseif eltname == "Tr" then
             rowcounter[tablearea] = rowcounter[tablearea] + 1
             current_row = rowcounter[tablearea]
-            rowheight, _rowspans,last_shiftup = self:calculate_rowheight(tr_contents,current_row,last_shiftup,self.skiptables.body)
+            rowheight, _rowspans, last_shiftup =
+                self:calculate_rowheight(tr_contents, current_row, last_shiftup, self.skiptables.body)
             rowheightarea[current_row] = rowheight
-            rowspans[tablearea] = table.__concat(rowspans[tablearea],_rowspans)
+            rowspans[tablearea] = table.__concat(rowspans[tablearea], _rowspans)
         else
             main.log("warn", string.format("Unknown contents in “Table” %s", eltname or "?"))
         end -- if it's not a <Tablerule>
     end -- for all rows
 
-    for k,v in pairs(self.rowheights) do
+    for k, v in pairs(self.rowheights) do
         local thisrowspan = rowspans[k]
-        self:adjust_row_heights_for_rowspans(thisrowspan,v)
+        self:adjust_row_heights_for_rowspans(thisrowspan, v)
     end
 end
 
@@ -1078,22 +1144,22 @@ end
 function tabular:adjust_row_heights_for_rowspans(rowspans, area)
     -- Adjust row heights. We have to do calculations on all row heights, before the rows can get their
     -- final heights
-    for i,rowspan in pairs(rowspans) do
+    for i, rowspan in pairs(rowspans) do
         local sum_ht = 0
-        for j=rowspan.start,rowspan.stop do
+        for j = rowspan.start, rowspan.stop do
             if not area[j] then
                 main.log("error", "Rowspan exceeds the number of rows in the table")
             else
                 sum_ht = sum_ht + area[j]
             end
         end
-        sum_ht = sum_ht + self.rowsep * ( rowspan.stop - rowspan.start )
+        sum_ht = sum_ht + self.rowsep * (rowspan.stop - rowspan.start)
         if rowspan.ht > sum_ht then
             if self.vexcess == "bottom" then
                 area[rowspan.stop] = area[rowspan.stop] + rowspan.ht - sum_ht
             else
                 local excess_per_row = (rowspan.ht - sum_ht) / (rowspan.stop - rowspan.start + 1)
-                for j=rowspan.start,rowspan.stop do
+                for j = rowspan.start, rowspan.stop do
                     area[j] = area[j] + excess_per_row
                 end
             end
@@ -1101,8 +1167,8 @@ function tabular:adjust_row_heights_for_rowspans(rowspans, area)
     end
 
     -- We have now calculated all row heights. So we can adjust the rowspans now.
-    for i,rowspan in pairs(rowspans) do
-        rowspan.sum_ht = table.sum(area,rowspan.start, rowspan.stop) + self.rowsep * ( rowspan.stop - rowspan.start )
+    for i, rowspan in pairs(rowspans) do
+        rowspan.sum_ht = table.sum(area, rowspan.start, rowspan.stop) + self.rowsep * (rowspan.stop - rowspan.start)
     end
 end
 
@@ -1135,11 +1201,11 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
     -- prevents row-level background optimization.
     local row_bg_simple = true
     local rowspan, colspan
-    local v,vlist,hlist
-    local fill = { width = 0, stretch = 2^16, stretch_order = 3}
+    local v, vlist, hlist
+    local fill = { width = 0, stretch = 2 ^ 16, stretch_order = 3 }
     local td_contents
     current_column = 0
-    for _,td in ipairs(tr_contents) do
+    for _, td in ipairs(tr_contents) do
         current_column = current_column + 1
 
         td_contents = publisher.xml_helpers.element_contents(td)
@@ -1154,25 +1220,25 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         end
 
         -- FIXME: am I sure that I am in the corerct column?  (colspan...)?
-        local td_borderleft   = td_contents.td_borderleft_calculated   or tex.sp(td_contents["border-left"]   or 0)
-        local td_borderright  = td_contents.td_borderright_calculated  or tex.sp(td_contents["border-right"]  or 0)
-        local td_bordertop    = td_contents.td_bordertop_calculated    or tex.sp(td_contents["border-top"]    or 0)
+        local td_borderleft = td_contents.td_borderleft_calculated or tex.sp(td_contents["border-left"] or 0)
+        local td_borderright = td_contents.td_borderright_calculated or tex.sp(td_contents["border-right"] or 0)
+        local td_bordertop = td_contents.td_bordertop_calculated or tex.sp(td_contents["border-top"] or 0)
         local td_borderbottom = td_contents.td_borderbottom_calculated or tex.sp(td_contents["border-bottom"] or 0)
-        local padding_left    = td_contents.padding_left   or self.padding_left_col[current_column]  or self.padding_left
-        local padding_right   = td_contents.padding_right  or self.padding_right_col[current_column] or  self.padding_right
-        local padding_top     = td_contents.padding_top    or self.padding_top
-        local padding_bottom  = td_contents.padding_bottom or self.padding_bottom
+        local padding_left = td_contents.padding_left or self.padding_left_col[current_column] or self.padding_left
+        local padding_right = td_contents.padding_right or self.padding_right_col[current_column] or self.padding_right
+        local padding_top = td_contents.padding_top or self.padding_top
+        local padding_bottom = td_contents.padding_bottom or self.padding_bottom
 
         -- when we are on a skip-cell (because of a rowspan), we need to create an empty hbox
         while skiptable[current_row] and skiptable[current_row][current_column] do
             v = publisher.nodes.create_empty_hbox_with_width(self.colwidths[current_column])
-            v = publisher.nodes.add_glue(v,"head",fill) -- otherwise we'd get an underfull box
-            row[current_column] = node.vpack(v,rowheightarea[current_row],"exactly")
+            v = publisher.nodes.add_glue(v, "head", fill) -- otherwise we'd get an underfull box
+            row[current_column] = node.vpack(v, rowheightarea[current_row], "exactly")
             current_column = current_column + 1
         end
 
         current_column_width = 0
-        for s = current_column,current_column + colspan - 1 do
+        for s = current_column, current_column + colspan - 1 do
             if self.colwidths[s] == nil then
                 main.log("error", "Something went wrong with the number of columns in the table (typeset_row)")
             else
@@ -1181,7 +1247,7 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         end
 
         -- FIXME: use column_distances[i] instead of self.colsep
-        current_column_width = current_column_width + ( colspan - 1 ) * self.colsep
+        current_column_width = current_column_width + (colspan - 1) * self.colsep
         current_column = current_column + colspan - 1
         if rowspan > 1 then
             ht = td_contents.rowspan_internal.sum_ht
@@ -1189,12 +1255,12 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
             ht = rowheightarea[current_row]
         end
 
-        local g = set_glue(nil,{width = padding_top})
-        publisher.attribute_helpers.setprop(g,"origin","padding_top")
+        local g = set_glue(nil, { width = padding_top })
+        publisher.attribute_helpers.setprop(g, "origin", "padding_top")
 
         local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
         if valign ~= "top" then
-            set_glue_values(g,{stretch = 2^16, stretch_order = 2})
+            set_glue_values(g, { stretch = 2 ^ 16, stretch_order = 2 })
         end
 
         local cell_start = g
@@ -1208,7 +1274,11 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
             node.free(td_contents.cell)
         else
             local alignment = td_contents.align or tr_contents.align or self.align[current_column]
-            cell = self:pack_cell(td_contents.objects,current_column_width - padding_left - padding_right - td_borderleft - td_borderright,alignment)
+            cell = self:pack_cell(
+                td_contents.objects,
+                current_column_width - padding_left - padding_right - td_borderleft - td_borderright,
+                alignment
+            )
             if not cell then
                 return
             end
@@ -1219,7 +1289,7 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         if publisher.options.format == "PDF/UA" then
             if td_contents.role then
                 td_role_num = publisher.structure_tree.get_rolenum(td_contents.role)
-                td_role_id = td_contents.role .. '_' .. tostring(publisher.rolecounter)
+                td_role_id = td_contents.role .. "_" .. tostring(publisher.rolecounter)
                 publisher.rolecounter = publisher.rolecounter + 1
             end
         end
@@ -1230,36 +1300,42 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         tail.next = cell
         cell.prev = tail
 
-        local g = set_glue(nil,{width = padding_bottom})
-        publisher.attribute_helpers.setprop(g,"origin","align_padding")
+        local g = set_glue(nil, { width = padding_bottom })
+        publisher.attribute_helpers.setprop(g, "origin", "align_padding")
 
         valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
         if valign ~= "bottom" then
-            set_glue_values(g,{stretch = 2^16, stretch_order = 2})
+            set_glue_values(g, { stretch = 2 ^ 16, stretch_order = 2 })
         end
 
-        node.insert_after(cell_start,node.tail(cell_start),g)
+        node.insert_after(cell_start, node.tail(cell_start), g)
 
-        vlist = node.vpack(cell_start,ht - td_bordertop - td_borderbottom,"exactly")
+        vlist = node.vpack(cell_start, ht - td_bordertop - td_borderbottom, "exactly")
         -- The table cell now looks like this
         --
         -- ![Table cell vertical](../img/tablecell1.svg)
         --
         -- Now we need to add the left and the right glue
-        g = set_glue(nil,{width = padding_left})
-        publisher.attribute_helpers.setprop(g,"origin","padding_left")
-
+        g = set_glue(nil, { width = padding_left })
+        publisher.attribute_helpers.setprop(g, "origin", "padding_left")
 
         cell_start = g
         local ht_border = 0
         rowspan = td_contents.rowspan or 1
-        for i=1,rowspan do
+        for i = 1, rowspan do
             ht_border = ht_border + rowheightarea[current_row + i - 1] + self.rowsep
         end
         ht_border = ht_border - td_bordertop - td_borderbottom - self.rowsep
 
         if td_borderleft ~= 0 then
-            local start = publisher.drawing.colorbar(td_borderleft,ht_border,0,td_contents["border-left-color"],"borderleft","vertical")
+            local start = publisher.drawing.colorbar(
+                td_borderleft,
+                ht_border,
+                0,
+                td_contents["border-left-color"],
+                "borderleft",
+                "vertical"
+            )
             local stop = node.tail(start)
             stop.next = g
             cell_start = start
@@ -1269,22 +1345,33 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         current.next = vlist
         current = vlist
 
-        g = set_glue(nil,{width = padding_right})
-        publisher.attribute_helpers.setprop(g,"origin","padding_right")
+        g = set_glue(nil, { width = padding_right })
+        publisher.attribute_helpers.setprop(g, "origin", "padding_right")
 
         current.next = g
         if td_borderright ~= 0 then
-            local rule = publisher.drawing.colorbar(td_borderright,ht_border,0,td_contents["border-right-color"],"borderright","vertical")
+            local rule = publisher.drawing.colorbar(
+                td_borderright,
+                ht_border,
+                0,
+                td_contents["border-right-color"],
+                "borderright",
+                "vertical"
+            )
             g.next = rule
         end
 
-        hlist = node.hpack(cell_start,current_column_width,"exactly")
+        hlist = node.hpack(cell_start, current_column_width, "exactly")
         -- The cell is now almost complete. Resolve the background color but do NOT
         -- apply it yet — store it in deferred_bg_color for later application.
         --
         -- ![Table cell vertical](../img/tablecell2.svg)
         local deferred_bg_color
-        if tr_contents.backgroundcolor or td_contents.backgroundcolor or self.backgroundcolumncolors[current_column] then
+        if
+            tr_contents.backgroundcolor
+            or td_contents.backgroundcolor
+            or self.backgroundcolumncolors[current_column]
+        then
             -- prio: Td.backgroundcolor, then Tr.backgroundcolor, then Column.backgroundcolor
             local color = self.backgroundcolumncolors[current_column]
             if tr_contents.backgroundcolor and tr_contents.backgroundcolor ~= "-" then
@@ -1306,20 +1393,20 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
 
         local bg = td_contents["background-text"]
         if bg then
-            local bgcolor  = td_contents["background-textcolor"] or "black"
-            local angle    = td_contents["background-angle"]     or 0
-            local bgsize   = td_contents["background-size"]      or "contain"
+            local bgcolor = td_contents["background-textcolor"] or "black"
+            local angle = td_contents["background-angle"] or 0
+            local bgsize = td_contents["background-size"] or "contain"
             local fontname = td_contents["background-font-family"]
             local ff = publisher.fonts.lookup_fontfamily_name_number[fontname]
-            hlist = publisher.drawing.bgtext(hlist,bg,angle,bgcolor, ff or self.fontfamily,bgsize)
+            hlist = publisher.drawing.bgtext(hlist, bg, angle, bgcolor, ff or self.fontfamily, bgsize)
         end
 
         if td_contents.graphic then
-            local _, x = metapost.prepareboxgraphic(hlist.width,hlist.height,td_contents.graphic)
+            local _, x = metapost.prepareboxgraphic(hlist.width, hlist.height, td_contents.graphic)
             local x = node.hpack(x)
             x.width = 0
             x.height = 0
-            hlist = node.insert_before(hlist,hlist,x)
+            hlist = node.insert_before(hlist, hlist, x)
             hlist = node.hpack(hlist)
         end
 
@@ -1333,36 +1420,50 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
 
         local head = hlist
         if td_bordertop > 0 then
-            local rule = publisher.drawing.colorbar(current_column_width,td_bordertop,0,td_contents["border-top-color"],"border top","horizontal")
+            local rule = publisher.drawing.colorbar(
+                current_column_width,
+                td_bordertop,
+                0,
+                td_contents["border-top-color"],
+                "border top",
+                "horizontal"
+            )
             -- rule is: whatsit, rule, whatsit
             node.tail(rule).next = hlist
             head = rule
         end
 
         if td_borderbottom > 0 then
-            local rule = publisher.drawing.colorbar(current_column_width,td_borderbottom,0,td_contents["border-bottom-color"],"border bottom","horizontal")
+            local rule = publisher.drawing.colorbar(
+                current_column_width,
+                td_borderbottom,
+                0,
+                td_contents["border-bottom-color"],
+                "border bottom",
+                "horizontal"
+            )
             hlist.next = rule
         end
 
         -- What is this for?
-        local gl = set_glue(nil,{width = 0, shrink = 2^16, shrink_order = 2})
-        publisher.attribute_helpers.setprop(gl,"origin","unknown")
+        local gl = set_glue(nil, { width = 0, shrink = 2 ^ 16, shrink_order = 2 })
+        publisher.attribute_helpers.setprop(gl, "origin", "unknown")
         node.slide(head).next = gl
 
         -- This is our table cell now:
         --
         -- ![Table cell vertical](../img/tablecell3.svg)
-        hlist = node.vpack(head,rowheightarea[current_row],"exactly")
+        hlist = node.vpack(head, rowheightarea[current_row], "exactly")
 
         if publisher.options.showobjects then
             publisher.drawing.boxit(hlist)
         end
 
         if td_role_num then
-            node.set_attribute(hlist,publisher.att_role,td_role_num)
-            publisher.attribute_helpers.setprop(hlist,"role",td_role_num)
-            publisher.attribute_helpers.setprop(hlist,"id",td_role_id)
-            publisher.attribute_helpers.setprop(hlist,"parentid",td_contents.parent)
+            node.set_attribute(hlist, publisher.att_role, td_role_num)
+            publisher.attribute_helpers.setprop(hlist, "role", td_role_num)
+            publisher.attribute_helpers.setprop(hlist, "id", td_role_id)
+            publisher.attribute_helpers.setprop(hlist, "parentid", td_contents.parent)
         end
 
         row[#row + 1] = hlist
@@ -1370,44 +1471,43 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
 
     if current_column == 0 then
         v = publisher.nodes.create_empty_hbox_with_width(self.tablewidth_target)
-        v = publisher.nodes.add_glue(v,"head",fill,"empty") -- otherwise we get an underfull vbox
-        row[1] = node.vpack(v,rowheightarea[current_row],"exactly")
+        v = publisher.nodes.add_glue(v, "head", fill, "empty") -- otherwise we get an underfull vbox
+        row[1] = node.vpack(v, rowheightarea[current_row], "exactly")
     end
-
 
     -- We now add colsep and connect the cells so we have a list of vboxes and
     -- pack them in a hbox.
     -- ![a row](../img/tablerow.svg)
     -- FIXME: use column_distances[i] instead of self.colsep
-    local cell_start,current
+    local cell_start, current
     cell_start = row[1]
     current = cell_start
     if row[1] then
-        for z=2,#row do
-            _,current = publisher.nodes.add_glue(current,"tail",{ width = self.colsep },"colsep")
+        for z = 2, #row do
+            _, current = publisher.nodes.add_glue(current, "tail", { width = self.colsep }, "colsep")
             if row[z] then
                 current.next = row[z]
                 current = row[z]
             end
         end
         row = node.hpack(cell_start)
-        publisher.attribute_helpers.setprop(row,"origin","row")
+        publisher.attribute_helpers.setprop(row, "origin", "row")
         -- Attach deferred background colors to the row hbox. Stored here (top-level
         -- node) rather than on inner cell hlists because node.copy_list() only
         -- preserves properties on directly copied nodes, not on deeply nested children.
         if next(deferred_bgcolors) then
-            publisher.attribute_helpers.setprop(row,"deferred_bgcolors", deferred_bgcolors)
+            publisher.attribute_helpers.setprop(row, "deferred_bgcolors", deferred_bgcolors)
             -- Row-level background is only safe when there is no column distance
             -- and no colspan/rowspan in this row.
             if row_bg_simple and self.colsep == 0 then
-                publisher.attribute_helpers.setprop(row,"row_bg_simple", true)
+                publisher.attribute_helpers.setprop(row, "row_bg_simple", true)
             end
         end
     else
         main.log("error", "(Internal error) Table is not complete.")
     end
-    node.set_attribute(row,publisher.att_tr_shift_up,tr_contents.shiftup)
-    node.set_attribute(row,publisher.att_use_as_head,tr_contents.sethead)
+    node.set_attribute(row, publisher.att_tr_shift_up, tr_contents.shiftup)
+    node.set_attribute(row, publisher.att_use_as_head, tr_contents.sethead)
     return row
 end
 
@@ -1423,35 +1523,52 @@ function tabular:make_tablehead(tr_contents, tablehead_first, tablehead, current
     if tr_contents.page == "first" then
         current_tablehead_type = tablehead_first
         if second_run ~= true then
-            self.tablehead_first_contents = {tr_contents,current_row}
+            self.tablehead_first_contents = { tr_contents, current_row }
         end
     else
         current_tablehead_type = tablehead
         if second_run ~= true then
-            self.tablehead_contents = {tr_contents,current_row}
+            self.tablehead_contents = { tr_contents, current_row }
         end
     end
 
     local tablearea = "tablehead" .. (tr_contents.page or "")
 
-    for _,row in ipairs(tr_contents) do
+    for _, row in ipairs(tr_contents) do
         local row_contents = publisher.xml_helpers.element_contents(row)
         local row_elementname = publisher.xml_helpers.elementname(row)
         if row_elementname == "Tr" then
             current_row = current_row + 1
-            current_tablehead_type[#current_tablehead_type + 1] = self:typeset_row(row_contents,current_row,self.skiptables[tablearea] or {},self.rowheights[tablearea])
+            current_tablehead_type[#current_tablehead_type + 1] = self:typeset_row(
+                row_contents,
+                current_row,
+                self.skiptables[tablearea] or {},
+                self.rowheights[tablearea]
+            )
         elseif row_elementname == "Tablerule" then
-            local tmp = publisher.drawing.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,"tablerule","horizontal")
+            local tmp = publisher.drawing.colorbar(
+                self.tablewidth_target,
+                tex.sp(row_contents.rulewidth or "0.25pt"),
+                0,
+                row_contents.color,
+                "tablerule",
+                "horizontal"
+            )
             tmp = node.hpack(tmp)
-            publisher.attribute_helpers.setprop(tmp,"origin","tablerule tablehead")
+            publisher.attribute_helpers.setprop(tmp, "origin", "tablerule tablehead")
             current_tablehead_type[#current_tablehead_type + 1] = tmp
         end
     end
     if #current_tablehead_type == 0 then
-        table.insert(current_tablehead_type,node.new("hlist"))
+        table.insert(current_tablehead_type, node.new("hlist"))
     end
     if self.rowsep ~= 0 then
-        publisher.nodes.add_glue(current_tablehead_type[#current_tablehead_type], "tail", {width=self.rowsep},"rowsep")
+        publisher.nodes.add_glue(
+            current_tablehead_type[#current_tablehead_type],
+            "tail",
+            { width = self.rowsep },
+            "rowsep"
+        )
     end
 
     return current_row
@@ -1469,31 +1586,43 @@ function tabular:make_tablefoot(tr_contents, tablefoot_last, tablefoot, current_
     if tr_contents.page == "last" then
         current_tablefoot_type = tablefoot_last
         if second_run ~= true then
-            self.tablefoot_last_contents = {tr_contents,current_row}
+            self.tablefoot_last_contents = { tr_contents, current_row }
         end
     else
         current_tablefoot_type = tablefoot
         if second_run ~= true then
-            self.tablefoot_contents = {tr_contents,current_row}
+            self.tablefoot_contents = { tr_contents, current_row }
         end
     end
-    for _,row in ipairs(tr_contents) do
+    for _, row in ipairs(tr_contents) do
         local row_contents = publisher.xml_helpers.element_contents(row)
         local row_elementname = publisher.xml_helpers.elementname(row)
 
         local tablearea = "tablefoot" .. (tr_contents.page or "")
         if row_elementname == "Tr" then
             current_row = current_row + 1
-            current_tablefoot_type[#current_tablefoot_type + 1] = self:typeset_row(row_contents,current_row,self.skiptables[tablearea] or {},self.rowheights[tablearea])
+            current_tablefoot_type[#current_tablefoot_type + 1] = self:typeset_row(
+                row_contents,
+                current_row,
+                self.skiptables[tablearea] or {},
+                self.rowheights[tablearea]
+            )
         elseif row_elementname == "Tablerule" then
-            local tmp = publisher.drawing.colorbar(self.tablewidth_target,tex.sp(row_contents.rulewidth or "0.25pt"),0,row_contents.color,"tablerule","horizontal")
+            local tmp = publisher.drawing.colorbar(
+                self.tablewidth_target,
+                tex.sp(row_contents.rulewidth or "0.25pt"),
+                0,
+                row_contents.color,
+                "tablerule",
+                "horizontal"
+            )
             tmp = node.hpack(tmp)
-            publisher.attribute_helpers.setprop(tmp,"origin","tablerule_make_tablefoot")
+            publisher.attribute_helpers.setprop(tmp, "origin", "tablerule_make_tablefoot")
             current_tablefoot_type[#current_tablefoot_type + 1] = tmp
         end
     end
     if #current_tablefoot_type == 0 then
-        table.insert(current_tablefoot_type,node.new("hlist"))
+        table.insert(current_tablefoot_type, node.new("hlist"))
     end
 
     return current_row
@@ -1505,16 +1634,16 @@ end
 ---@param tablehead table Table for subsequent page heads
 function tabular:connect_tablehead_first_all(tablehead_first, tablehead)
     -- We connect all but the last row with the next row and remember the height in ht_header
-    for z = 1,#tablehead_first - 1 do
-        local _, tmp = publisher.nodes.add_glue(tablehead_first[z],"tail",{ width = self.rowsep },"rowsep tablehead")
-        tmp.next = tablehead_first[z+1]
-        tablehead_first[z+1].prev = tmp
+    for z = 1, #tablehead_first - 1 do
+        local _, tmp = publisher.nodes.add_glue(tablehead_first[z], "tail", { width = self.rowsep }, "rowsep tablehead")
+        tmp.next = tablehead_first[z + 1]
+        tablehead_first[z + 1].prev = tmp
     end
 
-    for z = 1,#tablehead - 1 do
-        local _, tmp = publisher.nodes.add_glue(tablehead[z],"tail",{ width = self.rowsep },"rowsep tablehead (2)")
-        tmp.next = tablehead[z+1]
-        tablehead[z+1].prev = tmp
+    for z = 1, #tablehead - 1 do
+        local _, tmp = publisher.nodes.add_glue(tablehead[z], "tail", { width = self.rowsep }, "rowsep tablehead (2)")
+        tmp.next = tablehead[z + 1]
+        tablehead[z + 1].prev = tmp
     end
 end
 
@@ -1525,20 +1654,21 @@ end
 ---@return number Height of table foot for last page
 function tabular:calculate_height_and_connect_tablefoot(tablefoot, tablefoot_last)
     local ht_footer, ht_footer_last = 0, 0
-    for z = 1,#tablefoot - 1 do
-        ht_footer = ht_footer + tablefoot[z].height  -- Tr or Tablerule
+    for z = 1, #tablefoot - 1 do
+        ht_footer = ht_footer + tablefoot[z].height -- Tr or Tablerule
         -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
-        local _, tmp = publisher.nodes.add_glue(tablefoot[z],"tail",{ width = self.rowsep },"rowsep tablefoot (1)")
-        tmp.next = tablefoot[z+1]
-        tablefoot[z+1].prev = tmp
+        local _, tmp = publisher.nodes.add_glue(tablefoot[z], "tail", { width = self.rowsep }, "rowsep tablefoot (1)")
+        tmp.next = tablefoot[z + 1]
+        tablefoot[z + 1].prev = tmp
     end
 
-    for z = 1,#tablefoot_last - 1 do
-        ht_footer_last = ht_footer_last + tablefoot_last[z].height  -- Tr or Tablerule
+    for z = 1, #tablefoot_last - 1 do
+        ht_footer_last = ht_footer_last + tablefoot_last[z].height -- Tr or Tablerule
         -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
-        local _, tmp = publisher.nodes.add_glue(tablefoot_last[z],"tail",{ width = self.rowsep },"rowsep tablefoot (2)")
-        tmp.next = tablefoot_last[z+1]
-        tablefoot_last[z+1].prev = tmp
+        local _, tmp =
+            publisher.nodes.add_glue(tablefoot_last[z], "tail", { width = self.rowsep }, "rowsep tablefoot (2)")
+        tmp.next = tablefoot_last[z + 1]
+        tablefoot_last[z + 1].prev = tmp
     end
 
     if #tablefoot > 0 then
@@ -1553,14 +1683,13 @@ function tabular:calculate_height_and_connect_tablefoot(tablefoot, tablefoot_las
     return ht_footer, ht_footer_last
 end
 
-
 -- This is called for Td/sethead=yes for the copies
 -- of the first head. It removes the pdf_dest nodes for bookmark destinations.
 -- Recursively removes `pdf_dest` whatsit nodes from a node list. Used
 -- before re-typesetting head/foot rows so destinations are not duplicated.
 ---@param nodelist node
 ---@return node? nodelist The (possibly trimmed) node list, or `nil` when fully removed.
-function remove_bookmark_nodes( nodelist )
+function remove_bookmark_nodes(nodelist)
     local head = nodelist
     while head do
         if head.id == publisher.hlist_node or head.id == publisher.vlist_node then
@@ -1688,9 +1817,9 @@ function tabular:typeset_table(dataxml)
     local row_in_rowspan = {}
 
     current_row = 0
-    for _,tr in ipairs(self.tab) do
+    for _, tr in ipairs(self.tab) do
         local tr_contents = publisher.xml_helpers.element_contents(tr)
-        local eltname   = publisher.xml_helpers.elementname(tr)
+        local eltname = publisher.xml_helpers.elementname(tr)
         local tmp
         -- If this row is allowed to break above
         -- Will be set to false if break_below is "no"
@@ -1701,29 +1830,35 @@ function tabular:typeset_table(dataxml)
             local offset = 0
             if tr_contents.start and tr_contents.start ~= 1 then
                 local sum = 0
-                for i=1,tr_contents.start - 1 do
+                for i = 1, tr_contents.start - 1 do
                     sum = sum + self.colwidths[i]
                 end
                 offset = sum
             end
-            tmp = publisher.drawing.colorbar(self.tablewidth_target - offset,tex.sp(tr_contents.rulewidth or "0.25pt"),0,tr_contents.color,"tablerule","horizontal")
-            tmp = publisher.nodes.add_glue(tmp,"head",{width = offset},"offset tablerule")
+            tmp = publisher.drawing.colorbar(
+                self.tablewidth_target - offset,
+                tex.sp(tr_contents.rulewidth or "0.25pt"),
+                0,
+                tr_contents.color,
+                "tablerule",
+                "horizontal"
+            )
+            tmp = publisher.nodes.add_glue(tmp, "head", { width = offset }, "offset tablerule")
             tmp = node.hpack(tmp)
-            publisher.attribute_helpers.setprop(tmp,"origin","tablerule")
+            publisher.attribute_helpers.setprop(tmp, "origin", "tablerule")
             rows[#rows + 1] = tmp
             if break_above == false then
                 if publisher.options.showobjects then
                     rows[#rows] = publisher.drawing.addhrule(rows[#rows])
                 end
-                node.set_attribute(rows[#rows],publisher.att_break_above,1)
+                node.set_attribute(rows[#rows], publisher.att_break_above, 1)
                 break_above = true
             end
             if tr_contents.breakbelow == false then
                 break_above = false
             end
-
         elseif eltname == "Tablehead" then
-            self:make_tablehead(tr_contents,tablehead_first,tablehead,current_row)
+            self:make_tablehead(tr_contents, tablehead_first, tablehead, current_row)
             if tr_contents.page == "first" then
                 filter.tablehead_force_first = true
             elseif tr_contents.page == "odd" or tr_contents.page == "even" then
@@ -1731,16 +1866,15 @@ function tabular:typeset_table(dataxml)
             elseif tr_contents.page == "all" then
                 filter.tablehead = "none"
             end
-
         elseif eltname == "Tablefoot" then
-            self:make_tablefoot(tr_contents,tablefoot_last,tablefoot,0)
+            self:make_tablefoot(tr_contents, tablefoot_last, tablefoot, 0)
         elseif eltname == "Tr" then
             current_row = current_row + 1
-            rows[#rows + 1] = self:typeset_row(tr_contents,current_row,self.skiptables.body,self.rowheights.body)
+            rows[#rows + 1] = self:typeset_row(tr_contents, current_row, self.skiptables.body, self.rowheights.body)
             -- Mark if this row is inside a rowspan from a previous row
             local skip_row = self.skiptables.body[current_row]
             if skip_row then
-                for _,v in pairs(skip_row) do
+                for _, v in pairs(skip_row) do
                     if v then
                         row_in_rowspan[#rows] = true
                         break
@@ -1749,48 +1883,48 @@ function tabular:typeset_table(dataxml)
             end
             -- We allow data to be attached to a table row.
             local thisrow = rows[#rows]
-            publisher.attribute_helpers.setprop(thisrow,"origin","tr")
+            publisher.attribute_helpers.setprop(thisrow, "origin", "tr")
             if tr_contents._layoutxml then
-                publisher.attribute_helpers.setprop(thisrow,"tr_layoutxml", tr_contents._layoutxml)
-                publisher.attribute_helpers.setprop(thisrow,"tr_dataxml", tr_contents._dataxml)
+                publisher.attribute_helpers.setprop(thisrow, "tr_layoutxml", tr_contents._layoutxml)
+                publisher.attribute_helpers.setprop(thisrow, "tr_dataxml", tr_contents._dataxml)
             end
             if publisher.options.format == "PDF/UA" and tr_contents.role then
                 local rn = publisher.structure_tree.get_rolenum(tr_contents.role)
-                local id = tr_contents.role .. '_' .. tostring(publisher.rolecounter)
-                node.set_attribute(thisrow,publisher.att_role,rn)
-                publisher.attribute_helpers.setprop(thisrow,"role",rn)
-                publisher.attribute_helpers.setprop(thisrow,"id",id)
-                publisher.attribute_helpers.setprop(thisrow,"rolecounter",publisher.rolecounter)
+                local id = tr_contents.role .. "_" .. tostring(publisher.rolecounter)
+                node.set_attribute(thisrow, publisher.att_role, rn)
+                publisher.attribute_helpers.setprop(thisrow, "role", rn)
+                publisher.attribute_helpers.setprop(thisrow, "id", id)
+                publisher.attribute_helpers.setprop(thisrow, "rolecounter", publisher.rolecounter)
                 publisher.rolecounter = publisher.rolecounter + 1
-                publisher.attribute_helpers.setprop(thisrow,"parentid",tr_contents.parent)
-                publisher.attribute_helpers.setprop(thisrow,"actualtext",tr_contents.actualtext)
-                publisher.attribute_helpers.setprop(thisrow,"alttext",tr_contents.alttext)
+                publisher.attribute_helpers.setprop(thisrow, "parentid", tr_contents.parent)
+                publisher.attribute_helpers.setprop(thisrow, "actualtext", tr_contents.actualtext)
+                publisher.attribute_helpers.setprop(thisrow, "alttext", tr_contents.alttext)
             end
             if tr_contents.data then
                 dynamic_data[#dynamic_data + 1] = tr_contents.data
-                node.set_attribute(rows[#rows],publisher.att_tr_dynamic_data,#dynamic_data)
+                node.set_attribute(rows[#rows], publisher.att_tr_dynamic_data, #dynamic_data)
             end
-            node.set_attribute(rows[#rows],publisher.att_is_table_row,1)
+            node.set_attribute(rows[#rows], publisher.att_is_table_row, 1)
 
             if break_above == false then
                 if publisher.options.showobjects then
                     rows[#rows] = publisher.drawing.addhrule(rows[#rows])
                 end
-                node.set_attribute(rows[#rows],publisher.att_break_above,1)
+                node.set_attribute(rows[#rows], publisher.att_break_above, 1)
                 break_above = true
             end
 
             if tr_contents["top-distance"] ~= 0 then
-                node.set_attribute(rows[#rows],publisher.att_space_amount,tr_contents["top-distance"])
+                node.set_attribute(rows[#rows], publisher.att_space_amount, tr_contents["top-distance"])
             end
             if tr_contents["break-below"] == "no" then
-                node.set_attribute(rows[#rows],publisher.att_break_below_forbidden,1)
+                node.set_attribute(rows[#rows], publisher.att_break_below_forbidden, 1)
                 break_above = false
             end
         elseif eltname == "TableNewPage" then
             if publisher.current_group == nil then
                 local tf = node.new("hlist")
-                node.set_attribute(tf,publisher.att_tablenewpage, 1)
+                node.set_attribute(tf, publisher.att_tablenewpage, 1)
                 rows[#rows + 1] = tf
             else
                 main.log("warn", "TableNewPage does not work in Group")
@@ -1808,13 +1942,15 @@ function tabular:typeset_table(dataxml)
     -- I used to have a metatable with __index here, but this gives a stack overflow
     -- for large indexes
     local tableheads_extra = {
-        largest_index = 0
+        largest_index = 0,
     }
-    local function get_tableheads_extra( idx, maxrow )
+    local function get_tableheads_extra(idx, maxrow)
         idx = idx - 1
-        if idx < 1 then return nil end
+        if idx < 1 then
+            return nil
+        end
         local maxidx = tableheads_extra.largest_index
-        local id = math.min(idx,maxidx)
+        local id = math.min(idx, maxidx)
         if tableheads_extra[id] ~= nil then
             local subidx = #tableheads_extra[id]
             if maxrow == nil then
@@ -1828,23 +1964,25 @@ function tabular:typeset_table(dataxml)
                 end
                 subidx = subidx - 1
             end
-            return get_tableheads_extra(id  , maxrow)
+            return get_tableheads_extra(id, maxrow)
         end
-        if idx == 1 then return nil end
+        if idx == 1 then
+            return nil
+        end
         return get_tableheads_extra(idx)
     end
 
-    local function set_tableheads_extra( idx, nodelist, rownumber )
+    local function set_tableheads_extra(idx, nodelist, rownumber)
         -- nodelist is a copied list, but the pdf_dest whatsits must not
         -- go into the output.
         remove_bookmark_nodes(nodelist)
-        tableheads_extra.largest_index = math.max( tableheads_extra.largest_index , idx )
+        tableheads_extra.largest_index = math.max(tableheads_extra.largest_index, idx)
         tableheads_extra[idx] = tableheads_extra[idx] or {}
-        tableheads_extra[idx][#tableheads_extra[idx] + 1]  = { nodelist = nodelist, rownumber = rownumber }
+        tableheads_extra[idx][#tableheads_extra[idx] + 1] = { nodelist = nodelist, rownumber = rownumber }
     end
 
-    self:connect_tablehead_first_all(tablehead_first,tablehead)
-    local ht_footer,  ht_footer_last = self:calculate_height_and_connect_tablefoot(tablefoot,tablefoot_last)
+    self:connect_tablehead_first_all(tablehead_first, tablehead)
+    local ht_footer, ht_footer_last = self:calculate_height_and_connect_tablefoot(tablefoot, tablefoot_last)
 
     if not tablehead[1] then
         tablehead[1] = node.new("hlist") -- empty tablehead
@@ -1860,16 +1998,22 @@ function tabular:typeset_table(dataxml)
     end
 
     local ht_current = self.options.current_height or self.options.ht_max
-    local ht_max     = self.options.ht_max
+    local ht_max = self.options.ht_max
     -- The maximum heights are saved here for each table. Currently all tables must have the same height (see the metatable)
     local pagegoals = {}
 
     -- Return a boolean if we need to show the static header on this page
     local function showheader_static()
-        if tablepart_absolute == 1 and filter.tablehead_force_first then return true end
-        if filter.tablehead == nil then return false end
-        if filter.tablehead == "none" then return true end
-        if math.fmod(tablepart_absolute,2) == math.fmod(startpage,2) then
+        if tablepart_absolute == 1 and filter.tablehead_force_first then
+            return true
+        end
+        if filter.tablehead == nil then
+            return false
+        end
+        if filter.tablehead == "none" then
+            return true
+        end
+        if math.fmod(tablepart_absolute, 2) == math.fmod(startpage, 2) then
             if filter.tablehead == "odd" then
                 return true
             else
@@ -1885,14 +2029,17 @@ function tabular:typeset_table(dataxml)
     end
 
     -- Return a boolean if we need to show the dynamic header on this page
-    local function showheader( tablepart, rowmax )
+    local function showheader(tablepart, rowmax)
         -- We can skip the dynamic header on pages where the first line is the next dynamic header
-        if omit_head_on_pages[tablepart] then return false end
+        if omit_head_on_pages[tablepart] then
+            return false
+        end
 
-        if get_tableheads_extra(tablepart_absolute,rowmax) ~= nil then return true end
+        if get_tableheads_extra(tablepart_absolute, rowmax) ~= nil then
+            return true
+        end
         return false
     end
-
 
     -- Table splitting
     -- ===============
@@ -1917,39 +2064,40 @@ function tabular:typeset_table(dataxml)
 
     local maxpages = 0
 
-    setmetatable(pagegoals, { __index = function(_,idx)
-                local footerheight = ht_footer
-                if idx == maxpages then
-                    footerheight = ht_footer_last
-                end
-                local ht_head = get_height_header(idx)
-                local val
-                if idx == 1 then
-                    val = ht_current - ht_head - footerheight
-                    return val
-                elseif idx == -1 then
-                    val = ht_current - ht_head - footerheight
-                    return val
-                else
-                    if self.getheight then
-                        -- self.getheight is a function which expects a relative
-                        -- page number (1 = first page of table, 2 = second page of table...)
-                        -- The function might return nil, if it doesn't have enough information
-                        -- to obtain the max height
-                        local ht = self.getheight(idx,self.dataxml)
-                        if ht then
-                            val = ht - ht_head - footerheight
-                            return val
-                        end
-                    end
-                    val = ht_max - ht_head - footerheight
-                end
+    setmetatable(pagegoals, {
+        __index = function(_, idx)
+            local footerheight = ht_footer
+            if idx == maxpages then
+                footerheight = ht_footer_last
+            end
+            local ht_head = get_height_header(idx)
+            local val
+            if idx == 1 then
+                val = ht_current - ht_head - footerheight
                 return val
-    end})
+            elseif idx == -1 then
+                val = ht_current - ht_head - footerheight
+                return val
+            else
+                if self.getheight then
+                    -- self.getheight is a function which expects a relative
+                    -- page number (1 = first page of table, 2 = second page of table...)
+                    -- The function might return nil, if it doesn't have enough information
+                    -- to obtain the max height
+                    local ht = self.getheight(idx, self.dataxml)
+                    if ht then
+                        val = ht - ht_head - footerheight
+                        return val
+                    end
+                end
+                val = ht_max - ht_head - footerheight
+            end
+            return val
+        end,
+    })
 
-
-    local function get_tablehead( page,maxrow )
-        local nl = get_tableheads_extra(page,maxrow)
+    local function get_tablehead(page, maxrow)
+        local nl = get_tableheads_extra(page, maxrow)
         if nl then
             return node.copy_list(nl)
         end
@@ -1957,8 +2105,7 @@ function tabular:typeset_table(dataxml)
         return tmp
     end
 
-
-    local function get_tablehead_static( page )
+    local function get_tablehead_static(page)
         if page == 1 then
             return tablehead_first[1]
         end
@@ -1969,7 +2116,7 @@ function tabular:typeset_table(dataxml)
     local final_split_tables = {}
     local pagegoal = 0
 
-    local ht_row,space_above
+    local ht_row, space_above
     -- splits is a table which includes the number of the rows each page has in a multi-page table
     --
     --     splits = {
@@ -1988,23 +2135,23 @@ function tabular:typeset_table(dataxml)
 
         local att_break_above
 
-        splits = {0}
-        for i=1,#rows do
+        splits = { 0 }
+        for i = 1, #rows do
             -- We can mark a row as "use_as_head" to turn the row into a dynamic head
-            local use_as_head = node.has_attribute(rows[i],publisher.att_use_as_head)
+            local use_as_head = node.has_attribute(rows[i], publisher.att_use_as_head)
             if use_as_head == 1 then
-                set_tableheads_extra(#splits,node.copy(rows[i]),i)
+                set_tableheads_extra(#splits, node.copy(rows[i]), i)
             elseif use_as_head == 2 then
-                set_tableheads_extra(#splits,publisher.nodes.create_empty_hbox_with_width(1),i)
+                set_tableheads_extra(#splits, publisher.nodes.create_empty_hbox_with_width(1), i)
             end
-            local shiftup = node.has_attribute(rows[i],publisher.att_tr_shift_up) or 0
+            local shiftup = node.has_attribute(rows[i], publisher.att_tr_shift_up) or 0
             if shiftup > 0 then
                 rows[i].height = rows[i].height - shiftup
             end
             pagegoal = pagegoals[current_page]
             ht_row = rows[i].height + rows[i].depth
-            att_break_above = node.has_attribute(rows[i],publisher.att_break_above) or -1
-            space_above = node.has_attribute(rows[i],publisher.att_space_amount) or 0
+            att_break_above = node.has_attribute(rows[i], publisher.att_break_above) or -1
+            space_above = node.has_attribute(rows[i], publisher.att_space_amount) or 0
 
             local break_above_allowed = att_break_above ~= 1
 
@@ -2025,11 +2172,11 @@ function tabular:typeset_table(dataxml)
             --     local ht = tostring(sp_to_pt(ht_row)) .. "|" .. tostring(sp_to_pt(accumulated_height)) .. "|" .. tostring(sp_to_pt(extra_height))
             --     rows[i] = publisher.showtextatright(rows[i],ht)
             -- end
-            local tablenewpage = node.has_attribute(rows[i],publisher.att_tablenewpage)
+            local tablenewpage = node.has_attribute(rows[i], publisher.att_tablenewpage)
 
             local fits_in_table = accumulated_height + extra_height + space_above <= pagegoal
             if tablenewpage or not fits_in_table then
-                if node.has_attribute(rows[i],publisher.att_use_as_head) == 1 then
+                if node.has_attribute(rows[i], publisher.att_use_as_head) == 1 then
                     -- the next line would be used as a header, so let's skip the
                     -- header on this page
                     omit_head_on_pages[#splits + 1] = true
@@ -2040,7 +2187,9 @@ function tabular:typeset_table(dataxml)
                 end
                 -- ==0 can happen when there's not enough room for table head + first line
                 if last_possible_split_is_after_line ~= 0 then
-                    if node.has_attribute(rows[last_possible_split_is_after_line + 1],publisher.att_use_as_head) == 1 then
+                    if
+                        node.has_attribute(rows[last_possible_split_is_after_line + 1], publisher.att_use_as_head) == 1
+                    then
                         omit_head_on_pages[#splits + 1] = true
                     end
                     splits[#splits + 1] = last_possible_split_is_after_line
@@ -2087,10 +2236,12 @@ function tabular:typeset_table(dataxml)
     -- tosplit > 1 ==> needs balancing (otherwise only one frame or no splitting)
     if tosplit > 1 then
         -- used_frames is the number of frames used by the table w/o split.
-        local used_frames = ( #splits - 1 ) % tosplit
+        local used_frames = (#splits - 1) % tosplit
         -- This can be 0 (all columns used).
         -- So the number is set to the amount of tosplit in order to balance all columns.
-        if used_frames == 0 then used_frames = tosplit end
+        if used_frames == 0 then
+            used_frames = tosplit
+        end
 
         -- Now that we know the #frames to be split, we can count the lines.
         -- Remember: the split table looks like this:
@@ -2105,7 +2256,7 @@ function tabular:typeset_table(dataxml)
         local last_possible_split_is_after_line_t = {}
         -- first, we remove the split marks for the used frames.
         -- (If we omitted the rest of the balance routine, the resulting table would be empty for that page.)
-        for _=1,used_frames  do
+        for _ = 1, used_frames do
             -- the entry in omit_head_on_pages for this split is not valid anymore
             omit_head_on_pages[#splits] = nil
             table.remove(splits)
@@ -2117,17 +2268,17 @@ function tabular:typeset_table(dataxml)
         -- Now this is the total height of the remaining rows.
         -- We need to take the dynamic headers into account (TODO).
         local sum_ht = 0
-        for i = first_row_in_new_table, #rows  do
+        for i = first_row_in_new_table, #rows do
             sum_ht = sum_ht + rows[i].height + rows[i].depth
         end
 
         -- percolumn_goal is the optimum height for each column
-        local percolumn_goal = math.ceil( sum_ht / tosplit )
+        local percolumn_goal = math.ceil(sum_ht / tosplit)
         local sum_frame = 0
         local break_below_allowed
         local maxht = ht_current
         for i = first_row_in_new_table, #rows do
-            break_below_allowed = ( node.has_attribute(rows[i],publisher.att_break_below_forbidden) ~= 1)
+            break_below_allowed = (node.has_attribute(rows[i], publisher.att_break_below_forbidden) ~= 1)
             if break_below_allowed then
                 last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t + 1] = i
             end
@@ -2143,18 +2294,21 @@ function tabular:typeset_table(dataxml)
 
                 -- When there is more than one column left, we should adjust the percolumn_goal. (should we?)
                 if tosplit > 0 then
-                    percolumn_goal = percolumn_goal - math.ceil( (sum_frame - percolumn_goal )  / tosplit )
+                    percolumn_goal = percolumn_goal - math.ceil((sum_frame - percolumn_goal) / tosplit)
                 end
                 sum_frame = 0
             -- When stepped over the goal, move this line to the next frame.
             -- See #232 for a situation where the second test is necessary.
-            elseif sum_frame >= percolumn_goal and last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t] ~= splits[#splits] then
+            elseif
+                sum_frame >= percolumn_goal
+                and last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t] ~= splits[#splits]
+            then
                 splits[#splits + 1] = last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t]
                 tosplit = tosplit - 1
 
                 -- When there is more than one column left, we should adjust the percolumn_goal. (should we?)
                 if tosplit > 0 then
-                    percolumn_goal = percolumn_goal - math.ceil( (sum_frame - percolumn_goal )  / tosplit )
+                    percolumn_goal = percolumn_goal - math.ceil((sum_frame - percolumn_goal) / tosplit)
                 end
                 sum_frame = 0
             end
@@ -2169,7 +2323,7 @@ function tabular:typeset_table(dataxml)
         -- When the last column has exacly one table rule, this rule
         -- gets moved to the previous column
         if #splits > 1 and splits[#splits] - splits[#splits - 1] == 1 then
-            local istablerule = publisher.attribute_helpers.getprop(rows[#rows],"origin") == "tablerule"
+            local istablerule = publisher.attribute_helpers.getprop(rows[#rows], "origin") == "tablerule"
             if istablerule then
                 splits[#splits - 1] = splits[#splits]
                 table.remove(splits)
@@ -2180,10 +2334,10 @@ function tabular:typeset_table(dataxml)
     -- Table cleanup. This is for dynamic headers which get repeated on the top of
     -- each split. We omit the repetition, if the top entry in a frame is already
     -- a dynamic head.
-    for i=2,#splits - 1 do
+    for i = 2, #splits - 1 do
         local r = splits[i]
-        if rows[r+1] then
-            if node.has_attribute(rows[r + 1],publisher.att_use_as_head) == 1 then
+        if rows[r + 1] then
+            if node.has_attribute(rows[r + 1], publisher.att_use_as_head) == 1 then
                 omit_head_on_pages[i] = true
             end
         else
@@ -2195,14 +2349,14 @@ function tabular:typeset_table(dataxml)
     local first_row_in_new_table
     local last_tr_data
     tablepart_absolute = 0
-    for s=2,#splits do
+    for s = 2, #splits do
         tablepart_absolute = tablepart_absolute + 1
         if publisher.newxpath then
             dataxml["_last_tr_data"] = nil
         else
-            publisher.xpath.set_variable("_last_tr_data",nil)
+            publisher.xpath.set_variable("_last_tr_data", nil)
         end
-        first_row_in_new_table = splits[s-1] + 1
+        first_row_in_new_table = splits[s - 1] + 1
 
         local thissplittable = {}
         final_split_tables[#final_split_tables + 1] = thissplittable
@@ -2214,9 +2368,9 @@ function tabular:typeset_table(dataxml)
             if publisher.newxpath then
                 dataxml["_last_tr_data"] = val
             else
-                publisher.xpath.set_variable("_last_tr_data",val)
+                publisher.xpath.set_variable("_last_tr_data", val)
             end
-            local tmp1,tmp2 = self:reformat_head()
+            local tmp1, tmp2 = self:reformat_head()
             if s == 2 then
                 -- first page
                 thissplittable[#thissplittable + 1] = node.copy_list(tmp1)
@@ -2226,10 +2380,10 @@ function tabular:typeset_table(dataxml)
             end
         else
             if showheader_static() then
-                thissplittable[#thissplittable + 1] = get_tablehead_static(s-1)
+                thissplittable[#thissplittable + 1] = get_tablehead_static(s - 1)
             end
-            if showheader(s-1, splits[s]) then
-                thissplittable[#thissplittable + 1] = get_tablehead(s-1, splits[s - 1])
+            if showheader(s - 1, splits[s]) then
+                thissplittable[#thissplittable + 1] = get_tablehead(s - 1, splits[s - 1])
             end
         end
 
@@ -2250,24 +2404,38 @@ function tabular:typeset_table(dataxml)
         -- To use eval-on-split with alternating colors, the alternating expression
         -- must be in the Tr background-color attribute (not in Td or SetVariable).
         if s > 2 and self.eval_on_split_layoutxml then
-            publisher.attribute_helpers.read_attribute(self.eval_on_split_layoutxml, self.eval_on_split_dataxml, "eval-on-split", "xpath")
+            publisher.attribute_helpers.read_attribute(
+                self.eval_on_split_layoutxml,
+                self.eval_on_split_dataxml,
+                "eval-on-split",
+                "xpath"
+            )
         end
 
-        for i = first_row_in_new_table,splits[s]  do
+        for i = first_row_in_new_table, splits[s] do
             if i > first_row_in_new_table then
-                space_above = node.has_attribute(rows[i],publisher.att_space_amount) or 0
+                space_above = node.has_attribute(rows[i], publisher.att_space_amount) or 0
             else
                 space_above = 0
             end
-            thissplittable[#thissplittable + 1] = publisher.nodes.make_glue({ width = space_above})
+            thissplittable[#thissplittable + 1] = publisher.nodes.make_glue({ width = space_above })
             thissplittable[#thissplittable + 1] = rows[i]
 
             if s > 2 and self.eval_on_split_layoutxml and node.has_attribute(rows[i], publisher.att_is_table_row) then
                 local tr_layoutxml = publisher.attribute_helpers.getprop(rows[i], "tr_layoutxml")
                 local tr_dataxml = publisher.attribute_helpers.getprop(rows[i], "tr_dataxml")
                 if tr_layoutxml then
-                    local new_bgcolor = publisher.attribute_helpers.read_attribute(tr_layoutxml, tr_dataxml, "background-color", "string")
-                        or publisher.attribute_helpers.read_attribute(tr_layoutxml, tr_dataxml, "backgroundcolor", "string")
+                    local new_bgcolor = publisher.attribute_helpers.read_attribute(
+                        tr_layoutxml,
+                        tr_dataxml,
+                        "background-color",
+                        "string"
+                    ) or publisher.attribute_helpers.read_attribute(
+                        tr_layoutxml,
+                        tr_dataxml,
+                        "backgroundcolor",
+                        "string"
+                    )
                     if new_bgcolor and new_bgcolor ~= "-" then
                         local bgcolors = {}
                         local cell_idx = 0
@@ -2285,12 +2453,13 @@ function tabular:typeset_table(dataxml)
             end
 
             -- the last rowsep at the end of a split should be omitted.
-            if ( i < #rows and i < splits[s] ) or self.tablefoot_contents then
-                thissplittable[#thissplittable + 1] = publisher.nodes.make_glue({width = self.rowsep})
+            if (i < #rows and i < splits[s]) or self.tablefoot_contents then
+                thissplittable[#thissplittable + 1] = publisher.nodes.make_glue({ width = self.rowsep })
             end
         end
 
-        last_tr_data = thissplittable[#thissplittable - 1] and node.has_attribute(thissplittable[#thissplittable - 1],publisher.att_tr_dynamic_data)
+        last_tr_data = thissplittable[#thissplittable - 1]
+            and node.has_attribute(thissplittable[#thissplittable - 1], publisher.att_tr_dynamic_data)
 
         -- only reformat the foot when we have dynamic data _and_ have a foot to reformat.
         if last_tr_data and self.tablefoot_contents then
@@ -2299,10 +2468,10 @@ function tabular:typeset_table(dataxml)
             if publisher.newxpath then
                 dataxml.vars["_last_tr_data"] = val
             else
-                publisher.xpath.set_variable("_last_tr_data",val)
+                publisher.xpath.set_variable("_last_tr_data", val)
             end
 
-            local tmp_tablefoot_last,tmp_tablefoot_all = self:reformat_foot(s - 1,#splits - 1)
+            local tmp_tablefoot_last, tmp_tablefoot_all = self:reformat_foot(s - 1, #splits - 1)
             if s < #splits then
                 thissplittable[#thissplittable + 1] = node.copy_list(tmp_tablefoot_all)
             else
@@ -2325,18 +2494,18 @@ function tabular:typeset_table(dataxml)
     -- then call apply_deferred_backgrounds() to insert the pdf_literal
     -- background rectangles, and finally vpack everything into a vbox.
     local tail
-    for i=1,#final_split_tables do
-        for j=1,#final_split_tables[i] - 1 do
+    for i = 1, #final_split_tables do
+        for j = 1, #final_split_tables[i] - 1 do
             tail = node.tail(final_split_tables[i][j])
-            tail.next = final_split_tables[i][j+1]
-            final_split_tables[i][j+1].prev = tail
+            tail.next = final_split_tables[i][j + 1]
+            final_split_tables[i][j + 1].prev = tail
         end
         apply_deferred_backgrounds(final_split_tables[i][1])
         final_split_tables[i] = node.vpack(final_split_tables[i][1])
     end
     for i = 1, #final_split_tables do
         local thissplittable = final_split_tables[i]
-        node.set_attribute(thissplittable,publisher.att_dont_format,1)
+        node.set_attribute(thissplittable, publisher.att_dont_format, 1)
     end
     return final_split_tables
 end -- typeset table
@@ -2347,22 +2516,22 @@ end -- typeset table
 ---@return table Table foot nodes for the first page
 ---@return table Table foot nodes for other pages
 function tabular:reformat_foot(pagenumber, max_splits)
-    local rownumber,y
+    local rownumber, y
     if pagenumber == max_splits and self.tablefoot_last_contents then
-        y         = self.tablefoot_last_contents[1]
+        y = self.tablefoot_last_contents[1]
         rownumber = self.tablefoot_last_contents[2]
     else
-        y         = self.tablefoot_contents[1]
+        y = self.tablefoot_contents[1]
         rownumber = self.tablefoot_contents[2]
     end
-    local x = publisher.dispatch.dispatch(y._layoutxml,y._dataxml)
-    local page = publisher.attribute_helpers.read_attribute(y._layoutxml,y._dataxml,"page","string","all")
+    local x = publisher.dispatch.dispatch(y._layoutxml, y._dataxml)
+    local page = publisher.attribute_helpers.read_attribute(y._layoutxml, y._dataxml, "page", "string", "all")
     x.page = page
     self:attach_objects(x)
-    local tmp_tablefoot_last,tmp_tablefoot_all = {},{}
-    self:make_tablefoot(x,tmp_tablefoot_last,tmp_tablefoot_all,rownumber,true)
-    self:calculate_height_and_connect_tablefoot(tmp_tablefoot_last,tmp_tablefoot_all)
-    return tmp_tablefoot_last[1],tmp_tablefoot_all[1]
+    local tmp_tablefoot_last, tmp_tablefoot_all = {}, {}
+    self:make_tablefoot(x, tmp_tablefoot_last, tmp_tablefoot_all, rownumber, true)
+    self:calculate_height_and_connect_tablefoot(tmp_tablefoot_last, tmp_tablefoot_all)
+    return tmp_tablefoot_last[1], tmp_tablefoot_all[1]
 end
 
 -- Reformat the table head for a given page.
@@ -2371,14 +2540,14 @@ end
 function tabular:reformat_head()
     local y = self.tablehead_contents[1]
     local rownumber = self.tablehead_contents[2]
-    local x = publisher.dispatch.dispatch(y._layoutxml,y._dataxml)
+    local x = publisher.dispatch.dispatch(y._layoutxml, y._dataxml)
     self:attach_objects(x)
-    local tmp1,tmp2 = {}, {}
-    local page = publisher.attribute_helpers.read_attribute(y._layoutxml,y._dataxml,"page","string","all")
+    local tmp1, tmp2 = {}, {}
+    local page = publisher.attribute_helpers.read_attribute(y._layoutxml, y._dataxml, "page", "string", "all")
     x.page = page
-    self:make_tablehead(x,tmp1,tmp2,rownumber,true)
-    self:connect_tablehead_first_all(tmp1,tmp2)
-    return tmp1[1],tmp2[1]
+    self:make_tablehead(x, tmp1, tmp2, rownumber, true)
+    self:connect_tablehead_first_all(tmp1, tmp2)
+    return tmp1[1], tmp2[1]
 end
 
 -- Resolves border conflicts for `border-collapse="collapse"` by setting
@@ -2390,10 +2559,10 @@ function adjust_border(tbl)
         for _, col in ipairs(row) do
             for _, nxt in ipairs(col.nextcol) do
                 local td_borderright = tex.sp(col["border-right"] or 0)
-                local td_borderleft  = tex.sp(nxt["border-left"] or 0) or 0
-                local new_borderwidth = math.max(td_borderleft,td_borderright) / 2
-                col.td_borderright_calculated = math.max(col.td_borderright_calculated or 0, new_borderwidth )
-                nxt.td_borderleft_calculated = math.max(nxt.td_borderleft_calculated or 0, new_borderwidth )
+                local td_borderleft = tex.sp(nxt["border-left"] or 0) or 0
+                local new_borderwidth = math.max(td_borderleft, td_borderright) / 2
+                col.td_borderright_calculated = math.max(col.td_borderright_calculated or 0, new_borderwidth)
+                nxt.td_borderleft_calculated = math.max(nxt.td_borderleft_calculated or 0, new_borderwidth)
                 if td_borderleft == 0 then
                     nxt["border-left-color"] = col["border-right-color"]
                 end
@@ -2402,11 +2571,11 @@ function adjust_border(tbl)
                 end
             end
             for _, nxt in ipairs(col.nextrow) do
-                local td_borderbottom  = tex.sp(col["border-bottom"] or 0) or 0
-                local td_bordertop = tex.sp(nxt["border-top"]  or 0)
-                local new_borderwidth = math.max(td_borderbottom,td_bordertop) / 2
-                nxt.td_bordertop_calculated = math.max(nxt.td_bordertop_calculated or 0, new_borderwidth )
-                col.td_borderbottom_calculated = math.max(col.td_borderbottom_calculated or 0, new_borderwidth )
+                local td_borderbottom = tex.sp(col["border-bottom"] or 0) or 0
+                local td_bordertop = tex.sp(nxt["border-top"] or 0)
+                local new_borderwidth = math.max(td_borderbottom, td_bordertop) / 2
+                nxt.td_bordertop_calculated = math.max(nxt.td_bordertop_calculated or 0, new_borderwidth)
+                col.td_borderbottom_calculated = math.max(col.td_borderbottom_calculated or 0, new_borderwidth)
                 if td_bordertop == 0 then
                     nxt["border-top-color"] = col["border-bottom-color"]
                 end
@@ -2426,14 +2595,14 @@ function tabular:do_bordercollapse(tab, area)
     local tablematrix = {}
     local current_row, current_column = 1
     local maxcol = 0 -- needed?
-    for _,tr in ipairs(tab) do
+    for _, tr in ipairs(tab) do
         local tr_eltname = publisher.xml_helpers.elementname(tr)
         if tr_eltname == "Tablehead" then
             local tr_contents = publisher.xml_helpers.element_contents(tr)
-            self:do_bordercollapse(tr_contents,"tablehead" .. tr_contents.page)
+            self:do_bordercollapse(tr_contents, "tablehead" .. tr_contents.page)
         elseif tr_eltname == "Tablefoot" then
             local tr_contents = publisher.xml_helpers.element_contents(tr)
-            self:do_bordercollapse(tr_contents,"tablefoot" .. tr_contents.page)
+            self:do_bordercollapse(tr_contents, "tablefoot" .. tr_contents.page)
         elseif tr_eltname == "Tr" then
             current_column = 1
             local tr_contents = publisher.xml_helpers.element_contents(tr)
@@ -2441,20 +2610,22 @@ function tabular:do_bordercollapse(tab, area)
             for _, td in ipairs(tr_contents) do
                 local td_eltname = publisher.xml_helpers.elementname(td)
                 if td_eltname == "Td" then
-                    while self.skiptables[area][current_row] and self.skiptables[area][current_row][current_column]  do
+                    while self.skiptables[area][current_row] and self.skiptables[area][current_row][current_column] do
                         tablematrix[current_row][current_column] = tablematrix[current_row - 1][current_column]
                         current_column = current_column + 1
                     end
                     local td_contents = publisher.xml_helpers.element_contents(td)
                     tablematrix[current_row][current_column] = td_contents
-                    td_contents.name = string.format([[%2d / %2d]], current_row,current_column)
+                    td_contents.name = string.format([[%2d / %2d]], current_row, current_column)
                     local colspan = td_contents.colspan
-                    for i = 1, ( colspan or 1 ) - 1 do
+                    for i = 1, (colspan or 1) - 1 do
                         current_column = current_column + 1
                         tablematrix[current_row][current_column] = td_contents
                     end
                     current_column = current_column + 1
-                    if current_column > maxcol then maxcol = current_column end
+                    if current_column > maxcol then
+                        maxcol = current_column
+                    end
                 end
             end
             if self.skiptables.body[current_row] and self.skiptables.body[current_row][current_column] then
@@ -2479,7 +2650,7 @@ function tabular:do_bordercollapse(tab, area)
                 end
             end
             if not has_entry then
-                col.nextcol[#col.nextcol+1] = row[next_j]
+                col.nextcol[#col.nextcol + 1] = row[next_j]
             end
         end
     end
@@ -2500,7 +2671,7 @@ function tabular:do_bordercollapse(tab, area)
                 end
             end
             if tablematrix[next_row] and not has_entry then
-                col.nextrow[#col.nextrow+1] = tablematrix[next_row][j]
+                col.nextrow[#col.nextrow + 1] = tablematrix[next_row][j]
             end
         end
     end
@@ -2517,7 +2688,7 @@ function set_skip_table_elt(tr_contents, curskiptable, current_row, total_column
     local colspan
     local current_column = 0
 
-    for _,td in ipairs(tr_contents) do
+    for _, td in ipairs(tr_contents) do
         current_column = current_column + 1
 
         -- There might be a rowspan from the row above, so we need to find the correct column
@@ -2542,32 +2713,41 @@ function set_skip_table_elt(tr_contents, curskiptable, current_row, total_column
     end
 end
 
-
 -- Builds the skiptables for the body, head and foot. Marks every cell
 -- covered by a colspan or rowspan so later layout passes can skip them.
 ---@return nil
 function tabular:set_skip_table()
-    self.skiptables={ body = { name = "body"}, tablehead = { name = "tablehead"}, tablefoot = { name = "tablefoot"}}
+    self.skiptables =
+        { body = { name = "body" }, tablehead = { name = "tablehead" }, tablefoot = { name = "tablefoot" } }
     local rowcounter = {}
     local current_row_body = 0
-    for _,tr in ipairs(self.tab) do
+    for _, tr in ipairs(self.tab) do
         local tr_contents = publisher.xml_helpers.element_contents(tr)
         local eltname = publisher.xml_helpers.elementname(tr)
         if eltname == "Tr" then
             current_row_body = current_row_body + 1
-            set_skip_table_elt(tr_contents,self.skiptables.body,current_row_body,self.total_columns)
+            set_skip_table_elt(tr_contents, self.skiptables.body, current_row_body, self.total_columns)
         elseif eltname == "Tablehead" or eltname == "Tablefoot" then
             local tablearea
-            if eltname == "Tablehead" then tablearea = "tablehead" else tablearea = "tablefoot" end
+            if eltname == "Tablehead" then
+                tablearea = "tablehead"
+            else
+                tablearea = "tablefoot"
+            end
             tablearea = tablearea .. (tr_contents.page or "")
             rowcounter[tablearea] = 0
-            self.skiptables[tablearea] = self.skiptables[tablearea] or { name = self.skiptables[tablearea]}
-            for _,tr_inner in ipairs(tr_contents) do
+            self.skiptables[tablearea] = self.skiptables[tablearea] or { name = self.skiptables[tablearea] }
+            for _, tr_inner in ipairs(tr_contents) do
                 local inner_eltname = publisher.xml_helpers.elementname(tr_inner)
                 local inner_contents = publisher.xml_helpers.element_contents(tr_inner)
                 if inner_eltname == "Tr" then
                     rowcounter[tablearea] = rowcounter[tablearea] + 1
-                    set_skip_table_elt(inner_contents,self.skiptables[tablearea],rowcounter[tablearea],self.total_columns)
+                    set_skip_table_elt(
+                        inner_contents,
+                        self.skiptables[tablearea],
+                        rowcounter[tablearea],
+                        self.total_columns
+                    )
                 end
             end
         end
@@ -2577,15 +2757,19 @@ end
 -- Main entry point to create and typeset the table.
 ---@param dataxml table XML data for the table
 function tabular:make_table(dataxml)
-    setmetatable(self.column_distances,{ __index = function() return self.colsep or 0 end })
+    setmetatable(self.column_distances, {
+        __index = function()
+            return self.colsep or 0
+        end,
+    })
 
     -- Determine total number of columns from <Columns> or max cells per row
     self.total_columns = 0
-    for _,tr in ipairs(self.tab) do
+    for _, tr in ipairs(self.tab) do
         local tr_elementname = publisher.xml_helpers.elementname(tr)
         if tr_elementname == "Columns" then
             local tr_contents = publisher.xml_helpers.element_contents(tr)
-            for _,column in ipairs(tr_contents) do
+            for _, column in ipairs(tr_contents) do
                 if publisher.xml_helpers.elementname(column) == "Column" then
                     self.total_columns = self.total_columns + 1
                 end
@@ -2595,24 +2779,26 @@ function tabular:make_table(dataxml)
     end
     if self.total_columns == 0 then
         -- No <Columns> found, count max cells per row
-        for _,tr in ipairs(self.tab) do
+        for _, tr in ipairs(self.tab) do
             local tr_elementname = publisher.xml_helpers.elementname(tr)
             if tr_elementname == "Tr" then
                 local tr_contents = publisher.xml_helpers.element_contents(tr)
                 local count = 0
-                for _,td in ipairs(tr_contents) do
+                for _, td in ipairs(tr_contents) do
                     if publisher.xml_helpers.elementname(td) == "Td" then
                         count = count + 1
                     end
                 end
-                if count > self.total_columns then self.total_columns = count end
+                if count > self.total_columns then
+                    self.total_columns = count
+                end
             end
         end
     end
 
     self:set_skip_table()
     if self.bordercollapse then
-        self:do_bordercollapse(self.tab,"body")
+        self:do_bordercollapse(self.tab, "body")
     end
 
     self:collect_alignments()
@@ -2627,7 +2813,7 @@ function tabular:make_table(dataxml)
     if publisher.newxpath then
         dataxml.vars["_last_tr_data"] = ""
     else
-        publisher.xpath.set_variable("_last_tr_data","")
+        publisher.xpath.set_variable("_last_tr_data", "")
     end
 
     return self:typeset_table(dataxml)

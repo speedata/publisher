@@ -47,7 +47,6 @@ end
 ---@param elementname string|nil
 ---@return nil
 function M.copy_attributes(styles, attributes, elementname)
-
     local remember_currentcolor ---@type string[]
     remember_currentcolor = {}
 

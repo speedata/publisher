@@ -15,41 +15,34 @@ local M = {}
 ---@param fontfamilies table<string, any>    -- global fontfamilies map from the HTML tree
 ---@return table options
 function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
-    options            = options or {}
+    options = options or {}
 
     -- Font family / size
-    local family       = styles["font-family"]
-    local fontsize     = styles["font-size"]
-    options.fontfamily = fonts.get_fontfamily(
-        family,
-        styles.fontsize_sp,
-        fontsize,
-        styles,
-        publisher,
-        fontfamilies
-    )
+    local family = styles["font-family"]
+    local fontsize = styles["font-size"]
+    options.fontfamily = fonts.get_fontfamily(family, styles.fontsize_sp, fontsize, styles, publisher, fontfamilies)
 
     if styles.has_border then
         local styles_fontsize_sp = styles.fontsize_sp
-        local margin_top = units.getsize(styles,styles["margin-top"],styles_fontsize_sp)
-        local margin_right = units.getsize(styles,styles["margin-right"],styles_fontsize_sp)
-        local margin_bottom = units.getsize(styles,styles["margin-bottom"],styles_fontsize_sp)
-        local margin_left = units.getsize(styles,styles["margin-left"],styles_fontsize_sp)
+        local margin_top = units.getsize(styles, styles["margin-top"], styles_fontsize_sp)
+        local margin_right = units.getsize(styles, styles["margin-right"], styles_fontsize_sp)
+        local margin_bottom = units.getsize(styles, styles["margin-bottom"], styles_fontsize_sp)
+        local margin_left = units.getsize(styles, styles["margin-left"], styles_fontsize_sp)
 
-        local padding_top = units.getsize(styles,styles["padding-top"],styles_fontsize_sp)
-        local padding_right = units.getsize(styles,styles["padding-right"],styles_fontsize_sp)
-        local padding_bottom = units.getsize(styles,styles["padding-bottom"],styles_fontsize_sp)
-        local padding_left = units.getsize(styles,styles["padding-left"],styles_fontsize_sp)
+        local padding_top = units.getsize(styles, styles["padding-top"], styles_fontsize_sp)
+        local padding_right = units.getsize(styles, styles["padding-right"], styles_fontsize_sp)
+        local padding_bottom = units.getsize(styles, styles["padding-bottom"], styles_fontsize_sp)
+        local padding_left = units.getsize(styles, styles["padding-left"], styles_fontsize_sp)
 
         local border_top_style = styles["border-top-style"] or "none"
         local border_right_style = styles["border-right-style"] or "none"
         local border_bottom_style = styles["border-bottom-style"] or "none"
         local border_left_style = styles["border-left-style"] or "none"
 
-        local border_top_width = units.getsize(styles,styles["border-top-width"],styles_fontsize_sp)
-        local border_right_width = units.getsize(styles,styles["border-right-width"],styles_fontsize_sp)
-        local border_bottom_width = units.getsize(styles,styles["border-bottom-width"],styles_fontsize_sp)
-        local border_left_width = units.getsize(styles,styles["border-left-width"],styles_fontsize_sp)
+        local border_top_width = units.getsize(styles, styles["border-top-width"], styles_fontsize_sp)
+        local border_right_width = units.getsize(styles, styles["border-right-width"], styles_fontsize_sp)
+        local border_bottom_width = units.getsize(styles, styles["border-bottom-width"], styles_fontsize_sp)
+        local border_left_width = units.getsize(styles, styles["border-left-width"], styles_fontsize_sp)
 
         local border_top_color = styles["border-top-color"]
         local border_right_color = styles["border-right-color"]
@@ -92,15 +85,19 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
             margin_right = margin_right,
             margin_bottom = margin_bottom,
             margin_left = margin_left,
-            debug = ( styles["sp-debugbox"] == "border" ) or false,
+            debug = (styles["sp-debugbox"] == "border") or false,
         }
     end
 
     -- Font style & weight
-    local fontstyle    = styles["font-style"]
-    local fontweight   = styles["font-weight"]
-    if fontweight == "bold" then options.bold = 1 end
-    if fontstyle == "italic" then options.italic = 1 end
+    local fontstyle = styles["font-style"]
+    local fontweight = styles["font-weight"]
+    if fontweight == "bold" then
+        options.bold = 1
+    end
+    if fontstyle == "italic" then
+        options.italic = 1
+    end
 
     -- Colors (foreground + background)
     local bg = styles["background-color"]
@@ -112,7 +109,7 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
             options.textdecorationcolor = fg_index
             styles.currentcolor = styles.color
         else
-            splib.log("warning","HTML: color not defined", "color", styles.color)
+            splib.log("warning", "HTML: color not defined", "color", styles.color)
         end
     end
     if bg then
@@ -130,14 +127,14 @@ function M.set_options_for_mknodes(styles, options, publisher, fontfamilies)
     end
 
     -- Text decoration
-    local line  = styles["text-decoration-line"]
+    local line = styles["text-decoration-line"]
     local style = styles["text-decoration-style"]
     local color = styles["text-decoration-color"]
     if color and color ~= "currentcolor" then
         options.textdecorationcolor = color
     end
     if line == "underline" or line == "line-through" then
-        options.textdecorationline  = line
+        options.textdecorationline = line
         options.textdecorationstyle = style
     end
 

@@ -21,7 +21,9 @@ local roles = {}
 -- directly.
 ---@return nil
 local function ensure_roles()
-    if next(roles) then return end
+    if next(roles) then
+        return
+    end
     for k, v in pairs(publisher.roles_a) do
         roles[v] = k
     end
@@ -31,7 +33,7 @@ end
 -- function recursively emits `\pdfoutline` TeX code from the bookmark tree.
 ---@param tbl Bookmark Bookmark tree (or single bookmark with children).
 ---@return nil
-function M.bookmarkstotex( tbl )
+function M.bookmarkstotex(tbl)
     local countstring
     local open_string
     if #tbl == 0 then
@@ -45,8 +47,14 @@ function M.bookmarkstotex( tbl )
         countstring = string.format("count %s%d", open_string, #tbl)
     end
     if tbl.destination then
-        tex.sprint(string.format("\\pdfoutline goto num %s %s {%s}",
-            tbl.destination, countstring, publisher.utf8_to_utf16_string_pdf(tbl.name)))
+        tex.sprint(
+            string.format(
+                "\\pdfoutline goto num %s %s {%s}",
+                tbl.destination,
+                countstring,
+                publisher.utf8_to_utf16_string_pdf(tbl.name)
+            )
+        )
     end
     for _, v in ipairs(tbl) do
         M.bookmarkstotex(v)
@@ -62,7 +70,7 @@ end
 -- Creates a `pdf_action` whatsit node for the given action type.
 ---@param action_type PdfActionType
 ---@return node
-function M.get_action_node( action_type )
+function M.get_action_node(action_type)
     local ai = node.new("whatsit", publisher.pdf_action_whatsit)
     ai.action_type = action_type
     return ai
@@ -72,8 +80,10 @@ end
 -- index in `publisher.roles_a`. Logs an error for unknown roles.
 ---@param rolestring string?
 ---@return integer? rolenum
-function M.get_rolenum( rolestring )
-    if not rolestring then return nil end
+function M.get_rolenum(rolestring)
+    if not rolestring then
+        return nil
+    end
     ensure_roles()
     local ret = roles[rolestring]
     if ret then
@@ -113,13 +123,17 @@ end
 ---@param page_ref_to_pagenumber table<integer, integer>
 ---@return nil
 function M.sort_struct_tree_by_page_order(elem, page_ref_to_pagenumber)
-    if type(elem) ~= "table" then return end
+    if type(elem) ~= "table" then
+        return
+    end
     for i = 1, #elem do
         if type(elem[i]) == "table" then
             M.sort_struct_tree_by_page_order(elem[i], page_ref_to_pagenumber)
         end
     end
-    if #elem < 2 then return end
+    if #elem < 2 then
+        return
+    end
     local tagged = {}
     for i = 1, #elem do
         tagged[i] = { child = elem[i], orig = i, page_pos = get_struct_page_position(elem[i], page_ref_to_pagenumber) }
@@ -214,7 +228,8 @@ function M.writeStructElements(itm, parentobjectnumber)
         end
     end
     if itm.linkobjects then
-        objectnumbers[#objectnumbers + 1] = string.format("<</Type/OBJR /Obj %d 0 R /Pg %d 0 R >>", itm.linkobjects[1], itm.page)
+        objectnumbers[#objectnumbers + 1] =
+            string.format("<</Type/OBJR /Obj %d 0 R /Pg %d 0 R >>", itm.linkobjects[1], itm.page)
     end
 
     local k
@@ -232,7 +247,7 @@ function M.writeStructElements(itm, parentobjectnumber)
             "/Type /StructElem",
             "/S /" .. (itm.role or "???"),
             "/P " .. parentobjectnumber .. " 0 R",
-            "/K "  .. k,
+            "/K " .. k,
         }
         if itm.actualtext then
             str[#str + 1] = "/ActualText " .. publisher.utf8_to_utf16_string_pdf(itm.actualtext)
@@ -242,12 +257,18 @@ function M.writeStructElements(itm, parentobjectnumber)
         end
         if itm.bbox then
             local bbox = itm.bbox
-            str[#str + 1] = string.format("/A << /BBox [%s %s %s %s] /Placement /Block /O /Layout >>", bbox[1], bbox[2], bbox[3], bbox[4])
+            str[#str + 1] = string.format(
+                "/A << /BBox [%s %s %s %s] /Placement /Block /O /Layout >>",
+                bbox[1],
+                bbox[2],
+                bbox[3],
+                bbox[4]
+            )
         end
         if itm.page then
             str[#str + 1] = "/Pg " .. itm.page .. " 0 R"
         end
-        pdf.obj({type = "raw", objnum = obj, immediate = true, string = "<<" .. table.concat(str, " ") .. ">>"})
+        pdf.obj({ type = "raw", objnum = obj, immediate = true, string = "<<" .. table.concat(str, " ") .. ">>" })
     end
     return string.format("%d 0 R", obj)
 end
@@ -314,11 +335,14 @@ function M.get_page_labels_str()
                 prevmatter = mattername
                 tmp[#tmp + 1] = string.format("%d << %s >>", p.pagenumber - 1, table.concat(str, " "))
             end
-            publisher.visible_pagenumbers[i] = string.format("%s%s", thismatter.prefix or "", labelfunc(thismatter.label, c))
+            publisher.visible_pagenumbers[i] =
+                string.format("%s%s", thismatter.prefix or "", labelfunc(thismatter.label, c))
         end
     end
     local tmpstring = table.concat(tmp, " ")
-    if tmpstring == "" or tmpstring == "0 << /S /D >>" then return nil end
+    if tmpstring == "" or tmpstring == "0 << /S /D >>" then
+        return nil
+    end
     return string.format("/PageLabels << /Nums [ %s ] >> ", tmpstring)
 end
 
@@ -363,7 +387,11 @@ end
 function M.mkbookmarknodes(level, open_p, title, data)
     publisher.page_helpers.setup_page(nil, "mkbookmarknodes", data)
     local openclosed
-    if open_p then openclosed = 1 else openclosed = 2 end
+    if open_p then
+        openclosed = 1
+    else
+        openclosed = 2
+    end
     level = level or 1
     title = title or "no title for bookmark given"
 

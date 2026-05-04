@@ -10,12 +10,18 @@ local M = {}
 ---@param nodelist any # head of an hlist/vlist (node or head pointer)
 ---@return any head # potentially the same reference (tail glue removed)
 function M.trim_space_end(nodelist)
-    if not nodelist then return nodelist end
+    if not nodelist then
+        return nodelist
+    end
     local t = node.tail(nodelist)
-    if not t then return nodelist end
+    if not t then
+        return nodelist
+    end
     if t.id == publisher.glue_node then
         -- cut off tail glue; keep properties on the previous node untouched
-        if t.prev then t.prev.next = nil end
+        if t.prev then
+            t.prev.next = nil
+        end
     end
     return nodelist
 end
@@ -24,10 +30,14 @@ end
 ---@param nodelist any
 ---@return any head
 function M.trim_space_beginning(nodelist)
-    if not nodelist then return nodelist end
+    if not nodelist then
+        return nodelist
+    end
     local dir = publisher.attribute_helpers.getprop(nodelist, "direction")
     -- In horizontal mode ("→") we keep the leading glue as-is.
-    if dir == "→" then return nodelist end
+    if dir == "→" then
+        return nodelist
+    end
 
     if nodelist.id ~= publisher.glue_node then
         return nodelist

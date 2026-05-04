@@ -6,7 +6,9 @@ local M = {}
 ---@param str any
 ---@return any unquoted If input is a string with matching quotes, returns inner part; otherwise returns the original value.
 function M.remove_quotes(str)
-    if type(str) ~= "string" then return str end
+    if type(str) ~= "string" then
+        return str
+    end
     local first, last = string.sub(str, 1, 1), string.sub(str, -1, -1)
     if (first == '"' and last == '"') or (first == "'" and last == "'") then
         return string.sub(str, 2, -2)
@@ -18,7 +20,9 @@ end
 ---@param str any
 ---@return boolean
 function M.has_quotes(str)
-    if type(str) ~= "string" then return false end
+    if type(str) ~= "string" then
+        return false
+    end
     local first, last = string.sub(str, 1, 1), string.sub(str, -1, -1)
     return (first == '"' and last == '"') or (first == "'" and last == "'")
 end

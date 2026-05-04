@@ -8,7 +8,6 @@
 -- This file contains code from luamplib (https://www.ctan.org/pkg/luamplib) which
 -- is released under the GPL 2.
 
-
 ---@class metapost_module
 
 local publisher = require("publisher")
@@ -25,13 +24,13 @@ local colors_module = require("publisher.colors")
 ---@return table<string, number>
 function M.extra_page_parameter(current_page)
     return {
-        ["page.margin.top"]    = sp_to_bp(current_page.grid.margin_top),
-        ["page.margin.left"]   = sp_to_bp(current_page.grid.margin_left),
-        ["page.margin.right"]  = sp_to_bp(current_page.grid.margin_right),
+        ["page.margin.top"] = sp_to_bp(current_page.grid.margin_top),
+        ["page.margin.left"] = sp_to_bp(current_page.grid.margin_left),
+        ["page.margin.right"] = sp_to_bp(current_page.grid.margin_right),
         ["page.margin.bottom"] = sp_to_bp(current_page.grid.margin_bottom),
-        ["page.width"]         = sp_to_bp(current_page.width),
-        ["page.height"]        = sp_to_bp(current_page.height),
-        ["page.trim"]          = sp_to_bp(current_page.grid.trim),
+        ["page.width"] = sp_to_bp(current_page.width),
+        ["page.height"] = sp_to_bp(current_page.height),
+        ["page.trim"] = sp_to_bp(current_page.grid.trim),
     }
 end
 
@@ -43,7 +42,9 @@ end
 ---@return string? path
 local function finder(name, mode, type)
     local loc = kpse.find_file(name)
-    if mode == "r" then return loc end
+    if mode == "r" then
+        return loc
+    end
     return name
 end
 
@@ -68,7 +69,7 @@ local boundingbox
 local function pdf_literalcode(fmt, ...)
     pdfcode[pdfcodepointer] = pdfcode[pdfcodepointer] or {}
     local instructions = pdfcode[pdfcodepointer]
-    instructions[#instructions+1] = string.format(fmt, ...)
+    instructions[#instructions + 1] = string.format(fmt, ...)
 end
 
 -- Inserts the buffered TeX output and accumulated PDF literal code as
@@ -76,29 +77,28 @@ end
 ---@param n integer Position index for the inserted run.
 ---@return nil
 local function insert_text(n)
-    table.insert(pdfcode,n)
-    pdfcodepointer = pdfcodepointer+2
+    table.insert(pdfcode, n)
+    pdfcodepointer = pdfcodepointer + 2
 end
 
-local textext_fmt = [[image(addto currentpicture doublepath unitsquare ]] ..
-    [[xscaled %f yscaled %f shifted (0,-%f) ]] ..
-    [[withprescript "mplibtexboxid=%i:%f:%f")]]
+local textext_fmt = [[image(addto currentpicture doublepath unitsquare ]]
+    .. [[xscaled %f yscaled %f shifted (0,-%f) ]]
+    .. [[withprescript "mplibtexboxid=%i:%f:%f")]]
 
-local textext2_fmt = [[addto currentpicture doublepath unitsquare ]] ..
-    [[xscaled %f yscaled %f shifted (0,-%f) ]] ..
-    [[withprescript "mplibtexboxid=%i:%f:%f"]]
-
+local textext2_fmt = [[addto currentpicture doublepath unitsquare ]]
+    .. [[xscaled %f yscaled %f shifted (0,-%f) ]]
+    .. [[withprescript "mplibtexboxid=%i:%f:%f"]]
 
 -- Renders a `btex ... etex` block by running `str` through TeX and
 -- buffering the result for re-insertion at the current MetaPost position.
 ---@param str string TeX source.
 ---@param fmt? string Optional format wrapper.
 ---@return nil
-local function process_tex_text(str,fmt)
+local function process_tex_text(str, fmt)
     if str then
-        local familyname, style, text = string.match(str,"^(.-):(.-):(.*)$")
+        local familyname, style, text = string.match(str, "^(.-):(.-):(.*)$")
         local fam = publisher.fonts.lookup_fontfamily_name_number[familyname]
-        local param = {fontfamily = fam}
+        local param = { fontfamily = fam }
         if style == "bold" then
             param.bold = 1
         elseif style == "italic" then
@@ -107,14 +107,14 @@ local function process_tex_text(str,fmt)
             param.bold = 1
             param.italic = 1
         end
-        local nodelist            = publisher.nodes.mknodes(text,param)
-        local hbox                = node.hpack(nodelist)
+        local nodelist = publisher.nodes.mknodes(text, param)
+        local hbox = node.hpack(nodelist)
         nodelists[#nodelists + 1] = hbox
-        local box                 = #nodelists
-        local wd                  = hbox.width / publisher.factor
-        local ht                  = hbox.height / publisher.factor
-        local dp                  = hbox.depth / publisher.factor
-        local x                   = fmt:format(wd, ht + dp, dp, box, wd, ht + dp)
+        local box = #nodelists
+        local wd = hbox.width / publisher.factor
+        local ht = hbox.height / publisher.factor
+        local dp = hbox.depth / publisher.factor
+        local x = fmt:format(wd, ht + dp, dp, box, wd, ht + dp)
         return x
     end
 end
@@ -123,23 +123,23 @@ end
 -- corresponding PDF color command.
 ---@param str string
 ---@return string pdf_command
-local function process_color (str)
+local function process_color(str)
     if str then
         if not str:find("{.-}") then
-            str = string.format("{%s}",str)
+            str = string.format("{%s}", str)
         end
         str = str:match("{(.*)}")
         local colentry = colors_module.get_colentry_from_name(str)
         local transparency = ""
         if colentry.alpha then
-            transparency = string.format('withprescript "tr_alternative=1" withprescript "tr_transparency=%g"',colentry.alpha)
+            transparency =
+                string.format('withprescript "tr_alternative=1" withprescript "tr_transparency=%g"', colentry.alpha)
         end
-        str = string.format('1 %s withprescript "MPlibOverrideColor=%s" ',transparency, colentry.pdfstring)
+        str = string.format('1 %s withprescript "MPlibOverrideColor=%s" ', transparency, colentry.pdfstring)
         return str
     end
     return ""
-  end
-
+end
 
 -- Executes a MetaPost `runscript` snippet inside a sandboxed Lua env
 -- so figures can call back into the publisher.
@@ -149,13 +149,13 @@ local function scriptrunner(code)
     local id, str = code:match("(.-){(.*)}")
     if id and str then
         if id == "sptext" then
-            return process_tex_text(str,textext_fmt)
+            return process_tex_text(str, textext_fmt)
         elseif id == "drawtext" then
-            return process_tex_text(str,textext2_fmt)
+            return process_tex_text(str, textext2_fmt)
         elseif id == "spcolor" then
             return process_color(str)
         else
-            print("**** unknown runner",code)
+            print("**** unknown runner", code)
         end
     end
 end
@@ -176,17 +176,28 @@ local function put_tex_boxes(object, prescript)
         if tw ~= 0 then
             sx = (second.x_coord - tx) / tw
             rx = (second.y_coord - ty) / tw
-            if sx == 0 then sx = 0.00001 end
+            if sx == 0 then
+                sx = 0.00001
+            end
         end
         if th ~= 0 then
             sy = (fourth.y_coord - ty) / th
             ry = (fourth.x_coord - tx) / th
-            if sy == 0 then sy = 0.00001 end
+            if sy == 0 then
+                sy = 0.00001
+            end
         end
 
         local x = node.new("whatsit", "pdf_literal")
-        x.data = string.format("q %g %g %g %g %g %g cm", math.round(sx, 3), math.round(rx, 3), math.round(ry, 3),
-            math.round(sy, 3), math.round(tx, 3), math.round(ty, 3))
+        x.data = string.format(
+            "q %g %g %g %g %g %g cm",
+            math.round(sx, 3),
+            math.round(rx, 3),
+            math.round(ry, 3),
+            math.round(sy, 3),
+            math.round(tx, 3),
+            math.round(ty, 3)
+        )
         x = node.insert_before(nodelists[n].list, nodelists[n].list, x)
         nodelists[n].list = x
         local y = node.new("whatsit", "pdf_literal")
@@ -222,7 +233,7 @@ end
 ---@return userdata mpobj
 function M.newbox(width_sp, height_sp)
     local mp = mplib.new({
-        mem_name = 'plain',
+        mem_name = "plain",
         find_file = finder,
         ini_version = true,
         math_mode = "double",
@@ -244,16 +255,18 @@ function M.newbox(width_sp, height_sp)
     if width_sp and width_sp ~= 0 then
         M.execute(mpobj, string.format("box.width = %fbp;", width_sp / 65782))
     else
-        main.log("warn","MetaPost: width is 0, setting to 1bp")
+        main.log("warn", "MetaPost: width is 0, setting to 1bp")
         M.execute(mpobj, "box.width = 1bp;")
     end
     if height_sp and height_sp ~= 0 then
         M.execute(mpobj, string.format("box.height = %fbp;", height_sp / 65782))
     end
     if height_sp and width_sp and height_sp ~= 0 and width_sp ~= 0 then
-        M.execute(mpobj, [[path box; box = (0,0) -- (box.width,0) -- (box.width,box.height) -- (0,box.height) -- cycle ;]])
+        M.execute(
+            mpobj,
+            [[path box; box = (0,0) -- (box.width,0) -- (box.width,box.height) -- (0,box.height) -- cycle ;]]
+        )
     end
-
 
     local declarations = {}
     for name, v in pairs(publisher.metapostcolors) do
@@ -343,9 +356,15 @@ local bend_tolerance = 131 / 65536
 ---@return boolean
 local function curved(ith, pth)
     local d = pth.left_x - ith.right_x
-    if math.abs(ith.right_x - ith.x_coord - d) <= bend_tolerance and math.abs(pth.x_coord - pth.left_x - d) <= bend_tolerance then
+    if
+        math.abs(ith.right_x - ith.x_coord - d) <= bend_tolerance
+        and math.abs(pth.x_coord - pth.left_x - d) <= bend_tolerance
+    then
         d = pth.left_y - ith.right_y
-        if math.abs(ith.right_y - ith.y_coord - d) <= bend_tolerance and math.abs(pth.y_coord - pth.left_y - d) <= bend_tolerance then
+        if
+            math.abs(ith.right_y - ith.y_coord - d) <= bend_tolerance
+            and math.abs(pth.y_coord - pth.left_y - d) <= bend_tolerance
+        then
             return false
         end
     end
@@ -360,7 +379,6 @@ end
 local function concat(px, py) -- no tx, ty here
     return (sy * px - ry * py) / divider, (sx * py - rx * px) / divider
 end
-
 
 -- Emits a transformed MetaPost path as PDF operators.
 ---@param path table[] Sequence of MetaPost path points.
@@ -408,8 +426,15 @@ local function flushnormalpath(path, open)
         if not ith then
             pdf_literalcode("%f %f m", pth.x_coord, pth.y_coord)
         elseif curved(ith, pth) then
-            pdf_literalcode("%f %f %f %f %f %f c", ith.right_x, ith.right_y, pth.left_x, pth.left_y, pth.x_coord,
-                pth.y_coord)
+            pdf_literalcode(
+                "%f %f %f %f %f %f c",
+                ith.right_x,
+                ith.right_y,
+                pth.left_x,
+                pth.left_y,
+                pth.x_coord,
+                pth.y_coord
+            )
         else
             pdf_literalcode("%f %f l", pth.x_coord, pth.y_coord)
         end
@@ -418,8 +443,15 @@ local function flushnormalpath(path, open)
     if not open then
         local one = path[1]
         if curved(pth, one) then
-            pdf_literalcode("%f %f %f %f %f %f c", pth.right_x, pth.right_y, one.left_x, one.left_y, one.x_coord,
-                one.y_coord)
+            pdf_literalcode(
+                "%f %f %f %f %f %f c",
+                pth.right_x,
+                pth.right_y,
+                one.left_x,
+                one.left_y,
+                one.x_coord,
+                one.y_coord
+            )
         else
             pdf_literalcode("%f %f l", one.x_coord, one.y_coord)
         end
@@ -428,7 +460,6 @@ local function flushnormalpath(path, open)
         pdf_literalcode("%f %f l", one.x_coord, one.y_coord)
     end
 end
-
 
 -- Emits the closing color/transparency operators after a MetaPost
 -- object has been drawn.
@@ -488,8 +519,8 @@ end
 
 local further_split_keys = {
     mplibtexboxid = true,
-    sh_color_a    = true,
-    sh_color_b    = true,
+    sh_color_a = true,
+    sh_color_b = true,
 }
 
 -- Parses a `key=value;key=value;...` pre/postscript string into a Lua
@@ -510,7 +541,6 @@ local function script2table(s)
     end
     return t
 end
-
 
 -- Converts a MetaPost figure object into the PDF content-stream string
 -- and the bounding-box dimensions used for placement.
@@ -542,9 +572,9 @@ local function convert(result)
                         local savedpath = nil
                         local savedhtap = nil
                         for o = 1, #objects do
-                            local object     = objects[o]
+                            local object = objects[o]
                             local objecttype = object.type
-                            local prescript  = object.prescript
+                            local prescript = object.prescript
 
                             if prescript then
                                 -- prescript is now a table
@@ -586,7 +616,7 @@ local function convert(result)
                                         both = true
                                     elseif postscript == "eoboth" then
                                         evenodd = true
-                                        both    = true
+                                        both = true
                                     end
                                 end
                                 if collect then
@@ -615,8 +645,8 @@ local function convert(result)
                                     end
                                     local dl = object.dash
                                     if dl then
-                                        local d = string.format("[%s] %f d", table.concat(dl.dashes or {}, " "),
-                                            dl.offset)
+                                        local d =
+                                            string.format("[%s] %f d", table.concat(dl.dashes or {}, " "), dl.offset)
                                         if d ~= dashed then
                                             dashed = d
                                             pdf_literalcode(dashed)
@@ -630,14 +660,14 @@ local function convert(result)
                                     local open = path and path[1].left_type and path[#path].right_type
                                     local pen = object.pen
                                     if pen then
-                                        if pen.type == 'elliptical' then
+                                        if pen.type == "elliptical" then
                                             transformed, penwidth = pen_characteristics(object) -- boolean, value
                                             pdf_literalcode("%f w", penwidth)
-                                            if objecttype == 'fill' then
-                                                objecttype = 'both'
+                                            if objecttype == "fill" then
+                                                objecttype = "both"
                                             end
                                         else -- calculated by mplib itself
-                                            objecttype = 'fill'
+                                            objecttype = "fill"
                                         end
                                     end
                                     if transformed then
@@ -692,7 +722,7 @@ local function convert(result)
                                                 end
                                             end
                                             savedhtap = nil
-                                            evenodd   = true
+                                            evenodd = true
                                         end
                                         if transformed then
                                             flushconcatpath(path, open)
@@ -717,13 +747,14 @@ local function convert(result)
                     end
                     pdf_literalcode("Q")
                     texsprint("\\mplibstoptoPDF")
-                    if #TeX_code_bot > 0 then texsprint(TeX_code_bot) end
+                    if #TeX_code_bot > 0 then
+                        texsprint(TeX_code_bot)
+                    end
                 end
             end
         end
     end
 end
-
 
 -- Closes the MetaPost instance and returns the converted figure as a
 -- PDF content-stream string with its bounding box.
@@ -740,7 +771,7 @@ function M.finish(mpobj)
     local head, tail
     for i = 1, #pdfcode do
         if type(pdfcode[i]) == "table" then
-            local literal = node.new("whatsit","pdf_literal")
+            local literal = node.new("whatsit", "pdf_literal")
             local str = table.concat(pdfcode[i], " ")
             literal.data = str
             head = node.insert_after(head, tail, literal)
@@ -768,9 +799,16 @@ function M.prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
     local colorwarnings = publisher.metapostcolorwarnings
     if #colorwarnings > 0 then
         for i = 1, #colorwarnings do
-            local str,mpcolorname = table.unpack(colorwarnings[i])
+            local str, mpcolorname = table.unpack(colorwarnings[i])
             if publisher.options.mpcolorwarning then
-                main.log("warn","A color has characters in it that confuse the metapost interpreter, therefore I have renamed the color for metapost","color", str, "dest", "colors." .. mpcolorname)
+                main.log(
+                    "warn",
+                    "A color has characters in it that confuse the metapost interpreter, therefore I have renamed the color for metapost",
+                    "color",
+                    str,
+                    "dest",
+                    "colors." .. mpcolorname
+                )
             end
         end
         publisher.metapostcolorwarnings = {}
@@ -804,7 +842,7 @@ function M.prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
     end
     M.execute(mpobj, publisher.metapostgraphics[graphicname])
     M.execute(mpobj, "endfig;")
-    local nl, tv, bbox = M.finish(mpobj);
+    local nl, tv, bbox = M.finish(mpobj)
     local thispage = publisher.pages[publisher.current_pagenumber]
     thispage.transparenttext = thispage.transparenttext or {}
     for key in pairs(tv) do

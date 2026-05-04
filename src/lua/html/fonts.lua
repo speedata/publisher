@@ -13,8 +13,7 @@ local M = {}
 ---@return table  chosen_def                -- the matching definition table
 local function familyname(fontfamilies, fontgroup, family_table)
     for _, fontfamily in ipairs(family_table) do
-        local ff = strings.has_quotes(fontfamily) and strings.remove_quotes(fontfamily)
-            or string.lower(fontfamily)
+        local ff = strings.has_quotes(fontfamily) and strings.remove_quotes(fontfamily) or string.lower(fontfamily)
         if fontfamilies[ff] then
             return fontfamily, fontfamilies[ff]
         elseif fontgroup[ff] then
@@ -64,15 +63,23 @@ function M.get_fontfamily(families, size_sp, name, styles, publisher, fontfamili
     local regular, bold, italic, bolditalic
     for weightstyle, rec in pairs(def) do
         local resolved = publisher.fonts.get_fontname(rec["local"], rec["url"])
-        if weightstyle == "regular" then regular = resolved end
-        if weightstyle == "bold" then bold = resolved end
-        if weightstyle == "italic" then italic = resolved end
-        if weightstyle == "bolditalic" then bolditalic = resolved end
+        if weightstyle == "regular" then
+            regular = resolved
+        end
+        if weightstyle == "bold" then
+            bold = resolved
+        end
+        if weightstyle == "italic" then
+            italic = resolved
+        end
+        if weightstyle == "bolditalic" then
+            bolditalic = resolved
+        end
     end
 
     -- Define family at the given size
-    local fam = publisher.fontfamilies.define_fontfamily(regular, bold, italic, bolditalic,
-        singlefont, size_sp, size_sp * 1.12)
+    local fam =
+        publisher.fontfamilies.define_fontfamily(regular, bold, italic, bolditalic, singlefont, size_sp, size_sp * 1.12)
     return fam
 end
 

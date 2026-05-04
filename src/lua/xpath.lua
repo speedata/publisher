@@ -18,15 +18,18 @@ M.functions = {}
 M.default_functions = {}
 local nilmarker = "\1"
 
-
 if table_textvalue == nil then
     -- Get the text value of a table. Only the indexes 1,...#table are taken into account.
     -- The function recurses into nested tables.
-    function table_textvalue( tbl )
-        if not tbl then return nil end
-        if type(tbl) ~= "table" then return tostring(tbl) end
+    function table_textvalue(tbl)
+        if not tbl then
+            return nil
+        end
+        if type(tbl) ~= "table" then
+            return tostring(tbl)
+        end
         local ret = {}
-        for _,v in ipairs(tbl) do
+        for _, v in ipairs(tbl) do
             if type(v) == "string" then
                 ret[#ret + 1] = v
             elseif type(v) == "table" then
@@ -42,24 +45,24 @@ end
 function M.push_state()
     stack[#stack + 1] = {
         tok = M.tok,
-        nextpos = M.nextpos
+        nextpos = M.nextpos,
     }
 end
 
 function M.pop_state()
-    M.tok     = stack[#stack].tok
+    M.tok = stack[#stack].tok
     M.nextpos = stack[#stack].nextpos
     stack[#stack] = nil
 end
 
-function M.is_ifthenelse(dataxml,str,pos,ns)
-    local start,stop
-    start,stop = string.find(str,"^if%s+%(",pos)
+function M.is_ifthenelse(dataxml, str, pos, ns)
+    local start, stop
+    start, stop = string.find(str, "^if%s+%(", pos)
     if start then
         local lvl = 1
         local curpos, curstring = stop + 1
         while lvl > 0 do
-            curstring = string.sub(str,curpos,curpos)
+            curstring = string.sub(str, curpos, curpos)
             if curstring == "(" then
                 lvl = lvl + 1
             elseif curstring == ")" then
@@ -67,18 +70,18 @@ function M.is_ifthenelse(dataxml,str,pos,ns)
             end
             curpos = curpos + 1
         end
-        local eval = string.sub(str,stop + 1,curpos - 2)
+        local eval = string.sub(str, stop + 1, curpos - 2)
         M.push_state()
-        local ok = M.parse_internal(dataxml,eval,ns,1)[1]
+        local ok = M.parse_internal(dataxml, eval, ns, 1)[1]
         M.pop_state()
         local thenpart, elsepart
-        _, _, thenpart, elsepart = string.find(str,"then(.-)else(.*)")
+        _, _, thenpart, elsepart = string.find(str, "then(.-)else(.*)")
         local ret
         M.push_state()
         if ok then
-            ret = M.parse_internal(dataxml,thenpart,ns,1)[1]
+            ret = M.parse_internal(dataxml, thenpart, ns, 1)[1]
         else
-            ret = M.parse_internal(dataxml,elsepart,ns,1)[1]
+            ret = M.parse_internal(dataxml, elsepart, ns, 1)[1]
         end
         M.pop_state()
         M.tok = ret
@@ -88,8 +91,8 @@ function M.is_ifthenelse(dataxml,str,pos,ns)
     return false
 end
 
-function M.is_number(str,pos)
-    local _, stop, num = string.find(str,"^([%-+]?%d+%.?%d*)%s*",pos)
+function M.is_number(str, pos)
+    local _, stop, num = string.find(str, "^([%-+]?%d+%.?%d*)%s*", pos)
     if num then
         M.nextpos = stop + 1
         M.tok = num
@@ -98,8 +101,8 @@ function M.is_number(str,pos)
     return false
 end
 
-function M.is_dimension(str,pos)
-    local _, stop, num = string.find(str,"^([%-+]?%d+%.?%d*%a+)%s*",pos)
+function M.is_dimension(str, pos)
+    local _, stop, num = string.find(str, "^([%-+]?%d+%.?%d*%a+)%s*", pos)
     if num then
         M.nextpos = stop + 1
         M.tok = num
@@ -108,30 +111,31 @@ function M.is_dimension(str,pos)
     return false
 end
 
-
-function M.is_attribute(dataxml,str,pos)
-    local _, stop, attr = string.find(str,"^@([%w_:-]+)%s*",pos)
+function M.is_attribute(dataxml, str, pos)
+    local _, stop, attr = string.find(str, "^@([%w_:-]+)%s*", pos)
     if attr then
         M.nextpos = stop + 1
         M.tok = dataxml[attr]
         if type(M.tok) == "string" and #M.tok == 0 then
             M.tok = nil
         end
-        if M.tok == nil then M.tok = nilmarker end
+        if M.tok == nil then
+            M.tok = nilmarker
+        end
         return true
     end
     local start, eltname
-    start,stop,eltname = string.find(str,"^(%a[%w-/_*]*@[%w-_]+)%s*",pos)
+    start, stop, eltname = string.find(str, "^(%a[%w-/_*]*@[%w-_]+)%s*", pos)
     if start then
         local attrname
         M.nextpos = stop + 1
         local tmp = { dataxml }
         local ret
 
-        for part in string.gmatch(eltname,"([^/]+)") do
+        for part in string.gmatch(eltname, "([^/]+)") do
             ret = {}
-            for i=1,#tmp do
-                for j=1,#tmp[i] do
+            for i = 1, #tmp do
+                for j = 1, #tmp[i] do
                     if part == "*" or part == tmp[i][j][".__local_name"] then
                         if type(tmp[i][j]) == "table" then
                             ret[#ret + 1] = tmp[i][j]
@@ -139,15 +143,15 @@ function M.is_attribute(dataxml,str,pos)
                     end
                 end
             end
-            if string.sub(part,1,1) == "@" then
-                attrname = string.sub(part,2,-1)
+            if string.sub(part, 1, 1) == "@" then
+                attrname = string.sub(part, 2, -1)
             end
             if #ret ~= 0 then
                 tmp = ret
             end
         end
         ret = {}
-        for i=1,#tmp do
+        for i = 1, #tmp do
             if tmp[i][attrname] then
                 ret[#ret + 1] = tmp[i][attrname]
             end
@@ -168,8 +172,8 @@ function M.is_attribute(dataxml,str,pos)
     return false
 end
 
-function M.is_dataexpr( dataxml,str,pos )
-    local _,stop,expr = string.find(str,"^(xs:[^%s]*)%s*",pos)
+function M.is_dataexpr(dataxml, str, pos)
+    local _, stop, expr = string.find(str, "^(xs:[^%s]*)%s*", pos)
     if expr then
         M.nextpos = stop + 1
         M.tok = expr
@@ -178,14 +182,14 @@ function M.is_dataexpr( dataxml,str,pos )
     return false
 end
 
-function M.is_variable(str,pos)
-    local _,stop,var = string.find(str,"^%$([%w_%-]+)%s*",pos)
+function M.is_variable(str, pos)
+    local _, stop, var = string.find(str, "^%$([%w_%-]+)%s*", pos)
     if var then
         M.nextpos = stop + 1
         M.tok = M.get_variable(var)
         if M.tok == nil then
             M.err = true
-            M.errmsg = string.format("Variable %q undefined",var)
+            M.errmsg = string.format("Variable %q undefined", var)
             M.tok = nilmarker
         end
         return true
@@ -193,27 +197,27 @@ function M.is_variable(str,pos)
     return false
 end
 
-function M.is_openparen( dataxml,str,pos,ns )
-    local start,stop
-    start, stop = string.find(str,"^%(%s*",pos)
+function M.is_openparen(dataxml, str, pos, ns)
+    local start, stop
+    start, stop = string.find(str, "^%(%s*", pos)
     if start then
         pos = stop + 1
-        local contents = M.parse_internal(dataxml,str,ns,pos)
+        local contents = M.parse_internal(dataxml, str, ns, pos)
         M.tok = contents[1]
         return true
     end
     return false
 end
 
-function M.is_function(dataxml,str,pos,ns)
-    local start,stop,prefix,fname
-    _, stop, prefix = string.find(str,"^([^%(]+):",pos)
+function M.is_function(dataxml, str, pos, ns)
+    local start, stop, prefix, fname
+    _, stop, prefix = string.find(str, "^([^%(]+):", pos)
     if prefix then
         pos = stop + 1
     else
         prefix = ""
     end
-    _, stop, fname = string.find(str,"^([^(: %.]+)%(%s*",pos)
+    _, stop, fname = string.find(str, "^([^(: %.]+)%(%s*", pos)
     if prefix and fname then
         local x
         if prefix == "" then
@@ -225,7 +229,7 @@ function M.is_function(dataxml,str,pos,ns)
             local y = x[fname]
             pos = stop + 1
             M.nextpos = pos
-            start, stop = string.find(str,"^%s*%)%s*",pos)
+            start, stop = string.find(str, "^%s*%)%s*", pos)
             if start then
                 M.nextpos = stop + 1
                 M.tok = y(dataxml)
@@ -234,33 +238,35 @@ function M.is_function(dataxml,str,pos,ns)
                 M.nextpos = stop + 1
             else
                 -- function has some xpath contents in it, we need to parse it
-                local contents = M.parse_internal(dataxml,str,ns,pos)
+                local contents = M.parse_internal(dataxml, str, ns, pos)
                 if contents == nil and M.err ~= nil then
                     return nil
                 end
-                M.tok = y(dataxml,contents)
+                M.tok = y(dataxml, contents)
             end
-            if M.tok == nil then M.tok = nilmarker end
+            if M.tok == nil then
+                M.tok = nilmarker
+            end
             return true
         else
             M.err = true
-            main.log("error","XPath function unknown","fname",tostring(fname),"prefix",prefix)
-            M.errmsg = string.format("Function %q with prefix %q unknown", tostring(fname),tostring(prefix))
+            main.log("error", "XPath function unknown", "fname", tostring(fname), "prefix", prefix)
+            M.errmsg = string.format("Function %q with prefix %q unknown", tostring(fname), tostring(prefix))
             return true
         end
     end
     return false
 end
 
-function M.is_string(str,pos)
-    local stop,s
-    _, stop, s = string.find(str,"^'([^']*)'%s*",pos)
+function M.is_string(str, pos)
+    local stop, s
+    _, stop, s = string.find(str, "^'([^']*)'%s*", pos)
     if s then
         M.tok = s
         M.nextpos = stop + 1
         return true
     end
-    _, stop, s = string.find(str,'^"([^"]*)"%s*',pos)
+    _, stop, s = string.find(str, '^"([^"]*)"%s*', pos)
     if s then
         M.tok = s
         M.nextpos = stop + 1
@@ -269,13 +275,13 @@ function M.is_string(str,pos)
     return false
 end
 
-function M.check_restriction(dataxml,str,pos)
-    local start,stop,subxpath
-    start,stop,subxpath = string.find(str,"^%[(.-)%]%s*",pos)
+function M.check_restriction(dataxml, str, pos)
+    local start, stop, subxpath
+    start, stop, subxpath = string.find(str, "^%[(.-)%]%s*", pos)
     subxpath = tonumber(subxpath)
     local ret = {}
     if start then
-        for i=1,#M.tok do
+        for i = 1, #M.tok do
             if i == subxpath then
                 ret[#ret + 1] = M.tok[i]
             end
@@ -287,41 +293,44 @@ function M.check_restriction(dataxml,str,pos)
     return
 end
 
-
-function M.is_nodeselector( dataxml,str,pos,ns )
-    local start,stop
+function M.is_nodeselector(dataxml, str, pos, ns)
+    local start, stop
     -- Just the current node (focus, ".")
-    start,stop = string.find(str,"^%.%s*",pos)
+    start, stop = string.find(str, "^%.%s*", pos)
     if start then
         M.nextpos = stop + 1
-        M.tok = {dataxml}
+        M.tok = { dataxml }
         return true
     end
-    if type(dataxml) ~= "table" then M.err = true M.errmsg = "data is not a table" return end
+    if type(dataxml) ~= "table" then
+        M.err = true
+        M.errmsg = "data is not a table"
+        return
+    end
     -- All sub nodes
-    start,stop = string.find(str,"^%*%s*",pos)
+    start, stop = string.find(str, "^%*%s*", pos)
     if start then
         M.nextpos = stop + 1
         local tmp = {}
-        for i=1,#dataxml do
+        for i = 1, #dataxml do
             if type(dataxml[i]) == "table" then
                 tmp[#tmp + 1] = dataxml[i]
             end
         end
         M.tok = tmp
-        M.check_restriction(dataxml,str,M.nextpos)
+        M.check_restriction(dataxml, str, M.nextpos)
         return true
     end
     local eltname
-    start,stop,eltname = string.find(str,"^(%a[%w-/_*]*)%s*",pos)
+    start, stop, eltname = string.find(str, "^(%a[%w-/_*]*)%s*", pos)
     if start then
         local something_found = false
         M.nextpos = stop + 1
         local tmp = { dataxml }
-        for part in string.gmatch(eltname,"([^/]+)") do
+        for part in string.gmatch(eltname, "([^/]+)") do
             local ret = {}
-            for i=1,#tmp do
-                for j=1,#tmp[i] do
+            for i = 1, #tmp do
+                for j = 1, #tmp[i] do
                     if part == "*" or part == tmp[i][j][".__local_name"] then
                         if type(tmp[i][j]) == "table" then
                             something_found = true
@@ -342,35 +351,34 @@ function M.is_nodeselector( dataxml,str,pos,ns )
     return false
 end
 
-
-function M.get_operand(dataxml,str,pos,ns)
-    if M.is_dimension(str,pos) then
-         return M.tok
-    elseif M.is_number(str,pos) then
-         return tonumber(M.tok)
-    elseif M.is_ifthenelse(dataxml,str,pos,ns) then
+function M.get_operand(dataxml, str, pos, ns)
+    if M.is_dimension(str, pos) then
         return M.tok
-    elseif M.is_attribute(dataxml,str,pos) then
+    elseif M.is_number(str, pos) then
+        return tonumber(M.tok)
+    elseif M.is_ifthenelse(dataxml, str, pos, ns) then
         return M.tok
-    elseif M.is_string(str,pos) then
+    elseif M.is_attribute(dataxml, str, pos) then
         return M.tok
-    elseif M.is_variable(str,pos) then
+    elseif M.is_string(str, pos) then
         return M.tok
-    elseif M.is_openparen(dataxml,str,pos,ns) then
+    elseif M.is_variable(str, pos) then
         return M.tok
-    elseif M.is_function(dataxml,str,pos,ns) then
+    elseif M.is_openparen(dataxml, str, pos, ns) then
         return M.tok
-    elseif M.is_dataexpr(dataxml,str,pos,ns) then
+    elseif M.is_function(dataxml, str, pos, ns) then
         return M.tok
-    elseif M.is_nodeselector(dataxml,str,pos,ns) then
+    elseif M.is_dataexpr(dataxml, str, pos, ns) then
+        return M.tok
+    elseif M.is_nodeselector(dataxml, str, pos, ns) then
         return M.tok
     end
 end
 
-function M.is_additive_expr(dataxml,str,pos,ns)
+function M.is_additive_expr(dataxml, str, pos, ns)
     pos = pos or M.nextpos
-    local start,stop,op
-    start,stop,op = string.find(str,"^([%+%-])%s*",pos)
+    local start, stop, op
+    start, stop, op = string.find(str, "^([%+%-])%s*", pos)
     if start then
         M.tok = "\1" .. op
         M.nextpos = stop + 1
@@ -378,10 +386,10 @@ function M.is_additive_expr(dataxml,str,pos,ns)
     end
 end
 
-function M.is_comparison_epxr(dataxml,str,pos,ns)
+function M.is_comparison_epxr(dataxml, str, pos, ns)
     pos = pos or M.nextpos
-    local start,stop,op
-    start,stop,op = string.find(str,"^([><=!]+)%s*",pos)
+    local start, stop, op
+    start, stop, op = string.find(str, "^([><=!]+)%s*", pos)
     if start then
         M.nextpos = stop + 1
         M.tok = "\1" .. op
@@ -390,15 +398,15 @@ function M.is_comparison_epxr(dataxml,str,pos,ns)
     return false
 end
 
-function M.is_andor_expr(dataxml,str,pos,ns)
+function M.is_andor_expr(dataxml, str, pos, ns)
     pos = pos or M.nextpos
-    local start,stop = string.find(str,"^and%s*",pos)
+    local start, stop = string.find(str, "^and%s*", pos)
     if start then
         M.tok = "\1and"
         M.nextpos = stop + 1
         return true
     end
-    start,stop = string.find(str,"^or%s*",pos)
+    start, stop = string.find(str, "^or%s*", pos)
     if start then
         M.tok = "\1or"
         M.nextpos = stop + 1
@@ -407,9 +415,9 @@ function M.is_andor_expr(dataxml,str,pos,ns)
     return false
 end
 
-function M.is_castable_expr(dataxml,str,pos,ns)
+function M.is_castable_expr(dataxml, str, pos, ns)
     pos = pos or M.nextpos
-    local start,stop = string.find(str,"^castable as%s*",pos)
+    local start, stop = string.find(str, "^castable as%s*", pos)
     if start then
         M.tok = "castable_as"
         M.nextpos = stop + 1
@@ -418,30 +426,29 @@ function M.is_castable_expr(dataxml,str,pos,ns)
     return false
 end
 
-
-function M.is_multiplicative_expr(dataxml,str,pos,ns)
-    local start,stop
+function M.is_multiplicative_expr(dataxml, str, pos, ns)
+    local start, stop
     pos = pos or M.nextpos
-    start,stop = string.find(str,"^%*%s*",pos)
+    start, stop = string.find(str, "^%*%s*", pos)
     if start then
         M.tok = "\1*"
         M.nextpos = stop + 1
         return true
     end
     -- "div" | "idiv" | "mod"
-    start,stop = string.find(str,"^div%s*",pos)
+    start, stop = string.find(str, "^div%s*", pos)
     if start then
         M.tok = "\1div"
         M.nextpos = stop + 1
         return true
     end
-    start,stop = string.find(str,"^mod%s*",pos)
+    start, stop = string.find(str, "^mod%s*", pos)
     if start then
         M.tok = "\1mod"
         M.nextpos = stop + 1
         return true
     end
-    start,stop = string.find(str,"^idiv%s*",pos)
+    start, stop = string.find(str, "^idiv%s*", pos)
     if start then
         M.tok = "\1idiv"
         M.nextpos = stop + 1
@@ -449,56 +456,62 @@ function M.is_multiplicative_expr(dataxml,str,pos,ns)
     end
 end
 
-function M.get_single_expr(dataxml,str,pos,ns)
+function M.get_single_expr(dataxml, str, pos, ns)
     local stop
     local stack = {}
-    stack[#stack + 1] = M.get_operand(dataxml,str,pos,ns)
+    stack[#stack + 1] = M.get_operand(dataxml, str, pos, ns)
     pos = M.nextpos
-    while M.is_comparison_epxr(dataxml,str,pos,ns) or
-        M.is_andor_expr(dataxml,str,pos,ns) or
-        M.is_multiplicative_expr(dataxml,str,pos,ns) or
-        M.is_additive_expr(dataxml,str,pos,ns) or
-        M.is_castable_expr(dataxml,str,pos,ns) do
+    while
+        M.is_comparison_epxr(dataxml, str, pos, ns)
+        or M.is_andor_expr(dataxml, str, pos, ns)
+        or M.is_multiplicative_expr(dataxml, str, pos, ns)
+        or M.is_additive_expr(dataxml, str, pos, ns)
+        or M.is_castable_expr(dataxml, str, pos, ns)
+    do
         pos = M.nextpos
         local op = M.tok
         stack[#stack + 1] = op
-        stack[#stack + 1] = M.get_operand(dataxml,str,pos,ns)
+        stack[#stack + 1] = M.get_operand(dataxml, str, pos, ns)
         pos = M.nextpos
     end
-    _,stop = string.find(str,"^%s*%)%s*",M.nextpos)
+    _, stop = string.find(str, "^%s*%)%s*", M.nextpos)
     if stop then
         M.nextpos = stop + 1
-        return stack,true
+        return stack, true
     end
     -- We are now at the end of an expression (either closing paren or end of string)
-    return stack,false
+    return stack, false
 end
 
 -- Return a table with one entry for each comma separated expression.
 -- Each expression is the stack (table) of operators/operands
-function M.get_expr(dataxml,str,ns,pos)
+function M.get_expr(dataxml, str, ns, pos)
     M.str = str
     local ret = {}
-    pos = string.find(str,"%S",pos)
+    pos = string.find(str, "%S", pos)
     while true do
         local end_of_expression
-        local a = string.find(str,"^%s*%)",pos)
+        local a = string.find(str, "^%s*%)", pos)
         if a then
             M.err = true
             M.errmsg = "XPath error: looking for an expression but found a closing parentheses"
             return nil
         end
 
-        ret[#ret + 1],end_of_expression = M.get_single_expr(dataxml,str,pos,ns)
-        if end_of_expression then break end
-        local start,stop = string.find(str,"^%s*,%s*",M.nextpos)
-        if not start then break end
+        ret[#ret + 1], end_of_expression = M.get_single_expr(dataxml, str, pos, ns)
+        if end_of_expression then
+            break
+        end
+        local start, stop = string.find(str, "^%s*,%s*", M.nextpos)
+        if not start then
+            break
+        end
         pos = stop + 1
     end
     return ret
 end
 
-function M.eval_comparison(first,second,operator)
+function M.eval_comparison(first, second, operator)
     -- When comparing a string a and a number, we
     -- turn everything into a number.
     -- IIRC this is in the XPath sepc TODO: check
@@ -546,16 +559,15 @@ function M.eval_comparison(first,second,operator)
     end
 end
 
-local function xml_to_string( self )
+local function xml_to_string(self)
     local ret = {}
-    for i=1,#self do
-      ret[#ret + 1] = tostring(self[i])
+    for i = 1, #self do
+        ret[#ret + 1] = tostring(self[i])
     end
     return table.concat(ret)
 end
 
-
-function M.eval_castable_as(first,second,operator)
+function M.eval_castable_as(first, second, operator)
     if second == "xs:double" then
         if tonumber(first) then
             return true
@@ -566,18 +578,17 @@ function M.eval_castable_as(first,second,operator)
     return false
 end
 
-
 local mt = {
-    __tostring = xml_to_string
+    __tostring = xml_to_string,
 }
 
-function get_argument_number(arg,pos,what)
-    if type(arg)=='table' then
+function get_argument_number(arg, pos, what)
+    if type(arg) == "table" then
         setmetatable(arg, mt)
         arg = tostring(arg)
     end
 
-    if type(arg)=='string' then
+    if type(arg) == "string" then
         if tonumber(arg) then
             return tonumber(arg)
         else
@@ -588,7 +599,10 @@ function get_argument_number(arg,pos,what)
 
     if arg == nil then
         if err then
-            main.log("error", string.format("The %s operand of %s is not a number. Evaluating to 0 (%q)", pos, what, M.str))
+            main.log(
+                "error",
+                string.format("The %s operand of %s is not a number. Evaluating to 0 (%q)", pos, what, M.str)
+            )
         else
             main.log("error", string.format("The %s operand of %s is not a number. Evaluating to 0", pos, what))
         end
@@ -598,11 +612,10 @@ function get_argument_number(arg,pos,what)
     return arg
 end
 
-
-function M.eval_addition(first,second,operator)
+function M.eval_addition(first, second, operator)
     local unit_first, unit_second
-    first, unit_first = get_argument_number(first,"first")
-    second, unit_second = get_argument_number(second,"second")
+    first, unit_first = get_argument_number(first, "first")
+    second, unit_second = get_argument_number(second, "second")
     local res
     if operator == "\1+" then
         res = first + second
@@ -611,23 +624,23 @@ function M.eval_addition(first,second,operator)
     end
     local unit = unit_first or unit_second
     if unit then
-        res = string.format("%s%s",tostring(res),unit)
+        res = string.format("%s%s", tostring(res), unit)
     end
     return res
 end
 
-function M.eval_multiplication(first,second,operator)
+function M.eval_multiplication(first, second, operator)
     local unit_first, unit_second
-    first, unit_first = get_argument_number(first,"first","one of * div, mod, idiv")
-    second, unit_second = get_argument_number(second,"second","one of * div, mod, idiv")
+    first, unit_first = get_argument_number(first, "first", "one of * div, mod, idiv")
+    second, unit_second = get_argument_number(second, "second", "one of * div, mod, idiv")
     local res
     if operator == "\1*" then
         res = first * second
     elseif operator == "\1mod" then
-        res = math.fmod(first,second)
+        res = math.fmod(first, second)
     elseif operator == "\1div" then
         res = first / second
-    elseif operator =="\1idiv" then
+    elseif operator == "\1idiv" then
         local a = first / second
         if a > 0 then
             res = math.floor(a)
@@ -637,7 +650,7 @@ function M.eval_multiplication(first,second,operator)
     end
     local unit = unit_first or unit_second
     if unit then
-        res = string.format("%s%s",tostring(res),unit)
+        res = string.format("%s%s", tostring(res), unit)
     end
     return res
 end
@@ -663,9 +676,9 @@ end
 -- 18  /, //   left-to-right
 -- 19  [ ] left-to-right
 
-function M.reduce( tab )
+function M.reduce(tab)
     local operator_found = false
-    local op,first,second
+    local op, first, second
     local max, i
 
     -- castable as
@@ -675,14 +688,14 @@ function M.reduce( tab )
         op = tab[i]
         if op == "castable_as" then
             operator_found = true
-            second = table.remove(tab,i + 1)
-            table.remove(tab,i)
-            first  = table.remove(tab,i - 1)
-            table.insert(tab,i - 1,M.eval_castable_as(first,second,op))
+            second = table.remove(tab, i + 1)
+            table.remove(tab, i)
+            first = table.remove(tab, i - 1)
+            table.insert(tab, i - 1, M.eval_castable_as(first, second, op))
             i = i - 2
             max = max - 2
         end
-    i = i + 1
+        i = i + 1
     end
 
     max = #tab
@@ -691,10 +704,10 @@ function M.reduce( tab )
         op = tab[i]
         if op == "\1*" or op == "\1mod" or op == "\1div" or op == "\1idiv" then
             operator_found = true
-            second = table.remove(tab,i + 1)
-            table.remove(tab,i)
-            first  = table.remove(tab,i - 1)
-            table.insert(tab,i - 1,M.eval_multiplication(first,second,op))
+            second = table.remove(tab, i + 1)
+            table.remove(tab, i)
+            first = table.remove(tab, i - 1)
+            table.insert(tab, i - 1, M.eval_multiplication(first, second, op))
             i = i - 2
             max = max - 2
         end
@@ -706,10 +719,10 @@ function M.reduce( tab )
         op = tab[i]
         if op == "\1+" or op == "\1-" then
             operator_found = true
-            second = table.remove(tab,i + 1)
-            table.remove(tab,i)
-            first  = table.remove(tab,i - 1)
-            table.insert(tab,i - 1,M.eval_addition(first,second,op))
+            second = table.remove(tab, i + 1)
+            table.remove(tab, i)
+            first = table.remove(tab, i - 1)
+            table.insert(tab, i - 1, M.eval_addition(first, second, op))
             i = i - 2
             max = max - 2
         end
@@ -723,10 +736,10 @@ function M.reduce( tab )
         op = tab[i]
         if op == "\1<" or op == "\1>" or op == "\1<=" or op == "\1>=" or op == "\1!=" or op == "\1=" then
             operator_found = true
-            second = table.remove(tab,i + 1)
-            table.remove(tab,i)
-            first  = table.remove(tab,i - 1)
-            table.insert(tab,i - 1,M.eval_comparison(first,second,op))
+            second = table.remove(tab, i + 1)
+            table.remove(tab, i)
+            first = table.remove(tab, i - 1)
+            table.insert(tab, i - 1, M.eval_comparison(first, second, op))
             i = i - 2
             max = max - 2
         end
@@ -740,16 +753,15 @@ function M.reduce( tab )
         op = tab[i]
         if op == "\1and" then
             operator_found = true
-            second = table.remove(tab,i + 1)
-            table.remove(tab,i)
-            first  = table.remove(tab,i - 1)
-            table.insert(tab,i - 1, first and second)
+            second = table.remove(tab, i + 1)
+            table.remove(tab, i)
+            first = table.remove(tab, i - 1)
+            table.insert(tab, i - 1, first and second)
             i = i - 2
             max = max - 2
         end
         i = i + 1
     end
-
 
     -- "or"
     max = #tab
@@ -758,21 +770,23 @@ function M.reduce( tab )
         op = tab[i]
         if op == "\1or" then
             operator_found = true
-            second = table.remove(tab,i + 1)
-            table.remove(tab,i)
-            first  = table.remove(tab,i - 1)
-            table.insert(tab,i - 1, first or second)
+            second = table.remove(tab, i + 1)
+            table.remove(tab, i)
+            first = table.remove(tab, i - 1)
+            table.insert(tab, i - 1, first or second)
             i = i - 2
             max = max - 2
         end
         i = i + 1
     end
 
-    if #tab == 1 then return false end
+    if #tab == 1 then
+        return false
+    end
     return operator_found
 end
 
-function M.eval_argument( tab )
+function M.eval_argument(tab)
     if #tab == 1 then
         if tab[1] == nilmarker then
             return nil
@@ -788,17 +802,17 @@ function M.eval_argument( tab )
     return tab
 end
 
-function M.parse_internal(dataxml,str,ns,pos)
-    local r = M.get_expr(dataxml,str,ns,pos)
+function M.parse_internal(dataxml, str, ns, pos)
+    local r = M.get_expr(dataxml, str, ns, pos)
     if not r then
         return nil
     end
     local ret = {}
-    for i=1,#r do
+    for i = 1, #r do
         if type(r[i]) == "table" then
             local tmp = M.eval_argument(r[i])
             if type(tmp) == "table" then
-                for j=1,#tmp do
+                for j = 1, #tmp do
                     ret[#ret + 1] = tmp[j]
                 end
             else
@@ -812,22 +826,21 @@ function M.parse_internal(dataxml,str,ns,pos)
 end
 
 -- return err,result
-function M.parse_raw( dataxml,str,ns )
+function M.parse_raw(dataxml, str, ns)
     M.err = false
     M.nextpos = nil
-    local r = M.parse_internal(dataxml,str,ns,1)
+    local r = M.parse_internal(dataxml, str, ns, 1)
     if M.err then
-        return false,M.errmsg
+        return false, M.errmsg
     else
         return true, r
     end
 end
 
-
-function M.parse(dataxml,str,ns)
+function M.parse(dataxml, str, ns)
     M.nextpos = nil
     M.err = false
-    local r = M.parse_internal(dataxml,str,ns,1)
+    local r = M.parse_internal(dataxml, str, ns, 1)
     if #r == 1 then
         return r[1]
     elseif #r == 0 then
@@ -836,14 +849,18 @@ function M.parse(dataxml,str,ns)
     return r
 end
 
-function M.textvalue_raw(ok,value)
+function M.textvalue_raw(ok, value)
     if not ok then
         return ""
     end
-    if #value == 1 and type(value[1]) == "boolean" then return value[1] end
-    if type(value) == "string" then return value end
+    if #value == 1 and type(value[1]) == "boolean" then
+        return value[1]
+    end
+    if type(value) == "string" then
+        return value
+    end
     local ret = {}
-    for i=1,#value do
+    for i = 1, #value do
         ret[#ret + 1] = value[i]
     end
     return table.concat(ret)
@@ -857,7 +874,7 @@ function M.textvalue(arg)
 end
 -- ------
 
-function M.set_variable(var,value)
+function M.set_variable(var, value)
     M.variables[var] = value
 end
 
@@ -865,17 +882,17 @@ function M.get_variable(var)
     local v
     if var == "_mode" then
         local tmp = {}
-        for k,_ in pairs(publisher.modes) do
+        for k, _ in pairs(publisher.modes) do
             tmp[#tmp + 1] = k
         end
-        v = table.concat( tmp, "," )
+        v = table.concat(tmp, ",")
     else
         v = M.variables[var]
     end
     return v
 end
 
-function M.register_function(ns,fname,fun)
+function M.register_function(ns, fname, fun)
     if ns == "" then
         M.default_functions[fname] = fun
         return
@@ -884,16 +901,17 @@ function M.register_function(ns,fname,fun)
     M.functions[ns][fname] = fun
 end
 
-
 -- ------------------------------------------------------------
 -- -- Standard XPath functions
 -- ------------------------------------------------------------
 
-M.default_functions.doc = function (dataxml,arg)
+M.default_functions.doc = function(dataxml, arg)
     local filename = arg[1]
     local loc = kpse.find_file(filename)
-    if loc == nil then return end
-    local f,e = io.open(loc,"rb")
+    if loc == nil then
+        return
+    end
+    local f, e = io.open(loc, "rb")
     if f == nil then
         main.log("error", e)
         return
@@ -903,7 +921,7 @@ M.default_functions.doc = function (dataxml,arg)
     return contents
 end
 
-M.default_functions.abs = function(dataxml,arg)
+M.default_functions.abs = function(dataxml, arg)
     local tmp = math.abs(tonumber(arg[1]))
     return tmp
 end
@@ -913,24 +931,24 @@ M.default_functions.position = function()
     return pos
 end
 
-M.default_functions.ceiling = function( dataxml,arg )
+M.default_functions.ceiling = function(dataxml, arg)
     return math.ceil(arg[1])
 end
 
-M.default_functions.concat = function(dataxml, arg )
+M.default_functions.concat = function(dataxml, arg)
     local ret = ""
-    for i=1,#arg do
+    for i = 1, #arg do
         ret = ret .. tostring(arg[i])
     end
     return ret
 end
 
-M.default_functions.count = function(dataxml, arg )
+M.default_functions.count = function(dataxml, arg)
     local tocount = arg
     return #tocount
 end
 
-M.default_functions.empty = function( dataxml,arg )
+M.default_functions.empty = function(dataxml, arg)
     if arg and arg[1] ~= nil and arg[1] ~= "" then
         return false
     end
@@ -942,25 +960,25 @@ M.default_functions.floor = function(dataxml, arg)
 end
 
 -- Return number of records with the same name
-M.default_functions.last = function( dataxml )
+M.default_functions.last = function(dataxml)
     if dataxml[".__context"] then
         return #dataxml[".__context"]
     end
-    local recordname    = dataxml[".__local_name"]
+    local recordname = dataxml[".__local_name"]
     local parentelement = dataxml[".__parent"]
     if not parentelement then
         return 1
     end
     local count = 0
-    for i=1,#parentelement do
-        if type(parentelement[i]) == 'table' and parentelement[i][".__local_name"] == recordname then
+    for i = 1, #parentelement do
+        if type(parentelement[i]) == "table" and parentelement[i][".__local_name"] == recordname then
             count = count + 1
         end
     end
     return count
 end
 
-M.default_functions.max = function(dataxml,arg)
+M.default_functions.max = function(dataxml, arg)
     local max = tonumber(arg[1])
     if not max then
         if err then
@@ -968,7 +986,7 @@ M.default_functions.max = function(dataxml,arg)
         end
         return 0
     end
-    for i=2,#arg do
+    for i = 2, #arg do
         if tonumber(arg[i]) and tonumber(arg[i]) > max then
             max = tonumber(arg[i])
         end
@@ -976,9 +994,9 @@ M.default_functions.max = function(dataxml,arg)
     return max
 end
 
-M.default_functions.min = function(dataxml,arg)
+M.default_functions.min = function(dataxml, arg)
     local min = tonumber(arg[1])
-    for i=2,#arg do
+    for i = 2, #arg do
         if tonumber(arg[i]) < min then
             min = arg[i]
         end
@@ -986,27 +1004,26 @@ M.default_functions.min = function(dataxml,arg)
     return min
 end
 
-
-M.default_functions["normalize-space"] = function(dataxml, arg )
+M.default_functions["normalize-space"] = function(dataxml, arg)
     local str = arg[1]
     str = table_textvalue(str)
-    str = str:gsub("^%s*(.-)%s*$","%1"):gsub("[%s\n]+"," ")
+    str = str:gsub("^%s*(.-)%s*$", "%1"):gsub("[%s\n]+", " ")
     return str
 end
 
 M.default_functions.node = function(dataxml)
-    local tab={}
-    for i=1,#dataxml do
+    local tab = {}
+    for i = 1, #dataxml do
         tab[#tab + 1] = dataxml[i]
     end
     return tab
 end
 
-M.default_functions["string"] = function(dataxml,arg)
+M.default_functions["string"] = function(dataxml, arg)
     local ret
-    if type(arg)=="table" then
+    if type(arg) == "table" then
         ret = {}
-        for i=1,#arg do
+        for i = 1, #arg do
             ret[#ret + 1] = tostring(arg[i])
         end
         ret = table.concat(ret)
@@ -1025,9 +1042,9 @@ M.default_functions["string"] = function(dataxml,arg)
     return ret
 end
 
-M.default_functions["number"] = function(dataxml,arg)
+M.default_functions["number"] = function(dataxml, arg)
     local ret
-    if type(arg)=="table" then
+    if type(arg) == "table" then
         if #arg > 1 then
             main.log("error", "A sequence of more than one item is not allowed as the first argument of fn:number()")
             return
@@ -1039,7 +1056,11 @@ M.default_functions["number"] = function(dataxml,arg)
     elseif type(arg) == "string" then
         ret = arg
     elseif type(arg) == "boolean" then
-        if arg then ret = 1 else ret = 0 end
+        if arg then
+            ret = 1
+        else
+            ret = 0
+        end
     elseif arg == nil then
         ret = ""
     else
@@ -1050,21 +1071,21 @@ M.default_functions["number"] = function(dataxml,arg)
 end
 
 -- Tokenize is the first function we ask 'splib' for help
-M.default_functions["tokenize"] = function(dataxml,arg)
+M.default_functions["tokenize"] = function(dataxml, arg)
     if arg[1] == nil or arg[2] == nil then
         main.log("error", "tokenize: one of the arguments is empty")
         return ""
     end
-    return publisher.splib.tokenize(arg[1],arg[2])
+    return publisher.splib.tokenize(arg[1], arg[2])
 end
 
-M.default_functions["round"] = function( dataxml,arg )
+M.default_functions["round"] = function(dataxml, arg)
     local arg1 = arg[1]
     local arg2 = arg[2] or 0
-    return math.round(arg1,arg2)
+    return math.round(arg1, arg2)
 end
 
-M.default_functions["replace"] = function(dataxml,arg)
+M.default_functions["replace"] = function(dataxml, arg)
     if arg[1] == nil or arg[2] == nil or arg[3] == nil then
         main.log("warn", "replace: one of the arguments is empty")
         return ""
@@ -1073,26 +1094,25 @@ M.default_functions["replace"] = function(dataxml,arg)
     if type(arg[1]) == "table" and arg[1][".__type"] == "element" then
         firstarg = xml_to_string(arg[1])
     end
-    return publisher.splib.replace(firstarg,arg[2],arg[3])
+    return publisher.splib.replace(firstarg, arg[2], arg[3])
 end
 
-M.default_functions["contains"] = function(dataxml,arg)
-    if arg[1] == nil or arg[2] == nil  then
+M.default_functions["contains"] = function(dataxml, arg)
+    if arg[1] == nil or arg[2] == nil then
         -- warning("contains(): one of the arguments is empty")
         return false
     end
-    if type(arg[1]) ~= "string" or type(arg[2]) ~= "string"  then
+    if type(arg[1]) ~= "string" or type(arg[2]) ~= "string" then
         main.log("error", "contains(): one of the arguments is not a string")
         return false
     end
-    local ret = publisher.splib.contains(arg[1],arg[2])
+    local ret = publisher.splib.contains(arg[1], arg[2])
     return ret == "true"
 end
 
-
-M.default_functions["matches"] = function(dataxml,arg)
+M.default_functions["matches"] = function(dataxml, arg)
     -- flags can be one of ims, x is not supported
-    if arg[1] == nil or arg[2] == nil  then
+    if arg[1] == nil or arg[2] == nil then
         -- warning("contains(): one of the arguments is empty")
         return false
     end
@@ -1100,18 +1120,17 @@ M.default_functions["matches"] = function(dataxml,arg)
     local re = publisher.xml_helpers.xml_stringvalue(arg[2])
 
     local flags = arg[3] or ""
-    if string.find(flags,"x") then
+    if string.find(flags, "x") then
         main.log("warn", "matches does not support the x flag")
     end
     if flags ~= "" then
         flags = "(?" .. flags .. ")"
     end
-    local ret = publisher.splib.matches(text,flags .. re)
+    local ret = publisher.splib.matches(text, flags .. re)
     return ret
 end
 
-
-M.default_functions["upper-case"] = function(dataxml,arg)
+M.default_functions["upper-case"] = function(dataxml, arg)
     local str = arg and arg[1]
     if str then
         return string.upper(tostring(arg[1]))
@@ -1121,7 +1140,7 @@ M.default_functions["upper-case"] = function(dataxml,arg)
     end
 end
 
-M.default_functions["lower-case"] = function(dataxml,arg)
+M.default_functions["lower-case"] = function(dataxml, arg)
     local str = arg and arg[1]
     if str then
         return string.lower(tostring(arg[1]))
@@ -1139,46 +1158,46 @@ M.default_functions["false"] = function()
     return false
 end
 
-M.default_functions["not"] = function (dataxml,arg)
+M.default_functions["not"] = function(dataxml, arg)
     return not arg[1]
 end
 
-M.default_functions["string-join"] = function (dataxml,arg)
+M.default_functions["string-join"] = function(dataxml, arg)
     local ret = {}
-    for i=1,#arg - 1 do
+    for i = 1, #arg - 1 do
         ret[#ret + 1] = tostring(arg[i])
     end
-    return table.concat(ret,arg[#arg])
+    return table.concat(ret, arg[#arg])
 end
 
-M.default_functions["string-length"] = function (dataxml,arg)
+M.default_functions["string-length"] = function(dataxml, arg)
     return string.len(arg[1])
 end
 
-M.default_functions["substring"] = function (dataxml,arg)
+M.default_functions["substring"] = function(dataxml, arg)
     local input = tostring(arg[1])
     local start = tonumber(arg[2])
     local length
     if tonumber(arg[3]) then
         length = arg[2] + tonumber(arg[3]) - 1
     end
-    return string.sub(input,start,length)
+    return string.sub(input, start, length)
 end
 
-M.default_functions["local-name"] = function (dataxml,arg)
+M.default_functions["local-name"] = function(dataxml, arg)
     return dataxml[".__local_name"]
 end
 
 return {
-   get_variable      = M.get_variable,
-   parse             = M.parse,
-   parse_raw         = M.parse_raw,
-   register_function = M.register_function,
-   set_variable      = M.set_variable,
-   textvalue         = M.textvalue,
-   textvalue_raw     = M.textvalue_raw,
-   push_state        = M.push_state,
-   pop_state         = M.pop_state,
+    get_variable = M.get_variable,
+    parse = M.parse,
+    parse_raw = M.parse_raw,
+    register_function = M.register_function,
+    set_variable = M.set_variable,
+    textvalue = M.textvalue,
+    textvalue_raw = M.textvalue_raw,
+    push_state = M.push_state,
+    pop_state = M.pop_state,
 }
 
 -- Todo:

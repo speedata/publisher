@@ -66,10 +66,10 @@ end
 ---@param stretch boolean? Grow up to (maxwidth, maxheight) if needed.
 ---@return integer width
 ---@return integer height
-function M.calculate_image_width_height( image, width, height, minwidth, minheight, maxwidth, maxheight, stretch )
+function M.calculate_image_width_height(image, width, height, minwidth, minheight, maxwidth, maxheight, stretch)
     -- See https://www.w3.org/TR/CSS2/visudet.html#min-max-widths
     if stretch and maxheight < publisher.maxdimen and maxwidth < publisher.maxdimen then
-        local stretchamount = math.min(maxwidth / image.xsize , maxheight / image.ysize )
+        local stretchamount = math.min(maxwidth / image.xsize, maxheight / image.ysize)
         if stretchamount > 1 then
             return image.xsize * stretchamount, image.ysize * stretchamount
         end
@@ -82,7 +82,7 @@ function M.calculate_image_width_height( image, width, height, minwidth, minheig
         width = maxwidth
         height = minheight
     elseif width > maxwidth and height > maxheight and maxwidth / width <= maxheight / height then
-        height = math.max(minheight, maxwidth * height/width)
+        height = math.max(minheight, maxwidth * height / width)
         width = maxwidth
     elseif width > maxwidth and height > maxheight and maxwidth / width > maxheight / height then
         width = math.max(minwidth, maxheight * width / height)
@@ -114,7 +114,7 @@ function M.calculate_image_width_height( image, width, height, minwidth, minheig
         end
     elseif width == image.width then
         if height ~= image.height then
-            width = width *  height / image.height
+            width = width * height / image.height
         end
     end
     return width, height
@@ -129,13 +129,13 @@ end
 ---@param height integer Target height in sp.
 ---@return any image_info Result from `splib.reloadimage`.
 function M.reload_image(filename, typ, width, height)
-    main.log("info","Reload image","width",tostring(width),"height",tostring(height),"filename",filename)
+    main.log("info", "Reload image", "width", tostring(width), "height", tostring(height), "filename", filename)
     local filename_extension = publisher.get_extension(filename)
     local handlername_for_extension
     local opts = publisher.options
     if opts.extensionhandler and opts.extensionhandler ~= "" then
-        for _,v in ipairs(string.explode(opts.extensionhandler,";")) do
-            local _,_,ext,handler = string.find(v,"^(.*):(.*)$")
+        for _, v in ipairs(string.explode(opts.extensionhandler, ";")) do
+            local _, _, ext, handler = string.find(v, "^(.*):(.*)$")
             if ext == filename_extension then
                 handlername_for_extension = handler
                 break
@@ -143,7 +143,13 @@ function M.reload_image(filename, typ, width, height)
         end
     end
     local rh = publisher.resizehandler[handlername_for_extension or "*"]
-    return splib.reloadimage({ filename = filename, imagetype = typ, width = width, height = height, resizehandler = rh })
+    return splib.reloadimage({
+        filename = filename,
+        imagetype = typ,
+        width = width,
+        height = height,
+        resizehandler = rh,
+    })
 end
 
 -- Backwards-compatible alias for `imageinfo`.
@@ -182,9 +188,16 @@ end
 ---@param filename string? User-provided fallback name.
 ---@param missingfilename string? The original missing image (for logging).
 ---@return string
-function M.get_fallback_image_name( filename, missingfilename )
+function M.get_fallback_image_name(filename, missingfilename)
     if filename then
-        main.log("info","Using fallback","fallback",filename or "(filename)", "requested",missingfilename or "(empty)")
+        main.log(
+            "info",
+            "Using fallback",
+            "fallback",
+            filename or "(filename)",
+            "requested",
+            missingfilename or "(empty)"
+        )
         if not kpse.find_file(filename) then
             main.log("error", string.format("fallback image %q not found", filename or "<filename>"))
             return "filenotfound.pdf"
@@ -206,7 +219,7 @@ end
 ---@param fallback string? File name to use if `filename` is missing.
 ---@param imageshape boolean? Load shape XML if present.
 ---@return ImageInfo info Cached entry.
-function M.imageinfo( filename, page, box, fallback, imageshape )
+function M.imageinfo(filename, page, box, fallback, imageshape)
     page = page or 1
     box = box or "crop"
     if not filename then
@@ -223,17 +236,17 @@ function M.imageinfo( filename, page, box, fallback, imageshape )
     if images[new_name] then
         return images[new_name]
     end
-    main.log("info","Searching for image","filename",tostring(filename))
+    main.log("info", "Searching for image", "filename", tostring(filename))
     if not kpse.find_file(filename) then
         if publisher.options.imagenotfounderror then
-            main.log("error","Image not found","filename", filename or "???", publisher.lineinfo())
+            main.log("error", "Image not found", "filename", filename or "???", publisher.lineinfo())
         else
-            main.log("warn","Image not found","filename", filename or "???", publisher.lineinfo())
+            main.log("warn", "Image not found", "filename", filename or "???", publisher.lineinfo())
         end
         filename = M.get_fallback_image_name(fallback, filename)
         page = 1
     end
-    main.log("info","Load image","filename",tostring(filename))
+    main.log("info", "Load image", "filename", tostring(filename))
 
     local mt
     if imageshape and not string.match(filename, "^https?://") then
@@ -258,9 +271,10 @@ function M.imageinfo( filename, page, box, fallback, imageshape )
                     elseif v[".__local_name"] == "segment" then
                         if publisher.newxpath then
                             local attrs = v[".__attributes"]
-                            segments[#segments + 1] = {tonumber(attrs.x1), tonumber(attrs.y1), tonumber(attrs.x2), tonumber(attrs.y2)}
+                            segments[#segments + 1] =
+                                { tonumber(attrs.x1), tonumber(attrs.y1), tonumber(attrs.x2), tonumber(attrs.y2) }
                         else
-                            segments[#segments + 1] = {tonumber(v.x1), tonumber(v.y1), tonumber(v.x2), tonumber(v.y2)}
+                            segments[#segments + 1] = { tonumber(v.x1), tonumber(v.y1), tonumber(v.x2), tonumber(v.y2) }
                         end
                     end
                 end
@@ -293,7 +307,7 @@ function M.imageinfo( filename, page, box, fallback, imageshape )
             end
         end
         filename = M.validateimagetype(filename)
-        local image_info = img.scan{ filename = filename, pagebox = box, page = page, keepopen = true }
+        local image_info = img.scan({ filename = filename, pagebox = box, page = page, keepopen = true })
         if image_info.orientation == 0 then
             -- good, no transformation
         elseif image_info.orientation == 1 then

@@ -33,8 +33,12 @@ local M = {
     mapNS = "http://www.w3.org/2005/xpath-functions/map",
     stringmatch = string.match,
     stringfind = string.find,
-    findfile = function(fn) return fn end,
-    parse_xml = function(_fn) return {} end, -- dummy
+    findfile = function(fn)
+        return fn
+    end,
+    parse_xml = function(_fn)
+        return {}
+    end, -- dummy
     ignoreNS = false,
 }
 
@@ -61,22 +65,30 @@ local function get_qname(sc)
 
     while pos <= len do
         local b = string_byte(str, pos)
-        if (b >= 97 and b <= 122)     -- a-z
-            or (b >= 65 and b <= 90)  -- A-Z
-            or (b >= 48 and b <= 57)  -- 0-9
-            or b == 95                -- _
-            or b == 45                -- -
-            or b == 42                -- *
+        if
+            (b >= 97 and b <= 122) -- a-z
+            or (b >= 65 and b <= 90) -- A-Z
+            or (b >= 48 and b <= 57) -- 0-9
+            or b == 95 -- _
+            or b == 45 -- -
+            or b == 42 -- *
         then
             pos = pos + 1
         elseif b >= 128 then
             -- UTF-8 multi-byte: accept as part of QName (covers ·, ‿, ⁀, etc.)
-            if b >= 240 then pos = pos + 4
-            elseif b >= 224 then pos = pos + 3
-            elseif b >= 192 then pos = pos + 2
-            else pos = pos + 1 end
-        elseif b == 58 then  -- ':'
-            if hasColon then break end
+            if b >= 240 then
+                pos = pos + 4
+            elseif b >= 224 then
+                pos = pos + 3
+            elseif b >= 192 then
+                pos = pos + 2
+            else
+                pos = pos + 1
+            end
+        elseif b == 58 then -- ':'
+            if hasColon then
+                break
+            end
             hasColon = true
             pos = pos + 1
         else
@@ -122,7 +134,7 @@ local function get_comment(sc)
         local cur = string_byte(str, pos)
         local after = string_byte(str, pos + 1)
 
-        if cur == 58 and after == 41 then  -- ':)'
+        if cur == 58 and after == 41 then -- ':)'
             level = level - 1
             if level == 0 then
                 local result = string_sub(str, start, pos - 1)
@@ -130,7 +142,7 @@ local function get_comment(sc)
                 return result
             end
             pos = pos + 2
-        elseif cur == 40 and after == 58 then  -- '(:'
+        elseif cur == 40 and after == 58 then -- '(:'
             level = level + 1
             pos = pos + 2
         else
@@ -151,10 +163,11 @@ local function get_num(sc)
 
     while pos <= len do
         local b = string_byte(str, pos)
-        if (b >= 48 and b <= 57)  -- '0'-'9'
-            or b == 46            -- '.'
-            or b == 101           -- 'e'
-            or b == 45            -- '-'
+        if
+            (b >= 48 and b <= 57) -- '0'-'9'
+            or b == 46 -- '.'
+            or b == 101 -- 'e'
+            or b == 45 -- '-'
         then
             pos = pos + 1
         else
@@ -176,10 +189,8 @@ M.private.split_chars = split_chars
 
 ---@class token
 
-
 ---@class tokenlist
 local tokenlist = {}
-
 
 function tokenlist:new(o)
     o = o or {} -- create object if user does not provide one
@@ -229,7 +240,9 @@ function tokenlist:skipNCName(name)
     if tok[2] ~= "tokQName" then
         return "QName expected, got " .. tok[2]
     end
-    if tok[1] == name then return nil end
+    if tok[1] == name then
+        return nil
+    end
     return ""
 end
 
@@ -251,11 +264,13 @@ function tokenlist:readNexttokIfIsOneOfValue(tokvalues, typ)
 end
 
 function tokenlist:nextTokIsType(typ)
-    if self.pos > #self then return false end
+    if self.pos > #self then
+        return false
+    end
     local t = self:peek()
     -- tokQName main contain '*', which is incorrect.
     if typ == "tokQName" then
-        if string_find(t[1],'*',1,true) then
+        if string_find(t[1], "*", 1, true) then
             return false
         end
     end
@@ -264,7 +279,9 @@ end
 
 ---@return boolean true if the next token is the provided type.
 function tokenlist:skipType(typ)
-    if self.pos > #self then return false end
+    if self.pos > #self then
+        return false
+    end
     local t = self:peek()
     if t[2] == typ then
         self:read()
@@ -276,7 +293,9 @@ end
 ---@return tokenlist?
 ---@return string?
 function M.string_to_tokenlist(str)
-    if str == nil then return {} end
+    if str == nil then
+        return {}
+    end
     local tokens = tokenlist:new()
     local sc = make_scanner(str)
     local sstr = sc.str
@@ -285,92 +304,88 @@ function M.string_to_tokenlist(str)
     while sc.pos <= slen do
         local b = string_byte(sstr, sc.pos)
 
-        if b >= 48 and b <= 57 then  -- '0'-'9'
+        if b >= 48 and b <= 57 then -- '0'-'9'
             local num = get_num(sc)
             if num then
                 tokens[#tokens + 1] = { num, "tokNumber" }
             end
-
-        elseif b == 46 then  -- '.'
+        elseif b == 46 then -- '.'
             sc.pos = sc.pos + 1
             if sc.pos > slen then
-                tokens[#tokens + 1] = { '.', "tokOperator" }
+                tokens[#tokens + 1] = { ".", "tokOperator" }
                 break
             end
             local nb = string_byte(sstr, sc.pos)
-            if nb == 46 then  -- '..'
-                tokens[#tokens + 1] = { '..', "tokOperator" }
+            if nb == 46 then -- '..'
+                tokens[#tokens + 1] = { "..", "tokOperator" }
                 sc.pos = sc.pos + 1
-            elseif nb >= 48 and nb <= 57 then  -- '.digit'
+            elseif nb >= 48 and nb <= 57 then -- '.digit'
                 sc.pos = sc.pos - 1
                 local num = get_num(sc)
                 tokens[#tokens + 1] = { num, "tokNumber" }
             else
-                tokens[#tokens + 1] = { '.', "tokOperator" }
+                tokens[#tokens + 1] = { ".", "tokOperator" }
             end
-
-        elseif b == 42 then  -- '*'
+        elseif b == 42 then -- '*'
             sc.pos = sc.pos + 1
             if sc.pos > slen then
-                tokens[#tokens + 1] = { '*', "tokOperator" }
+                tokens[#tokens + 1] = { "*", "tokOperator" }
                 break
             end
             local nb = string_byte(sstr, sc.pos)
-            if nb == 58 then  -- '*:'
+            if nb == 58 then -- '*:'
                 sc.pos = sc.pos - 1
                 local word = get_qname(sc)
                 tokens[#tokens + 1] = { word, "tokQName" }
             else
-                tokens[#tokens + 1] = { '*', "tokOperator" }
+                tokens[#tokens + 1] = { "*", "tokOperator" }
             end
-
         elseif b == 43 or b == 45 or b == 63 or b == 64 or b == 61 then
             -- '+', '-', '?', '@', '='
             tokens[#tokens + 1] = { string_sub(sstr, sc.pos, sc.pos), "tokOperator" }
             sc.pos = sc.pos + 1
-
         elseif b == 124 then -- '|'
             sc.pos = sc.pos + 1
             if sc.pos > slen then
-                tokens[#tokens + 1] = { '|', "tokOperator" }
+                tokens[#tokens + 1] = { "|", "tokOperator" }
                 break
             end
             local nb = string_byte(sstr, sc.pos)
             if nb == 124 then -- '||'
-                tokens[#tokens + 1] = { '||', "tokOperator" }
+                tokens[#tokens + 1] = { "||", "tokOperator" }
                 sc.pos = sc.pos + 1
             else
-                tokens[#tokens + 1] = { '|', "tokOperator" }
+                tokens[#tokens + 1] = { "|", "tokOperator" }
             end
-
-        elseif b == 44 then  -- ','
-            tokens[#tokens + 1] = { ',', "tokComma" }
+        elseif b == 44 then -- ','
+            tokens[#tokens + 1] = { ",", "tokComma" }
             sc.pos = sc.pos + 1
-
-        elseif b == 62 or b == 60 then  -- '>' or '<'
+        elseif b == 62 or b == 60 then -- '>' or '<'
             local ch = string_sub(sstr, sc.pos, sc.pos)
             sc.pos = sc.pos + 1
-            if sc.pos > slen then break end
+            if sc.pos > slen then
+                break
+            end
             local nb = string_byte(sstr, sc.pos)
-            if nb == 61 or nb == b then  -- '=' or same char ('>>' or '<<')
+            if nb == 61 or nb == b then -- '=' or same char ('>>' or '<<')
                 tokens[#tokens + 1] = { ch .. string_sub(sstr, sc.pos, sc.pos), "tokOperator" }
                 sc.pos = sc.pos + 1
             else
                 tokens[#tokens + 1] = { ch, "tokOperator" }
             end
-
-        elseif b == 33 then  -- '!'
+        elseif b == 33 then -- '!'
             sc.pos = sc.pos + 1
-            if sc.pos > slen then break end
+            if sc.pos > slen then
+                break
+            end
             local nb = string_byte(sstr, sc.pos)
-            if nb == 61 then  -- '!='
+            if nb == 61 then -- '!='
                 tokens[#tokens + 1] = { "!=", "tokOperator" }
                 sc.pos = sc.pos + 1
             else
                 return nil, string_format("= expected after !, got %s", string_sub(sstr, sc.pos, sc.pos))
             end
-
-        elseif b == 47 or b == 58 then  -- '/' or ':'
+        elseif b == 47 or b == 58 then -- '/' or ':'
             local ch = string_sub(sstr, sc.pos, sc.pos)
             sc.pos = sc.pos + 1
             if sc.pos > slen then
@@ -378,29 +393,24 @@ function M.string_to_tokenlist(str)
                 break
             end
             local nb = string_byte(sstr, sc.pos)
-            if nb == b then  -- '//' or '::'
+            if nb == b then -- '//' or '::'
                 tokens[#tokens + 1] = { ch .. ch, "tokOperator" }
                 sc.pos = sc.pos + 1
             else
                 tokens[#tokens + 1] = { ch, "tokOperator" }
             end
-
-        elseif b == 91 then  -- '['
-            tokens[#tokens + 1] = { '[', "tokOpenBracket" }
+        elseif b == 91 then -- '['
+            tokens[#tokens + 1] = { "[", "tokOpenBracket" }
             sc.pos = sc.pos + 1
-
-        elseif b == 93 then  -- ']'
-            tokens[#tokens + 1] = { ']', "tokCloseBracket" }
+        elseif b == 93 then -- ']'
+            tokens[#tokens + 1] = { "]", "tokCloseBracket" }
             sc.pos = sc.pos + 1
-
-        elseif b == 36 then  -- '$'
+        elseif b == 36 then -- '$'
             sc.pos = sc.pos + 1
             local name = get_qname(sc)
             tokens[#tokens + 1] = { name, "tokVarname" }
-
-        elseif b == 32 or b == 9 or b == 10 or b == 13 then  -- whitespace
+        elseif b == 32 or b == 9 or b == 10 or b == 13 then -- whitespace
             sc.pos = sc.pos + 1
-
         elseif (b >= 97 and b <= 122) or (b >= 65 and b <= 90) or b == 95 or b >= 128 then
             -- letter, underscore, or non-ASCII: start of QName
             local name = get_qname(sc)
@@ -409,42 +419,36 @@ function M.string_to_tokenlist(str)
                 break
             end
             local nb = string_byte(sstr, sc.pos)
-            if nb == 58 then  -- name followed by ':' → double colon token
+            if nb == 58 then -- name followed by ':' → double colon token
                 tokens[#tokens + 1] = { string_sub(name, 1, -2), "tokDoubleColon" }
                 sc.pos = sc.pos + 1
             else
                 tokens[#tokens + 1] = { name, "tokQName" }
             end
-
-        elseif b == 34 or b == 39 then  -- '"' or "'"
+        elseif b == 34 or b == 39 then -- '"' or "'"
             local s = get_delimited_string(sc)
             tokens[#tokens + 1] = { s, "tokString" }
-
-        elseif b == 40 then  -- '('
+        elseif b == 40 then -- '('
             sc.pos = sc.pos + 1
             if sc.pos > slen then
                 return tokens, "parse error, unbalanced ( at end"
             end
             local nb = string_byte(sstr, sc.pos)
-            if nb == 58 then  -- '(:'
+            if nb == 58 then -- '(:'
                 sc.pos = sc.pos + 1
                 get_comment(sc)
             else
                 tokens[#tokens + 1] = { "(", "tokOpenParen" }
             end
-
-        elseif b == 41 then  -- ')'
+        elseif b == 41 then -- ')'
             tokens[#tokens + 1] = { ")", "tokCloseParen" }
             sc.pos = sc.pos + 1
-
         elseif b == 123 then -- '{'
-            tokens[#tokens + 1] = { '{', "tokOpenCurly" }
+            tokens[#tokens + 1] = { "{", "tokOpenCurly" }
             sc.pos = sc.pos + 1
-
         elseif b == 125 then -- '}'
-            tokens[#tokens + 1] = { '}', "tokCloseCurly" }
+            tokens[#tokens + 1] = { "}", "tokCloseCurly" }
             sc.pos = sc.pos + 1
-
         else
             return nil, string_format("Invalid char for xpath expression %q", string_sub(sstr, sc.pos, sc.pos))
         end
@@ -475,7 +479,9 @@ end
 
 local function make_array(members)
     local a = { [".__type"] = "array" }
-    for i, m in ipairs(members) do a[i] = m end
+    for i, m in ipairs(members) do
+        a[i] = m
+    end
     return a
 end
 
@@ -492,7 +498,9 @@ M.make_map = make_map
 
 local string_value
 local function number_value(sequence)
-    if type(sequence) == "string" then return tonumber(sequence) end
+    if type(sequence) == "string" then
+        return tonumber(sequence)
+    end
 
     if is_attribute(sequence) then
         return tonumber(sequence.value)
@@ -524,8 +532,12 @@ local function boolean_value(seq)
     if type(seq) == "boolean" then
         return seq
     end
-    if not seq then return false, nil end
-    if #seq == 0 then return false, nil end
+    if not seq then
+        return false, nil
+    end
+    if #seq == 0 then
+        return false, nil
+    end
     local val = seq[1]
     local ok = false
     if type(val) == "string" then
@@ -544,8 +556,12 @@ end
 
 function string_value(seq)
     local ret = {}
-    if type(seq) == "string" then return seq end
-    if is_array(seq) or is_map(seq) then return "[array/map]" end
+    if type(seq) == "string" then
+        return seq
+    end
+    if is_array(seq) or is_map(seq) then
+        return "[array/map]"
+    end
     if type(seq) == "number" then
         if seq ~= seq then
             return "NaN"
@@ -553,10 +569,12 @@ function string_value(seq)
             return tostring(seq)
         end
     end
-    if is_attribute(seq) then return seq.value end
+    if is_attribute(seq) then
+        return seq.value
+    end
     for _, itm in ipairs(seq) do
         if tonumber(itm) and itm ~= itm then
-            ret[#ret + 1] = 'NaN'
+            ret[#ret + 1] = "NaN"
         elseif is_element(itm) then
             for _, cld in ipairs(itm) do
                 ret[#ret + 1] = string_value(cld)
@@ -576,7 +594,6 @@ M.string_value = string_value
 M.boolean_value = boolean_value
 M.number_value = number_value
 
-
 local function docomparestring(op, left, right)
     if op == "=" then
         return left == right, nil
@@ -594,7 +611,6 @@ local function docomparestring(op, left, right)
         return nil, "not implemented: op " .. op
     end
 end
-
 
 local round_half_even
 
@@ -617,9 +633,12 @@ local function docomparenumber(op, left, right)
 end
 
 local function docomparefunc(op, leftitem, rightitem)
-    if is_attribute(leftitem) then leftitem = leftitem.value end
-    if is_attribute(rightitem) then rightitem = rightitem.value end
-
+    if is_attribute(leftitem) then
+        leftitem = leftitem.value
+    end
+    if is_attribute(rightitem) then
+        rightitem = rightitem.value
+    end
 
     if type(leftitem) == "boolean" or type(rightitem) == "boolean" then
         local x, errmsg = docomparestring(op, string_value({ leftitem }), string_value({ rightitem }))
@@ -643,15 +662,23 @@ local function docompare(op, lhs, rhs)
         local left, right, errmsg, ok
         local saved_sequence = ctx.sequence
         left, errmsg = lhs(ctx)
-        if errmsg ~= nil then return nil, errmsg end
+        if errmsg ~= nil then
+            return nil, errmsg
+        end
         ctx.sequence = saved_sequence
         right, errmsg = rhs(ctx:copy())
-        if errmsg ~= nil then return nil, errmsg end
+        if errmsg ~= nil then
+            return nil, errmsg
+        end
         for _, leftitem in ipairs(left) do
             for _, rightitem in ipairs(right) do
                 ok, errmsg = docomparefunc(op, leftitem, rightitem)
-                if errmsg ~= nil then return nil, errmsg end
-                if ok then return { true }, nil end
+                if errmsg ~= nil then
+                    return nil, errmsg
+                end
+                if ok then
+                    return { true }, nil
+                end
             end
         end
 
@@ -661,40 +688,48 @@ local function docompare(op, lhs, rhs)
 end
 
 local function patternescape(s)
-    return (s:gsub('%%', '%%%%')
-        :gsub('^%^', '%%^')
-        :gsub('%$$', '%%$')
-        :gsub('%(', '%%(')
-        :gsub('%)', '%%)')
-        :gsub('%.', '%%.')
-        :gsub('%[', '%%[')
-        :gsub('%]', '%%]')
-        :gsub('%*', '%%*')
-        :gsub('%+', '%%+')
-        :gsub('%-', '%%-')
-        :gsub('%?', '%%?'))
+    return (
+        s:gsub("%%", "%%%%")
+            :gsub("^%^", "%%^")
+            :gsub("%$$", "%%$")
+            :gsub("%(", "%%(")
+            :gsub("%)", "%%)")
+            :gsub("%.", "%%.")
+            :gsub("%[", "%%[")
+            :gsub("%]", "%%]")
+            :gsub("%*", "%%*")
+            :gsub("%+", "%%+")
+            :gsub("%-", "%%-")
+            :gsub("%?", "%%?")
+    )
 end
-
-
 
 local function fnAbs(_ctx, seq)
     local firstarg = seq[1]
     local n, errmsg = number_value(firstarg)
-    if not n or errmsg then return nil, errmsg end
+    if not n or errmsg then
+        return nil, errmsg
+    end
     return { math_abs(n) }, nil
 end
 
 local function fnBoolean(_ctx, seq)
     local firstarg = seq[1]
     local tf, errmsg = boolean_value(firstarg)
-    if tf == nil or errmsg then return nil, errmsg end
+    if tf == nil or errmsg then
+        return nil, errmsg
+    end
     return { tf }, nil
 end
 
 local function fnCeiling(_ctx, seq)
     local n, errmsg = number_value(seq[1])
-    if errmsg then return errmsg end
-    if n == nil then return { nan }, nil end
+    if errmsg then
+        return errmsg
+    end
+    if n == nil then
+        return { nan }, nil
+    end
     return { math_ceil(n) }, nil
 end
 
@@ -729,7 +764,9 @@ end
 
 local function fnCount(_ctx, seq)
     local firstarg = seq[1]
-    if not firstarg then return { 0 }, nil end
+    if not firstarg then
+        return { 0 }, nil
+    end
     return { #firstarg }, nil
 end
 
@@ -752,7 +789,7 @@ local function fnDoc(ctx, seq)
     local fn = M.findfile(firstarg)
     local xmltab = M.parse_xml(fn)
     ctx.sequence = xmltab
-    return {ctx.sequence}, nil
+    return { ctx.sequence }, nil
 end
 
 local function fnEmpty(_ctx, seq)
@@ -773,8 +810,12 @@ end
 
 local function fnFloor(_ctx, seq)
     local n, errmsg = number_value(seq[1])
-    if errmsg then return errmsg end
-    if n == nil then return { nan }, nil end
+    if errmsg then
+        return errmsg
+    end
+    if n == nil then
+        return { nan }, nil
+    end
     return { math_floor(n) }, nil
 end
 
@@ -803,7 +844,9 @@ local function fnFormatNumber(_ctx, seq)
 
     local function split_once(s, sep)
         local a, b = string_find(s, sep, 1, true)
-        if not a then return s, nil end
+        if not a then
+            return s, nil
+        end
         return string_sub(s, 1, a - 1), string_sub(s, b + 1)
     end
 
@@ -816,8 +859,12 @@ local function fnFormatNumber(_ctx, seq)
     end
     local picture = M.string_value(seq[2])
 
-    if n == nil then return { "NaN" }, nil end
-    if n ~= n then return { "NaN" }, nil end
+    if n == nil then
+        return { "NaN" }, nil
+    end
+    if n ~= n then
+        return { "NaN" }, nil
+    end
     if is_infinite(n) then
         return { (n < 0 and "-Infinity" or "Infinity") }, nil
     end
@@ -830,67 +877,105 @@ local function fnFormatNumber(_ctx, seq)
     --------------------------------------------------------------------------
     local function parse_pattern(pat)
         local scale = 1
-        if pat:find("%", 1, true) then scale = 100 end
-        if pat:find("‰", 1, true) then scale = 1000 end
+        if pat:find("%", 1, true) then
+            scale = 100
+        end
+        if pat:find("‰", 1, true) then
+            scale = 1000
+        end
 
         -- find first/last digit
         local firstIdx, lastIdx
         for i = 1, #pat do
-            local c = pat:sub(i,i)
-            if c == '0' or c == '#' then firstIdx = i; break end
+            local c = pat:sub(i, i)
+            if c == "0" or c == "#" then
+                firstIdx = i
+                break
+            end
         end
         for i = #pat, 1, -1 do
-            local c = pat:sub(i,i)
-            if c == '0' or c == '#' then lastIdx = i; break end
+            local c = pat:sub(i, i)
+            if c == "0" or c == "#" then
+                lastIdx = i
+                break
+            end
         end
         if not firstIdx then
             return {
-                prefix=pat, suffix="", intPat="", fracPat="",
-                minInt=0, minFrac=0, maxFrac=0, groupSize=0, scale=scale
+                prefix = pat,
+                suffix = "",
+                intPat = "",
+                fracPat = "",
+                minInt = 0,
+                minFrac = 0,
+                maxFrac = 0,
+                groupSize = 0,
+                scale = scale,
             }
         end
 
-        local prefix = pat:sub(1, firstIdx-1)
-        local core   = pat:sub(firstIdx, lastIdx)
-        local suffix = pat:sub(lastIdx+1)
+        local prefix = pat:sub(1, firstIdx - 1)
+        local core = pat:sub(firstIdx, lastIdx)
+        local suffix = pat:sub(lastIdx + 1)
 
         -- detect decimal point (robust loop)
         local dotPos
-        for i=1,#core do
-            if core:sub(i,i) == "." then dotPos = i; break end
+        for i = 1, #core do
+            if core:sub(i, i) == "." then
+                dotPos = i
+                break
+            end
         end
         local intPat, fracPat = core, ""
         if dotPos then
-            intPat  = core:sub(1, dotPos-1)
-            fracPat = core:sub(dotPos+1)
+            intPat = core:sub(1, dotPos - 1)
+            fracPat = core:sub(dotPos + 1)
         end
 
         -- grouping
         local lastCommaIdx
         for i = #intPat, 1, -1 do
-            if intPat:sub(i,i) == "," then lastCommaIdx = i; break end
+            if intPat:sub(i, i) == "," then
+                lastCommaIdx = i
+                break
+            end
         end
         local groupSize = 0
         if lastCommaIdx then
-            local tail = intPat:sub(lastCommaIdx+1):gsub("[^0#]","")
+            local tail = intPat:sub(lastCommaIdx + 1):gsub("[^0#]", "")
             groupSize = #tail
-            if groupSize == 0 then groupSize = 3 end
+            if groupSize == 0 then
+                groupSize = 3
+            end
         end
 
         -- count digits
-        local minInt, minFrac, maxFrac = 0,0,0
-        for i=1,#intPat do if intPat:sub(i,i) == '0' then minInt=minInt+1 end end
-        for i=1,#fracPat do
-            local c = fracPat:sub(i,i)
-            if c=='0' then minFrac=minFrac+1; maxFrac=maxFrac+1
-            elseif c=='#' then maxFrac=maxFrac+1 end
+        local minInt, minFrac, maxFrac = 0, 0, 0
+        for i = 1, #intPat do
+            if intPat:sub(i, i) == "0" then
+                minInt = minInt + 1
+            end
+        end
+        for i = 1, #fracPat do
+            local c = fracPat:sub(i, i)
+            if c == "0" then
+                minFrac = minFrac + 1
+                maxFrac = maxFrac + 1
+            elseif c == "#" then
+                maxFrac = maxFrac + 1
+            end
         end
 
         return {
-            prefix=prefix, suffix=suffix,
-            intPat=intPat, fracPat=fracPat,
-            minInt=minInt, minFrac=minFrac, maxFrac=maxFrac,
-            groupSize=groupSize, scale=scale
+            prefix = prefix,
+            suffix = suffix,
+            intPat = intPat,
+            fracPat = fracPat,
+            minInt = minInt,
+            minFrac = minFrac,
+            maxFrac = maxFrac,
+            groupSize = groupSize,
+            scale = scale,
         }
     end
 
@@ -898,18 +983,22 @@ local function fnFormatNumber(_ctx, seq)
     -- Grouping helper
     --------------------------------------------------------------------------
     local function apply_grouping(intStr, groupSize)
-        if not groupSize or groupSize <= 0 then return intStr end
+        if not groupSize or groupSize <= 0 then
+            return intStr
+        end
         local out, cnt = {}, 0
         for i = #intStr, 1, -1 do
-            out[#out+1] = intStr:sub(i,i)
+            out[#out + 1] = intStr:sub(i, i)
             cnt = cnt + 1
             if cnt == groupSize and i > 1 then
-                out[#out+1] = ","
+                out[#out + 1] = ","
                 cnt = 0
             end
         end
         local rev = {}
-        for i = #out, 1, -1 do rev[#rev+1] = out[i] end
+        for i = #out, 1, -1 do
+            rev[#rev + 1] = out[i]
+        end
         return table_concat(rev)
     end
 
@@ -921,11 +1010,13 @@ local function fnFormatNumber(_ctx, seq)
         local rounded = round_half_even((value or 0) * (P.scale or 1), maxF)
 
         local sign = ""
-        if rounded < 0 then sign = "-" end
+        if rounded < 0 then
+            sign = "-"
+        end
         local absval = math_abs(rounded)
 
         local intPart = math_floor(absval + 0.0)
-        local intStr  = tostring(intPart)
+        local intStr = tostring(intPart)
         if #intStr < (P.minInt or 0) then
             intStr = string_rep("0", (P.minInt or 0) - #intStr) .. intStr
         end
@@ -933,10 +1024,10 @@ local function fnFormatNumber(_ctx, seq)
 
         local fracStr = ""
         if maxF > 0 then
-            local m = 10^maxF
+            local m = 10 ^ maxF
             local scaled = math_floor(absval * m + 1e-9)
             local fracScaled = scaled % m
-            fracStr = string_format("%0"..maxF.."d", fracScaled)
+            fracStr = string_format("%0" .. maxF .. "d", fracScaled)
 
             if maxF > (P.minFrac or 0) then
                 local keep = math.max(P.minFrac or 0, 0)
@@ -947,7 +1038,7 @@ local function fnFormatNumber(_ctx, seq)
             end
 
             -- Heuristic: ensure one digit only if pattern is pure optional fraction and no int '0'
-            if fracStr == "" and (P.fracPat or "") ~= "" and (P.minFrac or 0)==0 and (P.minInt or 0)==0 then
+            if fracStr == "" and (P.fracPat or "") ~= "" and (P.minFrac or 0) == 0 and (P.minInt or 0) == 0 then
                 fracStr = "0"
             end
         end
@@ -973,7 +1064,6 @@ local function fnFormatNumber(_ctx, seq)
         return { format_with_pattern(n, Ppos) }, nil
     end
 end
-
 
 local function fnLast(ctx, _seq)
     return { ctx.size }, nil
@@ -1063,7 +1153,9 @@ local function fnMax(_ctx, seq)
             x = number_value({ itm })
         else
             local y = number_value({ itm })
-            if y > x then x = y end
+            if y > x then
+                x = y
+            end
         end
     end
     return { x }, nil
@@ -1086,7 +1178,9 @@ local function fnMin(_ctx, seq)
             x = number_value({ itm })
         else
             local y = number_value({ itm })
-            if y < x then x = y end
+            if y < x then
+                x = y
+            end
         end
     end
     return { x }, nil
@@ -1112,14 +1206,15 @@ end
 
 local function fnNumber(_ctx, seq)
     local x = number_value(seq[1])
-    if not x then return { nan }, nil end
+    if not x then
+        return { nan }, nil
+    end
     return { x }, nil
 end
 
 local function fnPosition(ctx, _seq)
     return { ctx.pos }, nil
 end
-
 
 local function fnReverse(_ctx, seq)
     local firstarg = seq[1]
@@ -1159,7 +1254,9 @@ local function fnRound(_ctx, seq)
     if errmsg then
         return nil, errmsg
     end
-    if not n then return { nan }, nil end
+    if not n then
+        return { nan }, nil
+    end
     return { math_floor(n + 0.5) }, nil
 end
 
@@ -1174,34 +1271,35 @@ local function fnString(ctx, seq)
     return { x }, nil
 end
 
-
 function round_half_even(value, precision)
-  if value == nil then
-    return nil
-  end
-  precision = precision or 0
-  local factor = 10 ^ precision
-  local shifted = value * factor
-  local floor_val = math_floor(shifted)
-  local frac = shifted - floor_val
-
-  if frac > 0.5 then
-    return (floor_val + 1) / factor
-  elseif frac < 0.5 then
-    return floor_val / factor
-  else
-    -- genau auf der Hälfte → round half to even
-    if floor_val % 2 == 0 then
-      return floor_val / factor
-    else
-      return (floor_val + 1) / factor
+    if value == nil then
+        return nil
     end
-  end
+    precision = precision or 0
+    local factor = 10 ^ precision
+    local shifted = value * factor
+    local floor_val = math_floor(shifted)
+    local frac = shifted - floor_val
+
+    if frac > 0.5 then
+        return (floor_val + 1) / factor
+    elseif frac < 0.5 then
+        return floor_val / factor
+    else
+        -- genau auf der Hälfte → round half to even
+        if floor_val % 2 == 0 then
+            return floor_val / factor
+        else
+            return (floor_val + 1) / factor
+        end
+    end
 end
 
 local function fnRoundHalfToEven(_ctx, seq)
     local firstarg = number_value(seq[1])
-    if not firstarg then return { nan }, nil end
+    if not firstarg then
+        return { nan }, nil
+    end
     local secondarg = 0
     if #seq > 1 then
         secondarg = number_value(seq[2]) or 0
@@ -1279,19 +1377,21 @@ local function fnSubstringAfter(_ctx, seq)
     local firstarg = string_value(seq[1])
     local secondarg = string_value(seq[2])
     local a, b = M.stringfind(firstarg, secondarg, 1, true)
-    if not a then return { "" }, nil end
+    if not a then
+        return { "" }, nil
+    end
     return { string_sub(firstarg, b + 1, -1) }
 end
-
 
 local function fnSubstringBefore(_ctx, seq)
     local firstarg = string_value(seq[1])
     local secondarg = string_value(seq[2])
     local a = M.stringfind(firstarg, secondarg, 1, true)
-    if not a then return { "" }, nil end
+    if not a then
+        return { "" }, nil
+    end
     return { string_sub(firstarg, 1, a - 1) }
 end
-
 
 -- XPath fn:translate(arg as xs:string?, from as xs:string, to as xs:string) as xs:string
 -- Requirements:
@@ -1306,15 +1406,23 @@ end
 
 local function fnTranslate(_ctx, seq)
     -- fetch arguments in the same style as other functions
-    local s, err1 = string_value(seq[1])   -- xs:string?  -> may be nil
-    if err1 then return err1 end
-    if s == nil then return { "" }, nil end
+    local s, err1 = string_value(seq[1]) -- xs:string?  -> may be nil
+    if err1 then
+        return err1
+    end
+    if s == nil then
+        return { "" }, nil
+    end
 
     local from, err2 = string_value(seq[2])
-    if err2 then return err2 end
+    if err2 then
+        return err2
+    end
 
     local to, err3 = string_value(seq[3])
-    if err3 then return err3 end
+    if err3 then
+        return err3
+    end
 
     -- Collect codepoints of 'to' into an array (1-based index corresponds to position P)
     local to_cps = {}
@@ -1324,16 +1432,16 @@ local function fnTranslate(_ctx, seq)
 
     -- Build mapping: codepoint_in_from -> replacement_codepoint or false (delete)
     -- Only the FIRST occurrence of a codepoint in 'from' is considered
-    local map = {}   -- map[codepoint] = replacement_cp (number) or false (delete); nil = unchanged
+    local map = {} -- map[codepoint] = replacement_cp (number) or false (delete); nil = unchanged
     local p = 0
     for _, cp in utf8.codes(from) do
         p = p + 1
         if map[cp] == nil then
             local rep = to_cps[p]
             if rep ~= nil then
-                map[cp] = rep       -- replace with to[p]
+                map[cp] = rep -- replace with to[p]
             else
-                map[cp] = false     -- delete
+                map[cp] = false -- delete
             end
         end
         -- If cp already seen: ignore (duplicates in 'from' are ignored)
@@ -1356,8 +1464,6 @@ local function fnTranslate(_ctx, seq)
     return { table_concat(out) }, nil
 end
 
-
-
 local function fnTrue(_ctx, _seq)
     return { true }, nil
 end
@@ -1365,13 +1471,13 @@ end
 local function fnUnparsedText(_ctx, seq)
     local firstarg = string_value(seq[1])
     local fn = M.findfile(firstarg)
-    local rd,msg = io.open(fn,"r")
+    local rd, msg = io.open(fn, "r")
     if not rd then
         return nil, msg
     end
     local txt = rd:read("a")
     rd:close()
-    return {txt},nil
+    return { txt }, nil
 end
 
 -- Not unicode aware!
@@ -1452,27 +1558,43 @@ end
 -- Array functions
 local function fnArraySize(_ctx, seq)
     local arr = seq[1]
-    if #arr == 1 and is_array(arr[1]) then arr = arr[1] end
-    if not is_array(arr) then return nil, "array:size expects an array" end
+    if #arr == 1 and is_array(arr[1]) then
+        arr = arr[1]
+    end
+    if not is_array(arr) then
+        return nil, "array:size expects an array"
+    end
     return { #arr * 1.0 }, nil
 end
 
 local function fnArrayGet(_ctx, seq)
     local arr = seq[1]
-    if #arr == 1 and is_array(arr[1]) then arr = arr[1] end
-    if not is_array(arr) then return nil, "array:get expects an array" end
+    if #arr == 1 and is_array(arr[1]) then
+        arr = arr[1]
+    end
+    if not is_array(arr) then
+        return nil, "array:get expects an array"
+    end
     local pos = number_value(seq[2])
-    if not pos or pos < 1 or pos > #arr then return nil, "array:get index out of bounds" end
+    if not pos or pos < 1 or pos > #arr then
+        return nil, "array:get index out of bounds"
+    end
     return arr[math_floor(pos)], nil
 end
 
 local function fnArrayPut(_ctx, seq)
     local arr = seq[1]
-    if #arr == 1 and is_array(arr[1]) then arr = arr[1] end
-    if not is_array(arr) then return nil, "array:put expects an array" end
+    if #arr == 1 and is_array(arr[1]) then
+        arr = arr[1]
+    end
+    if not is_array(arr) then
+        return nil, "array:put expects an array"
+    end
     local pos = math_floor(number_value(seq[2]))
     local val = seq[3]
-    if pos < 1 or pos > #arr then return nil, "array:put index out of bounds" end
+    if pos < 1 or pos > #arr then
+        return nil, "array:put index out of bounds"
+    end
     local members = {}
     for i = 1, #arr do
         if i == pos then
@@ -1486,22 +1608,34 @@ end
 
 local function fnArrayAppend(_ctx, seq)
     local arr = seq[1]
-    if #arr == 1 and is_array(arr[1]) then arr = arr[1] end
-    if not is_array(arr) then return nil, "array:append expects an array" end
+    if #arr == 1 and is_array(arr[1]) then
+        arr = arr[1]
+    end
+    if not is_array(arr) then
+        return nil, "array:append expects an array"
+    end
     local val = seq[2]
     local members = {}
-    for i = 1, #arr do members[i] = arr[i] end
+    for i = 1, #arr do
+        members[i] = arr[i]
+    end
     members[#members + 1] = val
     return { make_array(members) }, nil
 end
 
 local function fnArraySubarray(_ctx, seq)
     local arr = seq[1]
-    if #arr == 1 and is_array(arr[1]) then arr = arr[1] end
-    if not is_array(arr) then return nil, "array:subarray expects an array" end
+    if #arr == 1 and is_array(arr[1]) then
+        arr = arr[1]
+    end
+    if not is_array(arr) then
+        return nil, "array:subarray expects an array"
+    end
     local start = math_floor(number_value(seq[2]))
     local len = seq[3] and math_floor(number_value(seq[3])) or (#arr - start + 1)
-    if start < 1 or start + len - 1 > #arr then return nil, "array:subarray out of bounds" end
+    if start < 1 or start + len - 1 > #arr then
+        return nil, "array:subarray out of bounds"
+    end
     local members = {}
     for i = start, start + len - 1 do
         members[#members + 1] = arr[i]
@@ -1511,13 +1645,21 @@ end
 
 local function fnArrayRemove(_ctx, seq)
     local arr = seq[1]
-    if #arr == 1 and is_array(arr[1]) then arr = arr[1] end
-    if not is_array(arr) then return nil, "array:remove expects an array" end
+    if #arr == 1 and is_array(arr[1]) then
+        arr = arr[1]
+    end
+    if not is_array(arr) then
+        return nil, "array:remove expects an array"
+    end
     local pos = math_floor(number_value(seq[2]))
-    if pos < 1 or pos > #arr then return nil, "array:remove index out of bounds" end
+    if pos < 1 or pos > #arr then
+        return nil, "array:remove index out of bounds"
+    end
     local members = {}
     for i = 1, #arr do
-        if i ~= pos then members[#members + 1] = arr[i] end
+        if i ~= pos then
+            members[#members + 1] = arr[i]
+        end
     end
     return { make_array(members) }, nil
 end
@@ -1557,47 +1699,73 @@ end
 -- Map functions
 local function fnMapSize(_ctx, seq)
     local m = seq[1]
-    if #m == 1 and is_map(m[1]) then m = m[1] end
-    if not is_map(m) then return nil, "map:size expects a map" end
+    if #m == 1 and is_map(m[1]) then
+        m = m[1]
+    end
+    if not is_map(m) then
+        return nil, "map:size expects a map"
+    end
     local count = 0
-    for _ in pairs(m[".__entries"]) do count = count + 1 end
+    for _ in pairs(m[".__entries"]) do
+        count = count + 1
+    end
     return { count * 1.0 }, nil
 end
 
 local function fnMapKeys(_ctx, seq)
     local m = seq[1]
-    if #m == 1 and is_map(m[1]) then m = m[1] end
-    if not is_map(m) then return nil, "map:keys expects a map" end
+    if #m == 1 and is_map(m[1]) then
+        m = m[1]
+    end
+    if not is_map(m) then
+        return nil, "map:keys expects a map"
+    end
     local ret = {}
     for k in pairs(m[".__entries"]) do
         ret[#ret + 1] = k
     end
-    table.sort(ret, function(a, b) return tostring(a) < tostring(b) end)
+    table.sort(ret, function(a, b)
+        return tostring(a) < tostring(b)
+    end)
     return ret, nil
 end
 
 local function fnMapContains(_ctx, seq)
     local m = seq[1]
-    if #m == 1 and is_map(m[1]) then m = m[1] end
-    if not is_map(m) then return nil, "map:contains expects a map" end
+    if #m == 1 and is_map(m[1]) then
+        m = m[1]
+    end
+    if not is_map(m) then
+        return nil, "map:contains expects a map"
+    end
     local key = seq[2][1]
     return { m[".__entries"][key] ~= nil }, nil
 end
 
 local function fnMapGet(_ctx, seq)
     local m = seq[1]
-    if #m == 1 and is_map(m[1]) then m = m[1] end
-    if not is_map(m) then return nil, "map:get expects a map" end
+    if #m == 1 and is_map(m[1]) then
+        m = m[1]
+    end
+    if not is_map(m) then
+        return nil, "map:get expects a map"
+    end
     local key = seq[2][1]
     local entry = m[".__entries"][key]
-    if entry then return entry, nil end
+    if entry then
+        return entry, nil
+    end
     return {}, nil
 end
 
 local function fnMapPut(_ctx, seq)
     local m = seq[1]
-    if #m == 1 and is_map(m[1]) then m = m[1] end
-    if not is_map(m) then return nil, "map:put expects a map" end
+    if #m == 1 and is_map(m[1]) then
+        m = m[1]
+    end
+    if not is_map(m) then
+        return nil, "map:put expects a map"
+    end
     local key = seq[2][1]
     local val = seq[3]
     local new_entries = {}
@@ -1610,12 +1778,18 @@ end
 
 local function fnMapRemove(_ctx, seq)
     local m = seq[1]
-    if #m == 1 and is_map(m[1]) then m = m[1] end
-    if not is_map(m) then return nil, "map:remove expects a map" end
+    if #m == 1 and is_map(m[1]) then
+        m = m[1]
+    end
+    if not is_map(m) then
+        return nil, "map:remove expects a map"
+    end
     local key = seq[2][1]
     local new_entries = {}
     for k, v in pairs(m[".__entries"]) do
-        if k ~= key then new_entries[k] = v end
+        if k ~= key then
+            new_entries[k] = v
+        end
     end
     return { make_map(new_entries) }, nil
 end
@@ -1641,68 +1815,68 @@ end
 
 local funcs = {
     -- function name, namespace, function, minarg, maxarg
-    { "abs",                  M.fnNS, fnAbs,                1, 1 },
-    { "boolean",              M.fnNS, fnBoolean,            1, 1 },
-    { "ceiling",              M.fnNS, fnCeiling,            1, 1 },
+    { "abs", M.fnNS, fnAbs, 1, 1 },
+    { "boolean", M.fnNS, fnBoolean, 1, 1 },
+    { "ceiling", M.fnNS, fnCeiling, 1, 1 },
     { "codepoints-to-string", M.fnNS, fnCodepointsToString, 1, 1 },
     -- { "compare",              M.fnNS, fnCompare,             2, 2 },
-    { "concat",               M.fnNS, fnConcat,             0, -1 },
-    { "contains",             M.fnNS, fnContains,           2, 2 },
-    { "count",                M.fnNS, fnCount,              1, 1 },
-    { "distinct-values",      M.fnNS, fnDistinctValues,     1, 1 },
-    { "doc",                  M.fnNS, fnDoc,                1, 1 },
-    { "empty",                M.fnNS, fnEmpty,              1, 1 },
-    { "false",                M.fnNS, fnFalse,              0, 0 },
-    { "floor",                M.fnNS, fnFloor,              1, 1 },
-    { "format-number",        M.fnNS, fnFormatNumber,       2, 2 },
-    { "last",                 M.fnNS, fnLast,               0, 0 },
-    { "local-name",           M.fnNS, fnLocalName,          0, 1 },
-    { "lower-case",           M.fnNS, fnLowerCase,          1, 1 },
-    { "namespace-uri",        M.fnNS, fnNamespaceURI,       0, 1 },
-    { "max",                  M.fnNS, fnMax,                1, 1 },
-    { "matches",              M.fnNS, fnMatches,            2, 3 },
-    { "min",                  M.fnNS, fnMin,                1, 1 },
-    { "name",                 M.fnNS, fnName,               0, 1 },
-    { "normalize-space",      M.fnNS, fnNormalizeSpace,     1, 1 },
-    { "not",                  M.fnNS, fnNot,                1, 1 },
-    { "number",               M.fnNS, fnNumber,             1, 1 },
-    { "position",             M.fnNS, fnPosition,           0, 0 },
-    { "reverse",              M.fnNS, fnReverse,            1, 1 },
-    { "root",                 M.fnNS, fnRoot,               0, 1 },
-    { "round",                M.fnNS, fnRound,              1, 1 },
-    { "round-half-to-even",   M.fnNS, fnRoundHalfToEven,    1, 2 },
-    { "serialize",            M.fnNS, fnSerialize,          1, 1 },
-    { "starts-with",          M.fnNS, fnStartsWith,         2, 2 },
-    { "ends-with",            M.fnNS, fnEndsWith,           2, 2 },
-    { "substring-after",      M.fnNS, fnSubstringAfter,     2, 2 },
-    { "substring-before",     M.fnNS, fnSubstringBefore,    2, 2 },
-    { "string-join",          M.fnNS, fnStringJoin,         2, 2 },
-    { "string-length",        M.fnNS, fnStringLength,       0, 1 },
+    { "concat", M.fnNS, fnConcat, 0, -1 },
+    { "contains", M.fnNS, fnContains, 2, 2 },
+    { "count", M.fnNS, fnCount, 1, 1 },
+    { "distinct-values", M.fnNS, fnDistinctValues, 1, 1 },
+    { "doc", M.fnNS, fnDoc, 1, 1 },
+    { "empty", M.fnNS, fnEmpty, 1, 1 },
+    { "false", M.fnNS, fnFalse, 0, 0 },
+    { "floor", M.fnNS, fnFloor, 1, 1 },
+    { "format-number", M.fnNS, fnFormatNumber, 2, 2 },
+    { "last", M.fnNS, fnLast, 0, 0 },
+    { "local-name", M.fnNS, fnLocalName, 0, 1 },
+    { "lower-case", M.fnNS, fnLowerCase, 1, 1 },
+    { "namespace-uri", M.fnNS, fnNamespaceURI, 0, 1 },
+    { "max", M.fnNS, fnMax, 1, 1 },
+    { "matches", M.fnNS, fnMatches, 2, 3 },
+    { "min", M.fnNS, fnMin, 1, 1 },
+    { "name", M.fnNS, fnName, 0, 1 },
+    { "normalize-space", M.fnNS, fnNormalizeSpace, 1, 1 },
+    { "not", M.fnNS, fnNot, 1, 1 },
+    { "number", M.fnNS, fnNumber, 1, 1 },
+    { "position", M.fnNS, fnPosition, 0, 0 },
+    { "reverse", M.fnNS, fnReverse, 1, 1 },
+    { "root", M.fnNS, fnRoot, 0, 1 },
+    { "round", M.fnNS, fnRound, 1, 1 },
+    { "round-half-to-even", M.fnNS, fnRoundHalfToEven, 1, 2 },
+    { "serialize", M.fnNS, fnSerialize, 1, 1 },
+    { "starts-with", M.fnNS, fnStartsWith, 2, 2 },
+    { "ends-with", M.fnNS, fnEndsWith, 2, 2 },
+    { "substring-after", M.fnNS, fnSubstringAfter, 2, 2 },
+    { "substring-before", M.fnNS, fnSubstringBefore, 2, 2 },
+    { "string-join", M.fnNS, fnStringJoin, 2, 2 },
+    { "string-length", M.fnNS, fnStringLength, 0, 1 },
     { "string-to-codepoints", M.fnNS, fnStringToCodepoints, 1, 1 },
-    { "string",               M.fnNS, fnString,             0, 1 },
-    { "substring",            M.fnNS, fnSubstring,          2, 3 },
-    { "translate",            M.fnNS, fnTranslate,          3, 3 },
-    { "true",                 M.fnNS, fnTrue,               0, 0 },
-    { "unparsed-text",        M.fnNS, fnUnparsedText,       1, 1 },
-    { "upper-case",           M.fnNS, fnUpperCase,          1, 1 },
+    { "string", M.fnNS, fnString, 0, 1 },
+    { "substring", M.fnNS, fnSubstring, 2, 3 },
+    { "translate", M.fnNS, fnTranslate, 3, 3 },
+    { "true", M.fnNS, fnTrue, 0, 0 },
+    { "unparsed-text", M.fnNS, fnUnparsedText, 1, 1 },
+    { "upper-case", M.fnNS, fnUpperCase, 1, 1 },
     -- array functions
-    { "size",     M.arrayNS, fnArraySize,     1, 1 },
-    { "get",      M.arrayNS, fnArrayGet,      2, 2 },
-    { "put",      M.arrayNS, fnArrayPut,      3, 3 },
-    { "append",   M.arrayNS, fnArrayAppend,   2, 2 },
+    { "size", M.arrayNS, fnArraySize, 1, 1 },
+    { "get", M.arrayNS, fnArrayGet, 2, 2 },
+    { "put", M.arrayNS, fnArrayPut, 3, 3 },
+    { "append", M.arrayNS, fnArrayAppend, 2, 2 },
     { "subarray", M.arrayNS, fnArraySubarray, 2, 3 },
-    { "remove",   M.arrayNS, fnArrayRemove,   2, 2 },
-    { "join",     M.arrayNS, fnArrayJoin,     1, 1 },
-    { "flatten",  M.arrayNS, fnArrayFlatten,  1, 1 },
+    { "remove", M.arrayNS, fnArrayRemove, 2, 2 },
+    { "join", M.arrayNS, fnArrayJoin, 1, 1 },
+    { "flatten", M.arrayNS, fnArrayFlatten, 1, 1 },
     -- map functions
-    { "size",     M.mapNS, fnMapSize,     1, 1 },
-    { "keys",     M.mapNS, fnMapKeys,     1, 1 },
+    { "size", M.mapNS, fnMapSize, 1, 1 },
+    { "keys", M.mapNS, fnMapKeys, 1, 1 },
     { "contains", M.mapNS, fnMapContains, 2, 2 },
-    { "get",      M.mapNS, fnMapGet,      2, 2 },
-    { "put",      M.mapNS, fnMapPut,      3, 3 },
-    { "remove",   M.mapNS, fnMapRemove,   2, 2 },
-    { "merge",    M.mapNS, fnMapMerge,    1, 1 },
-    { "entry",    M.mapNS, fnMapEntry,    2, 2 },
+    { "get", M.mapNS, fnMapGet, 2, 2 },
+    { "put", M.mapNS, fnMapPut, 3, 3 },
+    { "remove", M.mapNS, fnMapRemove, 2, 2 },
+    { "merge", M.mapNS, fnMapMerge, 1, 1 },
+    { "entry", M.mapNS, fnMapEntry, 2, 2 },
 }
 
 local function registerFunction(func)
@@ -1730,15 +1904,24 @@ local function callFunction(fname, seq, ctx)
         fname = fn[2]
     end
     local func = getFunction(namespace, fname)
-    if not func then return {}, string_format("cannot find function with name %s",fname) end
+    if not func then
+        return {}, string_format("cannot find function with name %s", fname)
+    end
     local minarg, maxarg = func[4], func[5]
 
     if #seq < minarg or (maxarg ~= -1 and #seq > maxarg) then
         if minarg == maxarg then
-            return {}, string_format("function %s() requires %d arguments, %d supplied", table_concat(fn,':'), minarg, #seq)
+            return {},
+                string_format("function %s() requires %d arguments, %d supplied", table_concat(fn, ":"), minarg, #seq)
         else
-            return {}, string_format("function %s() requires %d to %d arguments, %d supplied", table_concat(fn,':'), minarg, maxarg,
-                #seq)
+            return {},
+                string_format(
+                    "function %s() requires %d to %d arguments, %d supplied",
+                    table_concat(fn, ":"),
+                    minarg,
+                    maxarg,
+                    #seq
+                )
         end
     end
 
@@ -1748,7 +1931,6 @@ local function callFunction(fname, seq, ctx)
 
     return {}, "Could not find function " .. fname .. " with name space " .. namespace
 end
-
 
 local function filter(ctx, f)
     local res = {}
@@ -1801,7 +1983,6 @@ local function filter(ctx, f)
     ctx.sequence = res
     return res, nil
 end
-
 
 -------------------------
 
@@ -1883,12 +2064,12 @@ function context:attributeaixs(testfunc)
                     value = value,
                     [".__type"] = "attribute",
                 }
-                if testfunc(self,x) then
+                if testfunc(self, x) then
                     seq[#seq + 1] = x
                 end
             end
         elseif is_attribute(itm) then
-            if testfunc(self,itm) then
+            if testfunc(self, itm) then
                 seq[#seq + 1] = itm
             end
         end
@@ -1905,7 +2086,7 @@ function context:childaxis(testfunc)
                 if is_element(child) then
                     child[".__parent"] = elt
                 end
-                if testfunc(self,child) then
+                if testfunc(self, child) then
                     seq[#seq + 1] = child
                 end
             end
@@ -1960,15 +2141,21 @@ function context:descendant(testfunc)
 end
 
 function context:following(testfunc)
-    local seq   = {}
+    local seq = {}
     local newself
     local ret, errmsg, _
-    newself     = self:copy()
+    newself = self:copy()
     _, errmsg = newself:followingSibling(testfunc)
-    if errmsg then return nil, errmsg end
+    if errmsg then
+        return nil, errmsg
+    end
     ret, errmsg = newself:descendantOrSelf(testfunc)
-    if errmsg then return nil, errmsg end
-    if not ret then return nil, "following: ret is empty" end
+    if errmsg then
+        return nil, errmsg
+    end
+    if not ret then
+        return nil, "following: ret is empty"
+    end
     for _, itm in ipairs(ret) do
         seq[#seq + 1] = itm
     end
@@ -1990,7 +2177,7 @@ function context:followingSibling(testfunc)
                         startCollecting = true
                     end
                 end
-                if startCollecting and testfunc(self,sibling) then
+                if startCollecting and testfunc(self, sibling) then
                     seq[#seq + 1] = sibling
                 end
             end
@@ -2052,7 +2239,7 @@ function context:parentAxis(testfunc)
     for _, elt in ipairs(self.sequence) do
         if is_element(elt) then
             local parent = elt[".__parent"]
-            if testfunc(self,parent) then
+            if testfunc(self, parent) then
                 seq[#seq + 1] = parent
             end
         end
@@ -2140,13 +2327,19 @@ end
 function context:precedingAxis(testfunc)
     local newself
     local ret, errmsg, _
-    local seq   = {}
-    newself     = self:copy()
+    local seq = {}
+    newself = self:copy()
     _, errmsg = newself:precedingSiblingAxis(testfunc)
-    if errmsg then return nil, errmsg end
+    if errmsg then
+        return nil, errmsg
+    end
     ret, errmsg = newself:descendantOrSelf(testfunc)
-    if errmsg then return nil, errmsg end
-    if not ret then return nil, "following: ret is empty" end
+    if errmsg then
+        return nil, errmsg
+    end
+    if not ret then
+        return nil, "following: ret is empty"
+    end
     for _, itm in ipairs(ret) do
         seq[#seq + 1] = itm
     end
@@ -2157,20 +2350,9 @@ end
 M.context = context
 -------------------------
 
-local parse_expr, parse_expr_single, parse_for_expr, parse_quantified_expr, parse_if_expr,
-      parse_or_expr, parse_and_expr, parse_comparison_expr, parse_string_concat_expr,
-      parse_range_expr, parse_additive_expr, parse_multiplicative_expr,
-      parse_union_expr, parse_intersect_except_expr, parse_instance_of_expr,
-      parse_treat_expr, parse_castable_expr, parse_cast_expr, parse_unary_expr,
-      parse_value_expr, parse_path_expr, parse_relative_path_expr,
-      parse_step_expr, parse_axis_step, parse_forward_step,
-      parse_node_test, parse_name_test, parse_wild_card,
-      parse_filter_expr, parse_primary_expr, parse_parenthesized_expr,
-      parse_function_call,
-      parse_kind_test, parse_any_kind_test, parse_element_test, parse_text_test
+local parse_expr, parse_expr_single, parse_for_expr, parse_quantified_expr, parse_if_expr, parse_or_expr, parse_and_expr, parse_comparison_expr, parse_string_concat_expr, parse_range_expr, parse_additive_expr, parse_multiplicative_expr, parse_union_expr, parse_intersect_except_expr, parse_instance_of_expr, parse_treat_expr, parse_castable_expr, parse_cast_expr, parse_unary_expr, parse_value_expr, parse_path_expr, parse_relative_path_expr, parse_step_expr, parse_axis_step, parse_forward_step, parse_node_test, parse_name_test, parse_wild_card, parse_filter_expr, parse_primary_expr, parse_parenthesized_expr, parse_function_call, parse_kind_test, parse_any_kind_test, parse_element_test, parse_text_test
 
 ---@type table sequence
-
 
 ---@alias evalfunc function(context) sequence?, string?
 ---@alias testfunc function(context) boolean?, string?
@@ -2226,7 +2408,11 @@ end
 function parse_expr_single(tl)
     local tok, errmsg
     tok = tl:peek()
-    if tok and tok[2] == "tokQName" and (tok[1] == "for" or tok[1] == "some" or tok[1] == "every" or tok[1] == "if") then
+    if
+        tok
+        and tok[2] == "tokQName"
+        and (tok[1] == "for" or tok[1] == "some" or tok[1] == "every" or tok[1] == "if")
+    then
         local ef
         if tok[1] == "for" then
             tl:read()
@@ -2252,7 +2438,6 @@ end
 -- [4] ForExpr ::= SimpleForClause "return" ExprSingle
 -- [5] SimpleForClause ::= "for" "$" VarName "in" ExprSingle ("," "$" VarName "in" ExprSingle)*
 function parse_for_expr(tl)
-
     local vartoken, errmsg = tl:read()
     if errmsg then
         return nil, errmsg
@@ -2286,13 +2471,17 @@ function parse_for_expr(tl)
     local evaler = function(ctx)
         local ret = {}
         local seqfc, err = sfc(ctx)
-        if err then return err end
+        if err then
+            return err
+        end
         for _, itm in ipairs(seqfc) do
             ctx.vars[varname] = { itm }
             ctx.context = { itm }
             local seq
             seq, err = ef(ctx)
-            if err then return nil, err end
+            if err then
+                return nil, err
+            end
             for i = 1, #seq do
                 ret[#ret + 1] = seq[i]
             end
@@ -2330,7 +2519,7 @@ function parse_quantified_expr(tl)
         local varname = vartok[1]
         local intok = tl:readNexttokIfIsOneOfValue({ "in" }, "tokQName")
         if not intok then
-            return nil, "\"in\" expected"
+            return nil, '"in" expected'
         end
         ef, errmsg = parse_expr_single(tl)
         if errmsg then
@@ -2339,11 +2528,13 @@ function parse_quantified_expr(tl)
         efs[#efs + 1] = ef
         varnames[#varnames + 1] = varname
         local comma = tl:readNexttokIfIsOneOfValue({ "," }, "tokComma")
-        if not comma then break end
+        if not comma then
+            break
+        end
     end
     local intok = tl:readNexttokIfIsOneOfValue({ "satisfies" }, "tokQName")
     if not intok then
-        return nil, "\"satisfies\" expected"
+        return nil, '"satisfies" expected'
     end
     local singleef
     singleef, errmsg = parse_expr_single(tl)
@@ -2359,11 +2550,15 @@ function parse_quantified_expr(tl)
             local step = efs[i]
             newcontext.sequence = copysequence
             local seq, err = step(newcontext)
-            if err then return nil, err end
+            if err then
+                return nil, err
+            end
             sequences[i] = seq
         end
         newcontext.sequence = copysequence
-        if singleef == nil then return nil, "single ef == nil" end
+        if singleef == nil then
+            return nil, "single ef == nil"
+        end
 
         local func
         func = function(vars, pending, body)
@@ -2448,9 +2643,13 @@ function parse_if_expr(tl)
     local ef = function(ctx)
         local res, bv, err
         res, err = boolEval(ctx)
-        if err then return nil, err end
+        if err then
+            return nil, err
+        end
         bv, err = boolean_value(res)
-        if err then return nil, err end
+        if err then
+            return nil, err
+        end
         if bv then
             return thenpart(ctx)
         end
@@ -2493,7 +2692,9 @@ function parse_or_expr(tl)
             if err ~= nil then
                 return nil, err
             end
-            if bv then return { true }, nil end
+            if bv then
+                return { true }, nil
+            end
         end
         return { false }, nil
     end
@@ -2530,10 +2731,16 @@ function parse_and_expr(tl)
             ef = efs[i]
             local newcontext = ctx:copy()
             seq, msg = ef(newcontext)
-            if msg then return nil, msg end
+            if msg then
+                return nil, msg
+            end
             ok, msg = boolean_value(seq)
-            if msg then return nil, msg end
-            if not ok then return { false }, nil end
+            if msg then
+                return nil, msg
+            end
+            if not ok then
+                return { false }, nil
+            end
         end
         return { true }, nil
     end
@@ -2552,9 +2759,23 @@ function parse_comparison_expr(tl)
         return nil, errmsg
     end
     local op
-    op, errmsg = tl:readNexttokIfIsOneOfValue({ "=", "<", ">", "<=", ">=", "!=", "eq", "ne", "lt", "le", "gt", "ge",
+    op, errmsg = tl:readNexttokIfIsOneOfValue({
+        "=",
+        "<",
+        ">",
+        "<=",
+        ">=",
+        "!=",
+        "eq",
+        "ne",
+        "lt",
+        "le",
+        "gt",
+        "ge",
         "is",
-        "<<", ">>" })
+        "<<",
+        ">>",
+    })
     if errmsg ~= nil then
         return nil, errmsg
     end
@@ -2601,13 +2822,17 @@ function parse_string_concat_expr(tl)
         if errmsg ~= nil then
             return nil, errmsg
         end
-        if not op then break end
+        if not op then
+            break
+        end
     end
     local evaler = function(ctx)
         local parts = {}
         for i, e in ipairs(efs) do
             local seq, err = e(ctx:copy())
-            if err then return nil, err end
+            if err then
+                return nil, err
+            end
             parts[i] = string_value(seq)
         end
         return { table_concat(parts) }, nil
@@ -2644,15 +2869,23 @@ function parse_range_expr(tl)
         local lhs, rhs, msg
         local saved_sequence = ctx.sequence
         lhs, msg = efs[1](ctx)
-        if msg then return nil, msg end
+        if msg then
+            return nil, msg
+        end
         ctx.sequence = saved_sequence
         rhs, msg = efs[2](ctx:copy())
-        if msg then return nil, msg end
+        if msg then
+            return nil, msg
+        end
         local lhsn, rhsn
         lhsn, msg = number_value(lhs)
-        if msg then return nil, msg end
+        if msg then
+            return nil, msg
+        end
         rhsn, msg = number_value(rhs)
-        if msg then return nil, msg end
+        if msg then
+            return nil, msg
+        end
         local seq = {}
         for i = lhsn, rhsn do
             seq[#seq + 1] = i
@@ -2681,7 +2914,9 @@ function parse_additive_expr(tl)
         if errmsg ~= nil then
             return nil, errmsg
         end
-        if not op then break end
+        if not op then
+            break
+        end
         operators[#operators + 1] = op[1]
     end
     if #efs == 1 then
@@ -2691,17 +2926,25 @@ function parse_additive_expr(tl)
     local evaler = function(ctx)
         local saved_sequence = ctx.sequence
         local s0, errmsg = efs[1](ctx)
-        if errmsg ~= nil then return nil, errmsg end
+        if errmsg ~= nil then
+            return nil, errmsg
+        end
         local sum
         sum, errmsg = number_value(s0)
-        if errmsg ~= nil then return nil, errmsg end
+        if errmsg ~= nil then
+            return nil, errmsg
+        end
         for i = 2, #efs do
             ctx.sequence = saved_sequence
             s0, errmsg = efs[i](ctx:copy())
-            if errmsg ~= nil then return nil, errmsg end
+            if errmsg ~= nil then
+                return nil, errmsg
+            end
             local val
             val, errmsg = number_value(s0)
-            if errmsg ~= nil then return nil, errmsg end
+            if errmsg ~= nil then
+                return nil, errmsg
+            end
 
             if operators[i - 1] == "+" then
                 sum = sum + val
@@ -2720,7 +2963,6 @@ end
 ---@return evalfunc?
 ---@return string? error
 function parse_multiplicative_expr(tl)
-
     local efs = {}
     local operators = {}
     while true do
@@ -2734,7 +2976,9 @@ function parse_multiplicative_expr(tl)
         if errmsg ~= nil then
             return nil, errmsg
         end
-        if not op then break end
+        if not op then
+            break
+        end
         operators[#operators + 1] = op[1]
     end
     if #efs == 1 then
@@ -2744,18 +2988,28 @@ function parse_multiplicative_expr(tl)
     local evaler = function(ctx)
         local saved_sequence = ctx.sequence
         local s0, errmsg = efs[1](ctx)
-        if errmsg ~= nil then return nil, errmsg end
+        if errmsg ~= nil then
+            return nil, errmsg
+        end
         local result
         result, errmsg = number_value(s0)
-        if errmsg ~= nil then return nil, errmsg end
-        if not result then return nil, "number expected" end
+        if errmsg ~= nil then
+            return nil, errmsg
+        end
+        if not result then
+            return nil, "number expected"
+        end
         for i = 2, #efs do
             ctx.sequence = saved_sequence
             s0, errmsg = efs[i](ctx:copy())
-            if errmsg ~= nil then return nil, errmsg end
+            if errmsg ~= nil then
+                return nil, errmsg
+            end
             local val
             val, errmsg = number_value(s0)
-            if errmsg ~= nil then return nil, errmsg end
+            if errmsg ~= nil then
+                return nil, errmsg
+            end
 
             if operators[i - 1] == "*" then
                 result = result * val
@@ -2764,7 +3018,7 @@ function parse_multiplicative_expr(tl)
                 if val == 0 then
                     if result == 0 then
                         -- 0 div 0 => NaN
-                        result = 0/0
+                        result = 0 / 0
                     else
                         -- x div 0 => ±Infinity depending on sign of numerator
                         result = (result > 0) and math_huge or -math_huge
@@ -2775,7 +3029,9 @@ function parse_multiplicative_expr(tl)
             elseif operators[i - 1] == "idiv" then
                 local d = result / val
                 local sign = 1
-                if d < 0 then sign = -1 end
+                if d < 0 then
+                    sign = -1
+                end
                 result = math_floor(math_abs(d)) * sign
             elseif operators[i - 1] == "mod" then
                 result = result % val
@@ -2864,13 +3120,19 @@ function parse_castable_expr(tl)
 
         local evaler = function(ctx)
             local seq, err = ef(ctx)
-            if err ~= nil then return nil, err end
+            if err ~= nil then
+                return nil, err
+            end
             if tok[1] == "xs:double" then
                 local nv, _ = number_value(seq)
-                if nv then return { true }, nil end
+                if nv then
+                    return { true }, nil
+                end
             elseif tok[1] == "xs:string" then
                 local sv, _ = string_value(seq)
-                if sv then return { true }, nil end
+                if sv then
+                    return { true }, nil
+                end
             end
             return { false }, nil
         end
@@ -2912,7 +3174,9 @@ function parse_unary_expr(tl)
             tl:unread()
             break
         end
-        if tok[1] == "-" then mult = mult * -1 end
+        if tok[1] == "-" then
+            mult = mult * -1
+        end
     end
 
     local ef, errmsg = parse_value_expr(tl)
@@ -2920,7 +3184,9 @@ function parse_unary_expr(tl)
         return nil, errmsg
     end
     if ef == nil then
-        return function() return {}, nil end, nil
+        return function()
+            return {}, nil
+        end, nil
     end
 
     local evaler = function(ctx)
@@ -2961,7 +3227,7 @@ end
 ---@return string? error
 function parse_path_expr(tl)
     local op
-    if tl:nextTokIsType('tokOperator') then
+    if tl:nextTokIsType("tokOperator") then
         op = tl:readNexttokIfIsOneOfValue({ "/", "//" })
     end
     local _, eof = tl:peek()
@@ -2986,10 +3252,14 @@ function parse_path_expr(tl)
         local evaler = function(ctx)
             ctx:document()
             if op[1] == "//" then
-                ctx:descendantOrSelf(function() return true end)
+                ctx:descendantOrSelf(function()
+                    return true
+                end)
             end
             local seq, msg = rpe(ctx)
-            if msg then return nil, msg end
+            if msg then
+                return nil, msg
+            end
             return seq, nil
         end
         return evaler, nil
@@ -3004,7 +3274,6 @@ end
 ---@return evalfunc?
 ---@return string? error
 function parse_relative_path_expr(tl)
-
     local efs = {}
     local ops = {}
     while true do
@@ -3014,7 +3283,9 @@ function parse_relative_path_expr(tl)
         end
         efs[#efs + 1] = ef
         local nt, eof = tl:peek()
-        if eof then break end
+        if eof then
+            break
+        end
         if nt and nt[2] == "tokOperator" and (nt[1] == "/" or nt[1] == "//") then
             ops[#ops + 1] = nt[1]
             tl:read()
@@ -3050,7 +3321,9 @@ function parse_relative_path_expr(tl)
             end
             ctx.sequence = retseq
             if i <= #ops and ops[i] == "//" then
-                ctx:descendantOrSelf(function(_ctx,itm) return is_element(itm) end)
+                ctx:descendantOrSelf(function(_ctx, itm)
+                    return is_element(itm)
+                end)
             end
         end
         return retseq, nil
@@ -3114,7 +3387,9 @@ function parse_axis_step(tl)
             ctx.sequence = seq
             for _, predicate in ipairs(predicates) do
                 local _, perr = filter(ctx, predicate)
-                if perr then return nil, perr end
+                if perr then
+                    return nil, perr
+                end
             end
             ctx.size = #ctx.sequence
             return ctx.sequence, nil
@@ -3184,7 +3459,9 @@ function parse_forward_step(tl)
 
     if tl:nextTokIsType("tokOperator") and tl:readNexttokIfIsOneOfValue({ ".." }) then
         local evaler = function(ctx)
-            local seq, err = ctx:parentAxis(function() return true end)
+            local seq, err = ctx:parentAxis(function()
+                return true
+            end)
             if err then
                 return nil, err
             end
@@ -3209,7 +3486,9 @@ function parse_forward_step(tl)
         return nil, nil
     end
     local evaler = function(ctx)
-        if not tf then return nil, nil end
+        if not tf then
+            return nil, nil
+        end
         if not ctx.xmldoc then
             return nil, "XML not set, aborting"
         end
@@ -3264,7 +3543,6 @@ function parse_forward_step(tl)
         return ret, nil
     end
 
-
     return evaler, nil
 end
 
@@ -3314,14 +3592,14 @@ function parse_name_test(tl)
                 if is_element(itm) then
                     if M.ignoreNS then
                         -- name might have a namespace prefix
-                        name = string_gsub(name,"^(.*:)","")
+                        name = string_gsub(name, "^(.*:)", "")
                         return itm[".__local_name"] == name
                     end
-                    local prefix, locname = string_match(name,"(.*):(.*)")
+                    local prefix, locname = string_match(name, "(.*):(.*)")
                     prefix = prefix or ""
                     locname = locname or name
                     local ns = ctx.namespaces[prefix]
-                    return itm[".__local_name"] == locname and itm[".__namespace"] == ( ns or "" )
+                    return itm[".__local_name"] == locname and itm[".__namespace"] == (ns or "")
                 end
                 return false
             end
@@ -3348,14 +3626,14 @@ function parse_wild_card(tl)
                 end
             end
         else
-            tf = function(ctx,itm)
+            tf = function(ctx, itm)
                 if not is_element(itm) then
                     return false
                 end
-                if str == '*' then
+                if str == "*" then
                     return true
                 end
-                local prefix, locname = string_match(str,"(.*):(.*)")
+                local prefix, locname = string_match(str, "(.*):(.*)")
                 if prefix == "*" then
                     if itm[".__local_name"] == locname then
                         return true
@@ -3380,7 +3658,9 @@ local function do_lookup(seq, key_ef, ctx)
     local ret = {}
     -- key_ef returns: {value} for a specific key, or "wildcard" sentinel
     local key_seq, kerr = key_ef(ctx:copy())
-    if kerr then return nil, kerr end
+    if kerr then
+        return nil, kerr
+    end
 
     for _, itm in ipairs(seq) do
         if is_array(itm) then
@@ -3409,7 +3689,9 @@ local function do_lookup(seq, key_ef, ctx)
                 end
             else
                 local key = key_seq[1]
-                if type(key) == "number" then key = key end
+                if type(key) == "number" then
+                    key = key
+                end
                 local entry = itm[".__entries"][key]
                 if entry then
                     for _, v in ipairs(entry) do
@@ -3425,26 +3707,36 @@ end
 -- KeySpecifier ::= NCName | IntegerLiteral | ParenthesizedExpr | "*"
 local function parse_key_specifier(tl)
     local tok, eof = tl:peek()
-    if eof then return nil, "key specifier expected" end
+    if eof then
+        return nil, "key specifier expected"
+    end
 
     if tok[2] == "tokOperator" and tok[1] == "*" then
         tl:read()
-        return function(_ctx) return "*", nil end, nil
+        return function(_ctx)
+            return "*", nil
+        end, nil
     end
     if tok[2] == "tokNumber" then
         tl:read()
         local num = tok[1]
-        return function(_ctx) return { num }, nil end, nil
+        return function(_ctx)
+            return { num }, nil
+        end, nil
     end
     if tok[2] == "tokQName" then
         tl:read()
         local name = tok[1]
-        return function(_ctx) return { name }, nil end, nil
+        return function(_ctx)
+            return { name }, nil
+        end, nil
     end
     if tok[2] == "tokOpenParen" then
         tl:read()
         local ef, err = parse_expr(tl)
-        if err then return nil, err end
+        if err then
+            return nil, err
+        end
         if not tl:skipType("tokCloseParen") then
             return nil, ") expected in key specifier"
         end
@@ -3483,13 +3775,17 @@ function parse_filter_expr(tl)
                 ctx.sequence = seq
                 return filter(ctx, f)
             end
-        elseif tl:readNexttokIfIsOneOfValue({"?"}, "tokOperator") then
+        elseif tl:readNexttokIfIsOneOfValue({ "?" }, "tokOperator") then
             local key_ef, kerr = parse_key_specifier(tl)
-            if kerr then return nil, kerr end
+            if kerr then
+                return nil, kerr
+            end
             local prev_ef = ef
             ef = function(ctx)
                 local seq, serr = prev_ef(ctx:copy())
-                if serr then return nil, serr end
+                if serr then
+                    return nil, serr
+                end
                 return do_lookup(seq, key_ef, ctx)
             end
         else
@@ -3533,20 +3829,24 @@ function parse_primary_expr(tl)
         return ef, nil
     end
 
-
     -- VarRef
     if nexttok[2] == "tokVarname" then
         local evaler = function(ctx)
             local varname = nexttok[1]
             local value = ctx.vars[varname]
-            if value == nil then return nil, string_format("variable %s does not exist", varname) end
-            if is_array(value) or is_map(value) then return { value }, nil end
-            if type(value) == "table" then return value, nil end
+            if value == nil then
+                return nil, string_format("variable %s does not exist", varname)
+            end
+            if is_array(value) or is_map(value) then
+                return { value }, nil
+            end
+            if type(value) == "table" then
+                return value, nil
+            end
             return { value }, nil
         end
         return evaler, nil
     end
-
 
     if nexttok[2] == "tokOperator" and nexttok[1] == "." then
         local evaler = function(ctx)
@@ -3558,7 +3858,9 @@ function parse_primary_expr(tl)
     -- Unary lookup ?key (context item)
     if nexttok[2] == "tokOperator" and nexttok[1] == "?" then
         local key_ef, key_err = parse_key_specifier(tl)
-        if key_err then return nil, key_err end
+        if key_err then
+            return nil, key_err
+        end
         local evaler = function(ctx)
             return do_lookup(ctx.sequence, key_ef, ctx)
         end
@@ -3569,14 +3871,20 @@ function parse_primary_expr(tl)
     if nexttok[2] == "tokOpenBracket" then
         if tl:nextTokIsType("tokCloseBracket") then
             tl:read()
-            return function(_ctx) return { make_array({}) }, nil end, nil
+            return function(_ctx)
+                return { make_array({}) }, nil
+            end, nil
         end
         local members = {}
         while true do
             local mef, merr = parse_expr_single(tl)
-            if merr then return nil, merr end
+            if merr then
+                return nil, merr
+            end
             members[#members + 1] = mef
-            if not tl:nextTokIsType("tokComma") then break end
+            if not tl:nextTokIsType("tokComma") then
+                break
+            end
             tl:read()
         end
         if not tl:skipType("tokCloseBracket") then
@@ -3586,7 +3894,9 @@ function parse_primary_expr(tl)
             local arr_members = {}
             for _, mef in ipairs(members) do
                 local seq, err = mef(ctx:copy())
-                if err then return nil, err end
+                if err then
+                    return nil, err
+                end
                 arr_members[#arr_members + 1] = seq
             end
             return { make_array(arr_members) }, nil
@@ -3601,17 +3911,23 @@ function parse_primary_expr(tl)
             tl:read() -- consume '{'
             if tl:nextTokIsType("tokCloseCurly") then
                 tl:read()
-                return function(_ctx) return { make_array({}) }, nil end, nil
+                return function(_ctx)
+                    return { make_array({}) }, nil
+                end, nil
             end
             local ef
             ef, errmsg = parse_expr(tl)
-            if errmsg then return nil, errmsg end
+            if errmsg then
+                return nil, errmsg
+            end
             if not tl:skipType("tokCloseCurly") then
                 return nil, "} expected in array constructor"
             end
             local evaler = function(ctx)
                 local seq, err = ef(ctx:copy())
-                if err then return nil, err end
+                if err then
+                    return nil, err
+                end
                 local members = {}
                 for _, itm in ipairs(seq) do
                     members[#members + 1] = { itm }
@@ -3626,21 +3942,29 @@ function parse_primary_expr(tl)
             tl:read() -- consume '{'
             if tl:nextTokIsType("tokCloseCurly") then
                 tl:read()
-                return function(_ctx) return { make_map({}) }, nil end, nil
+                return function(_ctx)
+                    return { make_map({}) }, nil
+                end, nil
             end
             local entries = {} -- list of {key_ef, value_ef}
             while true do
                 local key_ef, kerr = parse_expr_single(tl)
-                if kerr then return nil, kerr end
+                if kerr then
+                    return nil, kerr
+                end
                 -- expect ':' separator
                 local colon = tl:readNexttokIfIsOneOfValue({ ":" })
                 if not colon then
                     return nil, ": expected in map constructor"
                 end
                 local val_ef, verr = parse_expr_single(tl)
-                if verr then return nil, verr end
+                if verr then
+                    return nil, verr
+                end
                 entries[#entries + 1] = { key_ef, val_ef }
-                if not tl:nextTokIsType("tokComma") then break end
+                if not tl:nextTokIsType("tokComma") then
+                    break
+                end
                 tl:read()
             end
             if not tl:skipType("tokCloseCurly") then
@@ -3650,11 +3974,17 @@ function parse_primary_expr(tl)
                 local map_entries = {}
                 for _, entry in ipairs(entries) do
                     local kseq, kerr = entry[1](ctx:copy())
-                    if kerr then return nil, kerr end
+                    if kerr then
+                        return nil, kerr
+                    end
                     local vseq, verr = entry[2](ctx:copy())
-                    if verr then return nil, verr end
+                    if verr then
+                        return nil, verr
+                    end
                     local key = kseq[1]
-                    if type(key) == "table" then key = string_value(key) end
+                    if type(key) == "table" then
+                        key = string_value(key)
+                    end
                     map_entries[key] = vseq
                 end
                 return { make_map(map_entries) }, nil
@@ -3664,10 +3994,17 @@ function parse_primary_expr(tl)
 
         if tl:nextTokIsType("tokOpenParen") then
             local fnname = nexttok[1]
-            if fnname == "node" or fnname == "element" or fnname == "text"
-                or fnname == "comment" or fnname == "schema-attribute"
-                or fnname == "schema-element" or fnname == "attribute"
-                or fnname == "document" or fnname == "processing-instruction" then
+            if
+                fnname == "node"
+                or fnname == "element"
+                or fnname == "text"
+                or fnname == "comment"
+                or fnname == "schema-attribute"
+                or fnname == "schema-element"
+                or fnname == "attribute"
+                or fnname == "document"
+                or fnname == "processing-instruction"
+            then
                 tl:unread()
                 return nil, nil
             end
@@ -3693,7 +4030,9 @@ function parse_parenthesized_expr(tl)
     -- shortcut for empty sequence ():
     if tl:nextTokIsType("tokCloseParen") then
         tl:read()
-        return function(_ctx) return {}, nil end
+        return function(_ctx)
+            return {}, nil
+        end
     end
 
     local ef, errmsg = parse_expr(tl)
@@ -3760,7 +4099,9 @@ function parse_function_call(tl)
         for _, ef in ipairs(efs) do
             local newctx = ctx:copy()
             seq, err = ef(newctx)
-            if err ~= nil then return nil, err end
+            if err ~= nil then
+                return nil, err
+            end
             arguments[#arguments + 1] = seq
         end
         return callFunction(function_name_token[1], arguments, ctx)
@@ -3839,7 +4180,7 @@ function parse_element_test(tl)
                 tl:read()
                 tl:read()
                 tl:read()
-                local tf = function(_ctx,itm)
+                local tf = function(_ctx, itm)
                     return is_element(itm), nil
                 end
                 return tf, nil
@@ -3890,7 +4231,9 @@ local parse_cache = {}
 
 local function get_cached_evaler(xpathstring)
     local evaler = parse_cache[xpathstring]
-    if evaler then return evaler, nil end
+    if evaler then
+        return evaler, nil
+    end
     local toks, msg = M.string_to_tokenlist(xpathstring)
     if toks == nil then
         return nil, msg
@@ -3916,8 +4259,12 @@ end
 ---@return string? error
 function context:eval(xpathstring)
     local evaler, errmsg = get_cached_evaler(xpathstring)
-    if errmsg then return nil, errmsg end
-    if evaler == false then return {}, nil end
+    if errmsg then
+        return nil, errmsg
+    end
+    if evaler == false then
+        return {}, nil
+    end
     local copy = self:copy()
     return evaler(copy)
 end
@@ -3928,8 +4275,12 @@ end
 ---@return string? error
 function context:execute(xpathstring)
     local evaler, errmsg = get_cached_evaler(xpathstring)
-    if errmsg then return nil, errmsg end
-    if evaler == false then return {}, nil end
+    if errmsg then
+        return nil, errmsg
+    end
+    if evaler == false then
+        return {}, nil
+    end
     return evaler(self)
 end
 

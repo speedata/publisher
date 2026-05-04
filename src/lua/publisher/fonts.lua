@@ -20,9 +20,9 @@ local colors_module = require("publisher.colors")
 local M = {}
 
 ---@type table<string, { [1]: string, [2]: table }>
-local lookup_fontname_filename={}
+local lookup_fontname_filename = {}
 ---@type table<integer, table>
-local font_instances={}
+local font_instances = {}
 
 ---@type table<integer, true>
 M.used_fonts = {}
@@ -35,25 +35,23 @@ local used_fonts = M.used_fonts
 ---@type table<string, table<integer, integer>>
 M.missing_glyph_counts = {}
 
-local glue_node      = node.id("glue")
-local glyph_node     = node.id("glyph")
-local disc_node      = node.id("disc")
-local rule_node      = node.id("rule")
-local dir_node       = node.id("dir")
-local kern_node      = node.id("kern")
-local penalty_node   = node.id("penalty")
-local whatsit_node   = node.id("whatsit")
-local hlist_node     = node.id("hlist")
-local vlist_node     = node.id("vlist")
-
+local glue_node = node.id("glue")
+local glyph_node = node.id("glyph")
+local disc_node = node.id("disc")
+local rule_node = node.id("rule")
+local dir_node = node.id("dir")
+local kern_node = node.id("kern")
+local penalty_node = node.id("penalty")
+local whatsit_node = node.id("whatsit")
+local hlist_node = node.id("hlist")
+local vlist_node = node.id("vlist")
 
 local pdf_dest_whatsit
-for k,v in pairs(node.whatsits()) do
+for k, v in pairs(node.whatsits()) do
     if v == "pdf_dest" then
         pdf_dest_whatsit = k
     end
 end
-
 
 -- Every font family ("text", "Chapter") defined via `DefineFontfamily`
 -- gets an internal number. This table maps the family name to that number.
@@ -67,7 +65,6 @@ M.lookup_fontfamily_name_number = {}
 M.lookup_fontfamily_number_instance = {}
 local lookup_fontfamily_number_instance = M.lookup_fontfamily_number_instance
 
-
 -- Registers a font face under `name`, mapped to `filename` plus optional
 -- per-call parameters. The actual loading is deferred until the face is
 -- first used.
@@ -78,21 +75,23 @@ local lookup_fontfamily_number_instance = M.lookup_fontfamily_number_instance
 function M.load_fontfile(name, filename, parameter_tab)
     assert(filename)
     assert(name)
-    lookup_fontname_filename[name]={filename,parameter_tab or {}}
+    lookup_fontname_filename[name] = { filename, parameter_tab or {} }
     return true
 end
 
-function table.find(tab,key)
+function table.find(tab, key)
     assert(tab)
     assert(key)
     local found
-    for k_tab,v_tab in pairs(tab) do
-        if type(key)=="table" then
+    for k_tab, v_tab in pairs(tab) do
+        if type(key) == "table" then
             found = true
-            for k_key,v_key in pairs(key) do
-                if k_tab[k_key]~= v_key then found = false end
+            for k_key, v_key in pairs(key) do
+                if k_tab[k_key] ~= v_key then
+                    found = false
+                end
             end
-            if found==true then
+            if found == true then
                 return v_tab
             end
         end
@@ -102,20 +101,19 @@ end
 
 local preloaded_fonts = {}
 
-
 -- Resolves a font face name. Used from `html.lua` when a CSS rule
 -- references a font face by URL or local name. If `localname` is not
 -- registered but `url` is given, the URL is auto-loaded and returned.
 ---@param localname string?
 ---@param url string?
 ---@return string? face_name
-function M.get_fontname( localname, url )
+function M.get_fontname(localname, url)
     localname = publisher.fontfamilies.get_fontname(localname)
     -- w("get_fontname, localname %q",tostring(localname))
     if localname and lookup_fontname_filename[localname] then
         return localname
     elseif url then
-        M.load_fontfile(url,url)
+        M.load_fontfile(url, url)
         return url
     end
     return nil
@@ -130,37 +128,52 @@ end
 ---@param size integer Size in scaled points.
 ---@return boolean ok `false` on failure (e.g. missing file).
 ---@return integer|string id_or_error Instance id on success, error message on failure.
-function M.make_font_instance( name,size )
+function M.make_font_instance(name, size)
     -- Name is something like "TeXGyreHeros-Regular", the visible name of the font file
     assert(name)
     assert(tonumber(size))
     if not lookup_fontname_filename[name] then
         local msg = string.format("Font instance '%s' is not defined!", name)
-        main.log("error","Make font instance: filename is not defined","filename",name)
+        main.log("error", "Make font instance: filename is not defined", "filename", name)
         return false, msg
     end
-    local filename,parameter = table.unpack(lookup_fontname_filename[name])
+    local filename, parameter = table.unpack(lookup_fontname_filename[name])
     assert(filename)
-    local k = {filename = filename, fontsize = size, space = parameter.space, mode = parameter.mode or publisher.options.fontloader,fallbacks = parameter.fallbacks}
+    local k = {
+        filename = filename,
+        fontsize = size,
+        space = parameter.space,
+        mode = parameter.mode or publisher.options.fontloader,
+        fallbacks = parameter.fallbacks,
+    }
 
     if parameter.otfeatures then
-        for fea,enabled in pairs(parameter.otfeatures) do
+        for fea, enabled in pairs(parameter.otfeatures) do
             if enabled then
                 k[fea] = true
             end
         end
     end
-    local fontnumber = table.find(font_instances,k)
+    local fontnumber = table.find(font_instances, k)
     if fontnumber then
-        return true,fontnumber
+        return true, fontnumber
     else
         local f
         local num = font.nextid(true)
-        f = fontloader_mod.preload_font(filename,size,parameter,parameter.mode or publisher.options.fontloader)
+        f = fontloader_mod.preload_font(filename, size, parameter, parameter.mode or publisher.options.fontloader)
         f.reserved_num = num
         preloaded_fonts[num] = f
-        main.log("debug","Preload font","name",filename,"size",tostring(math.round(size / publisher.factor,3)),"id",tostring(num))
-        font_instances[k]=num
+        main.log(
+            "debug",
+            "Preload font",
+            "name",
+            filename,
+            "size",
+            tostring(math.round(size / publisher.factor, 3)),
+            "id",
+            tostring(num)
+        )
+        font_instances[k] = num
         return true, num
     end
 end
@@ -173,20 +186,39 @@ end
 function M.define_font(instance)
     local mode = instance.requested_mode
     local num = instance.reserved_num
-    main.log("info","Create font metrics","name",instance.requested_name,"size",math.round(instance.requested_size / publisher.factor,3),"id",num,"mode",mode)
+    main.log(
+        "info",
+        "Create font metrics",
+        "name",
+        instance.requested_name,
+        "size",
+        math.round(instance.requested_size / publisher.factor, 3),
+        "id",
+        num,
+        "mode",
+        mode
+    )
     local f, ok
     if mode == "harfbuzz" then
-        ok,f = fontloader_mod.define_font_hb(instance.requested_name,instance.requested_size,instance.requested_extra_parameter)
+        ok, f = fontloader_mod.define_font_hb(
+            instance.requested_name,
+            instance.requested_size,
+            instance.requested_extra_parameter
+        )
     else
-        ok,f = fontloader_mod.define_font(instance.requested_name,instance.requested_size,instance.requested_extra_parameter)
+        ok, f = fontloader_mod.define_font(
+            instance.requested_name,
+            instance.requested_size,
+            instance.requested_extra_parameter
+        )
     end
     if not ok then
-        main.log("error","Failed to load font","requested name",instance.requested_name,"errormessage",f or "")
+        main.log("error", "Failed to load font", "requested name", instance.requested_name, "errormessage", f or "")
         return false
     end
     preloaded_fonts[num] = f
-    used_fonts[num]=f
-    font.define(num,f)
+    used_fonts[num] = f
+    font.define(num, f)
     return true
 end
 
@@ -196,7 +228,7 @@ end
 ---@param fontfamily integer Family number from `lookup_fontfamily_name_number`.
 ---@param instancename "normal"|"bold"|"italic"|"bolditalic"|string Variant key.
 ---@return table? instance
-function M.get_fontinstance(fontfamily,instancename)
+function M.get_fontinstance(fontfamily, instancename)
     local instance
     if fontfamily and fontfamily > 0 then
         instance = lookup_fontfamily_number_instance[fontfamily][instancename]
@@ -217,7 +249,7 @@ function M.get_fontinstance(fontfamily,instancename)
     if pe.loaded == false then
         local ok = M.define_font(pe)
         if not ok then
-            return M.get_fontinstance(1,"normal")
+            return M.get_fontinstance(1, "normal")
         end
     end
     return instance
@@ -227,38 +259,38 @@ end
 -- like it. For example the (sub/sup)script glyphs still have the width of
 -- the regular characters and need
 -- node.direct locals for pre_linebreak hot loop
-local d              = node.direct
-local d_todirect     = d.todirect
-local d_tonode       = d.tonode
-local d_getnext      = d.getnext
-local d_getprev      = d.getprev
-local d_getid        = d.getid
-local d_getsubtype   = d.getsubtype
-local d_getchar      = d.getchar
-local d_setchar      = d.setchar
-local d_getfont      = d.getfont
-local d_getlist      = d.getlist
-local d_getleader    = d.getleader
+local d = node.direct
+local d_todirect = d.todirect
+local d_tonode = d.tonode
+local d_getnext = d.getnext
+local d_getprev = d.getprev
+local d_getid = d.getid
+local d_getsubtype = d.getsubtype
+local d_getchar = d.getchar
+local d_setchar = d.setchar
+local d_getfont = d.getfont
+local d_getlist = d.getlist
+local d_getleader = d.getleader
 local d_has_attribute = d.has_attribute
 local d_set_attribute = d.set_attribute
-local d_setfield     = d.setfield
-local d_getfield     = d.getfield
-local d_setnext      = d.setnext
-local d_setprev      = d.setprev
-local d_new          = d.new
+local d_setfield = d.setfield
+local d_getfield = d.getfield
+local d_setnext = d.setnext
+local d_setprev = d.setprev
+local d_new = d.new
 local d_insert_after = d.insert_after
 local d_insert_before = d.insert_before
-local d_vpack        = d.vpack
-local d_hpack        = d.hpack
-local d_tail         = d.tail
-local d_getproperty  = d.getproperty
+local d_vpack = d.vpack
+local d_hpack = d.hpack
+local d_tail = d.tail
+local d_getproperty = d.getproperty
 
 -- Pre-resolved attribute numbers for pre_linebreak hot loop
 local plb_att_fontfamily
 local plb_att_fontstyle
 local plb_att_fontweight
-local plb_attval_italic  -- index of "italic" in font-style table
-local plb_attval_bold    -- index of "bold" in font-weight table
+local plb_attval_italic -- index of "italic" in font-style table
+local plb_attval_bold -- index of "bold" in font-weight table
 
 -- Pre-linebreak callback (direct API): walks the node list and applies
 -- every visual attribute we attached earlier — color, decoration,
@@ -266,7 +298,7 @@ local plb_attval_bold    -- index of "bold" in font-weight table
 -- Runs hot, so it uses the `node.direct` API.
 ---@param head any Node list head in direct-API form.
 ---@return any head
-local function pre_linebreak_direct( head )
+local function pre_linebreak_direct(head)
     -- Cache for consecutive same-font glyphs
     local cache_ff, cache_fs, cache_fw
     local cache_fontnum, cache_is_fontforge, cache_f
@@ -295,7 +327,7 @@ local function pre_linebreak_direct( head )
                     d_setprev(head, nil)
                     local instance = lookup_fontfamily_number_instance[dest_fontfamily]
                     local f = used_fonts[instance.normal]
-                    local g = d_todirect(publisher.nodes.make_glue({width = f.size}))
+                    local g = d_todirect(publisher.nodes.make_glue({ width = f.size }))
 
                     local h = d_insert_after(head, head, g)
                     h = d_vpack(h)
@@ -323,8 +355,18 @@ local function pre_linebreak_direct( head )
                     tmpbox = d_hpack(l)
                 else
                     -- \hbox{ 1fil, text, 1fil }
-                    local l1 = d_todirect(set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 2, shrink = 2^16, shrink_order = 2}))
-                    local l2 = d_todirect(set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 2, shrink = 2^16, shrink_order = 2}))
+                    local l1 = d_todirect(
+                        set_glue(
+                            nil,
+                            { width = 0, stretch = 2 ^ 16, stretch_order = 2, shrink = 2 ^ 16, shrink_order = 2 }
+                        )
+                    )
+                    local l2 = d_todirect(
+                        set_glue(
+                            nil,
+                            { width = 0, stretch = 2 ^ 16, stretch_order = 2, shrink = 2 ^ 16, shrink_order = 2 }
+                        )
+                    )
                     local newhead = d_insert_before(l, l, l1)
                     local endoftext = d_tail(l)
                     newhead = d_insert_after(newhead, endoftext, l2)
@@ -341,7 +383,10 @@ local function pre_linebreak_direct( head )
                 local fontfamily = ff
 
                 -- Last resort
-                if fontfamily == 0 then fontfamily = 1 main.log("warn", "Undefined fontfamily, set fontfamily to 1") end
+                if fontfamily == 0 then
+                    fontfamily = 1
+                    main.log("warn", "Undefined fontfamily, set fontfamily to 1")
+                end
 
                 local fontstyle = d_has_attribute(head, plb_att_fontstyle)
                 local fontweight = d_has_attribute(head, plb_att_fontweight)
@@ -369,23 +414,26 @@ local function pre_linebreak_direct( head )
                 if cache_is_fontforge then
                     local f = cache_f
                     local headchar = d_getchar(head)
-                    for _,featuretable in ipairs(f.otfeatures) do
-                        local glyphno,lookups
+                    for _, featuretable in ipairs(f.otfeatures) do
+                        local glyphno, lookups
                         local glyph_lookuptable
                         if f.characters[headchar] then
                             glyphno = f.characters[headchar].index
                             lookups = f.fontloader.glyphs[glyphno].lookups
-                            for _,v in ipairs(featuretable) do
+                            for _, v in ipairs(featuretable) do
                                 if lookups then
                                     glyph_lookuptable = lookups[v]
                                     if glyph_lookuptable then
                                         local glt1 = glyph_lookuptable[1]
                                         if glt1.type == "substitution" then
-                                            d_setchar(head, f.fontloader.lookup_codepoint_by_name[glt1.specification.variant])
+                                            d_setchar(
+                                                head,
+                                                f.fontloader.lookup_codepoint_by_name[glt1.specification.variant]
+                                            )
                                             headchar = d_getchar(head)
                                         elseif glt1.type == "multiple" then
-                                            for i,comp in ipairs(string.explode(glt1.specification.components)) do
-                                                if i==1 then
+                                            for i, comp in ipairs(string.explode(glt1.specification.components)) do
+                                                if i == 1 then
                                                     d_setchar(head, f.fontloader.lookup_codepoint_by_name[comp])
                                                     headchar = d_getchar(head)
                                                 else
@@ -418,15 +466,25 @@ end
 -- node API caller and is registered through `callback.register`.
 ---@param head node
 ---@return node head
-function M.pre_linebreak( head )
+function M.pre_linebreak(head)
     if not plb_att_fontfamily then
         plb_att_fontfamily = publisher.attribute_name_number["fontfamily"]
-        plb_att_fontstyle  = publisher.attribute_name_number["font-style"]
+        plb_att_fontstyle = publisher.attribute_name_number["font-style"]
         plb_att_fontweight = publisher.attribute_name_number["font-weight"]
         local fs = publisher.attributes["font-style"]
-        for i,v in ipairs(fs) do if v == "italic" then plb_attval_italic = i break end end
+        for i, v in ipairs(fs) do
+            if v == "italic" then
+                plb_attval_italic = i
+                break
+            end
+        end
         local fw = publisher.attributes["font-weight"]
-        for i,v in ipairs(fw) do if v == "bold" then plb_attval_bold = i break end end
+        for i, v in ipairs(fw) do
+            if v == "bold" then
+                plb_attval_bold = i
+                break
+            end
+        end
     end
     return pre_linebreak_direct(d_todirect(head))
 end
@@ -441,11 +499,11 @@ end
 ---@param bg_padding_bottom integer Padding below baseline in sp.
 ---@param reverse boolean Walk backwards (used for RTL runs).
 ---@return nil
-function M.insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding_top, bg_padding_bottom, reverse )
+function M.insert_backgroundcolor(parent, head, start, bgcolorindex, bg_padding_top, bg_padding_bottom, reverse)
     reverse = reverse or false
-    bg_padding_top    = bg_padding_top or 0
+    bg_padding_top = bg_padding_top or 0
     bg_padding_bottom = bg_padding_bottom or 0
-    local wd = node.dimensions(parent.glue_set,parent.glue_sign, parent.glue_order,start,head)
+    local wd = node.dimensions(parent.glue_set, parent.glue_sign, parent.glue_order, start, head)
     local ht = parent.height
     local dp = parent.depth
 
@@ -456,13 +514,21 @@ function M.insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding
     wd = wd / publisher.factor
     ht = ht / publisher.factor
     dp = dp / publisher.factor
-    bg_padding_top    = bg_padding_top    / publisher.factor
+    bg_padding_top = bg_padding_top / publisher.factor
     bg_padding_bottom = bg_padding_bottom / publisher.factor
-    local rule = node.new("whatsit","pdf_literal")
-    if reverse then wd = wd * -1 end
-    rule.data = string.format("q %s 0 %g %g %g re f Q", pdfstring, -dp - bg_padding_bottom ,  wd, ht + dp + bg_padding_top + bg_padding_bottom )
+    local rule = node.new("whatsit", "pdf_literal")
+    if reverse then
+        wd = wd * -1
+    end
+    rule.data = string.format(
+        "q %s 0 %g %g %g re f Q",
+        pdfstring,
+        -dp - bg_padding_bottom,
+        wd,
+        ht + dp + bg_padding_top + bg_padding_bottom
+    )
     rule.mode = 0
-    parent.head = node.insert_before(parent.head,start,rule)
+    parent.head = node.insert_before(parent.head, start, rule)
     return rule
 end
 
@@ -476,10 +542,12 @@ end
 ---@param style "solid"|"double"|"dotted"|"dashed"|"wavy"
 ---@param colornumber integer Color index.
 ---@return nil
-function M.insert_underline( parent, head, start, typ, style, colornumber)
+function M.insert_underline(parent, head, start, typ, style, colornumber)
     colornumber = colornumber or 1
-    if colornumber == 0 then colornumber = 1 end
-    local wd = node.dimensions(parent.glue_set,parent.glue_sign, parent.glue_order,start,head)
+    if colornumber == 0 then
+        colornumber = 1
+    end
+    local wd = node.dimensions(parent.glue_set, parent.glue_sign, parent.glue_order, start, head)
     local ht = parent.height
     local dp = parent.depth
     local dashpattern = ""
@@ -489,24 +557,32 @@ function M.insert_underline( parent, head, start, typ, style, colornumber)
     wd = wd / publisher.factor
     ht = ht / publisher.factor
     dp = dp / publisher.factor
-    local rule = node.new("whatsit","pdf_literal")
-    publisher.attribute_helpers.setprop(rule,"origin","insert_underline")
+    local rule = node.new("whatsit", "pdf_literal")
+    publisher.attribute_helpers.setprop(rule, "origin", "insert_underline")
     -- thickness: ht / ...
     -- downshift: dp/2
-    local rule_width = math.round(ht / 13,3)
+    local rule_width = math.round(ht / 13, 3)
     if style == "dashed" then
         dashpattern = string.format("[%g] 0 d", 3 * rule_width)
     end
 
-    local shift_down = ( dp - rule_width ) / 1.5
+    local shift_down = (dp - rule_width) / 1.5
     if typ == "line-through" then
-        shift_down = - 1.6 * shift_down
+        shift_down = -1.6 * shift_down
     end
-    rule.data = string.format("q %s %g w %s 0 %g m %g %g l S Q", pdfstring, rule_width, dashpattern, -1 * shift_down, -wd, -1 * shift_down )
+    rule.data = string.format(
+        "q %s %g w %s 0 %g m %g %g l S Q",
+        pdfstring,
+        rule_width,
+        dashpattern,
+        -1 * shift_down,
+        -wd,
+        -1 * shift_down
+    )
     rule.mode = 0
     local attribs = publisher.attribute_helpers.get_attributes(start)
-    publisher.attribute_helpers.set_attributes(rule,attribs)
-    parent.head = node.insert_before(parent.head,head,rule)
+    publisher.attribute_helpers.set_attributes(rule, attribs)
+    parent.head = node.insert_before(parent.head, head, rule)
     return rule
 end
 
@@ -523,7 +599,7 @@ do
     local plb_attnum_bgpad_top
     local plb_attnum_bgpad_bottom
 
-    local function post_linebreak_direct( head, list_head_d )
+    local function post_linebreak_direct(head, list_head_d)
         local insert_bgcolor = M.insert_backgroundcolor
         local insert_ul = M.insert_underline
         local opts = publisher.options
@@ -545,7 +621,7 @@ do
             if props then
                 local pd = props.pardir
                 if pd and #curdir == 0 then
-                    curdir = {pd}
+                    curdir = { pd }
                 end
             end
             if id == hlist_node then
@@ -554,10 +630,14 @@ do
                 post_linebreak_direct(d_getlist(head), head)
             elseif id == dir_node then
                 local dirval = d_getfield(head, "dir")
-                local mode = string.sub(dirval,1,1)
-                local texdir = string.sub(dirval,2,4)
+                local mode = string.sub(dirval, 1, 1)
+                local texdir = string.sub(dirval, 2, 4)
                 local ldir
-                if texdir == "TLT" then ldir = "ltr" else ldir = "rtl" end
+                if texdir == "TLT" then
+                    ldir = "ltr"
+                else
+                    ldir = "rtl"
+                end
                 if mode == "+" then
                     curdir[#curdir + 1] = ldir
                 elseif mode == "-" then
@@ -568,12 +648,20 @@ do
                     end
                 end
                 if start_bgcolor then
-                    insert_bgcolor(d_tonode(list_head_d), d_tonode(head), d_tonode(start_bgcolor), bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                    insert_bgcolor(
+                        d_tonode(list_head_d),
+                        d_tonode(head),
+                        d_tonode(start_bgcolor),
+                        bgcolorindex,
+                        bg_padding_top,
+                        bg_padding_bottom,
+                        bgcolor_reverse
+                    )
                     start_bgcolor = nil
                 end
             elseif id == disc_node then
                 if opts.showhyphenation then
-                    local n = node.new("whatsit","pdf_literal")
+                    local n = node.new("whatsit", "pdf_literal")
                     n.mode = 0
                     n.data = "q 0.3 w 0 2 m 0 7 l S Q"
                     node.insert_before(d_tonode(list_head_d), d_tonode(head), n)
@@ -586,18 +674,33 @@ do
                 local bgcolor = d_has_attribute(head, plb_attnum_bgcolor)
                 if ul == nil then
                     if start_underline then
-                        insert_ul(d_tonode(list_head_d), d_tonode(head), d_tonode(start_underline),underlinetype,underlinestyle,underline_color)
+                        insert_ul(
+                            d_tonode(list_head_d),
+                            d_tonode(head),
+                            d_tonode(start_underline),
+                            underlinetype,
+                            underlinestyle,
+                            underline_color
+                        )
                         start_underline = nil
                     end
                 end
                 if bgcolor == nil then
                     if start_bgcolor then
-                        insert_bgcolor(d_tonode(list_head_d), d_tonode(head), d_tonode(start_bgcolor),bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                        insert_bgcolor(
+                            d_tonode(list_head_d),
+                            d_tonode(head),
+                            d_tonode(start_bgcolor),
+                            bgcolorindex,
+                            bg_padding_top,
+                            bg_padding_bottom,
+                            bgcolor_reverse
+                        )
                         start_bgcolor = nil
                     end
                 end
                 if opts.showkerning then
-                    local n = node.new("whatsit","pdf_literal")
+                    local n = node.new("whatsit", "pdf_literal")
                     n.mode = 0
                     n.data = "q .4 G 0.3 w 0 2 m 0 7 l S Q"
                     node.insert_before(d_tonode(list_head_d), d_tonode(head), n)
@@ -605,7 +708,9 @@ do
             elseif id == glue_node then
                 -- Fast path: skip when no decoration/bgcolor active or pending
                 if fast_path and not start_underline and not start_bgcolor then
-                    if not d_has_attribute(head, plb_attnum_td_line) and not d_has_attribute(head, plb_attnum_bgcolor) then
+                    if
+                        not d_has_attribute(head, plb_attnum_td_line) and not d_has_attribute(head, plb_attnum_bgcolor)
+                    then
                         goto continue_loop
                     end
                 end
@@ -615,19 +720,34 @@ do
                 -- at rightskip we must underline (if start exists)
                 if ul == nil or d_getsubtype(head) == 9 then
                     if start_underline then
-                        insert_ul(d_tonode(list_head_d), d_tonode(head), d_tonode(start_underline),underlinetype,underlinestyle,underline_color)
+                        insert_ul(
+                            d_tonode(list_head_d),
+                            d_tonode(head),
+                            d_tonode(start_underline),
+                            underlinetype,
+                            underlinestyle,
+                            underline_color
+                        )
                         start_underline = nil
                     end
                 end
                 if bgcolor and bgcolor > 0 and not start_bgcolor then
-                    bgcolor_reverse = ( curdir[#curdir] == "rtl" )
+                    bgcolor_reverse = (curdir[#curdir] == "rtl")
                     bgcolorindex = bgcolor
                     start_bgcolor = head
                     bg_padding_top = d_has_attribute(head, plb_attnum_bgpad_top)
                     bg_padding_bottom = d_has_attribute(head, plb_attnum_bgpad_bottom)
-            elseif bgcolor == nil or d_getsubtype(head) == 9 then -- 9 == rightskip
+                elseif bgcolor == nil or d_getsubtype(head) == 9 then -- 9 == rightskip
                     if start_bgcolor then
-                        insert_bgcolor(d_tonode(list_head_d), d_tonode(head), d_tonode(start_bgcolor),bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                        insert_bgcolor(
+                            d_tonode(list_head_d),
+                            d_tonode(head),
+                            d_tonode(start_bgcolor),
+                            bgcolorindex,
+                            bg_padding_top,
+                            bg_padding_bottom,
+                            bgcolor_reverse
+                        )
                         start_bgcolor = nil
                     end
                 end
@@ -654,21 +774,36 @@ do
                     end
                 else
                     if start_underline then
-                        insert_ul(d_tonode(list_head_d), d_tonode(head), d_tonode(start_underline), underlinetype,underlinestyle,underline_color)
+                        insert_ul(
+                            d_tonode(list_head_d),
+                            d_tonode(head),
+                            d_tonode(start_underline),
+                            underlinetype,
+                            underlinestyle,
+                            underline_color
+                        )
                         start_underline = nil
                     end
                 end
                 if bgcolor and bgcolor > 0 then
                     if not start_bgcolor then
                         bgcolorindex = bgcolor
-                        bg_padding_top    = d_has_attribute(head, plb_attnum_bgpad_top)
+                        bg_padding_top = d_has_attribute(head, plb_attnum_bgpad_top)
                         bg_padding_bottom = d_has_attribute(head, plb_attnum_bgpad_bottom)
                         start_bgcolor = head
-                        bgcolor_reverse = ( curdir[#curdir] == "rtl" )
+                        bgcolor_reverse = (curdir[#curdir] == "rtl")
                     end
                 else
                     if start_bgcolor then
-                        insert_bgcolor(d_tonode(list_head_d), d_tonode(head), d_tonode(start_bgcolor), bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+                        insert_bgcolor(
+                            d_tonode(list_head_d),
+                            d_tonode(head),
+                            d_tonode(start_bgcolor),
+                            bgcolorindex,
+                            bg_padding_top,
+                            bg_padding_bottom,
+                            bgcolor_reverse
+                        )
                         start_bgcolor = nil
                     end
                 end
@@ -678,19 +813,32 @@ do
             head = d_getnext(head)
         end
         if start_bgcolor then
-            local _, dummy = publisher.nodes.add_rule(d_tonode(lasthead),"tail",{width = 0, height = 0, depth = 0},"bgcolor dummy")
-            insert_bgcolor(d_tonode(list_head_d), dummy, d_tonode(start_bgcolor), bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
+            local _, dummy = publisher.nodes.add_rule(
+                d_tonode(lasthead),
+                "tail",
+                { width = 0, height = 0, depth = 0 },
+                "bgcolor dummy"
+            )
+            insert_bgcolor(
+                d_tonode(list_head_d),
+                dummy,
+                d_tonode(start_bgcolor),
+                bgcolorindex,
+                bg_padding_top,
+                bg_padding_bottom,
+                bgcolor_reverse
+            )
         end
         return head
     end
 
-    function M.post_linebreak( head, list_head )
+    function M.post_linebreak(head, list_head)
         if not plb_attnum_td_line then
-            plb_attnum_td_line    = publisher.attribute_name_number["text-decoration-line"]
-            plb_attnum_td_style   = publisher.attribute_name_number["text-decoration-style"]
-            plb_attnum_td_color   = publisher.attribute_name_number["text-decoration-color"]
-            plb_attnum_bgcolor    = publisher.attribute_name_number["background-color"]
-            plb_attnum_bgpad_top  = publisher.attribute_name_number["bgpaddingtop"]
+            plb_attnum_td_line = publisher.attribute_name_number["text-decoration-line"]
+            plb_attnum_td_style = publisher.attribute_name_number["text-decoration-style"]
+            plb_attnum_td_color = publisher.attribute_name_number["text-decoration-color"]
+            plb_attnum_bgcolor = publisher.attribute_name_number["background-color"]
+            plb_attnum_bgpad_top = publisher.attribute_name_number["bgpaddingtop"]
             plb_attnum_bgpad_bottom = publisher.attribute_name_number["bgpaddingbottom"]
         end
         return post_linebreak_direct(d_todirect(head), list_head and d_todirect(list_head))
@@ -703,7 +851,7 @@ end
 ---@param fam integer|string Source family number or name.
 ---@param params table Overrides applied to the clone.
 ---@return integer? newfam New family number, or `nil` on failure.
-function M.clone_family( fam, params )
+function M.clone_family(fam, params)
     -- fam_tbl = {
     --   ["baselineskip"] = "789372"
     --   ["name"] = "text"
@@ -714,13 +862,13 @@ function M.clone_family( fam, params )
     -- },
     local fam_tbl = lookup_fontfamily_number_instance[fam]
     local newfam = {}
-    for k,v in pairs(fam_tbl) do
+    for k, v in pairs(fam_tbl) do
         newfam[k] = v
     end
     newfam.name = "cloned"
 
     if newfam.fontfaceregular then
-        local ok,r = M.make_font_instance(newfam.fontfaceregular, params.size * newfam.size )
+        local ok, r = M.make_font_instance(newfam.fontfaceregular, params.size * newfam.size)
         if not ok then
             main.log("error", r)
             return fam
@@ -729,7 +877,7 @@ function M.clone_family( fam, params )
     end
 
     if newfam.fontfacebold then
-        local ok,b = M.make_font_instance(newfam.fontfacebold, params.size * newfam.size )
+        local ok, b = M.make_font_instance(newfam.fontfacebold, params.size * newfam.size)
         if not ok then
             main.log("error", b)
             return fam
@@ -738,16 +886,16 @@ function M.clone_family( fam, params )
     end
 
     if newfam.fontfaceitalic then
-        local ok,i = M.make_font_instance(newfam.fontfaceitalic, params.size * newfam.size )
+        local ok, i = M.make_font_instance(newfam.fontfaceitalic, params.size * newfam.size)
         if not ok then
             main.log("error", i)
             return fam
         end
         newfam.italic = i
-        end
+    end
 
     if newfam.fontfacebolditalic then
-        local ok,bi = M.make_font_instance(newfam.fontfacebolditalic, params.size * newfam.size )
+        local ok, bi = M.make_font_instance(newfam.fontfacebolditalic, params.size * newfam.size)
         if not ok then
             main.log("error", bi)
             return fam
@@ -784,10 +932,7 @@ function M.report_missing_glyph(level, font_name, code, ...)
         return
     end
     per_font[code] = 1
-    main.log(level, "Glyph is missing from the font",
-        "font", font_name,
-        "glyph_hex", string.format("%04x", code),
-        ...)
+    main.log(level, "Glyph is missing from the font", "font", font_name, "glyph_hex", string.format("%04x", code), ...)
 end
 
 -- Emits the `(N times)` summary log lines for repeated missing-glyph
@@ -802,17 +947,29 @@ function M.summarize_missing_glyphs()
             end
         end
     end
-    if #rows == 0 then return end
+    if #rows == 0 then
+        return
+    end
     table.sort(rows, function(a, b)
-        if a.count ~= b.count then return a.count > b.count end
-        if a.font ~= b.font then return a.font < b.font end
+        if a.count ~= b.count then
+            return a.count > b.count
+        end
+        if a.font ~= b.font then
+            return a.font < b.font
+        end
         return a.code < b.code
     end)
     for _, r in ipairs(rows) do
-        main.log("warn", "Glyph is missing from the font (repeated)",
-            "font", r.font,
-            "glyph_hex", string.format("%04x", r.code),
-            "count", tostring(r.count))
+        main.log(
+            "warn",
+            "Glyph is missing from the font (repeated)",
+            "font",
+            r.font,
+            "glyph_hex",
+            string.format("%04x", r.code),
+            "count",
+            tostring(r.count)
+        )
     end
 end
 

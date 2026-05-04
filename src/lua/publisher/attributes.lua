@@ -38,7 +38,7 @@ local M = {}
 ---@param default any Value used when the attribute is missing.
 ---@param context any? Optional context (unused by this implementation).
 ---@return any value Converted value, or `default` if absent, or `nil` on error.
-function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
+function M.read_attribute(layoutxml, dataxml, attname, typ, default, context)
     local namespaces = layoutxml[".__ns"]
     local attr
 
@@ -60,7 +60,7 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
 
     local val, num, ret
     if typ ~= "xpath" and typ ~= "xpathraw" and typ ~= "rawstring" then
-        val = string.gsub(attr, "{(.-)}", function (x)
+        val = string.gsub(attr, "{(.-)}", function(x)
             if publisher.newxpath then
                 local copysequence = dataxml.sequence
                 local seq, msg = dataxml:eval(x)
@@ -89,7 +89,9 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
         val = attr
     end
 
-    if val == "nil" then val = nil end
+    if val == "nil" then
+        val = nil
+    end
     if typ == "xpath" then
         if publisher.newxpath then
             local seq, msg = dataxml:eval(val)
@@ -126,13 +128,17 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
         return val
     elseif typ == "length_sp" then
         num = tonumber(val or default)
-        if num == 0 then return 0 end
+        if num == 0 then
+            return 0
+        end
         if num then
             ret = publisher.current_grid:width_sp(num)
         else
             ret = val
         end
-        if not ret then return end
+        if not ret then
+            return
+        end
         return tex.sp(ret)
     elseif typ == "height_sp" then
         num = tonumber(val or default)
@@ -142,7 +148,9 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
         else
             ret = val
         end
-        if not ret then return end
+        if not ret then
+            return
+        end
         return tex.sp(ret)
     elseif typ == "width_sp" then
         num = tonumber(val or default)
@@ -152,7 +160,9 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
         else
             ret = val
         end
-        if not ret then return end
+        if not ret then
+            return
+        end
         return tex.sp(ret)
     elseif typ == "boolean" then
         val = val or default
@@ -217,12 +227,18 @@ end
 ---@param attribute_name string Key in `publisher.attribute_name_number`.
 ---@return integer|string|nil value `nil` if the attribute is unknown or unset.
 function M.get_attribute(nodelist, attribute_name)
-    if not nodelist then return nil end
+    if not nodelist then
+        return nil
+    end
     local att_number = publisher.attribute_name_number[attribute_name]
-    if not att_number then return nil end
+    if not att_number then
+        return nil
+    end
     local entry = publisher.attributes[attribute_name]
     local val = node.has_attribute(nodelist, att_number)
-    if val == nil then return nil end
+    if val == nil then
+        return nil
+    end
     if type(entry) == "table" then
         return entry[val]
     end
@@ -239,12 +255,18 @@ end
 ---@return nil
 function M.set_attribute(nodelist, attribute_name, value)
     local att_number = publisher.attribute_name_number[attribute_name]
-    if not att_number then main.log("error", string.format("Internal error: attribute %s unknown", attribute_name or "?")) return end
+    if not att_number then
+        main.log("error", string.format("Internal error: attribute %s unknown", attribute_name or "?"))
+        return
+    end
     local entry = publisher.attributes[attribute_name]
     local att_value
     if type(entry) == "table" then
         for k, v in ipairs(entry) do
-            if v == value then att_value = k break end
+            if v == value then
+                att_value = k
+                break
+            end
         end
     else
         att_value = value
@@ -262,7 +284,10 @@ end
 ---@return nil
 function M.clear_attribute(nodelist, attribute_name)
     local att_number = publisher.attribute_name_number[attribute_name]
-    if not att_number then main.log("error", string.format("Internal error: attribute %s unknown", attribute_name or "?")) return end
+    if not att_number then
+        main.log("error", string.format("Internal error: attribute %s unknown", attribute_name or "?"))
+        return
+    end
     node.unset_attribute(nodelist, att_number)
 end
 
@@ -272,12 +297,18 @@ end
 ---@param att_tbl table<string|integer, integer|string>?
 ---@return nil
 function M.set_attributes(nodelist, att_tbl)
-    if att_tbl == nil then return end
+    if att_tbl == nil then
+        return
+    end
     for k, v in pairs(att_tbl) do
         if k and v then
             local num = k
-            if type(k) == "number" then k = publisher.attribute_number_name[k] end
-            if not k then w("attribute name %d not found", num) end
+            if type(k) == "number" then
+                k = publisher.attribute_number_name[k]
+            end
+            if not k then
+                w("attribute name %d not found", num)
+            end
             M.set_attribute(nodelist, k, v)
         end
     end
@@ -318,10 +349,14 @@ end
 ---@param n node
 ---@param prop string
 ---@return any value `nil` if no property table exists or the key is absent.
-function M.getprop( n, prop )
+function M.getprop(n, prop)
     local props = node.getproperty(n)
-    if not props then return nil end
-    if type(props) == "table" then return props[prop] end
+    if not props then
+        return nil
+    end
+    if type(props) == "table" then
+        return props[prop]
+    end
     return nil
 end
 
@@ -331,7 +366,9 @@ end
 ---@return any previous_value
 function M.clearprop(n, prop)
     local props = node.getproperty(n)
-    if not props then return nil end
+    if not props then
+        return nil
+    end
     if type(props) == "table" then
         local ret = props[prop]
         props[prop] = nil

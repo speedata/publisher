@@ -17,11 +17,11 @@ local M = {}
 ---@return number calc_width            -- resulting width (sp)
 ---@return number calc_height           -- resulting height (sp)
 function M.set_image_dimensions(image, styles, width_sp, height_sp, dataxml)
-    local publisher        = publisher -- from global legacy env
+    local publisher = publisher -- from global legacy env
 
-    local orig_w, orig_h   = image.width, image.height
+    local orig_w, orig_h = image.width, image.height
     local image_w, image_h = orig_w, orig_h
-    local factor           = 1
+    local factor = 1
 
     -- width constraint
     if width_sp ~= 0 then
@@ -51,13 +51,12 @@ function M.set_image_dimensions(image, styles, width_sp, height_sp, dataxml)
     end
 
     -- small headroom below line box
-    maxht                = maxht - styles.fontsize_sp * 0.25
+    maxht = maxht - styles.fontsize_sp * 0.25
 
-    local calc_w, calc_h =
-        publisher.images.calculate_image_width_height(image, image_w, image_h, 0, 0, maxwd, maxht)
+    local calc_w, calc_h = publisher.images.calculate_image_width_height(image, image_w, image_h, 0, 0, maxwd, maxht)
 
-    image.width          = calc_w
-    image.height         = calc_h
+    image.width = calc_w
+    image.height = calc_h
     return calc_w, calc_h
 end
 

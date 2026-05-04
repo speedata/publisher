@@ -68,20 +68,20 @@ end
 ---@param colorname string?
 ---@return string rgb Three values in [0,1] separated by spaces.
 local function getBordercolor(colorname)
-    local entry = colors.get_colentry_from_name(colorname,"black")
+    local entry = colors.get_colentry_from_name(colorname, "black")
     if entry == nil then
         return "0 0 0"
     end
     if entry.model == "rgb" then
-        return string.format("%g %g %g",entry.r,entry.g,entry.b)
+        return string.format("%g %g %g", entry.r, entry.g, entry.b)
     elseif entry.model == "gray" then
-        return string.format("%g %g %g",entry.g,entry.g,entry.g)
+        return string.format("%g %g %g", entry.g, entry.g, entry.g)
     elseif entry.model == "cmyk" then
-        local hundredminusk = ( 100 - entry.k) / 100
+        local hundredminusk = (100 - entry.k) / 100
         local r = (100 - entry.c) * hundredminusk / 100
         local g = (100 - entry.m) * hundredminusk / 100
         local b = (100 - entry.y) * hundredminusk / 100
-        return string.format("%g %g %g",r,g,b)
+        return string.format("%g %g %g", r, g, b)
     end
     return "0 0 0"
 end
@@ -117,9 +117,9 @@ local function get_border_for_link(options, color)
     if options.showhyperlinks then
         local thickness = ""
         if border_thickness ~= 0 then
-            thickness = string.format("/Border[0 0 %d]",sp_to_bp(border_thickness))
+            thickness = string.format("/Border[0 0 %d]", sp_to_bp(border_thickness))
         end
-        border = string.format("%s/C [%s]",thickness,getBordercolor(color or options.hyperlinkbordercolor))
+        border = string.format("%s/C [%s]", thickness, getBordercolor(color or options.hyperlinkbordercolor))
     end
     return border
 end
@@ -131,13 +131,13 @@ end
 ---@return table<string, string> fields Maps PDF keys (`"/Border"`, `"/C"`) to their string values.
 local function get_border_for_link_table(options, color)
     -- no border:
-    local border = {["/Border"] = "[0 0 0]" }
+    local border = { ["/Border"] = "[0 0 0]" }
     local border_thickness = options.hyperlinkborderwidth
     if options.showhyperlinks then
         if border_thickness ~= 0 then
-            border["/Border"] = string.format("[0 0 %d]",sp_to_bp(border_thickness))
+            border["/Border"] = string.format("[0 0 %d]", sp_to_bp(border_thickness))
         end
-        border["/C"] = string.format("[%s]",getBordercolor(color or options.hyperlinkbordercolor))
+        border["/C"] = string.format("[%s]", getBordercolor(color or options.hyperlinkbordercolor))
     end
     return border
 end
@@ -165,8 +165,8 @@ end
 ---@param tab table
 ---@return any[] keys
 local function sortedkeys(tab)
-    local keys, s = { }, 0
-    for key,_ in next, tab do
+    local keys, s = {}, 0
+    for key, _ in next, tab do
         s = s + 1
         keys[s] = key
     end
@@ -175,13 +175,14 @@ local function sortedkeys(tab)
 end
 
 -- get the key and values always in the same order to get reproducable PDFs
-local marshal_ordered = {__tostring = function(tbl)
-    local ret = {}
-    for _, key in ipairs(sortedkeys(tbl)) do
-        ret[#ret+1] = key .. tbl[key]
-    end
-    return table.concat(ret, "")
- end
+local marshal_ordered = {
+    __tostring = function(tbl)
+        local ret = {}
+        for _, key in ipairs(sortedkeys(tbl)) do
+            ret[#ret + 1] = key .. tbl[key]
+        end
+        return table.concat(ret, "")
+    end,
 }
 
 -- hyperlinks/hyperlinksbuilder
@@ -195,7 +196,12 @@ local marshal_ordered = {__tostring = function(tbl)
 ---@return integer index Index into the internal hyperlinks list.
 function M.hlembed(options, filename, page, link, bordercolor)
     local parsed_url = parse_embed_filename(filename, page, link)
-    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoToE/NewWindow true/D %s /T<</R/C/N%s >> >>", get_border_for_link(options, bordercolor), parsed_url.dest, parsed_url.fn)
+    local str = string.format(
+        "/Subtype/Link%s/A<</Type/Action/S/GoToE/NewWindow true/D %s /T<</R/C/N%s >> >>",
+        get_border_for_link(options, bordercolor),
+        parsed_url.dest,
+        parsed_url.fn
+    )
     hyperlinks[#hyperlinks + 1] = str
     return #hyperlinks
 end
@@ -205,19 +211,19 @@ end
 ---@param href string Target URL.
 ---@param bordercolor string?
 ---@return integer index Index into the internal hyperlinks list.
-function M.hlurl(options, href,bordercolor)
+function M.hlurl(options, href, bordercolor)
     href = urlencode(href)
     href = metadata.escape_pdfstring(href)
     local hl = {
-        ["/Subtype" ] = "/Link",
-        ["/A"] = string.format("<</Type/Action/S/URI/URI(%s)>>",href),
+        ["/Subtype"] = "/Link",
+        ["/A"] = string.format("<</Type/Action/S/URI/URI(%s)>>", href),
     }
     for key, value in pairs(get_border_for_link_table(options, bordercolor)) do
         hl[key] = value
     end
-    local tab = setmetatable(hl,marshal_ordered)
+    local tab = setmetatable(hl, marshal_ordered)
     -- hyperlinks must be a table, PDF/UA adds entries to the table
-    hyperlinks[#hyperlinks+1] = tab
+    hyperlinks[#hyperlinks + 1] = tab
     return #hyperlinks
 end
 
@@ -227,13 +233,17 @@ end
 ---@param pagenumber integer|string 1-based page number.
 ---@param bordercolor string?
 ---@return integer index Index into the internal hyperlinks list, or `0` on failure.
-function M.hlpage(options, pagenumber,bordercolor)
+function M.hlpage(options, pagenumber, bordercolor)
     pagenumber = tonumber(pagenumber)
     local pageobjnum = pdf.getpageref(pagenumber)
     if pageobjnum == nil then
         return 0
     end
-    local str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoTo/D [ %d 0 R /Fit ] >>",get_border_for_link(options, bordercolor),pageobjnum)
+    local str = string.format(
+        "/Subtype/Link%s/A<</Type/Action/S/GoTo/D [ %d 0 R /Fit ] >>",
+        get_border_for_link(options, bordercolor),
+        pageobjnum
+    )
     hyperlinks[#hyperlinks + 1] = str
     return #hyperlinks
 end
@@ -244,17 +254,17 @@ end
 ---@param link string Destination name (without the `mark` prefix).
 ---@param bordercolor string?
 ---@return integer index Index into the internal hyperlinks list.
-function M.hllink(options, link,bordercolor)
-    local formatted = string.format("mark%s",link)
+function M.hllink(options, link, bordercolor)
+    local formatted = string.format("mark%s", link)
     local hl = {
         ["/Subtype"] = "/Link",
-        ["/A"] = string.format("<</Type/Action/S/GoTo/D %s>>",metadata.utf8_to_utf16_string_pdf(formatted))
+        ["/A"] = string.format("<</Type/Action/S/GoTo/D %s>>", metadata.utf8_to_utf16_string_pdf(formatted)),
     }
     for key, value in pairs(get_border_for_link_table(options, bordercolor)) do
         hl[key] = value
     end
 
-    hyperlinks[#hyperlinks + 1] = setmetatable(hl,marshal_ordered)
+    hyperlinks[#hyperlinks + 1] = setmetatable(hl, marshal_ordered)
     return #hyperlinks
 end
 

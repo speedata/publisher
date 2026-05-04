@@ -21,36 +21,37 @@ local xmlbuilder = require("xmlbuilder")
 local function to_utf16(codepoint)
     assert(codepoint)
     if codepoint < 65536 then
-        return string.format("%04X",codepoint)
+        return string.format("%04X", codepoint)
     else
-        return string.format("%04X%04X",math.floor(codepoint / 1024) + 0xD800 ,codepoint % 1024 + 0xDC00)
+        return string.format("%04X%04X", math.floor(codepoint / 1024) + 0xD800, codepoint % 1024 + 0xDC00)
     end
 end
-
 
 -- Parses a PDF "date" string (`D:YYYYMMDDHHmmSS[±HH'mm']`) into ISO 8601.
 ---@param s string PDF date.
 ---@return string? iso ISO 8601 string, or `nil` on parse error.
 ---@return string? errmsg Error message when parsing fails.
 local function pdf_to_iso(s)
-  -- input: D:YYYYMMDDHHmmSS[Z|+/-HH['?]mm['?]]
-  local Y,Month,D,h,mi,se,sign,th,tm =
-    s:match("^D:(%d%d%d%d)(%d%d)(%d%d)(%d%d)(%d%d)(%d%d)([Z+-]?)(%d?%d?)'?([%d%?]?%d?)'?$")
-  if not Y then return nil, "Unbekanntes PDF-Datum" end
+    -- input: D:YYYYMMDDHHmmSS[Z|+/-HH['?]mm['?]]
+    local Y, Month, D, h, mi, se, sign, th, tm =
+        s:match("^D:(%d%d%d%d)(%d%d)(%d%d)(%d%d)(%d%d)(%d%d)([Z+-]?)(%d?%d?)'?([%d%?]?%d?)'?$")
+    if not Y then
+        return nil, "Unbekanntes PDF-Datum"
+    end
 
-  local iso = string.format("%s-%s-%sT%s:%s:%s", Y,Month,D,h,mi,se)
+    local iso = string.format("%s-%s-%sT%s:%s:%s", Y, Month, D, h, mi, se)
 
-  if sign == "Z" then
-    return iso .. "Z"
-  elseif sign == "+" or sign == "-" then
-    -- timezone given
-    th = (#th==2) and th or (th=="" and "00" or (th.."0"))
-    tm = (#tm==2) and tm or (tm=="" and "00" or (tm.."0"))
-    return string.format("%s%s%s:%s", iso, sign, th, tm)
-  else
-    -- no timezone given, assume local time
-    return iso
-  end
+    if sign == "Z" then
+        return iso .. "Z"
+    elseif sign == "+" or sign == "-" then
+        -- timezone given
+        th = (#th == 2) and th or (th == "" and "00" or (th .. "0"))
+        tm = (#tm == 2) and tm or (tm == "" and "00" or (tm .. "0"))
+        return string.format("%s%s%s:%s", iso, sign, th, tm)
+    else
+        -- no timezone given, assume local time
+        return iso
+    end
 end
 M.pdf_to_iso = pdf_to_iso
 
@@ -65,7 +66,7 @@ function M.getcreator(opts)
     elseif sp_suppressinfo then
         return "speedata Publisher"
     else
-        return string.format("speedata Publisher %s using LuaTeX",publisher.env_publisherversion)
+        return string.format("speedata Publisher %s using LuaTeX", publisher.env_publisherversion)
     end
 end
 
@@ -80,11 +81,11 @@ function M.getproducer(opts)
     elseif opts and opts.documentcreator and opts.documentcreator ~= "" and sp_suppressinfo then
         return string.format("speedata Publisher using LuaTeX")
     elseif opts and opts.documentcreator and opts.documentcreator ~= "" then
-        return string.format("speedata Publisher %s using LuaTeX",publisher.env_publisherversion)
+        return string.format("speedata Publisher %s using LuaTeX", publisher.env_publisherversion)
     elseif sp_suppressinfo then
         return "LuaTeX"
     else
-        return string.format("LuaTeX %s (build %s)",luatex_version, status.development_id or "-")
+        return string.format("LuaTeX %s (build %s)", luatex_version, status.development_id or "-")
     end
 end
 
@@ -92,39 +93,35 @@ end
 ---@param num integer Unix epoch seconds.
 ---@return string pdfdate
 local function pdfdate(num)
-    local ret = os.date("D:%Y%m%d%H%M%S+00'00'",num)
+    local ret = os.date("D:%Y%m%d%H%M%S+00'00'", num)
     return ret
 end
-
 
 -- Escapes the `/` character in a PDF name object as `#2f`.
 ---@param str string
 ---@return string escaped
-local function escape_pdfname( str )
-    return string.gsub(str,'/','#2f')
+local function escape_pdfname(str)
+    return string.gsub(str, "/", "#2f")
 end
 
 -- Escapes parentheses in a PDF literal string. `nil` passes through unchanged.
 ---@param str string?
 ---@return string? escaped
-function M.escape_pdfstring( str )
+function M.escape_pdfstring(str)
     if str then
-        str = string.gsub(str,"%(","\\(")
-        str = string.gsub(str,"%)","\\)")
+        str = string.gsub(str, "%(", "\\(")
+        str = string.gsub(str, "%)", "\\)")
     end
     return str
 end
-
-
-
 
 -- Converts a UTF-8 string to its PDF representation. ASCII-only inputs are
 -- wrapped in `(...)`; everything else becomes a `<feff...>` UTF-16 hex string.
 ---@param str string UTF-8 input.
 ---@return string pdfstring PDF-ready string literal.
-function M.utf8_to_utf16_string_pdf( str )
+function M.utf8_to_utf16_string_pdf(str)
     if str:match("^[a-zA-Z.0-9- ]+$") then
-        return "("..str.. ")"
+        return "(" .. str .. ")"
     end
     local ret = {}
     for s in string.utfvalues(str) do
@@ -145,7 +142,7 @@ function M.getmetadata(filespecnumbers, opts)
     local zugferd_level = nil
     local zugferd_filename = nil
     if filespecnumbers and type(filespecnumbers) == "table" then
-        for _,v in ipairs(filespecnumbers) do
+        for _, v in ipairs(filespecnumbers) do
             if type(v) == "table" and v[2] ~= nil then
                 zugferd_level = v[2]
                 zugferd_filename = v[3]
@@ -165,7 +162,7 @@ function M.getmetadata(filespecnumbers, opts)
     local fmt = opts and opts.format
 
     local doc = xmlbuilder.new_document()
-    doc:add_pi("xpacket", "begin=\"\239\187\191\" id=\"W5M0MpCehiHzreSzNTczkc9d\"")
+    doc:add_pi("xpacket", 'begin="\239\187\191" id="W5M0MpCehiHzreSzNTczkc9d"')
 
     local meta = doc:add_element("x:xmpmeta")
     meta:set_attr("xmlns:x", "adobe:ns:meta/")
@@ -176,10 +173,10 @@ function M.getmetadata(filespecnumbers, opts)
     local desc = rdf:add_element("rdf:Description")
     desc:set_attr("rdf:about", "")
     desc:set_attr("xmlns:xmpMM", "http://ns.adobe.com/xap/1.0/mm/")
-    desc:set_attr("xmlns:pdfuaid","http://www.aiim.org/pdfua/ns/id/")
-    desc:set_attr("xmlns:xmp",   "http://ns.adobe.com/xap/1.0/")
-    desc:set_attr("xmlns:pdf",   "http://ns.adobe.com/pdf/1.3/")
-    desc:set_attr("xmlns:dc",    "http://purl.org/dc/elements/1.1/")
+    desc:set_attr("xmlns:pdfuaid", "http://www.aiim.org/pdfua/ns/id/")
+    desc:set_attr("xmlns:xmp", "http://ns.adobe.com/xap/1.0/")
+    desc:set_attr("xmlns:pdf", "http://ns.adobe.com/pdf/1.3/")
+    desc:set_attr("xmlns:dc", "http://purl.org/dc/elements/1.1/")
     desc:set_attr("xmlns:pdfaid", "http://www.aiim.org/pdfa/ns/id/")
 
     if fmt == "PDF/A-3" then
@@ -212,11 +209,8 @@ function M.getmetadata(filespecnumbers, opts)
     -- title
     if opts and opts.documenttitle and opts.documenttitle ~= "" then
         if fmt == "PDF/A-3" or fmt == "PDF/UA" then
-            local li = desc:add_element("dc:title")
-                          :add_element("rdf:Alt")
-                          :add_element("rdf:li")
-            li:set_attr("xml:lang", "x-default")
-              :set_text(opts.documenttitle)
+            local li = desc:add_element("dc:title"):add_element("rdf:Alt"):add_element("rdf:li")
+            li:set_attr("xml:lang", "x-default"):set_text(opts.documenttitle)
         else
             desc:add_element("dc:title"):set_text(opts.documenttitle)
         end
@@ -225,10 +219,7 @@ function M.getmetadata(filespecnumbers, opts)
     -- author/creator
     if opts and opts.documentauthor and opts.documentauthor ~= "" then
         if fmt == "PDF/A-3" or fmt == "PDF/UA" then
-            desc:add_element("dc:creator")
-                :add_element("rdf:Seq")
-                :add_element("rdf:li")
-                :set_text(opts.documentauthor)
+            desc:add_element("dc:creator"):add_element("rdf:Seq"):add_element("rdf:li"):set_text(opts.documentauthor)
         else
             desc:add_element("dc:creator"):set_text(opts.documentauthor)
         end
@@ -272,7 +263,6 @@ function M.getmetadata(filespecnumbers, opts)
         rdfdesc:set_attr("zf:DocumentFileName", zugferd_filename)
         rdfdesc:set_attr("zf:DocumentType", "INVOICE")
         rdfdesc:set_attr("zf:Version", "1.0")
-
     end
     doc:add_pi("xpacket", [[end="r"]])
 
@@ -289,23 +279,29 @@ end
 ---@param destfilename string File name stored inside the PDF.
 ---@param filespecnumbers table Table the filespec entry is appended to.
 ---@return nil
-function M.attach_file_pdf(filecontents,description,mimetype,modificationtime,destfilename, filespecnumbers)
+function M.attach_file_pdf(filecontents, description, mimetype, modificationtime, destfilename, filespecnumbers)
     local is_zugferd = false
     if mimetype == "ZUGFeRD invoice" then
         is_zugferd = true
         mimetype = "text/xml"
     end
-    local fileobjectnum = pdf.immediateobj("stream",
+    local fileobjectnum = pdf.immediateobj(
+        "stream",
         filecontents,
-        string.format([[/Params <</ModDate (%s) /Size %d >> /Subtype /%s /Type /EmbeddedFile ]],
+        string.format(
+            [[/Params <</ModDate (%s) /Size %d >> /Subtype /%s /Type /EmbeddedFile ]],
             pdfdate(modificationtime),
             #filecontents,
-            escape_pdfname(mimetype)))
+            escape_pdfname(mimetype)
+        )
+    )
     local descPDF = ""
     if description then
-        descPDF = string.format("/Desc %s\n  ",M.utf8_to_utf16_string_pdf(description))
+        descPDF = string.format("/Desc %s\n  ", M.utf8_to_utf16_string_pdf(description))
     end
-    local filespecnum = pdf.immediateobj(string.format([[<<
+    local filespecnum = pdf.immediateobj(
+        string.format(
+            [[<<
   /AFRelationship /Alternative
   %s/EF <<
     /F %d 0 R
@@ -314,18 +310,38 @@ function M.attach_file_pdf(filecontents,description,mimetype,modificationtime,de
   /F %s
   /Type /Filespec
   /UF %s
->>]],descPDF, fileobjectnum,fileobjectnum,M.utf8_to_utf16_string_pdf(destfilename),M.utf8_to_utf16_string_pdf(destfilename)))
+>>]],
+            descPDF,
+            fileobjectnum,
+            fileobjectnum,
+            M.utf8_to_utf16_string_pdf(destfilename),
+            M.utf8_to_utf16_string_pdf(destfilename)
+        )
+    )
     if is_zugferd then
         local conformancelevel
-        if string.find(filecontents,"urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended",1,true) or string.find(filecontents,"urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended",1,true) or string.find(filecontents,"urn:ferd:CrossIndustryDocument:invoice:1p0:extended",1,true) then
+        if
+            string.find(filecontents, "urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended", 1, true)
+            or string.find(filecontents, "urn:cen.eu:en16931:2017#conformant#urn:zugferd.de:2p0:extended", 1, true)
+            or string.find(filecontents, "urn:ferd:CrossIndustryDocument:invoice:1p0:extended", 1, true)
+        then
             conformancelevel = "extended"
-        elseif string.find(filecontents,"urn:ferd:CrossIndustryDocument:invoice:1p0:comfort",1,true) or string.find(filecontents,"urn:cen.eu:en16931:2017",1,true) then
+        elseif
+            string.find(filecontents, "urn:ferd:CrossIndustryDocument:invoice:1p0:comfort", 1, true)
+            or string.find(filecontents, "urn:cen.eu:en16931:2017", 1, true)
+        then
             conformancelevel = "comfort" -- EN16931
-        elseif string.find(filecontents,"urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic",1,true) or string.find(filecontents,"urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic",1,true) then
+        elseif
+            string.find(filecontents, "urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic", 1, true)
+            or string.find(filecontents, "urn:cen.eu:en16931:2017#compliant#urn:zugferd.de:2p0:basic", 1, true)
+        then
             conformancelevel = "basic"
-        elseif string.find(filecontents,"urn:factur-x.eu:1p0:basicwl",1,true) then
+        elseif string.find(filecontents, "urn:factur-x.eu:1p0:basicwl", 1, true) then
             conformancelevel = "basicwl"
-        elseif string.find(filecontents,"urn:factur-x.eu:1p0:minimum",1,true) or string.find(filecontents,"urn:zugferd.de:2p0:minimum",1,true) then
+        elseif
+            string.find(filecontents, "urn:factur-x.eu:1p0:minimum", 1, true)
+            or string.find(filecontents, "urn:zugferd.de:2p0:minimum", 1, true)
+        then
             conformancelevel = "minimum"
         end
         if not conformancelevel then
@@ -335,9 +351,9 @@ function M.attach_file_pdf(filecontents,description,mimetype,modificationtime,de
             conformancelevel = string.upper(conformancelevel)
         end
 
-        filespecnumbers[#filespecnumbers + 1] = {filespecnum,conformancelevel,destfilename}
+        filespecnumbers[#filespecnumbers + 1] = { filespecnum, conformancelevel, destfilename }
     else
-        filespecnumbers[#filespecnumbers + 1] = {filespecnum,nil,destfilename}
+        filespecnumbers[#filespecnumbers + 1] = { filespecnum, nil, destfilename }
     end
 end
 

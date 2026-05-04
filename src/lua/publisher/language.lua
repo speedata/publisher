@@ -22,110 +22,109 @@ local M = {}
 -- in the format `hyph-XYZ.pat.txt` and we need to find out that `XYZ` part.
 ---@type table<string, string>
 local language_mapping = {
-    ["Ancient Greek"]                = "grc",
-    ["Armenian"]                     = "hy",
-    ["Bahasa Indonesia"]             = "id",
-    ["Basque"]                       = "eu",
-    ["Bulgarian"]                    = "bg",
-    ["Catalan"]                      = "ca",
-    ["Chinese"]                      = "zh",
-    ["Croatian"]                     = "hr",
-    ["Czech"]                        = "cs",
-    ["Danish"]                       = "da",
-    ["Dutch"]                        = "nl",
-    ["English"]                      = "en_GB",
-    ["English (Great Britain)"]      = "en_GB",
-    ["English (USA)"]                = "en_US",
-    ["Esperanto"]                    = "eo",
-    ["Estonian"]                     = "et",
-    ["Finnish"]                      = "fi",
-    ["French"]                       = "fr",
-    ["Galician"]                     = "gl",
-    ["German"]                       = "de",
-    ["Greek"]                        = "el",
-    ["Gujarati"]                     = "gu",
-    ["Hindi"]                        = "hi",
-    ["Hungarian"]                    = "hu",
-    ["Icelandic"]                    = "is",
-    ["Irish"]                        = "ga",
-    ["Italian"]                      = "it",
-    ["Kannada"]                      = "kn",
-    ["Kurmanji"]                     = "ku",
-    ["Latvian"]                      = "lv",
-    ["Lithuanian"]                   = "lt",
-    ["Malayalam"]                    = "ml",
-    ["Norwegian Bokmål"]             = "nb",
-    ["Norwegian Nynorsk"]            = "nn",
-    ["Other"]                        = "--",
-    ["Polish"]                       = "pl",
-    ["Portuguese"]                   = "pt",
-    ["Romanian"]                     = "ro",
-    ["Russian"]                      = "ru",
-    ["Sanskrit"]                     = "sa",
-    ["Serbian"]                      = "sr",
-    ["Serbian (cyrillic)"]           = "sc",
-    ["Slovak"]                       = "sk",
-    ["Slovenian"]                    = "sl",
-    ["Spanish"]                      = "es",
-    ["Swedish"]                      = "sv",
-    ["Turkish"]                      = "tr",
-    ["Ukrainian"]                    = "uk",
-    ["Welsh"]                        = "cy",
+    ["Ancient Greek"] = "grc",
+    ["Armenian"] = "hy",
+    ["Bahasa Indonesia"] = "id",
+    ["Basque"] = "eu",
+    ["Bulgarian"] = "bg",
+    ["Catalan"] = "ca",
+    ["Chinese"] = "zh",
+    ["Croatian"] = "hr",
+    ["Czech"] = "cs",
+    ["Danish"] = "da",
+    ["Dutch"] = "nl",
+    ["English"] = "en_GB",
+    ["English (Great Britain)"] = "en_GB",
+    ["English (USA)"] = "en_US",
+    ["Esperanto"] = "eo",
+    ["Estonian"] = "et",
+    ["Finnish"] = "fi",
+    ["French"] = "fr",
+    ["Galician"] = "gl",
+    ["German"] = "de",
+    ["Greek"] = "el",
+    ["Gujarati"] = "gu",
+    ["Hindi"] = "hi",
+    ["Hungarian"] = "hu",
+    ["Icelandic"] = "is",
+    ["Irish"] = "ga",
+    ["Italian"] = "it",
+    ["Kannada"] = "kn",
+    ["Kurmanji"] = "ku",
+    ["Latvian"] = "lv",
+    ["Lithuanian"] = "lt",
+    ["Malayalam"] = "ml",
+    ["Norwegian Bokmål"] = "nb",
+    ["Norwegian Nynorsk"] = "nn",
+    ["Other"] = "--",
+    ["Polish"] = "pl",
+    ["Portuguese"] = "pt",
+    ["Romanian"] = "ro",
+    ["Russian"] = "ru",
+    ["Sanskrit"] = "sa",
+    ["Serbian"] = "sr",
+    ["Serbian (cyrillic)"] = "sc",
+    ["Slovak"] = "sk",
+    ["Slovenian"] = "sl",
+    ["Spanish"] = "es",
+    ["Swedish"] = "sv",
+    ["Turkish"] = "tr",
+    ["Ukrainian"] = "uk",
+    ["Welsh"] = "cy",
 }
-
 
 ---@type table<string, string>
 local language_filename = {
-    ["bg"]    = "bg",
-    ["ca"]    = "ca",
-    ["cs"]    = "cs",
-    ["cy"]    = "cy",
-    ["da"]    = "da",
-    ["de"]    = "de-1996",
-    ["el"]    = "el-monoton",
-    ["en"]    = "en-gb",
+    ["bg"] = "bg",
+    ["ca"] = "ca",
+    ["cs"] = "cs",
+    ["cy"] = "cy",
+    ["da"] = "da",
+    ["de"] = "de-1996",
+    ["el"] = "el-monoton",
+    ["en"] = "en-gb",
     ["en_gb"] = "en-gb",
     ["en_us"] = "en-us",
-    ["eo"]    = "eo",
-    ["es"]    = "es",
-    ["et"]    = "et",
-    ["eu"]    = "eu",
-    ["fi"]    = "fi",
-    ["fr"]    = "fr",
-    ["ga"]    = "ga",
-    ["gl"]    = "gl",
-    ["grc"]   = "grc",
-    ["gu"]    = "gu",
-    ["hi"]    = "hi",
-    ["hr"]    = "hr",
-    ["hu"]    = "hu",
-    ["hy"]    = "hy",
-    ["id"]    = "id",
-    ["is"]    = "is",
-    ["it"]    = "it",
-    ["ku"]    = "kmr",
-    ["kn"]    = "kn",
-    ["lt"]    = "lt",
-    ["ml"]    = "ml",
-    ["lv"]    = "lv",
-    ["nb"]    = "nb",
-    ["nl"]    = "nl",
-    ["nn"]    = "nn",
-    ["no"]    = "nb",
-    ["pl"]    = "pl",
-    ["pt"]    = "pt",
-    ["ro"]    = "ro",
-    ["ru"]    = "ru",
-    ["sa"]    = "sa",
-    ["sk"]    = "sk",
-    ["sl"]    = "sl",
-    ["sr"]    = "sr",
-    ["sc"]    = "sr-cyrl",
-    ["sv"]    = "sv",
-    ["tr"]    = "tr",
-    ["uk"]    = "uk",
-    ["zh"]    = "",
-    ["--"]    = "",
+    ["eo"] = "eo",
+    ["es"] = "es",
+    ["et"] = "et",
+    ["eu"] = "eu",
+    ["fi"] = "fi",
+    ["fr"] = "fr",
+    ["ga"] = "ga",
+    ["gl"] = "gl",
+    ["grc"] = "grc",
+    ["gu"] = "gu",
+    ["hi"] = "hi",
+    ["hr"] = "hr",
+    ["hu"] = "hu",
+    ["hy"] = "hy",
+    ["id"] = "id",
+    ["is"] = "is",
+    ["it"] = "it",
+    ["ku"] = "kmr",
+    ["kn"] = "kn",
+    ["lt"] = "lt",
+    ["ml"] = "ml",
+    ["lv"] = "lv",
+    ["nb"] = "nb",
+    ["nl"] = "nl",
+    ["nn"] = "nn",
+    ["no"] = "nb",
+    ["pl"] = "pl",
+    ["pt"] = "pt",
+    ["ro"] = "ro",
+    ["ru"] = "ru",
+    ["sa"] = "sa",
+    ["sk"] = "sk",
+    ["sl"] = "sl",
+    ["sr"] = "sr",
+    ["sc"] = "sr-cyrl",
+    ["sv"] = "sv",
+    ["tr"] = "tr",
+    ["uk"] = "uk",
+    ["zh"] = "",
+    ["--"] = "",
 }
 
 -- Resolves a language reference to a LanguageEntry, loading hyphenation
@@ -154,10 +153,10 @@ function M.get_language(id_or_locale_or_name)
         filename_part = language_filename[locale]
     else
         local sep = "_"
-        if string.match( locale ,"%-" ) then
+        if string.match(locale, "%-") then
             sep = "-"
         end
-        local langcode, _ = table.unpack(string.explode(locale,sep))
+        local langcode, _ = table.unpack(string.explode(locale, sep))
         if language_filename[langcode] then
             filename_part = language_filename[langcode]
         end
@@ -168,11 +167,14 @@ function M.get_language(id_or_locale_or_name)
     if filename_part == "" then
         -- ignore this; probably cjk or another language without hyphenation patterns
     elseif not filename_part then
-        main.log("warn", string.format("Can't find hyphenation patterns for language %s", tostring(orig_id_or_locale_or_name)))
+        main.log(
+            "warn",
+            string.format("Can't find hyphenation patterns for language %s", tostring(orig_id_or_locale_or_name))
+        )
         return 0
     else
-        local filename = string.format("hyph-%s.pat.txt",filename_part)
-        main.log("debug","Loading hyphenation pattern","filename",filename)
+        local filename = string.format("hyph-%s.pat.txt", filename_part)
+        main.log("debug", "Loading hyphenation pattern", "filename", filename)
         local path = kpse.find_file(filename)
         local pattern_file = io.open(path)
         local pattern = pattern_file:read("*all")
@@ -181,7 +183,7 @@ function M.get_language(id_or_locale_or_name)
     end
 
     local id = l:id()
-    main.log("debug","Language ID","id",id)
+    main.log("debug", "Language ID", "id", id)
     local ret = { id = id, l = l, locale = locale }
     publisher.languages_id_lang[id] = ret
     publisher.languages[locale] = ret
@@ -192,7 +194,7 @@ end
 -- if the language cannot be resolved.
 ---@param locale_or_name integer|string
 ---@return integer id
-function M.get_languagecode( locale_or_name )
+function M.get_languagecode(locale_or_name)
     local tmp = M.get_language(locale_or_name)
     if type(tmp) ~= "table" then
         return 0
@@ -203,8 +205,8 @@ end
 -- Sets `publisher.defaultlanguage` to the id resolved from `mainlanguage`.
 ---@param mainlanguage integer|string
 ---@return nil
-function M.set_mainlanguage( mainlanguage )
-    main.log("info","Setting default language","lang",mainlanguage or "?")
+function M.set_mainlanguage(mainlanguage)
+    main.log("info", "Setting default language", "lang", mainlanguage or "?")
     publisher.defaultlanguage = M.get_languagecode(mainlanguage)
 end
 
@@ -212,13 +214,13 @@ end
 -- Called before `do_linebreak()` so the pre-hyphen char can be swapped.
 ---@param nodelist node Head of the node list to scan.
 ---@return integer[] ids
-function M.get_languages_used( nodelist )
+function M.get_languages_used(nodelist)
     local langs = {}
     for n in node.traverse_id(publisher.glyph_node, nodelist) do
         langs[n.lang] = true
     end
     local ret = {}
-    for k,_ in pairs(langs) do
+    for k, _ in pairs(langs) do
         ret[#ret + 1] = k
     end
     return ret

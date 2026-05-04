@@ -21,53 +21,63 @@ require("par")
 local html = require("html")
 
 -- node.direct API locals for hot loops
-local d              = node.direct
-local d_todirect     = d.todirect
-local d_tonode       = d.tonode
-local d_getnext      = d.getnext
-local d_getid        = d.getid
-local d_new          = d.new
-local d_setkern      = d.setkern
+local d = node.direct
+local d_todirect = d.todirect
+local d_tonode = d.tonode
+local d_getnext = d.getnext
+local d_getid = d.getid
+local d_new = d.new
+local d_setkern = d.setkern
 local d_insert_before = d.insert_before
 local d_has_attribute = d.has_attribute
 local d_set_attribute = d.set_attribute
-local d_getproperty  = d.getproperty
-local d_setproperty  = d.setproperty
-local d_setfield     = d.setfield
-local d_getlist      = d.getlist
-local d_dimensions   = d.dimensions
+local d_getproperty = d.getproperty
+local d_setproperty = d.setproperty
+local d_setfield = d.setfield
+local d_getlist = d.getlist
+local d_dimensions = d.dimensions
 
 -- Hot-path locals to avoid repeated global lookups
 local attribute_name_number_map = publisher.attribute_name_number
-local attributes_map            = publisher.attributes
+local attributes_map = publisher.attributes
 
 -- Pre-resolved attribute numbers for hot loops
-local att_fontfamily    = attribute_name_number_map["fontfamily"]
-local att_color         = attribute_name_number_map["color"]
-local att_bgcolor       = attribute_name_number_map["background-color"]
-local att_bgpadtop      = attribute_name_number_map["bgpaddingtop"]
-local att_bgpadbot      = attribute_name_number_map["bgpaddingbottom"]
-local att_hyperlink     = attribute_name_number_map["hyperlink"]
-local att_spaceglue     = attribute_name_number_map["spaceglue"]
-local att_newline       = attribute_name_number_map["newline"]
-local att_fontstyle     = attribute_name_number_map["font-style"]
-local att_fontweight    = attribute_name_number_map["font-weight"]
-local att_td_line       = attribute_name_number_map["text-decoration-line"]
-local att_td_style      = attribute_name_number_map["text-decoration-style"]
-local att_td_color      = attribute_name_number_map["text-decoration-color"]
+local att_fontfamily = attribute_name_number_map["fontfamily"]
+local att_color = attribute_name_number_map["color"]
+local att_bgcolor = attribute_name_number_map["background-color"]
+local att_bgpadtop = attribute_name_number_map["bgpaddingtop"]
+local att_bgpadbot = attribute_name_number_map["bgpaddingbottom"]
+local att_hyperlink = attribute_name_number_map["hyperlink"]
+local att_spaceglue = attribute_name_number_map["spaceglue"]
+local att_newline = attribute_name_number_map["newline"]
+local att_fontstyle = attribute_name_number_map["font-style"]
+local att_fontweight = attribute_name_number_map["font-weight"]
+local att_td_line = attribute_name_number_map["text-decoration-line"]
+local att_td_style = attribute_name_number_map["text-decoration-style"]
+local att_td_color = attribute_name_number_map["text-decoration-color"]
 local att_verticalalign = attribute_name_number_map["vertical-align"]
 
 -- Pre-resolved table-valued attribute indices (reverse lookup: string -> index)
 local attval_fontstyle = {}
-for i,v in ipairs(attributes_map["font-style"]) do attval_fontstyle[v] = i end
+for i, v in ipairs(attributes_map["font-style"]) do
+    attval_fontstyle[v] = i
+end
 local attval_fontweight = {}
-for i,v in ipairs(attributes_map["font-weight"]) do attval_fontweight[v] = i end
+for i, v in ipairs(attributes_map["font-weight"]) do
+    attval_fontweight[v] = i
+end
 local attval_td_line = {}
-for i,v in ipairs(attributes_map["text-decoration-line"]) do attval_td_line[v] = i end
+for i, v in ipairs(attributes_map["text-decoration-line"]) do
+    attval_td_line[v] = i
+end
 local attval_td_style = {}
-for i,v in ipairs(attributes_map["text-decoration-style"]) do attval_td_style[v] = i end
+for i, v in ipairs(attributes_map["text-decoration-style"]) do
+    attval_td_style[v] = i
+end
 local attval_verticalalign = {}
-for i,v in ipairs(attributes_map["vertical-align"]) do attval_verticalalign[v] = i end
+for i, v in ipairs(attributes_map["vertical-align"]) do
+    attval_verticalalign[v] = i
+end
 
 -- Dispatches a parsed CSS+HTML tree (`elt.typ == "csshtmltree"`) to
 -- `html.parse_html_new`, providing the runtime environment.
@@ -82,12 +92,12 @@ function M.parse_html(elt, parameter, data)
         -- Provide the runtime environment for the modular parser
         local env = {
             publisher = publisher,
-            tex       = tex,
-            node      = node,
-            img       = img,
-            xpath     = publisher.xpath,
-            math      = math,
-            err       = err,
+            tex = tex,
+            node = node,
+            img = img,
+            xpath = publisher.xpath,
+            math = math,
+            err = err,
         }
         -- New modular entry point (same call site for you)
         return html.parse_html_new(elt, parameter, data, env)
@@ -108,7 +118,7 @@ end
 ---@param pagewidth integer
 ---@param pageheight integer
 ---@return nil
-function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewidth, pageheight )
+function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, pagewidth, pageheight)
     local insert_nm = M.insert_nonmoving_whatsits
     local setp = publisher.attribute_helpers.setprop
     local set_attrs = publisher.attribute_helpers.set_attributes
@@ -132,7 +142,9 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
     local attr_num_borderht = attribute_name_number_map["borderht"]
     local node_has_attribute = node.has_attribute
     local node_getproperty = node.getproperty
-    if not head then return {} end
+    if not head then
+        return {}
+    end
     local fun
     local prev_hyperlink, prev_fgcolor, prev_role
     local nonextnode = false
@@ -143,10 +155,10 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
         local head_props = node_getproperty(head)
         local head_props_t = head_props and type(head_props) == "table" and head_props or nil
         -- what is subtype 1?
-        if head.id==publisher.hlist_node and head.subtype == 1 then
-            local r = insert_nm(head.list,head,"horizontal",curx,cury,pagewidth, pageheight)
+        if head.id == publisher.hlist_node and head.subtype == 1 then
+            local r = insert_nm(head.list, head, "horizontal", curx, cury, pagewidth, pageheight)
             for _, rule in ipairs(r) do
-                rules[#rules+1] = rule
+                rules[#rules + 1] = rule
             end
             local bordernumber = node_has_attribute(head, attr_num_bordernumber)
             if bordernumber then
@@ -154,79 +166,91 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                 local wd = node_has_attribute(head, attr_num_borderwd)
                 local ht = node_has_attribute(head, attr_num_borderht)
                 wd = wd - ba.border_left_width - ba.margin_right + ba.padding_left
-                setp(head,"border_bottom_color",ba.border_bottom_color)
-                setp(head,"border_bottom_left_radius",ba.border_bottom_left_radius)
-                setp(head,"border_bottom_right_radius",ba.border_bottom_right_radius)
-                setp(head,"border_bottom_style",ba.border_bottom_style)
-                setp(head,"border_bottom_width",ba.border_bottom_width)
-                setp(head,"border_left_color",ba.border_left_color)
-                setp(head,"border_left_style",ba.border_left_style)
-                setp(head,"border_left_width",ba.border_left_width)
-                setp(head,"border_right_color",ba.border_right_color)
-                setp(head,"border_right_style",ba.border_right_style)
-                setp(head,"border_right_width",ba.border_right_width)
-                setp(head,"border_top_color",ba.border_top_color)
-                setp(head,"border_top_left_radius",ba.border_top_left_radius)
-                setp(head,"border_top_right_radius",ba.border_top_right_radius)
-                setp(head,"border_top_style",ba.border_top_style)
-                setp(head,"border_top_width",ba.border_top_width)
-                setp(head,"borderstart","true")
-                setp(head,"debug","false")
-                setp(head,"margin_bottom",ba.margin_bottom)
-                setp(head,"margin_left",ba.margin_left)
-                setp(head,"margin_right",ba.margin_right)
-                setp(head,"margin_top",ba.margin_top)
-                setp(head,"padding_bottom",ba.padding_bottom)
-                setp(head,"padding_left",ba.padding_left)
-                setp(head,"padding_right",ba.padding_right)
-                setp(head,"padding_top",ba.padding_top)
-                setp(head,"lineheight",ht)
-                setp(head,"depth", parent.depth)
+                setp(head, "border_bottom_color", ba.border_bottom_color)
+                setp(head, "border_bottom_left_radius", ba.border_bottom_left_radius)
+                setp(head, "border_bottom_right_radius", ba.border_bottom_right_radius)
+                setp(head, "border_bottom_style", ba.border_bottom_style)
+                setp(head, "border_bottom_width", ba.border_bottom_width)
+                setp(head, "border_left_color", ba.border_left_color)
+                setp(head, "border_left_style", ba.border_left_style)
+                setp(head, "border_left_width", ba.border_left_width)
+                setp(head, "border_right_color", ba.border_right_color)
+                setp(head, "border_right_style", ba.border_right_style)
+                setp(head, "border_right_width", ba.border_right_width)
+                setp(head, "border_top_color", ba.border_top_color)
+                setp(head, "border_top_left_radius", ba.border_top_left_radius)
+                setp(head, "border_top_right_radius", ba.border_top_right_radius)
+                setp(head, "border_top_style", ba.border_top_style)
+                setp(head, "border_top_width", ba.border_top_width)
+                setp(head, "borderstart", "true")
+                setp(head, "debug", "false")
+                setp(head, "margin_bottom", ba.margin_bottom)
+                setp(head, "margin_left", ba.margin_left)
+                setp(head, "margin_right", ba.margin_right)
+                setp(head, "margin_top", ba.margin_top)
+                setp(head, "padding_bottom", ba.padding_bottom)
+                setp(head, "padding_left", ba.padding_left)
+                setp(head, "padding_right", ba.padding_right)
+                setp(head, "padding_top", ba.padding_top)
+                setp(head, "lineheight", ht)
+                setp(head, "depth", parent.depth)
                 local boxnode = publisher.htmlbox("horizontal", head, wd, parent.height, parent.depth)
                 local hbox = node.hpack(boxnode)
                 local g
                 g = set_glue(nil, { width = ba.border_left_width + ba.margin_left + ba.padding_left })
-                hbox.head = node.insert_before(hbox.head,boxnode,g)
+                hbox.head = node.insert_before(hbox.head, boxnode, g)
                 g = set_glue(nil, { width = parent.height })
                 local vl = node.vpack(g)
-                node.insert_after(vl,g,hbox)
+                node.insert_after(vl, g, hbox)
                 g = set_glue(nil, { width = -parent.height })
-                node.insert_after(vl,hbox,g)
+                node.insert_after(vl, hbox, g)
                 vl.height = 0
-                parent.head = node.insert_before(parent.head,head,vl)
+                parent.head = node.insert_before(parent.head, head, vl)
             end
-            if blockinline == "vertical" then cury = cury + head.height + head.depth else curx = curx + head.width end
-        elseif head.id==publisher.hlist_node or head.id == publisher.vlist_node then
+            if blockinline == "vertical" then
+                cury = cury + head.height + head.depth
+            else
+                curx = curx + head.width
+            end
+        elseif head.id == publisher.hlist_node or head.id == publisher.vlist_node then
             -- Check if this is a paragraph vlist from par:format with no features that need processing
             local skip_descent = false
             if head.id == publisher.vlist_node then
-                if head_props_t and head_props_t.origin == "par:format"
+                if
+                    head_props_t
+                    and head_props_t.origin == "par:format"
                     and not head_props_t.has_color
                     and not head_props_t.has_hyperlink
                     and not head_props_t.has_role
-                    and not head_props_t.has_special_nodes then
+                    and not head_props_t.has_special_nodes
+                then
                     skip_descent = true
                 end
             end
             if not skip_descent then
                 local bordernumber = node_has_attribute(head, attr_num_bordernumber)
                 if bordernumber then
-                    local boxnode = publisher.drawing.mpbox(borderattrs[bordernumber],head.width,head.height + head.depth)
-                    parent.head = node_insert_before(parent.head,head,boxnode)
+                    local boxnode =
+                        publisher.drawing.mpbox(borderattrs[bordernumber], head.width, head.height + head.depth)
+                    parent.head = node_insert_before(parent.head, head, boxnode)
                 end
                 if head.id == publisher.hlist_node then
-                    local r = insert_nm(head.list,head,"horizontal",curx,cury,pagewidth, pageheight)
+                    local r = insert_nm(head.list, head, "horizontal", curx, cury, pagewidth, pageheight)
                     for _, rule in ipairs(r) do
-                        rules[#rules+1] = rule
+                        rules[#rules + 1] = rule
                     end
                 else
-                    local r = insert_nm(head.list,head,"vertical",curx,cury,pagewidth, pageheight)
+                    local r = insert_nm(head.list, head, "vertical", curx, cury, pagewidth, pageheight)
                     for _, rule in ipairs(r) do
-                        rules[#rules+1] = rule
+                        rules[#rules + 1] = rule
                     end
                 end
             end
-            if blockinline == "vertical" then cury = cury + head.height + head.depth else curx = curx + head.width end
+            if blockinline == "vertical" then
+                cury = cury + head.height + head.depth
+            else
+                curx = curx + head.width
+            end
         else
             if head.id == publisher.glue_node then
                 if blockinline == "horizontal" then
@@ -240,10 +264,14 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                     local bot = pageheight - cury - head.height
                     local right = head.width + curx
                     local top = pageheight - cury
-                setp(head,"bbox",{ sp_to_bp(left),sp_to_bp(bot),sp_to_bp(right),sp_to_bp(top )})
+                    setp(head, "bbox", { sp_to_bp(left), sp_to_bp(bot), sp_to_bp(right), sp_to_bp(top) })
+                end
+                if blockinline == "vertical" then
+                    cury = cury + head.height + head.depth
+                else
+                    curx = curx + head.width
+                end
             end
-            if blockinline == "vertical" then cury = cury + head.height + head.depth else curx = curx + head.width end
-        end
 
             local fgcolor = node_has_attribute(head, attr_num_color)
             local bordernumber = node_has_attribute(head, attr_num_bordernumber)
@@ -253,76 +281,82 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                 local wd, ht
                 wd = node_has_attribute(head, attr_num_borderwd)
                 ht = node_has_attribute(head, attr_num_borderht)
-                setp(head,"border_bottom_color",ba.border_bottom_color)
-                setp(head,"border_bottom_left_radius",ba.border_bottom_left_radius)
-                setp(head,"border_bottom_right_radius",ba.border_bottom_right_radius)
-                setp(head,"border_bottom_style",ba.border_bottom_style)
-                setp(head,"border_bottom_width",ba.border_bottom_width)
-                setp(head,"border_left_color",ba.border_left_color)
-                setp(head,"border_left_style",ba.border_left_style)
-                setp(head,"border_left_width",ba.border_left_width)
-                setp(head,"border_right_color",ba.border_right_color)
-                setp(head,"border_right_style",ba.border_right_style)
-                setp(head,"border_right_width",ba.border_right_width)
-                setp(head,"border_top_color",ba.border_top_color)
-                setp(head,"border_top_left_radius",ba.border_top_left_radius)
-                setp(head,"border_top_right_radius",ba.border_top_right_radius)
-                setp(head,"border_top_style",ba.border_top_style)
-                setp(head,"border_top_width",ba.border_top_width)
-                setp(head,"borderstart","true")
-                setp(head,"debug","false")
-                setp(head,"margin_bottom",ba.margin_bottom)
-                setp(head,"margin_left",ba.margin_left)
-                setp(head,"margin_right",ba.margin_right)
-                setp(head,"margin_top",ba.margin_top)
-                setp(head,"padding_bottom",ba.padding_bottom)
-                setp(head,"padding_left",ba.padding_left)
-                setp(head,"padding_right",ba.padding_right)
-                setp(head,"padding_top",ba.padding_top)
-                setp(head,"lineheight",ht)
+                setp(head, "border_bottom_color", ba.border_bottom_color)
+                setp(head, "border_bottom_left_radius", ba.border_bottom_left_radius)
+                setp(head, "border_bottom_right_radius", ba.border_bottom_right_radius)
+                setp(head, "border_bottom_style", ba.border_bottom_style)
+                setp(head, "border_bottom_width", ba.border_bottom_width)
+                setp(head, "border_left_color", ba.border_left_color)
+                setp(head, "border_left_style", ba.border_left_style)
+                setp(head, "border_left_width", ba.border_left_width)
+                setp(head, "border_right_color", ba.border_right_color)
+                setp(head, "border_right_style", ba.border_right_style)
+                setp(head, "border_right_width", ba.border_right_width)
+                setp(head, "border_top_color", ba.border_top_color)
+                setp(head, "border_top_left_radius", ba.border_top_left_radius)
+                setp(head, "border_top_right_radius", ba.border_top_right_radius)
+                setp(head, "border_top_style", ba.border_top_style)
+                setp(head, "border_top_width", ba.border_top_width)
+                setp(head, "borderstart", "true")
+                setp(head, "debug", "false")
+                setp(head, "margin_bottom", ba.margin_bottom)
+                setp(head, "margin_left", ba.margin_left)
+                setp(head, "margin_right", ba.margin_right)
+                setp(head, "margin_top", ba.margin_top)
+                setp(head, "padding_bottom", ba.padding_bottom)
+                setp(head, "padding_left", ba.padding_left)
+                setp(head, "padding_right", ba.padding_right)
+                setp(head, "padding_top", ba.padding_top)
+                setp(head, "lineheight", ht)
                 if blockinline == "vertical" then
                     wd = wd - ba.border_left_width - ba.margin_left - ba.padding_left - ba.margin_right
-                    setp(head,"shiftdown",ht + ba.padding_top + ba.border_top_width + ba.margin_top)
-                    setp(head,"shiftright",ba.border_left_width + ba.margin_left + ba.padding_left)
+                    setp(head, "shiftdown", ht + ba.padding_top + ba.border_top_width + ba.margin_top)
+                    setp(head, "shiftright", ba.border_left_width + ba.margin_left + ba.padding_left)
                 else
                     ht = parent.height + parent.depth
-                    setp(head,"lineheight",ht)
+                    setp(head, "lineheight", ht)
                     wd = parent.width - ba.border_left_width - ba.margin_left - ba.border_right_width - ba.margin_right
                 end
 
-                local boxnode = publisher.htmlbox(blockinline, head, wd, parent.height,parent.depth)
-                parent.head = node_insert_before(parent.head,head,boxnode)
-                setp(head,"borderstart",false)
+                local boxnode = publisher.htmlbox(blockinline, head, wd, parent.height, parent.depth)
+                parent.head = node_insert_before(parent.head, head, boxnode)
+                setp(head, "borderstart", false)
             end
             -- Re-read properties if border/rule code may have created them
             if not head_props_t then
                 head_props = node_getproperty(head)
                 head_props_t = head_props and type(head_props) == "table" and head_props or nil
             end
-            local transparency  = head_props_t and head_props_t.opacity
-            local bbox          = head_props_t and head_props_t.bbox
-            local hl            = node_has_attribute(head, attr_num_hyperlink) or (head_props_t and head_props_t.hyperlink)
+            local transparency = head_props_t and head_props_t.opacity
+            local bbox = head_props_t and head_props_t.bbox
+            local hl = node_has_attribute(head, attr_num_hyperlink) or (head_props_t and head_props_t.hyperlink)
             local role, structelemobjnum, id, parentid, rc, actualtext, alttext
             if opt_format == "PDF/UA" and head_props_t then
-                actualtext       = head_props_t.actualtext
-                alttext          = head_props_t.alttext
-                role             = head_props_t.role
+                actualtext = head_props_t.actualtext
+                alttext = head_props_t.alttext
+                role = head_props_t.role
                 structelemobjnum = head_props_t.structelemobjnum
-                id               = head_props_t.id
-                parentid         = head_props_t.parent
-                rc               = head_props_t.rolecounter
+                id = head_props_t.id
+                parentid = head_props_t.parent
+                rc = head_props_t.rolecounter
             end
             if head.id == publisher.glyph_node then
                 currentfont = head.font
                 if role and head.next and head.next.id == publisher.disc_node then
-                    publisher.attribute_helpers.setprop(head.next,"role",role)
-                    publisher.attribute_helpers.setprop(head.next,"parent",parentid)
-                    publisher.attribute_helpers.setprop(head.next,"rolecounter",rc)
+                    publisher.attribute_helpers.setprop(head.next, "role", role)
+                    publisher.attribute_helpers.setprop(head.next, "parent", parentid)
+                    publisher.attribute_helpers.setprop(head.next, "rolecounter", rc)
                 end
             end
 
             -- Fast path: skip annotation work when no colors/links/roles/opacity are present
-            local needs_annotations = fgcolor or prev_fgcolor or hl or prev_hyperlink or role or prev_role or transparency
+            local needs_annotations = fgcolor
+                or prev_fgcolor
+                or hl
+                or prev_hyperlink
+                or role
+                or prev_role
+                or transparency
             if needs_annotations then
                 local insert_startlink = false
                 local insert_endlink = false
@@ -333,7 +367,7 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
 
                 if fgcolor and head.next == nil then
                     -- at end insert endcolor if in color mode
-                    if prev_fgcolor == nil  then
+                    if prev_fgcolor == nil then
                         insert_startcolor = true
                     end
                     insert_endcolor = true
@@ -356,9 +390,16 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                     prev_fgcolor = fgcolor
                 end
 
-                if role and ( head.next == nil or head.next.id == publisher.vlist_node or head.next.id == publisher.hlist_node )  then
+                if
+                    role
+                    and (
+                        head.next == nil
+                        or head.next.id == publisher.vlist_node
+                        or head.next.id == publisher.hlist_node
+                    )
+                then
                     -- at end insert endrole if in role mode
-                    if prev_role == nil  then
+                    if prev_role == nil then
                         insert_startrole = true
                     end
                     insert_endrole = true
@@ -401,14 +442,14 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                 end
                 if insert_endlink then
                     linklevel = linklevel - 1
-                    local enl = node_new("whatsit","pdf_end_link")
-                    parent.head = node_insert_before(parent.head,head,enl)
+                    local enl = node_new("whatsit", "pdf_end_link")
+                    parent.head = node_insert_before(parent.head, head, enl)
                     if insert_endrole then
-                        local emc = node_new("whatsit","pdf_literal")
+                        local emc = node_new("whatsit", "pdf_literal")
                         emc.data = "EMC"
                         emc.mode = 1
-                        setp(emc,"origin","insert_endrole")
-                        node_insert_after(parent.head,enl,emc)
+                        setp(emc, "origin", "insert_endrole")
+                        node_insert_after(parent.head, enl, emc)
                         insert_endrole = false
                     end
                 end
@@ -417,40 +458,39 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                     -- 3 = user
                     local ai = publisher.structure_tree.get_action_node(3)
                     ai.data = tostring(links_get(hl))
-                    local stl = node_new("whatsit","pdf_start_link")
+                    local stl = node_new("whatsit", "pdf_start_link")
                     stl.action = ai
                     stl.width = -1073741824
                     stl.height = -1073741824
                     stl.depth = -1073741824
                     stl.objnum = pdf_reserveobj()
-                    parent.head = node_insert_before(parent.head,head,stl)
+                    parent.head = node_insert_before(parent.head, head, stl)
                     if insert_endrole then
-                        local emc = node_new("whatsit","pdf_literal")
+                        local emc = node_new("whatsit", "pdf_literal")
                         emc.data = "EMC"
                         emc.mode = 1
-                        setp(emc,"origin","insert_endrole")
-                        parent.head = node_insert_before(parent.head,stl,emc)
+                        setp(emc, "origin", "insert_endrole")
+                        parent.head = node_insert_before(parent.head, stl, emc)
                         insert_endrole = false
                     end
 
                     if insert_startrole then
-                        local bdc = node_new("whatsit","pdf_literal")
-                        node_set_attr(bdc,publisher.att_role, role)
-                        setp(bdc,"parentid", parentid)
-                        setp(bdc,"rolecounter", rc)
-                        setp(bdc,"id",id)
-                        setp(bdc,"bbox",bbox)
-                        setp(bdc,"actualtext",actualtext)
-                        setp(bdc,"origin","insert_startrole")
-                        setp(bdc,"structelemobjnum",structelemobjnum)
-                        setp(bdc,"linkobjnum",stl.objnum)
+                        local bdc = node_new("whatsit", "pdf_literal")
+                        node_set_attr(bdc, publisher.att_role, role)
+                        setp(bdc, "parentid", parentid)
+                        setp(bdc, "rolecounter", rc)
+                        setp(bdc, "id", id)
+                        setp(bdc, "bbox", bbox)
+                        setp(bdc, "actualtext", actualtext)
+                        setp(bdc, "origin", "insert_startrole")
+                        setp(bdc, "structelemobjnum", structelemobjnum)
+                        setp(bdc, "linkobjnum", stl.objnum)
                         bdc.data = ""
                         bdc.mode = 1
-                        parent.head = node_insert_before(parent.head,stl,bdc)
+                        parent.head = node_insert_before(parent.head, stl, bdc)
                         head = head.next
                         insert_startrole = false
                     end
-
                 end
 
                 -- Lazy: only read full attribute table when color stacks need it
@@ -463,22 +503,22 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                 -- endcolor processing may advance head past the colored node.
                 local startcolor_before = head
                 if insert_endcolor then
-                    local colstop = node_new("whatsit","pdf_colorstack")
-                    set_attrs(colstop,attr_table)
+                    local colstop = node_new("whatsit", "pdf_colorstack")
+                    set_attrs(colstop, attr_table)
                     colstop.data = ""
                     colstop.command = 2
                     colstop.stack = default_stack
-                    setp(colstop,"origin","setcolor")
+                    setp(colstop, "origin", "setcolor")
                     if fgcolor and not prev_fgcolor then
-                        parent.head = node_insert_after(parent.head,head,colstop)
+                        parent.head = node_insert_after(parent.head, head, colstop)
                         head = head.next
                     else
-                        parent.head = node_insert_before(parent.head,head,colstop)
+                        parent.head = node_insert_before(parent.head, head, colstop)
                     end
                 end
                 if insert_startcolor then
-                    local colstart = node_new("whatsit","pdf_colorstack")
-                    set_attrs(colstart,attr_table)
+                    local colstart = node_new("whatsit", "pdf_colorstack")
+                    set_attrs(colstart, attr_table)
                     local colorname = colorname_table[fgcolor]
                     local colorentry = colors[colorname]
                     local col = colorentry.pdfstring
@@ -487,75 +527,75 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                         local thispage = publisher.pages[publisher.current_pagenumber]
                         thispage.transparenttext = thispage.transparenttext or {}
                         thispage.transparenttext[alpha] = true
-                        col = col .. string.format("/TRP%d gs",alpha )
+                        col = col .. string.format("/TRP%d gs", alpha)
                     end
                     colstart.data = col
                     colstart.command = 1
                     colstart.stack = default_stack
 
-                    setp(colstart,"origin","setcolor")
-                    parent.head = node_insert_before(parent.head,startcolor_before,colstart)
+                    setp(colstart, "origin", "setcolor")
+                    parent.head = node_insert_before(parent.head, startcolor_before, colstart)
                 end
                 if insert_endrole then
-                    local emc = node_new("whatsit","pdf_literal")
+                    local emc = node_new("whatsit", "pdf_literal")
                     emc.data = "EMC"
                     emc.mode = 1
-                    setp(emc,"origin","insert_endrole")
+                    setp(emc, "origin", "insert_endrole")
                     if nonextnode and prev_role then
-                        parent.head = node_insert_after(parent.head,head,emc)
+                        parent.head = node_insert_after(parent.head, head, emc)
                         head = head.next
                     elseif prev_role then
-                        parent.head = node_insert_before(parent.head,head,emc)
+                        parent.head = node_insert_before(parent.head, head, emc)
                     else
                         -- single item?
-                        local bdc = node_new("whatsit","pdf_literal")
-                        node_set_attr(bdc,publisher.att_role, role)
-                        setp(bdc,"parentid", parentid)
-                        setp(bdc,"rolecounter", rc)
-                        setp(bdc,"bbox",bbox)
-                        setp(bdc,"id",id)
-                        setp(bdc,"actualtext",actualtext)
-                        setp(bdc,"alttext",alttext)
-                        setp(bdc,"rolename",tostring(roles_lookup[role]))
-                        setp(bdc,"origin","insert_startrole")
+                        local bdc = node_new("whatsit", "pdf_literal")
+                        node_set_attr(bdc, publisher.att_role, role)
+                        setp(bdc, "parentid", parentid)
+                        setp(bdc, "rolecounter", rc)
+                        setp(bdc, "bbox", bbox)
+                        setp(bdc, "id", id)
+                        setp(bdc, "actualtext", actualtext)
+                        setp(bdc, "alttext", alttext)
+                        setp(bdc, "rolename", tostring(roles_lookup[role]))
+                        setp(bdc, "origin", "insert_startrole")
                         bdc.data = ""
                         bdc.mode = 1
-                        parent.head = node_insert_before(parent.head,head,bdc)
+                        parent.head = node_insert_before(parent.head, head, bdc)
 
-                        parent.head = node_insert_after(parent.head,head,emc)
+                        parent.head = node_insert_after(parent.head, head, emc)
                         head = emc
                         insert_startrole = false
                     end
                 end
                 if insert_startrole then
-                    local bdc = node_new("whatsit","pdf_literal")
-                    node_set_attr(bdc,publisher.att_role, role)
-                    setp(bdc,"parentid", parentid)
-                    setp(bdc,"rolecounter", rc)
-                    setp(bdc,"bbox",bbox)
-                    setp(bdc,"id",id)
-                    setp(bdc,"actualtext",actualtext)
-                    setp(bdc,"alttext",alttext)
-                    setp(bdc,"rolename",tostring(roles_lookup[role]))
-                    setp(bdc,"origin","insert_startrole")
+                    local bdc = node_new("whatsit", "pdf_literal")
+                    node_set_attr(bdc, publisher.att_role, role)
+                    setp(bdc, "parentid", parentid)
+                    setp(bdc, "rolecounter", rc)
+                    setp(bdc, "bbox", bbox)
+                    setp(bdc, "id", id)
+                    setp(bdc, "actualtext", actualtext)
+                    setp(bdc, "alttext", alttext)
+                    setp(bdc, "rolename", tostring(roles_lookup[role]))
+                    setp(bdc, "origin", "insert_startrole")
                     bdc.data = ""
                     bdc.mode = 1
-                    parent.head = node_insert_before(parent.head,head,bdc)
+                    parent.head = node_insert_before(parent.head, head, bdc)
                 end
                 prev_role = role
 
                 if transparency then
-                    local colstart = node_new("whatsit","pdf_colorstack")
-                    colstart.data = string.format("/TRP%d gs",transparency )
+                    local colstart = node_new("whatsit", "pdf_colorstack")
+                    colstart.data = string.format("/TRP%d gs", transparency)
                     colstart.command = 1
                     colstart.stack = default_stack
                     publisher.current_page.transparenttext[transparency] = true
 
-                    local colend = node_new("whatsit","pdf_colorstack")
+                    local colend = node_new("whatsit", "pdf_colorstack")
                     colend.command = 2
                     colend.stack = default_stack
-                    parent.head = node_insert_before(parent.head,head,colstart)
-                    node_insert_after(parent.head,head,colend)
+                    parent.head = node_insert_before(parent.head, head, colstart)
+                    node_insert_after(parent.head, head, colend)
                     head = head.next
                 end
             end
@@ -567,19 +607,21 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                     while cur do
                         local cur_properties = node.getproperty(cur)
                         if cur_properties and cur_properties.borderend then
-                            if cur.next then cur = cur.next end
+                            if cur.next then
+                                cur = cur.next
+                            end
                             break
                         end
                         cur = cur.next
                     end
-                    local wd,ht,dp = node.dimensions(head,cur)
-                    local boxnode = publisher.htmlbox(blockinline,head,wd,ht,dp)
-                    parent.head = node.insert_before(parent.head,head,boxnode)
+                    local wd, ht, dp = node.dimensions(head, cur)
+                    local boxnode = publisher.htmlbox(blockinline, head, wd, ht, dp)
+                    parent.head = node.insert_before(parent.head, head, boxnode)
                 end
             end
             -- Now let's look at user defined whatsits, that are ment
             -- for markers, bookmarks etc.
-            if head.id==publisher.whatsit_node then
+            if head.id == publisher.whatsit_node then
                 if head.subtype == publisher.user_defined_whatsit then
                     -- action
                     if head.user_id == publisher.user_defined_addtolist then
@@ -591,7 +633,7 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                         publisher.user_defined_functions[head.value] = nil
                     -- bookmark
                     elseif head.user_id == publisher.user_defined_bookmark then
-                        local level,openclose,dest,str =  string.match(head.value,"([^+]*)+([^+]*)+([^+]*)+(.*)")
+                        local level, openclose, dest, str = string.match(head.value, "([^+]*)+([^+]*)+([^+]*)+(.*)")
                         level = tonumber(level)
                         local open_p
                         if openclose == "1" then
@@ -610,27 +652,35 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                             current_bookmark_table = current_bookmark_table[#current_bookmark_table]
                             i = i + 1
                         end
-                        current_bookmark_table[#current_bookmark_table + 1] = {name = str, destination = dest, open = open_p}
+                        current_bookmark_table[#current_bookmark_table + 1] =
+                            { name = str, destination = dest, open = open_p }
                     elseif head.user_id == publisher.user_defined_mark then
                         local marker = head.value
                         publisher.markercount = publisher.markercount + 1
-                        publisher.markers[marker] = { page = publisher.current_pagenumber, count = publisher.markercount }
+                        publisher.markers[marker] =
+                            { page = publisher.current_pagenumber, count = publisher.markercount }
                     elseif head.user_id == publisher.user_defined_mark_append then
                         local marker = head.value
                         if publisher.markers[marker] == nil then
                             publisher.markers[marker] = { page = tostring(publisher.current_pagenumber) }
                         else
-                            publisher.markers[marker]["page"] = tostring(publisher.markers[marker]["page"]) .. "," ..  tostring(publisher.current_pagenumber)
+                            publisher.markers[marker]["page"] = tostring(publisher.markers[marker]["page"])
+                                .. ","
+                                .. tostring(publisher.current_pagenumber)
                         end
                     end
                 elseif head.subtype == publisher.pdf_literal_whatsit then
-                    local data = publisher.attribute_helpers.getprop(head,"data")
+                    local data = publisher.attribute_helpers.getprop(head, "data")
                     if data then
                         head.data = ""
-                        rules[#rules+1] = { curx, cury, data }
+                        rules[#rules + 1] = { curx, cury, data }
                     end
                 end
-            elseif publisher.options.format == "PDF/UA" and head.id == publisher.glue_node and node.has_attribute(head,att_spaceglue) == 1 then
+            elseif
+                publisher.options.format == "PDF/UA"
+                and head.id == publisher.glue_node
+                and node.has_attribute(head, att_spaceglue) == 1
+            then
                 -- a space in PDF/UA should be a real glyph
                 -- subtype >= 1000 is assigend to glue for arranging pages
                 local g = node.new("glyph")
@@ -638,7 +688,7 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                 g.font = currentfont
                 g.char = 32
                 g.width = head.width
-                parent.head = node.insert_before(parent.head,head,g)
+                parent.head = node.insert_before(parent.head, head, g)
                 head.width = 0
             end
         end
@@ -651,12 +701,24 @@ end
 ---@param a node Glue spec.
 ---@param b node Glue spec.
 ---@return node larger
-function M.bigger_glue_spec( a,b )
-    if a.stretch_order > b.stretch_order then return a end
-    if b.stretch_order > a.stretch_order then return b end
-    if a.stretch > b.stretch then return a end
-    if b.stretch > a.stretch then return b end
-    if a.width > b.width then return a else return b end
+function M.bigger_glue_spec(a, b)
+    if a.stretch_order > b.stretch_order then
+        return a
+    end
+    if b.stretch_order > a.stretch_order then
+        return b
+    end
+    if a.stretch > b.stretch then
+        return a
+    end
+    if b.stretch > a.stretch then
+        return b
+    end
+    if a.width > b.width then
+        return a
+    else
+        return b
+    end
 end
 
 -- TODO: this function is partially broken / unfinished. Compare with
@@ -679,13 +741,13 @@ function M.short_newline(fam)
     local dummypenalty
     dummypenalty = node.new("penalty")
     dummypenalty.penalty = 10000
-    node.set_attribute(dummypenalty,att_newline,1)
+    node.set_attribute(dummypenalty, att_newline, 1)
 
     -- luacheck: push ignore 321
     local list, cur
-    M.add_rule(list,"tail",{height = 0.75 * strutheight, depth = 0.25 * strutheight,width = 0}, "short_newline")
-    local g = set_glue(nil,{},"short_newline")
-    list,cur = node.insert_after(list,node.tail(list),g)
+    M.add_rule(list, "tail", { height = 0.75 * strutheight, depth = 0.25 * strutheight, width = 0 }, "short_newline")
+    local g = set_glue(nil, {}, "short_newline")
+    list, cur = node.insert_after(list, node.tail(list), g)
     -- luacheck: pop
     return list, cur
 end
@@ -699,35 +761,35 @@ function M.newline(fam)
     local dummypenalty
     dummypenalty = node.new("penalty")
     dummypenalty.penalty = 10000
-    node.set_attribute(dummypenalty,att_newline,1)
+    node.set_attribute(dummypenalty, att_newline, 1)
 
     local list, cur
-    list, cur = dummypenalty,dummypenalty
+    list, cur = dummypenalty, dummypenalty
 
     local strut = node.new(publisher.rule_node)
     -- set to 60000 for example for debugging
-    strut.width=0
-    strut.height = strutheight*0.75
-    strut.depth = strutheight*0.25
-    list,cur = node.insert_after(list,cur,strut)
+    strut.width = 0
+    strut.height = strutheight * 0.75
+    strut.depth = strutheight * 0.25
+    list, cur = node.insert_after(list, cur, strut)
 
-    local p1,g,p2
+    local p1, g, p2
     p1 = node.new("penalty")
     p1.penalty = 10000
-    g = set_glue(nil,{stretch = 2^16, stretch_order = 2})
+    g = set_glue(nil, { stretch = 2 ^ 16, stretch_order = 2 })
     p2 = node.new("penalty")
     p2.penalty = -10000
-    node.set_attribute(p1,att_newline,1)
-    node.set_attribute(p2,att_newline,1)
-    node.set_attribute(g,att_newline,1)
+    node.set_attribute(p1, att_newline, 1)
+    node.set_attribute(p2, att_newline, 1)
+    node.set_attribute(g, att_newline, 1)
     -- important for empty lines (adjustlineheight)
-    node.set_attribute(p1,att_fontfamily,fam)
-    list,cur = node.insert_after(list,cur,p1)
-    list,cur = node.insert_after(list,cur,g)
-    list,cur = node.insert_after(list,cur,p2)
+    node.set_attribute(p1, att_fontfamily, fam)
+    list, cur = node.insert_after(list, cur, p1)
+    list, cur = node.insert_after(list, cur, g)
+    list, cur = node.insert_after(list, cur, p2)
     -- add glue so next word can hyphenate (#274)
-    g = set_glue(nil,{})
-    list,cur = node.insert_after(list,cur,g)
+    g = set_glue(nil, {})
+    list, cur = node.insert_after(list, cur, g)
     return list, cur
 end
 
@@ -735,14 +797,14 @@ end
 -- Removes leading whitespace-only entries from a paragraph table.
 ---@param tbl table Paragraph table (array of segments).
 ---@return table tbl
-function M.remove_first_whitespace( tbl )
+function M.remove_first_whitespace(tbl)
     if publisher.newxpath and publisher.xpath.is_attribute(tbl) then
-        tbl.value = string.gsub(tbl.value,"^[\n\t]*(.-)$","%1")
+        tbl.value = string.gsub(tbl.value, "^[\n\t]*(.-)$", "%1")
         return true
     end
-    for i=1,#tbl do
+    for i = 1, #tbl do
         if type(tbl[i]) == "string" then
-            tbl[i] = string.gsub(tbl[i],"^[\n\t]*(.-)$","%1")
+            tbl[i] = string.gsub(tbl[i], "^[\n\t]*(.-)$", "%1")
             return true
         end
         if type(tbl[i]) == "table" then
@@ -752,7 +814,9 @@ function M.remove_first_whitespace( tbl )
             else
                 ret = M.remove_first_whitespace(tbl[i])
             end
-            if ret then return true end
+            if ret then
+                return true
+            end
         end
     end
 end
@@ -761,13 +825,13 @@ end
 -- Removes trailing whitespace-only entries from a paragraph table.
 ---@param tbl table Paragraph table.
 ---@return table tbl
-function M.remove_last_whitespace( tbl )
-    for i=#tbl,1,-1 do
+function M.remove_last_whitespace(tbl)
+    for i = #tbl, 1, -1 do
         if type(tbl[i]) == "string" then
-            if string.match(tbl[i],"^%s*$") then
-                table.remove(tbl,i)
+            if string.match(tbl[i], "^%s*$") then
+                table.remove(tbl, i)
             else
-                tbl[i] = string.gsub(tbl[i],"^(.-)[\n\t]*$","%1")
+                tbl[i] = string.gsub(tbl[i], "^(.-)[\n\t]*$", "%1")
             end
             return true
         end
@@ -778,7 +842,9 @@ function M.remove_last_whitespace( tbl )
             else
                 local tic = tbl[i].contents
                 -- the last contents could be an image for example. See #342
-                if type(tic) == "userdata" then ret = true else
+                if type(tic) == "userdata" then
+                    ret = true
+                else
                     ret = M.remove_last_whitespace(tbl[i])
                 end
             end
@@ -793,24 +859,23 @@ end
 ---@param where "head"|"tail"
 ---@param origin? string Origin tag for `setprop` (debugging).
 ---@return node nodelist
-function M.addstrut(nodelist,where,origin)
+function M.addstrut(nodelist, where, origin)
     local strutheight = 0
     local head = nodelist
     while head do
         if head.id == publisher.hlist_node then
             strutheight = head.height
-            if node.has_attribute(head,publisher.att_dont_format) then
+            if node.has_attribute(head, publisher.att_dont_format) then
                 -- 0.25 is the depth of the line, and hopefully
                 -- this is the highest thing in the line
                 head.shift = 0.25 * head.height
             end
         end
         head = head.next
-
     end
     head = nodelist
     while head do
-        if node.has_attribute(head,att_fontfamily) then
+        if node.has_attribute(head, att_fontfamily) then
             break
         end
         head = head.next
@@ -820,7 +885,7 @@ function M.addstrut(nodelist,where,origin)
     if head == nil then
         fontfamily = nil
     else
-        fontfamily = node.has_attribute(head,att_fontfamily)
+        fontfamily = node.has_attribute(head, att_fontfamily)
     end
     if fontfamily == nil or fontfamily == 0 then
         fontfamily = fonts.lookup_fontfamily_name_number["text"]
@@ -829,7 +894,12 @@ function M.addstrut(nodelist,where,origin)
     local fi = fonts.lookup_fontfamily_number_instance[fontfamily]
     strutheight = math.max(fi.baselineskip, strutheight)
     -- for debugging purposes set width to 20000:
-    local strut = M.add_rule(nodelist,"head",{height = 0.75 * strutheight, depth = 0.25 * strutheight, width = 0 },origin or "addstrut")
+    local strut = M.add_rule(
+        nodelist,
+        "head",
+        { height = 0.75 * strutheight, depth = 0.25 * strutheight, width = 0 },
+        origin or "addstrut"
+    )
     return strut
 end
 
@@ -838,66 +908,66 @@ end
 ---@param n node
 ---@param parameter table CSS-like attribute table.
 ---@return nil
-local function setstyles(n,parameter)
+local function setstyles(n, parameter)
     if parameter.bold == 1 then
-        node.set_attribute(n,att_fontweight,attval_fontweight["bold"])
-        publisher.attribute_helpers.setprop(n,"font-weight","bold")
+        node.set_attribute(n, att_fontweight, attval_fontweight["bold"])
+        publisher.attribute_helpers.setprop(n, "font-weight", "bold")
     end
     if parameter.italic == 1 then
-        node.set_attribute(n,att_fontstyle,attval_fontstyle["italic"])
+        node.set_attribute(n, att_fontstyle, attval_fontstyle["italic"])
     end
     if parameter.textdecorationline then
-        node.set_attribute(n,att_td_line,attval_td_line[parameter.textdecorationline])
-        node.set_attribute(n,att_td_style,attval_td_style[parameter.textdecorationstyle])
-        node.set_attribute(n,att_td_color,publisher.current_fgcolor)
+        node.set_attribute(n, att_td_line, attval_td_line[parameter.textdecorationline])
+        node.set_attribute(n, att_td_style, attval_td_style[parameter.textdecorationstyle])
+        node.set_attribute(n, att_td_color, publisher.current_fgcolor)
     end
     if parameter.color and parameter.color ~= 1 then
-        node.set_attribute(n,att_td_color,parameter.color)
-        node.set_attribute(n,att_color,parameter.color)
+        node.set_attribute(n, att_td_color, parameter.color)
+        node.set_attribute(n, att_color, parameter.color)
     end
     if parameter.hyperlink then
-        node.set_attribute(n,att_hyperlink,parameter.hyperlink)
+        node.set_attribute(n, att_hyperlink, parameter.hyperlink)
     end
     if parameter.languagecode and n.id == publisher.glyph_node then
         n.lang = parameter.languagecode
     end
     if parameter.backgroundcolor then
-        node.set_attribute(n,att_bgcolor,parameter.backgroundcolor)
+        node.set_attribute(n, att_bgcolor, parameter.backgroundcolor)
         local bg_padding_top = tex.sp(parameter.bg_padding_top or 0)
         local bg_padding_bottom = tex.sp(parameter.bg_padding_bottom or 0)
-        node.set_attribute(n,att_bgpadtop,bg_padding_top)
-        node.set_attribute(n,att_bgpadbot,bg_padding_bottom)
+        node.set_attribute(n, att_bgpadtop, bg_padding_top)
+        node.set_attribute(n, att_bgpadbot, bg_padding_bottom)
     end
     if parameter.verticalalign then
-        node.set_attribute(n,att_verticalalign,attval_verticalalign[parameter.verticalalign])
+        node.set_attribute(n, att_verticalalign, attval_verticalalign[parameter.verticalalign])
     end
     if parameter.indent then
-        publisher.attribute_helpers.setprop(n,"indent",parameter.indent)
+        publisher.attribute_helpers.setprop(n, "indent", parameter.indent)
     end
     if parameter.role then
-        publisher.attribute_helpers.setprop(n,"role",parameter.role)
+        publisher.attribute_helpers.setprop(n, "role", parameter.role)
     end
     if parameter.structelemobjnum then
-        publisher.attribute_helpers.setprop(n,"structelemobjnum",parameter.structelemobjnum)
+        publisher.attribute_helpers.setprop(n, "structelemobjnum", parameter.structelemobjnum)
     end
     if parameter.actualtext then
-        publisher.attribute_helpers.setprop(n,"actualtext", parameter.actualtext)
+        publisher.attribute_helpers.setprop(n, "actualtext", parameter.actualtext)
     end
     if parameter.alttext then
-        publisher.attribute_helpers.setprop(n,"alttext", parameter.alttext)
+        publisher.attribute_helpers.setprop(n, "alttext", parameter.alttext)
     end
     if parameter.parent then
         if parameter.parent == "" then
             -- ignore
         else
-            publisher.attribute_helpers.setprop(n,"parent",parameter.parent)
+            publisher.attribute_helpers.setprop(n, "parent", parameter.parent)
         end
     end
     if parameter.id then
-        publisher.attribute_helpers.setprop(n,"id",parameter.id)
+        publisher.attribute_helpers.setprop(n, "id", parameter.id)
     end
     if parameter.rolecounter then
-        publisher.attribute_helpers.setprop(n,"rolecounter",parameter.rolecounter)
+        publisher.attribute_helpers.setprop(n, "rolecounter", parameter.rolecounter)
     end
 end
 
@@ -907,7 +977,7 @@ end
 ---@param glyphslist table List of glyph entries to fill in.
 ---@param fallback_fontdefinitions table[] Fallback fonts to try.
 ---@return boolean ok `true` if all glyphs were resolved.
-function M.getfallbacks(cluster,glyphslist,fallback_fontdefinitions)
+function M.getfallbacks(cluster, glyphslist, fallback_fontdefinitions)
     local fontnum
     local ret = {}
     local fallback = fallback_fontdefinitions[1]
@@ -919,7 +989,7 @@ function M.getfallbacks(cluster,glyphslist,fallback_fontdefinitions)
         local buf = publisher.harfbuzz.Buffer.new()
         local pos = glyphslist[i][1]
         local thisglyph = glyphslist[i][2]
-        ret[#ret+1] = {
+        ret[#ret + 1] = {
             pos = pos,
             fonttable = tbl,
             fontnumber = fontnum,
@@ -929,20 +999,20 @@ function M.getfallbacks(cluster,glyphslist,fallback_fontdefinitions)
         -- create a list
         local uclist = {}
         local uc = cluster[thisglyph.cluster]
-        uclist[#uclist+1] = uc
+        uclist[#uclist + 1] = uc
         buf:add_utf8(unicode.utf8.char(uc))
-        while #glyphslist > i and glyphslist[i+1][1] == pos + 1 do
+        while #glyphslist > i and glyphslist[i + 1][1] == pos + 1 do
             i = i + 1
             pos = pos + 1
             thisglyph = glyphslist[i][2]
             uc = cluster[thisglyph.cluster]
-            uclist[#uclist+1] = uc
+            uclist[#uclist + 1] = uc
             buf:add_utf8(unicode.utf8.char(uc))
         end
         buf:set_cluster_level(buf.CLUSTER_LEVEL_MONOTONE_CHARACTERS)
         buf:set_flags(publisher.harfbuzz.Buffer.FLAG_REMOVE_DEFAULT_IGNORABLES)
         buf:guess_segment_properties()
-        publisher.shape(tbl,buf)
+        publisher.shape(tbl, buf)
         local nglyphs = buf:get_glyphs()
         curret.remove_len = #uclist
         for j = 1, #nglyphs do
@@ -985,18 +1055,18 @@ function M.hbglyphlist(arguments)
     local thisfont = fonts.used_fonts[fontnumber]
     local reportmissingglyphs = publisher.options.reportmissingglyphs
     local lastitemwasglyph
-    local space   = tbl.parameters.space
-    local shrink  = tbl.parameters.space_shrink
+    local space = tbl.parameters.space
+    local shrink = tbl.parameters.space_shrink
     local stretch = tbl.parameters.space_stretch
     local list, cur
     local n
     local preserve_whitespace = parameter.whitespace == "pre"
     local zeroglyphs = {}
 
-    for i=1,#glyphs do
+    for i = 1, #glyphs do
         local thisglyph = glyphs[i]
         if thisglyph.codepoint == 0 then
-            zeroglyphs[#zeroglyphs+1] = {i,thisglyph}
+            zeroglyphs[#zeroglyphs + 1] = { i, thisglyph }
         end
     end
 
@@ -1005,22 +1075,23 @@ function M.hbglyphlist(arguments)
     -- re-insert a more complex table at these positions.
     -- detect the other table type in the loop below (for i=1,#glyphs do .. end)
     if #zeroglyphs > 0 and #tbl.fallback_fontdefinitions > 0 then
-        fallbacks = M.getfallbacks(cluster,zeroglyphs,tbl.fallback_fontdefinitions)
+        fallbacks = M.getfallbacks(cluster, zeroglyphs, tbl.fallback_fontdefinitions)
         for i = #fallbacks, 1, -1 do
             local fb = fallbacks[i]
             for j = 1, fb.remove_len do
                 table.remove(glyphs, fb.pos)
             end
             for j = #fb, 1, -1 do
-                table.insert(glyphs, fb.pos, {pos = fb.pos,
-                fonttable = fb.fonttable,
-                  fontnumber = fb.fontnumber,
-                  glyph = fb[j].glyph,
-                  codepoint = fb[j].codepoint,
-                  uc = fb[j].uc
+                table.insert(glyphs, fb.pos, {
+                    pos = fb.pos,
+                    fonttable = fb.fonttable,
+                    fontnumber = fb.fontnumber,
+                    glyph = fb[j].glyph,
+                    codepoint = fb[j].codepoint,
+                    uc = fb[j].uc,
                 })
             end
-          end
+        end
     end
 
     local thistbl
@@ -1128,7 +1199,9 @@ function M.hbglyphlist(arguments)
         glyph_yoffset_base = famtab.supershift
     end
     local xoffset_dir = 1
-    if direction == "rtl" then xoffset_dir = -1 end
+    if direction == "rtl" then
+        xoffset_dir = -1
+    end
 
     -- Pre-build allowbreak lookup set
     local allowbreak_set = {}
@@ -1139,17 +1212,24 @@ function M.hbglyphlist(arguments)
     -- Apply pre-computed styles to a node (replaces setstyles in the loop)
     local function apply_styles(n)
         for j = 1, style_attrs_len, 2 do
-            node_set_attribute(n, style_attrs[j], style_attrs[j+1])
+            node_set_attribute(n, style_attrs[j], style_attrs[j + 1])
         end
-        if style_langcode and n.id == publisher.glyph_node then n.lang = style_langcode end
+        if style_langcode and n.id == publisher.glyph_node then
+            n.lang = style_langcode
+        end
         if style_props_tmpl then
             local p = node.getproperty(n)
-            if not p then p = {}; node.setproperty(n, p) end
-            for k, v in next, style_props_tmpl do p[k] = v end
+            if not p then
+                p = {}
+                node.setproperty(n, p)
+            end
+            for k, v in next, style_props_tmpl do
+                p[k] = v
+            end
         end
     end
 
-    for i=1,#glyphs do
+    for i = 1, #glyphs do
         local thisfontnumber = fontnumber
         local thisglyph = glyphs[i]
         local cp = thisglyph.codepoint
@@ -1179,9 +1259,15 @@ function M.hbglyphlist(arguments)
         end
 
         -- FIXME cp == 0 doesn't look right
-        local tabregularspace = ( cp == 0 and cluster[thisglyph.cluster] == 9 and parameter.tab ~= "hspace")
+        local tabregularspace = (cp == 0 and cluster[thisglyph.cluster] == 9 and parameter.tab ~= "hspace")
         -- skip double space
-        if i > 1 and ( uc == 32 or tabregularspace) and cp == glyphs[i-1].codepoint and cluster[thisglyph.cluster] ~= 160 and not preserve_whitespace then
+        if
+            i > 1
+            and (uc == 32 or tabregularspace)
+            and cp == glyphs[i - 1].codepoint
+            and cluster[thisglyph.cluster] ~= 160
+            and not preserve_whitespace
+        then
             goto continue
         end
         if false then
@@ -1196,125 +1282,129 @@ function M.hbglyphlist(arguments)
             if thisclustervalue == 160 then -- no break space
                 n = node.new(publisher.penalty_node)
                 n.penalty = 10000
-                list,cur = node.insert_after(list,cur,n)
-                n = set_glue(nil,{width = space, shrink = shrink, stretch = stretch},"uc=32,160")
-                node_set_attribute(n,publisher.att_tie_glue,1)
-                list,cur = node.insert_after(list,cur,n)
+                list, cur = node.insert_after(list, cur, n)
+                n = set_glue(nil, { width = space, shrink = shrink, stretch = stretch }, "uc=32,160")
+                node_set_attribute(n, publisher.att_tie_glue, 1)
+                list, cur = node.insert_after(list, cur, n)
             elseif thisclustervalue == 8194 then -- en space
-                n = set_glue(nil,{width = thistbl.parameters.enspace },"uc=8194")
+                n = set_glue(nil, { width = thistbl.parameters.enspace }, "uc=8194")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
-                list,cur = node.insert_after(list,cur,n)
+                list, cur = node.insert_after(list, cur, n)
             elseif thisclustervalue == 8195 then -- em space
-                n = set_glue(nil,{width = thistbl.parameters.emspace },"uc=8195")
+                n = set_glue(nil, { width = thistbl.parameters.emspace }, "uc=8195")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
-                list,cur = node.insert_after(list,cur,n)
+                list, cur = node.insert_after(list, cur, n)
             elseif thisclustervalue == 8196 then -- three per em space
-                n = set_glue(nil,{width = thistbl.parameters.thirdspace },"uc=8196")
+                n = set_glue(nil, { width = thistbl.parameters.thirdspace }, "uc=8196")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
-                list,cur = node.insert_after(list,cur,n)
+                list, cur = node.insert_after(list, cur, n)
             elseif thisclustervalue == 8197 then -- four per em space
-                n = set_glue(nil,{width = thistbl.parameters.quarterspace },"uc=8197")
+                n = set_glue(nil, { width = thistbl.parameters.quarterspace }, "uc=8197")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
-                list,cur = node.insert_after(list,cur,n)
+                list, cur = node.insert_after(list, cur, n)
             elseif thisclustervalue == 8198 then -- six per em space
-                n = set_glue(nil,{width = thistbl.parameters.sixthspace },"uc=8198")
+                n = set_glue(nil, { width = thistbl.parameters.sixthspace }, "uc=8198")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
-                list,cur = node.insert_after(list,cur,n)
+                list, cur = node.insert_after(list, cur, n)
             elseif thisclustervalue == 8201 then -- thin space
-                n = set_glue(nil,{width = thistbl.parameters.thinspace },"uc=8201")
+                n = set_glue(nil, { width = thistbl.parameters.thinspace }, "uc=8201")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
-                list,cur = node.insert_after(list,cur,n)
+                list, cur = node.insert_after(list, cur, n)
             elseif thisclustervalue == 8202 then -- hair space
-                n = set_glue(nil,{width = thistbl.parameters.hairspace},"uc=8202")
+                n = set_glue(nil, { width = thistbl.parameters.hairspace }, "uc=8202")
                 -- prevent from stretching with ragged shape
                 n.subtype = 1
-                list,cur = node.insert_after(list,cur,n)
+                list, cur = node.insert_after(list, cur, n)
             elseif thisclustervalue == 8203 then
                 -- U+200B ZERO WIDTH SPACE
                 local p = node.new(publisher.penalty_node)
                 p.penalty = -10
-                list,cur = node.insert_after(list,cur,p)
+                list, cur = node.insert_after(list, cur, p)
             elseif thisclustervalue == 8205 then
                 -- U+200D ZERO WIDTH JOINER
                 -- ignore
             elseif preserve_whitespace then
-                local n = M.add_rule(nil,"head",{height = 0 * publisher.factor, depth = 0, width = thistbl.zerowidth },"preserve_whitespace")
-                list,cur = node.insert_after(list,cur,n)
+                local n = M.add_rule(
+                    nil,
+                    "head",
+                    { height = 0 * publisher.factor, depth = 0, width = thistbl.zerowidth },
+                    "preserve_whitespace"
+                )
+                list, cur = node.insert_after(list, cur, n)
             else
-                n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch},"uc=32")
+                n = set_glue(nil, { width = space, shrink = shrink, stretch = stretch }, "uc=32")
                 apply_styles(n)
-                node_set_attribute(n,att_spaceglue,1)
-                list,cur = node.insert_after(list,cur,n)
+                node_set_attribute(n, att_spaceglue, 1)
+                list, cur = node.insert_after(list, cur, n)
                 if parameter.letterspacing then
                     n.width = n.width + parameter.letterspacing
                 end
             end
             if decoration_active then
-                node_set_attribute(n,att_td_line,attval_td_line[parameter.textdecorationline])
-                node_set_attribute(n,att_td_style,attval_td_style[parameter.textdecorationstyle])
-                node_set_attribute(n,att_td_color,publisher.current_fgcolor)
+                node_set_attribute(n, att_td_line, attval_td_line[parameter.textdecorationline])
+                node_set_attribute(n, att_td_style, attval_td_style[parameter.textdecorationstyle])
+                node_set_attribute(n, att_td_color, publisher.current_fgcolor)
             end
 
             if background_active then
-                node_set_attribute(n,att_bgcolor,parameter.backgroundcolor)
+                node_set_attribute(n, att_bgcolor, parameter.backgroundcolor)
                 if parameter.bg_padding_top then
-                    node_set_attribute(n,att_bgpadtop,parameter.bg_padding_top)
+                    node_set_attribute(n, att_bgpadtop, parameter.bg_padding_top)
                 end
                 if parameter.bg_pading_bottom then
-                    node_set_attribute(n,att_bgpadbot,parameter.bg_padding_bottom)
+                    node_set_attribute(n, att_bgpadbot, parameter.bg_padding_bottom)
                 end
             end
             if n then
-                node_set_attribute(n,att_fontfamily,fontfamily)
+                node_set_attribute(n, att_fontfamily, fontfamily)
             end
-        elseif ( cp == 0 or uc == 10 ) and newlines_at[thisglyph.cluster] then
+        elseif (cp == 0 or uc == 10) and newlines_at[thisglyph.cluster] then
             local dummypenalty
             dummypenalty = node.new(publisher.penalty_node)
             dummypenalty.penalty = 10000
-            node_set_attribute(dummypenalty,att_newline,1)
-            list,cur = node.insert_after(list,cur,dummypenalty)
+            node_set_attribute(dummypenalty, att_newline, 1)
+            list, cur = node.insert_after(list, cur, dummypenalty)
 
             local ht = famtab.size
-            local strut = M.add_rule(nil,"head",{height = ht * 0.75, depth = 0.25 * ht, width = 0 }, "newline")
-            node_set_attribute(strut,att_newline,1)
-            publisher.attribute_helpers.setprop(strut,"origin","strut newline hb")
-            list,cur = node.insert_after(list,cur,strut)
+            local strut = M.add_rule(nil, "head", { height = ht * 0.75, depth = 0.25 * ht, width = 0 }, "newline")
+            node_set_attribute(strut, att_newline, 1)
+            publisher.attribute_helpers.setprop(strut, "origin", "strut newline hb")
+            list, cur = node.insert_after(list, cur, strut)
 
-            local p1,g,p2
+            local p1, g, p2
             p1 = node.new(publisher.penalty_node)
             p1.penalty = 10000
 
-            g = set_glue(nil,{stretch = 2^16, stretch_order = 2})
+            g = set_glue(nil, { stretch = 2 ^ 16, stretch_order = 2 })
 
             p2 = node.new(publisher.penalty_node)
             p2.penalty = -10000
-            node_set_attribute(p1,att_newline,1)
-            node_set_attribute(p2,att_newline,1)
-            node_set_attribute(g,att_newline,1)
-
+            node_set_attribute(p1, att_newline, 1)
+            node_set_attribute(p2, att_newline, 1)
+            node_set_attribute(g, att_newline, 1)
 
             -- important for empty lines (adjustlineheight)
-            node_set_attribute(p1,att_fontfamily,fontfamily)
+            node_set_attribute(p1, att_fontfamily, fontfamily)
 
-            list,cur = node.insert_after(list,cur,p1)
-            list,cur = node.insert_after(list,cur,g)
-            list,cur = node.insert_after(list,cur,p2)
+            list, cur = node.insert_after(list, cur, p1)
+            list, cur = node.insert_after(list, cur, g)
+            list, cur = node.insert_after(list, cur, p2)
 
             -- add glue so next word can hyphenate (#274)
-            g = set_glue(nil,{})
-            list,cur = node.insert_after(list,cur,g)
+            g = set_glue(nil, {})
+            list, cur = node.insert_after(list, cur, g)
         elseif cp == 0 then
             local code = cluster[thisglyph.cluster]
             if code == 9 then
-                if parameter.tab == 'hspace' then
-                    local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
-                    list, cur = node.insert_after(list,cur,n)
+                if parameter.tab == "hspace" then
+                    local n = set_glue(nil, { width = 0, stretch = 2 ^ 16, stretch_order = 3 })
+                    list, cur = node.insert_after(list, cur, n)
                 else
                     -- a regular space, handled above (tabregularspace)
                 end
@@ -1341,9 +1431,9 @@ function M.hbglyphlist(arguments)
             if thisglyph.y_offset ~= 0 then
                 n.yoffset = thisglyph.y_offset * thistbl.mag
             end
-            node_set_attribute(n,att_fontfamily,fontfamily)
+            node_set_attribute(n, att_fontfamily, fontfamily)
             apply_styles(n)
-            list,cur = node.insert_after(list,cur,n)
+            list, cur = node.insert_after(list, cur, n)
 
             if cur and cur.prev and cur.prev.id == publisher.glyph_node then
                 lastitemwasglyph = true
@@ -1357,16 +1447,16 @@ function M.hbglyphlist(arguments)
                 else
                     -- add breaking point between this glyph and next glyph unless prohibited
                     if i < #glyphs then
-                        local nextchar = glyphs[i+1].codepoint
+                        local nextchar = glyphs[i + 1].codepoint
                         local nextuc = thistbl.backmap[nextchar] or nextchar
                         if not publisher.prohibited_at_beginning[thislang][unicode.utf8.char(nextuc)] then
                             local pen = node.new(publisher.penalty_node)
                             pen.penalty = 0
                             if parameter.textformat.alignment == "justified" then
-                                local g = set_glue(nil,{stretch = 2^16, stretch_order = 0})
-                                list,cur = node.insert_after(list,cur,g)
+                                local g = set_glue(nil, { stretch = 2 ^ 16, stretch_order = 0 })
+                                list, cur = node.insert_after(list, cur, g)
                             end
-                            list,cur = node.insert_after(list,cur,pen)
+                            list, cur = node.insert_after(list, cur, pen)
                         end
                     end
                 end
@@ -1379,7 +1469,7 @@ function M.hbglyphlist(arguments)
 
             -- glyph ids inserted by sd:symbol()
             local thischar = thistbl.characters[uc]
-            if  uc > publisher.puastart and thisglyph.codepoint == 0 and thischar then
+            if uc > publisher.puastart and thisglyph.codepoint == 0 and thischar then
                 thisglyph.x_advance = thischar.hadvance
             end
 
@@ -1394,29 +1484,31 @@ function M.hbglyphlist(arguments)
             end
             if kernvalue ~= 0 then
                 local property = "kernafter"
-                if direction == "rtl" then property = "kernbefore" end
-                publisher.attribute_helpers.setprop(cur,property, kernvalue)
+                if direction == "rtl" then
+                    property = "kernbefore"
+                end
+                publisher.attribute_helpers.setprop(cur, property, kernvalue)
             end
             if uc == -1 then
             elseif uc > publisher.puastart then
                 -- ignore
-            elseif ( uc == 45 or uc == 8211) and lastitemwasglyph and allowbreak_set[45] then
+            elseif (uc == 45 or uc == 8211) and lastitemwasglyph and allowbreak_set[45] then
                 -- only break if allowbreak contains the hyphen char
                 local pen = node.new(publisher.penalty_node)
                 pen.penalty = 10000
-                list = node.insert_before(list,cur,pen)
+                list = node.insert_before(list, cur, pen)
                 local disc = node.new(publisher.disc_node)
-                list,cur = node.insert_after(list,cur,disc)
+                list, cur = node.insert_after(list, cur, disc)
                 local g = set_glue(nil)
                 apply_styles(pen)
                 apply_styles(disc)
                 apply_styles(g)
-                list,cur = node.insert_after(list,cur,g)
+                list, cur = node.insert_after(list, cur, g)
             elseif allowbreak_set[uc] then
                 -- allowbreak lists characters where the publisher may break lines
                 local pen = node.new(publisher.penalty_node)
                 pen.penalty = 0
-                list,cur = node.insert_after(list,cur,pen)
+                list, cur = node.insert_after(list, cur, pen)
             end
         end
         ::continue::
@@ -1428,8 +1520,8 @@ function M.hbglyphlist(arguments)
         return node.new("hlist")
     end
     local aa = parameter.add_attributes or {}
-    for i=1,#aa do
-        publisher.attribute_helpers.set_attribute_recurse(list,aa[i][1],aa[i][2])
+    for i = 1, #aa do
+        publisher.attribute_helpers.set_attribute_recurse(list, aa[i][1], aa[i][2])
     end
     return list
 end
@@ -1438,24 +1530,24 @@ end
 ---@param s string Text segment.
 ---@param tbl table Font instance table (FontForge backend).
 ---@return integer? width
-local function ffgetglue(s,tbl)
+local function ffgetglue(s, tbl)
     local n
     if s == 8194 then
-        n = set_glue(nil,{width = tbl.parameters.enspace },"uc=8194")
+        n = set_glue(nil, { width = tbl.parameters.enspace }, "uc=8194")
     elseif s == 8195 then -- em space
-        n = set_glue(nil,{width = tbl.parameters.emspace },"uc=8195")
+        n = set_glue(nil, { width = tbl.parameters.emspace }, "uc=8195")
     elseif s == 8196 then -- three per em space
-        n = set_glue(nil,{width = tbl.parameters.thirdspace },"uc=8196")
+        n = set_glue(nil, { width = tbl.parameters.thirdspace }, "uc=8196")
     elseif s == 8197 then -- four per em space
-        n = set_glue(nil,{width = tbl.parameters.quarterspace },"uc=8197")
+        n = set_glue(nil, { width = tbl.parameters.quarterspace }, "uc=8197")
     elseif s == 8198 then -- six per em space
-        n = set_glue(nil,{width = tbl.parameters.sixthspace },"uc=8198")
+        n = set_glue(nil, { width = tbl.parameters.sixthspace }, "uc=8198")
     elseif s == 8201 then -- thin space
-        n = set_glue(nil,{width = tbl.parameters.thinspace },"uc=8201")
+        n = set_glue(nil, { width = tbl.parameters.thinspace }, "uc=8201")
     elseif s == 8202 then -- hair space
-        n = set_glue(nil,{width = tbl.parameters.hairspace },"uc=8202")
+        n = set_glue(nil, { width = tbl.parameters.hairspace }, "uc=8202")
     elseif s == 8203 then
-        n = set_glue(nil,{width = 0 },"uc=8203")
+        n = set_glue(nil, { width = 0 }, "uc=8203")
     end
     return n
 end
@@ -1473,8 +1565,8 @@ local function ffglyphlist(arguments)
     local fontfamily = parameter.fontfamily
     local fontnumber = arguments.fontnumber
     local languagecode = arguments.languagecode
-    local space   = tbl.parameters.space
-    local shrink  = tbl.parameters.space_shrink
+    local space = tbl.parameters.space
+    local shrink = tbl.parameters.space_shrink
     local stretch = tbl.parameters.space_stretch
 
     local match = unicode.utf8.match
@@ -1503,59 +1595,69 @@ local function ffglyphlist(arguments)
             local dummypenalty
             dummypenalty = node.new("penalty")
             dummypenalty.penalty = 10000
-            node.set_attribute(dummypenalty,att_newline,1)
-            head,last = node.insert_after(head,last,dummypenalty)
+            node.set_attribute(dummypenalty, att_newline, 1)
+            head, last = node.insert_after(head, last, dummypenalty)
             if fontfamily == nil then
                 main.log("error", "ffglyphlist: fontfamily is nil")
                 return
             end
             local ff = fonts.lookup_fontfamily_number_instance[fontfamily]
             if ff == nil then
-                main.log("error", string.format("Could not find instance of family %s",fontfamily))
+                main.log("error", string.format("Could not find instance of family %s", fontfamily))
                 return
             end
             local ht = ff.size
-            local strut = M.add_rule(nil,"head",{height = ht * 0.75, depth = ht * 0.25, width = 0 }, "newline")
-            node.set_attribute(strut,att_newline,1)
-            head,last = node.insert_after(head,last,strut)
+            local strut = M.add_rule(nil, "head", { height = ht * 0.75, depth = ht * 0.25, width = 0 }, "newline")
+            node.set_attribute(strut, att_newline, 1)
+            head, last = node.insert_after(head, last, strut)
 
-            local p1,g,p2
+            local p1, g, p2
             p1 = node.new("penalty")
             p1.penalty = 10000
 
-            g = set_glue(nil,{stretch = 2^16, stretch_order = 2})
+            g = set_glue(nil, { stretch = 2 ^ 16, stretch_order = 2 })
 
             p2 = node.new("penalty")
             p2.penalty = -10000
 
-            node.set_attribute(p1,att_newline,1)
-            node.set_attribute(p2,att_newline,1)
-            node.set_attribute(g,att_newline,1)
-            local attr = { fontfamily = fontfamily}
-            publisher.attribute_helpers.set_attributes(p1,attr)
-            publisher.attribute_helpers.set_attributes(p2,attr)
-            publisher.attribute_helpers.set_attributes(g,attr)
+            node.set_attribute(p1, att_newline, 1)
+            node.set_attribute(p2, att_newline, 1)
+            node.set_attribute(g, att_newline, 1)
+            local attr = { fontfamily = fontfamily }
+            publisher.attribute_helpers.set_attributes(p1, attr)
+            publisher.attribute_helpers.set_attributes(p2, attr)
+            publisher.attribute_helpers.set_attributes(g, attr)
 
-            head,last = node.insert_after(head,last,p1)
-            head,last = node.insert_after(head,last,g)
-            head,last = node.insert_after(head,last,p2)
+            head, last = node.insert_after(head, last, p1)
+            head, last = node.insert_after(head, last, g)
+            head, last = node.insert_after(head, last, p2)
 
             -- add glue so next word can hyphenate (#274)
-            g = set_glue(nil,{})
-            head,last = node.insert_after(head,last,g)
-        elseif preserve_whitespace and match(char,"^%s$") then
+            g = set_glue(nil, {})
+            head, last = node.insert_after(head, last, g)
+        elseif preserve_whitespace and match(char, "^%s$") then
             local tbl = fonts.used_fonts[fontnumber]
-            local strut = M.add_rule(nil,"head",{height = 0 * publisher.factor, depth = 0, width = tbl.zerowidth }, "preserve_whitespace")
-            head,last = node.insert_after(head,last,strut)
-        elseif match(char,"^%s$") and last and last.id == publisher.glue_node and not node.has_attribute(last,publisher.att_tie_glue,1) then
+            local strut = M.add_rule(
+                nil,
+                "head",
+                { height = 0 * publisher.factor, depth = 0, width = tbl.zerowidth },
+                "preserve_whitespace"
+            )
+            head, last = node.insert_after(head, last, strut)
+        elseif
+            match(char, "^%s$")
+            and last
+            and last.id == publisher.glue_node
+            and not node.has_attribute(last, publisher.att_tie_glue, 1)
+        then
             -- double space, use the bigger glue
             local tmp
             if s >= 8194 and s <= 8198 or s >= 8201 and s <= 8203 then
-                tmp = ffgetglue(s,tbl)
+                tmp = ffgetglue(s, tbl)
             else
-                tmp = set_glue(nil, {width = space, shrink = shrink, stretch = stretch},"double glue")
+                tmp = set_glue(nil, { width = space, shrink = shrink, stretch = stretch }, "double glue")
             end
-            local tmp2 = M.bigger_glue_spec(last,tmp)
+            local tmp2 = M.bigger_glue_spec(last, tmp)
             last.width = tmp2.width
             last.stretch = tmp2.stretch
             last.shrink = tmp2.shrink
@@ -1565,85 +1667,84 @@ local function ffglyphlist(arguments)
             n = node.new("penalty")
             n.penalty = 10000
 
-            head,last = node.insert_after(head,last,n)
-            n = set_glue(nil,{width = space, shrink = shrink, stretch = stretch})
-            node.set_attribute(n,publisher.att_tie_glue,1)
+            head, last = node.insert_after(head, last, n)
+            n = set_glue(nil, { width = space, shrink = shrink, stretch = stretch })
+            node.set_attribute(n, publisher.att_tie_glue, 1)
 
-            head,last = node.insert_after(head,last,n)
+            head, last = node.insert_after(head, last, n)
 
             if parameter.textdecorationline then
-                publisher.attribute_helpers.set_attribute(n,"text-decoration-line",parameter.textdecorationline)
-                publisher.attribute_helpers.set_attribute(n,"text-decoration-style",parameter.textdecorationstyle)
-                publisher.attribute_helpers.set_attribute(n,"text-decoration-color",publisher.current_fgcolor)
+                publisher.attribute_helpers.set_attribute(n, "text-decoration-line", parameter.textdecorationline)
+                publisher.attribute_helpers.set_attribute(n, "text-decoration-style", parameter.textdecorationstyle)
+                publisher.attribute_helpers.set_attribute(n, "text-decoration-color", publisher.current_fgcolor)
             end
 
             if parameter.backgroundcolor then
-                publisher.attribute_helpers.set_attribute(n,"background-color",parameter.backgroundcolor)
-                publisher.attribute_helpers.set_attribute(n,"bgpaddingtop",parameter.bg_padding_top)
-                publisher.attribute_helpers.set_attribute(n,"bgpaddingbottom",parameter.bg_padding_bottom)
+                publisher.attribute_helpers.set_attribute(n, "background-color", parameter.backgroundcolor)
+                publisher.attribute_helpers.set_attribute(n, "bgpaddingtop", parameter.bg_padding_top)
+                publisher.attribute_helpers.set_attribute(n, "bgpaddingbottom", parameter.bg_padding_bottom)
             end
-            publisher.attribute_helpers.set_attribute(n,"fontfamily",fontfamily)
+            publisher.attribute_helpers.set_attribute(n, "fontfamily", fontfamily)
         elseif s == 173 then -- soft hyphen
             -- The soft hyphen is used in server-mode /v0/format
             n = node.new(publisher.penalty_node)
             n.penalty = 10000
-            head, last = node.insert_after(head,last,n)
+            head, last = node.insert_after(head, last, n)
 
             n = node.new(publisher.disc_node)
-            node.set_attribute(n,publisher.att_keep,1)
-            head, last = node.insert_after(head,last,n)
+            node.set_attribute(n, publisher.att_keep, 1)
+            head, last = node.insert_after(head, last, n)
 
             n = node.new(publisher.penalty_node)
             n.penalty = 10000
-            head, last = node.insert_after(head,last,n)
+            head, last = node.insert_after(head, last, n)
 
             n = set_glue(nil)
-            head, last = node.insert_after(head,last,n)
-        elseif s == 9 and parameter.tab == 'hspace' then
-            local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
-            head, last = node.insert_after(head,last,n)
+            head, last = node.insert_after(head, last, n)
+        elseif s == 9 and parameter.tab == "hspace" then
+            local n = set_glue(nil, { width = 0, stretch = 2 ^ 16, stretch_order = 3 })
+            head, last = node.insert_after(head, last, n)
         elseif s >= 8194 and s <= 8198 or s >= 8201 and s <= 8203 then
-            local n = ffgetglue(s,tbl)
+            local n = ffgetglue(s, tbl)
             -- prevent from stretching with ragged shape
             n.subtype = 1
-            head, last = node.insert_after(head,last,n)
+            head, last = node.insert_after(head, last, n)
         -- anchor is necessary. Otherwise à (C3A0) would match A0 - %s
-        elseif match(char,"^%s$") then -- Space
+        elseif match(char, "^%s$") then -- Space
             if breakatspace == false then
                 n = node.new("penalty")
                 n.penalty = 10000
 
-                head,last = node.insert_after(head,last,n)
-
+                head, last = node.insert_after(head, last, n)
             end
             -- ; and : should have the possibility to break easily if a space follows
-            if last and last.id == publisher.glyph_node and ( last.char == 58 or last.char == 59) then
+            if last and last.id == publisher.glyph_node and (last.char == 58 or last.char == 59) then
                 n = node.new("penalty")
                 n.penalty = 0
-                head,last = node.insert_after(head,last,n)
+                head, last = node.insert_after(head, last, n)
             end
 
-            n = set_glue(nil,{width = space,shrink = shrink, stretch = stretch},"space")
-            setstyles(n,parameter)
+            n = set_glue(nil, { width = space, shrink = shrink, stretch = stretch }, "space")
+            setstyles(n, parameter)
             if breakatspace == false then
-                node.set_attribute(n,publisher.att_tie_glue,1)
+                node.set_attribute(n, publisher.att_tie_glue, 1)
             end
 
             if parameter.textdecorationline then
-                publisher.attribute_helpers.set_attribute(n,"text-decoration-line",parameter.textdecorationline)
-                publisher.attribute_helpers.set_attribute(n,"text-decoration-color",publisher.current_fgcolor)
+                publisher.attribute_helpers.set_attribute(n, "text-decoration-line", parameter.textdecorationline)
+                publisher.attribute_helpers.set_attribute(n, "text-decoration-color", publisher.current_fgcolor)
             end
             if parameter.backgroundcolor then
-                publisher.attribute_helpers.set_attribute(n,"background-color",parameter.backgroundcolor)
+                publisher.attribute_helpers.set_attribute(n, "background-color", parameter.backgroundcolor)
                 if parameter.bg_padding_top then
-                    publisher.attribute_helpers.set_attribute(n,"bgpaddingtop",parameter.bg_padding_top)
+                    publisher.attribute_helpers.set_attribute(n, "bgpaddingtop", parameter.bg_padding_top)
                 end
                 if parameter.bg_padding_bottom then
-                    publisher.attribute_helpers.set_attribute(n,"bgpaddingbottom",parameter.bg_padding_bottom)
+                    publisher.attribute_helpers.set_attribute(n, "bgpaddingbottom", parameter.bg_padding_bottom)
                 end
             end
-            publisher.attribute_helpers.set_attribute(n,"fontfamily",fontfamily)
-            head,last = node.insert_after(head,last,n)
+            publisher.attribute_helpers.set_attribute(n, "fontfamily", fontfamily)
+            head, last = node.insert_after(head, last, n)
             if parameter.letterspacing then
                 n.width = n.width + parameter.letterspacing
             end
@@ -1657,8 +1758,8 @@ local function ffglyphlist(arguments)
             n.uchyph = 1
             n.left = parameter.left or tex.lefthyphenmin
             n.right = parameter.right or tex.righthyphenmin
-            setstyles(n,parameter)
-            publisher.attribute_helpers.set_attribute(n,"fontfamily",fontfamily)
+            setstyles(n, parameter)
+            publisher.attribute_helpers.set_attribute(n, "fontfamily", fontfamily)
 
             local famtab = fonts.lookup_fontfamily_number_instance[fontfamily]
             if parameter.verticalalign == "sub" then
@@ -1670,20 +1771,20 @@ local function ffglyphlist(arguments)
             if parameter.letterspacing then
                 local k = node.new("kern")
                 k.kern = parameter.letterspacing
-                setstyles(k,parameter)
-                head,last = node.insert_after(head,last,k)
+                setstyles(k, parameter)
+                head, last = node.insert_after(head, last, k)
                 lastitemwasglyph = true
             end
             if last and last.id == publisher.glyph_node then
                 lastitemwasglyph = true
             end
 
-            head,last = node.insert_after(head,last,n)
+            head, last = node.insert_after(head, last, n)
             -- CJK
             if s >= 12032 then
                 local pen = node.new("penalty")
                 pen.penalty = 0
-                head,last = node.insert_after(head,last,pen)
+                head, last = node.insert_after(head, last, pen)
             end
 
             -- Some characters must be treated in a special way.
@@ -1692,24 +1793,24 @@ local function ffglyphlist(arguments)
                 n.char = 45
                 local pen = node.new("penalty")
                 pen.penalty = 10000
-                head,last = node.insert_after(head,last,pen)
-            elseif ( n.char == 45 or n.char == 8211) and lastitemwasglyph and string.find(allowbreak, "-",1,true) then
+                head, last = node.insert_after(head, last, pen)
+            elseif (n.char == 45 or n.char == 8211) and lastitemwasglyph and string.find(allowbreak, "-", 1, true) then
                 -- only break if allowbreak contains the hyphen char
                 local pen = node.new("penalty")
                 pen.penalty = 10000
-                head = node.insert_before(head,last,pen)
+                head = node.insert_before(head, last, pen)
                 local disc = node.new("disc")
-                head,last = node.insert_after(head,last,disc)
+                head, last = node.insert_after(head, last, disc)
                 local g = set_glue(nil)
-                setstyles(pen,parameter)
-                setstyles(disc,parameter)
-                setstyles(g,parameter)
-                head,last = node.insert_after(head,last,g)
-            elseif string.find(allowbreak,char,1,true) then
+                setstyles(pen, parameter)
+                setstyles(disc, parameter)
+                setstyles(g, parameter)
+                head, last = node.insert_after(head, last, g)
+            elseif string.find(allowbreak, char, 1, true) then
                 -- allowbreak lists characters where the publisher may break lines
                 local pen = node.new("penalty")
                 pen.penalty = 0
-                head,last = node.insert_after(head,last,pen)
+                head, last = node.insert_after(head, last, pen)
             end
         end
     end
@@ -1720,8 +1821,8 @@ local function ffglyphlist(arguments)
         return node.new("hlist")
     end
     local aa = parameter.add_attributes or {}
-    for i=1,#aa do
-        publisher.attribute_helpers.set_attribute_recurse(head,aa[i][1],aa[i][2])
+    for i = 1, #aa do
+        publisher.attribute_helpers.set_attribute_recurse(head, aa[i][1], aa[i][2])
     end
     return head
 end
@@ -1756,11 +1857,11 @@ end
 ---@param parameter table Style/font parameters.
 ---@param origin? string Origin tag for `setprop` (debugging).
 ---@return node head Head of the glyph node list.
-function M.mknodes(str,parameter,origin)
+function M.mknodes(str, parameter, origin)
     -- if it's an empty string, we make a zero-width rule
     if not str or string.len(str) == 0 then
         -- a space char can have a width, so we return a zero width something
-        local strut = M.add_rule(nil,"head",{height = 1 * publisher.factor, depth = 0, width = 0 }, "pardir")
+        local strut = M.add_rule(nil, "head", { height = 1 * publisher.factor, depth = 0, width = 0 }, "pardir")
         publisher.attribute_helpers.setprop(strut, "pardir", parameter.direction)
         return strut, parameter.direction
     end
@@ -1771,7 +1872,7 @@ function M.mknodes(str,parameter,origin)
     if parameter.monospace then
         fontfamily = fonts.lookup_fontfamily_name_number.monospace
     end
-    local fontnumber = fonts.get_fontinstance(fontfamily,M.getinstancename(parameter))
+    local fontnumber = fonts.get_fontinstance(fontfamily, M.getinstancename(parameter))
     local tbl = fonts.used_fonts[fontnumber]
 
     -- Convert letterspacing_em (in 1/1000 em) to absolute letterspacing based on font size
@@ -1791,7 +1892,7 @@ function M.mknodes(str,parameter,origin)
         elseif parameter.direction == "rtl" then
             dir = 2
         end
-        segments = splib.segmentize_text(str,dir)
+        segments = splib.segmentize_text(str, dir)
         if segments[1][1] == 0 then
             segments.maindirection = "ltr"
         else
@@ -1806,12 +1907,12 @@ function M.mknodes(str,parameter,origin)
         elseif parameter.direction == "ltr" then
             segments.maindirection = "ltr"
         end
-        segments[1] = {dir,str}
+        segments[1] = { dir, str }
     end
     maindirection = parameter.direction or segments.maindirection
     local nodelistsegments
 
-    for i=1,#segments do
+    for i = 1, #segments do
         str = segments[i][2]
         local direction = segments[i][1]
         local thislang = "en"
@@ -1832,7 +1933,7 @@ function M.mknodes(str,parameter,origin)
 
             local cluster = {}
             local pos = 0
-            for c in unicode.utf8.gmatch(str,".") do
+            for c in unicode.utf8.gmatch(str, ".") do
                 cluster[pos] = unicode.utf8.byte(c)
                 if c == "\n" then
                     newlines_at[pos] = true
@@ -1841,9 +1942,14 @@ function M.mknodes(str,parameter,origin)
             end
             local buf = publisher.harfbuzz.Buffer.new()
             buf:add_utf8(str)
-            if direction == 0 then direction = "ltr" elseif direction == 1 then direction = "rtl" end
+            if direction == 0 then
+                direction = "ltr"
+            elseif direction == 1 then
+                direction = "rtl"
+            end
             -- shape returns the guessed script and direction from the buffer
-            script, direction = publisher.shape(tbl,buf, { language = thislang, script = script, direction = direction } )
+            script, direction =
+                publisher.shape(tbl, buf, { language = thislang, script = script, direction = direction })
             local is_cjk = false
             if script == "Hans" or script == "Hira" or script == "Hant" or script == "Hani" then
                 is_cjk = true
@@ -1887,7 +1993,7 @@ function M.mknodes(str,parameter,origin)
             })
         end
         direction = direction or 0
-        thissegment = M.setsegmentdir(thissegment,direction,maindirection)
+        thissegment = M.setsegmentdir(thissegment, direction, maindirection)
 
         if nodelistsegments then
             local tail = node.tail(nodelistsegments)
@@ -1899,10 +2005,10 @@ function M.mknodes(str,parameter,origin)
         ::nextsegment::
     end
     if maindirection then
-        publisher.attribute_helpers.setprop(nodelistsegments,"pardir",maindirection)
+        publisher.attribute_helpers.setprop(nodelistsegments, "pardir", maindirection)
     end
     if not nodelistsegments then
-        local strut = M.add_rule(nil,"head",{height = 1 * publisher.factor, depth = 0, width = 0 }, "pardir")
+        local strut = M.add_rule(nil, "head", { height = 1 * publisher.factor, depth = 0, width = 0 }, "pardir")
         return strut, parameter.direction
     end
     return nodelistsegments, maindirection
@@ -1914,7 +2020,7 @@ end
 ---@param direction "TLT"|"TRT" Segment direction.
 ---@param maindirection "TLT"|"TRT" Surrounding paragraph direction.
 ---@return node head
-function M.setsegmentdir(nodelist,direction, maindirection)
+function M.setsegmentdir(nodelist, direction, maindirection)
     local dirstring
     if direction == 0 or direction == "ltr" then
         dirstring = "TLT"
@@ -1923,7 +2029,7 @@ function M.setsegmentdir(nodelist,direction, maindirection)
     end
 
     -- don't do anything if this segment goes in the paragraph direction
-    if ( maindirection == nil or maindirection == "ltr" ) and dirstring == "TLT" then
+    if (maindirection == nil or maindirection == "ltr") and dirstring == "TLT" then
         return nodelist
     elseif maindirection == "rtl" and dirstring == "TRT" then
         return nodelist
@@ -1933,16 +2039,16 @@ function M.setsegmentdir(nodelist,direction, maindirection)
     local dirend = node.new(publisher.dir_node)
     dirstart.dir = "+" .. dirstring
     dirend.dir = "-" .. dirstring
-    node.setproperty(dirstart,node.getproperty(nodelist))
-    local ff = publisher.attribute_helpers.get_attribute(nodelist,"fontfamily")
-    publisher.attribute_helpers.set_attribute(dirstart,"fontfamily",ff)
-    nodelist = node.insert_before(nodelist,nodelist,dirstart)
+    node.setproperty(dirstart, node.getproperty(nodelist))
+    local ff = publisher.attribute_helpers.get_attribute(nodelist, "fontfamily")
+    publisher.attribute_helpers.set_attribute(dirstart, "fontfamily", ff)
+    nodelist = node.insert_before(nodelist, nodelist, dirstart)
 
     local tail = node.tail(nodelist)
-    local ff = publisher.attribute_helpers.get_attribute(tail,"fontfamily")
-    publisher.attribute_helpers.set_attribute(dirend,"fontfamily",ff)
-    node.setproperty(dirend,node.getproperty(tail))
-    node.insert_after(nodelist,tail,dirend)
+    local ff = publisher.attribute_helpers.get_attribute(tail, "fontfamily")
+    publisher.attribute_helpers.set_attribute(dirend, "fontfamily", ff)
+    node.setproperty(dirend, node.getproperty(tail))
+    node.insert_after(nodelist, tail, dirend)
     return nodelist
 end
 
@@ -1952,48 +2058,52 @@ end
 ---@param parameter table Rule parameters (`width`, `height`, `depth`, `color`, ...).
 ---@param origin? string Origin tag (debugging).
 ---@return node nodelist
-function M.add_rule( nodelist,head_or_tail,parameter,origin)
+function M.add_rule(nodelist, head_or_tail, parameter, origin)
     parameter = parameter or {}
 
-    local n=node.new(publisher.rule_node)
-    n.width  = parameter.width
+    local n = node.new(publisher.rule_node)
+    n.width = parameter.width
     n.height = parameter.height
-    n.depth  = parameter.depth
-    if origin then publisher.attribute_helpers.setprop(n,"origin",origin) end
-    if not nodelist then return n end
+    n.depth = parameter.depth
+    if origin then
+        publisher.attribute_helpers.setprop(n, "origin", origin)
+    end
+    if not nodelist then
+        return n
+    end
 
-    if head_or_tail=="head" then
-        nodelist = node.insert_before(nodelist,nodelist,n)
+    if head_or_tail == "head" then
+        nodelist = node.insert_before(nodelist, nodelist, n)
         return nodelist
     else
-        local last=node.slide(nodelist)
+        local last = node.slide(nodelist)
         last.next = n
         n.prev = last
-        return nodelist,n
+        return nodelist, n
     end
-    assert(false,"never reached") -- luacheck: ignore 511
+    assert(false, "never reached") -- luacheck: ignore 511
 end
 
 -- Returns an hbox containing a bullet glyph, sized to fill `labelwidth`.
 ---@param labelwidth integer Target width in sp.
 ---@param parameter table Style parameters (font, color, ...).
 ---@return node hbox
-function M.bullet_hbox( labelwidth,parameter )
+function M.bullet_hbox(labelwidth, parameter)
     local bullet, pre_glue, post_glue
-    bullet = M.mknodes("•",parameter)
-    pre_glue = set_glue(nil,{stretch = 2^16, stretch_order = 3})
+    bullet = M.mknodes("•", parameter)
+    pre_glue = set_glue(nil, { stretch = 2 ^ 16, stretch_order = 3 })
     pre_glue.next = bullet
 
-    post_glue = set_glue(nil,{width = 4 * 2^16})
+    post_glue = set_glue(nil, { width = 4 * 2 ^ 16 })
     post_glue.prev = bullet
     bullet.next = post_glue
-    local bullet_hbox = node.hpack(pre_glue,labelwidth,"exactly")
+    local bullet_hbox = node.hpack(pre_glue, labelwidth, "exactly")
 
     if publisher.options.showobjects then
         publisher.drawing.boxit(bullet_hbox)
     end
-    publisher.attribute_helpers.set_attribute(bullet_hbox,"indent",labelwidth)
-    node.set_attribute(bullet_hbox,publisher.att_rows,-1)
+    publisher.attribute_helpers.set_attribute(bullet_hbox, "indent", labelwidth)
+    node.set_attribute(bullet_hbox, publisher.att_rows, -1)
     return bullet_hbox
 end
 
@@ -2003,22 +2113,22 @@ end
 ---@param labelwidth integer Target width in sp.
 ---@param parameter table Style parameters.
 ---@return node hbox
-function M.number_hbox( num, labelwidth,parameter )
+function M.number_hbox(num, labelwidth, parameter)
     local pre_glue, post_glue
-    local digits = M.mknodes( tostring(num) .. ".",parameter)
-    pre_glue = set_glue(nil,{stretch = 2^16, stretch_order = 3})
+    local digits = M.mknodes(tostring(num) .. ".", parameter)
+    pre_glue = set_glue(nil, { stretch = 2 ^ 16, stretch_order = 3 })
     pre_glue.next = digits
 
-    post_glue = set_glue(nil,{width = 4 * 2^16})
+    post_glue = set_glue(nil, { width = 4 * 2 ^ 16 })
     post_glue.prev = node.tail(digits)
     node.tail(digits).next = post_glue
-    local digit_hbox = node.hpack(pre_glue,labelwidth,"exactly")
+    local digit_hbox = node.hpack(pre_glue, labelwidth, "exactly")
 
     if publisher.options.showobjects then
         publisher.drawing.boxit(digit_hbox)
     end
-    publisher.attribute_helpers.set_attribute(digit_hbox,"indent",labelwidth)
-    node.set_attribute(digit_hbox,publisher.att_rows,-1)
+    publisher.attribute_helpers.set_attribute(digit_hbox, "indent", labelwidth)
+    node.set_attribute(digit_hbox, publisher.att_rows, -1)
     return digit_hbox
 end
 
@@ -2030,27 +2140,27 @@ end
 ---@param labelsep_wd integer Separator width in sp.
 ---@param labelalign "left"|"center"|"right"
 ---@return node hbox
-function M.whatever_hbox( label,labelwidth,options,labelsep_wd,labelalign )
+function M.whatever_hbox(label, labelwidth, options, labelsep_wd, labelalign)
     local fam = options.fontfamily
     labelsep_wd = labelsep_wd or fonts.lookup_fontfamily_number_instance[fam].size / 2
     labelalign = labelalign or "right"
-    local shrink_glue = set_glue(nil,{shrink = 2^16, shrink_order = 3,width =  labelwidth})
-    local label_sep = set_glue(nil,{width = labelsep_wd})
+    local shrink_glue = set_glue(nil, { shrink = 2 ^ 16, shrink_order = 3, width = labelwidth })
+    local label_sep = set_glue(nil, { width = labelsep_wd })
 
     local label_hbox
     if labelalign == "right" then
         shrink_glue.next = label
         local t = node.slide(label)
         t.next = label_sep
-        label_hbox = node.hpack(shrink_glue,labelwidth,"exactly")
+        label_hbox = node.hpack(shrink_glue, labelwidth, "exactly")
     else
         local t = node.slide(label)
         t.next = label_sep
         label_sep.next = shrink_glue
-        label_hbox = node.hpack(label,labelwidth,"exactly")
+        label_hbox = node.hpack(label, labelwidth, "exactly")
     end
-    publisher.attribute_helpers.set_attribute(label_hbox.head,"fontfamily",fam)
-    label_hbox.head = M.addstrut(label_hbox.head,"head","whatever_hbox/strut")
+    publisher.attribute_helpers.set_attribute(label_hbox.head, "fontfamily", fam)
+    label_hbox.head = M.addstrut(label_hbox.head, "head", "whatever_hbox/strut")
 
     return label_hbox
 end
@@ -2059,10 +2169,10 @@ end
 -- the node has no inline width.
 ---@param n node Glue node.
 ---@return integer width Width in sp.
-function M.get_glue_size( n )
+function M.get_glue_size(n)
     local spec
 
-    if node.has_field(n,"spec") then
+    if node.has_field(n, "spec") then
         spec = n.spec
     else
         spec = n
@@ -2076,37 +2186,41 @@ end
 ---@param parameter table Glue parameters (`width`, `stretch`, `shrink`, ...).
 ---@param origin? string Origin tag (debugging).
 ---@return node nodelist
-function M.add_glue( nodelist,head_or_tail,parameter,origin)
+function M.add_glue(nodelist, head_or_tail, parameter, origin)
     parameter = parameter or {}
 
     local n = set_glue(nil, parameter)
     n.subtype = parameter.subtype or 0
-    if origin then publisher.attribute_helpers.setprop(n,"origin",origin) end
-    if nodelist == nil then return n end
+    if origin then
+        publisher.attribute_helpers.setprop(n, "origin", origin)
+    end
+    if nodelist == nil then
+        return n
+    end
 
-    if head_or_tail=="head" then
+    if head_or_tail == "head" then
         n.next = nodelist
         nodelist.prev = n
         return n
     else
-        local last=node.slide(nodelist)
+        local last = node.slide(nodelist)
         last.next = n
         n.prev = last
-        return nodelist,n
+        return nodelist, n
     end
-    assert(false,"never reached") -- luacheck: ignore 511
+    assert(false, "never reached") -- luacheck: ignore 511
 end
 
 -- Returns a glue node that stretches and shrinks like TeX's `\hss`.
 ---@return node glue
 function M.hss_glue()
-    return M.make_glue({stretch = 2^16, stretch_order = 2, shrink=2^16, shrink_order = 2})
+    return M.make_glue({ stretch = 2 ^ 16, stretch_order = 2, shrink = 2 ^ 16, shrink_order = 2 })
 end
 
 -- Creates a fresh glue node from a parameter table.
 ---@param parameter table Glue parameters (`width`, `stretch`, `shrink`, ...).
 ---@return node glue
-function M.make_glue( parameter )
+function M.make_glue(parameter)
     return set_glue(nil, parameter)
 end
 
@@ -2118,29 +2232,28 @@ end
 local function add_properties_to_discnodes(head)
     while head do
         if head.id == publisher.glyph_node and head.next and head.next.id == publisher.disc_node then
-            local role = publisher.attribute_helpers.getprop(head,"role")
-            local parent = publisher.attribute_helpers.getprop(head,"parent")
-            local rolecounter = publisher.attribute_helpers.getprop(head,"rolecounter")
-            local id = publisher.attribute_helpers.getprop(head,"id")
+            local role = publisher.attribute_helpers.getprop(head, "role")
+            local parent = publisher.attribute_helpers.getprop(head, "parent")
+            local rolecounter = publisher.attribute_helpers.getprop(head, "rolecounter")
+            local id = publisher.attribute_helpers.getprop(head, "id")
             if head.next.pre then
-                publisher.attribute_helpers.setprop(head.next.pre,"role",role)
-                publisher.attribute_helpers.setprop(head.next.pre,"parent",parent)
-                publisher.attribute_helpers.setprop(head.next.pre,"rolecounter",rolecounter)
-                publisher.attribute_helpers.setprop(head.next.pre,"id",id)
+                publisher.attribute_helpers.setprop(head.next.pre, "role", role)
+                publisher.attribute_helpers.setprop(head.next.pre, "parent", parent)
+                publisher.attribute_helpers.setprop(head.next.pre, "rolecounter", rolecounter)
+                publisher.attribute_helpers.setprop(head.next.pre, "id", id)
             end
             if head.next.post then
-                publisher.attribute_helpers.setprop(head.next.post,"role",role)
-                publisher.attribute_helpers.setprop(head.next.post,"parent",parent)
-                publisher.attribute_helpers.setprop(head.next.post,"rolecounter",rolecounter)
-                publisher.attribute_helpers.setprop(head.next.post,"id",id)
+                publisher.attribute_helpers.setprop(head.next.post, "role", role)
+                publisher.attribute_helpers.setprop(head.next.post, "parent", parent)
+                publisher.attribute_helpers.setprop(head.next.post, "rolecounter", rolecounter)
+                publisher.attribute_helpers.setprop(head.next.post, "id", id)
             end
             if head.next.replace then
-                publisher.attribute_helpers.setprop(head.next.replace,"role",role)
-                publisher.attribute_helpers.setprop(head.next.replace,"parent",parent)
-                publisher.attribute_helpers.setprop(head.next.replace,"rolecounter",rolecounter)
-                publisher.attribute_helpers.setprop(head.next.replace,"id",id)
+                publisher.attribute_helpers.setprop(head.next.replace, "role", role)
+                publisher.attribute_helpers.setprop(head.next.replace, "parent", parent)
+                publisher.attribute_helpers.setprop(head.next.replace, "rolecounter", rolecounter)
+                publisher.attribute_helpers.setprop(head.next.replace, "id", id)
             end
-
         end
         head = head.next
     end
@@ -2152,7 +2265,7 @@ end
 ---@param hsize integer Target line width in sp.
 ---@param parameters table Paragraph parameters (alignment, indent, ...).
 ---@return node head Linebroken vbox.
-function M.finish_par( nodelist,hsize,parameters )
+function M.finish_par(nodelist, hsize, parameters)
     assert(nodelist)
     node.slide(nodelist)
 
@@ -2165,7 +2278,7 @@ function M.finish_par( nodelist,hsize,parameters )
     end
 
     local n = node.new("penalty")
-    publisher.attribute_helpers.setprop(n,"origin","finishpar")
+    publisher.attribute_helpers.setprop(n, "origin", "finishpar")
     n.penalty = 10000
     local last = node.slide(nodelist)
 
@@ -2176,7 +2289,7 @@ function M.finish_par( nodelist,hsize,parameters )
     n = node.kerning(nodelist)
     n = M.hbkern(n)
     -- 15 is a parfillskip
-    M.add_glue(n,"tail",{ subtype = 15, width = 0, stretch = 2^16, stretch_order = 2})
+    M.add_glue(n, "tail", { subtype = 15, width = 0, stretch = 2 ^ 16, stretch_order = 2 })
 end
 
 -- Inserts kern nodes between glyphs for HarfBuzz-shaped runs (font kerning
@@ -2195,7 +2308,9 @@ function M.hbkern(nodelist)
                 local k = props.kernbefore
                 if k then
                     props.kernbefore = nil
-                    if k ~= 0 then curkern = k end
+                    if k ~= 0 then
+                        curkern = k
+                    end
                 end
             end
 
@@ -2204,14 +2319,22 @@ function M.hbkern(nodelist)
                 d_setkern(kern, curkern)
                 start = d_insert_before(start, head, kern)
                 local ul = d_has_attribute(head, att_td_line)
-                if ul then d_set_attribute(kern, att_td_line, ul) end
+                if ul then
+                    d_set_attribute(kern, att_td_line, ul)
+                end
                 local uccolor = d_has_attribute(head, att_td_color)
-                if uccolor then d_set_attribute(kern, att_td_color, uccolor) end
+                if uccolor then
+                    d_set_attribute(kern, att_td_color, uccolor)
+                end
                 local bgcolor = d_has_attribute(head, att_bgcolor)
-                if bgcolor then d_set_attribute(kern, att_bgcolor, bgcolor) end
+                if bgcolor then
+                    d_set_attribute(kern, att_bgcolor, bgcolor)
+                end
                 d_setproperty(kern, d_getproperty(head))
                 local hl = d_has_attribute(head, att_hyperlink)
-                if hl then d_set_attribute(kern, att_hyperlink, hl) end
+                if hl then
+                    d_set_attribute(kern, att_hyperlink, hl)
+                end
                 curkern = 0
             end
             if props then
@@ -2229,10 +2352,18 @@ function M.hbkern(nodelist)
                 local uccolor = d_has_attribute(head, att_td_color)
                 local bgcolor = d_has_attribute(head, att_bgcolor)
                 local hyperlink = d_has_attribute(head, att_hyperlink)
-                if ul then d_set_attribute(kern, att_td_line, ul) end
-                if uccolor then d_set_attribute(kern, att_td_color, uccolor) end
-                if bgcolor then d_set_attribute(kern, att_bgcolor, bgcolor) end
-                if hyperlink then d_set_attribute(kern, att_hyperlink, hyperlink) end
+                if ul then
+                    d_set_attribute(kern, att_td_line, ul)
+                end
+                if uccolor then
+                    d_set_attribute(kern, att_td_color, uccolor)
+                end
+                if bgcolor then
+                    d_set_attribute(kern, att_bgcolor, bgcolor)
+                end
+                if hyperlink then
+                    d_set_attribute(kern, att_hyperlink, hyperlink)
+                end
                 d_setproperty(kern, d_getproperty(head))
                 curkern = 0
             end
@@ -2251,7 +2382,7 @@ end
 ---@param parent? node Surrounding hbox (for direction lookup).
 ---@param direction? "TLT"|"TRT" Paragraph direction.
 ---@return node nodelist
-function M.fix_justification(nodelist,alignment,parent,direction)
+function M.fix_justification(nodelist, alignment, parent, direction)
     if alignment == "start" then
         if direction == "rtl" then
             alignment = "rightaligned"
@@ -2277,7 +2408,6 @@ function M.fix_justification(nodelist,alignment,parent,direction)
     local head = nodelist
     while head do
         if head.id == 0 then -- hlist
-
             -- we are on a line now. We assume that the spacing needs correction.
             -- The goal depends on the current line (par shape!)
             local goal
@@ -2300,16 +2430,28 @@ function M.fix_justification(nodelist,alignment,parent,direction)
                 if n.id == publisher.glyph_node then
                     font_before_glue = n.font
                 elseif n.id == publisher.glue_node then
-                    if n.subtype==0 and font_before_glue and get_glue_value(n,"width") > 0 and head.glue_sign == 1 then
+                    if
+                        n.subtype == 0
+                        and font_before_glue
+                        and get_glue_value(n, "width") > 0
+                        and head.glue_sign == 1
+                    then
                         local fonttable = font.fonts[font_before_glue]
-                        if not fonttable then fonttable = font.fonts[1] main.log("error", "Some font not found") end
-                        set_glue_values(n,{width = fonttable.parameters.space, shrink_order = head.glue_order, stretch = 0, stretch_order = 0})
+                        if not fonttable then
+                            fonttable = font.fonts[1]
+                            main.log("error", "Some font not found")
+                        end
+                        set_glue_values(n, {
+                            width = fonttable.parameters.space,
+                            shrink_order = head.glue_order,
+                            stretch = 0,
+                            stretch_order = 0,
+                        })
                     end
                 end
             end
 
             if curalignment == "rightaligned" or curalignment == "centered" then
-
                 local rightskip_node = node.tail(head.head)
 
                 -- first we remove everything between the rightskip and the
@@ -2317,24 +2459,33 @@ function M.fix_justification(nodelist,alignment,parent,direction)
                 -- the glues might contain "plus 1 fill" and the penalties are not
                 -- useful
                 local tmp = rightskip_node.prev
-                while tmp and ( tmp.id == publisher.glue_node or tmp.id == publisher.penalty_node or tmp.id == publisher.dir_node ) do
+                while
+                    tmp
+                    and (
+                        tmp.id == publisher.glue_node
+                        or tmp.id == publisher.penalty_node
+                        or tmp.id == publisher.dir_node
+                    )
+                do
                     tmp = tmp.prev
-                    if tmp == nil then break end
-                    head.head = node.remove(head.head,tmp.next)
+                    if tmp == nil then
+                        break
+                    end
+                    head.head = node.remove(head.head, tmp.next)
                 end
 
-                local wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order,head.head)
+                local wd = node.dimensions(head.glue_set, head.glue_sign, head.glue_order, head.head)
 
                 local leftskip_node
                 if curalignment == "rightaligned" then
-                    leftskip_node = set_glue(nil,{width = goal - wd})
+                    leftskip_node = set_glue(nil, { width = goal - wd })
                 else
-                    leftskip_node = set_glue(nil,{width = ( goal - wd ) / 2 })
+                    leftskip_node = set_glue(nil, { width = (goal - wd) / 2 })
                 end
-                head.head = node.insert_before(head.head,head.head,leftskip_node)
+                head.head = node.insert_before(head.head, head.head, leftskip_node)
             end
         elseif head.id == 1 then -- vlist
-            M.fix_justification(head.head,alignment,head,direction)
+            M.fix_justification(head.head, alignment, head, direction)
         end
         head = head.next
     end
@@ -2345,13 +2496,13 @@ end
 ---@param nodelist node Vbox of lines.
 ---@param wd integer Target line width in sp.
 ---@return boolean
-local function check_if_a_line_exeeds(nodelist,wd)
+local function check_if_a_line_exeeds(nodelist, wd)
     local head = nodelist
     while head do
         if head.id == publisher.vlist_node then
-            return check_if_a_line_exeeds(head.head,wd)
+            return check_if_a_line_exeeds(head.head, wd)
         elseif head.id == publisher.hlist_node then
-            local width = node.dimensions(head.glue_set,head.glue_sign,head.glue_order,head.head)
+            local width = node.dimensions(head.glue_set, head.glue_sign, head.glue_order, head.head)
             if width > wd + 400 then
                 return true
             end
@@ -2368,18 +2519,17 @@ end
 ---@param hsize integer Target line width in sp.
 ---@param parameters table Line-break parameters.
 ---@return node head Linebroken vbox.
-function M.do_linebreak( nodelist,hsize,parameters )
+function M.do_linebreak(nodelist, hsize, parameters)
     if nodelist == nil then
         main.log("error", "No nodelist found for line breaking.")
-        return publisher.drawing.box(publisher.tenmm_sp,publisher.tenmm_sp,"black")
+        return publisher.drawing.box(publisher.tenmm_sp, publisher.tenmm_sp, "black")
     end
 
     parameters = parameters or {}
-    M.finish_par(nodelist,hsize,parameters)
+    M.finish_par(nodelist, hsize, parameters)
 
     local pdfignoreddimen
     pdfignoreddimen = -65536000
-
 
     local default_parameters = {
         hsize = hsize,
@@ -2390,13 +2540,13 @@ function M.do_linebreak( nodelist,hsize,parameters )
         tolerance = 2000,
         doublehyphendemerits = 1000,
         pdfeachlineheight = pdfignoreddimen,
-        pdfeachlinedepth  = pdfignoreddimen,
-        pdflastlinedepth  = pdfignoreddimen,
-        pdfignoreddimen   = pdfignoreddimen,
+        pdfeachlinedepth = pdfignoreddimen,
+        pdflastlinedepth = pdfignoreddimen,
+        pdfignoreddimen = pdfignoreddimen,
     }
 
     -- This could be done with a meta table, but somehow LuaTeX 104 doesn't like it
-    for k,v in pairs(parameters) do
+    for k, v in pairs(parameters) do
         default_parameters[k] = v
     end
 
@@ -2406,8 +2556,8 @@ function M.do_linebreak( nodelist,hsize,parameters )
     local c = 0
     local line_exceeds_right_margin = true
     while true do
-        j = tex.linebreak(node.copy_list(nodelist),default_parameters)
-        if not check_if_a_line_exeeds(j,hsize) then
+        j = tex.linebreak(node.copy_list(nodelist), default_parameters)
+        if not check_if_a_line_exeeds(j, hsize) then
             line_exceeds_right_margin = false
             break
         end
@@ -2421,9 +2571,9 @@ function M.do_linebreak( nodelist,hsize,parameters )
 
     if line_exceeds_right_margin and publisher.options.overfulllineerror ~= nil then
         if publisher.options.overfulllineerror then
-            main.log("error","Overfull line found","page",publisher.current_pagenumber,publisher.lineinfo())
+            main.log("error", "Overfull line found", "page", publisher.current_pagenumber, publisher.lineinfo())
         else
-            main.log("warn","Overfull line found","page",publisher.current_pagenumber,publisher.lineinfo())
+            main.log("warn", "Overfull line found", "page", publisher.current_pagenumber, publisher.lineinfo())
         end
     end
     node.flush_list(nodelist)
@@ -2455,13 +2605,17 @@ function M.do_linebreak( nodelist,hsize,parameters )
                     if sublist then
                         _, _h, _d = d_dimensions(sublist)
                         local total = _h + _d
-                        if total > maxlineheight then maxlineheight = total end
+                        if total > maxlineheight then
+                            maxlineheight = total
+                        end
                     end
                 else
                     fam = d_has_attribute(head_list, att_fontfamily)
                     if fam and fam > 0 then
                         local bls = lookup_fam[fam].baselineskip
-                        if bls > maxlineheight then maxlineheight = bls end
+                        if bls > maxlineheight then
+                            maxlineheight = bls
+                        end
                     end
                 end
                 head_list = d_getnext(head_list)
@@ -2479,7 +2633,7 @@ function M.do_linebreak( nodelist,hsize,parameters )
         cur = d_getnext(cur)
     end
     local ret = node.vpack(j)
-    publisher.attribute_helpers.setprop(ret,"origin","do_linebreak")
+    publisher.attribute_helpers.setprop(ret, "origin", "do_linebreak")
     return ret
 end
 
@@ -2487,21 +2641,21 @@ end
 ---@param wd integer Width in sp.
 ---@param ht integer Height in sp.
 ---@return node vbox
-function M.create_empty_vbox_width_width_height(wd,ht)
+function M.create_empty_vbox_width_width_height(wd, ht)
     local hb = M.create_empty_hbox_with_width(wd)
-    local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
-    node.insert_after(hb,hb,n)
-    n = node.vpack(n,ht,"exactly")
-    node.set_attribute(n,publisher.att_dontadjustlineheight,1)
+    local n = set_glue(nil, { width = 0, stretch = 2 ^ 16, stretch_order = 3 })
+    node.insert_after(hb, hb, n)
+    n = node.vpack(n, ht, "exactly")
+    node.set_attribute(n, publisher.att_dontadjustlineheight, 1)
     return n
 end
 
 -- Creates an empty hbox of the given width.
 ---@param wd integer Width in sp.
 ---@return node hbox
-function M.create_empty_hbox_with_width( wd )
-    local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
-    n = node.hpack(n,wd,"exactly")
+function M.create_empty_hbox_with_width(wd)
+    local n = set_glue(nil, { width = 0, stretch = 2 ^ 16, stretch_order = 3 })
+    n = node.hpack(n, wd, "exactly")
     return n
 end
 
@@ -2510,10 +2664,12 @@ end
 ---@param nodelist node
 ---@param color integer Color index from `colortable`.
 ---@return node nodelist
-function M.set_color_if_necessary( nodelist,color )
-    local dontformat = node.has_attribute(nodelist,publisher.att_dont_format)
+function M.set_color_if_necessary(nodelist, color)
+    local dontformat = node.has_attribute(nodelist, publisher.att_dont_format)
 
-    if not color then return nodelist end
+    if not color then
+        return nodelist
+    end
 
     local colorname
     if color == -1 then
@@ -2523,27 +2679,29 @@ function M.set_color_if_necessary( nodelist,color )
     end
     -- When we uncomment the if .. end here, the typesetting
     -- process is much slower. See #143
-    if colorname == "black" then return nodelist end
+    if colorname == "black" then
+        return nodelist
+    end
     local colstart, colstop
-    colstart = node.new("whatsit","pdf_colorstack")
-    colstop  = node.new("whatsit","pdf_colorstack")
+    colstart = node.new("whatsit", "pdf_colorstack")
+    colstop = node.new("whatsit", "pdf_colorstack")
     colstart.data = colors_module.colors[colorname].pdfstring
-    colstop.data  = ""
+    colstop.data = ""
     colstart.command = 1
-    colstop.command  = 2
+    colstop.command = 2
     colstart.stack = publisher.defaultcolorstack
-    colstop.stack  = publisher.defaultcolorstack
+    colstop.stack = publisher.defaultcolorstack
 
     if dontformat then
-        node.set_attribute(colstart,publisher.att_dont_format,dontformat)
+        node.set_attribute(colstart, publisher.att_dont_format, dontformat)
     end
 
-    nodelist = node.insert_before(nodelist,nodelist,colstart)
+    nodelist = node.insert_before(nodelist, nodelist, colstart)
     local last = node.tail(nodelist)
-    nodelist = node.insert_after(nodelist,last,colstop)
+    nodelist = node.insert_after(nodelist, last, colstop)
 
-    publisher.attribute_helpers.setprop(colstart,"origin","setcolorifnecessary")
-    publisher.attribute_helpers.setprop(colstop,"origin","setcolorifnecessary")
+    publisher.attribute_helpers.setprop(colstart, "origin", "setcolorifnecessary")
+    publisher.attribute_helpers.setprop(colstop, "origin", "setcolorifnecessary")
     return nodelist
 end
 
@@ -2552,22 +2710,29 @@ end
 ---@param nodelist node
 ---@param fontfamily integer Font family number.
 ---@return nil
-function M.set_fontfamily_if_necessary(nodelist,fontfamily)
+function M.set_fontfamily_if_necessary(nodelist, fontfamily)
     local fam
     while nodelist do
-        if nodelist.id==publisher.vlist_node or nodelist.id==publisher.hlist_node  then
-            fam = M.set_fontfamily_if_necessary(nodelist.list,fontfamily)
-        elseif nodelist.id == publisher.glue_node and nodelist.subtype == 100  then
-            fam = M.set_fontfamily_if_necessary(nodelist.leader,fontfamily)
+        if nodelist.id == publisher.vlist_node or nodelist.id == publisher.hlist_node then
+            fam = M.set_fontfamily_if_necessary(nodelist.list, fontfamily)
+        elseif nodelist.id == publisher.glue_node and nodelist.subtype == 100 then
+            fam = M.set_fontfamily_if_necessary(nodelist.leader, fontfamily)
         else
-            fam = publisher.attribute_helpers.get_attribute(nodelist,"fontfamily")
+            fam = publisher.attribute_helpers.get_attribute(nodelist, "fontfamily")
             -- See #242, #235 and referenced bugs (and change 5af208f)
-            if fam == 0 or ( fam == nil and nodelist.id == publisher.rule_node and publisher.attribute_helpers.get_attribute(nodelist,"publisher") == 1 )  then
-                publisher.attribute_helpers.set_attribute(nodelist,"fontfamily",fontfamily)
+            if
+                fam == 0
+                or (
+                    fam == nil
+                    and nodelist.id == publisher.rule_node
+                    and publisher.attribute_helpers.get_attribute(nodelist, "publisher") == 1
+                )
+            then
+                publisher.attribute_helpers.set_attribute(nodelist, "fontfamily", fontfamily)
                 fam = fontfamily
             end
         end
-        nodelist=nodelist.next
+        nodelist = nodelist.next
     end
     return fam
 end
@@ -2576,19 +2741,23 @@ end
 -- structural characters (`/`, `.`, `?`, `&`, ...).
 ---@param nodelist node
 ---@return node nodelist
-function M.break_url( nodelist )
+function M.break_url(nodelist)
     local p
 
     local slash = string.byte("/")
-    for n in node.traverse_id(publisher.glyph_node,nodelist) do
+    for n in node.traverse_id(publisher.glyph_node, nodelist) do
         p = node.new("penalty")
 
         if n.char == slash then
-            p.penalty=-10
+            p.penalty = -10
         else
-            p.penalty=-5
+            p.penalty = -5
         end
-        publisher.attribute_helpers.set_attribute(p,"hyperlink",publisher.attribute_helpers.get_attribute(n,"hyperlink"))
+        publisher.attribute_helpers.set_attribute(
+            p,
+            "hyperlink",
+            publisher.attribute_helpers.get_attribute(n, "hyperlink")
+        )
         p.next = n.next
         if n.next and n.next.prev then
             n.next.prev = p

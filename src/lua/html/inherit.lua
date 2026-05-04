@@ -35,7 +35,7 @@ function M.new_stack(inherited)
                 return stylesstack._stack[tbl.pos - 1][key]
             end
             return nil
-        end
+        end,
     }
     stylesstack._mt = levelmt
 
@@ -58,7 +58,9 @@ end
 ---@return HtmlStyles|nil popped
 function M.pop(stack)
     local idx = #stack._stack
-    if idx == 0 then return nil end
+    if idx == 0 then
+        return nil
+    end
     local top = stack._stack[idx]
     stack._stack[idx] = nil
     return top
@@ -69,7 +71,9 @@ end
 ---@return HtmlStyles|nil level
 function M.top(stack)
     local idx = #stack._stack
-    if idx == 0 then return nil end
+    if idx == 0 then
+        return nil
+    end
     return stack._stack[idx]
 end
 

@@ -40,7 +40,9 @@ local fonts = require("publisher.fonts")
 ---@param fontname string?
 ---@return string? resolved
 function M.get_fontname(fontname)
-    if not fontname then return nil end
+    if not fontname then
+        return nil
+    end
     local result = fontname
     while true do
         if publisher.fontaliases[result] then
@@ -68,9 +70,20 @@ end
 ---@param subshift? integer Defaults to `round(size * 0.3)`.
 ---@return integer|false fontnumber Family number on success; `false` on failure.
 ---@return string? errmsg Error message when a face cannot be instantiated.
-function M.define_fontfamily( regular, bold, italic, bolditalic, name, size, baselineskip, scriptsize, supershift, subshift)
+function M.define_fontfamily(
+    regular,
+    bold,
+    italic,
+    bolditalic,
+    name,
+    size,
+    baselineskip,
+    scriptsize,
+    supershift,
+    subshift
+)
     if not size then
-        main.log("error","DefineFontfamily needs size value")
+        main.log("error", "DefineFontfamily needs size value")
         return
     end
     if not scriptsize then
@@ -83,66 +96,101 @@ function M.define_fontfamily( regular, bold, italic, bolditalic, name, size, bas
         subshift = math.round(size * 0.3, 0)
     end
     if not tonumber(size) then
-        main.log("error","DefineFontfamily needs size value")
+        main.log("error", "DefineFontfamily needs size value")
         return
     end
     local fam = {
-        size         = size,
+        size = size,
         baselineskip = baselineskip,
-        scriptsize   = scriptsize,
-        supershift   = supershift,
-        subshift     = subshift,
+        scriptsize = scriptsize,
+        supershift = supershift,
+        subshift = subshift,
         name = name,
     }
     local ok, tmp
     if regular then
         ok, tmp = fonts.make_font_instance(regular, fam.size)
-        if not ok then return false, tmp end
+        if not ok then
+            return false, tmp
+        end
         fam.normal = tmp
         fam.fontfaceregular = regular
         ok, tmp = fonts.make_font_instance(regular, fam.scriptsize)
-        if not ok then return false, tmp end
+        if not ok then
+            return false, tmp
+        end
         fam.normalscript = tmp
     end
 
     if bold then
         ok, tmp = fonts.make_font_instance(bold, fam.size)
-        if not ok then return false, tmp end
+        if not ok then
+            return false, tmp
+        end
         fam.bold = tmp
         fam.fontfacebold = bold
         ok, tmp = fonts.make_font_instance(bold, fam.scriptsize)
-        if not ok then return false, tmp end
+        if not ok then
+            return false, tmp
+        end
         fam.boldscript = tmp
     end
 
     if italic then
         ok, tmp = fonts.make_font_instance(italic, fam.size)
-        if not ok then return false, tmp end
+        if not ok then
+            return false, tmp
+        end
         fam.italic = tmp
         fam.fontfaceitalic = italic
         ok, tmp = fonts.make_font_instance(italic, fam.scriptsize)
-        if not ok then return false, tmp end
+        if not ok then
+            return false, tmp
+        end
         fam.italicscript = tmp
     end
 
     if bolditalic then
         ok, tmp = fonts.make_font_instance(bolditalic, fam.size)
-        if not ok then return false, tmp end
+        if not ok then
+            return false, tmp
+        end
         fam.bolditalic = tmp
         fam.fontfacebolditalic = bolditalic
         ok, tmp = fonts.make_font_instance(bolditalic, fam.scriptsize)
-        if not ok then return false, tmp end
+        if not ok then
+            return false, tmp
+        end
         fam.bolditalicscript = tmp
     end
 
     fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam
     local fontnumber = #fonts.lookup_fontfamily_number_instance
     fonts.lookup_fontfamily_name_number[name] = fontnumber
-    main.log("info","Define font family","name",name,"size",math.round(size / publisher.factor, 3),"leading",math.round(baselineskip / publisher.factor, 3), "id",fontnumber)
-    if regular then main.log("debug", "Instance created", "instance", "regular", "name", regular,"id",fam.normal) end
-    if bold then main.log("debug", "Instance created", "instance", "bold", "name", bold,"id",fam.bold) end
-    if italic then main.log("debug", "Instance created", "instance", "italic", "name", italic,"id",fam.italic) end
-    if bolditalic then main.log("debug", "Instance created", "instance", "bolditalic", "name", bolditalic,"id",fam.bolditalic) end
+    main.log(
+        "info",
+        "Define font family",
+        "name",
+        name,
+        "size",
+        math.round(size / publisher.factor, 3),
+        "leading",
+        math.round(baselineskip / publisher.factor, 3),
+        "id",
+        fontnumber
+    )
+    if regular then
+        main.log("debug", "Instance created", "instance", "regular", "name", regular, "id", fam.normal)
+    end
+    if bold then
+        main.log("debug", "Instance created", "instance", "bold", "name", bold, "id", fam.bold)
+    end
+    if italic then
+        main.log("debug", "Instance created", "instance", "italic", "name", italic, "id", fam.italic)
+    end
+    if bolditalic then
+        main.log("debug", "Instance created", "instance", "bolditalic", "name", bolditalic, "id", fam.bolditalic)
+    end
     return fontnumber
 end
 

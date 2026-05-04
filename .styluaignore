@@ -1,0 +1,11 @@
+# Third-party vendored Lua files. Keep them in their upstream shape
+# so future syncs are clean diffs.
+src/lua/luxor.lua
+src/lua/ProFi.lua
+src/lua/uuid.lua
+src/lua/socket_url.lua
+src/lua/box.lua
+src/lua/sampler.lua
+src/lua/shalocal.lua
+src/lua/common/lua-visual-debug.lua
+src/lua/barcodes/qrencode.lua

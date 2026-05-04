@@ -4,9 +4,9 @@
 
 local publisher = require("publisher")
 
-local units      = require("html.units")
+local units = require("html.units")
 local styles_mod = require("html.styles")
-local inherit    = require("html.inherit")
+local inherit = require("html.inherit")
 
 local M = {}
 
@@ -38,7 +38,14 @@ function M.build_html_table_tbody(tbody, cb, dataxml, stylesstack, border_collap
                     local styles = inherit.push(stylesstack)
                     styles_mod.copy_attributes(styles, td_styles)
                     -- Build nodelist for td contents using the host's build_nodelist
-                    local r = cb.build_nodelist(td, {["font-weight"] = styles["font-weight"]}, nil, "build_html_table_tbody/td", nil, dataxml)
+                    local r = cb.build_nodelist(
+                        td,
+                        { ["font-weight"] = styles["font-weight"] },
+                        nil,
+                        "build_html_table_tbody/td",
+                        nil,
+                        dataxml
+                    )
 
                     r = publisher.flatten_boxes(r)
 
@@ -56,28 +63,64 @@ function M.build_html_table_tbody(tbody, cb, dataxml, stylesstack, border_collap
                         local btw = att["border-top-width"]
                         local brw = att["border-right-width"]
                         local blw = att["border-left-width"]
-                        if bbw then newcontents["border-bottom"] = bbw end
-                        if btw then newcontents["border-top"] = btw end
-                        if blw then newcontents["border-left"] = blw end
-                        if brw then newcontents["border-right"] = brw end
+                        if bbw then
+                            newcontents["border-bottom"] = bbw
+                        end
+                        if btw then
+                            newcontents["border-top"] = btw
+                        end
+                        if blw then
+                            newcontents["border-left"] = blw
+                        end
+                        if brw then
+                            newcontents["border-right"] = brw
+                        end
                         local bbc = att["border-bottom-color"]
                         local btc = att["border-top-color"]
                         local brc = att["border-right-color"]
                         local blc = att["border-left-color"]
 
                         local currentcolor = att.color or "black"
-                        if bbc then if bbc == "currentcolor" then bbc = currentcolor end newcontents["border-bottom-color"] = bbc end
-                        if btc then if btc == "currentcolor" then btc = currentcolor end newcontents["border-top-color"] = btc end
-                        if blc then if blc == "currentcolor" then blc = currentcolor end newcontents["border-left-color"] = blc end
-                        if brc then if brc == "currentcolor" then brc = currentcolor end newcontents["border-right-color"] = brc end
+                        if bbc then
+                            if bbc == "currentcolor" then
+                                bbc = currentcolor
+                            end
+                            newcontents["border-bottom-color"] = bbc
+                        end
+                        if btc then
+                            if btc == "currentcolor" then
+                                btc = currentcolor
+                            end
+                            newcontents["border-top-color"] = btc
+                        end
+                        if blc then
+                            if blc == "currentcolor" then
+                                blc = currentcolor
+                            end
+                            newcontents["border-left-color"] = blc
+                        end
+                        if brc then
+                            if brc == "currentcolor" then
+                                brc = currentcolor
+                            end
+                            newcontents["border-right-color"] = brc
+                        end
                         local pt = att["padding-top"]
                         local pb = att["padding-bottom"]
                         local pl = att["padding-left"]
                         local pr = att["padding-right"]
-                        if pt then newcontents.padding_top    = units.getsize(styles, pt, styles.fontsize_sp) end
-                        if pb then newcontents.padding_bottom = units.getsize(styles, pb, styles.fontsize_sp) end
-                        if pl then newcontents.padding_left   = units.getsize(styles, pl, styles.fontsize_sp) end
-                        if pr then newcontents.padding_right  = units.getsize(styles, pr, styles.fontsize_sp) end
+                        if pt then
+                            newcontents.padding_top = units.getsize(styles, pt, styles.fontsize_sp)
+                        end
+                        if pb then
+                            newcontents.padding_bottom = units.getsize(styles, pb, styles.fontsize_sp)
+                        end
+                        if pl then
+                            newcontents.padding_left = units.getsize(styles, pl, styles.fontsize_sp)
+                        end
+                        if pr then
+                            newcontents.padding_right = units.getsize(styles, pr, styles.fontsize_sp)
+                        end
                         -- Background color for cell, with fallback to tr and thead/tbody
                         local bgcolor = att["background-color"]
                             or (tr.styles and tr.styles["background-color"])
@@ -89,8 +132,12 @@ function M.build_html_table_tbody(tbody, cb, dataxml, stylesstack, border_collap
                     -- Copy colspan/rowspan from HTML attributes
                     local td_attr = td.attributes
                     if td_attr then
-                        if td_attr.colspan then newcontents.colspan = td_attr.colspan end
-                        if td_attr.rowspan then newcontents.rowspan = td_attr.rowspan end
+                        if td_attr.colspan then
+                            newcontents.colspan = td_attr.colspan
+                        end
+                        if td_attr.rowspan then
+                            newcontents.rowspan = td_attr.rowspan
+                        end
                     end
 
                     inherit.pop(stylesstack)
@@ -168,7 +215,9 @@ function M.build_html_table(table_elt, width, cb, dataxml, stylesstack)
     end
 
     -- Body rows go directly into tab
-    for i = 1, #body do tab[#tab + 1] = body[i] end
+    for i = 1, #body do
+        tab[#tab + 1] = body[i]
+    end
 
     -- Wrap tfoot rows in Tablefoot structure so they repeat on each page
     if #foot > 0 then
@@ -193,19 +242,21 @@ function M.build_html_table(table_elt, width, cb, dataxml, stylesstack)
 
     -- Original default options / paddings / borders
     -- Use publisher.getheight directly - it may be replaced for HTML-in-Output
-    tabular.options = { ht_max = publisher.page_helpers.getheight(1,dataxml) } -- a heuristic
-    tabular.getheight      = function(...) return publisher.page_helpers.getheight(...) end
-    tabular.padding_left   = 0
-    tabular.padding_top    = 0
-    tabular.padding_right  = 0
+    tabular.options = { ht_max = publisher.page_helpers.getheight(1, dataxml) } -- a heuristic
+    tabular.getheight = function(...)
+        return publisher.page_helpers.getheight(...)
+    end
+    tabular.padding_left = 0
+    tabular.padding_top = 0
+    tabular.padding_right = 0
     tabular.padding_bottom = 0
-    tabular.colsep         = 0
-    tabular.rowsep         = 0
+    tabular.colsep = 0
+    tabular.rowsep = 0
 
     -- For border-collapse: set all three flags for proper visual rendering
     if border_collapse then
         tabular.bordercollapse_horizontal = true
-        tabular.bordercollapse_vertical   = true
+        tabular.bordercollapse_vertical = true
         tabular.bordercollapse = true
     end
 

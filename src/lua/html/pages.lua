@@ -47,7 +47,7 @@ function M.handle_pages(pages, maxwidth_sp, dataxml)
                 publisher.page_helpers.set_pageformat(wd, ht)
 
                 if publisher.newxpath then
-                    dataxml.vars["__maxwidth"]  = wd
+                    dataxml.vars["__maxwidth"] = wd
                     dataxml.vars["__maxheight"] = ht
                 else
                     publisher.xpath.set_variable("__maxwidth", wd)
@@ -57,20 +57,28 @@ function M.handle_pages(pages, maxwidth_sp, dataxml)
         end
 
         -- Default margins: 10mm each side
-        local margin_left   = publisher.tenmm_sp
-        local margin_right  = publisher.tenmm_sp
+        local margin_left = publisher.tenmm_sp
+        local margin_right = publisher.tenmm_sp
         local margin_bottom = publisher.tenmm_sp
-        local margin_top    = publisher.tenmm_sp
+        local margin_top = publisher.tenmm_sp
 
-        local mt            = masterpage["margin-top"]
-        local mr            = masterpage["margin-right"]
-        local mb            = masterpage["margin-bottom"]
-        local ml            = masterpage["margin-left"]
+        local mt = masterpage["margin-top"]
+        local mr = masterpage["margin-right"]
+        local mb = masterpage["margin-bottom"]
+        local ml = masterpage["margin-left"]
 
-        if mt then margin_top = tex.sp(mt) end
-        if mr then margin_right = tex.sp(mr) end
-        if mb then margin_bottom = tex.sp(mb) end
-        if ml then margin_left = tex.sp(ml) end
+        if mt then
+            margin_top = tex.sp(mt)
+        end
+        if mr then
+            margin_right = tex.sp(mr)
+        end
+        if mb then
+            margin_bottom = tex.sp(mb)
+        end
+        if ml then
+            margin_left = tex.sp(ml)
+        end
 
         pagewd = pagewd - margin_left - margin_right
 
@@ -93,11 +101,11 @@ function M.handle_pages(pages, maxwidth_sp, dataxml)
                     elementname = "Margin",
                     contents = function(page)
                         page.grid:set_margin(margin_left, margin_top, margin_right, margin_bottom)
-                    end
-                }
+                    end,
+                },
             },
             name = "Default HTML page",
-            ns = { [""] = "urn:speedata.de:2009/publisher/en" }
+            ns = { [""] = "urn:speedata.de:2009/publisher/en" },
         }
     else
         -- No explicit master page
@@ -105,8 +113,8 @@ function M.handle_pages(pages, maxwidth_sp, dataxml)
             pagewd = maxwidth_sp
         else
             local margin_right = publisher.tenmm_sp
-            local margin_left  = publisher.tenmm_sp
-            pagewd             = pagewd - margin_left - margin_right
+            local margin_left = publisher.tenmm_sp
+            pagewd = pagewd - margin_left - margin_right
         end
 
         if publisher.newxpath then

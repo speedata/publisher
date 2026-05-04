@@ -19,15 +19,15 @@ local Par = {}
 ---@param textformat string
 ---@param origin? string
 ---@return Par
-function Par:new( textformat,origin )
+function Par:new(textformat, origin)
     local instance = {
         textformat = textformat,
         origin = origin,
-        typ = "par"
+        typ = "par",
     }
     setmetatable(instance, self)
     self.__index = self
-    for i=1,#instance do
+    for i = 1, #instance do
         instance[i] = nil
     end
     return instance
@@ -38,14 +38,14 @@ end
 ---@param nl node Vbox of lines.
 ---@param wd integer Padding in sp.
 ---@return node nl
-local function widen_nodelist(nl,wd)
+local function widen_nodelist(nl, wd)
     local glue = publisher.nodes.make_glue({ width = wd })
     local hbox = nl.head
 
     while hbox do
         if hbox.id == publisher.hlist_node then
             local tail = node.tail(hbox)
-            node.insert_after(tail,tail,node.copy(glue))
+            node.insert_after(tail, tail, node.copy(glue))
             hbox.width = hbox.width + wd
         end
         hbox = hbox.next
@@ -59,12 +59,12 @@ end
 ---@param nl node Vbox of lines.
 ---@param wd integer Indent in sp.
 ---@return nil
-local function indent_nodelist(nl,wd)
+local function indent_nodelist(nl, wd)
     local glue = publisher.nodes.make_glue({ width = wd })
     local hbox = nl.head
     while hbox do
         if hbox.id == publisher.hlist_node then
-            hbox.head = node.insert_before(hbox.head,hbox.head,node.copy(glue))
+            hbox.head = node.insert_before(hbox.head, hbox.head, node.copy(glue))
             hbox.width = hbox.width + wd
         end
         hbox = hbox.next
@@ -73,7 +73,21 @@ local function indent_nodelist(nl,wd)
     return nl
 end
 
-local void_elements = {area = true, base = true, br = true, col = true, hr = true, img = true, input = true, link = true, meta = true, param = true, command = true, keygen = true, source = true }
+local void_elements = {
+    area = true,
+    base = true,
+    br = true,
+    col = true,
+    hr = true,
+    img = true,
+    input = true,
+    link = true,
+    meta = true,
+    param = true,
+    command = true,
+    keygen = true,
+    source = true,
+}
 
 -- Reconstructs the original (or close-to-original) HTML/CSS text for an
 -- element so it can flow through the regular paragraph builder.
@@ -83,38 +97,38 @@ local function reconstruct_html_text(elt)
     local eltname = elt[".__local_name"]
     eltname = string.lower(eltname)
     local ret = {}
-    table.insert(ret,"<")
-    table.insert(ret,eltname)
-    if publisher.newxpath and elt[".__attributes"]  then
+    table.insert(ret, "<")
+    table.insert(ret, eltname)
+    if publisher.newxpath and elt[".__attributes"] then
         for key, value in pairs(elt[".__attributes"]) do
-            table.insert(ret,string.format(' %s="%s"',key,publisher.xml_helpers.xml_escape(value)))
+            table.insert(ret, string.format(' %s="%s"', key, publisher.xml_helpers.xml_escape(value)))
         end
     else
-        for key,value in next,elt,nil do
-            if type(key) == "string" and not string.match( key,"^.__" ) then
-                table.insert(ret,string.format(' %s="%s"',key,publisher.xml_helpers.xml_escape(value)))
+        for key, value in next, elt, nil do
+            if type(key) == "string" and not string.match(key, "^.__") then
+                table.insert(ret, string.format(' %s="%s"', key, publisher.xml_helpers.xml_escape(value)))
             end
         end
     end
     if #elt == 0 and void_elements[eltname] then
-        table.insert(ret,">")
+        table.insert(ret, ">")
     else
-        table.insert(ret,">")
-        for i=1,#elt do
+        table.insert(ret, ">")
+        for i = 1, #elt do
             local thiselt = elt[i]
             local type_thiselt = type(thiselt)
             if type_thiselt == "string" then
-                table.insert(ret,publisher.xml_helpers.xml_escape(thiselt))
+                table.insert(ret, publisher.xml_helpers.xml_escape(thiselt))
             elseif type_thiselt == "table" then
-                table.insert(ret,reconstruct_html_text(thiselt))
+                table.insert(ret, reconstruct_html_text(thiselt))
             end
         end
 
-        table.insert(ret,"</")
-        table.insert(ret,eltname)
-        table.insert(ret,">")
+        table.insert(ret, "</")
+        table.insert(ret, eltname)
+        table.insert(ret, ">")
     end
-    return table.concat( ret )
+    return table.concat(ret)
 end
 
 -- Builds a glyph node list from `text` using the surrounding par's
@@ -123,34 +137,43 @@ end
 ---@param text string
 ---@param options? table Per-call style overrides.
 ---@return node head
-local function mktextnode(self,text,options)
-    local nodes, newdir = publisher.nodes.mknodes(tostring(text),options,"par/mktextnode")
+local function mktextnode(self, text, options)
+    local nodes, newdir = publisher.nodes.mknodes(tostring(text), options, "par/mktextnode")
     if options.fontoutlinewidth and options.fontoutlinewidth > 0 then
-        local pw = node.new("whatsit","pdf_literal")
-        pw.data = string.format(" 1 Tr %g w ",sp_to_bp(options.fontoutlinewidth))
-        nodes = node.insert_before(nodes,nodes,pw)
+        local pw = node.new("whatsit", "pdf_literal")
+        pw.data = string.format(" 1 Tr %g w ", sp_to_bp(options.fontoutlinewidth))
+        nodes = node.insert_before(nodes, nodes, pw)
 
-        pw = node.new("whatsit","pdf_literal")
+        pw = node.new("whatsit", "pdf_literal")
         pw.data = " 0 Tr "
-        nodes = node.insert_after(nodes,node.tail(nodes),pw)
+        nodes = node.insert_after(nodes, node.tail(nodes), pw)
     end
 
     self.direction = self.direction or newdir
     if options.fontfamily and publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily] then
         local node_properties = node.getproperty(nodes)
         local fontheight = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily].baselineskip
-        local col = publisher.attribute_helpers.get_attribute(nodes,"color")
-        local hl = publisher.attribute_helpers.get_attribute(nodes,"hyperlink")
-        nodes = publisher.nodes.add_rule(nodes,"head",{height = 0.75 * fontheight, depth = 0.25 * fontheight, width = 0 },"mktextnode fontfamily")
-        node.setproperty(nodes,node_properties)
-        publisher.attribute_helpers.set_attribute(nodes,"fontfamily",options.fontfamily)
-        if col then publisher.attribute_helpers.set_attribute(nodes,"color",col)   end
-        if hl then publisher.attribute_helpers.set_attribute(nodes,"hyperlink",hl) end
+        local col = publisher.attribute_helpers.get_attribute(nodes, "color")
+        local hl = publisher.attribute_helpers.get_attribute(nodes, "hyperlink")
+        nodes = publisher.nodes.add_rule(
+            nodes,
+            "head",
+            { height = 0.75 * fontheight, depth = 0.25 * fontheight, width = 0 },
+            "mktextnode fontfamily"
+        )
+        node.setproperty(nodes, node_properties)
+        publisher.attribute_helpers.set_attribute(nodes, "fontfamily", options.fontfamily)
+        if col then
+            publisher.attribute_helpers.set_attribute(nodes, "color", col)
+        end
+        if hl then
+            publisher.attribute_helpers.set_attribute(nodes, "hyperlink", hl)
+        end
     end
     if options.newline then
-        publisher.attribute_helpers.setprop(nodes,"newline",true)
+        publisher.attribute_helpers.setprop(nodes, "newline", true)
         if options.discardallowed then
-            publisher.attribute_helpers.setprop(nodes,"discardallowed",true)
+            publisher.attribute_helpers.setprop(nodes, "discardallowed", true)
         end
     end
     return nodes
@@ -164,19 +187,25 @@ end
 ---@param options? table Inherited style options.
 ---@param data table Data XML context.
 ---@return nil
-local function flatten(self,items,options,data)
+local function flatten(self, items, options, data)
     options = options or {}
     local ret = {}
     local ret_len = 0
     local opts_pool = {}
     local function take_options(src)
         local opts = table.remove(opts_pool) or {}
-        for k in pairs(opts) do opts[k] = nil end
-        for k,v in next,src,nil do opts[k] = v end
+        for k in pairs(opts) do
+            opts[k] = nil
+        end
+        for k, v in next, src, nil do
+            opts[k] = v
+        end
         return opts
     end
     local function release_options(opts)
-        for k in pairs(opts) do opts[k] = nil end
+        for k in pairs(opts) do
+            opts[k] = nil
+        end
         opts_pool[#opts_pool + 1] = opts
     end
     local function append(v)
@@ -197,15 +226,27 @@ local function flatten(self,items,options,data)
     local default_css_text = publisher.css:gettext()
     -- Feature flag tracking: detect which features are used so that
     -- insert_nonmoving_whatsits can skip clean paragraphs
-    local function mark_color() self.has_color = true end
-    local function mark_hyperlink() self.has_hyperlink = true end
-    local function mark_role() self.has_role = true end
-    local function mark_special() self.has_special_nodes = true end
+    local function mark_color()
+        self.has_color = true
+    end
+    local function mark_hyperlink()
+        self.has_hyperlink = true
+    end
+    local function mark_role()
+        self.has_role = true
+    end
+    local function mark_special()
+        self.has_special_nodes = true
+    end
 
-    for i=1,items_len do
+    for i = 1, items_len do
         local thisself = items[i]
         local typ_thisself = type(thisself)
-        local reuse_text_opts = (typ_thisself == type_string or typ_thisself == type_number or typ_thisself == type_boolean)
+        local reuse_text_opts = (
+            typ_thisself == type_string
+            or typ_thisself == type_number
+            or typ_thisself == type_boolean
+        )
         local new_options
         if reuse_text_opts and text_options_shared then
             new_options = text_options_shared
@@ -236,13 +277,18 @@ local function flatten(self,items,options,data)
         if typ_thisself == type_table and thisself.contents then
             -- w("par/flatten: type: table with contents")
             if thisself.options then
-                for key,value in next,thisself.options,nil do
-                   new_options[key] = value
+                for key, value in next, thisself.options, nil do
+                    new_options[key] = value
                 end
             end
-            if new_options.padding_left and not self.padding_left then self.padding_left = new_options.padding_left end
+            if new_options.padding_left and not self.padding_left then
+                self.padding_left = new_options.padding_left
+            end
             if node.is_node(thisself.contents) then
-                if thisself.contents.id == publisher.whatsit_node and thisself.contents.subtype == publisher.user_defined_whatsit then
+                if
+                    thisself.contents.id == publisher.whatsit_node
+                    and thisself.contents.subtype == publisher.user_defined_whatsit
+                then
                     mark_special()
                     if type(thisself.contents.value) == "function" then
                         -- leaders and break_url
@@ -260,30 +306,49 @@ local function flatten(self,items,options,data)
                 mark_special()
                 local f = thisself.contents.flatten_callback
                 thisself.contents.flatten_callback = nil
-                local tmp = f(thisself.contents,new_options)
-                for i=1,#tmp.objects do
+                local tmp = f(thisself.contents, new_options)
+                for i = 1, #tmp.objects do
                     append(tmp.objects[i])
                 end
-            elseif type(thisself.contents) == type_string or type(thisself.contents) == type_number or type(thisself.contents) == type_boolean then
-                if new_options.color and new_options.color ~= 1 then mark_color() end
-                if new_options.hyperlink then mark_hyperlink() end
-                if new_options.role then mark_role() end
-                append(mktextnode(self,thisself.contents,new_options))
+            elseif
+                type(thisself.contents) == type_string
+                or type(thisself.contents) == type_number
+                or type(thisself.contents) == type_boolean
+            then
+                if new_options.color and new_options.color ~= 1 then
+                    mark_color()
+                end
+                if new_options.hyperlink then
+                    mark_hyperlink()
+                end
+                if new_options.role then
+                    mark_role()
+                end
+                append(mktextnode(self, thisself.contents, new_options))
             else
-                local tmp = flatten(self,thisself.contents,new_options,data)
-                for i=1,#tmp do
+                local tmp = flatten(self, thisself.contents, new_options, data)
+                for i = 1, #tmp do
                     append(tmp[i])
                 end
             end
         elseif typ_thisself == type_string or typ_thisself == type_number or typ_thisself == type_boolean then
             -- w("par/flatten: type: string or similar")
-            if new_options.color and new_options.color ~= 1 then mark_color() end
-            if new_options.hyperlink then mark_hyperlink() end
-            if new_options.role then mark_role() end
-            append(mktextnode(self,thisself,new_options))
+            if new_options.color and new_options.color ~= 1 then
+                mark_color()
+            end
+            if new_options.hyperlink then
+                mark_hyperlink()
+            end
+            if new_options.role then
+                mark_role()
+            end
+            append(mktextnode(self, thisself, new_options))
         elseif typ_thisself == type_table and thisself[".__type"] == "element" and new_options.html ~= "off" then
             -- HTML content can have any features, mark conservatively
-            mark_color() mark_hyperlink() mark_role() mark_special()
+            mark_color()
+            mark_hyperlink()
+            mark_role()
+            mark_special()
             -- w("par/flatten: type: HTML")
             -- Now this is a bit strange and I should explain. The XML parser (luxor.lua)
             -- creates a table structure from the XML text, but for HTML parsing, we need the
@@ -303,29 +368,29 @@ local function flatten(self,items,options,data)
             end
             if type(thisself) == type_string then
                 local text = thisself
-                local tmp = flatten(self,{text},new_options,data)
-                for j=1,#tmp do
+                local tmp = flatten(self, { text }, new_options, data)
+                for j = 1, #tmp do
                     append(tmp[j])
                 end
             else
                 local htmltext = reconstruct_html_text(thisself)
-                local csstext = " a { text-decoration: none; color: black}" ..  default_css_text
+                local csstext = " a { text-decoration: none; color: black}" .. default_css_text
 
                 if self.textformat and self.textformat.cssfontsize == true then
                     -- ignore
                 else
-                    csstext = csstext .. string.format(" body {font-family-number: %d ;}",options.fontfamily)
+                    csstext = csstext .. string.format(" body {font-family-number: %d ;}", options.fontfamily)
                 end
                 local body
-                local htmltree = splib.parse_html_text(htmltext,csstext)
+                local htmltree = splib.parse_html_text(htmltext, csstext)
                 body = htmltree[1][2]
                 body.block = nil
                 local startnewline = 0
                 local firstelement = body[1]
                 if firstelement then
-                    if type(firstelement) == "string" and not string.match( firstelement ,"^%s*$")  then
+                    if type(firstelement) == "string" and not string.match(firstelement, "^%s*$") then
                         startnewline = 1
-                    elseif type(firstelement[1]) == "string" and not string.match( firstelement[1] ,"^%s*$")  then
+                    elseif type(firstelement[1]) == "string" and not string.match(firstelement[1], "^%s*$") then
                         startnewline = 1
                     elseif type(firstelement[1]) == "table" then
                         if firstelement[1].direction == "→" then
@@ -339,37 +404,50 @@ local function flatten(self,items,options,data)
 
                     -- block number width contents
                     local blocknumber = 1
-                    for b=1,#blocks do
+                    for b = 1, #blocks do
                         local thisblock = blocks[b]
                         local this_block_has_contents = false
-                        for tb=1,#thisblock do
+                        for tb = 1, #thisblock do
                             local tbc = thisblock[tb].contents
-                            local dir = publisher.attribute_helpers.getprop(tbc,"direction")
+                            local dir = publisher.attribute_helpers.getprop(tbc, "direction")
                             local mode = thisblock.mode
-                            local startblock = (tb == 1 and mode == "block" )
-                            local is_newline = ( blocknumber > startnewline and ( this_block_has_contents == false ) and dir ~= "→" )
+                            local startblock = (tb == 1 and mode == "block")
+                            local is_newline = (
+                                blocknumber > startnewline
+                                and (this_block_has_contents == false)
+                                and dir ~= "→"
+                            )
                             if tbc then
                                 if startblock or is_newline then
-                                    publisher.attribute_helpers.setprop(tbc,"split",true)
+                                    publisher.attribute_helpers.setprop(tbc, "split", true)
                                     local padding_left = thisblock.padding_left or 0
                                     local margin_top = thisblock.margin_top or 0
-                                    publisher.attribute_helpers.setprop(tbc,"prependnodelist",thisblock.prependnodelist)
-                                    publisher.attribute_helpers.setprop(tbc,"prependlist",thisblock.prependlist)
-                                    publisher.attribute_helpers.setprop(tbc,"margin_bottom",thisblock.margin_bottom)
+                                    publisher.attribute_helpers.setprop(
+                                        tbc,
+                                        "prependnodelist",
+                                        thisblock.prependnodelist
+                                    )
+                                    publisher.attribute_helpers.setprop(tbc, "prependlist", thisblock.prependlist)
+                                    publisher.attribute_helpers.setprop(tbc, "margin_bottom", thisblock.margin_bottom)
                                     if thisblock.startendborder then
                                         local border_attributes = publisher.borderattributes[thisblock.startendborder]
-                                        publisher.attribute_helpers.set_attribute(tbc,"bordernumber",thisblock.startendborder)
+                                        publisher.attribute_helpers.set_attribute(
+                                            tbc,
+                                            "bordernumber",
+                                            thisblock.startendborder
+                                        )
                                         local wd, ht, dp = node.dimensions(tbc)
-                                        publisher.attribute_helpers.set_attribute(tbc,"borderwd",wd)
-                                        publisher.attribute_helpers.set_attribute(tbc,"borderht",ht + dp)
+                                        publisher.attribute_helpers.set_attribute(tbc, "borderwd", wd)
+                                        publisher.attribute_helpers.set_attribute(tbc, "borderht", ht + dp)
                                         if border_attributes then
                                             padding_left = padding_left + border_attributes.border_left_width
-                                            margin_top = margin_top + border_attributes.border_top_width + border_attributes.padding_top
+                                            margin_top = margin_top
+                                                + border_attributes.border_top_width
+                                                + border_attributes.padding_top
                                         end
-
                                     end
-                                    publisher.attribute_helpers.setprop(tbc,"margin_top",margin_top)
-                                    publisher.attribute_helpers.setprop(tbc,"padding_left",padding_left)
+                                    publisher.attribute_helpers.setprop(tbc, "margin_top", margin_top)
+                                    publisher.attribute_helpers.setprop(tbc, "padding_left", padding_left)
                                 end
                                 append(tbc)
                                 this_block_has_contents = true
@@ -392,9 +470,9 @@ local function flatten(self,items,options,data)
                     append(thisself)
                 end
             else
-                 -- Direct node with potentially pre-set attributes (e.g. from HTML/CSS)
-                 mark_special()
-                 append(thisself)
+                -- Direct node with potentially pre-set attributes (e.g. from HTML/CSS)
+                mark_special()
+                append(thisself)
             end
         elseif typ_thisself == type_table and thisself.elementname == "SetVariable" then
             -- w("par/flatten: type: setvariable - ignore")
@@ -404,12 +482,14 @@ local function flatten(self,items,options,data)
             local tmp
             if publisher.newxpath then
                 local x, msg = publisher.xpath.string_value(thisself)
-                if msg then main.log("error", msg) end
-                tmp = flatten(self,{x},new_options, data)
+                if msg then
+                    main.log("error", msg)
+                end
+                tmp = flatten(self, { x }, new_options, data)
             else
-                tmp = flatten(self,{table_textvalue(thisself)},new_options, data)
+                tmp = flatten(self, { table_textvalue(thisself) }, new_options, data)
             end
-            for j=1,#tmp do
+            for j = 1, #tmp do
                 append(tmp[j])
             end
         else
@@ -421,11 +501,11 @@ local function flatten(self,items,options,data)
         end
     end
     -- Optimized: directly overwrite items, then clear extras
-    for i=1,ret_len do
+    for i = 1, ret_len do
         items[i] = ret[i]
     end
     -- Only clear items beyond ret_len
-    for i=ret_len+1,items_len do
+    for i = ret_len + 1, items_len do
         items[i] = nil
     end
     return items
@@ -437,7 +517,7 @@ end
 ---@return nil
 function Par:prepend(whatever)
     self.prependlist = self.prependlist or {}
-    table.insert(self.prependlist,1, whatever)
+    table.insert(self.prependlist, 1, whatever)
 end
 
 -- Stores a left-indent value to be applied during `format()`.
@@ -457,7 +537,7 @@ end
 ---@param options table
 ---@param data table Data XML context.
 ---@return integer min_width Width in sp.
-function Par:min_width( textformat_name, options,data )
+function Par:min_width(textformat_name, options, data)
     options = options or {}
     local newpar = publisher.utilities.deepcopy(self)
     newpar.origin = "min_width"
@@ -465,9 +545,11 @@ function Par:min_width( textformat_name, options,data )
     local new_options = publisher.utilities.copy_table_from_defaults(options)
     new_options.textformat = textformat_name
 
-    local formatted = newpar:format(1,new_options,data)
+    local formatted = newpar:format(1, new_options, data)
     local head = formatted.head
-    if not head then return 0 end
+    if not head then
+        return 0
+    end
     -- See bug #46: a text format margin-top has a glue as its first item in the vlist
     while head.id ~= publisher.hlist_node do
         head = head.next
@@ -476,8 +558,8 @@ function Par:min_width( textformat_name, options,data )
     local max = 0
     while head do
         if head.head then
-            _w = node.dimensions(formatted.glue_set, formatted.glue_sign, formatted.glue_order,head.head)
-            max = math.max(max,_w)
+            _w = node.dimensions(formatted.glue_set, formatted.glue_sign, formatted.glue_order, head.head)
+            max = math.max(max, _w)
         end
         head = head.next
     end
@@ -492,7 +574,7 @@ end
 ---@param data table Data XML context.
 ---@return integer max_width Width in sp.
 ---@return integer lineheight Line height in sp.
-function Par:max_width_and_lineheight(options,data)
+function Par:max_width_and_lineheight(options, data)
     local newpar = publisher.utilities.deepcopy(self)
     newpar.origin = "max_width_and_lineheight"
     local orig_letterspacing = newpar.textformat and newpar.textformat.letterspacing
@@ -503,14 +585,14 @@ function Par:max_width_and_lineheight(options,data)
     if orig_letterspacing then
         new_options.letterspacing_em = orig_letterspacing
     end
-    local nl = newpar:format(publisher.maxdimen,new_options,data)
+    local nl = newpar:format(publisher.maxdimen, new_options, data)
     local maxwd = 0
     local hlist = nl.head
     while hlist do
         if hlist.id == publisher.hlist_node then
             -- could also be a glue node
             local wd = node.dimensions(hlist.head, node.tail(hlist.head))
-            maxwd = math.max(maxwd,wd)
+            maxwd = math.max(maxwd, wd)
         end
         hlist = hlist.next
     end
@@ -522,22 +604,28 @@ end
 ---@param options table
 ---@param data table Data XML context.
 ---@return node head Head of the resulting node list.
-function Par:mknodelist( options, data )
-    flatten(self,self,options, data)
+function Par:mknodelist(options, data)
+    flatten(self, self, options, data)
     local nodelist
     local objects = {}
-    for i=1,#self do
+    for i = 1, #self do
         local thisself = self[i]
         if nodelist == nil then
             -- the beginning of a new line (perhaps the first new line)
             nodelist = thisself
-        elseif (thisself.id == publisher.vlist_node and publisher.attribute_helpers.getprop(thisself,"origin") ~= "image" and not publisher.attribute_helpers.getprop(thisself,"inline")) or publisher.attribute_helpers.getprop(thisself,"split") then
+        elseif
+            (
+                thisself.id == publisher.vlist_node
+                and publisher.attribute_helpers.getprop(thisself, "origin") ~= "image"
+                and not publisher.attribute_helpers.getprop(thisself, "inline")
+            ) or publisher.attribute_helpers.getprop(thisself, "split")
+        then
             -- text right after a  newline, so push stuff that we have into the objects list and
             -- put what we have into the node list
             if nodelist.id == publisher.glue_node and nodelist.prev == nil and nodelist.next == nil then
                 -- ignore, just glue
             else
-                table.insert(objects,nodelist)
+                table.insert(objects, nodelist)
             end
             nodelist = thisself
         else
@@ -545,9 +633,13 @@ function Par:mknodelist( options, data )
             local tail = node.tail(nodelist)
             -- Remove strut rule between two glues inline at join points
             -- (strut rules from mktextnode are always at the fragment head).
-            if self.html == "off" and thisself.id == publisher.rule_node
-               and tail.id == publisher.glue_node
-               and thisself.next and thisself.next.id == publisher.glue_node then
+            if
+                self.html == "off"
+                and thisself.id == publisher.rule_node
+                and tail.id == publisher.glue_node
+                and thisself.next
+                and thisself.next.id == publisher.glue_node
+            then
                 local after_rule = thisself.next
                 after_rule.prev = nil
                 thisself.next = nil
@@ -561,13 +653,17 @@ function Par:mknodelist( options, data )
     -- insert the last fragment as an object of its own (new line)
     -- or add it to the last object of the table
     if nodelist then
-        local split = publisher.attribute_helpers.getprop(nodelist,"split")
+        local split = publisher.attribute_helpers.getprop(nodelist, "split")
         if #objects > 0 and not split then
             local tail = node.tail(objects[#objects])
             -- Remove strut rule between two glues at final join point
-            if self.html == "off" and nodelist.id == publisher.rule_node
-               and tail.id == publisher.glue_node
-               and nodelist.next and nodelist.next.id == publisher.glue_node then
+            if
+                self.html == "off"
+                and nodelist.id == publisher.rule_node
+                and tail.id == publisher.glue_node
+                and nodelist.next
+                and nodelist.next.id == publisher.glue_node
+            then
                 local after_rule = nodelist.next
                 after_rule.prev = nil
                 nodelist.next = nil
@@ -577,7 +673,7 @@ function Par:mknodelist( options, data )
             tail.next = nodelist
             nodelist.prev = tail
         else
-            table.insert(objects,nodelist)
+            table.insert(objects, nodelist)
         end
     end
     self.objects = objects
@@ -587,12 +683,14 @@ local get_lineheight
 -- Returns the maximum line height in `nodelist` (a vbox of lines).
 ---@param nodelist node
 ---@return integer lineheight Line height in sp.
-function get_lineheight( nodelist )
+function get_lineheight(nodelist)
     local head = nodelist
     while head do
-        if head.id == publisher.vlist_node or head.id == publisher.hlist_node then return get_lineheight(head.list) end
+        if head.id == publisher.vlist_node or head.id == publisher.hlist_node then
+            return get_lineheight(head.list)
+        end
         if head.id == publisher.glyph_node then
-            local ffnumber = publisher.attribute_helpers.get_attribute(head,"fontfamily")
+            local ffnumber = publisher.attribute_helpers.get_attribute(head, "fontfamily")
             local fi = publisher.fonts.lookup_fontfamily_number_instance[ffnumber]
             if fi then
                 return fi.baselineskip
@@ -618,22 +716,21 @@ local function get_border_width_height_margintop(nodelist)
     local head = nodelist.head
     while head do
         if head.id == publisher.glue_node then
-            local margintop = publisher.attribute_helpers.get_attribute(head,"margintop")
-            local paddingtop = publisher.attribute_helpers.get_attribute(head,"paddingtop")
-            local paddingbottom = publisher.attribute_helpers.get_attribute(head,"paddingbottom")
+            local margintop = publisher.attribute_helpers.get_attribute(head, "margintop")
+            local paddingtop = publisher.attribute_helpers.get_attribute(head, "paddingtop")
+            local paddingbottom = publisher.attribute_helpers.get_attribute(head, "paddingbottom")
             if margintop then
                 sum_margin_top = sum_margin_top + head.width
             elseif paddingtop or paddingbottom then
                 sum_ht = sum_ht + head.width
             end
-        elseif node.has_field(head,"height") then
+        elseif node.has_field(head, "height") then
             sum_ht = sum_ht + head.height + head.depth
         end
         head = head.next
     end
-    return nodelist.width,sum_ht,sum_margin_top
+    return nodelist.width, sum_ht, sum_margin_top
 end
-
 
 -- Builds the glyph node list, applies the textformat, runs line breaking
 -- and returns the linebroken vbox. The main entry point used by callers
@@ -643,7 +740,7 @@ end
 ---@param options? table Style overrides.
 ---@param data? table Data XML context.
 ---@return node vbox Linebroken paragraph.
-function Par:format( width_sp, options,data )
+function Par:format(width_sp, options, data)
     -- w("call format %s",self.origin)
     options = options or {}
     options.maxwidth_sp = width_sp
@@ -669,7 +766,7 @@ function Par:format( width_sp, options,data )
     end
     options.tab = current_textformat.tab
 
-    self:mknodelist(options,data)
+    self:mknodelist(options, data)
 
     -- Check if the only object has att_dont_format attribute (e.g., split HTML table)
     -- In this case, return it directly without further formatting
@@ -695,35 +792,39 @@ function Par:format( width_sp, options,data )
     end
     -- w("self.padding_right %s %gpt",self.origin, self.padding_right / publisher.factor)
     -- w("self.padding_left %s %gpt",self.origin, self.padding_left / publisher.factor)
-    for i=1,#self do
+    for i = 1, #self do
         self[i] = nil
     end
 
     if options.allocate == "auto" then
         local indent = current_textformat.indent
         local indent_this_row = function(row)
-            if not indent or indent == 0 then return false end
+            if not indent or indent == 0 then
+                return false
+            end
             local r = current_textformat.rows
-            if r == 0 then return false end
-            if  r < 0 then
+            if r == 0 then
+                return false
+            end
+            if r < 0 then
                 return row > r * -1
             end
             return row <= r
         end
-        local set_parshape = function(parshape,ps,rows)
+        local set_parshape = function(parshape, ps, rows)
             local psmin = {}
-            for _,row in ipairs(rows) do
+            for _, row in ipairs(rows) do
                 if parshape[row] then
                     local tmp = parshape[row]
-                    psmin[1] = math.max(ps[1] ,tmp[1])
-                    psmin[2] = math.min(ps[2] ,tmp[2])
+                    psmin[1] = math.max(ps[1], tmp[1])
+                    psmin[2] = math.min(ps[2], tmp[2])
                     parshape[row] = psmin
                 else
-                    parshape[row] = {ps[1],ps[2] - self.padding_left - self.padding_right}
+                    parshape[row] = { ps[1], ps[2] - self.padding_left - self.padding_right }
                 end
             end
         end
-        local is_equal = function(a,b)
+        local is_equal = function(a, b)
             return math.abs(a - b) < 3000
         end
         -- First we need to get the starting page
@@ -744,14 +845,14 @@ function Par:format( width_sp, options,data )
         local lineheight = get_lineheight(self.objects[1])
         if lineheight > 0 then
             local cg = publisher.current_grid
-            local max_width = math.min(width_sp,cg:width_sp(cg:number_of_columns(areaname)))
+            local max_width = math.min(width_sp, cg:width_sp(cg:number_of_columns(areaname)))
 
             local gridheight = cg.gridheight
             local parshape = {}
             local maxframes = cg:number_of_frames(areaname)
 
             -- this is to remove rounding errors
-            local g_l = math.round(gridheight / lineheight,3)
+            local g_l = math.round(gridheight / lineheight, 3)
             gridheight = lineheight * g_l
 
             local accumulated_height
@@ -772,7 +873,7 @@ function Par:format( width_sp, options,data )
                     cg = publisher.pages[current_pagenumber].grid
                 end
                 local grid_lower
-                local framenumber, startrow_grid =  cg:get_advanced_cursor(areaname)
+                local framenumber, startrow_grid = cg:get_advanced_cursor(areaname)
                 -- Let's assume that the already typeset text ends at the next page
                 -- This is not a real fix, but good enough for the moment.
                 -- We need to fix the output/text collect routine
@@ -780,9 +881,10 @@ function Par:format( width_sp, options,data )
                 if framenumber > maxframes then
                     -- w("framenumber %d > maxframes %d",framenumber,maxframes)
                     current_pagenumber = current_pagenumber + 1
-                    maxparshape = {0,max_width}
+                    maxparshape = { 0, max_width }
 
-                    framenumber = 1; startrow_grid = 1
+                    framenumber = 1
+                    startrow_grid = 1
                 else
                     maxparshape = nil
                 end
@@ -791,11 +893,11 @@ function Par:format( width_sp, options,data )
                     accumulated_height = lowest_grid_row
                     grid_lower = lowest_grid_row + gridheight
                     lowest_grid_row = lowest_grid_row + cg:number_of_rows(areaname) * gridheight
-                    while grid_row <=  cg:number_of_rows(areaname,framenumber) do
+                    while grid_row <= cg:number_of_rows(areaname, framenumber) do
                         local rows = {}
                         -- maxparshape is only "active" when placed on future, non-initialized pages
                         -- Hack!
-                        local ps = maxparshape or cg:get_parshape(grid_row,areaname,framenumber,width_sp)
+                        local ps = maxparshape or cg:get_parshape(grid_row, areaname, framenumber, width_sp)
                         -- ps is 0 when the line is completely allocated
                         if ps ~= 0 then
                             -- accumulated_height starts with 0
@@ -806,7 +908,7 @@ function Par:format( width_sp, options,data )
                             end
 
                             while accumulated_height <= grid_lower do
-                                if is_equal(accumulated_height + lineheight,grid_lower) then
+                                if is_equal(accumulated_height + lineheight, grid_lower) then
                                     -- if the current paragraph row ends "exactly" at the
                                     -- bottom of the grid line, we are done and can continue
                                     -- with the next paragraph row. The current paragraph row is
@@ -827,7 +929,7 @@ function Par:format( width_sp, options,data )
                                 current_row = current_row + 1
                                 accumulated_height = accumulated_height + lineheight
                             end
-                            set_parshape(parshape,ps,rows)
+                            set_parshape(parshape, ps, rows)
                             grid_lower = grid_lower + gridheight
                         end -- if ps ~= 0
                         grid_row = grid_row + 1
@@ -839,8 +941,8 @@ function Par:format( width_sp, options,data )
             end
             -- This should be the last line in the parshape array, so the
             -- rest of the lines in the paragraph have the full width
-            parshape[#parshape + 1] = {0,max_width}
-            for i,ps in ipairs(parshape) do
+            parshape[#parshape + 1] = { 0, max_width }
+            for i, ps in ipairs(parshape) do
                 if indent_this_row(i) then
                     ps[1] = ps[1] + indent
                     ps[2] = ps[2] - indent
@@ -852,7 +954,9 @@ function Par:format( width_sp, options,data )
     local objects = self.objects
     local orig_width_sp = width_sp
     local objects_len = #objects
-    if objects_len == 0 then return node.new("vlist") end
+    if objects_len == 0 then
+        return node.new("vlist")
+    end
     local objectrow = 0
 
     -- Cache frequently accessed self fields
@@ -876,10 +980,10 @@ function Par:format( width_sp, options,data )
     local att_margin_top_boxstart = publisher.att_margin_top_boxstart
 
     local tf = current_textformat
-    for i=1,objects_len do
+    for i = 1, objects_len do
         local nodelist = objects[i]
         if publisher.attribute_helpers.getprop(nodelist, "br") == true then
-            tf = publisher.dispatch.new_textformat("",current_textformat)
+            tf = publisher.dispatch.new_textformat("", current_textformat)
             tf.rows = 9999
             tf.margintop = current_textformat.margintop
             tf.indent = current_textformat.indent
@@ -887,17 +991,17 @@ function Par:format( width_sp, options,data )
             objectrow = objectrow + 1
         end
         -- Cache property accesses at loop start
-        local prop_pardir = publisher.attribute_helpers.getprop(nodelist,"pardir")
+        local prop_pardir = publisher.attribute_helpers.getprop(nodelist, "pardir")
         local prop_margin_top, prop_margin_bottom, prop_padding_left
         local tf_htmlvspace = tf.htmlverticalspacing
         if tf_htmlvspace == "inner" and i > 1 or tf_htmlvspace == "all" then
-            prop_margin_top = publisher.attribute_helpers.getprop(nodelist,"margin_top")
+            prop_margin_top = publisher.attribute_helpers.getprop(nodelist, "margin_top")
         end
         if tf_htmlvspace == "inner" and i < objects_len or tf_htmlvspace == "all" then
-            prop_margin_bottom = publisher.attribute_helpers.getprop(nodelist,"margin_bottom")
+            prop_margin_bottom = publisher.attribute_helpers.getprop(nodelist, "margin_bottom")
         end
-        prop_padding_left = publisher.attribute_helpers.getprop(nodelist,"padding_left")
-        local prop_prependlist = publisher.attribute_helpers.getprop(nodelist,"prependlist")
+        prop_padding_left = publisher.attribute_helpers.getprop(nodelist, "padding_left")
+        local prop_prependlist = publisher.attribute_helpers.getprop(nodelist, "prependlist")
 
         if prop_pardir == "rtl" then
             tex.shapemode = 1
@@ -915,27 +1019,34 @@ function Par:format( width_sp, options,data )
             thispaddingleft = thispaddingleft + this_object_padding_left
             width_sp = width_sp - this_object_padding_left
         end
-        local langs_num,langs
+        local langs_num, langs
         langs = {}
         if tf.hyphenchar then
             langs_num = publisher.language.get_languages_used(nodelist)
-            for i,v in ipairs(langs_num) do
+            for i, v in ipairs(langs_num) do
                 local l = publisher.language.get_language(v)
                 langs[#langs + 1] = l
                 l.prehyphenchar = lang.prehyphenchar(l.l)
-                lang.prehyphenchar(l.l,unicode.utf8.byte(tf.hyphenchar))
+                lang.prehyphenchar(l.l, unicode.utf8.byte(tf.hyphenchar))
             end
         end
 
         -- see #338 - penalty - hlist - penalty gives an error "Assertion ``varmem[(o)].hh.v.RH == cur_p`` failed"
-        if nodelist.id == penalty_node_id and nodelist.next and nodelist.next.id == hlist_node_id and nodelist.next.next and nodelist.next.next.id == penalty_node_id and nodelist.next.next.next then
+        if
+            nodelist.id == penalty_node_id
+            and nodelist.next
+            and nodelist.next.id == hlist_node_id
+            and nodelist.next.next
+            and nodelist.next.next.id == penalty_node_id
+            and nodelist.next.next.next
+        then
             nodelist = nodelist.next
         end
         publisher.fonts.pre_linebreak(nodelist)
 
         -- both are set only for ul/ol lists
-        local indent = publisher.attribute_helpers.get_attribute(nodelist,"indent") or 0
-        local rows   = node.has_attribute(nodelist,att_rows)
+        local indent = publisher.attribute_helpers.get_attribute(nodelist, "indent") or 0
+        local rows = node.has_attribute(nodelist, att_rows)
         parameter.hangindent = indent
 
         -- indent and rows
@@ -951,26 +1062,26 @@ function Par:format( width_sp, options,data )
         end
 
         if self_initial then
-            parameter.hangindent =  parameter.hangindent + self_initial.width
+            parameter.hangindent = parameter.hangindent + self_initial.width
             local i_ht = self_initial.height + self_initial.depth
             local ht_nodelist = get_lineheight(nodelist)
 
             local maxindent = 0
             -- get max indent
             if parameter.parshape then
-                for i=1,math.round(i_ht / ht_nodelist,0) do
-                    maxindent = math.max(parameter.parshape[i][1],maxindent)
+                for i = 1, math.round(i_ht / ht_nodelist, 0) do
+                    maxindent = math.max(parameter.parshape[i][1], maxindent)
                 end
             end
             local curindent
             if parameter.parshape then
-                for i=1,math.round(i_ht / ht_nodelist,0) do
+                for i = 1, math.round(i_ht / ht_nodelist, 0) do
                     curindent = maxindent - parameter.parshape[i][1]
                     parameter.parshape[i][1] = maxindent + self_initial.width
                     parameter.parshape[i][2] = parameter.parshape[i][2] - self_initial.width - curindent
                 end
             else
-                parameter.hangafter = math.max( parameter.hangafter, math.ceil(math.round(i_ht / ht_nodelist,1)))
+                parameter.hangafter = math.max(parameter.hangafter, math.ceil(math.round(i_ht / ht_nodelist, 1)))
             end
         end
 
@@ -979,12 +1090,18 @@ function Par:format( width_sp, options,data )
         local prepend = prop_prependlist or self_prependlist
         -- Cache alignment check
         local tf_alignment = tf.alignment
-        local ragged_shape = (tf_alignment == "leftaligned" or tf_alignment == "rightaligned" or tf_alignment == "centered" or tf_alignment == "start" or tf_alignment == "end")
+        local ragged_shape = (
+            tf_alignment == "leftaligned"
+            or tf_alignment == "rightaligned"
+            or tf_alignment == "centered"
+            or tf_alignment == "start"
+            or tf_alignment == "end"
+        )
 
         -- if the last items are newline nodes, clear them (see #142)
         local tail = node.slide(nodelist)
-        while tail and publisher.attribute_helpers.get_attribute(tail,"newline") do
-            nodelist = node.remove(nodelist,tail)
+        while tail and publisher.attribute_helpers.get_attribute(tail, "newline") do
+            nodelist = node.remove(nodelist, tail)
             tail = node.tail(nodelist)
         end
 
@@ -994,35 +1111,35 @@ function Par:format( width_sp, options,data )
             -- If there is ragged shape (i.e. not a rectangle of text) then we should turn off
             -- font expansion. This is done by setting tex.(pdf)adjustspacing to 0 temporarily
             if ragged_shape then
-                local save_tolerance     = parameter.tolerance
+                local save_tolerance = parameter.tolerance
                 local save_hyphenpenalty = parameter.hyphenpenalty
-                parameter.tolerance     = 5000
+                parameter.tolerance = 5000
                 parameter.hyphenpenalty = 200
 
                 local adjspace
                 adjspace = tex.adjustspacing
                 tex.pdfadjustspacing = 0
                 tex.adjustspacing = 0
-                nodelist = publisher.nodes.do_linebreak(nodelist,width_sp,parameter)
+                nodelist = publisher.nodes.do_linebreak(nodelist, width_sp, parameter)
 
-                parameter.tolerance     = save_tolerance
+                parameter.tolerance = save_tolerance
                 parameter.hyphenpenalty = save_hyphenpenalty
 
                 tex.pdfadjustspacing = adjspace
                 tex.adjustspacing = adjspace
-                publisher.nodes.fix_justification(nodelist,tf_alignment,nil,prop_pardir)
+                publisher.nodes.fix_justification(nodelist, tf_alignment, nil, prop_pardir)
             else
-                nodelist = publisher.nodes.do_linebreak(nodelist,width_sp,parameter)
+                nodelist = publisher.nodes.do_linebreak(nodelist, width_sp, parameter)
             end
 
             if thispaddingleft > 0 then
-                indent_nodelist(nodelist,thispaddingleft)
+                indent_nodelist(nodelist, thispaddingleft)
             end
             if thispaddingright > 0 then
-                widen_nodelist(nodelist,thispaddingright)
+                widen_nodelist(nodelist, thispaddingright)
             end
-            for _,v in ipairs(langs) do
-                lang.prehyphenchar(v.l,v.prehyphenchar)
+            for _, v in ipairs(langs) do
+                lang.prehyphenchar(v.l, v.prehyphenchar)
             end
 
             -- Remove glue between the lines
@@ -1046,13 +1163,13 @@ function Par:format( width_sp, options,data )
             while line do
                 c = c + 1
                 if c < tf_orphan and line.next then
-                    if line.head and not node.has_attribute(line.head,att_ignore_orphan) then
-                        node.set_attribute(line,att_break_below,1)
+                    if line.head and not node.has_attribute(line.head, att_ignore_orphan) then
+                        node.set_attribute(line, att_break_below, 1)
                     end
                 end
                 if publisher.page_helpers.less_or_equal_than_n_lines(line, tf_widow) then
-                    if line.head and not node.has_attribute(line.head,att_ignore_orphan) then
-                        node.set_attribute(line,att_break_below,2)
+                    if line.head and not node.has_attribute(line.head, att_ignore_orphan) then
+                        node.set_attribute(line, att_break_below, 2)
                     end
                 end
                 line = line.next
@@ -1071,86 +1188,138 @@ function Par:format( width_sp, options,data )
 
             publisher.fonts.post_linebreak(nodelist)
             if self_margin_top then
-                nodelist.list = publisher.nodes.add_glue(nodelist.list,"head",{width = self_margin_top},"par.lua/if self.margin_top")
-                publisher.attribute_helpers.set_attribute(nodelist.list,"margintop",1)
+                nodelist.list = publisher.nodes.add_glue(
+                    nodelist.list,
+                    "head",
+                    { width = self_margin_top },
+                    "par.lua/if self.margin_top"
+                )
+                publisher.attribute_helpers.set_attribute(nodelist.list, "margintop", 1)
             end
             if self_border_top_width and self_border_top_width > 0 then
-                nodelist.list = publisher.nodes.add_glue(nodelist.list,"head",{width = self_border_top_width},"par.lua/if self.border_top_width")
-                publisher.attribute_helpers.set_attribute(nodelist.list,"margintop",1)
+                nodelist.list = publisher.nodes.add_glue(
+                    nodelist.list,
+                    "head",
+                    { width = self_border_top_width },
+                    "par.lua/if self.border_top_width"
+                )
+                publisher.attribute_helpers.set_attribute(nodelist.list, "margintop", 1)
             end
             if has_margin_top then
-                nodelist.list = publisher.nodes.add_glue(nodelist.list,"head",{width = has_margin_top},"par.lua/if has_margin_top")
-                publisher.attribute_helpers.set_attribute(nodelist.list,"margintop",1)
+                nodelist.list = publisher.nodes.add_glue(
+                    nodelist.list,
+                    "head",
+                    { width = has_margin_top },
+                    "par.lua/if has_margin_top"
+                )
+                publisher.attribute_helpers.set_attribute(nodelist.list, "margintop", 1)
             end
             if self_padding_top and self_padding_top > 0 then
-                nodelist.list = publisher.nodes.add_glue(nodelist.list,"head",{width = self_padding_top, attributes},"par.lua/self.padding_top" )
-                publisher.attribute_helpers.set_attribute(nodelist.list,"margintop",1)
+                nodelist.list = publisher.nodes.add_glue(
+                    nodelist.list,
+                    "head",
+                    { width = self_padding_top, attributes },
+                    "par.lua/self.padding_top"
+                )
+                publisher.attribute_helpers.set_attribute(nodelist.list, "margintop", 1)
             end
             if tf.paddingtop and tf.paddingtop ~= 0 then
-                nodelist.list = publisher.nodes.add_glue(nodelist.list,"head",{width = tf.paddingtop})
-                node.set_attribute(nodelist.list,att_break_below,3)
+                nodelist.list = publisher.nodes.add_glue(nodelist.list, "head", { width = tf.paddingtop })
+                node.set_attribute(nodelist.list, att_break_below, 3)
             end
             if tf.bordertop and tf.bordertop ~= 0 then
-                nodelist.list = publisher.nodes.add_rule(nodelist.list,"head",{width = -1073741824, height = tf.bordertop},"par.lua/tf.bordertop")
-                node.set_attribute(nodelist.list,att_break_below,4)
+                nodelist.list = publisher.nodes.add_rule(
+                    nodelist.list,
+                    "head",
+                    { width = -1073741824, height = tf.bordertop },
+                    "par.lua/tf.bordertop"
+                )
+                node.set_attribute(nodelist.list, att_break_below, 4)
             end
             if tf.margintop and tf.margintop ~= 0 then
-                nodelist.list = publisher.nodes.add_glue(nodelist.list,"head",{width = tf.margintop})
-                node.set_attribute(nodelist.list,att_margin_top_boxstart,tf.margintopboxstart)
-                node.set_attribute(nodelist.list,att_break_below,6)
+                nodelist.list = publisher.nodes.add_glue(nodelist.list, "head", { width = tf.margintop })
+                node.set_attribute(nodelist.list, att_margin_top_boxstart, tf.margintopboxstart)
+                node.set_attribute(nodelist.list, att_break_below, 6)
             end
             if tf.breakbelow == false or self.break_after == "avoid" then
-                node.set_attribute(node.tail(nodelist.list),att_break_below,5)
+                node.set_attribute(node.tail(nodelist.list), att_break_below, 5)
             end
 
             local break_before = tf.break_before or self.break_before
             if break_before == "page" then
-                node.set_attribute(nodelist.list,publisher.att_break_before,1)
+                node.set_attribute(nodelist.list, publisher.att_break_before, 1)
             elseif break_before == "always" then
-                node.set_attribute(nodelist.list,publisher.att_break_before,2)
+                node.set_attribute(nodelist.list, publisher.att_break_before, 2)
             end
 
             if self.padding_bottom and self.padding_bottom > 0 then
                 local glue
-                nodelist.list, glue = publisher.nodes.add_glue(nodelist.list,"tail",{width = self.padding_bottom, attributes},"par.lua/self.padding_bottom" )
-                publisher.attribute_helpers.set_attribute(glue,"paddingbottom",1)
+                nodelist.list, glue = publisher.nodes.add_glue(
+                    nodelist.list,
+                    "tail",
+                    { width = self.padding_bottom, attributes },
+                    "par.lua/self.padding_bottom"
+                )
+                publisher.attribute_helpers.set_attribute(glue, "paddingbottom", 1)
             end
 
             if tf.borderbottom and tf.borderbottom ~= 0 then
-                nodelist.list = publisher.nodes.add_rule(nodelist.list,"tail",{width = width_sp, height = tf.borderbottom},"par.lua/tf.borderbottom")
-                node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,6)
+                nodelist.list = publisher.nodes.add_rule(
+                    nodelist.list,
+                    "tail",
+                    { width = width_sp, height = tf.borderbottom },
+                    "par.lua/tf.borderbottom"
+                )
+                node.set_attribute(node.tail(nodelist.list), publisher.att_break_below_forbidden, 6)
             end
             if tf.marginbottom and tf.marginbottom ~= 0 then
-                nodelist.list = publisher.nodes.add_glue(nodelist.list,"tail",{width = tf.marginbottom},"par.lua/tf.marginbottom")
-                node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
+                nodelist.list = publisher.nodes.add_glue(
+                    nodelist.list,
+                    "tail",
+                    { width = tf.marginbottom },
+                    "par.lua/tf.marginbottom"
+                )
+                node.set_attribute(node.tail(nodelist.list), publisher.att_omit_at_top, 1)
             end
             if self.border_bottom_width and self.border_bottom_width > 0 then
-                nodelist.list = publisher.nodes.add_glue(nodelist.list,"tail",{width = self.border_bottom_width},"par.lua/if self.border_bottom_width")
+                nodelist.list = publisher.nodes.add_glue(
+                    nodelist.list,
+                    "tail",
+                    { width = self.border_bottom_width },
+                    "par.lua/if self.border_bottom_width"
+                )
             end
             if self.margin_bottom then
-                nodelist.list = publisher.nodes.add_glue(nodelist.list,"tail",{width = self.margin_bottom},"par.lua/self.margin_bottom")
-                node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
+                nodelist.list = publisher.nodes.add_glue(
+                    nodelist.list,
+                    "tail",
+                    { width = self.margin_bottom },
+                    "par.lua/self.margin_bottom"
+                )
+                node.set_attribute(node.tail(nodelist.list), publisher.att_omit_at_top, 1)
             end
             if has_margin_bottom then
-                nodelist.list = publisher.nodes.add_glue(nodelist.list,"tail",{width = has_margin_bottom})
-                node.set_attribute(node.tail(nodelist.list),publisher.att_omit_at_top,1)
+                nodelist.list = publisher.nodes.add_glue(nodelist.list, "tail", { width = has_margin_bottom })
+                node.set_attribute(node.tail(nodelist.list), publisher.att_omit_at_top, 1)
             end
 
-            node.set_attribute(nodelist.list,publisher.att_margin_newcolumn, tf.colpaddingtop or 0)
+            node.set_attribute(nodelist.list, publisher.att_margin_newcolumn, tf.colpaddingtop or 0)
             if tf.breakbelow == false or self.break_after == "avoid" then
-                node.set_attribute(node.tail(nodelist.list),publisher.att_break_below_forbidden,7)
+                node.set_attribute(node.tail(nodelist.list), publisher.att_break_below_forbidden, 7)
             end
             objects[i] = nodelist.list
             if prepend then
                 local prependnodelist = nil
-                for j=1,#prepend do
+                for j = 1, #prepend do
                     local thisprepend = prepend[j]
                     local options = thisprepend[3] or options
                     local str = thisprepend[1]
-                    if options.color and options.color ~= 1 then self.has_color = true end
+                    if options.color and options.color ~= 1 then
+                        self.has_color = true
+                    end
                     local label
                     if type(str) == "string" then
-                        label = node.hpack(publisher.nodes.mknodes(str,options,"par prepend"))
+                        label = node.hpack(publisher.nodes.mknodes(str, options, "par prepend"))
                     elseif node.is_node(str) then
                         label = str
                     end
@@ -1162,13 +1331,17 @@ function Par:format( width_sp, options,data )
                         local labeldistance = thisprepend[4] or tex.sp("5pt")
                         local labelalign = thisprepend[5] or "right"
                         local labelbox
-                        labelbox = publisher.nodes.whatever_hbox(label,wd,options,labeldistance,labelalign)
-                        prependnodelist = node.insert_after(prependnodelist,node.tail(prependnodelist),labelbox)
+                        labelbox = publisher.nodes.whatever_hbox(label, wd, options, labeldistance, labelalign)
+                        prependnodelist = node.insert_after(prependnodelist, node.tail(prependnodelist), labelbox)
                     end
                 end
                 if prependnodelist then
                     prependnodelist = node.hpack(prependnodelist)
-                    prependnodelist.head = publisher.nodes.add_glue(prependnodelist.head,"head",{width = - prependnodelist.width, shrink = 2^16, shrink_order = 3 })
+                    prependnodelist.head = publisher.nodes.add_glue(
+                        prependnodelist.head,
+                        "head",
+                        { width = -prependnodelist.width, shrink = 2 ^ 16, shrink_order = 3 }
+                    )
                     prependnodelist.width = 0
 
                     local thisobject = objects[i]
@@ -1181,7 +1354,7 @@ function Par:format( width_sp, options,data )
                     local cur = thisobject.head
                     while cur do
                         if cur.id ~= publisher.glue_node then
-                            cur = node.insert_before(thisobject.head,cur,prependnodelist)
+                            cur = node.insert_before(thisobject.head, cur, prependnodelist)
                             break
                         end
                         cur = cur.next
@@ -1195,39 +1368,47 @@ function Par:format( width_sp, options,data )
         end
     end
 
-    for i=1,#objects - 1 do
+    for i = 1, #objects - 1 do
         local last = node.tail(objects[i])
-        last.next = objects[i+1]
-        objects[i+1].prev = last
+        last.next = objects[i + 1]
+        objects[i + 1].prev = last
     end
 
     local nodelist = node.vpack(objects[1])
 
     if self.startendborder or self.startborder then
-        local wd,ht,margintop = get_border_width_height_margintop(nodelist)
+        local wd, ht, margintop = get_border_width_height_margintop(nodelist)
         local bordernumber = self.startendborder or self.startborder
         local ba = publisher.borderattributes[bordernumber]
         ba.shiftdown = margintop
 
-        publisher.attribute_helpers.set_attribute(nodelist.list,"bordernumber",bordernumber)
-        publisher.attribute_helpers.set_attribute(nodelist.list,"borderwd",wd)
-        publisher.attribute_helpers.set_attribute(nodelist.list,"borderht",ht)
+        publisher.attribute_helpers.set_attribute(nodelist.list, "bordernumber", bordernumber)
+        publisher.attribute_helpers.set_attribute(nodelist.list, "borderwd", wd)
+        publisher.attribute_helpers.set_attribute(nodelist.list, "borderht", ht)
     end
-    publisher.attribute_helpers.setprop(nodelist,"origin","par:format")
+    publisher.attribute_helpers.setprop(nodelist, "origin", "par:format")
     -- Transfer feature flags from Par to the vlist so insert_nonmoving_whatsits can skip clean paragraphs
-    if self.has_color then publisher.attribute_helpers.setprop(nodelist,"has_color",true) end
-    if self.has_hyperlink then publisher.attribute_helpers.setprop(nodelist,"has_hyperlink",true) end
-    if self.has_role then publisher.attribute_helpers.setprop(nodelist,"has_role",true) end
-    if self.has_special_nodes then publisher.attribute_helpers.setprop(nodelist,"has_special_nodes",true) end
+    if self.has_color then
+        publisher.attribute_helpers.setprop(nodelist, "has_color", true)
+    end
+    if self.has_hyperlink then
+        publisher.attribute_helpers.setprop(nodelist, "has_hyperlink", true)
+    end
+    if self.has_role then
+        publisher.attribute_helpers.setprop(nodelist, "has_role", true)
+    end
+    if self.has_special_nodes then
+        publisher.attribute_helpers.setprop(nodelist, "has_special_nodes", true)
+    end
     -- Transfer PDF/UA structure properties to the vlist
     if publisher.options.format == "PDF/UA" and self.role then
-        publisher.attribute_helpers.setprop(nodelist,"role", self.role)
-        publisher.attribute_helpers.setprop(nodelist,"parentid", self.parent or "doc")
-        publisher.attribute_helpers.setprop(nodelist,"rolecounter", self.rolecounter)
-        publisher.attribute_helpers.setprop(nodelist,"id", self.id)
-        publisher.attribute_helpers.setprop(nodelist,"structpos", self.structpos)
-        publisher.attribute_helpers.setprop(nodelist,"actualtext", self.actualtext)
-        node.set_attribute(nodelist,publisher.att_role,self.role)
+        publisher.attribute_helpers.setprop(nodelist, "role", self.role)
+        publisher.attribute_helpers.setprop(nodelist, "parentid", self.parent or "doc")
+        publisher.attribute_helpers.setprop(nodelist, "rolecounter", self.rolecounter)
+        publisher.attribute_helpers.setprop(nodelist, "id", self.id)
+        publisher.attribute_helpers.setprop(nodelist, "structpos", self.structpos)
+        publisher.attribute_helpers.setprop(nodelist, "actualtext", self.actualtext)
+        node.set_attribute(nodelist, publisher.att_role, self.role)
     end
 
     if self.initial then
@@ -1240,14 +1421,14 @@ function Par:format( width_sp, options,data )
         if self.direction ~= "rtl" then
             initial_hlist.shift = -initial_hlist.width
         end
-        publisher.attribute_helpers.setprop(self.initial,"origin","initial")
+        publisher.attribute_helpers.setprop(self.initial, "origin", "initial")
         initial_hlist = node.vpack(initial_hlist)
-        publisher.attribute_helpers.setprop(initial_hlist,"origin","initial")
+        publisher.attribute_helpers.setprop(initial_hlist, "origin", "initial")
 
-        local shift_down =  ht_nodelist * 0.75 - initial_hlist.height
+        local shift_down = ht_nodelist * 0.75 - initial_hlist.height
         initial_hlist.shift = -shift_down
         initial_hlist.width = 0
-        nodelist.head.head = node.insert_before(nodelist.head.head,nodelist.head.head,initial_hlist)
+        nodelist.head.head = node.insert_before(nodelist.head.head, nodelist.head.head, initial_hlist)
     end
     self.objects = nil
     self.nodelist = nodelist
@@ -1263,20 +1444,33 @@ end
 ---@param whatever any|any[]
 ---@param options? table Style overrides applied to the appended items.
 ---@return nil
-function Par:append( whatever, options )
+function Par:append(whatever, options)
     options = options or {}
-    if options.initial and not self.initial then self.initial = options.initial end
+    if options.initial and not self.initial then
+        self.initial = options.initial
+    end
     self.direction = self.direction or options.direction
-    if options.textformat and not self.textformat then self.textformat = options.textformat end
-    if options.padding_right and not self.padding_right then self.padding_right = options.padding_right end
+    if options.textformat and not self.textformat then
+        self.textformat = options.textformat
+    end
+    if options.padding_right and not self.padding_right then
+        self.padding_right = options.padding_right
+    end
     if options.labelleft then
-        self:prepend({options.labelleft,options.labelleftwidth,options,options.labelleftdistance,options.labelleftalign})
+        self:prepend({
+            options.labelleft,
+            options.labelleftwidth,
+            options,
+            options.labelleftdistance,
+            options.labelleftalign,
+        })
     end
     -- w("whatever %s type %s",tostring(whatever), type(whatever))
-    if type(whatever) == "string" then whatever = {whatever} end
-    table.insert(self,{ contents = whatever, options = options} )
+    if type(whatever) == "string" then
+        whatever = { whatever }
+    end
+    table.insert(self, { contents = whatever, options = options })
 end
-
 
 file_end("par.lua")
 
