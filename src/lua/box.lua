@@ -1,4 +1,4 @@
---- Building and formatting a paragraph / box
+-- Building and formatting a paragraph / box
 --
 --  box.lua
 --  speedata publisher
@@ -8,9 +8,15 @@
 
 file_start("box.lua")
 
+---@class Box
+---@field prependbox any[] Items injected at the head of the formatted output.
+---@field typ "box"
 Box = {}
 Box.__index = Box
 
+-- Constructs a fresh `Box` instance.
+---@param self Box
+---@return Box
 function Box:new()
     local mybox = {
         prependbox = {},
@@ -20,6 +26,10 @@ function Box:new()
     return mybox
 end
 
+-- Appends `whatever` to the prepend queue.
+---@param self Box
+---@param whatever any
+---@return nil
 function Box:prepend( whatever )
     self.prependbox[#self.prependbox  + 1] = whatever
 end

@@ -32,10 +32,17 @@ end
 splib = require("luaglue")
 
 
+-- Logs a "start file" debug entry. Called at the top of every Lua source
+-- to give per-file load timing.
+---@param filename string
+---@return nil
 function file_start( filename )
     splib.log("debug","Start file","filename",filename)
 end
 
+-- Logs an "end file" debug entry, the counterpart to `file_start`.
+---@param filename string
+---@return nil
 function file_end( filename )
     splib.log("debug","End file","filename",filename)
 end
@@ -46,6 +53,9 @@ callback.register('start_run',function() return true end)
 
 main = {}
 
+-- Forwards to `splib.log`. The thin wrapper allows tests to monkey-patch it.
+---@param ... any
+---@return nil
 function main.log(...)
     splib.log(...)
 end
@@ -59,16 +69,24 @@ texconfig.trace_file_names = false
 splib.buildfilelist()
 kpse = {}
 
---- @param filename string The file name to look up
---- @return string|nil The full path of the file name or nil if the file is not found.
+-- Looks up `filename` in the publisher's built-in file list. Replaces the
+-- traditional kpse-based finder.
+---@param filename string
+---@return string? path Full path, or `nil` if not found.
 function kpse.find_file(filename)
   return splib.lookupfile(filename)
 end
 
+-- Adds `dirname` to the publisher's file lookup search path.
+---@param dirname string
+---@return any
 function kpse.add_dir(dirname)
     return splib.add_dir(dirname)
 end
 
+-- Resolves and `dofile`s a Lua source by file name.
+---@param filename string
+---@return any
 function do_luafile(filename)
   local a = kpse.find_file(filename)
   assert(a,string.format("Can't find file %q",filename))

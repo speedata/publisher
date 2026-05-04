@@ -8,8 +8,26 @@
 
 local grid = require("publisher.grid")
 
+---@class Page
+---@field grid Grid Page grid instance.
+---@field width integer Page width in sp (without bleed).
+---@field height integer Page height in sp (without bleed).
+---@field transparenttext table<integer, true> Set of alpha values used on the page.
+---@field pagebox node Vlist node holding the page contents.
+---@field defaultcolor? string Default text color name.
+---@field matter? string Matter name (for page label generation).
+---@field structparents? integer PDF/UA `/StructParents` index.
 page = {}
 
+-- Constructs a fresh `Page` with a fresh `Grid` and 1cm default margins.
+---@param self Page
+---@param width integer Page width in sp.
+---@param height integer Page height in sp.
+---@param additional_margin? integer Cut-mark margin in sp (default 0).
+---@param trim? integer Bleed in sp (default 0).
+---@param pagenumber? integer Logical page number (debugging).
+---@return Page? page
+---@return string? errmsg Set when `width` is missing.
 function page.new( self,width,height,additional_margin, trim,pagenumber )
   assert(self)
   if not width then return nil,"No information about page width found. Did you give the command <Pageformat>?" end

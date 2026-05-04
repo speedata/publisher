@@ -7,12 +7,34 @@
 
 file_start("publisher/colors.lua")
 
+---@class colors_module
 local M = {}
 
+---@alias ColorModel "rgb"|"cmyk"|"gray"|"spotcolor"
+
+---@class Color
+---@field model ColorModel
+---@field pdfstring string Combined PDF color command (fill + stroke).
+---@field index integer Position in `colortable`.
+---@field r? string|number Red channel (rgb).
+---@field g? string|number Green channel (rgb) or gray value (gray).
+---@field b? string|number Blue channel (rgb).
+---@field c? string|number Cyan (cmyk).
+---@field m? string|number Magenta (cmyk).
+---@field y? string|number Yellow (cmyk).
+---@field k? string|number Black (cmyk).
+---@field saturation? number Spot color saturation in [0,1].
+---@field colornum? integer Spot color object number.
+---@field overprint? boolean Whether overprint is enabled (spot colors).
+---@field pdfstring_fill? string Lazily computed fill-only command (via metatable).
+---@field pdfstring_stroking? string Lazily computed stroke-only command (via metatable).
+
 -- The spot colors used in the document (even when discarded)
+---@type table<integer, true>
 M.used_spotcolors = {}
 
 -- The predefined colors. index = 1 because we "know" that black will be the first registered color.
+---@type table<string, Color>
 M.colors  = {
   black = { model="gray", g = "0", pdfstring = " 0 G 0 g ", index = 1 },
   aliceblue = { model="rgb", r="0.941" , g="0.973" , b="1" , pdfstring = "0.941 0.973 1 rg 0.941 0.973 1 RG", index = 2},
@@ -164,16 +186,16 @@ M.colors  = {
 }
 
 -- An array of defined colors
+---@type string[]
 M.colortable = {"black","aliceblue", "orange", "rebeccapurple", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "blanchedalmond", "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse", "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", "darkblue", "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkgrey", "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange", "darkorchid", "darkred", "darksalmon", "darkseagreen", "darkslateblue", "darkslategray", "darkslategrey", "darkturquoise", "darkviolet", "deeppink", "deepskyblue", "dimgray", "dimgrey", "dodgerblue", "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold", "goldenrod", "gray", "green", "greenyellow", "grey", "honeydew", "hotpink", "indianred", "indigo", "ivory", "khaki", "lavender", "lavenderblush", "lawngreen", "lemonchiffon", "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgray", "lightgreen", "lightgrey", "lightpink", "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", "lightslategrey", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", "mediumseagreen", "mediumslateblue", "mediumspringgreen", "mediumturquoise", "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", "navy", "oldlace", "olive", "olivedrab", "orangered", "orchid", "palegoldenrod", "palegreen", "paleturquoise", "palevioletred", "papayawhip", "peachpuff", "peru", "pink", "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon", "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", "slategray", "slategrey", "snow", "springgreen", "steelblue", "tan", "teal", "thistle", "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen", "-"}
 
---- Parse a CSS-like color value into normalized channels.
--- Accepts #rgb, #rrggbb, rgb(), or rgba() strings.
--- @param colorvalue string CSS color value
--- @return number r red component in [0,1]
--- @return number g green component in [0,1]
--- @return number b blue component in [0,1]
--- @return number|nil a alpha percentage in [0,100] or nil if not provided
--- Get r,g,b and alpha values (#f0f,#ff00ff,rgb(0,255,0) or rgb(0,255,0,1))
+-- Parses a CSS-like color value into normalized channels.
+-- Accepts `#rgb`, `#rrggbb`, `rgb(...)`, or `rgba(...)` strings.
+---@param colorvalue string CSS color value.
+---@return number r Red component in [0,1].
+---@return number g Green component in [0,1].
+---@return number b Blue component in [0,1].
+---@return number? a Alpha percentage in [0,100] or `nil` if not provided.
 function M.getrgb( colorvalue )
     local r,g,b,a
     local rgbstr = "^rgba?%(%s*(%d+)%s*,%s*(%d+)%s*,%s*(%d+)%s*%)$"
@@ -232,18 +254,17 @@ setmetatable(M.colors,{  __index = function (tbl,key)
 end
  })
 
---- collect all spot colors used so far to create proper page resources
--- @param num number spot color id
+-- Collects all spot colors used so far so the page resources can be built.
+---@param num integer Spot color id.
 local function usespotcolor(num)
     M.used_spotcolors[num] = true
 end
 M.usespotcolor = usespotcolor
 
---- Split a combined PDF color string into fill and stroke parts.
--- @param pdfcolor string combined PDF color command
--- @return string|nil fill command
--- @return string|nil stroke command
--- return the fill and stroke color of the given color string
+-- Splits a combined PDF color string into its fill and stroke parts.
+---@param pdfcolor string Combined PDF color command.
+---@return string? fill Fill command, or `nil` if no match.
+---@return string? stroke Stroke command, or `nil` if no match.
 function M.fill_stroke_color( pdfcolor )
     local a,b = string.match(pdfcolor,"^(.*rg)(.*RG)")
     if a ~= nil then
@@ -257,10 +278,10 @@ function M.fill_stroke_color( pdfcolor )
     return a,b
 end
 
---- Metatable indexer for color entries to compute PDF strings lazily.
--- @param tbl table color entry
--- @param idx string requested field name
--- @return any derived value (pdfstring, pdfstring_fill, pdfstring_stroking)
+-- Metatable `__index` for color entries that derives PDF strings on demand.
+---@param tbl Color Color entry.
+---@param idx "pdfstring"|"pdfstring_fill"|"pdfstring_stroking" Requested field.
+---@return string? value Derived PDF command, or `nil` if not applicable.
 local function colentry_index_function(tbl,idx)
     local model = rawget(tbl,"model")
     if model == "spotcolor" then
@@ -309,27 +330,29 @@ end
 
 -- used in DefineColor
 -- M.colentry_index_function = colentry_index_function
+---@type metatable
 M.colormetatable = {__index = colentry_index_function}
 
---- Get the PDF color string from a color name or index.
--- @param colorname_or_number string|number color name or colortable index
--- @return string|nil PDF color command or nil if not found
+-- Gets the PDF color string for a color name or `colortable` index.
+---@param colorname_or_number string|integer Color name or 1-based index into `colortable`.
+---@return string? pdfcommand PDF color command, or `nil` if not resolvable.
 function M.pdfstring_from_color(colorname_or_number)
     local colorname
     local colno = tonumber(colorname_or_number)
     if colno then
         colorname = M.colortable[colno]
     else
-        colorname = colorname_or_number
+        colorname = tostring(colorname_or_number)
     end
     local colentry = M.get_colentry_from_name(colorname,"black")
     if colentry then return colentry.pdfstring else return nil end
 end
 
---- Resolve a color entry by name (fallback to default if missing).
--- @param colorname string|nil color name
--- @param default string|nil default color name if the requested is missing
--- @return table color entry
+-- Resolves a color entry by name, falling back to `default` and finally to black.
+-- The returned entry is wrapped with `colormetatable` for lazy PDF strings.
+---@param colorname string? Requested color name.
+---@param default string? Fallback color name if `colorname` is `nil` or unknown.
+---@return Color color Color entry; black if everything else fails.
 function M.get_colentry_from_name(colorname, default)
     colorname = colorname or default
     local colentry
@@ -351,10 +374,10 @@ function M.get_colentry_from_name(colorname, default)
     return setmetatable(colentry, M.colormetatable)
 end
 
---- Get the color index by name.
--- @param colorname string|nil color name
--- @param default string|nil default color name
--- @return number|nil color index or nil if not resolvable
+-- Gets the `colortable` index for a color name.
+---@param colorname string? Requested color name.
+---@param default string? Fallback color name.
+---@return integer? index Color index, or `nil` if not resolvable.
 function M.get_colorindex_from_name(colorname, default)
     if not colorname then return nil end
     if colorname == "nil" then return nil end
@@ -362,9 +385,10 @@ function M.get_colorindex_from_name(colorname, default)
     if colentry then return colentry.index else return nil end
 end
 
---- Register a new color name in the colortable.
--- @param name string color name
--- @return number index of the color in colortable
+-- Registers a new color name in `colortable`. If the name is already known,
+-- the existing index is returned.
+---@param name string Color name.
+---@return integer index Index of the color in `colortable`.
 function M.register_color( name )
     if M.colors[name] ~= nil then
         return M.colors[name].index

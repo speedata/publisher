@@ -1,4 +1,4 @@
---- Node creation, paragraph layout, line breaking and related helpers.
+-- Node creation, paragraph layout, line breaking and related helpers.
 --
 --  nodes.lua
 --  speedata publisher
@@ -8,6 +8,7 @@
 
 file_start("nodes.lua")
 
+---@class nodes_module
 local M = {}
 
 local fonts = require("publisher.fonts")
@@ -66,6 +67,12 @@ for i,v in ipairs(attributes_map["text-decoration-style"]) do attval_td_style[v]
 local attval_verticalalign = {}
 for i,v in ipairs(attributes_map["vertical-align"]) do attval_verticalalign[v] = i end
 
+-- Dispatches a parsed CSS+HTML tree (`elt.typ == "csshtmltree"`) to
+-- `html.parse_html_new`, providing the runtime environment.
+---@param elt table HTML element with `typ` field.
+---@param parameter? table Per-call parameters forwarded to the parser.
+---@param data table Data XML context.
+---@return any rendered The result of `html.parse_html_new`.
 function M.parse_html(elt, parameter, data)
     parameter = parameter or {}
 
@@ -87,6 +94,18 @@ function M.parse_html(elt, parameter, data)
     end
 end
 
+-- Walks a node list and inserts the non-moving whatsits (color stacks,
+-- hyperlink starts/stops, struct destinations, MetaPost graphics)
+-- needed to render attributes that were attached to nodes earlier.
+-- Recurses into hlists/vlists.
+---@param head node Head of the node list.
+---@param parent node? Parent hlist/vlist (nil at the top).
+---@param blockinline "block"|"inline"
+---@param curx integer Cursor X in sp (used for absolute placement).
+---@param cury integer Cursor Y in sp.
+---@param pagewidth integer
+---@param pageheight integer
+---@return nil
 function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewidth, pageheight )
     local insert_nm = M.insert_nonmoving_whatsits
     local setp = publisher.setprop
@@ -626,6 +645,10 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
     return rules
 end
 
+-- Returns the larger of two glue spec nodes by total natural width.
+---@param a node Glue spec.
+---@param b node Glue spec.
+---@return node larger
 function M.bigger_glue_spec( a,b )
     if a.stretch_order > b.stretch_order then return a end
     if b.stretch_order > a.stretch_order then return b end
@@ -645,6 +668,10 @@ end
 -- callers (html.lua's <br> in horizontal mode) expect — but the dead
 -- bookkeeping should be cleaned up or the function should be
 -- reimplemented properly.
+-- Returns a glue node tagged with `att_newline` that breaks the line
+-- without adding the full baseline skip.
+---@param fam integer Font family number.
+---@return node glue
 function M.short_newline(fam)
     local strutheight = fonts.lookup_fontfamily_number_instance[fam].baselineskip
     local dummypenalty
@@ -661,6 +688,10 @@ function M.short_newline(fam)
     return list, cur
 end
 
+-- Returns a glue node that forces a line break and applies the family's
+-- baseline skip on the next line.
+---@param fam integer Font family number.
+---@return node glue
 function M.newline(fam)
     local strutheight = fonts.lookup_fontfamily_number_instance[fam].baselineskip
     local dummypenalty
@@ -699,6 +730,9 @@ function M.newline(fam)
 end
 
 -- Remove the first \n in a paragraph value table. See #132
+-- Removes leading whitespace-only entries from a paragraph table.
+---@param tbl table Paragraph table (array of segments).
+---@return table tbl
 function M.remove_first_whitespace( tbl )
     if publisher.newxpath and xpath.is_attribute(tbl) then
         tbl.value = string.gsub(tbl.value,"^[\n\t]*(.-)$","%1")
@@ -722,6 +756,9 @@ function M.remove_first_whitespace( tbl )
 end
 
 -- Remove the final \n in a paragraph value table. See #132
+-- Removes trailing whitespace-only entries from a paragraph table.
+---@param tbl table Paragraph table.
+---@return table tbl
 function M.remove_last_whitespace( tbl )
     for i=#tbl,1,-1 do
         if type(tbl[i]) == "string" then
@@ -748,6 +785,12 @@ function M.remove_last_whitespace( tbl )
     end
 end
 
+-- Inserts a strut (zero-width box of font-height) at the head or tail of
+-- the node list to set its vertical extent.
+---@param nodelist node
+---@param where "head"|"tail"
+---@param origin? string Origin tag for `setprop` (debugging).
+---@return node nodelist
 function M.addstrut(nodelist,where,origin)
     local strutheight = 0
     local head = nodelist
@@ -788,6 +831,11 @@ function M.addstrut(nodelist,where,origin)
     return strut
 end
 
+-- Applies CSS-style attributes (color, decoration, weight, ...) to node
+-- `n` based on `parameter`.
+---@param n node
+---@param parameter table CSS-like attribute table.
+---@return nil
 local function setstyles(n,parameter)
     if parameter.bold == 1 then
         node.set_attribute(n,att_fontweight,attval_fontweight["bold"])
@@ -851,6 +899,12 @@ local function setstyles(n,parameter)
     end
 end
 
+-- Resolves missing glyphs in a HarfBuzz cluster by trying each fallback
+-- font definition in turn.
+---@param cluster table HarfBuzz shaping cluster.
+---@param glyphslist table List of glyph entries to fill in.
+---@param fallback_fontdefinitions table[] Fallback fonts to try.
+---@return boolean ok `true` if all glyphs were resolved.
 function M.getfallbacks(cluster,glyphslist,fallback_fontdefinitions)
     local fontnum
     local ret = {}
@@ -906,6 +960,11 @@ function M.getfallbacks(cluster,glyphslist,fallback_fontdefinitions)
     return ret
 end
 
+-- Builds a glyph node list from a string using HarfBuzz shaping.
+-- Handles ligatures, kerning, fallback fonts, font features and the
+-- color/decoration attributes encoded in `arguments`.
+---@param arguments table Shaping arguments (text, font, parameters, ...).
+---@return node head Head of the resulting glyph node list.
 function M.hbglyphlist(arguments)
     local tbl = arguments.tbl
     local glyphs = arguments.glyphs
@@ -1373,6 +1432,10 @@ function M.hbglyphlist(arguments)
     return list
 end
 
+-- FontForge backend: looks up the inter-word glue value for a string.
+---@param s string Text segment.
+---@param tbl table Font instance table (FontForge backend).
+---@return integer? width
 local function ffgetglue(s,tbl)
     local n
     if s == 8194 then
@@ -1395,6 +1458,10 @@ local function ffgetglue(s,tbl)
     return n
 end
 
+-- FontForge fallback for `hbglyphlist`. Builds a glyph node list using the
+-- legacy fontforge-based loader, without HarfBuzz shaping.
+---@param arguments table
+---@return node head
 local function ffglyphlist(arguments)
     local tbl = arguments.tbl
     local str = arguments.str
@@ -1657,6 +1724,10 @@ local function ffglyphlist(arguments)
     return head
 end
 
+-- Builds a deterministic instance key for `parameter` so font instances can
+-- be cached and reused.
+---@param parameter table Font parameters (family, style, weight, ...).
+---@return string key
 function M.getinstancename(parameter)
     local instancename
     if parameter.bold == 1 then
@@ -1676,6 +1747,13 @@ function M.getinstancename(parameter)
     return instancename
 end
 
+-- Top-level entry point: turns a string `str` plus `parameter` (font,
+-- color, decoration, ...) into a node list, picking HarfBuzz or FontForge
+-- depending on `publisher.options.fontloader`.
+---@param str string Text segment.
+---@param parameter table Style/font parameters.
+---@param origin? string Origin tag for `setprop` (debugging).
+---@return node head Head of the glyph node list.
 function M.mknodes(str,parameter,origin)
     -- if it's an empty string, we make a zero-width rule
     if not str or string.len(str) == 0 then
@@ -1828,6 +1906,12 @@ function M.mknodes(str,parameter,origin)
     return nodelistsegments, maindirection
 end
 
+-- Wraps `nodelist` in `dir` whatsits so it is treated as a bidi segment
+-- with the given direction inside the surrounding `maindirection`.
+---@param nodelist node
+---@param direction "TLT"|"TRT" Segment direction.
+---@param maindirection "TLT"|"TRT" Surrounding paragraph direction.
+---@return node head
 function M.setsegmentdir(nodelist,direction, maindirection)
     local dirstring
     if direction == 0 or direction == "ltr" then
@@ -1860,6 +1944,12 @@ function M.setsegmentdir(nodelist,direction, maindirection)
     return nodelist
 end
 
+-- Inserts an hrule at the head or tail of `nodelist`.
+---@param nodelist node
+---@param head_or_tail "head"|"tail"
+---@param parameter table Rule parameters (`width`, `height`, `depth`, `color`, ...).
+---@param origin? string Origin tag (debugging).
+---@return node nodelist
 function M.add_rule( nodelist,head_or_tail,parameter,origin)
     parameter = parameter or {}
 
@@ -1882,6 +1972,10 @@ function M.add_rule( nodelist,head_or_tail,parameter,origin)
     assert(false,"never reached") -- luacheck: ignore 511
 end
 
+-- Returns an hbox containing a bullet glyph, sized to fill `labelwidth`.
+---@param labelwidth integer Target width in sp.
+---@param parameter table Style parameters (font, color, ...).
+---@return node hbox
 function M.bullet_hbox( labelwidth,parameter )
     local bullet, pre_glue, post_glue
     bullet = M.mknodes("•",parameter)
@@ -1901,6 +1995,12 @@ function M.bullet_hbox( labelwidth,parameter )
     return bullet_hbox
 end
 
+-- Returns an hbox containing a numeric label (`num.`), sized to fill
+-- `labelwidth`.
+---@param num integer Label number.
+---@param labelwidth integer Target width in sp.
+---@param parameter table Style parameters.
+---@return node hbox
 function M.number_hbox( num, labelwidth,parameter )
     local pre_glue, post_glue
     local digits = M.mknodes( tostring(num) .. ".",parameter)
@@ -1920,6 +2020,14 @@ function M.number_hbox( num, labelwidth,parameter )
     return digit_hbox
 end
 
+-- Returns an hbox containing a custom label string, sized to `labelwidth`
+-- and aligned according to `labelalign`.
+---@param label string Label text.
+---@param labelwidth integer Target width in sp.
+---@param options table Style options.
+---@param labelsep_wd integer Separator width in sp.
+---@param labelalign "left"|"center"|"right"
+---@return node hbox
 function M.whatever_hbox( label,labelwidth,options,labelsep_wd,labelalign )
     local fam = options.fontfamily
     labelsep_wd = labelsep_wd or fonts.lookup_fontfamily_number_instance[fam].size / 2
@@ -1945,6 +2053,10 @@ function M.whatever_hbox( label,labelwidth,options,labelsep_wd,labelalign )
     return label_hbox
 end
 
+-- Returns the natural width of a glue node, falling back to the spec when
+-- the node has no inline width.
+---@param n node Glue node.
+---@return integer width Width in sp.
 function M.get_glue_size( n )
     local spec
 
@@ -1956,6 +2068,12 @@ function M.get_glue_size( n )
     return spec.width
 end
 
+-- Inserts a glue node at the head or tail of `nodelist`.
+---@param nodelist node?
+---@param head_or_tail "head"|"tail"
+---@param parameter table Glue parameters (`width`, `stretch`, `shrink`, ...).
+---@param origin? string Origin tag (debugging).
+---@return node nodelist
 function M.add_glue( nodelist,head_or_tail,parameter,origin)
     parameter = parameter or {}
 
@@ -1977,14 +2095,24 @@ function M.add_glue( nodelist,head_or_tail,parameter,origin)
     assert(false,"never reached") -- luacheck: ignore 511
 end
 
+-- Returns a glue node that stretches and shrinks like TeX's `\hss`.
+---@return node glue
 function M.hss_glue()
     return M.make_glue({stretch = 2^16, stretch_order = 2, shrink=2^16, shrink_order = 2})
 end
 
+-- Creates a fresh glue node from a parameter table.
+---@param parameter table Glue parameters (`width`, `stretch`, `shrink`, ...).
+---@return node glue
 function M.make_glue( parameter )
     return set_glue(nil, parameter)
 end
 
+-- Walks `head` and propagates the surrounding glyph properties onto the
+-- replacement glyphs of each disc (hyphenation) node so they pick up the
+-- correct font/color when chosen.
+---@param head node
+---@return nil
 local function add_properties_to_discnodes(head)
     while head do
         if head.id == publisher.glyph_node and head.next and head.next.id == publisher.disc_node then
@@ -2016,6 +2144,12 @@ local function add_properties_to_discnodes(head)
     end
 end
 
+-- Closes a paragraph node list: adds the par-end glue, applies
+-- justification settings and triggers line breaking via `do_linebreak`.
+---@param nodelist node
+---@param hsize integer Target line width in sp.
+---@param parameters table Paragraph parameters (alignment, indent, ...).
+---@return node head Linebroken vbox.
 function M.finish_par( nodelist,hsize,parameters )
     assert(nodelist)
     node.slide(nodelist)
@@ -2043,6 +2177,10 @@ function M.finish_par( nodelist,hsize,parameters )
     M.add_glue(n,"tail",{ subtype = 15, width = 0, stretch = 2^16, stretch_order = 2})
 end
 
+-- Inserts kern nodes between glyphs for HarfBuzz-shaped runs (font kerning
+-- is applied here rather than in TeX itself).
+---@param nodelist node
+---@return node nodelist
 function M.hbkern(nodelist)
     local head = d_todirect(nodelist)
     local start = head
@@ -2104,6 +2242,13 @@ function M.hbkern(nodelist)
     return d_tonode(start)
 end
 
+-- Adjusts a linebroken paragraph for a given alignment by re-glueing
+-- the line ends and replacing parfillskip with the appropriate spec.
+---@param nodelist node Linebroken paragraph (head).
+---@param alignment TextformatAlignment
+---@param parent? node Surrounding hbox (for direction lookup).
+---@param direction? "TLT"|"TRT" Paragraph direction.
+---@return node nodelist
 function M.fix_justification(nodelist,alignment,parent,direction)
     if alignment == "start" then
         if direction == "rtl" then
@@ -2194,6 +2339,10 @@ function M.fix_justification(nodelist,alignment,parent,direction)
     return nodelist
 end
 
+-- Returns `true` if any line in `nodelist` exceeds `wd` after line breaking.
+---@param nodelist node Vbox of lines.
+---@param wd integer Target line width in sp.
+---@return boolean
 local function check_if_a_line_exeeds(nodelist,wd)
     local head = nodelist
     while head do
@@ -2210,6 +2359,13 @@ local function check_if_a_line_exeeds(nodelist,wd)
     return false
 end
 
+-- Performs Knuth-Plass line breaking on the paragraph `nodelist` to fit
+-- `hsize`. Honors `parameters` such as `tolerance`, `parshape`, hyphen
+-- character overrides, language settings, etc.
+---@param nodelist node Paragraph node list (head).
+---@param hsize integer Target line width in sp.
+---@param parameters table Line-break parameters.
+---@return node head Linebroken vbox.
 function M.do_linebreak( nodelist,hsize,parameters )
     if nodelist == nil then
         err("No nodelist found for line breaking.")
@@ -2325,6 +2481,10 @@ function M.do_linebreak( nodelist,hsize,parameters )
     return ret
 end
 
+-- Creates an empty vbox of the given dimensions.
+---@param wd integer Width in sp.
+---@param ht integer Height in sp.
+---@return node vbox
 function M.create_empty_vbox_width_width_height(wd,ht)
     local hb = M.create_empty_hbox_with_width(wd)
     local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
@@ -2334,12 +2494,20 @@ function M.create_empty_vbox_width_width_height(wd,ht)
     return n
 end
 
+-- Creates an empty hbox of the given width.
+---@param wd integer Width in sp.
+---@return node hbox
 function M.create_empty_hbox_with_width( wd )
     local n = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3})
     n = node.hpack(n,wd,"exactly")
     return n
 end
 
+-- Wraps `nodelist` in color-stack literals if `color` differs from the
+-- surrounding default; passes the list through unchanged otherwise.
+---@param nodelist node
+---@param color integer Color index from `colortable`.
+---@return node nodelist
 function M.set_color_if_necessary( nodelist,color )
     local dontformat = node.has_attribute(nodelist,publisher.att_dont_format)
 
@@ -2377,6 +2545,11 @@ function M.set_color_if_necessary( nodelist,color )
     return nodelist
 end
 
+-- Sets the font family attribute on every glyph in `nodelist` that does
+-- not already carry one.
+---@param nodelist node
+---@param fontfamily integer Font family number.
+---@return nil
 function M.set_fontfamily_if_necessary(nodelist,fontfamily)
     local fam
     while nodelist do
@@ -2397,6 +2570,10 @@ function M.set_fontfamily_if_necessary(nodelist,fontfamily)
     return fam
 end
 
+-- Inserts hyphenation hints into a URL node list so it can break at
+-- structural characters (`/`, `.`, `?`, `&`, ...).
+---@param nodelist node
+---@return node nodelist
 function M.break_url( nodelist )
     local p
 

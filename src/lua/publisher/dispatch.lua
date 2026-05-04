@@ -1,4 +1,4 @@
---- Layout dispatch and pattern matching.
+-- Layout dispatch and pattern matching.
 --
 --  dispatch.lua
 --  speedata publisher
@@ -8,10 +8,12 @@
 
 file_start("dispatch.lua")
 
+---@class dispatch_module
 local M = {}
 
 
---- The dispatch table maps every element in the layout xml to a command in the `commands.lua` file.
+-- The dispatch table maps every element in the layout xml to a command in the `commands.lua` file.
+---@type table<string, fun(layoutxml: table, dataxml: table, opts?: table): any>
 local dispatch_table = {
     A                       = commands.a,
     Action                  = commands.action,
@@ -122,19 +124,22 @@ local dispatch_table = {
 }
 
 
---- Compile a match pattern string into a test function and priority.
---- Simple element names (no special chars) return nil to signal the fast path.
---- Supported patterns:
----   "foo"           -> fast path (nil)
----   "*"             -> matches any element, priority -0.5
----   "foo[pred]"     -> self::foo[pred], priority 0.5
----   "*[pred]"       -> self::*[pred], priority 0.5
----   "parent/child"  -> self::child[parent::parent], priority 0.5
----   "anc//desc"     -> self::desc[ancestor::anc], priority 0.5
+-- Compiles a match pattern string into a test function and priority.
+-- Simple element names (no special chars) return `nil` to signal the fast
+-- path so the caller can do a direct table lookup.
+--
+-- Supported patterns:
+--
+--     "foo"           -> fast path (nil)
+--     "*"             -> matches any element, priority -0.5
+--     "foo[pred]"     -> self::foo[pred], priority 0.5
+--     "*[pred]"       -> self::*[pred], priority 0.5
+--     "parent/child"  -> self::child[parent::parent], priority 0.5
+--     "anc//desc"     -> self::desc[ancestor::anc], priority 0.5
 ---@param pattern string
----@return function|nil matchfunc  nil means use fast path
+---@return (fun(ctx: table, node: any): boolean)? matchfunc `nil` means use the fast path.
 ---@return number priority
----@return string|nil elementname  for fast path only
+---@return string? elementname Set only for the fast path.
 function M.compile_match_pattern(pattern)
     -- Simple element name: no /, [, ], *
     if not string.find(pattern, "[/%[%]%*]") then
@@ -163,11 +168,14 @@ function M.compile_match_pattern(pattern)
     end, 0.5, nil
 end
 
---- Convert a match pattern to a self:: XPath expression.
---- "foo[pred]"    -> "self::foo[pred]"
---- "*[pred]"      -> "self::*[pred]"
---- "parent/child" -> "self::child[parent::parent]"
---- "anc//desc"    -> "self::desc[ancestor::anc]"
+-- Converts a match pattern to a `self::` XPath expression.
+--
+--     "foo[pred]"    -> "self::foo[pred]"
+--     "*[pred]"      -> "self::*[pred]"
+--     "parent/child" -> "self::child[parent::parent]"
+--     "anc//desc"    -> "self::desc[ancestor::anc]"
+---@param pattern string
+---@return string xpath
 function M.convert_pattern_to_selftest(pattern)
     local ancestor, desc = string.match(pattern, "^([^/]+)//(.+)$")
     if ancestor and desc then
@@ -188,7 +196,13 @@ function M.convert_pattern_to_selftest(pattern)
     return "self::" .. pattern
 end
 
---- Find the best matching pattern-based record for a given mode and data node.
+-- Finds the highest-priority pattern-based `<Record>` registered for `mode`
+-- whose match function accepts `datanode`. Returns the layout XML body of
+-- that record, or `nil` if no pattern matches.
+---@param mode string Mode name (the `mode` attribute on `<Record>`).
+---@param datanode any Current data XML node.
+---@param ctx table XPath context (used by the match function).
+---@return table? layoutxml
 function M.find_matching_pattern(mode, datanode, ctx)
     local patterns = publisher.data_dispatcher_patterns[mode]
     if not patterns then return nil end
@@ -205,6 +219,13 @@ function M.find_matching_pattern(mode, datanode, ctx)
     return best_match
 end
 
+-- Creates and registers a textformat that inherits from `base` (or from
+-- `text` if `base` is missing) and overlays `options_arg`. An empty `name`
+-- gets a random 10-character key so the result can still be referenced.
+---@param name string
+---@param base string? Base textformat name.
+---@param options_arg table? Per-call overrides merged on top of the base.
+---@return Textformat
 function M.new_textformat(name, base, options_arg)
     if name == "" then name = publisher.string_random(10) end
     local textformats = publisher.textformats
@@ -222,18 +243,28 @@ function M.new_textformat(name, base, options_arg)
     return tf
 end
 
---- Walk the layout XML elements and execute the matching commands.
---- The returned table is an array with hashes. The keys of these
---- hashes are `elementname` and `contents`. For example:
----
----     {
----       [1] = {
----         ["elementname"] = "Paragraph"
----         ["contents"] = {
----           ["nodelist"] = "<node    nil <  58515 >    nil : glyph 1>"
----         },
----       },
----     }
+---@class DispatchEntry
+---@field elementname string Layout element that produced the entry.
+---@field contents any Whatever the corresponding command returned.
+
+-- Walks the children of a layout XML element and executes the command
+-- registered in `dispatch_table` for each known element. Wrapper elements
+-- (`Copy-of`, `Switch`, `ForAll`, `Loop`, `Transformation`, `Frame`,
+-- `Include`, `Layout`, `Clip`, `Section`) are flattened into the result.
+-- For example:
+--
+--     {
+--       [1] = {
+--         ["elementname"] = "Paragraph"
+--         ["contents"] = {
+--           ["nodelist"] = "<node    nil <  58515 >    nil : glyph 1>"
+--         },
+--       },
+--     }
+---@param layoutxml table Layout XML element with children to walk.
+---@param dataxml table Current data XML context.
+---@param opts? table Forwarded to each command.
+---@return DispatchEntry[]?
 function M.dispatch(layoutxml, dataxml, opts)
     local ret = {}
     local tmp

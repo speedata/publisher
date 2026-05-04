@@ -5,19 +5,32 @@
 --  for a list of authors see `git blame'
 --  see file copying in the root directory for license info.
 
+---@class ColorProfile
+---@field identifier string
+---@field objectid integer PDF object number; `0` until written.
+---@field filename string ICC profile filename.
+---@field colors integer Number of channels (typically 4).
+---@field registry? string
+---@field info? string
+---@field condition? string
+
+---@type table<string, ColorProfile>
 local colorprofiles = {
    ["FOGRA39"] =  { identifier = "FOGRA39", objectid = 0, registry = "http://www.color.org", info = "Coated FOGRA39 (ISO 12647-2:2004)", condition = "Offset printing, according to ISO 12647-2:2004/Amd 1, OFCOM, paper type 1 or 2 = coated art, 115 g/m2, tone value increase curves A (CMY) and B (K)", filename = "ISOcoated_v2_eci.icc", colors = 4 }
 }
 
+---@type ColorProfile
 local currentcolorprofile = colorprofiles["FOGRA39"]
 
 -- index: color number
 -- value: { colorname, pdfobject for the color definition }
 -- The object number is 0 until the color is actually used (by color.pdfstring)
+---@type { [1]: string, [2]: integer }[]
 local colorobjects = {}
 
 local set_colorprofile_filename, write_colorprofile, use_color, getresource, register
 
+---@type table<string, integer[]>
 local spotcolors =  {
     ["pantone 100"] = {0, 0, 51, 0},
     ["pantone 101"] = {0, 0, 79, 0},
@@ -1196,8 +1209,10 @@ local spotcolors =  {
 }
 
 
--- The color profile defaults to 'ISO coated v2'. This is obsolete and only for
--- backwards compatibility
+-- Sets the current color profile by ICC filename. Obsolete; kept for
+-- backwards compatibility with older layouts. The default is `FOGRA39`.
+---@param fn string ICC filename.
+---@return nil
 function set_colorprofile_filename(fn)
     for k,v in pairs(colorprofiles) do
         if v.filename == fn then
@@ -1209,7 +1224,10 @@ function set_colorprofile_filename(fn)
     colorprofiles[fn] = currentcolorprofile
 end
 
--- set the default color profile
+-- Sets the active color profile by identifier. Falls back to `FOGRA39`
+-- when `name` is unknown.
+---@param name string
+---@return nil
 function set_colorprofile(name)
     local tmp = colorprofiles[name]
     if not tmp then
@@ -1220,12 +1238,16 @@ function set_colorprofile(name)
     end
 end
 
--- get the current color profile
+-- Returns the active color profile.
+---@return ColorProfile
 function get_colorprofile( )
     return currentcolorprofile
 end
 
--- register a color profile
+-- Registers a new color profile under `name` with the given options.
+---@param name string
+---@param options table<string, any> Options merged into the new profile.
+---@return nil
 function register_colorprofile( name, options )
     colorprofiles[name] = { identifier = name }
     local cp = colorprofiles[name]
@@ -1234,7 +1256,9 @@ function register_colorprofile( name, options )
     end
 end
 
--- Make sure that the color profile is written to the PDF.
+-- Writes the active color profile as an ICC stream object into the PDF
+-- if it has not been written yet, and returns its object number.
+---@return integer? objectnum
 function write_colorprofile()
     if currentcolorprofile.objectid == nil or currentcolorprofile.objectid == 0 then
         local colorprofile_filename = currentcolorprofile.filename
@@ -1250,7 +1274,15 @@ function write_colorprofile()
     return currentcolorprofile.objectid
 end
 
--- DefineColor registers the colors
+-- Registers a spot color with its CMYK substitute. Called from the
+-- `DefineColor` layout command.
+---@param colorname string Spot color name (Pantone/HKS/...).
+---@param c? number Cyan substitute in [0,100].
+---@param m? number Magenta substitute in [0,100].
+---@param y? number Yellow substitute in [0,100].
+---@param k? number Black substitute in [0,100].
+---@param usecolorprofile? boolean Use the active ICC profile for the substitute.
+---@return integer colornum 1-based index in `colorobjects`.
 function register( colorname,c,m,y,k,usecolorprofile )
     colorobjects[#colorobjects + 1] = { colorname, 0 }
     local rawname
@@ -1269,13 +1301,12 @@ function register( colorname,c,m,y,k,usecolorprofile )
     return #colorobjects
 end
 
---- getresource is called from publisher.lua from dothingsbeforeoutput()
---- `tab` has the form
----
----     tab = {
----        [1] = "true"
----        [3] = "true"
----     }
+-- Builds the page-resources fragment for the given used spot colors.
+-- Called from `publisher.lua#dothingsbeforeoutput()`.
+--
+--     tab = { [1] = true, [3] = true }
+---@param tab table<integer, true> Set-style table of used spot color numbers.
+---@return string fragment Concatenated `/CSn N 0 R` entries.
 function getresource( tab )
     local ret = {}
     for k,_ in pairs(tab) do
@@ -1290,7 +1321,10 @@ function getresource( tab )
     return table.concat(ret, " ")
 end
 
--- Make sure the color definition is written to the PDF.
+-- Writes the `/Separation` color object for `colorname` into the PDF and
+-- returns its object number.
+---@param colorname string
+---@return integer? objectnum
 function use_color(colorname)
     local rawname
     _,_, rawname = string.find(string.lower(colorname),"^(.-)%s*[cmunkez]?%s*$")

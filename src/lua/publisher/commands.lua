@@ -1,4 +1,4 @@
---- This file contains the code for the user commands. They are called from publisher#dispatch.
+-- This file contains the code for the user commands. They are called from publisher#dispatch.
 --
 --  commands.lua
 --  speedata publisher
@@ -19,6 +19,15 @@ local metapost = require("publisher.metapost")
 local grid_module = require("publisher.grid")
 do_luafile("css.lua")
 
+---@alias LayoutCommand fun(layoutxml: table, dataxml: table, opts?: any): any
+-- Standard signature for all entries in the global `commands` table:
+-- they are dispatched from `dispatch.lua` for each layout XML element.
+
+-- Returns six log-key values describing the current layout location, or
+-- `nil` for the legacy XPath parser. Used as `lineinfo(layoutxml)` in
+-- error messages from individual commands.
+---@param layout table Layout XML element.
+---@return string?, any?, string?, any?, string?, any?
 local function lineinfo(layout)
     if publisher.newxpath then
         return "line",layout[".__line"], "file", layout[".__file"], "page", publisher.current_pagenumber
@@ -27,12 +36,18 @@ local function lineinfo(layout)
     end
 end
 
--- This module contains the commands in the layout file (the tags)
+-- This module contains the commands in the layout file (the tags).
+-- Every field is invoked by `dispatch()` with the matching layout XML
+-- element and the current data XML context.
+---@type table<string, LayoutCommand>
 commands = {}
 
---- A
---- -----
---- Insert a hyperlink into the PDF.
+-- A
+-- -----
+-- Insert a hyperlink into the PDF.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.a( layoutxml,dataxml )
     local interaction = ( publisher.options.interaction ~= false )
 
@@ -130,15 +145,20 @@ function commands.a( layoutxml,dataxml )
     end
 end
 
---- Action
---- ------
---- Create a whatsit node of type `user_defined`. The action
---- `AddToList` is not well tested. Actions are
---- processed  after page ship out. The idea behind that is that we don't
---- really know in advance which elements are put on a page and which are
---- broken to the next page. This way we can find out exactly where something
---- is  placed.
+-- Action
+-- ------
+-- Create a whatsit node of type `user_defined`. The action
+-- `AddToList` is not well tested. Actions are
+-- processed  after page ship out. The idea behind that is that we don't
+-- really know in advance which elements are put on a page and which are
+-- broken to the next page. This way we can find out exactly where something
+-- is  placed.
 -- Helper: convert Mark contents into whatsit nodes appended to a par
+-- Appends a `Mark` whatsit list to the par object so the mark fires when
+-- the paragraph reaches the corresponding line during shipout.
+---@param p table Par object (from par.lua).
+---@param mark_contents table Mark element contents.
+---@return nil
 local function append_mark_to_par(p, mark_contents)
     for _,v in ipairs(mark_contents) do
         local n = node.new("whatsit","user_defined")
@@ -162,6 +182,10 @@ local function append_mark_to_par(p, mark_contents)
 end
 
 -- Helper: create a par from Mark contents (used when Mark appears directly)
+-- Wraps a Mark element's contents into a fresh par object so it can be
+-- inserted between paragraphs in the output stream.
+---@param mark_contents table
+---@return table par
 local function mark_to_par(mark_contents)
     local p = par:new(nil,"action")
     append_mark_to_par(p, mark_contents)
@@ -169,6 +193,10 @@ local function mark_to_par(mark_contents)
 end
 
 -- Helper: create a zero-width hbox from Mark contents (for PlaceObject context)
+-- Wraps a Mark element's contents into a zero-size hbox so it can be
+-- inserted between inline objects in the output stream.
+---@param mark_contents table
+---@return node hbox
 local function mark_to_hbox(mark_contents)
     local head
     local tail
@@ -210,6 +238,9 @@ end
 commands.mark_to_par = mark_to_par
 commands.mark_to_hbox = mark_to_hbox
 
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.action( layoutxml,dataxml)
     local tab = publisher.dispatch(layoutxml,dataxml)
     local p = par:new(nil,"action")
@@ -231,10 +262,13 @@ end
 
 
 
---- AddToList -- obsolete (2.9.3)
---- ---------
---- Return a number. This number is an index to the table `publisher.user_defined_functions` and the value
---- is a function that sets a key of another table.
+-- AddToList -- obsolete (2.9.3)
+-- ---------
+-- Return a number. This number is an index to the table `publisher.user_defined_functions` and the value
+-- is a function that sets a key of another table.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.add_to_list( layoutxml,dataxml )
     local key        = publisher.read_attribute(layoutxml,dataxml,"key","string")
     local listname   = publisher.read_attribute(layoutxml,dataxml,"list","string")
@@ -251,9 +285,12 @@ function commands.add_to_list( layoutxml,dataxml )
     return udef.last
 end
 
---- AddSearchpath
---- -------------
---- Add the given path to the global search path for image loading etc.
+-- AddSearchpath
+-- -------------
+-- Add the given path to the global search path for image loading etc.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.add_searchpath( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     if not selection then
@@ -269,10 +306,13 @@ function commands.add_searchpath( layoutxml,dataxml )
     kpse.add_dir(selection)
 end
 
---- Attribute
---- ---------
---- Create an attribute to be used in a XML structure. The XML structure can be formed via
---- Element and Attribute commands and written to disk with SaveDataset.
+-- Attribute
+-- ---------
+-- Create an attribute to be used in a XML structure. The XML structure can be formed via
+-- Element and Attribute commands and written to disk with SaveDataset.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.attribute( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpath")
     local attname   = publisher.read_attribute(layoutxml,dataxml,"name","string")
@@ -289,6 +329,9 @@ function commands.attribute( layoutxml,dataxml )
 end
 
 
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.attachfile( layoutxml,dataxml )
     -- destfilename is optional. It defaults to "factur-x.xml" when attaching a
     -- ZUGFeRD file version 2, "ZUGFeRD-invoice.xml" in version 1 or to the
@@ -362,28 +405,37 @@ function commands.attachfile( layoutxml,dataxml )
     metadata.attach_file_pdf(filecontents,description,filetype,modificationtime,destfilename, publisher.filespecnumbers)
 end
 
---- AtPageCreation
---- -------------
---- Run these commands when a page is created (as soon as the first element is written to it).
---- You can add header/footer and other repeating elements. These commands are
---- not executed when encountered, rather in `publisher#setup_page()`.
+-- AtPageCreation
+-- -------------
+-- Run these commands when a page is created (as soon as the first element is written to it).
+-- You can add header/footer and other repeating elements. These commands are
+-- not executed when encountered, rather in `publisher#setup_page()`.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.atpagecreation( layoutxml,dataxml )
     return layoutxml
 end
 
---- AtPageShipout
---- -------------
---- Run these commands when a page is ready to be put in
---- the PDF. You can add header/footer. These commands are
---- not executed when encountered, rather in `publisher#new_page()`.
+-- AtPageShipout
+-- -------------
+-- Run these commands when a page is ready to be put in
+-- the PDF. You can add header/footer. These commands are
+-- not executed when encountered, rather in `publisher#new_page()`.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.atpageshipout( layoutxml,dataxml )
     return layoutxml
 end
 
---- Barcode
---- -------
---- Create a EAN 13 barcode. The width of the barcode depends on the font
---- given in `fontface` (or the default `text`).
+-- Barcode
+-- -------
+-- Create a EAN 13 barcode. The width of the barcode depends on the font
+-- given in `fontface` (or the default `text`).
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.barcode( layoutxml,dataxml )
     if not publisher.pro then
         err("barcodes and qr codes need a pro plan")
@@ -441,9 +493,12 @@ function commands.barcode( layoutxml,dataxml )
     end
 end
 
---- Bold text (`<B>`)
---- -------------------
---- Set the contents of this element in boldface
+-- Bold text (`<B>`)
+-- -------------------
+-- Set the contents of this element in boldface
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.bold( layoutxml,dataxml )
     local p = par:new(nil,"b")
     local tab = publisher.dispatch(layoutxml,dataxml)
@@ -458,18 +513,24 @@ function commands.bold( layoutxml,dataxml )
     return p
 end
 
---- Br
---- ---
---- Insert a newline
+-- Br
+-- ---
+-- Insert a newline
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.br( layoutxml,dataxml )
     local a = par:new(nil,"br")
     a:append("\n",{})
     return a
 end
 
---- Box
---- ----
---- Draw a rectangular filled area
+-- Box
+-- ----
+-- Draw a rectangular filled area
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.box( layoutxml,dataxml )
     local bleed        = publisher.read_attribute(layoutxml,dataxml,"bleed",          "string")
     local border_color = publisher.read_attribute(layoutxml,dataxml,"border-color",   "string")
@@ -619,19 +680,22 @@ function commands.box( layoutxml,dataxml )
     return n
 end
 
---- Bookmark
---- --------
---- PDF bookmarks (for the PDF viewer)
+-- Bookmark
+-- --------
+-- PDF bookmarks (for the PDF viewer)
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.bookmark( layoutxml,dataxml )
-    --- For bookmarks, we need two things:
-    ---
-    --- 1) a destination and
-    --- 2) the bookmark itself that points to the destination.
-    ---
-    --- So we can safely insert the destination in our text flow but save the
-    --- destination code (a number) for later. There is a slight problem now: as
-    --- the text flow is asynchronous, we evaluate the bookmark during page
-    --- ship out. Then we have the correct order (hopefully)
+    -- For bookmarks, we need two things:
+    --
+    -- 1) a destination and
+    -- 2) the bookmark itself that points to the destination.
+    --
+    -- So we can safely insert the destination in our text flow but save the
+    -- destination code (a number) for later. There is a slight problem now: as
+    -- the text flow is asynchronous, we evaluate the bookmark during page
+    -- ship out. Then we have the correct order (hopefully)
     local title  = publisher.read_attribute(layoutxml,dataxml,"select","xpath")
     local level  = publisher.read_attribute(layoutxml,dataxml,"level", "number")
     local open_p = publisher.read_attribute(layoutxml,dataxml,"open",  "boolean")
@@ -649,9 +713,12 @@ function commands.bookmark( layoutxml,dataxml )
     end
 end
 
---- Circle
---- ------
---- Draw a circle or an ellipse
+-- Circle
+-- ------
+-- Draw a circle or an ellipse
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.circle( layoutxml,dataxml )
     local radiusx        = publisher.read_attribute(layoutxml,dataxml,"radiusx", "width_sp")
     local radiusy        = publisher.read_attribute(layoutxml,dataxml,"radiusy", "height_sp", radiusx)
@@ -669,9 +736,12 @@ function commands.circle( layoutxml,dataxml )
     return publisher.circle(radiusx,radiusy,colorname,framecolorname,rulewidth_sp)
 end
 
---- Clearpage
---- ---------
---- Finishes the current page
+-- Clearpage
+-- ---------
+-- Finishes the current page
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.clearpage( layoutxml,dataxml)
     local matter       = publisher.read_attribute(layoutxml,dataxml,"matter","string")
     local pagetype     = publisher.read_attribute(layoutxml,dataxml,"pagetype","string")
@@ -683,9 +753,12 @@ function commands.clearpage( layoutxml,dataxml)
 end
 
 
---- Clip
---- --------------
---- Apply a clip on an object for PlaceObject.
+-- Clip
+-- --------------
+-- Apply a clip on an object for PlaceObject.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.clip( layoutxml,dataxml )
     local clip_top_sp = publisher.read_attribute(layoutxml,dataxml,"top","length_sp", 0)
     local clip_bottom_sp = publisher.read_attribute(layoutxml,dataxml,"bottom","length_sp", 0)
@@ -733,9 +806,12 @@ function commands.clip( layoutxml,dataxml )
     return tab
 end
 
---- Color
---- -----
---- Set the color of the enclosed text.
+-- Color
+-- -----
+-- Set the color of the enclosed text.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.color( layoutxml, dataxml )
     local colorname = publisher.read_attribute(layoutxml,dataxml,"name","string")
     local colorindex = colors_module.get_colorindex_from_name(colorname,"black")
@@ -756,9 +832,12 @@ function commands.color( layoutxml, dataxml )
 end
 
 
---- Column
---- ------
---- Set definitions for a specific column of a table.
+-- Column
+-- ------
+-- Set definitions for a specific column of a table.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.column( layoutxml,dataxml )
     local ret = {}
     ret.minwidth         = publisher.read_attribute(layoutxml,dataxml,"minwidth","width_sp")
@@ -774,23 +853,32 @@ function commands.column( layoutxml,dataxml )
 end
 
 
---- Columns
---- -------
---- Set the width of a table to a fixed size. Expects multiple occurrences of element
---- Column as the child elements.
+-- Columns
+-- -------
+-- Set the width of a table to a fixed size. Expects multiple occurrences of element
+-- Column as the child elements.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.columns( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     return tab
 end
 
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.compatibility( layoutxml,dataxml )
     local movecursoronrightedge = publisher.read_attribute(layoutxml,dataxml,"movecursoronplaceobject", "boolean","yes")
     publisher.compatibility.movecursoronrightedge = movecursoronrightedge
 end
 
---- CopyOf
---- ------
---- Return the contents of a variable. Warning: this function does not actually copy the contents, so the name is a bit misleading.
+-- CopyOf
+-- ------
+-- Return the contents of a variable. Warning: this function does not actually copy the contents, so the name is a bit misleading.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.copy_of( layoutxml,dataxml )
     local selection
     if layoutxml[1] and #layoutxml[1] > 0 then
@@ -828,9 +916,12 @@ function commands.copy_of( layoutxml,dataxml )
     end
 end
 
---- DefineColor
---- -----------
---- Colors can be in model cmyk or rgb.
+-- DefineColor
+-- -----------
+-- Colors can be in model cmyk or rgb.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.define_color( layoutxml,dataxml )
     local name       = publisher.read_attribute(layoutxml,dataxml,"name","string")
     local value      = publisher.read_attribute(layoutxml,dataxml,"value","string")
@@ -921,9 +1012,12 @@ function commands.define_color( layoutxml,dataxml )
 end
 
 
---- DefineColorprofile
---- -----------
---- Associate a name with a color profile.
+-- DefineColorprofile
+-- -----------
+-- Associate a name with a color profile.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.define_colorprofile( layoutxml,dataxml )
     local condition  = publisher.read_attribute(layoutxml,dataxml,"condition", "string", "None")
     local colors     = publisher.read_attribute(layoutxml,dataxml,"colors",    "number" , 4)
@@ -935,9 +1029,12 @@ function commands.define_colorprofile( layoutxml,dataxml )
     spotcolors.register_colorprofile(name,{filename = filename, identifier = identifier, condition = condition, registry = registry, colors = colors, info = info })
 end
 
---- DefineGraphic
---- ------------
---- Define a metapost graphic for later use
+-- DefineGraphic
+-- ------------
+-- Define a metapost graphic for later use
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.define_graphic(layoutxml,dataxml)
     local name = publisher.read_attribute(layoutxml,dataxml,"name","string")
     local code
@@ -950,15 +1047,18 @@ function commands.define_graphic(layoutxml,dataxml)
 end
 
 
---- Define Textformat
---- ----------------
---- A text format defines the alignment and indentation of a paragraph.
----
---- The rules for textformat:
----
---- * if a paragraph has a textformat then use it, end
---- * if the textblock has a textformat then use it, end
---- * use the textformat `text` end
+-- Define Textformat
+-- ----------------
+-- A text format defines the alignment and indentation of a paragraph.
+--
+-- The rules for textformat:
+--
+-- * if a paragraph has a textformat then use it, end
+-- * if the textblock has a textformat then use it, end
+-- * use the textformat `text` end
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.define_textformat(layoutxml,dataxml)
     local alignment    = publisher.read_attribute(layoutxml,dataxml,"alignment",   "string")
     local borderbottom = publisher.read_attribute(layoutxml,dataxml,"border-bottom","string")
@@ -1063,19 +1163,25 @@ function commands.define_textformat(layoutxml,dataxml)
 end
 
 
---- Define FontAlias
---- -----------------
---- Define a font alias.
+-- Define FontAlias
+-- -----------------
+-- Define a font alias.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.define_fontalias( layoutxml,dataxml )
     local existing = publisher.read_attribute(layoutxml,dataxml,"existing", "string" )
     local alias    = publisher.read_attribute(layoutxml,dataxml,"alias",    "string" )
     publisher.fontaliases[alias] = existing
 end
 
---- Define Fontfamily
---- -----------------
---- Define a font family. A font family must consist of a `Regular` shape, optional are `Bold`,
---- `BoldItalic` and `Italic`.
+-- Define Fontfamily
+-- -----------------
+-- Define a font family. A font family must consist of a `Regular` shape, optional are `Bold`,
+-- `BoldItalic` and `Italic`.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.define_fontfamily( layoutxml,dataxml )
     -- fontsize and baselineskip are in dtp points (bp, 1 bp ≈ 65782 sp)
     -- Concrete font instances are created here. fontsize and baselineskip are known
@@ -1128,7 +1234,10 @@ function commands.define_fontfamily( layoutxml,dataxml )
     publisher.define_fontfamily(regular,bold,italic,bolditalic,name,size,baselineskip,scriptsize,supershift,subshift)
 end
 
---- DefineMatter
+-- DefineMatter
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.definematter(layoutxml,dataxml)
     local name       = publisher.read_attribute(layoutxml,dataxml,"name","string")
     local label      = publisher.read_attribute(layoutxml,dataxml,"label","string")
@@ -1138,9 +1247,12 @@ function commands.definematter(layoutxml,dataxml)
     publisher.matters[name] = {label = label, prefix = prefix, resetafter = resetafter, resetbefore = resetbefore }
 end
 
---- Element
---- -------
---- Create an element for use with Attribute and SaveDataset
+-- Element
+-- -------
+-- Create an element for use with Attribute and SaveDataset
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.element( layoutxml,dataxml )
     local name = publisher.read_attribute(layoutxml,dataxml,"name","string")
     local ret = {
@@ -1184,9 +1296,12 @@ function commands.element( layoutxml,dataxml )
 end
 
 
---- FontFace
---- --------
---- Set the font face (family) of the enclosed text.
+-- FontFace
+-- --------
+-- Set the font face (family) of the enclosed text.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.fontface( layoutxml,dataxml )
     local fontfamily   = publisher.read_attribute(layoutxml,dataxml,"fontfamily","string")
     local familynumber = publisher.fonts.lookup_fontfamily_name_number[fontfamily]
@@ -1204,9 +1319,12 @@ function commands.fontface( layoutxml,dataxml )
     end
 end
 
---- ForAll
---- --------
---- Execute the child elements for all elements given by the `select` attribute.
+-- ForAll
+-- --------
+-- Execute the child elements for all elements given by the `select` attribute.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.forall( layoutxml,dataxml )
     local limit = publisher.read_attribute(layoutxml,dataxml,"limit","number")
     local start = publisher.read_attribute(layoutxml,dataxml,"start","number")
@@ -1263,9 +1381,12 @@ function commands.forall( layoutxml,dataxml )
     return tab
 end
 
---- Frame
---- --------------
---- Apply a frame on an object for PlaceObject. Frames can be nested (with Transformation)
+-- Frame
+-- --------------
+-- Apply a frame on an object for PlaceObject. Frames can be nested (with Transformation)
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.frame( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     local b_radius         = publisher.read_attribute(layoutxml,dataxml,"border-radius", "string")
@@ -1329,9 +1450,12 @@ function commands.frame( layoutxml,dataxml )
     return tab
 end
 
---- Function
---- -----
----
+-- Function
+-- -----
+--
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.func(layoutxml, dataxml)
     if not publisher.newxpath then
         main.log("error","For function definitions you need the new XPath parser")
@@ -1400,16 +1524,22 @@ function commands.func(layoutxml, dataxml)
     xpath.registerFunction({functionname,ns,fn,#params,#params})
 end
 
---- Param
---- -----
----
+-- Param
+-- -----
+--
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.param(layoutxml, dataxml)
     local name = publisher.read_attribute(layoutxml, dataxml, "name", "string")
     return name
 end
---- Grid
---- -----
---- Set the grid in a group (also in a pagetype?)
+-- Grid
+-- -----
+-- Set the grid in a group (also in a pagetype?)
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.grid( layoutxml,dataxml )
     local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
     local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --PG
@@ -1422,9 +1552,12 @@ function commands.grid( layoutxml,dataxml )
     return { width = width, height = height, nx = tonumber(nx), ny = tonumber(ny), dx = dx, dy = dy , layoutxml = layoutxml, dataxml = dataxml }
 end
 
---- Group
---- -----
---- Create a virtual area
+-- Group
+-- -----
+-- Create a virtual area
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.group( layoutxml,dataxml )
     local elementname
     local grid
@@ -1482,9 +1615,12 @@ function commands.group( layoutxml,dataxml )
     publisher.current_grid = save_grid
 end
 
---- Groupcontents
---- -----
---- Insert the contents of a virtual area into a table cell.
+-- Groupcontents
+-- -----
+-- Insert the contents of a virtual area into a table cell.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.groupcontents( layoutxml,dataxml )
     local name = publisher.read_attribute(layoutxml,dataxml,"name", "string")
     local g = publisher.groups[name]
@@ -1495,11 +1631,14 @@ function commands.groupcontents( layoutxml,dataxml )
     return {node.copy(g.contents)}
 end
 
---- HTML
---- ------
---- Collect paragraphs to insert into the text stream (Textblock/Text).
---- When used directly in Output, implements pull-interface with incremental element parsing
---- to ensure correct position tracking for tables.
+-- HTML
+-- ------
+-- Collect paragraphs to insert into the text stream (Textblock/Text).
+-- When used directly in Output, implements pull-interface with incremental element parsing
+-- to ensure correct position tracking for tables.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.html( layoutxml,dataxml)
     local selection = publisher.read_attribute(layoutxml,dataxml,"select", "xpathraw")
     local expand_text = publisher.read_attribute(layoutxml,dataxml,"expand-text", "string", "no")
@@ -2152,9 +2291,12 @@ function commands.html( layoutxml,dataxml)
 end
 
 
---- HSpace
---- ------
---- Create a horizontal space that stretches up to infinity
+-- HSpace
+-- ------
+-- Create a horizontal space that stretches up to infinity
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.hspace( layoutxml,dataxml )
     local width      = publisher.read_attribute(layoutxml,dataxml,"width", "length_sp")
     local minwidth   = publisher.read_attribute(layoutxml,dataxml,"minwidth", "length_sp")
@@ -2202,10 +2344,13 @@ function commands.hspace( layoutxml,dataxml )
     return a
 end
 
---- Hyphenation
---- -----------
---- The contents of this element must be a string such as `hy-phen-ation`.
+-- Hyphenation
+-- -----------
+-- The contents of this element must be a string such as `hy-phen-ation`.
 -- FIXME: allow language attribute.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.hyphenation( layoutxml,dataxml )
     local languagename = publisher.read_attribute(layoutxml,dataxml,"language","string")
     local languagecode
@@ -2219,9 +2364,12 @@ function commands.hyphenation( layoutxml,dataxml )
     lang.hyphenation(l.l,layoutxml[1])
 end
 
---- Include
---- -------
---- Dummy element for use in files that are included by the `xi:include` instruction.
+-- Include
+-- -------
+-- Dummy element for use in files that are included by the `xi:include` instruction.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.include( layoutxml,dataxml )
     return publisher.dispatch(layoutxml,dataxml)
 end
@@ -2235,9 +2383,12 @@ local box_lookup = {
 }
 
 
---- Image
---- -----
---- Load an image from a file. To be used in a table cell and PlaceObject.
+-- Image
+-- -----
+-- Load an image from a file. To be used in a table cell and PlaceObject.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.image( layoutxml,dataxml )
     local bleed        = publisher.read_attribute(layoutxml,dataxml,"bleed" ,      "string")
     local class        = publisher.read_attribute(layoutxml,dataxml,"class",       "string")
@@ -2621,9 +2772,12 @@ function commands.image( layoutxml,dataxml )
     return {box,imageinfo.allocate}
 end
 
---- Initial
---- -------
---- Insert a decorated letter (or more than one) at the beginning of the paragraph.
+-- Initial
+-- -------
+-- Insert a decorated letter (or more than one) at the beginning of the paragraph.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.initial( layoutxml,dataxml)
     local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",        "string")
     local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",     "string")
@@ -2682,9 +2836,12 @@ function commands.initial( layoutxml,dataxml)
     return box
 end
 
---- InsertPages
---- -----------
---- Insert previously saved pages with SavePages
+-- InsertPages
+-- -----------
+-- Insert previously saved pages with SavePages
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.insert_pages( layoutxml,dataxml )
     local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","string")
     local pages          = publisher.read_attribute(layoutxml,dataxml,"pages","number")
@@ -2701,9 +2858,9 @@ function commands.insert_pages( layoutxml,dataxml )
         main.log("info","InsertPages forward mode","pages",pages,"insert at page",current_pagenumber)
         local savenextpage = publisher.nextpage
         publisher.nextpage = nil
-        --- If we insert before the first page, we don't need to to anything.
-        --- Otherwise finish the current page.
-        --- This duplicates code in publisher#initialize_luatex_and_generate_pdf
+        -- If we insert before the first page, we don't need to to anything.
+        -- Otherwise finish the current page.
+        -- This duplicates code in publisher#initialize_luatex_and_generate_pdf
         if publisher.page_initialized_p(current_pagenumber) and current_pagenumber > 1 then
             publisher.dothingsbeforeoutput(thispage,dataxml)
             local n = node.vpack(publisher.pages[current_pagenumber].pagebox)
@@ -2738,9 +2895,12 @@ function commands.insert_pages( layoutxml,dataxml )
 end
 
 
---- Italic text (`<I>`)
---- -------------------
---- Set the contents of this element in italic text
+-- Italic text (`<I>`)
+-- -------------------
+-- Set the contents of this element in italic text
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.italic( layoutxml,dataxml )
     local p = par:new(nil,"I")
     local tab = publisher.dispatch(layoutxml,dataxml)
@@ -2751,9 +2911,12 @@ function commands.italic( layoutxml,dataxml )
     return p
 end
 
---- List item (`<Li>`)
---- ------------------
---- An entry of an ordered or unordered list.
+-- List item (`<Li>`)
+-- ------------------
+-- An entry of an ordered or unordered list.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.li(layoutxml,dataxml )
     local p = par:new(nil,"li")
     local tab = publisher.dispatch(layoutxml,dataxml)
@@ -2765,10 +2928,13 @@ function commands.li(layoutxml,dataxml )
 end
 
 
---- Load Fontfile
---- -------------
---- Load a given font file (`name`).
---- Actually the font file is not loaded yet, only stored in a table. See `publisher.font#load_fontfile()`.
+-- Load Fontfile
+-- -------------
+-- Load a given font file (`name`).
+-- Actually the font file is not loaded yet, only stored in a table. See `publisher.font#load_fontfile()`.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.load_fontfile( layoutxml,dataxml )
     local features         = publisher.read_attribute(layoutxml,dataxml,"features",        "string")
     local filename         = publisher.read_attribute(layoutxml,dataxml,"filename",        "string")
@@ -2893,10 +3059,13 @@ function commands.load_fontfile( layoutxml,dataxml )
     publisher.fonts.load_fontfile(name,filename,extra_parameter)
 end
 
---- Load Dataset
---- ------------
---- Load a data file (XML) and start processing its contents by calling the `Record`
---- elements in the layout file.
+-- Load Dataset
+-- ------------
+-- Load a data file (XML) and start processing its contents by calling the `Record`
+-- elements in the layout file.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.load_dataset( layoutxml,dataxml )
     local path
     local filename = publisher.read_attribute(layoutxml,dataxml,"filename", "string")
@@ -2946,11 +3115,14 @@ function commands.load_dataset( layoutxml,dataxml )
 end
 
 
---- Loop
---- ----
---- Repeat the contents several times (given by the attribute select). If the attribute
---- `variable` is given, store the current loop value there, if not, it is stored
---- in the variable `_loopcounter`.
+-- Loop
+-- ----
+-- Repeat the contents several times (given by the attribute select). If the attribute
+-- `variable` is given, store the current loop value there, if not, it is stored
+-- in the variable `_loopcounter`.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.loop( layoutxml, dataxml )
     local num
     if publisher.newxpath then
@@ -2987,10 +3159,13 @@ function commands.loop( layoutxml, dataxml )
     return ret
 end
 
---- Empty line
---- ----------
---- Create an empty row in the layout. Set the cursor to the next free line and
---- let an empty row between.
+-- Empty line
+-- ----------
+-- Create an empty row in the layout. Set the cursor to the next free line and
+-- let an empty row between.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.emptyline( layoutxml,dataxml )
     warning("EmptyLine is deprecated since 2.7.4. Use NextRow instead.")
     local areaname = publisher.read_attribute(layoutxml,dataxml,"area","string")
@@ -3005,9 +3180,12 @@ function commands.emptyline( layoutxml,dataxml )
     current_grid:set_current_column(1)
 end
 
---- Makeindex
---- ---------
---- Generate an index from data
+-- Makeindex
+-- ---------
+-- Generate an index from data
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.makeindex( layoutxml,dataxml )
     local selection, selectstring
     if publisher.newxpath then
@@ -3078,9 +3256,12 @@ function commands.makeindex( layoutxml,dataxml )
 end
 
 
---- Margin
---- ------
---- Set margin for this page.
+-- Margin
+-- ------
+-- Set margin for this page.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.margin( layoutxml,dataxml )
     local left   = publisher.read_attribute(layoutxml,dataxml,"left", "length_sp")
     local right  = publisher.read_attribute(layoutxml,dataxml,"right","length_sp")
@@ -3103,9 +3284,12 @@ function commands.margin( layoutxml,dataxml )
     end
 end
 
---- Mark
---- ----
---- Set an invisible marker into the output (whatsit/user_defined)
+-- Mark
+-- ----
+-- Set an invisible marker into the output (whatsit/user_defined)
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.mark( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     local append    = publisher.read_attribute(layoutxml,dataxml,"append","boolean")
@@ -3128,9 +3312,12 @@ function commands.mark( layoutxml,dataxml )
     end
 end
 
---- Message
---- -------
---- Write a message to the terminal
+-- Message
+-- -------
+-- Write a message to the terminal
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.message( layoutxml, dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","string")
     local errcond   = publisher.read_attribute(layoutxml,dataxml,"error", "boolean",false)
@@ -3211,17 +3398,23 @@ function commands.message( layoutxml, dataxml )
     end
 end
 
---- NextFrame
---- ---------
---- Switch to the next frame of the given positioning area.
+-- NextFrame
+-- ---------
+-- Switch to the next frame of the given positioning area.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.next_frame( layoutxml,dataxml )
     local areaname = publisher.read_attribute(layoutxml,dataxml,"area","string")
     publisher.next_area(areaname,nil, dataxml,"cmd next_frame")
 end
 
---- Next Row
---- --------
---- Go to the next row in the current area.
+-- Next Row
+-- --------
+-- Go to the next row in the current area.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.next_row( layoutxml,dataxml )
     publisher.setup_page(nil,"commands#next_row",dataxml)
     local rownumber = publisher.read_attribute(layoutxml,dataxml,"row", "string")
@@ -3255,9 +3448,12 @@ function commands.next_row( layoutxml,dataxml )
     publisher.next_row(rownumber,areaname,rows,dataxml)
 end
 
---- NewPage
---- -------
---- Create a new page. Run the hooks in AtPageShipout.
+-- NewPage
+-- -------
+-- Create a new page. Run the hooks in AtPageShipout.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.new_page( layoutxml,dataxml )
     local pagetype     = publisher.read_attribute(layoutxml,dataxml,"pagetype","string")
     local skippagetype = publisher.read_attribute(layoutxml,dataxml,"skippagetype","string")
@@ -3284,9 +3480,12 @@ function commands.new_page( layoutxml,dataxml )
     end
 end
 
---- NoBreak
---- -------
---- Don't allow a line break of the contents. Reduce font size if necessary
+-- NoBreak
+-- -------
+-- Don't allow a line break of the contents. Reduce font size if necessary
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.nobreak( layoutxml, dataxml )
     local fontname         = publisher.read_attribute(layoutxml,dataxml,"fontface",   "string")
     local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce",     "string", "keeptogether")
@@ -3441,9 +3640,12 @@ function commands.nobreak( layoutxml, dataxml )
 end
 
 
---- Ordered list (`<Ol>`)
---- ------------------
---- A list with numbers
+-- Ordered list (`<Ol>`)
+-- ------------------
+-- A list with numbers
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.ol(layoutxml,dataxml )
     local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily","string")
     local fontfamily
@@ -3472,9 +3674,12 @@ function commands.ol(layoutxml,dataxml )
 end
 
 
---- Options
---- -------
---- This is a top-level element in the layout definition file. It saves the options such as `trim` and `mainlanguage`.
+-- Options
+-- -------
+-- This is a top-level element in the layout definition file. It saves the options such as `trim` and `mainlanguage`.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.options( layoutxml,dataxml )
     -- deprecated:
     publisher.options.showhyphenation    = publisher.read_attribute(layoutxml,dataxml,"show-hyphenation","boolean")
@@ -3587,28 +3792,31 @@ function commands.options( layoutxml,dataxml )
     publisher.options.namespaces = ns
 end
 
---- Output
---- ------
---- This command is able to produce multi-area contents by pulling from the underlying command.
---- That means the children (currently only `<Text>`) must implement a function called `pull()`
---- taking two arguments: 1) parameters, 2) state. Parameters is a table with the following layout:
----
----     parameters = {
----         area = area,
----         maxheight = maxht,
----         width = wd,
----         balance = true/false,
----         current_grid = current_grid,
----         allocate = allocate,
----     }
---- The state is just a table that is empty in the beginning and re-passed into `pull()`
---- every time there is output left over.
----
---- The function `pull()` must return three values:
----
----  1. `obj`: The vbox that should be placed in the pdf at the current position
----  1. `state`: The table that is passed to the next iteration of `pull()`
----  1. `more_to_follow`: boolean which indicates that there is output left for the next area
+-- Output
+-- ------
+-- This command is able to produce multi-area contents by pulling from the underlying command.
+-- That means the children (currently only `<Text>`) must implement a function called `pull()`
+-- taking two arguments: 1) parameters, 2) state. Parameters is a table with the following layout:
+--
+--     parameters = {
+--         area = area,
+--         maxheight = maxht,
+--         width = wd,
+--         balance = true/false,
+--         current_grid = current_grid,
+--         allocate = allocate,
+--     }
+-- The state is just a table that is empty in the beginning and re-passed into `pull()`
+-- every time there is output left over.
+--
+-- The function `pull()` must return three values:
+--
+--  1. `obj`: The vbox that should be placed in the pdf at the current position
+--  1. `state`: The table that is passed to the next iteration of `pull()`
+--  1. `more_to_follow`: boolean which indicates that there is output left for the next area
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.output( layoutxml,dataxml )
     publisher.setup_page(nil,"commands#output",dataxml)
     local area     = publisher.read_attribute(layoutxml,dataxml,"area","string")
@@ -3793,9 +4001,12 @@ function commands.output( layoutxml,dataxml )
     end
 end
 
---- Overlay
---- -------
---- Stacks things (like images, barcode, etc) on top of each other
+-- Overlay
+-- -------
+-- Stacks things (like images, barcode, etc) on top of each other
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.overlay( layoutxml, dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     local box
@@ -3815,9 +4026,13 @@ function commands.overlay( layoutxml, dataxml )
     return box
 end
 
---- PageFormat
---- ----------
---- Set the dimensions of the page
+-- PageFormat
+-- ----------
+-- Set the dimensions of the page.
+---@param layoutxml table
+---@param dataxml table
+---@param options? table
+---@return any
 function commands.page_format(layoutxml,dataxml,options)
     local width  = publisher.read_attribute(layoutxml,dataxml,"width","length")
     local height = publisher.read_attribute(layoutxml,dataxml,"height","length")
@@ -3836,9 +4051,12 @@ function commands.page_format(layoutxml,dataxml,options)
     publisher.options.default_pageheight = ht_sp
 end
 
---- PageType
---- --------
---- This command should be probably called master page or something similar.
+-- PageType
+-- --------
+-- This command should be probably called master page or something similar.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.pagetype(layoutxml,dataxml)
     local columnordering = publisher.read_attribute(layoutxml,dataxml,"columnordering","string")
     local test           = publisher.read_attribute(layoutxml,dataxml,"test","string")
@@ -3873,11 +4091,15 @@ function commands.pagetype(layoutxml,dataxml)
     publisher.masterpages[#publisher.masterpages + 1] = { is_pagetype = test, res = tmp_tab, name = pagetypename,ns=layoutxml[".__ns"]}
 end
 
---- Paragraph
---- ---------
---- A paragraph is just a bunch of text that is not yet typeset.
---- It can have a font face, color,... but these can be also given
---- On the surrounding element (`Textblock`).
+-- Paragraph
+-- ---------
+-- A paragraph is just a bunch of text that is not yet typeset.
+-- It can have a font face, color,... but these can be also given
+-- On the surrounding element (`Textblock`).
+---@param layoutxml table
+---@param dataxml table
+---@param textblockoptions? table Style overrides inherited from the surrounding `<Textblock>`.
+---@return any
 function commands.paragraph( layoutxml, dataxml,textblockoptions )
     textblockoptions = textblockoptions or {}
     local allowbreak        = publisher.read_attribute(layoutxml,dataxml,"allowbreak",         "string")
@@ -4070,9 +4292,12 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     return p
 end
 
---- PDFOptions
---- ------------
---- Sets number of copies and such. See #57
+-- PDFOptions
+-- ------------
+-- Sets number of copies and such. See #57
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.pdfoptions( layoutxml, dataxml )
     local author                = publisher.read_attribute(layoutxml,dataxml,"author",                "string")
     local colorprofile          = publisher.read_attribute(layoutxml,dataxml,"colorprofile",          "string")
@@ -4206,10 +4431,13 @@ function commands.pdfoptions( layoutxml, dataxml )
     end
 end
 
---- PlaceObject
---- -----------
---- Emit a rectangular object. The object can be
---- one of `Textblock`, `Table`, `Image`, `Box` or `Rule`.
+-- PlaceObject
+-- -----------
+-- Emit a rectangular object. The object can be
+-- one of `Textblock`, `Table`, `Image`, `Box` or `Rule`.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.place_object( layoutxml,dataxml)
     local absolute_positioning = false
     local column           = publisher.read_attribute(layoutxml,dataxml,"column",         "string")
@@ -4675,12 +4903,15 @@ function commands.place_object( layoutxml,dataxml)
     end
 end
 
---- ProcessNode
---- -----------
---- Call the given (in attribute `select`) names of elements in the data file.
---- The optional attribute `mode` must match, if given. Since the attribute `select` is a fixed
---- string, this function is rather stupid but nevertheless currently the main
---- function for processing data.
+-- ProcessNode
+-- -----------
+-- Call the given (in attribute `select`) names of elements in the data file.
+-- The optional attribute `mode` must match, if given. Since the attribute `select` is a fixed
+-- string, this function is rather stupid but nevertheless currently the main
+-- function for processing data.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.process_node(layoutxml,dataxml)
     local copysequence
     if publisher.newxpath then
@@ -4753,7 +4984,7 @@ function commands.process_node(layoutxml,dataxml)
             pos = pos + 1
         end
     end
-    --- Now restore the value for the parent element
+    -- Now restore the value for the parent element
     if publisher.newxpath then
         dataxml.sequence = copysequence
         dataxml.pos = current_position
@@ -4764,9 +4995,12 @@ function commands.process_node(layoutxml,dataxml)
 
 end
 
---- Position
---- -------
---- Used from Overlay to stack one thing on top of the first element of Overlay
+-- Position
+-- -------
+-- Used from Overlay to stack one thing on top of the first element of Overlay
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.position( layoutxml, dataxml )
     local x = publisher.read_attribute(layoutxml,dataxml,"x","number")
     local y = publisher.read_attribute(layoutxml,dataxml,"y","number")
@@ -4780,9 +5014,12 @@ function commands.position( layoutxml, dataxml )
 end
 
 
---- PositioningFrame
---- ----------------
---- Define a rectangular area on the page where content gets placed.
+-- PositioningFrame
+-- ----------------
+-- Define a rectangular area on the page where content gets placed.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.positioning_frame( layoutxml, dataxml )
     local column = publisher.read_attribute(layoutxml,dataxml,"column","number")
     local row    = publisher.read_attribute(layoutxml,dataxml,"row" ,"number")
@@ -4810,9 +5047,12 @@ function commands.positioning_frame( layoutxml, dataxml )
     }
 end
 
---- PositioningArea
---- ----------------
---- Contains one or more positioning frames.
+-- PositioningArea
+-- ----------------
+-- Contains one or more positioning frames.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.positioning_area( layoutxml,dataxml )
     -- Warning: if we call publisher.dispatch now, the xpath functions
     -- might depend on values on the _current_ page, which is not set!
@@ -4829,17 +5069,24 @@ function commands.positioning_area( layoutxml,dataxml )
 end
 
 
---- Section
---- -------
---- Grouping element for organizing layout instructions. Has no effect on execution.
+-- Section
+-- -------
+-- Grouping element for organizing layout instructions. Has no effect on execution.
+---@param layoutxml table
+---@param dataxml table
+---@param opts? table Forwarded to children.
+---@return any
 function commands.section( layoutxml,dataxml,opts )
     return publisher.dispatch(layoutxml,dataxml,opts)
 end
 
---- Record
---- ------
---- Matches an element name of the data file. To be called from ProcessNodes.
---- Supports both element="..." (exact name, fast lookup) and match="..." (pattern matching).
+-- Record
+-- ------
+-- Matches an element name of the data file. To be called from ProcessNodes.
+-- Supports both element="..." (exact name, fast lookup) and match="..." (pattern matching).
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.record( layoutxml,dataxml )
     local elementname, match, mode
     if publisher.newxpath then
@@ -4903,9 +5150,12 @@ function commands.record( layoutxml,dataxml )
 end
 
 
---- Rule
---- -----
---- Draw a horizontal or vertical rule
+-- Rule
+-- -----
+-- Draw a horizontal or vertical rule
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.rule( layoutxml,dataxml )
     local direction     = publisher.read_attribute(layoutxml,dataxml,"direction",  "string")
     local length        = publisher.read_attribute(layoutxml,dataxml,"length",     "string")
@@ -4968,9 +5218,12 @@ function commands.rule( layoutxml,dataxml )
     return n
 end
 
---- SaveDataset
---- -----------
---- Write a Lua table representing an XML file to the disk. See `#load_dataset` for the opposite.
+-- SaveDataset
+-- -----------
+-- Write a Lua table representing an XML file to the disk. See `#load_dataset` for the opposite.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.save_dataset( layoutxml,dataxml )
     local towrite, tmp,tab
     -- filename is obsolete, LoadDataset has "name" too. And it is actually not a filename, just part
@@ -5026,24 +5279,24 @@ function commands.save_dataset( layoutxml,dataxml )
         end
     end
 
-    --- tmp has now this structure:
-    ---    tmp = {
-    ---      [1] = {
-    ---        [".__parent"] =
-    ---        [".__local_name"] = "bar"
-    ---        ["att1"] = "1"
-    ---      },
-    ---      [2] = {
-    ---        [".__parent"] =
-    ---        [".__local_name"] = "bar"
-    ---        ["att2"] = "2"
-    ---      },
-    ---      [3] = {
-    ---        [".__parent"] =
-    ---        [".__local_name"] = "bar"
-    ---        ["att3"] = "3"
-    ---      },
-    ---    },
+    -- tmp has now this structure:
+    --    tmp = {
+    --      [1] = {
+    --        [".__parent"] =
+    --        [".__local_name"] = "bar"
+    --        ["att1"] = "1"
+    --      },
+    --      [2] = {
+    --        [".__parent"] =
+    --        [".__local_name"] = "bar"
+    --        ["att2"] = "2"
+    --      },
+    --      [3] = {
+    --        [".__parent"] =
+    --        [".__local_name"] = "bar"
+    --        ["att3"] = "3"
+    --      },
+    --    },
     tmp[".__local_name"] = elementname
     local full_filename = tex.jobname .. "-" .. name .. ".xml"
     local file = io.open(full_filename,"wb")
@@ -5056,9 +5309,12 @@ function commands.save_dataset( layoutxml,dataxml )
     file:close()
 end
 
---- SavePages
---- ---------
---- Save pages for later restore
+-- SavePages
+-- ---------
+-- Save pages for later restore
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.save_pages( layoutxml,dataxml )
     local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","string")
 
@@ -5128,9 +5384,12 @@ function commands.save_pages( layoutxml,dataxml )
     end
 end
 
---- SetGrid
---- -------
---- Set the grid to the given values.
+-- SetGrid
+-- -------
+-- Set the grid to the given values.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.set_grid(layoutxml,dataxml)
     local wd = publisher.read_attribute(layoutxml,dataxml,"width", "string")
     local ht = publisher.read_attribute(layoutxml,dataxml,"height","string")
@@ -5176,17 +5435,23 @@ function commands.set_grid(layoutxml,dataxml)
 end
 
 
---- Sequence
---- --------
---- Get parts of the data. Can be stored in a variable. Obsolete, can be removed (2.9.3).
+-- Sequence
+-- --------
+-- Get parts of the data. Can be stored in a variable. Obsolete, can be removed (2.9.3).
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.sequence( layoutxml,dataxml )
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
     return selection
 end
 
---- SetVariable
---- -----------
---- Assign a value to a variable.
+-- SetVariable
+-- -----------
+-- Assign a value to a variable.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.setvariable( layoutxml,dataxml )
     local trace_p   = publisher.options.showassignments or publisher.read_attribute(layoutxml,dataxml,"trace","boolean")
     local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
@@ -5363,9 +5628,12 @@ function commands.setvariable( layoutxml,dataxml )
     end
 end
 
---- SortSequence
---- ------------
---- Sort a sequence.
+-- SortSequence
+-- ------------
+-- Sort a sequence.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.sort_sequence( layoutxml,dataxml )
     local selection        = publisher.read_attribute(layoutxml,dataxml,"select","string")
     local removeduplicates = publisher.read_attribute(layoutxml,dataxml,"removeduplicates","string")
@@ -5442,9 +5710,12 @@ function commands.sort_sequence( layoutxml,dataxml )
 end
 
 
---- Span
---- ---------
---- Surround text by some style like underline or (background-)color
+-- Span
+-- ---------
+-- Surround text by some style like underline or (background-)color
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.span( layoutxml,dataxml )
     local backgroundcolor    = publisher.read_attribute(layoutxml,dataxml,"background-color",         "string")
     local bg_padding_top     = publisher.read_attribute(layoutxml,dataxml,"background-padding-top",   "length_sp")
@@ -5514,6 +5785,9 @@ function commands.span( layoutxml,dataxml )
 end
 
 
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.structureelement( layoutxml,dataxml )
     local analyzeStructureElement
     analyzeStructureElement = function (lx,parenttable)
@@ -5548,9 +5822,12 @@ function commands.structureelement( layoutxml,dataxml )
     analyzeStructureElement(layoutxml,nil)
 end
 
---- Stylesheet
---- ----------
---- Load a CSS file or read the command's value.
+-- Stylesheet
+-- ----------
+-- Load a CSS file or read the command's value.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.stylesheet( layoutxml,dataxml )
     local filename = publisher.read_attribute(layoutxml,dataxml,"filename","string")
     if filename then
@@ -5567,9 +5844,12 @@ function commands.stylesheet( layoutxml,dataxml )
     end
 end
 
---- Sub
---- ---
---- Subscript. The contents of this element should be written in subscript (smaller, lower)
+-- Sub
+-- ---
+-- Subscript. The contents of this element should be written in subscript (smaller, lower)
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.sub( layoutxml,dataxml )
     local p = par:new(nil,"sub")
     local tab = publisher.dispatch(layoutxml,dataxml)
@@ -5580,9 +5860,12 @@ function commands.sub( layoutxml,dataxml )
     return p
 end
 
---- Sup
---- ---
---- Superscript. The contents of this element should be written in superscript (smaller, higher)
+-- Sup
+-- ---
+-- Superscript. The contents of this element should be written in superscript (smaller, higher)
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.sup( layoutxml,dataxml )
     local p = par:new(nil,"sup")
     local tab = publisher.dispatch(layoutxml,dataxml)
@@ -5593,9 +5876,12 @@ function commands.sup( layoutxml,dataxml )
     return p
 end
 
---- Switch
---- ------
---- A case / switch instruction. Can be used on any level.
+-- Switch
+-- ------
+-- A case / switch instruction. Can be used on any level.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.switch( layoutxml,dataxml )
     local case_matched = false
     local otherwise,ret,elementname
@@ -5632,9 +5918,13 @@ function commands.switch( layoutxml,dataxml )
 end
 
 
---- Table
---- -----
---- Typesets tabular material. Mostly like an HTML table.
+-- Table
+-- -----
+-- Typesets tabular material. Mostly like an HTML table.
+---@param layoutxml table
+---@param dataxml table
+---@param options? table Per-call overrides (used when called from `<Textblock>`).
+---@return any
 function commands.table( layoutxml,dataxml,options )
     local autostretch    = publisher.read_attribute(layoutxml,dataxml,"stretch",         "string")
     local balance        = publisher.read_attribute(layoutxml,dataxml,"balance",         "boolean", false)
@@ -5784,9 +6074,12 @@ function commands.table( layoutxml,dataxml,options )
     return n
 end
 
---- Tablefoot
---- ---------
---- The foot gets repeated on every page.
+-- Tablefoot
+-- ---------
+-- The foot gets repeated on every page.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.tablefoot( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     local page = publisher.read_attribute(layoutxml,dataxml,"page","string","all")
@@ -5796,9 +6089,12 @@ function commands.tablefoot( layoutxml,dataxml )
     return tab
 end
 
---- Tablehead
---- ---------
---- The foot gets repeated on every page.
+-- Tablehead
+-- ---------
+-- The foot gets repeated on every page.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.tablehead( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     local page = publisher.read_attribute(layoutxml,dataxml,"page","string","all")
@@ -5808,16 +6104,22 @@ function commands.tablehead( layoutxml,dataxml )
     return tab
 end
 
---- TableNewPage
---- ---------
---- Page break inside a table
+-- TableNewPage
+-- ---------
+-- Page break inside a table
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.talbenewpage( layoutxml, dataxml )
     return {}
 end
 
---- Tablerule
---- ---------
---- A horizontal rule that is placed between two rows.
+-- Tablerule
+-- ---------
+-- A horizontal rule that is placed between two rows.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.tablerule( layoutxml,dataxml )
     local class     = publisher.read_attribute(layoutxml,dataxml,"class","string")
     local id        = publisher.read_attribute(layoutxml,dataxml,"id",   "string")
@@ -5854,9 +6156,12 @@ function commands.tablerule( layoutxml,dataxml )
     return { rulewidth = rulewidth, color = color, start = start, breakbelow = tab["break-below"] }
 end
 
---- Tr
---- ----
---- A table row. Consists of several Td's
+-- Tr
+-- ----
+-- A table row. Consists of several Td's
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.tr( layoutxml,dataxml )
     local tab = {}
     local tab_tmp = publisher.dispatch(layoutxml,dataxml)
@@ -5935,9 +6240,12 @@ function commands.tr( layoutxml,dataxml )
     return tab
 end
 
---- Transformation
---- --------------
---- Apply a transformation on an object for PlaceObject. Transformations can be nested.
+-- Transformation
+-- --------------
+-- Apply a transformation on an object for PlaceObject. Transformations can be nested.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.transformation( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     local matrix   = publisher.read_attribute(layoutxml,dataxml,"matrix",  "string")
@@ -5997,9 +6305,12 @@ function commands.transformation( layoutxml,dataxml )
     return tab
 end
 
---- Td
---- -----
---- A table cell. Can have anything in it that is a horizontal box.
+-- Td
+-- -----
+-- A table cell. Can have anything in it that is a horizontal box.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.td( layoutxml,dataxml )
     local tab = publisher.dispatch(layoutxml,dataxml)
     local parent    = publisher.read_attribute(layoutxml,dataxml,"parent", "string")
@@ -6106,9 +6417,12 @@ function commands.td( layoutxml,dataxml )
     return tab
 end
 
---- Trace
---- -----
---- Set various tracing options
+-- Trace
+-- -----
+-- Set various tracing options
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.trace(layoutxml,dataxml)
     local assignments      = publisher.read_attribute(layoutxml,dataxml,"assignments",   "boolean")
     local debug            = publisher.read_attribute(layoutxml,dataxml,"debug",         "boolean")
@@ -6166,9 +6480,12 @@ function commands.trace(layoutxml,dataxml)
     end
 end
 
---- Text
---- ----
---- Text is currently the only function / command that implements the pull-interface defined by output.
+-- Text
+-- ----
+-- Text is currently the only function / command that implements the pull-interface defined by output.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.text(layoutxml,dataxml)
     local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",      "string", "black")
     local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",   "string")
@@ -6311,9 +6628,12 @@ function commands.text(layoutxml,dataxml)
    return tab
 end
 
---- Textblock
---- ---------
---- A rectangular block of text. Return a vertical nodelist.
+-- Textblock
+-- ---------
+-- A rectangular block of text. Return a vertical nodelist.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.textblock( layoutxml,dataxml )
     local fontfamily
     local angle          = publisher.read_attribute(layoutxml,dataxml,"angle",         "number")
@@ -6481,7 +6801,7 @@ function commands.textblock( layoutxml,dataxml )
         nodes[1] = publisher.add_rule(nil,"head",vrule,"empty textblock")
     end
 
-    --- Multi column typesetting
+    -- Multi column typesetting
     if columns > 1 then
         local rows = {}
         local number_of_rows = 0
@@ -6543,10 +6863,13 @@ function commands.textblock( layoutxml,dataxml )
     return nodelist
 end
 
---- Underline
---- ---------
---- Underline text. This is done by setting the `att_underline` attribute and in the "finalizer"
---- drawing a line underneath the text.
+-- Underline
+-- ---------
+-- Underline text. This is done by setting the `att_underline` attribute and in the "finalizer"
+-- drawing a line underneath the text.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.underline( layoutxml,dataxml )
     local dashed = publisher.read_attribute(layoutxml,dataxml,"dashed", "boolean")
     local class  = publisher.read_attribute(layoutxml,dataxml,"class",  "string")
@@ -6571,9 +6894,12 @@ function commands.underline( layoutxml,dataxml )
     return p
 end
 
---- Unordered list (`<Ul>`)
---- ------------------
---- A list with bullet points.
+-- Unordered list (`<Ul>`)
+-- ------------------
+-- A list with bullet points.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.ul(layoutxml,dataxml )
     local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily","string")
     local fontfamily
@@ -6603,9 +6929,12 @@ function commands.ul(layoutxml,dataxml )
 end
 
 
---- Until
---- -----
---- A repeat .. until loop. Use the condition in `test` to determine if the loop should exit
+-- Until
+-- -----
+-- A repeat .. until loop. Use the condition in `test` to determine if the loop should exit
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.until_do( layoutxml,dataxml )
     local test = publisher.read_attribute(layoutxml,dataxml,"test","string")
     assert(test)
@@ -6628,9 +6957,12 @@ function commands.until_do( layoutxml,dataxml )
 end
 
 
---- URL
---- ---
---- Format the current URL. It should make the URL active.
+-- URL
+-- ---
+-- Format the current URL. It should make the URL active.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.url(layoutxml,dataxml)
     local a = par:new(nil,"URL")
     local strings = {}
@@ -6648,9 +6980,12 @@ function commands.url(layoutxml,dataxml)
 end
 
 
---- Value
---- -----
---- Get the value of an xpath expression (attribute `select`) or of the literal string.
+-- Value
+-- -----
+-- Get the value of an xpath expression (attribute `select`) or of the literal string.
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.value( layoutxml,dataxml )
     local selection
     if publisher.newxpath then
@@ -6696,9 +7031,12 @@ function commands.value( layoutxml,dataxml )
     return tab
 end
 
---- VSpace
---- ------
---- Create a vertical space that stretches up to infinity
+-- VSpace
+-- ------
+-- Create a vertical space that stretches up to infinity
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.vspace( layoutxml,dataxml )
     local height      = publisher.read_attribute(layoutxml,dataxml,"height", "height_sp")
     local minheight   = publisher.read_attribute(layoutxml,dataxml,"minheight", "height_sp")
@@ -6715,9 +7053,12 @@ function commands.vspace( layoutxml,dataxml )
 end
 
 
---- While
---- -----
---- A while loop. Use the condition in `test` to determine if the loop should be entered
+-- While
+-- -----
+-- A while loop. Use the condition in `test` to determine if the loop should be entered
+---@param layoutxml table
+---@param dataxml table
+---@return any
 function commands.while_do( layoutxml,dataxml )
     local test = publisher.read_attribute(layoutxml,dataxml,"test","string")
     assert(test)

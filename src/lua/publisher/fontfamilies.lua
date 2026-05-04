@@ -1,4 +1,4 @@
---- Font family definitions.
+-- Font family definitions.
 --
 --  fontfamilies.lua
 --  speedata publisher
@@ -8,11 +8,35 @@
 
 file_start("fontfamilies.lua")
 
+---@class fontfamilies_module
 local M = {}
 
 local fonts = require("publisher.fonts")
 
--- resolve all font aliases
+---@class FontFamily
+---@field size integer Font size in scaled points.
+---@field baselineskip integer Baseline skip in scaled points.
+---@field scriptsize integer Subscript/superscript size in sp.
+---@field supershift integer Superscript baseline shift in sp.
+---@field subshift integer Subscript baseline shift in sp.
+---@field name string Family name.
+---@field normal? integer LuaTeX font instance id for the regular face.
+---@field normalscript? integer Font instance id for the regular face at script size.
+---@field bold? integer
+---@field boldscript? integer
+---@field italic? integer
+---@field italicscript? integer
+---@field bolditalic? integer
+---@field bolditalicscript? integer
+---@field fontfaceregular? string Source font name for the regular face.
+---@field fontfacebold? string
+---@field fontfaceitalic? string
+---@field fontfacebolditalic? string
+
+-- Resolves a font name through `publisher.fontaliases` until it points at a
+-- concrete font face (or hits a name that is not aliased).
+---@param fontname string?
+---@return string? resolved
 function M.get_fontname(fontname)
     if not fontname then return nil end
     local result = fontname
@@ -26,6 +50,22 @@ function M.get_fontname(fontname)
     return result
 end
 
+-- Defines a new font family with the four standard faces and registers it
+-- in `fonts.lookup_fontfamily_*`. Missing faces are simply omitted from the
+-- resulting `FontFamily`. Each provided face additionally gets a script-size
+-- instance for sub/superscripts.
+---@param regular string? Regular face source name.
+---@param bold string? Bold face source name.
+---@param italic string? Italic face source name.
+---@param bolditalic string? Bold italic face source name.
+---@param name string Family name (key for lookup).
+---@param size integer Font size in scaled points.
+---@param baselineskip integer Baseline skip in scaled points.
+---@param scriptsize? integer Defaults to `round(size * 0.8)`.
+---@param supershift? integer Defaults to `round(size * 0.3)`.
+---@param subshift? integer Defaults to `round(size * 0.3)`.
+---@return integer|false fontnumber Family number on success; `false` on failure.
+---@return string? errmsg Error message when a face cannot be instantiated.
 function M.define_fontfamily( regular, bold, italic, bolditalic, name, size, baselineskip, scriptsize, supershift, subshift)
     if not size then
         main.log("error","DefineFontfamily needs size value")
@@ -104,9 +144,10 @@ function M.define_fontfamily( regular, bold, italic, bolditalic, name, size, bas
     return fontnumber
 end
 
---- Called once from `dothings()` during startup. Defines a family
---- with regular, bold, italic and bolditalic font with size 10pt
---- (we always measure font size in DTP points).
+-- Called once from `dothings()` during startup. Defines the default `text`
+-- family at 10pt (TeX Gyre Heros) and registers the standard sans/serif/
+-- monospace aliases used by HTML/CSS rendering.
+---@return nil
 function M.define_default_fontfamily()
     M.define_fontfamily(
         "TeXGyreHeros-Regular",

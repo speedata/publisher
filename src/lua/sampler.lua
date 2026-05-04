@@ -8,15 +8,23 @@
 --   sampler.stop()
 --   sampler.report("profile.txt")
 
+---@class sampler_module
 local sampler = {}
 
+---@type table<string, integer>
 local samples_by_func = {}
+---@type table<string, integer>
 local samples_by_line = {}
+---@type integer
 local total_samples = 0
+---@type number
 local start_time
 
 local getinfo = debug.getinfo
 
+-- Debug hook installed by `start`: bumps the per-function and per-line
+-- sample counters for the function currently on the stack.
+---@return nil
 local function hook()
     local info = getinfo(2, "Sln")
     if not info then return end
@@ -33,6 +41,10 @@ local function hook()
     total_samples = total_samples + 1
 end
 
+-- Starts sampling: installs the debug hook to fire every `interval` VM
+-- instructions and resets the counters.
+---@param interval? integer VM instructions between samples (default 10000).
+---@return nil
 function sampler.start(interval)
     interval = interval or 10000
     samples_by_func = {}
@@ -42,11 +54,16 @@ function sampler.start(interval)
     debug.sethook(hook, "", interval)
 end
 
+-- Stops sampling and returns the elapsed wall-clock time in seconds.
+---@return number elapsed
 function sampler.stop()
     debug.sethook()
     return os.clock() - start_time
 end
 
+-- Returns the entries of `tbl` as an array sorted by descending count.
+---@param tbl table<string, integer>
+---@return { key: string, count: integer }[]
 local function sorted_entries(tbl)
     local entries = {}
     for k, v in pairs(tbl) do
@@ -56,6 +73,11 @@ local function sorted_entries(tbl)
     return entries
 end
 
+-- Writes a human-readable profile report (top functions and top lines)
+-- to `filename`.
+---@param filename? string Output file path; defaults to `"profile.txt"`.
+---@param limit? integer Maximum entries per section; defaults to 40.
+---@return nil
 function sampler.report(filename, limit)
     limit = limit or 40
     filename = filename or "profile.txt"

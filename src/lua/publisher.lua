@@ -1,6 +1,6 @@
---- Here goes everything that does not belong anywhere else. Other parts are font handling, the command
---- list, page and grid setup, debugging and initialization. We start with the function publisher#dothings that
---- initializes some variables and starts processing (publisher#dispatch())
+-- Here goes everything that does not belong anywhere else. Other parts are font handling, the command
+-- list, page and grid setup, debugging and initialization. We start with the function publisher#dothings that
+-- initializes some variables and starts processing (publisher#dispatch())
 --
 --  publisher.lua
 --  speedata publisher
@@ -44,6 +44,7 @@ uuid.randomseed(tex.randomseed)
 
 env_publisherversion = os.getenv("PUBLISHERVERSION")
 
+---@class publisher
 local M = _G.publisher or {}
 _G.publisher = M
 local _ENV = setmetatable(M, {__index = _G}) -- luacheck: ignore _ENV
@@ -65,42 +66,61 @@ end
 -- so that node.copy_list copies the node properties
 node.set_properties_mode(true)
 
---- One big point (DTP point, PostScript point) is approx. 65781 scaled points.
+-- One big point (DTP point, PostScript point) is approx. 65781 scaled points.
+---@type integer
 factor = 65781
 -- factor = 65781.7
 
 -- no more than this number of frames is allowed on a page
+---@type integer
 maxframes = 999
 
+---@type integer
 tenpoint_sp    = tex.sp("10pt")
+---@type integer
 twelvepoint_sp = tex.sp("12pt")
+---@type integer
 tenmm_sp       = tex.sp("10mm")
+---@type integer
 onemm_sp       = tex.sp("1mm")
+---@type integer
 onein_sp       = tex.sp("1in")
+---@type integer
 onept_sp       = tex.sp("1pt")
+---@type integer
 onepc_sp       = tex.sp("1pc")
+---@type integer
 onepp_sp       = tex.sp("1pp")
+---@type integer
 onedd_sp       = tex.sp("1dd")
+---@type integer
 onecc_sp       = tex.sp("1cc")
+---@type integer
 onecm_sp       = tenmm_sp
 
 -- User has a pro plan
+---@type boolean
 pro = false
 
+---@type boolean
 has_pro_error = false
 
---- Attributes
---- ----------
---- Attributes are attached to nodes, so we can store information that are not present in the
---- nodes themselves or are evaluated later on (such as font selection - when generating glyph
---- nodes, we don't yet know what font the user will use).
----
---- Attributes may have any number, they just need to be constant across the whole source.
---- The attributes value must also be a number.
+-- Attributes
+-- ----------
+-- Attributes are attached to nodes, so we can store information that are not present in the
+-- nodes themselves or are evaluated later on (such as font selection - when generating glyph
+-- nodes, we don't yet know what font the user will use).
+--
+-- Attributes may have any number, they just need to be constant across the whole source.
+-- The attributes value must also be a number.
 
---- Instead of storing strings we store indexes to strings based on the attributes table.
---- Note: there are also properties in LuaTeX which are much more flexible, we use the old mechanism
---- because in disc nodes, the attributes are inherited (as far as I can see).
+-- Instead of storing strings we store indexes to strings based on the attributes table.
+-- Note: there are also properties in LuaTeX which are much more flexible, we use the old mechanism
+-- because in disc nodes, the attributes are inherited (as far as I can see).
+---
+-- Maps an attribute name to either `true` (any value allowed) or to an
+-- array of allowed string values (e.g. `{"italic","oblique"}`).
+---@type table<string, true|string[]>
 attributes = {
     ["background-color"] = true,
     ["bgpaddingbottom"] = true,
@@ -131,7 +151,9 @@ attributes = {
     ["vertical-align"] = {"baseline","top","middle","bottom","sub","super"},
 }
 
+---@type table<string, integer>
 attribute_name_number = {}
+---@type table<integer, string>
 attribute_number_name = {}
 do
     local c = 1
@@ -150,15 +172,15 @@ end
 
 att_rows           = 98 -- see text formats for details
 
---- These attributes are for image shifting. The amount of shift up/left can
---- be negative and is counted in scaled points.
+-- These attributes are for image shifting. The amount of shift up/left can
+-- be negative and is counted in scaled points.
 att_shift_left     = 100
 att_shift_up       = 101
 
---- A tie glue (U+00A0) is a non-breaking space
+-- A tie glue (U+00A0) is a non-breaking space
 att_tie_glue       = 201
 
---- These attributes are used in tabular material
+-- These attributes are used in tabular material
 att_space_prio     = 300
 att_space_amount   = 301
 
@@ -177,9 +199,9 @@ att_margin_bottom = 451
 
 att_break_before = 452
 
---- `att_is_table_row` is used in `tabular.lua` and if set to 1, it denotes
---- a regular table row, and not a spacer. Spacers must not appear
---- at the top or the bottom of a table, unless forced to.
+-- `att_is_table_row` is used in `tabular.lua` and if set to 1, it denotes
+-- a regular table row, and not a spacer. Spacers must not appear
+-- at the top or the bottom of a table, unless forced to.
 att_is_table_row    = 500
 att_tr_dynamic_data = 501
 
@@ -243,64 +265,115 @@ for k,v in pairs(node.whatsits()) do
 end
 
 -- sd:alternating
+---@type table<string, any[]>
 alternating = {}
+---@type table<string, integer>
 alternating_value = {}
 
 
 -- the return value for the LuaTeX process
+---@type integer
 errorcode = 0
 
 -- sp --mode foo sets modes.foo = true
+---@type table<string, boolean>
 modes = {}
 
 -- page numbers go from 1 to n. If reordering is necessary, we insert
 -- a different index into the pagenum_tbl.
 -- A value of {1,2,6,7,3,4,5} means place page 1 on position one, page 2 on
 -- position two, page 6 on position three and so on
+---@type integer[]
 pagenum_tbl = {}
+---@type table<string, table>
 forward_pagestore = {}
+---@type integer
 total_inserted_pages = 0
 
--- pagelabel contains information about a page with the following structure (see shipout() and get_page_labels_str() )
--- pagelabels[pagenumber] = { pagenumber = pagenumber, matter = cp.matter }
+---@class Pagelabel
+---@field pagenumber integer User-visible page number.
+---@field matter string Name of the matter this page belongs to (key in `matters`).
+
+-- pagelabel contains information about a page (see shipout() and get_page_labels_str() ).
+-- Indexed by real page number.
+---@type table<integer, Pagelabel>
 pagelabels = {}
 
--- An array of strings - a mapping of real page numbers and user visible pagenumbers
+-- An array of strings - a mapping of real page numbers and user visible pagenumbers.
+---@type string[]
 visible_pagenumbers = {}
 
 
+---@class Matter
+---@field label string Numbering style, e.g. `"decimal"`, `"lowercase-romannumeral"`.
+---@field resetafter? boolean Reset the page counter after this matter ends.
+---@field resetbefore? boolean Reset the page counter before this matter starts.
+---@field prefix? string String prepended to the formatted page number.
+
+---@type table<string, Matter>
 matters = { mainmatter = { label = "decimal", resetafter = false, resetbefore = true, prefix = "" },
             frontmatter = { label = "lowercase-romannumeral"}
 }
 
+---@type string
 default_areaname = "_page"
+---@type string
 default_area     = "_page"
 
 -- The name of the next requested page
+---@type string?
 nextpage = nil
 
 -- The document language
+---@type integer
 defaultlanguage = 0
 
 -- Start page
+---@type integer
 current_pagenumber = 1
 
 -- Expected number of pages (from previous run's aux file), nil if unknown
+---@type integer?
 expected_pages = nil
 
 -- Previous run duration in seconds (from status file), nil if unknown
+---@type number?
 previous_duration = nil
 
+---@type table<integer, table>
 pages = {}
 
 -- page n shipped out to PDF?
+---@type table<integer, boolean>
 pages_shippedout = {}
 
 
 -- CSS properties. Use `:matches(tbl)` to find a matching rule. `tbl` has the following structure: `{element=..., id=..., class=... }`
 css = do_luafile("css.lua"):new()
 
+---@class Options
+---@field resetmarks boolean
+---@field imagenotfounderror boolean Raise an error when an image cannot be found.
+---@field gridwidth integer Grid cell width in scaled points.
+---@field gridheight integer Grid cell height in scaled points.
+---@field gridcells_x integer Number of grid cells horizontally (0 = auto).
+---@field gridcells_y integer Number of grid cells vertically (0 = auto).
+---@field reportmissingglyphs boolean
+---@field gridlocation "background"|"foreground"|"none" Where the debug grid is drawn.
+---@field fontloader "harfbuzz"|"fontforge" Backend used to load fonts.
+---@field xmlparser "lua"|"go"|"lxpath" XML parser used for input data and layout.
+---@field hyperlinkborderwidth integer Border width for hyperlink annotations, in sp.
+---@field namespaces "lax"|"strict" XML namespace handling mode.
+---@field tablerulefix boolean
+---@field markdownextensions table<string, any>
+---@field default_pagewidth? integer Default page width in scaled points.
+---@field default_pageheight? integer Default page height in scaled points.
+---@field hidespinfo? string|boolean
+---
+-- Further fields are populated from the layout instructions XML at runtime.
+
 -- The defaults (set in the layout instructions file)
+---@type Options
 options = {
     resetmarks  = false,
     imagenotfounderror = true,
@@ -318,8 +391,11 @@ options = {
     markdownextensions = {},
 }
 
+---@type string
 current_layout_line = ""
+---@type string
 current_layout_file = ""
+---@type string
 current_data_line = ""
 
 if newxpath then
@@ -328,22 +404,35 @@ else
     options.xmlparser = "lua"
 end
 
+---@class Group
+---@field contents node Head of the node list that holds the group's content.
+---@field grid table Grid associated with the group.
+
 -- List of virtual areas. Key is the group name and value is
 -- a hash with keys contents (a nodelist) and grid (grid).
+---@type table<string, Group>
 groups    = {}
 
 -- sometimes we want to save pages for later reuse. Keys are pagestore names
+---@type table<string, table>
 pagestore = {}
 
+---@class Compatibility
+---@field movecursoronrightedge boolean
+
 -- See commands.compatibility
+---@type Compatibility
 compatibility = {
     movecursoronrightedge = true,
 }
 
 -- for external image conversion software
+---@type table<string, function>
 imagehandler = {}
+---@type table<string, function>
 resizehandler = {}
 
+---@type table<string, any>
 viewerpreferences = {}
 
 -- Hyperlinks are stored in publisher.links (links_module) to be inserted later
@@ -352,31 +441,54 @@ links_module.reset()
 
 -- marker counter. Each mark will get its unique counter, so we can determine the
 -- order in which markers appear.
+---@type integer
 markercount = 0
+---@type table<string, integer>
 marker_min = {}
+---@type table<string, integer>
 marker_max = {}
+---@type table<string, any>
 marker_id_value = {}
 
 -- metapost graphics. Keys are name and values are "beginfig(1)...." texts.
+---@type table<string, string>
 metapostgraphics = {}
+---@type table<string, string>
 metapostcolors = {}
+---@type table<string, string>
 metapostvariables = {}
+---@type table<string, boolean>
 metapostcolorwarnings = {}
 
 -- The current foreground color (used in underline)
+---@type string?
 current_fgcolor = nil
 
 -- The color stack to use
+---@type integer
 defaultcolorstack = 0
 
+---@type table<string, function>
 data_dispatcher = {}
+---@type table<string, string>
 data_dispatcher_patterns = {}
+---@type { last: integer, [string]: function }
 user_defined_functions = { last = 0}
 
+---@type table<string, any>
 markers = {}
 
 -- PDF/UA - the /S /Document StructElem
 local ktree = pdf.reserveobj()
+
+---@class StructElement
+---@field obj string PDF object id of the structure element.
+---@field role string PDF/UA role (e.g. `"Document"`, `"P"`, `"Figure"`).
+---@field added_tables? table<string, string> Auxiliary lookup of already-added child tables.
+---@field bbox? string[] Bounding box as `{llx, lly, urx, ury}` strings.
+---@field page? string Page number (as a string) the element appears on.
+---@field text? string Alternative text / contents.
+---@field [integer] StructElement|string Child structure elements or marked content references.
 
 -- This is a sample data structure in the structElements table:
 -- ["doc"] = {
@@ -404,18 +516,30 @@ local ktree = pdf.reserveobj()
         -- ["role"] = "P"
         -- [1] = "1"
     -- },
+---@type table<string, StructElement>
 structElements = {}
 
 -- We will have to remember the current group and grid
+---@type string?
 current_group = nil
+---@type table?
 current_grid = nil
 
 -- paragraph, table and textblock should set them
+---@type integer
 current_fontfamily = 0
 
+---@type table<string, string>
 fontaliases = {}
 
+---@class FontGroupVariant
+---@field regular table<string, string> Mapping of source kind (e.g. `"local"`) to font name.
+---@field bold table<string, string>
+---@field italic table<string, string>
+---@field bolditalic table<string, string>
+
 -- for HTML / CSS fontfamilies
+---@type table<string, FontGroupVariant>
 fontgroup = {
      ["sans-serif"] = { regular={["local"] = "sans"}, bold={["local"]="sans-bold"}, italic={["local"]="sans-italic"}, bolditalic={["local"]="sans-bolditalic"} },
      ["serif"] = { regular={["local"] = "serif"}, bold={["local"]="serif-bold"}, italic={["local"]="serif-italic"}, bolditalic={["local"]="serif-bolditalic"} },
@@ -423,23 +547,42 @@ fontgroup = {
 }
 
 -- Used when bookmarks are inserted in a non-text context
+---@type integer
 intextblockcontext = 0
 
--- The array 'masterpages' has tables similar to these:
--- { is_pagetype = test, res = tab, name = name_of_page_type }
--- where `is_pagetype` is an xpath expression to be evaluated,
--- `res` is a table with layoutxml instructions
--- `name` is a string.
+---@class Masterpage
+---@field is_pagetype string XPath expression evaluated to decide if this masterpage applies.
+---@field res table Layout XML instructions for this masterpage.
+---@field name string Name of the masterpage.
+
+---@type Masterpage[]
 masterpages = {}
 
 
 -- if true, look for lowercase files
+---@type boolean
 lowercase = false
 
---- Text formats is a hash with arbitrary names as keys and the values
---- are tables with alignment and indent. indent is the amount of
---- indentation in sp. alignment is one of "leftaligned", "rightaligned",
---- "centered", "justified", "start" and "end".
+---@alias TextformatAlignment
+---| "leftaligned"
+---| "rightaligned"
+---| "centered"
+---| "justified"
+---| "start"
+---| "end"
+
+---@class Textformat
+---@field indent integer Indentation in scaled points (sp).
+---@field alignment TextformatAlignment
+---@field rows? integer Number of rows that the format applies to.
+---@field orphan? integer Minimum lines kept at the bottom of a page when breaking.
+---@field widow? integer Minimum lines kept at the top of a page when breaking.
+---@field name? string Name of the textformat (matches the table key).
+
+-- Text formats is a hash with arbitrary names as keys and the values
+-- are tables with alignment and indent. indent is the amount of
+-- indentation in sp.
+---@type table<string, Textformat>
 textformats = {
 
     text           = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2, name = "text"},
@@ -455,31 +598,40 @@ textformats = {
 }
 
 
---- The bookmarks table has the format
----
----     bookmarks = {
----       { --- first bookmark
----         name = "outline 1" destination = "..." open = true,
----          { name = "outline 1.1", destination = "..." },
----          { name = "outline 1.2", destination = "..." }
----       },
----       { -- second bookmark
----         name = "outline 2" destination = "..." open = false,
----          { name = "outline 2.1", destination = "..." },
----          { name = "outline 2.2", destination = "..." }
----
----       }
----     }
+---@class Bookmark
+---@field name string Title text of the bookmark.
+---@field destination string Destination identifier (anchor name in the PDF).
+---@field open? boolean Whether sub-bookmarks are visible by default.
+---@field [integer] Bookmark Nested child bookmarks.
+
+-- The bookmarks table has the format
+--
+--     bookmarks = {
+--       { -- first bookmark
+--         name = "outline 1" destination = "..." open = true,
+--          { name = "outline 1.1", destination = "..." },
+--          { name = "outline 1.2", destination = "..." }
+--       },
+--       { -- second bookmark
+--         name = "outline 2" destination = "..." open = false,
+--          { name = "outline 2.1", destination = "..." },
+--          { name = "outline 2.2", destination = "..." }
+--
+--       }
+--     }
+---@type Bookmark[]
 bookmarks = {}
 
 
---- We need the separator for writing files in a directory structure (image cache for now)
+-- We need the separator for writing files in a directory structure (image cache for now)
+---@type string
 os_separator = "/"
 if os.type == "windows" then
     os_separator = "\\"
 end
 
 -- A very large length
+---@type integer
 maxdimen = 1073741823
 
 
@@ -487,15 +639,26 @@ maxdimen = 1073741823
 -- layout. For example you want to insert a glyph id 467, then you can write
 -- &#1100467; in the layout xml. Let me not make this public until I proof that
 -- it works.
+---@type integer
 puastart = 1100000
 
 -- It's convenient to just copy the stretching glue instead of writing
 -- the stretch etc. over and over again.
+---@type node
 glue_stretch2 = set_glue(nil, { stretch = 2^16, stretch_order = 2 })
 
 -- For attached files. Each of this numbers should appear in the catalog
+---@type integer[]
 filespecnumbers = {}
 
+-- Returns six values (alternating key/value pairs) describing the current
+-- layout/data location, or `nil` when the legacy xpath parser is active.
+---@return string? line_layout_label
+---@return string? line_layout_value
+---@return string? file_label
+---@return string? file_value
+---@return string? line_data_label
+---@return string? line_data_value
 function M.lineinfo()
     if newxpath then
         return "line_layout", current_layout_line, "file", current_layout_file, "line_data" , current_data_line
@@ -505,6 +668,7 @@ function M.lineinfo()
 end
 
 
+---@type string[]
 roles_a = {
     "Art",
     "Artifact",
@@ -531,16 +695,18 @@ roles_a = {
     "TR",
 }
 -- unique id for roles
+---@type integer
 rolecounter = 0
 
 
---- Start the processing (`dothings()`)
---- -------------------------------
---- This is the entry point of the processing. It is called from publisher.spinit#main_loop.
+-- Start the processing (`dothings()`)
+-- -------------------------------
+-- This is the entry point of the processing. It is called from publisher.spinit#main_loop.
+---@return nil
 function dothings()
     log("Running LuaTeX version %s on %s",luatex_version,os.name)
-    --- First we set some defaults.
-    --- A4 paper is 210x297 mm
+    -- First we set some defaults.
+    -- A4 paper is 210x297 mm
     local wd_sp = tex.sp("210mm")
     local ht_sp = tex.sp("297mm")
     set_pageformat(wd_sp,ht_sp)
@@ -551,9 +717,9 @@ function dothings()
 
     lowercase = os.getenv("SP_IGNORECASE") == "1"
     local extra_parameter = { otfeatures = { kern = true, liga = false } }
-    --- The free font family `TeXGyreHeros` is a Helvetica clone and is part of the
-    --- [The TeX Gyre Collection of Fonts](http://www.gust.org.pl/projects/e-foundry/tex-gyre).
-    --- We ship it in the distribution.
+    -- The free font family `TeXGyreHeros` is a Helvetica clone and is part of the
+    -- [The TeX Gyre Collection of Fonts](http://www.gust.org.pl/projects/e-foundry/tex-gyre).
+    -- We ship it in the distribution.
     fonts.load_fontfile("TeXGyreHeros-Regular",   "texgyreheros-regular.otf",extra_parameter)
     fonts.load_fontfile("TeXGyreHeros-Bold",      "texgyreheros-bold.otf",extra_parameter)
     fonts.load_fontfile("TeXGyreHeros-Italic",    "texgyreheros-italic.otf",extra_parameter)
@@ -570,7 +736,7 @@ function dothings()
     fonts.load_fontfile("CamingoCode-Italic","CamingoCode-Italic.ttf",extra_parameter)
     fonts.load_fontfile("CamingoCode-BoldItalic","CamingoCode-BoldItalic.ttf",extra_parameter)
 
-    --- Define a basic font family with name `text`:
+    -- Define a basic font family with name `text`:
     define_default_fontfamily()
 
     local _sampler
@@ -596,10 +762,18 @@ function dothings()
     end
 end
 
+-- Extracts the extension from a filename, e.g. `"foo.png"` → `"png"`.
+-- Returns `nil` if there is no dot in the name.
+---@param fn string
+---@return string?
 function get_extension(fn)
     return fn:match("^.+%.(.+)$")
 end
 
+-- Registers a `find_image_file` callback that maps `extension → handler` based
+-- on a `;`-separated string, e.g. `"svg:rsvg;eps:gs"`.
+---@param extensionhandler string? `ext1:handler1;ext2:handler2;...`
+---@return nil
 function define_image_callback( extensionhandler )
     local extensions = {}
     local ext,handler
@@ -610,6 +784,8 @@ function define_image_callback( extensionhandler )
         end
     end
 
+    ---@param asked_name string
+    ---@return string? file Resolved file path (after optional conversion), or `nil`.
     local function find_image_file( asked_name )
         local file = kpse.find_file(asked_name)
         local ext = get_extension(asked_name)
@@ -624,6 +800,7 @@ function define_image_callback( extensionhandler )
     callback.register('find_image_file',find_image_file)
 end
 
+---@type table<integer, table>
 borderattributes = {}
 do
     -- the idea of flatten_boxes is to return an array that only has
@@ -634,6 +811,14 @@ do
     -- Margin settings should go from <div> to the <p> (from Box to Par) so we can
     -- leave out the div stuff.
     local prependbox
+
+    -- Recursively flattens a tree of Box objects (similar to HTML `<div>`s)
+    -- and Par objects (similar to `<p>`s) into a flat array of Par objects,
+    -- propagating margin/padding/border settings down to the actual paragraphs.
+    ---@param box table Mixed tree of Box and Par objects.
+    ---@param parameter? table Inherited parameters (currently `indent`).
+    ---@param ret? table Accumulator for the flat result; created if absent.
+    ---@return table ret Array of Par objects.
     function flatten_boxes(box,parameter,ret)
         ret = ret or {}
         parameter = parameter or {}
@@ -738,6 +923,7 @@ end
 -- When not in server mode, we initialize LuaTeX in such a way that
 -- it has defaults, loads a layout file and a data file and
 -- executes them both
+---@return nil
 function initialize_luatex_and_generate_pdf()
     if os.getenv("SP_VERBOSITY") == nil then
         options.verbosity = 0
@@ -746,10 +932,10 @@ function initialize_luatex_and_generate_pdf()
     end
 
     options.mpcolorwarning = true
-    --- The default page type has 1cm margin
+    -- The default page type has 1cm margin
     masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(page) page.grid:set_margin(tenmm_sp,tenmm_sp,tenmm_sp,tenmm_sp) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
 
-    --- The `vars` file hold a lua document holding table
+    -- The `vars` file hold a lua document holding table
     local vars
     local varsfun = loadfile(tex.jobname .. ".vars")
     if varsfun then vars = varsfun() else err("Could not load .vars file. Something strange is happening.") vars = {} end
@@ -768,7 +954,7 @@ function initialize_luatex_and_generate_pdf()
         end
     end
 
-    --- Both the data and the layout instructions are written in XML.
+    -- Both the data and the layout instructions are written in XML.
     local layoutxml = load_xml(arg[2],"layout instructions")
     if not layoutxml then
         err("Without a valid layout-XML file, I can't really do anything.")
@@ -777,14 +963,14 @@ function initialize_luatex_and_generate_pdf()
     if newxpath then
         layoutxml = layoutxml[1] -- skip document
     end
-    --- Used in `xpath.lua` to find out which language the function is in.
+    -- Used in `xpath.lua` to find out which language the function is in.
     local ns = layoutxml[".__namespace"]
     if not ns then
         err("Cannot find the namespace of the layout file. What should I do?")
         exit()
     end
 
-    --- The currently active layout language. One of `de` or `en`.
+    -- The currently active layout language. One of `de` or `en`.
     local current_layoutlanguage = string.gsub(ns,"urn:speedata.de:2009/publisher/","")
     if not (current_layoutlanguage=='de' or current_layoutlanguage=='en') then
         err("Cannot determine the language of the layout file.")
@@ -966,7 +1152,7 @@ function initialize_luatex_and_generate_pdf()
     GS_State_OP_On  = pdf.immediateobj([[<< /Type/ExtGState /OP true /OPM 1 >>]])
     GS_State_OP_Off = pdf.immediateobj([[<< /Type/ExtGState /OP false >>]])
 
-    --- override options set in the `<Options>` element
+    -- override options set in the `<Options>` element
     for i=4,#arg do
         local k,v = arg[i]:match("^(.+)=(.+)$")
         if k ~= "mode" then -- mode handled before loading layout
@@ -1027,7 +1213,7 @@ function initialize_luatex_and_generate_pdf()
 
     define_image_callback(options.extensionhandler or "")
 
-    --- Set the starting page (which must be a number)
+    -- Set the starting page (which must be a number)
     if options.startpage then
         local num = options.startpage
         if num then
@@ -1161,7 +1347,7 @@ function initialize_luatex_and_generate_pdf()
     -- That means the table entries are either strings or child elements.
     -- Attributes are table keys and metadata is stored as ".__" plus the metadata.
 
-    --- Start data processing in the default mode (`""`)
+    -- Start data processing in the default mode (`""`)
     local name, tmp
     if newxpath then
         local seq, msg
@@ -1193,7 +1379,7 @@ function initialize_luatex_and_generate_pdf()
         xpath.set_variable("__position", 1)
     end
 
-    --- The rare case that the user has not any `Record` commands in the layout file:
+    -- The rare case that the user has not any `Record` commands in the layout file:
     if not data_dispatcher[""] and not data_dispatcher_patterns[""] then
         main.log("error","Can't find any “Record” commands in the layout file.")
         exit()
@@ -1227,7 +1413,7 @@ function initialize_luatex_and_generate_pdf()
     end
 
 
-    --- emit last page if necessary
+    -- emit last page if necessary
     -- current_pagestore_name is set when in SavePages and nil otherwise
     if page_initialized_p(current_pagenumber) and current_pagestore_name == nil then
         dothingsbeforeoutput(pages[current_pagenumber],data)
@@ -1239,8 +1425,8 @@ function initialize_luatex_and_generate_pdf()
         lastpage = lastpage - 1
     end
 
-    --- At this point, all pages are in the PDF
-    --- We are not at the end of the processing. Let's write the PDF information and status files.
+    -- At this point, all pages are in the PDF
+    -- We are not at the end of the processing. Let's write the PDF information and status files.
     local pdfcatalog = {}
     if sp_suppressinfo then
         pdf.settrailerid(" [ <FA052949448907805BA83C1E78896398> <FA052949448907805BA83C1E78896398> ]")
@@ -1441,7 +1627,7 @@ function initialize_luatex_and_generate_pdf()
         pdf.info = info
     end
 
-    --- Now put the bookmarks in the pdf
+    -- Now put the bookmarks in the pdf
     for _,v in ipairs(bookmarks) do
         bookmarkstotex(v)
     end
@@ -1479,6 +1665,7 @@ end
 -- entry in the pagelabels table for referencing.
 -- This is called at the end, when writing a dictionary
 
+---@type table<integer, integer>
 struct_root_numtree = {}
 
 local ntmetafunctostring = function(tbl)
@@ -1496,6 +1683,13 @@ do
     local objcount
     local structelementobjects
 
+    -- Walks a node list, collects PDF/UA structure entries from `att_role`
+    -- attributes and node properties, and links them into the `structElements`
+    -- tree. Recurses into hlists/vlists.
+    ---@param nodelist node Head of the node list to scan.
+    ---@param parenttree integer PDF object number of the parent tree.
+    ---@param page integer PDF page object number for the current page.
+    ---@param curid? string Current parent role id used when nodes don't carry one.
     function find_role_attributes( nodelist,parenttree, page, curid )
         local head = nodelist
         while head do
@@ -1630,7 +1824,11 @@ do
         end
     end
 
-    -- called once for each page
+    -- called once for each page.
+    -- Resets the per-page state, then scans the node list for role attributes
+    -- and registers the resulting struct elements in the page's structparents.
+    ---@param nodelist node Head of the page's node list.
+    ---@param page table Current page table; receives `structparents`.
     function insert_struct_elements( nodelist,page )
         -- structelementobjects contains struct tree object numbers for this page.
         structelementobjects = {}
@@ -1652,6 +1850,11 @@ end
 -- annotate_nodelist is used for tooltips when debugging text formats.
 do
     local annotcount = 0
+
+    -- Adds a `pdf_annot` whatsit at the head of the node list that shows a
+    -- tooltip with the given text — used for debugging text formats.
+    ---@param nodelist node Head of the node list to attach the annotation to.
+    ---@param text string Tooltip text.
     function annotate_nodelist(nodelist,text)
         text = text:gsub(" ","\\040")
         local annot = node.new(whatsit_node,"pdf_annot")
@@ -1667,11 +1870,18 @@ do
 end
 
 -- skippages are set in commands.new_page if openon="..."
+---@type integer?
 skippages = nil
 
--- Draw a box with HTML properties given at head
--- The `height_sp` parameter is recomputed from `properties.lineheight`
--- below; the caller's value is intentionally ignored.
+-- Draw a box with HTML properties given at head.
+-- The `height_sp` parameter is recomputed from `properties.lineheight` below;
+-- the caller's value is intentionally ignored.
+---@param dirmode "horizontal"|"vertical" Layout direction of the surrounding context.
+---@param head node Head of the content node list; carries the box properties.
+---@param width_sp integer Box width in scaled points.
+---@param height_sp integer Box height in sp (recomputed inside, ignored).
+---@param depth_sp integer Box depth in sp.
+---@return node? hbox_or_vbox Packaged hbox or vbox; `nil` on internal error.
 -- luacheck: push ignore height_sp
 function htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
     local debug_htmlbox = 0
@@ -1682,34 +1892,46 @@ function htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
     end
     local rules = {}
     rules[#rules + 1] = "q"
-    --- We start with 4 trapezoids (1 for each border). Later on clip paths are added.
-    ---
-    ---      4    4------------------------------3   3  y0
-    ---      |\    \                            /   /|
-    ---      | \    \                          /   / |
-    ---      |  \    \                        /   /  |
-    ---      |   \    \                      /   /   |
-    ---      |    \    \                    /   /    |
-    ---      |     3    1------------------2   4     |  y1
-    ---      |     |                           |     |
-    ---      |     |                           |     |
-    ---      |     |                           |     |
-    ---      |     |                           |     |
-    ---      |     |                           |     |
-    ---      |    2    4--------------------3   1    |  y2
-    ---      |   /    /                      \   \   |
-    ---      |  /    /                        \   \  |
-    ---      | /    /                          \   \ |
-    ---      |/    /                            \   \|
-    ---      1    /                              \   2  y3
-    ---          1--------------------------------2
-    ---      x0      x1                       x2     x3
-    ---
-    --- Baseline is at 0
-    --- depth is negative downwards
-    --- height is positive upwards
+    -- We start with 4 trapezoids (1 for each border). Later on clip paths are added.
+    --
+    --      4    4------------------------------3   3  y0
+    --      |\    \                            /   /|
+    --      | \    \                          /   / |
+    --      |  \    \                        /   /  |
+    --      |   \    \                      /   /   |
+    --      |    \    \                    /   /    |
+    --      |     3    1------------------2   4     |  y1
+    --      |     |                           |     |
+    --      |     |                           |     |
+    --      |     |                           |     |
+    --      |     |                           |     |
+    --      |     |                           |     |
+    --      |    2    4--------------------3   1    |  y2
+    --      |   /    /                      \   \   |
+    --      |  /    /                        \   \  |
+    --      | /    /                          \   \ |
+    --      |/    /                            \   \|
+    --      1    /                              \   2  y3
+    --          1--------------------------------2
+    --      x0      x1                       x2     x3
+    --
+    -- Baseline is at 0
+    -- depth is negative downwards
+    -- height is positive upwards
     local colorstring
 
+    -- Builds a PDF content-stream fragment that strokes/fills a quadrilateral
+    -- with corners (x1,y1)..(x4,y4). Coordinates are in scaled points and
+    -- converted to bp internally.
+    ---@param x1 integer
+    ---@param y1 integer
+    ---@param x2 integer
+    ---@param y2 integer
+    ---@param x3 integer
+    ---@param y3 integer
+    ---@param x4 integer
+    ---@param y4 integer
+    ---@return string
     local function get_rule(x1, y1, x2, y2, x3, y3, x4, y4)
         local _x1, _y1 = sp_to_bp(x1), sp_to_bp(y1)
         local _x2, _y2 = sp_to_bp(x2), sp_to_bp(y2)
@@ -1773,8 +1995,8 @@ function htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
         wd    = sp_x2 + border_right_width
     end
 
-    --- The trapezoids must extend closer to the center of the border, because if the border
-    --- radius is larger than the border width, the border goes "into" the surrounding object.
+    -- The trapezoids must extend closer to the center of the border, because if the border
+    -- radius is larger than the border width, the border goes "into" the surrounding object.
     -- 3 might not be correct. TODO: what is the correct factor? Should depend on the radius
     local extend_top = 0
     local extend_right = 0
@@ -1993,8 +2215,8 @@ marker.user_id = user_defined_marker
 marker.type = 100  -- type 100: "value is a number"
 marker.value = 1
 
---- Node(list) creation
---- -------------------
+-- Node(list) creation
+-- -------------------
 
 
 rightskip = node.new("glue_spec")
@@ -2008,11 +2230,12 @@ leftskip.stretch = 1 * 2^16
 leftskip.stretch_order = 3
 
 
---- Hyphenation and language handling
---- ---------------------------------
+-- Hyphenation and language handling
+-- ---------------------------------
 
---- We map from symbolic names to (part of) file names. The hyphenation pattern files are
---- in the format `hyph-XYZ.pat.txt` and we need to find out that `XYZ` part.
+-- We map from symbolic names to (part of) file names. The hyphenation pattern files are
+-- in the format `hyph-XYZ.pat.txt` and we need to find out that `XYZ` part.
+---@type table<string, string>
 language_mapping = {
     ["Ancient Greek"]                = "grc",
     ["Armenian"]                     = "hy",
@@ -2066,6 +2289,7 @@ language_mapping = {
 }
 
 
+---@type table<string, string>
 language_filename = {
     ["bg"]    = "bg",
     ["ca"]    = "ca",
@@ -2119,13 +2343,27 @@ language_filename = {
     ["--"]    = "",
 }
 
---- Once a hyphenation pattern file is loaded, we only need the _id_ of it. This is stored in the
---- `languages` table. Key is the filename part (such as `de-1996`) and the value is the internal
---- language id.
+-- Once a hyphenation pattern file is loaded, we only need the _id_ of it. This is stored in the
+-- `languages` table. Key is the filename part (such as `de-1996`) and the value is the internal
+-- language id.
+---@type table<string, integer>
 languages = {}
+---@type table<integer, string>
 languages_id_lang = {}
 
 
+---@class ShapeOptions
+---@field language? string BCP-47 language tag.
+---@field script? string ISO 15924 script tag.
+---@field direction? "ltr"|"rtl"|"ttb"|"btt" Direction override.
+
+-- Shapes a HarfBuzz buffer with the given font and OpenType features.
+-- Reverses the buffer when shaping produced an RTL run.
+---@param tbl { font: any, otfeatures: any } Font + OT-feature table.
+---@param buf any HarfBuzz buffer instance.
+---@param options? ShapeOptions Per-call shaping overrides.
+---@return string script ISO 15924 script tag actually used.
+---@return string direction `"ltr"`, `"rtl"`, `"ttb"` or `"btt"`.
 shape = function(tbl, buf, options)
     local font = tbl.font
     options = options or { }

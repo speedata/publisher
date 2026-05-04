@@ -7,11 +7,15 @@
 
 file_start("publisher/metadata.lua")
 
+---@class metadata_module
 local M = {}
 
 local uuid = require("uuid")
 local xmlbuilder = require("xmlbuilder")
 
+-- Encodes a Unicode codepoint as a hex UTF-16 string (BMP) or surrogate pair.
+---@param codepoint integer Unicode scalar.
+---@return string hex Uppercase hex digits, 4 chars (BMP) or 8 chars (surrogate pair).
 local function to_utf16(codepoint)
     assert(codepoint)
     if codepoint < 65536 then
@@ -22,10 +26,10 @@ local function to_utf16(codepoint)
 end
 
 
---- PDF "date" string to ISO 8601.
--- @param s string PDF date (D:YYYYMMDDHHmmSS... format)
--- @return string|nil ISO string or nil on parse error
--- @return string|nil error message on failure
+-- Parses a PDF "date" string (`D:YYYYMMDDHHmmSS[±HH'mm']`) into ISO 8601.
+---@param s string PDF date.
+---@return string? iso ISO 8601 string, or `nil` on parse error.
+---@return string? errmsg Error message when parsing fails.
 local function pdf_to_iso(s)
   -- input: D:YYYYMMDDHHmmSS[Z|+/-HH['?]mm['?]]
   local Y,Month,D,h,mi,se,sign,th,tm =
@@ -48,9 +52,10 @@ local function pdf_to_iso(s)
 end
 M.pdf_to_iso = pdf_to_iso
 
---- PDF info "Creator" field.
--- @param opts table|nil options table (falls back to publisher.options if available)
--- @return string creator name
+-- Returns the value for the PDF info "Creator" field. Honors
+-- `opts.documentcreator` and the `sp_suppressinfo` global.
+---@param opts table? Options table; falls back to `publisher.options` if available.
+---@return string creator
 function M.getcreator(opts)
     opts = opts or (package.loaded["publisher"] and package.loaded["publisher"].options)
     if opts and opts.documentcreator and opts.documentcreator ~= "" then
@@ -62,9 +67,10 @@ function M.getcreator(opts)
     end
 end
 
---- PDF info "Producer" field.
--- @param opts table|nil options table (falls back to publisher.options if available)
--- @return string producer name
+-- Returns the value for the PDF info "Producer" field. Honors
+-- `opts.documentproducer`, `opts.documentcreator` and `sp_suppressinfo`.
+---@param opts table? Options table; falls back to `publisher.options` if available.
+---@return string producer
 function M.getproducer(opts)
     opts = opts or (package.loaded["publisher"] and package.loaded["publisher"].options)
     if opts and opts.documentproducer and opts.documentproducer ~= "" then
@@ -80,26 +86,25 @@ function M.getproducer(opts)
     end
 end
 
---- Return a string that is a valid PDF date entry such as "D:20170721195500+02'00'".
--- Input is an epoch number such as 1500645681.
--- @param num number epoch seconds
--- @return string PDF date string
+-- Returns a valid PDF date string such as `"D:20170721195500+00'00'"`.
+---@param num integer Unix epoch seconds.
+---@return string pdfdate
 local function pdfdate(num)
     local ret = os.date("D:%Y%m%d%H%M%S+00'00'",num)
     return ret
 end
 
 
---- Escape a PDF name object.
--- @param str string
--- @return string escaped name
+-- Escapes the `/` character in a PDF name object as `#2f`.
+---@param str string
+---@return string escaped
 local function escape_pdfname( str )
     return string.gsub(str,'/','#2f')
 end
 
---- Escape parentheses in a PDF literal string.
--- @param str string
--- @return string escaped string
+-- Escapes parentheses in a PDF literal string. `nil` passes through unchanged.
+---@param str string?
+---@return string? escaped
 function M.escape_pdfstring( str )
     if str then
         str = string.gsub(str,"%(","\\(")
@@ -111,9 +116,10 @@ end
 
 
 
---- Convert UTF-8 string to a PDF UTF-16 string representation.
--- @param str string UTF-8 input
--- @return string PDF ready string
+-- Converts a UTF-8 string to its PDF representation. ASCII-only inputs are
+-- wrapped in `(...)`; everything else becomes a `<feff...>` UTF-16 hex string.
+---@param str string UTF-8 input.
+---@return string pdfstring PDF-ready string literal.
 function M.utf8_to_utf16_string_pdf( str )
     if str:match("^[a-zA-Z.0-9- ]+$") then
         return "("..str.. ")"
@@ -126,10 +132,12 @@ function M.utf8_to_utf16_string_pdf( str )
     return utf16str
 end
 
---- Build XMP metadata for the document.
--- @param filespecnumbers table|nil attachment info (for ZUGFeRD)
--- @param opts table|nil options table (falls back to publisher.options if available)
--- @return string XML metadata
+-- Builds the XMP metadata XML for the document.
+-- Selects the right schema (PDF/A-3, PDF/UA, PDF/X-4, PDF/X-3:2002) from
+-- `opts.format` and injects ZUGFeRD properties when an embedded invoice is present.
+---@param filespecnumbers table? Attachment info as appended by `attach_file_pdf` (used to detect ZUGFeRD).
+---@param opts table? Options table; falls back to `publisher.options` if available.
+---@return string xmp Pretty-printed XMP packet ready for `pdf.immediateobj`.
 function M.getmetadata(filespecnumbers, opts)
     opts = opts or (package.loaded["publisher"] and package.loaded["publisher"].options)
     local zugferd_level = nil
@@ -269,13 +277,16 @@ function M.getmetadata(filespecnumbers, opts)
     return doc:to_string({ pretty = true, indent = "  " })
 end
 
---- Attach an embedded file to the PDF.
--- @param filecontents string contents of the file
--- @param description string|nil human readable description
--- @param mimetype string mime or special "ZUGFeRD invoice"
--- @param modificationtime number epoch seconds
--- @param destfilename string file name stored in PDF
--- @param filespecnumbers table table to append the filespec object numbers to
+-- Attaches an embedded file to the PDF and registers the resulting filespec
+-- object number in `filespecnumbers`. `mimetype = "ZUGFeRD invoice"` triggers
+-- ZUGFeRD conformance-level detection from the invoice contents.
+---@param filecontents string Raw contents of the file to embed.
+---@param description string? Human-readable description.
+---@param mimetype string MIME type or the literal `"ZUGFeRD invoice"`.
+---@param modificationtime integer Unix epoch seconds.
+---@param destfilename string File name stored inside the PDF.
+---@param filespecnumbers table Table the filespec entry is appended to.
+---@return nil
 function M.attach_file_pdf(filecontents,description,mimetype,modificationtime,destfilename, filespecnumbers)
     local is_zugferd = false
     if mimetype == "ZUGFeRD invoice" then

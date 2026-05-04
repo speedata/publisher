@@ -10,42 +10,48 @@ file_start("publisher/links.lua")
 local colors = require("publisher.colors")
 local metadata = require("publisher.metadata")
 
+---@class links_module
 local M = {}
+
+---@type (string|table)[]
 local hyperlinks = {}
 
---- Reset hyperlink storage.
+-- Resets the internal hyperlink storage.
+---@return nil
 function M.reset()
     hyperlinks = {}
 end
 
---- Return the current hyperlink table (read-only use).
--- @return table
+-- Returns the current hyperlink table for read-only access.
+---@return (string|table)[]
 function M.get_all()
     return hyperlinks
 end
 
---- Get a hyperlink entry by index.
--- @param index number
--- @return any
+-- Returns the hyperlink entry at the given 1-based index, or `nil`.
+---@param index integer
+---@return string|table|nil
 function M.get(index)
     return hyperlinks[index]
 end
 
---- Get the most recently added hyperlink entry.
--- @return any
+-- Returns the most recently added hyperlink entry.
+---@return string|table|nil
 function M.last()
     return hyperlinks[#hyperlinks]
 end
 
---- Get the number of stored hyperlinks.
--- @return number
+-- Returns the number of stored hyperlinks.
+---@return integer
 function M.count()
     return #hyperlinks
 end
 
---- Set fields on a hyperlink entry (no-op if index is invalid).
--- @param index number
--- @param fields table
+-- Patches an existing hyperlink entry with the given fields.
+-- A no-op if the entry is missing or not a table.
+---@param index integer
+---@param fields table<string, any>
+---@return nil
 function M.set_fields(index, fields)
     local entry = hyperlinks[index]
     if type(entry) ~= "table" then
@@ -56,11 +62,11 @@ function M.set_fields(index, fields)
     end
 end
 
--- getBordercolor turns a color into a three RGB (0-1) value to be used for the /C array.
--- The PDF viewers only support RGB (three values in the /C array).
---- Convert a color name to an RGB string usable in PDF /C arrays.
--- @param colorname string|nil
--- @return string "r g b" values in [0,1]
+-- Converts a color name to a `"r g b"` string for use in a PDF `/C` array.
+-- Falls back to black on missing/unknown colors. PDF viewers only accept RGB
+-- in `/C`, so cmyk and gray entries are converted accordingly.
+---@param colorname string?
+---@return string rgb Three values in [0,1] separated by spaces.
 local function getBordercolor(colorname)
     local entry = colors.get_colentry_from_name(colorname,"black")
     if entry == nil then
@@ -80,16 +86,16 @@ local function getBordercolor(colorname)
     return "0 0 0"
 end
 
---- URL-encode a single character.
--- @param c string
--- @return string encoded
+-- URL-escapes a single character as `%XX`.
+---@param c string Single byte.
+---@return string
 local function char_to_hex(c)
     return string.format("%%%02X", string.byte(c))
 end
 
---- URL-encode a string (spaces -> +, escapes non-URL-safe chars).
--- @param url string|nil
--- @return string|nil encoded url or nil if input is nil
+-- URL-encodes a string. Spaces become `+`, non-URL-safe bytes become `%XX`.
+---@param url string?
+---@return string? encoded `nil` if `url` was `nil`.
 local function urlencode(url)
     if url == nil then
         return
@@ -100,10 +106,10 @@ local function urlencode(url)
     return url
 end
 
---- Build PDF border string for a hyperlink.
--- @param options table publisher options
--- @param color string|nil border color name
--- @return string PDF border fragment
+-- Builds the `/Border` (and optional `/C`) PDF fragment for a hyperlink.
+---@param options table Publisher options table.
+---@param color string? Border color; falls back to `options.hyperlinkbordercolor`.
+---@return string fragment
 local function get_border_for_link(options, color)
     -- no border:
     local border = "/Border[0 0 0]"
@@ -118,10 +124,11 @@ local function get_border_for_link(options, color)
     return border
 end
 
---- Build PDF border hash for hyperlink table variant.
--- @param options table publisher options
--- @param color string|nil border color name
--- @return table PDF border key/values
+-- Same as `get_border_for_link`, but returns the fields as a table for callers
+-- that build the link entry as a key/value table (e.g. `hlurl`, `hllink`).
+---@param options table Publisher options table.
+---@param color string?
+---@return table<string, string> fields Maps PDF keys (`"/Border"`, `"/C"`) to their string values.
 local function get_border_for_link_table(options, color)
     -- no border:
     local border = {["/Border"] = "[0 0 0]" }
@@ -135,11 +142,13 @@ local function get_border_for_link_table(options, color)
     return border
 end
 
---- Prepare parsed embed filename/target for GoToE link.
--- @param filename string
--- @param page number|nil destination page
--- @param link string|nil named destination
--- @return table parsed embed target
+-- Prepares the filename + destination for a `GoToE` (embedded-file) link.
+-- `page` (if given) wins over `link`; if neither is provided the link points
+-- to page 0 with `/Fit`.
+---@param filename string Embedded file name.
+---@param page integer? 1-based page number.
+---@param link string? Named destination.
+---@return { fn: string, dest: string } target `fn` is a PDF UTF-16 string, `dest` is either a page array or a named destination.
 local function parse_embed_filename(filename, page, link)
     local parsed_url = { fn = metadata.utf8_to_utf16_string_pdf(filename) }
     if page then
@@ -152,9 +161,9 @@ local function parse_embed_filename(filename, page, link)
     return parsed_url
 end
 
---- Get sorted keys of a table.
--- @param tab table
--- @return table array of sorted keys
+-- Returns the keys of `tab` as a sorted array.
+---@param tab table
+---@return any[] keys
 local function sortedkeys(tab)
     local keys, s = { }, 0
     for key,_ in next, tab do
@@ -177,13 +186,13 @@ local marshal_ordered = {__tostring = function(tbl)
 
 -- hyperlinks/hyperlinksbuilder
 
---- Add an embedded-file link.
--- @param options table publisher options
--- @param filename string file name
--- @param page number|nil page number
--- @param link string|nil named destination
--- @param bordercolor string|nil border color
--- @return number index in hyperlinks
+-- Registers a link that opens an embedded file via `GoToE`.
+---@param options table Publisher options.
+---@param filename string Embedded file name.
+---@param page integer? 1-based destination page.
+---@param link string? Named destination (used when `page` is `nil`).
+---@param bordercolor string?
+---@return integer index Index into the internal hyperlinks list.
 function M.hlembed(options, filename, page, link, bordercolor)
     local parsed_url = parse_embed_filename(filename, page, link)
     local str = string.format("/Subtype/Link%s/A<</Type/Action/S/GoToE/NewWindow true/D %s /T<</R/C/N%s >> >>", get_border_for_link(options, bordercolor), parsed_url.dest, parsed_url.fn)
@@ -191,11 +200,11 @@ function M.hlembed(options, filename, page, link, bordercolor)
     return #hyperlinks
 end
 
---- Add a URI link.
--- @param options table publisher options
--- @param href string URL
--- @param bordercolor string|nil border color
--- @return number index in hyperlinks
+-- Registers an external URI link.
+---@param options table Publisher options.
+---@param href string Target URL.
+---@param bordercolor string?
+---@return integer index Index into the internal hyperlinks list.
 function M.hlurl(options, href,bordercolor)
     href = urlencode(href)
     href = metadata.escape_pdfstring(href)
@@ -212,11 +221,12 @@ function M.hlurl(options, href,bordercolor)
     return #hyperlinks
 end
 
---- Add a page link.
--- @param options table publisher options
--- @param pagenumber number page number
--- @param bordercolor string|nil border color
--- @return number index in hyperlinks
+-- Registers a link that jumps to a specific page in the same document.
+-- Returns `0` if the page reference cannot be resolved.
+---@param options table Publisher options.
+---@param pagenumber integer|string 1-based page number.
+---@param bordercolor string?
+---@return integer index Index into the internal hyperlinks list, or `0` on failure.
 function M.hlpage(options, pagenumber,bordercolor)
     pagenumber = tonumber(pagenumber)
     local pageobjnum = pdf.getpageref(pagenumber)
@@ -228,11 +238,12 @@ function M.hlpage(options, pagenumber,bordercolor)
     return #hyperlinks
 end
 
---- Add a named destination link.
--- @param options table publisher options
--- @param link string destination name
--- @param bordercolor string|nil border color
--- @return number index in hyperlinks
+-- Registers a link that jumps to a named destination (`mark<name>`) within
+-- the same document.
+---@param options table Publisher options.
+---@param link string Destination name (without the `mark` prefix).
+---@param bordercolor string?
+---@return integer index Index into the internal hyperlinks list.
 function M.hllink(options, link,bordercolor)
     local formatted = string.format("mark%s",link)
     local hl = {

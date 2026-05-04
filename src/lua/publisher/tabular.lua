@@ -29,11 +29,13 @@ file_start("tabular.lua")
 
 local metapost = require("publisher.metapost")
 
+---@class tabular_module
 local tabular = {}
 
+---@type table<string, any>
 local dynamic_data = {}
 
---- Resolve a colspan value. Handles "*" (all remaining columns) and numeric values.
+-- Resolve a colspan value. Handles "*" (all remaining columns) and numeric values.
 ---@param value string|number The colspan attribute value
 ---@param current_column number The current column position (1-based)
 ---@param total_columns number The total number of columns in the table
@@ -45,7 +47,7 @@ local function resolve_colspan(value, current_column, total_columns)
     return tonumber(value) or 1
 end
 
---- Create a new tabular object.
+-- Create a new tabular object.
 ---@return table New tabular object
 function tabular:new()
     assert(self)
@@ -69,21 +71,21 @@ function tabular:new()
     return t
 end
 
---- The objects in a table cell can be block objects or inline objects.
---- See the list of [html block objects](https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements)
---- for a rule of thumb how objects are arranged in a table cell. I am not sure if we should fully follow
---- the HTML way.
----
---- The inner arrays contain the objects to be stacked from left to right (“inline”)
---- and the outer array is a list of block objects that are to be stacked from top to bottom:
----     { { img      },
----       { par      },
----       { img, img },
----       { table    }  }
----
---- ![Objects in a table](../img/objectsintable.svg)
---- The table is stored in the objects
---- Attach objects to a single table row, organizing block and inline objects.
+-- The objects in a table cell can be block objects or inline objects.
+-- See the list of [html block objects](https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements)
+-- for a rule of thumb how objects are arranged in a table cell. I am not sure if we should fully follow
+-- the HTML way.
+--
+-- The inner arrays contain the objects to be stacked from left to right (“inline”)
+-- and the outer array is a list of block objects that are to be stacked from top to bottom:
+--     { { img      },
+--       { par      },
+--       { img, img },
+--       { table    }  }
+--
+-- ![Objects in a table](../img/objectsintable.svg)
+-- The table is stored in the objects
+-- Attach objects to a single table row, organizing block and inline objects.
 ---@param tab table Table row data
 ---@param current_row integer Current row index
 ---@param skiptable table Table of skipped cells (rowspans/colspans)
@@ -192,7 +194,7 @@ function tabular:attach_objects_row(tab, current_row, skiptable)
     end
 end
 
---- Attach objects to all rows in the table, including table head and foot.
+-- Attach objects to all rows in the table, including table head and foot.
 ---@param tab table Table data
 ---@param row? integer Row index (optional)
 function tabular:attach_objects(tab, row)
@@ -214,21 +216,21 @@ function tabular:attach_objects(tab, row)
     end
 end
 
---- Width calculation
---- =================
+-- Width calculation
+-- =================
 
---- First we check for adjacent columns for collapsing border:
---- ![maximum width](../img/bordercollapse.svg)
----
---- The resulting width for each border (left and right) is
----
---- \\(\frac{max(border-left,border-right)}{2}\\)
----
---- even if one
---- side didn't have a border. In that case we need to adjust the border colors. Beware: the result is slightly undefined
---- if both sides have different colors.
+-- First we check for adjacent columns for collapsing border:
+-- ![maximum width](../img/bordercollapse.svg)
+--
+-- The resulting width for each border (left and right) is
+--
+-- \\(\frac{max(border-left,border-right)}{2}\\)
+--
+-- even if one
+-- side didn't have a border. In that case we need to adjust the border colors. Beware: the result is slightly undefined
+-- if both sides have different colors.
 -- Calculate the width for each column in the row.
---- Calculate the minimum and maximum column widths for a single row.
+-- Calculate the minimum and maximum column widths for a single row.
 ---@param tr_contents table Row contents
 ---@param current_row integer Current row index
 ---@param colspans table Table to store colspan info
@@ -241,19 +243,19 @@ function tabular:calculate_columnwidths_for_row(tr_contents, current_row, colspa
     -- first we go through all rows/cells and look, how wide the columns
     -- are supposed to be. If there are colspans, they have to be treated specially
 
-    --- We calculate the widths in two passes:
-    ---
-    ---  1. Calculate the width of each table cell in a row
-    ---  1. Calculate the row height
-    ---
-    --- The minimum width (min\_wd) is calculated as follows. Calculate the length of the longest item in the row:
-    ---
-    --- ![minimum width](../img/calculate_longtext2.svg)
-    ---
-    --- The maximum width (max\_wd) is calculated by typesetting the text and taking total size of the hbox into account:
-    ---
-    --- ![maximum width](../img/calculate_longtext.svg)
-    ---
+    -- We calculate the widths in two passes:
+    --
+    --  1. Calculate the width of each table cell in a row
+    --  1. Calculate the row height
+    --
+    -- The minimum width (min\_wd) is calculated as follows. Calculate the length of the longest item in the row:
+    --
+    -- ![minimum width](../img/calculate_longtext2.svg)
+    --
+    -- The maximum width (max\_wd) is calculated by typesetting the text and taking total size of the hbox into account:
+    --
+    -- ![maximum width](../img/calculate_longtext.svg)
+    --
     for _,td in ipairs(tr_contents) do
         local td_contents = publisher.element_contents(td)
         -- all columms (table cells)
@@ -319,7 +321,10 @@ function tabular:calculate_columnwidths_for_row(tr_contents, current_row, colspa
     end  -- ∀ columns
 end
 
---- Collect alignment and padding information from column definitions.
+-- Collects alignment and padding information from `<Columns>`/`<Column>`
+-- elements and stores it on `self.align`, `self.valign`,
+-- `self.padding_left_col` and `self.padding_right_col`.
+---@return nil
 function tabular:collect_alignments()
     for _,tr in ipairs(self.tab) do
         local tr_contents    = publisher.element_contents(tr)
@@ -342,9 +347,10 @@ end
 
 
 
---- Calculate the widths of the columns for the table.
---- -------------------------------------------------
---- Calculate the widths of all columns in the table.
+-- Calculates the final widths for every column in the table. Honors
+-- explicit widths, `*` (proportional), `min-width`/`max-width`, colspans
+-- and shrink/grow when the table has a fixed total width target.
+---@return nil
 function tabular:calculate_columnwidth()
     local colspans = {}
     local minwidths,col_shrink,starcols,colmax,colmin = {},{},{},{},{}
@@ -356,19 +362,19 @@ function tabular:calculate_columnwidth()
         local tr_contents      = publisher.element_contents(tr)
         local tr_elementname = publisher.elementname(tr)
 
-        --- When the user gives us column widths, we use them for calculation. There are two ways to
-        --- determine the column widths: with \\(n\\)* (where \\(n\\) is an integer number) or with absolute
-        --- lengths such as `4` (in grid cells) or `2.5cm`. For example:
-        ---
-        ---     <Columns>
-        ---       <Column width="3cm"/>
-        ---       <Column width="1*"/>
-        ---       <Column width="3*"/>
-        ---     </Columns>
-        ---
-        --- When we typeset a table with a requested with of 11cm, the first column would get 3cm,
-        --- the second column 1/4 of the rest (2cm) and the third 3/4 of the rest (6cm).
-        --- ![Table calculation](../img/table313.svg)
+        -- When the user gives us column widths, we use them for calculation. There are two ways to
+        -- determine the column widths: with \\(n\\)* (where \\(n\\) is an integer number) or with absolute
+        -- lengths such as `4` (in grid cells) or `2.5cm`. For example:
+        --
+        --     <Columns>
+        --       <Column width="3cm"/>
+        --       <Column width="1*"/>
+        --       <Column width="3*"/>
+        --     </Columns>
+        --
+        -- When we typeset a table with a requested with of 11cm, the first column would get 3cm,
+        -- the second column 1/4 of the rest (2cm) and the third 3/4 of the rest (6cm).
+        -- ![Table calculation](../img/table313.svg)
         if tr_elementname == "Columns" then
             local i = 0
             local count_stars = 0
@@ -459,11 +465,11 @@ function tabular:calculate_columnwidth()
 
     if columnwidths_given then return end
 
-    --- Phase I
-    --- -------
-    --- Calculate max\_wd, min\_wd. We do this in a separate function for each row.
-    --- Use separate row counters for body and each head/foot area to match the
-    --- numbering used in set_skip_table().
+    -- Phase I
+    -- -------
+    -- Calculate max\_wd, min\_wd. We do this in a separate function for each row.
+    -- Use separate row counters for body and each head/foot area to match the
+    -- numbering used in set_skip_table().
     local current_row_body = 0
     local rowcounter_areas = {}
     for _,tr in ipairs(self.tab) do
@@ -552,31 +558,31 @@ function tabular:calculate_columnwidth()
         return
     end
 
-    --- Now we are finished with all cells in all rows. If there are colospans, we might have
-    --- to increase some column widths
-    ---
-    --- Example (fake):
-    ---
-    ---     <Table width="30">
-    ---       <Tr><Td>A</Td><Td>A</Td></Tr>
-    ---       <Tr><Td colspan="2">A very very very long text</Td></Tr>
-    ---     </Table>
-    ---     ----------------------------
-    ---     |A           |A            |
-    ---     |A very very very long text|
-    ---     ----------------------------
-    ---
-    --- In this case sum(min) is approx. the width of the word "very" and sum(max) is the width of the text.
-    --- colmax[i] is the width of "A", colmin[i] also
-    ---
-    --- Phase II: include colspan
-    --- -------------------------
+    -- Now we are finished with all cells in all rows. If there are colospans, we might have
+    -- to increase some column widths
+    --
+    -- Example (fake):
+    --
+    --     <Table width="30">
+    --       <Tr><Td>A</Td><Td>A</Td></Tr>
+    --       <Tr><Td colspan="2">A very very very long text</Td></Tr>
+    --     </Table>
+    --     ----------------------------
+    --     |A           |A            |
+    --     |A very very very long text|
+    --     ----------------------------
+    --
+    -- In this case sum(min) is approx. the width of the word "very" and sum(max) is the width of the text.
+    -- colmax[i] is the width of "A", colmin[i] also
+    --
+    -- Phase II: include colspan
+    -- -------------------------
     for _,colspan in pairs(colspans) do
         local sum_min,sum_max = 0,0
         local r -- stretch factor = wd(colspan)/wd(sum_start_end)
 
-        --- First we calculate how wide the columns are that are covered by colspan, but without
-        --- colspan itself
+        -- First we calculate how wide the columns are that are covered by colspan, but without
+        -- colspan itself
 
         if #colmax < colspan.stop then
             err("Not enough columns found for colspan")
@@ -598,11 +604,11 @@ function tabular:calculate_columnwidth()
             end
         end
 
-        --- If the colspan requires more room than the rest of the table, we have to increase
-        --- the width of all columns in the table accordingly. We stretch the columns by
-        --- a factor r. r is calculated by the contents.
-        ---
-        --- We do that once for the maximum width and once for the minimum width
+        -- If the colspan requires more room than the rest of the table, we have to increase
+        -- the width of all columns in the table accordingly. We stretch the columns by
+        -- a factor r. r is calculated by the contents.
+        --
+        -- We do that once for the maximum width and once for the minimum width
         local width_of_colsep = table.sum(self.column_distances,colspan.start,colspan.stop - 1)
 
         if colspan.max_wd > sum_max + width_of_colsep then
@@ -626,17 +632,17 @@ function tabular:calculate_columnwidth()
 
     -- Now colmin and colmax are calculated for all columns. colspans are included.
 
-    --- Phase III: Stretch or shrink table
-    --- ----------------------------------
+    -- Phase III: Stretch or shrink table
+    -- ----------------------------------
 
     -- Here comes the main width calculation
     -- FIXME: we should use column_distances[i] instead of self.colsep
     local colsep = (#colmax - 1) * self.colsep
     local tablewidth_is = table.sum(colmax) + colsep
-    --- 1. calculate natural (max) width / total width for each column.
-    ---
-    --- If stretch="no" is set, we can encounter the case that the table is too wide. Then it
-    --- must be shrunk.
+    -- 1. calculate natural (max) width / total width for each column.
+    --
+    -- If stretch="no" is set, we can encounter the case that the table is too wide. Then it
+    -- must be shrunk.
 
     -- highly unlikely that the table matches the size exactly
     if tablewidth_is == self.tablewidth_target then
@@ -729,7 +735,7 @@ function tabular:calculate_columnwidth()
 end
 
 -- Typeset a table cell. Return a vlist, tightly packed (i.e. all vspace are 0).
---- Pack block and inline objects into a table cell, applying width and alignment.
+-- Pack block and inline objects into a table cell, applying width and alignment.
 ---@param blockobjects table List of block objects
 ---@param width number Target cell width
 ---@param horizontal_alignment string Alignment for cell content
@@ -888,8 +894,8 @@ function tabular:pack_cell(blockobjects, width, horizontal_alignment)
     return ret
 end
 
---- last\_shiftup is for vertical border-collapse.
---- Calculate the height of a table row, considering rowspans and minimum height.
+-- last\_shiftup is for vertical border-collapse.
+-- Calculate the height of a table row, considering rowspans and minimum height.
 ---@param tr_contents table Row contents
 ---@param current_row integer Current row index
 ---@param last_shiftup? number Last shift-up value
@@ -994,7 +1000,10 @@ function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, ski
 end
 
 
---- Calculate the heights for all rows in the table, including head and foot.
+-- Calculates row heights for every row in the body, head and foot,
+-- delegating per-row work to `calculate_rowheight` and accumulating
+-- rowspan information for `adjust_row_heights_for_rowspans`.
+---@return nil
 function tabular:calculate_rowheights()
     -- rowspans is the concatenation of each rowspan for a table row
     local rowspans = {}
@@ -1061,7 +1070,7 @@ function tabular:calculate_rowheights()
     end
 end
 
---- Adjust row heights to account for rowspans.
+-- Adjust row heights to account for rowspans.
 ---@param rowspans table Table of rowspans
 ---@param area table Table of row heights
 function tabular:adjust_row_heights_for_rowspans(rowspans, area)
@@ -1095,19 +1104,19 @@ function tabular:adjust_row_heights_for_rowspans(rowspans, area)
     end
 end
 
---- ![Table cell](../img/cell.svg)
+-- ![Table cell](../img/cell.svg)
 
---- Width calculation is now finished, we can typeset the table
---- Typesetting the table
---- ---------------------
---- First, we create a complete table with all rows. Splitting into pages is done later on.
---- Background colors are NOT applied during row creation. Instead, the resolved color
---- names are stored in `deferred_bgcolors` (a table mapping cell index to color name)
---- on the row hbox via node properties. The actual pdf_literal background nodes are
---- inserted later by `apply_deferred_backgrounds()`, after split points are known.
---- This allows `eval-on-split` to re-evaluate row colors at page breaks.
----
---- Typeset a single table row and return a horizontal list (hlist).
+-- Width calculation is now finished, we can typeset the table
+-- Typesetting the table
+-- ---------------------
+-- First, we create a complete table with all rows. Splitting into pages is done later on.
+-- Background colors are NOT applied during row creation. Instead, the resolved color
+-- names are stored in `deferred_bgcolors` (a table mapping cell index to color name)
+-- on the row hbox via node properties. The actual pdf_literal background nodes are
+-- inserted later by `apply_deferred_backgrounds()`, after split points are known.
+-- This allows `eval-on-split` to re-evaluate row colors at page breaks.
+--
+-- Typeset a single table row and return a horizontal list (hlist).
 ---@param tr_contents table Row contents
 ---@param current_row integer Current row index
 ---@param skiptable table Table of skipped cells
@@ -1117,11 +1126,11 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
     local current_column
     local current_column_width, ht
     local row = {}
-    --- Collects background colors per cell (indexed by cell position).
-    --- Stored on the row hbox after packing, applied later by apply_deferred_backgrounds().
+    -- Collects background colors per cell (indexed by cell position).
+    -- Stored on the row hbox after packing, applied later by apply_deferred_backgrounds().
     local deferred_bgcolors = {}
-    --- Set to false if any cell has colspan > 1 or rowspan > 1, which
-    --- prevents row-level background optimization.
+    -- Set to false if any cell has colspan > 1 or rowspan > 1, which
+    -- prevents row-level background optimization.
     local row_bg_simple = true
     local rowspan, colspan
     local v,vlist,hlist
@@ -1230,11 +1239,11 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         node.insert_after(cell_start,node.tail(cell_start),g)
 
         vlist = node.vpack(cell_start,ht - td_bordertop - td_borderbottom,"exactly")
-        --- The table cell now looks like this
-        ---
-        --- ![Table cell vertical](../img/tablecell1.svg)
-        ---
-        --- Now we need to add the left and the right glue
+        -- The table cell now looks like this
+        --
+        -- ![Table cell vertical](../img/tablecell1.svg)
+        --
+        -- Now we need to add the left and the right glue
         g = set_glue(nil,{width = padding_left})
         publisher.setprop(g,"origin","padding_left")
 
@@ -1268,10 +1277,10 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         end
 
         hlist = node.hpack(cell_start,current_column_width,"exactly")
-        --- The cell is now almost complete. Resolve the background color but do NOT
-        --- apply it yet — store it in deferred_bg_color for later application.
-        ---
-        --- ![Table cell vertical](../img/tablecell2.svg)
+        -- The cell is now almost complete. Resolve the background color but do NOT
+        -- apply it yet — store it in deferred_bg_color for later application.
+        --
+        -- ![Table cell vertical](../img/tablecell2.svg)
         local deferred_bg_color
         if tr_contents.backgroundcolor or td_contents.backgroundcolor or self.backgroundcolumncolors[current_column] then
             -- prio: Td.backgroundcolor, then Tr.backgroundcolor, then Column.backgroundcolor
@@ -1338,9 +1347,9 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         publisher.setprop(gl,"origin","unknown")
         node.slide(head).next = gl
 
-        --- This is our table cell now:
-        ---
-        --- ![Table cell vertical](../img/tablecell3.svg)
+        -- This is our table cell now:
+        --
+        -- ![Table cell vertical](../img/tablecell3.svg)
         hlist = node.vpack(head,rowheightarea[current_row],"exactly")
 
         if publisher.options.showobjects then
@@ -1364,9 +1373,9 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
     end
 
 
-    --- We now add colsep and connect the cells so we have a list of vboxes and
-    --- pack them in a hbox.
-    --- ![a row](../img/tablerow.svg)
+    -- We now add colsep and connect the cells so we have a list of vboxes and
+    -- pack them in a hbox.
+    -- ![a row](../img/tablerow.svg)
     -- FIXME: use column_distances[i] instead of self.colsep
     local cell_start,current
     cell_start = row[1]
@@ -1401,7 +1410,7 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
 end
 
 -- Gets called for each <Tablehead> element. second_run is for dynamic table head
---- Build the table head structure for typesetting.
+-- Build the table head structure for typesetting.
 ---@param tr_contents table Table head contents
 ---@param tablehead_first table Table for first page head
 ---@param tablehead table Table for subsequent page heads
@@ -1447,7 +1456,7 @@ function tabular:make_tablehead(tr_contents, tablehead_first, tablehead, current
 end
 
 -- second run is for dynamic table foot
---- Build the table foot structure for typesetting.
+-- Build the table foot structure for typesetting.
 ---@param tr_contents table Table foot contents
 ---@param tablefoot_last table Table for last page foot
 ---@param tablefoot table Table for other page foots
@@ -1489,7 +1498,7 @@ function tabular:make_tablefoot(tr_contents, tablefoot_last, tablefoot, current_
 end
 --------------------------------------------------------------------------
 
---- Calculate height and connect table head rows.
+-- Calculate height and connect table head rows.
 ---@param tablehead_first table Table for first page head
 ---@param tablehead table Table for subsequent page heads
 function tabular:connect_tablehead_first_all(tablehead_first, tablehead)
@@ -1507,7 +1516,7 @@ function tabular:connect_tablehead_first_all(tablehead_first, tablehead)
     end
 end
 
---- Calculate height and connect table foot rows.
+-- Calculate height and connect table foot rows.
 ---@param tablefoot table Table for other page foots
 ---@param tablefoot_last table Table for last page foot
 ---@return number Height of table foot for other pages
@@ -1545,6 +1554,10 @@ end
 
 -- This is called for Td/sethead=yes for the copies
 -- of the first head. It removes the pdf_dest nodes for bookmark destinations.
+-- Recursively removes `pdf_dest` whatsit nodes from a node list. Used
+-- before re-typesetting head/foot rows so destinations are not duplicated.
+---@param nodelist node
+---@return node? nodelist The (possibly trimmed) node list, or `nil` when fully removed.
 function remove_bookmark_nodes( nodelist )
     local head = nodelist
     while head do
@@ -1559,30 +1572,32 @@ function remove_bookmark_nodes( nodelist )
     return nodelist
 end
 
---- Apply deferred background colors to all cells in a linked node list.
---- Called after split points are known and all entries (head, body rows, foot)
---- have been connected into a single linked list.
----
---- The node structure at this point:
----
----     linked list (head → glue → row_hbox → glue → row_hbox → ... → foot)
----                                  │
----                            row_hbox.list
----                       ┌────────┼────────────┐
----                    vbox(cell1) glue(colsep) vbox(cell2) ...
----                       │
----                  cell vbox.list
----            ┌──────────┼───────────┐
----     hlist(border-top) hlist(content) hlist(border-bottom)
----       origin="border top"  origin=nil   origin="border bottom"
----
---- For each row hbox with a "deferred_bgcolors" property, we apply the
---- background colors. When all cells share the same color AND the row
---- is simple (no columndistance, no colspan/rowspan), a single background
---- rectangle is drawn on the row hbox — this avoids hairline rendering
---- artifacts between adjacent cells in some PDF viewers. Otherwise,
---- each cell gets its own background on its content hlist (identified
---- by having no "origin" property).
+-- Apply deferred background colors to all cells in a linked node list.
+-- Called after split points are known and all entries (head, body rows, foot)
+-- have been connected into a single linked list.
+--
+-- The node structure at this point:
+--
+--     linked list (head → glue → row_hbox → glue → row_hbox → ... → foot)
+--                                  │
+--                            row_hbox.list
+--                       ┌────────┼────────────┐
+--                    vbox(cell1) glue(colsep) vbox(cell2) ...
+--                       │
+--                  cell vbox.list
+--            ┌──────────┼───────────┐
+--     hlist(border-top) hlist(content) hlist(border-bottom)
+--       origin="border top"  origin=nil   origin="border bottom"
+--
+-- For each row hbox with a "deferred_bgcolors" property, we apply the
+-- background colors. When all cells share the same color AND the row
+-- is simple (no columndistance, no colspan/rowspan), a single background
+-- rectangle is drawn on the row hbox — this avoids hairline rendering
+-- artifacts between adjacent cells in some PDF viewers. Otherwise,
+-- each cell gets its own background on its content hlist (identified
+-- by having no "origin" property).
+---@param head node Linked list of typeset row hboxes.
+---@return nil
 local function apply_deferred_backgrounds(head)
     local n = head
     while n do
@@ -1649,7 +1664,7 @@ local function apply_deferred_backgrounds(head)
     end
 end
 
---- Typeset the entire table, including head, body, and foot.
+-- Typeset the entire table, including head, body, and foot.
 ---@param dataxml table XML data for the table
 function tabular:typeset_table(dataxml)
     local current_row
@@ -1877,10 +1892,10 @@ function tabular:typeset_table(dataxml)
     end
 
 
-    --- Table splitting
-    --- ===============
-    --- Table splitting is done in several steps and we need helper functions to generate the dynamic headers
-    --- and to get the height of these headers
+    -- Table splitting
+    -- ===============
+    -- Table splitting is done in several steps and we need helper functions to generate the dynamic headers
+    -- and to get the height of these headers
     local function get_height_header(i)
         local ht = 0
         if showheader_static() then
@@ -1953,13 +1968,13 @@ function tabular:typeset_table(dataxml)
     local pagegoal = 0
 
     local ht_row,space_above
-    --- splits is a table which includes the number of the rows each page has in a multi-page table
-    ---
-    ---     splits = {
-    ---       [1] = "0"
-    ---       [2] = "26"
-    ---       [3] = "44"
-    ---     }
+    -- splits is a table which includes the number of the rows each page has in a multi-page table
+    --
+    --     splits = {
+    --       [1] = "0"
+    --       [2] = "26"
+    --       [3] = "44"
+    --     }
 
     local splits
 
@@ -2058,11 +2073,11 @@ function tabular:typeset_table(dataxml)
     -- This is the last split
     splits[#splits + 1] = #rows
 
-    --- Table balancing
-    --- ===============
-    --- When the user has requested table balancing, we need to find out how many frames
-    --- the table spans. If there is only one frame, no balancing has to be done.
-    --- If there are more frames, we need to find out the “empty” frames.
+    -- Table balancing
+    -- ===============
+    -- When the user has requested table balancing, we need to find out how many frames
+    -- the table spans. If there is only one frame, no balancing has to be done.
+    -- If there are more frames, we need to find out the “empty” frames.
 
     -- tosplit is the total number of frames on the last page (used or unused)
     local tosplit = self.split
@@ -2160,9 +2175,9 @@ function tabular:typeset_table(dataxml)
         end
     end
 
-    --- Table cleanup. This is for dynamic headers which get repeated on the top of
-    --- each split. We omit the repetition, if the top entry in a frame is already
-    --- a dynamic head.
+    -- Table cleanup. This is for dynamic headers which get repeated on the top of
+    -- each split. We omit the repetition, if the top entry in a frame is already
+    -- a dynamic head.
     for i=2,#splits - 1 do
         local r = splits[i]
         if rows[r+1] then
@@ -2216,22 +2231,22 @@ function tabular:typeset_table(dataxml)
             end
         end
 
-        --- eval-on-split: re-evaluate background colors for page breaks
-        --- ─────────────────────────────────────────────────────────────
-        --- When the Table attribute eval-on-split is set and this is not the first
-        --- split (s > 2), we:
-        ---   1. Evaluate the eval-on-split XPath expression. This typically calls
-        ---      sd:reset-alternating() to restart the color cycle.
-        ---   2. For each body row, re-read the Tr's background-color attribute from
-        ---      the original layoutxml. Because the alternating counter was just
-        ---      reset, sd:alternating() now returns the correct color for this
-        ---      row's position within the new page.
-        ---   3. Override deferred_bgcolors on the row with the new color, so that
-        ---      apply_deferred_backgrounds() will use the updated value.
-        ---
-        --- Note: only Tr-level background-color is re-evaluated, not Td-level.
-        --- To use eval-on-split with alternating colors, the alternating expression
-        --- must be in the Tr background-color attribute (not in Td or SetVariable).
+        -- eval-on-split: re-evaluate background colors for page breaks
+        -- ─────────────────────────────────────────────────────────────
+        -- When the Table attribute eval-on-split is set and this is not the first
+        -- split (s > 2), we:
+        --   1. Evaluate the eval-on-split XPath expression. This typically calls
+        --      sd:reset-alternating() to restart the color cycle.
+        --   2. For each body row, re-read the Tr's background-color attribute from
+        --      the original layoutxml. Because the alternating counter was just
+        --      reset, sd:alternating() now returns the correct color for this
+        --      row's position within the new page.
+        --   3. Override deferred_bgcolors on the row with the new color, so that
+        --      apply_deferred_backgrounds() will use the updated value.
+        --
+        -- Note: only Tr-level background-color is re-evaluated, not Td-level.
+        -- To use eval-on-split with alternating colors, the alternating expression
+        -- must be in the Tr background-color attribute (not in Td or SetVariable).
         if s > 2 and self.eval_on_split_layoutxml then
             publisher.read_attribute(self.eval_on_split_layoutxml, self.eval_on_split_dataxml, "eval-on-split", "xpath")
         end
@@ -2301,12 +2316,12 @@ function tabular:typeset_table(dataxml)
         end
     end
 
-    --- Final assembly: connect entries and apply deferred backgrounds
-    --- ─────────────────────────────────────────────────────────────
-    --- Each split table is an array of disconnected nodes (head rows, glue,
-    --- body rows, foot rows). We connect them into a single linked list,
-    --- then call apply_deferred_backgrounds() to insert the pdf_literal
-    --- background rectangles, and finally vpack everything into a vbox.
+    -- Final assembly: connect entries and apply deferred backgrounds
+    -- ─────────────────────────────────────────────────────────────
+    -- Each split table is an array of disconnected nodes (head rows, glue,
+    -- body rows, foot rows). We connect them into a single linked list,
+    -- then call apply_deferred_backgrounds() to insert the pdf_literal
+    -- background rectangles, and finally vpack everything into a vbox.
     local tail
     for i=1,#final_split_tables do
         for j=1,#final_split_tables[i] - 1 do
@@ -2324,7 +2339,7 @@ function tabular:typeset_table(dataxml)
     return final_split_tables
 end -- typeset table
 
---- Reformat the table foot for a given page, handling splits.
+-- Reformat the table foot for a given page, handling splits.
 ---@param pagenumber integer Current page number
 ---@param max_splits integer Maximum number of splits
 ---@return table Table foot nodes for the first page
@@ -2348,7 +2363,7 @@ function tabular:reformat_foot(pagenumber, max_splits)
     return tmp_tablefoot_last[1],tmp_tablefoot_all[1]
 end
 
---- Reformat the table head for a given page.
+-- Reformat the table head for a given page.
 ---@return table Table head nodes for first page
 ---@return table Table head nodes for other pages
 function tabular:reformat_head()
@@ -2364,6 +2379,10 @@ function tabular:reformat_head()
     return tmp1[1],tmp2[1]
 end
 
+-- Resolves border conflicts for `border-collapse="collapse"` by setting
+-- the heavier border on each shared edge and zeroing the loser.
+---@param tbl table[][] 2D table of cell descriptors.
+---@return nil
 function adjust_border(tbl)
     for _, row in ipairs(tbl) do
         for _, col in ipairs(row) do
@@ -2397,7 +2416,7 @@ function adjust_border(tbl)
     end
 end
 
---- Perform border collapsing for the table, recalculating border widths.
+-- Perform border collapsing for the table, recalculating border widths.
 ---@param tab table Table data
 ---@param area? string Table area (e.g., 'body', 'tablehead')
 function tabular:do_bordercollapse(tab, area)
@@ -2487,7 +2506,7 @@ function tabular:do_bordercollapse(tab, area)
     adjust_border(tablematrix)
 end
 
---- Mark cells as skipped in the skiptable for rowspans and colspans.
+-- Mark cells as skipped in the skiptable for rowspans and colspans.
 ---@param tr_contents table Row contents
 ---@param curskiptable table Current skiptable
 ---@param current_row integer Current row index
@@ -2522,7 +2541,9 @@ function set_skip_table_elt(tr_contents, curskiptable, current_row, total_column
 end
 
 
---- Build the skiptable for the table, marking all skipped cells.
+-- Builds the skiptables for the body, head and foot. Marks every cell
+-- covered by a colspan or rowspan so later layout passes can skip them.
+---@return nil
 function tabular:set_skip_table()
     self.skiptables={ body = { name = "body"}, tablehead = { name = "tablehead"}, tablefoot = { name = "tablefoot"}}
     local rowcounter = {}
@@ -2551,7 +2572,7 @@ function tabular:set_skip_table()
     end
 end
 
---- Main entry point to create and typeset the table.
+-- Main entry point to create and typeset the table.
 ---@param dataxml table XML data for the table
 function tabular:make_table(dataxml)
     setmetatable(self.column_distances,{ __index = function() return self.colsep or 0 end })

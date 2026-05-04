@@ -25,10 +25,12 @@ local tables_mod = require("html.tables")
 local tree = require("html.tree")
 local units = require("html.units")
 
+---@class html_module
 local M = {}
 require("box")
 
 
+---@type table<string, integer>
 local fontfamilies = {}
 
 local inherited = {
@@ -129,7 +131,15 @@ local stylesstack = inherit.new_stack(inherited)
 -- }
 -- (attributes not shown)
 
--- collect horizontal nodes returns a table with nodelists (glyphs for example)
+-- Collects the horizontal node lists for an inline element subtree.
+-- Returns an array of node lists (one per inline run) so the caller can
+-- pack them into a paragraph.
+---@param elt table HTML element subtree (with `elementname`, children).
+---@param parameter? table Inherited style parameters.
+---@param before_box? boolean Whether the run starts a fresh line.
+---@param origin? string Caller identifier (debugging).
+---@param dataxml table Data XML context.
+---@return table[] runs Array of inline node lists.
 function M.collect_horizontal_nodes( elt,parameter,before_box,origin,dataxml )
     -- w("collect_horizontal_nodes %s",origin or "?")
     parameter = parameter or {}
@@ -204,6 +214,16 @@ end
 local olcounter = {}
 local oltype = {}
 
+-- Recursively builds the node list for a (block-level) HTML element
+-- subtree. Dispatches to inline collection, table layout, list rendering
+-- or image embedding based on the element kind.
+---@param elt table HTML element subtree.
+---@param options? table Inherited style options.
+---@param before_box? boolean Whether the element starts a fresh box.
+---@param caller? string Caller identifier (debugging).
+---@param prevdir? "→"|"↓" Previous run's direction.
+---@param dataxml table Data XML context.
+---@return node? head Head of the resulting node list.
 function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
     -- w("html: build nodelist from %s, prevdir = %s", caller or "?",prevdir or "?")
     options = options or {}
@@ -616,6 +636,12 @@ end
 
 
 -- Entry point for HTML parsing
+-- Top-level entry point for the HTML parser. Resolves CSS, dispatches
+-- to `build_nodelist` and returns the resulting box.
+---@param elt table Parsed CSS+HTML tree (from `<HTML>`).
+---@param options? table Per-call options.
+---@param data table Data XML context.
+---@return node|table result Final box or paragraph object.
 function M.parse_html_new( elt, options, data )
     options = options or {}
     -- local maxwidth_sp = options.maxwidth_sp

@@ -1,4 +1,4 @@
---- Generic Lua/table helpers.
+-- Generic Lua/table helpers.
 --
 --  utilities.lua
 --  speedata publisher
@@ -8,9 +8,16 @@
 
 file_start("utilities.lua")
 
+---@class utilities_module
 local M = {}
 
--- deepcopy is for <Copy-of>
+-- Deep-copies any Lua value. For tables, descends recursively, preserves
+-- metatables and copies node lists with `node.copy_list`. Skips a few
+-- well-known back-reference keys (`.__parent`, `.__context`, `_layoutxml`,
+-- `_dataxml`) to avoid infinite loops. Used by the `<Copy-of>` command.
+---@generic T
+---@param t T
+---@return T
 function M.deepcopy(t)
     local typ = type(t)
     if typ ~= 'table' then return t end
@@ -33,6 +40,10 @@ function M.deepcopy(t)
     return res
 end
 
+-- Returns a shallow copy of `defaults`. Non-table inputs are returned as-is.
+---@generic T
+---@param defaults T
+---@return T
 function M.copy_table_from_defaults( defaults )
     if type(defaults) ~= "table" then
         return defaults
@@ -47,6 +58,14 @@ end
 -- Stable sort, public domain / cc0
 local max_chunk_size = 12
 
+---@alias OrderFn fun(a: any, b: any): boolean Strict less-than predicate; must return `false` when `a == b`.
+
+-- Sorts `array[first..last]` in place using insertion sort.
+---@param array any[]
+---@param first integer
+---@param last integer
+---@param goes_before OrderFn
+---@return nil
 function M.insertion_sort( array, first, last, goes_before )
     for i = first + 1, last do
         local k = first
@@ -63,6 +82,15 @@ function M.insertion_sort( array, first, last, goes_before )
     end
 end
 
+-- Merges the two already-sorted runs `array[low..middle]` and
+-- `array[middle+1..high]` in place, using `workspace` as scratch space.
+---@param array any[]
+---@param workspace any[] Scratch buffer; `array[low..middle]` is copied into it.
+---@param low integer
+---@param middle integer
+---@param high integer
+---@param goes_before OrderFn
+---@return nil
 function M.merge( array, workspace, low, middle, high, goes_before )
     local i, j, k
     i = 1
@@ -92,6 +120,14 @@ function M.merge( array, workspace, low, middle, high, goes_before )
     end
 end
 
+-- Recursively merge-sorts `array[low..high]` in place. Falls back to
+-- `insertion_sort` for chunks smaller than `max_chunk_size`.
+---@param array any[]
+---@param workspace any[]
+---@param low integer
+---@param high integer
+---@param goes_before OrderFn
+---@return nil
 function M.merge_sort( array, workspace, low, high, goes_before )
     if high - low < max_chunk_size then
         M.insertion_sort( array, low, high, goes_before )
@@ -103,6 +139,11 @@ function M.merge_sort( array, workspace, low, high, goes_before )
     end
 end
 
+-- Sorts `array` in place using a stable merge sort.
+---@generic T
+---@param array T[]
+---@param goes_before? OrderFn Defaults to `function(a,b) return a < b end`.
+---@return T[] array Same instance, now sorted.
 function M.stable_sort( array, goes_before )
     local n = #array
     if n < 2 then return array end
@@ -116,7 +157,12 @@ function M.stable_sort( array, goes_before )
     return array
 end
 
---- Garbage Collection helpers
+-- Garbage Collection helpers
+
+-- Recursively walks a table and frees node lists found in userdata fields
+-- via `node.flush_list`. Skips back-reference keys (`.__context`, `.__parent`).
+---@param tbl table
+---@return nil
 function M.flush_table(tbl)
     for k,v in pairs(tbl) do
         if k == ".__context" or k == ".__parent" then
@@ -129,6 +175,11 @@ function M.flush_table(tbl)
     end
 end
 
+-- Looks up a publisher variable by name and runs `flush_table` on it if it
+-- holds a table. The lookup uses `publisher.data.vars` for the new XPath
+-- parser and `xpath.get_variable` for the legacy parser.
+---@param varname string
+---@return nil
 function M.flush_variable( varname )
     local x
     if publisher.newxpath then
@@ -142,11 +193,15 @@ function M.flush_variable( varname )
 end
 
 -- random string https://gist.github.com/haggen/2fd643ea9a261fea2094
+---@type string[]
 local charset = {}
 for i = 48,  57 do table.insert(charset, string.char(i)) end
 for i = 65,  90 do table.insert(charset, string.char(i)) end
 for i = 97, 122 do table.insert(charset, string.char(i)) end
 
+-- Returns a random alphanumeric string of `length` characters.
+---@param length integer
+---@return string
 function M.string_random(length)
     if length > 0 then
         return M.string_random(length - 1) .. charset[math.random(1, #charset)]

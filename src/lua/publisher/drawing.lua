@@ -1,4 +1,4 @@
---- Drawing primitives, frames, transformations and MetaPost bridge.
+-- Drawing primitives, frames, transformations and MetaPost bridge.
 --
 --  drawing.lua
 --  speedata publisher
@@ -8,23 +8,49 @@
 
 file_start("drawing.lua")
 
+---@class drawing_module
 local M = {}
 
 local colors_module = require("publisher.colors")
 local metapost = require("publisher.metapost")
 
+---@alias TransformMatrix number[] Six-element affine matrix `{a, b, c, d, e, f}` (PDF order).
+
+-- Returns a small filled square at `(x, y)` for visual debugging. sp input.
+---@param x integer
+---@param y integer
+---@return string pdf_fragment
 function M.pdf_draw_pos(x,y)
     x = sp_to_bp(x)
     y = sp_to_bp(y)
     local wd = 0.1
     return string.format("q 0 g 0.2 w %g %g m %g %g l %g %g l %g %g l h f Q ",x - wd,y - wd,x - wd,y + wd,x + wd,y + wd,x + wd,y - wd)
 end
+
+-- Small filled circle marker at `(x, y)`. sp input.
+---@param x integer
+---@param y integer
+---@return string pdf_fragment
 function M.pdf_circle_pos(x,y)
     return M.circle_pdfstring(x,y,10000,10000,"0G 0g","0G 0g",0)
 end
+
+-- Larger filled circle marker at `(x, y)`. sp input.
+---@param x integer
+---@param y integer
+---@return string pdf_fragment
 function M.pdf_circle_pos_big(x,y)
     return M.circle_pdfstring(x,y,100000,100000,"0G 0g","0G 0g",0)
 end
+
+-- PDF `c` (cubic Bezier) operator. sp input.
+---@param x1 integer
+---@param y1 integer
+---@param x2 integer
+---@param y2 integer
+---@param x3 integer
+---@param y3 integer
+---@return string
 function M.pdf_curveto(x1,y1,x2,y2,x3,y3)
     x1 = sp_to_bp(x1)
     y1 = sp_to_bp(y1)
@@ -34,11 +60,21 @@ function M.pdf_curveto(x1,y1,x2,y2,x3,y3)
     y3 = sp_to_bp(y3)
     return string.format("%g %g %g %g %g %g c",x1,y1,x2,y2,x3,y3)
 end
+
+-- PDF `m` (moveto) operator. sp input.
+---@param x integer
+---@param y integer
+---@return string
 function M.pdf_moveto( x,y )
     x = sp_to_bp(x)
     y = sp_to_bp(y)
     return string.format("%g %g m",x,y)
 end
+
+-- PDF `l` (lineto) operator. sp input.
+---@param x integer
+---@param y integer
+---@return string
 function M.pdf_lineto( x,y )
     x = sp_to_bp(x)
     y = sp_to_bp(y)
@@ -46,34 +82,72 @@ function M.pdf_lineto( x,y )
 end
 
 
+-- Same as `pdf_draw_pos` but takes coordinates in big points (bp).
+---@param x number
+---@param y number
+---@return string
 function M.pdf_draw_pos_bp(x,y)
     local wd = 0.1
     return string.format("q 0 g 0.2 w %g %g m %g %g l %g %g l %g %g l h f Q ",x - wd,y - wd,x - wd,y + wd,x + wd,y + wd,x + wd,y - wd)
 end
 
+-- Same as `pdf_circle_pos` but takes bp coordinates.
+---@param x number
+---@param y number
+---@return string
 function M.pdf_circle_pos_bp(x,y)
     return M.circle_pdfstring_bp(x,y,0.5,0.5,"0G 0g","0G 0g",0)
 end
+
+-- Same as `pdf_circle_pos_big` but takes bp coordinates.
+---@param x number
+---@param y number
+---@return string
 function M.pdf_circle_pos_big_bp(x,y)
     return M.circle_pdfstring_bp(x,y,3,3,"0G 0g","0G 0g",0)
 end
+
+-- PDF `c` operator with bp coordinates.
+---@param x1 number
+---@param y1 number
+---@param x2 number
+---@param y2 number
+---@param x3 number
+---@param y3 number
+---@return string
 function M.pdf_curveto_bp(x1,y1,x2,y2,x3,y3)
     return string.format("%g %g %g %g %g %g c",x1,y1,x2,y2,x3,y3)
 end
+
+-- PDF `m` operator with bp coordinates.
+---@param x number
+---@param y number
+---@return string
 function M.pdf_moveto_bp( x,y )
     return string.format("%g %g m",x,y)
 end
 
+-- PDF `l` operator with bp coordinates.
+---@param x number
+---@param y number
+---@return string
 function M.pdf_lineto_bp( x,y )
     return string.format("%g %g l",x,y)
 end
 
+-- Lazily creates the shared transparency color stack and stores its index
+-- in `publisher.defaultcolorstack`.
+---@return nil
 function M.transparentcolorstack()
     if publisher.defaultcolorstack == 0 then
         publisher.defaultcolorstack = pdf.newcolorstack("0 g 0 G/TRP1 gs","direct",true)
     end
 end
 
+-- Composes two affine transformation matrices (`a` then `b`).
+---@param a TransformMatrix
+---@param b TransformMatrix
+---@return TransformMatrix
 function M.concat_transformation( a, b )
     local c = {}
     c[1] = a[1] * b[1] + a[2] * b[3]
@@ -85,7 +159,14 @@ function M.concat_transformation( a, b )
     return c
 end
 
--- Place a text in the background
+-- Places a rotated text watermark in the background of `box`.
+---@param box node Hbox to decorate (modified in place).
+---@param textstring string Watermark text.
+---@param angle number Rotation in degrees.
+---@param colorname string Registered color name.
+---@param fontfamily integer Font family number.
+---@param bgsize? integer Optional font size in sp; defaults to family size.
+---@return nil
 function M.bgtext( box, textstring, angle, colorname, fontfamily, bgsize)
     local colorindex = colors_module.colors[colorname].index
     local boxheight, boxwidth = box.height, box.width
@@ -126,7 +207,12 @@ function M.bgtext( box, textstring, angle, colorname, fontfamily, bgsize)
     return box
 end
 
---- Draw a background behind the rectangular (box) object.
+-- Draw a background behind the rectangular (box) object.
+-- Adds a colored background rectangle behind the contents of `box`.
+---@param box node Hbox to modify in place.
+---@param colorname string|integer Color name or index.
+---@param origin? string Origin tag for `setprop` (debugging).
+---@return node box
 function M.background( box, colorname,origin )
     -- color '-' means 'no color'
     if colorname == "-" then return box end
@@ -164,18 +250,22 @@ function M.background( box, colorname,origin )
     end
 end
 
---- Draw a colored frame around a given TeX box.
---- The control points of the frame are illustrated in
---- doc/img/roundedcorners.svg.
----
---- `obj` is a table with the keys:
----   box: the TeX box
----   colorname: the name of a color (defaults to "black")
----   width: the width of the border (defaults to 0)
----   clip: should the outside be clipped?
----   b_x_y_radius (x = b|t, y = r|l): the radius of the corners
----
---- Returns a hbox.
+-- Draw a colored frame around a given TeX box.
+-- The control points of the frame are illustrated in
+-- doc/img/roundedcorners.svg.
+--
+-- `obj` is a table with the keys:
+--   box: the TeX box
+--   colorname: the name of a color (defaults to "black")
+--   width: the width of the border (defaults to 0)
+--   clip: should the outside be clipped?
+--   b_x_y_radius (x = b|t, y = r|l): the radius of the corners
+--
+-- Returns a hbox.
+-- Wraps a frame around the contents of `obj`. Honors border colors,
+-- widths, padding, corner radius and shadow attributes from `obj`.
+---@param obj table Frame parameters with `width`, `height`, `border_*`, etc.
+---@return node hbox
 function M.frame(obj)
     local  box, width
     box          = obj.box
@@ -373,6 +463,10 @@ function M.frame(obj)
     return hvbox
 end
 
+-- Wraps the children of `obj` in a clipping path defined by `obj.path`
+-- (PDF operator string).
+---@param obj table Clipping parameters with `width`, `height`, `path` etc.
+---@return node hbox
 function M.clip(obj)
     local box = obj.box
     local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
@@ -449,8 +543,18 @@ function M.clip(obj)
     return hvbox
 end
 
---- Get a PDF string for a circle. Control points are illustrated in
---- doc/img/circlepoints.svg.
+-- Get a PDF string for a circle. Control points are illustrated in
+-- doc/img/circlepoints.svg.
+-- Builds the PDF content-stream fragment for an ellipse, approximated by
+-- four cubic Beziers. sp inputs.
+---@param center_x integer
+---@param center_y integer
+---@param radiusx_sp integer
+---@param radiusy_sp integer
+---@param stroke_colorstring string PDF color command for the stroke (`/CS`/`G`/`RG`...).
+---@param fill_colorstring string PDF color command for the fill.
+---@param rulewidth_sp integer Stroke width in sp; `0` means no stroke.
+---@return string
 function M.circle_pdfstring(center_x, center_y, radiusx_sp, radiusy_sp, stroke_colorstring, fill_colorstring, rulewidth_sp )
     local circle_bezier = 0.551915024494
 
@@ -499,6 +603,15 @@ function M.circle_pdfstring(center_x, center_y, radiusx_sp, radiusy_sp, stroke_c
     return table.concat(circle, " ")
 end
 
+-- Same as `circle_pdfstring` but with all coordinates already in bp.
+---@param center_x number
+---@param center_y number
+---@param radiusx_bp number
+---@param radiusy_bp number
+---@param stroke_colorstring string
+---@param fill_colorstring string
+---@param rulewidth_bp number
+---@return string
 function M.circle_pdfstring_bp(center_x, center_y, radiusx_bp, radiusy_bp, stroke_colorstring, fill_colorstring, rulewidth_bp )
     local circle_bezier = 0.551915024494
 
@@ -547,7 +660,14 @@ function M.circle_pdfstring_bp(center_x, center_y, radiusx_bp, radiusy_bp, strok
     return table.concat(circle, " ")
 end
 
---- Draw a circle
+-- Draw a circle
+-- Returns an hbox containing a filled/stroked ellipse.
+---@param radiusx_sp integer Horizontal radius in sp.
+---@param radiusy_sp integer Vertical radius in sp.
+---@param colorname string|nil Fill color name; `nil` means no fill.
+---@param framecolorname string|nil Stroke color name; `nil` means no stroke.
+---@param rulewidth_sp integer Stroke width in sp.
+---@return node hbox
 function M.circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp)
     if rulewidth_sp < 5 then
         framecolorname = colorname
@@ -575,6 +695,14 @@ function M.circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp
     return v
 end
 
+-- Compiles a MetaPost figure source and returns the resulting drawing
+-- as a node, optionally clipped to `(width, height)`.
+---@param dataxml table Data XML context (used for variable substitution).
+---@param txt string MetaPost source.
+---@param width integer? Width in sp.
+---@param height integer? Height in sp.
+---@param clip boolean? Clip the output to the given dimensions.
+---@return node? hbox
 function M.do_metapostimage(dataxml,txt,width,height,clip)
     publisher.metapostgraphics["_image"] = txt
     local cp = publisher.current_page
@@ -641,6 +769,12 @@ function M.do_metapostimage(dataxml,txt,width,height,clip)
     return {box,nil}
 end
 
+-- Wraps a MetaPost graphic in an hbox using the named template from
+-- `publisher.metapostgraphics`.
+---@param parameter table Per-call MetaPost parameters (variable values, name).
+---@param width integer? Target width in sp.
+---@param height integer? Target height in sp.
+---@return node? hbox
 function M.mpbox(parameter,width,height)
     local width_sp = width
     local height_sp = height
@@ -782,9 +916,17 @@ function M.mpbox(parameter,width,height)
     return ret
 end
 
---- Create a colored area. width and height are in scaled points.
---- Optional border_color (color name) and border_width (in sp) draw a stroke
---- rectangle at the outer edge; the fill area shrinks inward by border_width.
+-- Create a colored area. width and height are in scaled points.
+-- Optional border_color (color name) and border_width (in sp) draw a stroke
+-- rectangle at the outer edge; the fill area shrinks inward by border_width.
+-- Returns a colored rectangle hbox of the given size, optionally with a
+-- border in another color.
+---@param width_sp integer
+---@param height_sp integer
+---@param colorname string|integer Fill color.
+---@param border_color string|integer|nil Border color (`nil` for none).
+---@param border_width_sp integer? Border width in sp.
+---@return node hbox
 function M.box( width_sp,height_sp,colorname,border_color,border_width_sp )
     local h,v
     local _width   = sp_to_bp(width_sp)
@@ -847,6 +989,9 @@ function M.box( width_sp,height_sp,colorname,border_color,border_width_sp )
     return v
 end
 
+-- Inserts a thin black rule at the head of `hbox` for visual debugging.
+---@param hbox node
+---@return nil
 function M.addhrule(hbox)
     local n = node.new("whatsit","pdf_literal")
     n.data = string.format("q 0.3 w [2 1] 0 d 0 0 1 RG 0 %g  m %g %g l S Q",  sp_to_bp(hbox.height),  -sp_to_bp(hbox.width) ,  sp_to_bp(hbox.height) )
@@ -856,6 +1001,9 @@ function M.addhrule(hbox)
     return hbox
 end
 
+-- Adds a debug rule around `box` so its bounding box is visible.
+---@param box node
+---@return node box
 function M.boxit( box )
     local box = node.hpack(box)
 
@@ -873,6 +1021,14 @@ function M.boxit( box )
     return box
 end
 
+-- Builds a colored bar (hrule wrapped in an hbox) with the given metrics.
+---@param wd integer Width in sp.
+---@param ht integer Height in sp (above baseline).
+---@param dp integer Depth in sp (below baseline).
+---@param color string|integer Color name or index.
+---@param origin? string Origin tag for `setprop` (debugging).
+---@param orientation? "horizontal"|"vertical" Defaults to horizontal.
+---@return node hbox
 function M.colorbar( wd,ht,dp,color,origin,orientation)
     local colorname = color
     if color == "-" then
@@ -945,6 +1101,13 @@ local explode = function(s,p)
    return t
 end
 
+-- Stacks `nodelist_foreground` on top of `nodelist_background` with the
+-- foreground anchored at `(origin_x, origin_y)` relative to the background.
+---@param nodelist_background node
+---@param nodelist_foreground node
+---@param origin_x integer Offset in sp.
+---@param origin_y integer Offset in sp.
+---@return node hbox
 function M.montage( nodelist_background,nodelist_foreground, origin_x, origin_y )
     local wd_bg = nodelist_background.width
     local ht_bg = nodelist_background.height + nodelist_background.depth
@@ -984,7 +1147,13 @@ function M.montage( nodelist_background,nodelist_foreground, origin_x, origin_y 
     return hbox
 end
 
---- Apply transformation matrix to object given at _nodelist_. Called from commands#transformation.
+-- Apply transformation matrix to object given at _nodelist_. Called from commands#transformation.
+-- Applies an arbitrary affine transformation to a node list.
+---@param nodelist node Source node list.
+---@param matrix TransformMatrix
+---@param origin_x integer Origin offset in sp.
+---@param origin_y integer Origin offset in sp.
+---@return node hbox
 function M.matrix( nodelist,matrix,origin_x,origin_y )
     local wd,ht = nodelist.width, nodelist.height
     local tbl = explode(matrix,"[^\t ]+")
@@ -1016,10 +1185,16 @@ function M.matrix( nodelist,matrix,origin_x,origin_y )
     return newbox
 end
 
---- Rotate an object clockwise with a given angle (in degrees).
----
---- First rotate the object at the top left corner (default)
---- If the origin is not top left, we need to shift the object
+-- Rotate an object clockwise with a given angle (in degrees).
+--
+-- First rotate the object at the top left corner (default)
+-- If the origin is not top left, we need to shift the object
+-- Rotates a node list around `(origin_x, origin_y)` by `angle` degrees.
+---@param nodelist node
+---@param angle number Rotation in degrees (counter-clockwise).
+---@param origin_x integer Origin offset in sp.
+---@param origin_y integer Origin offset in sp.
+---@return node hbox
 function M.rotate( nodelist,angle,origin_x,origin_y )
     local wd,ht = nodelist.width, nodelist.height + nodelist.depth
     nodelist.width = 0
@@ -1050,8 +1225,14 @@ function M.rotate( nodelist,angle,origin_x,origin_y )
     return tmp
 end
 
---- Rotate a table cell clockwise with a given angle (in degrees).
+-- Rotate a table cell clockwise with a given angle (in degrees).
 -- This is a simple and very basic implementation which needs to be extended in the future.
+-- Rotates a table-cell (Td) node list by `angle` degrees, fitting it
+-- into the column width.
+---@param nodelist node
+---@param angle number Rotation in degrees.
+---@param width_sp integer Target width in sp.
+---@return node hbox
 function M.rotateTd( nodelist,angle, width_sp)
     if angle % 360 == 0 then return nodelist end
 
@@ -1107,7 +1288,11 @@ function M.rotateTd( nodelist,angle, width_sp)
     return q
 end
 
---- Rotate a text on a given angle (`angle` on textblock).
+-- Rotate a text on a given angle (`angle` on textblock).
+-- Rotates a textblock node list by `angle` degrees around its origin.
+---@param nodelist node
+---@param angle number Rotation in degrees.
+---@return node hbox
 function M.rotate_textblock( nodelist,angle )
     local wd,ht = nodelist.width, nodelist.height + nodelist.depth
     nodelist.width = 0

@@ -1,4 +1,4 @@
---- XML loading and serialization helpers.
+-- XML loading and serialization helpers.
 --
 --  xml_helpers.lua
 --  speedata publisher
@@ -8,11 +8,15 @@
 
 file_start("xml_helpers.lua")
 
+---@class xml_helpers_module
 local M = {}
 
 local luxor = do_luafile("luxor.lua")
 
---- Make a string XML safe
+-- Escapes `<`, `>`, `"` and `&` for inclusion in XML text or attribute values.
+-- Tables are concatenated first; non-string, non-table inputs return `""`.
+---@param str string|string[]|nil
+---@return string
 function M.xml_escape( str )
     if type(str) == "table" then
         str = table.concat(str)
@@ -29,7 +33,13 @@ function M.xml_escape( str )
     return ret
 end
 
---- See commands#save_dataset() for documentation on the data structure for `xml_element`.
+-- Serializes an XML element produced by the new XPath parser back to a
+-- string. Namespaces declared on parent elements are not re-emitted on
+-- children. See `commands#save_dataset()` for the input data structure.
+---@param xml_element table|string
+---@param level? integer Recursion depth (used internally).
+---@param namespace_written? table<string, true> Namespaces already emitted in an ancestor.
+---@return string
 function M.xml_to_string_newxpath( xml_element, level, namespace_written )
     local new_namespaces = publisher.copy_table_from_defaults(namespace_written or {})
     local str = ""
@@ -81,6 +91,10 @@ function M.xml_to_string_newxpath( xml_element, level, namespace_written )
     return str
 end
 
+-- Serializes an XML element from the legacy Lua XML parser to a string.
+---@param xml_element table|string
+---@param level? integer Recursion depth (used internally).
+---@return string
 function M.xml_to_string( xml_element, level )
     local str = ""
     if type(xml_element) == "string" then
@@ -127,6 +141,10 @@ function M.xml_to_string( xml_element, level )
     return str
 end
 
+-- Concatenates all text descendants of an XML element into a single string.
+-- Used as the `__tostring` metamethod via `xml_stringvalue_mt`.
+---@param self table|string
+---@return string
 function M.xml_stringvalue( self )
     if type(self) == "string" then return self end
     local ret = {}
@@ -141,11 +159,19 @@ function M.xml_stringvalue( self )
     return table.concat(ret)
 end
 
+---@type metatable
 M.xml_stringvalue_mt = {
     __tostring = M.xml_stringvalue
 }
 
--- Adds index metatable for namespace lookup to layout xml
+-- Walks a parsed XML tree and (a) attaches `xml_stringvalue_mt` so elements
+-- stringify to their text content, (b) chains the `.__ns` namespace tables
+-- through the parent so descendants inherit namespace declarations, and
+-- (c) optionally collapses `\n` to spaces in text content.
+---@param tbl table Parsed XML element.
+---@param ignoreeol boolean? When true, replace `\n` with `" "` in text nodes.
+---@param parent? table Parent element (used internally).
+---@return nil
 function M.fixup_xmlfile(tbl, ignoreeol, parent)
     setmetatable(tbl, M.xml_stringvalue_mt)
     if parent and tbl[".__ns"] then
@@ -160,8 +186,13 @@ function M.fixup_xmlfile(tbl, ignoreeol, parent)
     end
 end
 
---- Load an XML file from the hard drive. filename is without path but including extension,
---- filetype is a string representing the type of file read, such as "layout" or "data".
+-- Loads an XML file from disk. `filename` is without path but with extension;
+-- the file is resolved via `kpse.find_file` (legacy parser) or via `splib`
+-- (new parser).
+---@param filename string File name without path, including extension.
+---@param filetype? string File category for log messages, e.g. `"layout"` or `"data"`.
+---@param parameter? { ignoreeol?: boolean }
+---@return table? xmltree Parsed XML, or `nil` on error.
 function M.load_xml(filename, filetype, parameter)
     if not filename or filename == "" then
         main.log("error","Load XML: no file name given")
@@ -198,6 +229,10 @@ function M.load_xml(filename, filetype, parameter)
     end
 end
 
+-- Computes and logs the MD5 hex digest of `filename`. Used for verbose logs
+-- so the operator can verify which file was actually loaded.
+---@param filename string Resolved via `kpse.find_file`.
+---@return nil
 function M.calculate_md5sum(filename)
     local p = kpse.find_file(filename)
     if p then
@@ -213,7 +248,9 @@ function M.calculate_md5sum(filename)
     end
 end
 
--- Return the element name of the given element (elt)
+-- Returns the element name of a dispatch entry.
+---@param elt { elementname: string }?
+---@return string?
 function M.elementname(elt)
     if not elt then
         main.log("error","Could not get element name", publisher.lineinfo())
@@ -222,7 +259,9 @@ function M.elementname(elt)
     return elt.elementname
 end
 
---- Return the contents of an entry from the `dispatch()` function call.
+-- Returns the contents of a dispatch entry (as produced by `dispatch()`).
+---@param elt { contents: any }
+---@return any
 function M.element_contents( elt )
     return elt.contents
 end

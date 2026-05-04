@@ -2,8 +2,21 @@
 
 file_start("par.lua")
 
+---@class Par
+---@field textformat string Name of the assigned textformat.
+---@field origin? string Caller identifier (debugging only).
+---@field typ "par"
+---@field has_color? boolean
+---@field has_hyperlink? boolean
+---@field has_role? boolean
+---@field has_special_nodes? boolean
 local Par = {}
 
+-- Constructs a fresh `Par` instance with the given textformat.
+---@param self Par
+---@param textformat string
+---@param origin? string
+---@return Par
 function Par:new( textformat,origin )
     local instance = {
         textformat = textformat,
@@ -18,11 +31,11 @@ function Par:new( textformat,origin )
     return instance
 end
 
--- Used when padding right > 0
--- It is not enough to reduce the width of the lines, because
--- the outer object will be smaller than requested.
--- Therefore it is necessary to add the padding right width
--- to the right of each line.
+-- Adds glue of width `wd` at the end of every line in the linebroken
+-- vbox `nl`. Used to honor padding-right without shrinking the line width.
+---@param nl node Vbox of lines.
+---@param wd integer Padding in sp.
+---@return node nl
 local function widen_nodelist(nl,wd)
     local glue = publisher.make_glue({ width = wd })
     local hbox = nl.head
@@ -39,6 +52,11 @@ local function widen_nodelist(nl,wd)
     return nl
 end
 
+-- Adds glue of width `wd` at the start of every line in the linebroken
+-- vbox `nl`. Used to apply a left indent to a paragraph.
+---@param nl node Vbox of lines.
+---@param wd integer Indent in sp.
+---@return nil
 local function indent_nodelist(nl,wd)
     local glue = publisher.make_glue({ width = wd })
     local hbox = nl.head
@@ -55,6 +73,10 @@ end
 
 local void_elements = {area = true, base = true, br = true, col = true, hr = true, img = true, input = true, link = true, meta = true, param = true, command = true, keygen = true, source = true }
 
+-- Reconstructs the original (or close-to-original) HTML/CSS text for an
+-- element so it can flow through the regular paragraph builder.
+---@param elt table HTML element.
+---@return string text
 local function reconstruct_html_text(elt)
     local eltname = elt[".__local_name"]
     eltname = string.lower(eltname)
@@ -93,6 +115,12 @@ local function reconstruct_html_text(elt)
     return table.concat( ret )
 end
 
+-- Builds a glyph node list from `text` using the surrounding par's
+-- options merged with `options`.
+---@param self Par
+---@param text string
+---@param options? table Per-call style overrides.
+---@return node head
 local function mktextnode(self,text,options)
     local nodes, newdir = publisher.mknodes(tostring(text),options,"par/mktextnode")
     if options.fontoutlinewidth and options.fontoutlinewidth > 0 then
@@ -126,6 +154,14 @@ local function mktextnode(self,text,options)
     return nodes
 end
 
+-- Flattens a heterogeneous list of paragraph items (text, marks, hyperlinks,
+-- inline objects, function callbacks, ...) into the par's underlying array
+-- of nodes, propagating style options downward.
+---@param self Par
+---@param items table Flat or nested list of items to append.
+---@param options? table Inherited style options.
+---@param data table Data XML context.
+---@return nil
 local function flatten(self,items,options,data)
     options = options or {}
     local ret = {}
@@ -393,17 +429,32 @@ local function flatten(self,items,options,data)
     return items
 end
 
+-- Prepends an item (or list of items) to the par.
+---@param self Par
+---@param whatever any|any[]
+---@return nil
 function Par:prepend(whatever)
     self.prependlist = self.prependlist or {}
     table.insert(self.prependlist,1, whatever)
 end
 
+-- Stores a left-indent value to be applied during `format()`.
+---@param self Par
+---@param width_sp integer Indent in sp.
+---@return nil
 function Par:indent(width_sp)
     -- w("indent %s wd %gpt",self.origin or "?", width_sp / publisher.factor)
     self.padding_left = self.padding_left or 0
     self.padding_left = self.padding_left + width_sp
 end
 
+-- Returns the minimum width the paragraph would occupy, defined as the
+-- width of its widest non-breakable item.
+---@param self Par
+---@param textformat_name string Textformat used for the simulation.
+---@param options table
+---@param data table Data XML context.
+---@return integer min_width Width in sp.
 function Par:min_width( textformat_name, options,data )
     options = options or {}
     local newpar = publisher.deepcopy(self)
@@ -433,6 +484,12 @@ function Par:min_width( textformat_name, options,data )
     return max
 end
 
+-- Returns the natural unbroken width and line height of the paragraph.
+---@param self Par
+---@param options table
+---@param data table Data XML context.
+---@return integer max_width Width in sp.
+---@return integer lineheight Line height in sp.
 function Par:max_width_and_lineheight(options,data)
     local newpar = publisher.deepcopy(self)
     newpar.origin = "max_width_and_lineheight"
@@ -458,6 +515,11 @@ function Par:max_width_and_lineheight(options,data)
     return maxwd, nl.height + nl.depth
 end
 
+-- Builds the glyph node list for the paragraph (without line breaking).
+---@param self Par
+---@param options table
+---@param data table Data XML context.
+---@return node head Head of the resulting node list.
 function Par:mknodelist( options, data )
     flatten(self,self,options, data)
     local nodelist
@@ -520,6 +582,9 @@ function Par:mknodelist( options, data )
 end
 
 local get_lineheight
+-- Returns the maximum line height in `nodelist` (a vbox of lines).
+---@param nodelist node
+---@return integer lineheight Line height in sp.
 function get_lineheight( nodelist )
     local head = nodelist
     while head do
@@ -539,6 +604,12 @@ function get_lineheight( nodelist )
     return 0
 end
 
+-- Computes the border-width contribution, content height and margin-top
+-- for a node list with HTML border properties attached.
+---@param nodelist node
+---@return integer border_width Total border width in sp.
+---@return integer height Content height in sp.
+---@return integer margin_top sp.
 local function get_border_width_height_margintop(nodelist)
     local sum_ht = 0
     local sum_margin_top = 0
@@ -562,6 +633,14 @@ local function get_border_width_height_margintop(nodelist)
 end
 
 
+-- Builds the glyph node list, applies the textformat, runs line breaking
+-- and returns the linebroken vbox. The main entry point used by callers
+-- once they know the target width.
+---@param self Par
+---@param width_sp integer Target line width in sp.
+---@param options? table Style overrides.
+---@param data? table Data XML context.
+---@return node vbox Linebroken paragraph.
 function Par:format( width_sp, options,data )
     -- w("call format %s",self.origin)
     options = options or {}
@@ -1177,6 +1256,11 @@ function Par:format( width_sp, options,data )
     return nodelist
 end
 
+-- Appends an item (or list of items) to the par.
+---@param self Par
+---@param whatever any|any[]
+---@param options? table Style overrides applied to the appended items.
+---@return nil
 function Par:append( whatever, options )
     options = options or {}
     if options.initial and not self.initial then self.initial = options.initial end

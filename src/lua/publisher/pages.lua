@@ -1,4 +1,4 @@
---- Page setup, output positioning and shipout.
+-- Page setup, output positioning and shipout.
 --
 --  pages.lua
 --  speedata publisher
@@ -8,6 +8,7 @@
 
 file_start("pages.lua")
 
+---@class pages_module
 local M = {}
 
 local page = require("publisher.page")
@@ -15,10 +16,20 @@ local colors_module = require("publisher.colors")
 local metapost = require("publisher.metapost")
 local spotcolors = require("spotcolors")
 
+-- Returns `true` when a page table has already been built for `pagenumber`.
+---@param pagenumber integer
+---@return boolean
 function M.page_initialized_p( pagenumber )
     return publisher.pages[pagenumber] ~= nil
 end
 
+-- Ships out the given page node list as the next PDF page. Records
+-- structure-tree information in PDF/UA mode and updates `pagelabels`,
+-- `pagenum_tbl`, `pages_shippedout`.
+---@param nodelist node Page contents (typically a vbox).
+---@param pagenumber integer Logical page number.
+---@param dataxml table Data XML context for matter resolution.
+---@return nil
 function M.shipout(nodelist, pagenumber,dataxml)
     publisher.pages_shippedout[pagenumber] = true
     publisher.pagenum_tbl[#publisher.pagenum_tbl+1] = pagenumber
@@ -65,25 +76,28 @@ function M.shipout(nodelist, pagenumber,dataxml)
     tex.shipout(666)
 end
 
---- Place an object at a position given in scaled points (_x_ and _y_).
----
---- Parameter       | Description
---- ----------------|----------------------------------------------
---- nodelist        | The box to be placed
---- x               | The horizontal distance from the left edge in grid cells
---- y               | The vertical distance form the top edge in grid cells
---- clipatmargin    | Clip objects so they don't appear in the page margin
---- rotate          | Rotation counter clockwise in degrees (0-360).
---- origin_x        | Origin X for rotation. Left is 0 and right is 100
---- origin_y        | Origin Y for rotation. Top is 0 and bottom is 100
---- allocate        | Should the touched cells be allocated?
+---@class OutputAbsoluteParam
+---@field nodelist node The box to be placed.
+---@field x integer Horizontal offset from the left edge (sp).
+---@field y integer Vertical offset from the top edge (sp).
+---@field clipatmargin? boolean Clip objects so they do not appear in the page margin.
+---@field rotate? number Rotation in degrees, counter-clockwise (0–360).
+---@field origin_x? number Rotation origin X percentage (0 = left, 100 = right).
+---@field origin_y? number Rotation origin Y percentage (0 = top, 100 = bottom).
+---@field allocate? boolean Mark touched cells as allocated.
+---@field grid? table Override grid (defaults to `publisher.current_grid`).
+---@field keepposition? boolean Force the object to stay at its absolute position.
+
+-- Places an object at an absolute position given in scaled points.
+---@param param OutputAbsoluteParam
+---@return nil
 function M.output_absolute_position(param)
     local x = param.x
     local y = param.y
     local nodelist = param.nodelist
     local keepposition = param.keepposition
     local r = param.grid or publisher.current_grid
-    --- We don't necessarily output things on a page, we can output them in a virtual page, called _group_.
+    -- We don't necessarily output things on a page, we can output them in a virtual page, called _group_.
     if publisher.current_group then
         -- Put the contents of the nodelist into the current group
         local group = publisher.groups[publisher.current_group]
@@ -223,27 +237,29 @@ function M.output_absolute_position(param)
     end
 end
 
---- Put the object (nodelist) on grid cell (x,y). If `allocate`=`true` then
---- mark cells as occupied.
----
---- Parameter       | Description
---- ----------------|----------------------------------------------
---- nodelist        | The box to be placed
---- x               | The horizontal distance from the left edge in grid cells
---- y               | The vertical distance form the top edge in grid cells
---- allocate        | Mark these cells as 'occupied'
---- area            | The area on which the object should be placed. Defaults to the page area.
---- clipatmargin    | Clip objects so they don't appear in the page margin
---- valign          |
---- halign          |
---- allocate_matrix | For image-shapes
---- pagenumber      | The page the object should be placed
---- keepposition    | Move the local cursor?
---- grid            | The grid object. If not present, we use the default grid object
---- rotate          | Rotation counter clockwise in degrees (0-360).
---- origin_x        | Origin X for rotation. Left is 0 and right is 100
---- origin_y        | Origin Y for rotation. Top is 0 and bottom is 100
---- framewidth      | When frame=solid then this has the frame width
+---@class OutputAtParam
+---@field nodelist node The box to be placed.
+---@field x integer Horizontal distance from the left edge in grid cells.
+---@field y integer Vertical distance from the top edge in grid cells.
+---@field allocate? boolean Mark touched cells as occupied.
+---@field area? string Target area name; defaults to the current page area.
+---@field clipatmargin? boolean Clip objects so they do not appear in the page margin.
+---@field valign? "top"|"middle"|"bottom"
+---@field halign? "left"|"center"|"right"
+---@field allocate_matrix? table Image-shape occupancy matrix.
+---@field pagenumber? integer Target page number; defaults to current.
+---@field keepposition? boolean Whether to move the local cursor after placement.
+---@field grid? table Override grid object.
+---@field rotate? number Rotation in degrees, counter-clockwise (0–360).
+---@field origin_x? number Rotation origin X percentage (0 = left, 100 = right).
+---@field origin_y? number Rotation origin Y percentage (0 = top, 100 = bottom).
+---@field framewidth? integer Frame width in sp when `frame="solid"`.
+---@field allocate_left? integer Extra left allocation in sp.
+
+-- Places an object at the given grid cell `(x, y)`. With `allocate=true`,
+-- the touched cells are marked as occupied.
+---@param param OutputAtParam
+---@return nil
 function M.output_at( param )
     local _wd, _ht, _dp = node.dimensions(param.nodelist)
     if param.framewidth then
@@ -346,7 +362,7 @@ function M.output_at( param )
     -- set the crop area
     r:setarea(delta_x - extra_crop,delta_y - extra_crop, _wd + extra_crop, _ht + extra_crop + _dp)
 
-    --- We don't necessarily output things on a page, we can output them in a virtual page, called _group_.
+    -- We don't necessarily output things on a page, we can output them in a virtual page, called _group_.
     if publisher.current_group then
         -- Put the contents of the nodelist into the current group
         local group = publisher.groups[publisher.current_group]
@@ -412,6 +428,13 @@ function M.output_at( param )
     end
 end
 
+-- Appends `nodelist` to `pagebox` with absolute glue offsets so it lands
+-- at `(x_sp, y_sp)` from the page's origin.
+---@param pagebox node Page node list (typically a vbox).
+---@param nodelist node Object to place.
+---@param x_sp integer Horizontal offset in sp.
+---@param y_sp integer Vertical offset in sp.
+---@return nil
 function M.place_at(pagebox,nodelist,x_sp,y_sp)
     local tail = node.tail(pagebox)
     local n = publisher.add_glue( nodelist ,"head",{subtype = 1000, width = x_sp })
@@ -426,6 +449,12 @@ function M.place_at(pagebox,nodelist,x_sp,y_sp)
     n.prev = tail
 end
 
+-- Walks `publisher.masterpages` in reverse order and returns the layout
+-- XML body of the first masterpage whose `is_pagetype` predicate matches,
+-- or whose name equals `publisher.nextpage`.
+---@param pagenumber integer
+---@param data table Data XML context for predicate evaluation.
+---@return table? layoutxml `nil` if nothing matched.
 function M.detect_pagetype(pagenumber, data)
     -- ugly hack. file global variables are a bad idea.
     if not publisher.newxpath then
@@ -479,6 +508,12 @@ function M.detect_pagetype(pagenumber, data)
     return false
 end
 
+-- Builds the page table for `pagenumber` (or for `current_pagenumber`),
+-- runs the masterpage instructions, and sets `current_grid`.
+---@param pagenumber integer? Page to initialize; defaults to `publisher.current_pagenumber`.
+---@param data table Data XML context.
+---@param from? string Caller identifier (used in log messages).
+---@return nil
 function M.initialize_page(pagenumber,data, from)
     local thispage
 
@@ -712,8 +747,12 @@ function M.initialize_page(pagenumber,data, from)
 
 end
 
---- _Must_ be called before something can be put on the page. Looks for
---- hooks to be run before page creation.
+-- Ensures the requested page exists. Must be called before anything is
+-- placed on a page; runs the deferred `nextpage` / `skippages` logic.
+---@param pagenumber integer? Page to set up; defaults to `publisher.current_pagenumber`.
+---@param fromwhere string Caller identifier for log messages.
+---@param dataxml table Data XML context.
+---@return nil
 function M.setup_page(pagenumber,fromwhere,dataxml)
     if publisher.current_group then return end
     if publisher.skippages then
@@ -730,7 +769,13 @@ function M.setup_page(pagenumber,fromwhere,dataxml)
      M.initialize_page(pagenumber,dataxml,fromwhere)
 end
 
---- Switch to the next frame in the given area.
+-- Switches to the next frame in the given area, or starts a new page if
+-- the area has no more frames.
+---@param areaname string Area name (e.g. `"_page"`).
+---@param grid? table Override grid; defaults to `publisher.current_grid`.
+---@param dataxml table Data XML context.
+---@param origin? string Caller identifier for log messages.
+---@return nil
 function M.next_area( areaname, grid, dataxml,origin )
     grid = grid or publisher.current_grid
     local current_framenumber = grid:framenumber(areaname)
@@ -747,8 +792,12 @@ function M.next_area( areaname, grid, dataxml,origin )
     grid:set_current_column(1,areaname,"next_area")
 end
 
---- Switch to a new page and ship out the current page.
---- This new page is only created if something is typeset on it.
+-- Ships out the current page (or stores it in the active pagestore) and
+-- advances `publisher.current_pagenumber`. Does nothing while
+-- `pagebreak_impossible` is set.
+---@param from? string Caller identifier for log messages.
+---@param dataxml table Data XML context.
+---@return nil
 function M.new_page(from,dataxml)
     -- w("new page from %s",from or "-")
     if publisher.pagebreak_impossible then
@@ -773,6 +822,11 @@ function M.new_page(from,dataxml)
     publisher.current_pagenumber = publisher.current_pagenumber + 1
 end
 
+-- Forces a page break and (when `options.openon` is set) inserts skip pages
+-- so the next page lands on the requested side. With `options.force` true,
+-- emits an empty page if none has been started yet.
+---@param options { dataxml: table, openon?: "left"|"right", force?: boolean }
+---@return nil
 function M.clearpage(options)
     local thispage = publisher.pages[publisher.current_pagenumber]
 
@@ -828,7 +882,10 @@ function M.clearpage(options)
     end
 end
 
---- Set the PDF page-resources for the current page.
+-- Builds the `/Resources` dictionary for the current page (color spaces,
+-- transparency states, spot colors).
+---@param thispage table Current page table; reads `transparenttext`.
+---@return nil
 function M.setpageresources(thispage)
     if next(thispage.transparenttext) ~= nil and publisher.defaultcolorstack == 0 then
         publisher.transparentcolorstack()
@@ -851,8 +908,14 @@ function M.setpageresources(thispage)
     end
 end
 
---- After everything is ready for page ship-out, add debug output and
---- crop marks if necessary.
+-- After everything is ready for page ship-out, add debug output and
+-- crop marks if necessary.
+-- Runs all `at-page-shipout` hooks for `thispage`, fills in margins,
+-- crop marks, headers/footers, watermarks etc. Called once per page before
+-- the actual `tex.shipout`.
+---@param thispage table Current page table.
+---@param data table Data XML context.
+---@return nil
 function M.dothingsbeforeoutput( thispage,data )
     local cg = thispage.grid
 
@@ -1000,6 +1063,11 @@ function M.dothingsbeforeoutput( thispage,data )
     end
 end
 
+-- Wraps the page node list with the final `pdf_save`/`pdf_restore` and
+-- color-stack literals required for transparent text and spot colors.
+---@param thispage table
+---@param nodelist node Page node list.
+---@return node nodelist Wrapped node list ready for `tex.shipout`.
 function M.dothingsafteroutput(thispage,nodelist)
     if publisher.options.showgrid and publisher.options.gridlocation == "foreground" then
         local cg = thispage.grid
@@ -1012,6 +1080,11 @@ function M.dothingsafteroutput(thispage,nodelist)
     return nodelist
 end
 
+-- Sets `\pdfpagewidth` and `\pdfpageheight` and stores the dimensions in
+-- `publisher.options.default_pagewidth/height` for later defaulting.
+---@param wd integer Page width in sp.
+---@param ht integer Page height in sp.
+---@return nil
 function M.set_pageformat( wd,ht )
     publisher.options.pagewidth   = wd
     publisher.options.pageheight  = ht
@@ -1019,6 +1092,11 @@ function M.set_pageformat( wd,ht )
     tex.pageheight = ht
 end
 
+-- Returns the remaining vertical space (in sp) on the current frame of
+-- `area`, optionally accounting for an allocation matrix.
+---@param area string Area name.
+---@param allocate? table Optional 2D occupancy matrix to subtract.
+---@return integer remaining
 function M.get_remaining_height(area,allocate)
     local cols = publisher.current_grid:number_of_columns(area)
     local startcol = 1
@@ -1083,6 +1161,13 @@ function M.get_remaining_height(area,allocate)
 
 end
 
+-- Advances the current row in `areaname` by `rows` rows, switching to the
+-- next frame (and possibly a new page) if there is not enough space.
+---@param rownumber integer? Target row number; `nil` for relative move.
+---@param areaname string
+---@param rows integer? Number of rows to advance (default 1).
+---@param dataxml table Data XML context.
+---@return nil
 function M.next_row(rownumber,areaname,rows,dataxml)
     local grid = publisher.current_grid
 
@@ -1130,6 +1215,9 @@ function M.next_row(rownumber,areaname,rows,dataxml)
     end
 end
 
+-- Returns a flag value indicating "no block to place"; used by callers
+-- that build a list of blocks for `vsplit`.
+---@return string sentinel
 function M.empty_block()
     local r = node.new("hlist")
     r.width = 0
@@ -1139,6 +1227,8 @@ function M.empty_block()
     return v
 end
 
+-- Returns a sentinel block used to force a page break when nothing else fits.
+---@return string sentinel
 function M.emergency_block()
     local r = node.new(publisher.rule_node)
     r.width = 5 * 2^16
@@ -1148,10 +1238,15 @@ function M.emergency_block()
     return v
 end
 
---- Return the height of the page given by the relative page number
---- (starting from the current_pagenumber). Used in tables to get the
---- height of a page in a multi-page table. Called from tabular.lua /
---- set in commands.lua (#table).
+-- Return the height of the page given by the relative page number
+-- (starting from the current_pagenumber). Used in tables to get the
+-- height of a page in a multi-page table. Called from tabular.lua /
+-- set in commands.lua (#table).
+-- Returns the height (in grid rows) of the current page's `relative_framenumber`-th
+-- positioning frame.
+---@param relative_framenumber integer
+---@param dataxml table
+---@return integer rows
 function M.getheight( relative_framenumber,dataxml )
     local grid = publisher.current_grid
     local cp, cg, cpn, cfn -- current page, current grid, current page number, current frame number
@@ -1200,8 +1295,12 @@ function M.getheight( relative_framenumber,dataxml )
     return remaining_height
 end
 
---- Return true iff the paragraph has at most `lines` text lines left
---- over and is not at the last line.
+-- Return true iff the paragraph has at most `lines` text lines left
+-- over and is not at the last line.
+-- Returns `true` when `nodelist` line-breaks into at most `lines` lines.
+---@param nodelist node
+---@param lines integer
+---@return boolean
 function M.less_or_equal_than_n_lines( nodelist, lines )
     if lines == 0 then return false end
     for i=1,lines - 1 do
@@ -1216,6 +1315,10 @@ function M.less_or_equal_than_n_lines( nodelist, lines )
     return nodelist.next == nil
 end
 
+-- Concatenates the given table objects vertically into a single vbox.
+---@param objects table[] Table objects produced by `commands.table`.
+---@param from? string Caller identifier for log messages.
+---@return node vbox
 function M.join_table_to_box(objects,from)
     for i=1,#objects - 1 do
         objects[i].next = objects[i+1]
@@ -1229,32 +1332,37 @@ function M.join_table_to_box(objects,from)
     return vbox
 end
 
---- vsplit takes a long paragraph and breaks it into small pieces of
---- text, taking orphans, widows and the destination area size into
---- account.
----
---- Input
---- -----
---- The table `objects_t` is an array of vboxes containing material
---- for the current frame of height `frameheight`. If the height of
---- the vboxes exceeds the frame height, we dissect the paragraphs
---- and place them into one large hlist.
----
---- Output
---- ------
---- A vbox to place in the PDF, with height <= frameheight. If
---- material is left over, `objects_t` is mutated and vsplit is
---- called again. Empty `objects_t` signals the caller (commands/text)
---- that all text has been placed.
+-- vsplit takes a long paragraph and breaks it into small pieces of
+-- text, taking orphans, widows and the destination area size into
+-- account.
+--
+-- Input
+-- -----
+-- The table `objects_t` is an array of vboxes containing material
+-- for the current frame of height `frameheight`. If the height of
+-- the vboxes exceeds the frame height, we dissect the paragraphs
+-- and place them into one large hlist.
+--
+-- Output
+-- ------
+-- A vbox to place in the PDF, with height <= frameheight. If
+-- material is left over, `objects_t` is mutated and vsplit is
+-- called again. Empty `objects_t` signals the caller (commands/text)
+-- that all text has been placed.
+-- Splits a vertical list of objects into pages, honoring break attributes,
+-- frame heights and orphan/widow constraints. Drives the main page loop.
+---@param objects_t table[] Vertical list of paragraph/table/box objects.
+---@param parameter table Layout parameters (area, allocate, break-* etc.).
+---@return table[]? remaining Objects that still need to be placed (or nil when done).
 function M.vsplit( objects_t, parameter )
-    --- Step 1: collect all the objects in one big table.
-    --- ------------------------------------------------
-    --- The objects that are not allowed to break are temporarily
-    --- collected in a special vertical list that gets vpacked to
-    --- disallow an "area" break.
-    ---
-    --- ![Step 1](img/vsplit2.png)
-    --- (assuming that there is a `break-below="no"` for the text format of the header).
+    -- Step 1: collect all the objects in one big table.
+    -- ------------------------------------------------
+    -- The objects that are not allowed to break are temporarily
+    -- collected in a special vertical list that gets vpacked to
+    -- disallow an "area" break.
+    --
+    -- ![Step 1](img/vsplit2.png)
+    -- (assuming that there is a `break-below="no"` for the text format of the header).
     local balance = parameter.balance
     local valignlast = parameter.valignlast
     local frameheight = parameter.maxheight
@@ -1375,14 +1483,14 @@ function M.vsplit( objects_t, parameter )
             return obj1
         end
     end
-    --- Step 2: Fill vbox (the return value)
-    --- ------------------------------------
-    --- Two cases: the objects have enough material to fill up the area (a)
-    --- or we have no objects left for the area and return the final vbox for this area. (b)
-    --- The task is to go though collection of h/vboxes (the hlist) and create one big vbox.
-    --- This is done by filling the table `thisarea`.
-    ---
-    --- ![final step for area](img/vsplit3.png)
+    -- Step 2: Fill vbox (the return value)
+    -- ------------------------------------
+    -- Two cases: the objects have enough material to fill up the area (a)
+    -- or we have no objects left for the area and return the final vbox for this area. (b)
+    -- The task is to go though collection of h/vboxes (the hlist) and create one big vbox.
+    -- This is done by filling the table `thisarea`.
+    --
+    -- ![final step for area](img/vsplit3.png)
     local goal = frameheight
     local accumulated_height = 0
     local thisarea = {}
@@ -1459,10 +1567,10 @@ function M.vsplit( objects_t, parameter )
         objects_t[1] = M.join_table_to_box(remaining_objects,"remaining objects != 1")
     end
 
-    --- It's a common situation where there is a single free row but the next material is
-    --- too high for the row. So we return an empty list and hope that the calling function
-    --- is clever enough to detect this case. (Well, it's not too difficult to detect, as
-    --- the `objects_t` table is not empty yet.)
+    -- It's a common situation where there is a single free row but the next material is
+    -- too high for the row. So we return an empty list and hope that the calling function
+    -- is clever enough to detect this case. (Well, it's not too difficult to detect, as
+    -- the `objects_t` table is not empty yet.)
 
     return M.join_table_to_box(thisarea,"return") or M.empty_block()
 end

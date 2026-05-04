@@ -1,4 +1,4 @@
---- Fonthandling after fontloading.
+-- Fonthandling after fontloading.
 --
 --  fonts.lua
 --  speedata publisher
@@ -6,19 +6,23 @@
 --  For a list of authors see `git blame'
 --  See file COPYING in the root directory for license info.
 --
---- Loading a font is only one part of the story. Proper dealing with fonts
---- requires post processing at various stages.
+-- Loading a font is only one part of the story. Proper dealing with fonts
+-- requires post processing at various stages.
 file_start("fonts.lua")
 
 local fontloader_mod = require("fonts.fontloader")
 
 local colors_module = require("publisher.colors")
 
+---@class fonts_module
 local M = {}
 
+---@type table<string, { [1]: string, [2]: table }>
 local lookup_fontname_filename={}
+---@type table<integer, table>
 local font_instances={}
 
+---@type table<integer, true>
 M.used_fonts = {}
 local used_fonts = M.used_fonts
 
@@ -26,6 +30,7 @@ local used_fonts = M.used_fonts
 -- Filled by report_missing_glyph(); flushed by summarize_missing_glyphs() at
 -- the end of the run. We emit the warning only on first occurrence and then
 -- print a "(N times)" summary for repeats, instead of flooding the log.
+---@type table<string, table<integer, integer>>
 M.missing_glyph_counts = {}
 
 local glue_node      = node.id("glue")
@@ -48,24 +53,26 @@ for k,v in pairs(node.whatsits()) do
 end
 
 
---- Every font family ("text", "Chapter"), that is defined by DefineFontfamily
---- gets an internal number. This number is stored here.
+-- Every font family ("text", "Chapter") defined via `DefineFontfamily`
+-- gets an internal number. This table maps the family name to that number.
+---@type table<string, integer>
 M.lookup_fontfamily_name_number = {}
 
---- Every font family (given by number) has variants like italic, bold etc.
---- These are stored as a table in this table.
---- The following keys are stored
----
----  * normal
----  * bolditalic
----  * italic
----  * bold
----  * baselineskip
----  * size
+-- Reverse lookup: every font family number maps to its `FontFamily` table
+-- with the variants `normal`, `bold`, `italic`, `bolditalic` plus the
+-- script-size instances and `size`/`baselineskip`.
+---@type FontFamily[]
 M.lookup_fontfamily_number_instance = {}
 local lookup_fontfamily_number_instance = M.lookup_fontfamily_number_instance
 
 
+-- Registers a font face under `name`, mapped to `filename` plus optional
+-- per-call parameters. The actual loading is deferred until the face is
+-- first used.
+---@param name string Logical font face name.
+---@param filename string Source file (resolved via kpse).
+---@param parameter_tab? table Per-face parameters (otfeatures, ...).
+---@return true
 function M.load_fontfile(name, filename, parameter_tab)
     assert(filename)
     assert(name)
@@ -94,7 +101,12 @@ end
 local preloaded_fonts = {}
 
 
--- called from html.lua
+-- Resolves a font face name. Used from `html.lua` when a CSS rule
+-- references a font face by URL or local name. If `localname` is not
+-- registered but `url` is given, the URL is auto-loaded and returned.
+---@param localname string?
+---@param url string?
+---@return string? face_name
 function M.get_fontname( localname, url )
     localname = publisher.get_fontname(localname)
     -- w("get_fontname, localname %q",tostring(localname))
@@ -110,6 +122,12 @@ end
 -- Return false, error message in case of failure, true, number otherwise. number
 -- is the internal font number. After calling this method, the font can be used
 -- with the key {filename,size}
+-- Loads (or reuses) a font face at the given size and returns the
+-- LuaTeX font instance id.
+---@param name string Registered font face name.
+---@param size integer Size in scaled points.
+---@return boolean ok `false` on failure (e.g. missing file).
+---@return integer|string id_or_error Instance id on success, error message on failure.
 function M.make_font_instance( name,size )
     -- Name is something like "TeXGyreHeros-Regular", the visible name of the font file
     assert(name)
@@ -146,6 +164,10 @@ function M.make_font_instance( name,size )
 end
 
 -- Define font from preloaded font
+-- Registers a previously created font instance with LuaTeX so glyphs can
+-- reference it by id. Fills in the metrics and feature tables.
+---@param instance table Font instance descriptor.
+---@return integer id LuaTeX font id.
 function M.define_font(instance)
     local mode = instance.requested_mode
     local num = instance.reserved_num
@@ -167,6 +189,11 @@ function M.define_font(instance)
 end
 
 -- Return instance number from fontfamily number and instance name
+-- Looks up the instance descriptor for a family + variant combination.
+-- Loads the instance on demand if it has not been used before.
+---@param fontfamily integer Family number from `lookup_fontfamily_name_number`.
+---@param instancename "normal"|"bold"|"italic"|"bolditalic"|string Variant key.
+---@return table? instance
 function M.get_fontinstance(fontfamily,instancename)
     local instance
     if fontfamily and fontfamily > 0 then
@@ -194,9 +221,9 @@ function M.get_fontinstance(fontfamily,instancename)
     return instance
 end
 
---- At this time we must adjust the contents of the paragraph how we would
---- like it. For example the (sub/sup)script glyphs still have the width of
---- the regular characters and need
+-- At this time we must adjust the contents of the paragraph how we would
+-- like it. For example the (sub/sup)script glyphs still have the width of
+-- the regular characters and need
 -- node.direct locals for pre_linebreak hot loop
 local d              = node.direct
 local d_todirect     = d.todirect
@@ -231,6 +258,12 @@ local plb_att_fontweight
 local plb_attval_italic  -- index of "italic" in font-style table
 local plb_attval_bold    -- index of "bold" in font-weight table
 
+-- Pre-linebreak callback (direct API): walks the node list and applies
+-- every visual attribute we attached earlier — color, decoration,
+-- background color, hyperlinks, vertical alignment, struct destinations.
+-- Runs hot, so it uses the `node.direct` API.
+---@param head any Node list head in direct-API form.
+---@return any head
 local function pre_linebreak_direct( head )
     -- Cache for consecutive same-font glyphs
     local cache_ff, cache_fs, cache_fw
@@ -379,6 +412,10 @@ local function pre_linebreak_direct( head )
     return true
 end
 
+-- Public pre-linebreak callback. Wraps `pre_linebreak_direct` for the
+-- node API caller and is registered through `callback.register`.
+---@param head node
+---@return node head
 function M.pre_linebreak( head )
     if not plb_att_fontfamily then
         plb_att_fontfamily = publisher.attribute_name_number["fontfamily"]
@@ -392,6 +429,16 @@ function M.pre_linebreak( head )
     return pre_linebreak_direct(d_todirect(head))
 end
 
+-- Inserts a background-color rule behind a glyph run starting at `start`
+-- and extending while the same `bgcolorindex` is set.
+---@param parent node Surrounding hbox/vbox.
+---@param head node Head of the run.
+---@param start node First node carrying the background color.
+---@param bgcolorindex integer Color index from `colortable`.
+---@param bg_padding_top integer Padding above baseline in sp.
+---@param bg_padding_bottom integer Padding below baseline in sp.
+---@param reverse boolean Walk backwards (used for RTL runs).
+---@return nil
 function M.insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding_top, bg_padding_bottom, reverse )
     reverse = reverse or false
     bg_padding_top    = bg_padding_top or 0
@@ -417,7 +464,16 @@ function M.insert_backgroundcolor( parent, head, start, bgcolorindex, bg_padding
     return rule
 end
 
---- Insert a horizontal rule in the nodelist that is used for underlining. typ is 1 (solid) or 2 (dashed)
+-- Insert a horizontal rule in the nodelist that is used for underlining. typ is 1 (solid) or 2 (dashed)
+-- Draws a text-decoration rule (underline / overline / line-through)
+-- across the run starting at `start`.
+---@param parent node Surrounding box.
+---@param head node Head of the run.
+---@param start node First node carrying the decoration.
+---@param typ "underline"|"overline"|"line-through"
+---@param style "solid"|"double"|"dotted"|"dashed"|"wavy"
+---@param colornumber integer Color index.
+---@return nil
 function M.insert_underline( parent, head, start, typ, style, colornumber)
     colornumber = colornumber or 1
     if colornumber == 0 then colornumber = 1 end
@@ -452,10 +508,10 @@ function M.insert_underline( parent, head, start, typ, style, colornumber)
     return rule
 end
 
---- In the post_linebreak function we manipulate the paragraph that doesn't
---- affect it's typesetting. Underline and 'showhyphens' is done here. The
---- overall appearance of the paragraph is fixed at this time, we can only add
---- decoration now.
+-- In the post_linebreak function we manipulate the paragraph that doesn't
+-- affect it's typesetting. Underline and 'showhyphens' is done here. The
+-- overall appearance of the paragraph is fixed at this time, we can only add
+-- decoration now.
 do
     local curdir = {}
     local plb_attnum_td_line
@@ -640,6 +696,11 @@ do
 end
 
 -- fam is a number
+-- Clones an existing font family with overridden parameters (size,
+-- baselineskip, ...). Used when one family inherits from another.
+---@param fam integer|string Source family number or name.
+---@param params table Overrides applied to the clone.
+---@return integer? newfam New family number, or `nil` on failure.
 function M.clone_family( fam, params )
     -- fam_tbl = {
     --   ["baselineskip"] = "789372"
@@ -697,11 +758,18 @@ function M.clone_family( fam, params )
     return #lookup_fontfamily_number_instance
 end
 
---- Report a missing glyph, deduplicated by (font, code).
---- The first occurrence is logged immediately at `level` ("warn" or "error");
---- subsequent occurrences only increment the counter. summarize_missing_glyphs()
---- emits a "(N times)" summary line for codes seen more than once.
---- Extra arguments are passed through to the immediate log call only.
+-- Report a missing glyph, deduplicated by (font, code).
+-- The first occurrence is logged immediately at `level` ("warn" or "error");
+-- subsequent occurrences only increment the counter. summarize_missing_glyphs()
+-- emits a "(N times)" summary line for codes seen more than once.
+-- Extra arguments are passed through to the immediate log call only.
+-- Records a missing-glyph occurrence. The first hit per (font, code)
+-- emits a log entry; subsequent hits only bump the counter.
+---@param level "warn"|"error"|"info"|string Log level for the first occurrence.
+---@param font_name string
+---@param code integer Unicode codepoint.
+---@param ... any Additional log arguments.
+---@return nil
 function M.report_missing_glyph(level, font_name, code, ...)
     local per_font = M.missing_glyph_counts[font_name]
     if not per_font then
@@ -720,6 +788,9 @@ function M.report_missing_glyph(level, font_name, code, ...)
         ...)
 end
 
+-- Emits the `(N times)` summary log lines for repeated missing-glyph
+-- reports collected during the run. Called once at shutdown.
+---@return nil
 function M.summarize_missing_glyphs()
     local rows = {}
     for font_name, per_font in next, M.missing_glyph_counts do

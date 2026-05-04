@@ -9,6 +9,9 @@
 -- libs are already loaded in sdini.lua
 dofile(arg[1])
 
+-- Returns the PostScript name for the given font file via `fontloader.info`.
+---@param filename string Resolved font file path.
+---@return string
 function get_ps_name( filename )
   local info = fontloader.info(filename)
   return info.fontname

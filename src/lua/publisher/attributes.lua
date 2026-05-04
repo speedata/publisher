@@ -1,4 +1,4 @@
---- Node attribute and property helpers.
+-- Node attribute and property helpers.
 --
 --  attributes.lua
 --  speedata publisher
@@ -8,8 +8,34 @@
 
 file_start("attributes.lua")
 
+---@class attributes_module
 local M = {}
 
+---@alias ReadAttributeType
+---| "string"
+---| "rawstring"
+---| "number"
+---| "length"
+---| "length_sp"
+---| "height_sp"
+---| "width_sp"
+---| "boolean"
+---| "booleanornumber"
+---| "booleanorlength"
+---| "xpath"
+---| "xpathraw"
+
+-- Reads an attribute from a layout XML element and converts it to the
+-- requested type. Curly-brace expressions inside the attribute value
+-- (`{...}`) are evaluated as XPath against `dataxml`, except for the
+-- `xpath`, `xpathraw` and `rawstring` types where the raw attribute is used.
+---@param layoutxml table Layout XML element holding the attribute.
+---@param dataxml table Data XML context for XPath evaluation.
+---@param attname string Attribute name to look up.
+---@param typ ReadAttributeType
+---@param default any Value used when the attribute is missing.
+---@param context any? Optional context (unused by this implementation).
+---@return any value Converted value, or `default` if absent, or `nil` on error.
 function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
     local namespaces = layoutxml[".__ns"]
     local attr
@@ -158,6 +184,12 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
     return val
 end
 
+-- Collects all LuaTeX attributes attached to the head node into a table
+-- keyed by attribute number. If `reuse_table` is given, it is cleared and
+-- reused for the result.
+---@param nodelist node?
+---@param reuse_table table<integer, integer>?
+---@return table<integer, integer> attributes
 function M.get_attributes(nodelist, reuse_table)
     local attributes = reuse_table or {}
     if reuse_table then
@@ -176,8 +208,12 @@ function M.get_attributes(nodelist, reuse_table)
     return attributes
 end
 
--- Get an attribute value. If the attribute table entry has a table, return the
--- string value of the attribute
+-- Reads a named attribute from a node. If the attribute is declared with an
+-- enum-like value list in `publisher.attributes`, the integer value is
+-- mapped back to the corresponding string.
+---@param nodelist node?
+---@param attribute_name string Key in `publisher.attribute_name_number`.
+---@return integer|string|nil value `nil` if the attribute is unknown or unset.
 function M.get_attribute(nodelist, attribute_name)
     if not nodelist then return nil end
     local att_number = publisher.attribute_name_number[attribute_name]
@@ -191,8 +227,14 @@ function M.get_attribute(nodelist, attribute_name)
     return val
 end
 
--- The attribute name must be present in publisher.attribute_name_number.
--- The value must be a number or a string value.
+-- Writes a named attribute on a node. For enum-like attributes the string
+-- value is converted to its integer index from `publisher.attributes`. A
+-- `nil` final value unsets the attribute. The attribute name must be known
+-- to `publisher.attribute_name_number`.
+---@param nodelist node
+---@param attribute_name string
+---@param value integer|string|nil
+---@return nil
 function M.set_attribute(nodelist, attribute_name, value)
     local att_number = publisher.attribute_name_number[attribute_name]
     if not att_number then err("Internal error: attribute %s unknown", attribute_name or "?") return end
@@ -212,12 +254,21 @@ function M.set_attribute(nodelist, attribute_name, value)
     end
 end
 
+-- Removes a named attribute from a node.
+---@param nodelist node
+---@param attribute_name string
+---@return nil
 function M.clear_attribute(nodelist, attribute_name)
     local att_number = publisher.attribute_name_number[attribute_name]
     if not att_number then err("Internal error: attribute %s unknown", attribute_name or "?") return end
     node.unset_attribute(nodelist, att_number)
 end
 
+-- Applies many attributes to a node at once. Keys may be attribute names
+-- or attribute numbers (numbers are translated via `attribute_number_name`).
+---@param nodelist node
+---@param att_tbl table<string|integer, integer|string>?
+---@return nil
 function M.set_attributes(nodelist, att_tbl)
     if att_tbl == nil then return end
     for k, v in pairs(att_tbl) do
@@ -230,7 +281,12 @@ function M.set_attributes(nodelist, att_tbl)
     end
 end
 
--- Set an attribute on the list and all sublists.
+-- Sets an attribute on the list and recursively on every sublist of any
+-- hlist/vlist nodes encountered.
+---@param nodelist node
+---@param attribute string Attribute name.
+---@param value integer|string|nil
+---@return nil
 function M.set_attribute_recurse(nodelist, attribute, value)
     while nodelist do
         if nodelist.id == publisher.vlist_node or nodelist.id == publisher.hlist_node then
@@ -242,6 +298,11 @@ function M.set_attribute_recurse(nodelist, attribute, value)
     end
 end
 
+-- Sets a value in the node's property table, creating the table on demand.
+---@param n node
+---@param prop string Property key.
+---@param value any
+---@return nil
 function M.setprop(n, prop, value)
     local props = node.getproperty(n)
     if not props then
@@ -251,6 +312,10 @@ function M.setprop(n, prop, value)
     props[prop] = value
 end
 
+-- Reads a value from the node's property table.
+---@param n node
+---@param prop string
+---@return any value `nil` if no property table exists or the key is absent.
 function M.getprop( n, prop )
     local props = node.getproperty(n)
     if not props then return nil end
@@ -258,6 +323,10 @@ function M.getprop( n, prop )
     return nil
 end
 
+-- Removes a key from the node's property table and returns the previous value.
+---@param n node
+---@param prop string
+---@return any previous_value
 function M.clearprop(n, prop)
     local props = node.getproperty(n)
     if not props then return nil end

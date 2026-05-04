@@ -1,4 +1,4 @@
---- PDF/UA structure tree, bookmarks and page-label helpers.
+-- PDF/UA structure tree, bookmarks and page-label helpers.
 --
 --  structure_tree.lua
 --  speedata publisher
@@ -8,13 +8,16 @@
 
 file_start("structure_tree.lua")
 
+---@class structure_tree_module
 local M = {}
 
+---@type table<string, integer>
 local roles = {}
 
--- Initialize the roles lookup at first use; publisher.roles_a is set
--- in publisher.lua's body and we run our require there too late to
--- access it directly.
+-- Initialize the roles lookup at first use; publisher.roles_a is set in
+-- publisher.lua's body and we run our require there too late to access it
+-- directly.
+---@return nil
 local function ensure_roles()
     if next(roles) then return end
     for k, v in pairs(publisher.roles_a) do
@@ -22,8 +25,10 @@ local function ensure_roles()
     end
 end
 
---- Bookmarks are collected and later processed. This function
---- (recursively) creates TeX code from the generated tables.
+-- Bookmarks are collected during the run and processed at shipout. This
+-- function recursively emits `\pdfoutline` TeX code from the bookmark tree.
+---@param tbl Bookmark Bookmark tree (or single bookmark with children).
+---@return nil
 function M.bookmarkstotex( tbl )
     local countstring
     local open_string
@@ -46,14 +51,25 @@ function M.bookmarkstotex( tbl )
     end
 end
 
--- action type is one of
--- 0 page, 1 goto, 2 thread, 3 user
+---@alias PdfActionType
+---| 0 # page
+---| 1 # goto
+---| 2 # thread
+---| 3 # user
+
+-- Creates a `pdf_action` whatsit node for the given action type.
+---@param action_type PdfActionType
+---@return node
 function M.get_action_node( action_type )
     local ai = node.new("whatsit", publisher.pdf_action_whatsit)
     ai.action_type = action_type
     return ai
 end
 
+-- Resolves a structure role name (e.g. `"Document"`, `"P"`) to its numeric
+-- index in `publisher.roles_a`. Logs an error for unknown roles.
+---@param rolestring string?
+---@return integer? rolenum
 function M.get_rolenum( rolestring )
     if not rolestring then return nil end
     ensure_roles()
@@ -64,9 +80,13 @@ function M.get_rolenum( rolestring )
     err("Unknown role %q", tostring(rolestring))
 end
 
--- Page position of a structure element child for sorting. Returns a page
--- number from page_map for table children (struct elements), or math.huge
--- for number children (MCIDs, keep relative order).
+-- Returns the sort key for a structure-tree child: the mapped page number
+-- for nested struct elements, or `math.huge` for raw MCID numbers (so they
+-- keep their relative order). Recurses into descendants when no `page` is
+-- set on the child itself.
+---@param child table|integer
+---@param page_map table<integer, integer> Maps PDF page reference numbers to logical page numbers.
+---@return integer|number
 local function get_struct_page_position(child, page_map)
     if type(child) == "number" then
         return math.huge
@@ -83,11 +103,13 @@ local function get_struct_page_position(child, page_map)
     return math.huge
 end
 
--- Sort the children of each structure element by page order (reading order).
--- Only reorders when pages were rearranged (InsertPages/SavePages).
--- Sort the children of each structure element by page order (reading
--- order). Only reorders when pages were rearranged (InsertPages /
+-- Sorts the children of each structure element by page order (reading
+-- order), using a stable sort to preserve original order within a page.
+-- Only changes anything when pages were rearranged (InsertPages /
 -- SavePages).
+---@param elem table Structure element (modified in place).
+---@param page_ref_to_pagenumber table<integer, integer>
+---@return nil
 function M.sort_struct_tree_by_page_order(elem, page_ref_to_pagenumber)
     if type(elem) ~= "table" then return end
     for i = 1, #elem do
@@ -111,6 +133,10 @@ function M.sort_struct_tree_by_page_order(elem, page_ref_to_pagenumber)
     end
 end
 
+-- Escapes the five XML metacharacters in a string. Used by the structure
+-- tree XML dumper, not by the production XMP path.
+---@param s string
+---@return string
 local function struct_xml_escape(s)
     s = string.gsub(s, "&", "&amp;")
     s = string.gsub(s, "<", "&lt;")
@@ -119,6 +145,12 @@ local function struct_xml_escape(s)
     return s
 end
 
+-- Serializes a structure tree to indented XML for debugging. MCID children
+-- are emitted as `<MCID>n</MCID>`; nested struct elements recurse.
+---@param elem table Structure tree root or sub-tree.
+---@param indent string? Leading whitespace prefix (used internally).
+---@param page_ref_to_num table<integer, integer>? Maps PDF page refs to logical page numbers.
+---@return string xml
 function M.dump_struct_tree_xml(elem, indent, page_ref_to_num)
     indent = indent or ""
     local lines = {}
@@ -161,6 +193,12 @@ function M.dump_struct_tree_xml(elem, indent, page_ref_to_num)
     return table.concat(lines, "\n")
 end
 
+-- Recursively writes `/StructElem` PDF objects for the given structure
+-- tree. Returns the indirect reference of `itm` so callers can splice it
+-- into their parent's `/K` array.
+---@param itm StructElement
+---@param parentobjectnumber integer PDF object number of the parent struct elem.
+---@return string indirect_ref e.g. `"7 0 R"`.
 function M.writeStructElements(itm, parentobjectnumber)
     local obj = itm.obj
     local objectnumbers = {}
@@ -212,6 +250,10 @@ function M.writeStructElements(itm, parentobjectnumber)
     return string.format("%d 0 R", obj)
 end
 
+-- Builds the `/PageLabels` catalog entry from `publisher.pagelabels` and
+-- populates `publisher.visible_pagenumbers` as a side effect. Returns
+-- `nil` when the labels reduce to a single trivial decimal range.
+---@return string? page_labels_dict The full `/PageLabels << ... >>` fragment, or `nil`.
 function M.get_page_labels_str()
     local labeltypes = {
         ["lowercase-romannumeral"] = "/r",
@@ -278,9 +320,14 @@ function M.get_page_labels_str()
     return string.format("/PageLabels << /Nums [ %s ] >> ", tmpstring)
 end
 
+---@type integer
 local destcounter = 0
--- Create a pdf anchor (dest object). Returns a whatsit node and the
--- number of the anchor, so it can be used in a pdf link or an outline.
+
+-- Creates a numeric PDF destination (`pdf_dest` whatsit) and returns it
+-- together with its destination number, suitable for use in PDF links
+-- or outline entries.
+---@return node dest
+---@return integer destnum
 function M.mknumdest()
     destcounter = destcounter + 1
     local d = node.new("whatsit", "pdf_dest")
@@ -290,6 +337,10 @@ function M.mknumdest()
     return d, destcounter
 end
 
+-- Creates a named PDF destination (`pdf_dest` whatsit) using `name` as the
+-- string identifier (encoded as a UTF-16 PDF string).
+---@param name string
+---@return node dest
 function M.mkstringdest(name)
     local d = node.new("whatsit", "pdf_dest")
     d.named_id = 1
@@ -298,7 +349,15 @@ function M.mkstringdest(name)
     return d
 end
 
--- Generate a hlist with necessary nodes for the bookmarks.
+-- Builds a hlist holding the destination + bookmark whatsit nodes that
+-- get picked up at shipout to emit the PDF outline entry.
+-- The hlist is sometimes reused (e.g. with `Td/sethead="yes"`); see
+-- `tabular#remove_bookmark_nodes()` for the matching cleanup.
+---@param level integer? Outline depth (1 = top-level).
+---@param open_p boolean Whether the bookmark starts open.
+---@param title string? Bookmark title.
+---@param data table Data XML context for `setup_page`.
+---@return node hbox
 function M.mkbookmarknodes(level, open_p, title, data)
     publisher.setup_page(nil, "mkbookmarknodes", data)
     local openclosed

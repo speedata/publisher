@@ -1,4 +1,4 @@
---- Language and locale handling.
+-- Language and locale handling.
 --
 --  language.lua
 --  speedata publisher
@@ -8,8 +8,19 @@
 
 file_start("language.lua")
 
+---@class language_module
 local M = {}
 
+---@class LanguageEntry
+---@field id integer LuaTeX-internal language id (`l:id()`).
+---@field l userdata The `lang` object created via `lang.new()`.
+---@field locale string Lower-cased locale string used to look the entry up.
+
+-- Resolves a language reference to a LanguageEntry, loading hyphenation
+-- patterns on first use and caching the result in `publisher.languages` and
+-- `publisher.languages_id_lang`. Numeric input is treated as an existing id.
+---@param id_or_locale_or_name integer|string LuaTeX language id, locale (`"de"`, `"en_GB"`, ...) or name (`"German"`).
+---@return LanguageEntry|integer entry Cached entry, or `0` when no patterns can be loaded.
 function M.get_language(id_or_locale_or_name)
     local orig_id_or_locale_or_name = id_or_locale_or_name
     local num = tonumber(id_or_locale_or_name)
@@ -65,7 +76,10 @@ function M.get_language(id_or_locale_or_name)
     return ret
 end
 
---- The language name is something like `German` or a locale.
+-- Returns the LuaTeX language id for a locale or language name. Returns `0`
+-- if the language cannot be resolved.
+---@param locale_or_name integer|string
+---@return integer id
 function M.get_languagecode( locale_or_name )
     local tmp = M.get_language(locale_or_name)
     if type(tmp) ~= "table" then
@@ -74,13 +88,18 @@ function M.get_languagecode( locale_or_name )
     return tmp.id
 end
 
+-- Sets `publisher.defaultlanguage` to the id resolved from `mainlanguage`.
+---@param mainlanguage integer|string
+---@return nil
 function M.set_mainlanguage( mainlanguage )
     main.log("info","Setting default language","lang",mainlanguage or "?")
     publisher.defaultlanguage = M.get_languagecode(mainlanguage)
 end
 
---- Return the language numbers used in this nodelist.
---- Used before `do_linebreak()` to change pre-hyphenchar temporarily.
+-- Returns the unique LuaTeX language ids used by glyph nodes in `nodelist`.
+-- Called before `do_linebreak()` so the pre-hyphen char can be swapped.
+---@param nodelist node Head of the node list to scan.
+---@return integer[] ids
 function M.get_languages_used( nodelist )
     local langs = {}
     for n in node.traverse_id(publisher.glyph_node, nodelist) do

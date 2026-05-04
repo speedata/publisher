@@ -7,13 +7,38 @@
 
 file_start("grid.lua")
 
+---@class PositioningFrame
+---@field row integer 1-based row of the top-left corner.
+---@field column integer 1-based column of the top-left corner.
+---@field width? integer Width in grid cells.
+---@field height? integer Height in grid cells.
+
+---@class Grid
+---@field pagenumber integer? Logical page number (debugging only).
+---@field pageheight_known boolean
+---@field extra_margin integer Cut-mark margin in sp.
+---@field trim integer Bleed in sp.
+---@field dimensions { [1]: integer, [2]: integer, [3]: integer, [4]: integer } `{min_x, min_y, max_x, max_y}` in sp.
+---@field positioning_frames table<string, PositioningFrame[]>
+---@field gridwidth? integer Cell width in sp.
+---@field gridheight? integer Cell height in sp.
+---@field grid_dx? integer Horizontal gap between cells in sp.
+---@field grid_dy? integer Vertical gap between cells in sp.
+---@field margin_left? integer
+---@field margin_top? integer
+---@field margin_right? integer
+---@field margin_bottom? integer
 local M = {}
 
 local colors_module = require("publisher.colors")
 
 M.__index = M
 
--- pagenumber is only for debugging purpose
+-- Constructs a fresh `Grid` instance. `pagenumber` is recorded for
+-- diagnostics only.
+---@param self Grid
+---@param pagenumber integer?
+---@return Grid
 function M.new( self,pagenumber )
     assert(self)
     local r = {
@@ -28,6 +53,9 @@ function M.new( self,pagenumber )
     return r
 end
 
+-- `tostring(grid)` summarizes the grid's known areas and current rows.
+---@param self Grid
+---@return string
 function M.__tostring(self)
     local ret = {}
     ret[#ret + 1] = string.format("Grid on page %s",tostring(self.pagenumber))
@@ -39,11 +67,22 @@ function M.__tostring(self)
     return table.concat(ret,"\n")
 end
 
+-- Returns the first row in the given frame that has any free space.
+---@param self Grid
+---@param areaname string
+---@param framenumber? integer
+---@return integer? row
 function M.first_free_row( self,areaname, framenumber )
     return self:find_suitable_row(1, self:number_of_columns(areaname),1,areaname,framenumber)
 end
 
--- Return the remaining height in the area in scaled points
+-- Returns the remaining vertical space in the area in scaled points.
+---@param self Grid
+---@param row? integer Starting row; defaults to current row.
+---@param areaname string
+---@param column? integer
+---@param framenumber? integer
+---@return integer remaining
 function M.remaining_height_sp( self,row,areaname,column,framenumber )
     if not self.positioning_frames[areaname] then
         err("Area %q unknown, using page",areaname)
@@ -61,6 +100,11 @@ function M.remaining_height_sp( self,row,areaname,column,framenumber )
     return remaining_height
 end
 
+-- Returns the current row index of the given frame.
+---@param self Grid
+---@param areaname string
+---@param framenumber? integer
+---@return integer row
 function M.current_row( self,areaname,framenumber )
     assert(self)
     areaname = areaname or publisher.default_areaname
@@ -75,6 +119,10 @@ function M.current_row( self,areaname,framenumber )
     return area.current_row or 1
 end
 
+-- Returns the current column of the given area.
+---@param self Grid
+---@param area string
+---@return integer column
 function M.current_column( self,area )
     assert(self)
     local area = area or publisher.default_areaname
@@ -82,6 +130,12 @@ function M.current_column( self,area )
     return self.positioning_frames[area].current_column or 1
 end
 
+-- Sets the current row of an area.
+---@param self Grid
+---@param row integer
+---@param areaname string
+---@param origin? string Caller identifier for log messages.
+---@return nil
 function M.set_current_row( self,row,areaname,origin )
     assert(self)
     local areaname = areaname or publisher.default_areaname
@@ -95,6 +149,11 @@ function M.set_current_row( self,row,areaname,origin )
 end
 
 -- Set column for the given area (or the default area, if none given).
+-- Sets the current column of an area.
+---@param self Grid
+---@param column integer
+---@param areaname string
+---@return nil
 function M.set_current_column( self,column,areaname )
     assert(self)
     local areaname = areaname or publisher.default_areaname
@@ -110,6 +169,12 @@ end
 -- current position of the start paragraph
 -- Return the overshoot if the next page should start at
 -- a row > 1
+-- Advances the cursor (row + column) by `rows` rows in the given area,
+-- wrapping into the next column / frame as needed.
+---@param self Grid
+---@param rows integer
+---@param areaname string
+---@return nil
 function M.advance_cursor( self,rows,areaname )
     assert(self)
     local areaname = areaname or publisher.default_areaname
@@ -141,6 +206,11 @@ function M.advance_cursor( self,rows,areaname )
 end
 
 -- return framenumber,row
+-- Returns the next-cell position (row, column) without modifying the grid.
+---@param self Grid
+---@param areaname string
+---@return integer row
+---@return integer column
 function M.get_advanced_cursor( self,areaname )
     assert(self)
     local areaname = areaname or publisher.default_areaname
@@ -169,6 +239,14 @@ end
 -- Return a table {a,b} where a is the first column
 -- (distance in sp from the left edge)
 -- and b is the width of the paragraph for the given row
+-- Returns the `\parshape` data for paragraphs that flow around already-
+-- allocated cells in the area: an array of `{indent, length}` pairs.
+---@param self Grid
+---@param row integer
+---@param areaname string
+---@param framenumber? integer
+---@param maxwd_sp? integer Maximum line width to use.
+---@return integer[][] parshape
 function M.get_parshape( self,row,areaname,framenumber, maxwd_sp )
     local frame_margin_left, frame_margin_top
     local area = self.positioning_frames[areaname]
@@ -195,6 +273,11 @@ function M.get_parshape( self,row,areaname,framenumber, maxwd_sp )
     return {x_start,x_width}
 end
 
+-- Returns the number of rows of the given frame.
+---@param self Grid
+---@param areaname string
+---@param framenumber? integer
+---@return integer rows
 function M.number_of_rows(self,areaname,framenumber)
     assert(self)
     areaname = areaname or publisher.default_areaname
@@ -208,6 +291,10 @@ function M.number_of_rows(self,areaname,framenumber)
     return height
 end
 
+-- Returns the number of columns of the given area's current frame.
+---@param self Grid
+---@param areaname string
+---@return integer columns
 function M.number_of_columns(self,areaname)
     assert(self)
     areaname = areaname or publisher.default_area
@@ -229,6 +316,13 @@ end
 ---@param y integer
 ---@param areaname string
 ---@param framenumber integer
+-- Checks whether grid cell `(x, y)` in the given frame is occupied.
+---@param self Grid
+---@param x integer Column.
+---@param y integer Row.
+---@param areaname string
+---@param framenumber? integer
+---@return boolean allocated
 function M.isallocated( self,x,y,areaname,framenumber )
     assert(self)
     local areaname = areaname or publisher.default_areaname
@@ -265,6 +359,11 @@ function M.isallocated( self,x,y,areaname,framenumber )
     return self.allocation_x_y[x][y] ~= nil
 end
 
+-- Records the total number of rows on the page (typically derived from
+-- the page height and grid cell size).
+---@param self Grid
+---@param rows integer
+---@return nil
 function M.set_number_of_rows( self,rows )
     assert(self)
     local areaname = publisher.default_areaname
@@ -274,6 +373,10 @@ function M.set_number_of_rows( self,rows )
     area[current_frame].height = rows
 end
 
+-- Records the total number of columns on the page.
+---@param self Grid
+---@param columns integer
+---@return nil
 function M.set_number_of_columns(self,columns)
     assert(self)
     local area = publisher.default_areaname
@@ -283,6 +386,10 @@ function M.set_number_of_columns(self,columns)
     end
 end
 
+-- Returns the number of positioning frames defined for the area.
+---@param self Grid
+---@param areaname string
+---@return integer
 function M.number_of_frames( self,areaname )
     local areaname = areaname or publisher.default_areaname
     local area = self.positioning_frames[areaname]
@@ -294,6 +401,10 @@ function M.number_of_frames( self,areaname )
 end
 
 -- Return the current frame number for the given area
+-- Returns the current frame number of the area.
+---@param self Grid
+---@param areaname string
+---@return integer
 function M.framenumber( self,areaname )
     local areaname = areaname or publisher.default_areaname
     local area = self.positioning_frames[areaname]
@@ -304,6 +415,11 @@ function M.framenumber( self,areaname )
     return area.current_frame or 1
 end
 
+-- Sets the current frame number of the area.
+---@param self Grid
+---@param areaname string
+---@param number integer
+---@return nil
 function M.set_framenumber( self,areaname, number )
     local areaname = areaname or publisher.default_areaname
     local area = self.positioning_frames[areaname]
@@ -312,6 +428,11 @@ function M.set_framenumber( self,areaname, number )
 end
 
 -- Set width and height of the given grid (self) to the values wd and ht
+-- Stores the grid cell width/height (and optional gaps) on the grid
+-- instance and updates the row/column counts to match the page.
+---@param self Grid
+---@param options { gridwidth?: integer, gridheight?: integer, grid_dx?: integer, grid_dy?: integer }
+---@return nil
 function M.set_width_height(self, options)
     self.gridwidth  = options.wd
     self.gridheight = options.ht
@@ -333,6 +454,11 @@ end
 
 -- Mark the rectangular area given by x and y (top left corner)
 -- and the width wd and height ht as "not free" (allocated)
+-- Marks a rectangular range of cells as occupied (or, with `keepposition`,
+-- merely advances the cursor without occupying them).
+---@param self Grid
+---@param options table Allocation parameters (`x`, `y`, `width`, `height`, `area`, `keepposition`, `allocate_matrix`, ...).
+---@return nil
 function M.allocate_cells(self,options)
     local x = options.posx
     local y = options.posy
@@ -441,6 +567,13 @@ end
 
 -- Return true if the object of width wd fits in the given row
 -- at the column.
+-- Returns `true` when an object of `width` cells starting at `column` fits
+-- in the given `row` (i.e. all involved cells are free).
+---@param self Grid
+---@param column integer
+---@param width integer
+---@param row integer
+---@return boolean
 function M.fits_in_row(self,column,width,row)
     column = math.ceil(column)
     if not column then return false end
@@ -455,6 +588,11 @@ end
 
 -- Return true if the given row has some space left to
 -- place objects (used for text wrapping around images)
+-- Returns `true` when at least one cell in the given row of the area is free.
+---@param self Grid
+---@param row integer
+---@param areaname string
+---@return boolean
 function M.row_has_some_space(self,row,areaname)
     local maxrows = self:number_of_rows(areaname)
     if row > maxrows then
@@ -486,6 +624,13 @@ function M.row_has_some_space(self,row,areaname)
 end
 
 -- Same as fits in row, but take area into account (offset)
+-- Like `fits_in_row` but constrained to the given area's frame.
+---@param self Grid
+---@param column integer
+---@param width integer
+---@param row integer
+---@param areaname string
+---@return boolean
 function M.fits_in_row_area(self,column,width,row,areaname)
     if not column then return false end
 
@@ -515,6 +660,15 @@ end
 -- Starting column is @column@, If the page size is not known yet, the next free
 -- row will be given. Is the page full (the object cannot be placed), the
 -- function returns nil.
+-- Finds the first row in the given frame where an object of `width × height`
+-- cells fits starting at `column`. Returns `nil` if it does not fit at all.
+---@param self Grid
+---@param column integer
+---@param width integer
+---@param height integer
+---@param areaname string
+---@param framenumber? integer
+---@return integer? row
 function M.find_suitable_row( self,column, width,height,areaname, framenumber)
     -- w("find_suitable_row in grid page %q | areaname %q | column %d | width %d | height %d | framenumber %d",self.pagenumber,areaname,column,width, height,framenumber or -1)
     if not column then return false end
@@ -592,6 +746,11 @@ function M.find_suitable_row( self,column, width,height,areaname, framenumber)
     return nil
 end
 
+-- Converts a horizontal grid-cell count to scaled points. Strings with
+-- explicit units (e.g. `"5mm"`) are converted via `tex.sp`.
+---@param self Grid
+---@param gridcells integer|string
+---@return integer sp
 function M.width_sp(self, gridcells )
     if not tonumber(gridcells) then
         return tex.sp(gridcells)
@@ -600,6 +759,10 @@ function M.width_sp(self, gridcells )
     return math.ceil(math.round(wd,3))
 end
 
+-- Converts a vertical grid-cell count to scaled points.
+---@param self Grid
+---@param gridcells integer|string
+---@return integer sp
 function M.height_sp(self, gridcells )
     if not tonumber(gridcells) then
         return tex.sp(gridcells)
@@ -608,6 +771,11 @@ function M.height_sp(self, gridcells )
     return math.ceil(math.round(ht,3))
 end
 
+-- Converts a horizontal grid-cell count to the X coordinate (in sp) of
+-- the corresponding cell origin, including the leading gap.
+---@param self Grid
+---@param gridcells integer|string
+---@return integer sp
 function M.posx_sp(self, gridcells )
     if not tonumber(gridcells) then
         return tex.sp(gridcells)
@@ -616,6 +784,11 @@ function M.posx_sp(self, gridcells )
     return math.ceil(math.round(wd,3))
 end
 
+-- Converts a vertical grid-cell count to the Y coordinate of the
+-- corresponding cell origin (sp).
+---@param self Grid
+---@param gridcells integer|string
+---@return integer sp
 function M.posy_sp(self, gridcells )
     if not tonumber(gridcells) then
         return tex.sp(gridcells)
@@ -624,7 +797,10 @@ function M.posy_sp(self, gridcells )
     return math.ceil(math.round(ht,3))
 end
 
--- Return the number of grid cells for the given width (in scaled points)
+-- Returns the number of grid cells that fit into the given width (in sp).
+---@param self Grid
+---@param width_sp integer
+---@return integer cells
 function M.width_in_gridcells_sp(self,width_sp)
     assert(self)
     local wd_sp = width_sp - self.gridwidth
@@ -641,6 +817,11 @@ end
 -- Return the number of grid cells for the given height (in scaled points).
 -- options: floor = true means we can round down the number of grid cells
 --                       if it is not an integer height
+-- Returns the number of grid rows that fit into the given height (in sp).
+---@param self Grid
+---@param height_sp integer
+---@param options? table Optional rounding parameters.
+---@return integer rows
 function M.height_in_gridcells_sp(self,height_sp,options)
     assert(self)
     local extra
@@ -669,6 +850,11 @@ function M.height_in_gridcells_sp(self,height_sp,options)
 end
 
 -- Draw frame (return PDF-strings)
+-- Draws the boundary of a positioning frame on the grid (debug overlay).
+---@param self Grid
+---@param frame PositioningFrame
+---@param width_sp? integer Override frame width in sp.
+---@return node hbox
 function M.draw_frame(self,frame,width_sp)
     assert(self)
     local ret = {}
@@ -696,6 +882,9 @@ function M.draw_frame(self,frame,width_sp)
     return table.concat(ret,"\n")
 end
 
+-- Draws a grid debug overlay for a `Group` virtual area.
+---@param group Group
+---@return node hbox
 function M.draw_grid_group(group)
     main.log("debug","draw_grid_group","width",group.contents.width or -1,"height",group.contents.height or -1)
     local ht = group.contents.height
@@ -740,6 +929,9 @@ function M.draw_grid_group(group)
 end
 
 -- Draw internal grid (return PDF-strings)
+-- Draws the full debug grid (cell rules, row/column numbers, area frames).
+---@param self Grid
+---@return node hbox
 function M.draw_grid(self)
     assert(self)
     local color
@@ -835,6 +1027,9 @@ function M.draw_grid(self)
     return table.concat(ret,"\n")
 end
 
+-- Renders a debug heatmap of allocated grid cells.
+---@param self Grid
+---@return node hbox
 function M.draw_gridallocation(self)
     local pdf_literals = {}
     local paperheight  = sp_to_bp(tex.pageheight)
@@ -862,6 +1057,21 @@ function M.draw_gridallocation(self)
 end
 
 -- Return the Position of the grid cell from the left and top border (in sp)
+-- Computes the absolute (x, y) sp position for placing an object at
+-- grid cell `(x, y)` of the given area, honoring valign/halign within
+-- the cell rectangle.
+---@param self Grid
+---@param x integer Column.
+---@param y integer Row.
+---@param areaname string
+---@param wd integer Object width in sp.
+---@param ht integer Object height in sp.
+---@param valign? "top"|"middle"|"bottom"
+---@param halign? "left"|"center"|"right"
+---@param width_gridcells integer
+---@param height_gridcells integer
+---@return integer x_sp
+---@return integer y_sp
 function M.position_grid_cell(self,x,y,areaname,wd,ht,valign,halign,width_gridcells,height_gridcells)
     local x_sp, y_sp
     if not self.margin_left then return nil, "Left margin not defined. Perhaps the <Margin> command in Pagetype is missing?" end
@@ -906,6 +1116,13 @@ end
 
 
 -- Arguments must be in sp (''scaled points'')
+-- Stores the page margins on the grid; recomputed cell counts follow.
+---@param self Grid
+---@param left integer sp
+---@param top integer sp
+---@param right integer sp
+---@param bottom integer sp
+---@return nil
 function M.set_margin(self,left,top,right,bottom)
     if not tonumber(bottom) then
         main.log("error","Set margin: four arguments must be given.")
@@ -922,7 +1139,11 @@ function M.set_margin(self,left,top,right,bottom)
     self.margin_bottom = bottom
 end
 
---- ![width calculation](../img/gridnx.svg)
+-- ![width calculation](../img/gridnx.svg)
+-- Recomputes the number of rows and columns from the page size, margins
+-- and grid cell dimensions.
+---@param self Grid
+---@return nil
 function M.calculate_number_gridcells(self)
     assert(self)
     assert(self.margin_left,  "Margin not set yet!")
@@ -973,6 +1194,14 @@ function M.calculate_number_gridcells(self)
 end
 
 -- Sets the used area for the page (used by crop="yes")
+-- Defines a positioning frame on the grid (one entry in
+-- `positioning_frames`). Coordinates are in grid cells.
+---@param self Grid
+---@param x integer Column of the top-left corner.
+---@param y integer Row of the top-left corner.
+---@param wd integer Width in cells.
+---@param ht integer Height in cells.
+---@return nil
 function M.setarea( self, x, y, wd, ht)
     if self.dimensions[1] == nil then
         self.dimensions[1] = x
@@ -996,6 +1225,13 @@ function M.setarea( self, x, y, wd, ht)
     end
 end
 
+-- Sets the page's `/TrimBox` (and optionally extra page attributes such
+-- as `/StructParents` for tagged PDFs) and adjusts the page size to
+-- include cut/trim marks.
+---@param self Grid
+---@param crop integer? Crop in sp.
+---@param extrapageattributes string? Additional PDF page-dict attributes.
+---@return nil
 function M.trimbox( self, crop, extrapageattributes )
     assert(self)
     local x,y,wd,ht =  sp_to_bp(self.extra_margin), sp_to_bp(self.extra_margin) , sp_to_bp(tex.pagewidth - self.extra_margin), sp_to_bp(tex.pageheight - self.extra_margin)
@@ -1015,6 +1251,12 @@ function M.trimbox( self, crop, extrapageattributes )
     pdf.setpageattributes(table.concat(attrstring, " "))
 end
 
+-- Adds cut marks at the four corners of the trim box.
+---@param self Grid
+---@param length integer Mark length in sp.
+---@param distance integer Distance from the trim box in sp.
+---@param width integer Stroke width in sp.
+---@return nil
 function M.cutmarks( self, length, distance, width )
     local x,y,wd,ht =  sp_to_bp(self.extra_margin), sp_to_bp(self.extra_margin) , sp_to_bp(tex.pagewidth - self.extra_margin), sp_to_bp(tex.pageheight - self.extra_margin)
     local ret = {}
@@ -1053,6 +1295,12 @@ function M.cutmarks( self, length, distance, width )
     return table.concat(ret,"\n")
 end
 
+-- Adds trim marks (separate from cut marks) at the four corners.
+---@param self Grid
+---@param length integer Mark length in sp.
+---@param distance integer Distance from the trim box in sp.
+---@param width integer Stroke width in sp.
+---@return nil
 function M.trimmarks( self, length, distance, width )
     local x,y,wd,ht = sp_to_bp(self.extra_margin - self.trim), sp_to_bp(self.extra_margin - self.trim) , sp_to_bp(tex.pagewidth - self.extra_margin + self.trim), sp_to_bp(tex.pageheight - self.extra_margin + self.trim)
     local ret = {}

@@ -1,8 +1,12 @@
+---@class dimexpr_module
+---@field private table<string, function> Module-private helpers exposed for tests.
 local M = {
     private = {},
 }
 
----@return table
+-- Splits a UTF-8 string into a positional rune array.
+---@param str string
+---@return string[] runes Has a `pos` cursor field at index 1.
 local function split_chars(str)
     local runes = {}
     for _, c in utf8.codes(str) do
@@ -14,17 +18,23 @@ end
 M.private.split_chars = split_chars
 
 
+---@param str string
+---@return string?
 local function is_letter(str)
     return string.match(str, "%w")
 end
 
+---@param str string
+---@return string?
 local function is_space(str)
     return string.match(str, "%s")
 end
 
 
----@return string
----@return boolean
+-- Reads the next rune from `tbl` and advances the cursor.
+---@param tbl string[] Rune array as produced by `split_chars`.
+---@return string rune
+---@return boolean eof
 local function read_rune(tbl)
     local r = tbl[tbl.pos]
     tbl.pos = tbl.pos + 1
@@ -32,11 +42,19 @@ local function read_rune(tbl)
     return r, false
 end
 
+-- Steps the cursor back by one so the previously read rune can be read again.
+---@param tbl string[]
+---@return nil
 local function unread_rune(tbl)
     tbl.pos = tbl.pos - 1
 end
 
 
+-- Reads a signed number with optional unit (`5mm`, `12.5pt`, `-3`) from
+-- the rune buffer. Numbers with units are converted via `tex.sp`,
+-- numbers without units are returned as plain Lua numbers.
+---@param tbl string[]
+---@return integer|number? value
 local function read_number(tbl)
     local collect = {}
     local number_read = false
@@ -86,9 +104,14 @@ local function read_number(tbl)
 end
 
 
+---@class DimexprTokenlist
 local tokenlist = {}
 
 
+-- Creates a fresh tokenlist instance.
+---@param self DimexprTokenlist
+---@param o? table
+---@return DimexprTokenlist
 function tokenlist:new(o)
     o = o or {} -- create object if user does not provide one
     setmetatable(o, self)
@@ -98,6 +121,11 @@ end
 
 
 
+-- Parses a dimension expression into a normalized space-separated string
+-- with `$variables` substituted from `ctx.vars`.
+---@param str string? Source expression.
+---@param ctx table XPath context with `vars`.
+---@return string|table tokens Normalized expression, or `{}` if `str` is nil.
 function M.string_to_tokenlist(str,ctx)
     if str == nil then return {} end
     -- replace all variables

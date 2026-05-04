@@ -1,4 +1,4 @@
---- Image loading, dimensions and shape support.
+-- Image loading, dimensions and shape support.
 --
 --  images.lua
 --  speedata publisher
@@ -8,11 +8,27 @@
 
 file_start("images.lua")
 
+---@class images_module
 local M = {}
 
+---@class ImageInfo
+---@field img table LuaTeX `img.scan` result with `xsize`, `ysize`, `transform` etc.
+---@field allocate? table Optional 2D occupancy matrix (`mt[y][x] = 0|1`) plus `max_x`/`max_y`.
+
 -- Per-process image cache, keyed by "<filename><page><box>"
+---@type table<string, ImageInfo>
 local images = {}
 
+---@alias ImageDimAxis "width"|"height"
+
+-- Resolves a length expression for an image dimension. Numeric values are
+-- treated as grid units (multiplied by current grid width/height); strings
+-- with explicit units (`"5mm"`) are converted via `tex.sp`. The literal
+-- `"100%"` maps to the data-XML variable `__maxwidth` (width axis only).
+---@param dataxml table Data XML root (used for variable lookup).
+---@param len string|number|nil
+---@param width_or_height ImageDimAxis
+---@return integer? sp Length in scaled points, or `nil` for `nil`/`"auto"`.
 function M.set_image_length(dataxml, len, width_or_height)
     if len == nil or len == "auto" then
         return nil
@@ -33,8 +49,21 @@ function M.set_image_length(dataxml, len, width_or_height)
     end
 end
 
--- Calculate the image width and height
--- stretch: grow to maxwidth,maxheight if needed
+-- Computes the final width/height for an image given min/max constraints.
+-- Implements the CSS 2.1 algorithm at
+-- https://www.w3.org/TR/CSS2/visudet.html#min-max-widths. When `stretch`
+-- is true and both maxima are finite, the image grows uniformly to fit
+-- within (maxwidth, maxheight).
+---@param image { xsize: integer, ysize: integer, width: integer, height: integer }
+---@param width integer Initial width in sp.
+---@param height integer Initial height in sp.
+---@param minwidth integer
+---@param minheight integer
+---@param maxwidth integer
+---@param maxheight integer
+---@param stretch boolean? Grow up to (maxwidth, maxheight) if needed.
+---@return integer width
+---@return integer height
 function M.calculate_image_width_height( image, width, height, minwidth, minheight, maxwidth, maxheight, stretch )
     -- See https://www.w3.org/TR/CSS2/visudet.html#min-max-widths
     if stretch and maxheight < publisher.maxdimen and maxwidth < publisher.maxdimen then
@@ -89,6 +118,14 @@ function M.calculate_image_width_height( image, width, height, minwidth, minheig
     return width, height
 end
 
+-- Reloads an image at a different target size. Honors the user's image
+-- handler configuration (`options.extensionhandler`) and the matching
+-- `publisher.resizehandler` to support external converters.
+---@param filename string
+---@param typ string Image type passed through to `splib.reloadimage`.
+---@param width integer Target width in sp.
+---@param height integer Target height in sp.
+---@return any image_info Result from `splib.reloadimage`.
 function M.reload_image(filename, typ, width, height)
     main.log("info","Reload image","width",tostring(width),"height",tostring(height),"filename",filename)
     local filename_extension = publisher.get_extension(filename)
@@ -107,10 +144,22 @@ function M.reload_image(filename, typ, width, height)
     return splib.reloadimage({ filename = filename, imagetype = typ, width = width, height = height, resizehandler = rh })
 end
 
+-- Backwards-compatible alias for `imageinfo`.
+---@param filename string
+---@param page integer?
+---@param box string?
+---@param fallback string?
+---@param imageshape boolean?
+---@return ImageInfo
 function M.new_image(filename, page, box, fallback, imageshape)
     return M.imageinfo(filename, page, box, fallback, imageshape)
 end
 
+-- Verifies the actual content of an image file and converts SVG to PDF on
+-- the fly via `splib.convert_svg_image`. Returns the path to use for
+-- subsequent `img.scan` calls.
+---@param filename string
+---@return string? localfilename `nil` when the file cannot be opened.
 function M.validateimagetype(filename)
     local localfilename = kpse.find_file(filename)
     local f, errmsg = io.open(localfilename)
@@ -126,6 +175,11 @@ function M.validateimagetype(filename)
     return localfilename
 end
 
+-- Picks the file name to use when the requested image is missing. Returns
+-- `filename` if it exists, the built-in `"filenotfound.pdf"` otherwise.
+---@param filename string? User-provided fallback name.
+---@param missingfilename string? The original missing image (for logging).
+---@return string
 function M.get_fallback_image_name( filename, missingfilename )
     if filename then
         main.log("info","Using fallback","fallback",filename or "(filename)", "requested",missingfilename or "(empty)")
@@ -139,7 +193,17 @@ function M.get_fallback_image_name( filename, missingfilename )
     end
 end
 
--- box is none, media, crop, bleed, trim, art
+---@alias ImageBox "none"|"media"|"crop"|"bleed"|"trim"|"art"
+
+-- Loads (and caches) an image. Looks for an accompanying `<file>.xml` shape
+-- description if `imageshape` is true; loads it as a 2D occupancy matrix
+-- so callers can fit text into the image's negative space.
+---@param filename string?
+---@param page integer? PDF page to load (defaults to `1`).
+---@param box ImageBox? PDF box to use (defaults to `"crop"`).
+---@param fallback string? File name to use if `filename` is missing.
+---@param imageshape boolean? Load shape XML if present.
+---@return ImageInfo info Cached entry.
 function M.imageinfo( filename, page, box, fallback, imageshape )
     page = page or 1
     box = box or "crop"

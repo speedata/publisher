@@ -9,12 +9,17 @@
 -- is released under the GPL 2.
 
 
+---@class metapost_module
 local M = {}
 
 local colors_module = require("publisher.colors")
 
 -- helper
 
+-- Returns a table of MetaPost variables exposing the current page's
+-- geometry (margins, width, height, trim) in big points.
+---@param current_page table Current page table (with `grid`, `width`, `height`).
+---@return table<string, number>
 function M.extra_page_parameter(current_page)
     return {
         ["page.margin.top"]    = sp_to_bp(current_page.grid.margin_top),
@@ -27,12 +32,22 @@ function M.extra_page_parameter(current_page)
     }
 end
 
+-- File finder callback registered with the MetaPost runtime; uses kpse
+-- for inputs and the working directory for outputs.
+---@param name string
+---@param mode "r"|"w"
+---@param type string MetaPost file kind.
+---@return string? path
 local function finder(name, mode, type)
     local loc = kpse.find_file(name)
     if mode == "r" then return loc end
     return name
 end
 
+-- Buffers MetaPost-emitted TeX output to be flushed into the current PDF
+-- content stream.
+---@param whatever any
+---@return nil
 local function texsprint(whatever)
     -- w("texsprint %s", tostring(whatever))
 end
@@ -42,12 +57,21 @@ local pdfcodepointer
 local nodelists = {}
 local boundingbox
 
+-- Buffers a `pdf_literal` formatted with `string.format` for emission
+-- into the current MetaPost figure.
+---@param fmt string
+---@param ... any
+---@return nil
 local function pdf_literalcode(fmt, ...)
     pdfcode[pdfcodepointer] = pdfcode[pdfcodepointer] or {}
     local instructions = pdfcode[pdfcodepointer]
     instructions[#instructions+1] = string.format(fmt, ...)
 end
 
+-- Inserts the buffered TeX output and accumulated PDF literal code as
+-- a hbox/whatsit pair so MetaPost-generated content lands in the page.
+---@param n integer Position index for the inserted run.
+---@return nil
 local function insert_text(n)
     table.insert(pdfcode,n)
     pdfcodepointer = pdfcodepointer+2
@@ -62,6 +86,11 @@ local textext2_fmt = [[addto currentpicture doublepath unitsquare ]] ..
     [[withprescript "mplibtexboxid=%i:%f:%f"]]
 
 
+-- Renders a `btex ... etex` block by running `str` through TeX and
+-- buffering the result for re-insertion at the current MetaPost position.
+---@param str string TeX source.
+---@param fmt? string Optional format wrapper.
+---@return nil
 local function process_tex_text(str,fmt)
     if str then
         local familyname, style, text = string.match(str,"^(.-):(.-):(.*)$")
@@ -87,6 +116,10 @@ local function process_tex_text(str,fmt)
     end
 end
 
+-- Resolves a color reference encoded by MetaPost (`mpcolor:NAME`) to the
+-- corresponding PDF color command.
+---@param str string
+---@return string pdf_command
 local function process_color (str)
     if str then
         if not str:find("{.-}") then
@@ -105,6 +138,10 @@ local function process_color (str)
   end
 
 
+-- Executes a MetaPost `runscript` snippet inside a sandboxed Lua env
+-- so figures can call back into the publisher.
+---@param code string
+---@return string? result
 local function scriptrunner(code)
     local id, str = code:match("(.-){(.*)}")
     if id and str then
@@ -120,6 +157,11 @@ local function scriptrunner(code)
     end
 end
 
+-- Places previously rendered `btex...etex` boxes at the proper MetaPost
+-- positions, accounting for transformation and color commands.
+---@param object table MetaPost figure object.
+---@param prescript string Prescript instructions encoding placement.
+---@return nil
 local function put_tex_boxes(object, prescript)
     local box = prescript.mplibtexboxid
     local n, tw, th = tonumber(box[1]), tonumber(box[2]), tonumber(box[3])
@@ -151,6 +193,11 @@ local function put_tex_boxes(object, prescript)
     end
 end
 
+-- Feeds `str` to the given MetaPost instance and returns the resulting
+-- figure object.
+---@param mpobj userdata MetaPost instance.
+---@param str string MetaPost source.
+---@return table? figure
 function M.execute(mpobj, str)
     if not str then
         err("Empty metapost string for execute")
@@ -165,6 +212,11 @@ function M.execute(mpobj, str)
     return true
 end
 
+-- Creates a new MetaPost instance pre-configured for the publisher's
+-- canvas (width × height in sp), with the standard prelude loaded.
+---@param width_sp integer
+---@param height_sp integer
+---@return userdata mpobj
 function M.newbox(width_sp, height_sp)
     local mp = mplib.new({
         mem_name = 'plain',
@@ -243,6 +295,11 @@ end
 
 local tex_code_pre_mplib = {}
 
+-- Converts a MetaPost color tuple (`{r}`, `{r,g,b}`, `{c,m,y,k}`) into
+-- the corresponding PDF stroke + fill operator pair.
+---@param cr number[]
+---@return string stroke
+---@return string fill
 local function colorconverter(cr)
     local n = #cr
     if n == 4 then
@@ -262,6 +319,11 @@ end
 local rx, ry, sx, sy, tx, ty
 local divider
 
+-- Returns the pen characteristics (line width, stroke type) for a
+-- MetaPost object so they can be re-emitted as PDF operators.
+---@param object table MetaPost figure object.
+---@return number wd Line width in bp.
+---@return string lc Line cap operator.
 local function pen_characteristics(object)
     local t = mplib.pen_info(object)
     rx, ry, sx, sy, tx, ty = t.rx, t.ry, t.sx, t.sy, t.tx, t.ty
@@ -271,6 +333,11 @@ end
 
 local bend_tolerance = 131 / 65536
 
+-- Returns `true` when the path segment between `ith` and `pth` is curved
+-- (rather than a straight line).
+---@param ith table MetaPost path point.
+---@param pth table Following MetaPost path point.
+---@return boolean
 local function curved(ith, pth)
     local d = pth.left_x - ith.right_x
     if math.abs(ith.right_x - ith.x_coord - d) <= bend_tolerance and math.abs(pth.x_coord - pth.left_x - d) <= bend_tolerance then
@@ -282,11 +349,20 @@ local function curved(ith, pth)
     return true
 end
 
+-- PDF `cm` operator from a 2x2 transformation; no translation here
+-- because it is emitted separately.
+---@param px number[] First column.
+---@param py number[] Second column.
+---@return string
 local function concat(px, py) -- no tx, ty here
     return (sy * px - ry * py) / divider, (sx * py - rx * px) / divider
 end
 
 
+-- Emits a transformed MetaPost path as PDF operators.
+---@param path table[] Sequence of MetaPost path points.
+---@param open boolean Whether the path is open (no closing `h`).
+---@return nil
 local function flushconcatpath(path, open)
     pdf_literalcode("%f %f %f %f %f %f cm", sx, rx, ry, sy, tx, ty)
     local pth, ith
@@ -318,6 +394,10 @@ local function flushconcatpath(path, open)
     end
 end
 
+-- Emits an untransformed MetaPost path as PDF operators.
+---@param path table[]
+---@param open boolean
+---@return nil
 local function flushnormalpath(path, open)
     local pth, ith
     for i = 1, #path do
@@ -347,6 +427,12 @@ local function flushnormalpath(path, open)
 end
 
 
+-- Emits the closing color/transparency operators after a MetaPost
+-- object has been drawn.
+---@param tr boolean Transparent.
+---@param over boolean Overprint.
+---@param sh boolean Shading.
+---@return nil
 local function do_postobj_color(tr, over, sh)
     if sh then
         pdf_literalcode("W n /MPlibSh%s sh Q", sh)
@@ -361,6 +447,13 @@ end
 
 local transparency_values
 
+-- Emits the opening color/transparency/shading operators for a MetaPost
+-- object based on its prescript instructions.
+---@param object table
+---@param prescript string|nil
+---@return boolean transparent
+---@return boolean overprint
+---@return boolean shading
 local function do_preobj_color(object, prescript)
     local opaq = prescript and prescript.tr_transparency
 
@@ -396,6 +489,10 @@ local further_split_keys = {
     sh_color_b    = true,
 }
 
+-- Parses a `key=value;key=value;...` pre/postscript string into a Lua
+-- table.
+---@param s string
+---@return table<string, string>
 local function script2table(s)
     local t = {}
     for _, i in ipairs(s:explode("\13+")) do
@@ -412,6 +509,12 @@ local function script2table(s)
 end
 
 
+-- Converts a MetaPost figure object into the PDF content-stream string
+-- and the bounding-box dimensions used for placement.
+---@param result table MetaPost figure result.
+---@return string pdf_stream
+---@return number width_bp
+---@return number height_bp
 local function convert(result)
     if result then
         local figures = result.fig
@@ -619,6 +722,12 @@ local function convert(result)
 end
 
 
+-- Closes the MetaPost instance and returns the converted figure as a
+-- PDF content-stream string with its bounding box.
+---@param mpobj userdata
+---@return string? pdf_stream
+---@return number? width_bp
+---@return number? height_bp
 function M.finish(mpobj)
     pdfcode = {}
     pdfcodepointer = 1
@@ -644,6 +753,14 @@ function M.finish(mpobj)
 end
 
 -- Return a pdf_whatsit node
+-- Compiles a named MetaPost graphic from `publisher.metapostgraphics`
+-- and returns a fresh MetaPost instance ready to render it. Used as the
+-- first half of `boxgraphic` so callers can reuse the compiled figure.
+---@param width_sp integer
+---@param height_sp integer
+---@param graphicname string Key in `publisher.metapostgraphics`.
+---@param extra_parameter? table<string, any> Variable values.
+---@return userdata mpobj
 function M.prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
     local colorwarnings = publisher.metapostcolorwarnings
     if #colorwarnings > 0 then
@@ -702,6 +819,14 @@ end
 ---@param parameter table
 ---@return Node
 ---@return table bounding box
+-- Returns an hbox containing a named MetaPost graphic rendered at
+-- (width × height) sp.
+---@param width_sp integer
+---@param height_sp integer
+---@param graphicname string
+---@param extra_parameter? table<string, any> Variable values.
+---@param parameter? table Per-call parameters.
+---@return node? hbox
 function M.boxgraphic(width_sp, height_sp, graphicname, extra_parameter, parameter)
     local _, a, bbox = M.prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
     return a, bbox

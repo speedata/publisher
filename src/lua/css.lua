@@ -1,4 +1,4 @@
---- This file contains the code for the CSS parser.
+-- This file contains the code for the CSS parser.
 --
 --  css.lua
 --  speedata publisher
@@ -9,7 +9,14 @@
 local explode = string.explode
 local string = unicode.utf8
 
+---@class CSSRules
+---@field rules table<integer, table<string, table<string, string>>> `[priority][selector][property] = value`.
+---@field priorities integer[] Known priorities, sorted descending after each parse.
+---@field text string[] Concatenation of every parsed CSS source (kept for the Go renderer).
 
+-- Constructs a fresh empty CSS rule store.
+---@param self CSSRules
+---@return CSSRules
 local function new(self)
   local c = {
      rules = {},
@@ -21,7 +28,11 @@ local function new(self)
   return c
 end
 
--- sanitize selector and calculate priority
+-- Sanitizes the selector string and computes its specificity priority
+-- using the simple `id=100, class=10, element=1` rule.
+---@param selector string
+---@return string sanitized
+---@return integer priority
 local function get_priority( selector )
   local prio = 0
   string.gsub(selector,"[%.#]?[^%s.]+",function ( x )
@@ -37,10 +48,19 @@ local function get_priority( selector )
   return sel,prio
 end
 
+-- Returns the concatenation of every CSS source ever fed into this store.
+-- Used to forward the raw CSS to the Go HTML renderer.
+---@param self CSSRules
+---@return string
 local function gettext(self)
     return table.concat(self.text)
 end
 
+-- Parses a CSS source string into the rule store. Selectors are split on
+-- `,`; rules with the same priority and selector are merged.
+---@param self CSSRules
+---@param csstext string
+---@return nil
 local function parsetxt(self,csstext)
   -- save it for later to pass to the Go routine
   self.text[#self.text + 1] = csstext
@@ -93,6 +113,11 @@ local function parsetxt(self,csstext)
   table.sort( self.priorities,function ( a,b ) return a > b end )
 end
 
+-- Loads a CSS file from disk (resolved via `kpse.find_file`) and merges
+-- its rules into the store via `parsetxt`.
+---@param self CSSRules
+---@param filename string
+---@return nil
 local function parse( self,filename)
   local path = kpse.find_file(filename)
   if not path then
@@ -106,13 +131,10 @@ local function parse( self,filename)
   return parsetxt(self,csstext)
 end
 
---- tbl has these entries:
----
---- * `id`
---- * `class`
---- * `element`
---- * `parent`
----
+-- Returns `true` when `selector` matches the description in `tbl`.
+---@param tbl { element?: string, class?: string, id?: string, parent?: string }
+---@param selector string
+---@return boolean
 local function matches_selector(tbl,selector )
   local element,class,id = tbl.element,tbl.class,tbl.id
   local id_found   ,class_found   ,element_found    = false,false,false
@@ -155,7 +177,13 @@ local function matches_selector(tbl,selector )
   return element_found == element_matches and class_found == class_matches and id_found == id_matches and (class_found or element_found or id_found)
 end
 
--- tbl = element, class, id
+-- Walks the rule store in priority order and returns the first rule body
+-- whose selector matches `tbl`. `level` selects which compound-selector
+-- segment is tested (1 = rightmost).
+---@param self CSSRules
+---@param tbl { element?: string, class?: string, id?: string, parent?: string }
+---@param level? integer
+---@return table<string, string>? rule
 local function matches(self,tbl,level)
   level = level or 1
   local interesting_part,parts
