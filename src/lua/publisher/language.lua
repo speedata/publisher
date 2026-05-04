@@ -16,6 +16,116 @@ local M = {}
 ---@field l userdata The `lang` object created via `lang.new()`.
 ---@field locale string Lower-cased locale string used to look the entry up.
 
+-- We map from symbolic names to (part of) file names. The hyphenation pattern files are
+-- in the format `hyph-XYZ.pat.txt` and we need to find out that `XYZ` part.
+---@type table<string, string>
+local language_mapping = {
+    ["Ancient Greek"]                = "grc",
+    ["Armenian"]                     = "hy",
+    ["Bahasa Indonesia"]             = "id",
+    ["Basque"]                       = "eu",
+    ["Bulgarian"]                    = "bg",
+    ["Catalan"]                      = "ca",
+    ["Chinese"]                      = "zh",
+    ["Croatian"]                     = "hr",
+    ["Czech"]                        = "cs",
+    ["Danish"]                       = "da",
+    ["Dutch"]                        = "nl",
+    ["English"]                      = "en_GB",
+    ["English (Great Britain)"]      = "en_GB",
+    ["English (USA)"]                = "en_US",
+    ["Esperanto"]                    = "eo",
+    ["Estonian"]                     = "et",
+    ["Finnish"]                      = "fi",
+    ["French"]                       = "fr",
+    ["Galician"]                     = "gl",
+    ["German"]                       = "de",
+    ["Greek"]                        = "el",
+    ["Gujarati"]                     = "gu",
+    ["Hindi"]                        = "hi",
+    ["Hungarian"]                    = "hu",
+    ["Icelandic"]                    = "is",
+    ["Irish"]                        = "ga",
+    ["Italian"]                      = "it",
+    ["Kannada"]                      = "kn",
+    ["Kurmanji"]                     = "ku",
+    ["Latvian"]                      = "lv",
+    ["Lithuanian"]                   = "lt",
+    ["Malayalam"]                    = "ml",
+    ["Norwegian Bokmål"]             = "nb",
+    ["Norwegian Nynorsk"]            = "nn",
+    ["Other"]                        = "--",
+    ["Polish"]                       = "pl",
+    ["Portuguese"]                   = "pt",
+    ["Romanian"]                     = "ro",
+    ["Russian"]                      = "ru",
+    ["Sanskrit"]                     = "sa",
+    ["Serbian"]                      = "sr",
+    ["Serbian (cyrillic)"]           = "sc",
+    ["Slovak"]                       = "sk",
+    ["Slovenian"]                    = "sl",
+    ["Spanish"]                      = "es",
+    ["Swedish"]                      = "sv",
+    ["Turkish"]                      = "tr",
+    ["Ukrainian"]                    = "uk",
+    ["Welsh"]                        = "cy",
+}
+
+
+---@type table<string, string>
+local language_filename = {
+    ["bg"]    = "bg",
+    ["ca"]    = "ca",
+    ["cs"]    = "cs",
+    ["cy"]    = "cy",
+    ["da"]    = "da",
+    ["de"]    = "de-1996",
+    ["el"]    = "el-monoton",
+    ["en"]    = "en-gb",
+    ["en_gb"] = "en-gb",
+    ["en_us"] = "en-us",
+    ["eo"]    = "eo",
+    ["es"]    = "es",
+    ["et"]    = "et",
+    ["eu"]    = "eu",
+    ["fi"]    = "fi",
+    ["fr"]    = "fr",
+    ["ga"]    = "ga",
+    ["gl"]    = "gl",
+    ["grc"]   = "grc",
+    ["gu"]    = "gu",
+    ["hi"]    = "hi",
+    ["hr"]    = "hr",
+    ["hu"]    = "hu",
+    ["hy"]    = "hy",
+    ["id"]    = "id",
+    ["is"]    = "is",
+    ["it"]    = "it",
+    ["ku"]    = "kmr",
+    ["kn"]    = "kn",
+    ["lt"]    = "lt",
+    ["ml"]    = "ml",
+    ["lv"]    = "lv",
+    ["nb"]    = "nb",
+    ["nl"]    = "nl",
+    ["nn"]    = "nn",
+    ["no"]    = "nb",
+    ["pl"]    = "pl",
+    ["pt"]    = "pt",
+    ["ro"]    = "ro",
+    ["ru"]    = "ru",
+    ["sa"]    = "sa",
+    ["sk"]    = "sk",
+    ["sl"]    = "sl",
+    ["sr"]    = "sr",
+    ["sc"]    = "sr-cyrl",
+    ["sv"]    = "sv",
+    ["tr"]    = "tr",
+    ["uk"]    = "uk",
+    ["zh"]    = "",
+    ["--"]    = "",
+}
+
 -- Resolves a language reference to a LanguageEntry, loading hyphenation
 -- patterns on first use and caching the result in `publisher.languages` and
 -- `publisher.languages_id_lang`. Numeric input is treated as an existing id.
@@ -29,8 +139,8 @@ function M.get_language(id_or_locale_or_name)
     end
     local locale = string.lower(id_or_locale_or_name)
 
-    if publisher.language_mapping[id_or_locale_or_name] then
-        locale = publisher.language_mapping[id_or_locale_or_name]
+    if language_mapping[id_or_locale_or_name] then
+        locale = language_mapping[id_or_locale_or_name]
     end
     locale = string.lower(locale)
     if publisher.languages[locale] then
@@ -38,16 +148,16 @@ function M.get_language(id_or_locale_or_name)
     end
 
     local filename_part
-    if publisher.language_filename[locale] then
-        filename_part = publisher.language_filename[locale]
+    if language_filename[locale] then
+        filename_part = language_filename[locale]
     else
         local sep = "_"
         if string.match( locale ,"%-" ) then
             sep = "-"
         end
         local langcode, _ = table.unpack(string.explode(locale,sep))
-        if publisher.language_filename[langcode] then
-            filename_part = publisher.language_filename[langcode]
+        if language_filename[langcode] then
+            filename_part = language_filename[langcode]
         end
     end
 

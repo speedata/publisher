@@ -47,16 +47,20 @@ env_publisherversion = os.getenv("PUBLISHERVERSION")
 ---@class publisher
 local M = _G.publisher or {}
 _G.publisher = M
-local _ENV = setmetatable(M, {__index = _G}) -- luacheck: ignore _ENV
+-- M falls back to _G so that pre-M globals set in the section above
+-- (xpath, barcodes, par, hasharfbuzz, …) remain reachable as
+-- `publisher.<name>` from other files that still rely on the legacy
+-- namespace.
+setmetatable(M, {__index = _G})
 
 -- expose helpers from submodules
-utf8_to_utf16_string_pdf = metadata.utf8_to_utf16_string_pdf
+M.utf8_to_utf16_string_pdf = metadata.utf8_to_utf16_string_pdf
 
 
-newxpath = false
+M.newxpath = false
 
 if os.getenv("SP_XMLPARSER") == "lxpath" then
-    newxpath = true
+    M.newxpath = true
     do_luafile("layout_functions_lxpath.lua")
 else
     do_luafile("layout_functions.lua")
@@ -68,42 +72,42 @@ node.set_properties_mode(true)
 
 -- One big point (DTP point, PostScript point) is approx. 65781 scaled points.
 ---@type integer
-factor = 65781
--- factor = 65781.7
+M.factor = 65781
+-- M.factor = 65781.7
 
 -- no more than this number of frames is allowed on a page
 ---@type integer
-maxframes = 999
+M.maxframes = 999
 
 ---@type integer
-tenpoint_sp    = tex.sp("10pt")
+M.tenpoint_sp    = tex.sp("10pt")
 ---@type integer
-twelvepoint_sp = tex.sp("12pt")
+M.twelvepoint_sp = tex.sp("12pt")
 ---@type integer
-tenmm_sp       = tex.sp("10mm")
+M.tenmm_sp       = tex.sp("10mm")
 ---@type integer
-onemm_sp       = tex.sp("1mm")
+M.onemm_sp       = tex.sp("1mm")
 ---@type integer
-onein_sp       = tex.sp("1in")
+M.onein_sp       = tex.sp("1in")
 ---@type integer
-onept_sp       = tex.sp("1pt")
+M.onept_sp       = tex.sp("1pt")
 ---@type integer
-onepc_sp       = tex.sp("1pc")
+M.onepc_sp       = tex.sp("1pc")
 ---@type integer
-onepp_sp       = tex.sp("1pp")
+M.onepp_sp       = tex.sp("1pp")
 ---@type integer
-onedd_sp       = tex.sp("1dd")
+M.onedd_sp       = tex.sp("1dd")
 ---@type integer
-onecc_sp       = tex.sp("1cc")
+M.onecc_sp       = tex.sp("1cc")
 ---@type integer
-onecm_sp       = tenmm_sp
+M.onecm_sp       = M.tenmm_sp
 
 -- User has a pro plan
 ---@type boolean
-pro = false
+M.pro = false
 
 ---@type boolean
-has_pro_error = false
+M.has_pro_error = false
 
 -- Attributes
 -- ----------
@@ -121,7 +125,7 @@ has_pro_error = false
 -- Maps an attribute name to either `true` (any value allowed) or to an
 -- array of allowed string values (e.g. `{"italic","oblique"}`).
 ---@type table<string, true|string[]>
-attributes = {
+M.attributes = {
     ["background-color"] = true,
     ["bgpaddingbottom"] = true,
     ["bgpaddingtop"] = true,
@@ -152,143 +156,143 @@ attributes = {
 }
 
 ---@type table<string, integer>
-attribute_name_number = {}
+M.attribute_name_number = {}
 ---@type table<integer, string>
-attribute_number_name = {}
+M.attribute_number_name = {}
 do
     local c = 1
     local sorted_keys = {}
     -- attribute sorting is just for debugging purposes
-    for k, _ in pairs(attributes) do
+    for k, _ in pairs(M.attributes) do
         sorted_keys[#sorted_keys + 1] = k
     end
     table.sort(sorted_keys)
     for _, k in ipairs(sorted_keys) do
-        attribute_name_number[k] = c
-        attribute_number_name[c] = k
+        M.attribute_name_number[k] = c
+        M.attribute_number_name[c] = k
         c = c + 1
     end
 end
 
-att_rows           = 98 -- see text formats for details
+M.att_rows           = 98 -- see text formats for details
 
 -- These attributes are for image shifting. The amount of shift up/left can
 -- be negative and is counted in scaled points.
-att_shift_left     = 100
-att_shift_up       = 101
+M.att_shift_left     = 100
+M.att_shift_up       = 101
 
 -- A tie glue (U+00A0) is a non-breaking space
-att_tie_glue       = 201
+M.att_tie_glue       = 201
 
 -- These attributes are used in tabular material
-att_space_prio     = 300
-att_space_amount   = 301
+M.att_space_prio     = 300
+M.att_space_amount   = 301
 
-att_break_below_forbidden = 400
-att_break_above           = 401
-att_omit_at_top           = 402
-att_use_as_head           = 403
+M.att_break_below_forbidden = 400
+M.att_break_above           = 401
+M.att_omit_at_top           = 402
+M.att_use_as_head           = 403
 -- HTML tables should not be paragraph:format()ted
-att_dont_format           = 404
-att_margin_newcolumn      = 405
-att_margin_top_boxstart   = 406
-att_ignore_orphan_widowsetting = 407
+M.att_dont_format           = 404
+M.att_margin_newcolumn      = 405
+M.att_margin_top_boxstart   = 406
+M.att_ignore_orphan_widowsetting = 407
 
-att_margin_top = 450
-att_margin_bottom = 451
+M.att_margin_top = 450
+M.att_margin_bottom = 451
 
-att_break_before = 452
+M.att_break_before = 452
 
 -- `att_is_table_row` is used in `tabular.lua` and if set to 1, it denotes
 -- a regular table row, and not a spacer. Spacers must not appear
 -- at the top or the bottom of a table, unless forced to.
-att_is_table_row    = 500
-att_tr_dynamic_data = 501
+M.att_is_table_row    = 500
+M.att_tr_dynamic_data = 501
 
 -- for border-collapse (vertical)
-att_tr_shift_up     = 550
+M.att_tr_shift_up     = 550
 
 -- Force a hbox line height
-att_lineheight = 600
-att_dontadjustlineheight = 601
+M.att_lineheight = 600
+M.att_dontadjustlineheight = 601
 
 -- server-mode / line breaking (not used anymore?)
-att_keep = 700
+M.att_keep = 700
 
 -- attributes for glue
-att_leaderwd = 800
-att_tablenewpage = 801
+M.att_leaderwd = 800
+M.att_tablenewpage = 801
 
 -- mknodes
-att_newline = 900
+M.att_newline = 900
 
 -- PDF/UA - tagged PDF
-att_role  = 1000
+M.att_role  = 1000
 
 
-user_defined_addtolist = 1
-user_defined_bookmark  = 2
-user_defined_mark      = 3
-user_defined_marker    = 4
-user_defined_mark_append = 5
+M.user_defined_addtolist = 1
+M.user_defined_bookmark  = 2
+M.user_defined_mark      = 3
+M.user_defined_marker    = 4
+M.user_defined_mark_append = 5
 
 
-action_node    = node.id("action")
-disc_node      = node.id("disc")
-dir_node       = node.id("dir")
-glue_node      = node.id("glue")
-glue_spec_node = node.id("glue_spec")
-glyph_node     = node.id("glyph")
-hlist_node     = node.id("hlist")
-kern_node      = node.id("kern")
-penalty_node   = node.id("penalty")
-rule_node      = node.id("rule")
-vlist_node     = node.id("vlist")
-whatsit_node   = node.id("whatsit")
+M.action_node    = node.id("action")
+M.disc_node      = node.id("disc")
+M.dir_node       = node.id("dir")
+M.glue_node      = node.id("glue")
+M.glue_spec_node = node.id("glue_spec")
+M.glyph_node     = node.id("glyph")
+M.hlist_node     = node.id("hlist")
+M.kern_node      = node.id("kern")
+M.penalty_node   = node.id("penalty")
+M.rule_node      = node.id("rule")
+M.vlist_node     = node.id("vlist")
+M.whatsit_node   = node.id("whatsit")
 
 
 for k,v in pairs(node.whatsits()) do
     if v == "user_defined" then
         -- for mark command
-        user_defined_whatsit = k
+        M.user_defined_whatsit = k
     elseif v == "pdf_refximage" then
-        pdf_refximage_whatsit = k
+        M.pdf_refximage_whatsit = k
     elseif v == "pdf_action" then
-        pdf_action_whatsit = k
+        M.pdf_action_whatsit = k
     elseif v == "pdf_dest" then
-        pdf_dest_whatsit = k
+        M.pdf_dest_whatsit = k
     elseif v == "pdf_start_link" then
-        pdf_start_link_whatsit = k
+        M.pdf_start_link_whatsit = k
     elseif v == "pdf_literal" then
-        pdf_literal_whatsit = k
+        M.pdf_literal_whatsit = k
     end
 end
 
 -- sd:alternating
 ---@type table<string, any[]>
-alternating = {}
+M.alternating = {}
 ---@type table<string, integer>
-alternating_value = {}
+M.alternating_value = {}
 
 
 -- the return value for the LuaTeX process
 ---@type integer
-errorcode = 0
+M.errorcode = 0
 
 -- sp --mode foo sets modes.foo = true
 ---@type table<string, boolean>
-modes = {}
+M.modes = {}
 
 -- page numbers go from 1 to n. If reordering is necessary, we insert
 -- a different index into the pagenum_tbl.
 -- A value of {1,2,6,7,3,4,5} means place page 1 on position one, page 2 on
 -- position two, page 6 on position three and so on
 ---@type integer[]
-pagenum_tbl = {}
+M.pagenum_tbl = {}
 ---@type table<string, table>
-forward_pagestore = {}
+M.forward_pagestore = {}
 ---@type integer
-total_inserted_pages = 0
+M.total_inserted_pages = 0
 
 ---@class Pagelabel
 ---@field pagenumber integer User-visible page number.
@@ -297,11 +301,11 @@ total_inserted_pages = 0
 -- pagelabel contains information about a page (see shipout() and get_page_labels_str() ).
 -- Indexed by real page number.
 ---@type table<integer, Pagelabel>
-pagelabels = {}
+M.pagelabels = {}
 
 -- An array of strings - a mapping of real page numbers and user visible pagenumbers.
 ---@type string[]
-visible_pagenumbers = {}
+M.visible_pagenumbers = {}
 
 
 ---@class Matter
@@ -311,45 +315,45 @@ visible_pagenumbers = {}
 ---@field prefix? string String prepended to the formatted page number.
 
 ---@type table<string, Matter>
-matters = { mainmatter = { label = "decimal", resetafter = false, resetbefore = true, prefix = "" },
+M.matters = { mainmatter = { label = "decimal", resetafter = false, resetbefore = true, prefix = "" },
             frontmatter = { label = "lowercase-romannumeral"}
 }
 
 ---@type string
-default_areaname = "_page"
+M.default_areaname = "_page"
 ---@type string
-default_area     = "_page"
+M.default_area     = "_page"
 
 -- The name of the next requested page
 ---@type string?
-nextpage = nil
+M.nextpage = nil
 
 -- The document language
 ---@type integer
-defaultlanguage = 0
+M.defaultlanguage = 0
 
 -- Start page
 ---@type integer
-current_pagenumber = 1
+M.current_pagenumber = 1
 
 -- Expected number of pages (from previous run's aux file), nil if unknown
 ---@type integer?
-expected_pages = nil
+M.expected_pages = nil
 
 -- Previous run duration in seconds (from status file), nil if unknown
 ---@type number?
-previous_duration = nil
+M.previous_duration = nil
 
 ---@type table<integer, table>
-pages = {}
+M.pages = {}
 
 -- page n shipped out to PDF?
 ---@type table<integer, boolean>
-pages_shippedout = {}
+M.pages_shippedout = {}
 
 
 -- CSS properties. Use `:matches(tbl)` to find a matching rule. `tbl` has the following structure: `{element=..., id=..., class=... }`
-css = do_luafile("css.lua"):new()
+M.css = do_luafile("css.lua"):new()
 
 ---@class Options
 ---@field resetmarks boolean
@@ -374,11 +378,11 @@ css = do_luafile("css.lua"):new()
 
 -- The defaults (set in the layout instructions file)
 ---@type Options
-options = {
+M.options = {
     resetmarks  = false,
     imagenotfounderror = true,
-    gridwidth   = tenmm_sp,
-    gridheight  = tenmm_sp,
+    gridwidth   = M.tenmm_sp,
+    gridheight  = M.tenmm_sp,
     gridcells_x = 0,
     gridcells_y = 0,
     reportmissingglyphs = true,
@@ -392,16 +396,16 @@ options = {
 }
 
 ---@type string
-current_layout_line = ""
+M.current_layout_line = ""
 ---@type string
-current_layout_file = ""
+M.current_layout_file = ""
 ---@type string
-current_data_line = ""
+M.current_data_line = ""
 
-if newxpath then
-    options.xmlparser = "go"
+if M.newxpath then
+    M.options.xmlparser = "go"
 else
-    options.xmlparser = "lua"
+    M.options.xmlparser = "lua"
 end
 
 ---@class Group
@@ -411,29 +415,29 @@ end
 -- List of virtual areas. Key is the group name and value is
 -- a hash with keys contents (a nodelist) and grid (grid).
 ---@type table<string, Group>
-groups    = {}
+M.groups    = {}
 
 -- sometimes we want to save pages for later reuse. Keys are pagestore names
 ---@type table<string, table>
-pagestore = {}
+M.pagestore = {}
 
 ---@class Compatibility
 ---@field movecursoronrightedge boolean
 
 -- See commands.compatibility
 ---@type Compatibility
-compatibility = {
+M.compatibility = {
     movecursoronrightedge = true,
 }
 
 -- for external image conversion software
 ---@type table<string, function>
-imagehandler = {}
+M.imagehandler = {}
 ---@type table<string, function>
-resizehandler = {}
+M.resizehandler = {}
 
 ---@type table<string, any>
-viewerpreferences = {}
+M.viewerpreferences = {}
 
 -- Hyperlinks are stored in publisher.links (links_module) to be inserted later
 -- in the pre shipout filter.
@@ -442,41 +446,41 @@ links_module.reset()
 -- marker counter. Each mark will get its unique counter, so we can determine the
 -- order in which markers appear.
 ---@type integer
-markercount = 0
+M.markercount = 0
 ---@type table<string, integer>
-marker_min = {}
+M.marker_min = {}
 ---@type table<string, integer>
-marker_max = {}
+M.marker_max = {}
 ---@type table<string, any>
-marker_id_value = {}
+M.marker_id_value = {}
 
 -- metapost graphics. Keys are name and values are "beginfig(1)...." texts.
 ---@type table<string, string>
-metapostgraphics = {}
+M.metapostgraphics = {}
 ---@type table<string, string>
-metapostcolors = {}
+M.metapostcolors = {}
 ---@type table<string, string>
-metapostvariables = {}
+M.metapostvariables = {}
 ---@type table<string, boolean>
-metapostcolorwarnings = {}
+M.metapostcolorwarnings = {}
 
 -- The current foreground color (used in underline)
 ---@type string?
-current_fgcolor = nil
+M.current_fgcolor = nil
 
 -- The color stack to use
 ---@type integer
-defaultcolorstack = 0
+M.defaultcolorstack = 0
 
 ---@type table<string, function>
-data_dispatcher = {}
+M.data_dispatcher = {}
 ---@type table<string, string>
-data_dispatcher_patterns = {}
+M.data_dispatcher_patterns = {}
 ---@type { last: integer, [string]: function }
-user_defined_functions = { last = 0}
+M.user_defined_functions = { last = 0}
 
 ---@type table<string, any>
-markers = {}
+M.markers = {}
 
 -- PDF/UA - the /S /Document StructElem
 local ktree = pdf.reserveobj()
@@ -517,20 +521,20 @@ local ktree = pdf.reserveobj()
         -- [1] = "1"
     -- },
 ---@type table<string, StructElement>
-structElements = {}
+M.structElements = {}
 
 -- We will have to remember the current group and grid
 ---@type string?
-current_group = nil
+M.current_group = nil
 ---@type table?
-current_grid = nil
+M.current_grid = nil
 
 -- paragraph, table and textblock should set them
 ---@type integer
-current_fontfamily = 0
+M.current_fontfamily = 0
 
 ---@type table<string, string>
-fontaliases = {}
+M.fontaliases = {}
 
 ---@class FontGroupVariant
 ---@field regular table<string, string> Mapping of source kind (e.g. `"local"`) to font name.
@@ -540,7 +544,7 @@ fontaliases = {}
 
 -- for HTML / CSS fontfamilies
 ---@type table<string, FontGroupVariant>
-fontgroup = {
+M.fontgroup = {
      ["sans-serif"] = { regular={["local"] = "sans"}, bold={["local"]="sans-bold"}, italic={["local"]="sans-italic"}, bolditalic={["local"]="sans-bolditalic"} },
      ["serif"] = { regular={["local"] = "serif"}, bold={["local"]="serif-bold"}, italic={["local"]="serif-italic"}, bolditalic={["local"]="serif-bolditalic"} },
      ["monospace"] = { regular={["local"] = "monospace"}, bold={["local"]="monospace-bold"}, italic={["local"]="monospace-italic"}, bolditalic={["local"]="monospace-bolditalic"} },
@@ -548,7 +552,7 @@ fontgroup = {
 
 -- Used when bookmarks are inserted in a non-text context
 ---@type integer
-intextblockcontext = 0
+M.intextblockcontext = 0
 
 ---@class Masterpage
 ---@field is_pagetype string XPath expression evaluated to decide if this masterpage applies.
@@ -556,12 +560,12 @@ intextblockcontext = 0
 ---@field name string Name of the masterpage.
 
 ---@type Masterpage[]
-masterpages = {}
+M.masterpages = {}
 
 
 -- if true, look for lowercase files
 ---@type boolean
-lowercase = false
+M.lowercase = false
 
 ---@alias TextformatAlignment
 ---| "leftaligned"
@@ -583,7 +587,7 @@ lowercase = false
 -- are tables with alignment and indent. indent is the amount of
 -- indentation in sp.
 ---@type table<string, Textformat>
-textformats = {
+M.textformats = {
 
     text           = { indent = 0, alignment="justified",   rows = 1, orphan = 2, widow = 2, name = "text"},
     __centered     = { indent = 0, alignment="centered",    rows = 1, orphan = 2, widow = 2, name = "__centered"},
@@ -620,19 +624,19 @@ textformats = {
 --       }
 --     }
 ---@type Bookmark[]
-bookmarks = {}
+M.bookmarks = {}
 
 
 -- We need the separator for writing files in a directory structure (image cache for now)
 ---@type string
-os_separator = "/"
+M.os_separator = "/"
 if os.type == "windows" then
-    os_separator = "\\"
+    M.os_separator = "\\"
 end
 
 -- A very large length
 ---@type integer
-maxdimen = 1073741823
+M.maxdimen = 1073741823
 
 
 -- this should be 0x100000 (= 1048576), but this is easier to work with in the
@@ -640,16 +644,16 @@ maxdimen = 1073741823
 -- &#1100467; in the layout xml. Let me not make this public until I proof that
 -- it works.
 ---@type integer
-puastart = 1100000
+M.puastart = 1100000
 
 -- It's convenient to just copy the stretching glue instead of writing
 -- the stretch etc. over and over again.
 ---@type node
-glue_stretch2 = set_glue(nil, { stretch = 2^16, stretch_order = 2 })
+M.glue_stretch2 = set_glue(nil, { stretch = 2^16, stretch_order = 2 })
 
 -- For attached files. Each of this numbers should appear in the catalog
 ---@type integer[]
-filespecnumbers = {}
+M.filespecnumbers = {}
 
 -- Returns six values (alternating key/value pairs) describing the current
 -- layout/data location, or `nil` when the legacy xpath parser is active.
@@ -660,8 +664,8 @@ filespecnumbers = {}
 ---@return string? line_data_label
 ---@return string? line_data_value
 function M.lineinfo()
-    if newxpath then
-        return "line_layout", current_layout_line, "file", current_layout_file, "line_data" , current_data_line
+    if M.newxpath then
+        return "line_layout", M.current_layout_line, "file", M.current_layout_file, "line_data" , M.current_data_line
     else
         return nil
     end
@@ -669,7 +673,7 @@ end
 
 
 ---@type string[]
-roles_a = {
+M.roles_a = {
     "Art",
     "Artifact",
     "Div",
@@ -696,26 +700,26 @@ roles_a = {
 }
 -- unique id for roles
 ---@type integer
-rolecounter = 0
+M.rolecounter = 0
 
 
 -- Start the processing (`dothings()`)
 -- -------------------------------
 -- This is the entry point of the processing. It is called from publisher.spinit#main_loop.
 ---@return nil
-function dothings()
+function M.dothings()
     log("Running LuaTeX version %s on %s",luatex_version,os.name)
     -- First we set some defaults.
     -- A4 paper is 210x297 mm
     local wd_sp = tex.sp("210mm")
     local ht_sp = tex.sp("297mm")
-    set_pageformat(wd_sp,ht_sp)
-    options.default_pagewidth = wd_sp
-    options.default_pageheight = ht_sp
+    M.set_pageformat(wd_sp,ht_sp)
+    M.options.default_pagewidth = wd_sp
+    M.options.default_pageheight = ht_sp
 
-    get_languagecode(os.getenv("SP_MAINLANGUAGE") or "en_GB")
+    M.get_languagecode(os.getenv("SP_MAINLANGUAGE") or "en_GB")
 
-    lowercase = os.getenv("SP_IGNORECASE") == "1"
+    M.lowercase = os.getenv("SP_IGNORECASE") == "1"
     local extra_parameter = { otfeatures = { kern = true, liga = false } }
     -- The free font family `TeXGyreHeros` is a Helvetica clone and is part of the
     -- [The TeX Gyre Collection of Fonts](http://www.gust.org.pl/projects/e-foundry/tex-gyre).
@@ -737,24 +741,24 @@ function dothings()
     fonts.load_fontfile("CamingoCode-BoldItalic","CamingoCode-BoldItalic.ttf",extra_parameter)
 
     -- Define a basic font family with name `text`:
-    define_default_fontfamily()
+    M.define_default_fontfamily()
 
     local _sampler
     if os.getenv("SP_PROFILE") then
         _sampler = require "sampler"
         _sampler.start(tonumber(os.getenv("SP_PROFILE")) or 10000)
     end
-    initialize_luatex_and_generate_pdf()
+    M.initialize_luatex_and_generate_pdf()
     if _sampler then
         _sampler.stop()
         _sampler.report("profile.txt")
     end
     -- The last thing is to put a stamp in the PDF
-    if options.hidespinfo and options.hidespinfo == "true" or options.hidespinfo == "yes" then
+    if M.options.hidespinfo and M.options.hidespinfo == "true" or M.options.hidespinfo == "yes" then
         -- do nothing
-        if not pro then
+        if not M.pro then
             err("Removing speedata info needs a pro plan")
-            publisher.has_pro_error = true
+            M.has_pro_error = true
             return nil
         end
     else
@@ -766,7 +770,7 @@ end
 -- Returns `nil` if there is no dot in the name.
 ---@param fn string
 ---@return string?
-function get_extension(fn)
+function M.get_extension(fn)
     return fn:match("^.+%.(.+)$")
 end
 
@@ -774,7 +778,7 @@ end
 -- on a `;`-separated string, e.g. `"svg:rsvg;eps:gs"`.
 ---@param extensionhandler string? `ext1:handler1;ext2:handler2;...`
 ---@return nil
-function define_image_callback( extensionhandler )
+function M.define_image_callback( extensionhandler )
     local extensions = {}
     local ext,handler
     if extensionhandler and extensionhandler ~= "" then
@@ -788,9 +792,9 @@ function define_image_callback( extensionhandler )
     ---@return string? file Resolved file path (after optional conversion), or `nil`.
     local function find_image_file( asked_name )
         local file = kpse.find_file(asked_name)
-        local ext = get_extension(asked_name)
+        local ext = M.get_extension(asked_name)
         local handlername = extensions[ext]
-        local handler = imagehandler[handlername or "*"]
+        local handler = M.imagehandler[handlername or "*"]
         if handler then
             main.log("info","Convert image", "extension",ext, "handler",handlername or "*")
             file = splib.convertimage(file,handler)
@@ -801,7 +805,7 @@ function define_image_callback( extensionhandler )
 end
 
 ---@type table<integer, table>
-borderattributes = {}
+M.borderattributes = {}
 do
     -- the idea of flatten_boxes is to return an array that only has
     -- par objects.
@@ -819,7 +823,7 @@ do
     ---@param parameter? table Inherited parameters (currently `indent`).
     ---@param ret? table Accumulator for the flat result; created if absent.
     ---@return table ret Array of Par objects.
-    function flatten_boxes(box,parameter,ret)
+    function M.flatten_boxes(box,parameter,ret)
         ret = ret or {}
         parameter = parameter or {}
         local indent = box.indent_amount or 0
@@ -843,11 +847,11 @@ do
             box[1].padding_top = box.padding_top
         end
         if box.draw_border then
-            borderattributes[#borderattributes + 1] = box.border
+            M.borderattributes[#M.borderattributes + 1] = box.border
             if #box > 1 then
-                box[1].startborder = #borderattributes
+                box[1].startborder = #M.borderattributes
             else
-                box[1].startendborder = #borderattributes
+                box[1].startendborder = #M.borderattributes
             end
         end
         if box.startendborder then
@@ -865,7 +869,7 @@ do
                 if i == #box and box.break_after then
                     thisbox.break_after = box.break_after
                 end
-                flatten_boxes(thisbox,new_parameter,ret)
+                M.flatten_boxes(thisbox,new_parameter,ret)
                 if thisbox.mode == "block" then ret.mode = "block" end
             else
                 -- a regular paragraph
@@ -924,16 +928,16 @@ end
 -- it has defaults, loads a layout file and a data file and
 -- executes them both
 ---@return nil
-function initialize_luatex_and_generate_pdf()
+function M.initialize_luatex_and_generate_pdf()
     if os.getenv("SP_VERBOSITY") == nil then
-        options.verbosity = 0
+        M.options.verbosity = 0
     else
-        options.verbosity = tonumber(os.getenv("SP_VERBOSITY"))
+        M.options.verbosity = tonumber(os.getenv("SP_VERBOSITY"))
     end
 
-    options.mpcolorwarning = true
+    M.options.mpcolorwarning = true
     -- The default page type has 1cm margin
-    masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(page) page.grid:set_margin(tenmm_sp,tenmm_sp,tenmm_sp,tenmm_sp) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
+    M.masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(page) page.grid:set_margin(M.tenmm_sp,M.tenmm_sp,M.tenmm_sp,M.tenmm_sp) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
 
     -- The `vars` file hold a lua document holding table
     local vars
@@ -946,21 +950,21 @@ function initialize_luatex_and_generate_pdf()
             v = v:gsub("^\"(.*)\"$","%1")
             local _modes = string.explode(v,",")
             for _,m in ipairs(_modes) do
-                modes[m] = true
+                M.modes[m] = true
             end
         elseif k == "pro" then
-            pro = true
+            M.pro = true
             main.log("info","speedata Publisher Pro")
         end
     end
 
     -- Both the data and the layout instructions are written in XML.
-    local layoutxml = load_xml(arg[2],"layout instructions")
+    local layoutxml = M.load_xml(arg[2],"layout instructions")
     if not layoutxml then
         err("Without a valid layout-XML file, I can't really do anything.")
         exit()
     end
-    if newxpath then
+    if M.newxpath then
         layoutxml = layoutxml[1] -- skip document
     end
     -- Used in `xpath.lua` to find out which language the function is in.
@@ -982,7 +986,7 @@ function initialize_luatex_and_generate_pdf()
     end
     local version
     local requirements
-    if newxpath then
+    if M.newxpath then
         local attr = layoutxml[".__attributes"]
         if attr and attr["version"] then
             version = attr["version"]
@@ -1018,22 +1022,22 @@ function initialize_luatex_and_generate_pdf()
         local r = string.explode(requirements,",")
         for _, req in ipairs(r) do
             if req == "lxpath" then
-                if not newxpath then
+                if not M.newxpath then
                     main.log("error","failed to meet requirement", "requirement","lxpath","message","This layout requires the lxpath XML / XPath parser","help","see https://doc.speedata.de/publisher/en/lxpath/ how to activate")
                     exit(false)
                 end
             elseif req == "luxor" then
-                    if newxpath then
+                    if M.newxpath then
                         main.log("error","failed to meet requirement", "requirement","luxor","message","This layout requires the luxor XML / XPath parser","help","see https://doc.speedata.de/publisher/en/xpathfunctions/ how to activate")
                         exit(false)
                     end
             elseif req == "harfbuzz" then
-                if options.fontloader ~= "harfbuzz" then
+                if M.options.fontloader ~= "harfbuzz" then
                     main.log("error","failed to meet requirement", "requirement","harfbuzz","message","This layout requires the harfbuzz font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
                     exit(false)
                 end
             elseif req == "fontforge" then
-                if options.fontloader ~= "fontforge" then
+                if M.options.fontloader ~= "fontforge" then
                     main.log("error","failed to meet requirement", "requirement","fontforge","message","This layout requires the fontforge font loader","help","see https://doc.speedata.de/publisher/en/configuration/ how to activate")
                     exit(false)
                 end
@@ -1043,7 +1047,7 @@ function initialize_luatex_and_generate_pdf()
             end
         end
     end
-    if newxpath then
+    if M.newxpath then
         local tmp = os.getenv("SP_PREPEND_XML")
         if tmp and tmp ~= "" then
             main.log("error","--prepend-xml is not supported with the new XPath mode. Use xinclude instead.")
@@ -1071,7 +1075,7 @@ function initialize_luatex_and_generate_pdf()
     local dataxml
     local datafilename = arg[3]
     if datafilename == "-dummy" then
-        if newxpath then
+        if M.newxpath then
             dataxml = splib.loadxmlstring("<data />")
         else
             dataxml = luxor.parse_xml("<data />")
@@ -1080,7 +1084,7 @@ function initialize_luatex_and_generate_pdf()
         log("Reading from stdin")
         dataxml = luxor.parse_xml(io.stdin:read("*a"),{htmlentities = true})
     else
-        dataxml = load_xml(datafilename,"data file",{ htmlentities = true, ignoreeol = ( options.ignoreeol or false ) })
+        dataxml = M.load_xml(datafilename,"data file",{ htmlentities = true, ignoreeol = ( M.options.ignoreeol or false ) })
     end
     if not dataxml then
         main.log("error","Could not read data")
@@ -1091,7 +1095,7 @@ function initialize_luatex_and_generate_pdf()
         exit()
     end
 
-    if newxpath then
+    if M.newxpath then
         local defaults = {
             _bleed = "0mm",
             _pageheight = "297mm",
@@ -1101,27 +1105,27 @@ function initialize_luatex_and_generate_pdf()
             __maxwidth = tex.sp("190mm"),
             _lastpage = 1,
         }
-        data = xpath.context:new()
-        data.xmldoc = {dataxml}
-        data.sequence = {dataxml}
-        data.namespaces = layoutxml[".__ns"]
+        M.data = xpath.context:new()
+        M.data.xmldoc = {dataxml}
+        M.data.sequence = {dataxml}
+        M.data.namespaces = layoutxml[".__ns"]
 
         for k, v in pairs(defaults) do
-            data.vars[k] = v
+            M.data.vars[k] = v
         end
 
         -- from command line or publisher.cfg:
         for k, v in pairs(vars) do
-            data.vars[k] = v
+            M.data.vars[k] = v
         end
         local mode_keys = {}
-        for k, _ in pairs(modes) do
+        for k, _ in pairs(M.modes) do
             mode_keys[#mode_keys+1] = k
         end
         table.sort(mode_keys)
-        data.vars._mode = table.concat(mode_keys,",")
+        M.data.vars._mode = table.concat(mode_keys,",")
 
-        local _, msg = data:execute("root()")
+        local _, msg = M.data:execute("root()")
         if msg then
             main.log("error",msg)
         end
@@ -1131,118 +1135,118 @@ function initialize_luatex_and_generate_pdf()
         end
     end
 
-    dispatch(layoutxml,data)
-    if newxpath then
+    M.dispatch(layoutxml,M.data)
+    if M.newxpath then
         -- for namespace mode == strict
-        data.namespaces = dataxml[1][".__ns"]
+        M.data.namespaces = dataxml[1][".__ns"]
     end
 
     -- options.ignoreeol is now set.
     -- In DataMode (newxpath), element metatables are already set during
     -- Go XML parsing, so fixup_xmlfile only needs to run if ignoreeol
     -- was set in the layout (after loading) and wasn't handled by Go.
-    if newxpath then
-        local needs_eol = (options.ignoreeol or false) and not dataxml.ignoreeol_done
+    if M.newxpath then
+        local needs_eol = (M.options.ignoreeol or false) and not dataxml.ignoreeol_done
         if needs_eol then
-            fixup_xmlfile(dataxml, true)
+            M.fixup_xmlfile(dataxml, true)
         end
     end
 
     -- We define two graphic states for overprinting on and off.
-    GS_State_OP_On  = pdf.immediateobj([[<< /Type/ExtGState /OP true /OPM 1 >>]])
-    GS_State_OP_Off = pdf.immediateobj([[<< /Type/ExtGState /OP false >>]])
+    M.GS_State_OP_On  = pdf.immediateobj([[<< /Type/ExtGState /OP true /OPM 1 >>]])
+    M.GS_State_OP_Off = pdf.immediateobj([[<< /Type/ExtGState /OP false >>]])
 
     -- override options set in the `<Options>` element
     for i=4,#arg do
         local k,v = arg[i]:match("^(.+)=(.+)$")
         if k ~= "mode" then -- mode handled before loading layout
             v = v:gsub("^\"(.*)\"$","%1")
-            options[k]=v
+            M.options[k]=v
         end
     end
 
-    if options.interaction == "false" then
-        options.interaction = false
-    elseif options.interaction == "true" then
-        options.interaction = true
+    if M.options.interaction == "false" then
+        M.options.interaction = false
+    elseif M.options.interaction == "true" then
+        M.options.interaction = true
     end
 
-    if options.showgrid == "false" then
-        options.showgrid = false
-    elseif options.showgrid == "true" then
-        options.showgrid = true
+    if M.options.showgrid == "false" then
+        M.options.showgrid = false
+    elseif M.options.showgrid == "true" then
+        M.options.showgrid = true
     end
 
-    if options.cutmarks == "true" then
-        options.cutmarks = true
-    elseif options.cutmarks == "false" then
-        options.cutmarks = false
+    if M.options.cutmarks == "true" then
+        M.options.cutmarks = true
+    elseif M.options.cutmarks == "false" then
+        M.options.cutmarks = false
     end
 
-    if options.trimmarks == "true" then
-        options.trimmarks = true
-    elseif options.trimmarks == "false" then
-        options.trimmarks = false
+    if M.options.trimmarks == "true" then
+        M.options.trimmarks = true
+    elseif M.options.trimmarks == "false" then
+        M.options.trimmarks = false
     end
 
-    if options.showgridallocation == "false" then
-        options.showgridallocation = false
-    elseif options.showgridallocation == "true" then
-        options.showgridallocation = true
+    if M.options.showgridallocation == "false" then
+        M.options.showgridallocation = false
+    elseif M.options.showgridallocation == "true" then
+        M.options.showgridallocation = true
     end
 
-    if options.reportmissingglyphs == "false" or options.reportmissingglyphs == "no" then
-        options.reportmissingglyphs = false
-    elseif options.reportmissingglyphs == "true" or options.reportmissingglyphs == "yes" then
-        options.reportmissingglyphs = true
-    elseif options.reportmissingglyphs == "warning" then
-        options.reportmissingglyphs = "warning"
+    if M.options.reportmissingglyphs == "false" or M.options.reportmissingglyphs == "no" then
+        M.options.reportmissingglyphs = false
+    elseif M.options.reportmissingglyphs == "true" or M.options.reportmissingglyphs == "yes" then
+        M.options.reportmissingglyphs = true
+    elseif M.options.reportmissingglyphs == "warning" then
+        M.options.reportmissingglyphs = "warning"
     end
 
-    if options.imagehandler then
-        string.gsub(options.imagehandler,"([a-zA-Z*]+):%((.-)%);?", function( imagetype,cmdline )
-            imagehandler[imagetype] = cmdline
+    if M.options.imagehandler then
+        string.gsub(M.options.imagehandler,"([a-zA-Z*]+):%((.-)%);?", function( imagetype,cmdline )
+            M.imagehandler[imagetype] = cmdline
         end)
     end
 
-    if options.resizehandler then
-        string.gsub(options.resizehandler,"([a-zA-Z*]+):%((.-)%);?", function( imagetype,cmdline )
-            resizehandler[imagetype] = cmdline
+    if M.options.resizehandler then
+        string.gsub(M.options.resizehandler,"([a-zA-Z*]+):%((.-)%);?", function( imagetype,cmdline )
+            M.resizehandler[imagetype] = cmdline
         end)
     end
 
-    define_image_callback(options.extensionhandler or "")
+    M.define_image_callback(M.options.extensionhandler or "")
 
     -- Set the starting page (which must be a number)
-    if options.startpage then
-        local num = options.startpage
+    if M.options.startpage then
+        local num = M.options.startpage
         if num then
-            current_pagenumber = tonumber(num)
+            M.current_pagenumber = tonumber(num)
             log("Set page number to %d",num)
         else
-            main.log("error","Can't recognize starting page number", "startpage", options.startpage or "(not set)")
+            main.log("error","Can't recognize starting page number", "startpage", M.options.startpage or "(not set)")
         end
     end
 
-    if options.colorprofile then
-        spotcolors.set_colorprofile_filename(options.colorprofile)
+    if M.options.colorprofile then
+        spotcolors.set_colorprofile_filename(M.options.colorprofile)
         warning("Options / colorprofile is obsolete. Use DefineColorprofile and PDFOptions / colorprofile instead.")
     end
 
-    if options.format == "PDF/UA" and not structElements[".root"] then
-        structElements[".root"] = {
+    if M.options.format == "PDF/UA" and not M.structElements[".root"] then
+        M.structElements[".root"] = {
             role = "Document",
             obj = pdf.reserveobj(),
         }
-        structElements["doc"] = structElements[".root"]
+        M.structElements["doc"] = M.structElements[".root"]
     end
 
 
     local auxfilename = tex.jobname .. "-aux.xml"
     -- load help file if it exists
-    if kpse.find_file(auxfilename) and options.resetmarks == false then
-        local mark_tab = load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeol = true })
-        if newxpath and mark_tab then
+    if kpse.find_file(auxfilename) and M.options.resetmarks == false then
+        local mark_tab = M.load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeol = true })
+        if M.newxpath and mark_tab then
             mark_tab = mark_tab[1]
         end
         mark_tab = mark_tab or {}
@@ -1250,38 +1254,38 @@ function initialize_luatex_and_generate_pdf()
             local mt = mark_tab[i]
             if type(mt) == "table" then
                 local attributes
-                if newxpath then
+                if M.newxpath then
                     attributes = mt[".__attributes"]
                 else
                     attributes = mt
                 end
                 if mt[".__local_name"] == "mark" then
-                    markers[attributes.name] = { page = attributes.page}
+                    M.markers[attributes.name] = { page = attributes.page}
                     local id = tonumber(attributes.id)
                     if id then
-                        marker_id_value[id] = { page = attributes.page, name = attributes.name}
+                        M.marker_id_value[id] = { page = attributes.page, name = attributes.name}
 
                         local pagenumber = tonumber(attributes.page)
-                        if not marker_min[pagenumber] then
-                            marker_min[pagenumber] = id
-                        elseif marker_min[pagenumber] > id then
-                            marker_min[pagenumber] = id
+                        if not M.marker_min[pagenumber] then
+                            M.marker_min[pagenumber] = id
+                        elseif M.marker_min[pagenumber] > id then
+                            M.marker_min[pagenumber] = id
                         end
-                        if not marker_max[pagenumber] then
-                            marker_max[pagenumber] = id
-                        elseif marker_max[pagenumber] < id then
-                            marker_max[pagenumber] = id
+                        if not M.marker_max[pagenumber] then
+                            M.marker_max[pagenumber] = id
+                        elseif M.marker_max[pagenumber] < id then
+                            M.marker_max[pagenumber] = id
                         end
                     end
                 elseif mt[".__local_name"] == "pagelabel" then
-                    visible_pagenumbers[tonumber(attributes.pagenumber)] = attributes.visible
+                    M.visible_pagenumbers[tonumber(attributes.pagenumber)] = attributes.visible
                 elseif mt[".__local_name"] == "lastpage" then
-                    if newxpath then
-                        data.vars["_lastpage"] = attributes.page
+                    if M.newxpath then
+                        M.data.vars["_lastpage"] = attributes.page
                     else
                         xpath.set_variable("_lastpage", attributes.page )
                     end
-                    expected_pages = tonumber(attributes.page)
+                    M.expected_pages = tonumber(attributes.page)
                 end
             end
         end
@@ -1295,11 +1299,11 @@ function initialize_luatex_and_generate_pdf()
         statusfile:close()
         local dur = content:match("<DurationSeconds>([%d%.]+)</DurationSeconds>")
         if dur then
-            previous_duration = tonumber(dur)
+            M.previous_duration = tonumber(dur)
         end
     end
 
-    if newxpath then
+    if M.newxpath then
     else
         xpath.set_variable("_bleed", "0mm")
         xpath.set_variable("_pageheight", "297mm")
@@ -1349,26 +1353,26 @@ function initialize_luatex_and_generate_pdf()
 
     -- Start data processing in the default mode (`""`)
     local name, tmp
-    if newxpath then
-        local seq, msg
-        _, msg = data:execute("root()")
+    if M.newxpath then
+        local _, seq, msg
+        _, msg = M.data:execute("root()")
         if msg then
             main.log("error",msg)
         end
-        if options.namespaces == "strict" then
-            seq, msg = data:eval("local-name()")
+        if M.options.namespaces == "strict" then
+            seq, msg = M.data:eval("local-name()")
             if msg then
                 main.log("error",msg)
             end
             name = xpath.string_value(seq)
-            seq, msg = data:eval("namespace-uri()")
+            seq, msg = M.data:eval("namespace-uri()")
             if msg then
                 main.log("error",msg)
             end
             local namespace_element = xpath.string_value(seq)
             name = "{" .. namespace_element .. "}" .. name
         else
-            seq, msg = data:eval("local-name()")
+            seq, msg = M.data:eval("local-name()")
             if msg then
                 main.log("error",msg)
             end
@@ -1380,26 +1384,26 @@ function initialize_luatex_and_generate_pdf()
     end
 
     -- The rare case that the user has not any `Record` commands in the layout file:
-    if not data_dispatcher[""] and not data_dispatcher_patterns[""] then
+    if not M.data_dispatcher[""] and not M.data_dispatcher_patterns[""] then
         main.log("error","Can't find any “Record” commands in the layout file.")
         exit()
     end
 
-    tmp = data_dispatcher[""] and data_dispatcher[""][name]
+    tmp = M.data_dispatcher[""] and M.data_dispatcher[""][name]
     -- Pattern matching fallback for root element (newxpath only)
-    if not tmp and newxpath then
-        local rootnode = data.sequence and data.sequence[1]
+    if not tmp and M.newxpath then
+        local rootnode = M.data.sequence and M.data.sequence[1]
         if rootnode then
-            tmp = find_matching_pattern("", rootnode, data)
+            tmp = find_matching_pattern("", rootnode, M.data)
         end
     end
     if tmp then
-        if newxpath then
+        if M.newxpath then
             -- For data:eval, the namespaces must be set the layout namespaces
-            data.namespaces = layoutxml[".__ns"]
-            dispatch(tmp,data)
+            M.data.namespaces = layoutxml[".__ns"]
+            M.dispatch(tmp,M.data)
         else
-            dispatch(tmp,dataxml)
+            M.dispatch(tmp,dataxml)
         end
     else
         name = name or ""
@@ -1415,13 +1419,13 @@ function initialize_luatex_and_generate_pdf()
 
     -- emit last page if necessary
     -- current_pagestore_name is set when in SavePages and nil otherwise
-    if page_initialized_p(current_pagenumber) and current_pagestore_name == nil then
-        dothingsbeforeoutput(pages[current_pagenumber],data)
-        local n = node.vpack(pages[current_pagenumber].pagebox)
-        shipout(n,current_pagenumber,dataxml)
+    if M.page_initialized_p(M.current_pagenumber) and current_pagestore_name == nil then
+        M.dothingsbeforeoutput(M.pages[M.current_pagenumber],M.data)
+        local n = node.vpack(M.pages[M.current_pagenumber].pagebox)
+        M.shipout(n,M.current_pagenumber,dataxml)
     end
-    local lastpage = current_pagenumber
-    while not(page_initialized_p(lastpage)) and lastpage > 0 and current_pagestore_name == nil do
+    local lastpage = M.current_pagenumber
+    while not(M.page_initialized_p(lastpage)) and lastpage > 0 and current_pagestore_name == nil do
         lastpage = lastpage - 1
     end
 
@@ -1432,55 +1436,55 @@ function initialize_luatex_and_generate_pdf()
         pdf.settrailerid(" [ <FA052949448907805BA83C1E78896398> <FA052949448907805BA83C1E78896398> ]")
     end
     -- file attachment
-    if #filespecnumbers > 0 then
+    if #M.filespecnumbers > 0 then
         local afstring = {}
-        for i = 1, #filespecnumbers do
-            local filespecnum = filespecnumbers[i][1]
+        for i = 1, #M.filespecnumbers do
+            local filespecnum = M.filespecnumbers[i][1]
             afstring[#afstring+1] = string.format("%d 0 R",filespecnum)
         end
         local af = "[" .. table.concat(afstring," ") .. "]"
 
         local names = {}
-        for i = 1, #filespecnumbers do
-            local filespecnum = filespecnumbers[i][1]
-            local filename = filespecnumbers[i][3]
-            names[#names+1] = string.format([[%s %d 0 R]],utf8_to_utf16_string_pdf(filename),filespecnum)
+        for i = 1, #M.filespecnumbers do
+            local filespecnum = M.filespecnumbers[i][1]
+            local filename = M.filespecnumbers[i][3]
+            names[#names+1] = string.format([[%s %d 0 R]],M.utf8_to_utf16_string_pdf(filename),filespecnum)
         end
         pdfcatalog[#pdfcatalog + 1] = string.format([[ /Names << /EmbeddedFiles <<  /Names [%s] >> >> ]],table.concat(names," "))
         pdfcatalog[#pdfcatalog + 1] = string.format([[ /AF %s ]],af)
     end
 
-    local str = get_page_labels_str()
+    local str = M.get_page_labels_str()
     if str then
         pdfcatalog[#pdfcatalog + 1] = str
     end
-    local langtbl = get_language(defaultlanguage)
+    local langtbl = M.get_language(M.defaultlanguage)
 
     if langtbl and langtbl.locale then
         pdfcatalog[#pdfcatalog+1] = string.format(" /Lang (%s)",string.gsub(langtbl.locale,"^(%a+).*","%1"))
     end
 
     local vp = {}
-    if viewerpreferences.numcopies and viewerpreferences.numcopies > 1 and viewerpreferences.numcopies <= 5 then
-        vp[#vp + 1] = string.format("/NumCopies %d", viewerpreferences.numcopies)
+    if M.viewerpreferences.numcopies and M.viewerpreferences.numcopies > 1 and M.viewerpreferences.numcopies <= 5 then
+        vp[#vp + 1] = string.format("/NumCopies %d", M.viewerpreferences.numcopies)
     end
-    if viewerpreferences.printscaling and viewerpreferences.printscaling ~= ""  then
-        vp[#vp + 1] = string.format("/PrintScaling /%s", viewerpreferences.printscaling)
+    if M.viewerpreferences.printscaling and M.viewerpreferences.printscaling ~= ""  then
+        vp[#vp + 1] = string.format("/PrintScaling /%s", M.viewerpreferences.printscaling)
     end
-    if viewerpreferences.picktray ~= nil  then
-        vp[#vp + 1] = string.format("/PickTrayByPDFSize %s", viewerpreferences.picktray)
-    end
-
-    if viewerpreferences.duplex ~= nil and viewerpreferences.duplex ~= "" then
-        vp[#vp + 1] = string.format("/Duplex /%s", viewerpreferences.duplex)
+    if M.viewerpreferences.picktray ~= nil  then
+        vp[#vp + 1] = string.format("/PickTrayByPDFSize %s", M.viewerpreferences.picktray)
     end
 
-    if options.pagelayout then
-        pdfcatalog[#pdfcatalog + 1] = string.format("/PageLayout /%s", options.pagelayout)
+    if M.viewerpreferences.duplex ~= nil and M.viewerpreferences.duplex ~= "" then
+        vp[#vp + 1] = string.format("/Duplex /%s", M.viewerpreferences.duplex)
     end
 
-    if options.displaymode then
-        pdfcatalog[#pdfcatalog + 1] = string.format("/PageMode /%s", options.displaymode)
+    if M.options.pagelayout then
+        pdfcatalog[#pdfcatalog + 1] = string.format("/PageLayout /%s", M.options.pagelayout)
+    end
+
+    if M.options.displaymode then
+        pdfcatalog[#pdfcatalog + 1] = string.format("/PageMode /%s", M.options.displaymode)
     else
         pdfcatalog[#pdfcatalog + 1] = "/PageMode /UseNone"
     end
@@ -1506,62 +1510,62 @@ function initialize_luatex_and_generate_pdf()
     -- suppressinfo / Creator set:
     -- Creator:         CREATOR
     -- Producer:        speedata Publisher using LuaTeX
-    local infos = { string.format("/Creator %s /Producer %s",utf8_to_utf16_string_pdf(metadata.getcreator(options)), utf8_to_utf16_string_pdf(metadata.getproducer(options))) }
+    local infos = { string.format("/Creator %s /Producer %s",M.utf8_to_utf16_string_pdf(metadata.getcreator(M.options)), M.utf8_to_utf16_string_pdf(metadata.getproducer(M.options))) }
     if not sp_suppressinfo then
         infos[#infos+1] = "/Trapped /False"
     end
-    if options.documenttitle and options.documenttitle ~= "" then
-        infos[#infos + 1] = string.format("/Title %s",utf8_to_utf16_string_pdf(options.documenttitle))
+    if M.options.documenttitle and M.options.documenttitle ~= "" then
+        infos[#infos + 1] = string.format("/Title %s",M.utf8_to_utf16_string_pdf(M.options.documenttitle))
     end
-    if options.documentauthor and options.documentauthor ~= "" then
-        infos[#infos + 1] = string.format("/Author %s", utf8_to_utf16_string_pdf(options.documentauthor))
+    if M.options.documentauthor and M.options.documentauthor ~= "" then
+        infos[#infos + 1] = string.format("/Author %s", M.utf8_to_utf16_string_pdf(M.options.documentauthor))
     end
-    if options.documentsubject and options.documentsubject ~= "" then
-        infos[#infos + 1] = string.format("/Subject %s", utf8_to_utf16_string_pdf(options.documentsubject))
+    if M.options.documentsubject and M.options.documentsubject ~= "" then
+        infos[#infos + 1] = string.format("/Subject %s", M.utf8_to_utf16_string_pdf(M.options.documentsubject))
     end
-    if options.documentkeywords and options.documentkeywords ~= "" then
-        infos[#infos + 1] = string.format("/Keywords %s", utf8_to_utf16_string_pdf(options.documentkeywords))
+    if M.options.documentkeywords and M.options.documentkeywords ~= "" then
+        infos[#infos + 1] = string.format("/Keywords %s", M.utf8_to_utf16_string_pdf(M.options.documentkeywords))
     end
 
-    if options.format then
+    if M.options.format then
         local metadataobjnum
-        if options.format == "PDF/X-3:2002" or options.format == "PDF/X-4" then
-            infos[#infos + 1] = string.format("/GTS_PDFXVersion (%s)",options.format)
-            metadataobjnum = pdf.obj({ type="stream", string = metadata.getmetadata(filespecnumbers,options), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0})
+        if M.options.format == "PDF/X-3:2002" or M.options.format == "PDF/X-4" then
+            infos[#infos + 1] = string.format("/GTS_PDFXVersion (%s)",M.options.format)
+            metadataobjnum = pdf.obj({ type="stream", string = metadata.getmetadata(M.filespecnumbers,M.options), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0})
             local colorprofileobjnum = spotcolors.write_colorprofile()
             local cp = spotcolors.get_colorprofile()
             local outputintentsobjnum = pdf.obj({type = "raw",  immediate = true , string = string.format([[<<  /DestOutputProfile %d 0 R /Info %s /OutputCondition %s    /OutputConditionIdentifier %s   /RegistryName %s    /S /GTS_PDFX   /Type /OutputIntent  >>]],colorprofileobjnum,
- utf8_to_utf16_string_pdf(cp.info),
- utf8_to_utf16_string_pdf(cp.condition),
- utf8_to_utf16_string_pdf(cp.identifier),
- utf8_to_utf16_string_pdf(cp.registry))})
+ M.utf8_to_utf16_string_pdf(cp.info),
+ M.utf8_to_utf16_string_pdf(cp.condition),
+ M.utf8_to_utf16_string_pdf(cp.identifier),
+ M.utf8_to_utf16_string_pdf(cp.registry))})
             local outputintentsarrayobjnum = pdf.obj({type="raw", string = string.format("[ %d 0 R ]",outputintentsobjnum), immediate = true })
             pdfcatalog[#pdfcatalog + 1] = string.format("/OutputIntents %d 0 R",outputintentsarrayobjnum )
         end
-        if options.format == "PDF/A-3" then
-            metadataobjnum = pdf.obj({ type="stream", string = metadata.getmetadata(filespecnumbers,options), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0})
+        if M.options.format == "PDF/A-3" then
+            metadataobjnum = pdf.obj({ type="stream", string = metadata.getmetadata(M.filespecnumbers,M.options), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0})
             pdf.setomitcidset(1)
             local colorprofileobjnum = spotcolors.write_colorprofile()
             local cp = spotcolors.get_colorprofile()
             local outputintentsobjnum = pdf.obj({type = "raw",  immediate = true , string = string.format([[<<  /DestOutputProfile %d 0 R /Info %s /OutputCondition %s    /OutputConditionIdentifier %s   /RegistryName %s    /S /GTS_PDFA1   /Type /OutputIntent  >>]],colorprofileobjnum,
- utf8_to_utf16_string_pdf(cp.info),
- utf8_to_utf16_string_pdf(cp.condition),
- utf8_to_utf16_string_pdf(cp.identifier),
- utf8_to_utf16_string_pdf(cp.registry))})
+ M.utf8_to_utf16_string_pdf(cp.info),
+ M.utf8_to_utf16_string_pdf(cp.condition),
+ M.utf8_to_utf16_string_pdf(cp.identifier),
+ M.utf8_to_utf16_string_pdf(cp.registry))})
             local outputintentsarrayobjnum = pdf.obj({type="raw", string = string.format("[ %d 0 R ]",outputintentsobjnum), immediate = true })
             pdfcatalog[#pdfcatalog + 1] = string.format("/OutputIntents %d 0 R",outputintentsarrayobjnum )
         end
-        if options.format == "PDF/UA" then
+        if M.options.format == "PDF/UA" then
             pdfcatalog[#pdfcatalog + 1] = string.format(" /MarkInfo <<  /Marked true >> ")
-            metadataobjnum = pdf.obj({ type="stream", string = metadata.getmetadata(filespecnumbers, options), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0,})
+            metadataobjnum = pdf.obj({ type="stream", string = metadata.getmetadata(M.filespecnumbers, M.options), immediate = true, attr = [[  /Subtype /XML /Type /Metadata ]],compresslevel = 0,})
             vp[#vp + 1] = "/DisplayDocTitle true"
 
             local parenttree = pdf.reserveobj()
             local structTreeRootObjectNumber = pdf.reserveobj()
             -- Sort structure tree by reading order if pages were reordered (InsertPages/SavePages)
             local needs_reorder = false
-            for i = 1, #pagenum_tbl do
-                if pagenum_tbl[i] ~= i then
+            for i = 1, #M.pagenum_tbl do
+                if M.pagenum_tbl[i] ~= i then
                     needs_reorder = true
                     break
                 end
@@ -1570,18 +1574,18 @@ function initialize_luatex_and_generate_pdf()
                 -- Map page object ref → output position (reading order).
                 -- pagenum_tbl[k] = output position for internal page k (shipout order).
                 local page_ref_to_num = {}
-                for k = 1, #pagenum_tbl do
-                    page_ref_to_num[pdf.getpageref(k)] = pagenum_tbl[k]
+                for k = 1, #M.pagenum_tbl do
+                    page_ref_to_num[pdf.getpageref(k)] = M.pagenum_tbl[k]
                 end
-                sort_struct_tree_by_page_order(structElements[".root"], page_ref_to_num)
+                M.sort_struct_tree_by_page_order(M.structElements[".root"], page_ref_to_num)
             end
-            if options.dumpstructtree then
+            if M.options.dumpstructtree then
                 -- Build page object ref → logical page number mapping
                 local pageref_to_num = {}
-                for k = 1, #pagenum_tbl do
-                    pageref_to_num[pdf.getpageref(k)] = pagenum_tbl[k]
+                for k = 1, #M.pagenum_tbl do
+                    pageref_to_num[pdf.getpageref(k)] = M.pagenum_tbl[k]
                 end
-                local xmlstr = '<?xml version="1.0" encoding="UTF-8"?>\n' .. dump_struct_tree_xml(structElements[".root"], nil, pageref_to_num)
+                local xmlstr = '<?xml version="1.0" encoding="UTF-8"?>\n' .. M.dump_struct_tree_xml(M.structElements[".root"], nil, pageref_to_num)
                 local fn = tex.jobname .. "-struct.xml"
                 local f = io.open(fn, "w")
                 if f then
@@ -1593,12 +1597,12 @@ function initialize_luatex_and_generate_pdf()
                     main.log("error","Cannot open " .. fn .. " for writing")
                 end
             end
-            writeStructElements(structElements[".root"],structTreeRootObjectNumber)
-            local strObjnum = pdf.obj({ type = "raw", objnum = structTreeRootObjectNumber,  string = string.format("<</Type /StructTreeRoot /K %d 0 R /ParentTree %d 0 R >>",structElements[".root"].obj,parenttree), immediate = true})
+            M.writeStructElements(M.structElements[".root"],structTreeRootObjectNumber)
+            local strObjnum = pdf.obj({ type = "raw", objnum = structTreeRootObjectNumber,  string = string.format("<</Type /StructTreeRoot /K %d 0 R /ParentTree %d 0 R >>",M.structElements[".root"].obj,parenttree), immediate = true})
             local numentries = { "<< /Nums [" }
-            for i = 1, #struct_root_numtree do
+            for i = 1, #M.struct_root_numtree do
                 numentries[#numentries+1] = tostring(i-1)
-                numentries[#numentries+1] = tostring(struct_root_numtree[i])
+                numentries[#numentries+1] = tostring(M.struct_root_numtree[i])
             end
             numentries[#numentries + 1] = "] >>"
             pdf.obj({type = "raw", string = string.format(table.concat(numentries," ")), objnum = parenttree, immediate = true})
@@ -1628,15 +1632,15 @@ function initialize_luatex_and_generate_pdf()
     end
 
     -- Now put the bookmarks in the pdf
-    for _,v in ipairs(bookmarks) do
-        bookmarkstotex(v)
+    for _,v in ipairs(M.bookmarks) do
+        M.bookmarkstotex(v)
     end
     local tab = {}
-    for k,v in pairs(markers) do
-        tab[#tab + 1] = string.format("  <mark name=%q page=%q id=%q />",xml_escape(tostring(k)),xml_escape(tostring(v.page)), tostring(v.count))
+    for k,v in pairs(M.markers) do
+        tab[#tab + 1] = string.format("  <mark name=%q page=%q id=%q />",M.xml_escape(tostring(k)),M.xml_escape(tostring(v.page)), tostring(v.count))
     end
-    for i = 1,#visible_pagenumbers do
-        tab[#tab + 1] = string.format("  <pagelabel pagenumber=%q visible=%q />",tostring(i),xml_escape(tostring(visible_pagenumbers[i])))
+    for i = 1,#M.visible_pagenumbers do
+        tab[#tab + 1] = string.format("  <pagelabel pagenumber=%q visible=%q />",tostring(i),M.xml_escape(tostring(M.visible_pagenumbers[i])))
     end
     local file, errmsg = io.open(auxfilename,"wb")
     if file == nil then
@@ -1648,7 +1652,7 @@ function initialize_luatex_and_generate_pdf()
     file:write(string.format("\n <lastpage page='%d' />",lastpage))
     file:write("\n</marker>")
     file:close()
-    if has_pro_error then
+    if M.has_pro_error then
         log("*****************************************************")
         log("*                                                   *")
         log("* This layout uses features that require a Pro plan *")
@@ -1666,7 +1670,7 @@ end
 -- This is called at the end, when writing a dictionary
 
 ---@type table<integer, integer>
-struct_root_numtree = {}
+M.struct_root_numtree = {}
 
 local ntmetafunctostring = function(tbl)
     local tmp = {}
@@ -1690,27 +1694,27 @@ do
     ---@param parenttree integer PDF object number of the parent tree.
     ---@param page integer PDF page object number for the current page.
     ---@param curid? string Current parent role id used when nodes don't carry one.
-    function find_role_attributes( nodelist,parenttree, page, curid )
+    function M.find_role_attributes( nodelist,parenttree, page, curid )
         local head = nodelist
         while head do
             local entry
-            if head.id == hlist_node or head.id == vlist_node then
+            if head.id == M.hlist_node or head.id == M.vlist_node then
                 if head.list then
-                    local r = node.has_attribute(head,att_role)
-                    local parentid    = getprop(head,"parentid")
+                    local r = node.has_attribute(head,M.att_role)
+                    local parentid    = M.getprop(head,"parentid")
 
                     -- parentdid == "" is a maker for inheritance
                     if parentid == "" or parentid == nil then
                         parentid = curid
                     end
                     -- roleid is role, underscore, rolecounter, for example P_1
-                    local roleid = getprop(head,"id")
+                    local roleid = M.getprop(head,"id")
                     if roleid then
-                        local actualtext = getprop(head,"actualtext")
-                        local alttext = getprop(head,"alttext")
-                        local rolename = roles_a[r]
+                        local actualtext = M.getprop(head,"actualtext")
+                        local alttext = M.getprop(head,"alttext")
+                        local rolename = M.roles_a[r]
                         if rolename ~= "Artifact" then
-                            local structpos = getprop(head,"structpos")
+                            local structpos = M.getprop(head,"structpos")
                             entry = {
                                 obj = pdf.reserveobj(),
                                 role = rolename,
@@ -1718,7 +1722,7 @@ do
                                 actualtext = actualtext,
                                 alttext = alttext,
                             }
-                            local parenttable = structElements[parentid]
+                            local parenttable = M.structElements[parentid]
                             if parenttable then
                                 if structpos == "top" then
                                     table.insert(parenttable,1,entry)
@@ -1728,31 +1732,31 @@ do
                                     parenttable[#parenttable+1] = entry
                                 end
                             end
-                            structElements[roleid] = entry
+                            M.structElements[roleid] = entry
                         end
                     end
-                    find_role_attributes(head.list, parenttree, page, roleid or curid)
+                    M.find_role_attributes(head.list, parenttree, page, roleid or curid)
                 end
-            elseif node.has_attribute(head,att_role) then
-                local r = node.has_attribute(head,att_role)
-                local roleid      = getprop(head,"id")
-                local parentid    = getprop(head,"parentid")
+            elseif node.has_attribute(head,M.att_role) then
+                local r = node.has_attribute(head,M.att_role)
+                local roleid      = M.getprop(head,"id")
+                local parentid    = M.getprop(head,"parentid")
                 if parentid == nil or parentid == "" or parentid == 0 or parentid == roleid then
                     parentid = curid
                 end
-                local actualtext  = getprop(head,"actualtext")
-                local alttext     = getprop(head,"alttext")
-                local bbox        = getprop(head,"bbox")
+                local actualtext  = M.getprop(head,"actualtext")
+                local alttext     = M.getprop(head,"alttext")
+                local bbox        = M.getprop(head,"bbox")
                 -- role number to role name
-                r = roles_a[r]
+                r = M.roles_a[r]
 
                 local entry
-                if structElements[roleid] then
-                    entry = structElements[roleid]
+                if M.structElements[roleid] then
+                    entry = M.structElements[roleid]
                 else
                     if r == "Link" then
-                        local linkobjnum = getprop(head,"linkobjnum")
-                        local structelemobjnum = getprop(head,"structelemobjnum")
+                        local linkobjnum = M.getprop(head,"linkobjnum")
+                        local structelemobjnum = M.getprop(head,"structelemobjnum")
                         local startlink = head.next
                         startlink.action.data = startlink.action.data .. "/F 2" .. string.format("/P %s 0 R ",page)
                         entry = {
@@ -1799,7 +1803,7 @@ do
                         main.log("debug","Structure entry has no parent id","roleid",roleid or "(none)","role",r)
                     else
                         if r ~= "Artifact" then
-                            local parenttable = structElements[parentid]
+                            local parenttable = M.structElements[parentid]
                             if parenttable then
                                 parenttable[#parenttable+1] = entry
                             else
@@ -1829,19 +1833,19 @@ do
     -- and registers the resulting struct elements in the page's structparents.
     ---@param nodelist node Head of the page's node list.
     ---@param page table Current page table; receives `structparents`.
-    function insert_struct_elements( nodelist,page )
+    function M.insert_struct_elements( nodelist,page )
         -- structelementobjects contains struct tree object numbers for this page.
         structelementobjects = {}
         objcount = 0
         local parenttree = ktree
         -- Use shipout index (#pagenum_tbl) instead of logical page number,
         -- because pdf.getpageref uses internal page numbering (shipout order).
-        local thispage = pdf.getpageref(#pagenum_tbl)
-        find_role_attributes(nodelist,parenttree,thispage)
+        local thispage = pdf.getpageref(#M.pagenum_tbl)
+        M.find_role_attributes(nodelist,parenttree,thispage)
 
-        page.structparents = #struct_root_numtree
+        page.structparents = #M.struct_root_numtree
         -- ntmetafunctostring returns object references in brackets for __tostring
-        struct_root_numtree[#struct_root_numtree + 1] = setmetatable(structelementobjects,{__tostring = ntmetafunctostring })
+        M.struct_root_numtree[#M.struct_root_numtree + 1] = setmetatable(structelementobjects,{__tostring = ntmetafunctostring })
      end
 end
 
@@ -1855,9 +1859,9 @@ do
     -- tooltip with the given text — used for debugging text formats.
     ---@param nodelist node Head of the node list to attach the annotation to.
     ---@param text string Tooltip text.
-    function annotate_nodelist(nodelist,text)
+    function M.annotate_nodelist(nodelist,text)
         text = text:gsub(" ","\\040")
-        local annot = node.new(whatsit_node,"pdf_annot")
+        local annot = node.new(M.whatsit_node,"pdf_annot")
         local str = string.format([[ /Subtype /Widget /TU (%s) /T (tooltip zref@%d) /C [] /FT/Btn /F 768 /Ff 65536 /H/N /BS << /W 0 >>]],text,annotcount)
         annotcount = annotcount + 1
         annot.data = str
@@ -1871,7 +1875,7 @@ end
 
 -- skippages are set in commands.new_page if openon="..."
 ---@type integer?
-skippages = nil
+M.skippages = nil
 
 -- Draw a box with HTML properties given at head.
 -- The `height_sp` parameter is recomputed from `properties.lineheight` below;
@@ -1883,7 +1887,7 @@ skippages = nil
 ---@param depth_sp integer Box depth in sp.
 ---@return node? hbox_or_vbox Packaged hbox or vbox; `nil` on internal error.
 -- luacheck: push ignore height_sp
-function htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
+function M.htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
     local debug_htmlbox = 0
     local properties = node.getproperty(head)
     if not properties then
@@ -2116,69 +2120,69 @@ function htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
 
     local rules_clip = {}
 
-    rules_clip[#rules_clip + 1] = pdf_moveto(x1,y1)
-    rules_clip[#rules_clip + 1] = pdf_lineto(x2,y2)
-    rules_clip[#rules_clip + 1] = pdf_curveto(x3,y3,x4,y4,x5,y5)
-    rules_clip[#rules_clip + 1] = pdf_lineto(x6,y6)
-    rules_clip[#rules_clip + 1] = pdf_curveto(x7,y7,x8,y8,x9,y9)
-    rules_clip[#rules_clip + 1] = pdf_lineto(x10,y10)
-    rules_clip[#rules_clip + 1] = pdf_curveto(x11,y11,x12,y12,x13,y13)
-    rules_clip[#rules_clip + 1] = pdf_lineto(x14,y14)
-    rules_clip[#rules_clip + 1] = pdf_curveto(x15,y15,x16,y16,x1,y1)
+    rules_clip[#rules_clip + 1] = M.pdf_moveto(x1,y1)
+    rules_clip[#rules_clip + 1] = M.pdf_lineto(x2,y2)
+    rules_clip[#rules_clip + 1] = M.pdf_curveto(x3,y3,x4,y4,x5,y5)
+    rules_clip[#rules_clip + 1] = M.pdf_lineto(x6,y6)
+    rules_clip[#rules_clip + 1] = M.pdf_curveto(x7,y7,x8,y8,x9,y9)
+    rules_clip[#rules_clip + 1] = M.pdf_lineto(x10,y10)
+    rules_clip[#rules_clip + 1] = M.pdf_curveto(x11,y11,x12,y12,x13,y13)
+    rules_clip[#rules_clip + 1] = M.pdf_lineto(x14,y14)
+    rules_clip[#rules_clip + 1] = M.pdf_curveto(x15,y15,x16,y16,x1,y1)
 
-    rules_clip[#rules_clip + 1] = pdf_moveto(xi1,yi1)
-    rules_clip[#rules_clip + 1] = pdf_lineto(xi2,yi2)
-    rules_clip[#rules_clip + 1] = pdf_curveto(xi3,yi3,xi4,yi4,xi5,yi5)
-    rules_clip[#rules_clip + 1] = pdf_lineto(xi6,yi6)
-    rules_clip[#rules_clip + 1] = pdf_curveto(xi7,yi7,xi8,yi8,xi9,yi9)
-    rules_clip[#rules_clip + 1] = pdf_lineto(xi10,yi10)
-    rules_clip[#rules_clip + 1] = pdf_curveto(xi11,yi11,xi12,yi12,xi13,yi13)
-    rules_clip[#rules_clip + 1] = pdf_lineto(xi14,yi14)
-    rules_clip[#rules_clip + 1] = pdf_curveto(xi15,yi15,xi16,yi16,xi1,yi1)
+    rules_clip[#rules_clip + 1] = M.pdf_moveto(xi1,yi1)
+    rules_clip[#rules_clip + 1] = M.pdf_lineto(xi2,yi2)
+    rules_clip[#rules_clip + 1] = M.pdf_curveto(xi3,yi3,xi4,yi4,xi5,yi5)
+    rules_clip[#rules_clip + 1] = M.pdf_lineto(xi6,yi6)
+    rules_clip[#rules_clip + 1] = M.pdf_curveto(xi7,yi7,xi8,yi8,xi9,yi9)
+    rules_clip[#rules_clip + 1] = M.pdf_lineto(xi10,yi10)
+    rules_clip[#rules_clip + 1] = M.pdf_curveto(xi11,yi11,xi12,yi12,xi13,yi13)
+    rules_clip[#rules_clip + 1] = M.pdf_lineto(xi14,yi14)
+    rules_clip[#rules_clip + 1] = M.pdf_curveto(xi15,yi15,xi16,yi16,xi1,yi1)
 
     if debug_htmlbox > 0 then
         rules[#rules + 1] = "q 0.3 w"
-        rules[#rules + 1] = pdf_moveto(x0,0)
-        rules[#rules + 1] = pdf_lineto(wd,0)
+        rules[#rules + 1] = M.pdf_moveto(x0,0)
+        rules[#rules + 1] = M.pdf_lineto(wd,0)
         rules[#rules + 1] = "S"
-        rules[#rules + 1] = pdf_moveto(x0,-depth_sp)
-        rules[#rules + 1] = pdf_lineto(wd,-depth_sp)
+        rules[#rules + 1] = M.pdf_moveto(x0,-depth_sp)
+        rules[#rules + 1] = M.pdf_lineto(wd,-depth_sp)
         rules[#rules + 1] = "S"
-        rules[#rules + 1] = pdf_moveto(x0,height_sp)
-        rules[#rules + 1] = pdf_lineto(wd,height_sp)
+        rules[#rules + 1] = M.pdf_moveto(x0,height_sp)
+        rules[#rules + 1] = M.pdf_lineto(wd,height_sp)
         rules[#rules + 1] = "S"
         rules[#rules + 1] = "Q"
     end
 
     if debug_htmlbox > 1 then
         rules[#rules + 1] = "q 0.3 w"
-        rules[#rules + 1] = pdf_moveto(x1,y1)
-        rules[#rules + 1] = pdf_lineto(x2,y2)
-        rules[#rules + 1] = pdf_curveto(x3,y3,x4,y4,x5,y5)
-        rules[#rules + 1] = pdf_lineto(x6,y6)
-        rules[#rules + 1] = pdf_curveto(x7,y7,x8,y8,x9,y9)
-        rules[#rules + 1] = pdf_lineto(x10,y10)
-        rules[#rules + 1] = pdf_curveto(x11,y11,x12,y12,x13,y13)
-        rules[#rules + 1] = pdf_lineto(x14,y14)
-        rules[#rules + 1] = pdf_curveto(x15,y15,x16,y16,x1,y1)
+        rules[#rules + 1] = M.pdf_moveto(x1,y1)
+        rules[#rules + 1] = M.pdf_lineto(x2,y2)
+        rules[#rules + 1] = M.pdf_curveto(x3,y3,x4,y4,x5,y5)
+        rules[#rules + 1] = M.pdf_lineto(x6,y6)
+        rules[#rules + 1] = M.pdf_curveto(x7,y7,x8,y8,x9,y9)
+        rules[#rules + 1] = M.pdf_lineto(x10,y10)
+        rules[#rules + 1] = M.pdf_curveto(x11,y11,x12,y12,x13,y13)
+        rules[#rules + 1] = M.pdf_lineto(x14,y14)
+        rules[#rules + 1] = M.pdf_curveto(x15,y15,x16,y16,x1,y1)
         rules[#rules + 1] = "S"
 
-        rules[#rules + 1] = pdf_moveto(xi1,yi1)
-        rules[#rules + 1] = pdf_lineto(xi2,yi2)
-        rules[#rules + 1] = pdf_curveto(xi3,yi3,xi4,yi4,xi5,yi5)
-        rules[#rules + 1] = pdf_lineto(xi6,yi6)
-        rules[#rules + 1] = pdf_curveto(xi7,yi7,xi8,yi8,xi9,yi9)
-        rules[#rules + 1] = pdf_lineto(xi10,yi10)
-        rules[#rules + 1] = pdf_curveto(xi11,yi11,xi12,yi12,xi13,yi13)
-        rules[#rules + 1] = pdf_lineto(xi14,yi14)
-        rules[#rules + 1] = pdf_curveto(xi15,yi15,xi16,yi16,xi1,yi1)
+        rules[#rules + 1] = M.pdf_moveto(xi1,yi1)
+        rules[#rules + 1] = M.pdf_lineto(xi2,yi2)
+        rules[#rules + 1] = M.pdf_curveto(xi3,yi3,xi4,yi4,xi5,yi5)
+        rules[#rules + 1] = M.pdf_lineto(xi6,yi6)
+        rules[#rules + 1] = M.pdf_curveto(xi7,yi7,xi8,yi8,xi9,yi9)
+        rules[#rules + 1] = M.pdf_lineto(xi10,yi10)
+        rules[#rules + 1] = M.pdf_curveto(xi11,yi11,xi12,yi12,xi13,yi13)
+        rules[#rules + 1] = M.pdf_lineto(xi14,yi14)
+        rules[#rules + 1] = M.pdf_curveto(xi15,yi15,xi16,yi16,xi1,yi1)
         rules[#rules + 1] = "S Q"
     end
 
     rules_clip[#rules_clip + 1] = "h W* n"
 
     local n_clip = node.new("whatsit","pdf_literal")
-    setprop(n_clip,"origin","htmlbox.clip")
+    M.setprop(n_clip,"origin","htmlbox.clip")
     local n_clip_data = table.concat(rules_clip," ")
     local concat_rules = table.concat(rules, " ")
     n_clip_data = n_clip_data .. " " .. concat_rules
@@ -2211,7 +2215,7 @@ end
 -- To split the textblock in pieces
 local marker
 marker = node.new("whatsit","user_defined")
-marker.user_id = user_defined_marker
+marker.user_id = M.user_defined_marker
 marker.type = 100  -- type 100: "value is a number"
 marker.value = 1
 
@@ -2219,137 +2223,27 @@ marker.value = 1
 -- -------------------
 
 
-rightskip = node.new("glue_spec")
-rightskip.width = 0
-rightskip.stretch = 1 * 2^16
-rightskip.stretch_order = 3
+M.rightskip = node.new("glue_spec")
+M.rightskip.width = 0
+M.rightskip.stretch = 1 * 2^16
+M.rightskip.stretch_order = 3
 
-leftskip = node.new("glue_spec")
-leftskip.width = 0
-leftskip.stretch = 1 * 2^16
-leftskip.stretch_order = 3
+M.leftskip = node.new("glue_spec")
+M.leftskip.width = 0
+M.leftskip.stretch = 1 * 2^16
+M.leftskip.stretch_order = 3
 
 
 -- Hyphenation and language handling
 -- ---------------------------------
 
--- We map from symbolic names to (part of) file names. The hyphenation pattern files are
--- in the format `hyph-XYZ.pat.txt` and we need to find out that `XYZ` part.
----@type table<string, string>
-language_mapping = {
-    ["Ancient Greek"]                = "grc",
-    ["Armenian"]                     = "hy",
-    ["Bahasa Indonesia"]             = "id",
-    ["Basque"]                       = "eu",
-    ["Bulgarian"]                    = "bg",
-    ["Catalan"]                      = "ca",
-    ["Chinese"]                      = "zh",
-    ["Croatian"]                     = "hr",
-    ["Czech"]                        = "cs",
-    ["Danish"]                       = "da",
-    ["Dutch"]                        = "nl",
-    ["English"]                      = "en_GB",
-    ["English (Great Britain)"]      = "en_GB",
-    ["English (USA)"]                = "en_US",
-    ["Esperanto"]                    = "eo",
-    ["Estonian"]                     = "et",
-    ["Finnish"]                      = "fi",
-    ["French"]                       = "fr",
-    ["Galician"]                     = "gl",
-    ["German"]                       = "de",
-    ["Greek"]                        = "el",
-    ["Gujarati"]                     = "gu",
-    ["Hindi"]                        = "hi",
-    ["Hungarian"]                    = "hu",
-    ["Icelandic"]                    = "is",
-    ["Irish"]                        = "ga",
-    ["Italian"]                      = "it",
-    ["Kannada"]                      = "kn",
-    ["Kurmanji"]                     = "ku",
-    ["Latvian"]                      = "lv",
-    ["Lithuanian"]                   = "lt",
-    ["Malayalam"]                    = "ml",
-    ["Norwegian Bokmål"]             = "nb",
-    ["Norwegian Nynorsk"]            = "nn",
-    ["Other"]                        = "--",
-    ["Polish"]                       = "pl",
-    ["Portuguese"]                   = "pt",
-    ["Romanian"]                     = "ro",
-    ["Russian"]                      = "ru",
-    ["Sanskrit"]                     = "sa",
-    ["Serbian"]                      = "sr",
-    ["Serbian (cyrillic)"]           = "sc",
-    ["Slovak"]                       = "sk",
-    ["Slovenian"]                    = "sl",
-    ["Spanish"]                      = "es",
-    ["Swedish"]                      = "sv",
-    ["Turkish"]                      = "tr",
-    ["Ukrainian"]                    = "uk",
-    ["Welsh"]                        = "cy",
-}
-
-
----@type table<string, string>
-language_filename = {
-    ["bg"]    = "bg",
-    ["ca"]    = "ca",
-    ["cs"]    = "cs",
-    ["cy"]    = "cy",
-    ["da"]    = "da",
-    ["de"]    = "de-1996",
-    ["el"]    = "el-monoton",
-    ["en"]    = "en-gb",
-    ["en_gb"] = "en-gb",
-    ["en_us"] = "en-us",
-    ["eo"]    = "eo",
-    ["es"]    = "es",
-    ["et"]    = "et",
-    ["eu"]    = "eu",
-    ["fi"]    = "fi",
-    ["fr"]    = "fr",
-    ["ga"]    = "ga",
-    ["gl"]    = "gl",
-    ["grc"]   = "grc",
-    ["gu"]    = "gu",
-    ["hi"]    = "hi",
-    ["hr"]    = "hr",
-    ["hu"]    = "hu",
-    ["hy"]    = "hy",
-    ["id"]    = "id",
-    ["is"]    = "is",
-    ["it"]    = "it",
-    ["ku"]    = "kmr",
-    ["kn"]    = "kn",
-    ["lt"]    = "lt",
-    ["ml"]    = "ml",
-    ["lv"]    = "lv",
-    ["nb"]    = "nb",
-    ["nl"]    = "nl",
-    ["nn"]    = "nn",
-    ["no"]    = "nb",
-    ["pl"]    = "pl",
-    ["pt"]    = "pt",
-    ["ro"]    = "ro",
-    ["ru"]    = "ru",
-    ["sa"]    = "sa",
-    ["sk"]    = "sk",
-    ["sl"]    = "sl",
-    ["sr"]    = "sr",
-    ["sc"]    = "sr-cyrl",
-    ["sv"]    = "sv",
-    ["tr"]    = "tr",
-    ["uk"]    = "uk",
-    ["zh"]    = "",
-    ["--"]    = "",
-}
-
 -- Once a hyphenation pattern file is loaded, we only need the _id_ of it. This is stored in the
 -- `languages` table. Key is the filename part (such as `de-1996`) and the value is the internal
 -- language id.
 ---@type table<string, integer>
-languages = {}
+M.languages = {}
 ---@type table<integer, string>
-languages_id_lang = {}
+M.languages_id_lang = {}
 
 
 ---@class ShapeOptions
@@ -2364,7 +2258,7 @@ languages_id_lang = {}
 ---@param options? ShapeOptions Per-call shaping overrides.
 ---@return string script ISO 15924 script tag actually used.
 ---@return string direction `"ltr"`, `"rtl"`, `"ttb"` or `"btt"`.
-shape = function(tbl, buf, options)
+M.shape = function(tbl, buf, options)
     local font = tbl.font
     options = options or { }
     local hblang, script, dir
