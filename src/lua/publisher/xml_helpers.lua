@@ -43,13 +43,13 @@ end
 ---@param namespace_written? table<string, true> Namespaces already emitted in an ancestor.
 ---@return string
 function M.xml_to_string_newxpath( xml_element, level, namespace_written )
-    local new_namespaces = publisher.copy_table_from_defaults(namespace_written or {})
+    local new_namespaces = publisher.utilities.copy_table_from_defaults(namespace_written or {})
     local str = ""
     if type(xml_element) == "string" then
         return M.xml_escape(xml_element)
     end
     if type(xml_element) ~= "table" then
-        err("xml_to_string is not a table, but a %s %q",type(xml_element),tostring(xml_element))
+        main.log("error", string.format("xml_to_string is not a table, but a %s %q", type(xml_element), tostring(xml_element)))
         return "error in publisher run"
     end
     level = level or 0
@@ -103,7 +103,7 @@ function M.xml_to_string( xml_element, level )
         return M.xml_escape(xml_element)
     end
     if type(xml_element) ~= "table" then
-        err("xml_to_string is not a table, but a %s %q",type(xml_element),tostring(xml_element))
+        main.log("error", string.format("xml_to_string is not a table, but a %s %q", type(xml_element), tostring(xml_element)))
         return "error in publisher run"
     end
     level = level or 0
@@ -215,7 +215,7 @@ function M.load_xml(filename, filetype, parameter)
         return xmltable
     else
         if publisher.options.verbosity > 0 then
-            log("Using old Lua based XML reader")
+            main.log("info", "Using old Lua based XML reader")
         end
         local path = kpse.find_file(filename)
         if not path then
@@ -246,7 +246,7 @@ function M.calculate_md5sum(filename)
         local str = f:read("*a")
         local sum = md5.sumhexa(str)
         f:close()
-        log("filename %q, md5sum: %s", filename, sum)
+        main.log("info", string.format("filename %q, md5sum: %s", filename, sum))
     end
 end
 

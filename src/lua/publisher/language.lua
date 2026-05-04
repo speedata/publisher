@@ -168,7 +168,7 @@ function M.get_language(id_or_locale_or_name)
     if filename_part == "" then
         -- ignore this; probably cjk or another language without hyphenation patterns
     elseif not filename_part then
-        warning("Can't find hyphenation patterns for language %s",tostring(orig_id_or_locale_or_name))
+        main.log("warn", string.format("Can't find hyphenation patterns for language %s", tostring(orig_id_or_locale_or_name)))
         return 0
     else
         local filename = string.format("hyph-%s.pat.txt",filename_part)

@@ -16,8 +16,6 @@
 
 ---@type table<string, ColorProfile>
 
-local publisher = require("publisher")
-
 local colorprofiles = {
    ["FOGRA39"] =  { identifier = "FOGRA39", objectid = 0, registry = "http://www.color.org", info = "Coated FOGRA39 (ISO 12647-2:2004)", condition = "Offset printing, according to ISO 12647-2:2004/Amd 1, OFCOM, paper type 1 or 2 = coated art, 115 g/m2, tone value increase curves A (CMY) and B (K)", filename = "ISOcoated_v2_eci.icc", colors = 4 }
 }
@@ -1234,7 +1232,7 @@ end
 function set_colorprofile(name)
     local tmp = colorprofiles[name]
     if not tmp then
-        err("Color profile with ID %q not found. Using default %q",tostring(name),"FOGRA39")
+        main.log("error", string.format("Color profile with ID %q not found. Using default %q", tostring(name), "FOGRA39"))
         currentcolorprofile = colorprofiles["FOGRA39"]
     else
         currentcolorprofile = tmp
@@ -1265,12 +1263,12 @@ end
 function write_colorprofile()
     if currentcolorprofile.objectid == nil or currentcolorprofile.objectid == 0 then
         local colorprofile_filename = currentcolorprofile.filename
-        log("Loading colorprofile %s",colorprofile_filename)
+        main.log("info", string.format("Loading colorprofile %s", colorprofile_filename))
         local path = kpse.find_file(colorprofile_filename)
         if not path then
-            err("colorprofile not found %s",tostring(colorprofile_filename))
+            main.log("error", string.format("colorprofile not found %s", tostring(colorprofile_filename)))
         else
-            log("colorprofile found: %s",path)
+            main.log("info", string.format("colorprofile found: %s", path))
             currentcolorprofile.objectid = pdf.immediateobj("streamfile",path,  string.format("/N %d",currentcolorprofile.colors or 4))
         end
     end
@@ -1293,7 +1291,7 @@ function register( colorname,c,m,y,k,usecolorprofile )
     local cmyktable = spotcolors[rawname]
     if not cmyktable then
         if c == nil or m == nil or y == nil or k == nil then
-            warning("You must define a CMYK substitute for the spot color %q in order to display it in the PDF.",rawname)
+            main.log("warn", string.format("You must define a CMYK substitute for the spot color %q in order to display it in the PDF.", rawname))
             spotcolors[rawname] = {0,0,0,50}
         else
             spotcolors[rawname] = { c,m,y,k }
@@ -1333,7 +1331,7 @@ function use_color(colorname)
     _,_, rawname = string.find(string.lower(colorname),"^(.-)%s*[cmunkez]?%s*$")
     local cmyktable = spotcolors[rawname]
     if not cmyktable then
-        err("Cannot find CMYK replacement for color %q",colorname)
+        main.log("error", string.format("Cannot find CMYK replacement for color %q", colorname))
         return
     end
     local pdfcolorname = "/" .. string.gsub(colorname," ","#20")

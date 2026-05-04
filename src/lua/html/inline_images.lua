@@ -17,7 +17,7 @@ local M      = {}
 function M.build_image_box(styles, attributes, dataxml)
     -- env: publisher/img/node/tex are globals in the legacy environment
     local source = attributes.src
-    local it = publisher.new_image(source, 1, nil, nil)
+    local it = publisher.images.new_image(source, 1, nil, nil)
     -- copy so that size changes don't affect future uses of the same image
     it = img.copy(it.img)
 
@@ -36,7 +36,7 @@ function M.build_image_box(styles, attributes, dataxml)
     local calc_w, calc_h = images.set_image_dimensions(it, styles, width_sp, height_sp, dataxml)
 
     -- wrap image node into a box (prevent line-height adjustment, orphan/widow logic, etc.)
-    local box = publisher.box(calc_w, calc_h, "-")
+    local box = publisher.drawing.box(calc_w, calc_h, "-")
     node.set_attribute(box, publisher.att_dontadjustlineheight, 1)
     node.set_attribute(box, publisher.att_ignore_orphan_widowsetting, 1)
 

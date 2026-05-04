@@ -92,7 +92,7 @@ function M.parse_html(elt, parameter, data)
         -- New modular entry point (same call site for you)
         return html.parse_html_new(elt, parameter, data, env)
     else
-        err("This should not happen (parse_html)")
+        main.log("error", "This should not happen (parse_html)")
     end
 end
 
@@ -110,8 +110,8 @@ end
 ---@return nil
 function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewidth, pageheight )
     local insert_nm = M.insert_nonmoving_whatsits
-    local setp = publisher.setprop
-    local set_attrs = publisher.set_attributes
+    local setp = publisher.attribute_helpers.setprop
+    local set_attrs = publisher.attribute_helpers.set_attributes
     local default_stack = publisher.defaultcolorstack
     local opt_format = publisher.options.format
     local links_get = links_module.get
@@ -211,7 +211,7 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
             if not skip_descent then
                 local bordernumber = node_has_attribute(head, attr_num_bordernumber)
                 if bordernumber then
-                    local boxnode = publisher.mpbox(borderattrs[bordernumber],head.width,head.height + head.depth)
+                    local boxnode = publisher.drawing.mpbox(borderattrs[bordernumber],head.width,head.height + head.depth)
                     parent.head = node_insert_before(parent.head,head,boxnode)
                 end
                 if head.id == publisher.hlist_node then
@@ -315,9 +315,9 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
             if head.id == publisher.glyph_node then
                 currentfont = head.font
                 if role and head.next and head.next.id == publisher.disc_node then
-                    publisher.setprop(head.next,"role",role)
-                    publisher.setprop(head.next,"parent",parentid)
-                    publisher.setprop(head.next,"rolecounter",rc)
+                    publisher.attribute_helpers.setprop(head.next,"role",role)
+                    publisher.attribute_helpers.setprop(head.next,"parent",parentid)
+                    publisher.attribute_helpers.setprop(head.next,"rolecounter",rc)
                 end
             end
 
@@ -415,7 +415,7 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                 if insert_startlink then
                     linklevel = linklevel + 1
                     -- 3 = user
-                    local ai = publisher.get_action_node(3)
+                    local ai = publisher.structure_tree.get_action_node(3)
                     ai.data = tostring(links_get(hl))
                     local stl = node_new("whatsit","pdf_start_link")
                     stl.action = ai
@@ -456,7 +456,7 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                 -- Lazy: only read full attribute table when color stacks need it
                 local attr_table
                 if insert_endcolor or insert_startcolor then
-                    attr_table = publisher.get_attributes(head, attr_table_reuse)
+                    attr_table = publisher.attribute_helpers.get_attributes(head, attr_table_reuse)
                     attr_table_reuse = attr_table
                 end
                 -- Save original head for startcolor insertion, because
@@ -605,7 +605,7 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                         while i < level do
                             if #current_bookmark_table == 0 then
                                 current_bookmark_table[1] = {}
-                                err("No bookmark given for this level (%d)!",level)
+                                main.log("error", string.format("No bookmark given for this level (%d)!", level))
                             end
                             current_bookmark_table = current_bookmark_table[#current_bookmark_table]
                             i = i + 1
@@ -624,7 +624,7 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                         end
                     end
                 elseif head.subtype == publisher.pdf_literal_whatsit then
-                    local data = publisher.getprop(head,"data")
+                    local data = publisher.attribute_helpers.getprop(head,"data")
                     if data then
                         head.data = ""
                         rules[#rules+1] = { curx, cury, data }
@@ -841,7 +841,7 @@ end
 local function setstyles(n,parameter)
     if parameter.bold == 1 then
         node.set_attribute(n,att_fontweight,attval_fontweight["bold"])
-        publisher.setprop(n,"font-weight","bold")
+        publisher.attribute_helpers.setprop(n,"font-weight","bold")
     end
     if parameter.italic == 1 then
         node.set_attribute(n,att_fontstyle,attval_fontstyle["italic"])
@@ -872,32 +872,32 @@ local function setstyles(n,parameter)
         node.set_attribute(n,att_verticalalign,attval_verticalalign[parameter.verticalalign])
     end
     if parameter.indent then
-        publisher.setprop(n,"indent",parameter.indent)
+        publisher.attribute_helpers.setprop(n,"indent",parameter.indent)
     end
     if parameter.role then
-        publisher.setprop(n,"role",parameter.role)
+        publisher.attribute_helpers.setprop(n,"role",parameter.role)
     end
     if parameter.structelemobjnum then
-        publisher.setprop(n,"structelemobjnum",parameter.structelemobjnum)
+        publisher.attribute_helpers.setprop(n,"structelemobjnum",parameter.structelemobjnum)
     end
     if parameter.actualtext then
-        publisher.setprop(n,"actualtext", parameter.actualtext)
+        publisher.attribute_helpers.setprop(n,"actualtext", parameter.actualtext)
     end
     if parameter.alttext then
-        publisher.setprop(n,"alttext", parameter.alttext)
+        publisher.attribute_helpers.setprop(n,"alttext", parameter.alttext)
     end
     if parameter.parent then
         if parameter.parent == "" then
             -- ignore
         else
-            publisher.setprop(n,"parent",parameter.parent)
+            publisher.attribute_helpers.setprop(n,"parent",parameter.parent)
         end
     end
     if parameter.id then
-        publisher.setprop(n,"id",parameter.id)
+        publisher.attribute_helpers.setprop(n,"id",parameter.id)
     end
     if parameter.rolecounter then
-        publisher.setprop(n,"rolecounter",parameter.rolecounter)
+        publisher.attribute_helpers.setprop(n,"rolecounter",parameter.rolecounter)
     end
 end
 
@@ -1283,7 +1283,7 @@ function M.hbglyphlist(arguments)
             local ht = famtab.size
             local strut = M.add_rule(nil,"head",{height = ht * 0.75, depth = 0.25 * ht, width = 0 }, "newline")
             node_set_attribute(strut,att_newline,1)
-            publisher.setprop(strut,"origin","strut newline hb")
+            publisher.attribute_helpers.setprop(strut,"origin","strut newline hb")
             list,cur = node.insert_after(list,cur,strut)
 
             local p1,g,p2
@@ -1395,7 +1395,7 @@ function M.hbglyphlist(arguments)
             if kernvalue ~= 0 then
                 local property = "kernafter"
                 if direction == "rtl" then property = "kernbefore" end
-                publisher.setprop(cur,property, kernvalue)
+                publisher.attribute_helpers.setprop(cur,property, kernvalue)
             end
             if uc == -1 then
             elseif uc > publisher.puastart then
@@ -1424,12 +1424,12 @@ function M.hbglyphlist(arguments)
 
     if not list then
         -- This should never happen.
-        warning("No head found")
+        main.log("warn", "No head found")
         return node.new("hlist")
     end
     local aa = parameter.add_attributes or {}
     for i=1,#aa do
-        publisher.set_attribute_recurse(list,aa[i][1],aa[i][2])
+        publisher.attribute_helpers.set_attribute_recurse(list,aa[i][1],aa[i][2])
     end
     return list
 end
@@ -1506,12 +1506,12 @@ local function ffglyphlist(arguments)
             node.set_attribute(dummypenalty,att_newline,1)
             head,last = node.insert_after(head,last,dummypenalty)
             if fontfamily == nil then
-                err( "ffglyphlist: fontfamily is nil")
+                main.log("error", "ffglyphlist: fontfamily is nil")
                 return
             end
             local ff = fonts.lookup_fontfamily_number_instance[fontfamily]
             if ff == nil then
-                err( string.format("Could not find instance of family %s",fontfamily))
+                main.log("error", string.format("Could not find instance of family %s",fontfamily))
                 return
             end
             local ht = ff.size
@@ -1532,9 +1532,9 @@ local function ffglyphlist(arguments)
             node.set_attribute(p2,att_newline,1)
             node.set_attribute(g,att_newline,1)
             local attr = { fontfamily = fontfamily}
-            publisher.set_attributes(p1,attr)
-            publisher.set_attributes(p2,attr)
-            publisher.set_attributes(g,attr)
+            publisher.attribute_helpers.set_attributes(p1,attr)
+            publisher.attribute_helpers.set_attributes(p2,attr)
+            publisher.attribute_helpers.set_attributes(g,attr)
 
             head,last = node.insert_after(head,last,p1)
             head,last = node.insert_after(head,last,g)
@@ -1572,17 +1572,17 @@ local function ffglyphlist(arguments)
             head,last = node.insert_after(head,last,n)
 
             if parameter.textdecorationline then
-                publisher.set_attribute(n,"text-decoration-line",parameter.textdecorationline)
-                publisher.set_attribute(n,"text-decoration-style",parameter.textdecorationstyle)
-                publisher.set_attribute(n,"text-decoration-color",publisher.current_fgcolor)
+                publisher.attribute_helpers.set_attribute(n,"text-decoration-line",parameter.textdecorationline)
+                publisher.attribute_helpers.set_attribute(n,"text-decoration-style",parameter.textdecorationstyle)
+                publisher.attribute_helpers.set_attribute(n,"text-decoration-color",publisher.current_fgcolor)
             end
 
             if parameter.backgroundcolor then
-                publisher.set_attribute(n,"background-color",parameter.backgroundcolor)
-                publisher.set_attribute(n,"bgpaddingtop",parameter.bg_padding_top)
-                publisher.set_attribute(n,"bgpaddingbottom",parameter.bg_padding_bottom)
+                publisher.attribute_helpers.set_attribute(n,"background-color",parameter.backgroundcolor)
+                publisher.attribute_helpers.set_attribute(n,"bgpaddingtop",parameter.bg_padding_top)
+                publisher.attribute_helpers.set_attribute(n,"bgpaddingbottom",parameter.bg_padding_bottom)
             end
-            publisher.set_attribute(n,"fontfamily",fontfamily)
+            publisher.attribute_helpers.set_attribute(n,"fontfamily",fontfamily)
         elseif s == 173 then -- soft hyphen
             -- The soft hyphen is used in server-mode /v0/format
             n = node.new(publisher.penalty_node)
@@ -1630,19 +1630,19 @@ local function ffglyphlist(arguments)
             end
 
             if parameter.textdecorationline then
-                publisher.set_attribute(n,"text-decoration-line",parameter.textdecorationline)
-                publisher.set_attribute(n,"text-decoration-color",publisher.current_fgcolor)
+                publisher.attribute_helpers.set_attribute(n,"text-decoration-line",parameter.textdecorationline)
+                publisher.attribute_helpers.set_attribute(n,"text-decoration-color",publisher.current_fgcolor)
             end
             if parameter.backgroundcolor then
-                publisher.set_attribute(n,"background-color",parameter.backgroundcolor)
+                publisher.attribute_helpers.set_attribute(n,"background-color",parameter.backgroundcolor)
                 if parameter.bg_padding_top then
-                    publisher.set_attribute(n,"bgpaddingtop",parameter.bg_padding_top)
+                    publisher.attribute_helpers.set_attribute(n,"bgpaddingtop",parameter.bg_padding_top)
                 end
                 if parameter.bg_padding_bottom then
-                    publisher.set_attribute(n,"bgpaddingbottom",parameter.bg_padding_bottom)
+                    publisher.attribute_helpers.set_attribute(n,"bgpaddingbottom",parameter.bg_padding_bottom)
                 end
             end
-            publisher.set_attribute(n,"fontfamily",fontfamily)
+            publisher.attribute_helpers.set_attribute(n,"fontfamily",fontfamily)
             head,last = node.insert_after(head,last,n)
             if parameter.letterspacing then
                 n.width = n.width + parameter.letterspacing
@@ -1658,7 +1658,7 @@ local function ffglyphlist(arguments)
             n.left = parameter.left or tex.lefthyphenmin
             n.right = parameter.right or tex.righthyphenmin
             setstyles(n,parameter)
-            publisher.set_attribute(n,"fontfamily",fontfamily)
+            publisher.attribute_helpers.set_attribute(n,"fontfamily",fontfamily)
 
             local famtab = fonts.lookup_fontfamily_number_instance[fontfamily]
             if parameter.verticalalign == "sub" then
@@ -1716,12 +1716,12 @@ local function ffglyphlist(arguments)
 
     if not head then
         -- This should never happen.
-        warning("No head found")
+        main.log("warn", "No head found")
         return node.new("hlist")
     end
     local aa = parameter.add_attributes or {}
     for i=1,#aa do
-        publisher.set_attribute_recurse(head,aa[i][1],aa[i][2])
+        publisher.attribute_helpers.set_attribute_recurse(head,aa[i][1],aa[i][2])
     end
     return head
 end
@@ -1761,7 +1761,7 @@ function M.mknodes(str,parameter,origin)
     if not str or string.len(str) == 0 then
         -- a space char can have a width, so we return a zero width something
         local strut = M.add_rule(nil,"head",{height = 1 * publisher.factor, depth = 0, width = 0 }, "pardir")
-        publisher.setprop(strut, "pardir", parameter.direction)
+        publisher.attribute_helpers.setprop(strut, "pardir", parameter.direction)
         return strut, parameter.direction
     end
     parameter = parameter or {}
@@ -1899,7 +1899,7 @@ function M.mknodes(str,parameter,origin)
         ::nextsegment::
     end
     if maindirection then
-        publisher.setprop(nodelistsegments,"pardir",maindirection)
+        publisher.attribute_helpers.setprop(nodelistsegments,"pardir",maindirection)
     end
     if not nodelistsegments then
         local strut = M.add_rule(nil,"head",{height = 1 * publisher.factor, depth = 0, width = 0 }, "pardir")
@@ -1934,13 +1934,13 @@ function M.setsegmentdir(nodelist,direction, maindirection)
     dirstart.dir = "+" .. dirstring
     dirend.dir = "-" .. dirstring
     node.setproperty(dirstart,node.getproperty(nodelist))
-    local ff = publisher.get_attribute(nodelist,"fontfamily")
-    publisher.set_attribute(dirstart,"fontfamily",ff)
+    local ff = publisher.attribute_helpers.get_attribute(nodelist,"fontfamily")
+    publisher.attribute_helpers.set_attribute(dirstart,"fontfamily",ff)
     nodelist = node.insert_before(nodelist,nodelist,dirstart)
 
     local tail = node.tail(nodelist)
-    local ff = publisher.get_attribute(tail,"fontfamily")
-    publisher.set_attribute(dirend,"fontfamily",ff)
+    local ff = publisher.attribute_helpers.get_attribute(tail,"fontfamily")
+    publisher.attribute_helpers.set_attribute(dirend,"fontfamily",ff)
     node.setproperty(dirend,node.getproperty(tail))
     node.insert_after(nodelist,tail,dirend)
     return nodelist
@@ -1959,7 +1959,7 @@ function M.add_rule( nodelist,head_or_tail,parameter,origin)
     n.width  = parameter.width
     n.height = parameter.height
     n.depth  = parameter.depth
-    if origin then publisher.setprop(n,"origin",origin) end
+    if origin then publisher.attribute_helpers.setprop(n,"origin",origin) end
     if not nodelist then return n end
 
     if head_or_tail=="head" then
@@ -1990,9 +1990,9 @@ function M.bullet_hbox( labelwidth,parameter )
     local bullet_hbox = node.hpack(pre_glue,labelwidth,"exactly")
 
     if publisher.options.showobjects then
-        publisher.boxit(bullet_hbox)
+        publisher.drawing.boxit(bullet_hbox)
     end
-    publisher.set_attribute(bullet_hbox,"indent",labelwidth)
+    publisher.attribute_helpers.set_attribute(bullet_hbox,"indent",labelwidth)
     node.set_attribute(bullet_hbox,publisher.att_rows,-1)
     return bullet_hbox
 end
@@ -2015,9 +2015,9 @@ function M.number_hbox( num, labelwidth,parameter )
     local digit_hbox = node.hpack(pre_glue,labelwidth,"exactly")
 
     if publisher.options.showobjects then
-        publisher.boxit(digit_hbox)
+        publisher.drawing.boxit(digit_hbox)
     end
-    publisher.set_attribute(digit_hbox,"indent",labelwidth)
+    publisher.attribute_helpers.set_attribute(digit_hbox,"indent",labelwidth)
     node.set_attribute(digit_hbox,publisher.att_rows,-1)
     return digit_hbox
 end
@@ -2049,7 +2049,7 @@ function M.whatever_hbox( label,labelwidth,options,labelsep_wd,labelalign )
         label_sep.next = shrink_glue
         label_hbox = node.hpack(label,labelwidth,"exactly")
     end
-    publisher.set_attribute(label_hbox.head,"fontfamily",fam)
+    publisher.attribute_helpers.set_attribute(label_hbox.head,"fontfamily",fam)
     label_hbox.head = M.addstrut(label_hbox.head,"head","whatever_hbox/strut")
 
     return label_hbox
@@ -2081,7 +2081,7 @@ function M.add_glue( nodelist,head_or_tail,parameter,origin)
 
     local n = set_glue(nil, parameter)
     n.subtype = parameter.subtype or 0
-    if origin then publisher.setprop(n,"origin",origin) end
+    if origin then publisher.attribute_helpers.setprop(n,"origin",origin) end
     if nodelist == nil then return n end
 
     if head_or_tail=="head" then
@@ -2118,27 +2118,27 @@ end
 local function add_properties_to_discnodes(head)
     while head do
         if head.id == publisher.glyph_node and head.next and head.next.id == publisher.disc_node then
-            local role = publisher.getprop(head,"role")
-            local parent = publisher.getprop(head,"parent")
-            local rolecounter = publisher.getprop(head,"rolecounter")
-            local id = publisher.getprop(head,"id")
+            local role = publisher.attribute_helpers.getprop(head,"role")
+            local parent = publisher.attribute_helpers.getprop(head,"parent")
+            local rolecounter = publisher.attribute_helpers.getprop(head,"rolecounter")
+            local id = publisher.attribute_helpers.getprop(head,"id")
             if head.next.pre then
-                publisher.setprop(head.next.pre,"role",role)
-                publisher.setprop(head.next.pre,"parent",parent)
-                publisher.setprop(head.next.pre,"rolecounter",rolecounter)
-                publisher.setprop(head.next.pre,"id",id)
+                publisher.attribute_helpers.setprop(head.next.pre,"role",role)
+                publisher.attribute_helpers.setprop(head.next.pre,"parent",parent)
+                publisher.attribute_helpers.setprop(head.next.pre,"rolecounter",rolecounter)
+                publisher.attribute_helpers.setprop(head.next.pre,"id",id)
             end
             if head.next.post then
-                publisher.setprop(head.next.post,"role",role)
-                publisher.setprop(head.next.post,"parent",parent)
-                publisher.setprop(head.next.post,"rolecounter",rolecounter)
-                publisher.setprop(head.next.post,"id",id)
+                publisher.attribute_helpers.setprop(head.next.post,"role",role)
+                publisher.attribute_helpers.setprop(head.next.post,"parent",parent)
+                publisher.attribute_helpers.setprop(head.next.post,"rolecounter",rolecounter)
+                publisher.attribute_helpers.setprop(head.next.post,"id",id)
             end
             if head.next.replace then
-                publisher.setprop(head.next.replace,"role",role)
-                publisher.setprop(head.next.replace,"parent",parent)
-                publisher.setprop(head.next.replace,"rolecounter",rolecounter)
-                publisher.setprop(head.next.replace,"id",id)
+                publisher.attribute_helpers.setprop(head.next.replace,"role",role)
+                publisher.attribute_helpers.setprop(head.next.replace,"parent",parent)
+                publisher.attribute_helpers.setprop(head.next.replace,"rolecounter",rolecounter)
+                publisher.attribute_helpers.setprop(head.next.replace,"id",id)
             end
 
         end
@@ -2165,7 +2165,7 @@ function M.finish_par( nodelist,hsize,parameters )
     end
 
     local n = node.new("penalty")
-    publisher.setprop(n,"origin","finishpar")
+    publisher.attribute_helpers.setprop(n,"origin","finishpar")
     n.penalty = 10000
     local last = node.slide(nodelist)
 
@@ -2302,7 +2302,7 @@ function M.fix_justification(nodelist,alignment,parent,direction)
                 elseif n.id == publisher.glue_node then
                     if n.subtype==0 and font_before_glue and get_glue_value(n,"width") > 0 and head.glue_sign == 1 then
                         local fonttable = font.fonts[font_before_glue]
-                        if not fonttable then fonttable = font.fonts[1] err("Some font not found") end
+                        if not fonttable then fonttable = font.fonts[1] main.log("error", "Some font not found") end
                         set_glue_values(n,{width = fonttable.parameters.space, shrink_order = head.glue_order, stretch = 0, stretch_order = 0})
                     end
                 end
@@ -2370,8 +2370,8 @@ end
 ---@return node head Linebroken vbox.
 function M.do_linebreak( nodelist,hsize,parameters )
     if nodelist == nil then
-        err("No nodelist found for line breaking.")
-        return publisher.box(publisher.tenmm_sp,publisher.tenmm_sp,"black")
+        main.log("error", "No nodelist found for line breaking.")
+        return publisher.drawing.box(publisher.tenmm_sp,publisher.tenmm_sp,"black")
     end
 
     parameters = parameters or {}
@@ -2479,7 +2479,7 @@ function M.do_linebreak( nodelist,hsize,parameters )
         cur = d_getnext(cur)
     end
     local ret = node.vpack(j)
-    publisher.setprop(ret,"origin","do_linebreak")
+    publisher.attribute_helpers.setprop(ret,"origin","do_linebreak")
     return ret
 end
 
@@ -2542,8 +2542,8 @@ function M.set_color_if_necessary( nodelist,color )
     local last = node.tail(nodelist)
     nodelist = node.insert_after(nodelist,last,colstop)
 
-    publisher.setprop(colstart,"origin","setcolorifnecessary")
-    publisher.setprop(colstop,"origin","setcolorifnecessary")
+    publisher.attribute_helpers.setprop(colstart,"origin","setcolorifnecessary")
+    publisher.attribute_helpers.setprop(colstop,"origin","setcolorifnecessary")
     return nodelist
 end
 
@@ -2560,10 +2560,10 @@ function M.set_fontfamily_if_necessary(nodelist,fontfamily)
         elseif nodelist.id == publisher.glue_node and nodelist.subtype == 100  then
             fam = M.set_fontfamily_if_necessary(nodelist.leader,fontfamily)
         else
-            fam = publisher.get_attribute(nodelist,"fontfamily")
+            fam = publisher.attribute_helpers.get_attribute(nodelist,"fontfamily")
             -- See #242, #235 and referenced bugs (and change 5af208f)
-            if fam == 0 or ( fam == nil and nodelist.id == publisher.rule_node and publisher.get_attribute(nodelist,"publisher") == 1 )  then
-                publisher.set_attribute(nodelist,"fontfamily",fontfamily)
+            if fam == 0 or ( fam == nil and nodelist.id == publisher.rule_node and publisher.attribute_helpers.get_attribute(nodelist,"publisher") == 1 )  then
+                publisher.attribute_helpers.set_attribute(nodelist,"fontfamily",fontfamily)
                 fam = fontfamily
             end
         end
@@ -2588,7 +2588,7 @@ function M.break_url( nodelist )
         else
             p.penalty=-5
         end
-        publisher.set_attribute(p,"hyperlink",publisher.get_attribute(n,"hyperlink"))
+        publisher.attribute_helpers.set_attribute(p,"hyperlink",publisher.attribute_helpers.get_attribute(n,"hyperlink"))
         p.next = n.next
         if n.next and n.next.prev then
             n.next.prev = p

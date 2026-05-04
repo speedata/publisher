@@ -27,73 +27,11 @@ end
 
 tex.enableprimitives('',tex.extraprimitives())
 
--- The actual `require("publisher")` is deferred to further down (after
--- the tex.sp override and other setup that publisher.lua's main chunk
--- depends on). Declare the upvalue here so the helper functions defined
--- below close over it; it gets assigned once the require runs.
+-- Forward declaration. The actual `require("publisher")` is deferred to
+-- further down in this file because publisher.lua's main chunk depends on
+-- the tex.sp override and other setup we haven't done yet. The helper
+-- functions defined below close over this upvalue.
 local publisher
-
-function warning(...)
-    local text = { ... }
-    local unpacked
-    if publisher then
-        unpacked = string.format( "[page %d] ",publisher.current_pagenumber ) .. string.format(table.unpack(text))
-    else
-        unpacked = string.format( "%s",string.format(table.unpack(text)))
-    end
-    main.log("warn",unpacked)
-end
-
-function err(...)
-    local text = { ... }
-    local unpacked
-    if publisher then
-        local lineinfo = ""
-        if publisher.newxpath then
-            lineinfo = string.format(" line %s, data line %s",publisher.current_layout_line, publisher.current_data_line)
-        end
-        unpacked = string.format( "[page %d%s] ",publisher.current_pagenumber, lineinfo ) .. string.format(table.unpack(text))
-    else
-        unpacked = string.format( "%s",string.format(table.unpack(text)))
-    end
-    main.log("error",unpacked)
-end
-
-function call(...)
-    local ret = { pcall(...) }
-    if ret[1]==false then
-        err(tostring(ret[2])  .. "\n" .. debug.traceback())
-        return
-    end
-    return table.unpack(ret,2)
-end
-
-function log(...)
-    local text = { ... }
-    local res = call(string.format,table.unpack(text))
-    splib.log("info",res)
-end
-
-do
-local matches = {
-    ["^"] = "%^";
-    ["$"] = "%$";
-    ["("] = "%(";
-    [")"] = "%)";
-    ["%"] = "%%";
-    ["."] = "%.";
-    ["["] = "%[";
-    ["]"] = "%]";
-    ["*"] = "%*";
-    ["+"] = "%+";
-    ["-"] = "%-";
-    ["?"] = "%?";
-    ["\0"] = "%z";
-}
-escape_lua_pattern = function(s)
-    return (s:gsub(".", matches))
-    end
-end
 
 --- Convert scaled point to postscript points,
 --- rounded to three digits after decimal point
@@ -176,7 +114,7 @@ function set_glue( gluenode, values, origin )
         n[k] = v
     end
     if origin then
-        publisher.setprop(n,"origin",origin)
+        publisher.attribute_helpers.setprop(n,"origin",origin)
     end
     return n
 end
@@ -292,9 +230,9 @@ function exit(graceful)
     end
     errcount = splib.errcount()
     warncount = splib.warncount()
-    log("Stop processing data")
-    log("%d errors occurred",errcount)
-    log("Duration: %3f seconds",os.gettimeofday() - starttime)
+    main.log("info", "Stop processing data")
+    main.log("info", string.format("%d errors occurred", errcount))
+    main.log("info", string.format("Duration: %3f seconds", os.gettimeofday() - starttime))
 
     if errcount > 0 then
         publisher.errorcode = math.max(publisher.errorcode,1)
@@ -501,7 +439,7 @@ local function traceback(what)
 end
 
 function main_loop()
-    log("Start processing")
+    main.log("info", "Start processing")
     setup()
     xpcall(publisher.dothings,traceback)
     exit(true)

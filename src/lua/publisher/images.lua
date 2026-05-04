@@ -166,7 +166,7 @@ function M.validateimagetype(filename)
     local localfilename = kpse.find_file(filename)
     local f, errmsg = io.open(localfilename)
     if not f then
-        err(errmsg)
+        main.log("error", errmsg)
         return nil
     end
     local whatever = f:read(5)
@@ -186,7 +186,7 @@ function M.get_fallback_image_name( filename, missingfilename )
     if filename then
         main.log("info","Using fallback","fallback",filename or "(filename)", "requested",missingfilename or "(empty)")
         if not kpse.find_file(filename) then
-            err("fallback image %q not found",filename or "<filename>")
+            main.log("error", string.format("fallback image %q not found", filename or "<filename>"))
             return "filenotfound.pdf"
         end
         return filename
@@ -210,11 +210,11 @@ function M.imageinfo( filename, page, box, fallback, imageshape )
     page = page or 1
     box = box or "crop"
     if not filename then
-        err("No filename given for image")
+        main.log("error", "No filename given for image")
         filename = M.get_fallback_image_name(fallback)
     end
     if type(filename) ~= "string" then
-        err("something is wrong with the filename for the image, not a string")
+        main.log("error", "something is wrong with the filename for the image, not a string")
         filename = M.get_fallback_image_name(fallback)
     end
 
@@ -240,9 +240,9 @@ function M.imageinfo( filename, page, box, fallback, imageshape )
         local xmlfilename = string.gsub(filename, "(%..*)$", "") .. ".xml"
 
         if kpse.find_file(xmlfilename) then
-            local xmltab, msg = publisher.load_xml(xmlfilename, "Imageinfo")
+            local xmltab, msg = publisher.xml_helpers.load_xml(xmlfilename, "Imageinfo")
             if not xmltab then
-                err(msg)
+                main.log("error", msg)
             else
                 if publisher.newxpath then
                     xmltab = xmltab[1]
@@ -289,7 +289,7 @@ function M.imageinfo( filename, page, box, fallback, imageshape )
             if filename == nil or filename == "" then
                 filename = "filenotfound.pdf"
             else
-                log("Using converted file %q instead", filename)
+                main.log("info", string.format("Using converted file %q instead", filename))
             end
         end
         filename = M.validateimagetype(filename)

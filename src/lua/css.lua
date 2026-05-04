@@ -9,6 +9,16 @@
 local explode = string.explode
 local string = unicode.utf8
 
+local lua_pattern_escapes = {
+    ["^"] = "%^", ["$"] = "%$", ["("] = "%(", [")"] = "%)",
+    ["%"] = "%%", ["."] = "%.", ["["] = "%[", ["]"] = "%]",
+    ["*"] = "%*", ["+"] = "%+", ["-"] = "%-", ["?"] = "%?",
+    ["\0"] = "%z",
+}
+local function escape_lua_pattern(s)
+    return (s:gsub(".", lua_pattern_escapes))
+end
+
 ---@class CSSRules
 ---@field rules table<integer, table<string, table<string, string>>> `[priority][selector][property] = value`.
 ---@field priorities integer[] Known priorities, sorted descending after each parse.
@@ -121,10 +131,10 @@ end
 local function parse( self,filename)
   local path = kpse.find_file(filename)
   if not path then
-    err("CSS: cannot find filename %q.",filename or "--")
+    main.log("error", string.format("CSS: cannot find filename %q.", filename or "--"))
     return
   end
-  log("Loading CSS %q",path)
+  main.log("info", string.format("Loading CSS %q", path))
   local cssio = io.open(path,"rb")
   local csstext = cssio:read("*all")
   cssio:close()

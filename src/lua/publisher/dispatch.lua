@@ -229,7 +229,7 @@ end
 ---@param options_arg table? Per-call overrides merged on top of the base.
 ---@return Textformat
 function M.new_textformat(name, base, options_arg)
-    if name == "" then name = publisher.string_random(10) end
+    if name == "" then name = publisher.utilities.string_random(10) end
     local textformats = publisher.textformats
     local baseformat = textformats[base] or textformats.text
     options_arg = options_arg or {}
@@ -323,7 +323,7 @@ function M.dispatch(layoutxml, dataxml, opts)
                     prefix = ""
                 end
                 if j[".__ns"][prefix] == "urn:speedata.de:2009/publisher/en" then
-                    err("Unknown element found in layoutfile: %q", j[".__local_name"] or "???")
+                    main.log("error", string.format("Unknown element found in layoutfile: %q", j[".__local_name"] or "???"))
                 end
             end
         end

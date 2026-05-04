@@ -65,13 +65,13 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
                 local copysequence = dataxml.sequence
                 local seq, msg = dataxml:eval(x)
                 if msg then
-                    err(msg)
+                    main.log("error", msg)
                     return nil
                 end
                 local txt
                 txt, msg = publisher.xpath.string_value(seq)
                 if msg then
-                    err(msg)
+                    main.log("error", msg)
                     return nil
                 end
                 dataxml.sequence = copysequence
@@ -79,7 +79,7 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
             else
                 local ok, xp = publisher.xpath.parse_raw(dataxml, x, namespaces)
                 if not ok then
-                    err(xp)
+                    main.log("error", xp)
                     return nil
                 end
                 return publisher.xpath.textvalue(xp[1])
@@ -94,7 +94,7 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
         if publisher.newxpath then
             local seq, msg = dataxml:eval(val)
             if msg then
-                err(msg)
+                main.log("error", msg)
                 return nil
             end
             return publisher.xpath.string_value(seq)
@@ -105,14 +105,14 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
         if publisher.newxpath then
             local seq, msg = dataxml:eval(val)
             if msg then
-                err(msg)
+                main.log("error", msg)
                 return nil
             end
             return seq
         else
             local ok, tmp = publisher.xpath.parse_raw(dataxml, val, namespaces)
             if not ok then
-                err(tmp)
+                main.log("error", tmp)
                 return nil
             else
                 return tmp
@@ -137,7 +137,7 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
     elseif typ == "height_sp" then
         num = tonumber(val or default)
         if num then
-            publisher.setup_page(nil, "read_attribute height_sp", dataxml)
+            publisher.page_helpers.setup_page(nil, "read_attribute height_sp", dataxml)
             ret = publisher.current_page.grid.gridheight * num
         else
             ret = val
@@ -147,7 +147,7 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
     elseif typ == "width_sp" then
         num = tonumber(val or default)
         if num then
-            publisher.setup_page(nil, "read_attribute width_sp", dataxml)
+            publisher.page_helpers.setup_page(nil, "read_attribute width_sp", dataxml)
             ret = publisher.current_page.grid:width_sp(num)
         else
             ret = val
@@ -181,7 +181,7 @@ function M.read_attribute( layoutxml, dataxml, attname, typ, default, context )
             return tex.sp(val)
         end
     else
-        warning("read_attribute (2): unknown type: %s", type(val))
+        main.log("warn", string.format("read_attribute (2): unknown type: %s", type(val)))
     end
     return val
 end
@@ -239,7 +239,7 @@ end
 ---@return nil
 function M.set_attribute(nodelist, attribute_name, value)
     local att_number = publisher.attribute_name_number[attribute_name]
-    if not att_number then err("Internal error: attribute %s unknown", attribute_name or "?") return end
+    if not att_number then main.log("error", string.format("Internal error: attribute %s unknown", attribute_name or "?")) return end
     local entry = publisher.attributes[attribute_name]
     local att_value
     if type(entry) == "table" then
@@ -262,7 +262,7 @@ end
 ---@return nil
 function M.clear_attribute(nodelist, attribute_name)
     local att_number = publisher.attribute_name_number[attribute_name]
-    if not att_number then err("Internal error: attribute %s unknown", attribute_name or "?") return end
+    if not att_number then main.log("error", string.format("Internal error: attribute %s unknown", attribute_name or "?")) return end
     node.unset_attribute(nodelist, att_number)
 end
 

@@ -209,7 +209,7 @@ function M.getrgb( colorvalue )
             -- w("don't know")
         end
         if r == nil then
-            err("Could not parse color %q",colorvalue)
+            main.log("error", string.format("Could not parse color %q", colorvalue))
             return 0,0,0
         end
         r = math.round(r / 255 , 3)
@@ -227,7 +227,7 @@ function M.getrgb( colorvalue )
         g = math.round(tonumber(g,16) / 15, 3)
         b = math.round(tonumber(b,16) / 15, 3)
     else
-        err("Could not parse color %q",colorvalue)
+        main.log("error", string.format("Could not parse color %q", colorvalue))
         return 0,0,0
     end
     return r,g,b,a
@@ -235,7 +235,7 @@ end
 
 setmetatable(M.colors,{  __index = function (tbl,key)
     if not key then
-        err("Empty color")
+        main.log("error", "Empty color")
         return tbl["black"]
     end
     if string.sub(key,1,1) ~= "#" and string.sub(key,1,3) ~= "rgb" then

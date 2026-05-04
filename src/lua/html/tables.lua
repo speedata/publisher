@@ -186,15 +186,15 @@ function M.build_html_table(table_elt, width, cb, dataxml, stylesstack)
     local fontname = "text"
     local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
     if fontfamily == nil then
-        err(string.format("Fontfamily %q not found.", fontname or "???"))
+        main.log("error", string.format("Fontfamily %q not found.", fontname or "???"))
         fontfamily = 1
     end
     tabular.fontfamily = fontfamily
 
     -- Original default options / paddings / borders
     -- Use publisher.getheight directly - it may be replaced for HTML-in-Output
-    tabular.options = { ht_max = publisher.getheight(1,dataxml) } -- a heuristic
-    tabular.getheight      = function(...) return publisher.getheight(...) end
+    tabular.options = { ht_max = publisher.page_helpers.getheight(1,dataxml) } -- a heuristic
+    tabular.getheight      = function(...) return publisher.page_helpers.getheight(...) end
     tabular.padding_left   = 0
     tabular.padding_top    = 0
     tabular.padding_right  = 0

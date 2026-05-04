@@ -45,7 +45,7 @@ function M.shipout(nodelist, pagenumber,dataxml)
         else
             defaultmatter = publisher.xpath.get_variable("_matter")
         end
-        err("matter %q unknown, revert to %s",cp.matter or "-", defaultmatter )
+        main.log("error", string.format("matter %q unknown, revert to %s", cp.matter or "-", defaultmatter))
         cp.matter = defaultmatter
     end
     publisher.pagelabels[pagenumber] = {
@@ -57,7 +57,7 @@ function M.shipout(nodelist, pagenumber,dataxml)
             main.log("error","Pagetype / defaultcolor: color is not defined yet.","name",colorname)
         else
             local colorindex = colors_module.colors[colorname].index
-            nodelist = publisher.set_color_if_necessary(nodelist,colorindex)
+            nodelist = publisher.nodes.set_color_if_necessary(nodelist,colorindex)
             nodelist = node.vpack(nodelist)
         end
     end
@@ -105,9 +105,9 @@ function M.output_absolute_position(param)
         local group = publisher.groups[publisher.current_group]
         assert(group)
 
-        local n = publisher.add_glue( nodelist ,"head",{ width = x })
+        local n = publisher.nodes.add_glue( nodelist ,"head",{ width = x })
         n = node.hpack(n)
-        n = publisher.add_glue(n, "head", {width = y})
+        n = publisher.nodes.add_glue(n, "head", {width = y})
         n = node.vpack(n)
 
         if group.contents then
@@ -199,7 +199,7 @@ function M.output_absolute_position(param)
         end
 
         if param.rotate then
-            nodelist = publisher.rotate(nodelist,param.rotate, param.origin_x or 0, param.origin_y or 0)
+            nodelist = publisher.drawing.rotate(nodelist,param.rotate, param.origin_x or 0, param.origin_y or 0)
         end
 
         if param.clipatmargin then
@@ -213,7 +213,7 @@ function M.output_absolute_position(param)
             local maxht = r.extra_margin + r.margin_top + pageframe.height * r.gridheight + (pageframe.height - 1) * r.grid_dy
             local clipbottom = math.max(-1 *( maxht - y - ht),0)
 
-            nodelist = publisher.clip({
+            nodelist = publisher.drawing.clip({
                 box = nodelist,
                 clip_top_sp = cliptop,
                 clip_bottom_sp = clipbottom,
@@ -226,9 +226,9 @@ function M.output_absolute_position(param)
         end
 
 
-        local n = publisher.add_glue( nodelist ,"head",{ width = x })
+        local n = publisher.nodes.add_glue( nodelist ,"head",{ width = x })
         n = node.hpack(n)
-        n = publisher.add_glue(n, "head", {width = y})
+        n = publisher.nodes.add_glue(n, "head", {width = y})
         n = node.vpack(n)
         n.width  = 0
         n.height = 0
@@ -279,7 +279,7 @@ function M.output_at( param )
     end
     local nodelist = param.nodelist
     if publisher.options.showobjects then
-        nodelist = publisher.boxit(nodelist)
+        nodelist = publisher.drawing.boxit(nodelist)
     end
     local x = param.x
     local y = param.y
@@ -343,7 +343,7 @@ function M.output_at( param )
         local maxht = r.extra_margin + r.margin_top + pageframe.height * r.gridheight + (pageframe.height - 1) * r.grid_dy
         local clipbottom = math.max(-1 *( maxht - delta_y - ht),0)
 
-        nodelist = publisher.clip({
+        nodelist = publisher.drawing.clip({
             box = nodelist,
             clip_top_sp = cliptop,
             clip_bottom_sp = clipbottom,
@@ -370,9 +370,9 @@ function M.output_at( param )
         local group = publisher.groups[publisher.current_group]
         assert(group)
 
-        local n = publisher.add_glue( nodelist ,"head",{ width = delta_x })
+        local n = publisher.nodes.add_glue( nodelist ,"head",{ width = delta_x })
         n = node.hpack(n)
-        n = publisher.add_glue(n, "head", {width = delta_y})
+        n = publisher.nodes.add_glue(n, "head", {width = delta_y})
         n = node.vpack(n)
 
         if group.contents then
@@ -423,7 +423,7 @@ function M.output_at( param )
             })
         end
         if param.rotate then
-            nodelist = publisher.rotate(nodelist,param.rotate, param.origin_x or 0, param.origin_y or 0)
+            nodelist = publisher.drawing.rotate(nodelist,param.rotate, param.origin_x or 0, param.origin_y or 0)
         end
 
         M.place_at(publisher.pages[outputpage].pagebox,nodelist,delta_x,delta_y)
@@ -439,9 +439,9 @@ end
 ---@return nil
 function M.place_at(pagebox,nodelist,x_sp,y_sp)
     local tail = node.tail(pagebox)
-    local n = publisher.add_glue( nodelist ,"head",{subtype = 1000, width = x_sp })
+    local n = publisher.nodes.add_glue( nodelist ,"head",{subtype = 1000, width = x_sp })
     n = node.hpack(n)
-    n = publisher.add_glue(n, "head", { subtype = 1001, width = y_sp})
+    n = publisher.nodes.add_glue(n, "head", { subtype = 1001, width = y_sp})
     n = node.vpack(n)
     n.width  = 0
     n.height = 0
@@ -478,12 +478,12 @@ function M.detect_pagetype(pagenumber, data)
                 assert(data,"detect_pagetype")
                 local seq, msg = data:eval(pagetype.is_pagetype)
                 if msg then
-                    err(msg)
+                    main.log("error", msg)
                 end
                 local ok
                 ok, msg = publisher.xpath.boolean_value(seq)
                 if msg then
-                    err(msg)
+                    main.log("error", msg)
                 end
                 if ok then
                     main.log("info","Create page","type",pagetype.name or "(detect_pagetype)","pagenumber",pagenumber)
@@ -502,7 +502,7 @@ function M.detect_pagetype(pagenumber, data)
             end
         end
     end
-    err("Can't find correct page type!")
+    main.log("error", "Can't find correct page type!")
     publisher.current_pagenumber = cp
     if not publisher.newxpath then
         publisher.xpath.pop_state()
@@ -540,14 +540,14 @@ function M.initialize_page(pagenumber,data, from)
     local extra_margin
     if publisher.options.cutmarks or publisher.options.trimmarks then
         if not publisher.pro then
-            err("cutmarks need a pro plan")
+            main.log("error", "cutmarks need a pro plan")
             publisher.has_pro_error = true
         else
             extra_margin = publisher.tenmm_sp + trim_amount
         end
     elseif trim_amount > 0 then
         if not publisher.pro then
-            err("page bleed needs a pro plan")
+            main.log("error", "page bleed needs a pro plan")
             publisher.has_pro_error = true
         else
             extra_margin = trim_amount
@@ -555,7 +555,7 @@ function M.initialize_page(pagenumber,data, from)
     end
     local current_page, errorstring = page:new(publisher.options.default_pagewidth,publisher.options.default_pageheight, extra_margin, trim_amount,thispage)
     if not current_page then
-        err("Can't create a new page. Is the page type (“PageType”) defined? %s",errorstring)
+        main.log("error", string.format("Can't create a new page. Is the page type (“PageType”) defined? %s", errorstring))
         exit()
     end
     publisher.current_page = current_page
@@ -608,19 +608,19 @@ function M.initialize_page(pagenumber,data, from)
     current_page.matter = mattername
 
     for _,j in ipairs(pagetype) do
-        local eltname = publisher.elementname(j)
-        local eltcontents = publisher.element_contents(j)
-        if type(publisher.element_contents(j))=="function" and eltname=="Margin" then
+        local eltname = publisher.xml_helpers.elementname(j)
+        local eltcontents = publisher.xml_helpers.element_contents(j)
+        if type(publisher.xml_helpers.element_contents(j))=="function" and eltname=="Margin" then
             eltcontents(current_page)
         elseif eltname=="Grid" then
             local layoutxml = eltcontents.layoutxml
             local dataxml = eltcontents.dataxml
-            local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
-            local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --PG
-            local _nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "number")
-            local _ny     = publisher.read_attribute(layoutxml,dataxml,"ny",     "number")
-            local _dx     = publisher.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
-            local _dy     = publisher.read_attribute(layoutxml,dataxml,"dy",     "length_sp")
+            local width  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width",  "length_sp")
+            local height = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --PG
+            local _nx     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"nx",     "number")
+            local _ny     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"ny",     "number")
+            local _dx     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
+            local _dy     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"dy",     "length_sp")
 
             gridwidth  = width
             gridheight = height
@@ -644,37 +644,37 @@ function M.initialize_page(pagenumber,data, from)
     -- The default color is applied during ship-out
     if publisher.newxpath then
         if pagetype.layoutxml and pagetype.layoutxml[".__attributes"].defaultcolor then
-            current_page.defaultcolor = publisher.read_attribute(pagetype.layoutxml,nil,"defaultcolor","string")
+            current_page.defaultcolor = publisher.attribute_helpers.read_attribute(pagetype.layoutxml,nil,"defaultcolor","string")
         end
     else
         if pagetype.layoutxml and pagetype.layoutxml.defaultcolor then
-            current_page.defaultcolor = publisher.read_attribute(pagetype.layoutxml,nil,"defaultcolor","string")
+            current_page.defaultcolor = publisher.attribute_helpers.read_attribute(pagetype.layoutxml,nil,"defaultcolor","string")
         end
     end
     current_page.graphic = pagetype.graphic
     current_page.backgroundcolor = pagetype.backgroundcolor
     local columnordering = pagetype.columnordering
     for _,j in ipairs(pagetype) do
-        local eltname = publisher.elementname(j)
-        if type(publisher.element_contents(j))=="function" and eltname=="Margin" then
+        local eltname = publisher.xml_helpers.elementname(j)
+        if type(publisher.xml_helpers.element_contents(j))=="function" and eltname=="Margin" then
             -- do nothing, done before
         elseif eltname=="Grid" then
             -- do nothing, done before
         elseif eltname=="AtPageCreation" then
-            current_page.atpagecreation = publisher.element_contents(j)
+            current_page.atpagecreation = publisher.xml_helpers.element_contents(j)
         elseif eltname=="AtPageShipout" then
-            current_page.AtPageShipout = publisher.element_contents(j)
+            current_page.AtPageShipout = publisher.xml_helpers.element_contents(j)
         elseif eltname=="PositioningArea" then
-            local name = publisher.element_contents(j).name
+            local name = publisher.xml_helpers.element_contents(j).name
             publisher.current_grid.positioning_frames[name] = {}
             local current_positioning_area = publisher.current_grid.positioning_frames[name]
             -- we evaluate now, because the attributes in PositioningFrame can be page dependent.
-            local d = publisher.element_contents(j).dataxml
-            local l = publisher.element_contents(j).layoutxml
-            local tab  = publisher.dispatch(l,d)
+            local d = publisher.xml_helpers.element_contents(j).dataxml
+            local l = publisher.xml_helpers.element_contents(j).layoutxml
+            local tab  = publisher.dispatch.dispatch(l,d)
             local tmp = {}
             for i,k in ipairs(tab) do
-                tmp[#tmp + 1] = publisher.element_contents(k)
+                tmp[#tmp + 1] = publisher.xml_helpers.element_contents(k)
                 tmp[#tmp].order = i
             end
             if columnordering == "rtl" then
@@ -687,7 +687,7 @@ function M.initialize_page(pagenumber,data, from)
             for i=1,#tmp do
                 table.insert(current_positioning_area,tmp[i])
             end
-            local bgcolor = publisher.element_contents(j).bgcolor
+            local bgcolor = publisher.xml_helpers.element_contents(j).bgcolor
             if bgcolor then
                 for _, tbl in ipairs(tmp) do
                     local x = publisher.current_grid:posx_sp(tbl.column - 1) + publisher.current_grid.extra_margin + publisher.current_grid.margin_left
@@ -695,7 +695,7 @@ function M.initialize_page(pagenumber,data, from)
                     local wd = publisher.current_grid:posx_sp(tbl.width)
                     local ht = publisher.current_grid:posy_sp(tbl.height)
 
-                    local nl = publisher.box(wd,ht,bgcolor)
+                    local nl = publisher.drawing.box(wd,ht,bgcolor)
 
                     M.output_absolute_position({
                         nodelist = nl,
@@ -705,9 +705,9 @@ function M.initialize_page(pagenumber,data, from)
                     })
                 end
             end
-            current_positioning_area.colorname = publisher.element_contents(j).colorname
+            current_positioning_area.colorname = publisher.xml_helpers.element_contents(j).colorname
         else
-            err("Element name %q unknown (setup_page())",eltname or "<create_page>")
+            main.log("error", string.format("Element name %q unknown (setup_page())", eltname or "<create_page>"))
         end
     end
 
@@ -718,7 +718,7 @@ function M.initialize_page(pagenumber,data, from)
         local cpn = publisher.current_pagenumber
         publisher.current_pagenumber = thispage
         publisher.current_grid = publisher.pages[thispage].grid
-        publisher.dispatch(current_page.atpagecreation,data)
+        publisher.dispatch.dispatch(current_page.atpagecreation,data)
         publisher.current_pagenumber = cpn
         publisher.pagebreak_impossible = false
         local graphic
@@ -782,7 +782,7 @@ function M.next_area( areaname, grid, dataxml,origin )
     grid = grid or publisher.current_grid
     local current_framenumber = grid:framenumber(areaname)
     if not current_framenumber then
-        err("Cannot determine current area number (areaname=%q)",areaname or "(undefined)")
+        main.log("error", string.format("Cannot determine current area number (areaname=%q)", areaname or "(undefined)"))
         return
     end
     if current_framenumber >= grid:number_of_frames(areaname) then
@@ -890,7 +890,7 @@ end
 ---@return nil
 function M.setpageresources(thispage)
     if next(thispage.transparenttext) ~= nil and publisher.defaultcolorstack == 0 then
-        publisher.transparentcolorstack()
+        publisher.drawing.transparentcolorstack()
     end
     -- thispage.transparenttext is something like { 40 = true, 20 = true}
     -- but only if we use alpha values for color
@@ -923,7 +923,7 @@ function M.dothingsbeforeoutput( thispage,data )
 
     if thispage and thispage.AtPageShipout then
         publisher.pagebreak_impossible = true
-        publisher.dispatch(thispage.AtPageShipout,data)
+        publisher.dispatch.dispatch(thispage.AtPageShipout,data)
         publisher.pagebreak_impossible = false
         local graphic = thispage.AtPageShipout.graphic
         if graphic then
@@ -933,13 +933,13 @@ function M.dothingsbeforeoutput( thispage,data )
     end
 
     local nodelist = thispage.pagebox
-    local rules = publisher.insert_nonmoving_whatsits(nodelist,nil,"vertical",0,0,thispage.width,thispage.height)
+    local rules = publisher.nodes.insert_nonmoving_whatsits(nodelist,nil,"vertical",0,0,thispage.width,thispage.height)
     for _, rule in pairs(rules) do
         -- @class whatsit_node
         local wr = node.new("whatsit","pdf_literal")
         wr.data = rule[3]
         wr.mode = 0
-        publisher.setprop(wr,"origin","tr-later")
+        publisher.attribute_helpers.setprop(wr,"origin","tr-later")
         M.output_absolute_position({x = rule[1], y = rule[2], nodelist = wr})
     end
 
@@ -1028,7 +1028,7 @@ function M.dothingsbeforeoutput( thispage,data )
 
     if publisher.options.cutmarks then
         if not publisher.pro then
-            err("cutmarks need a pro plan")
+            main.log("error", "cutmarks need a pro plan")
             publisher.has_pro_error = true
         else
             local lit = node.new("whatsit","pdf_literal")
@@ -1105,7 +1105,7 @@ function M.get_remaining_height(area,allocate)
     local row,firstrow,lastrow,maxrows
     firstrow = publisher.current_grid:current_row(area)
     if not firstrow then
-        err("get remaining height: no current row")
+        main.log("error", "get remaining height: no current row")
         firstrow = 1
     end
     maxrows = publisher.current_grid:number_of_rows(area)
@@ -1330,7 +1330,7 @@ function M.join_table_to_box(objects,from)
     end
     node.slide(objects[1])
     local vbox = node.vpack(objects[1])
-    publisher.setprop(vbox,"origin","join_table_hbox " .. (from or "") )
+    publisher.attribute_helpers.setprop(vbox,"origin","join_table_hbox " .. (from or "") )
     return vbox
 end
 
@@ -1385,11 +1385,11 @@ function M.vsplit( objects_t, parameter )
     while vlist do
         local head = vlist.head
         while head do
-            local bordernumber = publisher.get_attribute(head,"bordernumber")
+            local bordernumber = publisher.attribute_helpers.get_attribute(head,"bordernumber")
             if bordernumber then
                 -- move bordernumber to vlist
-                publisher.set_attribute(vlist,"bordernumber",bordernumber)
-                publisher.clear_attribute(vlist,"bordernumber")
+                publisher.attribute_helpers.set_attribute(vlist,"bordernumber",bordernumber)
+                publisher.attribute_helpers.clear_attribute(vlist,"bordernumber")
             end
 
             local tmp_margin_newcolumn = node.has_attribute(head, publisher.att_margin_newcolumn)
@@ -1433,7 +1433,7 @@ function M.vsplit( objects_t, parameter )
                 else
                     hlist[#hlist + 1] = head
                     if head.id == publisher.glue_node then
-                        ht_hlist = publisher.get_glue_size(head)
+                        ht_hlist = publisher.nodes.get_glue_size(head)
                     else
                         ht_hlist = ht_hlist + ( head.height or 0 ) + ( head.depth or 0 )
                     end
@@ -1454,14 +1454,14 @@ function M.vsplit( objects_t, parameter )
 
         local margin_newcolumn_obj1 = node.has_attribute(hlist[1], publisher.att_margin_newcolumn)
         if margin_newcolumn_obj1 and margin_newcolumn_obj1 > 0 then
-            table.insert(hlist,1,publisher.add_glue(nil,"head",{width=margin_newcolumn_obj1}))
+            table.insert(hlist,1,publisher.nodes.add_glue(nil,"head",{width=margin_newcolumn_obj1}))
             splitpos = splitpos + 1
         end
         local obj1 = M.join_table_to_box({table.unpack(hlist,1,splitpos)},"balance > 1 obj1")
         if hlist[splitpos + 1] then
             local margin_newcolumn_obj2 = node.has_attribute(hlist[splitpos + 1], publisher.att_margin_newcolumn)
             if margin_newcolumn_obj2 and margin_newcolumn_obj2 > 0 then
-                table.insert(hlist,splitpos + 1,publisher.add_glue(nil,"head",{width=margin_newcolumn_obj2}))
+                table.insert(hlist,splitpos + 1,publisher.nodes.add_glue(nil,"head",{width=margin_newcolumn_obj2}))
             end
             local obj2 = M.join_table_to_box({table.unpack(hlist,splitpos + 1)},"balance > 1 obj2")
             if valignlast == "bottom" then
@@ -1470,8 +1470,8 @@ function M.vsplit( objects_t, parameter )
                 if remaining_height > lastpaddingbottommax then
                     remaining_height = remaining_height - lastpaddingbottommax
                 end
-                obj1.head = publisher.add_glue(obj1.head,"head",{width = remaining_height} )
-                obj2.head = publisher.add_glue(obj2.head,"head",{width = remaining_height} )
+                obj1.head = publisher.nodes.add_glue(obj1.head,"head",{width = remaining_height} )
+                obj2.head = publisher.nodes.add_glue(obj2.head,"head",{width = remaining_height} )
             end
             return obj1, obj2
         else
@@ -1480,7 +1480,7 @@ function M.vsplit( objects_t, parameter )
                 if remaining_height > lastpaddingbottommax then
                     remaining_height = remaining_height - lastpaddingbottommax
                 end
-                obj1.head = publisher.add_glue(obj1.head,"head",{width = remaining_height} )
+                obj1.head = publisher.nodes.add_glue(obj1.head,"head",{width = remaining_height} )
             end
             return obj1
         end
@@ -1522,7 +1522,7 @@ function M.vsplit( objects_t, parameter )
             else
                 local margin_newcolumn = node.has_attribute(hbox, publisher.att_margin_newcolumn)
                 if margin_newcolumn and margin_newcolumn > 0 and #thisarea == 0 then
-                    thisarea[#thisarea + 1] = publisher.add_glue(nil,"head",{width=margin_newcolumn})
+                    thisarea[#thisarea + 1] = publisher.nodes.add_glue(nil,"head",{width=margin_newcolumn})
                     lineheight = margin_newcolumn
                 end
 

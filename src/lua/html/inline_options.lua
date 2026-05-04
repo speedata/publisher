@@ -1,8 +1,6 @@
 --- Inline options builder for publisher.mknodes.
 --- Extracted from the legacy set_options_for_mknodes implementation.
 
-local publisher = require("publisher")
-
 local fonts = require("html.fonts")
 local units = require("html.units")
 local colors_module = require("publisher.colors")

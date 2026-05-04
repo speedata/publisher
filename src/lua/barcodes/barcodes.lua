@@ -21,13 +21,13 @@ local function scalebox(scalefactor,box)
     local hbox = node.hpack(box)
     hbox = node.insert_before(hbox,hbox,pdf_setmatrix)
     hbox = node.insert_before(hbox,pdf_setmatrix,pdf_save)
-    publisher.setprop(hbox,"origin","scalebox 1")
+    publisher.attribute_helpers.setprop(hbox,"origin","scalebox 1")
 
     hbox = node.hpack(hbox)
     hbox.height = box.height * scalefactor
     hbox.width = box.width * scalefactor
     hbox.depth = 0
-    publisher.setprop(hbox,"origin","scalebox 2")
+    publisher.attribute_helpers.setprop(hbox,"origin","scalebox 2")
 
     node.insert_after(hbox,node.tail(hbox),pdf_restore)
 
@@ -116,10 +116,10 @@ local function mkglyph( char,fontnumber, destwd )
     local g = node.new("glyph")
     g.char = string.byte(char)
     g.font = fontnumber
-    local nl = publisher.add_glue(g,"head",{width = 0, stretch = 2^16, stretch_order = 2})
-    nl = publisher.add_glue(nl,"tail",{width = 0, stretch = 2^16, stretch_order = 2})
+    local nl = publisher.nodes.add_glue(g,"head",{width = 0, stretch = 2^16, stretch_order = 2})
+    nl = publisher.nodes.add_glue(nl,"tail",{width = 0, stretch = 2^16, stretch_order = 2})
     nl = node.hpack(nl,destwd,"exactly")
-    publisher.setprop(nl,"origin","mkglyph")
+    publisher.attribute_helpers.setprop(nl,"origin","mkglyph")
     return nl
 end
 
@@ -144,7 +144,7 @@ end
 
 local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor,keep_fontsize)
     if #digits ~= 13 and showtext then
-        err("Barcode: not enough numbers for EAN13 code _and_ text")
+        main.log("error", "Barcode: not enough numbers for EAN13 code _and_ text")
         showtext = false
     end
     local fontnumber = publisher.fonts.get_fontinstance(fontfamily,"normal")
@@ -205,7 +205,7 @@ local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor,ke
     end
     -- barcode_top will become the vbox
     local barcode_top = node.hpack(nodelist)
-    publisher.setprop(barcode_top,"origin","ean13 barcode_top")
+    publisher.attribute_helpers.setprop(barcode_top,"origin","ean13 barcode_top")
 
     if showtext then
         nodelist = nil
@@ -221,7 +221,7 @@ local function ean13(width,height,fontfamily,digits,showtext,overshoot_factor,ke
           end
         end
         local barcode_bottom = node.hpack(nodelist)
-        publisher.setprop(barcode_bottom,"origin","ean13 barcode_bottom")
+        publisher.attribute_helpers.setprop(barcode_bottom,"origin","ean13 barcode_bottom")
         -- barcode_top now has three elements: the hbox
         -- from the rules and kerns, the kern of -1.7mm
         -- and the hbox with the digits below the bars.
@@ -341,7 +341,7 @@ local function code128_make_nodelist(pattern,wd,ht)
     end)
   end
   local hbox = node.hpack(nodelist)
-  publisher.setprop(hbox,"origin","code128")
+  publisher.attribute_helpers.setprop(hbox,"origin","code128")
 
   return hbox
 end
@@ -349,7 +349,7 @@ end
 local function code128(width,height,fontfamily,text,showtext)
   local textnodelist
   if showtext then
-    textnodelist = publisher.mknodes(text,{fontfamily = fontfamily})
+    textnodelist = publisher.nodes.mknodes(text,{fontfamily = fontfamily})
   end
   local pattern = {}
 	local mode,output
@@ -412,7 +412,7 @@ local function code128(width,height,fontfamily,text,showtext)
   else
     vbox = node.vpack(code_hbox)
   end
-  publisher.setprop(vbox,"origin","code128 vbox")
+  publisher.attribute_helpers.setprop(vbox,"origin","code128 vbox")
   node.set_attribute(vbox,publisher.att_dontadjustlineheight,1)
 
 
@@ -472,13 +472,13 @@ local function make_code(size,matrix,pdfcolorstring)
   local n = node.new("whatsit","pdf_literal")
   n.data = table.concat(bc," ")
   n.mode = 0
-  publisher.setprop(n,"origin","qrcode")
-  publisher.setprop(n,"role",publisher.get_rolenum("Artifact"))
+  publisher.attribute_helpers.setprop(n,"origin","qrcode")
+  publisher.attribute_helpers.setprop(n,"role",publisher.structure_tree.get_rolenum("Artifact"))
 
   -- Avoid underfull boxes message:
-  n = publisher.add_glue(n,"tail",{width = 0, stretch = 1, stretch_order = 3})
+  n = publisher.nodes.add_glue(n,"tail",{width = 0, stretch = 1, stretch_order = 3})
   local h = node.hpack(n,size,"exactly")
-  h = publisher.add_glue(h,"tail",{stretch = 1, stretch_order = 3})
+  h = publisher.nodes.add_glue(h,"tail",{stretch = 1, stretch_order = 3})
   local v = node.vpack(h,size,"exactly")
   node.set_attribute(v,publisher.att_dontadjustlineheight,1)
   return v
@@ -489,7 +489,7 @@ local function qrcode(width,height,codeword,eclevel,colorname)
   if not barcodes_qrencode then barcodes_qrencode = do_luafile("qrencode.lua") end
   local ok, tab_or_message =  barcodes_qrencode.qrcode(codeword,eclevel)
   if not ok then
-    err(tab_or_message)
+    main.log("error", tab_or_message)
     return nil
   else
     return make_code(width,tab_or_message,pdfcolorstring)

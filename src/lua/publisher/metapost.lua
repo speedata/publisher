@@ -107,7 +107,7 @@ local function process_tex_text(str,fmt)
             param.bold = 1
             param.italic = 1
         end
-        local nodelist            = publisher.mknodes(text,param)
+        local nodelist            = publisher.nodes.mknodes(text,param)
         local hbox                = node.hpack(nodelist)
         nodelists[#nodelists + 1] = hbox
         local box                 = #nodelists
@@ -203,12 +203,12 @@ end
 ---@return table? figure
 function M.execute(mpobj, str)
     if not str then
-        err("Empty metapost string for execute")
+        main.log("error", "Empty metapost string for execute")
         return false
     end
     local l = mpobj.mp:execute(str)
     if l and l.status > 0 then
-        err("Executing %s: %s", str, l.term)
+        main.log("error", string.format("Executing %s: %s", str, l.term))
         return false
     end
     mpobj.l = l
@@ -237,7 +237,7 @@ function M.newbox(width_sp, height_sp)
     }
     for _, v in pairs({ "plain", "csscolors", "sp" }) do
         if not M.execute(mpobj, string.format("input %s;", v)) then
-            err("Cannot start metapost.")
+            main.log("error", "Cannot start metapost.")
             return nil
         end
     end
@@ -272,7 +272,7 @@ function M.newbox(width_sp, height_sp)
         elseif v.model == "gray" then
             M.execute(mpobj, string.format("rgbcolor colors.%s; colors.%s := (%g, %g, %g);", name, name, v.k, v.k, v.k))
         else
-            err("metapost: model %q not supported", v.model)
+            main.log("error", string.format("metapost: model %q not supported", v.model))
         end
     end
 
@@ -776,7 +776,7 @@ function M.prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
         publisher.metapostcolorwarnings = {}
     end
     if not publisher.metapostgraphics[graphicname] then
-        err("MetaPost graphic %s not defined", graphicname)
+        main.log("error", string.format("MetaPost graphic %s not defined", graphicname))
         return nil
     end
     local mpobj = M.newbox(width_sp, height_sp)

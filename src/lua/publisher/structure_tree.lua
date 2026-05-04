@@ -79,7 +79,7 @@ function M.get_rolenum( rolestring )
     if ret then
         return ret
     end
-    err("Unknown role %q", tostring(rolestring))
+    main.log("error", string.format("Unknown role %q", tostring(rolestring)))
 end
 
 -- Returns the sort key for a structure-tree child: the mapped page number
@@ -124,7 +124,7 @@ function M.sort_struct_tree_by_page_order(elem, page_ref_to_pagenumber)
     for i = 1, #elem do
         tagged[i] = { child = elem[i], orig = i, page_pos = get_struct_page_position(elem[i], page_ref_to_pagenumber) }
     end
-    publisher.stable_sort(tagged, function(a, b)
+    publisher.utilities.stable_sort(tagged, function(a, b)
         if a.page_pos ~= b.page_pos then
             return a.page_pos < b.page_pos
         end
@@ -361,7 +361,7 @@ end
 ---@param data table Data XML context for `setup_page`.
 ---@return node hbox
 function M.mkbookmarknodes(level, open_p, title, data)
-    publisher.setup_page(nil, "mkbookmarknodes", data)
+    publisher.page_helpers.setup_page(nil, "mkbookmarknodes", data)
     local openclosed
     if open_p then openclosed = 1 else openclosed = 2 end
     level = level or 1

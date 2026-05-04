@@ -110,7 +110,7 @@ local preloaded_fonts = {}
 ---@param url string?
 ---@return string? face_name
 function M.get_fontname( localname, url )
-    localname = publisher.get_fontname(localname)
+    localname = publisher.fontfamilies.get_fontname(localname)
     -- w("get_fontname, localname %q",tostring(localname))
     if localname and lookup_fontname_filename[localname] then
         return localname
@@ -204,7 +204,7 @@ function M.get_fontinstance(fontfamily,instancename)
         instance = 1
     end
     if not instance then
-        err("font %s not found for family %s",instancename,fontfamily)
+        main.log("error", string.format("font %s not found for family %s", instancename, fontfamily))
         -- let's try "regular"
         if fontfamily and fontfamily > 0 then
             instance = lookup_fontfamily_number_instance[fontfamily].normal
@@ -295,7 +295,7 @@ local function pre_linebreak_direct( head )
                     d_setprev(head, nil)
                     local instance = lookup_fontfamily_number_instance[dest_fontfamily]
                     local f = used_fonts[instance.normal]
-                    local g = d_todirect(publisher.make_glue({width = f.size}))
+                    local g = d_todirect(publisher.nodes.make_glue({width = f.size}))
 
                     local h = d_insert_after(head, head, g)
                     h = d_vpack(h)
@@ -341,7 +341,7 @@ local function pre_linebreak_direct( head )
                 local fontfamily = ff
 
                 -- Last resort
-                if fontfamily == 0 then fontfamily = 1 warning("Undefined fontfamily, set fontfamily to 1") end
+                if fontfamily == 0 then fontfamily = 1 main.log("warn", "Undefined fontfamily, set fontfamily to 1") end
 
                 local fontstyle = d_has_attribute(head, plb_att_fontstyle)
                 local fontweight = d_has_attribute(head, plb_att_fontweight)
@@ -407,7 +407,7 @@ local function pre_linebreak_direct( head )
                 end
             end
         else
-            warning("Unknown node: %q", d_getid(head))
+            main.log("warn", string.format("Unknown node: %q", d_getid(head)))
         end
         head = d_getnext(head)
     end
@@ -490,7 +490,7 @@ function M.insert_underline( parent, head, start, typ, style, colornumber)
     ht = ht / publisher.factor
     dp = dp / publisher.factor
     local rule = node.new("whatsit","pdf_literal")
-    publisher.setprop(rule,"origin","insert_underline")
+    publisher.attribute_helpers.setprop(rule,"origin","insert_underline")
     -- thickness: ht / ...
     -- downshift: dp/2
     local rule_width = math.round(ht / 13,3)
@@ -504,8 +504,8 @@ function M.insert_underline( parent, head, start, typ, style, colornumber)
     end
     rule.data = string.format("q %s %g w %s 0 %g m %g %g l S Q", pdfstring, rule_width, dashpattern, -1 * shift_down, -wd, -1 * shift_down )
     rule.mode = 0
-    local attribs = publisher.get_attributes(start)
-    publisher.set_attributes(rule,attribs)
+    local attribs = publisher.attribute_helpers.get_attributes(start)
+    publisher.attribute_helpers.set_attributes(rule,attribs)
     parent.head = node.insert_before(parent.head,head,rule)
     return rule
 end
@@ -564,7 +564,7 @@ do
                     local x = curdir[#curdir]
                     curdir[#curdir] = nil
                     if x ~= ldir then
-                        warning("paragraph direction incorrect, found %s, expected %s",ldir,x)
+                        main.log("warn", string.format("paragraph direction incorrect, found %s, expected %s", ldir, x))
                     end
                 end
                 if start_bgcolor then
@@ -678,7 +678,7 @@ do
             head = d_getnext(head)
         end
         if start_bgcolor then
-            local _, dummy = publisher.add_rule(d_tonode(lasthead),"tail",{width = 0, height = 0, depth = 0},"bgcolor dummy")
+            local _, dummy = publisher.nodes.add_rule(d_tonode(lasthead),"tail",{width = 0, height = 0, depth = 0},"bgcolor dummy")
             insert_bgcolor(d_tonode(list_head_d), dummy, d_tonode(start_bgcolor), bgcolorindex,bg_padding_top,bg_padding_bottom,bgcolor_reverse)
         end
         return head
@@ -722,7 +722,7 @@ function M.clone_family( fam, params )
     if newfam.fontfaceregular then
         local ok,r = M.make_font_instance(newfam.fontfaceregular, params.size * newfam.size )
         if not ok then
-            err(r)
+            main.log("error", r)
             return fam
         end
         newfam.normal = r
@@ -731,7 +731,7 @@ function M.clone_family( fam, params )
     if newfam.fontfacebold then
         local ok,b = M.make_font_instance(newfam.fontfacebold, params.size * newfam.size )
         if not ok then
-            err(b)
+            main.log("error", b)
             return fam
         end
         newfam.bold = b
@@ -740,7 +740,7 @@ function M.clone_family( fam, params )
     if newfam.fontfaceitalic then
         local ok,i = M.make_font_instance(newfam.fontfaceitalic, params.size * newfam.size )
         if not ok then
-            err(i)
+            main.log("error", i)
             return fam
         end
         newfam.italic = i
@@ -749,7 +749,7 @@ function M.clone_family( fam, params )
     if newfam.fontfacebolditalic then
         local ok,bi = M.make_font_instance(newfam.fontfacebolditalic, params.size * newfam.size )
         if not ok then
-            err(bi)
+            main.log("error", bi)
             return fam
         end
         newfam.bolditalic = bi

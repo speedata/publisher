@@ -53,11 +53,49 @@ callback.register('start_run',function() return true end)
 
 main = {}
 
--- Forwards to `splib.log`. The thin wrapper allows tests to monkey-patch it.
----@param ... any
+-- Forwards to `splib.log`, automatically appending the current page
+-- number (and, with the new XPath parser, layout/data line numbers) as
+-- structured key/value fields, so warn/error log entries carry that
+-- context without callers having to assemble it themselves.
+---@param level string Log level: `"debug"`, `"info"`, `"warn"`, `"error"`, …
+---@param msg string Primary message.
+---@param ... any Additional key/value pairs forwarded to `splib.log`.
 ---@return nil
-function main.log(...)
-    splib.log(...)
+function main.log(level, msg, ...)
+    local publisher = package.loaded.publisher
+    if not (publisher and publisher.current_pagenumber) then
+        return splib.log(level, msg, ...)
+    end
+    -- Capture `...` first; in Lua, `f(..., "x")` only forwards the first
+    -- value of `...` (the rest is dropped before "x" is appended), so the
+    -- existing key/value pairs from the caller would shift onto the wrong
+    -- positions if we tried to inline this.
+    local extras = {...}
+    -- Don't overwrite keys the caller passed in already; e.g. PlaceObject
+    -- intentionally logs a `page` value distinct from current_pagenumber.
+    local has_page, has_layout, has_data = false, false, false
+    for i = 1, #extras - 1, 2 do
+        local k = extras[i]
+        if     k == "page"        then has_page   = true
+        elseif k == "line_layout" then has_layout = true
+        elseif k == "line_data"   then has_data   = true
+        end
+    end
+    if not has_page then
+        extras[#extras+1] = "page"
+        extras[#extras+1] = tostring(publisher.current_pagenumber)
+    end
+    if publisher.newxpath then
+        if not has_layout then
+            extras[#extras+1] = "line_layout"
+            extras[#extras+1] = tostring(publisher.current_layout_line)
+        end
+        if not has_data then
+            extras[#extras+1] = "line_data"
+            extras[#extras+1] = tostring(publisher.current_data_line)
+        end
+    end
+    return splib.log(level, msg, table.unpack(extras))
 end
 
 

@@ -41,7 +41,7 @@ end
 
 M.hasharfbuzz, M.harfbuzz = pcall(require,'luaharfbuzz')
 if not M.hasharfbuzz then
-    warning("harfbuzz library not found")
+    main.log("warn", "harfbuzz library not found")
 end
 
 M.hasharfbuzzsubset, M.harfbuzzsubset = pcall(require,'luaharfbuzzsubset')
@@ -714,16 +714,16 @@ M.rolecounter = 0
 -- This is the entry point of the processing. It is called from publisher.spinit#main_loop.
 ---@return nil
 function M.dothings()
-    log("Running LuaTeX version %s on %s",luatex_version,os.name)
+    main.log("info", string.format("Running LuaTeX version %s on %s", luatex_version, os.name))
     -- First we set some defaults.
     -- A4 paper is 210x297 mm
     local wd_sp = tex.sp("210mm")
     local ht_sp = tex.sp("297mm")
-    M.set_pageformat(wd_sp,ht_sp)
+    M.page_helpers.set_pageformat(wd_sp,ht_sp)
     M.options.default_pagewidth = wd_sp
     M.options.default_pageheight = ht_sp
 
-    M.get_languagecode(os.getenv("SP_MAINLANGUAGE") or "en_GB")
+    M.language.get_languagecode(os.getenv("SP_MAINLANGUAGE") or "en_GB")
 
     M.lowercase = os.getenv("SP_IGNORECASE") == "1"
     local extra_parameter = { otfeatures = { kern = true, liga = false } }
@@ -747,7 +747,7 @@ function M.dothings()
     fonts.load_fontfile("CamingoCode-BoldItalic","CamingoCode-BoldItalic.ttf",extra_parameter)
 
     -- Define a basic font family with name `text`:
-    M.define_default_fontfamily()
+    M.fontfamilies.define_default_fontfamily()
 
     local _sampler
     if os.getenv("SP_PROFILE") then
@@ -763,7 +763,7 @@ function M.dothings()
     if M.options.hidespinfo and M.options.hidespinfo == "true" or M.options.hidespinfo == "yes" then
         -- do nothing
         if not M.pro then
-            err("Removing speedata info needs a pro plan")
+            main.log("error", "Removing speedata info needs a pro plan")
             M.has_pro_error = true
             return nil
         end
@@ -948,7 +948,7 @@ function M.initialize_luatex_and_generate_pdf()
     -- The `vars` file hold a lua document holding table
     local vars
     local varsfun = loadfile(tex.jobname .. ".vars")
-    if varsfun then vars = varsfun() else err("Could not load .vars file. Something strange is happening.") vars = {} end
+    if varsfun then vars = varsfun() else main.log("error", "Could not load .vars file. Something strange is happening.") vars = {} end
 
     for i=4,#arg do
         local k,v = arg[i]:match("^(.+)=(.+)$")
@@ -965,9 +965,9 @@ function M.initialize_luatex_and_generate_pdf()
     end
 
     -- Both the data and the layout instructions are written in XML.
-    local layoutxml = M.load_xml(arg[2],"layout instructions")
+    local layoutxml = M.xml_helpers.load_xml(arg[2],"layout instructions")
     if not layoutxml then
-        err("Without a valid layout-XML file, I can't really do anything.")
+        main.log("error", "Without a valid layout-XML file, I can't really do anything.")
         exit()
     end
     if M.newxpath then
@@ -976,18 +976,18 @@ function M.initialize_luatex_and_generate_pdf()
     -- Used in `xpath.lua` to find out which language the function is in.
     local ns = layoutxml[".__namespace"]
     if not ns then
-        err("Cannot find the namespace of the layout file. What should I do?")
+        main.log("error", "Cannot find the namespace of the layout file. What should I do?")
         exit()
     end
 
     -- The currently active layout language. One of `de` or `en`.
     local current_layoutlanguage = string.gsub(ns,"urn:speedata.de:2009/publisher/","")
     if not (current_layoutlanguage=='de' or current_layoutlanguage=='en') then
-        err("Cannot determine the language of the layout file.")
+        main.log("error", "Cannot determine the language of the layout file.")
         exit()
     end
     if current_layoutlanguage == "de" then
-        err("The German layout instructions have been removed\nin version 2.7 of the publisher.")
+        main.log("error", "The German layout instructions have been removed\nin version 2.7 of the publisher.")
         exit()
     end
     local version
@@ -1020,7 +1020,7 @@ function M.initialize_luatex_and_generate_pdf()
             version_mismatch = true
         end
         if version_mismatch then
-            err("Version mismatch. speedata Publisher is at version %s, requested version %s", M.env_publisherversion, version)
+            main.log("error", string.format("Version mismatch. speedata Publisher is at version %s, requested version %s", M.env_publisherversion, version))
             exit()
         end
     end
@@ -1048,7 +1048,7 @@ function M.initialize_luatex_and_generate_pdf()
                     exit(false)
                 end
             else
-                err("This layout requires feature %q, but I don't know what it is.\nPerhaps I am too old?",req)
+                main.log("error", string.format("This layout requires feature %q, but I don't know what it is.\nPerhaps I am too old?", req))
                 exit(false)
             end
         end
@@ -1087,10 +1087,10 @@ function M.initialize_luatex_and_generate_pdf()
             dataxml = luxor.parse_xml("<data />")
         end
     elseif datafilename == "-" then
-        log("Reading from stdin")
+        main.log("info", "Reading from stdin")
         dataxml = luxor.parse_xml(io.stdin:read("*a"),{htmlentities = true})
     else
-        dataxml = M.load_xml(datafilename,"data file",{ htmlentities = true, ignoreeol = ( M.options.ignoreeol or false ) })
+        dataxml = M.xml_helpers.load_xml(datafilename,"data file",{ htmlentities = true, ignoreeol = ( M.options.ignoreeol or false ) })
     end
     if not dataxml then
         main.log("error","Could not read data")
@@ -1141,7 +1141,7 @@ function M.initialize_luatex_and_generate_pdf()
         end
     end
 
-    M.dispatch(layoutxml,M.data)
+    M.dispatch.dispatch(layoutxml,M.data)
     if M.newxpath then
         -- for namespace mode == strict
         M.data.namespaces = dataxml[1][".__ns"]
@@ -1154,7 +1154,7 @@ function M.initialize_luatex_and_generate_pdf()
     if M.newxpath then
         local needs_eol = (M.options.ignoreeol or false) and not dataxml.ignoreeol_done
         if needs_eol then
-            M.fixup_xmlfile(dataxml, true)
+            M.xml_helpers.fixup_xmlfile(dataxml, true)
         end
     end
 
@@ -1228,7 +1228,7 @@ function M.initialize_luatex_and_generate_pdf()
         local num = M.options.startpage
         if num then
             M.current_pagenumber = tonumber(num)
-            log("Set page number to %d",num)
+            main.log("info", string.format("Set page number to %d", num))
         else
             main.log("error","Can't recognize starting page number", "startpage", M.options.startpage or "(not set)")
         end
@@ -1236,7 +1236,7 @@ function M.initialize_luatex_and_generate_pdf()
 
     if M.options.colorprofile then
         spotcolors.set_colorprofile_filename(M.options.colorprofile)
-        warning("Options / colorprofile is obsolete. Use DefineColorprofile and PDFOptions / colorprofile instead.")
+        main.log("warn", "Options / colorprofile is obsolete. Use DefineColorprofile and PDFOptions / colorprofile instead.")
     end
 
     if M.options.format == "PDF/UA" and not M.structElements[".root"] then
@@ -1251,7 +1251,7 @@ function M.initialize_luatex_and_generate_pdf()
     local auxfilename = tex.jobname .. "-aux.xml"
     -- load help file if it exists
     if kpse.find_file(auxfilename) and M.options.resetmarks == false then
-        local mark_tab = M.load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeol = true })
+        local mark_tab = M.xml_helpers.load_xml(auxfilename,"aux file",{ htmlentities = true, ignoreeol = true })
         if M.newxpath and mark_tab then
             mark_tab = mark_tab[1]
         end
@@ -1407,9 +1407,9 @@ function M.initialize_luatex_and_generate_pdf()
         if M.newxpath then
             -- For data:eval, the namespaces must be set the layout namespaces
             M.data.namespaces = layoutxml[".__ns"]
-            M.dispatch(tmp,M.data)
+            M.dispatch.dispatch(tmp,M.data)
         else
-            M.dispatch(tmp,dataxml)
+            M.dispatch.dispatch(tmp,dataxml)
         end
     else
         name = name or ""
@@ -1425,13 +1425,13 @@ function M.initialize_luatex_and_generate_pdf()
 
     -- emit last page if necessary
     -- current_pagestore_name is set when in SavePages and nil otherwise
-    if M.page_initialized_p(M.current_pagenumber) and M.current_pagestore_name == nil then
-        M.dothingsbeforeoutput(M.pages[M.current_pagenumber],M.data)
+    if M.page_helpers.page_initialized_p(M.current_pagenumber) and M.current_pagestore_name == nil then
+        M.page_helpers.dothingsbeforeoutput(M.pages[M.current_pagenumber],M.data)
         local n = node.vpack(M.pages[M.current_pagenumber].pagebox)
-        M.shipout(n,M.current_pagenumber,dataxml)
+        M.page_helpers.shipout(n,M.current_pagenumber,dataxml)
     end
     local lastpage = M.current_pagenumber
-    while not(M.page_initialized_p(lastpage)) and lastpage > 0 and M.current_pagestore_name == nil do
+    while not(M.page_helpers.page_initialized_p(lastpage)) and lastpage > 0 and M.current_pagestore_name == nil do
         lastpage = lastpage - 1
     end
 
@@ -1460,11 +1460,11 @@ function M.initialize_luatex_and_generate_pdf()
         pdfcatalog[#pdfcatalog + 1] = string.format([[ /AF %s ]],af)
     end
 
-    local str = M.get_page_labels_str()
+    local str = M.structure_tree.get_page_labels_str()
     if str then
         pdfcatalog[#pdfcatalog + 1] = str
     end
-    local langtbl = M.get_language(M.defaultlanguage)
+    local langtbl = M.language.get_language(M.defaultlanguage)
 
     if langtbl and langtbl.locale then
         pdfcatalog[#pdfcatalog+1] = string.format(" /Lang (%s)",string.gsub(langtbl.locale,"^(%a+).*","%1"))
@@ -1583,7 +1583,7 @@ function M.initialize_luatex_and_generate_pdf()
                 for k = 1, #M.pagenum_tbl do
                     page_ref_to_num[pdf.getpageref(k)] = M.pagenum_tbl[k]
                 end
-                M.sort_struct_tree_by_page_order(M.structElements[".root"], page_ref_to_num)
+                M.structure_tree.sort_struct_tree_by_page_order(M.structElements[".root"], page_ref_to_num)
             end
             if M.options.dumpstructtree then
                 -- Build page object ref → logical page number mapping
@@ -1591,7 +1591,7 @@ function M.initialize_luatex_and_generate_pdf()
                 for k = 1, #M.pagenum_tbl do
                     pageref_to_num[pdf.getpageref(k)] = M.pagenum_tbl[k]
                 end
-                local xmlstr = '<?xml version="1.0" encoding="UTF-8"?>\n' .. M.dump_struct_tree_xml(M.structElements[".root"], nil, pageref_to_num)
+                local xmlstr = '<?xml version="1.0" encoding="UTF-8"?>\n' .. M.structure_tree.dump_struct_tree_xml(M.structElements[".root"], nil, pageref_to_num)
                 local fn = tex.jobname .. "-struct.xml"
                 local f = io.open(fn, "w")
                 if f then
@@ -1603,7 +1603,7 @@ function M.initialize_luatex_and_generate_pdf()
                     main.log("error","Cannot open " .. fn .. " for writing")
                 end
             end
-            M.writeStructElements(M.structElements[".root"],structTreeRootObjectNumber)
+            M.structure_tree.writeStructElements(M.structElements[".root"],structTreeRootObjectNumber)
             local strObjnum = pdf.obj({ type = "raw", objnum = structTreeRootObjectNumber,  string = string.format("<</Type /StructTreeRoot /K %d 0 R /ParentTree %d 0 R >>",M.structElements[".root"].obj,parenttree), immediate = true})
             local numentries = { "<< /Nums [" }
             for i = 1, #M.struct_root_numtree do
@@ -1639,14 +1639,14 @@ function M.initialize_luatex_and_generate_pdf()
 
     -- Now put the bookmarks in the pdf
     for _,v in ipairs(M.bookmarks) do
-        M.bookmarkstotex(v)
+        M.structure_tree.bookmarkstotex(v)
     end
     local tab = {}
     for k,v in pairs(M.markers) do
-        tab[#tab + 1] = string.format("  <mark name=%q page=%q id=%q />",M.xml_escape(tostring(k)),M.xml_escape(tostring(v.page)), tostring(v.count))
+        tab[#tab + 1] = string.format("  <mark name=%q page=%q id=%q />",M.xml_helpers.xml_escape(tostring(k)),M.xml_helpers.xml_escape(tostring(v.page)), tostring(v.count))
     end
     for i = 1,#M.visible_pagenumbers do
-        tab[#tab + 1] = string.format("  <pagelabel pagenumber=%q visible=%q />",tostring(i),M.xml_escape(tostring(M.visible_pagenumbers[i])))
+        tab[#tab + 1] = string.format("  <pagelabel pagenumber=%q visible=%q />",tostring(i),M.xml_helpers.xml_escape(tostring(M.visible_pagenumbers[i])))
     end
     local file, errmsg = io.open(auxfilename,"wb")
     if file == nil then
@@ -1659,15 +1659,15 @@ function M.initialize_luatex_and_generate_pdf()
     file:write("\n</marker>")
     file:close()
     if M.has_pro_error then
-        log("*****************************************************")
-        log("*                                                   *")
-        log("* This layout uses features that require a Pro plan *")
-        log("*                                                   *")
-        log("* See                                               *")
-        log("*  https://www.speedata.de/en/product/prices/       *")
-        log("* for more information                              *")
-        log("*                                                   *")
-        log("*****************************************************")
+        main.log("info", "*****************************************************")
+        main.log("info", "*                                                   *")
+        main.log("info", "* This layout uses features that require a Pro plan *")
+        main.log("info", "*                                                   *")
+        main.log("info", "* See                                               *")
+        main.log("info", "*  https://www.speedata.de/en/product/prices/       *")
+        main.log("info", "* for more information                              *")
+        main.log("info", "*                                                   *")
+        main.log("info", "*****************************************************")
     end
 end
 
@@ -1707,20 +1707,20 @@ do
             if head.id == M.hlist_node or head.id == M.vlist_node then
                 if head.list then
                     local r = node.has_attribute(head,M.att_role)
-                    local parentid    = M.getprop(head,"parentid")
+                    local parentid    = M.attribute_helpers.getprop(head,"parentid")
 
                     -- parentdid == "" is a maker for inheritance
                     if parentid == "" or parentid == nil then
                         parentid = curid
                     end
                     -- roleid is role, underscore, rolecounter, for example P_1
-                    local roleid = M.getprop(head,"id")
+                    local roleid = M.attribute_helpers.getprop(head,"id")
                     if roleid then
-                        local actualtext = M.getprop(head,"actualtext")
-                        local alttext = M.getprop(head,"alttext")
+                        local actualtext = M.attribute_helpers.getprop(head,"actualtext")
+                        local alttext = M.attribute_helpers.getprop(head,"alttext")
                         local rolename = M.roles_a[r]
                         if rolename ~= "Artifact" then
-                            local structpos = M.getprop(head,"structpos")
+                            local structpos = M.attribute_helpers.getprop(head,"structpos")
                             entry = {
                                 obj = pdf.reserveobj(),
                                 role = rolename,
@@ -1745,14 +1745,14 @@ do
                 end
             elseif node.has_attribute(head,M.att_role) then
                 local r = node.has_attribute(head,M.att_role)
-                local roleid      = M.getprop(head,"id")
-                local parentid    = M.getprop(head,"parentid")
+                local roleid      = M.attribute_helpers.getprop(head,"id")
+                local parentid    = M.attribute_helpers.getprop(head,"parentid")
                 if parentid == nil or parentid == "" or parentid == 0 or parentid == roleid then
                     parentid = curid
                 end
-                local actualtext  = M.getprop(head,"actualtext")
-                local alttext     = M.getprop(head,"alttext")
-                local bbox        = M.getprop(head,"bbox")
+                local actualtext  = M.attribute_helpers.getprop(head,"actualtext")
+                local alttext     = M.attribute_helpers.getprop(head,"alttext")
+                local bbox        = M.attribute_helpers.getprop(head,"bbox")
                 -- role number to role name
                 r = M.roles_a[r]
 
@@ -1761,8 +1761,8 @@ do
                     entry = M.structElements[roleid]
                 else
                     if r == "Link" then
-                        local linkobjnum = M.getprop(head,"linkobjnum")
-                        local structelemobjnum = M.getprop(head,"structelemobjnum")
+                        local linkobjnum = M.attribute_helpers.getprop(head,"linkobjnum")
+                        local structelemobjnum = M.attribute_helpers.getprop(head,"structelemobjnum")
                         local startlink = head.next
                         startlink.action.data = startlink.action.data .. "/F 2" .. string.format("/P %s 0 R ",page)
                         entry = {
@@ -1897,7 +1897,7 @@ function M.htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
     local debug_htmlbox = 0
     local properties = node.getproperty(head)
     if not properties then
-        err("Internal error: htmlbox() - no properties given")
+        main.log("error", "Internal error: htmlbox() - no properties given")
         return
     end
     local rules = {}
@@ -2126,69 +2126,69 @@ function M.htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
 
     local rules_clip = {}
 
-    rules_clip[#rules_clip + 1] = M.pdf_moveto(x1,y1)
-    rules_clip[#rules_clip + 1] = M.pdf_lineto(x2,y2)
-    rules_clip[#rules_clip + 1] = M.pdf_curveto(x3,y3,x4,y4,x5,y5)
-    rules_clip[#rules_clip + 1] = M.pdf_lineto(x6,y6)
-    rules_clip[#rules_clip + 1] = M.pdf_curveto(x7,y7,x8,y8,x9,y9)
-    rules_clip[#rules_clip + 1] = M.pdf_lineto(x10,y10)
-    rules_clip[#rules_clip + 1] = M.pdf_curveto(x11,y11,x12,y12,x13,y13)
-    rules_clip[#rules_clip + 1] = M.pdf_lineto(x14,y14)
-    rules_clip[#rules_clip + 1] = M.pdf_curveto(x15,y15,x16,y16,x1,y1)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_moveto(x1,y1)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_lineto(x2,y2)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_curveto(x3,y3,x4,y4,x5,y5)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_lineto(x6,y6)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_curveto(x7,y7,x8,y8,x9,y9)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_lineto(x10,y10)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_curveto(x11,y11,x12,y12,x13,y13)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_lineto(x14,y14)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_curveto(x15,y15,x16,y16,x1,y1)
 
-    rules_clip[#rules_clip + 1] = M.pdf_moveto(xi1,yi1)
-    rules_clip[#rules_clip + 1] = M.pdf_lineto(xi2,yi2)
-    rules_clip[#rules_clip + 1] = M.pdf_curveto(xi3,yi3,xi4,yi4,xi5,yi5)
-    rules_clip[#rules_clip + 1] = M.pdf_lineto(xi6,yi6)
-    rules_clip[#rules_clip + 1] = M.pdf_curveto(xi7,yi7,xi8,yi8,xi9,yi9)
-    rules_clip[#rules_clip + 1] = M.pdf_lineto(xi10,yi10)
-    rules_clip[#rules_clip + 1] = M.pdf_curveto(xi11,yi11,xi12,yi12,xi13,yi13)
-    rules_clip[#rules_clip + 1] = M.pdf_lineto(xi14,yi14)
-    rules_clip[#rules_clip + 1] = M.pdf_curveto(xi15,yi15,xi16,yi16,xi1,yi1)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_moveto(xi1,yi1)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_lineto(xi2,yi2)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_curveto(xi3,yi3,xi4,yi4,xi5,yi5)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_lineto(xi6,yi6)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_curveto(xi7,yi7,xi8,yi8,xi9,yi9)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_lineto(xi10,yi10)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_curveto(xi11,yi11,xi12,yi12,xi13,yi13)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_lineto(xi14,yi14)
+    rules_clip[#rules_clip + 1] = M.drawing.pdf_curveto(xi15,yi15,xi16,yi16,xi1,yi1)
 
     if debug_htmlbox > 0 then
         rules[#rules + 1] = "q 0.3 w"
-        rules[#rules + 1] = M.pdf_moveto(x0,0)
-        rules[#rules + 1] = M.pdf_lineto(wd,0)
+        rules[#rules + 1] = M.drawing.pdf_moveto(x0,0)
+        rules[#rules + 1] = M.drawing.pdf_lineto(wd,0)
         rules[#rules + 1] = "S"
-        rules[#rules + 1] = M.pdf_moveto(x0,-depth_sp)
-        rules[#rules + 1] = M.pdf_lineto(wd,-depth_sp)
+        rules[#rules + 1] = M.drawing.pdf_moveto(x0,-depth_sp)
+        rules[#rules + 1] = M.drawing.pdf_lineto(wd,-depth_sp)
         rules[#rules + 1] = "S"
-        rules[#rules + 1] = M.pdf_moveto(x0,height_sp)
-        rules[#rules + 1] = M.pdf_lineto(wd,height_sp)
+        rules[#rules + 1] = M.drawing.pdf_moveto(x0,height_sp)
+        rules[#rules + 1] = M.drawing.pdf_lineto(wd,height_sp)
         rules[#rules + 1] = "S"
         rules[#rules + 1] = "Q"
     end
 
     if debug_htmlbox > 1 then
         rules[#rules + 1] = "q 0.3 w"
-        rules[#rules + 1] = M.pdf_moveto(x1,y1)
-        rules[#rules + 1] = M.pdf_lineto(x2,y2)
-        rules[#rules + 1] = M.pdf_curveto(x3,y3,x4,y4,x5,y5)
-        rules[#rules + 1] = M.pdf_lineto(x6,y6)
-        rules[#rules + 1] = M.pdf_curveto(x7,y7,x8,y8,x9,y9)
-        rules[#rules + 1] = M.pdf_lineto(x10,y10)
-        rules[#rules + 1] = M.pdf_curveto(x11,y11,x12,y12,x13,y13)
-        rules[#rules + 1] = M.pdf_lineto(x14,y14)
-        rules[#rules + 1] = M.pdf_curveto(x15,y15,x16,y16,x1,y1)
+        rules[#rules + 1] = M.drawing.pdf_moveto(x1,y1)
+        rules[#rules + 1] = M.drawing.pdf_lineto(x2,y2)
+        rules[#rules + 1] = M.drawing.pdf_curveto(x3,y3,x4,y4,x5,y5)
+        rules[#rules + 1] = M.drawing.pdf_lineto(x6,y6)
+        rules[#rules + 1] = M.drawing.pdf_curveto(x7,y7,x8,y8,x9,y9)
+        rules[#rules + 1] = M.drawing.pdf_lineto(x10,y10)
+        rules[#rules + 1] = M.drawing.pdf_curveto(x11,y11,x12,y12,x13,y13)
+        rules[#rules + 1] = M.drawing.pdf_lineto(x14,y14)
+        rules[#rules + 1] = M.drawing.pdf_curveto(x15,y15,x16,y16,x1,y1)
         rules[#rules + 1] = "S"
 
-        rules[#rules + 1] = M.pdf_moveto(xi1,yi1)
-        rules[#rules + 1] = M.pdf_lineto(xi2,yi2)
-        rules[#rules + 1] = M.pdf_curveto(xi3,yi3,xi4,yi4,xi5,yi5)
-        rules[#rules + 1] = M.pdf_lineto(xi6,yi6)
-        rules[#rules + 1] = M.pdf_curveto(xi7,yi7,xi8,yi8,xi9,yi9)
-        rules[#rules + 1] = M.pdf_lineto(xi10,yi10)
-        rules[#rules + 1] = M.pdf_curveto(xi11,yi11,xi12,yi12,xi13,yi13)
-        rules[#rules + 1] = M.pdf_lineto(xi14,yi14)
-        rules[#rules + 1] = M.pdf_curveto(xi15,yi15,xi16,yi16,xi1,yi1)
+        rules[#rules + 1] = M.drawing.pdf_moveto(xi1,yi1)
+        rules[#rules + 1] = M.drawing.pdf_lineto(xi2,yi2)
+        rules[#rules + 1] = M.drawing.pdf_curveto(xi3,yi3,xi4,yi4,xi5,yi5)
+        rules[#rules + 1] = M.drawing.pdf_lineto(xi6,yi6)
+        rules[#rules + 1] = M.drawing.pdf_curveto(xi7,yi7,xi8,yi8,xi9,yi9)
+        rules[#rules + 1] = M.drawing.pdf_lineto(xi10,yi10)
+        rules[#rules + 1] = M.drawing.pdf_curveto(xi11,yi11,xi12,yi12,xi13,yi13)
+        rules[#rules + 1] = M.drawing.pdf_lineto(xi14,yi14)
+        rules[#rules + 1] = M.drawing.pdf_curveto(xi15,yi15,xi16,yi16,xi1,yi1)
         rules[#rules + 1] = "S Q"
     end
 
     rules_clip[#rules_clip + 1] = "h W* n"
 
     local n_clip = node.new("whatsit","pdf_literal")
-    M.setprop(n_clip,"origin","htmlbox.clip")
+    M.attribute_helpers.setprop(n_clip,"origin","htmlbox.clip")
     local n_clip_data = table.concat(rules_clip," ")
     local concat_rules = table.concat(rules, " ")
     n_clip_data = n_clip_data .. " " .. concat_rules
@@ -2298,25 +2298,23 @@ end
 
 file_end("publisher.lua")
 
--- Mirror each submodule's public functions onto M so that
--- publisher.foo continues to resolve to the same callable, regardless
--- of which file actually defines it.
-for _, modname in ipairs({
-    "publisher.utilities",
-    "publisher.xml_helpers",
-    "publisher.images",
-    "publisher.language",
-    "publisher.attributes",
-    "publisher.structure_tree",
-    "publisher.drawing",
-    "publisher.fontfamilies",
-    "publisher.dispatch",
-    "publisher.pages",
-    "publisher.nodes",
-}) do
-    for k, v in pairs(require(modname)) do
-        M[k] = v
-    end
-end
+-- Expose each submodule on M, so callers reach functions through their
+-- actual module (publisher.pages.shipout, publisher.nodes.mknodes, …)
+-- instead of through a flat mirror. The require()s also force the
+-- submodules to load even if no other file pulls them in directly.
+M.utilities         = require("publisher.utilities")
+M.xml_helpers       = require("publisher.xml_helpers")
+M.images            = require("publisher.images")
+M.language          = require("publisher.language")
+-- 'attributes' is already taken by the attribute-defs table at the top
+-- of this file; 'pages' is the runtime page-state map. Expose the
+-- corresponding helper modules under qualified names instead.
+M.attribute_helpers = require("publisher.attributes")
+M.page_helpers      = require("publisher.pages")
+M.structure_tree    = require("publisher.structure_tree")
+M.drawing           = require("publisher.drawing")
+M.fontfamilies      = require("publisher.fontfamilies")
+M.dispatch          = require("publisher.dispatch")
+M.nodes             = require("publisher.nodes")
 
 return M

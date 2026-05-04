@@ -87,7 +87,7 @@ end
 ---@return integer remaining
 function M.remaining_height_sp( self,row,areaname,column,framenumber )
     if not self.positioning_frames[areaname] then
-        err("Area %q unknown, using page",areaname)
+        main.log("error", string.format("Area %q unknown, using page", areaname))
         areaname = publisher.default_areaname
     end
     row = row or self:current_row(areaname,framenumber)
@@ -112,7 +112,7 @@ function M.current_row( self,areaname,framenumber )
     areaname = areaname or publisher.default_areaname
     local area = self.positioning_frames[areaname]
     if not area then
-        err("Area %q not known",tostring(areaname))
+        main.log("error", string.format("Area %q not known", tostring(areaname)))
         return nil
     end
     if framenumber and self:framenumber(areaname) < framenumber then
@@ -142,7 +142,7 @@ function M.set_current_row( self,row,areaname,origin )
     assert(self)
     local areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
-        err("Area %q unknown, using page",areaname)
+        main.log("error", string.format("Area %q unknown, using page", areaname))
         areaname = publisher.default_areaname
     end
     local area = self.positioning_frames[areaname]
@@ -160,7 +160,7 @@ function M.set_current_column( self,column,areaname )
     assert(self)
     local areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
-        err("Area %q unknown, using page",areaname)
+        main.log("error", string.format("Area %q unknown, using page", areaname))
         areaname = publisher.default_areaname
     end
     local area = self.positioning_frames[areaname]
@@ -181,7 +181,7 @@ function M.advance_cursor( self,rows,areaname )
     assert(self)
     local areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
-        err("Area %q unknown, using page",areaname)
+        main.log("error", string.format("Area %q unknown, using page", areaname))
         areaname = publisher.default_areaname
     end
     local area = self.positioning_frames[areaname]
@@ -217,7 +217,7 @@ function M.get_advanced_cursor( self,areaname )
     assert(self)
     local areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
-        err("Area %q unknown, using page",areaname)
+        main.log("error", string.format("Area %q unknown, using page", areaname))
         areaname = publisher.default_areaname
     end
     local area = self.positioning_frames[areaname]
@@ -334,7 +334,7 @@ function M.isallocated( self,x,y,areaname,framenumber )
     else
         local area = self.positioning_frames[areaname]
         if not self.positioning_frames[areaname] then
-            err("Area %q unknown, using page",areaname)
+            main.log("error", string.format("Area %q unknown, using page", areaname))
             areaname = publisher.default_areaname
             frame_margin_left, frame_margin_top = 0,0
         else
@@ -347,11 +347,11 @@ function M.isallocated( self,x,y,areaname,framenumber )
     end
 
     if x > self:number_of_columns(areaname) then
-        err("sd:allocated() out of bounds. x (%d) > #cols (%d) of the area %q.",x,self:number_of_columns(areaname),areaname)
+        main.log("error", string.format("sd:allocated() out of bounds. x (%d) > #cols (%d) of the area %q.", x, self:number_of_columns(areaname), areaname))
         return false
     end
     if y > self:number_of_rows(areaname) then
-        err("sd:allocated() out of bounds. y (%d) > #rows (%d) of the area %q.",y,self:number_of_rows(areaname),areaname)
+        main.log("error", string.format("sd:allocated() out of bounds. y (%d) > #rows (%d) of the area %q.", y, self:number_of_rows(areaname), areaname))
         return false
     end
 
@@ -396,7 +396,7 @@ function M.number_of_frames( self,areaname )
     local areaname = areaname or publisher.default_areaname
     local area = self.positioning_frames[areaname]
     if not area then
-        err("Area %q is not known on this page. Using the default area (page)",areaname)
+        main.log("error", string.format("Area %q is not known on this page. Using the default area (page)", areaname))
         area = self.positioning_frames[publisher.default_areaname]
     end
     return #area
@@ -411,7 +411,7 @@ function M.framenumber( self,areaname )
     local areaname = areaname or publisher.default_areaname
     local area = self.positioning_frames[areaname]
     if not area then
-        err("Area %q is not known on this page.",areaname)
+        main.log("error", string.format("Area %q is not known on this page.", areaname))
         return nil
     end
     return area.current_frame or 1
@@ -510,7 +510,7 @@ function M.allocate_cells(self,options)
     else
         local area = self.positioning_frames[areaname]
         if not area then
-            err("Area %q not known, expect many errors",tostring(areaname))
+            main.log("error", string.format("Area %q not known, expect many errors", tostring(areaname)))
             return
         end
         local block = area[self:framenumber(areaname)]
@@ -606,7 +606,7 @@ function M.row_has_some_space(self,row,areaname)
     else
         local area = self.positioning_frames[areaname]
         if not self.positioning_frames[areaname] then
-            err("Area %q unknown, using page",areaname)
+            main.log("error", string.format("Area %q unknown, using page", areaname))
             areaname = publisher.default_areaname
             frame_margin_left, frame_margin_top = 0,0
         else
@@ -642,7 +642,7 @@ function M.fits_in_row_area(self,column,width,row,areaname)
     else
         local area = self.positioning_frames[areaname]
         if not self.positioning_frames[areaname] then
-            err("Area %q unknown, using page",areaname)
+            main.log("error", string.format("Area %q unknown, using page", areaname))
             frame_margin_left, frame_margin_top = 0,0
         else
             -- Todo: find the correct block because they can be of different width/height
@@ -680,7 +680,7 @@ function M.find_suitable_row( self,column, width,height,areaname, framenumber)
     else
         local area = self.positioning_frames[areaname]
         if not self.positioning_frames[areaname] then
-            err("Area %q unknown, using page",areaname or "-")
+            main.log("error", string.format("Area %q unknown, using page", areaname or "-"))
             areaname = publisher.default_areaname
             frame_margin_left, frame_margin_top = 0,0
         else
@@ -699,7 +699,7 @@ function M.find_suitable_row( self,column, width,height,areaname, framenumber)
     if maxrows < self:current_row(areaname) + height - 1 then
         -- doesn't fit, so we try on the next area
         if self:number_of_frames(areaname) > self:framenumber(areaname) then
-            publisher.next_area(areaname,self,nil,"find_suitable_row")
+            publisher.page_helpers.next_area(areaname,self,nil,"find_suitable_row")
             return self:find_suitable_row(column, width,height,areaname)
         else
             return
@@ -868,7 +868,7 @@ function M.draw_frame(self,frame,width_sp)
     local colorname = frame.draw.color
     local colentry = colors_module.colors[colorname]
     if not colentry then
-        err("Color %q unknown, reverting to black",colorname or "(no color name given)")
+        main.log("error", string.format("Color %q unknown, reverting to black", colorname or "(no color name given)"))
         colentry = colors_module.colors["black"]
     end
 
@@ -1083,7 +1083,7 @@ function M.position_grid_cell(self,x,y,areaname,wd,ht,valign,halign,width_gridce
         frame_margin_left, frame_margin_top = 0,0
     else
         if not self.positioning_frames[areaname] then
-            err("Area %q unknown, using page",areaname)
+            main.log("error", string.format("Area %q unknown, using page", areaname))
             frame_margin_left, frame_margin_top = 0,0
         else
             local area = self.positioning_frames[areaname]

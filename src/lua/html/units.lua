@@ -60,7 +60,7 @@ function M.calculate_height(attribute_height, original_size)
         ---@cast attribute_height number
         return attribute_height
     else
-        err("not implemented yet, calculate_height")
+        main.log("error", "not implemented yet, calculate_height")
         return original_size
     end
 end

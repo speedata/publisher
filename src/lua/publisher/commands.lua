@@ -16,7 +16,6 @@ local spotcolors = require("spotcolors")
 local metadata = require("publisher.metadata")
 local colors_module = require("publisher.colors")
 local links_module = require("publisher.links")
-local par  = require("par")
 local metapost = require("publisher.metapost")
 local grid_module = require("publisher.grid")
 do_luafile("css.lua")
@@ -53,17 +52,17 @@ commands = {}
 function commands.a( layoutxml,dataxml )
     local interaction = ( publisher.options.interaction ~= false )
 
-    local tab = publisher.dispatch(layoutxml,dataxml)
-    local eltname = publisher.elementname(tab[1])
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
+    local eltname = publisher.xml_helpers.elementname(tab[1])
     if not interaction then
         return tab
     end
-    local bordercolor = publisher.read_attribute(layoutxml,dataxml,"bordercolor","string")
-    local description = publisher.read_attribute(layoutxml,dataxml,"description","string","-")
-    local href = publisher.read_attribute(layoutxml,dataxml,"href","string")
-    local link = publisher.read_attribute(layoutxml,dataxml,"link","string")
-    local page = publisher.read_attribute(layoutxml,dataxml,"page","number")
-    local embedded = publisher.read_attribute(layoutxml,dataxml,"embedded","string")
+    local bordercolor = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"bordercolor","string")
+    local description = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"description","string","-")
+    local href = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"href","string")
+    local link = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"link","string")
+    local page = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"page","number")
+    local embedded = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"embedded","string")
     local structelemobjnum = pdf.reserveobj()
     local hyperlink_index
     if embedded then
@@ -108,7 +107,7 @@ function commands.a( layoutxml,dataxml )
         else
             c = tab[1].contents
         end
-        local ai = publisher.get_action_node(3)
+        local ai = publisher.structure_tree.get_action_node(3)
         local data = links_module.get(hyperlink_index)
         ai.data = tostring(data)
 
@@ -131,10 +130,10 @@ function commands.a( layoutxml,dataxml )
         local p = publisher.par:new(nil,"a")
         local ch = hyperlink_index
         for _,j in ipairs(tab) do
-            local c = publisher.element_contents(j)
+            local c = publisher.xml_helpers.element_contents(j)
             local params = {hyperlink = ch}
             if publisher.options.format == "PDF/UA" then
-                params.role = publisher.get_rolenum("Link")
+                params.role = publisher.structure_tree.get_rolenum("Link")
                 params.structelemobjnum = structelemobjnum
                 publisher.rolecounter = publisher.rolecounter + 1
                 params.rolecounter = publisher.rolecounter
@@ -172,7 +171,7 @@ local function append_mark_to_par(p, mark_contents)
         n.type = 115  -- type 115: "value is a string"
         n.value = v.selection
         if v.pdftarget then
-            local d = publisher.mkstringdest("mark" .. tostring(v.selection))
+            local d = publisher.structure_tree.mkstringdest("mark" .. tostring(v.selection))
             if v.shiftup ~= nil then
                 d = node.hpack(d)
                 d.shift = -1 * tex.sp(v.shiftup)
@@ -212,7 +211,7 @@ local function mark_to_hbox(mark_contents)
         n.type = 115
         n.value = v.selection
         if v.pdftarget then
-            local d = publisher.mkstringdest("mark" .. tostring(v.selection))
+            local d = publisher.structure_tree.mkstringdest("mark" .. tostring(v.selection))
             if v.shiftup ~= nil then
                 d = node.hpack(d)
                 d.shift = -1 * tex.sp(v.shiftup)
@@ -244,19 +243,19 @@ commands.mark_to_hbox = mark_to_hbox
 ---@param dataxml table
 ---@return any
 function commands.action( layoutxml,dataxml)
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     local p = publisher.par:new(nil,"action")
 
     for _,j in ipairs(tab) do
-        local eltname = publisher.elementname(j)
+        local eltname = publisher.xml_helpers.elementname(j)
         if eltname == "AddToList" then
             local n = node.new("whatsit","user_defined")
             n.user_id = publisher.user_defined_addtolist
             n.type = 100  -- type 100: "value is a number"
-            n.value = publisher.element_contents(j) -- pointer to the function (int)
+            n.value = publisher.xml_helpers.element_contents(j) -- pointer to the function (int)
             p:append(n)
         elseif eltname == "Mark" then
-            append_mark_to_par(p, publisher.element_contents(j))
+            append_mark_to_par(p, publisher.xml_helpers.element_contents(j))
         end
     end
     return p
@@ -272,9 +271,9 @@ end
 ---@param dataxml table
 ---@return any
 function commands.add_to_list( layoutxml,dataxml )
-    local key        = publisher.read_attribute(layoutxml,dataxml,"key","string")
-    local listname   = publisher.read_attribute(layoutxml,dataxml,"list","string")
-    local selection  = publisher.read_attribute(layoutxml,dataxml,"select","string")
+    local key        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"key","string")
+    local listname   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"list","string")
+    local selection  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","string")
 
     local value = publisher.xpath.parse(dataxml,selection,layoutxml[".__ns"])
     local var = publisher.xpath.get_variable(listname)
@@ -294,14 +293,14 @@ end
 ---@param dataxml table
 ---@return any
 function commands.add_searchpath( layoutxml,dataxml )
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
+    local selection = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","xpathraw")
     if not selection then
-        err("AddSearchpath: Can't add an empty search path")
+        main.log("error", "AddSearchpath: Can't add an empty search path")
         return
     end
     selection = table_textvalue(selection)
     if not lfs.isdir(selection) then
-        err("AddSearchpath: The path %q does not exist",selection)
+        main.log("error", string.format("AddSearchpath: The path %q does not exist", selection))
         return
     end
     main.log("info","Add search path","path",selection)
@@ -316,8 +315,8 @@ end
 ---@param dataxml table
 ---@return any
 function commands.attribute( layoutxml,dataxml )
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpath")
-    local attname   = publisher.read_attribute(layoutxml,dataxml,"name","string")
+    local selection = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","xpath")
+    local attname   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name","string")
 
     if not selection then return { [".__type"]="attribute", [attname] = "" } end
     -- Escaping the xpath.textvalue makes & into &amp; etc.
@@ -338,18 +337,18 @@ function commands.attachfile( layoutxml,dataxml )
     -- destfilename is optional. It defaults to "factur-x.xml" when attaching a
     -- ZUGFeRD file version 2, "ZUGFeRD-invoice.xml" in version 1 or to the
     -- input file name otherwise.
-    local inputfilename = publisher.read_attribute(layoutxml,dataxml,"filename","string")
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
-    local destfilename = publisher.read_attribute(layoutxml,dataxml,"name","string")
-    local filetype = publisher.read_attribute(layoutxml,dataxml,"type","string","application/octet-stream")
+    local inputfilename = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"filename","string")
+    local selection = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","xpathraw")
+    local destfilename = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name","string")
+    local filetype = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"type","string","application/octet-stream")
 
     local filecontents
     local modificationtime
     if selection ~= nil then
         if publisher.newxpath then
-            filecontents = publisher.xml_to_string_newxpath(selection[1],0)
+            filecontents = publisher.xml_helpers.xml_to_string_newxpath(selection[1],0)
         else
-            filecontents = publisher.xml_to_string(selection[1],0)
+            filecontents = publisher.xml_helpers.xml_to_string(selection[1],0)
         end
         modificationtime = os.time()
     else
@@ -367,14 +366,14 @@ function commands.attachfile( layoutxml,dataxml )
         if filetype ~= "ZUGFeRD invoice" then
             destfilename = destfilename or inputfilename
             if destfilename:match("^.*%.(.+)$") == nil then
-                warning("AttachFile: name attribute has no file extension, take from source.")
+                main.log("warn", "AttachFile: name attribute has no file extension, take from source.")
                 destfilename = string.format("%s.%s",destfilename,filename_extension)
             end
         end
         modificationtime = stat.modification
         local attachfile,msg = io.open(path,"rb")
         if attachfile == nil then
-            err("could not read file %s",msg)
+            main.log("error", string.format("could not read file %s", msg))
             return
         end
         filecontents = attachfile:read("*all")
@@ -384,7 +383,7 @@ function commands.attachfile( layoutxml,dataxml )
     if filetype == "ZUGFeRD invoice" then
         publisher.options.format = "PDF/A-3"
         if not publisher.pro then
-            err("attaching ZUGReRD files need a pro plan")
+            main.log("error", "attaching ZUGReRD files need a pro plan")
             publisher.has_pro_error = true
             return nil
         end
@@ -400,10 +399,10 @@ function commands.attachfile( layoutxml,dataxml )
     end
 
     if not destfilename then
-        err("AttachFile: you must provide a file name")
+        main.log("error", "AttachFile: you must provide a file name")
     end
 
-    local description = publisher.read_attribute(layoutxml,dataxml,"description","string")
+    local description = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"description","string")
     metadata.attach_file_pdf(filecontents,description,filetype,modificationtime,destfilename, publisher.filespecnumbers)
 end
 
@@ -440,22 +439,22 @@ end
 ---@return any
 function commands.barcode( layoutxml,dataxml )
     if not publisher.pro then
-        err("barcodes and qr codes need a pro plan")
+        main.log("error", "barcodes and qr codes need a pro plan")
         publisher.has_pro_error = true
         return nil
     end
-    local colorname      = publisher.read_attribute(layoutxml,dataxml,"color"  ,     "string","black")
-    local eclevel        = publisher.read_attribute(layoutxml,dataxml,"eclevel"  ,   "string")
-    local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface" ,   "string")
-    local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily",  "string",fontname)
-    local height         = publisher.read_attribute(layoutxml,dataxml,"height"   ,   "height_sp")
-    local keepfontsize   = publisher.read_attribute(layoutxml,dataxml,"keepfontsize","boolean", "no")
-    local overshoot      = publisher.read_attribute(layoutxml,dataxml,"overshoot",   "number")
-    local selection      = publisher.read_attribute(layoutxml,dataxml,"select",      "xpath")
-    local showtext       = publisher.read_attribute(layoutxml,dataxml,"showtext",    "boolean", "yes")
-    local typ            = publisher.read_attribute(layoutxml,dataxml,"type",        "string")
-    local width          = publisher.read_attribute(layoutxml,dataxml,"width",       "length_sp")
-    if fontname then warning("Barcode/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
+    local colorname      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"color"  ,     "string","black")
+    local eclevel        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"eclevel"  ,   "string")
+    local fontname       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontface" ,   "string")
+    local fontfamilyname = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontfamily",  "string",fontname)
+    local height         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"height"   ,   "height_sp")
+    local keepfontsize   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"keepfontsize","boolean", "no")
+    local overshoot      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"overshoot",   "number")
+    local selection      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select",      "xpath")
+    local showtext       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"showtext",    "boolean", "yes")
+    local typ            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"type",        "string")
+    local width          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width",       "length_sp")
+    if fontname then main.log("warn", "Barcode/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     if not width then
         local maxwidth
@@ -471,7 +470,7 @@ function commands.barcode( layoutxml,dataxml )
     if fontfamilyname then
         fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
         if not fontfamily then
-            err("Fontfamily %q not found.",fontfamilyname or "???")
+            main.log("error", string.format("Fontfamily %q not found.", fontfamilyname or "???"))
             fontfamily = 1
         end
     else
@@ -491,7 +490,7 @@ function commands.barcode( layoutxml,dataxml )
         end
         return publisher.barcodes.qrcode(width,height,selection,eclevel,colorname)
     else
-        err("Unknown barcode type %q", typ or "?")
+        main.log("error", string.format("Unknown barcode type %q", typ or "?"))
     end
 end
 
@@ -503,9 +502,9 @@ end
 ---@return any
 function commands.bold( layoutxml,dataxml )
     local p = publisher.par:new(nil,"b")
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
-        local c = publisher.element_contents(j)
+        local c = publisher.xml_helpers.element_contents(j)
         p:append(c,{
             bold = 1,
             role = 0,
@@ -534,18 +533,18 @@ end
 ---@param dataxml table
 ---@return any
 function commands.box( layoutxml,dataxml )
-    local bleed        = publisher.read_attribute(layoutxml,dataxml,"bleed",          "string")
-    local border_color = publisher.read_attribute(layoutxml,dataxml,"border-color",   "string")
-    local border_width = publisher.read_attribute(layoutxml,dataxml,"border-width",   "length")
-    local colorname    = publisher.read_attribute(layoutxml,dataxml,"background-color","string")
-    colorname          = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string",colorname)
-    local graphic      = publisher.read_attribute(layoutxml,dataxml,"graphic",        "string")
-    local height       = publisher.read_attribute(layoutxml,dataxml,"height",         "length")
-    local valign       = publisher.read_attribute(layoutxml,dataxml,"vertical-align", "string")
-    local width        = publisher.read_attribute(layoutxml,dataxml,"width",          "length")
+    local bleed        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"bleed",          "string")
+    local border_color = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"border-color",   "string")
+    local border_width = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"border-width",   "length")
+    local colorname    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"background-color","string")
+    colorname          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"backgroundcolor","string",colorname)
+    local graphic      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"graphic",        "string")
+    local height       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"height",         "length")
+    local valign       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"vertical-align", "string")
+    local width        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width",          "length")
 
-    local class     = publisher.read_attribute(layoutxml,dataxml,"class",          "string")
-    local id        = publisher.read_attribute(layoutxml,dataxml,"id",             "string")
+    local class     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"class",          "string")
+    local id        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"id",             "string")
 
     local css_rules = publisher.css:matches({element = 'box', class=class,id=id}) or {}
     colorname = colorname or css_rules["background-color"] or "black"
@@ -573,7 +572,7 @@ function commands.box( layoutxml,dataxml )
 
     local tmpattr
     for attname,atttyp in pairs(attribute) do
-        tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+        tmpattr = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,attname,atttyp)
         if tmpattr then
             tab[attname] = tmpattr
         end
@@ -673,11 +672,11 @@ function commands.box( layoutxml,dataxml )
     end
 
     local border_width_sp = border_width and tex.sp(border_width) or nil
-    local n = publisher.box(width,height,colorname,border_color,border_width_sp)
+    local n = publisher.drawing.box(width,height,colorname,border_color,border_width_sp)
     node.set_attribute(n, publisher.att_shift_left, shift_left)
     node.set_attribute(n, publisher.att_shift_up  , shift_up )
     if valign then
-        publisher.setprop(n,"vertical-align",valign)
+        publisher.attribute_helpers.setprop(n,"vertical-align",valign)
     end
     return n
 end
@@ -698,16 +697,16 @@ function commands.bookmark( layoutxml,dataxml )
     -- destination code (a number) for later. There is a slight problem now: as
     -- the text flow is asynchronous, we evaluate the bookmark during page
     -- ship out. Then we have the correct order (hopefully)
-    local title  = publisher.read_attribute(layoutxml,dataxml,"select","xpath")
-    local level  = publisher.read_attribute(layoutxml,dataxml,"level", "number")
-    local open_p = publisher.read_attribute(layoutxml,dataxml,"open",  "boolean")
+    local title  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","xpath")
+    local level  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"level", "number")
+    local open_p = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"open",  "boolean")
 
 
-    local hlist = publisher.mkbookmarknodes(level,open_p,title,dataxml)
+    local hlist = publisher.structure_tree.mkbookmarknodes(level,open_p,title,dataxml)
 
     if publisher.intextblockcontext == 0 then
-        publisher.setup_page(nil,"commands#bookmark",dataxml)
-        publisher.output_absolute_position({nodelist = hlist, x = 0, y = 0})
+        publisher.page_helpers.setup_page(nil,"commands#bookmark",dataxml)
+        publisher.page_helpers.output_absolute_position({nodelist = hlist, x = 0, y = 0})
     else
         local p = publisher.par:new(nil,"bookmark")
         p:append(hlist)
@@ -722,20 +721,20 @@ end
 ---@param dataxml table
 ---@return any
 function commands.circle( layoutxml,dataxml )
-    local radiusx        = publisher.read_attribute(layoutxml,dataxml,"radiusx", "width_sp")
-    local radiusy        = publisher.read_attribute(layoutxml,dataxml,"radiusy", "height_sp", radiusx)
-    local framecolorname = publisher.read_attribute(layoutxml,dataxml,"framecolor","string")
-    local rulewidth_sp   = publisher.read_attribute(layoutxml,dataxml,"rulewidth","length_sp", 0)
-    local colorname      = publisher.read_attribute(layoutxml,dataxml,"background-color","string")
-    colorname            = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string",colorname)
-    local class          = publisher.read_attribute(layoutxml,dataxml,"class",          "string")
-    local id             = publisher.read_attribute(layoutxml,dataxml,"id",             "string")
+    local radiusx        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"radiusx", "width_sp")
+    local radiusy        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"radiusy", "height_sp", radiusx)
+    local framecolorname = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"framecolor","string")
+    local rulewidth_sp   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"rulewidth","length_sp", 0)
+    local colorname      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"background-color","string")
+    colorname            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"backgroundcolor","string",colorname)
+    local class          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"class",          "string")
+    local id             = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"id",             "string")
 
     local css_rules = publisher.css:matches({element = 'circle', class=class,id=id}) or {}
     colorname      = colorname      or css_rules["background-color"] or "black"
     framecolorname = framecolorname or css_rules["color"]            or "black"
 
-    return publisher.circle(radiusx,radiusy,colorname,framecolorname,rulewidth_sp)
+    return publisher.drawing.circle(radiusx,radiusy,colorname,framecolorname,rulewidth_sp)
 end
 
 -- Clearpage
@@ -745,13 +744,13 @@ end
 ---@param dataxml table
 ---@return any
 function commands.clearpage( layoutxml,dataxml)
-    local matter       = publisher.read_attribute(layoutxml,dataxml,"matter","string")
-    local pagetype     = publisher.read_attribute(layoutxml,dataxml,"pagetype","string")
-    local skippagetype = publisher.read_attribute(layoutxml,dataxml,"skippagetype","string")
-    local openon       = publisher.read_attribute(layoutxml,dataxml,"openon","string")
-    local force        = publisher.read_attribute(layoutxml,dataxml,"force", "boolean")
+    local matter       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"matter","string")
+    local pagetype     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"pagetype","string")
+    local skippagetype = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"skippagetype","string")
+    local openon       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"openon","string")
+    local force        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"force", "boolean")
 
-    publisher.clearpage({matter = matter,pagetype = pagetype, openon = openon, skippagetype = skippagetype,force = force,dataxml = dataxml})
+    publisher.page_helpers.clearpage({matter = matter,pagetype = pagetype, openon = openon, skippagetype = skippagetype,force = force,dataxml = dataxml})
 end
 
 
@@ -762,22 +761,22 @@ end
 ---@param dataxml table
 ---@return any
 function commands.clip( layoutxml,dataxml )
-    local clip_top_sp = publisher.read_attribute(layoutxml,dataxml,"top","length_sp", 0)
-    local clip_bottom_sp = publisher.read_attribute(layoutxml,dataxml,"bottom","length_sp", 0)
-    local clip_left_sp = publisher.read_attribute(layoutxml,dataxml,"left","length_sp", 0)
-    local clip_right_sp = publisher.read_attribute(layoutxml,dataxml,"right","length_sp", 0)
-    local clip_width_sp = publisher.read_attribute(layoutxml,dataxml,"width","width_sp", 0)
-    local clip_height_sp = publisher.read_attribute(layoutxml,dataxml,"height","height_sp", 0)
-    local method = publisher.read_attribute(layoutxml,dataxml,"method", "string","clip")
+    local clip_top_sp = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"top","length_sp", 0)
+    local clip_bottom_sp = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"bottom","length_sp", 0)
+    local clip_left_sp = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"left","length_sp", 0)
+    local clip_right_sp = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"right","length_sp", 0)
+    local clip_width_sp = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width","width_sp", 0)
+    local clip_height_sp = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"height","height_sp", 0)
+    local method = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"method", "string","clip")
 
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     for i=1,#tab do
-        local contents = publisher.element_contents(tab[i])
+        local contents = publisher.xml_helpers.element_contents(tab[i])
 
 
         if node.is_node(contents) then
             -- This case is for <Textblock>...
-            tab[i].contents = publisher.clip({
+            tab[i].contents = publisher.drawing.clip({
                 box = contents,
                 clip_top_sp = clip_top_sp,
                 clip_bottom_sp = clip_bottom_sp,
@@ -791,7 +790,7 @@ function commands.clip( layoutxml,dataxml )
             -- This case is for <Table>
             for j=1,#contents do
                 if node.is_node(contents[j]) then
-                    contents[j] = publisher.clip({
+                    contents[j] = publisher.drawing.clip({
                         box = contents[j],
                         clip_top_sp = clip_top_sp,
                         clip_bottom_sp = clip_bottom_sp,
@@ -815,18 +814,18 @@ end
 ---@param dataxml table
 ---@return any
 function commands.color( layoutxml, dataxml )
-    local colorname = publisher.read_attribute(layoutxml,dataxml,"name","string")
+    local colorname = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name","string")
     local colorindex = colors_module.get_colorindex_from_name(colorname,"black")
 
     local p = publisher.par:new(nil,"color")
 
     local prev_fgcolor = publisher.current_fgcolor
     publisher.current_fgcolor = colorindex
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     publisher.current_fgcolor = prev_fgcolor
 
     for _,j in ipairs(tab) do
-        local c = publisher.element_contents(j)
+        local c = publisher.xml_helpers.element_contents(j)
         p:append(c,{color = colorindex})
     end
 
@@ -842,14 +841,14 @@ end
 ---@return any
 function commands.column( layoutxml,dataxml )
     local ret = {}
-    ret.minwidth         = publisher.read_attribute(layoutxml,dataxml,"minwidth","width_sp")
-    ret.width            = publisher.read_attribute(layoutxml,dataxml,"width","string")
-    ret.backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"background-color","string")
-    ret.backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string",ret.backgroundcolor)
-    ret.align            = publisher.read_attribute(layoutxml,dataxml,"align","string")
-    ret.valign           = publisher.read_attribute(layoutxml,dataxml,"valign","string")
-    ret.padding_left     = publisher.read_attribute(layoutxml,dataxml,"padding-left","length_sp")
-    ret.padding_right    = publisher.read_attribute(layoutxml,dataxml,"padding-right","length_sp")
+    ret.minwidth         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"minwidth","width_sp")
+    ret.width            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width","string")
+    ret.backgroundcolor  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"background-color","string")
+    ret.backgroundcolor  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"backgroundcolor","string",ret.backgroundcolor)
+    ret.align            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"align","string")
+    ret.valign           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"valign","string")
+    ret.padding_left     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"padding-left","length_sp")
+    ret.padding_right    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"padding-right","length_sp")
 
     return ret
 end
@@ -863,7 +862,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.columns( layoutxml,dataxml )
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     return tab
 end
 
@@ -871,7 +870,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.compatibility( layoutxml,dataxml )
-    local movecursoronrightedge = publisher.read_attribute(layoutxml,dataxml,"movecursoronplaceobject", "boolean","yes")
+    local movecursoronrightedge = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"movecursoronplaceobject", "boolean","yes")
     publisher.compatibility.movecursoronrightedge = movecursoronrightedge
 end
 
@@ -887,10 +886,10 @@ function commands.copy_of( layoutxml,dataxml )
         return table.concat(layoutxml)
     else
         if publisher.newxpath then
-            local selectionstring = publisher.read_attribute(layoutxml,dataxml,"select", "string")
+            local selectionstring = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select", "string")
             local seq, msg = dataxml:eval(selectionstring)
             if msg then
-                err(msg)
+                main.log("error", msg)
                 return
             end
             selection = {}
@@ -898,23 +897,23 @@ function commands.copy_of( layoutxml,dataxml )
                 selection[#selection+1] = itm
             end
             if type(selection) == "table" and selection[1] == "expand" then
-                local tmp = publisher.dispatch(selection,dataxml)
+                local tmp = publisher.dispatch.dispatch(selection,dataxml)
                 return tmp
             end
         else
-            selection = publisher.read_attribute(layoutxml,dataxml,"select", "string")
+            selection = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select", "string")
             local ok
                 ok,selection = publisher.xpath.parse_raw(dataxml,selection,layoutxml[".__ns"])
             if not ok then
-                err(selection)
+                main.log("error", selection)
                 return nil
             end
             if type(selection) == "table" and selection[1] == "expand"  then
-                local tmp = publisher.dispatch(selection,dataxml)
+                local tmp = publisher.dispatch.dispatch(selection,dataxml)
                 return tmp
             end
         end
-        return publisher.deepcopy(selection)
+        return publisher.utilities.deepcopy(selection)
     end
 end
 
@@ -925,19 +924,19 @@ end
 ---@param dataxml table
 ---@return any
 function commands.define_color( layoutxml,dataxml )
-    local name       = publisher.read_attribute(layoutxml,dataxml,"name","string")
-    local value      = publisher.read_attribute(layoutxml,dataxml,"value","string")
-    local alpha      = publisher.read_attribute(layoutxml,dataxml,"alpha","number")
-    local saturation = publisher.read_attribute(layoutxml,dataxml,"saturation","number","1")
-    local model      = publisher.read_attribute(layoutxml,dataxml,"model","string")
-    local colorname  = publisher.read_attribute(layoutxml,dataxml,"colorname","string")
-    local overprint  = publisher.read_attribute(layoutxml,dataxml,"overprint","boolean")
-    local usecolorprofile = publisher.read_attribute(layoutxml,dataxml,"usecolorprofile","boolean",true)
+    local name       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name","string")
+    local value      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"value","string")
+    local alpha      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"alpha","number")
+    local saturation = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"saturation","number","1")
+    local model      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"model","string")
+    local colorname  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"colorname","string")
+    local overprint  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"overprint","boolean")
+    local usecolorprofile = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"usecolorprofile","boolean",true)
 
     local color = setmetatable({}, colors_module.colormetatable)
     color.overprint = overprint
     if alpha then
-        publisher.transparentcolorstack()
+        publisher.drawing.transparentcolorstack()
         -- color.alpha is in the range of 0 to 100
         color.alpha = alpha
     end
@@ -959,38 +958,38 @@ function commands.define_color( layoutxml,dataxml )
     end
 
     if model=="cmyk" then
-        color.c = publisher.read_attribute(layoutxml,dataxml,"c","number")
-        color.m = publisher.read_attribute(layoutxml,dataxml,"m","number")
-        color.y = publisher.read_attribute(layoutxml,dataxml,"y","number")
-        color.k = publisher.read_attribute(layoutxml,dataxml,"k","number")
+        color.c = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"c","number")
+        color.m = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"m","number")
+        color.y = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"y","number")
+        color.k = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"k","number")
         color.pdfstring = string.format("%s %g %g %g %g k %g %g %g %g K", op, color.c/100, color.m/100, color.y/100, color.k/100,color.c/100, color.m/100, color.y/100, color.k/100)
         publisher.metapostcolors[mpname(name)] = {model = "cmyk", c = color.c/100, m = color.m/100, y = color.y/100, k = color.k/100 }
     elseif model=="rgb" then
-        color.r = publisher.read_attribute(layoutxml,dataxml,"r","number") / 100
-        color.g = publisher.read_attribute(layoutxml,dataxml,"g","number") / 100
-        color.b = publisher.read_attribute(layoutxml,dataxml,"b","number") / 100
+        color.r = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"r","number") / 100
+        color.g = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"g","number") / 100
+        color.b = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"b","number") / 100
         color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
         publisher.metapostcolors[mpname(name)] = {model = "rgb", r = color.r, g = color.g, b = color.b }
     elseif model=="RGB" then
-        color.r = publisher.read_attribute(layoutxml,dataxml,"r","number") / 255
-        color.g = publisher.read_attribute(layoutxml,dataxml,"g","number") / 255
-        color.b = publisher.read_attribute(layoutxml,dataxml,"b","number") / 255
+        color.r = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"r","number") / 255
+        color.g = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"g","number") / 255
+        color.b = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"b","number") / 255
         color.pdfstring = string.format("%s %g %g %g rg %g %g %g RG", op, color.r, color.g, color.b, color.r,color.g, color.b)
         publisher.metapostcolors[mpname(name)] = {model = "rgb", r = color.r, g = color.g, b = color.b }
     elseif model=="gray" then
-        color.g = publisher.read_attribute(layoutxml,dataxml,"g","number")
+        color.g = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"g","number")
         color.pdfstring = string.format("%s %g g %g G",op,color.g/100,color.g/100)
         publisher.metapostcolors[mpname(name)] = {model = "gray", k = color.g }
     elseif model=="spotcolor" then
         if not publisher.pro then
-            err("spot colors need a Pro plan")
+            main.log("error", "spot colors need a Pro plan")
             publisher.has_pro_error = true
             return
         end
-        local c = publisher.read_attribute(layoutxml,dataxml,"c","number")
-        local m = publisher.read_attribute(layoutxml,dataxml,"m","number")
-        local y = publisher.read_attribute(layoutxml,dataxml,"y","number")
-        local k = publisher.read_attribute(layoutxml,dataxml,"k","number")
+        local c = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"c","number")
+        local m = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"m","number")
+        local y = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"y","number")
+        local k = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"k","number")
         color.colornum = spotcolors.register(colorname,c,m,y,k,usecolorprofile)
         color.saturation = saturation
 
@@ -1004,7 +1003,7 @@ function commands.define_color( layoutxml,dataxml )
         model = "rgb"
         publisher.metapostcolors[mpname(name)] = {model = model, r = color.r, g = color.g, b = color.b }
     else
-        err("Unknown color model: %s",model or "?")
+        main.log("error", string.format("Unknown color model: %s", model or "?"))
     end
 
     color.model = model
@@ -1021,13 +1020,13 @@ end
 ---@param dataxml table
 ---@return any
 function commands.define_colorprofile( layoutxml,dataxml )
-    local condition  = publisher.read_attribute(layoutxml,dataxml,"condition", "string", "None")
-    local colors     = publisher.read_attribute(layoutxml,dataxml,"colors",    "number" , 4)
-    local filename   = publisher.read_attribute(layoutxml,dataxml,"filename",  "string")
-    local identifier = publisher.read_attribute(layoutxml,dataxml,"identifier","string", "identifier")
-    local info       = publisher.read_attribute(layoutxml,dataxml,"info",      "string", "info")
-    local name       = publisher.read_attribute(layoutxml,dataxml,"name",      "string", "default")
-    local registry   = publisher.read_attribute(layoutxml,dataxml,"registry",  "string","http://www.color.org")
+    local condition  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"condition", "string", "None")
+    local colors     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"colors",    "number" , 4)
+    local filename   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"filename",  "string")
+    local identifier = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"identifier","string", "identifier")
+    local info       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"info",      "string", "info")
+    local name       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name",      "string", "default")
+    local registry   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"registry",  "string","http://www.color.org")
     spotcolors.register_colorprofile(name,{filename = filename, identifier = identifier, condition = condition, registry = registry, colors = colors, info = info })
 end
 
@@ -1038,7 +1037,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.define_graphic(layoutxml,dataxml)
-    local name = publisher.read_attribute(layoutxml,dataxml,"name","string")
+    local name = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name","string")
     local code
     if publisher.newxpath then
         code = publisher.xpath.string_value(layoutxml)
@@ -1062,29 +1061,29 @@ end
 ---@param dataxml table
 ---@return any
 function commands.define_textformat(layoutxml,dataxml)
-    local alignment    = publisher.read_attribute(layoutxml,dataxml,"alignment",   "string")
-    local borderbottom = publisher.read_attribute(layoutxml,dataxml,"border-bottom","string")
-    local bordertop    = publisher.read_attribute(layoutxml,dataxml,"border-top",  "string")
-    local breakbefore   = publisher.read_attribute(layoutxml,dataxml,"break-before",  "string")
-    local breakbelow    = publisher.read_attribute(layoutxml,dataxml,"break-below",   "boolean", true)
-    local colpaddingtop = publisher.read_attribute(layoutxml,dataxml,"column-padding-top", "length_sp")
-    local filllastline  = publisher.read_attribute(layoutxml,dataxml,"fill-last-line","number")
-    local htmlverticalspacing = publisher.read_attribute(layoutxml,dataxml,"html-vertical-spacing","string")
-    local hyphenate     = publisher.read_attribute(layoutxml,dataxml,"hyphenate",     "boolean", true)
-    local hyphenchar    = publisher.read_attribute(layoutxml,dataxml,"hyphenchar",    "string")
-    local indentation   = publisher.read_attribute(layoutxml,dataxml,"indentation",   "length")
-    local letterspacing = publisher.read_attribute(layoutxml,dataxml,"letter-spacing","number")
-    local marginbottom  = publisher.read_attribute(layoutxml,dataxml,"margin-bottom", "string")
-    local margintop     = publisher.read_attribute(layoutxml,dataxml,"margin-top",    "string")
-    local margintopboxstart  = publisher.read_attribute(layoutxml,dataxml,"margin-top-box-start","length_sp")
-    local name         = publisher.read_attribute(layoutxml,dataxml,"name",        "string")
-    local orphan        = publisher.read_attribute(layoutxml,dataxml,"orphan",        "booleanornumber", false)
-    local cssfontsize = publisher.read_attribute(layoutxml,dataxml,"cssfontsize","boolean", false)
-    local paddingbottom = publisher.read_attribute(layoutxml,dataxml,"padding-bottom","string")
-    local paddingtop    = publisher.read_attribute(layoutxml,dataxml,"padding-top",   "string")
-    local rows         = publisher.read_attribute(layoutxml,dataxml,"rows",        "number")
-    local tab           = publisher.read_attribute(layoutxml,dataxml,"tab",           "string")
-    local widow         = publisher.read_attribute(layoutxml,dataxml,"widow",         "booleanornumber", false)
+    local alignment    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"alignment",   "string")
+    local borderbottom = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"border-bottom","string")
+    local bordertop    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"border-top",  "string")
+    local breakbefore   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"break-before",  "string")
+    local breakbelow    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"break-below",   "boolean", true)
+    local colpaddingtop = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"column-padding-top", "length_sp")
+    local filllastline  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fill-last-line","number")
+    local htmlverticalspacing = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"html-vertical-spacing","string")
+    local hyphenate     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"hyphenate",     "boolean", true)
+    local hyphenchar    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"hyphenchar",    "string")
+    local indentation   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"indentation",   "length")
+    local letterspacing = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"letter-spacing","number")
+    local marginbottom  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"margin-bottom", "string")
+    local margintop     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"margin-top",    "string")
+    local margintopboxstart  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"margin-top-box-start","length_sp")
+    local name         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name",        "string")
+    local orphan        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"orphan",        "booleanornumber", false)
+    local cssfontsize = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"cssfontsize","boolean", false)
+    local paddingbottom = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"padding-bottom","string")
+    local paddingtop    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"padding-top",   "string")
+    local rows         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"rows",        "number")
+    local tab           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"tab",           "string")
+    local widow         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"widow",         "booleanornumber", false)
     local fmt = {
         colpaddingtop = colpaddingtop,
         htmlverticalspacing = htmlverticalspacing,
@@ -1172,8 +1171,8 @@ end
 ---@param dataxml table
 ---@return any
 function commands.define_fontalias( layoutxml,dataxml )
-    local existing = publisher.read_attribute(layoutxml,dataxml,"existing", "string" )
-    local alias    = publisher.read_attribute(layoutxml,dataxml,"alias",    "string" )
+    local existing = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"existing", "string" )
+    local alias    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"alias",    "string" )
     publisher.fontaliases[alias] = existing
 end
 
@@ -1187,14 +1186,14 @@ end
 function commands.define_fontfamily( layoutxml,dataxml )
     -- fontsize and baselineskip are in dtp points (bp, 1 bp ≈ 65782 sp)
     -- Concrete font instances are created here. fontsize and baselineskip are known
-    local name         = publisher.read_attribute(layoutxml,dataxml,"name",    "string" )
-    local size         = publisher.read_attribute(layoutxml,dataxml,"fontsize","string")
-    local scriptsize   = publisher.read_attribute(layoutxml,dataxml,"scriptsize","length_sp")
-    local supershift   = publisher.read_attribute(layoutxml,dataxml,"supershift","length_sp")
-    local subshift     = publisher.read_attribute(layoutxml,dataxml,"subshift","length_sp")
-    local baselineskip = publisher.read_attribute(layoutxml,dataxml,"leading", "string")
+    local name         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name",    "string" )
+    local size         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontsize","string")
+    local scriptsize   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"scriptsize","length_sp")
+    local supershift   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"supershift","length_sp")
+    local subshift     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"subshift","length_sp")
+    local baselineskip = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"leading", "string")
     if size == nil then
-        err("DefineFontfamily: no size given.")
+        main.log("error", "DefineFontfamily: no size given.")
         return
     end
 
@@ -1206,7 +1205,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
     end
 
     if baselineskip == nil then
-        err("DefineFontfamily: no leading given.")
+        main.log("error", "DefineFontfamily: no leading given.")
         return
     end
     if tonumber(baselineskip) == nil then
@@ -1219,8 +1218,8 @@ function commands.define_fontfamily( layoutxml,dataxml )
     local regular, bold, italic, bolditalic
     for i,v in ipairs(layoutxml) do
         elementname = v[".__local_name"]
-        fontface = publisher.read_attribute(v,dataxml,"fontface","string")
-        fontface = publisher.get_fontname(fontface)
+        fontface = publisher.attribute_helpers.read_attribute(v,dataxml,"fontface","string")
+        fontface = publisher.fontfamilies.get_fontname(fontface)
         if type(v) ~= "table" then
             -- ignore
         elseif elementname=="Regular" then
@@ -1233,7 +1232,7 @@ function commands.define_fontfamily( layoutxml,dataxml )
             bolditalic = fontface
         end
     end
-    publisher.define_fontfamily(regular,bold,italic,bolditalic,name,size,baselineskip,scriptsize,supershift,subshift)
+    publisher.fontfamilies.define_fontfamily(regular,bold,italic,bolditalic,name,size,baselineskip,scriptsize,supershift,subshift)
 end
 
 -- DefineMatter
@@ -1241,11 +1240,11 @@ end
 ---@param dataxml table
 ---@return any
 function commands.definematter(layoutxml,dataxml)
-    local name       = publisher.read_attribute(layoutxml,dataxml,"name","string")
-    local label      = publisher.read_attribute(layoutxml,dataxml,"label","string")
-    local prefix     = publisher.read_attribute(layoutxml,dataxml,"prefix","string")
-    local resetafter = publisher.read_attribute(layoutxml,dataxml,"resetafter","boolean")
-    local resetbefore = publisher.read_attribute(layoutxml,dataxml,"resetbefore","boolean")
+    local name       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name","string")
+    local label      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"label","string")
+    local prefix     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"prefix","string")
+    local resetafter = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"resetafter","boolean")
+    local resetbefore = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"resetbefore","boolean")
     publisher.matters[name] = {label = label, prefix = prefix, resetafter = resetafter, resetbefore = resetbefore }
 end
 
@@ -1256,7 +1255,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.element( layoutxml,dataxml )
-    local name = publisher.read_attribute(layoutxml,dataxml,"name","string")
+    local name = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name","string")
     local ret = {
         [".__local_name"] = name,
         [".__name"] = name,
@@ -1266,11 +1265,11 @@ function commands.element( layoutxml,dataxml )
         [".__type"] = "element",
     }
 
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     for i,v in ipairs(tab) do
-        local contents = publisher.element_contents(v)
+        local contents = publisher.xml_helpers.element_contents(v)
         if contents then
-            local eltname = publisher.elementname(v)
+            local eltname = publisher.xml_helpers.elementname(v)
             if contents[".__type"]=="attribute" then
                 -- Attribute
                 for _k,_v in pairs(contents) do
@@ -1305,15 +1304,15 @@ end
 ---@param dataxml table
 ---@return any
 function commands.fontface( layoutxml,dataxml )
-    local fontfamily   = publisher.read_attribute(layoutxml,dataxml,"fontfamily","string")
+    local fontfamily   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontfamily","string")
     local familynumber = publisher.fonts.lookup_fontfamily_name_number[fontfamily]
     if not familynumber then
-        err("font: family %q unknown",fontfamily)
+        main.log("error", string.format("font: family %q unknown", fontfamily))
     else
         local p = publisher.par:new(nil,"fontface")
-        local tab = publisher.dispatch(layoutxml,dataxml)
+        local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
         for _,j in ipairs(tab) do
-            local c = publisher.element_contents(j)
+            local c = publisher.xml_helpers.element_contents(j)
             p:append(c,{fontfamily = familynumber})
         end
 
@@ -1328,15 +1327,15 @@ end
 ---@param dataxml table
 ---@return any
 function commands.forall( layoutxml,dataxml )
-    local limit = publisher.read_attribute(layoutxml,dataxml,"limit","number")
-    local start = publisher.read_attribute(layoutxml,dataxml,"start","number")
+    local limit = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"limit","number")
+    local start = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"start","number")
 
     local tab = {}
     if publisher.newxpath then
         if limit or start then
             main.log("error","ForAll: the new xpath parser does not allow limit or start, please use predicates instead.")
         end
-        local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
+        local selection = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","xpathraw")
         for i = 1, #selection do
             local iterdata = {}
             for k, v in pairs(dataxml) do
@@ -1346,7 +1345,7 @@ function commands.forall( layoutxml,dataxml )
             iterdata.pos = i
             iterdata.sequence = {selection[i]}
             iterdata.size = #selection
-            local tmp_tab = publisher.dispatch(layoutxml, iterdata)
+            local tmp_tab = publisher.dispatch.dispatch(layoutxml, iterdata)
             for j = 1, #tmp_tab do
                 tab[#tab+1] = tmp_tab[j]
             end
@@ -1357,9 +1356,9 @@ function commands.forall( layoutxml,dataxml )
     local tmp_tab
     local current_position
     current_position = publisher.xpath.get_variable("__position")
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
+    local selection = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","xpathraw")
     if not selection then
-        err("Can't iterate over an unknown sequence")
+        main.log("error", "Can't iterate over an unknown sequence")
         return {}
     end
 
@@ -1374,7 +1373,7 @@ function commands.forall( layoutxml,dataxml )
         if type(selection[i]) == "table" then
             selection[i][".__context"] = selection
         end
-        tmp_tab = publisher.dispatch(layoutxml,selection[i])
+        tmp_tab = publisher.dispatch.dispatch(layoutxml,selection[i])
         for j=1,#tmp_tab do
             tab[#tab + 1] = tmp_tab[j]
         end
@@ -1390,19 +1389,19 @@ end
 ---@param dataxml table
 ---@return any
 function commands.frame( layoutxml,dataxml )
-    local tab = publisher.dispatch(layoutxml,dataxml)
-    local b_radius         = publisher.read_attribute(layoutxml,dataxml,"border-radius", "string")
-    local b_b_r_radius     = publisher.read_attribute(layoutxml,dataxml,"border-bottom-right-radius", "string")
-    local b_t_r_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-right-radius",    "string")
-    local b_t_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-left-radius",     "string")
-    local b_b_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-bottom-left-radius",  "string")
-    local framecolor       = publisher.read_attribute(layoutxml,dataxml,"framecolor",                 "string")
-    local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"background-color",            "string")
-    backgroundcolor        = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor",            "string", backgroundcolor)
-    local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",                  "length_sp", 26312) -- 0.4bp
-    local class            = publisher.read_attribute(layoutxml,dataxml,"class",                      "string")
-    local id               = publisher.read_attribute(layoutxml,dataxml,"id",                         "string")
-    local clip             = publisher.read_attribute(layoutxml,dataxml,"clip",                       "boolean", true)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
+    local b_radius         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"border-radius", "string")
+    local b_b_r_radius     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"border-bottom-right-radius", "string")
+    local b_t_r_radius     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"border-top-right-radius",    "string")
+    local b_t_l_radius     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"border-top-left-radius",     "string")
+    local b_b_l_radius     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"border-bottom-left-radius",  "string")
+    local framecolor       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"framecolor",                 "string")
+    local backgroundcolor  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"background-color",            "string")
+    backgroundcolor        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"backgroundcolor",            "string", backgroundcolor)
+    local rulewidth_sp     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"rulewidth",                  "length_sp", 26312) -- 0.4bp
+    local class            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"class",                      "string")
+    local id               = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"id",                         "string")
+    local clip             = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"clip",                       "boolean", true)
 
     local css_rules = publisher.css:matches({element = 'frame', class=class,id=id}) or {}
 
@@ -1412,13 +1411,13 @@ function commands.frame( layoutxml,dataxml )
     b_t_l_radius = b_t_l_radius or b_radius or css_rules["border-top-left-radius"]
 
     for i=1,#tab do
-        local contents = publisher.element_contents(tab[i])
+        local contents = publisher.xml_helpers.element_contents(tab[i])
         if node.is_node(contents) then
             -- This case is for <Textblock>...
             if backgroundcolor then
-                contents = publisher.background(contents,backgroundcolor)
+                contents = publisher.drawing.background(contents,backgroundcolor)
             end
-            tab[i].contents = publisher.frame({
+            tab[i].contents = publisher.drawing.frame({
                 box       = contents,
                 clip      = clip,
                 colorname = framecolor,
@@ -1433,9 +1432,9 @@ function commands.frame( layoutxml,dataxml )
             for j=1,#contents do
                 if node.is_node(contents[j]) then
                     if backgroundcolor then
-                        contents[j] = publisher.background(contents[j],backgroundcolor)
+                        contents[j] = publisher.drawing.background(contents[j],backgroundcolor)
                     end
-                    contents[j] = publisher.frame({
+                    contents[j] = publisher.drawing.frame({
                         box       = contents[j],
                         clip      = clip,
                         colorname = framecolor,
@@ -1463,19 +1462,19 @@ function commands.func(layoutxml, dataxml)
         main.log("error","For function definitions you need the new XPath parser")
         return
     end
-    local name = publisher.read_attribute(layoutxml, dataxml, "name", "string")
+    local name = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "name", "string")
     local params = {}
 
     local exploded = string.explode(name,":")
     if #exploded ~= 2 then
-        err("function name needs a prefix and a name")
+        main.log("error", "function name needs a prefix and a name")
     end
     local prefix, functionname
     prefix = exploded[1]
     functionname = exploded[2]
     local ns = dataxml.namespaces[prefix]
     if not ns then
-        err("No namespace defined for prefix %q",prefix)
+        main.log("error", string.format("No namespace defined for prefix %q", prefix))
         return
     end
 
@@ -1493,12 +1492,12 @@ function commands.func(layoutxml, dataxml)
             copy.vars[params[i]] = arg[i]
         end
 
-        local x = publisher.dispatch(layoutxml,copy)
+        local x = publisher.dispatch.dispatch(layoutxml,copy)
         local res = {}
         local has_value = false
         for i = 1, #x do
             local thiselt = x[i]
-            local eltname = publisher.elementname(thiselt)
+            local eltname = publisher.xml_helpers.elementname(thiselt)
             if eltname ~= "Param" then
                 res[#res+1] = thiselt
             end
@@ -1533,7 +1532,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.param(layoutxml, dataxml)
-    local name = publisher.read_attribute(layoutxml, dataxml, "name", "string")
+    local name = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "name", "string")
     return name
 end
 -- Grid
@@ -1543,12 +1542,12 @@ end
 ---@param dataxml table
 ---@return any
 function commands.grid( layoutxml,dataxml )
-    local width  = publisher.read_attribute(layoutxml,dataxml,"width",  "length_sp")
-    local height = publisher.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --PG
-    local nx     = publisher.read_attribute(layoutxml,dataxml,"nx",     "string")
-    local ny     = publisher.read_attribute(layoutxml,dataxml,"ny",     "string")
-    local dx     = publisher.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
-    local dy     = publisher.read_attribute(layoutxml,dataxml,"dy",     "length_sp")
+    local width  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width",  "length_sp")
+    local height = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"height", "length_sp") -- shouldn't this be height_sp??? --PG
+    local nx     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"nx",     "string")
+    local ny     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"ny",     "string")
+    local dx     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"dx",     "length_sp")
+    local dy     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"dy",     "length_sp")
 
     -- layoutxml and dataxml are used when determining the grid of a pagetype
     return { width = width, height = height, nx = tonumber(nx), ny = tonumber(ny), dx = dx, dy = dy , layoutxml = layoutxml, dataxml = dataxml }
@@ -1563,8 +1562,8 @@ end
 function commands.group( layoutxml,dataxml )
     local elementname
     local grid
-    publisher.setup_page(nil,"commands#group",dataxml)
-    local groupname = publisher.read_attribute(layoutxml,dataxml,"name", "string")
+    publisher.page_helpers.setup_page(nil,"commands#group",dataxml)
+    local groupname = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name", "string")
 
     if publisher.groups[groupname] == nil then
         main.log("debug","Create group","name",groupname)
@@ -1587,7 +1586,7 @@ function commands.group( layoutxml,dataxml )
     r:set_margin(0,0,0,0)
     if grid then
         if grid.nx or grid.ny then
-            err("Setting grid via nx or ny doesn't make sense in groups. Fallback to 1cm.")
+            main.log("error", "Setting grid via nx or ny doesn't make sense in groups. Fallback to 1cm.")
             grid.width = tex.sp("1cm")
             grid.height = grid.width
         end
@@ -1609,7 +1608,7 @@ function commands.group( layoutxml,dataxml )
     for _,v in ipairs(layoutxml) do
         elementname=v[".__local_name"]
         if type(v)=="table" and elementname=="Contents" then
-            publisher.dispatch(v,dataxml)
+            publisher.dispatch.dispatch(v,dataxml)
         end
     end
 
@@ -1624,11 +1623,11 @@ end
 ---@param dataxml table
 ---@return any
 function commands.groupcontents( layoutxml,dataxml )
-    local name = publisher.read_attribute(layoutxml,dataxml,"name", "string")
+    local name = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name", "string")
     local g = publisher.groups[name]
     if not g then
-        err("group %q does not exist!",tostring(name))
-        return {publisher.emergency_block()}
+        main.log("error", string.format("group %q does not exist!", tostring(name)))
+        return {publisher.page_helpers.emergency_block()}
     end
     return {node.copy(g.contents)}
 end
@@ -1642,8 +1641,8 @@ end
 ---@param dataxml table
 ---@return any
 function commands.html( layoutxml,dataxml)
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select", "xpathraw")
-    local expand_text = publisher.read_attribute(layoutxml,dataxml,"expand-text", "string", "no")
+    local selection = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select", "xpathraw")
+    local expand_text = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"expand-text", "string", "no")
     local csstext = publisher.css:gettext()
     local tab
 
@@ -1784,7 +1783,7 @@ function commands.html( layoutxml,dataxml)
     -- Helper function to parse on demand (for non-pull contexts like Textblock/Text)
     local function ensure_parsed()
         if parsed_blocks == nil then
-            parsed_blocks = publisher.parse_html(tab, {}, dataxml)
+            parsed_blocks = publisher.nodes.parse_html(tab, {}, dataxml)
             parsed_blocks = publisher.flatten_boxes(parsed_blocks)
         end
         return parsed_blocks
@@ -1868,7 +1867,7 @@ function commands.html( layoutxml,dataxml)
         local offset_y = (thisframe.row - 1) * cg.gridheight
 
         -- Save original getheight
-        local original_getheight = publisher.getheight
+        local original_getheight = publisher.page_helpers.getheight
 
         while ret._element_index <= #elements do
             -- Check if this element was already parsed
@@ -1883,7 +1882,7 @@ function commands.html( layoutxml,dataxml)
                 if is_table then
                     local current_remaining = remaining_height
                     local page_content_height = parameters.page_height_sp - margin_top
-                    publisher.getheight = function(relative_framenumber, dxml)
+                    publisher.page_helpers.getheight = function(relative_framenumber, dxml)
                         if relative_framenumber == 1 then
                             return current_remaining
                         else
@@ -1922,11 +1921,11 @@ function commands.html( layoutxml,dataxml)
                 end
 
                 -- Parse this single element (only once!)
-                local parsed = publisher.parse_html(temp_tree, {}, dataxml)
+                local parsed = publisher.nodes.parse_html(temp_tree, {}, dataxml)
                 parsed = publisher.flatten_boxes(parsed)
 
                 -- Restore original getheight
-                publisher.getheight = original_getheight
+                publisher.page_helpers.getheight = original_getheight
 
                 -- Format all blocks immediately (they can only be formatted once!)
                 local formatted_objects = {}
@@ -1989,7 +1988,7 @@ function commands.html( layoutxml,dataxml)
                             }
                         end
 
-                        publisher.output_absolute_position({
+                        publisher.page_helpers.output_absolute_position({
                             nodelist = pobj,
                             x = offset_x,
                             y = pactual_y + offset_y,
@@ -2063,7 +2062,7 @@ function commands.html( layoutxml,dataxml)
                     local margin_overlap = math.min(ret._prev_margin_bottom, pmargin_top)
                     local pactual_y = current_y_sp - margin_overlap
 
-                    publisher.output_absolute_position({
+                    publisher.page_helpers.output_absolute_position({
                         nodelist = pobj,
                         x = x_sp + offset_x,
                         y = pactual_y + offset_y,
@@ -2101,7 +2100,7 @@ function commands.html( layoutxml,dataxml)
                 local actual_y = current_y_sp - margin_overlap
 
                 -- Check for page break conditions
-                local break_before = publisher.getprop(obj, "break_before") or item.break_before
+                local break_before = publisher.attribute_helpers.getprop(obj, "break_before") or item.break_before
                 local remaining_height = parameters.page_height_sp - actual_y
 
                 -- Handle break-before: page/always
@@ -2134,12 +2133,12 @@ function commands.html( layoutxml,dataxml)
                             balance = 1,
                         }
                         local objects_for_split = {obj}
-                        local first_part = publisher.vsplit(objects_for_split, split_param)
+                        local first_part = publisher.page_helpers.vsplit(objects_for_split, split_param)
 
                         if first_part and first_part.height > 0 then
                             -- Output the first part
                             local x_sp = 0
-                            publisher.output_absolute_position({
+                            publisher.page_helpers.output_absolute_position({
                                 nodelist = first_part,
                                 x = x_sp + offset_x,
                                 y = actual_y + offset_y,
@@ -2177,7 +2176,7 @@ function commands.html( layoutxml,dataxml)
                             end
                             -- If page is empty, output anyway (avoid infinite loop)
                             local x_sp = 0
-                            publisher.output_absolute_position({
+                            publisher.page_helpers.output_absolute_position({
                                 nodelist = obj,
                                 x = x_sp + offset_x,
                                 y = actual_y + offset_y,
@@ -2198,7 +2197,7 @@ function commands.html( layoutxml,dataxml)
                     else
                         -- Page is empty, output anyway to avoid infinite loop
                         local x_sp = 0
-                        publisher.output_absolute_position({
+                        publisher.page_helpers.output_absolute_position({
                             nodelist = obj,
                             x = x_sp + offset_x,
                             y = actual_y + offset_y,
@@ -2213,7 +2212,7 @@ function commands.html( layoutxml,dataxml)
                 else
                     -- Object fits - output it normally
                     local x_sp = 0
-                    publisher.output_absolute_position({
+                    publisher.page_helpers.output_absolute_position({
                         nodelist = obj,
                         x = x_sp + offset_x,
                         y = actual_y + offset_y,
@@ -2263,7 +2262,7 @@ function commands.html( layoutxml,dataxml)
                     }
                 end
 
-                publisher.output_absolute_position({
+                publisher.page_helpers.output_absolute_position({
                     nodelist = pobj,
                     x = x_sp + offset_x,
                     y = pactual_y + offset_y,
@@ -2300,10 +2299,10 @@ end
 ---@param dataxml table
 ---@return any
 function commands.hspace( layoutxml,dataxml )
-    local width      = publisher.read_attribute(layoutxml,dataxml,"width", "length_sp")
-    local minwidth   = publisher.read_attribute(layoutxml,dataxml,"minwidth", "length_sp")
-    local leadertext = publisher.read_attribute(layoutxml,dataxml,"leader", "string")
-    local leaderwd   = publisher.read_attribute(layoutxml,dataxml,"leader-width", "length_sp")
+    local width      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width", "length_sp")
+    local minwidth   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"minwidth", "length_sp")
+    local leadertext = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"leader", "string")
+    local leaderwd   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"leader-width", "length_sp")
     local a = publisher.par:new(nil,"hspace")
 
     -- We insert a function that gets called in paragraph creation
@@ -2318,7 +2317,7 @@ function commands.hspace( layoutxml,dataxml )
         end
         if leadertext then
             n.subtype = 100
-            n.leader = publisher.mknodes(leadertext,options)
+            n.leader = publisher.nodes.mknodes(leadertext,options)
             node.set_attribute(n.leader, publisher.att_leaderwd, leaderwd or -1)
         end
 
@@ -2332,10 +2331,10 @@ function commands.hspace( layoutxml,dataxml )
         -- TODO: also copy all other attributes necessary for styling
         local att_tbl = {color = options.color, hyperlink = options.hyperlink }
 
-        publisher.set_attributes(p1,att_tbl)
-        publisher.set_attributes(p2,att_tbl)
-        publisher.set_attributes(h1,att_tbl)
-        publisher.set_attributes(n,att_tbl)
+        publisher.attribute_helpers.set_attributes(p1,att_tbl)
+        publisher.attribute_helpers.set_attributes(p2,att_tbl)
+        publisher.attribute_helpers.set_attributes(h1,att_tbl)
+        publisher.attribute_helpers.set_attributes(n,att_tbl)
 
         node.insert_after(p1,p1,h1)
         node.insert_after(p1,h1,p2)
@@ -2354,15 +2353,15 @@ end
 ---@param dataxml table
 ---@return any
 function commands.hyphenation( layoutxml,dataxml )
-    local languagename = publisher.read_attribute(layoutxml,dataxml,"language","string")
+    local languagename = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"language","string")
     local languagecode
     if languagename then
-        languagecode = publisher.get_languagecode(languagename)
+        languagecode = publisher.language.get_languagecode(languagename)
     else
         languagecode = publisher.defaultlanguage
     end
 
-    local l = publisher.get_language(languagecode)
+    local l = publisher.language.get_language(languagecode)
     lang.hyphenation(l.l,layoutxml[1])
 end
 
@@ -2373,7 +2372,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.include( layoutxml,dataxml )
-    return publisher.dispatch(layoutxml,dataxml)
+    return publisher.dispatch.dispatch(layoutxml,dataxml)
 end
 
 local box_lookup = {
@@ -2392,37 +2391,37 @@ local box_lookup = {
 ---@param dataxml table
 ---@return any
 function commands.image( layoutxml,dataxml )
-    local bleed        = publisher.read_attribute(layoutxml,dataxml,"bleed" ,      "string")
-    local class        = publisher.read_attribute(layoutxml,dataxml,"class",       "string")
-    local clip         = publisher.read_attribute(layoutxml,dataxml,"clip",        "boolean")
-    local description  = publisher.read_attribute(layoutxml,dataxml,"description", "string")
-    local dpiwarn      = publisher.read_attribute(layoutxml,dataxml,"dpiwarn",     "number")
-    local fallback     = publisher.read_attribute(layoutxml,dataxml,"fallback",    "string")
-    local filename     = publisher.read_attribute(layoutxml,dataxml,"file",        "string")
-    local height       = publisher.read_attribute(layoutxml,dataxml,"height",      "string")
-    local id           = publisher.read_attribute(layoutxml,dataxml,"id",          "string")
-    local imageshape   = publisher.read_attribute(layoutxml,dataxml,"imageshape",  "boolean",false)
-    local imagetype    = publisher.read_attribute(layoutxml,dataxml,"imagetype",   "string")
-    local margin_bottom = publisher.read_attribute(layoutxml,dataxml,"margin-bottom","length_sp")
-    local margin_left  = publisher.read_attribute(layoutxml,dataxml,"margin-left", "length_sp")
-    local margin_right = publisher.read_attribute(layoutxml,dataxml,"margin-right","length_sp")
-    local margin_top   = publisher.read_attribute(layoutxml,dataxml,"margin-top",  "length_sp")
+    local bleed        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"bleed" ,      "string")
+    local class        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"class",       "string")
+    local clip         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"clip",        "boolean")
+    local description  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"description", "string")
+    local dpiwarn      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"dpiwarn",     "number")
+    local fallback     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fallback",    "string")
+    local filename     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"file",        "string")
+    local height       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"height",      "string")
+    local id           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"id",          "string")
+    local imageshape   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"imageshape",  "boolean",false)
+    local imagetype    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"imagetype",   "string")
+    local margin_bottom = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"margin-bottom","length_sp")
+    local margin_left  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"margin-left", "length_sp")
+    local margin_right = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"margin-right","length_sp")
+    local margin_top   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"margin-top",  "length_sp")
     -- deprecated since 2.7.5:
-    local max_box      = publisher.read_attribute(layoutxml,dataxml,"maxsize",     "string")
-    local maxheight    = publisher.read_attribute(layoutxml,dataxml,"maxheight",   "string")
-    local maxwidth     = publisher.read_attribute(layoutxml,dataxml,"maxwidth",    "string")
-    local minheight    = publisher.read_attribute(layoutxml,dataxml,"minheight",   "string")
-    local minwidth     = publisher.read_attribute(layoutxml,dataxml,"minwidth",    "string")
-    local opacity      = publisher.read_attribute(layoutxml,dataxml,"opacity",     "number")
-    local page         = publisher.read_attribute(layoutxml,dataxml,"page",        "number")
-    local parent       = publisher.read_attribute(layoutxml,dataxml,"parent",      "string")
-    local role         = publisher.read_attribute(layoutxml,dataxml,"role",        "string", "Figure")
-    local rotate       = publisher.read_attribute(layoutxml,dataxml,"rotate",      "number")
-    local stretch      = publisher.read_attribute(layoutxml,dataxml,"stretch",     "boolean",false)
-    local url          = publisher.read_attribute(layoutxml,dataxml,"href",        "string")
-    local valign       = publisher.read_attribute(layoutxml,dataxml,"vertical-align","string")
-    local vis_box      = publisher.read_attribute(layoutxml,dataxml,"visiblebox",  "string")
-    local width        = publisher.read_attribute(layoutxml,dataxml,"width",       "string")
+    local max_box      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"maxsize",     "string")
+    local maxheight    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"maxheight",   "string")
+    local maxwidth     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"maxwidth",    "string")
+    local minheight    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"minheight",   "string")
+    local minwidth     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"minwidth",    "string")
+    local opacity      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"opacity",     "number")
+    local page         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"page",        "number")
+    local parent       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"parent",      "string")
+    local role         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"role",        "string", "Figure")
+    local rotate       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"rotate",      "number")
+    local stretch      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"stretch",     "boolean",false)
+    local url          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"href",        "string")
+    local valign       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"vertical-align","string")
+    local vis_box      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"visiblebox",  "string")
+    local width        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width",       "string")
 
     local css_rules    = publisher.css:matches({element = 'img', class=class,id=id}) or {}
 
@@ -2445,7 +2444,7 @@ function commands.image( layoutxml,dataxml )
 
     local tmpattr
     for attname,atttyp in pairs(attribute) do
-        tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+        tmpattr = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,attname,atttyp)
         if tmpattr then
             tab[attname] = tmpattr
         end
@@ -2465,23 +2464,23 @@ function commands.image( layoutxml,dataxml )
     -- width = 100%  => take width from surrounding area
     -- auto on any value ({max,min}?{width,height}) is default
 
-    local children = publisher.dispatch(layoutxml,dataxml)
+    local children = publisher.dispatch.dispatch(layoutxml,dataxml)
     if #children > 0 then
         if not imagetype then
-            err("Cannot handle image without imagetype")
+            main.log("error", "Cannot handle image without imagetype")
             filename = nil
         elseif imagetype == "metapost" then
-            return publisher.do_metapostimage(dataxml,children[1].contents,width,height,clip)
+            return publisher.drawing.do_metapostimage(dataxml,children[1].contents,width,height,clip)
         else
-            log("Image: found %q contents",imagetype or "?")
+            main.log("info", string.format("Image: found %q contents", imagetype or "?"))
             local elt = children[1]
-            local contents = publisher.element_contents(elt)
-            if publisher.elementname(elt) == "Value" and type(contents) == "table" then
-                contents = publisher.xml_stringvalue(contents)
+            local contents = publisher.xml_helpers.element_contents(elt)
+            if publisher.xml_helpers.elementname(elt) == "Value" and type(contents) == "table" then
+                contents = publisher.xml_helpers.xml_stringvalue(contents)
             end
             local ih = publisher.imagehandler[imagetype]
             if not ih then
-                err("No imagehandler for image type %s found.",imagetype)
+                main.log("error", string.format("No imagehandler for image type %s found.", imagetype))
             else
                 filename = splib.convertcontents(contents,ih)
             end
@@ -2493,16 +2492,16 @@ function commands.image( layoutxml,dataxml )
     if filename and string.match(filename,"%.mp$") then
         local mpfile, msg = io.open(filename,"r")
         if mpfile == nil then
-            err(msg)
+            main.log("error", msg)
             return nil
         end
         local contents = mpfile:read("*a")
         mpfile:close()
-        return publisher.do_metapostimage(dataxml,contents,width,height,clip)
+        return publisher.drawing.do_metapostimage(dataxml,contents,width,height,clip)
     end
 
     local imageinfo
-    imageinfo = publisher.new_image(filename,page,box_lookup[vis_box] or "crop", fallback,imageshape)
+    imageinfo = publisher.images.new_image(filename,page,box_lookup[vis_box] or "crop", fallback,imageshape)
 
     local image = img.copy(imageinfo.img)
     if rotate then
@@ -2517,19 +2516,19 @@ function commands.image( layoutxml,dataxml )
         elseif rotate == 0 or rotate == 360 or rotate == 360 then
             image.transform = 0
         else
-            err("Image/rotate: rotation must be between -360 and 360 and given in multiple of 90")
+            main.log("error", "Image/rotate: rotation must be between -360 and 360 and given in multiple of 90")
         end
     end
 
-    height    = publisher.set_image_length(dataxml,height,   "height") or image.height
-    width     = publisher.set_image_length(dataxml,width,    "width" ) or image.width
-    minheight = publisher.set_image_length(dataxml,minheight,"height") or 0
-    minwidth  = publisher.set_image_length(dataxml,minwidth, "width" ) or 0
-    maxheight = publisher.set_image_length(dataxml,maxheight,"height") or publisher.maxdimen
-    maxwidth  = publisher.set_image_length(dataxml,maxwidth, "width" ) or publisher.maxdimen
+    height    = publisher.images.set_image_length(dataxml,height,   "height") or image.height
+    width     = publisher.images.set_image_length(dataxml,width,    "width" ) or image.width
+    minheight = publisher.images.set_image_length(dataxml,minheight,"height") or 0
+    minwidth  = publisher.images.set_image_length(dataxml,minwidth, "width" ) or 0
+    maxheight = publisher.images.set_image_length(dataxml,maxheight,"height") or publisher.maxdimen
+    maxwidth  = publisher.images.set_image_length(dataxml,maxwidth, "width" ) or publisher.maxdimen
 
     if not clip then
-        width, height = publisher.calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight,stretch)
+        width, height = publisher.images.calculate_image_width_height( image, width,height,minwidth,minheight,maxwidth, maxheight,stretch)
 
 
         local destdpi = tonumber(publisher.options.dpi)
@@ -2544,9 +2543,9 @@ function commands.image( layoutxml,dataxml )
                     local destpx_x = math.round(destdpi * width / publisher.factor / 72,0)
                     local destpx_y = math.round(destdpi * height / publisher.factor / 72,0)
 
-                    filename = publisher.reload_image(image.filepath,image.imagetype,destpx_x, destpx_y)
+                    filename = publisher.images.reload_image(image.filepath,image.imagetype,destpx_x, destpx_y)
                     if filename then
-                        imageinfo = publisher.new_image(filename,page,box_lookup[vis_box] or "crop", fallback,imageshape)
+                        imageinfo = publisher.images.new_image(filename,page,box_lookup[vis_box] or "crop", fallback,imageshape)
                         image = img.copy(imageinfo.img)
                     end
                 end
@@ -2649,14 +2648,14 @@ function commands.image( layoutxml,dataxml )
 
     local imagenode = img.node(image)
     if publisher.options.format == "PDF/UA" then
-        local figrole = publisher.get_rolenum(role)
-        publisher.setprop(imagenode,"role",figrole)
+        local figrole = publisher.structure_tree.get_rolenum(role)
+        publisher.attribute_helpers.setprop(imagenode,"role",figrole)
         if parent then
-            publisher.setprop(imagenode,"parent",parent)
+            publisher.attribute_helpers.setprop(imagenode,"parent",parent)
         end
         publisher.rolecounter = publisher.rolecounter + 1
-        publisher.setprop(imagenode,"rolecounter",publisher.rolecounter)
-        publisher.setprop(imagenode,"alttext",description)
+        publisher.attribute_helpers.setprop(imagenode,"rolecounter",publisher.rolecounter)
+        publisher.attribute_helpers.setprop(imagenode,"alttext",description)
     end
 
     if opacity then
@@ -2668,8 +2667,8 @@ function commands.image( layoutxml,dataxml )
         local group_attr = "/Group << /Type /Group /S /Transparency /I true /CS /DeviceRGB >>"
         local idx = tex.saveboxresource(ibox, group_attr, nil, true)
         imagenode = tex.useboxresource(idx, width, height, 0)
-        publisher.transparentcolorstack()
-        publisher.setprop(imagenode,"opacity",opacity)
+        publisher.drawing.transparentcolorstack()
+        publisher.attribute_helpers.setprop(imagenode,"opacity",opacity)
     end
     local head, hbox = imagenode, imagenode
     if margin_left then
@@ -2758,7 +2757,7 @@ function commands.image( layoutxml,dataxml )
 
     else
         box = node.vpack(imagenode)
-        publisher.setprop(box,"origin","image")
+        publisher.attribute_helpers.setprop(box,"origin","image")
         node.set_attribute(box,publisher.att_lineheight,box.height)
         node.set_attribute(box, publisher.att_shift_left, padding_shift_left)
         node.set_attribute(box, publisher.att_shift_up  , padding_shift_up  )
@@ -2766,10 +2765,10 @@ function commands.image( layoutxml,dataxml )
         box.height = box.height - padding_shift_up
     end
     if valign then
-        publisher.setprop(box,"vertical-align",valign)
+        publisher.attribute_helpers.setprop(box,"vertical-align",valign)
     end
     if publisher.options.showobjects then
-        box = publisher.boxit(box)
+        box = publisher.drawing.boxit(box)
     end
     return {box,imageinfo.allocate}
 end
@@ -2781,57 +2780,57 @@ end
 ---@param dataxml table
 ---@return any
 function commands.initial( layoutxml,dataxml)
-    local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",        "string")
-    local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",     "string")
-    local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily",   "string",fontname)
-    local padding_left   = publisher.read_attribute(layoutxml,dataxml,"padding-left", "length_sp",0)
-    local padding_right  = publisher.read_attribute(layoutxml,dataxml,"padding-right","length_sp",0)
-    local padding_top    = publisher.read_attribute(layoutxml,dataxml,"padding-top", "length_sp",0)
-    local padding_bottom = publisher.read_attribute(layoutxml,dataxml,"padding-bottom","length_sp",0)
-    if fontname then warning("Initial/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
+    local colorname      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"color",        "string")
+    local fontname       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontface",     "string")
+    local fontfamilyname = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontfamily",   "string",fontname)
+    local padding_left   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"padding-left", "length_sp",0)
+    local padding_right  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"padding-right","length_sp",0)
+    local padding_top    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"padding-top", "length_sp",0)
+    local padding_bottom = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"padding-bottom","length_sp",0)
+    if fontname then main.log("warn", "Initial/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     local fontfamily = 0
     if fontfamilyname then
         fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
         if fontfamily == nil then
-            err("Fontfamily %q not found.",fontfamilyname)
+            main.log("error", string.format("Fontfamily %q not found.", fontfamilyname))
             fontfamily = 0
         end
     end
 
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     local initialvalue
     for i,j in ipairs(tab) do
-        if publisher.elementname(j) == "Value" and type(publisher.element_contents(j)) == "table" then
+        if publisher.xml_helpers.elementname(j) == "Value" and type(publisher.xml_helpers.element_contents(j)) == "table" then
             if publisher.newxpath then
-                initialvalue = publisher.xpath.string_value(publisher.element_contents(j))
+                initialvalue = publisher.xpath.string_value(publisher.xml_helpers.element_contents(j))
             else
-                initialvalue = table.concat(publisher.element_contents(j))
+                initialvalue = table.concat(publisher.xml_helpers.element_contents(j))
             end
         else
-            initialvalue = publisher.element_contents(j)
+            initialvalue = publisher.xml_helpers.element_contents(j)
         end
     end
     local box
-    box = publisher.mknodes(initialvalue,{fontfamily = fontfamily,color = colors_module.get_colorindex_from_name(colorname,"black")})
-    box = publisher.addstrut(box,"head","initial")
-    publisher.finish_par(box,nil,{})
+    box = publisher.nodes.mknodes(initialvalue,{fontfamily = fontfamily,color = colors_module.get_colorindex_from_name(colorname,"black")})
+    box = publisher.nodes.addstrut(box,"head","initial")
+    publisher.nodes.finish_par(box,nil,{})
     box = node.hpack(box)
     local head = box
     if padding_left and padding_left ~= 0 then
-        head = node.insert_before(box,box,publisher.make_glue({width = padding_left}))
+        head = node.insert_before(box,box,publisher.nodes.make_glue({width = padding_left}))
     end
     if padding_right and padding_right ~= 0 then
-        head = node.insert_after(head,box,publisher.make_glue({width = padding_right}))
+        head = node.insert_after(head,box,publisher.nodes.make_glue({width = padding_right}))
     end
     box = node.hpack(head)
     head = box
 
     if padding_top and padding_top ~= 0 then
-        head = node.insert_before(box,box,publisher.make_glue({width = padding_top}))
+        head = node.insert_before(box,box,publisher.nodes.make_glue({width = padding_top}))
     end
     if padding_bottom and padding_bottom ~= 0 then
-        head = node.insert_after(head,box,publisher.make_glue({width = padding_bottom}))
+        head = node.insert_after(head,box,publisher.nodes.make_glue({width = padding_bottom}))
     end
     box = node.vpack(head)
 
@@ -2845,15 +2844,15 @@ end
 ---@param dataxml table
 ---@return any
 function commands.insert_pages( layoutxml,dataxml )
-    local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","string")
-    local pages          = publisher.read_attribute(layoutxml,dataxml,"pages","number")
+    local pagestore_name = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name","string")
+    local pages          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"pages","number")
 
     local current_pagenumber = publisher.current_pagenumber
     local thispagestore = publisher.pagestore[pagestore_name]
     if not thispagestore then
         -- Forward mode: re-order pages
         if not pages then
-            err("For future mode please provide the number of pages to insert.")
+            main.log("error", "For future mode please provide the number of pages to insert.")
             return
         end
         local thispage = publisher.pages[current_pagenumber]
@@ -2863,10 +2862,10 @@ function commands.insert_pages( layoutxml,dataxml )
         -- If we insert before the first page, we don't need to to anything.
         -- Otherwise finish the current page.
         -- This duplicates code in publisher#initialize_luatex_and_generate_pdf
-        if publisher.page_initialized_p(current_pagenumber) and current_pagenumber > 1 then
-            publisher.dothingsbeforeoutput(thispage,dataxml)
+        if publisher.page_helpers.page_initialized_p(current_pagenumber) and current_pagenumber > 1 then
+            publisher.page_helpers.dothingsbeforeoutput(thispage,dataxml)
             local n = node.vpack(publisher.pages[current_pagenumber].pagebox)
-            publisher.shipout(n,current_pagenumber)
+            publisher.page_helpers.shipout(n,current_pagenumber)
             current_pagenumber = current_pagenumber + 1
         end
 
@@ -2883,7 +2882,7 @@ function commands.insert_pages( layoutxml,dataxml )
     end
     local tmp = publisher.pages[publisher.current_pagenumber]
     if not tmp and not publisher.pages_shippedout[current_pagenumber - 1] then
-        publisher.setup_page(publisher.current_pagenumber,"insert_pages",dataxml)
+        publisher.page_helpers.setup_page(publisher.current_pagenumber,"insert_pages",dataxml)
         current_pagenumber = publisher.current_pagenumber
     end
     main.log("info","InsertPages backward mode","name", pagestore_name)
@@ -2905,9 +2904,9 @@ end
 ---@return any
 function commands.italic( layoutxml,dataxml )
     local p = publisher.par:new(nil,"I")
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
-        local c = publisher.element_contents(j)
+        local c = publisher.xml_helpers.element_contents(j)
         p:append(c,{italic = 1})
     end
     return p
@@ -2921,9 +2920,9 @@ end
 ---@return any
 function commands.li(layoutxml,dataxml )
     local p = publisher.par:new(nil,"li")
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
-        local c = publisher.element_contents(j)
+        local c = publisher.xml_helpers.element_contents(j)
         p:append(c,{padding_left = 0})
     end
     return p
@@ -2938,19 +2937,19 @@ end
 ---@param dataxml table
 ---@return any
 function commands.load_fontfile( layoutxml,dataxml )
-    local features         = publisher.read_attribute(layoutxml,dataxml,"features",        "string")
-    local filename         = publisher.read_attribute(layoutxml,dataxml,"filename",        "string")
-    local marginprotrusion = publisher.read_attribute(layoutxml,dataxml,"marginprotrusion","number")
-    local mode             = publisher.read_attribute(layoutxml,dataxml,"mode",            "string", publisher.options.fontloader)
-    local name             = publisher.read_attribute(layoutxml,dataxml,"name",            "string")
-    local osf              = publisher.read_attribute(layoutxml,dataxml,"oldstylefigures", "boolean")
-    local shrink           = publisher.read_attribute(layoutxml,dataxml,"shrink",          "number")
-    local smcp             = publisher.read_attribute(layoutxml,dataxml,"smallcaps",       "string")
-    local space            = publisher.read_attribute(layoutxml,dataxml,"space",           "number")
-    local step             = publisher.read_attribute(layoutxml,dataxml,"step",            "number")
-    local stretch          = publisher.read_attribute(layoutxml,dataxml,"stretch",         "number")
-    local weight           = publisher.read_attribute(layoutxml,dataxml,"weight",          "number")
-    local width            = publisher.read_attribute(layoutxml,dataxml,"width",           "number")
+    local features         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"features",        "string")
+    local filename         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"filename",        "string")
+    local marginprotrusion = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"marginprotrusion","number")
+    local mode             = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"mode",            "string", publisher.options.fontloader)
+    local name             = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name",            "string")
+    local osf              = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"oldstylefigures", "boolean")
+    local shrink           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"shrink",          "number")
+    local smcp             = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"smallcaps",       "string")
+    local space            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"space",           "number")
+    local step             = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"step",            "number")
+    local stretch          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"stretch",         "number")
+    local weight           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"weight",          "number")
+    local width            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width",           "number")
 
     local fallbacks = {}
     local axes = {}
@@ -2985,12 +2984,12 @@ function commands.load_fontfile( layoutxml,dataxml )
     -- Variable font: pin axes via harfbuzz subsetting
     if next(axes) then
         if not publisher.hasharfbuzzsubset then
-            err("Variable fonts require the luaharfbuzzsubset library")
+            main.log("error", "Variable fonts require the luaharfbuzzsubset library")
         else
             if publisher.lowercase then filename = unicode.utf8.lower(filename) end
             local filepath = kpse.find_file(filename)
             if not filepath then
-                err("Variable font file %q not found",filename)
+                main.log("error", string.format("Variable font file %q not found", filename))
             else
                 local face = publisher.harfbuzz.Face.new(filepath)
                 local input = publisher.harfbuzzsubset.SubsetInput.new()
@@ -3018,10 +3017,10 @@ function commands.load_fontfile( layoutxml,dataxml )
                         for k,v in pairs(axes) do axis_desc[#axis_desc+1] = k .. "=" .. v end
                         main.log("info","Variable font instance created","axes",table.concat(axis_desc,","),"file",outpath)
                     else
-                        err("Could not write variable font instance: %s", e)
+                        main.log("error", string.format("Could not write variable font instance: %s", e))
                     end
                 else
-                    err("SP_TEMPDIR not set, cannot create variable font instance")
+                    main.log("error", "SP_TEMPDIR not set, cannot create variable font instance")
                 end
             end
         end
@@ -3070,8 +3069,8 @@ end
 ---@return any
 function commands.load_dataset( layoutxml,dataxml )
     local path
-    local filename = publisher.read_attribute(layoutxml,dataxml,"filename", "string")
-    local name = publisher.read_attribute(layoutxml,dataxml,"name", "string")
+    local filename = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"filename", "string")
+    local name = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name", "string")
     if filename then
         main.log("info","Load data file","filename",filename)
         path = kpse.find_file(filename)
@@ -3080,7 +3079,7 @@ function commands.load_dataset( layoutxml,dataxml )
         main.log("info","Load data file","filename",name)
         path = kpse.find_file(name)
     else
-        err("LoadDataset: no (file)name given.")
+        main.log("error", "LoadDataset: no (file)name given.")
     end
 
     if path == nil then
@@ -3089,14 +3088,14 @@ function commands.load_dataset( layoutxml,dataxml )
     end
     local root_name
     if publisher.newxpath then
-        local tmp_data = publisher.load_xml(name or filename)
+        local tmp_data = publisher.xml_helpers.load_xml(name or filename)
         local tmpctx = publisher.xpath.context:new()
         tmpctx.xmldoc = { tmp_data}
         tmpctx.sequence = { tmp_data }
 
         local seq,msg = tmpctx:eval("local-name(root())")
         if msg then
-            err(msg)
+            main.log("error", msg)
             return
         end
         local copysequence = dataxml.sequence
@@ -3105,14 +3104,14 @@ function commands.load_dataset( layoutxml,dataxml )
         tmpctx:execute("root()")
         dataxml.xmldoc = tmpctx.xmldoc
         dataxml.sequence = tmpctx.sequence
-        publisher.dispatch(publisher.data_dispatcher[""][root_name],dataxml)
+        publisher.dispatch.dispatch(publisher.data_dispatcher[""][root_name],dataxml)
         dataxml.sequence = copysequence
         dataxml.xmldoc = copyxmldoc
     else
-        local tmp_data = publisher.load_xml(name or filename)
+        local tmp_data = publisher.xml_helpers.load_xml(name or filename)
         root_name = tmp_data[".__local_name"]
-        log("Selecting node: %q, mode=%q",root_name,"")
-        publisher.dispatch(publisher.data_dispatcher[""][root_name],tmp_data)
+        main.log("info", string.format("Selecting node: %q, mode=%q", root_name, ""))
+        publisher.dispatch.dispatch(publisher.data_dispatcher[""][root_name],tmp_data)
     end
 end
 
@@ -3128,7 +3127,7 @@ end
 function commands.loop( layoutxml, dataxml )
     local num
     if publisher.newxpath then
-        local numstr = publisher.read_attribute(layoutxml,dataxml,"select","string")
+        local numstr = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","string")
         local copysequence = dataxml.sequence
         local seq, msg = dataxml:eval(numstr)
         dataxml.sequence = copysequence
@@ -3136,14 +3135,14 @@ function commands.loop( layoutxml, dataxml )
         num, msg = publisher.xpath.number_value(seq)
         if msg then return nil, msg end
     else
-        local numstr = publisher.read_attribute(layoutxml,dataxml,"select","xpath")
+        local numstr = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","xpath")
         num = tonumber(numstr)
     end
     if not num then
-        err("loop: can't parse number given in the attribute select: %q",tostring(num))
+        main.log("error", string.format("loop: can't parse number given in the attribute select: %q", tostring(num)))
         return
     end
-    local var = publisher.read_attribute(layoutxml,dataxml,"variable","string")
+    local var = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"variable","string")
     var = var or "_loopcounter"
     local ret = {}
     local tab
@@ -3153,7 +3152,7 @@ function commands.loop( layoutxml, dataxml )
         else
             publisher.xpath.set_variable(var,i)
         end
-        tab = publisher.dispatch(layoutxml,dataxml)
+        tab = publisher.dispatch.dispatch(layoutxml,dataxml)
         for j=1,#tab do
             ret[#ret + 1] = tab[j]
         end
@@ -3169,8 +3168,8 @@ end
 ---@param dataxml table
 ---@return any
 function commands.emptyline( layoutxml,dataxml )
-    warning("EmptyLine is deprecated since 2.7.4. Use NextRow instead.")
-    local areaname = publisher.read_attribute(layoutxml,dataxml,"area","string")
+    main.log("warn", "EmptyLine is deprecated since 2.7.4. Use NextRow instead.")
+    local areaname = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"area","string")
     areaname = areaname or publisher.default_area or publisher.default_areaname
     local current_grid = publisher.current_grid
     local current_row = current_grid:find_suitable_row(1,current_grid:number_of_columns(),1,areaname)
@@ -3191,13 +3190,13 @@ end
 function commands.makeindex( layoutxml,dataxml )
     local selection, selectstring
     if publisher.newxpath then
-        selectstring = publisher.read_attribute(layoutxml,dataxml,"select", "string")
+        selectstring = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select", "string")
     else
-        selection = publisher.read_attribute(layoutxml,dataxml,"select", "xpathraw")
+        selection = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select", "xpathraw")
     end
-    local sortkey        = publisher.read_attribute(layoutxml,dataxml,"sortkey", "string")
-    local sectionname    = publisher.read_attribute(layoutxml,dataxml,"section", "string")
-    local pagenumbername = publisher.read_attribute(layoutxml,dataxml,"pagenumber", "string","page")
+    local sortkey        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"sortkey", "string")
+    local sectionname    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"section", "string")
+    local pagenumbername = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"pagenumber", "string","page")
 
     local section, lastname, lastindex
     local lastfirstletter = ""
@@ -3207,18 +3206,18 @@ function commands.makeindex( layoutxml,dataxml )
         local msg
         selection, msg = dataxml:eval(selectstring)
         if msg then
-            err(msg)
+            main.log("error", msg)
         end
     end
 
-    publisher.stable_sort(selection,function(elta,eltb)
+    publisher.utilities.stable_sort(selection,function(elta,eltb)
         return string.lower(elta[sortkey]) < string.lower(eltb[sortkey])
     end)
 
     for i=1,#selection do
         local tmp = string.sub(selection[i][sortkey],1,1)
         if tmp == nil or tmp == "" then
-            err("Incorrect index entry - no contents?")
+            main.log("error", "Incorrect index entry - no contents?")
         else
             local startletter = string.upper(tmp)
 
@@ -3239,7 +3238,7 @@ function commands.makeindex( layoutxml,dataxml )
             -- The current implementation only concatenates page numbers
             if selection[i].name == lastname and pagenumbername ~= "" then
                 if not selection[lastindex][pagenumbername] then
-                    err("Can't find the page number in the index entries. Did you set the pagenumber attribute in Makeindex?")
+                    main.log("error", "Can't find the page number in the index entries. Did you set the pagenumber attribute in Makeindex?")
                 else
                     selection[lastindex][pagenumbername] = selection[lastindex][pagenumbername] .. ", " .. selection[i][pagenumbername]
                     if publisher.newxpath then
@@ -3265,12 +3264,12 @@ end
 ---@param dataxml table
 ---@return any
 function commands.margin( layoutxml,dataxml )
-    local left   = publisher.read_attribute(layoutxml,dataxml,"left", "length_sp")
-    local right  = publisher.read_attribute(layoutxml,dataxml,"right","length_sp")
-    local top    = publisher.read_attribute(layoutxml,dataxml,"top",  "length_sp")
-    local bottom = publisher.read_attribute(layoutxml,dataxml,"bottom", "length_sp")
-    local inner  = publisher.read_attribute(layoutxml,dataxml,"inner", "length_sp")
-    local outer  = publisher.read_attribute(layoutxml,dataxml,"outer", "length_sp")
+    local left   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"left", "length_sp")
+    local right  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"right","length_sp")
+    local top    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"top",  "length_sp")
+    local bottom = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"bottom", "length_sp")
+    local inner  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"inner", "length_sp")
+    local outer  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"outer", "length_sp")
 
     return function(page)
         if inner or outer then
@@ -3293,10 +3292,10 @@ end
 ---@param dataxml table
 ---@return any
 function commands.mark( layoutxml,dataxml )
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
-    local append    = publisher.read_attribute(layoutxml,dataxml,"append","boolean")
-    local pdftarget = publisher.read_attribute(layoutxml,dataxml,"pdftarget","boolean")
-    local shiftup   = publisher.read_attribute(layoutxml,dataxml,"shiftup","height_sp")
+    local selection = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","xpathraw")
+    local append    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"append","boolean")
+    local pdftarget = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"pdftarget","boolean")
+    local shiftup   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"shiftup","height_sp")
     local ret = {}
     if type(selection) == "table" then
         if publisher.newxpath then
@@ -3310,7 +3309,7 @@ function commands.mark( layoutxml,dataxml )
         end
         return ret
     else
-        err("Unknown type in <Mark>")
+        main.log("error", "Unknown type in <Mark>")
     end
 end
 
@@ -3321,10 +3320,10 @@ end
 ---@param dataxml table
 ---@return any
 function commands.message( layoutxml, dataxml )
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select","string")
-    local errcond   = publisher.read_attribute(layoutxml,dataxml,"error", "boolean",false)
-    local exitnow   = publisher.read_attribute(layoutxml,dataxml,"exit",  "boolean",false)
-    local errorcode = publisher.read_attribute(layoutxml,dataxml,"errorcode", "number",1)
+    local selection = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","string")
+    local errcond   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"error", "boolean",false)
+    local exitnow   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"exit",  "boolean",false)
+    local errorcode = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"errorcode", "number",1)
 
     local contents
     if selection then
@@ -3339,7 +3338,7 @@ function commands.message( layoutxml, dataxml )
             dataxml.sequence = copysequence
         else
             local ret = {}
-            local tmp = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
+            local tmp = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","xpathraw")
             if tmp then
                 for i=1,#tmp do
                     ret[#ret + 1] = tostring(tmp[i])
@@ -3350,15 +3349,15 @@ function commands.message( layoutxml, dataxml )
             end
         end
     else
-        local tab = publisher.dispatch(layoutxml,dataxml)
+        local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
         contents = tab
     end
 
     if type(contents) == "table" then
         local ret = {}
         for i=1,#contents do
-            local eltname = publisher.elementname(contents[i])
-            local contents = publisher.element_contents(contents[i])
+            local eltname = publisher.xml_helpers.elementname(contents[i])
+            local contents = publisher.xml_helpers.element_contents(contents[i])
             if eltname == "Sequence" or eltname == "Value" then
                 if type(contents) == "table" then
                     for k,v in pairs(contents) do
@@ -3374,12 +3373,12 @@ function commands.message( layoutxml, dataxml )
                 elseif type(contents) == "nil" then
                     -- ignore
                 else
-                    err("Message: unknown type in value: %q",type(contents))
+                    main.log("error", string.format("Message: unknown type in value: %q", type(contents)))
                 end
             elseif eltname == "Element" then
-                ret[#ret + 1] = publisher.xml_stringvalue(contents)
+                ret[#ret + 1] = publisher.xml_helpers.xml_stringvalue(contents)
             else
-                err("Unknown element name in <Message> %q",tostring(eltname))
+                main.log("error", string.format("Unknown element name in <Message> %q", tostring(eltname)))
             end
         end
         contents = table.concat(ret)
@@ -3395,7 +3394,7 @@ function commands.message( layoutxml, dataxml )
     end
 
     if exitnow then
-        err(-1,"Exiting on user request.")
+        main.log("error", string.format(-1, "Exiting on user request."))
         quit()
     end
 end
@@ -3407,8 +3406,8 @@ end
 ---@param dataxml table
 ---@return any
 function commands.next_frame( layoutxml,dataxml )
-    local areaname = publisher.read_attribute(layoutxml,dataxml,"area","string")
-    publisher.next_area(areaname,nil, dataxml,"cmd next_frame")
+    local areaname = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"area","string")
+    publisher.page_helpers.next_area(areaname,nil, dataxml,"cmd next_frame")
 end
 
 -- Next Row
@@ -3418,16 +3417,16 @@ end
 ---@param dataxml table
 ---@return any
 function commands.next_row( layoutxml,dataxml )
-    publisher.setup_page(nil,"commands#next_row",dataxml)
-    local rownumber = publisher.read_attribute(layoutxml,dataxml,"row", "string")
-    local areaname  = publisher.read_attribute(layoutxml,dataxml,"area","string")
-    local rows      = publisher.read_attribute(layoutxml,dataxml,"rows","string")
+    publisher.page_helpers.setup_page(nil,"commands#next_row",dataxml)
+    local rownumber = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"row", "string")
+    local areaname  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"area","string")
+    local rows      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"rows","string")
     local tmp
 
     if rownumber ~= nil then
         tmp = tonumber(rownumber)
         if tmp == nil then
-            err("Cannot parse row in NextRow, number expected, but got %q",tostring(rownumber))
+            main.log("error", string.format("Cannot parse row in NextRow, number expected, but got %q", tostring(rownumber)))
             rownumber = nil
         else
             rownumber = tmp
@@ -3437,7 +3436,7 @@ function commands.next_row( layoutxml,dataxml )
     if rows ~= nil then
         tmp = tonumber(rows)
         if tmp == nil then
-            err("Cannot parse rows in NextRow, number expected, but got %q",tostring(rows))
+            main.log("error", string.format("Cannot parse rows in NextRow, number expected, but got %q", tostring(rows)))
             rows = nil
         else
             rows = tmp
@@ -3447,7 +3446,7 @@ function commands.next_row( layoutxml,dataxml )
     rows = rows or 1
     local areaname = areaname or publisher.default_area or publisher.default_areaname
 
-    publisher.next_row(rownumber,areaname,rows,dataxml)
+    publisher.page_helpers.next_row(rownumber,areaname,rows,dataxml)
 end
 
 -- NewPage
@@ -3457,16 +3456,16 @@ end
 ---@param dataxml table
 ---@return any
 function commands.new_page( layoutxml,dataxml )
-    local pagetype     = publisher.read_attribute(layoutxml,dataxml,"pagetype","string")
-    local skippagetype = publisher.read_attribute(layoutxml,dataxml,"skippagetype","string")
-    local openon       = publisher.read_attribute(layoutxml,dataxml,"openon","string")
-    local force        = publisher.read_attribute(layoutxml,dataxml,"force", "boolean")
-    warning("NewPage is deprecated and will be removed in version 5.\nPlease use ClearPage instead.\nSee https://github.com/speedata/publisher/discussions/345 for details.")
+    local pagetype     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"pagetype","string")
+    local skippagetype = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"skippagetype","string")
+    local openon       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"openon","string")
+    local force        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"force", "boolean")
+    main.log("warn", "NewPage is deprecated and will be removed in version 5.\nPlease use ClearPage instead.\nSee https://github.com/speedata/publisher/discussions/345 for details.")
 
     -- two new pages right after each other should insert a new page
     if publisher.skippages then
         publisher.skippages = nil
-        publisher.new_page("new_page",dataxml)
+        publisher.page_helpers.new_page("new_page",dataxml)
     end
     local doubleopen = false
     if ( openon == "right" and math.fmod(publisher.current_pagenumber,2) == 1 ) or ( openon == "left" and math.fmod(publisher.current_pagenumber,2) == 0 ) then
@@ -3475,9 +3474,9 @@ function commands.new_page( layoutxml,dataxml )
     publisher.skippages = {skippagetype = skippagetype, pagetype = pagetype, doubleopen = doubleopen}
     if force then
         local thispage = publisher.pages[publisher.current_pagenumber]
-        publisher.dothingsbeforeoutput(thispage)
+        publisher.page_helpers.dothingsbeforeoutput(thispage)
         local n = node.vpack(thispage.pagebox)
-        publisher.shipout(n,publisher.current_pagenumber)
+        publisher.page_helpers.shipout(n,publisher.current_pagenumber)
         publisher.current_pagenumber = publisher.current_pagenumber + 1
     end
 end
@@ -3489,13 +3488,13 @@ end
 ---@param dataxml table
 ---@return any
 function commands.nobreak( layoutxml, dataxml )
-    local fontname         = publisher.read_attribute(layoutxml,dataxml,"fontface",   "string")
-    local strategy         = publisher.read_attribute(layoutxml,dataxml,"reduce",     "string", "keeptogether")
-    local shrinkfactor     = publisher.read_attribute(layoutxml,dataxml,"factor",     "string",0.9)
-    local text             = publisher.read_attribute(layoutxml,dataxml,"text",       "string")
-    if fontname then warning("Nobreak/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
+    local fontname         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontface",   "string")
+    local strategy         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"reduce",     "string", "keeptogether")
+    local shrinkfactor     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"factor",     "string",0.9)
+    local text             = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"text",       "string")
+    if fontname then main.log("warn", "Nobreak/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
     local p = publisher.par:new(nil,"nobreak")
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
 
     if strategy == "fontsize" then
         p:append(tab,{})
@@ -3506,12 +3505,12 @@ function commands.nobreak( layoutxml, dataxml )
             else
                 maxwidth = publisher.xpath.get_variable("__maxwidth")
             end
-            local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth",   "length_sp", maxwidth)
+            local current_maxwidth = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"maxwidth",   "length_sp", maxwidth)
 
             local fam = options.fontfamily
             local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[fam]
             local strut
-            strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 },"nobreak/fontsize")
+            strut = publisher.nodes.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 },"nobreak/fontsize")
             local loops = 0
             local nl
             local maxloops = 10
@@ -3523,11 +3522,11 @@ function commands.nobreak( layoutxml, dataxml )
                     main.log("error","Nobreak, giving up, too many loops","maxloops",maxloops)
                     break
                 end
-                local thisoptions = publisher.copy_table_from_defaults(options)
+                local thisoptions = publisher.utilities.copy_table_from_defaults(options)
                 thisoptions.fontfamily = fam
                 for _,j in ipairs(thiselt) do
-                    local c = publisher.element_contents(j)
-                    tmppar:append(publisher.deepcopy(c),thisoptions)
+                    local c = publisher.xml_helpers.element_contents(j)
+                    tmppar:append(publisher.utilities.deepcopy(c),thisoptions)
                 end
                 tmppar:mknodelist(thisoptions,dataxml)
                 if #tmppar.objects == 0 then
@@ -3552,21 +3551,21 @@ function commands.nobreak( layoutxml, dataxml )
             else
                 maxwidth = publisher.xpath.get_variable("__maxwidth")
             end
-            local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth", "length_sp", maxwidth)
+            local current_maxwidth = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"maxwidth", "length_sp", maxwidth)
             local fam = options.fontfamily
             local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[fam]
             local strut
-            strut = publisher.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 },"nobreak/fontfit")
+            strut = publisher.nodes.add_rule(nil,"head",{height = fam_tbl.baselineskip * 0.75 , depth = fam_tbl.baselineskip * 0.25 , width = 0 },"nobreak/fontfit")
             local nl
 
             local tmppar
             for i = 1, 2 do
                 tmppar = publisher.par:new(nil,"nobreak(fontfit " .. i .. ")")
-                local thisoptions = publisher.copy_table_from_defaults(options)
+                local thisoptions = publisher.utilities.copy_table_from_defaults(options)
                 thisoptions.fontfamily = fam
                 for _,j in ipairs(thiselt) do
-                    local c = publisher.element_contents(j)
-                    tmppar:append(publisher.deepcopy(c),thisoptions)
+                    local c = publisher.xml_helpers.element_contents(j)
+                    tmppar:append(publisher.utilities.deepcopy(c),thisoptions)
                 end
                 tmppar:mknodelist(thisoptions,dataxml)
                 if #tmppar.objects == 0 then
@@ -3591,11 +3590,11 @@ function commands.nobreak( layoutxml, dataxml )
             else
                 maxwidth = publisher.xpath.get_variable("__maxwidth")
             end
-            local current_maxwidth = publisher.read_attribute(layoutxml,dataxml,"maxwidth", "length_sp", maxwidth)
+            local current_maxwidth = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"maxwidth", "length_sp", maxwidth)
 
             local tmppar = publisher.par:new(nil,"cut")
             for _,j in ipairs(thiselt) do
-                local c = publisher.element_contents(j)
+                local c = publisher.xml_helpers.element_contents(j)
                 tmppar:append(c,options)
             end
             tmppar:mknodelist(options,dataxml)
@@ -3604,7 +3603,7 @@ function commands.nobreak( layoutxml, dataxml )
             if wd < current_maxwidth then
                 return tmppar
             end
-            local cuttextnodelist = publisher.mknodes(text,{fontfamily = options.fontfamily})
+            local cuttextnodelist = publisher.nodes.mknodes(text,{fontfamily = options.fontfamily})
             cuttextnodelist = node.hpack(cuttextnodelist)
 
             local txtwd = node.dimensions(cuttextnodelist)
@@ -3631,7 +3630,7 @@ function commands.nobreak( layoutxml, dataxml )
             local nl = tmppar.objects[1]
             local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily]
             local lineheight = fam_tbl.baselineskip
-            local strut = publisher.add_rule(nil,"head",{height = lineheight * 0.75 , depth = lineheight * 0.25 , width = 0 },"nobreak/keeptogether")
+            local strut = publisher.nodes.add_rule(nil,"head",{height = lineheight * 0.75 , depth = lineheight * 0.25 , width = 0 },"nobreak/keeptogether")
             nl = node.hpack(nl)
             nl = node.insert_before(nl,nl,strut)
             tmppar.objects[1] = nl
@@ -3649,12 +3648,12 @@ end
 ---@param dataxml table
 ---@return any
 function commands.ol(layoutxml,dataxml )
-    local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily","string")
+    local fontfamilyname = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontfamily","string")
     local fontfamily
     if fontfamilyname then
         fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
         if fontfamily == nil then
-            err("Fontfamily %q not found.",fontfamilyname)
+            main.log("error", string.format("Fontfamily %q not found.", fontfamilyname))
             fontfamily = 0
         end
         publisher.current_fontfamily = fontfamily
@@ -3665,11 +3664,11 @@ function commands.ol(layoutxml,dataxml )
 
     local ret = {}
     local labelwidth = tex.sp("5mm")
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
         local a = publisher.par:new(nil,"ol")
-        a:append(publisher.number_hbox(i,labelwidth,{fontfamily = fontfamily}))
-        a:append(publisher.element_contents(j),{})
+        a:append(publisher.nodes.number_hbox(i,labelwidth,{fontfamily = fontfamily}))
+        a:append(publisher.xml_helpers.element_contents(j),{})
         ret[#ret + 1] = a
     end
     return ret
@@ -3684,11 +3683,11 @@ end
 ---@return any
 function commands.options( layoutxml,dataxml )
     -- deprecated:
-    publisher.options.showhyphenation    = publisher.read_attribute(layoutxml,dataxml,"show-hyphenation","boolean")
-    publisher.options.tablerulefix       = publisher.read_attribute(layoutxml,dataxml,"tablerulefix","boolean",publisher.options.tablerulefix)
-    local showgrid                       = publisher.read_attribute(layoutxml,dataxml,"show-grid",   "boolean")
-    local showgridallocation             = publisher.read_attribute(layoutxml,dataxml,"show-gridallocation","boolean")
-    local trace                          = publisher.read_attribute(layoutxml,dataxml,"trace",       "boolean")
+    publisher.options.showhyphenation    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"show-hyphenation","boolean")
+    publisher.options.tablerulefix       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"tablerulefix","boolean",publisher.options.tablerulefix)
+    local showgrid                       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"show-grid",   "boolean")
+    local showgridallocation             = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"show-gridallocation","boolean")
+    local trace                          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"trace",       "boolean")
 
     if publisher.options.interaction == nil then
         publisher.options.interaction = true
@@ -3704,20 +3703,20 @@ function commands.options( layoutxml,dataxml )
         publisher.options.trace = trace
     end
 
-    publisher.options.background          = publisher.read_attribute(layoutxml,dataxml,"background-color", "string", publisher.options.background)
-    publisher.options.cutmarks            = publisher.read_attribute(layoutxml,dataxml,"cutmarks",    "boolean",publisher.options.cutmarks)
-    publisher.options.trimmarks           = publisher.read_attribute(layoutxml,dataxml,"trimmarks",   "boolean",publisher.options.trimmarks)
-    publisher.options.trimmarks           = publisher.read_attribute(layoutxml,dataxml,"bleedmarks",  "boolean",publisher.options.trimmarks)
-    local num = publisher.read_attribute(layoutxml,dataxml,"startpage",   "number", publisher.options.startpage)
+    publisher.options.background          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"background-color", "string", publisher.options.background)
+    publisher.options.cutmarks            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"cutmarks",    "boolean",publisher.options.cutmarks)
+    publisher.options.trimmarks           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"trimmarks",   "boolean",publisher.options.trimmarks)
+    publisher.options.trimmarks           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"bleedmarks",  "boolean",publisher.options.trimmarks)
+    local num = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"startpage",   "number", publisher.options.startpage)
     if tonumber(num) then
         publisher.current_pagenumber = tonumber(num)
-        log("Set page number to %d",num)
+        main.log("info", string.format("Set page number to %d", num))
     end
 
-    publisher.options.fontstretch         = publisher.read_attribute(layoutxml,dataxml,"fontstretch", "number", publisher.options.fontstretch)
-    publisher.options.fontshrink          = publisher.read_attribute(layoutxml,dataxml,"fontshrink",  "number", publisher.options.fontshrink)
-    publisher.options.fontstep            = publisher.read_attribute(layoutxml,dataxml,"fontstep",    "number", publisher.options.fontstep)
-    local fontexpansion                   = publisher.read_attribute(layoutxml,dataxml,"fontexpansion", "string")
+    publisher.options.fontstretch         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontstretch", "number", publisher.options.fontstretch)
+    publisher.options.fontshrink          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontshrink",  "number", publisher.options.fontshrink)
+    publisher.options.fontstep            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontstep",    "number", publisher.options.fontstep)
+    local fontexpansion                   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontexpansion", "string")
     if fontexpansion ~= nil then
         if fontexpansion == "yes" then
             tex.adjustspacing = 2
@@ -3727,21 +3726,21 @@ function commands.options( layoutxml,dataxml )
             tex.adjustspacing = 0
         end
     end
-    publisher.options.trim                = publisher.read_attribute(layoutxml,dataxml,"trim",        "length", publisher.options.trim)
-    publisher.options.trim                = publisher.read_attribute(layoutxml,dataxml,"bleed",       "length", publisher.options.trim)
-    publisher.options.ignoreeol           = publisher.read_attribute(layoutxml,dataxml,"ignoreeol",   "boolean",publisher.options.ignoreeol)
-    publisher.options.resetmarks          = publisher.read_attribute(layoutxml,dataxml,"resetmarks",  "boolean",publisher.options.resetmarks or false)
-    publisher.options.colorprofile        = publisher.read_attribute(layoutxml,dataxml,"colorprofile","string",publisher.options.colorprofile)
-    publisher.options.crop                = publisher.read_attribute(layoutxml,dataxml,"crop",        "booleanorlength",publisher.options.crop or false)
-    local randomseed                      = publisher.read_attribute(layoutxml,dataxml,"randomseed",  "number")
-    local reportmissingglyphs             = publisher.read_attribute(layoutxml,dataxml,"reportmissingglyphs", "string")
-    publisher.options.interaction         = publisher.read_attribute(layoutxml,dataxml,"interaction", "boolean", publisher.options.interaction)
-    local overfullline                    = publisher.read_attribute(layoutxml,dataxml,"overfull-line", "string")
-    local imagenotfound                   = publisher.read_attribute(layoutxml,dataxml,"imagenotfound", "string")
-    publisher.options.mpcolorwarning      = publisher.read_attribute(layoutxml,dataxml,"mpcolorwarning", "boolean", publisher.options.mpcolorwarning)
-    local mainlanguage                    = publisher.read_attribute(layoutxml,dataxml,"mainlanguage","string","")
-    local default_area                    = publisher.read_attribute(layoutxml,dataxml,"defaultarea","string")
-    local markdownextensions              = publisher.read_attribute(layoutxml,dataxml,"markdown-extensions","string")
+    publisher.options.trim                = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"trim",        "length", publisher.options.trim)
+    publisher.options.trim                = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"bleed",       "length", publisher.options.trim)
+    publisher.options.ignoreeol           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"ignoreeol",   "boolean",publisher.options.ignoreeol)
+    publisher.options.resetmarks          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"resetmarks",  "boolean",publisher.options.resetmarks or false)
+    publisher.options.colorprofile        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"colorprofile","string",publisher.options.colorprofile)
+    publisher.options.crop                = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"crop",        "booleanorlength",publisher.options.crop or false)
+    local randomseed                      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"randomseed",  "number")
+    local reportmissingglyphs             = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"reportmissingglyphs", "string")
+    publisher.options.interaction         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"interaction", "boolean", publisher.options.interaction)
+    local overfullline                    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"overfull-line", "string")
+    local imagenotfound                   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"imagenotfound", "string")
+    publisher.options.mpcolorwarning      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"mpcolorwarning", "boolean", publisher.options.mpcolorwarning)
+    local mainlanguage                    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"mainlanguage","string","")
+    local default_area                    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"defaultarea","string")
+    local markdownextensions              = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"markdown-extensions","string")
     if markdownextensions then
         splib.markdownextensions = string.explode(markdownextensions,",")
     end
@@ -3761,7 +3760,7 @@ function commands.options( layoutxml,dataxml )
     end
 
     if mainlanguage ~= "" then
-        publisher.set_mainlanguage(mainlanguage,true)
+        publisher.language.set_mainlanguage(mainlanguage,true)
     end
     if publisher.options.trim then
         if publisher.newxpath then
@@ -3775,7 +3774,7 @@ function commands.options( layoutxml,dataxml )
         local uuid = require "uuid"
         uuid.randomseed(randomseed)
     end
-    publisher.options.html = publisher.read_attribute(layoutxml,dataxml,"html", "string", publisher.options.html)
+    publisher.options.html = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"html", "string", publisher.options.html)
 
     if reportmissingglyphs == true or reportmissingglyphs == "yes" then
         publisher.options.reportmissingglyphs = true
@@ -3785,7 +3784,7 @@ function commands.options( layoutxml,dataxml )
         publisher.options.reportmissingglyphs = "warning"
     end
 
-    local ns = publisher.read_attribute(layoutxml,dataxml,"namespaces", "string", publisher.options.namespaces)
+    local ns = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"namespaces", "string", publisher.options.namespaces)
     if ns == "lax" and publisher.newxpath then
         publisher.xpath.ignoreNS = true
     elseif ns == "strict" and publisher.newxpath then
@@ -3820,14 +3819,14 @@ end
 ---@param dataxml table
 ---@return any
 function commands.output( layoutxml,dataxml )
-    publisher.setup_page(nil,"commands#output",dataxml)
-    local area     = publisher.read_attribute(layoutxml,dataxml,"area","string")
-    local allocate = publisher.read_attribute(layoutxml,dataxml,"allocate", "string", "yes")
-    local row      = publisher.read_attribute(layoutxml,dataxml,"row","number")
-    local balance  = publisher.read_attribute(layoutxml,dataxml,"balance", "boolean", false)
-    local valignlast = publisher.read_attribute(layoutxml,dataxml,"valign-last","string")
-    local width    = publisher.read_attribute(layoutxml,dataxml,"width","length_sp")
-    local lastpaddingbottommax = publisher.read_attribute(layoutxml,dataxml,"last-padding-bottom-max","length_sp")
+    publisher.page_helpers.setup_page(nil,"commands#output",dataxml)
+    local area     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"area","string")
+    local allocate = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"allocate", "string", "yes")
+    local row      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"row","number")
+    local balance  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"balance", "boolean", false)
+    local valignlast = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"valign-last","string")
+    local width    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width","length_sp")
+    local lastpaddingbottommax = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"last-padding-bottom-max","length_sp")
 
     local maxwidth = width or publisher.current_grid:width_sp(publisher.current_grid:number_of_columns(area))
     local maxheight = publisher.current_grid:height_sp(publisher.current_grid:number_of_rows(area))
@@ -3842,7 +3841,7 @@ function commands.output( layoutxml,dataxml )
         publisher.xpath.set_variable("__maxheight", maxheight)
     end
 
-    local tab  = publisher.dispatch(layoutxml,dataxml)
+    local tab  = publisher.dispatch.dispatch(layoutxml,dataxml)
     area = area or publisher.default_area or publisher.default_areaname
     local last_area
     if publisher.newxpath then
@@ -3852,7 +3851,7 @@ function commands.output( layoutxml,dataxml )
         last_area = publisher.xpath.get_variable("__area")
         publisher.xpath.set_variable("__area",area)
     end
-    publisher.next_row(row,area,0,dataxml)
+    publisher.page_helpers.next_row(row,area,0,dataxml)
 
     local tosplit
     if balance then
@@ -3865,13 +3864,13 @@ function commands.output( layoutxml,dataxml )
 
     local state
     for i=1,#tab do
-        local contents = publisher.element_contents(tab[i])
-        local eltname = publisher.elementname(tab[i])
+        local contents = publisher.xml_helpers.element_contents(tab[i])
+        local eltname = publisher.xml_helpers.elementname(tab[i])
 
         -- Check if this is HTML content that should use direct output
         if eltname == "HTML" and contents.is_html_content and contents.output_direct then
             -- Use direct HTML output mechanism for precise positioning
-            publisher.setup_page(nil,"commands#output html direct",dataxml)
+            publisher.page_helpers.setup_page(nil,"commands#output html direct",dataxml)
             current_grid = publisher.current_grid
             local current_row = current_grid:current_row(area)
 
@@ -3907,8 +3906,8 @@ function commands.output( layoutxml,dataxml )
                     break
                 elseif result.need_new_page then
                     -- Go to next page and continue
-                    publisher.next_area(area, nil, dataxml, "output html direct new page")
-                    publisher.setup_page(nil, "commands#output html direct newpage", dataxml)
+                    publisher.page_helpers.next_area(area, nil, dataxml, "output html direct new page")
+                    publisher.page_helpers.setup_page(nil, "commands#output html direct newpage", dataxml)
                     current_grid = publisher.current_grid
                     start_y_sp = current_grid.margin_top + current_grid.extra_margin
                     page_height_sp = current_grid.margin_top + current_grid.extra_margin +
@@ -3934,8 +3933,8 @@ function commands.output( layoutxml,dataxml )
         -- Currently only the command Text implements pull.
         while true do
             objcount = objcount + 1
-            publisher.setup_page(nil,"commands#output",dataxml)
-            maxht,row,nextfreerow = publisher.get_remaining_height(area,allocate)
+            publisher.page_helpers.setup_page(nil,"commands#output",dataxml)
+            maxht,row,nextfreerow = publisher.page_helpers.get_remaining_height(area,allocate)
             current_grid = publisher.current_grid
             parameters = {
                 area = area,
@@ -3961,22 +3960,22 @@ function commands.output( layoutxml,dataxml )
             elseif state.split then
                 local obj1 = obj
                 local obj2 = state.split
-                publisher.output_at({nodelist = obj1, x = 1, y = row, allocate = true, area = area})
-                publisher.next_area(area,nil,dataxml,"output split")
-                publisher.output_at({nodelist = obj2, x = 1, y = row, allocate = true, area = area})
+                publisher.page_helpers.output_at({nodelist = obj1, x = 1, y = row, allocate = true, area = area})
+                publisher.page_helpers.next_area(area,nil,dataxml,"output split")
+                publisher.page_helpers.output_at({nodelist = obj2, x = 1, y = row, allocate = true, area = area})
                 current_grid:set_framenumber(area,1)
             else
                 local ht = current_grid:height_in_gridcells_sp(obj.height)
-                publisher.output_at({nodelist = obj, x = 1, y = row, allocate = true, area = area})
+                publisher.page_helpers.output_at({nodelist = obj, x = 1, y = row, allocate = true, area = area})
                 -- We don't need to go to the next page when we are at the end
                 if nextfreerow then
                     if nextfreerow <= row then
                         nextfreerow = row + 1
                     end
-                    publisher.next_row(nextfreerow,area,0,dataxml)
+                    publisher.page_helpers.next_row(nextfreerow,area,0,dataxml)
                 else
                     if more_to_follow then
-                        publisher.next_area(area,nil,dataxml,"output (2)")
+                        publisher.page_helpers.next_area(area,nil,dataxml,"output (2)")
                     else
                         -- We need to go down a bit to ensure that the next
                         -- current row for allocation detection is not
@@ -3994,7 +3993,7 @@ function commands.output( layoutxml,dataxml )
     else
         publisher.xpath.set_variable("__maxwidth",current_maxwidth)
     end
-    _,row,_ = publisher.get_remaining_height(area,allocate)
+    _,row,_ = publisher.page_helpers.get_remaining_height(area,allocate)
     current_grid:set_current_row(row,area)
     if publisher.newxpath then
         dataxml.vars["__area"] = last_area
@@ -4010,19 +4009,19 @@ end
 ---@param dataxml table
 ---@return any
 function commands.overlay( layoutxml, dataxml )
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     local box
     local ti
     for i,v in ipairs(tab) do
         ti = tab[i].contents
         if i == 1 then
-            if publisher.elementname(tab[i]) == "Image" then
+            if publisher.xml_helpers.elementname(tab[i]) == "Image" then
                 box = ti[1]
             else
                 box = ti
             end
         else
-            box = publisher.montage(box,ti.contents,ti.x,ti.y)
+            box = publisher.drawing.montage(box,ti.contents,ti.x,ti.y)
         end
     end
     return box
@@ -4036,8 +4035,8 @@ end
 ---@param options? table
 ---@return any
 function commands.page_format(layoutxml,dataxml,options)
-    local width  = publisher.read_attribute(layoutxml,dataxml,"width","length")
-    local height = publisher.read_attribute(layoutxml,dataxml,"height","length")
+    local width  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width","length")
+    local height = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"height","length")
 
     local wd_sp = tex.sp(width)
     local ht_sp = tex.sp(height)
@@ -4048,7 +4047,7 @@ function commands.page_format(layoutxml,dataxml,options)
         publisher.xpath.set_variable("_pagewidth",width)
         publisher.xpath.set_variable("_pageheight",height)
     end
-    publisher.set_pageformat(wd_sp,ht_sp)
+    publisher.page_helpers.set_pageformat(wd_sp,ht_sp)
     publisher.options.default_pagewidth = wd_sp
     publisher.options.default_pageheight = ht_sp
 end
@@ -4060,14 +4059,14 @@ end
 ---@param dataxml table
 ---@return any
 function commands.pagetype(layoutxml,dataxml)
-    local columnordering = publisher.read_attribute(layoutxml,dataxml,"columnordering","string")
-    local test           = publisher.read_attribute(layoutxml,dataxml,"test","string")
-    local pagetypename   = publisher.read_attribute(layoutxml,dataxml,"name","string")
-    local part           = publisher.read_attribute(layoutxml,dataxml,"part","string")
-    local backgroundcolor = publisher.read_attribute(layoutxml,dataxml,"background-color","string")
+    local columnordering = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"columnordering","string")
+    local test           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"test","string")
+    local pagetypename   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name","string")
+    local part           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"part","string")
+    local backgroundcolor = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"background-color","string")
 
-    local width  = publisher.read_attribute(layoutxml,dataxml,"width","length")
-    local height = publisher.read_attribute(layoutxml,dataxml,"height","length")
+    local width  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width","length")
+    local height = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"height","length")
 
     local tmp_tab = {
         layoutxml = layoutxml,
@@ -4079,10 +4078,10 @@ function commands.pagetype(layoutxml,dataxml)
     }
     -- evaluate the default color for this page later on, so we can set it dynamically (XPath)
 
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
 
     for i,j in ipairs(tab) do
-        local eltname = publisher.elementname(j)
+        local eltname = publisher.xml_helpers.elementname(j)
         if eltname=="Margin" or eltname == "AtPageShipout" or eltname == "AtPageCreation" or eltname=="Grid" or eltname=="PositioningArea" then
             tmp_tab [#tmp_tab + 1] = j
         else
@@ -4104,31 +4103,31 @@ end
 ---@return any
 function commands.paragraph( layoutxml, dataxml,textblockoptions )
     textblockoptions = textblockoptions or {}
-    local allowbreak        = publisher.read_attribute(layoutxml,dataxml,"allowbreak",         "string")
-    local bidi              = publisher.read_attribute(layoutxml,dataxml,"bidi",               "boolean")
-    local colorname         = publisher.read_attribute(layoutxml,dataxml,"color",              "string")
-    local actualtext        = publisher.read_attribute(layoutxml,dataxml,"actualtext",         "string")
-    local direction         = publisher.read_attribute(layoutxml,dataxml,"direction",          "string")
-    local fontname          = publisher.read_attribute(layoutxml,dataxml,"fontface",           "string")
-    local fontfamilyname    = publisher.read_attribute(layoutxml,dataxml,"fontfamily",         "string",fontname)
-    local fontoutline       = publisher.read_attribute(layoutxml,dataxml,"font-outline",       "width_sp")
-    local html              = publisher.read_attribute(layoutxml,dataxml,"html",               "string",publisher.options.html or "all")
-    local language_name     = publisher.read_attribute(layoutxml,dataxml,"language",           "string")
-    local labelleft         = publisher.read_attribute(layoutxml,dataxml,"label-left",         "string")
-    local labelleftwidth    = publisher.read_attribute(layoutxml,dataxml,"label-left-width",   "width_sp")
-    local labelleftalign    = publisher.read_attribute(layoutxml,dataxml,"label-left-align",   "string")
-    local labelleftdistance = publisher.read_attribute(layoutxml,dataxml,"label-left-distance","width_sp")
-    local paddingleft       = publisher.read_attribute(layoutxml,dataxml,"padding-left",       "width_sp")
-    local paddingright      = publisher.read_attribute(layoutxml,dataxml,"padding-right",      "width_sp")
-    local role              = publisher.read_attribute(layoutxml,dataxml,"role",               "string")
-    local parent            = publisher.read_attribute(layoutxml,dataxml,"parent",             "string")
-    local structpos         = publisher.read_attribute(layoutxml,dataxml,"structpos",          "string","cur")
-    local textformat        = publisher.read_attribute(layoutxml,dataxml,"textformat",         "string")
-    if fontname then warning("Paragraph/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
-    if textformat and not publisher.textformats[textformat] then err("Paragraph: textformat %q unknown",tostring(textformat)) end
+    local allowbreak        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"allowbreak",         "string")
+    local bidi              = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"bidi",               "boolean")
+    local colorname         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"color",              "string")
+    local actualtext        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"actualtext",         "string")
+    local direction         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"direction",          "string")
+    local fontname          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontface",           "string")
+    local fontfamilyname    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontfamily",         "string",fontname)
+    local fontoutline       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"font-outline",       "width_sp")
+    local html              = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"html",               "string",publisher.options.html or "all")
+    local language_name     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"language",           "string")
+    local labelleft         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"label-left",         "string")
+    local labelleftwidth    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"label-left-width",   "width_sp")
+    local labelleftalign    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"label-left-align",   "string")
+    local labelleftdistance = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"label-left-distance","width_sp")
+    local paddingleft       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"padding-left",       "width_sp")
+    local paddingright      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"padding-right",      "width_sp")
+    local role              = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"role",               "string")
+    local parent            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"parent",             "string")
+    local structpos         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"structpos",          "string","cur")
+    local textformat        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"textformat",         "string")
+    if fontname then main.log("warn", "Paragraph/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
+    if textformat and not publisher.textformats[textformat] then main.log("error", string.format("Paragraph: textformat %q unknown", tostring(textformat))) end
     if direction and not ( direction == "ltr" or direction == "rtl") then
         if direction ~= "" then
-            warning("direction must be 'ltr' or 'rtl', ignoring direction")
+            main.log("warn", "direction must be 'ltr' or 'rtl', ignoring direction")
         end
         direction = nil
     end
@@ -4136,7 +4135,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     if fontfamilyname then
         fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
         if fontfamily == nil then
-            err("Fontfamily %q not found.",fontfamilyname)
+            main.log("error", string.format("Fontfamily %q not found.", fontfamilyname))
             fontfamily = 0
         end
         publisher.current_fontfamily = fontfamily
@@ -4146,7 +4145,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     local colorindex = colors_module.get_colorindex_from_name(colorname)
     local languagecode
     if language_name then
-        languagecode = publisher.get_languagecode(language_name)
+        languagecode = publisher.language.get_languagecode(language_name)
     else
         languagecode = textblockoptions.languagecode or publisher.defaultlanguage
     end
@@ -4180,14 +4179,14 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     if publisher.options.format == "PDF/UA" then
         publisher.rolecounter = publisher.rolecounter + 1
         params.rolecounter = publisher.rolecounter
-        params.role = publisher.get_rolenum(role)
+        params.role = publisher.structure_tree.get_rolenum(role)
         params.parent = parent
         params.structpos = structpos
         params.actualtext = actualtext
     end
 
 
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     local p = publisher.par:new(nil,"commands.paragraph")
     p.fontfamily = fontfamily
     p.html = html
@@ -4201,11 +4200,11 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     -- hanging: top on baseline, element hangs below (per-element, no group logic)
     -- bottom:  bottom of element at bottom of line box (baseline - font descender)
     local function get_valign_box(tab_entry)
-        local eltname = publisher.elementname(tab_entry)
+        local eltname = publisher.xml_helpers.elementname(tab_entry)
         if eltname == "Image" then
-            return publisher.element_contents(tab_entry)[1]
+            return publisher.xml_helpers.element_contents(tab_entry)[1]
         elseif eltname == "Box" then
-            return publisher.element_contents(tab_entry)
+            return publisher.xml_helpers.element_contents(tab_entry)
         end
         return nil
     end
@@ -4215,7 +4214,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     for i=1,#tab do
         local box = get_valign_box(tab[i])
         if box then
-            local va = publisher.getprop(box,"vertical-align")
+            local va = publisher.attribute_helpers.getprop(box,"vertical-align")
             if va then
                 local h = box.height + box.depth
                 if va == "top" and h > max_top_height then
@@ -4240,7 +4239,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
     for i=1,#tab do
         local box = get_valign_box(tab[i])
         if box then
-            local va = publisher.getprop(box,"vertical-align")
+            local va = publisher.attribute_helpers.getprop(box,"vertical-align")
             if va then
                 local h = box.height + box.depth
                 if va == "top" and max_top_height > 0 then
@@ -4263,15 +4262,15 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
 
     for i=1,#tab do
         local thischild = tab[i]
-        local eltname = publisher.elementname(thischild)
-        local contents = publisher.element_contents(thischild)
+        local eltname = publisher.xml_helpers.elementname(thischild)
+        local contents = publisher.xml_helpers.element_contents(thischild)
         if eltname == "Initial" then
             params.initial = contents
         elseif eltname == "Image" then
             node.set_attribute(contents[1],publisher.att_dontadjustlineheight,1)
             p:append(contents[1],params)
         elseif eltname == "Box" then
-            publisher.setprop(contents,"inline",true)
+            publisher.attribute_helpers.setprop(contents,"inline",true)
             node.set_attribute(contents,publisher.att_lineheight,contents.height)
             p:append(contents,params)
         else
@@ -4279,7 +4278,7 @@ function commands.paragraph( layoutxml, dataxml,textblockoptions )
         end
     end
     if publisher.options.format == "PDF/UA" then
-        params.role = params.role or publisher.get_rolenum("P")
+        params.role = params.role or publisher.structure_tree.get_rolenum("P")
         if not params.role then
             main.log("error","Paragraph: role unknown",lineinfo(layoutxml))
         else
@@ -4301,26 +4300,26 @@ end
 ---@param dataxml table
 ---@return any
 function commands.pdfoptions( layoutxml, dataxml )
-    local author                = publisher.read_attribute(layoutxml,dataxml,"author",                "string")
-    local colorprofile          = publisher.read_attribute(layoutxml,dataxml,"colorprofile",          "string")
-    local creator               = publisher.read_attribute(layoutxml,dataxml,"creator",               "string")
-    local displaymode           = publisher.read_attribute(layoutxml,dataxml,"displaymode",           "string")
-    local dpi                   = publisher.read_attribute(layoutxml,dataxml,"dpi",                   "number")
-    local duplex                = publisher.read_attribute(layoutxml,dataxml,"duplex",                "string")
-    local format                = publisher.read_attribute(layoutxml,dataxml,"format",                "string")
-    local hyperlinksbordercolor = publisher.read_attribute(layoutxml,dataxml,"hyperlinksbordercolor", "string")
-    local hyperlinkbordercolor  = publisher.read_attribute(layoutxml,dataxml,"hyperlinkbordercolor",  "string",hyperlinksbordercolor)
-    local hyperlinkborderwidth  = publisher.read_attribute(layoutxml,dataxml,"hyperlinkborderwidth",  "width_sp")
-    local keywords              = publisher.read_attribute(layoutxml,dataxml,"keywords",              "string")
-    local nc                    = publisher.read_attribute(layoutxml,dataxml,"numcopies",             "number")
-    local pagelayout            = publisher.read_attribute(layoutxml,dataxml,"pagelayout",            "string")
-    local picktray              = publisher.read_attribute(layoutxml,dataxml,"picktraybypdfsize",     "boolean")
-    local printscaling          = publisher.read_attribute(layoutxml,dataxml,"printscaling",          "string")
-    local producer              = publisher.read_attribute(layoutxml,dataxml,"producer",              "string")
-    local showbookmarks         = publisher.read_attribute(layoutxml,dataxml,"showbookmarks",         "boolean")
-    local showhyperlinks        = publisher.read_attribute(layoutxml,dataxml,"showhyperlinks",        "boolean", false)
-    local subject               = publisher.read_attribute(layoutxml,dataxml,"subject",               "string")
-    local title                 = publisher.read_attribute(layoutxml,dataxml,"title",                 "string")
+    local author                = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"author",                "string")
+    local colorprofile          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"colorprofile",          "string")
+    local creator               = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"creator",               "string")
+    local displaymode           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"displaymode",           "string")
+    local dpi                   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"dpi",                   "number")
+    local duplex                = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"duplex",                "string")
+    local format                = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"format",                "string")
+    local hyperlinksbordercolor = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"hyperlinksbordercolor", "string")
+    local hyperlinkbordercolor  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"hyperlinkbordercolor",  "string",hyperlinksbordercolor)
+    local hyperlinkborderwidth  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"hyperlinkborderwidth",  "width_sp")
+    local keywords              = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"keywords",              "string")
+    local nc                    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"numcopies",             "number")
+    local pagelayout            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"pagelayout",            "string")
+    local picktray              = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"picktraybypdfsize",     "boolean")
+    local printscaling          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"printscaling",          "string")
+    local producer              = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"producer",              "string")
+    local showbookmarks         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"showbookmarks",         "boolean")
+    local showhyperlinks        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"showhyperlinks",        "boolean", false)
+    local subject               = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"subject",               "string")
+    local title                 = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"title",                 "string")
 
     if title then
         publisher.options.documenttitle = title
@@ -4333,7 +4332,7 @@ function commands.pdfoptions( layoutxml, dataxml )
     end
     if producer then
         if not publisher.pro then
-            err("Setting the producer needs a pro plan")
+            main.log("error", "Setting the producer needs a pro plan")
             publisher.has_pro_error = true
             return nil
         end
@@ -4388,7 +4387,7 @@ function commands.pdfoptions( layoutxml, dataxml )
 
     if showbookmarks then
         publisher.options.displaymode = "UseOutlines"
-        warning("PDFOptions/showbookmarks is deprecated and will be removed in version 5. Please use displaymode instead")
+        main.log("warn", "PDFOptions/showbookmarks is deprecated and will be removed in version 5. Please use displaymode instead")
     end
 
     if printscaling then
@@ -4442,38 +4441,38 @@ end
 ---@return any
 function commands.place_object( layoutxml,dataxml)
     local absolute_positioning = false
-    local column           = publisher.read_attribute(layoutxml,dataxml,"column",         "string")
-    local row              = publisher.read_attribute(layoutxml,dataxml,"row",            "string")
-    local area             = publisher.read_attribute(layoutxml,dataxml,"area",           "string")
-    local allocate         = publisher.read_attribute(layoutxml,dataxml,"allocate",       "string")
-    local clipatmargin     = publisher.read_attribute(layoutxml,dataxml,"clipatmargin",   "boolean",false)
-    local framecolor       = publisher.read_attribute(layoutxml,dataxml,"framecolor",     "string")
-    local backgroundcolor  = publisher.read_attribute(layoutxml,dataxml,"background-color","string")
-    backgroundcolor        = publisher.read_attribute(layoutxml,dataxml,"backgroundcolor","string",backgroundcolor)
-    local rulewidth_sp     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",      "length_sp", 26312) -- 0.4bp
-    local maxheight        = publisher.read_attribute(layoutxml,dataxml,"maxheight",      "number")
-    local onpage           = publisher.read_attribute(layoutxml,dataxml,"page",           "string")
-    local keepposition     = publisher.read_attribute(layoutxml,dataxml,"keepposition",   "boolean",false)
-    local frame            = publisher.read_attribute(layoutxml,dataxml,"frame",          "string")
-    local background       = publisher.read_attribute(layoutxml,dataxml,"background",     "string")
-    local groupname        = publisher.read_attribute(layoutxml,dataxml,"groupname",      "string")
-    local valign           = publisher.read_attribute(layoutxml,dataxml,"valign",         "string")
-    local halign           = publisher.read_attribute(layoutxml,dataxml,"halign",         "string")
-    local hreference       = publisher.read_attribute(layoutxml,dataxml,"hreference",     "string")
-    local vreference       = publisher.read_attribute(layoutxml,dataxml,"vreference",     "string")
-    local rotate           = publisher.read_attribute(layoutxml,dataxml,"rotate",         "number")
-    local origin_x         = publisher.read_attribute(layoutxml,dataxml,"origin-x",       "string", nil, "origin")
-    local origin_y         = publisher.read_attribute(layoutxml,dataxml,"origin-y",       "string", nil, "origin")
-    local b_b_r_radius     = publisher.read_attribute(layoutxml,dataxml,"border-bottom-right-radius", "string")
-    local b_t_r_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-right-radius",    "string")
-    local b_t_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-top-left-radius",     "string")
-    local b_b_l_radius     = publisher.read_attribute(layoutxml,dataxml,"border-bottom-left-radius",  "string")
-    local allocate_left    = publisher.read_attribute(layoutxml,dataxml,"allocate-left",  "width_sp")
-    local allocate_right   = publisher.read_attribute(layoutxml,dataxml,"allocate-right", "width_sp")
-    local allocate_top     = publisher.read_attribute(layoutxml,dataxml,"allocate-top",   "height_sp")
-    local allocate_bottom  = publisher.read_attribute(layoutxml,dataxml,"allocate-bottom","height_sp")
-    local class            = publisher.read_attribute(layoutxml,dataxml,"class",      "string")
-    local id               = publisher.read_attribute(layoutxml,dataxml,"id",         "string")
+    local column           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"column",         "string")
+    local row              = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"row",            "string")
+    local area             = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"area",           "string")
+    local allocate         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"allocate",       "string")
+    local clipatmargin     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"clipatmargin",   "boolean",false)
+    local framecolor       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"framecolor",     "string")
+    local backgroundcolor  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"background-color","string")
+    backgroundcolor        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"backgroundcolor","string",backgroundcolor)
+    local rulewidth_sp     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"rulewidth",      "length_sp", 26312) -- 0.4bp
+    local maxheight        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"maxheight",      "number")
+    local onpage           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"page",           "string")
+    local keepposition     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"keepposition",   "boolean",false)
+    local frame            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"frame",          "string")
+    local background       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"background",     "string")
+    local groupname        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"groupname",      "string")
+    local valign           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"valign",         "string")
+    local halign           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"halign",         "string")
+    local hreference       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"hreference",     "string")
+    local vreference       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"vreference",     "string")
+    local rotate           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"rotate",         "number")
+    local origin_x         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"origin-x",       "string", nil, "origin")
+    local origin_y         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"origin-y",       "string", nil, "origin")
+    local b_b_r_radius     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"border-bottom-right-radius", "string")
+    local b_t_r_radius     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"border-top-right-radius",    "string")
+    local b_t_l_radius     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"border-top-left-radius",     "string")
+    local b_b_l_radius     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"border-bottom-left-radius",  "string")
+    local allocate_left    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"allocate-left",  "width_sp")
+    local allocate_right   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"allocate-right", "width_sp")
+    local allocate_top     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"allocate-top",   "height_sp")
+    local allocate_bottom  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"allocate-bottom","height_sp")
+    local class            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"class",      "string")
+    local id               = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"id",         "string")
 
     local css_rules = publisher.css:matches({element = "placeobject", class=class,id=id}) or {}
     if rotate and tonumber(rotate) % 360 ~= 0 then
@@ -4496,7 +4495,7 @@ function commands.place_object( layoutxml,dataxml)
     end
 
     if publisher.current_group and area and area ~= publisher.default_areaname then
-        err("Areas can't be combined with groups")
+        main.log("error", "Areas can't be combined with groups")
     end
     area = area or publisher.default_area or publisher.default_areaname
     local save_current_area
@@ -4518,7 +4517,7 @@ function commands.place_object( layoutxml,dataxml)
         end
     end
 
-    publisher.setup_page(onpage,"commands#PlaceObject",dataxml)
+    publisher.page_helpers.setup_page(onpage,"commands#PlaceObject",dataxml)
     local current_grid
     if onpage then
         current_grid = publisher.pages[onpage].grid
@@ -4551,7 +4550,7 @@ function commands.place_object( layoutxml,dataxml)
 
     if absolute_positioning then
         if not ( row and column ) then
-            err("“Column” and “Row” must be given with absolute positioning (PlaceObject).")
+            main.log("error", "“Column” and “Row” must be given with absolute positioning (PlaceObject).")
             return
         end
     end
@@ -4571,7 +4570,7 @@ function commands.place_object( layoutxml,dataxml)
     local mw = current_grid:number_of_columns(area)
     local mh = current_grid:number_of_rows(area)
     if not mw then
-        err("Something is wrong with the current page, expect strange results")
+        main.log("error", "Something is wrong with the current page, expect strange results")
         return
     end
 
@@ -4602,7 +4601,7 @@ function commands.place_object( layoutxml,dataxml)
     end
     -- jump to the next row if the requested column is < than the current column
     if absolute_positioning == false and column and tonumber(column) < current_grid:current_column(area) then
-        publisher.next_row(nil,area,1,dataxml)
+        publisher.page_helpers.next_row(nil,area,1,dataxml)
     end
     local current_column_start = tonumber(column or current_grid:current_column(area))
 
@@ -4640,7 +4639,7 @@ function commands.place_object( layoutxml,dataxml)
         options.current_height = areaheight
     end
 
-    local tab = publisher.dispatch(layoutxml,dataxml,options)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml,options)
 
     -- reset the current maxwidth
     if publisher.newxpath then
@@ -4653,7 +4652,7 @@ function commands.place_object( layoutxml,dataxml)
 
     if groupname then
         if not publisher.groups[groupname] then
-            err("Unknown group %q in PlaceObject",groupname)
+            main.log("error", string.format("Unknown group %q in PlaceObject", groupname))
         else
             local g = publisher.groups[groupname]
             objects[1] = { object = node.copy(g.contents),objecttype = string.format("Group (%s)", groupname)}
@@ -4663,15 +4662,15 @@ function commands.place_object( layoutxml,dataxml)
                     main.log("error","Group contents is nil","groupname",groupname)
                 else
                     p.data = grid_module.draw_grid_group(g)
-                    publisher.setprop(p,"origin","trace group")
+                    publisher.attribute_helpers.setprop(p,"origin","trace group")
                     objects[1].object.head = node.insert_before(objects[1].object.head,objects[1].object.head,p)
                 end
             end
         end
     else
         for _,j in ipairs(tab) do
-            object = publisher.element_contents(j)
-            objecttype = publisher.elementname(j)
+            object = publisher.xml_helpers.element_contents(j)
+            objecttype = publisher.xml_helpers.elementname(j)
             if objecttype == "Image" then
                 -- return value is a table, #1 is the image, #2 is the allocation grid
                 objects[#objects + 1] = {object = object[1], objecttype = objecttype, allocate_matrix = object[2] }
@@ -4722,11 +4721,11 @@ function commands.place_object( layoutxml,dataxml)
 
 
         if background == "full" or css_rules["background-color"] then
-            object = publisher.background(object,backgroundcolor or css_rules["background-color"],"PlaceObject")
+            object = publisher.drawing.background(object,backgroundcolor or css_rules["background-color"],"PlaceObject")
         end
         if frame == "solid" then
             framewidth = rulewidth_sp
-            object = publisher.frame({
+            object = publisher.drawing.frame({
                 box       = object,
                 colorname = framecolor,
                 rulewidth = rulewidth_sp,
@@ -4740,11 +4739,11 @@ function commands.place_object( layoutxml,dataxml)
             framewidth = 0
         end
         if not object then
-            err("Something is wrong with <PlaceObject>, content is missing")
+            main.log("error", "Something is wrong with <PlaceObject>, content is missing")
             return
         end
         if publisher.options.showobjects then
-            publisher.boxit(object)
+            publisher.drawing.boxit(object)
         end
         assert(object.width,"Can't determine object width")
         local width_in_gridcells   = current_grid:width_in_gridcells_sp(object.width)
@@ -4772,7 +4771,7 @@ function commands.place_object( layoutxml,dataxml)
                     top = top + object.width
                 end
             end
-            publisher.output_absolute_position({
+            publisher.page_helpers.output_absolute_position({
                 nodelist = object,
                 clipatmargin = clipatmargin,
                 origin_x = origin_x,
@@ -4794,7 +4793,7 @@ function commands.place_object( layoutxml,dataxml)
             local current_row
             -- local current_row = current_grid:current_row(area)
             if not node.has_field(object,"width") then
-                warning("Can't calculate with object's width!")
+                main.log("warn", "Can't calculate with object's width!")
             end
             -- w("PlaceObject: finished calculating width: wd=%d,ht=%d",width_in_gridcells,height_in_gridcells)
             -- w("PlaceObject: find suitable row for object, current_row = %d",row or current_grid:current_row(area) or "-1")
@@ -4835,8 +4834,8 @@ function commands.place_object( layoutxml,dataxml)
                     current_row = current_grid:find_suitable_row(current_column_start,width_in_gridcells,height_in_gridcells,area)
                     if not current_row then
                         main.log("warn","No suitable row found","type", objecttype,lineinfo(layoutxml))
-                        publisher.next_area(area,nil, dataxml, "place_object no current row")
-                        publisher.setup_page(nil,"commands#PlaceObject",dataxml)
+                        publisher.page_helpers.next_area(area,nil, dataxml, "place_object no current row")
+                        publisher.page_helpers.setup_page(nil,"commands#PlaceObject",dataxml)
                         current_grid = publisher.current_grid
                         current_row = current_grid:current_row(area)
                         current_column_start = 1
@@ -4846,7 +4845,7 @@ function commands.place_object( layoutxml,dataxml)
             -- if the object has no height (for example an Action node), we don't move the cursor
             if height_in_gridcells == 0  then allocate = "no" end
             main.log("debug","PlaceObject","type",objecttype,"col",tostring(math.floor(current_column_start)),"row",tostring(math.floor(current_row)),"wd",width_in_gridcells,"ht",height_in_gridcells,"page",onpage or publisher.current_pagenumber)
-            publisher.output_at({
+            publisher.page_helpers.output_at({
                 nodelist = node.copy(object),
                 x = current_column_start,
                 y = current_row,
@@ -4875,8 +4874,8 @@ function commands.place_object( layoutxml,dataxml)
         if i < #objects then
             -- don't switch when inside a group
             if publisher.current_group == nil then
-                publisher.next_area(area,nil,dataxml,"place_object not in group")
-                publisher.setup_page(nil,"commands#PlaceObject",dataxml)
+                publisher.page_helpers.next_area(area,nil,dataxml,"place_object not in group")
+                publisher.page_helpers.setup_page(nil,"commands#PlaceObject",dataxml)
             end
         else
             if objects.balance then
@@ -4895,7 +4894,7 @@ function commands.place_object( layoutxml,dataxml)
     end
 
     if onpage then
-        publisher.setup_page(nil,"commands#PlaceObject",dataxml)
+        publisher.page_helpers.setup_page(nil,"commands#PlaceObject",dataxml)
         publisher.current_grid = publisher.pages[publisher.current_pagenumber].grid
     end
     if publisher.newxpath then
@@ -4920,9 +4919,9 @@ function commands.process_node(layoutxml,dataxml)
         copysequence = dataxml.sequence
     end
 
-    local dataxml_selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
-    local mode              = publisher.read_attribute(layoutxml,dataxml,"mode","string") or ""
-    local limit             = publisher.read_attribute(layoutxml,dataxml,"limit","number")
+    local dataxml_selection = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","xpathraw")
+    local mode              = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"mode","string") or ""
+    local limit             = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"limit","number")
 
     -- To restore the current value of `__position`, we save it.
     -- The value of `__position` is available from xpath (function position()).
@@ -4964,11 +4963,11 @@ function commands.process_node(layoutxml,dataxml)
 
         -- Pattern matching fallback (newxpath only)
         if not layoutnode and publisher.newxpath then
-            layoutnode = publisher.find_matching_pattern(mode, elt, dataxml)
+            layoutnode = publisher.dispatch.find_matching_pattern(mode, elt, dataxml)
         end
 
         if not layoutnode and not modeselector then
-            err("No combination of mode %q element name %q is defined.",mode,element_name)
+            main.log("error", string.format("No combination of mode %q element name %q is defined.", mode, element_name))
             return
         end
 
@@ -4976,11 +4975,11 @@ function commands.process_node(layoutxml,dataxml)
             main.log("debug","Process node", "node",element_name,"mode",mode,"pos",string.format("%d",pos))
             if publisher.newxpath then
                 dataxml.pos = pos
-                publisher.dispatch(layoutnode,dataxml)
+                publisher.dispatch.dispatch(layoutnode,dataxml)
             else
                 publisher.xpath.set_variable("__position",pos)
                 dataxml_selection[i][".__context"] = dataxml_selection
-                publisher.dispatch(layoutnode,dataxml_selection[i])
+                publisher.dispatch.dispatch(layoutnode,dataxml_selection[i])
             end
 
             pos = pos + 1
@@ -5004,12 +5003,12 @@ end
 ---@param dataxml table
 ---@return any
 function commands.position( layoutxml, dataxml )
-    local x = publisher.read_attribute(layoutxml,dataxml,"x","number")
-    local y = publisher.read_attribute(layoutxml,dataxml,"y","number")
+    local x = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"x","number")
+    local y = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"y","number")
 
-    local tab = publisher.dispatch(layoutxml,dataxml)
-    if publisher.elementname(tab[1]) == "Image" then
-        return {x = x, y = y, contents = publisher.element_contents(tab[1])[1]}
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
+    if publisher.xml_helpers.elementname(tab[1]) == "Image" then
+        return {x = x, y = y, contents = publisher.xml_helpers.element_contents(tab[1])[1]}
     else
         return {x = x, y = y, contents = tab[1].contents}
     end
@@ -5023,10 +5022,10 @@ end
 ---@param dataxml table
 ---@return any
 function commands.positioning_frame( layoutxml, dataxml )
-    local column = publisher.read_attribute(layoutxml,dataxml,"column","number")
-    local row    = publisher.read_attribute(layoutxml,dataxml,"row" ,"number")
-    local width  = publisher.read_attribute(layoutxml,dataxml,"width","number")
-    local height = publisher.read_attribute(layoutxml,dataxml,"height"  ,"number")
+    local column = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"column","number")
+    local row    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"row" ,"number")
+    local width  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width","number")
+    local height = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"height"  ,"number")
     if row == nil or column == nil or width == nil or height == nil then
         if not row then
             main.log("error","row not set in PositioningFrame")
@@ -5058,9 +5057,9 @@ end
 function commands.positioning_area( layoutxml,dataxml )
     -- Warning: if we call publisher.dispatch now, the xpath functions
     -- might depend on values on the _current_ page, which is not set!
-    local colorname = publisher.read_attribute(layoutxml,dataxml,"framecolor", "string")
-    local name      = publisher.read_attribute(layoutxml,dataxml,"name","string")
-    local bgcolor   = publisher.read_attribute(layoutxml,dataxml,"background-color","string")
+    local colorname = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"framecolor", "string")
+    local name      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name","string")
+    local bgcolor   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"background-color","string")
     local tab = {}
     tab.colorname = colorname
     tab.layoutxml = layoutxml
@@ -5079,7 +5078,7 @@ end
 ---@param opts? table Forwarded to children.
 ---@return any
 function commands.section( layoutxml,dataxml,opts )
-    return publisher.dispatch(layoutxml,dataxml,opts)
+    return publisher.dispatch.dispatch(layoutxml,dataxml,opts)
 end
 
 -- Record
@@ -5096,17 +5095,17 @@ function commands.record( layoutxml,dataxml )
         match       = layoutxml[".__attributes"].match
         mode        = layoutxml[".__attributes"].mode or ""
     else
-        elementname = publisher.read_attribute(layoutxml,{},"element","string")
-        mode        = publisher.read_attribute(layoutxml,{},"mode","string","")
+        elementname = publisher.attribute_helpers.read_attribute(layoutxml,{},"element","string")
+        mode        = publisher.attribute_helpers.read_attribute(layoutxml,{},"mode","string","")
     end
 
     if match and elementname then
-        err("Record: attributes 'element' and 'match' are mutually exclusive.")
+        main.log("error", "Record: attributes 'element' and 'match' are mutually exclusive.")
         return
     end
 
     if match and publisher.newxpath then
-        local matchfunc, priority, fastpath_name = publisher.compile_match_pattern(match)
+        local matchfunc, priority, fastpath_name = publisher.dispatch.compile_match_pattern(match)
         if fastpath_name then
             -- Simple element name pattern: use fast path
             main.log("debug","Record","match (fast path)",fastpath_name,"mode",mode)
@@ -5130,7 +5129,7 @@ function commands.record( layoutxml,dataxml )
     end
 
     if not elementname or elementname == "" then
-        err("Record: attribute 'element' or 'match' required.")
+        main.log("error", "Record: attribute 'element' or 'match' required.")
         return
     end
 
@@ -5159,13 +5158,13 @@ end
 ---@param dataxml table
 ---@return any
 function commands.rule( layoutxml,dataxml )
-    local direction     = publisher.read_attribute(layoutxml,dataxml,"direction",  "string")
-    local length        = publisher.read_attribute(layoutxml,dataxml,"length",     "string")
-    local rulewidth     = publisher.read_attribute(layoutxml,dataxml,"rulewidth",  "string")
-    local dashed        = publisher.read_attribute(layoutxml,dataxml,"dashed",     "boolean")
-    local color         = publisher.read_attribute(layoutxml,dataxml,"color",      "string")
-    local class         = publisher.read_attribute(layoutxml,dataxml,"class",      "string")
-    local id            = publisher.read_attribute(layoutxml,dataxml,"id",         "string")
+    local direction     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"direction",  "string")
+    local length        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"length",     "string")
+    local rulewidth     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"rulewidth",  "string")
+    local dashed        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"dashed",     "boolean")
+    local color         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"color",      "string")
+    local class         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"class",      "string")
+    local id            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"id",         "string")
 
     local css_rules = publisher.css:matches({element = "rule", class=class,id=id}) or {}
 
@@ -5178,7 +5177,7 @@ function commands.rule( layoutxml,dataxml )
         elseif direction == "vertical" then
             length = publisher.current_grid:height_sp(length)
         else
-            err("Attribute “direction” with “Rule”: unknown direction: %q",direction)
+            main.log("error", string.format("Attribute “direction” with “Rule”: unknown direction: %q", direction))
         end
     else
         length = tex.sp(length)
@@ -5214,7 +5213,7 @@ function commands.rule( layoutxml,dataxml )
         --
     end
     if colentry.alpha then
-        publisher.set_attribute(n,"color",colentry.index)
+        publisher.attribute_helpers.set_attribute(n,"color",colentry.index)
     end
     n = node.hpack(n)
     return n
@@ -5230,11 +5229,11 @@ function commands.save_dataset( layoutxml,dataxml )
     local towrite, tmp,tab
     -- filename is obsolete, LoadDataset has "name" too. And it is actually not a filename, just part
     -- of it.
-    local filename    = publisher.read_attribute(layoutxml,dataxml,"filename",   "string")
-    local name        = publisher.read_attribute(layoutxml,dataxml,"name",       "string")
-    local elementname = publisher.read_attribute(layoutxml,dataxml,"elementname","string")
-    local selection   = publisher.read_attribute(layoutxml,dataxml,"select",     "string")
-    local attributes  = publisher.read_attribute(layoutxml,dataxml,"attributes", "xpathraw")
+    local filename    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"filename",   "string")
+    local name        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name",       "string")
+    local elementname = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"elementname","string")
+    local selection   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select",     "string")
+    local attributes  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"attributes", "xpathraw")
     name = name or filename
 
     assert(name)
@@ -5243,8 +5242,8 @@ function commands.save_dataset( layoutxml,dataxml )
     tmp = {}
     if attributes then
         for i=1,#attributes do
-            if publisher.elementname(attributes[i]) == "Attribute" then
-                for k,v in pairs(publisher.element_contents(attributes[i])) do
+            if publisher.xml_helpers.elementname(attributes[i]) == "Attribute" then
+                for k,v in pairs(publisher.xml_helpers.element_contents(attributes[i])) do
                     if k ~= ".__type" then
                         tmp[k] = v
                     end
@@ -5256,25 +5255,25 @@ function commands.save_dataset( layoutxml,dataxml )
         if publisher.newxpath then
             local seq, msg = dataxml:eval(selection)
             if msg then
-                err(msg)
+                main.log("error", msg)
             end
             tab = seq
         else
             local ok
             ok, tab = publisher.xpath.parse_raw(dataxml,selection,layoutxml[".__ns"])
-            if not ok then err(tab) return end
+            if not ok then main.log("error", tab) return end
         end
     else
-        tab = publisher.dispatch(layoutxml,dataxml)
+        tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     end
 
     for i=1,#tab do
         local eltname = tab[i].elementname
         if eltname == "Element" then
-            tmp[#tmp + 1] = publisher.element_contents(tab[i])
+            tmp[#tmp + 1] = publisher.xml_helpers.element_contents(tab[i])
         elseif eltname=="elementstructure" or eltname=="Makeindex" then
-            for j=1,#publisher.element_contents(tab[i]) do
-                tmp[#tmp + 1] = publisher.element_contents(tab[i])[j]
+            for j=1,#publisher.xml_helpers.element_contents(tab[i]) do
+                tmp[#tmp + 1] = publisher.xml_helpers.element_contents(tab[i])[j]
             end
         else
             tmp[#tmp + 1] = tab[i]
@@ -5303,9 +5302,9 @@ function commands.save_dataset( layoutxml,dataxml )
     local full_filename = tex.jobname .. "-" .. name .. ".xml"
     local file = io.open(full_filename,"wb")
     if publisher.newxpath then
-        towrite = publisher.xml_to_string_newxpath(tmp)
+        towrite = publisher.xml_helpers.xml_to_string_newxpath(tmp)
     else
-        towrite = publisher.xml_to_string(tmp)
+        towrite = publisher.xml_helpers.xml_to_string(tmp)
     end
     file:write(towrite)
     file:close()
@@ -5318,7 +5317,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.save_pages( layoutxml,dataxml )
-    local pagestore_name = publisher.read_attribute(layoutxml,dataxml,"name","string")
+    local pagestore_name = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"name","string")
 
     if publisher.forward_pagestore[pagestore_name] == nil then
         -- backwards mode. First save_pages, then insert_pages
@@ -5326,8 +5325,8 @@ function commands.save_pages( layoutxml,dataxml )
         main.log("info","SavePages backwards mode","start page",save_current_pagenumber, "name",pagestore_name)
         publisher.current_pagestore_name = pagestore_name
         publisher.pagestore[pagestore_name] = {}
-        local tab = publisher.dispatch(layoutxml,dataxml)
-        publisher.new_page("save_pages",dataxml)
+        local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
+        publisher.page_helpers.new_page("save_pages",dataxml)
         for i=save_current_pagenumber,publisher.current_pagenumber - 1 do
             publisher.pages[i] = nil
         end
@@ -5338,8 +5337,8 @@ function commands.save_pages( layoutxml,dataxml )
     else
         -- forward mode. First insert pages then save pages
         -- Run NewPage if the current page is not finished
-        if publisher.page_initialized_p(publisher.current_pagenumber) then
-            publisher.new_page("save_pages forward mode",dataxml)
+        if publisher.page_helpers.page_initialized_p(publisher.current_pagenumber) then
+            publisher.page_helpers.new_page("save_pages forward mode",dataxml)
         end
         local save_current_pagenumber = publisher.current_pagenumber
         local ps = publisher.pagestore[pagestore_name]
@@ -5354,7 +5353,7 @@ function commands.save_pages( layoutxml,dataxml )
         -- since the callback for page ordering is called after
         -- each shipout.
         publisher.nextpage = ps.pagetype
-        local tab = publisher.dispatch(layoutxml,dataxml)
+        local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
 
         local realpagecount = publisher.current_pagenumber - location + 1
         if realpagecount ~= number_of_pages then
@@ -5363,7 +5362,7 @@ function commands.save_pages( layoutxml,dataxml )
         end
 
         -- for next pages, if any:
-        publisher.new_page("save_pages forward mode 2",dataxml)
+        publisher.page_helpers.new_page("save_pages forward mode 2",dataxml)
 
         -- If bookmarks are used in SavePages, we need to insert them at the
         -- correct location (InsertPages)
@@ -5393,12 +5392,12 @@ end
 ---@param dataxml table
 ---@return any
 function commands.set_grid(layoutxml,dataxml)
-    local wd = publisher.read_attribute(layoutxml,dataxml,"width", "string")
-    local ht = publisher.read_attribute(layoutxml,dataxml,"height","string")
-    local nx = publisher.read_attribute(layoutxml,dataxml,"nx",    "string")
-    local ny = publisher.read_attribute(layoutxml,dataxml,"ny",    "string")
-    local dx = publisher.read_attribute(layoutxml,dataxml,"dx",    "length_sp")
-    local dy = publisher.read_attribute(layoutxml,dataxml,"dy",    "length_sp")
+    local wd = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width", "string")
+    local ht = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"height","string")
+    local nx = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"nx",    "string")
+    local ny = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"ny",    "string")
+    local dx = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"dx",    "length_sp")
+    local dy = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"dy",    "length_sp")
     if not (wd or ht or nx or ny) then
         main.log("error","SetGrid: you must set nx and ny or width and height", lineinfo(layoutxml))
         return
@@ -5413,7 +5412,7 @@ function commands.set_grid(layoutxml,dataxml)
         publisher.options.gridwidth = 0
     else
         if tonumber(wd) then
-            err("SetGrid: width must be a length (with unit). Setting it to 1cm.")
+            main.log("error", "SetGrid: width must be a length (with unit). Setting it to 1cm.")
             wd = "1cm"
         end
         if wd == nil then
@@ -5428,7 +5427,7 @@ function commands.set_grid(layoutxml,dataxml)
         publisher.options.gridheight = 0
     else
         if tonumber(ht) then
-            err("SetGrid: height must be a length (with unit). Setting it to 1cm.")
+            main.log("error", "SetGrid: height must be a length (with unit). Setting it to 1cm.")
             ht = "1cm"
         end
         publisher.options.gridheight  = tex.sp(ht)
@@ -5444,7 +5443,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.sequence( layoutxml,dataxml )
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select","xpathraw")
+    local selection = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","xpathraw")
     return selection
 end
 
@@ -5455,15 +5454,15 @@ end
 ---@param dataxml table
 ---@return any
 function commands.setvariable( layoutxml,dataxml )
-    local trace_p   = publisher.options.showassignments or publisher.read_attribute(layoutxml,dataxml,"trace","boolean")
-    local selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
-    local varname   = publisher.read_attribute(layoutxml,dataxml,"variable","string")
-    local typ       = publisher.read_attribute(layoutxml,dataxml,"type","string","sd")
-    local execute   = publisher.read_attribute(layoutxml,dataxml,"execute", "string","now")
+    local trace_p   = publisher.options.showassignments or publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"trace","boolean")
+    local selection = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","rawstring")
+    local varname   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"variable","string")
+    local typ       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"type","string","sd")
+    local execute   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"execute", "string","now")
     -- FIXME: if the variable contains nodes, the must be freed.
 
     if not varname then
-        err("Variable name in “SetVariable” not recognized")
+        main.log("error", "Variable name in “SetVariable” not recognized")
         return
     end
     local contents
@@ -5497,7 +5496,7 @@ function commands.setvariable( layoutxml,dataxml )
                 contents = publisher.xpath.parse(dataxml,selection,layoutxml[".__ns"])
             end
         else
-            local tab = publisher.dispatch(layoutxml,dataxml)
+            local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
             contents = tab
         end
     end
@@ -5509,8 +5508,8 @@ function commands.setvariable( layoutxml,dataxml )
             for i=1,#contents do
                 local thiscontents = contents[i]
                 if type(thiscontents) == "table" and thiscontents.elementname then
-                    local eltname = publisher.elementname(thiscontents)
-                    local element_contents = publisher.element_contents(thiscontents)
+                    local eltname = publisher.xml_helpers.elementname(thiscontents)
+                    local element_contents = publisher.xml_helpers.element_contents(thiscontents)
                     if eltname == "Sequence" or eltname == "Value" or eltname == "SortSequence" then
                         if type(element_contents) == "table" then
                             ret = ret or {}
@@ -5531,7 +5530,7 @@ function commands.setvariable( layoutxml,dataxml )
                         elseif type(element_contents) == "nil" then
                             -- ignore
                         else
-                            err("Unknown type: %q",type(element_contents))
+                            main.log("error", string.format("Unknown type: %q", type(element_contents)))
                             ret = nil
                         end
                     elseif eltname == "elementstructure" then
@@ -5561,8 +5560,8 @@ function commands.setvariable( layoutxml,dataxml )
         if type(contents) == "table" then
             local ret
             for i=1,#contents do
-                local eltname = publisher.elementname(contents[i])
-                local element_contents = publisher.element_contents(contents[i])
+                local eltname = publisher.xml_helpers.elementname(contents[i])
+                local element_contents = publisher.xml_helpers.element_contents(contents[i])
                 if eltname == "Sequence" or eltname == "Value" or eltname == "SortSequence" then
                     if type(element_contents) == "table" then
                         ret = ret or {}
@@ -5583,7 +5582,7 @@ function commands.setvariable( layoutxml,dataxml )
                     elseif type(element_contents) == "nil" then
                         -- ignore
                     else
-                        err("Unknown type: %q",type(element_contents))
+                        main.log("error", string.format("Unknown type: %q", type(element_contents)))
                         ret = nil
                     end
                 elseif eltname == "elementstructure" then
@@ -5618,7 +5617,7 @@ function commands.setvariable( layoutxml,dataxml )
             publisher.modes[m] = true
         end
     end
-    publisher.flush_variable(varname)
+    publisher.utilities.flush_variable(varname)
     if string.sub(typ,1,2) == "mp" then
         publisher.metapostvariables[varname] = { typ = string.sub(typ,4), contents}
     else
@@ -5637,12 +5636,12 @@ end
 ---@param dataxml table
 ---@return any
 function commands.sort_sequence( layoutxml,dataxml )
-    local selection        = publisher.read_attribute(layoutxml,dataxml,"select","string")
-    local removeduplicates = publisher.read_attribute(layoutxml,dataxml,"removeduplicates","string")
-    local criterion        = publisher.read_attribute(layoutxml,dataxml,"criterion","string")
-    local numerical        = publisher.read_attribute(layoutxml,dataxml,"numerical",   "boolean")
-    local criterium        = publisher.read_attribute(layoutxml,dataxml,"criterium","string")
-    local order            = publisher.read_attribute(layoutxml,dataxml,"order","string","ascending")
+    local selection        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","string")
+    local removeduplicates = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"removeduplicates","string")
+    local criterion        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"criterion","string")
+    local numerical        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"numerical",   "boolean")
+    local criterium        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"criterium","string")
+    local order            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"order","string","ascending")
 
     -- spelling error in schema
     local sortkey = criterion or criterium
@@ -5650,7 +5649,7 @@ function commands.sort_sequence( layoutxml,dataxml )
     if publisher.newxpath then
         local msg
         sequence, msg = dataxml:eval(selection)
-        if msg then err(msg) end
+        if msg then main.log("error", msg) end
     else
         sequence = publisher.xpath.parse(dataxml,selection,layoutxml[".__ns"])
     end
@@ -5719,16 +5718,16 @@ end
 ---@param dataxml table
 ---@return any
 function commands.span( layoutxml,dataxml )
-    local backgroundcolor    = publisher.read_attribute(layoutxml,dataxml,"background-color",         "string")
-    local bg_padding_top     = publisher.read_attribute(layoutxml,dataxml,"background-padding-top",   "length_sp")
-    local bg_padding_bottom  = publisher.read_attribute(layoutxml,dataxml,"background-padding-bottom","length_sp")
-    local fontfamilyname     = publisher.read_attribute(layoutxml,dataxml,"fontfamily",               "string")
-    local language_name      = publisher.read_attribute(layoutxml,dataxml,"language",                 "string")
-    local letterspacing      = publisher.read_attribute(layoutxml,dataxml,"letter-spacing",           "booleanorlength")
-    local class              = publisher.read_attribute(layoutxml,dataxml,"class",                    "string")
-    local id                 = publisher.read_attribute(layoutxml,dataxml,"id",                       "string")
+    local backgroundcolor    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"background-color",         "string")
+    local bg_padding_top     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"background-padding-top",   "length_sp")
+    local bg_padding_bottom  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"background-padding-bottom","length_sp")
+    local fontfamilyname     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontfamily",               "string")
+    local language_name      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"language",                 "string")
+    local letterspacing      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"letter-spacing",           "booleanorlength")
+    local class              = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"class",                    "string")
+    local id                 = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"id",                       "string")
     local css_rules          = publisher.css:matches({element = 'span', class=class,id=id}) or {}
-    local role               = publisher.read_attribute(layoutxml,dataxml,"role",                     "string")
+    local role               = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"role",                     "string")
 
 
     if letterspacing == nil then
@@ -5757,7 +5756,7 @@ function commands.span( layoutxml,dataxml )
     end
     local languagecode
     if language_name then
-        languagecode = publisher.get_languagecode(language_name)
+        languagecode = publisher.language.get_languagecode(language_name)
     end
 
     local params = {
@@ -5771,15 +5770,15 @@ function commands.span( layoutxml,dataxml )
     }
     if publisher.options.format == "PDF/UA" then
         publisher.rolecounter = publisher.rolecounter + 1
-        params.role = publisher.get_rolenum(role)
+        params.role = publisher.structure_tree.get_rolenum(role)
         params.rolecounter = publisher.rolecounter
         params.parent = 0
     end
 
     local p = publisher.par:new(nil,"span2")
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
-        local c = publisher.element_contents(j)
+        local c = publisher.xml_helpers.element_contents(j)
         p:append(c,params)
     end
 
@@ -5793,9 +5792,9 @@ end
 function commands.structureelement( layoutxml,dataxml )
     local analyzeStructureElement
     analyzeStructureElement = function (lx,parenttable)
-        local role = publisher.read_attribute(lx,dataxml,"role", "string")
-        local id = publisher.read_attribute(lx,dataxml,"id", "string")
-        local parent = publisher.read_attribute(lx,dataxml,"parent", "string")
+        local role = publisher.attribute_helpers.read_attribute(lx,dataxml,"role", "string")
+        local id = publisher.attribute_helpers.read_attribute(lx,dataxml,"id", "string")
+        local parent = publisher.attribute_helpers.read_attribute(lx,dataxml,"parent", "string")
         if parent then
             parenttable = publisher.structElements[parent]
         end
@@ -5831,7 +5830,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.stylesheet( layoutxml,dataxml )
-    local filename = publisher.read_attribute(layoutxml,dataxml,"filename","string")
+    local filename = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"filename","string")
     if filename then
         publisher.css:parse(filename)
     else
@@ -5854,9 +5853,9 @@ end
 ---@return any
 function commands.sub( layoutxml,dataxml )
     local p = publisher.par:new(nil,"sub")
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
-        local c = publisher.element_contents(j)
+        local c = publisher.xml_helpers.element_contents(j)
         p:append(c,{verticalalign = "sub", fontsize = "small"})
     end
     return p
@@ -5870,9 +5869,9 @@ end
 ---@return any
 function commands.sup( layoutxml,dataxml )
     local p = publisher.par:new(nil,"sup")
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     for _,j in ipairs(tab) do
-        local c = publisher.element_contents(j)
+        local c = publisher.xml_helpers.element_contents(j)
         p:append(c,{verticalalign = "super", fontsize = "small"})
     end
     return p
@@ -5890,22 +5889,22 @@ function commands.switch( layoutxml,dataxml )
     for _,case_or_otherwise_element in ipairs(layoutxml) do
         elementname = case_or_otherwise_element[".__local_name"]
         if type(case_or_otherwise_element)=="table" and elementname=="Case" and case_matched ~= true then
-            local test = publisher.read_attribute(case_or_otherwise_element,dataxml,"test","string")
+            local test = publisher.attribute_helpers.read_attribute(case_or_otherwise_element,dataxml,"test","string")
             if publisher.newxpath then
                 local seq, msg = dataxml:eval(test)
-                if msg then err(msg) return nil end
+                if msg then main.log("error", msg) return nil end
                 case_matched = publisher.xpath.boolean_value(seq)
                 if case_matched then
-                    ret = publisher.dispatch(case_or_otherwise_element, dataxml)
+                    ret = publisher.dispatch.dispatch(case_or_otherwise_element, dataxml)
                 end
             else
             -- newxpath!!
                 local ok, tab = publisher.xpath.parse_raw(dataxml,test,layoutxml[".__ns"])
                 if not ok then
-                    err(tab)
+                    main.log("error", tab)
                 elseif tab[1] then
                     case_matched = true
-                    ret = publisher.dispatch(case_or_otherwise_element,dataxml)
+                    ret = publisher.dispatch.dispatch(case_or_otherwise_element,dataxml)
                 end
             end
         elseif type(case_or_otherwise_element)=="table" and elementname=="Otherwise" then
@@ -5913,7 +5912,7 @@ function commands.switch( layoutxml,dataxml )
         end -- case/otherwise
     end
     if otherwise and case_matched==false then
-        ret = publisher.dispatch(otherwise,dataxml)
+        ret = publisher.dispatch.dispatch(otherwise,dataxml)
     end
     if not ret then return {} end
     return ret
@@ -5928,30 +5927,30 @@ end
 ---@param options? table Per-call overrides (used when called from `<Textblock>`).
 ---@return any
 function commands.table( layoutxml,dataxml,options )
-    local autostretch    = publisher.read_attribute(layoutxml,dataxml,"stretch",         "string")
-    local balance        = publisher.read_attribute(layoutxml,dataxml,"balance",         "boolean", false)
-    local collapse       = publisher.read_attribute(layoutxml,dataxml,"border-collapse", "string", "separate")
-    local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance",  "length")
+    local autostretch    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"stretch",         "string")
+    local balance        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"balance",         "boolean", false)
+    local collapse       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"border-collapse", "string", "separate")
+    local columndistance = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"columndistance",  "length")
     -- The XPath in @eval is evaluated for its side-effects only; the result
     -- is intentionally discarded.
-    local eval           = publisher.read_attribute(layoutxml,dataxml,"eval",            "xpath") -- luacheck: ignore eval
-    local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",        "string")
-    local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily",      "string",fontname)
-    local padding        = publisher.read_attribute(layoutxml,dataxml,"padding",         "length")
-    local rowdistance    = publisher.read_attribute(layoutxml,dataxml,"leading",         "length")
-    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",      "string", "__leftaligned")
-    local width          = publisher.read_attribute(layoutxml,dataxml,"width",           "length")
-    local vexcess        = publisher.read_attribute(layoutxml,dataxml,"vexcess",         "string", "stretch")
-    local parent         = publisher.read_attribute(layoutxml,dataxml,"parent",          "string")
-    local role           = publisher.read_attribute(layoutxml,dataxml,"role",            "string")
+    local eval           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"eval",            "xpath") -- luacheck: ignore eval
+    local fontname       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontface",        "string")
+    local fontfamilyname = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontfamily",      "string",fontname)
+    local padding        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"padding",         "length")
+    local rowdistance    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"leading",         "length")
+    local textformat     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"textformat",      "string", "__leftaligned")
+    local width          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width",           "length")
+    local vexcess        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"vexcess",         "string", "stretch")
+    local parent         = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"parent",          "string")
+    local role           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"role",            "string")
 
-    if fontname then warning("Table/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
+    if fontname then main.log("warn", "Table/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     -- FIXME: leading -> row distance or so
     padding        = tex.sp(padding        or "0pt")
     columndistance = tex.sp(columndistance or "0pt")
     rowdistance    = tex.sp(rowdistance    or "0pt")
-    publisher.setup_page(nil,"commands#table",dataxml)
+    publisher.page_helpers.setup_page(nil,"commands#table",dataxml)
 
     if width == nil then
         if publisher.newxpath then
@@ -5959,12 +5958,12 @@ function commands.table( layoutxml,dataxml,options )
             if tmp then
                 width = tmp
             else
-                err("Can't determine the current width. Tables in groups and data cells must contain explicit widths.")
+                main.log("error", "Can't determine the current width. Tables in groups and data cells must contain explicit widths.")
                 width = 50 * 2^16
             end
         else
             if publisher.xpath.get_variable("__maxwidth") == nil then
-                err("Can't determine the current width. Tables in groups and data cells must contain explicit widths.")
+                main.log("error", "Can't determine the current width. Tables in groups and data cells must contain explicit widths.")
                 width = 50 * 2^16
             else
                 width = publisher.xpath.get_variable("__maxwidth")
@@ -5978,8 +5977,8 @@ function commands.table( layoutxml,dataxml,options )
         end
     end
     if not width then
-        err("Can't get the width of the table!")
-        local rule = publisher.add_rule(nil,"head",{height=100*2^16,width=100*2^16},"width error")
+        main.log("error", "Can't get the width of the table!")
+        local rule = publisher.nodes.add_rule(nil,"head",{height=100*2^16,width=100*2^16},"width error")
         local v = node.vpack(rule)
         return v
     end
@@ -5989,14 +5988,14 @@ function commands.table( layoutxml,dataxml,options )
     publisher.current_fontfamily = fontfamily
 
     if fontfamily == nil then
-        err("Fontfamily %q not found.",fontfamilyname or "???")
+        main.log("error", string.format("Fontfamily %q not found.", fontfamilyname or "???"))
         fontfamily = 1
     end
     local tab = {}
-    local tab_tmp = publisher.dispatch(layoutxml,dataxml)
+    local tab_tmp = publisher.dispatch.dispatch(layoutxml,dataxml)
 
     for i=1,#tab_tmp do
-        local eltname = publisher.elementname(tab_tmp[i])
+        local eltname = publisher.xml_helpers.elementname(tab_tmp[i])
         if eltname == "Tr" or eltname == "Columns" or eltname == "Tablehead" or eltname == "Tablefoot" or eltname == "Tablerule" or eltname == "TableNewPage" then
             tab[#tab + 1] = tab_tmp[i]
         elseif eltname == "Value" then
@@ -6011,7 +6010,7 @@ function commands.table( layoutxml,dataxml,options )
     local tabular = t:new()
 
     tabular.tab = tab
-    tabular.getheight      = publisher.getheight
+    tabular.getheight      = publisher.page_helpers.getheight
     tabular.options        = options or { ht_max=99999*2^16 } -- FIXME! Test - this is for tabular in tabular
     tabular.layoutxml      = layoutxml
     tabular.dataxml        = dataxml
@@ -6026,7 +6025,7 @@ function commands.table( layoutxml,dataxml,options )
     tabular.autostretch    = autostretch
     tabular.vexcess        = vexcess
     tabular.bordercollapse = collapse == "collapse"
-    local eval_on_split_raw = publisher.read_attribute(layoutxml,dataxml,"eval-on-split","string")
+    local eval_on_split_raw = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"eval-on-split","string")
     if eval_on_split_raw then
         tabular.eval_on_split_layoutxml = layoutxml
         tabular.eval_on_split_dataxml = dataxml
@@ -6058,12 +6057,12 @@ function commands.table( layoutxml,dataxml,options )
         if not parent then
             parent = "doc"
         end
-        publisher.setprop(n[1],"role", publisher.get_rolenum(role))
-        publisher.setprop(n[1],"parentid", parent)
-        publisher.setprop(n[1],"rolecounter", publisher.rolecounter)
+        publisher.attribute_helpers.setprop(n[1],"role", publisher.structure_tree.get_rolenum(role))
+        publisher.attribute_helpers.setprop(n[1],"parentid", parent)
+        publisher.attribute_helpers.setprop(n[1],"rolecounter", publisher.rolecounter)
         local tblid = role .. "_" .. publisher.rolecounter
-        publisher.setprop(n[1],"id", tblid)
-        node.set_attribute(n[1],publisher.att_role,publisher.get_rolenum(role))
+        publisher.attribute_helpers.setprop(n[1],"id", tblid)
+        node.set_attribute(n[1],publisher.att_role,publisher.structure_tree.get_rolenum(role))
         publisher.rolecounter = publisher.rolecounter + 1
     end
     if not node.is_node(n) then
@@ -6083,8 +6082,8 @@ end
 ---@param dataxml table
 ---@return any
 function commands.tablefoot( layoutxml,dataxml )
-    local tab = publisher.dispatch(layoutxml,dataxml)
-    local page = publisher.read_attribute(layoutxml,dataxml,"page","string","all")
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
+    local page = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"page","string","all")
     tab.page = page
     tab._layoutxml = layoutxml
     tab._dataxml = dataxml
@@ -6098,8 +6097,8 @@ end
 ---@param dataxml table
 ---@return any
 function commands.tablehead( layoutxml,dataxml )
-    local tab = publisher.dispatch(layoutxml,dataxml)
-    local page = publisher.read_attribute(layoutxml,dataxml,"page","string","all")
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
+    local page = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"page","string","all")
     tab.page = page
     tab._layoutxml = layoutxml
     tab._dataxml = dataxml
@@ -6123,8 +6122,8 @@ end
 ---@param dataxml table
 ---@return any
 function commands.tablerule( layoutxml,dataxml )
-    local class     = publisher.read_attribute(layoutxml,dataxml,"class","string")
-    local id        = publisher.read_attribute(layoutxml,dataxml,"id",   "string")
+    local class     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"class","string")
+    local id        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"id",   "string")
 
     local css_rules = publisher.css:matches({element = "tablerule", class=class,id=id}) or {}
 
@@ -6144,7 +6143,7 @@ function commands.tablerule( layoutxml,dataxml )
 
     local tmpattr
     for attname,atttyp in pairs(attribute) do
-        tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+        tmpattr = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,attname,atttyp)
         if tmpattr ~= nil then
             tab[attname] = tmpattr
         end
@@ -6166,12 +6165,12 @@ end
 ---@return any
 function commands.tr( layoutxml,dataxml )
     local tab = {}
-    local tab_tmp = publisher.dispatch(layoutxml,dataxml)
+    local tab_tmp = publisher.dispatch.dispatch(layoutxml,dataxml)
 
-    local class  = publisher.read_attribute(layoutxml,dataxml,"class",  "string")
-    local id     = publisher.read_attribute(layoutxml,dataxml,"id",     "string")
-    local parent = publisher.read_attribute(layoutxml,dataxml,"parent", "string")
-    local role   = publisher.read_attribute(layoutxml,dataxml,"role",   "string")
+    local class  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"class",  "string")
+    local id     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"id",     "string")
+    local parent = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"parent", "string")
+    local role   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"role",   "string")
 
     local css_rules = publisher.css:matches({element = "tr", class=class,id=id})
 
@@ -6190,7 +6189,7 @@ function commands.tr( layoutxml,dataxml )
     local eltname
     -- filter things like <Message ...> that don't give sensible output
     for i=1,#tab_tmp do
-        eltname = publisher.elementname(tab_tmp[i])
+        eltname = publisher.xml_helpers.elementname(tab_tmp[i])
         if eltname == "Value" or eltname == "elementstructure" or eltname == "Message" then
             -- ignore
         else
@@ -6212,7 +6211,7 @@ function commands.tr( layoutxml,dataxml )
 
     local tmpattr
     for attname,atttyp in pairs(attribute) do
-        tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+        tmpattr = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,attname,atttyp)
         if tmpattr then
             if attname == "background-color" then attname = "backgroundcolor" end
             tab[attname] = tmpattr
@@ -6221,8 +6220,8 @@ function commands.tr( layoutxml,dataxml )
 
     tab._layoutxml = layoutxml
     tab._dataxml = dataxml
-    tab.align = publisher.read_attribute(layoutxml,dataxml,"align","string",nil,"align")
-    local sethead = publisher.read_attribute(layoutxml,dataxml,"sethead","string")
+    tab.align = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"align","string",nil,"align")
+    local sethead = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"sethead","string")
     if sethead == "yes" then
         tab.sethead = 1
     elseif sethead == "clear" then
@@ -6249,11 +6248,11 @@ end
 ---@param dataxml table
 ---@return any
 function commands.transformation( layoutxml,dataxml )
-    local tab = publisher.dispatch(layoutxml,dataxml)
-    local matrix   = publisher.read_attribute(layoutxml,dataxml,"matrix",  "string")
-    local origin_x = publisher.read_attribute(layoutxml,dataxml,"origin-x","string", "50", "origin")
-    local origin_y = publisher.read_attribute(layoutxml,dataxml,"origin-y","string", "50", "origin")
-    local flip = publisher.read_attribute(layoutxml,dataxml,"flip","string","none")
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
+    local matrix   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"matrix",  "string")
+    local origin_x = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"origin-x","string", "50", "origin")
+    local origin_y = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"origin-y","string", "50", "origin")
+    local flip = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"flip","string","none")
 
     local mirrorx, mirrory = false, false
     if flip == "none" then
@@ -6291,15 +6290,15 @@ function commands.transformation( layoutxml,dataxml )
         origin_y = 100
     end
     for i=1,#tab do
-        local contents = publisher.element_contents(tab[i])
+        local contents = publisher.xml_helpers.element_contents(tab[i])
         if node.is_node(contents) then
             if matrix then
-                tab[i].contents = publisher.matrix(contents,matrix,origin_x, origin_y)
+                tab[i].contents = publisher.drawing.matrix(contents,matrix,origin_x, origin_y)
             end
         else
             for j=1,#contents do
                 if node.is_node(contents[j]) then
-                    contents[j] = publisher.matrix(contents[j],matrix,origin_x, origin_y)
+                    contents[j] = publisher.drawing.matrix(contents[j],matrix,origin_x, origin_y)
                 end
             end
         end
@@ -6314,12 +6313,12 @@ end
 ---@param dataxml table
 ---@return any
 function commands.td( layoutxml,dataxml )
-    local tab = publisher.dispatch(layoutxml,dataxml)
-    local parent    = publisher.read_attribute(layoutxml,dataxml,"parent", "string")
-    local role      = publisher.read_attribute(layoutxml,dataxml,"role",   "string")
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
+    local parent    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"parent", "string")
+    local role      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"role",   "string")
 
-    local class = publisher.read_attribute(layoutxml,dataxml,"class","string")
-    local id    = publisher.read_attribute(layoutxml,dataxml,"id",   "string")
+    local class = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"class","string")
+    local id    = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"id",   "string")
 
     local css_rules = publisher.css:matches({element = "td", class=class,id=id})
 
@@ -6381,7 +6380,7 @@ function commands.td( layoutxml,dataxml )
 
     local tmpattr
     for attname,atttyp in pairs(attribute) do
-        tmpattr = publisher.read_attribute(layoutxml,dataxml,attname,atttyp)
+        tmpattr = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,attname,atttyp)
         if tmpattr then
             if attname == "background-color" then attname = "backgroundcolor" end
             tab[attname] = tmpattr
@@ -6392,11 +6391,11 @@ function commands.td( layoutxml,dataxml )
     tab.parent  = parent
     -- backwards compatibility. Used to be graphics, but should be without "s" (#457)
     if tab.graphics then
-        warning("deprecation note: attribute graphics on Td should be graphic (without s)")
+        main.log("warn", "deprecation note: attribute graphics on Td should be graphic (without s)")
         tab.graphic = tab.graphics
     end
 
-    local tmp = publisher.read_attribute(layoutxml,dataxml,"align","string",nil,"align")
+    local tmp = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"align","string",nil,"align")
     if tmp then
         tab.align = tmp
     end
@@ -6426,18 +6425,18 @@ end
 ---@param dataxml table
 ---@return any
 function commands.trace(layoutxml,dataxml)
-    local assignments      = publisher.read_attribute(layoutxml,dataxml,"assignments",   "boolean")
-    local debug            = publisher.read_attribute(layoutxml,dataxml,"debug",         "boolean")
-    local grid             = publisher.read_attribute(layoutxml,dataxml,"grid",          "boolean")
-    local groups           = publisher.read_attribute(layoutxml,dataxml,"groups",        "boolean")
-    local gridallocation   = publisher.read_attribute(layoutxml,dataxml,"gridallocation","boolean")
-    local gridlocation     = publisher.read_attribute(layoutxml,dataxml,"gridlocation",  "string")
-    local hyphenation      = publisher.read_attribute(layoutxml,dataxml,"hyphenation",   "boolean")
-    local kerning          = publisher.read_attribute(layoutxml,dataxml,"kerning",       "boolean")
-    local objects          = publisher.read_attribute(layoutxml,dataxml,"objects",       "boolean")
-    local verbose          = publisher.read_attribute(layoutxml,dataxml,"verbose",       "boolean")
-    local textformat       = publisher.read_attribute(layoutxml,dataxml,"textformat",    "boolean")
-    local dumpstructtree   = publisher.read_attribute(layoutxml,dataxml,"dump-structtree","boolean")
+    local assignments      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"assignments",   "boolean")
+    local debug            = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"debug",         "boolean")
+    local grid             = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"grid",          "boolean")
+    local groups           = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"groups",        "boolean")
+    local gridallocation   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"gridallocation","boolean")
+    local gridlocation     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"gridlocation",  "string")
+    local hyphenation      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"hyphenation",   "boolean")
+    local kerning          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"kerning",       "boolean")
+    local objects          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"objects",       "boolean")
+    local verbose          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"verbose",       "boolean")
+    local textformat       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"textformat",    "boolean")
+    local dumpstructtree   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"dump-structtree","boolean")
 
     if assignments ~= nil then
         publisher.options.showassignments = assignments
@@ -6476,7 +6475,7 @@ function commands.trace(layoutxml,dataxml)
         if gridlocation == "foreground" or gridlocation == "background" then
             publisher.options.gridlocation = gridlocation
         else
-            warning("Grid location %s unknown",gridlocation)
+            main.log("warn", string.format("Grid location %s unknown", gridlocation))
         end
 
     end
@@ -6489,11 +6488,11 @@ end
 ---@param dataxml table
 ---@return any
 function commands.text(layoutxml,dataxml)
-    local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",      "string", "black")
-    local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",   "string")
-    local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily", "string",fontname)
-    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat", "string","text")
-    if fontname then warning("Text/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
+    local colorname      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"color",      "string", "black")
+    local fontname       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontface",   "string")
+    local fontfamilyname = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontfamily", "string",fontname)
+    local textformat     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"textformat", "string","text")
+    if fontname then main.log("warn", "Text/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     local colorindex
     if colorname then
@@ -6505,13 +6504,13 @@ function commands.text(layoutxml,dataxml)
     end
     local save_color = publisher.current_fgcolor
     publisher.current_fgcolor = colorindex
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     publisher.current_fgcolor = save_color
 
     if not fontfamilyname then fontfamilyname = "text" end
     local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
     if fontfamily == nil then
-        err("Fontfamily %q not found.",fontfamilyname or "???")
+        main.log("error", string.format("Fontfamily %q not found.", fontfamilyname or "???"))
         fontfamily = 1
     end
 
@@ -6520,8 +6519,8 @@ function commands.text(layoutxml,dataxml)
 
     local objects = {}
     for i,j in ipairs(tab) do
-        local eltname = publisher.elementname(j)
-        local contents = publisher.element_contents(j)
+        local eltname = publisher.xml_helpers.elementname(j)
+        local contents = publisher.xml_helpers.element_contents(j)
         if eltname == "Paragraph" then
             objects[#objects + 1] = contents
         elseif eltname == "Par" then
@@ -6609,9 +6608,9 @@ function commands.text(layoutxml,dataxml)
                 -- Check if page already has content (for break-before: page logic)
                 local current_row = cg:current_row(parameter.area) or 1
                 parameter.page_has_content = (current_row > 1)
-                local obj1, obj2 = publisher.vsplit(state.objects,parameter)
+                local obj1, obj2 = publisher.page_helpers.vsplit(state.objects,parameter)
                 if state.prevobj1 == obj1 then
-                    err("Output loop detected in vsplit: Object cannot be placed and would cause infinite loop. Some objects are discarded from the output. This usually happens when content (e.g., a table with ht_max set too high) cannot be split properly. Consider reducing table size or using a more conservative ht_max value (e.g., 550pt).")
+                    main.log("error", "Output loop detected in vsplit: Object cannot be placed and would cause infinite loop. Some objects are discarded from the output. This usually happens when content (e.g., a table with ht_max set too high) cannot be split properly. Consider reducing table size or using a more conservative ht_max value (e.g., 550pt).")
                     state.objects = {}
                     return obj1,state,false
                 end
@@ -6638,17 +6637,17 @@ end
 ---@return any
 function commands.textblock( layoutxml,dataxml )
     local fontfamily
-    local angle          = publisher.read_attribute(layoutxml,dataxml,"angle",         "number")
-    local colorname      = publisher.read_attribute(layoutxml,dataxml,"color",         "string", "black")
-    local columns        = publisher.read_attribute(layoutxml,dataxml,"columns",       "number")
-    local columndistance = publisher.read_attribute(layoutxml,dataxml,"columndistance","string")
-    local fontname       = publisher.read_attribute(layoutxml,dataxml,"fontface",      "string")
-    local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily",    "string",fontname)
-    local language_name  = publisher.read_attribute(layoutxml,dataxml,"language",      "string")
-    local minheight      = publisher.read_attribute(layoutxml,dataxml,"minheight",     "height_sp")
-    local textformat     = publisher.read_attribute(layoutxml,dataxml,"textformat",    "string","text")
-    local width          = publisher.read_attribute(layoutxml,dataxml,"width",         "length_sp")
-    if fontname then warning("Textblock/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
+    local angle          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"angle",         "number")
+    local colorname      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"color",         "string", "black")
+    local columns        = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"columns",       "number")
+    local columndistance = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"columndistance","string")
+    local fontname       = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontface",      "string")
+    local fontfamilyname = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontfamily",    "string",fontname)
+    local language_name  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"language",      "string")
+    local minheight      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"minheight",     "height_sp")
+    local textformat     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"textformat",    "string","text")
+    local width          = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"width",         "length_sp")
+    if fontname then main.log("warn", "Textblock/fontface is deprecated and will be removed in version 5. Please use fontfamily instead") end
 
     if publisher.current_group and not width then
         main.log("warn","Textblock: width not set, but within a group. Expect strange results.")
@@ -6666,13 +6665,13 @@ function commands.textblock( layoutxml,dataxml )
         publisher.xpath.set_variable("__maxwidth", width)
     end
     if not width then
-        err("Can't evaluate width in textblock")
-        local rule = publisher.add_rule(nil,"head",{height=100*2^16,width=100*2^16},"width error")
+        main.log("error", "Can't evaluate width in textblock")
+        local rule = publisher.nodes.add_rule(nil,"head",{height=100*2^16,width=100*2^16},"width error")
         local v = node.vpack(rule)
         return v
     end
 
-    if textformat and not publisher.textformats[textformat] then err("Textblock: textformat %q unknown",tostring(textformat)) end
+    if textformat and not publisher.textformats[textformat] then main.log("error", string.format("Textblock: textformat %q unknown", tostring(textformat))) end
 
     publisher.intextblockcontext = publisher.intextblockcontext + 1
 
@@ -6687,7 +6686,7 @@ function commands.textblock( layoutxml,dataxml )
     if not fontfamilyname then fontfamilyname = "text" end
     fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
     if fontfamily == nil then
-        err("Fontfamily %q not found.",fontfamilyname or "???")
+        main.log("error", string.format("Fontfamily %q not found.", fontfamilyname or "???"))
         fontfamily = 1
     end
 
@@ -6705,7 +6704,7 @@ function commands.textblock( layoutxml,dataxml )
 
     local languagecode
     if language_name then
-        languagecode = publisher.get_languagecode(language_name)
+        languagecode = publisher.language.get_languagecode(language_name)
     else
         languagecode = publisher.defaultlanguage
     end
@@ -6730,14 +6729,14 @@ function commands.textblock( layoutxml,dataxml )
         textformat = publisher.textformats[textformat],
     }
 
-    local tab = publisher.dispatch(layoutxml,dataxml,options)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml,options)
     if colorname then
         publisher.current_fgcolor = save_color
     end
 
     for i,j in ipairs(tab) do
-        local eltname = publisher.elementname(j)
-        local contents = publisher.element_contents(j)
+        local eltname = publisher.xml_helpers.elementname(j)
+        local contents = publisher.xml_helpers.element_contents(j)
         if eltname == "Paragraph" then
             objects[#objects + 1] = contents
         elseif eltname == "Par" then
@@ -6772,8 +6771,8 @@ function commands.textblock( layoutxml,dataxml )
             nodelist = paragraph.nodelist
             local tmp = node.has_attribute(nodelist,publisher.att_dont_format)
             if tmp ~= 1 then
-                publisher.set_fontfamily_if_necessary(nodelist,fontfamily)
-                paragraph.nodelist = publisher.set_color_if_necessary(nodelist,colorindex)
+                publisher.nodes.set_fontfamily_if_necessary(nodelist,fontfamily)
+                paragraph.nodelist = publisher.nodes.set_color_if_necessary(nodelist,colorindex)
                 node.slide(nodelist)
                 nodelist = paragraph:format(width_sp,{textformat = publisher.textformats[textformat]},dataxml)
             end
@@ -6783,13 +6782,13 @@ function commands.textblock( layoutxml,dataxml )
             -- new <Par> mode
             local fmt = paragraph:format(width_sp,options,dataxml)
             if publisher.options.format == "PDF/UA" then
-                publisher.setprop(fmt,"role", paragraph.role)
+                publisher.attribute_helpers.setprop(fmt,"role", paragraph.role)
                 local parent = paragraph.parent or "doc"
-                publisher.setprop(fmt,"parentid", parent)
-                publisher.setprop(fmt,"rolecounter", paragraph.rolecounter)
-                publisher.setprop(fmt,"id", paragraph.id)
-                publisher.setprop(fmt,"strutpos", paragraph.strutpos)
-                publisher.setprop(fmt,"actualtext",paragraph.actualtext)
+                publisher.attribute_helpers.setprop(fmt,"parentid", parent)
+                publisher.attribute_helpers.setprop(fmt,"rolecounter", paragraph.rolecounter)
+                publisher.attribute_helpers.setprop(fmt,"id", paragraph.id)
+                publisher.attribute_helpers.setprop(fmt,"strutpos", paragraph.strutpos)
+                publisher.attribute_helpers.setprop(fmt,"actualtext",paragraph.actualtext)
                 node.set_attribute(fmt,publisher.att_role,paragraph.role)
             end
             table.insert( nodes, fmt )
@@ -6798,9 +6797,9 @@ function commands.textblock( layoutxml,dataxml )
 
     if #objects == 0 then
         main.log("warn","Textblock: no objects found", lineinfo(layoutxml))
-        warning("Textblock: no objects found!")
+        main.log("warn", "Textblock: no objects found!")
         local vrule = {  width = 10 * 2^16, height = -1073741824}
-        nodes[1] = publisher.add_rule(nil,"head",vrule,"empty textblock")
+        nodes[1] = publisher.nodes.add_rule(nil,"head",vrule,"empty textblock")
     end
 
     -- Multi column typesetting
@@ -6833,7 +6832,7 @@ function commands.textblock( layoutxml,dataxml )
             end
             tail.next = nil
             local tmp = node.hpack(hbox_current_row)
-            publisher.setprop(tmp,"origin","columns > 1")
+            publisher.attribute_helpers.setprop(tmp,"origin","columns > 1")
             new_nodes[#new_nodes + 1] = tmp
         end
         nodes=new_nodes
@@ -6848,7 +6847,7 @@ function commands.textblock( layoutxml,dataxml )
 
     nodelist = node.vpack(nodes[1])
     if angle then
-        nodelist = publisher.rotate_textblock(nodelist,angle)
+        nodelist = publisher.drawing.rotate_textblock(nodelist,angle)
     end
 
     publisher.current_fontfamily = save_fontfamily
@@ -6873,9 +6872,9 @@ end
 ---@param dataxml table
 ---@return any
 function commands.underline( layoutxml,dataxml )
-    local dashed = publisher.read_attribute(layoutxml,dataxml,"dashed", "boolean")
-    local class  = publisher.read_attribute(layoutxml,dataxml,"class",  "string")
-    local id     = publisher.read_attribute(layoutxml,dataxml,"id",     "string")
+    local dashed = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"dashed", "boolean")
+    local class  = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"class",  "string")
+    local id     = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"id",     "string")
 
     local css_rules = publisher.css:matches({element = 'u', class=class,id=id}) or {}
     if dashed == nil then dashed = ( css_rules["border-style"] == "dashed") end
@@ -6887,10 +6886,10 @@ function commands.underline( layoutxml,dataxml )
     end
 
 
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
 
     for _,j in ipairs(tab) do
-        local c = publisher.element_contents(j)
+        local c = publisher.xml_helpers.element_contents(j)
         p:append(c,{textdecorationline = "underline", textdecorationstyle = tds})
     end
     return p
@@ -6903,12 +6902,12 @@ end
 ---@param dataxml table
 ---@return any
 function commands.ul(layoutxml,dataxml )
-    local fontfamilyname = publisher.read_attribute(layoutxml,dataxml,"fontfamily","string")
+    local fontfamilyname = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"fontfamily","string")
     local fontfamily
     if fontfamilyname then
         fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
         if fontfamily == nil then
-            err("Fontfamily %q not found.",fontfamilyname)
+            main.log("error", string.format("Fontfamily %q not found.", fontfamilyname))
             fontfamily = 0
         end
         publisher.current_fontfamily = fontfamily
@@ -6919,11 +6918,11 @@ function commands.ul(layoutxml,dataxml )
 
     local ret = {}
     local labelwidth = tex.sp("5mm")
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     for i,j in ipairs(tab) do
         local a = publisher.par:new(nil,"ul")
-        a:append(publisher.bullet_hbox(labelwidth,{fontfamily = fontfamily}))
-        a:append(publisher.element_contents(j),{})
+        a:append(publisher.nodes.bullet_hbox(labelwidth,{fontfamily = fontfamily}))
+        a:append(publisher.xml_helpers.element_contents(j),{})
         ret[#ret + 1] = a
     end
 
@@ -6938,11 +6937,11 @@ end
 ---@param dataxml table
 ---@return any
 function commands.until_do( layoutxml,dataxml )
-    local test = publisher.read_attribute(layoutxml,dataxml,"test","string")
+    local test = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"test","string")
     assert(test)
     if publisher.newxpath then
         repeat
-            publisher.dispatch(layoutxml,dataxml)
+            publisher.dispatch.dispatch(layoutxml,dataxml)
             local seq, msg = dataxml:eval(test)
             if msg then
                 main.log("error",msg)
@@ -6952,7 +6951,7 @@ function commands.until_do( layoutxml,dataxml )
         until tf
     else
         repeat
-            publisher.dispatch(layoutxml,dataxml)
+            publisher.dispatch.dispatch(layoutxml,dataxml)
         until publisher.xpath.parse(dataxml,test,layoutxml[".__ns"])
     end
 
@@ -6968,16 +6967,16 @@ end
 function commands.url(layoutxml,dataxml)
     local a = publisher.par:new(nil,"URL")
     local strings = {}
-    local tab = publisher.dispatch(layoutxml,dataxml)
+    local tab = publisher.dispatch.dispatch(layoutxml,dataxml)
     for i = 1, #tab do
-        local contents = publisher.element_contents(tab[i])
-        if publisher.elementname(tab[i]) == "Value" and type(contents) == "table" then
-            strings[#strings+1] = publisher.xml_stringvalue(contents)
+        local contents = publisher.xml_helpers.element_contents(tab[i])
+        if publisher.xml_helpers.elementname(tab[i]) == "Value" and type(contents) == "table" then
+            strings[#strings+1] = publisher.xml_helpers.xml_stringvalue(contents)
         end
     end
     local str = table.concat(strings)
-    local urlnodes = publisher.mknodes(str,options)
-    a:append(publisher.break_url(urlnodes))
+    local urlnodes = publisher.nodes.mknodes(str,options)
+    a:append(publisher.nodes.break_url(urlnodes))
     return a
 end
 
@@ -6991,10 +6990,10 @@ end
 function commands.value( layoutxml,dataxml )
     local selection
     if publisher.newxpath then
-        selection = publisher.read_attribute(layoutxml,dataxml,"select","rawstring")
+        selection = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","rawstring")
     else
         -- backwards compatibility, see commit e5d28aeccd and #680
-        selection = publisher.read_attribute(layoutxml,dataxml,"select","string")
+        selection = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"select","string")
     end
     local tab
     if selection then
@@ -7018,7 +7017,7 @@ function commands.value( layoutxml,dataxml )
         else
             local ok
             ok, tab = publisher.xpath.parse_raw(dataxml,selection,layoutxml[".__ns"])
-            if not ok then err(tab) return end
+            if not ok then main.log("error", tab) return end
             -- tab can now contain markup coming from data.xml such as <sup>...</sup>
         end
     else
@@ -7040,8 +7039,8 @@ end
 ---@param dataxml table
 ---@return any
 function commands.vspace( layoutxml,dataxml )
-    local height      = publisher.read_attribute(layoutxml,dataxml,"height", "height_sp")
-    local minheight   = publisher.read_attribute(layoutxml,dataxml,"minheight", "height_sp")
+    local height      = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"height", "height_sp")
+    local minheight   = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"minheight", "height_sp")
 
     local n
     if height == nil then
@@ -7050,7 +7049,7 @@ function commands.vspace( layoutxml,dataxml )
         n = set_glue(nil,{width = tonumber(height)})
     end
 
-    publisher.setprop(n,"origin","vspace")
+    publisher.attribute_helpers.setprop(n,"origin","vspace")
     return n
 end
 
@@ -7062,7 +7061,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.while_do( layoutxml,dataxml )
-    local test = publisher.read_attribute(layoutxml,dataxml,"test","string")
+    local test = publisher.attribute_helpers.read_attribute(layoutxml,dataxml,"test","string")
     assert(test)
     if publisher.newxpath then
         while true do
@@ -7075,11 +7074,11 @@ function commands.while_do( layoutxml,dataxml )
             if not tf then
                 break
             end
-            publisher.dispatch(layoutxml,dataxml)
+            publisher.dispatch.dispatch(layoutxml,dataxml)
         end
     else
         while publisher.xpath.parse(dataxml,test,layoutxml[".__ns"]) do
-            publisher.dispatch(layoutxml,dataxml)
+            publisher.dispatch.dispatch(layoutxml,dataxml)
         end
     end
 end

@@ -44,7 +44,7 @@ function M.handle_pages(pages, maxwidth_sp, dataxml)
                     publisher.xpath.set_variable("_pageheight", masterpage.height)
                 end
                 ht = tex.sp(masterpage.height)
-                publisher.set_pageformat(wd, ht)
+                publisher.page_helpers.set_pageformat(wd, ht)
 
                 if publisher.newxpath then
                     dataxml.vars["__maxwidth"]  = wd
@@ -81,7 +81,7 @@ function M.handle_pages(pages, maxwidth_sp, dataxml)
         end
 
         -- Ensure pageformat is set even if only width provided
-        publisher.set_pageformat(wd, ht)
+        publisher.page_helpers.set_pageformat(wd, ht)
 
         -- Create a default masterpage entry (as in legacy)
         publisher.masterpages[1] = {

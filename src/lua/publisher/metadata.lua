@@ -329,7 +329,7 @@ function M.attach_file_pdf(filecontents,description,mimetype,modificationtime,de
             conformancelevel = "minimum"
         end
         if not conformancelevel then
-            err("No ZUGFeRD conformance level found")
+            main.log("error", "No ZUGFeRD conformance level found")
             return
         else
             conformancelevel = string.upper(conformancelevel)

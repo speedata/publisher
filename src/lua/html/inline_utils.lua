@@ -25,7 +25,7 @@ end
 ---@return any head
 function M.trim_space_beginning(nodelist)
     if not nodelist then return nodelist end
-    local dir = publisher.getprop(nodelist, "direction")
+    local dir = publisher.attribute_helpers.getprop(nodelist, "direction")
     -- In horizontal mode ("→") we keep the leading glue as-is.
     if dir == "→" then return nodelist end
 

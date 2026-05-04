@@ -7,8 +7,6 @@
 
 file_start("publisher/links.lua")
 
-local publisher = require("publisher")
-
 local colors = require("publisher.colors")
 local metadata = require("publisher.metadata")
 

@@ -153,7 +153,7 @@ function nodelist_tostring( head )
 end
 
 function showattributes(n, name)
-  local attribs = publisher.get_attributes(n)
+  local attribs = publisher.attribute_helpers.get_attributes(n)
   w("----------")
   if name then w("Attributes %s",name) end
   for i, v in ipairs(attribs) do

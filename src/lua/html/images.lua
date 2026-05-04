@@ -54,7 +54,7 @@ function M.set_image_dimensions(image, styles, width_sp, height_sp, dataxml)
     maxht                = maxht - styles.fontsize_sp * 0.25
 
     local calc_w, calc_h =
-        publisher.calculate_image_width_height(image, image_w, image_h, 0, 0, maxwd, maxht)
+        publisher.images.calculate_image_width_height(image, image_w, image_h, 0, 0, maxwd, maxht)
 
     image.width          = calc_w
     image.height         = calc_h

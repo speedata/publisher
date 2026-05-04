@@ -231,12 +231,12 @@ function M.background( box, colorname,origin )
     local pdfcolorstring = colentry.pdfstring
     local wd, ht, dp = sp_to_bp(box.width),sp_to_bp(box.height),sp_to_bp(box.depth)
     local n = node.new("whatsit","pdf_literal")
-    publisher.setprop(n,"origin","background")
-    publisher.setprop(n,"role",publisher.get_rolenum("Artifact"))
+    publisher.attribute_helpers.setprop(n,"origin","background")
+    publisher.attribute_helpers.setprop(n,"role",publisher.structure_tree.get_rolenum("Artifact"))
     n.data = string.format("q %s 0 -%g %g %g re f Q",pdfcolorstring,dp,wd,ht + dp)
     n.mode = 0
     if colentry.alpha then
-        publisher.setprop(n,"opacity",colentry.alpha)
+        publisher.attribute_helpers.setprop(n,"opacity",colentry.alpha)
     end
     if node.type(box.id) == "hlist" then
         -- pdfliteral does not use up any space, so we can add it to the already packed box.
@@ -377,7 +377,7 @@ function M.frame(obj)
 
     if obj.clip then
         n_clip = node.new("whatsit","pdf_literal")
-        publisher.setprop(n_clip,"origin","obj.clip")
+        publisher.attribute_helpers.setprop(n_clip,"origin","obj.clip")
         rule_clip = {}
         rule_clip[#rule_clip + 1] = string.format("%g %g m",xx1,yy1)
         rule_clip[#rule_clip + 1] = string.format("%g %g l",xx2,yy2)
@@ -391,7 +391,7 @@ function M.frame(obj)
     end
 
     local n = node.new("whatsit","pdf_literal")
-    publisher.setprop(n,"origin","publisher.frame")
+    publisher.attribute_helpers.setprop(n,"origin","publisher.frame")
     local rule = {}
 
     -- We need to add q .. Q because the color would leak into the inner objects (#55)
@@ -426,11 +426,11 @@ function M.frame(obj)
 
     n.data = table.concat(rule," ")
     if colentry.alpha then
-        publisher.setprop(n,"opacity",colentry.alpha)
+        publisher.attribute_helpers.setprop(n,"opacity",colentry.alpha)
     end
 
-    publisher.setprop(n,"origin","frame")
-    publisher.setprop(n,"role",publisher.get_rolenum("Artifact"))
+    publisher.attribute_helpers.setprop(n,"origin","frame")
+    publisher.attribute_helpers.setprop(n,"role",publisher.structure_tree.get_rolenum("Artifact"))
 
 
     if obj.clip then
@@ -439,8 +439,8 @@ function M.frame(obj)
     end
 
     if n_clip and node.is_node(n_clip) then
-        publisher.setprop(n_clip,"origin","frame")
-        publisher.setprop(n_clip,"role",publisher.get_rolenum("Artifact"))
+        publisher.attribute_helpers.setprop(n_clip,"origin","frame")
+        publisher.attribute_helpers.setprop(n_clip,"role",publisher.structure_tree.get_rolenum("Artifact"))
     end
 
 
@@ -511,14 +511,14 @@ function M.clip(obj)
 
     local n_clip, rule_clip
     n_clip = node.new("whatsit","pdf_literal")
-    publisher.setprop(n_clip,"origin","obj.clip")
+    publisher.attribute_helpers.setprop(n_clip,"origin","obj.clip")
     rule_clip = {}
     if obj.method == "clip" then
         rule_clip[#rule_clip + 1] = string.format(" %g %g %g %g re W n ", 0,  -1 * dp + clip_bottom_bp, wd - clip_right_bp - clip_left_bp,ht+dp - clip_bottom_bp - clip_top_bp )
     elseif obj.method == "frame" then
         rule_clip[#rule_clip + 1] = string.format(" %g %g %g %g re W n ", clip_left_bp,  -1 * dp + clip_bottom_bp, wd - clip_right_bp - clip_left_bp,ht+dp - clip_bottom_bp - clip_top_bp )
     else
-        err("Clip: method %s not implemented",obj.method)
+        main.log("error", string.format("Clip: method %s not implemented", obj.method))
     end
 
     n_clip = node.new("whatsit","pdf_literal")
@@ -676,13 +676,13 @@ function M.circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp
     end
     local colentry = colors_module.get_colentry_from_name(colorname)
     if not colentry then
-        err("Color %q unknown, reverting to black",colorname or "(no color name given)")
+        main.log("error", string.format("Color %q unknown, reverting to black", colorname or "(no color name given)"))
         colentry = colors_module.colors["black"]
     end
     local framecolentry = colors_module.get_colentry_from_name(framecolorname)
 
     if not framecolentry then
-        err("Color %q unknown, reverting to black",framecolorname or "(no color name given)")
+        main.log("error", string.format("Color %q unknown, reverting to black", framecolorname or "(no color name given)"))
         framecolentry = colors_module.colors["black"]
     end
     local fillcolor   = colentry.pdfstring_fill
@@ -691,7 +691,7 @@ function M.circle( radiusx_sp, radiusy_sp, colorname,framecolorname,rulewidth_sp
     local paint = node.new("whatsit","pdf_literal")
     paint.data = M.circle_pdfstring(0,0,radiusx_sp, radiusy_sp, bordercolor, fillcolor, rulewidth_sp)
     if colentry.alpha then
-        publisher.setprop(paint,"opacity",colentry.alpha)
+        publisher.attribute_helpers.setprop(paint,"opacity",colentry.alpha)
     end
     local v = node.vpack(paint)
     return v
@@ -733,15 +733,15 @@ function M.do_metapostimage(dataxml,txt,width,height,clip)
     image.width = image.xsize
     image.height = image.ysize
 
-    height    = publisher.set_image_length(dataxml,height,   "height") or image.height
-    width     = publisher.set_image_length(dataxml,width,    "width" ) or image.width
-    publisher.minheight = publisher.set_image_length(dataxml,publisher.minheight,"height") or 0
-    publisher.minwidth  = publisher.set_image_length(dataxml,publisher.minwidth, "width" ) or 0
-    publisher.maxheight = publisher.set_image_length(dataxml,publisher.maxheight,"height") or publisher.maxdimen
-    publisher.maxwidth  = publisher.set_image_length(dataxml,publisher.maxwidth, "width" ) or publisher.maxdimen
+    height    = publisher.images.set_image_length(dataxml,height,   "height") or image.height
+    width     = publisher.images.set_image_length(dataxml,width,    "width" ) or image.width
+    publisher.minheight = publisher.images.set_image_length(dataxml,publisher.minheight,"height") or 0
+    publisher.minwidth  = publisher.images.set_image_length(dataxml,publisher.minwidth, "width" ) or 0
+    publisher.maxheight = publisher.images.set_image_length(dataxml,publisher.maxheight,"height") or publisher.maxdimen
+    publisher.maxwidth  = publisher.images.set_image_length(dataxml,publisher.maxwidth, "width" ) or publisher.maxdimen
 
     if not clip then
-        width, height = publisher.calculate_image_width_height( image, width,height,publisher.minwidth,publisher.minheight,publisher.maxwidth, publisher.maxheight,publisher.stretch)
+        width, height = publisher.images.calculate_image_width_height( image, width,height,publisher.minwidth,publisher.minheight,publisher.maxwidth, publisher.maxheight,publisher.stretch)
 
         box = node.hpack(box)
         box.width = width
@@ -941,7 +941,7 @@ function M.box( width_sp,height_sp,colorname,border_color,border_width_sp )
         local half = bw / 2
         local border_colentry = colors_module.colors[border_color]
         if not border_colentry then
-            err("Color %q unknown, reverting to black",border_color or "(no color name given)")
+            main.log("error", string.format("Color %q unknown, reverting to black", border_color or "(no color name given)"))
             border_colentry = colors_module.colors["black"]
         end
         pdfcmds[#pdfcmds+1] = string.format("q %s %g w %g %g %g %g re S Q",
@@ -953,7 +953,7 @@ function M.box( width_sp,height_sp,colorname,border_color,border_width_sp )
     if colorname ~= "-" then
         local colentry = colors_module.colors[colorname]
         if not colentry then
-            err("Color %q unknown, reverting to black",colorname or "(no color name given)")
+            main.log("error", string.format("Color %q unknown, reverting to black", colorname or "(no color name given)"))
             colentry = colors_module.colors["black"]
         end
         local bw = border_width_sp and sp_to_bp(border_width_sp) or 0
@@ -969,20 +969,20 @@ function M.box( width_sp,height_sp,colorname,border_color,border_width_sp )
 
     if #pdfcmds > 0 then
         local paint = node.new("whatsit","pdf_literal")
-        publisher.setprop(paint,"role",publisher.get_rolenum("Artifact"))
+        publisher.attribute_helpers.setprop(paint,"role",publisher.structure_tree.get_rolenum("Artifact"))
         paint.data = table.concat(pdfcmds, " ")
         paint.mode = 0
         if colorname ~= "-" then
             local colentry = colors_module.colors[colorname]
             if colentry and colentry.alpha then
-                publisher.set_attribute(paint,"color",colors_module.get_colorindex_from_name(colorname))
+                publisher.attribute_helpers.set_attribute(paint,"color",colors_module.get_colorindex_from_name(colorname))
             end
         end
         local hglue = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3 })
         h = node.insert_after(paint,paint,hglue)
         h = node.hpack(h,width_sp,"exactly")
     else
-        h = publisher.create_empty_hbox_with_width(width_sp)
+        h = publisher.nodes.create_empty_hbox_with_width(width_sp)
     end
 
     local vglue = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3 })
@@ -1040,13 +1040,13 @@ function M.colorbar( wd,ht,dp,color,origin,orientation)
             colorname = "black"
         end
         if not colors_module.colors[colorname] then
-            err("Color %q not found",color)
+            main.log("error", string.format("Color %q not found", color))
             colorname = "black"
         end
     end
 
     local rule_start = node.new("whatsit","pdf_literal")
-    publisher.setprop(rule_start,"origin","colorbar")
+    publisher.attribute_helpers.setprop(rule_start,"origin","colorbar")
     if colorname ~= "-" then
         local ht_bp = sp_to_bp(ht)
         local wd_bp = sp_to_bp(wd)
@@ -1080,16 +1080,16 @@ function M.colorbar( wd,ht,dp,color,origin,orientation)
         end
         rule_start.data = data
         if publisher.options.tablerulefix then
-            publisher.setprop(rule_start,"data", data)
+            publisher.attribute_helpers.setprop(rule_start,"data", data)
         end
-        publisher.setprop(rule_start,"role",publisher.get_rolenum("Artifact"))
+        publisher.attribute_helpers.setprop(rule_start,"role",publisher.structure_tree.get_rolenum("Artifact"))
     end
     local h = node.hpack(rule_start)
     h.width = wd
     h.depth = dp
     h.height = ht
     origin = origin or "origin_colorbar"
-    publisher.setprop(h,"origin",origin)
+    publisher.attribute_helpers.setprop(h,"origin",origin)
     return h
 end
 

@@ -35,7 +35,7 @@ function M.resolve_list_style_type(styles, olcounter, oltype, dataxml)
     -- If list-style-image is given, it overrides list-style-type
     if liststyleimage then
         local filename = string.match(liststyleimage, "url%((.*)%)")
-        local it = publisher.new_image(filename, 1, nil, nil)
+        local it = publisher.images.new_image(filename, 1, nil, nil)
         it = img.copy(it.img)
         images.set_image_dimensions(it, styles, 0, styles.fontsize_sp * 0.9, dataxml)
         return img.node(it)

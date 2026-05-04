@@ -57,19 +57,19 @@ local function fnAllocated(dataxml, arg)
         framenumber = publisher.xpath.number_value(arg[4])
     end
 
-    publisher.setup_page(nil, "layout_functions#allocated", dataxml)
+    publisher.page_helpers.setup_page(nil, "layout_functions#allocated", dataxml)
     return { publisher.current_grid:isallocated(x, y, areaname, framenumber) }, nil
 end
 
 local function fnCurrentPage(dataxml, arg)
     if not publisher.in_init_page then
-        publisher.setup_page(nil, "layout_functions#current_page", dataxml)
+        publisher.page_helpers.setup_page(nil, "layout_functions#current_page", dataxml)
     end
     return { publisher.current_pagenumber }, nil
 end
 
 local function fnCurrentRow(dataxml, arg)
-    publisher.setup_page(nil, "layout_functions#current_row", dataxml)
+    publisher.page_helpers.setup_page(nil, "layout_functions#current_row", dataxml)
     local areaname = nil
     if #arg == 1 then
         areaname = publisher.xpath.string_value(arg[1])
@@ -90,7 +90,7 @@ local function fnpagenumber(dataxml, arg)
 end
 
 local function current_column(dataxml, arg)
-    publisher.setup_page(nil, "layout_functions#current_column", dataxml)
+    publisher.page_helpers.setup_page(nil, "layout_functions#current_column", dataxml)
     local firstarg
     if #arg > 0 then
         firstarg = publisher.xpath.string_value(arg[1])
@@ -124,7 +124,7 @@ end
 -- Get the first mark of a page (for example used in the head of dictionaries)
 local function firstmark(dataxml, arg)
     local pagenumber = publisher.xpath.number_value(arg[1])
-    if not tonumber(pagenumber) then err("firstmark: cannot get page number") end
+    if not tonumber(pagenumber) then main.log("error", "firstmark: cannot get page number") end
     local minid = publisher.marker_min[pagenumber]
     if not minid then return "" end
     return { publisher.marker_id_value[minid].name }
@@ -133,7 +133,7 @@ end
 -- Get the last mark of a page (for example used in the head of dictionaires)
 local function lastmark(dataxml, arg)
     local pagenumber = publisher.xpath.number_value(arg[1])
-    if not tonumber(pagenumber) then err("lasttmark: cannot get page number") end
+    if not tonumber(pagenumber) then main.log("error", "lasttmark: cannot get page number") end
     local maxid = publisher.marker_max[pagenumber]
     if not maxid then return "" end
     return { publisher.marker_id_value[maxid].name }
@@ -145,16 +145,16 @@ end
 local function filecontents(dataxml, arg)
     local tmpdir = os.getenv("SP_TEMPDIR")
     if tmpdir == nil then
-        err("SD_TEMPDIR is nil")
+        main.log("error", "SD_TEMPDIR is nil")
         return
     end
 
     lfs.mkdir(tmpdir)
-    local filename = publisher.string_random(20)
+    local filename = publisher.utilities.string_random(20)
     local path = tmpdir .. publisher.os_separator .. filename
     local file, e = io.open(path, "wb")
     if file == nil then
-        err("Could not write filecontents into temp directory: %q", e)
+        main.log("error", string.format("Could not write filecontents into temp directory: %q", e))
         return nil
     end
     local firstarg = publisher.xpath.string_value(arg[1])
@@ -190,7 +190,7 @@ local function fnNumberOfColumns(dataxml, arg)
     if #arg > 0 then
         areaname = publisher.xpath.string_value(arg[1])
     end
-    publisher.setup_page(nil, "layout_functions#number_of_columns", dataxml)
+    publisher.page_helpers.setup_page(nil, "layout_functions#number_of_columns", dataxml)
     return { publisher.current_grid:number_of_columns(areaname) }
 end
 
@@ -237,7 +237,7 @@ local function fnMergePagenumbers(dataxml, arg)
             end
         end
     end
-    publisher.stable_sort(withoutdupes, function(elta, eltb) return tonumber(elta) < tonumber(eltb) end)
+    publisher.utilities.stable_sort(withoutdupes, function(elta, eltb) return tonumber(elta) < tonumber(eltb) end)
     local gethyperlink
     if interaction then
         gethyperlink = function(pagenum) return { hyperlink = links_module.hlpage(publisher.options, pagenum) } end
@@ -303,20 +303,20 @@ local function fnNumberOfRows(dataxml, arg)
     if #arg > 0 then
         areaname = publisher.xpath.string_value(arg[1])
     end
-    publisher.setup_page(nil, "layout_functions#number_of_rows", dataxml)
+    publisher.page_helpers.setup_page(nil, "layout_functions#number_of_rows", dataxml)
     return { publisher.current_grid:number_of_rows(areaname) }
 end
 
 local function fnNumberOfPages(dataxml, arg)
     local filename = publisher.xpath.string_value(arg[1])
-    local img = publisher.imageinfo(filename)
+    local img = publisher.images.imageinfo(filename)
     return { img.img.pages }, nil
 end
 
 local function imagewidth(dataxml, arg)
     local filename, pagenumber, box, unit = get_filename_pagenum_box_unit_from_arg(arg)
-    local img = publisher.imageinfo(filename, pagenumber, box)
-    publisher.setup_page(nil, "layout_functions#imagewidth", dataxml)
+    local img = publisher.images.imageinfo(filename, pagenumber, box)
+    publisher.page_helpers.setup_page(nil, "layout_functions#imagewidth", dataxml)
 
     local width
     if unit then
@@ -341,7 +341,7 @@ local function imagewidth(dataxml, arg)
         elseif unit == "cc" then
             ret = width / publisher.onecc_sp
         else
-            err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
+            main.log("error", string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit))
         end
         return { math.round(ret, 4) }, nil
     else
@@ -352,8 +352,8 @@ end
 
 local function imageheight(dataxml, arg)
     local filename, pagenumber, box, unit = get_filename_pagenum_box_unit_from_arg(arg)
-    local img = publisher.imageinfo(filename, pagenumber, box)
-    publisher.setup_page(nil, "layout_functions#imageheight", dataxml)
+    local img = publisher.images.imageinfo(filename, pagenumber, box)
+    publisher.page_helpers.setup_page(nil, "layout_functions#imageheight", dataxml)
     local height
     if unit then
         height = img.img.height
@@ -377,7 +377,7 @@ local function imageheight(dataxml, arg)
         elseif unit == "cc" then
             ret = height / publisher.onecc_sp
         else
-            err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
+            main.log("error", string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit))
         end
         return { math.round(ret, 4) }, nil
     else
@@ -428,7 +428,7 @@ local function format_string(dataxml, arg)
     end
     local unpacked = table.unpack(argument)
     if unpacked == nil or unpacked == "" then
-        err("format-string: first arguments are empty")
+        main.log("error", "format-string: first arguments are empty")
         return ""
     end
     local ret = string.format(publisher.xpath.string_value(arg[#arg]), unpacked)
@@ -439,14 +439,14 @@ end
 local function even(dataxml, arg)
     local firstarg = publisher.xpath.number_value(arg[1])
     if not tonumber(firstarg) then
-        err("sd:even() - argument is not a number")
+        main.log("error", "sd:even() - argument is not a number")
         return false
     end
     return { math.fmod(firstarg, 2) == 0 }, nil
 end
 
 local function current_frame_number(dataxml, arg)
-    publisher.setup_page(nil, "layout_functions#current_framenumber", dataxml)
+    publisher.page_helpers.setup_page(nil, "layout_functions#current_framenumber", dataxml)
     local framename = publisher.xpath.string_value(arg[1])
     if framename == nil then return { 1 }, nil end
     local current_framenumber = publisher.current_grid:framenumber(framename)
@@ -454,7 +454,7 @@ local function current_frame_number(dataxml, arg)
 end
 
 local function groupheight(dataxml, arg)
-    publisher.setup_page(nil, "layout_functions#groupheight", dataxml)
+    publisher.page_helpers.setup_page(nil, "layout_functions#groupheight", dataxml)
     local groupname = publisher.xpath.string_value(arg[1])
     if not publisher.groups[groupname] then
         main.log("error","Can't find group","groupname",groupname)
@@ -463,7 +463,7 @@ local function groupheight(dataxml, arg)
 
     local groupcontents = publisher.groups[groupname].contents
     if not groupcontents then
-        err("Can't find group with the name %q", groupname)
+        main.log("error", string.format("Can't find group with the name %q", groupname))
         return 0
     end
     local height
@@ -491,7 +491,7 @@ local function groupheight(dataxml, arg)
         elseif unit == "cc" then
             ret = height / publisher.onecc_sp
         else
-            err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
+            main.log("error", string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit))
         end
         return { math.round(ret, 4) }, nil
     else
@@ -502,16 +502,16 @@ local function groupheight(dataxml, arg)
 end
 
 local function groupwidth(dataxml, arg)
-    publisher.setup_page(nil, "layout_functions#groupwidth", dataxml)
+    publisher.page_helpers.setup_page(nil, "layout_functions#groupwidth", dataxml)
     local groupname = publisher.xpath.string_value(arg[1])
     if not publisher.groups[groupname] then
-        err("Can't find group with the name %q", groupname)
+        main.log("error", string.format("Can't find group with the name %q", groupname))
         return 0
     end
     local groupcontents = publisher.groups[groupname].contents
 
     if not groupcontents then
-        err("Can't find group with the name %q", groupname)
+        main.log("error", string.format("Can't find group with the name %q", groupname))
         return 0
     end
     local unit = arg[2]
@@ -539,7 +539,7 @@ local function groupwidth(dataxml, arg)
         elseif unit == "cc" then
             ret = width / publisher.onecc_sp
         else
-            err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
+            main.log("error", string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit))
         end
         return { math.round(ret, 4) }, nil
     else
@@ -555,7 +555,7 @@ local function odd(dataxml, arg)
     local num, msg = publisher.xpath.number_value(firstarg)
     if msg then return nil, msg end
     if not tonumber(num) then
-        err("sd:odd() - argument is not a number")
+        main.log("error", "sd:odd() - argument is not a number")
         return false
     end
     return { math.fmod(num, 2) ~= 0 }, nil
@@ -675,7 +675,7 @@ local function tounit(dataxml, arg)
     elseif unit == "cc" then
         ret = width / publisher.onecc_sp
     else
-        err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
+        main.log("error", string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit))
     end
     return { math.round(ret, decimal) }, nil
 end
@@ -706,7 +706,7 @@ local function fnDimexpr(dataxml, arg)
     elseif unit == "cc" then
         ret = value / publisher.onecc_sp
     else
-        err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
+        main.log("error", string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit))
     end
 
     return {math.round(ret,3)}, nil
@@ -720,7 +720,7 @@ local function decode_html(dataxml, arg)
     if type(firstarg) == "string" then
         local msg = publisher.splib.htmltoxml(firstarg)
         if msg == nil then
-            err("decode-html failed")
+            main.log("error", "decode-html failed")
             return nil
         end
         -- two dummy tags because xpath.parse_raw removes the surrounding table
@@ -775,12 +775,12 @@ end
 
 local function aspectratio(dataxml, arg)
     local filename, pagenumber, box, _ = get_filename_pagenum_box_unit_from_arg(arg)
-    local img = publisher.imageinfo(filename, pagenumber, box)
+    local img = publisher.images.imageinfo(filename, pagenumber, box)
     return { img.img.xsize / img.img.ysize }, nil
 end
 
 local function pageheight(dataxml, arg)
-    publisher.setup_page(nil, "layout_functions#pageheight", dataxml)
+    publisher.page_helpers.setup_page(nil, "layout_functions#pageheight", dataxml)
     local unit = publisher.xpath.string_value(arg[1]) or "mm"
     if unit then
         local width = publisher.current_page.height
@@ -804,7 +804,7 @@ local function pageheight(dataxml, arg)
         elseif unit == "cc" then
             ret = width / publisher.onecc_sp
         else
-            err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
+            main.log("error", string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit))
         end
         return { math.round(ret, 0) }, nil
     end
@@ -812,7 +812,7 @@ end
 
 
 local function pagewidth(dataxml, arg)
-    publisher.setup_page(nil, "layout_functions#pagewidth", dataxml)
+    publisher.page_helpers.setup_page(nil, "layout_functions#pagewidth", dataxml)
     local unit = publisher.xpath.string_value(arg[1]) or "mm"
     if unit then
         local width = publisher.current_page.width
@@ -836,14 +836,14 @@ local function pagewidth(dataxml, arg)
         elseif unit == "cc" then
             ret = width / publisher.onecc_sp
         else
-            err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
+            main.log("error", string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit))
         end
         return { math.round(ret, 0) }, nil
     end
 end
 
 local function fnLength(dataxml, arg)
-    publisher.setup_page(nil, "layout_functions#length", dataxml)
+    publisher.page_helpers.setup_page(nil, "layout_functions#length", dataxml)
     local value = publisher.xpath.string_value(arg[1])
     local unit = 'mm'
     if #arg > 1 then
@@ -872,7 +872,7 @@ local function fnLength(dataxml, arg)
         elseif unit == "cc" then
             ret = width / publisher.onecc_sp
         else
-            err("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
+            main.log("error", string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit))
         end
         return { math.round(ret, 0) }, nil
     end
@@ -887,7 +887,7 @@ local function fnVisiblePagenumber(dataxml, arg)
         firstarg = publisher.xpath.string_value(arg[1])
     else
         if not publisher.in_init_page then
-            publisher.setup_page(nil, "layout_functions#current_page", dataxml)
+            publisher.page_helpers.setup_page(nil, "layout_functions#current_page", dataxml)
         end
         firstarg = tostring(publisher.current_pagenumber)
     end
@@ -1008,7 +1008,7 @@ local function fnTokenize(dataxml, arg)
     local firstarg = publisher.xpath.string_value(arg[1])
     local secondarg = publisher.xpath.string_value(arg[2])
     if firstarg == nil or secondarg == nil then
-        err("tokenize: one of the arguments is empty")
+        main.log("error", "tokenize: one of the arguments is empty")
         return { "" }, nil
     end
     local seq = libprefix.tokenize(firstarg, secondarg)

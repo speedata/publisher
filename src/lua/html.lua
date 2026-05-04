@@ -146,7 +146,7 @@ function M.collect_horizontal_nodes( elt,parameter,before_box,origin,dataxml )
     -- w("collect_horizontal_nodes %s",origin or "?")
     parameter = parameter or {}
     if elt.elementname == "br" then
-        local nodes = publisher.mknodes("\n",parameter)
+        local nodes = publisher.nodes.mknodes("\n",parameter)
         return {nodes}
     end
     local ret = {}
@@ -167,12 +167,12 @@ function M.collect_horizontal_nodes( elt,parameter,before_box,origin,dataxml )
 
         local thisret = {}
         if typ == "string" then
-            local nodes = publisher.mknodes(thiselt,options)
+            local nodes = publisher.nodes.mknodes(thiselt,options)
             if before_box then
                 nodes = node.insert_before(nodes,nodes,before_box)
             end
             before_box = nil
-            publisher.setprop(nodes,"direction",elt.direction)
+            publisher.attribute_helpers.setprop(nodes,"direction",elt.direction)
             thisret[#thisret + 1] = nodes
         elseif typ == "table" then
             local attributes = thiselt.attributes or {}
@@ -193,15 +193,15 @@ function M.collect_horizontal_nodes( elt,parameter,before_box,origin,dataxml )
         end
 
         if styles.has_border then
-            publisher.setprop(thisret[1],"borderstart",1)
+            publisher.attribute_helpers.setprop(thisret[1],"borderstart",1)
             local ff = options.fontfamily
             local ht = publisher.fonts.lookup_fontfamily_number_instance[ff].size
 
-            publisher.setprop(thisret[1],"lineheight", ht)
+            publisher.attribute_helpers.setprop(thisret[1],"lineheight", ht)
             for index, value in pairs(options.border) do
-                publisher.setprop(thisret[1],index,value)
+                publisher.attribute_helpers.setprop(thisret[1],index,value)
             end
-            publisher.setprop(node.tail(thisret[1],""),"borderend",1)
+            publisher.attribute_helpers.setprop(node.tail(thisret[1],""),"borderend",1)
         end
 
         for i=1,#thisret do
@@ -268,14 +268,14 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
             local before_options = {}
             inline_options.set_options_for_mknodes(styles, before_options, publisher, fontfamilies)
             local content = styles.content
-            local nl = publisher.mknodes(content,before_options)
+            local nl = publisher.nodes.mknodes(content,before_options)
             local margin_left = units.getsize(styles,styles["margin-left"],styles.fontsize_sp)
 
-            local hss = publisher.hss_glue()
+            local hss = publisher.nodes.hss_glue()
             local ml_box = node.hpack(hss,margin_left,"exactly")
 
             if styles.width then
-                node.insert_after(nl,nl,publisher.hss_glue())
+                node.insert_after(nl,nl,publisher.nodes.hss_glue())
                 nl = node.hpack(nl,styles.calculated_width,"exactly")
             end
 
@@ -348,7 +348,7 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
             if options.override_alignment then
                 tf = options.textformat
             else
-                tf = publisher.new_textformat("","text",{alignment = alignment})
+                tf = publisher.dispatch.new_textformat("","text",{alignment = alignment})
             end
             if hyphens == "none" or hyphens == "manual" then
                 tf.disable_hyphenation = true
@@ -455,7 +455,7 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                             tabpar.margin_top = margin_top
                         end
                         node.set_attribute(nl,publisher.att_lineheight,nl.height)
-                        publisher.setprop(nl,"origin","html table")
+                        publisher.attribute_helpers.setprop(nl,"origin","html table")
                         tabpar:append(nl,{dontformat=true})
                         box[#box + 1] = tabpar
                     end
@@ -532,7 +532,7 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                                 if cached then
                                     ms["font-family-number"] = cached
                                 else
-                                    local new_fam = publisher.define_fontfamily(
+                                    local new_fam = publisher.fontfamilies.define_fontfamily(
                                         fam_inst.fontfaceregular, fam_inst.fontfacebold,
                                         fam_inst.fontfaceitalic, fam_inst.fontfacebolditalic,
                                         marker_name, ms.fontsize_sp, ms.fontsize_sp * 1.12)
@@ -551,7 +551,7 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                         marker_opt = inline_options.set_options_for_mknodes(styles,{},publisher,fontfamilies)
                     end
                     if pos == "inside" then
-                        local nl = publisher.mknodes(str .. " ", marker_opt)
+                        local nl = publisher.nodes.mknodes(str .. " ", marker_opt)
                         nl = node.hpack(nl)
                         local a_head = a[1].contents
                         a_head = node.insert_before(a_head,a_head,nl)
@@ -576,18 +576,18 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 local a = publisher.par:new(tf,"html.lua (br)") -- luacheck: ignore tf
                 local list
                 if prevdir == "vertical" then
-                    list = publisher.newline(fam)
+                    list = publisher.nodes.newline(fam)
                 else
-                    list = publisher.short_newline(fam)
+                    list = publisher.nodes.short_newline(fam)
                 end
-                publisher.setprop(list,"br",true)
+                publisher.attribute_helpers.setprop(list,"br",true)
                 a:append(list)
                 ret[#ret + 1] = a
             prevdir = "vertical"
             elseif thiseltname == "hr" then
                 local ht = units.getsize(styles,styles.height,styles.fontsize_sp)
                 ht = ht + border_top_width + border_bottom_width
-                local bx = publisher.create_empty_vbox_width_width_height(styles.calculated_width,ht)
+                local bx = publisher.nodes.create_empty_vbox_width_width_height(styles.calculated_width,ht)
                 -- tf is nil here (set only in horizontal mode); Par:format
                 -- falls back to options.textformat.
                 local a = publisher.par:new(tf,"html.lua (hr)") -- luacheck: ignore tf
@@ -596,11 +596,11 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 ret[#ret + 1] = box
             else
                 local n
-                local nloptions = publisher.copy_table_from_defaults(options)
+                local nloptions = publisher.utilities.copy_table_from_defaults(options)
                 if thiseltname == "h1" then
-                    nloptions.role = publisher.get_rolenum("H1")
+                    nloptions.role = publisher.structure_tree.get_rolenum("H1")
                 elseif thiseltname == "p" then
-                    nloptions.role = publisher.get_rolenum("P")
+                    nloptions.role = publisher.structure_tree.get_rolenum("P")
                 end
                 n, prevdir = M.build_nodelist(thiselt,options,before_box,string.format("build_nodelist/ any element name %q",thiseltname),prevdir,dataxml)
                 if thiselt.block then prevdir = "vertical" end
@@ -608,7 +608,7 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 local mode
                 if thiselt.block then mode = "block" end
                 if thiselt.block and #n == 0 then
-                    local list = publisher.newline(fam)
+                    local list = publisher.nodes.newline(fam)
                     -- tf is nil here (set only in horizontal mode);
                     -- Par:format falls back to options.textformat.
                     local a = publisher.par:new(tf,"html.lua (p)") -- luacheck: ignore tf
@@ -667,7 +667,7 @@ function M.parse_html_new( elt, options, data )
     end
     local lang = elt.lang
     if lang then
-        publisher.set_mainlanguage(lang)
+        publisher.language.set_mainlanguage(lang)
     end
     tree.normalize_html_tree(elt[1])
     -- printtable("elt[1]",elt[1])

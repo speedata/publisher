@@ -588,9 +588,9 @@ function get_argument_number(arg,pos,what)
 
     if arg == nil then
         if err then
-            err("The %s operand of %s is not a number. Evaluating to 0 (%q)",pos,what,M.str)
+            main.log("error", string.format("The %s operand of %s is not a number. Evaluating to 0 (%q)", pos, what, M.str))
         else
-            err("The %s operand of %s is not a number. Evaluating to 0",pos,what)
+            main.log("error", string.format("The %s operand of %s is not a number. Evaluating to 0", pos, what))
         end
         return 0
     end
@@ -895,7 +895,7 @@ M.default_functions.doc = function (dataxml,arg)
     if loc == nil then return end
     local f,e = io.open(loc,"rb")
     if f == nil then
-        err(e)
+        main.log("error", e)
         return
     end
     local contents = f:read("*a")
@@ -964,7 +964,7 @@ M.default_functions.max = function(dataxml,arg)
     local max = tonumber(arg[1])
     if not max then
         if err then
-            err("First argument in max() is not a number, returning 0")
+            main.log("error", "First argument in max() is not a number, returning 0")
         end
         return 0
     end
@@ -1019,7 +1019,7 @@ M.default_functions["string"] = function(dataxml,arg)
     elseif arg == nil then
         ret = ""
     else
-        warning("Unknown type in XPath-function 'string()': %s",type(arg))
+        main.log("warn", string.format("Unknown type in XPath-function 'string()': %s", type(arg)))
         ret = tostring(arg)
     end
     return ret
@@ -1029,7 +1029,7 @@ M.default_functions["number"] = function(dataxml,arg)
     local ret
     if type(arg)=="table" then
         if #arg > 1 then
-            err("A sequence of more than one item is not allowed as the first argument of fn:number()")
+            main.log("error", "A sequence of more than one item is not allowed as the first argument of fn:number()")
             return
         end
         setmetatable(arg, mt)
@@ -1043,7 +1043,7 @@ M.default_functions["number"] = function(dataxml,arg)
     elseif arg == nil then
         ret = ""
     else
-        warning("Unknown type in XPath-function 'number()': %s",type(arg))
+        main.log("warn", string.format("Unknown type in XPath-function 'number()': %s", type(arg)))
         ret = tostring(arg)
     end
     return tonumber(ret)
@@ -1052,7 +1052,7 @@ end
 -- Tokenize is the first function we ask 'splib' for help
 M.default_functions["tokenize"] = function(dataxml,arg)
     if arg[1] == nil or arg[2] == nil then
-        err("tokenize: one of the arguments is empty")
+        main.log("error", "tokenize: one of the arguments is empty")
         return ""
     end
     return publisher.splib.tokenize(arg[1],arg[2])
@@ -1066,7 +1066,7 @@ end
 
 M.default_functions["replace"] = function(dataxml,arg)
     if arg[1] == nil or arg[2] == nil or arg[3] == nil then
-        warning("replace: one of the arguments is empty")
+        main.log("warn", "replace: one of the arguments is empty")
         return ""
     end
     local firstarg = arg[1]
@@ -1082,7 +1082,7 @@ M.default_functions["contains"] = function(dataxml,arg)
         return false
     end
     if type(arg[1]) ~= "string" or type(arg[2]) ~= "string"  then
-        err("contains(): one of the arguments is not a string")
+        main.log("error", "contains(): one of the arguments is not a string")
         return false
     end
     local ret = publisher.splib.contains(arg[1],arg[2])
@@ -1096,12 +1096,12 @@ M.default_functions["matches"] = function(dataxml,arg)
         -- warning("contains(): one of the arguments is empty")
         return false
     end
-    local text = publisher.xml_stringvalue(arg[1])
-    local re = publisher.xml_stringvalue(arg[2])
+    local text = publisher.xml_helpers.xml_stringvalue(arg[1])
+    local re = publisher.xml_helpers.xml_stringvalue(arg[2])
 
     local flags = arg[3] or ""
     if string.find(flags,"x") then
-        warning("matches does not support the x flag")
+        main.log("warn", "matches does not support the x flag")
     end
     if flags ~= "" then
         flags = "(?" .. flags .. ")"
@@ -1116,7 +1116,7 @@ M.default_functions["upper-case"] = function(dataxml,arg)
     if str then
         return string.upper(tostring(arg[1]))
     else
-        warning("No string given for upper-case()")
+        main.log("warn", "No string given for upper-case()")
         return ""
     end
 end
@@ -1126,7 +1126,7 @@ M.default_functions["lower-case"] = function(dataxml,arg)
     if str then
         return string.lower(tostring(arg[1]))
     else
-        warning("No string given for lower-case()")
+        main.log("warn", "No string given for lower-case()")
         return ""
     end
 end
