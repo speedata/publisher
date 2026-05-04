@@ -38,8 +38,6 @@ github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLf
 github.com/peterbourgon/diskv v2.0.1+incompatible h1:UBdAOUP5p4RWqPBg048CAvpKN+vxiaj6gdUUzhl4XmI=
 github.com/peterbourgon/diskv v2.0.1+incompatible/go.mod h1:uqqh8zWWbv1HBMNONnaR/tNboyR3/BZd58JJSHlUSCU=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
-github.com/russross/blackfriday v1.6.0 h1:KqfZb0pUVN2lYqZUYRddxF4OR8ZMURnJIG5Y3VRLtww=
-github.com/russross/blackfriday v1.6.0/go.mod h1:ti0ldHuxg49ri4ksnFxlkCfN+hvslNlmVHqNRXXJNAY=
 github.com/speedata/bild v0.0.0-20240628091728-dd063a632b14 h1:OzrpKgCTyQ8z8oBLqK8Du/XwPgYS9hbfZxk9s3xo8gc=
 github.com/speedata/bild v0.0.0-20240628091728-dd063a632b14/go.mod h1:ANw4vXFlvX/kQAgKWiDpB0xvqYEZ0YC8AUcCMYyfWdo=
 github.com/speedata/config v0.0.0-20181203093101-3a3f44982ec4 h1:20KhtGSKIcqEv4WtuCVYM9rWhgiuYJGLm5aCeW4IufI=

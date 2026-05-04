@@ -20,7 +20,6 @@ import (
 	"speedatapublisher/sphelper/fileutils"
 	"speedatapublisher/sphelper/genadoc"
 	"speedatapublisher/sphelper/genschema"
-	"speedatapublisher/sphelper/sourcedoc"
 
 	"github.com/speedata/optionparser"
 )
@@ -44,7 +43,6 @@ func main() {
 	op.Command("doc", "Generate reference docs and changelog for Hugo")
 	op.Command("genschema", "Generate schema (layoutschema-en.xml)")
 	op.Command("mkreadme", "Make readme for installation/distribution")
-	op.Command("sourcedoc", "Generate the source documentation")
 	err := op.Parse()
 	if err != nil {
 		log.Fatal(err)
@@ -243,11 +241,6 @@ func main() {
 		if err := mkreadme(cfg, op.Extra[1], op.Extra[2]); err != nil {
 			fmt.Println(err)
 			os.Exit(-1)
-		}
-	case "sourcedoc":
-		err := sourcedoc.GenSourcedoc(cfg)
-		if err != nil {
-			log.Fatal(err)
 		}
 	default:
 		op.Help()

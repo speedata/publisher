@@ -137,7 +137,7 @@ The publisher has two build flavors selected with the Go build tag `pro`: the op
 | `src/go/splib/spliblua.go` | Thin Go wrapper around the Lua C API (`lua_State *`) that the rest of `splib` uses to push tables and values back to Lua. |
 | `src/go/splib/luaxmlparser.go` | Bridge that hands the result of `xmltree.ParseXMLToLua` straight onto the Lua stack via the `LuaState` adapter. |
 | `src/go/splib/logging.go` | Structured logger (`log/slog`) that writes the XML protocol file and `status.xml` consumed by other tools. |
-| `src/go/sphelper/sphelper/sphelper.go` | The `sphelper` binary. Subcommand dispatch for `build`, `buildlib`, `doc`, `schema`, `dist`, `sourcedoc`, `mkreadme`, … |
+| `src/go/sphelper/sphelper/sphelper.go` | The `sphelper` binary. Subcommand dispatch for `build`, `buildlib`, `doc`, `schema`, `dist`, `mkreadme`, … |
 
 ### `sp` binary helper packages (under `src/go/sp/sp/`)
 
@@ -217,7 +217,6 @@ All packages here are only used by the `sphelper` developer binary.
 | `commandsxml/commandsxml.go`, `commandsxml/markdown.go` | Reads `doc/commands-xml/commands.xml`, the canonical reference of all Layout commands. Provides Markdown rendering for embedded paragraph content. |
 | `genadoc/genmarkdown.go` | Generates the AsciiDoc reference pages under `doc/newmanual/adoc-{en,de}/ref/` from `commands.xml`. |
 | `genschema/genschema.go`, `genschema/relaxng.go`, `genschema/commandsxml.go` | Generates RELAX NG and XSD schemas for the Layout language in English and German from `commands.xml`. |
-| `sourcedoc/sourcedoc.go` | Generates HTML source-code documentation from the Lua sources by parsing leading `--` comments. |
 
 ### Vendored Unicode data (`src/go/text/`)
 

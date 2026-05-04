@@ -2,7 +2,7 @@ require "pathname"
 require 'rake/clean'
 
 CLEAN.include("publisher.pdf","publisher.log","publisher.protocol","publisher.vars")
-CLOBBER.include("build/sourcedoc","src/go/sp/sp","src/go/sp/docgo", "src/go/sp/bin","src/go/sp/pkg")
+CLOBBER.include("src/go/sp/sp","src/go/sp/docgo", "src/go/sp/bin","src/go/sp/pkg")
 
 installdir = Pathname.new(__FILE__).join("..")
 srcdir   = installdir.join("src")
@@ -53,16 +53,6 @@ desc "Generate schema from master"
 task :schema => [:sphelper] do
   # generate the lua translation + schema
   sh "#{installdir}/bin/sphelper genschema"
-end
-
-desc "Source documentation"
-task :sourcedoc => [:sphelper] do
-    sh "#{installdir}/bin/sphelper sourcedoc"
-	if RUBY_PLATFORM =~ /darwin/
-		sh "open #{builddir}/sourcedoc/publisher.html"
-	else
-		puts "Generated source documentation in \n#{builddir}/sourcedoc/publisher.html"
-	end
 end
 
 # For now: only a small test
