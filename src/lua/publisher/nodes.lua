@@ -13,7 +13,7 @@ local M = {}
 local fonts = require("publisher.fonts")
 local colors_module = require("publisher.colors")
 local links_module = require("publisher.links")
-local par = require("par")
+require("par")
 
 local html = require("html")
 
@@ -88,10 +88,8 @@ function M.parse_html(elt, parameter, data)
 end
 
 function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, pagewidth, pageheight )
-    local get_attr = publisher.get_attribute
     local insert_nm = M.insert_nonmoving_whatsits
     local setp = publisher.setprop
-    local getp = publisher.getprop
     local set_attrs = publisher.set_attributes
     local default_stack = publisher.defaultcolorstack
     local opt_format = publisher.options.format
@@ -104,8 +102,6 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
     local attr_num_hyperlink = attribute_name_number_map["hyperlink"]
     local roles_lookup = publisher.roles_a
     local pdf_reserveobj = pdf.reserveobj
-    local spbp = sp_to_bp
-    local pages_tbl = publisher.pages
     local attr_table_reuse = {}
     local borderattrs = publisher.borderattributes
     local colors = colors_module.colors
@@ -115,7 +111,6 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
     local attr_num_borderht = attribute_name_number_map["borderht"]
     local node_has_attribute = node.has_attribute
     local node_getproperty = node.getproperty
-    local firsthead = head
     if not head then return {} end
     local fun
     local prev_hyperlink, prev_fgcolor, prev_role
@@ -272,7 +267,6 @@ function M.insert_nonmoving_whatsits( head, parent, blockinline,curx, cury, page
                     ht = parent.height + parent.depth
                     setp(head,"lineheight",ht)
                     wd = parent.width - ba.border_left_width - ba.margin_left - ba.border_right_width - ba.margin_right
-                    ht = head.height + head.depth
                 end
 
                 local boxnode = publisher.htmlbox(blockinline, head, wd, parent.height,parent.depth)
@@ -640,6 +634,17 @@ function M.bigger_glue_spec( a,b )
     if a.width > b.width then return a else return b end
 end
 
+-- TODO: this function is partially broken / unfinished. Compare with
+-- M.newline below: that one initialises `list, cur = dummypenalty,
+-- dummypenalty` and then builds a real chain (penalty → strut → glue →
+-- penalty). short_newline creates a dummypenalty but never uses it; the
+-- M.add_rule(nil, "tail", ...) call discards its return value and has
+-- no observable effect; node.insert_after(nil, nil, g) effectively
+-- returns just `g`. So this function currently degenerates to "return
+-- a single glue". QA passes today, so the simple-glue behaviour is what
+-- callers (html.lua's <br> in horizontal mode) expect — but the dead
+-- bookkeeping should be cleaned up or the function should be
+-- reimplemented properly.
 function M.short_newline(fam)
     local strutheight = fonts.lookup_fontfamily_number_instance[fam].baselineskip
     local dummypenalty
@@ -647,10 +652,12 @@ function M.short_newline(fam)
     dummypenalty.penalty = 10000
     node.set_attribute(dummypenalty,att_newline,1)
 
+    -- luacheck: push ignore 321
     local list, cur
     M.add_rule(list,"tail",{height = 0.75 * strutheight, depth = 0.25 * strutheight,width = 0}, "short_newline")
-    g = set_glue(nil,{},"short_newline")
+    local g = set_glue(nil,{},"short_newline")
     list,cur = node.insert_after(list,node.tail(list),g)
+    -- luacheck: pop
     return list, cur
 end
 
@@ -955,7 +962,7 @@ function M.hbglyphlist(arguments)
           end
     end
 
-    local thistbl = tbl
+    local thistbl
 
     -- Pre-compute style attributes (parameter is constant throughout the loop)
     local style_attrs = {}
@@ -1169,7 +1176,7 @@ function M.hbglyphlist(arguments)
                 list,cur = node.insert_after(list,cur,n)
             elseif thisclustervalue == 8203 then
                 -- U+200B ZERO WIDTH SPACE
-                p = node.new(publisher.penalty_node)
+                local p = node.new(publisher.penalty_node)
                 p.penalty = -10
                 list,cur = node.insert_after(list,cur,p)
             elseif thisclustervalue == 8205 then
@@ -1697,7 +1704,7 @@ function M.mknodes(str,parameter,origin)
 
     local maindirection
     local segments
-    if parameter.bidi and not ( str == "\n" ) then
+    if parameter.bidi and str ~= "\n" then
         local dir = 0
         if parameter.direction == "ltr" then
             dir = 1
@@ -1872,7 +1879,7 @@ function M.add_rule( nodelist,head_or_tail,parameter,origin)
         n.prev = last
         return nodelist,n
     end
-    assert(false,"never reached")
+    assert(false,"never reached") -- luacheck: ignore 511
 end
 
 function M.bullet_hbox( labelwidth,parameter )
@@ -1967,7 +1974,7 @@ function M.add_glue( nodelist,head_or_tail,parameter,origin)
         n.prev = last
         return nodelist,n
     end
-    assert(false,"never reached")
+    assert(false,"never reached") -- luacheck: ignore 511
 end
 
 function M.hss_glue()
@@ -2028,13 +2035,12 @@ function M.finish_par( nodelist,hsize,parameters )
 
     last.next = n
     n.prev = last
-    last = n
 
     -- mode harfbuzz sets haskerns, different kind of kerning
     n = node.kerning(nodelist)
     n = M.hbkern(n)
     -- 15 is a parfillskip
-    n,last = M.add_glue(n,"tail",{ subtype = 15, width = 0, stretch = 2^16, stretch_order = 2})
+    M.add_glue(n,"tail",{ subtype = 15, width = 0, stretch = 2^16, stretch_order = 2})
 end
 
 function M.hbkern(nodelist)
@@ -2143,10 +2149,6 @@ function M.fix_justification(nodelist,alignment,parent,direction)
             -- which, when reformatted, gets a complaint by LuaTeX about
             -- infinite shrinkage in a paragraph
 
-            -- a new glue spec node - we must not(!) alter the current glue spec
-            -- because this list is copied in paragraph:format()
-            local spec_new
-
             for n in node.traverse(head.head) do
                 if n.id == publisher.glyph_node then
                     font_before_glue = n.font
@@ -2161,9 +2163,7 @@ function M.fix_justification(nodelist,alignment,parent,direction)
 
             if curalignment == "rightaligned" or curalignment == "centered" then
 
-                local list_start = head.head
                 local rightskip_node = node.tail(head.head)
-                local parfillskip
 
                 -- first we remove everything between the rightskip and the
                 -- last non-glue/non-penalty item
@@ -2370,7 +2370,7 @@ function M.set_color_if_necessary( nodelist,color )
 
     nodelist = node.insert_before(nodelist,nodelist,colstart)
     local last = node.tail(nodelist)
-    nodelist = node.insert_after(nodelist,tail,colstop)
+    nodelist = node.insert_after(nodelist,last,colstop)
 
     publisher.setprop(colstart,"origin","setcolorifnecessary")
     publisher.setprop(colstop,"origin","setcolorifnecessary")

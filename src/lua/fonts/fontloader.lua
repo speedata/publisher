@@ -255,7 +255,7 @@ function M.define_font_hb( name, size, extra_parameter )
         local glyphname = fnt:get_glyph_name(gid)
         if glyphname and string.find(glyphname,".",1,true) then
             local basename = string.match(glyphname,"^(.*)%.")
-            thischar = f.characters[uni]
+            local thischar = f.characters[uni]
             if thischar then
                 thischar.tounicode = glyphname_uni[basename]
             end
@@ -593,7 +593,7 @@ function M.define_font(name, size,extra_parameter)
                 for i=48,57 do
                     local lookups = new_f.characters[i].lookups
                     if lookups and lookups[featuret] then
-                        destname = lookups[featuret][1].specification.variant
+                        local destname = lookups[featuret][1].specification.variant
                         local dest = fonttable.lookup_codepoint_by_name[destname]
                         new_f.characters[i] = new_f.characters[dest]
                     end

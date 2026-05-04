@@ -12,14 +12,14 @@
 local links_module = require("publisher.links")
 
 local fonts = require("html.fonts")
-local images = require("html.images")
+require("html.images")
 local inherit = require("html.inherit")
 local inline_images = require("html.inline_images")
 local inline_options = require("html.inline_options")
 local inline_utils = require("html.inline_utils")
 local lists = require("html.lists")
-local pages_mod = require("html.pages")
-local strings = require("html.strings")
+require("html.pages")
+require("html.strings")
 local styles_mod = require("html.styles")
 local tables_mod = require("html.tables")
 local tree = require("html.tree")
@@ -148,7 +148,6 @@ function M.collect_horizontal_nodes( elt,parameter,before_box,origin,dataxml )
         local thiselt = elt[i]
         local typ = type(thiselt)
 
-        local attributes = thiselt.attributes or {}
         local thiselt_styles = thiselt.styles or {}
         styles_mod.copy_attributes(styles,thiselt_styles, thiselt.elementname or "(string)")
 
@@ -549,7 +548,10 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                     ret[#ret + 1] = a
                 end
             elseif thiseltname == "br" then
-                local a = par:new(tf,"html.lua (br)")
+                -- tf is nil here (only set in the `mode == "horizontal"`
+                -- branch above); Par:format() falls back to
+                -- options.textformat — see par.lua's `current_textformat`.
+                local a = par:new(tf,"html.lua (br)") -- luacheck: ignore tf
                 local list
                 if prevdir == "vertical" then
                     list = publisher.newline(fam)
@@ -564,7 +566,9 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 local ht = units.getsize(styles,styles.height,styles.fontsize_sp)
                 ht = ht + border_top_width + border_bottom_width
                 local bx = publisher.create_empty_vbox_width_width_height(styles.calculated_width,ht)
-                local a = par:new(tf,"html.lua (hr)")
+                -- tf is nil here (set only in horizontal mode); Par:format
+                -- falls back to options.textformat.
+                local a = par:new(tf,"html.lua (hr)") -- luacheck: ignore tf
                 a:append(bx)
                 box[#box + 1] = a
                 ret[#ret + 1] = box
@@ -583,7 +587,9 @@ function M.build_nodelist(elt,options,before_box,caller, prevdir,dataxml )
                 if thiselt.block then mode = "block" end
                 if thiselt.block and #n == 0 then
                     local list = publisher.newline(fam)
-                    local a = par:new(tf,"html.lua (p)")
+                    -- tf is nil here (set only in horizontal mode);
+                    -- Par:format falls back to options.textformat.
+                    local a = par:new(tf,"html.lua (p)") -- luacheck: ignore tf
                     a:append(list)
                     box[#box + 1] = a
                 end

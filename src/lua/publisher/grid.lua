@@ -13,11 +13,6 @@ local colors_module = require("publisher.colors")
 
 M.__index = M
 
-local function to_sp(arg)
-    tex.dimen[0] = arg
-    return tex.dimen[0]
-end
-
 -- pagenumber is only for debugging purpose
 function M.new( self,pagenumber )
     assert(self)
@@ -68,8 +63,8 @@ end
 
 function M.current_row( self,areaname,framenumber )
     assert(self)
-    local areaname = areaname or publisher.default_areaname
-    area = self.positioning_frames[areaname]
+    areaname = areaname or publisher.default_areaname
+    local area = self.positioning_frames[areaname]
     if not area then
         err("Area %q not known",tostring(areaname))
         return nil
@@ -312,7 +307,7 @@ end
 function M.set_framenumber( self,areaname, number )
     local areaname = areaname or publisher.default_areaname
     local area = self.positioning_frames[areaname]
-    assert(area,string.format("Area %q not known",tostring(areaame)))
+    assert(area,string.format("Area %q not known",tostring(areaname)))
     area.current_frame = number
 end
 
@@ -359,12 +354,10 @@ function M.allocate_cells(self,options)
     -- when true, we don't want to move the cursor
     if not keepposition then
         local col = math.ceil(x + wd)
-        local rows = 0
         -- Only move the cursor if the current column is past the right edge of the paper
         if col > self:number_of_columns(areaname) and publisher.compatibility.movecursoronrightedge then
             col = 1
-            rows = 1
-            local c = math.ceil(y + rows + ht  - 1)
+            local c = math.ceil(y + 1 + ht  - 1)
             self:set_current_row(c,areaname,"allocate_cells")
         else
             self:set_current_row(y,areaname,"allocate_cells 2")
@@ -403,8 +396,6 @@ function M.allocate_cells(self,options)
         -- local wdobj = options.objectwidth
         -- used in output/text when allocate="auto"
         -- special handling for the non rectangular shape
-        local grid_step_x = math.floor(100 * wd / allocate_matrix.max_x) / 100
-        local grid_step_y = math.floor(1000 * ht / allocate_matrix.max_y) / 1000
         local cur_x, cur_y
         for _y=1,ht do
             cur_y = math.ceil(_y / ht * allocate_matrix.max_y)
@@ -505,7 +496,6 @@ function M.fits_in_row_area(self,column,width,row,areaname)
         local area = self.positioning_frames[areaname]
         if not self.positioning_frames[areaname] then
             err("Area %q unknown, using page",areaname)
-            areaname = publisher.default_areaname
             frame_margin_left, frame_margin_top = 0,0
         else
             -- Todo: find the correct block because they can be of different width/height
@@ -714,7 +704,7 @@ function M.draw_grid_group(group)
     local gray1 = "0.6"
     local gray2 = "0.8"
     local gray3 = "0.2"
-    local color = gray3
+    local color
     local g = group.grid
     local gridwidth = g.gridwidth
     local gridheight = g.gridheight
@@ -731,7 +721,6 @@ function M.draw_grid_group(group)
         ret[#ret+1] = string.format("%g G %g %g m %g %g l S", color, sp_to_bp(x), sp_to_bp(y), sp_to_bp(x), sp_to_bp(y - ht) )
         x = x + gridwidth
     end
-    x = 0
     y = 0
     local i = 0
     while y <= ht do
@@ -853,8 +842,6 @@ function M.draw_gridallocation(self)
     local re_wd, re_ht, re_x, re_y, color
     re_ht = sp_to_bp(self.gridheight)
     for y=1,self:number_of_rows() do
-        local alloc_found = nil
-
         for x=1, self:number_of_columns(publisher.default_areaname) do
             if self.allocation_x_y[x][y] then
                 re_wd = sp_to_bp(self.gridwidth)
@@ -870,7 +857,6 @@ function M.draw_gridallocation(self)
                 pdf_literals[#pdf_literals + 1]  = string.format("q %s 1 0 0 1 %g %g cm 0 0 %g %g re f Q ",color,re_x, re_y, re_wd,re_ht)
             end
         end
-        alloc_found=nil
     end
     return table.concat(pdf_literals,"\n")
 end
@@ -886,7 +872,6 @@ function M.position_grid_cell(self,x,y,areaname,wd,ht,valign,halign,width_gridce
     else
         if not self.positioning_frames[areaname] then
             err("Area %q unknown, using page",areaname)
-            areaname = publisher.default_areaname
             frame_margin_left, frame_margin_top = 0,0
         else
             local area = self.positioning_frames[areaname]

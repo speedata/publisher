@@ -89,9 +89,9 @@ function M.output_absolute_position(param)
         local group = publisher.groups[publisher.current_group]
         assert(group)
 
-        local n = publisher.add_glue( nodelist ,"head",{ width = delta_x })
+        local n = publisher.add_glue( nodelist ,"head",{ width = param.delta_x })
         n = node.hpack(n)
-        n = publisher.add_glue(n, "head", {width = delta_y})
+        n = publisher.add_glue(n, "head", {width = param.delta_y})
         n = node.vpack(n)
 
         if group.contents then
@@ -117,13 +117,13 @@ function M.output_absolute_position(param)
             -- group is empty
             group.contents = n
         end
-        if allocate then
+        if param.allocate then
             r:allocate_cells({
-                posx = x - shift_left,
-                posy = y - shift_up,
-                width_gridcells = width_gridcells,
-                height_gridcells = height_gridcells,
-                allocate_matrix = allocate_matrix,
+                posx = x - (param.shift_left or 0),
+                posy = y - (param.shift_up or 0),
+                width_gridcells = param.width_gridcells,
+                height_gridcells = param.height_gridcells,
+                allocate_matrix = param.allocate_matrix,
             })
         end
     else
@@ -433,7 +433,7 @@ function M.detect_pagetype(pagenumber, data)
     end
     local cp = publisher.current_pagenumber
     publisher.current_pagenumber = pagenumber
-    local ret = nil
+    local ret
     for i=#publisher.masterpages,1,-1 do
         local pagetype = publisher.masterpages[i]
         if publisher.nextpage then
@@ -516,8 +516,6 @@ function M.initialize_page(pagenumber,data, from)
             extra_margin = trim_amount
         end
     end
-    local errorstring
-
     local current_page, errorstring = page:new(publisher.options.default_pagewidth,publisher.options.default_pageheight, extra_margin, trim_amount,thispage)
     if not current_page then
         err("Can't create a new page. Is the page type (“PageType”) defined? %s",errorstring)
@@ -703,7 +701,7 @@ function M.initialize_page(pagenumber,data, from)
     local cg = current_page.grid
 
     for k,v in pairs(cg.positioning_frames) do
-        css_rules = publisher.css:matches({element = 'area', class=class,id=k}) or {}
+        css_rules = publisher.css:matches({element = 'area', class=nil, id=k}) or {}
         if css_rules["border-width"] then
             for i,frame in ipairs(v) do
                 frame.draw = { color = "green", width = css_rules["border-width"] }
@@ -1442,7 +1440,6 @@ function M.vsplit( objects_t, parameter )
                     -- objects > goal
                     -- This is case (a)
                     remaining_objects[1] = hbox
-                    area_filled = true
                     break
                 end
             end

@@ -9,7 +9,6 @@
 -- BUG on windows: http://lua-users.org/lists/lua-l/2012-08/msg00052.html
 -- ! in LUA_PATH gets replaced by $PWD
 package.path=os.getenv("LUA_PATH")
-local jobname = os.getenv("JOBNAME") or "publisher"
 splib = nil
 
 local libname

@@ -349,7 +349,6 @@ function tabular:calculate_columnwidth()
     local colspans = {}
     local minwidths,col_shrink,starcols,colmax,colmin = {},{},{},{},{}
     local has_min_or_max_width = false
-    local current_row = 0
     self.tablewidth_target = self.width
     local columnwidths_given = nil
 
@@ -529,7 +528,7 @@ function tabular:calculate_columnwidth()
         for i in pairs(starcols) do
             sum_star_minwd = sum_star_minwd + colmin[i]
         end
-        local overshoot = 0
+        local overshoot
         local r = 1
         if total_stars_width - sum_star_minwd < sum_stretch then
             overshoot = total_stars_width - sum_star_minwd
@@ -1188,7 +1187,7 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         end
 
         local cell_start = g
-        local current = node.tail(cell_start)
+        local current
 
         local cell
         -- td_contents.cell can be nil if we have dynamic table head and foot
@@ -1263,7 +1262,6 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         publisher.setprop(g,"origin","padding_right")
 
         current.next = g
-        current = g
         if td_borderright ~= 0 then
             local rule = publisher.colorbar(td_borderright,ht_border,0,td_contents["border-right-color"],"borderright","vertical")
             g.next = rule
@@ -1497,13 +1495,13 @@ end
 function tabular:connect_tablehead_first_all(tablehead_first, tablehead)
     -- We connect all but the last row with the next row and remember the height in ht_header
     for z = 1,#tablehead_first - 1 do
-        _,tmp = publisher.add_glue(tablehead_first[z],"tail",{ width = self.rowsep },"rowsep tablehead")
+        local _, tmp = publisher.add_glue(tablehead_first[z],"tail",{ width = self.rowsep },"rowsep tablehead")
         tmp.next = tablehead_first[z+1]
         tablehead_first[z+1].prev = tmp
     end
 
     for z = 1,#tablehead - 1 do
-        _,tmp = publisher.add_glue(tablehead[z],"tail",{ width = self.rowsep },"rowsep tablehead (2)")
+        local _, tmp = publisher.add_glue(tablehead[z],"tail",{ width = self.rowsep },"rowsep tablehead (2)")
         tmp.next = tablehead[z+1]
         tablehead[z+1].prev = tmp
     end
@@ -1519,7 +1517,7 @@ function tabular:calculate_height_and_connect_tablefoot(tablefoot, tablefoot_las
     for z = 1,#tablefoot - 1 do
         ht_footer = ht_footer + tablefoot[z].height  -- Tr or Tablerule
         -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
-        _,tmp = publisher.add_glue(tablefoot[z],"tail",{ width = self.rowsep },"rowsep tablefoot (1)")
+        local _, tmp = publisher.add_glue(tablefoot[z],"tail",{ width = self.rowsep },"rowsep tablefoot (1)")
         tmp.next = tablefoot[z+1]
         tablefoot[z+1].prev = tmp
     end
@@ -1527,7 +1525,7 @@ function tabular:calculate_height_and_connect_tablefoot(tablefoot, tablefoot_las
     for z = 1,#tablefoot_last - 1 do
         ht_footer_last = ht_footer_last + tablefoot_last[z].height  -- Tr or Tablerule
         -- if we have a rowsep then add glue. Todo: make a if/then/else conditional
-        _,tmp = publisher.add_glue(tablefoot_last[z],"tail",{ width = self.rowsep },"rowsep tablefoot (2)")
+        local _, tmp = publisher.add_glue(tablefoot_last[z],"tail",{ width = self.rowsep },"rowsep tablefoot (2)")
         tmp.next = tablefoot_last[z+1]
         tablefoot_last[z+1].prev = tmp
     end
@@ -2189,7 +2187,7 @@ function tabular:typeset_table(dataxml)
         end
         first_row_in_new_table = splits[s-1] + 1
 
-        thissplittable = {}
+        local thissplittable = {}
         final_split_tables[#final_split_tables + 1] = thissplittable
 
         -- only reformat head when we have a head
@@ -2366,16 +2364,6 @@ function tabular:reformat_head()
     return tmp1[1],tmp2[1]
 end
 
-function dump_table(tbl)
-    for _, row in ipairs(tbl) do
-        local ret_row = {}
-        for _, col in ipairs(row) do
-            ret_row[#ret_row+1] = col.name
-        end
-        w(tostring(table.concat(ret_row, " | ")))
-    end
-end
-
 function adjust_border(tbl)
     for _, row in ipairs(tbl) do
         for _, col in ipairs(row) do
@@ -2415,7 +2403,7 @@ end
 function tabular:do_bordercollapse(tab, area)
     area = area or "body"
     local tablematrix = {}
-    local current_row, current_column = 1, nil
+    local current_row, current_column = 1
     local maxcol = 0 -- needed?
     for _,tr in ipairs(tab) do
         local tr_eltname = publisher.elementname(tr)

@@ -15,7 +15,6 @@ local M = {}
 ---@return number calc_height           -- resulting height (sp)
 function M.set_image_dimensions(image, styles, width_sp, height_sp, dataxml)
     local publisher        = publisher -- from global legacy env
-    local tex              = tex -- from global legacy env
 
     local orig_w, orig_h   = image.width, image.height
     local image_w, image_h = orig_w, orig_h
@@ -29,7 +28,6 @@ function M.set_image_dimensions(image, styles, width_sp, height_sp, dataxml)
 
     -- height constraint
     if height_sp ~= 0 then
-        image_h = tex.sp(image_h)
         image_h = units.calculate_height(height_sp, orig_h)
         factor = orig_h / image_h
     end

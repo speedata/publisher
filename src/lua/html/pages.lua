@@ -88,8 +88,8 @@ function M.handle_pages(pages, maxwidth_sp, dataxml)
                 height = ht,
                 {
                     elementname = "Margin",
-                    contents = function(_page)
-                        _page.grid:set_margin(margin_left, margin_top, margin_right, margin_bottom)
+                    contents = function(page)
+                        page.grid:set_margin(margin_left, margin_top, margin_right, margin_bottom)
                     end
                 }
             },

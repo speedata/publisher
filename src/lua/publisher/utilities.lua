@@ -125,8 +125,6 @@ function M.flush_table(tbl)
             M.flush_table(v)
         elseif type(v) == "userdata" then
             node.flush_list(v)
-        else
-            k = nil
         end
     end
 end

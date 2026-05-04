@@ -40,19 +40,9 @@ local hlist_node     = node.id("hlist")
 local vlist_node     = node.id("vlist")
 
 
-local user_defined_whatsit
-local pdf_refximage_whatsit
-local pdf_action_whatsit
 local pdf_dest_whatsit
 for k,v in pairs(node.whatsits()) do
-    if v == "user_defined" then
-        -- for mark command
-        user_defined_whatsit = k
-    elseif v == "pdf_refximage" then
-        pdf_refximage_whatsit = k
-    elseif v == "pdf_action" then
-        pdf_action_whatsit = k
-    elseif v == "pdf_dest" then
+    if v == "pdf_dest" then
         pdf_dest_whatsit = k
     end
 end
@@ -61,7 +51,6 @@ end
 --- Every font family ("text", "Chapter"), that is defined by DefineFontfamily
 --- gets an internal number. This number is stored here.
 M.lookup_fontfamily_name_number = {}
-local lookup_fontfamily_name_number = M.lookup_fontfamily_name_number
 
 --- Every font family (given by number) has variants like italic, bold etc.
 --- These are stored as a table in this table.
@@ -154,7 +143,6 @@ function M.make_font_instance( name,size )
         font_instances[k]=num
         return true, num
     end
-    return false, "Internal error"
 end
 
 -- Define font from preloaded font
@@ -235,7 +223,6 @@ local d_vpack        = d.vpack
 local d_hpack        = d.hpack
 local d_tail         = d.tail
 local d_getproperty  = d.getproperty
-local d_setproperty  = d.setproperty
 
 -- Pre-resolved attribute numbers for pre_linebreak hot loop
 local plb_att_fontfamily

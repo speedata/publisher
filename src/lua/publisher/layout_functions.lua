@@ -10,14 +10,6 @@ file_start("layout_functions.lua")
 
 local links_module = require("publisher.links")
 
-local box_lookup = {
-    ["artbox"]   = "art",
-    ["cropbox"]  = "crop",
-    ["trimbox"]  = "trim",
-    ["mediabox"] = "media",
-    ["bleedbox"] = "bleed",
-}
-
 local luxor      = do_luafile("luxor.lua")
 local sha        = require('shalocal')
 
@@ -569,7 +561,6 @@ end
 -- convert a textual dimension (e.g. '2cm') to a scalar in another dimension.
 local function tounit(dataxml, arg)
     local unit = arg[1]
-    local value = arg[2]
     local decimal = arg[3] or 0
     local width = tex.sp(arg[2])
     local ret

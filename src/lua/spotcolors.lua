@@ -11,11 +11,6 @@ local colorprofiles = {
 
 local currentcolorprofile = colorprofiles["FOGRA39"]
 
-
-
-local colorprofile_objectid = 0
-local colorprofile_filename = nil
-
 -- index: color number
 -- value: { colorname, pdfobject for the color definition }
 -- The object number is 0 until the color is actually used (by color.pdfstring)

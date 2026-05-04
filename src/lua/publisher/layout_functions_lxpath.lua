@@ -49,7 +49,7 @@ local function fnAllocated(dataxml, arg)
     x = xpath.number_value(arg[1])
     y = xpath.number_value(arg[2])
     if #arg > 2 then
-        areaname, msg = xpath.string_value(arg[3])
+        areaname = xpath.string_value(arg[3])
     end
     if #arg > 3 then
         framenumber = xpath.number_value(arg[4])
@@ -109,14 +109,13 @@ local function fnAlternating(dataxml, arg)
 end
 
 local function first_free_row(dataxml, arg)
-    local ret = 0
     local firstarg
     if #arg > 0 then
         firstarg = xpath.string_value(arg[1])
     else
         firstarg = publisher.default_areaname
     end
-    ret = publisher.current_grid:first_free_row(firstarg)
+    local ret = publisher.current_grid:first_free_row(firstarg)
     return { ret }, nil
 end
 

@@ -146,7 +146,7 @@ local function put_tex_boxes(object, prescript)
         nodelists[n].list = x
         local y = node.new("whatsit", "pdf_literal")
         y.data = " Q"
-        y = node.insert_after(nodelists[n].list, node.tail(nodelists[n].list), y)
+        node.insert_after(nodelists[n].list, node.tail(nodelists[n].list), y)
         insert_text(nodelists[n])
     end
 end
@@ -257,6 +257,11 @@ local function colorconverter(cr)
     end
 end
 
+-- Pen transformation state shared between pen_characteristics, concat, and
+-- flushconcatpath (kept at file scope on purpose).
+local rx, ry, sx, sy, tx, ty
+local divider
+
 local function pen_characteristics(object)
     local t = mplib.pen_info(object)
     rx, ry, sx, sy, tx, ty = t.rx, t.ry, t.sx, t.sy, t.tx, t.ty
@@ -354,37 +359,13 @@ local function do_postobj_color(tr, over, sh)
     end
 end
 
-local transparancy_modes = {
-    [0] = "Normal",
-    "Normal",
-    "Multiply",
-    "Screen",
-    "Overlay",
-    "SoftLight",
-    "HardLight",
-    "ColorDodge",
-    "ColorBurn",
-    "Darken",
-    "Lighten",
-    "Difference",
-    "Exclusion",
-    "Hue",
-    "Saturation",
-    "Color",
-    "Luminosity",
-    "Compatible",
-}
-
 local transparency_values
 
 local function do_preobj_color(object, prescript)
     local opaq = prescript and prescript.tr_transparency
 
-    local tron_no, troff_no
     if opaq then
-        local mode = prescript.tr_alternative or 1
-        mode = transparancy_modes[tonumber(mode)]
-        -- tron_no, troff_no = tr_pdf_pageresources(mode, opaq)
+        -- tron_no, troff_no = tr_pdf_pageresources(prescript.tr_alternative or 1, opaq)
         local str_int_val = string.format("%d", opaq)
         transparency_values[str_int_val] = true
         pdf_literalcode("/TRP%s gs", str_int_val)
@@ -397,64 +378,16 @@ local function do_preobj_color(object, prescript)
         local cs = object.color
         if cs and #cs > 0 then
             pdf_literalcode(colorconverter(cs))
-            prev_override_color = nil
-        elseif false then
-            override = prev_override_color
-            if override then
-                texsprint(string.format("\\special{color push %s}", override))
-            end
         end
     end
-    local sh_type = prescript and prescript.sh_type
-    if sh_type then
-        local domain  = prescript.sh_domain
-        local centera = prescript.sh_center_a:explode()
-        local centerb = prescript.sh_center_b:explode()
-        for _, t in pairs({ centera, centerb }) do
-            for i, v in ipairs(t) do
-                t[i] = string.format("%f", v)
-            end
-        end
-        centera      = table.concat(centera, " ")
-        centerb      = table.concat(centerb, " ")
-        local colora = prescript.sh_color_a or { 0 };
-        local colorb = prescript.sh_color_b or { 1 };
-        for _, t in pairs({ colora, colorb }) do
-            for i, v in ipairs(t) do
-                t[i] = string.format("%.3f", v)
-            end
-        end
-        if #colora > #colorb then
-            color_normalize(colora, colorb)
-        elseif #colorb > #colora then
-            color_normalize(colorb, colora)
-        end
-        local colorspace
-        if #colorb == 1 then
-            colorspace = "DeviceGray"
-        elseif #colorb == 3 then
-            colorspace = "DeviceRGB"
-        elseif #colorb == 4 then
-            colorspace = "DeviceCMYK"
-        else
-            return troff_no, override
-        end
-        colora = table.concat(colora, " ")
-        colorb = table.concat(colorb, " ")
-        local shade_no
-        if sh_type == "linear" then
-            local coordinates = table.concat({ centera, centerb }, " ")
-            shade_no = sh_pdfpageresources(2, domain, colorspace, colora, colorb, coordinates)
-        elseif sh_type == "circular" then
-            local radiusa = string.format("%f", prescript.sh_radius_a)
-            local radiusb = string.format("%f", prescript.sh_radius_b)
-            local coordinates = table.concat({ centera, radiusa, centerb, radiusb }, " ")
-            shade_no = sh_pdfpageresources(3, domain, colorspace, colora, colorb, coordinates)
-        end
-        pdf_literalcode("q /Pattern cs")
-        return troff_no, override, shade_no
-    end
-    return troff_no, override
+    -- TODO: gradient/shading support (sh_type == "linear" / "circular") was
+    -- partially adapted from luamplib but never finished — the helpers
+    -- color_normalize and sh_pdfpageresources were not ported. The block
+    -- has been removed; reinstate it together with those helpers when
+    -- shading is needed again. The first return value (formerly troff_no)
+    -- is always nil for the same reason — transparency_modes was never wired
+    -- through tr_pdf_pageresources.
+    return nil, override
 end
 
 local further_split_keys = {
@@ -587,7 +520,7 @@ local function convert(result)
                                         dashed = false
                                     end
                                     local path = object.path
-                                    local transformed, penwidth = false, 1
+                                    local transformed, penwidth
                                     local open = path and path[1].left_type and path[#path].right_type
                                     local pen = object.pen
                                     if pen then
@@ -705,7 +638,7 @@ function M.finish(mpobj)
             tail = node.tail(pdfcode[i])
         end
     end
-    tv = transparency_values
+    local tv = transparency_values
     mpobj.mp:finish()
     return head, tv, boundingbox
 end
@@ -770,7 +703,7 @@ end
 ---@return Node
 ---@return table bounding box
 function M.boxgraphic(width_sp, height_sp, graphicname, extra_parameter, parameter)
-    local mpobj, a, bbox = M.prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
+    local _, a, bbox = M.prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
     return a, bbox
 end
 

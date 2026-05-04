@@ -20,7 +20,7 @@ function M.build_image_box(styles, attributes, dataxml)
     it = img.copy(it.img)
 
     -- width: if HTML width given, we use styles.calculated_width as target width in sp
-    local width_sp = 0
+    local width_sp
     if attributes.width then
         width_sp = units.getsize(styles, attributes.width, styles.fontsize_sp) or 0
     else

@@ -6,7 +6,6 @@ local Par = {}
 
 function Par:new( textformat,origin )
     local instance = {
-        nodelist,
         textformat = textformat,
         origin = origin,
         typ = "par"
@@ -146,7 +145,6 @@ local function flatten(self,items,options,data)
         ret_len = ret_len + 1
         ret[ret_len] = v
     end
-    local copy_defaults = publisher.copy_table_from_defaults
     local roles_a = publisher.roles_a
     local pdf_ua = publisher.options.format == "PDF/UA"
     local text_options_shared
@@ -415,18 +413,17 @@ function Par:min_width( textformat_name, options,data )
     new_options.textformat = textformat_name
 
     local formatted = newpar:format(1,new_options,data)
-    local nl = formatted
     local head = formatted.head
     if not head then return 0 end
     -- See bug #46: a text format margin-top has a glue as its first item in the vlist
     while head.id ~= publisher.hlist_node do
         head = head.next
     end
-    local _w,_h,_d
+    local _w
     local max = 0
     while head do
         if head.head then
-            _w,_h,_d = node.dimensions(formatted.glue_set, formatted.glue_sign, formatted.glue_order,head.head)
+            _w = node.dimensions(formatted.glue_set, formatted.glue_sign, formatted.glue_order,head.head)
             max = math.max(max,_w)
         end
         head = head.next
@@ -453,7 +450,7 @@ function Par:max_width_and_lineheight(options,data)
     while hlist do
         if hlist.id == publisher.hlist_node then
             -- could also be a glue node
-            wd,_,_ = node.dimensions(hlist.head, node.tail(hlist.head))
+            local wd = node.dimensions(hlist.head, node.tail(hlist.head))
             maxwd = math.max(maxwd,wd)
         end
         hlist = hlist.next
@@ -545,7 +542,6 @@ end
 local function get_border_width_height_margintop(nodelist)
     local sum_ht = 0
     local sum_margin_top = 0
-    local sum_margin_bottom = 0
     local head = nodelist.head
     while head do
         if head.id == publisher.glue_node then
@@ -694,7 +690,7 @@ function Par:format( width_sp, options,data )
                 else
                     cg = publisher.pages[current_pagenumber].grid
                 end
-                local grid_lower = gridheight
+                local grid_lower
                 local framenumber, startrow_grid =  cg:get_advanced_cursor(areaname)
                 -- Let's assume that the already typeset text ends at the next page
                 -- This is not a real fix, but good enough for the moment.
@@ -800,7 +796,7 @@ function Par:format( width_sp, options,data )
 
     local tf = current_textformat
     for i=1,objects_len do
-        nodelist = objects[i]
+        local nodelist = objects[i]
         if publisher.getprop(nodelist, "br") == true then
             tf = publisher.new_textformat("",current_textformat)
             tf.rows = 9999
@@ -1124,7 +1120,7 @@ function Par:format( width_sp, options,data )
         objects[i+1].prev = last
     end
 
-    nodelist = node.vpack(objects[1])
+    local nodelist = node.vpack(objects[1])
 
     if self.startendborder or self.startborder then
         local wd,ht,margintop = get_border_width_height_margintop(nodelist)

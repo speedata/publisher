@@ -33,7 +33,7 @@ hasharfbuzzsubset, harfbuzzsubset = pcall(require,'luaharfbuzzsubset')
 
 
 
-local commands      = require("publisher.commands")
+require("publisher.commands")
 local fonts         = require("publisher.fonts")
 local uuid          = require("uuid")
 local colors_module = require("publisher.colors")
@@ -46,7 +46,7 @@ env_publisherversion = os.getenv("PUBLISHERVERSION")
 
 local M = _G.publisher or {}
 _G.publisher = M
-local _ENV = setmetatable(M, {__index = _G})
+local _ENV = setmetatable(M, {__index = _G}) -- luacheck: ignore _ENV
 
 -- expose helpers from submodules
 utf8_to_utf16_string_pdf = metadata.utf8_to_utf16_string_pdf
@@ -530,11 +530,6 @@ roles_a = {
     "TOCI",
     "TR",
 }
-local roles = {}
-for k,v in pairs(roles_a) do
-    roles[v] = k
-end
-
 -- unique id for roles
 rolecounter = 0
 
@@ -752,7 +747,7 @@ function initialize_luatex_and_generate_pdf()
 
     options.mpcolorwarning = true
     --- The default page type has 1cm margin
-    masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(_page) _page.grid:set_margin(tenmm_sp,tenmm_sp,tenmm_sp,tenmm_sp) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
+    masterpages[1] = { is_pagetype = "true()", res = { {elementname = "Margin", contents = function(page) page.grid:set_margin(tenmm_sp,tenmm_sp,tenmm_sp,tenmm_sp) end }}, name = "Default Page",ns={[""] = "urn:speedata.de:2009/publisher/en" } }
 
     --- The `vars` file hold a lua document holding table
     local vars
@@ -863,7 +858,7 @@ function initialize_luatex_and_generate_pdf()
         end
     end
     if newxpath then
-        tmp = os.getenv("SP_PREPEND_XML")
+        local tmp = os.getenv("SP_PREPEND_XML")
         if tmp and tmp ~= "" then
             main.log("error","--prepend-xml is not supported with the new XPath mode. Use xinclude instead.")
         end
@@ -872,7 +867,7 @@ function initialize_luatex_and_generate_pdf()
             main.log("error","--extra-xml is not supported with the new XPath mode. Use xinclude instead.")
         end
     else
-        tmp = os.getenv("SP_PREPEND_XML")
+        local tmp = os.getenv("SP_PREPEND_XML")
         if tmp and tmp ~= "" then
             for i,v in ipairs(string.explode(tmp,",")) do
                 table.insert(layoutxml, i, luxor.parse_xml_file(v))
@@ -940,7 +935,7 @@ function initialize_luatex_and_generate_pdf()
         table.sort(mode_keys)
         data.vars._mode = table.concat(mode_keys,",")
 
-        seq, msg = data:execute("root()")
+        local _, msg = data:execute("root()")
         if msg then
             main.log("error",msg)
         end
@@ -1170,7 +1165,7 @@ function initialize_luatex_and_generate_pdf()
     local name, tmp
     if newxpath then
         local seq, msg
-        seq, msg = data:execute("root()")
+        _, msg = data:execute("root()")
         if msg then
             main.log("error",msg)
         end
@@ -1263,7 +1258,6 @@ function initialize_luatex_and_generate_pdf()
         for i = 1, #filespecnumbers do
             local filespecnum = filespecnumbers[i][1]
             local filename = filespecnumbers[i][3]
-            local conformancelevel = filespecnumbers[i][2]
             names[#names+1] = string.format([[%s %d 0 R]],utf8_to_utf16_string_pdf(filename),filespecnum)
         end
         pdfcatalog[#pdfcatalog + 1] = string.format([[ /Names << /EmbeddedFiles <<  /Names [%s] >> >> ]],table.concat(names," "))
@@ -1377,7 +1371,7 @@ function initialize_luatex_and_generate_pdf()
             vp[#vp + 1] = "/DisplayDocTitle true"
 
             local parenttree = pdf.reserveobj()
-            structTreeRootObjectNumber = pdf.reserveobj()
+            local structTreeRootObjectNumber = pdf.reserveobj()
             -- Sort structure tree by reading order if pages were reordered (InsertPages/SavePages)
             local needs_reorder = false
             for i = 1, #pagenum_tbl do
@@ -1505,7 +1499,7 @@ do
     function find_role_attributes( nodelist,parenttree, page, curid )
         local head = nodelist
         while head do
-            entry = nil
+            local entry
             if head.id == hlist_node or head.id == vlist_node then
                 if head.list then
                     local r = node.has_attribute(head,att_role)
@@ -1676,6 +1670,9 @@ end
 skippages = nil
 
 -- Draw a box with HTML properties given at head
+-- The `height_sp` parameter is recomputed from `properties.lineheight`
+-- below; the caller's value is intentionally ignored.
+-- luacheck: push ignore height_sp
 function htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
     local debug_htmlbox = 0
     local properties = node.getproperty(head)
@@ -1822,7 +1819,7 @@ function htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
     local circle_bezier = 0.551915024494
 
     -- xn, yn = outer path, xin, yin = inner path used for clipping
-    local x0, y0   = sp_x0                              , ht + b_b_l_radius
+    local x0, y0   = sp_x0                              , ht + b_b_l_radius -- luacheck: ignore y0
     local x1, y1   = sp_x0 + b_b_l_radius   , ht
     local x2, y2   = wd - b_b_r_radius                , y1
     local x3, y3   = x2 + circle_bezier * b_b_r_radius, y1
@@ -1987,6 +1984,7 @@ function htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
     vbox.depth = 0
     return vbox
 end
+-- luacheck: pop
 
 -- To split the textblock in pieces
 local marker

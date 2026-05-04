@@ -762,7 +762,7 @@ function M.mpbox(parameter,width,height)
     ]]
     publisher.metapostgraphics.__htmlbox = mptext
 
-    local instr,bbox = metapost.boxgraphic(width_sp,height_sp,"__htmlbox",extra_parameter)
+    local instr = metapost.boxgraphic(width_sp,height_sp,"__htmlbox",extra_parameter)
     if not instr then
         main.log("error","Could not create metapost image")
         return
@@ -842,7 +842,7 @@ function M.box( width_sp,height_sp,colorname,border_color,border_width_sp )
     end
 
     local vglue = set_glue(nil,{width = 0, stretch = 2^16, stretch_order = 3 })
-    v = node.insert_after(h,h,vglue)
+    node.insert_after(h,h,vglue)
     v = node.vpack(h,height_sp,"exactly")
     return v
 end
@@ -1097,7 +1097,7 @@ function M.rotateTd( nodelist,angle, width_sp)
     Q.data = "Q"
 
     _,q = node.insert_before(nodelist,nodelist,q)
-    _,Q = node.insert_after(q,nodelist,Q)
+    node.insert_after(q,nodelist,Q)
     q = node.vpack(q)
 
     q.width  = math.abs(_wd * cos) + math.abs(ht * sin)

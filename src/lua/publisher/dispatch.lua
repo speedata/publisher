@@ -287,7 +287,7 @@ function M.dispatch(layoutxml, dataxml, opts)
             else
                 local prefix, localname = table.unpack(string.explode(j[".__name"], ":"))
                 if localname == nil then
-                    prefix, localname = "", prefix
+                    prefix = ""
                 end
                 if j[".__ns"][prefix] == "urn:speedata.de:2009/publisher/en" then
                     err("Unknown element found in layoutfile: %q", j[".__local_name"] or "???")

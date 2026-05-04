@@ -103,10 +103,7 @@ function bp_to_sp( bp )
 end
 
 function table.not_empty(t)
-    for key, value in pairs(t) do
-        return true
-    end
-    return false
+    return next(t) ~= nil
 end
 --- Sum up the contents of the array entries. `first` and `last` are optional.
 function table.sum( tbl, first, last )
@@ -334,6 +331,9 @@ local function setup()
     else
         pdf.setsuppressoptionalinfo(143)
     end
+    -- Toggle to "if true" for an uncompressed PDF (handy for debugging /
+    -- diffing the raw stream content).
+    -- luacheck: push ignore 511
     if false then
         pdf.setcompresslevel(0)
         pdf.setobjcompresslevel(0)
@@ -343,6 +343,7 @@ local function setup()
             pdf.setobjcompresslevel(9)
         end
     end
+    -- luacheck: pop
     tex.adjustspacing = 2
     tex.pdfpageheight = tex.sp("29.7cm")
     tex.pdfpagewidth  = tex.sp("21cm")
@@ -430,7 +431,7 @@ prohibited_at_end = {
     ["〔"] = true,["〖"] = true,["〝"] = true,
     ["（"] = true,["［"] = true,["｛"] = true,
     -- typical additionally prohibited
-    ["『"] = true,["「"] = true,["〘"] = true,["〚"] = true
+    ["〘"] = true,["〚"] = true
   }
 }
 

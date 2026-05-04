@@ -17,13 +17,6 @@ function w( ... )
   io.stdout:flush()
 end
 
--- xpath.lua
-function nexttok(src,str,pos)
-    pos = pos or M.nextpos
-    w(string.format("%.10s|",src)..string.sub(str,pos,pos + 10) .. "|")
-end
-
-
 if not log then
   log = function (...)
     texio.write(string.format(...) .. "\n")
@@ -51,7 +44,6 @@ do
       return
     end
     level = level or 0
-    local k,l
     local key
     if level > 0 then
       if type(ind) == "number" then
@@ -151,22 +143,6 @@ function nodelist_tostring( head )
         head = head.next
     end
     return table.concat(ret,"")
-end
-
-local function xml_escape( str )
-    if type(str) == "table" then
-        str = table.concat(str)
-    end
-    if not str then return "" end
-    local replace = {
-        [">"] = "&gt;",
-        ["<"] = "&lt;",
-        ["\""] = "&quot;",
-        ["&"] = "&amp;",
-    }
-    -- FIXME, str can be bool
-    local ret = string.gsub(str,".",replace)
-    return ret
 end
 
 function showattributes(n, name)

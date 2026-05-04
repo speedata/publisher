@@ -80,6 +80,15 @@ task :qa do
 	sh "#{installdir}/bin/sp compare #{installdir}/qa"
 end
 
+desc "Lint Lua sources with luacheck"
+task :luacheck do
+	# luacheck exit codes: 0 = clean, 1 = warnings only, >=2 = syntax / config / I/O error.
+	# Treat warnings as a successful run so the report is shown without breaking the task.
+	ok = system("luacheck src/lua")
+	status = $?.exitstatus
+	fail "luacheck failed (exit #{status})" if !ok && status >= 2
+end
+
 desc "Clean QA intermediate files"
 task :cleanqa do
 	FileUtils.rm Dir.glob("qa/**/pagediff-*.png")

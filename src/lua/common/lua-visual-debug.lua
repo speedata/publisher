@@ -95,8 +95,6 @@ end
 
 local curdir = {}
 
-local show_page_elements
-
 local function show_page_elements(parent)
   local head = parent.list
   while head do
@@ -121,10 +119,10 @@ local function show_page_elements(parent)
         local factor = 1
         if curdir[#curdir] == "rtl" then factor = -1 end
         if head.id == HLIST then -- hbox
-          rectangle.data = fmt("q %s %s %g w %g %g %g %g re s Q", 
+          rectangle.data = fmt("q %s %s %g w %g %g %g %g re s Q",
             params.opacity,params.hlist.color, rule_width, -factor*rule_width / 2, -dp, factor*wd, ht)
         else
-          rectangle.data = fmt("q %s %s %g w %g %g %g %g re s Q", 
+          rectangle.data = fmt("q %s %s %g w %g %g %g %g re s Q",
             params.opacity,params.vlist.color, rule_width, -factor*rule_width / 2, 0, factor*wd, -ht)
         end
         head.list = insert_before(head.list,head.list,rectangle)
@@ -211,7 +209,7 @@ local function show_page_elements(parent)
       end
       rectangle.data = fmt("q %s 0 w 0 0 1 1 re B Q",color)
       parent.list = insert_before(parent.list,head,rectangle)
-    
+
     elseif head.id == GLYPH and params.glyph.show then
       local rule_width = params.glyph.width
       local wd = -math_round(head.width                 / number_sp_in_a_pdf_point - rule_width     ,2)
@@ -224,12 +222,12 @@ local function show_page_elements(parent)
       if head.depth ~= 0 and params.glyph.baseline then
         baseline = fmt("%g %g m %g %g l",
           0, -rule_width / 2, factor*(wd-rule_width), -rule_width / 2)
-      end      
+      end
       rectangle.data = fmt("q %s %s %g w %s %g %g %g %g re s Q",
         params.opacity, params.glyph.color, rule_width, baseline, -factor*rule_width / 2, -dp, factor*wd, ht)
       parent.list, head = insert_after(parent.list,head,rectangle)
     end
-    
+
     if has_dir then
       table.remove(curdir)
     end

@@ -11,7 +11,7 @@ local string = unicode.utf8
 
 
 local function new(self)
-  c = {
+  local c = {
      rules = {},
      priorities = {},
      text = {}
@@ -23,7 +23,7 @@ end
 
 -- sanitize selector and calculate priority
 local function get_priority( selector )
-  prio = 0
+  local prio = 0
   string.gsub(selector,"[%.#]?[^%s.]+",function ( x )
     if string.match(x,"^#") then
       prio = prio + 100
@@ -48,7 +48,7 @@ local function parsetxt(self,csstext)
   csstext = string.gsub(csstext,"%s+"," ")
   -- remove comments:
   csstext = string.gsub(csstext,"/%*.-%*/"," ")
-  local stop,selector,selectors,rules,rule,property,expr,rule_stop
+  local stop,selector,selectors,rules,rule,property,expr,rule_stop,rules_text
   stop = 0
   while true do
     _,stop,selector = string.find(csstext,"^%s*([^{]+)",stop + 1)
@@ -69,7 +69,7 @@ local function parsetxt(self,csstext)
       end
     end
     selectors = explode(selector,",")
-    local sel
+    local sel,prio
     for i=1,#selectors do
       sel, prio = get_priority(selectors[i])
       self.rules[prio] = self.rules[prio] or {}
@@ -158,7 +158,7 @@ end
 -- tbl = element, class, id
 local function matches(self,tbl,level)
   level = level or 1
-  local rules,interesting_part,parts
+  local interesting_part,parts
   for _,v in ipairs(self.priorities) do
     for selector,rule in pairs(self.rules[v]) do
       parts = explode(selector," ")

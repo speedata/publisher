@@ -50,11 +50,11 @@ function M.pop_state()
 end
 
 function M.is_ifthenelse(dataxml,str,pos,ns)
-    local start,stop,num
+    local start,stop
     start,stop = string.find(str,"^if%s+%(",pos)
     if start then
         local lvl = 1
-        local curpos,curstring = stop + 1, ""
+        local curpos, curstring = stop + 1
         while lvl > 0 do
             curstring = string.sub(str,curpos,curpos)
             if curstring == "(" then
@@ -86,8 +86,7 @@ function M.is_ifthenelse(dataxml,str,pos,ns)
 end
 
 function M.is_number(str,pos)
-    local start,stop,num
-    start, stop, num = string.find(str,"^([%-+]?%d+%.?%d*)%s*",pos)
+    local _, stop, num = string.find(str,"^([%-+]?%d+%.?%d*)%s*",pos)
     if num then
         M.nextpos = stop + 1
         M.tok = num
@@ -97,8 +96,7 @@ function M.is_number(str,pos)
 end
 
 function M.is_dimension(str,pos)
-    local start,stop,num
-    start, stop, num = string.find(str,"^([%-+]?%d+%.?%d*%a+)%s*",pos)
+    local _, stop, num = string.find(str,"^([%-+]?%d+%.?%d*%a+)%s*",pos)
     if num then
         M.nextpos = stop + 1
         M.tok = num
@@ -109,8 +107,7 @@ end
 
 
 function M.is_attribute(dataxml,str,pos)
-    local start,stop,attr
-    start,stop,attr = string.find(str,"^@([%w_:-]+)%s*",pos)
+    local _, stop, attr = string.find(str,"^@([%w_:-]+)%s*",pos)
     if attr then
         M.nextpos = stop + 1
         M.tok = dataxml[attr]
@@ -120,10 +117,9 @@ function M.is_attribute(dataxml,str,pos)
         if M.tok == nil then M.tok = nilmarker end
         return true
     end
-    local eltname
+    local start, eltname
     start,stop,eltname = string.find(str,"^(%a[%w-/_*]*@[%w-_]+)%s*",pos)
     if start then
-        local ret = {}
         local attrname
         M.nextpos = stop + 1
         local tmp = { dataxml }
@@ -170,8 +166,7 @@ function M.is_attribute(dataxml,str,pos)
 end
 
 function M.is_dataexpr( dataxml,str,pos )
-    local start,stop,expr
-    start,stop,expr = string.find(str,"^(xs:[^%s]*)%s*",pos)
+    local _,stop,expr = string.find(str,"^(xs:[^%s]*)%s*",pos)
     if expr then
         M.nextpos = stop + 1
         M.tok = expr
@@ -181,8 +176,7 @@ function M.is_dataexpr( dataxml,str,pos )
 end
 
 function M.is_variable(str,pos)
-    local start,stop,var
-    start,stop,var = string.find(str,"^%$([%w_%-]+)%s*",pos)
+    local _,stop,var = string.find(str,"^%$([%w_%-]+)%s*",pos)
     if var then
         M.nextpos = stop + 1
         M.tok = M.get_variable(var)
@@ -210,13 +204,13 @@ end
 
 function M.is_function(dataxml,str,pos,ns)
     local start,stop,prefix,fname
-    start,stop,prefix = string.find(str,"^([^%(]+):",pos)
+    _, stop, prefix = string.find(str,"^([^%(]+):",pos)
     if prefix then
         pos = stop + 1
     else
         prefix = ""
     end
-    start,stop,fname = string.find(str,"^([^(: %.]+)%(%s*",pos)
+    _, stop, fname = string.find(str,"^([^(: %.]+)%(%s*",pos)
     if prefix and fname then
         local x
         if prefix == "" then
@@ -256,14 +250,14 @@ function M.is_function(dataxml,str,pos,ns)
 end
 
 function M.is_string(str,pos)
-    local start,stop,s
-    start, stop, s = string.find(str,"^'([^']*)'%s*",pos)
+    local stop,s
+    _, stop, s = string.find(str,"^'([^']*)'%s*",pos)
     if s then
         M.tok = s
         M.nextpos = stop + 1
         return true
     end
-    start, stop, s = string.find(str,'^"([^"]*)"%s*',pos)
+    _, stop, s = string.find(str,'^"([^"]*)"%s*',pos)
     if s then
         M.tok = s
         M.nextpos = stop + 1
@@ -319,7 +313,6 @@ function M.is_nodeselector( dataxml,str,pos,ns )
     start,stop,eltname = string.find(str,"^(%a[%w-/_*]*)%s*",pos)
     if start then
         local something_found = false
-        local ret = {}
         M.nextpos = stop + 1
         local tmp = { dataxml }
         for part in string.gmatch(eltname,"([^/]+)") do
@@ -348,7 +341,6 @@ end
 
 
 function M.get_operand(dataxml,str,pos,ns)
-    local start, stop
     if M.is_dimension(str,pos) then
          return M.tok
     elseif M.is_number(str,pos) then
@@ -397,14 +389,13 @@ end
 
 function M.is_andor_expr(dataxml,str,pos,ns)
     pos = pos or M.nextpos
-    local start,stop,op
-    start,stop,op = string.find(str,"^and%s*",pos)
+    local start,stop = string.find(str,"^and%s*",pos)
     if start then
         M.tok = "\1and"
         M.nextpos = stop + 1
         return true
     end
-    start,stop,op = string.find(str,"^or%s*",pos)
+    start,stop = string.find(str,"^or%s*",pos)
     if start then
         M.tok = "\1or"
         M.nextpos = stop + 1
@@ -415,8 +406,7 @@ end
 
 function M.is_castable_expr(dataxml,str,pos,ns)
     pos = pos or M.nextpos
-    local start,stop,op
-    start,stop,op = string.find(str,"^castable as%s*",pos)
+    local start,stop = string.find(str,"^castable as%s*",pos)
     if start then
         M.tok = "castable_as"
         M.nextpos = stop + 1
@@ -579,7 +569,6 @@ local mt = {
 }
 
 function get_argument_number(arg,pos,what)
-    local unit
     if type(arg)=='table' then
         setmetatable(arg, mt)
         arg = tostring(arg)
@@ -1152,7 +1141,7 @@ M.default_functions["not"] = function (dataxml,arg)
 end
 
 M.default_functions["string-join"] = function (dataxml,arg)
-    ret = {}
+    local ret = {}
     for i=1,#arg - 1 do
         ret[#ret + 1] = tostring(arg[i])
     end

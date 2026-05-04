@@ -372,7 +372,7 @@ local function code128(width,height,fontfamily,text,showtext)
   -- width of the barcode. Each pattern entry has bars
   -- and spaces of total width 11, the stop pattern has
   -- two more.
-  wd_pattern_units = #pattern * 11 + 2
+  local wd_pattern_units = #pattern * 11 + 2
   local unit_width, barcode_height
   if width then
     unit_width = width / wd_pattern_units
@@ -431,7 +431,7 @@ local function make_code(size,matrix,pdfcolorstring)
   local bc = {}
   bc[#bc + 1] = string.format("q %s",pdfcolorstring)
   for x=1,#matrix do
-    last_bit = "-"
+    local last_bit = "-"
     dark_bits = 0
     white_bits = 0
 
