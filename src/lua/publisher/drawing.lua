@@ -181,7 +181,7 @@ function M.concat_transformation(a, b)
 end
 
 -- Places a rotated text watermark in the background of `box`.
----@param box Node Hbox to decorate (modified in place).
+---@param box HlistNode Hbox to decorate (modified in place).
 ---@param textstring string Watermark text.
 ---@param angle number Rotation in degrees.
 ---@param colorname string Registered color name.
@@ -190,26 +190,47 @@ end
 ---@return nil
 function M.bgtext(box, textstring, angle, colorname, fontfamily, bgsize)
     local colorindex = colors_module.colors[colorname].index
-    local boxheight, boxwidth = box.height, box.width
+    local boxheight, boxdepth, boxwidth = box.height, box.depth or 0, box.width
     local angle_rad = -1 * math.rad(angle)
     local sin = math.sin(angle_rad)
     local cos = math.cos(angle_rad)
 
     local a = publisher.par:new(nil, "bgtext")
     a:append(textstring, { fontfamily = fontfamily, color = colorindex })
-    a:mknodelist(publisher.data)
+    a:mknodelist({}, publisher.data)
     local textbox = node.hpack(a.objects[1])
-    local rotated_height = sin * textbox.width + cos * textbox.height
+
+    -- Bounding box of the four rotated corners of the textbox. The
+    -- textbox origin is at (0,0) (baseline-left); glyphs extend upward
+    -- to textbox.height (ascender) and downward to -textbox.depth
+    -- (descenders, e.g. on "(", ")", "g"). Rotating around the origin
+    -- moves the BB asymmetrically, so compute the BB explicitly and
+    -- re-center it inside the cell. The cell occupies y in
+    -- [-boxdepth, +boxheight] relative to the same baseline-origin, so
+    -- its vertical center sits at (boxheight - boxdepth) / 2.
+    local function rot(x, y)
+        return cos * x - sin * y, sin * x + cos * y
+    end
+    local txt_d = textbox.depth or 0
+    local x1, y1 = rot(0, -txt_d)
+    local x2, y2 = rot(textbox.width, -txt_d)
+    local x3, y3 = rot(0, textbox.height)
+    local x4, y4 = rot(textbox.width, textbox.height)
+    local bb_xmin = math.min(x1, x2, x3, x4)
+    local bb_xmax = math.max(x1, x2, x3, x4)
+    local bb_ymin = math.min(y1, y2, y3, y4)
+    local bb_ymax = math.max(y1, y2, y3, y4)
+    local bb_w = bb_xmax - bb_xmin
+    local bb_h = bb_ymax - bb_ymin
+
     local scale
-    local shift_up = 0
     if bgsize == "contain" then
-        scale = boxheight / rotated_height
+        scale = math.min(boxwidth / bb_w, (boxheight + boxdepth) / bb_h)
     else
         scale = 1
-        shift_up = sp_to_bp((boxheight - rotated_height) / 2)
     end
-    local rotated_width = sin * textbox.height + cos * textbox.width
-    local shift_right = sp_to_bp((boxwidth - rotated_width * scale) / 2)
+    local shift_right = sp_to_bp(boxwidth / 2 - scale * (bb_xmin + bb_xmax) / 2)
+    local shift_up = sp_to_bp((boxheight - boxdepth) / 2 - scale * (bb_ymin + bb_ymax) / 2)
 
     -- rotate: [cos θ sin θ −sin θ cos θ 0 0 ]
     local rotate_matrix = { cos, sin, -1 * sin, cos, 0, 0 }
@@ -219,7 +240,7 @@ function M.bgtext(box, textstring, angle, colorname, fontfamily, bgsize)
     result_matrix = M.concat_transformation(rotate_matrix, scale_matrix)
     result_matrix = M.concat_transformation(result_matrix, shift_matrix)
     local matrixstring = string.format(
-        "%g %g %g %g %d %g",
+        "%g %g %g %g %g %g",
         math.round(result_matrix[1], 3),
         math.round(result_matrix[2], 3),
         math.round(result_matrix[3], 3),
