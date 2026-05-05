@@ -1,5 +1,6 @@
 source*.png
 reference*.png
+reference-index.xml
 pagediff*.png
 publisher.log
 publisher.protocol
