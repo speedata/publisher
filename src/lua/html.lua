@@ -191,8 +191,8 @@ function M.collect_horizontal_nodes(elt, parameter, before_box, origin, dataxml)
                 string.format("collect horizontal mode element %s", eltname),
                 dataxml
             )
-            for i = 1, #n do
-                thisret[#thisret + 1] = n[i]
+            for j = 1, #n do
+                thisret[#thisret + 1] = n[j]
             end
         end
 
@@ -205,7 +205,7 @@ function M.collect_horizontal_nodes(elt, parameter, before_box, origin, dataxml)
             for index, value in pairs(options.border) do
                 publisher.attribute_helpers.setprop(thisret[1], index, value)
             end
-            publisher.attribute_helpers.setprop(node.tail(thisret[1], ""), "borderend", 1)
+            publisher.attribute_helpers.setprop(node.tail(thisret[1]), "borderend", 1)
         end
 
         for i = 1, #thisret do
@@ -226,9 +226,9 @@ local oltype = {}
 ---@param options? table Inherited style options.
 ---@param before_box? boolean Whether the element starts a fresh box.
 ---@param caller? string Caller identifier (debugging).
----@param prevdir? "→"|"↓" Previous run's direction.
+---@param prevdir? "horizontal"|"vertical" Previous run's direction.
 ---@param dataxml table Data XML context.
----@return node? head Head of the resulting node list.
+---@return Node? head Head of the resulting node list.
 function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
     -- w("html: build nodelist from %s, prevdir = %s", caller or "?",prevdir or "?")
     options = options or {}
@@ -345,8 +345,9 @@ function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
             alignment = "justified"
         end
 
-        local tf
         if thiselt.mode == "horizontal" then
+            ---@type Textformat
+            local tf
             -- when called from Paragraph, we use that textformat
             if options.override_alignment then
                 tf = options.textformat
@@ -584,10 +585,7 @@ function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
                     ret[#ret + 1] = a
                 end
             elseif thiseltname == "br" then
-                -- tf is nil here (only set in the `mode == "horizontal"`
-                -- branch above); Par:format() falls back to
-                -- options.textformat — see par.lua's `current_textformat`.
-                local a = publisher.par:new(tf, "html.lua (br)") -- luacheck: ignore tf
+                local a = publisher.par:new(nil, "html.lua (br)")
                 local list
                 if prevdir == "vertical" then
                     list = publisher.nodes.newline(fam)
@@ -602,9 +600,7 @@ function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
                 local ht = units.getsize(styles, styles.height, styles.fontsize_sp)
                 ht = ht + border_top_width + border_bottom_width
                 local bx = publisher.nodes.create_empty_vbox_width_width_height(styles.calculated_width, ht)
-                -- tf is nil here (set only in horizontal mode); Par:format
-                -- falls back to options.textformat.
-                local a = publisher.par:new(tf, "html.lua (hr)") -- luacheck: ignore tf
+                local a = publisher.par:new(nil, "html.lua (hr)")
                 a:append(bx)
                 box[#box + 1] = a
                 ret[#ret + 1] = box
@@ -634,9 +630,7 @@ function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
                 end
                 if thiselt.block and #n == 0 then
                     local list = publisher.nodes.newline(fam)
-                    -- tf is nil here (set only in horizontal mode);
-                    -- Par:format falls back to options.textformat.
-                    local a = publisher.par:new(tf, "html.lua (p)") -- luacheck: ignore tf
+                    local a = publisher.par:new(nil, "html.lua (p)")
                     a:append(list)
                     box[#box + 1] = a
                 end
@@ -667,7 +661,7 @@ end
 ---@param elt table Parsed CSS+HTML tree (from `<HTML>`).
 ---@param options? table Per-call options.
 ---@param data table Data XML context.
----@return node|table result Final box or paragraph object.
+---@return Node|table result Final box or paragraph object.
 function M.parse_html_new(elt, options, data)
     options = options or {}
     -- local maxwidth_sp = options.maxwidth_sp
@@ -704,7 +698,6 @@ function M.parse_html_new(elt, options, data)
         publisher.language.set_mainlanguage(lang)
     end
     tree.normalize_html_tree(elt[1])
-    -- printtable("elt[1]",elt[1])
     local block = M.build_nodelist(elt, options, nil, "parse_html_new", "vertical", data)
     return block
 end

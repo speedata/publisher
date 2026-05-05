@@ -14,7 +14,7 @@ local grid = require("publisher.grid")
 ---@field width integer Page width in sp (without bleed).
 ---@field height integer Page height in sp (without bleed).
 ---@field transparenttext table<integer, true> Set of alpha values used on the page.
----@field pagebox node Vlist node holding the page contents.
+---@field pagebox Node Vlist node holding the page contents.
 ---@field defaultcolor? string Default text color name.
 ---@field matter? string Matter name (for page label generation).
 ---@field structparents? integer PDF/UA `/StructParents` index.

@@ -119,15 +119,13 @@ function M.get_fontname(localname, url)
     return nil
 end
 
--- Return false, error message in case of failure, true, number otherwise. number
--- is the internal font number. After calling this method, the font can be used
--- with the key {filename,size}
--- Loads (or reuses) a font face at the given size and returns the
--- LuaTeX font instance id.
+-- Loads (or reuses) a font face at the given size and returns the LuaTeX font
+-- instance id. After this call the font is registered under the key
+-- {filename, size}.
 ---@param name string Registered font face name.
 ---@param size integer Size in scaled points.
----@return boolean ok `false` on failure (e.g. missing file).
----@return integer|string id_or_error Instance id on success, error message on failure.
+---@return integer? id  LuaTeX font instance id, or `nil` on failure.
+---@return string? err  Error message when `id` is `nil`.
 function M.make_font_instance(name, size)
     -- Name is something like "TeXGyreHeros-Regular", the visible name of the font file
     assert(name)
@@ -135,7 +133,7 @@ function M.make_font_instance(name, size)
     if not lookup_fontname_filename[name] then
         local msg = string.format("Font instance '%s' is not defined!", name)
         main.log("error", "Make font instance: filename is not defined", "filename", name)
-        return false, msg
+        return nil, msg
     end
     local filename, parameter = table.unpack(lookup_fontname_filename[name])
     assert(filename)
@@ -156,7 +154,7 @@ function M.make_font_instance(name, size)
     end
     local fontnumber = table.find(font_instances, k)
     if fontnumber then
-        return true, fontnumber
+        return fontnumber
     else
         local f
         local num = font.nextid(true)
@@ -174,7 +172,7 @@ function M.make_font_instance(name, size)
             tostring(num)
         )
         font_instances[k] = num
-        return true, num
+        return num
     end
 end
 
@@ -464,8 +462,8 @@ end
 
 -- Public pre-linebreak callback. Wraps `pre_linebreak_direct` for the
 -- node API caller and is registered through `callback.register`.
----@param head node
----@return node head
+---@param head Node
+---@return Node head
 function M.pre_linebreak(head)
     if not plb_att_fontfamily then
         plb_att_fontfamily = publisher.attribute_name_number["fontfamily"]
@@ -491,9 +489,9 @@ end
 
 -- Inserts a background-color rule behind a glyph run starting at `start`
 -- and extending while the same `bgcolorindex` is set.
----@param parent node Surrounding hbox/vbox.
----@param head node Head of the run.
----@param start node First node carrying the background color.
+---@param parent Node Surrounding hbox/vbox.
+---@param head Node Head of the run.
+---@param start Node First node carrying the background color.
 ---@param bgcolorindex integer Color index from `colortable`.
 ---@param bg_padding_top integer Padding above baseline in sp.
 ---@param bg_padding_bottom integer Padding below baseline in sp.
@@ -535,9 +533,9 @@ end
 -- Insert a horizontal rule in the nodelist that is used for underlining. typ is 1 (solid) or 2 (dashed)
 -- Draws a text-decoration rule (underline / overline / line-through)
 -- across the run starting at `start`.
----@param parent node Surrounding box.
----@param head node Head of the run.
----@param start node First node carrying the decoration.
+---@param parent Node Surrounding box.
+---@param head Node Head of the run.
+---@param start Node First node carrying the decoration.
 ---@param typ "underline"|"overline"|"line-through"
 ---@param style "solid"|"double"|"dotted"|"dashed"|"wavy"
 ---@param colornumber integer Color index.
@@ -868,39 +866,39 @@ function M.clone_family(fam, params)
     newfam.name = "cloned"
 
     if newfam.fontfaceregular then
-        local ok, r = M.make_font_instance(newfam.fontfaceregular, params.size * newfam.size)
-        if not ok then
-            main.log("error", r)
+        local id, err = M.make_font_instance(newfam.fontfaceregular, params.size * newfam.size)
+        if not id then
+            main.log("error", err)
             return fam
         end
-        newfam.normal = r
+        newfam.normal = id
     end
 
     if newfam.fontfacebold then
-        local ok, b = M.make_font_instance(newfam.fontfacebold, params.size * newfam.size)
-        if not ok then
-            main.log("error", b)
+        local id, err = M.make_font_instance(newfam.fontfacebold, params.size * newfam.size)
+        if not id then
+            main.log("error", err)
             return fam
         end
-        newfam.bold = b
+        newfam.bold = id
     end
 
     if newfam.fontfaceitalic then
-        local ok, i = M.make_font_instance(newfam.fontfaceitalic, params.size * newfam.size)
-        if not ok then
-            main.log("error", i)
+        local id, err = M.make_font_instance(newfam.fontfaceitalic, params.size * newfam.size)
+        if not id then
+            main.log("error", err)
             return fam
         end
-        newfam.italic = i
+        newfam.italic = id
     end
 
     if newfam.fontfacebolditalic then
-        local ok, bi = M.make_font_instance(newfam.fontfacebolditalic, params.size * newfam.size)
-        if not ok then
-            main.log("error", bi)
+        local id, err = M.make_font_instance(newfam.fontfacebolditalic, params.size * newfam.size)
+        if not id then
+            main.log("error", err)
             return fam
         end
-        newfam.bolditalic = bi
+        newfam.bolditalic = id
     end
 
     newfam.size = math.floor(params.size * newfam.size)
@@ -974,7 +972,5 @@ function M.summarize_missing_glyphs()
 end
 
 file_end("fonts.lua")
-
-publisher.fonts = M
 
 return M

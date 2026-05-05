@@ -1,15 +1,7 @@
---- Style helpers for HTML parser: width calculation and attribute copying.
---- Uses global `tex` and `math` like the legacy code.
+-- Style helpers for HTML parser: width calculation and attribute copying.
+-- Uses global `tex` and `math` like the legacy code.
+-- The `HtmlStyles` class is defined in `html/inherit.lua`, where instances are created.
 local M = {}
-
----@class HtmlStyles
----@field calculated_width number
----@field width string|number|nil
----@field height string|number|nil
----@field fontsize_sp number
----@field rootfontsize_sp number
----@field lineheight_sp number
----@field color string|nil
 
 ---Recompute styles.calculated_width based on CSS-like width and box extras.
 ---@param styles HtmlStyles

@@ -903,7 +903,7 @@ end
 ---@param self Grid
 ---@param frame PositioningFrame
 ---@param width_sp? integer Override frame width in sp.
----@return node hbox
+---@return Node hbox
 function M.draw_frame(self, frame, width_sp)
     assert(self)
     local ret = {}
@@ -939,7 +939,7 @@ end
 
 -- Draws a grid debug overlay for a `Group` virtual area.
 ---@param group Group
----@return node hbox
+---@return Node hbox
 function M.draw_grid_group(group)
     main.log("debug", "draw_grid_group", "width", group.contents.width or -1, "height", group.contents.height or -1)
     local ht = group.contents.height
@@ -1000,7 +1000,7 @@ end
 -- Draw internal grid (return PDF-strings)
 -- Draws the full debug grid (cell rules, row/column numbers, area frames).
 ---@param self Grid
----@return node hbox
+---@return Node hbox
 function M.draw_grid(self)
     assert(self)
     local color
@@ -1129,7 +1129,7 @@ end
 
 -- Renders a debug heatmap of allocated grid cells.
 ---@param self Grid
----@return node hbox
+---@return Node hbox
 function M.draw_gridallocation(self)
     local pdf_literals = {}
     local paperheight = sp_to_bp(tex.pageheight)

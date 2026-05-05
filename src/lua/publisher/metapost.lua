@@ -867,7 +867,7 @@ end
 ---@param graphicname string
 ---@param extra_parameter? table<string, any> Variable values.
 ---@param parameter? table Per-call parameters.
----@return node? hbox
+---@return Node? hbox
 function M.boxgraphic(width_sp, height_sp, graphicname, extra_parameter, parameter)
     local _, a, bbox = M.prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
     return a, bbox

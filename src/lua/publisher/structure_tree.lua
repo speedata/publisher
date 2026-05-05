@@ -69,9 +69,9 @@ end
 
 -- Creates a `pdf_action` whatsit node for the given action type.
 ---@param action_type PdfActionType
----@return node
+---@return Node
 function M.get_action_node(action_type)
-    local ai = node.new("whatsit", publisher.pdf_action_whatsit)
+    local ai = node.new("whatsit", "pdf_action")
     ai.action_type = action_type
     return ai
 end
@@ -352,11 +352,11 @@ local destcounter = 0
 -- Creates a numeric PDF destination (`pdf_dest` whatsit) and returns it
 -- together with its destination number, suitable for use in PDF links
 -- or outline entries.
----@return node dest
+---@return Node dest
 ---@return integer destnum
 function M.mknumdest()
     destcounter = destcounter + 1
-    local d = node.new("whatsit", "pdf_dest")
+    local d = node.new("whatsit", "pdf_dest") --[[@as PdfDestWhatsitNode]]
     d.named_id = 0
     d.dest_id = destcounter
     d.dest_type = 0
@@ -366,9 +366,9 @@ end
 -- Creates a named PDF destination (`pdf_dest` whatsit) using `name` as the
 -- string identifier (encoded as a UTF-16 PDF string).
 ---@param name string
----@return node dest
+---@return Node dest
 function M.mkstringdest(name)
-    local d = node.new("whatsit", "pdf_dest")
+    local d = node.new("whatsit", "pdf_dest") --[[@as PdfDestWhatsitNode]]
     d.named_id = 1
     d.dest_id = publisher.utf8_to_utf16_string_pdf(name)
     d.dest_type = 0
@@ -383,7 +383,7 @@ end
 ---@param open_p boolean Whether the bookmark starts open.
 ---@param title string? Bookmark title.
 ---@param data table Data XML context for `setup_page`.
----@return node hbox
+---@return Node hbox
 function M.mkbookmarknodes(level, open_p, title, data)
     publisher.page_helpers.setup_page(nil, "mkbookmarknodes", data)
     local openclosed

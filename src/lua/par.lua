@@ -16,7 +16,7 @@ local Par = {}
 
 -- Constructs a fresh `Par` instance with the given textformat.
 ---@param self Par
----@param textformat string
+---@param textformat? Textformat
 ---@param origin? string
 ---@return Par
 function Par:new(textformat, origin)
@@ -35,9 +35,9 @@ end
 
 -- Adds glue of width `wd` at the end of every line in the linebroken
 -- vbox `nl`. Used to honor padding-right without shrinking the line width.
----@param nl node Vbox of lines.
+---@param nl Node Vbox of lines.
 ---@param wd integer Padding in sp.
----@return node nl
+---@return Node nl
 local function widen_nodelist(nl, wd)
     local glue = publisher.nodes.make_glue({ width = wd })
     local hbox = nl.head
@@ -56,7 +56,7 @@ end
 
 -- Adds glue of width `wd` at the start of every line in the linebroken
 -- vbox `nl`. Used to apply a left indent to a paragraph.
----@param nl node Vbox of lines.
+---@param nl Node Vbox of lines.
 ---@param wd integer Indent in sp.
 ---@return nil
 local function indent_nodelist(nl, wd)
@@ -136,7 +136,7 @@ end
 ---@param self Par
 ---@param text string
 ---@param options? table Per-call style overrides.
----@return node head
+---@return Node head
 local function mktextnode(self, text, options)
     local nodes, newdir = publisher.nodes.mknodes(tostring(text), options, "par/mktextnode")
     if options.fontoutlinewidth and options.fontoutlinewidth > 0 then
@@ -603,7 +603,7 @@ end
 ---@param self Par
 ---@param options table
 ---@param data table Data XML context.
----@return node head Head of the resulting node list.
+---@return Node head Head of the resulting node list.
 function Par:mknodelist(options, data)
     flatten(self, self, options, data)
     local nodelist
@@ -681,7 +681,7 @@ end
 
 local get_lineheight
 -- Returns the maximum line height in `nodelist` (a vbox of lines).
----@param nodelist node
+---@param nodelist Node
 ---@return integer lineheight Line height in sp.
 function get_lineheight(nodelist)
     local head = nodelist
@@ -706,7 +706,7 @@ end
 
 -- Computes the border-width contribution, content height and margin-top
 -- for a node list with HTML border properties attached.
----@param nodelist node
+---@param nodelist Node
 ---@return integer border_width Total border width in sp.
 ---@return integer height Content height in sp.
 ---@return integer margin_top sp.
@@ -739,7 +739,7 @@ end
 ---@param width_sp integer Target line width in sp.
 ---@param options? table Style overrides.
 ---@param data? table Data XML context.
----@return node vbox Linebroken paragraph.
+---@return Node vbox Linebroken paragraph.
 function Par:format(width_sp, options, data)
     -- w("call format %s",self.origin)
     options = options or {}

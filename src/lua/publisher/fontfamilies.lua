@@ -83,8 +83,7 @@ function M.define_fontfamily(
     subshift
 )
     if not size then
-        main.log("error", "DefineFontfamily needs size value")
-        return
+        return false, "DefineFontfamily needs size value"
     end
     if not scriptsize then
         scriptsize = math.round(size * 0.8, 0)
@@ -96,8 +95,7 @@ function M.define_fontfamily(
         subshift = math.round(size * 0.3, 0)
     end
     if not tonumber(size) then
-        main.log("error", "DefineFontfamily needs size value")
-        return
+        return false, "DefineFontfamily needs size value"
     end
     local fam = {
         size = size,
@@ -107,61 +105,60 @@ function M.define_fontfamily(
         subshift = subshift,
         name = name,
     }
-    local ok, tmp
     if regular then
-        ok, tmp = fonts.make_font_instance(regular, fam.size)
-        if not ok then
-            return false, tmp
+        local id, err = fonts.make_font_instance(regular, fam.size)
+        if not id then
+            return false, err
         end
-        fam.normal = tmp
+        fam.normal = id
         fam.fontfaceregular = regular
-        ok, tmp = fonts.make_font_instance(regular, fam.scriptsize)
-        if not ok then
-            return false, tmp
+        id, err = fonts.make_font_instance(regular, fam.scriptsize)
+        if not id then
+            return false, err
         end
-        fam.normalscript = tmp
+        fam.normalscript = id
     end
 
     if bold then
-        ok, tmp = fonts.make_font_instance(bold, fam.size)
-        if not ok then
-            return false, tmp
+        local id, err = fonts.make_font_instance(bold, fam.size)
+        if not id then
+            return false, err
         end
-        fam.bold = tmp
+        fam.bold = id
         fam.fontfacebold = bold
-        ok, tmp = fonts.make_font_instance(bold, fam.scriptsize)
-        if not ok then
-            return false, tmp
+        id, err = fonts.make_font_instance(bold, fam.scriptsize)
+        if not id then
+            return false, err
         end
-        fam.boldscript = tmp
+        fam.boldscript = id
     end
 
     if italic then
-        ok, tmp = fonts.make_font_instance(italic, fam.size)
-        if not ok then
-            return false, tmp
+        local id, err = fonts.make_font_instance(italic, fam.size)
+        if not id then
+            return false, err
         end
-        fam.italic = tmp
+        fam.italic = id
         fam.fontfaceitalic = italic
-        ok, tmp = fonts.make_font_instance(italic, fam.scriptsize)
-        if not ok then
-            return false, tmp
+        id, err = fonts.make_font_instance(italic, fam.scriptsize)
+        if not id then
+            return false, err
         end
-        fam.italicscript = tmp
+        fam.italicscript = id
     end
 
     if bolditalic then
-        ok, tmp = fonts.make_font_instance(bolditalic, fam.size)
-        if not ok then
-            return false, tmp
+        local id, err = fonts.make_font_instance(bolditalic, fam.size)
+        if not id then
+            return false, err
         end
-        fam.bolditalic = tmp
+        fam.bolditalic = id
         fam.fontfacebolditalic = bolditalic
-        ok, tmp = fonts.make_font_instance(bolditalic, fam.scriptsize)
-        if not ok then
-            return false, tmp
+        id, err = fonts.make_font_instance(bolditalic, fam.scriptsize)
+        if not id then
+            return false, err
         end
-        fam.bolditalicscript = tmp
+        fam.bolditalicscript = id
     end
 
     fonts.lookup_fontfamily_number_instance[#fonts.lookup_fontfamily_number_instance + 1] = fam

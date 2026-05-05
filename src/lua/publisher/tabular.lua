@@ -1687,8 +1687,8 @@ end
 -- of the first head. It removes the pdf_dest nodes for bookmark destinations.
 -- Recursively removes `pdf_dest` whatsit nodes from a node list. Used
 -- before re-typesetting head/foot rows so destinations are not duplicated.
----@param nodelist node
----@return node? nodelist The (possibly trimmed) node list, or `nil` when fully removed.
+---@param nodelist Node
+---@return Node? nodelist The (possibly trimmed) node list, or `nil` when fully removed.
 function remove_bookmark_nodes(nodelist)
     local head = nodelist
     while head do
@@ -1727,7 +1727,7 @@ end
 -- artifacts between adjacent cells in some PDF viewers. Otherwise,
 -- each cell gets its own background on its content hlist (identified
 -- by having no "origin" property).
----@param head node Linked list of typeset row hboxes.
+---@param head Node Linked list of typeset row hboxes.
 ---@return nil
 local function apply_deferred_backgrounds(head)
     local n = head

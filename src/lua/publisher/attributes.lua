@@ -199,7 +199,7 @@ end
 -- Collects all LuaTeX attributes attached to the head node into a table
 -- keyed by attribute number. If `reuse_table` is given, it is cleared and
 -- reused for the result.
----@param nodelist node?
+---@param nodelist Node?
 ---@param reuse_table table<integer, integer>?
 ---@return table<integer, integer> attributes
 function M.get_attributes(nodelist, reuse_table)
@@ -223,7 +223,7 @@ end
 -- Reads a named attribute from a node. If the attribute is declared with an
 -- enum-like value list in `publisher.attributes`, the integer value is
 -- mapped back to the corresponding string.
----@param nodelist node?
+---@param nodelist Node?
 ---@param attribute_name string Key in `publisher.attribute_name_number`.
 ---@return integer|string|nil value `nil` if the attribute is unknown or unset.
 function M.get_attribute(nodelist, attribute_name)
@@ -249,7 +249,7 @@ end
 -- value is converted to its integer index from `publisher.attributes`. A
 -- `nil` final value unsets the attribute. The attribute name must be known
 -- to `publisher.attribute_name_number`.
----@param nodelist node
+---@param nodelist Node
 ---@param attribute_name string
 ---@param value integer|string|nil
 ---@return nil
@@ -279,7 +279,7 @@ function M.set_attribute(nodelist, attribute_name, value)
 end
 
 -- Removes a named attribute from a node.
----@param nodelist node
+---@param nodelist Node
 ---@param attribute_name string
 ---@return nil
 function M.clear_attribute(nodelist, attribute_name)
@@ -293,7 +293,7 @@ end
 
 -- Applies many attributes to a node at once. Keys may be attribute names
 -- or attribute numbers (numbers are translated via `attribute_number_name`).
----@param nodelist node
+---@param nodelist Node
 ---@param att_tbl table<string|integer, integer|string>?
 ---@return nil
 function M.set_attributes(nodelist, att_tbl)
@@ -316,7 +316,7 @@ end
 
 -- Sets an attribute on the list and recursively on every sublist of any
 -- hlist/vlist nodes encountered.
----@param nodelist node
+---@param nodelist Node
 ---@param attribute string Attribute name.
 ---@param value integer|string|nil
 ---@return nil
@@ -332,7 +332,7 @@ function M.set_attribute_recurse(nodelist, attribute, value)
 end
 
 -- Sets a value in the node's property table, creating the table on demand.
----@param n node
+---@param n Node
 ---@param prop string Property key.
 ---@param value any
 ---@return nil
@@ -346,7 +346,7 @@ function M.setprop(n, prop, value)
 end
 
 -- Reads a value from the node's property table.
----@param n node
+---@param n Node
 ---@param prop string
 ---@return any value `nil` if no property table exists or the key is absent.
 function M.getprop(n, prop)
@@ -361,7 +361,7 @@ function M.getprop(n, prop)
 end
 
 -- Removes a key from the node's property table and returns the previous value.
----@param n node
+---@param n Node
 ---@param prop string
 ---@return any previous_value
 function M.clearprop(n, prop)

@@ -1,19 +1,16 @@
---- Unit conversion helpers (em/rem/px/sp/percent) for HTML parser.
---- Relies on global `tex`, `math`, `err` like the legacy code.
+-- Unit conversion helpers (em/rem/px/sp/percent) for HTML parser.
+-- Relies on global `tex`, `math`, `err` like the legacy code.
+-- The `HtmlStyles` class is defined in `html/inherit.lua`.
 
 local publisher = require("publisher")
 
 local M = {}
 
----@class HtmlStyles
----@field rootfontsize_sp number
----@field fontsize_sp number
-
 ---Convert a CSS-like size to TeX scaled points (sp).
 ---Accepts: "Nrem", "Nem", number-as-string => px, TeX length string (e.g. "12pt", "1pc").
 ---@param styles HtmlStyles
 ---@param size any
----@param fontsize_sp number
+---@param fontsize_sp number?
 ---@return number sp
 function M.getsize(styles, size, fontsize_sp)
     if size == nil then

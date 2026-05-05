@@ -3,11 +3,23 @@
 local M = {}
 
 ---@class HtmlStyles : table
----@field pos integer                 -- 1-based index in the stack
----@field calculated_width number|nil
----@field fontsize_sp number|nil
----@field rootfontsize_sp number|nil
----@field lineheight_sp number|nil
+---@field pos integer                  -- 1-based index in the stack
+---@field calculated_width? number
+---@field width? string|number
+---@field height? string|number
+---@field fontsize_sp? number
+---@field rootfontsize_sp? number
+---@field lineheight_sp? number
+---@field color? string
+---@field currentcolor? string
+---@field content? string
+---@field hyphens? string
+---@field has_border? boolean
+---@field listindent? number
+---@field listlevel? integer
+---@field ollevel? integer
+---@field ullevel? integer
+---@field olullisttype? string
 
 ---@class HtmlStylesStack
 ---@field _stack HtmlStyles[]

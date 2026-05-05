@@ -205,7 +205,7 @@ end
 -- Wraps a Mark element's contents into a zero-size hbox so it can be
 -- inserted between inline objects in the output stream.
 ---@param mark_contents table
----@return node hbox
+---@return Node hbox
 local function mark_to_hbox(mark_contents)
     local head
     local tail
@@ -7057,6 +7057,7 @@ function commands.text(layoutxml, dataxml)
             local extra_accumulated = 0
             for i = 1, #tab do
                 local contents = tab[i]
+                ---@type integer?
                 local dont_format = 0
                 if node.is_node(contents.nodelist) then
                     dont_format = node.has_attribute(contents.nodelist, publisher.att_dont_format)

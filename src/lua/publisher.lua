@@ -11,6 +11,9 @@
 file_start("publisher.lua")
 
 ---@class publisher
+---@field current_pagestore_name? string
+---@field current_group? string
+---@field current_grid? table
 local M = {}
 -- Publish M into package.loaded right away so that submodules required
 -- below can `local publisher = require("publisher")` and get a usable
@@ -20,8 +23,7 @@ local M = {}
 package.loaded["publisher"] = M
 -- splib is set up in sdini.lua and stays a plain _G global for the few
 -- entry points (sdscripts.lua, sdini.lua) that don't go through the
--- publisher namespace. Mirror it onto M so other code can read it as
--- publisher.splib without the metatable trick we just removed.
+-- publisher namespace.
 M.splib = splib
 
 M.barcodes = do_luafile("barcodes.lua")
@@ -46,7 +48,8 @@ end
 M.hasharfbuzzsubset, M.harfbuzzsubset = pcall(require, "luaharfbuzzsubset")
 
 require("publisher.commands")
-local fonts = require("publisher.fonts")
+M.fonts = require("publisher.fonts")
+local fonts = M.fonts
 local uuid = require("uuid")
 local colors_module = require("publisher.colors")
 local metadata = require("publisher.metadata")
@@ -81,25 +84,25 @@ M.factor = 65781
 M.maxframes = 999
 
 ---@type integer
-M.tenpoint_sp = tex.sp("10pt")
+M.tenpoint_sp = assert(tex.sp("10pt"))
 ---@type integer
-M.twelvepoint_sp = tex.sp("12pt")
+M.twelvepoint_sp = assert(tex.sp("12pt"))
 ---@type integer
-M.tenmm_sp = tex.sp("10mm")
+M.tenmm_sp = assert(tex.sp("10mm"))
 ---@type integer
-M.onemm_sp = tex.sp("1mm")
+M.onemm_sp = assert(tex.sp("1mm"))
 ---@type integer
-M.onein_sp = tex.sp("1in")
+M.onein_sp = assert(tex.sp("1in"))
 ---@type integer
-M.onept_sp = tex.sp("1pt")
+M.onept_sp = assert(tex.sp("1pt"))
 ---@type integer
-M.onepc_sp = tex.sp("1pc")
+M.onepc_sp = assert(tex.sp("1pc"))
 ---@type integer
-M.onepp_sp = tex.sp("1pp")
+M.onepp_sp = assert(tex.sp("1pp"))
 ---@type integer
-M.onedd_sp = tex.sp("1dd")
+M.onedd_sp = assert(tex.sp("1dd"))
 ---@type integer
-M.onecc_sp = tex.sp("1cc")
+M.onecc_sp = assert(tex.sp("1cc"))
 ---@type integer
 M.onecm_sp = M.tenmm_sp
 
@@ -236,7 +239,6 @@ M.user_defined_mark = 3
 M.user_defined_marker = 4
 M.user_defined_mark_append = 5
 
-M.action_node = node.id("action")
 M.disc_node = node.id("disc")
 M.dir_node = node.id("dir")
 M.glue_node = node.id("glue")
@@ -330,7 +332,7 @@ M.nextpage = nil
 M.defaultlanguage = 0
 
 -- Start page
----@type integer
+---@type number
 M.current_pagenumber = 1
 
 -- Expected number of pages (from previous run's aux file), nil if unknown
@@ -352,43 +354,96 @@ M.pages_shippedout = {}
 M.css = do_luafile("css.lua"):new()
 
 ---@class Options
----@field resetmarks boolean
----@field imagenotfounderror boolean Raise an error when an image cannot be found.
----@field gridwidth integer Grid cell width in scaled points.
----@field gridheight integer Grid cell height in scaled points.
+---@field background string? Background color of the page.
+---@field cutmarks boolean
+---@field default_pageheight? integer Default page height in scaled points.
+---@field default_pagewidth? integer Default page width in scaled points.
+---@field documentauthor string
+---@field documentkeywords string
+---@field documentsubject string
+---@field documenttitle string The document title.
+---@field dumpstructtree boolean Writes the PDF/UA structure tree to a file (-struct.xml).
+---@field extensionhandler string?
+---@field fontloader "harfbuzz"|"fontforge" Backend used to load fonts.
+---@field fontshrink number?
+---@field fontstep number?
+---@field fontstretch number?
+---@field format "PDF/UA"|"PDF/X-4"|"PDF/X-3:2002"|"" PDF output format
 ---@field gridcells_x integer Number of grid cells horizontally (0 = auto).
 ---@field gridcells_y integer Number of grid cells vertically (0 = auto).
----@field reportmissingglyphs boolean
+---@field gridheight integer Grid cell height in scaled points.
 ---@field gridlocation "background"|"foreground"|"none" Where the debug grid is drawn.
----@field fontloader "harfbuzz"|"fontforge" Backend used to load fonts.
----@field xmlparser "lua"|"go"|"lxpath" XML parser used for input data and layout.
----@field hyperlinkborderwidth integer Border width for hyperlink annotations, in sp.
----@field namespaces "lax"|"strict" XML namespace handling mode.
----@field tablerulefix boolean
----@field markdownextensions table<string, any>
----@field default_pagewidth? integer Default page width in scaled points.
----@field default_pageheight? integer Default page height in scaled points.
+---@field gridwidth integer Grid cell width in scaled points.
 ---@field hidespinfo? string|boolean
+---@field hyperlinkborderwidth integer Border width for hyperlink annotations, in sp.
+---@field ignoreeol boolean Ignore newlines in data.
+---@field imagehandler string?
+---@field imagenotfounderror boolean Raise an error when an image cannot be found.
+---@field interaction boolean Disable interaction if set to false.
+---@field markdownextensions table<string, any>
+---@field mpcolorwarning boolean
+---@field namespaces "lax"|"strict" XML namespace handling mode.
+---@field reportmissingglyphs boolean|string
+---@field resetmarks boolean
+---@field resizehandler string?
+---@field showassignments boolean Show all assignments.
+---@field showdebug boolean Shows lots of markup.
+---@field showgrid boolean Show grid.
+---@field showgridallocation boolean Allocated grid cells are colored.
+---@field showgroups boolean Show groups.
+---@field showhyphenation boolean Show all possible hyphenation points.
+---@field showkerning boolean Show kerning marks.
+---@field showobjects boolean Draw a line around objects.
+---@field showtextformat boolean Create tooltip that shows the current textformat.
+---@field startpage number Start page (defaults to 1)
+---@field tablerulefix boolean Fix table rules for better display in Adobe Acrobat.
+---@field trace boolean
+---@field trimmarks boolean
+---@field verbosity number
+---@field xmlparser "lua"|"go"|"lxpath" XML parser used for input data and layout.
 ---
 -- Further fields are populated from the layout instructions XML at runtime.
 
 -- The defaults (set in the layout instructions file)
 ---@type Options
 M.options = {
-    resetmarks = false,
-    imagenotfounderror = true,
-    gridwidth = M.tenmm_sp,
-    gridheight = M.tenmm_sp,
+    cutmarks = false,
+    documentauthor = "",
+    documentkeywords = "",
+    documentsubject = "",
+    documenttitle = "",
+    dumpstructtree = false,
+    fontloader = os.getenv("SP_FONTLOADER") or "harfbuzz",
+    format = "",
     gridcells_x = 0,
     gridcells_y = 0,
-    reportmissingglyphs = true,
+    gridheight = M.tenmm_sp,
     gridlocation = "background",
-    fontloader = os.getenv("SP_FONTLOADER") or "harfbuzz",
-    xmlparser = os.getenv("SP_XMLPARSER") or "lua",
-    hyperlinkborderwidth = tex.sp("1pt"),
-    namespaces = "lax",
-    tablerulefix = false,
+    gridwidth = M.tenmm_sp,
+    hyperlinkborderwidth = M.onept_sp,
+    ignoreeol = false,
+    imagenotfounderror = true,
+    interaction = true,
     markdownextensions = {},
+    mpcolorwarning = true,
+    namespaces = "lax",
+    reportmissingglyphs = "",
+    resetmarks = false,
+    showassignments = false,
+    showdebug = false,
+    showgrid = false,
+    showgridallocation = false,
+    showgroups = false,
+    showhyphenation = false,
+    showkerning = false,
+    showobjects = false,
+    showtextformat = false,
+    startpage = 1,
+    tablerulefix = false,
+    trace = false,
+    trimmarks = false,
+    verbosity = 0,
+    xmlparser = os.getenv("SP_XMLPARSER") or "lua",
 }
 
 ---@type string
@@ -405,7 +460,7 @@ else
 end
 
 ---@class Group
----@field contents node Head of the node list that holds the group's content.
+---@field contents Node Head of the node list that holds the group's content.
 ---@field grid table Grid associated with the group.
 
 -- List of virtual areas. Key is the group name and value is
@@ -519,12 +574,6 @@ local ktree = pdf.reserveobj()
 ---@type table<string, StructElement>
 M.structElements = {}
 
--- We will have to remember the current group and grid
----@type string?
-M.current_group = nil
----@type table?
-M.current_grid = nil
-
 -- paragraph, table and textblock should set them
 ---@type integer
 M.current_fontfamily = 0
@@ -592,6 +641,9 @@ M.lowercase = false
 ---@field orphan? integer Minimum lines kept at the bottom of a page when breaking.
 ---@field widow? integer Minimum lines kept at the top of a page when breaking.
 ---@field name? string Name of the textformat (matches the table key).
+---@field disable_hyphenation? boolean Suppress hyphenation for this format.
+---@field break_before? "page" | "always" | "" allow break before this paragraph.
+---@field breakbelow? boolean allow break after this paragraph.
 
 -- Text formats is a hash with arbitrary names as keys and the values
 -- are tables with alignment and indent. indent is the amount of
@@ -662,7 +714,7 @@ M.puastart = 1100000
 
 -- It's convenient to just copy the stretching glue instead of writing
 -- the stretch etc. over and over again.
----@type node
+---@type Node
 M.glue_stretch2 = set_glue(nil, { stretch = 2 ^ 16, stretch_order = 2 })
 
 -- For attached files. Each of this numbers should appear in the catalog
@@ -717,14 +769,14 @@ M.rolecounter = 0
 
 -- Start the processing (`dothings()`)
 -- -------------------------------
--- This is the entry point of the processing. It is called from publisher.spinit#main_loop.
+-- This is the entry point of the processing. It is called from publisher.spinit.
 ---@return nil
 function M.dothings()
     main.log("info", string.format("Running LuaTeX version %s on %s", luatex_version, os.name))
     -- First we set some defaults.
     -- A4 paper is 210x297 mm
-    local wd_sp = tex.sp("210mm")
-    local ht_sp = tex.sp("297mm")
+    local wd_sp = assert(tex.sp("210mm"))
+    local ht_sp = assert(tex.sp("297mm"))
     M.page_helpers.set_pageformat(wd_sp, ht_sp)
     M.options.default_pagewidth = wd_sp
     M.options.default_pageheight = ht_sp
@@ -828,7 +880,7 @@ do
     -- par objects.
     -- The input of flatten_boxes is a mix of Box objects and Par objects.
     -- You can consider Box objects something similar to <div> blocks in HTML
-    -- and Par objects like <p> that has acutal content in it (also: images and other stuff)
+    -- and Par objects like <p> that has actual content in it (also: images and other stuff)
     -- Margin settings should go from <div> to the <p> (from Box to Par) so we can
     -- leave out the div stuff.
     local prependbox
@@ -948,13 +1000,8 @@ end
 -- executes them both
 ---@return nil
 function M.initialize_luatex_and_generate_pdf()
-    if os.getenv("SP_VERBOSITY") == nil then
-        M.options.verbosity = 0
-    else
-        M.options.verbosity = tonumber(os.getenv("SP_VERBOSITY"))
-    end
+    M.options.verbosity = tonumber(os.getenv("SP_VERBOSITY")) or 0
 
-    M.options.mpcolorwarning = true
     -- The default page type has 1cm margin
     M.masterpages[1] = {
         is_pagetype = "true()",
@@ -1001,7 +1048,20 @@ function M.initialize_luatex_and_generate_pdf()
         exit()
     end
     if M.newxpath then
-        layoutxml = layoutxml[1] -- skip document
+        if type(layoutxml) == "table" then
+            layoutxml = layoutxml[1] -- skip document
+        else
+            main.log("error", "Internal error: layout is not a table")
+            return
+        end
+    end
+    if layoutxml == nil then
+        main.log("error", "Internal error: layout is empty")
+        return
+    end
+    if type(layoutxml) ~= "table" then
+        main.log("error", "Internal error: layout is not a table")
+        return
     end
     -- Used in `xpath.lua` to find out which language the function is in.
     local ns = layoutxml[".__namespace"]
@@ -1314,8 +1374,11 @@ function M.initialize_luatex_and_generate_pdf()
     if M.options.startpage then
         local num = M.options.startpage
         if num then
-            M.current_pagenumber = tonumber(num)
-            main.log("info", string.format("Set page number to %d", num))
+            local tmp = tonumber(num)
+            if tmp then
+                M.current_pagenumber = tmp
+                main.log("info", string.format("Set page number to %d", num))
+            end
         else
             main.log("error", "Can't recognize starting page number", "startpage", M.options.startpage or "(not set)")
         end
@@ -1855,7 +1918,7 @@ do
     -- Walks a node list, collects PDF/UA structure entries from `att_role`
     -- attributes and node properties, and links them into the `structElements`
     -- tree. Recurses into hlists/vlists.
-    ---@param nodelist node Head of the node list to scan.
+    ---@param nodelist Node Head of the node list to scan.
     ---@param parenttree integer PDF object number of the parent tree.
     ---@param page integer PDF page object number for the current page.
     ---@param curid? string Current parent role id used when nodes don't carry one.
@@ -2003,7 +2066,7 @@ do
     -- called once for each page.
     -- Resets the per-page state, then scans the node list for role attributes
     -- and registers the resulting struct elements in the page's structparents.
-    ---@param nodelist node Head of the page's node list.
+    ---@param nodelist Node Head of the page's node list.
     ---@param page table Current page table; receives `structparents`.
     function M.insert_struct_elements(nodelist, page)
         -- structelementobjects contains struct tree object numbers for this page.
@@ -2028,11 +2091,11 @@ do
 
     -- Adds a `pdf_annot` whatsit at the head of the node list that shows a
     -- tooltip with the given text — used for debugging text formats.
-    ---@param nodelist node Head of the node list to attach the annotation to.
+    ---@param nodelist Node Head of the node list to attach the annotation to.
     ---@param text string Tooltip text.
     function M.annotate_nodelist(nodelist, text)
         text = text:gsub(" ", "\\040")
-        local annot = node.new(M.whatsit_node, "pdf_annot")
+        local annot = node.new(M.whatsit_node, "pdf_annot") --[[@as PdfAnnotWhatsitNode ]]
         local str = string.format(
             [[ /Subtype /Widget /TU (%s) /T (tooltip zref@%d) /C [] /FT/Btn /F 768 /Ff 65536 /H/N /BS << /W 0 >>]],
             text,
@@ -2056,11 +2119,11 @@ M.skippages = nil
 -- The `height_sp` parameter is recomputed from `properties.lineheight` below;
 -- the caller's value is intentionally ignored.
 ---@param dirmode "horizontal"|"vertical" Layout direction of the surrounding context.
----@param head node Head of the content node list; carries the box properties.
+---@param head Node Head of the content node list; carries the box properties.
 ---@param width_sp integer Box width in scaled points.
 ---@param height_sp integer Box height in sp (recomputed inside, ignored).
 ---@param depth_sp integer Box depth in sp.
----@return node? hbox_or_vbox Packaged hbox or vbox; `nil` on internal error.
+---@return Node? hbox_or_vbox Packaged hbox or vbox; `nil` on internal error.
 -- luacheck: push ignore height_sp
 function M.htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
     local debug_htmlbox = 0
@@ -2292,15 +2355,19 @@ function M.htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
     local xi12, yi12 = xi13, yi13 + circle_bezier * b_t_l_inner_radius_y
 
     if debug_htmlbox > 1 then
-        rules[#rules + 1] = circle_pdfstring(x1, y14, b_b_l_radius, b_b_l_radius, "0 G ", "", 1000)
-        rules[#rules + 1] = circle_pdfstring(x2, y5, b_b_r_radius, b_b_r_radius, "0 G ", "", 1000)
-        rules[#rules + 1] = circle_pdfstring(x9, y6, b_t_r_radius, b_t_r_radius, "0 G ", "", 1000)
-        rules[#rules + 1] = circle_pdfstring(x10, y13, b_t_l_radius, b_t_l_radius, "0 G ", "", 1000)
+        rules[#rules + 1] = M.drawing.circle_pdfstring(x1, y14, b_b_l_radius, b_b_l_radius, "0 G ", "", 1000)
+        rules[#rules + 1] = M.drawing.circle_pdfstring(x2, y5, b_b_r_radius, b_b_r_radius, "0 G ", "", 1000)
+        rules[#rules + 1] = M.drawing.circle_pdfstring(x9, y6, b_t_r_radius, b_t_r_radius, "0 G ", "", 1000)
+        rules[#rules + 1] = M.drawing.circle_pdfstring(x10, y13, b_t_l_radius, b_t_l_radius, "0 G ", "", 1000)
 
-        rules[#rules + 1] = circle_pdfstring(xi1, yi14, b_b_l_inner_radius_x, b_b_l_inner_radius_y, "0 G ", "", 1000)
-        rules[#rules + 1] = circle_pdfstring(xi2, yi5, b_b_r_inner_radius_x, b_b_r_inner_radius_y, "0 G ", "", 1000)
-        rules[#rules + 1] = circle_pdfstring(xi9, yi6, b_t_r_inner_radius_x, b_t_r_inner_radius_y, "0 G ", "", 1000)
-        rules[#rules + 1] = circle_pdfstring(xi10, yi13, b_t_l_inner_radius_x, b_t_l_inner_radius_y, "0 G ", "", 1000)
+        rules[#rules + 1] =
+            M.drawing.circle_pdfstring(xi1, yi14, b_b_l_inner_radius_x, b_b_l_inner_radius_y, "0 G ", "", 1000)
+        rules[#rules + 1] =
+            M.drawing.circle_pdfstring(xi2, yi5, b_b_r_inner_radius_x, b_b_r_inner_radius_y, "0 G ", "", 1000)
+        rules[#rules + 1] =
+            M.drawing.circle_pdfstring(xi9, yi6, b_t_r_inner_radius_x, b_t_r_inner_radius_y, "0 G ", "", 1000)
+        rules[#rules + 1] =
+            M.drawing.circle_pdfstring(xi10, yi13, b_t_l_inner_radius_x, b_t_l_inner_radius_y, "0 G ", "", 1000)
     end
 
     local rules_clip = {}
@@ -2366,7 +2433,7 @@ function M.htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
 
     rules_clip[#rules_clip + 1] = "h W* n"
 
-    local n_clip = node.new("whatsit", "pdf_literal")
+    local n_clip = node.new("whatsit", "pdf_literal") --[[@as PdfLiteralWhatsitNode]]
     M.attribute_helpers.setprop(n_clip, "origin", "htmlbox.clip")
     local n_clip_data = table.concat(rules_clip, " ")
     local concat_rules = table.concat(rules, " ")
@@ -2399,7 +2466,7 @@ end
 
 -- To split the textblock in pieces
 local marker
-marker = node.new("whatsit", "user_defined")
+marker = node.new("whatsit", "user_defined") --[[@as UserDefinedWhatsitNode]]
 marker.user_id = M.user_defined_marker
 marker.type = 100 -- type 100: "value is a number"
 marker.value = 1
@@ -2407,12 +2474,12 @@ marker.value = 1
 -- Node(list) creation
 -- -------------------
 
-M.rightskip = node.new("glue_spec")
+M.rightskip = node.new("glue_spec") --[[@as GlueSpecNode]]
 M.rightskip.width = 0
 M.rightskip.stretch = 1 * 2 ^ 16
 M.rightskip.stretch_order = 3
 
-M.leftskip = node.new("glue_spec")
+M.leftskip = node.new("glue_spec") --[[@as GlueSpecNode]]
 M.leftskip.width = 0
 M.leftskip.stretch = 1 * 2 ^ 16
 M.leftskip.stretch_order = 3

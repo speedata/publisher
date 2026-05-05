@@ -181,7 +181,7 @@ function M.concat_transformation(a, b)
 end
 
 -- Places a rotated text watermark in the background of `box`.
----@param box node Hbox to decorate (modified in place).
+---@param box Node Hbox to decorate (modified in place).
 ---@param textstring string Watermark text.
 ---@param angle number Rotation in degrees.
 ---@param colorname string Registered color name.
@@ -238,10 +238,10 @@ end
 
 -- Draw a background behind the rectangular (box) object.
 -- Adds a colored background rectangle behind the contents of `box`.
----@param box node Hbox to modify in place.
+---@param box Node Hbox to modify in place.
 ---@param colorname string|integer Color name or index.
 ---@param origin? string Origin tag for `setprop` (debugging).
----@return node box
+---@return Node box
 function M.background(box, colorname, origin)
     -- color '-' means 'no color'
     if colorname == "-" then
@@ -296,7 +296,7 @@ end
 -- Wraps a frame around the contents of `obj`. Honors border colors,
 -- widths, padding, corner radius and shadow attributes from `obj`.
 ---@param obj table Frame parameters with `width`, `height`, `border_*`, etc.
----@return node hbox
+---@return Node hbox
 function M.frame(obj)
     local box, width
     box = obj.box
@@ -494,7 +494,7 @@ end
 -- Wraps the children of `obj` in a clipping path defined by `obj.path`
 -- (PDF operator string).
 ---@param obj table Clipping parameters with `width`, `height`, `path` etc.
----@return node hbox
+---@return Node hbox
 function M.clip(obj)
     local box = obj.box
     local wd, ht, dp = sp_to_bp(box.width), sp_to_bp(box.height), sp_to_bp(box.depth)
@@ -721,7 +721,7 @@ end
 ---@param colorname string|nil Fill color name; `nil` means no fill.
 ---@param framecolorname string|nil Stroke color name; `nil` means no stroke.
 ---@param rulewidth_sp integer Stroke width in sp.
----@return node hbox
+---@return Node hbox
 function M.circle(radiusx_sp, radiusy_sp, colorname, framecolorname, rulewidth_sp)
     if rulewidth_sp < 5 then
         framecolorname = colorname
@@ -759,7 +759,7 @@ end
 ---@param width integer? Width in sp.
 ---@param height integer? Height in sp.
 ---@param clip boolean? Clip the output to the given dimensions.
----@return node? hbox
+---@return Node? hbox
 function M.do_metapostimage(dataxml, txt, width, height, clip)
     publisher.metapostgraphics["_image"] = txt
     local cp = publisher.current_page
@@ -841,7 +841,7 @@ end
 ---@param parameter table Per-call MetaPost parameters (variable values, name).
 ---@param width integer? Target width in sp.
 ---@param height integer? Target height in sp.
----@return node? hbox
+---@return Node? hbox
 function M.mpbox(parameter, width, height)
     local width_sp = width
     local height_sp = height
@@ -993,7 +993,7 @@ end
 ---@param colorname string|integer Fill color.
 ---@param border_color string|integer|nil Border color (`nil` for none).
 ---@param border_width_sp integer? Border width in sp.
----@return node hbox
+---@return Node hbox
 function M.box(width_sp, height_sp, colorname, border_color, border_width_sp)
     local h, v
     local _width = sp_to_bp(width_sp)
@@ -1079,7 +1079,7 @@ function M.box(width_sp, height_sp, colorname, border_color, border_width_sp)
 end
 
 -- Inserts a thin black rule at the head of `hbox` for visual debugging.
----@param hbox node
+---@param hbox Node
 ---@return nil
 function M.addhrule(hbox)
     local n = node.new("whatsit", "pdf_literal")
@@ -1096,8 +1096,8 @@ function M.addhrule(hbox)
 end
 
 -- Adds a debug rule around `box` so its bounding box is visible.
----@param box node
----@return node box
+---@param box Node
+---@return Node box
 function M.boxit(box)
     local box = node.hpack(box)
 
@@ -1122,7 +1122,7 @@ end
 ---@param color string|integer Color name or index.
 ---@param origin? string Origin tag for `setprop` (debugging).
 ---@param orientation? "horizontal"|"vertical" Defaults to horizontal.
----@return node hbox
+---@return Node hbox
 function M.colorbar(wd, ht, dp, color, origin, orientation)
     local colorname = color
     if color == "-" then
@@ -1228,11 +1228,11 @@ end
 
 -- Stacks `nodelist_foreground` on top of `nodelist_background` with the
 -- foreground anchored at `(origin_x, origin_y)` relative to the background.
----@param nodelist_background node
----@param nodelist_foreground node
+---@param nodelist_background Node
+---@param nodelist_foreground Node
 ---@param origin_x integer Offset in sp.
 ---@param origin_y integer Offset in sp.
----@return node hbox
+---@return Node hbox
 function M.montage(nodelist_background, nodelist_foreground, origin_x, origin_y)
     local wd_bg = nodelist_background.width
     local ht_bg = nodelist_background.height + nodelist_background.depth
@@ -1274,11 +1274,11 @@ end
 
 -- Apply transformation matrix to object given at _nodelist_. Called from commands#transformation.
 -- Applies an arbitrary affine transformation to a node list.
----@param nodelist node Source node list.
+---@param nodelist Node Source node list.
 ---@param matrix TransformMatrix
 ---@param origin_x integer Origin offset in sp.
 ---@param origin_y integer Origin offset in sp.
----@return node hbox
+---@return Node hbox
 function M.matrix(nodelist, matrix, origin_x, origin_y)
     local wd, ht = nodelist.width, nodelist.height
     local tbl = explode(matrix, "[^\t ]+")
@@ -1327,11 +1327,11 @@ end
 -- First rotate the object at the top left corner (default)
 -- If the origin is not top left, we need to shift the object
 -- Rotates a node list around `(origin_x, origin_y)` by `angle` degrees.
----@param nodelist node
+---@param nodelist Node
 ---@param angle number Rotation in degrees (counter-clockwise).
 ---@param origin_x integer Origin offset in sp.
 ---@param origin_y integer Origin offset in sp.
----@return node hbox
+---@return Node hbox
 function M.rotate(nodelist, angle, origin_x, origin_y)
     local wd, ht = nodelist.width, nodelist.height + nodelist.depth
     nodelist.width = 0
@@ -1376,10 +1376,10 @@ end
 -- This is a simple and very basic implementation which needs to be extended in the future.
 -- Rotates a table-cell (Td) node list by `angle` degrees, fitting it
 -- into the column width.
----@param nodelist node
+---@param nodelist Node
 ---@param angle number Rotation in degrees.
 ---@param width_sp integer Target width in sp.
----@return node hbox
+---@return Node hbox
 function M.rotateTd(nodelist, angle, width_sp)
     if angle % 360 == 0 then
         return nodelist
@@ -1447,9 +1447,9 @@ end
 
 -- Rotate a text on a given angle (`angle` on textblock).
 -- Rotates a textblock node list by `angle` degrees around its origin.
----@param nodelist node
+---@param nodelist Node
 ---@param angle number Rotation in degrees.
----@return node hbox
+---@return Node hbox
 function M.rotate_textblock(nodelist, angle)
     local wd, ht = nodelist.width, nodelist.height + nodelist.depth
     nodelist.width = 0

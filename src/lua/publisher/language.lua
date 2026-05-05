@@ -212,7 +212,7 @@ end
 
 -- Returns the unique LuaTeX language ids used by glyph nodes in `nodelist`.
 -- Called before `do_linebreak()` so the pre-hyphen char can be swapped.
----@param nodelist node Head of the node list to scan.
+---@param nodelist Node Head of the node list to scan.
 ---@return integer[] ids
 function M.get_languages_used(nodelist)
     local langs = {}

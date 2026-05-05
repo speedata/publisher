@@ -28,7 +28,7 @@ end
 -- Ships out the given page node list as the next PDF page. Records
 -- structure-tree information in PDF/UA mode and updates `pagelabels`,
 -- `pagenum_tbl`, `pages_shippedout`.
----@param nodelist node Page contents (typically a vbox).
+---@param nodelist Node Page contents (typically a vbox).
 ---@param pagenumber integer Logical page number.
 ---@param dataxml table Data XML context for matter resolution.
 ---@return nil
@@ -79,7 +79,7 @@ function M.shipout(nodelist, pagenumber, dataxml)
 end
 
 ---@class OutputAbsoluteParam
----@field nodelist node The box to be placed.
+---@field nodelist Node The box to be placed.
 ---@field x integer Horizontal offset from the left edge (sp).
 ---@field y integer Vertical offset from the top edge (sp).
 ---@field clipatmargin? boolean Clip objects so they do not appear in the page margin.
@@ -254,7 +254,7 @@ function M.output_absolute_position(param)
 end
 
 ---@class OutputAtParam
----@field nodelist node The box to be placed.
+---@field nodelist Node The box to be placed.
 ---@field x integer Horizontal distance from the left edge in grid cells.
 ---@field y integer Vertical distance from the top edge in grid cells.
 ---@field allocate? boolean Mark touched cells as occupied.
@@ -446,8 +446,8 @@ end
 
 -- Appends `nodelist` to `pagebox` with absolute glue offsets so it lands
 -- at `(x_sp, y_sp)` from the page's origin.
----@param pagebox node Page node list (typically a vbox).
----@param nodelist node Object to place.
+---@param pagebox Node Page node list (typically a vbox).
+---@param nodelist Node Object to place.
 ---@param x_sp integer Horizontal offset in sp.
 ---@param y_sp integer Vertical offset in sp.
 ---@return nil
@@ -1158,8 +1158,8 @@ end
 -- Wraps the page node list with the final `pdf_save`/`pdf_restore` and
 -- color-stack literals required for transparent text and spot colors.
 ---@param thispage table
----@param nodelist node Page node list.
----@return node nodelist Wrapped node list ready for `tex.shipout`.
+---@param nodelist Node Page node list.
+---@return Node nodelist Wrapped node list ready for `tex.shipout`.
 function M.dothingsafteroutput(thispage, nodelist)
     if publisher.options.showgrid and publisher.options.gridlocation == "foreground" then
         local cg = thispage.grid
@@ -1392,7 +1392,7 @@ end
 -- Return true iff the paragraph has at most `lines` text lines left
 -- over and is not at the last line.
 -- Returns `true` when `nodelist` line-breaks into at most `lines` lines.
----@param nodelist node
+---@param nodelist Node
 ---@param lines integer
 ---@return boolean
 function M.less_or_equal_than_n_lines(nodelist, lines)
@@ -1414,7 +1414,7 @@ end
 -- Concatenates the given table objects vertically into a single vbox.
 ---@param objects table[] Table objects produced by `commands.table`.
 ---@param from? string Caller identifier for log messages.
----@return node vbox
+---@return Node vbox
 function M.join_table_to_box(objects, from)
     for i = 1, #objects - 1 do
         objects[i].next = objects[i + 1]
