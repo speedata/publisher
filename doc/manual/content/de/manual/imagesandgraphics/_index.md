@@ -164,6 +164,23 @@ Mit dem Befehl `sp clearcache` wird der Zwischenspeicher gelöscht.
 
 Der Ort, wo der Bildercache liegt, kann entweder über `tempdir` (Kommandozeile und Konfigurationsdatei) gesteuert werden oder über den Schlüssel `imagecache` in der Konfigurationsdatei (nicht auf der Kommandozeile).
 
+## Platzhalterbilder
+
+Während der Layoutentwicklung sind die finalen Bilder oft noch nicht verfügbar.
+Statt mit Bilddateien als Stellvertreter zu arbeiten, kann das Pseudo-URL-Schema `placeholder://` benutzt werden.
+Es erzeugt zur Laufzeit einen grauen Platzhalter mit Diagonalkreuz und Rahmen in der angegebenen natürlichen Größe (in PostScript-Punkten):
+
+```xml
+<PlaceObject>
+    <Image file="placeholder://400x200" width="3"/>
+</PlaceObject>
+```
+
+Die Syntax lautet `placeholder://<Breite>x<Höhe>`.
+Die natürliche Größe verhält sich wie bei einer echten Bilddatei mit den Maßen `<Breite> pt × <Höhe> pt`, das heißt, alle gewohnten Mechanismen für Skalierung, Seitenverhältnis (`width`/`height`/`maxwidth`/`maxheight`) und das Beschneiden mit `clip` funktionieren wie bei einem normalen Bild.
+
+Es wird keine Datei auf der Festplatte erzeugt; der Platzhalter wird intern über MetaPost gerendert.
+
 ## Bild nicht gefunden?
 
 Was passiert, wenn ein Bild nicht gefunden wird? Das normale Verhalten ist die Ausgabe einer Fehlermeldung und einem Platzhalterbild, das das Fehlen anzeigt:

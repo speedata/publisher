@@ -752,6 +752,38 @@ function M.circle(radiusx_sp, radiusy_sp, colorname, framecolorname, rulewidth_s
     return v
 end
 
+-- Builds MetaPost source for a `placeholder://WxH` image: a grey
+-- rectangle with a diagonal cross and a border, sized so the bounding
+-- box is exactly `w x h` bp. The natural dimensions then drive the
+-- standard image scaling and aspect-ratio handling.
+---@param w integer Width in bp.
+---@param h integer Height in bp.
+---@return string mpsrc
+function M.placeholder_metapost(w, h)
+    return string.format(
+        [[
+fill (0,0)--(%d,0)--(%d,%d)--(0,%d)--cycle withcolor 0.85white;
+pickup pencircle scaled 0.4bp;
+draw (0,0)--(%d,%d) withcolor 0.5white;
+draw (0,%d)--(%d,0) withcolor 0.5white;
+pickup pencircle scaled 0.6bp;
+draw (0,0)--(%d,0)--(%d,%d)--(0,%d)--cycle withcolor 0.4white;
+]],
+        w,
+        w,
+        h,
+        h,
+        w,
+        h,
+        h,
+        w,
+        w,
+        w,
+        h,
+        h
+    )
+end
+
 -- Compiles a MetaPost figure source and returns the resulting drawing
 -- as a node, optionally clipped to `(width, height)`.
 ---@param dataxml table Data XML context (used for variable substitution).
@@ -781,8 +813,8 @@ function M.do_metapostimage(dataxml, txt, width, height, clip)
         return
     end
     local image = {
-        xsize = publisher.bp_to_sp(bbox[3] - bbox[1]),
-        ysize = publisher.bp_to_sp(bbox[4] - bbox[2]),
+        xsize = bp_to_sp(bbox[3] - bbox[1]),
+        ysize = bp_to_sp(bbox[4] - bbox[2]),
     }
 
     image.width = image.xsize

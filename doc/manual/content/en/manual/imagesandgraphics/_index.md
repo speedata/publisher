@@ -130,6 +130,23 @@ The `sp clearcache` command deletes the cache.
 
 The location of the image cache can be controlled either by tempdir (command line and configuration file) or by the imagecache key in the configuration file (not on the command line).
 
+## Placeholder images
+
+During layout development the final images are often not yet available.
+Rather than juggling stand-in image files, the pseudo URL scheme `placeholder://` can be used.
+It produces a grey placeholder with a diagonal cross and a border at the requested natural size (in PostScript points), generated at run time:
+
+```xml
+<PlaceObject>
+    <Image file="placeholder://400x200" width="3"/>
+</PlaceObject>
+```
+
+The syntax is `placeholder://<width>x<height>`.
+The natural size behaves like that of a real image file with dimensions `<width> pt × <height> pt`, so all the usual mechanisms for scaling, aspect ratio (`width`/`height`/`maxwidth`/`maxheight`) and clipping with `clip` work just as for a regular image.
+
+No file is written to disk; the placeholder is rendered internally via MetaPost.
+
 ## Image not found?
 
 What happens if an image is not found? The normal behavior is to output an error message and a placeholder image indicating the missing image:

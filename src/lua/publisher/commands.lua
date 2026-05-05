@@ -2614,6 +2614,14 @@ function commands.image(layoutxml, dataxml)
         return publisher.drawing.do_metapostimage(dataxml, contents, width, height, clip)
     end
 
+    if filename then
+        local ph_w, ph_h = string.match(filename, "^placeholder://(%d+)x(%d+)$")
+        if ph_w and ph_h then
+            local contents = publisher.drawing.placeholder_metapost(tonumber(ph_w), tonumber(ph_h))
+            return publisher.drawing.do_metapostimage(dataxml, contents, width, height, clip)
+        end
+    end
+
     local imageinfo
     imageinfo = publisher.images.new_image(filename, page, box_lookup[vis_box] or "crop", fallback, imageshape)
 
