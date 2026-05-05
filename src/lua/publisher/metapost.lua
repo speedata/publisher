@@ -61,15 +61,47 @@ local pdfcodepointer
 local nodelists = {}
 local boundingbox
 
+-- Compactly formats a number for PDF output: integers without a decimal
+-- point, fractional values trimmed to 4 decimal places with trailing
+-- zeros removed. PDF readers do not accept exponential notation, so we
+-- never emit it.
+---@param x any
+---@return string
+local function numfmt(x)
+    if type(x) ~= "number" then
+        return tostring(x)
+    end
+    if x == math.floor(x) and math.abs(x) < 1e15 then
+        return string.format("%d", x)
+    end
+    local s = string.format("%.4f", x)
+    s = s:gsub("0+$", ""):gsub("%.$", "")
+    return s
+end
+
 -- Buffers a `pdf_literal` formatted with `string.format` for emission
--- into the current MetaPost figure.
+-- into the current MetaPost figure. In addition to the standard
+-- conversions, `%n` formats a number compactly via `numfmt` (used for
+-- coordinates and dimensions in PDF graphics operators).
 ---@param fmt string
 ---@param ... any
 ---@return nil
 local function pdf_literalcode(fmt, ...)
+    local args = { ... }
+    local new_args = {}
+    local i = 0
+    local new_fmt = fmt:gsub("%%[%-%+ #0]*%d*%.?%d*[diouxXfFeEgGsqn]", function(spec)
+        i = i + 1
+        if spec:sub(-1) == "n" then
+            new_args[i] = numfmt(args[i])
+            return "%s"
+        end
+        new_args[i] = args[i]
+        return spec
+    end)
     pdfcode[pdfcodepointer] = pdfcode[pdfcodepointer] or {}
     local instructions = pdfcode[pdfcodepointer]
-    instructions[#instructions + 1] = string.format(fmt, ...)
+    instructions[#instructions + 1] = string.format(new_fmt, table.unpack(new_args))
 end
 
 -- Inserts the buffered TeX output and accumulated PDF literal code as
@@ -385,18 +417,18 @@ end
 ---@param open boolean Whether the path is open (no closing `h`).
 ---@return nil
 local function flushconcatpath(path, open)
-    pdf_literalcode("%f %f %f %f %f %f cm", sx, rx, ry, sy, tx, ty)
+    pdf_literalcode("%n %n %n %n %n %n cm", sx, rx, ry, sy, tx, ty)
     local pth, ith
     for i = 1, #path do
         pth = path[i]
         if not ith then
-            pdf_literalcode("%f %f m", concat(pth.x_coord, pth.y_coord))
+            pdf_literalcode("%n %n m", concat(pth.x_coord, pth.y_coord))
         elseif curved(ith, pth) then
             local a, b = concat(ith.right_x, ith.right_y)
             local c, d = concat(pth.left_x, pth.left_y)
-            pdf_literalcode("%f %f %f %f %f %f c", a, b, c, d, concat(pth.x_coord, pth.y_coord))
+            pdf_literalcode("%n %n %n %n %n %n c", a, b, c, d, concat(pth.x_coord, pth.y_coord))
         else
-            pdf_literalcode("%f %f l", concat(pth.x_coord, pth.y_coord))
+            pdf_literalcode("%n %n l", concat(pth.x_coord, pth.y_coord))
         end
         ith = pth
     end
@@ -405,13 +437,13 @@ local function flushconcatpath(path, open)
         if curved(pth, one) then
             local a, b = concat(pth.right_x, pth.right_y)
             local c, d = concat(one.left_x, one.left_y)
-            pdf_literalcode("%f %f %f %f %f %f c", a, b, c, d, concat(one.x_coord, one.y_coord))
+            pdf_literalcode("%n %n %n %n %n %n c", a, b, c, d, concat(one.x_coord, one.y_coord))
         else
-            pdf_literalcode("%f %f l", concat(one.x_coord, one.y_coord))
+            pdf_literalcode("%n %n l", concat(one.x_coord, one.y_coord))
         end
     elseif #path == 1 then -- special case .. draw point
         local one = path[1]
-        pdf_literalcode("%f %f l", concat(one.x_coord, one.y_coord))
+        pdf_literalcode("%n %n l", concat(one.x_coord, one.y_coord))
     end
 end
 
@@ -424,10 +456,10 @@ local function flushnormalpath(path, open)
     for i = 1, #path do
         pth = path[i]
         if not ith then
-            pdf_literalcode("%f %f m", pth.x_coord, pth.y_coord)
+            pdf_literalcode("%n %n m", pth.x_coord, pth.y_coord)
         elseif curved(ith, pth) then
             pdf_literalcode(
-                "%f %f %f %f %f %f c",
+                "%n %n %n %n %n %n c",
                 ith.right_x,
                 ith.right_y,
                 pth.left_x,
@@ -436,7 +468,7 @@ local function flushnormalpath(path, open)
                 pth.y_coord
             )
         else
-            pdf_literalcode("%f %f l", pth.x_coord, pth.y_coord)
+            pdf_literalcode("%n %n l", pth.x_coord, pth.y_coord)
         end
         ith = pth
     end
@@ -444,7 +476,7 @@ local function flushnormalpath(path, open)
         local one = path[1]
         if curved(pth, one) then
             pdf_literalcode(
-                "%f %f %f %f %f %f c",
+                "%n %n %n %n %n %n c",
                 pth.right_x,
                 pth.right_y,
                 one.left_x,
@@ -453,11 +485,11 @@ local function flushnormalpath(path, open)
                 one.y_coord
             )
         else
-            pdf_literalcode("%f %f l", one.x_coord, one.y_coord)
+            pdf_literalcode("%n %n l", one.x_coord, one.y_coord)
         end
     elseif #path == 1 then -- special case .. draw point
         local one = path[1]
-        pdf_literalcode("%f %f l", one.x_coord, one.y_coord)
+        pdf_literalcode("%n %n l", one.x_coord, one.y_coord)
     end
 end
 
@@ -600,7 +632,7 @@ local function convert(result)
                             elseif objecttype == "text" then
                                 local ot = object.transform -- 3,4,5,6,1,2
                                 pdf_literalcode("q")
-                                pdf_literalcode("%f %f %f %f %f %f cm", ot[3], ot[4], ot[5], ot[6], ot[1], ot[2])
+                                pdf_literalcode("%n %n %n %n %n %n cm", ot[3], ot[4], ot[5], ot[6], ot[1], ot[2])
                                 -- pdf_textfigure(object.font, object.dsize, object.text, object.width, object.height,
                                 --     object.depth)
                                 pdf_literalcode("Q")
@@ -631,7 +663,7 @@ local function convert(result)
                                     local ml = object.miterlimit
                                     if ml and ml ~= miterlimit then
                                         miterlimit = ml
-                                        pdf_literalcode("%f M", ml)
+                                        pdf_literalcode("%n M", ml)
                                     end
                                     local lj = object.linejoin
                                     if lj and lj ~= linejoin then
@@ -662,7 +694,7 @@ local function convert(result)
                                     if pen then
                                         if pen.type == "elliptical" then
                                             transformed, penwidth = pen_characteristics(object) -- boolean, value
-                                            pdf_literalcode("%f w", penwidth)
+                                            pdf_literalcode("%n w", penwidth)
                                             if objecttype == "fill" then
                                                 objecttype = "both"
                                             end
