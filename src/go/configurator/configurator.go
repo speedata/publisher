@@ -13,6 +13,9 @@ type ConfigData struct {
 }
 
 func (cd *ConfigData) String(section string, str string) string {
+	if cd == nil {
+		return ""
+	}
 	for i := 0; i < len(cd.cfg); i++ {
 		s, _ := cd.cfg[i].String(section, str)
 		if s != "" {

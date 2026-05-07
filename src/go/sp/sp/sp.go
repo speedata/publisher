@@ -883,7 +883,7 @@ func main() {
 	err := op.Parse()
 
 	if errors.Is(err, optionparser.ErrHelp) {
-		exitProgram(0)
+		os.Exit(0)
 	}
 
 	if err != nil {
