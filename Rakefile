@@ -135,9 +135,15 @@ end
 # └── default -> 0_79_1/
 #
 # The task looks for a directory named "default" and uses the binary files in that directory
-desc "Make ZIP files for all platforms and installer for windows"
+desc "Make ZIP files. Set PLATFORM=linux|windows|all (default all)."
 task :dist => [:sphelper] do
-	sh "#{installdir}/bin/sphelper dist windows/amd64 linux/amd64 linux/arm64"
+	targets = case ENV["PLATFORM"] || "all"
+	          when "linux"   then "linux/amd64 linux/arm64"
+	          when "windows" then "windows/amd64"
+	          when "all"     then "windows/amd64 linux/amd64 linux/arm64"
+	          else abort "Unknown PLATFORM=#{ENV['PLATFORM']}, expected linux|windows|all"
+	          end
+	sh "#{installdir}/bin/sphelper dist #{targets}"
 end
 
 desc "Create a customized directory strcuture for distribution"
