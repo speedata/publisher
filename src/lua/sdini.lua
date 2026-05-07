@@ -24,8 +24,12 @@ end
 
 local ok, msg = package.loadlib(libname, "*")
 if not ok then
-    print(msg)
-    os.exit(0)
+    io.stderr:write(string.format("speedata Publisher: failed to load %s\n", libname))
+    io.stderr:write(string.format("  reason: %s\n", msg or "unknown error"))
+    io.stderr:write("  This usually means the library is missing, has a wrong\n")
+    io.stderr:write("  architecture, or was built for a different platform.\n")
+    io.stderr:write("  Please report this at https://github.com/speedata/publisher/issues\n")
+    os.exit(1)
 end
 -- the library was formally named splib. luaglue is a layer (see #570).
 splib = require("luaglue")
