@@ -1,67 +1,91 @@
-[![Platforms](https://img.shields.io/badge/Platform-Mac%2FLinux%2FWindows-lightgrey)](https://doc.speedata.de/publisher/en/installation/) [![Manual](https://img.shields.io/badge/Manual-online-blue)](https://doc.speedata.de/)
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="doc/images/banner-dark.svg">
+    <img src="doc/images/banner-light.svg" alt="speedata Publisher — Database in. PDF out." width="900">
+  </picture>
+</p>
 
-speedata Publisher
-==================
+<p align="center">
+  <a href="https://doc.speedata.de/publisher/en/installation/"><img src="https://img.shields.io/badge/Platform-macOS%20%7C%20Linux%20%7C%20Windows-FFC72C?labelColor=000000" alt="Platforms"></a>
+  <a href="COPYING"><img src="https://img.shields.io/badge/license-AGPLv3-FFC72C?labelColor=000000" alt="License: AGPLv3"></a>
+  <a href="https://doc.speedata.de/"><img src="https://img.shields.io/badge/manual-online-FFC72C?labelColor=000000" alt="Manual"></a>
+</p>
 
-About
------
+---
 
-<p align="center"><img src="https://i.imgur.com/yzUJlVv.png"></p>
+Database in. PDF out. Layout-as-code for high-volume, high-precision PDFs — catalogs, reports, manuals, anything where InDesign would mean fifty thousand clicks. Open source, deterministic, scriptable, in production since 2011.
 
+## Real-world performance
 
-The speedata Publisher is a full featured and mature database publishing software. It generates PDF files from XML data and XML layout instructions. It is used to make product catalogs and other documents with high demands on the layout.
+Three projects, same binary, same machine (M4 MacBook Air):
 
-Its built-in layout description language allows you to create almost arbitrary layouts, while keeping the job as simple as possible.
+```console
+# Multi-level TOC, cross-references, PDF bookmarks
+$ sp --data produkte.xml --layout katalog.xml
+1828 pages rendered in 2m 56s
+exit status 0
+```
 
-Think of it as “XSL-FO on steroids” or “server side InDesign”.
+```console
+# Table of contents
+$ sp --layout reisebroschuere.xml --data kundendaten.xml
+13 pages rendered in 0.54s
+exit status 0
+```
 
-Examples
---------
+```console
+# ZUGFeRD invoice with PDF/A-3 validation
+$ sp --data facturx.xml --layout zugferd.xml
+1 page rendered in 0.21s
+exit status 0
+```
 
-There are some examples in the [example repository on GitHub](https://github.com/speedata/examples). Also, there are lots of small examples in the `qa` subdirectory that is used for quality assurance. See also our [showcase](https://www.speedata.de/en/#showcase).
+<p align="center">
+  <img src="doc/images/showcase-brochure.jpg" alt="Sample brochure spread" width="1000">
+</p>
+<p align="center"><sub>Sample brochure spread — layout-driven, image cutouts, branded tables, cross-references with page numbers.</sub></p>
 
-<img src="https://doc.speedata.de/publisher/img/beispiele.png">
+## Try it in 60 seconds
 
-Can I use this in production?
------------------------------
+Grab a ready-to-run package from <https://download.speedata.de/> (extract, set `PATH`, done — no TeX install, no InDesign license, everything bundled including LuaTeX). Then:
 
-Yes. Absolutely. We release stable (long term support) versions once in a while which are heavily tested in commercial environments and we release development versions often. Note that these development are still safe to use, they just might contain some experimental new features.
+```bash
+sp new mycatalog && cd mycatalog
+sp                # → publisher.pdf
+```
 
-For a list of upcoming and recent features see the [news file](News.md).
+Full setup walkthrough in the [installation guide](https://doc.speedata.de/publisher/en/manual/setup/installation/).
 
-Installation
-------------
+## Why speedata Publisher
 
-Just get one of the ready-to-run packages from <https://download.speedata.de/> and follow the directions inside the ZIP file (=just extract and set the PATH variable). See the [installation instructions in the manual](https://doc.speedata.de/publisher/en/manual/setup/installation/).
+- **Deterministic.** Same data → bit-identical PDF. Reviewable, diff-able, CI-ready.
+- **Scales.** 1,000-page catalogs are the normal case, not the stress test.
+- **Layout-as-code.** XML layout language with XPath. Anything that takes a thousand clicks in InDesign is one rule here.
+- **Open source.** AGPLv3, builds from source, no closed-source dependencies.
+- **Battle-tested.** Production use since 2011, hundreds of QA test cases, long-term-support releases.
 
+Think of it as *XSL-FO on steroids* or *server-side InDesign*.
 
-Manual
-------
-The documentation is available online: <https://doc.speedata.de/>.
+## Documentation & examples
 
+- **Manual:** <https://doc.speedata.de/> — every command, every attribute, both XML parsers, HTML/CSS mode, REST server mode.
+- **Examples repository:** <https://github.com/speedata/examples>
+- **Showcase:** <https://www.speedata.de/en/#showcase>
+- **QA suite:** the [`qa/`](qa/) directory contains hundreds of self-contained test cases — small, readable, copy-paste-ready.
+- **Architecture:** [`ARCHITECTURE.md`](ARCHITECTURE.md)
+- **News & changelog:** [`News.md`](News.md), [`news.speedata.de`](https://news.speedata.de/)
 
-Bugs
-----
+## Community & support
 
-Please use the [GitHub bug tracker](https://github.com/speedata/publisher/issues) for reporting bugs or write an email. See below for contact details.
+- **Bugs & feature requests:** [GitHub issues](https://github.com/speedata/publisher/issues)
+- **Commercial support and consulting:** [speedata.de/imprint](https://www.speedata.de/imprint/)
+- **Contributing:** fork, branch, PR. Build instructions in [`BUILDING.md`](BUILDING.md).
 
+## License
 
-License / Contributing
-----------------------
+AGPLv3 — see [`COPYING`](COPYING).
 
-The license is AGPLv3, see the file COPYING in the root directory.
+speedata Publisher uses [LuaTeX](https://www.luatex.org/) for PDF generation (GPLv2 or later). LuaTeX is bundled in the release packages; full third-party list in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
 
-Third-party software: speedata Publisher relies on LuaTeX for PDF generation, which is licensed under the GNU General Public License ([GPLv2 or later](https://www.gnu.org/licenses/)). LuaTeX is included in the packages at [download.speedata.de](https://download.speedata.de). Get the source code of LuaTeX from [www.luatex.org](https://www.luatex.org/). See also the file [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) in the root directory.
-
-We welcome contributions. Just [follow the GitHub procedure (fork, pull requests)](https://help.github.com/articles/using-pull-requests/). The file [BUILDING.md](BUILDING.md) has instructions on building the binary from the source code.
-
-Contact / Support
------------------
-
-We offer commercial support for the speedata Publisher. You can find the contact information [on the webpage](https://www.speedata.de/imprint/).
-
-
---------
-Source: <https://github.com/speedata/publisher/> <br>
-News: <https://news.speedata.de/> <br>
-Webpage: <https://www.speedata.de/> <br>
+---
+<sub>Source: <https://github.com/speedata/publisher/> · Web: <https://www.speedata.de/></sub>
