@@ -11,7 +11,7 @@ file_start("commands.lua")
 local publisher = require("publisher")
 
 require("publisher.fonts")
-require("publisher.tabular")
+local tabular_module = require("publisher.tabular")
 local spotcolors = require("spotcolors")
 local metadata = require("publisher.metadata")
 local colors_module = require("publisher.colors")
@@ -6553,8 +6553,7 @@ function commands.tablefoot(layoutxml, dataxml)
     local tab = publisher.dispatch.dispatch(layoutxml, dataxml)
     local page = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "page", "string", "all")
     tab.page = page
-    tab._layoutxml = layoutxml
-    tab._dataxml = dataxml
+    tabular_module.set_origin(tab, layoutxml, dataxml)
     return tab
 end
 
@@ -6568,8 +6567,7 @@ function commands.tablehead(layoutxml, dataxml)
     local tab = publisher.dispatch.dispatch(layoutxml, dataxml)
     local page = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "page", "string", "all")
     tab.page = page
-    tab._layoutxml = layoutxml
-    tab._dataxml = dataxml
+    tabular_module.set_origin(tab, layoutxml, dataxml)
     return tab
 end
 
@@ -6689,8 +6687,7 @@ function commands.tr(layoutxml, dataxml)
         end
     end
 
-    tab._layoutxml = layoutxml
-    tab._dataxml = dataxml
+    tabular_module.set_origin(tab, layoutxml, dataxml)
     tab.align = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "align", "string", nil, "align")
     local sethead = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "sethead", "string")
     if sethead == "yes" then

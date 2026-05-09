@@ -34,6 +34,29 @@ local tabular = {}
 ---@type table<string, any>
 local dynamic_data = {}
 
+-- Maps row/head/foot value tables to the (layoutxml, dataxml) under which
+-- they were created. Kept off the value tables themselves so that
+-- `flush_table` doesn't recurse into the layout/data XML trees when a
+-- variable that holds such a structure is re-assigned.
+local tr_origin = setmetatable({}, { __mode = "k" })
+
+---@param t table
+---@param layoutxml table
+---@param dataxml table
+function tabular.set_origin(t, layoutxml, dataxml)
+    tr_origin[t] = { layoutxml = layoutxml, dataxml = dataxml }
+end
+
+---@param t table
+---@return table? layoutxml
+---@return table? dataxml
+function tabular.get_origin(t)
+    local o = tr_origin[t]
+    if o then
+        return o.layoutxml, o.dataxml
+    end
+end
+
 -- Resolve a colspan value. Handles "*" (all remaining columns) and numeric values.
 ---@param value string|number The colspan attribute value
 ---@param current_column number The current column position (1-based)
@@ -1884,9 +1907,10 @@ function tabular:typeset_table(dataxml)
             -- We allow data to be attached to a table row.
             local thisrow = rows[#rows]
             publisher.attribute_helpers.setprop(thisrow, "origin", "tr")
-            if tr_contents._layoutxml then
-                publisher.attribute_helpers.setprop(thisrow, "tr_layoutxml", tr_contents._layoutxml)
-                publisher.attribute_helpers.setprop(thisrow, "tr_dataxml", tr_contents._dataxml)
+            local tr_layoutxml_origin, tr_dataxml_origin = tabular.get_origin(tr_contents)
+            if tr_layoutxml_origin then
+                publisher.attribute_helpers.setprop(thisrow, "tr_layoutxml", tr_layoutxml_origin)
+                publisher.attribute_helpers.setprop(thisrow, "tr_dataxml", tr_dataxml_origin)
             end
             if publisher.options.format == "PDF/UA" and tr_contents.role then
                 local rn = publisher.structure_tree.get_rolenum(tr_contents.role)
@@ -2524,8 +2548,9 @@ function tabular:reformat_foot(pagenumber, max_splits)
         y = self.tablefoot_contents[1]
         rownumber = self.tablefoot_contents[2]
     end
-    local x = publisher.dispatch.dispatch(y._layoutxml, y._dataxml)
-    local page = publisher.attribute_helpers.read_attribute(y._layoutxml, y._dataxml, "page", "string", "all")
+    local y_layoutxml, y_dataxml = tabular.get_origin(y)
+    local x = publisher.dispatch.dispatch(y_layoutxml, y_dataxml)
+    local page = publisher.attribute_helpers.read_attribute(y_layoutxml, y_dataxml, "page", "string", "all")
     x.page = page
     self:attach_objects(x)
     local tmp_tablefoot_last, tmp_tablefoot_all = {}, {}
@@ -2540,10 +2565,11 @@ end
 function tabular:reformat_head()
     local y = self.tablehead_contents[1]
     local rownumber = self.tablehead_contents[2]
-    local x = publisher.dispatch.dispatch(y._layoutxml, y._dataxml)
+    local y_layoutxml, y_dataxml = tabular.get_origin(y)
+    local x = publisher.dispatch.dispatch(y_layoutxml, y_dataxml)
     self:attach_objects(x)
     local tmp1, tmp2 = {}, {}
-    local page = publisher.attribute_helpers.read_attribute(y._layoutxml, y._dataxml, "page", "string", "all")
+    local page = publisher.attribute_helpers.read_attribute(y_layoutxml, y_dataxml, "page", "string", "all")
     x.page = page
     self:make_tablehead(x, tmp1, tmp2, rownumber, true)
     self:connect_tablehead_first_all(tmp1, tmp2)
