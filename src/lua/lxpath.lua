@@ -62,6 +62,7 @@ local function get_qname(sc)
     local len = sc.len
     local start = pos
     local hasColon = false
+    local colonPos = -1
 
     while pos <= len do
         local b = string_byte(str, pos)
@@ -71,9 +72,14 @@ local function get_qname(sc)
             or (b >= 48 and b <= 57) -- 0-9
             or b == 95 -- _
             or b == 45 -- -
-            or b == 42 -- *
         then
             pos = pos + 1
+        elseif b == 42 then -- '*': only valid as wildcard at start or directly after ':'
+            if pos == start or pos == colonPos + 1 then
+                pos = pos + 1
+            else
+                break
+            end
         elseif b >= 128 then
             -- UTF-8 multi-byte: accept as part of QName (covers ·, ‿, ⁀, etc.)
             if b >= 240 then
@@ -90,6 +96,7 @@ local function get_qname(sc)
                 break
             end
             hasColon = true
+            colonPos = pos
             pos = pos + 1
         else
             break
