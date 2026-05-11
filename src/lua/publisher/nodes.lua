@@ -253,10 +253,18 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
             end
         else
             if head.id == publisher.glue_node then
+                local eff = head.width
+                if parent then
+                    if parent.glue_sign == 1 and head.stretch_order == parent.glue_order then
+                        eff = eff + parent.glue_set * head.stretch
+                    elseif parent.glue_sign == 2 and head.shrink_order == parent.glue_order then
+                        eff = eff - parent.glue_set * head.shrink
+                    end
+                end
                 if blockinline == "horizontal" then
-                    curx = curx + head.width
+                    curx = curx + eff
                 else
-                    cury = cury + head.width
+                    cury = cury + eff
                 end
             elseif head.id == publisher.rule_node then
                 if head.subtype == 2 then

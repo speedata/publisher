@@ -1,0 +1,31 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Options tablerulefix="yes" />
+    <Pageformat height="6cm" width="6cm"  />
+    <Record element="data">
+        <PlaceObject column="1" row="1">
+            <Table >
+                <Tr minheight="18mm">
+                    <Td rowspan="2">
+                        <Box height="3cm" width="1cm" background-color="yellow" />
+                    </Td>
+                </Tr>
+                <Tr background-color="limegreen">
+                    <Td>
+                        <Table width="30mm" stretch="max">
+                            <Tr valign="top">
+                                <Td>
+                                    <Table width="28mm" stretch="max">
+                                        <Tr>
+                                            <Td />
+                                        </Tr>
+                                    </Table>
+                                </Td>
+                            </Tr>
+                            <Tablerule rulewidth="0.4pt" />
+                        </Table>
+                    </Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>
