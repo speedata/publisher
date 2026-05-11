@@ -544,6 +544,13 @@ function M.eval_comparison(first, second, operator)
         second = table_textvalue(second)
     end
 
+    -- After the type juggling above, tonumber(...) on a non-numeric string
+    -- can produce a real nil. Mirror the nilmarker convention: anything
+    -- compared with nil is false, except for "!=" which is true.
+    if first == nil or second == nil then
+        return operator == "\1!="
+    end
+
     if operator == "\1<" then
         return first < second
     elseif operator == "\1>" then
@@ -588,24 +595,39 @@ function get_argument_number(arg, pos, what)
         arg = tostring(arg)
     end
 
+    -- The nilmarker sentinel ("\1") stands in for an unbound value
+    -- (missing attribute, undefined variable, function returning nil).
+    -- Treat it like a real nil so the fallback below applies.
+    if arg == nilmarker then
+        arg = nil
+    end
+
     if type(arg) == "string" then
         if tonumber(arg) then
             return tonumber(arg)
         else
-            local tmpnum = tex.sp(arg)
-            return tonumber(tmpnum), "sp"
+            local ok, tmpnum = pcall(tex.sp, arg)
+            local n = ok and tonumber(tmpnum) or nil
+            if n == nil then
+                main.log(
+                    "error",
+                    string.format(
+                        "The %s operand of %s is not a number. Evaluating to 0",
+                        tostring(pos),
+                        tostring(what or "")
+                    )
+                )
+                return 0
+            end
+            return n, "sp"
         end
     end
 
     if arg == nil then
-        if err then
-            main.log(
-                "error",
-                string.format("The %s operand of %s is not a number. Evaluating to 0 (%q)", pos, what, M.str)
-            )
-        else
-            main.log("error", string.format("The %s operand of %s is not a number. Evaluating to 0", pos, what))
-        end
+        main.log(
+            "error",
+            string.format("The %s operand of %s is not a number. Evaluating to 0", tostring(pos), tostring(what or ""))
+        )
         return 0
     end
 
