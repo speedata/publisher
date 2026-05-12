@@ -108,6 +108,9 @@ you can display a list of the allowed commands and parameters.
 `--filter=FILTER`
 : Run Lua filter before publishing starts
 
+`--generate-completion=SHELL`
+: Print a shell completion script (`bash`, `zsh` or `fish`) to standard output and exit. See the section _Shell completion_ below.
+
 `--grid`
 : Display background grid. Disable with `--no-grid`
 
@@ -206,4 +209,47 @@ you can display a list of the allowed commands and parameters.
 
 `--xml`
 : Output as (pseudo-)XML (for list-fonts)
+
+## Shell completion
+
+`sp` can produce tab-completion scripts for `bash`, `zsh` and `fish`. The script is written to standard output, so redirect it to wherever your shell expects completion files.
+
+The completion knows all options and commands; for options that take a value it offers file completion as a generic default.
+
+### Bash
+
+Per user (requires the `bash-completion` package):
+
+```shell
+$ sp --generate-completion=bash > ~/.local/share/bash-completion/completions/sp
+```
+
+System-wide (e.g. from a distribution package): `/usr/share/bash-completion/completions/sp`.
+
+### Zsh
+
+Per user, one possible setup:
+
+```shell
+$ mkdir -p ~/.zsh/completions
+$ sp --generate-completion=zsh > ~/.zsh/completions/_sp
+```
+
+Then add the following to `~/.zshrc` _before_ the `compinit` call:
+
+```shell
+fpath=(~/.zsh/completions $fpath)
+```
+
+System-wide locations are `/usr/share/zsh/vendor-completions/_sp` (Debian/Ubuntu) or `/usr/share/zsh/site-functions/_sp`.
+
+### Fish
+
+Fish picks completions up automatically from the user configuration directory:
+
+```shell
+$ sp --generate-completion=fish > ~/.config/fish/completions/sp.fish
+```
+
+System-wide path: `/usr/share/fish/vendor_completions.d/sp.fish`.
 

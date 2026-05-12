@@ -106,6 +106,9 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 `--filter=FILTER`
 : Führt die angegebene Lua-Datei aus. Siehe Kapitel [Lua-Filter / Vorverarbeitung]({{% relref "preprocessing" %}}).
 
+`--generate-completion=SHELL`
+: Gibt ein Shell-Vervollständigungs-Skript (`bash`, `zsh` oder `fish`) auf der Standardausgabe aus und beendet das Programm. Siehe Abschnitt _Shell-Vervollständigung_ weiter unten.
+
 `--grid`
 : Zeichnet das Raster. Mit `--no-grid` wird es ausgeschaltet. Konfigurierbar auch im [Layout]({{% relref "/reference/trace" %}}) über den Befehl `<Trace>`.
 
@@ -201,4 +204,47 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 
 `--xml`
 : Die Ausgabe des Befehls `list-fonts` werden als (Pseudo-)XML dargestellt, um sie in das Layoutregelwerk zu übernehmen.
+
+## Shell-Vervollständigung
+
+`sp` kann Tab-Vervollständigungs-Skripte für `bash`, `zsh` und `fish` erzeugen. Das Skript wird auf die Standardausgabe geschrieben und in die von der Shell erwartete Datei umgeleitet.
+
+Die Vervollständigung kennt alle Optionen und Befehle; für Optionen mit Parameter wird als Standardvorschlag eine Datei-Vervollständigung angeboten.
+
+### Bash
+
+Pro Benutzer (das Paket `bash-completion` muss installiert sein):
+
+```shell
+$ sp --generate-completion=bash > ~/.local/share/bash-completion/completions/sp
+```
+
+Systemweit (z.B. aus einem Distributionspaket): `/usr/share/bash-completion/completions/sp`.
+
+### Zsh
+
+Pro Benutzer, eine mögliche Einrichtung:
+
+```shell
+$ mkdir -p ~/.zsh/completions
+$ sp --generate-completion=zsh > ~/.zsh/completions/_sp
+```
+
+Anschließend in `~/.zshrc` _vor_ dem Aufruf von `compinit` ergänzen:
+
+```shell
+fpath=(~/.zsh/completions $fpath)
+```
+
+Systemweite Ablageorte sind `/usr/share/zsh/vendor-completions/_sp` (Debian/Ubuntu) oder `/usr/share/zsh/site-functions/_sp`.
+
+### Fish
+
+Fish lädt Vervollständigungen automatisch aus dem User-Konfigurationsverzeichnis:
+
+```shell
+$ sp --generate-completion=fish > ~/.config/fish/completions/sp.fish
+```
+
+Systemweiter Pfad: `/usr/share/fish/vendor_completions.d/sp.fish`.
 

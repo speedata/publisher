@@ -50,8 +50,8 @@ github.com/speedata/goxlsx v1.0.2 h1:hi00xy1EQhqrag4HNIc9hVEtVmTGrh3z9C1AH9ysg74
 github.com/speedata/goxlsx v1.0.2/go.mod h1:7eXkL4ZUZ2uUlnBBAmh0iwOdhOkqqstW/FmkEe2IPMY=
 github.com/speedata/hotfolder v0.0.0-20181204121114-5f743a840a92 h1:X9JJkHmcQlWmDzN5m11u8+44iXf+ggmOdprrU4z5eTA=
 github.com/speedata/hotfolder v0.0.0-20181204121114-5f743a840a92/go.mod h1:rsc2+nghpGmXpyXMj/zuke7fphLxMvAmgcO6WCeBuic=
-github.com/speedata/optionparser v1.1.1 h1:fGVD7n3bzRQH/T1iHpUNzdP1hMAgQSY85LTfqxDZ1zM=
-github.com/speedata/optionparser v1.1.1/go.mod h1:JzOMd1kGlM5gtPBy7reOayfHsTXCvd6P4JU8BW0LicE=
+github.com/speedata/optionparser v1.2.1 h1:h/fN19txdNyY6esRvLAEvh5ntic79r80fDI8D8+6y8g=
+github.com/speedata/optionparser v1.2.1/go.mod h1:JzOMd1kGlM5gtPBy7reOayfHsTXCvd6P4JU8BW0LicE=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=

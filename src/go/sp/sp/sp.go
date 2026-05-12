@@ -835,6 +835,12 @@ func main() {
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
 	op.On("--extra-xml NAME", "Add this file to the layout file", extraXML)
 	op.On("--filter FILTER", "Run Lua filter before publishing starts", options)
+	op.On("--generate-completion SHELL", "Print shell completion script (bash, zsh or fish) to stdout and exit", func(shell string) {
+		if err := op.GenerateCompletion(shell, "sp", os.Stdout); err != nil {
+			log.Fatal(err)
+		}
+		os.Exit(0)
+	})
 	op.On("--grid", "Display background grid. Disable with --no-grid", options)
 	op.On("--ignore-case", "Ignore case when accessing files in the recursive file list (on a case-insensitive file system)", options)
 	op.On("--imagecache PATH", "Set the image cache", options)
