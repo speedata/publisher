@@ -50,6 +50,7 @@ func (l *LuaState) buildXMLTable() error {
 	if full == "" {
 		return fmt.Errorf("Cannot find file %s: %w", xmlfilename, os.ErrNotExist)
 	}
+	slog.Debug("Read XML file", "type", xmltype, "filename", full, "md5sum", md5calc(full))
 	f, err := os.Open(full)
 	if err != nil {
 		return err
@@ -60,6 +61,7 @@ func (l *LuaState) buildXMLTable() error {
 	err = xmltree.ParseXMLToLua(f, luaAdapter{l: l}, &xmltree.Options{
 		ResolveInclude: func(href string) (io.ReadCloser, error) {
 			full := splibaux.LookupFile(href)
+			slog.Debug("Read XML file", "type", "xinclude", "filename", full, "md5sum", md5calc(full))
 			return os.Open(full)
 		},
 		DataMode:  isDataMode,
