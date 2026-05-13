@@ -1422,6 +1422,9 @@ function commands.forall(layoutxml, dataxml)
             )
         end
         local selection = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "xpathraw")
+        if not selection then
+            return tab
+        end
         for i = 1, #selection do
             local iterdata = {}
             for k, v in pairs(dataxml) do
