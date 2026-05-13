@@ -13,8 +13,14 @@ type luaAdapter struct{ l *LuaState }
 
 func (a luaAdapter) CheckStack(n int) bool      { return a.l.checkStack(n) }
 func (a luaAdapter) CreateTable(narr, nrec int) { a.l.createTable(narr, nrec) }
-func (a luaAdapter) AddKeyValueToTable(idx int, key string, v any) {
-	a.l.addKeyValueToTable(idx, key, v)
+func (a luaAdapter) AddStringValueToTable(idx int, key, v string) {
+	a.l.addStringValueToTable(idx, key, v)
+}
+func (a luaAdapter) AddIntValueToTable(idx int, key string, v int) {
+	a.l.addIntValueToTable(idx, key, v)
+}
+func (a luaAdapter) AddBoolValueToTable(idx int, key string, v bool) {
+	a.l.addBoolValueToTable(idx, key, v)
 }
 func (a luaAdapter) RawSet(idx int)      { a.l.rawSet(idx) }
 func (a luaAdapter) PushInt(v int)       { a.l.pushInt(v) }

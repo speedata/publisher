@@ -10,10 +10,14 @@ var errStackExhausted = errors.New("Lua stack could not be grown (LUAI_MAXSTACK 
 
 // LuaStater defines the minimal interface required to build a Lua table.
 // Methods are exported so external types (like *LuaState) can implement it.
+// The Add*ValueToTable helpers are typed so the parser's hot path does not
+// route every key/value through an interface{} box.
 type LuaStater interface {
 	CheckStack(n int) bool
 	CreateTable(narr, nrec int)
-	AddKeyValueToTable(idx int, key string, value any)
+	AddStringValueToTable(idx int, key, value string)
+	AddIntValueToTable(idx int, key string, value int)
+	AddBoolValueToTable(idx int, key string, value bool)
 	RawSet(idx int)
 	PushInt(v int)
 	PushString(s string)
@@ -22,9 +26,9 @@ type LuaStater interface {
 // stackHeadroom is the number of Lua stack slots reserved before each
 // element push. Covers the worst-case push pattern in a single element:
 // child-index + element table + .__attributes key/table (+ 2 per attr
-// during transient AddKeyValueToTable) + .__ns key/table — with comfortable
-// margin. Lua's default LUA_MINSTACK is only 20, so this must be requested
-// explicitly on every iteration via lua_checkstack.
+// transiently) + .__ns key/table — with comfortable margin. Lua's default
+// LUA_MINSTACK is only 20, so this must be requested explicitly on every
+// iteration via lua_checkstack.
 const stackHeadroom = 16
 
 // RenderToLua converts a parsed XML tree (Node) into a Lua table representation
@@ -32,7 +36,7 @@ const stackHeadroom = 16
 func RenderToLua(l LuaStater, doc *Node) {
 	l.CheckStack(stackHeadroom)
 	l.CreateTable(len(doc.Children), 1)
-	l.AddKeyValueToTable(-1, ".__type", "document")
+	l.AddStringValueToTable(-1, ".__type", "document")
 
 	// Add child elements or text nodes as numbered indices
 	idx := 1
@@ -55,20 +59,20 @@ func pushElement(l LuaStater, n *Node) {
 	l.CheckStack(stackHeadroom)
 	l.CreateTable(len(n.Children), 10)
 
-	l.AddKeyValueToTable(-1, ".__type", "element")
-	l.AddKeyValueToTable(-1, ".__id", n.ID)
-	l.AddKeyValueToTable(-1, ".__name", n.Name)
-	l.AddKeyValueToTable(-1, ".__local_name", n.LocalName)
-	l.AddKeyValueToTable(-1, ".__namespace", n.Namespace)
-	l.AddKeyValueToTable(-1, ".__line", n.Line)
-	l.AddKeyValueToTable(-1, ".__file", n.File)
-	l.AddKeyValueToTable(-1, ".__col", n.Col)
+	l.AddStringValueToTable(-1, ".__type", "element")
+	l.AddIntValueToTable(-1, ".__id", n.ID)
+	l.AddStringValueToTable(-1, ".__name", n.Name)
+	l.AddStringValueToTable(-1, ".__local_name", n.LocalName)
+	l.AddStringValueToTable(-1, ".__namespace", n.Namespace)
+	l.AddIntValueToTable(-1, ".__line", n.Line)
+	l.AddStringValueToTable(-1, ".__file", n.File)
+	l.AddIntValueToTable(-1, ".__col", n.Col)
 
 	// .__attributes
 	l.PushString(".__attributes")
 	l.CreateTable(0, len(n.Attrs))
 	for k, v := range n.Attrs {
-		l.AddKeyValueToTable(-1, k, v)
+		l.AddStringValueToTable(-1, k, v)
 	}
 	l.RawSet(-3)
 
@@ -76,7 +80,7 @@ func pushElement(l LuaStater, n *Node) {
 	l.PushString(".__ns")
 	l.CreateTable(0, len(n.NS))
 	for pfx, uri := range n.NS {
-		l.AddKeyValueToTable(-1, pfx, uri)
+		l.AddStringValueToTable(-1, pfx, uri)
 	}
 	l.RawSet(-3)
 

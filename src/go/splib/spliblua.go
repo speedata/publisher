@@ -298,27 +298,31 @@ func (l *LuaState) stackDump() {
 	fmt.Println("~~> end stack <~~")
 }
 
-func (l *LuaState) pushAny(value any) {
-	switch t := value.(type) {
-	case string:
-		l.pushString(t)
-	case int:
-		l.pushInt(t)
-	case bool:
-		l.pushBool(t)
-	default:
-		fmt.Printf("~~> t %#T\n", t)
-		panic("l.pushAny()")
+// addStringValueToTable sets t[key] = value where t is the table at the
+// given (possibly relative) stack index.
+func (l *LuaState) addStringValueToTable(index int, key, value string) {
+	l.pushString(key)
+	l.pushString(value)
+	if index < 0 {
+		index -= 2
 	}
+	l.rawSet(index)
 }
 
-// addKeyValueToTable adds the key and value to the table at the given index.
-func (l *LuaState) addKeyValueToTable(index int, key any, value any) {
-	l.pushAny(key)
-	l.pushAny(value)
-
+func (l *LuaState) addIntValueToTable(index int, key string, value int) {
+	l.pushString(key)
+	l.pushInt(value)
 	if index < 0 {
-		index = index - 2
+		index -= 2
+	}
+	l.rawSet(index)
+}
+
+func (l *LuaState) addBoolValueToTable(index int, key string, value bool) {
+	l.pushString(key)
+	l.pushBool(value)
+	if index < 0 {
+		index -= 2
 	}
 	l.rawSet(index)
 }

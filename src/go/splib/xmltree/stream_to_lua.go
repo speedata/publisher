@@ -44,7 +44,7 @@ func ParseXMLToLua(r io.Reader, l LuaStater, opts *Options, filename string) err
 		return errStackExhausted
 	}
 	l.CreateTable(0, 1)
-	l.AddKeyValueToTable(-1, ".__type", "document")
+	l.AddStringValueToTable(-1, ".__type", "document")
 
 	for {
 		tok, err := dec.Token()
@@ -172,16 +172,16 @@ func ParseXMLToLua(r io.Reader, l LuaStater, opts *Options, filename string) err
 				nrec++ // .__file
 			}
 			l.CreateTable(0, nrec)
-			l.AddKeyValueToTable(-1, ".__type", "element")
-			l.AddKeyValueToTable(-1, ".__id", idCounter)
-			l.AddKeyValueToTable(-1, ".__name", name)
-			l.AddKeyValueToTable(-1, ".__local_name", v.Name.Local)
+			l.AddStringValueToTable(-1, ".__type", "element")
+			l.AddIntValueToTable(-1, ".__id", idCounter)
+			l.AddStringValueToTable(-1, ".__name", name)
+			l.AddStringValueToTable(-1, ".__local_name", v.Name.Local)
 			if includeNamespace {
-				l.AddKeyValueToTable(-1, ".__namespace", v.Name.Space)
+				l.AddStringValueToTable(-1, ".__namespace", v.Name.Space)
 			}
-			l.AddKeyValueToTable(-1, ".__line", line)
+			l.AddIntValueToTable(-1, ".__line", line)
 			if !dataMode {
-				l.AddKeyValueToTable(-1, ".__file", filename)
+				l.AddStringValueToTable(-1, ".__file", filename)
 			}
 			idCounter++
 
@@ -192,7 +192,7 @@ func ParseXMLToLua(r io.Reader, l LuaStater, opts *Options, filename string) err
 				if a.Name.Space == "xmlns" || a.Name.Local == "xmlns" {
 					continue
 				}
-				l.AddKeyValueToTable(-1, a.Name.Local, a.Value)
+				l.AddStringValueToTable(-1, a.Name.Local, a.Value)
 			}
 			l.RawSet(-3)
 
@@ -203,7 +203,7 @@ func ParseXMLToLua(r io.Reader, l LuaStater, opts *Options, filename string) err
 				l.PushString(".__ns")
 				l.CreateTable(0, len(nsMap))
 				for pfx, uri := range nsMap {
-					l.AddKeyValueToTable(-1, pfx, uri)
+					l.AddStringValueToTable(-1, pfx, uri)
 				}
 				l.RawSet(-3)
 			}

@@ -12,7 +12,9 @@ import (
 // LuaStater matches the xmltree interface: implement it for *LuaState once.
 type LuaStater interface {
 	CreateTable(narr, nrec int)
-	AddKeyValueToTable(idx int, key string, value any)
+	AddStringValueToTable(idx int, key, value string)
+	AddIntValueToTable(idx int, key string, value int)
+	AddBoolValueToTable(idx int, key string, value bool)
 	RawSet(idx int)
 	PushInt(v int)
 	PushString(s string)
@@ -36,9 +38,9 @@ func (m mode) String() string {
 func Render(l LuaStater, res *csspkg.Result) {
 	// Top-level table: { typ="csshtmltree", lang=?, fontfamilies=?, pages=?, [1]=root }
 	l.CreateTable(0, 4)
-	l.AddKeyValueToTable(-1, "typ", "csshtmltree")
+	l.AddStringValueToTable(-1, "typ", "csshtmltree")
 	if res.Lang != "" {
-		l.AddKeyValueToTable(-1, "lang", res.Lang)
+		l.AddStringValueToTable(-1, "lang", res.Lang)
 	}
 	pushFontFamilies(l, res)
 	pushPages(l, res)
@@ -95,10 +97,10 @@ func emitFontVariant(l LuaStater, key string, src csspkg.FontSource) {
 	l.CreateTable(0, rec)
 
 	if src.URL != "" {
-		l.AddKeyValueToTable(-1, "url", src.URL)
+		l.AddStringValueToTable(-1, "url", src.URL)
 	}
 	if src.Local != "" {
-		l.AddKeyValueToTable(-1, "local", src.Local)
+		l.AddStringValueToTable(-1, "local", src.Local)
 	}
 
 	l.RawSet(-3)
@@ -119,17 +121,17 @@ func pushPages(l LuaStater, res *csspkg.Result) {
 		// Expand shorthand attributes of page here if they aren't already normalized.
 		styles, _ := resolveAttributes(p.Attributes)
 		for k2, v2 := range styles {
-			l.AddKeyValueToTable(-1, k2, v2)
+			l.AddStringValueToTable(-1, k2, v2)
 		}
 		wd, ht := papersize(p.Papersize)
-		l.AddKeyValueToTable(-1, "width", wd)
-		l.AddKeyValueToTable(-1, "height", ht)
+		l.AddStringValueToTable(-1, "width", wd)
+		l.AddStringValueToTable(-1, "height", ht)
 
 		for area, rules := range p.Pagearea {
 			l.PushString(area)
 			l.CreateTable(0, len(rules))
 			for _, r := range rules {
-				l.AddKeyValueToTable(-1, r.Key, r.Value.String())
+				l.AddStringValueToTable(-1, r.Key, r.Value.String())
 			}
 			l.RawSet(-3)
 		}
@@ -240,13 +242,13 @@ func pushNode(l LuaStater, res *csspkg.Result, n *html.Node, dir mode, ws bool) 
 		newDir := flowDirByStyle(n.Data, st, dir)
 
 		l.CreateTable(0, 8)
-		l.AddKeyValueToTable(-1, "elementname", n.Data)
-		l.AddKeyValueToTable(-1, "direction", newDir.String())
+		l.AddStringValueToTable(-1, "elementname", n.Data)
+		l.AddStringValueToTable(-1, "direction", newDir.String())
 
 		// Emit "block = true" only if the element is effectively block-level
 		// (same precedence as flowDir: display first, then known tags).
 		if isBlockByStyle(n.Data, st) {
-			l.AddKeyValueToTable(-1, "block", true)
+			l.AddBoolValueToTable(-1, "block", true)
 		}
 
 		// ----- styles (computed) -----
@@ -266,9 +268,9 @@ func pushNode(l LuaStater, res *csspkg.Result, n *html.Node, dir mode, ws bool) 
 			// +1 to hold has_border if we add it
 			l.CreateTable(0, len(st)+1)
 			for k, v := range st {
-				l.AddKeyValueToTable(-1, k, v)
+				l.AddStringValueToTable(-1, k, v)
 			}
-			l.AddKeyValueToTable(-1, "has_border", hb)
+			l.AddBoolValueToTable(-1, "has_border", hb)
 			l.RawSet(-3)
 		}
 
@@ -278,7 +280,7 @@ func pushNode(l LuaStater, res *csspkg.Result, n *html.Node, dir mode, ws bool) 
 			l.PushString("attributes")
 			l.CreateTable(0, len(at))
 			for k, v := range at {
-				l.AddKeyValueToTable(-1, k, v)
+				l.AddStringValueToTable(-1, k, v)
 			}
 			l.RawSet(-3)
 		}

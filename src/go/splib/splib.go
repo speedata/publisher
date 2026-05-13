@@ -573,7 +573,7 @@ func sdLoadXMLString(L *C.lua_State) int {
 		sr := strings.NewReader(str)
 
 		l.createTable(0, 0)
-		l.addKeyValueToTable(-1, ".__type", "document")
+		l.addStringValueToTable(-1, ".__type", "document")
 		err := l.readXMLFile(sr, 1)
 		if err != nil {
 			slog.Error("Parsing XML file failed", "message", err.Error())
