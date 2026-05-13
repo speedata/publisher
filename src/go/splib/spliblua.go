@@ -102,10 +102,16 @@ func (l *LuaState) remove(n int) {
 	l.pop(1)
 }
 
+// pushString pushes a Go string via lua_pushlstring. The explicit length is
+// required for binary safety: lua_pushstring truncates at the first NUL,
+// which would silently corrupt XML CDATA or binary attribute values.
 func (l *LuaState) pushString(str string) {
-	cStr := C.CString(str)
-	C.lua_pushstring(l.l, cStr)
-	C.free(unsafe.Pointer(cStr))
+	if len(str) == 0 {
+		C.lua_pushlstring(l.l, nil, 0)
+		return
+	}
+	p := unsafe.StringData(str)
+	C.lua_pushlstring(l.l, (*C.char)(unsafe.Pointer(p)), C.size_t(len(str)))
 }
 
 func (l *LuaState) pushBool(tf bool) {
