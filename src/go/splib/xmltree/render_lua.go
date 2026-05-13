@@ -1,8 +1,17 @@
 package xmltree
 
+import "errors"
+
+// errStackExhausted is returned when the Lua stack cannot be grown further.
+// In practice this requires deeply pathological input (hundreds of thousands
+// of nesting levels) and is virtually never hit; it exists so a hard limit
+// surfaces as a clean error instead of undefined behaviour.
+var errStackExhausted = errors.New("Lua stack could not be grown (LUAI_MAXSTACK reached)")
+
 // LuaStater defines the minimal interface required to build a Lua table.
 // Methods are exported so external types (like *LuaState) can implement it.
 type LuaStater interface {
+	CheckStack(n int) bool
 	CreateTable(narr, nrec int)
 	AddKeyValueToTable(idx int, key string, value any)
 	RawSet(idx int)
@@ -10,15 +19,25 @@ type LuaStater interface {
 	PushString(s string)
 }
 
+// stackHeadroom is the number of Lua stack slots reserved before each
+// element push. Covers the worst-case push pattern in a single element:
+// child-index + element table + .__attributes key/table (+ 2 per attr
+// during transient AddKeyValueToTable) + .__ns key/table — with comfortable
+// margin. Lua's default LUA_MINSTACK is only 20, so this must be requested
+// explicitly on every iteration via lua_checkstack.
+const stackHeadroom = 16
+
 // RenderToLua converts a parsed XML tree (Node) into a Lua table representation
 // following your original format (. __type, . __ns, numbered children, etc.).
 func RenderToLua(l LuaStater, doc *Node) {
+	l.CheckStack(stackHeadroom)
 	l.CreateTable(len(doc.Children), 1)
 	l.AddKeyValueToTable(-1, ".__type", "document")
 
 	// Add child elements or text nodes as numbered indices
 	idx := 1
 	for _, ch := range doc.Children {
+		l.CheckStack(stackHeadroom)
 		l.PushInt(idx)
 		if ch.Text != nil {
 			l.PushString(*ch.Text)
@@ -33,6 +52,7 @@ func RenderToLua(l LuaStater, doc *Node) {
 
 // pushElement builds a Lua table for a single XML element node.
 func pushElement(l LuaStater, n *Node) {
+	l.CheckStack(stackHeadroom)
 	l.CreateTable(len(n.Children), 10)
 
 	l.AddKeyValueToTable(-1, ".__type", "element")

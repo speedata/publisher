@@ -196,10 +196,10 @@ func GenerateMarkdownFiles(cfg *config.Config, lang string) error {
 	sort.Sort(allAttributeNames)
 
 	funcMap := template.FuncMap{
-		"translate":            translate,
-		"childelemsMarkdown":   childelemsMarkdown,
-		"parentelemsMarkdown":  parentelemsMarkdown,
-		"atttypeinfoMarkdown":  atttypeinfoMarkdown,
+		"translate":           translate,
+		"childelemsMarkdown":  childelemsMarkdown,
+		"parentelemsMarkdown": parentelemsMarkdown,
+		"atttypeinfoMarkdown": atttypeinfoMarkdown,
 	}
 
 	mdTemplates, err := template.New("").Funcs(funcMap).ParseFiles(

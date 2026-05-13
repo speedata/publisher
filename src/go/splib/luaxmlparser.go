@@ -11,6 +11,7 @@ import (
 
 type luaAdapter struct{ l *LuaState }
 
+func (a luaAdapter) CheckStack(n int) bool      { return a.l.checkStack(n) }
 func (a luaAdapter) CreateTable(narr, nrec int) { a.l.createTable(narr, nrec) }
 func (a luaAdapter) AddKeyValueToTable(idx int, key string, v any) {
 	a.l.addKeyValueToTable(idx, key, v)

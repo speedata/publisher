@@ -213,6 +213,18 @@ func (l *LuaState) createTable(seq int, other int) int {
 	return l.getTop()
 }
 
+// checkStack ensures that the Lua stack has space for at least n additional
+// slots, growing the internal stack buffer if necessary. Returns false if the
+// stack cannot be grown (hard Lua limit reached); in that case the caller
+// must abort, because any subsequent push is undefined behaviour.
+//
+// Lua only guarantees LUA_MINSTACK (20) free slots by default; every code
+// path that pushes more than that without checking is undefined behaviour
+// and the source of nondeterministic heap/stack corruption on the host.
+func (l *LuaState) checkStack(n int) bool {
+	return C.lua_checkstack(l.l, C.int(n)) != 0
+}
+
 // Similar to lua_settable, but does a raw assignment (i.e., without
 // metamethods).
 func (l *LuaState) rawSet(index int) {

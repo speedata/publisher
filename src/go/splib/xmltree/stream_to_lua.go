@@ -40,6 +40,9 @@ func ParseXMLToLua(r io.Reader, l LuaStater, opts *Options, filename string) err
 	stack := []level{{childIdx: 1}} // document level
 
 	// Create the document table.
+	if !l.CheckStack(stackHeadroom) {
+		return errStackExhausted
+	}
 	l.CreateTable(0, 1)
 	l.AddKeyValueToTable(-1, ".__type", "document")
 
@@ -50,6 +53,14 @@ func ParseXMLToLua(r io.Reader, l LuaStater, opts *Options, filename string) err
 		}
 		if err != nil {
 			return err
+		}
+
+		// Reserve headroom for whatever this iteration pushes. Each
+		// nesting level leaves child-index + element table on the stack
+		// until the EndElement pops them, so checkstack must be called
+		// per-iteration (not just once up front).
+		if !l.CheckStack(stackHeadroom) {
+			return errStackExhausted
 		}
 
 		switch v := tok.(type) {
