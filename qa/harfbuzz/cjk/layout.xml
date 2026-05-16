@@ -1,0 +1,17 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <LoadFontfile name="Han" filename="NotoSansCJKsc-subset.ttf" mode="harfbuzz"/>
+    <Pageformat height="4cm" width="6cm" />
+    <DefineFontfamily fontsize="10" leading="12" name="text">
+        <Regular fontface="Han" />
+    </DefineFontfamily>
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>天地人中文</Value>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

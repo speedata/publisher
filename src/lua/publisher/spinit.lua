@@ -1126,7 +1126,10 @@ local function setup()
     end
 end
 
-prohibited_at_end = {
+--- This is the entry point in the publishing run and called from the TeX file (`publisher.tex`).
+publisher = require("publisher")
+
+publisher.prohibited_at_end = {
     zh = {
         ["$"] = true,
         ["("] = true,
@@ -1174,7 +1177,7 @@ prohibited_at_end = {
     },
 }
 
-prohibited_at_beginning = {
+publisher.prohibited_at_beginning = {
     zh = {
         ["!"] = true,
         ["%"] = true,
@@ -1246,8 +1249,6 @@ prohibited_at_beginning = {
         ["〆"] = true,
     },
 }
---- This is the entry point in the publishing run and called from the TeX file (`publisher.tex`).
-publisher = require("publisher")
 
 local function traceback(what)
     -- get message from what
