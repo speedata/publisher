@@ -2443,6 +2443,7 @@ function M.fix_justification(nodelist, alignment, parent, direction)
                         and font_before_glue
                         and get_glue_value(n, "width") > 0
                         and head.glue_sign == 1
+                        and not publisher.attribute_helpers.getprop(n, "hspace_fixed")
                     then
                         local fonttable = font.fonts[font_before_glue]
                         if not fonttable then

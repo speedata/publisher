@@ -1,0 +1,28 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<Pageformat height="4cm" width="8cm" />
+
+	<Record element="data">
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value>A</Value>
+					<HSpace width="5cm" />
+					<Value>B</Value>
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<PlaceObject>
+			<Table stretch="max">
+				<Tr>
+					<Td>
+						<Paragraph>
+							<Value>C</Value>
+							<HSpace width="5cm" />
+							<Value>D</Value>
+						</Paragraph>
+					</Td>
+				</Tr>
+			</Table>
+		</PlaceObject>
+	</Record>
+</Layout>

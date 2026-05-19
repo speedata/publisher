@@ -2425,6 +2425,9 @@ function commands.hspace(layoutxml, dataxml)
             n = set_glue(nil, { width = minwidth or 0, stretch = 2 ^ 16, stretch_order = 3 })
         else
             n = set_glue(nil, { width = tonumber(width) })
+            -- Mark fixed-width HSpace so fix_justification does not replace
+            -- the width with the font's interword space (see nodes.lua).
+            publisher.attribute_helpers.setprop(n, "hspace_fixed", true)
         end
         if leadertext then
             n.subtype = 100
