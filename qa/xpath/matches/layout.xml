@@ -1,0 +1,23 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="10cm" width="10cm" />
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>matches('Hello', 'hello'): </Value>
+                    <Value select="matches('Hello', 'hello')"/>
+                </Paragraph>
+                <Paragraph>
+                    <Value>matches('Hello', 'hello', 'i'): </Value>
+                    <Value select="matches('Hello', 'hello', 'i')"/>
+                </Paragraph>
+                <Paragraph>
+                    <Value>matches('banana', '^(.a)+$'): </Value>
+                    <Value select="matches('banana', '^(.a)+$')"/>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

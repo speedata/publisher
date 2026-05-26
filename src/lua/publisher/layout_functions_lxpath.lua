@@ -1064,6 +1064,13 @@ end
 local function fnMatches(dataxml, arg)
     local firstarg = publisher.xpath.string_value(arg[1])
     local secondarg = publisher.xpath.string_value(arg[2])
+    local flags = arg[3] and publisher.xpath.string_value(arg[3]) or ""
+    if string.find(flags, "x") then
+        main.log("warn", "matches does not support the x flag")
+    end
+    if flags ~= "" then
+        secondarg = "(?" .. flags .. ")" .. secondarg
+    end
     return { libprefix.matches(firstarg, secondarg) }, nil
 end
 
@@ -1089,7 +1096,7 @@ end
 
 funcs = {
     { "contains", publisher.xpath.fnNS, fnContains, 2, 2 },
-    { "matches", publisher.xpath.fnNS, fnMatches, 1, 2 },
+    { "matches", publisher.xpath.fnNS, fnMatches, 2, 3 },
     { "tokenize", publisher.xpath.fnNS, fnTokenize, 1, 2 },
     { "replace", publisher.xpath.fnNS, fnReplace, 1, 3 },
 }
