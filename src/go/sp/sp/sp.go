@@ -121,6 +121,7 @@ func init() {
 		"cache":             "optimal",
 		"inkscape":          "inkscape",
 		"inkscape-command":  "--export-filename",
+		"jardir":            "",
 		"fontloader":        "harfbuzz",
 		"referencefilename": "reference",
 		"xpath":             "lxpath",

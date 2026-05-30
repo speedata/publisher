@@ -39,6 +39,10 @@ Im Folgenden werden die Anwendungsmöglichkeiten beschrieben, ganz zum Schluss g
 Um RELAX NG-Dateien zu validieren gibt es mehrere Möglichkeiten. Neben einer Variante, direkt im XML Editor das Schema zu validieren (siehe den entsprechenden [ Abschnitt im Handbuch]({{< relref "schema" >}})) gibt es die Möglichkeit,  ein externes Programm dafür zu nutzen.
 Eines davon ist Jing. Es wird mit dem Publisher mitgeliefert.
 
+{{< callout >}}
+Jing, Saxon und xmlresolver liegen im `lib`-Verzeichnis des Publishers. Maintainer von Betriebssystem-Paketen können den Publisher auf die vom Betriebssystem bereitgestellten JARs verweisen — siehe [System-eigene Java-JARs verwenden]({{% relref "installation#system-eigene-java-jars-verwenden" %}}).
+{{< /callout >}}
+
 In der Lua-Vorverarbeitung gibt es eine Funktion, die die Validierung übernimmt:
 
 ```lua

@@ -92,6 +92,9 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `inkscape-command`
 : Command line for image conversion. Version 0.92 and before needs `--export-pdf` and since version 1 it is `--export-filename`.
 
+`jardir`
+: Directory containing the Java JAR files used for XSLT and RELAX-NG processing. Defaults to the bundled `lib` directory. Mainly relevant for OS package maintainers — see [Using system-provided Java JARs]({{% relref "installation#using-system-provided-java-jars" %}}).
+
 `jobname`
 : Name of the output file. Default is `publisher`.
 

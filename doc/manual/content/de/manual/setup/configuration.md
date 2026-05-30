@@ -99,6 +99,9 @@ erkannt. Folgende Optionen werden unterstützt:
 `inkscape-command`
 : Befehlszeile zur Bildkonvertierung. In Version 0.92 und vorher ist dies `--export-pdf` und ab Version 1 ist das `--export-filename`.
 
+`jardir`
+: Verzeichnis mit den Java-JAR-Dateien für XSLT- und RELAX-NG-Verarbeitung. Standardmäßig wird das mitgelieferte `lib`-Verzeichnis verwendet. Vor allem für Maintainer von Betriebssystem-Paketen relevant — siehe [System-eigene Java-JARs verwenden]({{% relref "installation#system-eigene-java-jars-verwenden" %}}).
+
 `jobname`
 : Name der Ausgabedatei ohne Dateiendung. Voreinstellung ist `publisher`.
 

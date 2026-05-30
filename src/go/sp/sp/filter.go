@@ -24,11 +24,24 @@ var (
 	l *lua.State
 )
 
+// jarDir returns the directory used to look up bundled JAR files
+// (Saxon, jing, xmlresolver). When the "jardir" option is set, JARs
+// are expected to live flat in that directory — this matches OS
+// package layouts such as FreeBSD's /usr/local/share/java/classes/.
+// Otherwise the bundled libdir is used, with companion JARs in
+// libdir/lib/.
+func jarDir() string {
+	if d := getOption("jardir"); d != "" {
+		return d
+	}
+	return libdir
+}
+
 func validateRelaxNG(l *lua.State) int {
 	xmlfile := lua.CheckString(l, 1)
 	rngfile := lua.CheckString(l, 2)
 
-	cmd := exec.Command("java", "-jar", filepath.Join(libdir, "jing.jar"), rngfile, xmlfile)
+	cmd := exec.Command("java", "-jar", filepath.Join(jarDir(), "jing.jar"), rngfile, xmlfile)
 
 	stdoutPipe, err := cmd.StdoutPipe()
 	if err != nil {
@@ -53,8 +66,23 @@ func validateRelaxNG(l *lua.State) int {
 
 func saxonClasspath() string {
 	sep := string(os.PathListSeparator)
-	cp := filepath.Join(libdir, "saxon-he-12.9.jar")
-	jars, _ := filepath.Glob(filepath.Join(libdir, "lib", "*.jar"))
+	dir := jarDir()
+	// Saxon JAR — match any version so OS packagers (e.g. FreeBSD,
+	// which ships 12.8) can substitute their own point release.
+	var cp string
+	if matches, _ := filepath.Glob(filepath.Join(dir, "saxon-he-*.jar")); len(matches) > 0 {
+		cp = matches[0]
+	} else {
+		cp = filepath.Join(dir, "saxon-he-12.9.jar")
+	}
+	// Companion JARs (xmlresolver and its data jar). When jardir is
+	// overridden, JARs sit flat alongside saxon; otherwise they live
+	// in the historical libdir/lib/ subdirectory.
+	companionDir := filepath.Join(dir, "lib")
+	if getOption("jardir") != "" {
+		companionDir = dir
+	}
+	jars, _ := filepath.Glob(filepath.Join(companionDir, "xmlresolver-*.jar"))
 	for _, jar := range jars {
 		cp += sep + jar
 	}

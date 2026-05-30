@@ -40,6 +40,10 @@ The application options are described below, and at the very end there is anothe
 There are several ways to validate RELAX NG files. Beside a variant to validate the schema directly in the XML editor (see the corresponding [ section in the manual]({{< relref "schema" >}})) there is the possibility to use an external program for this.
 One of these is Jing. It is delivered with the Publisher.
 
+{{< callout >}}
+Jing, Saxon and xmlresolver are bundled in the Publisher's `lib` directory. OS package maintainers can point the Publisher at the JARs shipped by the operating system — see [Using system-provided Java JARs]({{% relref "installation#using-system-provided-java-jars" %}}).
+{{< /callout >}}
+
 In the Lua preprocessing there is a function that does the validation:
 
 ```lua
