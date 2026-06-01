@@ -1907,15 +1907,16 @@ function M.mknodes(str, parameter, origin)
             segments.maindirection = "rtl"
         end
     else
-        local dir = nil
+        -- bidi disabled: let HarfBuzz auto-detect the segment direction from
+        -- the script, so Latin text isn't reversed when the paragraph is rtl.
+        -- The paragraph-level maindirection still drives line layout.
         segments = {}
         if parameter.direction == "rtl" then
-            dir = 1
             segments.maindirection = "rtl"
         elseif parameter.direction == "ltr" then
             segments.maindirection = "ltr"
         end
-        segments[1] = { dir, str }
+        segments[1] = { nil, str }
     end
     maindirection = parameter.direction or segments.maindirection
     local nodelistsegments
