@@ -3987,6 +3987,7 @@ function commands.options(layoutxml, dataxml)
         publisher.options.startpage
     )
     if tonumber(num) then
+        publisher.options.startpage = tonumber(num)
         publisher.current_pagenumber = tonumber(num)
         main.log("info", string.format("Set page number to %d", num))
     end
