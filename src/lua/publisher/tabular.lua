@@ -884,7 +884,23 @@ function tabular:pack_cell(blockobjects, width, horizontal_alignment)
                     end
                 elseif node.is_node(inlineobject) then
                     -- an image for example
-                    if node.has_field(inlineobject, "width") then
+                    local rotate_deg = tonumber(blockobjects.rotate) or 0
+                    if rotate_deg % 360 ~= 0 and node.has_field(inlineobject, "height") and inlineobject.height > 0 then
+                        -- Pivot rotation around the content's top instead of
+                        -- its bottom by wrapping in a save/restore that
+                        -- pre-shifts down by the content height. Required for
+                        -- images, harmless for text (Tm overrides CTM).
+                        local pre = node.new("whatsit", "pdf_literal")
+                        pre.mode = 0
+                        pre.data = string.format("q 1 0 0 1 0 %g cm ", -inlineobject.height / publisher.factor)
+                        local post = node.new("whatsit", "pdf_literal")
+                        post.mode = 0
+                        post.data = "Q "
+                        cellrow = node.insert_after(cellrow, node.tail(cellrow), pre)
+                        cellrow = node.insert_after(cellrow, node.tail(cellrow), inlineobject)
+                        cellrow = node.insert_after(cellrow, node.tail(cellrow), post)
+                        current_width = current_width + inlineobject.width
+                    elseif node.has_field(inlineobject, "width") then
                         -- insert a line break if the row is too wide
                         if current_width + inlineobject.width > width then
                             local tmp
