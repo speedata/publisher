@@ -3,7 +3,9 @@
 This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/en/).
 
 
-# Version 5.5
+# Version 5.6
+
+Released 2026-06-03
 
 * XPath Support for arrays and maps, fn:serialize(), || concatenation
 * New documentation
@@ -19,6 +21,7 @@ This file gets updated before a stable release. There is a [detailed changelog](
 * Update to LuaTeX 1.24.0
 * New API version 1 (v0 still remains)
 * Progress bar
+* Placeholder images with placeholder://
 
 ## Version 5.4
 

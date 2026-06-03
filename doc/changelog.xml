@@ -1,5 +1,11 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="5.5">
+  <chapter version="5.6">
+    <entry version="5.6.0" date="2026-06-03">
+        <en>Release version 5.6.0.</en>
+        <de>Veröffentliche Version 5.6.0.</de>
+    </entry>
+  </chapter>
+  <chapter version="5.5" date="2026-06-03">
     <entry version="5.5.25" date="2026-06-01" sha1="d3625b11">
         <en summary="Keep rotated table cell images inside their cell.">The PDF <tt>cm</tt> emitted before an image whatsit no longer carries a y-shift of <tt>-image_height</tt>; older LuaTeX versions added one automatically. For <tt>&lt;Td rotate="..."/&gt;</tt> which pivots at the cell's top, the image was drawn above the pivot, escaping the cell upward. The image is now wrapped in a save/restore that pre-shifts down by the content height, so rotation pivots at the image's top edge. Text in rotated cells is unaffected because its position is set by an absolute <tt>Tm</tt> matrix that overrides the CTM shift.</en>
         <de summary="Bilder in rotierten Td-Zellen rutschten nach oben aus der Zelle.">Das von LuaTeX vor einem Bild emittierte <tt>cm</tt> enthält in neuen Versionen keinen y-Shift von <tt>-image_height</tt> mehr — frühere LuaTeX-Versionen fügten ihn automatisch hinzu. Bei <tt>&lt;Td rotate="..."/&gt;</tt>, das um die obere Zellkante rotiert, wurde das Bild dadurch über dem Pivot gezeichnet und ragte nach oben aus der Zelle. Das Bild wird jetzt in ein save/restore eingewickelt, das es vorher um die Inhaltshöhe nach unten verschiebt, sodass die Rotation um die obere Bildkante pivotiert. Text in rotierten Zellen ist nicht betroffen, weil seine Position über eine absolute <tt>Tm</tt>-Matrix gesetzt wird, die den CTM-Shift überschreibt.</de>
