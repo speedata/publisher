@@ -1,4 +1,10 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="5.7">
+    <entry version="5.7.0" date="2026-06-12" sha1="12c07a1d">
+        <en summary="Accept luahbtex as a fallback backend binary.">The <tt>sp</tt> launcher previously looked only for <tt>sdluatex</tt> (in <tt>installdir/bin</tt> and on <tt>PATH</tt>) and aborted if it was missing. It now also accepts a stock <tt>luahbtex</tt> binary as a fallback, so installations that do not ship the speedata-patched LuaTeX (e.g. distribution packages) can still run the publisher. The <tt>luatex</tt> configuration option keeps overriding both. The final error message has been updated to mention both binary names.</en>
+        <de summary="luahbtex als Fallback-Backend-Binary akzeptiert.">Der <tt>sp</tt>-Launcher suchte bisher ausschließlich nach <tt>sdluatex</tt> (in <tt>installdir/bin</tt> und im <tt>PATH</tt>) und brach ab, wenn die Binary fehlte. Jetzt wird zusätzlich ein normales <tt>luahbtex</tt> als Fallback akzeptiert, sodass Installationen ohne das speedata-gepatchte LuaTeX (z. B. Distributions-Pakete) den Publisher trotzdem starten können. Die Konfigurationsoption <tt>luatex</tt> überschreibt nach wie vor beide. Die abschließende Fehlermeldung nennt jetzt beide Binary-Namen.</de>
+    </entry>
+  </chapter>
   <chapter version="5.6">
     <entry version="5.6.0" date="2026-06-03">
         <en>Release version 5.6.0.</en>
