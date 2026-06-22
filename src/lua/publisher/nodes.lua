@@ -34,6 +34,8 @@ local d_set_attribute = d.set_attribute
 local d_getproperty = d.getproperty
 local d_setproperty = d.setproperty
 local d_setfield = d.setfield
+local d_getfield = d.getfield
+local d_setlink = d.setlink
 local d_getlist = d.getlist
 local d_dimensions = d.dimensions
 
@@ -2356,7 +2358,16 @@ function M.hbkern(nodelist)
             if curkern ~= 0 then
                 local kern = d_new(publisher.kern_node)
                 d_setkern(kern, curkern)
+                -- Prepend the kern to the disc's existing replace list instead of
+                -- overwriting it. lang.hyphenate turns an explicit hyphen into an
+                -- automatic discretionary whose replace text holds the hyphen glyph;
+                -- a blind d_setfield(head, "replace", kern) would discard that glyph
+                -- and the hyphen would vanish whenever HarfBuzz kerned in front of it.
+                local oldreplace = d_getfield(head, "replace")
                 d_setfield(head, "replace", kern)
+                if oldreplace then
+                    d_setlink(kern, oldreplace)
+                end
                 local ul = d_has_attribute(head, att_td_line)
                 local uccolor = d_has_attribute(head, att_td_color)
                 local bgcolor = d_has_attribute(head, att_bgcolor)

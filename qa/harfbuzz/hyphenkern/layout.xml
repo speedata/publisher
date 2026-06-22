@@ -1,0 +1,24 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Options crop="2mm"/>
+
+  <!--
+    An explicit hyphen between a kerning glyph and a real word must stay
+    visible. lang.hyphenate turns the explicit hyphen into an automatic
+    discretionary whose replace text holds the hyphen glyph; the HarfBuzz
+    kern in front of the hyphen (the default font kerns T/V/F before "-")
+    must not overwrite that replace text. allowbreak=" " is required so the
+    publisher does not insert its own hyphen handling.
+  -->
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="10">
+        <Paragraph allowbreak=" ">
+          <Value>T-tägig V-tägig F-tägig</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+
+</Layout>
