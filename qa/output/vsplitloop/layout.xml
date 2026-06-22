@@ -1,0 +1,25 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <!-- Regression test: a single Output/Text whose material spans more
+         pages than the point where LuaTeX recycles a freed page-box node.
+         The loop detection must not fire here (no false positive); the full
+         content has to be placed across all pages. See commit fixing the
+         "Output loop detected in vsplit" false positive. -->
+
+    <Pageformat width="8cm" height="6cm"/>
+
+    <DefineTextformat name="text" margin-top="6pt"/>
+
+    <Record element="data">
+        <Output>
+            <Text>
+                <ForAll select="p">
+                    <Paragraph textformat="text">
+                        <Value select="."/>
+                    </Paragraph>
+                </ForAll>
+            </Text>
+        </Output>
+    </Record>
+</Layout>

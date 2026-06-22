@@ -7103,8 +7103,22 @@ function commands.text(layoutxml, dataxml)
             -- Check if page already has content (for break-before: page logic)
             local current_row = cg:current_row(parameter.area) or 1
             parameter.page_has_content = (current_row > 1)
+            local remaining_before = 0
+            for ri = 1, #state.objects do
+                remaining_before = remaining_before + (state.objects[ri].height or 0) + (state.objects[ri].depth or 0)
+            end
             local obj1, obj2 = publisher.page_helpers.vsplit(state.objects, parameter)
-            if state.prevobj1 == obj1 then
+            local remaining_after = 0
+            for ri = 1, #state.objects do
+                remaining_after = remaining_after + (state.objects[ri].height or 0) + (state.objects[ri].depth or 0)
+            end
+            -- Detect a genuine infinite loop. Comparing node references alone is
+            -- unreliable: LuaTeX recycles freed node memory, so the freshly built
+            -- page box can reuse the pointer of an already-output box and compare
+            -- equal even though real progress was made (false positive). Only treat
+            -- it as a loop when no vertical progress was made either, i.e. the
+            -- remaining material did not shrink.
+            if state.prevobj1 == obj1 and remaining_after >= remaining_before then
                 main.log(
                     "error",
                     "Output loop detected in vsplit: Object cannot be placed and would cause infinite loop. Some objects are discarded from the output. This usually happens when content (e.g., a table with ht_max set too high) cannot be split properly. Consider reducing table size or using a more conservative ht_max value (e.g., 550pt)."
