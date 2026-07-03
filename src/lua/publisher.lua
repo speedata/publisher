@@ -1552,7 +1552,7 @@ function M.initialize_luatex_and_generate_pdf()
     if not tmp and M.newxpath then
         local rootnode = M.data.sequence and M.data.sequence[1]
         if rootnode then
-            tmp = find_matching_pattern("", rootnode, M.data)
+            tmp = M.dispatch.find_matching_pattern("", rootnode, M.data)
         end
     end
     if tmp then
