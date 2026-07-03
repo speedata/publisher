@@ -345,6 +345,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const pageResults = window.pageIndex.search(query, maxPageResults, { enrich: true, suggest: true })[0]?.result || [];
 
+    // Guarantee that pages whose TITLE matches the query are candidates, even
+    // when FlexSearch's full-text ranking buries them: a short reference page
+    // like "Options" otherwise loses to long pages that merely mention
+    // "options" and falls outside maxPageResults. These synthetic entries are
+    // scored by the same boost logic below, so an exact title match wins.
+    const routeToPageId = {};
+    for (const pid in window.pageIdToRoute) routeToPageId[window.pageIdToRoute[pid]] = Number(pid);
+    const presentIds = new Set(pageResults.map(r => r.id));
+    for (const route in window.searchData) {
+      const pageTitle = stripHTML(window.searchData[route].title || '');
+      if (!pageTitle || !pageTitle.toLowerCase().includes(queryLower)) continue;
+      const pid = routeToPageId[route];
+      if (pid == null || presentIds.has(pid)) continue;
+      presentIds.add(pid);
+      pageResults.push({ id: pid, doc: { title: pageTitle, crumb: '' } });
+    }
+
     for (let i = 0; i < pageResults.length; i++) {
       const result = pageResults[i];
       const pageTitle = stripHTML(result.doc.title || '');
@@ -417,6 +434,11 @@ document.addEventListener("DOMContentLoaded", function () {
       if (titleLower === queryLower) boost = 3;
       else if (titleLower.includes(queryLower)) boost = 2;
       if (hasContentMatch) boost += 1;
+
+      // Prefer manual pages over reference pages, unless the reference page's
+      // title matches the query exactly (e.g. searching "eval" still surfaces
+      // the Eval reference page itself, but otherwise the manual ranks higher).
+      if (bestUrl && bestUrl.includes('/reference/') && titleLower !== queryLower) boost -= 2;
 
       // Demote changelog pages so they appear at the end
       if (bestUrl && bestUrl.includes('/changelog/')) boost -= 5;
