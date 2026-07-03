@@ -3863,6 +3863,8 @@ function commands.nobreak(layoutxml, dataxml)
             tmppar:append(thiselt)
             tmppar:mknodelist(options, dataxml)
             local nl = tmppar.objects[1]
+            nl = node.kerning(nl)
+            nl = publisher.nodes.hbkern(nl)
             local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily]
             local lineheight = fam_tbl.baselineskip
             local strut = publisher.nodes.add_rule(
