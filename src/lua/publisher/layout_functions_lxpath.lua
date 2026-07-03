@@ -220,7 +220,7 @@ local function fnMergePagenumbers(dataxml, arg)
         thirdarg = publisher.xpath.string_value(arg[3])
     end
     if #arg > 3 then
-        fourtharg = publisher.xpath.string_value(arg[4])
+        fourtharg = publisher.xpath.boolean_value(arg[4])
     end
 
     local pagenumbers_string = string.gsub(firstarg or "", "%s", "")
