@@ -370,6 +370,7 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
             if needs_annotations then
                 local insert_startlink = false
                 local insert_endlink = false
+                local endlink_after = false
                 local insert_startcolor = false
                 local insert_endcolor = false
                 local insert_startrole = false
@@ -436,7 +437,14 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                 --  case 2: hyperlink value of the node changes
                 --         either insert a start link or an end link marker
                 if hl and head.next == nil and linklevel > 0 then
+                    -- The link reaches the last node of this list, so head is
+                    -- still part of the link. Close the link *after* head (like
+                    -- the endcolor case below) instead of before it, otherwise
+                    -- the last glyph drops out of the link area. This happens
+                    -- for links packed tightly into a box (e.g. NoBreak), where
+                    -- no trailing glue follows the final glyph.
                     insert_endlink = true
+                    endlink_after = true
                     prev_hyperlink = nil
                 elseif hl ~= prev_hyperlink then
                     if hl ~= nil then
@@ -453,7 +461,11 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                 if insert_endlink then
                     linklevel = linklevel - 1
                     local enl = node_new("whatsit", "pdf_end_link")
-                    parent.head = node_insert_before(parent.head, head, enl)
+                    if endlink_after then
+                        parent.head = node_insert_after(parent.head, head, enl)
+                    else
+                        parent.head = node_insert_before(parent.head, head, enl)
+                    end
                     if insert_endrole then
                         local emc = node_new("whatsit", "pdf_literal")
                         emc.data = "EMC"
