@@ -2,6 +2,7 @@ package genadoc
 
 import (
 	"fmt"
+	"html"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -350,6 +351,13 @@ func GenerateChangelogMarkdown(cfg *config.Config, lang string) error {
 				text = entry.De.Text
 			}
 			text = strings.TrimSpace(text)
+			// text comes from ,innerxml, so entity references (&lt;, &gt;,
+			// &amp;, …) are still encoded. Decode them so that literal angle
+			// brackets survive as real characters; mdEscape then escapes the
+			// ones outside <tt> blocks for Markdown, while the ones inside
+			// become part of a backtick code span. <tt>/</tt> markup tags are
+			// left untouched by UnescapeString.
+			text = html.UnescapeString(text)
 			text = mdEscape(text)
 			text = ghIssueRe.ReplaceAllString(text, `[#$1](https://github.com/speedata/publisher/issues/$1)`)
 			text = ttRepl.Replace(text)
@@ -374,6 +382,7 @@ func GenerateChangelogMarkdown(cfg *config.Config, lang string) error {
 				summaryText = chap.Summary.De.Text
 			}
 			summaryText = strings.TrimSpace(summaryText)
+			summaryText = html.UnescapeString(summaryText)
 			summaryText = mdEscape(summaryText)
 			if summaryText != "" {
 				majorVersions[idx].summaries = append(majorVersions[idx].summaries, chapterSummary{
