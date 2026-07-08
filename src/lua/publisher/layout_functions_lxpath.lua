@@ -773,6 +773,11 @@ local function decode_html(dataxml, arg)
     end
     local firstarg = publisher.xpath.string_value(arg[1])
     if type(firstarg) == "string" then
+        -- A '<' that is not the start of a valid tag (letter, !, /, ?) is
+        -- literal text in HTML, e.g. "amount <5". The underlying XML parser
+        -- would reject it, so treat it like the HTML tokenizer does and turn
+        -- it into &lt; before handing it over.
+        firstarg = firstarg:gsub("<([^%a!/?])", "&lt;%1"):gsub("<$", "&lt;")
         local msg = publisher.splib.htmltoxml(firstarg)
         if msg == nil then
             main.log("error", "decode-html failed")
