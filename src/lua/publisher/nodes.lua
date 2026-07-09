@@ -1430,6 +1430,12 @@ function M.hbglyphlist(arguments)
                 else
                     -- a regular space, handled above (tabregularspace)
                 end
+            elseif code == 131 then
+                -- U+0083 NO BREAK HERE (also U+2060 WORD JOINER, mapped to
+                -- U+0083 in mknodes): forbid a line break at this position (#695).
+                local pen = node.new(publisher.penalty_node)
+                pen.penalty = 10000
+                list, cur = node.insert_after(list, cur, pen)
             else
                 if reportmissingglyphs then
                     local lvl = reportmissingglyphs == "warning" and "warn" or "error"
@@ -1951,6 +1957,13 @@ function M.mknodes(str, parameter, origin)
             elseif thislang == "zh" then
                 script = "Hans"
             end
+
+            -- U+2060 WORD JOINER is a default ignorable and gets removed by
+            -- HarfBuzz (FLAG_REMOVE_DEFAULT_IGNORABLES) before it reaches the
+            -- glyph list. Map it to U+0083 (NO BREAK HERE), which survives
+            -- shaping as a .notdef glyph and is turned into a no-break
+            -- penalty in hbglyphlist (#695).
+            str = string.gsub(str, "\226\129\160", "\194\131")
 
             local newlines_at = {}
 
