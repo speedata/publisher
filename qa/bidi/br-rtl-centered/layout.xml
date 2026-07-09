@@ -1,0 +1,45 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Options html="off" />
+
+    <LoadFontfile name="Amiri" filename="amiri-bold.ttf" />
+    <DefineFontfamily name="text" fontsize="13" leading="26">
+        <Regular fontface="Amiri" />
+    </DefineFontfamily>
+
+    <DefineTextformat name="center" alignment="centered" />
+    <Pageformat height="6cm" width="12cm" />
+
+    <!-- A centered rtl bidi paragraph with a <Br/>. The newline must stay
+         aligned to the rtl main direction; otherwise the second line (LTR
+         quotes around rtl text) is nudged 1.25pt off-center. -->
+    <Record element="data">
+        <PlaceObject>
+            <Table>
+                <Tr>
+                    <Td>
+                        <Paragraph language="English (USA)" textformat="center" bidi="yes" direction="rtl">
+                            <Span language="Other">
+                                <Fontface fontfamily="text">
+                                    <Value>المعروف أيضا باسم</Value>
+                                </Fontface>
+                            </Span>
+                            <Br />
+                            <Span language="English (USA)">
+                                <Value> " </Value>
+                            </Span>
+                            <Span language="Other">
+                                <Fontface fontfamily="text">
+                                    <Value>الكتاب المقدس الأرجواني</Value>
+                                </Fontface>
+                            </Span>
+                            <Span language="English (USA)">
+                                <Value> " </Value>
+                            </Span>
+                        </Paragraph>
+                    </Td>
+                </Tr>
+            </Table>
+        </PlaceObject>
+    </Record>
+</Layout>
