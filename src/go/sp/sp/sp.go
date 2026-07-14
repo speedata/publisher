@@ -789,21 +789,36 @@ func scaffold(extra ...string) error {
 	return nil
 }
 
+// luaTeXInfo returns the path to the TeX binary that will be used and its
+// version, extracted from the first line of its '--version' output.
+func luaTeXInfo() (binpath string, version string) {
+	binpath = getExecutablePath()
+	out, err := exec.Command(binpath, "--version").Output()
+	if err != nil {
+		return binpath, "unknown version"
+	}
+	// The first line looks like:
+	//   This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)
+	firstLine := strings.SplitN(string(out), "\n", 2)[0]
+	return binpath, strings.TrimSpace(firstLine)
+}
+
 func showCredits() {
 	fmt.Println("This is the speedata Publisher, version", versionWithPro)
+	luatexBin, luatexVersion := luaTeXInfo()
 	fmt.Println(`
-Copyright 2009-2024 speedata, Berlin. Licensed under
+Copyright 2009-2026 Patrick Gundlach. Licensed under
 the GNU Affero GPL License, see
   https://raw.githubusercontent.com/speedata/publisher/develop/COPYING
 for details.
 
-This software is built upon and contains third party libraries including:
-
-LuaTeX (http://www.luatex.org/)
+This software is built upon and contains third party libraries including:`)
+	fmt.Printf("\nLuaTeX (http://www.luatex.org/)\n   binary:  %s\n   %s\n", luatexBin, luatexVersion)
+	fmt.Println(`
 Camingo Code font (https://www.janfromm.de/typefaces/camingomono/camingocode/, CC BY-ND 3.0)
 Crimson text (https://fonts.google.com/specimen/Crimson+Text, SIL Open font license)
 goconfig (https://github.com/Unknwon/goconfig)
-GopherLua (https://github.com/yuin/gopher-lua)
+go-lua (https://github.com/speedata/go-lua)
 jing/trang (https://github.com/relaxng/jing-trang)
 Parts of the Go library (https://golang.org/)
 Saxon (http://saxon.sourceforge.net)
