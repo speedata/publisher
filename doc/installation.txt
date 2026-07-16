@@ -3,7 +3,7 @@ Welcome to speedata Publisher {{.Version}} for {{if eq .Os "windows"}}Windows{{e
 How to install the speedata Publisher (ZIP file)
 ================================================
 
-See also the online-instructions at https://doc.speedata.de/publisher/en/description-en/installation.html (EN) or https://doc.speedata.de/publisher/de/installation/ (DE)
+See also the online-instructions at https://doc.speedata.de/publisher/en/manual/setup/installation/ (EN) or https://doc.speedata.de/publisher/de/manual/setup/installation/ (DE)
 
 The ZIP file is organized as follows:
 
