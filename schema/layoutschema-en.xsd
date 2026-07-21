@@ -3122,12 +3122,12 @@
           <xs:restriction base="xs:token">
             <xs:enumeration value="fontforge">
               <xs:annotation>
-                <xs:documentation>The old and well tested font handler. Renders western scripts well, but no right-to-left or other complex scripts.</xs:documentation>
+                <xs:documentation>The old font handler. Renders western scripts, but no right-to-left or other complex scripts.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="harfbuzz">
               <xs:annotation>
-                <xs:documentation>The new renderer that will eventually handle all scripts including right-to-left.</xs:documentation>
+                <xs:documentation>The renderer that handles all scripts including right-to-left (default).</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
           </xs:restriction>
@@ -7740,6 +7740,11 @@
             </xs:enumeration>
           </xs:restriction>
         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="break-pagetype">
+        <xs:annotation>
+          <xs:documentation>When the table is split at a page break, an extra page of the given page type is inserted between the two parts of the table. The contents of that page must be created with AtPageCreation of the page type. The page numbering continues as usual. An empty value disables the insertion.</xs:documentation>
+        </xs:annotation>
       </xs:attribute>
       <xs:attribute name="columndistance">
         <xs:annotation>

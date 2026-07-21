@@ -3033,9 +3033,9 @@
                      <a:documentation>Setzt den Fonthandler. Voreinstellung ist harfbuzz.</a:documentation>
                      <choice>
                         <value>fontforge</value>
-                        <a:documentation>Der alte und gut funktionierende Fonthandler. Funktioniert gut mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen.</a:documentation>
+                        <a:documentation>Der alte Fonthandler. Funktioniert mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen.</a:documentation>
                         <value>harfbuzz</value>
-                        <a:documentation>Der neue Fonthandler der Arabisch und andere komplexen Schreibsysteme verarbeiten kann.</a:documentation>
+                        <a:documentation>Der Fonthandler, der Arabisch und andere komplexen Schreibsysteme verarbeiten kann (Voreinstellung).</a:documentation>
                      </choice>
                   </attribute>
                </optional>
@@ -6520,6 +6520,11 @@
                         <value>collapse</value>
                         <a:documentation>Die Rahmen benachbarter Zellen überlappen sich.</a:documentation>
                      </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="break-pagetype">
+                     <a:documentation>Wenn die Tabelle an einem Seitenumbruch geteilt wird, wird zwischen den beiden Teilen der Tabelle eine zusätzliche Seite mit dem angegebenen Seitentyp eingefügt. Der Inhalt dieser Seite muss in AtPageCreation des Seitentyps erzeugt werden. Die Seitennummerierung läuft normal weiter. Ein leerer Wert schaltet das Einfügen aus.</a:documentation>
                   </attribute>
                </optional>
                <optional>

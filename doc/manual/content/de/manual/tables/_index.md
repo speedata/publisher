@@ -813,6 +813,34 @@ Die Angabe wird immer auf der letzte Seite einer Tabelle beachtet, da die vorher
 
 Ist eine Tabelle größer als der zur Verfügung stehende Platz auf der Seite, so wird die Tabelle auf der nächsten Seite bzw. im nächsten Platzierungsrahmen fortgeführt. Um solch einen Seitenwechsel zu erzwingen, gibt es [den Befehl `<TableNewPage>`]({{< relref "/reference/tablenewpage" >}}).
 
+### Zwischenseiten beim Tabellenumbruch
+
+Mit dem Attribut `break-pagetype` am `<Table>`-Element (ab Version 5.7.5) wird bei jedem Seitenumbruch der Tabelle eine zusätzliche Seite zwischen den beiden Teilen der Tabelle eingefügt, beispielsweise für die Rückseite eines Blattes. Der Wert des Attributs ist der Name eines Seitentyps. Der Inhalt der eingefügten Seite wird im `<AtPageCreation>` dieses Seitentyps erzeugt. Damit der Seitentyp nur für die eingefügten Seiten benutzt wird, sollte sein `test`-Attribut `false()` sein. Die Seitennummerierung läuft normal weiter.
+
+```xml
+<Record element="data">
+    <Pagetype name="rueckseite" test="false()">
+        <AtPageCreation>
+            <PlaceObject>
+                <Textblock>
+                    <Paragraph>
+                        <Value>Rückseite von Seite </Value>
+                        <Value select="sd:current-page() - 1" />
+                    </Paragraph>
+                </Textblock>
+            </PlaceObject>
+        </AtPageCreation>
+    </Pagetype>
+    <PlaceObject>
+        <Table break-pagetype="rueckseite">
+            <!-- viele Zeilen -->
+        </Table>
+    </PlaceObject>
+</Record>
+```
+
+Bricht die Tabelle beispielsweise von Seite 1 auf die nächste Seite um, so wird die Rückseite als Seite 2 ausgegeben und die Tabelle auf Seite 3 fortgesetzt.
+
 ## Tabellen und Schriftgröße
 
 Um Tabellen mit kleiner Schriftgröße zu setzen, muss die Schriftfamilie in der Tabellendefinition auf eine kleine Schriftfamilie gesetzt werden:

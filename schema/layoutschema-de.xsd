@@ -3122,12 +3122,12 @@
           <xs:restriction base="xs:token">
             <xs:enumeration value="fontforge">
               <xs:annotation>
-                <xs:documentation>Der alte und gut funktionierende Fonthandler. Funktioniert gut mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen.</xs:documentation>
+                <xs:documentation>Der alte Fonthandler. Funktioniert mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="harfbuzz">
               <xs:annotation>
-                <xs:documentation>Der neue Fonthandler der Arabisch und andere komplexen Schreibsysteme verarbeiten kann.</xs:documentation>
+                <xs:documentation>Der Fonthandler, der Arabisch und andere komplexen Schreibsysteme verarbeiten kann (Voreinstellung).</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
           </xs:restriction>
@@ -7740,6 +7740,11 @@
             </xs:enumeration>
           </xs:restriction>
         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="break-pagetype">
+        <xs:annotation>
+          <xs:documentation>Wenn die Tabelle an einem Seitenumbruch geteilt wird, wird zwischen den beiden Teilen der Tabelle eine zusätzliche Seite mit dem angegebenen Seitentyp eingefügt. Der Inhalt dieser Seite muss in AtPageCreation des Seitentyps erzeugt werden. Die Seitennummerierung läuft normal weiter. Ein leerer Wert schaltet das Einfügen aus.</xs:documentation>
+        </xs:annotation>
       </xs:attribute>
       <xs:attribute name="columndistance">
         <xs:annotation>

@@ -3033,9 +3033,9 @@
                      <a:documentation>Set the shaping mode of the font. Defaults to harfbuzz.</a:documentation>
                      <choice>
                         <value>fontforge</value>
-                        <a:documentation>The old and well tested font handler. Renders western scripts well, but no right-to-left or other complex scripts.</a:documentation>
+                        <a:documentation>The old font handler. Renders western scripts, but no right-to-left or other complex scripts.</a:documentation>
                         <value>harfbuzz</value>
-                        <a:documentation>The new renderer that will eventually handle all scripts including right-to-left.</a:documentation>
+                        <a:documentation>The renderer that handles all scripts including right-to-left (default).</a:documentation>
                      </choice>
                   </attribute>
                </optional>
@@ -6520,6 +6520,11 @@
                         <value>collapse</value>
                         <a:documentation>The borders of neighboring cells overlap.</a:documentation>
                      </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="break-pagetype">
+                     <a:documentation>When the table is split at a page break, an extra page of the given page type is inserted between the two parts of the table. The contents of that page must be created with AtPageCreation of the page type. The page numbering continues as usual. An empty value disables the insertion.</a:documentation>
                   </attribute>
                </optional>
                <optional>

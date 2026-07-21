@@ -10290,6 +10290,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="break-pagetype" type="text" optional="yes" since="5.7.5">
+      <description xml:lang="en">
+        <para>When the table is split at a page break, an extra page of the given page type is inserted between the two parts of the table. The contents of that page must be created with <tt>AtPageCreation</tt> of the page type. The page numbering continues as usual. An empty value disables the insertion.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Wenn die Tabelle an einem Seitenumbruch geteilt wird, wird zwischen den beiden Teilen der Tabelle eine zusätzliche Seite mit dem angegebenen Seitentyp eingefügt. Der Inhalt dieser Seite muss in <tt>AtPageCreation</tt> des Seitentyps erzeugt werden. Die Seitennummerierung läuft normal weiter. Ein leerer Wert schaltet das Einfügen aus.</para>
+      </description>
+    </attribute>
     <attribute en="columndistance" type="length" optional="yes">
       <description xml:lang="en">
         <para>Distance between two table columns.</para>

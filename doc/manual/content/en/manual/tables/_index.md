@@ -752,6 +752,34 @@ The specification is always observed on the last page of a table, since the prev
 If a table is larger than the available space on the page, the table is continued on the next page or in the next placement frame.
 [The command `<TableNewPage>`]({{< relref "/reference/tablenewpage" >}}) is used to force such a page change.
 
+### Extra pages at table page breaks
+
+The attribute `break-pagetype` on the `<Table>` element (since version 5.7.5) inserts an extra page between the two parts of the table at each page break, for example for the back side of a sheet. The value of the attribute is the name of a page type. The contents of the inserted page are created in the `<AtPageCreation>` of that page type. To make sure the page type is only used for the inserted pages, its `test` attribute should be `false()`. The page numbering continues as usual.
+
+```xml
+<Record element="data">
+    <Pagetype name="backside" test="false()">
+        <AtPageCreation>
+            <PlaceObject>
+                <Textblock>
+                    <Paragraph>
+                        <Value>Back side of page </Value>
+                        <Value select="sd:current-page() - 1" />
+                    </Paragraph>
+                </Textblock>
+            </PlaceObject>
+        </AtPageCreation>
+    </Pagetype>
+    <PlaceObject>
+        <Table break-pagetype="backside">
+            <!-- many rows -->
+        </Table>
+    </PlaceObject>
+</Record>
+```
+
+If the table breaks from page 1 to the next page, the back side is output as page 2 and the table continues on page 3.
+
 ## Tables and font sizes
 
 To typeset tables with small font sizes, you need to set a small fontfamily in the table definition:

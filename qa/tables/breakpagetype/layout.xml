@@ -1,0 +1,48 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat height="10cm" width="10cm" />
+
+  <Record element="data">
+    <Pagetype name="backside" test="false()">
+      <AtPageCreation>
+        <PlaceObject>
+          <Textblock>
+            <Paragraph>
+              <Value select="'Page ' || sd:current-page() || '. '" />
+              <Value>Back side of page </Value>
+              <Value select="sd:current-page() - 1" />
+            </Paragraph>
+          </Textblock>
+        </PlaceObject>
+        <PlaceObject row="3" column="2">
+          <Image file="placeholder://150x100" width="5cm" />
+        </PlaceObject>
+      </AtPageCreation>
+    </Pagetype>
+    <Pagetype name="front" test="true()">
+      <AtPageShipout>
+        <PlaceObject column="{sd:number-of-columns()}" row="{sd:number-of-rows()}">
+          <Textblock>
+            <Paragraph>
+              <Value>Page </Value>
+              <Value select="sd:current-page()" />
+            </Paragraph>
+          </Textblock>
+        </PlaceObject>
+      </AtPageShipout>
+    </Pagetype>
+    <PlaceObject>
+      <Table break-pagetype="backside">
+        <Loop select="20" variable="i">
+          <Tr>
+            <Td>
+              <Paragraph>
+                <Value>Line: </Value>
+                <Value select="$i" />
+              </Paragraph>
+            </Td>
+          </Tr>
+        </Loop>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>

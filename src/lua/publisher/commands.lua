@@ -5087,6 +5087,7 @@ function commands.place_object(layoutxml, dataxml)
                     -- last page of balanced objects must not change active frame
                     -- see last lines of place_object
                     objects.balance = object.balance
+                    objects.break_pagetype = object.break_pagetype
                     for i = 1, #object do
                         objects[#objects + 1] = { object = object[i], objecttype = objecttype }
                     end
@@ -5291,7 +5292,20 @@ function commands.place_object(layoutxml, dataxml)
         if i < #objects then
             -- don't switch when inside a group
             if publisher.current_group == nil then
+                local prev_pagenumber = publisher.current_pagenumber
                 publisher.page_helpers.next_area(area, nil, dataxml, "place_object not in group")
+                if objects.break_pagetype and publisher.current_pagenumber > prev_pagenumber then
+                    -- Table/break-pagetype: between two parts of a split table
+                    -- an extra page of the requested page type is shipped out.
+                    -- Its contents must come from AtPageCreation of that page type.
+                    -- The next page might have been initialized in advance (see
+                    -- getheight in the split calculation); discard the empty page
+                    -- so it can be re-created with the requested page type.
+                    publisher.pages[publisher.current_pagenumber] = nil
+                    publisher.nextpage = objects.break_pagetype
+                    publisher.page_helpers.setup_page(nil, "place_object break-pagetype", dataxml)
+                    publisher.page_helpers.new_page("place_object break-pagetype", dataxml)
+                end
                 publisher.page_helpers.setup_page(nil, "commands#PlaceObject", dataxml)
             end
         else
@@ -6503,6 +6517,11 @@ function commands.table(layoutxml, dataxml, options)
         tabular.eval_on_split_layoutxml = layoutxml
         tabular.eval_on_split_dataxml = dataxml
     end
+    local break_pagetype = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "break-pagetype", "string")
+    if break_pagetype == "" then
+        -- an empty value (e.g. from an attribute value template) means: no extra page
+        break_pagetype = nil
+    end
 
     if columndistance > 0 then
         tabular.bordercollapse_horizontal = false
@@ -6544,6 +6563,7 @@ function commands.table(layoutxml, dataxml, options)
     end
     if not node.is_node(n) then
         n.balance = balance
+        n.break_pagetype = break_pagetype
     end
     -- Helpful for debugging purpose:
     -- for i=1,#n do
