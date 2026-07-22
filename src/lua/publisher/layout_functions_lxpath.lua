@@ -1087,6 +1087,19 @@ local function fnReplace(dataxml, arg)
     return { libprefix.replace(firstarg, secondarg, thirdarg) }, nil
 end
 
+-- UpperCase. The built-in upper-case() in lxpath only handles ASCII,
+-- the Go version uses the Unicode full case mappings (Straße -> STRASSE).
+local function fnUpperCase(dataxml, arg)
+    local firstarg = publisher.xpath.string_value(arg[1])
+    return { libprefix.uppercase(firstarg) }, nil
+end
+
+-- LowerCase
+local function fnLowerCase(dataxml, arg)
+    local firstarg = publisher.xpath.string_value(arg[1])
+    return { libprefix.lowercase(firstarg) }, nil
+end
+
 -- Tokenize is the first function we ask 'splib' for help
 local function fnTokenize(dataxml, arg)
     local firstarg = publisher.xpath.string_value(arg[1])
@@ -1104,6 +1117,8 @@ funcs = {
     { "matches", publisher.xpath.fnNS, fnMatches, 2, 3 },
     { "tokenize", publisher.xpath.fnNS, fnTokenize, 1, 2 },
     { "replace", publisher.xpath.fnNS, fnReplace, 1, 3 },
+    { "upper-case", publisher.xpath.fnNS, fnUpperCase, 1, 1 },
+    { "lower-case", publisher.xpath.fnNS, fnLowerCase, 1, 1 },
 }
 
 for _, func in ipairs(funcs) do

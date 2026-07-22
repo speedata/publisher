@@ -94,6 +94,8 @@ extern int sdContains(lua_State* L);
 extern int sdMatches(lua_State* L);
 extern int sdTokenize(lua_State* L);
 extern int sdReplace(lua_State* L);
+extern int sdUpperCase(lua_State* L);
+extern int sdLowerCase(lua_State* L);
 extern int sdHtmlToXml(lua_State* L);
 extern int sdBuildFilelist(lua_State* L);
 extern int sdAddDir(lua_State* L);

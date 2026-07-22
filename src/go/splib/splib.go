@@ -35,6 +35,8 @@ import (
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting/v2"
 	"github.com/yuin/goldmark/extension"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 var (
@@ -329,6 +331,32 @@ func sdReplace(L *C.lua_State) int {
 		}
 		str := re.ReplaceAllString(text, repl)
 		l.pushString(str)
+		return 1
+	})
+}
+
+//export sdUpperCase
+func sdUpperCase(L *C.lua_State) int {
+	return luaEntry(L, func(l *LuaState) int {
+		text, ok := l.getString(1)
+		if !ok {
+			slog.Error("sdUpperCase first argument must be a string (the text)")
+			return 0
+		}
+		l.pushString(cases.Upper(language.Und).String(text))
+		return 1
+	})
+}
+
+//export sdLowerCase
+func sdLowerCase(L *C.lua_State) int {
+	return luaEntry(L, func(l *LuaState) int {
+		text, ok := l.getString(1)
+		if !ok {
+			slog.Error("sdLowerCase first argument must be a string (the text)")
+			return 0
+		}
+		l.pushString(cases.Lower(language.Und).String(text))
 		return 1
 	})
 }

@@ -17,6 +17,7 @@ static const struct luaL_Reg myfuncs[] = {
     {"loadxmlstring", sdLoadXMLString},
     {"log", sdLog},
     {"lookupfile", sdLookupFile},
+    {"lowercase", sdLowerCase},
     {"markdown", sdMarkdown},
     {"matches", sdMatches},
     {"parse_raw_html_text", sdParseRawHTMLText},
@@ -26,6 +27,7 @@ static const struct luaL_Reg myfuncs[] = {
     {"segmentize_text", sdSegmentizeText},
     {"teardown", sdTeardown},
     {"tokenize", sdTokenize},
+    {"uppercase", sdUpperCase},
     {"warncount", sdGetWarnCount},
     {NULL, NULL},
 };
