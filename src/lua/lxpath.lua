@@ -3058,11 +3058,66 @@ end
 ---@return evalfunc?
 ---@return string? error
 function parse_union_expr(tl)
-    local ef, errmsg = parse_intersect_except_expr(tl)
-    if errmsg ~= nil then
-        return nil, errmsg
+    local efs = {}
+    while true do
+        local ef, errmsg = parse_intersect_except_expr(tl)
+        if errmsg ~= nil then
+            return nil, errmsg
+        end
+        efs[#efs + 1] = ef
+        local op
+        op, errmsg = tl:readNexttokIfIsOneOfValue({ "|", "union" })
+        if errmsg ~= nil then
+            return nil, errmsg
+        end
+        if not op then
+            break
+        end
     end
-    return ef, nil
+    if #efs == 1 then
+        return efs[1], nil
+    end
+
+    local evaler = function(ctx)
+        local saved_sequence = ctx.sequence
+        local result = {}
+        local seen = {}
+        for i = 1, #efs do
+            ctx.sequence = saved_sequence
+            local seq, errmsg = efs[i](ctx:copy())
+            if errmsg ~= nil then
+                return nil, errmsg
+            end
+            for _, itm in ipairs(seq) do
+                -- nodes (tables) are deduplicated by identity; atomic
+                -- values have no identity and are passed through as-is
+                if type(itm) == "table" then
+                    if not seen[itm] then
+                        seen[itm] = true
+                        result[#result + 1] = itm
+                    end
+                else
+                    result[#result + 1] = itm
+                end
+            end
+        end
+        -- sort into document order, but only if every item carries a
+        -- document position (attributes and atomic values don't)
+        local sortable = true
+        for _, itm in ipairs(result) do
+            if type(itm) ~= "table" or itm[".__id"] == nil then
+                sortable = false
+                break
+            end
+        end
+        if sortable then
+            table.sort(result, function(a, b)
+                return a[".__id"] < b[".__id"]
+            end)
+        end
+        return result, nil
+    end
+    return evaler, nil
 end
 
 -- [15] IntersectExceptExpr  ::= InstanceofExpr ( ("intersect" | "except") InstanceofExpr )*
@@ -3071,11 +3126,65 @@ end
 ---@return evalfunc?
 ---@return string? error
 function parse_intersect_except_expr(tl)
-    local ef, errmsg = parse_instance_of_expr(tl)
-    if errmsg ~= nil then
-        return nil, errmsg
+    local efs = {}
+    local operators = {}
+    while true do
+        local ef, errmsg = parse_instance_of_expr(tl)
+        if errmsg ~= nil then
+            return nil, errmsg
+        end
+        efs[#efs + 1] = ef
+        local op
+        op, errmsg = tl:readNexttokIfIsOneOfValue({ "intersect", "except" })
+        if errmsg ~= nil then
+            return nil, errmsg
+        end
+        if not op then
+            break
+        end
+        operators[#operators + 1] = op[1]
     end
-    return ef, nil
+    if #efs == 1 then
+        return efs[1], nil
+    end
+
+    local evaler = function(ctx)
+        local saved_sequence = ctx.sequence
+        local result, errmsg = efs[1](ctx:copy())
+        if errmsg ~= nil then
+            return nil, errmsg
+        end
+        for i = 2, #efs do
+            ctx.sequence = saved_sequence
+            local seq
+            seq, errmsg = efs[i](ctx:copy())
+            if errmsg ~= nil then
+                return nil, errmsg
+            end
+            -- nodes (tables) compare by identity, atomic values by value
+            local right = {}
+            for _, itm in ipairs(seq) do
+                right[itm] = true
+            end
+            local filtered = {}
+            local seen = {}
+            for _, itm in ipairs(result) do
+                local keep
+                if operators[i - 1] == "intersect" then
+                    keep = right[itm]
+                else
+                    keep = not right[itm]
+                end
+                if keep and not seen[itm] then
+                    seen[itm] = true
+                    filtered[#filtered + 1] = itm
+                end
+            end
+            result = filtered
+        end
+        return result, nil
+    end
+    return evaler, nil
 end
 
 -- [16] InstanceofExpr ::= TreatExpr ( "instance" "of" SequenceType )?
