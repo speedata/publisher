@@ -4556,8 +4556,37 @@ function commands.paragraph(layoutxml, dataxml, textblockoptions)
     local p = publisher.par:new(nil, "commands.paragraph")
     p.fontfamily = fontfamily
     p.html = html
-    if #tab == 1 and tab[1].contents == "" then
-        tab[1].contents = " " -- U+00A0, non breaking space
+    -- A paragraph without content behaves like a paragraph with a single
+    -- non breaking space and creates an empty line. This applies to a
+    -- literally empty <Paragraph></Paragraph> as well as to child elements
+    -- (Value, ForAll, Switch, ...) that produce no output at runtime.
+    local function is_empty_contents(contents)
+        if contents == nil or contents == "" then
+            return true
+        end
+        if type(contents) ~= "table" then
+            return false
+        end
+        if next(contents) == nil then
+            return true
+        end
+        -- a sequence that contains only empty strings
+        for k, v in pairs(contents) do
+            if type(k) ~= "number" or v ~= "" then
+                return false
+            end
+        end
+        return true
+    end
+    local has_contents = false
+    for i = 1, #tab do
+        if not is_empty_contents(tab[i].contents) then
+            has_contents = true
+            break
+        end
+    end
+    if not has_contents then
+        tab = { { elementname = "Value", contents = " " } } -- U+00A0, non breaking space
     end
 
     -- Adjust vertically aligned inline elements (Image, Box).

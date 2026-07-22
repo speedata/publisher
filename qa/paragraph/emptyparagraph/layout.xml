@@ -1,0 +1,30 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en" xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat height="6cm" width="3cm" />
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>a</Value>
+        </Paragraph>
+        <Paragraph></Paragraph>
+        <Paragraph>
+          <Value>b</Value>
+        </Paragraph>
+        <Paragraph>
+          <ForAll select="doesnotexist">
+            <Value>x</Value>
+          </ForAll>
+        </Paragraph>
+        <Paragraph>
+          <Value>c</Value>
+        </Paragraph>
+        <Paragraph>
+          <Value select="doesnotexist"/>
+        </Paragraph>
+        <Paragraph>
+          <Value>d</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
