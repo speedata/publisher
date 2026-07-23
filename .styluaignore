@@ -9,3 +9,6 @@ src/lua/sampler.lua
 src/lua/shalocal.lua
 src/lua/common/lua-visual-debug.lua
 src/lua/barcodes/qrencode.lua
+
+# Generated from doc/commands-xml/commands.xml by "sphelper genschema".
+src/lua/publisher/commandattributes.lua
