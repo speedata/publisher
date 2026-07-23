@@ -63,7 +63,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 : Add this XML file to the layout instructions. List of comma separated file names (`extraxml=file1.xml,file2.xml`). Not supported with the new XPath module. Use xinclude instead.
 
 `fontloader`
-: Set the fontloader to `fontforge` (default until version 4.16) or `harfbuzz` (default starting from version 4.18).
+: Set the fontloader to `fontforge` (default until version 4.16) or `harfbuzz` (default starting from version 4.18). The `fontforge` fontloader is deprecated and will be removed in a future version.
 
 `filter`
 : Run the given file as a Lua filter. See the section [Lua-Filter / Vorverarbeitung]({{% relref "preprocessing" %}}).

@@ -5383,9 +5383,11 @@
   <command en="LoadFontfile">
     <description xml:lang="en">
       <para>Load a font file (.otf, .ttf, .pfb) and associate it with an internal name. If a glyph is not found in the font file, an error will be raised (this can be configured via the <cmd name="Options"/> command). You can specify fallbacks as a child element of Loadfontfile.</para>
+      <para>Type 1 fonts (.pfb) are deprecated: they are always loaded with the old fontforge font handler, which will be removed in a future version. Please convert Type 1 fonts to OpenType.</para>
     </description>
     <description xml:lang="de">
       <para>Der Befehl LoadFontfile weist einer physikalischen Schriftdatei einen internen Namen zu. Wird ein Zeichen in der Schriftart nicht gefunden, erzeugt das Programm eine Fehlermeldung, die mit <cmd name="Options"/> ausgeschaltet werden kann. Alternativ dazu können auch Ersatzschriftarten (mit <cmd name="Fallback"/>) angegeben werden, die nach den fehlenden Zeichen abgesucht werden. </para>
+      <para>Type-1-Schriften (.pfb) sind veraltet: sie werden immer mit dem alten fontforge-Fonthandler geladen, der in einer zukünftigen Version entfernt wird. Bitte Type-1-Schriften nach OpenType konvertieren.</para>
     </description>
     <childelements>
       <optional>
@@ -5440,10 +5442,10 @@
       </description>
       <choice en="fontforge">
         <description xml:lang="en">
-          <para>The old font handler. Renders western scripts, but no right-to-left or other complex scripts.</para>
+          <para>The old font handler. Renders western scripts, but no right-to-left or other complex scripts. Deprecated: this font handler will be removed in a future version. Type 1 fonts (.pfb) are always loaded with this handler, regardless of the mode setting.</para>
         </description>
         <description xml:lang="de">
-          <para>Der alte Fonthandler. Funktioniert mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen.</para>
+          <para>Der alte Fonthandler. Funktioniert mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen. Veraltet: dieser Fonthandler wird in einer zukünftigen Version entfernt. Type-1-Schriften (.pfb) werden unabhängig von dieser Einstellung immer mit diesem Fonthandler geladen.</para>
         </description>
       </choice>
       <choice en="harfbuzz">

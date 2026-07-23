@@ -3087,7 +3087,8 @@
   </xs:element>
   <xs:element name="LoadFontfile">
     <xs:annotation>
-      <xs:documentation>Load a font file (.otf, .ttf, .pfb) and associate it with an internal name. If a glyph is not found in the font file, an error will be raised (this can be configured via the Options command). You can specify fallbacks as a child element of Loadfontfile.</xs:documentation>
+      <xs:documentation>Load a font file (.otf, .ttf, .pfb) and associate it with an internal name. If a glyph is not found in the font file, an error will be raised (this can be configured via the Options command). You can specify fallbacks as a child element of Loadfontfile.
+      Type 1 fonts (.pfb) are deprecated: they are always loaded with the old fontforge font handler, which will be removed in a future version. Please convert Type 1 fonts to OpenType.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
@@ -3122,7 +3123,7 @@
           <xs:restriction base="xs:token">
             <xs:enumeration value="fontforge">
               <xs:annotation>
-                <xs:documentation>The old font handler. Renders western scripts, but no right-to-left or other complex scripts.</xs:documentation>
+                <xs:documentation>The old font handler. Renders western scripts, but no right-to-left or other complex scripts. Deprecated: this font handler will be removed in a future version. Type 1 fonts (.pfb) are always loaded with this handler, regardless of the mode setting.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="harfbuzz">

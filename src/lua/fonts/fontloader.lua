@@ -95,6 +95,9 @@ end
 --- Only the size dependent values are computed.
 local lookup_fonttable_from_filename = {}
 
+-- The fontforge based font loader is deprecated. Warn only once per font file.
+local fontforge_deprecation_warned = {}
+
 function M.preload_font(name, size, extra_parameter, mode)
     local f = {
         requested_mode = mode,
@@ -111,6 +114,15 @@ function M.define_font_hb(name, size, extra_parameter)
     local glyphname_uni = {}
     if not publisher.hasharfbuzz then
         main.log("error", 'Can\'t use mode="harfbuzz" on LoadFontfile without harfbuzz library')
+        return M.define_font(name, size, extra_parameter)
+    end
+    if M.guess_fonttype(name) == "type1" then
+        main.log(
+            "warn",
+            "Type 1 fonts are not supported by harfbuzz, falling back to the fontforge font loader",
+            "filename",
+            name
+        )
         return M.define_font(name, size, extra_parameter)
     end
     local fonttable
@@ -329,6 +341,15 @@ end
 ---       },
 ---     },
 function M.define_font(name, size, extra_parameter)
+    if not fontforge_deprecation_warned[name] then
+        fontforge_deprecation_warned[name] = true
+        main.log(
+            "warn",
+            "The fontforge font loader is deprecated and will be removed in a future version",
+            "filename",
+            name
+        )
+    end
     local extra_parameter = extra_parameter or {}
     local fonttable
     local missing_features = {}

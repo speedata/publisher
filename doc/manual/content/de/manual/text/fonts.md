@@ -8,6 +8,10 @@ type: docs
 Das Einbinden von Schriftarten in den gängigen Formaten ist sehr einfach.
 Unterstützt werden die Formate TrueType und OpenType (Dateien `.ttf` und `.otf`).
 
+{{< callout type="warning" >}}
+Type-1-Schriften (Dateien `.pfb`) sind veraltet. Sie werden noch mit dem alten fontforge-Fonthandler geladen, dieser wird aber in einer zukünftigen Version entfernt. Bitte konvertieren Sie Type-1-Schriften nach OpenType.
+{{< /callout >}}
+
 Um dem Publisher Schriftarten bekannt zu machen und zu nutzen, sind
 zwei Schritte notwendig. Der erste Schritt ist das Laden einer
 Schriftdatei:

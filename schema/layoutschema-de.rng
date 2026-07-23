@@ -3009,7 +3009,8 @@
    </define>
    <define name="e_LoadFontfile">
       <element name="LoadFontfile">
-         <a:documentation>Der Befehl LoadFontfile weist einer physikalischen Schriftdatei einen internen Namen zu. Wird ein Zeichen in der Schriftart nicht gefunden, erzeugt das Programm eine Fehlermeldung, die mit Options ausgeschaltet werden kann. Alternativ dazu können auch Ersatzschriftarten (mit Fallback) angegeben werden, die nach den fehlenden Zeichen abgesucht werden.</a:documentation>
+         <a:documentation>Der Befehl LoadFontfile weist einer physikalischen Schriftdatei einen internen Namen zu. Wird ein Zeichen in der Schriftart nicht gefunden, erzeugt das Programm eine Fehlermeldung, die mit Options ausgeschaltet werden kann. Alternativ dazu können auch Ersatzschriftarten (mit Fallback) angegeben werden, die nach den fehlenden Zeichen abgesucht werden. 
+      Type-1-Schriften (.pfb) sind veraltet: sie werden immer mit dem alten fontforge-Fonthandler geladen, der in einer zukünftigen Version entfernt wird. Bitte Type-1-Schriften nach OpenType konvertieren.</a:documentation>
          <interleave>
             <group>
                <attribute name="name">
@@ -3033,7 +3034,7 @@
                      <a:documentation>Setzt den Fonthandler. Voreinstellung ist harfbuzz.</a:documentation>
                      <choice>
                         <value>fontforge</value>
-                        <a:documentation>Der alte Fonthandler. Funktioniert mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen.</a:documentation>
+                        <a:documentation>Der alte Fonthandler. Funktioniert mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen. Veraltet: dieser Fonthandler wird in einer zukünftigen Version entfernt. Type-1-Schriften (.pfb) werden unabhängig von dieser Einstellung immer mit diesem Fonthandler geladen.</a:documentation>
                         <value>harfbuzz</value>
                         <a:documentation>Der Fonthandler, der Arabisch und andere komplexen Schreibsysteme verarbeiten kann (Voreinstellung).</a:documentation>
                      </choice>

@@ -67,7 +67,7 @@ erkannt. Folgende Optionen werden unterstützt:
 : Diese XML-Dateien zu den Layoutanweisungen hinzufügen. Kommaseparierte Liste (`extraxml=datei1.xml,datei2.xml`). Wird im neuen XPath-Parser nicht mehr unterstützt, stattdessen ist xinclude zu benutzen.
 
 `fontloader`
-: Setze den Fontlader auf `fontforge` (Voreinstellung bis Version 4.16) oder `harfbuzz` (Voreinstellung ab Version 4.18).
+: Setze den Fontlader auf `fontforge` (Voreinstellung bis Version 4.16) oder `harfbuzz` (Voreinstellung ab Version 4.18). Der Fontlader `fontforge` ist veraltet und wird in einer zukünftigen Version entfernt.
 
 `prependxml`
 : Diese XML-Dateien vor den Layoutanweisungen hinzufügen. Kommaseparierte Liste (`prependxml=datei1.xml,datei2.xml`). Wird im neuen XPath-Parser nicht mehr unterstützt, stattdessen ist xinclude zu benutzen.
