@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+
+  <Pageformat width="5cm" height="5cm"/>
+
+  <Pagetype name="apage" test="true()">
+    <Margin left="5mm" right="5mm" top="5mm" bottom="5mm"/>
+    <PositioningArea name="small">
+      <PositioningFrame width="3" height="2" row="1" column="1"/>
+    </PositioningArea>
+    <AtPageCreation>
+      <Output area="small">
+        <Text>
+          <Loop select="20" variable="i">
+            <Paragraph><Value>Zeile </Value><Value select="$i"/></Paragraph>
+          </Loop>
+        </Text>
+      </Output>
+    </AtPageCreation>
+  </Pagetype>
+
+  <Record element="data">
+    <PlaceObject row="4">
+      <Textblock><Paragraph><Value>Hallo</Value></Paragraph></Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

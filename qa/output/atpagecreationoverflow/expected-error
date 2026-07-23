@@ -1,0 +1,2 @@
+The Output in AtPageCreation overflows the area on purpose (#701).
+sp exits with an error; the QA runner compares the PDF anyway.

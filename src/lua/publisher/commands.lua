@@ -4319,6 +4319,25 @@ function commands.output(layoutxml, dataxml)
                         publisher.page_helpers.next_row(nextfreerow, area, 0, dataxml)
                     else
                         if more_to_follow then
+                            -- When a page break is impossible (inside AtPageCreation or
+                            -- AtPageShipout), next_area() cannot advance past the last
+                            -- frame of the area. Without this check the loop would run
+                            -- forever: vsplit gets a full area (maxheight 0), consumes
+                            -- nothing and returns a fresh empty box each round, so the
+                            -- loop detection in pull() never sees the same object twice.
+                            if
+                                publisher.pagebreak_impossible
+                                and current_grid:framenumber(area) >= current_grid:number_of_frames(area)
+                            then
+                                main.log(
+                                    "error",
+                                    string.format(
+                                        "Output: the contents does not fit into the area %q and a page break is not possible here (AtPageCreation/AtPageShipout). The remaining text is discarded.",
+                                        area
+                                    )
+                                )
+                                break
+                            end
                             publisher.page_helpers.next_area(area, nil, dataxml, "output (2)")
                         else
                             -- We need to go down a bit to ensure that the next

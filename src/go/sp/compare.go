@@ -197,14 +197,20 @@ func runComparison(path string, statuschan chan []compareStatus) {
 		return
 	}
 	if err != nil {
-		cs.BuildError = true
-		cs.BuildErrorMsg = strings.TrimSpace(string(output))
-		all.BuildError = true
-		all.BuildErrorMsg = cs.BuildErrorMsg
+		// A test may exercise an error path on purpose. When the directory
+		// contains a file named "expected-error" and a PDF was written, the
+		// exit status is ignored and the PDFs are compared as usual.
+		expectedError := fileExists(filepath.Join(path, "expected-error")) && fileExists(filepath.Join(path, "publisher.pdf"))
+		if !expectedError {
+			cs.BuildError = true
+			cs.BuildErrorMsg = strings.TrimSpace(string(output))
+			all.BuildError = true
+			all.BuildErrorMsg = cs.BuildErrorMsg
 
-		// Keep Delta at 0; report layer will render this as a failed build row.
-		statuschan <- []compareStatus{cs, all}
-		return
+			// Keep Delta at 0; report layer will render this as a failed build row.
+			statuschan <- []compareStatus{cs, all}
+			return
+		}
 	}
 
 	// 2) Compare checksums of publisher.pdf vs reference.pdf.
