@@ -188,13 +188,32 @@ func ParseXMLToLua(r io.Reader, l LuaStater, opts *Options, filename string) err
 			// .__attributes
 			l.PushString(".__attributes")
 			l.CreateTable(0, attrCount)
+			foreignAttrCount := 0
 			for _, a := range v.Attr {
 				if a.Name.Space == "xmlns" || a.Name.Local == "xmlns" {
 					continue
 				}
+				if !dataMode && a.Name.Space != "" {
+					foreignAttrCount++
+				}
 				l.AddStringValueToTable(-1, a.Name.Local, a.Value)
 			}
 			l.RawSet(-3)
+
+			// .__foreign_attributes (layout XML only): set of local names
+			// of attributes that live in another namespace (xml:lang,
+			// user annotations, ...). The unknown-attribute warning must
+			// skip these.
+			if foreignAttrCount > 0 {
+				l.PushString(".__foreign_attributes")
+				l.CreateTable(0, foreignAttrCount)
+				for _, a := range v.Attr {
+					if a.Name.Space != "" && a.Name.Space != "xmlns" {
+						l.AddStringValueToTable(-1, a.Name.Local, "true")
+					}
+				}
+				l.RawSet(-3)
+			}
 
 			// .__ns (prefix -> URI) — only for layout XML or the
 			// data root element.

@@ -2,6 +2,8 @@
 package genschema
 
 import (
+	"bytes"
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -75,5 +77,31 @@ func DoThings(cfg *config.Config) error {
 	if err != nil {
 		return err
 	}
+	buf = genLuaAttributeList(c)
+	err = os.WriteFile(filepath.Join(basedir, "src", "lua", "publisher", "commandattributes.lua"), buf, 0644)
+	if err != nil {
+		return err
+	}
 	return nil
+}
+
+// genLuaAttributeList returns a Lua module that maps each command name to
+// the set of its allowed attribute names. The publisher uses this table at
+// runtime to warn about unknown attributes in the layout file.
+func genLuaAttributeList(c *commandsXML) []byte {
+	var b bytes.Buffer
+	b.WriteString("-- Generated from doc/commands-xml/commands.xml by \"sphelper genschema\". Do not edit.\n")
+	b.WriteString("return {\n")
+	for _, cmd := range c.Commands {
+		fmt.Fprintf(&b, "    [%q] = {", cmd.Name)
+		for i, attr := range cmd.Attributes {
+			if i > 0 {
+				b.WriteString(", ")
+			}
+			fmt.Fprintf(&b, "[%q] = true", attr.Name)
+		}
+		b.WriteString(" },\n")
+	}
+	b.WriteString("}\n")
+	return b.Bytes()
 }

@@ -9,9 +9,35 @@
 file_start("dispatch.lua")
 
 local publisher = require("publisher")
+local commandattributes = require("publisher.commandattributes")
 
 ---@class dispatch_module
 local M = {}
+
+-- Warns about attributes that are not defined for the command in
+-- commands.xml. Runs once per layout element: the element table is reused
+-- on every execution, so the result is remembered in the table itself.
+-- Attributes from other namespaces (xml:lang, user annotations, ...) are
+-- listed in .__foreign_attributes and are skipped.
+---@param layoutxml table Layout XML element.
+---@param eltname string Command name (English).
+local function check_attributes(layoutxml, eltname)
+    if layoutxml[".__attributes_checked"] then
+        return
+    end
+    layoutxml[".__attributes_checked"] = true
+    local allowed = commandattributes[eltname]
+    local attributes = layoutxml[".__attributes"]
+    if not allowed or not attributes then
+        return
+    end
+    local foreign = layoutxml[".__foreign_attributes"]
+    for attname in pairs(attributes) do
+        if not allowed[attname] and not (foreign and foreign[attname]) then
+            main.log("warn", string.format("Unknown attribute %q for element %q", attname, eltname))
+        end
+    end
+end
 
 -- The dispatch table maps every element in the layout xml to a command in the `commands.lua` file.
 ---@type table<string, fun(layoutxml: table, dataxml: table, opts?: table): any>
@@ -295,6 +321,7 @@ function M.dispatch(layoutxml, dataxml, opts)
                 if newxpath then
                     publisher.current_layout_line = j[".__line"]
                     publisher.current_layout_file = j[".__file"]
+                    check_attributes(j, eltname)
                     if
                         dataxml.sequence
                         and type(dataxml.sequence) == "table"
