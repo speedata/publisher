@@ -7213,7 +7213,12 @@
     </description>
     <childelements>
       <optional><cmd name="Initial"/></optional>
-      <reference name="Textvalues"/>
+      <zeroOrMore>
+        <choice>
+          <cmd name="Mark"/>
+          <reference name="Textvalues"/>
+        </choice>
+      </zeroOrMore>
     </childelements>
     <attribute en="class" optional="yes" type="text">
       <description xml:lang="en">

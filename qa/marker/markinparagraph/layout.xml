@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Options resetmarks="yes"/>
+
+  <Pageformat width="4cm" height="4cm"/>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>before </Value>
+          <Mark select="'first'"/>
+          <Value>after</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <ClearPage/>
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Mark select="'second'"/>
+          <Value>two</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <ClearPage/>
+    <PlaceObject>
+      <Textblock>
+        <Paragraph>
+          <Value>first: </Value>
+          <Value select="sd:pagenumber('first')"/>
+        </Paragraph>
+        <Paragraph>
+          <Value>second: </Value>
+          <Value select="sd:pagenumber('second')"/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

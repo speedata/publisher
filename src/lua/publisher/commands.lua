@@ -4661,6 +4661,8 @@ function commands.paragraph(layoutxml, dataxml, textblockoptions)
         local contents = publisher.xml_helpers.element_contents(thischild)
         if eltname == "Initial" then
             params.initial = contents
+        elseif eltname == "Mark" then
+            append_mark_to_par(p, contents)
         elseif eltname == "Image" then
             node.set_attribute(contents[1], publisher.att_dontadjustlineheight, 1)
             p:append(contents[1], params)
