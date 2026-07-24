@@ -784,6 +784,53 @@
   <definelist name="languagesshortcodes">--|bg|ca|cs|cy|da|de|el|en|en_GB|en_US|eo|es|et|eu|fi|fr|ga|gl|grc|gu|hi|hr|hu|hy|id|is|it|kn|ku|lt|lv|ml|nb|nl|nn|pl|pt|ro|ru|sc|sk|sl|sr|sv|tr|uk|zh</definelist>
 
   <!--
+      Annotations for xml-lsp (urn:xml-lsp:annotations). sphelper genschema
+      copies these rules into the generated layout schemas so that editors
+      running xml-lsp get go-to-definition, rename, symbol completion and
+      formatter hints.
+
+      defines/references: "command" and "attribute" take space separated
+      lists. A rule without "command" applies to every command that has an
+      attribute with that name. Rules with "command" win over rules without;
+      each attribute gets at most one annotation. "form" is one of literal
+      (default), xpath-string or xpath-variable.
+
+      format: formatter conventions for a command (preserve, blank-lines,
+      inline; value yes).
+  -->
+  <lspannotations>
+    <defines command="DefineColor" attribute="name" symbol="color"/>
+    <defines command="DefineColorprofile" attribute="name" symbol="colorprofile"/>
+    <defines command="DefineFontfamily" attribute="name" symbol="fontfamily"/>
+    <defines command="DefineFontalias" attribute="alias" symbol="fontfamily"/>
+    <defines command="LoadFontfile" attribute="name" symbol="fontfile"/>
+    <defines command="DefineTextformat" attribute="name" symbol="textformat"/>
+    <defines command="DefineGraphic" attribute="name" symbol="graphic"/>
+    <defines command="DefineMatter" attribute="name" symbol="matter"/>
+    <defines command="PositioningArea" attribute="name" symbol="area"/>
+    <defines command="Group" attribute="name" symbol="group"/>
+    <defines command="Pagetype" attribute="name" symbol="pagetype"/>
+    <defines command="Mark" attribute="select" symbol="mark" form="xpath-string"/>
+    <defines command="SetVariable Loop" attribute="variable" symbol="variable"/>
+    <references command="DefineFontalias" attribute="existing" symbol="fontfamily"/>
+    <references command="Regular Bold Italic BoldItalic" attribute="fontface" symbol="fontfile"/>
+    <references command="A" attribute="link" symbol="mark"/>
+    <references attribute="color background-color background-textcolor bordercolor border-color border-top-color border-right-color border-bottom-color border-left-color defaultcolor framecolor hyperlinkbordercolor" symbol="color"/>
+    <references attribute="colorprofile" symbol="colorprofile"/>
+    <references attribute="fontfamily" symbol="fontfamily"/>
+    <references attribute="textformat" symbol="textformat"/>
+    <references attribute="graphic" symbol="graphic"/>
+    <references attribute="matter" symbol="matter"/>
+    <references attribute="area" symbol="area"/>
+    <references attribute="groupname" symbol="group"/>
+    <references attribute="pagetype" symbol="pagetype"/>
+    <references attribute="select" symbol="variable" form="xpath-variable"/>
+    <format command="Value" preserve="yes"/>
+    <format command="Section" blank-lines="yes"/>
+    <format command="HTML" inline="yes"/>
+  </lspannotations>
+
+  <!--
       *************************
       * A
       *************************

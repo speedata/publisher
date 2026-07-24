@@ -24,6 +24,7 @@ func DoThings(cfg *config.Config) error {
 	if err != nil {
 		return err
 	}
+	warnUnmatchedLspRules(c)
 	var buf []byte
 	rngSchemaENPath := filepath.Join(basedir, "schema", "layoutschema-en.rng")
 	rngSchemaDEPath := filepath.Join(basedir, "schema", "layoutschema-de.rng")

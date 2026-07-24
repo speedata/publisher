@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<grammar
-  xmlns="http://relaxng.org/ns/structure/1.0"
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
   xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
   xmlns:sch="http://purl.oclc.org/dsdl/schematron"
   datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
@@ -10,22 +9,24 @@
     <element name="para">
       <oneOrMore>
         <choice>
-          <text />
+          <text/>
           <element name="quote">
-            <text />
+            <text/>
           </element>
           <ref name="cmd"/>
-          <element name="tt"><text/></element>
+          <element name="tt">
+            <text/>
+          </element>
         </choice>
       </oneOrMore>
-      <text />
+      <text/>
     </element>
   </define>
 
   <define name="cmd">
     <element name="cmd">
-      <attribute name="name" />
-      <empty />
+      <attribute name="name"/>
+      <empty/>
     </element>
   </define>
 
@@ -33,11 +34,21 @@
     <element name="oneOrMore">
       <oneOrMore>
         <interleave>
-          <optional><ref name="optional"/></optional>
-          <optional><ref name="cmd"/></optional>
-          <optional><ref name="choice"/></optional>
-          <optional><ref name="reference"/></optional>
-          <optional><ref name="interleave"/></optional>
+          <optional>
+            <ref name="optional"/>
+          </optional>
+          <optional>
+            <ref name="cmd"/>
+          </optional>
+          <optional>
+            <ref name="choice"/>
+          </optional>
+          <optional>
+            <ref name="reference"/>
+          </optional>
+          <optional>
+            <ref name="interleave"/>
+          </optional>
         </interleave>
       </oneOrMore>
     </element>
@@ -47,13 +58,29 @@
     <element name="zeroOrMore">
       <oneOrMore>
         <interleave>
-          <optional><ref name="optional"/></optional>
-          <optional><ref name="choice"/></optional>
-          <optional><ref name="cmd"/></optional>
-          <optional><ref name="reference"/></optional>
-          <optional><ref name="interleave"/></optional>
-          <optional><element name="text"><empty/></element></optional>
-          <optional><ref name="element"/></optional>
+          <optional>
+            <ref name="optional"/>
+          </optional>
+          <optional>
+            <ref name="choice"/>
+          </optional>
+          <optional>
+            <ref name="cmd"/>
+          </optional>
+          <optional>
+            <ref name="reference"/>
+          </optional>
+          <optional>
+            <ref name="interleave"/>
+          </optional>
+          <optional>
+            <element name="text">
+              <empty/>
+            </element>
+          </optional>
+          <optional>
+            <ref name="element"/>
+          </optional>
         </interleave>
       </oneOrMore>
     </element>
@@ -62,13 +89,22 @@
   <define name="element">
     <element name="element">
       <attribute name="name"/>
-      <element name="empty"><empty/></element>
+      <element name="empty">
+        <empty/>
+      </element>
     </element>
   </define>
 
   <define name="choice">
     <element name="choice">
-      <oneOrMore><ref name="cmd"/></oneOrMore>
+      <interleave>
+        <zeroOrMore>
+          <ref name="reference"/>
+        </zeroOrMore>
+        <zeroOrMore>
+          <ref name="cmd"/>
+        </zeroOrMore>
+      </interleave>
     </element>
   </define>
 
@@ -76,10 +112,18 @@
     <element name="interleave">
       <oneOrMore>
         <interleave>
-          <optional><ref name="cmd"/></optional>
-          <optional><ref name="zeroOrMore"></ref></optional>
-          <optional><ref name="optional"/></optional>
-          <optional><ref name="reference"/></optional>
+          <optional>
+            <ref name="cmd"/>
+          </optional>
+          <optional>
+            <ref name="zeroOrMore"/>
+          </optional>
+          <optional>
+            <ref name="optional"/>
+          </optional>
+          <optional>
+            <ref name="reference"/>
+          </optional>
         </interleave>
       </oneOrMore>
     </element>
@@ -99,7 +143,7 @@
           <ref name="oneOrMore"/>
           <ref name="cmd"/>
         </choice>
-    </oneOrMore>
+      </oneOrMore>
     </element>
   </define>
 
@@ -109,18 +153,20 @@
         <element name="para">
           <oneOrMore>
             <choice>
-              <text />
+              <text/>
               <element name="quote">
-                <text />
+                <text/>
               </element>
               <ref name="cmd"/>
-              <element name="tt"><text/></element>
+              <element name="tt">
+                <text/>
+              </element>
             </choice>
           </oneOrMore>
-          <text />
+          <text/>
         </element>
         <element name="listing">
-          <text />
+          <text/>
         </element>
         <element name="image">
           <attribute name="file"/>
@@ -134,22 +180,22 @@
   </define>
 
   <define name="descriptions">
-      <element name="description">
-        <attribute name="xml:lang">
-            <value>en</value>
-        </attribute>
-        <oneOrMore>
-          <ref name="para"></ref>
-        </oneOrMore>
-      </element>
-      <element name="description">
-        <attribute name="xml:lang">
-            <value>de</value>
-        </attribute>
-        <oneOrMore>
-          <ref name="para"></ref>
-        </oneOrMore>
-      </element>
+    <element name="description">
+      <attribute name="xml:lang">
+        <value>en</value>
+      </attribute>
+      <oneOrMore>
+        <ref name="para"/>
+      </oneOrMore>
+    </element>
+    <element name="description">
+      <attribute name="xml:lang">
+        <value>de</value>
+      </attribute>
+      <oneOrMore>
+        <ref name="para"/>
+      </oneOrMore>
+    </element>
   </define>
 
   <start>
@@ -157,12 +203,18 @@
       <oneOrMore>
         <element name="define">
           <attribute name="name"/>
-            <oneOrMore>
-              <interleave>
-                <optional><ref name="zeroOrMore"/></optional>
-                <optional><element name="optional"><ref name="cmd"></ref></element></optional>
-              </interleave>
-            </oneOrMore>
+          <oneOrMore>
+            <interleave>
+              <optional>
+                <ref name="zeroOrMore"/>
+              </optional>
+              <optional>
+                <element name="optional">
+                  <ref name="cmd"/>
+                </element>
+              </optional>
+            </interleave>
+          </oneOrMore>
         </element>
       </oneOrMore>
       <oneOrMore>
@@ -171,7 +223,9 @@
           <oneOrMore>
             <element name="choice">
               <attribute name="en"/>
-              <optional><attribute name="context"/></optional>
+              <optional>
+                <attribute name="context"/>
+              </optional>
               <ref name="descriptions"/>
             </element>
           </oneOrMore>
@@ -183,34 +237,102 @@
           <text/>
         </element>
       </oneOrMore>
+      <optional>
+        <element name="lspannotations">
+          <zeroOrMore>
+            <choice>
+              <element name="defines">
+                <attribute name="command"/>
+                <attribute name="attribute"/>
+                <attribute name="symbol"/>
+                <optional>
+                  <ref name="lspform"/>
+                </optional>
+              </element>
+              <element name="references">
+                <optional>
+                  <attribute name="command"/>
+                </optional>
+                <attribute name="attribute"/>
+                <attribute name="symbol"/>
+                <optional>
+                  <ref name="lspform"/>
+                </optional>
+              </element>
+              <element name="format">
+                <attribute name="command"/>
+                <optional>
+                  <attribute name="preserve">
+                    <value>yes</value>
+                  </attribute>
+                </optional>
+                <optional>
+                  <attribute name="blank-lines">
+                    <value>yes</value>
+                  </attribute>
+                </optional>
+                <optional>
+                  <attribute name="inline">
+                    <value>yes</value>
+                  </attribute>
+                </optional>
+              </element>
+            </choice>
+          </zeroOrMore>
+        </element>
+      </optional>
       <oneOrMore>
         <element name="command">
           <attribute name="en"/>
-          <optional><attribute name="css"/></optional>
-          <optional><attribute name="since"/></optional>
-          <optional><attribute name="deprecated">
-            <choice>
-              <value>yes</value>
-              <value>no</value>
-            </choice>
-          </attribute></optional>
-          <optional><attribute name="pro">
-            <choice>
-              <value>yes</value>
-              <value>no</value>
-            </choice>
-          </attribute></optional>
-          <ref name="descriptions" />
+          <optional>
+            <attribute name="css"/>
+          </optional>
+          <optional>
+            <attribute name="since"/>
+          </optional>
+          <optional>
+            <attribute name="deprecated">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <optional>
+            <attribute name="pro">
+              <choice>
+                <value>yes</value>
+                <value>no</value>
+              </choice>
+            </attribute>
+          </optional>
+          <ref name="descriptions"/>
           <element name="childelements">
             <zeroOrMore>
               <interleave>
-                <optional><element name="text"><empty/></element></optional>
-                <optional><ref name="oneOrMore"/></optional>
-                <optional><ref name="zeroOrMore"/></optional>
-                <optional><ref name="optional"/></optional>
-                <optional><ref name="cmd"/></optional>
-                <optional><ref name="reference"/></optional>
-                <optional><ref name="interleave"/></optional>
+                <optional>
+                  <element name="text">
+                    <empty/>
+                  </element>
+                </optional>
+                <optional>
+                  <ref name="oneOrMore"/>
+                </optional>
+                <optional>
+                  <ref name="zeroOrMore"/>
+                </optional>
+                <optional>
+                  <ref name="optional"/>
+                </optional>
+                <optional>
+                  <ref name="cmd"/>
+                </optional>
+                <optional>
+                  <ref name="reference"/>
+                </optional>
+                <optional>
+                  <ref name="interleave"/>
+                </optional>
               </interleave>
             </zeroOrMore>
           </element>
@@ -229,7 +351,9 @@
               <optional>
                 <attribute name="since"/>
               </optional>
-              <optional><attribute name="lastchanged"/></optional>
+              <optional>
+                <attribute name="lastchanged"/>
+              </optional>
               <optional>
                 <attribute name="allowxpath">
                   <choice>
@@ -253,7 +377,7 @@
                   </choice>
                 </attribute>
               </optional>
-              <ref name="descriptions" />
+              <ref name="descriptions"/>
               <choice>
                 <attribute name="type">
                   <choice>
@@ -274,15 +398,23 @@
                 <zeroOrMore>
                   <element name="choice">
                     <attribute name="en"/>
-                    <optional><attribute name="css"/></optional>
-                    <optional><attribute name="context"/></optional>
-                    <optional><attribute name="since"/></optional>
-                    <optional><attribute name="pro">
-                      <choice>
-                        <value>yes</value>
-                        <value>no</value>
-                      </choice>
-                    </attribute></optional>
+                    <optional>
+                      <attribute name="css"/>
+                    </optional>
+                    <optional>
+                      <attribute name="context"/>
+                    </optional>
+                    <optional>
+                      <attribute name="since"/>
+                    </optional>
+                    <optional>
+                      <attribute name="pro">
+                        <choice>
+                          <value>yes</value>
+                          <value>no</value>
+                        </choice>
+                      </attribute>
+                    </optional>
                     <ref name="descriptions"/>
                   </element>
                 </zeroOrMore>
@@ -303,7 +435,9 @@
                   <value>de</value>
                 </choice>
               </attribute>
-              <oneOrMore><ref name="para"/></oneOrMore>
+              <oneOrMore>
+                <ref name="para"/>
+              </oneOrMore>
             </element>
           </zeroOrMore>
           <oneOrMore>
@@ -314,7 +448,7 @@
                   <value>de</value>
                 </choice>
               </attribute>
-              <ref name="paraorlisting"></ref>
+              <ref name="paraorlisting"/>
             </element>
           </oneOrMore>
           <oneOrMore>
@@ -332,22 +466,24 @@
               </element>
             </optional>
           </oneOrMore>
-          <oneOrMore>
+          <zeroOrMore>
             <element name="seealso">
               <zeroOrMore>
                 <interleave>
-                  <text />
-                  <optional><ref name="cmd"/></optional>
+                  <text/>
+                  <optional>
+                    <ref name="cmd"/>
+                  </optional>
                   <optional>
                     <element name="ref">
-                      <attribute name="name" />
-                      <text />
+                      <attribute name="name"/>
+                      <text/>
                     </element>
                   </optional>
                 </interleave>
               </zeroOrMore>
             </element>
-          </oneOrMore>
+          </zeroOrMore>
           <zeroOrMore>
             <element name="rules">
               <attribute name="xml:lang">
@@ -363,6 +499,16 @@
       </oneOrMore>
     </element>
   </start>
+
+  <define name="lspform">
+    <attribute name="form">
+      <choice>
+        <value>literal</value>
+        <value>xpath-string</value>
+        <value>xpath-variable</value>
+      </choice>
+    </attribute>
+  </define>
 
   <!-- This matches any element. One day it would be nice to restrict this to the schematron namespace  -->
   <define name="any_content">
