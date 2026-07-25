@@ -241,8 +241,8 @@ end
 ---@return string?
 function tokenlist:skipNCName(name)
     local tok, errmsg = self:read()
-    if errmsg then
-        return errmsg
+    if errmsg or tok == nil then
+        return errmsg or "eof"
     end
     if tok[2] ~= "tokQName" then
         return "QName expected, got " .. tok[2]
@@ -271,10 +271,10 @@ function tokenlist:readNexttokIfIsOneOfValue(tokvalues, typ)
 end
 
 function tokenlist:nextTokIsType(typ)
-    if self.pos > #self then
+    local t = self:peek()
+    if t == nil then
         return false
     end
-    local t = self:peek()
     -- tokQName main contain '*', which is incorrect.
     if typ == "tokQName" then
         if string_find(t[1], "*", 1, true) then
@@ -286,14 +286,15 @@ end
 
 ---@return boolean true if the next token is the provided type.
 function tokenlist:skipType(typ)
-    if self.pos > #self then
+    local t = self:peek()
+    if t == nil then
         return false
     end
-    local t = self:peek()
     if t[2] == typ then
         self:read()
         return true
     end
+    return false
 end
 
 ---@param str string
@@ -732,7 +733,7 @@ end
 local function fnCeiling(_ctx, seq)
     local n, errmsg = number_value(seq[1])
     if errmsg then
-        return errmsg
+        return nil, errmsg
     end
     if n == nil then
         return { nan }, nil
@@ -756,7 +757,11 @@ local function fnCodepointsToString(_ctx, seq)
         if errmsg then
             return nil, errmsg
         end
-        ret[#ret + 1] = utf8.char(n)
+        local cp = n and math.tointeger(n)
+        if not cp then
+            return nil, "codepoints-to-string expects integer code points"
+        end
+        ret[#ret + 1] = utf8.char(cp)
     end
 
     return { table_concat(ret) }, nil
@@ -818,7 +823,7 @@ end
 local function fnFloor(_ctx, seq)
     local n, errmsg = number_value(seq[1])
     if errmsg then
-        return errmsg
+        return nil, errmsg
     end
     if n == nil then
         return { nan }, nil
@@ -1364,9 +1369,17 @@ local function fnSubstring(_ctx, seq)
     if errmsg then
         return nil, errmsg
     end
-    local len = #str
+    -- non-numeric arguments compare like NaN and yield an empty result
+    pos = pos or nan
+    local len
     if #seq > 2 then
-        len = number_value(seq[3])
+        len, errmsg = number_value(seq[3])
+        if errmsg then
+            return nil, errmsg
+        end
+        len = len or nan
+    else
+        len = #str
     end
     local ret = {}
     local l = 0
@@ -1597,9 +1610,13 @@ local function fnArrayPut(_ctx, seq)
     if not is_array(arr) then
         return nil, "array:put expects an array"
     end
-    local pos = math_floor(number_value(seq[2]))
+    local pos, errmsg = number_value(seq[2])
+    if not pos then
+        return nil, errmsg or "array:put expects a numeric position"
+    end
+    pos = math_floor(pos)
     local val = seq[3]
-    if pos < 1 or pos > #arr then
+    if not (pos >= 1 and pos <= #arr) then
         return nil, "array:put index out of bounds"
     end
     local members = {}
@@ -1638,9 +1655,22 @@ local function fnArraySubarray(_ctx, seq)
     if not is_array(arr) then
         return nil, "array:subarray expects an array"
     end
-    local start = math_floor(number_value(seq[2]))
-    local len = seq[3] and math_floor(number_value(seq[3])) or (#arr - start + 1)
-    if start < 1 or start + len - 1 > #arr then
+    local start, errmsg = number_value(seq[2])
+    if not start then
+        return nil, errmsg or "array:subarray expects a numeric start"
+    end
+    start = math_floor(start)
+    local len
+    if seq[3] then
+        len, errmsg = number_value(seq[3])
+        if not len then
+            return nil, errmsg or "array:subarray expects a numeric length"
+        end
+        len = math_floor(len)
+    else
+        len = #arr - start + 1
+    end
+    if not (start >= 1 and start + len - 1 <= #arr) then
         return nil, "array:subarray out of bounds"
     end
     local members = {}
@@ -1658,8 +1688,12 @@ local function fnArrayRemove(_ctx, seq)
     if not is_array(arr) then
         return nil, "array:remove expects an array"
     end
-    local pos = math_floor(number_value(seq[2]))
-    if pos < 1 or pos > #arr then
+    local pos, errmsg = number_value(seq[2])
+    if not pos then
+        return nil, errmsg or "array:remove expects a numeric position"
+    end
+    pos = math_floor(pos)
+    if not (pos >= 1 and pos <= #arr) then
         return nil, "array:remove index out of bounds"
     end
     local members = {}
@@ -2461,7 +2495,7 @@ function parse_for_expr(tl)
 
     local sfc
     sfc, errmsg = parse_expr_single(tl)
-    if errmsg then
+    if errmsg or not sfc then
         return nil, errmsg
     end
 
@@ -2471,15 +2505,15 @@ function parse_for_expr(tl)
     end
     local ef
     ef, errmsg = parse_expr_single(tl)
-    if errmsg then
-        return errmsg
+    if errmsg or not ef then
+        return nil, errmsg
     end
 
     local evaler = function(ctx)
         local ret = {}
         local seqfc, err = sfc(ctx)
         if err then
-            return err
+            return nil, err
         end
         for _, itm in ipairs(seqfc) do
             ctx.vars[varname] = { itm }
@@ -2626,7 +2660,7 @@ function parse_if_expr(tl)
     end
     local boolEval, thenpart, elsepart
     boolEval, errmsg = parse_expr(tl)
-    if errmsg then
+    if errmsg or not boolEval then
         return nil, errmsg
     end
     local ok = tl:skipType("tokCloseParen")
@@ -2638,13 +2672,13 @@ function parse_if_expr(tl)
         return nil, errmsg
     end
     thenpart, errmsg = parse_expr_single(tl)
-    if errmsg then
+    if errmsg or not thenpart then
         return nil, errmsg
     end
 
     tl:skipNCName("else")
     elsepart, errmsg = parse_expr_single(tl)
-    if errmsg then
+    if errmsg or not elsepart then
         return nil, errmsg
     end
     local ef = function(ctx)
@@ -3230,7 +3264,7 @@ function parse_castable_expr(tl)
         end
         local tok
         tok, errmsg = tl:read()
-        if errmsg ~= nil then
+        if errmsg ~= nil or tok == nil then
             return nil, errmsg
         end
 
@@ -4033,7 +4067,7 @@ function parse_primary_expr(tl)
             end
             local ef
             ef, errmsg = parse_expr(tl)
-            if errmsg then
+            if errmsg or not ef then
                 return nil, errmsg
             end
             if not tl:skipType("tokCloseCurly") then
@@ -4152,11 +4186,11 @@ function parse_parenthesized_expr(tl)
     end
 
     local ef, errmsg = parse_expr(tl)
-    if errmsg ~= nil then
+    if errmsg ~= nil or ef == nil then
         return nil, errmsg
     end
     if not tl:skipType("tokCloseParen") then
-        return nil, errmsg
+        return nil, ") expected"
     end
     local evaler = function(ctx)
         local seq, err = ef(ctx)
@@ -4260,13 +4294,12 @@ end
 ---@return evalfunc?
 ---@return string? error
 function parse_any_kind_test(tl)
-    local tok, eof
-    tok, eof = tl:peek(1)
-    if not eof and tok[1] == "node" and tok[2] == "tokQName" then
-        tok, eof = tl:peek(2)
-        if not eof and tok[2] == "tokOpenParen" then
-            tok, eof = tl:peek(3)
-            if not eof and tok[2] == "tokCloseParen" then
+    local tok = tl:peek(1)
+    if tok and tok[1] == "node" and tok[2] == "tokQName" then
+        tok = tl:peek(2)
+        if tok and tok[2] == "tokOpenParen" then
+            tok = tl:peek(3)
+            if tok and tok[2] == "tokCloseParen" then
                 tl:read()
                 tl:read()
                 tl:read()
@@ -4286,13 +4319,12 @@ end
 ---@return evalfunc?
 ---@return string? error
 function parse_element_test(tl)
-    local tok, eof
-    tok, eof = tl:peek(1)
-    if not eof and tok[1] == "element" and tok[2] == "tokQName" then
-        tok, eof = tl:peek(2)
-        if not eof and tok[2] == "tokOpenParen" then
-            tok, eof = tl:peek(3)
-            if not eof and tok[2] == "tokCloseParen" then
+    local tok = tl:peek(1)
+    if tok and tok[1] == "element" and tok[2] == "tokQName" then
+        tok = tl:peek(2)
+        if tok and tok[2] == "tokOpenParen" then
+            tok = tl:peek(3)
+            if tok and tok[2] == "tokCloseParen" then
                 tl:read()
                 tl:read()
                 tl:read()
@@ -4312,13 +4344,12 @@ end
 ---@return evalfunc?
 ---@return string? error
 function parse_text_test(tl)
-    local tok, eof
-    tok, eof = tl:peek(1)
-    if not eof and tok[1] == "text" and tok[2] == "tokQName" then
-        tok, eof = tl:peek(2)
-        if not eof and tok[2] == "tokOpenParen" then
-            tok, eof = tl:peek(3)
-            if not eof and tok[2] == "tokCloseParen" then
+    local tok = tl:peek(1)
+    if tok and tok[1] == "text" and tok[2] == "tokQName" then
+        tok = tl:peek(2)
+        if tok and tok[2] == "tokOpenParen" then
+            tok = tl:peek(3)
+            if tok and tok[2] == "tokCloseParen" then
                 tl:read()
                 tl:read()
                 tl:read()
@@ -4375,11 +4406,11 @@ end
 ---@return string? error
 function context:eval(xpathstring)
     local evaler, errmsg = get_cached_evaler(xpathstring)
-    if errmsg then
-        return nil, errmsg
-    end
     if evaler == false then
         return {}, nil
+    end
+    if not evaler then
+        return nil, errmsg
     end
     local copy = self:copy()
     return evaler(copy)
@@ -4391,11 +4422,11 @@ end
 ---@return string? error
 function context:execute(xpathstring)
     local evaler, errmsg = get_cached_evaler(xpathstring)
-    if errmsg then
-        return nil, errmsg
-    end
     if evaler == false then
         return {}, nil
+    end
+    if not evaler then
+        return nil, errmsg
     end
     return evaler(self)
 end
