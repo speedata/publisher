@@ -82,6 +82,137 @@ task :stylua do
 	sh "stylua --check src/lua/"
 end
 
+# lua-language-server diagnostics ratchet.
+#
+#   rake lualint          run the headless check and fail if any diagnostic
+#                         code exceeds its count in luals-baseline.json
+#   rake lualint:update   write the current counts as the new baseline
+#                         (do this deliberately, after real improvements)
+#
+# The baseline tracks findings per diagnostic code, so a regression in one
+# category cannot hide behind an improvement in another. Results depend on
+# the lua-language-server version and on the state of the LuaTeX type
+# definitions checkout; when upgrading either, re-run lualint:update and
+# commit the new baseline together with the upgrade.
+#
+# Configuration (environment variables):
+#   SP_LUALS_BIN      path to lua-language-server. Default: $PATH, then the
+#                     newest VS Code sumneko.lua extension.
+#   SP_TEXLUATEX_LIB  path to the LuaCATS "tex-luatex/library" directory.
+#                     Default: ~/prog/lua/tex-luatex/library. Get it with
+#                     git clone https://github.com/LuaCATS/tex-luatex
+#
+# Check artifacts (config, raw results, log) are written to build/lualint/.
+
+require 'json'
+
+LUALINT_BASELINE = installdir.join("luals-baseline.json")
+LUALINT_OUTDIR = installdir.join("build", "lualint")
+
+def lualint_binary
+	if ENV["SP_LUALS_BIN"]
+		abort "SP_LUALS_BIN is set but not executable: #{ENV['SP_LUALS_BIN']}" unless File.executable?(ENV["SP_LUALS_BIN"])
+		return ENV["SP_LUALS_BIN"]
+	end
+	onpath = `which lua-language-server 2>/dev/null`.chomp
+	return onpath unless onpath.empty?
+	candidate = Dir.glob(File.join(Dir.home, ".vscode/extensions/sumneko.lua-*/server/bin/lua-language-server")).sort.last
+	return candidate if candidate
+	abort "lua-language-server not found. Install it or set SP_LUALS_BIN."
+end
+
+def lualint_texluatex_lib
+	lib = ENV["SP_TEXLUATEX_LIB"] || File.join(Dir.home, "prog/lua/tex-luatex/library")
+	unless File.directory?(lib)
+		abort "LuaTeX type definitions not found at #{lib}.\n" \
+		      "Clone https://github.com/LuaCATS/tex-luatex and set SP_TEXLUATEX_LIB to its library/ directory."
+	end
+	lib
+end
+
+# Runs the headless check over the repository and returns the findings
+# grouped by diagnostic code: { "undefined-field" => 383, ... }
+def lualint_run_check
+	FileUtils.mkdir_p(LUALINT_OUTDIR)
+	config = {
+		"runtime.version" => "Lua 5.3",
+		"diagnostics.severity" => { "duplicate-set-field" => "Hint" },
+		"diagnostics.unusedLocalExclude" => ["_*"],
+		"workspace.library" => [lualint_texluatex_lib, LUALINT_OUTDIR.join("..", "..", "meta").expand_path.to_s],
+	}
+	configpath = LUALINT_OUTDIR.join("luarc-check.json")
+	File.write(configpath, JSON.pretty_generate(config))
+
+	resultpath = LUALINT_OUTDIR.join("check.json")
+	FileUtils.rm_f(resultpath)
+	stdoutpath = LUALINT_OUTDIR.join("check.log")
+	cmd = [
+		lualint_binary, "--check", LUALINT_OUTDIR.join("..", "..").expand_path.to_s,
+		"--checklevel=Hint",
+		"--configpath=#{configpath}",
+		"--check_out_path=#{resultpath}",
+		"--logpath=#{LUALINT_OUTDIR.join('log')}",
+	]
+	puts "Running #{cmd[0]} --check (takes a minute) ..."
+	ok = system(*cmd, out: stdoutpath.to_s, err: stdoutpath.to_s)
+	log = File.read(stdoutpath)
+	unless File.exist?(resultpath)
+		# The server writes no result file when the workspace is clean.
+		return {} if log.include?("no problems found")
+		abort "lua-language-server --check failed (exit #{$?.exitstatus}, ok=#{ok}), see #{stdoutpath}"
+	end
+	counts = Hash.new(0)
+	JSON.parse(File.read(resultpath)).each_value do |diags|
+		diags.each { |d| counts[d["code"]] += 1 }
+	end
+	counts
+end
+
+desc "Lua diagnostics ratchet: fail when lua-language-server findings exceed luals-baseline.json"
+task :lualint do
+	abort "No baseline found. Run 'rake lualint:update' once to create #{LUALINT_BASELINE.basename}." unless File.exist?(LUALINT_BASELINE)
+	baseline = JSON.parse(File.read(LUALINT_BASELINE))["codes"] || {}
+	current = lualint_run_check
+	total = current.values.sum
+
+	violations = current.select { |code, n| n > (baseline[code] || 0) }
+	improved = baseline.select { |code, n| current.fetch(code, 0) < n }
+
+	unless violations.empty?
+		puts "New lua-language-server findings compared to the baseline:"
+		violations.sort_by { |code, _| code }.each do |code, n|
+			puts format("  %-24s %d -> %d", code, baseline[code] || 0, n)
+		end
+		puts "Details: #{LUALINT_OUTDIR.join('check.json')}"
+		puts "If the new findings are deliberate (e.g. honest findings surfaced by better annotations),"
+		puts "fix or acknowledge them explicitly with 'rake lualint:update'."
+		abort "lualint: #{violations.size} diagnostic code(s) above baseline."
+	end
+
+	puts "lualint: OK, #{total} finding(s), nothing above baseline."
+	unless improved.empty?
+		puts "Improvements over the baseline (run 'rake lualint:update' to lock them in):"
+		improved.sort_by { |code, _| code }.each do |code, n|
+			puts format("  %-24s %d -> %d", code, n, current.fetch(code, 0))
+		end
+	end
+end
+
+namespace :lualint do
+	desc "Write the current lua-language-server findings as the new lualint baseline"
+	task :update do
+		counts = lualint_run_check
+		data = {
+			"comment" => "Per-code lua-language-server finding counts. Managed by 'rake lualint:update'.",
+			"total" => counts.values.sum,
+			"codes" => counts.sort_by { |code, n| [-n, code] }.to_h,
+		}
+		File.write(LUALINT_BASELINE, JSON.pretty_generate(data) + "\n")
+		puts "Baseline written: #{LUALINT_BASELINE} (#{data['total']} findings)"
+		counts.sort_by { |code, n| [-n, code] }.each { |code, n| puts format("  %5d  %s", n, code) }
+	end
+end
+
 desc "Run all release-gate checks: luacheck, stylua format, QA suite"
 task :check => [:luacheck, :stylua, :qa]
 
