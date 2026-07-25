@@ -12,7 +12,6 @@ local publisher = require("publisher")
 local de = require("dimexpr")
 local links_module = require("publisher.links")
 
-local luxor = do_luafile("luxor.lua")
 local sha = require("shalocal")
 
 -- Return filename, pagenumber, box and unit from the arg. Used in imagewidth et al.
@@ -784,8 +783,13 @@ local function decode_html(dataxml, arg)
             return nil
         end
         -- two dummy tags because xpath.parse_raw removes the surrounding table
-        local ret = luxor.parse_xml("<dummy><dummy>" .. msg .. "</dummy></dummy>")
-        return ret
+        local doc = publisher.splib.loadxmlstring("<dummy><dummy>" .. msg .. "</dummy></dummy>")
+        if doc == nil then
+            main.log("error", "decode-html failed")
+            return nil
+        end
+        -- loadxmlstring returns a document table, the outer dummy element is its first child
+        return doc[1]
     end
 end
 

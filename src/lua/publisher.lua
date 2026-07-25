@@ -1231,7 +1231,11 @@ function M.initialize_luatex_and_generate_pdf()
         end
     elseif datafilename == "-" then
         main.log("info", "Reading from stdin")
-        dataxml = luxor.parse_xml(io.stdin:read("*a"), { htmlentities = true })
+        if M.newxpath then
+            dataxml = splib.loadxmlstring(io.stdin:read("*a"))
+        else
+            dataxml = luxor.parse_xml(io.stdin:read("*a"), { htmlentities = true })
+        end
     else
         dataxml = M.xml_helpers.load_xml(
             datafilename,

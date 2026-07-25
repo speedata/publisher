@@ -1754,7 +1754,7 @@ function commands.html(layoutxml, dataxml)
     local tab
 
     -- Check if selection is already an XML structure (e.g., from sd:decode-html)
-    -- decode-html returns a luxor structure with .__local_name, .__type etc.
+    -- decode-html returns an XML structure with .__local_name, .__type etc.
     local function get_local_name(t)
         if type(t) ~= "table" then
             return nil
@@ -1798,7 +1798,7 @@ function commands.html(layoutxml, dataxml)
         return result
     end
 
-    -- Convert XML/luxor structure to HTML string
+    -- Convert XML structure to HTML string
     local function xml_to_html(node)
         if type(node) ~= "table" then
             -- Text node - escape HTML entities
