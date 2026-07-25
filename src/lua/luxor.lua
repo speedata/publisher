@@ -13,7 +13,7 @@ local _string = string
 local string = unicode.utf8
 local current_element
 local decoder
-local err = err or print
+local err = print
 local filefinder
 local parse_xml_file
 

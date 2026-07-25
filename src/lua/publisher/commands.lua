@@ -7571,7 +7571,7 @@ function commands.url(layoutxml, dataxml)
         end
     end
     local str = table.concat(strings)
-    local urlnodes = publisher.nodes.mknodes(str, options)
+    local urlnodes = publisher.nodes.mknodes(str)
     a:append(publisher.nodes.break_url(urlnodes))
     return a
 end

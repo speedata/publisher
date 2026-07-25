@@ -99,7 +99,6 @@ function M.parse_html(elt, parameter, data)
             img = img,
             xpath = publisher.xpath,
             math = math,
-            err = err,
         }
         -- New modular entry point (same call site for you)
         return html.parse_html_new(elt, parameter, data, env)
@@ -1882,10 +1881,11 @@ end
 -- color, decoration, ...) into a node list, picking HarfBuzz or FontForge
 -- depending on `publisher.options.fontloader`.
 ---@param str string Text segment.
----@param parameter table Style/font parameters.
+---@param parameter? table Style/font parameters.
 ---@param origin? string Origin tag for `setprop` (debugging).
 ---@return Node head Head of the glyph node list.
 function M.mknodes(str, parameter, origin)
+    parameter = parameter or {}
     -- if it's an empty string, we make a zero-width rule
     if not str or string.len(str) == 0 then
         -- a space char can have a width, so we return a zero width something
@@ -1893,7 +1893,6 @@ function M.mknodes(str, parameter, origin)
         publisher.attribute_helpers.setprop(strut, "pardir", parameter.direction)
         return strut, parameter.direction
     end
-    parameter = parameter or {}
     local languagecode = parameter.languagecode or publisher.defaultlanguage
 
     local fontfamily = parameter.fontfamily

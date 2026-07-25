@@ -1003,9 +1003,7 @@ end
 M.default_functions.max = function(dataxml, arg)
     local max = tonumber(arg[1])
     if not max then
-        if err then
-            main.log("error", "First argument in max() is not a number, returning 0")
-        end
+        main.log("error", "First argument in max() is not a number, returning 0")
         return 0
     end
     for i = 2, #arg do

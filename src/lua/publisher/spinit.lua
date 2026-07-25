@@ -63,7 +63,7 @@ end
 -- tbl .. tbl
 function table.__concat(tbl, other)
     if type(other) ~= "table" then
-        err("Internal error: table concat: second argument is not a table")
+        texio.write_nl("Internal error: table concat: second argument is not a table")
         return
     end
     local ret = {}

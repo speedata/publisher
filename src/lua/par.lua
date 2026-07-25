@@ -7,6 +7,7 @@ local publisher = require("publisher")
 ---@class Par
 ---@field textformat string Name of the assigned textformat.
 ---@field origin? string Caller identifier (debugging only).
+---@field margin_top number
 ---@field typ "par"
 ---@field has_color? boolean
 ---@field has_hyperlink? boolean
@@ -1218,7 +1219,7 @@ function Par:format(width_sp, options, data)
                 nodelist.list = publisher.nodes.add_glue(
                     nodelist.list,
                     "head",
-                    { width = self_padding_top, attributes },
+                    { width = self_padding_top },
                     "par.lua/self.padding_top"
                 )
                 publisher.attribute_helpers.set_attribute(nodelist.list, "margintop", 1)
@@ -1257,7 +1258,7 @@ function Par:format(width_sp, options, data)
                 nodelist.list, glue = publisher.nodes.add_glue(
                     nodelist.list,
                     "tail",
-                    { width = self.padding_bottom, attributes },
+                    { width = self.padding_bottom },
                     "par.lua/self.padding_bottom"
                 )
                 publisher.attribute_helpers.set_attribute(glue, "paddingbottom", 1)

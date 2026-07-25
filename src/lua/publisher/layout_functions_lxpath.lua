@@ -733,11 +733,11 @@ local function fnDimexpr(dataxml, arg)
     local unit = publisher.xpath.string_value(arg[1])
     local secondarg = publisher.xpath.string_value(arg[2])
     local ret = de.string_to_tokenlist(secondarg, dataxml)
-    local fun = load(" value = " .. ret)
+    local fun = load("return " .. ret)
     if not fun then
         return nil, "error in sd:dimexpr"
     end
-    fun()
+    local value = fun()
     if unit == "cm" then
         ret = value / publisher.onecm_sp
     elseif unit == "mm" then
