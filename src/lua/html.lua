@@ -136,7 +136,7 @@ local stylesstack = inherit.new_stack(inherited)
 -- pack them into a paragraph.
 ---@param elt table HTML element subtree (with `elementname`, children).
 ---@param parameter? table Inherited style parameters.
----@param before_box? boolean Whether the run starts a fresh line.
+---@param before_box? Node Whether the run starts a fresh line.
 ---@param origin? string Caller identifier (debugging).
 ---@param dataxml table Data XML context.
 ---@return table[] runs Array of inline node lists.
@@ -224,11 +224,12 @@ local oltype = {}
 -- or image embedding based on the element kind.
 ---@param elt table HTML element subtree.
 ---@param options? table Inherited style options.
----@param before_box? boolean Whether the element starts a fresh box.
+---@param before_box? Node Whether the element starts a fresh box.
 ---@param caller? string Caller identifier (debugging).
 ---@param prevdir? "horizontal"|"vertical" Previous run's direction.
 ---@param dataxml table Data XML context.
----@return Node? head Head of the resulting node list.
+---@return any[] ret Nested array of boxes and paragraphs.
+---@return ("horizontal"|"vertical")? prevdir Direction after the last processed element.
 function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
     -- w("html: build nodelist from %s, prevdir = %s", caller or "?",prevdir or "?")
     options = options or {}
@@ -271,20 +272,22 @@ function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
             local before_options = {}
             inline_options.set_options_for_mknodes(styles, before_options, publisher, fontfamilies)
             local content = styles.content
-            local nl = publisher.nodes.mknodes(content, before_options)
-            local margin_left = units.getsize(styles, styles["margin-left"], styles.fontsize_sp)
+            -- a ::before rule without content generates no pseudo-element
+            if content then
+                local nl = publisher.nodes.mknodes(content, before_options)
+                local margin_left = units.getsize(styles, styles["margin-left"], styles.fontsize_sp)
 
-            local hss = publisher.nodes.hss_glue()
-            local ml_box = node.hpack(hss, margin_left, "exactly")
+                local hss = publisher.nodes.hss_glue()
+                local ml_box = node.hpack(hss, margin_left, "exactly")
 
-            if styles.width then
-                node.insert_after(nl, nl, publisher.nodes.hss_glue())
-                nl = node.hpack(nl, styles.calculated_width, "exactly")
+                if styles.width then
+                    node.insert_after(nl, nl, publisher.nodes.hss_glue())
+                    nl = node.hpack(nl, styles.calculated_width, "exactly")
+                end
+
+                before_box = node.insert_after(ml_box, ml_box, nl)
+                before_box = node.hpack(before_box)
             end
-
-            before_box = node.insert_after(ml_box, ml_box, nl)
-            before_box = node.hpack(before_box)
-
             inherit.pop(stylesstack)
         end
         styles_mod.copy_attributes(styles, thiselt_styles, thiseltname)
@@ -369,11 +372,11 @@ function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
 
             local a = publisher.par:new(tf, "html.lua (horizontal)")
             local appended = false
-            for i = 1, #n do
-                local thisn = n[i]
-                if i == 1 then
+            for j = 1, #n do
+                local thisn = n[j]
+                if j == 1 then
                     thisn = inline_utils.trim_space_beginning(thisn)
-                elseif i == #n then
+                elseif j == #n then
                     thisn = inline_utils.trim_space_end(thisn)
                 end
                 if thisn then
@@ -485,8 +488,8 @@ function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
                 olcounter[styles.listlevel] = 0
                 if attribs then
                     if attribs.start then
-                        local i = math.tointeger(attribs.start - 1)
-                        olcounter[styles.listlevel] = i
+                        local j = math.tointeger(attribs.start - 1)
+                        olcounter[styles.listlevel] = j
                     else
                         olcounter[styles.listlevel] = 0
                     end

@@ -11,7 +11,7 @@ local inherit = require("html.inherit")
 local M = {}
 
 ---@class HtmlTableCallbacks
----@field build_nodelist fun(elt:table, options:table|nil, before_box:any|nil, caller:string, prevdir:string|nil, dataxml:table): (any[], string|nil)
+---@field build_nodelist fun(elt:table, options:table|nil, before_box:any|nil, caller:string, prevdir:("horizontal"|"vertical")|nil, dataxml:table): (any[], ("horizontal"|"vertical")|nil)
 
 ---Build the table body (tbody/thead/tfoot) into the Publisher tabular row structure.
 ---@param tbody table                     -- the HTML tbody/thead/tfoot element tree
