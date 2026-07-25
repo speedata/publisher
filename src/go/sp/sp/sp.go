@@ -252,7 +252,7 @@ func getOption(optionname string) string {
 // Open the given file with the system's default program
 func openFile(filename string) {
 	opencommand := getOption("opencommand")
-	cmdname := strings.SplitN(opencommand, " ", -1)
+	cmdname := strings.Split(opencommand, " ")
 	cmdname = append(cmdname, filepath.Base(filename))
 	cmd := exec.Command(cmdname[0], cmdname[1:]...)
 	// windows doesn't like quotation marks on the filename argument. So we change into the
@@ -266,7 +266,7 @@ func openFile(filename string) {
 
 func openWebPage(url string) {
 	opencommand := getOption("opencommand")
-	cmdname := strings.SplitN(opencommand, " ", -1)
+	cmdname := strings.Split(opencommand, " ")
 	cmdname = append(cmdname, url)
 	cmd := exec.Command(cmdname[0], cmdname[1:]...)
 	// windows doesn't like quotation marks on the filename argument. So we change into the
@@ -448,7 +448,7 @@ func readVariables() {
 		fmt.Println("done")
 	}
 	if vars := getOption("vars"); vars != "" {
-		for _, keyvalue := range strings.Split(vars, ",") {
+		for keyvalue := range strings.SplitSeq(vars, ",") {
 			tmp := strings.Split(keyvalue, "=")
 			if len(tmp) == 2 {
 				variables[tmp[0]] = tmp[1]
@@ -496,7 +496,7 @@ func saveVariables() {
 
 // add the command line argument (extra-dir) into the slice
 func extradir(arg string) {
-	for _, p := range strings.Split(arg, string(filepath.ListSeparator)) {
+	for p := range strings.SplitSeq(arg, string(filepath.ListSeparator)) {
 		extraDir = append(extraDir, p)
 	}
 }
@@ -1043,7 +1043,7 @@ func main() {
 	os.Setenv("CACHEMETHOD", cachemethod)
 
 	if ed := cfg.String("DEFAULT", "extra-dir"); ed != "" {
-		for _, p := range strings.Split(ed, string(filepath.ListSeparator)) {
+		for p := range strings.SplitSeq(ed, string(filepath.ListSeparator)) {
 			if abspath, err := filepath.Abs(p); err != nil {
 				log.Fatalf("Failed to make %q into an absolute path", p)
 			} else {
@@ -1243,7 +1243,7 @@ func main() {
 		events := getOptionSection("events", "hotfolder")
 		var hotfolderEvents []hotfolder.Event
 
-		for _, v := range strings.Split(events, ";") {
+		for v := range strings.SplitSeq(events, ";") {
 			patternCommand := strings.Split(v, ":")
 			if len(patternCommand) < 2 {
 				log.Fatal("Something is wrong with the configuration file. hotfolder section correct?")
