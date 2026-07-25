@@ -1,3 +1,5 @@
+---@diagnostic disable
+-- Vendored third-party code, kept close to upstream: not checked by lua-language-server.
 -- Almost unmodified from url.lua (socket library). Somehow the profiler choked
 -- on this file when loaded like "require('socket.lua')"
 -- Renamed to socket_url.lua (pg, 2013)

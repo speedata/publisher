@@ -1,0 +1,45 @@
+---@meta
+-- Additional fields for the base `Node` class. The TeXLuaCATS LuaTeX library
+-- declares these only on the subtype classes (ListNode, GlueNode, GlyphNode, …),
+-- but the publisher code handles nodes generically, so the fields are widened
+-- onto the base class here. lua-language-server merges duplicate @class
+-- declarations. This file is annotation-only and never loaded at runtime.
+
+---@class Node
+---@field width number
+---@field height number
+---@field depth number
+---@field shift number
+---@field list Node|nil
+---@field glue_set number
+---@field glue_sign integer
+---@field glue_order integer
+---@field stretch number
+---@field stretch_order integer
+---@field shrink number
+---@field shrink_order integer
+---@field penalty integer
+---@field kern number
+---@field char integer
+---@field font integer
+---@field lang integer
+---@field uchyph integer
+---@field left integer
+---@field right integer
+---@field xoffset number
+---@field yoffset number
+---@field dir string
+---@field mode any
+---@field data any
+---@field value any
+---@field type any
+---@field user_id integer
+---@field action any
+---@field action_type integer
+---@field objnum integer
+---@field command any
+---@field stack integer
+---@field leader Node|nil
+---@field pre Node|nil
+---@field post Node|nil
+---@field replace Node|nil
