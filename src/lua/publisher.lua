@@ -396,6 +396,7 @@ M.css = do_luafile("css.lua"):new()
 ---@field gridwidth integer Grid cell width in scaled points.
 ---@field hidespinfo? string|boolean
 ---@field html? string HTML rendering mode.
+---@field htmlignoreeol? boolean Ignore newlines in HTML mode (FontForge backend).
 ---@field hyperlinkbordercolor? string Border color for hyperlink annotations.
 ---@field hyperlinkborderwidth integer Border width for hyperlink annotations, in sp.
 ---@field ignoreeol boolean Ignore newlines in data.
@@ -563,8 +564,8 @@ M.metapostvariables = {}
 ---@type [string, string][]
 M.metapostcolorwarnings = {}
 
--- The current foreground color (used in underline)
----@type string?
+-- The current foreground color index (used in underline)
+---@type integer?
 M.current_fgcolor = nil
 
 -- The color stack to use
@@ -2564,13 +2565,13 @@ M.leftskip.stretch_order = 3
 -- language id.
 ---@type table<string, integer>
 M.languages = {}
----@type table<integer, string>
+---@type table<integer, LanguageEntry>
 M.languages_id_lang = {}
 
 ---@class ShapeOptions
 ---@field language? string BCP-47 language tag.
 ---@field script? string ISO 15924 script tag.
----@field direction? "ltr"|"rtl"|"ttb"|"btt" Direction override.
+---@field direction? string Direction override (`"ltr"`, `"rtl"`, `"ttb"` or `"btt"`).
 
 -- Shapes a HarfBuzz buffer with the given font and OpenType features.
 -- Reverses the buffer when shaping produced an RTL run.

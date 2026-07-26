@@ -24,7 +24,7 @@ local lookup_fontname_filename = {}
 ---@type table<integer, table>
 local font_instances = {}
 
----@type table<integer, true>
+---@type table<integer, table>
 M.used_fonts = {}
 local used_fonts = M.used_fonts
 

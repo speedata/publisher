@@ -54,6 +54,24 @@ function node.direct.setlink(d, ...) end
 ---@return Node head
 function node.setlink(n, ...) end
 
+-- The TeXLuaCATS library declares node.insert_before/insert_after with all
+-- parameters required, but the LuaTeX manual states "If head is initially
+-- nil, it will become new", and a nil current is accepted as well (new
+-- becomes the head/tail). Worth a PR upstream.
+---@param head Node?
+---@param current Node?
+---@param new Node
+---@return Node head
+---@return Node new
+function node.insert_before(head, current, new) end
+
+---@param head Node?
+---@param current Node?
+---@param new Node
+---@return Node head
+---@return Node new
+function node.insert_after(head, current, new) end
+
 ---@class Node
 ---@field width number
 ---@field height number
@@ -92,3 +110,4 @@ function node.setlink(n, ...) end
 ---@field pre Node|nil
 ---@field post Node|nil
 ---@field replace Node|nil
+---@field spec Node|nil Legacy glue spec (only when `node.has_field(n, "spec")`).
