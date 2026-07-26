@@ -23,6 +23,7 @@ local M = {}
 ---@field m? string|number Magenta (cmyk).
 ---@field y? string|number Yellow (cmyk).
 ---@field k? string|number Black (cmyk).
+---@field alpha? number Transparency (0 = fully transparent).
 ---@field saturation? number Spot color saturation in [0,1].
 ---@field colornum? integer Spot color object number.
 ---@field overprint? boolean Whether overprint is enabled (spot colors).

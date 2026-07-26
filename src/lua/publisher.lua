@@ -536,11 +536,31 @@ M.marker_id_value = {}
 -- metapost graphics. Keys are name and values are "beginfig(1)...." texts.
 ---@type table<string, string>
 M.metapostgraphics = {}
----@type table<string, string>
+
+-- A color definition handed over to the MetaPost interpreter.
+---@class MetapostColor
+---@field model "rgb"|"cmyk"|"gray"
+---@field r? number
+---@field g? number
+---@field b? number
+---@field c? number
+---@field m? number
+---@field y? number
+---@field k? number
+
+---@type table<string, MetapostColor>
 M.metapostcolors = {}
----@type table<string, string>
+
+-- A typed variable declaration for MetaPost graphics (element `SetVariable`).
+---@class MetapostVariable
+---@field typ string MetaPost type (`numeric`, `string`, ...).
+---@field [1] any Variable contents.
+
+---@type table<string, MetapostVariable>
 M.metapostvariables = {}
----@type table<string, boolean>
+
+-- Pairs of {original color name, sanitized MetaPost color name}.
+---@type [string, string][]
 M.metapostcolorwarnings = {}
 
 -- The current foreground color (used in underline)

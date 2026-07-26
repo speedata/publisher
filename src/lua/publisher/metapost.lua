@@ -8,13 +8,31 @@
 -- This file contains code from luamplib (https://www.ctan.org/pkg/luamplib) which
 -- is released under the GPL 2.
 
----@class metapost_module
-
 local publisher = require("publisher")
 
+---@class metapost_module
 local M = {}
 
 local colors_module = require("publisher.colors")
+
+-- A MetaPost instance wrapper: the mplib interpreter plus the requested
+-- box dimensions and the result of the last `execute()` call.
+---@class MetapostInstance
+---@field mp mplib.MpInstance
+---@field width integer Box width in scaled points.
+---@field height integer Box height in scaled points.
+---@field l? mplib.MpResult Result of the last `M.execute()` call.
+
+-- A parsed pre/postscript table (see `script2table`). Keys listed in
+-- `further_split_keys` hold arrays, all others plain strings.
+---@class MetapostPrescript
+---@field mplibtexboxid? string[] Box id, width, height.
+---@field sh_color_a? string[]
+---@field sh_color_b? string[]
+---@field tr_alternative? string
+---@field tr_transparency? string
+---@field MPlibOverrideColor? string
+---@field postmplibverbtex? string
 
 -- helper
 
@@ -38,9 +56,9 @@ end
 -- for inputs and the working directory for outputs.
 ---@param name string
 ---@param mode "r"|"w"
----@param type string MetaPost file kind.
+---@param _type string MetaPost file kind.
 ---@return string? path
-local function finder(name, mode, type)
+local function finder(name, mode, _type)
     local loc = kpse.find_file(name)
     if mode == "r" then
         return loc
@@ -50,9 +68,9 @@ end
 
 -- Buffers MetaPost-emitted TeX output to be flushed into the current PDF
 -- content stream.
----@param whatever any
+---@param _whatever any
 ---@return nil
-local function texsprint(whatever)
+local function texsprint(_whatever)
     -- w("texsprint %s", tostring(whatever))
 end
 
@@ -124,8 +142,8 @@ local textext2_fmt = [[addto currentpicture doublepath unitsquare ]]
 -- Renders a `btex ... etex` block by running `str` through TeX and
 -- buffering the result for re-insertion at the current MetaPost position.
 ---@param str string TeX source.
----@param fmt? string Optional format wrapper.
----@return nil
+---@param fmt string Format wrapper (`textext_fmt` or `textext2_fmt`).
+---@return string? mpcode MetaPost code placing the rendered box.
 local function process_tex_text(str, fmt)
     if str then
         local familyname, style, text = string.match(str, "^(.-):(.-):(.*)$")
@@ -195,10 +213,10 @@ end
 -- Places previously rendered `btex...etex` boxes at the proper MetaPost
 -- positions, accounting for transformation and color commands.
 ---@param object table MetaPost figure object.
----@param prescript string Prescript instructions encoding placement.
+---@param prescript MetapostPrescript Prescript instructions encoding placement.
 ---@return nil
 local function put_tex_boxes(object, prescript)
-    local box = prescript.mplibtexboxid
+    local box = assert(prescript.mplibtexboxid)
     local n, tw, th = tonumber(box[1]), tonumber(box[2]), tonumber(box[3])
     if n and tw and th then
         local op = object.path
@@ -239,11 +257,11 @@ local function put_tex_boxes(object, prescript)
     end
 end
 
--- Feeds `str` to the given MetaPost instance and returns the resulting
--- figure object.
----@param mpobj userdata MetaPost instance.
+-- Feeds `str` to the given MetaPost instance; the resulting figure is
+-- stored in `mpobj.l`.
+---@param mpobj MetapostInstance
 ---@param str string MetaPost source.
----@return table? figure
+---@return boolean success
 function M.execute(mpobj, str)
     if not str then
         main.log("error", "Empty metapost string for execute")
@@ -262,7 +280,7 @@ end
 -- canvas (width × height in sp), with the standard prelude loaded.
 ---@param width_sp integer
 ---@param height_sp integer
----@return userdata mpobj
+---@return MetapostInstance? mpobj `nil` if the prelude could not be loaded.
 function M.newbox(width_sp, height_sp)
     local mp = mplib.new({
         mem_name = "plain",
@@ -273,6 +291,7 @@ function M.newbox(width_sp, height_sp)
         run_script = scriptrunner,
         extensions = 1,
     })
+    ---@type MetapostInstance
     local mpobj = {
         mp = mp,
         width = width_sp,
@@ -367,13 +386,13 @@ end
 local rx, ry, sx, sy, tx, ty
 local divider
 
--- Returns the pen characteristics (line width, stroke type) for a
--- MetaPost object so they can be re-emitted as PDF operators.
+-- Stores the pen transformation of a MetaPost object in the shared
+-- upvalues above and reports whether a transformation is needed at all.
 ---@param object table MetaPost figure object.
----@return number wd Line width in bp.
----@return string lc Line cap operator.
+---@return boolean transformed Whether the pen is transformed (needs `cm`).
+---@return number width Line width.
 local function pen_characteristics(object)
-    local t = mplib.pen_info(object)
+    local t = assert(mplib.pen_info(object))
     rx, ry, sx, sy, tx, ty = t.rx, t.ry, t.sx, t.sy, t.tx, t.ty
     divider = sx * sy - rx * ry
     return not (sx == 1 and rx == 0 and ry == 0 and sy == 1 and tx == 0 and ty == 0), t.width
@@ -403,11 +422,12 @@ local function curved(ith, pth)
     return true
 end
 
--- PDF `cm` operator from a 2x2 transformation; no translation here
--- because it is emitted separately.
----@param px number[] First column.
----@param py number[] Second column.
----@return string
+-- Applies the inverse pen transformation to a point; no translation
+-- here because it is emitted separately.
+---@param px number
+---@param py number
+---@return number x
+---@return number y
 local function concat(px, py) -- no tx, ty here
     return (sy * px - ry * py) / divider, (sx * py - rx * px) / divider
 end
@@ -516,7 +536,7 @@ local transparency_values
 -- Emits the opening color/transparency/shading operators for a MetaPost
 -- object based on its prescript instructions.
 ---@param object table
----@param prescript table|nil
+---@param prescript MetapostPrescript|nil
 ---@return integer? transparent
 ---@return string? overprint
 ---@return integer? shading
@@ -558,8 +578,9 @@ local further_split_keys = {
 -- Parses a `key=value;key=value;...` pre/postscript string into a Lua
 -- table.
 ---@param s string
----@return table<string, string>
+---@return MetapostPrescript
 local function script2table(s)
+    ---@type MetapostPrescript
     local t = {}
     for _, i in ipairs(s:explode("\13+")) do
         local k, v = i:match("(.-)=(.*)") -- v may contain = or empty.
@@ -576,7 +597,7 @@ end
 
 -- Converts a MetaPost figure object by emitting the PDF content stream
 -- and TeX code directly (via tex.sprint / pdf literals); returns nothing.
----@param result table MetaPost figure result.
+---@param result mplib.MpResult? MetaPost figure result.
 ---@return nil
 local function convert(result)
     if result then
@@ -585,6 +606,8 @@ local function convert(result)
             for f = 1, #figures do
                 local figure = figures[f]
                 local objects = figure:objects()
+                -- dashed holds the last emitted dash pattern (a PDF `d` operator string) or false
+                ---@type integer, integer, integer, string|false
                 local miterlimit, linecap, linejoin, dashed = -1, -1, -1, false
                 boundingbox = figure:boundingbox()
                 local llx, lly, urx, ury = boundingbox[1], boundingbox[2], boundingbox[3], boundingbox[4] -- faster than unpack
@@ -706,11 +729,11 @@ local function convert(result)
                                     if path then
                                         if savedpath then
                                             for i = 1, #savedpath do
-                                                local path = savedpath[i]
+                                                local spath = savedpath[i]
                                                 if transformed then
-                                                    flushconcatpath(path, open)
+                                                    flushconcatpath(spath, open)
                                                 else
-                                                    flushnormalpath(path, open)
+                                                    flushnormalpath(spath, open)
                                                 end
                                             end
                                             savedpath = nil
@@ -737,27 +760,27 @@ local function convert(result)
                                     if transformed then
                                         pdf_literalcode("Q")
                                     end
-                                    local path = object.htap
-                                    if path then
+                                    local htap = object.htap
+                                    if htap then
                                         if transformed then
                                             pdf_literalcode("q")
                                         end
                                         if savedhtap then
                                             for i = 1, #savedhtap do
-                                                local path = savedhtap[i]
+                                                local hpath = savedhtap[i]
                                                 if transformed then
-                                                    flushconcatpath(path, open)
+                                                    flushconcatpath(hpath, open)
                                                 else
-                                                    flushnormalpath(path, open)
+                                                    flushnormalpath(hpath, open)
                                                 end
                                             end
                                             savedhtap = nil
                                             evenodd = true
                                         end
                                         if transformed then
-                                            flushconcatpath(path, open)
+                                            flushconcatpath(htap, open)
                                         else
-                                            flushnormalpath(path, open)
+                                            flushnormalpath(htap, open)
                                         end
                                         if objecttype == "fill" then
                                             pdf_literalcode(evenodd and "h f*" or "h f")
@@ -787,11 +810,11 @@ local function convert(result)
 end
 
 -- Closes the MetaPost instance and returns the converted figure as a
--- PDF content-stream string with its bounding box.
----@param mpobj userdata
----@return string? pdf_stream
----@return number? width_bp
----@return number? height_bp
+-- node list with the used transparency values and the bounding box.
+---@param mpobj MetapostInstance
+---@return Node? head Node list with pdf_literal whatsits and text boxes.
+---@return table<string, boolean> transparency_values Set of used transparency values.
+---@return number[] boundingbox `{llx, lly, urx, ury}` in bp.
 function M.finish(mpobj)
     pdfcode = {}
     pdfcodepointer = 1
@@ -824,7 +847,9 @@ end
 ---@param height_sp integer
 ---@param graphicname string Key in `publisher.metapostgraphics`.
 ---@param extra_parameter? table<string, any> Variable values.
----@return userdata mpobj
+---@return MetapostInstance? mpobj `nil` on error.
+---@return Node? head Rendered figure as a node list.
+---@return number[]? bbox Bounding box `{llx, lly, urx, ury}` in bp.
 function M.prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
     local colorwarnings = publisher.metapostcolorwarnings
     if #colorwarnings > 0 then
@@ -848,6 +873,9 @@ function M.prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
         return nil
     end
     local mpobj = M.newbox(width_sp, height_sp)
+    if not mpobj then
+        return nil
+    end
     M.execute(mpobj, "beginfig(1);")
     for k, v in pairs(extra_parameter or {}) do
         if k == "colors" and type(v) == "table" then
@@ -888,10 +916,10 @@ end
 ---@param height_sp integer
 ---@param graphicname string
 ---@param extra_parameter? table<string, any> Variable values.
----@param parameter? table Per-call parameters.
----@return Node? hbox
----@return table? bbox Bounding box.
-function M.boxgraphic(width_sp, height_sp, graphicname, extra_parameter, parameter)
+---@param _parameter? table Per-call parameters.
+---@return Node? head Rendered figure as a node list.
+---@return number[]? bbox Bounding box `{llx, lly, urx, ury}` in bp.
+function M.boxgraphic(width_sp, height_sp, graphicname, extra_parameter, _parameter)
     local _, a, bbox = M.prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
     return a, bbox
 end
