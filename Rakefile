@@ -55,16 +55,6 @@ task :schema => [:sphelper] do
   sh "#{installdir}/bin/sphelper genschema"
 end
 
-# For now: only a small test
-desc "Test source code"
-task :test do
-	ENV["LUA_PATH"] = "#{srcdir}/lua/?.lua;#{installdir}/lib/?.lua;#{installdir}/test/?.lua"
-	ENV["PUBLISHER_BASE_PATH"] = installdir.to_s
-	ENV["LD_LIBRARY_PATH"] = "#{installdir}/lib"
-	inifile = srcdir.join("lua/sdini.lua")
-	sh "bin/sdluatex --luaonly --lua=#{inifile} --ini --shell-escape #{installdir}/bin/luatest tc_xpath.lua"
-end
-
 desc "Run quality assurance"
 task :qa do
 	sh "#{installdir}/bin/sp compare #{installdir}/qa"
