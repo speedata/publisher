@@ -28,7 +28,42 @@ local publisher = require("publisher")
 
 local metapost = require("publisher.metapost")
 
+-- A table instance is created by `tabular:new()`; the fields after `split`
+-- are attached by the Table command in commands.lua before typesetting.
 ---@class tabular_module
+---@field rowheights table Row heights, keyed by area ("body", "tablehead…").
+---@field colwidths number[] Calculated column widths in sp.
+---@field align table Per-column horizontal alignment.
+---@field valign table Per-column vertical alignment.
+---@field padding_left_col table Per-column left padding.
+---@field padding_right_col table Per-column right padding.
+---@field skip table
+---@field backgroundcolumncolors table
+---@field column_distances table Distance between column i and i+1.
+---@field split integer Number of frames the table is split across.
+---@field skiptables table Cells skipped because of row/colspans, per area.
+---@field total_columns integer
+---@field tab table Parsed contents of the Table element.
+---@field layoutxml table
+---@field dataxml table
+---@field options table
+---@field getheight function
+---@field width number Table width in sp.
+---@field fontfamily integer
+---@field padding_left number
+---@field padding_right number
+---@field padding_top number
+---@field padding_bottom number
+---@field colsep number Distance between columns in sp.
+---@field rowsep number Distance between rows in sp.
+---@field autostretch? string Column stretching ("max" or "no").
+---@field vexcess? string Vertical excess distribution.
+---@field bordercollapse? boolean
+---@field bordercollapse_horizontal? boolean
+---@field bordercollapse_vertical? boolean
+---@field eval_on_split_layoutxml? table
+---@field eval_on_split_dataxml? table
+---@field textformat? string
 local tabular = {}
 
 ---@type table<string, any>
@@ -70,7 +105,7 @@ local function resolve_colspan(value, current_column, total_columns)
 end
 
 -- Create a new tabular object.
----@return table New tabular object
+---@return tabular_module tab New tabular object
 function tabular:new()
     assert(self)
     local t = {
@@ -2637,7 +2672,8 @@ end
 function tabular:do_bordercollapse(tab, area)
     area = area or "body"
     local tablematrix = {}
-    local current_row, current_column = 1, 1
+    local current_row = 1
+    local current_column
     local maxcol = 0 -- needed?
     for _, tr in ipairs(tab) do
         local tr_eltname = publisher.xml_helpers.elementname(tr)

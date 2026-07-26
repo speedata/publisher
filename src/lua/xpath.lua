@@ -173,7 +173,7 @@ function M.is_attribute(dataxml, str, pos)
     return false
 end
 
-function M.is_dataexpr(dataxml, str, pos)
+function M.is_dataexpr(_dataxml, str, pos)
     local _, stop, expr = string.find(str, "^(xs:[^%s]*)%s*", pos)
     if expr then
         M.nextpos = stop + 1
@@ -276,7 +276,7 @@ function M.is_string(str, pos)
     return false
 end
 
-function M.check_restriction(dataxml, str, pos)
+function M.check_restriction(_dataxml, str, pos)
     local start, stop, subxpath
     start, stop, subxpath = string.find(str, "^%[(.-)%]%s*", pos)
     subxpath = tonumber(subxpath)
@@ -294,7 +294,7 @@ function M.check_restriction(dataxml, str, pos)
     return
 end
 
-function M.is_nodeselector(dataxml, str, pos, ns)
+function M.is_nodeselector(dataxml, str, pos, _ns)
     local start, stop
     -- Just the current node (focus, ".")
     start, stop = string.find(str, "^%.%s*", pos)
@@ -376,7 +376,7 @@ function M.get_operand(dataxml, str, pos, ns)
     end
 end
 
-function M.is_additive_expr(dataxml, str, pos, ns)
+function M.is_additive_expr(_dataxml, str, pos, _ns)
     pos = pos or M.nextpos
     local start, stop, op
     start, stop, op = string.find(str, "^([%+%-])%s*", pos)
@@ -387,7 +387,7 @@ function M.is_additive_expr(dataxml, str, pos, ns)
     end
 end
 
-function M.is_comparison_epxr(dataxml, str, pos, ns)
+function M.is_comparison_epxr(_dataxml, str, pos, _ns)
     pos = pos or M.nextpos
     local start, stop, op
     start, stop, op = string.find(str, "^([><=!]+)%s*", pos)
@@ -399,7 +399,7 @@ function M.is_comparison_epxr(dataxml, str, pos, ns)
     return false
 end
 
-function M.is_andor_expr(dataxml, str, pos, ns)
+function M.is_andor_expr(_dataxml, str, pos, _ns)
     pos = pos or M.nextpos
     local start, stop = string.find(str, "^and%s*", pos)
     if start then
@@ -416,7 +416,7 @@ function M.is_andor_expr(dataxml, str, pos, ns)
     return false
 end
 
-function M.is_castable_expr(dataxml, str, pos, ns)
+function M.is_castable_expr(_dataxml, str, pos, _ns)
     pos = pos or M.nextpos
     local start, stop = string.find(str, "^castable as%s*", pos)
     if start then
@@ -427,7 +427,7 @@ function M.is_castable_expr(dataxml, str, pos, ns)
     return false
 end
 
-function M.is_multiplicative_expr(dataxml, str, pos, ns)
+function M.is_multiplicative_expr(_dataxml, str, pos, _ns)
     local start, stop
     pos = pos or M.nextpos
     start, stop = string.find(str, "^%*%s*", pos)
@@ -575,7 +575,7 @@ local function xml_to_string(self)
     return table.concat(ret)
 end
 
-function M.eval_castable_as(first, second, operator)
+function M.eval_castable_as(first, second, _operator)
     if second == "xs:double" then
         if tonumber(first) then
             return true
@@ -928,7 +928,7 @@ end
 -- -- Standard XPath functions
 -- ------------------------------------------------------------
 
-M.default_functions.doc = function(dataxml, arg)
+M.default_functions.doc = function(_dataxml, arg)
     local filename = arg[1]
     local loc = kpse.find_file(filename)
     if loc == nil then
@@ -944,7 +944,7 @@ M.default_functions.doc = function(dataxml, arg)
     return contents
 end
 
-M.default_functions.abs = function(dataxml, arg)
+M.default_functions.abs = function(_dataxml, arg)
     local tmp = math.abs(tonumber(arg[1]))
     return tmp
 end
@@ -954,11 +954,11 @@ M.default_functions.position = function()
     return pos
 end
 
-M.default_functions.ceiling = function(dataxml, arg)
+M.default_functions.ceiling = function(_dataxml, arg)
     return math.ceil(arg[1])
 end
 
-M.default_functions.concat = function(dataxml, arg)
+M.default_functions.concat = function(_dataxml, arg)
     local ret = ""
     for i = 1, #arg do
         ret = ret .. tostring(arg[i])
@@ -966,19 +966,19 @@ M.default_functions.concat = function(dataxml, arg)
     return ret
 end
 
-M.default_functions.count = function(dataxml, arg)
+M.default_functions.count = function(_dataxml, arg)
     local tocount = arg
     return #tocount
 end
 
-M.default_functions.empty = function(dataxml, arg)
+M.default_functions.empty = function(_dataxml, arg)
     if arg and arg[1] ~= nil and arg[1] ~= "" then
         return false
     end
     return true
 end
 
-M.default_functions.floor = function(dataxml, arg)
+M.default_functions.floor = function(_dataxml, arg)
     return math.floor(arg[1])
 end
 
@@ -1001,7 +1001,7 @@ M.default_functions.last = function(dataxml)
     return count
 end
 
-M.default_functions.max = function(dataxml, arg)
+M.default_functions.max = function(_dataxml, arg)
     local max = tonumber(arg[1])
     if not max then
         main.log("error", "First argument in max() is not a number, returning 0")
@@ -1015,7 +1015,7 @@ M.default_functions.max = function(dataxml, arg)
     return max
 end
 
-M.default_functions.min = function(dataxml, arg)
+M.default_functions.min = function(_dataxml, arg)
     local min = tonumber(arg[1])
     for i = 2, #arg do
         if tonumber(arg[i]) < min then
@@ -1025,7 +1025,7 @@ M.default_functions.min = function(dataxml, arg)
     return min
 end
 
-M.default_functions["normalize-space"] = function(dataxml, arg)
+M.default_functions["normalize-space"] = function(_dataxml, arg)
     local str = arg[1]
     str = table_textvalue(str)
     str = str:gsub("^%s*(.-)%s*$", "%1"):gsub("[%s\n]+", " ")
@@ -1040,7 +1040,7 @@ M.default_functions.node = function(dataxml)
     return tab
 end
 
-M.default_functions["string"] = function(dataxml, arg)
+M.default_functions["string"] = function(_dataxml, arg)
     local ret
     if type(arg) == "table" then
         ret = {}
@@ -1063,7 +1063,7 @@ M.default_functions["string"] = function(dataxml, arg)
     return ret
 end
 
-M.default_functions["number"] = function(dataxml, arg)
+M.default_functions["number"] = function(_dataxml, arg)
     local ret
     if type(arg) == "table" then
         if #arg > 1 then
@@ -1092,7 +1092,7 @@ M.default_functions["number"] = function(dataxml, arg)
 end
 
 -- Tokenize is the first function we ask 'splib' for help
-M.default_functions["tokenize"] = function(dataxml, arg)
+M.default_functions["tokenize"] = function(_dataxml, arg)
     if arg[1] == nil or arg[2] == nil then
         main.log("error", "tokenize: one of the arguments is empty")
         return ""
@@ -1100,13 +1100,13 @@ M.default_functions["tokenize"] = function(dataxml, arg)
     return publisher.splib.tokenize(arg[1], arg[2])
 end
 
-M.default_functions["round"] = function(dataxml, arg)
+M.default_functions["round"] = function(_dataxml, arg)
     local arg1 = arg[1]
     local arg2 = arg[2] or 0
     return math.round(arg1, arg2)
 end
 
-M.default_functions["replace"] = function(dataxml, arg)
+M.default_functions["replace"] = function(_dataxml, arg)
     if arg[1] == nil or arg[2] == nil or arg[3] == nil then
         main.log("warn", "replace: one of the arguments is empty")
         return ""
@@ -1118,7 +1118,7 @@ M.default_functions["replace"] = function(dataxml, arg)
     return publisher.splib.replace(firstarg, arg[2], arg[3])
 end
 
-M.default_functions["contains"] = function(dataxml, arg)
+M.default_functions["contains"] = function(_dataxml, arg)
     if arg[1] == nil or arg[2] == nil then
         -- warning("contains(): one of the arguments is empty")
         return false
@@ -1131,7 +1131,7 @@ M.default_functions["contains"] = function(dataxml, arg)
     return ret == "true"
 end
 
-M.default_functions["matches"] = function(dataxml, arg)
+M.default_functions["matches"] = function(_dataxml, arg)
     -- flags can be one of ims, x is not supported
     if arg[1] == nil or arg[2] == nil then
         -- warning("contains(): one of the arguments is empty")
@@ -1151,7 +1151,7 @@ M.default_functions["matches"] = function(dataxml, arg)
     return ret
 end
 
-M.default_functions["upper-case"] = function(dataxml, arg)
+M.default_functions["upper-case"] = function(_dataxml, arg)
     local str = arg and arg[1]
     if str then
         return string.upper(tostring(arg[1]))
@@ -1161,7 +1161,7 @@ M.default_functions["upper-case"] = function(dataxml, arg)
     end
 end
 
-M.default_functions["lower-case"] = function(dataxml, arg)
+M.default_functions["lower-case"] = function(_dataxml, arg)
     local str = arg and arg[1]
     if str then
         return string.lower(tostring(arg[1]))
@@ -1179,11 +1179,11 @@ M.default_functions["false"] = function()
     return false
 end
 
-M.default_functions["not"] = function(dataxml, arg)
+M.default_functions["not"] = function(_dataxml, arg)
     return not arg[1]
 end
 
-M.default_functions["string-join"] = function(dataxml, arg)
+M.default_functions["string-join"] = function(_dataxml, arg)
     local ret = {}
     for i = 1, #arg - 1 do
         ret[#ret + 1] = tostring(arg[i])
@@ -1191,11 +1191,11 @@ M.default_functions["string-join"] = function(dataxml, arg)
     return table.concat(ret, arg[#arg])
 end
 
-M.default_functions["string-length"] = function(dataxml, arg)
+M.default_functions["string-length"] = function(_dataxml, arg)
     return string.len(arg[1])
 end
 
-M.default_functions["substring"] = function(dataxml, arg)
+M.default_functions["substring"] = function(_dataxml, arg)
     local input = tostring(arg[1])
     local start = tonumber(arg[2])
     local length
@@ -1205,7 +1205,7 @@ M.default_functions["substring"] = function(dataxml, arg)
     return string.sub(input, start, length)
 end
 
-M.default_functions["local-name"] = function(dataxml, arg)
+M.default_functions["local-name"] = function(dataxml, _arg)
     return dataxml[".__local_name"]
 end
 

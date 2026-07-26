@@ -13,7 +13,16 @@ file_start("publisher.lua")
 ---@class publisher
 ---@field current_pagestore_name? string
 ---@field current_group? string
----@field current_grid? table
+---@field current_grid? Grid
+---@field current_page? Page
+---@field pagebreak_impossible? boolean
+---@field skippages? table Pending page skip (pagetype, skippagetype, doubleopen).
+---@field minwidth? integer Image size constraints in sp (set per image).
+---@field minheight? integer
+---@field maxwidth? integer
+---@field maxheight? integer
+---@field prohibited_at_end table Characters not allowed at the end of a line.
+---@field prohibited_at_beginning table Characters not allowed at the start of a line.
 local M = {}
 -- Publish M into package.loaded right away so that submodules required
 -- below can `local publisher = require("publisher")` and get a usable
@@ -105,6 +114,8 @@ M.onedd_sp = assert(tex.sp("1dd"))
 M.onecc_sp = assert(tex.sp("1cc"))
 ---@type integer
 M.onecm_sp = M.tenmm_sp
+---@type integer
+M.fivemm_sp = assert(tex.sp("5mm"))
 
 -- User has a pro plan
 ---@type boolean
@@ -302,7 +313,7 @@ M.total_inserted_pages = 0
 ---@type table<integer, Pagelabel>
 M.pagelabels = {}
 
--- An array of strings - a mapping of real page numbers and user visible pagenumbers.
+-- An array of strings - a mapping of real page numbers and user visible page numbers.
 ---@type string[]
 M.visible_pagenumbers = {}
 
@@ -355,13 +366,20 @@ M.css = do_luafile("css.lua"):new()
 
 ---@class Options
 ---@field background string? Background color of the page.
+---@field colorprofile string? Name of the color profile
 ---@field cutmarks boolean
+---@field crop boolean | string | nil The amount of crop to be added to each side of a page
 ---@field default_pageheight? integer Default page height in scaled points.
 ---@field default_pagewidth? integer Default page width in scaled points.
+---@field default_zugferdfile? string Default ZUGFeRD invoice file name.
+---@field displaymode? "UseAttachments"|"UseOutlines"|"FullScreen"|"UseThumbs" PDF viewer display mode.
 ---@field documentauthor string
+---@field documentcreator? string
 ---@field documentkeywords string
+---@field documentproducer? string
 ---@field documentsubject string
 ---@field documenttitle string The document title.
+---@field dpi? number Resolution for pixel to sp conversion.
 ---@field dumpstructtree boolean Writes the PDF/UA structure tree to a file (-struct.xml).
 ---@field extensionhandler string?
 ---@field fontloader "harfbuzz"|"fontforge" Backend used to load fonts.
@@ -369,12 +387,16 @@ M.css = do_luafile("css.lua"):new()
 ---@field fontstep number?
 ---@field fontstretch number?
 ---@field format "PDF/UA"|"PDF/X-4"|"PDF/X-3:2002"|"" PDF output format
+---@field gridcells_dx? integer Horizontal gap between grid cells in sp.
+---@field gridcells_dy? integer Vertical gap between grid cells in sp.
 ---@field gridcells_x integer Number of grid cells horizontally (0 = auto).
 ---@field gridcells_y integer Number of grid cells vertically (0 = auto).
 ---@field gridheight integer Grid cell height in scaled points.
 ---@field gridlocation "background"|"foreground"|"none" Where the debug grid is drawn.
 ---@field gridwidth integer Grid cell width in scaled points.
 ---@field hidespinfo? string|boolean
+---@field html? string HTML rendering mode.
+---@field hyperlinkbordercolor? string Border color for hyperlink annotations.
 ---@field hyperlinkborderwidth integer Border width for hyperlink annotations, in sp.
 ---@field ignoreeol boolean Ignore newlines in data.
 ---@field imagehandler string?
@@ -383,6 +405,10 @@ M.css = do_luafile("css.lua"):new()
 ---@field markdownextensions table<string, any>
 ---@field mpcolorwarning boolean
 ---@field namespaces "lax"|"strict" XML namespace handling mode.
+---@field overfulllineerror? boolean Treat overfull lines as errors (nil = ignore).
+---@field pageheight? integer Page height in sp (set by Pageformat).
+---@field pagelayout? "SinglePage"|"OneColumn"|"TwoColumnLeft"|"TwoColumnRight"|"TwoPageLeft"|"TwoPageRight" PDF viewer page layout.
+---@field pagewidth? integer Page width in sp (set by Pageformat).
 ---@field reportmissingglyphs boolean|string
 ---@field resetmarks boolean
 ---@field resizehandler string?
@@ -391,6 +417,7 @@ M.css = do_luafile("css.lua"):new()
 ---@field showgrid boolean Show grid.
 ---@field showgridallocation boolean Allocated grid cells are colored.
 ---@field showgroups boolean Show groups.
+---@field showhyperlinks? boolean Draw a border around hyperlinks.
 ---@field showhyphenation boolean Show all possible hyphenation points.
 ---@field showkerning boolean Show kerning marks.
 ---@field showobjects boolean Draw a line around objects.
@@ -398,6 +425,7 @@ M.css = do_luafile("css.lua"):new()
 ---@field startpage number Start page (defaults to 1)
 ---@field tablerulefix boolean Fix table rules for better display in Adobe Acrobat.
 ---@field trace boolean
+---@field trim? integer Bleed amount in sp.
 ---@field trimmarks boolean
 ---@field verbosity number
 ---@field xmlparser "lua"|"go"|"lxpath" XML parser used for input data and layout.
@@ -587,7 +615,7 @@ M.fontaliases = {}
 ---@field italic table<string, string>
 ---@field bolditalic table<string, string>
 
--- for HTML / CSS fontfamilies
+-- for HTML / CSS font families
 ---@type table<string, FontGroupVariant>
 M.fontgroup = {
     ["sans-serif"] = {
@@ -643,7 +671,22 @@ M.lowercase = false
 ---@field name? string Name of the textformat (matches the table key).
 ---@field disable_hyphenation? boolean Suppress hyphenation for this format.
 ---@field break_before? "page" | "always" | "" allow break before this paragraph.
+---@field break_after? string Break behaviour after this paragraph ("avoid").
 ---@field breakbelow? boolean allow break after this paragraph.
+---@field paddingtop? number Padding above the paragraph in sp.
+---@field colpaddingtop? number Padding above the paragraph in table cells, in sp.
+---@field bordertop? number Width of the rule above the paragraph in sp.
+---@field borderbottom? number Width of the rule below the paragraph in sp.
+---@field border_top_width? number
+---@field border_bottom_width? number
+---@field margintop? number Vertical margin above the paragraph in sp.
+---@field marginbottom? number Vertical margin below the paragraph in sp.
+---@field margintopboxstart? number Margin above the paragraph at the top of a box, in sp.
+---@field letterspacing? number Letter spacing in em.
+---@field cssfontsize? boolean Use the CSS font size handling.
+---@field hyphenchar? string Hyphenation character override.
+---@field htmlverticalspacing? string Vertical spacing mode for HTML ("inner", ...).
+---@field tab? any Tab handling configuration.
 
 -- Text formats is a hash with arbitrary names as keys and the values
 -- are tables with alignment and indent. indent is the amount of
@@ -667,7 +710,7 @@ M.textformats = {
     centered = { indent = 0, alignment = "centered", rows = 1, orphan = 2, widow = 2, name = "centered" },
     left = { indent = 0, alignment = "leftaligned", rows = 1, orphan = 2, widow = 2, name = "left" },
     right = { indent = 0, alignment = "rightaligned", rows = 1, orphan = 2, widow = 2, name = "right" },
-    __fivemm = { indent = tex.sp("5mm"), alignment = "justified", rows = 1, orphan = 2, widow = 2 },
+    __fivemm = { indent = M.fivemm_sp, alignment = "justified", rows = 1, orphan = 2, widow = 2 },
 }
 
 ---@class Bookmark
@@ -1935,7 +1978,7 @@ do
                     local r = node.has_attribute(head, M.att_role)
                     local parentid = M.attribute_helpers.getprop(head, "parentid")
 
-                    -- parentdid == "" is a maker for inheritance
+                    -- parentid == "" is a maker for inheritance
                     if parentid == "" or parentid == nil then
                         parentid = curid
                     end
@@ -2011,7 +2054,7 @@ do
                         }
                     end
                     -- The parent needs links to the children, but only one for each. Therefore
-                    -- the parent contains a table (added_tables) which records all roleids
+                    -- the parent contains a table (added_tables) which records all role ids
                     -- that are already part of the structure.
                     -- Example:
                     -- Object 2 is: <</Type /StructElem /S /Document /P 16 0 R /K 8 0 R>>

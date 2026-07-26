@@ -17,6 +17,7 @@ local M = {}
 ---@field id integer LuaTeX-internal language id (`l:id()`).
 ---@field l userdata The `lang` object created via `lang.new()`.
 ---@field locale string Lower-cased locale string used to look the entry up.
+---@field prehyphenchar? integer Saved pre-hyphen char, restored after linebreaking.
 
 -- We map from symbolic names to (part of) file names. The hyphenation pattern files are
 -- in the format `hyph-XYZ.pat.txt` and we need to find out that `XYZ` part.

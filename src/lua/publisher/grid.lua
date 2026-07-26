@@ -14,6 +14,18 @@ local publisher = require("publisher")
 ---@field column integer 1-based column of the top-left corner.
 ---@field width? integer Width in grid cells.
 ---@field height? integer Height in grid cells.
+---@field draw? table Debug overlay settings (color, width).
+
+-- One entry of `positioning_frames`: the array of frames of an area plus
+-- the cursor state for that area.
+---@class Area
+---@field [integer] PositioningFrame
+---@field current_row? integer
+---@field current_column? integer
+---@field current_frame? integer
+---@field advance_rows? integer
+---@field advance_frame? integer
+---@field colorname? string Debug overlay color.
 
 ---@class Grid
 ---@field pagenumber integer? Logical page number (debugging only).
@@ -21,7 +33,10 @@ local publisher = require("publisher")
 ---@field extra_margin integer Cut-mark margin in sp.
 ---@field trim integer Bleed in sp.
 ---@field dimensions { [1]: integer, [2]: integer, [3]: integer, [4]: integer } `{min_x, min_y, max_x, max_y}` in sp.
----@field positioning_frames table<string, PositioningFrame[]>
+---@field positioning_frames table<string, Area>
+---@field allocation_x_y table Occupancy matrix, indexed `[x][y]`.
+---@field grid_nx? integer Number of columns requested by the layout.
+---@field grid_ny? integer Number of rows requested by the layout.
 ---@field gridwidth? integer Cell width in sp.
 ---@field gridheight? integer Cell height in sp.
 ---@field grid_dx? integer Horizontal gap between cells in sp.
@@ -135,7 +150,7 @@ end
 -- Sets the current row of an area.
 ---@param self Grid
 ---@param row integer
----@param areaname string
+---@param areaname? string
 ---@param origin? string Caller identifier for log messages.
 ---@return nil
 function M.set_current_row(self, row, areaname, origin)
@@ -154,7 +169,7 @@ end
 -- Sets the current column of an area.
 ---@param self Grid
 ---@param column integer
----@param areaname string
+---@param areaname? string
 ---@param origin? string Caller identifier for log messages.
 ---@return nil
 function M.set_current_column(self, column, areaname, origin)
@@ -445,7 +460,7 @@ end
 -- Stores the grid cell width/height (and optional gaps) on the grid
 -- instance and updates the row/column counts to match the page.
 ---@param self Grid
----@param options { gridwidth?: integer, gridheight?: integer, grid_dx?: integer, grid_dy?: integer }
+---@param options { wd?: integer, ht?: integer, nx?: integer, ny?: integer, dx?: integer, dy?: integer }
 ---@return nil
 function M.set_width_height(self, options)
     self.gridwidth = options.wd

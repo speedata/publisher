@@ -343,6 +343,8 @@ local function pre_linebreak_direct(head)
         elseif id == glue_node then
             if d_getsubtype(head) == 100 then -- leader
                 local l = d_getleader(head)
+                -- a glue node with the leader subtype always carries a leader
+                ---@cast l -nil
                 local wd = d_has_attribute(l, publisher.att_leaderwd)
 
                 -- Set the font for the leader

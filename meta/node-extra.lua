@@ -27,6 +27,21 @@ function tex.shipout(n) end
 ---@return integer index
 function tex.saveboxresource(n, attributes, resources, immediate, type, margin) end
 
+-- The TeXLuaCATS library declares node.direct.getprev as returning Node
+-- instead of a direct node index, and setnext/setprev without the
+-- possibility to unlink by passing nil. Worth a PR upstream.
+---@param d integer
+---@return integer|nil prev
+function node.direct.getprev(d) end
+
+---@param d integer
+---@param next? integer
+function node.direct.setnext(d, next) end
+
+---@param d integer
+---@param prev? integer
+function node.direct.setprev(d, prev) end
+
 -- The TeXLuaCATS library declares setlink with a single parameter, but the
 -- LuaTeX API takes a list of nodes to be chained. Worth a PR upstream.
 ---@param d integer

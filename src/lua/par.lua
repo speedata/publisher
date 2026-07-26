@@ -5,9 +5,17 @@ file_start("par.lua")
 local publisher = require("publisher")
 
 ---@class Par
----@field textformat string Name of the assigned textformat.
+---@field textformat? Textformat Resolved textformat of the paragraph.
 ---@field origin? string Caller identifier (debugging only).
 ---@field margin_top number
+---@field margin_bottom? number
+---@field padding_left? number
+---@field padding_right? number
+---@field padding_top? number
+---@field padding_bottom? number
+---@field width? integer Requested width in sp.
+---@field id? string Structure element id (PDF/UA).
+---@field html? string HTML processing mode ("off" disables it).
 ---@field typ "par"
 ---@field has_color? boolean
 ---@field has_hyperlink? boolean
@@ -962,8 +970,8 @@ function Par:format(width_sp, options, data)
     local objectrow = 0
 
     -- Cache frequently accessed self fields
-    local self_padding_left = self.padding_left
-    local self_padding_right = self.padding_right
+    local self_padding_left = self.padding_left or 0
+    local self_padding_right = self.padding_right or 0
     local self_prependlist = self.prependlist
     local self_initial = self.initial
     local self_startendborder = self.startendborder

@@ -89,6 +89,15 @@ end
 ---@field allocate? boolean Mark touched cells as allocated.
 ---@field grid? table Override grid (defaults to `publisher.current_grid`).
 ---@field keepposition? boolean Force the object to stay at its absolute position.
+---@field shift_left? integer Allocation shift to the left in grid cells.
+---@field shift_up? integer Allocation shift upwards in grid cells.
+---@field width_gridcells? integer Width of the allocated region.
+---@field height_gridcells? integer Height of the allocated region.
+---@field allocate_matrix? table Image-shape occupancy matrix.
+---@field allocate_left? integer Extra allocation in sp.
+---@field allocate_right? integer Extra allocation in sp.
+---@field allocate_top? integer Extra allocation in sp.
+---@field allocate_bottom? integer Extra allocation in sp.
 
 -- Places an object at an absolute position given in scaled points.
 ---@param param OutputAbsoluteParam
@@ -263,6 +272,11 @@ end
 ---@field valign? "top"|"middle"|"bottom"
 ---@field halign? "left"|"center"|"right"
 ---@field allocate_matrix? table Image-shape occupancy matrix.
+---@field allocate_left? integer Extra allocation in sp.
+---@field allocate_right? integer Extra allocation in sp.
+---@field allocate_top? integer Extra allocation in sp.
+---@field allocate_bottom? integer Extra allocation in sp.
+---@field vreference? string Vertical reference ("bottom" shifts by box height).
 ---@field pagenumber? integer Target page number; defaults to current.
 ---@field keepposition? boolean Whether to move the local cursor after placement.
 ---@field grid? table Override grid object.
@@ -270,7 +284,6 @@ end
 ---@field origin_x? number Rotation origin X percentage (0 = left, 100 = right).
 ---@field origin_y? number Rotation origin Y percentage (0 = top, 100 = bottom).
 ---@field framewidth? integer Frame width in sp when `frame="solid"`.
----@field allocate_left? integer Extra left allocation in sp.
 
 -- Places an object at the given grid cell `(x, y)`. With `allocate=true`,
 -- the touched cells are marked as occupied.
