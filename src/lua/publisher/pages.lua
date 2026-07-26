@@ -626,10 +626,10 @@ function M.initialize_page(pagenumber, data, _from)
         return
     end
     if pagetype.width then
-        current_page.width = tex.sp(pagetype.width)
+        current_page.width = tex.sp(pagetype.width) or current_page.width
     end
     if pagetype.height then
-        current_page.height = tex.sp(pagetype.height)
+        current_page.height = tex.sp(pagetype.height) or current_page.height
     end
     if pagetype.width or pagetype.height then
         if publisher.newxpath then

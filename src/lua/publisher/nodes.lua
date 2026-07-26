@@ -2245,7 +2245,7 @@ end
 ---@param parameter table Glue parameters (`width`, `stretch`, `shrink`, ...).
 ---@param origin? string Origin tag (debugging).
 ---@return Node nodelist
----@return Node? glue The glue node (only in the "tail" case).
+---@return Node glue The inserted glue node.
 function M.add_glue(nodelist, head_or_tail, parameter, origin)
     parameter = parameter or {}
 
@@ -2255,13 +2255,13 @@ function M.add_glue(nodelist, head_or_tail, parameter, origin)
         publisher.attribute_helpers.setprop(n, "origin", origin)
     end
     if nodelist == nil then
-        return n
+        return n, n
     end
 
     if head_or_tail == "head" then
         n.next = nodelist
         nodelist.prev = n
-        return n
+        return n, n
     else
         local last = node.slide(nodelist)
         last.next = n

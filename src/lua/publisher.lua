@@ -688,8 +688,8 @@ M.lowercase = false
 ---@field indent integer Indentation in scaled points (sp).
 ---@field alignment TextformatAlignment
 ---@field rows? integer Number of rows that the format applies to.
----@field orphan? integer Minimum lines kept at the bottom of a page when breaking.
----@field widow? integer Minimum lines kept at the top of a page when breaking.
+---@field orphan integer Minimum lines kept at the bottom of a page when breaking.
+---@field widow integer Minimum lines kept at the top of a page when breaking.
 ---@field name? string Name of the textformat (matches the table key).
 ---@field disable_hyphenation? boolean Suppress hyphenation for this format.
 ---@field break_before? "page" | "always" | "" allow break before this paragraph.
