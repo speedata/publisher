@@ -60,7 +60,8 @@ function M.is_ifthenelse(dataxml, str, pos, ns)
     start, stop = string.find(str, "^if%s+%(", pos)
     if start then
         local lvl = 1
-        local curpos, curstring = stop + 1
+        local curpos = stop + 1
+        local curstring
         while lvl > 0 do
             curstring = string.sub(str, curpos, curpos)
             if curstring == "(" then
@@ -368,7 +369,7 @@ function M.get_operand(dataxml, str, pos, ns)
         return M.tok
     elseif M.is_function(dataxml, str, pos, ns) then
         return M.tok
-    elseif M.is_dataexpr(dataxml, str, pos, ns) then
+    elseif M.is_dataexpr(dataxml, str, pos) then
         return M.tok
     elseif M.is_nodeselector(dataxml, str, pos, ns) then
         return M.tok

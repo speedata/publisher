@@ -495,9 +495,9 @@ end
 
 -- Emits the closing color/transparency operators after a MetaPost
 -- object has been drawn.
----@param tr boolean Transparent.
----@param over boolean Overprint.
----@param sh boolean Shading.
+---@param tr integer? Transparency graphic state number.
+---@param over string? Color override.
+---@param sh integer? Shading number.
 ---@return nil
 local function do_postobj_color(tr, over, sh)
     if sh then
@@ -516,10 +516,10 @@ local transparency_values
 -- Emits the opening color/transparency/shading operators for a MetaPost
 -- object based on its prescript instructions.
 ---@param object table
----@param prescript string|nil
----@return boolean transparent
----@return boolean overprint
----@return boolean shading
+---@param prescript table|nil
+---@return integer? transparent
+---@return string? overprint
+---@return integer? shading
 local function do_preobj_color(object, prescript)
     local opaq = prescript and prescript.tr_transparency
 
@@ -574,12 +574,10 @@ local function script2table(s)
     return t
 end
 
--- Converts a MetaPost figure object into the PDF content-stream string
--- and the bounding-box dimensions used for placement.
+-- Converts a MetaPost figure object by emitting the PDF content stream
+-- and TeX code directly (via tex.sprint / pdf literals); returns nothing.
 ---@param result table MetaPost figure result.
----@return string pdf_stream
----@return number width_bp
----@return number height_bp
+---@return nil
 local function convert(result)
     if result then
         local figures = result.fig
@@ -884,14 +882,6 @@ function M.prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
     return mpobj, nl, bbox
 end
 
--- return a vbox with the pdf_whatsit node
----@param width_sp integer
----@param height_sp integer
----@param graphicname string
----@param extra_parameter table
----@param parameter table
----@return Node
----@return table bounding box
 -- Returns an hbox containing a named MetaPost graphic rendered at
 -- (width × height) sp.
 ---@param width_sp integer
@@ -900,6 +890,7 @@ end
 ---@param extra_parameter? table<string, any> Variable values.
 ---@param parameter? table Per-call parameters.
 ---@return Node? hbox
+---@return table? bbox Bounding box.
 function M.boxgraphic(width_sp, height_sp, graphicname, extra_parameter, parameter)
     local _, a, bbox = M.prepareboxgraphic(width_sp, height_sp, graphicname, extra_parameter)
     return a, bbox

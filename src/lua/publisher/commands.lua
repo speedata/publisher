@@ -4094,7 +4094,7 @@ function commands.options(layoutxml, dataxml)
     end
 
     if mainlanguage ~= "" then
-        publisher.language.set_mainlanguage(mainlanguage, true)
+        publisher.language.set_mainlanguage(mainlanguage)
     end
     if publisher.options.trim then
         if publisher.newxpath then

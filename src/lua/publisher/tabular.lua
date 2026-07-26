@@ -1002,9 +1002,9 @@ end
 ---@param current_row integer Current row index
 ---@param last_shiftup? number Last shift-up value
 ---@param skiptable table Table of skipped cells
----@return number Row height
----@return table Rowspans
----@return number Shift-up value
+---@return number? rowheight Row height (nil if no cell could be packed).
+---@return table? rowspans
+---@return number? shiftup
 function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, skiptable)
     last_shiftup = last_shiftup or 0
     local rowheight
@@ -1119,6 +1119,7 @@ function tabular:calculate_rowheights()
     local rowcounter = {}
     local current_row
 
+    ---@type number?
     local last_shiftup = 0
 
     for _, tr in ipairs(self.tab) do
@@ -1143,6 +1144,7 @@ function tabular:calculate_rowheights()
         if eltname == "Tablerule" or eltname == "Columns" or eltname == "TableNewPage" then
             -- ignore
         elseif eltname == "Tablehead" or eltname == "Tablefoot" then
+            ---@type number?
             local last_shiftup = 0
             for _, row in ipairs(tr_contents) do
                 local cellcontents = publisher.xml_helpers.element_contents(row)
@@ -1228,7 +1230,7 @@ end
 ---@param current_row integer Current row index
 ---@param skiptable table Table of skipped cells
 ---@param rowheightarea table Table of row heights
----@return table Horizontal list node for the row
+---@return Node? row Horizontal list for the row (nil if no cell could be packed).
 function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
     local current_column
     local current_column_width, ht
@@ -2635,7 +2637,7 @@ end
 function tabular:do_bordercollapse(tab, area)
     area = area or "body"
     local tablematrix = {}
-    local current_row, current_column = 1
+    local current_row, current_column = 1, 1
     local maxcol = 0 -- needed?
     for _, tr in ipairs(tab) do
         local tr_eltname = publisher.xml_helpers.elementname(tr)

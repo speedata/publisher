@@ -829,7 +829,7 @@ function M.do_metapostimage(dataxml, txt, width, height, clip)
     end
 
     local box, bbox = metapost.boxgraphic(width_sp, height_sp, "_image", {}, {})
-    if not box then
+    if not box or not bbox then
         main.log("error", "Could not create metapost image")
         return
     end

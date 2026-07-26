@@ -30,7 +30,7 @@ end
 -- `pagenum_tbl`, `pages_shippedout`.
 ---@param nodelist Node Page contents (typically a vbox).
 ---@param pagenumber integer Logical page number.
----@param dataxml table Data XML context for matter resolution.
+---@param dataxml? table Data XML context for matter resolution.
 ---@return nil
 function M.shipout(nodelist, pagenumber, dataxml)
     publisher.pages_shippedout[pagenumber] = true
@@ -41,7 +41,7 @@ function M.shipout(nodelist, pagenumber, dataxml)
     if not publisher.matters[cp.matter] then
         local defaultmatter
         if publisher.newxpath then
-            defaultmatter = publisher.xpath.string_value(dataxml.vars["_matter"])
+            defaultmatter = dataxml and publisher.xpath.string_value(dataxml.vars["_matter"]) or "mainmatter"
         else
             defaultmatter = publisher.xpath.get_variable("_matter")
         end
@@ -991,7 +991,7 @@ end
 -- crop marks, headers/footers, watermarks etc. Called once per page before
 -- the actual `tex.shipout`.
 ---@param thispage table Current page table.
----@param data table Data XML context.
+---@param data? table Data XML context.
 ---@return nil
 function M.dothingsbeforeoutput(thispage, data)
     local cg = thispage.grid
@@ -1187,8 +1187,10 @@ end
 -- Returns the remaining vertical space (in sp) on the current frame of
 -- `area`, optionally accounting for an allocation matrix.
 ---@param area string Area name.
----@param allocate? table Optional 2D occupancy matrix to subtract.
+---@param allocate? "auto"|table Optional 2D occupancy matrix to subtract.
 ---@return integer remaining
+---@return integer? firstrow
+---@return integer? lastrow
 function M.get_remaining_height(area, allocate)
     local cols = publisher.current_grid:number_of_columns(area)
     local startcol = 1
@@ -1219,15 +1221,14 @@ function M.get_remaining_height(area, allocate)
         lastrow = lastrow - 1
         if lastrow == firstrow then
             lastrow = nil
-        end
-        if lastrow >= maxrows then
+        elseif lastrow >= maxrows then
             lastrow = nil
         end
         return (row - firstrow) * publisher.current_grid.gridheight, firstrow, lastrow
     end
     if not tonumber(maxrows) then
         main.log("error", "maxrows not set, why?")
-        return
+        return 0
     end
     if not publisher.current_grid:fits_in_row_area(startcol, cols, firstrow, area) then
         while firstrow <= maxrows do

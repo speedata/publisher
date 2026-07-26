@@ -5,6 +5,40 @@
 -- onto the base class here. lua-language-server merges duplicate @class
 -- declarations. This file is annotation-only and never loaded at runtime.
 
+-- The TeXLuaCATS library declares font.nextid without its optional
+-- parameter: with true, the id is only reserved, not yet assigned.
+---@param reserve? boolean
+---@return integer id
+function font.nextid(reserve) end
+
+-- The TeXLuaCATS library declares tex.shipout without its box number
+-- parameter and tex.saveboxresource with all parameters required, although
+-- only the box is mandatory. Worth a PR upstream.
+---@param n integer Box register number.
+---@return nil
+function tex.shipout(n) end
+
+---@param n Node|integer
+---@param attributes? string
+---@param resources? string
+---@param immediate? boolean
+---@param type? integer
+---@param margin? integer
+---@return integer index
+function tex.saveboxresource(n, attributes, resources, immediate, type, margin) end
+
+-- The TeXLuaCATS library declares setlink with a single parameter, but the
+-- LuaTeX API takes a list of nodes to be chained. Worth a PR upstream.
+---@param d integer
+---@param ... integer
+---@return integer head
+function node.direct.setlink(d, ...) end
+
+---@param n Node
+---@param ... Node
+---@return Node head
+function node.setlink(n, ...) end
+
 ---@class Node
 ---@field width number
 ---@field height number

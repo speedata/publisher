@@ -91,17 +91,7 @@ function M.parse_html(elt, parameter, data)
     parameter = parameter or {}
 
     if elt.typ == "csshtmltree" then
-        -- Provide the runtime environment for the modular parser
-        local env = {
-            publisher = publisher,
-            tex = tex,
-            node = node,
-            img = img,
-            xpath = publisher.xpath,
-            math = math,
-        }
-        -- New modular entry point (same call site for you)
-        return html.parse_html_new(elt, parameter, data, env)
+        return html.parse_html_new(elt, parameter, data)
     else
         main.log("error", "This should not happen (parse_html)")
     end
@@ -817,7 +807,7 @@ end
 -- Remove the first \n in a paragraph value table. See #132
 -- Removes leading whitespace-only entries from a paragraph table.
 ---@param tbl table Paragraph table (array of segments).
----@return table tbl
+---@return boolean? done True when a segment was cleaned.
 function M.remove_first_whitespace(tbl)
     if publisher.newxpath and publisher.xpath.is_attribute(tbl) then
         tbl.value = string.gsub(tbl.value, "^[\n\t]*(.-)$", "%1")
@@ -845,7 +835,7 @@ end
 -- Remove the final \n in a paragraph value table. See #132
 -- Removes trailing whitespace-only entries from a paragraph table.
 ---@param tbl table Paragraph table.
----@return table tbl
+---@return boolean? done True when a segment was cleaned.
 function M.remove_last_whitespace(tbl)
     for i = #tbl, 1, -1 do
         if type(tbl[i]) == "string" then
@@ -1626,12 +1616,12 @@ local function ffglyphlist(arguments)
             head, last = node.insert_after(head, last, dummypenalty)
             if fontfamily == nil then
                 main.log("error", "ffglyphlist: fontfamily is nil")
-                return
+                return head
             end
             local ff = fonts.lookup_fontfamily_number_instance[fontfamily]
             if ff == nil then
                 main.log("error", string.format("Could not find instance of family %s", fontfamily))
-                return
+                return head
             end
             local ht = ff.size
             local strut = M.add_rule(nil, "head", { height = ht * 0.75, depth = ht * 0.25, width = 0 }, "newline")
@@ -2124,6 +2114,7 @@ function M.add_rule(nodelist, head_or_tail, parameter, origin)
         n.prev = last
         return nodelist, n
     end
+    ---@diagnostic disable-next-line: unreachable-code
     assert(false, "never reached") -- luacheck: ignore 511
 end
 
@@ -2251,6 +2242,7 @@ function M.add_glue(nodelist, head_or_tail, parameter, origin)
         n.prev = last
         return nodelist, n
     end
+    ---@diagnostic disable-next-line: unreachable-code
     assert(false, "never reached") -- luacheck: ignore 511
 end
 
@@ -2307,7 +2299,7 @@ end
 ---@param nodelist Node
 ---@param hsize integer Target line width in sp.
 ---@param parameters table Paragraph parameters (alignment, indent, ...).
----@return Node head Linebroken vbox.
+---@return nil
 function M.finish_par(nodelist, hsize, parameters)
     assert(nodelist)
     node.slide(nodelist)

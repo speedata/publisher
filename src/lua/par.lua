@@ -601,10 +601,11 @@ function Par:max_width_and_lineheight(options, data)
 end
 
 -- Builds the glyph node list for the paragraph (without line breaking).
+-- The result is stored in `self.objects`.
 ---@param self Par
 ---@param options table
 ---@param data table Data XML context.
----@return Node head Head of the resulting node list.
+---@return nil
 function Par:mknodelist(options, data)
     flatten(self, self, options, data)
     local nodelist

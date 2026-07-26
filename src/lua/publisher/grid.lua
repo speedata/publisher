@@ -142,7 +142,7 @@ function M.set_current_row(self, row, areaname, origin)
     assert(self)
     local areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
-        main.log("error", string.format("Area %q unknown, using page", areaname))
+        main.log("error", string.format("Area %q unknown, using page", areaname), "origin", origin or "?")
         areaname = publisher.default_areaname
     end
     local area = self.positioning_frames[areaname]
@@ -155,12 +155,13 @@ end
 ---@param self Grid
 ---@param column integer
 ---@param areaname string
+---@param origin? string Caller identifier for log messages.
 ---@return nil
-function M.set_current_column(self, column, areaname)
+function M.set_current_column(self, column, areaname, origin)
     assert(self)
     local areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
-        main.log("error", string.format("Area %q unknown, using page", areaname))
+        main.log("error", string.format("Area %q unknown, using page", areaname), "origin", origin or "?")
         areaname = publisher.default_areaname
     end
     local area = self.positioning_frames[areaname]
@@ -277,7 +278,7 @@ end
 
 -- Returns the number of rows of the given frame.
 ---@param self Grid
----@param areaname string
+---@param areaname? string
 ---@param framenumber? integer
 ---@return integer rows
 function M.number_of_rows(self, areaname, framenumber)
@@ -295,7 +296,7 @@ end
 
 -- Returns the number of columns of the given area's current frame.
 ---@param self Grid
----@param areaname string
+---@param areaname? string
 ---@return integer columns
 function M.number_of_columns(self, areaname)
     assert(self)
@@ -313,11 +314,6 @@ function M.number_of_columns(self, areaname)
     return width
 end
 
----@param self table
----@param x integer
----@param y integer
----@param areaname string
----@param framenumber integer
 -- Checks whether grid cell `(x, y)` in the given frame is occupied.
 ---@param self Grid
 ---@param x integer Column.
@@ -677,7 +673,7 @@ function M.fits_in_row_area(self, column, width, row, areaname)
             local block = area[self:framenumber(areaname)]
             if not tonumber(block.row) then
                 main.log("error", "row not set, why? (1)", "area", areaname or "(default)")
-                return
+                return false
             end
             frame_margin_left = block.column - 1
             frame_margin_top = block.row - 1
@@ -865,6 +861,7 @@ end
 ---@param height_sp integer
 ---@param options? table Optional rounding parameters.
 ---@return integer rows
+---@return integer? extra_sp Rest height within the last grid cell.
 function M.height_in_gridcells_sp(self, height_sp, options)
     assert(self)
     local extra
@@ -878,7 +875,7 @@ function M.height_in_gridcells_sp(self, height_sp, options)
     end
     if not self.gridheight then
         main.log("error", "grid height not set, why?")
-        return
+        return 0, 0
     end
     local ht_sp = height_sp - self.gridheight
     if ht_sp <= 0 then
@@ -903,7 +900,7 @@ end
 ---@param self Grid
 ---@param frame PositioningFrame
 ---@param width_sp? integer Override frame width in sp.
----@return Node hbox
+---@return string pdfstring PDF literal code.
 function M.draw_frame(self, frame, width_sp)
     assert(self)
     local ret = {}
@@ -1000,7 +997,7 @@ end
 -- Draw internal grid (return PDF-strings)
 -- Draws the full debug grid (cell rules, row/column numbers, area frames).
 ---@param self Grid
----@return Node hbox
+---@return string? pdfstring PDF literal code.
 function M.draw_grid(self)
     assert(self)
     local color
@@ -1129,7 +1126,7 @@ end
 
 -- Renders a debug heatmap of allocated grid cells.
 ---@param self Grid
----@return Node hbox
+---@return string pdfstring PDF literal code.
 function M.draw_gridallocation(self)
     local pdf_literals = {}
     local paperheight = sp_to_bp(tex.pageheight)

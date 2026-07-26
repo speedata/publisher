@@ -1,5 +1,6 @@
----@diagnostic disable: undefined-global, lowercase-global
--- The test runner (Lua 5.1/luaunit style) injects assert_equal & Co. as globals.
+---@diagnostic disable: undefined-global, lowercase-global, deprecated
+-- The test runner (Lua 5.1/luaunit style) injects assert_equal & Co. as
+-- globals; module() exists because sdluatex enables Lua 5.1 compatibility.
 module(...,package.seeall)
 
 
