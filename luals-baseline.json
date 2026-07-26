@@ -1,9 +1,8 @@
 {
   "comment": "Per-code lua-language-server finding counts. Managed by 'rake lualint:update'.",
-  "total": 266,
+  "total": 219,
   "codes": {
-    "param-type-mismatch": 52,
-    "lowercase-global": 44,
+    "param-type-mismatch": 50,
     "redefined-local": 34,
     "unused-local": 33,
     "need-check-nil": 30,
@@ -12,8 +11,8 @@
     "return-type-mismatch": 15,
     "inject-field": 6,
     "assign-type-mismatch": 4,
-    "duplicate-set-field": 2,
     "redundant-return-value": 2,
+    "duplicate-set-field": 1,
     "luadoc-miss-type-name": 1,
     "missing-fields": 1,
     "redundant-return": 1,

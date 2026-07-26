@@ -9,9 +9,9 @@
 
 file_start("spinit.lua")
 
-loglevel_str = os.getenv("SD_LOGLEVEL")
+local loglevel_str = os.getenv("SD_LOGLEVEL")
 
-loglevel = 0
+local loglevel = 0
 if loglevel_str == "debug" then
     loglevel = -4
 elseif loglevel_str == "info" then
@@ -31,6 +31,9 @@ tex.enableprimitives("", tex.extraprimitives())
 -- the tex.sp override and other setup we haven't done yet. The helper
 -- functions defined below close over this upvalue.
 local publisher
+
+-- Assigned at the end of this file, read by exit().
+local starttime
 
 --- Convert scaled point to postscript points,
 --- rounded to three digits after decimal point
@@ -143,6 +146,7 @@ local orig_texsp = tex.sp
 --- Prints a splib.error message only when TeX dimension conversion fails.
 ---@param number_or_string number|string|nil
 ---@return integer|nil
+---@diagnostic disable-next-line: duplicate-set-field
 function tex.sp(number_or_string)
     ---Helper: safely round to nearest integer
     ---@param x number|string|nil
@@ -271,9 +275,10 @@ local function setup()
     tex.pdfhorigin = 0
     tex.pdfvorigin = 0
 
-    -- since 4.9.3
-    pdf.setminorversion(tonumber(os.getenv("SP_PDFMINORVERSION")))
-    pdf.setmajorversion(tonumber(os.getenv("SP_PDFMAJORVERSION")))
+    -- since 4.9.3. The sp binary always sets both variables; 1.7 is its
+    -- default, repeated here for a LuaTeX run without the wrapper.
+    pdf.setminorversion(tonumber(os.getenv("SP_PDFMINORVERSION")) or 7)
+    pdf.setmajorversion(tonumber(os.getenv("SP_PDFMAJORVERSION")) or 1)
 
     -- 10 00 11 11 == 143
     -- PTEX.FullBanner, PTEX.FileName, PTEX.PageNumber, PTEX.InfoDict, Producer
@@ -1303,7 +1308,7 @@ local function traceback(what)
     )
 end
 
-function main_loop()
+local function main_loop()
     -- splib.log (not main.log) so no page/line context is attached: the
     -- run hasn't started yet, there is no meaningful current page.
     splib.log("info", "Start processing")

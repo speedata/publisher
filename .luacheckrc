@@ -136,7 +136,6 @@ globals = {
     "env_publisherversion", "utf8_to_utf16_string_pdf",
     "has_pro_error", "pro",
     "os_separator",
-    "loglevel", "loglevel_str",
     -- Attributes registered globally
     "attributes", "attribute_name_number", "attribute_number_name",
     "att_rows", "att_shift_left", "att_shift_up", "att_tie_glue",
@@ -179,7 +178,7 @@ globals = {
     -- spinit.lua exports
     "escape_lua_pattern", "sp_to_bp", "bp_to_sp", "table_textvalue",
     "set_glue", "set_glue_values", "get_glue_value",
-    "exit", "quit", "main_loop", "starttime",
+    "exit", "quit",
     "prohibited_at_end", "prohibited_at_beginning",
     "luatex_version", "errcount", "warncount",
     -- sd-callbacks.lua hooks

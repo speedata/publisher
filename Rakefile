@@ -128,6 +128,15 @@ def lualint_run_check
 		"runtime.version" => "Lua 5.3",
 		"diagnostics.severity" => { "duplicate-set-field" => "Hint" },
 		"diagnostics.unusedLocalExclude" => ["_*"],
+		# Intentional cross-file globals defined in spinit.lua (kept in sync
+		# with the "spinit.lua exports" section of .luacheckrc). Keep this in
+		# sync with the same list in .luarc.json for the IDE.
+		"diagnostics.globals" => [
+			"sp_to_bp", "sp_to_pt", "bp_to_sp", "table_textvalue",
+			"set_glue", "set_glue_values", "get_glue_value",
+			"exit", "quit", "errcount", "warncount",
+			"sp_suppressinfo", "luatex_version",
+		],
 		"workspace.library" => [lualint_texluatex_lib, LUALINT_OUTDIR.join("..", "..", "meta").expand_path.to_s],
 	}
 	configpath = LUALINT_OUTDIR.join("luarc-check.json")
