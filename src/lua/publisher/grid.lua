@@ -119,7 +119,7 @@ end
 
 -- Returns the current row index of the given frame.
 ---@param self Grid
----@param areaname string
+---@param areaname? string
 ---@param framenumber? integer
 ---@return integer row
 function M.current_row(self, areaname, framenumber)
@@ -331,10 +331,10 @@ end
 
 -- Checks whether grid cell `(x, y)` in the given frame is occupied.
 ---@param self Grid
----@param x integer Column.
----@param y integer Row.
----@param areaname string
----@param framenumber? integer
+---@param x number Column.
+---@param y number Row.
+---@param areaname? string
+---@param framenumber? number
 ---@return boolean allocated
 function M.isallocated(self, x, y, areaname, framenumber)
     assert(self)

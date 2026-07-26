@@ -78,6 +78,11 @@ function splib.loadxmlstring(xml) end
 ---@param ... any
 function splib.log(level, message, ...) end
 
+---Lower-case `text` using the Unicode full case mappings.
+---@param text string
+---@return string? lowercased
+function splib.lowercase(text) end
+
 ---Resolve a logical filename through the file-lookup system to its absolute path,
 ---or `nil` if not found.
 ---@param filename string
@@ -145,6 +150,11 @@ function splib.teardown() end
 ---@param pattern string  Go-flavoured regexp.
 ---@return string[] segments
 function splib.tokenize(text, pattern) end
+
+---Upper-case `text` using the Unicode full case mappings (Straße -> STRASSE).
+---@param text string
+---@return string? uppercased
+function splib.uppercase(text) end
 
 ---Number of warnings logged so far in this run.
 ---@return integer

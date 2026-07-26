@@ -78,7 +78,7 @@ local function dimexpression(dataxml, arg)
 end
 
 --- Get the page number of a marker
-local function fnpagenumber(dataxml, arg)
+local function fnpagenumber(_dataxml, arg)
     local m = publisher.markers[arg[1]]
     if m then
         return m.page
@@ -92,7 +92,7 @@ local function current_column(dataxml, arg)
     return publisher.current_grid:current_column(arg and arg[1])
 end
 
-local function alternating(dataxml, arg)
+local function alternating(_dataxml, arg)
     local alt_type = arg[1]
     if not publisher.alternating[alt_type] then
         publisher.alternating[alt_type] = 1
@@ -104,8 +104,8 @@ local function alternating(dataxml, arg)
     return val
 end
 
-local function first_free_row(dataxml, arg)
-    local ret = 0
+local function first_free_row(_dataxml, arg)
+    local ret = 0 ---@type integer?
     if arg and arg[1] then
         ret = publisher.current_grid:first_free_row(arg[1])
     end
@@ -113,7 +113,7 @@ local function first_free_row(dataxml, arg)
 end
 
 -- Get the first mark of a page (for example used in the head of dictionaires)
-local function firstmark(dataxml, arg)
+local function firstmark(_dataxml, arg)
     local pagenumber = arg[1]
     if not tonumber(pagenumber) then
         main.log("error", "firstmark: cannot get page number")
@@ -126,10 +126,10 @@ local function firstmark(dataxml, arg)
 end
 
 -- Get the last mark of a page (for example used in the head of dictionaires)
-local function lastmark(dataxml, arg)
+local function lastmark(_dataxml, arg)
     local pagenumber = arg[1]
     if not tonumber(pagenumber) then
-        main.log("error", "lasttmark: cannot get page number")
+        main.log("error", "lastmark: cannot get page number")
     end
     local maxid = publisher.marker_max[pagenumber]
     if not maxid then
@@ -141,10 +141,10 @@ end
 -- Read the contents given in arg[1] and write it to a temporary file.
 -- Return the name of the file. Useful in conjunction with sd:decode-base64()
 -- and Image to read an image from the data.
-local function filecontents(dataxml, arg)
+local function filecontents(_dataxml, arg)
     local tmpdir = os.getenv("SP_TEMPDIR")
     if tmpdir == nil then
-        main.log("error", "SD_TEMPDIR is nil")
+        main.log("error", "SP_TEMPDIR is nil")
         return
     end
     lfs.mkdir(tmpdir)
@@ -160,7 +160,7 @@ local function filecontents(dataxml, arg)
     return path
 end
 
-local function mode(dataxml, arg)
+local function mode(_dataxml, arg)
     local entry
     for _, v in pairs(arg) do
         entry = publisher.modes[v]
@@ -171,17 +171,17 @@ local function mode(dataxml, arg)
     return false
 end
 
-local function keepalternating(dataxml, arg)
+local function keepalternating(_dataxml, arg)
     local alt_type = arg[1]
     return publisher.alternating_value[alt_type]
 end
 
-local function reset_alternating(dataxml, arg)
+local function reset_alternating(_dataxml, arg)
     local alt_type = arg[1]
     publisher.alternating[alt_type] = 0
 end
 
-local function number_of_datasets(dataxml, d)
+local function number_of_datasets(_dataxml, d)
     if not d then
         return 0
     end
@@ -200,7 +200,7 @@ local function number_of_columns(dataxml, arg)
 end
 
 --- Merge numbers like '1,2,3,4,5, 8, 9,10' into '1-5, 8-10'
-local function merge_pagenumbers(dataxml, arg)
+local function merge_pagenumbers(_dataxml, arg)
     local pagenumbers_string = string.gsub(arg[1] or "", "%s", "")
     local mergechar = arg[2] or "–"
     local spacer = arg[3] or ", "
@@ -215,8 +215,8 @@ local function merge_pagenumbers(dataxml, arg)
         local num = pagenumbers[i]
         cap1, cap2 = string.match(num, "^(.)-(.)$")
         if cap1 then
-            for i = tonumber(cap1), tonumber(cap2) do
-                num = tostring(i)
+            for n = tonumber(cap1), tonumber(cap2) do
+                num = tostring(n)
                 if not dupes[num] then
                     withoutdupes[#withoutdupes + 1] = num
                     dupes[num] = true
@@ -238,7 +238,7 @@ local function merge_pagenumbers(dataxml, arg)
             return { hyperlink = links_module.hlpage(publisher.options, pagenum) }
         end
     else
-        gethyperlink = function(pagenum)
+        gethyperlink = function(_pagenum)
             return nil
         end
     end
@@ -260,9 +260,9 @@ local function merge_pagenumbers(dataxml, arg)
         local buckets = {}
         local bucket
         local cur
-        local prev = -99
+        local prev = -99 ---@type number
         for i = 1, #withoutdupes do
-            cur = tonumber(withoutdupes[i])
+            cur = tonumber(withoutdupes[i]) or 0
             if cur == prev + 1 then
                 -- same bucket
                 bucket[#bucket + 1] = cur
@@ -301,7 +301,7 @@ local function number_of_rows(dataxml, arg)
     return publisher.current_grid:number_of_rows(arg and arg[1])
 end
 
-local function number_of_pages(dataxml, arg)
+local function number_of_pages(_dataxml, arg)
     local filename = arg[1]
     local img = publisher.images.imageinfo(filename)
     return img.img.pages
@@ -386,7 +386,7 @@ local function imageheight(dataxml, arg)
     end
 end
 
-local function file_exists(dataxml, arg)
+local function file_exists(_dataxml, arg)
     local filename = arg[1]
     if not filename then
         return false
@@ -398,7 +398,7 @@ local function file_exists(dataxml, arg)
 end
 
 --- Insert 1000's separator and comma separator
-local function format_number(dataxml, arg)
+local function format_number(_dataxml, arg)
     local num, thousandssep, commasep = arg[1], arg[2], arg[3]
     local sign, digits, commadigits = string.match(tostring(num), "([%-%+]?)(%d*)%.?(%d*)")
     local first_digits = math.fmod(#digits, 3)
@@ -417,7 +417,7 @@ local function format_number(dataxml, arg)
     end
 end
 
-local function format_string(dataxml, arg)
+local function format_string(_dataxml, arg)
     local argument = {}
     for i = 1, #arg - 1 do
         argument[#argument + 1] = table_textvalue(arg[i])
@@ -431,7 +431,7 @@ local function format_string(dataxml, arg)
     return ret
 end
 
-local function even(dataxml, arg)
+local function even(_dataxml, arg)
     if not tonumber(arg[1]) then
         main.log("error", "sd:even() - argument is not a number")
         return false
@@ -493,7 +493,7 @@ local function groupheight(dataxml, arg)
         end
         return math.round(ret, 4)
     else
-        local grid = publisher.current_grid
+        local grid = assert(publisher.current_grid)
         height = grid:height_in_gridcells_sp(groupcontents.height)
         return height
     end
@@ -543,13 +543,13 @@ local function groupwidth(dataxml, arg)
         end
         return math.round(ret, 4)
     else
-        local grid = publisher.current_grid
+        local grid = assert(publisher.current_grid)
         width = grid:width_in_gridcells_sp(groupcontents.width)
         return width
     end
 end
 
-local function odd(dataxml, arg)
+local function odd(_dataxml, arg)
     local num = arg[1]
     if not tonumber(num) then
         main.log("error", "sd:odd() - argument is not a number")
@@ -558,7 +558,7 @@ local function odd(dataxml, arg)
     return math.fmod(num, 2) ~= 0
 end
 
-local function variable(dataxml, arg)
+local function variable(_dataxml, arg)
     local varname = table.concat(arg)
     local var = publisher.xpath.get_variable(varname)
     return var
@@ -570,38 +570,38 @@ local function attr(dataxml, arg)
     return att
 end
 
-local function variable_exists(dataxml, arg)
+local function variable_exists(_dataxml, arg)
     local var = publisher.xpath.get_variable(arg[1])
     return var ~= nil
 end
 
 -- SHA-1
-local function shaone(dataxml, arg)
+local function shaone(_dataxml, arg)
     local message = table.concat(arg)
     local ret = sha.sha1(message)
     return ret
 end
 
-local function sha256(dataxml, arg)
+local function sha256(_dataxml, arg)
     local message = table.concat(arg)
     local ret = sha.sha256(message)
     return ret
 end
 
-local function sha512(dataxml, arg)
+local function sha512(_dataxml, arg)
     local message = table.concat(arg)
     local ret = sha.sha512(message)
     return ret
 end
 
-local function md5(dataxml, arg)
+local function md5(_dataxml, arg)
     local message = table.concat(arg)
     local ret = sha.md5(message)
     return ret
 end
 
 -- convert a textual dimension (e.g. '2cm') to a scalar in another dimension.
-local function tounit(dataxml, arg)
+local function tounit(_dataxml, arg)
     local unit = arg[1]
     local decimal = arg[3] or 0
     local width = tex.sp(arg[2])
@@ -637,7 +637,7 @@ local function markdown(dataxml, arg)
     if arg == nil then
         arg = dataxml
     end
-    local str = table_textvalue(arg[1])
+    local str = table_textvalue(arg[1]) or ""
     local htmltext = splib.markdown(str)
     if htmltext then
         htmltext = publisher.splib.htmltoxml(htmltext)
@@ -652,14 +652,14 @@ local function html(dataxml, arg)
     if arg == nil then
         arg = dataxml
     end
-    arg = table_textvalue(arg)
+    arg = table_textvalue(arg) or ""
     local tab = splib.parse_html_text(arg, publisher.css:gettext())
     if type(tab) == "string" then
         local a, b = load(tab)
         if a then
             a()
         else
-            main.log("error", b)
+            main.log("error", tostring(b))
             return
         end
         -- the chunk generated by the Go library assigns the global csshtmltree
@@ -686,7 +686,7 @@ local function decode_html(dataxml, arg)
     end
 end
 
-local function decode_base64(dataxml, arg)
+local function decode_base64(_dataxml, arg)
     local b = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
     local data = tostring(arg[1])
     data = string.gsub(data, "[^" .. b .. "=]", "")
@@ -713,7 +713,7 @@ local function decode_base64(dataxml, arg)
     )
 end
 
-local function count_saved_pages(dataxml, arg)
+local function count_saved_pages(_dataxml, arg)
     local tmp = publisher.pagestore[arg[1]]
     if not tmp then
         main.log("error", "count-saved-pages(): no saved pages found. Return 0")
@@ -723,16 +723,16 @@ local function count_saved_pages(dataxml, arg)
     end
 end
 
-local function randomitem(dataxml, arg)
+local function randomitem(_dataxml, arg)
     local x = math.random(#arg)
     return arg[x]
 end
 
-local function romannumeral(dataxml, arg)
+local function romannumeral(_dataxml, arg)
     return tex.romannumeral(arg[1])
 end
 
-local function aspectratio(dataxml, arg)
+local function aspectratio(_dataxml, arg)
     local filename, pagenumber, box, _ = get_filename_pagenum_box_unit_from_arg(arg)
     local img = publisher.images.imageinfo(filename, pagenumber, box)
     return img.img.xsize / img.img.ysize
@@ -806,11 +806,11 @@ local function pagewidth(dataxml, arg)
     end
 end
 
-local function visible_pagenumber(dataxml, arg)
+local function visible_pagenumber(_dataxml, arg)
     return visiblepagenumber(arg[1])
 end
 
-local function loremipsum(dataxml, arg)
+local function loremipsum(_dataxml, arg)
     local count = arg and arg[1] or 1
     local lorem = [[
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod

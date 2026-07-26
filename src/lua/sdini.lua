@@ -9,7 +9,6 @@
 -- BUG on windows: http://lua-users.org/lists/lua-l/2012-08/msg00052.html
 -- ! in LUA_PATH gets replaced by $PWD
 package.path = os.getenv("LUA_PATH")
-splib = nil
 
 local libname
 if os.name == "windows" then

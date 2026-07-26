@@ -280,9 +280,11 @@ for k, v in pairs(node.whatsits()) do
 end
 
 -- sd:alternating
----@type table<string, any[]>
-M.alternating = {}
+-- Current position per alternating group.
 ---@type table<string, integer>
+M.alternating = {}
+-- Last returned value per alternating group (for sd:keep-alternating).
+---@type table<string, string>
 M.alternating_value = {}
 
 -- the return value for the LuaTeX process

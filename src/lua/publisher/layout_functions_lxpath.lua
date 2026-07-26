@@ -52,9 +52,12 @@ local function visiblepagenumber(pagenumber)
 end
 
 local function fnAllocated(dataxml, arg)
-    local x, y, areaname, framenumber
-    x = publisher.xpath.number_value(arg[1])
-    y = publisher.xpath.number_value(arg[2])
+    local areaname, framenumber
+    local x = publisher.xpath.number_value(arg[1])
+    local y = publisher.xpath.number_value(arg[2])
+    if not x or not y then
+        return nil, "sd:allocated(): x and y must be numbers"
+    end
     if #arg > 2 then
         areaname = publisher.xpath.string_value(arg[3])
     end
@@ -63,13 +66,12 @@ local function fnAllocated(dataxml, arg)
     end
 
     publisher.page_helpers.setup_page(nil, "layout_functions#allocated", dataxml)
-    return { publisher.current_grid:isallocated(x, y, areaname, framenumber) }, nil
+    local grid = assert(publisher.current_grid)
+    return { grid:isallocated(x, y, areaname, framenumber) }, nil
 end
 
 local function fnCurrentPage(dataxml, _arg)
-    if not publisher.in_init_page then
-        publisher.page_helpers.setup_page(nil, "layout_functions#current_page", dataxml)
-    end
+    publisher.page_helpers.setup_page(nil, "layout_functions#current_page", dataxml)
     return { publisher.current_pagenumber }, nil
 end
 
@@ -128,27 +130,29 @@ end
 -- Get the first mark of a page (for example used in the head of dictionaries)
 local function firstmark(_dataxml, arg)
     local pagenumber = publisher.xpath.number_value(arg[1])
-    if not tonumber(pagenumber) then
+    if not pagenumber then
         main.log("error", "firstmark: cannot get page number")
+        return {}, "firstmark: cannot get page number"
     end
     local minid = publisher.marker_min[pagenumber]
     if not minid then
-        return ""
+        return { "" }, nil
     end
-    return { publisher.marker_id_value[minid].name }
+    return { publisher.marker_id_value[minid].name }, nil
 end
 
 -- Get the last mark of a page (for example used in the head of dictionaires)
 local function lastmark(_dataxml, arg)
     local pagenumber = publisher.xpath.number_value(arg[1])
-    if not tonumber(pagenumber) then
-        main.log("error", "lasttmark: cannot get page number")
+    if not pagenumber then
+        main.log("error", "lastmark: cannot get page number")
+        return {}, "lastmark: cannot get page number"
     end
     local maxid = publisher.marker_max[pagenumber]
     if not maxid then
-        return ""
+        return { "" }, nil
     end
-    return { publisher.marker_id_value[maxid].name }
+    return { publisher.marker_id_value[maxid].name }, nil
 end
 
 -- Read the contents given in arg[1] and write it to a temporary file.
@@ -157,8 +161,8 @@ end
 local function filecontents(_dataxml, arg)
     local tmpdir = os.getenv("SP_TEMPDIR")
     if tmpdir == nil then
-        main.log("error", "SD_TEMPDIR is nil")
-        return
+        main.log("error", "SP_TEMPDIR is nil")
+        return {}, "SP_TEMPDIR is nil"
     end
 
     lfs.mkdir(tmpdir)
@@ -167,7 +171,7 @@ local function filecontents(_dataxml, arg)
     local file, e = io.open(path, "wb")
     if file == nil then
         main.log("error", string.format("Could not write filecontents into temp directory: %q", e))
-        return nil
+        return {}, "Could not write filecontents into the temp directory"
     end
     local firstarg = publisher.xpath.string_value(arg[1])
     file:write(firstarg)
@@ -237,8 +241,8 @@ local function fnMergePagenumbers(_dataxml, arg)
         local num = pagenumbers[i]
         cap1, cap2 = string.match(num, "^(.)-(.)$")
         if cap1 then
-            for i = tonumber(cap1), tonumber(cap2) do
-                num = tostring(i)
+            for n = tonumber(cap1), tonumber(cap2) do
+                num = tostring(n)
                 if not dupes[num] then
                     withoutdupes[#withoutdupes + 1] = num
                     dupes[num] = true
@@ -282,9 +286,9 @@ local function fnMergePagenumbers(_dataxml, arg)
         local buckets = {}
         local bucket
         local cur
-        local prev = -99
+        local prev = -99 ---@type number
         for i = 1, #withoutdupes do
-            cur = tonumber(withoutdupes[i])
+            cur = tonumber(withoutdupes[i]) or 0
             if cur == prev + 1 then
                 -- same bucket
                 bucket[#bucket + 1] = cur
@@ -472,10 +476,10 @@ local function format_string(_dataxml, arg)
 end
 
 local function even(_dataxml, arg)
-    local firstarg = publisher.xpath.number_value(arg[1])
-    if not tonumber(firstarg) then
+    local firstarg = tonumber(publisher.xpath.number_value(arg[1]))
+    if not firstarg then
         main.log("error", "sd:even() - argument is not a number")
-        return false
+        return {}, "sd:even() - argument is not a number"
     end
     return { math.fmod(firstarg, 2) == 0 }, nil
 end
@@ -501,7 +505,7 @@ local function groupheight(dataxml, arg)
     local groupcontents = publisher.groups[groupname].contents
     if not groupcontents then
         main.log("error", string.format("Can't find group with the name %q", groupname))
-        return 0
+        return {}, "Can't find group"
     end
     local height
     local unit = arg[2]
@@ -535,7 +539,7 @@ local function groupheight(dataxml, arg)
         end
         return { math.round(ret, 4) }, nil
     else
-        local grid = publisher.current_grid
+        local grid = assert(publisher.current_grid)
         height = grid:height_in_gridcells_sp(groupcontents.height)
         return { height }, nil
     end
@@ -546,13 +550,13 @@ local function groupwidth(dataxml, arg)
     local groupname = publisher.xpath.string_value(arg[1])
     if not publisher.groups[groupname] then
         main.log("error", string.format("Can't find group with the name %q", groupname))
-        return 0
+        return {}, "Can't find group"
     end
     local groupcontents = publisher.groups[groupname].contents
 
     if not groupcontents then
         main.log("error", string.format("Can't find group with the name %q", groupname))
-        return 0
+        return {}, "Can't find group"
     end
     local unit = arg[2]
     local width
@@ -586,7 +590,7 @@ local function groupwidth(dataxml, arg)
         end
         return { math.round(ret, 4) }, nil
     else
-        local grid = publisher.current_grid
+        local grid = assert(publisher.current_grid)
         width = grid:width_in_gridcells_sp(groupcontents.width)
         return { width }, nil
     end
@@ -598,9 +602,10 @@ local function odd(_dataxml, arg)
     if msg then
         return nil, msg
     end
-    if not tonumber(num) then
+    num = tonumber(num)
+    if not num then
         main.log("error", "sd:odd() - argument is not a number")
-        return false
+        return {}, "sd:odd() - argument is not a number"
     end
     return { math.fmod(num, 2) ~= 0 }, nil
 end
@@ -674,7 +679,7 @@ local function markdown(dataxml, arg)
     if arg == nil then
         arg = dataxml
     end
-    local str = table_textvalue(arg[1])
+    local str = table_textvalue(arg[1]) or ""
     local htmltext
     htmltext = splib.markdown(str)
     if htmltext then
@@ -966,9 +971,7 @@ local function fnVisiblePagenumber(dataxml, arg)
     if #arg > 0 then
         firstarg = publisher.xpath.string_value(arg[1])
     else
-        if not publisher.in_init_page then
-            publisher.page_helpers.setup_page(nil, "layout_functions#current_page", dataxml)
-        end
+        publisher.page_helpers.setup_page(nil, "layout_functions#current_page", dataxml)
         firstarg = tostring(publisher.current_pagenumber)
     end
     local vpn = visiblepagenumber(firstarg)
@@ -982,7 +985,7 @@ local function loremipsum(_dataxml, arg)
         if msg then
             return nil, msg
         end
-        count = num
+        count = tonumber(num) or 1
     end
 
     local lorem = [[
