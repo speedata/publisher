@@ -1206,7 +1206,7 @@ end
 ---@param area string Area name.
 ---@param allocate? "auto"|table Optional 2D occupancy matrix to subtract.
 ---@return integer remaining
----@return integer? firstrow
+---@return integer firstrow
 ---@return integer? lastrow
 function M.get_remaining_height(area, allocate)
     local cols = publisher.current_grid:number_of_columns(area)
@@ -1243,7 +1243,7 @@ function M.get_remaining_height(area, allocate)
     end
     if not tonumber(maxrows) then
         main.log("error", "maxrows not set, why?")
-        return 0
+        return 0, firstrow
     end
     if not publisher.current_grid:fits_in_row_area(startcol, cols, firstrow, area) then
         while firstrow <= maxrows do

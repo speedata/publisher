@@ -80,9 +80,12 @@ codes = true
 -- explanatory comment); flagging those is just noise.
 -- A common Lua idiom is `local x = x or default`, which trips W411/W412.
 -- W211 unused locals stay enabled — those tend to surface real dead code.
+-- Exception: a leading underscore marks a local as intentionally unused
+-- (same convention as diagnostics.unusedLocalExclude for lua-language-server).
 ignore = {
     "411", "412", "421", "422", "423", "431", "432",
     "542",
+    "21/_.*",
 }
 
 -- Cross-file project globals (read AND written somewhere in the tree).

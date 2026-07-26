@@ -2323,7 +2323,7 @@ end
 -- Closes a paragraph node list: adds the par-end glue, applies
 -- justification settings and triggers line breaking via `do_linebreak`.
 ---@param nodelist Node
----@param _hsize integer Unused; the line width is applied in `do_linebreak`.
+---@param _hsize integer? Unused; the line width is applied in `do_linebreak`.
 ---@param parameters table Paragraph parameters (alignment, indent, ...).
 ---@return nil
 function M.finish_par(nodelist, _hsize, parameters)

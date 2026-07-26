@@ -33,6 +33,8 @@ local publisher = require("publisher")
 ---@field has_hyperlink? boolean
 ---@field has_role? boolean
 ---@field has_special_nodes? boolean
+---@field fontfamily? integer Font family number for the whole paragraph.
+---@field flatten_callback? fun(thiselt: table, options: table): Par Called during flatten to re-typeset the contents (see Nobreak).
 local Par = {}
 
 -- Constructs a fresh `Par` instance with the given textformat.

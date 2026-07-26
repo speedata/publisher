@@ -1871,8 +1871,13 @@ local function apply_deferred_backgrounds(head)
     end
 end
 
+---@class SplitTableResult: VlistNode[] One vlist per part of a split table.
+---@field balance? boolean Balance the parts over all frames (set in commands.table).
+---@field break_pagetype? string Page type for the extra page between two parts (set in commands.table).
+
 -- Typeset the entire table, including head, body, and foot.
 ---@param dataxml table XML data for the table
+---@return Node|SplitTableResult
 function tabular:typeset_table(dataxml)
     local current_row
     local tablehead_first = {}
@@ -2836,6 +2841,7 @@ end
 
 -- Main entry point to create and typeset the table.
 ---@param dataxml table XML data for the table
+---@return Node|SplitTableResult
 function tabular:make_table(dataxml)
     setmetatable(self.column_distances, {
         __index = function()

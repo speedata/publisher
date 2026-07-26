@@ -21,9 +21,11 @@ local nilmarker = "\1"
 if table_textvalue == nil then
     -- Get the text value of a table. Only the indexes 1,...#table are taken into account.
     -- The function recurses into nested tables.
+    ---@param tbl any
+    ---@return string
     function table_textvalue(tbl)
         if not tbl then
-            return nil
+            return ""
         end
         if type(tbl) ~= "table" then
             return tostring(tbl)

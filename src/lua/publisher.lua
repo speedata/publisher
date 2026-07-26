@@ -301,7 +301,7 @@ M.modes = {}
 -- position two, page 6 on position three and so on
 ---@type integer[]
 M.pagenum_tbl = {}
----@type table<string, table>
+---@type table<string, boolean>
 M.forward_pagestore = {}
 ---@type integer
 M.total_inserted_pages = 0
@@ -388,7 +388,7 @@ M.css = do_luafile("css.lua"):new()
 ---@field fontshrink number?
 ---@field fontstep number?
 ---@field fontstretch number?
----@field format "PDF/UA"|"PDF/X-4"|"PDF/X-3:2002"|"" PDF output format
+---@field format "PDF/UA"|"PDF/X-3"|"PDF/X-4"|"PDF/X-3:2002"|"PDF/A-3"|"" PDF output format ("PDF/X-3" is normalized to "PDF/X-3:2002" in commands.pdfoptions)
 ---@field gridcells_dx? integer Horizontal gap between grid cells in sp.
 ---@field gridcells_dy? integer Vertical gap between grid cells in sp.
 ---@field gridcells_x integer Number of grid cells horizontally (0 = auto).
@@ -491,7 +491,7 @@ else
 end
 
 ---@class Group
----@field contents Node Head of the node list that holds the group's content.
+---@field contents? Node Head of the node list that holds the group's content (nil until the group is filled).
 ---@field grid table Grid associated with the group.
 
 -- List of virtual areas. Key is the group name and value is
@@ -512,10 +512,11 @@ M.compatibility = {
     movecursoronrightedge = true,
 }
 
--- for external image conversion software
----@type table<string, function>
+-- for external image conversion software. Key is the image type (or "*"),
+-- value is the command line template of the external converter.
+---@type table<string, string>
 M.imagehandler = {}
----@type table<string, function>
+---@type table<string, string>
 M.resizehandler = {}
 
 ---@type table<string, any>
@@ -574,9 +575,13 @@ M.current_fgcolor = nil
 ---@type integer
 M.defaultcolorstack = 0
 
----@type table<string, function>
+-- Key is the processing mode, value maps an element name to the Record
+-- layout XML element that handles it.
+---@type table<string, table<string, table>>
 M.data_dispatcher = {}
----@type table<string, string>
+-- Key is the processing mode, value is a list of compiled match patterns
+-- sorted by priority (see commands.record).
+---@type table<string, {pattern: string, priority: number, layoutxml: table, matchfunc: function?}[]>
 M.data_dispatcher_patterns = {}
 ---@type { last: integer, [string]: function }
 M.user_defined_functions = { last = 0 }
@@ -1968,7 +1973,9 @@ end
 -- entry in the pagelabels table for referencing.
 -- This is called at the end, when writing a dictionary
 
----@type table<integer, integer>
+-- Each entry is a table of PDF object numbers with a `__tostring`
+-- metamethod that renders the object references for the number tree.
+---@type table[]
 M.struct_root_numtree = {}
 
 local ntmetafunctostring = function(tbl)

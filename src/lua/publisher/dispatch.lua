@@ -301,13 +301,13 @@ end
 ---@param layoutxml table Layout XML element with children to walk.
 ---@param dataxml table Current data XML context.
 ---@param opts? table Forwarded to each command.
----@return DispatchEntry[]?
+---@return DispatchEntry[]
 function M.dispatch(layoutxml, dataxml, opts)
     local ret = {}
     local tmp
     if not layoutxml then
         assert(false, "No elements for dispatch, why?")
-        return
+        return ret
     end
 
     local options = publisher.options

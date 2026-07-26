@@ -192,7 +192,7 @@ end
 ---@param self Grid
 ---@param rows integer
 ---@param areaname string
----@return nil
+---@return integer overshoot
 function M.advance_cursor(self, rows, areaname)
     assert(self)
     local areaname = areaname or publisher.default_areaname
@@ -207,7 +207,7 @@ function M.advance_cursor(self, rows, areaname)
     local ht = area[current_frame].height
     if not tonumber(ht) then
         main.log("error", "area height not set, why?", "area", areaname or "(default)")
-        return
+        return 0
     end
     if area.advance_rows >= ht then
         local overshoot = area.advance_rows - ht
@@ -876,7 +876,7 @@ end
 ---@param height_sp integer
 ---@param options? table Optional rounding parameters.
 ---@return integer rows
----@return integer? extra_sp Rest height within the last grid cell.
+---@return integer extra_sp Rest height within the last grid cell.
 function M.height_in_gridcells_sp(self, height_sp, options)
     assert(self)
     local extra
