@@ -32,7 +32,7 @@ local M = {}
 -- (`{...}`) are evaluated as XPath against `dataxml`, except for the
 -- `xpath`, `xpathraw` and `rawstring` types where the raw attribute is used.
 ---@param layoutxml table Layout XML element holding the attribute.
----@param dataxml table Data XML context for XPath evaluation.
+---@param dataxml table? Data XML context; `nil` is only safe when the attribute cannot contain `{...}` or XPath expressions.
 ---@param attname string Attribute name to look up.
 ---@param typ ReadAttributeType
 ---@param default any Value used when the attribute is missing.

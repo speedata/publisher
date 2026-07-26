@@ -103,12 +103,12 @@ end
 -- Recurses into hlists/vlists.
 ---@param head Node Head of the node list.
 ---@param parent Node? Parent hlist/vlist (nil at the top).
----@param blockinline "block"|"inline"
+---@param blockinline "horizontal"|"vertical" Layout direction of the list.
 ---@param curx integer Cursor X in sp (used for absolute placement).
 ---@param cury integer Cursor Y in sp.
 ---@param pagewidth integer
 ---@param pageheight integer
----@return nil
+---@return table[] rules Each entry is `{x_sp, y_sp, pdf_instructions}`.
 function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, pagewidth, pageheight)
     local insert_nm = M.insert_nonmoving_whatsits
     local setp = publisher.attribute_helpers.setprop

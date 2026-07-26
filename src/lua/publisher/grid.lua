@@ -1187,8 +1187,8 @@ end
 ---@param halign? "left"|"center"|"right"
 ---@param width_gridcells integer
 ---@param height_gridcells integer
----@return integer x_sp
----@return integer y_sp
+---@return integer|nil x_sp X position in sp; `nil` on error.
+---@return integer|string y_sp Y position in sp, or an error message when `x_sp` is `nil`.
 function M.position_grid_cell(self, x, y, areaname, wd, ht, valign, halign, width_gridcells, height_gridcells)
     local x_sp, y_sp
     if not self.margin_left then

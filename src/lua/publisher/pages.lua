@@ -107,7 +107,7 @@ function M.output_absolute_position(param)
     local y = param.y
     local nodelist = param.nodelist
     local keepposition = param.keepposition
-    local r = param.grid or publisher.current_grid
+    local r = assert(param.grid or publisher.current_grid)
     -- We don't necessarily output things on a page, we can output them in a virtual page, called _group_.
     if publisher.current_group then
         -- Put the contents of the nodelist into the current group
@@ -297,7 +297,7 @@ function M.output_at(param)
     end
 
     -- current_grid is important here, because it can be a group
-    local r = param.grid or publisher.current_grid
+    local r = assert(param.grid or publisher.current_grid)
 
     local outputpage = publisher.current_pagenumber
     if param.pagenumber then
@@ -352,9 +352,11 @@ function M.output_at(param)
 
     if not delta_x then
         -- if delta_x is nil, delta_y has the error message
-        main.log("error", delta_y)
+        main.log("error", tostring(delta_y))
         exit()
+        return
     end
+    ---@cast delta_y integer
 
     if node.has_attribute(nodelist, publisher.att_shift_left) then
         delta_x = delta_x - node.has_attribute(nodelist, publisher.att_shift_left)
@@ -483,7 +485,7 @@ end
 -- or whose name equals `publisher.nextpage`.
 ---@param pagenumber integer
 ---@param data table Data XML context for predicate evaluation.
----@return table? layoutxml `nil` if nothing matched.
+---@return table|false layoutxml `false` if nothing matched.
 function M.detect_pagetype(pagenumber, data)
     -- ugly hack. file global variables are a bad idea.
     if not publisher.newxpath then
@@ -555,9 +557,9 @@ end
 -- runs the masterpage instructions, and sets `current_grid`.
 ---@param pagenumber integer? Page to initialize; defaults to `publisher.current_pagenumber`.
 ---@param data table Data XML context.
----@param from? string Caller identifier (used in log messages).
+---@param _from? string Caller identifier.
 ---@return nil
-function M.initialize_page(pagenumber, data, from)
+function M.initialize_page(pagenumber, data, _from)
     local thispage
 
     if pagenumber then
@@ -607,6 +609,7 @@ function M.initialize_page(pagenumber, data, from)
             string.format("Can't create a new page. Is the page type (“PageType”) defined? %s", errorstring)
         )
         exit()
+        return
     end
     publisher.current_page = current_page
     publisher.current_grid = current_page.grid
@@ -619,11 +622,8 @@ function M.initialize_page(pagenumber, data, from)
     dy = publisher.options.gridcells_dy
 
     local pagetype = M.detect_pagetype(thispage, data)
-    if pagetype == false then
-        return false
-    end
     if not pagetype then
-        return false
+        return
     end
     if pagetype.width then
         current_page.width = tex.sp(pagetype.width)
@@ -727,7 +727,7 @@ function M.initialize_page(pagenumber, data, from)
             -- we evaluate now, because the attributes in PositioningFrame can be page dependent.
             local d = publisher.xml_helpers.element_contents(j).dataxml
             local l = publisher.xml_helpers.element_contents(j).layoutxml
-            local tab = publisher.dispatch.dispatch(l, d)
+            local tab = publisher.dispatch.dispatch(l, d) or {}
             local tmp = {}
             for i, k in ipairs(tab) do
                 tmp[#tmp + 1] = publisher.xml_helpers.element_contents(k)
@@ -799,12 +799,14 @@ function M.initialize_page(pagenumber, data, from)
                 graphic,
                 metapost.extra_page_parameter(current_page)
             )
-            M.place_at(
-                current_page.pagebox,
-                whatsit,
-                current_page.grid.extra_margin,
-                current_page.height + current_page.grid.extra_margin
-            )
+            if whatsit then
+                M.place_at(
+                    current_page.pagebox,
+                    whatsit,
+                    current_page.grid.extra_margin,
+                    current_page.height + current_page.grid.extra_margin
+                )
+            end
         end
     end
 
@@ -814,7 +816,7 @@ function M.initialize_page(pagenumber, data, from)
     for k, v in pairs(cg.positioning_frames) do
         css_rules = publisher.css:matches({ element = "area", class = nil, id = k }) or {}
         if css_rules["border-width"] then
-            for i, frame in ipairs(v) do
+            for _, frame in ipairs(v) do
                 frame.draw = { color = "green", width = css_rules["border-width"] }
             end
         end
@@ -832,8 +834,8 @@ function M.setup_page(pagenumber, fromwhere, dataxml)
     if publisher.current_group then
         return
     end
-    if publisher.skippages then
-        local tmp = publisher.skippages
+    local tmp = publisher.skippages
+    if tmp then
         publisher.skippages = nil
         if tmp.doubleopen then
             M.new_page("setup_page - skippages doubleopen", dataxml)
@@ -849,12 +851,12 @@ end
 -- Switches to the next frame in the given area, or starts a new page if
 -- the area has no more frames.
 ---@param areaname string Area name (e.g. `"_page"`).
----@param grid? table Override grid; defaults to `publisher.current_grid`.
+---@param grid? Grid Override grid; defaults to `publisher.current_grid`.
 ---@param dataxml table Data XML context.
----@param origin? string Caller identifier for log messages.
+---@param _origin? string Caller identifier.
 ---@return nil
-function M.next_area(areaname, grid, dataxml, origin)
-    grid = grid or publisher.current_grid
+function M.next_area(areaname, grid, dataxml, _origin)
+    grid = assert(grid or publisher.current_grid)
     local current_framenumber = grid:framenumber(areaname)
     if not current_framenumber then
         main.log(
@@ -875,11 +877,11 @@ end
 -- Ships out the current page (or stores it in the active pagestore) and
 -- advances `publisher.current_pagenumber`. Does nothing while
 -- `pagebreak_impossible` is set.
----@param from? string Caller identifier for log messages.
+---@param _from? string Caller identifier for log messages.
 ---@param dataxml table Data XML context.
 ---@return nil
-function M.new_page(from, dataxml)
-    -- w("new page from %s",from or "-")
+function M.new_page(_from, dataxml)
+    -- w("new page from %s",_from or "-")
     if publisher.pagebreak_impossible then
         return
     end
@@ -887,7 +889,7 @@ function M.new_page(from, dataxml)
     if not thispage then
         -- new_page() is called without anything on the page yet
         M.setup_page(nil, "new_page", dataxml)
-        thispage = publisher.current_page
+        thispage = assert(publisher.current_page)
     end
 
     M.dothingsbeforeoutput(thispage, publisher.data)
@@ -905,7 +907,7 @@ end
 -- Forces a page break and (when `options.openon` is set) inserts skip pages
 -- so the next page lands on the requested side. With `options.force` true,
 -- emits an empty page if none has been started yet.
----@param options { dataxml: table, openon?: "left"|"right", force?: boolean }
+---@param options { dataxml: table, openon?: "left"|"right", force?: boolean, skippagetype?: string, matter?: string, pagetype?: string }
 ---@return nil
 function M.clearpage(options)
     local thispage = publisher.pages[publisher.current_pagenumber]
@@ -1004,7 +1006,7 @@ end
 -- crop marks, headers/footers, watermarks etc. Called once per page before
 -- the actual `tex.shipout`.
 ---@param thispage table Current page table.
----@param data? table Data XML context.
+---@param data table? Data XML context (`nil` with the legacy XPath parser).
 ---@return nil
 function M.dothingsbeforeoutput(thispage, data)
     local cg = thispage.grid
@@ -1021,12 +1023,14 @@ function M.dothingsbeforeoutput(thispage, data)
                 graphic,
                 metapost.extra_page_parameter(thispage)
             )
-            M.place_at(
-                thispage.pagebox,
-                whatsit,
-                thispage.grid.extra_margin,
-                thispage.height + thispage.grid.extra_margin
-            )
+            if whatsit then
+                M.place_at(
+                    thispage.pagebox,
+                    whatsit,
+                    thispage.grid.extra_margin,
+                    thispage.height + thispage.grid.extra_margin
+                )
+            end
         end
     end
 
@@ -1073,7 +1077,7 @@ function M.dothingsbeforeoutput(thispage, data)
         end
         local colentry = colors_module.get_colentry_from_name(col, "white")
         if not colentry then
-            main.log("error", "Color is not defined", "name", tostring(publisher.options.backgroun))
+            main.log("error", "Color is not defined", "name", tostring(publisher.options.background))
             colentry = colors_module.colors["white"]
         end
         local pdfcolorstring = colentry.pdfstring
@@ -1099,7 +1103,7 @@ function M.dothingsbeforeoutput(thispage, data)
         end
     end
 
-    for framename, v in pairs(cg.positioning_frames) do
+    for _, v in pairs(cg.positioning_frames) do
         for _, frame in ipairs(v) do
             if frame.draw then
                 local lit = node.new("whatsit", "pdf_literal")
@@ -1207,7 +1211,7 @@ end
 function M.get_remaining_height(area, allocate)
     local cols = publisher.current_grid:number_of_columns(area)
     local startcol = 1
-    local row, firstrow, lastrow, maxrows
+    local firstrow, maxrows
     firstrow = publisher.current_grid:current_row(area)
     if not firstrow then
         main.log("error", "get remaining height: no current row")
@@ -1232,10 +1236,8 @@ function M.get_remaining_height(area, allocate)
             lastrow = lastrow + 1
         end
         lastrow = lastrow - 1
-        if lastrow == firstrow then
-            lastrow = nil
-        elseif lastrow >= maxrows then
-            lastrow = nil
+        if lastrow == firstrow or lastrow >= maxrows then
+            return (row - firstrow) * publisher.current_grid.gridheight, firstrow
         end
         return (row - firstrow) * publisher.current_grid.gridheight, firstrow, lastrow
     end
@@ -1252,13 +1254,13 @@ function M.get_remaining_height(area, allocate)
         end
     end
 
-    row = firstrow
+    local row = firstrow
 
     while publisher.current_grid:fits_in_row_area(startcol, cols, row, area) and row <= maxrows do
         row = row + 1
     end
 
-    lastrow = row
+    local lastrow = row
 
     while row <= maxrows do
         if publisher.current_grid:fits_in_row_area(startcol, cols, row, area) then
@@ -1277,7 +1279,8 @@ end
 ---@param dataxml table Data XML context.
 ---@return nil
 function M.next_row(rownumber, areaname, rows, dataxml)
-    local grid = publisher.current_grid
+    local grid = assert(publisher.current_grid)
+    rows = rows or 1
 
     if rownumber then
         grid:set_current_row(rownumber, areaname, "next_row")
@@ -1294,7 +1297,7 @@ function M.next_row(rownumber, areaname, rows, dataxml)
     if not current_row then
         M.next_area(areaname, nil, dataxml, "next_row")
         M.setup_page(nil, "next_row", dataxml)
-        grid = publisher.current_page.grid
+        grid = assert(publisher.current_page).grid
         grid:set_current_row(1, areaname, "cannot find suitable row")
     else
         -- Version 2.7.3 and before had the problem that the cursor is past the right
@@ -1314,7 +1317,7 @@ function M.next_row(rownumber, areaname, rows, dataxml)
         if current_row + rows - dec > grid_number_of_rows then
             M.next_area(areaname, nil, dataxml, "next_row 2")
             M.setup_page(nil, "next_row", dataxml)
-            grid = publisher.current_page.grid
+            grid = assert(publisher.current_page).grid
             grid:set_current_row(1, areaname, "next_row -> next_area")
             return
         end
@@ -1325,7 +1328,7 @@ end
 
 -- Returns a flag value indicating "no block to place"; used by callers
 -- that build a list of blocks for `vsplit`.
----@return string sentinel
+---@return VlistNode sentinel Empty vbox.
 function M.empty_block()
     local r = node.new("hlist")
     r.width = 0
@@ -1336,7 +1339,7 @@ function M.empty_block()
 end
 
 -- Returns a sentinel block used to force a page break when nothing else fits.
----@return string sentinel
+---@return VlistNode sentinel Vbox with a visible rule.
 function M.emergency_block()
     local r = node.new(publisher.rule_node)
     r.width = 5 * 2 ^ 16
@@ -1356,7 +1359,7 @@ end
 ---@param dataxml table
 ---@return integer rows
 function M.getheight(relative_framenumber, dataxml)
-    local grid = publisher.current_grid
+    local grid = assert(publisher.current_grid)
     local cp, cg, cpn, cfn -- current page, current grid, current page number, current frame number
     cp = publisher.current_page
     cg = publisher.current_grid
@@ -1414,8 +1417,9 @@ function M.less_or_equal_than_n_lines(nodelist, lines)
         return false
     end
     for i = 1, lines - 1 do
-        if nodelist.id == publisher.hlist_node and nodelist.next then
-            nodelist = nodelist.next
+        local nxt = nodelist.next
+        if nodelist.id == publisher.hlist_node and nxt then
+            nodelist = nxt
         else
             if i == 1 then
                 return false
@@ -1428,7 +1432,7 @@ end
 -- Concatenates the given table objects vertically into a single vbox.
 ---@param objects table[] Table objects produced by `commands.table`.
 ---@param from? string Caller identifier for log messages.
----@return Node vbox
+---@return Node? vbox `nil` when `objects` is empty.
 function M.join_table_to_box(objects, from)
     for i = 1, #objects - 1 do
         objects[i].next = objects[i + 1]
@@ -1463,7 +1467,8 @@ end
 -- frame heights and orphan/widow constraints. Drives the main page loop.
 ---@param objects_t table[] Vertical list of paragraph/table/box objects.
 ---@param parameter table Layout parameters (area, allocate, break-* etc.).
----@return table[]? remaining Objects that still need to be placed (or nil when done).
+---@return Node area_vbox Material for the current area/column (vbox).
+---@return Node? balanced_second Second column when balancing splits the material.
 function M.vsplit(objects_t, parameter)
     -- Step 1: collect all the objects in one big table.
     -- ------------------------------------------------
@@ -1530,7 +1535,7 @@ function M.vsplit(objects_t, parameter)
                     head = tmp
 
                     local margin_newcolumn_tmplist = node.has_attribute(tmplist[1], publisher.att_margin_newcolumn)
-                    local vbox = M.join_table_to_box(tmplist, "break allowed")
+                    local vbox = assert(M.join_table_to_box(tmplist, "break allowed"))
                     node.set_attribute(vbox, publisher.att_margin_newcolumn, margin_newcolumn_tmplist)
 
                     hlist[#hlist + 1] = vbox
@@ -1563,7 +1568,7 @@ function M.vsplit(objects_t, parameter)
             table.insert(hlist, 1, publisher.nodes.add_glue(nil, "head", { width = margin_newcolumn_obj1 }))
             splitpos = splitpos + 1
         end
-        local obj1 = M.join_table_to_box({ table.unpack(hlist, 1, splitpos) }, "balance > 1 obj1")
+        local obj1 = assert(M.join_table_to_box({ table.unpack(hlist, 1, splitpos) }, "balance > 1 obj1"))
         if hlist[splitpos + 1] then
             local margin_newcolumn_obj2 = node.has_attribute(hlist[splitpos + 1], publisher.att_margin_newcolumn)
             if margin_newcolumn_obj2 and margin_newcolumn_obj2 > 0 then
@@ -1573,7 +1578,7 @@ function M.vsplit(objects_t, parameter)
                     publisher.nodes.add_glue(nil, "head", { width = margin_newcolumn_obj2 })
                 )
             end
-            local obj2 = M.join_table_to_box({ table.unpack(hlist, splitpos + 1) }, "balance > 1 obj2")
+            local obj2 = assert(M.join_table_to_box({ table.unpack(hlist, splitpos + 1) }, "balance > 1 obj2"))
             if valignlast == "bottom" then
                 local remaining_height = frameheight - math.max(obj1.height, obj2.height)
 
@@ -1610,7 +1615,7 @@ function M.vsplit(objects_t, parameter)
     local area_filled = false
     local lineheight = 0
     while not area_filled do
-        for i = 1, #hlist do
+        for _ = 1, #hlist do
             local hbox = table.remove(hlist, 1)
             local break_before = node.has_attribute(hbox, publisher.att_break_before)
             node.set_attribute(hbox, publisher.att_break_before, nil)
@@ -1630,10 +1635,10 @@ function M.vsplit(objects_t, parameter)
                 -- When the margin-below appears at the top of the new frame, we just ignore
                 -- it. Too bad Lua doesn't have a 'next' in for-loops
             else
-                local margin_newcolumn = node.has_attribute(hbox, publisher.att_margin_newcolumn)
-                if margin_newcolumn and margin_newcolumn > 0 and #thisarea == 0 then
-                    thisarea[#thisarea + 1] = publisher.nodes.add_glue(nil, "head", { width = margin_newcolumn })
-                    lineheight = margin_newcolumn
+                local margin_newcolumn_hbox = node.has_attribute(hbox, publisher.att_margin_newcolumn)
+                if margin_newcolumn_hbox and margin_newcolumn_hbox > 0 and #thisarea == 0 then
+                    thisarea[#thisarea + 1] = publisher.nodes.add_glue(nil, "head", { width = margin_newcolumn_hbox })
+                    lineheight = margin_newcolumn_hbox
                 end
 
                 if hbox.id == publisher.hlist_node or hbox.id == publisher.vlist_node then
@@ -1668,8 +1673,8 @@ function M.vsplit(objects_t, parameter)
     end
 
     if #hlist > 0 then
-        for i = 1, #hlist do
-            remaining_objects[#remaining_objects + 1] = hlist[i]
+        for j = 1, #hlist do
+            remaining_objects[#remaining_objects + 1] = hlist[j]
         end
     end
     -- Sometimes there is a single glue (margin-bottom) left, we should ignore it

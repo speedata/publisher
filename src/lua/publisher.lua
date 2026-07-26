@@ -16,7 +16,7 @@ file_start("publisher.lua")
 ---@field current_grid? Grid
 ---@field current_page? Page
 ---@field pagebreak_impossible? boolean
----@field skippages? table Pending page skip (pagetype, skippagetype, doubleopen).
+---@field skippages? SkipPages Pending page skip.
 ---@field minwidth? integer Image size constraints in sp (set per image).
 ---@field minheight? integer
 ---@field maxwidth? integer
@@ -666,6 +666,7 @@ M.intextblockcontext = 0
 ---@field is_pagetype string XPath expression evaluated to decide if this masterpage applies.
 ---@field res table Layout XML instructions for this masterpage.
 ---@field name string Name of the masterpage.
+---@field ns? table Namespace mapping (legacy XPath parser only).
 
 ---@type Masterpage[]
 M.masterpages = {}
@@ -2179,7 +2180,11 @@ do
 end
 
 -- skippages are set in commands.new_page if openon="..."
----@type integer?
+---@class SkipPages
+---@field pagetype? string Page type for the next regular page.
+---@field skippagetype? string Page type for the inserted skip page.
+---@field doubleopen? boolean Whether an extra page must be inserted.
+
 M.skippages = nil
 
 -- Draw a box with HTML properties given at head.

@@ -3691,7 +3691,7 @@ function commands.new_page(layoutxml, dataxml)
     publisher.skippages = { skippagetype = skippagetype, pagetype = pagetype, doubleopen = doubleopen }
     if force then
         local thispage = publisher.pages[publisher.current_pagenumber]
-        publisher.page_helpers.dothingsbeforeoutput(thispage)
+        publisher.page_helpers.dothingsbeforeoutput(thispage, publisher.data)
         local n = node.vpack(thispage.pagebox)
         publisher.page_helpers.shipout(n, publisher.current_pagenumber)
         publisher.current_pagenumber = publisher.current_pagenumber + 1

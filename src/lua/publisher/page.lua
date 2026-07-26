@@ -18,6 +18,10 @@ local grid = require("publisher.grid")
 ---@field defaultcolor? string Default text color name.
 ---@field matter? string Matter name (for page label generation).
 ---@field structparents? integer PDF/UA `/StructParents` index.
+---@field graphic? string MetaPost graphic name for the page background.
+---@field backgroundcolor? string Background color name.
+---@field atpagecreation? table Layout XML of `<AtPageCreation>`.
+---@field AtPageShipout? table Layout XML of `<AtPageShipout>`.
 page = {}
 
 -- Constructs a fresh `Page` with a fresh `Grid` and 1cm default margins.
