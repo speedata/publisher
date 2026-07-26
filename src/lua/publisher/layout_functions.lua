@@ -104,10 +104,10 @@ local function alternating(_dataxml, arg)
     return val
 end
 
-local function first_free_row(_dataxml, arg)
+local function first_free_row(dataxml, arg)
     local ret = 0 ---@type integer?
     if arg and arg[1] then
-        ret = publisher.current_grid:first_free_row(arg[1])
+        ret = publisher.current_grid:first_free_row(arg[1], nil, dataxml)
     end
     return ret
 end

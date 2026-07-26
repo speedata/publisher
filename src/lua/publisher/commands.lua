@@ -3389,7 +3389,7 @@ function commands.emptyline(layoutxml, dataxml)
     local areaname = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "area", "string")
     areaname = areaname or publisher.default_area or publisher.default_areaname
     local current_grid = assert(publisher.current_grid)
-    local current_row = current_grid:find_suitable_row(1, current_grid:number_of_columns(), 1, areaname)
+    local current_row = current_grid:find_suitable_row(1, current_grid:number_of_columns(), 1, areaname, nil, dataxml)
     if not current_row then
         current_grid:set_current_row(1)
     else
@@ -5324,7 +5324,9 @@ function commands.place_object(layoutxml, dataxml)
                         current_column_start,
                         width_in_gridcells,
                         height_in_gridcells,
-                        area
+                        area,
+                        nil,
+                        dataxml
                     )
                     if not current_row then
                         current_row = 1
@@ -5335,7 +5337,9 @@ function commands.place_object(layoutxml, dataxml)
                         current_column_start,
                         width_in_gridcells,
                         height_in_gridcells,
-                        area
+                        area,
+                        nil,
+                        dataxml
                     )
                     if not current_row then
                         main.log("warn", "No suitable row found", "type", objecttype, lineinfo(layoutxml))
@@ -5416,7 +5420,7 @@ function commands.place_object(layoutxml, dataxml)
             if objects.balance then
                 -- a split table and the last object.
                 current_grid:set_framenumber(area, 1)
-                local first_free_row = current_grid:first_free_row(area, 1) or 1
+                local first_free_row = current_grid:first_free_row(area, 1, dataxml) or 1
                 current_grid:set_current_row(first_free_row, area)
             end
         end

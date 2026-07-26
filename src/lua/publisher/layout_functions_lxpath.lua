@@ -116,14 +116,14 @@ local function fnAlternating(_dataxml, arg)
     return { val }
 end
 
-local function first_free_row(_dataxml, arg)
+local function first_free_row(dataxml, arg)
     local firstarg
     if #arg > 0 then
         firstarg = publisher.xpath.string_value(arg[1])
     else
         firstarg = publisher.default_areaname
     end
-    local ret = publisher.current_grid:first_free_row(firstarg)
+    local ret = publisher.current_grid:first_free_row(firstarg, nil, dataxml)
     return { ret }, nil
 end
 

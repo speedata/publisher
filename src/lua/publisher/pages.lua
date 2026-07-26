@@ -1289,11 +1289,11 @@ function M.next_row(rownumber, areaname, rows, dataxml)
 
     local current_row
     local noc = grid:number_of_columns(areaname)
-    if noc == nil then
+    if noc == 0 then
         main.log("error", "number of columns is not set for area", "area", areaname)
         return
     end
-    current_row = grid:find_suitable_row(1, noc, rows, areaname)
+    current_row = grid:find_suitable_row(1, noc, rows, areaname, nil, dataxml)
     if not current_row then
         M.next_area(areaname, nil, dataxml, "next_row")
         M.setup_page(nil, "next_row", dataxml)
@@ -1396,7 +1396,7 @@ function M.getheight(relative_framenumber, dataxml)
         publisher.current_grid = publisher.current_page.grid
         c = c + 1
     end
-    local firstrow = publisher.current_grid:first_free_row(areaname, current_framenumber)
+    local firstrow = publisher.current_grid:first_free_row(areaname, current_framenumber, dataxml)
     local remaining_height = publisher.current_grid:remaining_height_sp(firstrow, areaname, current_framenumber)
     publisher.current_pagenumber = cpn
     publisher.current_grid = cg

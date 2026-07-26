@@ -88,9 +88,10 @@ end
 ---@param self Grid
 ---@param areaname string
 ---@param framenumber? integer
+---@param dataxml table Data XML context, needed when the search advances to a new page.
 ---@return integer? row
-function M.first_free_row(self, areaname, framenumber)
-    return self:find_suitable_row(1, self:number_of_columns(areaname), 1, areaname, framenumber)
+function M.first_free_row(self, areaname, framenumber, dataxml)
+    return self:find_suitable_row(1, self:number_of_columns(areaname), 1, areaname, framenumber, dataxml)
 end
 
 -- Returns the remaining vertical space in the area in scaled points.
@@ -127,8 +128,8 @@ function M.current_row(self, areaname, framenumber)
     areaname = areaname or publisher.default_areaname
     local area = self.positioning_frames[areaname]
     if not area then
-        main.log("error", string.format("Area %q not known", tostring(areaname)))
-        return nil
+        main.log("error", string.format("Area %q not known, using page", tostring(areaname)))
+        area = self.positioning_frames[publisher.default_areaname]
     end
     if framenumber and self:framenumber(areaname) < framenumber then
         return 1
@@ -142,7 +143,7 @@ end
 ---@return integer column
 function M.current_column(self, area)
     assert(self)
-    local area = area or publisher.default_areaname
+    area = area or publisher.default_areaname
     assert(self.positioning_frames[area], string.format("Area %q not known", tostring(area)))
     return self.positioning_frames[area].current_column or 1
 end
@@ -155,7 +156,7 @@ end
 ---@return nil
 function M.set_current_row(self, row, areaname, origin)
     assert(self)
-    local areaname = areaname or publisher.default_areaname
+    areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
         main.log("error", string.format("Area %q unknown, using page", areaname), "origin", origin or "?")
         areaname = publisher.default_areaname
@@ -174,7 +175,7 @@ end
 ---@return nil
 function M.set_current_column(self, column, areaname, origin)
     assert(self)
-    local areaname = areaname or publisher.default_areaname
+    areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
         main.log("error", string.format("Area %q unknown, using page", areaname), "origin", origin or "?")
         areaname = publisher.default_areaname
@@ -195,7 +196,7 @@ end
 ---@return integer overshoot
 function M.advance_cursor(self, rows, areaname)
     assert(self)
-    local areaname = areaname or publisher.default_areaname
+    areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
         main.log("error", string.format("Area %q unknown, using page", areaname))
         areaname = publisher.default_areaname
@@ -231,7 +232,7 @@ end
 ---@return integer column
 function M.get_advanced_cursor(self, areaname)
     assert(self)
-    local areaname = areaname or publisher.default_areaname
+    areaname = areaname or publisher.default_areaname
     if not self.positioning_frames[areaname] then
         main.log("error", string.format("Area %q unknown, using page", areaname))
         areaname = publisher.default_areaname
@@ -264,7 +265,7 @@ end
 ---@param areaname string
 ---@param framenumber? integer
 ---@param maxwd_sp? integer Maximum line width to use.
----@return integer[][] parshape
+---@return integer[]|integer parshape An `{indent, length}` pair, or `0` when the row is fully allocated.
 function M.get_parshape(self, row, areaname, framenumber, maxwd_sp)
     local frame_margin_left, frame_margin_top
     local area = self.positioning_frames[areaname]
@@ -306,6 +307,10 @@ function M.number_of_rows(self, areaname, framenumber)
     local current_frame = framenumber or self:framenumber(areaname)
     local area = self.positioning_frames[areaname]
     local height = area[current_frame].height
+    if not height then
+        main.log("error", "height is nil", "location", "number_of_rows", "area", areaname)
+        return 0
+    end
     return height
 end
 
@@ -325,6 +330,7 @@ function M.number_of_columns(self, areaname)
     local width = area[current_frame].width
     if not width then
         main.log("error", "width is nil", "location", "number_of_columns", "area", areaname)
+        return 0
     end
     return width
 end
@@ -338,7 +344,7 @@ end
 ---@return boolean allocated
 function M.isallocated(self, x, y, areaname, framenumber)
     assert(self)
-    local areaname = areaname or publisher.default_areaname
+    areaname = areaname or publisher.default_areaname
     local frame_margin_left, frame_margin_top
     if areaname == publisher.default_areaname then
         frame_margin_left, frame_margin_top = 0, 0
@@ -410,7 +416,7 @@ function M.set_number_of_columns(self, columns)
     assert(self)
     local area = publisher.default_areaname
     assert(self.positioning_frames[area], string.format("Area %q not known", tostring(area)))
-    for i, v in ipairs(self.positioning_frames[area]) do
+    for _, v in ipairs(self.positioning_frames[area]) do
         v.width = columns
     end
 end
@@ -420,7 +426,7 @@ end
 ---@param areaname string
 ---@return integer
 function M.number_of_frames(self, areaname)
-    local areaname = areaname or publisher.default_areaname
+    areaname = areaname or publisher.default_areaname
     local area = self.positioning_frames[areaname]
     if not area then
         main.log("error", string.format("Area %q is not known on this page. Using the default area (page)", areaname))
@@ -435,11 +441,11 @@ end
 ---@param areaname string
 ---@return integer
 function M.framenumber(self, areaname)
-    local areaname = areaname or publisher.default_areaname
+    areaname = areaname or publisher.default_areaname
     local area = self.positioning_frames[areaname]
     if not area then
-        main.log("error", string.format("Area %q is not known on this page.", areaname))
-        return nil
+        main.log("error", string.format("Area %q is not known on this page, using page", areaname))
+        area = self.positioning_frames[publisher.default_areaname]
     end
     return area.current_frame or 1
 end
@@ -450,7 +456,7 @@ end
 ---@param number integer
 ---@return nil
 function M.set_framenumber(self, areaname, number)
-    local areaname = areaname or publisher.default_areaname
+    areaname = areaname or publisher.default_areaname
     local area = self.positioning_frames[areaname]
     assert(area, string.format("Area %q not known", tostring(areaname)))
     area.current_frame = number
@@ -709,11 +715,12 @@ end
 ---@param height integer
 ---@param areaname string
 ---@param framenumber? integer
+---@param dataxml table Data XML context, needed when the search advances to a new page.
 ---@return integer? row
-function M.find_suitable_row(self, column, width, height, areaname, framenumber)
+function M.find_suitable_row(self, column, width, height, areaname, framenumber, dataxml)
     -- w("find_suitable_row in grid page %q | areaname %q | column %d | width %d | height %d | framenumber %d",self.pagenumber,areaname,column,width, height,framenumber or -1)
     if not column then
-        return false
+        return nil
     end
     local frame_margin_left, frame_margin_top
     if areaname == publisher.default_areaname then
@@ -740,8 +747,8 @@ function M.find_suitable_row(self, column, width, height, areaname, framenumber)
     if maxrows < self:current_row(areaname) + height - 1 then
         -- doesn't fit, so we try on the next area
         if self:number_of_frames(areaname) > self:framenumber(areaname) then
-            publisher.page_helpers.next_area(areaname, self, nil, "find_suitable_row")
-            return self:find_suitable_row(column, width, height, areaname)
+            publisher.page_helpers.next_area(areaname, self, dataxml, "find_suitable_row")
+            return self:find_suitable_row(column, width, height, areaname, nil, dataxml)
         else
             return
         end
@@ -805,7 +812,7 @@ end
 ---@return integer sp
 function M.width_sp(self, gridcells)
     if not tonumber(gridcells) then
-        return tex.sp(gridcells)
+        return tex.sp(gridcells) or 0
     end
     local wd = self.gridwidth * gridcells + (gridcells - 1) * self.grid_dx
     return math.ceil(math.round(wd, 3))
@@ -817,7 +824,7 @@ end
 ---@return integer sp
 function M.height_sp(self, gridcells)
     if not tonumber(gridcells) then
-        return tex.sp(gridcells)
+        return tex.sp(gridcells) or 0
     end
     local ht = self.gridheight * gridcells + (gridcells - 1) * self.grid_dy
     return math.ceil(math.round(ht, 3))
@@ -830,7 +837,7 @@ end
 ---@return integer sp
 function M.posx_sp(self, gridcells)
     if not tonumber(gridcells) then
-        return tex.sp(gridcells)
+        return tex.sp(gridcells) or 0
     end
     local wd = self.gridwidth * gridcells + gridcells * self.grid_dx
     return math.ceil(math.round(wd, 3))
@@ -843,7 +850,7 @@ end
 ---@return integer sp
 function M.posy_sp(self, gridcells)
     if not tonumber(gridcells) then
-        return tex.sp(gridcells)
+        return tex.sp(gridcells) or 0
     end
     local ht = self.gridheight * gridcells + gridcells * self.grid_dy
     return math.ceil(math.round(ht, 3))
@@ -951,7 +958,7 @@ end
 
 -- Draws a grid debug overlay for a `Group` virtual area.
 ---@param group Group
----@return Node hbox
+---@return string pdfstring PDF literal code.
 function M.draw_grid_group(group)
     main.log("debug", "draw_grid_group", "width", group.contents.width or -1, "height", group.contents.height or -1)
     local ht = group.contents.height
@@ -985,7 +992,7 @@ function M.draw_grid_group(group)
         x = x + gridwidth
     end
     y = 0
-    local i = 0
+    i = 0
     while y <= ht do
         -- every 5 grid cells draw a gray rule
         if i % 5 == 0 then
@@ -1006,7 +1013,7 @@ function M.draw_grid_group(group)
 
     ret[#ret + 1] = string.format("Q q 0 0 %g %g re S", sp_to_bp(wd), -1 * sp_to_bp(ht))
     ret[#ret + 1] = "Q"
-    return string.format(table.concat(ret, "\n"))
+    return table.concat(ret, "\n")
 end
 
 -- Draw internal grid (return PDF-strings)
