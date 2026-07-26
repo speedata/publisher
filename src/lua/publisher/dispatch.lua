@@ -253,7 +253,7 @@ end
 -- `text` if `base` is missing) and overlays `options_arg`. An empty `name`
 -- gets a random 10-character key so the result can still be referenced.
 ---@param name string
----@param base string? Base textformat name.
+---@param base string|Textformat|nil Base textformat (name or instance).
 ---@param options_arg table? Per-call overrides merged on top of the base.
 ---@return Textformat
 function M.new_textformat(name, base, options_arg)
@@ -261,7 +261,12 @@ function M.new_textformat(name, base, options_arg)
         name = publisher.utilities.string_random(10)
     end
     local textformats = publisher.textformats
-    local baseformat = textformats[base] or textformats.text
+    local baseformat
+    if type(base) == "table" then
+        baseformat = base
+    else
+        baseformat = textformats[base] or textformats.text
+    end
     options_arg = options_arg or {}
     local tf = {}
     for k, v in pairs(baseformat) do
