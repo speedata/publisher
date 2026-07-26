@@ -505,6 +505,11 @@ M.make_array = make_array
 M.make_map = make_map
 
 local string_value
+
+--- Get the numeric value of a sequence or a plain value.
+---@param sequence any
+---@return number|nil value The numeric value, `nil` if it cannot be determined.
+---@return string|nil errmsg
 local function number_value(sequence)
     if type(sequence) == "string" then
         return tonumber(sequence)
@@ -536,6 +541,10 @@ local function number_value(sequence)
     return tonumber(string_value(sequence)), nil
 end
 
+--- Get the effective boolean value of a sequence or a plain value.
+---@param seq any
+---@return boolean value
+---@return string|nil errmsg
 local function boolean_value(seq)
     if type(seq) == "boolean" then
         return seq
@@ -562,6 +571,9 @@ local function boolean_value(seq)
     return ok, nil
 end
 
+--- Get the string value of a sequence or a plain value.
+---@param seq any
+---@return string value
 function string_value(seq)
     local ret = {}
     if type(seq) == "string" then
