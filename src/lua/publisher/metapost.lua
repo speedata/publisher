@@ -27,12 +27,9 @@ local colors_module = require("publisher.colors")
 -- `further_split_keys` hold arrays, all others plain strings.
 ---@class MetapostPrescript
 ---@field mplibtexboxid? string[] Box id, width, height.
----@field sh_color_a? string[]
----@field sh_color_b? string[]
----@field tr_alternative? string
+---@field tr_alternative? string Emitted by sp.mp but currently unused.
 ---@field tr_transparency? string
 ---@field MPlibOverrideColor? string
----@field postmplibverbtex? string
 
 -- helper
 
@@ -64,14 +61,6 @@ local function finder(name, mode, _type)
         return loc
     end
     return name
-end
-
--- Buffers MetaPost-emitted TeX output to be flushed into the current PDF
--- content stream.
----@param _whatever any
----@return nil
-local function texsprint(_whatever)
-    -- w("texsprint %s", tostring(whatever))
 end
 
 local pdfcode
@@ -122,9 +111,9 @@ local function pdf_literalcode(fmt, ...)
     instructions[#instructions + 1] = string.format(new_fmt, table.unpack(new_args))
 end
 
--- Inserts the buffered TeX output and accumulated PDF literal code as
--- a hbox/whatsit pair so MetaPost-generated content lands in the page.
----@param n integer Position index for the inserted run.
+-- Inserts a rendered text box into the PDF code buffer so that
+-- subsequent literals go into a fresh instruction run after the box.
+---@param n Node The hbox to insert at the current position.
 ---@return nil
 local function insert_text(n)
     table.insert(pdfcode, n)
@@ -139,9 +128,10 @@ local textext2_fmt = [[addto currentpicture doublepath unitsquare ]]
     .. [[xscaled %f yscaled %f shifted (0,-%f) ]]
     .. [[withprescript "mplibtexboxid=%i:%f:%f"]]
 
--- Renders a `btex ... etex` block by running `str` through TeX and
--- buffering the result for re-insertion at the current MetaPost position.
----@param str string TeX source.
+-- Renders a text (from the `sptext`/`drawtext` runscript macros) as a
+-- node list and buffers it for re-insertion at the current MetaPost
+-- position.
+---@param str string Text in the form `family:style:text`.
 ---@param fmt string Format wrapper (`textext_fmt` or `textext2_fmt`).
 ---@return string? mpcode MetaPost code placing the rendered box.
 local function process_tex_text(str, fmt)
@@ -210,8 +200,8 @@ local function scriptrunner(code)
     end
 end
 
--- Places previously rendered `btex...etex` boxes at the proper MetaPost
--- positions, accounting for transformation and color commands.
+-- Places previously rendered text boxes (see `process_tex_text`) at the
+-- proper MetaPost positions, accounting for transformations.
 ---@param object table MetaPost figure object.
 ---@param prescript MetapostPrescript Prescript instructions encoding placement.
 ---@return nil
@@ -359,8 +349,6 @@ function M.newbox(width_sp, height_sp)
     end
     return mpobj
 end
-
-local tex_code_pre_mplib = {}
 
 -- Converts a MetaPost color tuple (`{r}`, `{r,g,b}`, `{c,m,y,k}`) into
 -- the corresponding PDF stroke + fill operator pair.
@@ -513,46 +501,23 @@ local function flushnormalpath(path, open)
     end
 end
 
--- Emits the closing color/transparency operators after a MetaPost
--- object has been drawn.
----@param tr integer? Transparency graphic state number.
----@param over string? Color override.
----@param sh integer? Shading number.
----@return nil
-local function do_postobj_color(tr, over, sh)
-    if sh then
-        pdf_literalcode("W n /MPlibSh%s sh Q", sh)
-    end
-    if over then
-        texsprint("\\special{color pop}")
-    end
-    if tr then
-        pdf_literalcode("/MPlibTr%i gs", tr)
-    end
-end
-
 local transparency_values
 
--- Emits the opening color/transparency/shading operators for a MetaPost
--- object based on its prescript instructions.
+-- Emits the opening color/transparency operators for a MetaPost object
+-- based on its prescript instructions.
 ---@param object table
 ---@param prescript MetapostPrescript|nil
----@return integer? transparent
----@return string? overprint
----@return integer? shading
+---@return nil
 local function do_preobj_color(object, prescript)
     local opaq = prescript and prescript.tr_transparency
-
     if opaq then
-        -- tron_no, troff_no = tr_pdf_pageresources(prescript.tr_alternative or 1, opaq)
         local str_int_val = string.format("%d", opaq)
         transparency_values[str_int_val] = true
         pdf_literalcode("/TRP%s gs", str_int_val)
     end
     local override = prescript and prescript.MPlibOverrideColor
-    if override and type(override) == "string" then
+    if override then
         pdf_literalcode(override)
-        override = nil
     else
         local cs = object.color
         if cs and #cs > 0 then
@@ -563,16 +528,11 @@ local function do_preobj_color(object, prescript)
     -- partially adapted from luamplib but never finished — the helpers
     -- color_normalize and sh_pdfpageresources were not ported. The block
     -- has been removed; reinstate it together with those helpers when
-    -- shading is needed again. The first return value (formerly troff_no)
-    -- is always nil for the same reason — transparency_modes was never wired
-    -- through tr_pdf_pageresources.
-    return nil, override
+    -- shading is needed again.
 end
 
 local further_split_keys = {
     mplibtexboxid = true,
-    sh_color_a = true,
-    sh_color_b = true,
 }
 
 -- Parses a `key=value;key=value;...` pre/postscript string into a Lua
@@ -595,8 +555,8 @@ local function script2table(s)
     return t
 end
 
--- Converts a MetaPost figure object by emitting the PDF content stream
--- and TeX code directly (via tex.sprint / pdf literals); returns nothing.
+-- Converts a MetaPost figure result into PDF literal code (buffered in
+-- `pdfcode`); returns nothing.
 ---@param result mplib.MpResult? MetaPost figure result.
 ---@return nil
 local function convert(result)
@@ -610,16 +570,11 @@ local function convert(result)
                 ---@type integer, integer, integer, string|false
                 local miterlimit, linecap, linejoin, dashed = -1, -1, -1, false
                 boundingbox = figure:boundingbox()
-                local llx, lly, urx, ury = boundingbox[1], boundingbox[2], boundingbox[3], boundingbox[4] -- faster than unpack
+                local llx, urx = boundingbox[1], boundingbox[3]
                 if urx < llx then
                     w("no figure")
                 else
-                    if tex_code_pre_mplib[f] then
-                        texsprint(tex_code_pre_mplib[f])
-                    end
-                    local TeX_code_bot = {}
                     -- start figure
-                    texsprint(string.format("\\mplibstarttoPDF{%f}{%f}{%f}{%f}", llx, lly, urx, ury))
                     pdf_literalcode("q")
                     if objects then
                         local savedpath = nil
@@ -634,7 +589,7 @@ local function convert(result)
                                 prescript = script2table(prescript)
                             end
 
-                            local tr_opaq, cr_over, shade_no = do_preobj_color(object, prescript)
+                            do_preobj_color(object, prescript)
                             if prescript and prescript.mplibtexboxid then
                                 put_tex_boxes(object, prescript)
                             elseif objecttype == "start_bounds" or objecttype == "stop_bounds" then --skip
@@ -646,17 +601,10 @@ local function convert(result)
                             elseif objecttype == "stop_clip" then
                                 pdf_literalcode("Q")
                                 miterlimit, linecap, linejoin, dashed = -1, -1, -1, false
-                            elseif objecttype == "special" then
-                                if prescript and prescript.postmplibverbtex then
-                                    TeX_code_bot[#TeX_code_bot + 1] = prescript.postmplibverbtex
-                                end
-                            elseif objecttype == "text" then
-                                local ot = object.transform -- 3,4,5,6,1,2
-                                pdf_literalcode("q")
-                                pdf_literalcode("%n %n %n %n %n %n cm", ot[3], ot[4], ot[5], ot[6], ot[1], ot[2])
-                                -- pdf_textfigure(object.font, object.dsize, object.text, object.width, object.height,
-                                --     object.depth)
-                                pdf_literalcode("Q")
+                            elseif objecttype == "special" or objecttype == "text" then
+                                -- TeX specials (verbatimtex) and text objects
+                                -- (btex ... etex / infont) are not supported;
+                                -- text is rendered via the sptext runscript macro.
                             else
                                 local evenodd, collect, both = false, false, false
                                 local postscript = object.postscript
@@ -743,18 +691,16 @@ local function convert(result)
                                         else
                                             flushnormalpath(path, open)
                                         end
-                                        if not shade_no then -- conflict with shading
-                                            if objecttype == "fill" then
-                                                pdf_literalcode(evenodd and "h f*" or "h f")
-                                            elseif objecttype == "outline" then
-                                                if both then
-                                                    pdf_literalcode(evenodd and "h B*" or "h B")
-                                                else
-                                                    pdf_literalcode(open and "S" or "h S")
-                                                end
-                                            elseif objecttype == "both" then
+                                        if objecttype == "fill" then
+                                            pdf_literalcode(evenodd and "h f*" or "h f")
+                                        elseif objecttype == "outline" then
+                                            if both then
                                                 pdf_literalcode(evenodd and "h B*" or "h B")
+                                            else
+                                                pdf_literalcode(open and "S" or "h S")
                                             end
+                                        elseif objecttype == "both" then
+                                            pdf_literalcode(evenodd and "h B*" or "h B")
                                         end
                                     end
                                     if transformed then
@@ -795,14 +741,9 @@ local function convert(result)
                                     end
                                 end
                             end
-                            do_postobj_color(tr_opaq, cr_over, shade_no)
                         end
                     end
                     pdf_literalcode("Q")
-                    texsprint("\\mplibstoptoPDF")
-                    if #TeX_code_bot > 0 then
-                        texsprint(TeX_code_bot)
-                    end
                 end
             end
         end
