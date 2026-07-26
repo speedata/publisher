@@ -212,8 +212,8 @@ namespace :lualint do
 	end
 end
 
-desc "Run all release-gate checks: luacheck, stylua format, QA suite"
-task :check => [:luacheck, :stylua, :qa]
+desc "Run all release-gate checks: luacheck, lualint, stylua format, QA suite"
+task :check => [:luacheck, :lualint, :stylua, :qa]
 
 desc "Clean QA intermediate files"
 task :cleanqa do

@@ -1,3 +1,6 @@
+---@diagnostic disable
+-- Legacy XML parser code (replaced by lxpath, still reachable via
+-- --xpath=luxor), scheduled for removal: not checked by lua-language-server.
 --  luxor.lua
 --  speedata publisher
 --  A crappy non-validating XML parser
