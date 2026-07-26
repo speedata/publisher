@@ -1,6 +1,6 @@
---- The fontloader uses the LuaTeX internal fontforge library (called
---- fontloader) to inspect an OpenType, a TrueType or a Type1 font. It
---- converts this font to a font structure  TeX uses internally.
+-- The fontloader uses the LuaTeX internal fontforge library (called
+-- fontloader) to inspect an OpenType, a TrueType or a Type1 font. It
+-- converts this font to a font structure  TeX uses internally.
 --
 --  fontloader.lua
 --  speedata publisher
@@ -14,9 +14,9 @@ local publisher = require("publisher")
 
 local M = {}
 
---- Return `truetype`, `opentype` or `type1` depending on the string
---- `filename`. If not recognized form  the file name, return _nil_.
---- This function simply looks at the last three letters.
+-- Return `truetype`, `opentype` or `type1` depending on the string
+-- `filename`. If not recognized form  the file name, return _nil_.
+-- This function simply looks at the last three letters.
 function M.guess_fonttype(filename)
     local f = filename:lower()
     if f:match(".*%.ttf$") then
@@ -30,20 +30,20 @@ function M.guess_fonttype(filename)
     end
 end
 
---- Return `true` if the this feature table `tab` has an entry for the
---- given `script` and `lang`. The table is something like:
----
----     [1] = {
----       ["langs"] = {
----         [1] = "AZE "
----         [2] = "CRT "
----         [3] = "TRK "
----       },
----       ["script"] = "latn"
----     },
+-- Return `true` if the this feature table `tab` has an entry for the
+-- given `script` and `lang`. The table is something like:
+--
+--     [1] = {
+--       ["langs"] = {
+--         [1] = "AZE "
+--         [2] = "CRT "
+--         [3] = "TRK "
+--       },
+--       ["script"] = "latn"
+--     },
 function M.features_scripts_matches(tab, script, lang)
-    local lang = string.lower(lang)
-    local script = string.lower(script)
+    lang = string.lower(lang)
+    script = string.lower(script)
     for i = 1, #tab do
         local entry = tab[i]
         if string.lower(entry.script) == script then
@@ -57,7 +57,7 @@ function M.features_scripts_matches(tab, script, lang)
     return false
 end
 
---- Convert codepoint to a UTF-16 string.
+-- Convert codepoint to a UTF-16 string.
 function M.to_utf16(codepoint)
     assert(codepoint)
     if codepoint < 65536 then
@@ -67,8 +67,8 @@ function M.to_utf16(codepoint)
     end
 end
 
---- Return the string that is responsible for the OpenType feature `featurename`.
---- Currently only gsub lookups are supported for script `latn` and language `dflt`.
+-- Return the string that is responsible for the OpenType feature `featurename`.
+-- Currently only gsub lookups are supported for script `latn` and language `dflt`.
 function M.find_feature_string(f, featurename)
     local ret = {}
     if f.gsub == nil then
@@ -88,16 +88,33 @@ function M.find_feature_string(f, featurename)
     return ret
 end
 
---- LuaTeX's fontloader (function `to_table()`) returns a rather complex table
---- with all kinds of information. Loading this table is expensive (_todo:
---- measure it_), so we  don't load it over and over again if the user
---- requests the same font in a different size. We also cache the `to_unicode` mapping.
---- Only the size dependent values are computed.
+---@class SpGlyph: FontloaderGlyph
+---@field glyphno integer
+
+-- The result of `fontloader.to_table()` with the publisher specific lookup
+-- tables that are stored alongside it.
+---@class SpFontloaderTable: FontloaderFont
+---@field filename_with_path string
+---@field lookup_codepoint_by_name table<string, integer>
+---@field lookup_codepoint_by_number table<integer, integer>
+---@field glyphtable SpGlyph[]
+
+-- LuaTeX's fontloader (function `to_table()`) returns a rather complex table
+-- with all kinds of information. Loading this table is expensive (_todo:
+-- measure it_), so we  don't load it over and over again if the user
+-- requests the same font in a different size. We also cache the `to_unicode` mapping.
+-- Only the size dependent values are computed.
+---@type table<string, SpFontloaderTable>
 local lookup_fonttable_from_filename = {}
 
 -- The fontforge based font loader is deprecated. Warn only once per font file.
 local fontforge_deprecation_warned = {}
 
+---@param name string Font file name (without path).
+---@param size number Font size in scaled points.
+---@param extra_parameter table Additional font settings such as `space` or `otfeatures`.
+---@param mode string The requested font loader ("harfbuzz" or "fontforge").
+---@return table f A not yet loaded font instance descriptor.
 function M.preload_font(name, size, extra_parameter, mode)
     local f = {
         requested_mode = mode,
@@ -110,6 +127,11 @@ function M.preload_font(name, size, extra_parameter, mode)
 end
 
 -- The harfbuzz version of the fontloader.
+---@param name string Font file name (without path).
+---@param size number Font size in scaled points.
+---@param extra_parameter table Additional font settings such as `space` or `otfeatures`.
+---@return boolean ok
+---@return table|string fnt_or_msg A TeX usable font table on success, an error message otherwise.
 function M.define_font_hb(name, size, extra_parameter)
     local glyphname_uni = {}
     if not publisher.hasharfbuzz then
@@ -125,22 +147,15 @@ function M.define_font_hb(name, size, extra_parameter)
         )
         return M.define_font(name, size, extra_parameter)
     end
-    local fonttable
-    local filename_with_path
-    filename_with_path = kpse.find_file(name)
+    local filename_with_path = kpse.find_file(name)
     if not filename_with_path then
         return false, string.format("Fontfile '%s' not found.", name)
     end
+    -- Nothing must be stored in lookup_fonttable_from_filename here: that
+    -- cache holds fontloader tables for M.define_font, a harfbuzz face stored
+    -- there breaks a later fontforge load of the same file.
     local face = publisher.harfbuzz.Face.new(filename_with_path)
     local fnt = publisher.harfbuzz.Font.new(face)
-    fonttable = {
-        face = face,
-        font = fnt,
-    }
-
-    lookup_fonttable_from_filename[name] = fonttable
-    face = fonttable.face
-    fnt = fonttable.font
 
     if size < 0 then
         size = -655.36 * size
@@ -246,7 +261,7 @@ function M.define_font_hb(name, size, extra_parameter)
             name = glyphname,
             expansion_factor = 1000,
         }
-        --- Margin protrusion is enabled in `spinit.lua`.
+        -- Margin protrusion is enabled in `spinit.lua`.
         if (uni == 44 or uni == 45 or uni == 46) and extra_parameter and tonumber(extra_parameter.marginprotrusion) then
             f.characters[uni]["right_protruding"] = extra_parameter.marginprotrusion
         end
@@ -306,19 +321,20 @@ function M.define_font_hb(name, size, extra_parameter)
     local fallback_fontdefinitions = {}
     if extra_parameter.fallbacks then
         for i = #extra_parameter.fallbacks, 1, -1 do
-            local fnt = extra_parameter.fallbacks[i]
+            local fallbackname = extra_parameter.fallbacks[i]
             main.log(
                 "info",
                 "Create font metrics for fallback font",
                 "name",
-                fnt,
+                fallbackname,
                 "size",
                 math.round(size / publisher.factor, 3)
             )
-            local tmp, newfont_or_msg = M.define_font_hb(fnt, size, {})
+            local tmp, newfont_or_msg = M.define_font_hb(fallbackname, size, {})
             if not tmp then
-                return nil, newfont_or_msg
+                return false, newfont_or_msg
             end
+            ---@cast newfont_or_msg -string
             local num = font.define(newfont_or_msg)
             newfont_or_msg.fontnum = num
             fallback_fontdefinitions[#fallback_fontdefinitions + 1] = newfont_or_msg
@@ -330,16 +346,20 @@ function M.define_font_hb(name, size, extra_parameter)
     return true, f
 end
 
---- Return a TeX usable font table, or _nil_ plus an error message.
---- The parameter `name` is the filename (without path), `size` is
---- given in scaled points, `extra_parameter` is a table such as:
----     {
----       ["space"] = "25"
----       ["marginprotrusion"] = "100"
----       ["otfeatures"] = {
----         ["smcp"] = "true"
----       },
----     },
+-- Return `true` and a TeX usable font table, or `false` plus an error
+-- message. The parameter `extra_parameter` is a table such as:
+--     {
+--       ["space"] = "25"
+--       ["marginprotrusion"] = "100"
+--       ["otfeatures"] = {
+--         ["smcp"] = "true"
+--       },
+--     },
+---@param name string Font file name (without path).
+---@param size number Font size in scaled points.
+---@param extra_parameter? table Additional font settings such as `space` or `otfeatures`.
+---@return boolean ok
+---@return table|string fnt_or_msg A TeX usable font table on success, an error message otherwise.
 function M.define_font(name, size, extra_parameter)
     if not fontforge_deprecation_warned[name] then
         fontforge_deprecation_warned[name] = true
@@ -350,8 +370,8 @@ function M.define_font(name, size, extra_parameter)
             name
         )
     end
-    local extra_parameter = extra_parameter or {}
-    local fonttable
+    extra_parameter = extra_parameter or {}
+    local fonttable ---@type SpFontloaderTable
     local missing_features = {}
 
     if lookup_fonttable_from_filename[name] then
@@ -359,62 +379,69 @@ function M.define_font(name, size, extra_parameter)
         assert(fonttable)
     else
         -- These are stored in the cached fonttable table
-        local filename_with_path
+        ---@type table<string, integer>
         local lookup_codepoint_by_name = {}
+        ---@type table<integer, integer>
         local lookup_codepoint_by_number = {}
 
-        filename_with_path = kpse.find_file(name)
+        local filename_with_path = kpse.find_file(name)
         if not filename_with_path then
             return false, string.format("Fontfile '%s' not found.", name)
         end
-        local font, err = fontloader.open(filename_with_path)
-        if not font then
+        local loadedfont, err = fontloader.open(filename_with_path)
+        if not loadedfont then
             if type(err) == "string" then
                 return false, err
             else
                 printtable("Font error", err)
+                return false, string.format("Problem while loading font '%s'", tostring(filename_with_path))
             end
         end
-        fonttable = fontloader.to_table(font)
-        if fonttable == nil then
+        local totable = fontloader.to_table(loadedfont)
+        if not totable then
             return false, string.format("Problem while loading font '%s'", tostring(filename_with_path))
         end
+        ---@cast totable SpFontloaderTable
+        fonttable = totable
 
         -- Store the table for quicker lookup later.
         lookup_fonttable_from_filename[name] = fonttable
 
         fonttable.filename_with_path = filename_with_path
 
-        --- We require a mapping glyph number -> unicode codepoint.
-        --- I used to have two different means of unicode -> glyph mapping.
-        --- The type1 fonts got the unicode point with `g.unicode`, the
-        --- The ttf/otf font got the point with `fonttable.map.backmap[i]`
-        --- Somehow this worked a few years until Arial Narrow could not display
-        --- a semicolon (see issue #152).
-        --- Now I use g.unicode if present, otherwise map.backmap.
-        --- See issue #154
+        -- We require a mapping glyph number -> unicode codepoint.
+        -- I used to have two different means of unicode -> glyph mapping.
+        -- The type1 fonts got the unicode point with `g.unicode`, the
+        -- The ttf/otf font got the point with `fonttable.map.backmap[i]`
+        -- Somehow this worked a few years until Arial Narrow could not display
+        -- a semicolon (see issue #152).
+        -- Now I use g.unicode if present, otherwise map.backmap.
+        -- See issue #154
 
+        ---@type SpGlyph[]
         local glyphtable = {}
         if fonttable.subfonts and #fonttable.subfonts > 0 then
             -- this looks like a CID-keyed font such as Noto
             for _, subfont in pairs(fonttable.subfonts) do
                 for glyphno, g in pairs(subfont.glyphs) do
+                    ---@cast g SpGlyph
                     -- hyphen
                     if g.unicode == 8209 then
                         g.unicode = 45
                     end
+                    g.glyphno = glyphno
                     glyphtable[#glyphtable + 1] = g
-                    glyphtable[#glyphtable].glyphno = glyphno
                 end
             end
         else
             -- all regular
             for glyphno, g in pairs(fonttable.glyphs) do
+                ---@cast g SpGlyph
+                g.glyphno = glyphno
                 glyphtable[#glyphtable + 1] = g
-                glyphtable[#glyphtable].glyphno = glyphno
             end
         end
-        --- For kerning a mapping glyphname -> codepoint is needed.
+        -- For kerning a mapping glyphname -> codepoint is needed.
 
         for i = 1, #glyphtable do
             local g = glyphtable[i]
@@ -430,8 +457,8 @@ function M.define_font(name, size, extra_parameter)
         fonttable.glyphtable = glyphtable
     end
 
-    --- A this point we have taken the `fonttable` from memory or from `fontloader#to_table()`. The next
-    --- part is mostly size/features dependent.
+    -- A this point we have taken the `fonttable` from memory or from `fontloader#to_table()`. The next
+    -- part is mostly size/features dependent.
 
     if size < 0 then
         size = -655.36 * size
@@ -439,21 +466,16 @@ function M.define_font(name, size, extra_parameter)
     -- Some fonts have `units_per_em` set to 0. I am not sure if setting this to
     -- 1000 in that case has any drawbacks.
     if not fonttable.units_per_em then
-        main.log(
-            "error",
-            string.format(
-                "something went wrong defining %s. Perhaps you have combined harfbuzz with fallback? Please file a bug report.",
-                name
-            )
-        )
+        return false,
+            string.format("something went wrong defining %s. Please file a bug report.", name)
     end
     if fonttable.units_per_em == 0 then
         fonttable.units_per_em = 1000
     end
     local mag = size / fonttable.units_per_em
 
-    --- The table `f` is the font structure that TeX can use, see chapter 7 of the LuaTeX manual for a detailed description. This is returned from
-    --- the function. It is safe to store additional data here.
+    -- The table `f` is the font structure that TeX can use, see chapter 7 of the LuaTeX manual for a detailed description. This is returned from
+    -- the function. It is safe to store additional data here.
     local f = {}
 
     -- The index of the characters table must match the glyphs in the
@@ -533,10 +555,10 @@ function M.define_font(name, size, extra_parameter)
                 f.characters[codepoint].depth = -glyph.boundingbox[2] * mag
             end
 
-            --- We change the `tounicode` entry for entries with a period. Sometimes fonts
-            --- have entries like `a.sc` or `a.c2sc` for smallcaps letter a. We are
-            --- only interested in the part before the period.
-            --- _This solution might not be perfect_.
+            -- We change the `tounicode` entry for entries with a period. Sometimes fonts
+            -- have entries like `a.sc` or `a.c2sc` for smallcaps letter a. We are
+            -- only interested in the part before the period.
+            -- _This solution might not be perfect_.
             if glyph.name:match("%.") then
                 local destname = glyph.name:gsub("^([^%.]*)%..*$", "%1")
                 local cp = fonttable.lookup_codepoint_by_name[destname]
@@ -545,7 +567,7 @@ function M.define_font(name, size, extra_parameter)
                 end
             end
 
-            --- Margin protrusion is enabled in `spinit.lua`.
+            -- Margin protrusion is enabled in `spinit.lua`.
             if
                 (glyph.name == "hyphen" or glyph.name == "period" or glyph.name == "comma")
                 and extra_parameter
@@ -554,7 +576,7 @@ function M.define_font(name, size, extra_parameter)
                 f.characters[codepoint]["right_protruding"] = extra_parameter.marginprotrusion
             end
 
-            --- We do kerning by default. In the future we could turn it off.
+            -- We do kerning by default. In the future we could turn it off.
             local kerns = {}
             if glyph.kerns then
                 for _, kern in pairs(glyph.kerns) do
@@ -583,8 +605,9 @@ function M.define_font(name, size, extra_parameter)
             )
             local tmp, newfont_or_msg = M.define_font(fnt, size)
             if not tmp then
-                return nil, newfont_or_msg
+                return false, newfont_or_msg
             end
+            ---@cast newfont_or_msg -string
             local num = font.define(newfont_or_msg)
             newfont_or_msg.fontnum = num
             fallback_fontdefinitions[#fallback_fontdefinitions + 1] = newfont_or_msg
