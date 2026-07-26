@@ -181,13 +181,13 @@ function M.concat_transformation(a, b)
 end
 
 -- Places a rotated text watermark in the background of `box`.
----@param box HlistNode Hbox to decorate (modified in place).
+---@param box HlistNode Hbox to decorate.
 ---@param textstring string Watermark text.
 ---@param angle number Rotation in degrees.
 ---@param colorname string Registered color name.
 ---@param fontfamily integer Font family number.
----@param bgsize? integer Optional font size in sp; defaults to family size.
----@return nil
+---@param bgsize? string Background sizing keyword; "contain" scales the text into the box.
+---@return HlistNode box Repacked hbox with the background text prepended.
 function M.bgtext(box, textstring, angle, colorname, fontfamily, bgsize)
     local colorindex = colors_module.colors[colorname].index
     local boxheight, boxdepth, boxwidth = box.height, box.depth or 0, box.width

@@ -165,7 +165,7 @@ function tabular:attach_objects_row(tab, current_row, skiptable)
                 thiscolumn = thiscolumn + 1
                 current_column = current_column + 1
             end
-            for i, j in ipairs(td_contents) do
+            for _, j in ipairs(td_contents) do
                 local eltname = publisher.xml_helpers.elementname(j)
                 local eltcontents = publisher.xml_helpers.element_contents(j)
                 if eltname == "Image" then
@@ -1085,8 +1085,8 @@ function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, ski
 
         local td_borderleft = td_contents.td_borderleft_calculated or tex.sp(td_contents["border-left"] or 0)
         local td_borderright = td_contents.td_borderright_calculated or tex.sp(td_contents["border-right"] or 0)
-        local td_bordertop = td_contents.td_bordertop_calculated or tex.sp(td_contents["border-top"] or 0)
-        local td_borderbottom = td_contents.td_borderbottom_calculated or tex.sp(td_contents["border-bottom"] or 0)
+        local td_bordertop = td_contents.td_bordertop_calculated or tex.sp(td_contents["border-top"] or 0) or 0
+        local td_borderbottom = td_contents.td_borderbottom_calculated or tex.sp(td_contents["border-bottom"] or 0) or 0
         local padding_left = td_contents.padding_left or self.padding_left_col[current_column] or self.padding_left
         local padding_right = td_contents.padding_right or self.padding_right_col[current_column] or self.padding_right
         local padding_top = td_contents.padding_top or self.padding_top
@@ -1180,15 +1180,15 @@ function tabular:calculate_rowheights()
             -- ignore
         elseif eltname == "Tablehead" or eltname == "Tablefoot" then
             ---@type number?
-            local last_shiftup = 0
+            local hf_last_shiftup = 0
             for _, row in ipairs(tr_contents) do
                 local cellcontents = publisher.xml_helpers.element_contents(row)
                 local cell_elementname = publisher.xml_helpers.elementname(row)
                 if cell_elementname == "Tr" then
                     rowcounter[tablearea] = rowcounter[tablearea] + 1
                     current_row = rowcounter[tablearea]
-                    rowheight, _rowspans, last_shiftup =
-                        self:calculate_rowheight(cellcontents, current_row, last_shiftup, self.skiptables[tablearea])
+                    rowheight, _rowspans, hf_last_shiftup =
+                        self:calculate_rowheight(cellcontents, current_row, hf_last_shiftup, self.skiptables[tablearea])
                     if not rowheight then
                         return
                     end
@@ -1220,7 +1220,7 @@ end
 function tabular:adjust_row_heights_for_rowspans(rowspans, area)
     -- Adjust row heights. We have to do calculations on all row heights, before the rows can get their
     -- final heights
-    for i, rowspan in pairs(rowspans) do
+    for _, rowspan in pairs(rowspans) do
         local sum_ht = 0
         for j = rowspan.start, rowspan.stop do
             if not area[j] then
@@ -1243,7 +1243,7 @@ function tabular:adjust_row_heights_for_rowspans(rowspans, area)
     end
 
     -- We have now calculated all row heights. So we can adjust the rowspans now.
-    for i, rowspan in pairs(rowspans) do
+    for _, rowspan in pairs(rowspans) do
         rowspan.sum_ht = table.sum(area, rowspan.start, rowspan.stop) + self.rowsep * (rowspan.stop - rowspan.start)
     end
 end
@@ -1298,8 +1298,8 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         -- FIXME: am I sure that I am in the corerct column?  (colspan...)?
         local td_borderleft = td_contents.td_borderleft_calculated or tex.sp(td_contents["border-left"] or 0)
         local td_borderright = td_contents.td_borderright_calculated or tex.sp(td_contents["border-right"] or 0)
-        local td_bordertop = td_contents.td_bordertop_calculated or tex.sp(td_contents["border-top"] or 0)
-        local td_borderbottom = td_contents.td_borderbottom_calculated or tex.sp(td_contents["border-bottom"] or 0)
+        local td_bordertop = td_contents.td_bordertop_calculated or tex.sp(td_contents["border-top"] or 0) or 0
+        local td_borderbottom = td_contents.td_borderbottom_calculated or tex.sp(td_contents["border-bottom"] or 0) or 0
         local padding_left = td_contents.padding_left or self.padding_left_col[current_column] or self.padding_left
         local padding_right = td_contents.padding_right or self.padding_right_col[current_column] or self.padding_right
         local padding_top = td_contents.padding_top or self.padding_top
@@ -1376,7 +1376,7 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         tail.next = cell
         cell.prev = tail
 
-        local g = set_glue(nil, { width = padding_bottom })
+        g = set_glue(nil, { width = padding_bottom })
         publisher.attribute_helpers.setprop(g, "origin", "align_padding")
 
         valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
@@ -1478,12 +1478,14 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         end
 
         if td_contents.graphic then
-            local _, x = metapost.prepareboxgraphic(hlist.width, hlist.height, td_contents.graphic)
-            local x = node.hpack(x)
-            x.width = 0
-            x.height = 0
-            hlist = node.insert_before(hlist, hlist, x)
-            hlist = node.hpack(hlist)
+            local _, gfx = metapost.prepareboxgraphic(hlist.width, hlist.height, td_contents.graphic)
+            if gfx then
+                local x = node.hpack(gfx)
+                x.width = 0
+                x.height = 0
+                hlist = node.insert_before(hlist, hlist, x)
+                hlist = node.hpack(hlist)
+            end
         end
 
         -- Store the resolved color indexed by cell position. The background will
@@ -1494,6 +1496,7 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
             deferred_bgcolors[#row + 1] = deferred_bg_color
         end
 
+        ---@type Node
         local head = hlist
         if td_bordertop > 0 then
             local rule = publisher.drawing.colorbar(
@@ -1624,7 +1627,7 @@ function tabular:make_tablehead(tr_contents, tablehead_first, tablehead, current
         elseif row_elementname == "Tablerule" then
             local tmp = publisher.drawing.colorbar(
                 self.tablewidth_target,
-                tex.sp(row_contents.rulewidth or "0.25pt"),
+                tex.sp(row_contents.rulewidth or "0.25pt") or 0,
                 0,
                 row_contents.color,
                 "tablerule",
@@ -1686,7 +1689,7 @@ function tabular:make_tablefoot(tr_contents, tablefoot_last, tablefoot, current_
         elseif row_elementname == "Tablerule" then
             local tmp = publisher.drawing.colorbar(
                 self.tablewidth_target,
-                tex.sp(row_contents.rulewidth or "0.25pt"),
+                tex.sp(row_contents.rulewidth or "0.25pt") or 0,
                 0,
                 row_contents.color,
                 "tablerule",
@@ -1765,7 +1768,7 @@ end
 -- before re-typesetting head/foot rows so destinations are not duplicated.
 ---@param nodelist Node
 ---@return Node? nodelist The (possibly trimmed) node list, or `nil` when fully removed.
-function remove_bookmark_nodes(nodelist)
+local function remove_bookmark_nodes(nodelist)
     local head = nodelist
     while head do
         if head.id == publisher.hlist_node or head.id == publisher.vlist_node then
@@ -1918,7 +1921,7 @@ function tabular:typeset_table(dataxml)
             end
             tmp = publisher.drawing.colorbar(
                 self.tablewidth_target - offset,
-                tex.sp(tr_contents.rulewidth or "0.25pt"),
+                tex.sp(tr_contents.rulewidth or "0.25pt") or 0,
                 0,
                 tr_contents.color,
                 "tablerule",
@@ -2607,7 +2610,10 @@ function tabular:reformat_foot(pagenumber, max_splits)
         rownumber = self.tablefoot_contents[2]
     end
     local y_layoutxml, y_dataxml = tabular.get_origin(y)
+    assert(y_layoutxml, "no layout XML origin registered for the table foot")
+    assert(y_dataxml, "no data XML origin registered for the table foot")
     local x = publisher.dispatch.dispatch(y_layoutxml, y_dataxml)
+    ---@cast x TableheadFootContents
     local page = publisher.attribute_helpers.read_attribute(y_layoutxml, y_dataxml, "page", "string", "all")
     x.page = page
     self:attach_objects(x)
@@ -2624,7 +2630,10 @@ function tabular:reformat_head()
     local y = self.tablehead_contents[1]
     local rownumber = self.tablehead_contents[2]
     local y_layoutxml, y_dataxml = tabular.get_origin(y)
+    assert(y_layoutxml, "no layout XML origin registered for the table head")
+    assert(y_dataxml, "no data XML origin registered for the table head")
     local x = publisher.dispatch.dispatch(y_layoutxml, y_dataxml)
+    ---@cast x TableheadFootContents
     self:attach_objects(x)
     local tmp1, tmp2 = {}, {}
     local page = publisher.attribute_helpers.read_attribute(y_layoutxml, y_dataxml, "page", "string", "all")
@@ -2638,7 +2647,7 @@ end
 -- the heavier border on each shared edge and zeroing the loser.
 ---@param tbl table[][] 2D table of cell descriptors.
 ---@return nil
-function adjust_border(tbl)
+local function adjust_border(tbl)
     for _, row in ipairs(tbl) do
         for _, col in ipairs(row) do
             for _, nxt in ipairs(col.nextcol) do
@@ -2656,7 +2665,7 @@ function adjust_border(tbl)
             end
             for _, nxt in ipairs(col.nextrow) do
                 local td_borderbottom = tex.sp(col["border-bottom"] or 0) or 0
-                local td_bordertop = tex.sp(nxt["border-top"] or 0)
+                local td_bordertop = tex.sp(nxt["border-top"] or 0) or 0
                 local new_borderwidth = math.max(td_borderbottom, td_bordertop) / 2
                 nxt.td_bordertop_calculated = math.max(nxt.td_bordertop_calculated or 0, new_borderwidth)
                 col.td_borderbottom_calculated = math.max(col.td_borderbottom_calculated or 0, new_borderwidth)
@@ -2703,7 +2712,7 @@ function tabular:do_bordercollapse(tab, area)
                     tablematrix[current_row][current_column] = td_contents
                     td_contents.name = string.format([[%2d / %2d]], current_row, current_column)
                     local colspan = td_contents.colspan
-                    for i = 1, (colspan or 1) - 1 do
+                    for _ = 1, (colspan or 1) - 1 do
                         current_column = current_column + 1
                         tablematrix[current_row][current_column] = td_contents
                     end
@@ -2768,7 +2777,7 @@ end
 ---@param tr_contents table Row contents
 ---@param curskiptable table Current skiptable
 ---@param current_row integer Current row index
-function set_skip_table_elt(tr_contents, curskiptable, current_row, total_columns)
+local function set_skip_table_elt(tr_contents, curskiptable, current_row, total_columns)
     local rowspan
     local colspan
     local current_column = 0

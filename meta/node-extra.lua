@@ -72,6 +72,16 @@ function node.insert_before(head, current, new) end
 ---@return Node new
 function node.insert_after(head, current, new) end
 
+-- The TeXLuaCATS library declares node.tail with a required node, but
+-- passing nil is allowed and returns nil (the publisher relies on this in
+-- the common `insert_after(head, tail(head), new)` idiom with an initially
+-- empty list, where insert_after accepts a nil current). Worth a PR
+-- upstream. The return type stays non-optional on purpose: it is only nil
+-- when the input is nil.
+---@param n Node?
+---@return Node tail
+function node.tail(n) end
+
 -- The TeXLuaCATS library declares the six-argument overload of
 -- node.dimensions with direct-access integers for the node arguments,
 -- but the node API variant takes nodes (the direct variant lives in
