@@ -72,6 +72,22 @@ function node.insert_before(head, current, new) end
 ---@return Node new
 function node.insert_after(head, current, new) end
 
+-- The TeXLuaCATS library declares the six-argument overload of
+-- node.dimensions with direct-access integers for the node arguments,
+-- but the node API variant takes nodes (the direct variant lives in
+-- node.direct.dimensions). glue_set is a float factor, not an integer.
+-- Worth a PR upstream.
+---@param glue_set number
+---@param glue_sign integer
+---@param glue_order integer
+---@param n Node
+---@param t Node Terminating node.
+---@param dir? DirectionSpecifier
+---@return integer width
+---@return integer height
+---@return integer depth
+function node.dimensions(glue_set, glue_sign, glue_order, n, t, dir) end
+
 ---@class Node
 ---@field width number
 ---@field height number

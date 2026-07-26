@@ -416,7 +416,9 @@ func resolveAttributes(attrs []html.Attribute) (map[string]string, map[string]st
 		}
 	}
 	if str, ok := resolved["text-decoration-line"]; ok && str != "none" {
-		resolved["text-decoration-style"] = "solid"
+		if _, ok := resolved["text-decoration-style"]; !ok {
+			resolved["text-decoration-style"] = "solid"
+		}
 	}
 	return resolved, attributes
 }

@@ -180,7 +180,7 @@ end
 -- Registers a previously created font instance with LuaTeX so glyphs can
 -- reference it by id. Fills in the metrics and feature tables.
 ---@param instance table Font instance descriptor.
----@return integer id LuaTeX font id.
+---@return boolean ok
 function M.define_font(instance)
     local mode = instance.requested_mode
     local num = instance.reserved_num
@@ -214,6 +214,8 @@ function M.define_font(instance)
         main.log("error", "Failed to load font", "requested name", instance.requested_name, "errormessage", f or "")
         return false
     end
+    -- On success the fontloader returns the font table, on failure the message.
+    ---@cast f Font
     preloaded_fonts[num] = f
     used_fonts[num] = f
     font.define(num, f)
@@ -225,7 +227,7 @@ end
 -- Loads the instance on demand if it has not been used before.
 ---@param fontfamily integer Family number from `lookup_fontfamily_name_number`.
 ---@param instancename "normal"|"bold"|"italic"|"bolditalic"|string Variant key.
----@return table? instance
+---@return integer instance LuaTeX font instance id.
 function M.get_fontinstance(fontfamily, instancename)
     local instance
     if fontfamily and fontfamily > 0 then
@@ -321,6 +323,10 @@ local function pre_linebreak_direct(head)
                 if dest_fontfamily then
                     local tmpnext = d_getnext(head)
                     local tmpprev = d_getprev(head)
+                    -- TeXLuaCATS declares direct.getprev as returning Node; the
+                    -- corrected declaration in meta/node-extra.lua merges into a
+                    -- union instead of replacing it, so narrow explicitly.
+                    ---@cast tmpprev integer?
                     d_setnext(head, nil)
                     d_setprev(head, nil)
                     local instance = lookup_fontfamily_number_instance[dest_fontfamily]
@@ -471,7 +477,10 @@ function M.pre_linebreak(head)
         plb_att_fontfamily = publisher.attribute_name_number["fontfamily"]
         plb_att_fontstyle = publisher.attribute_name_number["font-style"]
         plb_att_fontweight = publisher.attribute_name_number["font-weight"]
+        -- font-style and font-weight are declared with fixed value lists in
+        -- publisher.attributes, so they are never the `true` variant.
         local fs = publisher.attributes["font-style"]
+        ---@cast fs string[]
         for i, v in ipairs(fs) do
             if v == "italic" then
                 plb_attval_italic = i
@@ -479,6 +488,7 @@ function M.pre_linebreak(head)
             end
         end
         local fw = publisher.attributes["font-weight"]
+        ---@cast fw string[]
         for i, v in ipairs(fw) do
             if v == "bold" then
                 plb_attval_bold = i
@@ -494,12 +504,15 @@ end
 ---@param parent Node Surrounding hbox/vbox.
 ---@param head Node Head of the run.
 ---@param start Node First node carrying the background color.
----@param bgcolorindex integer Color index from `colortable`.
----@param bg_padding_top integer Padding above baseline in sp.
----@param bg_padding_bottom integer Padding below baseline in sp.
----@param reverse boolean Walk backwards (used for RTL runs).
+---@param bgcolorindex integer? Color index from `colortable`.
+---@param bg_padding_top integer? Padding above baseline in sp.
+---@param bg_padding_bottom integer? Padding below baseline in sp.
+---@param reverse boolean? Walk backwards (used for RTL runs).
 ---@return nil
 function M.insert_backgroundcolor(parent, head, start, bgcolorindex, bg_padding_top, bg_padding_bottom, reverse)
+    if bgcolorindex == nil then
+        return
+    end
     reverse = reverse or false
     bg_padding_top = bg_padding_top or 0
     bg_padding_bottom = bg_padding_bottom or 0
@@ -532,21 +545,29 @@ function M.insert_backgroundcolor(parent, head, start, bgcolorindex, bg_padding_
     return rule
 end
 
--- Insert a horizontal rule in the nodelist that is used for underlining. typ is 1 (solid) or 2 (dashed)
+-- Insert a horizontal rule in the nodelist that is used for underlining.
 -- Draws a text-decoration rule (underline / overline / line-through)
 -- across the run starting at `start`.
 ---@param parent Node Surrounding box.
 ---@param head Node Head of the run.
 ---@param start Node First node carrying the decoration.
----@param typ "underline"|"overline"|"line-through"
----@param style "solid"|"double"|"dotted"|"dashed"|"wavy"
----@param colornumber integer Color index.
+---@param typ integer? Value index into `publisher.attributes["text-decoration-line"]`.
+---@param style integer? Value index into `publisher.attributes["text-decoration-style"]`.
+---@param colornumber integer? Color index.
 ---@return nil
 function M.insert_underline(parent, head, start, typ, style, colornumber)
     colornumber = colornumber or 1
     if colornumber == 0 then
         colornumber = 1
     end
+    -- typ and style arrive as the integer indices stored in the node
+    -- attributes; publisher.attributes maps them back to the CSS names.
+    local td_lines = publisher.attributes["text-decoration-line"]
+    local td_styles = publisher.attributes["text-decoration-style"]
+    ---@cast td_lines string[]
+    ---@cast td_styles string[]
+    local typname = typ and td_lines[typ]
+    local stylename = style and td_styles[style]
     local wd = node.dimensions(parent.glue_set, parent.glue_sign, parent.glue_order, start, head)
     local ht = parent.height
     local dp = parent.depth
@@ -562,12 +583,12 @@ function M.insert_underline(parent, head, start, typ, style, colornumber)
     -- thickness: ht / ...
     -- downshift: dp/2
     local rule_width = math.round(ht / 13, 3)
-    if style == "dashed" then
+    if stylename == "dashed" then
         dashpattern = string.format("[%g] 0 d", 3 * rule_width)
     end
 
     local shift_down = (dp - rule_width) / 1.5
-    if typ == "line-through" then
+    if typname == "line-through" then
         shift_down = -1.6 * shift_down
     end
     rule.data = string.format(
@@ -610,8 +631,9 @@ do
         local bgcolorindex = nil
         local start_bgcolor = nil
         local bgcolor_reverse = false
-        local bg_padding_top = 0
-        local bg_padding_bottom = 0
+        -- Always assigned together with start_bgcolor; nil when the glyph
+        -- carries no background padding attribute.
+        local bg_padding_top, bg_padding_bottom
         local reportmissingglyphs = opts.reportmissingglyphs
         local lasthead = nil
         local fast_path = not (opts.showhyphenation or opts.showkerning or reportmissingglyphs)
@@ -760,9 +782,10 @@ do
                 end
                 if reportmissingglyphs then
                     local thisfont = used_fonts[d_getfont(head)]
-                    if thisfont and not thisfont.characters[d_getchar(head)] then
+                    local thischar = d_getchar(head)
+                    if thisfont and thischar and not thisfont.characters[thischar] then
                         local lvl = reportmissingglyphs == "warning" and "warn" or "error"
-                        M.report_missing_glyph(lvl, thisfont.name, d_getchar(head))
+                        M.report_missing_glyph(lvl, thisfont.name, thischar)
                     end
                 end
                 if ul then
@@ -821,7 +844,7 @@ do
             )
             insert_bgcolor(
                 d_tonode(list_head_d),
-                dummy,
+                assert(dummy),
                 d_tonode(start_bgcolor),
                 bgcolorindex,
                 bg_padding_top,
@@ -845,12 +868,12 @@ do
     end
 end
 
--- fam is a number
 -- Clones an existing font family with overridden parameters (size,
 -- baselineskip, ...). Used when one family inherits from another.
----@param fam integer|string Source family number or name.
+-- On failure the original family number is returned.
+---@param fam integer Source family number.
 ---@param params table Overrides applied to the clone.
----@return integer? newfam New family number, or `nil` on failure.
+---@return integer newfam New family number (or `fam` on failure).
 function M.clone_family(fam, params)
     -- fam_tbl = {
     --   ["baselineskip"] = "789372"
@@ -870,7 +893,7 @@ function M.clone_family(fam, params)
     if newfam.fontfaceregular then
         local id, err = M.make_font_instance(newfam.fontfaceregular, params.size * newfam.size)
         if not id then
-            main.log("error", err)
+            main.log("error", err or "could not make the font instance")
             return fam
         end
         newfam.normal = id
@@ -879,7 +902,7 @@ function M.clone_family(fam, params)
     if newfam.fontfacebold then
         local id, err = M.make_font_instance(newfam.fontfacebold, params.size * newfam.size)
         if not id then
-            main.log("error", err)
+            main.log("error", err or "could not make the font instance")
             return fam
         end
         newfam.bold = id
@@ -888,7 +911,7 @@ function M.clone_family(fam, params)
     if newfam.fontfaceitalic then
         local id, err = M.make_font_instance(newfam.fontfaceitalic, params.size * newfam.size)
         if not id then
-            main.log("error", err)
+            main.log("error", err or "could not make the font instance")
             return fam
         end
         newfam.italic = id
@@ -897,7 +920,7 @@ function M.clone_family(fam, params)
     if newfam.fontfacebolditalic then
         local id, err = M.make_font_instance(newfam.fontfacebolditalic, params.size * newfam.size)
         if not id then
-            main.log("error", err)
+            main.log("error", err or "could not make the font instance")
             return fam
         end
         newfam.bolditalic = id
