@@ -21,10 +21,10 @@ else
     libname = "libsplib.so"
 end
 
-local ok, msg = package.loadlib(libname, "*")
+local ok, loaderr = package.loadlib(libname, "*")
 if not ok then
     io.stderr:write(string.format("speedata Publisher: failed to load %s\n", libname))
-    io.stderr:write(string.format("  reason: %s\n", msg or "unknown error"))
+    io.stderr:write(string.format("  reason: %s\n", loaderr or "unknown error"))
     io.stderr:write("  This usually means the library is missing, has a wrong\n")
     io.stderr:write("  architecture, or was built for a different platform.\n")
     io.stderr:write("  Please report this at https://github.com/speedata/publisher/issues\n")
@@ -115,6 +115,7 @@ kpse = {}
 -- traditional kpse-based finder.
 ---@param filename string
 ---@return string? path Full path, or `nil` if not found.
+---@diagnostic disable-next-line: duplicate-set-field
 function kpse.find_file(filename)
     return splib.lookupfile(filename)
 end
@@ -140,7 +141,7 @@ do_luafile("sd-callbacks.lua")
 
 table.keys = function(tbl)
     local keyset = {}
-    for k, v in pairs(tbl) do
+    for k in pairs(tbl) do
         keyset[#keyset + 1] = k
     end
     return keyset

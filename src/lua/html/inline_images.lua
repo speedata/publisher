@@ -19,7 +19,7 @@ function M.build_image_box(styles, attributes, dataxml)
     local source = attributes.src
     local it = publisher.images.new_image(source, 1, nil, nil)
     -- copy so that size changes don't affect future uses of the same image
-    it = img.copy(it.img)
+    local image = img.copy(it.img)
 
     -- width: if HTML width given, we use styles.calculated_width as target width in sp
     local width_sp
@@ -33,7 +33,7 @@ function M.build_image_box(styles, attributes, dataxml)
     local height_sp = units.getsize(styles, attributes.height, styles.fontsize_sp) or 0
 
     -- compute final dimensions and mutate image.width/height
-    local calc_w, calc_h = images.set_image_dimensions(it, styles, width_sp, height_sp, dataxml)
+    local calc_w, calc_h = images.set_image_dimensions(image, styles, width_sp, height_sp, dataxml)
 
     -- wrap image node into a box (prevent line-height adjustment, orphan/widow logic, etc.)
     local box = publisher.drawing.box(calc_w, calc_h, "-")
@@ -41,7 +41,7 @@ function M.build_image_box(styles, attributes, dataxml)
     node.set_attribute(box, publisher.att_ignore_orphan_widowsetting, 1)
 
     -- insert the image node at box head
-    box.head = node.insert_before(box.head, box.head, img.node(it))
+    box.head = node.insert_before(box.head, box.head, img.node(image))
 
     return box
 end

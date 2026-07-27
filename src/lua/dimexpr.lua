@@ -1,20 +1,24 @@
 local publisher = require("publisher")
 
 ---@class dimexpr_module
----@field private table<string, function> Module-private helpers exposed for tests.
+---@field ["private"] table<string, function> Module-private helpers exposed for tests.
 local M = {
     private = {},
 }
 
+-- A rune array with a cursor, as produced by `split_chars`.
+---@class RuneBuffer: string[]
+---@field pos integer Cursor position (1-based).
+
 -- Splits a UTF-8 string into a positional rune array.
 ---@param str string
----@return string[] runes Has a `pos` cursor field at index 1.
+---@return RuneBuffer runes
 local function split_chars(str)
-    local runes = {}
+    ---@type RuneBuffer
+    local runes = { pos = 1 }
     for _, c in utf8.codes(str) do
         runes[#runes + 1] = utf8.char(c)
     end
-    runes.pos = 1
     return runes
 end
 M.private.split_chars = split_chars
@@ -32,7 +36,7 @@ local function is_space(str)
 end
 
 -- Reads the next rune from `tbl` and advances the cursor.
----@param tbl string[] Rune array as produced by `split_chars`.
+---@param tbl RuneBuffer
 ---@return string rune
 ---@return boolean eof
 local function read_rune(tbl)
@@ -45,7 +49,7 @@ local function read_rune(tbl)
 end
 
 -- Steps the cursor back by one so the previously read rune can be read again.
----@param tbl string[]
+---@param tbl RuneBuffer
 ---@return nil
 local function unread_rune(tbl)
     tbl.pos = tbl.pos - 1
@@ -54,7 +58,7 @@ end
 -- Reads a signed number with optional unit (`5mm`, `12.5pt`, `-3`) from
 -- the rune buffer. Numbers with units are converted via `tex.sp`,
 -- numbers without units are returned as plain Lua numbers.
----@param tbl string[]
+---@param tbl RuneBuffer
 ---@return integer|number? value
 local function read_number(tbl)
     local collect = {}

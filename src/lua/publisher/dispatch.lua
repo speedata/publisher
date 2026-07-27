@@ -173,7 +173,7 @@ function M.compile_match_pattern(pattern)
     end
     -- Wildcard: just "*"
     if pattern == "*" then
-        return function(ctx, node)
+        return function(_ctx, node)
             return publisher.xpath.is_element(node)
         end, -0.5, nil
     end

@@ -34,13 +34,13 @@ function M.getsize(styles, size, fontsize_sp)
             ---@diagnostic disable-next-line: cast-local-type
             return math.round(fontsize_sp * amount)
         elseif tonumber(size) then
-            return tex.sp(size .. "px")
+            return tex.sp(size .. "px") or 0
         else
-            return tex.sp(size)
+            return tex.sp(size) or 0
         end
     elseif type(size) == "number" then
         -- Interpret bare numbers as px, for backward compatibility
-        return tex.sp(tostring(size) .. "px")
+        return tex.sp(tostring(size) .. "px") or 0
     else
         return 0
     end

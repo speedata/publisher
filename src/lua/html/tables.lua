@@ -18,9 +18,9 @@ local M = {}
 ---@param cb HtmlTableCallbacks           -- callbacks including build_nodelist
 ---@param dataxml table                   -- data context
 ---@param stylesstack table               -- styles inheritance stack
----@param border_collapse boolean|nil     -- true if border-collapse: collapse is set
+---@param _border_collapse boolean|nil    -- true if border-collapse: collapse is set
 ---@return table                          -- array of Tr{ contents = { Td{...}, ... } }
-function M.build_html_table_tbody(tbody, cb, dataxml, stylesstack, border_collapse)
+function M.build_html_table_tbody(tbody, cb, dataxml, stylesstack, _border_collapse)
     local trtab = {}
 
     for row = 1, #tbody do

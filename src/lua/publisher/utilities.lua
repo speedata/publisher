@@ -98,8 +98,8 @@ end
 function M.merge(array, workspace, low, middle, high, goes_before)
     local i, j, k
     i = 1
-    for j = low, middle do
-        workspace[i] = array[j]
+    for idx = low, middle do
+        workspace[i] = array[idx]
         i = i + 1
     end
     i = 1
@@ -118,8 +118,8 @@ function M.merge(array, workspace, low, middle, high, goes_before)
         end
         k = k + 1
     end
-    for k = k, j - 1 do
-        array[k] = workspace[i]
+    for kk = k, j - 1 do
+        array[kk] = workspace[i]
         i = i + 1
     end
 end
@@ -178,7 +178,7 @@ function M.flush_table(tbl)
         elseif type(v) == "table" then
             M.flush_table(v)
         elseif type(v) == "userdata" then
-            node.flush_list(v)
+            node.flush_list(v --[[@as Node]])
         end
     end
 end

@@ -17,8 +17,6 @@ local M = {}
 ---@return number calc_width            -- resulting width (sp)
 ---@return number calc_height           -- resulting height (sp)
 function M.set_image_dimensions(image, styles, width_sp, height_sp, dataxml)
-    local publisher = publisher -- from global legacy env
-
     local orig_w, orig_h = image.width, image.height
     local image_w, image_h = orig_w, orig_h
     local factor = 1

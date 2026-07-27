@@ -87,7 +87,7 @@ function M.xml_to_string_newxpath(xml_element, level, namespace_written)
         end
         str = str .. ">"
     end
-    for i, v in ipairs(xml_element) do
+    for _, v in ipairs(xml_element) do
         if type(v) == "string" and v == "" then
             -- ok, nothing to do
         else
@@ -142,7 +142,7 @@ function M.xml_to_string(xml_element, level)
         end
         str = str .. ">"
     end
-    for i, v in ipairs(xml_element) do
+    for _, v in ipairs(xml_element) do
         if type(v) == "string" and v == "" then
             -- ok, nothing to do
         else
@@ -254,7 +254,7 @@ function M.calculate_md5sum(filename)
     if p then
         local f, msg = io.open(p)
         if not f then
-            main.log("error", msg)
+            main.log("error", msg or string.format("Cannot open %q", p))
             return nil
         end
         local str = f:read("*a")

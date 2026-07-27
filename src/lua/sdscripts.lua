@@ -13,7 +13,7 @@ dofile(arg[1])
 ---@param filename string Resolved font file path.
 ---@return string
 function get_ps_name(filename)
-    local info = fontloader.info(filename)
+    local info = assert(fontloader.info(filename), "cannot read font file " .. filename)
     return info.fontname
 end
 
@@ -44,7 +44,7 @@ if cmd == "list-fonts" then
     end
     table.sort(filenames_sorted)
     local psname
-    for i, v in ipairs(filenames_sorted) do
+    for _, v in ipairs(filenames_sorted) do
         psname = get_ps_name(fontlist[v])
         if is_xml then
             print(string.format('<LoadFontfile name="%s" filename="%s" />', psname, v))

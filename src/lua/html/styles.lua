@@ -36,9 +36,9 @@ end
 ---Copy (inline-)style attributes into styles table and post-process line-height & width.
 ---@param styles HtmlStyles
 ---@param attributes table<string, any>
----@param elementname string|nil
+---@param _elementname string|nil
 ---@return nil
-function M.copy_attributes(styles, attributes, elementname)
+function M.copy_attributes(styles, attributes, _elementname)
     local remember_currentcolor ---@type string[]
     remember_currentcolor = {}
 
