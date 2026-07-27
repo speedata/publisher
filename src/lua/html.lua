@@ -137,11 +137,11 @@ local stylesstack = inherit.new_stack(inherited)
 ---@param elt table HTML element subtree (with `elementname`, children).
 ---@param parameter? table Inherited style parameters.
 ---@param before_box? Node Whether the run starts a fresh line.
----@param origin? string Caller identifier (debugging).
+---@param _origin? string Caller identifier (debugging).
 ---@param dataxml table Data XML context.
 ---@return table[] runs Array of inline node lists.
-function M.collect_horizontal_nodes(elt, parameter, before_box, origin, dataxml)
-    -- w("collect_horizontal_nodes %s",origin or "?")
+function M.collect_horizontal_nodes(elt, parameter, before_box, _origin, dataxml)
+    -- w("collect_horizontal_nodes %s",_origin or "?")
     parameter = parameter or {}
     if elt.elementname == "br" then
         local nodes = publisher.nodes.mknodes("\n", parameter)
@@ -208,8 +208,8 @@ function M.collect_horizontal_nodes(elt, parameter, before_box, origin, dataxml)
             publisher.attribute_helpers.setprop(node.tail(thisret[1]), "borderend", 1)
         end
 
-        for i = 1, #thisret do
-            ret[#ret + 1] = thisret[i]
+        for j = 1, #thisret do
+            ret[#ret + 1] = thisret[j]
         end
         inherit.pop(stylesstack)
     end
@@ -225,13 +225,13 @@ local oltype = {}
 ---@param elt table HTML element subtree.
 ---@param options? table Inherited style options.
 ---@param before_box? Node Whether the element starts a fresh box.
----@param caller? string Caller identifier (debugging).
+---@param _caller? string Caller identifier (debugging).
 ---@param prevdir? "horizontal"|"vertical" Previous run's direction.
 ---@param dataxml table Data XML context.
 ---@return any[] ret Nested array of boxes and paragraphs.
 ---@return ("horizontal"|"vertical")? prevdir Direction after the last processed element.
-function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
-    -- w("html: build nodelist from %s, prevdir = %s", caller or "?",prevdir or "?")
+function M.build_nodelist(elt, options, before_box, _caller, prevdir, dataxml)
+    -- w("html: build nodelist from %s, prevdir = %s", _caller or "?",prevdir or "?")
     options = options or {}
     -- ret is a nested table of boxes and paragraphs
     local ret = {}
@@ -266,23 +266,23 @@ function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
         end
 
         if has_before_styles then
-            local styles = inherit.push(stylesstack)
-            styles_mod.copy_attributes(styles, before_styles, thiseltname .. "::before")
+            local bstyles = inherit.push(stylesstack)
+            styles_mod.copy_attributes(bstyles, before_styles, thiseltname .. "::before")
 
             local before_options = {}
-            inline_options.set_options_for_mknodes(styles, before_options, publisher, fontfamilies)
-            local content = styles.content
+            inline_options.set_options_for_mknodes(bstyles, before_options, publisher, fontfamilies)
+            local content = bstyles.content
             -- a ::before rule without content generates no pseudo-element
             if content then
                 local nl = publisher.nodes.mknodes(content, before_options)
-                local margin_left = units.getsize(styles, styles["margin-left"], styles.fontsize_sp)
+                local margin_left = units.getsize(bstyles, bstyles["margin-left"], bstyles.fontsize_sp)
 
                 local hss = publisher.nodes.hss_glue()
                 local ml_box = node.hpack(hss, margin_left, "exactly")
 
-                if styles.width then
+                if bstyles.width then
                     node.insert_after(nl, nl, publisher.nodes.hss_glue())
-                    nl = node.hpack(nl, styles.calculated_width, "exactly")
+                    nl = node.hpack(nl, bstyles.calculated_width, "exactly")
                 end
 
                 before_box = node.insert_after(ml_box, ml_box, nl)
@@ -447,9 +447,9 @@ function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
                 -- w("html/table")
                 local wd = styles.calculated_width
                 local nl_array = tables_mod.build_html_table(thiselt, wd, {
-                    build_nodelist = function(elt, options, before_box, caller, prevdir, dataxml_inner)
-                        -- callback which uses the existing build_nodelist
-                        return M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml_inner)
+                    -- callback which uses the existing build_nodelist
+                    build_nodelist = function(...)
+                        return M.build_nodelist(...)
                     end,
                 }, dataxml, stylesstack)
 
@@ -459,11 +459,11 @@ function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
                     -- The table warning is already issued by tabular.lua
                 elseif type(nl_array) == "table" then
                     -- Process all table parts (for multi-page tables)
-                    for i = 1, #nl_array do
-                        local nl = nl_array[i]
+                    for part = 1, #nl_array do
+                        local nl = nl_array[part]
                         local tabpar = publisher.par:new(nil, "html table (a)")
                         -- Only apply margin_top to the first table part
-                        if i == 1 then
+                        if part == 1 then
                             tabpar.margin_top = margin_top
                         end
                         node.set_attribute(nl, publisher.att_lineheight, nl.height)
@@ -506,8 +506,8 @@ function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
                     styles.ullevel = styles.ullevel - 1
                 end
                 styles.listlevel = styles.listlevel - 1
-                for i = 1, #n do
-                    box[#box + 1] = n[i]
+                for j = 1, #n do
+                    box[#box + 1] = n[j]
                     box[#box].mode = "block"
                 end
                 ret[#ret + 1] = box
@@ -527,8 +527,8 @@ function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
                     str = lists.resolve_list_style_type(styles, olcounter, oltype[styles.listlevel], dataxml)
                 end
                 local pos = styles["list-style-position"] or "outside"
-                for i = 1, #n do
-                    local a = n[i]
+                for j = 1, #n do
+                    local a = n[j]
                     -- Apply ::marker styles to the marker options
                     local marker_opt
                     if has_marker_styles then
@@ -637,8 +637,8 @@ function M.build_nodelist(elt, options, before_box, caller, prevdir, dataxml)
                     a:append(list)
                     box[#box + 1] = a
                 end
-                for i = 1, #n do
-                    box[#box + 1] = n[i]
+                for j = 1, #n do
+                    box[#box + 1] = n[j]
                     box[#box].mode = mode
                 end
                 ret[#ret + 1] = box

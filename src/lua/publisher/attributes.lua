@@ -36,9 +36,9 @@ local M = {}
 ---@param attname string Attribute name to look up.
 ---@param typ ReadAttributeType
 ---@param default any Value used when the attribute is missing.
----@param context any? Optional context (unused by this implementation).
+---@param _context any? Optional context (unused by this implementation).
 ---@return any value Converted value, or `default` if absent, or `nil` on error.
-function M.read_attribute(layoutxml, dataxml, attname, typ, default, context)
+function M.read_attribute(layoutxml, dataxml, attname, typ, default, _context)
     local namespaces = layoutxml[".__ns"]
     local attr
 
@@ -61,9 +61,11 @@ function M.read_attribute(layoutxml, dataxml, attname, typ, default, context)
     local val, num, ret
     if typ ~= "xpath" and typ ~= "xpathraw" and typ ~= "rawstring" then
         val = string.gsub(attr, "{(.-)}", function(x)
+            -- an XPath expression inside {...} requires a data context
+            local data = assert(dataxml)
             if publisher.newxpath then
-                local copysequence = dataxml.sequence
-                local seq, msg = dataxml:eval(x)
+                local copysequence = data.sequence
+                local seq, msg = data:eval(x)
                 if msg then
                     main.log("error", msg)
                     return nil
@@ -74,10 +76,10 @@ function M.read_attribute(layoutxml, dataxml, attname, typ, default, context)
                     main.log("error", msg)
                     return nil
                 end
-                dataxml.sequence = copysequence
+                data.sequence = copysequence
                 return txt
             else
-                local ok, xp = publisher.xpath.parse_raw(dataxml, x, namespaces)
+                local ok, xp = publisher.xpath.parse_raw(data, x, namespaces)
                 if not ok then
                     main.log("error", xp)
                     return nil
@@ -94,7 +96,7 @@ function M.read_attribute(layoutxml, dataxml, attname, typ, default, context)
     end
     if typ == "xpath" then
         if publisher.newxpath then
-            local seq, msg = dataxml:eval(val)
+            local seq, msg = assert(dataxml):eval(val)
             if msg then
                 main.log("error", msg)
                 return nil
@@ -105,7 +107,7 @@ function M.read_attribute(layoutxml, dataxml, attname, typ, default, context)
         end
     elseif typ == "xpathraw" then
         if publisher.newxpath then
-            local seq, msg = dataxml:eval(val)
+            local seq, msg = assert(dataxml):eval(val)
             if msg then
                 main.log("error", msg)
                 return nil
@@ -143,7 +145,7 @@ function M.read_attribute(layoutxml, dataxml, attname, typ, default, context)
     elseif typ == "height_sp" then
         num = tonumber(val or default)
         if num then
-            publisher.page_helpers.setup_page(nil, "read_attribute height_sp", dataxml)
+            publisher.page_helpers.setup_page(nil, "read_attribute height_sp", assert(dataxml))
             ret = publisher.current_page.grid.gridheight * num
         else
             ret = val
@@ -155,7 +157,7 @@ function M.read_attribute(layoutxml, dataxml, attname, typ, default, context)
     elseif typ == "width_sp" then
         num = tonumber(val or default)
         if num then
-            publisher.page_helpers.setup_page(nil, "read_attribute width_sp", dataxml)
+            publisher.page_helpers.setup_page(nil, "read_attribute width_sp", assert(dataxml))
             ret = publisher.current_page.grid:width_sp(num)
         else
             ret = val
@@ -209,8 +211,11 @@ function M.get_attributes(nodelist, reuse_table)
             reuse_table[k] = nil
         end
     end
+    -- The attr field points to an attribute_list head node whose next chain
+    -- holds the attribute nodes; the head itself has no number field.
     local n = nodelist and nodelist.attr
     while n do
+        ---@cast n AttributeNode
         local num = n.number
         if num then
             attributes[num] = n.value
@@ -269,7 +274,10 @@ function M.set_attribute(nodelist, attribute_name, value)
             end
         end
     else
-        att_value = value
+        att_value = math.tointeger(tonumber(value))
+        if att_value == nil and value ~= nil then
+            main.log("error", string.format("Internal error: non-integer value for attribute %s", attribute_name))
+        end
     end
     if att_value == nil then
         node.unset_attribute(nodelist, att_number)
@@ -302,14 +310,17 @@ function M.set_attributes(nodelist, att_tbl)
     end
     for k, v in pairs(att_tbl) do
         if k and v then
-            local num = k
-            if type(k) == "number" then
-                k = publisher.attribute_number_name[k]
+            local name = k
+            if type(name) == "number" then
+                name = publisher.attribute_number_name[name]
             end
-            if not k then
-                w("attribute name %d not found", num)
+            if not name then
+                w("attribute name %d not found", k)
+            else
+                -- numeric keys were translated to their name above
+                ---@cast name string
+                M.set_attribute(nodelist, name, v)
             end
-            M.set_attribute(nodelist, k, v)
         end
     end
 end
