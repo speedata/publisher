@@ -161,7 +161,11 @@ def lualint_run_check
 		abort "lua-language-server --check failed (exit #{$?.exitstatus}, ok=#{ok}), see #{stdoutpath}"
 	end
 	counts = Hash.new(0)
-	JSON.parse(File.read(resultpath)).each_value do |diags|
+	# With zero findings the server writes an empty JSON array instead of
+	# the usual file -> diagnostics object.
+	result = JSON.parse(File.read(resultpath))
+	return counts if result.is_a?(Array)
+	result.each_value do |diags|
 		diags.each { |d| counts[d["code"]] += 1 }
 	end
 	counts
