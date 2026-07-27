@@ -43,21 +43,19 @@ function node.direct.setnext(d, next) end
 function node.direct.setprev(d, prev) end
 
 -- The TeXLuaCATS library declares setlink with a single parameter, but the
--- LuaTeX API takes a list of nodes to be chained. Worth a PR upstream.
+-- LuaTeX API takes a list of nodes to be chained (nil entries are skipped).
+-- Fixed upstream in TeXLuaCATS/LuaTeX. Note: setlink only exists in the
+-- direct namespace (manual, "supported" table).
 ---@param d integer
 ---@param ... integer
 ---@return integer head
 function node.direct.setlink(d, ...) end
 
----@param n Node
----@param ... Node
----@return Node head
-function node.setlink(n, ...) end
-
 -- The TeXLuaCATS library declares node.insert_before/insert_after with all
 -- parameters required, but the LuaTeX manual states "If head is initially
--- nil, it will become new", and a nil current is accepted as well (new
--- becomes the head/tail). Worth a PR upstream.
+-- nil, it will become new", and a nil current is accepted as well
+-- (insert_before then inserts before the tail, insert_after appends).
+-- Fixed upstream in TeXLuaCATS/LuaTeX.
 ---@param head Node?
 ---@param current Node?
 ---@param new Node
