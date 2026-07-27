@@ -593,13 +593,16 @@ M.markers = {}
 local ktree = pdf.reserveobj()
 
 ---@class StructElement
----@field obj string PDF object id of the structure element.
+---@field obj integer PDF object number of the structure element.
 ---@field role string PDF/UA role (e.g. `"Document"`, `"P"`, `"Figure"`).
 ---@field added_tables? table<string, string> Auxiliary lookup of already-added child tables.
----@field bbox? string[] Bounding box as `{llx, lly, urx, ury}` strings.
----@field page? string Page number (as a string) the element appears on.
+---@field bbox? [string, string, string, string] Bounding box as `{llx, lly, urx, ury}` strings.
+---@field page? integer PDF page object number the element appears on.
+---@field actualtext? string Replacement text for the contents (PDF `/ActualText`).
+---@field alttext? string Alternative description (PDF `/Alt`).
+---@field linkobjects? integer[] PDF object numbers of associated link annotations.
 ---@field text? string Alternative text / contents.
----@field [integer] StructElement|string Child structure elements or marked content references.
+---@field [integer] StructElement|integer Child structure elements or MCID numbers.
 
 -- This is a sample data structure in the structElements table:
 -- ["doc"] = {
@@ -921,10 +924,9 @@ end
 ---@return nil
 function M.define_image_callback(extensionhandler)
     local extensions = {}
-    local ext, handler
     if extensionhandler and extensionhandler ~= "" then
         for _, v in ipairs(string.explode(extensionhandler, ";")) do
-            _, _, ext, handler = string.find(v, "^(.*):(.*)$")
+            local _, _, ext, handler = string.find(v, "^(.*):(.*)$")
             extensions[ext] = handler
         end
     end
@@ -936,7 +938,7 @@ function M.define_image_callback(extensionhandler)
         local ext = M.get_extension(asked_name)
         local handlername = extensions[ext]
         local handler = M.imagehandler[handlername or "*"]
-        if handler then
+        if file and handler then
             main.log("info", "Convert image", "extension", ext, "handler", handlername or "*")
             file = splib.convertimage(file, handler)
         end
@@ -1318,10 +1320,12 @@ function M.initialize_luatex_and_generate_pdf()
     if not dataxml then
         main.log("error", "Could not read data")
         exit()
+        return
     end
     if type(dataxml) ~= "table" then
         main.log("error", "Something is wrong with the data: dataxml is not a table")
         exit()
+        return
     end
 
     if M.newxpath then
@@ -1500,15 +1504,17 @@ function M.initialize_luatex_and_generate_pdf()
                         M.marker_id_value[id] = { page = attributes.page, name = attributes.name }
 
                         local pagenumber = tonumber(attributes.page)
-                        if not M.marker_min[pagenumber] then
-                            M.marker_min[pagenumber] = id
-                        elseif M.marker_min[pagenumber] > id then
-                            M.marker_min[pagenumber] = id
-                        end
-                        if not M.marker_max[pagenumber] then
-                            M.marker_max[pagenumber] = id
-                        elseif M.marker_max[pagenumber] < id then
-                            M.marker_max[pagenumber] = id
+                        if pagenumber then
+                            if not M.marker_min[pagenumber] then
+                                M.marker_min[pagenumber] = id
+                            elseif M.marker_min[pagenumber] > id then
+                                M.marker_min[pagenumber] = id
+                            end
+                            if not M.marker_max[pagenumber] then
+                                M.marker_max[pagenumber] = id
+                            elseif M.marker_max[pagenumber] < id then
+                                M.marker_max[pagenumber] = id
+                            end
                         end
                     end
                 elseif mt[".__local_name"] == "pagelabel" then
@@ -2003,7 +2009,6 @@ do
     function M.find_role_attributes(nodelist, parenttree, page, curid)
         local head = nodelist
         while head do
-            local entry
             if head.id == M.hlist_node or head.id == M.vlist_node then
                 if head.list then
                     local r = node.has_attribute(head, M.att_role)
@@ -2021,7 +2026,8 @@ do
                         local rolename = M.roles_a[r]
                         if rolename ~= "Artifact" then
                             local structpos = M.attribute_helpers.getprop(head, "structpos")
-                            entry = {
+                            local structposnum = tonumber(structpos)
+                            local entry = {
                                 obj = pdf.reserveobj(),
                                 role = rolename,
                                 page = page,
@@ -2032,8 +2038,8 @@ do
                             if parenttable then
                                 if structpos == "top" then
                                     table.insert(parenttable, 1, entry)
-                                elseif tonumber(structpos) then
-                                    table.insert(parenttable, tonumber(structpos), entry)
+                                elseif structposnum then
+                                    table.insert(parenttable, math.floor(structposnum), entry)
                                 else
                                     parenttable[#parenttable + 1] = entry
                                 end
@@ -2054,20 +2060,21 @@ do
                 local alttext = M.attribute_helpers.getprop(head, "alttext")
                 local bbox = M.attribute_helpers.getprop(head, "bbox")
                 -- role number to role name
-                r = M.roles_a[r]
+                local rolename = M.roles_a[r]
 
                 local entry
                 if M.structElements[roleid] then
                     entry = M.structElements[roleid]
                 else
-                    if r == "Link" then
+                    if rolename == "Link" then
                         local linkobjnum = M.attribute_helpers.getprop(head, "linkobjnum")
                         local structelemobjnum = M.attribute_helpers.getprop(head, "structelemobjnum")
-                        local startlink = head.next
-                        startlink.action.data = startlink.action.data .. "/F 2" .. string.format("/P %s 0 R ", page)
+                        local startlink = assert(head.next)
+                        local action = assert(startlink.action)
+                        action.data = action.data .. "/F 2" .. string.format("/P %s 0 R ", page)
                         entry = {
                             obj = structelemobjnum,
-                            role = r,
+                            role = rolename,
                             page = page,
                             actualtext = actualtext,
                             alttext = alttext,
@@ -2077,7 +2084,7 @@ do
                     else
                         entry = {
                             obj = pdf.reserveobj(),
-                            role = r,
+                            role = rolename,
                             page = page,
                             actualtext = actualtext,
                             alttext = alttext,
@@ -2106,9 +2113,16 @@ do
                     --     },
                     -- },
                     if not parentid then
-                        main.log("debug", "Structure entry has no parent id", "roleid", roleid or "(none)", "role", r)
+                        main.log(
+                            "debug",
+                            "Structure entry has no parent id",
+                            "roleid",
+                            roleid or "(none)",
+                            "role",
+                            rolename
+                        )
                     else
-                        if r ~= "Artifact" then
+                        if rolename ~= "Artifact" then
                             local parenttable = M.structElements[parentid]
                             if parenttable then
                                 parenttable[#parenttable + 1] = entry
@@ -2119,7 +2133,7 @@ do
                                     "parentid",
                                     parentid or "(none)",
                                     "role",
-                                    r
+                                    rolename
                                 )
                             end
                         end
@@ -2128,10 +2142,10 @@ do
 
                 structelementobjects[#structelementobjects + 1] = entry.obj
                 local str
-                if r == "Artifact" then
+                if rolename == "Artifact" then
                     str = "/Artifact<<>>BDC"
                 else
-                    str = string.format("/%s<</MCID %d>>BDC", r, objcount)
+                    str = string.format("/%s<</MCID %d>>BDC", rolename, objcount)
                 end
                 head.data = str
                 entry[#entry + 1] = objcount
@@ -2376,7 +2390,7 @@ function M.htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
     local circle_bezier = 0.551915024494
 
     -- xn, yn = outer path, xin, yin = inner path used for clipping
-    local x0, y0 = sp_x0, ht + b_b_l_radius -- luacheck: ignore y0
+    local x0, _y0 = sp_x0, ht + b_b_l_radius
     local x1, y1 = sp_x0 + b_b_l_radius, ht
     local x2, y2 = wd - b_b_r_radius, y1
     local x3, y3 = x2 + circle_bezier * b_b_r_radius, y1
@@ -2527,7 +2541,7 @@ function M.htmlbox(dirmode, head, width_sp, height_sp, depth_sp)
 
     node.insert_after(pdf_save, pdf_save, n_clip)
 
-    local hvbox = node.hpack(pdf_save)
+    local hvbox = node.hpack(pdf_save) ---@type Node
     hvbox.depth = 0
     node.insert_after(hvbox, node.tail(hvbox), pdf_restore)
     hvbox = node.vpack(hvbox)

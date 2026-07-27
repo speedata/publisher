@@ -255,8 +255,8 @@ function M.writeStructElements(itm, parentobjectnumber)
         if itm.alttext then
             str[#str + 1] = "/Alt " .. publisher.utf8_to_utf16_string_pdf(itm.alttext)
         end
-        if itm.bbox then
-            local bbox = itm.bbox
+        local bbox = itm.bbox
+        if bbox then
             str[#str + 1] = string.format(
                 "/A << /BBox [%s %s %s %s] /Placement /Block /O /Layout >>",
                 bbox[1],
@@ -404,7 +404,8 @@ function M.mkbookmarknodes(level, open_p, title, data)
     udw.prev = n
     -- This hlist sometimes gets reused, for example with Td/sethead=yes.
     -- See tabular#remove_bookmark_nodes() for the matching cleanup.
-    return node.hpack(n)
+    local hbox = node.hpack(n)
+    return hbox
 end
 
 file_end("structure_tree.lua")
