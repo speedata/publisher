@@ -1,7 +1,6 @@
 {
   "comment": "Per-code lua-language-server finding counts. Managed by 'rake lualint:update'.",
-  "total": 1,
+  "total": 0,
   "codes": {
-    "param-type-mismatch": 1
   }
 }

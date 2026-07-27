@@ -299,7 +299,7 @@ end
 --       },
 --     }
 ---@param layoutxml table Layout XML element with children to walk.
----@param dataxml table Current data XML context.
+---@param dataxml table? Current data XML context (`nil` with the legacy XPath parser).
 ---@param opts? table Forwarded to each command.
 ---@return DispatchEntry[]
 function M.dispatch(layoutxml, dataxml, opts)
@@ -328,7 +328,8 @@ function M.dispatch(layoutxml, dataxml, opts)
                     publisher.current_layout_file = j[".__file"]
                     check_attributes(j, eltname)
                     if
-                        dataxml.sequence
+                        dataxml
+                        and dataxml.sequence
                         and type(dataxml.sequence) == "table"
                         and dataxml.sequence[1]
                         and type(dataxml.sequence[1]) == "table"
@@ -340,7 +341,9 @@ function M.dispatch(layoutxml, dataxml, opts)
                     end
                 end
 
-                tmp = dispatch_table[eltname](j, dataxml, opts)
+                -- The legacy XPath parser calls the commands with a nil
+                -- dataxml; the commands only pass it through in that case.
+                tmp = dispatch_table[eltname](j, dataxml --[[@as table]], opts)
                 if type(tmp) == "table" and tmp.raw == true then
                     for i = 1, #tmp do
                         ret[#ret + 1] = tmp[i]
