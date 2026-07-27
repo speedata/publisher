@@ -252,7 +252,7 @@ function M.bgtext(box, textstring, angle, colorname, fontfamily, bgsize)
     x = node.hpack(x)
     x.width = 0
     x.height = 0
-    box = node.insert_before(box, box, x)
+    box = node.insert_before(box, box, x) --[[@as HlistNode]]
     box = node.hpack(box)
     return box
 end
@@ -502,7 +502,7 @@ function M.frame(obj)
         node.insert_after(n, n, box)
     end
 
-    local hvbox = node.hpack(pdf_save)
+    local hvbox = node.hpack(pdf_save) ---@type Node
     local savedp = hvbox.depth
     hvbox.depth = 0
     node.insert_after(hvbox, node.tail(hvbox), pdf_restore)
@@ -588,7 +588,7 @@ function M.clip(obj)
     node.insert_after(pdf_save, pdf_save, n_clip)
     node.insert_after(n_clip, n_clip, box)
 
-    local hvbox = node.hpack(pdf_save)
+    local hvbox = node.hpack(pdf_save) ---@type Node
     local savedp = hvbox.depth
     hvbox.depth = 0
     node.insert_after(hvbox, node.tail(hvbox), pdf_restore)
@@ -761,8 +761,8 @@ function M.circle(radiusx_sp, radiusy_sp, colorname, framecolorname, rulewidth_s
         )
         framecolentry = colors_module.colors["black"]
     end
-    local fillcolor = colentry.pdfstring_fill
-    local bordercolor = framecolentry.pdfstring_stroking
+    local fillcolor = assert(colentry.pdfstring_fill)
+    local bordercolor = assert(framecolentry.pdfstring_stroking)
 
     local paint = node.new("whatsit", "pdf_literal")
     paint.data = M.circle_pdfstring(0, 0, radiusx_sp, radiusy_sp, bordercolor, fillcolor, rulewidth_sp)
@@ -815,15 +815,17 @@ end
 ---@return Node? hbox
 function M.do_metapostimage(dataxml, txt, width, height, clip)
     publisher.metapostgraphics["_image"] = txt
-    local cp = publisher.current_page
+    local cp = assert(publisher.current_page)
     local width_sp, height_sp
-    if tonumber(width) then
-        width_sp = cp.grid:width_sp(tonumber(width))
+    local wnum = tonumber(width)
+    if wnum then
+        width_sp = cp.grid:width_sp(wnum)
     else
         width_sp = tex.sp(width)
     end
-    if tonumber(height) then
-        height_sp = cp.grid:height_sp(tonumber(height))
+    local hnum = tonumber(height)
+    if hnum then
+        height_sp = cp.grid:height_sp(hnum)
     else
         height_sp = tex.sp(height)
     end
@@ -857,8 +859,7 @@ function M.do_metapostimage(dataxml, txt, width, height, clip)
             publisher.minwidth,
             publisher.minheight,
             publisher.maxwidth,
-            publisher.maxheight,
-            publisher.stretch
+            publisher.maxheight
         )
 
         box = node.hpack(box)
@@ -892,8 +893,8 @@ end
 -- Wraps a MetaPost graphic in an hbox using the named template from
 -- `publisher.metapostgraphics`.
 ---@param parameter table Per-call MetaPost parameters (variable values, name).
----@param width integer? Target width in sp.
----@param height integer? Target height in sp.
+---@param width integer Target width in sp.
+---@param height integer Target height in sp.
 ---@return Node? hbox
 function M.mpbox(parameter, width, height)
     local width_sp = width
@@ -1022,7 +1023,7 @@ function M.mpbox(parameter, width, height)
         return
     end
 
-    local ret = node.hpack(instr, width, "exactly")
+    local ret = node.hpack(instr, width, "exactly") ---@type Node
     ret.height = height
     if parameter.shiftdown then
         ret.height = ret.height + parameter.shiftdown
@@ -1043,8 +1044,8 @@ end
 -- border in another color.
 ---@param width_sp integer
 ---@param height_sp integer
----@param colorname string|integer Fill color.
----@param border_color string|integer|nil Border color (`nil` for none).
+---@param colorname string Fill color.
+---@param border_color string? Border color (`nil` for none).
 ---@param border_width_sp integer? Border width in sp.
 ---@return Node hbox
 function M.box(width_sp, height_sp, colorname, border_color, border_width_sp)
@@ -1152,7 +1153,7 @@ end
 ---@param box Node
 ---@return Node box
 function M.boxit(box)
-    local box = node.hpack(box)
+    box = node.hpack(box)
 
     local rule_width = 0.1
     local wd = box.width / publisher.factor - rule_width
@@ -1271,9 +1272,9 @@ end
 
 local explode = function(s, p)
     local t = {}
-    for s in string.gmatch(s, p) do
-        if s ~= "" then
-            t[#t + 1] = s
+    for part in string.gmatch(s, p) do
+        if part ~= "" then
+            t[#t + 1] = part
         end
     end
     return t
@@ -1328,7 +1329,7 @@ end
 -- Apply transformation matrix to object given at _nodelist_. Called from commands#transformation.
 -- Applies an arbitrary affine transformation to a node list.
 ---@param nodelist Node Source node list.
----@param matrix TransformMatrix
+---@param matrix string Six space-separated matrix entries `a b c d e f` (PDF order).
 ---@param origin_x integer Origin offset in sp.
 ---@param origin_y integer Origin offset in sp.
 ---@return Node hbox
@@ -1431,9 +1432,9 @@ end
 -- into the column width.
 ---@param nodelist Node
 ---@param angle number Rotation in degrees.
----@param width_sp integer Target width in sp.
+---@param _width_sp integer Target width in sp (not used by the current basic implementation).
 ---@return Node hbox
-function M.rotateTd(nodelist, angle, width_sp)
+function M.rotateTd(nodelist, angle, _width_sp)
     if angle % 360 == 0 then
         return nodelist
     end

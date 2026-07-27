@@ -19,8 +19,8 @@ local colors_module = require("publisher.colors")
 -- box dimensions and the result of the last `execute()` call.
 ---@class MetapostInstance
 ---@field mp mplib.MpInstance
----@field width integer Box width in scaled points.
----@field height integer Box height in scaled points.
+---@field width integer? Box width in scaled points.
+---@field height integer? Box height in scaled points.
 ---@field l? mplib.MpResult Result of the last `M.execute()` call.
 
 -- A parsed pre/postscript table (see `script2table`). Keys listed in
@@ -268,8 +268,8 @@ end
 
 -- Creates a new MetaPost instance pre-configured for the publisher's
 -- canvas (width × height in sp), with the standard prelude loaded.
----@param width_sp integer
----@param height_sp integer
+---@param width_sp integer? Box width; `nil`/`0` fall back to a minimal box.
+---@param height_sp integer?
 ---@return MetapostInstance? mpobj `nil` if the prelude could not be loaded.
 function M.newbox(width_sp, height_sp)
     local mp = mplib.new({
@@ -784,8 +784,8 @@ end
 -- Compiles a named MetaPost graphic from `publisher.metapostgraphics`
 -- and returns a fresh MetaPost instance ready to render it. Used as the
 -- first half of `boxgraphic` so callers can reuse the compiled figure.
----@param width_sp integer
----@param height_sp integer
+---@param width_sp integer? Box width; `nil`/`0` fall back to a minimal box.
+---@param height_sp integer?
 ---@param graphicname string Key in `publisher.metapostgraphics`.
 ---@param extra_parameter? table<string, any> Variable values.
 ---@return MetapostInstance? mpobj `nil` on error.
@@ -853,8 +853,8 @@ end
 
 -- Returns an hbox containing a named MetaPost graphic rendered at
 -- (width × height) sp.
----@param width_sp integer
----@param height_sp integer
+---@param width_sp integer? Box width; `nil`/`0` fall back to a minimal box.
+---@param height_sp integer?
 ---@param graphicname string
 ---@param extra_parameter? table<string, any> Variable values.
 ---@param _parameter? table Per-call parameters.
