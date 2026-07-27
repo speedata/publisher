@@ -93,7 +93,8 @@ end
 ---@param num integer Unix epoch seconds.
 ---@return string pdfdate
 local function pdfdate(num)
-    local ret = os.date("D:%Y%m%d%H%M%S+00'00'", num)
+    -- a plain format string (no "*t") always yields a string
+    local ret = os.date("D:%Y%m%d%H%M%S+00'00'", num) --[[@as string]]
     return ret
 end
 
@@ -101,7 +102,7 @@ end
 ---@param str string
 ---@return string escaped
 local function escape_pdfname(str)
-    return string.gsub(str, "/", "#2f")
+    return (string.gsub(str, "/", "#2f"))
 end
 
 -- Escapes parentheses in a PDF literal string. `nil` passes through unchanged.
@@ -243,12 +244,12 @@ function M.getmetadata(filespecnumbers, opts)
         local seq = prop:add_element("rdf:Seq")
 
         local function add_zugferd_property(name, valuetype, category, description)
-            local li = seq:add_element("rdf:li")
-            li:set_attr("rdf:parseType", "Resource")
-            li:add_element("pdfaProperty:name"):set_text(name)
-            li:add_element("pdfaProperty:valueType"):set_text(valuetype)
-            li:add_element("pdfaProperty:category"):set_text(category)
-            li:add_element("pdfaProperty:description"):set_text(description)
+            local propli = seq:add_element("rdf:li")
+            propli:set_attr("rdf:parseType", "Resource")
+            propli:add_element("pdfaProperty:name"):set_text(name)
+            propli:add_element("pdfaProperty:valueType"):set_text(valuetype)
+            propli:add_element("pdfaProperty:category"):set_text(category)
+            propli:add_element("pdfaProperty:description"):set_text(description)
         end
 
         add_zugferd_property("DocumentFileName", "Text", "external", "name of the embedded XML invoice file")

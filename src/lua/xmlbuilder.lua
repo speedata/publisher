@@ -61,14 +61,6 @@ end
 
 -- ========== Node Types ==========
 
----@class XmlElement
----@field _type "element"
----@field name string
----@field attrs XmlAttrlist
----@field text string?
----@field children (XmlElement|XmlPI|XmlComment)[]
----@field parent XmlElement?
-
 ---@class XmlPI
 ---@field _type "pi"
 ---@field target string
@@ -80,14 +72,29 @@ end
 ---@field text string
 ---@field parent? XmlElement
 
+-- Options used internally by the serializer functions (normalized in `to_string`).
+---@class XmlSerializeOpts
+---@field pretty boolean
+---@field indent string
+
+---@class XmlElement
+---@field _type "element"
+---@field name string
+---@field attrs XmlAttrlist
+---@field text string?
+---@field children (XmlElement|XmlPI|XmlComment)[]
+---@field parent XmlElement?
+local ElementMT = {}
+ElementMT.__index = ElementMT
+
 ---@class XmlDocument
 ---@field _type "document"
 ---@field prolog { xml_decl: { version: string, encoding?: string, standalone?: boolean, omit: boolean }, nodes: (XmlPI|XmlComment)[] }
 ---@field root XmlElement?
 ---@field epilog (XmlPI|XmlComment)[]
-
-local ElementMT, DocumentMT = {}, {}
-ElementMT.__index = ElementMT
+---@field _pretty? boolean Pretty-print preference stored by `set_pretty`.
+---@field _indent? string Indent string stored by `set_pretty`.
+local DocumentMT = {}
 DocumentMT.__index = DocumentMT
 
 -- ========== Element ==========
@@ -179,7 +186,7 @@ end
 
 -- Serializes an element (and its descendants) into the buffer.
 ---@param el XmlElement
----@param opts { pretty: boolean, indent: string }
+---@param opts XmlSerializeOpts
 ---@param depth integer? Recursion depth (used internally).
 ---@param buf string[]
 ---@return nil
@@ -330,7 +337,7 @@ function DocumentMT:add_element(name)
 end
 
 ---@param doc XmlDocument
----@param opts { pretty: boolean, indent: string }
+---@param opts XmlSerializeOpts
 ---@param buf string[]
 ---@return nil
 local function serialize_prolog(doc, opts, buf)
@@ -359,7 +366,7 @@ local function serialize_prolog(doc, opts, buf)
 end
 
 ---@param doc XmlDocument
----@param opts { pretty: boolean, indent: string }
+---@param opts XmlSerializeOpts
 ---@param buf string[]
 ---@return nil
 local function serialize_epilog(doc, opts, buf)
@@ -383,6 +390,7 @@ function DocumentMT:to_string(opts)
     opts = opts or {}
     opts.pretty = opts.pretty ~= false and (opts.pretty == true or opts.indent ~= nil)
     opts.indent = opts.indent or "  "
+    ---@cast opts XmlSerializeOpts
 
     local buf = {}
     serialize_prolog(self, opts, buf)

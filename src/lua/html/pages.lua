@@ -28,7 +28,7 @@ function M.handle_pages(pages, maxwidth_sp, dataxml)
         local wd, ht
 
         if masterpage.width then
-            wd = tex.sp(masterpage.width)
+            wd = tex.sp(masterpage.width) or pagewd
             if publisher.newxpath then
                 dataxml.vars["_pagewidth"] = masterpage.width
             else
@@ -43,7 +43,7 @@ function M.handle_pages(pages, maxwidth_sp, dataxml)
                 else
                     publisher.xpath.set_variable("_pageheight", masterpage.height)
                 end
-                ht = tex.sp(masterpage.height)
+                ht = tex.sp(masterpage.height) or tex.pageheight
                 publisher.page_helpers.set_pageformat(wd, ht)
 
                 if publisher.newxpath then
@@ -68,16 +68,16 @@ function M.handle_pages(pages, maxwidth_sp, dataxml)
         local ml = masterpage["margin-left"]
 
         if mt then
-            margin_top = tex.sp(mt)
+            margin_top = tex.sp(mt) or margin_top
         end
         if mr then
-            margin_right = tex.sp(mr)
+            margin_right = tex.sp(mr) or margin_right
         end
         if mb then
-            margin_bottom = tex.sp(mb)
+            margin_bottom = tex.sp(mb) or margin_bottom
         end
         if ml then
-            margin_left = tex.sp(ml)
+            margin_left = tex.sp(ml) or margin_left
         end
 
         pagewd = pagewd - margin_left - margin_right
@@ -88,8 +88,12 @@ function M.handle_pages(pages, maxwidth_sp, dataxml)
             publisher.xpath.set_variable("__maxwidth", pagewd)
         end
 
-        -- Ensure pageformat is set even if only width provided
-        publisher.page_helpers.set_pageformat(wd, ht)
+        -- Ensure pageformat is set even if only width provided.
+        -- Without a width (e.g. an @page rule with margins only) there is
+        -- nothing to set and tex.pagewidth/pageheight must keep their values.
+        if wd then
+            publisher.page_helpers.set_pageformat(wd, ht or tex.pageheight)
+        end
 
         -- Create a default masterpage entry (as in legacy)
         publisher.masterpages[1] = {

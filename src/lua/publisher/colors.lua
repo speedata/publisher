@@ -13,7 +13,7 @@ local M = {}
 ---@alias ColorModel "rgb"|"cmyk"|"gray"|"spotcolor"
 
 ---@class Color
----@field model ColorModel
+---@field model? ColorModel Absent only in the special `"-"` (no color) entry.
 ---@field pdfstring string Combined PDF color command (fill + stroke).
 ---@field index integer Position in `colortable`.
 ---@field r? string|number Red channel (rgb).
@@ -1201,15 +1201,23 @@ function M.getrgb(colorvalue)
             a = a * 100
         end
     elseif #colorvalue == 7 then
-        r, g, b = string.match(colorvalue, "#?(%x%x)(%x%x)(%x%x)")
-        r = math.round(tonumber(r, 16) / 255, 3)
-        g = math.round(tonumber(g, 16) / 255, 3)
-        b = math.round(tonumber(b, 16) / 255, 3)
+        local rs, gs, bs = string.match(colorvalue, "#?(%x%x)(%x%x)(%x%x)")
+        if rs == nil then
+            main.log("error", string.format("Could not parse color %q", colorvalue))
+            return 0, 0, 0
+        end
+        r = math.round(tonumber(rs, 16) / 255, 3)
+        g = math.round(tonumber(gs, 16) / 255, 3)
+        b = math.round(tonumber(bs, 16) / 255, 3)
     elseif #colorvalue == 4 then
-        r, g, b = string.match(colorvalue, "#?(%x)(%x)(%x)")
-        r = math.round(tonumber(r, 16) / 15, 3)
-        g = math.round(tonumber(g, 16) / 15, 3)
-        b = math.round(tonumber(b, 16) / 15, 3)
+        local rs, gs, bs = string.match(colorvalue, "#?(%x)(%x)(%x)")
+        if rs == nil then
+            main.log("error", string.format("Could not parse color %q", colorvalue))
+            return 0, 0, 0
+        end
+        r = math.round(tonumber(rs, 16) / 15, 3)
+        g = math.round(tonumber(gs, 16) / 15, 3)
+        b = math.round(tonumber(bs, 16) / 15, 3)
     else
         main.log("error", string.format("Could not parse color %q", colorvalue))
         return 0, 0, 0
