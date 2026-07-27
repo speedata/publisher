@@ -127,8 +127,6 @@ local function get_mode(str)
 	else
 		return 4
 	end
-	assert(false,"never reached") -- luacheck: ignore
-	return nil
 end
 
 --- Capacity of QR codes
@@ -1144,7 +1142,9 @@ local function qrcode(str,ec_level,mode_enc)
 	return true, tab
 end
 
-if testing then
+-- The test suite (qrtest.lua) sets the global `testing` before loading this
+-- file to get access to the internal functions.
+if rawget(_G, "testing") then
 	return {
 		encode_string_numeric = encode_string_numeric,
 		encode_string_ascii = encode_string_ascii,
