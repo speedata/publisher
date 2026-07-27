@@ -2583,10 +2583,9 @@ M.leftskip.stretch_order = 3
 -- Hyphenation and language handling
 -- ---------------------------------
 
--- Once a hyphenation pattern file is loaded, we only need the _id_ of it. This is stored in the
--- `languages` table. Key is the filename part (such as `de-1996`) and the value is the internal
--- language id.
----@type table<string, integer>
+-- Loaded languages. Key is the lower-cased locale (such as `de-1996`), the
+-- value is the language entry created in `language.lua#get_language()`.
+---@type table<string, LanguageEntry>
 M.languages = {}
 ---@type table<integer, LanguageEntry>
 M.languages_id_lang = {}

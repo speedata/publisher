@@ -39,7 +39,12 @@ local colorobjects = {}
 
 local set_colorprofile_filename, write_colorprofile, use_color, getresource, register
 
----@type table<string, integer[]>
+-- A CMYK substitute `{ c, m, y, k }` in [0,100]; `register()` can add a flag
+-- to render the substitute with the active ICC profile.
+---@class SpotcolorCMYK: number[]
+---@field usecolorprofile? boolean
+
+---@type table<string, SpotcolorCMYK>
 local spotcolors = {
     ["pantone 100"] = { 0, 0, 51, 0 },
     ["pantone 101"] = { 0, 0, 79, 0 },
@@ -1222,9 +1227,9 @@ local spotcolors = {
 ---@param fn string ICC filename.
 ---@return nil
 function set_colorprofile_filename(fn)
-    for k, v in pairs(colorprofiles) do
+    for _, v in pairs(colorprofiles) do
         if v.filename == fn then
-            currentcolorprofile = v.identifier
+            currentcolorprofile = v
             return
         end
     end

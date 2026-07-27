@@ -212,8 +212,8 @@ end
 ---@param bordercolor string?
 ---@return integer index Index into the internal hyperlinks list.
 function M.hlurl(options, href, bordercolor)
-    href = urlencode(href)
-    href = metadata.escape_pdfstring(href)
+    href = urlencode(href) or href
+    href = metadata.escape_pdfstring(href) or href
     local hl = {
         ["/Subtype"] = "/Link",
         ["/A"] = string.format("<</Type/Action/S/URI/URI(%s)>>", href),
@@ -234,8 +234,11 @@ end
 ---@param bordercolor string?
 ---@return integer index Index into the internal hyperlinks list, or `0` on failure.
 function M.hlpage(options, pagenumber, bordercolor)
-    pagenumber = tonumber(pagenumber)
-    local pageobjnum = pdf.getpageref(pagenumber)
+    local pagenum = math.tointeger(tonumber(pagenumber))
+    if pagenum == nil then
+        return 0
+    end
+    local pageobjnum = pdf.getpageref(pagenum)
     if pageobjnum == nil then
         return 0
     end

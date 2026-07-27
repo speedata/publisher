@@ -42,19 +42,22 @@ end
 
 local function read_font_file(name)
     local f = io.open(name, "rb")
+    if not f then
+        return false
+    end
     local buf = f:read("*all")
     f:close()
     return true, buf, buf:len()
 end
 
-local function find_read_file(id_number, asked_name)
+local function find_read_file(_id_number, asked_name)
     local file = kpse.find_file(asked_name)
     return file
 end
-function find_write_file(id_number, asked_name)
+function find_write_file(_id_number, asked_name)
     return asked_name
 end
-local function read_other_file(name)
+local function read_other_file(_name)
     return true, "", 0
 end
 

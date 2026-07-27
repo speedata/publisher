@@ -32,6 +32,7 @@ end
 ---@field rules table<integer, table<string, table<string, string>>> `[priority][selector][property] = value`.
 ---@field priorities integer[] Known priorities, sorted descending after each parse.
 ---@field text string[] Concatenation of every parsed CSS source (kept for the Go renderer).
+---@field __index? CSSRules Set when the table serves as a metatable in `new`.
 
 -- Constructs a fresh empty CSS rule store.
 ---@param self CSSRules
@@ -105,8 +106,11 @@ local function parsetxt(self, csstext)
             -- if it's not only whitespace
             if not string.match(rule, "^%s*$") then
                 _, rule_stop, property = string.find(rule, "%s*([^:]+):")
-                _, _, expr = string.find(rule, "^%s*(.-)%s*$", rule_stop + 1)
-                rules_t[property] = expr
+                -- a rule without a colon has no property and gets skipped
+                if property then
+                    _, _, expr = string.find(rule, "^%s*(.-)%s*$", rule_stop + 1)
+                    rules_t[property] = expr
+                end
             end
         end
         selectors = explode(selector, ",")
@@ -154,6 +158,10 @@ local function parse(self, filename)
     end
     main.log("info", string.format("Loading CSS %q", path))
     local cssio = io.open(path, "rb")
+    if not cssio then
+        main.log("error", string.format("CSS: cannot open file %q.", path))
+        return
+    end
     local csstext = cssio:read("*all")
     cssio:close()
     return parsetxt(self, csstext)

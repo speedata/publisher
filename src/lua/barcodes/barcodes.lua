@@ -18,12 +18,12 @@ local function scalebox(scalefactor, box)
     scalefactor = math.round(scalefactor, 3)
     pdf_setmatrix.data = string.format("%.4g 0 0 %.4g", scalefactor, scalefactor)
 
-    local hbox = node.hpack(box)
-    hbox = node.insert_before(hbox, hbox, pdf_setmatrix)
-    hbox = node.insert_before(hbox, pdf_setmatrix, pdf_save)
-    publisher.attribute_helpers.setprop(hbox, "origin", "scalebox 1")
+    local head = node.hpack(box) ---@type Node
+    head = node.insert_before(head, head, pdf_setmatrix)
+    head = node.insert_before(head, pdf_setmatrix, pdf_save)
+    publisher.attribute_helpers.setprop(head, "origin", "scalebox 1")
 
-    hbox = node.hpack(hbox)
+    local hbox = node.hpack(head)
     hbox.height = box.height * scalefactor
     hbox.width = box.width * scalefactor
     hbox.depth = 0
@@ -575,14 +575,14 @@ local function make_code(size, matrix, pdfcolorstring)
 
     -- Avoid underfull boxes message:
     n = publisher.nodes.add_glue(n, "tail", { width = 0, stretch = 1, stretch_order = 3 })
-    local h = node.hpack(n, size, "exactly")
+    local h = node.hpack(n, size, "exactly") ---@type Node
     h = publisher.nodes.add_glue(h, "tail", { stretch = 1, stretch_order = 3 })
     local v = node.vpack(h, size, "exactly")
     node.set_attribute(v, publisher.att_dontadjustlineheight, 1)
     return v
 end
 
-local function qrcode(width, height, codeword, eclevel, colorname)
+local function qrcode(width, _height, codeword, eclevel, colorname)
     local pdfcolorstring = colors_module.colors[colorname or "black"].pdfstring
     if not barcodes_qrencode then
         barcodes_qrencode = do_luafile("qrencode.lua")

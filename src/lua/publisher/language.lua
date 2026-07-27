@@ -177,10 +177,14 @@ function M.get_language(id_or_locale_or_name)
         local filename = string.format("hyph-%s.pat.txt", filename_part)
         main.log("debug", "Loading hyphenation pattern", "filename", filename)
         local path = kpse.find_file(filename)
-        local pattern_file = io.open(path)
-        local pattern = pattern_file:read("*all")
-        pattern_file:close()
-        l:patterns(pattern)
+        local pattern_file = path and io.open(path)
+        if pattern_file then
+            local pattern = pattern_file:read("*all")
+            pattern_file:close()
+            l:patterns(pattern)
+        else
+            main.log("warn", string.format("Can't load hyphenation patterns %q", filename))
+        end
     end
 
     local id = l:id()

@@ -170,9 +170,13 @@ end
 ---@return string? localfilename `nil` when the file cannot be opened.
 function M.validateimagetype(filename)
     local localfilename = kpse.find_file(filename)
+    if not localfilename then
+        main.log("error", string.format("Image %q not found", filename))
+        return nil
+    end
     local f, errmsg = io.open(localfilename)
     if not f then
-        main.log("error", errmsg)
+        main.log("error", errmsg or string.format("Cannot open image %q", localfilename))
         return nil
     end
     local whatever = f:read(5)
@@ -255,7 +259,7 @@ function M.imageinfo(filename, page, box, fallback, imageshape)
         if kpse.find_file(xmlfilename) then
             local xmltab, msg = publisher.xml_helpers.load_xml(xmlfilename, "Imageinfo")
             if not xmltab then
-                main.log("error", msg)
+                main.log("error", msg or string.format("Cannot load image info %q", xmlfilename))
             else
                 if publisher.newxpath then
                     xmltab = xmltab[1]
@@ -306,7 +310,7 @@ function M.imageinfo(filename, page, box, fallback, imageshape)
                 main.log("info", string.format("Using converted file %q instead", filename))
             end
         end
-        filename = M.validateimagetype(filename)
+        filename = M.validateimagetype(filename) or "filenotfound.pdf"
         local image_info = img.scan({ filename = filename, pagebox = box, page = page, keepopen = true })
         if image_info.orientation == 0 then
             -- good, no transformation
