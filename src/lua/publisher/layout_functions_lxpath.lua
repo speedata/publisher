@@ -141,7 +141,7 @@ local function firstmark(_dataxml, arg)
     return { publisher.marker_id_value[minid].name }, nil
 end
 
--- Get the last mark of a page (for example used in the head of dictionaires)
+-- Get the last mark of a page (for example used in the head of dictionaries)
 local function lastmark(_dataxml, arg)
     local pagenumber = publisher.xpath.number_value(arg[1])
     if not pagenumber then

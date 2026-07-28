@@ -231,7 +231,6 @@ function M.build_html_table(table_elt, width, cb, dataxml, stylesstack)
 
     tabular.tab = tab
 
-    -- Fontfamily "text" fallback wie im Original
     local fontname = "text"
     local fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontname]
     if fontfamily == nil then
