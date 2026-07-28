@@ -1,0 +1,52 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en"
+	xmlns:fn="mynamespace">
+
+	<Function name="fn:add">
+		<Param name="a" />
+		<Param name="b" />
+		<Value select="$a + $b" />
+	</Function>
+
+	<Record element="data">
+		<!-- direct call in a paragraph -->
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value select="fn:add(3, 4)" />
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+
+		<!-- via variable -->
+		<SetVariable variable="x" select="fn:add(3, 4)" />
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value select="concat('x=', $x)" />
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+
+		<!-- function call inside a string expression, see #704 -->
+		<PlaceObject>
+			<Textblock>
+				<Paragraph>
+					<Value select="concat('test-', fn:add(3, 4), '.pdf')" />
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+
+		<!-- function call in an attribute expression, see #704 -->
+		<PlaceObject column="{fn:add(2, 3)}" row="{fn:add(5, 5)}">
+			<Textblock>
+				<Paragraph>
+					<Value select="'at column 5, row 10'" />
+				</Paragraph>
+			</Textblock>
+		</PlaceObject>
+
+		<!-- string context in Message (protocol only), see #704 -->
+		<Message select="concat('msg:', fn:add(3, 4))" />
+	</Record>
+</Layout>

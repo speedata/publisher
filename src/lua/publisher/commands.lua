@@ -1614,11 +1614,20 @@ function commands.func(layoutxml, dataxml)
         end
         local ret
         if has_value then
+            -- Unwrap the dispatch entries so the function returns a plain
+            -- XPath sequence, just like the inline expression would. See #704.
             ret = {}
             for i = 1, #res do
                 local tmp = res[i]
                 if type(tmp) == "table" and tmp["elementname"] == "Value" then
-                    ret[#ret + 1] = tmp
+                    local contents = publisher.xml_helpers.element_contents(tmp)
+                    if type(contents) == "table" and not contents[".__type"] then
+                        for j = 1, #contents do
+                            ret[#ret + 1] = contents[j]
+                        end
+                    elseif contents ~= nil then
+                        ret[#ret + 1] = contents
+                    end
                 end
             end
         else
