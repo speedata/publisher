@@ -236,7 +236,9 @@ function M.get_fontinstance(fontfamily, instancename)
         instance = 1
     end
     if not instance then
-        main.log("error", string.format("font %s not found for family %s", instancename, fontfamily))
+        local fam_tbl = lookup_fontfamily_number_instance[fontfamily]
+        local familyname = fam_tbl and fam_tbl.name or "?"
+        main.log("error", string.format("font %s not found for family %s (%s)", instancename, familyname, fontfamily))
         -- let's try "regular"
         if fontfamily and fontfamily > 0 then
             instance = lookup_fontfamily_number_instance[fontfamily].normal
