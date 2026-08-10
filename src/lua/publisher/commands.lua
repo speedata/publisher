@@ -3087,6 +3087,9 @@ function commands.insert_pages(layoutxml, dataxml)
     end
     main.log("info", "InsertPages backward mode", "name", pagestore_name)
     for i = 1, #thispagestore do
+        -- Stored pages bypass pages.shipout(), so the TrimBox/BleedBox
+        -- page attributes must be set here.
+        thispagestore.grids[i]:trimbox(publisher.options.crop)
         tex.box[666] = thispagestore[i]
         publisher.pagenum_tbl[#publisher.pagenum_tbl + 1] = current_pagenumber
         tex.shipout(666)
@@ -5883,7 +5886,7 @@ function commands.save_pages(layoutxml, dataxml)
         local save_current_pagenumber = publisher.current_pagenumber
         main.log("info", "SavePages backwards mode", "start page", save_current_pagenumber, "name", pagestore_name)
         publisher.current_pagestore_name = pagestore_name
-        publisher.pagestore[pagestore_name] = {}
+        publisher.pagestore[pagestore_name] = { grids = {} }
         local tab = publisher.dispatch.dispatch(layoutxml, dataxml)
         publisher.page_helpers.new_page("save_pages", dataxml)
         for i = save_current_pagenumber, publisher.current_pagenumber - 1 do

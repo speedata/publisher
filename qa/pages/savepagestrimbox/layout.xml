@@ -1,0 +1,15 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+  <Options bleed="3mm" cutmarks="yes" />
+  <Record element="data">
+    <SavePages name="p">
+      <PlaceObject>
+        <Textblock>
+          <Paragraph>
+            <Value>Hello</Value>
+          </Paragraph>
+        </Textblock>
+      </PlaceObject>
+    </SavePages>
+    <InsertPages name="p" />
+  </Record>
+</Layout>

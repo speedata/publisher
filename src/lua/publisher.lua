@@ -499,7 +499,10 @@ end
 ---@type table<string, Group>
 M.groups = {}
 
--- sometimes we want to save pages for later reuse. Keys are pagestore names
+-- sometimes we want to save pages for later reuse. Keys are pagestore names.
+-- In backward mode the value is a list of vpacked pages with a `grids`
+-- sub-table holding each page's grid (needed for TrimBox/BleedBox at
+-- InsertPages time), in forward mode a table with insert metadata.
 ---@type table<string, table>
 M.pagestore = {}
 

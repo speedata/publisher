@@ -898,6 +898,7 @@ function M.new_page(_from, dataxml)
     if publisher.current_pagestore_name then
         local thispagestore = publisher.pagestore[publisher.current_pagestore_name]
         thispagestore[#thispagestore + 1] = n
+        thispagestore.grids[#thispagestore] = thispage.grid
     else
         M.shipout(n, publisher.current_pagenumber, dataxml)
     end
@@ -918,6 +919,7 @@ function M.clearpage(options)
         if publisher.current_pagestore_name then
             local thispagestore = publisher.pagestore[publisher.current_pagestore_name]
             thispagestore[#thispagestore + 1] = n
+            thispagestore.grids[#thispagestore] = thispage.grid
         else
             M.shipout(n, publisher.current_pagenumber, options.dataxml)
         end
