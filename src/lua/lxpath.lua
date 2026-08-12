@@ -3484,7 +3484,7 @@ function parse_relative_path_expr(tl)
             ctx.sequence = retseq
             if i <= #ops and ops[i] == "//" then
                 ctx:descendantOrSelf(function(_ctx, itm)
-                    return is_element(itm)
+                    return is_element(itm) or is_document(itm)
                 end)
             end
         end
