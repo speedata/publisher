@@ -137,6 +137,25 @@ func main() {
 			os.Exit(-1)
 		}
 
+		// Build the HTML manual once; it gets copied into each platform tree
+		// (share/doc) so that sp doc can serve it locally.
+		for _, lang := range []string{"en", "de"} {
+			if err = genadoc.GenerateMarkdownFiles(cfg, lang); err != nil {
+				log.Fatal(err)
+			}
+			if err = genadoc.GenerateChangelogMarkdown(cfg, lang); err != nil {
+				log.Fatal(err)
+			}
+		}
+		manualHTML := filepath.Join(cfg.Builddir, "manual-html")
+		os.RemoveAll(manualHTML)
+		hugocmd := exec.Command("hugo", "--quiet", "--destination", manualHTML)
+		hugocmd.Dir = filepath.Join(cfg.Basedir(), "doc", "manual")
+		if out, err := hugocmd.CombinedOutput(); err != nil {
+			fmt.Println(string(out))
+			log.Fatal("hugo build failed; hugo is required for dist because the manual is part of the ZIP files")
+		}
+
 		var t *texttemplate.Template
 		if runtime.GOOS == "windows" {
 			t = texttemplate.Must(texttemplate.ParseFiles(filepath.Join(cfg.Srcdir, "other", "nsitemplate_win.txt")))
@@ -160,6 +179,11 @@ func main() {
 			os.MkdirAll(dylibbuild, 0755)
 
 			err = dirstructure.FillBuildDir(cfg, luatexdir, bindestdir, sharedestdir, swdestdir)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			err = fileutils.CpR(manualHTML, filepath.Join(sharedestdir, "doc"))
 			if err != nil {
 				log.Fatal(err)
 			}

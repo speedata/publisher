@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/exec"
@@ -1219,8 +1220,50 @@ func main() {
 			}
 		}
 	case cmdDoc:
-		openWebPage("https://doc.speedata.de")
-		exitProgram(0)
+		// The manual exists in German and English, pick by locale.
+		doclang := "en"
+		for _, v := range []string{"LC_ALL", "LC_MESSAGES", "LANG"} {
+			if val := os.Getenv(v); val != "" {
+				if strings.HasPrefix(strings.ToLower(val), "de") {
+					doclang = "de"
+				}
+				break
+			}
+		}
+		// Serve the manual from the local installation if present, otherwise
+		// fall back to the online documentation.
+		var docroot string
+		for _, d := range []string{
+			filepath.Join(installdir, "share", "doc"),
+			filepath.Join(installdir, "doc", "manual", "public"),
+		} {
+			if fileExists(filepath.Join(d, "index.html")) {
+				docroot = d
+				break
+			}
+		}
+		if docroot == "" {
+			onlineURL := "https://doc.speedata.de/publisher/" + doclang + "/"
+			fmt.Println("Documentation available at " + onlineURL)
+			if getOption("autoopen") != "false" {
+				openWebPage(onlineURL)
+			}
+			exitProgram(0)
+		}
+		ln, err := net.Listen("tcp", "127.0.0.1:5267")
+		if err != nil {
+			// port already in use, let the system pick a free one
+			if ln, err = net.Listen("tcp", "127.0.0.1:0"); err != nil {
+				log.Fatal(err)
+			}
+		}
+		docURL := fmt.Sprintf("http://%s/%s/", ln.Addr().String(), doclang)
+		fmt.Printf("Serving documentation from %s\n", docroot)
+		fmt.Printf("Documentation available at %s (press ctrl-c to quit)\n", docURL)
+		if getOption("autoopen") != "false" {
+			openWebPage(docURL)
+		}
+		log.Fatal(http.Serve(ln, http.FileServer(http.Dir(docroot))))
 	case cmdListFonts:
 		var xml string
 		if getOption("xml") == stringTrue {

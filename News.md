@@ -17,6 +17,7 @@ Planned for 2026-09
 
 * Only bug fixes and internal changes
 * Deprecation of the old XPath parser and fontforge font loader
+* The distribution ZIP files now include the HTML manual, `sp doc` serves it locally
 
 # Version 5.6
 

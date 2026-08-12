@@ -55,7 +55,7 @@ kann man sich eine Liste der erlaubten Befehle und Parameter ausgeben lassen.
 : Vergleicht PDF-Dateien für die Qualitätssicherung. Siehe [Qualitätssicherung]({{% relref "qualityassurance" %}}).
 
 `doc`
-: Öffnet das Referenzhandbuch im Browser (lokale HTML-Dateien).
+: Zeigt das Handbuch im Browser an. Liegt der Installation das Handbuch bei (Verzeichnis `share/doc`), wird es über einen lokalen Webserver ausgeliefert; die Adresse erscheint auch auf der Konsole, der Server läuft bis Strg-C. Geöffnet wird die deutsche oder die englische Ausgabe, je nach Spracheinstellung des Systems (Umgebungsvariablen `LC_ALL`, `LC_MESSAGES`, `LANG`). Mit `--no-autoopen` wird der Browser nicht geöffnet. Ohne lokales Handbuch öffnet der Befehl die Online-Dokumentation auf <https://doc.speedata.de>, ebenfalls in der passenden Sprache.
 
 `list-fonts`
 : Listet alle Schriftdateien auf, die in den Publisher-Verzeichnissen gefunden werden. Zusammen mit `--xml` erlaubt dieses Kommando die Ausgabe per Copy&Paste in das Layoutregelwerk zu übernehmen. Siehe [Schriften verwenden]({{% relref "fonts" %}}).

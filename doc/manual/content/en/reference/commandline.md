@@ -54,7 +54,7 @@ you can display a list of the allowed commands and parameters.
 : Recursively check a directory for layout changes. See the topic about [quality assurance]({{% relref "qualityassurance" %}}).
 
 `doc`
-: Opens the reference manual in the browser (local HTML files).
+: Shows the manual in the browser. If the manual is part of the installation (directory `share/doc`), it is served through a local web server; the address is also printed on the console, and the server runs until ctrl-c. The German or the English edition is opened, depending on the language setting of the system (environment variables `LC_ALL`, `LC_MESSAGES`, `LANG`). With `--no-autoopen` the browser is not opened. Without a local manual, the command opens the online documentation at <https://doc.speedata.de>, also in the matching language.
 
 `list-fonts`
 : Lists all font files found in the Publisher directories. Together with `--xml` this command allows you to copy and paste the output into the layout rules. See [Using fonts]({{% relref "fonts" %}}).
