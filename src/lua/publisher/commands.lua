@@ -6104,9 +6104,22 @@ function commands.setvariable(layoutxml, dataxml)
                     elseif eltname == "elementstructure" then
                         for j = 1, #element_contents do
                             ret = ret or {}
-                            ret[#ret + 1] = element_contents[j]
-                            if type(element_contents[j]) == "table" and element_contents[j][".__type"] == "element" then
-                                has_element = true
+                            local itm = element_contents[j]
+                            -- A document node (the implicit wrapper of a constructed
+                            -- variable) is dissolved: splice its children, document
+                            -- nodes never nest (XSLT 2.0 §5.7.1).
+                            if type(itm) == "table" and itm[".__type"] == "document" then
+                                for k = 1, #itm do
+                                    ret[#ret + 1] = itm[k]
+                                    if type(itm[k]) == "table" and itm[k][".__type"] == "element" then
+                                        has_element = true
+                                    end
+                                end
+                            else
+                                ret[#ret + 1] = itm
+                                if type(itm) == "table" and itm[".__type"] == "element" then
+                                    has_element = true
+                                end
                             end
                         end
                     elseif eltname == "Element" then
@@ -6118,6 +6131,7 @@ function commands.setvariable(layoutxml, dataxml)
             end
             if ret then
                 if has_element then
+                    ret[".__type"] = "document"
                     contents = { ret }
                 else
                     contents = ret

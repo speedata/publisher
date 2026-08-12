@@ -1,0 +1,33 @@
+<Layout
+    xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat width="100mm" height="100mm"/>
+    <Record element="data">
+        <SetVariable variable="entries"/>
+        <ProcessNode select="item"/>
+        <Message select="concat('count entries: ', count($entries/entry))"/>
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value select="concat('count entries: ', count($entries/entry))"/>
+                </Paragraph>
+                <Paragraph>
+                    <Value select="concat('count descendant entries: ', count($entries//entry))"/>
+                </Paragraph>
+                <ForAll select="$entries/entry">
+                    <Paragraph>
+                        <Value select="concat('entry n=', @n)"/>
+                    </Paragraph>
+                </ForAll>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+    <Record element="item">
+        <SetVariable variable="entries">
+            <Copy-of select="$entries"/>
+            <Element name="entry">
+                <Attribute name="n" select="@n"/>
+            </Element>
+        </SetVariable>
+    </Record>
+</Layout>
