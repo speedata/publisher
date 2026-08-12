@@ -3050,7 +3050,7 @@
    <define name="e_LoadFontfile">
       <element name="LoadFontfile">
          <a:documentation>Load a font file (.otf, .ttf, .pfb) and associate it with an internal name. If a glyph is not found in the font file, an error will be raised (this can be configured via the Options command). You can specify fallbacks as a child element of Loadfontfile.
-      Type 1 fonts (.pfb) are deprecated: they are always loaded with the old fontforge font handler, which will be removed in a future version. Please convert Type 1 fonts to OpenType.</a:documentation>
+      Type 1 fonts (.pfb) are deprecated: they are always loaded with the old fontforge font handler, which is scheduled for removal in version 6.0. Please convert Type 1 fonts to OpenType.</a:documentation>
          <interleave>
             <group>
                <attribute name="name">
@@ -3072,10 +3072,10 @@
                </optional>
                <optional>
                   <attribute name="mode">
-                     <a:documentation>Set the shaping mode of the font. Defaults to harfbuzz.</a:documentation>
+                     <a:documentation>Set the shaping mode of the font. Defaults to harfbuzz. This attribute is deprecated: it is only needed to select the old fontforge font handler, which is scheduled for removal in version 6.0.</a:documentation>
                      <choice>
                         <value>fontforge</value>
-                        <a:documentation>The old font handler. Renders western scripts, but no right-to-left or other complex scripts. Deprecated: this font handler will be removed in a future version. Type 1 fonts (.pfb) are always loaded with this handler, regardless of the mode setting.</a:documentation>
+                        <a:documentation>The old font handler. Renders western scripts, but no right-to-left or other complex scripts. Deprecated: this font handler is scheduled for removal in version 6.0. Type 1 fonts (.pfb) are always loaded with this handler, regardless of the mode setting.</a:documentation>
                         <value>harfbuzz</value>
                         <a:documentation>The renderer that handles all scripts including right-to-left (default).</a:documentation>
                      </choice>
@@ -3165,7 +3165,7 @@
                </optional>
                <optional>
                   <attribute name="require">
-                     <a:documentation>A comma separated list of required default features. Currently supported features are luxor/lxpath and harfbuzz/fontforge.</a:documentation>
+                     <a:documentation>A comma separated list of required default features. Currently supported features are luxor/lxpath and harfbuzz/fontforge. The features luxor and fontforge are deprecated and scheduled for removal in version 6.0.</a:documentation>
                   </attribute>
                </optional>
                <oneOrMore>

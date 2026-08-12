@@ -3,18 +3,25 @@ title: speedata Publisher Dokumentation
 type: docs
 ---
 
-Vollautomatisch PDF-Dateien aus XML-Daten erzeugen — mit programmierbaren Layouts, typographischer Qualität und voller Kontrolle über jedes Detail.
+Vollautomatisch PDF-Dateien aus XML-Daten erzeugen – mit programmierbaren Layouts, typographischer Qualität und voller Kontrolle über jedes Detail.
+
+Der Publisher liest zwei XML-Dateien – die Daten und die Layoutregeln – und erzeugt daraus ein PDF.
+Sobald er [installiert]({{< relref "manual/setup" >}}) ist, entsteht das erste PDF mit drei Befehlen:
 
 ```shell
-sp new helloworld && cd helloworld && sp
+sp new helloworld   # Beispielprojekt mit Daten- und Layoutdatei anlegen
+cd helloworld
+sp                  # PDF erzeugen – das Ergebnis heißt publisher.pdf
 ```
+
+Wie die beiden Dateien zusammenspielen, zeigt Schritt für Schritt das Kapitel [Hallo Welt!]({{< relref "manual/helloworld" >}}).
 
 ## Einstieg
 
 {{< cards >}}
   {{< card link="manual/introduction" title="Einführung" subtitle="Was der Publisher kann und wofür er eingesetzt wird" >}}
   {{< card link="manual/helloworld" title="Hallo Welt!" subtitle="In drei Befehlen zum ersten PDF" >}}
-  {{< card link="manual/setup" title="Installation & Setup" subtitle="Installation, Kommandozeile, Konfiguration und XML-Editor" >}}
+  {{< card link="manual/setup" title="Installation & Setup" subtitle="Installation, XML-Editor und Schema-Validierung" >}}
 {{< /cards >}}
 
 ## Themen
@@ -37,11 +44,28 @@ sp new helloworld && cd helloworld && sp
   {{< card link="manual/quality" title="Qualität & Fehlersuche" subtitle="Troubleshooting, Performance und Qualitätssicherung" >}}
 {{< /cards >}}
 
+## Anleitungen
+
+{{< cards >}}
+  {{< card link="howto" title="Anleitungen" subtitle="Aufgabenorientierte Rezepte mit Entscheidungswissen" >}}
+  {{< card link="howto/datapreparation" title="Datenaufbereitung" subtitle="Vorweg transformieren oder im Layout verarbeiten?" >}}
+  {{< card link="howto/tableorgroups" title="Tabelle, Gruppen oder Textfluss?" subtitle="Die zentrale Darstellungsentscheidung" >}}
+  {{< card link="howto/simpletable" title="Tabelle mit automatischem Umbruch" subtitle="Artikelliste mit wiederholtem Tabellenkopf" >}}
+  {{< card link="howto/columnwidths" title="Spaltenbreiten steuern" subtitle="Feste Breiten, Sternangaben und Mischformen" >}}
+  {{< card link="howto/continuationhead" title="Fortsetzungskopf und -hinweis" subtitle="Kopf und Fuß je Seite variieren" >}}
+  {{< card link="howto/manualtablebreak" title="Tabellen manuell umbrechen" subtitle="Portionieren und Messen für eigene Umbruchlogik" >}}
+  {{< card link="howto/datasheet" title="Grundgerüst eines Datenblatts" subtitle="Seitentyp mit Kopf, Fuß und Satzspiegel" >}}
+  {{< card link="howto/tableofcontents" title="Inhaltsverzeichnis" subtitle="Seitenzahlen sammeln, im nächsten Durchlauf ausgeben" >}}
+  {{< card link="howto/keywordindex" title="Stichwortverzeichnis" subtitle="Sortieren und Gruppieren mit Makeindex" >}}
+{{< /cards >}}
+
 ## Referenz
 
 {{< cards >}}
-  {{< card link="reference" title="Befehlsreferenz" subtitle="Alle Befehle und Attribute im Überblick" >}}
-  {{< card link="manual/xpathref" title="XPath & Layoutfunktionen" subtitle="XPath-Ausdrücke und sd:-Funktionen" >}}
-  {{< card link="manual/setup/commandline" title="Kommandozeile" subtitle="Alle Optionen von sp im Detail" >}}
-  {{< card link="manual/setup/configuration" title="Konfiguration" subtitle="Konfigurationsdatei und Umgebungsvariablen" >}}
+  {{< card link="reference/commands" title="Befehlsreferenz" subtitle="Alle Befehle und Attribute im Überblick" >}}
+  {{< card link="reference/xpath" title="XPath & Layoutfunktionen" subtitle="XPath-Ausdrücke und sd:-Funktionen" >}}
+  {{< card link="reference/commandline" title="Kommandozeile" subtitle="Alle Optionen von sp im Detail" >}}
+  {{< card link="reference/configuration" title="Konfiguration" subtitle="Konfigurationsdatei und Umgebungsvariablen" >}}
+  {{< card link="reference/glossary" title="Glossar" subtitle="Begriffe und Definitionen" >}}
+  {{< card link="reference/appendix" title="Anhang" subtitle="Voreinstellungen, Dateinamen, interne Variablen" >}}
 {{< /cards >}}

@@ -88,10 +88,68 @@ Further details on structuring the data file can be found in the chapter [Struct
 
 ## Data processing with Record and ProcessNode
 
-The basic principle of [`Record`]({{< relref "/reference/record" >}}) and [`ProcessNode`]({{< relref "/reference/processnode" >}}) was already introduced above.
+The basic principle of [`Record`]({{< relref "/reference/commands/record" >}}) and [`ProcessNode`]({{< relref "/reference/commands/processnode" >}}) was already introduced above.
 Similar to `xsl:template match` and `xsl:apply-templates` in XSLT, `Record` defines processing rules for data elements and `ProcessNode` invokes them.
 
-This section describes the advanced capabilities: pattern matching, priorities and modes.
+This section describes the advanced capabilities: the alternative `<ForAll>`, pattern matching, priorities and modes.
+
+### ForAll: processing child elements without a separate Record
+
+As an alternative to the pair `<ProcessNode>`/`<Record>`, [`<ForAll>`]({{< relref "/reference/commands/forall" >}}) iterates directly over child elements without the need for a separate Record.
+Within `<ForAll>` you have access to the attributes and child elements of the respective element, just like in a Record.
+
+For the data file
+
+```xml
+<catalog>
+  <article nr="12345" price="99,95" quantity="1">
+    <description>Text for article 12345</description>
+  </article>
+  <article nr="56789" price="45,95" quantity="5">
+    <description>Text for article 56789</description>
+  </article>
+</catalog>
+```
+
+the following layout creates a table row for each child element `article`:
+
+```xml
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="catalog">
+    <PlaceObject>
+      <Table stretch="max"> <!--1-->
+        <Tablehead> <!--2-->
+          <Tr background-color="gray">
+            <Td>
+              <Paragraph><Value>Article number</Value></Paragraph>
+            </Td>
+            <Td>
+              <Paragraph><Value>Description</Value></Paragraph>
+            </Td>
+          </Tr>
+        </Tablehead>
+        <ForAll select="article"> <!--3-->
+          <Tr>
+            <Td>
+              <Paragraph><Value select="@nr"/></Paragraph>
+            </Td>
+            <Td>
+              <Paragraph><Value select="description"/></Paragraph>
+            </Td>
+          </Tr>
+        </ForAll>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
+```
+1. A table is output that stretches over the whole width (see the [chapter on tables]({{< relref "tables" >}})).
+2. A table head is repeated on every page.
+3. Within the `<ForAll>` you can access the attributes and child elements of each article.
+
+`<ForAll>` is well suited for compact output in place, such as these table rows. `<ProcessNode>` with its own `<Record>` is the better choice when the processing is more extensive or needed in several places.
 
 ### Pattern matching with the match attribute
 
@@ -424,7 +482,7 @@ The namespace for the function must be defined in the root element (here: `xmlns
 
 ## Data Structures
 
-The speedata Publisher supports [arrays and maps]({{< relref "/manual/xpathref/datastructures" >}}) as native data structures:
+The speedata Publisher supports [arrays and maps]({{< relref "/reference/xpath/datastructures" >}}) as native data structures:
 
 ```xml
 <!-- Array: ordered list -->
@@ -438,4 +496,4 @@ The speedata Publisher supports [arrays and maps]({{< relref "/manual/xpathref/d
 
 Array functions such as `array:size()`, `array:append()` and `array:flatten()` are available.
 For maps there are `map:keys()`, `map:get()`, `map:put()` and more.
-All details and practical examples can be found in the chapter [Arrays and Maps]({{< relref "/manual/xpathref/datastructures" >}}).
+All details and practical examples can be found in the chapter [Arrays and Maps]({{< relref "/reference/xpath/datastructures" >}}).

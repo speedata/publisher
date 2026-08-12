@@ -10,7 +10,7 @@ Der speedata Publisher ist in zwei Paketen erhältlich: Standard und Pro. Das Pr
 * Support per E-Mail
 * [Servermodus]({{< relref "servermode" >}}) (REST-API für lokale Netzwerke)
 * [Publisher über Hotfolder starten]({{< relref "hotfolder" >}}) (für den vollautomatischen Start des Publishers)
-* [QR-Codes und Barcodes]({{< relref "/reference/barcode" >}})
+* [QR-Codes und Barcodes]({{< relref "/reference/commands/barcode" >}})
 * Einbinden von ZUGFeRD Rechnungen
 * Einbinden von Ressourcen über HTTP(s), z.B. für Mediendatenbanken
 * [Beschnittzugabe]({{< relref "cutmarks" >}}) (bleed)

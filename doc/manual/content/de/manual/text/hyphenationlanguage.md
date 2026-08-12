@@ -24,7 +24,7 @@ stellt das gesamte Dokument auf deutsche Trennmuster um, während
 ```
 
 nur für einen Absatz die Sprache umstellt.
-Die verfügbaren Sprachen sind in der Befehlsreferenz unter [`<Options>`]({{< relref "/reference/options" >}}) beschrieben.
+Die verfügbaren Sprachen sind in der Befehlsreferenz unter [`<Options>`]({{< relref "/reference/commands/options" >}}) beschrieben.
 
 Alternativ zu den ausgeschriebenen Namen wie `German` kann auch der Sprachcode verwendet werden.
 Die beiden Beispiele oben können auch wie folgt benutzt werden:
@@ -37,7 +37,7 @@ Die beiden Beispiele oben können auch wie folgt benutzt werden:
 </Paragraph>
 ```
 
-Möchte man testen, ob die Wörter richtig getrennt werden, kann man mit `<Trace hyphenation="yes" />` kleine Markierungen erzeugen lassen.
+Möchte man testen, ob die Wörter richtig getrennt werden, kann man mit `<Trace hyphenation="yes" />` kleine Markierungen erzeugen lassen. Alle Schalter des Befehls `<Trace>` listet das Kapitel [Fehlerbehebung / Debugging]({{< relref "troubleshooting" >}}) auf.
 
 
 ```xml
@@ -73,7 +73,7 @@ Mittels
 kann man für einzelne Wörter Trennvorschläge bzw. -ausnahmen definieren. So werden die Wörter dann nur an den mit Bindestrich angegebenen Stellen getrennt. Die Trennausnahme gilt für die Hauptsprache des Dokuments. Mit dem Attribut `language` kann man die Sprache festlegen, für die die Trennausnahme gilt.
 
 {{< callout >}}
-Mit optischem Randausgleich, der im Abschnitt [optischerrandausgleich]({{< relref "textformatting" >}}) beschrieben ist, kann man die Anzahl der Silbentrennungen im Dokument etwas verringern.
+Mit optischem Randausgleich, der im Abschnitt [Optischer Randausgleich]({{< relref "textformatting#optischer-randausgleich" >}}) beschrieben ist, kann man die Anzahl der Silbentrennungen im Dokument etwas verringern.
 {{< /callout >}}
 
 ## Trennungen für Absätze ausschalten
@@ -140,8 +140,8 @@ Das ist ein experimentelles Feature im Publisher. Wahrscheinlich wird dies in ei
 
 Manche Sprachen haben besondere Satzregeln, die sich nicht auf die Silbentrennung auswirken, sondern auf das Erscheinungsbild des Textes. So können die Zeichen ihre Form oder Position verändern, je nach dem wo sie im Wort stehen. Um dieses Feature zu nutzen müssen folgende Bedingungen erfüllt sein:
 
-1. `mode="harfbuzz"` muss bei [`<LoadFontfile>`]({{< relref "/reference/loadfontfile" >}}) aktiviert sein.
-2. Die Sprache sollte korrekt eingestellt sein. Falls die Sprache nicht in der [Liste der unterstützten Sprachen]({{< relref "/reference/options" >}}) vorhanden ist, muss `Other` oder `--` (zwei Striche) eingestellt werden. Wenn die Sprache nicht korrekt eingestellt ist, kann es zu Darstellungsproblemen kommen.
+1. `mode="harfbuzz"` muss bei [`<LoadFontfile>`]({{< relref "/reference/commands/loadfontfile" >}}) aktiviert sein.
+2. Die Sprache sollte korrekt eingestellt sein. Falls die Sprache nicht in der [Liste der unterstützten Sprachen]({{< relref "/reference/commands/options" >}}) vorhanden ist, muss `Other` oder `--` (zwei Striche) eingestellt werden. Wenn die Sprache nicht korrekt eingestellt ist, kann es zu Darstellungsproblemen kommen.
 3. Die gewählte Schriftart muss die entsprechenden Zeichen enthalten.
 
 ```xml
@@ -237,6 +237,6 @@ und wird mit `bidi="yes"` aktiviert:
 * Setze das Attribut `direction`, wenn klar ist, in welchem Kontext der Text erscheinen soll. Wenn es leer oder nicht gesetzt ist, entscheidet der Inhalt des Textes, welche Richtung der Absatz haben soll. Das klappt in den meisten Fällen gut, aber beispielsweise nicht mit gemischtem Text, der mit einer »falschen« Richtung anfängt.
 * Setze das Attribut `bidi` im Zweifelsfall auf `yes`. Der einzige Nachteil ist, dass der Publishing-Lauf etwas langsamer sein könnte. Andere Unterschiede sollten nicht auftreten.
 * Die Spracheinstellung (`language`) sollte entweder die richtige Sprache beinhalten, leer sein oder auf die Sprache `Other` gesetzt werden. Das Problem ist, dass manche Spracheinstellungen eine unerwünschte Schreibrichtung erwirken können.
-* Als Textausrichtung (`alignment` bei [DefineTextformat]({{< relref "/reference/definetextformat" >}})) sollte anstelle von `left` oder `right` lieber `start` und `end` benutzt werden. `start` und `end` orientieren sich an der Richtung für den Absatz.
+* Als Textausrichtung (`alignment` bei [DefineTextformat]({{< relref "/reference/commands/definetextformat" >}})) sollte anstelle von `left` oder `right` lieber `start` und `end` benutzt werden. `start` und `end` orientieren sich an der Richtung für den Absatz.
 * Es muss der [HarfBuzz-Fontlader]({{< relref "hyphenationlanguage" >}}) aktiviert sein.
 

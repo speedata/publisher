@@ -51,8 +51,34 @@ Die Eingabe mit einem guten Schema mach viel Spaß und hat einige Vorteile gegen
 
 ![Erlaubte Attribute bei Textblock](/img/29-autocomplete2.png)
 
+## Geeignete Editoren
+
+Um das Schema zu nutzen, braucht man einen XML-Editor, der RELAX NG oder XML Schema (XSD) verarbeiten kann, zum Beispiel:
+
+-   [OxygenXML](https://www.oxygenxml.com) (Mac, Windows, Linux)
+-   [Visual Studio Code](https://code.visualstudio.com) (Mac, Windows, Linux, kostenlos)
+-   [XMLSpy](https://www.altova.com/xml-editor/) (Windows)
+-   [XML Blueprint](https://www.xmlblueprint.com/) (Windows)
+-   [GNU Emacs](https://www.gnu.org/software/emacs/) mit [nxml-mode](https://www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html) (alle Betriebssysteme, kostenlos)
+-   [jEdit](http://www.jedit.org) (Mac, Windows, Linux, kostenlos)
+
 ## Einbinden der Schemata
 
+Die Schemadateien liegen in der ZIP-Datei im Verzeichnis `share/schema/` unter den Dateinamen
+
+```
+layoutschema-de.rng
+layoutschema-en.rng
+```
+
+für RELAX NG und
+
+```
+layoutschema-de.xsd
+layoutschema-en.xsd
+```
+
+für XSD, je nach gewünschter Sprache der Dokumentation.
+
 Wie das Schema eingebunden wird, ist abhängig vom Editor.
-Im Anhang finden sich für verschiedene Editoren ([oXygen XML Editor]({{< relref "oxygenxmlschema" >}}) bzw. [Visual Studio Code]({{< relref "vscodeschema" >}})) Schritt für Schritt Anleitungen.
-Weitere Informationen gibt es im Kapitel [anhang-schemazuweisen]({{< relref "schema" >}}).
+Für verschiedene Editoren ([oXygen XML Editor]({{< relref "oxygenxmlschema" >}}) bzw. [Visual Studio Code]({{< relref "vscodeschema" >}})) gibt es Schritt-für-Schritt-Anleitungen.

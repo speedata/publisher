@@ -1,0 +1,46 @@
+---
+title: "Embed multipage PDF files"
+weight: 53
+type: docs
+---
+
+
+
+Embedding multiple pages of a PDF file is easy. You can use the layout function `sd:number-of-pages()` to determine how many pages a PDF file has.
+With the `<Image>` command to include an image, you can specify the desired number of pages. So the pattern for including all pages of a PDF file is as follows:
+
+```xml
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="data">
+    <SetVariable variable="myfile" select="'multipage.pdf'"/> <!--1-->
+    <Loop select="sd:number-of-pages($myfile)" variable="page"> <!--2-->
+      <PlaceObject column="0mm" row="0mm">
+        <Image file="{$myfile}" width="210mm" page="{$page}"/>
+      </PlaceObject>
+      <ClearPage/>
+    </Loop>
+  </Record>
+
+</Layout>
+```
+1. First the file name is saved in the variable `myfile`. This is not absolutely necessary. Important are the single quotation marks within the double quotation marks of `select`, this will save the string `multipage.pdf`.
+2. The loop (`<Loop>`) is passed through exactly as often as the PDF file has pages, the number of the loop pass is saved in the variable `page`.
+
+To access the variables you need the curly brackets, because neither `file` nor `page` expects an XPath expression, but a fixed value.
+In order to access the variables, you must temporarily switch to XPath mode.
+This is how
+
+```xml
+file="{$myfile}"
+```
+
+becomes
+
+```xml
+file="multipage.pdf"
+```
+
+The integrated pages can of course also be "overwritten" afterwards, i.e. with a page number or an image (watermark or similar).
+

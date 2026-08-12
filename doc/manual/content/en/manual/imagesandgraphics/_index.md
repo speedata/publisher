@@ -62,39 +62,9 @@ To use the natural size, but specify restrictions, there are four combinations o
 
 If the natural image size is smaller than the given `maxwidth` and `maxheight`, you can set the attribute `stretch` to `yes` to increase the size of the image until one of the given constraints is reached.
 
-##  Rotating images
+## Rotating images
 
-With the rotate attribute you can rotate images in 90 degree steps (positive values: clockwise). The following example rotates an image 90 degrees counterclockwise if it is a portrait image. With the XPath command `sd:aspectratio(<filename>)` you can determine the aspect ratio of an image. If it is greater than 1, then it is a landscape image.
-
-```xml
-<data>
-  <img file="_samplea.pdf" />
-  <img file="_sampleb.pdf" />
-</data>
-```
-{{% codecaption %}}Data{{% /codecaption %}}
-
-```xml
-<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
-  xmlns="urn:speedata.de:2009/publisher/en">
-
-  <Record element="data">
-    <ForAll select="img">
-      <PlaceObject>
-        <Image file="{@file}" width="5"
-          rotate="{if ( sd:aspectratio(@file) &lt; 1 ) then '-90' else '0'}"/>
-      </PlaceObject>
-    </ForAll>
-  </Record>
-</Layout>
-```
-{{% codecaption %}}The image is rotated 90 degrees if it is a portrait image.{{% /codecaption %}}
-
-![The second image is rotated by 90° because it is in portrait format.](/img/drehungaspectratio.png)
-
-**Tip:** The curly brackets at file and rotate mean that the system jumps to XPath mode to evaluate the XPath expressions (access to the file attribute and the if-then query). See the [XPath and Layout Functions]({{< relref "xpath" >}}) for more information.
-
-_Note: if the image in the argument of `sd:aspectratio()` is not available in the filesystem, the value is taken from the placeholder image (chapter [imagenotfound]({{< relref "imagesandgraphics" >}})). To check if an image is available at all, you can use the command `sd:file-exists(<filename>)`._
+Rotating images and other objects is described in the section [Rotation of contents]({{< relref "rotatingthings" >}}).
 
 ## Location of the image files
 
@@ -185,7 +155,7 @@ PDF files have some peculiarities: they can contain several pages and the indivi
 
 means that the "artbox" is displayed in the size 210mm × 297mm
 
-The `page` attribute is also described in the section [Embed multipage PDF files]({{< relref "multipagepdf" >}}). It is used to select the page when a PDF file is embedded. With `sd:number-of-pages('filename')` it can be determined how many pages a PDF file contains.
+Selecting the page with the `page` attribute and the layout function `sd:number-of-pages()` are described in the section [Embed multipage PDF files]({{< relref "multipagepdf" >}}).
 
 ### Specifying the page for layout functions
 
@@ -297,14 +267,14 @@ There is an [extra chapter]({{< relref "metapostgraphics" >}}) for MetaPost grap
     <Value>....</Value>
 </Image>
 ```
-3. As a reference at the commands within the master page ([AtPageCreation]({{< relref "/reference/atpagecreation" >}}), [AtPageShipout]({{< relref "/reference/atpageshipout" >}})), with [Td]({{< relref "/reference/td" >}}) and boxes ([Box]({{< relref "/reference/box" >}})).
+3. As a reference at the commands within the master page ([AtPageCreation]({{< relref "/reference/commands/atpagecreation" >}}), [AtPageShipout]({{< relref "/reference/commands/atpageshipout" >}})), with [Td]({{< relref "/reference/commands/td" >}}) and boxes ([Box]({{< relref "/reference/commands/box" >}})).
 
 See also the chapter on [MetaPost]({{< relref "metapostgraphics" >}}) and the examples at [the examples repository](https://github.com/speedata/examples/tree/master/metapost).
 
 ## Image size and resolution {{< profeature "Available in the Pro plan" >}}
 
 Large image files also generate large PDF files when they are included, regardless of how wide and high they are displayed in the PDF.
-If you want to limit the resolution (and therefore the file size), you can achieve this with the `dpi` option at [PDFOptions]({{< relref "/reference/pdfoptions" >}}).
+If you want to limit the resolution (and therefore the file size), you can achieve this with the `dpi` option at [PDFOptions]({{< relref "/reference/commands/pdfoptions" >}}).
 DPI stands for dots per inch and is a unit of measurement for pixel density.
 The lower the number, the “worse” the image looks.
 By limiting the resolution, you can sometimes obtain much smaller files.
@@ -334,11 +304,11 @@ It is important to also define an `extensionhandler` for the file extension (e.g
 
 ## Vertical alignment of images in a paragraph
 
-Images can be placed inline within a `[Paragraph]({{< relref "/reference/paragraph" >}})`, alongside text or other images.
+Images can be placed inline within a `[Paragraph]({{< relref "/reference/commands/paragraph" >}})`, alongside text or other images.
 By default, all images sit on the text baseline with their full height extending upward.
 When images of different heights appear together, this can look uneven.
 
-The `vertical-align` attribute on `[Image]({{< relref "/reference/image" >}})` controls how images are aligned relative to each other and the text.
+The `vertical-align` attribute on `[Image]({{< relref "/reference/commands/image" >}})` controls how images are aligned relative to each other and the text.
 Four modes are available:
 
 ### baseline (default)
@@ -390,7 +360,7 @@ Each image hangs below the text baseline. The top edge of each image is on the b
 ```
 
 {{< callout >}}
-The `vertical-align` attribute only takes effect when images are used inline within a paragraph. It has no effect when an image is placed directly via `[PlaceObject]({{< relref "/reference/placeobject" >}})`.
+The `vertical-align` attribute only takes effect when images are used inline within a paragraph. It has no effect when an image is placed directly via `[PlaceObject]({{< relref "/reference/commands/placeobject" >}})`.
 {{< /callout >}}
 
 ## Other parameters

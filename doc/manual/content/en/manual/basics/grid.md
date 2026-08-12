@@ -7,7 +7,7 @@ type: docs
 
 The grid is a set of invisible lines or boxes to which objects are aligned. It is familiar from newspaper printing, for example, where there are often five or six columns. All pictures or advertisements then fill one or more columns. Likewise, there are often grid lines in catalogues that work in a similar way. In this way a clear layout is achieved.
 
-The speedata Publisher always works with such a grid. Since every publication is different, there is no way to find a sensible default for it. By default the grid is set to a size of 1cm × 1cm. It applies to the page as well as all positioning frames and groups. You can display the grid with `sp --grid` or `<Trace grid="yes"/>` in the layout.
+The speedata Publisher always works with such a grid. Since every publication is different, there is no way to find a sensible default for it. By default the grid is set to a size of 1cm × 1cm. It applies to the page as well as all positioning frames and groups. You can display the grid with `sp --grid` or `<Trace grid="yes"/>` in the layout. All switches of the `<Trace>` command are listed in the chapter [Troubleshooting / Debugging]({{< relref "troubleshooting" >}}).
 
 ```xml
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
@@ -169,43 +169,5 @@ Absolutely placed objects do not occupy areas in the grid by default. In this ca
 
 ## Separate grids in groups
 
-The following is an example of a grid within a group that differs from the global grid.
-Without the explicit `<Grid ... />` specification, the grid is taken from the page.
-
-```xml
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-  xmlns:sd="urn:speedata:2009/publisher/functions/en">
-
-  <SetGrid nx="4" ny="4"/>
-  <Trace grid="yes" gridallocation="yes" objects="yes"/>
-
-  <Record element="data">
-    <Group name="table">
-      <Grid width="1cm" height="12pt"/>
-      <Contents>
-        <PlaceObject>
-          <Table width="4" stretch="max">
-            <Tr>
-              <Td><Paragraph><Value>Cell 1/1</Value></Paragraph></Td>
-              <Td><Paragraph><Value>Cell 2/1</Value></Paragraph></Td>
-            </Tr>
-            <Tr>
-              <Td><Paragraph><Value>Cell 1/2</Value></Paragraph></Td>
-              <Td><Paragraph><Value>Cell 2/2</Value></Paragraph></Td>
-            </Tr>
-          </Table>
-        </PlaceObject>
-        <PlaceObject row="4" column="2">
-          <Image file="ocean.pdf" width="3"/>
-        </PlaceObject>
-      </Contents>
-    </Group>
-
-    <PlaceObject groupname="table"/>
-  </Record>
-</Layout>
-```
-{{% codecaption %}}The group has its own grid that is independent of the page grid.{{% /codecaption %}}
-
-![Section of a page. The grid within the group is much finer than the coarse page grid.](/img/08-raster4.png)
-
+Groups can have their own grid that is independent of the page grid, for example for finer positioning.
+This is described in the section [Separate grids in groups]({{< relref "groups#separate-grids-in-groups" >}}).

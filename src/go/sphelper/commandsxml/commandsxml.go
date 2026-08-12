@@ -907,11 +907,11 @@ func descriptiontext(c *Commands, text []byte, lang string) string {
 				if err != nil {
 					panic(err)
 				}
-				ret = append(ret, p.String(lang))
+				ret = append(ret, strings.TrimSpace(p.String(lang)))
 			}
 		}
 	}
-	return strings.Join(ret, "")
+	return strings.Join(ret, " ")
 
 }
 
@@ -1336,7 +1336,29 @@ func (c *Commands) Commands() []*Command {
 type Commands struct {
 	commandsEn       map[string]*Command
 	commandsSortedEn []*Command
+	commandGroups    []*CommandGroup
 	defines          map[string]*define
+}
+
+// CommandGroup is a thematic group of commands, used for the overview page of
+// the reference documentation.
+type CommandGroup struct {
+	nameEn   string
+	nameDe   string
+	Commands []*Command
+}
+
+// Name returns the title of the group in the given language.
+func (cg *CommandGroup) Name(lang string) string {
+	if lang == "de" {
+		return cg.nameDe
+	}
+	return cg.nameEn
+}
+
+// CommandGroups returns the thematic command groups in document order.
+func (c *Commands) CommandGroups() []*CommandGroup {
+	return c.commandGroups
 }
 
 // sorting (de, en)
@@ -1358,6 +1380,17 @@ func (s attributesbyen) Less(i, j int) bool {
 
 // ReadCommandsFile reads from the reader. It must be in the format of a commands file.
 func ReadCommandsFile(r io.Reader) (*Commands, error) {
+	type xmlCommandGroups struct {
+		Groups []struct {
+			En  string `xml:"en,attr"`
+			De  string `xml:"de,attr"`
+			Cmd []struct {
+				Name string `xml:"name,attr"`
+			} `xml:"cmd"`
+		} `xml:"commandgroup"`
+	}
+	var rawgroups xmlCommandGroups
+
 	commands := &Commands{}
 	commands.defines = make(map[string]*define)
 	commands.commandsEn = make(map[string]*Command)
@@ -1384,6 +1417,11 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 					return nil, err
 				}
 				commands.defines[d.Name] = d
+			case "commandgroups":
+				err = dec.DecodeElement(&rawgroups, &v)
+				if err != nil {
+					return nil, err
+				}
 			case "command":
 				c := &Command{}
 				c.commands = commands
@@ -1422,6 +1460,17 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 	// have to be called at least once. I know this sucks...
 	for _, v := range commands.commandsEn {
 		v.Childelements()
+	}
+	for _, g := range rawgroups.Groups {
+		group := &CommandGroup{nameEn: g.En, nameDe: g.De}
+		for _, cmd := range g.Cmd {
+			if c, ok := commands.commandsEn[cmd.Name]; ok {
+				group.Commands = append(group.Commands, c)
+			} else {
+				fmt.Printf("commandgroup %q: unknown command %q\n", g.En, cmd.Name)
+			}
+		}
+		commands.commandGroups = append(commands.commandGroups, group)
 	}
 	return commands, nil
 }

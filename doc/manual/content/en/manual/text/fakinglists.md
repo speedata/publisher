@@ -10,7 +10,7 @@ The publisher has various options for creating enumeration lists.
 
 ## Enumeration lists with Ol and Ul
 
-Numbered and unnumbered lists can be created with [`<Ul>`]({{< relref "/reference/ul" >}}) and [`<Ol>`]({{< relref "/reference/ol" >}}):
+Numbered and unnumbered lists can be created with [`<Ul>`]({{< relref "/reference/commands/ul" >}}) and [`<Ol>`]({{< relref "/reference/commands/ol" >}}):
 
 ```xml
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
@@ -113,7 +113,7 @@ You can set a left margin or a hanging indent for text formats. This allows you 
 
 ## Enumeration lists with labels in Paragraph
 
-The command [`<paragraph>`]({{< relref "/reference/paragraph" >}}) can display characters to the left of the paragraph:
+The command [`<paragraph>`]({{< relref "/reference/commands/paragraph" >}}) can display characters to the left of the paragraph:
 
 ```xml
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
@@ -146,7 +146,7 @@ The command [`<paragraph>`]({{< relref "/reference/paragraph" >}}) can display c
 </Layout>
 ```
 
-This can also be used for bulleted lists. This has the advantage that paragraphs can also be wrapped in the [`<output>`]({{< relref "/reference/output" >}}) command.
+This can also be used for bulleted lists. This has the advantage that paragraphs can also be wrapped in the [`<output>`]({{< relref "/reference/commands/output" >}}) command.
 
 ![olulparlabel.png](/img/olulparlabel.png)
 
@@ -192,51 +192,5 @@ Here you have the option of nesting and specially formatting lists:
 
 ![olulhtmlnested.png](/img/olulhtmlnested.png)
 
-For the styling, you can use CSS:
-
-```xml
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-    xmlns:sd="urn:speedata:2009/publisher/functions/en">
-
-    <Pageformat width="100mm" height="100mm" />
-    <Stylesheet >
-        ul {
-            list-style: none;
-            padding-left: 1em;
-        }
-
-        ul li::before {
-            content: "\25e6";
-            color: red;
-            display: inline-block;
-            width:1em;
-        }
-    </Stylesheet>
-
-    <Record element="data">
-        <PlaceObject>
-            <Textblock>
-                <Paragraph>
-                    <Value select="." />
-                </Paragraph>
-            </Textblock>
-        </PlaceObject>
-    </Record>
-
-</Layout>
-```
-
-and the following data file:
-
-```xml
-<data>
-   <ul>
-      <li>Lorem ipsum</li>
-      <li>dolor sit amet</li>
-      <li>consectetur adipisicing elit</li>
-   </ul>
-</data>
-```
-
-![olulhtmlcolor.png](/img/olulhtmlcolor.png)
-
+The lists and their markers can be styled with CSS, for example `li::marker` for the color and character of the bullet.
+The details (indentation, supported properties, marker styling) are described in the section [Lists in HTML]({{< relref "/manual/webformats/html#lists-in-html" >}}).

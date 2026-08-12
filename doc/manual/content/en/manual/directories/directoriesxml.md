@@ -1,6 +1,6 @@
 ---
 title: "Creating lists (XML structure)"
-weight: 46
+weight: 45
 type: docs
 ---
 
@@ -15,8 +15,7 @@ The next time the Publisher is run, this data is read in and is available.
 
 ## Step 1: Collecting the information
 
-The two commands [`<Element>`]({{< relref "/reference/element" >}}) and [`<Attribute>`]({{< relref "/reference/attribute" >}}) are used to structure data that is read during processing.
-This has already been described in the chapter [elementattribute]({{< relref "elementattribut" >}}).
+The two commands [`<Element>`]({{< relref "/reference/commands/element" >}}) and [`<Attribute>`]({{< relref "/reference/commands/attribute" >}}) are used to structure data that is read during processing.
 These commands can be used to create new XML data set files.
 The following structure could be useful for an article list:
 
@@ -47,9 +46,11 @@ To create this structure in the layout rules, it must be composed of the command
 </Element>
 ```
 
+Text content outside of attributes, such as mixed content, cannot be created this way.
+
 ## Step 2: Saving and loading the information
 
-With the command [`<SaveDataset>`]({{< relref "/reference/savedataset" >}}) this structure is saved to disk and with [`<LoadDataset>`]({{< relref "/reference/loaddataset" >}}) it is loaded again.
+With the command [`<SaveDataset>`]({{< relref "/reference/commands/savedataset" >}}) this structure is saved to disk and with [`<LoadDataset>`]({{< relref "/reference/commands/loaddataset" >}}) it is loaded again.
 If the file does not exist when loading, no error is reported, because it could be the first pass where the file naturally does not yet exist.
 
 ## Step 3: Processing the information
@@ -62,11 +63,11 @@ Immediately after loading, XML processing is continued with the first element of
 </Record>
 ```
 
-This means that the actual data processing is temporarily interrupted and continued with the new data set from [`<LoadDataset>`]({{< relref "/reference/loaddataset" >}}).
+This means that the actual data processing is temporarily interrupted and continued with the new data set from [`<LoadDataset>`]({{< relref "/reference/commands/loaddataset" >}}).
 
 ## Example
 
-This is the same example as in the previous section ([directories-marker]({{< relref "directoriesmarker" >}})). A simple data file is used as an example:
+This is the same example as in the previous section ([Markers]({{< relref "directoriesmarker" >}})). A simple data file is used as an example:
 
 ```xml
 <data>

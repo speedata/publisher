@@ -171,7 +171,7 @@ Mit [pdfuaanalyze](https://github.com/speedata/pdfuaanalyze) kann man sich die S
 </Document>
 ```
 
-Der speedata Publisher kann den Strukturbaum auch als XML-Datei ausgeben. Dazu wird der Befehl `Trace` mit dem Attribut `dump-structtree` verwendet:
+Der speedata Publisher kann den Strukturbaum auch als XML-Datei ausgeben. Dazu wird der Befehl `Trace` mit dem Attribut `dump-structtree` verwendet (alle Trace-Schalter listet das Kapitel [Fehlerbehebung / Debugging]({{< relref "troubleshooting" >}}) auf):
 
 ```xml
 <Trace dump-structtree="yes" />

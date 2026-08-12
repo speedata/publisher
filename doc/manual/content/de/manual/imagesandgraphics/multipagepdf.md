@@ -1,0 +1,47 @@
+---
+title: "Mehrseitige PDF-Dateien einbetten"
+weight: 53
+type: docs
+---
+
+
+
+Mehrere Seiten einer PDF-Datei einzubinden ist einfach.
+Mithilfe der Layoutfunktion `sd:number-of-pages()` kann man ermitteln, wie viele Seiten eine PDF-Datei hat.
+Bei dem Befehl `<Image>`, um ein Bild einzubinden, kann man die gewünschte Seitenzahl angeben.
+So ist das Muster, alle Seiten einer PDF-Datei einzubinden, wie folgt:
+
+```xml
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="data">
+    <SetVariable variable="myfile" select="'multipage.pdf'"/> <!--1-->
+    <Loop select="sd:number-of-pages($myfile)" variable="page"> <!--2-->
+      <PlaceObject column="0mm" row="0mm">
+        <Image file="{$myfile}" width="210mm" page="{$page}"/>
+      </PlaceObject>
+      <ClearPage/>
+    </Loop>
+  </Record>
+
+</Layout>
+```
+1. Zuerst wird der Dateiname in der Variablen `myfile` gespeichert. Das ist nicht zwingend notwendig. Wichtig sind die einfachen Anführungszeichen innerhalb der doppelten Anführungszeichen von `select`, damit wird die Zeichenkette `multipage.pdf` gespeichert.
+2. Die Schleife (`<Loop>`) wird genau so oft durchlaufen, wie die PDF-Datei Seiten hat, die Nummer des Schleifendurchlaufs wird in der Variablen `page` gesichert.
+
+Um auf die Variablen zuzugreifen benötigt man die geschweiften Klammern, da weder `file` noch `page` einen XPath-Ausdruck erwarten, sondern einen festen Wert.
+Damit man auf die Variablen zugreifen kann, muss vorübergehend in den XPath-Modus gesprungen werden. So wird aus
+
+```xml
+file="{$myfile}"
+```
+
+durch die Ersetzung
+
+```xml
+file="multipage.pdf"
+```
+
+Die eingebundenen Seiten lassen sich nachträglich natürlich auch »überschreiben«, also mit einer Seitenzahl oder einem Bild (Wasserzeichen oder ähnliches).
+

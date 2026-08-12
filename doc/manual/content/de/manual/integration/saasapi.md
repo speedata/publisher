@@ -1,10 +1,10 @@
 ---
-linktitle: "Publisher Webservice API"
+title: "Publisher Webservice API"
 weight: 70
 type: docs
 ---
 
-# Publisher Webservice API {{< profeature "Verfügbar im PRO-Paket" >}}
+{{< profeature "Verfügbar im PRO-Paket" >}}
 
 Der speedata Publisher kann auch ohne lokale Installation benutzt werden.
 Dafür steht unter https://api.speedata.de eine sogenannte Software-as-a-Service Lösung zur Verfügung, die über eine REST-Schnittstelle benutzt werden kann.

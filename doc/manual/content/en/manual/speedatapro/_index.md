@@ -10,7 +10,7 @@ The speedata Publisher is available in two plans: Standard and Pro. The Pro plan
 * Support via e-mail
 * [Server-Modus (REST API)]({{< relref "servermode" >}}) (REST API for local networks)
 * [Starting the Publisher via the Hotfolder]({{< relref "hotfolder" >}}) (for fully automatic publisher startup)
-* [QR codes and barcodes]({{< relref "/reference/barcode" >}})
+* [QR codes and barcodes]({{< relref "/reference/commands/barcode" >}})
 * Embedding of ZUGFeRD invoices
 * Embedding of resources via HTTP(s), e.g. for media databases
 * [bleed]({{< relref "cutmarks" >}})

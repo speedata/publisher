@@ -86,44 +86,7 @@ Falls die natürliche Größe des Bildes kleiner ist als die vorgegebenen Angabe
 
 ## Drehen von Bildern
 
-Mit dem Attribut `rotate` kann man Bilder in 90-Grad-Schritten drehen (positive Werte: im Uhrzeigersinn).
-Das nachfolgende Beispiel dreht ein Bild um 90 Grad gegen den Uhrzeigersinn, wenn es sich um ein Hochformat-Bild handelt.
-Mit dem XPath-Befehl `sd:aspectratio(<Dateiname>)` kann man das Seitenverhältnis eines Bildes ermitteln.
-Wenn es größer als 1 ist, dann handelt es sich um ein Bild im Querformat.
-
-Mit der Datensatzdatei in Listing   und der Layoutdatei in  wird das zweite Bild um 90° gegen den Uhrzeigersinn gedreht.
-
-```xml
-<data>
-  <img file="_samplea.pdf" />
-  <img file="_sampleb.pdf" />
-</data>
-```
-{{% codecaption %}}Datensatzdatei{{% /codecaption %}}
-
-```xml
-<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
-  xmlns="urn:speedata.de:2009/publisher/en">
-
-  <Record element="data">
-    <ForAll select="img">
-      <PlaceObject>
-        <Image file="{@file}" width="5"
-          rotate="{if ( sd:aspectratio(@file) &lt; 1 ) then '-90' else '0'}"/>
-      </PlaceObject>
-    </ForAll>
-  </Record>
-</Layout>
-```
-{{% codecaption %}}Das Bild wird um 90 Grad gedreht, wenn es ein hochformatiges Bild ist.{{% /codecaption %}}
-
-![Das zweite Bild wird um 90° gedreht, weil es im Hochformat ist.](/img/drehungaspectratio.png)
-
-{{< callout >}}
-Die geschweiften Klammern bei `file` und `rotate` bedeuten, dass in den XPath-Modus gesprungen wird, um die XPath-Ausdrücke (Zugriff auf das Attribut `file` und die Wenn-Dann-Abfrage) auszuwerten. Mehr dazu im Abschnitt [XPath- und Layoutfunktionen]({{< relref "xpath" >}}).
-{{< /callout >}}
-
-_Achtung: ist das Bild im Argument von `sd:aspectratio()` nicht im Dateisystem vorhanden, wird der Wert von dem Platzhalterbild (Kapitel [filenotfound]({{< relref "imagesandgraphics" >}})) genommen. Um zu überprüfen, ob ein Bild überhaupt vorhanden ist, kann man den Befehl `sd:file-exists(<Dateiname>)` benutzen._
+Das Drehen von Bildern und anderen Objekten beschreibt der Abschnitt [Rotation von Inhalten]({{< relref "rotatingthings" >}}).
 
 ## Speicherort der Bilddateien
 
@@ -222,9 +185,7 @@ Die Box, die mit den angegebenen Größen angezeigt werden soll, wird mit dem At
 
 bedeutet, dass die »artbox« in der Größe 210mm × 297mm dargestellt wird.
 
-Das Attribut `page` wird auch im Abschnitt [mehrseitigepdf]({{< relref "multipagepdf" >}}) beschrieben.
-Es dient dazu, die Seite auszuwählen, wenn eine PDF-Datei eingebunden wird.
-Mit `sd:number-of-pages(‹Dateiname›)` kann ermittelt werden, wie viele Seiten eine PDF-Datei enthält.
+Die Auswahl der Seite über das Attribut `page` und die Layoutfunktion `sd:number-of-pages()` beschreibt der Abschnitt [Mehrseitige PDF-Dateien einbetten]({{< relref "multipagepdf" >}}).
 
 ### Angabe der Seite bei Layout-Funktionen
 
@@ -341,14 +302,14 @@ Zu MetaPost gibt es ein [eigenes Kapitel]({{< relref "metapostgraphics" >}}). Hi
     <Value>....</Value>
 </Image>
 ```
-3. Als Referenz bei Seitentypen ([AtPageCreation]({{< relref "/reference/atpagecreation" >}}), [AtPageShipout]({{< relref "/reference/atpageshipout" >}})), bei [Td]({{< relref "/reference/td" >}}) und bei Boxen ([Box]({{< relref "/reference/box" >}})).
+3. Als Referenz bei Seitentypen ([AtPageCreation]({{< relref "/reference/commands/atpagecreation" >}}), [AtPageShipout]({{< relref "/reference/commands/atpageshipout" >}})), bei [Td]({{< relref "/reference/commands/td" >}}) und bei Boxen ([Box]({{< relref "/reference/commands/box" >}})).
 
 Siehe auch das Kapitel über [MetaPost]({{< relref "metapostgraphics" >}}) sowie die [MetaPost-Beispiele](https://github.com/speedata/examples/tree/master/metapost).
 
 ## Bildgröße und Auflösung {{< profeature "Verfügbar im PRO-Paket" >}}
 
 Große Bilddateien erzeugen auch große PDF-Dateien, wenn sie eingebunden werden, unabhängig davon, wie breit und hoch sie im PDF dargestellt werden.
-Möchte man die Auflösung (und damit die Dateigröße) begrenzen, kann man dies mit der `dpi`-Option bei [PDFOptions]({{< relref "/reference/pdfoptions" >}}) erreichen.
+Möchte man die Auflösung (und damit die Dateigröße) begrenzen, kann man dies mit der `dpi`-Option bei [PDFOptions]({{< relref "/reference/commands/pdfoptions" >}}) erreichen.
 DPI steht für Punkte pro Zoll (dots per inch) und ist eine Maßeinheit für die Pixeldichte.
 Je geringer die Zahl, desto »schlechter« sieht das Bild aus.
 Durch eine Begrenzung der Auflösung erhält man teilweise wesentlich kleinere Dateien.
@@ -378,11 +339,11 @@ Wichtig ist, dass auch ein extensionhandler für die Dateiendung (im Beispiel `j
 
 ## Vertikale Ausrichtung von Bildern im Absatz
 
-Bilder können innerhalb eines `[Paragraph]({{< relref "/reference/paragraph" >}})`-Elements inline platziert werden, zusammen mit Text oder anderen Bildern.
+Bilder können innerhalb eines `[Paragraph]({{< relref "/reference/commands/paragraph" >}})`-Elements inline platziert werden, zusammen mit Text oder anderen Bildern.
 Standardmäßig stehen alle Bilder auf der Textgrundlinie und ragen mit ihrer gesamten Höhe nach oben.
 Bei Bildern unterschiedlicher Höhe kann das ungleichmäßig aussehen.
 
-Das Attribut `vertical-align` auf `[Image]({{< relref "/reference/image" >}})` steuert, wie Bilder zueinander und zum Text ausgerichtet werden.
+Das Attribut `vertical-align` auf `[Image]({{< relref "/reference/commands/image" >}})` steuert, wie Bilder zueinander und zum Text ausgerichtet werden.
 Vier Modi stehen zur Verfügung:
 
 ### baseline (Standard)
@@ -434,7 +395,7 @@ Jedes Bild hängt unterhalb der Textgrundlinie. Die Oberkante jedes Bildes liegt
 ```
 
 {{< callout >}}
-Das Attribut `vertical-align` wirkt nur, wenn Bilder inline in einem Absatz verwendet werden. Bei direkter Platzierung über `[PlaceObject]({{< relref "/reference/placeobject" >}})` hat es keine Auswirkung.
+Das Attribut `vertical-align` wirkt nur, wenn Bilder inline in einem Absatz verwendet werden. Bei direkter Platzierung über `[PlaceObject]({{< relref "/reference/commands/placeobject" >}})` hat es keine Auswirkung.
 {{< /callout >}}
 
 ## Weitere Parameter

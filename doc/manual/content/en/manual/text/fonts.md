@@ -8,7 +8,7 @@ type: docs
 Embedding fonts in the common formats is very easy. The formats TrueType and OpenType (files .ttf and .otf) are supported.
 
 {{< callout type="warning" >}}
-Type 1 fonts (files `.pfb`) are deprecated. They are still loaded with the old fontforge font handler, but this handler will be removed in a future version. Please convert Type 1 fonts to OpenType.
+Type 1 fonts (files `.pfb`) are deprecated. They are still loaded with the old fontforge font handler, but this handler is scheduled for removal in version 6.0. Please convert Type 1 fonts to OpenType.
 {{< /callout >}}
 
 To make fonts known and used by the publisher, two steps are necessary. The first step is to load a font file:
@@ -64,7 +64,9 @@ There are several ways to switch to bold, italic, and bold-italic styles. The mo
 </PlaceObject>
 ```
 
-![Text markup in layout. Underline (not shown) is possible with the command `<U>`.](/img/14-fonts.png)
+![Text markup in layout.](/img/14-fonts.png)
+
+Further markup commands such as `<U>` (underline), `<Sub>`/`<Sup>`, `<Color>` or `<A>` are described in the section [Text formatting]({{< relref "textformatting" >}}).
 
 ## Text markup in the data
 
@@ -91,7 +93,7 @@ with the corresponding data:
 The result is the same as above. The tags can also be written in capital letters in the data: `<B>` instead of `<b>`. Nesting is also allowed and again `<u>` is underlined.
 
 {{< callout >}}
-If the data is not in well-formed XML but in HTML format for example, you can use the layout function `sd:decode-html()` to interpret it.
+If the data is not in well-formed XML but in HTML format for example, you can use the layout function `sd:decode-html()` to interpret it. An example is shown in the section [HTML in Paragraph]({{< relref "/manual/webformats/html#html-in-paragraph" >}}).
 {{< /callout >}}
 
 ## Outline font

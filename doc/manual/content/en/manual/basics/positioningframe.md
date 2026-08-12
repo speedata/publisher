@@ -1,5 +1,5 @@
 ---
-title: "Areas on the page"
+title: "Placement areas"
 weight: 41
 type: docs
 ---
@@ -107,7 +107,7 @@ The following example illustrates the behavior of the cursor.
 
 ## Overflow of texts into the next frame
 
-When outputting texts using the commands `<Output>`/`<Text>`, page breaks can occur in texts, as described in the section [outputobjects-output]({{< relref "outputtingobjects" >}}). This works not only for page boundaries, but also for areas on the pages, provided that they have the same name.
+When outputting texts using the commands `<Output>`/`<Text>`, page breaks can occur in texts, as described in the section [Placing objects]({{< relref "outputtingobjects" >}}). This works not only for page boundaries, but also for areas on the pages, provided that they have the same name.
 
 This page definition serves as an example:
 

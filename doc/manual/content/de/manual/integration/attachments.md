@@ -1,4 +1,5 @@
 ---
+title: "Dateianhänge"
 weight: 78
 type: docs
 ---
@@ -39,7 +40,7 @@ Die PDF-Ausgabe muss noch auf PDF/A-3 gestellt werden:
 <PDFOptions format="PDF/A-3" />
 ```
 
-Das passiert automatisch, sofern der Befehl [`<AttachFile>`]({{< relref "/reference/attachfile" >}}) am Anfang des Dokuments (vor der ersten Seitenausgabe) ausgeführt wird.
+Das passiert automatisch, sofern der Befehl [`<AttachFile>`]({{< relref "/reference/commands/attachfile" >}}) am Anfang des Dokuments (vor der ersten Seitenausgabe) ausgeführt wird.
 
 {{< callout >}}
 Damit ein PDF-Dokument mit PDF/A-3 konform ist, müssen die Farben passend zu den Farbprofilen benutzt werden. In der PDF/A-3 Voreinstellung wird ein OutputIntent für ein CMYK-Farbprofil definiert. Entsprechend müssen die Farben im Dokument in diesem Farbraum definiert werden. Oder es muss ein anderes Farbprofil eingebettet werden.

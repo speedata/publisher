@@ -830,6 +830,148 @@
     <format command="HTML" inline="yes"/>
   </lspannotations>
 
+  <!-- Thematic grouping of all commands. Used for the overview page
+       of the reference documentation. Every command should appear in
+       exactly one group; the documentation generator warns about
+       commands that are missing here. -->
+  <commandgroups>
+    <commandgroup en="Structure and settings" de="Grundstruktur und Einstellungen">
+      <cmd name="Layout"/>
+      <cmd name="Include"/>
+      <cmd name="Section"/>
+      <cmd name="Compatibility"/>
+      <cmd name="Options"/>
+      <cmd name="AddSearchpath"/>
+      <cmd name="Message"/>
+      <cmd name="Trace"/>
+    </commandgroup>
+    <commandgroup en="Data processing" de="Datenverarbeitung">
+      <cmd name="Record"/>
+      <cmd name="ProcessNode"/>
+      <cmd name="ForAll"/>
+      <cmd name="Copy-of"/>
+      <cmd name="Value"/>
+      <cmd name="SortSequence"/>
+      <cmd name="LoadDataset"/>
+      <cmd name="SaveDataset"/>
+      <cmd name="Element"/>
+      <cmd name="Attribute"/>
+    </commandgroup>
+    <commandgroup en="Programming" de="Programmierung">
+      <cmd name="SetVariable"/>
+      <cmd name="Function"/>
+      <cmd name="Param"/>
+      <cmd name="Switch"/>
+      <cmd name="Case"/>
+      <cmd name="Otherwise"/>
+      <cmd name="Loop"/>
+      <cmd name="While"/>
+      <cmd name="Until"/>
+    </commandgroup>
+    <commandgroup en="Pages and grid" de="Seiten und Raster">
+      <cmd name="Pageformat"/>
+      <cmd name="Pagetype"/>
+      <cmd name="Margin"/>
+      <cmd name="AtPageCreation"/>
+      <cmd name="AtPageShipout"/>
+      <cmd name="ClearPage"/>
+      <cmd name="DefineMatter"/>
+      <cmd name="InsertPages"/>
+      <cmd name="SavePages"/>
+      <cmd name="PositioningArea"/>
+      <cmd name="PositioningFrame"/>
+      <cmd name="SetGrid"/>
+      <cmd name="Grid"/>
+      <cmd name="NextRow"/>
+      <cmd name="NextFrame"/>
+    </commandgroup>
+    <commandgroup en="Output of objects" de="Ausgabe von Objekten">
+      <cmd name="PlaceObject"/>
+      <cmd name="Textblock"/>
+      <cmd name="Text"/>
+      <cmd name="Output"/>
+      <cmd name="Image"/>
+      <cmd name="Box"/>
+      <cmd name="Circle"/>
+      <cmd name="Rule"/>
+      <cmd name="Barcode"/>
+      <cmd name="Frame"/>
+      <cmd name="Clip"/>
+      <cmd name="Transformation"/>
+      <cmd name="Overlay"/>
+      <cmd name="Position"/>
+      <cmd name="Group"/>
+      <cmd name="Groupcontents"/>
+      <cmd name="Contents"/>
+      <cmd name="DefineGraphic"/>
+    </commandgroup>
+    <commandgroup en="Text and paragraphs" de="Text und Absätze">
+      <cmd name="Paragraph"/>
+      <cmd name="B"/>
+      <cmd name="I"/>
+      <cmd name="U"/>
+      <cmd name="Sub"/>
+      <cmd name="Sup"/>
+      <cmd name="Span"/>
+      <cmd name="Br"/>
+      <cmd name="NoBreak"/>
+      <cmd name="Initial"/>
+      <cmd name="HSpace"/>
+      <cmd name="VSpace"/>
+      <cmd name="URL"/>
+      <cmd name="Hyphenation"/>
+      <cmd name="DefineTextformat"/>
+    </commandgroup>
+    <commandgroup en="Fonts" de="Schriften">
+      <cmd name="DefineFontfamily"/>
+      <cmd name="Regular"/>
+      <cmd name="Bold"/>
+      <cmd name="Italic"/>
+      <cmd name="BoldItalic"/>
+      <cmd name="DefineFontalias"/>
+      <cmd name="Fallback"/>
+      <cmd name="LoadFontfile"/>
+      <cmd name="Fontface"/>
+      <cmd name="Axis"/>
+    </commandgroup>
+    <commandgroup en="Colors" de="Farben">
+      <cmd name="DefineColor"/>
+      <cmd name="Color"/>
+    </commandgroup>
+    <commandgroup en="Tables" de="Tabellen">
+      <cmd name="Table"/>
+      <cmd name="Columns"/>
+      <cmd name="Column"/>
+      <cmd name="Tablehead"/>
+      <cmd name="Tablefoot"/>
+      <cmd name="Tr"/>
+      <cmd name="Td"/>
+      <cmd name="Tablerule"/>
+      <cmd name="TableNewPage"/>
+    </commandgroup>
+    <commandgroup en="Lists" de="Listen">
+      <cmd name="Ol"/>
+      <cmd name="Ul"/>
+      <cmd name="Li"/>
+    </commandgroup>
+    <commandgroup en="Directories and references" de="Verzeichnisse und Verweise">
+      <cmd name="Mark"/>
+      <cmd name="Makeindex"/>
+      <cmd name="Bookmark"/>
+      <cmd name="A"/>
+    </commandgroup>
+    <commandgroup en="HTML and CSS" de="HTML und CSS">
+      <cmd name="HTML"/>
+      <cmd name="Stylesheet"/>
+    </commandgroup>
+    <commandgroup en="PDF output" de="PDF-Ausgabe">
+      <cmd name="PDFOptions"/>
+      <cmd name="DefineColorprofile"/>
+      <cmd name="AttachFile"/>
+      <cmd name="StructureElement"/>
+    </commandgroup>
+  </commandgroups>
+
   <!--
       *************************
       * A
@@ -5430,11 +5572,11 @@
   <command en="LoadFontfile">
     <description xml:lang="en">
       <para>Load a font file (.otf, .ttf, .pfb) and associate it with an internal name. If a glyph is not found in the font file, an error will be raised (this can be configured via the <cmd name="Options"/> command). You can specify fallbacks as a child element of Loadfontfile.</para>
-      <para>Type 1 fonts (.pfb) are deprecated: they are always loaded with the old fontforge font handler, which will be removed in a future version. Please convert Type 1 fonts to OpenType.</para>
+      <para>Type 1 fonts (.pfb) are deprecated: they are always loaded with the old fontforge font handler, which is scheduled for removal in version 6.0. Please convert Type 1 fonts to OpenType.</para>
     </description>
     <description xml:lang="de">
       <para>Der Befehl LoadFontfile weist einer physikalischen Schriftdatei einen internen Namen zu. Wird ein Zeichen in der Schriftart nicht gefunden, erzeugt das Programm eine Fehlermeldung, die mit <cmd name="Options"/> ausgeschaltet werden kann. Alternativ dazu können auch Ersatzschriftarten (mit <cmd name="Fallback"/>) angegeben werden, die nach den fehlenden Zeichen abgesucht werden. </para>
-      <para>Type-1-Schriften (.pfb) sind veraltet: sie werden immer mit dem alten fontforge-Fonthandler geladen, der in einer zukünftigen Version entfernt wird. Bitte Type-1-Schriften nach OpenType konvertieren.</para>
+      <para>Type-1-Schriften (.pfb) sind veraltet: sie werden immer mit dem alten fontforge-Fonthandler geladen, der mit Version 6.0 entfernt werden soll. Bitte Type-1-Schriften nach OpenType konvertieren.</para>
     </description>
     <childelements>
       <optional>
@@ -5480,19 +5622,19 @@
         <para>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Voreinstellung ist 0. Der Wert wird mit 0,001em der aktuellen Schrift multipliziert, eine Einstellung von 200 erlaubt also, dass diese Zeichen 0,2em über den Rand hinausragen.</para>
       </description>
     </attribute>
-    <attribute en="mode" optional="yes" since="3.9.29">
+    <attribute en="mode" optional="yes" since="3.9.29" deprecated="yes">
       <description xml:lang="en">
-        <para>Set the shaping mode of the font. Defaults to <tt>harfbuzz</tt>.</para>
+        <para>Set the shaping mode of the font. Defaults to <tt>harfbuzz</tt>. This attribute is deprecated: it is only needed to select the old fontforge font handler, which is scheduled for removal in version 6.0.</para>
       </description>
       <description xml:lang="de">
-        <para>Setzt den Fonthandler. Voreinstellung ist <tt>harfbuzz</tt>.</para>
+        <para>Setzt den Fonthandler. Voreinstellung ist <tt>harfbuzz</tt>. Das Attribut ist veraltet: es wird nur benötigt, um den alten fontforge-Fonthandler auszuwählen, der mit Version 6.0 entfernt werden soll.</para>
       </description>
       <choice en="fontforge">
         <description xml:lang="en">
-          <para>The old font handler. Renders western scripts, but no right-to-left or other complex scripts. Deprecated: this font handler will be removed in a future version. Type 1 fonts (.pfb) are always loaded with this handler, regardless of the mode setting.</para>
+          <para>The old font handler. Renders western scripts, but no right-to-left or other complex scripts. Deprecated: this font handler is scheduled for removal in version 6.0. Type 1 fonts (.pfb) are always loaded with this handler, regardless of the mode setting.</para>
         </description>
         <description xml:lang="de">
-          <para>Der alte Fonthandler. Funktioniert mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen. Veraltet: dieser Fonthandler wird in einer zukünftigen Version entfernt. Type-1-Schriften (.pfb) werden unabhängig von dieser Einstellung immer mit diesem Fonthandler geladen.</para>
+          <para>Der alte Fonthandler. Funktioniert mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen. Veraltet: dieser Fonthandler soll mit Version 6.0 entfernt werden. Type-1-Schriften (.pfb) werden unabhängig von dieser Einstellung immer mit diesem Fonthandler geladen.</para>
         </description>
       </choice>
       <choice en="harfbuzz">
@@ -5679,10 +5821,10 @@
     </attribute>
     <attribute en="require" type="text" optional="yes" since="4.15.10">
       <description xml:lang="en">
-        <para>A comma separated list of required default features. Currently supported features are <tt>luxor</tt>/<tt>lxpath</tt> and <tt>harfbuzz</tt>/<tt>fontforge</tt>.</para>
+        <para>A comma separated list of required default features. Currently supported features are <tt>luxor</tt>/<tt>lxpath</tt> and <tt>harfbuzz</tt>/<tt>fontforge</tt>. The features <tt>luxor</tt> and <tt>fontforge</tt> are deprecated and scheduled for removal in version 6.0.</para>
       </description>
       <description xml:lang="de">
-        <para>Kommaseparierte Liste mit erforderlichen Features. Erlaubt sind <tt>luxor</tt>/<tt>lxpath</tt> und <tt>harfbuzz</tt>/<tt>fontforge</tt></para>
+        <para>Kommaseparierte Liste mit erforderlichen Features. Erlaubt sind <tt>luxor</tt>/<tt>lxpath</tt> und <tt>harfbuzz</tt>/<tt>fontforge</tt>. Die Features <tt>luxor</tt> und <tt>fontforge</tt> sind veraltet und sollen mit Version 6.0 entfernt werden.</para>
       </description>
     </attribute>
     <example xml:lang="en">
@@ -7253,7 +7395,7 @@
       * Paragraph
       *************************
   -->
-  <command en="Paragraph" css="p">
+  <command en="Paragraph">
     <description xml:lang="en">
       <para>Insert a paragraph of text. The width of the paragraph is inherited from the surrounding element.</para>
     </description>
@@ -7325,7 +7467,7 @@
         </description>
       </choice>
     </attribute>
-    <attribute en="color" type="text" css="color" optional="yes">
+    <attribute en="color" type="text" optional="yes">
       <description xml:lang="en">
         <para>Color of the paragraph. Must be defined with <cmd name="DefineColor"/> before use.</para>
       </description>
@@ -7341,7 +7483,7 @@
         <para>Die Laufrichtung des Textes (ltr oder rtl)</para>
       </description>
     </attribute>
-    <attribute en="fontfamily" css="font-family" type="text" optional="yes">
+    <attribute en="fontfamily" type="text" optional="yes">
       <description xml:lang="en">
         <para>The name of the font family for the paragraph. The default is “text” (lowercase t).</para>
       </description>

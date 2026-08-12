@@ -8,7 +8,7 @@ type: docs
 Textformate dienen zur Steuerung der Absätze.
 Hierüber lassen sich verschiedene Dinge wie Texteinzug, Textausrichtung, Hurenkinder und Schusterjungen, Umbruchverhalten und mehr steuern.
 
-Die einzelnen Parameter werden in der Referenz unter [`<DefineTextformat>`]({{< relref "/reference/definetextformat" >}}) beschrieben.
+Die einzelnen Parameter werden in der Referenz unter [`<DefineTextformat>`]({{< relref "/reference/commands/definetextformat" >}}) beschrieben.
 
 ## Übersicht aller Attribute
 
@@ -134,7 +134,7 @@ Um dennoch einen Text an einem Stück auszugeben, der erst aus den Daten zusamme
 
 ## Tracing
 
-Der Befehl `<Trace textformat="yes"/>` aktiviert »tooltips« im PDF über den Texten, die das dort verwendete Textformat ausgeben.
+Der Befehl `<Trace textformat="yes"/>` aktiviert »tooltips« im PDF über den Texten, die das dort verwendete Textformat ausgeben. Alle Schalter des Befehls `<Trace>` listet das Kapitel [Fehlerbehebung / Debugging]({{< relref "troubleshooting" >}}) auf.
 
 ![Tooltip mit dem Textformat](/img/tracetextformat.png)
 

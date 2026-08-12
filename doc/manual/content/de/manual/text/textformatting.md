@@ -60,7 +60,7 @@ Unter diesem Punkt finden sich Einstellungen, die kleine, manchmal unscheinbare 
 
 ### Absatzumbruch und Zeichenerweiterung
 
-In der Voreinstellung des speedata Publishers, dürfen Zeichen ein wenig gestreckt oder gestaucht werden, damit ein Absatz besser umbrechen kann. Das tritt in der Regel nur in sehr schmalen Spalten auf, wenn zu große Leerräume zwischen den Wörtern entstehen würden. Dieses Verhalten kann man über den Befehl [`<Options>`]({{< relref "/reference/options" >}}) steuern.
+In der Voreinstellung des speedata Publishers, dürfen Zeichen ein wenig gestreckt oder gestaucht werden, damit ein Absatz besser umbrechen kann. Das tritt in der Regel nur in sehr schmalen Spalten auf, wenn zu große Leerräume zwischen den Wörtern entstehen würden. Dieses Verhalten kann man über den Befehl [`<Options>`]({{< relref "/reference/commands/options" >}}) steuern.
 
 ```xml
 <Options fontexpansion="yes" />
@@ -77,7 +77,7 @@ Die folgenden Werte sind erlaubt:
 `yes`
 : (Voreinstellung) Der Absatzumbruch wird mit verschiedenen Zeichenbreiten ausprobiert und dann das beste Ergebnis genommen.
 
-Es gibt noch folgende Attribute bei [`<Options>`]({{< relref "/reference/options" >}}), um den Grad der Zeichenerweiterung einzustellen:
+Es gibt noch folgende Attribute bei [`<Options>`]({{< relref "/reference/commands/options" >}}), um den Grad der Zeichenerweiterung einzustellen:
 
 `fontstretch`
 : Die Angabe, um wie viel Prozent die Zeichen gestreckt werden dürfen. Angabe ist in 0,1 Prozent: ein Wert von 20 bedeutet 2%. Voreinstellung ist 40 (= 4%).
@@ -158,28 +158,8 @@ Folgende Unicode-Leerzeichen werden vom speedata Publisher interpretiert:
 
 ## Aufzählungslisten
 
-Anstelle eines Absatzes kann auch eine Aufzählungsliste erscheinen.
-Diese wird mit `<Ol>`  bzw. `<Ul>` für eine Liste mit Nummerierung (ordered list) und eine Liste mit Punkten (unordered list) angegeben.
-Die einzelnen Punkte müssen mit `<Li>` ausgezeichnet werden.
-
-```xml
-<PlaceObject>
-  <Textblock>
-    <Ol>
-      <Li><Value>One</Value></Li>
-      <Li><Value>Two</Value></Li>
-    </Ol>
-    <Ul>
-      <Li><Value>One</Value></Li>
-      <Li><Value>Two</Value></Li>
-    </Ul>
-  </Textblock>
-</PlaceObject>
-```
-
-![olul.png](/img/olul.png)
-
-Es gibt einen [eigenen Abschnitt über Aufzählungslisten]({{< relref "fakinglists" >}}).
+Anstelle eines Absatzes kann auch eine Aufzählungsliste erscheinen: `<Ol>` erzeugt eine nummerierte Liste, `<Ul>` eine Liste mit Aufzählungszeichen; die einzelnen Punkte werden mit `<Li>` ausgezeichnet.
+Alle Verfahren für Aufzählungslisten, einschließlich Beispielen zu `<Ol>` und `<Ul>`, beschreibt das Kapitel [Aufzählungslisten]({{< relref "fakinglists" >}}).
 
 ## Verhindern von Textumbruch
 

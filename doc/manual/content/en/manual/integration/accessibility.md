@@ -172,7 +172,7 @@ You can use [pdfuaanalyze](https://github.com/speedata/pdfuaanalyze) to display 
 </Document>
 ```
 
-The speedata Publisher can also dump the structure tree to an XML file by using the `Trace` command with the attribute `dump-structtree`:
+The speedata Publisher can also dump the structure tree to an XML file by using the `Trace` command with the attribute `dump-structtree` (all Trace switches are listed in the chapter [Troubleshooting / Debugging]({{< relref "troubleshooting" >}})):
 
 ```xml
 <Trace dump-structtree="yes" />

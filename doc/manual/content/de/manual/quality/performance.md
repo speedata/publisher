@@ -76,3 +76,20 @@ Behalten Sie das HTML-Parsing bei, wenn:
 * Sie CSS-Styles mit HTML-Elementen verwenden
 * Die Dokumentenerstellungszeit nicht kritisch ist
 
+## Größe des Arbeitsverzeichnisses
+
+Beim Start liest der Publisher das Arbeitsverzeichnis mit allen Unterverzeichnissen ein und merkt sich die Dateinamen (siehe [Dateiorganisation]({{< relref "fileorganization" >}})).
+Einige tausend Dateien sind kein Problem, sehr große Verzeichnisbäume verlangsamen den Start aber spürbar.
+Halten Sie das Arbeitsverzeichnis deshalb schlank und legen Sie nur die Dateien hinein, die der Publisher wirklich braucht.
+Mit `sp --no-local` lässt sich die rekursive Suche abschalten, mit `--extra-dir` werden gezielt weitere Verzeichnisse hinzugenommen.
+
+## Bildgrößen
+
+Sehr große Bilddateien verlängern die Verarbeitung und vergrößern die PDF-Datei.
+Wird die volle Auflösung nicht benötigt, lohnt es sich, die Bilder vorab zu verkleinern.
+Alternativ begrenzt die `dpi`-Option bei [PDFOptions]({{< relref "/reference/commands/pdfoptions" >}}) die Auflösung im PDF, und mit dem [Resizehandler]({{< relref "/manual/imagesandgraphics#konfiguration-des-resizehandlers" >}}) (Pro-Paket) können Bilder automatisch angepasst werden.
+
+## Bidirektionaler Text
+
+Das Attribut `bidi` beim Befehl [`<Options>`]({{< relref "/reference/commands/options" >}}) schaltet die Analyse der Schreibrichtung ein, um links-nach-rechts- und rechts-nach-links-Text mischen zu können.
+Diese Analyse kostet Zeit. Schalten Sie sie nur ein, wenn das Dokument tatsächlich gemischte Schreibrichtungen enthält.

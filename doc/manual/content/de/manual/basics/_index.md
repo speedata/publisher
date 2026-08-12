@@ -11,11 +11,11 @@ Noch ein Hinweis für das Handbuch. Viele Beispiele zeigen nur die Layout-Datei 
 {{< /callout >}}
 
 {{< cards >}}
-  {{< card link="structuredatafile" title="Datenstruktur" subtitle="Wie Daten und Layoutregeln zusammenwirken" >}}
-  {{< card link="programming" title="Programmierung" subtitle="Variablen, Bedingungen, Schleifen und Funktionen" >}}
+  {{< card link="structuredatafile" title="Datenstruktur" subtitle="Aufbau und Strukturierung der Datendatei" >}}
   {{< card link="outputtingobjects" title="Objekte ausgeben" subtitle="Text, Bilder, Boxen, Barcodes und mehr" >}}
   {{< card link="fileorganization" title="Dateiorganisation" subtitle="Wie der Publisher Dateien findet" >}}
   {{< card link="grid" title="Raster" subtitle="Das Seitenraster und Objektplatzierung" >}}
   {{< card link="pagetypes" title="Seitentypen" subtitle="Verschiedene Seitenvorlagen definieren" >}}
+  {{< card link="programming" title="Programmierung" subtitle="Variablen, Bedingungen, Schleifen und Funktionen" >}}
   {{< card link="positioningframe" title="Platzierungsbereiche" subtitle="Bereiche und Rahmen auf der Seite" >}}
 {{< /cards >}}

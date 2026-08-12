@@ -17,13 +17,13 @@ Using colors in the speedata Publisher is straightforward. Usually one specifica
     </PlaceObject>
 ```
 
-All CSS4 colors are predefined, see the list at [`<DefineColor>`]({{< relref "/reference/definecolor" >}}).
+All CSS4 colors are predefined, see the list at [`<DefineColor>`]({{< relref "/reference/commands/definecolor" >}}).
 
 ![Not every color combination is beautiful](/img/kreismitfarbe.png)
 
 ## Color definitions
 
-Colors can be assigned to a name with [`<DefineColor>`]({{< relref "/reference/definecolor" >}}) and then addressed under that name:
+Colors can be assigned to a name with [`<DefineColor>`]({{< relref "/reference/commands/definecolor" >}}) and then addressed under that name:
 
 ```xml
 <DefineColor name="logocolor" model="cmyk" c="0" m="18" y="90" k="2" />

@@ -67,7 +67,7 @@ Die Layoutdatei ist etwas umfangreicher und wird in mehreren Etappen erläutert:
 ```
 1. Der Kopf ist wieder wie üblich. Die Option `ignoreeol` besagt, dass die Zeilenumbrüche in den Daten ignoriert werden sollen.
 2. Anschließend wird die Schriftgröße für die Überschrift eingestellt. Der Fließtext nutzt die voreingestellte Schriftart mit der Größe 10/12 Punkt.
-3. Wenn man die Rasterhöhe gleich dem normalen Zeilenabstand setzt, kann man leicht registerhaltigen Satz erreichen. Der Seitentyp definiert zwei Seitenbereiche (siehe Abschnitt [PositioningArea]({{< relref "positioningarea" >}})).
+3. Wenn man die Rasterhöhe gleich dem normalen Zeilenabstand setzt, kann man leicht registerhaltigen Satz erreichen. Der Seitentyp definiert zwei Seitenbereiche (siehe Abschnitt [Platzierungsbereiche]({{< relref "/manual/basics/positioningframe" >}})).
 4. Der Bereich für die Überschrift umfasst die ersten 8 Zeilen und ist unabhängig vom Textbereich.
 5. Der Bereich für den Text besteht aus zwei Spalten.
 

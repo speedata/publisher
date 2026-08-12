@@ -61,7 +61,7 @@ The output appears in the log file (`publisher-protocol.xml`)
 <entry level="INFO" msg="Message" line="6" message="1"></entry>
 ```
 
-The command `<Message>` can be instructed with `error="yes"` to output an error message (instead of a message). You can also specify the error code that will be returned when you exit the Publisher. See [the command `<Message>` in the reference]({{< relref "/reference/message" >}}).
+The command `<Message>` can be instructed with `error="yes"` to output an error message (instead of a message). You can also specify the error code that will be returned when you exit the Publisher. See [the command `<Message>` in the reference]({{< relref "/reference/commands/message" >}}).
 
 ## Status File and Log File
 

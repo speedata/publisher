@@ -16,5 +16,5 @@ CLAUDE.md
 settings.local.json
 
 # Generated documentation (rake doc / rake schema)
-doc/manual/content/*/reference/
+doc/manual/content/*/reference/commands/
 doc/manual/content/*/manual/changelog/

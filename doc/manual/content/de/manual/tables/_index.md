@@ -69,7 +69,7 @@ Bei Angabe von `stretch="no"` (Voreinstellung) beim Befehl `<Table>` nimmt die T
 ![Bei stretch="no" (bzw. weglassen des Attributs stretch) ist die Tabelle nur so breit, wie nötig (oben). Die Angabe von stretch="max" bei der Tabelle hat zur Folge, dass die gesamte angegebene Breite genutzt wird. Die Voreinstellung für die Breite ist die Seitenbreite (unten).](/img/tablestretchmaxno.png)
 
 Es gibt einige für die gesamte Tabelle gültige Einstellungen, wie die Schriftart, Innenabstand, Zeilen- und Spaltenabstand.
-Diese sind im Anhang in der  [Referenz für den Befehl `<Table>`]({{< relref "/reference/table" >}}) beschrieben.
+Diese sind im Anhang in der  [Referenz für den Befehl `<Table>`]({{< relref "/reference/commands/table" >}}) beschrieben.
 
 ## Tabellenzellen und Tabellenzeilen, Linien in Tabellen
 
@@ -568,7 +568,7 @@ Die Breite der dynamischen Kopf- und Fußzeile wird ohne `$_last_tr_data` berech
 
 Tabellen werden manchmal nicht an einem Stück erzeugt.
 Ein gängiges Muster bei der Erstellung von Tabellen ist die Probe, ob eine Tabelle noch an einen bestimmten Platz passt.
-Dazu fügt man Zeile für Zeile an eine Tabelle an und platziert sie in eine Gruppe (eine virtuelle Fläche), um diese anschließend auszumessen.
+Dazu fügt man Zeile für Zeile an eine Tabelle an und platziert sie in eine [Gruppe]({{< relref "groups" >}}) (eine virtuelle Fläche), um diese anschließend auszumessen.
 Das Vorgehen hierfür ist folgendes:
 
 ```xml
@@ -617,7 +617,7 @@ Geprüft wird nun, in dem die Tabelle in einer Gruppe erzeugt wird und anschlie�
 ```
 {{% codecaption %}}Mit diesem Muster kann man eine Tabelle zeilenweise vergrößern und ausmessen{{% /codecaption %}}
 
-Eine etwas ausführlichere Beschreibung findet sich im Abschnitt [optimierung-mit-gruppen]({{< relref "optimizingwithgroups" >}}).
+Eine etwas ausführlichere Beschreibung des Messen-Musters findet sich im Abschnitt [Layout-Optimierung]({{< relref "groups#layout-optimierung" >}}).
 
 ## Abwechselnde Zeilenfarben
 
@@ -811,7 +811,7 @@ Die Angabe wird immer auf der letzte Seite einer Tabelle beachtet, da die vorher
 
 ## Seitenwechsel in Tabellen
 
-Ist eine Tabelle größer als der zur Verfügung stehende Platz auf der Seite, so wird die Tabelle auf der nächsten Seite bzw. im nächsten Platzierungsrahmen fortgeführt. Um solch einen Seitenwechsel zu erzwingen, gibt es [den Befehl `<TableNewPage>`]({{< relref "/reference/tablenewpage" >}}).
+Ist eine Tabelle größer als der zur Verfügung stehende Platz auf der Seite, so wird die Tabelle auf der nächsten Seite bzw. im nächsten Platzierungsrahmen fortgeführt. Um solch einen Seitenwechsel zu erzwingen, gibt es [den Befehl `<TableNewPage>`]({{< relref "/reference/commands/tablenewpage" >}}).
 
 ### Zwischenseiten beim Tabellenumbruch
 

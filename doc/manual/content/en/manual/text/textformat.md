@@ -8,7 +8,7 @@ type: docs
 
 Text formats are used to control the paragraphs. You can use them to control various things like text indents, text alignment, orphan and widow lines, pagination and more.
 
-The individual parameters are described in the reference under [`<DefineTextformat>`]({{< relref "/reference/definetextformat" >}}).
+The individual parameters are described in the reference under [`<DefineTextformat>`]({{< relref "/reference/commands/definetextformat" >}}).
 
 ## Attribute overview
 
@@ -129,6 +129,6 @@ However, the `break-below="no"` and `break-before="page"` properties are only ta
 
 ## Tracing
 
-The command `<Trace textformat="yes"/>` activates "tooltips" in the PDF above the texts that output the text format used there.
+The command `<Trace textformat="yes"/>` activates "tooltips" in the PDF above the texts that output the text format used there. All switches of the `<Trace>` command are listed in the chapter [Troubleshooting / Debugging]({{< relref "troubleshooting" >}}).
 
 ![Tooltip with the text format](/img/tracetextformat.png)

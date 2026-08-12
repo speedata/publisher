@@ -4,12 +4,12 @@ weight: 30
 type: docs
 ---
 
-Learn how to install, run and configure the speedata Publisher.
+Learn how to install the speedata Publisher and which tools help with writing the layout file.
+The [command line]({{< relref "/reference/commandline" >}}) and the [configuration]({{< relref "/reference/configuration" >}}) are described in the reference.
 
 {{< cards >}}
   {{< card link="installation" title="Installation" subtitle="Binary packages and APT repository" >}}
-  {{< card link="commandline" title="Command Line" subtitle="Running and controlling the Publisher" >}}
-  {{< card link="configuration" title="Configuration" subtitle="Configuration file and options" >}}
-  {{< card link="xmleditor" title="Writing the Layout" subtitle="How to create a layout file" >}}
+  {{< card link="namespace" title="Namespace" subtitle="The XML namespace of the layout ruleset" >}}
+  {{< card link="schema" title="Schema Validation" subtitle="Validate your layout with an XML schema" >}}
   {{< card link="schema" title="Schema Validation" subtitle="Validate your layout with an XML schema" >}}
 {{< /cards >}}

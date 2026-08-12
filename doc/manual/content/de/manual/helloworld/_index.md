@@ -20,7 +20,7 @@ Wer das »Hallo Welt« Beispiel sofort ausprobieren möchte: `sp new helloworld`
 
 ## Die beiden Dateien
 
-Die Datendatei (`data.xml`) enthält die Daten — hier nur ein kurzer Text:
+Die Datendatei (`data.xml`) enthält die Daten – hier nur ein kurzer Text:
 
 ```xml
 <data>Hello world!</data>
@@ -84,11 +84,11 @@ Die Layoutdatei Schritt für Schritt:
   </Record>
 </Layout>
 ```
-1. Das Wurzelelement `Layout` mit den beiden Namensräumen. Den zweiten Namensraum (`sd:`) braucht man hier noch nicht, aber er sollte immer angegeben werden — er wird für die eingebauten Funktionen benötigt.
+1. Das Wurzelelement `Layout` mit den beiden Namensräumen. Den zweiten Namensraum (`sd:`) braucht man hier noch nicht, aber er sollte immer angegeben werden – er wird für die eingebauten Funktionen benötigt.
 2. `Record` definiert, was passieren soll, wenn der Publisher das Element `<data>` in der Datendatei findet. Da `<data>` das Wurzelelement ist, wird dieser Record automatisch beim Start aufgerufen.
-3. `PlaceObject` ist der Befehl, um etwas in das PDF auszugeben — Text, Bilder, Tabellen, Boxen usw.
+3. `PlaceObject` ist der Befehl, um etwas in das PDF auszugeben – Text, Bilder, Tabellen, Boxen usw.
 4. `select="."` ist ein XPath-Ausdruck: der Punkt `.` bedeutet »das aktuelle Datenelement«. Hier ist das aktuelle Element `<data>`, und dessen Textinhalt ist `Hello world!`. Genau dieser Text erscheint im PDF.
 
 ## Wie geht es weiter?
 
-Im Kapitel [Programmierung]({{< relref "programming" >}}) wird ausführlich erklärt, wie Layout und Daten zusammenspielen — insbesondere das Zusammenspiel von `Record` und `ProcessNode`, mit dem auch verschachtelte Datenstrukturen verarbeitet werden können.
+Im Kapitel [Programmierung]({{< relref "programming" >}}) wird ausführlich erklärt, wie Layout und Daten zusammenspielen – insbesondere das Zusammenspiel von `Record` und `ProcessNode`, mit dem auch verschachtelte Datenstrukturen verarbeitet werden können.

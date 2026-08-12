@@ -1,4 +1,5 @@
 ---
+title: "File attachments"
 weight: 78
 type: docs
 ---
@@ -38,7 +39,7 @@ The PDF output must be set to PDF/A-3:
 <PDFOptions format="PDF/A-3" />
 ```
 
-This happens automatically if the command [`<AttachFile>`]({{< relref "/reference/attachfile" >}}) is executed at the beginning of the document (before the first page output).
+This happens automatically if the command [`<AttachFile>`]({{< relref "/reference/commands/attachfile" >}}) is executed at the beginning of the document (before the first page output).
 
 {{< callout >}}
 For a PDF document to be compliant with PDF/A-3, the colors must match the color profiles. In the PDF/A-3 default setting, an OutputIntent is defined for a CMYK color profile. Accordingly, the colors in the document must be defined in this color space. Or another color profile must be embedded.

@@ -44,10 +44,10 @@ Also wird sie nach dieser Logik zuletzt ausgewertet und wird immer dann benutzt,
 ```
 {{% codecaption %}}Hier muss der Seitentyp für die erste Seite nach dem Seitentyp für rechte Seiten definiert werden, weil er sonst nicht in Betracht gezogen würde (sd:odd(1) ergibt wahr).{{% /codecaption %}}
 
-## Textrahmen
+## Platzierungsbereiche
 
-In der Seitentyp-Definition können Textrahmen angelegt werden.
-Diese werden ausführlich im Abschnitt [»Bereiche auf der Seite«]({{< relref "positioningarea" >}}) beschrieben.
+In der Seitentyp-Definition können Platzierungsbereiche angelegt werden.
+Diese werden ausführlich im Abschnitt [Platzierungsbereiche]({{< relref "positioningframe" >}}) beschrieben.
 
 ## AtPageCreation, AtPageShipout
 
@@ -157,7 +157,7 @@ In der Logdatei (`publisher-protocol.xml`) sieht man, welche Seitentypen gewähl
 
 ## Nummerierung von Seiten
 
-Die Seitenzahl der aktuellen Seite kann mit `sd:current-page()` ermittelt werden. Diese Funktion gibt auf der ersten Seite die Zahl 1 zurück, auf der zweiten Seite die Zahl 2 und so fort. Mit dem `startpage`-Attribut bei [`<Options>`]({{< relref "/reference/options" >}}) kann man die Startseitenzahl setzen:
+Die Seitenzahl der aktuellen Seite kann mit `sd:current-page()` ermittelt werden. Diese Funktion gibt auf der ersten Seite die Zahl 1 zurück, auf der zweiten Seite die Zahl 2 und so fort. Mit dem `startpage`-Attribut bei [`<Options>`]({{< relref "/reference/commands/options" >}}) kann man die Startseitenzahl setzen:
 
 ```xml
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
@@ -176,6 +176,19 @@ Die Seitenzahl der aktuellen Seite kann mit `sd:current-page()` ermittelt werden
     </Record>
 </Layout>
 ```
+
+### Seite x von y
+
+Für Angaben wie »Seite 1 von 10« wird die Gesamtseitenzahl des Dokuments benötigt.
+Die [interne Variable]({{< relref "internalvariables" >}}) `$_lastpage` enthält die Anzahl der Seiten aus dem vorherigen Durchlauf:
+
+```xml
+<Value select="concat('Seite ', sd:current-page(), ' von ', $_lastpage)"/>
+```
+
+Da erst am Ende eines Durchlaufs feststeht, wie lang das Dokument wird, sind mindestens zwei Durchläufe notwendig, bis der Wert stimmt.
+Vor Version 3.9.26 musste die letzte Seitenzahl selbst mit `<SaveDataset>` gespeichert und im nächsten Durchlauf wieder geladen werden.
+Dieser allgemeine Mechanismus ist im Abschnitt [Listen erstellen (XML-Struktur)]({{< relref "directoriesxml" >}}) beschrieben.
 
 ## Abschnitte
 
@@ -210,11 +223,11 @@ Werden eigene Abschnitte definiert und benutzt oder ein vordefinierter Abschnitt
 </PlaceObject>
 ```
 
-Hier (mit [`<Clearpage>`]({{< relref "/reference/clearpage" >}})) wird der Abschnitt `frontmatter` für die folgenden Seiten benutzt. Das bewirkt die Ausgabe der sichtbaren Seitenzahl als römische Ziffer in Kleinbuchstaben, da dieser Abschnitt wie folgt definiert wurde:
+Hier (mit [`<Clearpage>`]({{< relref "/reference/commands/clearpage" >}})) wird der Abschnitt `frontmatter` für die folgenden Seiten benutzt. Das bewirkt die Ausgabe der sichtbaren Seitenzahl als römische Ziffer in Kleinbuchstaben, da dieser Abschnitt wie folgt definiert wurde:
 
 ```xml
 <DefineMatter name="frontmatter" label="lowercase-romannumeral" />
 ```
 
-Abschnitte können nur mit dem Befehl [`<Clearpage>`]({{< relref "/reference/clearpage" >}}) eingeleitet werden.
+Abschnitte können nur mit dem Befehl [`<Clearpage>`]({{< relref "/reference/commands/clearpage" >}}) eingeleitet werden.
 

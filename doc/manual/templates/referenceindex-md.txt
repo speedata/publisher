@@ -1,0 +1,21 @@
+---
+title: "{{ translate .Lang "Command reference" }}"
+linkTitle: "{{ translate .Lang "Commands" }}"
+weight: 10
+type: docs
+---
+
+{{ if eq .Lang "de" -}}
+Alle Befehle der Layoutdatei, nach Themen geordnet.
+Die Seitenleiste führt die Befehle alphabetisch auf, eine Übersicht über alle Attribute gibt der [Attribut-Index]({{`{{% relref "00attributes" %}}`}}).
+{{- else -}}
+All commands of the layout file, arranged by topic.
+The sidebar lists the commands alphabetically; see the [attribute index]({{`{{% relref "00attributes" %}}`}}) for an overview of all attributes.
+{{- end }}
+{{ range .Groups }}
+## {{ .Name $.Lang }}
+{{ range .Commands }}
+[`{{ .Name }}`]({{`{{% relref "`}}{{ .Mdlink }}{{`" %}}`}}){{ if .Deprecated }} ({{ translate $.Lang "deprecated" }}){{ end }}
+: {{ shortDescription $.Lang . }}
+{{ end }}
+{{ end }}

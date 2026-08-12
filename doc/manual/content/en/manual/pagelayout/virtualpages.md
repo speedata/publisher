@@ -67,7 +67,7 @@ The layout file is somewhat more extensive and is explained in several stages:
 ```
 1. The head is back to normal. The `ignoreeol` option says that the line breaks in the data should be ignored.
 2. Then the font size for the header is set. The body text will use the default font size of 10/12 point.
-3. If you set the grid height equal to the normal line spacing, you can easily achieve register-true typesetting. The page type defines two page areas (see section [PositioningArea]({{< relref "positioningarea" >}}))
+3. If you set the grid height equal to the normal line spacing, you can easily achieve register-true typesetting. The page type defines two page areas (see section [Placement areas]({{< relref "/manual/basics/positioningframe" >}}))
 4. The header area covers the first 8 lines and is independent of the text area.
 5. The area for the text consists of two columns.
 

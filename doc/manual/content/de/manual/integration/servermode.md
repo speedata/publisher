@@ -1,10 +1,10 @@
 ---
-linktitle: "Server-Modus (REST API)"
+title: "Server-Modus (REST API)"
 weight: 64
 type: docs
 ---
 
-# Server-Modus (REST API) {{< profeature "Verfügbar im PRO-Paket" >}}
+{{< profeature "Verfügbar im PRO-Paket" >}}
 
 Der Publisher bietet eine Schnittstelle an, mit der über HTTP Aufträge zur Dokumentenerzeugung übergeben werden können. Gestartet wird der Servermodus mit
 

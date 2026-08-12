@@ -11,6 +11,7 @@ import (
 	"sync"
 	"text/template"
 	"time"
+	"unicode"
 
 	"speedatapublisher/sphelper/changelog"
 	"speedatapublisher/sphelper/commandsxml"
@@ -65,6 +66,18 @@ func translate(lang, text string) string {
 		if lang == "de" {
 			return "Attribut-Index"
 		}
+	case "Reference":
+		if lang == "de" {
+			return "Referenz"
+		}
+	case "Commands":
+		if lang == "de" {
+			return "Befehle"
+		}
+	case "Command reference":
+		if lang == "de" {
+			return "Befehlsreferenz"
+		}
 	case "profeature tooltip":
 		if lang == "de" {
 			return "Dieses Feature ist nur im Pro-Paket verfügbar"
@@ -116,7 +129,7 @@ func parentelemsMarkdown(lang string, cmd *commandsxml.Command) string {
 func atttypeinfoMarkdown(att *commandsxml.Attribute, lang string) string {
 	atttypesDe := map[string]string{
 		"boolean":                "yes oder no",
-		"xpath":                  "[XPath-Ausdruck]({{% relref \"../manual/xpathref/xpath\" %}})",
+		"xpath":                  "[XPath-Ausdruck]({{% relref \"/reference/xpath/xpath\" %}})",
 		"text":                   "Text",
 		"number":                 "Zahl",
 		"length":                 "Längenangabe",
@@ -130,7 +143,7 @@ func atttypeinfoMarkdown(att *commandsxml.Attribute, lang string) string {
 	}
 	atttypesEn := map[string]string{
 		"boolean":                "yes or no",
-		"xpath":                  "[XPath expression]({{% relref \"../manual/xpathref/xpath\" %}})",
+		"xpath":                  "[XPath expression]({{% relref \"/reference/xpath/xpath\" %}})",
 		"numberorlength":         "number or length",
 		"numberlengthorstar":     "Number, length or *-numbers",
 		"topcurnumber":           "top, cur or number",
@@ -161,11 +174,47 @@ func atttypeinfoMarkdown(att *commandsxml.Attribute, lang string) string {
 	return strings.Join(ret, ", ")
 }
 
+// firstSentence returns the text up to the end of the first sentence. Periods
+// after single letters (“z.B.”, “i.e.”) and periods followed by a lower case
+// word do not count as sentence ends.
+func firstSentence(s string) string {
+	runes := []rune(s)
+	for i, r := range runes {
+		if r != '.' && r != '!' && r != '?' {
+			continue
+		}
+		if i == len(runes)-1 {
+			return s
+		}
+		if !unicode.IsSpace(runes[i+1]) {
+			continue
+		}
+		if r == '.' && i >= 2 && unicode.IsLetter(runes[i-1]) && !unicode.IsLetter(runes[i-2]) {
+			continue
+		}
+		j := i + 1
+		for j < len(runes) && unicode.IsSpace(runes[j]) {
+			j++
+		}
+		if j < len(runes) && !unicode.IsUpper(runes[j]) && !unicode.IsDigit(runes[j]) {
+			continue
+		}
+		return string(runes[:i+1])
+	}
+	return s
+}
+
+// shortDescriptionMarkdown returns the first sentence of the command
+// description, used for the thematic overview on the reference index page.
+func shortDescriptionMarkdown(lang string, cmd *commandsxml.Command) string {
+	return firstSentence(strings.TrimSpace(cmd.DescriptionText(lang)))
+}
+
 // GenerateMarkdownFiles reads the commands.xml file and creates Markdown files
-// for use with Hugo/Hextra in the doc/manual/content/{lang}/reference/ directory.
+// for use with Hugo/Hextra in the doc/manual/content/{lang}/reference/commands/ directory.
 func GenerateMarkdownFiles(cfg *config.Config, lang string) error {
 	srcpath := filepath.Join(cfg.Basedir(), "doc", "manual")
-	destpath := filepath.Join(cfg.Basedir(), "doc", "manual", "content", lang, "reference")
+	destpath := filepath.Join(cfg.Basedir(), "doc", "manual", "content", lang, "reference", "commands")
 
 	err := os.MkdirAll(destpath, 0755)
 	if err != nil {
@@ -201,11 +250,13 @@ func GenerateMarkdownFiles(cfg *config.Config, lang string) error {
 		"childelemsMarkdown":  childelemsMarkdown,
 		"parentelemsMarkdown": parentelemsMarkdown,
 		"atttypeinfoMarkdown": atttypeinfoMarkdown,
+		"shortDescription":    shortDescriptionMarkdown,
 	}
 
 	mdTemplates, err := template.New("").Funcs(funcMap).ParseFiles(
 		filepath.Join(srcpath, "templates", "command-md.txt"),
 		filepath.Join(srcpath, "templates", "attributesref-md.txt"),
+		filepath.Join(srcpath, "templates", "referenceindex-md.txt"),
 	)
 	if err != nil {
 		return err
@@ -220,6 +271,35 @@ func GenerateMarkdownFiles(cfg *config.Config, lang string) error {
 	err = mdTemplates.ExecuteTemplate(f, "attributesref-md.txt", struct {
 		Lang, AttributeNames, AttributeMap interface{}
 	}{lang, allAttributeNames, allAttributes})
+	f.Close()
+	if err != nil {
+		return err
+	}
+
+	// Generate the section index with the thematic command overview
+	if lang == "en" {
+		ingroup := make(map[*commandsxml.Command]bool)
+		for _, g := range c.CommandGroups() {
+			for _, cmd := range g.Commands {
+				ingroup[cmd] = true
+			}
+		}
+		for _, cmd := range c.Commands() {
+			if !ingroup[cmd] {
+				fmt.Printf("command %q is not listed in any commandgroup\n", cmd.Name)
+			}
+		}
+	}
+
+	fullpath = filepath.Join(destpath, "_index.md")
+	f, err = os.Create(fullpath)
+	if err != nil {
+		return err
+	}
+	err = mdTemplates.ExecuteTemplate(f, "referenceindex-md.txt", struct {
+		Lang   string
+		Groups []*commandsxml.CommandGroup
+	}{lang, c.CommandGroups()})
 	f.Close()
 	if err != nil {
 		return err

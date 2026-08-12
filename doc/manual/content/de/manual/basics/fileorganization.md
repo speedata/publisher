@@ -25,7 +25,7 @@ Es gibt Ausnahmen von der Regel:
 3. Mit `sp --systemfonts` wird für Schriftdateien auch in Verzeichnissen gesucht, die vom System vorgegeben sind.
 4. Mit `sp --wd DIR` wechselt der Publisher vor dem Start in dieses Verzeichnis.
 
-Für eine Beschreibung der Parameter siehe den Anhang [kommandozeile]({{< relref "commandline" >}}).
+Für eine Beschreibung der Parameter siehe die Referenzseite [Kommandozeile]({{< relref "commandline" >}}).
 
 ## Welche Namen müssen die Daten- und die Layoutdatei haben?
 

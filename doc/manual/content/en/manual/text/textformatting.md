@@ -57,7 +57,7 @@ This section contains settings that can change small, sometimes inconspicuous de
 
 ### Line breaking and font expansion
 
-In the default setting of the speedata Publisher, characters may be stretched or compressed a little so that a paragraph can wrap better. This usually only occurs in very narrow columns if there are too many spaces between the words. This behaviour can be controlled using the command [`<options>`]({{< relref "/reference/options" >}}).
+In the default setting of the speedata Publisher, characters may be stretched or compressed a little so that a paragraph can wrap better. This usually only occurs in very narrow columns if there are too many spaces between the words. This behaviour can be controlled using the command [`<options>`]({{< relref "/reference/commands/options" >}}).
 
 ```xml
 <Options fontexpansion="yes" />
@@ -74,7 +74,7 @@ The following settings are allowed:
 `yes`
 : (default setting) The paragraph break is tried out with different character widths and then the best result is used.
 
-There are also the following attributes at [`<options>`]({{< relref "/reference/options" >}}) to set the degree of character expansion:
+There are also the following attributes at [`<options>`]({{< relref "/reference/commands/options" >}}) to set the degree of character expansion:
 
 `fontstretch`
 : Specifies the percentage by which the characters may be stretched. Specification is in 0.1 per cent: a value of 20 means 2%. The default setting is 40 (= 4%).
@@ -155,26 +155,8 @@ The following Unicode space characters are interpreted by the speedata Publisher
 
 ## Enumeration lists
 
-Instead of a paragraph, an enumeration list can also appear. This is specified with `<Ol>` or `<Ul>` for an ordered list and an unordered list. The individual points must be marked with `<Li>`.
-
-```xml
-    <PlaceObject>
-      <Textblock>
-        <Ol>
-          <Li><Value>One</Value></Li>
-          <Li><Value>Two</Value></Li>
-        </Ol>
-        <Ul>
-          <Li><Value>One</Value></Li>
-          <Li><Value>Two</Value></Li>
-        </Ul>
-      </Textblock>
-    </PlaceObject>
-```
-
-![olul.png](/img/olul.png)
-
-There is a [chapter on the various possibilities for enumeration lists]({{< relref "fakinglists" >}}).
+Instead of a paragraph, an enumeration list can also appear: `<Ol>` creates an ordered list, `<Ul>` an unordered list; the individual items are marked with `<Li>`.
+All methods for creating enumeration lists, including examples for `<Ol>` and `<Ul>`, are described in the chapter [Enumeration lists]({{< relref "fakinglists" >}}).
 
 ## Prevent text wrapping
 

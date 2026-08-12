@@ -23,7 +23,7 @@ Auf der [Download-Seite](https://download.speedata.de/) die passende ZIP-Datei f
 Administratorrechte sind dafür nicht notwendig.
 
 {{< callout type="warning" >}}
-Die entpackte Verzeichnisstruktur darf nicht verändert werden — der speedata Publisher erwartet das vorgegebene Dateilayout.
+Die entpackte Verzeichnisstruktur darf nicht verändert werden – der speedata Publisher erwartet das vorgegebene Dateilayout.
 {{< /callout >}}
 
 Für Windows gibt es zusätzlich Installationspakete (.exe), die den Suchpfad automatisch setzen.

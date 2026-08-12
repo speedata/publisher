@@ -1,4 +1,5 @@
 ---
+title: "Druckvorstufe"
 weight: 55
 type: docs
 ---
@@ -10,23 +11,25 @@ Ein druckbares PDF unterscheidet sich in der Regel nicht oder nur sehr wenig von
 Format
 : Während die heutigen Bildschirme tendenziell im Querformat (16:10 oder ähnliche Seitenverhältnisse) sind, ist die übliche Druckseite Hochformat.
 : Im Befehl `<Pageformat>` sollte man die gewünschte Größe (Endformat) angeben.
-: Beschnittmarken und Beschnittzugabe können separat gesteuert werden (siehe unten bzw. den Befehl [`<Options>`]({{% relref "/reference/options" %}}))
+: Beschnittmarken und Beschnittzugabe können separat gesteuert werden (siehe unten bzw. den Befehl [`<Options>`]({{% relref "/reference/commands/options" %}}))
 
 Farben
 : Da Druckfarben fast immer auf weißem Papier aufgebracht werden, müssen diese anders angegeben werden als auf dem Bildschirm, die auf dunklem Untergrund LEDs zum Leuchten bringen.
 : Es sollte darauf geachtet werden, alle Farben entweder im CMYK-Farbraum zu definieren oder im Graustufenmodus.
 : Man kann zwar rechnerisch RGB-Werte in CMYK umwandeln, doch in der Praxis funktioniert das nur mäßig gut.
+: Wie Farben definiert werden, beschreibt das Kapitel [Farben]({{< relref "/manual/colors" >}}).
 
 Bilder
 : Auch hier sollte man darauf achten, ausschließlich Bilder im CMYK-Farbraum einzubinden.
 : Der Publisher übernimmt die Bilder ohne Änderungen oder Konvertierung in das PDF.
 : Das heißt, das Ausgangsmaterial sollte schon für den Druck geeignet sein.
+: Mehr zu Bildformaten und Auflösung im Kapitel [Bilder & Grafiken]({{< relref "/manual/imagesandgraphics" >}}).
 
 Qualität (Pixelzahl) der Bilder
 : Manchmal wird gesagt, dass nur Bilder mit mindestens 300 DPI (Punkte pro Zoll) eingebunden werden sollen.
 : Die Angabe der DPI-Zahl ist oftmals unsinnig, da sie willkürlich im Bild festgelegt werden kann.
 : Es kommt auf die tatsächliche Anzahl der Pixel je Zoll nach der Skalierung im Publisher an.
-: Der Publisher kann eine Warnung ausgeben, wenn diese unter einen bestimmten Wert ist (Attribut `dpiwarn`, siehe [`<Image>`]({{% relref "/reference/image" %}})).
+: Der Publisher kann eine Warnung ausgeben, wenn diese unter einen bestimmten Wert ist (Attribut `dpiwarn`, siehe [`<Image>`]({{% relref "/reference/commands/image" %}})).
 
 Schriftarten
 : Der Publisher bindet automatisch alle benutzten Schriftarten in das PDF ein (subsetting - nur die tatsächlich benutzten Buchstaben und Zeichen werden eingebettet).
@@ -34,7 +37,7 @@ Schriftarten
 ## Schnittmarken {{< profeature "Verfügbar im PRO-Paket" >}}
 
 Wird keine gesonderte Einstellung vorgenommen, so erzeugt der speedata Publisher ein PDF, das genau der Größe der angegebenen Seiten hat.
-Um Beschnittzugabe oder Schnittmarken einzuschalten, müssen diese im Element [`<Options>`]({{< relref "/reference/options" >}}) aktiviert werden:
+Um Beschnittzugabe oder Schnittmarken einzuschalten, müssen diese im Element [`<Options>`]({{< relref "/reference/commands/options" >}}) aktiviert werden:
 
 ```xml
     <Options

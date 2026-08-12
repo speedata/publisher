@@ -15,7 +15,7 @@ Der speedata Publisher arbeitet immer mit einem solchen Raster.
 Da jede Publikation anders ist, gibt es keine Möglichkeit, eine sinnvolle Vorgabe dafür zu finden.
 In der Voreinstellung ist das Raster auf eine Größe von 1cm × 1cm gesetzt.
 Es gilt für die Seite sowie alle Positionierungsrahmen und Gruppen.
-Anzeigen kann man das Raster mit `sp --grid` oder `<Trace grid="yes"/>` im Layout.
+Anzeigen kann man das Raster mit `sp --grid` oder `<Trace grid="yes"/>` im Layout. Alle Schalter des Befehls `<Trace>` listet das Kapitel [Fehlerbehebung / Debugging]({{< relref "troubleshooting" >}}) auf.
 
 ```xml
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
@@ -195,44 +195,5 @@ Absolut platzierte Objekte belegen in der Voreinstellung keine Flächen im Raste
 
 ## Eigene Raster in Gruppen
 
-Es folgt ein Beispiel für ein vom globalen Raster abweichendes Raster innerhalb einer Gruppe.
-Ohne die explizite `<Grid ... />`-Angabe wird das Raster der Seite genommen.
-
-```xml
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-  xmlns:sd="urn:speedata:2009/publisher/functions/en">
-
-  <SetGrid nx="4" ny="4"/>
-  <Trace grid="yes" gridallocation="yes" objects="yes"/>
-
-  <Record element="data">
-    <Group name="table">
-      <Grid width="1cm" height="12pt"/>
-      <Contents>
-        <PlaceObject>
-          <Table width="4" stretch="max">
-            <Tr>
-              <Td><Paragraph><Value>Cell 1/1</Value></Paragraph></Td>
-              <Td><Paragraph><Value>Cell 2/1</Value></Paragraph></Td>
-            </Tr>
-            <Tr>
-              <Td><Paragraph><Value>Cell 1/2</Value></Paragraph></Td>
-              <Td><Paragraph><Value>Cell 2/2</Value></Paragraph></Td>
-            </Tr>
-          </Table>
-        </PlaceObject>
-        <PlaceObject row="4" column="2">
-          <Image file="ocean.pdf" width="3"/>
-        </PlaceObject>
-      </Contents>
-    </Group>
-
-    <PlaceObject groupname="table"/>
-  </Record>
-</Layout>
-```
-{{% codecaption %}}Die Gruppe hat ein eigenes Raster, das vom Seitenraster unabhängig ist.{{% /codecaption %}}
-
-
-![Ausschnitt aus einer Seite. Das Raster innerhalb der Gruppe ist deutlich feiner als das grobe Seitenraster.](/img/08-raster4.png)
-
+Gruppen können ein eigenes, vom Seitenraster unabhängiges Raster bekommen, zum Beispiel für feinere Positionierung.
+Das beschreibt der Abschnitt [Eigene Raster in Gruppen]({{< relref "groups#eigene-raster-in-gruppen" >}}).

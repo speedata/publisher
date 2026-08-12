@@ -8,7 +8,7 @@ type: docs
 Es gibt zwei Befehle, Objekte auszugeben.
 Der eine heißt `<Output>` und wird nur für Text benutzt, der auf mehrere Seiten umbrechen soll.
 Alle anderen Objekte (Bilder, Tabellen, Barcodes, ...) werden über den Befehl `<PlaceObject>` ausgegeben.
-Die Parameter werden im Detail in der Befehlsreferenz (siehe [Befehl `<PlaceObject>`]({{< relref "/reference/placeobject" >}})) aufgeführt.
+Die Parameter werden im Detail in der Befehlsreferenz (siehe [Befehl `<PlaceObject>`]({{< relref "/reference/commands/placeobject" >}})) aufgeführt.
 Hier folgen einige Beispiele und Anwendungsmöglichkeiten.
 
 Im einfachsten Fall ist der Befehl wie folgt zu benutzen:
@@ -27,18 +27,15 @@ Das Bild `_samplea.pdf` (mit Unterstrich am Anfang) ist in der Distribution enth
 
 ## Rasterbasierte Platzierung von Objekten
 
-Im Abschnitt [raster]({{< relref "/manual/basics/grid" >}}) wird ausführlich auf das Gestaltungsraster eingegangen.
-Hier soll nur soviel erwähnt werden: Das Raster hilft einerseits beim Positionieren der Objekte (leichtes Anordnen der Objekte) als auch bei der Suche nach dem passenden Platz.
-Rasterzellen werden nicht von zwei Objekten gleichzeitig belegt, außer man erlaubt dies explizit.
-
-Dies ist ein Beispiel für die rasterbasierte Ausgabe.
-Die Angaben bei `row` und `column` sind Koordinaten im Seitenraster, wobei die linke obere Ecke die Position 1,1 ist.
+Mit den Attributen `row` und `column` wird ein Objekt an einer festen Position im Seitenraster platziert; die linke obere Ecke ist die Position 1,1.
 
 ```xml
 <PlaceObject row="4" column="5">
     <Image file="_samplea.pdf" width="5"/>
 </PlaceObject>
 ```
+
+Das Gestaltungsraster und seine Rolle beim Platzieren (Belegung der Rasterzellen, Suche nach freiem Platz) beschreibt ausführlich der Abschnitt [Raster]({{< relref "/manual/basics/grid" >}}).
 
 
 ## Reihenfolge der Objekte
@@ -101,11 +98,11 @@ Sind diese in den Absätzen deklariert, so haben die Vorrang vor denen, die im T
 </Textblock>
 ```
 
-Weitere Formatierungsmöglichkeiten sind im Abschnitt [einbindungschriftarten]({{< relref "fonts" >}}) und [textformatierung]({{< relref "textformatting" >}})  beschrieben.
+Weitere Formatierungsmöglichkeiten sind im Abschnitt [Schriften verwenden]({{< relref "fonts" >}}) und [Textformatierung]({{< relref "textformatting" >}})  beschrieben.
 
 ![Angaben in den Absätzen überschreiben die Werte im Textblock](/img/textblock-paragraph.png)
 
-Die vollständige Beschreibung von `<Textblock>` ist [in der Referenz (Abschnitt Textblock)]({{< relref "/reference/textblock" >}}) zu finden.
+Die vollständige Beschreibung von `<Textblock>` ist [in der Referenz (Abschnitt Textblock)]({{< relref "/reference/commands/textblock" >}}) zu finden.
 Für Texte, die über Seitengrenzen hinweg umbrechen dürfen, gibt es den Befehl `<Text>` als Kindelement von `<Output>`, beschrieben im nächsten Abschnitt.
 
 ## Texte mit Seitenumbruch
@@ -127,11 +124,11 @@ Die Syntax dafür ist
 ```
 
 Neben der Besonderheit, dass dieser Text auf mehrere Seiten umbrechen kann, ist er auch in der Lage, Objekte zu umfließen.
-Eine detaillierte Beschreibung dieser Eigenschaft ist im Abschnitt [umfliessenvonbildern]({{< relref "wrappingaroundobjects" >}}) gegeben.
+Eine detaillierte Beschreibung dieser Eigenschaft ist im Abschnitt [Umfließen von Bildern]({{< relref "wrappingaroundobjects" >}}) gegeben.
 
 ## HTML
 
-HTML-Inhalte können auf verschiedene Arten ausgegeben werden. Am einfachsten ist die Verwendung des `<HTML>`-Befehls direkt innerhalb von `<Output>`:
+HTML-Inhalte können mit dem Befehl `<HTML>` direkt innerhalb von `<Output>` oder als Markup in Absätzen ausgegeben werden:
 
 ```xml
 <Output>
@@ -141,34 +138,12 @@ HTML-Inhalte können auf verschiedene Arten ausgegeben werden. Am einfachsten is
 </Output>
 ```
 
-HTML kann auch innerhalb von `<Paragraph>` in einem `<Textblock>` oder `<Text>` verwendet werden. In diesem Fall kommt das HTML aus den Daten:
-
-```xml
-<Record element="Paragraph">
-  <PlaceObject>
-    <Textblock>
-      <Paragraph>
-        <Value select="." />
-      </Paragraph>
-    </Textblock>
-  </PlaceObject>
-</Record>
-```
-
-Mit Daten wie:
-
-```xml
-<Paragraph><![CDATA[<ul><li>Punkt 1</li><li>Punkt 2</li></ul>]]></Paragraph>
-```
-
-Eine ausführliche Beschreibung der HTML-Funktionen einschließlich CSS-Styling ist im Abschnitt [HTML]({{< relref "/manual/webformats/html" >}}) zu finden.
+Die verschiedenen Einbindungswege, die unterstützten Elemente und das CSS-Styling beschreibt das Kapitel [HTML]({{< relref "/manual/webformats/html" >}}).
 
 ## Einführung in Tabellen
 
-Das im Publisher benutzte Tabellenmodell entspricht in etwa dem von HTML bekannten Modell.
-Die Zeilen werden mit `<Tr>` angegeben und die einzelnen Spalten mit `<Td>`.
-
-Die Struktur einer einfachen Tabelle ohne Spaltendeklaration, Kopf- und Fußzeile sieht wie folgt aus:
+Das im Publisher benutzte Tabellenmodell entspricht in etwa dem von HTML bekannten Modell: Zeilen werden mit `<Tr>` angegeben, die einzelnen Zellen mit `<Td>`.
+In den Zellen kann alles stehen, was auch in `<PlaceObject>` enthalten sein kann.
 
 ```xml
 <PlaceObject>
@@ -177,31 +152,11 @@ Die Struktur einer einfachen Tabelle ohne Spaltendeklaration, Kopf- und Fußzeil
       <Td>...</Td>
       <Td>...</Td>
     </Tr>
-    <Tr>
-      <Td>...</Td>
-      <Td>...</Td>
-    </Tr>
   </Table>
 </PlaceObject>
 ```
 
-Die Inhalte der Tabellenzellen können Absätze, Bilder und andere Objekte sein.
-
-```xml
-<Td>
-  <Paragraph>
-    <Value>...</Value>
-  </Paragraph>
-</Td>
-
-<Td>
-  <Image file="ocean.pdf" width="4"/>
-</Td>
-```
-
-Eine praktische Eigenschaft der Tabellen ist, dass sie über mehrere Seiten laufen können, auch mit wiederholenden Kopf- und Fußzeilen.
-In den Tabellenzellen können Texte, Bilder, Barcodes, etc. stehen; also alles, was auch in `<PlaceObject>` enthalten sein kann.
-Einzelne Zellen werden niemals auf mehrere Seiten umbrochen, d. h. sie werden als rechteckiges Kästchen gesetzt, auch wenn die Inhalte einen Umbruch erlauben würden (z. B. Texte oder Tabellen).
+Tabellen können über mehrere Seiten laufen, auch mit wiederholenden Kopf- und Fußzeilen.
 
 Dem Thema Tabellen ist [ein eigenes Kapitel gewidmet]({{< relref "tables" >}}).
 
@@ -215,10 +170,7 @@ Bilder einbinden ist, wie schon eingangs gezeigt, sehr leicht. Der Befehl dafür
 </PlaceObject>
 ```
 
-Bilder können in den Formaten PDF, JPEG und PNG vorliegen und eingebunden werden.
-Alle anderen Formate wie z. B. Tiff oder SVG müssen vorher konvertiert werden.
-
-Der Befehl zum Einbinden der Bilder ist sehr mächtig und wird ausführlich in einem eigenen Abschnitt (Kapitel [bildereinbinden]({{< relref "imagesandgraphics" >}})) beschrieben. Die [Referenz]({{< relref "/reference/image" >}}) enthält eine kurze Beschreibung aller Möglichkeiten.
+Der Befehl zum Einbinden der Bilder ist sehr mächtig und wird ausführlich im Kapitel [Bilder & Grafiken]({{< relref "imagesandgraphics" >}}) beschrieben (dort stehen auch die unterstützten Dateiformate). Die [Referenz]({{< relref "/reference/commands/image" >}}) enthält eine kurze Beschreibung aller Möglichkeiten.
 
 ## Rechteckige Flächen (`<Box>`)
 
@@ -233,8 +185,8 @@ Rechteckige Flächen werden mit dem Befehl `<Box>` erzeugt.
 ![Ein buntes Kästchen, ausgegeben mit `<Box>`](/img/zitronengruen.png)
 
 Oftmals werden Kästchen für farbige Flächen hinter einem Text oder einer Tabelle benutzt.
-Dann muss die Belegung der Rasterzellen ausgeschaltet werden (`allocate="no"` bei `<PlaceObject>`), sonst kommt es zu einer Warnung wegen der doppelt belegten Fläche im PDF (siehe Abschnitt [raster]({{< relref "/manual/basics/grid" >}})).
-Ein Beispiel für die Nutzung von Boxen als Hintergrund ist im Abschnitt über [griffmarken]({{< relref "thumbindex" >}}) zu finden.
+Dann muss die Belegung der Rasterzellen ausgeschaltet werden (`allocate="no"` bei `<PlaceObject>`), sonst kommt es zu einer Warnung wegen der doppelt belegten Fläche im PDF (siehe Abschnitt [Raster]({{< relref "/manual/basics/grid" >}})).
+Ein Beispiel für die Nutzung von Boxen als Hintergrund ist im Abschnitt über [Griffmarken]({{< relref "thumbindex" >}}) zu finden.
 Dort wird auch der Parameter `bleed` erläutert, der dazu dient, den Kasten in eine oder mehrere Richtungen zu vergrößern, sofern sich diese am Seitenrand befinden.
 
 ## Kreis

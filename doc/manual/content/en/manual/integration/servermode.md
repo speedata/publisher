@@ -1,10 +1,10 @@
 ---
-linktitle: "Server mode (REST API)"
+title: "Server mode (REST API)"
 weight: 64
 type: docs
 ---
 
-# Server mode (REST API) {{< profeature "Available in the Pro plan" >}}
+{{< profeature "Available in the Pro plan" >}}
 
 The Publisher provides an interface that can be used to pass requests for document generation via HTTP. The server mode is started with
 

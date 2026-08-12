@@ -9,7 +9,7 @@ Der Publisher hat verschiedene Möglichkeiten, Aufzählungslisten zu erstellen.
 
 ## Aufzählungslisten mit Ol und Ul
 
-Nummerierte und nicht nummerierte Listen können mit [`<Ul>`]({{< relref "/reference/ul" >}}) und [`<Ol>`]({{< relref "/reference/ol" >}}) erstellt werden:
+Nummerierte und nicht nummerierte Listen können mit [`<Ul>`]({{< relref "/reference/commands/ul" >}}) und [`<Ol>`]({{< relref "/reference/commands/ol" >}}) erstellt werden:
 
 ```xml
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
@@ -116,7 +116,7 @@ Verschachtelte Listen können über Tabellen realisiert werden, wobei man beacht
 
 ## Aufzählungslisten mit Absatzetiketten
 
-Der Befehl [`<Paragraph>`]({{< relref "/reference/paragraph" >}}) kann Zeichen links vor den Absatz anzeigen:
+Der Befehl [`<Paragraph>`]({{< relref "/reference/commands/paragraph" >}}) kann Zeichen links vor den Absatz anzeigen:
 
 ```xml
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
@@ -149,7 +149,7 @@ Der Befehl [`<Paragraph>`]({{< relref "/reference/paragraph" >}}) kann Zeichen l
 </Layout>
 ```
 
-Auch das kann für Aufzählungslisten benutzt werden. Das hat den Vorteil, dass im Befehl [`<Output>`]({{< relref "/reference/output" >}}) Absätze auch umbrochen werden können.
+Auch das kann für Aufzählungslisten benutzt werden. Das hat den Vorteil, dass im Befehl [`<Output>`]({{< relref "/reference/commands/output" >}}) Absätze auch umbrochen werden können.
 
 ![olulparlabel.png](/img/olulparlabel.png)
 
@@ -195,50 +195,5 @@ Hier hat man die Möglichkeit, Listen zu schachteln und besonders zu formatieren
 
 ![olulhtmlnested.png](/img/olulhtmlnested.png)
 
-Für die Formatierung kann man CSS-Anweisungen nutzen:
-
-```xml
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-    xmlns:sd="urn:speedata:2009/publisher/functions/en">
-
-    <Pageformat width="100mm" height="100mm" />
-    <Stylesheet >
-        ul {
-            list-style: none;
-            padding-left: 1em;
-        }
-
-        ul li::before {
-            content: "\25e6";
-            color: red;
-            display: inline-block;
-            width:1em;
-        }
-    </Stylesheet>
-
-    <Record element="data">
-        <PlaceObject>
-            <Textblock>
-                <Paragraph>
-                    <Value select="." />
-                </Paragraph>
-            </Textblock>
-        </PlaceObject>
-    </Record>
-
-</Layout>
-```
-
-mit den folgenden Daten:
-
-```xml
-<data>
-   <ul>
-      <li>Lorem ipsum</li>
-      <li>dolor sit amet</li>
-      <li>consectetur adipisicing elit</li>
-   </ul>
-</data>
-```
-
-![olulhtmlcolor.png](/img/olulhtmlcolor.png)
+Für die Formatierung der Listen und ihrer Marker können CSS-Anweisungen genutzt werden, zum Beispiel `li::marker` für Farbe und Zeichen des Aufzählungspunkts.
+Die Einzelheiten (Einzug, unterstützte Eigenschaften, Marker-Styling) beschreibt der Abschnitt [Listen in HTML]({{< relref "/manual/webformats/html#listen-in-html" >}}).

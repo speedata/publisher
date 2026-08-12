@@ -44,10 +44,10 @@ So it is evaluated last according to this logic and is always used if no other p
 ```
 {{% codecaption %}}Here, the page type for the first page after the page type for right pages must be defined, otherwise it would not be considered (sd:odd(1) returns true).{{% /codecaption %}}
 
-## Text frame
+## Placement areas
 
-Text frames can be created in the page type definition.
-These are described in detail in the section [ "Areas on the page"]({{< relref "positioningarea" >}}).
+Placement areas can be created in the page type definition.
+These are described in detail in the section [Placement areas]({{< relref "positioningframe" >}}).
 
 ## AtPageCreation, AtPageShipout
 
@@ -156,7 +156,7 @@ In the log file (`publisher-protocol.xml`) you can see which page types are sele
 
 ## Pagenumbers
 
-The page number of the current page can be determined with `sd:current-page()`. This function returns the number 1 on the first page, the number 2 on the second page and so on. The `startpage` attribute at [`<options>`]({{< relref "/reference/options" >}}) can be used to set the start page number:
+The page number of the current page can be determined with `sd:current-page()`. This function returns the number 1 on the first page, the number 2 on the second page and so on. The `startpage` attribute at [`<options>`]({{< relref "/reference/commands/options" >}}) can be used to set the start page number:
 
 ```xml
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
@@ -175,6 +175,19 @@ The page number of the current page can be determined with `sd:current-page()`. 
     </Record>
 </Layout>
 ```
+
+### Page x of y
+
+For output such as “Page 1 of 10” you need the total number of pages in the document.
+The [internal variable]({{< relref "internalvariables" >}}) `$_lastpage` contains the number of pages from the previous run:
+
+```xml
+<Value select="concat('Page ', sd:current-page(), ' of ', $_lastpage)"/>
+```
+
+Since the length of the document is only known at the end of a run, at least two runs are necessary before the value is correct.
+Before version 3.9.26 the last page number had to be saved with `<SaveDataset>` and loaded again in the next run.
+This general mechanism is described in the section [Creating lists (XML structure)]({{< relref "directoriesxml" >}}).
 
 ## Sections or matters
 
@@ -209,10 +222,10 @@ If you define and use your own sections or use a predefined section, this can ch
 </PlaceObject>
 ```
 
-Here (with [`<Clearpage>`]({{< relref "/reference/clearpage" >}})) the matter `frontmatter` is used for the following pages. This causes the visible page number to be output as a Roman numeral in lower case, as this section has been defined as follows:
+Here (with [`<Clearpage>`]({{< relref "/reference/commands/clearpage" >}})) the matter `frontmatter` is used for the following pages. This causes the visible page number to be output as a Roman numeral in lower case, as this section has been defined as follows:
 
 ```xml
 <DefineMatter name="frontmatter" label="lowercase-romannumeral" />
 ```
 
-Matters can only start with the command [`<Clearpage>`]({{< relref "/reference/clearpage" >}}).
+Matters can only start with the command [`<Clearpage>`]({{< relref "/reference/commands/clearpage" >}}).

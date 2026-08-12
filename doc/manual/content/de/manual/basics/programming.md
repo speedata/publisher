@@ -94,10 +94,68 @@ Weitere Details zur Strukturierung der Datendatei finden sich im Kapitel [Strukt
 
 ## Datenverarbeitung mit Record und ProcessNode
 
-Das Grundprinzip von [`Record`]({{< relref "/reference/record" >}}) und [`ProcessNode`]({{< relref "/reference/processnode" >}}) wurde oben bereits vorgestellt.
+Das Grundprinzip von [`Record`]({{< relref "/reference/commands/record" >}}) und [`ProcessNode`]({{< relref "/reference/commands/processnode" >}}) wurde oben bereits vorgestellt.
 Ähnlich wie `xsl:template match` und `xsl:apply-templates` in XSLT, definiert `Record` Verarbeitungsregeln für Datenelemente und `ProcessNode` ruft diese auf.
 
-In diesem Abschnitt werden die weiterführenden Möglichkeiten beschrieben: Pattern-Matching, Prioritäten und Modi.
+In diesem Abschnitt werden die weiterführenden Möglichkeiten beschrieben: die Alternative `<ForAll>`, Pattern-Matching, Prioritäten und Modi.
+
+### ForAll: Kindelemente ohne eigenen Record verarbeiten
+
+Alternativ zum Paar `<ProcessNode>`/`<Record>` kann mit [`<ForAll>`]({{< relref "/reference/commands/forall" >}}) direkt über Kindelemente iteriert werden, ohne dass ein eigener Record nötig ist.
+Innerhalb von `<ForAll>` hat man Zugriff auf die Attribute und Kindelemente des jeweiligen Elements, genau wie in einem Record.
+
+Für die Datendatei
+
+```xml
+<catalog>
+  <article nr="12345" price="99,95" quantity="1">
+    <description>Text for article 12345</description>
+  </article>
+  <article nr="56789" price="45,95" quantity="5">
+    <description>Text for article 56789</description>
+  </article>
+</catalog>
+```
+
+erzeugt das folgende Layout für jedes Kindelement `article` eine Tabellenzeile:
+
+```xml
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="catalog">
+    <PlaceObject>
+      <Table stretch="max"> <!--1-->
+        <Tablehead> <!--2-->
+          <Tr background-color="gray">
+            <Td>
+              <Paragraph><Value>Article number</Value></Paragraph>
+            </Td>
+            <Td>
+              <Paragraph><Value>Description</Value></Paragraph>
+            </Td>
+          </Tr>
+        </Tablehead>
+        <ForAll select="article"> <!--3-->
+          <Tr>
+            <Td>
+              <Paragraph><Value select="@nr"/></Paragraph>
+            </Td>
+            <Td>
+              <Paragraph><Value select="description"/></Paragraph>
+            </Td>
+          </Tr>
+        </ForAll>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
+```
+1. Es wird eine Tabelle ausgegeben, die sich über die gesamte Breite erstreckt (siehe das [Kapitel Tabellen]({{< relref "tables" >}})).
+2. Ein Tabellenkopf wird auf jeder Seite wiederholt.
+3. Innerhalb des `<ForAll>` kann auf die Attribute und Kindelemente von jedem Artikel zugegriffen werden.
+
+`<ForAll>` eignet sich für kompakte Ausgaben an Ort und Stelle wie diese Tabellenzeilen. `<ProcessNode>` mit eigenem `<Record>` ist die bessere Wahl, wenn die Verarbeitung umfangreicher ist oder an mehreren Stellen gebraucht wird.
 
 ### Pattern-Matching mit dem match-Attribut
 
@@ -286,7 +344,7 @@ damit wird der neue Wert an die vorherigen angehängt.
   </Element>
 </SetVariable>
 ```
-{{% codecaption %}}Ein Beispiel für Copy-of in der Praxis ist das Zusammenbauen von XML-Strukturen, mit denen Informationen gespeichert werden können. Ausführlich beschrieben wird dieses Beispiel im Kochbuch (Kapitel 8), dort im Abschnitt Verzeichnisse erstellen (XML-Struktur).{{% /codecaption %}}
+{{% codecaption %}}Ein Beispiel für Copy-of in der Praxis ist das Zusammenbauen von XML-Strukturen, mit denen Informationen gespeichert werden können. Ausführlich beschrieben wird dieses Beispiel im Abschnitt [Listen erstellen (XML-Struktur)]({{< relref "directoriesxml" >}}).{{% /codecaption %}}
 
 
 ## Kontrollfluss
@@ -443,7 +501,7 @@ Der Namensraum für die Funktion muss im Wurzelelement definiert werden (hier: `
 
 ## Datenstrukturen
 
-Der speedata Publisher unterstützt [Arrays und Maps]({{< relref "/manual/xpathref/datastructures" >}}) als native Datenstrukturen:
+Der speedata Publisher unterstützt [Arrays und Maps]({{< relref "/reference/xpath/datastructures" >}}) als native Datenstrukturen:
 
 ```xml
 <!-- Array: geordnete Liste -->
@@ -457,4 +515,4 @@ Der speedata Publisher unterstützt [Arrays und Maps]({{< relref "/manual/xpathr
 
 Für Arrays stehen Funktionen wie `array:size()`, `array:append()` und `array:flatten()` zur Verfügung.
 Für Maps gibt es `map:keys()`, `map:get()`, `map:put()` und weitere.
-Alle Details und Praxisbeispiele finden sich im Kapitel [Arrays und Maps]({{< relref "/manual/xpathref/datastructures" >}}).
+Alle Details und Praxisbeispiele finden sich im Kapitel [Arrays und Maps]({{< relref "/reference/xpath/datastructures" >}}).

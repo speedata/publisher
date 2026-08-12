@@ -62,7 +62,7 @@ The width of the table is determined by the contents. If `stretch="no"` (default
 
 ![If `stretch="no"` (or omit the stretch attribute), the table is only as wide as necessary (above). If you specify `stretch="max"` for the table, the entire width specified is used. The default setting for the width is the page width (bottom).](/img/tablestretchmaxno.png)
 
-There are some settings that apply to the entire table, such as the font, inner spacing, line and column spacing. These are described in the appendix in the reference [for the `<Table>` command]({{< relref "/reference/table" >}}).
+There are some settings that apply to the entire table, such as the font, inner spacing, line and column spacing. These are described in the appendix in the reference [for the `<Table>` command]({{< relref "/reference/commands/table" >}}).
 
 ## Table cells and table rows, lines in tables
 
@@ -517,7 +517,7 @@ The width of the dynamic header and footer is calculated without `_last_tr_data`
 
 ## Assembling tables
 
-Sometimes tables are not created in one piece. A common pattern when creating tables is to test whether a table still fits in a certain place. This is done by appending a table line by line and placing it in a group (a virtual space), which is then measured. The procedure for this is as follows:
+Sometimes tables are not created in one piece. A common pattern when creating tables is to test whether a table still fits in a certain place. This is done by appending a table line by line and placing it in a [group]({{< relref "groups" >}}) (a virtual space), which is then measured. The procedure for this is as follows:
 
 ```xml
 <SetVariable variable="newtablerows">
@@ -565,7 +565,7 @@ The check now takes place by creating the table in a group and then checking the
 ```
 {{% codecaption %}}With this pattern you can enlarge and measure a table line by line{{% /codecaption %}}
 
-A more detailed description can be found in the section [layoutoptimizationusinggroups]({{< relref "optimizingwithgroups" >}}).
+A more detailed description of the measuring pattern can be found in the section [Layout optimization]({{< relref "groups#layout-optimization" >}}).
 
 ## Alternating line colors
 Alternating row colors are often used in tables with many columns to help the eye read the table. The row color can be specified by `background-color="..."` at `<Tr>`.
@@ -750,7 +750,7 @@ The specification is always observed on the last page of a table, since the prev
 ## Page change in tables
 
 If a table is larger than the available space on the page, the table is continued on the next page or in the next placement frame.
-[The command `<TableNewPage>`]({{< relref "/reference/tablenewpage" >}}) is used to force such a page change.
+[The command `<TableNewPage>`]({{< relref "/reference/commands/tablenewpage" >}}) is used to force such a page change.
 
 ### Extra pages at table page breaks
 

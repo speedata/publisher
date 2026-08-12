@@ -22,7 +22,7 @@ Die Layoutanweisungen liegen getrennt von den Daten vor und sind in einer spezie
 
 **Programmierbare Layouts:** Anders als bei Template-basierten Systemen können Layoutentscheidungen während der PDF-Erzeugung getroffen werden. Abfragen wie »Passt dieses Bild noch auf die Seite?« oder »Wie breit ist der verbleibende Platz?« sind jederzeit möglich.
 
-**Keine GUI, volle Kontrolle:** Der Publisher ist ein Kommandozeilen-Werkzeug ohne graphische Oberfläche. Alle Anweisungen werden vor dem Lauf festgelegt. Das macht den Prozess reproduzierbar und automatisierbar — ideal für die Einbindung in bestehende Workflows und CI/CD-Pipelines.
+**Keine GUI, volle Kontrolle:** Der Publisher ist ein Kommandozeilen-Werkzeug ohne graphische Oberfläche. Alle Anweisungen werden vor dem Lauf festgelegt. Das macht den Prozess reproduzierbar und automatisierbar – ideal für die Einbindung in bestehende Workflows und CI/CD-Pipelines.
 
 **Typographische Qualität:** Der Publisher nutzt die gleiche Satztechnologie wie TeX/LaTeX (LuaTeX) und erreicht damit eine Ausgabequalität, die sonst nur interaktiven DTP-Programmen wie InDesign vorbehalten ist.
 

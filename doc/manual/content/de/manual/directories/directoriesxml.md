@@ -1,6 +1,6 @@
 ---
 title: "Listen erstellen (XML-Struktur)"
-weight: 46
+weight: 45
 type: docs
 ---
 
@@ -15,9 +15,8 @@ Beim nächsten Lauf des Publishers werden diese Daten eingelesen und stehen zur 
 
 ## Schritt 1: Sammeln der Informationen
 
-Die beiden Befehle [`<Element>`]({{< relref "/reference/element" >}}) und [`<Attribute>`]({{< relref "/reference/attribute" >}}) dienen zur Strukturierung von Daten, die während der Verarbeitung gelesen werden.
-Das ist schon im Kapitel [xmlstrukturen]({{< relref "elementattribut" >}}) beschrieben worden.
-Mit diesen Befehlen lassen sich neue XML Datensatzdateien erzeugen.
+Die beiden Befehle [`<Element>`]({{< relref "/reference/commands/element" >}}) und [`<Attribute>`]({{< relref "/reference/commands/attribute" >}}) dienen zur Strukturierung von Daten, die während der Verarbeitung gelesen werden.
+Mit diesen Befehlen lassen sich neue XML-Datensatzdateien erzeugen.
 Folgende Struktur könnte für eine Artikelliste sinnvoll sein:
 
 ```xml
@@ -47,9 +46,11 @@ Um diese Struktur im Layoutregelwerk zu erstellen, muss sie aus den Befehlen `<E
 </Element>
 ```
 
+Textinhalte außerhalb von Attributen, wie z. B. mixed content, können auf diesem Weg nicht erzeugt werden.
+
 ## Schritt 2: Speichern und Laden der Informationen
 
-Mit dem Befehl [`<SaveDataset>`]({{< relref "/reference/savedataset" >}})  wird diese Struktur auf die Festplatte gespeichert und mit [`<LoadDataset>`]({{< relref "/reference/loaddataset" >}}) wird sie wieder geladen.
+Mit dem Befehl [`<SaveDataset>`]({{< relref "/reference/commands/savedataset" >}})  wird diese Struktur auf die Festplatte gespeichert und mit [`<LoadDataset>`]({{< relref "/reference/commands/loaddataset" >}}) wird sie wieder geladen.
 Existiert die Datei beim Laden nicht, so wird kein Fehler gemeldet, da es sich um den ersten Durchlauf handeln könnte, wo die Datei naturgemäß noch nicht existiert.
 
 ## Schritt 3: Verarbeiten der Informationen
@@ -62,11 +63,11 @@ Direkt nach dem Laden wird die XML-Verarbeitung mit dem ersten Element der gerad
 </Record>
 ```
 
-Das heißt, dass die eigentliche Datenverarbeitung zeitweilig unterbrochen und mit dem neuen Datensatz aus [`<LoadDataset>`]({{< relref "/reference/loaddataset" >}}) fortgeführt wird.
+Das heißt, dass die eigentliche Datenverarbeitung zeitweilig unterbrochen und mit dem neuen Datensatz aus [`<LoadDataset>`]({{< relref "/reference/commands/loaddataset" >}}) fortgeführt wird.
 
 ## Beispiel
 
-Das ist dasselbe Beispiel wie aus dem vorherigen Abschnitt ([verzeichnisseerstellen-marker]({{< relref "directoriesmarker" >}})). Als Beispiel wird eine einfache Datendatei genommen:
+Das ist dasselbe Beispiel wie aus dem vorherigen Abschnitt ([Marken]({{< relref "directoriesmarker" >}})). Als Beispiel wird eine einfache Datendatei genommen:
 
 ```xml
 <data>

@@ -11,11 +11,11 @@ Another note for the manual. Many examples only show the layout file and not the
 {{< /callout >}}
 
 {{< cards >}}
-  {{< card link="structuredatafile" title="Data File Structure" subtitle="How data and layout rules work together" >}}
-  {{< card link="programming" title="Programming" subtitle="Variables, conditions, loops, and functions" >}}
+  {{< card link="structuredatafile" title="Data File Structure" subtitle="How to structure the data file" >}}
   {{< card link="outputtingobjects" title="Outputting Objects" subtitle="Text, images, boxes, barcodes, and more" >}}
   {{< card link="fileorganization" title="File Organization" subtitle="How the Publisher finds files" >}}
   {{< card link="grid" title="Grid" subtitle="The page grid and object placement" >}}
   {{< card link="pagetypes" title="Page Types" subtitle="Defining different page templates" >}}
-  {{< card link="positioningframe" title="Positioning Areas" subtitle="Areas and frames on the page" >}}
+  {{< card link="programming" title="Programming" subtitle="Variables, conditions, loops, and functions" >}}
+  {{< card link="positioningframe" title="Placement areas" subtitle="Areas and frames on the page" >}}
 {{< /cards >}}

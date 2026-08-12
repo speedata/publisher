@@ -1,6 +1,6 @@
 ---
 title: "Inhaltsverzeichnis in einem Durchlauf"
-weight: 58
+weight: 46
 type: docs
 ---
 
@@ -15,27 +15,9 @@ Es ist möglich, die Reihenfolge der Seiten nachträglich zu ändern, indem die 
 
 ![Der Seitenbaum muss nicht der Reihenfolge der geschriebenen Seiten entsprechen.](/img/pagetree-insert.png)
 
-Die Schnittstelle zum speedata Publisher läuft über die schon vorhandenen Befehle `<InsertPages>` und `<SavePages>`:
-
-```xml
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-  xmlns:sd="urn:speedata:2009/publisher/functions/en">
-
-  <Record element="data">
-    <InsertPages name="table of contents" pages="1" />
-
-    <ProcessNode select="chapter" />
-
-    <SavePages name="table of contents">
-      <PlaceObject>
-        ...
-      </PlaceObject>
-    </SavePages>
-  </Record>
-</Layout>
-```
-
-Das Ziel der später erstellten Seiten wird mit `<InsertPages>` markiert und die eigentlichen Seiten mit `<SavePages>` erzeugt. Der speedata Publisher kümmert sich darum, dass die interne Seitenzahl nach `<InsertPages>` um die angegebene Zahl erhöht wird und dass im Inhalt von `<SavePages>` wiederum die Seitenzahl angepasst wird.
+Die Schnittstelle zum speedata Publisher sind die Befehle `<InsertPages>` und `<SavePages>`, deren Grundlagen im Abschnitt [Virtuelle Seiten]({{< relref "virtualpages" >}}) beschrieben sind.
+Für das Inhaltsverzeichnis markiert `<InsertPages>` vorne im Dokument das Ziel der später erstellten Seiten, und `<SavePages>` erzeugt diese Seiten am Ende des Durchlaufs.
+Der speedata Publisher kümmert sich darum, dass die interne Seitenzahl nach `<InsertPages>` um die angegebene Zahl erhöht wird und dass im Inhalt von `<SavePages>` wiederum die Seitenzahl angepasst wird.
 
 Damit die Seitennummerierung auch richtig ist, muss man die Anzahl der einzufügenden Seiten vorab kennen. Das ist bei Datenblättern und Produktkatalogen (dem eigentlichen Anwendungsfall für den speedata Publisher) fast immer gegeben, so dass das in der Praxis nur eine kleine Einschränkung ist.
 
@@ -44,7 +26,7 @@ Damit die Seitennummerierung auch richtig ist, muss man die Anzahl der einzufüg
 Dieses Beispiel ist aus dem [Beispiel-Repository](https://github.com/speedata/examples/tree/master/technical/singlepasstoc) und wird in drei Schritten erläutert.
 
 Zuerst wird ein Seitentyp definiert, der für alle Seiten gleich ist (Bedingung ist `true()`, diese Seite wird also immer ausgewählt).
-Dieser Seitentyp definiert einen Textrahmen (`text`) und gibt im Seitenfuß die Seitenzahl im äußeren Rand aus.
+Dieser Seitentyp definiert einen Platzierungsbereich (`text`) und gibt im Seitenfuß die Seitenzahl im äußeren Rand aus.
 Das dient hier nur zur Kontrolle, dass die Seiten auch richtig gezählt werden, denn es wird eine Seite vom Schluss an den Anfang geschoben.
 
 ```xml

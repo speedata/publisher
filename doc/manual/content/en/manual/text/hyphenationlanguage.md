@@ -22,7 +22,7 @@ switches the entire document to German hyphenation patterns, while
 </Paragraph>
 ```
 
-changes the language for only one paragraph. The available languages are described in the command reference under [`<Options>`]({{< relref "/reference/options" >}}).
+changes the language for only one paragraph. The available languages are described in the command reference under [`<Options>`]({{< relref "/reference/commands/options" >}}).
 
 Alternatively to the written out names like `German`, the language code can be used.
 The two examples above can also be used as follows:
@@ -35,7 +35,7 @@ The two examples above can also be used as follows:
 </Paragraph>
 ```
 
-If you want to test if the words are hyphenated correctly, you can create small marks with `<Trace hyphenation="yes" />`.
+If you want to test if the words are hyphenated correctly, you can create small marks with `<Trace hyphenation="yes" />`. All switches of the `<Trace>` command are listed in the chapter [Troubleshooting / Debugging]({{< relref "troubleshooting" >}}).
 
 ```xml
 <Layout
@@ -136,8 +136,8 @@ Some languages have special typesetting rules that do not affect hyphenation, bu
 So the characters can change their shape or position, depending on where they are in the word.
 To use this feature, the following conditions must be met:
 
-1. `mode="harfbuzz"` must be activated at [`<LoadFontfile>`]({{< relref "/reference/loadfontfile" >}}).
-2. The language should be set correctly. If the language is not available in the [list of supported languages]({{< relref "/reference/options" >}}), `Other` or `--` (two dashes) must be used. If the language is not set correctly, layout errors might occur.
+1. `mode="harfbuzz"` must be activated at [`<LoadFontfile>`]({{< relref "/reference/commands/loadfontfile" >}}).
+2. The language should be set correctly. If the language is not available in the [list of supported languages]({{< relref "/reference/commands/options" >}}), `Other` or `--` (two dashes) must be used. If the language is not set correctly, layout errors might occur.
 3. The selected font must contain the appropriate characters.
 
 ```xml
@@ -232,5 +232,5 @@ and is activated with `bidi="yes"`:
 * Set the `direction` attribute if it is clear in which context the text should appear. If it is empty or not set, the content of the text decides which direction the paragraph should have. This works well in most cases, but not, for example, with mixed text that starts with a “wrong” direction.
 * If in doubt, set the attribute `bidi` to `yes`. The only drawback is that the publishing run might be a bit slower. Other differences should not occur.
 * The language setting (`language`) should either contain the correct language, be empty or set to the language `Other`. The problem is that some language settings can cause an unwanted write direction.
-* For text alignment (`alignment` at [DefineTextformat]({{< relref "/reference/definetextformat" >}})) you should use `start` and `end` instead of `left` or `right`. `start` and `end` are oriented to the direction for the paragraph.
+* For text alignment (`alignment` at [DefineTextformat]({{< relref "/reference/commands/definetextformat" >}})) you should use `start` and `end` instead of `left` or `right`. `start` and `end` are oriented to the direction for the paragraph.
 * The [HarfBuzz-fontloader]({{< relref "hyphenationlanguage" >}}) must be activated.

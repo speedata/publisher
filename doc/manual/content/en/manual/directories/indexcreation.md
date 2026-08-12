@@ -1,9 +1,50 @@
 ---
-title: "Sorting of keyword indexes"
-weight: 44
+title: "Sorting and grouping"
+weight: 47
 type: docs
 ---
 
+
+The speedata Publisher offers two commands for sorting data in the layout:
+[`<SortSequence>`]({{< relref "/reference/commands/sortsequence" >}}) for simple sorting and [`<Makeindex>`]({{< relref "/reference/commands/makeindex" >}}), which also groups the data and is therefore suitable for keyword indexes.
+If these methods are not sufficient, the sorting must be done beforehand by an external program such as XSLT.
+
+## Sorting with SortSequence
+
+Assuming that the data file (data.xml) looks like this:
+
+```xml
+<data>
+  <item value="one"/>
+  <item value="two"/>
+  <item value="three"/>
+</data>
+```
+
+Can now be sorted with `<SortSequence>`. The original data is not changed.
+
+```xml
+<Layout
+  xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Record element="data">
+    <SetVariable variable="unsorted" select="*"/>
+    <SetVariable variable="sorted">
+      <SortSequence select="$unsorted" criterion="value"/>
+    </SetVariable>
+    <PlaceObject>
+      <Textblock>
+        <ForAll select="$sorted">
+          <Paragraph><Value select="@value"/></Paragraph>
+        </ForAll>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+```
+
+## Keyword indexes with Makeindex
 
 As a rule, keyword indexes can be found at the end of a document in order to quickly locate relevant pages in printed works.
 These keywords can be words or even article numbers or other designations.
@@ -11,7 +52,7 @@ These keywords can be words or even article numbers or other designations.
 In contrast to the table of contents (which is usually at the front of a publication), the data only has to be compiled; there is usually no need to save the data temporarily for the next run.
 
 
-## Example
+### Example
 
 ![Keyword index from the example](/img/stichwortverzeichnis.png)
 
@@ -92,21 +133,22 @@ The element structure, which is created with the command `<Makeindex>`, is as fo
 </index>
 ```
 
-The section on the `keyword` element (insert at position 1 in the listing ) is kept simple, and corresponds to the “copy of” pattern (see [copyof]({{< relref "programming" >}})).
+The section on the `keyword` element (insert at position 1 in the listing ) is kept simple, and corresponds to the “copy of” pattern (see [Copy-of]({{< relref "programming#copy-of" >}})).
 Here the variable `indexentries` is supplemented by one entry each.
 
 ```xml
   <Record element="keyword">
     <SetVariable variable="indexentries">
-      <Copy-of select="$indexentries"/>
+      <Copy-of select="$indexentries/indexentry"/> <!--1-->
       <Element name="indexentry">
-        <Attribute name="name" select="@word"/> <!--1-->
+        <Attribute name="name" select="@word"/> <!--2-->
         <Attribute name="page" select="@page"/>
       </Element>
     </SetVariable>
   </Record>
 ```
-1. In the current publisher version, the entry that is sorted must be saved in an attribute called `name`.
+1. The path `$indexentries/indexentry` (instead of just `$indexentries`) keeps the list flat; only then will `<Makeindex>` later see all the entries.
+2. In the current publisher version, the entry that is sorted must be saved in an attribute called `name`.
 
 In the last part the table is output (insert at position 3 in the listing ).
 For each section (element `section` in `<Makeindex>`) a line in light grey is output with the sort key.
@@ -137,4 +179,3 @@ Then, for each entry within this section, a line is output with the name of the 
     </PlaceObject>
   </Record>
 ```
-

@@ -61,7 +61,90 @@ Do they still fit on the page? Do I have to insert a page break here? And so on.
 It's best to play a little with the virtual areas to get familiar with them.
 Used correctly, they are a powerful tool.
 
-See the chapter [layoutoptimizationusinggroups]({{< relref "optimizingwithgroups" >}}) for an example how to optimize layout using groups.
+## Layout optimization
+
+A typical case with database publishing is that you don't know what data to expect. Text varies in length, images have different aspect ratios, the amount of data in the record varies, and so on. In order to still create a presentation that is appealing (i.e. follows certain rules), you can make queries. Besides static questions like "How many articles are in the article group?", dynamic questions can be answered:
+
+* How wide is the headline?
+* How high is the image?
+* Does the table still fit on the page?
+
+The idea is as follows: You create a group, place the elements that you want to measure there and then ask how large (width and height) the virtual area has become, in order to react differently to it.
+
+The framework is as follows:
+
+```xml
+<Record element="data">
+  <Group name="img">
+    <Contents>
+      <!--1-->
+      <PlaceObject>
+        <Image file="_samplea.pdf" width="4"/>
+      </PlaceObject>
+    </Contents>
+  </Group>
+  <!--2-->
+  <Switch>
+    <Case test="sd:group-height('img') > 5">
+      ...
+    </Case>
+    <Otherwise>
+      ...
+    </Otherwise>
+  </Switch>
+</Record>
+```
+1. At the beginning the group has a width and height of 0. All objects increase the area.
+2. The group now has a width of 4 and an unknown height (depending on the image). Now the height can be queried with `sd:group-height()` and the width with `sd:group-width()`. What happens in the case distinction depends on the concrete layout, of course.
+
+The principle is always the same: the content in question is placed on a virtual area and measured. On the basis of the determined height or width, you can, for example
+
+* simply output the group,
+* insert a page break if the group no longer fits on the page,
+* recreate the group in a loop with modified parameters until a condition is met (an example of this procedure is shown in the section [Virtual Pages]({{< relref "virtualpages" >}})),
+* assemble a table row by row and check whether it still fits (see [Assembling tables]({{< relref "/manual/tables#assembling-tables" >}})).
+
+## Separate grids in groups
+
+The following is an example of a grid within a group that differs from the global grid.
+Without the explicit `<Grid ... />` specification, the grid is taken from the page.
+
+```xml
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <SetGrid nx="4" ny="4"/>
+  <Trace grid="yes" gridallocation="yes" objects="yes"/>
+
+  <Record element="data">
+    <Group name="table">
+      <Grid width="1cm" height="12pt"/>
+      <Contents>
+        <PlaceObject>
+          <Table width="4" stretch="max">
+            <Tr>
+              <Td><Paragraph><Value>Cell 1/1</Value></Paragraph></Td>
+              <Td><Paragraph><Value>Cell 2/1</Value></Paragraph></Td>
+            </Tr>
+            <Tr>
+              <Td><Paragraph><Value>Cell 1/2</Value></Paragraph></Td>
+              <Td><Paragraph><Value>Cell 2/2</Value></Paragraph></Td>
+            </Tr>
+          </Table>
+        </PlaceObject>
+        <PlaceObject row="4" column="2">
+          <Image file="ocean.pdf" width="3"/>
+        </PlaceObject>
+      </Contents>
+    </Group>
+
+    <PlaceObject groupname="table"/>
+  </Record>
+</Layout>
+```
+{{% codecaption %}}The group has its own grid that is independent of the page grid.{{% /codecaption %}}
+
+![Section of a page. The grid within the group is much finer than the coarse page grid.](/img/08-raster4.png)
 
 ## Tracing
 

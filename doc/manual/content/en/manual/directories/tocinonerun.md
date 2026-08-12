@@ -1,6 +1,6 @@
 ---
 title: "Create table of contents in one go"
-weight: 58
+weight: 46
 type: docs
 ---
 
@@ -16,27 +16,9 @@ It is possible to change the order of the pages afterwards by changing the list 
 
 ![The page tree does not have to correspond to the order of the written pages.](/img/pagetree-insert.png)
 
-The interface to the speedata Publisher runs via the existing commands `<InsertPages>` and `<SavePages>`:
-
-```xml
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-  xmlns:sd="urn:speedata:2009/publisher/functions/en">
-
-  <Record element="data">
-    <InsertPages name="table of contents" pages="1" />
-
-    <ProcessNode select="chapter" />
-
-    <SavePages name="table of contents">
-      <PlaceObject>
-        ...
-      </PlaceObject>
-    </SavePages>
-  </Record>
-</Layout>
-```
-
-The destination of the pages created later is marked with `<InsertPages>` and the actual pages are created with `<SavePages>`. The speedata Publisher takes care that the internal number of pages after `<InsertPages>` is increased by the number specified and that the number of pages in the content of `<SavePages>` is again adjusted.
+The interface to the speedata Publisher are the commands `<InsertPages>` and `<SavePages>`; their basics are described in the section [Virtual Pages]({{< relref "virtualpages" >}}).
+For the table of contents, `<InsertPages>` marks the destination of the pages created later at the beginning of the document, and `<SavePages>` creates these pages at the end of the run.
+The speedata Publisher takes care that the internal page number after `<InsertPages>` is increased by the number specified and that the page numbers in the content of `<SavePages>` are adjusted accordingly.
 
 To ensure that the page numbering is correct, the number of pages to be inserted must be known in advance. This is almost always the case with data sheets and product catalogs (the actual use case for the speedata Publisher), so in practice this is only a small limitation.
 
@@ -45,7 +27,7 @@ To ensure that the page numbering is correct, the number of pages to be inserted
 This example is from the [sample repository](https://github.com/speedata/examples/tree/master/technical/singlepasstoc) and is explained in three steps
 
 First, a page type is defined which is the same for all pages (condition is `true()`, so this page is always selected).
-This page type defines a text frame (`text`) and displays the page number in the outer margin of the page footer.
+This page type defines a placement area (`text`) and displays the page number in the outer margin of the page footer.
 This is only used here to check that the pages are counted correctly, because a page is moved from the end to the beginning.
 
 ```xml

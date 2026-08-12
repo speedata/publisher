@@ -18,13 +18,13 @@ In der Regel reicht eine Angabe bei dem Objekt, das ausgegeben werden soll:
     </PlaceObject>
 ```
 
-Alle CSS4 Farben sind im Publisher definiert, siehe dazu die Liste bei [`<DefineColor>`]({{< relref "/reference/definecolor" >}}).
+Alle CSS4 Farben sind im Publisher definiert, siehe dazu die Liste bei [`<DefineColor>`]({{< relref "/reference/commands/definecolor" >}}).
 
 ![Nicht jede Farbkombination ist schön](/img/kreismitfarbe.png)
 
 ## Farbdefinitionen
 
-Farben können mit [`<DefineColor>`]({{< relref "/reference/definecolor" >}}) einem Namen zugewiesen und anschließend unter diesem angesprochen werden:
+Farben können mit [`<DefineColor>`]({{< relref "/reference/commands/definecolor" >}}) einem Namen zugewiesen und anschließend unter diesem angesprochen werden:
 
 ```xml
 <DefineColor name="logocolor" model="cmyk" c="0" m="18" y="90" k="2" />

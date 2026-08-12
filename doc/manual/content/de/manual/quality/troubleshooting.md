@@ -34,10 +34,10 @@ Dies sind (mit Voreinstellung):
 : Erhöht die Ausgabe auf der Konsole (Protokoll-Datei).
 
 `grid`
-: Zeichnet das Raster. Siehe Abschnitt [raster]({{% relref "/manual/basics/grid" %}}).
+: Zeichnet das Raster. Siehe Abschnitt [Raster]({{% relref "/manual/basics/grid" %}}).
 
 `gridallocation`
-: Zeichnet die Rasterbelegung. Siehe Abschnitt [raster]({{% relref "/manual/basics/grid" %}}).
+: Zeichnet die Rasterbelegung. Siehe Abschnitt [Raster]({{% relref "/manual/basics/grid" %}}).
 
 `hyphenation`
 : Markiert die Stellen, an denen die Wörter umbrochen werden dürfen (Silbentrennung).
@@ -66,7 +66,7 @@ Die Ausgaben erscheinen in der Logdatei (`publisher-protocol.xml`)
 
 Den Befehl `<Message>` kann man mit `error="yes"` anweisen, eine Fehlermeldung auszugeben (anstelle einer Nachricht).
 Ebenso kann man den Fehlercode bestimmen, der beim Beenden des Publishers zurückgegeben wird.
-Siehe [den Befehl `<Message>` in der Referenz]({{< relref "/reference/message" >}}).
+Siehe [den Befehl `<Message>` in der Referenz]({{< relref "/reference/commands/message" >}}).
 
 ## Statusdatei und Protokolldatei
 

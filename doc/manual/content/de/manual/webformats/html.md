@@ -108,15 +108,8 @@ Oder CSS aus einer Datei laden:
 
 ### Unterstützte CSS-Eigenschaften
 
-Der speedata Publisher unterstützt eine Teilmenge von CSS-Eigenschaften, darunter:
-
-* Schrifteigenschaften: `font-family`, `font-size`, `font-weight`, `font-style`
-* Texteigenschaften: `color`, `text-align`, `text-decoration`, `line-height`
-* Box-Modell: `margin`, `padding`, `border`, `width`, `height`
-* Hintergrund: `background-color`
-* Listenstil: `list-style-type`, `list-style`
-
-Eine vollständige Liste der unterstützten CSS-Eigenschaften ist im CSS-Abschnitt unter [CSS verwenden]({{< relref "css" >}}) zu finden.
+Der speedata Publisher unterstützt eine Teilmenge von CSS-Eigenschaften, darunter Schrift-, Text- und Box-Modell-Eigenschaften, Hintergrundfarben sowie Listen- und Umbruchsteuerung.
+Die vollständige Liste steht im Kapitel [CSS verwenden]({{< relref "css" >}}); den Umsetzungsstand einzelner Eigenschaften zeigt der [Teststatus](#teststatus).
 
 ## Listen in HTML
 

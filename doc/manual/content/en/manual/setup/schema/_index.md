@@ -44,8 +44,34 @@ The documentation of the individual commands and the selection options is also i
 
 ![Allowed attributes for text block](/img/29-autocomplete2.png)
 
+## Suitable editors
+
+To use the schema you need an XML editor that can process RELAX NG or XML Schema (XSD), for example:
+
+-   [OxygenXML](https://www.oxygenxml.com) (Mac, Windows, Linux)
+-   [Visual Studio Code](https://code.visualstudio.com) (Mac, Windows, Linux, free)
+-   [XMLSpy](https://www.altova.com/xml-editor/) (Windows)
+-   [XML Blueprint](https://www.xmlblueprint.com/) (Windows)
+-   [GNU Emacs](https://www.gnu.org/software/emacs/) with [nxml-mode](https://www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html) (cross platform, free)
+-   [jEdit](http://www.jedit.org) (Mac, Windows, Linux, free)
+
 ## Integration of the schemata
 
+The schema files are located in the ZIP file in the `share/schema/` directory under the file names
+
+```
+layoutschema-de.rng
+layoutschema-en.rng
+```
+
+for RELAX NG and
+
+```
+layoutschema-de.xsd
+layoutschema-en.xsd
+```
+
+for XSD, depending on the desired language of the documentation.
+
 How the schema is included depends on the editor.
-The appendix contains step-by-step instructions for various editors ([oXygen XML Editor]({{< relref "oxygenxmlschema" >}}) or [Visual Studio Code]({{< relref "vscodeschema" >}})).
-Further information is available in the chapter [appendix-schema-assigning]({{< relref "schema" >}}).
+There are step-by-step instructions for various editors ([oXygen XML Editor]({{< relref "oxygenxmlschema" >}}) or [Visual Studio Code]({{< relref "vscodeschema" >}})).

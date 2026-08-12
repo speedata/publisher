@@ -3,6 +3,21 @@
 This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/en/).
 
 
+# Version 6.0
+
+Planned for 2026-11
+
+* Math enhancements
+* Removal of the old XPath and font loader code
+* Callbacks for file finding and image handlers (replaces configuration)
+
+# Version 5.8
+
+Planned for 2026-09
+
+* Only bug fixes and internal changes
+* Deprecation of the old XPath parser and fontforge font loader
+
 # Version 5.6
 
 Released 2026-06-03

@@ -1,5 +1,5 @@
 ---
-title: "Bereiche auf der Seite"
+title: "Platzierungsbereiche"
 weight: 41
 type: docs
 ---
@@ -105,7 +105,7 @@ Folgendes Beispiel illustriert das Verhalten des Cursors.
 
 ## Überlauf von Texten in den nächsten Rahmen
 
-Mit der Ausgabe von Texten über die Befehle `<Output>`/`<Text>` können Seitenumbrüche in Texten vorkommen, wie im Abschnitt [objekteausgebentext]({{< relref "outputtingobjects" >}}) beschrieben.
+Mit der Ausgabe von Texten über die Befehle `<Output>`/`<Text>` können Seitenumbrüche in Texten vorkommen, wie im Abschnitt [Objekte ausgeben]({{< relref "outputtingobjects" >}}) beschrieben.
 Das funktioniert nicht nur über Seitengrenzen, sondern auch über Bereiche auf den Seiten, sofern diese denselben Namen haben.
 
 Als Beispiel dient diese Seitendefinition:

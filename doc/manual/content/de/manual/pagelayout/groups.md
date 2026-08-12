@@ -60,8 +60,95 @@ Passen sie noch auf die Seite? Muss ich hier einen Umbruch einfügen? Und so for
 Am besten spielt man ein wenig mit den virtuellen Bereichen, um sich damit vertraut zu machen.
 Richtig benutzt sind sie ein mächtiges Werkzeug.
 
-Ein Hinweis auf das Kapitel [optimierung-mit-gruppen]({{< relref "optimizingwithgroups" >}}) sei noch erlaubt.
-Dort wird die Optimierung mit einem Beispiel beschrieben.
+## Layout-Optimierung
+
+Ein typischer Fall beim Database Publishing ist, dass man nicht weiß, welche Daten zu erwarten sind.
+Texte sind unterschiedlich lang, Bilder haben andere Seitenverhältnisse, die Anzahl der Daten im Datensatz ist variabel und so fort.
+Um trotzdem eine Darstellung zu erzeugen, die ansprechend ist (also gewissen Regeln folgt), kann man Abfragen stellen.
+Neben statischen Fragen wie »Wie viele Artikel sind in der Artikelgruppe enthalten?« können dynamische Fragen beantwortet werden:
+
+* Wie breit ist die Überschrift?
+* Wie hoch ist das Bild?
+* Passt die Tabelle noch auf die Seite?
+
+Die Idee ist folgende: Man erzeugt eine Gruppe, platziert dort die Elemente, die man ausmessen möchte, und fragt anschließend, wie groß (Breite und Höhe) die virtuelle Fläche geworden ist, um daraufhin unterschiedlich zu reagieren.
+
+Das Gerüst ist folgendes:
+
+```xml
+<Record element="data">
+  <Group name="img">
+    <Contents>
+      <!--1-->
+      <PlaceObject>
+        <Image file="_samplea.pdf" width="4"/>
+      </PlaceObject>
+    </Contents>
+  </Group>
+  <!--2-->
+  <Switch>
+    <Case test="sd:group-height('img') > 5">
+      ...
+    </Case>
+    <Otherwise>
+      ...
+    </Otherwise>
+  </Switch>
+</Record>
+```
+1. Zu Beginn hat die Gruppe eine Breite und Höhe von 0. Alle Objekte vergrößern die Fläche.
+2. Die Gruppe hat nun eine Breite von 4 und eine unbekannte Höhe (abhängig vom Bild). Nun kann mit `sd:group-height()` die Höhe und `sd:group-width()` die Breite abgefragt werden. Was in der Fallunterscheidung passiert, ist natürlich vom konkreten Layout abhängig.
+
+Das Prinzip ist immer dasselbe: die fraglichen Inhalte werden auf einen virtuellen Bereich gesetzt und ausgemessen.
+Aufgrund der ermittelten Höhe oder Breite kann man z. B.
+
+* die Gruppe einfach ausgeben,
+* einen Seitenumbruch einfügen, wenn die Gruppe nicht mehr auf die Seite passt,
+* die Gruppe in einer Schleife mit veränderten Parametern erneut erzeugen, bis eine Bedingung erfüllt ist (ein Beispiel für dieses Verfahren ist im Abschnitt [Virtuelle Seiten]({{< relref "virtualpages" >}}) gezeigt),
+* eine Tabelle zeilenweise aufbauen und prüfen, ob sie noch passt (siehe [Zusammenbauen von Tabellen]({{< relref "/manual/tables#zusammenbauen-von-tabellen" >}})).
+
+## Eigene Raster in Gruppen
+
+Es folgt ein Beispiel für ein vom globalen Raster abweichendes Raster innerhalb einer Gruppe.
+Ohne die explizite `<Grid ... />`-Angabe wird das Raster der Seite genommen.
+
+```xml
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <SetGrid nx="4" ny="4"/>
+  <Trace grid="yes" gridallocation="yes" objects="yes"/>
+
+  <Record element="data">
+    <Group name="table">
+      <Grid width="1cm" height="12pt"/>
+      <Contents>
+        <PlaceObject>
+          <Table width="4" stretch="max">
+            <Tr>
+              <Td><Paragraph><Value>Cell 1/1</Value></Paragraph></Td>
+              <Td><Paragraph><Value>Cell 2/1</Value></Paragraph></Td>
+            </Tr>
+            <Tr>
+              <Td><Paragraph><Value>Cell 1/2</Value></Paragraph></Td>
+              <Td><Paragraph><Value>Cell 2/2</Value></Paragraph></Td>
+            </Tr>
+          </Table>
+        </PlaceObject>
+        <PlaceObject row="4" column="2">
+          <Image file="ocean.pdf" width="3"/>
+        </PlaceObject>
+      </Contents>
+    </Group>
+
+    <PlaceObject groupname="table"/>
+  </Record>
+</Layout>
+```
+{{% codecaption %}}Die Gruppe hat ein eigenes Raster, das vom Seitenraster unabhängig ist.{{% /codecaption %}}
+
+
+![Ausschnitt aus einer Seite. Das Raster innerhalb der Gruppe ist deutlich feiner als das grobe Seitenraster.](/img/08-raster4.png)
 
 ## Tracing
 

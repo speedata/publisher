@@ -76,3 +76,20 @@ Keep HTML parsing enabled when:
 * You are using CSS styles with HTML elements
 * Document generation time is not critical
 
+## Size of the working directory
+
+When the Publisher starts, it reads the working directory including all subdirectories and stores the file names (see [File organization]({{< relref "fileorganization" >}})).
+A few thousand files are not a problem, but very large directory trees slow down the start noticeably.
+Keep the working directory lean and only put files there that the Publisher really needs.
+With `sp --no-local` the recursive search can be switched off; `--extra-dir` adds specific directories.
+
+## Image sizes
+
+Very large image files slow down processing and increase the size of the PDF file.
+If the full resolution is not needed, it pays off to downscale the images beforehand.
+Alternatively, the `dpi` option on [PDFOptions]({{< relref "/reference/commands/pdfoptions" >}}) limits the resolution in the PDF, and the [resize handler]({{< relref "/manual/imagesandgraphics#configuration-of-the-resize-handler" >}}) (Pro plan) can adapt images automatically.
+
+## Bidirectional text
+
+The `bidi` attribute on the [`<Options>`]({{< relref "/reference/commands/options" >}}) command enables the analysis of the writing direction so that left-to-right and right-to-left text can be mixed.
+This analysis takes time. Only enable it if the document actually contains mixed writing directions.

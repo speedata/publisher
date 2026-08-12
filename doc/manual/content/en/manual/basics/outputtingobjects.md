@@ -6,7 +6,7 @@ type: docs
 
 
 There are two commands to output objects. One is called `<Output>` and is only used for text that is to wrap to multiple pages. All other objects (images, tables, barcodes, ...) are output using the command `<PlaceObject>`.
-The parameters are listed in detail in the command reference (see command [`<PlaceObject>`]({{< relref "/reference/placeobject" >}})). Here are some examples and possible applications.
+The parameters are listed in detail in the command reference (see command [`<PlaceObject>`]({{< relref "/reference/commands/placeobject" >}})). Here are some examples and possible applications.
 
 In the simplest case, the command can be used as follows:
 
@@ -23,15 +23,15 @@ Here an image is loaded with the specified file name and a specified width. The 
 
 ## Grid based placement of objects
 
-The [section about grids]({{< relref "/manual/basics/grid" >}}) provides a detailed description of the design grid. Only so much should be mentioned here: The grid helps on the one hand to position the objects (easy arrangement of the objects) and on the other hand to find the right place. Grid cells are not occupied by two objects at the same time, unless you explicitly allow this.
-
-This is an example of grid-based output. The specifications for `row` and `column` are coordinates in the page grid, where the upper left corner is position 1,1.
+With the attributes `row` and `column` an object is placed at a fixed position in the page grid; the upper left corner is position 1,1.
 
 ```xml
 <PlaceObject row="4" column="5">
     <Image file="_samplea.pdf" width="5"/>
 </PlaceObject>
 ```
+
+The design grid and its role in placing objects (allocation of grid cells, finding free space) is described in detail in the [section about grids]({{< relref "/manual/basics/grid" >}}).
 
 
 ## Order of the objects
@@ -86,11 +86,11 @@ A <text block> can contain one or more paragraphs (<paragraph>). Both the text b
 ```
 
 
-Further formatting options are described in the section Including Fonts and Text Formatting.
+Further formatting options are described in the sections [Using fonts]({{< relref "fonts" >}}) and [Text formatting]({{< relref "textformatting" >}}).
 
 ![Specifications in the paragraphs overwrite the values in the text block](/img/textblock-paragraph.png)
 
-The complete description of `<Textblock>` can be found in the reference (section Text block). For texts that may wrap across page boundaries, there is the command `<Text>` as a child element of `<Output>`, described in the next section.
+The complete description of `<Textblock>` can be found [in the reference (section Textblock)]({{< relref "/reference/commands/textblock" >}}). For texts that may wrap across page boundaries, there is the command `<Text>` as a child element of `<Output>`, described in the next section.
 
 ## Texts with page break
 
@@ -113,7 +113,7 @@ Besides the special feature that this text can wrap around several pages, it is 
 
 ## HTML
 
-HTML content can be output in different ways. The simplest is to use the `<HTML>` command directly within `<Output>`:
+HTML content can be output with the `<HTML>` command directly within `<Output>` or as markup in paragraphs:
 
 ```xml
 <Output>
@@ -123,34 +123,12 @@ HTML content can be output in different ways. The simplest is to use the `<HTML>
 </Output>
 ```
 
-HTML can also be used within `<Paragraph>` in a `<Textblock>` or `<Text>`. In this case, the HTML comes from the data:
-
-```xml
-<Record element="Paragraph">
-  <PlaceObject>
-    <Textblock>
-      <Paragraph>
-        <Value select="." />
-      </Paragraph>
-    </Textblock>
-  </PlaceObject>
-</Record>
-```
-
-With data like:
-
-```xml
-<Paragraph><![CDATA[<ul><li>Item 1</li><li>Item 2</li></ul>]]></Paragraph>
-```
-
-A detailed description of the HTML features including CSS styling is given in the section [HTML]({{< relref "/manual/webformats/html" >}}).
+The different ways of inclusion, the supported elements and the CSS styling are described in the chapter [HTML]({{< relref "/manual/webformats/html" >}}).
 
 ## Introduction to tables
 
-The table model used in the Publisher corresponds approximately to the model known from HTML.
-The rows are specified with `<Tr>` and the individual columns with `<Td>`.
-
-The structure of a simple table without column declaration, header and footer looks as follows:
+The table model used in the Publisher corresponds approximately to the model known from HTML: rows are specified with `<Tr>`, the individual cells with `<Td>`.
+The cells can contain anything that can also be contained in `<PlaceObject>`.
 
 ```xml
 <PlaceObject>
@@ -159,33 +137,12 @@ The structure of a simple table without column declaration, header and footer lo
       <Td>...</Td>
       <Td>...</Td>
     </Tr>
-    <Tr>
-      <Td>...</Td>
-      <Td>...</Td>
-    </Tr>
   </Table>
 </PlaceObject>
 ```
 
-The contents of the table cells can be paragraphs, pictures and other objects.
-
-```xml
-<Td>
-  <Paragraph>
-    <Value>...</Value>
-  </Paragraph>
-</Td>
-
-<Td>
-  <Image file="ocean.pdf" width="4"/>
-</Td>
-```
-
-A practical feature of tables is that they can run over several pages, even with repeating headers and footers.
-The table cells can contain text, images, barcodes, etc.; in other words, anything that can also be contained in `<PlaceObject>`.
-Individual cells are never wrapped to multiple pages, i.e. they are set as a rectangular box, even if the contents would allow wrapping (e.g. texts or tables).
-
-A separate chapter is devoted to the topic of tables [a separate chapter]({{< relref "tables" >}}).
+Tables can run over several pages, even with repeating headers and footers.
+[A separate chapter]({{< relref "tables" >}}) is devoted to the topic of tables.
 
 ## Images
 
@@ -197,9 +154,7 @@ Including images is, as already shown at the beginning, very easy. The command f
 </PlaceObject>
 ```
 
-Images can be in the formats PDF, JPEG and PNG and can be integrated. All other formats such as Tiff or SVG must be converted first.
-
-The command for embedding images is very powerful and is described in detail in a separate section ([Image inclusion]({{< relref "imagesandgraphics" >}})). The [reference]({{< relref "/reference/image" >}}) contains a short description of all possibilities.
+The command for embedding images is very powerful and is described in detail in the chapter [Images & Graphics]({{< relref "imagesandgraphics" >}}), which also lists the supported file formats. The [reference]({{< relref "/reference/commands/image" >}}) contains a short description of all possibilities.
 
 ## Rectangular areas (`<Box>`)
 
@@ -213,7 +168,7 @@ Rectangular surfaces are created with the command <Box>.
 
 ![A colored box, output with `<Box>`](/img/zitronengruen.png)
 
-Boxes are often used for colored areas behind a text or table. In this case the allocation of the raster cells must be switched off (`allocate="no"` at `<PlaceObject>`), otherwise a warning will be issued because of the double allocation of the area in the PDF (see section [Grid]({{< relref "/manual/basics/grid" >}})). An example for the use of boxes as background can be found in the section about crop marks. There, the parameter bleed is also explained, which is used to enlarge the box in one or more directions, if they are located at the page margin.
+Boxes are often used for colored areas behind a text or table. In this case the allocation of the raster cells must be switched off (`allocate="no"` at `<PlaceObject>`), otherwise a warning will be issued because of the double allocation of the area in the PDF (see section [Grid]({{< relref "/manual/basics/grid" >}})). An example for the use of boxes as background can be found in the section about the [thumb index]({{< relref "thumbindex" >}}). There, the parameter `bleed` is also explained, which is used to enlarge the box in one or more directions, if they are located at the page margin.
 
 ## Circle
 

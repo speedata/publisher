@@ -1,0 +1,15 @@
+---
+title: "XPath & Funktionen"
+weight: 20
+type: docs
+---
+
+XPath-Ausdrücke und Funktionen für den Zugriff auf Daten und die Steuerung des Layouts.
+
+{{< cards >}}
+  {{< card link="xpath" title="XPath-Ausdrücke" subtitle="Syntax, Operatoren, Achsen und Namensräume" >}}
+  {{< card link="datastructures" title="Arrays und Maps" subtitle="Datenstrukturen: Arrays, Maps und der Lookup-Operator" >}}
+  {{< card link="layoutfunctions" title="Layoutfunktionen" subtitle="sd:-Funktionen für Seiten, Bilder, Text und mehr" >}}
+  {{< card link="xpathfunctions" title="XPath-Standardfunktionen" subtitle="String-, Zahlen- und Sequenzfunktionen" >}}
+  {{< card link="lengthsunits" title="Längen & Einheiten" subtitle="Maßeinheiten und Umrechner" >}}
+{{< /cards >}}

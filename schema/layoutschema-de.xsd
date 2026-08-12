@@ -3088,7 +3088,7 @@
   <xs:element name="LoadFontfile">
     <xs:annotation>
       <xs:documentation>Der Befehl LoadFontfile weist einer physikalischen Schriftdatei einen internen Namen zu. Wird ein Zeichen in der Schriftart nicht gefunden, erzeugt das Programm eine Fehlermeldung, die mit Options ausgeschaltet werden kann. Alternativ dazu können auch Ersatzschriftarten (mit Fallback) angegeben werden, die nach den fehlenden Zeichen abgesucht werden. 
-      Type-1-Schriften (.pfb) sind veraltet: sie werden immer mit dem alten fontforge-Fonthandler geladen, der in einer zukünftigen Version entfernt wird. Bitte Type-1-Schriften nach OpenType konvertieren.</xs:documentation>
+      Type-1-Schriften (.pfb) sind veraltet: sie werden immer mit dem alten fontforge-Fonthandler geladen, der mit Version 6.0 entfernt werden soll. Bitte Type-1-Schriften nach OpenType konvertieren.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:sequence>
@@ -3117,13 +3117,13 @@
       </xs:attribute>
       <xs:attribute name="mode">
         <xs:annotation>
-          <xs:documentation>Setzt den Fonthandler. Voreinstellung ist harfbuzz.</xs:documentation>
+          <xs:documentation>Setzt den Fonthandler. Voreinstellung ist harfbuzz. Das Attribut ist veraltet: es wird nur benötigt, um den alten fontforge-Fonthandler auszuwählen, der mit Version 6.0 entfernt werden soll.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
             <xs:enumeration value="fontforge">
               <xs:annotation>
-                <xs:documentation>Der alte Fonthandler. Funktioniert mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen. Veraltet: dieser Fonthandler wird in einer zukünftigen Version entfernt. Type-1-Schriften (.pfb) werden unabhängig von dieser Einstellung immer mit diesem Fonthandler geladen.</xs:documentation>
+                <xs:documentation>Der alte Fonthandler. Funktioniert mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen. Veraltet: dieser Fonthandler soll mit Version 6.0 entfernt werden. Type-1-Schriften (.pfb) werden unabhängig von dieser Einstellung immer mit diesem Fonthandler geladen.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="harfbuzz">
@@ -3254,7 +3254,7 @@
       </xs:attribute>
       <xs:attribute name="require">
         <xs:annotation>
-          <xs:documentation>Kommaseparierte Liste mit erforderlichen Features. Erlaubt sind luxor/lxpath und harfbuzz/fontforge</xs:documentation>
+          <xs:documentation>Kommaseparierte Liste mit erforderlichen Features. Erlaubt sind luxor/lxpath und harfbuzz/fontforge. Die Features luxor und fontforge sind veraltet und sollen mit Version 6.0 entfernt werden.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>

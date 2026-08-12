@@ -9,7 +9,7 @@ Das Einbinden von Schriftarten in den gängigen Formaten ist sehr einfach.
 Unterstützt werden die Formate TrueType und OpenType (Dateien `.ttf` und `.otf`).
 
 {{< callout type="warning" >}}
-Type-1-Schriften (Dateien `.pfb`) sind veraltet. Sie werden noch mit dem alten fontforge-Fonthandler geladen, dieser wird aber in einer zukünftigen Version entfernt. Bitte konvertieren Sie Type-1-Schriften nach OpenType.
+Type-1-Schriften (Dateien `.pfb`) sind veraltet. Sie werden noch mit dem alten fontforge-Fonthandler geladen, dieser soll aber mit Version 6.0 entfernt werden. Bitte konvertieren Sie Type-1-Schriften nach OpenType.
 {{< /callout >}}
 
 Um dem Publisher Schriftarten bekannt zu machen und zu nutzen, sind
@@ -71,7 +71,9 @@ Die direkteste ist mit den Befehlen `B` und `I` umzuschalten, diese können auch
 </PlaceObject>
 ```
 
-![Auszeichnungen im Layout. Unterstreichen (nicht gezeigt) geht mit dem Befehl `<U>`.](/img/14-fonts.png)
+![Auszeichnungen im Layout.](/img/14-fonts.png)
+
+Weitere Auszeichnungsbefehle wie `<U>` (Unterstreichen), `<Sub>`/`<Sup>`, `<Color>` oder `<A>` beschreibt der Abschnitt [Textformatierung]({{< relref "textformatting" >}}).
 
 ## Textauszeichnung in den Daten
 
@@ -100,7 +102,7 @@ In den Daten können die Tags auch groß geschrieben werden: `<B>` anstatt `<b>`
 Schachtelung ist ebenfalls erlaubt und auch hier wird mit `<u>` unterstrichen.
 
 {{< callout >}}
-Sollten die Daten nicht als wohlgeformtes XML sondern beispielsweise im HTML Format vorliegen, kann man die Layoutfunktion `sd:decode-html()` benutzen, sie zu interpretieren.
+Sollten die Daten nicht als wohlgeformtes XML sondern beispielsweise im HTML Format vorliegen, kann man die Layoutfunktion `sd:decode-html()` benutzen, sie zu interpretieren. Ein Beispiel zeigt der Abschnitt [HTML in Paragraph]({{< relref "/manual/webformats/html#html-in-paragraph" >}}).
 {{< /callout >}}
 
 ## Konturschrift
@@ -294,13 +296,13 @@ Wird ein Zeichen angefordert, das in der Schriftart nicht enthalten ist, gibt es
 Error: Glyph f1c7 (hex) is missing from the font "TeXGyreHeros-Regular"
 ```
 
-Diesen Fehler kann man mit dem Befehl [`<Options>`]({{< relref "/reference/options" >}}) unterdrücken:
+Diesen Fehler kann man mit dem Befehl [`<Options>`]({{< relref "/reference/commands/options" >}}) unterdrücken:
 
 ```
 <Options reportmissingglyphs="no"/>
 ```
 
-Alternativ dazu kann man auch bei  [`<LoadFontfile>`]({{< relref "/reference/loadfontfile" >}}) eine Ersatzschriftart angeben, die durchsucht wird, sobald ein Zeichen nicht gefunden wird:
+Alternativ dazu kann man auch bei  [`<LoadFontfile>`]({{< relref "/reference/commands/loadfontfile" >}}) eine Ersatzschriftart angeben, die durchsucht wird, sobald ein Zeichen nicht gefunden wird:
 
 ```xml
 <LoadFontfile name="helvetica" filename="texgyreheros-regular.otf">
@@ -350,4 +352,4 @@ erlauben es nun, die Schriftfamilien allgemein wie folgt zu definieren:
 ```
 
 also unabhängig von der tatsächlich genutzten Schriftart.
-Mit den im Abschnitt [Include]({{< relref "include" >}}) beschriebenen Möglichkeiten kann man nun die Fontdefinition in eine separate Datei auslagern und bei Bedarf schnell zwischen verschiedenen Schriftarten wählen, indem die gewünschten Dateien eingebunden werden.
+Mit den im Abschnitt [Dateiorganisation]({{< relref "fileorganization" >}}) beschriebenen Möglichkeiten kann man nun die Fontdefinition in eine separate Datei auslagern und bei Bedarf schnell zwischen verschiedenen Schriftarten wählen, indem die gewünschten Dateien eingebunden werden.

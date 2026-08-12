@@ -29,10 +29,7 @@ In [examples repository on github](https://github.com/speedata/examples/) there 
 
 ## Rotate images
 
-The attribute `rotate` is available for both `<PlaceObject>` and `<Image>`. The attribute at `<Image>` can only rotate images in 90° steps. Therefore, in practice the rotation is rather controlled by `<PlaceObject>`.
-
-Depending on what you are aiming at, rotation should be applied directly to the image `<Image>` or to the `<PlaceObject>` element.
-
+The attribute `rotate` is available for both `<PlaceObject>` and `<Image>`. The attribute at `<Image>` can only rotate images in 90 degree steps (positive values: clockwise). Therefore, in practice the rotation is rather controlled by `<PlaceObject>`.
 This minimal sample shows the difference:
 
 ```xml
@@ -53,10 +50,46 @@ This minimal sample shows the difference:
 
 Bear in mind that this rotation might also affect some given image dimensions.
 
+The following example rotates an image 90 degrees counterclockwise if it is a portrait image.
+With the XPath command `sd:aspectratio(<filename>)` you can determine the aspect ratio of an image.
+If it is greater than 1, then it is a landscape image.
+The second image from the data file is rotated by 90° counterclockwise.
+
+```xml
+<data>
+  <img file="_samplea.pdf" />
+  <img file="_sampleb.pdf" />
+</data>
+```
+{{% codecaption %}}Data{{% /codecaption %}}
+
+```xml
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en">
+
+  <Record element="data">
+    <ForAll select="img">
+      <PlaceObject>
+        <Image file="{@file}" width="5"
+          rotate="{if ( sd:aspectratio(@file) &lt; 1 ) then '-90' else '0'}"/>
+      </PlaceObject>
+    </ForAll>
+  </Record>
+</Layout>
+```
+{{% codecaption %}}The image is rotated 90 degrees if it is a portrait image.{{% /codecaption %}}
+
+![The second image is rotated by 90° because it is in portrait format.](/img/drehungaspectratio.png)
+
+{{< callout >}}
+The curly brackets at `file` and `rotate` mean that the system jumps to XPath mode to evaluate the XPath expressions (access to the file attribute and the if-then query). See [XPath and Layout Functions]({{< relref "/reference/xpath/xpath" >}}) for more information.
+{{< /callout >}}
+
+_Note: if the image in the argument of `sd:aspectratio()` is not available in the filesystem, the value is taken from the placeholder image (section [Image not found?]({{< relref "/manual/imagesandgraphics#image-not-found" >}})). To check if an image is available at all, you can use the command `sd:file-exists(<filename>)`._
 
 ## Rotate via transformation
 
-Using the command `<Transformation>` (see section [outputtingobjects-transformation]({{< relref "outputtingobjects" >}}) and in the appendix the [command description]({{< relref "/reference/transformation" >}})) you can also rotate contents.
+Using the command `<Transformation>` (see section [Transformation]({{< relref "outputtingobjects#transformation" >}}) and in the reference the [command description]({{< relref "/reference/commands/transformation" >}})) you can also rotate contents.
 The matrix has the form "cos θ sin θ -sin θ cos θ 0 0", for a rotation of 90 degrees thus "0 1 -1 0 0 0".
-This is shown in the section [tables-imagebehindtext]({{< relref "tables" >}}).
+This is shown in the section [Image behind the text]({{< relref "/manual/tables#image-behind-the-text" >}}).
 

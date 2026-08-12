@@ -40,7 +40,7 @@ Um RELAX NG-Dateien zu validieren gibt es mehrere Möglichkeiten. Neben einer Va
 Eines davon ist Jing. Es wird mit dem Publisher mitgeliefert.
 
 {{< callout >}}
-Jing, Saxon und xmlresolver liegen im `lib`-Verzeichnis des Publishers. Maintainer von Betriebssystem-Paketen können den Publisher auf die vom Betriebssystem bereitgestellten JARs verweisen — siehe [System-eigene Java-JARs verwenden]({{% relref "installation#system-eigene-java-jars-verwenden" %}}).
+Jing, Saxon und xmlresolver liegen im `lib`-Verzeichnis des Publishers. Maintainer von Betriebssystem-Paketen können den Publisher auf die vom Betriebssystem bereitgestellten JARs verweisen – siehe [System-eigene Java-JARs verwenden]({{% relref "installation#system-eigene-java-jars-verwenden" %}}).
 {{< /callout >}}
 
 In der Lua-Vorverarbeitung gibt es eine Funktion, die die Validierung übernimmt:
@@ -260,7 +260,7 @@ runtime.finalizer = finished
 
 `options`
 
-Tabelle mit Konfigurationswerten (siehe [konfiguration]({{< relref "configuration" >}})). Kann sowohl zum Lesen der Werte als auch zum Setzen benutzt werden.
+Tabelle mit Konfigurationswerten (siehe [Konfiguration]({{< relref "configuration" >}})). Kann sowohl zum Lesen der Werte als auch zum Setzen benutzt werden.
 
 `validate_relaxng(‹xmldatei›,‹schemadatei›)`
 

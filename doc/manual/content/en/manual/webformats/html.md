@@ -108,15 +108,8 @@ Or load CSS from a file:
 
 ### Supported CSS properties
 
-The speedata Publisher supports a subset of CSS properties including:
-
-* Font properties: `font-family`, `font-size`, `font-weight`, `font-style`
-* Text properties: `color`, `text-align`, `text-decoration`, `line-height`
-* Box model: `margin`, `padding`, `border`, `width`, `height`
-* Background: `background-color`
-* List styling: `list-style-type`, `list-style`
-
-For a complete list of supported CSS properties, see the CSS section in [CSS verwenden]({{< relref "css" >}}).
+The speedata Publisher supports a subset of CSS properties, including font, text and box model properties, background colors as well as list and break control.
+The complete list can be found in the chapter [Using CSS]({{< relref "css" >}}); the implementation status of individual properties is shown in the [test status](#test-status).
 
 ## Lists in HTML
 

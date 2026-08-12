@@ -281,6 +281,19 @@
           </zeroOrMore>
         </element>
       </optional>
+      <optional>
+        <element name="commandgroups">
+          <oneOrMore>
+            <element name="commandgroup">
+              <attribute name="en"/>
+              <attribute name="de"/>
+              <oneOrMore>
+                <ref name="cmd"/>
+              </oneOrMore>
+            </element>
+          </oneOrMore>
+        </element>
+      </optional>
       <oneOrMore>
         <element name="command">
           <attribute name="en"/>
