@@ -367,7 +367,9 @@ function M.define_font(name, size, extra_parameter)
             "warn",
             "The fontforge font loader is deprecated and will be removed in a future version",
             "filename",
-            name
+            name,
+            "help",
+            "see https://doc.speedata.de/publisher/en/configuration/ how to switch to harfbuzz"
         )
     end
     extra_parameter = extra_parameter or {}

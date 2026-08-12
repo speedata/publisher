@@ -851,6 +851,17 @@ M.rolecounter = 0
 ---@return nil
 function M.dothings()
     main.log("info", string.format("Running LuaTeX version %s on %s", luatex_version, os.name))
+    -- The fontforge font loader is also deprecated; the warning for it is
+    -- in fonts/fontloader.lua (define_font), so it catches every way to
+    -- request fontforge (option fontloader, mode="fontforge", Type 1 fallback).
+    if not M.newxpath then
+        main.log(
+            "warn",
+            "The luxor XML / XPath parser is deprecated and will be removed in a future version",
+            "help",
+            "see https://doc.speedata.de/publisher/en/lxpath/ how to switch to the new parser"
+        )
+    end
     -- First we set some defaults.
     -- A4 paper is 210x297 mm
     local wd_sp = assert(tex.sp("210mm"))
