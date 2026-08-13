@@ -151,6 +151,7 @@ func main() {
 		os.RemoveAll(manualHTML)
 		hugocmd := exec.Command("hugo", "--quiet", "--destination", manualHTML)
 		hugocmd.Dir = filepath.Join(cfg.Basedir(), "doc", "manual")
+		hugocmd.Env = append(os.Environ(), "HUGO_PUBLISHER_VERSION="+cfg.Publisherversion.String())
 		if out, err := hugocmd.CombinedOutput(); err != nil {
 			fmt.Println(string(out))
 			log.Fatal("hugo build failed; hugo is required for dist because the manual is part of the ZIP files")
