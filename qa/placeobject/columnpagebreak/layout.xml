@@ -1,0 +1,17 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="100mm" height="100mm"/>
+  <SetGrid nx="3" dx="3mm" height="10mm"/>
+  <Options show-grid="yes"/>
+  <Record element="data">
+    <!-- fills rows 1-6 in columns 2 and 3 -->
+    <PlaceObject column="2">
+      <Box width="2" height="6" background-color="black"/>
+    </PlaceObject>
+    <!-- does not fit in the remaining two rows. It must keep
+         the requested column 2 on the next page. -->
+    <PlaceObject column="2">
+      <Box width="2" height="4" background-color="red"/>
+    </PlaceObject>
+  </Record>
+</Layout>

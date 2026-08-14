@@ -5359,7 +5359,10 @@ function commands.place_object(layoutxml, dataxml)
                         publisher.page_helpers.setup_page(nil, "commands#PlaceObject", dataxml)
                         current_grid = assert(publisher.current_grid)
                         current_row = current_grid:current_row(area)
-                        current_column_start = 1
+                        -- keep an explicitly requested column on the new area/page
+                        if not column then
+                            current_column_start = 1
+                        end
                     end
                 end
             end
