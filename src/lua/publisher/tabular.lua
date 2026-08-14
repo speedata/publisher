@@ -1102,6 +1102,8 @@ function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, ski
         while skiptable[current_row] and skiptable[current_row][current_column] do
             current_column = current_column + 1
         end
+        -- alignments of a colspan cell come from its first column
+        local thiscolumn = current_column
         for s = current_column, current_column + colspan - 1 do
             if self.colwidths[s] == nil then
                 main.log("error", "Something went wrong with the number of columns in the table (calculate_rowheight)")
@@ -1115,7 +1117,7 @@ function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, ski
 
         -- FIXME: take border-left and border-right into account
         --        in the height calculation also border-top and border-bottom
-        local alignment = td_contents.align or tr_contents.align or self.align[current_column]
+        local alignment = td_contents.align or tr_contents.align or self.align[thiscolumn]
         local cell = self:pack_cell(
             td_contents.objects,
             wd - padding_left - padding_right - td_borderleft - td_borderright,
@@ -1312,6 +1314,8 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
             row[current_column] = node.vpack(v, rowheightarea[current_row], "exactly")
             current_column = current_column + 1
         end
+        -- alignments of a colspan cell come from its first column
+        local thiscolumn = current_column
 
         current_column_width = 0
         for s = current_column, current_column + colspan - 1 do
@@ -1334,7 +1338,7 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         local g = set_glue(nil, { width = padding_top })
         publisher.attribute_helpers.setprop(g, "origin", "padding_top")
 
-        local valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
+        local valign = td_contents.valign or tr_contents.valign or self.valign[thiscolumn]
         if valign ~= "top" then
             set_glue_values(g, { stretch = 2 ^ 16, stretch_order = 2 })
         end
@@ -1349,7 +1353,7 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
             td_contents.cell.head = nil
             node.free(td_contents.cell)
         else
-            local alignment = td_contents.align or tr_contents.align or self.align[current_column]
+            local alignment = td_contents.align or tr_contents.align or self.align[thiscolumn]
             cell = self:pack_cell(
                 td_contents.objects,
                 current_column_width - padding_left - padding_right - td_borderleft - td_borderright,
@@ -1379,7 +1383,7 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
         g = set_glue(nil, { width = padding_bottom })
         publisher.attribute_helpers.setprop(g, "origin", "align_padding")
 
-        valign = td_contents.valign or tr_contents.valign or self.valign[current_column]
+        valign = td_contents.valign or tr_contents.valign or self.valign[thiscolumn]
         if valign ~= "bottom" then
             set_glue_values(g, { stretch = 2 ^ 16, stretch_order = 2 })
         end

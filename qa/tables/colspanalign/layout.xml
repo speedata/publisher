@@ -1,0 +1,33 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <Pageformat width="150mm" height="100mm"/>
+  <Record element="data">
+    <PlaceObject>
+      <Table stretch="max">
+        <Columns>
+          <Column width="4cm" />
+          <Column width="4cm" />
+          <Column width="4cm" align="right" valign="bottom" />
+        </Columns>
+        <!-- alignments of a colspan cell must come from its first
+             column (here: left/top), not from the last one -->
+        <Tr minheight="3">
+          <Td colspan="*" background-color="limegreen">
+            <Table width="5cm">
+              <Tr>
+                <Td>
+                  <Paragraph><Value>innere Tabelle</Value></Paragraph>
+                </Td>
+              </Tr>
+            </Table>
+          </Td>
+        </Tr>
+        <Tr>
+          <Td><Paragraph><Value>eins</Value></Paragraph></Td>
+          <Td><Paragraph><Value>zwei</Value></Paragraph></Td>
+          <Td><Paragraph><Value>drei</Value></Paragraph></Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>
