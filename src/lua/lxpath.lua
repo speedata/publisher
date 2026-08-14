@@ -1961,16 +1961,16 @@ local function callFunction(fname, seq, ctx)
     end
     local func = getFunction(namespace, fname)
     if not func then
-        return {}, string_format("cannot find function with name %s", fname)
+        return nil, string_format("cannot find function with name %s", fname)
     end
     local minarg, maxarg = func[4], func[5]
 
     if #seq < minarg or (maxarg ~= -1 and #seq > maxarg) then
         if minarg == maxarg then
-            return {},
+            return nil,
                 string_format("function %s() requires %d arguments, %d supplied", table_concat(fn, ":"), minarg, #seq)
         else
-            return {},
+            return nil,
                 string_format(
                     "function %s() requires %d to %d arguments, %d supplied",
                     table_concat(fn, ":"),
@@ -1981,11 +1981,7 @@ local function callFunction(fname, seq, ctx)
         end
     end
 
-    if func then
-        return func[3](ctx, seq)
-    end
-
-    return {}, "Could not find function " .. fname .. " with name space " .. namespace
+    return func[3](ctx, seq)
 end
 
 local function filter(ctx, f)
