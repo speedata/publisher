@@ -1954,6 +1954,9 @@ local function callFunction(fname, seq, ctx)
     local namespace = M.fnNS
     if #fn == 2 then
         namespace = ctx.namespaces[fn[1]]
+        if not namespace then
+            return nil, string_format("unknown namespace prefix %s in function call %s()", fn[1], fname)
+        end
         fname = fn[2]
     end
     local func = getFunction(namespace, fname)
