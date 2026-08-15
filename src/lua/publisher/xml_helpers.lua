@@ -16,8 +16,9 @@ local M = {}
 local luxor = do_luafile("luxor.lua")
 
 -- Escapes `<`, `>`, `"` and `&` for inclusion in XML text or attribute values.
--- Tables are concatenated first; non-string, non-table inputs return `""`.
----@param str string|string[]|nil
+-- Tables are concatenated first; `nil` and `false` return `""`, other
+-- non-string values (booleans, numbers) are converted with `tostring`.
+---@param str any
 ---@return string
 function M.xml_escape(str)
     if type(str) == "table" then
@@ -26,13 +27,13 @@ function M.xml_escape(str)
     if not str then
         return ""
     end
+    str = tostring(str)
     local replace = {
         [">"] = "&gt;",
         ["<"] = "&lt;",
         ['"'] = "&quot;",
         ["&"] = "&amp;",
     }
-    -- FIXME, str can be bool
     local ret = string.gsub(str, ".", replace)
     return ret
 end
