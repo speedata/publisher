@@ -2488,7 +2488,6 @@ end
 -- Hyphenation
 -- -----------
 -- The contents of this element must be a string such as `hy-phen-ation`.
--- FIXME: allow language attribute.
 ---@param layoutxml table
 ---@param dataxml table
 ---@return any
@@ -7418,7 +7417,6 @@ function commands.textblock(layoutxml, dataxml)
         languagecode = publisher.defaultlanguage
     end
 
-    -- FIXME: remove width_sp
     local width_sp = width
 
     local objects, nodes = {}, {}
