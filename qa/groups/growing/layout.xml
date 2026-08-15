@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Pageformat width="10cm" height="5cm"/>
+
+  <Record element="data">
+    <!-- The group grows beyond 10 page heights (60 rows of 1cm on a 5cm page).
+         Versions up to 5.7.11 limited groups to 10 page heights (50 rows here),
+         objects beyond that limit were placed at row 1 again. -->
+    <Group name="big">
+      <Contents>
+        <Loop select="60">
+          <PlaceObject>
+            <Box width="8" height="1" background-color="black"/>
+          </PlaceObject>
+        </Loop>
+      </Contents>
+    </Group>
+
+    <PlaceObject column="1" row="1">
+      <Textblock>
+        <Paragraph>
+          <Value select="concat('rows: ', sd:group-height('big'))"/>
+        </Paragraph>
+        <Paragraph>
+          <Value select="concat('height: ', sd:group-height('big', 'cm'), 'cm')"/>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>

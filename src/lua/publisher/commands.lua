@@ -5135,7 +5135,7 @@ function commands.place_object(layoutxml, dataxml)
     end
 
     -- no table splitting in AtPageShipout
-    if allocate == "no" or publisher.pagebreak_impossible then
+    if (allocate == "no" or publisher.pagebreak_impossible) and publisher.current_group == nil then
         options.current_height = areaheight
     end
 
@@ -5340,6 +5340,8 @@ function commands.place_object(layoutxml, dataxml)
                         dataxml
                     )
                     if not current_row then
+                        -- should not happen, the group grid grows on demand
+                        main.log("error", "No suitable row found in group", "type", objecttype, lineinfo(layoutxml))
                         current_row = 1
                     end
                 else

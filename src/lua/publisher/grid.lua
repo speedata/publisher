@@ -535,9 +535,14 @@ function M.allocate_cells(self, options)
         grid_conflict = true
     end
     if y + ht - 1 > self:number_of_rows(areaname) then
-        main.log("debug", "Object protrudes below the last line of the page")
-        show_bottom = true
-        grid_conflict = true
+        if self.pageheight_known then
+            main.log("debug", "Object protrudes below the last line of the page")
+            show_bottom = true
+            grid_conflict = true
+        else
+            -- a group: grow the grid, the following min() then keeps all rows
+            self:set_number_of_rows(y + ht - 1)
+        end
     end
     local frame_margin_left, frame_margin_top
     if areaname == publisher.default_areaname then
@@ -745,8 +750,12 @@ function M.find_suitable_row(self, column, width, height, areaname, framenumber,
 
     local maxrows = self:number_of_rows(areaname)
     if maxrows < self:current_row(areaname) + height - 1 then
-        -- doesn't fit, so we try on the next area
-        if self:number_of_frames(areaname) > self:framenumber(areaname) then
+        if not self.pageheight_known then
+            -- a group: the grid grows on demand instead of running out of rows
+            maxrows = self:current_row(areaname) + height - 1
+            self:set_number_of_rows(maxrows)
+        elseif self:number_of_frames(areaname) > self:framenumber(areaname) then
+            -- doesn't fit, so we try on the next area
             publisher.page_helpers.next_area(areaname, self, dataxml, "find_suitable_row")
             return self:find_suitable_row(column, width, height, areaname, nil, dataxml)
         else
@@ -774,7 +783,13 @@ function M.find_suitable_row(self, column, width, height, areaname, framenumber,
         local row = z - frame_margin_top - 1
         -- when the object is too high, it can't fit, even if the page is empty
         if maxrows - row - height < 0 then
-            return nil
+            if self.pageheight_known then
+                return nil
+            end
+            -- a group: grow the grid so the object fits starting at this row
+            maxrows = row + height
+            self:set_number_of_rows(maxrows)
+            max_z = maxrows + frame_margin_top
         end
         -- check all height rows, break and skip ahead on first conflict
         local fits = true
@@ -1272,11 +1287,10 @@ end
 function M.calculate_number_gridcells(self)
     assert(self)
     assert(self.margin_left, "Margin not set yet!")
-    self.pageheight_known = true
     if self.pagenumber == -999 then
-        -- a group
-        -- This is an ugly workaround. We should not make the group height 10 times the current page height.
-        -- FIXME!!
+        -- A group. Its height is unlimited: pageheight_known stays false and
+        -- find_suitable_row/allocate_cells grow the row count on demand. The
+        -- initial value of one page height is just a starting point.
         if not (self.gridwidth and self.gridheight) then
             main.log("error", "grid width or height not set, why?")
             return
@@ -1291,13 +1305,13 @@ function M.calculate_number_gridcells(self)
         self:set_number_of_rows(
             math.ceil(
                 math.round(
-                    (10 * tex.pageheight - self.margin_top - self.margin_bottom - 2 * self.extra_margin)
-                        / self.gridheight,
+                    (tex.pageheight - self.margin_top - self.margin_bottom - 2 * self.extra_margin) / self.gridheight,
                     4
                 )
             )
         )
     else
+        self.pageheight_known = true
         local pagearea_x, pagearea_y
         pagearea_x = tex.pagewidth - self.margin_left - self.margin_right - 2 * self.extra_margin
         pagearea_y = tex.pageheight - self.margin_top - self.margin_bottom - 2 * self.extra_margin

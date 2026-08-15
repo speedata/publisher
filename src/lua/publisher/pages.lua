@@ -1231,6 +1231,10 @@ function M.get_remaining_height(area, allocate)
         end
 
         if row > maxrows then
+            if not publisher.current_grid.pageheight_known then
+                -- a group: the grid grows on demand, so there is no height limit
+                return publisher.maxdimen, firstrow
+            end
             return (row - firstrow) * publisher.current_grid.gridheight, firstrow
         end
         local lastrow = row
@@ -1269,6 +1273,10 @@ function M.get_remaining_height(area, allocate)
             return (lastrow - firstrow) * publisher.current_grid.gridheight, firstrow, firstrow
         end
         row = row + 1
+    end
+    if lastrow > maxrows and not publisher.current_grid.pageheight_known then
+        -- a group: the grid grows on demand, so there is no height limit
+        return publisher.maxdimen, firstrow, nil
     end
     return (lastrow - firstrow) * publisher.current_grid.gridheight, firstrow, nil
 end
