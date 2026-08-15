@@ -4255,7 +4255,6 @@ function parse_function_call(tl)
 
     local evaler = function(ctx)
         local arguments = {}
-        -- TODO: save context and restore afterwards
         local seq, err
         for _, ef in ipairs(efs) do
             local newctx = ctx:copy()
