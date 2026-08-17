@@ -39,7 +39,6 @@ local metapost = require("publisher.metapost")
 ---@field padding_right_col table Per-column right padding.
 ---@field skip table
 ---@field backgroundcolumncolors table
----@field column_distances table Distance between column i and i+1.
 ---@field split integer Number of frames the table is split across.
 ---@field skiptables table Cells skipped because of row/colspans, per area.
 ---@field total_columns integer
@@ -117,8 +116,6 @@ function tabular:new()
         padding_right_col = {},
         skip = {},
         backgroundcolumncolors = {},
-        -- The distance between column i and i+1
-        column_distances = {},
         -- number of frames the table is split across, initialize to a sane default value
         split = 1,
     }
@@ -541,7 +538,7 @@ function tabular:calculate_columnwidth()
                 -- we can distribute the remaining space
                 local to_distribute = self.tablewidth_target
                     - sum_real_widths
-                    - table.sum(self.column_distances, 1, count_columns - 1)
+                    - (count_columns - 1) * self.colsep
                 i = 0
                 for _, column in ipairs(tr_contents) do
                     if publisher.xml_helpers.elementname(column) == "Column" then
@@ -725,7 +722,7 @@ function tabular:calculate_columnwidth()
         -- a factor r. r is calculated by the contents.
         --
         -- We do that once for the maximum width and once for the minimum width
-        local width_of_colsep = table.sum(self.column_distances, colspan.start, colspan.stop - 1)
+        local width_of_colsep = (colspan.stop - colspan.start) * self.colsep
 
         if colspan.max_wd > sum_max + width_of_colsep then
             r = (colspan.max_wd - width_of_colsep) / sum_max
@@ -752,7 +749,6 @@ function tabular:calculate_columnwidth()
     -- ----------------------------------
 
     -- Here comes the main width calculation
-    -- FIXME: we should use column_distances[i] instead of self.colsep
     local colsep = (#colmax - 1) * self.colsep
     local tablewidth_is = table.sum(colmax) + colsep
     -- 1. calculate natural (max) width / total width for each column.
@@ -1112,7 +1108,6 @@ function tabular:calculate_rowheight(tr_contents, current_row, last_shiftup, ski
             end
         end
         current_column = current_column + colspan - 1
-        -- FIXME: use column_distances[i] instead of self.colsep
         wd = wd + (colspan - 1) * self.colsep
 
         -- FIXME: take border-left and border-right into account
@@ -1326,7 +1321,6 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
             end
         end
 
-        -- FIXME: use column_distances[i] instead of self.colsep
         current_column_width = current_column_width + (colspan - 1) * self.colsep
         current_column = current_column + colspan - 1
         if rowspan > 1 then
@@ -1561,7 +1555,6 @@ function tabular:typeset_row(tr_contents, current_row, skiptable, rowheightarea)
     -- We now add colsep and connect the cells so we have a list of vboxes and
     -- pack them in a hbox.
     -- ![a row](../img/tablerow.svg)
-    -- FIXME: use column_distances[i] instead of self.colsep
     local cell_start, current
     cell_start = row[1]
     current = cell_start
@@ -2856,12 +2849,6 @@ end
 ---@param dataxml table XML data for the table
 ---@return Node|SplitTableResult
 function tabular:make_table(dataxml)
-    setmetatable(self.column_distances, {
-        __index = function()
-            return self.colsep or 0
-        end,
-    })
-
     -- Determine total number of columns from <Columns> or max cells per row
     self.total_columns = 0
     for _, tr in ipairs(self.tab) do
