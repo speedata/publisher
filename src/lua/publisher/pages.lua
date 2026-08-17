@@ -1554,7 +1554,7 @@ function M.vsplit(objects_t, parameter)
                 else
                     hlist[#hlist + 1] = head
                     if head.id == publisher.glue_node then
-                        ht_hlist = publisher.nodes.get_glue_size(head)
+                        ht_hlist = ht_hlist + publisher.nodes.get_glue_size(head)
                     else
                         ht_hlist = ht_hlist + (head.height or 0) + (head.depth or 0)
                     end
@@ -1570,8 +1570,39 @@ function M.vsplit(objects_t, parameter)
     -- the hlist now has lot's of rows. Widows/orphans are packed together in a vbox with n hboxes.
 
     if balance > 1 and ht_hlist < balance * frameheight then
-        -- TODO: splitpos should be based on the actual height
-        local splitpos = math.ceil(#hlist / balance)
+        -- The split position is chosen so that the accumulated height of the
+        -- first column approaches the total height divided by the number of
+        -- columns. See #714.
+        local goal = ht_hlist / balance
+        local splitpos = #hlist
+        local accumulated_ht = 0
+        for j = 1, #hlist do
+            local entry = hlist[j]
+            local ht
+            if entry.id == publisher.glue_node then
+                ht = publisher.nodes.get_glue_size(entry)
+            else
+                ht = (entry.height or 0) + (entry.depth or 0)
+            end
+            accumulated_ht = accumulated_ht + ht
+            if accumulated_ht >= goal then
+                splitpos = j
+                -- With two columns the entry that steps over the goal must
+                -- stay in the first column, because moving it to the second
+                -- column would make that column higher than the first one.
+                -- With more columns the first column should get as close to
+                -- the goal as possible.
+                if balance > 2 and j > 1 and (accumulated_ht - goal) * 2 > ht then
+                    splitpos = j - 1
+                end
+                break
+            end
+        end
+        -- A glue at the top of the second column is dropped, like at any
+        -- other column break.
+        while hlist[splitpos + 1] and hlist[splitpos + 1].id == publisher.glue_node do
+            node.free(table.remove(hlist, splitpos + 1))
+        end
 
         local margin_newcolumn_obj1 = node.has_attribute(hlist[1], publisher.att_margin_newcolumn)
         if margin_newcolumn_obj1 and margin_newcolumn_obj1 > 0 then
