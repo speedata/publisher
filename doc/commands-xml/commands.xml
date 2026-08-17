@@ -10046,12 +10046,12 @@
       </description>
       <referenceattribute name="languages" />
     </attribute>
-    <attribute en="letter-spacing" optional="yes" type="length" css="letter-spacing" since="3.5.2">
+    <attribute en="letter-spacing" optional="yes" type="yesnolength" css="letter-spacing" since="3.5.2">
       <description xml:lang="en">
-        <para>Increase spacing between glyphs.</para>
+        <para>Increase spacing between glyphs. Allowed values are yes, no and a length. With yes, the spacing depends on the current font size (0.1 em).</para>
       </description>
       <description xml:lang="de">
-        <para>Erhöhe Leerraum zwischen Zeichen.</para>
+        <para>Erhöhe Leerraum zwischen Zeichen. Erlaubte Werte sind 'yes', 'no' und eine Längenangabe. Bei 'yes' hängt der Abstand von der aktuellen Schriftgröße ab (0,1 em).</para>
       </description>
     </attribute>
     <attribute en="role" optional="yes" since="4.19.8">

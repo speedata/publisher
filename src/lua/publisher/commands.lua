@@ -6332,13 +6332,16 @@ function commands.span(layoutxml, dataxml)
     local css_rules = publisher.css:matches({ element = "span", class = class, id = id }) or {}
     local role = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "role", "string")
 
+    local letterspacing_em
     if letterspacing == nil then
         if css_rules["letter-spacing"] then
             letterspacing = tex.sp(css_rules["letter-spacing"])
         end
     elseif letterspacing == true then
-        -- FIXME: this is just a dummy value
-        letterspacing = tex.sp("2pt")
+        -- letter-spacing="yes": 0.1 em, converted to an absolute length in
+        -- mknodes() where the font size is known.
+        letterspacing = nil
+        letterspacing_em = 100
     end
 
     if backgroundcolor == nil then
@@ -6369,6 +6372,7 @@ function commands.span(layoutxml, dataxml)
         bg_padding_top = bg_padding_top,
         bg_padding_bottom = bg_padding_bottom,
         letterspacing = letterspacing,
+        letterspacing_em = letterspacing_em,
         languagecode = languagecode,
     }
     if publisher.options.format == "PDF/UA" then

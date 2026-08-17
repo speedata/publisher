@@ -1,0 +1,25 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+	<Pageformat height="8cm" width="10cm" />
+	<DefineFontfamily fontsize="10" leading="12" name="small">
+		<Regular fontface="sans" />
+	</DefineFontfamily>
+	<DefineFontfamily fontsize="30" leading="34" name="big">
+		<Regular fontface="sans" />
+	</DefineFontfamily>
+
+	<Record element="data">
+		<PlaceObject>
+			<Textblock fontfamily="small">
+				<Paragraph><Span letter-spacing="yes"><Value>Hello nice world</Value></Span></Paragraph>
+				<Paragraph><Span letter-spacing="2pt"><Value>Hello nice world</Value></Span></Paragraph>
+				<Paragraph><Span letter-spacing="no"><Value>Hello nice world</Value></Span></Paragraph>
+			</Textblock>
+		</PlaceObject>
+		<PlaceObject>
+			<Textblock fontfamily="big">
+				<Paragraph><Span letter-spacing="yes"><Value>Hello</Value></Span></Paragraph>
+				<Paragraph><Span letter-spacing="yes" fontfamily="small"><Value>Hello</Value></Span></Paragraph>
+			</Textblock>
+		</PlaceObject>
+	</Record>
+</Layout>

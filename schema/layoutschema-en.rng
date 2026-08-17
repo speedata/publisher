@@ -6361,7 +6361,7 @@
                </optional>
                <optional>
                   <attribute name="letter-spacing">
-                     <a:documentation>Increase spacing between glyphs.</a:documentation>
+                     <a:documentation>Increase spacing between glyphs. Allowed values are yes, no and a length. With yes, the spacing depends on the current font size (0.1 em).</a:documentation>
                   </attribute>
                </optional>
                <optional>

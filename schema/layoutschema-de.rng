@@ -6361,7 +6361,7 @@
                </optional>
                <optional>
                   <attribute name="letter-spacing">
-                     <a:documentation>Erhöhe Leerraum zwischen Zeichen.</a:documentation>
+                     <a:documentation>Erhöhe Leerraum zwischen Zeichen. Erlaubte Werte sind &#39;yes&#39;, &#39;no&#39; und eine Längenangabe. Bei &#39;yes&#39; hängt der Abstand von der aktuellen Schriftgröße ab (0,1 em).</a:documentation>
                   </attribute>
                </optional>
                <optional>

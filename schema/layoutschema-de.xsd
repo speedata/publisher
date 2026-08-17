@@ -7369,7 +7369,7 @@
       </xs:attribute>
       <xs:attribute name="letter-spacing">
         <xs:annotation>
-          <xs:documentation>Erhöhe Leerraum zwischen Zeichen.</xs:documentation>
+          <xs:documentation>Erhöhe Leerraum zwischen Zeichen. Erlaubte Werte sind 'yes', 'no' und eine Längenangabe. Bei 'yes' hängt der Abstand von der aktuellen Schriftgröße ab (0,1 em).</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="role">
