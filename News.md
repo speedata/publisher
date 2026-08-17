@@ -13,7 +13,7 @@ Planned for 2026-11
 
 # Version 5.8
 
-Planned for 2026-09
+Released 2026-08-17
 
 * Only bug fixes and internal changes
 * Deprecation of the old XPath parser and fontforge font loader

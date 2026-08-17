@@ -1,5 +1,11 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
-  <chapter version="5.7">
+  <chapter version="5.8">
+    <entry version="5.8.0" date="2026-08-17">
+        <en>Release version 5.8.0.</en>
+        <de>Veröffentliche Version 5.8.0.</de>
+    </entry>
+  </chapter>
+  <chapter version="5.7" date="2026-08-17">
     <entry version="5.7.12" date="2026-08-17" sha1="fde8a895">
         <en summary="Balanced columns in Output are now split by height.">When the contents of <tt>&lt;Output balance="yes"&gt;</tt> was distributed over two frames, the split position was determined by the number of lines, not by their height. Lines of different heights led to visibly unequal columns. Now the material is split by its actual height, and the second column never gets higher than the first one (#714).</en>
         <de summary="Ausgeglichene Spalten bei Output werden jetzt nach der Höhe geteilt.">Wurde der Inhalt von <tt>&lt;Output balance="yes"&gt;</tt> auf zwei Rahmen verteilt, bestimmte die Anzahl der Zeilen die Teilungsstelle, nicht ihre Höhe. Unterschiedlich hohe Zeilen führten zu sichtbar ungleichen Spalten. Jetzt wird nach der tatsächlichen Höhe geteilt, und die zweite Spalte wird nie höher als die erste (#714).</de>
