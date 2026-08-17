@@ -536,9 +536,7 @@ function tabular:calculate_columnwidth()
             if count_stars > 0 then
                 -- now we know the number of *-columns and the sum of the fix columns, so that
                 -- we can distribute the remaining space
-                local to_distribute = self.tablewidth_target
-                    - sum_real_widths
-                    - (count_columns - 1) * self.colsep
+                local to_distribute = self.tablewidth_target - sum_real_widths - (count_columns - 1) * self.colsep
                 i = 0
                 for _, column in ipairs(tr_contents) do
                     if publisher.xml_helpers.elementname(column) == "Column" then
@@ -2347,16 +2345,61 @@ function tabular:typeset_table(dataxml)
         -- first row is needed for height calculation
         local first_row_in_new_table = splits[#splits] + 1
 
+        -- The dynamic header which gets repeated at the top of a frame takes
+        -- room from the rows, so its height must be part of the balancing
+        -- calculation. See #715.
+        -- Return the height of the repeated dynamic header for a frame
+        -- (framenumber) that starts with the row firstrow. The height is zero
+        -- when there is no dynamic header or when the frame starts with a
+        -- header row, because then the repetition is omitted (see “Table
+        -- cleanup” below).
+        local function get_dynhead_height(framenumber, firstrow)
+            if rows[firstrow] and node.has_attribute(rows[firstrow], publisher.att_use_as_head) == 1 then
+                return 0
+            end
+            local nl = get_tableheads_extra(framenumber, firstrow - 1)
+            if nl then
+                return nl.height + nl.depth
+            end
+            return 0
+        end
+
         -- Now this is the total height of the remaining rows.
-        -- We need to take the dynamic headers into account (TODO).
         local sum_ht = 0
         for i = first_row_in_new_table, #rows do
             sum_ht = sum_ht + rows[i].height + rows[i].depth
         end
+        -- The height of the rows that are not distributed to a frame yet,
+        -- gets decreased row by row in the loop below.
+        local rows_remaining = sum_ht
+
+        -- Add the heights of the repeated dynamic headers to the total
+        -- height. The header of the first frame is known. The headers of the
+        -- following frames depend on the split positions which are not known
+        -- yet, so we estimate their height: the first header row within the
+        -- remaining rows is the best guess, the header which is active at the
+        -- beginning of the remaining rows the second best.
+        local ht_dynhead_first = get_dynhead_height(#splits, first_row_in_new_table)
+        local ht_dynhead_following = 0
+        local nl_active = get_tableheads_extra(#splits + 1, first_row_in_new_table)
+        if nl_active then
+            ht_dynhead_following = nl_active.height + nl_active.depth
+        end
+        for i = first_row_in_new_table, #rows do
+            local use_as_head = node.has_attribute(rows[i], publisher.att_use_as_head)
+            if use_as_head == 1 then
+                ht_dynhead_following = rows[i].height + rows[i].depth
+                break
+            elseif use_as_head == 2 then
+                ht_dynhead_following = 0
+                break
+            end
+        end
+        sum_ht = sum_ht + ht_dynhead_first + (tosplit - 1) * ht_dynhead_following
 
         -- percolumn_goal is the optimum height for each column
         local percolumn_goal = math.ceil(sum_ht / tosplit)
-        local sum_frame = 0
+        local sum_frame = ht_dynhead_first
         local break_below_allowed
         local maxht = ht_current
         for i = first_row_in_new_table, #rows do
@@ -2364,7 +2407,9 @@ function tabular:typeset_table(dataxml)
             if break_below_allowed then
                 last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t + 1] = i
             end
-            sum_frame = sum_frame + rows[i].height + rows[i].depth
+            local ht_this_row = rows[i].height + rows[i].depth
+            sum_frame = sum_frame + ht_this_row
+            rows_remaining = rows_remaining - ht_this_row
 
             if #splits > tosplit then
                 -- ht_current must be replaced with ht_max on following pages
@@ -2378,21 +2423,61 @@ function tabular:typeset_table(dataxml)
                 if tosplit > 0 then
                     percolumn_goal = percolumn_goal - math.ceil((sum_frame - percolumn_goal) / tosplit)
                 end
-                sum_frame = 0
+                sum_frame = get_dynhead_height(#splits, splits[#splits] + 1)
             -- When stepped over the goal, move this line to the next frame.
             -- See #232 for a situation where the second test is necessary.
             elseif
                 sum_frame >= percolumn_goal
                 and last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t] ~= splits[#splits]
             then
-                splits[#splits + 1] = last_possible_split_is_after_line_t[#last_possible_split_is_after_line_t]
-                tosplit = tosplit - 1
-
-                -- When there is more than one column left, we should adjust the percolumn_goal. (should we?)
-                if tosplit > 0 then
-                    percolumn_goal = percolumn_goal - math.ceil((sum_frame - percolumn_goal) / tosplit)
+                local lp = last_possible_split_is_after_line_t
+                local splitafter = lp[#lp]
+                -- carry_ht is the height of the current row when it gets
+                -- moved to the next frame.
+                local carry_ht = 0
+                local do_split = true
+                local move = false
+                local move_possible = splitafter == i and lp[#lp - 1] == i - 1 and lp[#lp - 1] ~= splits[#splits]
+                if tosplit == 2 and splitafter == i and i < #rows then
+                    -- The next frame is the last one, so its height is known:
+                    -- the remaining rows plus the repeated dynamic header.
+                    -- The last frame must not be higher than the frame before
+                    -- it. Differences below half a row don't count, they are
+                    -- not visible because both frames show the same number of
+                    -- rows.
+                    local ht_last_keep = get_dynhead_height(#splits + 1, i + 1) + rows_remaining
+                    if ht_last_keep > sum_frame + ht_this_row / 2 then
+                        -- The last frame would be higher than this one, so we
+                        -- keep adding rows.
+                        do_split = false
+                    elseif move_possible then
+                        -- Move the current row to the last frame when this
+                        -- gives a more even result.
+                        local ht_last_move = get_dynhead_height(#splits + 1, i) + ht_this_row + rows_remaining
+                        move = math.abs(ht_last_move - (sum_frame - ht_this_row)) < math.abs(ht_last_keep - sum_frame)
+                            and ht_last_move <= sum_frame - ht_this_row / 2
+                    end
+                elseif move_possible and (sum_frame - percolumn_goal) * 2 > ht_this_row then
+                    -- Keeping the current row in this frame overshoots the
+                    -- goal by sum_frame - percolumn_goal. Moving the row to
+                    -- the next frame gives a more even result here.
+                    move = true
                 end
-                sum_frame = 0
+                if do_split then
+                    if move then
+                        splitafter = i - 1
+                        carry_ht = ht_this_row
+                    end
+                    splits[#splits + 1] = splitafter
+                    tosplit = tosplit - 1
+                    sum_frame = sum_frame - carry_ht
+
+                    -- When there is more than one column left, we should adjust the percolumn_goal. (should we?)
+                    if tosplit > 0 then
+                        percolumn_goal = percolumn_goal - math.ceil((sum_frame - percolumn_goal) / tosplit)
+                    end
+                    sum_frame = get_dynhead_height(#splits, splits[#splits] + 1) + carry_ht
+                end
             end
         end
 
