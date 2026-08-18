@@ -1,4 +1,14 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
+  <chapter version="5.9">
+    <entry version="5.9.1" date="2026-08-18" sha1="48e803bf">
+        <en summary="The old XPath parser (luxor) has been removed.">Layouts are always processed with the lxpath parser. The configuration setting <tt>xpath</tt> and <tt>require="luxor"</tt> on <tt>&lt;Layout&gt;</tt> now report an error. The command line options <tt>--extra-xml</tt> and <tt>--prepend-xml</tt> are also gone, use XInclude instead to split the layout into several files.</en>
+        <de summary="Der alte XPath-Parser (luxor) wurde entfernt.">Layouts werden immer mit dem lxpath-Parser verarbeitet. Die Konfigurationseinstellung <tt>xpath</tt> und <tt>require="luxor"</tt> bei <tt>&lt;Layout&gt;</tt> führen jetzt zu einer Fehlermeldung. Die Kommandozeilenoptionen <tt>--extra-xml</tt> und <tt>--prepend-xml</tt> sind ebenfalls entfallen, zum Aufteilen des Layouts auf mehrere Dateien dient XInclude.</de>
+    </entry>
+    <entry version="5.9.1" date="2026-08-18" sha1="17fca06c">
+        <en summary="The old fontforge font handler has been removed.">Fonts are always loaded and shaped with harfbuzz. The configuration setting <tt>fontloader</tt>, the attribute <tt>mode</tt> on <tt>&lt;LoadFontfile&gt;</tt> and <tt>require="fontforge"</tt> on <tt>&lt;Layout&gt;</tt> now report an error. Type 1 fonts (.pfb) are no longer supported, please convert them to OpenType.</en>
+        <de summary="Der alte fontforge-Fonthandler wurde entfernt.">Schriften werden immer mit harfbuzz geladen und gesetzt. Die Konfigurationseinstellung <tt>fontloader</tt>, das Attribut <tt>mode</tt> bei <tt>&lt;LoadFontfile&gt;</tt> und <tt>require="fontforge"</tt> bei <tt>&lt;Layout&gt;</tt> führen jetzt zu einer Fehlermeldung. Type-1-Schriften (.pfb) werden nicht mehr unterstützt, bitte nach OpenType konvertieren.</de>
+    </entry>
+  </chapter>
   <chapter version="5.8">
     <entry version="5.8.0" date="2026-08-17">
         <en>Release version 5.8.0.</en>
