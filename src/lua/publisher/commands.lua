@@ -3143,6 +3143,15 @@ function commands.load_fontfile(layoutxml, dataxml)
         publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "marginprotrusion", "number")
     local mode =
         publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "mode", "string", publisher.options.fontloader)
+    if mode == "fontforge" then
+        main.log(
+            "error",
+            "The fontforge font loader has been removed in version 6.0",
+            "help",
+            'remove mode="fontforge" from LoadFontfile'
+        )
+        exit(false)
+    end
     local name = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "name", "string")
     local osf = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "oldstylefigures", "boolean")
     local shrink = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "shrink", "number")

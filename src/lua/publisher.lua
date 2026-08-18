@@ -384,7 +384,7 @@ M.css = do_luafile("css.lua"):new()
 ---@field dpi? number Resolution for pixel to sp conversion.
 ---@field dumpstructtree boolean Writes the PDF/UA structure tree to a file (-struct.xml).
 ---@field extensionhandler string?
----@field fontloader "harfbuzz"|"fontforge" Backend used to load fonts.
+---@field fontloader "harfbuzz" Backend used to load fonts (always harfbuzz).
 ---@field fontshrink number?
 ---@field fontstep number?
 ---@field fontstretch number?
@@ -444,7 +444,7 @@ M.options = {
     documentsubject = "",
     documenttitle = "",
     dumpstructtree = false,
-    fontloader = os.getenv("SP_FONTLOADER") or "harfbuzz",
+    fontloader = "harfbuzz",
     format = "",
     gridcells_x = 0,
     gridcells_y = 0,
@@ -851,9 +851,6 @@ M.rolecounter = 0
 ---@return nil
 function M.dothings()
     main.log("info", string.format("Running LuaTeX version %s on %s", luatex_version, os.name))
-    -- The fontforge font loader is also deprecated; the warning for it is
-    -- in fonts/fontloader.lua (define_font), so it catches every way to
-    -- request fontforge (option fontloader, mode="fontforge", Type 1 fallback).
     if not M.newxpath then
         main.log(
             "warn",
@@ -1245,33 +1242,17 @@ function M.initialize_luatex_and_generate_pdf()
                     exit(false)
                 end
             elseif req == "harfbuzz" then
-                if M.options.fontloader ~= "harfbuzz" then
-                    main.log(
-                        "error",
-                        "failed to meet requirement",
-                        "requirement",
-                        "harfbuzz",
-                        "message",
-                        "This layout requires the harfbuzz font loader",
-                        "help",
-                        "see https://doc.speedata.de/publisher/en/configuration/ how to activate"
-                    )
-                    exit(false)
-                end
+                -- always satisfied, harfbuzz is the only font loader
             elseif req == "fontforge" then
-                if M.options.fontloader ~= "fontforge" then
-                    main.log(
-                        "error",
-                        "failed to meet requirement",
-                        "requirement",
-                        "fontforge",
-                        "message",
-                        "This layout requires the fontforge font loader",
-                        "help",
-                        "see https://doc.speedata.de/publisher/en/configuration/ how to activate"
-                    )
-                    exit(false)
-                end
+                main.log(
+                    "error",
+                    "failed to meet requirement",
+                    "requirement",
+                    "fontforge",
+                    "message",
+                    "The fontforge font loader has been removed in version 6.0"
+                )
+                exit(false)
             else
                 main.log(
                     "error",

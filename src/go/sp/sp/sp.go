@@ -123,7 +123,6 @@ func init() {
 		"inkscape":          "inkscape",
 		"inkscape-command":  "--export-filename",
 		"jardir":            "",
-		"fontloader":        "harfbuzz",
 		"referencefilename": "reference",
 		"xpath":             "lxpath",
 		"hidespinfo":        stringFalse,
@@ -625,7 +624,11 @@ func runPublisher(cachemethod string) (exitstatus int) {
 	saveVariables()
 
 	layoutoptions["grid"] = getOption("grid")
-	os.Setenv("SP_FONTLOADER", getOption("fontloader"))
+	if fl := getOption("fontloader"); fl != "" && fl != "harfbuzz" {
+		log.Printf("The value %q for the option 'fontloader' is not supported.", fl)
+		log.Println("The fontforge font loader has been removed in version 6.0, harfbuzz is always used.")
+		exitProgram(1)
+	}
 	os.Setenv("SP_XMLPARSER", getOption("xpath"))
 
 	layoutoptions["reportmissingglyphs"] = getOption("reportmissingglyphs")
