@@ -85,7 +85,6 @@ Die folgende Tabelle ordnet die Parameter den Schlüsseln zu; Angaben auf der Ko
 | `--data=NAME` | `data` |
 | `--dummy` | `dummy` |
 | `-x`, `--extra-dir=DIR` | `extra-dir` |
-| `--extra-xml=NAME` | `extraxml` |
 | `--filter=FILTER` | `filter` |
 | `--grid`, `--no-grid` | `grid` |
 | `--ignore-case` | `ignore-case` |
@@ -107,7 +106,6 @@ Die folgende Tabelle ordnet die Parameter den Schlüsseln zu; Angaben auf der Ko
 | `-v`, `--var=VAR=WERT` | `vars` |
 | `--verbose` | `verbose` |
 | `--wd=DIR` | `wd` |
-| `--xpath=PARSER` | `xpath` |
 
 Die folgenden Parameter gibt es nur auf der Kommandozeile:
 

@@ -8,7 +8,7 @@ type: docs
 Embedding fonts in the common formats is very easy. The formats TrueType and OpenType (files .ttf and .otf) are supported.
 
 {{< callout type="warning" >}}
-Type 1 fonts (files `.pfb`) are deprecated. They are still loaded with the old fontforge font handler, but this handler is scheduled for removal in version 6.0. Please convert Type 1 fonts to OpenType.
+Type 1 fonts (files `.pfb`) are not supported since version 6.0. Please convert Type 1 fonts to OpenType.
 {{< /callout >}}
 
 To make fonts known and used by the publisher, two steps are necessary. The first step is to load a font file:

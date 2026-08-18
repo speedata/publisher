@@ -100,13 +100,12 @@ These all follow the same `local M = {}; function M.foo(...); return M` pattern 
 
 | File | Role |
 |------|------|
-| `lxpath.lua`, `xpath.lua` | XPath engines. The new lxpath parser is the default; the legacy parser is selectable via `SP_XMLPARSER=luxor`. |
-| `layout_functions.lua`, `layout_functions_lxpath.lua` | XPath function libraries registered into the chosen engine at startup. |
+| `lxpath.lua` | XPath engine. The legacy parser (luxor) was removed in v6.0. |
+| `layout_functions.lua` | XPath function library registered into the engine at startup. |
 | `html.lua` plus `html/*.lua` | HTML/CSS rendering pipeline (CSS resolution, inline / block layout, lists, tables, font handling). |
 | `par.lua` | Paragraph builder used by both XML and HTML pipelines. |
-| `fonts/fontloader.lua` | Low-level font file reader (HarfBuzz and FontForge code paths). |
+| `fonts/fontloader.lua` | Low-level font file reader (HarfBuzz). |
 | `barcodes/barcodes.lua` | EAN, QR, etc. |
-| `luxor.lua` | Pure-Lua XML parser used by the legacy XML path and a few utilities. |
 | `xmlbuilder.lua` | Pure-Lua XML serializer. |
 | `spotcolors.lua` | ICC-based spot color handling. |
 | `uuid.lua`, `socket_url.lua` | Vendored third-party helpers. |

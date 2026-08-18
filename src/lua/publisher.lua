@@ -385,7 +385,6 @@ M.css = do_luafile("css.lua"):new()
 ---@field gridwidth integer Grid cell width in scaled points.
 ---@field hidespinfo? string|boolean
 ---@field html? string HTML rendering mode.
----@field htmlignoreeol? boolean Ignore newlines in HTML mode (FontForge backend).
 ---@field hyperlinkbordercolor? string Border color for hyperlink annotations.
 ---@field hyperlinkborderwidth integer Border width for hyperlink annotations, in sp.
 ---@field ignoreeol boolean Ignore newlines in data.

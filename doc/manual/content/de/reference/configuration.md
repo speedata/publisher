@@ -64,15 +64,6 @@ erkannt. Folgende Optionen werden unterstützt:
 `extensionhandler`
 : Zuordnung von Dateiendungen zu in `imagehandler` definierten Konvertern. Um Grafiken on-the-fly zu konvertieren. Beispiel: `extensionhandler="mmd:mermaid"`. Mehrere Einträge werden mit Semikolon getrennt. Siehe auch `imagehandler`.
 
-`extraxml` (Kommandozeile: `--extra-xml`)
-: Diese XML-Dateien zu den Layoutanweisungen hinzufügen. Kommaseparierte Liste (`extraxml=datei1.xml,datei2.xml`). Wird im neuen XPath-Parser nicht mehr unterstützt, stattdessen ist xinclude zu benutzen.
-
-`fontloader`
-: Setze den Fontlader auf `fontforge` (Voreinstellung bis Version 4.16) oder `harfbuzz` (Voreinstellung ab Version 4.18). Der Fontlader `fontforge` ist veraltet und soll mit Version 6.0 entfernt werden.
-
-`prependxml` (Kommandozeile: `--prepend-xml`)
-: Diese XML-Dateien vor den Layoutanweisungen hinzufügen. Kommaseparierte Liste (`prependxml=datei1.xml,datei2.xml`). Wird im neuen XPath-Parser nicht mehr unterstützt, stattdessen ist xinclude zu benutzen.
-
 `filter` (Kommandozeile: `--filter`)
 : Führt die angegebene Datei als Lua-Filter aus. Siehe Abschnitt [Lua-Filter / Vorverarbeitung]({{% relref "preprocessing" %}}).
 
@@ -156,9 +147,6 @@ erkannt. Folgende Optionen werden unterstützt:
 
 `wd` (Kommandozeile: `--wd`)
 : Wechselt vor dem Start in das angegebene Verzeichnis, so als ob man vorher mit `cd` dorthin gewechselt hätte.
-
-`xpath` (Kommandozeile: `--xpath`)
-: Setzt das XML Modul. Die Voreinstellung ist der [neue XML/XPath Parser]({{% relref "/reference/xpath/xpath" %}}) `lxpath`, mit `luxor` wird der alte XML/XPath Parser eingeschaltet. Der alte Parser ist veraltet und soll mit Version 6.0 entfernt werden.
 
 ### Abschnitt Server (`server`)
 

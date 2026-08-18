@@ -84,7 +84,6 @@ The following table maps the parameters to the keys; values given on the command
 | `--data=NAME` | `data` |
 | `--dummy` | `dummy` |
 | `-x`, `--extra-dir=DIR` | `extra-dir` |
-| `--extra-xml=NAME` | `extraxml` |
 | `--filter=FILTER` | `filter` |
 | `--grid`, `--no-grid` | `grid` |
 | `--ignore-case` | `ignore-case` |
@@ -106,7 +105,6 @@ The following table maps the parameters to the keys; values given on the command
 | `-v`, `--var=VAR=VALUE` | `vars` |
 | `--verbose` | `verbose` |
 | `--wd=DIR` | `wd` |
-| `--xpath=PARSER` | `xpath` |
 
 The following parameters exist only on the command line:
 

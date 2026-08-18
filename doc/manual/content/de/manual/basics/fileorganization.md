@@ -39,10 +39,7 @@ Siehe Abbildung  für eine mögliche Anordnung der Dateien.
 
 ## Layoutregelwerke in einzelne Dateien teilen
 
-Man kann das Layoutregelwerk in mehrere Dateien aufteilen.
-Es gibt zwei Möglichkeiten, die Dateien zusammenzuführen.
-Auf der Kommandozeile kann man mit `--extra-xml` ein oder mehrere Layoutregelwerke angeben, die zusätzlich eingelesen werden.
-Alternativ dazu kann man den Mechanismus über XInclude benutzen, hier im Fall einer Fontdefinition:
+Man kann das Layoutregelwerk in mehrere Dateien aufteilen und über XInclude zusammenführen, hier im Fall einer Fontdefinition:
 
 ```xml
 <Layout

@@ -5571,12 +5571,12 @@
   -->
   <command en="LoadFontfile">
     <description xml:lang="en">
-      <para>Load a font file (.otf, .ttf, .pfb) and associate it with an internal name. If a glyph is not found in the font file, an error will be raised (this can be configured via the <cmd name="Options"/> command). You can specify fallbacks as a child element of Loadfontfile.</para>
-      <para>Type 1 fonts (.pfb) are deprecated: they are always loaded with the old fontforge font handler, which is scheduled for removal in version 6.0. Please convert Type 1 fonts to OpenType.</para>
+      <para>Load a font file (.otf, .ttf) and associate it with an internal name. If a glyph is not found in the font file, an error will be raised (this can be configured via the <cmd name="Options"/> command). You can specify fallbacks as a child element of Loadfontfile.</para>
+      <para>Type 1 fonts (.pfb) are not supported since version 6.0. Please convert Type 1 fonts to OpenType.</para>
     </description>
     <description xml:lang="de">
       <para>Der Befehl LoadFontfile weist einer physikalischen Schriftdatei einen internen Namen zu. Wird ein Zeichen in der Schriftart nicht gefunden, erzeugt das Programm eine Fehlermeldung, die mit <cmd name="Options"/> ausgeschaltet werden kann. Alternativ dazu können auch Ersatzschriftarten (mit <cmd name="Fallback"/>) angegeben werden, die nach den fehlenden Zeichen abgesucht werden. </para>
-      <para>Type-1-Schriften (.pfb) sind veraltet: sie werden immer mit dem alten fontforge-Fonthandler geladen, der mit Version 6.0 entfernt werden soll. Bitte Type-1-Schriften nach OpenType konvertieren.</para>
+      <para>Type-1-Schriften (.pfb) werden seit Version 6.0 nicht mehr unterstützt. Bitte Type-1-Schriften nach OpenType konvertieren.</para>
     </description>
     <childelements>
       <optional>
@@ -5621,30 +5621,6 @@
       <description xml:lang="de">
         <para>Angabe in Prozent, um wie viel die Zeichen -, . und , über den Rand herausragen. Voreinstellung ist 0. Der Wert wird mit 0,001em der aktuellen Schrift multipliziert, eine Einstellung von 200 erlaubt also, dass diese Zeichen 0,2em über den Rand hinausragen.</para>
       </description>
-    </attribute>
-    <attribute en="mode" optional="yes" since="3.9.29" deprecated="yes">
-      <description xml:lang="en">
-        <para>Set the shaping mode of the font. Defaults to <tt>harfbuzz</tt>. This attribute is deprecated: it is only needed to select the old fontforge font handler, which is scheduled for removal in version 6.0.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Setzt den Fonthandler. Voreinstellung ist <tt>harfbuzz</tt>. Das Attribut ist veraltet: es wird nur benötigt, um den alten fontforge-Fonthandler auszuwählen, der mit Version 6.0 entfernt werden soll.</para>
-      </description>
-      <choice en="fontforge">
-        <description xml:lang="en">
-          <para>The old font handler. Renders western scripts, but no right-to-left or other complex scripts. Deprecated: this font handler is scheduled for removal in version 6.0. Type 1 fonts (.pfb) are always loaded with this handler, regardless of the mode setting.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Der alte Fonthandler. Funktioniert mit westlichen Schreibsystemen, nicht aber mit rechts-nach-links oder anderen komplizierten Schreibsystemen. Veraltet: dieser Fonthandler soll mit Version 6.0 entfernt werden. Type-1-Schriften (.pfb) werden unabhängig von dieser Einstellung immer mit diesem Fonthandler geladen.</para>
-        </description>
-      </choice>
-      <choice en="harfbuzz">
-        <description xml:lang="en">
-          <para>The renderer that handles all scripts including right-to-left (default).</para>
-        </description>
-        <description xml:lang="de">
-          <para>Der Fonthandler, der Arabisch und andere komplexen Schreibsysteme verarbeiten kann (Voreinstellung).</para>
-        </description>
-      </choice>
     </attribute>
     <attribute en="oldstylefigures" optional="yes">
       <description xml:lang="en">
@@ -5821,10 +5797,10 @@
     </attribute>
     <attribute en="require" type="text" optional="yes" since="4.15.10">
       <description xml:lang="en">
-        <para>A comma separated list of required default features. Currently supported features are <tt>luxor</tt>/<tt>lxpath</tt> and <tt>harfbuzz</tt>/<tt>fontforge</tt>. The features <tt>luxor</tt> and <tt>fontforge</tt> are deprecated and scheduled for removal in version 6.0.</para>
+        <para>A comma separated list of required default features. The features <tt>lxpath</tt> and <tt>harfbuzz</tt> are accepted for compatibility and have no effect, they are always active. The features <tt>luxor</tt> and <tt>fontforge</tt> have been removed in version 6.0 and raise an error.</para>
       </description>
       <description xml:lang="de">
-        <para>Kommaseparierte Liste mit erforderlichen Features. Erlaubt sind <tt>luxor</tt>/<tt>lxpath</tt> und <tt>harfbuzz</tt>/<tt>fontforge</tt>. Die Features <tt>luxor</tt> und <tt>fontforge</tt> sind veraltet und sollen mit Version 6.0 entfernt werden.</para>
+        <para>Kommaseparierte Liste mit erforderlichen Features. Die Features <tt>lxpath</tt> und <tt>harfbuzz</tt> werden aus Kompatibilitätsgründen akzeptiert und haben keine Wirkung, sie sind immer aktiv. Die Features <tt>luxor</tt> und <tt>fontforge</tt> wurden mit Version 6.0 entfernt und führen zu einer Fehlermeldung.</para>
       </description>
     </attribute>
     <example xml:lang="en">

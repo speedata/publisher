@@ -34,7 +34,7 @@ The speedata Publisher looks for the layout with the name layout.xml and the dat
 
 ## Splitting layout sets of rules into individual files
 
-You can split the layout ruleset into several files. There are two ways to merge the files. On the command line, you can use `--extra-xml` to specify one or more layout rulesets, which are also read in. Alternatively, you can use the mechanism via XInclude, here in the case of a font definition:
+You can split the layout ruleset into several files and merge them with XInclude, here in the case of a font definition:
 
 ```xml
 <Layout

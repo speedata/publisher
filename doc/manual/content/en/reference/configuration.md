@@ -60,12 +60,6 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `extensionhandler`
 : Assignment of file extensions to converters defined in 'imagehandler'. To convert graphics on-the-fly. Example: `extensionhandler="mmd:mermaid"`. Multiple entries are separated by semicolon. See also `imagehandler`. (Since version 3.9.1.)
 
-`extraxml` (command line: `--extra-xml`)
-: Add this XML file to the layout instructions. List of comma separated file names (`extraxml=file1.xml,file2.xml`). Not supported with the new XPath module. Use xinclude instead.
-
-`fontloader`
-: Set the fontloader to `fontforge` (default until version 4.16) or `harfbuzz` (default starting from version 4.18). The `fontforge` fontloader is deprecated and scheduled for removal in version 6.0.
-
 `filter` (command line: `--filter`)
 : Run the given file as a Lua filter. See the section [Lua-Filter / Vorverarbeitung]({{% relref "preprocessing" %}}).
 
@@ -120,9 +114,6 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `pdfversion` (command line: `--pdfversion`)
 : The PDF version that gets written. Default is `1.7`.
 
-`prependxml` (command line: `--prepend-xml`)
-: Add this XML file in front of the layout instructions. List of comma separated file names (`prependxml=file1.xml,file2.xml`). Not supported with the new XPath module. Use xinclude instead.
-
 `reportmissingglyphs`
 : Should requested but missing glyphs be reported as an error or as a warning? The allowed values are `true`, `false`, or `warning`. `false` disables the reporting.
 
@@ -152,9 +143,6 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 
 `wd` (command line: `--wd`)
 : Change into this directory before the run starts, as if you had changed into it with `cd` beforehand.
-
-`xpath` (command line: `--xpath`)
-: [Set the XML module]({{% relref "/reference/xpath/xpath" %}}). The current default is `lxpath`, and the old is called `luxor`. The old parser is deprecated and scheduled for removal in version 6.0.
 
 ### Section server (`server`)
 

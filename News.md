@@ -8,7 +8,7 @@ This file gets updated before a stable release. There is a [detailed changelog](
 Planned for 2026-11
 
 * Math enhancements
-* Removal of the old XPath and font loader code
+* Removal of the old XPath parser (luxor) and the fontforge font loader. Type 1 fonts (.pfb) and the command line options `--extra-xml`/`--prepend-xml` are no longer supported, use OpenType fonts and XInclude instead.
 * Callbacks for file finding and image handlers (replaces configuration)
 
 # Version 5.8

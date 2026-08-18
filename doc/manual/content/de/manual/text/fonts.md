@@ -9,7 +9,7 @@ Das Einbinden von Schriftarten in den gängigen Formaten ist sehr einfach.
 Unterstützt werden die Formate TrueType und OpenType (Dateien `.ttf` und `.otf`).
 
 {{< callout type="warning" >}}
-Type-1-Schriften (Dateien `.pfb`) sind veraltet. Sie werden noch mit dem alten fontforge-Fonthandler geladen, dieser soll aber mit Version 6.0 entfernt werden. Bitte konvertieren Sie Type-1-Schriften nach OpenType.
+Type-1-Schriften (Dateien `.pfb`) werden seit Version 6.0 nicht mehr unterstützt. Bitte konvertieren Sie Type-1-Schriften nach OpenType.
 {{< /callout >}}
 
 Um dem Publisher Schriftarten bekannt zu machen und zu nutzen, sind

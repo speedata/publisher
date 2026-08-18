@@ -10,23 +10,23 @@ The development of the speedata Publisher has one big "mantra": existing setups 
 New features are introduced via new XML tags or attributes.
 Existing layout files simply ignore them and continue to work.
 
-## Legacy options
+## Removed in version 6.0
 
 Since version 5, the XPath parser `lxpath` and the font loader `harfbuzz` are the defaults.
-The older variants (`luxor` and `fontforge`) are deprecated and scheduled for removal in version 6.0.
-If an existing layout requires one of the old variants, it can still be activated via the [configuration file]({{< relref "configuration" >}}) for the time being.
+The older variants (`luxor` and `fontforge`) have been removed in version 6.0.
+Selecting them (via the `xpath` or `fontloader` key in the [configuration file]({{< relref "configuration" >}}), the attribute `mode="fontforge"` on `<LoadFontfile>` or the attribute `require` on `<Layout>`) results in an error.
 
-Known differences of the old variants:
+Also removed in version 6.0:
 
-- `fontforge`: Supports virtual fonts which can be used to simulate certain font features.
-- `luxor`: Can calculate with dimensions (e.g. `"2cm + 12mm"`), which does not conform to the XPath specification but is used in some older layouts.
+- Type 1 fonts (`.pfb`): they could only be loaded with the fontforge font loader. Please convert them to OpenType.
+- The command line options `--extra-xml` and `--prepend-xml` (configuration keys `extraxml` and `prependxml`): use XInclude instead to split the layout into several files.
 
-### Migrating to lxpath and harfbuzz
+### Migrating from luxor and fontforge
 
-If you still use one of the old variants, you should switch before version 6.0:
+If your layout still uses one of the old variants:
 
-- `luxor`: Run the layout with the default `lxpath` and fix the reported errors. Calculations with units (e.g. `"2cm + 12mm"`) can be expressed with the function [`sd:dimexpr()`]({{< relref "layoutfunctions" >}}).
-- `fontforge`: Remove the `fontloader` key from the configuration file or the attribute `mode="fontforge"` on `<LoadFontfile>`; fonts are then loaded with `harfbuzz`. Type 1 fonts (`.pfb`) only work with fontforge and should be converted to OpenType.
+- `luxor`: Run the layout with `lxpath` and fix the reported errors. Calculations with units (e.g. `"2cm + 12mm"`) do not conform to the XPath specification and can be expressed with the function [`sd:dimexpr()`]({{< relref "layoutfunctions" >}}).
+- `fontforge`: Remove the `fontloader` key from the configuration file and the attribute `mode="fontforge"` on `<LoadFontfile>`; fonts are then loaded with `harfbuzz`. Virtual fonts are no longer supported. Type 1 fonts (`.pfb`) should be converted to OpenType.
 
 ## Setting requirements in the layout file
 
@@ -44,7 +44,7 @@ The available options are:
 
 | Key | Description |
 | --- | --- |
-| `lxpath` | Ensures the XPath parser `lxpath` is used (default since v5). |
-| `harfbuzz` | Ensures the font loader `harfbuzz` is used (default since v5). |
-| `luxor` | Forces the old XPath parser (deprecated). |
-| `fontforge` | Forces the old font loader (deprecated). |
+| `lxpath` | The XPath parser `lxpath` (always active, accepted for compatibility). |
+| `harfbuzz` | The font loader `harfbuzz` (always active, accepted for compatibility). |
+| `luxor` | The old XPath parser (removed in version 6.0, raises an error). |
+| `fontforge` | The old font loader (removed in version 6.0, raises an error). |
