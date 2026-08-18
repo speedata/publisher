@@ -9,9 +9,9 @@ file_start("layout_functions.lua")
 
 local publisher = require("publisher")
 
+local de = require("dimexpr")
 local links_module = require("publisher.links")
 
-local luxor = do_luafile("luxor.lua")
 local sha = require("shalocal")
 
 -- Return filename, pagenumber, box and unit from the arg. Used in imagewidth et al.
@@ -21,24 +21,26 @@ local function get_filename_pagenum_box_unit_from_arg(arg)
     local filename, box, unit
     box = "cropbox"
     local pagenumber = 1
-    filename = arg[1]
+    filename = publisher.xpath.string_value(arg[1])
     for i = 2, #arg do
         local ai = arg[i]
-        if tonumber(ai) then
-            pagenumber = tonumber(ai) or 1
+        local nv = publisher.xpath.number_value(ai)
+        local tv = publisher.xpath.string_value(ai)
+        if nv then
+            pagenumber = nv or 1
         elseif
-            ai == "cm"
-            or ai == "mm"
-            or ai == "in"
-            or ai == "sp"
-            or ai == "pc"
-            or ai == "pt"
-            or ai == "pp"
-            or ai == "cc"
+            tv == "cm"
+            or tv == "mm"
+            or tv == "in"
+            or tv == "sp"
+            or tv == "pc"
+            or tv == "pt"
+            or tv == "pp"
+            or tv == "cc"
         then
-            unit = ai
-        elseif ai == "artbox" or ai == "cropbox" or ai == "bleedbox" or ai == "trimbox" or ai == "mediabox" then
-            box = ai
+            unit = tv
+        elseif tv == "artbox" or tv == "cropbox" or tv == "bleedbox" or tv == "trimbox" or tv == "mediabox" then
+            box = tv
         end
     end
     return filename, pagenumber, box, unit
@@ -49,93 +51,108 @@ local function visiblepagenumber(pagenumber)
     return publisher.visible_pagenumbers[pagenumber] or pagenumber
 end
 
-local function allocated(dataxml, arg)
-    local x = arg[1]
-    local y = arg[2]
-    local areaname = arg[3]
-    local framenumber = arg[4]
+local function fnAllocated(dataxml, arg)
+    local areaname, framenumber
+    local x = publisher.xpath.number_value(arg[1])
+    local y = publisher.xpath.number_value(arg[2])
+    if not x or not y then
+        return nil, "sd:allocated(): x and y must be numbers"
+    end
+    if #arg > 2 then
+        areaname = publisher.xpath.string_value(arg[3])
+    end
+    if #arg > 3 then
+        framenumber = publisher.xpath.number_value(arg[4])
+    end
+
     publisher.page_helpers.setup_page(nil, "layout_functions#allocated", dataxml)
-    return publisher.current_grid:isallocated(x, y, areaname, framenumber)
+    local grid = assert(publisher.current_grid)
+    return { grid:isallocated(x, y, areaname, framenumber) }, nil
 end
 
-local function current_page(dataxml)
+local function fnCurrentPage(dataxml, _arg)
     publisher.page_helpers.setup_page(nil, "layout_functions#current_page", dataxml)
-    return publisher.current_pagenumber
+    return { publisher.current_pagenumber }, nil
 end
 
-local function current_row(dataxml, arg)
+local function fnCurrentRow(dataxml, arg)
     publisher.page_helpers.setup_page(nil, "layout_functions#current_row", dataxml)
-    return publisher.current_grid:current_row(arg and arg[1])
-end
-
--- Evaluate the string arg as a dimension. The return value is a string with the dimension "sp".
-local function dimexpression(dataxml, arg)
-    arg = table.concat(arg)
-    publisher.xpath.push_state()
-    local ret = publisher.xpath.parse(dataxml, arg, "")
-    publisher.xpath.pop_state()
-    return ret
+    local areaname = nil
+    if #arg == 1 then
+        areaname = publisher.xpath.string_value(arg[1])
+    end
+    return { publisher.current_grid:current_row(areaname) }, nil
 end
 
 --- Get the page number of a marker
 local function fnpagenumber(_dataxml, arg)
-    local m = publisher.markers[arg[1]]
+    local firstarg = publisher.xpath.string_value(arg[1])
+    local m = publisher.markers[firstarg]
     if m then
-        return m.page
+        return { m.page }, nil
     else
-        return nil
+        return {}, nil
     end
 end
 
 local function current_column(dataxml, arg)
     publisher.page_helpers.setup_page(nil, "layout_functions#current_column", dataxml)
-    return publisher.current_grid:current_column(arg and arg[1])
+    local firstarg
+    if #arg > 0 then
+        firstarg = publisher.xpath.string_value(arg[1])
+    end
+    return { publisher.current_grid:current_column(firstarg) }, nil
 end
 
-local function alternating(_dataxml, arg)
-    local alt_type = arg[1]
+local function fnAlternating(_dataxml, arg)
+    local alt_type = publisher.xpath.string_value(arg[1])
     if not publisher.alternating[alt_type] then
         publisher.alternating[alt_type] = 1
     else
         publisher.alternating[alt_type] = math.fmod(publisher.alternating[alt_type], #arg - 1) + 1
     end
-    local val = arg[publisher.alternating[alt_type] + 1]
+    local val = publisher.xpath.string_value(arg[publisher.alternating[alt_type] + 1])
     publisher.alternating_value[alt_type] = val
-    return val
+    return { val }
 end
 
 local function first_free_row(dataxml, arg)
-    local ret = 0 ---@type integer?
-    if arg and arg[1] then
-        ret = publisher.current_grid:first_free_row(arg[1], nil, dataxml)
+    local firstarg
+    if #arg > 0 then
+        firstarg = publisher.xpath.string_value(arg[1])
+    else
+        firstarg = publisher.default_areaname
     end
-    return ret
+    local ret = publisher.current_grid:first_free_row(firstarg, nil, dataxml)
+    return { ret }, nil
 end
 
--- Get the first mark of a page (for example used in the head of dictionaires)
+-- Get the first mark of a page (for example used in the head of dictionaries)
 local function firstmark(_dataxml, arg)
-    local pagenumber = arg[1]
-    if not tonumber(pagenumber) then
+    local pagenumber = publisher.xpath.number_value(arg[1])
+    if not pagenumber then
         main.log("error", "firstmark: cannot get page number")
+        return {}, "firstmark: cannot get page number"
     end
     local minid = publisher.marker_min[pagenumber]
     if not minid then
-        return ""
+        return { "" }, nil
     end
-    return publisher.marker_id_value[minid].name
+    return { publisher.marker_id_value[minid].name }, nil
 end
 
--- Get the last mark of a page (for example used in the head of dictionaires)
+-- Get the last mark of a page (for example used in the head of dictionaries)
 local function lastmark(_dataxml, arg)
-    local pagenumber = arg[1]
-    if not tonumber(pagenumber) then
+    local pagenumber = publisher.xpath.number_value(arg[1])
+    if not pagenumber then
         main.log("error", "lastmark: cannot get page number")
+        return {}, "lastmark: cannot get page number"
     end
     local maxid = publisher.marker_max[pagenumber]
     if not maxid then
-        return ""
+        return { "" }, nil
     end
-    return publisher.marker_id_value[maxid].name
+    return { publisher.marker_id_value[maxid].name }, nil
 end
 
 -- Read the contents given in arg[1] and write it to a temporary file.
@@ -145,68 +162,77 @@ local function filecontents(_dataxml, arg)
     local tmpdir = os.getenv("SP_TEMPDIR")
     if tmpdir == nil then
         main.log("error", "SP_TEMPDIR is nil")
-        return
+        return {}, "SP_TEMPDIR is nil"
     end
+
     lfs.mkdir(tmpdir)
     local filename = publisher.utilities.string_random(20)
     local path = tmpdir .. publisher.os_separator .. filename
     local file, e = io.open(path, "wb")
     if file == nil then
         main.log("error", string.format("Could not write filecontents into temp directory: %q", e))
-        return nil
+        return {}, "Could not write filecontents into the temp directory"
     end
-    file:write(arg[1])
+    local firstarg = publisher.xpath.string_value(arg[1])
+    file:write(firstarg)
     file:close()
-    return path
+    return { path }
 end
 
 local function mode(_dataxml, arg)
     local entry
-    for _, v in pairs(arg) do
-        entry = publisher.modes[v]
-        if entry == true then
-            return true
+    for i = 1, #arg do
+        local name = publisher.xpath.string_value(arg[i])
+        entry = publisher.modes[name]
+        if entry then
+            return { true }, nil
         end
     end
-    return false
+    return { false }, nil
 end
 
 local function keepalternating(_dataxml, arg)
-    local alt_type = arg[1]
-    return publisher.alternating_value[alt_type]
+    local alt_type = publisher.xpath.string_value(arg[1])
+    local val = publisher.xpath.string_value(publisher.alternating_value[alt_type])
+    return { val }, nil
 end
 
 local function reset_alternating(_dataxml, arg)
-    local alt_type = arg[1]
+    local alt_type = publisher.xpath.string_value(arg[1])
     publisher.alternating[alt_type] = 0
+    return {}, nil
 end
 
-local function number_of_datasets(_dataxml, d)
-    if not d then
-        return 0
+local function fnNumberOfColumns(dataxml, arg)
+    local areaname
+    if #arg > 0 then
+        areaname = publisher.xpath.string_value(arg[1])
     end
-    local count = 0
-    for i = 1, #d do
-        if type(d[i]) == "table" then
-            count = count + 1
-        end
-    end
-    return count
-end
-
-local function number_of_columns(dataxml, arg)
     publisher.page_helpers.setup_page(nil, "layout_functions#number_of_columns", dataxml)
-    return publisher.current_grid:number_of_columns(arg and arg[1])
+    return { publisher.current_grid:number_of_columns(areaname) }
 end
 
 --- Merge numbers like '1,2,3,4,5, 8, 9,10' into '1-5, 8-10'
-local function merge_pagenumbers(_dataxml, arg)
-    local pagenumbers_string = string.gsub(arg[1] or "", "%s", "")
-    local mergechar = arg[2] or "–"
-    local spacer = arg[3] or ", "
-    local interaction = arg[4] or false
+local function fnMergePagenumbers(_dataxml, arg)
+    local firstarg, secondarg, thirdarg, fourtharg
+    firstarg = publisher.xpath.string_value(arg[1])
+    if #arg > 1 then
+        secondarg = publisher.xpath.string_value(arg[2])
+    end
+    if #arg > 2 then
+        thirdarg = publisher.xpath.string_value(arg[3])
+    end
+    if #arg > 3 then
+        fourtharg = publisher.xpath.boolean_value(arg[4])
+    end
+
+    local pagenumbers_string = string.gsub(firstarg or "", "%s", "")
+    local mergechar = secondarg or "–"
+    local spacer = thirdarg or ", "
+    local interaction = fourtharg or false
 
     local pagenumbers = string.explode(pagenumbers_string, ",")
+
     -- let's remove duplicates now
     local dupes = {}
     local withoutdupes = {}
@@ -293,18 +319,22 @@ local function merge_pagenumbers(_dataxml, arg)
             end
         end
     end
-    return p
+    return p, nil
 end
 
-local function number_of_rows(dataxml, arg)
+local function fnNumberOfRows(dataxml, arg)
+    local areaname
+    if #arg > 0 then
+        areaname = publisher.xpath.string_value(arg[1])
+    end
     publisher.page_helpers.setup_page(nil, "layout_functions#number_of_rows", dataxml)
-    return publisher.current_grid:number_of_rows(arg and arg[1])
+    return { publisher.current_grid:number_of_rows(areaname) }
 end
 
-local function number_of_pages(_dataxml, arg)
-    local filename = arg[1]
+local function fnNumberOfPages(_dataxml, arg)
+    local filename = publisher.xpath.string_value(arg[1])
     local img = publisher.images.imageinfo(filename)
-    return img.img.pages
+    return { img.img.pages }, nil
 end
 
 local function imagewidth(dataxml, arg)
@@ -340,10 +370,10 @@ local function imagewidth(dataxml, arg)
                 string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
             )
         end
-        return math.round(ret, 4)
+        return { math.round(ret, 4) }, nil
     else
         width = publisher.current_grid:width_in_gridcells_sp(img.img.width)
-        return width
+        return { width }, nil
     end
 end
 
@@ -379,27 +409,41 @@ local function imageheight(dataxml, arg)
                 string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
             )
         end
-        return math.round(ret, 4)
+        return { math.round(ret, 4) }, nil
     else
         height = publisher.current_grid:height_in_gridcells_sp(img.img.height)
-        return height
+        return { height }, nil
     end
 end
 
 local function file_exists(_dataxml, arg)
-    local filename = arg[1]
+    local filename = publisher.xpath.string_value(arg[1])
     if not filename then
-        return false
+        return { false }, nil
     end
     if filename == "" then
-        return false
+        return { false }, nil
     end
-    return kpse.find_file(filename) ~= nil
+    return { kpse.find_file(filename) ~= nil }, nil
 end
 
 --- Insert 1000's separator and comma separator
 local function format_number(_dataxml, arg)
-    local num, thousandssep, commasep = arg[1], arg[2], arg[3]
+    local num, thousandssep, commasep
+    local msg
+    num, msg = publisher.xpath.string_value(arg[1])
+    if msg then
+        return nil, msg
+    end
+    thousandssep, msg = publisher.xpath.string_value(arg[2])
+    if msg then
+        return nil, msg
+    end
+    commasep, msg = publisher.xpath.string_value(arg[3])
+    if msg then
+        return nil, msg
+    end
+
     local sign, digits, commadigits = string.match(tostring(num), "([%-%+]?)(%d*)%.?(%d*)")
     local first_digits = math.fmod(#digits, 3)
     local ret = {}
@@ -411,60 +455,62 @@ local function format_number(_dataxml, arg)
     end
     local retstr = table.concat(ret, thousandssep)
     if commadigits and #commadigits > 0 then
-        return sign .. retstr .. commasep .. commadigits
+        return { sign .. retstr .. commasep .. commadigits }, nil
     else
-        return sign .. retstr
+        return { sign .. retstr }, nil
     end
 end
 
 local function format_string(_dataxml, arg)
     local argument = {}
     for i = 1, #arg - 1 do
-        argument[#argument + 1] = table_textvalue(arg[i])
+        argument[#argument + 1] = publisher.xpath.string_value(arg[i])
     end
     local unpacked = table.unpack(argument)
     if unpacked == nil or unpacked == "" then
         main.log("error", "format-string: first arguments are empty")
         return ""
     end
-    local ret = string.format(arg[#arg], unpacked)
-    return ret
+    local ret = string.format(publisher.xpath.string_value(arg[#arg]), unpacked)
+    return { ret }
 end
 
 local function even(_dataxml, arg)
-    if not tonumber(arg[1]) then
+    local firstarg = tonumber(publisher.xpath.number_value(arg[1]))
+    if not firstarg then
         main.log("error", "sd:even() - argument is not a number")
-        return false
+        return {}, "sd:even() - argument is not a number"
     end
-    return math.fmod(arg[1], 2) == 0
+    return { math.fmod(firstarg, 2) == 0 }, nil
 end
 
 local function current_frame_number(dataxml, arg)
     publisher.page_helpers.setup_page(nil, "layout_functions#current_framenumber", dataxml)
-    local framename = arg[1]
+    local framename = publisher.xpath.string_value(arg[1])
     if framename == nil then
-        return 1
+        return { 1 }, nil
     end
     local current_framenumber = publisher.current_grid:framenumber(framename)
-    return current_framenumber
+    return { current_framenumber }, nil
 end
 
 local function groupheight(dataxml, arg)
     publisher.page_helpers.setup_page(nil, "layout_functions#groupheight", dataxml)
-    local groupname = arg[1]
+    local groupname = publisher.xpath.string_value(arg[1])
     if not publisher.groups[groupname] then
-        main.log("error", string.format("Can't find group with the name %q", groupname))
-        return 0
+        main.log("error", "Can't find group", "groupname", groupname)
+        return {}, "Can't find group"
     end
 
     local groupcontents = publisher.groups[groupname].contents
     if not groupcontents then
         main.log("error", string.format("Can't find group with the name %q", groupname))
-        return 0
+        return {}, "Can't find group"
     end
     local height
     local unit = arg[2]
     if unit then
+        unit = publisher.xpath.string_value(arg[2])
         height = groupcontents.height
         local ret
         if unit == "cm" then
@@ -491,30 +537,31 @@ local function groupheight(dataxml, arg)
                 string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
             )
         end
-        return math.round(ret, 4)
+        return { math.round(ret, 4) }, nil
     else
         local grid = assert(publisher.current_grid)
         height = grid:height_in_gridcells_sp(groupcontents.height)
-        return height
+        return { height }, nil
     end
 end
 
 local function groupwidth(dataxml, arg)
     publisher.page_helpers.setup_page(nil, "layout_functions#groupwidth", dataxml)
-    local groupname = arg[1]
+    local groupname = publisher.xpath.string_value(arg[1])
     if not publisher.groups[groupname] then
         main.log("error", string.format("Can't find group with the name %q", groupname))
-        return 0
+        return {}, "Can't find group"
     end
     local groupcontents = publisher.groups[groupname].contents
 
     if not groupcontents then
         main.log("error", string.format("Can't find group with the name %q", groupname))
-        return 0
+        return {}, "Can't find group"
     end
     local unit = arg[2]
     local width
     if unit then
+        unit = publisher.xpath.string_value(arg[2])
         width = groupcontents.width
         local ret
         if unit == "cm" then
@@ -541,70 +588,124 @@ local function groupwidth(dataxml, arg)
                 string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
             )
         end
-        return math.round(ret, 4)
+        return { math.round(ret, 4) }, nil
     else
         local grid = assert(publisher.current_grid)
         width = grid:width_in_gridcells_sp(groupcontents.width)
-        return width
+        return { width }, nil
     end
 end
 
 local function odd(_dataxml, arg)
-    local num = arg[1]
-    if not tonumber(num) then
-        main.log("error", "sd:odd() - argument is not a number")
-        return false
+    local firstarg = arg[1]
+    local num, msg = publisher.xpath.number_value(firstarg)
+    if msg then
+        return nil, msg
     end
-    return math.fmod(num, 2) ~= 0
+    num = tonumber(num)
+    if not num then
+        main.log("error", "sd:odd() - argument is not a number")
+        return {}, "sd:odd() - argument is not a number"
+    end
+    return { math.fmod(num, 2) ~= 0 }, nil
 end
 
-local function variable(_dataxml, arg)
-    local varname = table.concat(arg)
-    local var = publisher.xpath.get_variable(varname)
-    return var
+local function variable(dataxml, arg)
+    local args = {}
+    for i = 1, #arg do
+        args[#args + 1] = publisher.xpath.string_value(arg[i])
+    end
+    local varname = table.concat(args)
+    local var = dataxml.vars[varname]
+    if type(var) == "table" then
+        return var, nil
+    end
+    return { var }, nil
 end
 
 local function attr(dataxml, arg)
     local attname = table.concat(arg)
     local att = dataxml[attname]
-    return att
+    return { att }, nil
 end
 
-local function variable_exists(_dataxml, arg)
-    local var = publisher.xpath.get_variable(arg[1])
-    return var ~= nil
+local function variable_exists(dataxml, arg)
+    local varname = publisher.xpath.string_value(arg[1])
+    return { dataxml.vars[varname] ~= nil }, nil
 end
 
 -- SHA-1
 local function shaone(_dataxml, arg)
-    local message = table.concat(arg)
+    local args = {}
+    for i = 1, #arg do
+        args[#args + 1] = publisher.xpath.string_value(arg[i])
+    end
+
+    local message = table.concat(args)
     local ret = sha.sha1(message)
-    return ret
+    return { ret }, nil
 end
 
 local function sha256(_dataxml, arg)
-    local message = table.concat(arg)
+    local args = {}
+    for i = 1, #arg do
+        args[#args + 1] = publisher.xpath.string_value(arg[i])
+    end
+    local message = table.concat(args)
     local ret = sha.sha256(message)
-    return ret
+    return { ret }, nil
 end
 
 local function sha512(_dataxml, arg)
-    local message = table.concat(arg)
+    local args = {}
+    for i = 1, #arg do
+        args[#args + 1] = publisher.xpath.string_value(arg[i])
+    end
+    local message = table.concat(args)
     local ret = sha.sha512(message)
-    return ret
+    return { ret }, nil
+end
+
+local function symbol(_dataxml, arg)
+    local p = publisher.par:new(nil, "symbol")
+    for _, v in ipairs(arg) do
+        local thisarg = publisher.xpath.number_value(v)
+        p:append(utf8.char(publisher.puastart + thisarg))
+    end
+    return p, nil
+end
+
+local function markdown(dataxml, arg)
+    if arg == nil then
+        arg = dataxml
+    end
+    local str = table_textvalue(arg[1]) or ""
+    local htmltext
+    htmltext = splib.markdown(str)
+    if htmltext then
+        htmltext = publisher.splib.htmltoxml("<html><body>" .. htmltext .. "</body></html>")
+        return { htmltext }, nil
+    end
+    return {}, nil
 end
 
 local function md5(_dataxml, arg)
-    local message = table.concat(arg)
+    local args = {}
+    for i = 1, #arg do
+        args[#args + 1] = publisher.xpath.string_value(arg[i])
+    end
+
+    local message = table.concat(args)
     local ret = sha.md5(message)
-    return ret
+    return { ret }, nil
 end
 
 -- convert a textual dimension (e.g. '2cm') to a scalar in another dimension.
 local function tounit(_dataxml, arg)
-    local unit = arg[1]
-    local decimal = arg[3] or 0
-    local width = tex.sp(arg[2])
+    local unit = publisher.xpath.string_value(arg[1])
+    local decimal = publisher.xpath.number_value(arg[3]) or 0
+    local width = tex.sp(publisher.xpath.string_value(arg[2]))
+
     local ret
     if unit == "cm" then
         ret = width / publisher.onecm_sp
@@ -630,67 +731,78 @@ local function tounit(_dataxml, arg)
             string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
         )
     end
-    return math.round(ret, decimal)
+    return { math.round(ret, decimal) }, nil
 end
 
-local function markdown(dataxml, arg)
-    if arg == nil then
-        arg = dataxml
+local function fnDimexpr(dataxml, arg)
+    local unit = publisher.xpath.string_value(arg[1])
+    local secondarg = publisher.xpath.string_value(arg[2])
+    local ret = de.string_to_tokenlist(secondarg, dataxml)
+    local fun = load("return " .. ret)
+    if not fun then
+        return nil, "error in sd:dimexpr"
     end
-    local str = table_textvalue(arg[1]) or ""
-    local htmltext = splib.markdown(str)
-    if htmltext then
-        htmltext = publisher.splib.htmltoxml(htmltext)
-        local ret = luxor.parse_xml("<dummy><dummy>" .. htmltext .. "</dummy></dummy>")
-        return { ret }, nil
+    local value = fun()
+    if unit == "cm" then
+        ret = value / publisher.onecm_sp
+    elseif unit == "mm" then
+        ret = value / publisher.onemm_sp
+    elseif unit == "in" then
+        ret = value / publisher.onein_sp
+    elseif unit == "sp" then
+        ret = value
+    elseif unit == "pc" then
+        ret = value / publisher.onepc_sp
+    elseif unit == "pt" then
+        ret = value / publisher.onept_sp
+    elseif unit == "pp" then
+        ret = value / publisher.onepp_sp
+    elseif unit == "dd" then
+        ret = value / publisher.onedd_sp
+    elseif unit == "cc" then
+        ret = value / publisher.onecc_sp
+    else
+        main.log(
+            "error",
+            string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
+        )
     end
-    return {}, nil
-end
 
--- Turn escaped HTML into table. Uses Go XML parser + CSS
-local function html(dataxml, arg)
-    if arg == nil then
-        arg = dataxml
-    end
-    arg = table_textvalue(arg) or ""
-    local tab = splib.parse_html_text(arg, publisher.css:gettext())
-    if type(tab) == "string" then
-        local a, b = load(tab)
-        if a then
-            a()
-        else
-            main.log("error", tostring(b))
-            return
-        end
-        -- the chunk generated by the Go library assigns the global csshtmltree
-        ---@diagnostic disable-next-line: undefined-global
-        return { csshtmltree }
-    end
+    return { math.round(ret, 3) }, nil
 end
-
 -- Turn &lt;b&gt;Hello&lt;b /&gt; into an HTML table and then into XML structure.
 local function decode_html(dataxml, arg)
     if arg == nil then
         arg = dataxml
     end
-    arg = table_textvalue(arg)
-    if type(arg) == "string" then
-        local msg = publisher.splib.htmltoxml(arg)
+    local firstarg = publisher.xpath.string_value(arg[1])
+    if type(firstarg) == "string" then
+        -- A '<' that is not the start of a valid tag (letter, !, /, ?) is
+        -- literal text in HTML, e.g. "amount <5". The underlying XML parser
+        -- would reject it, so treat it like the HTML tokenizer does and turn
+        -- it into &lt; before handing it over.
+        firstarg = firstarg:gsub("<([^%a!/?])", "&lt;%1"):gsub("<$", "&lt;")
+        local msg = publisher.splib.htmltoxml(firstarg)
         if msg == nil then
             main.log("error", "decode-html failed")
             return nil
         end
         -- two dummy tags because xpath.parse_raw removes the surrounding table
-        local ret = luxor.parse_xml("<dummy><dummy>" .. msg .. "</dummy></dummy>")
-        return ret
+        local doc = publisher.splib.loadxmlstring("<dummy><dummy>" .. msg .. "</dummy></dummy>")
+        if doc == nil then
+            main.log("error", "decode-html failed")
+            return nil
+        end
+        -- loadxmlstring returns a document table, the outer dummy element is its first child
+        return doc[1]
     end
 end
 
 local function decode_base64(_dataxml, arg)
     local b = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-    local data = tostring(arg[1])
+    local data = publisher.xpath.string_value(arg[1])
     data = string.gsub(data, "[^" .. b .. "=]", "")
-    return (
+    local a = (
         data:gsub(".", function(x)
             if x == "=" then
                 return ""
@@ -711,36 +823,44 @@ local function decode_base64(_dataxml, arg)
             return string.char(c)
         end)
     )
+    return { a }, nil
 end
 
 local function count_saved_pages(_dataxml, arg)
-    local tmp = publisher.pagestore[arg[1]]
+    local firstarg = publisher.xpath.string_value(arg[1])
+    local tmp = publisher.pagestore[firstarg]
     if not tmp then
-        main.log("error", "count-saved-pages(): no saved pages found. Return 0")
-        return 0
+        return { 0 }, "count-saved-pages(): no saved pages found. Return 0"
     else
-        return #tmp
+        -- in backwards mode, tmp contains one entry for each page (a node list)
+        -- in forward mode, tmp contains four elements: the number of pages, the position, #publisher.bookmarks, and the page type
+        return { #tmp }, nil
     end
 end
 
 local function randomitem(_dataxml, arg)
     local x = math.random(#arg)
-    return arg[x]
+    return { arg[x] }, nil
 end
 
 local function romannumeral(_dataxml, arg)
-    return tex.romannumeral(arg[1])
+    local firstarg = publisher.xpath.number_value(arg[1])
+    if not firstarg then
+        main.log("error", "romannumeral expects a number as the first argument")
+        return {}, "romannumeral expects a number as the first argument"
+    end
+    return { tex.romannumeral(firstarg) }, nil
 end
 
 local function aspectratio(_dataxml, arg)
     local filename, pagenumber, box, _ = get_filename_pagenum_box_unit_from_arg(arg)
     local img = publisher.images.imageinfo(filename, pagenumber, box)
-    return img.img.xsize / img.img.ysize
+    return { img.img.xsize / img.img.ysize }, nil
 end
 
 local function pageheight(dataxml, arg)
     publisher.page_helpers.setup_page(nil, "layout_functions#pageheight", dataxml)
-    local unit = arg[1] or "mm"
+    local unit = publisher.xpath.string_value(arg[1]) or "mm"
     if unit then
         local width = publisher.current_page.height
         local ret
@@ -768,13 +888,13 @@ local function pageheight(dataxml, arg)
                 string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
             )
         end
-        return math.round(ret, 0)
+        return { math.round(ret, 0) }, nil
     end
 end
 
 local function pagewidth(dataxml, arg)
     publisher.page_helpers.setup_page(nil, "layout_functions#pagewidth", dataxml)
-    local unit = arg[1] or "mm"
+    local unit = publisher.xpath.string_value(arg[1]) or "mm"
     if unit then
         local width = publisher.current_page.width
         local ret
@@ -802,16 +922,72 @@ local function pagewidth(dataxml, arg)
                 string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
             )
         end
-        return math.round(ret, 0)
+        return { math.round(ret, 0) }, nil
     end
 end
 
-local function visible_pagenumber(_dataxml, arg)
-    return visiblepagenumber(arg[1])
+local function fnLength(dataxml, arg)
+    publisher.page_helpers.setup_page(nil, "layout_functions#length", dataxml)
+    local value = publisher.xpath.string_value(arg[1])
+    local unit = "mm"
+    if #arg > 1 then
+        unit = publisher.xpath.string_value(arg[2]) or "mm"
+    end
+    if unit then
+        local width = tex.sp(dataxml.vars[value])
+
+        local ret
+        if unit == "cm" then
+            ret = width / publisher.tenmm_sp
+        elseif unit == "mm" then
+            ret = width / publisher.onemm_sp
+        elseif unit == "in" then
+            ret = width / publisher.onein_sp
+        elseif unit == "sp" then
+            ret = width
+        elseif unit == "pc" then
+            ret = width / publisher.onepc_sp
+        elseif unit == "pt" then
+            ret = width / publisher.onept_sp
+        elseif unit == "pp" then
+            ret = width / publisher.onepp_sp
+        elseif unit == "dd" then
+            ret = width / publisher.onedd_sp
+        elseif unit == "cc" then
+            ret = width / publisher.onecc_sp
+        else
+            main.log(
+                "error",
+                string.format("unsupported unit: %q, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'", unit)
+            )
+        end
+        return { math.round(ret, 0) }, nil
+    end
+    return {}, "unsupported unit, please use 'sp', 'pt', 'pc', 'cm', 'mm', 'in', 'dd' or 'cc'"
+end
+
+local function fnVisiblePagenumber(dataxml, arg)
+    local firstarg
+    if #arg > 0 then
+        firstarg = publisher.xpath.string_value(arg[1])
+    else
+        publisher.page_helpers.setup_page(nil, "layout_functions#current_page", dataxml)
+        firstarg = tostring(publisher.current_pagenumber)
+    end
+    local vpn = visiblepagenumber(firstarg)
+    return { vpn }, nil
 end
 
 local function loremipsum(_dataxml, arg)
-    local count = arg and arg[1] or 1
+    local count = 1
+    if #arg == 1 then
+        local num, msg = publisher.xpath.number_value(arg[1])
+        if msg then
+            return nil, msg
+        end
+        count = tonumber(num) or 1
+    end
+
     local lorem = [[
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
@@ -821,65 +997,139 @@ local function loremipsum(_dataxml, arg)
         occaecat cupidatat non proident, sunt in culpa qui officia deserunt
         mollit anim id est laborum.
     ]]
-    return string.rep(lorem:gsub("^%s*(.-)%s*$", "%1"):gsub("[%s\n]+", " "), count, " ")
+    return { string.rep(lorem:gsub("^%s*(.-)%s*$", "%1"):gsub("[%s\n]+", " "), count, " ") }, nil
 end
 
 local sdns = "urn:speedata:2009/publisher/functions/en"
 
-local register = publisher.xpath.register_function
-register(sdns, "attr", attr)
-register(sdns, "dimexpr", dimexpression)
-register(sdns, "alternating", alternating)
-register(sdns, "aspectratio", aspectratio)
-register(sdns, "count-saved-pages", count_saved_pages)
-register(sdns, "current-page", current_page)
-register(sdns, "current-row", current_row)
-register(sdns, "current-framenumber", current_frame_number)
-register(sdns, "current-column", current_column)
-register(sdns, "html", html)
-register(sdns, "decode-html", decode_html)
-register(sdns, "decode-base64", decode_base64)
-register(sdns, "dummytext", loremipsum)
-register(sdns, "loremipsum", loremipsum)
-register(sdns, "even", even)
-register(sdns, "first-free-row", first_free_row)
-register(sdns, "firstmark", firstmark)
-register(sdns, "lastmark", lastmark)
-register(sdns, "filecontents", filecontents)
-register(sdns, "file-exists", file_exists)
-register(sdns, "format-number", format_number)
-register(sdns, "format-string", format_string)
-register(sdns, "group-height", groupheight)
-register(sdns, "groupheight", groupheight)
-register(sdns, "group-width", groupwidth)
-register(sdns, "groupwidth", groupwidth)
-register(sdns, "imagewidth", imagewidth)
-register(sdns, "imageheight", imageheight)
-register(sdns, "markdown", markdown)
-register(sdns, "mode", mode)
-register(sdns, "allocated", allocated)
-register(sdns, "keep-alternating", keepalternating)
-register(sdns, "merge-pagenumbers", merge_pagenumbers)
-register(sdns, "number-of-datasets", number_of_datasets)
-register(sdns, "number-of-rows", number_of_rows)
-register(sdns, "number-of-columns", number_of_columns)
-register(sdns, "number-of-pages", number_of_pages)
-register(sdns, "odd", odd)
-register(sdns, "pagenumber", fnpagenumber)
-register(sdns, "pagewidth", pagewidth)
-register(sdns, "pageheight", pageheight)
-register(sdns, "randomitem", randomitem)
-register(sdns, "romannumeral", romannumeral)
-register(sdns, "reset_alternating", reset_alternating) -- backward comp.
-register(sdns, "reset-alternating", reset_alternating)
-register(sdns, "sha1", shaone)
-register(sdns, "sha256", sha256)
-register(sdns, "sha512", sha512)
-register(sdns, "md5", md5)
-register(sdns, "todimen", tounit)
-register(sdns, "tounit", tounit)
-register(sdns, "variable", variable)
-register(sdns, "variable-exists", variable_exists)
-register(sdns, "visible-pagenumber", visible_pagenumber)
+local funcs = {
+    { "allocated", sdns, fnAllocated, 1, 4 },
+    { "alternating", sdns, fnAlternating, 1, -1 },
+    { "aspectratio", sdns, aspectratio, 1, 3 },
+    { "attr", sdns, attr, 1, -1 },
+    { "count-saved-pages", sdns, count_saved_pages, 1, 1 },
+    { "current-column", sdns, current_column, 0, 1 },
+    { "current-framenumber", sdns, current_frame_number, 0, 1 },
+    { "current-page", sdns, fnCurrentPage, 0, 0 },
+    { "current-row", sdns, fnCurrentRow, 0, 1 },
+    { "decode-base64", sdns, decode_base64, 1, 1 },
+    { "decode-html", sdns, decode_html, 1, 1 },
+    { "dimexpr", sdns, fnDimexpr, 2, 2 },
+    { "dummytext", sdns, loremipsum, 0, 1 },
+    { "even", sdns, even, 1, 1 },
+    { "file-exists", sdns, file_exists, 1, 1 },
+    { "filecontents", sdns, filecontents, 1, 1 },
+    { "first-free-row", sdns, first_free_row, 0, 1 },
+    { "firstmark", sdns, firstmark, 1, 1 },
+    { "format-number", sdns, format_number, 1, 3 },
+    { "format-string", sdns, format_string, 1, -1 },
+    { "group-height", sdns, groupheight, 1, 2 },
+    { "group-width", sdns, groupwidth, 1, 2 },
+    { "groupheight", sdns, groupheight, 1, 2 },
+    { "groupwidth", sdns, groupwidth, 1, 2 },
+    { "imageheight", sdns, imageheight, 1, 4 },
+    { "imagewidth", sdns, imagewidth, 1, 4 },
+    { "keep-alternating", sdns, keepalternating, 1, -1 },
+    { "lastmark", sdns, lastmark, 1, 1 },
+    { "length", sdns, fnLength, 1, 2 },
+    { "loremipsum", sdns, loremipsum, 0, 1 },
+    { "markdown", sdns, markdown, 1, 1 },
+    { "md5", sdns, md5, 1, -1 },
+    { "merge-pagenumbers", sdns, fnMergePagenumbers, 1, 4 },
+    { "mode", sdns, mode, 1, -1 },
+    { "number-of-columns", sdns, fnNumberOfColumns, 0, 1 },
+    { "number-of-pages", sdns, fnNumberOfPages, 1, 1 },
+    { "number-of-rows", sdns, fnNumberOfRows, 0, 1 },
+    { "odd", sdns, odd, 1, 1 },
+    { "pageheight", sdns, pageheight, 0, 1 },
+    { "pagenumber", sdns, fnpagenumber, 1, 1 },
+    { "pagewidth", sdns, pagewidth, 0, 1 },
+    { "randomitem", sdns, randomitem, 1, -1 },
+    { "reset-alternating", sdns, reset_alternating, 1, 1 },
+    { "romannumeral", sdns, romannumeral, 1, 1 },
+    { "sha1", sdns, shaone, 1, -1 },
+    { "sha256", sdns, sha256, 1, -1 },
+    { "sha512", sdns, sha512, 1, -1 },
+    { "symbol", sdns, symbol, 1, -1 },
+    { "todimen", sdns, tounit, 1, 3 },
+    { "tounit", sdns, tounit, 1, 3 },
+    { "variable-exists", sdns, variable_exists, 1, 1 },
+    { "variable", sdns, variable, 1, -1 },
+    { "visible-pagenumber", sdns, fnVisiblePagenumber, 0, 1 },
+}
+
+local register = publisher.xpath.registerFunction
+for _, func in ipairs(funcs) do
+    register(func)
+end
+
+local libprefix = publisher.splib
+
+-- Contains
+local function fnContains(_dataxml, arg)
+    local firstarg = publisher.xpath.string_value(arg[1])
+    local secondarg = publisher.xpath.string_value(arg[2])
+    return { libprefix.contains(firstarg, secondarg) }, nil
+end
+
+-- Matches
+local function fnMatches(_dataxml, arg)
+    local firstarg = publisher.xpath.string_value(arg[1])
+    local secondarg = publisher.xpath.string_value(arg[2])
+    local flags = arg[3] and publisher.xpath.string_value(arg[3]) or ""
+    if string.find(flags, "x") then
+        main.log("warn", "matches does not support the x flag")
+    end
+    if flags ~= "" then
+        secondarg = "(?" .. flags .. ")" .. secondarg
+    end
+    return { libprefix.matches(firstarg, secondarg) }, nil
+end
+
+-- Replace
+local function fnReplace(_dataxml, arg)
+    local firstarg = publisher.xpath.string_value(arg[1])
+    local secondarg = publisher.xpath.string_value(arg[2])
+    local thirdarg = publisher.xpath.string_value(arg[3])
+    return { libprefix.replace(firstarg, secondarg, thirdarg) }, nil
+end
+
+-- UpperCase. The built-in upper-case() in lxpath only handles ASCII,
+-- the Go version uses the Unicode full case mappings (Straße -> STRASSE).
+local function fnUpperCase(_dataxml, arg)
+    local firstarg = publisher.xpath.string_value(arg[1])
+    return { libprefix.uppercase(firstarg) }, nil
+end
+
+-- LowerCase
+local function fnLowerCase(_dataxml, arg)
+    local firstarg = publisher.xpath.string_value(arg[1])
+    return { libprefix.lowercase(firstarg) }, nil
+end
+
+-- Tokenize is the first function we ask 'splib' for help
+local function fnTokenize(_dataxml, arg)
+    local firstarg = publisher.xpath.string_value(arg[1])
+    local secondarg = publisher.xpath.string_value(arg[2])
+    if firstarg == nil or secondarg == nil then
+        main.log("error", "tokenize: one of the arguments is empty")
+        return { "" }, nil
+    end
+    local seq = libprefix.tokenize(firstarg, secondarg)
+    return seq, nil
+end
+
+funcs = {
+    { "contains", publisher.xpath.fnNS, fnContains, 2, 2 },
+    { "matches", publisher.xpath.fnNS, fnMatches, 2, 3 },
+    { "tokenize", publisher.xpath.fnNS, fnTokenize, 1, 2 },
+    { "replace", publisher.xpath.fnNS, fnReplace, 1, 3 },
+    { "upper-case", publisher.xpath.fnNS, fnUpperCase, 1, 1 },
+    { "lower-case", publisher.xpath.fnNS, fnLowerCase, 1, 1 },
+}
+
+for _, func in ipairs(funcs) do
+    register(func)
+end
 
 file_end("layout_functions.lua")

@@ -66,7 +66,7 @@ M.env_publisherversion = os.getenv("PUBLISHERVERSION")
 -- expose helpers from submodules
 M.utf8_to_utf16_string_pdf = metadata.utf8_to_utf16_string_pdf
 
-do_luafile("layout_functions_lxpath.lua")
+do_luafile("layout_functions.lua")
 
 -- so that node.copy_list copies the node properties
 node.set_properties_mode(true)

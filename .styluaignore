@@ -1,6 +1,5 @@
 # Third-party vendored Lua files. Keep them in their upstream shape
 # so future syncs are clean diffs.
-src/lua/luxor.lua
 src/lua/ProFi.lua
 src/lua/uuid.lua
 src/lua/socket_url.lua
