@@ -141,7 +141,6 @@ function M.make_font_instance(name, size)
         filename = filename,
         fontsize = size,
         space = parameter.space,
-        mode = parameter.mode or publisher.options.fontloader,
         fallbacks = parameter.fallbacks,
     }
 
@@ -158,7 +157,7 @@ function M.make_font_instance(name, size)
     else
         local f
         local num = font.nextid(true)
-        f = fontloader_mod.preload_font(filename, size, parameter, parameter.mode or publisher.options.fontloader)
+        f = fontloader_mod.preload_font(filename, size, parameter)
         f.reserved_num = num
         preloaded_fonts[num] = f
         main.log(
@@ -182,7 +181,6 @@ end
 ---@param instance table Font instance descriptor.
 ---@return boolean ok
 function M.define_font(instance)
-    local mode = instance.requested_mode
     local num = instance.reserved_num
     main.log(
         "info",
@@ -192,24 +190,13 @@ function M.define_font(instance)
         "size",
         math.round(instance.requested_size / publisher.factor, 3),
         "id",
-        num,
-        "mode",
-        mode
+        num
     )
-    local f, ok
-    if mode == "harfbuzz" then
-        ok, f = fontloader_mod.define_font_hb(
-            instance.requested_name,
-            instance.requested_size,
-            instance.requested_extra_parameter
-        )
-    else
-        ok, f = fontloader_mod.define_font(
-            instance.requested_name,
-            instance.requested_size,
-            instance.requested_extra_parameter
-        )
-    end
+    local ok, f = fontloader_mod.define_font_hb(
+        instance.requested_name,
+        instance.requested_size,
+        instance.requested_extra_parameter
+    )
     if not ok then
         main.log("error", "Failed to load font", "requested name", instance.requested_name, "errormessage", f or "")
         return false
@@ -269,7 +256,6 @@ local d_getprev = d.getprev
 local d_getid = d.getid
 local d_getsubtype = d.getsubtype
 local d_getchar = d.getchar
-local d_setchar = d.setchar
 local d_getfont = d.getfont
 local d_getlist = d.getlist
 local d_getleader = d.getleader
@@ -279,7 +265,6 @@ local d_setfield = d.setfield
 local d_getfield = d.getfield
 local d_setnext = d.setnext
 local d_setprev = d.setprev
-local d_new = d.new
 local d_insert_after = d.insert_after
 local d_insert_before = d.insert_before
 local d_vpack = d.vpack
@@ -303,7 +288,6 @@ local plb_attval_bold -- index of "bold" in font-weight table
 local function pre_linebreak_direct(head)
     -- Cache for consecutive same-font glyphs
     local cache_ff, cache_fs, cache_fw
-    local cache_fontnum, cache_is_fontforge, cache_f
     while head do
         local id = d_getid(head)
         if id == hlist_node then
@@ -410,56 +394,10 @@ local function pre_linebreak_direct(head)
                     else
                         instancename = "normal"
                     end
-                    cache_fontnum = M.get_fontinstance(fontfamily, instancename)
-                    cache_f = used_fonts[cache_fontnum]
-                    cache_is_fontforge = cache_f and cache_f.mode == "fontforge" and cache_f.otfeatures
+                    M.get_fontinstance(fontfamily, instancename)
                     cache_ff = ff
                     cache_fs = fontstyle
                     cache_fw = fontweight
-                end
-
-                -- check for font features (fontforge mode only)
-                if cache_is_fontforge then
-                    local f = cache_f
-                    local headchar = d_getchar(head)
-                    for _, featuretable in ipairs(f.otfeatures) do
-                        local glyphno, lookups
-                        local glyph_lookuptable
-                        if f.characters[headchar] then
-                            glyphno = f.characters[headchar].index
-                            lookups = f.fontloader.glyphs[glyphno].lookups
-                            for _, v in ipairs(featuretable) do
-                                if lookups then
-                                    glyph_lookuptable = lookups[v]
-                                    if glyph_lookuptable then
-                                        local glt1 = glyph_lookuptable[1]
-                                        if glt1.type == "substitution" then
-                                            d_setchar(
-                                                head,
-                                                f.fontloader.lookup_codepoint_by_name[glt1.specification.variant]
-                                            )
-                                            headchar = d_getchar(head)
-                                        elseif glt1.type == "multiple" then
-                                            for i, comp in ipairs(string.explode(glt1.specification.components)) do
-                                                if i == 1 then
-                                                    d_setchar(head, f.fontloader.lookup_codepoint_by_name[comp])
-                                                    headchar = d_getchar(head)
-                                                else
-                                                    local n = d_new(glyph_node)
-                                                    d_setnext(n, d_getnext(head))
-                                                    d_setfield(n, "font", cache_fontnum)
-                                                    d_setfield(n, "lang", 0)
-                                                    d_setchar(n, f.fontloader.lookup_codepoint_by_name[comp])
-                                                    d_setnext(head, n)
-                                                    head = n
-                                                end
-                                            end
-                                        end
-                                    end
-                                end
-                            end
-                        end
-                    end
                 end
             end
         else

@@ -3141,8 +3141,7 @@ function commands.load_fontfile(layoutxml, dataxml)
     local filename = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "filename", "string")
     local marginprotrusion =
         publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "marginprotrusion", "number")
-    local mode =
-        publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "mode", "string", publisher.options.fontloader)
+    local mode = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "mode", "string")
     if mode == "fontforge" then
         main.log(
             "error",
@@ -3256,7 +3255,6 @@ function commands.load_fontfile(layoutxml, dataxml)
         space = space or 25,
         marginprotrusion = marginprotrusion or 0,
         fallbacks = fallbacks,
-        mode = mode,
         shrink = shrink,
         stretch = stretch,
         step = step,

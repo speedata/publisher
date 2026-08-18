@@ -384,7 +384,6 @@ M.css = do_luafile("css.lua"):new()
 ---@field dpi? number Resolution for pixel to sp conversion.
 ---@field dumpstructtree boolean Writes the PDF/UA structure tree to a file (-struct.xml).
 ---@field extensionhandler string?
----@field fontloader "harfbuzz" Backend used to load fonts (always harfbuzz).
 ---@field fontshrink number?
 ---@field fontstep number?
 ---@field fontstretch number?
@@ -444,7 +443,6 @@ M.options = {
     documentsubject = "",
     documenttitle = "",
     dumpstructtree = false,
-    fontloader = "harfbuzz",
     format = "",
     gridcells_x = 0,
     gridcells_y = 0,

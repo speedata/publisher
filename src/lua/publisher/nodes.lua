@@ -930,74 +930,6 @@ function M.addstrut(nodelist, _where, origin)
     return strut
 end
 
--- Applies CSS-style attributes (color, decoration, weight, ...) to node
--- `n` based on `parameter`.
----@param n Node
----@param parameter table CSS-like attribute table.
----@return nil
-local function setstyles(n, parameter)
-    if parameter.bold == 1 then
-        node.set_attribute(n, att_fontweight, attval_fontweight["bold"])
-        publisher.attribute_helpers.setprop(n, "font-weight", "bold")
-    end
-    if parameter.italic == 1 then
-        node.set_attribute(n, att_fontstyle, attval_fontstyle["italic"])
-    end
-    if parameter.textdecorationline then
-        node.set_attribute(n, att_td_line, attval_td_line[parameter.textdecorationline])
-        node.set_attribute(n, att_td_style, attval_td_style[parameter.textdecorationstyle])
-        node.set_attribute(n, att_td_color, publisher.current_fgcolor)
-    end
-    if parameter.color and parameter.color ~= 1 then
-        node.set_attribute(n, att_td_color, parameter.color)
-        node.set_attribute(n, att_color, parameter.color)
-    end
-    if parameter.hyperlink then
-        node.set_attribute(n, att_hyperlink, parameter.hyperlink)
-    end
-    if parameter.languagecode and n.id == publisher.glyph_node then
-        n.lang = parameter.languagecode
-    end
-    if parameter.backgroundcolor then
-        node.set_attribute(n, att_bgcolor, parameter.backgroundcolor)
-        local bg_padding_top = tex.sp(parameter.bg_padding_top or 0)
-        local bg_padding_bottom = tex.sp(parameter.bg_padding_bottom or 0)
-        node.set_attribute(n, att_bgpadtop, bg_padding_top)
-        node.set_attribute(n, att_bgpadbot, bg_padding_bottom)
-    end
-    if parameter.verticalalign then
-        node.set_attribute(n, att_verticalalign, attval_verticalalign[parameter.verticalalign])
-    end
-    if parameter.indent then
-        publisher.attribute_helpers.setprop(n, "indent", parameter.indent)
-    end
-    if parameter.role then
-        publisher.attribute_helpers.setprop(n, "role", parameter.role)
-    end
-    if parameter.structelemobjnum then
-        publisher.attribute_helpers.setprop(n, "structelemobjnum", parameter.structelemobjnum)
-    end
-    if parameter.actualtext then
-        publisher.attribute_helpers.setprop(n, "actualtext", parameter.actualtext)
-    end
-    if parameter.alttext then
-        publisher.attribute_helpers.setprop(n, "alttext", parameter.alttext)
-    end
-    if parameter.parent then
-        if parameter.parent == "" then
-            -- ignore
-        else
-            publisher.attribute_helpers.setprop(n, "parent", parameter.parent)
-        end
-    end
-    if parameter.id then
-        publisher.attribute_helpers.setprop(n, "id", parameter.id)
-    end
-    if parameter.rolecounter then
-        publisher.attribute_helpers.setprop(n, "rolecounter", parameter.rolecounter)
-    end
-end
-
 -- Resolves missing glyphs in a HarfBuzz cluster by trying each fallback
 -- font definition in turn.
 ---@param cluster table HarfBuzz shaping cluster.
@@ -1236,7 +1168,7 @@ function M.hbglyphlist(arguments)
         allowbreak_set[c] = true
     end
 
-    -- Apply pre-computed styles to a node (replaces setstyles in the loop)
+    -- Apply pre-computed styles to a node
     local function apply_styles(nd)
         for j = 1, style_attrs_len, 2 do
             node_set_attribute(nd, style_attrs[j], style_attrs[j + 1])
@@ -1559,307 +1491,6 @@ function M.hbglyphlist(arguments)
     return list
 end
 
--- FontForge backend: returns the glue node for a Unicode space character.
----@param s integer Unicode codepoint (en space, em space, thin space, ...).
----@param tbl table Font instance table (FontForge backend).
----@return Node? glue `nil` for unknown codepoints.
-local function ffgetglue(s, tbl)
-    local n
-    if s == 8194 then
-        n = set_glue(nil, { width = tbl.parameters.enspace }, "uc=8194")
-    elseif s == 8195 then -- em space
-        n = set_glue(nil, { width = tbl.parameters.emspace }, "uc=8195")
-    elseif s == 8196 then -- three per em space
-        n = set_glue(nil, { width = tbl.parameters.thirdspace }, "uc=8196")
-    elseif s == 8197 then -- four per em space
-        n = set_glue(nil, { width = tbl.parameters.quarterspace }, "uc=8197")
-    elseif s == 8198 then -- six per em space
-        n = set_glue(nil, { width = tbl.parameters.sixthspace }, "uc=8198")
-    elseif s == 8201 then -- thin space
-        n = set_glue(nil, { width = tbl.parameters.thinspace }, "uc=8201")
-    elseif s == 8202 then -- hair space
-        n = set_glue(nil, { width = tbl.parameters.hairspace }, "uc=8202")
-    elseif s == 8203 then
-        n = set_glue(nil, { width = 0 }, "uc=8203")
-    end
-    return n
-end
-
--- FontForge fallback for `hbglyphlist`. Builds a glyph node list using the
--- legacy fontforge-based loader, without HarfBuzz shaping.
----@param arguments table
----@return Node head
-local function ffglyphlist(arguments)
-    local tbl = arguments.tbl
-    local str = arguments.str
-
-    local parameter = arguments.parameter
-    local allowbreak = arguments.allowbreak
-    local fontfamily = parameter.fontfamily
-    local fontnumber = arguments.fontnumber
-    local languagecode = arguments.languagecode
-    local space = tbl.parameters.space
-    local shrink = tbl.parameters.space_shrink
-    local stretch = tbl.parameters.space_stretch
-
-    local match = unicode.utf8.match
-    local allow_newline = true
-    if publisher.options.htmlignoreeol then
-        allow_newline = false
-    end
-
-    local head, last, n
-
-    local lastitemwasglyph
-    local newline = 10
-    local breakatspace = true
-    if not string.find(allowbreak, " ") then
-        breakatspace = false
-    end
-    local preserve_whitespace = parameter.whitespace == "pre"
-    -- There is a string with UTF-8 chars
-    for s in string.utfvalues(str) do
-        local char = unicode.utf8.char(s)
-        -- If the next char is a newline (&#x0A;) a \\ is inserted
-        if s == newline and allow_newline then
-            -- This is to enable hyphenation again. When we add a rule right after a word
-            -- hyphenation is disabled. So we insert a penalty of 10k which should not do
-            -- harm. Perhaps there is a better solution, but this seems to work OK.
-            local dummypenalty
-            dummypenalty = node.new("penalty")
-            dummypenalty.penalty = 10000
-            node.set_attribute(dummypenalty, att_newline, 1)
-            head, last = node.insert_after(head, last, dummypenalty)
-            if fontfamily == nil then
-                main.log("error", "ffglyphlist: fontfamily is nil")
-                return head
-            end
-            local ff = fonts.lookup_fontfamily_number_instance[fontfamily]
-            if ff == nil then
-                main.log("error", string.format("Could not find instance of family %s", fontfamily))
-                return head
-            end
-            local ht = ff.size
-            local strut = M.add_rule(nil, "head", { height = ht * 0.75, depth = ht * 0.25, width = 0 }, "newline")
-            node.set_attribute(strut, att_newline, 1)
-            head, last = node.insert_after(head, last, strut)
-
-            local p1, g, p2
-            p1 = node.new("penalty")
-            p1.penalty = 10000
-
-            g = set_glue(nil, { stretch = 2 ^ 16, stretch_order = 2 })
-
-            p2 = node.new("penalty")
-            p2.penalty = -10000
-
-            node.set_attribute(p1, att_newline, 1)
-            node.set_attribute(p2, att_newline, 1)
-            node.set_attribute(g, att_newline, 1)
-            local attr = { fontfamily = fontfamily }
-            publisher.attribute_helpers.set_attributes(p1, attr)
-            publisher.attribute_helpers.set_attributes(p2, attr)
-            publisher.attribute_helpers.set_attributes(g, attr)
-
-            head, last = node.insert_after(head, last, p1)
-            head, last = node.insert_after(head, last, g)
-            head, last = node.insert_after(head, last, p2)
-
-            -- add glue so next word can hyphenate (#274)
-            g = set_glue(nil, {})
-            head, last = node.insert_after(head, last, g)
-        elseif preserve_whitespace and match(char, "^%s$") then
-            local fonttbl = fonts.used_fonts[fontnumber]
-            local strut = M.add_rule(
-                nil,
-                "head",
-                { height = 0 * publisher.factor, depth = 0, width = fonttbl.zerowidth },
-                "preserve_whitespace"
-            )
-            head, last = node.insert_after(head, last, strut)
-        elseif
-            match(char, "^%s$")
-            and last
-            and last.id == publisher.glue_node
-            and not node.has_attribute(last, publisher.att_tie_glue, 1)
-        then
-            -- double space, use the bigger glue
-            local tmp
-            if s >= 8194 and s <= 8198 or s >= 8201 and s <= 8203 then
-                tmp = assert(ffgetglue(s, tbl))
-            else
-                tmp = set_glue(nil, { width = space, shrink = shrink, stretch = stretch }, "double glue")
-            end
-            local tmp2 = M.bigger_glue_spec(last, tmp)
-            last.width = tmp2.width
-            last.stretch = tmp2.stretch
-            last.shrink = tmp2.shrink
-            last.stretch_order = tmp2.stretch_order
-            last.shrink_order = tmp2.shrink_order
-        elseif s == 160 then -- non breaking space U+00A0
-            n = node.new("penalty")
-            n.penalty = 10000
-
-            head, last = node.insert_after(head, last, n)
-            n = set_glue(nil, { width = space, shrink = shrink, stretch = stretch })
-            node.set_attribute(n, publisher.att_tie_glue, 1)
-
-            head, last = node.insert_after(head, last, n)
-
-            if parameter.textdecorationline then
-                publisher.attribute_helpers.set_attribute(n, "text-decoration-line", parameter.textdecorationline)
-                publisher.attribute_helpers.set_attribute(n, "text-decoration-style", parameter.textdecorationstyle)
-                publisher.attribute_helpers.set_attribute(n, "text-decoration-color", publisher.current_fgcolor)
-            end
-
-            if parameter.backgroundcolor then
-                publisher.attribute_helpers.set_attribute(n, "background-color", parameter.backgroundcolor)
-                publisher.attribute_helpers.set_attribute(n, "bgpaddingtop", parameter.bg_padding_top)
-                publisher.attribute_helpers.set_attribute(n, "bgpaddingbottom", parameter.bg_padding_bottom)
-            end
-            publisher.attribute_helpers.set_attribute(n, "fontfamily", fontfamily)
-        elseif s == 173 then -- soft hyphen
-            -- The soft hyphen is used in server-mode /v0/format
-            n = node.new(publisher.penalty_node)
-            n.penalty = 10000
-            head, last = node.insert_after(head, last, n)
-
-            n = node.new(publisher.disc_node)
-            node.set_attribute(n, publisher.att_keep, 1)
-            head, last = node.insert_after(head, last, n)
-
-            n = node.new(publisher.penalty_node)
-            n.penalty = 10000
-            head, last = node.insert_after(head, last, n)
-
-            n = set_glue(nil)
-            head, last = node.insert_after(head, last, n)
-        elseif s == 9 and parameter.tab == "hspace" then
-            local tabglue = set_glue(nil, { width = 0, stretch = 2 ^ 16, stretch_order = 3 })
-            head, last = node.insert_after(head, last, tabglue)
-        elseif s >= 8194 and s <= 8198 or s >= 8201 and s <= 8203 then
-            local spaceglue = assert(ffgetglue(s, tbl))
-            -- prevent from stretching with ragged shape
-            spaceglue.subtype = 1
-            head, last = node.insert_after(head, last, spaceglue)
-        -- anchor is necessary. Otherwise à (C3A0) would match A0 - %s
-        elseif match(char, "^%s$") then -- Space
-            if breakatspace == false then
-                n = node.new("penalty")
-                n.penalty = 10000
-
-                head, last = node.insert_after(head, last, n)
-            end
-            -- ; and : should have the possibility to break easily if a space follows
-            if last and last.id == publisher.glyph_node and (last.char == 58 or last.char == 59) then
-                n = node.new("penalty")
-                n.penalty = 0
-                head, last = node.insert_after(head, last, n)
-            end
-
-            n = set_glue(nil, { width = space, shrink = shrink, stretch = stretch }, "space")
-            setstyles(n, parameter)
-            if breakatspace == false then
-                node.set_attribute(n, publisher.att_tie_glue, 1)
-            end
-
-            if parameter.textdecorationline then
-                publisher.attribute_helpers.set_attribute(n, "text-decoration-line", parameter.textdecorationline)
-                publisher.attribute_helpers.set_attribute(n, "text-decoration-color", publisher.current_fgcolor)
-            end
-            if parameter.backgroundcolor then
-                publisher.attribute_helpers.set_attribute(n, "background-color", parameter.backgroundcolor)
-                if parameter.bg_padding_top then
-                    publisher.attribute_helpers.set_attribute(n, "bgpaddingtop", parameter.bg_padding_top)
-                end
-                if parameter.bg_padding_bottom then
-                    publisher.attribute_helpers.set_attribute(n, "bgpaddingbottom", parameter.bg_padding_bottom)
-                end
-            end
-            publisher.attribute_helpers.set_attribute(n, "fontfamily", fontfamily)
-            head, last = node.insert_after(head, last, n)
-            if parameter.letterspacing then
-                n.width = n.width + parameter.letterspacing
-            end
-        else
-            -- A regular character?!?
-            n = node.new("glyph")
-            n.font = fontnumber
-            n.subtype = 1
-            n.char = s
-            n.lang = languagecode
-            n.uchyph = 1
-            n.left = parameter.left or tex.lefthyphenmin
-            n.right = parameter.right or tex.righthyphenmin
-            setstyles(n, parameter)
-            publisher.attribute_helpers.set_attribute(n, "fontfamily", fontfamily)
-
-            local famtab = fonts.lookup_fontfamily_number_instance[fontfamily]
-            if parameter.verticalalign == "sub" then
-                n.yoffset = -famtab.subshift
-            elseif parameter.verticalalign == "super" then
-                n.yoffset = famtab.supershift
-            end
-
-            if parameter.letterspacing then
-                local k = node.new("kern")
-                k.kern = parameter.letterspacing
-                setstyles(k, parameter)
-                head, last = node.insert_after(head, last, k)
-                lastitemwasglyph = true
-            end
-            if last and last.id == publisher.glyph_node then
-                lastitemwasglyph = true
-            end
-
-            head, last = node.insert_after(head, last, n)
-            -- CJK
-            if s >= 12032 then
-                local pen = node.new("penalty")
-                pen.penalty = 0
-                head, last = node.insert_after(head, last, pen)
-            end
-
-            -- Some characters must be treated in a special way.
-            -- Hyphens must be separated from words:
-            if n.char == 8209 then -- non breaking hyphen U+2011
-                n.char = 45
-                local pen = node.new("penalty")
-                pen.penalty = 10000
-                head, last = node.insert_after(head, last, pen)
-            elseif (n.char == 45 or n.char == 8211) and lastitemwasglyph and string.find(allowbreak, "-", 1, true) then
-                -- only break if allowbreak contains the hyphen char
-                local pen = node.new("penalty")
-                pen.penalty = 10000
-                head = node.insert_before(head, last, pen)
-                local disc = node.new("disc")
-                head, last = node.insert_after(head, last, disc)
-                local g = set_glue(nil)
-                setstyles(pen, parameter)
-                setstyles(disc, parameter)
-                setstyles(g, parameter)
-                head, last = node.insert_after(head, last, g)
-            elseif string.find(allowbreak, char, 1, true) then
-                -- allowbreak lists characters where the publisher may break lines
-                local pen = node.new("penalty")
-                pen.penalty = 0
-                head, last = node.insert_after(head, last, pen)
-            end
-        end
-    end
-
-    if not head then
-        -- This should never happen.
-        main.log("warn", "No head found")
-        return node.new("hlist")
-    end
-    local aa = parameter.add_attributes or {}
-    for i = 1, #aa do
-        publisher.attribute_helpers.set_attribute_recurse(head, aa[i][1], aa[i][2])
-    end
-    return head
-end
-
 -- Builds a deterministic instance key for `parameter` so font instances can
 -- be cached and reused.
 ---@param parameter table Font parameters (family, style, weight, ...).
@@ -1884,8 +1515,7 @@ function M.getinstancename(parameter)
 end
 
 -- Top-level entry point: turns a string `str` plus `parameter` (font,
--- color, decoration, ...) into a node list, picking HarfBuzz or FontForge
--- depending on `publisher.options.fontloader`.
+-- color, decoration, ...) into a node list shaped with HarfBuzz.
 ---@param str string Text segment.
 ---@param parameter? table Style/font parameters.
 ---@param _origin? string Origin tag (debugging).
@@ -1967,87 +1597,71 @@ function M.mknodes(str, parameter, _origin)
             thislang = publisher.languages_id_lang[languagecode].locale
         end
         local thissegment
-        if tbl.face then
-            local script = nil
-            if thislang == "--" then
-                thislang = nil
-                script = nil
-            elseif thislang == "zh" then
-                script = "Hans"
-            end
-
-            -- U+2060 WORD JOINER is a default ignorable and gets removed by
-            -- HarfBuzz (FLAG_REMOVE_DEFAULT_IGNORABLES) before it reaches the
-            -- glyph list. Map it to U+0083 (NO BREAK HERE), which survives
-            -- shaping as a .notdef glyph and is turned into a no-break
-            -- penalty in hbglyphlist (#695).
-            str = string.gsub(str, "\226\129\160", "\194\131")
-
-            local newlines_at = {}
-
-            local cluster = {}
-            local pos = 0
-            for c in unicode.utf8.gmatch(str, ".") do
-                cluster[pos] = unicode.utf8.byte(c)
-                if c == "\n" then
-                    newlines_at[pos] = true
-                end
-                pos = pos + #c
-            end
-            local buf = publisher.harfbuzz.Buffer.new()
-            buf:add_utf8(str)
-            if direction == 0 then
-                direction = "ltr"
-            elseif direction == 1 then
-                direction = "rtl"
-            end
-            -- the numeric bidi directions are converted to strings above
-            ---@cast direction string?
-            -- shape returns the guessed script and direction from the buffer
-            script, direction =
-                publisher.shape(tbl, buf, { language = thislang, script = script, direction = direction })
-            local is_cjk = false
-            if script == "Hans" or script == "Hira" or script == "Hant" or script == "Hani" then
-                is_cjk = true
-                -- script can be guessed from buffer and thislang could be empty, so
-                -- lang must be set again.
-                thislang = "zh"
-            elseif script == "Kana" then
-                is_cjk = true
-                thislang = "ja"
-            end
-
-            local glyphs = buf:get_glyphs()
-            if #glyphs == 0 then
-                goto nextsegment
-            end
-            thissegment = M.hbglyphlist({
-                glyphs = glyphs,
-                tbl = tbl,
-                cluster = cluster,
-                parameter = parameter,
-                allowbreak = parameter.allowbreak or " -",
-                newlines_at = newlines_at,
-                script = script,
-                direction = direction or maindirection,
-                thislang = thislang,
-                fontnumber = fontnumber,
-                is_cjk = is_cjk,
-            })
-        else
-            -- old fontforge code
-            thissegment = ffglyphlist({
-                str = str,
-                tbl = tbl,
-                parameter = parameter,
-                allowbreak = parameter.allowbreak or " -",
-                fontfamily = fontfamily,
-                direction = maindirection,
-                thislang = thislang,
-                fontnumber = fontnumber,
-                languagecode = languagecode,
-            })
+        local script = nil
+        if thislang == "--" then
+            thislang = nil
+            script = nil
+        elseif thislang == "zh" then
+            script = "Hans"
         end
+
+        -- U+2060 WORD JOINER is a default ignorable and gets removed by
+        -- HarfBuzz (FLAG_REMOVE_DEFAULT_IGNORABLES) before it reaches the
+        -- glyph list. Map it to U+0083 (NO BREAK HERE), which survives
+        -- shaping as a .notdef glyph and is turned into a no-break
+        -- penalty in hbglyphlist (#695).
+        str = string.gsub(str, "\226\129\160", "\194\131")
+
+        local newlines_at = {}
+
+        local cluster = {}
+        local pos = 0
+        for c in unicode.utf8.gmatch(str, ".") do
+            cluster[pos] = unicode.utf8.byte(c)
+            if c == "\n" then
+                newlines_at[pos] = true
+            end
+            pos = pos + #c
+        end
+        local buf = publisher.harfbuzz.Buffer.new()
+        buf:add_utf8(str)
+        if direction == 0 then
+            direction = "ltr"
+        elseif direction == 1 then
+            direction = "rtl"
+        end
+        -- the numeric bidi directions are converted to strings above
+        ---@cast direction string?
+        -- shape returns the guessed script and direction from the buffer
+        script, direction = publisher.shape(tbl, buf, { language = thislang, script = script, direction = direction })
+        local is_cjk = false
+        if script == "Hans" or script == "Hira" or script == "Hant" or script == "Hani" then
+            is_cjk = true
+            -- script can be guessed from buffer and thislang could be empty, so
+            -- lang must be set again.
+            thislang = "zh"
+        elseif script == "Kana" then
+            is_cjk = true
+            thislang = "ja"
+        end
+
+        local glyphs = buf:get_glyphs()
+        if #glyphs == 0 then
+            goto nextsegment
+        end
+        thissegment = M.hbglyphlist({
+            glyphs = glyphs,
+            tbl = tbl,
+            cluster = cluster,
+            parameter = parameter,
+            allowbreak = parameter.allowbreak or " -",
+            newlines_at = newlines_at,
+            script = script,
+            direction = direction or maindirection,
+            thislang = thislang,
+            fontnumber = fontnumber,
+            is_cjk = is_cjk,
+        })
         direction = direction or 0
         thissegment = M.setsegmentdir(thissegment, direction, maindirection)
 
