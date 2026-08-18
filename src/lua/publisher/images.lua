@@ -35,11 +35,7 @@ function M.set_image_length(dataxml, len, width_or_height)
     if len == nil or len == "auto" then
         return nil
     elseif len == "100%" and width_or_height == "width" then
-        if publisher.newxpath then
-            return dataxml.vars["__maxwidth"]
-        else
-            return publisher.xpath.get_variable("__maxwidth")
-        end
+        return dataxml.vars["__maxwidth"]
     elseif tonumber(len) then
         if width_or_height == "width" then
             return publisher.current_grid:width_sp(len)
@@ -261,9 +257,7 @@ function M.imageinfo(filename, page, box, fallback, imageshape)
             if not xmltab then
                 main.log("error", msg or string.format("Cannot load image info %q", xmlfilename))
             else
-                if publisher.newxpath then
-                    xmltab = xmltab[1]
-                end
+                xmltab = xmltab[1]
                 mt = {}
                 local segments = {}
                 local cells_x, cells_y
@@ -273,13 +267,9 @@ function M.imageinfo(filename, page, box, fallback, imageshape)
                     elseif v[".__local_name"] == "cells_y" then
                         cells_y = tonumber(v[1])
                     elseif v[".__local_name"] == "segment" then
-                        if publisher.newxpath then
-                            local attrs = v[".__attributes"]
-                            segments[#segments + 1] =
-                                { tonumber(attrs.x1), tonumber(attrs.y1), tonumber(attrs.x2), tonumber(attrs.y2) }
-                        else
-                            segments[#segments + 1] = { tonumber(v.x1), tonumber(v.y1), tonumber(v.x2), tonumber(v.y2) }
-                        end
+                        local attrs = v[".__attributes"]
+                        segments[#segments + 1] =
+                            { tonumber(attrs.x1), tonumber(attrs.y1), tonumber(attrs.x2), tonumber(attrs.y2) }
                     end
                 end
                 mt.max_x = cells_x

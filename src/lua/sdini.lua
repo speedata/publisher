@@ -90,15 +90,13 @@ function main.log(level, msg, ...)
         extras[#extras + 1] = "page"
         extras[#extras + 1] = tostring(publisher.current_pagenumber)
     end
-    if publisher.newxpath then
-        if not has_layout then
-            extras[#extras + 1] = "line_layout"
-            extras[#extras + 1] = tostring(publisher.current_layout_line)
-        end
-        if not has_data then
-            extras[#extras + 1] = "line_data"
-            extras[#extras + 1] = tostring(publisher.current_data_line)
-        end
+    if not has_layout then
+        extras[#extras + 1] = "line_layout"
+        extras[#extras + 1] = tostring(publisher.current_layout_line)
+    end
+    if not has_data then
+        extras[#extras + 1] = "line_data"
+        extras[#extras + 1] = tostring(publisher.current_data_line)
     end
     return splib.log(level, msg, table.unpack(extras))
 end

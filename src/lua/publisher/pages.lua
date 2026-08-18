@@ -40,11 +40,7 @@ function M.shipout(nodelist, pagenumber, dataxml)
     local colorname = cp.defaultcolor
     if not publisher.matters[cp.matter] then
         local defaultmatter
-        if publisher.newxpath then
-            defaultmatter = dataxml and publisher.xpath.string_value(dataxml.vars["_matter"]) or "mainmatter"
-        else
-            defaultmatter = publisher.xpath.get_variable("_matter")
-        end
+        defaultmatter = dataxml and publisher.xpath.string_value(dataxml.vars["_matter"]) or "mainmatter"
         main.log("error", string.format("matter %q unknown, revert to %s", cp.matter or "-", defaultmatter))
         cp.matter = defaultmatter
     end
@@ -488,9 +484,6 @@ end
 ---@return table|false layoutxml `false` if nothing matched.
 function M.detect_pagetype(pagenumber, data)
     -- ugly hack. file global variables are a bad idea.
-    if not publisher.newxpath then
-        publisher.xpath.push_state()
-    end
     local cp = publisher.current_pagenumber
     publisher.current_pagenumber = pagenumber
     local ret
@@ -503,53 +496,26 @@ function M.detect_pagetype(pagenumber, data)
                 return pagetype.res
             end
         else
-            if publisher.newxpath then
-                assert(data, "detect_pagetype")
-                local seq, msg = data:eval(pagetype.is_pagetype)
-                if msg then
-                    main.log("error", msg)
-                end
-                local ok
-                ok, msg = publisher.xpath.boolean_value(seq)
-                if msg then
-                    main.log("error", msg)
-                end
-                if ok then
-                    main.log(
-                        "info",
-                        "Create page",
-                        "type",
-                        pagetype.name or "(detect_pagetype)",
-                        "pagenumber",
-                        pagenumber
-                    )
-                    ret = pagetype.res
-                    publisher.current_pagenumber = cp
-                    return ret
-                end
-            else
-                if publisher.xpath.parse(data, pagetype.is_pagetype, pagetype.ns) == true then
-                    main.log(
-                        "info",
-                        "Create page",
-                        "type",
-                        pagetype.name or "(detect_pagetype)",
-                        "pagenumber",
-                        pagenumber
-                    )
-                    ret = pagetype.res
-                    publisher.xpath.pop_state()
-                    publisher.current_pagenumber = cp
-                    return ret
-                end
+            assert(data, "detect_pagetype")
+            local seq, msg = data:eval(pagetype.is_pagetype)
+            if msg then
+                main.log("error", msg)
+            end
+            local ok
+            ok, msg = publisher.xpath.boolean_value(seq)
+            if msg then
+                main.log("error", msg)
+            end
+            if ok then
+                main.log("info", "Create page", "type", pagetype.name or "(detect_pagetype)", "pagenumber", pagenumber)
+                ret = pagetype.res
+                publisher.current_pagenumber = cp
+                return ret
             end
         end
     end
     main.log("error", "Can't find correct page type!")
     publisher.current_pagenumber = cp
-    if not publisher.newxpath then
-        publisher.xpath.pop_state()
-    end
     return false
 end
 
@@ -632,33 +598,19 @@ function M.initialize_page(pagenumber, data, _from)
         current_page.height = tex.sp(pagetype.height) or current_page.height
     end
     if pagetype.width or pagetype.height then
-        if publisher.newxpath then
-            data.vars["_pagewidth"] = pagetype.width
-            data.vars["_pageheight"] = pagetype.height
-        else
-            publisher.xpath.set_variable("_pagewidth", pagetype.width)
-            publisher.xpath.set_variable("_pageheight", pagetype.height)
-        end
+        data.vars["_pagewidth"] = pagetype.width
+        data.vars["_pageheight"] = pagetype.height
         M.set_pageformat(current_page.width, current_page.height)
     else
         -- 186467sp = 1mm
         local pagewd = current_page.width / 186467
         local pageht = current_page.height / 186467
-        if publisher.newxpath then
-            data.vars["_pagewidth"] = tostring(math.round(pagewd, 0)) .. "mm"
-            data.vars["_pageheight"] = tostring(math.round(pageht, 0)) .. "mm"
-        else
-            publisher.xpath.set_variable("_pagewidth", tostring(math.round(pagewd, 0)) .. "mm")
-            publisher.xpath.set_variable("_pageheight", tostring(math.round(pageht, 0)) .. "mm")
-        end
+        data.vars["_pagewidth"] = tostring(math.round(pagewd, 0)) .. "mm"
+        data.vars["_pageheight"] = tostring(math.round(pageht, 0)) .. "mm"
     end
 
     local mattername
-    if publisher.newxpath then
-        mattername = pagetype.part or publisher.xpath.string_value(data.vars["_matter"])
-    else
-        mattername = pagetype.part or publisher.xpath.get_variable("_matter")
-    end
+    mattername = pagetype.part or publisher.xpath.string_value(data.vars["_matter"])
     current_page.matter = mattername
 
     for _, j in ipairs(pagetype) do
@@ -696,16 +648,9 @@ function M.initialize_page(pagenumber, data, _from)
     current_page.grid:set_width_height({ wd = gridwidth, ht = gridheight, nx = nx, ny = ny, dx = dx, dy = dy })
 
     -- The default color is applied during ship-out
-    if publisher.newxpath then
-        if pagetype.layoutxml and pagetype.layoutxml[".__attributes"].defaultcolor then
-            current_page.defaultcolor =
-                publisher.attribute_helpers.read_attribute(pagetype.layoutxml, nil, "defaultcolor", "string")
-        end
-    else
-        if pagetype.layoutxml and pagetype.layoutxml.defaultcolor then
-            current_page.defaultcolor =
-                publisher.attribute_helpers.read_attribute(pagetype.layoutxml, nil, "defaultcolor", "string")
-        end
+    if pagetype.layoutxml and pagetype.layoutxml[".__attributes"].defaultcolor then
+        current_page.defaultcolor =
+            publisher.attribute_helpers.read_attribute(pagetype.layoutxml, nil, "defaultcolor", "string")
     end
     current_page.graphic = pagetype.graphic
     current_page.backgroundcolor = pagetype.backgroundcolor
@@ -784,13 +729,9 @@ function M.initialize_page(pagenumber, data, _from)
         publisher.current_pagenumber = cpn
         publisher.pagebreak_impossible = false
         local graphic
-        if publisher.newxpath then
-            local attrs = current_page.atpagecreation[".__attributes"]
-            if attrs then
-                graphic = attrs.graphic
-            end
-        else
-            graphic = current_page.atpagecreation.graphic
+        local attrs = current_page.atpagecreation[".__attributes"]
+        if attrs then
+            graphic = attrs.graphic
         end
         if graphic then
             local _, whatsit, _ = metapost.prepareboxgraphic(
@@ -958,11 +899,7 @@ function M.clearpage(options)
     end
 
     if options.matter then
-        if publisher.newxpath then
-            options.dataxml.vars["_matter"] = options.matter
-        else
-            publisher.xpath.set_variable("_matter", options.matter)
-        end
+        options.dataxml.vars["_matter"] = options.matter
     end
     if options.pagetype then
         publisher.nextpage = options.pagetype
@@ -1375,11 +1312,7 @@ function M.getheight(relative_framenumber, dataxml)
     cg = publisher.current_grid
     cpn = publisher.current_pagenumber
     local areaname
-    if publisher.newxpath then
-        areaname = dataxml.vars["__currentarea"]
-    else
-        areaname = publisher.xpath.get_variable("__currentarea")
-    end
+    areaname = dataxml.vars["__currentarea"]
     areaname = areaname or publisher.default_areaname
     local current_framenumber = grid:framenumber(areaname)
     cfn = current_framenumber

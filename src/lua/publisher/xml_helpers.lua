@@ -13,8 +13,6 @@ local publisher = require("publisher")
 ---@class xml_helpers_module
 local M = {}
 
-local luxor = do_luafile("luxor.lua")
-
 -- Escapes `<`, `>`, `"` and `&` for inclusion in XML text or attribute values.
 -- Tables are concatenated first; `nil` and `false` return `""`, other
 -- non-string values (booleans, numbers) are converted with `tostring`.
@@ -45,7 +43,7 @@ end
 ---@param level? integer Recursion depth (used internally).
 ---@param namespace_written? table<string, true> Namespaces already emitted in an ancestor.
 ---@return string
-function M.xml_to_string_newxpath(xml_element, level, namespace_written)
+function M.xml_to_string(xml_element, level, namespace_written)
     local new_namespaces = publisher.utilities.copy_table_from_defaults(namespace_written or {})
     local str = ""
     if type(xml_element) == "string" then
@@ -92,62 +90,7 @@ function M.xml_to_string_newxpath(xml_element, level, namespace_written)
         if type(v) == "string" and v == "" then
             -- ok, nothing to do
         else
-            str = str .. M.xml_to_string_newxpath(v, level + 1, new_namespaces)
-        end
-    end
-    if eltname ~= "" then
-        str = str .. "</" .. eltname .. ">"
-    end
-    return str
-end
-
--- Serializes an XML element from the legacy Lua XML parser to a string.
----@param xml_element table|string
----@param level? integer Recursion depth (used internally).
----@return string
-function M.xml_to_string(xml_element, level)
-    local str = ""
-    if type(xml_element) == "string" then
-        return M.xml_escape(xml_element)
-    end
-    if type(xml_element) ~= "table" then
-        main.log(
-            "error",
-            string.format("xml_to_string is not a table, but a %s %q", type(xml_element), tostring(xml_element))
-        )
-        return "error in publisher run"
-    end
-    level = level or 0
-    local eltname = xml_element[".__name"] or xml_element[".__local_name"] or ""
-    if level == 0 and eltname == "" then
-        eltname = "undefined"
-    end
-    if eltname ~= "" then
-        str = str .. "<" .. eltname
-        for k, v in pairs(xml_element) do
-            if type(k) == "string" and not k:match("^%.") then
-                str = str .. string.format(" %s=%q", k, M.xml_escape(v))
-            end
-        end
-        if xml_element[".__ns"] then
-            for k, v in pairs(xml_element[".__ns"]) do
-                if type(k) == "string" then
-                    if k == "" then
-                        k = "xmlns"
-                    else
-                        k = "xmlns:" .. k
-                    end
-                    str = str .. string.format(" %s=%q", k, M.xml_escape(v))
-                end
-            end
-        end
-        str = str .. ">"
-    end
-    for _, v in ipairs(xml_element) do
-        if type(v) == "string" and v == "" then
-            -- ok, nothing to do
-        else
-            str = str .. M.xml_to_string(v, level + 1)
+            str = str .. M.xml_to_string(v, level + 1, new_namespaces)
         end
     end
     if eltname ~= "" then
@@ -217,33 +160,16 @@ function M.load_xml(filename, filetype, parameter)
     end
     parameter = parameter or {}
     main.log("info", "Load XML", "type", filetype or "file", "filename", filename)
-    if publisher.newxpath then
-        local xmltable
-        local ignoreeol_str = parameter.ignoreeol and "true" or nil
-        xmltable = splib.load_xmlfile(filename, filetype or "file", ignoreeol_str)
-        if not xmltable then
-            return nil
-        end
-        if parameter.ignoreeol then
-            xmltable.ignoreeol_done = true
-        end
-        return xmltable
-    else
-        if publisher.options.verbosity > 0 then
-            main.log("info", "Using old Lua based XML reader")
-        end
-        local path = kpse.find_file(filename)
-        if not path then
-            main.log("error", "Can't find XML file. Abort", "filename", filename or "?")
-            return nil
-        end
-        if publisher.options.verbosity > 0 then
-            M.calculate_md5sum(filename)
-        end
-        main.log("info", "Load XML", "type", filetype or "file", "filename", path)
-        local parsed_xml = luxor.parse_xml_file(path, parameter, kpse.find_file)
-        return parsed_xml
+    local xmltable
+    local ignoreeol_str = parameter.ignoreeol and "true" or nil
+    xmltable = splib.load_xmlfile(filename, filetype or "file", ignoreeol_str)
+    if not xmltable then
+        return nil
     end
+    if parameter.ignoreeol then
+        xmltable.ignoreeol_done = true
+    end
+    return xmltable
 end
 
 -- Computes and logs the MD5 hex digest of `filename`. Used for verbose logs

@@ -13,7 +13,7 @@ local M = {}
 ---@param styles table                  -- HtmlStyles-like table with fontsize_sp etc.
 ---@param width_sp number               -- target width in sp (0 = auto)
 ---@param height_sp number              -- target height in sp (0 = auto)
----@param dataxml table                 -- data context (vars with __maxwidth/__maxheight when newxpath=true)
+---@param dataxml table                 -- data context (vars with __maxwidth/__maxheight)
 ---@return number calc_width            -- resulting width (sp)
 ---@return number calc_height           -- resulting height (sp)
 function M.set_image_dimensions(image, styles, width_sp, height_sp, dataxml)
@@ -40,13 +40,8 @@ function M.set_image_dimensions(image, styles, width_sp, height_sp, dataxml)
 
     -- page max constraints
     local maxwd, maxht
-    if publisher.newxpath then
-        maxwd = dataxml.vars["__maxwidth"]
-        maxht = dataxml.vars["__maxheight"]
-    else
-        maxwd = publisher.xpath.get_variable("__maxwidth")
-        maxht = publisher.xpath.get_variable("__maxheight")
-    end
+    maxwd = dataxml.vars["__maxwidth"]
+    maxht = dataxml.vars["__maxheight"]
 
     -- small headroom below line box
     maxht = maxht - styles.fontsize_sp * 0.25

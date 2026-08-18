@@ -30,11 +30,7 @@ do_luafile("css.lua")
 ---@param layout table Layout XML element.
 ---@return string?, any?, string?, any?, string?, any?
 local function lineinfo(layout)
-    if publisher.newxpath then
-        return "line", layout[".__line"], "file", layout[".__file"], "page", publisher.current_pagenumber
-    else
-        return nil
-    end
+    return "line", layout[".__line"], "file", layout[".__file"], "page", publisher.current_pagenumber
 end
 
 -- This module contains the commands in the layout file (the tags).
@@ -334,11 +330,7 @@ function commands.attribute(layoutxml, dataxml)
     end
     -- Escaping the xpath.textvalue makes & into &amp; etc.
     local ret
-    if publisher.newxpath then
-        ret = { [".__type"] = "attribute", [attname] = publisher.xpath.string_value(selection) }
-    else
-        ret = { [".__type"] = "attribute", [attname] = publisher.xpath.textvalue(selection) }
-    end
+    ret = { [".__type"] = "attribute", [attname] = publisher.xpath.string_value(selection) }
     return ret
 end
 
@@ -358,11 +350,7 @@ function commands.attachfile(layoutxml, dataxml)
     local filecontents
     local modificationtime
     if selection ~= nil then
-        if publisher.newxpath then
-            filecontents = publisher.xml_helpers.xml_to_string_newxpath(selection[1], 0)
-        else
-            filecontents = publisher.xml_helpers.xml_to_string(selection[1], 0)
-        end
+        filecontents = publisher.xml_helpers.xml_to_string(selection[1], 0)
         modificationtime = os.time()
     else
         if not inputfilename then
@@ -489,11 +477,7 @@ function commands.barcode(layoutxml, dataxml)
 
     if not width then
         local maxwidth
-        if publisher.newxpath then
-            maxwidth = dataxml.vars["__maxwidth"]
-        else
-            maxwidth = publisher.xpath.get_variable("__maxwidth")
-        end
+        maxwidth = dataxml.vars["__maxwidth"]
         width = maxwidth
     end
 
@@ -671,13 +655,8 @@ function commands.box(layoutxml, dataxml)
         local trim = publisher.options.trim or 0
         if bleed == "auto" then
             local col, row
-            if publisher.newxpath then
-                col = dataxml.vars["__column"]
-                row = dataxml.vars["__row"]
-            else
-                col = publisher.xpath.get_variable("__column")
-                row = publisher.xpath.get_variable("__row")
-            end
+            col = dataxml.vars["__column"]
+            row = dataxml.vars["__row"]
             if col == 0 then
                 if width == publisher.options.pagewidth then
                     width = width + trim
@@ -933,33 +912,19 @@ function commands.copy_of(layoutxml, dataxml)
     if layoutxml[1] and #layoutxml[1] > 0 then
         return table.concat(layoutxml)
     else
-        if publisher.newxpath then
-            local selectionstring = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "string")
-            local seq, msg = dataxml:eval(selectionstring)
-            if msg then
-                main.log("error", msg)
-                return
-            end
-            selection = {}
-            for _, itm in ipairs(seq) do
-                selection[#selection + 1] = itm
-            end
-            if type(selection) == "table" and selection[1] == "expand" then
-                local tmp = publisher.dispatch.dispatch(selection, dataxml)
-                return tmp
-            end
-        else
-            selection = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "string")
-            local ok
-            ok, selection = publisher.xpath.parse_raw(dataxml, selection, layoutxml[".__ns"])
-            if not ok then
-                main.log("error", selection)
-                return nil
-            end
-            if type(selection) == "table" and selection[1] == "expand" then
-                local tmp = publisher.dispatch.dispatch(selection, dataxml)
-                return tmp
-            end
+        local selectionstring = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "string")
+        local seq, msg = dataxml:eval(selectionstring)
+        if msg then
+            main.log("error", msg)
+            return
+        end
+        selection = {}
+        for _, itm in ipairs(seq) do
+            selection[#selection + 1] = itm
+        end
+        if type(selection) == "table" and selection[1] == "expand" then
+            local tmp = publisher.dispatch.dispatch(selection, dataxml)
+            return tmp
         end
         return publisher.utilities.deepcopy(selection)
     end
@@ -1110,11 +1075,7 @@ end
 function commands.define_graphic(layoutxml, dataxml)
     local name = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "name", "string")
     local code
-    if publisher.newxpath then
-        code = publisher.xpath.string_value(layoutxml)
-    else
-        code = layoutxml[1]
-    end
+    code = publisher.xpath.string_value(layoutxml)
     publisher.metapostgraphics[name] = code
 end
 
@@ -1427,60 +1388,27 @@ function commands.forall(layoutxml, dataxml)
     local start = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "start", "number")
 
     local tab = {}
-    if publisher.newxpath then
-        if limit or start then
-            main.log(
-                "error",
-                "ForAll: the new xpath parser does not allow limit or start, please use predicates instead."
-            )
-        end
-        local selection = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "xpathraw")
-        if not selection then
-            return tab
-        end
-        for i = 1, #selection do
-            local iterdata = {}
-            for k, v in pairs(dataxml) do
-                iterdata[k] = v
-            end
-            setmetatable(iterdata, getmetatable(dataxml))
-            iterdata.pos = i
-            iterdata.sequence = { selection[i] }
-            iterdata.size = #selection
-            local tmp_tab = publisher.dispatch.dispatch(layoutxml, iterdata)
-            for j = 1, #tmp_tab do
-                tab[#tab + 1] = tmp_tab[j]
-            end
-        end
-        return tab
+    if limit or start then
+        main.log("error", "ForAll: the new xpath parser does not allow limit or start, please use predicates instead.")
     end
-
-    local tmp_tab
-    local current_position
-    current_position = publisher.xpath.get_variable("__position")
     local selection = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "xpathraw")
     if not selection then
-        main.log("error", "Can't iterate over an unknown sequence")
-        return {}
+        return tab
     end
-
-    limit = limit or #selection
-    if limit > #selection then
-        limit = #selection
-    end
-    start = start or 1
-
-    for i = start, limit do
-        publisher.xpath.set_variable("__position", i)
-        if type(selection[i]) == "table" then
-            selection[i][".__context"] = selection
+    for i = 1, #selection do
+        local iterdata = {}
+        for k, v in pairs(dataxml) do
+            iterdata[k] = v
         end
-        tmp_tab = publisher.dispatch.dispatch(layoutxml, selection[i])
+        setmetatable(iterdata, getmetatable(dataxml))
+        iterdata.pos = i
+        iterdata.sequence = { selection[i] }
+        iterdata.size = #selection
+        local tmp_tab = publisher.dispatch.dispatch(layoutxml, iterdata)
         for j = 1, #tmp_tab do
             tab[#tab + 1] = tmp_tab[j]
         end
     end
-    publisher.xpath.set_variable("__position", current_position)
     return tab
 end
 
@@ -1565,10 +1493,6 @@ end
 ---@param dataxml table
 ---@return any
 function commands.func(layoutxml, dataxml)
-    if not publisher.newxpath then
-        main.log("error", "For function definitions you need the new XPath parser")
-        return
-    end
     local name = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "name", "string")
     local params = {}
 
@@ -1794,21 +1718,12 @@ function commands.html(layoutxml, dataxml)
         result = string.gsub(result, "%}%}", "\0DOUBLE_CLOSE\0")
         result = string.gsub(result, "%{([^}]+)%}", function(expr)
             local val
-            if publisher.newxpath then
-                local seq, msg = dataxml:eval(expr)
-                if msg then
-                    splib.log("warn", "XPath evaluation failed", "expression", expr, "message", msg)
-                    return "{" .. expr .. "}"
-                end
-                val = publisher.xpath.string_value(seq)
-            else
-                local ok, res = publisher.xpath.parse_raw(dataxml, expr, layoutxml[".__ns"])
-                if not ok then
-                    splib.log("warn", "XPath evaluation failed", "expression", expr)
-                    return "{" .. expr .. "}"
-                end
-                val = publisher.xpath.string_value(res)
+            local seq, msg = dataxml:eval(expr)
+            if msg then
+                splib.log("warn", "XPath evaluation failed", "expression", expr, "message", msg)
+                return "{" .. expr .. "}"
             end
+            val = publisher.xpath.string_value(seq)
             -- Escape HTML entities in the result
             val = string.gsub(val, "&", "&amp;")
             val = string.gsub(val, "<", "&lt;")
@@ -2052,11 +1967,7 @@ function commands.html(layoutxml, dataxml)
                 }
 
                 -- Set calculated_width for this element
-                if publisher.newxpath then
-                    temp_html.styles.calculated_width = dxml.vars["__maxwidth"] or maxwidth
-                else
-                    temp_html.styles.calculated_width = publisher.xpath.get_variable("__maxwidth") or maxwidth
-                end
+                temp_html.styles.calculated_width = dxml.vars["__maxwidth"] or maxwidth
 
                 -- Parse this single element (only once!)
                 local parsed = publisher.nodes.parse_html(temp_tree, {}, dxml)
@@ -2751,13 +2662,8 @@ function commands.image(layoutxml, dataxml)
 
     if bleed and bleed == "auto" then
         local col, row
-        if publisher.newxpath then
-            col = dataxml.vars["__column"]
-            row = dataxml.vars["__row"]
-        else
-            col = publisher.xpath.get_variable("__column")
-            row = publisher.xpath.get_variable("__row")
-        end
+        col = dataxml.vars["__column"]
+        row = dataxml.vars["__row"]
         if col == 0 then
             tab.padding_left = (tab.padding_left or 0) - (publisher.options.trim or 0)
             if width == publisher.options.pagewidth then
@@ -2996,11 +2902,7 @@ function commands.initial(layoutxml, dataxml)
             publisher.xml_helpers.elementname(j) == "Value"
             and type(publisher.xml_helpers.element_contents(j)) == "table"
         then
-            if publisher.newxpath then
-                initialvalue = publisher.xpath.string_value(publisher.xml_helpers.element_contents(j))
-            else
-                initialvalue = table.concat(publisher.xml_helpers.element_contents(j))
-            end
+            initialvalue = publisher.xpath.string_value(publisher.xml_helpers.element_contents(j))
         else
             initialvalue = publisher.xml_helpers.element_contents(j)
         end
@@ -3166,20 +3068,11 @@ function commands.load_fontfile(layoutxml, dataxml)
     for _, v in ipairs(layoutxml) do
         if type(v) == "table" then
             if v[".__local_name"] == "Fallback" then
-                if publisher.newxpath then
-                    fallbacks[#fallbacks + 1] = v[".__attributes"].filename
-                else
-                    fallbacks[#fallbacks + 1] = v.filename
-                end
+                fallbacks[#fallbacks + 1] = v[".__attributes"].filename
             elseif v[".__local_name"] == "Axis" then
                 local axis_name, axis_value
-                if publisher.newxpath then
-                    axis_name = v[".__attributes"].name
-                    axis_value = tonumber(v[".__attributes"].value)
-                else
-                    axis_name = v.name
-                    axis_value = tonumber(v.value)
-                end
+                axis_name = v[".__attributes"].name
+                axis_value = tonumber(v[".__attributes"].value)
                 if axis_name and axis_value then
                     axes[axis_name] = axis_value
                 end
@@ -3313,36 +3206,25 @@ function commands.load_dataset(layoutxml, dataxml)
         return
     end
     local root_name
-    if publisher.newxpath then
-        local tmp_data = publisher.xml_helpers.load_xml(name or filename)
-        local tmpctx = publisher.xpath.context:new()
-        tmpctx.xmldoc = { tmp_data }
-        tmpctx.sequence = { tmp_data }
+    local tmp_data = publisher.xml_helpers.load_xml(name or filename)
+    local tmpctx = publisher.xpath.context:new()
+    tmpctx.xmldoc = { tmp_data }
+    tmpctx.sequence = { tmp_data }
 
-        local seq, msg = tmpctx:eval("local-name(root())")
-        if msg then
-            main.log("error", msg)
-            return
-        end
-        local copysequence = dataxml.sequence
-        local copyxmldoc = dataxml.xmldoc
-        root_name = publisher.xpath.string_value(seq)
-        tmpctx:execute("root()")
-        dataxml.xmldoc = tmpctx.xmldoc
-        dataxml.sequence = tmpctx.sequence
-        publisher.dispatch.dispatch(publisher.data_dispatcher[""][root_name], dataxml)
-        dataxml.sequence = copysequence
-        dataxml.xmldoc = copyxmldoc
-    else
-        local tmp_data = publisher.xml_helpers.load_xml(name or filename)
-        if not tmp_data then
-            main.log("error", "LoadDataset: could not load the data file")
-            return
-        end
-        root_name = tmp_data[".__local_name"]
-        main.log("info", string.format("Selecting node: %q, mode=%q", root_name, ""))
-        publisher.dispatch.dispatch(publisher.data_dispatcher[""][root_name], tmp_data)
+    local seq, msg = tmpctx:eval("local-name(root())")
+    if msg then
+        main.log("error", msg)
+        return
     end
+    local copysequence = dataxml.sequence
+    local copyxmldoc = dataxml.xmldoc
+    root_name = publisher.xpath.string_value(seq)
+    tmpctx:execute("root()")
+    dataxml.xmldoc = tmpctx.xmldoc
+    dataxml.sequence = tmpctx.sequence
+    publisher.dispatch.dispatch(publisher.data_dispatcher[""][root_name], dataxml)
+    dataxml.sequence = copysequence
+    dataxml.xmldoc = copyxmldoc
 end
 
 -- Loop
@@ -3355,23 +3237,18 @@ end
 ---@return any
 function commands.loop(layoutxml, dataxml)
     local num
-    if publisher.newxpath then
-        local numstr = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "string")
-        local copysequence = dataxml.sequence
-        local seq, msg = dataxml:eval(numstr)
-        dataxml.sequence = copysequence
-        if msg then
-            main.log("error", msg)
-            return
-        end
-        num, msg = publisher.xpath.number_value(seq)
-        if msg then
-            main.log("error", msg)
-            return
-        end
-    else
-        local numstr = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "xpath")
-        num = tonumber(numstr)
+    local numstr = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "string")
+    local copysequence = dataxml.sequence
+    local seq, msg = dataxml:eval(numstr)
+    dataxml.sequence = copysequence
+    if msg then
+        main.log("error", msg)
+        return
+    end
+    num, msg = publisher.xpath.number_value(seq)
+    if msg then
+        main.log("error", msg)
+        return
     end
     if not num then
         main.log("error", string.format("loop: can't parse number given in the attribute select: %q", tostring(num)))
@@ -3382,11 +3259,7 @@ function commands.loop(layoutxml, dataxml)
     local ret = {}
     local tab
     for i = 1, num do
-        if publisher.newxpath then
-            dataxml.vars[var] = i
-        else
-            publisher.xpath.set_variable(var, i)
-        end
+        dataxml.vars[var] = i
         tab = publisher.dispatch.dispatch(layoutxml, dataxml)
         for j = 1, #tab do
             ret[#ret + 1] = tab[j]
@@ -3424,11 +3297,7 @@ end
 ---@return any
 function commands.makeindex(layoutxml, dataxml)
     local selection, selectstring
-    if publisher.newxpath then
-        selectstring = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "string")
-    else
-        selection = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "xpathraw")
-    end
+    selectstring = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "string")
     local sortkey = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "sortkey", "string")
     local sectionname = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "section", "string")
     local pagenumbername =
@@ -3438,12 +3307,10 @@ function commands.makeindex(layoutxml, dataxml)
     local lastfirstletter = ""
     local ret = {}
 
-    if publisher.newxpath then
-        local msg
-        selection, msg = dataxml:eval(selectstring)
-        if msg then
-            main.log("error", msg)
-        end
+    local msg
+    selection, msg = dataxml:eval(selectstring)
+    if msg then
+        main.log("error", msg)
     end
 
     publisher.utilities.stable_sort(selection, function(elta, eltb)
@@ -3482,11 +3349,9 @@ function commands.makeindex(layoutxml, dataxml)
                     selection[lastindex][pagenumbername] = selection[lastindex][pagenumbername]
                         .. ", "
                         .. selection[i][pagenumbername]
-                    if publisher.newxpath then
-                        selection[lastindex][".__attributes"][pagenumbername] = selection[lastindex][".__attributes"][pagenumbername]
-                            .. ", "
-                            .. selection[i][".__attributes"][pagenumbername]
-                    end
+                    selection[lastindex][".__attributes"][pagenumbername] = selection[lastindex][".__attributes"][pagenumbername]
+                        .. ", "
+                        .. selection[i][".__attributes"][pagenumbername]
                 end
             else
                 lastindex = i
@@ -3540,19 +3405,13 @@ function commands.mark(layoutxml, dataxml)
     local shiftup = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "shiftup", "height_sp")
     local ret = {}
     if type(selection) == "table" then
-        if publisher.newxpath then
-            for _, v in ipairs(selection) do
-                ret[#ret + 1] = {
-                    selection = publisher.xpath.string_value(v),
-                    append = append,
-                    pdftarget = pdftarget,
-                    shiftup = shiftup,
-                }
-            end
-        else
-            for _, v in ipairs(selection) do
-                ret[#ret + 1] = { selection = v, append = append, pdftarget = pdftarget, shiftup = shiftup }
-            end
+        for _, v in ipairs(selection) do
+            ret[#ret + 1] = {
+                selection = publisher.xpath.string_value(v),
+                append = append,
+                pdftarget = pdftarget,
+                shiftup = shiftup,
+            }
         end
         return ret
     else
@@ -3574,27 +3433,14 @@ function commands.message(layoutxml, dataxml)
 
     local contents
     if selection then
-        if publisher.newxpath then
-            local copysequence = dataxml.sequence
-            local seq, msg = dataxml:eval(selection)
-            if msg then
-                main.log("error", msg, lineinfo(layoutxml))
-                return
-            end
-            contents = publisher.xpath.string_value(seq)
-            dataxml.sequence = copysequence
-        else
-            local ret = {}
-            local tmp = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "xpathraw")
-            if tmp then
-                for i = 1, #tmp do
-                    ret[#ret + 1] = tostring(tmp[i])
-                end
-                contents = table.concat(ret)
-            else
-                contents = nil
-            end
+        local copysequence = dataxml.sequence
+        local seq, msg = dataxml:eval(selection)
+        if msg then
+            main.log("error", msg, lineinfo(layoutxml))
+            return
         end
+        contents = publisher.xpath.string_value(seq)
+        dataxml.sequence = copysequence
     else
         local tab = publisher.dispatch.dispatch(layoutxml, dataxml)
         contents = tab
@@ -3764,11 +3610,7 @@ function commands.nobreak(layoutxml, dataxml)
         p:append(tab, {})
         p.flatten_callback = function(thiselt, options)
             local maxwidth
-            if publisher.newxpath then
-                maxwidth = dataxml.vars["__maxwidth"]
-            else
-                maxwidth = publisher.xpath.get_variable("__maxwidth")
-            end
+            maxwidth = dataxml.vars["__maxwidth"]
             local current_maxwidth =
                 publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "maxwidth", "length_sp", maxwidth)
 
@@ -3816,11 +3658,7 @@ function commands.nobreak(layoutxml, dataxml)
         p:append(tab, {})
         p.flatten_callback = function(thiselt, options)
             local maxwidth
-            if publisher.newxpath then
-                maxwidth = dataxml.vars["__maxwidth"]
-            else
-                maxwidth = publisher.xpath.get_variable("__maxwidth")
-            end
+            maxwidth = dataxml.vars["__maxwidth"]
             local current_maxwidth =
                 publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "maxwidth", "length_sp", maxwidth)
             local fam = options.fontfamily
@@ -3861,11 +3699,7 @@ function commands.nobreak(layoutxml, dataxml)
         p:append(tab, {})
         p.flatten_callback = function(thiselt, options)
             local maxwidth
-            if publisher.newxpath then
-                maxwidth = dataxml.vars["__maxwidth"]
-            else
-                maxwidth = publisher.xpath.get_variable("__maxwidth")
-            end
+            maxwidth = dataxml.vars["__maxwidth"]
             local current_maxwidth =
                 publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "maxwidth", "length_sp", maxwidth)
 
@@ -4140,11 +3974,7 @@ function commands.options(layoutxml, dataxml)
         publisher.language.set_mainlanguage(mainlanguage)
     end
     if publisher.options.trim then
-        if publisher.newxpath then
-            dataxml.vars["_bleed"] = publisher.options.trim
-        else
-            publisher.xpath.set_variable("_bleed", publisher.options.trim)
-        end
+        dataxml.vars["_bleed"] = publisher.options.trim
         publisher.options.trim = tex.sp(publisher.options.trim)
     end
     if randomseed then
@@ -4169,9 +3999,9 @@ function commands.options(layoutxml, dataxml)
         "string",
         publisher.options.namespaces
     )
-    if ns == "lax" and publisher.newxpath then
+    if ns == "lax" then
         publisher.xpath.ignoreNS = true
-    elseif ns == "strict" and publisher.newxpath then
+    elseif ns == "strict" then
         publisher.xpath.ignoreNS = false
     end
     publisher.options.namespaces = ns
@@ -4216,26 +4046,15 @@ function commands.output(layoutxml, dataxml)
     local maxwidth = width or publisher.current_grid:width_sp(publisher.current_grid:number_of_columns(area))
     local maxheight = publisher.current_grid:height_sp(publisher.current_grid:number_of_rows(area))
     local current_maxwidth
-    if publisher.newxpath then
-        current_maxwidth = dataxml.vars["__maxwidth"]
-        dataxml.vars["__maxwidth"] = maxwidth
-        dataxml.vars["__maxheight"] = maxheight
-    else
-        current_maxwidth = publisher.xpath.get_variable("__maxwidth")
-        publisher.xpath.set_variable("__maxwidth", maxwidth)
-        publisher.xpath.set_variable("__maxheight", maxheight)
-    end
+    current_maxwidth = dataxml.vars["__maxwidth"]
+    dataxml.vars["__maxwidth"] = maxwidth
+    dataxml.vars["__maxheight"] = maxheight
 
     local tab = publisher.dispatch.dispatch(layoutxml, dataxml)
     area = area or publisher.default_area or publisher.default_areaname
     local last_area
-    if publisher.newxpath then
-        last_area = dataxml.vars["__area"]
-        dataxml.vars["__area"] = area
-    else
-        last_area = publisher.xpath.get_variable("__area")
-        publisher.xpath.set_variable("__area", area)
-    end
+    last_area = dataxml.vars["__area"]
+    dataxml.vars["__area"] = area
     publisher.page_helpers.next_row(row, area, 0, dataxml)
 
     local tosplit
@@ -4412,19 +4231,11 @@ function commands.output(layoutxml, dataxml)
         end -- end of else (pull-based mechanism)
     end
     -- reset the current maxwidth
-    if publisher.newxpath then
-        dataxml.vars["__maxwidth"] = current_maxwidth
-    else
-        publisher.xpath.set_variable("__maxwidth", current_maxwidth)
-    end
+    dataxml.vars["__maxwidth"] = current_maxwidth
     _, row, _ = publisher.page_helpers.get_remaining_height(area, allocate)
     current_grid = assert(publisher.current_grid)
     current_grid:set_current_row(row, area)
-    if publisher.newxpath then
-        dataxml.vars["__area"] = last_area
-    else
-        publisher.xpath.set_variable("__area", last_area)
-    end
+    dataxml.vars["__area"] = last_area
 end
 
 -- Overlay
@@ -4469,13 +4280,8 @@ function commands.page_format(layoutxml, dataxml, _options)
         main.log("error", "PageFormat: could not parse width or height", lineinfo(layoutxml))
         return
     end
-    if publisher.newxpath then
-        dataxml.vars["_pagewidth"] = width
-        dataxml.vars["_pageheight"] = height
-    else
-        publisher.xpath.set_variable("_pagewidth", width)
-        publisher.xpath.set_variable("_pageheight", height)
-    end
+    dataxml.vars["_pagewidth"] = width
+    dataxml.vars["_pageheight"] = height
     publisher.page_helpers.set_pageformat(wd_sp, ht_sp)
     publisher.options.default_pagewidth = wd_sp
     publisher.options.default_pageheight = ht_sp
@@ -5003,13 +4809,8 @@ function commands.place_object(layoutxml, dataxml)
     end
     area = area or publisher.default_area or publisher.default_areaname
     local save_current_area
-    if publisher.newxpath then
-        save_current_area = dataxml.vars["__currentarea"]
-        dataxml.vars["__currentarea"] = area
-    else
-        save_current_area = publisher.xpath.get_variable("__currentarea")
-        publisher.xpath.set_variable("__currentarea", area)
-    end
+    save_current_area = dataxml.vars["__currentarea"]
+    dataxml.vars["__currentarea"] = area
     framecolor = framecolor or "black"
 
     if onpage then
@@ -5058,15 +4859,9 @@ function commands.place_object(layoutxml, dataxml)
 
     -- remember the current maximum width for later
     local current_maxwidth
-    if publisher.newxpath then
-        dataxml.vars["__row"] = row
-        dataxml.vars["__column"] = column
-        current_maxwidth = dataxml.vars["__maxwidth"]
-    else
-        publisher.xpath.set_variable("__row", row)
-        publisher.xpath.set_variable("__column", column)
-        current_maxwidth = publisher.xpath.get_variable("__maxwidth")
-    end
+    dataxml.vars["__row"] = row
+    dataxml.vars["__column"] = column
+    current_maxwidth = dataxml.vars["__maxwidth"]
 
     local mw = current_grid:number_of_columns(area)
     local mh = current_grid:number_of_rows(area)
@@ -5092,13 +4887,8 @@ function commands.place_object(layoutxml, dataxml)
             allocate = "no"
         end
     end
-    if publisher.newxpath then
-        dataxml.vars["__maxwidth"] = mw
-        dataxml.vars["__maxheight"] = mh
-    else
-        publisher.xpath.set_variable("__maxwidth", mw)
-        publisher.xpath.set_variable("__maxwheight", mh)
-    end
+    dataxml.vars["__maxwidth"] = mw
+    dataxml.vars["__maxheight"] = mh
 
     local current_row_start = current_grid:current_row(area)
     if not current_row_start then
@@ -5149,11 +4939,7 @@ function commands.place_object(layoutxml, dataxml)
     local tab = publisher.dispatch.dispatch(layoutxml, dataxml, options)
 
     -- reset the current maxwidth
-    if publisher.newxpath then
-        dataxml.vars["__maxwidth"] = current_maxwidth
-    else
-        publisher.xpath.set_variable("__maxwidth", current_maxwidth)
-    end
+    dataxml.vars["__maxwidth"] = current_maxwidth
     local objects = {}
     local object, objecttype
 
@@ -5459,11 +5245,7 @@ function commands.place_object(layoutxml, dataxml)
         publisher.page_helpers.setup_page(nil, "commands#PlaceObject", dataxml)
         publisher.current_grid = publisher.pages[publisher.current_pagenumber].grid
     end
-    if publisher.newxpath then
-        dataxml.vars["__currentarea"] = save_current_area
-    else
-        publisher.xpath.set_variable("__currentarea", save_current_area)
-    end
+    dataxml.vars["__currentarea"] = save_current_area
 end
 
 -- ProcessNode
@@ -5477,9 +5259,7 @@ end
 ---@return any
 function commands.process_node(layoutxml, dataxml)
     local copysequence
-    if publisher.newxpath then
-        copysequence = dataxml.sequence
-    end
+    copysequence = dataxml.sequence
 
     local dataxml_selection = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "xpathraw")
     local mode = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "mode", "string") or ""
@@ -5488,11 +5268,7 @@ function commands.process_node(layoutxml, dataxml)
     -- To restore the current value of `__position`, we save it.
     -- The value of `__position` is available from xpath (function position()).
     local current_position
-    if publisher.newxpath then
-        current_position = dataxml.pos
-    else
-        current_position = publisher.xpath.get_variable("__position")
-    end
+    current_position = dataxml.pos
     local element_name
     local layoutnode
     local pos = 1
@@ -5506,10 +5282,8 @@ function commands.process_node(layoutxml, dataxml)
     end
     local items = dataxml_selection
     local save_size
-    if publisher.newxpath then
-        save_size = dataxml.size
-        dataxml.size = limit
-    end
+    save_size = dataxml.size
+    dataxml.size = limit
     for i = 1, limit do
         local elt = dataxml_selection[i]
         if publisher.options.namespaces == "strict" then
@@ -5518,15 +5292,13 @@ function commands.process_node(layoutxml, dataxml)
             element_name = elt[".__local_name"]
         end
 
-        if publisher.newxpath then
-            dataxml.sequence = { items[i] }
-        end
+        dataxml.sequence = { items[i] }
         -- Fast path: direct lookup by mode + element name
         local modeselector = publisher.data_dispatcher[mode]
         layoutnode = modeselector and modeselector[element_name]
 
-        -- Pattern matching fallback (newxpath only)
-        if not layoutnode and publisher.newxpath then
+        -- Pattern matching fallback
+        if not layoutnode then
             layoutnode = publisher.dispatch.find_matching_pattern(mode, elt, dataxml)
         end
 
@@ -5540,26 +5312,16 @@ function commands.process_node(layoutxml, dataxml)
 
         if layoutnode then
             main.log("debug", "Process node", "node", element_name, "mode", mode, "pos", string.format("%d", pos))
-            if publisher.newxpath then
-                dataxml.pos = pos
-                publisher.dispatch.dispatch(layoutnode, dataxml)
-            else
-                publisher.xpath.set_variable("__position", pos)
-                dataxml_selection[i][".__context"] = dataxml_selection
-                publisher.dispatch.dispatch(layoutnode, dataxml_selection[i])
-            end
+            dataxml.pos = pos
+            publisher.dispatch.dispatch(layoutnode, dataxml)
 
             pos = pos + 1
         end
     end
     -- Now restore the value for the parent element
-    if publisher.newxpath then
-        dataxml.sequence = copysequence
-        dataxml.pos = current_position
-        dataxml.size = save_size
-    else
-        publisher.xpath.set_variable("__position", current_position)
-    end
+    dataxml.sequence = copysequence
+    dataxml.pos = current_position
+    dataxml.size = save_size
 end
 
 -- Position
@@ -5654,21 +5416,16 @@ end
 ---@return any
 function commands.record(layoutxml, dataxml)
     local elementname, match, mode
-    if publisher.newxpath then
-        elementname = layoutxml[".__attributes"].element
-        match = layoutxml[".__attributes"].match
-        mode = layoutxml[".__attributes"].mode or ""
-    else
-        elementname = publisher.attribute_helpers.read_attribute(layoutxml, {}, "element", "string")
-        mode = publisher.attribute_helpers.read_attribute(layoutxml, {}, "mode", "string", "")
-    end
+    elementname = layoutxml[".__attributes"].element
+    match = layoutxml[".__attributes"].match
+    mode = layoutxml[".__attributes"].mode or ""
 
     if match and elementname then
         main.log("error", "Record: attributes 'element' and 'match' are mutually exclusive.")
         return
     end
 
-    if match and publisher.newxpath then
+    if match then
         local matchfunc, priority, fastpath_name = publisher.dispatch.compile_match_pattern(match)
         if fastpath_name then
             -- Simple element name pattern: use fast path
@@ -5818,20 +5575,11 @@ function commands.save_dataset(layoutxml, dataxml)
         end
     end
     if selection then
-        if publisher.newxpath then
-            local seq, msg = dataxml:eval(selection)
-            if msg then
-                main.log("error", msg)
-            end
-            tab = seq
-        else
-            local ok
-            ok, tab = publisher.xpath.parse_raw(dataxml, selection, layoutxml[".__ns"])
-            if not ok then
-                main.log("error", tab)
-                return
-            end
+        local seq, msg = dataxml:eval(selection)
+        if msg then
+            main.log("error", msg)
         end
+        tab = seq
     else
         tab = publisher.dispatch.dispatch(layoutxml, dataxml)
     end
@@ -5874,11 +5622,7 @@ function commands.save_dataset(layoutxml, dataxml)
         main.log("error", "SaveDataset: could not open file for writing", "filename", full_filename)
         return
     end
-    if publisher.newxpath then
-        towrite = publisher.xml_helpers.xml_to_string_newxpath(tmp)
-    else
-        towrite = publisher.xml_helpers.xml_to_string(tmp)
-    end
+    towrite = publisher.xml_helpers.xml_to_string(tmp)
     file:write(towrite)
     file:close()
 end
@@ -6056,105 +5800,30 @@ function commands.setvariable(layoutxml, dataxml)
                 save[#save + 1] = layoutxml[i]
             end
         end
-        if publisher.newxpath then
-            dataxml.vars[varname] = save
-        else
-            publisher.xpath.set_variable(varname, save)
-        end
+        dataxml.vars[varname] = save
         return
     else
         if selection then
-            if publisher.newxpath then
-                local seq, msg = dataxml:eval(selection)
-                if msg then
-                    main.log("error", msg, lineinfo(layoutxml))
-                end
-                dataxml.vars[varname] = seq
-                contents = seq
-            else
-                contents = publisher.xpath.parse(dataxml, selection, layoutxml[".__ns"])
+            local seq, msg = dataxml:eval(selection)
+            if msg then
+                main.log("error", msg, lineinfo(layoutxml))
             end
+            dataxml.vars[varname] = seq
+            contents = seq
         else
             local tab = publisher.dispatch.dispatch(layoutxml, dataxml)
             contents = tab
         end
     end
 
-    if publisher.newxpath then
-        if type(contents) == "table" then
-            local ret
-            local has_element = false
-            for i = 1, #contents do
-                local thiscontents = contents[i]
-                if type(thiscontents) == "table" and thiscontents.elementname then
-                    local eltname = publisher.xml_helpers.elementname(thiscontents)
-                    local element_contents = publisher.xml_helpers.element_contents(thiscontents)
-                    if eltname == "Sequence" or eltname == "Value" or eltname == "SortSequence" then
-                        if type(element_contents) == "table" then
-                            ret = ret or {}
-                            if getmetatable(ret) == nil then
-                                setmetatable(ret, { __concat = table.__concat })
-                            end
-                            ret = ret .. element_contents
-                        elseif type(element_contents) == "string" then
-                            local rettype = type(ret)
-                            if rettype == "table" then
-                                ret[#ret + 1] = element_contents
-                            elseif rettype == "string" then
-                                ret = ret .. element_contents
-                            end
-                        elseif type(element_contents) == "number" then
-                            ret = ret or ""
-                            ret = ret .. tostring(element_contents)
-                        elseif type(element_contents) == "nil" then
-                            -- ignore
-                        else
-                            main.log("error", string.format("Unknown type: %q", type(element_contents)))
-                            ret = nil
-                        end
-                    elseif eltname == "elementstructure" then
-                        for j = 1, #element_contents do
-                            ret = ret or {}
-                            local itm = element_contents[j]
-                            -- A document node (the implicit wrapper of a constructed
-                            -- variable) is dissolved: splice its children, document
-                            -- nodes never nest (XSLT 2.0 §5.7.1).
-                            if type(itm) == "table" and itm[".__type"] == "document" then
-                                for k = 1, #itm do
-                                    ret[#ret + 1] = itm[k]
-                                    if type(itm[k]) == "table" and itm[k][".__type"] == "element" then
-                                        has_element = true
-                                    end
-                                end
-                            else
-                                ret[#ret + 1] = itm
-                                if type(itm) == "table" and itm[".__type"] == "element" then
-                                    has_element = true
-                                end
-                            end
-                        end
-                    elseif eltname == "Element" then
-                        has_element = true
-                        ret = ret or {}
-                        ret[#ret + 1] = element_contents
-                    end
-                end
-            end
-            if ret then
-                if has_element then
-                    ret[".__type"] = "document"
-                    contents = { ret }
-                else
-                    contents = ret
-                end
-            end
-        end
-    else
-        if type(contents) == "table" then
-            local ret
-            for i = 1, #contents do
-                local eltname = publisher.xml_helpers.elementname(contents[i])
-                local element_contents = publisher.xml_helpers.element_contents(contents[i])
+    if type(contents) == "table" then
+        local ret
+        local has_element = false
+        for i = 1, #contents do
+            local thiscontents = contents[i]
+            if type(thiscontents) == "table" and thiscontents.elementname then
+                local eltname = publisher.xml_helpers.elementname(thiscontents)
+                local element_contents = publisher.xml_helpers.element_contents(thiscontents)
                 if eltname == "Sequence" or eltname == "Value" or eltname == "SortSequence" then
                     if type(element_contents) == "table" then
                         ret = ret or {}
@@ -6181,14 +5850,36 @@ function commands.setvariable(layoutxml, dataxml)
                 elseif eltname == "elementstructure" then
                     for j = 1, #element_contents do
                         ret = ret or {}
-                        ret[#ret + 1] = element_contents[j]
+                        local itm = element_contents[j]
+                        -- A document node (the implicit wrapper of a constructed
+                        -- variable) is dissolved: splice its children, document
+                        -- nodes never nest (XSLT 2.0 §5.7.1).
+                        if type(itm) == "table" and itm[".__type"] == "document" then
+                            for k = 1, #itm do
+                                ret[#ret + 1] = itm[k]
+                                if type(itm[k]) == "table" and itm[k][".__type"] == "element" then
+                                    has_element = true
+                                end
+                            end
+                        else
+                            ret[#ret + 1] = itm
+                            if type(itm) == "table" and itm[".__type"] == "element" then
+                                has_element = true
+                            end
+                        end
                     end
                 elseif eltname == "Element" then
+                    has_element = true
                     ret = ret or {}
                     ret[#ret + 1] = element_contents
                 end
             end
-            if ret then
+        end
+        if ret then
+            if has_element then
+                ret[".__type"] = "document"
+                contents = { ret }
+            else
                 contents = ret
             end
         end
@@ -6202,9 +5893,7 @@ function commands.setvariable(layoutxml, dataxml)
     end
     if varname == "_mode" then
         publisher.modes = {}
-        if publisher.newxpath then
-            contents = publisher.xpath.string_value(contents)
-        end
+        contents = publisher.xpath.string_value(contents)
         local _modes = string.explode(tostring(contents), ",")
         for _, m in ipairs(_modes) do
             publisher.modes[m] = true
@@ -6214,11 +5903,7 @@ function commands.setvariable(layoutxml, dataxml)
     if string.sub(typ, 1, 2) == "mp" then
         publisher.metapostvariables[varname] = { typ = string.sub(typ, 4), contents }
     else
-        if publisher.newxpath then
-            dataxml.vars[varname] = contents
-        else
-            publisher.xpath.set_variable(varname, contents)
-        end
+        dataxml.vars[varname] = contents
     end
 end
 
@@ -6240,14 +5925,10 @@ function commands.sort_sequence(layoutxml, dataxml)
     -- spelling error in schema
     local sortkey = criterion or criterium
     local sequence
-    if publisher.newxpath then
-        local msg
-        sequence, msg = dataxml:eval(selection)
-        if msg then
-            main.log("error", msg)
-        end
-    else
-        sequence = publisher.xpath.parse(dataxml, selection, layoutxml[".__ns"])
+    local msg
+    sequence, msg = dataxml:eval(selection)
+    if msg then
+        main.log("error", msg)
     end
     local tmp = {}
     if #sequence == 0 then
@@ -6268,46 +5949,24 @@ function commands.sort_sequence(layoutxml, dataxml)
         end
     end
 
-    if publisher.newxpath then
-        if numerical then
-            table.sort(tmp, function(a, b)
-                return compare(tonumber(a[".__attributes"][sortkey]), tonumber(b[".__attributes"][sortkey]))
-            end)
-        else
-            table.sort(tmp, function(a, b)
-                return compare(a[".__attributes"][sortkey], b[".__attributes"][sortkey])
-            end)
-        end
+    if numerical then
+        table.sort(tmp, function(a, b)
+            return compare(tonumber(a[".__attributes"][sortkey]), tonumber(b[".__attributes"][sortkey]))
+        end)
     else
-        if numerical then
-            table.sort(tmp, function(a, b)
-                return compare(tonumber(a[sortkey]), tonumber(b[sortkey]))
-            end)
-        else
-            table.sort(tmp, function(a, b)
-                return compare(a[sortkey], b[sortkey])
-            end)
-        end
+        table.sort(tmp, function(a, b)
+            return compare(a[".__attributes"][sortkey], b[".__attributes"][sortkey])
+        end)
     end
 
     if removeduplicates then
         local deleteme = {}
-        if publisher.newxpath then
-            local last_entry = { [".__attributes"] = {} }
-            for i, v in ipairs(tmp) do
-                if v[".__attributes"][removeduplicates] == last_entry[".__attributes"][removeduplicates] then
-                    deleteme[#deleteme + 1] = i
-                end
-                last_entry = v
+        local last_entry = { [".__attributes"] = {} }
+        for i, v in ipairs(tmp) do
+            if v[".__attributes"][removeduplicates] == last_entry[".__attributes"][removeduplicates] then
+                deleteme[#deleteme + 1] = i
             end
-        else
-            local last_entry = {}
-            for i, v in ipairs(tmp) do
-                if v[removeduplicates] == last_entry[removeduplicates] then
-                    deleteme[#deleteme + 1] = i
-                end
-                last_entry = v
-            end
+            last_entry = v
         end
 
         for i = #deleteme, 1, -1 do
@@ -6504,25 +6163,14 @@ function commands.switch(layoutxml, dataxml)
         if type(case_or_otherwise_element) == "table" and elementname == "Case" and case_matched ~= true then
             local test =
                 publisher.attribute_helpers.read_attribute(case_or_otherwise_element, dataxml, "test", "string")
-            if publisher.newxpath then
-                local seq, msg = dataxml:eval(test)
-                if msg then
-                    main.log("error", msg)
-                    return nil
-                end
-                case_matched = publisher.xpath.boolean_value(seq)
-                if case_matched then
-                    ret = publisher.dispatch.dispatch(case_or_otherwise_element, dataxml)
-                end
-            else
-                -- newxpath!!
-                local ok, tab = publisher.xpath.parse_raw(dataxml, test, layoutxml[".__ns"])
-                if not ok then
-                    main.log("error", tab)
-                elseif tab[1] then
-                    case_matched = true
-                    ret = publisher.dispatch.dispatch(case_or_otherwise_element, dataxml)
-                end
+            local seq, msg = dataxml:eval(test)
+            if msg then
+                main.log("error", msg)
+                return nil
+            end
+            case_matched = publisher.xpath.boolean_value(seq)
+            if case_matched then
+                ret = publisher.dispatch.dispatch(case_or_otherwise_element, dataxml)
             end
         elseif type(case_or_otherwise_element) == "table" and elementname == "Otherwise" then
             otherwise = case_or_otherwise_element
@@ -6576,27 +6224,15 @@ function commands.table(layoutxml, dataxml, options)
     publisher.page_helpers.setup_page(nil, "commands#table", dataxml)
 
     if width == nil then
-        if publisher.newxpath then
-            local tmp = dataxml.vars["__maxwidth"]
-            if tmp then
-                width = tmp
-            else
-                main.log(
-                    "error",
-                    "Can't determine the current width. Tables in groups and data cells must contain explicit widths."
-                )
-                width = 50 * 2 ^ 16
-            end
+        local tmp = dataxml.vars["__maxwidth"]
+        if tmp then
+            width = tmp
         else
-            if publisher.xpath.get_variable("__maxwidth") == nil then
-                main.log(
-                    "error",
-                    "Can't determine the current width. Tables in groups and data cells must contain explicit widths."
-                )
-                width = 50 * 2 ^ 16
-            else
-                width = publisher.xpath.get_variable("__maxwidth")
-            end
+            main.log(
+                "error",
+                "Can't determine the current width. Tables in groups and data cells must contain explicit widths."
+            )
+            width = 50 * 2 ^ 16
         end
     else
         if tonumber(width) ~= nil then
@@ -6683,22 +6319,14 @@ function commands.table(layoutxml, dataxml, options)
     end
     if balance then
         local current_area
-        if publisher.newxpath then
-            current_area = dataxml.vars["__currentarea"]
-        else
-            current_area = publisher.xpath.get_variable("__currentarea")
-        end
+        current_area = dataxml.vars["__currentarea"]
         tabular.split = publisher.current_grid:number_of_frames(current_area)
     else
         tabular.split = 1
     end
     tabular.textformat = textformat
 
-    if publisher.newxpath then
-        dataxml.vars["_last_tr_data"] = ""
-    else
-        publisher.xpath.set_variable("_last_tr_data", "")
-    end
+    dataxml.vars["_last_tr_data"] = ""
 
     local n = tabular:make_table(dataxml)
     if publisher.options.format == "PDF/UA" and role then
@@ -7367,17 +6995,9 @@ function commands.textblock(layoutxml, dataxml)
         main.log("warn", "Textblock: width not set, but within a group. Expect strange results.")
     end
     local save_width
-    if publisher.newxpath then
-        save_width = dataxml.vars["__maxwidth"]
-    else
-        save_width = publisher.xpath.get_variable("__maxwidth")
-    end
+    save_width = dataxml.vars["__maxwidth"]
     width = width or save_width
-    if publisher.newxpath then
-        dataxml.vars["__maxwidth"] = width
-    else
-        publisher.xpath.set_variable("__maxwidth", width)
-    end
+    dataxml.vars["__maxwidth"] = width
     if not width then
         main.log("error", "Can't evaluate width in textblock")
         local rule =
@@ -7570,11 +7190,7 @@ function commands.textblock(layoutxml, dataxml)
     end
 
     publisher.current_fontfamily = save_fontfamily
-    if publisher.newxpath then
-        dataxml.vars["__maxwidth"] = save_width
-    else
-        publisher.xpath.set_variable("__maxwidth", save_width)
-    end
+    dataxml.vars["__maxwidth"] = save_width
     publisher.intextblockcontext = publisher.intextblockcontext - 1
     if minheight then
         nodelist.height = math.max(nodelist.height + nodelist.depth, minheight)
@@ -7660,21 +7276,15 @@ end
 function commands.until_do(layoutxml, dataxml)
     local test = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "test", "string")
     assert(test)
-    if publisher.newxpath then
-        repeat
-            publisher.dispatch.dispatch(layoutxml, dataxml)
-            local seq, msg = dataxml:eval(test)
-            if msg then
-                main.log("error", msg)
-                break
-            end
-            local tf = publisher.xpath.boolean_value(seq)
-        until tf
-    else
-        repeat
-            publisher.dispatch.dispatch(layoutxml, dataxml)
-        until publisher.xpath.parse(dataxml, test, layoutxml[".__ns"])
-    end
+    repeat
+        publisher.dispatch.dispatch(layoutxml, dataxml)
+        local seq, msg = dataxml:eval(test)
+        if msg then
+            main.log("error", msg)
+            break
+        end
+        local tf = publisher.xpath.boolean_value(seq)
+    until tf
 end
 
 -- URL
@@ -7707,40 +7317,25 @@ end
 ---@return any
 function commands.value(layoutxml, dataxml)
     local selection
-    if publisher.newxpath then
-        selection = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "rawstring")
-    else
-        -- backwards compatibility, see commit e5d28aeccd and #680
-        selection = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "string")
-    end
+    selection = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "select", "rawstring")
     local tab
     if selection then
-        if publisher.newxpath then
-            local ret = {}
-            local seq, msg = dataxml:eval(selection)
-            if msg then
-                main.log("error", "xpath error", "message", msg)
-                return
-            end
-            if seq then
-                if seq.raw == true then
-                    return seq
-                else
-                    for i = 1, #seq do
-                        ret[#ret + 1] = seq[i]
-                    end
+        local ret = {}
+        local seq, msg = dataxml:eval(selection)
+        if msg then
+            main.log("error", "xpath error", "message", msg)
+            return
+        end
+        if seq then
+            if seq.raw == true then
+                return seq
+            else
+                for i = 1, #seq do
+                    ret[#ret + 1] = seq[i]
                 end
             end
-            return ret
-        else
-            local ok
-            ok, tab = publisher.xpath.parse_raw(dataxml, selection, layoutxml[".__ns"])
-            if not ok then
-                main.log("error", tab)
-                return
-            end
-            -- tab can now contain markup coming from data.xml such as <sup>...</sup>
         end
+        return ret
     else
         -- Change all br elements to \n
         for i = 1, #layoutxml do
@@ -7783,23 +7378,17 @@ end
 function commands.while_do(layoutxml, dataxml)
     local test = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "test", "string")
     assert(test)
-    if publisher.newxpath then
-        while true do
-            local seq, msg = dataxml:eval(test)
-            if msg then
-                main.log("error", msg)
-                break
-            end
-            local tf = publisher.xpath.boolean_value(seq)
-            if not tf then
-                break
-            end
-            publisher.dispatch.dispatch(layoutxml, dataxml)
+    while true do
+        local seq, msg = dataxml:eval(test)
+        if msg then
+            main.log("error", msg)
+            break
         end
-    else
-        while publisher.xpath.parse(dataxml, test, layoutxml[".__ns"]) do
-            publisher.dispatch.dispatch(layoutxml, dataxml)
+        local tf = publisher.xpath.boolean_value(seq)
+        if not tf then
+            break
         end
+        publisher.dispatch.dispatch(layoutxml, dataxml)
     end
 end
 

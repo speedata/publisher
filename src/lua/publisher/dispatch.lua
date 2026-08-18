@@ -311,34 +311,27 @@ function M.dispatch(layoutxml, dataxml, opts)
     end
 
     local options = publisher.options
-    local newxpath = publisher.newxpath
     for _, j in ipairs(layoutxml) do
         if type(j) == "table" then
             local eltname = j[".__local_name"]
             if dispatch_table[eltname] ~= nil then
                 if options.verbosity > 0 then
-                    if newxpath then
-                        main.log("debug", "Call command", "name", eltname, "line", j[".__line"])
-                    else
-                        main.log("debug", "Call command", "name", eltname)
-                    end
+                    main.log("debug", "Call command", "name", eltname, "line", j[".__line"])
                 end
-                if newxpath then
-                    publisher.current_layout_line = j[".__line"]
-                    publisher.current_layout_file = j[".__file"]
-                    check_attributes(j, eltname)
-                    if
-                        dataxml
-                        and dataxml.sequence
-                        and type(dataxml.sequence) == "table"
-                        and dataxml.sequence[1]
-                        and type(dataxml.sequence[1]) == "table"
-                        and dataxml.sequence[1][".__line"]
-                    then
-                        publisher.current_data_line = dataxml.sequence[1][".__line"]
-                    else
-                        publisher.current_data_line = "(unknown)"
-                    end
+                publisher.current_layout_line = j[".__line"]
+                publisher.current_layout_file = j[".__file"]
+                check_attributes(j, eltname)
+                if
+                    dataxml
+                    and dataxml.sequence
+                    and type(dataxml.sequence) == "table"
+                    and dataxml.sequence[1]
+                    and type(dataxml.sequence[1]) == "table"
+                    and dataxml.sequence[1][".__line"]
+                then
+                    publisher.current_data_line = dataxml.sequence[1][".__line"]
+                else
+                    publisher.current_data_line = "(unknown)"
                 end
 
                 -- The legacy XPath parser calls the commands with a nil

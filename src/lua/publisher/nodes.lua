@@ -825,7 +825,7 @@ end
 ---@param tbl table Paragraph table (array of segments).
 ---@return boolean? done True when a segment was cleaned.
 function M.remove_first_whitespace(tbl)
-    if publisher.newxpath and publisher.xpath.is_attribute(tbl) then
+    if publisher.xpath.is_attribute(tbl) then
         tbl.value = string.gsub(tbl.value, "^[\n\t]*(.-)$", "%1")
         return true
     end

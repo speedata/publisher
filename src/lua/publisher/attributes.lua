@@ -39,53 +39,36 @@ local M = {}
 ---@param _context any? Optional context (unused by this implementation).
 ---@return any value Converted value, or `default` if absent, or `nil` on error.
 function M.read_attribute(layoutxml, dataxml, attname, typ, default, _context)
-    local namespaces = layoutxml[".__ns"]
     local attr
 
-    if publisher.newxpath then
-        local attributes = layoutxml[".__attributes"]
-        if not attributes then
-            return default
-        end
-        if not attributes[attname] then
-            return default
-        end
-        attr = attributes[attname]
-    else
-        if not layoutxml[attname] then
-            return default
-        end
-        attr = layoutxml[attname]
+    local attributes = layoutxml[".__attributes"]
+    if not attributes then
+        return default
     end
+    if not attributes[attname] then
+        return default
+    end
+    attr = attributes[attname]
 
     local val, num, ret
     if typ ~= "xpath" and typ ~= "xpathraw" and typ ~= "rawstring" then
         val = string.gsub(attr, "{(.-)}", function(x)
             -- an XPath expression inside {...} requires a data context
             local data = assert(dataxml)
-            if publisher.newxpath then
-                local copysequence = data.sequence
-                local seq, msg = data:eval(x)
-                if msg then
-                    main.log("error", msg)
-                    return nil
-                end
-                local txt
-                txt, msg = publisher.xpath.string_value(seq)
-                if msg then
-                    main.log("error", msg)
-                    return nil
-                end
-                data.sequence = copysequence
-                return txt
-            else
-                local ok, xp = publisher.xpath.parse_raw(data, x, namespaces)
-                if not ok then
-                    main.log("error", xp)
-                    return nil
-                end
-                return publisher.xpath.textvalue(xp[1])
+            local copysequence = data.sequence
+            local seq, msg = data:eval(x)
+            if msg then
+                main.log("error", msg)
+                return nil
             end
+            local txt
+            txt, msg = publisher.xpath.string_value(seq)
+            if msg then
+                main.log("error", msg)
+                return nil
+            end
+            data.sequence = copysequence
+            return txt
         end)
     else
         val = attr
@@ -95,33 +78,19 @@ function M.read_attribute(layoutxml, dataxml, attname, typ, default, _context)
         val = nil
     end
     if typ == "xpath" then
-        if publisher.newxpath then
-            local seq, msg = assert(dataxml):eval(val)
-            if msg then
-                main.log("error", msg)
-                return nil
-            end
-            return publisher.xpath.string_value(seq)
-        else
-            return publisher.xpath.textvalue(publisher.xpath.parse(dataxml, val, namespaces))
+        local seq, msg = assert(dataxml):eval(val)
+        if msg then
+            main.log("error", msg)
+            return nil
         end
+        return publisher.xpath.string_value(seq)
     elseif typ == "xpathraw" then
-        if publisher.newxpath then
-            local seq, msg = assert(dataxml):eval(val)
-            if msg then
-                main.log("error", msg)
-                return nil
-            end
-            return seq
-        else
-            local ok, tmp = publisher.xpath.parse_raw(dataxml, val, namespaces)
-            if not ok then
-                main.log("error", tmp)
-                return nil
-            else
-                return tmp
-            end
+        local seq, msg = assert(dataxml):eval(val)
+        if msg then
+            main.log("error", msg)
+            return nil
         end
+        return seq
     elseif typ == "string" or typ == "rawstring" then
         return tostring(val or default)
     elseif typ == "number" then

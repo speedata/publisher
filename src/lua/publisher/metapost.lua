@@ -333,17 +333,9 @@ function M.newbox(width_sp, height_sp)
     for name, v in pairs(publisher.metapostvariables) do
         local expr
         if v.typ == "string" then
-            if publisher.newxpath then
-                expr = string.format("%s %s ; %s := %q ;", v.typ, name, name, publisher.xpath.string_value(v[1]))
-            else
-                expr = string.format("%s %s ; %s := %q ;", v.typ, name, name, v[1])
-            end
+            expr = string.format("%s %s ; %s := %q ;", v.typ, name, name, publisher.xpath.string_value(v[1]))
         else
-            if publisher.newxpath then
-                expr = string.format("%s %s ; %s := %s ;", v.typ, name, name, publisher.xpath.string_value(v))
-            else
-                expr = string.format("%s %s ; %s := %s ;", v.typ, name, name, v[1])
-            end
+            expr = string.format("%s %s ; %s := %s ;", v.typ, name, name, publisher.xpath.string_value(v))
         end
         M.execute(mpobj, expr)
     end

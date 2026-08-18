@@ -867,13 +867,8 @@ function tabular:pack_cell(blockobjects, width, horizontal_alignment)
                 if type(inlineobject) == "table" then
                     if width then
                         local save_width
-                        if publisher.newxpath then
-                            save_width = self.dataxml.vars["__maxwidth"]
-                            self.dataxml.vars["__maxwidth"] = width
-                        else
-                            save_width = publisher.xpath.get_variable("__maxwidth")
-                            publisher.xpath.set_variable("__maxwidth", width)
-                        end
+                        save_width = self.dataxml.vars["__maxwidth"]
+                        self.dataxml.vars["__maxwidth"] = width
 
                         local angle_rad = -1 * math.rad(blockobjects.rotate or 0)
                         local sin_angle = math.sin(angle_rad)
@@ -903,11 +898,7 @@ function tabular:pack_cell(blockobjects, width, horizontal_alignment)
                         end
 
                         cell = node.insert_after(cell, node.tail(cell), v)
-                        if publisher.newxpath then
-                            self.dataxml.vars["__maxwidth"] = save_width
-                        else
-                            publisher.xpath.set_variable("__maxwidth", save_width)
-                        end
+                        self.dataxml.vars["__maxwidth"] = save_width
                     else
                         w("no width given in paragraph")
                     end
@@ -2518,11 +2509,7 @@ function tabular:typeset_table(dataxml)
     tablepart_absolute = 0
     for s = 2, #splits do
         tablepart_absolute = tablepart_absolute + 1
-        if publisher.newxpath then
-            dataxml["_last_tr_data"] = nil
-        else
-            publisher.xpath.set_variable("_last_tr_data", nil)
-        end
+        dataxml["_last_tr_data"] = nil
         first_row_in_new_table = splits[s - 1] + 1
 
         local thissplittable = {}
@@ -2532,11 +2519,7 @@ function tabular:typeset_table(dataxml)
         if last_tr_data and self.tablehead_contents then
             -- we have some data attached to table rows, so we re-format the header
             local val = dynamic_data[last_tr_data]
-            if publisher.newxpath then
-                dataxml["_last_tr_data"] = val
-            else
-                publisher.xpath.set_variable("_last_tr_data", val)
-            end
+            dataxml["_last_tr_data"] = val
             local tmp1, tmp2 = self:reformat_head()
             if s == 2 then
                 -- first page
@@ -2632,11 +2615,7 @@ function tabular:typeset_table(dataxml)
         if last_tr_data and self.tablefoot_contents then
             -- we have some data attached to table rows, so we re-format the footer
             local val = dynamic_data[last_tr_data]
-            if publisher.newxpath then
-                dataxml.vars["_last_tr_data"] = val
-            else
-                publisher.xpath.set_variable("_last_tr_data", val)
-            end
+            dataxml.vars["_last_tr_data"] = val
 
             local tmp_tablefoot_last, tmp_tablefoot_all = self:reformat_foot(s - 1, #splits - 1)
             if s < #splits then
@@ -2981,11 +2960,7 @@ function tabular:make_table(dataxml)
     end
 
     self:calculate_rowheights()
-    if publisher.newxpath then
-        dataxml.vars["_last_tr_data"] = ""
-    else
-        publisher.xpath.set_variable("_last_tr_data", "")
-    end
+    dataxml.vars["_last_tr_data"] = ""
 
     return self:typeset_table(dataxml)
 end

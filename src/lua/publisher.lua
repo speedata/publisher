@@ -36,7 +36,6 @@ package.loaded["publisher"] = M
 M.splib = splib
 
 M.barcodes = do_luafile("barcodes.lua")
-local luxor = do_luafile("luxor.lua")
 local spotcolors = require("spotcolors")
 
 M.xpath = require("lxpath")
@@ -67,7 +66,6 @@ M.env_publisherversion = os.getenv("PUBLISHERVERSION")
 -- expose helpers from submodules
 M.utf8_to_utf16_string_pdf = metadata.utf8_to_utf16_string_pdf
 
-M.newxpath = true
 do_luafile("layout_functions_lxpath.lua")
 
 -- so that node.copy_list copies the node properties
@@ -420,7 +418,6 @@ M.css = do_luafile("css.lua"):new()
 ---@field trim? integer Bleed amount in sp.
 ---@field trimmarks boolean
 ---@field verbosity number
----@field xmlparser "lua"|"go"|"lxpath" XML parser used for input data and layout.
 ---
 -- Further fields are populated from the layout instructions XML at runtime.
 
@@ -462,7 +459,6 @@ M.options = {
     trace = false,
     trimmarks = false,
     verbosity = 0,
-    xmlparser = os.getenv("SP_XMLPARSER") or "lua",
 }
 
 ---@type string
@@ -471,12 +467,6 @@ M.current_layout_line = ""
 M.current_layout_file = ""
 ---@type string
 M.current_data_line = ""
-
-if M.newxpath then
-    M.options.xmlparser = "go"
-else
-    M.options.xmlparser = "lua"
-end
 
 ---@class Group
 ---@field contents? Node Head of the node list that holds the group's content (nil until the group is filled).
@@ -796,11 +786,7 @@ M.filespecnumbers = {}
 ---@return string? line_data_label
 ---@return string? line_data_value
 function M.lineinfo()
-    if M.newxpath then
-        return "line_layout", M.current_layout_line, "file", M.current_layout_file, "line_data", M.current_data_line
-    else
-        return nil
-    end
+    return "line_layout", M.current_layout_line, "file", M.current_layout_file, "line_data", M.current_data_line
 end
 
 ---@type string[]
@@ -1112,13 +1098,11 @@ function M.initialize_luatex_and_generate_pdf()
         main.log("error", "Without a valid layout-XML file, I can't really do anything.")
         exit()
     end
-    if M.newxpath then
-        if type(layoutxml) == "table" then
-            layoutxml = layoutxml[1] -- skip document
-        else
-            main.log("error", "Internal error: layout is not a table")
-            return
-        end
+    if type(layoutxml) == "table" then
+        layoutxml = layoutxml[1] -- skip document
+    else
+        main.log("error", "Internal error: layout is not a table")
+        return
     end
     if layoutxml == nil then
         main.log("error", "Internal error: layout is empty")
@@ -1147,17 +1131,12 @@ function M.initialize_luatex_and_generate_pdf()
     end
     local version
     local requirements
-    if M.newxpath then
-        local attr = layoutxml[".__attributes"]
-        if attr and attr["version"] then
-            version = attr["version"]
-        end
-        if attr and attr["require"] then
-            requirements = attr["require"]
-        end
-    else
-        version = layoutxml.version
-        requirements = layoutxml.require
+    local attr = layoutxml[".__attributes"]
+    if attr and attr["version"] then
+        version = attr["version"]
+    end
+    if attr and attr["require"] then
+        requirements = attr["require"]
     end
     if version then
         local version_mismatch = false
@@ -1233,18 +1212,10 @@ function M.initialize_luatex_and_generate_pdf()
     local dataxml
     local datafilename = arg[3]
     if datafilename == "-dummy" then
-        if M.newxpath then
-            dataxml = splib.loadxmlstring("<data />")
-        else
-            dataxml = luxor.parse_xml("<data />")
-        end
+        dataxml = splib.loadxmlstring("<data />")
     elseif datafilename == "-" then
         main.log("info", "Reading from stdin")
-        if M.newxpath then
-            dataxml = splib.loadxmlstring(io.stdin:read("*a"))
-        else
-            dataxml = luxor.parse_xml(io.stdin:read("*a"), { htmlentities = true })
-        end
+        dataxml = splib.loadxmlstring(io.stdin:read("*a"))
     else
         dataxml = M.xml_helpers.load_xml(
             datafilename,
@@ -1263,61 +1234,51 @@ function M.initialize_luatex_and_generate_pdf()
         return
     end
 
-    if M.newxpath then
-        local defaults = {
-            _bleed = "0mm",
-            _pageheight = "297mm",
-            _pagewidth = "210mm",
-            _jobname = tex.jobname,
-            _matter = "mainmatter",
-            __maxwidth = tex.sp("190mm"),
-            _lastpage = 1,
-        }
-        M.data = M.xpath.context:new()
-        M.data.xmldoc = { dataxml }
-        M.data.sequence = { dataxml }
-        M.data.namespaces = layoutxml[".__ns"]
+    local defaults = {
+        _bleed = "0mm",
+        _pageheight = "297mm",
+        _pagewidth = "210mm",
+        _jobname = tex.jobname,
+        _matter = "mainmatter",
+        __maxwidth = tex.sp("190mm"),
+        _lastpage = 1,
+    }
+    M.data = M.xpath.context:new()
+    M.data.xmldoc = { dataxml }
+    M.data.sequence = { dataxml }
+    M.data.namespaces = layoutxml[".__ns"]
 
-        for k, v in pairs(defaults) do
-            M.data.vars[k] = v
-        end
+    for k, v in pairs(defaults) do
+        M.data.vars[k] = v
+    end
 
-        -- from command line or publisher.cfg:
-        for k, v in pairs(vars) do
-            M.data.vars[k] = v
-        end
-        local mode_keys = {}
-        for k, _ in pairs(M.modes) do
-            mode_keys[#mode_keys + 1] = k
-        end
-        table.sort(mode_keys)
-        M.data.vars._mode = table.concat(mode_keys, ",")
+    -- from command line or publisher.cfg:
+    for k, v in pairs(vars) do
+        M.data.vars[k] = v
+    end
+    local mode_keys = {}
+    for k, _ in pairs(M.modes) do
+        mode_keys[#mode_keys + 1] = k
+    end
+    table.sort(mode_keys)
+    M.data.vars._mode = table.concat(mode_keys, ",")
 
-        local _, msg = M.data:execute("root()")
-        if msg then
-            main.log("error", msg)
-        end
-    else
-        for k, v in pairs(vars) do
-            M.xpath.set_variable(k, v)
-        end
+    local _, msg = M.data:execute("root()")
+    if msg then
+        main.log("error", msg)
     end
 
     M.dispatch.dispatch(layoutxml, M.data)
-    if M.newxpath then
-        -- for namespace mode == strict
-        M.data.namespaces = dataxml[1][".__ns"]
-    end
+    -- for namespace mode == strict
+    M.data.namespaces = dataxml[1][".__ns"]
 
     -- options.ignoreeol is now set.
-    -- In DataMode (newxpath), element metatables are already set during
+    -- In DataMode, element metatables are already set during
     -- Go XML parsing, so fixup_xmlfile only needs to run if ignoreeol
     -- was set in the layout (after loading) and wasn't handled by Go.
-    if M.newxpath then
-        local needs_eol = (M.options.ignoreeol or false) and not dataxml.ignoreeol_done
-        if needs_eol then
-            M.xml_helpers.fixup_xmlfile(dataxml, true)
-        end
+    local needs_eol = (M.options.ignoreeol or false) and not dataxml.ignoreeol_done
+    if needs_eol then
+        M.xml_helpers.fixup_xmlfile(dataxml, true)
     end
 
     -- We define two graphic states for overprinting on and off.
@@ -1419,7 +1380,7 @@ function M.initialize_luatex_and_generate_pdf()
     -- load help file if it exists
     if kpse.find_file(auxfilename) and M.options.resetmarks == false then
         local mark_tab = M.xml_helpers.load_xml(auxfilename, "aux file", { htmlentities = true, ignoreeol = true })
-        if M.newxpath and mark_tab then
+        if mark_tab then
             mark_tab = mark_tab[1]
         end
         mark_tab = mark_tab or {}
@@ -1427,11 +1388,7 @@ function M.initialize_luatex_and_generate_pdf()
             local mt = mark_tab[i]
             if type(mt) == "table" then
                 local attributes
-                if M.newxpath then
-                    attributes = mt[".__attributes"]
-                else
-                    attributes = mt
-                end
+                attributes = mt[".__attributes"]
                 if mt[".__local_name"] == "mark" then
                     M.markers[attributes.name] = { page = attributes.page }
                     local id = tonumber(attributes.id)
@@ -1455,11 +1412,7 @@ function M.initialize_luatex_and_generate_pdf()
                 elseif mt[".__local_name"] == "pagelabel" then
                     M.visible_pagenumbers[tonumber(attributes.pagenumber)] = attributes.visible
                 elseif mt[".__local_name"] == "lastpage" then
-                    if M.newxpath then
-                        M.data.vars["_lastpage"] = attributes.page
-                    else
-                        M.xpath.set_variable("_lastpage", attributes.page)
-                    end
+                    M.data.vars["_lastpage"] = attributes.page
                     M.expected_pages = tonumber(attributes.page)
                 end
             end
@@ -1475,19 +1428,6 @@ function M.initialize_luatex_and_generate_pdf()
         local dur = content:match("<DurationSeconds>([%d%.]+)</DurationSeconds>")
         if dur then
             M.previous_duration = tonumber(dur)
-        end
-    end
-
-    if M.newxpath then
-    else
-        M.xpath.set_variable("_bleed", "0mm")
-        M.xpath.set_variable("_pageheight", "297mm")
-        M.xpath.set_variable("_pagewidth", "210mm")
-        M.xpath.set_variable("_jobname", tex.jobname)
-        M.xpath.set_variable("_matter", "mainmatter")
-        M.xpath.set_variable("__maxwidth", tex.sp("190mm"))
-        if M.xpath.get_variable("_lastpage") == nil then
-            M.xpath.set_variable("_lastpage", 1)
         end
     end
 
@@ -1528,34 +1468,29 @@ function M.initialize_luatex_and_generate_pdf()
 
     -- Start data processing in the default mode (`""`)
     local name, tmp
-    if M.newxpath then
-        local _, seq, msg
-        _, msg = M.data:execute("root()")
+    local seq
+    _, msg = M.data:execute("root()")
+    if msg then
+        main.log("error", msg)
+    end
+    if M.options.namespaces == "strict" then
+        seq, msg = M.data:eval("local-name()")
         if msg then
             main.log("error", msg)
         end
-        if M.options.namespaces == "strict" then
-            seq, msg = M.data:eval("local-name()")
-            if msg then
-                main.log("error", msg)
-            end
-            name = M.xpath.string_value(seq)
-            seq, msg = M.data:eval("namespace-uri()")
-            if msg then
-                main.log("error", msg)
-            end
-            local namespace_element = M.xpath.string_value(seq)
-            name = "{" .. namespace_element .. "}" .. name
-        else
-            seq, msg = M.data:eval("local-name()")
-            if msg then
-                main.log("error", msg)
-            end
-            name = M.xpath.string_value(seq)
+        name = M.xpath.string_value(seq)
+        seq, msg = M.data:eval("namespace-uri()")
+        if msg then
+            main.log("error", msg)
         end
+        local namespace_element = M.xpath.string_value(seq)
+        name = "{" .. namespace_element .. "}" .. name
     else
-        name = dataxml[".__local_name"]
-        M.xpath.set_variable("__position", 1)
+        seq, msg = M.data:eval("local-name()")
+        if msg then
+            main.log("error", msg)
+        end
+        name = M.xpath.string_value(seq)
     end
 
     -- The rare case that the user has not any `Record` commands in the layout file:
@@ -1565,21 +1500,17 @@ function M.initialize_luatex_and_generate_pdf()
     end
 
     tmp = M.data_dispatcher[""] and M.data_dispatcher[""][name]
-    -- Pattern matching fallback for root element (newxpath only)
-    if not tmp and M.newxpath then
+    -- Pattern matching fallback for root element
+    if not tmp then
         local rootnode = M.data.sequence and M.data.sequence[1]
         if rootnode then
             tmp = M.dispatch.find_matching_pattern("", rootnode, M.data)
         end
     end
     if tmp then
-        if M.newxpath then
-            -- For data:eval, the namespaces must be set the layout namespaces
-            M.data.namespaces = layoutxml[".__ns"]
-            M.dispatch.dispatch(tmp, M.data)
-        else
-            M.dispatch.dispatch(tmp, dataxml)
-        end
+        -- For data:eval, the namespaces must be set the layout namespaces
+        M.data.namespaces = layoutxml[".__ns"]
+        M.dispatch.dispatch(tmp, M.data)
     else
         name = name or ""
         local elt_ns, elt_localname = string.match(name, "{(.*)}(.*)")

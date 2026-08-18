@@ -9,18 +9,13 @@ local M = {}
 ---Mirrors the legacy behavior from html.lua.
 ---@param pages table                              -- elt.pages
 ---@param maxwidth_sp number|nil                   -- optional override for max width
----@param dataxml table                            -- data context (vars if newxpath)
+---@param dataxml table                            -- data context (vars)
 ---@return nil
 function M.handle_pages(pages, maxwidth_sp, dataxml)
     -- Relies on global publisher/tex/xpath as in the legacy code
     local pagewd = tex.pagewidth
 
-    if publisher.newxpath then
-        -- nothing here; set below where needed
-    else
-        publisher.xpath.set_variable("__maxwidth", pagewd)
-        publisher.xpath.set_variable("__maxheight", tex.pageheight)
-    end
+    -- nothing here; set below where needed
 
     local masterpage = pages and pages["*"]
 
@@ -29,30 +24,17 @@ function M.handle_pages(pages, maxwidth_sp, dataxml)
 
         if masterpage.width then
             wd = tex.sp(masterpage.width) or pagewd
-            if publisher.newxpath then
-                dataxml.vars["_pagewidth"] = masterpage.width
-            else
-                publisher.xpath.set_variable("_pagewidth", masterpage.width)
-            end
+            dataxml.vars["_pagewidth"] = masterpage.width
 
             pagewd = wd
 
             if masterpage.height then
-                if publisher.newxpath then
-                    dataxml.vars["_pageheight"] = masterpage.height
-                else
-                    publisher.xpath.set_variable("_pageheight", masterpage.height)
-                end
+                dataxml.vars["_pageheight"] = masterpage.height
                 ht = tex.sp(masterpage.height) or tex.pageheight
                 publisher.page_helpers.set_pageformat(wd, ht)
 
-                if publisher.newxpath then
-                    dataxml.vars["__maxwidth"] = wd
-                    dataxml.vars["__maxheight"] = ht
-                else
-                    publisher.xpath.set_variable("__maxwidth", wd)
-                    publisher.xpath.set_variable("__maxheight", ht)
-                end
+                dataxml.vars["__maxwidth"] = wd
+                dataxml.vars["__maxheight"] = ht
             end
         end
 
@@ -82,11 +64,7 @@ function M.handle_pages(pages, maxwidth_sp, dataxml)
 
         pagewd = pagewd - margin_left - margin_right
 
-        if publisher.newxpath then
-            dataxml.vars["__maxwidth"] = pagewd
-        else
-            publisher.xpath.set_variable("__maxwidth", pagewd)
-        end
+        dataxml.vars["__maxwidth"] = pagewd
 
         -- Ensure pageformat is set even if only width provided.
         -- Without a width (e.g. an @page rule with margins only) there is
@@ -121,11 +99,7 @@ function M.handle_pages(pages, maxwidth_sp, dataxml)
             pagewd = pagewd - margin_left - margin_right
         end
 
-        if publisher.newxpath then
-            dataxml.vars["__maxwidth"] = pagewd
-        else
-            publisher.xpath.set_variable("__maxwidth", pagewd)
-        end
+        dataxml.vars["__maxwidth"] = pagewd
     end
 end
 

@@ -122,7 +122,7 @@ local function reconstruct_html_text(elt)
     local ret = {}
     table.insert(ret, "<")
     table.insert(ret, eltname)
-    if publisher.newxpath and elt[".__attributes"] then
+    if elt[".__attributes"] then
         for key, value in pairs(elt[".__attributes"]) do
             table.insert(ret, string.format(' %s="%s"', key, publisher.xml_helpers.xml_escape(value)))
         end
@@ -373,7 +373,7 @@ local function flatten(self, items, options, data)
             mark_role()
             mark_special()
             -- w("par/flatten: type: HTML")
-            -- Now this is a bit strange and I should explain. The XML parser (luxor.lua)
+            -- Now this is a bit strange and I should explain. The XML parser
             -- creates a table structure from the XML text, but for HTML parsing, we need the
             -- original XML string. So I reconstruct the XML text (without comments etc.) and
             -- run this through Go's HTML parser and add CSS.
@@ -512,15 +512,11 @@ local function flatten(self, items, options, data)
         elseif typ_thisself == type_table then
             -- w("par/flatten: type: table")
             local tmp
-            if publisher.newxpath then
-                local x, msg = publisher.xpath.string_value(thisself)
-                if msg then
-                    main.log("error", msg)
-                end
-                tmp = flatten(self, { x }, new_options, data)
-            else
-                tmp = flatten(self, { table_textvalue(thisself) }, new_options, data)
+            local x, msg = publisher.xpath.string_value(thisself)
+            if msg then
+                main.log("error", msg)
             end
+            tmp = flatten(self, { x }, new_options, data)
             for j = 1, #tmp do
                 append(tmp[j])
             end

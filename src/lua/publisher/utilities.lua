@@ -190,11 +190,7 @@ end
 ---@return nil
 function M.flush_variable(varname)
     local x
-    if publisher.newxpath then
-        x = publisher.data.vars[varname]
-    else
-        x = publisher.xpath.get_variable(varname)
-    end
+    x = publisher.data.vars[varname]
     if type(x) == "table" then
         M.flush_table(x)
     end

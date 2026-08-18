@@ -691,11 +691,7 @@ function M.parse_html_new(elt, options, data)
             publisher.options.showtextformat = true
         end
     end
-    if publisher.newxpath then
-        elt[1].styles.calculated_width = data.vars["__maxwidth"]
-    else
-        elt[1].styles.calculated_width = publisher.xpath.get_variable("__maxwidth")
-    end
+    elt[1].styles.calculated_width = data.vars["__maxwidth"]
     local lang = elt.lang
     if lang then
         publisher.language.set_mainlanguage(lang)
