@@ -267,10 +267,7 @@ end
 local function setup()
     splib.log("debug", "Setting", "varname", "LUA_PATH", "value", os.getenv("LUA_PATH") or "")
     splib.log("debug", "Setting", "varname", "SP_EXTRA_DIRS", "value", os.getenv("SP_EXTRA_DIRS") or "")
-    splib.log("debug", "Setting", "varname", "SP_EXTRA_XML", "value", os.getenv("SP_EXTRA_XML") or "")
-    splib.log("debug", "Setting", "varname", "SP_PREPEND_XML", "value", os.getenv("SP_PREPEND_XML") or "")
     splib.log("debug", "Setting", "varname", "SP_IGNORECASE", "value", os.getenv("SP_IGNORECASE") or "")
-    splib.log("debug", "Setting", "varname", "SP_XMLPARSER", "value", os.getenv("SP_XMLPARSER") or "")
 
     tex.pdfhorigin = 0
     tex.pdfvorigin = 0

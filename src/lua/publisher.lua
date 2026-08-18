@@ -39,15 +39,11 @@ M.barcodes = do_luafile("barcodes.lua")
 local luxor = do_luafile("luxor.lua")
 local spotcolors = require("spotcolors")
 
-if os.getenv("SP_XMLPARSER") == "lxpath" then
-    M.xpath = require("lxpath")
-    M.xpath.stringmatch = unicode.utf8.match
-    M.xpath.find_file = kpse.find_file
-    M.xpath.parse_xml = splib.load_xmlfile
-    M.xpath.ignoreNS = true
-else
-    M.xpath = do_luafile("xpath.lua")
-end
+M.xpath = require("lxpath")
+M.xpath.stringmatch = unicode.utf8.match
+M.xpath.find_file = kpse.find_file
+M.xpath.parse_xml = splib.load_xmlfile
+M.xpath.ignoreNS = true
 
 M.hasharfbuzz, M.harfbuzz = pcall(require, "luaharfbuzz")
 if not M.hasharfbuzz then
@@ -71,14 +67,8 @@ M.env_publisherversion = os.getenv("PUBLISHERVERSION")
 -- expose helpers from submodules
 M.utf8_to_utf16_string_pdf = metadata.utf8_to_utf16_string_pdf
 
-M.newxpath = false
-
-if os.getenv("SP_XMLPARSER") == "lxpath" then
-    M.newxpath = true
-    do_luafile("layout_functions_lxpath.lua")
-else
-    do_luafile("layout_functions.lua")
-end
+M.newxpath = true
+do_luafile("layout_functions_lxpath.lua")
 
 -- so that node.copy_list copies the node properties
 node.set_properties_mode(true)
@@ -849,14 +839,6 @@ M.rolecounter = 0
 ---@return nil
 function M.dothings()
     main.log("info", string.format("Running LuaTeX version %s on %s", luatex_version, os.name))
-    if not M.newxpath then
-        main.log(
-            "warn",
-            "The luxor XML / XPath parser is deprecated and will be removed in a future version",
-            "help",
-            "see https://doc.speedata.de/publisher/en/lxpath/ how to switch to the new parser"
-        )
-    end
     -- First we set some defaults.
     -- A4 paper is 210x297 mm
     local wd_sp = assert(tex.sp("210mm"))
@@ -1212,33 +1194,17 @@ function M.initialize_luatex_and_generate_pdf()
         local r = string.explode(requirements, ",")
         for _, req in ipairs(r) do
             if req == "lxpath" then
-                if not M.newxpath then
-                    main.log(
-                        "error",
-                        "failed to meet requirement",
-                        "requirement",
-                        "lxpath",
-                        "message",
-                        "This layout requires the lxpath XML / XPath parser",
-                        "help",
-                        "see https://doc.speedata.de/publisher/en/lxpath/ how to activate"
-                    )
-                    exit(false)
-                end
+                -- always satisfied, lxpath is the only XML / XPath parser
             elseif req == "luxor" then
-                if M.newxpath then
-                    main.log(
-                        "error",
-                        "failed to meet requirement",
-                        "requirement",
-                        "luxor",
-                        "message",
-                        "This layout requires the luxor XML / XPath parser",
-                        "help",
-                        "see https://doc.speedata.de/publisher/en/xpathfunctions/ how to activate"
-                    )
-                    exit(false)
-                end
+                main.log(
+                    "error",
+                    "failed to meet requirement",
+                    "requirement",
+                    "luxor",
+                    "message",
+                    "The luxor XML / XPath parser has been removed in version 6.0"
+                )
+                exit(false)
             elseif req == "harfbuzz" then
                 -- always satisfied, harfbuzz is the only font loader
             elseif req == "fontforge" then
@@ -1263,30 +1229,6 @@ function M.initialize_luatex_and_generate_pdf()
             end
         end
     end
-    if M.newxpath then
-        local tmp = os.getenv("SP_PREPEND_XML")
-        if tmp and tmp ~= "" then
-            main.log("error", "--prepend-xml is not supported with the new XPath mode. Use xinclude instead.")
-        end
-        tmp = os.getenv("SP_EXTRA_XML")
-        if tmp and tmp ~= "" then
-            main.log("error", "--extra-xml is not supported with the new XPath mode. Use xinclude instead.")
-        end
-    else
-        local tmp = os.getenv("SP_PREPEND_XML")
-        if tmp and tmp ~= "" then
-            for i, v in ipairs(string.explode(tmp, ",")) do
-                table.insert(layoutxml, i, luxor.parse_xml_file(v))
-            end
-        end
-        tmp = os.getenv("SP_EXTRA_XML")
-        if tmp and tmp ~= "" then
-            for _, v in ipairs(string.explode(tmp, ",")) do
-                layoutxml[#layoutxml + 1] = luxor.parse_xml_file(v)
-            end
-        end
-    end
-
     -- We allow the use of a dummy xml file for testing purpose
     local dataxml
     local datafilename = arg[3]

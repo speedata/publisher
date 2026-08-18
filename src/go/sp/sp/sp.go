@@ -80,8 +80,6 @@ var (
 	configfilename string
 	mainlanguage   string
 	extraDir       []string
-	extraxml       []string
-	prependxml     []string
 	starttime      time.Time
 	cfg            *configurator.ConfigData
 	runningProcess []*os.Process
@@ -124,7 +122,6 @@ func init() {
 		"inkscape-command":  "--export-filename",
 		"jardir":            "",
 		"referencefilename": "reference",
-		"xpath":             "lxpath",
 		"hidespinfo":        stringFalse,
 	}
 
@@ -501,16 +498,6 @@ func extradir(arg string) {
 	}
 }
 
-// Add the command line argument to the list of additional XML files for the layout
-func extraXML(arg string) {
-	extraxml = append(extraxml, arg)
-}
-
-// Add the command line argument to the list of additional XML files for the layout
-func prependXML(arg string) {
-	prependxml = append(prependxml, arg)
-}
-
 // Return the full path to the TeX executable. It is called sdluatex(.exe) and
 // can be overridden by the 'luatex' option. As a fallback, luahbtex(.exe) is
 // also accepted. It panics if no TeX binary can be found.
@@ -629,7 +616,11 @@ func runPublisher(cachemethod string) (exitstatus int) {
 		log.Println("The fontforge font loader has been removed in version 6.0, harfbuzz is always used.")
 		exitProgram(1)
 	}
-	os.Setenv("SP_XMLPARSER", getOption("xpath"))
+	if xp := getOption("xpath"); xp != "" && xp != "lxpath" {
+		log.Printf("The value %q for the option 'xpath' is not supported.", xp)
+		log.Println("The luxor XML/XPath parser has been removed in version 6.0, lxpath is always used.")
+		exitProgram(1)
+	}
 
 	layoutoptions["reportmissingglyphs"] = getOption("reportmissingglyphs")
 
@@ -848,7 +839,6 @@ func main() {
 	op.On("--data NAME", "Name of the XML data file. Defaults to 'data.xml'. Use '-' for STDIN (only 1 run possible).", options)
 	op.On("--dummy", "Don't read a data file, use '<data />' as input", options)
 	op.On("-x", "--extra-dir DIR", "Additional directory for file search", extradir)
-	op.On("--extra-xml NAME", "Add this file to the layout file", extraXML)
 	op.On("--filter FILTER", "Run Lua filter before publishing starts", options)
 	op.On("--generate-completion SHELL", "Print shell completion script (bash, zsh or fish) to stdout and exit", func(shell string) {
 		if err := op.GenerateCompletion(shell, "sp", os.Stdout); err != nil {
@@ -870,7 +860,6 @@ func main() {
 	op.On("--outputdir=DIR", "Copy PDF and protocol to this directory", options)
 	op.On("--option=OPTION", "Set a specific option", setOption)
 	op.On("--pdfversion=VERSION", "Set the PDF version. Default is 1.6", options)
-	op.On("--prepend-xml NAME", "Add this file in front of the layout file", prependXML)
 	op.On("--port PORT", "Port to be used for the server mode. Defaults to 5266", options)
 	op.On("--progress", "Show progress information on standard output", options)
 	op.On("--quiet", "Run publisher in silent mode", options)
@@ -887,7 +876,6 @@ func main() {
 	op.On("--verbose", "Print a bit of debugging output", options)
 	op.On("--version", "Show version information", versioninfo)
 	op.On("--wd DIR", "Change working directory", options)
-	op.On("--xpath MODE", "Set the xpath mode (old: 'luxor', new: 'lxpath'). Default is lxpath", options)
 	op.On("--xml", "Output as (pseudo-)XML (for list-fonts)", options)
 
 	op.Command(cmdHelp, "Show usage help")
@@ -1057,20 +1045,10 @@ func main() {
 	}
 	os.Setenv("SP_EXTRA_DIRS", strings.Join(extraDir, string(filepath.ListSeparator)))
 
-	if extraxmloption := getOption("extraxml"); extraxmloption != "" {
-		for _, xmlfile := range strings.Split(extraxmloption, ",") {
-			extraxml = append(extraxml, xmlfile)
-		}
+	if getOption("extraxml") != "" || getOption("prependxml") != "" {
+		log.Println("The options 'extraxml' and 'prependxml' have been removed in version 6.0. Use xinclude instead.")
+		exitProgram(1)
 	}
-
-	if prependxmloption := getOption("prependxml"); prependxmloption != "" {
-		for _, xmlfile := range strings.Split(prependxmloption, ",") {
-			prependxml = append(prependxml, xmlfile)
-		}
-	}
-
-	os.Setenv("SP_EXTRA_XML", strings.Join(extraxml, ","))
-	os.Setenv("SP_PREPEND_XML", strings.Join(prependxml, ","))
 
 	if getOption("ignore-case") == stringTrue {
 		os.Setenv("SP_IGNORECASE", "1")
