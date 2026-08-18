@@ -1319,6 +1319,14 @@ func (c *Command) HasHTMLChildren() bool {
 	return bytes.Contains(c.childelement.Text, []byte(`name="html"`))
 }
 
+// HasMathMLChildren returns true if this command allows MathML elements as children
+func (c *Command) HasMathMLChildren() bool {
+	if c == nil || c.childelement == nil {
+		return false
+	}
+	return bytes.Contains(c.childelement.Text, []byte(`name="mathml"`))
+}
+
 // GetDefineText returns the byte value of a define section in the commands xml
 func (c *Commands) GetDefineText(section string) []byte {
 	if t, ok := c.defines[section]; ok {

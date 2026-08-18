@@ -2517,5 +2517,6 @@ M.drawing = require("publisher.drawing")
 M.fontfamilies = require("publisher.fontfamilies")
 M.dispatch = require("publisher.dispatch")
 M.nodes = require("publisher.nodes")
+M.math = require("publisher.math")
 
 return M

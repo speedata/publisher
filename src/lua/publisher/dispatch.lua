@@ -95,6 +95,7 @@ local dispatch_table = {
     Makeindex = commands.makeindex,
     Margin = commands.margin,
     Mark = commands.mark,
+    Math = commands.math,
     Message = commands.message,
     NewPage = commands.new_page,
     NextFrame = commands.next_frame,

@@ -244,6 +244,29 @@ function M.get_fontinstance(fontfamily, instancename)
     return instance
 end
 
+-- Return a defined (LuaTeX-registered) font instance for a font face name
+-- at an arbitrary size, loading it on demand. The math setup uses this to
+-- get the script and scriptscript sizes of a math font, which are not part
+-- of any font family.
+---@param name string Font face name (as defined via LoadFontfile).
+---@param size number Font size in scaled points.
+---@return integer? instance LuaTeX font instance id, nil on error.
+---@return string? errmsg
+function M.get_fontinstance_by_name_size(name, size)
+    local num, err = M.make_font_instance(name, size)
+    if not num then
+        return nil, err
+    end
+    local pe = preloaded_fonts[num]
+    if pe.loaded == false then
+        local ok = M.define_font(pe)
+        if not ok then
+            return nil, string.format("could not define font %q at size %d", name, size)
+        end
+    end
+    return num
+end
+
 -- At this time we must adjust the contents of the paragraph how we would
 -- like it. For example the (sub/sup)script glyphs still have the width of
 -- the regular characters and need

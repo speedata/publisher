@@ -61,6 +61,7 @@
                            <ref name="e_I"></ref>
                            <ref name="e_Image"></ref>
                            <ref name="e_Loop"></ref>
+                           <ref name="e_Math"></ref>
                            <ref name="e_NoBreak"></ref>
                            <ref name="e_Sub"></ref>
                            <ref name="e_Sup"></ref>
@@ -442,6 +443,7 @@
                      <ref name="e_I"></ref>
                      <ref name="e_Image"></ref>
                      <ref name="e_Loop"></ref>
+                     <ref name="e_Math"></ref>
                      <ref name="e_NoBreak"></ref>
                      <ref name="e_Sub"></ref>
                      <ref name="e_Sup"></ref>
@@ -816,6 +818,9 @@
                      <ref name="e_Mark"></ref>
                   </optional>
                   <optional>
+                     <ref name="e_Math"></ref>
+                  </optional>
+                  <optional>
                      <ref name="e_Message"></ref>
                   </optional>
                   <optional>
@@ -1123,6 +1128,7 @@
                      <ref name="e_I"></ref>
                      <ref name="e_Image"></ref>
                      <ref name="e_Loop"></ref>
+                     <ref name="e_Math"></ref>
                      <ref name="e_NoBreak"></ref>
                      <ref name="e_Sub"></ref>
                      <ref name="e_Sup"></ref>
@@ -1888,6 +1894,7 @@
                      <ref name="e_I"></ref>
                      <ref name="e_Image"></ref>
                      <ref name="e_Loop"></ref>
+                     <ref name="e_Math"></ref>
                      <ref name="e_NoBreak"></ref>
                      <ref name="e_Sub"></ref>
                      <ref name="e_Sup"></ref>
@@ -2040,6 +2047,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Mark"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Math"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Message"></ref>
@@ -2619,6 +2629,7 @@
                      <ref name="e_I"></ref>
                      <ref name="e_Image"></ref>
                      <ref name="e_Loop"></ref>
+                     <ref name="e_Math"></ref>
                      <ref name="e_NoBreak"></ref>
                      <ref name="e_Sub"></ref>
                      <ref name="e_Sup"></ref>
@@ -3277,6 +3288,7 @@
                      <ref name="e_I"></ref>
                      <ref name="e_Image"></ref>
                      <ref name="e_Loop"></ref>
+                     <ref name="e_Math"></ref>
                      <ref name="e_NoBreak"></ref>
                      <ref name="e_Sub"></ref>
                      <ref name="e_Sup"></ref>
@@ -3425,6 +3437,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Mark"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Math"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Message"></ref>
@@ -3635,6 +3650,34 @@
          <empty></empty>
       </element>
    </define>
+   <define name="e_Math">
+      <element name="Math">
+         <a:documentation>Setzt eine mathematische Formel. Die Kindelemente werden als MathML interpretiert. Das MathML-Wurzelelement &lt;math&gt; und der MathML-Namensraum können angegeben werden, sind aber optional; mehrere Kindelemente werden als implizites mrow behandelt. Experimentell, die Implementierung ist in Arbeit.</a:documentation>
+         <interleave>
+            <group>
+               <optional>
+                  <attribute name="display">
+                     <a:documentation>Falls yes, wird die Formel im Display-Stil gesetzt (großzügigere Abstände, zum Beispiel bei Brüchen). Bei no (Standardwert) wird die Formel im Textstil für die Verwendung im Fließtext gesetzt.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>Display-Stil.</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Inline-Stil.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="fontfamily">
+                     <a:documentation>Name der Schriftfamilie (definiert mit DefineFontfamily), deren regulärer Font die OpenType-MATH-Tabelle enthält. Das erste Math-Element muss dieses Attribut setzen, weitere Elemente verwenden den registrierten Mathematik-Font.</a:documentation>
+                     <lsp:references symbol="fontfamily"></lsp:references>
+                  </attribute>
+               </optional>
+               <ref name="mathml"></ref>
+            </group>
+            <ref name="foreign-nodes"></ref>
+         </interleave>
+      </element>
+   </define>
    <define name="e_Message">
       <element name="Message">
          <a:documentation>Gibt eine Textmeldung auf der Konsole und in der Protokolldatei aus.</a:documentation>
@@ -3778,6 +3821,7 @@
                      <ref name="e_I"></ref>
                      <ref name="e_Image"></ref>
                      <ref name="e_Loop"></ref>
+                     <ref name="e_Math"></ref>
                      <ref name="e_NoBreak"></ref>
                      <ref name="e_Sub"></ref>
                      <ref name="e_Sup"></ref>
@@ -4252,6 +4296,9 @@
                   </optional>
                   <optional>
                      <ref name="e_Mark"></ref>
+                  </optional>
+                  <optional>
+                     <ref name="e_Math"></ref>
                   </optional>
                   <optional>
                      <ref name="e_Message"></ref>
@@ -4805,6 +4852,7 @@
                            <ref name="e_I"></ref>
                            <ref name="e_Image"></ref>
                            <ref name="e_Loop"></ref>
+                           <ref name="e_Math"></ref>
                            <ref name="e_NoBreak"></ref>
                            <ref name="e_Sub"></ref>
                            <ref name="e_Sup"></ref>
@@ -6422,6 +6470,7 @@
                      <ref name="e_I"></ref>
                      <ref name="e_Image"></ref>
                      <ref name="e_Loop"></ref>
+                     <ref name="e_Math"></ref>
                      <ref name="e_NoBreak"></ref>
                      <ref name="e_Sub"></ref>
                      <ref name="e_Sup"></ref>
@@ -7798,6 +7847,7 @@
                      <ref name="e_I"></ref>
                      <ref name="e_Image"></ref>
                      <ref name="e_Loop"></ref>
+                     <ref name="e_Math"></ref>
                      <ref name="e_NoBreak"></ref>
                      <ref name="e_Sub"></ref>
                      <ref name="e_Sup"></ref>
@@ -7967,6 +8017,9 @@
                         <ref name="e_Mark"></ref>
                      </optional>
                      <optional>
+                        <ref name="e_Math"></ref>
+                     </optional>
+                     <optional>
                         <ref name="e_Message"></ref>
                      </optional>
                      <optional>
@@ -8107,6 +8160,7 @@
                      <ref name="e_I"></ref>
                      <ref name="e_Image"></ref>
                      <ref name="e_Loop"></ref>
+                     <ref name="e_Math"></ref>
                      <ref name="e_NoBreak"></ref>
                      <ref name="e_Sub"></ref>
                      <ref name="e_Sup"></ref>
@@ -8291,6 +8345,9 @@
                      </optional>
                      <optional>
                         <ref name="e_Mark"></ref>
+                     </optional>
+                     <optional>
+                        <ref name="e_Math"></ref>
                      </optional>
                      <optional>
                         <ref name="e_Message"></ref>
@@ -8497,6 +8554,41 @@
                 </choice>
             </oneOrMore>
         </element>
+    </define>
+	<!-- MathML subset in <Math> ... </Math>. The elements inherit the
+	     layout namespace, so the MathML namespace is not required. -->
+	<define name="mathml">
+        <zeroOrMore>
+            <ref name="mathml-element"/>
+        </zeroOrMore>
+    </define>
+    <define name="mathml-element">
+        <choice>
+            <element name="math"><ref name="mathml"/></element>
+            <element name="mrow"><ref name="mathml"/></element>
+            <element name="msqrt"><ref name="mathml"/></element>
+            <element name="mi"><text/></element>
+            <element name="mn"><text/></element>
+            <element name="mo"><text/></element>
+            <element name="mtext"><text/></element>
+            <element name="mfrac">
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+            </element>
+            <element name="msup">
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+            </element>
+            <element name="msub">
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+            </element>
+            <element name="msubsup">
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+            </element>
+        </choice>
     </define>
 
 	<!-- This pattern allows any element from any namespace -->

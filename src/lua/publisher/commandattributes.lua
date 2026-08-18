@@ -57,6 +57,7 @@ return {
     ["Makeindex"] = {["pagenumber"] = true, ["section"] = true, ["select"] = true, ["sortkey"] = true },
     ["Margin"] = {["left"] = true, ["right"] = true, ["inner"] = true, ["outer"] = true, ["top"] = true, ["bottom"] = true },
     ["Mark"] = {["append"] = true, ["select"] = true, ["shiftup"] = true, ["pdftarget"] = true },
+    ["Math"] = {["display"] = true, ["fontfamily"] = true },
     ["Message"] = {["select"] = true, ["error"] = true, ["errorcode"] = true, ["exit"] = true },
     ["NextFrame"] = {["area"] = true },
     ["NextRow"] = {["area"] = true, ["row"] = true, ["rows"] = true },

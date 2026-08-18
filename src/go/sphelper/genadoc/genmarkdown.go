@@ -100,6 +100,12 @@ func childelemsMarkdown(lang string, cmd *commandsxml.Command) string {
 		}
 		return "HTML elements"
 	}
+	if cmd.HasMathMLChildren() {
+		if lang == "de" {
+			return "MathML-Elemente"
+		}
+		return "MathML elements"
+	}
 
 	children := cmd.Childelements()
 	if len(children) == 0 {

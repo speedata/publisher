@@ -22,6 +22,7 @@
           <xs:element ref="en:I"/>
           <xs:element ref="en:Image"/>
           <xs:element ref="en:Loop"/>
+          <xs:element ref="en:Math"/>
           <xs:element ref="en:NoBreak"/>
           <xs:element ref="en:Sub"/>
           <xs:element ref="en:Sup"/>
@@ -270,6 +271,7 @@
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Math"/>
         <xs:element ref="en:NoBreak"/>
         <xs:element ref="en:Sub"/>
         <xs:element ref="en:Sup"/>
@@ -647,6 +649,7 @@
         <xs:element minOccurs="0" ref="en:LoadFontfile"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
         <xs:element minOccurs="0" ref="en:Mark"/>
+        <xs:element minOccurs="0" ref="en:Math"/>
         <xs:element minOccurs="0" ref="en:Message"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
         <xs:element minOccurs="0" ref="en:NextRow"/>
@@ -880,6 +883,7 @@
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Math"/>
         <xs:element ref="en:NoBreak"/>
         <xs:element ref="en:Sub"/>
         <xs:element ref="en:Sup"/>
@@ -1705,6 +1709,7 @@
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Math"/>
         <xs:element ref="en:NoBreak"/>
         <xs:element ref="en:Sub"/>
         <xs:element ref="en:Sup"/>
@@ -1766,6 +1771,7 @@
         <xs:element ref="en:LoadFontfile"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Mark"/>
+        <xs:element ref="en:Math"/>
         <xs:element ref="en:Message"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
@@ -2549,6 +2555,7 @@
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Math"/>
         <xs:element ref="en:NoBreak"/>
         <xs:element ref="en:Sub"/>
         <xs:element ref="en:Sup"/>
@@ -3259,6 +3266,7 @@
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Math"/>
         <xs:element ref="en:NoBreak"/>
         <xs:element ref="en:Sub"/>
         <xs:element ref="en:Sup"/>
@@ -3315,6 +3323,7 @@
         <xs:element ref="en:LoadFontfile"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Mark"/>
+        <xs:element ref="en:Math"/>
         <xs:element ref="en:Message"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
@@ -3477,6 +3486,41 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
+  <xs:element name="Math">
+    <xs:annotation>
+      <xs:documentation>Typeset a mathematical formula. The child elements are interpreted as MathML. The MathML root element &lt;math&gt; and the MathML namespace may be given, but both are optional; several child elements are treated as an implicit mrow. Experimental, implementation in progress.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:mathml">
+          <xs:attribute name="display">
+            <xs:annotation>
+              <xs:documentation>If yes, the formula is set in display style (more generous spacing, for example in fractions). If no (default), the formula is set in text style for inline use.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="yes">
+                  <xs:annotation>
+                    <xs:documentation>Display style.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="no">
+                  <xs:annotation>
+                    <xs:documentation>Inline style.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="fontfamily">
+            <xs:annotation>
+              <xs:documentation>Name of the font family (defined with DefineFontfamily) whose regular font provides the OpenType MATH table. The first Math element must set this attribute; later elements reuse the registered math font.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="Message">
     <xs:annotation>
       <xs:documentation>Writes a message onto the console and to the protocol file.</xs:documentation>
@@ -3589,6 +3633,7 @@
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Math"/>
         <xs:element ref="en:NoBreak"/>
         <xs:element ref="en:Sub"/>
         <xs:element ref="en:Sup"/>
@@ -4461,6 +4506,7 @@
         <xs:element minOccurs="0" ref="en:LoadFontfile"/>
         <xs:element minOccurs="0" ref="en:Loop"/>
         <xs:element minOccurs="0" ref="en:Mark"/>
+        <xs:element minOccurs="0" ref="en:Math"/>
         <xs:element minOccurs="0" ref="en:Message"/>
         <xs:element minOccurs="0" ref="en:NextFrame"/>
         <xs:element minOccurs="0" ref="en:NextRow"/>
@@ -4647,6 +4693,7 @@
             <xs:element ref="en:I"/>
             <xs:element ref="en:Image"/>
             <xs:element ref="en:Loop"/>
+            <xs:element ref="en:Math"/>
             <xs:element ref="en:NoBreak"/>
             <xs:element ref="en:Sub"/>
             <xs:element ref="en:Sup"/>
@@ -6858,6 +6905,7 @@
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Math"/>
         <xs:element ref="en:NoBreak"/>
         <xs:element ref="en:Sub"/>
         <xs:element ref="en:Sup"/>
@@ -9616,6 +9664,7 @@
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Math"/>
         <xs:element ref="en:NoBreak"/>
         <xs:element ref="en:Sub"/>
         <xs:element ref="en:Sup"/>
@@ -9717,6 +9766,7 @@
         <xs:element ref="en:LoadFontfile"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Mark"/>
+        <xs:element ref="en:Math"/>
         <xs:element ref="en:Message"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
@@ -9782,6 +9832,7 @@
         <xs:element ref="en:I"/>
         <xs:element ref="en:Image"/>
         <xs:element ref="en:Loop"/>
+        <xs:element ref="en:Math"/>
         <xs:element ref="en:NoBreak"/>
         <xs:element ref="en:Sub"/>
         <xs:element ref="en:Sup"/>
@@ -9873,6 +9924,7 @@
         <xs:element ref="en:LoadFontfile"/>
         <xs:element ref="en:Loop"/>
         <xs:element ref="en:Mark"/>
+        <xs:element ref="en:Math"/>
         <xs:element ref="en:Message"/>
         <xs:element ref="en:NextFrame"/>
         <xs:element ref="en:NextRow"/>
@@ -10173,6 +10225,56 @@
           <xs:attributeGroup ref="en:htmlclassidstyle"/>
         </xs:extension>
       </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!--
+    MathML subset in <Math> ... </Math>. The elements inherit the
+    layout namespace, so the MathML namespace is not required.
+  -->
+  <xs:complexType name="mathml">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" ref="en:mathml-element"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="mathml-element" abstract="true"/>
+  <xs:element name="math" substitutionGroup="en:mathml-element" type="en:mathml"/>
+  <xs:element name="mrow" substitutionGroup="en:mathml-element" type="en:mathml"/>
+  <xs:element name="msqrt" substitutionGroup="en:mathml-element" type="en:mathml"/>
+  <xs:element name="mi" substitutionGroup="en:mathml-element" type="xs:string"/>
+  <xs:element name="mn" substitutionGroup="en:mathml-element" type="xs:string"/>
+  <xs:element name="mo" substitutionGroup="en:mathml-element" type="xs:string"/>
+  <xs:element name="mtext" substitutionGroup="en:mathml-element" type="xs:string"/>
+  <xs:element name="mfrac" substitutionGroup="en:mathml-element">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="en:mathml-element"/>
+        <xs:element ref="en:mathml-element"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="msup" substitutionGroup="en:mathml-element">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="en:mathml-element"/>
+        <xs:element ref="en:mathml-element"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="msub" substitutionGroup="en:mathml-element">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="en:mathml-element"/>
+        <xs:element ref="en:mathml-element"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="msubsup" substitutionGroup="en:mathml-element">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="en:mathml-element"/>
+        <xs:element ref="en:mathml-element"/>
+        <xs:element ref="en:mathml-element"/>
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
 </xs:schema>

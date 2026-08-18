@@ -42,6 +42,7 @@
     <optional><cmd name="LoadFontfile"/></optional>
     <optional><cmd name="Loop"/></optional>
     <optional><cmd name="Mark"/></optional>
+    <optional><cmd name="Math"/></optional>
     <optional><cmd name="Message"/></optional>
     <optional><cmd name="NextFrame"/></optional>
     <optional><cmd name="NextRow"/></optional>
@@ -141,6 +142,7 @@
         <cmd name="I"/>
         <cmd name="Image"/>
         <cmd name="Loop"/>
+        <cmd name="Math"/>
         <cmd name="NoBreak"/>
         <cmd name="Sub"/>
         <cmd name="Sup"/>
@@ -912,6 +914,7 @@
       <cmd name="U"/>
       <cmd name="Sub"/>
       <cmd name="Sup"/>
+      <cmd name="Math"/>
       <cmd name="Span"/>
       <cmd name="Br"/>
       <cmd name="NoBreak"/>
@@ -6326,6 +6329,69 @@
     <info xml:lang="de">
       <para>Marker werden für nachfolgende Läufe gespeichert.</para>
     </info>
+    <seealso></seealso>
+  </command>
+  <!--
+      *************************
+      * Math
+      *************************
+  -->
+  <command en="Math" since="5.9.2">
+    <description xml:lang="en">
+      <para>Typeset a mathematical formula. The child elements are interpreted as MathML. The MathML root element <tt>&lt;math&gt;</tt> and the MathML namespace may be given, but both are optional; several child elements are treated as an implicit mrow. Experimental, implementation in progress.</para>
+    </description>
+    <description xml:lang="de">
+      <para>Setzt eine mathematische Formel. Die Kindelemente werden als MathML interpretiert. Das MathML-Wurzelelement <tt>&lt;math&gt;</tt> und der MathML-Namensraum können angegeben werden, sind aber optional; mehrere Kindelemente werden als implizites mrow behandelt. Experimentell, die Implementierung ist in Arbeit.</para>
+    </description>
+    <childelements><reference name="mathml"/></childelements>
+    <attribute en="display" type="boolean" optional="yes">
+      <description xml:lang="en">
+        <para>If <tt>yes</tt>, the formula is set in display style (more generous spacing, for example in fractions). If <tt>no</tt> (default), the formula is set in text style for inline use.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Falls <tt>yes</tt>, wird die Formel im Display-Stil gesetzt (großzügigere Abstände, zum Beispiel bei Brüchen). Bei <tt>no</tt> (Standardwert) wird die Formel im Textstil für die Verwendung im Fließtext gesetzt.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en"><para>Display style.</para></description>
+        <description xml:lang="de"><para>Display-Stil.</para></description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en"><para>Inline style.</para></description>
+        <description xml:lang="de"><para>Inline-Stil.</para></description>
+      </choice>
+    </attribute>
+    <attribute en="fontfamily" type="text" optional="yes">
+      <description xml:lang="en">
+        <para>Name of the font family (defined with <tt>DefineFontfamily</tt>) whose regular font provides the OpenType MATH table. The first <tt>Math</tt> element must set this attribute; later elements reuse the registered math font.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name der Schriftfamilie (definiert mit <tt>DefineFontfamily</tt>), deren regulärer Font die OpenType-MATH-Tabelle enthält. Das erste <tt>Math</tt>-Element muss dieses Attribut setzen, weitere Elemente verwenden den registrierten Mathematik-Font.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
+      <listing><![CDATA[<Paragraph>
+  The Pythagorean theorem:
+  <Math fontfamily="mathfont">
+    <msup><mi>a</mi><mn>2</mn></msup>
+    <mo>+</mo>
+    <msup><mi>b</mi><mn>2</mn></msup>
+    <mo>=</mo>
+    <msup><mi>c</mi><mn>2</mn></msup>
+  </Math>
+</Paragraph>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Paragraph>
+  Der Satz des Pythagoras:
+  <Math fontfamily="mathfont">
+    <msup><mi>a</mi><mn>2</mn></msup>
+    <mo>+</mo>
+    <msup><mi>b</mi><mn>2</mn></msup>
+    <mo>=</mo>
+    <msup><mi>c</mi><mn>2</mn></msup>
+  </Math>
+</Paragraph>]]></listing>
+    </example>
     <seealso></seealso>
   </command>
   <!--

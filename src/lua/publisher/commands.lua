@@ -3419,6 +3419,103 @@ function commands.mark(layoutxml, dataxml)
     end
 end
 
+-- Math
+-- ----
+-- Typeset a MathML formula. The element body holds the MathML tree (root
+-- element <math>); the `display` attribute toggles between inline and
+-- display style. SKELETON — math-font setup is not wired up yet, so this
+-- command currently logs an error and returns nil unless a math font has
+-- been registered programmatically via `publisher.math.set_math_font`.
+---@param layoutxml table
+---@param dataxml table
+---@return any
+function commands.math(layoutxml, dataxml)
+    local display = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "display", "boolean", false)
+    local fontfamilyname = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "fontfamily", "string")
+
+    -- Bootstrap: on first call with a fontfamily attribute, bind the family
+    -- to math family 0. The script and scriptscript sizes are derived from
+    -- the percentages in the font's MathConstants (0 in the font means
+    -- "use the default"). A dedicated layout command should replace this
+    -- eventually so several math fonts can coexist.
+    if fontfamilyname and not publisher.math.font_ready then
+        local famnum = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
+        if famnum then
+            local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[famnum]
+            local instance = publisher.fonts.get_fontinstance(famnum, "normal")
+            if instance then
+                local fnt = font.getfont(instance)
+                local mc = fnt and fnt.MathConstants or {}
+                local script_pct = mc.ScriptPercentScaleDown
+                if not script_pct or script_pct == 0 then
+                    script_pct = 70
+                end
+                local scriptscript_pct = mc.ScriptScriptPercentScaleDown
+                if not scriptscript_pct or scriptscript_pct == 0 then
+                    scriptscript_pct = 50
+                end
+                local fontname = fam_tbl.fontfaceregular
+                local size = fam_tbl.size
+                local script_instance, scriptscript_instance
+                if fontname then
+                    script_instance =
+                        publisher.fonts.get_fontinstance_by_name_size(fontname, math.floor(size * script_pct / 100))
+                    scriptscript_instance = publisher.fonts.get_fontinstance_by_name_size(
+                        fontname,
+                        math.floor(size * scriptscript_pct / 100)
+                    )
+                end
+                publisher.math.set_math_font(
+                    0,
+                    instance,
+                    script_instance or instance,
+                    scriptscript_instance or instance
+                )
+            else
+                main.log("error", "Math: cannot resolve fontfamily to a font instance", "fontfamily", fontfamilyname)
+            end
+        else
+            main.log("error", string.format("Math: fontfamily %q not found", fontfamilyname))
+        end
+    end
+
+    -- The content of <Math> is always MathML, so both the <math> wrapper
+    -- element and the MathML namespace are optional (the walker dispatches
+    -- on local element names only). A single child element is used as the
+    -- root directly, several children are treated as an implicit mrow.
+    local children = {}
+    for i = 1, #layoutxml do
+        if type(layoutxml[i]) == "table" then
+            children[#children + 1] = layoutxml[i]
+        end
+    end
+    local mathml_root
+    if #children == 1 then
+        mathml_root = children[1]
+    elseif #children > 1 then
+        mathml_root = children
+        mathml_root[".__local_name"] = "mrow"
+    end
+    if not mathml_root then
+        main.log("error", "Math: no MathML content found", lineinfo(layoutxml))
+        return nil
+    end
+
+    local hlist = publisher.math.mathml_to_hlist(mathml_root, display)
+    if not hlist then
+        return nil
+    end
+
+    -- Splice into the surrounding paragraph the same way Sub / Sup do, so
+    -- line breaking and baseline alignment go through the regular paragraph
+    -- builder. `display` only selects the math style (more generous
+    -- spacing, e.g. in fractions); positioning the formula on its own line
+    -- is up to the surrounding paragraph.
+    local p = publisher.par:new(nil, "math")
+    p:append({ hlist }, {})
+    return p
+end
+
 -- Message
 -- -------
 -- Write a message to the terminal

@@ -67,11 +67,14 @@ func writeChildElements(commands *commandsXML, enc *xml.Encoder, children []byte
 			case "reference":
 				for _, attr := range v.Attr {
 					if attr.Name.Local == "name" {
-						if attr.Value == "html" {
-							htmlSe := xml.StartElement{Name: xml.Name{Local: "ref"}}
-							htmlSe.Attr = append(htmlSe.Attr, xml.Attr{Name: xml.Name{Local: "name"}, Value: "html"})
-							enc.EncodeToken(htmlSe)
-							enc.EncodeToken(htmlSe.End())
+						if attr.Value == "html" || attr.Value == "mathml" {
+							// These references point to static defines in the
+							// schema (see the literal block at the end of
+							// genRelaxNGSchema), not to a define in commands.xml.
+							se := xml.StartElement{Name: xml.Name{Local: "ref"}}
+							se.Attr = append(se.Attr, xml.Attr{Name: xml.Name{Local: "name"}, Value: attr.Value})
+							enc.EncodeToken(se)
+							enc.EncodeToken(se.End())
 						} else {
 							writeChildElements(commands, enc, commands.getDefine(attr.Value), lang)
 						}
@@ -430,6 +433,41 @@ func genRelaxNGSchema(commands *commandsXML, lang string, allowForeignNodes bool
                 </choice>
             </oneOrMore>
         </element>
+    </define>
+	<!-- MathML subset in <Math> ... </Math>. The elements inherit the
+	     layout namespace, so the MathML namespace is not required. -->
+	<define name="mathml">
+        <zeroOrMore>
+            <ref name="mathml-element"/>
+        </zeroOrMore>
+    </define>
+    <define name="mathml-element">
+        <choice>
+            <element name="math"><ref name="mathml"/></element>
+            <element name="mrow"><ref name="mathml"/></element>
+            <element name="msqrt"><ref name="mathml"/></element>
+            <element name="mi"><text/></element>
+            <element name="mn"><text/></element>
+            <element name="mo"><text/></element>
+            <element name="mtext"><text/></element>
+            <element name="mfrac">
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+            </element>
+            <element name="msup">
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+            </element>
+            <element name="msub">
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+            </element>
+            <element name="msubsup">
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+            </element>
+        </choice>
     </define>
 `)
 	if allowForeignNodes {

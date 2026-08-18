@@ -254,6 +254,13 @@ function M.define_font_hb(name, size, extra_parameter)
 
     f.fallback_fontdefinitions = fallback_fontdefinitions
 
+    -- If the face carries an OpenType MATH table, parse it and populate
+    -- f.MathConstants + per-glyph italic corrections. No-op for regular
+    -- text fonts.
+    if publisher.math and publisher.math.attach_to_font then
+        publisher.math.attach_to_font(f, face, mag)
+    end
+
     return true, f
 end
 
