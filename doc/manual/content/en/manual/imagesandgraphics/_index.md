@@ -170,6 +170,10 @@ If no box is specified, the `cropbox` is used. Possible values for the box speci
 
 The Publisher usually only processes PDF, PNG and JPEG files. In order to use other formats, you have to convert them into one of the three formats. This can be done in advance, but also during the runtime of the Publisher.
 
+{{< callout >}}
+Since version 5.9.2 external converters can also be defined with the `image_handler` Lua callback, see [Lua callbacks]({{< relref "/manual/integration/luacallbacks" >}}). The callback needs none of the `%%input%%`/`%%output%%` placeholders and quoting rules described below and is the recommended way for new projects. The configuration settings described in this section continue to work; a registered callback takes precedence.
+{{< /callout >}}
+
 ```xml
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
@@ -239,6 +243,8 @@ Necessary is of course the configuration how the external converter is called. T
 imagehandler="mermaid:(/usr/bin/mmdc -i %%input%% -o %%output%%.pdf)"
 ```
 
+With the `image_handler` Lua callback ([Lua callbacks]({{< relref "/manual/integration/luacallbacks" >}})) the value of the `imagetype` attribute is available as `job.imagetype`.
+
 The result is a sequence diagram, created by mermaid and converted to PDF.
 
 ![mermaid.png](/img/mermaid.png)
@@ -286,6 +292,10 @@ Depending on the application (print/online viewing), a resolution of 300 dpi or 
 ### Configuration of the Resize Handler
 
 In addition to the regular `imagehandler` entries in the configuration file, there is a `resizehandler` that adjusts the image size to the desired DPI value. If no resize handler is defined, the Publisher uses a built-in library to change the image size.
+
+{{< callout >}}
+Since version 5.9.2 the resizing can also be done with the `resize_handler` Lua callback, which needs no placeholders, see [Lua callbacks]({{< relref "/manual/integration/luacallbacks" >}}). The `resizehandler` setting described below continues to work; a registered callback takes precedence.
+{{< /callout >}}
 
 The resize handler is used internally by the Publisher whenever the image size needs to be reduced according to the `dpi` setting.
 

@@ -32,6 +32,7 @@ key = value
 ```
 
 You can access the base directory of the project with `%(projectdir)s`. This is the directory with the file `publisher.cfg`.
+The variable only exists in the configuration file. In the [Lua callbacks]({{% relref "/manual/integration/luacallbacks" %}}) it is not needed: a file name returned by the `lookup_file` callback is resolved by the regular file search, which includes the project directory.
 
 All entries in the configuration file are optional.
 The configuration files are read in the following order: `/etc/speedata/publisher.cfg`, `~/.publisher.cfg` and in the current directory `publisher.cfg`.
@@ -76,7 +77,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 : Folder for cached images (`href="http://..."` and image processors). Defaults to `$TMPDIR/sp/images`. The directory is created if necessary.
 
 `imagehandler`
-: Assignments of image type to external converters, for example `imagehandler="mermaid:(/usr/bin/mmdc -i %%input%% -o %%output%%.pdf)"`. Multiple entries are separated by semicolons. How this works, the placeholders and further examples are described in the section [External Conversion Tools]({{% relref "/manual/imagesandgraphics#external-conversion-tools" %}}).
+: Assignments of image type to external converters, for example `imagehandler="mermaid:(/usr/bin/mmdc -i %%input%% -o %%output%%.pdf)"`. Multiple entries are separated by semicolons. How this works, the placeholders and further examples are described in the section [External Conversion Tools]({{% relref "/manual/imagesandgraphics#external-conversion-tools" %}}). Since version 5.9.2 the `image_handler` Lua callback is the more flexible alternative, see [Lua callbacks]({{% relref "/manual/integration/luacallbacks" %}}).
 
 `ignore-case` (command line: `--ignore-case`)
 : Ignore case when accessing files (on a case-insensitive file system) in the recursive file lookup.
@@ -112,7 +113,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 : Command that will be run to open the documentation and the PDF file. For MacOS X this should be `open`, for Linux `xdg-open` or `exo-open` (xfce).
 
 `pathrewrite`
-: Comma separated list of entries of the form A=B which replace parts in `file:///media/XYZ` to `file:///path/to/project/myfiles/XYZ`. Useful when you have absolute paths in the data which must be changed during the publishing process.
+: Comma separated list of entries of the form A=B which replace parts in `file:///media/XYZ` to `file:///path/to/project/myfiles/XYZ`. Useful when you have absolute paths in the data which must be changed during the publishing process. Since version 5.9.2 the `lookup_file` Lua callback is the more flexible alternative, see [Lua callbacks]({{% relref "/manual/integration/luacallbacks" %}}).
 
 `pdfversion` (command line: `--pdfversion`)
 : The PDF version that gets written. Default is `1.7`.
@@ -121,7 +122,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 : Should requested but missing glyphs be reported as an error or as a warning? The allowed values are `true`, `false`, or `warning`. `false` disables the reporting.
 
 `resizehandler`
-: Assignment of screen type to external converters that resize images to the desired DPI. For example, `resizehandler="jpegimage:(magick %%input%% -resize %%width%%x%%height%%! %%output%%)"`. See also the section [Configuration of the Resize Handler]({{% relref "/manual/imagesandgraphics#configuration-of-the-resize-handler" %}}). (Since version 5.1.23.)
+: Assignment of screen type to external converters that resize images to the desired DPI. For example, `resizehandler="jpegimage:(magick %%input%% -resize %%width%%x%%height%%! %%output%%)"`. See also the section [Configuration of the Resize Handler]({{% relref "/manual/imagesandgraphics#configuration-of-the-resize-handler" %}}). (Since version 5.1.23.) Since version 5.9.2 the `resize_handler` Lua callback is the more flexible alternative, see [Lua callbacks]({{% relref "/manual/integration/luacallbacks" %}}).
 
 `runs` (command line: `--runs`)
 : Set the number of runs.

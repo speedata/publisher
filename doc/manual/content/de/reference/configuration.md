@@ -34,6 +34,7 @@ key = value
 
 In der Konfigurationsdatei kann mit `%(projectdir)s` auf das Verzeichnis
 zugegriffen werden, in dem die Datei `publisher.cfg` liegt.
+Die Variable gibt es nur in der Konfigurationsdatei. In den [Lua-Callbacks]({{% relref "/manual/integration/luacallbacks" %}}) wird sie nicht gebraucht: ein Dateiname, den der Callback `lookup_file` zurückgibt, wird von der regulären Dateisuche aufgelöst, die das Projektverzeichnis einschließt.
 
 Alle Angaben in dieser Konfigurationsdatei sind optional.
 Alle folgenden Konfigurationsdateien werden in dieser Reihenfolge eingelesen: `/etc/speedata/publisher.cfg`, `~/.publisher.cfg`
@@ -80,7 +81,7 @@ erkannt. Folgende Optionen werden unterstützt:
 : Ordner für zwischengespeicherte Dateien (`file="http(s)://..."` und externe Programme). Voreinstellung: `$TMPDIR/sp/images`. Das Verzeichnis wird bei Bedarf erstellt.
 
 `imagehandler`
-: Zuordnungen von Bildtyp zu externen Konvertern, z.B. `imagehandler="mermaid:(/usr/bin/mmdc -i %%input%% -o %%output%%.pdf)"`. Mehrere Einträge werden mit Semikolon getrennt. Funktionsweise, Platzhalter und weitere Beispiele beschreibt der Abschnitt [Externe Konvertierungstools]({{% relref "/manual/imagesandgraphics#externe-konvertierungstools" %}}).
+: Zuordnungen von Bildtyp zu externen Konvertern, z.B. `imagehandler="mermaid:(/usr/bin/mmdc -i %%input%% -o %%output%%.pdf)"`. Mehrere Einträge werden mit Semikolon getrennt. Funktionsweise, Platzhalter und weitere Beispiele beschreibt der Abschnitt [Externe Konvertierungstools]({{% relref "/manual/imagesandgraphics#externe-konvertierungstools" %}}). Seit Version 5.9.2 ist der Lua-Callback `image_handler` die flexiblere Alternative, siehe [Lua-Callbacks]({{% relref "/manual/integration/luacallbacks" %}}).
 
 `ignore-case` (Kommandozeile: `--ignore-case`)
 : Ignoriere die Groß- und Kleinschreibung für Dateizugriff in der rekursiven Dateiliste.
@@ -116,7 +117,7 @@ erkannt. Folgende Optionen werden unterstützt:
 : Kommando für das automatische Öffnen der Dokumentation bzw. PDF-Datei. Für MacOS X sollte das `open` sein, für Linux `xdg-open` oder `exo-open` (xfce).
 
 `pathrewrite`
-: Kommaseparierte Liste der Form Pfadteil=Pfadteil. Beispiel: `/media/=%(projectdir)s/myfiles/`. Das würde absolute Pfadangaben wie `file:///media/XYZ` in `file:///Pfad/zum/Projekt/myfiles/XYZ` ändern.
+: Kommaseparierte Liste der Form Pfadteil=Pfadteil. Beispiel: `/media/=%(projectdir)s/myfiles/`. Das würde absolute Pfadangaben wie `file:///media/XYZ` in `file:///Pfad/zum/Projekt/myfiles/XYZ` ändern. Seit Version 5.9.2 ist der Lua-Callback `lookup_file` die flexiblere Alternative, siehe [Lua-Callbacks]({{% relref "/manual/integration/luacallbacks" %}}).
 
 `pdfversion` (Kommandozeile: `--pdfversion`)
 : Die Versionsnummer des PDFs, das geschrieben wird. Voreinstellung ist `1.7`.
@@ -125,7 +126,7 @@ erkannt. Folgende Optionen werden unterstützt:
 : Sollen angeforderte aber fehlende Zeichen als Fehler oder als Warnung gemeldet werden? Die erlaubten Werte sind `true`, `false`, und `warning`. `false` schaltet die Ausgabe aus.
 
 `resizehandler`
-: Zuordnung von Bildtyp zu externen Konvertern, die die Bildgröße an die gewünschte DPI-Zahl anpassen. Z.B. `resizehandler="jpegimage:(magick %%input%% -resize %%width%%x%%height%%! %%output%%)"`. Siehe auch den Abschnitt [Konfiguration des Resizehandlers]({{% relref "/manual/imagesandgraphics#konfiguration-des-resizehandlers" %}}). (Seit Version 5.1.23.)
+: Zuordnung von Bildtyp zu externen Konvertern, die die Bildgröße an die gewünschte DPI-Zahl anpassen. Z.B. `resizehandler="jpegimage:(magick %%input%% -resize %%width%%x%%height%%! %%output%%)"`. Siehe auch den Abschnitt [Konfiguration des Resizehandlers]({{% relref "/manual/imagesandgraphics#konfiguration-des-resizehandlers" %}}). (Seit Version 5.1.23.) Seit Version 5.9.2 ist der Lua-Callback `resize_handler` die flexiblere Alternative, siehe [Lua-Callbacks]({{% relref "/manual/integration/luacallbacks" %}}).
 
 `runs` (Kommandozeile: `--runs`)
 : Setzt die Anzahl der Durchläufe fest.

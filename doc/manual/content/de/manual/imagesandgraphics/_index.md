@@ -203,6 +203,10 @@ Der Publisher verarbeitet in der Regel nur PDF, PNG und JPEG Dateien.
 Um andere Formate nutzen zu können, muss man sie in eines der drei Formate umwandeln.
 Das kann im Vorfeld gemacht werden, aber auch zur Laufzeit des Publishers.
 
+{{< callout >}}
+Seit Version 5.9.2 lassen sich externe Konverter auch über den Lua-Callback `image_handler` definieren, siehe [Lua-Callbacks]({{< relref "/manual/integration/luacallbacks" >}}). Der Callback kommt ohne die unten beschriebenen `%%input%%`/`%%output%%`-Platzhalter und Anführungszeichen-Regeln aus und ist der empfohlene Weg für neue Projekte. Die in diesem Abschnitt beschriebenen Konfigurationseinstellungen funktionieren weiterhin; ein registrierter Callback hat Vorrang.
+{{< /callout >}}
+
 ```xml
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
@@ -274,6 +278,8 @@ Notwendig ist natürlich die Konfiguration, wie der externe Konverter aufgerufen
 imagehandler="mermaid:(/usr/bin/mmdc -i %%input%% -o %%output%%.pdf)"
 ```
 
+Beim Lua-Callback `image_handler` ([Lua-Callbacks]({{< relref "/manual/integration/luacallbacks" >}})) steht der Wert des Attributs `imagetype` als `job.imagetype` zur Verfügung.
+
 Das Ergebnis ist ein Sequenzdiagramm, von `mermaid` erzeugt und nach PDF konvertiert.
 
 ![mermaid.png](/img/mermaid.png)
@@ -321,6 +327,10 @@ Je nach Anwendungsfall (Druck/Onlinebetrachtung) kann z.B. eine Auflösung von 3
 ### Konfiguration des Resizehandlers
 
 Zusätzlich zu den normalen `imagehandler`-Einträgen in der Konfigurationsdatei gibt es einen `resizehandler`, der die Bildgröße an die gewünschte DPI-Zahl anpasst. Wird der resizehandler nicht gesetzt, nutzt der Publisher eine eingebaute Bibliothek, die die Bildgröße ändert.
+
+{{< callout >}}
+Seit Version 5.9.2 kann die Größenänderung auch der Lua-Callback `resize_handler` übernehmen, der ohne Platzhalter auskommt, siehe [Lua-Callbacks]({{< relref "/manual/integration/luacallbacks" >}}). Die unten beschriebene Einstellung `resizehandler` funktioniert weiterhin; ein registrierter Callback hat Vorrang.
+{{< /callout >}}
 
 Der resizehandler wird intern vom Publisher genutzt, wenn die Bildgröße anhand der `dpi`-Einstellung reduziert werden soll.
 
