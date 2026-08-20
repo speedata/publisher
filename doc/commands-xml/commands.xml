@@ -6406,15 +6406,26 @@
         <description xml:lang="de"><para>Der speedata Publisher beendet sich ohne die PDF-Datei fertig zu stellen.</para></description>
       </choice>
     </attribute>
-    <example xml:lang="de">
+    <example xml:lang="en">
       <listing><![CDATA[<Message select="concat('Price: ',@price)" error="no"/>]]></listing>
+    </example>
+    <example xml:lang="en">
+      <listing><![CDATA[<Record element="data">
+  <Message>
+    <Value>Attribute price: </Value>
+    <Value select="@price"/>
+  </Message>
+</Record>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<Message select="concat('Preis: ',@Preis)" error="no"/>]]></listing>
     </example>
     <example xml:lang="de">
       <listing><![CDATA[<Record element="Datensatz">
   <Message>
     <Value>Attribut Preis: </Value>
-    <Value select="@Preis"></Value>
-  </Nachricht>
+    <Value select="@Preis"/>
+  </Message>
 </Record>]]></listing>
     </example>
     <seealso/>
