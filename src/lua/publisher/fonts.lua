@@ -79,6 +79,14 @@ function M.load_fontfile(name, filename, parameter_tab)
     return true
 end
 
+-- Reports whether a font face has been registered under `name` via
+-- `load_fontfile`.
+---@param name string Logical font face name.
+---@return boolean
+function M.is_registered(name)
+    return lookup_fontname_filename[name] ~= nil
+end
+
 function table.find(tab, key)
     assert(tab)
     assert(key)

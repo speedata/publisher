@@ -36,7 +36,9 @@ local fonts = require("publisher.fonts")
 ---@field fontfacebolditalic? string
 
 -- Resolves a font name through `publisher.fontaliases` until it points at a
--- concrete font face (or hits a name that is not aliased).
+-- concrete font face (or hits a name that is not aliased). A face registered
+-- via `LoadFontfile` takes precedence over an alias of the same name, so
+-- user-loaded fonts override the built-in HTML aliases (serif, sans, ...).
 ---@param fontname string?
 ---@return string? resolved
 function M.get_fontname(fontname)
@@ -44,12 +46,8 @@ function M.get_fontname(fontname)
         return nil
     end
     local result = fontname
-    while true do
-        if publisher.fontaliases[result] then
-            result = publisher.fontaliases[result]
-        else
-            break
-        end
+    while not fonts.is_registered(result) and publisher.fontaliases[result] do
+        result = publisher.fontaliases[result]
     end
     return result
 end

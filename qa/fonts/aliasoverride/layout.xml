@@ -1,0 +1,25 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+
+  <Options crop="yes"/>
+
+  <!-- A font loaded under a built-in alias name must override the alias
+       (issue #718). "serif-bold" is not overridden and still resolves to
+       the built-in CrimsonPro-Bold. -->
+  <LoadFontfile name="serif" filename="CamingoCode-Regular.ttf"/>
+
+  <DefineFontfamily name="text" fontsize="12" leading="14">
+    <Regular fontface="serif"/>
+    <Bold fontface="serif-bold"/>
+  </DefineFontfamily>
+
+  <Record element="data">
+    <PlaceObject>
+      <Textblock width="8">
+        <Paragraph>
+          <Value>Overridden serif </Value>
+          <B><Value>built-in serif bold</Value></B>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
