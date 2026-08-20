@@ -126,6 +126,23 @@ end
 ---@return any image_info Result from `splib.reloadimage`.
 function M.reload_image(filename, typ, width, height)
     main.log("info", "Reload image", "width", tostring(width), "height", tostring(height), "filename", filename)
+    -- The resize_handler user callback gets the first chance. When it returns
+    -- nil, the resizehandler configuration applies as before.
+    if publisher.usercallbacks.get("resize_handler") then
+        local ext = publisher.get_extension(filename)
+        local job = {
+            input = filename,
+            extension = ext and ext:lower() or "",
+            imagetype = typ,
+            width = width,
+            height = height,
+            outputbase = publisher.usercallbacks.outputbase(filename, "resize", width, height),
+        }
+        local res = publisher.usercallbacks.call("resize_handler", job)
+        if res ~= nil then
+            return publisher.usercallbacks.run_imagejob("resize_handler", res)
+        end
+    end
     local filename_extension = publisher.get_extension(filename)
     local handlername_for_extension
     local opts = publisher.options

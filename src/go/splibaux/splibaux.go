@@ -261,6 +261,41 @@ func convertFile(inputfilename, baseoutputfilename, handler string) (string, err
 	return outfile, err
 }
 
+// RunImageCommand executes an external program (given as an argv slice) which
+// is expected to create the file outfile. When the output file already exists
+// and caching is not disabled, the command is not run again. The output of the
+// command is included in the error log when the command fails.
+func RunImageCommand(argv []string, outfile string) (string, error) {
+	if len(argv) == 0 {
+		return "", fmt.Errorf("empty command for image conversion")
+	}
+	if outfile == "" {
+		return "", fmt.Errorf("no output file name given for image conversion")
+	}
+	if cachemethod := os.Getenv("CACHEMETHOD"); cachemethod != "none" {
+		if _, err := os.Stat(outfile); err == nil {
+			slog.Debug("RunImageCommand: output file already exists", "file", outfile)
+			return outfile, nil
+		}
+	}
+	if dir := filepath.Dir(outfile); dir != "" && dir != "." {
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			return "", err
+		}
+	}
+	cmd := exec.Command(argv[0], argv[1:]...)
+	slog.Debug("Command for image conversion", "cmd", fmt.Sprintf("%#v", cmd.Args))
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		slog.Error("Image conversion command failed", "command", argv[0], "message", err.Error(), "output", string(out))
+		return "", err
+	}
+	if _, err := os.Stat(outfile); err != nil {
+		return "", fmt.Errorf("the image conversion command %q did not create the output file %q", argv[0], outfile)
+	}
+	return outfile, nil
+}
+
 // ConvertContents runs an external program to convert the image into a file
 // format suitable for the speedata Publisher.
 func ConvertContents(contents, handler string) (string, error) {

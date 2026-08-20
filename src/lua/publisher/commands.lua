@@ -2534,11 +2534,18 @@ function commands.image(layoutxml, dataxml)
             if publisher.xml_helpers.elementname(elt) == "Value" and type(contents) == "table" then
                 contents = publisher.xml_helpers.xml_stringvalue(contents)
             end
-            local ih = publisher.imagehandler[imagetype]
-            if not ih then
-                main.log("error", string.format("No imagehandler for image type %s found.", imagetype))
+            -- The image_handler user callback gets the first chance. When it
+            -- returns nil, the imagehandler configuration applies as before.
+            local newfilename, handled = publisher.usercallbacks.convert_contents(contents, imagetype)
+            if handled then
+                filename = newfilename
             else
-                filename = splib.convertcontents(contents, ih)
+                local ih = publisher.imagehandler[imagetype]
+                if not ih then
+                    main.log("error", string.format("No imagehandler for image type %s found.", imagetype))
+                else
+                    filename = splib.convertcontents(contents, ih)
+                end
             end
         end
     end

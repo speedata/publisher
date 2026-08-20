@@ -99,6 +99,9 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 `loglevel` (command line: `--loglevel`)
 : Set the log level to one of `debug`, `info`, `message`, `warn` and `error`. Messages from this level and above are written to the protocol file.
 
+`luafile` (command line: `--luafile`)
+: Load the given Lua file at the beginning of the publishing run. The file can register callbacks for file lookup and image conversion, see the section [Lua callbacks]({{% relref "/manual/integration/luacallbacks" %}}). (Since version 5.9.2.)
+
 `luatex`
 : Path to the LuaTeX binary. Experimental! This is provided for your experiments, not for production use.
 

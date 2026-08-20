@@ -391,6 +391,7 @@ M.css = do_luafile("css.lua"):new()
 ---@field imagehandler string?
 ---@field imagenotfounderror boolean Raise an error when an image cannot be found.
 ---@field interaction boolean Disable interaction if set to false.
+---@field luafile string? File with user defined callbacks (see publisher.usercallbacks).
 ---@field markdownextensions table<string, any>
 ---@field mpcolorwarning boolean
 ---@field namespaces "lax"|"strict" XML namespace handling mode.
@@ -912,6 +913,20 @@ function M.define_image_callback(extensionhandler)
     local function find_image_file(asked_name)
         local file = kpse.find_file(asked_name)
         local ext = M.get_extension(asked_name)
+        -- The image_handler user callback gets the first chance. When it
+        -- returns nil, the imagehandler configuration applies as before.
+        if file and M.usercallbacks.get("image_handler") then
+            local job = {
+                input = file,
+                extension = ext and ext:lower() or "",
+                outputbase = M.usercallbacks.outputbase(file, "convert"),
+            }
+            local res = M.usercallbacks.call("image_handler", job)
+            if res ~= nil then
+                main.log("info", "Convert image (image_handler callback)", "extension", job.extension)
+                return M.usercallbacks.run_imagejob("image_handler", res)
+            end
+        end
         local handlername = extensions[ext]
         local handler = M.imagehandler[handlername or "*"]
         if file and handler then
@@ -1088,6 +1103,16 @@ function M.initialize_luatex_and_generate_pdf()
         elseif k == "pro" then
             M.pro = true
             main.log("info", "speedata Publisher Pro")
+        end
+    end
+
+    -- The user callbacks must be loaded before the layout and data XML files,
+    -- so that the lookup_file callback applies to them as well.
+    for i = 4, #arg do
+        local k, v = arg[i]:match("^(.+)=(.+)$")
+        if k == "luafile" then
+            v = v:gsub('^"(.*)"$', "%1")
+            M.usercallbacks.load(v)
         end
     end
 
@@ -2503,6 +2528,7 @@ file_end("publisher.lua")
 -- actual module (publisher.pages.shipout, publisher.nodes.mknodes, …)
 -- instead of through a flat mirror. The require()s also force the
 -- submodules to load even if no other file pulls them in directly.
+M.usercallbacks = require("publisher.usercallbacks")
 M.utilities = require("publisher.utilities")
 M.xml_helpers = require("publisher.xml_helpers")
 M.images = require("publisher.images")

@@ -103,6 +103,9 @@ erkannt. Folgende Optionen werden unterstützt:
 `loglevel` (Kommandozeile: `--loglevel`)
 : Setze die Logausgabe auf einen Level. Erlaubt ist `debug`, `info`, `message`, `warn` und `error`. Die Ausgaben in dem Level und darüber werden in der Protokolldatei ausgegeben.
 
+`luafile` (Kommandozeile: `--luafile`)
+: Lädt die angegebene Lua-Datei zu Beginn des Publishing-Laufs. Die Datei kann Callbacks für die Dateisuche und die Bildkonvertierung registrieren, siehe den Abschnitt [Lua-Callbacks]({{% relref "/manual/integration/luacallbacks" %}}). (Seit Version 5.9.2.)
+
 `luatex`
 : Pfad zum LuaTeX-Programm. Für Entwicklungszwecke.
 

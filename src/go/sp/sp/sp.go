@@ -656,6 +656,9 @@ func runPublisher(cachemethod string) (exitstatus int) {
 	if imagehandler := getOption("imagehandler"); imagehandler != "" {
 		layoutoptionsSlice = append(layoutoptionsSlice, `imagehandler=`+imagehandler)
 	}
+	if luafile := getOption("luafile"); luafile != "" {
+		layoutoptionsSlice = append(layoutoptionsSlice, `luafile=`+luafile)
+	}
 	if extensionhandler := getOption("extensionhandler"); extensionhandler != "" {
 		layoutoptionsSlice = append(layoutoptionsSlice, `extensionhandler=`+extensionhandler)
 	}
@@ -854,6 +857,7 @@ func main() {
 	op.On("--no-local", "Add local directory to the search path. Default is true", &addLocalPath)
 	op.On("--layout NAME", "Name of the layout file. Defaults to 'layout.xml'", options)
 	op.On("--logfile NAME", "Logfile for server mode. Default 'publisher.protocol'. Use STDOUT for standard output and STDERR for standard error.", options)
+	op.On("--luafile NAME", "Load the Lua file with user defined callbacks before the publishing run", options)
 	op.On("--loglevel LVL", "Set the log level for the console to one of debug, info, warn, error", options)
 	op.On("--mainlanguage NAME", "The document's main language in locale format, for example 'en' or 'en_US'.", &mainlanguage)
 	op.On("--mode NAME", "Set mode. Multiple modes given in a comma separated list.", options)

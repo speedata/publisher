@@ -24,6 +24,7 @@ static const struct luaL_Reg myfuncs[] = {
     {"parse_html_text", sdParseHTMLText},
     {"reloadimage",sdReloadImage},
     {"replace", sdReplace},
+    {"runimagecommand", sdRunImageCommand},
     {"segmentize_text", sdSegmentizeText},
     {"teardown", sdTeardown},
     {"tokenize", sdTokenize},

@@ -110,6 +110,7 @@ extern int sdTeardown(lua_State* L);
 extern int sdError(lua_State* L);
 extern int sdLog(lua_State* L);
 extern int sdReloadImage(lua_State* L);
+extern int sdRunImageCommand(lua_State* L);
 extern int sdGetErrCount(lua_State* L);
 extern int sdGetWarnCount(lua_State* L);
 extern int sdLoadXMLFile(lua_State* L);

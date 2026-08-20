@@ -38,6 +38,13 @@ function splib.convertcontents(contents, handler) end
 ---@return string? converted
 function splib.convertimage(filename, handler) end
 
+---Run an external command (given as separate string arguments) that creates
+---the file outfile. Skips the run when outfile already exists (caching).
+---@param outfile string
+---@param ... string The command and its arguments.
+---@return string? outfile
+function splib.runimagecommand(outfile, ...) end
+
 ---Number of errors logged so far in this run.
 ---@return integer
 function splib.errcount() end

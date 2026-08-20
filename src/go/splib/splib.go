@@ -495,6 +495,41 @@ func sdConvertContents(L *C.lua_State) int {
 	})
 }
 
+//export sdRunImageCommand
+func sdRunImageCommand(L *C.lua_State) int {
+	// arguments are the output file name followed by the command and its
+	// arguments (all strings). Returns the output file name or nothing on
+	// error.
+	return luaEntry(L, func(l *LuaState) int {
+		n := l.getTop()
+		if n < 2 {
+			slog.Error("sdRunImageCommand expects an output file name and a command")
+			return 0
+		}
+		outfile, ok := l.getString(1)
+		if !ok {
+			slog.Error("First argument to sdRunImageCommand must be a string")
+			return 0
+		}
+		argv := make([]string, 0, n-1)
+		for i := 2; i <= n; i++ {
+			arg, ok := l.getString(i)
+			if !ok {
+				slog.Error("All command arguments to sdRunImageCommand must be strings")
+				return 0
+			}
+			argv = append(argv, arg)
+		}
+		ret, err := splibaux.RunImageCommand(argv, outfile)
+		if err != nil {
+			slog.Error("RunImageCommand", "msg", err.Error())
+			return 0
+		}
+		l.pushString(ret)
+		return 1
+	})
+}
+
 //export sdConvertImage
 func sdConvertImage(L *C.lua_State) int {
 	return luaEntry(L, func(l *LuaState) int {
