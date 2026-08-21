@@ -491,7 +491,7 @@
          </optional>
          <optional>
             <attribute name="height">
-               <a:documentation>Height of the barcode.</a:documentation>
+               <a:documentation>Height of the barcode. Since QR codes are square, the smaller value of width and height determines their size.</a:documentation>
             </attribute>
          </optional>
          <optional>

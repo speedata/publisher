@@ -329,7 +329,7 @@
       </xs:attribute>
       <xs:attribute name="height">
         <xs:annotation>
-          <xs:documentation>Höhe des Strichcodes.</xs:documentation>
+          <xs:documentation>Höhe des Strichcodes. Da QR-Codes quadratisch sind, bestimmt der kleinere Wert von Breite und Höhe ihre Größe.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="keepfontsize">

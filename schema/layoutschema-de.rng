@@ -491,7 +491,7 @@
          </optional>
          <optional>
             <attribute name="height">
-               <a:documentation>Höhe des Strichcodes.</a:documentation>
+               <a:documentation>Höhe des Strichcodes. Da QR-Codes quadratisch sind, bestimmt der kleinere Wert von Breite und Höhe ihre Größe.</a:documentation>
             </attribute>
          </optional>
          <optional>

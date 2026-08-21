@@ -582,7 +582,7 @@ local function make_code(size, matrix, pdfcolorstring)
     return v
 end
 
-local function qrcode(width, _height, codeword, eclevel, colorname)
+local function qrcode(width, height, codeword, eclevel, colorname)
     local pdfcolorstring = colors_module.colors[colorname or "black"].pdfstring
     if not barcodes_qrencode then
         barcodes_qrencode = do_luafile("qrencode.lua")
@@ -592,7 +592,13 @@ local function qrcode(width, _height, codeword, eclevel, colorname)
         main.log("error", tab_or_message)
         return nil
     else
-        return make_code(width, tab_or_message, pdfcolorstring)
+        -- QR codes are square, so the edge length is the smaller of
+        -- width and height (width defaults to the available width).
+        local size = width
+        if height and (not size or height < size) then
+            size = height
+        end
+        return make_code(size, tab_or_message, pdfcolorstring)
     end
 end
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en" >
+
+  <Pageformat width="10cm" height="14cm"/>
+
+  <Record element="data">
+    <!-- height as length -->
+    <PlaceObject column="1" row="1">
+      <Barcode select="'http://www.speedata.de'" type="QRCode" height="2cm"/>
+    </PlaceObject>
+    <!-- height in grid cells -->
+    <PlaceObject column="4" row="1">
+      <Barcode select="'http://www.speedata.de'" type="QRCode" height="3"/>
+    </PlaceObject>
+    <!-- both given, height is smaller -->
+    <PlaceObject column="1" row="5">
+      <Barcode select="'http://www.speedata.de'" type="QRCode" width="4cm" height="2cm"/>
+    </PlaceObject>
+    <!-- both given, width is smaller -->
+    <PlaceObject column="4" row="5">
+      <Barcode select="'http://www.speedata.de'" type="QRCode" width="2cm" height="4cm"/>
+    </PlaceObject>
+    <!-- width only, unchanged behavior -->
+    <PlaceObject column="1" row="9">
+      <Barcode select="'http://www.speedata.de'" type="QRCode" width="3"/>
+    </PlaceObject>
+  </Record>
+</Layout>

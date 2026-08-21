@@ -1529,10 +1529,10 @@
     </attribute>
     <attribute en="height" type="numberorlength" optional="yes">
       <description xml:lang="en">
-        <para>Height of the barcode.</para>
+        <para>Height of the barcode. Since QR codes are square, the smaller value of width and height determines their size.</para>
       </description>
       <description xml:lang="de">
-        <para>Höhe des Strichcodes.</para>
+        <para>Höhe des Strichcodes. Da QR-Codes quadratisch sind, bestimmt der kleinere Wert von Breite und Höhe ihre Größe.</para>
       </description>
     </attribute>
     <attribute en="keepfontsize" optional="yes" type="boolean" since="4.1.2">
