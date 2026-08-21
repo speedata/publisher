@@ -1,5 +1,21 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.9">
+    <entry version="5.9.2" date="2026-08-21" sha1="0868d5f5">
+        <en summary="The height attribute now also scales QR codes.">The attribute <tt>height</tt> on <tt>&lt;Barcode&gt;</tt> was ignored for QR codes, the code always filled the available width. Since QR codes are square, the smaller value of <tt>width</tt> and <tt>height</tt> now determines their size (#732).</en>
+        <de summary="Das Attribut height verkleinert jetzt auch QR-Codes.">Das Attribut <tt>height</tt> bei <tt>&lt;Barcode&gt;</tt> wurde bei QR-Codes ignoriert, der Code füllte immer die verfügbare Breite. Da QR-Codes quadratisch sind, bestimmt jetzt der kleinere Wert von <tt>width</tt> und <tt>height</tt> ihre Größe (#732).</de>
+    </entry>
+    <entry version="5.9.2" date="2026-08-20" sha1="a73c2415">
+        <en summary="New setting luafile: Lua callbacks for file lookup and image conversion.">The new configuration setting <tt>luafile</tt> (command line <tt>--luafile</tt>) loads a Lua file at the beginning of the publishing run. The file can register callbacks: <tt>lookup_file</tt> rewrites file names before the file lookup, <tt>image_handler</tt> and <tt>resize_handler</tt> control the conversion of images with external programs. The callbacks are a more flexible replacement for the settings <tt>pathrewrite</tt>, <tt>imagehandler</tt> and <tt>resizehandler</tt>, which continue to work as before (#710).</en>
+        <de summary="Neue Einstellung luafile: Lua-Callbacks für Dateisuche und Bildkonvertierung.">Die neue Konfigurationseinstellung <tt>luafile</tt> (Kommandozeile <tt>--luafile</tt>) lädt zu Beginn des Publishing-Laufs eine Lua-Datei. Darin lassen sich Callbacks registrieren: <tt>lookup_file</tt> schreibt Dateinamen vor der Dateisuche um, <tt>image_handler</tt> und <tt>resize_handler</tt> steuern die Konvertierung von Bildern mit externen Programmen. Die Callbacks sind der flexiblere Ersatz für die Einstellungen <tt>pathrewrite</tt>, <tt>imagehandler</tt> und <tt>resizehandler</tt>, die weiterhin wie bisher funktionieren (#710).</de>
+    </entry>
+    <entry version="5.9.2" date="2026-08-20" sha1="7daaffa5">
+        <en summary="Fonts loaded with LoadFontfile override the built-in fonts serif, sans and monospace.">When a font file is loaded with <tt>&lt;LoadFontfile&gt;</tt> under one of the built-in names <tt>serif</tt>, <tt>sans</tt> or <tt>monospace</tt> (or one of their bold and italic variants), that font is now used in the output. Previously the built-in font was used silently instead, which could also lead to reports about missing glyphs (#718).</en>
+        <de summary="Mit LoadFontfile geladene Schriften haben Vorrang vor den eingebauten Schriften serif, sans und monospace.">Wird eine Schriftdatei mit <tt>&lt;LoadFontfile&gt;</tt> unter einem der eingebauten Namen <tt>serif</tt>, <tt>sans</tt> oder <tt>monospace</tt> (oder einer ihrer Varianten für fett und kursiv) geladen, dann wird diese Schrift jetzt auch in der Ausgabe verwendet. Bisher wurde stattdessen stillschweigend die eingebaute Schrift benutzt, was auch zu Meldungen über fehlende Zeichen führen konnte (#718).</de>
+    </entry>
+    <entry version="5.9.2" date="2026-08-18" sha1="9513512a">
+        <en summary="New experimental Math command for mathematical formulas.">The new command <tt>&lt;Math&gt;</tt> typesets mathematical formulas that are written in MathML notation. Fractions, square roots, superscripts and subscripts are supported, both inline in the running text and in display style. A math font in OpenType format such as Latin Modern Math is required; it is loaded as a font family and selected with the attribute <tt>fontfamily</tt>. The command is experimental and the supported MathML subset will grow in future versions.</en>
+        <de summary="Neues experimentelles Kommando Math für mathematische Formeln.">Das neue Kommando <tt>&lt;Math&gt;</tt> setzt mathematische Formeln, die in MathML-Notation angegeben werden. Unterstützt werden Brüche, Wurzeln sowie Hoch- und Tiefstellungen, sowohl im Fließtext als auch im Display-Stil. Benötigt wird eine Mathematikschrift im OpenType-Format wie Latin Modern Math; sie wird als Schriftfamilie geladen und über das Attribut <tt>fontfamily</tt> ausgewählt. Das Kommando ist experimentell, der unterstützte MathML-Umfang wächst in den nächsten Versionen.</de>
+    </entry>
     <entry version="5.9.1" date="2026-08-18" sha1="48e803bf">
         <en summary="The old XPath parser (luxor) has been removed.">Layouts are always processed with the lxpath parser. The configuration setting <tt>xpath</tt> and <tt>require="luxor"</tt> on <tt>&lt;Layout&gt;</tt> now report an error. The command line options <tt>--extra-xml</tt> and <tt>--prepend-xml</tt> are also gone, use XInclude instead to split the layout into several files.</en>
         <de summary="Der alte XPath-Parser (luxor) wurde entfernt.">Layouts werden immer mit dem lxpath-Parser verarbeitet. Die Konfigurationseinstellung <tt>xpath</tt> und <tt>require="luxor"</tt> bei <tt>&lt;Layout&gt;</tt> führen jetzt zu einer Fehlermeldung. Die Kommandozeilenoptionen <tt>--extra-xml</tt> und <tt>--prepend-xml</tt> sind ebenfalls entfallen, zum Aufteilen des Layouts auf mehrere Dateien dient XInclude.</de>
@@ -9,7 +25,11 @@
         <de summary="Der alte fontforge-Fonthandler wurde entfernt.">Schriften werden immer mit harfbuzz geladen und gesetzt. Die Konfigurationseinstellung <tt>fontloader</tt>, das Attribut <tt>mode</tt> bei <tt>&lt;LoadFontfile&gt;</tt> und <tt>require="fontforge"</tt> bei <tt>&lt;Layout&gt;</tt> führen jetzt zu einer Fehlermeldung. Type-1-Schriften (.pfb) werden nicht mehr unterstützt, bitte nach OpenType konvertieren.</de>
     </entry>
   </chapter>
-  <chapter version="5.8">
+  <chapter version="5.8" date="2026-08-17">
+    <summary>
+      <en>Bug fixes and internal changes, deprecation of the old XPath parser (luxor) and the fontforge font handler, the distribution packages now include the HTML manual for sp doc.</en>
+      <de>Fehlerkorrekturen und interne Änderungen, der alte XPath-Parser (luxor) und der fontforge-Fonthandler sind veraltet, die Distributionspakete enthalten jetzt das HTML-Handbuch für sp doc.</de>
+    </summary>
     <entry version="5.8.0" date="2026-08-17">
         <en>Release version 5.8.0.</en>
         <de>Veröffentliche Version 5.8.0.</de>
@@ -165,7 +185,11 @@
         <de summary="luahbtex als Fallback-Backend-Binary akzeptiert.">Der <tt>sp</tt>-Launcher suchte bisher ausschließlich nach <tt>sdluatex</tt> (in <tt>installdir/bin</tt> und im <tt>PATH</tt>) und brach ab, wenn die Binary fehlte. Jetzt wird zusätzlich ein normales <tt>luahbtex</tt> als Fallback akzeptiert, sodass Installationen ohne das speedata-gepatchte LuaTeX (z. B. Distributions-Pakete) den Publisher trotzdem starten können. Die Konfigurationsoption <tt>luatex</tt> überschreibt nach wie vor beide. Die abschließende Fehlermeldung nennt jetzt beide Binary-Namen.</de>
     </entry>
   </chapter>
-  <chapter version="5.6">
+  <chapter version="5.6" date="2026-06-03">
+    <summary>
+      <en>XPath support for arrays and maps, fn:serialize() and the || operator, new documentation, PDF/UA (accessibility) enhancements, HTML/CSS enhancements, new match attribute on Record, alternating table row colors restart on each page, colspan="*", variable fonts, reduced memory usage, sp filter scripts with Lua 5.4, LuaTeX 1.24.0, new server API v1, progress display, placeholder images.</en>
+      <de>XPath-Unterstützung für Arrays und Maps, fn:serialize() und den Operator ||, neue Dokumentation, Verbesserungen bei PDF/UA (Barrierefreiheit) und HTML/CSS, neues Attribut match bei Record, abwechselnde Zeilenfarben in Tabellen beginnen auf jeder Seite neu, colspan="*", variable Schriften, geringerer Speicherverbrauch, sp filter mit Lua 5.4, LuaTeX 1.24.0, neue Server-API v1, Fortschrittsanzeige, Platzhalterbilder.</de>
+    </summary>
     <entry version="5.6.0" date="2026-06-03">
         <en>Release version 5.6.0.</en>
         <de>Veröffentliche Version 5.6.0.</de>

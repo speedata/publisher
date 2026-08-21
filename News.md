@@ -1,6 +1,6 @@
 # NEWS
 
-This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/changelog/#ch-changelog) in the [manual](https://doc.speedata.de/publisher/en/).
+This file gets updated before a stable release. There is a [detailed changelog](https://doc.speedata.de/publisher/en/manual/changelog/) in the [manual](https://doc.speedata.de/publisher/en/).
 
 
 # Version 6.0
@@ -8,8 +8,9 @@ This file gets updated before a stable release. There is a [detailed changelog](
 Planned for 2026-11
 
 * Math enhancements
-* Removal of the old XPath parser (luxor) and the fontforge font loader. Type 1 fonts (.pfb) and the command line options `--extra-xml`/`--prepend-xml` are no longer supported, use OpenType fonts and XInclude instead.
-* Callbacks for file finding and image handlers (replaces configuration)
+* Removal of the old XPath parser (luxor) and the fontforge font loader.
+* Type 1 fonts (.pfb) and the command line options `--extra-xml`/`--prepend-xml` are no longer supported, use OpenType fonts and XInclude instead.
+* New `luafile` setting: Lua callbacks for file lookup (`lookup_file`) and image conversion (`image_handler`, `resize_handler`), replacing `pathrewrite`, `imagehandler` and `resizehandler` in the long run
 
 # Version 5.8
 
