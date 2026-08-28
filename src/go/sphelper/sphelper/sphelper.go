@@ -29,9 +29,6 @@ var (
 )
 
 func main() {
-	cfg := config.NewConfig(basedir)
-	cfg.IsPro = os.Getenv("SDPRO") == "yes"
-
 	var commandlinebasedir string
 	op := optionparser.NewOptionParser()
 	op.On("--basedir DIR", "Base dir", &commandlinebasedir)
@@ -57,13 +54,19 @@ func main() {
 	}
 
 	if commandlinebasedir != "" {
-		cfg.SetBasedir(commandlinebasedir)
+		basedir = commandlinebasedir
 	}
+	if basedir == "" {
+		log.Fatal("Base directory not set. Use --basedir or compile sphelper with -ldflags \"-X main.basedir=...\"")
+	}
+
+	cfg := config.NewConfig(basedir)
+	cfg.IsPro = os.Getenv("SDPRO") == "yes"
 
 	switch command {
 	case "build":
 		// build the sp executable
-		err := buildsp.BuildGo(cfg, filepath.Join(basedir, "bin"), "", "", "local", "", "")
+		err := buildsp.BuildGo(cfg, filepath.Join(cfg.Basedir(), "bin"), "", "", "local", "", "")
 		if err != nil {
 			os.Exit(-1)
 		}

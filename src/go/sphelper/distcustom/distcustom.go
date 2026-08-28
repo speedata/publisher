@@ -9,6 +9,7 @@ import (
 	"speedatapublisher/sphelper/buildsp"
 	"speedatapublisher/sphelper/config"
 	"speedatapublisher/sphelper/dirstructure"
+	"speedatapublisher/sphelper/fileutils"
 	"strings"
 )
 
@@ -47,11 +48,22 @@ func CreateCustomBuild(cfg *config.Config, arguments []string) error {
 	platform := osArch[0]
 	arch := osArch[1]
 	fmt.Println(platform, arch)
-	luatexdir, err := dirstructure.GetLuaTeXDir(platform, arch, cfg.LuatexVersion)
-	if err != nil {
-		log.Fatal(err)
+	// LUATEX_BIN is optional here: without it no LuaTeX binary is copied
+	// into the destination and sp falls back to a luahbtex provided some
+	// other way (for example a symlink placed next to sp).
+	var luatexdir string
+	if os.Getenv("LUATEX_BIN") != "" {
+		var err error
+		luatexdir, err = dirstructure.GetLuaTeXDir(platform, arch, cfg.LuatexVersion)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
-	err = dirstructure.FillBuildDir(cfg, luatexdir, builddirBin, builddirShare, builddirSw)
+	err := dirstructure.FillBuildDir(cfg, luatexdir, builddirBin, builddirShare, builddirSw)
+	if err != nil {
+		return err
+	}
+	err = os.MkdirAll(filepath.Join(cfg.Builddir, "dylib"), 0755)
 	if err != nil {
 		return err
 	}
@@ -72,16 +84,27 @@ func CreateCustomBuild(cfg *config.Config, arguments []string) error {
 		os.Exit(-1)
 	}
 
+	// os.Rename fails across file system boundaries (EXDEV), for example in
+	// a Nix sandbox where the build directory and the destination are
+	// separate mounts, so fall back to copy and remove.
+	moveFile := func(src, dest string) {
+		if err := os.Rename(src, dest); err != nil {
+			if err = fileutils.CopyFile(src, dest); err != nil {
+				log.Fatal(err)
+			}
+			if err = os.Remove(src); err != nil {
+				log.Fatal(err)
+			}
+		}
+	}
+
 	switch platform {
 	case "windows":
-		os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.dll"), filepath.Join(destdirBin, "libsplib.dll"))
-		os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.dll"), filepath.Join(libBuildDir, "luaglue.dll"))
-	case "linux":
-		os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(libBuildDir, "libsplib.so"))
-		os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(libBuildDir, "luaglue.so"))
-	case "darwin":
-		os.Rename(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(libBuildDir, "libsplib.so"))
-		os.Rename(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(libBuildDir, "luaglue.so"))
+		moveFile(filepath.Join(cfg.Builddir, "dylib", "libsplib.dll"), filepath.Join(destdirBin, "libsplib.dll"))
+		moveFile(filepath.Join(cfg.Builddir, "dylib", "luaglue.dll"), filepath.Join(libBuildDir, "luaglue.dll"))
+	case "linux", "darwin":
+		moveFile(filepath.Join(cfg.Builddir, "dylib", "libsplib.so"), filepath.Join(libBuildDir, "libsplib.so"))
+		moveFile(filepath.Join(cfg.Builddir, "dylib", "luaglue.so"), filepath.Join(libBuildDir, "luaglue.so"))
 	}
 
 	return nil

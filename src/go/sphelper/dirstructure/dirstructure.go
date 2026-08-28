@@ -33,9 +33,14 @@ func GetLuaTeXDir(platform, arch, version string) (string, error) {
 	return luatexdir, err
 }
 
-// FillBuildDir builds the directory structure.  srcbindir contains all files necessary to run LuaTeX
+// FillBuildDir builds the directory structure. luatexbindir contains all files
+// necessary to run LuaTeX; it may be empty, in which case no LuaTeX binary is
+// copied into bindir.
 func FillBuildDir(cfg *config.Config, luatexbindir, bindir, sharedir, swdir string) error {
 	var err error
+	if err = os.MkdirAll(bindir, 0755); err != nil {
+		return err
+	}
 	srcdir := filepath.Join(cfg.Basedir(), "src")
 
 	mapping := []struct {
@@ -56,6 +61,9 @@ func FillBuildDir(cfg *config.Config, luatexbindir, bindir, sharedir, swdir stri
 	}
 
 	for _, v := range mapping {
+		if v.src == "" {
+			continue
+		}
 		reject := append(v.reject, ".DS_Store", ".gitignore")
 		err = fileutils.CpR(v.src, v.dest, reject...)
 		if err != nil {
