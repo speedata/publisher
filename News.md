@@ -8,6 +8,7 @@ This file gets updated before a stable release. There is a [detailed changelog](
 Planned for 2026-11
 
 * Math enhancements
+* More XPath standard functions: `sum()`, `avg()`, `exists()`, `index-of()`, `subsequence()`, `insert-before()`, `remove()`, `compare()`, `deep-equal()`, `zero-or-one()`, `one-or-more()` and `exactly-one()`
 * Removal of the old XPath parser (luxor) and the fontforge font loader.
 * Type 1 fonts (.pfb) and the command line options `--extra-xml`/`--prepend-xml` are no longer supported, use OpenType fonts and XInclude instead.
 * New `luafile` setting: Lua callbacks for file lookup (`lookup_file`) and image conversion (`image_handler`, `resize_handler`), replacing `pathrewrite`, `imagehandler` and `resizehandler` in the long run

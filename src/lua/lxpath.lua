@@ -33,6 +33,7 @@ local M = {
     mapNS = "http://www.w3.org/2005/xpath-functions/map",
     stringmatch = string.match,
     stringfind = string.find,
+    stringgsub = string.gsub,
     findfile = function(fn)
         return fn
     end,
@@ -733,6 +734,22 @@ local function fnAbs(_ctx, seq)
     return { math_abs(n) }, nil
 end
 
+local function fnAvg(_ctx, seq)
+    local firstarg = seq[1]
+    if #firstarg == 0 then
+        return {}, nil
+    end
+    local sum = 0
+    for _, itm in ipairs(firstarg) do
+        local n = number_value({ itm })
+        if n == nil then
+            return { nan }, nil
+        end
+        sum = sum + n
+    end
+    return { sum / #firstarg }, nil
+end
+
 local function fnBoolean(_ctx, seq)
     local firstarg = seq[1]
     local tf, errmsg = boolean_value(firstarg)
@@ -751,6 +768,20 @@ local function fnCeiling(_ctx, seq)
         return { nan }, nil
     end
     return { math_ceil(n) }, nil
+end
+
+local function fnCompare(_ctx, seq)
+    if #seq[1] == 0 or #seq[2] == 0 then
+        return {}, nil
+    end
+    local firstarg = string_value(seq[1])
+    local secondarg = string_value(seq[2])
+    if firstarg < secondarg then
+        return { -1 }, nil
+    elseif firstarg > secondarg then
+        return { 1 }, nil
+    end
+    return { 0 }, nil
 end
 
 local function fnConcat(_ctx, seq)
@@ -794,6 +825,71 @@ local function fnCount(_ctx, seq)
     return { #firstarg }, nil
 end
 
+local deep_equal_item
+
+local function deep_equal_node(a, b)
+    if a[".__local_name"] ~= b[".__local_name"] or a[".__namespace"] ~= b[".__namespace"] then
+        return false
+    end
+    local aattr = a[".__attributes"] or {}
+    local battr = b[".__attributes"] or {}
+    local acount = 0
+    for name, value in pairs(aattr) do
+        if battr[name] ~= value then
+            return false
+        end
+        acount = acount + 1
+    end
+    for _ in pairs(battr) do
+        acount = acount - 1
+    end
+    if acount ~= 0 then
+        return false
+    end
+    if #a ~= #b then
+        return false
+    end
+    for i = 1, #a do
+        if not deep_equal_item(a[i], b[i]) then
+            return false
+        end
+    end
+    return true
+end
+
+function deep_equal_item(a, b)
+    local anode = is_element(a) or is_document(a)
+    local bnode = is_element(b) or is_document(b)
+    if anode ~= bnode then
+        return false
+    end
+    if anode then
+        return deep_equal_node(a, b)
+    end
+    if is_attribute(a) or is_attribute(b) then
+        if not (is_attribute(a) and is_attribute(b)) then
+            return false
+        end
+        return a.name == b.name and a.value == b.value
+    end
+    local ok = docomparefunc("=", a, b)
+    return ok == true
+end
+
+local function fnDeepEqual(_ctx, seq)
+    local firstarg = seq[1]
+    local secondarg = seq[2]
+    if #firstarg ~= #secondarg then
+        return { false }, nil
+    end
+    for i = 1, #firstarg do
+        if not deep_equal_item(firstarg[i], secondarg[i]) then
+            return { false }, nil
+        end
+    end
+    return { true }, nil
+end
+
 local function fnDistinctValues(_ctx, seq)
     local firstarg = seq[1]
     local seen = {}
@@ -826,6 +922,17 @@ local function fnEndsWith(_ctx, seq)
     secondarg = patternescape(secondarg)
     local m = M.stringmatch(firstarg, secondarg .. "$")
     return { m ~= nil }, nil
+end
+
+local function fnExactlyOne(_ctx, seq)
+    if #seq[1] ~= 1 then
+        return nil, "exactly-one: sequence must contain exactly one item"
+    end
+    return seq[1], nil
+end
+
+local function fnExists(_ctx, seq)
+    return { #seq[1] ~= 0 }, nil
 end
 
 local function fnFalse(_ctx, _seq)
@@ -1089,6 +1196,52 @@ local function fnFormatNumber(_ctx, seq)
     end
 end
 
+local function fnIndexOf(_ctx, seq)
+    local search = seq[2][1]
+    if search == nil then
+        return {}, nil
+    end
+    local ret = {}
+    for i, itm in ipairs(seq[1]) do
+        local ok, errmsg = docomparefunc("=", itm, search)
+        if errmsg then
+            return nil, errmsg
+        end
+        if ok then
+            ret[#ret + 1] = i
+        end
+    end
+    return ret, nil
+end
+
+local function fnInsertBefore(_ctx, seq)
+    local target = seq[1]
+    local pos, errmsg = number_value(seq[2])
+    if errmsg then
+        return nil, errmsg
+    end
+    if pos == nil then
+        return nil, "insert-before: position must be a number"
+    end
+    pos = math_floor(pos + 0.5)
+    if pos < 1 then
+        pos = 1
+    elseif pos > #target + 1 then
+        pos = #target + 1
+    end
+    local ret = {}
+    for i = 1, pos - 1 do
+        ret[#ret + 1] = target[i]
+    end
+    for _, itm in ipairs(seq[3]) do
+        ret[#ret + 1] = itm
+    end
+    for i = pos, #target do
+        ret[#ret + 1] = target[i]
+    end
+    return ret, nil
+end
+
 local function fnLast(ctx, _seq)
     return { ctx.size }, nil
 end
@@ -1236,8 +1389,42 @@ local function fnNumber(_ctx, seq)
     return { x }, nil
 end
 
+local function fnOneOrMore(_ctx, seq)
+    if #seq[1] == 0 then
+        return nil, "one-or-more: sequence must contain at least one item"
+    end
+    return seq[1], nil
+end
+
 local function fnPosition(ctx, _seq)
     return { ctx.pos }, nil
+end
+
+local function fnRemove(_ctx, seq)
+    local target = seq[1]
+    local pos, errmsg = number_value(seq[2])
+    if errmsg then
+        return nil, errmsg
+    end
+    local ret = {}
+    for i, itm in ipairs(target) do
+        if i ~= pos then
+            ret[#ret + 1] = itm
+        end
+    end
+    return ret, nil
+end
+
+local function fnReplace(_ctx, seq)
+    local input = string_value(seq[1])
+    local pattern = string_value(seq[2])
+    local replacement = string_value(seq[3])
+    -- translate the replacement string from XPath syntax to Lua gsub syntax:
+    -- '%' must be escaped, group references are written $1..$9 in XPath
+    replacement = string_gsub(replacement, "%%", "%%%%")
+    replacement = string_gsub(replacement, "%$(%d)", "%%%1")
+    local ret = M.stringgsub(input, pattern, replacement)
+    return { ret }, nil
 end
 
 local function fnReverse(_ctx, seq)
@@ -1375,6 +1562,38 @@ local function fnStringToCodepoints(_ctx, seq)
     return ret, nil
 end
 
+local function fnSubsequence(_ctx, seq)
+    local source = seq[1]
+    local start, errmsg = number_value(seq[2])
+    if errmsg then
+        return nil, errmsg
+    end
+    if start == nil then
+        return nil, "subsequence: starting location must be a number"
+    end
+    start = math_floor(start + 0.5)
+    -- one past the last position to return
+    local stop = #source + 1
+    if seq[3] then
+        local len
+        len, errmsg = number_value(seq[3])
+        if errmsg then
+            return nil, errmsg
+        end
+        if len == nil then
+            return nil, "subsequence: length must be a number"
+        end
+        stop = start + math_floor(len + 0.5)
+    end
+    local ret = {}
+    for i = 1, #source do
+        if i >= start and i < stop then
+            ret[#ret + 1] = source[i]
+        end
+    end
+    return ret, nil
+end
+
 local function fnSubstring(_ctx, seq)
     local str = string_value(seq[1])
     local pos, errmsg = number_value(seq[2])
@@ -1423,6 +1642,56 @@ local function fnSubstringBefore(_ctx, seq)
         return { "" }, nil
     end
     return { string_sub(firstarg, 1, a - 1) }
+end
+
+local function fnSum(_ctx, seq)
+    local firstarg = seq[1]
+    if #firstarg == 0 then
+        if seq[2] then
+            return seq[2], nil
+        end
+        return { 0 }, nil
+    end
+    local sum = 0
+    for _, itm in ipairs(firstarg) do
+        local n = number_value({ itm })
+        if n == nil then
+            return { nan }, nil
+        end
+        sum = sum + n
+    end
+    return { sum }, nil
+end
+
+local function fnTokenize(_ctx, seq)
+    local input
+    local pattern
+    if #seq == 1 then
+        input = string_value(seq[1])
+        input = input:gsub("^%s+", ""):gsub("%s+$", "")
+        pattern = "%s+"
+    else
+        input = string_value(seq[1])
+        pattern = string_value(seq[2])
+    end
+    if input == "" then
+        return {}, nil
+    end
+    local ret = {}
+    local pos = 1
+    while true do
+        local s, e = M.stringfind(input, pattern, pos)
+        if s == nil then
+            ret[#ret + 1] = string_sub(input, pos)
+            break
+        end
+        if e < s then
+            return nil, "tokenize: pattern matches zero-length string"
+        end
+        ret[#ret + 1] = string_sub(input, pos, s - 1)
+        pos = e + 1
+    end
+    return ret, nil
 end
 
 -- XPath fn:translate(arg as xs:string?, from as xs:string, to as xs:string) as xs:string
@@ -1570,6 +1839,13 @@ local function serialize_item(itm)
         return string_value(itm)
     end
     return tostring(itm)
+end
+
+local function fnZeroOrOne(_ctx, seq)
+    if #seq[1] > 1 then
+        return nil, "zero-or-one: sequence must not contain more than one item"
+    end
+    return seq[1], nil
 end
 
 local function fnSerialize(ctx, seq)
@@ -1869,19 +2145,25 @@ end
 local funcs = {
     -- function name, namespace, function, minarg, maxarg
     { "abs", M.fnNS, fnAbs, 1, 1 },
+    { "avg", M.fnNS, fnAvg, 1, 1 },
     { "boolean", M.fnNS, fnBoolean, 1, 1 },
     { "ceiling", M.fnNS, fnCeiling, 1, 1 },
     { "codepoints-to-string", M.fnNS, fnCodepointsToString, 1, 1 },
-    -- { "compare",              M.fnNS, fnCompare,             2, 2 },
+    { "compare", M.fnNS, fnCompare, 2, 2 },
     { "concat", M.fnNS, fnConcat, 0, -1 },
     { "contains", M.fnNS, fnContains, 2, 2 },
     { "count", M.fnNS, fnCount, 1, 1 },
+    { "deep-equal", M.fnNS, fnDeepEqual, 2, 2 },
     { "distinct-values", M.fnNS, fnDistinctValues, 1, 1 },
     { "doc", M.fnNS, fnDoc, 1, 1 },
     { "empty", M.fnNS, fnEmpty, 1, 1 },
+    { "exactly-one", M.fnNS, fnExactlyOne, 1, 1 },
+    { "exists", M.fnNS, fnExists, 1, 1 },
     { "false", M.fnNS, fnFalse, 0, 0 },
     { "floor", M.fnNS, fnFloor, 1, 1 },
     { "format-number", M.fnNS, fnFormatNumber, 2, 2 },
+    { "index-of", M.fnNS, fnIndexOf, 2, 2 },
+    { "insert-before", M.fnNS, fnInsertBefore, 3, 3 },
     { "last", M.fnNS, fnLast, 0, 0 },
     { "local-name", M.fnNS, fnLocalName, 0, 1 },
     { "lower-case", M.fnNS, fnLowerCase, 1, 1 },
@@ -1893,7 +2175,10 @@ local funcs = {
     { "normalize-space", M.fnNS, fnNormalizeSpace, 1, 1 },
     { "not", M.fnNS, fnNot, 1, 1 },
     { "number", M.fnNS, fnNumber, 1, 1 },
+    { "one-or-more", M.fnNS, fnOneOrMore, 1, 1 },
     { "position", M.fnNS, fnPosition, 0, 0 },
+    { "remove", M.fnNS, fnRemove, 2, 2 },
+    { "replace", M.fnNS, fnReplace, 3, 4 },
     { "reverse", M.fnNS, fnReverse, 1, 1 },
     { "root", M.fnNS, fnRoot, 0, 1 },
     { "round", M.fnNS, fnRound, 1, 1 },
@@ -1901,6 +2186,7 @@ local funcs = {
     { "serialize", M.fnNS, fnSerialize, 1, 1 },
     { "starts-with", M.fnNS, fnStartsWith, 2, 2 },
     { "ends-with", M.fnNS, fnEndsWith, 2, 2 },
+    { "subsequence", M.fnNS, fnSubsequence, 2, 3 },
     { "substring-after", M.fnNS, fnSubstringAfter, 2, 2 },
     { "substring-before", M.fnNS, fnSubstringBefore, 2, 2 },
     { "string-join", M.fnNS, fnStringJoin, 2, 2 },
@@ -1908,10 +2194,13 @@ local funcs = {
     { "string-to-codepoints", M.fnNS, fnStringToCodepoints, 1, 1 },
     { "string", M.fnNS, fnString, 0, 1 },
     { "substring", M.fnNS, fnSubstring, 2, 3 },
+    { "sum", M.fnNS, fnSum, 1, 2 },
+    { "tokenize", M.fnNS, fnTokenize, 1, 3 },
     { "translate", M.fnNS, fnTranslate, 3, 3 },
     { "true", M.fnNS, fnTrue, 0, 0 },
     { "unparsed-text", M.fnNS, fnUnparsedText, 1, 1 },
     { "upper-case", M.fnNS, fnUpperCase, 1, 1 },
+    { "zero-or-one", M.fnNS, fnZeroOrOne, 1, 1 },
     -- array functions
     { "size", M.arrayNS, fnArraySize, 1, 1 },
     { "get", M.arrayNS, fnArrayGet, 2, 2 },

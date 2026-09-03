@@ -49,6 +49,9 @@ In addition, there are the Publisher-specific [layout functions]({{< relref "lay
 `translate(<input>,<from>,<to>)`
 : Replace all characters in `input` found in `from` with the corresponding character in `to`. Example: `translate('banana','an','uo')` returns `buouou`. If `to` is shorter than `from`, extra characters are deleted.
 
+`compare(<string>,<string>)`
+: Compare two strings: return `-1` if the first string is less than the second, `0` if they are equal and `1` if it is greater. Example: `compare('a','b')` returns `-1`.
+
 `matches(<text>,<regexp>[,<flags>])`
 : True if the text matches the regular expression. Flags: `s`, `i`, `m` (see [XPath spec](https://www.w3.org/TR/xpath-functions-31/#flags)). Example: `matches("banana", "^(.a)+$")` returns true.
 
@@ -97,6 +100,12 @@ In addition, there are the Publisher-specific [layout functions]({{< relref "lay
 `min(<sequence>)`
 : Return the minimum. `min((1.1, 2.2, 3.3))` returns `1.1`.
 
+`sum(<sequence>[,<zero-value>])`
+: Return the sum of the values. `sum((1, 2, 3))` returns `6`. For an empty sequence, `0` is returned, or the second argument if given.
+
+`avg(<sequence>)`
+: Return the average of the values. `avg((1, 2, 3))` returns `2.0`. For an empty sequence, the empty sequence is returned.
+
 
 ## Boolean Functions
 
@@ -115,6 +124,9 @@ In addition, there are the Publisher-specific [layout functions]({{< relref "lay
 `empty(<sequence>)`
 : True if the sequence is empty (e.g. a non-existing attribute or element).
 
+`exists(<sequence>)`
+: True if the sequence is not empty. The opposite of `empty()`.
+
 
 ## Sequences and Nodes
 
@@ -132,6 +144,30 @@ In addition, there are the Publisher-specific [layout functions]({{< relref "lay
 
 `reverse(<sequence>)`
 : Reverse the order of the sequence.
+
+`index-of(<sequence>,<search>)`
+: Return the positions of the items that are equal to the search value. `index-of((10, 20, 30, 20), 20)` returns `(2, 4)`.
+
+`insert-before(<sequence>,<position>,<items>)`
+: Insert the items at the given position. `insert-before(('a', 'b'), 2, 'x')` returns `('a', 'x', 'b')`. Positions outside the sequence insert at the start or at the end.
+
+`remove(<sequence>,<position>)`
+: Remove the item at the given position. `remove(('a', 'b', 'c'), 2)` returns `('a', 'c')`.
+
+`subsequence(<sequence>,<start>[,<length>])`
+: Return the part of the sequence starting at `start` (first item is 1). Without `length`, everything up to the end is returned. `subsequence((1, 2, 3, 4), 2, 2)` returns `(2, 3)`.
+
+`deep-equal(<sequence>,<sequence>)`
+: True if both sequences have the same length and all items are equal. Elements are compared recursively including their attributes and contents.
+
+`zero-or-one(<sequence>)`
+: Return the sequence if it contains at most one item, otherwise raise an error.
+
+`one-or-more(<sequence>)`
+: Return the sequence if it contains at least one item, otherwise raise an error.
+
+`exactly-one(<sequence>)`
+: Return the sequence if it contains exactly one item, otherwise raise an error.
 
 `local-name()`
 : Return the name of the current node (without namespace).

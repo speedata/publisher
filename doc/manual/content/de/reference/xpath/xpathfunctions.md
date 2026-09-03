@@ -49,6 +49,9 @@ Daneben gibt es die Publisher-spezifischen [Layoutfunktionen]({{< relref "layout
 `translate(<Eingabe>,<Von>,<Nach>)`
 : Ersetzt alle Zeichen in `Eingabe`, die in `Von` vorkommen, durch das entsprechende Zeichen in `Nach`. Beispiel: `translate('banana','an','uo')` ergibt `buouou`. Wenn `Nach` kürzer als `Von` ist, werden überzählige Zeichen gelöscht.
 
+`compare(<String>,<String>)`
+: Vergleicht zwei Zeichenketten: ergibt `-1`, wenn die erste Zeichenkette kleiner als die zweite ist, `0`, wenn beide gleich sind, und `1`, wenn sie größer ist. Beispiel: `compare('a','b')` ergibt `-1`.
+
 `matches(<Text>,<Regexp>[,<Flags>])`
 : Prüft, ob der Text auf den regulären Ausdruck passt. Flags: `s`, `i`, `m` (siehe [XPath-Spezifikation](https://www.w3.org/TR/xpath-functions-31/#flags)). Beispiel: `matches("banana", "^(.a)+$")` ergibt wahr.
 
@@ -97,6 +100,12 @@ Daneben gibt es die Publisher-spezifischen [Layoutfunktionen]({{< relref "layout
 `min(<Sequenz>)`
 : Gibt das Minimum zurück. `min((1.1, 2.2, 3.3))` ergibt `1.1`.
 
+`sum(<Sequenz>[,<Nullwert>])`
+: Gibt die Summe der Werte zurück. `sum((1, 2, 3))` ergibt `6`. Bei einer leeren Sequenz wird `0` zurückgegeben, oder das zweite Argument, falls angegeben.
+
+`avg(<Sequenz>)`
+: Gibt den Durchschnitt der Werte zurück. `avg((1, 2, 3))` ergibt `2.0`. Bei einer leeren Sequenz wird die leere Sequenz zurückgegeben.
+
 
 ## Boolesche Funktionen
 
@@ -115,6 +124,9 @@ Daneben gibt es die Publisher-spezifischen [Layoutfunktionen]({{< relref "layout
 `empty(<Sequenz>)`
 : Wahr, wenn die Sequenz leer ist (z.B. ein nicht vorhandenes Attribut oder Element).
 
+`exists(<Sequenz>)`
+: Wahr, wenn die Sequenz nicht leer ist. Das Gegenteil von `empty()`.
+
 
 ## Sequenzen und Knoten
 
@@ -132,6 +144,30 @@ Daneben gibt es die Publisher-spezifischen [Layoutfunktionen]({{< relref "layout
 
 `reverse(<Sequenz>)`
 : Kehrt die Reihenfolge der Sequenz um.
+
+`index-of(<Sequenz>,<Suchwert>)`
+: Gibt die Positionen der Einträge zurück, die gleich dem Suchwert sind. `index-of((10, 20, 30, 20), 20)` ergibt `(2, 4)`.
+
+`insert-before(<Sequenz>,<Position>,<Einträge>)`
+: Fügt die Einträge an der angegebenen Position ein. `insert-before(('a', 'b'), 2, 'x')` ergibt `('a', 'x', 'b')`. Positionen außerhalb der Sequenz fügen am Anfang bzw. am Ende ein.
+
+`remove(<Sequenz>,<Position>)`
+: Entfernt den Eintrag an der angegebenen Position. `remove(('a', 'b', 'c'), 2)` ergibt `('a', 'c')`.
+
+`subsequence(<Sequenz>,<Start>[,<Länge>])`
+: Gibt den Teil der Sequenz ab der Position `Start` zurück (der erste Eintrag ist 1). Ohne `Länge` wird alles bis zum Ende zurückgegeben. `subsequence((1, 2, 3, 4), 2, 2)` ergibt `(2, 3)`.
+
+`deep-equal(<Sequenz>,<Sequenz>)`
+: Wahr, wenn beide Sequenzen gleich lang sind und alle Einträge gleich sind. Elemente werden rekursiv verglichen, einschließlich ihrer Attribute und Inhalte.
+
+`zero-or-one(<Sequenz>)`
+: Gibt die Sequenz zurück, wenn sie höchstens einen Eintrag enthält, sonst wird ein Fehler ausgelöst.
+
+`one-or-more(<Sequenz>)`
+: Gibt die Sequenz zurück, wenn sie mindestens einen Eintrag enthält, sonst wird ein Fehler ausgelöst.
+
+`exactly-one(<Sequenz>)`
+: Gibt die Sequenz zurück, wenn sie genau einen Eintrag enthält, sonst wird ein Fehler ausgelöst.
 
 `local-name()`
 : Gibt den Namen des aktuellen Knotens zurück (ohne Namensraum).
