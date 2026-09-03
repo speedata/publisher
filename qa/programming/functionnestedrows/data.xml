@@ -1,0 +1,11 @@
+<data>
+  <item name="A">
+    <extra>one</extra>
+    <other>ignored</other>
+    <extra>two</extra>
+  </item>
+  <item name="B" />
+  <item name="C">
+    <extra>three</extra>
+  </item>
+</data>

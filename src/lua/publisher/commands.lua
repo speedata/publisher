@@ -1529,11 +1529,19 @@ function commands.func(layoutxml, dataxml)
         for i = 1, #x do
             local thiselt = x[i]
             local eltname = publisher.xml_helpers.elementname(thiselt)
-            if eltname ~= "Param" then
-                res[#res + 1] = thiselt
-            end
             if eltname == "Value" then
-                has_value = true
+                -- A raw contents table comes from a nested function call
+                -- that returned dispatch entries (table rows etc.). Those
+                -- entries are already spliced into x by dispatch, so the
+                -- Value entry is redundant and must not switch this
+                -- function into value mode.
+                local contents = publisher.xml_helpers.element_contents(thiselt)
+                if not (type(contents) == "table" and contents.raw == true) then
+                    res[#res + 1] = thiselt
+                    has_value = true
+                end
+            elseif eltname ~= "Param" then
+                res[#res + 1] = thiselt
             end
         end
         local ret

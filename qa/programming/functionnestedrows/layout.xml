@@ -1,0 +1,46 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en"
+    xmlns:fn="mynamespace">
+    <Pageformat height="8cm" width="8cm" />
+
+    <Record element="data">
+        <PlaceObject>
+            <Table padding="2pt">
+                <Columns>
+                    <Column width="2cm" />
+                    <Column width="4cm" />
+                </Columns>
+                <ForAll select="item">
+                    <Value select="fn:itemrows(.)" />
+                </ForAll>
+            </Table>
+        </PlaceObject>
+    </Record>
+
+    <!-- A function that returns table rows and calls another row
+         returning function inside ForAll/Switch. The rows before and
+         after the nested call must survive. -->
+    <Function name="fn:itemrows">
+        <Param name="item" />
+        <Tr>
+            <Td><Paragraph><Value>Item</Value></Paragraph></Td>
+            <Td><Paragraph><Value select="$item/@name" /></Paragraph></Td>
+        </Tr>
+        <ForAll select="$item/*">
+            <Switch>
+                <Case test="local-name() = 'extra'">
+                    <Value select="fn:extrarow(.)" />
+                </Case>
+            </Switch>
+        </ForAll>
+        <Tablerule rulewidth="1pt" />
+    </Function>
+
+    <Function name="fn:extrarow">
+        <Param name="extra" />
+        <Tr>
+            <Td><Paragraph><Value>Extra</Value></Paragraph></Td>
+            <Td><Paragraph><Value select="$extra" /></Paragraph></Td>
+        </Tr>
+    </Function>
+</Layout>
