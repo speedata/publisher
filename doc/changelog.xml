@@ -1,5 +1,13 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.9">
+    <entry version="5.9.3" date="2026-09-03" sha1="4a9cf2bb">
+        <en summary="New XPath functions for sequences and aggregates.">The XPath parser now supports more standard functions: <tt>sum()</tt>, <tt>avg()</tt>, <tt>exists()</tt>, <tt>index-of()</tt>, <tt>subsequence()</tt>, <tt>insert-before()</tt>, <tt>remove()</tt>, <tt>compare()</tt>, <tt>deep-equal()</tt>, <tt>zero-or-one()</tt>, <tt>one-or-more()</tt> and <tt>exactly-one()</tt>.</en>
+        <de summary="Neue XPath-Funktionen für Sequenzen und Aggregate.">Der XPath-Parser unterstützt jetzt weitere Standardfunktionen: <tt>sum()</tt>, <tt>avg()</tt>, <tt>exists()</tt>, <tt>index-of()</tt>, <tt>subsequence()</tt>, <tt>insert-before()</tt>, <tt>remove()</tt>, <tt>compare()</tt>, <tt>deep-equal()</tt>, <tt>zero-or-one()</tt>, <tt>one-or-more()</tt> und <tt>exactly-one()</tt>.</de>
+    </entry>
+    <entry version="5.9.3" date="2026-09-03" sha1="e9b0ab7d">
+        <en summary="Functions that return table rows can now call other row returning functions.">When a layout function that returned table rows called another row returning function via <tt>&lt;Value&gt;</tt> inside <tt>&lt;ForAll&gt;</tt> or <tt>&lt;Switch&gt;</tt>, all rows of the outer function disappeared from the table as soon as the inner function was called at least once. Now all rows are output.</en>
+        <de summary="Funktionen, die Tabellenzeilen liefern, können jetzt andere Zeilenfunktionen aufrufen.">Rief eine Layoutfunktion, die Tabellenzeilen liefert, innerhalb von <tt>&lt;ForAll&gt;</tt> oder <tt>&lt;Switch&gt;</tt> eine weitere Zeilenfunktion über <tt>&lt;Value&gt;</tt> auf, verschwanden alle Zeilen der äußeren Funktion aus der Tabelle, sobald die innere Funktion mindestens einmal aufgerufen wurde. Jetzt werden alle Zeilen ausgegeben.</de>
+    </entry>
     <entry version="5.9.2" date="2026-08-21" sha1="0868d5f5">
         <en summary="The height attribute now also scales QR codes.">The attribute <tt>height</tt> on <tt>&lt;Barcode&gt;</tt> was ignored for QR codes, the code always filled the available width. Since QR codes are square, the smaller value of <tt>width</tt> and <tt>height</tt> now determines their size (#732).</en>
         <de summary="Das Attribut height verkleinert jetzt auch QR-Codes.">Das Attribut <tt>height</tt> bei <tt>&lt;Barcode&gt;</tt> wurde bei QR-Codes ignoriert, der Code füllte immer die verfügbare Breite. Da QR-Codes quadratisch sind, bestimmt jetzt der kleinere Wert von <tt>width</tt> und <tt>height</tt> ihre Größe (#732).</de>
