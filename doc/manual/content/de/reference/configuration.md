@@ -129,7 +129,7 @@ erkannt. Folgende Optionen werden unterstützt:
 : Zuordnung von Bildtyp zu externen Konvertern, die die Bildgröße an die gewünschte DPI-Zahl anpassen. Z.B. `resizehandler="jpegimage:(magick %%input%% -resize %%width%%x%%height%%! %%output%%)"`. Siehe auch den Abschnitt [Konfiguration des Resizehandlers]({{% relref "/manual/imagesandgraphics#konfiguration-des-resizehandlers" %}}). (Seit Version 5.1.23.) Seit Version 5.9.2 ist der Lua-Callback `resize_handler` die flexiblere Alternative, siehe [Lua-Callbacks]({{% relref "/manual/integration/luacallbacks" %}}).
 
 `runs` (Kommandozeile: `--runs`)
-: Setzt die Anzahl der Durchläufe fest.
+: Setzt die Anzahl der Durchläufe fest. Seit Version 5.9.4 kann die Anzahl auch im Layout mit dem Attribut `runs` bei `<Options>` angegeben werden. Die Kommandozeile hat Vorrang vor dem Layout, das Layout vor der Konfigurationsdatei.
 
 `startpage` (Kommandozeile: `--startpage`)
 : Nummer der ersten Seite.

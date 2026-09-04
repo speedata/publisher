@@ -148,8 +148,11 @@ function splib.replace(text, pattern, replacement) end
 ---@return [0|1, string][]? runs
 function splib.segmentize_text(text, dir) end
 
----Release native resources held by splib (called at shutdown).
-function splib.teardown() end
+---Release native resources held by splib (called at shutdown). If `runs` is
+---given, it is written to the status file as the number of publishing runs
+---requested in the layout file.
+---@param runs? number
+function splib.teardown(runs) end
 
 ---Split `text` at every match of the Go regexp `pattern`, returning the surrounding
 ---segments. The matches themselves are dropped.

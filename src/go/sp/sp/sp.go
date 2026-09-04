@@ -5,6 +5,7 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"encoding/xml"
 	"errors"
 	"fmt"
 	"io"
@@ -593,6 +594,24 @@ func writeFinishedfile(path string) {
 	os.WriteFile(path, []byte("finished\n"), 0600)
 }
 
+// runsFromStatusFile returns the number of publishing runs requested in the
+// layout file (attribute runs on the Options command). The value is written
+// to the status file at the end of each run. 0 means: the layout file does
+// not request a specific number of runs.
+func runsFromStatusFile(jobname string) int {
+	data, err := os.ReadFile(jobname + ".status")
+	if err != nil {
+		return 0
+	}
+	var status struct {
+		Runs int `xml:"Runs"`
+	}
+	if err = xml.Unmarshal(data, &status); err != nil {
+		return 0
+	}
+	return status.Runs
+}
+
 func runPublisher(cachemethod string) (exitstatus int) {
 	if getOption("quiet") != "true" {
 		log.Printf("Run speedata publisher %s", versionWithPro)
@@ -679,6 +698,10 @@ func runPublisher(cachemethod string) (exitstatus int) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	// The command line has the highest priority for the number of runs, a
+	// runs attribute on the Options command in the layout file overrides the
+	// configuration file and the default.
+	runsFromCommandline := options["runs"] != ""
 
 	cmdline = append(cmdline, "--shell-escape", "--interaction", "nonstopmode", fmt.Sprintf("--jobname=%s", jobname))
 	cmdline = append(cmdline, "--ini", fmt.Sprintf("--lua=%s", inifile), "publisher.tex")
@@ -702,6 +725,10 @@ See https://github.com/speedata/publisher/issues/310 for details.
 
 		if run(ep, cmdline, env) < 0 {
 			exitstatus = -1
+		} else if !runsFromCommandline {
+			if layoutruns := runsFromStatusFile(jobname); layoutruns > 0 {
+				runs = layoutruns
+			}
 		}
 
 		if cachemethod != "none" {

@@ -4130,6 +4130,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="runs">
+               <a:documentation>Number of publishing runs. Some layouts need more than one run, for example to get page references or the total number of pages right. The command line option --runs takes precedence over this attribute, this attribute takes precedence over the setting in the configuration file. Since the value is read during the first run, it takes effect from the second run on.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="startpage">
                <a:documentation>Set the number of the first page.</a:documentation>
             </attribute>

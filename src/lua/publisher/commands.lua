@@ -3983,6 +3983,13 @@ function commands.options(layoutxml, dataxml)
         main.log("info", string.format("Set page number to %d", startpage))
     end
 
+    -- The requested number of runs is reported to the sp binary via the
+    -- status file at the end of the run (see splib.teardown()).
+    local runs = tonumber(publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "runs", "number"))
+    if runs then
+        publisher.options.runs = runs
+    end
+
     publisher.options.fontstretch = publisher.attribute_helpers.read_attribute(
         layoutxml,
         dataxml,

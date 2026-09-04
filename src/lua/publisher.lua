@@ -402,6 +402,7 @@ M.css = do_luafile("css.lua"):new()
 ---@field reportmissingglyphs boolean|string
 ---@field resetmarks boolean
 ---@field resizehandler string?
+---@field runs? number Number of runs requested in the layout file.
 ---@field showassignments boolean Show all assignments.
 ---@field showdebug boolean Shows lots of markup.
 ---@field showgrid boolean Show grid.

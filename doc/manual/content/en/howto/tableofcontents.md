@@ -126,7 +126,7 @@ sp --runs 3
 
 Why three? On the first run there is no directory yet, the catalog starts on page 1 and the entries are saved with these page numbers. On the second run the directory is added at the front, all groups move back one page, so the saved page numbers change once more. Only the third run outputs the directory with the final numbers. In the example: 3 pages, then 4 pages with still incorrect directory numbers, then 4 pages correct.
 
-Instead of the command line, the number can also be set in the configuration file (`runs = 3`, see [Configuration]({{< relref "/reference/configuration" >}})).
+Instead of the command line, the number can also be set in the configuration file (`runs = 3`, see [Configuration]({{< relref "/reference/configuration" >}})) or, since version 5.9.4, directly in the layout with `<Options runs="3" />`. This way the layout runs correctly without any extra settings.
 
 ### Complete example
 

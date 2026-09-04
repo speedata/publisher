@@ -4404,6 +4404,11 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="runs">
+        <xs:annotation>
+          <xs:documentation>Number of publishing runs. Some layouts need more than one run, for example to get page references or the total number of pages right. The command line option --runs takes precedence over this attribute, this attribute takes precedence over the setting in the configuration file. Since the value is read during the first run, it takes effect from the second run on.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="startpage">
         <xs:annotation>
           <xs:documentation>Set the number of the first page.</xs:documentation>

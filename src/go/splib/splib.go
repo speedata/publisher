@@ -649,12 +649,18 @@ func sdLoadXMLString(L *C.lua_State) int {
 
 //export sdTeardown
 func sdTeardown(L *C.lua_State) int {
-	_ = L
-	err := teardownLog()
-	if err != nil {
-		fmt.Println("Internal error", err.Error())
-	}
-	return 0
+	return luaEntry(L, func(l *LuaState) int {
+		// Optional first argument: the number of publishing runs requested
+		// in the layout file, reported in the status file for the sp binary.
+		if runs, ok := l.getInt(1); ok && runs > 0 {
+			layoutRuns = runs
+		}
+		err := teardownLog()
+		if err != nil {
+			fmt.Println("Internal error", err.Error())
+		}
+		return 0
+	})
 }
 
 //export sdError

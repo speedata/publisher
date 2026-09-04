@@ -63,7 +63,7 @@ return {
     ["NextRow"] = {["area"] = true, ["row"] = true, ["rows"] = true },
     ["NoBreak"] = {["maxwidth"] = true, ["reduce"] = true, ["text"] = true, ["factor"] = true, ["fontfamily"] = true },
     ["Ol"] = {["fontfamily"] = true },
-    ["Options"] = {["background-color"] = true, ["bleed"] = true, ["bleedmarks"] = true, ["crop"] = true, ["cutmarks"] = true, ["defaultarea"] = true, ["ignoreeol"] = true, ["html"] = true, ["imagenotfound"] = true, ["interaction"] = true, ["mainlanguage"] = true, ["markdown-extensions"] = true, ["mpcolorwarning"] = true, ["namespaces"] = true, ["randomseed"] = true, ["overfull-line"] = true, ["resetmarks"] = true, ["reportmissingglyphs"] = true, ["startpage"] = true, ["fontexpansion"] = true, ["fontstretch"] = true, ["fontshrink"] = true, ["fontstep"] = true, ["tablerulefix"] = true },
+    ["Options"] = {["background-color"] = true, ["bleed"] = true, ["bleedmarks"] = true, ["crop"] = true, ["cutmarks"] = true, ["defaultarea"] = true, ["ignoreeol"] = true, ["html"] = true, ["imagenotfound"] = true, ["interaction"] = true, ["mainlanguage"] = true, ["markdown-extensions"] = true, ["mpcolorwarning"] = true, ["namespaces"] = true, ["randomseed"] = true, ["overfull-line"] = true, ["resetmarks"] = true, ["reportmissingglyphs"] = true, ["runs"] = true, ["startpage"] = true, ["fontexpansion"] = true, ["fontstretch"] = true, ["fontshrink"] = true, ["fontstep"] = true, ["tablerulefix"] = true },
     ["Otherwise"] = { },
     ["Output"] = {["allocate"] = true, ["area"] = true, ["balance"] = true, ["last-padding-bottom-max"] = true, ["row"] = true, ["valign-last"] = true, ["width"] = true },
     ["Overlay"] = { },

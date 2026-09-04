@@ -7069,6 +7069,14 @@
         <description xml:lang="de"><para>Zeige eine Warnung</para></description>
       </choice>
     </attribute>
+    <attribute en="runs" type="number" optional="yes" since="5.9.4">
+      <description xml:lang="en">
+        <para>Number of publishing runs. Some layouts need more than one run, for example to get page references or the total number of pages right. The command line option <tt>--runs</tt> takes precedence over this attribute, this attribute takes precedence over the setting in the configuration file. Since the value is read during the first run, it takes effect from the second run on.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Anzahl der Durchläufe. Manche Layouts benötigen mehr als einen Durchlauf, zum Beispiel damit Seitenverweise oder die Gesamtseitenzahl stimmen. Die Kommandozeilenoption <tt>--runs</tt> hat Vorrang vor diesem Attribut, das Attribut hat Vorrang vor der Einstellung in der Konfigurationsdatei. Da der Wert im ersten Durchlauf gelesen wird, wirkt er ab dem zweiten Durchlauf.</para>
+      </description>
+    </attribute>
     <attribute en="startpage" type="number" optional="yes">
       <description xml:lang="en">
         <para>Set the number of the first page.</para>

@@ -4404,6 +4404,11 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="runs">
+        <xs:annotation>
+          <xs:documentation>Anzahl der Durchläufe. Manche Layouts benötigen mehr als einen Durchlauf, zum Beispiel damit Seitenverweise oder die Gesamtseitenzahl stimmen. Die Kommandozeilenoption --runs hat Vorrang vor diesem Attribut, das Attribut hat Vorrang vor der Einstellung in der Konfigurationsdatei. Da der Wert im ersten Durchlauf gelesen wird, wirkt er ab dem zweiten Durchlauf.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="startpage">
         <xs:annotation>
           <xs:documentation>Gibt den Nummer der ersten Seite an.</xs:documentation>

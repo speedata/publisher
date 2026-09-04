@@ -126,7 +126,7 @@ sp --runs 3
 
 Warum drei? Im ersten Durchlauf gibt es noch kein Verzeichnis, der Katalog beginnt auf Seite 1 und die Einträge werden mit diesen Seitenzahlen gespeichert. Im zweiten Durchlauf kommt das Verzeichnis vorn dazu, alle Gruppen rutschen eine Seite nach hinten, die gespeicherten Seitenzahlen ändern sich also noch einmal. Erst der dritte Durchlauf gibt das Verzeichnis mit den endgültigen Zahlen aus. Im Beispiel: 3 Seiten, dann 4 Seiten mit noch falschen Verzeichniszahlen, dann 4 Seiten korrekt.
 
-Statt auf der Kommandozeile lässt sich die Zahl auch in der Konfigurationsdatei festlegen (`runs = 3`, siehe [Konfiguration]({{< relref "/reference/configuration" >}})).
+Statt auf der Kommandozeile lässt sich die Zahl auch in der Konfigurationsdatei festlegen (`runs = 3`, siehe [Konfiguration]({{< relref "/reference/configuration" >}})) oder seit Version 5.9.4 direkt im Layout mit `<Options runs="3" />`. Damit läuft das Layout ohne zusätzliche Einstellungen korrekt durch.
 
 ### Vollständiges Beispiel
 

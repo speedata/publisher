@@ -28,6 +28,7 @@ var (
 	statusWriter       io.Writer
 	errCount           = 0
 	warnCount          = 0
+	layoutRuns         = 0
 	loglevel           slog.LevelVar
 	repl               = strings.NewReplacer(" ", "-") // for XML attribute names
 	logStartElement    xml.StartElement
@@ -279,6 +280,26 @@ func teardownLog() error {
 	}
 	if err = statusEncoder.EncodeToken(xml.CharData([]byte("\n"))); err != nil {
 		return err
+	}
+	// The number of publishing runs requested in the layout file, if any. The
+	// sp binary reads this after each run to extend the number of runs.
+	if layoutRuns > 0 {
+		runsElt := xml.StartElement{Name: xml.Name{Local: "Runs"}}
+		if err = statusEncoder.EncodeToken(xml.CharData([]byte("  "))); err != nil {
+			return err
+		}
+		if err = statusEncoder.EncodeToken(runsElt); err != nil {
+			return err
+		}
+		if err = statusEncoder.EncodeToken(xml.CharData(fmt.Sprintf("%d", layoutRuns))); err != nil {
+			return err
+		}
+		if err = statusEncoder.EncodeToken(runsElt.End()); err != nil {
+			return err
+		}
+		if err = statusEncoder.EncodeToken(xml.CharData([]byte("\n"))); err != nil {
+			return err
+		}
 	}
 	durationElt := xml.StartElement{Name: xml.Name{Local: "DurationSeconds"}}
 	if err = statusEncoder.EncodeToken(xml.CharData([]byte("  "))); err != nil {

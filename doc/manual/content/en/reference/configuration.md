@@ -125,7 +125,7 @@ The format of the file is important, otherwise it won’t be recognized. The fol
 : Assignment of screen type to external converters that resize images to the desired DPI. For example, `resizehandler="jpegimage:(magick %%input%% -resize %%width%%x%%height%%! %%output%%)"`. See also the section [Configuration of the Resize Handler]({{% relref "/manual/imagesandgraphics#configuration-of-the-resize-handler" %}}). (Since version 5.1.23.) Since version 5.9.2 the `resize_handler` Lua callback is the more flexible alternative, see [Lua callbacks]({{% relref "/manual/integration/luacallbacks" %}}).
 
 `runs` (command line: `--runs`)
-: Set the number of runs.
+: Set the number of runs. Since version 5.9.4 the number can also be set in the layout with the attribute `runs` on `<Options>`. The command line takes precedence over the layout, the layout over the configuration file.
 
 `startpage` (command line: `--startpage`)
 : Number of the first page.

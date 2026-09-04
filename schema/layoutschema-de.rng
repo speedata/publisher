@@ -4130,6 +4130,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="runs">
+               <a:documentation>Anzahl der Durchläufe. Manche Layouts benötigen mehr als einen Durchlauf, zum Beispiel damit Seitenverweise oder die Gesamtseitenzahl stimmen. Die Kommandozeilenoption --runs hat Vorrang vor diesem Attribut, das Attribut hat Vorrang vor der Einstellung in der Konfigurationsdatei. Da der Wert im ersten Durchlauf gelesen wird, wirkt er ab dem zweiten Durchlauf.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="startpage">
                <a:documentation>Gibt den Nummer der ersten Seite an.</a:documentation>
             </attribute>

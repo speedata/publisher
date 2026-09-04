@@ -251,7 +251,9 @@ function exit(graceful)
     end
     status.setexitcode(publisher.errorcode)
 
-    splib.teardown()
+    -- The layout file can request a number of publishing runs (Options
+    -- runs="..."). Report it in the status file for the sp binary.
+    splib.teardown(publisher.options and publisher.options.runs)
     if not graceful then
         stop_run_cb()
         if publisher.errorcode ~= 0 then
