@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.9">
+    <entry version="5.9.4" date="2026-09-04" sha1="0ce33c44">
+        <en summary="The number of publishing runs can now be set in the layout file.">The new attribute <tt>runs</tt> on <tt>&lt;Options&gt;</tt> sets the number of publishing runs. This way a layout that needs more than one run, for example for page references or the total number of pages, works without extra settings. The command line option <tt>--runs</tt> takes precedence over the attribute, the attribute takes precedence over the configuration file.</en>
+        <de summary="Die Anzahl der Durchläufe kann jetzt in der Layoutdatei angegeben werden.">Das neue Attribut <tt>runs</tt> bei <tt>&lt;Options&gt;</tt> legt die Anzahl der Durchläufe fest. Damit funktioniert ein Layout, das mehrere Durchläufe benötigt, zum Beispiel für Seitenverweise oder die Gesamtseitenzahl, ohne zusätzliche Einstellungen. Die Kommandozeilenoption <tt>--runs</tt> hat Vorrang vor dem Attribut, das Attribut hat Vorrang vor der Konfigurationsdatei.</de>
+    </entry>
     <entry version="5.9.3" date="2026-09-03" sha1="4a9cf2bb">
         <en summary="New XPath functions for sequences and aggregates.">The XPath parser now supports more standard functions: <tt>sum()</tt>, <tt>avg()</tt>, <tt>exists()</tt>, <tt>index-of()</tt>, <tt>subsequence()</tt>, <tt>insert-before()</tt>, <tt>remove()</tt>, <tt>compare()</tt>, <tt>deep-equal()</tt>, <tt>zero-or-one()</tt>, <tt>one-or-more()</tt> and <tt>exactly-one()</tt>.</en>
         <de summary="Neue XPath-Funktionen für Sequenzen und Aggregate.">Der XPath-Parser unterstützt jetzt weitere Standardfunktionen: <tt>sum()</tt>, <tt>avg()</tt>, <tt>exists()</tt>, <tt>index-of()</tt>, <tt>subsequence()</tt>, <tt>insert-before()</tt>, <tt>remove()</tt>, <tt>compare()</tt>, <tt>deep-equal()</tt>, <tt>zero-or-one()</tt>, <tt>one-or-more()</tt> und <tt>exactly-one()</tt>.</de>
