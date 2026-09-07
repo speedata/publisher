@@ -1638,7 +1638,7 @@ function M.initialize_luatex_and_generate_pdf()
     --
     -- Creator set:
     -- Creator:         CREATOR
-    -- Producer:        speedata Publisher 4.19.2 using LuaTeX
+    -- Producer:        speedata Publisher 4.19.2
 
     -- suppressinfo:
     -- Creator:         speedata Publisher
@@ -1646,7 +1646,7 @@ function M.initialize_luatex_and_generate_pdf()
 
     -- suppressinfo / Creator set:
     -- Creator:         CREATOR
-    -- Producer:        speedata Publisher using LuaTeX
+    -- Producer:        speedata Publisher
     local infos = {
         string.format(
             "/Creator %s /Producer %s",

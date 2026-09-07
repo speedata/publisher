@@ -66,7 +66,7 @@ function M.getcreator(opts)
     elseif sp_suppressinfo then
         return "speedata Publisher"
     else
-        return string.format("speedata Publisher %s using LuaTeX", publisher.env_publisherversion)
+        return string.format("speedata Publisher %s", publisher.env_publisherversion)
     end
 end
 
@@ -79,9 +79,9 @@ function M.getproducer(opts)
     if opts and opts.documentproducer and opts.documentproducer ~= "" then
         return opts.documentproducer
     elseif opts and opts.documentcreator and opts.documentcreator ~= "" and sp_suppressinfo then
-        return string.format("speedata Publisher using LuaTeX")
+        return string.format("speedata Publisher")
     elseif opts and opts.documentcreator and opts.documentcreator ~= "" then
-        return string.format("speedata Publisher %s using LuaTeX", publisher.env_publisherversion)
+        return string.format("speedata Publisher %s", publisher.env_publisherversion)
     elseif sp_suppressinfo then
         return "LuaTeX"
     else
