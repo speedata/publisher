@@ -1226,19 +1226,8 @@
       <element name="Compatibility">
          <a:documentation>Setze Kompatibilität für ältere Layoutregeln</a:documentation>
          <optional>
-            <attribute name="movecursoronplaceobject">
-               <a:documentation>Wechselt das Verhalten bei dem Objekte (platziert mit PlaceObject) am rechten Rand den Cursor in Spalte »Anzahl Spalten + 1« setzt.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>Neues Verhalten (Voreinstellung): setzt den Cursor in Spalte 1 wenn ein Objekt an den rechten Rand stößt.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Altes Verhalten: setzt den Cursor auf die Spalte 1 hinter den rechten Rand des platzierten Objekts.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="spacefromfont">
-               <a:documentation>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird. Ein explizites Attribut space bei LoadFontfile hat für diese Schrift Vorrang.</a:documentation>
+               <a:documentation>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird. Ein explizites Attribut space bei LoadFontfile hat für diese Schrift Vorrang. Diese Einstellung übersteuert das Attribut defaults bei Layout, zu dessen Verhaltensstand 6.0 dieses Verhalten gehört.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>Neues Verhalten: der Wortzwischenraum erhält die Breite, die der Schriftgestalter vorgesehen hat. Er darf um die Hälfte dieser Breite gedehnt und um ein Drittel gestaucht werden.</a:documentation>
@@ -3177,6 +3166,11 @@
                <optional>
                   <attribute name="require">
                      <a:documentation>Kommaseparierte Liste mit erforderlichen Features. Die Features lxpath und harfbuzz werden aus Kompatibilitätsgründen akzeptiert und haben keine Wirkung, sie sind immer aktiv. Die Features luxor und fontforge wurden mit Version 6.0 entfernt und führen zu einer Fehlermeldung.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="defaults">
+                     <a:documentation>Wählt den Verhaltensstand der angegebenen Publisher-Version aus, im Format major.minor (zum Beispiel 6.0) oder mit dem Schlüsselwort latest für die aktuelle Version. Verhaltensänderungen, die erst in einer späteren Version zum Standard werden, lassen sich so schon vorher einschalten, zum Beispiel der Wortzwischenraum aus der Schriftdatei (Standard ab Version 6.0). Einzeleinstellungen wie die Attribute bei Compatibility haben Vorrang. Es zählt nur das Wurzelelement der Haupt-Layoutdatei. Ist die angeforderte Version neuer als der Publisher, wird eine Warnung ausgegeben.</a:documentation>
                   </attribute>
                </optional>
                <oneOrMore>

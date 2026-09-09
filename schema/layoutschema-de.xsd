@@ -1000,28 +1000,9 @@
       <xs:documentation>Setze Kompatibilität für ältere Layoutregeln</xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:attribute name="movecursoronplaceobject">
-        <xs:annotation>
-          <xs:documentation>Wechselt das Verhalten bei dem Objekte (platziert mit PlaceObject) am rechten Rand den Cursor in Spalte »Anzahl Spalten + 1« setzt.</xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="yes">
-              <xs:annotation>
-                <xs:documentation>Neues Verhalten (Voreinstellung): setzt den Cursor in Spalte 1 wenn ein Objekt an den rechten Rand stößt.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="no">
-              <xs:annotation>
-                <xs:documentation>Altes Verhalten: setzt den Cursor auf die Spalte 1 hinter den rechten Rand des platzierten Objekts.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
       <xs:attribute name="spacefromfont">
         <xs:annotation>
-          <xs:documentation>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird. Ein explizites Attribut space bei LoadFontfile hat für diese Schrift Vorrang.</xs:documentation>
+          <xs:documentation>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird. Ein explizites Attribut space bei LoadFontfile hat für diese Schrift Vorrang. Diese Einstellung übersteuert das Attribut defaults bei Layout, zu dessen Verhaltensstand 6.0 dieses Verhalten gehört.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -3262,6 +3243,11 @@
       <xs:attribute name="require">
         <xs:annotation>
           <xs:documentation>Kommaseparierte Liste mit erforderlichen Features. Die Features lxpath und harfbuzz werden aus Kompatibilitätsgründen akzeptiert und haben keine Wirkung, sie sind immer aktiv. Die Features luxor und fontforge wurden mit Version 6.0 entfernt und führen zu einer Fehlermeldung.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="defaults">
+        <xs:annotation>
+          <xs:documentation>Wählt den Verhaltensstand der angegebenen Publisher-Version aus, im Format major.minor (zum Beispiel 6.0) oder mit dem Schlüsselwort latest für die aktuelle Version. Verhaltensänderungen, die erst in einer späteren Version zum Standard werden, lassen sich so schon vorher einschalten, zum Beispiel der Wortzwischenraum aus der Schriftdatei (Standard ab Version 6.0). Einzeleinstellungen wie die Attribute bei Compatibility haben Vorrang. Es zählt nur das Wurzelelement der Haupt-Layoutdatei. Ist die angeforderte Version neuer als der Publisher, wird eine Warnung ausgegeben.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>

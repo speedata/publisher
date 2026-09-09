@@ -518,7 +518,7 @@ function M.allocate_cells(self, options)
     if not keepposition then
         local col = math.ceil(x + wd)
         -- Only move the cursor if the current column is past the right edge of the paper
-        if col > self:number_of_columns(areaname) and publisher.compatibility.movecursoronrightedge then
+        if col > self:number_of_columns(areaname) then
             col = 1
             local c = math.ceil(y + 1 + ht - 1)
             self:set_current_row(c, areaname, "allocate_cells")

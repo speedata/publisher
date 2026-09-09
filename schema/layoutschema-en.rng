@@ -1226,19 +1226,8 @@
       <element name="Compatibility">
          <a:documentation>Set compatibility for older layouts</a:documentation>
          <optional>
-            <attribute name="movecursoronplaceobject">
-               <a:documentation>Switch the behavior where objects at the right page margin used in PlaceObject puts the cursor in #columns + 1.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>New behavior (default): set cursor in column 1 when an object goes to the right margin.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Old behavior: set the cursor to the column + 1 past the right edge of the placed object.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
-         <optional>
             <attribute name="spacefromfont">
-               <a:documentation>Take the width of the interword space from the font itself. An explicit space attribute at LoadFontfile takes precedence for that font.</a:documentation>
+               <a:documentation>Take the width of the interword space from the font itself. An explicit space attribute at LoadFontfile takes precedence for that font. This setting overrides the defaults attribute at Layout, where this behavior is part of version 6.0.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>New behavior: the interword space gets the width that the font designer intended. It can stretch by half and shrink by a third of that width.</a:documentation>
@@ -3177,6 +3166,11 @@
                <optional>
                   <attribute name="require">
                      <a:documentation>A comma separated list of required default features. The features lxpath and harfbuzz are accepted for compatibility and have no effect, they are always active. The features luxor and fontforge have been removed in version 6.0 and raise an error.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="defaults">
+                     <a:documentation>Selects the behavior defaults of the given publisher version, in the format major.minor (for example 6.0) or the keyword latest for the current version. Behavior changes that become the standard in a later version can be switched on this way before upgrading, for example the interword space taken from the font (standard with version 6.0). Individual settings such as the attributes at Compatibility take precedence. Only the root element of the main layout file is taken into account. If the requested version is newer than the publisher, a warning is given.</a:documentation>
                   </attribute>
                </optional>
                <oneOrMore>

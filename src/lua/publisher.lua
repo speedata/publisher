@@ -485,16 +485,53 @@ M.groups = {}
 ---@type table<string, table>
 M.pagestore = {}
 
+-- Compare two dotted version numbers component by component, up to the
+-- shorter one, so "5.9" against "5.9.4" compares major and minor only.
+---@param a string
+---@param b string
+---@return integer result -1 if a < b, 0 if equal (as far as compared), 1 if a > b.
+function M.compare_versions(a, b)
+    local av = string.explode(a, ".")
+    local bv = string.explode(b, ".")
+    for i = 1, math.min(#av, #bv) do
+        local an = tonumber(av[i]) or 0
+        local bn = tonumber(bv[i]) or 0
+        if an < bn then
+            return -1
+        elseif an > bn then
+            return 1
+        end
+    end
+    return 0
+end
+
 ---@class Compatibility
----@field movecursoronrightedge boolean
 ---@field spacefromfont boolean
 
--- See commands.compatibility
+-- See commands.compatibility. The flags for registry behaviors are
+-- recomputed from M.behaviors and M.defaultlevel right below.
 ---@type Compatibility
 M.compatibility = {
-    movecursoronrightedge = true,
     spacefromfont = false,
 }
+
+-- The built-in behavior level of this binary. It is raised deliberately at
+-- a major release, when the behaviors that became standard up to that
+-- version flip their default for everyone.
+M.defaultlevel = "5.9"
+
+-- Registry of switchable behaviors for the defaults attribute at Layout.
+-- since is the version at which a behavior becomes the standard. The flag
+-- of the same name in M.compatibility is enabled when the requested
+-- defaults level is at least that version; a setting at the Compatibility
+-- command takes precedence.
+M.behaviors = {
+    spacefromfont = { since = "6.0" },
+}
+
+for behavior, b in pairs(M.behaviors) do
+    M.compatibility[behavior] = M.compare_versions(M.defaultlevel, b.since) >= 0
+end
 
 -- for external image conversion software. Key is the image type (or "*"),
 -- value is the command line template of the external converter.
@@ -1166,25 +1203,7 @@ function M.initialize_luatex_and_generate_pdf()
         requirements = attr["require"]
     end
     if version then
-        local version_mismatch = false
-        local publisher_version = string.explode(M.env_publisherversion, ".")
-        local requested_version = string.explode(version, ".")
-
-        if publisher_version[1] ~= requested_version[1] then
-            if tonumber(publisher_version[1]) < tonumber(requested_version[1]) then
-                version_mismatch = true
-            end
-        elseif tonumber(publisher_version[2]) < tonumber(requested_version[2]) then
-            -- major number are same, minor are different
-            version_mismatch = true
-        elseif
-            tonumber(requested_version[3])
-            and tonumber(publisher_version[3]) < tonumber(requested_version[3])
-            and tonumber(publisher_version[2]) == tonumber(requested_version[2])
-        then
-            version_mismatch = true
-        end
-        if version_mismatch then
+        if M.compare_versions(M.env_publisherversion, version) < 0 then
             main.log(
                 "error",
                 string.format(
@@ -1232,6 +1251,43 @@ function M.initialize_luatex_and_generate_pdf()
                     )
                 )
                 exit(false)
+            end
+        end
+    end
+    -- The defaults attribute selects the behavior defaults of the given
+    -- publisher version (see M.behaviors). Only the root element of the
+    -- main layout file counts. Evaluated before any command is dispatched,
+    -- so lazy loaded resources such as fonts see the flags.
+    if attr and attr["defaults"] then
+        local defaultsattr = attr["defaults"]
+        local level
+        if defaultsattr == "latest" then
+            level = M.env_publisherversion
+        elseif string.match(defaultsattr, "^%d+%.%d+$") then
+            level = defaultsattr
+            if M.compare_versions(M.env_publisherversion, level) < 0 then
+                main.log(
+                    "warn",
+                    string.format(
+                        "The layout requests defaults of version %s, but this is the speedata Publisher %s. Using what is available.",
+                        level,
+                        M.env_publisherversion
+                    )
+                )
+            end
+        else
+            main.log(
+                "error",
+                string.format(
+                    'Invalid value %q for defaults. Use major.minor (for example "6.0") or "latest".',
+                    defaultsattr
+                )
+            )
+        end
+        if level then
+            main.log("info", "Layout defaults", "requested", defaultsattr, "level", level)
+            for behavior, b in pairs(M.behaviors) do
+                M.compatibility[behavior] = M.compare_versions(level, b.since) >= 0
             end
         end
     end

@@ -1000,28 +1000,9 @@
       <xs:documentation>Set compatibility for older layouts</xs:documentation>
     </xs:annotation>
     <xs:complexType>
-      <xs:attribute name="movecursoronplaceobject">
-        <xs:annotation>
-          <xs:documentation>Switch the behavior where objects at the right page margin used in PlaceObject puts the cursor in #columns + 1.</xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="yes">
-              <xs:annotation>
-                <xs:documentation>New behavior (default): set cursor in column 1 when an object goes to the right margin.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="no">
-              <xs:annotation>
-                <xs:documentation>Old behavior: set the cursor to the column + 1 past the right edge of the placed object.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
       <xs:attribute name="spacefromfont">
         <xs:annotation>
-          <xs:documentation>Take the width of the interword space from the font itself. An explicit space attribute at LoadFontfile takes precedence for that font.</xs:documentation>
+          <xs:documentation>Take the width of the interword space from the font itself. An explicit space attribute at LoadFontfile takes precedence for that font. This setting overrides the defaults attribute at Layout, where this behavior is part of version 6.0.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -3262,6 +3243,11 @@
       <xs:attribute name="require">
         <xs:annotation>
           <xs:documentation>A comma separated list of required default features. The features lxpath and harfbuzz are accepted for compatibility and have no effect, they are always active. The features luxor and fontforge have been removed in version 6.0 and raise an error.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="defaults">
+        <xs:annotation>
+          <xs:documentation>Selects the behavior defaults of the given publisher version, in the format major.minor (for example 6.0) or the keyword latest for the current version. Behavior changes that become the standard in a later version can be switched on this way before upgrading, for example the interword space taken from the font (standard with version 6.0). Individual settings such as the attributes at Compatibility take precedence. Only the root element of the main layout file is taken into account. If the requested version is newer than the publisher, a warning is given.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>

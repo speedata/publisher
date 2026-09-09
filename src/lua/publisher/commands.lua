@@ -896,13 +896,23 @@ end
 ---@param dataxml table
 ---@return any
 function commands.compatibility(layoutxml, dataxml)
-    local movecursoronrightedge =
-        publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "movecursoronplaceobject", "boolean", "yes")
-    -- When the attribute is missing, read_attribute returns the raw default,
-    -- so the string "no" must not end up as a truthy flag value.
+    local movecursoronplaceobject =
+        publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "movecursoronplaceobject", "string")
+    if movecursoronplaceobject then
+        main.log(
+            "error",
+            "The setting movecursoronplaceobject has been removed in version 6.0",
+            "help",
+            "remove movecursoronplaceobject from Compatibility"
+        )
+        exit(false)
+    end
+    -- A missing attribute must leave its flag untouched, otherwise this
+    -- command would undo what the defaults attribute at Layout has set.
     local spacefromfont = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "spacefromfont", "boolean")
-    publisher.compatibility.movecursoronrightedge = movecursoronrightedge
-    publisher.compatibility.spacefromfont = spacefromfont == true
+    if spacefromfont ~= nil then
+        publisher.compatibility.spacefromfont = spacefromfont
+    end
 end
 
 -- CopyOf
