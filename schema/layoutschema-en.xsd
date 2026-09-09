@@ -1002,7 +1002,7 @@
     <xs:complexType>
       <xs:attribute name="spacefromfont">
         <xs:annotation>
-          <xs:documentation>Take the width of the interword space from the font itself. An explicit space attribute at LoadFontfile takes precedence for that font. This setting overrides the defaults attribute at Layout, where this behavior is part of version 6.0.</xs:documentation>
+          <xs:documentation>Take the width of the interword space from the font itself. An explicit space attribute at LoadFontfile takes precedence for that font. This also applies to preserved spaces in preformatted text (white-space: pre), which otherwise get the width of the digit zero. This setting overrides the defaults attribute at Layout, where this behavior is part of version 6.0.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">

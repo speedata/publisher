@@ -1227,7 +1227,7 @@
          <a:documentation>Setze Kompatibilität für ältere Layoutregeln</a:documentation>
          <optional>
             <attribute name="spacefromfont">
-               <a:documentation>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird. Ein explizites Attribut space bei LoadFontfile hat für diese Schrift Vorrang. Diese Einstellung übersteuert das Attribut defaults bei Layout, zu dessen Verhaltensstand 6.0 dieses Verhalten gehört.</a:documentation>
+               <a:documentation>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird. Ein explizites Attribut space bei LoadFontfile hat für diese Schrift Vorrang. Das gilt auch für erhaltene Leerzeichen in vorformatiertem Text (white-space: pre), die sonst die Breite der Ziffer Null erhalten. Diese Einstellung übersteuert das Attribut defaults bei Layout, zu dessen Verhaltensstand 6.0 dieses Verhalten gehört.</a:documentation>
                <choice>
                   <value>yes</value>
                   <a:documentation>Neues Verhalten: der Wortzwischenraum erhält die Breite, die der Schriftgestalter vorgesehen hat. Er darf um die Hälfte dieser Breite gedehnt und um ein Drittel gestaucht werden.</a:documentation>

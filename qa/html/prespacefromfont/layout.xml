@@ -1,0 +1,20 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <Compatibility spacefromfont="yes"/>
+  <Pageformat width="10cm" height="7cm"/>
+  <!-- a proportional font in pre makes the space width visible; the digit
+       zero in TeX Gyre Heros is twice as wide as its space -->
+  <Stylesheet>
+    pre { font-family: sans-serif; }
+  </Stylesheet>
+
+  <Record element="data">
+    <Output>
+      <Text>
+        <HTML select="."/>
+      </Text>
+    </Output>
+  </Record>
+
+</Layout>

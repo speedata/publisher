@@ -1002,7 +1002,7 @@
     <xs:complexType>
       <xs:attribute name="spacefromfont">
         <xs:annotation>
-          <xs:documentation>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird. Ein explizites Attribut space bei LoadFontfile hat für diese Schrift Vorrang. Diese Einstellung übersteuert das Attribut defaults bei Layout, zu dessen Verhaltensstand 6.0 dieses Verhalten gehört.</xs:documentation>
+          <xs:documentation>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird. Ein explizites Attribut space bei LoadFontfile hat für diese Schrift Vorrang. Das gilt auch für erhaltene Leerzeichen in vorformatiertem Text (white-space: pre), die sonst die Breite der Ziffer Null erhalten. Diese Einstellung übersteuert das Attribut defaults bei Layout, zu dessen Verhaltensstand 6.0 dieses Verhalten gehört.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">

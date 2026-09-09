@@ -1,0 +1,9 @@
+<data>
+    <![CDATA[<p>one two three, spaces as in normal text</p>
+<pre>
+begin
+    indented by four spaces
+        indented by eight spaces
+one two   three     end
+</pre>]]>
+</data>

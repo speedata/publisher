@@ -1289,10 +1289,19 @@ function M.hbglyphlist(arguments)
                 -- U+200D ZERO WIDTH JOINER
                 -- ignore
             elseif preserve_whitespace then
+                -- With spacefromfont a preserved space keeps the natural
+                -- width of the interword space. The width of the digit zero
+                -- is a stand-in that is only correct for monospaced fonts.
+                local wswidth
+                if publisher.compatibility.spacefromfont then
+                    wswidth = thistbl.parameters.space
+                else
+                    wswidth = thistbl.zerowidth
+                end
                 local ws = M.add_rule(
                     nil,
                     "head",
-                    { height = 0 * publisher.factor, depth = 0, width = thistbl.zerowidth },
+                    { height = 0 * publisher.factor, depth = 0, width = wswidth },
                     "preserve_whitespace"
                 )
                 list, cur = node.insert_after(list, cur, ws)

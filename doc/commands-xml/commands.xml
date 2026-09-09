@@ -2722,10 +2722,10 @@
     <childelements></childelements>
     <attribute en="spacefromfont" optional="yes" since="5.9.5">
       <description xml:lang="en">
-        <para>Take the width of the interword space from the font itself. An explicit <tt>space</tt> attribute at <cmd name="LoadFontfile"/> takes precedence for that font. This setting overrides the <tt>defaults</tt> attribute at <cmd name="Layout"/>, where this behavior is part of version 6.0.</para>
+        <para>Take the width of the interword space from the font itself. An explicit <tt>space</tt> attribute at <cmd name="LoadFontfile"/> takes precedence for that font. This also applies to preserved spaces in preformatted text (<tt>white-space: pre</tt>), which otherwise get the width of the digit zero. This setting overrides the <tt>defaults</tt> attribute at <cmd name="Layout"/>, where this behavior is part of version 6.0.</para>
       </description>
       <description xml:lang="de">
-        <para>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird. Ein explizites Attribut <tt>space</tt> bei <cmd name="LoadFontfile"/> hat für diese Schrift Vorrang. Diese Einstellung übersteuert das Attribut <tt>defaults</tt> bei <cmd name="Layout"/>, zu dessen Verhaltensstand 6.0 dieses Verhalten gehört.</para>
+        <para>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird. Ein explizites Attribut <tt>space</tt> bei <cmd name="LoadFontfile"/> hat für diese Schrift Vorrang. Das gilt auch für erhaltene Leerzeichen in vorformatiertem Text (<tt>white-space: pre</tt>), die sonst die Breite der Ziffer Null erhalten. Diese Einstellung übersteuert das Attribut <tt>defaults</tt> bei <cmd name="Layout"/>, zu dessen Verhaltensstand 6.0 dieses Verhalten gehört.</para>
       </description>
       <choice en="yes">
         <description xml:lang="en">
