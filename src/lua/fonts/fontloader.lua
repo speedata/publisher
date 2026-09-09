@@ -229,6 +229,20 @@ function M.define_font_hb(name, size, extra_parameter)
     end
     f.backmap = backmap
 
+    -- With <Compatibility spacefromfont="yes"/> the interword glue comes from
+    -- the font's own space advance instead of the fixed 25% of the font size
+    -- set above. Stretch and shrink use TeX's 1 : 1/2 : 1/3 ratios. An
+    -- explicit space attribute at LoadFontfile keeps the old calculation, as
+    -- do fonts without a space glyph (some emoji fonts).
+    if publisher.compatibility.spacefromfont and not extra_parameter.space then
+        local spacechar = f.characters[32]
+        if spacechar and spacechar.width > 0 then
+            f.parameters.space = spacechar.width
+            f.parameters.space_stretch = spacechar.width / 2
+            f.parameters.space_shrink = spacechar.width / 3
+        end
+    end
+
     local fallback_fontdefinitions = {}
     if extra_parameter.fallbacks then
         for i = #extra_parameter.fallbacks, 1, -1 do

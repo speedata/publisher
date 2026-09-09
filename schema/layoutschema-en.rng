@@ -1236,6 +1236,17 @@
                </choice>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="spacefromfont">
+               <a:documentation>Take the width of the interword space from the font itself. An explicit space attribute at LoadFontfile takes precedence for that font.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>New behavior: the interword space gets the width that the font designer intended. It can stretch by half and shrink by a third of that width.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Old behavior (default): the interword space is 25 percent of the font size, it can stretch by 30 percent and shrink by 10 percent of the font size.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -3105,7 +3116,7 @@
                </optional>
                <optional>
                   <attribute name="space">
-                     <a:documentation>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size.</a:documentation>
+                     <a:documentation>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size. With spacefromfont=&#34;yes&#34; at Compatibility the width comes from the font itself, unless this attribute is set.</a:documentation>
                   </attribute>
                </optional>
                <optional>

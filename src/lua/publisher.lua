@@ -487,11 +487,13 @@ M.pagestore = {}
 
 ---@class Compatibility
 ---@field movecursoronrightedge boolean
+---@field spacefromfont boolean
 
 -- See commands.compatibility
 ---@type Compatibility
 M.compatibility = {
     movecursoronrightedge = true,
+    spacefromfont = false,
 }
 
 -- for external image conversion software. Key is the image type (or "*"),

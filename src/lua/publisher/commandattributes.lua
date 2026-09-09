@@ -21,7 +21,7 @@ return {
     ["Color"] = {["name"] = true },
     ["Column"] = {["align"] = true, ["background-color"] = true, ["minwidth"] = true, ["padding-left"] = true, ["padding-right"] = true, ["width"] = true, ["valign"] = true },
     ["Columns"] = { },
-    ["Compatibility"] = {["movecursoronplaceobject"] = true },
+    ["Compatibility"] = {["movecursoronplaceobject"] = true, ["spacefromfont"] = true },
     ["Contents"] = { },
     ["Copy-of"] = {["select"] = true },
     ["DefineColorprofile"] = {["condition"] = true, ["colors"] = true, ["filename"] = true, ["identifier"] = true, ["info"] = true, ["name"] = true, ["registry"] = true },

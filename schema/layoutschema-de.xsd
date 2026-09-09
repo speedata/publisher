@@ -1019,6 +1019,25 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="spacefromfont">
+        <xs:annotation>
+          <xs:documentation>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird. Ein explizites Attribut space bei LoadFontfile hat für diese Schrift Vorrang.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes">
+              <xs:annotation>
+                <xs:documentation>Neues Verhalten: der Wortzwischenraum erhält die Breite, die der Schriftgestalter vorgesehen hat. Er darf um die Hälfte dieser Breite gedehnt und um ein Drittel gestaucht werden.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="no">
+              <xs:annotation>
+                <xs:documentation>Altes Verhalten (Voreinstellung): der Wortzwischenraum beträgt 25 Prozent der Schriftgröße, er darf um 30 Prozent der Schriftgröße gedehnt und um 10 Prozent gestaucht werden.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Contents">
@@ -3162,7 +3181,7 @@
       </xs:attribute>
       <xs:attribute name="space">
         <xs:annotation>
-          <xs:documentation>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße.</xs:documentation>
+          <xs:documentation>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße. Mit spacefromfont="yes" bei Compatibility kommt die Breite aus der Schriftdatei, sofern dieses Attribut nicht gesetzt ist.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="stretch">

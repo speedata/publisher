@@ -898,7 +898,11 @@ end
 function commands.compatibility(layoutxml, dataxml)
     local movecursoronrightedge =
         publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "movecursoronplaceobject", "boolean", "yes")
+    -- When the attribute is missing, read_attribute returns the raw default,
+    -- so the string "no" must not end up as a truthy flag value.
+    local spacefromfont = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "spacefromfont", "boolean")
     publisher.compatibility.movecursoronrightedge = movecursoronrightedge
+    publisher.compatibility.spacefromfont = spacefromfont == true
 end
 
 -- CopyOf
@@ -3159,8 +3163,10 @@ function commands.load_fontfile(layoutxml, dataxml)
         end
     end
 
+    -- space stays nil when the attribute is not given, so the fontloader can
+    -- tell an explicit setting apart (see Compatibility spacefromfont).
     local extra_parameter = {
-        space = space or 25,
+        space = space,
         marginprotrusion = marginprotrusion or 0,
         fallbacks = fallbacks,
         shrink = shrink,

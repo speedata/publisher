@@ -2744,6 +2744,30 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="spacefromfont" optional="yes" since="5.9.5">
+      <description xml:lang="en">
+        <para>Take the width of the interword space from the font itself. An explicit <tt>space</tt> attribute at <cmd name="LoadFontfile"/> takes precedence for that font.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird. Ein explizites Attribut <tt>space</tt> bei <cmd name="LoadFontfile"/> hat für diese Schrift Vorrang.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>New behavior: the interword space gets the width that the font designer intended. It can stretch by half and shrink by a third of that width.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Neues Verhalten: der Wortzwischenraum erhält die Breite, die der Schriftgestalter vorgesehen hat. Er darf um die Hälfte dieser Breite gedehnt und um ein Drittel gestaucht werden.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Old behavior (default): the interword space is 25 percent of the font size, it can stretch by 30 percent and shrink by 10 percent of the font size.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Altes Verhalten (Voreinstellung): der Wortzwischenraum beträgt 25 Prozent der Schriftgröße, er darf um 30 Prozent der Schriftgröße gedehnt und um 10 Prozent gestaucht werden.</para>
+        </description>
+      </choice>
+    </attribute>
     <example xml:lang="en">
       <listing><![CDATA[<Compatibility
     movecursoronplaceobject="no"
@@ -5675,10 +5699,10 @@
     </attribute>
     <attribute en="space" type="zerotohundred" optional="yes">
       <description xml:lang="en">
-        <para>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size.</para>
+        <para>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size. With <tt>spacefromfont="yes"</tt> at <cmd name="Compatibility"/> the width comes from the font itself, unless this attribute is set.</para>
       </description>
       <description xml:lang="de">
-        <para>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße.</para>
+        <para>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße. Mit <tt>spacefromfont="yes"</tt> bei <cmd name="Compatibility"/> kommt die Breite aus der Schriftdatei, sofern dieses Attribut nicht gesetzt ist.</para>
       </description>
     </attribute>
     <attribute en="stretch" optional="yes" type="number" since="4.19.17">

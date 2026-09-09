@@ -145,10 +145,14 @@ function M.make_font_instance(name, size)
     end
     local filename, parameter = table.unpack(lookup_fontname_filename[name])
     assert(filename)
+    -- The space entry is the effective interword space: the explicit value
+    -- from LoadFontfile, the marker "font" when the space comes from the font
+    -- file (Compatibility spacefromfont) or the default of 25 percent.
+    -- Instances with different space settings must not be shared.
     local k = {
         filename = filename,
         fontsize = size,
-        space = parameter.space,
+        space = parameter.space or (publisher.compatibility.spacefromfont and "font" or 25),
         fallbacks = parameter.fallbacks,
     }
 

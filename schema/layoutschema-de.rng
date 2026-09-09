@@ -1236,6 +1236,17 @@
                </choice>
             </attribute>
          </optional>
+         <optional>
+            <attribute name="spacefromfont">
+               <a:documentation>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird. Ein explizites Attribut space bei LoadFontfile hat für diese Schrift Vorrang.</a:documentation>
+               <choice>
+                  <value>yes</value>
+                  <a:documentation>Neues Verhalten: der Wortzwischenraum erhält die Breite, die der Schriftgestalter vorgesehen hat. Er darf um die Hälfte dieser Breite gedehnt und um ein Drittel gestaucht werden.</a:documentation>
+                  <value>no</value>
+                  <a:documentation>Altes Verhalten (Voreinstellung): der Wortzwischenraum beträgt 25 Prozent der Schriftgröße, er darf um 30 Prozent der Schriftgröße gedehnt und um 10 Prozent gestaucht werden.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
          <empty></empty>
       </element>
    </define>
@@ -3105,7 +3116,7 @@
                </optional>
                <optional>
                   <attribute name="space">
-                     <a:documentation>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße.</a:documentation>
+                     <a:documentation>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße. Mit spacefromfont=&#34;yes&#34; bei Compatibility kommt die Breite aus der Schriftdatei, sofern dieses Attribut nicht gesetzt ist.</a:documentation>
                   </attribute>
                </optional>
                <optional>

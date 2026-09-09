@@ -1019,6 +1019,25 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="spacefromfont">
+        <xs:annotation>
+          <xs:documentation>Take the width of the interword space from the font itself. An explicit space attribute at LoadFontfile takes precedence for that font.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes">
+              <xs:annotation>
+                <xs:documentation>New behavior: the interword space gets the width that the font designer intended. It can stretch by half and shrink by a third of that width.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="no">
+              <xs:annotation>
+                <xs:documentation>Old behavior (default): the interword space is 25 percent of the font size, it can stretch by 30 percent and shrink by 10 percent of the font size.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
   <xs:element name="Contents">
@@ -3162,7 +3181,7 @@
       </xs:attribute>
       <xs:attribute name="space">
         <xs:annotation>
-          <xs:documentation>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size.</xs:documentation>
+          <xs:documentation>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size. With spacefromfont="yes" at Compatibility the width comes from the font itself, unless this attribute is set.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="stretch">
