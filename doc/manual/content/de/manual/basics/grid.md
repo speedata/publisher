@@ -111,6 +111,50 @@ Man kann auch noch Abstände zwischen den Rasterzellen festlegen, wie es z. B.
 Wenn das Raster nicht vollständig in den Satzspiegel passt, z. B. bei einer Rasterbreite von 3 Zentimeter und einer Seitenbreite von 10 Zentimeter, führt das zu einem Konflikt im Seitenlayout.
 Dadurch wird der rechte bzw. der untere Rand verschoben und passt nicht mit den im Seitentyp angegebenen Werten überein.
 
+## Eigenes Raster in Seitentypen
+
+Das mit `<SetGrid>` eingestellte Raster gilt für alle Seiten.
+Sollen nur bestimmte Seiten ein anderes Raster bekommen, kann im Seitentyp ein `<Grid>`-Element angegeben werden.
+Es kennt dieselben Attribute wie `<SetGrid>` (`width`, `height`, `nx`, `ny`, `dx` und `dy`) und überschreibt das globale Raster auf allen Seiten, die mit diesem Seitentyp erzeugt werden.
+Alle anderen Seiten behalten das globale Raster, es muss also anschließend nichts zurückgesetzt werden.
+
+```xml
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <SetGrid height="12pt" nx="10"/>
+  <Trace grid="yes"/>
+  <Pageformat width="8cm" height="4cm"/>
+
+  <Pagetype name="first page" test="sd:current-page() = 1">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+    <Grid nx="4" ny="4"/>
+  </Pagetype>
+
+  <Record element="data">
+    <PlaceObject column="2" row="2">
+      <Textblock>
+        <Paragraph>
+          <Value>Page 1</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <ClearPage/>
+    <PlaceObject column="2" row="2">
+      <Textblock>
+        <Paragraph>
+          <Value>Page 2</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+```
+
+![Die erste Seite benutzt das 4 × 4-Raster aus dem Seitentyp, die zweite Seite fällt auf das globale Raster zurück.](/img/pagetypegrid.png)
+
+Seitentypen werden ausführlich im Abschnitt [Seitentypen]({{< relref "pagetypes" >}}) beschrieben.
+
 ## Wofür wird das Raster benötigt?
 
 Ruft man `sp` mit der Option `--show-gridallocation` auf, so sieht man sofort, wofür das Raster auch gut ist.

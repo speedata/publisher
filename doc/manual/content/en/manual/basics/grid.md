@@ -91,6 +91,47 @@ This creates a so-called nine-division, which is often used in book design. It i
 
 If the grid does not fit completely into the type area, e.g. with a grid width of 3 centimeters and a page width of 10 centimeters, this leads to a conflict in the page layout. This causes the right or bottom margin to be shifted and does not match the values specified in the page type.
 
+## Separate grid in page types
+
+The grid set with `<SetGrid>` applies to all pages. If only some pages need a different grid, you can add a `<Grid>` element to a page type. It accepts the same attributes as `<SetGrid>` (`width`, `height`, `nx`, `ny`, `dx` and `dy`) and overrides the global grid on all pages that use this page type. All other pages keep the global grid, so there is no need to reset anything afterwards.
+
+```xml
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <SetGrid height="12pt" nx="10"/>
+  <Trace grid="yes"/>
+  <Pageformat width="8cm" height="4cm"/>
+
+  <Pagetype name="first page" test="sd:current-page() = 1">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+    <Grid nx="4" ny="4"/>
+  </Pagetype>
+
+  <Record element="data">
+    <PlaceObject column="2" row="2">
+      <Textblock>
+        <Paragraph>
+          <Value>Page 1</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+    <ClearPage/>
+    <PlaceObject column="2" row="2">
+      <Textblock>
+        <Paragraph>
+          <Value>Page 2</Value>
+        </Paragraph>
+      </Textblock>
+    </PlaceObject>
+  </Record>
+</Layout>
+```
+
+![The first page uses the 4 × 4 grid from the page type, the second page falls back to the global grid.](/img/pagetypegrid.png)
+
+Page types are described in detail in the section [Page types]({{< relref "pagetypes" >}}).
+
 ## What is the grid needed for?
 
 If you call `sp` with the `--show-gridallocation` option, you can see immediately what the grid is for. Occupied cells are marked internally, so that no other object can be placed in this area.  At least not without an error message or the instruction that no area needs to be reserved for it (`allocate="no"` in `<PlaceObject>`).

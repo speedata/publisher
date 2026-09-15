@@ -49,6 +49,12 @@ Also wird sie nach dieser Logik zuletzt ausgewertet und wird immer dann benutzt,
 In der Seitentyp-Definition können Platzierungsbereiche angelegt werden.
 Diese werden ausführlich im Abschnitt [Platzierungsbereiche]({{< relref "positioningframe" >}}) beschrieben.
 
+## Eigenes Raster
+
+Ein Seitentyp kann mit einem `<Grid>`-Kindelement ein eigenes Raster bekommen.
+Es überschreibt das mit `<SetGrid>` eingestellte Raster für alle Seiten, die mit diesem Seitentyp erzeugt werden.
+Beschrieben ist das im Abschnitt [Eigenes Raster in Seitentypen]({{< relref "grid#eigenes-raster-in-seitentypen" >}}).
+
 ## AtPageCreation, AtPageShipout
 
 Die beiden Befehle `<AtPageCreation>` und `<AtPageShipout>` sind dafür zuständig, Code auszuführen, wenn eine Seite erzeugt und wenn eine Seite in die PDF Datei geschrieben wird.

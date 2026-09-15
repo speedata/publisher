@@ -49,6 +49,10 @@ So it is evaluated last according to this logic and is always used if no other p
 Placement areas can be created in the page type definition.
 These are described in detail in the section [Placement areas]({{< relref "positioningframe" >}}).
 
+## Separate grid
+
+A page type can get its own grid with a `<Grid>` child element. It overrides the grid set with `<SetGrid>` for all pages that use this page type. This is described in the section [Separate grid in page types]({{< relref "grid#separate-grid-in-page-types" >}}).
+
 ## AtPageCreation, AtPageShipout
 
 The two commands `<AtPageCreation>` and `<AtPageShipout>` are responsible for executing code when a page is created and when a page is written to the PDF file.
