@@ -1345,7 +1345,30 @@ type Commands struct {
 	commandsEn       map[string]*Command
 	commandsSortedEn []*Command
 	commandGroups    []*CommandGroup
+	manualPages      map[string]*ManualPage
 	defines          map[string]*define
+}
+
+// ManualPage is a page of the Hugo manual that a <ref name="..."/> in a
+// seealso section can point to. Href is the path relative to the language's
+// content root.
+type ManualPage struct {
+	Href    string
+	titleEn string
+	titleDe string
+}
+
+// Title returns the link text of the manual page in the given language.
+func (mp *ManualPage) Title(lang string) string {
+	if lang == "de" {
+		return mp.titleDe
+	}
+	return mp.titleEn
+}
+
+// ManualPage returns the manual page for the given ref name or nil.
+func (c *Commands) ManualPage(name string) *ManualPage {
+	return c.manualPages[name]
 }
 
 // CommandGroup is a thematic group of commands, used for the overview page of
@@ -1399,9 +1422,20 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 	}
 	var rawgroups xmlCommandGroups
 
+	type xmlManualPages struct {
+		Pages []struct {
+			Name string `xml:"name,attr"`
+			Href string `xml:"href,attr"`
+			En   string `xml:"en,attr"`
+			De   string `xml:"de,attr"`
+		} `xml:"page"`
+	}
+	var rawpages xmlManualPages
+
 	commands := &Commands{}
 	commands.defines = make(map[string]*define)
 	commands.commandsEn = make(map[string]*Command)
+	commands.manualPages = make(map[string]*ManualPage)
 	dec := xml.NewDecoder(r)
 	for {
 		tok, err := dec.Token()
@@ -1429,6 +1463,14 @@ func ReadCommandsFile(r io.Reader) (*Commands, error) {
 				err = dec.DecodeElement(&rawgroups, &v)
 				if err != nil {
 					return nil, err
+				}
+			case "manualpages":
+				err = dec.DecodeElement(&rawpages, &v)
+				if err != nil {
+					return nil, err
+				}
+				for _, p := range rawpages.Pages {
+					commands.manualPages[p.Name] = &ManualPage{Href: p.Href, titleEn: p.En, titleDe: p.De}
 				}
 			case "command":
 				c := &Command{}

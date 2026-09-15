@@ -8,6 +8,11 @@ import (
 	"strings"
 )
 
+// mdCharDataRepl escapes characters that Hugo would otherwise interpret as
+// raw HTML or Markdown syntax when they appear in para text (e.g. a literal
+// <b> written as &lt;b&gt; in commands.xml).
+var mdCharDataRepl = strings.NewReplacer(`&`, `\&`, `<`, `\<`, `>`, `\>`)
+
 // Markdown returns the para content as a Markdown string.
 func (p *para) Markdown(lang string) string {
 	ret := []string{}
@@ -15,6 +20,7 @@ func (p *para) Markdown(lang string) string {
 	r := bytes.NewReader(p.Text)
 	dec := xml.NewDecoder(r)
 
+	inTT := false
 	for {
 		tok, err := dec.Token()
 		if err != nil && err == io.EOF {
@@ -40,19 +46,79 @@ func (p *para) Markdown(lang string) string {
 				}
 				ret = append(ret, "[`"+cmdname+"`]({{% relref \""+x.Mdlink()+"\" %}})")
 			case "tt":
+				inTT = true
 				ret = append(ret, "`")
 			}
 		case xml.CharData:
-			ret = append(ret, string(v.Copy()))
+			if inTT {
+				ret = append(ret, string(v.Copy()))
+			} else {
+				ret = append(ret, mdCharDataRepl.Replace(string(v.Copy())))
+			}
 		case xml.EndElement:
 			switch v.Name.Local {
 			case "tt":
+				inTT = false
 				ret = append(ret, "`")
 			}
 		}
 	}
 	ret = append(ret, "\n\n")
 	return strings.Join(ret, "")
+}
+
+// SeealsoMarkdown returns the see also section as a Markdown string.
+func (c *Command) SeealsoMarkdown(lang string) string {
+	if c.seealso == nil {
+		return ""
+	}
+	ret := []string{}
+	r := bytes.NewReader(c.seealso.Text)
+	dec := xml.NewDecoder(r)
+	for {
+		tok, err := dec.Token()
+		if err != nil && err == io.EOF {
+			break
+		}
+		if err != nil {
+			panic(err)
+		}
+		switch v := tok.(type) {
+		case xml.StartElement:
+			switch v.Name.Local {
+			case "cmd":
+				var x *Command
+				for _, attribute := range v.Attr {
+					if attribute.Name.Local == "name" {
+						x = c.commands.commandsEn[attribute.Value]
+						if x == nil {
+							fmt.Printf("There is an unknown cmd in the seealso section of %q (%q)\n", c.Name, attribute.Value)
+						}
+					}
+				}
+				if x != nil {
+					ret = append(ret, "[`"+x.Name+"`]({{% relref \""+x.Mdlink()+"\" %}})")
+				}
+			case "ref":
+				var nameatt string
+				for _, attribute := range v.Attr {
+					if attribute.Name.Local == "name" {
+						nameatt = attribute.Value
+					}
+				}
+				if x := c.commands.ManualPage(nameatt); x != nil {
+					ret = append(ret, fmt.Sprintf(`[%s]({{%% relref %q %%}})`, x.Title(lang), x.Href))
+				} else {
+					fmt.Printf("There is an unknown ref in the seealso section of %q (%q)\n", c.Name, nameatt)
+					ret = append(ret, nameatt)
+				}
+			}
+		case xml.CharData:
+			ret = append(ret, mdCharDataRepl.Replace(string(v.Copy())))
+		}
+	}
+	// collapse the whitespace and newlines from the XML source
+	return strings.Join(strings.Fields(strings.Join(ret, "")), " ")
 }
 
 // MarkdownDescription returns the description in Markdown format.

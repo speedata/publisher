@@ -294,6 +294,18 @@
           </oneOrMore>
         </element>
       </optional>
+      <optional>
+        <element name="manualpages">
+          <oneOrMore>
+            <element name="page">
+              <attribute name="name"/>
+              <attribute name="href"/>
+              <attribute name="en"/>
+              <attribute name="de"/>
+            </element>
+          </oneOrMore>
+        </element>
+      </optional>
       <oneOrMore>
         <element name="command">
           <attribute name="en"/>

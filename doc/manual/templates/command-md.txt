@@ -39,3 +39,9 @@ type: docs
 
 {{ . }}
 {{ end }}
+
+{{ with (.Command.SeealsoMarkdown $.Lang) }}
+## {{ translate $.Lang "See also" }}
+
+{{ . }}
+{{ end }}

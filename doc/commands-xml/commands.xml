@@ -975,6 +975,17 @@
     </commandgroup>
   </commandgroups>
 
+  <!-- Pages of the Hugo manual that a <ref name="..."/> in a seealso
+       section may point to. href is the path relative to the language's
+       content root, en/de are the link texts. -->
+  <manualpages>
+    <page name="fonts" href="/manual/text/fonts" en="Using fonts" de="Schriften verwenden"/>
+    <page name="directories" href="/manual/directories" en="Directories &amp; Lists" de="Verzeichnisse &amp; Listen"/>
+    <page name="cutmarks" href="/manual/pagelayout/cutmarks" en="Prepress" de="Druckvorstufe"/>
+    <page name="xpath" href="/reference/xpath/xpath" en="XPath Expressions" de="XPath-Ausdrücke"/>
+    <page name="css" href="/manual/webformats/css" en="Using CSS with the speedata Publisher" de="CSS verwenden"/>
+  </manualpages>
+
   <!--
       *************************
       * A
@@ -3492,7 +3503,7 @@
       <para>Setze die Seitennummerierung auf »A-1, A-2, ... «</para>
       <listing><![CDATA[<DefineMatter name="mainmatter" label="decimal" prefix="A-" />]]></listing>
     </example>
-    <seealso><cmd name="pagetype"/></seealso>
+    <seealso><cmd name="Pagetype"/></seealso>
   </command>
   <!--
       *************************
@@ -3757,10 +3768,10 @@
     </attribute>
     <attribute en="tab" optional="yes" since="3.1.5">
       <description xml:lang="en">
-        <para>What to do on the tab (&amp; #09;) character.</para>
+        <para>What to do on the tab (&amp;#09;) character.</para>
       </description>
       <description xml:lang="de">
-        <para>Was ist beim Tabulator (&amp; #09;) zu tun?</para>
+        <para>Was ist beim Tabulator (&amp;#09;) zu tun?</para>
       </description>
       <choice en="space">
         <description xml:lang="en">

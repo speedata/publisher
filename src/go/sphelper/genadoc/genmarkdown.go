@@ -7,15 +7,14 @@ import (
 	"path/filepath"
 	"regexp"
 	"sort"
+	"speedatapublisher/sphelper/changelog"
+	"speedatapublisher/sphelper/commandsxml"
+	"speedatapublisher/sphelper/config"
 	"strings"
 	"sync"
 	"text/template"
 	"time"
 	"unicode"
-
-	"speedatapublisher/sphelper/changelog"
-	"speedatapublisher/sphelper/commandsxml"
-	"speedatapublisher/sphelper/config"
 )
 
 var wg sync.WaitGroup
@@ -45,6 +44,10 @@ func translate(lang, text string) string {
 	case "Remarks":
 		if lang == "de" {
 			return "Bemerkungen"
+		}
+	case "See also":
+		if lang == "de" {
+			return "Siehe auch"
 		}
 	case "CSS property":
 		if lang == "de" {
