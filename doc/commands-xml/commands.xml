@@ -7777,12 +7777,28 @@
       <para>Legt die Größe des Ausgabemediums (z.B. DIN A4) fest. Voreinstellung ist eine Breite von 210mm und eine Höhe von 297mm.</para>
     </description>
     <childelements/>
+    <attribute en="bleedbox" optional="yes" since="5.9.5">
+      <description xml:lang="en">
+        <para>Set the bleed box of the PDF pages. The value has the form “x y width height” (four lengths), where x and y are measured from the top left corner of the page. If not given, the bleed box is derived from the bleed setting in <cmd name="Options"/>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setzt die Bleedbox der PDF-Seiten. Der Wert hat die Form »x y Breite Höhe« (vier Längenangaben), x und y werden von der linken oberen Ecke der Seite gemessen. Ohne diese Angabe ergibt sich die Bleedbox aus der Beschnittzugabe in <cmd name="Options"/>.</para>
+      </description>
+    </attribute>
     <attribute en="height" type="length" optional="no">
       <description xml:lang="en">
         <para>The height of the PDF pages.</para>
       </description>
       <description xml:lang="de">
         <para>Höhe des Ausgabemediums.</para>
+      </description>
+    </attribute>
+    <attribute en="trimbox" optional="yes" since="5.9.5">
+      <description xml:lang="en">
+        <para>Set the trim box (the final page size after trimming) of the PDF pages. The value has the form “x y width height” (four lengths), where x and y are measured from the top left corner of the page. If not given, the trim box is derived from the cut mark and bleed settings in <cmd name="Options"/>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Setzt die Trimbox (das Endformat nach dem Beschneiden) der PDF-Seiten. Der Wert hat die Form »x y Breite Höhe« (vier Längenangaben), x und y werden von der linken oberen Ecke der Seite gemessen. Ohne diese Angabe ergibt sich die Trimbox aus den Einstellungen für Schnittmarken und Beschnittzugabe in <cmd name="Options"/>.</para>
       </description>
     </attribute>
     <attribute en="width" type="length" optional="no">

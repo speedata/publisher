@@ -5562,9 +5562,19 @@
       <xs:documentation>The size of the PDF pages. Defaults to 210mm width and 297mm height (A4)</xs:documentation>
     </xs:annotation>
     <xs:complexType>
+      <xs:attribute name="bleedbox">
+        <xs:annotation>
+          <xs:documentation>Set the bleed box of the PDF pages. The value has the form “x y width height” (four lengths), where x and y are measured from the top left corner of the page. If not given, the bleed box is derived from the bleed setting in Options.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="height" use="required">
         <xs:annotation>
           <xs:documentation>The height of the PDF pages.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="trimbox">
+        <xs:annotation>
+          <xs:documentation>Set the trim box (the final page size after trimming) of the PDF pages. The value has the form “x y width height” (four lengths), where x and y are measured from the top left corner of the page. If not given, the trim box is derived from the cut mark and bleed settings in Options.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="width" use="required">

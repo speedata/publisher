@@ -1399,6 +1399,22 @@ function M.trimbox(self, crop, extrapageattributes)
         sp_to_bp(self.extra_margin - self.trim),
         sp_to_bp(tex.pagewidth - self.extra_margin + self.trim),
         sp_to_bp(tex.pageheight - self.extra_margin + self.trim)
+    -- Explicit boxes from Pageformat override the values derived from
+    -- extra_margin/trim. Their x/y are measured from the top left corner.
+    local tb = publisher.options.trimbox
+    if tb then
+        x = sp_to_bp(tb.x)
+        y = sp_to_bp(tex.pageheight - tb.y - tb.height)
+        wd = sp_to_bp(tb.x + tb.width)
+        ht = sp_to_bp(tex.pageheight - tb.y)
+    end
+    local bb = publisher.options.bleedbox
+    if bb then
+        b_x = sp_to_bp(bb.x)
+        b_y = sp_to_bp(tex.pageheight - bb.y - bb.height)
+        b_wd = sp_to_bp(bb.x + bb.width)
+        b_ht = sp_to_bp(tex.pageheight - bb.y)
+    end
     local attrstring = { extrapageattributes }
     attrstring[#attrstring + 1] = string.format("/TrimBox [ %g %g %g %g]", x, y, wd, ht)
     attrstring[#attrstring + 1] = string.format("/BleedBox [%g %g %g %g]", b_x, b_y, b_wd, b_ht)

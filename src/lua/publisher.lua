@@ -356,6 +356,7 @@ M.css = do_luafile("css.lua"):new()
 
 ---@class Options
 ---@field background string? Background color of the page.
+---@field bleedbox? {x: integer, y: integer, width: integer, height: integer} Explicit bleed box in sp, x/y from the top left page corner (set by Pageformat).
 ---@field colorprofile string? Name of the color profile
 ---@field cutmarks boolean
 ---@field crop boolean | string | nil The amount of crop to be added to each side of a page
@@ -417,6 +418,7 @@ M.css = do_luafile("css.lua"):new()
 ---@field tablerulefix boolean Fix table rules for better display in Adobe Acrobat.
 ---@field trace boolean
 ---@field trim? integer Bleed amount in sp.
+---@field trimbox? {x: integer, y: integer, width: integer, height: integer} Explicit trim box in sp, x/y from the top left page corner (set by Pageformat).
 ---@field trimmarks boolean
 ---@field verbosity number
 ---

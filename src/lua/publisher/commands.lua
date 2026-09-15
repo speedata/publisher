@@ -4398,6 +4398,35 @@ function commands.overlay(layoutxml, dataxml)
     return box
 end
 
+-- Parses a page box attribute of the form "x y width height" (four lengths,
+-- x/y measured from the top left corner of the page). Returns nil on error.
+---@param value string?
+---@param attributename string
+---@return {x: integer, y: integer, width: integer, height: integer}?
+local function parse_pagebox(value, attributename)
+    if value == nil then
+        return nil
+    end
+    local lengths = {}
+    for len in string.gmatch(value, "%S+") do
+        lengths[#lengths + 1] = len
+    end
+    local ok, x, y, wd, ht
+    if #lengths == 4 then
+        ok, x, y, wd, ht = pcall(function()
+            return tex.sp(lengths[1]), tex.sp(lengths[2]), tex.sp(lengths[3]), tex.sp(lengths[4])
+        end)
+    end
+    if not ok then
+        main.log(
+            "error",
+            string.format("Pageformat: %s must be four lengths “x y width height”, got %q", attributename, value)
+        )
+        return nil
+    end
+    return { x = x, y = y, width = wd, height = ht }
+end
+
 -- PageFormat
 -- ----------
 -- Set the dimensions of the page.
@@ -4408,6 +4437,8 @@ end
 function commands.page_format(layoutxml, dataxml, _options)
     local width = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "width", "length")
     local height = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "height", "length")
+    local trimbox = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "trimbox", "string")
+    local bleedbox = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "bleedbox", "string")
 
     local wd_sp = tex.sp(width)
     local ht_sp = tex.sp(height)
@@ -4420,6 +4451,8 @@ function commands.page_format(layoutxml, dataxml, _options)
     publisher.page_helpers.set_pageformat(wd_sp, ht_sp)
     publisher.options.default_pagewidth = wd_sp
     publisher.options.default_pageheight = ht_sp
+    publisher.options.trimbox = parse_pagebox(trimbox, "trimbox")
+    publisher.options.bleedbox = parse_pagebox(bleedbox, "bleedbox")
 end
 
 -- PageType

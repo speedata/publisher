@@ -4892,9 +4892,19 @@
    <define name="e_Pageformat">
       <element name="Pageformat">
          <a:documentation>The size of the PDF pages. Defaults to 210mm width and 297mm height (A4)</a:documentation>
+         <optional>
+            <attribute name="bleedbox">
+               <a:documentation>Set the bleed box of the PDF pages. The value has the form “x y width height” (four lengths), where x and y are measured from the top left corner of the page. If not given, the bleed box is derived from the bleed setting in Options.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="height">
             <a:documentation>The height of the PDF pages.</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="trimbox">
+               <a:documentation>Set the trim box (the final page size after trimming) of the PDF pages. The value has the form “x y width height” (four lengths), where x and y are measured from the top left corner of the page. If not given, the trim box is derived from the cut mark and bleed settings in Options.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="width">
             <a:documentation>Width of the PDF pages.</a:documentation>
          </attribute>

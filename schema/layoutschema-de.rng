@@ -4892,9 +4892,19 @@
    <define name="e_Pageformat">
       <element name="Pageformat">
          <a:documentation>Legt die Größe des Ausgabemediums (z.B. DIN A4) fest. Voreinstellung ist eine Breite von 210mm und eine Höhe von 297mm.</a:documentation>
+         <optional>
+            <attribute name="bleedbox">
+               <a:documentation>Setzt die Bleedbox der PDF-Seiten. Der Wert hat die Form »x y Breite Höhe« (vier Längenangaben), x und y werden von der linken oberen Ecke der Seite gemessen. Ohne diese Angabe ergibt sich die Bleedbox aus der Beschnittzugabe in Options.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="height">
             <a:documentation>Höhe des Ausgabemediums.</a:documentation>
          </attribute>
+         <optional>
+            <attribute name="trimbox">
+               <a:documentation>Setzt die Trimbox (das Endformat nach dem Beschneiden) der PDF-Seiten. Der Wert hat die Form »x y Breite Höhe« (vier Längenangaben), x und y werden von der linken oberen Ecke der Seite gemessen. Ohne diese Angabe ergibt sich die Trimbox aus den Einstellungen für Schnittmarken und Beschnittzugabe in Options.</a:documentation>
+            </attribute>
+         </optional>
          <attribute name="width">
             <a:documentation>Breite des Ausgabemediums.</a:documentation>
          </attribute>

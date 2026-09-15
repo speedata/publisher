@@ -5562,9 +5562,19 @@
       <xs:documentation>Legt die Größe des Ausgabemediums (z.B. DIN A4) fest. Voreinstellung ist eine Breite von 210mm und eine Höhe von 297mm.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
+      <xs:attribute name="bleedbox">
+        <xs:annotation>
+          <xs:documentation>Setzt die Bleedbox der PDF-Seiten. Der Wert hat die Form »x y Breite Höhe« (vier Längenangaben), x und y werden von der linken oberen Ecke der Seite gemessen. Ohne diese Angabe ergibt sich die Bleedbox aus der Beschnittzugabe in Options.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="height" use="required">
         <xs:annotation>
           <xs:documentation>Höhe des Ausgabemediums.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="trimbox">
+        <xs:annotation>
+          <xs:documentation>Setzt die Trimbox (das Endformat nach dem Beschneiden) der PDF-Seiten. Der Wert hat die Form »x y Breite Höhe« (vier Längenangaben), x und y werden von der linken oberen Ecke der Seite gemessen. Ohne diese Angabe ergibt sich die Trimbox aus den Einstellungen für Schnittmarken und Beschnittzugabe in Options.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
       <xs:attribute name="width" use="required">
