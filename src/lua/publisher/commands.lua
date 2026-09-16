@@ -1119,7 +1119,7 @@ function commands.define_textformat(layoutxml, dataxml)
     local hyphenate = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "hyphenate", "boolean", true)
     local hyphenchar = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "hyphenchar", "string")
     local indentation = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "indentation", "length")
-    local letterspacing = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "letter-spacing", "number")
+    local letterspacing = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "letter-spacing", "string")
     local marginbottom = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "margin-bottom", "string")
     local margintop = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "margin-top", "string")
     local margintopboxstart =
@@ -1172,7 +1172,16 @@ function commands.define_textformat(layoutxml, dataxml)
 
     fmt.disable_hyphenation = not hyphenate
     fmt.hyphenchar = hyphenchar
-    fmt.letterspacing = letterspacing
+    -- letter-spacing: a plain number is 1/1000 em (font size dependent,
+    -- converted in mknodes()), a length is an absolute value in sp.
+    if letterspacing then
+        local num = tonumber(letterspacing)
+        if num then
+            fmt.letterspacing_em = num
+        else
+            fmt.letterspacing = tex.sp(letterspacing)
+        end
+    end
 
     if indentation then
         fmt.indent = tex.sp(indentation)

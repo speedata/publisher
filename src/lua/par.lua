@@ -290,8 +290,9 @@ local function flatten(self, items, options, data)
             end
             new_options.direction = new_options.direction or self.direction
             local effective_textformat = self.textformat or options.textformat
-            if not new_options.letterspacing and effective_textformat and effective_textformat.letterspacing then
-                new_options.letterspacing_em = effective_textformat.letterspacing
+            if not new_options.letterspacing and not new_options.letterspacing_em and effective_textformat then
+                new_options.letterspacing = effective_textformat.letterspacing
+                new_options.letterspacing_em = effective_textformat.letterspacing_em
             end
             if reuse_text_opts then
                 text_options_shared = new_options
@@ -609,12 +610,15 @@ function Par:max_width_and_lineheight(options, data)
     local newpar = publisher.utilities.deepcopy(self)
     newpar.origin = "max_width_and_lineheight"
     local orig_letterspacing = newpar.textformat and newpar.textformat.letterspacing
+    local orig_letterspacing_em = newpar.textformat and newpar.textformat.letterspacing_em
     newpar.textformat = nil
     options = options or {}
     local new_options = publisher.utilities.copy_table_from_defaults(options)
     new_options.textformat = publisher.textformats["__leftaligned"]
     if orig_letterspacing then
-        new_options.letterspacing_em = orig_letterspacing
+        new_options.letterspacing = orig_letterspacing
+    elseif orig_letterspacing_em then
+        new_options.letterspacing_em = orig_letterspacing_em
     end
     local nl = newpar:format(publisher.maxdimen, new_options, data)
     local maxwd = 0

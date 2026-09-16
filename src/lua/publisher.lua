@@ -737,7 +737,8 @@ M.lowercase = false
 ---@field margintop? number Vertical margin above the paragraph in sp.
 ---@field marginbottom? number Vertical margin below the paragraph in sp.
 ---@field margintopboxstart? number Margin above the paragraph at the top of a box, in sp.
----@field letterspacing? number Letter spacing in em.
+---@field letterspacing? number Absolute letter spacing in sp.
+---@field letterspacing_em? number Letter spacing in 1/1000 em.
 ---@field cssfontsize? boolean Use the CSS font size handling.
 ---@field hyphenchar? string Hyphenation character override.
 ---@field htmlverticalspacing? string Vertical spacing mode for HTML ("inner", ...).

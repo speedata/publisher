@@ -1784,7 +1784,7 @@
          </optional>
          <optional>
             <attribute name="letter-spacing">
-               <a:documentation>Additional space between characters in 1/1000 em. For example, a value of 50 adds 0.05 em between each character. This is font-size independent and scales with the text.</a:documentation>
+               <a:documentation>Additional space between characters. A plain number is interpreted in 1/1000 em: for example, a value of 50 adds 0.05 em between each character, which is font-size independent and scales with the text. A length such as 2pt adds a fixed space regardless of the font size (since 5.9.6).</a:documentation>
             </attribute>
          </optional>
          <optional>

@@ -4,7 +4,7 @@ weight: 162
 type: docs
 ---
 
-Die Layoutfunktionen des Publishers sind im Namensraum `urn:speedata:2009/publisher/functions/de` definiert (im Folgenden mit `sd:` gekennzeichnet).
+Die Layoutfunktionen des Publishers sind im Namensraum `urn:speedata:2009/publisher/functions/en` definiert (im Folgenden mit `sd:` gekennzeichnet).
 Neben diesen gibt es [XPath-Standardfunktionen]({{< relref "xpathfunctions" >}}) und [selbstdefinierte Funktionen]({{< relref "/reference/commands/function" >}}).
 
 Optionale Parameter werden durch eckige Klammern markiert. Die Auslassungspunkte `...` bedeuten, dass der letzte Wert beliebig oft wiederholt werden kann.

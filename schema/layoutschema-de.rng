@@ -1784,7 +1784,7 @@
          </optional>
          <optional>
             <attribute name="letter-spacing">
-               <a:documentation>Zusätzlicher Abstand zwischen Zeichen in 1/1000 em. Beispiel: Ein Wert von 50 fügt 0,05 em zwischen jedem Zeichen ein. Der Wert ist schriftgrößenunabhängig und skaliert mit dem Text.</a:documentation>
+               <a:documentation>Zusätzlicher Abstand zwischen Zeichen. Eine reine Zahl wird in 1/1000 em interpretiert: Ein Wert von 50 fügt zum Beispiel 0,05 em zwischen jedem Zeichen ein, das ist schriftgrößenunabhängig und skaliert mit dem Text. Eine Längenangabe wie 2pt fügt einen festen Abstand unabhängig von der Schriftgröße ein (seit 5.9.6).</a:documentation>
             </attribute>
          </optional>
          <optional>
