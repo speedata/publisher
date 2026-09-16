@@ -1602,7 +1602,7 @@
       </xs:attribute>
       <xs:attribute name="tab">
         <xs:annotation>
-          <xs:documentation>Was ist beim Tabulator (&amp; #09;) zu tun?</xs:documentation>
+          <xs:documentation>Was ist beim Tabulator (&amp;#09;) zu tun?</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -3504,16 +3504,8 @@
             </xs:annotation>
             <xs:simpleType>
               <xs:restriction base="xs:token">
-                <xs:enumeration value="yes">
-                  <xs:annotation>
-                    <xs:documentation>Display-Stil.</xs:documentation>
-                  </xs:annotation>
-                </xs:enumeration>
-                <xs:enumeration value="no">
-                  <xs:annotation>
-                    <xs:documentation>Inline-Stil.</xs:documentation>
-                  </xs:annotation>
-                </xs:enumeration>
+                <xs:enumeration value="yes"/>
+                <xs:enumeration value="no"/>
               </xs:restriction>
             </xs:simpleType>
           </xs:attribute>

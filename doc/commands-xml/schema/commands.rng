@@ -277,6 +277,44 @@
                   </attribute>
                 </optional>
               </element>
+              <element name="builtin">
+                <attribute name="symbol"/>
+                <attribute name="names"/>
+              </element>
+              <element name="symbol">
+                <attribute name="command"/>
+                <attribute name="kind"/>
+                <attribute name="label"/>
+                <optional>
+                  <attribute name="detail"/>
+                </optional>
+              </element>
+              <element name="exclusive">
+                <attribute name="command"/>
+                <attribute name="attributes"/>
+                <optional>
+                  <attribute name="content">
+                    <value>yes</value>
+                  </attribute>
+                </optional>
+              </element>
+              <element name="when">
+                <attribute name="command"/>
+                <attribute name="attribute"/>
+                <optional>
+                  <attribute name="value"/>
+                </optional>
+                <optional>
+                  <attribute name="requires"/>
+                </optional>
+                <optional>
+                  <attribute name="forbids"/>
+                </optional>
+              </element>
+              <element name="namespace">
+                <attribute name="prefix"/>
+                <attribute name="uri"/>
+              </element>
             </choice>
           </zeroOrMore>
         </element>

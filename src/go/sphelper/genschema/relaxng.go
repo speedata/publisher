@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/xml"
 	"fmt"
+	"strings"
 )
 
 const (
@@ -27,6 +28,86 @@ func init() {
 	valueElement = xml.StartElement{Name: xml.Name{Local: "value"}}
 	optionalElement = xml.StartElement{Name: xml.Name{Local: "optional"}}
 	choiceElement = xml.StartElement{Name: xml.Name{Local: "choice"}}
+}
+
+// lspElement returns an empty start element in the lsp namespace with the
+// given attributes. Attributes with an empty value are omitted.
+func lspElement(name string, attrs ...xml.Attr) xml.StartElement {
+	elt := xml.StartElement{Name: xml.Name{Local: "lsp:" + name}}
+	for _, a := range attrs {
+		if a.Value != "" {
+			elt.Attr = append(elt.Attr, a)
+		}
+	}
+	return elt
+}
+
+func xmlAttr(name, value string) xml.Attr {
+	return xml.Attr{Name: xml.Name{Local: name}, Value: value}
+}
+
+func encodeEmpty(enc *xml.Encoder, elt xml.StartElement) {
+	enc.EncodeToken(elt)
+	enc.EncodeToken(elt.End())
+}
+
+// yesToTrue maps the commands.xml boolean "yes" to the "true" used in the
+// lsp annotations. Any other value yields an empty string, which drops the
+// attribute in lspElement.
+func yesToTrue(v string) string {
+	if v == "yes" {
+		return "true"
+	}
+	return ""
+}
+
+// writeLspGrammarAnnotations writes the annotations that belong to the
+// grammar as a whole: namespace prefixes for xmlns completion and the
+// built-in symbol names. They are written directly after the grammar start,
+// before the start element.
+func writeLspGrammarAnnotations(commands *commandsXML, enc *xml.Encoder) {
+	for _, ns := range commands.LspAnnotations.Namespaces {
+		encodeEmpty(enc, lspElement("namespace", xmlAttr("prefix", ns.Prefix), xmlAttr("uri", ns.URI)))
+	}
+	for _, b := range commands.LspAnnotations.Builtins {
+		encodeEmpty(enc, lspElement("builtin", xmlAttr("symbol", b.Symbol), xmlAttr("names", strings.Join(strings.Fields(b.Names), " "))))
+	}
+}
+
+// writeLspElementAnnotations writes the annotations of a command directly
+// after its a:documentation element: the link to the manual, formatter
+// hints, the document symbol, exclusive attributes and conditional
+// attributes.
+func writeLspElementAnnotations(commands *commandsXML, enc *xml.Encoder, cmdname, lang string) {
+	encodeEmpty(enc, lspElement("doc", xmlAttr("href", lspDocURL(cmdname, lang))))
+	if f := commands.lspFormatAnnotation(cmdname); f != nil {
+		encodeEmpty(enc, lspElement("format", xmlAttr("preserve", yesToTrue(f.Preserve)), xmlAttr("blank-lines", yesToTrue(f.BlankLines)), xmlAttr("inline", yesToTrue(f.Inline))))
+	}
+	if s := commands.lspDocSymbolAnnotation(cmdname); s != nil {
+		encodeEmpty(enc, lspElement("symbol", xmlAttr("kind", s.Kind), xmlAttr("label", s.Label), xmlAttr("detail", s.Detail)))
+	}
+	for _, e := range commands.lspExclusiveAnnotations(cmdname) {
+		encodeEmpty(enc, lspElement("exclusive", xmlAttr("attributes", e.Attributes), xmlAttr("content", yesToTrue(e.Content))))
+	}
+	for _, w := range commands.lspWhenAnnotations(cmdname) {
+		// A rule with several values expands to one annotation per value. A
+		// rule without a value applies when the attribute is absent.
+		values := strings.Fields(w.Value)
+		if len(values) == 0 {
+			values = []string{""}
+		}
+		for _, v := range values {
+			encodeEmpty(enc, lspElement("when", xmlAttr("attribute", w.Attribute), xmlAttr("value", v), xmlAttr("requires", w.Requires), xmlAttr("forbids", w.Forbids)))
+		}
+	}
+}
+
+// writeLspAttributeAnnotation writes the defines/references annotation of an
+// attribute directly after its a:documentation element.
+func writeLspAttributeAnnotation(commands *commandsXML, enc *xml.Encoder, cmdname, attname string) {
+	if kind, symbol, form := commands.lspSymbolAnnotation(cmdname, attname); kind != "" {
+		encodeEmpty(enc, lspElement(kind, xmlAttr("symbol", symbol), xmlAttr("form", form)))
+	}
 }
 
 // writeChildElements writes the child elements from this command to the encoder.
@@ -129,6 +210,10 @@ func genRelaxNGSchema(commands *commandsXML, lang string, allowForeignNodes bool
 	enc.EncodeToken(sch)
 	enc.EncodeToken(sch.End())
 
+	if allowForeignNodes {
+		writeLspGrammarAnnotations(commands, enc)
+	}
+
 	start := xml.StartElement{Name: xml.Name{Local: "start"}}
 	enc.EncodeToken(start)
 
@@ -170,20 +255,7 @@ func genRelaxNGSchema(commands *commandsXML, lang string, allowForeignNodes bool
 		enc.EncodeToken(doc.End())
 
 		if allowForeignNodes {
-			if f := commands.lspFormatAnnotation(cmd.Name); f != nil {
-				format := xml.StartElement{Name: xml.Name{Local: "lsp:format"}}
-				if f.Preserve == "yes" {
-					format.Attr = append(format.Attr, xml.Attr{Name: xml.Name{Local: "preserve"}, Value: "true"})
-				}
-				if f.BlankLines == "yes" {
-					format.Attr = append(format.Attr, xml.Attr{Name: xml.Name{Local: "blank-lines"}, Value: "true"})
-				}
-				if f.Inline == "yes" {
-					format.Attr = append(format.Attr, xml.Attr{Name: xml.Name{Local: "inline"}, Value: "true"})
-				}
-				enc.EncodeToken(format)
-				enc.EncodeToken(format.End())
-			}
+			writeLspElementAnnotations(commands, enc, cmd.Name, lang)
 		}
 
 		// if the child elements contents is "empty", there is no need for allowing foreign nodes (1/2)
@@ -210,15 +282,7 @@ func genRelaxNGSchema(commands *commandsXML, lang string, allowForeignNodes bool
 			enc.EncodeToken(doc.End())
 
 			if allowForeignNodes {
-				if kind, symbol, form := commands.lspSymbolAnnotation(cmd.Name, attr.Name); kind != "" {
-					ann := xml.StartElement{Name: xml.Name{Local: "lsp:" + kind}}
-					ann.Attr = []xml.Attr{{Name: xml.Name{Local: "symbol"}, Value: symbol}}
-					if form != "" {
-						ann.Attr = append(ann.Attr, xml.Attr{Name: xml.Name{Local: "form"}, Value: form})
-					}
-					enc.EncodeToken(ann)
-					enc.EncodeToken(ann.End())
-				}
+				writeLspAttributeAnnotation(commands, enc, cmd.Name, attr.Name)
 			}
 
 			if len(attr.Choice) > 0 {

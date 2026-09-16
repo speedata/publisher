@@ -799,6 +799,30 @@
 
       format: formatter conventions for a command (preserve, blank-lines,
       inline; value yes).
+
+      builtin: names of a symbol that exist without a definition in the
+      layout, for example the predefined text format "text". "names" is a
+      space separated list.
+
+      symbol: the command is a document symbol (outline entry). "kind" is an
+      LSP SymbolKind name in lower camel case (namespace, struct, function,
+      method, object, ...). "label" and "detail" are templates in which
+      {@attr} is replaced by the value of that attribute.
+
+      exclusive: at most one of the listed "attributes" and, with
+      content="yes", the element content may be present.
+
+      when: conditional attributes. When "attribute" has one of the values in
+      "value", the attributes in "requires" must be present and the
+      attributes in "forbids" must be absent. A value list expands to one
+      annotation per value; a rule without "value" applies when the attribute
+      is absent.
+
+      namespace: a prefix worth offering when completing xmlns: on the root
+      element.
+
+      The lsp:doc annotation (link to the reference page in the manual) needs
+      no rule, it is derived from the command name.
   -->
   <lspannotations>
     <defines command="DefineColor" attribute="name" symbol="color"/>
@@ -830,6 +854,20 @@
     <format command="Value" preserve="yes"/>
     <format command="Section" blank-lines="yes"/>
     <format command="HTML" inline="yes"/>
+    <builtin symbol="textformat" names="text justified centered left right"/>
+    <builtin symbol="fontfamily" names="text"/>
+    <symbol command="Section" kind="namespace" label="{@name}"/>
+    <symbol command="Record" kind="struct" label="{@element}{@match}" detail="{@mode}"/>
+    <symbol command="Function" kind="function" label="{@name}"/>
+    <exclusive command="Value SetVariable" attributes="select" content="yes"/>
+    <when command="DefineColor" attribute="model" value="cmyk" requires="c m y k" forbids="r g b value colorname"/>
+    <when command="DefineColor" attribute="model" value="rgb RGB" requires="r g b" forbids="c m y k value colorname"/>
+    <when command="DefineColor" attribute="model" value="gray" requires="g" forbids="r b c m y k value colorname"/>
+    <when command="DefineColor" attribute="model" value="spotcolor" requires="colorname" forbids="r g b value"/>
+    <when command="DefineColor" attribute="model" requires="value" forbids="r g b c m y k colorname"/>
+    <namespace prefix="sd" uri="urn:speedata:2009/publisher/functions/en"/>
+    <namespace prefix="map" uri="http://www.w3.org/2005/xpath-functions/map"/>
+    <namespace prefix="array" uri="http://www.w3.org/2005/xpath-functions/array"/>
   </lspannotations>
 
   <!-- Thematic grouping of all commands. Used for the overview page
@@ -6370,14 +6408,6 @@
       <description xml:lang="de">
         <para>Falls <tt>yes</tt>, wird die Formel im Display-Stil gesetzt (großzügigere Abstände, zum Beispiel bei Brüchen). Bei <tt>no</tt> (Standardwert) wird die Formel im Textstil für die Verwendung im Fließtext gesetzt.</para>
       </description>
-      <choice en="yes">
-        <description xml:lang="en"><para>Display style.</para></description>
-        <description xml:lang="de"><para>Display-Stil.</para></description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en"><para>Inline style.</para></description>
-        <description xml:lang="de"><para>Inline-Stil.</para></description>
-      </choice>
     </attribute>
     <attribute en="fontfamily" type="text" optional="yes">
       <description xml:lang="en">
