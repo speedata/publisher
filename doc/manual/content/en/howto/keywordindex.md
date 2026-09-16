@@ -33,7 +33,7 @@ As with the table of contents, a variable is filled with entries while the catal
 
 <Record element="article">
   <SetVariable variable="indexentries">
-    <Copy-of select="$indexentries/indexentry"/>
+    <Copy-of select="$indexentries"/>
     <Element name="indexentry">
       <Attribute name="name" select="@base"/>
       <Attribute name="page" select="sd:current-page()"/>
@@ -42,10 +42,7 @@ As with the table of contents, a variable is filled with entries while the catal
 </Record>
 ```
 
-Two details matter here:
-
-* **The keyword must be stored in the attribute `name`**; `<Makeindex>` expects this name when merging identical entries.
-* **`<Copy-of>` takes over the previous entries via the path `$indexentries/indexentry`**, not via `$indexentries` alone. The path keeps the list flat; with `$indexentries` each step creates a more deeply nested structure from which `<Makeindex>` later only reads the last entry.
+One detail matters here: **the keyword must be stored in the attribute `name`**; `<Makeindex>` expects this name when merging identical entries.
 
 Instead of the dedicated section, the collecting could also sit directly in a `<ForAll select="article">` in the catalog section; the separate `<Record>` merely keeps collecting and output apart.
 
@@ -215,7 +212,7 @@ The runnable project is also available in the [examples repository](https://gith
 
   <Record element="article">
     <SetVariable variable="indexentries">
-      <Copy-of select="$indexentries/indexentry"/>
+      <Copy-of select="$indexentries"/>
       <Element name="indexentry">
         <Attribute name="name" select="@base"/>
         <Attribute name="page" select="sd:current-page()"/>

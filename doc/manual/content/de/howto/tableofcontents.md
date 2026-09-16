@@ -50,7 +50,7 @@ Der Katalog selbst ist schnell gebaut: Jede Gruppe bekommt eine Überschrift und
 
 ### Schritt 2: Beim Setzen die Einträge sammeln
 
-Für jede Gruppe wird ein Verzeichniseintrag in der Variablen `entries` ergänzt, und zwar in dem Moment, in dem die Gruppe gesetzt wird; `sd:current-page()` liefert dann die richtige Seite. Die Befehle [`<Element>`]({{< relref "/reference/commands/element" >}}) und [`<Attribute>`]({{< relref "/reference/commands/attribute" >}}) bauen dafür eine XML-Struktur zusammen, `<Copy-of>` übernimmt jeweils die bisherigen Einträge (der Pfad `$entries/entry` statt `$entries` hält die Liste dabei flach):
+Für jede Gruppe wird ein Verzeichniseintrag in der Variablen `entries` ergänzt, und zwar in dem Moment, in dem die Gruppe gesetzt wird; `sd:current-page()` liefert dann die richtige Seite. Die Befehle [`<Element>`]({{< relref "/reference/commands/element" >}}) und [`<Attribute>`]({{< relref "/reference/commands/attribute" >}}) bauen dafür eine XML-Struktur zusammen, `<Copy-of>` übernimmt jeweils die bisherigen Einträge:
 
 ```xml
 <Record element="group">
@@ -161,7 +161,7 @@ Das lauffähige Projekt liegt auch im [Beispiele-Repository](https://github.com/
 
   <Record element="group">
     <SetVariable variable="entries">
-      <Copy-of select="$entries/entry"/>
+      <Copy-of select="$entries"/>
       <Element name="entry">
         <Attribute name="name" select="@name"/>
         <Attribute name="material" select="@material"/>

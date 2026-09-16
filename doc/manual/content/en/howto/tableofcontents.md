@@ -50,7 +50,7 @@ The catalog itself is quickly built: each group gets a heading and its article t
 
 ### Step 2: Collect the entries while typesetting
 
-For each group, a directory entry is added to the variable `entries` at the very moment the group is typeset; `sd:current-page()` then returns the correct page. The commands [`<Element>`]({{< relref "/reference/commands/element" >}}) and [`<Attribute>`]({{< relref "/reference/commands/attribute" >}}) assemble an XML structure for this, and `<Copy-of>` takes over the previous entries each time (the path `$entries/entry` instead of `$entries` keeps the list flat):
+For each group, a directory entry is added to the variable `entries` at the very moment the group is typeset; `sd:current-page()` then returns the correct page. The commands [`<Element>`]({{< relref "/reference/commands/element" >}}) and [`<Attribute>`]({{< relref "/reference/commands/attribute" >}}) assemble an XML structure for this, and `<Copy-of>` takes over the previous entries each time:
 
 ```xml
 <Record element="group">
@@ -161,7 +161,7 @@ The runnable project is also available in the [examples repository](https://gith
 
   <Record element="group">
     <SetVariable variable="entries">
-      <Copy-of select="$entries/entry"/>
+      <Copy-of select="$entries"/>
       <Element name="entry">
         <Attribute name="name" select="@name"/>
         <Attribute name="material" select="@material"/>

@@ -33,7 +33,7 @@ Wie beim Inhaltsverzeichnis wird beim Setzen des Katalogs eine Variable mit Eint
 
 <Record element="article">
   <SetVariable variable="indexentries">
-    <Copy-of select="$indexentries/indexentry"/>
+    <Copy-of select="$indexentries"/>
     <Element name="indexentry">
       <Attribute name="name" select="@base"/>
       <Attribute name="page" select="sd:current-page()"/>
@@ -42,10 +42,7 @@ Wie beim Inhaltsverzeichnis wird beim Setzen des Katalogs eine Variable mit Eint
 </Record>
 ```
 
-Zwei Details sind hier wichtig:
-
-* **Das Stichwort muss im Attribut `name` stehen**; `<Makeindex>` erwartet diesen Namen beim Zusammenfassen gleicher Einträge.
-* **`<Copy-of>` übernimmt die bisherigen Einträge über den Pfad `$indexentries/indexentry`**, nicht über `$indexentries` allein. Der Pfad hält die Liste flach; mit `$indexentries` entsteht bei jedem Schritt eine tiefer geschachtelte Struktur, aus der `<Makeindex>` später nur den letzten Eintrag herausliest.
+Ein Detail ist hier wichtig: **Das Stichwort muss im Attribut `name` stehen**; `<Makeindex>` erwartet diesen Namen beim Zusammenfassen gleicher Einträge.
 
 Das Sammeln könnte statt über den eigenen Abschnitt auch direkt in einem `<ForAll select="article">` im Katalogabschnitt stehen; der eigene `<Record>` hält hier lediglich Sammeln und Ausgabe getrennt.
 
@@ -215,7 +212,7 @@ Das lauffähige Projekt liegt auch im [Beispiele-Repository](https://github.com/
 
   <Record element="article">
     <SetVariable variable="indexentries">
-      <Copy-of select="$indexentries/indexentry"/>
+      <Copy-of select="$indexentries"/>
       <Element name="indexentry">
         <Attribute name="name" select="@base"/>
         <Attribute name="page" select="sd:current-page()"/>

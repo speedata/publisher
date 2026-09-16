@@ -139,16 +139,15 @@ Here the variable `indexentries` is supplemented by one entry each.
 ```xml
   <Record element="keyword">
     <SetVariable variable="indexentries">
-      <Copy-of select="$indexentries/indexentry"/> <!--1-->
+      <Copy-of select="$indexentries"/>
       <Element name="indexentry">
-        <Attribute name="name" select="@word"/> <!--2-->
+        <Attribute name="name" select="@word"/> <!--1-->
         <Attribute name="page" select="@page"/>
       </Element>
     </SetVariable>
   </Record>
 ```
-1. The path `$indexentries/indexentry` (instead of just `$indexentries`) keeps the list flat; only then will `<Makeindex>` later see all the entries.
-2. In the current publisher version, the entry that is sorted must be saved in an attribute called `name`.
+1. In the current publisher version, the entry that is sorted must be saved in an attribute called `name`.
 
 In the last part the table is output (insert at position 3 in the listing ).
 For each section (element `section` in `<Makeindex>`) a line in light grey is output with the sort key.

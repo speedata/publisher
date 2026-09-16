@@ -135,16 +135,15 @@ Der Abschnitt zum Element `keyword` (einfügen an Stelle 1 im Listing ) ist einf
 ```xml
   <Record element="keyword">
     <SetVariable variable="indexentries">
-      <Copy-of select="$indexentries/indexentry"/> <!--1-->
+      <Copy-of select="$indexentries"/>
       <Element name="indexentry">
-        <Attribute name="name" select="@word"/> <!--2-->
+        <Attribute name="name" select="@word"/> <!--1-->
         <Attribute name="page" select="@page"/>
       </Element>
     </SetVariable>
   </Record>
 ```
-1. Der Pfad `$indexentries/indexentry` (statt nur `$indexentries`) hält die Liste flach; nur so bekommt `<Makeindex>` später alle Einträge zu sehen.
-2. In der aktuellen Publisher-Version muss der Eintrag, der sortiert wird, in einem Attribut mit dem Namen `name` gespeichert werden.
+1. In der aktuellen Publisher-Version muss der Eintrag, der sortiert wird, in einem Attribut mit dem Namen `name` gespeichert werden.
 
 Im letzten Teil wird die Tabelle ausgegeben (einfügen an Stelle 3 im Listing ).
 Für jeden Abschnitt (Element `section` in `<Makeindex>`) wird eine Zeile in Hellgrau ausgegeben mit dem Sortierschlüssel.
