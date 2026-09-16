@@ -2,12 +2,11 @@
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
   <Options crop="2mm"/>
-  <Compatibility spacefromfont="yes"/>
 
   <!-- interword space from the font (TeX Gyre Heros designs 278/1000 em) -->
-  <LoadFontfile name="fromfont" filename="texgyreheros-regular.otf" />
+  <LoadFontfile name="fromfont" filename="texgyreheros-regular.otf" spacefromfont="yes" />
   <!-- explicit space attribute wins over spacefromfont -->
-  <LoadFontfile name="pinned" filename="texgyreheros-regular.otf" space="25" />
+  <LoadFontfile name="pinned" filename="texgyreheros-regular.otf" spacefromfont="yes" space="25" />
 
   <DefineFontfamily name="fromfont" fontsize="10" leading="12">
     <Regular fontface="fromfont"/>

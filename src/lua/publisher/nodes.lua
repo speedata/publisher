@@ -1293,7 +1293,7 @@ function M.hbglyphlist(arguments)
                 -- width of the interword space. The width of the digit zero
                 -- is a stand-in that is only correct for monospaced fonts.
                 local wswidth
-                if publisher.compatibility.spacefromfont then
+                if thistbl.spacefromfont then
                     wswidth = thistbl.parameters.space
                 else
                     wswidth = thistbl.zerowidth

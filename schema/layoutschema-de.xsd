@@ -997,29 +997,9 @@
   </xs:element>
   <xs:element name="Compatibility">
     <xs:annotation>
-      <xs:documentation>Setze Kompatibilität für ältere Layoutregeln</xs:documentation>
+      <xs:documentation>Setze Kompatibilität für ältere Layoutregeln. Derzeit hat dieser Befehl keine Einstellungen, er bleibt für Layouts früherer Versionen erhalten.</xs:documentation>
     </xs:annotation>
-    <xs:complexType>
-      <xs:attribute name="spacefromfont">
-        <xs:annotation>
-          <xs:documentation>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird. Ein explizites Attribut space bei LoadFontfile hat für diese Schrift Vorrang. Das gilt auch für erhaltene Leerzeichen in vorformatiertem Text (white-space: pre), die sonst die Breite der Ziffer Null erhalten. Diese Einstellung übersteuert das Attribut defaults bei Layout, zu dessen Verhaltensstand 6.0 dieses Verhalten gehört.</xs:documentation>
-        </xs:annotation>
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="yes">
-              <xs:annotation>
-                <xs:documentation>Neues Verhalten: der Wortzwischenraum erhält die Breite, die der Schriftgestalter vorgesehen hat. Er darf um die Hälfte dieser Breite gedehnt und um ein Drittel gestaucht werden.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-            <xs:enumeration value="no">
-              <xs:annotation>
-                <xs:documentation>Altes Verhalten (Voreinstellung): der Wortzwischenraum beträgt 25 Prozent der Schriftgröße, er darf um 30 Prozent der Schriftgröße gedehnt und um 10 Prozent gestaucht werden.</xs:documentation>
-              </xs:annotation>
-            </xs:enumeration>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
-    </xs:complexType>
+    <xs:complexType/>
   </xs:element>
   <xs:element name="Contents">
     <xs:annotation>
@@ -3162,8 +3142,27 @@
       </xs:attribute>
       <xs:attribute name="space">
         <xs:annotation>
-          <xs:documentation>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße. Mit spacefromfont="yes" bei Compatibility kommt die Breite aus der Schriftdatei, sofern dieses Attribut nicht gesetzt ist.</xs:documentation>
+          <xs:documentation>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße. Dieses Attribut hat Vorrang vor spacefromfont.</xs:documentation>
         </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="spacefromfont">
+        <xs:annotation>
+          <xs:documentation>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird statt aus dem festen Prozentsatz der Schriftgröße. Das gilt auch für erhaltene Leerzeichen in vorformatiertem Text (white-space: pre), die sonst die Breite der Ziffer Null erhalten. Ein explizites Attribut space hat Vorrang, Schriften ohne Leerzeichen-Glyphe behalten die Voreinstellung.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes">
+              <xs:annotation>
+                <xs:documentation>Der Wortzwischenraum erhält die Breite, die der Schriftgestalter vorgesehen hat. Er darf um die Hälfte dieser Breite gedehnt und um ein Drittel gestaucht werden.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="no">
+              <xs:annotation>
+                <xs:documentation>Voreinstellung: der Wortzwischenraum beträgt 25 Prozent der Schriftgröße (oder den Wert von space), er darf um 30 Prozent der Schriftgröße gedehnt und um 10 Prozent gestaucht werden.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
       </xs:attribute>
       <xs:attribute name="stretch">
         <xs:annotation>
@@ -3247,7 +3246,7 @@
       </xs:attribute>
       <xs:attribute name="defaults">
         <xs:annotation>
-          <xs:documentation>Wählt den Verhaltensstand der angegebenen Publisher-Version aus, im Format major.minor (zum Beispiel 6.0) oder mit dem Schlüsselwort latest für die aktuelle Version. Verhaltensänderungen, die erst in einer späteren Version zum Standard werden, lassen sich so schon vorher einschalten, zum Beispiel der Wortzwischenraum aus der Schriftdatei (Standard ab Version 6.0). Einzeleinstellungen wie die Attribute bei Compatibility haben Vorrang. Es zählt nur das Wurzelelement der Haupt-Layoutdatei. Ist die angeforderte Version neuer als der Publisher, wird eine Warnung ausgegeben.</xs:documentation>
+          <xs:documentation>Wählt den Verhaltensstand der angegebenen Publisher-Version aus, im Format major.minor (zum Beispiel 6.0) oder mit dem Schlüsselwort latest für die aktuelle Version. Verhaltensänderungen, die erst in einer späteren Version zum Standard werden, lassen sich so schon vorher einschalten. Einzeleinstellungen wie die Attribute bei Compatibility haben Vorrang. Derzeit gibt es keine solchen Verhaltensänderungen, das Attribut wird angenommen und hat keine Wirkung. Es zählt nur das Wurzelelement der Haupt-Layoutdatei. Ist die angeforderte Version neuer als der Publisher, wird eine Warnung ausgegeben.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>

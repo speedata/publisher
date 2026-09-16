@@ -1250,19 +1250,8 @@
    </define>
    <define name="e_Compatibility">
       <element name="Compatibility">
-         <a:documentation>Set compatibility for older layouts</a:documentation>
+         <a:documentation>Set compatibility for older layouts. At the moment this command has no settings, it is kept for layouts of earlier versions.</a:documentation>
          <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/compatibility/"></lsp:doc>
-         <optional>
-            <attribute name="spacefromfont">
-               <a:documentation>Take the width of the interword space from the font itself. An explicit space attribute at LoadFontfile takes precedence for that font. This also applies to preserved spaces in preformatted text (white-space: pre), which otherwise get the width of the digit zero. This setting overrides the defaults attribute at Layout, where this behavior is part of version 6.0.</a:documentation>
-               <choice>
-                  <value>yes</value>
-                  <a:documentation>New behavior: the interword space gets the width that the font designer intended. It can stretch by half and shrink by a third of that width.</a:documentation>
-                  <value>no</value>
-                  <a:documentation>Old behavior (default): the interword space is 25 percent of the font size, it can stretch by 30 percent and shrink by 10 percent of the font size.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
          <empty></empty>
       </element>
    </define>
@@ -3168,7 +3157,18 @@
                </optional>
                <optional>
                   <attribute name="space">
-                     <a:documentation>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size. With spacefromfont=&#34;yes&#34; at Compatibility the width comes from the font itself, unless this attribute is set.</a:documentation>
+                     <a:documentation>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size. This attribute takes precedence over spacefromfont.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="spacefromfont">
+                     <a:documentation>Take the width of the interword space from the font itself instead of the fixed percentage of the font size. This also applies to preserved spaces in preformatted text (white-space: pre), which otherwise get the width of the digit zero. An explicit space attribute takes precedence, fonts without a space glyph keep the default.</a:documentation>
+                     <choice>
+                        <value>yes</value>
+                        <a:documentation>The interword space gets the width that the font designer intended. It can stretch by half and shrink by a third of that width.</a:documentation>
+                        <value>no</value>
+                        <a:documentation>Default: the interword space is 25 percent of the font size (or the value of space), it can stretch by 30 percent and shrink by 10 percent of the font size.</a:documentation>
+                     </choice>
                   </attribute>
                </optional>
                <optional>
@@ -3234,7 +3234,7 @@
                </optional>
                <optional>
                   <attribute name="defaults">
-                     <a:documentation>Selects the behavior defaults of the given publisher version, in the format major.minor (for example 6.0) or the keyword latest for the current version. Behavior changes that become the standard in a later version can be switched on this way before upgrading, for example the interword space taken from the font (standard with version 6.0). Individual settings such as the attributes at Compatibility take precedence. Only the root element of the main layout file is taken into account. If the requested version is newer than the publisher, a warning is given.</a:documentation>
+                     <a:documentation>Selects the behavior defaults of the given publisher version, in the format major.minor (for example 6.0) or the keyword latest for the current version. Behavior changes that become the standard in a later version can be switched on this way before upgrading. Individual settings such as the attributes at Compatibility take precedence. At the moment there are no such behavior changes, the attribute is accepted and has no effect. Only the root element of the main layout file is taken into account. If the requested version is newer than the publisher, a warning is given.</a:documentation>
                   </attribute>
                </optional>
                <oneOrMore>

@@ -507,15 +507,10 @@ function M.compare_versions(a, b)
     return 0
 end
 
----@class Compatibility
----@field spacefromfont boolean
-
 -- See commands.compatibility. The flags for registry behaviors are
 -- recomputed from M.behaviors and M.defaultlevel right below.
----@type Compatibility
-M.compatibility = {
-    spacefromfont = false,
-}
+---@type table<string, boolean>
+M.compatibility = {}
 
 -- The built-in behavior level of this binary. It is raised deliberately at
 -- a major release, when the behaviors that became standard up to that
@@ -526,10 +521,9 @@ M.defaultlevel = "5.9"
 -- since is the version at which a behavior becomes the standard. The flag
 -- of the same name in M.compatibility is enabled when the requested
 -- defaults level is at least that version; a setting at the Compatibility
--- command takes precedence.
-M.behaviors = {
-    spacefromfont = { since = "6.0" },
-}
+-- command takes precedence. The registry is empty at the moment.
+---@type table<string, {since: string}>
+M.behaviors = {}
 
 for behavior, b in pairs(M.behaviors) do
     M.compatibility[behavior] = M.compare_versions(M.defaultlevel, b.since) >= 0

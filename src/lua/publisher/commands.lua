@@ -907,11 +907,17 @@ function commands.compatibility(layoutxml, dataxml)
         )
         exit(false)
     end
-    -- A missing attribute must leave its flag untouched, otherwise this
-    -- command would undo what the defaults attribute at Layout has set.
-    local spacefromfont = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "spacefromfont", "boolean")
-    if spacefromfont ~= nil then
-        publisher.compatibility.spacefromfont = spacefromfont
+    -- spacefromfont lived here only in version 5.9.5 and moved to
+    -- LoadFontfile, so the layout keeps its line breaks unless a font
+    -- asks for the font's own interword space.
+    local spacefromfont = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "spacefromfont", "string")
+    if spacefromfont then
+        main.log(
+            "warn",
+            "The setting spacefromfont at Compatibility has been removed and is ignored",
+            "help",
+            "use spacefromfont at LoadFontfile instead"
+        )
     end
 end
 
@@ -3096,6 +3102,7 @@ function commands.load_fontfile(layoutxml, dataxml)
     local shrink = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "shrink", "number")
     local smcp = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "smallcaps", "string")
     local space = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "space", "number")
+    local spacefromfont = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "spacefromfont", "boolean")
     local step = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "step", "number")
     local stretch = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "stretch", "number")
     local weight = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "weight", "number")
@@ -3183,9 +3190,11 @@ function commands.load_fontfile(layoutxml, dataxml)
     end
 
     -- space stays nil when the attribute is not given, so the fontloader can
-    -- tell an explicit setting apart (see Compatibility spacefromfont).
+    -- tell an explicit setting apart from spacefromfont. A missing boolean
+    -- attribute comes back as a raw string, hence the comparison.
     local extra_parameter = {
         space = space,
+        spacefromfont = spacefromfont == true,
         marginprotrusion = marginprotrusion or 0,
         fallbacks = fallbacks,
         shrink = shrink,

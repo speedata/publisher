@@ -1,8 +1,9 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
   xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-  <Compatibility spacefromfont="yes"/>
   <Pageformat width="10cm" height="7cm"/>
+  <!-- redefine the built-in sans-serif face with the font's own space -->
+  <LoadFontfile name="TeXGyreHeros-Regular" filename="texgyreheros-regular.otf" spacefromfont="yes" />
   <!-- a proportional font in pre makes the space width visible; the digit
        zero in TeX Gyre Heros is twice as wide as its space -->
   <Stylesheet>

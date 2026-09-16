@@ -2763,47 +2763,17 @@
   -->
   <command en="Compatibility">
     <description xml:lang="en">
-      <para>Set compatibility for older layouts</para>
+      <para>Set compatibility for older layouts. At the moment this command has no settings, it is kept for layouts of earlier versions.</para>
     </description>
     <description xml:lang="de">
-      <para>Setze Kompatibilität für ältere Layoutregeln</para>
+      <para>Setze Kompatibilität für ältere Layoutregeln. Derzeit hat dieser Befehl keine Einstellungen, er bleibt für Layouts früherer Versionen erhalten.</para>
     </description>
     <childelements></childelements>
-    <attribute en="spacefromfont" optional="yes" since="5.9.5">
-      <description xml:lang="en">
-        <para>Take the width of the interword space from the font itself. An explicit <tt>space</tt> attribute at <cmd name="LoadFontfile"/> takes precedence for that font. This also applies to preserved spaces in preformatted text (<tt>white-space: pre</tt>), which otherwise get the width of the digit zero. This setting overrides the <tt>defaults</tt> attribute at <cmd name="Layout"/>, where this behavior is part of version 6.0.</para>
-      </description>
-      <description xml:lang="de">
-        <para>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird. Ein explizites Attribut <tt>space</tt> bei <cmd name="LoadFontfile"/> hat für diese Schrift Vorrang. Das gilt auch für erhaltene Leerzeichen in vorformatiertem Text (<tt>white-space: pre</tt>), die sonst die Breite der Ziffer Null erhalten. Diese Einstellung übersteuert das Attribut <tt>defaults</tt> bei <cmd name="Layout"/>, zu dessen Verhaltensstand 6.0 dieses Verhalten gehört.</para>
-      </description>
-      <choice en="yes">
-        <description xml:lang="en">
-          <para>New behavior: the interword space gets the width that the font designer intended. It can stretch by half and shrink by a third of that width.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Neues Verhalten: der Wortzwischenraum erhält die Breite, die der Schriftgestalter vorgesehen hat. Er darf um die Hälfte dieser Breite gedehnt und um ein Drittel gestaucht werden.</para>
-        </description>
-      </choice>
-      <choice en="no">
-        <description xml:lang="en">
-          <para>Old behavior (default): the interword space is 25 percent of the font size, it can stretch by 30 percent and shrink by 10 percent of the font size.</para>
-        </description>
-        <description xml:lang="de">
-          <para>Altes Verhalten (Voreinstellung): der Wortzwischenraum beträgt 25 Prozent der Schriftgröße, er darf um 30 Prozent der Schriftgröße gedehnt und um 10 Prozent gestaucht werden.</para>
-        </description>
-      </choice>
-    </attribute>
     <example xml:lang="en">
-      <listing><![CDATA[<Compatibility
-    spacefromfont="yes"
-/>
-]]></listing>
+      <para>The settings <tt>movecursoronplaceobject</tt> (removed in version 6.0) and <tt>spacefromfont</tt> (moved to <cmd name="LoadFontfile"/> in version 5.9.6) are no longer available here.</para>
     </example>
     <example xml:lang="de">
-      <listing><![CDATA[<Compatibility
-    spacefromfont="yes"
-/>
-]]></listing>
+      <para>Die Einstellungen <tt>movecursoronplaceobject</tt> (in Version 6.0 entfernt) und <tt>spacefromfont</tt> (in Version 5.9.6 zu <cmd name="LoadFontfile"/> verschoben) gibt es hier nicht mehr.</para>
     </example>
     <seealso></seealso>
   </command>
@@ -5724,11 +5694,35 @@
     </attribute>
     <attribute en="space" type="zerotohundred" optional="yes">
       <description xml:lang="en">
-        <para>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size. With <tt>spacefromfont="yes"</tt> at <cmd name="Compatibility"/> the width comes from the font itself, unless this attribute is set.</para>
+        <para>The natural width between words. Can be stretched by 30% and shrunk by 10%. Defaults to 25. The value is a percentile of the font size. This attribute takes precedence over <tt>spacefromfont</tt>.</para>
       </description>
       <description xml:lang="de">
-        <para>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße. Mit <tt>spacefromfont="yes"</tt> bei <cmd name="Compatibility"/> kommt die Breite aus der Schriftdatei, sofern dieses Attribut nicht gesetzt ist.</para>
+        <para>Natürliche Breite des Leerraums zwischen zwei Wörtern. Dieser darf um 30% gestreckt und um 10% gestaucht werden. Die Voreinstellung ist 25. Der Wert ist die Prozentangabe der Schriftgröße. Dieses Attribut hat Vorrang vor <tt>spacefromfont</tt>.</para>
       </description>
+    </attribute>
+    <attribute en="spacefromfont" optional="yes" since="5.9.6">
+      <description xml:lang="en">
+        <para>Take the width of the interword space from the font itself instead of the fixed percentage of the font size. This also applies to preserved spaces in preformatted text (<tt>white-space: pre</tt>), which otherwise get the width of the digit zero. An explicit <tt>space</tt> attribute takes precedence, fonts without a space glyph keep the default.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Bestimmt, ob die Breite des Wortzwischenraums aus der Schriftdatei genommen wird statt aus dem festen Prozentsatz der Schriftgröße. Das gilt auch für erhaltene Leerzeichen in vorformatiertem Text (<tt>white-space: pre</tt>), die sonst die Breite der Ziffer Null erhalten. Ein explizites Attribut <tt>space</tt> hat Vorrang, Schriften ohne Leerzeichen-Glyphe behalten die Voreinstellung.</para>
+      </description>
+      <choice en="yes">
+        <description xml:lang="en">
+          <para>The interword space gets the width that the font designer intended. It can stretch by half and shrink by a third of that width.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Der Wortzwischenraum erhält die Breite, die der Schriftgestalter vorgesehen hat. Er darf um die Hälfte dieser Breite gedehnt und um ein Drittel gestaucht werden.</para>
+        </description>
+      </choice>
+      <choice en="no">
+        <description xml:lang="en">
+          <para>Default: the interword space is 25 percent of the font size (or the value of <tt>space</tt>), it can stretch by 30 percent and shrink by 10 percent of the font size.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Voreinstellung: der Wortzwischenraum beträgt 25 Prozent der Schriftgröße (oder den Wert von <tt>space</tt>), er darf um 30 Prozent der Schriftgröße gedehnt und um 10 Prozent gestaucht werden.</para>
+        </description>
+      </choice>
     </attribute>
     <attribute en="stretch" optional="yes" type="number" since="4.19.17">
       <description xml:lang="en">
@@ -5857,10 +5851,10 @@
     </attribute>
     <attribute en="defaults" type="text" optional="yes" since="5.9.5">
       <description xml:lang="en">
-        <para>Selects the behavior defaults of the given publisher version, in the format major.minor (for example <tt>6.0</tt>) or the keyword <tt>latest</tt> for the current version. Behavior changes that become the standard in a later version can be switched on this way before upgrading, for example the interword space taken from the font (standard with version 6.0). Individual settings such as the attributes at <cmd name="Compatibility"/> take precedence. Only the root element of the main layout file is taken into account. If the requested version is newer than the publisher, a warning is given.</para>
+        <para>Selects the behavior defaults of the given publisher version, in the format major.minor (for example <tt>6.0</tt>) or the keyword <tt>latest</tt> for the current version. Behavior changes that become the standard in a later version can be switched on this way before upgrading. Individual settings such as the attributes at <cmd name="Compatibility"/> take precedence. At the moment there are no such behavior changes, the attribute is accepted and has no effect. Only the root element of the main layout file is taken into account. If the requested version is newer than the publisher, a warning is given.</para>
       </description>
       <description xml:lang="de">
-        <para>Wählt den Verhaltensstand der angegebenen Publisher-Version aus, im Format major.minor (zum Beispiel <tt>6.0</tt>) oder mit dem Schlüsselwort <tt>latest</tt> für die aktuelle Version. Verhaltensänderungen, die erst in einer späteren Version zum Standard werden, lassen sich so schon vorher einschalten, zum Beispiel der Wortzwischenraum aus der Schriftdatei (Standard ab Version 6.0). Einzeleinstellungen wie die Attribute bei <cmd name="Compatibility"/> haben Vorrang. Es zählt nur das Wurzelelement der Haupt-Layoutdatei. Ist die angeforderte Version neuer als der Publisher, wird eine Warnung ausgegeben.</para>
+        <para>Wählt den Verhaltensstand der angegebenen Publisher-Version aus, im Format major.minor (zum Beispiel <tt>6.0</tt>) oder mit dem Schlüsselwort <tt>latest</tt> für die aktuelle Version. Verhaltensänderungen, die erst in einer späteren Version zum Standard werden, lassen sich so schon vorher einschalten. Einzeleinstellungen wie die Attribute bei <cmd name="Compatibility"/> haben Vorrang. Derzeit gibt es keine solchen Verhaltensänderungen, das Attribut wird angenommen und hat keine Wirkung. Es zählt nur das Wurzelelement der Haupt-Layoutdatei. Ist die angeforderte Version neuer als der Publisher, wird eine Warnung ausgegeben.</para>
       </description>
     </attribute>
     <example xml:lang="en">
