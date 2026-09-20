@@ -3781,12 +3781,12 @@
                </optional>
                <optional>
                   <attribute name="exit">
-                     <a:documentation>Tells the software to exit immediately.</a:documentation>
+                     <a:documentation>Stop the data processing after this message?</a:documentation>
                      <choice>
                         <value>no</value>
-                        <a:documentation>The speedata Publisher continues with the PDF creation.</a:documentation>
+                        <a:documentation>The speedata Publisher continues with the PDF creation (default).</a:documentation>
                         <value>yes</value>
-                        <a:documentation>The speedata Publisher exits without finishing the PDF file.</a:documentation>
+                        <a:documentation>The speedata Publisher stops processing the data and writes the PDF file with the pages processed so far. The current page is written as well, even if it is still empty. Useful for checking the first pages of a large document. Before version 5.9.6 the PDF file was left unfinished.</a:documentation>
                      </choice>
                   </attribute>
                </optional>

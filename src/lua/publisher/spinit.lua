@@ -262,10 +262,6 @@ function exit(graceful)
     end
 end
 
-function quit()
-    os.exit(-1)
-end
-
 local function setup()
     splib.log("debug", "Setting", "varname", "LUA_PATH", "value", os.getenv("LUA_PATH") or "")
     splib.log("debug", "Setting", "varname", "SP_EXTRA_DIRS", "value", os.getenv("SP_EXTRA_DIRS") or "")
@@ -1259,6 +1255,10 @@ publisher.prohibited_at_beginning = {
 }
 
 local function traceback(what)
+    -- <Message exit="yes"> stops the run on purpose, see publisher.dothings
+    if what == publisher.stop_request then
+        return what
+    end
     -- get message from what
     local msg = string.gsub(what, ".*:%d+: (.*)", "%1")
     splib.log("error", "Lua error:", "message", msg)
@@ -1306,6 +1306,10 @@ local function traceback(what)
         "Please report this error to the speedata Publisher developers.\nSee the protocol file (publisher-protocol.xml) for more information."
     )
 end
+
+-- publisher.dothings uses the same handler for Lua errors raised while
+-- the layout is processed, so a stack trace is reported as in main_loop().
+publisher.lua_error_handler = traceback
 
 local function main_loop()
     -- splib.log (not main.log) so no page/line context is attached: the

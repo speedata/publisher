@@ -23,6 +23,7 @@ file_start("publisher.lua")
 ---@field maxheight? integer
 ---@field prohibited_at_end table Characters not allowed at the end of a line.
 ---@field prohibited_at_beginning table Characters not allowed at the start of a line.
+---@field lua_error_handler? fun(what: any): any Set by spinit.lua, reports a Lua error with stack trace, passes stop_request through.
 local M = {}
 -- Publish M into package.loaded right away so that submodules required
 -- below can `local publisher = require("publisher")` and get a usable
@@ -278,6 +279,11 @@ M.alternating_value = {}
 -- the return value for the LuaTeX process
 ---@type integer
 M.errorcode = 0
+
+-- Raised (as error value) by <Message exit="yes"> to stop the data
+-- processing. dothings() catches it and finishes the PDF with the pages
+-- processed so far.
+M.stop_request = {}
 
 -- sp --mode foo sets modes.foo = true
 ---@type table<string, boolean>
@@ -858,6 +864,31 @@ M.rolecounter = 0
 
 -- Start the processing (`dothings()`)
 -- -------------------------------
+
+-- Run the dispatcher for the layout or the root Record. Returns "ok" when
+-- all commands were processed, "stop" after <Message exit="yes"> and "error"
+-- after a Lua error, which is reported like in the main loop of spinit.lua.
+---@param layoutxml table
+---@param dataxml table
+---@return "ok"|"stop"|"error"
+local function dispatch_toplevel(layoutxml, dataxml)
+    local handler = M.lua_error_handler
+        or function(e)
+            if e ~= M.stop_request then
+                print(e)
+            end
+            return e
+        end
+    local ok, err = xpcall(M.dispatch.dispatch, handler, layoutxml, dataxml)
+    if ok then
+        return "ok"
+    elseif err == M.stop_request then
+        return "stop"
+    else
+        return "error"
+    end
+end
+
 -- This is the entry point of the processing. It is called from publisher.spinit.
 ---@return nil
 function M.dothings()
@@ -1348,7 +1379,11 @@ function M.initialize_luatex_and_generate_pdf()
         main.log("error", msg)
     end
 
-    M.dispatch.dispatch(layoutxml, M.data)
+    -- A stop or an error at this level (outside of Record) leaves no pages
+    -- to write, so the run ends here.
+    if dispatch_toplevel(layoutxml, M.data) ~= "ok" then
+        return
+    end
     -- for namespace mode == strict
     M.data.namespaces = dataxml[1][".__ns"]
 
@@ -1590,7 +1625,12 @@ function M.initialize_luatex_and_generate_pdf()
     if tmp then
         -- For data:eval, the namespaces must be set the layout namespaces
         M.data.namespaces = layoutxml[".__ns"]
-        M.dispatch.dispatch(tmp, M.data)
+        -- After <Message exit="yes"> the PDF gets finished with the pages
+        -- processed so far. A Lua error is already reported, the PDF stays
+        -- incomplete as before.
+        if dispatch_toplevel(tmp, M.data) == "error" then
+            return
+        end
     else
         name = name or ""
         local elt_ns, elt_localname = string.match(name, "{(.*)}(.*)")

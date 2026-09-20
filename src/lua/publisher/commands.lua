@@ -3633,8 +3633,9 @@ function commands.message(layoutxml, dataxml)
     end
 
     if exitnow then
-        main.log("error", string.format(-1, "Exiting on user request."))
-        quit()
+        main.log("info", "Stop processing on user request (Message exit)")
+        -- Unwinds to publisher.dothings, which writes the pages processed so far.
+        error(publisher.stop_request, 0)
     end
 end
 

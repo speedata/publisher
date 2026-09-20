@@ -3557,18 +3557,18 @@
       </xs:attribute>
       <xs:attribute name="exit">
         <xs:annotation>
-          <xs:documentation>Tells the software to exit immediately.</xs:documentation>
+          <xs:documentation>Stop the data processing after this message?</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
             <xs:enumeration value="no">
               <xs:annotation>
-                <xs:documentation>The speedata Publisher continues with the PDF creation.</xs:documentation>
+                <xs:documentation>The speedata Publisher continues with the PDF creation (default).</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="yes">
               <xs:annotation>
-                <xs:documentation>The speedata Publisher exits without finishing the PDF file.</xs:documentation>
+                <xs:documentation>The speedata Publisher stops processing the data and writes the PDF file with the pages processed so far. The current page is written as well, even if it is still empty. Useful for checking the first pages of a large document. Before version 5.9.6 the PDF file was left unfinished.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
           </xs:restriction>

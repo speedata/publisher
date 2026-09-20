@@ -3557,18 +3557,18 @@
       </xs:attribute>
       <xs:attribute name="exit">
         <xs:annotation>
-          <xs:documentation>Soll sich der Publisher beenden?</xs:documentation>
+          <xs:documentation>Soll die Verarbeitung der Daten nach dieser Meldung beendet werden?</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:token">
             <xs:enumeration value="no">
               <xs:annotation>
-                <xs:documentation>Der speedata Publisher erzeugt weiterhin die PDF-Datei</xs:documentation>
+                <xs:documentation>Der speedata Publisher erzeugt weiterhin die PDF-Datei (Voreinstellung).</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
             <xs:enumeration value="yes">
               <xs:annotation>
-                <xs:documentation>Der speedata Publisher beendet sich ohne die PDF-Datei fertig zu stellen.</xs:documentation>
+                <xs:documentation>Der speedata Publisher bricht die Verarbeitung der Daten ab und schreibt die PDF-Datei mit den bis dahin erzeugten Seiten. Die aktuelle Seite wird ebenfalls ausgegeben, auch wenn sie noch leer ist. Nützlich, um die ersten Seiten eines großen Dokuments zu prüfen. Vor Version 5.9.6 blieb die PDF-Datei unvollständig.</xs:documentation>
               </xs:annotation>
             </xs:enumeration>
           </xs:restriction>

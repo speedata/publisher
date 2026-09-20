@@ -3781,12 +3781,12 @@
                </optional>
                <optional>
                   <attribute name="exit">
-                     <a:documentation>Soll sich der Publisher beenden?</a:documentation>
+                     <a:documentation>Soll die Verarbeitung der Daten nach dieser Meldung beendet werden?</a:documentation>
                      <choice>
                         <value>no</value>
-                        <a:documentation>Der speedata Publisher erzeugt weiterhin die PDF-Datei</a:documentation>
+                        <a:documentation>Der speedata Publisher erzeugt weiterhin die PDF-Datei (Voreinstellung).</a:documentation>
                         <value>yes</value>
-                        <a:documentation>Der speedata Publisher beendet sich ohne die PDF-Datei fertig zu stellen.</a:documentation>
+                        <a:documentation>Der speedata Publisher bricht die Verarbeitung der Daten ab und schreibt die PDF-Datei mit den bis dahin erzeugten Seiten. Die aktuelle Seite wird ebenfalls ausgegeben, auch wenn sie noch leer ist. Nützlich, um die ersten Seiten eines großen Dokuments zu prüfen. Vor Version 5.9.6 blieb die PDF-Datei unvollständig.</a:documentation>
                      </choice>
                   </attribute>
                </optional>

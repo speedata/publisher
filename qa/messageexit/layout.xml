@@ -1,0 +1,21 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+        xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <!-- Message exit="yes" stops the data processing, the PDF is written
+       with the pages processed so far (here: two of five). -->
+  <Record element="data">
+    <ForAll select="item">
+      <PlaceObject>
+        <Textblock>
+          <Paragraph><Value select="."/></Paragraph>
+        </Textblock>
+      </PlaceObject>
+      <Switch>
+        <Case test="sd:current-page() = 2">
+          <Message select="'Stop after two pages'" exit="yes"/>
+        </Case>
+      </Switch>
+      <ClearPage/>
+    </ForAll>
+  </Record>
+</Layout>

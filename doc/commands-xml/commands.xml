@@ -6504,15 +6504,15 @@
       </description>
     </attribute>
     <attribute en="exit" optional="yes" since="3.1.17">
-      <description xml:lang="en"><para>Tells the software to exit immediately.</para></description>
-      <description xml:lang="de"><para>Soll sich der Publisher beenden?</para></description>
+      <description xml:lang="en"><para>Stop the data processing after this message?</para></description>
+      <description xml:lang="de"><para>Soll die Verarbeitung der Daten nach dieser Meldung beendet werden?</para></description>
       <choice en="no">
-        <description xml:lang="en"><para>The speedata Publisher continues with the PDF creation.</para></description>
-        <description xml:lang="de"><para>Der speedata Publisher erzeugt weiterhin die PDF-Datei</para></description>
+        <description xml:lang="en"><para>The speedata Publisher continues with the PDF creation (default).</para></description>
+        <description xml:lang="de"><para>Der speedata Publisher erzeugt weiterhin die PDF-Datei (Voreinstellung).</para></description>
       </choice>
       <choice en="yes">
-        <description xml:lang="en"><para>The speedata Publisher exits without finishing the PDF file.</para></description>
-        <description xml:lang="de"><para>Der speedata Publisher beendet sich ohne die PDF-Datei fertig zu stellen.</para></description>
+        <description xml:lang="en"><para>The speedata Publisher stops processing the data and writes the PDF file with the pages processed so far. The current page is written as well, even if it is still empty. Useful for checking the first pages of a large document. Before version 5.9.6 the PDF file was left unfinished.</para></description>
+        <description xml:lang="de"><para>Der speedata Publisher bricht die Verarbeitung der Daten ab und schreibt die PDF-Datei mit den bis dahin erzeugten Seiten. Die aktuelle Seite wird ebenfalls ausgegeben, auch wenn sie noch leer ist. Nützlich, um die ersten Seiten eines großen Dokuments zu prüfen. Vor Version 5.9.6 blieb die PDF-Datei unvollständig.</para></description>
       </choice>
     </attribute>
     <example xml:lang="en">
@@ -6526,6 +6526,15 @@
   </Message>
 </Record>]]></listing>
     </example>
+    <example xml:lang="en">
+      <listing><![CDATA[<!-- only typeset the first 100 pages of a large document -->
+<Switch>
+  <Case test="sd:current-page() = 100">
+    <Message select="'Stopping after page 100'" exit="yes"/>
+  </Case>
+</Switch>
+<ClearPage/>]]></listing>
+    </example>
     <example xml:lang="de">
       <listing><![CDATA[<Message select="concat('Preis: ',@Preis)" error="no"/>]]></listing>
     </example>
@@ -6536,6 +6545,15 @@
     <Value select="@Preis"/>
   </Message>
 </Record>]]></listing>
+    </example>
+    <example xml:lang="de">
+      <listing><![CDATA[<!-- nur die ersten 100 Seiten eines großen Dokuments erzeugen -->
+<Switch>
+  <Case test="sd:current-page() = 100">
+    <Message select="'Abbruch nach Seite 100'" exit="yes"/>
+  </Case>
+</Switch>
+<ClearPage/>]]></listing>
     </example>
     <seealso/>
   </command>
