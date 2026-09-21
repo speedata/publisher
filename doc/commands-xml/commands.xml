@@ -1022,6 +1022,46 @@
     <page name="cutmarks" href="/manual/pagelayout/cutmarks" en="Prepress" de="Druckvorstufe"/>
     <page name="xpath" href="/reference/xpath/xpath" en="XPath Expressions" de="XPath-Ausdrücke"/>
     <page name="css" href="/manual/webformats/css" en="Using CSS with the speedata Publisher" de="CSS verwenden"/>
+    <page name="lists" href="/manual/text/lists" en="Enumeration lists" de="Aufzählungslisten"/>
+    <page name="textformatting" href="/manual/text/textformatting" en="Text formatting" de="Textformatierung"/>
+    <page name="textformat" href="/manual/text/textformat" en="Text formats" de="Textformate"/>
+    <page name="hyphenation" href="/manual/text/hyphenationlanguage" en="Hyphenation / language settings" de="Silbentrennung / Spracheinstellungen"/>
+    <page name="pagetypes" href="/manual/basics/pagetypes" en="Page types" de="Seitentypen"/>
+    <page name="grid" href="/manual/basics/grid" en="Grid" de="Raster"/>
+    <page name="positioningframe" href="/manual/basics/positioningframe" en="Placement areas" de="Platzierungsbereiche"/>
+    <page name="outputtingobjects" href="/manual/basics/outputtingobjects" en="Placing objects" de="Objekte ausgeben"/>
+    <page name="programming" href="/manual/basics/programming" en="Programming" de="Programmierung"/>
+    <page name="fileorganization" href="/manual/basics/fileorganization" en="File organization" de="Dateiorganisation"/>
+    <page name="namespace" href="/manual/setup/namespace" en="Namespace of the layout ruleset" de="Namensraum des Layoutregelwerks"/>
+    <page name="colors" href="/manual/colors" en="Colors" de="Farben"/>
+    <page name="tables" href="/manual/tables" en="Tables" de="Tabellen"/>
+    <page name="images" href="/manual/imagesandgraphics" en="Images &amp; Graphics" de="Bilder &amp; Grafiken"/>
+    <page name="metapost" href="/manual/imagesandgraphics/metapostgraphics" en="Create images with MetaPost" de="Bilder mit MetaPost erstellen"/>
+    <page name="rotating" href="/manual/imagesandgraphics/rotatingthings" en="Rotation of contents" de="Rotation von Inhalten"/>
+    <page name="multipagepdf" href="/manual/imagesandgraphics/multipagepdf" en="Embed multipage PDF files" de="Mehrseitige PDF-Dateien einbetten"/>
+    <page name="wrapping" href="/manual/imagesandgraphics/wrappingaroundobjects" en="Wrap around images" de="Umfließen von Bildern"/>
+    <page name="groups" href="/manual/pagelayout/groups" en="Groups (virtual objects)" de="Gruppen (virtuelle Objekte)"/>
+    <page name="virtualpages" href="/manual/pagelayout/virtualpages" en="Virtual pages" de="Virtuelle Seiten"/>
+    <page name="bookmarks" href="/manual/directories/bookmarks" en="Bookmarks" de="Lesezeichen"/>
+    <page name="markers" href="/manual/directories/directoriesmarker" en="Markers" de="Marken"/>
+    <page name="directoriesxml" href="/manual/directories/directoriesxml" en="Creating lists (XML structure)" de="Listen erstellen (XML-Struktur)"/>
+    <page name="indexcreation" href="/manual/directories/indexcreation" en="Sorting and grouping" de="Sortieren und Gruppieren"/>
+    <page name="tocinonerun" href="/manual/directories/tocinonerun" en="Create table of contents in one go" de="Inhaltsverzeichnis in einem Durchlauf"/>
+    <page name="accessibility" href="/manual/integration/accessibility" en="Accessibility / tagged PDF" de="Barrierefreiheit / getaggtes PDF"/>
+    <page name="attachments" href="/manual/integration/attachments" en="File attachments" de="Dateianhänge"/>
+    <page name="html" href="/manual/webformats/html" en="HTML" de="HTML"/>
+    <page name="troubleshooting" href="/manual/quality/troubleshooting" en="Troubleshooting / Debugging" de="Fehlerbehebung / Debugging"/>
+    <page name="compatibility" href="/manual/compatibility/compatibility-olderversions" en="Compatibility with older versions" de="Kompatibilität mit älteren Versionen"/>
+    <page name="configuration" href="/reference/configuration" en="How to configure the speedata publisher" de="Konfiguration des speedata Publishers"/>
+    <page name="layoutfunctions" href="/reference/xpath/layoutfunctions" en="Layout Functions" de="Layoutfunktionen"/>
+    <page name="howto-keywordindex" href="/howto/keywordindex" en="Keyword index" de="Stichwortverzeichnis"/>
+    <page name="howto-tableofcontents" href="/howto/tableofcontents" en="Table of contents" de="Inhaltsverzeichnis"/>
+    <page name="howto-simpletable" href="/howto/simpletable" en="Simple table with automatic breaking" de="Einfache Tabelle mit automatischem Umbruch"/>
+    <page name="howto-manualtablebreak" href="/howto/manualtablebreak" en="Breaking complex tables manually" de="Komplexe Tabellen manuell umbrechen"/>
+    <page name="howto-columnwidths" href="/howto/columnwidths" en="Controlling column widths" de="Spaltenbreiten steuern"/>
+    <page name="howto-continuationhead" href="/howto/continuationhead" en="Continuation head and continuation note" de="Fortsetzungskopf und Fortsetzungshinweis"/>
+    <page name="howto-tableorgroups" href="/howto/tableorgroups" en="Table, groups or text flow?" de="Tabelle, Gruppen oder Textfluss?"/>
+    <page name="howto-datasheet" href="/howto/datasheet" en="Basic structure of a data sheet" de="Grundgerüst eines Datenblatts"/>
   </manualpages>
 
   <!--
@@ -1162,7 +1202,10 @@
 </PlaceObject>
 ]]></listing>
     </example>
-    <seealso/>
+    <seealso>
+      <ref name="textformatting"/>,
+      <ref name="markers"/>
+    </seealso>
   </command>
 
 
@@ -1203,7 +1246,10 @@
 </Switch>
 ]]></listing>
     </example>
-    <seealso></seealso>
+    <seealso>
+      <ref name="fileorganization"/>,
+      <ref name="configuration"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -1254,7 +1300,11 @@
   </PlaceObject>
 </AtPageCreation>]]></listing>
     </example>
-    <seealso><cmd name="Pagetype"/>, <cmd name="AtPageShipout"/></seealso>
+    <seealso>
+      <cmd name="Pagetype"/>,
+      <cmd name="AtPageShipout"/>,
+      <ref name="pagetypes"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -1304,7 +1354,11 @@
   </PlaceObject>
 </AtPageShipout>]]></listing>
     </example>
-    <seealso><cmd name="AtPageCreation"/>, <cmd name="Pagetype"/></seealso>
+    <seealso>
+      <cmd name="AtPageCreation"/>,
+      <cmd name="Pagetype"/>,
+      <ref name="pagetypes"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -1377,7 +1431,9 @@
     <info xml:lang="de">
       <para>Voraussetzung für das Anhängen einer ZUGFeRD Datei ist das Pro-Paket.</para>
     </info>
-    <seealso/>
+    <seealso>
+      <ref name="attachments"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -1424,7 +1480,10 @@
 </LoadFontfile>
 ]]></listing>
     </example>
-    <seealso><cmd name="LoadFontfile"/></seealso>
+    <seealso>
+      <cmd name="LoadFontfile"/>,
+      <ref name="fonts"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -1472,7 +1531,11 @@
       <para>Erzeugt diese Datenstruktur:</para>
       <listing><![CDATA[<Eintrag kapitelname=" (Inhalt von @name) " seite=" (aktuelle Seitennummer) " />]]></listing>
     </example>
-    <seealso><cmd name="Element"/>, <cmd name="SaveDataset"/>, <ref name="directories"/></seealso>
+    <seealso>
+      <cmd name="Element"/>,
+      <cmd name="SaveDataset"/>,
+      <ref name="directoriesxml"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -1505,7 +1568,11 @@
 </Textblock>
 ]]></listing>
     </example>
-    <seealso><cmd name="I"/>, <ref name="fonts"/></seealso>
+    <seealso>
+      <cmd name="I"/>,
+      <ref name="textformatting"/>,
+      <ref name="fonts"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -1710,7 +1777,10 @@
       <para>wird zu</para>
       <image file="ref-speedata-publisher-qrcode.png" width="30%"/>
     </example>
-    <seealso><cmd name="PlaceObject"/></seealso>
+    <seealso>
+      <cmd name="PlaceObject"/>,
+      <ref name="outputtingobjects"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -1762,7 +1832,11 @@
 </DefineFontfamily>]]></listing>
     </example>
     <seealso>
-      <cmd name="B"/>, <cmd name="BoldItalic"/>, <cmd name="Regular"/>, <cmd name="Italic"/>
+      <cmd name="B"/>,
+      <cmd name="BoldItalic"/>,
+      <cmd name="Regular"/>,
+      <cmd name="Italic"/>,
+      <ref name="fonts"/>
     </seealso>
   </command>
   <!--
@@ -1818,9 +1892,9 @@
     <seealso>
       <cmd name="B"/>,
       <cmd name="I"/>,
-      <cmd name="BoldItalic"/>,
       <cmd name="Regular"/>,
-      <cmd name="Bold"/>, <ref name="fonts"/>
+      <cmd name="Bold"/>,
+      <ref name="fonts"/>
     </seealso>
   </command>
   <!--
@@ -1885,7 +1959,8 @@
       <para>Erzeugt ein Lesezeichen der Stufe 1 (höchste Stufe) mit dem Titel, der in der Variablen <tt>titel</tt> steht.</para>
     </example>
     <seealso>
-      <cmd name="Textblock"/>
+      <cmd name="Textblock"/>,
+      <ref name="bookmarks"/>
     </seealso>
   </command>
   <!--
@@ -2111,7 +2186,12 @@
       <para>erzeugt ein farbiges Rechteck</para>
       <image file="ref-greenbox.png"/>
     </example>
-    <seealso><cmd name="DefineColor"/>, <cmd name="PlaceObject"/></seealso>
+    <seealso>
+      <cmd name="DefineColor"/>,
+      <cmd name="PlaceObject"/>,
+      <ref name="outputtingobjects"/>,
+      <ref name="colors"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -2149,7 +2229,9 @@
 </Record>
 ]]></listing>
     </example>
-    <seealso/>
+    <seealso>
+      <ref name="textformatting"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -2183,7 +2265,9 @@
       <para>Siehe das Beispiel bei <cmd name="Switch"/>.</para>
     </example>
     <seealso>
-      <cmd name="Switch"/>, <cmd name="Otherwise"/>
+      <cmd name="Switch"/>,
+      <cmd name="Otherwise"/>,
+      <ref name="programming"/>
     </seealso>
   </command>
   <!--
@@ -2273,7 +2357,12 @@
       <para>erzeugt einen Kreis</para>
       <image file="ref-circlewithborder.png" width="30%"/>
     </example>
-    <seealso><cmd name="DefineColor"/>, <cmd name="PlaceObject"/></seealso>
+    <seealso>
+      <cmd name="DefineColor"/>,
+      <cmd name="PlaceObject"/>,
+      <ref name="outputtingobjects"/>,
+      <ref name="colors"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -2386,7 +2475,10 @@
 </Record>
 ]]></listing>
     </example>
-    <seealso><cmd name="Pagetype"/></seealso>
+    <seealso>
+      <cmd name="Pagetype"/>,
+      <ref name="pagetypes"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -2501,7 +2593,9 @@
     </Clip>
 </PlaceObject>]]></listing>
     </example>
-    <seealso></seealso>
+    <seealso>
+      <ref name="outputtingobjects"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -2561,7 +2655,10 @@
 </Layout>
 ]]></listing>
     </example>
-    <seealso><cmd name="DefineColor"/></seealso>
+    <seealso>
+      <cmd name="DefineColor"/>,
+      <ref name="colors"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -2687,8 +2784,10 @@
       <para>Siehe das Beispiel bei <cmd name="Columns"/>.</para>
     </example>
     <seealso>
-      <cmd name="Table"/>
-      <cmd name="Columns"/>
+      <cmd name="Table"/>,
+      <cmd name="Columns"/>,
+      <ref name="tables"/>,
+      <ref name="howto-columnwidths"/>
     </seealso>
   </command>
   <!--
@@ -2753,7 +2852,10 @@
 </Table>]]></listing>
     </example>
     <seealso>
-      <cmd name="Table"/>, <cmd name="Column"/>
+      <cmd name="Table"/>,
+      <cmd name="Column"/>,
+      <ref name="tables"/>,
+      <ref name="howto-columnwidths"/>
     </seealso>
   </command>
   <!--
@@ -2775,7 +2877,9 @@
     <example xml:lang="de">
       <para>Die Einstellungen <tt>movecursoronplaceobject</tt> (in Version 6.0 entfernt) und <tt>spacefromfont</tt> (in Version 5.9.6 zu <cmd name="LoadFontfile"/> verschoben) gibt es hier nicht mehr.</para>
     </example>
-    <seealso></seealso>
+    <seealso>
+      <ref name="compatibility"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -2800,7 +2904,10 @@
     <example xml:lang="de">
       <para>Siehe das Beispiel bei <cmd name="Group"/>.</para>
     </example>
-    <seealso><cmd name="Group"/></seealso>
+    <seealso>
+      <cmd name="Group"/>,
+      <ref name="groups"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -2868,7 +2975,12 @@
       <para>nur mit dem Unterschied, dass der Inhalt vom Paragraph (<tt>@name</tt>, <tt>@symbol</tt>) ermittelt werden kann, bevor der Text ausgegeben wird. Die Zuweisung und die Textausgabe können in
         verschiedenen Regeln stehen.</para>
     </example>
-    <seealso><cmd name="Value"/>, <ref name="xpath"/>, <cmd name="SetVariable"/></seealso>
+    <seealso>
+      <cmd name="Value"/>,
+      <cmd name="SetVariable"/>,
+      <ref name="xpath"/>,
+      <ref name="programming"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -2973,7 +3085,10 @@
     <info xml:lang="de">
       <para>Das Farbprofil »FOGRA39« - Coated FOGRA39 (ISO 12647-2:2004) ist in der Distribution enthalten.</para>
     </info>
-    <seealso><cmd name="PDFOptions"/></seealso>
+    <seealso>
+      <cmd name="PDFOptions"/>,
+      <ref name="cutmarks"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -3182,7 +3297,9 @@
       <para>The predefined colors are: <tt>aliceblue</tt>, <tt>black</tt>, <tt>orange</tt>, <tt>rebeccapurple</tt>, <tt>antiquewhite</tt>, <tt>aqua</tt>, <tt>aquamarine</tt>, <tt>azure</tt>, <tt>beige</tt>, <tt>bisque</tt>, <tt>blanchedalmond</tt>, <tt>blue</tt>, <tt>blueviolet</tt>, <tt>brown</tt>, <tt>burlywood</tt>, <tt>cadetblue</tt>, <tt>chartreuse</tt>, <tt>chocolate</tt>, <tt>coral</tt>, <tt>cornflowerblue</tt>, <tt>cornsilk</tt>, <tt>crimson</tt>, <tt>darkblue</tt>, <tt>darkcyan</tt>, <tt>darkgoldenrod</tt>, <tt>darkgray</tt>, <tt>darkgreen</tt>, <tt>darkgrey</tt>, <tt>darkkhaki</tt>, <tt>darkmagenta</tt>, <tt>darkolivegreen</tt>, <tt>darkorange</tt>, <tt>darkorchid</tt>, <tt>darkred</tt>, <tt>darksalmon</tt>, <tt>darkseagreen</tt>, <tt>darkslateblue</tt>, <tt>darkslategray</tt>, <tt>darkslategrey</tt>, <tt>darkturquoise</tt>, <tt>darkviolet</tt>, <tt>deeppink</tt>, <tt>deepskyblue</tt>, <tt>dimgray</tt>, <tt>dimgrey</tt>, <tt>dodgerblue</tt>, <tt>firebrick</tt>, <tt>floralwhite</tt>, <tt>forestgreen</tt>, <tt>fuchsia</tt>, <tt>gainsboro</tt>, <tt>ghostwhite</tt>, <tt>gold</tt>, <tt>goldenrod</tt>, <tt>gray</tt>, <tt>green</tt>, <tt>greenyellow</tt>, <tt>grey</tt>, <tt>honeydew</tt>, <tt>hotpink</tt>, <tt>indianred</tt>, <tt>indigo</tt>, <tt>ivory</tt>, <tt>khaki</tt>, <tt>lavender</tt>, <tt>lavenderblush</tt>, <tt>lawngreen</tt>, <tt>lemonchiffon</tt>, <tt>lightblue</tt>, <tt>lightcoral</tt>, <tt>lightcyan</tt>, <tt>lightgoldenrodyellow</tt>, <tt>lightgray</tt>, <tt>lightgreen</tt>, <tt>lightgrey</tt>, <tt>lightpink</tt>, <tt>lightsalmon</tt>, <tt>lightseagreen</tt>, <tt>lightskyblue</tt>, <tt>lightslategray</tt>, <tt>lightslategrey</tt>, <tt>lightsteelblue</tt>, <tt>lightyellow</tt>, <tt>lime</tt>, <tt>limegreen</tt>, <tt>linen</tt>, <tt>maroon</tt>, <tt>mediumaquamarine</tt>, <tt>mediumblue</tt>, <tt>mediumorchid</tt>, <tt>mediumpurple</tt>, <tt>mediumseagreen</tt>, <tt>mediumslateblue</tt>, <tt>mediumspringgreen</tt>, <tt>mediumturquoise</tt>, <tt>mediumvioletred</tt>, <tt>midnightblue</tt>, <tt>mintcream</tt>, <tt>mistyrose</tt>, <tt>moccasin</tt>, <tt>navajowhite</tt>, <tt>navy</tt>, <tt>oldlace</tt>, <tt>olive</tt>, <tt>olivedrab</tt>, <tt>orangered</tt>, <tt>orchid</tt>, <tt>palegoldenrod</tt>, <tt>palegreen</tt>, <tt>paleturquoise</tt>, <tt>palevioletred</tt>, <tt>papayawhip</tt>, <tt>peachpuff</tt>, <tt>peru</tt>, <tt>pink</tt>, <tt>plum</tt>, <tt>powderblue</tt>, <tt>purple</tt>, <tt>red</tt>, <tt>rosybrown</tt>, <tt>royalblue</tt>, <tt>saddlebrown</tt>, <tt>salmon</tt>, <tt>sandybrown</tt>, <tt>seagreen</tt>, <tt>seashell</tt>, <tt>sienna</tt>, <tt>silver</tt>, <tt>skyblue</tt>, <tt>slateblue</tt>, <tt>slategray</tt>, <tt>slategrey</tt>, <tt>snow</tt>, <tt>springgreen</tt>, <tt>steelblue</tt>, <tt>tan</tt>, <tt>teal</tt>, <tt>thistle</tt>, <tt>tomato</tt>, <tt>turquoise</tt>, <tt>violet</tt>, <tt>wheat</tt>, <tt>white</tt>, <tt>whitesmoke</tt>, <tt>yellow</tt> and <tt>yellowgreen</tt></para></info>
     <info xml:lang="de"><para>Die Farben aus CSS Level 3 sind vordefinert im RGB-Farbraum. Siehe http://www.w3.org/TR/css3-color/ für die Definitionen. Damit kann man häufige Farben wie <tt>red</tt> oder <tt>goldenrod</tt> benutzen, ohne sie vorher mit <cmd name="DefineColor"/> zu definieren.</para>
       <para>Die vordefinierten Farben sind <tt>aliceblue</tt>, <tt>black</tt>, <tt>orange</tt>, <tt>rebeccapurple</tt>, <tt>antiquewhite</tt>, <tt>aqua</tt>, <tt>aquamarine</tt>, <tt>azure</tt>, <tt>beige</tt>, <tt>bisque</tt>, <tt>blanchedalmond</tt>, <tt>blue</tt>, <tt>blueviolet</tt>, <tt>brown</tt>, <tt>burlywood</tt>, <tt>cadetblue</tt>, <tt>chartreuse</tt>, <tt>chocolate</tt>, <tt>coral</tt>, <tt>cornflowerblue</tt>, <tt>cornsilk</tt>, <tt>crimson</tt>, <tt>darkblue</tt>, <tt>darkcyan</tt>, <tt>darkgoldenrod</tt>, <tt>darkgray</tt>, <tt>darkgreen</tt>, <tt>darkgrey</tt>, <tt>darkkhaki</tt>, <tt>darkmagenta</tt>, <tt>darkolivegreen</tt>, <tt>darkorange</tt>, <tt>darkorchid</tt>, <tt>darkred</tt>, <tt>darksalmon</tt>, <tt>darkseagreen</tt>, <tt>darkslateblue</tt>, <tt>darkslategray</tt>, <tt>darkslategrey</tt>, <tt>darkturquoise</tt>, <tt>darkviolet</tt>, <tt>deeppink</tt>, <tt>deepskyblue</tt>, <tt>dimgray</tt>, <tt>dimgrey</tt>, <tt>dodgerblue</tt>, <tt>firebrick</tt>, <tt>floralwhite</tt>, <tt>forestgreen</tt>, <tt>fuchsia</tt>, <tt>gainsboro</tt>, <tt>ghostwhite</tt>, <tt>gold</tt>, <tt>goldenrod</tt>, <tt>gray</tt>, <tt>green</tt>, <tt>greenyellow</tt>, <tt>grey</tt>, <tt>honeydew</tt>, <tt>hotpink</tt>, <tt>indianred</tt>, <tt>indigo</tt>, <tt>ivory</tt>, <tt>khaki</tt>, <tt>lavender</tt>, <tt>lavenderblush</tt>, <tt>lawngreen</tt>, <tt>lemonchiffon</tt>, <tt>lightblue</tt>, <tt>lightcoral</tt>, <tt>lightcyan</tt>, <tt>lightgoldenrodyellow</tt>, <tt>lightgray</tt>, <tt>lightgreen</tt>, <tt>lightgrey</tt>, <tt>lightpink</tt>, <tt>lightsalmon</tt>, <tt>lightseagreen</tt>, <tt>lightskyblue</tt>, <tt>lightslategray</tt>, <tt>lightslategrey</tt>, <tt>lightsteelblue</tt>, <tt>lightyellow</tt>, <tt>lime</tt>, <tt>limegreen</tt>, <tt>linen</tt>, <tt>maroon</tt>, <tt>mediumaquamarine</tt>, <tt>mediumblue</tt>, <tt>mediumorchid</tt>, <tt>mediumpurple</tt>, <tt>mediumseagreen</tt>, <tt>mediumslateblue</tt>, <tt>mediumspringgreen</tt>, <tt>mediumturquoise</tt>, <tt>mediumvioletred</tt>, <tt>midnightblue</tt>, <tt>mintcream</tt>, <tt>mistyrose</tt>, <tt>moccasin</tt>, <tt>navajowhite</tt>, <tt>navy</tt>, <tt>oldlace</tt>, <tt>olive</tt>, <tt>olivedrab</tt>, <tt>orangered</tt>, <tt>orchid</tt>, <tt>palegoldenrod</tt>, <tt>palegreen</tt>, <tt>paleturquoise</tt>, <tt>palevioletred</tt>, <tt>papayawhip</tt>, <tt>peachpuff</tt>, <tt>peru</tt>, <tt>pink</tt>, <tt>plum</tt>, <tt>powderblue</tt>, <tt>purple</tt>, <tt>red</tt>, <tt>rosybrown</tt>, <tt>royalblue</tt>, <tt>saddlebrown</tt>, <tt>salmon</tt>, <tt>sandybrown</tt>, <tt>seagreen</tt>, <tt>seashell</tt>, <tt>sienna</tt>, <tt>silver</tt>, <tt>skyblue</tt>, <tt>slateblue</tt>, <tt>slategray</tt>, <tt>slategrey</tt>, <tt>snow</tt>, <tt>springgreen</tt>, <tt>steelblue</tt>, <tt>tan</tt>, <tt>teal</tt>, <tt>thistle</tt>, <tt>tomato</tt>, <tt>turquoise</tt>, <tt>violet</tt>, <tt>wheat</tt>, <tt>white</tt>, <tt>whitesmoke</tt>, <tt>yellow</tt> und <tt>yellowgreen</tt>.</para></info>
-    <seealso/>
+    <seealso>
+      <ref name="colors"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -3235,7 +3352,9 @@
 </Record>
 ]]></listing>
     </example>
-    <seealso></seealso>
+    <seealso>
+      <ref name="metapost"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -3293,7 +3412,8 @@
 </DefineFontfamily>]]></listing>
     </example>
     <seealso>
-      <cmd name="DefineFontfamily"/>
+      <cmd name="DefineFontfamily"/>,
+      <ref name="fonts"/>
     </seealso>
   </command>
   <!--
@@ -3401,7 +3521,9 @@
    ...]]></listing>
     </example>
     <seealso>
-      <cmd name="LoadFontfile"/>, <cmd name="DefineFontalias"/>
+      <cmd name="LoadFontfile"/>,
+      <cmd name="DefineFontalias"/>,
+      <ref name="fonts"/>
     </seealso>
   </command>
   <!--
@@ -3511,7 +3633,10 @@
       <para>Setze die Seitennummerierung auf »A-1, A-2, ... «</para>
       <listing><![CDATA[<DefineMatter name="mainmatter" label="decimal" prefix="A-" />]]></listing>
     </example>
-    <seealso><cmd name="Pagetype"/></seealso>
+    <seealso>
+      <cmd name="Pagetype"/>,
+      <ref name="pagetypes"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -3875,7 +4000,8 @@
     </example>
     <seealso>
       <cmd name="Textblock"/>,
-      <cmd name="Paragraph"/>
+      <cmd name="Paragraph"/>,
+      <ref name="textformat"/>
     </seealso>
   </command>
   <!--
@@ -3931,7 +4057,8 @@
     <seealso>
       <cmd name="Attribute"/>,
       <cmd name="LoadDataset"/>,
-      <cmd name="SaveDataset"/>
+      <cmd name="SaveDataset"/>,
+      <ref name="directoriesxml"/>
     </seealso>
   </command>
   <!--
@@ -3969,7 +4096,10 @@
 </LoadFontfile>
 ]]></listing>
     </example>
-    <seealso><cmd name="LoadFontfile"/></seealso>
+    <seealso>
+      <cmd name="LoadFontfile"/>,
+      <ref name="fonts"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -4024,7 +4154,9 @@
     <seealso>
       <cmd name="Paragraph"/>,
       <cmd name="I"/>,
-      <cmd name="B"/>
+      <cmd name="B"/>,
+      <ref name="fonts"/>,
+      <ref name="textformatting"/>
     </seealso>
   </command>
   <!--
@@ -4109,7 +4241,10 @@
   <entry>c</entry>
 </data>]]></listing>
     </example>
-    <seealso><cmd name="Switch"/></seealso>
+    <seealso>
+      <cmd name="Switch"/>,
+      <ref name="programming"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -4263,7 +4398,10 @@
 </Record>
 ]]></listing>
     </example>
-    <seealso><cmd name="PlaceObject"/></seealso>
+    <seealso>
+      <cmd name="PlaceObject"/>,
+      <ref name="outputtingobjects"/>
+    </seealso>
   </command>
 
   <!--
@@ -4363,7 +4501,10 @@
     </Layout>]]></listing>
       <para>Gibt die Zahl 7 aus.</para>
     </example>
-    <seealso></seealso>
+    <seealso>
+      <ref name="programming"/>,
+      <ref name="layoutfunctions"/>
+    </seealso>
   </command>
 
   <!--
@@ -4449,9 +4590,10 @@
       <para>Wenn diese Seite ausgewählt wird, gilt das dort angegebene Raster.</para>
     </example>
     <seealso>
-      <cmd name="SetGrid"/>
-      <cmd name="Pagetype"/>
-      <cmd name="Group"/>
+      <cmd name="SetGrid"/>,
+      <cmd name="Pagetype"/>,
+      <cmd name="Group"/>,
+      <ref name="grid"/>
     </seealso>
   </command>
   <!--
@@ -4526,8 +4668,9 @@
 <PlaceObject groupname="Beispielgruppe" />]]></listing>
     </example>
     <seealso>
-      <cmd name="PlaceObject"/>
-      <cmd name="Contents"/>
+      <cmd name="PlaceObject"/>,
+      <cmd name="Contents"/>,
+      <ref name="groups"/>
     </seealso>
   </command>
   <!--
@@ -4589,7 +4732,9 @@
 </Record>
 ]]></listing>
     </example>
-    <seealso></seealso>
+    <seealso>
+      <ref name="groups"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -4644,7 +4789,10 @@
   </HTML>
 </Output>]]></listing>
     </example>
-    <seealso><cmd name="Output"></cmd></seealso>
+    <seealso>
+      <cmd name="Output"/>,
+      <ref name="html"/>
+    </seealso>
   </command>
 
   <!--
@@ -4675,7 +4823,9 @@
     <example xml:lang="de">
       <listing><![CDATA[<Hyphenation>Au-to-bahn</Hyphenation>]]></listing>
     </example>
-    <seealso/>
+    <seealso>
+      <ref name="hyphenation"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -4740,7 +4890,10 @@
   </Textblock>
 </PlaceObject>]]></listing>
     </example>
-    <seealso><cmd name="Paragraph"/></seealso>
+    <seealso>
+      <cmd name="Paragraph"/>,
+      <ref name="textformatting"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -4773,7 +4926,11 @@
   </Paragraph>
 </Textblock>]]></listing>
     </example>
-    <seealso><cmd name="B"/></seealso>
+    <seealso>
+      <cmd name="B"/>,
+      <ref name="textformatting"/>,
+      <ref name="fonts"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -4855,7 +5012,8 @@
       <para>Dieser Befehl ist obsolete. Benutze <cmd name="Layout"/> anstelle von Include.</para>
     </info>
     <seealso>
-      <cmd name="Layout"/>
+      <cmd name="Layout"/>,
+      <ref name="fileorganization"/>
     </seealso>
     <!--
     <rules xml:lang="en">
@@ -5040,7 +5198,11 @@
 </Record>
 ]]></listing>
     </example>
-    <seealso><cmd name="SavePages"/></seealso>
+    <seealso>
+      <cmd name="SavePages"/>,
+      <ref name="virtualpages"/>,
+      <ref name="tocinonerun"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -5480,7 +5642,12 @@
       <para>The number of pages in a PDF file can be determined with the XPath function <tt>sd:number-of-pages(&lt;filename or URI&gt;).</tt></para>
       <para>Attention. The number of PDF files that can be included in a document is limited. This limit can be increased in is system dependant. On Mac OS X it can be queried with <tt>ulimit -a</tt> and set for example with <tt>ulimit -n 1024</tt>.</para>
     </info>
-    <seealso><cmd name="PlaceObject"/></seealso>
+    <seealso>
+      <cmd name="PlaceObject"/>,
+      <ref name="images"/>,
+      <ref name="multipagepdf"/>,
+      <ref name="wrapping"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -5529,10 +5696,11 @@
 </DefineFontfamily>]]></listing>
     </example>
     <seealso>
-      <cmd name="Bold"/>
-      <cmd name="Regular"/>
-      <cmd name="I"/>
-      <cmd name="BoldItalic"/>
+      <cmd name="Bold"/>,
+      <cmd name="Regular"/>,
+      <cmd name="I"/>,
+      <cmd name="BoldItalic"/>,
+      <ref name="fonts"/>
     </seealso>
   </command>
   <!--
@@ -5584,7 +5752,10 @@
     <seealso>
       <cmd name="Element"/>,
       <cmd name="Attribute"/>,
-      <cmd name="SaveDataset"/>, <ref name="directories"/></seealso>
+      <cmd name="SaveDataset"/>,
+      <ref name="directoriesxml"/>,
+      <ref name="howto-tableofcontents"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -5803,7 +5974,11 @@
       <para>Die Schriftdateien werden aus dem lokalen Suchpfad geladen. Unter Windows wird der Pfad <tt>%WINDIR%\Fonts</tt> (normalerweise <tt>C:\Windows\Fonts</tt>) und auf Mac OS X die Pfade <tt>/Library/Fonts</tt> und <tt>/System/Library/Fonts</tt> können als Ergänzung des lokalen Suchpfads dienen. Das kann mit der Option <tt>fontpath</tt> in der Konfigurationsdatei gesetzt werden.</para>
     </info>
     <seealso>
-      <cmd name="DefineFontfamily"/>, <cmd name="Fallback"/>, <cmd name="Axis"/> <ref name="fonts"/></seealso>
+      <cmd name="DefineFontfamily"/>,
+      <cmd name="Fallback"/>,
+      <cmd name="Axis"/>,
+      <ref name="fonts"/>
+    </seealso>
   </command>
 
   <!--
@@ -5907,7 +6082,10 @@
   </Record>
 </Layout>]]></listing>
     </example>
-    <seealso/>
+    <seealso>
+      <ref name="fileorganization"/>,
+      <ref name="namespace"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -5954,7 +6132,11 @@
 </PlaceObject>
 ]]></listing>
     </example>
-    <seealso><cmd name="Ol"/>, <cmd name="Ul"/></seealso>
+    <seealso>
+      <cmd name="Ol"/>,
+      <cmd name="Ul"/>,
+      <ref name="lists"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -6013,7 +6195,10 @@
 </PlaceObject>
 ]]></listing>
     </example>
-    <seealso><cmd name="ForAll"/></seealso>
+    <seealso>
+      <cmd name="ForAll"/>,
+      <ref name="programming"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -6185,7 +6370,9 @@
 ]]></listing>
     </example>
     <seealso>
-      <cmd name="SaveDataset"/>
+      <cmd name="SaveDataset"/>,
+      <ref name="indexcreation"/>,
+      <ref name="howto-keywordindex"/>
     </seealso>
   </command>
   <!--
@@ -6255,7 +6442,10 @@
     <example xml:lang="de">
       <listing><![CDATA[<Margin left="2cm" right="1cm" top="1cm" bottom="1cm" />]]></listing>
     </example>
-    <seealso/>
+    <seealso>
+      <ref name="pagetypes"/>,
+      <ref name="positioningframe"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -6386,7 +6576,10 @@
     <info xml:lang="de">
       <para>Marker werden für nachfolgende Läufe gespeichert.</para>
     </info>
-    <seealso></seealso>
+    <seealso>
+      <ref name="markers"/>,
+      <ref name="tocinonerun"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -6561,7 +6754,10 @@
 </Switch>
 <ClearPage/>]]></listing>
     </example>
-    <seealso/>
+    <seealso>
+      <ref name="troubleshooting"/>,
+      <ref name="programming"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -6593,8 +6789,9 @@
 </Record>]]></listing>
     </example>
     <seealso>
-      <cmd name="PositioningArea"/>
-      <cmd name="PositioningFrame"/>
+      <cmd name="PositioningArea"/>,
+      <cmd name="PositioningFrame"/>,
+      <ref name="positioningframe"/>
     </seealso>
   </command>
   <!--
@@ -6652,6 +6849,7 @@
 </Record>]]></listing>
     </example>
     <seealso>
+      <ref name="positioningframe"/>
     </seealso>
   </command>
   <!--
@@ -6766,7 +6964,10 @@
 </PlaceObject>
 ]]></listing>
     </example>
-    <seealso></seealso>
+    <seealso>
+      <ref name="textformatting"/>,
+      <ref name="hyphenation"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -6928,7 +7129,11 @@
 </PlaceObject>
 ]]></listing>
     </example>
-    <seealso><cmd name="Ul"/>, <cmd name="Li"/></seealso>
+    <seealso>
+      <cmd name="Ul"/>,
+      <cmd name="Li"/>,
+      <ref name="lists"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -7350,7 +7555,11 @@
       <para>Die Liste der bekannten Sprachen und der Sprachcode im speedata Publisher sind:</para>
       <para><tt>Ancient Greek</tt> (<tt>grc</tt>), <tt>Armenian</tt> (<tt>hy</tt>), <tt>Bahasa Indonesia</tt> (<tt>id</tt>), <tt>Basque</tt> (<tt>eu</tt>), <tt>Bulgarian</tt> (<tt>bg</tt>), <tt>Catalan</tt> (<tt>ca</tt>), <tt>Chinese</tt> (<tt>zh</tt>), <tt>Croatian</tt> (<tt>hr</tt>), <tt>Czech</tt> (<tt>cs</tt>), <tt>Danish</tt> (<tt>da</tt>), <tt>Dutch</tt> (<tt>nl</tt>), <tt>English</tt> (<tt>en_GB</tt>), <tt>English (Great Britain)</tt> (<tt>en_GB</tt>), <tt>English (USA)</tt> (<tt>en_US</tt>), <tt>Esperanto</tt> (<tt>eo</tt>), <tt>Estonian</tt> (<tt>et</tt>), <tt>Finnish</tt> (<tt>fi</tt>), <tt>French</tt> (<tt>fr</tt>), <tt>Galician</tt> (<tt>gl</tt>), <tt>German</tt> (<tt>de</tt>), <tt>Greek</tt> (<tt>el</tt>), <tt>Gujarati</tt> (<tt>gu</tt>), <tt>Hindi</tt> (<tt>hi</tt>), <tt>Hungarian</tt> (<tt>hu</tt>), <tt>Icelandic</tt> (<tt>is</tt>), <tt>Irish</tt> (<tt>ga</tt>), <tt>Italian</tt> (<tt>it</tt>), <tt>Kannada</tt> (<tt>kn</tt>), <tt>Kurmanji</tt> (<tt>ku</tt>), <tt>Latvian</tt> (<tt>lv</tt>), <tt>Lithuanian</tt> (<tt>lt</tt>), <tt>Malayalam</tt> (<tt>ml</tt>), <tt>Norwegian Bokmål</tt> (<tt>nb</tt>), <tt>Norwegian Nynorsk</tt> (<tt>nn</tt>), <tt>Other</tt> (<tt>--</tt>), <tt>Polish</tt> (<tt>pl</tt>), <tt>Portuguese</tt> (<tt>pt</tt>), <tt>Romanian</tt> (<tt>ro</tt>), <tt>Russian</tt> (<tt>ru</tt>), <tt>Sanskrit</tt> (<tt>sa</tt>), <tt>Serbian</tt> (<tt>sr</tt>), <tt>Serbian (cyrillic)</tt> (<tt>sc</tt>), <tt>Slovak</tt> (<tt>sk</tt>), <tt>Slovenian</tt> (<tt>sl</tt>), <tt>Spanish</tt> (<tt>es</tt>), <tt>Swedish</tt> (<tt>sv</tt>), <tt>Turkish</tt> (<tt>tr</tt>), <tt>Ukrainian</tt> (<tt>uk</tt>), <tt>Welsh</tt> (<tt>cy</tt>)</para>
     </info>
-    <seealso><ref name="cutmarks"/></seealso>
+    <seealso>
+      <ref name="configuration"/>,
+      <ref name="cutmarks"/>,
+      <ref name="hyphenation"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -7376,7 +7585,9 @@
       <para>See the example at <cmd name="Switch"/>.</para>
     </example>
     <seealso>
-      <cmd name="Switch"/>, <cmd name="Case"/>
+      <cmd name="Switch"/>,
+      <cmd name="Case"/>,
+      <ref name="programming"/>
     </seealso>
   </command>
   <!--
@@ -7544,7 +7755,10 @@
   </Record>
 ]]></listing>
     </example>
-    <seealso/>
+    <seealso>
+      <ref name="outputtingobjects"/>,
+      <ref name="howto-tableorgroups"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -7623,7 +7837,10 @@
       <para>ergibt folgende Ausgabe</para>
       <image file="ref-overlay.png"/>
     </example>
-    <seealso><cmd name="Position"/></seealso>
+    <seealso>
+      <cmd name="Position"/>,
+      <ref name="tables"/>
+    </seealso>
   </command>
 
   <!--
@@ -7898,7 +8115,11 @@
       <para>wobei in den Daten ein Text steht, beispielsweise falls der aktuelle Knoten das Element <cmd name="Record"/> ist:</para>
       <listing><![CDATA[<Record>Produktbeschreibung: die Artikelnummer <i>1234</i> setzt sich aus ... </Record>]]></listing>
     </example>
-    <seealso><cmd name="Textblock"/>, <ref name="fonts"/></seealso>
+    <seealso>
+      <cmd name="Textblock"/>,
+      <ref name="textformatting"/>,
+      <ref name="fonts"/>
+    </seealso>
   </command>
 
   <!--
@@ -7928,7 +8149,9 @@
     <example xml:lang="de">
       <para>Siehe das Bespiel bei <cmd name="Function"/>.</para>
     </example>
-    <seealso></seealso>
+    <seealso>
+      <ref name="programming"/>
+    </seealso>
   </command>
 
   <!--
@@ -7982,7 +8205,10 @@
     <example xml:lang="de">
       <listing><![CDATA[<Pageformat width="150mm" height="150mm" />]]></listing>
     </example>
-    <seealso/>
+    <seealso>
+      <ref name="pagetypes"/>,
+      <ref name="grid"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -8140,7 +8366,14 @@
   </PositioningArea>
 </Pagetype>]]></listing>
     </example>
-    <seealso><ref name="xpath"/>, <cmd name="AtPageCreation"/>,  <cmd name="AtPageShipout"/>,   <cmd name="PositioningArea"/>,  <cmd name="ClearPage"/>, <cmd name="DefineMatter"/>
+    <seealso>
+      <cmd name="AtPageCreation"/>,
+      <cmd name="AtPageShipout"/>,
+      <cmd name="PositioningArea"/>,
+      <cmd name="ClearPage"/>,
+      <cmd name="DefineMatter"/>,
+      <ref name="pagetypes"/>,
+      <ref name="xpath"/>
     </seealso>
   </command>
   <!--
@@ -8486,7 +8719,10 @@
     </attribute>
     <example xml:lang="en"><listing><![CDATA[<PDFOptions numcopies="3"/>]]></listing></example>
     <example xml:lang="de"><listing><![CDATA[<PDFOptions numcopies="4"/>]]></listing></example>
-    <seealso></seealso>
+    <seealso>
+      <ref name="cutmarks"/>,
+      <ref name="accessibility"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -8999,12 +9235,15 @@
     <seealso>
       <cmd name="Image"/>,
       <cmd name="Box"/>,
-      <cmd name="Circle"/>
+      <cmd name="Circle"/>,
       <cmd name="Tablerule"/>,
       <cmd name="Table"/>,
       <cmd name="Textblock"/>,
       <cmd name="DefineColor"/>,
-      <cmd name="Output"/>
+      <cmd name="Output"/>,
+      <ref name="outputtingobjects"/>,
+      <ref name="grid"/>,
+      <ref name="positioningframe"/>
     </seealso>
   </command>
   <!--
@@ -9053,7 +9292,10 @@
     <example xml:lang="de">
       <para>Siehe das Beispiel bei <cmd name="Overlay"/></para>
     </example>
-    <seealso><cmd name="Overlay"/></seealso>
+    <seealso>
+      <cmd name="Overlay"/>,
+      <ref name="tables"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -9108,8 +9350,9 @@
 </PositioningArea>]]></listing>
     </example>
     <seealso>
-      <cmd name="PositioningFrame"/>
-      <cmd name="PlaceObject"/>
+      <cmd name="PositioningFrame"/>,
+      <cmd name="PlaceObject"/>,
+      <ref name="positioningframe"/>
     </seealso>
   </command>
   <!--
@@ -9173,7 +9416,8 @@
 </PositioningArea>]]></listing>
     </example>
     <seealso>
-      <cmd name="PositioningArea"/>
+      <cmd name="PositioningArea"/>,
+      <ref name="positioningframe"/>
     </seealso>
   </command>
   <!--
@@ -9219,7 +9463,11 @@
     <example xml:lang="de">
       <listing><![CDATA[<ProcessNode select="*" mode="summe" />]]></listing>
     </example>
-    <seealso><cmd name="Record"/></seealso>
+    <seealso>
+      <cmd name="Record"/>,
+      <ref name="programming"/>,
+      <ref name="xpath"/>
+    </seealso>
   </command>
 
   <!--
@@ -9316,7 +9564,9 @@
 ]]></listing>
     </example>
     <seealso>
-      <cmd name="ProcessNode"/>
+      <cmd name="ProcessNode"/>,
+      <ref name="programming"/>,
+      <ref name="xpath"/>
     </seealso>
   </command>
   <!--
@@ -9368,9 +9618,10 @@
 </DefineFontfamily>]]></listing>
     </example>
     <seealso>
-      <cmd name="Bold"/>
-      <cmd name="Italic"/>
-      <cmd name="BoldItalic"/>
+      <cmd name="Bold"/>,
+      <cmd name="Italic"/>,
+      <cmd name="BoldItalic"/>,
+      <ref name="fonts"/>
     </seealso>
   </command>
   <!--
@@ -9474,7 +9725,8 @@
 ]]></listing>
     </example>
     <seealso>
-      <cmd name="PlaceObject"/>
+      <cmd name="PlaceObject"/>,
+      <ref name="outputtingobjects"/>
     </seealso>
   </command>
   <!--
@@ -9567,7 +9819,11 @@
       <listing><![CDATA[<SaveDataset name="toc" elementname="Inhalt" select="$Inhalt" />]]></listing>
     </example>
     <seealso>
-      <cmd name="Element"/>, <cmd name="Attribute"/>, <cmd name="LoadDataset"/>, <ref name="directories"/>
+      <cmd name="Element"/>,
+      <cmd name="Attribute"/>,
+      <cmd name="LoadDataset"/>,
+      <ref name="directoriesxml"/>,
+      <ref name="howto-tableofcontents"/>
     </seealso>
   </command>
   <!--
@@ -9697,7 +9953,11 @@
     </Record>
 </Layout>]]></listing>
     </example>
-    <seealso><cmd name="InsertPages"/></seealso>
+    <seealso>
+      <cmd name="InsertPages"/>,
+      <ref name="virtualpages"/>,
+      <ref name="tocinonerun"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -9776,6 +10036,9 @@
   </Record>
 </Layout>]]></listing>
     </example>
+    <seealso>
+      <ref name="fileorganization"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -9844,7 +10107,10 @@
     <example xml:lang="de">
       <listing><![CDATA[<SetGrid width="4mm" height="14pt" />]]></listing>
     </example>
-    <seealso><cmd name="Grid"/></seealso>
+    <seealso>
+      <cmd name="Grid"/>,
+      <ref name="grid"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -10075,7 +10341,9 @@
 </Record>]]></listing>
     </example>
     <seealso>
-      <cmd name="Value"/>
+      <cmd name="Value"/>,
+      <ref name="programming"/>,
+      <ref name="xpath"/>
     </seealso>
     <rules xml:lang="en">
       <sch:pattern>
@@ -10224,7 +10492,10 @@
   </PlaceObject>
 </Record>]]></listing>
     </example>
-    <seealso/>
+    <seealso>
+      <ref name="indexcreation"/>,
+      <ref name="howto-keywordindex"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -10347,7 +10618,10 @@
 </Record>
 ]]></listing>
     </example>
-    <seealso></seealso>
+    <seealso>
+      <ref name="textformatting"/>,
+      <ref name="css"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -10380,7 +10654,9 @@
 </PlaceObject>]]></listing>
     </example>
     <seealso>
-      <cmd name="Sup"/>, <cmd name="Paragraph"/>
+      <cmd name="Sup"/>,
+      <cmd name="Paragraph"/>,
+      <ref name="textformatting"/>
     </seealso>
   </command>
   <!--
@@ -10414,8 +10690,9 @@
 </PlaceObject>]]></listing>
     </example>
     <seealso>
-      <cmd name="Paragraph"/>
-      <cmd name="Sub"/>
+      <cmd name="Paragraph"/>,
+      <cmd name="Sub"/>,
+      <ref name="textformatting"/>
     </seealso>
   </command>
   <!--
@@ -10516,8 +10793,9 @@
       <para>je nach Inhalt der Variablen.</para>
     </info>
     <seealso>
-      <cmd name="Case"/>
-      <cmd name="Otherwise"/>
+      <cmd name="Case"/>,
+      <cmd name="Otherwise"/>,
+      <ref name="programming"/>
     </seealso>
   </command>
 
@@ -10597,7 +10875,9 @@
 </Record>
 ]]></listing>
     </example>
-    <seealso></seealso>
+    <seealso>
+      <ref name="accessibility"/>
+    </seealso>
   </command>
 
   <!--
@@ -10657,7 +10937,10 @@
   }
 </Stylesheet>]]></listing>
     </example>
-    <seealso><ref name="css"/></seealso>
+    <seealso>
+      <ref name="css"/>,
+      <ref name="html"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -10988,7 +11271,12 @@
       <image file="ref-table-de.png" width="100%"/>
     </example>
     <seealso>
-      <cmd name="Tr"/>,  <cmd name="Td"/>, <cmd name="Tablerule"/>, <cmd name="PlaceObject"/>
+      <cmd name="Tr"/>,
+      <cmd name="Td"/>,
+      <cmd name="Tablerule"/>,
+      <cmd name="PlaceObject"/>,
+      <ref name="tables"/>,
+      <ref name="howto-simpletable"/>
     </seealso>
   </command>
   <!--
@@ -11049,7 +11337,9 @@
       <para>Siehe Erläuterung zu <cmd name="Table"/></para>
     </example>
     <seealso>
-      <cmd name="Tablehead"/>
+      <cmd name="Tablehead"/>,
+      <ref name="tables"/>,
+      <ref name="howto-continuationhead"/>
     </seealso>
   </command>
   <!--
@@ -11131,7 +11421,9 @@
       <para>Siehe Erläuterung zu <cmd name="Table"/>.</para>
     </example>
     <seealso>
-      <cmd name="Tablefoot"/>
+      <cmd name="Tablefoot"/>,
+      <ref name="tables"/>,
+      <ref name="howto-continuationhead"/>
     </seealso>
   </command>
   <!--
@@ -11177,7 +11469,10 @@
 ]]></listing>
       <para>Die zweite Zeile der Tabelle ist auf der zweiten Seite.</para>
     </example>
-    <seealso></seealso>
+    <seealso>
+      <ref name="tables"/>,
+      <ref name="howto-manualtablebreak"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -11560,7 +11855,8 @@
       <cmd name="Tr"/>,
       <cmd name="Paragraph"/>,
       <cmd name="Image"/>,
-      <cmd name="Stylesheet"/>
+      <cmd name="Stylesheet"/>,
+      <ref name="tables"/>
     </seealso>
   </command>
   <!--
@@ -11650,7 +11946,8 @@
 ...]]></listing>
     </example>
     <seealso>
-      <cmd name="Table"/>
+      <cmd name="Table"/>,
+      <ref name="tables"/>
     </seealso>
   </command>
   <!--
@@ -11786,7 +12083,12 @@
 </PlaceObject>]]></listing>
     </example>
     <seealso>
-      <cmd name="DefineTextformat"/>, <cmd name="DefineColor"/>, <cmd name="Paragraph"/>, <cmd name="PlaceObject"/>
+      <cmd name="DefineTextformat"/>,
+      <cmd name="DefineColor"/>,
+      <cmd name="Paragraph"/>,
+      <cmd name="PlaceObject"/>,
+      <ref name="outputtingobjects"/>,
+      <ref name="textformatting"/>
     </seealso>
   </command>
 
@@ -11880,7 +12182,11 @@
 </Record>
 ]]></listing>
     </example>
-    <seealso><cmd name="PlaceObject"/></seealso>
+    <seealso>
+      <cmd name="PlaceObject"/>,
+      <ref name="outputtingobjects"/>,
+      <ref name="howto-tableorgroups"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -12165,7 +12471,9 @@
     <example xml:lang="de">
       <listing><![CDATA[<Trace textformat="yes"/>]]></listing>
     </example>
-    <seealso></seealso>
+    <seealso>
+      <ref name="troubleshooting"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -12392,8 +12700,9 @@
 </Tr>]]></listing>
     </example>
     <seealso>
-      <cmd name="Td"/>
-      <cmd name="Table"/>
+      <cmd name="Td"/>,
+      <cmd name="Table"/>,
+      <ref name="tables"/>
     </seealso>
   </command>
   <!--
@@ -12517,7 +12826,10 @@
 ]]></listing>
 
     </example>
-    <seealso><cmd name="PlaceObject"/></seealso>
+    <seealso>
+      <cmd name="PlaceObject"/>,
+      <ref name="rotating"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -12604,9 +12916,10 @@
 </PlaceObject>]]></listing>
     </example>
     <seealso>
-      <cmd name="B"/>
-      <cmd name="I"/>
-      <cmd name="Paragraph"/>
+      <cmd name="B"/>,
+      <cmd name="I"/>,
+      <cmd name="Paragraph"/>,
+      <ref name="textformatting"/>
     </seealso>
   </command>
   <!--
@@ -12767,7 +13080,11 @@
 </PlaceObject>
 ]]></listing>
     </example>
-    <seealso><cmd name="Ol"/>, <cmd name="Li"/></seealso>
+    <seealso>
+      <cmd name="Ol"/>,
+      <cmd name="Li"/>,
+      <ref name="lists"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -12823,7 +13140,8 @@ Message: "$i is: 3"]]></listing>
     <seealso>
       <cmd name="Switch"/>,
       <cmd name="SetVariable"/>,
-      <cmd name="While"/>
+      <cmd name="While"/>,
+      <ref name="programming"/>
     </seealso>
   </command>
   <!--
@@ -12860,7 +13178,9 @@ Message: "$i is: 3"]]></listing>
   </Paragraph>
 </Textblock>]]></listing>
     </example>
-    <seealso/>
+    <seealso>
+      <ref name="textformatting"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -12923,8 +13243,9 @@ Message: "$i is: 3"]]></listing>
     </example>
     <seealso>
       <cmd name="Copy-of"/>,
+      <cmd name="SetVariable"/>,
       <ref name="xpath"/>,
-      <cmd name="SetVariable"/>
+      <ref name="programming"/>
     </seealso>
   </command>
   <!--
@@ -12972,7 +13293,11 @@ Message: "$i is: 3"]]></listing>
 </Td>
 ]]></listing>
     </example>
-    <seealso><cmd name="Td"/></seealso>
+    <seealso>
+      <cmd name="Td"/>,
+      <ref name="textformatting"/>,
+      <ref name="tables"/>
+    </seealso>
   </command>
   <!--
       *************************
@@ -13043,7 +13368,8 @@ Message: "$i is: 3"]]></listing>
     <seealso>
       <cmd name="Switch"/>,
       <cmd name="SetVariable"/>,
-      <cmd name="Until"/>
+      <cmd name="Until"/>,
+      <ref name="programming"/>
     </seealso>
   </command>
 
