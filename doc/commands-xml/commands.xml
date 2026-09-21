@@ -6389,10 +6389,10 @@
   -->
   <command en="Math" since="5.9.2">
     <description xml:lang="en">
-      <para>Typeset a mathematical formula. The child elements are interpreted as MathML. The MathML root element <tt>&lt;math&gt;</tt> and the MathML namespace may be given, but both are optional; several child elements are treated as an implicit mrow. Experimental, implementation in progress.</para>
+      <para>Typeset a mathematical formula. The child elements are interpreted as MathML. The MathML root element <tt>&lt;math&gt;</tt> and the MathML namespace may be given, but both are optional; several child elements are treated as an implicit mrow. Supported are the token elements <tt>mi</tt>, <tt>mn</tt>, <tt>mo</tt> and <tt>mtext</tt>, the layout elements <tt>mrow</tt>, <tt>mfrac</tt>, <tt>msqrt</tt>, <tt>msup</tt>, <tt>msub</tt>, <tt>msubsup</tt>, <tt>munder</tt>, <tt>mover</tt> and <tt>munderover</tt>. Operators get the spacing of their class (binary operators, relations, parentheses, large operators such as sums and integrals), accents are placed with the metrics of the font. Not yet supported are stretchy delimiters, <tt>mroot</tt>, <tt>mtable</tt> and the attribute <tt>mathvariant</tt>. Experimental, implementation in progress.</para>
     </description>
     <description xml:lang="de">
-      <para>Setzt eine mathematische Formel. Die Kindelemente werden als MathML interpretiert. Das MathML-Wurzelelement <tt>&lt;math&gt;</tt> und der MathML-Namensraum können angegeben werden, sind aber optional; mehrere Kindelemente werden als implizites mrow behandelt. Experimentell, die Implementierung ist in Arbeit.</para>
+      <para>Setzt eine mathematische Formel. Die Kindelemente werden als MathML interpretiert. Das MathML-Wurzelelement <tt>&lt;math&gt;</tt> und der MathML-Namensraum können angegeben werden, sind aber optional; mehrere Kindelemente werden als implizites mrow behandelt. Unterstützt werden die Token-Elemente <tt>mi</tt>, <tt>mn</tt>, <tt>mo</tt> und <tt>mtext</tt> sowie die Layout-Elemente <tt>mrow</tt>, <tt>mfrac</tt>, <tt>msqrt</tt>, <tt>msup</tt>, <tt>msub</tt>, <tt>msubsup</tt>, <tt>munder</tt>, <tt>mover</tt> und <tt>munderover</tt>. Operatoren erhalten die Abstände ihrer Klasse (Rechenzeichen, Relationen, Klammern, große Operatoren wie Summen und Integrale), Akzente werden mit den Metriken der Schrift platziert. Noch nicht unterstützt sind dehnbare Klammern, <tt>mroot</tt>, <tt>mtable</tt> und das Attribut <tt>mathvariant</tt>. Experimentell, die Implementierung ist in Arbeit.</para>
     </description>
     <childelements><reference name="mathml"/></childelements>
     <attribute en="display" type="boolean" optional="yes">
@@ -6405,10 +6405,10 @@
     </attribute>
     <attribute en="fontfamily" type="text" optional="yes">
       <description xml:lang="en">
-        <para>Name of the font family (defined with <tt>DefineFontfamily</tt>) whose regular font provides the OpenType MATH table. The first <tt>Math</tt> element must set this attribute; later elements reuse the registered math font.</para>
+        <para>Name of the font family (defined with <tt>DefineFontfamily</tt>) whose regular font provides the OpenType MATH table. The first <tt>Math</tt> element must set this attribute; later elements reuse the registered math font. Only one math font per document is supported, a different family on a later element is ignored with a warning.</para>
       </description>
       <description xml:lang="de">
-        <para>Name der Schriftfamilie (definiert mit <tt>DefineFontfamily</tt>), deren regulärer Font die OpenType-MATH-Tabelle enthält. Das erste <tt>Math</tt>-Element muss dieses Attribut setzen, weitere Elemente verwenden den registrierten Mathematik-Font.</para>
+        <para>Name der Schriftfamilie (definiert mit <tt>DefineFontfamily</tt>), deren regulärer Font die OpenType-MATH-Tabelle enthält. Das erste <tt>Math</tt>-Element muss dieses Attribut setzen, weitere Elemente verwenden den registrierten Mathematik-Font. Pro Dokument wird nur eine Mathematikschrift unterstützt, eine andere Schriftfamilie bei einem späteren Element wird mit einer Warnung ignoriert.</para>
       </description>
     </attribute>
     <example xml:lang="en">
