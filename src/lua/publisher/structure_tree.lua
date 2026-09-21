@@ -127,7 +127,7 @@ function M.sort_struct_tree_by_page_order(elem, page_ref_to_pagenumber)
         return
     end
     for i = 1, #elem do
-        if type(elem[i]) == "table" then
+        if type(elem[i]) == "table" and not elem[i].mcid then
             M.sort_struct_tree_by_page_order(elem[i], page_ref_to_pagenumber)
         end
     end
@@ -187,7 +187,9 @@ function M.dump_struct_tree_xml(elem, indent, page_ref_to_num)
     local children = {}
     for i = 1, #elem do
         local child = elem[i]
-        if type(child) == "table" then
+        if type(child) == "table" and child.mcid then
+            mcids[#mcids + 1] = tostring(child.mcid)
+        elseif type(child) == "table" then
             children[#children + 1] = child
         else
             mcids[#mcids + 1] = tostring(child)
@@ -220,7 +222,11 @@ function M.writeStructElements(itm, parentobjectnumber)
     local objectnumbers = {}
     for i = 1, #itm do
         local thisitm = itm[i]
-        if type(thisitm) == "table" then
+        if type(thisitm) == "table" and thisitm.mcid then
+            -- marked content on another page than the structure element
+            objectnumbers[#objectnumbers + 1] =
+                string.format("<</Type /MCR /Pg %d 0 R /MCID %d>>", thisitm.page, thisitm.mcid)
+        elseif type(thisitm) == "table" then
             local onum = M.writeStructElements(thisitm, obj)
             objectnumbers[#objectnumbers + 1] = onum
         else

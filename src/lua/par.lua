@@ -26,6 +26,7 @@ local publisher = require("publisher")
 ---@field parent? string Id of the parent structure element (PDF/UA).
 ---@field rolecounter? integer Counter for the structure role (PDF/UA).
 ---@field structpos? string Position in the parent structure element (PDF/UA).
+---@field structchain? table Enclosing container structure elements to create on demand (PDF/UA, see `ensure_struct_chain`).
 ---@field actualtext? string Replacement text for the structure element (PDF/UA).
 ---@field html? string HTML processing mode ("off" disables it).
 ---@field typ "par"
@@ -35,6 +36,7 @@ local publisher = require("publisher")
 ---@field has_special_nodes? boolean
 ---@field fontfamily? integer Font family number for the whole paragraph.
 ---@field sublists? Par[] Paragraphs of the lists nested in a list item (set by `<Li>`).
+---@field struct_li? table Ids of the LI and LBody structure elements of a list item (PDF/UA, set by `<Li>`).
 ---@field flatten_callback? fun(thiselt: table, options: table): Par Called during flatten to re-typeset the contents (see Nobreak).
 local Par = {}
 
@@ -1448,6 +1450,7 @@ function Par:format(width_sp, options, data)
         publisher.attribute_helpers.setprop(nodelist, "id", self.id)
         publisher.attribute_helpers.setprop(nodelist, "structpos", self.structpos)
         publisher.attribute_helpers.setprop(nodelist, "actualtext", self.actualtext)
+        publisher.attribute_helpers.setprop(nodelist, "structchain", self.structchain)
         node.set_attribute(nodelist, publisher.att_role, self.role)
     end
 

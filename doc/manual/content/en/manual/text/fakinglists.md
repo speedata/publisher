@@ -82,6 +82,8 @@ Alternatively the lists can be styled with CSS in [`<Stylesheet>`]({{< relref "/
 
 Attributes take precedence over CSS.
 
+In PDF/UA documents the lists are tagged automatically: the list becomes an `L` structure element, every item an `LI` with `Lbl` for the marker and `LBody` for the text. Nested lists are placed inside the `LBody` of their item.
+
 ## Enumeration lists with textformat
 
 You can set a left margin or a hanging indent for text formats. This allows you to output bulleted lists:

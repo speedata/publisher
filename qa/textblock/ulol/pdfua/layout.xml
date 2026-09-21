@@ -1,0 +1,27 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <PDFOptions format="PDF/UA"/>
+    <Pageformat width="100mm" height="100mm"/>
+    <Stylesheet>
+        ul.sq { list-style-type: square; }
+        ol.in { list-style-position: inside; }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph role="H1"><Value>Lists in PDF/UA</Value></Paragraph>
+                <Ul class="sq">
+                    <Li><Value>Square marker drawn as a rule</Value></Li>
+                    <Li>
+                        <Value>Second item with nested lists</Value>
+                        <Ol class="in"><Li><Value>Marker inside</Value></Li></Ol>
+                        <Ul marker="none"><Li><Value>Without marker</Value></Li></Ul>
+                    </Li>
+                    <Li><Ul><Li><Value>Item without text of its own</Value></Li></Ul></Li>
+                </Ul>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

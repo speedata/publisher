@@ -3060,16 +3060,59 @@ function commands.italic(layoutxml, dataxml)
     return p
 end
 
+-- PDF/UA: the chain of the enclosing list structure elements (L, LI,
+-- LBody, ...) while the children of a list or list item are dispatched.
+-- Each entry is `{ id = ..., role = ..., parentid = ... }`, outermost first.
+---@type table[]?
+local list_struct_chain = nil
+
+-- Returns a copy of `chain` with `entry` appended.
+---@param chain table[]?
+---@param entry table
+---@return table[]
+local function chain_with(chain, entry)
+    local ret = {}
+    if chain then
+        for i = 1, #chain do
+            ret[i] = chain[i]
+        end
+    end
+    ret[#ret + 1] = entry
+    return ret
+end
+
 -- List item (`<Li>`)
 -- ------------------
--- An entry of an ordered or unordered list.
+-- An entry of an ordered or unordered list. Nested lists inside the item
+-- are returned in the field `sublists` of the paragraph.
 ---@param layoutxml table
 ---@param dataxml table
 ---@return any
 function commands.li(layoutxml, dataxml)
     local p = publisher.par:new(nil, "li")
     local sublists
+    local struct_li
+    local outer_chain = list_struct_chain
+    if publisher.options.format == "PDF/UA" then
+        -- Reserve the ids of the LI and LBody structure elements now, so
+        -- that nested lists can be placed inside the LBody.
+        publisher.rolecounter = publisher.rolecounter + 1
+        local li_counter = publisher.rolecounter
+        publisher.rolecounter = publisher.rolecounter + 1
+        local lbody_counter = publisher.rolecounter
+        struct_li = {
+            li_id = "LI_" .. li_counter,
+            li_counter = li_counter,
+            lbody_id = "LBody_" .. lbody_counter,
+            lbody_counter = lbody_counter,
+        }
+        local parentid = outer_chain and outer_chain[#outer_chain].id or "doc"
+        local chain = chain_with(outer_chain, { id = struct_li.li_id, role = "LI", parentid = parentid })
+        list_struct_chain = chain_with(chain, { id = struct_li.lbody_id, role = "LBody", parentid = struct_li.li_id })
+    end
     local tab = publisher.dispatch.dispatch(layoutxml, dataxml)
+    list_struct_chain = outer_chain
+    p.struct_li = struct_li
     for _, j in ipairs(tab) do
         local eltname = publisher.xml_helpers.elementname(j)
         local c = publisher.xml_helpers.element_contents(j)
@@ -4008,17 +4051,23 @@ end
 
 -- A filled square as list marker. It is drawn as a rule, because the
 -- square glyphs are missing in many fonts (including the default font).
----@param fontfamily integer
----@param colorindex? integer
+---@param options table Label options (fontfamily, color and the PDF/UA structure fields).
 ---@return Node hbox
-local function square_marker(fontfamily, colorindex)
-    local size = publisher.fonts.lookup_fontfamily_number_instance[fontfamily].size
+local function square_marker(options)
+    local size = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily].size
     local r = node.new("rule")
     r.width = math.floor(size * 0.35)
     r.height = math.floor(size * 0.48)
     r.depth = -math.floor(size * 0.13)
-    if colorindex and colorindex ~= 1 then
-        publisher.attribute_helpers.set_attribute(r, "color", colorindex)
+    if options.color and options.color ~= 1 then
+        publisher.attribute_helpers.set_attribute(r, "color", options.color)
+    end
+    if options.role then
+        publisher.attribute_helpers.setprop(r, "role", options.role)
+        publisher.attribute_helpers.setprop(r, "id", options.id)
+        publisher.attribute_helpers.setprop(r, "parent", options.parent)
+        publisher.attribute_helpers.setprop(r, "rolecounter", options.rolecounter)
+        publisher.attribute_helpers.setprop(r, "structchain", options.structchain)
     end
     local hbox = node.hpack(r)
     return hbox
@@ -4113,6 +4162,24 @@ local function list_common(layoutxml, dataxml, kind)
         end
     end
 
+    -- PDF/UA: the list is an L structure element, every item an LI with
+    -- Lbl (marker) and LBody (text). The L, LI and LBody elements have no
+    -- nodes of their own, they are created at shipout from the structchain
+    -- property (see publisher.find_role_attributes).
+    local pdf_ua = publisher.options.format == "PDF/UA"
+    local outer_chain = list_struct_chain
+    local l_id, role_li, role_lbl, role_lbody
+    if pdf_ua then
+        role_li = publisher.structure_tree.get_rolenum("LI")
+        role_lbl = publisher.structure_tree.get_rolenum("Lbl")
+        role_lbody = publisher.structure_tree.get_rolenum("LBody")
+        publisher.rolecounter = publisher.rolecounter + 1
+        l_id = "L_" .. publisher.rolecounter
+        local parentid = outer_chain and outer_chain[#outer_chain].id or "doc"
+        list_struct_chain = chain_with(outer_chain, { id = l_id, role = "L", parentid = parentid })
+    end
+    local list_chain = list_struct_chain
+
     -- Nested lists (dispatched below) start at the text position of this list.
     local outer_indent = list_indent_sp
     local text_indent = outer_indent + paddingleft
@@ -4128,32 +4195,75 @@ local function list_common(layoutxml, dataxml, kind)
         ul_level = ul_level - 1
     end
     list_indent_sp = outer_indent
+    list_struct_chain = outer_chain
 
-    local labeloptions = { fontfamily = labelfontfamily, color = markercolorindex }
     local styles = { ["list-style-type"] = marker, listlevel = 1 }
     local ret = {}
     local counter = start - 1
     for _, j in ipairs(tab) do
         local contents = publisher.xml_helpers.element_contents(j)
         counter = counter + 1
-        local label
-        if marker == "square" then
-            label = square_marker(labelfontfamily, markercolorindex)
-        else
-            label = html_lists.resolve_list_style_type(styles, { counter }, oltype, dataxml)
-        end
         local a = publisher.par:new(nil, kind)
         a.padding_left = text_indent
         a.textformat = textformat
+        local labeloptions = { fontfamily = labelfontfamily, color = markercolorindex }
+        local textoptions = { fontfamily = fontfamily, color = colorindex }
+        if pdf_ua then
+            local struct_li
+            if type(contents) == "table" then
+                struct_li = contents.struct_li
+            end
+            if not struct_li then
+                -- not created by <Li>
+                publisher.rolecounter = publisher.rolecounter + 1
+                local li_counter = publisher.rolecounter
+                publisher.rolecounter = publisher.rolecounter + 1
+                struct_li = {
+                    li_id = "LI_" .. li_counter,
+                    li_counter = li_counter,
+                    lbody_id = "LBody_" .. publisher.rolecounter,
+                    lbody_counter = publisher.rolecounter,
+                }
+            end
+            a.role = role_li
+            a.parent = l_id
+            a.id = struct_li.li_id
+            a.rolecounter = struct_li.li_counter
+            a.structchain = list_chain
+            local item_chain = chain_with(list_chain, { id = struct_li.li_id, role = "LI", parentid = l_id })
+            publisher.rolecounter = publisher.rolecounter + 1
+            labeloptions.role = role_lbl
+            labeloptions.rolecounter = publisher.rolecounter
+            labeloptions.id = "Lbl_" .. publisher.rolecounter
+            labeloptions.parent = struct_li.li_id
+            labeloptions.structchain = item_chain
+            textoptions.role = role_lbody
+            textoptions.rolecounter = struct_li.lbody_counter
+            textoptions.parent = struct_li.li_id
+            -- the LBody is created from the chain, so that nested lists find it
+            textoptions.structchain =
+                chain_with(item_chain, { id = struct_li.lbody_id, role = "LBody", parentid = struct_li.li_id })
+        end
+        local label
+        if marker == "square" then
+            label = square_marker(labeloptions)
+        else
+            label = html_lists.resolve_list_style_type(styles, { counter }, oltype, dataxml)
+        end
         if label ~= "" then
             if position == "inside" then
-                a:append(label, { fontfamily = fontfamily, color = markercolorindex })
-                a:append(" ", { fontfamily = fontfamily })
+                local insideoptions = {}
+                for k, v in pairs(labeloptions) do
+                    insideoptions[k] = v
+                end
+                insideoptions.fontfamily = fontfamily
+                a:append(label, insideoptions)
+                a:append(" ", insideoptions)
             else
                 a:prepend({ label, labelwidth, labeloptions, labeldistance, labelalign })
             end
         end
-        a:append(contents, { fontfamily = fontfamily, color = colorindex })
+        a:append(contents, textoptions)
         ret[#ret + 1] = a
         if type(contents) == "table" and contents.sublists then
             for _, sub in ipairs(contents.sublists) do

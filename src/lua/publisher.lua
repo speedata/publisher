@@ -625,7 +625,7 @@ local ktree = pdf.reserveobj()
 ---@field alttext? string Alternative description (PDF `/Alt`).
 ---@field linkobjects? integer[] PDF object numbers of associated link annotations.
 ---@field text? string Alternative text / contents.
----@field [integer] StructElement|integer Child structure elements or MCID numbers.
+---@field [integer] StructElement|integer|{ mcid: integer, page: integer } Child structure elements, MCID numbers or marked content references on other pages.
 
 -- This is a sample data structure in the structElements table:
 -- ["doc"] = {
@@ -845,7 +845,10 @@ M.roles_a = {
     "H4",
     "H5",
     "H6",
+    "L",
     "Lbl",
+    "LBody",
+    "LI",
     "Link",
     "P",
     "Part",
@@ -1985,6 +1988,33 @@ do
     local objcount
     local structelementobjects
 
+    -- Creates the container structure elements a node depends on (for
+    -- example L and LI of a list item) when they do not exist yet. The
+    -- node property `structchain` lists them from the outermost to the
+    -- innermost as `{ id = ..., role = ..., parentid = ... }`.
+    ---@param head Node
+    ---@return nil
+    local function ensure_struct_chain(head)
+        local chain = M.attribute_helpers.getprop(head, "structchain")
+        if not chain then
+            return
+        end
+        for i = 1, #chain do
+            local c = chain[i]
+            if not M.structElements[c.id] then
+                local entry = {
+                    obj = pdf.reserveobj(),
+                    role = c.role,
+                }
+                local parenttable = M.structElements[c.parentid]
+                if parenttable then
+                    parenttable[#parenttable + 1] = entry
+                end
+                M.structElements[c.id] = entry
+            end
+        end
+    end
+
     -- Walks a node list, collects PDF/UA structure entries from `att_role`
     -- attributes and node properties, and links them into the `structElements`
     -- tree. Recurses into hlists/vlists.
@@ -2011,6 +2041,7 @@ do
                         local alttext = M.attribute_helpers.getprop(head, "alttext")
                         local rolename = M.roles_a[r]
                         if rolename ~= "Artifact" then
+                            ensure_struct_chain(head)
                             local structpos = M.attribute_helpers.getprop(head, "structpos")
                             local structposnum = tonumber(structpos)
                             local entry = {
@@ -2045,6 +2076,7 @@ do
                 local actualtext = M.attribute_helpers.getprop(head, "actualtext")
                 local alttext = M.attribute_helpers.getprop(head, "alttext")
                 local bbox = M.attribute_helpers.getprop(head, "bbox")
+                ensure_struct_chain(head)
                 -- role number to role name
                 local rolename = M.roles_a[r]
 
@@ -2134,7 +2166,17 @@ do
                     str = string.format("/%s<</MCID %d>>BDC", rolename, objcount)
                 end
                 head.data = str
-                entry[#entry + 1] = objcount
+                -- An entry created from a structchain has no page yet. Marked
+                -- content on another page than the entry gets a marked
+                -- content reference (see structure_tree.writeStructElements).
+                if entry.page == nil then
+                    entry.page = page
+                end
+                if entry.page == page then
+                    entry[#entry + 1] = objcount
+                else
+                    entry[#entry + 1] = { mcid = objcount, page = page }
+                end
                 objcount = objcount + 1
             end
             head = head.next

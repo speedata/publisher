@@ -81,6 +81,8 @@ Alternativ lassen sich die Listen über die Attribute `class` und `id` mit CSS i
 
 Attribute haben Vorrang vor CSS.
 
+In PDF/UA-Dokumenten werden die Listen automatisch getaggt: Die Liste wird zu einem Strukturelement `L`, jeder Eintrag zu einem `LI` mit `Lbl` für das Aufzählungszeichen und `LBody` für den Text. Verschachtelte Listen liegen im `LBody` ihres Eintrags.
+
 ## Aufzählungslisten mit Textformaten
 
 Man kann einen linken Rand bzw. einen hängenden Einzug bei Textformaten einstellen. Damit kann man Aufzählungslisten ausgeben:

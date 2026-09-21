@@ -331,8 +331,9 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
             local transparency = head_props_t and head_props_t.opacity
             local bbox = head_props_t and head_props_t.bbox
             local hl = node_has_attribute(head, attr_num_hyperlink) or (head_props_t and head_props_t.hyperlink)
-            local role, structelemobjnum, id, parentid, rc, actualtext, alttext
+            local role, structelemobjnum, id, parentid, rc, actualtext, alttext, structchain
             if opt_format == "PDF/UA" and head_props_t then
+                structchain = head_props_t.structchain
                 actualtext = head_props_t.actualtext
                 alttext = head_props_t.alttext
                 role = head_props_t.role
@@ -495,6 +496,7 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                         node_set_attr(bdc, publisher.att_role, role)
                         setp(bdc, "parentid", parentid)
                         setp(bdc, "rolecounter", rc)
+                        setp(bdc, "structchain", structchain)
                         setp(bdc, "id", id)
                         setp(bdc, "bbox", bbox)
                         setp(bdc, "actualtext", actualtext)
@@ -568,6 +570,7 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                         node_set_attr(bdc, publisher.att_role, role)
                         setp(bdc, "parentid", parentid)
                         setp(bdc, "rolecounter", rc)
+                        setp(bdc, "structchain", structchain)
                         setp(bdc, "bbox", bbox)
                         setp(bdc, "id", id)
                         setp(bdc, "actualtext", actualtext)
@@ -588,6 +591,7 @@ function M.insert_nonmoving_whatsits(head, parent, blockinline, curx, cury, page
                     node_set_attr(bdc, publisher.att_role, role)
                     setp(bdc, "parentid", parentid)
                     setp(bdc, "rolecounter", rc)
+                    setp(bdc, "structchain", structchain)
                     setp(bdc, "bbox", bbox)
                     setp(bdc, "id", id)
                     setp(bdc, "actualtext", actualtext)
@@ -1145,6 +1149,10 @@ function M.hbglyphlist(arguments)
     if parameter.rolecounter then
         style_props_tmpl = style_props_tmpl or {}
         style_props_tmpl["rolecounter"] = parameter.rolecounter
+    end
+    if parameter.structchain then
+        style_props_tmpl = style_props_tmpl or {}
+        style_props_tmpl["structchain"] = parameter.structchain
     end
 
     -- Pre-compute glyph creation values
