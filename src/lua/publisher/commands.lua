@@ -4968,8 +4968,15 @@ function commands.paragraph(layoutxml, dataxml, textblockoptions)
     if publisher.options.format == "PDF/UA" then
         publisher.rolecounter = publisher.rolecounter + 1
         params.rolecounter = publisher.rolecounter
-        params.role = publisher.structure_tree.get_rolenum(role)
+        -- A paragraph without a role is a P. The role must be known before
+        -- the contents are appended, otherwise the text stays untagged.
+        params.role = publisher.structure_tree.get_rolenum(role or "P")
         params.parent = parent
+        if list_struct_chain and not parent then
+            -- inside <Li>: the paragraph belongs to the LBody of the list item
+            params.parent = list_struct_chain[#list_struct_chain].id
+            params.structchain = list_struct_chain
+        end
         params.structpos = structpos
         params.actualtext = actualtext
     end
@@ -5097,7 +5104,6 @@ function commands.paragraph(layoutxml, dataxml, textblockoptions)
         end
     end
     if publisher.options.format == "PDF/UA" then
-        params.role = params.role or publisher.structure_tree.get_rolenum("P")
         if not params.role then
             main.log("error", "Paragraph: role unknown", lineinfo(layoutxml))
         else
@@ -5107,6 +5113,7 @@ function commands.paragraph(layoutxml, dataxml, textblockoptions)
             p.id = publisher.roles_a[params.role] .. "_" .. tostring(params.rolecounter)
             p.structpos = params.structpos
             p.actualtext = params.actualtext
+            p.structchain = params.structchain
         end
     end
     return p

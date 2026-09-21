@@ -2032,7 +2032,8 @@ do
 
                     -- parentid == "" is a maker for inheritance
                     if parentid == "" or parentid == nil then
-                        parentid = curid
+                        -- top level content (for example lines in Text) belongs to the document
+                        parentid = curid or "doc"
                     end
                     -- roleid is role, underscore, rolecounter, for example P_1
                     local roleid = M.attribute_helpers.getprop(head, "id")
@@ -2071,7 +2072,7 @@ do
                 local roleid = M.attribute_helpers.getprop(head, "id")
                 local parentid = M.attribute_helpers.getprop(head, "parentid")
                 if parentid == nil or parentid == "" or parentid == 0 or parentid == roleid then
-                    parentid = curid
+                    parentid = curid or "doc"
                 end
                 local actualtext = M.attribute_helpers.getprop(head, "actualtext")
                 local alttext = M.attribute_helpers.getprop(head, "alttext")

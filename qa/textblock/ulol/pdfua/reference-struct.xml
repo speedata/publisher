@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document>
+  <H1 page="1">
+    <MCID>0</MCID>
+  </H1>
+  <L>
+    <LI page="1">
+      <Lbl page="1">
+        <MCID>1</MCID>
+      </Lbl>
+      <LBody page="1">
+        <MCID>2</MCID>
+      </LBody>
+    </LI>
+    <LI page="1">
+      <Lbl page="1">
+        <MCID>3</MCID>
+      </Lbl>
+      <LBody page="1">
+        <MCID>4</MCID>
+        <L>
+          <LI page="1">
+            <Lbl page="1">
+              <MCID>5</MCID>
+            </Lbl>
+            <LBody page="1">
+              <MCID>6</MCID>
+            </LBody>
+          </LI>
+        </L>
+        <L>
+          <LI page="1">
+            <LBody page="1">
+              <MCID>7</MCID>
+            </LBody>
+          </LI>
+        </L>
+      </LBody>
+    </LI>
+    <LI>
+      <LBody>
+        <L>
+          <LI page="1">
+            <Lbl page="1">
+              <MCID>8</MCID>
+            </Lbl>
+            <LBody page="1">
+              <MCID>9</MCID>
+            </LBody>
+          </LI>
+        </L>
+      </LBody>
+    </LI>
+    <LI page="1">
+      <Lbl page="1">
+        <MCID>10</MCID>
+      </Lbl>
+      <LBody>
+        <P page="1">
+          <MCID>11</MCID>
+        </P>
+      </LBody>
+    </LI>
+  </L>
+</Document>

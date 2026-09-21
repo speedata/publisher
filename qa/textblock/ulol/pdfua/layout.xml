@@ -2,6 +2,7 @@
     xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
     <PDFOptions format="PDF/UA"/>
+    <Trace dump-structtree="yes"/>
     <Pageformat width="100mm" height="100mm"/>
     <Stylesheet>
         ul.sq { list-style-type: square; }
@@ -20,6 +21,7 @@
                         <Ul marker="none"><Li><Value>Without marker</Value></Li></Ul>
                     </Li>
                     <Li><Ul><Li><Value>Item without text of its own</Value></Li></Ul></Li>
+                    <Li><Paragraph><Value>Paragraph inside the list item</Value></Paragraph></Li>
                 </Ul>
             </Textblock>
         </PlaceObject>
