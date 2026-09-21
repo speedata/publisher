@@ -44,7 +44,7 @@ Das erste `<Math>`-Element im Layout gibt die Schriftfamilie mit dem Attribut `f
 Die wichtigsten MathML-Elemente:
 
 `<mi>`
-: Bezeichner. Einzelne Buchstaben werden kursiv gesetzt (`x`, `a`), Funktionsnamen aus mehreren Buchstaben aufrecht und mit einem kleinen Abstand zum Argument (`sin`, `lim`, `log`).
+: Bezeichner. Einzelne Buchstaben werden kursiv gesetzt (`x`, `a`, `α`), Funktionsnamen aus mehreren Buchstaben aufrecht und mit einem kleinen Abstand zum Argument (`sin`, `lim`, `log`). Mit `mathvariant="normal"` bleibt ein einzelner Buchstabe aufrecht, etwa das d in dx oder die Konstanten e und i.
 
 `<mn>`
 : Zahlen.
@@ -55,8 +55,14 @@ Die wichtigsten MathML-Elemente:
 `<mrow>`
 : Fasst mehrere Elemente zu einer Gruppe zusammen, etwa als Zähler eines Bruchs.
 
-`<mfrac>`, `<msqrt>`
-: Bruch mit Zähler und Nenner, Quadratwurzel.
+`<mfrac>`, `<msqrt>`, `<mroot>`
+: Bruch mit Zähler und Nenner, Quadratwurzel, Wurzel mit Exponent. Mit `linethickness="0"` entfällt der Bruchstrich, so entstehen Binomialkoeffizienten.
+
+`<mspace>`
+: Zusätzlicher Abstand, zum Beispiel `<mspace width="1em"/>` vor dem dx eines Integrals.
+
+`<mstyle>`
+: Ändert den Stil für die enthaltenen Elemente: `displaystyle="true"` setzt einen Bruch im Fließtext in voller Größe, `scriptlevel="1"` verkleinert den Inhalt auf die Größe einer Hochstellung.
 
 `<msup>`, `<msub>`, `<msubsup>`
 : Hoch- und Tiefstellung. Ein Strich als Exponent (`<msup><mi>f</mi><mo>′</mo></msup>`) wird als Ableitungsstrich gesetzt und nicht zusätzlich hochgestellt.
@@ -84,15 +90,17 @@ Mit `display="yes"` wird die Formel im Display-Stil gesetzt: Brüche werden grö
 
 ![Abgesetzte Formeln im Display-Stil](/img/math-display.png)
 
-Eine Formelzeile ist mindestens so hoch wie eine Textzeile der Absatzschrift. Hohe Formeln (Brüche, Summen mit Grenzen) ragen darüber hinaus; sie brauchen einen Absatz mit größerem Zeilenabstand, zum Beispiel über eine Schriftfamilie mit größerem `leading` am `<Paragraph>`.
+Eine Formelzeile ist mindestens so hoch wie eine Textzeile der Absatzschrift. Für hohe Formeln (Brüche, Summen mit Grenzen) wird die Zeile so weit vergrößert, dass die Formel nicht in die Nachbarzeilen ragt. Wer bei mehreren abgesetzten Formeln einen gleichmäßigen Abstand möchte, verwendet für diese Absätze eine Schriftfamilie mit größerem `leading`.
+
+Die Formel übernimmt die Farbe des Absatzes (Attribut `color` bei `<Paragraph>`).
 
 ## Grenzen
 
 Noch nicht unterstützt sind:
 
 * dehnbare Klammern und Wurzelzeichen, die mit dem Inhalt wachsen
-* `<mroot>` (Wurzel mit Exponent) und `<mtable>` (Ausrichtung mehrzeiliger Gleichungen)
-* das Attribut `mathvariant` (fett, Fraktur, Schreibschrift)
+* `<mtable>` (Ausrichtung mehrzeiliger Gleichungen)
+* die Werte fett, Fraktur und Schreibschrift des Attributs `mathvariant`
 * mehrere Mathematikschriften in einem Dokument
 * `<mtext>` in der Textschrift des Absatzes; der Text wird derzeit aus der Mathematikschrift gesetzt
 

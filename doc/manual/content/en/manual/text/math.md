@@ -44,7 +44,7 @@ The first `<Math>` element in the layout names the font family with the attribut
 The most important MathML elements:
 
 `<mi>`
-: Identifiers. Single letters are set in italics (`x`, `a`), function names of several letters upright and with a small space before the argument (`sin`, `lim`, `log`).
+: Identifiers. Single letters are set in italics (`x`, `a`, `α`), function names of several letters upright and with a small space before the argument (`sin`, `lim`, `log`). With `mathvariant="normal"` a single letter stays upright, for example the d in dx or the constants e and i.
 
 `<mn>`
 : Numbers.
@@ -55,8 +55,14 @@ The most important MathML elements:
 `<mrow>`
 : Groups several elements, for example as the numerator of a fraction.
 
-`<mfrac>`, `<msqrt>`
-: Fraction with numerator and denominator, square root.
+`<mfrac>`, `<msqrt>`, `<mroot>`
+: Fraction with numerator and denominator, square root, root with index. With `linethickness="0"` the fraction bar is omitted, which gives binomial coefficients.
+
+`<mspace>`
+: Extra space, for example `<mspace width="1em"/>` before the dx of an integral.
+
+`<mstyle>`
+: Changes the style of the enclosed elements: `displaystyle="true"` sets a fraction in running text at full size, `scriptlevel="1"` shrinks the contents to the size of a superscript.
 
 `<msup>`, `<msub>`, `<msubsup>`
 : Superscript and subscript. A prime as exponent (`<msup><mi>f</mi><mo>′</mo></msup>`) is set as a derivative mark and not raised a second time.
@@ -84,15 +90,17 @@ With `display="yes"` the formula is set in display style: fractions get larger, 
 
 ![Displayed formulas in display style](/img/math-display.png)
 
-A formula line is at least as high as a text line of the paragraph font. Tall formulas (fractions, sums with limits) extend beyond that; they need a paragraph with more line spacing, for example through a font family with a larger `leading` on the `<Paragraph>`.
+A formula line is at least as high as a text line of the paragraph font. For tall formulas (fractions, sums with limits) the line grows so that the formula does not reach into the neighboring lines. For an even distance between several displayed formulas, use a font family with a larger `leading` for these paragraphs.
+
+The formula takes the color of the paragraph (attribute `color` on `<Paragraph>`).
 
 ## Limits
 
 Not yet supported are:
 
 * stretchy parentheses and radical signs that grow with their contents
-* `<mroot>` (root with index) and `<mtable>` (alignment of multi-line equations)
-* the attribute `mathvariant` (bold, fraktur, script)
+* `<mtable>` (alignment of multi-line equations)
+* the values bold, fraktur and script of the attribute `mathvariant`
 * several math fonts in one document
 * `<mtext>` in the text font of the paragraph; the text is currently set from the math font
 
