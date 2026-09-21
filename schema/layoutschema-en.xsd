@@ -3257,28 +3257,32 @@
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="en:A"/>
-        <xs:element ref="en:B"/>
-        <xs:element ref="en:Barcode"/>
-        <xs:element ref="en:Br"/>
-        <xs:element ref="en:Clip"/>
-        <xs:element ref="en:Color"/>
-        <xs:element ref="en:Fontface"/>
-        <xs:element ref="en:ForAll"/>
-        <xs:element ref="en:Frame"/>
-        <xs:element ref="en:HSpace"/>
-        <xs:element ref="en:I"/>
-        <xs:element ref="en:Image"/>
-        <xs:element ref="en:Loop"/>
-        <xs:element ref="en:Math"/>
-        <xs:element ref="en:NoBreak"/>
-        <xs:element ref="en:Sub"/>
-        <xs:element ref="en:Sup"/>
-        <xs:element ref="en:Span"/>
-        <xs:element ref="en:Switch"/>
-        <xs:element ref="en:U"/>
-        <xs:element ref="en:URL"/>
-        <xs:element ref="en:Value"/>
+        <xs:element ref="en:Ol"/>
+        <xs:element ref="en:Ul"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="en:A"/>
+          <xs:element ref="en:B"/>
+          <xs:element ref="en:Barcode"/>
+          <xs:element ref="en:Br"/>
+          <xs:element ref="en:Clip"/>
+          <xs:element ref="en:Color"/>
+          <xs:element ref="en:Fontface"/>
+          <xs:element ref="en:ForAll"/>
+          <xs:element ref="en:Frame"/>
+          <xs:element ref="en:HSpace"/>
+          <xs:element ref="en:I"/>
+          <xs:element ref="en:Image"/>
+          <xs:element ref="en:Loop"/>
+          <xs:element ref="en:Math"/>
+          <xs:element ref="en:NoBreak"/>
+          <xs:element ref="en:Sub"/>
+          <xs:element ref="en:Sup"/>
+          <xs:element ref="en:Span"/>
+          <xs:element ref="en:Switch"/>
+          <xs:element ref="en:U"/>
+          <xs:element ref="en:URL"/>
+          <xs:element ref="en:Value"/>
+        </xs:choice>
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -3699,9 +3703,73 @@
         <xs:element ref="en:Li"/>
         <xs:element ref="en:ForAll"/>
       </xs:choice>
+      <xs:attribute name="class">
+        <xs:annotation>
+          <xs:documentation>CSS class of the list. The rules for ol and li::marker in the stylesheet are applied (list-style-type, list-style-position, padding-left, color, for the marker content, color and padding-right).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="color">
+        <xs:annotation>
+          <xs:documentation>Color of the marker and the text. Must be defined with DefineColor before use.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
-          <xs:documentation>The name of the font family for the paragraph. The default is “text” (lowercase t).</xs:documentation>
+          <xs:documentation>Font family of the marker and the text. Without this attribute the marker uses the font family “text” and the text inherits the font of the surrounding text block.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="id">
+        <xs:annotation>
+          <xs:documentation>CSS id of the list.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="label-align">
+        <xs:annotation>
+          <xs:documentation>Alignment of the marker within the width given by label-width. Default is right.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="left">
+              <xs:annotation>
+                <xs:documentation>The marker starts at the left edge.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="right">
+              <xs:annotation>
+                <xs:documentation>The marker ends at the distance label-distance before the text.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="label-distance">
+        <xs:annotation>
+          <xs:documentation>Horizontal distance between the marker and the text (for right aligned markers). Default is 4pt.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="label-width">
+        <xs:annotation>
+          <xs:documentation>Width reserved for the marker to the left of the text. The text of all lines starts after this width. Default is 5mm.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="marker">
+        <xs:annotation>
+          <xs:documentation>The numbering style: decimal (default), decimal-leading-zero, lower-alpha, upper-alpha, lower-roman, upper-roman or none. The HTML values 1, a, A, i and I are accepted as well.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="padding-left">
+        <xs:annotation>
+          <xs:documentation>Additional indentation of the whole list including the marker.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="start">
+        <xs:annotation>
+          <xs:documentation>The number of the first item. Default is 1.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="textformat">
+        <xs:annotation>
+          <xs:documentation>Name of the textformat for the list items, for example to set the vertical spacing or the alignment. Without this attribute the textformat of the surrounding text block is used.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
@@ -9725,9 +9793,68 @@
         <xs:element ref="en:Li"/>
         <xs:element ref="en:ForAll"/>
       </xs:choice>
+      <xs:attribute name="class">
+        <xs:annotation>
+          <xs:documentation>CSS class of the list. The rules for ul and li::marker in the stylesheet are applied (list-style-type, list-style-position, padding-left, color, for the marker content, color and padding-right).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="color">
+        <xs:annotation>
+          <xs:documentation>Color of the marker and the text. Must be defined with DefineColor before use.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
-          <xs:documentation>The name of the font family for the paragraph. The default is “text” (lowercase t).</xs:documentation>
+          <xs:documentation>Font family of the marker and the text. Without this attribute the marker uses the font family “text” and the text inherits the font of the surrounding text block.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="id">
+        <xs:annotation>
+          <xs:documentation>CSS id of the list.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="label-align">
+        <xs:annotation>
+          <xs:documentation>Alignment of the marker within the width given by label-width. Default is right.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="left">
+              <xs:annotation>
+                <xs:documentation>The marker starts at the left edge.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="right">
+              <xs:annotation>
+                <xs:documentation>The marker ends at the distance label-distance before the text.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="label-distance">
+        <xs:annotation>
+          <xs:documentation>Horizontal distance between the marker and the text (for right aligned markers). Default is 4pt.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="label-width">
+        <xs:annotation>
+          <xs:documentation>Width reserved for the marker to the left of the text. The text of all lines starts after this width. Default is 5mm.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="marker">
+        <xs:annotation>
+          <xs:documentation>The marker of the list items: any text or one of disc, circle, square or none. Without this attribute nested lists use disc, circle and square in turn.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="padding-left">
+        <xs:annotation>
+          <xs:documentation>Additional indentation of the whole list including the marker.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="textformat">
+        <xs:annotation>
+          <xs:documentation>Name of the textformat for the list items, for example to set the vertical spacing or the alignment. Without this attribute the textformat of the surrounding text block is used.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>

@@ -41,9 +41,46 @@ Numbered and unnumbered lists can be created with [`<Ul>`]({{< relref "/referenc
 </Layout>
 ```
 
-These enumeration lists cannot be nested within one another.
-
 ![olulstandard.png](/img/olulstandard.png)
+
+Since version 5.9.7 the lists can be styled and nested. Lists inside `<Li>` are indented by the width of the enclosing list:
+
+```xml
+<Ul marker="–" label-width="4mm" label-distance="1mm">
+    <Li><Value>Lorem ipsum</Value></Li>
+    <Li>
+        <Value>dolor sit amet</Value>
+        <Ol marker="lower-alpha" start="3">
+            <Li><Value>consectetur adipisicing elit</Value></Li>
+            <Li><Value>sed do eiusmod tempor</Value></Li>
+        </Ol>
+    </Li>
+</Ul>
+```
+
+The most important attributes of `<Ul>` and `<Ol>`:
+
+* `marker`: the bullet character of `<Ul>` (any text or `disc`, `circle`, `square`, `none`) or the numbering style of `<Ol>` (`decimal`, `lower-alpha`, `upper-roman`, ...). Nested unordered lists use disc, circle and square in turn.
+* `label-width`, `label-align` and `label-distance`: the space reserved for the marker to the left of the text and the position of the marker within it.
+* `padding-left`: additional indentation of the whole list.
+* `start`: the number of the first item of `<Ol>`.
+* `textformat`: the textformat of the items, for example for vertical spacing.
+* `fontfamily` and `color`.
+
+Alternatively the lists can be styled with CSS in [`<Stylesheet>`]({{< relref "/reference/commands/stylesheet" >}}) via the attributes `class` and `id`. The rules for `ul` and `ol` support `list-style-type`, `list-style-position`, `padding-left` and `color`, the rules for `li::marker` support `content`, `color` and `padding-right`:
+
+```xml
+<Stylesheet>
+    ul.notes { list-style-type: square; padding-left: 3mm; }
+    ul.notes li::marker { color: darkred; }
+</Stylesheet>
+...
+<Ul class="notes">
+    <Li><Value>Lorem ipsum</Value></Li>
+</Ul>
+```
+
+Attributes take precedence over CSS.
 
 ## Enumeration lists with textformat
 

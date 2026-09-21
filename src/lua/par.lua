@@ -34,6 +34,7 @@ local publisher = require("publisher")
 ---@field has_role? boolean
 ---@field has_special_nodes? boolean
 ---@field fontfamily? integer Font family number for the whole paragraph.
+---@field sublists? Par[] Paragraphs of the lists nested in a list item (set by `<Li>`).
 ---@field flatten_callback? fun(thiselt: table, options: table): Par Called during flatten to re-typeset the contents (see Nobreak).
 local Par = {}
 

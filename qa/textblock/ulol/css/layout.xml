@@ -1,0 +1,39 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Pageformat width="100mm" height="150mm"/>
+    <DefineColor name="darkred" model="rgb" r="60" g="0" b="0"/>
+
+    <Stylesheet>
+        ul.notes { list-style-type: square; padding-left: 3mm; }
+        ul.notes li::marker { color: darkred; }
+        ol.arrows li::marker { content: "→"; padding-right: 2mm; }
+        ol#inside { list-style-position: inside; }
+        ul.circle { list-style-type: circle; color: darkred; }
+    </Stylesheet>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Ul class="notes">
+                    <Li><Value>Square marker in dark red, list indented by 3mm</Value></Li>
+                    <Li><Value>Second note</Value></Li>
+                </Ul>
+                <Ol class="arrows">
+                    <Li><Value>Arrow instead of a number</Value></Li>
+                    <Li><Value select="sd:dummytext()"/></Li>
+                </Ol>
+                <Ol id="inside">
+                    <Li><Value>Marker inside the text</Value></Li>
+                    <Li><Value select="sd:dummytext()"/></Li>
+                </Ol>
+                <Ul class="circle">
+                    <Li><Value>Circle marker, everything in dark red</Value></Li>
+                </Ul>
+                <Ul class="circle" marker="disc">
+                    <Li><Value>The attribute takes precedence over CSS</Value></Li>
+                </Ul>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

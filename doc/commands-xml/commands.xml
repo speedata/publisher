@@ -5922,7 +5922,13 @@
       <para>Listeneintrag in einer Aufzählungsliste (mit Aufzählungspunkten oder nummerierten Punkten).</para>
     </description>
     <childelements>
-      <reference name="Textvalues"/>
+      <zeroOrMore>
+        <choice>
+          <cmd name="Ol"/>
+          <cmd name="Ul"/>
+          <reference name="Textvalues"/>
+        </choice>
+      </zeroOrMore>
     </childelements>
     <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
@@ -6782,20 +6788,122 @@
         </interleave>
       </oneOrMore>
     </childelements>
-    <attribute en="fontfamily" type="text" optional="yes" since="4.3.1">
+    <attribute en="class" optional="yes" type="text" since="5.9.7">
       <description xml:lang="en">
-        <para>The name of the font family for the paragraph. The default is “text” (lowercase t).</para>
+        <para>CSS class of the list. The rules for <tt>ol</tt> and <tt>li::marker</tt> in the stylesheet are applied (<tt>list-style-type</tt>, <tt>list-style-position</tt>, <tt>padding-left</tt>, <tt>color</tt>, for the marker <tt>content</tt>, <tt>color</tt> and <tt>padding-right</tt>).</para>
       </description>
       <description xml:lang="de">
-        <para>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</para>
+        <para>CSS-Klasse der Liste. Es gelten die Regeln für <tt>ol</tt> und <tt>li::marker</tt> aus dem Stylesheet (<tt>list-style-type</tt>, <tt>list-style-position</tt>, <tt>padding-left</tt>, <tt>color</tt>, beim Aufzählungszeichen <tt>content</tt>, <tt>color</tt> und <tt>padding-right</tt>).</para>
       </description>
     </attribute>
-      <example xml:lang="en">
+    <attribute en="color" optional="yes" type="text" since="5.9.7">
+      <description xml:lang="en">
+        <para>Color of the marker and the text. Must be defined with <cmd name="DefineColor"/> before use.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Farbe des Aufzählungszeichens und des Textes. Muss vorher mit <cmd name="DefineColor"/> definiert worden sein.</para>
+      </description>
+    </attribute>
+    <attribute en="fontfamily" optional="yes" type="text" since="4.3.1">
+      <description xml:lang="en">
+        <para>Font family of the marker and the text. Without this attribute the marker uses the font family “text” and the text inherits the font of the surrounding text block.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Schriftfamilie des Aufzählungszeichens und des Textes. Ohne dieses Attribut nimmt das Aufzählungszeichen die Schriftfamilie »text« und der Text übernimmt die Schrift des umgebenden Textblocks.</para>
+      </description>
+    </attribute>
+    <attribute en="id" optional="yes" type="text" since="5.9.7">
+      <description xml:lang="en">
+        <para>CSS id of the list.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Id der Liste.</para>
+      </description>
+    </attribute>
+    <attribute en="label-align" optional="yes" since="5.9.7">
+      <description xml:lang="en">
+        <para>Alignment of the marker within the width given by <tt>label-width</tt>. Default is <tt>right</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Ausrichtung des Aufzählungszeichens innerhalb der mit <tt>label-width</tt> angegebenen Breite. Voreinstellung ist <tt>right</tt>.</para>
+      </description>
+      <choice en="left">
+        <description xml:lang="en">
+          <para>The marker starts at the left edge.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Aufzählungszeichen beginnt am linken Rand.</para>
+        </description>
+      </choice>
+      <choice en="right">
+        <description xml:lang="en">
+          <para>The marker ends at the distance <tt>label-distance</tt> before the text.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Aufzählungszeichen endet im Abstand <tt>label-distance</tt> vor dem Text.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="label-distance" optional="yes" type="length" allowxpath="yes" since="5.9.7">
+      <description xml:lang="en">
+        <para>Horizontal distance between the marker and the text (for right aligned markers). Default is 4pt.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Horizontaler Abstand zwischen Aufzählungszeichen und Text (bei rechtsbündigen Aufzählungszeichen). Voreinstellung ist 4pt.</para>
+      </description>
+    </attribute>
+    <attribute en="label-width" optional="yes" type="length" allowxpath="yes" since="5.9.7">
+      <description xml:lang="en">
+        <para>Width reserved for the marker to the left of the text. The text of all lines starts after this width. Default is 5mm.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Breite, die links vom Text für das Aufzählungszeichen reserviert wird. Der Text beginnt in allen Zeilen nach dieser Breite. Voreinstellung ist 5mm.</para>
+      </description>
+    </attribute>
+    <attribute en="marker" optional="yes" type="text" allowxpath="yes" since="5.9.7">
+      <description xml:lang="en">
+        <para>The numbering style: <tt>decimal</tt> (default), <tt>decimal-leading-zero</tt>, <tt>lower-alpha</tt>, <tt>upper-alpha</tt>, <tt>lower-roman</tt>, <tt>upper-roman</tt> or <tt>none</tt>. The HTML values <tt>1</tt>, <tt>a</tt>, <tt>A</tt>, <tt>i</tt> and <tt>I</tt> are accepted as well.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Art der Nummerierung: <tt>decimal</tt> (Voreinstellung), <tt>decimal-leading-zero</tt>, <tt>lower-alpha</tt>, <tt>upper-alpha</tt>, <tt>lower-roman</tt>, <tt>upper-roman</tt> oder <tt>none</tt>. Die HTML-Werte <tt>1</tt>, <tt>a</tt>, <tt>A</tt>, <tt>i</tt> und <tt>I</tt> werden ebenfalls akzeptiert.</para>
+      </description>
+    </attribute>
+    <attribute en="padding-left" optional="yes" type="length" allowxpath="yes" since="5.9.7">
+      <description xml:lang="en">
+        <para>Additional indentation of the whole list including the marker.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zusätzlicher Einzug der gesamten Liste einschließlich Aufzählungszeichen.</para>
+      </description>
+    </attribute>
+    <attribute en="start" optional="yes" type="number" allowxpath="yes" since="5.9.7">
+      <description xml:lang="en">
+        <para>The number of the first item. Default is 1.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Die Nummer des ersten Eintrags. Voreinstellung ist 1.</para>
+      </description>
+    </attribute>
+    <attribute en="textformat" optional="yes" type="text" since="5.9.7">
+      <description xml:lang="en">
+        <para>Name of the textformat for the list items, for example to set the vertical spacing or the alignment. Without this attribute the textformat of the surrounding text block is used.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name des Textformats für die Listeneinträge, zum Beispiel für die vertikalen Abstände oder die Ausrichtung. Ohne dieses Attribut gilt das Textformat des umgebenden Textblocks.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
   <Textblock>
-    <Ol>
+    <Ol marker="lower-alpha" start="3">
       <Li><Value>First item</Value></Li>
-      <Li><Value>Second item</Value></Li>
+      <Li>
+        <Value>Second item with a nested list</Value>
+        <Ol>
+          <Li><Value>Nested item</Value></Li>
+          <Li><Value>Nested item</Value></Li>
+        </Ol>
+      </Li>
       <Li><Value>Third item</Value></Li>
     </Ol>
   </Textblock>
@@ -6805,9 +6913,15 @@
     <example xml:lang="de">
       <listing><![CDATA[<PlaceObject>
   <Textblock>
-    <Ol>
+    <Ol marker="lower-alpha" start="3">
       <Li><Value>Erster Eintrag</Value></Li>
-      <Li><Value>Zweiter Eintrag</Value></Li>
+      <Li>
+        <Value>Zweiter Eintrag mit verschachtelter Liste</Value>
+        <Ol>
+          <Li><Value>Untereintrag</Value></Li>
+          <Li><Value>Untereintrag</Value></Li>
+        </Ol>
+      </Li>
       <Li><Value>Dritter Eintrag</Value></Li>
     </Ol>
   </Textblock>
@@ -12507,6 +12621,12 @@
     <description xml:lang="de">
       <para>Erzeugt eine Stichpunktliste mit Aufzählungspunkten</para>
     </description>
+    <description xml:lang="en">
+      <para>The name of the font family for the paragraph. The default is “text” (lowercase t).</para>
+    </description>
+    <description xml:lang="de">
+      <para>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</para>
+    </description>
     <childelements>
       <oneOrMore>
         <interleave>
@@ -12514,21 +12634,115 @@
           <optional><cmd name="ForAll"/></optional>
         </interleave>
       </oneOrMore>
-   </childelements>
-   <attribute en="fontfamily" type="text" optional="yes" since="4.3.1">
-    <description xml:lang="en">
-      <para>The name of the font family for the paragraph. The default is “text” (lowercase t).</para>
-    </description>
-    <description xml:lang="de">
-      <para>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</para>
-    </description>
-  </attribute>
-   <example xml:lang="en">
+    </childelements>
+    <attribute en="class" optional="yes" type="text" since="5.9.7">
+      <description xml:lang="en">
+        <para>CSS class of the list. The rules for <tt>ul</tt> and <tt>li::marker</tt> in the stylesheet are applied (<tt>list-style-type</tt>, <tt>list-style-position</tt>, <tt>padding-left</tt>, <tt>color</tt>, for the marker <tt>content</tt>, <tt>color</tt> and <tt>padding-right</tt>).</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Klasse der Liste. Es gelten die Regeln für <tt>ul</tt> und <tt>li::marker</tt> aus dem Stylesheet (<tt>list-style-type</tt>, <tt>list-style-position</tt>, <tt>padding-left</tt>, <tt>color</tt>, beim Aufzählungszeichen <tt>content</tt>, <tt>color</tt> und <tt>padding-right</tt>).</para>
+      </description>
+    </attribute>
+    <attribute en="color" optional="yes" type="text" since="5.9.7">
+      <description xml:lang="en">
+        <para>Color of the marker and the text. Must be defined with <cmd name="DefineColor"/> before use.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Farbe des Aufzählungszeichens und des Textes. Muss vorher mit <cmd name="DefineColor"/> definiert worden sein.</para>
+      </description>
+    </attribute>
+    <attribute en="fontfamily" optional="yes" type="text" since="4.3.1">
+      <description xml:lang="en">
+        <para>Font family of the marker and the text. Without this attribute the marker uses the font family “text” and the text inherits the font of the surrounding text block.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Schriftfamilie des Aufzählungszeichens und des Textes. Ohne dieses Attribut nimmt das Aufzählungszeichen die Schriftfamilie »text« und der Text übernimmt die Schrift des umgebenden Textblocks.</para>
+      </description>
+    </attribute>
+    <attribute en="id" optional="yes" type="text" since="5.9.7">
+      <description xml:lang="en">
+        <para>CSS id of the list.</para>
+      </description>
+      <description xml:lang="de">
+        <para>CSS-Id der Liste.</para>
+      </description>
+    </attribute>
+    <attribute en="label-align" optional="yes" since="5.9.7">
+      <description xml:lang="en">
+        <para>Alignment of the marker within the width given by <tt>label-width</tt>. Default is <tt>right</tt>.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Ausrichtung des Aufzählungszeichens innerhalb der mit <tt>label-width</tt> angegebenen Breite. Voreinstellung ist <tt>right</tt>.</para>
+      </description>
+      <choice en="left">
+        <description xml:lang="en">
+          <para>The marker starts at the left edge.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Aufzählungszeichen beginnt am linken Rand.</para>
+        </description>
+      </choice>
+      <choice en="right">
+        <description xml:lang="en">
+          <para>The marker ends at the distance <tt>label-distance</tt> before the text.</para>
+        </description>
+        <description xml:lang="de">
+          <para>Das Aufzählungszeichen endet im Abstand <tt>label-distance</tt> vor dem Text.</para>
+        </description>
+      </choice>
+    </attribute>
+    <attribute en="label-distance" optional="yes" type="length" allowxpath="yes" since="5.9.7">
+      <description xml:lang="en">
+        <para>Horizontal distance between the marker and the text (for right aligned markers). Default is 4pt.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Horizontaler Abstand zwischen Aufzählungszeichen und Text (bei rechtsbündigen Aufzählungszeichen). Voreinstellung ist 4pt.</para>
+      </description>
+    </attribute>
+    <attribute en="label-width" optional="yes" type="length" allowxpath="yes" since="5.9.7">
+      <description xml:lang="en">
+        <para>Width reserved for the marker to the left of the text. The text of all lines starts after this width. Default is 5mm.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Breite, die links vom Text für das Aufzählungszeichen reserviert wird. Der Text beginnt in allen Zeilen nach dieser Breite. Voreinstellung ist 5mm.</para>
+      </description>
+    </attribute>
+    <attribute en="marker" optional="yes" type="text" allowxpath="yes" since="5.9.7">
+      <description xml:lang="en">
+        <para>The marker of the list items: any text or one of <tt>disc</tt>, <tt>circle</tt>, <tt>square</tt> or <tt>none</tt>. Without this attribute nested lists use disc, circle and square in turn.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Das Aufzählungszeichen: beliebiger Text oder einer der Werte <tt>disc</tt>, <tt>circle</tt>, <tt>square</tt> oder <tt>none</tt>. Ohne dieses Attribut verwenden verschachtelte Listen der Reihe nach disc, circle und square.</para>
+      </description>
+    </attribute>
+    <attribute en="padding-left" optional="yes" type="length" allowxpath="yes" since="5.9.7">
+      <description xml:lang="en">
+        <para>Additional indentation of the whole list including the marker.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Zusätzlicher Einzug der gesamten Liste einschließlich Aufzählungszeichen.</para>
+      </description>
+    </attribute>
+    <attribute en="textformat" optional="yes" type="text" since="5.9.7">
+      <description xml:lang="en">
+        <para>Name of the textformat for the list items, for example to set the vertical spacing or the alignment. Without this attribute the textformat of the surrounding text block is used.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Name des Textformats für die Listeneinträge, zum Beispiel für die vertikalen Abstände oder die Ausrichtung. Ohne dieses Attribut gilt das Textformat des umgebenden Textblocks.</para>
+      </description>
+    </attribute>
+    <example xml:lang="en">
       <listing><![CDATA[<PlaceObject>
   <Textblock>
-    <Ul>
+    <Ul marker="–" label-width="4mm">
       <Li><Value>First item</Value></Li>
-      <Li><Value>Second item</Value></Li>
+      <Li>
+        <Value>Second item with a nested list</Value>
+        <Ul>
+          <Li><Value>Nested item</Value></Li>
+          <Li><Value>Nested item</Value></Li>
+        </Ul>
+      </Li>
       <Li><Value>Third item</Value></Li>
     </Ul>
   </Textblock>
@@ -12538,16 +12752,22 @@
     <example xml:lang="de">
       <listing><![CDATA[<PlaceObject>
   <Textblock>
-    <Ul>
+    <Ul marker="–" label-width="4mm">
       <Li><Value>Erster Eintrag</Value></Li>
-      <Li><Value>Zweiter Eintrag</Value></Li>
+      <Li>
+        <Value>Zweiter Eintrag mit verschachtelter Liste</Value>
+        <Ul>
+          <Li><Value>Untereintrag</Value></Li>
+          <Li><Value>Untereintrag</Value></Li>
+        </Ul>
+      </Li>
       <Li><Value>Dritter Eintrag</Value></Li>
     </Ul>
   </Textblock>
 </PlaceObject>
 ]]></listing>
     </example>
-    <seealso><cmd name="Ol"/></seealso>
+    <seealso><cmd name="Ol"/>, <cmd name="Li"/></seealso>
   </command>
   <!--
       *************************

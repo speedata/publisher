@@ -240,10 +240,36 @@ local function matches(self, tbl, level)
     return nil
 end
 
+-- Collects the declarations of all rules whose selector is `last` alone or
+-- `<parent> <last>` where `<parent>` matches `parent_tbl`. Used for the
+-- `li::marker` rules of a list: `li::marker`, `ul li::marker` and
+-- `ul.foo li::marker` all apply to `<Ul class="foo">`. Declarations of
+-- rules with a higher priority override those with a lower priority.
+---@param self CSSRules
+---@param parent_tbl { element?: string, class?: string, id?: string }
+---@param last string
+---@return table<string, string> declarations
+local function matches_descendant(self, parent_tbl, last)
+    local ret = {}
+    for i = #self.priorities, 1, -1 do
+        for selector, rule in pairs(self.rules[self.priorities[i]]) do
+            local parts = explode(selector, " ")
+            local n = #parts
+            if parts[n] == last and (n == 1 or matches_selector(parent_tbl, parts[n - 1])) then
+                for k, v in pairs(rule) do
+                    ret[k] = v
+                end
+            end
+        end
+    end
+    return ret
+end
+
 return {
     new = new,
     parse = parse,
     parsetxt = parsetxt,
     matches = matches,
+    matches_descendant = matches_descendant,
     gettext = gettext,
 }

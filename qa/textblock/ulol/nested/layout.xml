@@ -1,0 +1,46 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Pageformat width="100mm" height="170mm"/>
+    <DefineColor name="darkred" model="rgb" r="60" g="0" b="0"/>
+    <DefineTextformat name="spaced" margin-bottom="3pt" alignment="leftaligned"/>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Ul marker="–" label-width="4mm" label-distance="1mm">
+                    <Li><Value>First item</Value></Li>
+                    <Li>
+                        <Value>Second item with nested lists</Value>
+                        <Ul>
+                            <Li><Value>Nested item, default marker of level two</Value></Li>
+                            <Li>
+                                <Value>Nested item</Value>
+                                <Ul>
+                                    <Li><Value>Level three, square drawn as a rule</Value></Li>
+                                </Ul>
+                                <Ol marker="lower-alpha" label-align="left">
+                                    <Li><Value>Nested ordered list</Value></Li>
+                                    <Li><Value select="sd:dummytext()"/></Li>
+                                </Ol>
+                            </Li>
+                        </Ul>
+                    </Li>
+                    <Li><Value>Third item</Value></Li>
+                </Ul>
+                <Ol marker="upper-roman" start="5" label-width="8mm" padding-left="5mm" textformat="spaced" color="darkred">
+                    <Li><Value>Fifth item</Value></Li>
+                    <Li><Value>Sixth item</Value></Li>
+                    <Li><Value>Seventh item</Value></Li>
+                </Ol>
+                <Ol marker="decimal-leading-zero">
+                    <Li><Value>Item</Value></Li>
+                    <Li><Value>Item</Value></Li>
+                </Ol>
+                <Ul marker="none">
+                    <Li><Value>No marker, text still indented</Value></Li>
+                </Ul>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

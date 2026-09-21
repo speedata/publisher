@@ -3257,28 +3257,32 @@
     </xs:annotation>
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="en:A"/>
-        <xs:element ref="en:B"/>
-        <xs:element ref="en:Barcode"/>
-        <xs:element ref="en:Br"/>
-        <xs:element ref="en:Clip"/>
-        <xs:element ref="en:Color"/>
-        <xs:element ref="en:Fontface"/>
-        <xs:element ref="en:ForAll"/>
-        <xs:element ref="en:Frame"/>
-        <xs:element ref="en:HSpace"/>
-        <xs:element ref="en:I"/>
-        <xs:element ref="en:Image"/>
-        <xs:element ref="en:Loop"/>
-        <xs:element ref="en:Math"/>
-        <xs:element ref="en:NoBreak"/>
-        <xs:element ref="en:Sub"/>
-        <xs:element ref="en:Sup"/>
-        <xs:element ref="en:Span"/>
-        <xs:element ref="en:Switch"/>
-        <xs:element ref="en:U"/>
-        <xs:element ref="en:URL"/>
-        <xs:element ref="en:Value"/>
+        <xs:element ref="en:Ol"/>
+        <xs:element ref="en:Ul"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="en:A"/>
+          <xs:element ref="en:B"/>
+          <xs:element ref="en:Barcode"/>
+          <xs:element ref="en:Br"/>
+          <xs:element ref="en:Clip"/>
+          <xs:element ref="en:Color"/>
+          <xs:element ref="en:Fontface"/>
+          <xs:element ref="en:ForAll"/>
+          <xs:element ref="en:Frame"/>
+          <xs:element ref="en:HSpace"/>
+          <xs:element ref="en:I"/>
+          <xs:element ref="en:Image"/>
+          <xs:element ref="en:Loop"/>
+          <xs:element ref="en:Math"/>
+          <xs:element ref="en:NoBreak"/>
+          <xs:element ref="en:Sub"/>
+          <xs:element ref="en:Sup"/>
+          <xs:element ref="en:Span"/>
+          <xs:element ref="en:Switch"/>
+          <xs:element ref="en:U"/>
+          <xs:element ref="en:URL"/>
+          <xs:element ref="en:Value"/>
+        </xs:choice>
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -3699,9 +3703,73 @@
         <xs:element ref="en:Li"/>
         <xs:element ref="en:ForAll"/>
       </xs:choice>
+      <xs:attribute name="class">
+        <xs:annotation>
+          <xs:documentation>CSS-Klasse der Liste. Es gelten die Regeln für ol und li::marker aus dem Stylesheet (list-style-type, list-style-position, padding-left, color, beim Aufzählungszeichen content, color und padding-right).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="color">
+        <xs:annotation>
+          <xs:documentation>Farbe des Aufzählungszeichens und des Textes. Muss vorher mit DefineColor definiert worden sein.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
-          <xs:documentation>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</xs:documentation>
+          <xs:documentation>Schriftfamilie des Aufzählungszeichens und des Textes. Ohne dieses Attribut nimmt das Aufzählungszeichen die Schriftfamilie »text« und der Text übernimmt die Schrift des umgebenden Textblocks.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="id">
+        <xs:annotation>
+          <xs:documentation>CSS-Id der Liste.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="label-align">
+        <xs:annotation>
+          <xs:documentation>Ausrichtung des Aufzählungszeichens innerhalb der mit label-width angegebenen Breite. Voreinstellung ist right.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="left">
+              <xs:annotation>
+                <xs:documentation>Das Aufzählungszeichen beginnt am linken Rand.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="right">
+              <xs:annotation>
+                <xs:documentation>Das Aufzählungszeichen endet im Abstand label-distance vor dem Text.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="label-distance">
+        <xs:annotation>
+          <xs:documentation>Horizontaler Abstand zwischen Aufzählungszeichen und Text (bei rechtsbündigen Aufzählungszeichen). Voreinstellung ist 4pt.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="label-width">
+        <xs:annotation>
+          <xs:documentation>Breite, die links vom Text für das Aufzählungszeichen reserviert wird. Der Text beginnt in allen Zeilen nach dieser Breite. Voreinstellung ist 5mm.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="marker">
+        <xs:annotation>
+          <xs:documentation>Die Art der Nummerierung: decimal (Voreinstellung), decimal-leading-zero, lower-alpha, upper-alpha, lower-roman, upper-roman oder none. Die HTML-Werte 1, a, A, i und I werden ebenfalls akzeptiert.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="padding-left">
+        <xs:annotation>
+          <xs:documentation>Zusätzlicher Einzug der gesamten Liste einschließlich Aufzählungszeichen.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="start">
+        <xs:annotation>
+          <xs:documentation>Die Nummer des ersten Eintrags. Voreinstellung ist 1.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="textformat">
+        <xs:annotation>
+          <xs:documentation>Name des Textformats für die Listeneinträge, zum Beispiel für die vertikalen Abstände oder die Ausrichtung. Ohne dieses Attribut gilt das Textformat des umgebenden Textblocks.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>
@@ -9725,9 +9793,68 @@
         <xs:element ref="en:Li"/>
         <xs:element ref="en:ForAll"/>
       </xs:choice>
+      <xs:attribute name="class">
+        <xs:annotation>
+          <xs:documentation>CSS-Klasse der Liste. Es gelten die Regeln für ul und li::marker aus dem Stylesheet (list-style-type, list-style-position, padding-left, color, beim Aufzählungszeichen content, color und padding-right).</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="color">
+        <xs:annotation>
+          <xs:documentation>Farbe des Aufzählungszeichens und des Textes. Muss vorher mit DefineColor definiert worden sein.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="fontfamily">
         <xs:annotation>
-          <xs:documentation>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</xs:documentation>
+          <xs:documentation>Schriftfamilie des Aufzählungszeichens und des Textes. Ohne dieses Attribut nimmt das Aufzählungszeichen die Schriftfamilie »text« und der Text übernimmt die Schrift des umgebenden Textblocks.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="id">
+        <xs:annotation>
+          <xs:documentation>CSS-Id der Liste.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="label-align">
+        <xs:annotation>
+          <xs:documentation>Ausrichtung des Aufzählungszeichens innerhalb der mit label-width angegebenen Breite. Voreinstellung ist right.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="left">
+              <xs:annotation>
+                <xs:documentation>Das Aufzählungszeichen beginnt am linken Rand.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="right">
+              <xs:annotation>
+                <xs:documentation>Das Aufzählungszeichen endet im Abstand label-distance vor dem Text.</xs:documentation>
+              </xs:annotation>
+            </xs:enumeration>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="label-distance">
+        <xs:annotation>
+          <xs:documentation>Horizontaler Abstand zwischen Aufzählungszeichen und Text (bei rechtsbündigen Aufzählungszeichen). Voreinstellung ist 4pt.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="label-width">
+        <xs:annotation>
+          <xs:documentation>Breite, die links vom Text für das Aufzählungszeichen reserviert wird. Der Text beginnt in allen Zeilen nach dieser Breite. Voreinstellung ist 5mm.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="marker">
+        <xs:annotation>
+          <xs:documentation>Das Aufzählungszeichen: beliebiger Text oder einer der Werte disc, circle, square oder none. Ohne dieses Attribut verwenden verschachtelte Listen der Reihe nach disc, circle und square.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="padding-left">
+        <xs:annotation>
+          <xs:documentation>Zusätzlicher Einzug der gesamten Liste einschließlich Aufzählungszeichen.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="textformat">
+        <xs:annotation>
+          <xs:documentation>Name des Textformats für die Listeneinträge, zum Beispiel für die vertikalen Abstände oder die Ausrichtung. Ohne dieses Attribut gilt das Textformat des umgebenden Textblocks.</xs:documentation>
         </xs:annotation>
       </xs:attribute>
     </xs:complexType>

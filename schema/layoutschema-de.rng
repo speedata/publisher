@@ -3345,28 +3345,34 @@
             <group>
                <zeroOrMore>
                   <choice>
-                     <ref name="e_A"></ref>
-                     <ref name="e_B"></ref>
-                     <ref name="e_Barcode"></ref>
-                     <ref name="e_Br"></ref>
-                     <ref name="e_Clip"></ref>
-                     <ref name="e_Color"></ref>
-                     <ref name="e_Fontface"></ref>
-                     <ref name="e_ForAll"></ref>
-                     <ref name="e_Frame"></ref>
-                     <ref name="e_HSpace"></ref>
-                     <ref name="e_I"></ref>
-                     <ref name="e_Image"></ref>
-                     <ref name="e_Loop"></ref>
-                     <ref name="e_Math"></ref>
-                     <ref name="e_NoBreak"></ref>
-                     <ref name="e_Sub"></ref>
-                     <ref name="e_Sup"></ref>
-                     <ref name="e_Span"></ref>
-                     <ref name="e_Switch"></ref>
-                     <ref name="e_U"></ref>
-                     <ref name="e_URL"></ref>
-                     <ref name="e_Value"></ref>
+                     <ref name="e_Ol"></ref>
+                     <ref name="e_Ul"></ref>
+                     <zeroOrMore>
+                        <choice>
+                           <ref name="e_A"></ref>
+                           <ref name="e_B"></ref>
+                           <ref name="e_Barcode"></ref>
+                           <ref name="e_Br"></ref>
+                           <ref name="e_Clip"></ref>
+                           <ref name="e_Color"></ref>
+                           <ref name="e_Fontface"></ref>
+                           <ref name="e_ForAll"></ref>
+                           <ref name="e_Frame"></ref>
+                           <ref name="e_HSpace"></ref>
+                           <ref name="e_I"></ref>
+                           <ref name="e_Image"></ref>
+                           <ref name="e_Loop"></ref>
+                           <ref name="e_Math"></ref>
+                           <ref name="e_NoBreak"></ref>
+                           <ref name="e_Sub"></ref>
+                           <ref name="e_Sup"></ref>
+                           <ref name="e_Span"></ref>
+                           <ref name="e_Switch"></ref>
+                           <ref name="e_U"></ref>
+                           <ref name="e_URL"></ref>
+                           <ref name="e_Value"></ref>
+                        </choice>
+                     </zeroOrMore>
                   </choice>
                </zeroOrMore>
             </group>
@@ -3921,9 +3927,67 @@
          <interleave>
             <group>
                <optional>
+                  <attribute name="class">
+                     <a:documentation>CSS-Klasse der Liste. Es gelten die Regeln für ol und li::marker aus dem Stylesheet (list-style-type, list-style-position, padding-left, color, beim Aufzählungszeichen content, color und padding-right).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="color">
+                     <a:documentation>Farbe des Aufzählungszeichens und des Textes. Muss vorher mit DefineColor definiert worden sein.</a:documentation>
+                     <lsp:references symbol="color"></lsp:references>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="fontfamily">
-                     <a:documentation>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</a:documentation>
+                     <a:documentation>Schriftfamilie des Aufzählungszeichens und des Textes. Ohne dieses Attribut nimmt das Aufzählungszeichen die Schriftfamilie »text« und der Text übernimmt die Schrift des umgebenden Textblocks.</a:documentation>
                      <lsp:references symbol="fontfamily"></lsp:references>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="id">
+                     <a:documentation>CSS-Id der Liste.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-align">
+                     <a:documentation>Ausrichtung des Aufzählungszeichens innerhalb der mit label-width angegebenen Breite. Voreinstellung ist right.</a:documentation>
+                     <choice>
+                        <value>left</value>
+                        <a:documentation>Das Aufzählungszeichen beginnt am linken Rand.</a:documentation>
+                        <value>right</value>
+                        <a:documentation>Das Aufzählungszeichen endet im Abstand label-distance vor dem Text.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-distance">
+                     <a:documentation>Horizontaler Abstand zwischen Aufzählungszeichen und Text (bei rechtsbündigen Aufzählungszeichen). Voreinstellung ist 4pt.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-width">
+                     <a:documentation>Breite, die links vom Text für das Aufzählungszeichen reserviert wird. Der Text beginnt in allen Zeilen nach dieser Breite. Voreinstellung ist 5mm.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="marker">
+                     <a:documentation>Die Art der Nummerierung: decimal (Voreinstellung), decimal-leading-zero, lower-alpha, upper-alpha, lower-roman, upper-roman oder none. Die HTML-Werte 1, a, A, i und I werden ebenfalls akzeptiert.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-left">
+                     <a:documentation>Zusätzlicher Einzug der gesamten Liste einschließlich Aufzählungszeichen.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="start">
+                     <a:documentation>Die Nummer des ersten Eintrags. Voreinstellung ist 1.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="textformat">
+                     <a:documentation>Name des Textformats für die Listeneinträge, zum Beispiel für die vertikalen Abstände oder die Ausrichtung. Ohne dieses Attribut gilt das Textformat des umgebenden Textblocks.</a:documentation>
+                     <lsp:references symbol="textformat"></lsp:references>
                   </attribute>
                </optional>
                <oneOrMore>
@@ -8007,9 +8071,62 @@
          <interleave>
             <group>
                <optional>
+                  <attribute name="class">
+                     <a:documentation>CSS-Klasse der Liste. Es gelten die Regeln für ul und li::marker aus dem Stylesheet (list-style-type, list-style-position, padding-left, color, beim Aufzählungszeichen content, color und padding-right).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="color">
+                     <a:documentation>Farbe des Aufzählungszeichens und des Textes. Muss vorher mit DefineColor definiert worden sein.</a:documentation>
+                     <lsp:references symbol="color"></lsp:references>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="fontfamily">
-                     <a:documentation>Name der Schriftfamilie. Voreinstellung ist »text« (mit kleinem t).</a:documentation>
+                     <a:documentation>Schriftfamilie des Aufzählungszeichens und des Textes. Ohne dieses Attribut nimmt das Aufzählungszeichen die Schriftfamilie »text« und der Text übernimmt die Schrift des umgebenden Textblocks.</a:documentation>
                      <lsp:references symbol="fontfamily"></lsp:references>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="id">
+                     <a:documentation>CSS-Id der Liste.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-align">
+                     <a:documentation>Ausrichtung des Aufzählungszeichens innerhalb der mit label-width angegebenen Breite. Voreinstellung ist right.</a:documentation>
+                     <choice>
+                        <value>left</value>
+                        <a:documentation>Das Aufzählungszeichen beginnt am linken Rand.</a:documentation>
+                        <value>right</value>
+                        <a:documentation>Das Aufzählungszeichen endet im Abstand label-distance vor dem Text.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-distance">
+                     <a:documentation>Horizontaler Abstand zwischen Aufzählungszeichen und Text (bei rechtsbündigen Aufzählungszeichen). Voreinstellung ist 4pt.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-width">
+                     <a:documentation>Breite, die links vom Text für das Aufzählungszeichen reserviert wird. Der Text beginnt in allen Zeilen nach dieser Breite. Voreinstellung ist 5mm.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="marker">
+                     <a:documentation>Das Aufzählungszeichen: beliebiger Text oder einer der Werte disc, circle, square oder none. Ohne dieses Attribut verwenden verschachtelte Listen der Reihe nach disc, circle und square.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-left">
+                     <a:documentation>Zusätzlicher Einzug der gesamten Liste einschließlich Aufzählungszeichen.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="textformat">
+                     <a:documentation>Name des Textformats für die Listeneinträge, zum Beispiel für die vertikalen Abstände oder die Ausrichtung. Ohne dieses Attribut gilt das Textformat des umgebenden Textblocks.</a:documentation>
+                     <lsp:references symbol="textformat"></lsp:references>
                   </attribute>
                </optional>
                <oneOrMore>

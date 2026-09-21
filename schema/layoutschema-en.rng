@@ -3345,28 +3345,34 @@
             <group>
                <zeroOrMore>
                   <choice>
-                     <ref name="e_A"></ref>
-                     <ref name="e_B"></ref>
-                     <ref name="e_Barcode"></ref>
-                     <ref name="e_Br"></ref>
-                     <ref name="e_Clip"></ref>
-                     <ref name="e_Color"></ref>
-                     <ref name="e_Fontface"></ref>
-                     <ref name="e_ForAll"></ref>
-                     <ref name="e_Frame"></ref>
-                     <ref name="e_HSpace"></ref>
-                     <ref name="e_I"></ref>
-                     <ref name="e_Image"></ref>
-                     <ref name="e_Loop"></ref>
-                     <ref name="e_Math"></ref>
-                     <ref name="e_NoBreak"></ref>
-                     <ref name="e_Sub"></ref>
-                     <ref name="e_Sup"></ref>
-                     <ref name="e_Span"></ref>
-                     <ref name="e_Switch"></ref>
-                     <ref name="e_U"></ref>
-                     <ref name="e_URL"></ref>
-                     <ref name="e_Value"></ref>
+                     <ref name="e_Ol"></ref>
+                     <ref name="e_Ul"></ref>
+                     <zeroOrMore>
+                        <choice>
+                           <ref name="e_A"></ref>
+                           <ref name="e_B"></ref>
+                           <ref name="e_Barcode"></ref>
+                           <ref name="e_Br"></ref>
+                           <ref name="e_Clip"></ref>
+                           <ref name="e_Color"></ref>
+                           <ref name="e_Fontface"></ref>
+                           <ref name="e_ForAll"></ref>
+                           <ref name="e_Frame"></ref>
+                           <ref name="e_HSpace"></ref>
+                           <ref name="e_I"></ref>
+                           <ref name="e_Image"></ref>
+                           <ref name="e_Loop"></ref>
+                           <ref name="e_Math"></ref>
+                           <ref name="e_NoBreak"></ref>
+                           <ref name="e_Sub"></ref>
+                           <ref name="e_Sup"></ref>
+                           <ref name="e_Span"></ref>
+                           <ref name="e_Switch"></ref>
+                           <ref name="e_U"></ref>
+                           <ref name="e_URL"></ref>
+                           <ref name="e_Value"></ref>
+                        </choice>
+                     </zeroOrMore>
                   </choice>
                </zeroOrMore>
             </group>
@@ -3921,9 +3927,67 @@
          <interleave>
             <group>
                <optional>
+                  <attribute name="class">
+                     <a:documentation>CSS class of the list. The rules for ol and li::marker in the stylesheet are applied (list-style-type, list-style-position, padding-left, color, for the marker content, color and padding-right).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="color">
+                     <a:documentation>Color of the marker and the text. Must be defined with DefineColor before use.</a:documentation>
+                     <lsp:references symbol="color"></lsp:references>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="fontfamily">
-                     <a:documentation>The name of the font family for the paragraph. The default is “text” (lowercase t).</a:documentation>
+                     <a:documentation>Font family of the marker and the text. Without this attribute the marker uses the font family “text” and the text inherits the font of the surrounding text block.</a:documentation>
                      <lsp:references symbol="fontfamily"></lsp:references>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="id">
+                     <a:documentation>CSS id of the list.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-align">
+                     <a:documentation>Alignment of the marker within the width given by label-width. Default is right.</a:documentation>
+                     <choice>
+                        <value>left</value>
+                        <a:documentation>The marker starts at the left edge.</a:documentation>
+                        <value>right</value>
+                        <a:documentation>The marker ends at the distance label-distance before the text.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-distance">
+                     <a:documentation>Horizontal distance between the marker and the text (for right aligned markers). Default is 4pt.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-width">
+                     <a:documentation>Width reserved for the marker to the left of the text. The text of all lines starts after this width. Default is 5mm.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="marker">
+                     <a:documentation>The numbering style: decimal (default), decimal-leading-zero, lower-alpha, upper-alpha, lower-roman, upper-roman or none. The HTML values 1, a, A, i and I are accepted as well.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-left">
+                     <a:documentation>Additional indentation of the whole list including the marker.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="start">
+                     <a:documentation>The number of the first item. Default is 1.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="textformat">
+                     <a:documentation>Name of the textformat for the list items, for example to set the vertical spacing or the alignment. Without this attribute the textformat of the surrounding text block is used.</a:documentation>
+                     <lsp:references symbol="textformat"></lsp:references>
                   </attribute>
                </optional>
                <oneOrMore>
@@ -8007,9 +8071,62 @@
          <interleave>
             <group>
                <optional>
+                  <attribute name="class">
+                     <a:documentation>CSS class of the list. The rules for ul and li::marker in the stylesheet are applied (list-style-type, list-style-position, padding-left, color, for the marker content, color and padding-right).</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="color">
+                     <a:documentation>Color of the marker and the text. Must be defined with DefineColor before use.</a:documentation>
+                     <lsp:references symbol="color"></lsp:references>
+                  </attribute>
+               </optional>
+               <optional>
                   <attribute name="fontfamily">
-                     <a:documentation>The name of the font family for the paragraph. The default is “text” (lowercase t).</a:documentation>
+                     <a:documentation>Font family of the marker and the text. Without this attribute the marker uses the font family “text” and the text inherits the font of the surrounding text block.</a:documentation>
                      <lsp:references symbol="fontfamily"></lsp:references>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="id">
+                     <a:documentation>CSS id of the list.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-align">
+                     <a:documentation>Alignment of the marker within the width given by label-width. Default is right.</a:documentation>
+                     <choice>
+                        <value>left</value>
+                        <a:documentation>The marker starts at the left edge.</a:documentation>
+                        <value>right</value>
+                        <a:documentation>The marker ends at the distance label-distance before the text.</a:documentation>
+                     </choice>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-distance">
+                     <a:documentation>Horizontal distance between the marker and the text (for right aligned markers). Default is 4pt.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="label-width">
+                     <a:documentation>Width reserved for the marker to the left of the text. The text of all lines starts after this width. Default is 5mm.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="marker">
+                     <a:documentation>The marker of the list items: any text or one of disc, circle, square or none. Without this attribute nested lists use disc, circle and square in turn.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="padding-left">
+                     <a:documentation>Additional indentation of the whole list including the marker.</a:documentation>
+                  </attribute>
+               </optional>
+               <optional>
+                  <attribute name="textformat">
+                     <a:documentation>Name of the textformat for the list items, for example to set the vertical spacing or the alignment. Without this attribute the textformat of the surrounding text block is used.</a:documentation>
+                     <lsp:references symbol="textformat"></lsp:references>
                   </attribute>
                </optional>
                <oneOrMore>

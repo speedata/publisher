@@ -15,6 +15,7 @@ local tabular_module = require("publisher.tabular")
 local spotcolors = require("spotcolors")
 local metadata = require("publisher.metadata")
 local colors_module = require("publisher.colors")
+local html_lists = require("html.lists")
 local links_module = require("publisher.links")
 local metapost = require("publisher.metapost")
 local grid_module = require("publisher.grid")
@@ -3067,11 +3068,23 @@ end
 ---@return any
 function commands.li(layoutxml, dataxml)
     local p = publisher.par:new(nil, "li")
+    local sublists
     local tab = publisher.dispatch.dispatch(layoutxml, dataxml)
     for _, j in ipairs(tab) do
+        local eltname = publisher.xml_helpers.elementname(j)
         local c = publisher.xml_helpers.element_contents(j)
-        p:append(c, { padding_left = 0 })
+        if eltname == "Ul" or eltname == "Ol" then
+            -- A nested list. Its paragraphs are already indented, they are
+            -- placed after the paragraph of this item by the enclosing list.
+            sublists = sublists or {}
+            for _, sub in ipairs(c) do
+                sublists[#sublists + 1] = sub
+            end
+        else
+            p:append(c, { padding_left = 0 })
+        end
     end
+    p.sublists = sublists
     return p
 end
 
@@ -3970,14 +3983,75 @@ function commands.nobreak(layoutxml, dataxml)
     end
 end
 
--- Ordered list (`<Ol>`)
--- ------------------
--- A list with numbers
+-- Lists (`<Ul>` and `<Ol>`)
+-- -------------------------
+-- Both commands share the code below. Every `<Li>` becomes a paragraph
+-- with a label (the marker) to the left of the text, built with the same
+-- `prepend` mechanism that `<Paragraph label-left="...">` and the HTML
+-- lists use. Nested lists inside `<Li>` are typeset as separate
+-- paragraphs that are indented by the width of all enclosing lists.
+
+-- Accumulated left indent (sp) of the enclosing lists while the children
+-- of a list are dispatched.
+local list_indent_sp = 0
+-- Number of enclosing `<Ul>` while the children are dispatched (selects the
+-- default marker).
+local ul_level = 0
+local ul_default_markers = { "disc", "circle", "square" }
+
+-- Remove the surrounding quotes of a CSS `content` string.
+---@param str string
+---@return string
+local function css_content_string(str)
+    return string.match(str, '^"(.*)"$') or string.match(str, "^'(.*)'$") or str
+end
+
+-- A filled square as list marker. It is drawn as a rule, because the
+-- square glyphs are missing in many fonts (including the default font).
+---@param fontfamily integer
+---@param colorindex? integer
+---@return Node hbox
+local function square_marker(fontfamily, colorindex)
+    local size = publisher.fonts.lookup_fontfamily_number_instance[fontfamily].size
+    local r = node.new("rule")
+    r.width = math.floor(size * 0.35)
+    r.height = math.floor(size * 0.48)
+    r.depth = -math.floor(size * 0.13)
+    if colorindex and colorindex ~= 1 then
+        publisher.attribute_helpers.set_attribute(r, "color", colorindex)
+    end
+    local hbox = node.hpack(r)
+    return hbox
+end
+
+-- Common implementation of `<Ul>` and `<Ol>`.
 ---@param layoutxml table
 ---@param dataxml table
----@return any
-function commands.ol(layoutxml, dataxml)
-    local fontfamilyname = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "fontfamily", "string")
+---@param kind "ul"|"ol"
+---@return Par[] paragraphs One paragraph per list item, followed by the paragraphs of nested lists.
+local function list_common(layoutxml, dataxml, kind)
+    local read_attribute = publisher.attribute_helpers.read_attribute
+    local cmdname = kind == "ul" and "Ul" or "Ol"
+    local class = read_attribute(layoutxml, dataxml, "class", "string")
+    local colorname = read_attribute(layoutxml, dataxml, "color", "string")
+    local fontfamilyname = read_attribute(layoutxml, dataxml, "fontfamily", "string")
+    local id = read_attribute(layoutxml, dataxml, "id", "string")
+    local labelalign = read_attribute(layoutxml, dataxml, "label-align", "string")
+    local labeldistance = read_attribute(layoutxml, dataxml, "label-distance", "width_sp")
+    local labelwidth = read_attribute(layoutxml, dataxml, "label-width", "width_sp")
+    local marker = read_attribute(layoutxml, dataxml, "marker", "string")
+    local paddingleft = read_attribute(layoutxml, dataxml, "padding-left", "width_sp")
+    local textformatname = read_attribute(layoutxml, dataxml, "textformat", "string")
+    local start = 1
+    if kind == "ol" then
+        start = read_attribute(layoutxml, dataxml, "start", "number") or 1
+    end
+
+    -- CSS: rules for ul / ol and for the marker (li::marker). Attributes
+    -- take precedence over CSS, CSS over the built-in defaults.
+    local css_rules = publisher.css:matches({ element = kind, class = class, id = id }) or {}
+    local marker_rules = publisher.css:matches_descendant({ element = kind, class = class, id = id }, "li::marker")
+
     local fontfamily
     if fontfamilyname then
         fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
@@ -3986,23 +4060,118 @@ function commands.ol(layoutxml, dataxml)
             fontfamily = 0
         end
         publisher.current_fontfamily = fontfamily
-    else
-        fontfamily = nil
     end
-    if not fontfamily then
-        fontfamily = publisher.fonts.lookup_fontfamily_name_number["text"]
+    -- The label always needs a font family, the text inherits its font from
+    -- the surrounding text block unless fontfamily is given.
+    local labelfontfamily = fontfamily or publisher.fonts.lookup_fontfamily_name_number["text"]
+
+    local colorindex = colors_module.get_colorindex_from_name(colorname or css_rules.color)
+    local markercolorindex = colors_module.get_colorindex_from_name(marker_rules.color) or colorindex
+
+    local textformat
+    if textformatname then
+        textformat = publisher.textformats[textformatname]
+        if not textformat then
+            main.log("error", string.format("%s: textformat %q unknown", cmdname, textformatname))
+        end
     end
 
-    local ret = {}
-    local labelwidth = tex.sp("5mm") or 0
+    if marker == nil then
+        if marker_rules.content then
+            marker = css_content_string(marker_rules.content)
+        else
+            marker = css_rules["list-style-type"]
+        end
+    end
+    -- oltype is the HTML style type attribute (1, a, A, i, I)
+    local oltype
+    if kind == "ol" then
+        marker = marker or "decimal"
+        if string.match(marker, "^[1aAiI]$") then
+            oltype = marker
+            marker = nil
+        end
+    else
+        marker = marker or ul_default_markers[ul_level % #ul_default_markers + 1]
+    end
+
+    local position = css_rules["list-style-position"] or "outside"
+    labelwidth = labelwidth or tex.sp("5mm")
+    labelalign = labelalign or "right"
+    if labeldistance == nil then
+        if marker_rules["padding-right"] then
+            labeldistance = tex.sp(marker_rules["padding-right"])
+        else
+            labeldistance = tex.sp("4pt")
+        end
+    end
+    if paddingleft == nil then
+        if css_rules["padding-left"] then
+            paddingleft = tex.sp(css_rules["padding-left"])
+        else
+            paddingleft = 0
+        end
+    end
+
+    -- Nested lists (dispatched below) start at the text position of this list.
+    local outer_indent = list_indent_sp
+    local text_indent = outer_indent + paddingleft
+    if position ~= "inside" then
+        text_indent = text_indent + labelwidth
+    end
+    list_indent_sp = text_indent
+    if kind == "ul" then
+        ul_level = ul_level + 1
+    end
     local tab = publisher.dispatch.dispatch(layoutxml, dataxml)
-    for i, j in ipairs(tab) do
-        local a = publisher.par:new(nil, "ol")
-        a:append(publisher.nodes.number_hbox(i, labelwidth, { fontfamily = fontfamily }))
-        a:append(publisher.xml_helpers.element_contents(j), {})
+    if kind == "ul" then
+        ul_level = ul_level - 1
+    end
+    list_indent_sp = outer_indent
+
+    local labeloptions = { fontfamily = labelfontfamily, color = markercolorindex }
+    local styles = { ["list-style-type"] = marker, listlevel = 1 }
+    local ret = {}
+    local counter = start - 1
+    for _, j in ipairs(tab) do
+        local contents = publisher.xml_helpers.element_contents(j)
+        counter = counter + 1
+        local label
+        if marker == "square" then
+            label = square_marker(labelfontfamily, markercolorindex)
+        else
+            label = html_lists.resolve_list_style_type(styles, { counter }, oltype, dataxml)
+        end
+        local a = publisher.par:new(nil, kind)
+        a.padding_left = text_indent
+        a.textformat = textformat
+        if label ~= "" then
+            if position == "inside" then
+                a:append(label, { fontfamily = fontfamily, color = markercolorindex })
+                a:append(" ", { fontfamily = fontfamily })
+            else
+                a:prepend({ label, labelwidth, labeloptions, labeldistance, labelalign })
+            end
+        end
+        a:append(contents, { fontfamily = fontfamily, color = colorindex })
         ret[#ret + 1] = a
+        if type(contents) == "table" and contents.sublists then
+            for _, sub in ipairs(contents.sublists) do
+                ret[#ret + 1] = sub
+            end
+        end
     end
     return ret
+end
+
+-- Ordered list (`<Ol>`)
+-- ------------------
+-- A list with numbers
+---@param layoutxml table
+---@param dataxml table
+---@return any
+function commands.ol(layoutxml, dataxml)
+    return list_common(layoutxml, dataxml, "ol")
 end
 
 -- Options
@@ -7490,33 +7659,7 @@ end
 ---@param dataxml table
 ---@return any
 function commands.ul(layoutxml, dataxml)
-    local fontfamilyname = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "fontfamily", "string")
-    local fontfamily
-    if fontfamilyname then
-        fontfamily = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
-        if fontfamily == nil then
-            main.log("error", string.format("Fontfamily %q not found.", fontfamilyname))
-            fontfamily = 0
-        end
-        publisher.current_fontfamily = fontfamily
-    else
-        fontfamily = nil
-    end
-    if not fontfamily then
-        fontfamily = publisher.fonts.lookup_fontfamily_name_number["text"]
-    end
-
-    local ret = {}
-    local labelwidth = tex.sp("5mm") or 0
-    local tab = publisher.dispatch.dispatch(layoutxml, dataxml)
-    for _, j in ipairs(tab) do
-        local a = publisher.par:new(nil, "ul")
-        a:append(publisher.nodes.bullet_hbox(labelwidth, { fontfamily = fontfamily }))
-        a:append(publisher.xml_helpers.element_contents(j), {})
-        ret[#ret + 1] = a
-    end
-
-    return ret
+    return list_common(layoutxml, dataxml, "ul")
 end
 
 -- Until

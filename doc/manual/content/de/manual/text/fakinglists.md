@@ -40,9 +40,46 @@ Nummerierte und nicht nummerierte Listen können mit [`<Ul>`]({{< relref "/refer
 </Layout>
 ```
 
-Diese Aufzählungslisten lassen sich nicht ineinander schachteln.
-
 ![olulstandard.png](/img/olulstandard.png)
+
+Seit Version 5.9.7 lassen sich die Listen gestalten und verschachteln. Listen innerhalb von `<Li>` werden um die Breite der umgebenden Liste eingerückt:
+
+```xml
+<Ul marker="–" label-width="4mm" label-distance="1mm">
+    <Li><Value>Lorem ipsum</Value></Li>
+    <Li>
+        <Value>dolor sit amet</Value>
+        <Ol marker="lower-alpha" start="3">
+            <Li><Value>consectetur adipisicing elit</Value></Li>
+            <Li><Value>sed do eiusmod tempor</Value></Li>
+        </Ol>
+    </Li>
+</Ul>
+```
+
+Die wichtigsten Attribute von `<Ul>` und `<Ol>`:
+
+* `marker`: das Aufzählungszeichen bei `<Ul>` (beliebiger Text oder `disc`, `circle`, `square`, `none`) bzw. die Art der Nummerierung bei `<Ol>` (`decimal`, `lower-alpha`, `upper-roman`, ...). Verschachtelte Listen mit `<Ul>` verwenden der Reihe nach disc, circle und square.
+* `label-width`, `label-align` und `label-distance`: der Platz, der links vom Text für das Aufzählungszeichen reserviert wird, und die Position des Zeichens darin.
+* `padding-left`: zusätzlicher Einzug der gesamten Liste.
+* `start`: die Nummer des ersten Eintrags bei `<Ol>`.
+* `textformat`: das Textformat der Einträge, zum Beispiel für die vertikalen Abstände.
+* `fontfamily` und `color`.
+
+Alternativ lassen sich die Listen über die Attribute `class` und `id` mit CSS in [`<Stylesheet>`]({{< relref "/reference/commands/stylesheet" >}}) gestalten. Die Regeln für `ul` und `ol` unterstützen `list-style-type`, `list-style-position`, `padding-left` und `color`, die Regeln für `li::marker` unterstützen `content`, `color` und `padding-right`:
+
+```xml
+<Stylesheet>
+    ul.notes { list-style-type: square; padding-left: 3mm; }
+    ul.notes li::marker { color: darkred; }
+</Stylesheet>
+...
+<Ul class="notes">
+    <Li><Value>Lorem ipsum</Value></Li>
+</Ul>
+```
+
+Attribute haben Vorrang vor CSS.
 
 ## Aufzählungslisten mit Textformaten
 
