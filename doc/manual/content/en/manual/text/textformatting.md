@@ -156,7 +156,7 @@ The following Unicode space characters are interpreted by the speedata Publisher
 ## Enumeration lists
 
 Instead of a paragraph, an enumeration list can also appear: `<Ol>` creates an ordered list, `<Ul>` an unordered list; the individual items are marked with `<Li>`.
-All methods for creating enumeration lists, including examples for `<Ol>` and `<Ul>`, are described in the chapter [Enumeration lists]({{< relref "fakinglists" >}}).
+All methods for creating enumeration lists, including examples for `<Ol>` and `<Ul>`, are described in the chapter [Enumeration lists]({{< relref "lists" >}}).
 
 ## Prevent text wrapping
 

@@ -159,7 +159,7 @@ Folgende Unicode-Leerzeichen werden vom speedata Publisher interpretiert:
 ## Aufzählungslisten
 
 Anstelle eines Absatzes kann auch eine Aufzählungsliste erscheinen: `<Ol>` erzeugt eine nummerierte Liste, `<Ul>` eine Liste mit Aufzählungszeichen; die einzelnen Punkte werden mit `<Li>` ausgezeichnet.
-Alle Verfahren für Aufzählungslisten, einschließlich Beispielen zu `<Ol>` und `<Ul>`, beschreibt das Kapitel [Aufzählungslisten]({{< relref "fakinglists" >}}).
+Alle Verfahren für Aufzählungslisten, einschließlich Beispielen zu `<Ol>` und `<Ul>`, beschreibt das Kapitel [Aufzählungslisten]({{< relref "lists" >}}).
 
 ## Verhindern von Textumbruch
 

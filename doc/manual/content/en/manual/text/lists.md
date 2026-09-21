@@ -2,6 +2,8 @@
 title: "Enumeration lists"
 weight: 53
 type: docs
+aliases:
+  - fakinglists
 ---
 
 
@@ -83,72 +85,6 @@ Alternatively the lists can be styled with CSS in [`<Stylesheet>`]({{< relref "/
 Attributes take precedence over CSS.
 
 In PDF/UA documents the lists are tagged automatically: the list becomes an `L` structure element, every item an `LI` with `Lbl` for the marker and `LBody` for the text. Nested lists are placed inside the `LBody` of their item.
-
-## Enumeration lists with textformat
-
-You can set a left margin or a hanging indent for text formats. This allows you to output bulleted lists:
-
-```xml
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-  xmlns:sd="urn:speedata:2009/publisher/functions/en">
-
-  <DefineTextformat name="li" indentation="6pt" rows="-1"/>
-  <Record element="data">
-    <PlaceObject>
-      <Textblock textformat="li">
-        <Paragraph><Value>• </Value><Value select="sd:dummytext()"></Value></Paragraph>
-        <Paragraph><Value>• Two</Value></Paragraph>
-        <Paragraph><Value>• Three</Value></Paragraph>
-      </Textblock>
-    </PlaceObject>
-  </Record>
-
-</Layout>
-```
-
-![olulwithtext.png](/img/olulwithtext.png)
-
-## Enumeration lists with tables
-
-```xml
-<Record element="data">
-  <PlaceObject>
-    <Table stretch="max">
-      <Columns>
-        <Column width="5mm"/>
-        <Column width="5mm"/>
-        <Column width="1*"/>
-      </Columns>
-      <Loop select="3" variable="i">
-        <Tr valign="top">
-          <Td>
-            <Paragraph>
-              <Value select="$i"/><Value>. </Value>
-            </Paragraph>
-          </Td>
-          <Td colspan="2">
-            <Paragraph textformat="justified">
-              <Value select="sd:dummytext()"/>
-            </Paragraph>
-          </Td>
-        </Tr>
-        <Loop select="3">
-          <Tr valign="top">
-            <Td></Td>
-            <Td><Paragraph><Value>•</Value></Paragraph></Td>
-            <Td><Paragraph textformat="justified">
-                  <Value select="sd:dummytext()"/>
-                </Paragraph>
-            </Td>
-          </Tr>
-        </Loop>
-      </Loop>
-    </Table>
-  </PlaceObject>
-</Record>
-```
-
-![olulwithtables.png](/img/olulwithtables.png)
 
 ## Enumeration lists with labels in Paragraph
 

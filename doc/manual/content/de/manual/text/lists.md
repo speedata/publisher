@@ -2,6 +2,8 @@
 title: "Aufzählungslisten"
 weight: 53
 type: docs
+aliases:
+  - fakinglists
 ---
 
 
@@ -82,76 +84,6 @@ Alternativ lassen sich die Listen über die Attribute `class` und `id` mit CSS i
 Attribute haben Vorrang vor CSS.
 
 In PDF/UA-Dokumenten werden die Listen automatisch getaggt: Die Liste wird zu einem Strukturelement `L`, jeder Eintrag zu einem `LI` mit `Lbl` für das Aufzählungszeichen und `LBody` für den Text. Verschachtelte Listen liegen im `LBody` ihres Eintrags.
-
-## Aufzählungslisten mit Textformaten
-
-Man kann einen linken Rand bzw. einen hängenden Einzug bei Textformaten einstellen. Damit kann man Aufzählungslisten ausgeben:
-
-```xml
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-  xmlns:sd="urn:speedata:2009/publisher/functions/en">
-
-  <DefineTextformat name="li" indentation="6pt" rows="-1"/>
-  <Record element="data">
-    <PlaceObject>
-      <Textblock textformat="li">
-        <Paragraph><Value>• </Value><Value select="sd:dummytext()"></Value></Paragraph>
-        <Paragraph><Value>• Two</Value></Paragraph>
-        <Paragraph><Value>• Three</Value></Paragraph>
-      </Textblock>
-    </PlaceObject>
-  </Record>
-
-</Layout>
-```
-
-![olulwithtext.png](/img/olulwithtext.png)
-
-Das funktioniert in der Praxis sehr gut. Der offensichtliche Nachteil ist, dass man ausmessen muss, wie breit der linke Rand sein soll.
-
-## Aufzählungslisten mit Tabellen
-
-Verschachtelte Listen können über Tabellen realisiert werden, wobei man beachten muss, dass innerhalb der Tabellenzellen ja nicht umbrochen werden kann.
-
-```xml
-<Record element="data">
-  <PlaceObject>
-    <Table stretch="max">
-      <Columns>
-        <Column width="5mm"/>
-        <Column width="5mm"/>
-        <Column width="1*"/>
-      </Columns>
-      <Loop select="3" variable="i">
-        <Tr valign="top">
-          <Td>
-            <Paragraph>
-              <Value select="$i"/><Value>. </Value>
-            </Paragraph>
-          </Td>
-          <Td colspan="2">
-            <Paragraph textformat="justified">
-              <Value select="sd:dummytext()"/>
-            </Paragraph>
-          </Td>
-        </Tr>
-        <Loop select="3">
-          <Tr valign="top">
-            <Td></Td>
-            <Td><Paragraph><Value>•</Value></Paragraph></Td>
-            <Td><Paragraph textformat="justified">
-                  <Value select="sd:dummytext()"/>
-                </Paragraph>
-            </Td>
-          </Tr>
-        </Loop>
-      </Loop>
-    </Table>
-  </PlaceObject>
-</Record>
-```
-
-![olulwithtables.png](/img/olulwithtables.png)
 
 ## Aufzählungslisten mit Absatzetiketten
 

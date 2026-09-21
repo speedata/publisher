@@ -11,6 +11,6 @@ Alles rund um Textausgabe: Formatierung, Schriftarten, Silbentrennung und Listen
   {{< card link="fonts" title="Schriften" subtitle="Schriften laden und verwenden" >}}
   {{< card link="textformat" title="Textformate" subtitle="Wiederverwendbare Absatzformate definieren" >}}
   {{< card link="hyphenationlanguage" title="Silbentrennung & Sprache" subtitle="Spracheinstellungen und Silbentrennung" >}}
-  {{< card link="fakinglists" title="Aufzählungslisten" subtitle="Nummerierte und unnummerierte Listen" >}}
+  {{< card link="lists" title="Aufzählungslisten" subtitle="Nummerierte und unnummerierte Listen" >}}
   {{< card link="math" title="Mathematische Formeln" subtitle="Formeln in MathML-Notation setzen" >}}
 {{< /cards >}}
