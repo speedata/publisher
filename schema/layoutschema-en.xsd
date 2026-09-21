@@ -3492,7 +3492,7 @@
   </xs:element>
   <xs:element name="Math">
     <xs:annotation>
-      <xs:documentation>Typeset a mathematical formula. The child elements are interpreted as MathML. The MathML root element &lt;math&gt; and the MathML namespace may be given, but both are optional; several child elements are treated as an implicit mrow. Experimental, implementation in progress.</xs:documentation>
+      <xs:documentation>Typeset a mathematical formula. The child elements are interpreted as MathML. The MathML root element &lt;math&gt; and the MathML namespace may be given, but both are optional; several child elements are treated as an implicit mrow. Supported are the token elements mi, mn, mo and mtext, the layout elements mrow, mfrac, msqrt, msup, msub, msubsup, munder, mover and munderover. Operators get the spacing of their class (binary operators, relations, parentheses, large operators such as sums and integrals), accents are placed with the metrics of the font. Not yet supported are stretchy delimiters, mroot, mtable and the attribute mathvariant. Experimental, implementation in progress.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:complexContent>
@@ -3510,7 +3510,7 @@
           </xs:attribute>
           <xs:attribute name="fontfamily">
             <xs:annotation>
-              <xs:documentation>Name of the font family (defined with DefineFontfamily) whose regular font provides the OpenType MATH table. The first Math element must set this attribute; later elements reuse the registered math font.</xs:documentation>
+              <xs:documentation>Name of the font family (defined with DefineFontfamily) whose regular font provides the OpenType MATH table. The first Math element must set this attribute; later elements reuse the registered math font. Only one math font per document is supported, a different family on a later element is ignored with a warning.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>
@@ -10286,6 +10286,35 @@
         <xs:element ref="en:mathml-element"/>
         <xs:element ref="en:mathml-element"/>
       </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="munder" substitutionGroup="en:mathml-element">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="en:mathml-element"/>
+        <xs:element ref="en:mathml-element"/>
+      </xs:sequence>
+      <xs:attribute name="accentunder"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mover" substitutionGroup="en:mathml-element">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="en:mathml-element"/>
+        <xs:element ref="en:mathml-element"/>
+      </xs:sequence>
+      <xs:attribute name="accent"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="munderover" substitutionGroup="en:mathml-element">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="en:mathml-element"/>
+        <xs:element ref="en:mathml-element"/>
+        <xs:element ref="en:mathml-element"/>
+      </xs:sequence>
+      <xs:attribute name="accent"/>
+      <xs:attribute name="accentunder"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>

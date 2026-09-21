@@ -1,0 +1,118 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+    <Pageformat width="120mm" height="170mm"/>
+    <LoadFontfile name="lmmath" filename="latinmodern-math.otf"/>
+    <DefineFontfamily name="lmmath" fontsize="10" leading="12">
+        <Regular fontface="lmmath"/>
+    </DefineFontfamily>
+    <DefineFontfamily name="display" fontsize="10" leading="30">
+        <Regular fontface="lmmath"/>
+    </DefineFontfamily>
+
+    <Record element="data">
+        <PlaceObject>
+            <Textblock>
+                <Paragraph>
+                    <Value>Inline: Pythagoras </Value>
+                    <Math fontfamily="lmmath">
+                        <msup><mi>a</mi><mn>2</mn></msup>
+                        <mo>+</mo>
+                        <msup><mi>b</mi><mn>2</mn></msup>
+                        <mo>=</mo>
+                        <msup><mi>c</mi><mn>2</mn></msup>
+                    </Math>
+                    <Value>, Ableitung </Value>
+                    <Math>
+                        <msup><mi>f</mi><mo>′</mo></msup>
+                        <mo>(</mo><mi>x</mi><mo>)</mo>
+                        <mo>=</mo>
+                        <mn>2</mn><mi>x</mi>
+                    </Math>
+                    <Value>, Summe </Value>
+                    <Math>
+                        <munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover>
+                        <mi>k</mi>
+                        <mo>=</mo>
+                        <mfrac><mrow><mi>n</mi><mo>(</mo><mi>n</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow><mn>2</mn></mfrac>
+                    </Math>
+                    <Value>, Relationen </Value>
+                    <Math>
+                        <mi>a</mi><mo>≤</mo><mi>b</mi><mo>≠</mo><mi>c</mi><mo>∈</mo><mi>M</mi><mo>,</mo>
+                        <mi>x</mi><mo>∘</mo><mi>y</mi><mo>∪</mo><mi>z</mi>
+                    </Math>
+                    <Value> im Fließtext.</Value>
+                </Paragraph>
+
+                <Paragraph fontfamily="display">
+                    <Math display="yes">
+                        <munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover>
+                        <msup><mi>k</mi><mn>2</mn></msup>
+                        <mo>=</mo>
+                        <mfrac>
+                            <mrow><mi>n</mi><mo>(</mo><mi>n</mi><mo>+</mo><mn>1</mn><mo>)</mo><mo>(</mo><mn>2</mn><mi>n</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow>
+                            <mn>6</mn>
+                        </mfrac>
+                    </Math>
+                </Paragraph>
+
+                <Paragraph fontfamily="display">
+                    <Math display="yes">
+                        <msubsup><mo>∫</mo><mn>0</mn><mn>1</mn></msubsup>
+                        <msup><mi>x</mi><mn>2</mn></msup>
+                        <mi>d</mi><mi>x</mi>
+                        <mo>=</mo>
+                        <mfrac><mn>1</mn><mn>3</mn></mfrac>
+                        <mo>,</mo>
+                        <munderover><mo>∫</mo><mi>a</mi><mi>b</mi></munderover>
+                        <mi>f</mi>
+                    </Math>
+                </Paragraph>
+
+                <Paragraph fontfamily="display">
+                    <Math display="yes">
+                        <munder><mi>lim</mi><mrow><mi>x</mi><mo>→</mo><mn>0</mn></mrow></munder>
+                        <mfrac><mrow><mi>sin</mi><mi>x</mi></mrow><mi>x</mi></mfrac>
+                        <mo>=</mo>
+                        <mn>1</mn>
+                        <mo>,</mo>
+                        <mi>a</mi>
+                        <mover><mo>=</mo><mi>def</mi></mover>
+                        <mi>b</mi>
+                    </Math>
+                </Paragraph>
+
+                <Paragraph fontfamily="display">
+                    <Math display="yes">
+                        <mover><mi>v</mi><mo>→</mo></mover>
+                        <mo>+</mo>
+                        <mover><mi>x</mi><mo>^</mo></mover>
+                        <mo>+</mo>
+                        <mover><mi>y</mi><mo>¯</mo></mover>
+                        <mo>+</mo>
+                        <mover accent="true"><mi>z</mi><mo>~</mo></mover>
+                        <mo>+</mo>
+                        <munder><mi>w</mi><mo>̲</mo></munder>
+                        <mo>,</mo>
+                        <msubsup><mi>f</mi><mn>1</mn><mo>″</mo></msubsup>
+                    </Math>
+                </Paragraph>
+
+                <Paragraph fontfamily="display">
+                    <Math display="yes">
+                        <mi>x</mi><mo>=</mo>
+                        <mfrac>
+                            <mrow><mo>-</mo><mi>b</mi><mo>±</mo><msqrt><msup><mi>b</mi><mn>2</mn></msup><mo>-</mo><mn>4</mn><mi>a</mi><mi>c</mi></msqrt></mrow>
+                            <mrow><mn>2</mn><mi>a</mi></mrow>
+                        </mfrac>
+                    </Math>
+                </Paragraph>
+
+                <Paragraph>
+                    <Value>Zweite Schriftfamilie wird ignoriert: </Value>
+                    <Math fontfamily="display"><mi>x</mi></Math>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

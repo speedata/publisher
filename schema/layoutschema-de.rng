@@ -3726,7 +3726,7 @@
    </define>
    <define name="e_Math">
       <element name="Math">
-         <a:documentation>Setzt eine mathematische Formel. Die Kindelemente werden als MathML interpretiert. Das MathML-Wurzelelement &lt;math&gt; und der MathML-Namensraum können angegeben werden, sind aber optional; mehrere Kindelemente werden als implizites mrow behandelt. Experimentell, die Implementierung ist in Arbeit.</a:documentation>
+         <a:documentation>Setzt eine mathematische Formel. Die Kindelemente werden als MathML interpretiert. Das MathML-Wurzelelement &lt;math&gt; und der MathML-Namensraum können angegeben werden, sind aber optional; mehrere Kindelemente werden als implizites mrow behandelt. Unterstützt werden die Token-Elemente mi, mn, mo und mtext sowie die Layout-Elemente mrow, mfrac, msqrt, msup, msub, msubsup, munder, mover und munderover. Operatoren erhalten die Abstände ihrer Klasse (Rechenzeichen, Relationen, Klammern, große Operatoren wie Summen und Integrale), Akzente werden mit den Metriken der Schrift platziert. Noch nicht unterstützt sind dehnbare Klammern, mroot, mtable und das Attribut mathvariant. Experimentell, die Implementierung ist in Arbeit.</a:documentation>
          <lsp:doc href="https://doc.speedata.de/publisher/de/befehlsreferenz/math/"></lsp:doc>
          <interleave>
             <group>
@@ -3741,7 +3741,7 @@
                </optional>
                <optional>
                   <attribute name="fontfamily">
-                     <a:documentation>Name der Schriftfamilie (definiert mit DefineFontfamily), deren regulärer Font die OpenType-MATH-Tabelle enthält. Das erste Math-Element muss dieses Attribut setzen, weitere Elemente verwenden den registrierten Mathematik-Font.</a:documentation>
+                     <a:documentation>Name der Schriftfamilie (definiert mit DefineFontfamily), deren regulärer Font die OpenType-MATH-Tabelle enthält. Das erste Math-Element muss dieses Attribut setzen, weitere Elemente verwenden den registrierten Mathematik-Font. Pro Dokument wird nur eine Mathematikschrift unterstützt, eine andere Schriftfamilie bei einem späteren Element wird mit einer Warnung ignoriert.</a:documentation>
                      <lsp:references symbol="fontfamily"></lsp:references>
                   </attribute>
                </optional>
@@ -8728,6 +8728,23 @@
                 <ref name="mathml-element"/>
             </element>
             <element name="msubsup">
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+            </element>
+            <element name="munder">
+                <optional><attribute name="accentunder"/></optional>
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+            </element>
+            <element name="mover">
+                <optional><attribute name="accent"/></optional>
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+            </element>
+            <element name="munderover">
+                <optional><attribute name="accent"/></optional>
+                <optional><attribute name="accentunder"/></optional>
                 <ref name="mathml-element"/>
                 <ref name="mathml-element"/>
                 <ref name="mathml-element"/>

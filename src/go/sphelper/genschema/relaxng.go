@@ -531,6 +531,23 @@ func genRelaxNGSchema(commands *commandsXML, lang string, allowForeignNodes bool
                 <ref name="mathml-element"/>
                 <ref name="mathml-element"/>
             </element>
+            <element name="munder">
+                <optional><attribute name="accentunder"/></optional>
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+            </element>
+            <element name="mover">
+                <optional><attribute name="accent"/></optional>
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+            </element>
+            <element name="munderover">
+                <optional><attribute name="accent"/></optional>
+                <optional><attribute name="accentunder"/></optional>
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+            </element>
         </choice>
     </define>
 `)

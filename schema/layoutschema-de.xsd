@@ -3492,7 +3492,7 @@
   </xs:element>
   <xs:element name="Math">
     <xs:annotation>
-      <xs:documentation>Setzt eine mathematische Formel. Die Kindelemente werden als MathML interpretiert. Das MathML-Wurzelelement &lt;math&gt; und der MathML-Namensraum können angegeben werden, sind aber optional; mehrere Kindelemente werden als implizites mrow behandelt. Experimentell, die Implementierung ist in Arbeit.</xs:documentation>
+      <xs:documentation>Setzt eine mathematische Formel. Die Kindelemente werden als MathML interpretiert. Das MathML-Wurzelelement &lt;math&gt; und der MathML-Namensraum können angegeben werden, sind aber optional; mehrere Kindelemente werden als implizites mrow behandelt. Unterstützt werden die Token-Elemente mi, mn, mo und mtext sowie die Layout-Elemente mrow, mfrac, msqrt, msup, msub, msubsup, munder, mover und munderover. Operatoren erhalten die Abstände ihrer Klasse (Rechenzeichen, Relationen, Klammern, große Operatoren wie Summen und Integrale), Akzente werden mit den Metriken der Schrift platziert. Noch nicht unterstützt sind dehnbare Klammern, mroot, mtable und das Attribut mathvariant. Experimentell, die Implementierung ist in Arbeit.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:complexContent>
@@ -3510,7 +3510,7 @@
           </xs:attribute>
           <xs:attribute name="fontfamily">
             <xs:annotation>
-              <xs:documentation>Name der Schriftfamilie (definiert mit DefineFontfamily), deren regulärer Font die OpenType-MATH-Tabelle enthält. Das erste Math-Element muss dieses Attribut setzen, weitere Elemente verwenden den registrierten Mathematik-Font.</xs:documentation>
+              <xs:documentation>Name der Schriftfamilie (definiert mit DefineFontfamily), deren regulärer Font die OpenType-MATH-Tabelle enthält. Das erste Math-Element muss dieses Attribut setzen, weitere Elemente verwenden den registrierten Mathematik-Font. Pro Dokument wird nur eine Mathematikschrift unterstützt, eine andere Schriftfamilie bei einem späteren Element wird mit einer Warnung ignoriert.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>
@@ -10286,6 +10286,35 @@
         <xs:element ref="en:mathml-element"/>
         <xs:element ref="en:mathml-element"/>
       </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="munder" substitutionGroup="en:mathml-element">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="en:mathml-element"/>
+        <xs:element ref="en:mathml-element"/>
+      </xs:sequence>
+      <xs:attribute name="accentunder"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mover" substitutionGroup="en:mathml-element">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="en:mathml-element"/>
+        <xs:element ref="en:mathml-element"/>
+      </xs:sequence>
+      <xs:attribute name="accent"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="munderover" substitutionGroup="en:mathml-element">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="en:mathml-element"/>
+        <xs:element ref="en:mathml-element"/>
+        <xs:element ref="en:mathml-element"/>
+      </xs:sequence>
+      <xs:attribute name="accent"/>
+      <xs:attribute name="accentunder"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>

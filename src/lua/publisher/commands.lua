@@ -3487,7 +3487,19 @@ function commands.math(layoutxml, dataxml)
     -- the percentages in the font's MathConstants (0 in the font means
     -- "use the default"). A dedicated layout command should replace this
     -- eventually so several math fonts can coexist.
-    if fontfamilyname and not publisher.math.font_ready then
+    if fontfamilyname and publisher.math.font_ready then
+        if fontfamilyname ~= publisher.math.fontfamily_name then
+            main.log(
+                "warn",
+                string.format(
+                    "Math: only one math font per document is supported, fontfamily %q is ignored (using %q)",
+                    fontfamilyname,
+                    tostring(publisher.math.fontfamily_name)
+                ),
+                lineinfo(layoutxml)
+            )
+        end
+    elseif fontfamilyname then
         local famnum = publisher.fonts.lookup_fontfamily_name_number[fontfamilyname]
         if famnum then
             local fam_tbl = publisher.fonts.lookup_fontfamily_number_instance[famnum]
@@ -3520,6 +3532,7 @@ function commands.math(layoutxml, dataxml)
                     script_instance or instance,
                     scriptscript_instance or instance
                 )
+                publisher.math.fontfamily_name = fontfamilyname
             else
                 main.log("error", "Math: cannot resolve fontfamily to a font instance", "fontfamily", fontfamilyname)
             end
@@ -3560,8 +3573,30 @@ function commands.math(layoutxml, dataxml)
     -- builder. `display` only selects the math style (more generous
     -- spacing, e.g. in fractions); positioning the formula on its own line
     -- is up to the surrounding paragraph.
+    -- The strut and the fontfamily attribute give the line the same height
+    -- as a text line of the paragraph font (a formula-only line would
+    -- otherwise get no leading at all); a taller formula still extends the
+    -- line. The paragraph options are only known while the paragraph is
+    -- flattened, hence the callback.
     local p = publisher.par:new(nil, "math")
-    p:append({ hlist }, {})
+    p:append({
+        hlist = hlist,
+        flatten_callback = function(contents, options)
+            local nodes = contents.hlist
+            local ff = options.fontfamily
+            local fi = ff and publisher.fonts.lookup_fontfamily_number_instance[ff]
+            if fi then
+                nodes = publisher.nodes.add_rule(
+                    nodes,
+                    "head",
+                    { height = 0.75 * fi.baselineskip, depth = 0.25 * fi.baselineskip, width = 0 },
+                    "math strut"
+                )
+                publisher.attribute_helpers.set_attribute(nodes, "fontfamily", ff)
+            end
+            return { objects = { nodes } }
+        end,
+    }, {})
     return p
 end
 

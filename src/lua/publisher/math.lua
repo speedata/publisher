@@ -4,11 +4,10 @@
 -- The hlist that comes out of mlist_to_hlist is an ordinary node list that the
 -- paragraph builder (par.lua) can consume like glyphs and boxes.
 --
--- This file is a SKELETON. The walker covers a minimal MathML subset
--- (mrow, mi, mn, mo, mtext, mfrac, msup, msub, msubsup, msqrt). The
--- OpenType MATH table parser handles MathConstants and italic corrections;
--- the operator-spacing dictionary, stretchy delimiters, mtable and the
--- remaining MathML elements still need to be implemented.
+-- The walker covers a MathML subset (mrow, mi, mn, mo, mtext, mfrac, msup,
+-- msub, msubsup, msqrt, munder, mover, munderover). The OpenType MATH table
+-- parser handles MathConstants and italic corrections; stretchy delimiters
+-- (MathVariants), mtable, mroot and mathvariant are not implemented yet.
 --
 --  math.lua
 --  speedata publisher
@@ -31,6 +30,11 @@ M.FAM_MAIN = 0
 -- Track whether a math font has been registered. Without it `mlist_to_hlist`
 -- runs with all MathConstants at 0 and produces unusable output.
 M.font_ready = false
+
+-- Name of the DefineFontfamily that was registered as the math font, for
+-- the warning when a layout asks for a second one.
+---@type string?
+M.fontfamily_name = nil
 
 ----------------------------------------------------------------------------
 -- OpenType MATH table parser
@@ -145,11 +149,31 @@ local function read_mvr(data, pos)
     return unpack_str(">i2", data, pos)
 end
 
+-- Parses a per-glyph MathValueRecord list (a Coverage offset, a count and
+-- a parallel array of MathValueRecords), the layout shared by
+-- MathItalicsCorrectionInfo and MathTopAccentAttachment.
+---@param data string Raw MATH table bytes.
+---@param base integer 0-based offset of the subtable within `data`.
+---@return table values `{ [gid] = value }` in design units.
+local function parse_glyph_values(data, base)
+    local coverage_rel = unpack_str(">I2", data, base + 1)
+    local count = unpack_str(">I2", data, base + 3)
+    local gids = parse_coverage(data, base + coverage_rel)
+    local values = {}
+    for i = 1, count do
+        local gid = gids[i]
+        if gid then
+            values[gid] = read_mvr(data, base + 5 + (i - 1) * 4)
+        end
+    end
+    return values
+end
+
 -- Parses the raw bytes of an OpenType MATH table. Pure function — no
 -- dependencies on `publisher` or `main.log`, so it can be exercised
 -- standalone for testing.
 ---@param data string Raw MATH table bytes (as returned by harfbuzz).
----@return table? parsed `{ constants = { Name = { value, kind } | int }, italics = { [gid] = value } }`, or nil on parse error / wrong version.
+---@return table? parsed `{ constants = { Name = { value, kind } | int }, italics = { [gid] = value }, top_accents = { [gid] = value } }`, or nil on parse error / wrong version.
 ---@return string? errmsg Reason for parse failure when the first return is nil.
 function M.parse_math_table(data)
     if not data or #data < 10 then
@@ -163,7 +187,7 @@ function M.parse_math_table(data)
     local math_glyph_info_off = unpack_str(">I2", data, 7)
     -- MathVariants offset at byte 9; not parsed yet.
 
-    local parsed = { constants = {}, italics = {} }
+    local parsed = { constants = {}, italics = {}, top_accents = {} }
 
     -- MathConstants -----------------------------------------------------
     if math_const_off > 0 then
@@ -180,25 +204,18 @@ function M.parse_math_table(data)
         parsed.constants.RadicalDegreeBottomRaisePercent = unpack_str(">i2", data, cursor)
     end
 
-    -- MathGlyphInfo → MathItalicsCorrectionInfo -------------------------
+    -- MathGlyphInfo: italic corrections and top-accent attachment --------
     if math_glyph_info_off > 0 then
         local mgi_p = math_glyph_info_off + 1
         local italics_off = unpack_str(">I2", data, mgi_p)
         if italics_off > 0 then
-            local ic_base = math_glyph_info_off + italics_off
-            local coverage_rel = unpack_str(">I2", data, ic_base + 1)
-            local count = unpack_str(">I2", data, ic_base + 3)
-            local gids = parse_coverage(data, math_glyph_info_off + italics_off + coverage_rel)
-            -- The italicsCorrection array runs parallel to the coverage,
-            -- one MathValueRecord per covered glyph.
-            for i = 1, count do
-                local gid = gids[i]
-                if gid then
-                    parsed.italics[gid] = read_mvr(data, ic_base + 5 + (i - 1) * 4)
-                end
-            end
+            parsed.italics = parse_glyph_values(data, math_glyph_info_off + italics_off)
         end
-        -- TODO: mathTopAccentAttachment, extendedShapeCoverage, mathKernInfo.
+        local top_accent_off = unpack_str(">I2", data, mgi_p + 2)
+        if top_accent_off > 0 then
+            parsed.top_accents = parse_glyph_values(data, math_glyph_info_off + top_accent_off)
+        end
+        -- TODO: extendedShapeCoverage, mathKernInfo.
     end
 
     -- TODO: MathVariants (stretchy delimiters + glyph assemblies).
@@ -273,9 +290,24 @@ function M.attach_to_font(f, face, mag)
     mc.FractionDelimiterDisplayStyleSize = math.floor(2.39 * f.size + 0.5)
     f.MathConstants = mc
 
-    -- Per-glyph italic correction. Lookup via backmap (gid → primary
-    -- unicode). Glyphs without a unicode mapping are skipped — they
-    -- can't be addressed from a `math_char` noad anyway.
+    -- The font loader takes the depth from the glyph bounding box, so a glyph
+    -- that floats above the baseline (a combining accent) gets a negative
+    -- depth and a glyph below the baseline a negative height. TeX assumes
+    -- both are non-negative; a negative accent depth pulls the accent down
+    -- into its base.
+    for _, ch in pairs(f.characters) do
+        if ch.depth and ch.depth < 0 then
+            ch.depth = 0
+        end
+        if ch.height and ch.height < 0 then
+            ch.height = 0
+        end
+    end
+
+    -- Per-glyph italic correction and top-accent attachment point (the
+    -- horizontal position accents are centered on). Lookup via backmap
+    -- (gid → primary unicode). Glyphs without a unicode mapping are
+    -- skipped, they cannot be addressed from a `math_char` noad anyway.
     local backmap = f.backmap
     if backmap then
         for gid, value in pairs(parsed.italics) do
@@ -283,6 +315,13 @@ function M.attach_to_font(f, face, mag)
             local ch = uni and f.characters[uni]
             if ch then
                 ch.italic = du_to_sp(value, mag)
+            end
+        end
+        for gid, value in pairs(parsed.top_accents) do
+            local uni = backmap[gid]
+            local ch = uni and f.characters[uni]
+            if ch then
+                ch.top_accent = du_to_sp(value, mag)
             end
         end
     end
@@ -312,6 +351,7 @@ end
 ---@param fontid_scriptscript integer? Font id for scriptscript size. Falls back to script.
 function M.set_math_font(family, fontid_text, fontid_script, fontid_scriptscript)
     family = family or M.FAM_MAIN
+    M.fontid_text = fontid_text
     fontid_script = fontid_script or fontid_text
     fontid_scriptscript = fontid_scriptscript or fontid_script
     -- LuaTeX exposes no direct Lua setter for `\textfont`. We invoke the
@@ -344,7 +384,9 @@ end
 -- 2 = oplimits, 3 = opnolimits, 4 = bin, 5 = rel, 6 = open, 7 = close,
 -- 8 = punct, 9 = inner.
 local NOAD_ORD = 0
-local NOAD_OP = 1 -- opdisplaylimits — default for sum, prod, int
+local NOAD_OP = 1 -- opdisplaylimits: limits in display style, scripts in text style
+local NOAD_OPLIMITS = 2 -- limits always above and below
+local NOAD_OPNOLIMITS = 3 -- limits always as scripts (integrals)
 local NOAD_BIN = 4
 local NOAD_REL = 5
 local NOAD_OPEN = 6
@@ -459,6 +501,26 @@ function M.sqrt(fam, body, degree)
     return n
 end
 
+-- Builds an `accent` noad: `body` with an accent glyph above (`top`) and/or
+-- below (`bottom`). Without MathVariants data the accent glyph is not
+-- stretched to wide bases.
+---@param fam integer Math family (for the accent glyphs).
+---@param body Node? Base mlist head.
+---@param top integer? Code point of the accent above, or nil.
+---@param bottom integer? Code point of the accent below, or nil.
+---@return Node
+function M.accent(fam, body, top, bottom)
+    local n = node.new("accent") --[[@as AccentNode]]
+    n.nucleus = sub_mlist(body)
+    if top then
+        n.accent = math_char(fam, top)
+    end
+    if bottom then
+        n.bot_accent = math_char(fam, bottom)
+    end
+    return n
+end
+
 -- Concatenates two math node lists. Returns the new head. Either argument
 -- may be nil. Intended for building mrow contents one child at a time.
 ---@param head Node?
@@ -481,43 +543,72 @@ end
 -- MathML walker
 ----------------------------------------------------------------------------
 
--- Operator dictionary stub. The full MathML operator dictionary
--- (Appendix C of the MathML 3 spec / unicode-math-table.tex) maps each
--- operator code point to a noad class plus default lspace/rspace. For the
--- skeleton we keep a tiny table; everything not listed becomes "bin".
---
--- TODO: replace with a generated table covering the ~1500 operator entries.
-local OP_CLASS = {
-    [0x002B] = NOAD_BIN, -- '+'
-    [0x2212] = NOAD_BIN, -- '−' minus
-    [0x00D7] = NOAD_BIN, -- '×'
-    [0x22C5] = NOAD_BIN, -- '⋅'
-    [0x003D] = NOAD_REL, -- '='
-    [0x2260] = NOAD_REL, -- '≠'
-    [0x003C] = NOAD_REL, -- '<'
-    [0x003E] = NOAD_REL, -- '>'
-    [0x2264] = NOAD_REL, -- '≤'
-    [0x2265] = NOAD_REL, -- '≥'
-    [0x0028] = NOAD_OPEN, -- '('
-    [0x005B] = NOAD_OPEN, -- '['
-    [0x007B] = NOAD_OPEN, -- '{'
-    [0x0029] = NOAD_CLOSE, -- ')'
-    [0x005D] = NOAD_CLOSE, -- ']'
-    [0x007D] = NOAD_CLOSE, -- '}'
-    [0x002C] = NOAD_PUNCT, -- ','
-    [0x003B] = NOAD_PUNCT, -- ';'
-    [0x2211] = NOAD_OP, -- '∑'
-    [0x220F] = NOAD_OP, -- '∏'
-    [0x222B] = NOAD_OP, -- '∫'
-    -- Primes are designed as raised glyphs in OpenType math fonts (they sit
-    -- above the x-height at text size), so they are set as ord atoms without
-    -- any script treatment. Do not wrap them in msup: that would scale and
-    -- raise them a second time.
-    [0x2032] = NOAD_ORD, -- '′' prime
-    [0x2033] = NOAD_ORD, -- '″' double prime
-    [0x2034] = NOAD_ORD, -- '‴' triple prime
-    [0x2035] = NOAD_ORD, -- '‵' reversed prime
-    [0x2057] = NOAD_ORD, -- '⁗' quadruple prime
+-- Operator dictionary: Unicode code point -> class string (see the header
+-- of mathoperators.lua for the class names). Code points that are not
+-- listed are ordinary atoms.
+local operators = require("publisher.mathoperators")
+
+-- Dictionary class -> simple-noad subtype for a plain <mo> inside an mrow.
+-- Fences, accents and over/under braces have no atom class of their own in
+-- TeX; on their own they are set as ordinary atoms.
+local CLASS_SUBTYPE = {
+    bin = NOAD_BIN,
+    rel = NOAD_REL,
+    open = NOAD_OPEN,
+    close = NOAD_CLOSE,
+    punct = NOAD_PUNCT,
+    op = NOAD_OP,
+    opnolimits = NOAD_OPNOLIMITS,
+}
+
+-- Prime glyphs are designed as raised glyphs in OpenType math fonts (they
+-- sit above the x-height at text size), so they are set as ordinary atoms
+-- without any script treatment, even when the MathML input wraps them in
+-- msup as MathML Core recommends.
+local PRIMES = {
+    [0x2032] = true, -- '′' prime
+    [0x2033] = true, -- '″' double prime
+    [0x2034] = true, -- '‴' triple prime
+    [0x2035] = true, -- '‵' reversed prime
+    [0x2057] = true, -- '⁗' quadruple prime
+}
+
+-- MathML input usually writes accents with spacing characters (a plain ^
+-- for a hat, → for a vector arrow), as MathML Core lists them in its
+-- operator dictionary. In an accent position they are replaced by the
+-- combining characters that OpenType math fonts provide accent metrics for.
+local ACCENT_MAP = {
+    [0x005E] = 0x0302, -- ^ -> combining circumflex
+    [0x02C6] = 0x0302, -- ˆ modifier circumflex
+    [0x007E] = 0x0303, -- ~ -> combining tilde
+    [0x02DC] = 0x0303, -- ˜ small tilde
+    [0x00AF] = 0x0304, -- ¯ macron
+    [0x203E] = 0x0305, -- ‾ overline
+    [0x005F] = 0x0332, -- _ -> combining low line
+    [0x02D8] = 0x0306, -- ˘ breve
+    [0x02D9] = 0x0307, -- ˙ dot above
+    [0x002E] = 0x0307, -- . as dot accent
+    [0x00A8] = 0x0308, -- ¨ diaeresis
+    [0x02C7] = 0x030C, -- ˇ caron
+    [0x0060] = 0x0300, -- ` grave
+    [0x00B4] = 0x0301, -- ´ acute
+    [0x02DA] = 0x030A, -- ˚ ring above
+    [0x2192] = 0x20D7, -- → -> combining right arrow above
+    [0x2190] = 0x20D6, -- ← -> combining left arrow above
+    [0x2194] = 0x20E1, -- ↔ -> combining left right arrow above
+    [0x20D7] = 0x20D7,
+    [0x20D6] = 0x20D6,
+    [0x20E1] = 0x20E1,
+}
+
+-- Invisible MathML operators (function application, invisible times,
+-- invisible separator, invisible plus). They carry no glyph; the atom
+-- spacing takes care of the layout.
+local INVISIBLE = {
+    [0x2061] = true,
+    [0x2062] = true,
+    [0x2063] = true,
+    [0x2064] = true,
 }
 
 -- Maps an ASCII letter to its Unicode math-italic counterpart (block
@@ -540,7 +631,8 @@ end
 
 -- Extracts inline text content of an XML element produced by lxpath. Joins
 -- string children; nested elements are ignored (caller should not pass
--- container elements like <mrow>).
+-- container elements like <mrow>). Surrounding whitespace is removed, as
+-- MathML token elements ignore it.
 ---@param elt table lxpath element.
 ---@return string
 local function inner_text(elt)
@@ -550,7 +642,7 @@ local function inner_text(elt)
             parts[#parts + 1] = elt[i]
         end
     end
-    return table.concat(parts)
+    return (table.concat(parts):gsub("^%s+", ""):gsub("%s+$", ""))
 end
 
 -- Returns the i-th child element of `elt`, skipping whitespace-only text
@@ -570,6 +662,70 @@ local function child_element(elt, i)
         end
     end
     return nil
+end
+
+-- Returns the value of the XML attribute `name` of `elt`, or nil.
+---@param elt table lxpath element.
+---@param name string
+---@return string?
+local function attribute(elt, name)
+    local attrs = elt[".__attributes"]
+    return attrs and attrs[name]
+end
+
+-- Returns the local element name of an lxpath element.
+---@param elt table?
+---@return string?
+local function element_name(elt)
+    if type(elt) ~= "table" then
+        return nil
+    end
+    return elt[".__local_name"] or elt[".__name"]
+end
+
+-- If `elt` is an <mo> with exactly one code point, returns that code point.
+---@param elt table?
+---@return integer?
+local function single_mo_codepoint(elt)
+    if element_name(elt) ~= "mo" then
+        return nil
+    end
+    local txt = inner_text(elt --[[@as table]])
+    if utf8.len(txt) ~= 1 then
+        return nil
+    end
+    return utf8.codepoint(txt)
+end
+
+-- True if `head` is a single simple noad (no following node).
+---@param head Node?
+---@return boolean
+local function is_single_noad(head)
+    return head ~= nil and head.next == nil and node.type(head.id) == "noad"
+end
+
+-- True if `head` is a single large-operator noad (op, oplimits, opnolimits).
+---@param head Node?
+---@return boolean
+local function is_single_op(head)
+    if not head or not is_single_noad(head) then
+        return false
+    end
+    local st = head.subtype
+    return st == NOAD_OP or st == NOAD_OPLIMITS or st == NOAD_OPNOLIMITS
+end
+
+-- Returns a noad that scripts can be attached to. A single simple noad is
+-- used directly: this keeps the atom class, so scripts on a large operator
+-- such as ∑ get display limits and the display-size glyph. Everything else
+-- (several nodes, fractions, radicals) is wrapped in an ord noad.
+---@param head Node?
+---@return NoadNode
+local function script_base(head)
+    if is_single_noad(head) then
+        return head --[[@as NoadNode]]
+    end
+    return M.ord_from_mlist(head)
 end
 
 -- Forward declaration so handlers can call back into the walker.
@@ -603,6 +759,14 @@ function mml_handler.mi(elt, ctx)
         end
         head = M.append(head, M.mchar(NOAD_ORD, ctx.fam, cp))
     end
+    -- A multi-letter identifier such as "sin" or "lim" is a function name:
+    -- one atom, set as an operator (as \sin and \lim in TeX) so that a
+    -- thin space separates it from its argument and limits can go below.
+    if not single and head then
+        local op = node.new("noad", NOAD_OPNOLIMITS) --[[@as NoadNode]]
+        op.nucleus = sub_mlist(head)
+        head = op
+    end
     return head
 end
 
@@ -622,8 +786,10 @@ function mml_handler.mo(elt, ctx)
         if cp == 0x2D then
             cp = 0x2212
         end
-        local class = OP_CLASS[cp] or NOAD_BIN
-        head = M.append(head, M.mchar(class, ctx.fam, cp))
+        if not INVISIBLE[cp] then
+            local subtype = CLASS_SUBTYPE[operators[cp]] or NOAD_ORD
+            head = M.append(head, M.mchar(subtype, ctx.fam, cp))
+        end
     end
     return head
 end
@@ -642,23 +808,126 @@ function mml_handler.mfrac(elt, ctx)
     return M.frac(num, den, nil)
 end
 
-function mml_handler.msup(elt, ctx)
+-- Shared implementation of msup / msub / msubsup. `sup_elt` / `sub_elt`
+-- may be nil.
+---@param elt table
+---@param ctx table
+---@param sup_elt table?
+---@param sub_elt table?
+---@return Node?
+local function scripts(elt, ctx, sup_elt, sub_elt)
     local base = walk(child_element(elt, 1), ctx)
-    local sup = walk(child_element(elt, 2), ctx)
-    return M.attach_scripts(M.ord_from_mlist(base), sup, nil)
+    local sub = sub_elt and walk(sub_elt, ctx)
+    -- MathML Core writes primes as superscripts (<msup><mi>a</mi><mo>′</mo>
+    -- </msup>). The glyph is already raised, so it is appended as an
+    -- ordinary atom instead of being raised a second time.
+    local sup_cp = single_mo_codepoint(sup_elt)
+    if sup_cp and PRIMES[sup_cp] then
+        local noad = script_base(base)
+        M.attach_scripts(noad, nil, sub)
+        return M.append(noad, M.mchar(NOAD_ORD, ctx.fam, sup_cp))
+    end
+    local sup = sup_elt and walk(sup_elt, ctx)
+    return M.attach_scripts(script_base(base), sup, sub)
+end
+
+function mml_handler.msup(elt, ctx)
+    return scripts(elt, ctx, child_element(elt, 2), nil)
 end
 
 function mml_handler.msub(elt, ctx)
-    local base = walk(child_element(elt, 1), ctx)
-    local sub = walk(child_element(elt, 2), ctx)
-    return M.attach_scripts(M.ord_from_mlist(base), nil, sub)
+    return scripts(elt, ctx, nil, child_element(elt, 2))
 end
 
 function mml_handler.msubsup(elt, ctx)
+    return scripts(elt, ctx, child_element(elt, 3), child_element(elt, 2))
+end
+
+-- True if the under/over element should be treated as an accent: either the
+-- MathML attribute says so, or it is a single <mo> that the operator
+-- dictionary lists as a (bottom) accent.
+---@param elt table The munder/mover/munderover element.
+---@param attr string "accent" or "accentunder".
+---@param script_elt table? The over or under child.
+---@param class string "accent" or "botaccent".
+---@return boolean
+local function is_accent(elt, attr, script_elt, class)
+    local a = attribute(elt, attr)
+    if a == "true" then
+        return true
+    elseif a == "false" then
+        return false
+    end
+    local cp = single_mo_codepoint(script_elt)
+    if cp == nil then
+        return false
+    end
+    return operators[cp] == class or operators[ACCENT_MAP[cp]] == class
+end
+
+-- Shared implementation of munder / mover / munderover. Either script
+-- element may be nil.
+--
+-- Three cases:
+--  1. The base is a large operator (∑, ∫, …): the scripts become its
+--     limits. Operators with movable limits keep them (limits in display
+--     style, scripts in text style), integrals get explicit limits since
+--     the input asked for them.
+--  2. Accents (a hat, a bar, an arrow over a vector): an accent noad, so
+--     the font's accent placement is used.
+--  3. Anything else (a word under an arrow, "def" over an equals sign):
+--     an op noad with forced limits, wrapped in a noad of the base's class
+--     so the spacing of the base is kept (the amsmath \overset trick).
+---@param elt table
+---@param ctx table
+---@param over_elt table?
+---@param under_elt table?
+---@return Node?
+local function underover(elt, ctx, over_elt, under_elt)
     local base = walk(child_element(elt, 1), ctx)
-    local sub = walk(child_element(elt, 2), ctx)
-    local sup = walk(child_element(elt, 3), ctx)
-    return M.attach_scripts(M.ord_from_mlist(base), sup, sub)
+    if is_single_op(base) then
+        local over = over_elt and walk(over_elt, ctx)
+        local under = under_elt and walk(under_elt, ctx)
+        if base.subtype == NOAD_OPNOLIMITS then
+            base.subtype = NOAD_OPLIMITS
+        end
+        return M.attach_scripts(base, over, under)
+    end
+    local over_accent = over_elt and is_accent(elt, "accent", over_elt, "accent")
+    local under_accent = under_elt and is_accent(elt, "accentunder", under_elt, "botaccent")
+    if (over_elt == nil or over_accent) and (under_elt == nil or under_accent) then
+        local over_cp = over_elt and single_mo_codepoint(over_elt)
+        local under_cp = under_elt and single_mo_codepoint(under_elt)
+        if (over_elt == nil or over_cp) and (under_elt == nil or under_cp) then
+            over_cp = over_cp and (ACCENT_MAP[over_cp] or over_cp)
+            under_cp = under_cp and (ACCENT_MAP[under_cp] or under_cp)
+            return M.accent(ctx.fam, base, over_cp, under_cp)
+        end
+    end
+    local over = over_elt and walk(over_elt, ctx)
+    local under = under_elt and walk(under_elt, ctx)
+    local class = is_single_noad(base) and base.subtype or NOAD_ORD
+    if class == NOAD_OP or class == NOAD_OPLIMITS or class == NOAD_OPNOLIMITS then
+        class = NOAD_ORD
+    end
+    local op = node.new("noad", NOAD_OPLIMITS) --[[@as NoadNode]]
+    op.nucleus = sub_mlist(base)
+    M.attach_scripts(op, over, under)
+    local wrapper = node.new("noad", class) --[[@as NoadNode]]
+    wrapper.nucleus = sub_mlist(op)
+    return wrapper
+end
+
+function mml_handler.mover(elt, ctx)
+    return underover(elt, ctx, child_element(elt, 2), nil)
+end
+
+function mml_handler.munder(elt, ctx)
+    return underover(elt, ctx, nil, child_element(elt, 2))
+end
+
+function mml_handler.munderover(elt, ctx)
+    return underover(elt, ctx, child_element(elt, 3), child_element(elt, 2))
 end
 
 function mml_handler.msqrt(elt, ctx)
@@ -682,7 +951,7 @@ walk = function(elt, ctx)
     if not elt or type(elt) ~= "table" then
         return nil
     end
-    local name = elt[".__local_name"] or elt[".__name"]
+    local name = element_name(elt)
     local h = mml_handler[name]
     if h then
         return h(elt, ctx)
