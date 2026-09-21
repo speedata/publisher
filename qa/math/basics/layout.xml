@@ -22,26 +22,26 @@
                         <mo>=</mo>
                         <msup><mi>c</mi><mn>2</mn></msup>
                     </Math>
-                    <Value>, Ableitung </Value>
+                    <Value>, derivative </Value>
                     <Math>
                         <msup><mi>f</mi><mo>′</mo></msup>
                         <mo>(</mo><mi>x</mi><mo>)</mo>
                         <mo>=</mo>
                         <mn>2</mn><mi>x</mi>
                     </Math>
-                    <Value>, Summe </Value>
+                    <Value>, sum </Value>
                     <Math>
                         <munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover>
                         <mi>k</mi>
                         <mo>=</mo>
                         <mfrac><mrow><mi>n</mi><mo>(</mo><mi>n</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow><mn>2</mn></mfrac>
                     </Math>
-                    <Value>, Relationen </Value>
+                    <Value>, relations </Value>
                     <Math>
                         <mi>a</mi><mo>≤</mo><mi>b</mi><mo>≠</mo><mi>c</mi><mo>∈</mo><mi>M</mi><mo>,</mo>
                         <mi>x</mi><mo>∘</mo><mi>y</mi><mo>∪</mo><mi>z</mi>
                     </Math>
-                    <Value> im Fließtext.</Value>
+                    <Value> in running text.</Value>
                 </Paragraph>
 
                 <Paragraph fontfamily="display">
@@ -109,7 +109,7 @@
                 </Paragraph>
 
                 <Paragraph>
-                    <Value>Zweite Schriftfamilie wird ignoriert: </Value>
+                    <Value>Second font family is ignored: </Value>
                     <Math fontfamily="display"><mi>x</mi></Math>
                 </Paragraph>
             </Textblock>
