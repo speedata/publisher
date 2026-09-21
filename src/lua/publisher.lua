@@ -623,6 +623,7 @@ local ktree = pdf.reserveobj()
 ---@field page? integer PDF page object number the element appears on.
 ---@field actualtext? string Replacement text for the contents (PDF `/ActualText`).
 ---@field alttext? string Alternative description (PDF `/Alt`).
+---@field listnumbering? string `/ListNumbering` attribute of an L element (Decimal, Disc, None, ...).
 ---@field linkobjects? integer[] PDF object numbers of associated link annotations.
 ---@field text? string Alternative text / contents.
 ---@field [integer] StructElement|integer|{ mcid: integer, page: integer } Child structure elements, MCID numbers or marked content references on other pages.
@@ -2005,6 +2006,7 @@ do
                 local entry = {
                     obj = pdf.reserveobj(),
                     role = c.role,
+                    listnumbering = c.listnumbering,
                 }
                 local parenttable = M.structElements[c.parentid]
                 if parenttable then

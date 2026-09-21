@@ -4049,29 +4049,62 @@ local function css_content_string(str)
     return string.match(str, '^"(.*)"$') or string.match(str, "^'(.*)'$") or str
 end
 
--- A filled square as list marker. It is drawn as a rule, because the
--- square glyphs are missing in many fonts (including the default font).
+-- A filled square as list marker. It is drawn as a PDF literal, because
+-- the square glyphs are missing in many fonts (including the default font).
 ---@param options table Label options (fontfamily, color and the PDF/UA structure fields).
 ---@return Node hbox
 local function square_marker(options)
     local size = publisher.fonts.lookup_fontfamily_number_instance[options.fontfamily].size
-    local r = node.new("rule")
-    r.width = math.floor(size * 0.35)
-    r.height = math.floor(size * 0.48)
-    r.depth = -math.floor(size * 0.13)
-    if options.color and options.color ~= 1 then
-        publisher.attribute_helpers.set_attribute(r, "color", options.color)
-    end
+    local side = size * 0.35
+    local raise = size * 0.13
+    local colorstring = colors_module.pdfstring_from_color(options.color or 1) or ""
+    local n = node.new("whatsit", "pdf_literal")
+    n.mode = 0
+    n.data = string.format(
+        "q %s 0 %g %g %g re f Q",
+        colorstring,
+        raise / publisher.factor,
+        side / publisher.factor,
+        side / publisher.factor
+    )
+    publisher.attribute_helpers.setprop(n, "origin", "list marker")
     if options.role then
-        publisher.attribute_helpers.setprop(r, "role", options.role)
-        publisher.attribute_helpers.setprop(r, "id", options.id)
-        publisher.attribute_helpers.setprop(r, "parent", options.parent)
-        publisher.attribute_helpers.setprop(r, "rolecounter", options.rolecounter)
-        publisher.attribute_helpers.setprop(r, "structchain", options.structchain)
+        publisher.attribute_helpers.setprop(n, "role", options.role)
+        publisher.attribute_helpers.setprop(n, "id", options.id)
+        publisher.attribute_helpers.setprop(n, "parent", options.parent)
+        publisher.attribute_helpers.setprop(n, "rolecounter", options.rolecounter)
+        publisher.attribute_helpers.setprop(n, "structchain", options.structchain)
     end
-    local hbox = node.hpack(r)
+    -- the literal has no dimensions, the kern reserves the space
+    local k = node.new("kern")
+    k.kern = math.floor(side)
+    n.next = k
+    k.prev = n
+    local hbox = node.hpack(n)
+    hbox.height = math.floor(raise + side)
+    hbox.depth = 0
     return hbox
 end
+
+-- The /ListNumbering values (PDF 1.7, table 347) for the marker styles.
+-- Other markers are arbitrary text, which is "None".
+local listnumbering_names = {
+    decimal = "Decimal",
+    ["decimal-leading-zero"] = "Decimal",
+    ["lower-roman"] = "LowerRoman",
+    ["upper-roman"] = "UpperRoman",
+    ["lower-alpha"] = "LowerAlpha",
+    ["upper-alpha"] = "UpperAlpha",
+    disc = "Disc",
+    circle = "Circle",
+    square = "Square",
+    none = "None",
+    ["1"] = "Decimal",
+    a = "LowerAlpha",
+    A = "UpperAlpha",
+    i = "LowerRoman",
+    I = "UpperRoman",
+}
 
 -- Common implementation of `<Ul>` and `<Ol>`.
 ---@param layoutxml table
@@ -4176,7 +4209,12 @@ local function list_common(layoutxml, dataxml, kind)
         publisher.rolecounter = publisher.rolecounter + 1
         l_id = "L_" .. publisher.rolecounter
         local parentid = outer_chain and outer_chain[#outer_chain].id or "doc"
-        list_struct_chain = chain_with(outer_chain, { id = l_id, role = "L", parentid = parentid })
+        list_struct_chain = chain_with(outer_chain, {
+            id = l_id,
+            role = "L",
+            parentid = parentid,
+            listnumbering = listnumbering_names[oltype or marker] or "None",
+        })
     end
     local list_chain = list_struct_chain
 

@@ -271,6 +271,9 @@ function M.writeStructElements(itm, parentobjectnumber)
                 bbox[4]
             )
         end
+        if itm.listnumbering then
+            str[#str + 1] = string.format("/A << /O /List /ListNumbering /%s >>", itm.listnumbering)
+        end
         if itm.page then
             str[#str + 1] = "/Pg " .. itm.page .. " 0 R"
         end
