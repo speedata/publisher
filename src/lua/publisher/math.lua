@@ -6,9 +6,9 @@
 --
 -- The walker covers a MathML subset (mrow, mi, mn, mo, mtext, mfrac, msqrt,
 -- mroot, msup, msub, msubsup, munder, mover, munderover, mspace, mstyle).
--- The OpenType MATH table parser handles MathConstants, italic corrections
--- and top-accent attachment; stretchy delimiters (MathVariants), mtable and
--- most mathvariant values are not implemented yet.
+-- The OpenType MATH table parser handles MathConstants, italic corrections,
+-- top-accent attachment and MathVariants (stretchy glyphs); stretchy fences
+-- in the walker, mtable and most mathvariant values are not implemented yet.
 --
 --  math.lua
 --  speedata publisher
@@ -50,10 +50,10 @@ M.fontid_text = nil
 -- going through the FontForge fontloader. The format is documented in the
 -- OpenType spec, section "MATH — The mathematical typesetting table".
 --
--- Scope of the parser: MathConstants (all 57 fields) and italic corrections
--- (from MathGlyphInfo → MathItalicsCorrectionInfo). Stretchy variants,
--- glyph assemblies, top-accent attachment and per-glyph math kerns are not
--- yet handled — leave them as TODOs.
+-- Scope of the parser: MathConstants (all 57 fields), italic corrections and
+-- top-accent attachment (from MathGlyphInfo) and MathVariants (size variants
+-- and glyph assemblies for stretchy glyphs, both directions). Per-glyph math
+-- kerns and the extended-shape coverage are not handled yet.
 
 local unpack_str = string.unpack
 
@@ -175,11 +175,79 @@ local function parse_glyph_values(data, base)
     return values
 end
 
+-- Parses a GlyphAssembly subtable: the recipe for building an arbitrarily
+-- large glyph from parts (e.g. a tall parenthesis from top, extender and
+-- bottom pieces).
+---@param data string Raw MATH table bytes.
+---@param base integer 0-based offset of the GlyphAssembly within `data`.
+---@return table assembly `{ italic = du, parts = { { glyph = gid, start = du, ["end"] = du, advance = du, extender = 0|1 }, ... } }`
+local function parse_glyph_assembly(data, base)
+    local italic = read_mvr(data, base + 1)
+    local part_count = unpack_str(">I2", data, base + 5)
+    local parts = {}
+    for i = 1, part_count do
+        local rec = base + 7 + (i - 1) * 10
+        local gid, start_len, end_len, advance, flags = unpack_str(">I2I2I2I2I2", data, rec)
+        parts[i] = {
+            glyph = gid,
+            start = start_len,
+            ["end"] = end_len,
+            advance = advance,
+            extender = (flags & 1 == 1) and 1 or 0,
+        }
+    end
+    return { italic = italic, parts = parts }
+end
+
+-- Parses a MathGlyphConstruction subtable: the list of pre-drawn size
+-- variants of a glyph (smallest first) and, optionally, its assembly.
+---@param data string Raw MATH table bytes.
+---@param base integer 0-based offset of the MathGlyphConstruction within `data`.
+---@return table construction `{ variants = { { glyph = gid, advance = du }, ... }, assembly = table? }`
+local function parse_glyph_construction(data, base)
+    local assembly_rel = unpack_str(">I2", data, base + 1)
+    local variant_count = unpack_str(">I2", data, base + 3)
+    local variants = {}
+    for i = 1, variant_count do
+        local gid, advance = unpack_str(">I2I2", data, base + 5 + (i - 1) * 4)
+        variants[i] = { glyph = gid, advance = advance }
+    end
+    local assembly
+    if assembly_rel > 0 then
+        assembly = parse_glyph_assembly(data, base + assembly_rel)
+    end
+    return { variants = variants, assembly = assembly }
+end
+
+-- Parses one direction of the MathVariants table: a Coverage table plus a
+-- parallel array of MathGlyphConstruction offsets.
+---@param data string Raw MATH table bytes.
+---@param mv_base integer 0-based offset of the MathVariants table.
+---@param coverage_rel integer Coverage offset relative to `mv_base` (0 = none).
+---@param count integer Number of construction offsets.
+---@param offsets_pos integer 1-based position of the first construction offset.
+---@return table constructions `{ [gid] = construction }`
+local function parse_variant_direction(data, mv_base, coverage_rel, count, offsets_pos)
+    local constructions = {}
+    if coverage_rel == 0 or count == 0 then
+        return constructions
+    end
+    local gids = parse_coverage(data, mv_base + coverage_rel)
+    for i = 1, count do
+        local gid = gids[i]
+        local construction_rel = unpack_str(">I2", data, offsets_pos + (i - 1) * 2)
+        if gid and construction_rel > 0 then
+            constructions[gid] = parse_glyph_construction(data, mv_base + construction_rel)
+        end
+    end
+    return constructions
+end
+
 -- Parses the raw bytes of an OpenType MATH table. Pure function — no
 -- dependencies on `publisher` or `main.log`, so it can be exercised
 -- standalone for testing.
 ---@param data string Raw MATH table bytes (as returned by harfbuzz).
----@return table? parsed `{ constants = { Name = { value, kind } | int }, italics = { [gid] = value }, top_accents = { [gid] = value } }`, or nil on parse error / wrong version.
+---@return table? parsed `{ constants = { Name = { value, kind } | int }, italics = { [gid] = value }, top_accents = { [gid] = value }, variants = { min_connector_overlap = du, vert = { [gid] = construction }, horiz = { [gid] = construction } } }`, or nil on parse error / wrong version.
 ---@return string? errmsg Reason for parse failure when the first return is nil.
 function M.parse_math_table(data)
     if not data or #data < 10 then
@@ -191,9 +259,14 @@ function M.parse_math_table(data)
     end
     local math_const_off = unpack_str(">I2", data, 5)
     local math_glyph_info_off = unpack_str(">I2", data, 7)
-    -- MathVariants offset at byte 9; not parsed yet.
+    local math_variants_off = unpack_str(">I2", data, 9)
 
-    local parsed = { constants = {}, italics = {}, top_accents = {} }
+    local parsed = {
+        constants = {},
+        italics = {},
+        top_accents = {},
+        variants = { min_connector_overlap = 0, vert = {}, horiz = {} },
+    }
 
     -- MathConstants -----------------------------------------------------
     if math_const_off > 0 then
@@ -224,7 +297,17 @@ function M.parse_math_table(data)
         -- TODO: extendedShapeCoverage, mathKernInfo.
     end
 
-    -- TODO: MathVariants (stretchy delimiters + glyph assemblies).
+    -- MathVariants: size variants and assemblies for stretchy glyphs ------
+    if math_variants_off > 0 then
+        local mv_p = math_variants_off + 1
+        local min_overlap, vert_cov, horiz_cov, vert_count, horiz_count = unpack_str(">I2I2I2I2I2", data, mv_p)
+        parsed.variants.min_connector_overlap = min_overlap
+        local vert_offsets_pos = mv_p + 10
+        local horiz_offsets_pos = vert_offsets_pos + vert_count * 2
+        parsed.variants.vert = parse_variant_direction(data, math_variants_off, vert_cov, vert_count, vert_offsets_pos)
+        parsed.variants.horiz =
+            parse_variant_direction(data, math_variants_off, horiz_cov, horiz_count, horiz_offsets_pos)
+    end
 
     return parsed
 end
@@ -237,6 +320,67 @@ end
 -- the nearest scaled point.
 local function du_to_sp(value, mag)
     return math.floor(value * mag + 0.5)
+end
+
+-- Converts a parsed glyph assembly to the LuaTeX `vert_variants` /
+-- `horiz_variants` record list (glyphs as character codes, lengths in sp).
+-- Parts whose glyph has no character code in the font are dropped.
+---@param f table Font definition.
+---@param assembly table Parsed GlyphAssembly.
+---@param mag number `size / units_per_em`.
+---@return table[] parts
+local function assembly_to_variants(f, assembly, mag)
+    local parts = {}
+    for _, part in ipairs(assembly.parts) do
+        local uni = f.backmap[part.glyph]
+        if uni and f.characters[uni] then
+            parts[#parts + 1] = {
+                glyph = uni,
+                extender = part.extender,
+                start = du_to_sp(part.start, mag),
+                ["end"] = du_to_sp(part["end"], mag),
+                advance = du_to_sp(part.advance, mag),
+            }
+        end
+    end
+    return parts
+end
+
+-- Writes one direction of the MathVariants data into `f.characters`: the
+-- size variants become a `next` chain starting at the base glyph, the
+-- assembly is attached to the last glyph of the chain under `fieldname`.
+-- A `next` link that is already set (by the other direction) is kept.
+---@param f table Font definition with `characters` and `backmap`.
+---@param constructions table `{ [gid] = construction }` from the parser.
+---@param fieldname "vert_variants"|"horiz_variants"
+---@param mag number `size / units_per_em`.
+local function attach_variants(f, constructions, fieldname, mag)
+    local backmap = f.backmap
+    for base_gid, construction in pairs(constructions) do
+        local base_uni = backmap[base_gid]
+        local last = base_uni and f.characters[base_uni]
+        if last then
+            local seen = { [base_gid] = true }
+            for _, variant in ipairs(construction.variants) do
+                local gid = variant.glyph
+                local uni = backmap[gid]
+                local ch = uni and f.characters[uni]
+                if ch and not seen[gid] then
+                    seen[gid] = true
+                    if not last.next then
+                        last.next = uni
+                    end
+                    last = ch
+                end
+            end
+            if construction.assembly then
+                local parts = assembly_to_variants(f, construction.assembly, mag)
+                if #parts > 0 then
+                    last[fieldname] = parts
+                end
+            end
+        end
+    end
 end
 
 -- Attempts to attach OpenType MATH metrics to a harfbuzz-loaded font
@@ -294,6 +438,9 @@ function M.attach_to_font(f, face, mag)
     -- for delim2 (1.01 em) and delim1 (2.39 em), as used by luaotfload.
     mc.FractionDelimiterSize = math.floor(1.01 * f.size + 0.5)
     mc.FractionDelimiterDisplayStyleSize = math.floor(2.39 * f.size + 0.5)
+    -- Minimum overlap of adjacent parts in a glyph assembly. Lives in the
+    -- MathVariants header in OpenType, but LuaTeX reads it from MathConstants.
+    mc.MinConnectorOverlap = du_to_sp(parsed.variants.min_connector_overlap, mag)
     f.MathConstants = mc
 
     -- The font loader takes the depth from the glyph bounding box, so a glyph
@@ -330,6 +477,16 @@ function M.attach_to_font(f, face, mag)
                 ch.top_accent = du_to_sp(value, mag)
             end
         end
+    end
+
+    -- Stretchy glyphs. LuaTeX walks the `next` chain of a character until
+    -- it finds a variant that is large enough; a character with
+    -- `vert_variants` / `horiz_variants` is built from parts instead. The
+    -- assembly therefore goes on the last link of the chain (a glyph with
+    -- an assembly would be assembled even when a variant would do).
+    if backmap then
+        attach_variants(f, parsed.variants.vert, "vert_variants", mag)
+        attach_variants(f, parsed.variants.horiz, "horiz_variants", mag)
     end
 
     main.log(
@@ -498,9 +655,9 @@ function M.sqrt(fam, body, degree)
     -- Unicode-math style \Uradical without a fixed delimiter selection.
     local n = node.new("radical", 1) --[[@as RadicalNode]]
     n.nucleus = sub_mlist(body) --[[@as KernNode]]
-    -- The radical sign itself is a delimiter subnode. Growing it to match
-    -- tall radicands needs the MathVariants data (vert_variants), which the
-    -- font loader does not provide yet; until then the base glyph is used.
+    -- The radical sign itself is a delimiter subnode. LuaTeX grows it to
+    -- match tall radicands via the `next` chain and `vert_variants` that
+    -- `attach_to_font` sets from the font's MathVariants data.
     local delim = node.new("delim") --[[@as DelimNode]]
     delim.small_fam = fam
     delim.small_char = 0x221A -- '√'
@@ -512,8 +669,8 @@ function M.sqrt(fam, body, degree)
 end
 
 -- Builds an `accent` noad: `body` with an accent glyph above (`top`) and/or
--- below (`bottom`). Without MathVariants data the accent glyph is not
--- stretched to wide bases.
+-- below (`bottom`). LuaTeX stretches the accent glyph to wide bases using
+-- the font's horizontal variants (see `attach_to_font`).
 ---@param fam integer Math family (for the accent glyphs).
 ---@param body Node? Base mlist head.
 ---@param top integer? Code point of the accent above, or nil.

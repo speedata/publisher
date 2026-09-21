@@ -98,7 +98,7 @@ The formula takes the color of the paragraph (attribute `color` on `<Paragraph>`
 
 Not yet supported are:
 
-* stretchy parentheses and radical signs that grow with their contents
+* stretchy parentheses that grow with their contents (radical signs and accents such as arrows already do)
 * `<mtable>` (alignment of multi-line equations)
 * the values bold, fraktur and script of the attribute `mathvariant`
 * several math fonts in one document
