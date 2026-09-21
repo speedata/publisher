@@ -55,6 +55,13 @@ task :schema => [:sphelper] do
   sh "#{installdir}/bin/sphelper genschema"
 end
 
+desc "Generate the math operator dictionary from unicode-math-table.tex"
+task :mathoperators do
+  table = `kpsewhich unicode-math-table.tex`.chomp
+  abort "unicode-math-table.tex not found (is TeX Live with unicode-math installed?)" if table.empty?
+  sh "#{installdir}/bin/sdluatex --luaonly #{installdir}/src/lua/tools/genmathoperators.lua #{table} #{installdir}/src/lua/publisher/mathoperators.lua"
+end
+
 desc "Run quality assurance"
 task :qa do
 	sh "#{installdir}/bin/sp compare #{installdir}/qa"

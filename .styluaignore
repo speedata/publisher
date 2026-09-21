@@ -11,3 +11,6 @@ src/lua/barcodes/qrencode.lua
 
 # Generated from doc/commands-xml/commands.xml by "sphelper genschema".
 src/lua/publisher/commandattributes.lua
+
+# Generated from unicode-math-table.tex by "rake mathoperators".
+src/lua/publisher/mathoperators.lua
