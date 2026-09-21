@@ -8711,11 +8711,27 @@
             <element name="math"><ref name="mathml"/></element>
             <element name="mrow"><ref name="mathml"/></element>
             <element name="msqrt"><ref name="mathml"/></element>
-            <element name="mi"><text/></element>
+            <element name="mstyle">
+                <optional><attribute name="displaystyle"/></optional>
+                <optional><attribute name="scriptlevel"/></optional>
+                <ref name="mathml"/>
+            </element>
+            <element name="mi">
+                <optional><attribute name="mathvariant"/></optional>
+                <text/>
+            </element>
             <element name="mn"><text/></element>
             <element name="mo"><text/></element>
             <element name="mtext"><text/></element>
+            <element name="mspace">
+                <optional><attribute name="width"/></optional>
+            </element>
             <element name="mfrac">
+                <optional><attribute name="linethickness"/></optional>
+                <ref name="mathml-element"/>
+                <ref name="mathml-element"/>
+            </element>
+            <element name="mroot">
                 <ref name="mathml-element"/>
                 <ref name="mathml-element"/>
             </element>

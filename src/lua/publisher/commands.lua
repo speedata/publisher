@@ -3583,6 +3583,15 @@ function commands.math(layoutxml, dataxml)
         hlist = hlist,
         flatten_callback = function(contents, options)
             local nodes = contents.hlist
+            -- The boxes of the formula (fractions, radicals, limits) are
+            -- marked so that the line height adjustment after the line
+            -- break can make room for a deep denominator or a tall
+            -- numerator (see do_linebreak in nodes.lua).
+            for n in node.traverse(nodes) do
+                if n.id == publisher.hlist_node or n.id == publisher.vlist_node then
+                    publisher.attribute_helpers.setprop(n, "mathbox", true)
+                end
+            end
             local ff = options.fontfamily
             local fi = ff and publisher.fonts.lookup_fontfamily_number_instance[ff]
             if fi then
@@ -3593,6 +3602,27 @@ function commands.math(layoutxml, dataxml)
                     "math strut"
                 )
                 publisher.attribute_helpers.set_attribute(nodes, "fontfamily", ff)
+            end
+            -- The color of the paragraph (or of an enclosing Span) applies to
+            -- the formula as well. The formula gets an explicit color stack
+            -- push/pop around its nodes instead of color attributes on the
+            -- glyphs: the attribute handling at shipout expects text runs,
+            -- not nested math boxes.
+            if options.color and options.color ~= 1 then
+                local colorname = colors_module.colortable[options.color]
+                local colorentry = colorname and colors_module.colors[colorname]
+                if colorentry then
+                    local colstart = node.new("whatsit", "pdf_colorstack") --[[@as PdfColorstackWhatsitNode]]
+                    colstart.data = colorentry.pdfstring
+                    colstart.command = 1
+                    colstart.stack = publisher.defaultcolorstack
+                    local colstop = node.new("whatsit", "pdf_colorstack") --[[@as PdfColorstackWhatsitNode]]
+                    colstop.data = ""
+                    colstop.command = 2
+                    colstop.stack = publisher.defaultcolorstack
+                    nodes = node.insert_before(nodes, nodes, colstart)
+                    node.insert_after(nodes, node.tail(nodes), colstop)
+                end
             end
             return { objects = { nodes } }
         end,

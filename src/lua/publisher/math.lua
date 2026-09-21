@@ -4,10 +4,11 @@
 -- The hlist that comes out of mlist_to_hlist is an ordinary node list that the
 -- paragraph builder (par.lua) can consume like glyphs and boxes.
 --
--- The walker covers a MathML subset (mrow, mi, mn, mo, mtext, mfrac, msup,
--- msub, msubsup, msqrt, munder, mover, munderover). The OpenType MATH table
--- parser handles MathConstants and italic corrections; stretchy delimiters
--- (MathVariants), mtable, mroot and mathvariant are not implemented yet.
+-- The walker covers a MathML subset (mrow, mi, mn, mo, mtext, mfrac, msqrt,
+-- mroot, msup, msub, msubsup, munder, mover, munderover, mspace, mstyle).
+-- The OpenType MATH table parser handles MathConstants, italic corrections
+-- and top-accent attachment; stretchy delimiters (MathVariants), mtable and
+-- most mathvariant values are not implemented yet.
 --
 --  math.lua
 --  speedata publisher
@@ -35,6 +36,11 @@ M.font_ready = false
 -- the warning when a layout asks for a second one.
 ---@type string?
 M.fontfamily_name = nil
+
+-- Font id of the text-size math font, set by `M.set_math_font`. Used for
+-- em-based lengths in the MathML input.
+---@type integer?
+M.fontid_text = nil
 
 ----------------------------------------------------------------------------
 -- OpenType MATH table parser
@@ -371,6 +377,10 @@ function M.set_math_font(family, fontid_text, fontid_script, fontid_scriptscript
         tex.sprint("\\global\\thinmuskip=3mu ")
         tex.sprint("\\global\\medmuskip=4mu plus 2mu minus 4mu ")
         tex.sprint("\\global\\thickmuskip=5mu plus 5mu ")
+        -- Line breaks inside inline formulas: TeX prefers a break after a
+        -- relation (=) over one after a binary operator (+). In ini mode
+        -- both penalties are 0, these are the plain-TeX values.
+        tex.sprint("\\global\\relpenalty=500 \\global\\binoppenalty=700 ")
     end)
     M.font_ready = true
 end
@@ -615,6 +625,18 @@ local INVISIBLE = {
 -- "Mathematical Alphanumeric Symbols"). TeX renders single-letter
 -- identifiers with these glyphs. Non-letters pass through unchanged.
 -- U+210E (planck constant) fills the hole at 'h' in the italic block.
+-- Lowercase Greek letters are italic as well (TeX convention: lowercase
+-- Greek italic, uppercase Greek upright). The variant forms and the
+-- partial differential follow the italic block in Unicode order.
+local GREEK_ITALIC = {
+    [0x2202] = 0x1D715, -- ∂
+    [0x03F5] = 0x1D716, -- ϵ
+    [0x03D1] = 0x1D717, -- ϑ
+    [0x03F0] = 0x1D718, -- ϰ
+    [0x03D5] = 0x1D719, -- ϕ
+    [0x03F1] = 0x1D71A, -- ϱ
+    [0x03D6] = 0x1D71B, -- ϖ
+}
 ---@param cp integer Unicode code point.
 ---@return integer
 local function to_math_italic(cp)
@@ -625,8 +647,10 @@ local function to_math_italic(cp)
         return 0x1D44E + (cp - 0x61)
     elseif cp >= 0x41 and cp <= 0x5A then
         return 0x1D434 + (cp - 0x41)
+    elseif cp >= 0x03B1 and cp <= 0x03C9 then
+        return 0x1D6FC + (cp - 0x03B1)
     end
-    return cp
+    return GREEK_ITALIC[cp] or cp
 end
 
 -- Extracts inline text content of an XML element produced by lxpath. Joins
@@ -697,6 +721,35 @@ local function single_mo_codepoint(elt)
     return utf8.codepoint(txt)
 end
 
+-- Parses a MathML length (a number with a unit such as 1em, 3pt, 0.5mm,
+-- or a plain number). Em-based units refer to the math font size, other
+-- units go through TeX. Unknown input yields 0 with a warning.
+---@param str string
+---@param ctx table Walker context (for the font size).
+---@return integer sp
+local function mml_length(str, ctx)
+    str = str:gsub("^%s+", ""):gsub("%s+$", "")
+    local num, unit = str:match("^([+-]?%d*%.?%d+)%s*(%a*)$")
+    if not num then
+        main.log("warn", string.format("Math: cannot parse length %q", str))
+        return 0
+    end
+    local n = tonumber(num)
+    if unit == "" or unit == "em" or unit == "ex" then
+        local size = ctx.fontsize or 0
+        if unit == "ex" then
+            size = size / 2
+        end
+        return math.floor(n * size + 0.5)
+    end
+    local ok, sp = pcall(tex.sp, num .. unit)
+    if not ok or not sp then
+        main.log("warn", string.format("Math: cannot parse length %q", str))
+        return 0
+    end
+    return sp
+end
+
 -- True if `head` is a single simple noad (no following node).
 ---@param head Node?
 ---@return boolean
@@ -728,7 +781,7 @@ local function script_base(head)
     return M.ord_from_mlist(head)
 end
 
--- Forward declaration so handlers can call back into the walker.
+-- Forward declarations so handlers can call back into the walker.
 local walk
 
 local mml_handler = {}
@@ -750,11 +803,14 @@ function mml_handler.mi(elt, ctx)
     end
     -- Single-character identifiers are italic by MathML convention (mapped
     -- to the math-italic code points), multi-character identifiers are
-    -- upright. mathvariant styling (bold/script/…) is a later milestone.
+    -- upright. mathvariant="normal" keeps a single letter upright (the d in
+    -- dx, units, the constants e and i); the other mathvariant values
+    -- (bold, script, fraktur, …) are not supported yet.
     local single = utf8.len(txt) == 1
+    local italic = single and attribute(elt, "mathvariant") ~= "normal"
     local head
     for _, cp in utf8.codes(txt) do
-        if single then
+        if italic then
             cp = to_math_italic(cp)
         end
         head = M.append(head, M.mchar(NOAD_ORD, ctx.fam, cp))
@@ -805,7 +861,81 @@ end
 function mml_handler.mfrac(elt, ctx)
     local num = walk(child_element(elt, 1), ctx)
     local den = walk(child_element(elt, 2), ctx)
-    return M.frac(num, den, nil)
+    -- linethickness="0" gives a rule-less fraction (binomial coefficients).
+    -- The keywords thin, medium and thick and no attribute use the rule
+    -- thickness of the font, a length sets it explicitly.
+    local thickness
+    local lt = attribute(elt, "linethickness")
+    if lt and lt ~= "thin" and lt ~= "medium" and lt ~= "thick" then
+        thickness = mml_length(lt, ctx)
+    end
+    return M.frac(num, den, thickness)
+end
+
+function mml_handler.mroot(elt, ctx)
+    local body = walk(child_element(elt, 1), ctx)
+    local degree = walk(child_element(elt, 2), ctx)
+    return M.sqrt(ctx.fam, body, degree)
+end
+
+function mml_handler.mspace(elt, ctx)
+    local wd = attribute(elt, "width")
+    if not wd then
+        return nil
+    end
+    local g = node.new("glue") --[[@as GlueNode]]
+    g.width = mml_length(wd, ctx)
+    return g
+end
+
+-- Maps mstyle attributes to a LuaTeX style: displaystyle chooses between
+-- display and text, scriptlevel between text, script and scriptscript.
+---@param elt table
+---@param ctx table
+---@return string? style
+local function mstyle_style(elt, ctx)
+    local sl = attribute(elt, "scriptlevel")
+    if sl then
+        local n = tonumber(sl)
+        if n then
+            if sl:match("^[+-]") then
+                n = (ctx.scriptlevel or 0) + n
+            end
+            if n >= 2 then
+                return "scriptscript"
+            elseif n == 1 then
+                return "script"
+            end
+            return ctx.display and "display" or "text"
+        end
+    end
+    local ds = attribute(elt, "displaystyle")
+    if ds == "true" then
+        return "display"
+    elseif ds == "false" then
+        return "text"
+    end
+    return nil
+end
+
+function mml_handler.mstyle(elt, ctx)
+    local style = mstyle_style(elt, ctx)
+    if not style then
+        return mml_handler.mrow(elt, ctx)
+    end
+    -- A style node changes the style until the end of its mlist, so the
+    -- contents are wrapped in an ord noad to keep the change local. The
+    -- context tells nested elements which style is in effect.
+    local inner = {}
+    for k, v in pairs(ctx) do
+        inner[k] = v
+    end
+    inner.display = style == "display"
+    inner.scriptlevel = style == "script" and 1 or style == "scriptscript" and 2 or 0
+    local body = mml_handler.mrow(elt, inner)
+    local st = node.new("style") --[[@as StyleNode]]
+    st.style = style
+    return M.ord_from_mlist(M.append(st, body))
 end
 
 -- Shared implementation of msup / msub / msubsup. `sup_elt` / `sub_elt`
@@ -945,7 +1075,7 @@ end
 -- to mrow semantics (process children) so unsupported markup degrades to a
 -- best-effort rendering instead of dropping the formula entirely.
 ---@param elt table? lxpath element.
----@param ctx table Walker context: `{ fam = math-family index, display = bool }`.
+---@param ctx table Walker context: `{ fam = math-family index, display = bool, fontsize = sp }`.
 ---@return Node? Head of an mlist (chain of noads), or nil if `elt` is nil/empty.
 walk = function(elt, ctx)
     if not elt or type(elt) ~= "table" then
@@ -977,7 +1107,8 @@ function M.mathml_to_hlist(mathml_elt, display)
         main.log("error", "Math: no math font registered; call publisher.math.set_math_font first")
         return nil
     end
-    local ctx = { fam = M.FAM_MAIN, display = display }
+    local fnt = M.fontid_text and font.getfont(M.fontid_text)
+    local ctx = { fam = M.FAM_MAIN, display = display, fontsize = fnt and fnt.size or 0 }
     local mlist = walk(mathml_elt, ctx)
     if not mlist then
         return nil

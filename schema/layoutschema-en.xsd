@@ -10251,11 +10251,39 @@
   <xs:element name="math" substitutionGroup="en:mathml-element" type="en:mathml"/>
   <xs:element name="mrow" substitutionGroup="en:mathml-element" type="en:mathml"/>
   <xs:element name="msqrt" substitutionGroup="en:mathml-element" type="en:mathml"/>
-  <xs:element name="mi" substitutionGroup="en:mathml-element" type="xs:string"/>
+  <xs:element name="mstyle" substitutionGroup="en:mathml-element">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="en:mathml">
+          <xs:attribute name="displaystyle"/>
+          <xs:attribute name="scriptlevel"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mi" substitutionGroup="en:mathml-element">
+    <xs:complexType mixed="true">
+      <xs:attribute name="mathvariant"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="mn" substitutionGroup="en:mathml-element" type="xs:string"/>
   <xs:element name="mo" substitutionGroup="en:mathml-element" type="xs:string"/>
   <xs:element name="mtext" substitutionGroup="en:mathml-element" type="xs:string"/>
+  <xs:element name="mspace" substitutionGroup="en:mathml-element">
+    <xs:complexType>
+      <xs:attribute name="width"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="mfrac" substitutionGroup="en:mathml-element">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="en:mathml-element"/>
+        <xs:element ref="en:mathml-element"/>
+      </xs:sequence>
+      <xs:attribute name="linethickness"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mroot" substitutionGroup="en:mathml-element">
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="en:mathml-element"/>

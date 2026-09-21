@@ -1,7 +1,8 @@
 <Layout xmlns="urn:speedata.de:2009/publisher/en"
     xmlns:sd="urn:speedata:2009/publisher/functions/en">
 
-    <Pageformat width="120mm" height="170mm"/>
+    <Pageformat width="120mm" height="200mm"/>
+    <DefineColor name="darkblue" model="rgb" r="20" g="40" b="120"/>
     <LoadFontfile name="lmmath" filename="latinmodern-math.otf"/>
     <DefineFontfamily name="lmmath" fontsize="10" leading="12">
         <Regular fontface="lmmath"/>
@@ -106,6 +107,41 @@
                             <mrow><mn>2</mn><mi>a</mi></mrow>
                         </mfrac>
                     </Math>
+                </Paragraph>
+
+                <Paragraph fontfamily="display" color="darkblue" id="colortest">
+                    <Math display="yes">
+                        <mroot><mrow><mi>x</mi><mo>+</mo><mn>1</mn></mrow><mn>3</mn></mroot>
+                        <mo>,</mo>
+                        <mrow><mo>(</mo><mfrac linethickness="0"><mi>n</mi><mi>k</mi></mfrac><mo>)</mo></mrow>
+                        <mo>=</mo>
+                        <mfrac><mrow><mi>n</mi><mo>!</mo></mrow><mrow><mi>k</mi><mo>!</mo><mo>(</mo><mi>n</mi><mo>-</mo><mi>k</mi><mo>)</mo><mo>!</mo></mrow></mfrac>
+                        <mo>,</mo>
+                        <mi>α</mi><mo>+</mo><mi>β</mi><mo>=</mo><mi>Γ</mi><mo>,</mo>
+                        <mfrac><mrow><mo>∂</mo><mi>f</mi></mrow><mrow><mo>∂</mo><mi>x</mi></mrow></mfrac>
+                        <mspace width="1em"/>
+                        <mi mathvariant="normal">d</mi><mi>x</mi>
+                        <mo>,</mo>
+                        <msup><mi mathvariant="normal">e</mi><mrow><mi mathvariant="normal">i</mi><mi>π</mi></mrow></msup>
+                    </Math>
+                </Paragraph>
+
+                <Paragraph>
+                    <Value>Inline with mstyle: </Value>
+                    <Math>
+                        <mstyle displaystyle="true">
+                            <mfrac><mn>1</mn><mn>2</mn></mfrac>
+                        </mstyle>
+                        <mo>+</mo>
+                        <mfrac><mn>1</mn><mn>2</mn></mfrac>
+                        <mo>+</mo>
+                        <mstyle scriptlevel="1"><mi>x</mi></mstyle>
+                        <mo>=</mo>
+                        <mn>1</mn>
+                    </Math>
+                    <Value> and a tall fraction </Value>
+                    <Math display="yes"><mfrac><mfrac><mi>a</mi><mi>b</mi></mfrac><mi>c</mi></mfrac></Math>
+                    <Value> in a paragraph with normal leading, followed by more text so that the line breaks and the next line is visible.</Value>
                 </Paragraph>
 
                 <Paragraph>

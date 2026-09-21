@@ -2286,6 +2286,9 @@ function M.do_linebreak(nodelist, hsize, parameters)
         if d_getid(cur) == publisher.hlist_node then
             local lineheight
             maxlineheight = 0
+            -- Boxes of math formulas keep their own height and depth: the
+            -- 75/25 split below would cut off a deep denominator.
+            local maxmathheight, maxmathdepth = 0, 0
             local head_list = d_getlist(cur)
             local adjustlineheight = true
             while head_list do
@@ -2305,6 +2308,20 @@ function M.do_linebreak(nodelist, hsize, parameters)
                             maxlineheight = total
                         end
                     end
+                    local props = d_getproperty(head_list)
+                    if props and props.mathbox then
+                        -- A shifted box (a fraction placed on the math axis)
+                        -- extends less above and more below the baseline.
+                        local shift = d_getfield(head_list, "shift") or 0
+                        local mh = d_getfield(head_list, "height") - shift
+                        local md = d_getfield(head_list, "depth") + shift
+                        if mh > maxmathheight then
+                            maxmathheight = mh
+                        end
+                        if md > maxmathdepth then
+                            maxmathdepth = md
+                        end
+                    end
                 else
                     fam = d_has_attribute(head_list, att_fontfamily)
                     if fam and fam > 0 then
@@ -2317,13 +2334,22 @@ function M.do_linebreak(nodelist, hsize, parameters)
                 head_list = d_getnext(head_list)
             end
             if adjustlineheight then
+                local ht, dp
                 if lineheight and lineheight > 0.75 * maxlineheight then
-                    d_setfield(cur, "height", lineheight)
-                    d_setfield(cur, "depth", 0.25 * maxlineheight)
+                    ht = lineheight
+                    dp = 0.25 * maxlineheight
                 else
-                    d_setfield(cur, "height", 0.75 * maxlineheight)
-                    d_setfield(cur, "depth", 0.25 * maxlineheight)
+                    ht = 0.75 * maxlineheight
+                    dp = 0.25 * maxlineheight
                 end
+                if maxmathheight > ht then
+                    ht = maxmathheight
+                end
+                if maxmathdepth > dp then
+                    dp = maxmathdepth
+                end
+                d_setfield(cur, "height", ht)
+                d_setfield(cur, "depth", dp)
             end
         end
         cur = d_getnext(cur)
