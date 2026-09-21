@@ -98,7 +98,6 @@ Die Formel übernimmt die Farbe des Absatzes (Attribut `color` bei `<Paragraph>`
 
 Noch nicht unterstützt sind:
 
-* dehnbare Klammern, die mit dem Inhalt wachsen (Wurzelzeichen und Akzente wie Pfeile wachsen bereits mit)
 * `<mtable>` (Ausrichtung mehrzeiliger Gleichungen)
 * die Werte fett, Fraktur und Schreibschrift des Attributs `mathvariant`
 * mehrere Mathematikschriften in einem Dokument

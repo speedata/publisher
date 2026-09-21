@@ -7,8 +7,8 @@
 -- The walker covers a MathML subset (mrow, mi, mn, mo, mtext, mfrac, msqrt,
 -- mroot, msup, msub, msubsup, munder, mover, munderover, mspace, mstyle).
 -- The OpenType MATH table parser handles MathConstants, italic corrections,
--- top-accent attachment and MathVariants (stretchy glyphs); stretchy fences
--- in the walker, mtable and most mathvariant values are not implemented yet.
+-- top-accent attachment and MathVariants (stretchy glyphs); mtable and most
+-- mathvariant values are not implemented yet.
 --
 --  math.lua
 --  speedata publisher
@@ -559,6 +559,7 @@ local NOAD_REL = 5
 local NOAD_OPEN = 6
 local NOAD_CLOSE = 7
 local NOAD_PUNCT = 8
+local NOAD_INNER = 9
 
 -- Builds a `math_char` subnode (the leaf inside a noad's `nucleus`).
 ---@param fam integer Math family.
@@ -665,6 +666,47 @@ function M.sqrt(fam, body, degree)
     if degree then
         n.degree = sub_mlist(degree) --[[@as KernNode]]
     end
+    return n
+end
+
+-- Fence noad subtypes (the side of the delimiter).
+local FENCE_LEFT = 1
+local FENCE_MIDDLE = 2
+local FENCE_RIGHT = 3
+
+-- Builds a `fence` noad, the counterpart of TeX's \left, \middle and
+-- \right. LuaTeX grows the delimiter to the height of the enclosing
+-- mlist. A fence noad created from Lua has class 0 (ord); TeX's primitives
+-- leave the class unset and derive open / close from the side, so the
+-- class is set explicitly here to get the same spacing.
+---@param side integer FENCE_LEFT, FENCE_MIDDLE or FENCE_RIGHT.
+---@param fam integer Math family.
+---@param char integer Unicode code point of the delimiter.
+---@return FenceNode
+function M.fence(side, fam, char)
+    local n = node.new("fence", side) --[[@as FenceNode]]
+    local delim = node.new("delim") --[[@as DelimNode]]
+    delim.small_fam = fam
+    delim.small_char = char
+    delim.large_fam = fam
+    delim.large_char = char
+    n.delim = delim
+    if side == FENCE_LEFT then
+        n.class = NOAD_OPEN
+    else
+        n.class = NOAD_CLOSE
+    end
+    return n
+end
+
+-- Wraps an mlist that starts with a left fence and ends with a right fence
+-- in an inner noad, as TeX does at \right. The fences are sized to the
+-- content of this sub-mlist only, not to the surrounding formula.
+---@param head Node? Head of the fenced mlist.
+---@return NoadNode
+function M.inner_from_mlist(head)
+    local n = node.new("noad", NOAD_INNER) --[[@as NoadNode]]
+    n.nucleus = sub_mlist(head)
     return n
 end
 
@@ -943,12 +985,70 @@ local walk
 
 local mml_handler = {}
 
+-- Operator classes that may act as a stretchy delimiter on each side of a
+-- fenced mrow. Vertical bars are "fence" in the operator dictionary and
+-- work on either side and in the middle.
+local FENCE_CLASSES = {
+    [FENCE_LEFT] = { open = true, fence = true },
+    [FENCE_RIGHT] = { close = true, fence = true },
+    [FENCE_MIDDLE] = { fence = true },
+}
+
+-- Returns the code point of `elt` when it is a single-character `<mo>`
+-- that can serve as a stretchy delimiter on `side`, nil otherwise. The
+-- MathML attribute `stretchy="false"` opts out.
+---@param elt table? Child element of an mrow.
+---@param side integer FENCE_LEFT, FENCE_MIDDLE or FENCE_RIGHT.
+---@return integer? cp
+local function fence_codepoint(elt, side)
+    local cp = elt and single_mo_codepoint(elt)
+    if
+        not cp or attribute(elt --[[@as table]], "stretchy") == "false"
+    then
+        return nil
+    end
+    if FENCE_CLASSES[side][operators[cp]] then
+        return cp
+    end
+    return nil
+end
+
+-- An mrow whose first child is an opening and whose last child is a closing
+-- `<mo>` becomes a fenced group (\left ... \right): the delimiters grow with
+-- the content, vertical bars in between become \middle fences. Any other
+-- mrow is just the concatenation of its children.
 function mml_handler.mrow(elt, ctx)
-    local head
+    local children = {}
     for k = 1, #elt do
         if type(elt[k]) == "table" then
-            head = M.append(head, walk(elt[k], ctx))
+            children[#children + 1] = elt[k]
         end
+    end
+    local n = #children
+    local left_cp, right_cp
+    if n >= 2 then
+        left_cp = fence_codepoint(children[1], FENCE_LEFT)
+        right_cp = fence_codepoint(children[n], FENCE_RIGHT)
+    end
+    local fenced = left_cp ~= nil and right_cp ~= nil
+    local head
+    local first, last = 1, n
+    if fenced then
+        head = M.fence(FENCE_LEFT, ctx.fam, left_cp --[[@as integer]])
+        first, last = 2, n - 1
+    end
+    for k = first, last do
+        local child = children[k]
+        local middle_cp = fenced and fence_codepoint(child, FENCE_MIDDLE)
+        if middle_cp then
+            head = M.append(head, M.fence(FENCE_MIDDLE, ctx.fam, middle_cp))
+        else
+            head = M.append(head, walk(child, ctx))
+        end
+    end
+    if fenced then
+        head = M.append(head, M.fence(FENCE_RIGHT, ctx.fam, right_cp --[[@as integer]]))
+        return M.inner_from_mlist(head)
     end
     return head
 end

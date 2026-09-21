@@ -140,6 +140,18 @@
                     </Math>
                 </Paragraph>
 
+                <Paragraph fontfamily="display">
+                    <Math display="yes">
+                        <mrow><mo>[</mo><mfrac><mfrac><mi>a</mi><mi>b</mi></mfrac><mi>c</mi></mfrac><mo>]</mo></mrow>
+                        <mo>+</mo>
+                        <msup><mrow><mo>(</mo><mi>a</mi><mo>+</mo><mfrac><mi>b</mi><mi>c</mi></mfrac><mo>)</mo></mrow><mn>2</mn></msup>
+                        <mo>+</mo>
+                        <mrow><mo>{</mo><mi>x</mi><mo>|</mo><mfrac><mi>x</mi><mn>2</mn></mfrac><mo>&gt;</mo><mn>0</mn><mo>}</mo></mrow>
+                        <mo>+</mo>
+                        <mrow><mo stretchy="false">(</mo><mfrac><mi>a</mi><mi>b</mi></mfrac><mo stretchy="false">)</mo></mrow>
+                    </Math>
+                </Paragraph>
+
                 <Paragraph>
                     <Value>Inline with mstyle: </Value>
                     <Math>

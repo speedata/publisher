@@ -3492,7 +3492,7 @@
   </xs:element>
   <xs:element name="Math">
     <xs:annotation>
-      <xs:documentation>Setzt eine mathematische Formel. Die Kindelemente werden als MathML interpretiert. Das MathML-Wurzelelement &lt;math&gt; und der MathML-Namensraum können angegeben werden, sind aber optional; mehrere Kindelemente werden als implizites mrow behandelt. Unterstützt werden die Token-Elemente mi, mn, mo und mtext sowie die Layout-Elemente mrow, mfrac, msqrt, msup, msub, msubsup, munder, mover und munderover. Operatoren erhalten die Abstände ihrer Klasse (Rechenzeichen, Relationen, Klammern, große Operatoren wie Summen und Integrale), Akzente werden mit den Metriken der Schrift platziert. Noch nicht unterstützt sind dehnbare Klammern, mroot, mtable und das Attribut mathvariant. Experimentell, die Implementierung ist in Arbeit.</xs:documentation>
+      <xs:documentation>Setzt eine mathematische Formel. Die Kindelemente werden als MathML interpretiert. Das MathML-Wurzelelement &lt;math&gt; und der MathML-Namensraum können angegeben werden, sind aber optional; mehrere Kindelemente werden als implizites mrow behandelt. Unterstützt werden die Token-Elemente mi (mit mathvariant="normal" für aufrechte einzelne Buchstaben), mn, mo, mtext und mspace sowie die Layout-Elemente mrow, mfrac (mit linethickness), msqrt, mroot, msup, msub, msubsup, munder, mover, munderover und mstyle (mit displaystyle und scriptlevel). Operatoren erhalten die Abstände ihrer Klasse (Rechenzeichen, Relationen, Klammern, große Operatoren wie Summen und Integrale), Akzente werden mit den Metriken der Schrift platziert. Die Formel übernimmt die Farbe des Absatzes. Noch nicht unterstützt sind dehnbare Klammern, mtable und die übrigen Werte von mathvariant. Experimentell, die Implementierung ist in Arbeit.</xs:documentation>
     </xs:annotation>
     <xs:complexType>
       <xs:complexContent>
@@ -10267,7 +10267,11 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="mn" substitutionGroup="en:mathml-element" type="xs:string"/>
-  <xs:element name="mo" substitutionGroup="en:mathml-element" type="xs:string"/>
+  <xs:element name="mo" substitutionGroup="en:mathml-element">
+    <xs:complexType mixed="true">
+      <xs:attribute name="stretchy"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="mtext" substitutionGroup="en:mathml-element" type="xs:string"/>
   <xs:element name="mspace" substitutionGroup="en:mathml-element">
     <xs:complexType>

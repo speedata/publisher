@@ -520,7 +520,10 @@ func genRelaxNGSchema(commands *commandsXML, lang string, allowForeignNodes bool
                 <text/>
             </element>
             <element name="mn"><text/></element>
-            <element name="mo"><text/></element>
+            <element name="mo">
+                <optional><attribute name="stretchy"/></optional>
+                <text/>
+            </element>
             <element name="mtext"><text/></element>
             <element name="mspace">
                 <optional><attribute name="width"/></optional>

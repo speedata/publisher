@@ -3726,7 +3726,7 @@
    </define>
    <define name="e_Math">
       <element name="Math">
-         <a:documentation>Typeset a mathematical formula. The child elements are interpreted as MathML. The MathML root element &lt;math&gt; and the MathML namespace may be given, but both are optional; several child elements are treated as an implicit mrow. Supported are the token elements mi, mn, mo and mtext, the layout elements mrow, mfrac, msqrt, msup, msub, msubsup, munder, mover and munderover. Operators get the spacing of their class (binary operators, relations, parentheses, large operators such as sums and integrals), accents are placed with the metrics of the font. Not yet supported are stretchy delimiters, mroot, mtable and the attribute mathvariant. Experimental, implementation in progress.</a:documentation>
+         <a:documentation>Typeset a mathematical formula. The child elements are interpreted as MathML. The MathML root element &lt;math&gt; and the MathML namespace may be given, but both are optional; several child elements are treated as an implicit mrow. Supported are the token elements mi (with mathvariant=&#34;normal&#34; for upright single letters), mn, mo, mtext and mspace, the layout elements mrow, mfrac (with linethickness), msqrt, mroot, msup, msub, msubsup, munder, mover, munderover and mstyle (with displaystyle and scriptlevel). Operators get the spacing of their class (binary operators, relations, parentheses, large operators such as sums and integrals), accents are placed with the metrics of the font. The formula takes the color of the paragraph. Not yet supported are stretchy delimiters, mtable and the other values of mathvariant. Experimental, implementation in progress.</a:documentation>
          <lsp:doc href="https://doc.speedata.de/publisher/en/commandreference/math/"></lsp:doc>
          <interleave>
             <group>
@@ -8721,7 +8721,10 @@
                 <text/>
             </element>
             <element name="mn"><text/></element>
-            <element name="mo"><text/></element>
+            <element name="mo">
+                <optional><attribute name="stretchy"/></optional>
+                <text/>
+            </element>
             <element name="mtext"><text/></element>
             <element name="mspace">
                 <optional><attribute name="width"/></optional>
