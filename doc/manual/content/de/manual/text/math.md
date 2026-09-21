@@ -39,6 +39,8 @@ Das erste `<Math>`-Element im Layout gibt die Schriftfamilie mit dem Attribut `f
 </Paragraph>
 ```
 
+![Formeln im Fließtext](/img/math-inline.png)
+
 Die wichtigsten MathML-Elemente:
 
 `<mi>`
@@ -79,6 +81,8 @@ Mit `display="yes"` wird die Formel im Display-Stil gesetzt: Brüche werden grö
   </Math>
 </Paragraph>
 ```
+
+![Abgesetzte Formeln im Display-Stil](/img/math-display.png)
 
 Eine Formelzeile ist mindestens so hoch wie eine Textzeile der Absatzschrift. Hohe Formeln (Brüche, Summen mit Grenzen) ragen darüber hinaus; sie brauchen einen Absatz mit größerem Zeilenabstand, zum Beispiel über eine Schriftfamilie mit größerem `leading` am `<Paragraph>`.
 

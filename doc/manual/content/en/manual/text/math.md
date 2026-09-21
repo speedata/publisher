@@ -39,6 +39,8 @@ The first `<Math>` element in the layout names the font family with the attribut
 </Paragraph>
 ```
 
+![Formulas in running text](/img/math-inline.png)
+
 The most important MathML elements:
 
 `<mi>`
@@ -79,6 +81,8 @@ With `display="yes"` the formula is set in display style: fractions get larger, 
   </Math>
 </Paragraph>
 ```
+
+![Displayed formulas in display style](/img/math-display.png)
 
 A formula line is at least as high as a text line of the paragraph font. Tall formulas (fractions, sums with limits) extend beyond that; they need a paragraph with more line spacing, for example through a font family with a larger `leading` on the `<Paragraph>`.
 
