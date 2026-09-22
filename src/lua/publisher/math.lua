@@ -967,6 +967,25 @@ local function is_single_op(head)
     return st == NOAD_OP or st == NOAD_OPLIMITS or st == NOAD_OPNOLIMITS
 end
 
+-- Returns a copy of the walker context for a nested part that is set in
+-- a smaller style: `delta` is added to the script level (0 = text, 1 =
+-- script, 2 = scriptscript) and the display flag is cleared. The level is
+-- used by elements that set text with the paragraph font (mtext) and by
+-- relative scriptlevel values on mstyle; the noads themselves get their
+-- style from LuaTeX.
+---@param ctx table
+---@param delta integer
+---@return table
+local function smaller_ctx(ctx, delta)
+    local inner = {}
+    for k, v in pairs(ctx) do
+        inner[k] = v
+    end
+    inner.scriptlevel = math.min((ctx.scriptlevel or 0) + delta, 2)
+    inner.display = false
+    return inner
+end
+
 -- Returns a noad that scripts can be attached to. A single simple noad is
 -- used directly: this keeps the atom class, so scripts on a large operator
 -- such as ∑ get display limits and the display-size glyph. Everything else
@@ -1108,16 +1127,49 @@ function mml_handler.mo(elt, ctx)
 end
 
 function mml_handler.mtext(elt, ctx)
-    -- mtext should switch to text mode (upright, with text-font spacing).
-    -- For the skeleton we treat it like mi to keep something visible.
-    -- TODO: build an hlist of glyph nodes via the regular font pipeline and
-    -- wrap it in a sub_box nucleus.
-    return mml_handler.mi(elt, ctx)
+    -- Text inside a formula ("for all", units, words) is set with the font
+    -- of the surrounding paragraph through the regular text pipeline and
+    -- embedded as a box (sub_box nucleus of an ord atom). Inner whitespace
+    -- is collapsed to single spaces as in MathML, leading and trailing
+    -- whitespace is dropped (use mspace for explicit spacing). Inside
+    -- scripts and limits the script size of the font family is used, as
+    -- for Sub and Sup. mathvariant selects bold and italic faces.
+    local txt = inner_text(elt):gsub("%s+", " ")
+    if txt == "" then
+        return nil
+    end
+    local text = ctx.text
+    if not text then
+        -- No paragraph context (should not happen): fall back to the
+        -- characters of the math font.
+        return mml_handler.mn(elt, ctx)
+    end
+    local parameter = { fontfamily = text.fontfamily, languagecode = text.languagecode }
+    if (ctx.scriptlevel or 0) >= 1 then
+        parameter.fontsize = "small"
+    end
+    local mv = attribute(elt, "mathvariant")
+    if mv == "bold" or mv == "bold-italic" then
+        parameter.bold = 1
+    end
+    if mv == "italic" or mv == "bold-italic" then
+        parameter.italic = 1
+    end
+    local nodes = publisher.nodes.mknodes(txt, parameter, "math/mtext")
+    local box = node.hpack(nodes)
+    local sb = node.new("sub_box") --[[@as SubBoxNode]]
+    sb.head = box
+    local n = node.new("noad", NOAD_ORD) --[[@as NoadNode]]
+    n.nucleus = sb
+    return n
 end
 
 function mml_handler.mfrac(elt, ctx)
-    local num = walk(child_element(elt, 1), ctx)
-    local den = walk(child_element(elt, 2), ctx)
+    -- Numerator and denominator are set in text style within display
+    -- style and one level smaller otherwise.
+    local fctx = smaller_ctx(ctx, ctx.display and 0 or 1)
+    local num = walk(child_element(elt, 1), fctx)
+    local den = walk(child_element(elt, 2), fctx)
     -- linethickness="0" gives a rule-less fraction (binomial coefficients).
     -- The keywords thin, medium and thick and no attribute use the rule
     -- thickness of the font, a length sets it explicitly.
@@ -1131,7 +1183,7 @@ end
 
 function mml_handler.mroot(elt, ctx)
     local body = walk(child_element(elt, 1), ctx)
-    local degree = walk(child_element(elt, 2), ctx)
+    local degree = walk(child_element(elt, 2), smaller_ctx(ctx, 2))
     return M.sqrt(ctx.fam, body, degree)
 end
 
@@ -1204,7 +1256,8 @@ end
 ---@return Node?
 local function scripts(elt, ctx, sup_elt, sub_elt)
     local base = walk(child_element(elt, 1), ctx)
-    local sub = sub_elt and walk(sub_elt, ctx)
+    local sctx = smaller_ctx(ctx, 1)
+    local sub = sub_elt and walk(sub_elt, sctx)
     -- MathML Core writes primes as superscripts (<msup><mi>a</mi><mo>′</mo>
     -- </msup>). The glyph is already raised, so it is appended as an
     -- ordinary atom instead of being raised a second time.
@@ -1214,7 +1267,7 @@ local function scripts(elt, ctx, sup_elt, sub_elt)
         M.attach_scripts(noad, nil, sub)
         return M.append(noad, M.mchar(NOAD_ORD, ctx.fam, sup_cp))
     end
-    local sup = sup_elt and walk(sup_elt, ctx)
+    local sup = sup_elt and walk(sup_elt, sctx)
     return M.attach_scripts(script_base(base), sup, sub)
 end
 
@@ -1272,9 +1325,10 @@ end
 ---@return Node?
 local function underover(elt, ctx, over_elt, under_elt)
     local base = walk(child_element(elt, 1), ctx)
+    local sctx = smaller_ctx(ctx, 1)
     if is_single_op(base) then
-        local over = over_elt and walk(over_elt, ctx)
-        local under = under_elt and walk(under_elt, ctx)
+        local over = over_elt and walk(over_elt, sctx)
+        local under = under_elt and walk(under_elt, sctx)
         if base.subtype == NOAD_OPNOLIMITS then
             base.subtype = NOAD_OPLIMITS
         end
@@ -1291,8 +1345,8 @@ local function underover(elt, ctx, over_elt, under_elt)
             return M.accent(ctx.fam, base, over_cp, under_cp)
         end
     end
-    local over = over_elt and walk(over_elt, ctx)
-    local under = under_elt and walk(under_elt, ctx)
+    local over = over_elt and walk(over_elt, sctx)
+    local under = under_elt and walk(under_elt, sctx)
     local class = is_single_noad(base) and base.subtype or NOAD_ORD
     if class == NOAD_OP or class == NOAD_OPLIMITS or class == NOAD_OPNOLIMITS then
         class = NOAD_ORD
@@ -1332,7 +1386,7 @@ end
 -- to mrow semantics (process children) so unsupported markup degrades to a
 -- best-effort rendering instead of dropping the formula entirely.
 ---@param elt table? lxpath element.
----@param ctx table Walker context: `{ fam = math-family index, display = bool, fontsize = sp }`.
+---@param ctx table Walker context: `{ fam = math-family index, display = bool, fontsize = sp, scriptlevel = 0..2, text = paragraph text options }`.
 ---@return Node? Head of an mlist (chain of noads), or nil if `elt` is nil/empty.
 walk = function(elt, ctx)
     if not elt or type(elt) ~= "table" then
@@ -1358,14 +1412,15 @@ M.walk = walk
 -- wrap into a positioned box.
 ---@param mathml_elt table lxpath element (typically the <math> root).
 ---@param display boolean `true` for display style, `false` for inline.
+---@param text table? Text options of the surrounding paragraph (`fontfamily`, `languagecode`), used for mtext.
 ---@return Node? hlist Head of the resulting hlist, or nil on error.
-function M.mathml_to_hlist(mathml_elt, display)
+function M.mathml_to_hlist(mathml_elt, display, text)
     if not M.font_ready then
         main.log("error", "Math: no math font registered; call publisher.math.set_math_font first")
         return nil
     end
     local fnt = M.fontid_text and font.getfont(M.fontid_text)
-    local ctx = { fam = M.FAM_MAIN, display = display, fontsize = fnt and fnt.size or 0 }
+    local ctx = { fam = M.FAM_MAIN, display = display, fontsize = fnt and fnt.size or 0, text = text }
     local mlist = walk(mathml_elt, ctx)
     if not mlist then
         return nil

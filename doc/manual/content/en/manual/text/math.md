@@ -58,8 +58,11 @@ The most important MathML elements:
 `<mfrac>`, `<msqrt>`, `<mroot>`
 : Fraction with numerator and denominator, square root, root with index. With `linethickness="0"` the fraction bar is omitted, which gives binomial coefficients.
 
+`<mtext>`
+: Text within the formula, such as words like "for all" or units like "km/h". The text is set in the font of the surrounding paragraph; in superscripts and subscripts, limits and inline fractions it uses the smaller size the font family provides for sub- and superscripts. `mathvariant="bold"` or `mathvariant="italic"` selects the bold or italic face of the family. Leading and trailing whitespace is removed, a distance to the formula is set with `<mspace>` or a non-breaking space (`&#xa0;`) in the text.
+
 `<mspace>`
-: Extra space, for example `<mspace width="1em"/>` before the dx of an integral.
+: Extra space, for example `<mspace width="1em"/>` before the dx of an integral or around an `<mtext>`.
 
 `<mstyle>`
 : Changes the style of the enclosed elements: `displaystyle="true"` sets a fraction in running text at full size, `scriptlevel="1"` shrinks the contents to the size of a superscript.
@@ -101,6 +104,5 @@ Not yet supported are:
 * `<mtable>` (alignment of multi-line equations)
 * the values bold, fraktur and script of the attribute `mathvariant`
 * several math fonts in one document
-* `<mtext>` in the text font of the paragraph; the text is currently set from the math font
 
 Unknown MathML elements are treated like `<mrow>` with a warning, so the formula is not dropped.

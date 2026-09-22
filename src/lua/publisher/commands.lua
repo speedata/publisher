@@ -3527,10 +3527,9 @@ end
 -- Math
 -- ----
 -- Typeset a MathML formula. The element body holds the MathML tree (root
--- element <math>); the `display` attribute toggles between inline and
--- display style. SKELETON — math-font setup is not wired up yet, so this
--- command currently logs an error and returns nil unless a math font has
--- been registered programmatically via `publisher.math.set_math_font`.
+-- element <math>, optional); the `display` attribute toggles between inline
+-- and display style. The `fontfamily` attribute registers the math font on
+-- first use.
 ---@param layoutxml table
 ---@param dataxml table
 ---@return any
@@ -3619,11 +3618,6 @@ function commands.math(layoutxml, dataxml)
         return nil
     end
 
-    local hlist = publisher.math.mathml_to_hlist(mathml_root, display)
-    if not hlist then
-        return nil
-    end
-
     -- Splice into the surrounding paragraph the same way Sub / Sup do, so
     -- line breaking and baseline alignment go through the regular paragraph
     -- builder. `display` only selects the math style (more generous
@@ -3632,13 +3626,20 @@ function commands.math(layoutxml, dataxml)
     -- The strut and the fontfamily attribute give the line the same height
     -- as a text line of the paragraph font (a formula-only line would
     -- otherwise get no leading at all); a taller formula still extends the
-    -- line. The paragraph options are only known while the paragraph is
-    -- flattened, hence the callback.
+    -- line. The paragraph options (font family for mtext, color) are only
+    -- known while the paragraph is flattened, hence the formula is built in
+    -- the callback.
     local p = publisher.par:new(nil, "math")
     p:append({
-        hlist = hlist,
-        flatten_callback = function(contents, options)
-            local nodes = contents.hlist
+        flatten_callback = function(_, options)
+            local nodes = publisher.math.mathml_to_hlist(
+                mathml_root,
+                display,
+                { fontfamily = options.fontfamily, languagecode = options.languagecode }
+            )
+            if not nodes then
+                return { objects = {} }
+            end
             -- The boxes of the formula (fractions, radicals, limits) are
             -- marked so that the line height adjustment after the line
             -- break can make room for a deep denominator or a tall

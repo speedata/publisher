@@ -58,8 +58,11 @@ Die wichtigsten MathML-Elemente:
 `<mfrac>`, `<msqrt>`, `<mroot>`
 : Bruch mit Zähler und Nenner, Quadratwurzel, Wurzel mit Exponent. Mit `linethickness="0"` entfällt der Bruchstrich, so entstehen Binomialkoeffizienten.
 
+`<mtext>`
+: Text in der Formel, etwa Wörter wie »für alle« oder Einheiten wie »km/h«. Der Text wird in der Schrift des umgebenden Absatzes gesetzt, in Hoch- und Tiefstellungen, Grenzen und Brüchen im Fließtext in der kleineren Größe, die die Schriftfamilie für Hoch- und Tiefstellungen vorsieht. Mit `mathvariant="bold"` oder `mathvariant="italic"` wird der fette oder kursive Schnitt der Familie verwendet. Leerraum am Anfang und Ende wird entfernt, ein Abstand zur Formel wird mit `<mspace>` oder einem geschützten Leerzeichen (`&#xa0;`) im Text gesetzt.
+
 `<mspace>`
-: Zusätzlicher Abstand, zum Beispiel `<mspace width="1em"/>` vor dem dx eines Integrals.
+: Zusätzlicher Abstand, zum Beispiel `<mspace width="1em"/>` vor dem dx eines Integrals oder um ein `<mtext>` herum.
 
 `<mstyle>`
 : Ändert den Stil für die enthaltenen Elemente: `displaystyle="true"` setzt einen Bruch im Fließtext in voller Größe, `scriptlevel="1"` verkleinert den Inhalt auf die Größe einer Hochstellung.
@@ -101,6 +104,5 @@ Noch nicht unterstützt sind:
 * `<mtable>` (Ausrichtung mehrzeiliger Gleichungen)
 * die Werte fett, Fraktur und Schreibschrift des Attributs `mathvariant`
 * mehrere Mathematikschriften in einem Dokument
-* `<mtext>` in der Textschrift des Absatzes; der Text wird derzeit aus der Mathematikschrift gesetzt
 
 Unbekannte MathML-Elemente werden mit einer Warnung wie `<mrow>` behandelt, die Formel wird also nicht verworfen.
