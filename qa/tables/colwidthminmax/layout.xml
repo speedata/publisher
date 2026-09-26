@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+
+  <SetGrid width="5mm" height="4mm"/>
+  <Pageformat width="12cm" height="9cm"/>
+  <Pagetype name="p" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+  </Pagetype>
+
+  <Record element="data">
+    <!-- min: as narrow as the widest word, max: natural width -->
+    <PlaceObject>
+      <Table>
+        <Columns>
+          <Column width="min"/>
+          <Column width="max"/>
+        </Columns>
+        <Tr valign="top">
+          <Td border-left="0.5pt" border-right="0.5pt"><Paragraph><Value>The quick brown fox</Value></Paragraph></Td>
+          <Td border-right="0.5pt"><Paragraph><Value>The quick brown fox</Value></Paragraph></Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+
+    <!-- minwidth raises min and max columns, the star column gets the rest -->
+    <PlaceObject>
+      <Table width="10cm">
+        <Columns>
+          <Column width="min" minwidth="2cm"/>
+          <Column width="max" minwidth="2cm"/>
+          <Column width="1*"/>
+        </Columns>
+        <Tr valign="top">
+          <Td border-left="0.5pt" border-right="0.5pt"><Paragraph><Value>The quick brown fox</Value></Paragraph></Td>
+          <Td border-right="0.5pt"><Paragraph><Value>fox</Value></Paragraph></Td>
+          <Td border-right="0.5pt"><Paragraph><Value>rest</Value></Paragraph></Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+
+    <!-- not enough room: max columns do not get narrower than their widest word -->
+    <PlaceObject>
+      <Table width="10cm">
+        <Columns>
+          <Column width="max"/>
+          <Column width="max"/>
+          <Column width="7cm"/>
+        </Columns>
+        <Tr valign="top">
+          <Td border-left="0.5pt" border-right="0.5pt"><Paragraph><Value>Extraordinarily long words</Value></Paragraph></Td>
+          <Td border-right="0.5pt"><Paragraph><Value>Two words</Value></Paragraph></Td>
+          <Td border-right="0.5pt"><Paragraph><Value>7cm</Value></Paragraph></Td>
+        </Tr>
+      </Table>
+    </PlaceObject>
+  </Record>
+</Layout>

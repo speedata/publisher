@@ -435,6 +435,85 @@ function tabular:collect_alignments()
     end
 end
 
+-- Parse the width attribute of a `<Column>` that is neither `min`, `max` nor `?`.
+-- Returns the kind (`"star"`, `"percent"` or `"length"`) and the value: the
+-- star factor, the percentage or the width in sp. Returns nil on invalid input.
+---@param width string
+---@param em integer The font size of the table in sp, the base for `em`.
+---@return string? kind
+---@return number? value
+local function parse_column_width(width, em)
+    local stars = string.match(width, "^%s*([%d.]*)%s*%*%s*$")
+    if stars then
+        local n = stars == "" and 1 or tonumber(stars)
+        if not n or n <= 0 then
+            return nil
+        end
+        return "star", n
+    end
+    local pct = string.match(width, "^%s*([%d.]+)%s*%%%s*$")
+    if pct then
+        local n = tonumber(pct)
+        if not n then
+            return nil
+        end
+        return "percent", n
+    end
+    if string.find(width, "[*%%]") then
+        return nil
+    end
+    if tonumber(width) then
+        return "length", publisher.current_grid:width_sp(width)
+    end
+    local ems = string.match(width, "^%s*([%d.]+)%s*em%s*$")
+    if ems and tonumber(ems) then
+        return "length", math.floor(tonumber(ems) * em + 0.5)
+    end
+    -- tex.sp returns 0 for units it cannot resolve here, such as ex
+    local ok, sp = pcall(tex.sp, width)
+    local n = tonumber(string.match(width, "^%s*([%d.]+)"))
+    if not ok or not sp or (sp == 0 and n and n ~= 0) then
+        return nil
+    end
+    return "length", sp
+end
+
+-- Distributes total among the star columns in the ratio of their factors.
+-- A column never gets less than its minwidth (or 0); the rest is shared among
+-- the other star columns.
+---@param total number
+---@param starcols table<integer, number> Star factor per column.
+---@param minwidths table<integer, number>
+---@param round boolean Round to whole sp.
+---@return table<integer, number>
+local function distribute_stars(total, starcols, minwidths, round)
+    local ret = {}
+    local count = 0
+    for _, n in pairs(starcols) do
+        count = count + n
+    end
+    local changed = true
+    while changed and count > 0 do
+        changed = false
+        for col, n in pairs(starcols) do
+            local minwd = minwidths[col] or 0
+            if not ret[col] and total * n / count < minwd then
+                ret[col] = minwd
+                total = total - minwd
+                count = count - n
+                changed = true
+            end
+        end
+    end
+    for col, n in pairs(starcols) do
+        if not ret[col] then
+            local wd = total * n / count
+            ret[col] = round and math.floor(wd + 0.5) or wd
+        end
+    end
+    return ret
+end
+
 -- Calculates the final widths for every column in the table. Honors
 -- explicit widths, `*` (proportional), `min-width`/`max-width`, colspans
 -- and shrink/grow when the table has a fixed total width target.
@@ -450,8 +529,9 @@ function tabular:calculate_columnwidth()
         local tr_contents = publisher.xml_helpers.element_contents(tr)
         local tr_elementname = publisher.xml_helpers.elementname(tr)
 
-        -- When the user gives us column widths, we use them for calculation. There are two ways to
-        -- determine the column widths: with \\(n\\)* (where \\(n\\) is an integer number) or with absolute
+        -- When the user gives us column widths, we use them for calculation. There are three ways to
+        -- determine the column widths: with \\(n\\)* (where \\(n\\) is a positive number, `*` alone
+        -- means `1*`), with a percentage of the table width such as `25%` or with absolute
         -- lengths such as `4` (in grid cells) or `2.5cm`. For example:
         --
         --     <Columns>
@@ -468,8 +548,10 @@ function tabular:calculate_columnwidth()
             local count_stars = 0
             local sum_real_widths = 0
             local count_columns = 0
-            local starpattern = "([0-9]+)%*"
+            local percentcols = {}
+            local autocols = {}
             local has_width = false
+            local em = publisher.fonts.lookup_fontfamily_number_instance[self.fontfamily].size
             for _, column in ipairs(tr_contents) do
                 if publisher.xml_helpers.elementname(column) == "Column" then
                     local column_contents = publisher.xml_helpers.element_contents(column)
@@ -489,6 +571,7 @@ function tabular:calculate_columnwidth()
                             col_shrink[i] = 2
                             has_min_or_max_width = true
                         elseif column_contents.width == "?" then
+                            autocols[i] = true
                             columnwidths_given = false
                         else
                             -- columnwidths_given can be false with a "?" width. This must
@@ -496,20 +579,31 @@ function tabular:calculate_columnwidth()
                             if columnwidths_given == nil then
                                 columnwidths_given = true
                             end
-                            local width_stars = string.match(column_contents.width, starpattern)
-                            if width_stars then
-                                local n = tonumber(width_stars, 10)
-                                starcols[i] = n
-                                count_stars = count_stars + n
+                            local kind, value = parse_column_width(column_contents.width, em)
+                            if kind == "star" then
+                                starcols[i] = value
+                                count_stars = count_stars + value
+                            elseif kind == "percent" then
+                                percentcols[i] = value
+                            elseif kind == "length" then
+                                self.colwidths[i] = value
+                                sum_real_widths = sum_real_widths + value
                             else
-                                if tonumber(column_contents.width) then
-                                    self.colwidths[i] = publisher.current_grid:width_sp(column_contents.width)
-                                else
-                                    self.colwidths[i] = tex.sp(column_contents.width)
-                                end
-                                sum_real_widths = sum_real_widths + (self.colwidths[i] or 0)
+                                main.log(
+                                    "error",
+                                    string.format("Invalid column width %q", column_contents.width),
+                                    "help",
+                                    "use a length (2cm, 8em), grid cells (3), a percentage (25%), stars (2*, 1.5*, *), min, max or ?"
+                                )
+                                -- continue with 1* to keep the number of columns intact
+                                starcols[i] = 1
+                                count_stars = count_stars + 1
                             end
                         end
+                    else
+                        -- a column without a width (for example only for align) is
+                        -- sized by its contents, like width="?"
+                        autocols[i] = true
                     end
                     if column_contents.backgroundcolor then
                         self.backgroundcolumncolors[i] = column_contents.backgroundcolor
@@ -518,10 +612,37 @@ function tabular:calculate_columnwidth()
                 count_columns = i
             end
 
+            -- Percentages refer to the table width without the column separators, so
+            -- that columns adding up to 100% fill the table exactly.
+            local percent_base = self.tablewidth_target - (count_columns - 1) * self.colsep
+            for col, pct in pairs(percentcols) do
+                self.colwidths[col] = math.floor(percent_base * pct / 100 + 0.5)
+                sum_real_widths = sum_real_widths + self.colwidths[col]
+            end
+
+            -- minwidth is a lower bound for fixed widths as well
+            for col = 1, count_columns do
+                if self.colwidths[col] and minwidths[col] > self.colwidths[col] then
+                    sum_real_widths = sum_real_widths + minwidths[col] - self.colwidths[col]
+                    self.colwidths[col] = minwidths[col]
+                end
+            end
+
+            -- Next to star, min or max columns, a column sized by its contents
+            -- gets its natural width like a max column.
+            if next(autocols) and (has_min_or_max_width or count_stars > 0) then
+                for col in pairs(autocols) do
+                    col_shrink[col] = 1
+                end
+                has_min_or_max_width = true
+            elseif next(autocols) and has_width then
+                columnwidths_given = false
+            end
+
             -- if stretch="no", we don't need to stretch/shrink anything
             -- count_stars == 0 if there are only fixed width columns
             -- given in the <Column width="..."/>  setting.
-            if self.autostretch ~= "max" and count_stars == 0 and has_width then
+            if self.autostretch ~= "max" and count_stars == 0 and has_width and not next(autocols) then
                 self.tablewidth_target = sum_real_widths
             end
             if has_min_or_max_width then
@@ -537,19 +658,8 @@ function tabular:calculate_columnwidth()
                 -- now we know the number of *-columns and the sum of the fix columns, so that
                 -- we can distribute the remaining space
                 local to_distribute = self.tablewidth_target - sum_real_widths - (count_columns - 1) * self.colsep
-                i = 0
-                for _, column in ipairs(tr_contents) do
-                    if publisher.xml_helpers.elementname(column) == "Column" then
-                        local column_contents = publisher.xml_helpers.element_contents(column)
-                        i = i + 1
-                        local width_stars = string.match(column_contents.width, starpattern)
-                        if width_stars then
-                            local n = tonumber(width_stars, 10)
-                            if n and count_stars > 0 then
-                                self.colwidths[i] = math.floor((to_distribute * n / count_stars) + 0.5)
-                            end
-                        end
-                    end
+                for col, wd in pairs(distribute_stars(to_distribute, starcols, minwidths, true)) do
+                    self.colwidths[col] = wd
                 end
             end -- sum_* > 0
         end
@@ -615,28 +725,25 @@ function tabular:calculate_columnwidth()
     if has_min_or_max_width then
         local stretch = {}
         local sum_stretch = 0
-        local total_stars_width = self.width
-        local count_stars = 0
+        local total_stars_width = self.width - (#colmin - 1) * self.colsep
         for i = 1, #colmin do
             stretch[i] = 0
             if col_shrink[i] then
-                -- this column has min or max
+                -- this column has min or max. It is never narrower than its
+                -- content allows (the widest word or object) and minwidth.
+                local base = math.max(minwidths[i], colmin[i])
                 if col_shrink[i] == 1 then
-                    -- width="max"
-                    if colmax[i] > minwidths[i] then
-                        stretch[i] = colmax[i] - minwidths[i]
+                    -- width="max": grow up to the natural width
+                    if colmax[i] > base then
+                        stretch[i] = colmax[i] - base
                         sum_stretch = sum_stretch + stretch[i]
                     end
-                else
-                    -- width="min"
                 end
-                self.colwidths[i] = minwidths[i]
+                self.colwidths[i] = base
                 total_stars_width = total_stars_width - self.colwidths[i]
-            elseif starcols[i] then
-                count_stars = count_stars + starcols[i]
-            else
-                if i > #self.colwidths then
-                    main.log("error", "Something is wrong with the number of coumns in the table")
+            elseif not starcols[i] then
+                if not self.colwidths[i] then
+                    main.log("error", "Something is wrong with the number of columns in the table")
                     return
                 end
                 total_stars_width = total_stars_width - self.colwidths[i]
@@ -644,7 +751,7 @@ function tabular:calculate_columnwidth()
         end
         local sum_star_minwd = 0
         for i in pairs(starcols) do
-            sum_star_minwd = sum_star_minwd + colmin[i]
+            sum_star_minwd = sum_star_minwd + math.max(colmin[i], minwidths[i])
         end
         local overshoot
         local r = 1
@@ -660,11 +767,8 @@ function tabular:calculate_columnwidth()
                 self.colwidths[i] = self.colwidths[i] + stretch[i] * r
             end
         end
-        total_stars_width = total_stars_width / count_stars
-        for i = 1, #colmin do
-            if starcols[i] then
-                self.colwidths[i] = total_stars_width * starcols[i]
-            end
+        for col, wd in pairs(distribute_stars(total_stars_width, starcols, minwidths, false)) do
+            self.colwidths[col] = wd
         end
         return
     end
@@ -742,6 +846,14 @@ function tabular:calculate_columnwidth()
     end -- ∀ colspans
 
     -- Now colmin and colmax are calculated for all columns. colspans are included.
+
+    -- minwidth raises the limits of the columns that are sized by their contents
+    for i, minwd in pairs(minwidths) do
+        if minwd > 0 and not self.colwidths[i] and colmax[i] then
+            colmin[i] = math.max(colmin[i], minwd)
+            colmax[i] = math.max(colmax[i], minwd)
+        end
+    end
 
     -- Phase III: Stretch or shrink table
     -- ----------------------------------

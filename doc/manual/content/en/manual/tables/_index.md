@@ -227,6 +227,23 @@ In the previous examples the widths of the cells are automatically determined by
 ```
 
 Here it is specified that the table has three columns. The first column has a width of 2mm, the second and third columns divide the remaining width in a ratio of 1 to 3.
+The number before the star may have decimals (`1.5*`), a star on its own means `1*`.
+
+You can also specify column widths as a percentage of the table width:
+
+```xml
+<Table width="10cm" stretch="max">
+  <Columns>
+    <Column width="30%"/>
+    <Column width="2cm"/>
+    <Column width="*"/>
+  </Columns>
+  ...
+</Table>
+```
+
+The first column is 3cm wide, the second 2cm, and the third gets the rest (5cm).
+Percentages refer to the table width without the column distances (`columndistance`), so columns that add up to 100% fill the table exactly.
 
 Instead of a fixed width or a `*` specification, you can also specify the keywords `min` and `max`:
 
@@ -254,11 +271,11 @@ Instead of a fixed width or a `*` specification, you can also specify the keywor
 
 ![Effect of min and max for column specifications](/img/tab-min-max.png)
 
-`min` in the width specification means that the column will be as narrow as possible, `max` means that the column will be as wide as necessary.
+`min` in the width specification means that the column will be as narrow as possible, that is as wide as its widest word. `max` means that the column will be as wide as necessary, that is as wide as its content without line breaks. If there is not enough room for that, a `max` column gets narrower, but not narrower than its widest word. `min` and `max` can be combined with fixed widths, percentages and star widths.
 
-In addition to specifying `min` or `max` for column widths, you can also use `minwidth` to specify the minimum width of a column.
+In addition to specifying `min` or `max` for column widths, you can also use `minwidth` to specify the minimum width of a column. `minwidth` is a lower bound for every column width.
 
-The available space can also be calculated using the natural width of the content with a “?” specification for the column. This is useful in connection with fixed column specifications:
+The available space can also be calculated using the natural width of the content with a “?” specification for the column. This is useful in connection with fixed column specifications. With `stretch="max"` the `?` columns fill the table, without it they get their natural width. Next to star, `min` or `max` columns, `?` behaves like `max`, a `<Column>` without `width` counts as `?`:
 
 ```xml
 <PlaceObject>
@@ -287,6 +304,8 @@ The available space can also be calculated using the natural width of the conten
 ```
 
 ![With ?-columns the widths of some cells can be calculated while other cells have a fixed width.](/img/tab-questionmark.png)
+
+An example with all width settings is in the [examples repository](https://github.com/speedata/examples/tree/master/technical/columnwidths), an overview is in the how-to [Controlling column widths]({{< relref "/howto/columnwidths" >}}).
 
 In the `Column` command, you can also define further specifications for the column: the horizontal and vertical alignment and the background color can be specified. A specification for a cell overwrites the default.
 

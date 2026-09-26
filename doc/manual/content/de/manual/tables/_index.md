@@ -253,6 +253,23 @@ Der Befehl dazu lautet `Columns` und wird direkt als erster Befehl innerhalb von
 
 Hier wird festgelegt, dass die Tabelle drei Spalten hat.
 Die erste Spalte hat eine Breite von 2mm, die zweite und die dritte Spalte teilen sich die übrige Breite im Verhältnis von 1 zu 3 auf. Es wird die Anzahl der Stern-Angaben berechnet und dann wird er verfügbare Platz anhand der Spaltenangaben im Verhältnis aufgeteilt.
+Die Zahl vor dem Stern darf auch Nachkommastellen haben (`1.5*`), ein Stern allein steht für `1*`.
+
+Außerdem lassen sich Spaltenbreiten in Prozent der Tabellenbreite angeben:
+
+```xml
+<Table width="10cm" stretch="max">
+  <Columns>
+    <Column width="30%"/>
+    <Column width="2cm"/>
+    <Column width="*"/>
+  </Columns>
+  ...
+</Table>
+```
+
+Die erste Spalte ist 3cm breit, die zweite 2cm, die dritte erhält den Rest (5cm).
+Die Prozentangaben beziehen sich auf die Tabellenbreite ohne die Spaltenabstände (`columndistance`), so dass Spalten mit zusammen 100% die Tabelle genau füllen.
 
 Anstelle einer festen Breite oder eine Stern-Angabe kann man auch die Schlüsselwörter `min` und `max` angeben:
 
@@ -280,11 +297,11 @@ Anstelle einer festen Breite oder eine Stern-Angabe kann man auch die Schlüssel
 
 ![Auswirkung von min und max bei Spaltenangaben](/img/tab-min-max.png)
 
-`min` bei der Breitenangabe bedeutet dass die Spalte so schmal wie möglich wird, `max` bedeutet, dass die Spalte so breit wie nötig wird.
+`min` bei der Breitenangabe bedeutet, dass die Spalte so schmal wie möglich wird, also so breit wie ihr breitestes Wort. `max` bedeutet, dass die Spalte so breit wie nötig wird, also so breit wie ihr Inhalt ohne Umbruch. Reicht dafür der Platz nicht, wird eine `max`-Spalte schmaler, aber nicht schmaler als ihr breitestes Wort. `min` und `max` lassen sich mit festen Breiten, Prozent- und Sternangaben kombinieren.
 
-Zusätzlich zur Angabe von `min` oder `max` bei Spaltenbreiten kann man auch mit `minwidth` die minimale Breite einer Spalte bestimmen.
+Zusätzlich zur Angabe von `min` oder `max` bei Spaltenbreiten kann man auch mit `minwidth` die minimale Breite einer Spalte bestimmen. `minwidth` wirkt bei allen Spaltenbreiten als Untergrenze.
 
-Ebenso kann mit einer "?" Angabe bei der Spalte der verfügbare Platz anhand der natürlichen Breite der Inhalte berechnet werden. Das ist im Zusammenhang mit festen Spaltenangaben sinnvoll:
+Ebenso kann mit einer "?" Angabe bei der Spalte der verfügbare Platz anhand der natürlichen Breite der Inhalte berechnet werden. Das ist im Zusammenhang mit festen Spaltenangaben sinnvoll. Mit `stretch="max"` füllen die `?`-Spalten die Tabelle, ohne erhalten sie ihre natürliche Breite. Neben Stern-, `min`- oder `max`-Spalten verhält sich `?` wie `max`, eine `<Column>` ohne `width` gilt als `?`:
 
 ```xml
 <PlaceObject>
@@ -313,6 +330,8 @@ Ebenso kann mit einer "?" Angabe bei der Spalte der verfügbare Platz anhand der
 ```
 
 ![Angaben von ?-Spalten lässt die Breiten wieder dynamisch berechnen](/img/tab-questionmark.png)
+
+Ein Beispiel mit allen Breitenangaben liegt im [Beispiele-Repository](https://github.com/speedata/examples/tree/master/technical/columnwidths), eine Übersicht bietet die Anleitung [Spaltenbreiten steuern]({{< relref "/howto/columnwidths" >}}).
 
 Im Befehl `Column` kann man noch weitere Angaben für die Spalte festlegen: die horizontale und vertikale Ausrichtung und die Hintergrundfarbe können vorgegeben werden.
 Eine Angabe bei einer Zelle überschreibt die Vorgabe.

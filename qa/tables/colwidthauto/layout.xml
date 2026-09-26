@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+  xmlns:sd="urn:speedata:2009/publisher/functions/en">
+  <SetGrid width="5mm" height="12pt"/>
+  <Pageformat width="12cm" height="8cm"/>
+  <Pagetype name="p" test="true()">
+    <Margin left="1cm" right="1cm" top="1cm" bottom="1cm"/>
+  </Pagetype>
+  <DefineFontfamily name="small" fontsize="7" leading="8">
+    <Regular fontface="TeXGyreHeros-Regular"/>
+  </DefineFontfamily>
+  <Record element="data">
+    <!-- ? without stretch: natural widths -->
+    <PlaceObject column="1"><Table width="10cm" fontfamily="small" padding="1pt" >
+      <Columns>
+        <Column width="?"/>
+        <Column width="?"/>
+        <Column width="20mm"/>
+      </Columns>
+      <Tr valign="top"><Td border-left="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td><Td border-left="0.5pt"><Paragraph><Value>a medium text</Value></Paragraph></Td><Td border-left="0.5pt" border-right="0.5pt"><Paragraph><Value>a medium text</Value></Paragraph></Td></Tr>
+    </Table></PlaceObject>
+    <!-- ? with stretch=max: fill the table -->
+    <PlaceObject column="1"><Table width="10cm" fontfamily="small" padding="1pt" stretch="max">
+      <Columns>
+        <Column width="?"/>
+        <Column width="?"/>
+        <Column width="20mm"/>
+      </Columns>
+      <Tr valign="top"><Td border-left="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td><Td border-left="0.5pt"><Paragraph><Value>a medium text</Value></Paragraph></Td><Td border-left="0.5pt" border-right="0.5pt"><Paragraph><Value>a medium text</Value></Paragraph></Td></Tr>
+    </Table></PlaceObject>
+    <!-- ? next to a star: natural width, star gets the rest -->
+    <PlaceObject column="1"><Table width="10cm" fontfamily="small" padding="1pt" >
+      <Columns>
+        <Column width="?"/>
+        <Column width="1*"/>
+        <Column width="20mm"/>
+      </Columns>
+      <Tr valign="top"><Td border-left="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td><Td border-left="0.5pt"><Paragraph><Value>a long text that has to wrap because it is really long</Value></Paragraph></Td><Td border-left="0.5pt" border-right="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td></Tr>
+    </Table></PlaceObject>
+    <!-- ? next to max -->
+    <PlaceObject column="1"><Table width="10cm" fontfamily="small" padding="1pt" >
+      <Columns>
+        <Column width="max"/>
+        <Column width="20mm"/>
+        <Column width="?"/>
+      </Columns>
+      <Tr valign="top"><Td border-left="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td><Td border-left="0.5pt"><Paragraph><Value>a medium text</Value></Paragraph></Td><Td border-left="0.5pt" border-right="0.5pt"><Paragraph><Value>a long text that has to wrap because it is really long</Value></Paragraph></Td></Tr>
+    </Table></PlaceObject>
+    <!-- Column without width next to a star -->
+    <PlaceObject column="1"><Table width="10cm" fontfamily="small" padding="1pt" >
+      <Columns>
+        <Column align="left"/>
+        <Column width="1*"/>
+        <Column width="20mm"/>
+      </Columns>
+      <Tr valign="top"><Td border-left="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td><Td border-left="0.5pt"><Paragraph><Value>a long text that has to wrap because it is really long</Value></Paragraph></Td><Td border-left="0.5pt" border-right="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td></Tr>
+    </Table></PlaceObject>
+    <!-- em: 6em, 1*, 20mm -->
+    <PlaceObject column="1"><Table width="10cm" fontfamily="small" padding="1pt" >
+      <Columns>
+        <Column width="6em"/>
+        <Column width="1*"/>
+        <Column width="20mm"/>
+      </Columns>
+      <Tr valign="top"><Td border-left="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td><Td border-left="0.5pt"><Paragraph><Value>a long text that has to wrap because it is really long</Value></Paragraph></Td><Td border-left="0.5pt" border-right="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td></Tr>
+    </Table></PlaceObject>
+    <!-- minwidth on a star -->
+    <PlaceObject column="1"><Table width="10cm" fontfamily="small" padding="1pt" >
+      <Columns>
+        <Column width="1*" minwidth="40mm"/>
+        <Column width="1*"/>
+        <Column width="1*"/>
+      </Columns>
+      <Tr valign="top"><Td border-left="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td><Td border-left="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td><Td border-left="0.5pt" border-right="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td></Tr>
+    </Table></PlaceObject>
+    <!-- minwidth on a fixed width -->
+    <PlaceObject column="1"><Table width="10cm" fontfamily="small" padding="1pt" >
+      <Columns>
+        <Column width="20mm" minwidth="40mm"/>
+        <Column width="1*"/>
+        <Column width="1*"/>
+      </Columns>
+      <Tr valign="top"><Td border-left="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td><Td border-left="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td><Td border-left="0.5pt" border-right="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td></Tr>
+    </Table></PlaceObject>
+    <!-- minwidth on ? -->
+    <PlaceObject column="1"><Table width="10cm" fontfamily="small" padding="1pt" >
+      <Columns>
+        <Column width="?" minwidth="30mm"/>
+        <Column width="?"/>
+        <Column width="20mm"/>
+      </Columns>
+      <Tr valign="top"><Td border-left="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td><Td border-left="0.5pt"><Paragraph><Value>a medium text</Value></Paragraph></Td><Td border-left="0.5pt" border-right="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td></Tr>
+    </Table></PlaceObject>
+    <!-- min and stars with columndistance -->
+    <PlaceObject column="1"><Table width="10cm" fontfamily="small" padding="1pt" columndistance="5mm">
+      <Columns>
+        <Column width="min"/>
+        <Column width="1*"/>
+        <Column width="1*"/>
+      </Columns>
+      <Tr valign="top"><Td border-left="0.5pt"><Paragraph><Value>a medium text</Value></Paragraph></Td><Td border-left="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td><Td border-left="0.5pt" border-right="0.5pt"><Paragraph><Value>short</Value></Paragraph></Td></Tr>
+    </Table></PlaceObject>
+  </Record>
+</Layout>

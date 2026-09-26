@@ -45,7 +45,7 @@ Feste Breiten lassen sich in absoluten Maßen (`32mm`) oder in Rasterzellen (Zah
 
 ### Schritt 2: Der Rest per Sternangabe
 
-Die Anwendungsspalte bekommt `width="1*"`: Sternspalten teilen sich den Platz, der nach Abzug der festen Breiten übrig bleibt. Gibt es mehrere Sternspalten, wird im Verhältnis der Zahlen verteilt: `2*` erhält doppelt so viel wie `1*`. So entsteht die übliche Mischform: feste Breiten für alles Technische, Sternangaben für den Text.
+Die Anwendungsspalte bekommt `width="1*"`: Sternspalten teilen sich den Platz, der nach Abzug der festen Breiten übrig bleibt. Gibt es mehrere Sternspalten, wird im Verhältnis der Zahlen verteilt: `2*` erhält doppelt so viel wie `1*`. Die Zahlen dürfen Nachkommastellen haben (`1.5*`), ein Stern allein steht für `1*`. So entsteht die übliche Mischform: feste Breiten für alles Technische, Sternangaben für den Text.
 
 ### Schritt 3: Ausrichtung an der Spalte statt an der Zelle
 
@@ -116,9 +116,83 @@ Die Daten sind ein Ausschnitt aus dem Confixa-Bestand; neu ist das Attribut `app
 </data>
 ```
 
+## Variante: Anteile in Prozent
+
+Statt in absoluten Maßen lassen sich Spalten auch als Anteil der Tabellenbreite angeben. Das ist praktisch, wenn dieselbe Tabelle in verschiedenen Breiten vorkommt, etwa einspaltig und zweispaltig, und die Proportionen erhalten bleiben sollen:
+
+```xml
+<Columns>
+  <Column width="22%"/>
+  <Column width="16%"/>
+  <Column width="*"/>
+  <Column width="7%" align="right"/>
+  <Column width="12%" align="right"/>
+</Columns>
+```
+
+Die Prozentangaben beziehen sich auf die Tabellenbreite ohne die Spaltenabstände (`columndistance`); die Sternspalte erhält wie bisher den Rest, hier 43 %. Prozent, feste Breiten und Sterne lassen sich beliebig mischen. Allerdings schrumpfen prozentuale Spalten mit der Tabelle: Für Werte, die nicht umbrechen dürfen, sind feste Breiten die sicherere Wahl.
+
+## Variante: Breite nach Inhalt
+
+Feste Breiten müssen ausgemessen werden und passen nur, solange die Daten es tun. Soll sich eine Spalte nach ihrem Inhalt richten, gibt es die Schlüsselwörter `max` und `min` und das Attribut `minwidth`:
+
+* `max`: Die Spalte wird so breit wie ihr Inhalt ohne Umbruch (die natürliche Breite). Reicht der Platz nicht, wird sie schmaler, aber nie schmaler als ihr breitestes Wort.
+* `min`: Die Spalte wird so schmal wie ihr breitestes Wort, der Text bricht so oft wie möglich um.
+* `minwidth`: eine Untergrenze für die Spaltenbreite, zum Beispiel damit eine Spalte mit kurzen Werten nicht zu eng wirkt.
+
+`min` und `max` lassen sich mit festen Breiten, Prozent- und Sternangaben kombinieren, die Sternspalten erhalten den Rest:
+
+```xml
+<Columns>
+  <Column width="max"/>
+  <Column width="max" minwidth="20mm"/>
+  <Column width="*"/>
+  <Column width="max" align="right"/>
+  <Column width="max" align="right"/>
+</Columns>
+```
+
+Für die Artikelliste ist das eine Alternative zu den ausgemessenen Breiten aus Schritt 1: Artikelnummer, Abmessung, VE und Preis werden genau so breit wie nötig, der Anwendungstext erhält den Rest. Der Preis dafür: Die Breiten hängen von den Daten ab, zwei Tabellen mit denselben `<Columns>` haben keine gemeinsame Spaltenflucht mehr.
+
+Eine weitere Möglichkeit ist `?`. Solche Spalten werden wie bei einer Tabelle ohne `<Columns>` aus ihrem Inhalt berechnet, während die übrigen Spalten ihre feste Breite behalten. Mit `stretch="max"` teilen sich die `?`-Spalten den Platz, der nach den festen Breiten übrig bleibt, im Verhältnis ihrer natürlichen Breiten:
+
+```xml
+<Table stretch="max">
+  <Columns>
+    <Column width="32mm"/>
+    <Column width="?"/>
+    <Column width="?"/>
+  </Columns>
+  ...
+```
+
+Ohne `stretch="max"` erhalten die `?`-Spalten ihre natürliche Breite, die Tabelle kann dann schmaler sein als vorgegeben. Stehen in derselben Tabelle Stern-, `min`- oder `max`-Spalten, verhält sich `?` wie `max`. Eine `<Column>` ohne `width`, etwa nur mit `align`, gilt als `?`.
+
+## Alle Breitenangaben im Überblick
+
+| Angabe | Beispiel | Wirkung |
+| --- | --- | --- |
+| Länge | `32mm`, `1.5cm`, `40pt`, `8em` | feste Breite; `em` bezieht sich auf die Schriftgröße der Tabelle |
+| Zahl | `4`, `2.5` | feste Breite in Rasterzellen (siehe `<SetGrid>`) |
+| Prozent | `25%` | fester Anteil der Tabellenbreite ohne die Spaltenabstände |
+| Stern | `1*`, `2.5*`, `*` | Anteil am Platz, der nach allen anderen Spalten übrig bleibt |
+| `max` | | natürliche Breite des Inhalts, bei Platzmangel schmaler, aber nicht schmaler als das breiteste Wort |
+| `min` | | Breite des breitesten Worts |
+| `?` | | natürliche Breite des Inhalts; mit `stretch="max"` Anteil am Restplatz im Verhältnis der natürlichen Breiten |
+| `minwidth` | `minwidth="20mm"` | eigenes Attribut: Untergrenze für jede Spaltenbreite |
+
+Dazu gelten ein paar Regeln:
+
+* **Tabellenbreite**: Prozent- und Sternangaben beziehen sich auf die Breite der Tabelle. Sie wird mit `width` an `<Table>` angegeben, als Länge oder in Rasterzellen; ohne Angabe ist es die verfügbare Breite.
+* **Nur feste Breiten**: Enthalten die `<Columns>` nur Längen, Rasterzellen und Prozentangaben, ist die Tabelle genau so breit wie deren Summe, auch mit `stretch="max"`.
+* **Ohne `<Columns>`** berechnet der Publisher die Breiten aus den Inhalten; `stretch="max"` dehnt die Tabelle dann auf die volle Breite.
+* **Eine `<Column>` ohne `width`** wird wie `?` aus ihrem Inhalt berechnet.
+* **`minwidth`** gilt für alle Angaben: Eine feste Breite wird auf `minwidth` angehoben, bei Sternspalten wird der übrige Platz unter den anderen Sternspalten verteilt.
+
 ## Grenzen
 
-* **Inhaltsabhängige Breiten**: Neben festen und Sternbreiten gibt es die Schlüsselwörter `min` und `max`, die Angabe `?` (natürliche Breite) und `minwidth` als Untergrenze. Diese Feinheiten beschreibt das Handbuchkapitel [Tabellen, Abschnitt Spaltenbreiten]({{< relref "/manual/tables#angabe-der-spaltenbreiten" >}}).
 * **Der Text passt trotzdem nicht**: Wird die Sternspalte zu schmal, hilft nur kürzen, kleiner setzen oder die Silbentrennung prüfen (Attribut `language`); eine Tabelle, die breiter deklariert ist als der Satzspiegel, ragt über den Rand hinaus.
-* **Gleiche Spaltenflucht über Tabellen hinweg** bekommt man, indem alle Tabellen dieselbe `<Columns>`-Deklaration verwenden; bei nur einer Sternspalte sind die Breiten dann in allen Tabellen identisch.
+* **Gleiche Spaltenflucht über Tabellen hinweg** bekommt man, indem alle Tabellen dieselbe `<Columns>`-Deklaration verwenden; bei nur einer Sternspalte sind die Breiten dann in allen Tabellen identisch. Bei gleicher Tabellenbreite gilt das auch für Prozentangaben.
+* Weitere Beispiele mit Abbildungen enthält das Handbuchkapitel [Tabellen, Abschnitt Spaltenbreiten]({{< relref "/manual/tables#angabe-der-spaltenbreiten" >}}).
+* Ein Beispiel mit allen Breitenangaben (Prozent, Sterne, `min`, `max`, `minwidth` und `?`) liegt im [Beispiele-Repository](https://github.com/speedata/examples/tree/master/technical/columnwidths).
 * Referenz: [`<Columns>`]({{< relref "/reference/commands/columns" >}}) und [`<Column>`]({{< relref "/reference/commands/column" >}}).

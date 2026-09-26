@@ -1193,7 +1193,7 @@
          </optional>
          <optional>
             <attribute name="minwidth">
-               <a:documentation>Minimum width of the column. Argument can be a number (in grid cells) or a length (e.g. 2cm).</a:documentation>
+               <a:documentation>Minimum width of the column. Argument can be a number (in grid cells) or a length (e.g. 2cm). Applies to all kinds of column widths.</a:documentation>
             </attribute>
          </optional>
          <optional>
@@ -1208,7 +1208,7 @@
          </optional>
          <optional>
             <attribute name="width">
-               <a:documentation>Width of the column. Argument can be a number (in grid cells) a length (e.g. 2cm), a *-number (e.g. 4*) or the keyword min or max.</a:documentation>
+               <a:documentation>Width of the column. Argument can be a number (in grid cells), a length (e.g. 2cm), a percentage of the table width (e.g. 25%), a *-number (e.g. 4*, 1.5* or just *), the keyword min (width of the widest word) or max (natural width of the content) or ? (natural width of the content, with stretch=&#34;max&#34; a share of the remaining width in the ratio of the natural widths). Lengths in em refer to the font size of the table. A column without width is treated like ?.</a:documentation>
             </attribute>
          </optional>
          <optional>
