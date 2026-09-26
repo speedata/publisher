@@ -725,7 +725,11 @@ See https://github.com/speedata/publisher/issues/310 for details.
 
 		if run(ep, cmdline, env) < 0 {
 			exitstatus = -1
-		} else if !runsFromCommandline {
+		}
+		// The status file is written even if the publisher exits with an
+		// error, so the runs setting from the layout is honored in that case
+		// as well.
+		if !runsFromCommandline {
 			if layoutruns := runsFromStatusFile(jobname); layoutruns > 0 {
 				runs = layoutruns
 			}
