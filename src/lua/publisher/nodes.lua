@@ -827,23 +827,25 @@ end
 -- Remove the first \n in a paragraph value table. See #132
 -- Removes leading whitespace-only entries from a paragraph table.
 ---@param tbl table Paragraph table (array of segments).
+---@param keeptabs? boolean Keep leading tabs (tab stops).
 ---@return boolean? done True when a segment was cleaned.
-function M.remove_first_whitespace(tbl)
+function M.remove_first_whitespace(tbl, keeptabs)
+    local pattern = keeptabs and "^\n*(.-)$" or "^[\n\t]*(.-)$"
     if publisher.xpath.is_attribute(tbl) then
-        tbl.value = string.gsub(tbl.value, "^[\n\t]*(.-)$", "%1")
+        tbl.value = string.gsub(tbl.value, pattern, "%1")
         return true
     end
     for i = 1, #tbl do
         if type(tbl[i]) == "string" then
-            tbl[i] = string.gsub(tbl[i], "^[\n\t]*(.-)$", "%1")
+            tbl[i] = string.gsub(tbl[i], pattern, "%1")
             return true
         end
         if type(tbl[i]) == "table" then
             local ret
             if tbl[i].contents and type(tbl[i].contents) == "table" then
-                ret = M.remove_first_whitespace(tbl[i].contents)
+                ret = M.remove_first_whitespace(tbl[i].contents, keeptabs)
             else
-                ret = M.remove_first_whitespace(tbl[i])
+                ret = M.remove_first_whitespace(tbl[i], keeptabs)
             end
             if ret then
                 return true
@@ -855,28 +857,32 @@ end
 -- Remove the final \n in a paragraph value table. See #132
 -- Removes trailing whitespace-only entries from a paragraph table.
 ---@param tbl table Paragraph table.
+---@param keeptabs? boolean Keep trailing tabs (tab stops).
 ---@return boolean? done True when a segment was cleaned.
-function M.remove_last_whitespace(tbl)
+function M.remove_last_whitespace(tbl, keeptabs)
+    local pattern = keeptabs and "^(.-)\n*$" or "^(.-)[\n\t]*$"
+    -- with tab stops, a string of tabs is content (e.g. a line of leaders)
+    local blank = keeptabs and "^[^%S\t]*$" or "^%s*$"
     for i = #tbl, 1, -1 do
         if type(tbl[i]) == "string" then
-            if string.match(tbl[i], "^%s*$") then
+            if string.match(tbl[i], blank) then
                 table.remove(tbl, i)
             else
-                tbl[i] = string.gsub(tbl[i], "^(.-)[\n\t]*$", "%1")
+                tbl[i] = string.gsub(tbl[i], pattern, "%1")
             end
             return true
         end
         if type(tbl[i]) == "table" then
             local ret
             if tbl[i].contents and type(tbl[i].contents) == "table" then
-                ret = M.remove_last_whitespace(tbl[i].contents)
+                ret = M.remove_last_whitespace(tbl[i].contents, keeptabs)
             else
                 local tic = tbl[i].contents
                 -- the last contents could be an image for example. See #342
                 if type(tic) == "userdata" then
                     ret = true
                 else
-                    ret = M.remove_last_whitespace(tbl[i])
+                    ret = M.remove_last_whitespace(tbl[i], keeptabs)
                 end
             end
             return ret
@@ -1226,7 +1232,12 @@ function M.hbglyphlist(arguments)
         end
 
         -- FIXME cp == 0 doesn't look right
-        local tabregularspace = (cp == 0 and cluster[thisglyph.cluster] == 9 and parameter.tab ~= "hspace")
+        local tabregularspace = (
+            cp == 0
+            and cluster[thisglyph.cluster] == 9
+            and parameter.tab ~= "hspace"
+            and not parameter.tabstops
+        )
         -- skip double space
         if
             i > 1
@@ -1378,7 +1389,14 @@ function M.hbglyphlist(arguments)
         elseif cp == 0 then
             local code = cluster[thisglyph.cluster]
             if code == 9 then
-                if parameter.tab == "hspace" then
+                if parameter.tabstops then
+                    -- the tab stops set its width, this is the width it
+                    -- keeps once the stops run out
+                    local tabglue = set_glue(nil, { width = space })
+                    node_set_attribute(tabglue, publisher.att_tab, 1)
+                    node_set_attribute(tabglue, att_fontfamily, fontfamily)
+                    list, cur = node.insert_after(list, cur, tabglue)
+                elseif parameter.tab == "hspace" then
                     local tabglue = set_glue(nil, { width = 0, stretch = 2 ^ 16, stretch_order = 3 })
                     list, cur = node.insert_after(list, cur, tabglue)
                 else
@@ -2061,7 +2079,8 @@ function M.fix_justification(nodelist, alignment, _parent, direction)
 
     local head = nodelist
     while head do
-        if head.id == 0 then -- hlist
+        -- a line with tab stops is already set from the start edge
+        if head.id == 0 and not node.has_attribute(head, publisher.att_tab) then -- hlist
             -- we are on a line now. We assume that the spacing needs correction.
             -- The goal depends on the current line (par shape!)
             local goal

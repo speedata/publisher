@@ -1,0 +1,19 @@
+<data>
+  <contents>
+    <line>1&#9;Introduction&#9;3</line>
+    <line>2.1&#9;Tab stops and a rather long title that wraps onto the next line&#9;12</line>
+    <line>3&#9;Index&#9;121</line>
+  </contents>
+  <form>
+    <line>Name &#9; Alice Example</line>
+    <line>Address &#9; Bob Street 12, 12345 Sample City, a long address to see the wrap</line>
+    <line>E-mail &#9; alice@example.com</line>
+  </form>
+  <prices>
+    <line>Item&#9;Net&#9;Gross</line>
+    <line>Coffee&#9;3,50&#9;4,17</line>
+    <line>Cake&#9;12,00&#9;14,28</line>
+    <line>Water&#9;1&#9;1,19</line>
+  </prices>
+  <captions>&#9;Place, date&#9;Signature</captions>
+</data>

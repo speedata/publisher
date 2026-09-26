@@ -1825,6 +1825,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="tab-stops">
+               <a:documentation>Tabulatoren: Ein Tabulatorzeichen (&amp;#9;) rückt den folgenden Text zum nächsten Tabstopp. Eine durch Kommas getrennte Liste von Tabstopps, jeweils mit einer Position (Länge oder Prozentangabe der Textbreite, gemessen vom Anfang des Absatzes), optional gefolgt von einer Ausrichtung (left, right, center, decimal oder decimal(&#39;,&#39;)) und einer Füllung wie leader(&#39;.&#39;). Beispiel: tab-stops=&#34;10mm, 100% right leader(&#39;.&#39;)&#34;. Leerzeichen neben einem Tabulator werden entfernt. Gibt es in der Zeile keinen weiteren Tabstopp, ist der Tabulator ein normales Leerzeichen.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="html-vertical-spacing">
                <a:documentation>Setze den vertikalen Abstand für HTML Inhalte. Voreinstellung ist »off«.</a:documentation>
                <choice>

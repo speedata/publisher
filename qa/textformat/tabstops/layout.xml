@@ -1,0 +1,37 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat height="12cm" width="10cm"/>
+    <Options mainlanguage="German"/>
+    <DefineTextformat name="contents" alignment="leftaligned" tab-stops="8mm, 100% right leader(' . ')"/>
+    <DefineTextformat name="form" tab-stops="25mm"/>
+    <DefineTextformat name="prices" alignment="leftaligned" tab-stops="45mm decimal(','), 75mm decimal(',')"/>
+    <DefineTextformat name="signature" alignment="leftaligned" tab-stops="40% leader('_'), 60%, 100% leader('_')"/>
+    <DefineTextformat name="captions" alignment="centered" tab-stops="20% center, 80% center"/>
+    <Record element="data">
+        <PlaceObject column="1" row="1">
+            <Textblock width="8cm">
+                <ForAll select="contents/line">
+                    <Paragraph textformat="contents">
+                        <Value select="string(.)"/>
+                    </Paragraph>
+                </ForAll>
+                <ForAll select="form/line">
+                    <Paragraph textformat="form">
+                        <Value select="string(.)"/>
+                    </Paragraph>
+                </ForAll>
+                <ForAll select="prices/line">
+                    <Paragraph textformat="prices">
+                        <Value select="string(.)"/>
+                    </Paragraph>
+                </ForAll>
+                <Paragraph textformat="signature">
+                    <Value>&#9;&#9;&#9;</Value>
+                </Paragraph>
+                <Paragraph textformat="captions">
+                    <Value select="string(captions)"/>
+                </Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

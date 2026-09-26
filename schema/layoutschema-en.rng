@@ -1825,6 +1825,11 @@
             </attribute>
          </optional>
          <optional>
+            <attribute name="tab-stops">
+               <a:documentation>Tab stops: a tab character (&amp;#9;) moves the text after it to the next stop. A comma separated list of stops, each with a position (a length or a percentage of the text width, measured from the start of the paragraph), optionally followed by an alignment (left, right, center, decimal or decimal(&#39;,&#39;)) and a leader such as leader(&#39;.&#39;). Example: tab-stops=&#34;10mm, 100% right leader(&#39;.&#39;)&#34;. Spaces next to a tab are removed. When there are no more stops on the line, the tab is an ordinary space.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
             <attribute name="html-vertical-spacing">
                <a:documentation>Set the vertical spacing for HTML contents. Defaults to “off”.</a:documentation>
                <choice>

@@ -1138,6 +1138,7 @@ function commands.define_textformat(layoutxml, dataxml)
     local paddingtop = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "padding-top", "string")
     local rows = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "rows", "number")
     local tab = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "tab", "string")
+    local tabstops = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "tab-stops", "string")
     local widow = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "widow", "booleanornumber", false)
     local fmt = {
         colpaddingtop = colpaddingtop,
@@ -1225,6 +1226,9 @@ function commands.define_textformat(layoutxml, dataxml)
     end
 
     fmt.tab = tab
+    if tabstops then
+        fmt.tabstops = publisher.tabstops.parse(tabstops)
+    end
 
     if filllastline then
         fmt.filllastline = filllastline

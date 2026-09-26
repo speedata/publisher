@@ -793,9 +793,6 @@ function Par:format(width_sp, options, data)
         end
     end
 
-    publisher.nodes.remove_first_whitespace(self)
-    publisher.nodes.remove_last_whitespace(self)
-
     local current_textformat = self.textformat or options.textformat
     if not current_textformat then
         if self.textformat or options.textformat then
@@ -803,7 +800,11 @@ function Par:format(width_sp, options, data)
         end
         current_textformat = publisher.textformats.text
     end
+
+    publisher.nodes.remove_first_whitespace(self, current_textformat.tabstops ~= nil)
+    publisher.nodes.remove_last_whitespace(self, current_textformat.tabstops ~= nil)
     options.tab = current_textformat.tab
+    options.tabstops = current_textformat.tabstops ~= nil
 
     self:mknodelist(options, data)
 
@@ -1143,6 +1144,27 @@ function Par:format(width_sp, options, data)
             tail = node.tail(nodelist)
         end
 
+        local tabstops = tf.tabstops
+        if nodelist and tabstops then
+            local hangindent, hangafter, parshape = parameter.hangindent, parameter.hangafter, parameter.parshape
+            local inset = function(row)
+                if parshape then
+                    return (parshape[row] or parshape[#parshape])[1]
+                end
+                if (hangafter < 0 and row <= -hangafter) or (hangafter >= 0 and row > hangafter) then
+                    return hangindent
+                end
+                return 0
+            end
+            local measure = function(row)
+                if parshape then
+                    return (parshape[row] or parshape[#parshape])[2]
+                end
+                return width_sp - inset(row)
+            end
+            nodelist = publisher.tabstops.prepare(nodelist, tabstops, width_sp, inset, measure)
+        end
+
         if nodelist == nil then
             -- ignore
         else
@@ -1159,6 +1181,9 @@ function Par:format(width_sp, options, data)
                 tex.pdfadjustspacing = 0
                 tex.adjustspacing = 0
                 nodelist = publisher.nodes.do_linebreak(nodelist, width_sp, parameter)
+                if tabstops then
+                    publisher.tabstops.set_lines(nodelist, tabstops, width_sp, true)
+                end
 
                 parameter.tolerance = save_tolerance
                 parameter.hyphenpenalty = save_hyphenpenalty
@@ -1168,6 +1193,9 @@ function Par:format(width_sp, options, data)
                 publisher.nodes.fix_justification(nodelist, tf_alignment, nil, prop_pardir)
             else
                 nodelist = publisher.nodes.do_linebreak(nodelist, width_sp, parameter)
+                if tabstops then
+                    publisher.tabstops.set_lines(nodelist, tabstops, width_sp, false)
+                end
             end
 
             if thispaddingleft > 0 then

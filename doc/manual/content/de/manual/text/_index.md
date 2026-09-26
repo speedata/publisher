@@ -4,13 +4,14 @@ weight: 50
 type: docs
 ---
 
-Alles rund um Textausgabe: Formatierung, Schriftarten, Silbentrennung und Listen.
+Alles rund um Textausgabe: Formatierung, Schriftarten, Silbentrennung, Tabulatoren und Listen.
 
 {{< cards >}}
   {{< card link="textformatting" title="Textformatierung" subtitle="Fett, kursiv, Farben, Hochstellung und mehr" >}}
   {{< card link="fonts" title="Schriften" subtitle="Schriften laden und verwenden" >}}
   {{< card link="textformat" title="Textformate" subtitle="Wiederverwendbare Absatzformate definieren" >}}
   {{< card link="hyphenationlanguage" title="Silbentrennung & Sprache" subtitle="Spracheinstellungen und Silbentrennung" >}}
+  {{< card link="tabstops" title="Tabulatoren" subtitle="Text an Tabstopps ausrichten, mit Füllpunkten" >}}
   {{< card link="lists" title="Aufzählungslisten" subtitle="Nummerierte und unnummerierte Listen" >}}
   {{< card link="math" title="Mathematische Formeln" subtitle="Formeln in MathML-Notation setzen" >}}
 {{< /cards >}}

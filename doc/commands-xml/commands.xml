@@ -3923,6 +3923,14 @@
         </description>
       </choice>
     </attribute>
+    <attribute en="tab-stops" type="text" optional="yes" since="5.9.8">
+      <description xml:lang="en">
+        <para>Tab stops: a tab character (&amp;#9;) moves the text after it to the next stop. A comma separated list of stops, each with a position (a length or a percentage of the text width, measured from the start of the paragraph), optionally followed by an alignment (<tt>left</tt>, <tt>right</tt>, <tt>center</tt>, <tt>decimal</tt> or <tt>decimal(',')</tt>) and a leader such as <tt>leader('.')</tt>. Example: <tt>tab-stops="10mm, 100% right leader('.')"</tt>. Spaces next to a tab are removed. When there are no more stops on the line, the tab is an ordinary space.</para>
+      </description>
+      <description xml:lang="de">
+        <para>Tabulatoren: Ein Tabulatorzeichen (&amp;#9;) rückt den folgenden Text zum nächsten Tabstopp. Eine durch Kommas getrennte Liste von Tabstopps, jeweils mit einer Position (Länge oder Prozentangabe der Textbreite, gemessen vom Anfang des Absatzes), optional gefolgt von einer Ausrichtung (<tt>left</tt>, <tt>right</tt>, <tt>center</tt>, <tt>decimal</tt> oder <tt>decimal(',')</tt>) und einer Füllung wie <tt>leader('.')</tt>. Beispiel: <tt>tab-stops="10mm, 100% right leader('.')"</tt>. Leerzeichen neben einem Tabulator werden entfernt. Gibt es in der Zeile keinen weiteren Tabstopp, ist der Tabulator ein normales Leerzeichen.</para>
+      </description>
+    </attribute>
     <attribute en="html-vertical-spacing" optional="yes" since="4.1.6">
       <description xml:lang="en">
         <para>Set the vertical spacing for HTML contents. Defaults to “off”.</para>

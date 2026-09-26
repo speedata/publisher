@@ -229,6 +229,8 @@ M.att_tablenewpage = 801
 
 -- mknodes
 M.att_newline = 900
+-- a tab with tab stops (DefineTextformat tab-stops)
+M.att_tab = 901
 
 -- PDF/UA - tagged PDF
 M.att_role = 1000
@@ -744,6 +746,7 @@ M.lowercase = false
 ---@field hyphenchar? string Hyphenation character override.
 ---@field htmlverticalspacing? string Vertical spacing mode for HTML ("inner", ...).
 ---@field tab? any Tab handling configuration.
+---@field tabstops? TabStop[] Parsed tab-stops attribute.
 
 -- Text formats is a hash with arbitrary names as keys and the values
 -- are tables with alignment and indent. indent is the amount of
@@ -2685,5 +2688,6 @@ M.fontfamilies = require("publisher.fontfamilies")
 M.dispatch = require("publisher.dispatch")
 M.nodes = require("publisher.nodes")
 M.math = require("publisher.math")
+M.tabstops = require("publisher.tabstops")
 
 return M

@@ -30,7 +30,7 @@ return {
     ["DefineFontalias"] = {["alias"] = true, ["existing"] = true },
     ["DefineFontfamily"] = {["fontsize"] = true, ["leading"] = true, ["name"] = true, ["scriptsize"] = true, ["subshift"] = true, ["supershift"] = true },
     ["DefineMatter"] = {["name"] = true, ["prefix"] = true, ["label"] = true, ["resetafter"] = true, ["resetbefore"] = true },
-    ["DefineTextformat"] = {["alignment"] = true, ["border-top"] = true, ["border-bottom"] = true, ["break-before"] = true, ["break-below"] = true, ["column-padding-top"] = true, ["cssfontsize"] = true, ["fill-last-line"] = true, ["hyphenchar"] = true, ["hyphenate"] = true, ["indentation"] = true, ["letter-spacing"] = true, ["margin-bottom"] = true, ["margin-top"] = true, ["margin-top-box-start"] = true, ["name"] = true, ["orphan"] = true, ["padding-top"] = true, ["rows"] = true, ["tab"] = true, ["html-vertical-spacing"] = true, ["widow"] = true },
+    ["DefineTextformat"] = {["alignment"] = true, ["border-top"] = true, ["border-bottom"] = true, ["break-before"] = true, ["break-below"] = true, ["column-padding-top"] = true, ["cssfontsize"] = true, ["fill-last-line"] = true, ["hyphenchar"] = true, ["hyphenate"] = true, ["indentation"] = true, ["letter-spacing"] = true, ["margin-bottom"] = true, ["margin-top"] = true, ["margin-top-box-start"] = true, ["name"] = true, ["orphan"] = true, ["padding-top"] = true, ["rows"] = true, ["tab"] = true, ["tab-stops"] = true, ["html-vertical-spacing"] = true, ["widow"] = true },
     ["Element"] = {["name"] = true },
     ["Fallback"] = {["filename"] = true },
     ["Fontface"] = {["fontfamily"] = true },

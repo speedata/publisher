@@ -1599,6 +1599,11 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="tab-stops">
+        <xs:annotation>
+          <xs:documentation>Tab stops: a tab character (&amp;#9;) moves the text after it to the next stop. A comma separated list of stops, each with a position (a length or a percentage of the text width, measured from the start of the paragraph), optionally followed by an alignment (left, right, center, decimal or decimal(',')) and a leader such as leader('.'). Example: tab-stops="10mm, 100% right leader('.')". Spaces next to a tab are removed. When there are no more stops on the line, the tab is an ordinary space.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="html-vertical-spacing">
         <xs:annotation>
           <xs:documentation>Set the vertical spacing for HTML contents. Defaults to “off”.</xs:documentation>

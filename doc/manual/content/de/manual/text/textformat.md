@@ -27,6 +27,7 @@ Die einzelnen Parameter werden in der Referenz unter [`<DefineTextformat>`]({{< 
 |`orphan`, `widow`|Schusterjungen/Hurenkinder verhindern
 |`rows`|Anzahl der eingerückten Zeilen
 |`tab`|Verhalten bei Tabulator (`space`/`hspace`)
+|`tab-stops`|Tabstopps, siehe [Tabulatoren]({{< relref "tabstops" >}})
 
 
 Das Textformat mit dem Namen `text` ist im Publisher vorgegeben und wird an allen Stellen benutzt, wo kein anderes Textformat angegeben wird.

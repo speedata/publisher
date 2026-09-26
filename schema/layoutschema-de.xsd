@@ -1599,6 +1599,11 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
+      <xs:attribute name="tab-stops">
+        <xs:annotation>
+          <xs:documentation>Tabulatoren: Ein Tabulatorzeichen (&amp;#9;) rückt den folgenden Text zum nächsten Tabstopp. Eine durch Kommas getrennte Liste von Tabstopps, jeweils mit einer Position (Länge oder Prozentangabe der Textbreite, gemessen vom Anfang des Absatzes), optional gefolgt von einer Ausrichtung (left, right, center, decimal oder decimal(',')) und einer Füllung wie leader('.'). Beispiel: tab-stops="10mm, 100% right leader('.')". Leerzeichen neben einem Tabulator werden entfernt. Gibt es in der Zeile keinen weiteren Tabstopp, ist der Tabulator ein normales Leerzeichen.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
       <xs:attribute name="html-vertical-spacing">
         <xs:annotation>
           <xs:documentation>Setze den vertikalen Abstand für HTML Inhalte. Voreinstellung ist »off«.</xs:documentation>

@@ -27,6 +27,7 @@ The individual parameters are described in the reference under [`<DefineTextform
 |`orphan`, `widow`|Prevent orphans/widows
 |`rows`|Number of indented rows
 |`tab`|Tab character behavior (`space`/`hspace`)
+|`tab-stops`|Tab stops, see [Tab stops]({{< relref "tabstops" >}})
 
 The text format called text is predefined in the Publisher and is used in all places where no other text format is specified. It is defined as follows:
 
