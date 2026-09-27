@@ -1,5 +1,9 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.9">
+    <entry version="5.9.9" date="2026-09-27" sha1="0aab65d3">
+        <en summary="The grid in the foreground is no longer shifted.">With <tt>&lt;Trace grid="yes" gridlocation="foreground"&gt;</tt> the grid was shifted as soon as the page contained a box, a frame, a group or a graphic. The grid is now always drawn at the correct position.</en>
+        <de summary="Das Raster im Vordergrund wird nicht mehr verschoben.">Bei <tt>&lt;Trace grid="yes" gridlocation="foreground"&gt;</tt> wurde das Raster verschoben, sobald die Seite eine Box, einen Rahmen, eine Gruppe oder eine Grafik enthielt. Das Raster wird jetzt immer an der richtigen Stelle gezeichnet.</de>
+    </entry>
     <entry version="5.9.8" date="2026-09-26" sha1="036c3bf3">
         <en summary="Options runs=&quot;…&quot; now also applies when an error occurs.">The number of runs set with <tt>runs</tt> on <tt>&lt;Options&gt;</tt> was ignored as soon as the publisher reported an error, so only one run was made. The requested number of runs is now made in this case as well.</en>
         <de summary="Options runs=&quot;…&quot; gilt jetzt auch, wenn ein Fehler auftritt.">Die mit <tt>runs</tt> bei <tt>&lt;Options&gt;</tt> festgelegte Anzahl der Durchläufe wurde ignoriert, sobald der Publisher einen Fehler meldete, es gab dann nur einen Durchlauf. Die gewünschte Anzahl an Durchläufen wird jetzt auch in diesem Fall ausgeführt.</de>
