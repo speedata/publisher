@@ -1118,11 +1118,18 @@ end
 ---@return Node nodelist Wrapped node list ready for `tex.shipout`.
 function M.dothingsafteroutput(thispage, nodelist)
     if publisher.options.showgrid and publisher.options.gridlocation == "foreground" then
+        -- The grid is drawn in absolute page coordinates. A page mode literal
+        -- would use the origin left behind by the page contents (every origin
+        -- mode literal moves it), so set the origin explicitly: an origin mode
+        -- literal at the lower left corner of the page.
         local cg = thispage.grid
         local lit = node.new("whatsit", "pdf_literal")
-        lit.mode = 1
+        lit.mode = 0
         lit.data = cg:draw_grid()
-        node.insert_after(nodelist, nodelist, lit)
+        local k = node.new("kern")
+        k.kern = tex.pageheight - nodelist.height - nodelist.depth
+        node.insert_after(nodelist, nodelist, k)
+        node.insert_after(nodelist, k, node.hpack(lit))
         nodelist = node.vpack(nodelist)
     end
     return nodelist

@@ -1,0 +1,23 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+	xmlns:sd="urn:speedata:2009/publisher/functions/en">
+	<!-- Foreground grid must stay at the page origin, also after boxes and groups (#739) -->
+	<Trace grid="yes" gridlocation="foreground" />
+	<Pageformat width="120mm" height="100mm" />
+	<SetGrid width="5mm" height="5mm" />
+
+	<Record element="data">
+		<PlaceObject column="3" row="2">
+			<Box width="4" height="3" background-color="gray" />
+		</PlaceObject>
+
+		<Group name="group">
+			<Grid width="5mm" height="5mm" />
+			<Contents>
+				<PlaceObject column="1" row="1" frame="solid" framecolor="black" rulewidth="1pt">
+					<Box width="3" height="3" background-color="lightgray" />
+				</PlaceObject>
+			</Contents>
+		</Group>
+		<PlaceObject groupname="group" column="10" row="8" />
+	</Record>
+</Layout>
