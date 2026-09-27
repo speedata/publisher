@@ -446,7 +446,7 @@ document.addEventListener("DOMContentLoaded", function () {
       results.push({
         _boost: boost,
         _page_rk: i,
-        route: bestUrl || crumb,
+        route: bestUrl || pageRoute,
         prefix: crumb,
         children: { title, content: bestDisplayText }
       });

@@ -50,7 +50,7 @@
 {{- $headingKeys := $s.Get "keys" -}}
 {{- $headingTitles := $s.Get "titles" -}}
 
-{{- $content := $page.Content | htmlUnescape -}}
+{{- $content := $page.Content -}}
 {{- $len := len $headingKeys -}}
 {{- $data := dict -}}
 
