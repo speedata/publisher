@@ -21,7 +21,7 @@ This command is used to attach a file to the PDF. The type is the [mime type](ht
 
 ![attachfile.png](/img/attachfile.png)
 
-## Attach ZUGFeRD / Factur-X invoices {{< profeature "Available in the Pro plan" >}}
+## Attach ZUGFeRD / Factur-X invoices {{< profeature "Available in the Pro plan" >}} {#attach-zugferd-factur-x-invoices}
 
 To attach an electronic invoice, the value at type must be exactly the string `ZUGFeRD invoice`:
 

@@ -34,7 +34,7 @@ Quality (pixel number) of the images
 Fonts
 : The Publisher automatically embeds all used fonts in the PDF (subsetting - only the actually used letters and characters are embedded).
 
-## Crop marks {{< profeature "Available in the Pro plan" >}}
+## Crop marks {{< profeature "Available in the Pro plan" >}} {#crop-marks}
 
 If no special setting is made, the speedata Publisher creates a PDF which has exactly the size of the specified pages.
 To switch on bleed or crop marks, these must be activated in the element [`<Options>`]({{< relref "/reference/commands/options" >}}):

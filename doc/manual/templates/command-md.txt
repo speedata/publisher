@@ -4,7 +4,7 @@ weight: {{ .Weight }}
 type: docs
 ---
 
-# `{{ .Command.Name }}`{{ if .Command.Pro }} {{`{{< profeature "`}}{{ translate $.Lang "profeature tooltip" }}{{`" >}}`}}{{ end }}
+# `{{ .Command.Name }}`{{ if .Command.Pro }} {{`{{< profeature "`}}{{ translate $.Lang "profeature tooltip" }}{{`" >}} {#`}}{{ .Command.Mdlink }}{{`}`}}{{ end }}
 {{ with .Command.Since }}_{{ translate $.Lang "since version" }} {{ . }}_{{ end }}
 
 {{ .Command.DescriptionMarkdown .Lang }}

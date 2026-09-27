@@ -308,7 +308,7 @@ Mit dem Befehl Transformation können Objekte auch gespiegelt werden. Das kann m
 
 Erlaubt sind die Werte `none`, `horizontal`, `vertical` und `both`.
 
-## Barcodes, QR-Codes {{< profeature "Verfügbar im PRO-Paket" >}}
+## Barcodes, QR-Codes {{< profeature "Verfügbar im PRO-Paket" >}} {#barcodes-qr-codes}
 
 Barcodes bzw. QR-Codes werden über den Befehl `<Barcode>` eingebunden:
 

@@ -22,7 +22,7 @@ Mit diesem Befehl hängt man eine Datei an das PDF an. Der Typ ist der [Mime-Typ
 
 ![So zeigt der Adobe Acrobat die angehängten Dateien an](/img/attachfile.png)
 
-## ZUGFeRD /Factur-X Rechnungen anhängen {{< profeature "Verfügbar im PRO-Paket" >}}
+## ZUGFeRD /Factur-X Rechnungen anhängen {{< profeature "Verfügbar im PRO-Paket" >}} {#zugferd-factur-x-rechnungen-anhängen}
 
 Um eine elektronische Rechnung anzuhängen, muss der Wert bei `type` genau die Zeichenkette `ZUGFeRD invoice` sein:
 

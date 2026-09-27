@@ -277,7 +277,7 @@ There is an [extra chapter]({{< relref "metapostgraphics" >}}) for MetaPost grap
 
 See also the chapter on [MetaPost]({{< relref "metapostgraphics" >}}) and the examples at [the examples repository](https://github.com/speedata/examples/tree/master/metapost).
 
-## Image size and resolution {{< profeature "Available in the Pro plan" >}}
+## Image size and resolution {{< profeature "Available in the Pro plan" >}} {#image-size-and-resolution}
 
 Large image files also generate large PDF files when they are included, regardless of how wide and high they are displayed in the PDF.
 If you want to limit the resolution (and therefore the file size), you can achieve this with the `dpi` option at [PDFOptions]({{< relref "/reference/commands/pdfoptions" >}}).

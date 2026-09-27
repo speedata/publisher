@@ -277,7 +277,7 @@ Objects can also be mirrored using the Transformation command. This can be contr
 
 The allowed attributes are `none`, `horizontal`, `vertical` and `both`.
 
-## Barcodes, QR Codes {{< profeature "Available in the Pro plan" >}}
+## Barcodes, QR Codes {{< profeature "Available in the Pro plan" >}} {#barcodes-qr-codes}
 
 Barcodes or QR codes are integrated via the command `<Barcode>`:
 

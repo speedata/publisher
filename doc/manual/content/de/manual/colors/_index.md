@@ -43,7 +43,7 @@ Die Werte liegen zwischen 0 (kein Farbauftrag) und 100 bzw. 255 (voller Farbauft
 | `gray` | `g` | 0–100 (0 = schwarz, 100 = weiß) |
 
 
-## Sonderfarben {{< profeature "Verfügbar im PRO-Paket" >}}
+## Sonderfarben {{< profeature "Verfügbar im PRO-Paket" >}} {#sonderfarben}
 
 Sonderfarben (Schmuckfarben) sind Farben, die im Drucker gesondert angesprochen werden.
 Sie sind für das PDF-Anzeigeprogramm an sich unbekannt und müssen für die Bildschirmausgabe angenähert werden.

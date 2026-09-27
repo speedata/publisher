@@ -34,7 +34,7 @@ Qualität (Pixelzahl) der Bilder
 Schriftarten
 : Der Publisher bindet automatisch alle benutzten Schriftarten in das PDF ein (subsetting - nur die tatsächlich benutzten Buchstaben und Zeichen werden eingebettet).
 
-## Schnittmarken {{< profeature "Verfügbar im PRO-Paket" >}}
+## Schnittmarken {{< profeature "Verfügbar im PRO-Paket" >}} {#schnittmarken}
 
 Wird keine gesonderte Einstellung vorgenommen, so erzeugt der speedata Publisher ein PDF, das genau der Größe der angegebenen Seiten hat.
 Um Beschnittzugabe oder Schnittmarken einzuschalten, müssen diese im Element [`<Options>`]({{< relref "/reference/commands/options" >}}) aktiviert werden:

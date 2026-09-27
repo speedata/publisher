@@ -312,7 +312,7 @@ Zu MetaPost gibt es ein [eigenes Kapitel]({{< relref "metapostgraphics" >}}). Hi
 
 Siehe auch das Kapitel über [MetaPost]({{< relref "metapostgraphics" >}}) sowie die [MetaPost-Beispiele](https://github.com/speedata/examples/tree/master/metapost).
 
-## Bildgröße und Auflösung {{< profeature "Verfügbar im PRO-Paket" >}}
+## Bildgröße und Auflösung {{< profeature "Verfügbar im PRO-Paket" >}} {#bildgröße-und-auflösung}
 
 Große Bilddateien erzeugen auch große PDF-Dateien, wenn sie eingebunden werden, unabhängig davon, wie breit und hoch sie im PDF dargestellt werden.
 Möchte man die Auflösung (und damit die Dateigröße) begrenzen, kann man dies mit der `dpi`-Option bei [PDFOptions]({{< relref "/reference/commands/pdfoptions" >}}) erreichen.

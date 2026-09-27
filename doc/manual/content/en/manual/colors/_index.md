@@ -42,7 +42,7 @@ The values are between 0 (no color application) and 100 or 255 (full color appli
 | `gray` | `g` | 0–100 (0 = black, 100 = white) |
 
 
-## Spot colors {{< profeature "Available in the Pro plan" >}}
+## Spot colors {{< profeature "Available in the Pro plan" >}} {#spot-colors}
 
 Spot colors are colors that are addressed separately in the printer.
 They are unknown to the PDF display program and must be approximated for the screen output.
