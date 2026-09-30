@@ -615,6 +615,28 @@ M.string_value = string_value
 M.boolean_value = boolean_value
 M.number_value = number_value
 
+-- NaN is a valid map key in XPath, but not in a Lua table. NaN keys are stored
+-- under this sentinel instead.
+local nan_key = setmetatable({}, {
+    __tostring = function()
+        return "NaN"
+    end,
+})
+
+--- Atomize the first item of a sequence for use as a map key. Nodes are keyed
+--- by their string value, so that @attr and 'value' find the same entry.
+---@param seq table
+---@return any key nil for the empty sequence
+local function map_key(seq)
+    local key = seq[1]
+    if type(key) == "table" then
+        key = string_value(key)
+    elseif key ~= key then
+        key = nan_key
+    end
+    return key
+end
+
 local function docomparestring(op, left, right)
     if op == "=" then
         return left == right, nil
@@ -2051,6 +2073,9 @@ local function fnMapKeys(_ctx, seq)
     end
     local ret = {}
     for k in pairs(m[".__entries"]) do
+        if k == nan_key then
+            k = nan
+        end
         ret[#ret + 1] = k
     end
     table.sort(ret, function(a, b)
@@ -2067,7 +2092,7 @@ local function fnMapContains(_ctx, seq)
     if not is_map(m) then
         return nil, "map:contains expects a map"
     end
-    local key = seq[2][1]
+    local key = map_key(seq[2])
     return { m[".__entries"][key] ~= nil }, nil
 end
 
@@ -2079,7 +2104,7 @@ local function fnMapGet(_ctx, seq)
     if not is_map(m) then
         return nil, "map:get expects a map"
     end
-    local key = seq[2][1]
+    local key = map_key(seq[2])
     local entry = m[".__entries"][key]
     if entry then
         return entry, nil
@@ -2095,7 +2120,10 @@ local function fnMapPut(_ctx, seq)
     if not is_map(m) then
         return nil, "map:put expects a map"
     end
-    local key = seq[2][1]
+    local key = map_key(seq[2])
+    if key == nil then
+        return nil, "map:put: key must not be the empty sequence"
+    end
     local val = seq[3]
     local new_entries = {}
     for k, v in pairs(m[".__entries"]) do
@@ -2113,7 +2141,7 @@ local function fnMapRemove(_ctx, seq)
     if not is_map(m) then
         return nil, "map:remove expects a map"
     end
-    local key = seq[2][1]
+    local key = map_key(seq[2])
     local new_entries = {}
     for k, v in pairs(m[".__entries"]) do
         if k ~= key then
@@ -2137,7 +2165,10 @@ local function fnMapMerge(_ctx, seq)
 end
 
 local function fnMapEntry(_ctx, seq)
-    local key = seq[1][1]
+    local key = map_key(seq[1])
+    if key == nil then
+        return nil, "map:entry: key must not be the empty sequence"
+    end
     local val = seq[2]
     return { make_map({ [key] = val }) }, nil
 end
@@ -4122,10 +4153,12 @@ local function do_lookup(seq, key_ef, ctx)
                     end
                 end
             else
-                local idx = number_value(key_seq)
-                if idx and itm[idx] then
-                    for _, v in ipairs(itm[idx]) do
-                        ret[#ret + 1] = v
+                for _, k in ipairs(key_seq) do
+                    local idx = number_value({ k })
+                    if idx and itm[idx] then
+                        for _, v in ipairs(itm[idx]) do
+                            ret[#ret + 1] = v
+                        end
                     end
                 end
             end
@@ -4138,14 +4171,12 @@ local function do_lookup(seq, key_ef, ctx)
                     end
                 end
             else
-                local key = key_seq[1]
-                if type(key) == "number" then
-                    key = key
-                end
-                local entry = itm[".__entries"][key]
-                if entry then
-                    for _, v in ipairs(entry) do
-                        ret[#ret + 1] = v
+                for _, k in ipairs(key_seq) do
+                    local entry = itm[".__entries"][map_key({ k })]
+                    if entry then
+                        for _, v in ipairs(entry) do
+                            ret[#ret + 1] = v
+                        end
                     end
                 end
             end
@@ -4237,6 +4268,53 @@ function parse_filter_expr(tl)
                     return nil, serr
                 end
                 return do_lookup(seq, key_ef, ctx)
+            end
+        elseif tl:nextTokIsType("tokOpenParen") then
+            -- Dynamic function call: maps and arrays are functions of one
+            -- argument, $map(key) and $array(n)
+            tl:read()
+            local arg_efs = {}
+            if not tl:nextTokIsType("tokCloseParen") then
+                while true do
+                    local arg_ef, aerr = parse_expr_single(tl)
+                    if aerr ~= nil then
+                        return nil, aerr
+                    end
+                    arg_efs[#arg_efs + 1] = arg_ef
+                    if not tl:nextTokIsType("tokComma") then
+                        break
+                    end
+                    tl:read()
+                end
+            end
+            if not tl:skipType("tokCloseParen") then
+                return nil, ") expected"
+            end
+            local prev_ef = ef
+            ef = function(ctx)
+                local seq, serr = prev_ef(ctx:copy())
+                if serr then
+                    return nil, serr
+                end
+                local fn = seq[1]
+                if #seq ~= 1 or not (is_map(fn) or is_array(fn)) then
+                    return nil, "dynamic function call expects a map or an array"
+                end
+                if #arg_efs ~= 1 then
+                    return nil, "a map or an array must be called with exactly one argument"
+                end
+                local argseq, aerr = arg_efs[1](ctx:copy())
+                if aerr then
+                    return nil, aerr
+                end
+                if is_map(fn) then
+                    return fn[".__entries"][map_key(argseq)] or {}, nil
+                end
+                local pos = number_value(argseq)
+                if not pos or pos < 1 or pos > #fn then
+                    return nil, "array index out of bounds"
+                end
+                return fn[math_floor(pos)], nil
             end
         else
             break
@@ -4431,9 +4509,9 @@ function parse_primary_expr(tl)
                     if verr then
                         return nil, verr
                     end
-                    local key = kseq[1]
-                    if type(key) == "table" then
-                        key = string_value(key)
+                    local key = map_key(kseq)
+                    if key == nil then
+                        return nil, "map key must not be the empty sequence"
                     end
                     map_entries[key] = vseq
                 end
@@ -4665,12 +4743,22 @@ end
 ---@param tl tokenlist
 ---@return evalfunc?
 ---@return string? error
-function M.parse_xpath(tl)
+-- Parse a complete XPath expression. Tokens left over after the expression
+-- are an error, otherwise "1 2" would silently evaluate to 1.
+local function parse_complete_expr(tl)
     local evaler, errmsg = parse_expr(tl)
     if errmsg ~= nil then
         return nil, errmsg
     end
+    local tok = tl:peek()
+    if tok then
+        return nil, string_format("unexpected token %q", tostring(tok[1]))
+    end
     return evaler, nil
+end
+
+function M.parse_xpath(tl)
+    return parse_complete_expr(tl)
 end
 
 local parse_cache = {}
@@ -4688,7 +4776,7 @@ local function get_cached_evaler(xpathstring)
         return false, nil
     end
     local errmsg
-    evaler, errmsg = parse_expr(toks)
+    evaler, errmsg = parse_complete_expr(toks)
     if errmsg ~= nil then
         return nil, errmsg
     end
