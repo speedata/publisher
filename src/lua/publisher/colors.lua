@@ -1267,7 +1267,12 @@ function M.fill_stroke_color(pdfcolor)
     if a ~= nil then
         return a, b
     end
-    a, b = string.match(pdfcolor, "^(.*G)(.*g)")
+    -- DefineColor writes gray as "g G", the builtin colors use "G g".
+    a, b = string.match(pdfcolor, "^(.*g)(.*G)")
+    if a ~= nil then
+        return a, b
+    end
+    b, a = string.match(pdfcolor, "^(.*G)(.*g)")
     return a, b
 end
 

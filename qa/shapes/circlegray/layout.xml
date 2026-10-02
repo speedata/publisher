@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Layout xmlns:sd="urn:speedata:2009/publisher/functions/en"
+  xmlns="urn:speedata.de:2009/publisher/en" >
+
+  <Pageformat width="9cm" height="4cm"/>
+  <SetGrid width="1cm" height="1cm"/>
+  <DefineColor name="lightgray" model="gray" g="80"/>
+  <DefineColor name="darkgray" model="gray" g="30"/>
+  <Record element="data">
+    <PlaceObject row="1" column="1" allocate="no">
+      <Box width="9" height="4" background-color="lightgray"/>
+    </PlaceObject>
+    <PlaceObject row="2" column="2">
+      <Circle radiusx="1" background-color="white" framecolor="black" rulewidth="2pt"/>
+    </PlaceObject>
+    <PlaceObject row="2" column="5">
+      <Circle radiusx="1" background-color="darkgray" framecolor="white" rulewidth="2pt"/>
+    </PlaceObject>
+    <PlaceObject row="2" column="8">
+      <Circle radiusx="1" background-color="black" framecolor="darkgray" rulewidth="2pt"/>
+    </PlaceObject>
+  </Record>
+</Layout>
