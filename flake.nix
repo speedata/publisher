@@ -34,7 +34,7 @@
 
             src = self;
             modRoot = "src/go";
-            vendorHash = "sha256-ZEc8sG3cGsffZ+ctH9Yf8QcnZXS28zOOp++itsE9eQ4=";
+            vendorHash = "sha256-nNHkYhk5btBfteMd4cjUtKNvWdkz6zKunitadcVtvRU=";
 
             buildInputs = [ pkgs.lua5_3 ];
 
