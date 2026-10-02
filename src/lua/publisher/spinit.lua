@@ -221,8 +221,13 @@ function tex.bp(number_or_string)
     return sp_to_bp(tex.sp(number_or_string))
 end
 
+-- Unlike Lua's assert, a failed assertion does not stop the run. It is
+-- logged as an error, so it shows up in the error count and exit code.
 function assert(what, msg)
     if not what then
+        local info = debug.getinfo(2, "Sl")
+        local src = string.gsub(info.source, "^.*src/lua/(.*)$", "%1")
+        splib.log("error", "Assertion failed", "message", tostring(msg or "?"), "source", src, "line", info.currentline)
         texio.write_nl("An error occurred: " .. (msg or ""))
         texio.write_nl(debug.traceback())
     end
