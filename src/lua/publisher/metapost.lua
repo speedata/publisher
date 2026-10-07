@@ -324,7 +324,7 @@ function M.newbox(width_sp, height_sp)
         elseif v.model == "rgb" then
             M.execute(mpobj, string.format("rgbcolor colors.%s; colors.%s := (%g, %g, %g);", name, name, v.r, v.g, v.b))
         elseif v.model == "gray" then
-            M.execute(mpobj, string.format("rgbcolor colors.%s; colors.%s := (%g, %g, %g);", name, name, v.k, v.k, v.k))
+            M.execute(mpobj, string.format("numeric colors.%s; colors.%s := %g;", name, name, v.g))
         else
             main.log("error", string.format("metapost: model %q not supported", v.model))
         end

@@ -1028,7 +1028,7 @@ function commands.define_color(layoutxml, dataxml)
     elseif model == "gray" then
         color.g = publisher.attribute_helpers.read_attribute(layoutxml, dataxml, "g", "number")
         color.pdfstring = string.format("%s %g g %g G", op, color.g / 100, color.g / 100)
-        publisher.metapostcolors[mpname(name)] = { model = "gray", k = color.g }
+        publisher.metapostcolors[mpname(name)] = { model = "gray", g = color.g / 100 }
     elseif model == "spotcolor" then
         if not publisher.pro then
             main.log("error", "spot colors need a Pro plan")

@@ -1,0 +1,16 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en">
+  <DefineColor name="myblack" model="gray" g="0" />
+  <DefineColor name="mygray" model="gray" g="50" />
+  <DefineColor name="myprocess" model="cmyk" c="0" m="0" y="0" k="100" />
+  <DefineGraphic name="square">
+    pickup pencircle scaled 1pt;
+    draw unitsquare scaled 10mm withcolor colors.myblack;
+    fill unitsquare scaled 5mm shifted (12mm,0) withcolor colors.mygray;
+    draw unitsquare scaled 10mm shifted (24mm,0) withcolor colors.myprocess;
+  </DefineGraphic>
+  <Record element="data">
+    <PlaceObject>
+      <Box width="5" height="2" graphic="square"/>
+    </PlaceObject>
+  </Record>
+</Layout>
