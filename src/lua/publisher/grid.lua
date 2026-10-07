@@ -1333,7 +1333,8 @@ function M.calculate_number_gridcells(self)
             if not self.gridheight then
                 main.log("error", "grid height not set, why?")
             else
-                self:set_number_of_rows(math.ceil(math.round(pagearea_y / self.gridheight, 2)))
+                local rows = (pagearea_y + self.grid_dy) / (self.gridheight + self.grid_dy)
+                self:set_number_of_rows(math.ceil(math.round(rows, 2)))
             end
         end
     end
