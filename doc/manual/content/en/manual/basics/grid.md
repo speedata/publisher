@@ -90,6 +90,8 @@ This creates a so-called nine-division, which is often used in book design. It i
 ```
 
 If the grid does not fit completely into the type area, e.g. with a grid width of 3 centimeters and a page width of 10 centimeters, this leads to a conflict in the page layout. This causes the right or bottom margin to be shifted and does not match the values specified in the page type.
+In this case the publisher prints a warning with the given and the actual margin (not for the default grid on the default page).
+To keep the margin, choose a grid width or height that divides the type area evenly, or set the number of grid cells with `nx` and `ny`.
 
 ## Separate grid in page types
 

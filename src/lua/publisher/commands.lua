@@ -6306,6 +6306,7 @@ function commands.set_grid(layoutxml, dataxml)
         main.log("error", "SetGrid: you must set nx and ny or width and height", lineinfo(layoutxml))
         return
     end
+    publisher.options.gridset = true
     publisher.options.gridcells_dx = dx
     publisher.options.gridcells_dy = dy
 

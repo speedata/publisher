@@ -45,6 +45,7 @@ local publisher = require("publisher")
 ---@field margin_top? integer
 ---@field margin_right? integer
 ---@field margin_bottom? integer
+---@field check_fit? boolean Warn when the cells do not fit evenly into the type area.
 local M = {}
 
 local colors_module = require("publisher.colors")
@@ -466,9 +467,10 @@ end
 -- Stores the grid cell width/height (and optional gaps) on the grid
 -- instance and updates the row/column counts to match the page.
 ---@param self Grid
----@param options { wd?: integer, ht?: integer, nx?: integer, ny?: integer, dx?: integer, dy?: integer }
+---@param options { wd?: integer, ht?: integer, nx?: integer, ny?: integer, dx?: integer, dy?: integer, check_fit?: boolean }
 ---@return nil
 function M.set_width_height(self, options)
+    self.check_fit = options.check_fit
     self.gridwidth = options.wd
     self.gridheight = options.ht
     self.grid_nx = options.nx
@@ -1279,6 +1281,69 @@ function M.set_margin(self, left, top, right, bottom)
     self.margin_bottom = bottom
 end
 
+-- Page geometries that already got a warning from warn_uneven_grid.
+---@type table<string, boolean>
+local uneven_grid_warned = {}
+
+-- Warns when the grid cells do not fit evenly into the type area. The
+-- number of cells is rounded up, so the last column or row reaches into
+-- the right or bottom margin. Warns only once for each page geometry.
+---@param self Grid
+---@param pagearea_x integer Width of the type area in sp.
+---@param pagearea_y integer Height of the type area in sp.
+---@return nil
+local function warn_uneven_grid(self, pagearea_x, pagearea_y)
+    local overflow_x, overflow_y = 0, 0
+    if not (self.grid_nx and self.grid_nx ~= 0) then
+        overflow_x = self:width_sp(self:number_of_columns(publisher.default_areaname)) - pagearea_x
+    end
+    if not (self.grid_ny and self.grid_ny ~= 0) and self.gridheight then
+        overflow_y = self:height_sp(self:number_of_rows(publisher.default_areaname)) - pagearea_y
+    end
+    if overflow_x <= 500 and overflow_y <= 500 then
+        return
+    end
+    local key = table.concat({
+        tex.pagewidth,
+        tex.pageheight,
+        self.margin_left,
+        self.margin_top,
+        self.margin_right,
+        self.margin_bottom,
+        self.gridwidth or 0,
+        self.gridheight or 0,
+        self.grid_dx,
+        self.grid_dy,
+    }, ":")
+    if uneven_grid_warned[key] then
+        return
+    end
+    uneven_grid_warned[key] = true
+    local function pt(sp)
+        return string.format("%gpt", math.round(sp_to_bp(sp), 2))
+    end
+    if overflow_x > 500 then
+        main.log(
+            "warn",
+            "Grid width does not fit evenly into the type area, the right margin is reduced",
+            "margin",
+            pt(self.margin_right),
+            "actual margin",
+            pt(self.margin_right - overflow_x)
+        )
+    end
+    if overflow_y > 500 then
+        main.log(
+            "warn",
+            "Grid height does not fit evenly into the type area, the bottom margin is reduced",
+            "margin",
+            pt(self.margin_bottom),
+            "actual margin",
+            pt(self.margin_bottom - overflow_y)
+        )
+    end
+end
+
 -- ![width calculation](../img/gridnx.svg)
 -- Recomputes the number of rows and columns from the page size, margins
 -- and grid cell dimensions.
@@ -1336,6 +1401,9 @@ function M.calculate_number_gridcells(self)
                 local rows = (pagearea_y + self.grid_dy) / (self.gridheight + self.grid_dy)
                 self:set_number_of_rows(math.ceil(math.round(rows, 2)))
             end
+        end
+        if self.check_fit then
+            warn_uneven_grid(self, pagearea_x, pagearea_y)
         end
     end
 

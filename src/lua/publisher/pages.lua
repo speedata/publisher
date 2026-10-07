@@ -582,6 +582,9 @@ function M.initialize_page(pagenumber, data, _from)
     publisher.pages[thispage] = current_page
 
     local gridwidth, gridheight, nx, ny, dx, dy
+    -- The built-in default page with the default grid does not fit evenly
+    -- (A4, 10mm), so only check grids and margins the layout has set.
+    local check_fit = publisher.options.gridset
     nx = publisher.options.gridcells_x
     ny = publisher.options.gridcells_y
     dx = publisher.options.gridcells_dx
@@ -590,6 +593,9 @@ function M.initialize_page(pagenumber, data, _from)
     local pagetype = M.detect_pagetype(thispage, data)
     if not pagetype then
         return
+    end
+    if not pagetype.is_default then
+        check_fit = true
     end
     if pagetype.width then
         current_page.width = tex.sp(pagetype.width) or current_page.width
@@ -634,6 +640,7 @@ function M.initialize_page(pagenumber, data, _from)
             ny = _ny
             dx = _dx
             dy = _dy
+            check_fit = true
         end
     end
 
@@ -645,7 +652,15 @@ function M.initialize_page(pagenumber, data, _from)
         gridheight = publisher.options.gridheight
     end
 
-    current_page.grid:set_width_height({ wd = gridwidth, ht = gridheight, nx = nx, ny = ny, dx = dx, dy = dy })
+    current_page.grid:set_width_height({
+        wd = gridwidth,
+        ht = gridheight,
+        nx = nx,
+        ny = ny,
+        dx = dx,
+        dy = dy,
+        check_fit = check_fit,
+    })
 
     -- The default color is applied during ship-out
     if pagetype.layoutxml and pagetype.layoutxml[".__attributes"].defaultcolor then

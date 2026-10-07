@@ -392,6 +392,7 @@ M.css = do_luafile("css.lua"):new()
 ---@field gridheight integer Grid cell height in scaled points.
 ---@field gridlocation "background"|"foreground"|"none" Where the debug grid is drawn.
 ---@field gridwidth integer Grid cell width in scaled points.
+---@field gridset? boolean True once the layout has used SetGrid.
 ---@field hidespinfo? string|boolean
 ---@field html? string HTML rendering mode.
 ---@field hyperlinkbordercolor? string Border color for hyperlink annotations.
@@ -1146,6 +1147,7 @@ function M.initialize_luatex_and_generate_pdf()
     M.masterpages[1] = {
         is_pagetype = "true()",
         res = {
+            is_default = true,
             {
                 elementname = "Margin",
                 contents = function(page)
