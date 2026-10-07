@@ -1,5 +1,17 @@
 <changelog xmlns="urn:speedata.de:2014/changelog">
   <chapter version="5.9">
+    <entry version="5.9.11" date="2026-10-07" sha1="8392333c">
+        <en summary="Warning when the grid does not fit into the type area (#739).">If the grid cells do not fit evenly into the type area, the last column or row reaches into the margin, so the right or bottom margin gets smaller than specified. The publisher now prints a warning with the specified and the actual margin. The default grid on the default page is not checked.</en>
+        <de summary="Warnung, wenn das Raster nicht in den Satzspiegel passt (#739).">Passen die Rasterzellen nicht ohne Rest in den Satzspiegel, ragt die letzte Spalte oder Zeile in den Rand, der rechte oder untere Rand wird also kleiner als angegeben. Der Publisher gibt jetzt eine Warnung mit dem angegebenen und dem tatsächlichen Rand aus. Das voreingestellte Raster auf der voreingestellten Seite wird nicht geprüft.</de>
+    </entry>
+    <entry version="5.9.11" date="2026-10-07" sha1="6b872f18">
+        <en summary="Grid rows with dy are calculated correctly.">With a grid height and a row distance, for example <tt>&lt;SetGrid height="10mm" dy="2mm"&gt;</tt>, the distance was not taken into account when calculating the number of rows. The grid then reached far beyond the bottom of the page. The number of rows now fits the page.</en>
+        <de summary="Rasterzeilen mit dy werden richtig berechnet.">Bei einer Rasterhöhe mit Zeilenabstand, zum Beispiel <tt>&lt;SetGrid height="10mm" dy="2mm"&gt;</tt>, wurde der Abstand bei der Anzahl der Zeilen nicht berücksichtigt. Das Raster reichte dann weit über den unteren Seitenrand hinaus. Die Anzahl der Zeilen passt jetzt zur Seite.</de>
+    </entry>
+    <entry version="5.9.11" date="2026-10-07" sha1="92cee764">
+        <en summary="Gray colors in MetaPost graphics stay gray (#741).">A color defined with <tt>&lt;DefineColor model="gray"&gt;</tt> and used in a MetaPost graphic as <tt>colors.name</tt> was written to the PDF as an RGB color. Besides, gray values other than 0 came out white. Such colors are now output as gray with the correct value.</en>
+        <de summary="Graustufen-Farben in MetaPost-Grafiken bleiben Graustufen (#741).">Eine mit <tt>&lt;DefineColor model="gray"&gt;</tt> definierte Farbe, die in einer MetaPost-Grafik als <tt>colors.name</tt> verwendet wurde, landete als RGB-Farbe in der PDF-Datei. Außerdem wurden Grauwerte außer 0 weiß ausgegeben. Solche Farben werden jetzt als Graustufen mit dem richtigen Wert ausgegeben.</de>
+    </entry>
     <entry version="5.9.10" date="2026-10-02" sha1="68bd8908">
         <en summary="Internal errors are now counted as errors.">When an internal check failed, the publisher printed a stack trace but finished with "0 errors" and a successful exit code, although the PDF could be broken. Such failures are now reported as errors in the protocol file, they appear in the error count, and the exit code shows the failure.</en>
         <de summary="Interne Fehler werden jetzt als Fehler gezählt.">Schlug eine interne Prüfung fehl, gab der Publisher zwar eine Fehlermeldung mit Aufrufliste aus, endete aber mit „0 errors“ und einem erfolgreichen Rückgabewert, obwohl die PDF-Datei fehlerhaft sein konnte. Solche Fehler stehen jetzt als Fehler in der Protokolldatei, werden mitgezählt, und der Rückgabewert zeigt den Fehler an.</de>
