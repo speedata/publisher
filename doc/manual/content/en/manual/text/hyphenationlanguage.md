@@ -130,107 +130,27 @@ The default setting for allowbreak is “ -”, i.e. a break at a space or hyphe
 This is an experimental feature in the Publisher. It is likely to be associated with a text format in a future version.
 {{< /callout >}}
 
-## Language settings for non-western languages
+## Controlling line breaks with special characters
 
-Some languages have special typesetting rules that do not affect hyphenation, but the appearance of the text.
-So the characters can change their shape or position, depending on where they are in the word.
-To use this feature, the following conditions must be met:
+Some Unicode characters control line breaking directly in the text.
+They are invisible and can be written as numeric character references in the data or in the layout.
 
-1. `mode="harfbuzz"` must be activated at [`<LoadFontfile>`]({{< relref "/reference/commands/loadfontfile" >}}).
-2. The language should be set correctly. If the language is not available in the [list of supported languages]({{< relref "/reference/commands/options" >}}), `Other` or `--` (two dashes) must be used. If the language is not set correctly, layout errors might occur.
-3. The selected font must contain the appropriate characters.
-
-```xml
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-    xmlns:sd="urn:speedata:2009/publisher/functions/en"
-    version="4.1.7">
-
-    <LoadFontfile name="NotoSansBengali-Regular"
-                  filename="NotoSansBengali-Regular.ttf"
-                  mode="harfbuzz" />
-    <DefineFontfamily fontsize="10" leading="12" name="text">
-        <Regular fontface="NotoSansBengali-Regular" />
-    </DefineFontfamily>
-
-    <Record element="data">
-        <PlaceObject>
-            <Textblock>
-                <Paragraph language="Other">
-                    <Value>আমি</Value>
-                </Paragraph>
-            </Textblock>
-        </PlaceObject>
-    </Record>
-</Layout>
-```
-
-![The language is recognized by the system when set to `Other`.](/img/hb-bengali-correct.png)
-
-## Right-to-left running text
-
-If text is output that runs from right to left (e.g. Arabic), the direction of the paragraph must be specified (`direction="rtl"`).
-Otherwise, the alignment may be wrong (the last line is left-aligned instead of right-aligned).
-
-If the output text is not justified then `start` and `end` must be used for the alignment in text format and not 'leftaligned' and 'rightaligned'. `start` and `end` are based on the start position of the text and not on the orientation of the page (output area).
+| Character | Input | Effect |
+|---|---|---|
+| U+00AD soft hyphen | `&#xAD;` | The word may be hyphenated at this position. At the end of the line the hyphen character of the text format (`hyphenchar`) appears, otherwise the character stays invisible. |
+| U+200B zero width space | `&#x200B;` | A line break without a hyphen is allowed, for example in long product names or in Thai (see [Writing systems]({{< relref "scripts" >}})). |
+| U+2060 word joiner | `&#x2060;` | No line break between the two characters. |
+| U+00A0 no-break space | `&#xA0;` | A space where the line is not broken, for example between a number and its unit. |
 
 ```xml
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-    xmlns:sd="urn:speedata:2009/publisher/functions/en"
-    version="4.1.16">
-
-  <LoadFontfile
-    name="Amiri-Regular"
-    filename="amiri-regular.ttf"
-    mode="harfbuzz" />
-  <DefineFontfamily fontsize="10" leading="12" name="text">
-        <Regular fontface="Amiri-Regular" />
-    </DefineFontfamily>
-
-    <Record element="data">
-        <PlaceObject>
-            <Textblock width="5">
-                <Paragraph direction="rtl">
-                  <Value select="."/>
-                </Paragraph>
-            </Textblock>
-        </PlaceObject>
-    </Record>
-</Layout>
+<Paragraph>
+  <Value>Donau&#xAD;dampf&#xAD;schiff&#xAD;fahrt, 12&#xA0;kg</Value>
+</Paragraph>
 ```
 
-```xml
-<data>المادة 1 يولد جميع الناس أحرارًا متساوين في الكرامة والحقوق.
-وقد وهبوا عقلاً وضميرًا وعليهم أن يعامل بعضهم بعضًا بروح الإخاء.</data>
-```
+A line break after a hyphen cannot be prevented with U+2060, use the attribute `allowbreak` for that (see above).
 
-![The text runs from right to left.](/img/rtl-text.png)
+## Other writing systems
 
-## Mixed text (right-to-left and left-to-right)
-
-If text is output that runs both from right to left (rtl) and from left to right (ltr), the paragraph must be divided into individual segments and the writing direction must be changed between the segments. This so-called “bidi algorithm” is built into the speedata Publisher
-and is activated with `bidi="yes"`:
-
-```xml
-<PlaceObject>
-    <Textblock width="5">
-        <Paragraph bidi="yes">
-            <Value select="."/>
-        </Paragraph>
-    </Textblock>
-</PlaceObject>
-```
-
-```xml
-<data>العاشر ليونيكود (Unicode Conference)،
-الذي سيعقد في 10-12 آذار 1997 مبدينة</data>
-```
-
-![Here the text direction is calculated separately for each section. If `bidi="yes"` is specified, the first part is taken as the main direction of the paragraph, in this case the specification `direction="rtl"` is not necessary](/img/bidi-sample.png)
-
-## Rules for mixed text
-
-* Set the `direction` attribute if it is clear in which context the text should appear. If it is empty or not set, the content of the text decides which direction the paragraph should have. This works well in most cases, but not, for example, with mixed text that starts with a “wrong” direction.
-* If in doubt, set the attribute `bidi` to `yes`. The only drawback is that the publishing run might be a bit slower. Other differences should not occur.
-* The language setting (`language`) should either contain the correct language, be empty or set to the language `Other`. The problem is that some language settings can cause an unwanted write direction.
-* For text alignment (`alignment` at [DefineTextformat]({{< relref "/reference/commands/definetextformat" >}})) you should use `start` and `end` instead of `left` or `right`. `start` and `end` are oriented to the direction for the paragraph.
-* The [HarfBuzz-fontloader]({{< relref "hyphenationlanguage" >}}) must be activated.
+Right-to-left scripts such as Arabic and Hebrew, Chinese, Japanese and Korean, and Thai and related scripts have their own rules for the writing direction, line breaking and the forms of the characters.
+They are described in the section [Writing systems]({{< relref "scripts" >}}).

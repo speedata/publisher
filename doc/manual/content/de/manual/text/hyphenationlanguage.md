@@ -136,107 +136,27 @@ Die Voreinstellung für `allowbreak` ist `" -"`, also ein Umbruch an einem Leerz
 Das ist ein experimentelles Feature im Publisher. Wahrscheinlich wird dies in einer zukünftigen Version einem Textformat zugeordnet werden.
 {{< /callout >}}
 
-## Spracheinstellungen für nicht-westliche Sprachen
+## Zeilenumbruch mit Sonderzeichen steuern
 
-Manche Sprachen haben besondere Satzregeln, die sich nicht auf die Silbentrennung auswirken, sondern auf das Erscheinungsbild des Textes. So können die Zeichen ihre Form oder Position verändern, je nach dem wo sie im Wort stehen. Um dieses Feature zu nutzen müssen folgende Bedingungen erfüllt sein:
+Einige Unicode-Zeichen steuern den Zeilenumbruch direkt im Text.
+Sie sind unsichtbar und können in den Daten oder im Layout als numerische Zeichenreferenz geschrieben werden.
 
-1. `mode="harfbuzz"` muss bei [`<LoadFontfile>`]({{< relref "/reference/commands/loadfontfile" >}}) aktiviert sein.
-2. Die Sprache sollte korrekt eingestellt sein. Falls die Sprache nicht in der [Liste der unterstützten Sprachen]({{< relref "/reference/commands/options" >}}) vorhanden ist, muss `Other` oder `--` (zwei Striche) eingestellt werden. Wenn die Sprache nicht korrekt eingestellt ist, kann es zu Darstellungsproblemen kommen.
-3. Die gewählte Schriftart muss die entsprechenden Zeichen enthalten.
-
-```xml
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-    xmlns:sd="urn:speedata:2009/publisher/functions/en"
-    version="4.1.7">
-
-    <LoadFontfile name="NotoSansBengali-Regular"
-                  filename="NotoSansBengali-Regular.ttf"
-                  mode="harfbuzz" />
-    <DefineFontfamily fontsize="10" leading="12" name="text">
-        <Regular fontface="NotoSansBengali-Regular" />
-    </DefineFontfamily>
-
-    <Record element="data">
-        <PlaceObject>
-            <Textblock>
-                <Paragraph language="Other">
-                    <Value>আমি</Value>
-                </Paragraph>
-            </Textblock>
-        </PlaceObject>
-    </Record>
-</Layout>
-```
-
-![Die Sprache wird vom System selbst erkannt, wenn sie auf `Other` gesetzt ist.](/img/hb-bengali-correct.png)
-
-## Rechts-nach-links laufender Text
-
-Wird Text ausgegeben, der von rechts nach links läuft (z.B. Arabisch), muss die Richtung des Absatzes mit
-angegeben werden (`direction="rtl"`).
-Ansonsten ist die Ausrichtung ggf. falsch (die letzte Zeile ist dann linksbündig anstelle von rechtsbündig).
-
-Falls kein Blocksatz ausgegeben wird, muss im Textformat bei der Ausrichtung `start` und `end` benutzt werden und nicht `leftaligned` und `rightaligned`. `start` und `end` orientieren sich an der Startposition des Textes und nicht an der Orientierung der Seite (Ausgabefläche).
+| Zeichen | Eingabe | Wirkung |
+|---|---|---|
+| U+00AD weicher Trennstrich | `&#xAD;` | Das Wort darf an dieser Stelle getrennt werden. Am Zeilenende erscheint das Trennzeichen des Textformats (`hyphenchar`), sonst bleibt das Zeichen unsichtbar. |
+| U+200B Leerzeichen mit Nullbreite | `&#x200B;` | Ein Umbruch ohne Trennstrich ist erlaubt, zum Beispiel in langen Bezeichnungen oder bei Thai (siehe [Schriftsysteme]({{< relref "scripts" >}})). |
+| U+2060 Wortverbinder | `&#x2060;` | Zwischen den beiden Zeichen wird nicht umbrochen. |
+| U+00A0 geschütztes Leerzeichen | `&#xA0;` | Ein Leerzeichen, an dem nicht umbrochen wird, zum Beispiel zwischen Zahl und Einheit. |
 
 ```xml
-<Layout xmlns="urn:speedata.de:2009/publisher/en"
-    xmlns:sd="urn:speedata:2009/publisher/functions/en"
-    version="4.1.16">
-
-  <LoadFontfile
-    name="Amiri-Regular"
-    filename="amiri-regular.ttf"
-    mode="harfbuzz" />
-  <DefineFontfamily fontsize="10" leading="12" name="text">
-        <Regular fontface="Amiri-Regular" />
-    </DefineFontfamily>
-
-    <Record element="data">
-        <PlaceObject>
-            <Textblock width="5">
-                <Paragraph direction="rtl">
-                  <Value select="."/>
-                </Paragraph>
-            </Textblock>
-        </PlaceObject>
-    </Record>
-</Layout>
+<Paragraph>
+  <Value>Donau&#xAD;dampf&#xAD;schiff&#xAD;fahrt, 12&#xA0;kg</Value>
+</Paragraph>
 ```
 
-```xml
-<data>المادة 1 يولد جميع الناس أحرارًا متساوين في الكرامة والحقوق.
-وقد وهبوا عقلاً وضميرًا وعليهم أن يعامل بعضهم بعضًا بروح الإخاء.</data>
-```
+Ein Umbruch hinter einem Bindestrich lässt sich mit U+2060 nicht verhindern, dafür gibt es das Attribut `allowbreak` (siehe oben).
 
-![Der Text läuft von rechts nach links.](/img/rtl-text.png)
+## Andere Schriftsysteme
 
-## Gemischter Text (rechts-nach-links und links-nach-rechts)
-
-Wird Text ausgegeben, der sowohl von rechts nach links (rtl, right to left) als auch von links nach rechts (ltr) läuft, muss der Absatz in einzelne Segmente unterteilt werden und zwischen den Segmenten die Schreibrichtung geändert werden. Dieser sogenannte »Bidi-Algorithmus« ist im speedata Publisher eingebaut
-und wird mit `bidi="yes"` aktiviert:
-
-```xml
-<PlaceObject>
-    <Textblock width="5">
-        <Paragraph bidi="yes">
-            <Value select="."/>
-        </Paragraph>
-    </Textblock>
-</PlaceObject>
-```
-
-```xml
-<data>العاشر ليونيكود (Unicode Conference)،
-الذي سيعقد في 10-12 آذار 1997 مبدينة</data>
-```
-
-![Hier wird die Textrichtung für jedes Teilstück separat berechnet. Wird `bidi="yes"` angegeben, wird der erste Teil als Hauptrichtung des Absatzes genommen, in diesem Fall ist die Angabe `direction="rtl"` nicht notwendig](/img/bidi-sample.png)
-
-## Regeln für gemischten Text
-
-* Setze das Attribut `direction`, wenn klar ist, in welchem Kontext der Text erscheinen soll. Wenn es leer oder nicht gesetzt ist, entscheidet der Inhalt des Textes, welche Richtung der Absatz haben soll. Das klappt in den meisten Fällen gut, aber beispielsweise nicht mit gemischtem Text, der mit einer »falschen« Richtung anfängt.
-* Setze das Attribut `bidi` im Zweifelsfall auf `yes`. Der einzige Nachteil ist, dass der Publishing-Lauf etwas langsamer sein könnte. Andere Unterschiede sollten nicht auftreten.
-* Die Spracheinstellung (`language`) sollte entweder die richtige Sprache beinhalten, leer sein oder auf die Sprache `Other` gesetzt werden. Das Problem ist, dass manche Spracheinstellungen eine unerwünschte Schreibrichtung erwirken können.
-* Als Textausrichtung (`alignment` bei [DefineTextformat]({{< relref "/reference/commands/definetextformat" >}})) sollte anstelle von `left` oder `right` lieber `start` und `end` benutzt werden. `start` und `end` orientieren sich an der Richtung für den Absatz.
-* Es muss der [HarfBuzz-Fontlader]({{< relref "hyphenationlanguage" >}}) aktiviert sein.
-
+Rechtsläufige Schriften wie Arabisch und Hebräisch, Chinesisch, Japanisch und Koreanisch sowie Thai und verwandte Schriften haben eigene Regeln für Schreibrichtung, Zeilenumbruch und Zeichenformen.
+Sie sind im Abschnitt [Schriftsysteme]({{< relref "scripts" >}}) beschrieben.
