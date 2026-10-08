@@ -2530,10 +2530,14 @@
                         <a:documentation>Arabic</a:documentation>
                         <value>Armenian</value>
                         <a:documentation>Armenian</a:documentation>
+                        <value>Assamese</value>
+                        <a:documentation>Assamese</a:documentation>
                         <value>Bahasa Indonesia</value>
                         <a:documentation>Bahasa Indonesia</a:documentation>
                         <value>Basque</value>
                         <a:documentation>Basque</a:documentation>
+                        <value>Bengali</value>
+                        <a:documentation>Bengali</a:documentation>
                         <value>Bulgarian</value>
                         <a:documentation>Bulgarian (latin alphabet)</a:documentation>
                         <value>Catalan</value>
@@ -2596,10 +2600,16 @@
                         <a:documentation>Lithuanian</a:documentation>
                         <value>Malayalam</value>
                         <a:documentation>Malayalam</a:documentation>
+                        <value>Marathi</value>
+                        <a:documentation>Marathi</a:documentation>
+                        <value>Nepali</value>
+                        <a:documentation>Nepali</a:documentation>
                         <value>Norwegian Bokmål</value>
                         <a:documentation>Norwegian Bokmål</a:documentation>
                         <value>Norwegian Nynorsk</value>
                         <a:documentation>Norwegian Nynorsk</a:documentation>
+                        <value>Odia</value>
+                        <a:documentation>Odia</a:documentation>
                         <value>Other</value>
                         <a:documentation>Don&#39;t any of these languages. Useful if a text does not render correctly.</a:documentation>
                         <value>Persian</value>
@@ -2608,6 +2618,8 @@
                         <a:documentation>Polish</a:documentation>
                         <value>Portuguese</value>
                         <a:documentation>Portuguese</a:documentation>
+                        <value>Punjabi</value>
+                        <a:documentation>Punjabi</a:documentation>
                         <value>Romanian</value>
                         <a:documentation>Romanian</a:documentation>
                         <value>Russian</value>
@@ -2626,6 +2638,10 @@
                         <a:documentation>Spanish</a:documentation>
                         <value>Swedish</value>
                         <a:documentation>Swedish</a:documentation>
+                        <value>Tamil</value>
+                        <a:documentation>Tamil</a:documentation>
+                        <value>Telugu</value>
+                        <a:documentation>Telugu</a:documentation>
                         <value>Turkish</value>
                         <a:documentation>Turkish</a:documentation>
                         <value>Ukrainian</value>
@@ -4131,10 +4147,14 @@
                   <a:documentation>Arabic</a:documentation>
                   <value>Armenian</value>
                   <a:documentation>Armenian</a:documentation>
+                  <value>Assamese</value>
+                  <a:documentation>Assamese</a:documentation>
                   <value>Bahasa Indonesia</value>
                   <a:documentation>Bahasa Indonesia</a:documentation>
                   <value>Basque</value>
                   <a:documentation>Basque</a:documentation>
+                  <value>Bengali</value>
+                  <a:documentation>Bengali</a:documentation>
                   <value>Bulgarian</value>
                   <a:documentation>Bulgarian (latin alphabet)</a:documentation>
                   <value>Catalan</value>
@@ -4197,10 +4217,16 @@
                   <a:documentation>Lithuanian</a:documentation>
                   <value>Malayalam</value>
                   <a:documentation>Malayalam</a:documentation>
+                  <value>Marathi</value>
+                  <a:documentation>Marathi</a:documentation>
+                  <value>Nepali</value>
+                  <a:documentation>Nepali</a:documentation>
                   <value>Norwegian Bokmål</value>
                   <a:documentation>Norwegian Bokmål</a:documentation>
                   <value>Norwegian Nynorsk</value>
                   <a:documentation>Norwegian Nynorsk</a:documentation>
+                  <value>Odia</value>
+                  <a:documentation>Odia</a:documentation>
                   <value>Other</value>
                   <a:documentation>Don&#39;t any of these languages. Useful if a text does not render correctly.</a:documentation>
                   <value>Persian</value>
@@ -4209,6 +4235,8 @@
                   <a:documentation>Polish</a:documentation>
                   <value>Portuguese</value>
                   <a:documentation>Portuguese</a:documentation>
+                  <value>Punjabi</value>
+                  <a:documentation>Punjabi</a:documentation>
                   <value>Romanian</value>
                   <a:documentation>Romanian</a:documentation>
                   <value>Russian</value>
@@ -4227,6 +4255,10 @@
                   <a:documentation>Spanish</a:documentation>
                   <value>Swedish</value>
                   <a:documentation>Swedish</a:documentation>
+                  <value>Tamil</value>
+                  <a:documentation>Tamil</a:documentation>
+                  <value>Telugu</value>
+                  <a:documentation>Telugu</a:documentation>
                   <value>Turkish</value>
                   <a:documentation>Turkish</a:documentation>
                   <value>Ukrainian</value>
@@ -4840,10 +4872,14 @@
                         <a:documentation>Arabic</a:documentation>
                         <value>Armenian</value>
                         <a:documentation>Armenian</a:documentation>
+                        <value>Assamese</value>
+                        <a:documentation>Assamese</a:documentation>
                         <value>Bahasa Indonesia</value>
                         <a:documentation>Bahasa Indonesia</a:documentation>
                         <value>Basque</value>
                         <a:documentation>Basque</a:documentation>
+                        <value>Bengali</value>
+                        <a:documentation>Bengali</a:documentation>
                         <value>Bulgarian</value>
                         <a:documentation>Bulgarian (latin alphabet)</a:documentation>
                         <value>Catalan</value>
@@ -4906,10 +4942,16 @@
                         <a:documentation>Lithuanian</a:documentation>
                         <value>Malayalam</value>
                         <a:documentation>Malayalam</a:documentation>
+                        <value>Marathi</value>
+                        <a:documentation>Marathi</a:documentation>
+                        <value>Nepali</value>
+                        <a:documentation>Nepali</a:documentation>
                         <value>Norwegian Bokmål</value>
                         <a:documentation>Norwegian Bokmål</a:documentation>
                         <value>Norwegian Nynorsk</value>
                         <a:documentation>Norwegian Nynorsk</a:documentation>
+                        <value>Odia</value>
+                        <a:documentation>Odia</a:documentation>
                         <value>Other</value>
                         <a:documentation>Don&#39;t any of these languages. Useful if a text does not render correctly.</a:documentation>
                         <value>Persian</value>
@@ -4918,6 +4960,8 @@
                         <a:documentation>Polish</a:documentation>
                         <value>Portuguese</value>
                         <a:documentation>Portuguese</a:documentation>
+                        <value>Punjabi</value>
+                        <a:documentation>Punjabi</a:documentation>
                         <value>Romanian</value>
                         <a:documentation>Romanian</a:documentation>
                         <value>Russian</value>
@@ -4936,6 +4980,10 @@
                         <a:documentation>Spanish</a:documentation>
                         <value>Swedish</value>
                         <a:documentation>Swedish</a:documentation>
+                        <value>Tamil</value>
+                        <a:documentation>Tamil</a:documentation>
+                        <value>Telugu</value>
+                        <a:documentation>Telugu</a:documentation>
                         <value>Turkish</value>
                         <a:documentation>Turkish</a:documentation>
                         <value>Ukrainian</value>
@@ -6534,10 +6582,14 @@
                         <a:documentation>Arabic</a:documentation>
                         <value>Armenian</value>
                         <a:documentation>Armenian</a:documentation>
+                        <value>Assamese</value>
+                        <a:documentation>Assamese</a:documentation>
                         <value>Bahasa Indonesia</value>
                         <a:documentation>Bahasa Indonesia</a:documentation>
                         <value>Basque</value>
                         <a:documentation>Basque</a:documentation>
+                        <value>Bengali</value>
+                        <a:documentation>Bengali</a:documentation>
                         <value>Bulgarian</value>
                         <a:documentation>Bulgarian (latin alphabet)</a:documentation>
                         <value>Catalan</value>
@@ -6600,10 +6652,16 @@
                         <a:documentation>Lithuanian</a:documentation>
                         <value>Malayalam</value>
                         <a:documentation>Malayalam</a:documentation>
+                        <value>Marathi</value>
+                        <a:documentation>Marathi</a:documentation>
+                        <value>Nepali</value>
+                        <a:documentation>Nepali</a:documentation>
                         <value>Norwegian Bokmål</value>
                         <a:documentation>Norwegian Bokmål</a:documentation>
                         <value>Norwegian Nynorsk</value>
                         <a:documentation>Norwegian Nynorsk</a:documentation>
+                        <value>Odia</value>
+                        <a:documentation>Odia</a:documentation>
                         <value>Other</value>
                         <a:documentation>Don&#39;t any of these languages. Useful if a text does not render correctly.</a:documentation>
                         <value>Persian</value>
@@ -6612,6 +6670,8 @@
                         <a:documentation>Polish</a:documentation>
                         <value>Portuguese</value>
                         <a:documentation>Portuguese</a:documentation>
+                        <value>Punjabi</value>
+                        <a:documentation>Punjabi</a:documentation>
                         <value>Romanian</value>
                         <a:documentation>Romanian</a:documentation>
                         <value>Russian</value>
@@ -6630,6 +6690,10 @@
                         <a:documentation>Spanish</a:documentation>
                         <value>Swedish</value>
                         <a:documentation>Swedish</a:documentation>
+                        <value>Tamil</value>
+                        <a:documentation>Tamil</a:documentation>
+                        <value>Telugu</value>
+                        <a:documentation>Telugu</a:documentation>
                         <value>Turkish</value>
                         <a:documentation>Turkish</a:documentation>
                         <value>Ukrainian</value>
@@ -7519,10 +7583,14 @@
                         <a:documentation>Arabic</a:documentation>
                         <value>Armenian</value>
                         <a:documentation>Armenian</a:documentation>
+                        <value>Assamese</value>
+                        <a:documentation>Assamese</a:documentation>
                         <value>Bahasa Indonesia</value>
                         <a:documentation>Bahasa Indonesia</a:documentation>
                         <value>Basque</value>
                         <a:documentation>Basque</a:documentation>
+                        <value>Bengali</value>
+                        <a:documentation>Bengali</a:documentation>
                         <value>Bulgarian</value>
                         <a:documentation>Bulgarian (latin alphabet)</a:documentation>
                         <value>Catalan</value>
@@ -7585,10 +7653,16 @@
                         <a:documentation>Lithuanian</a:documentation>
                         <value>Malayalam</value>
                         <a:documentation>Malayalam</a:documentation>
+                        <value>Marathi</value>
+                        <a:documentation>Marathi</a:documentation>
+                        <value>Nepali</value>
+                        <a:documentation>Nepali</a:documentation>
                         <value>Norwegian Bokmål</value>
                         <a:documentation>Norwegian Bokmål</a:documentation>
                         <value>Norwegian Nynorsk</value>
                         <a:documentation>Norwegian Nynorsk</a:documentation>
+                        <value>Odia</value>
+                        <a:documentation>Odia</a:documentation>
                         <value>Other</value>
                         <a:documentation>Don&#39;t any of these languages. Useful if a text does not render correctly.</a:documentation>
                         <value>Persian</value>
@@ -7597,6 +7671,8 @@
                         <a:documentation>Polish</a:documentation>
                         <value>Portuguese</value>
                         <a:documentation>Portuguese</a:documentation>
+                        <value>Punjabi</value>
+                        <a:documentation>Punjabi</a:documentation>
                         <value>Romanian</value>
                         <a:documentation>Romanian</a:documentation>
                         <value>Russian</value>
@@ -7615,6 +7691,10 @@
                         <a:documentation>Spanish</a:documentation>
                         <value>Swedish</value>
                         <a:documentation>Swedish</a:documentation>
+                        <value>Tamil</value>
+                        <a:documentation>Tamil</a:documentation>
+                        <value>Telugu</value>
+                        <a:documentation>Telugu</a:documentation>
                         <value>Turkish</value>
                         <a:documentation>Turkish</a:documentation>
                         <value>Ukrainian</value>

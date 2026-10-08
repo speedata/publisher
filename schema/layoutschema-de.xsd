@@ -2084,6 +2084,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Assamese">
+                  <xs:annotation>
+                    <xs:documentation>Assamesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Bahasa Indonesia">
                   <xs:annotation>
                     <xs:documentation>Indonesisch</xs:documentation>
@@ -2096,6 +2105,15 @@
                 <xs:enumeration value="Basque">
                   <xs:annotation>
                     <xs:documentation>Baskisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Bengali">
+                  <xs:annotation>
+                    <xs:documentation>Bengalisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2381,6 +2399,24 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Marathi">
+                  <xs:annotation>
+                    <xs:documentation>Marathi</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Nepali">
+                  <xs:annotation>
+                    <xs:documentation>Nepalesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Bokmål">
                   <xs:annotation>
                     <xs:documentation>Norwegisch (Bokmål).</xs:documentation>
@@ -2393,6 +2429,15 @@
                 <xs:enumeration value="Norwegian Nynorsk">
                   <xs:annotation>
                     <xs:documentation>Norwegisch (Nynorsk).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Odia">
+                  <xs:annotation>
+                    <xs:documentation>Oriya</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2429,6 +2474,15 @@
                 <xs:enumeration value="Portuguese">
                   <xs:annotation>
                     <xs:documentation>Portugiesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Punjabi">
+                  <xs:annotation>
+                    <xs:documentation>Panjabi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2510,6 +2564,24 @@
                 <xs:enumeration value="Swedish">
                   <xs:annotation>
                     <xs:documentation>Schwedisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Tamil">
+                  <xs:annotation>
+                    <xs:documentation>Tamil</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Telugu">
+                  <xs:annotation>
+                    <xs:documentation>Telugu</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -4023,6 +4095,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Assamese">
+                  <xs:annotation>
+                    <xs:documentation>Assamesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Bahasa Indonesia">
                   <xs:annotation>
                     <xs:documentation>Indonesisch</xs:documentation>
@@ -4035,6 +4116,15 @@
                 <xs:enumeration value="Basque">
                   <xs:annotation>
                     <xs:documentation>Baskisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Bengali">
+                  <xs:annotation>
+                    <xs:documentation>Bengalisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -4320,6 +4410,24 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Marathi">
+                  <xs:annotation>
+                    <xs:documentation>Marathi</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Nepali">
+                  <xs:annotation>
+                    <xs:documentation>Nepalesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Bokmål">
                   <xs:annotation>
                     <xs:documentation>Norwegisch (Bokmål).</xs:documentation>
@@ -4332,6 +4440,15 @@
                 <xs:enumeration value="Norwegian Nynorsk">
                   <xs:annotation>
                     <xs:documentation>Norwegisch (Nynorsk).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Odia">
+                  <xs:annotation>
+                    <xs:documentation>Oriya</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -4368,6 +4485,15 @@
                 <xs:enumeration value="Portuguese">
                   <xs:annotation>
                     <xs:documentation>Portugiesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Punjabi">
+                  <xs:annotation>
+                    <xs:documentation>Panjabi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -4449,6 +4575,24 @@
                 <xs:enumeration value="Swedish">
                   <xs:annotation>
                     <xs:documentation>Schwedisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Tamil">
+                  <xs:annotation>
+                    <xs:documentation>Tamil</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Telugu">
+                  <xs:annotation>
+                    <xs:documentation>Telugu</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5080,6 +5224,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Assamese">
+                  <xs:annotation>
+                    <xs:documentation>Assamesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Bahasa Indonesia">
                   <xs:annotation>
                     <xs:documentation>Indonesisch</xs:documentation>
@@ -5092,6 +5245,15 @@
                 <xs:enumeration value="Basque">
                   <xs:annotation>
                     <xs:documentation>Baskisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Bengali">
+                  <xs:annotation>
+                    <xs:documentation>Bengalisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5377,6 +5539,24 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Marathi">
+                  <xs:annotation>
+                    <xs:documentation>Marathi</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Nepali">
+                  <xs:annotation>
+                    <xs:documentation>Nepalesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Bokmål">
                   <xs:annotation>
                     <xs:documentation>Norwegisch (Bokmål).</xs:documentation>
@@ -5389,6 +5569,15 @@
                 <xs:enumeration value="Norwegian Nynorsk">
                   <xs:annotation>
                     <xs:documentation>Norwegisch (Nynorsk).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Odia">
+                  <xs:annotation>
+                    <xs:documentation>Oriya</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5425,6 +5614,15 @@
                 <xs:enumeration value="Portuguese">
                   <xs:annotation>
                     <xs:documentation>Portugiesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Punjabi">
+                  <xs:annotation>
+                    <xs:documentation>Panjabi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5506,6 +5704,24 @@
                 <xs:enumeration value="Swedish">
                   <xs:annotation>
                     <xs:documentation>Schwedisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Tamil">
+                  <xs:annotation>
+                    <xs:documentation>Tamil</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Telugu">
+                  <xs:annotation>
+                    <xs:documentation>Telugu</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -7263,6 +7479,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Assamese">
+                  <xs:annotation>
+                    <xs:documentation>Assamesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Bahasa Indonesia">
                   <xs:annotation>
                     <xs:documentation>Indonesisch</xs:documentation>
@@ -7275,6 +7500,15 @@
                 <xs:enumeration value="Basque">
                   <xs:annotation>
                     <xs:documentation>Baskisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Bengali">
+                  <xs:annotation>
+                    <xs:documentation>Bengalisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -7560,6 +7794,24 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Marathi">
+                  <xs:annotation>
+                    <xs:documentation>Marathi</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Nepali">
+                  <xs:annotation>
+                    <xs:documentation>Nepalesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Bokmål">
                   <xs:annotation>
                     <xs:documentation>Norwegisch (Bokmål).</xs:documentation>
@@ -7572,6 +7824,15 @@
                 <xs:enumeration value="Norwegian Nynorsk">
                   <xs:annotation>
                     <xs:documentation>Norwegisch (Nynorsk).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Odia">
+                  <xs:annotation>
+                    <xs:documentation>Oriya</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -7608,6 +7869,15 @@
                 <xs:enumeration value="Portuguese">
                   <xs:annotation>
                     <xs:documentation>Portugiesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Punjabi">
+                  <xs:annotation>
+                    <xs:documentation>Panjabi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -7689,6 +7959,24 @@
                 <xs:enumeration value="Swedish">
                   <xs:annotation>
                     <xs:documentation>Schwedisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Tamil">
+                  <xs:annotation>
+                    <xs:documentation>Tamil</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Telugu">
+                  <xs:annotation>
+                    <xs:documentation>Telugu</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -8937,6 +9225,15 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Assamese">
+                  <xs:annotation>
+                    <xs:documentation>Assamesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Bahasa Indonesia">
                   <xs:annotation>
                     <xs:documentation>Indonesisch</xs:documentation>
@@ -8949,6 +9246,15 @@
                 <xs:enumeration value="Basque">
                   <xs:annotation>
                     <xs:documentation>Baskisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Bengali">
+                  <xs:annotation>
+                    <xs:documentation>Bengalisch</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -9234,6 +9540,24 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Marathi">
+                  <xs:annotation>
+                    <xs:documentation>Marathi</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Nepali">
+                  <xs:annotation>
+                    <xs:documentation>Nepalesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Norwegian Bokmål">
                   <xs:annotation>
                     <xs:documentation>Norwegisch (Bokmål).</xs:documentation>
@@ -9246,6 +9570,15 @@
                 <xs:enumeration value="Norwegian Nynorsk">
                   <xs:annotation>
                     <xs:documentation>Norwegisch (Nynorsk).</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Odia">
+                  <xs:annotation>
+                    <xs:documentation>Oriya</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -9282,6 +9615,15 @@
                 <xs:enumeration value="Portuguese">
                   <xs:annotation>
                     <xs:documentation>Portugiesisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Punjabi">
+                  <xs:annotation>
+                    <xs:documentation>Panjabi</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -9363,6 +9705,24 @@
                 <xs:enumeration value="Swedish">
                   <xs:annotation>
                     <xs:documentation>Schwedisch</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Tamil">
+                  <xs:annotation>
+                    <xs:documentation>Tamil</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Telugu">
+                  <xs:annotation>
+                    <xs:documentation>Telugu</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>

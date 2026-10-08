@@ -135,14 +135,27 @@ The word joiner U+2060 prevents a line break at a certain position, see [Control
 ## Indic scripts
 
 The text shaping builds the syllables of Indic scripts (Devanagari, Bengali, Tamil …) automatically, including the half forms and ligatures that are controlled with ZWJ (U+200D) and ZWNJ (U+200C).
-Lines are broken at the spaces.
+Lines are broken at the spaces; a danda (`।`, `॥`) does not start a line, even if there is a space before it.
 There is currently no hyphenation for Indic scripts, not even with the languages `Hindi`, `Gujarati`, `Kannada`, `Malayalam` and `Sanskrit`.
-As language, use the matching one from the list or `Other`:
+
+With fonts that support it, the language selects the regional forms.
+Some characters have their own forms in Marathi and Nepali, for example:
 
 ```xml
-<Paragraph language="Other">
+<Paragraph language="Hindi"><Value>अ झ ल श १ ५ ८ ९</Value></Paragraph>
+<Paragraph language="Marathi"><Value>अ झ ल श १ ५ ८ ९</Value></Paragraph>
+<Paragraph language="Nepali"><Value>अ झ ल श १ ५ ८ ९</Value></Paragraph>
+```
+
+![Hindi, Marathi and Nepali in the same font (Noto Sans Devanagari)](/img/scripts-devanagari-forms.png)
+
+Besides `Hindi`, `Marathi` and `Nepali` there are the languages `Assamese`, `Bengali`, `Gujarati`, `Kannada`, `Malayalam`, `Odia`, `Punjabi`, `Sanskrit`, `Tamil` and `Telugu`.
+For other languages, use `Other`.
+
+```xml
+<Paragraph language="Bengali">
   <Value>আমি</Value>
 </Paragraph>
 ```
 
-![Bengali with the language setting `Other`](/img/hb-bengali-correct.png)
+![Bengali](/img/hb-bengali-correct.png)

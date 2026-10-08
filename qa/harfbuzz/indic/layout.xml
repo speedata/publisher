@@ -1,0 +1,24 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat width="10cm" height="6cm" />
+    <SetGrid width="5mm" height="5mm" />
+    <LoadFontfile name="deva" filename="NotoSansDevanagari-subset.ttf" />
+    <DefineFontfamily name="deva" fontsize="12" leading="18"><Regular fontface="deva" /></DefineFontfamily>
+
+    <Record element="data">
+        <!-- The danda after a space does not start a line. -->
+        <PlaceObject column="1" row="1">
+            <Textblock width="2cm" fontfamily="deva" textformat="left">
+                <Paragraph><Value>यह पुस्तक है । वह कलम है ।</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <!-- The language selects the Marathi and Nepali forms. -->
+        <PlaceObject column="7" row="1">
+            <Textblock width="4cm" fontfamily="deva">
+                <Paragraph language="Hindi"><Value>अ झ ल श १ ५ ८ ९</Value></Paragraph>
+                <Paragraph language="Marathi"><Value>अ झ ल श १ ५ ८ ९</Value></Paragraph>
+                <Paragraph language="Nepali"><Value>अ झ ल श १ ५ ८ ९</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

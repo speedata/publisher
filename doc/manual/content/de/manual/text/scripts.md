@@ -135,14 +135,27 @@ Mit dem Wortverbinder U+2060 verhindert man einen Umbruch an einer bestimmten St
 ## Indische Schriften
 
 Die Silbenbildung indischer Schriften (Devanagari, Bengali, Tamil …) übernimmt die Textformung automatisch, einschließlich der Halbformen und Ligaturen, die man mit ZWJ (U+200D) und ZWNJ (U+200C) steuert.
-Umbrochen wird an den Leerzeichen.
+Umbrochen wird an den Leerzeichen; ein Danda (`।`, `॥`) steht dabei nicht am Zeilenanfang, auch wenn davor ein Leerzeichen steht.
 Eine Silbentrennung gibt es für indische Schriften derzeit nicht, auch nicht mit den Sprachen `Hindi`, `Gujarati`, `Kannada`, `Malayalam` und `Sanskrit`.
-Als Sprache nimmt man die passende aus der Liste oder `Other`:
+
+Die Sprache wählt bei Schriften, die das unterstützen, die regionalen Formen.
+So haben einige Zeichen im Marathi und im Nepali eigene Formen:
 
 ```xml
-<Paragraph language="Other">
+<Paragraph language="Hindi"><Value>अ झ ल श १ ५ ८ ९</Value></Paragraph>
+<Paragraph language="Marathi"><Value>अ झ ल श १ ५ ८ ९</Value></Paragraph>
+<Paragraph language="Nepali"><Value>अ झ ल श १ ५ ८ ९</Value></Paragraph>
+```
+
+![Hindi, Marathi und Nepali in derselben Schrift (Noto Sans Devanagari)](/img/scripts-devanagari-forms.png)
+
+Neben `Hindi`, `Marathi` und `Nepali` gibt es die Sprachen `Assamese`, `Bengali`, `Gujarati`, `Kannada`, `Malayalam`, `Odia`, `Punjabi`, `Sanskrit`, `Tamil` und `Telugu`.
+Für andere Sprachen nimmt man `Other`.
+
+```xml
+<Paragraph language="Bengali">
   <Value>আমি</Value>
 </Paragraph>
 ```
 
-![Bengali mit der Spracheinstellung `Other`](/img/hb-bengali-correct.png)
+![Bengali](/img/hb-bengali-correct.png)

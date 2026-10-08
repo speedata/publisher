@@ -1310,7 +1310,12 @@ function M.hbglyphlist(arguments)
         elseif uc == 32 or tabregularspace then
             local thiscluster = thisglyph.cluster
             local thisclustervalue = cluster[thiscluster]
-            if thisclustervalue == 160 then -- no break space
+            -- A space before a danda (U+0964) or double danda (U+0965) does
+            -- not break, the danda must not start a line (Hindi "है ।").
+            local before_danda = thisclustervalue == 32
+                and thiscluster
+                and (cluster[thiscluster + 1] == 0x0964 or cluster[thiscluster + 1] == 0x0965)
+            if thisclustervalue == 160 or before_danda then -- no break space
                 n = node.new(publisher.penalty_node)
                 n.penalty = 10000
                 list, cur = node.insert_after(list, cur, n)
