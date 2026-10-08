@@ -21,8 +21,6 @@ file_start("publisher.lua")
 ---@field minheight? integer
 ---@field maxwidth? integer
 ---@field maxheight? integer
----@field prohibited_at_end table Characters not allowed at the end of a line.
----@field prohibited_at_beginning table Characters not allowed at the start of a line.
 ---@field lua_error_handler? fun(what: any): any Set by spinit.lua, reports a Lua error with stack trace, passes stop_request through.
 local M = {}
 -- Publish M into package.loaded right away so that submodules required

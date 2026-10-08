@@ -1,0 +1,41 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat width="12cm" height="9cm" />
+    <SetGrid width="5mm" height="5mm" />
+    <LoadFontfile name="sc" filename="NotoSansSC-subset.otf" />
+    <LoadFontfile name="jp" filename="NotoSansJP-subset.otf" />
+    <LoadFontfile name="kr" filename="NotoSansKR-subset.otf" />
+    <DefineFontfamily name="sc" fontsize="10" leading="15"><Regular fontface="sc" /></DefineFontfamily>
+    <DefineFontfamily name="jp" fontsize="10" leading="15"><Regular fontface="jp" /></DefineFontfamily>
+    <DefineFontfamily name="kr" fontsize="10" leading="15"><Regular fontface="kr" /></DefineFontfamily>
+
+    <Record element="data">
+        <!-- No language and a Latin word at the start: breaks between the
+             Han characters nevertheless. -->
+        <PlaceObject column="1" row="1">
+            <Textblock width="8" fontfamily="sc">
+                <Paragraph><Value>Speedata出版软件可以从数据和布局说明中生成文件。</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <!-- 》 and ， do not start a line, …… and —— are not split, a break
+             is possible at the span boundary, the underline has no gaps. -->
+        <PlaceObject column="12" row="1">
+            <Textblock width="8" fontfamily="sc">
+                <Paragraph language="Chinese"><Value>他读了很多遍《红楼梦》，</Value><U><Value>每一遍都有新的体会</Value></U><Value>……真是好书——值得一读。</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <!-- Japanese: small kana and ー do not start a line (strict). -->
+        <PlaceObject column="1" row="10">
+            <Textblock width="8" fontfamily="jp">
+                <Paragraph language="Japanese"><Value>東京のコンピューターショップでキャッシュカードを使ってチョコレートを買った。</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <!-- Korean breaks at spaces, also when the font replaces the space
+             glyph for the language (locl). -->
+        <PlaceObject column="12" row="10">
+            <Textblock width="8" fontfamily="kr">
+                <Paragraph language="Korean"><Value>한국어 텍스트는 띄어쓰기로 줄을 바꿉니다. 漢字도 가능합니다.</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

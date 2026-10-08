@@ -2537,7 +2537,9 @@
                         <value>Catalan</value>
                         <a:documentation>Catalan</a:documentation>
                         <value>Chinese</value>
-                        <a:documentation>Chinese language setting.</a:documentation>
+                        <a:documentation>Chinese (simplified characters)</a:documentation>
+                        <value>Chinese (Traditional)</value>
+                        <a:documentation>Chinese (traditional characters)</a:documentation>
                         <value>Croatian</value>
                         <a:documentation>Croatian</a:documentation>
                         <value>Czech</value>
@@ -2576,8 +2578,12 @@
                         <a:documentation>Irish</a:documentation>
                         <value>Italian</value>
                         <a:documentation>Italian</a:documentation>
+                        <value>Japanese</value>
+                        <a:documentation>Japanese</a:documentation>
                         <value>Kannada</value>
                         <a:documentation>Kannada</a:documentation>
+                        <value>Korean</value>
+                        <a:documentation>Korean</a:documentation>
                         <value>Kurmanji</value>
                         <a:documentation>Kurmanji</a:documentation>
                         <value>Latvian</value>
@@ -4124,7 +4130,9 @@
                   <value>Catalan</value>
                   <a:documentation>Catalan</a:documentation>
                   <value>Chinese</value>
-                  <a:documentation>Chinese language setting.</a:documentation>
+                  <a:documentation>Chinese (simplified characters)</a:documentation>
+                  <value>Chinese (Traditional)</value>
+                  <a:documentation>Chinese (traditional characters)</a:documentation>
                   <value>Croatian</value>
                   <a:documentation>Croatian</a:documentation>
                   <value>Czech</value>
@@ -4163,8 +4171,12 @@
                   <a:documentation>Irish</a:documentation>
                   <value>Italian</value>
                   <a:documentation>Italian</a:documentation>
+                  <value>Japanese</value>
+                  <a:documentation>Japanese</a:documentation>
                   <value>Kannada</value>
                   <a:documentation>Kannada</a:documentation>
+                  <value>Korean</value>
+                  <a:documentation>Korean</a:documentation>
                   <value>Kurmanji</value>
                   <a:documentation>Kurmanji</a:documentation>
                   <value>Latvian</value>
@@ -4819,7 +4831,9 @@
                         <value>Catalan</value>
                         <a:documentation>Catalan</a:documentation>
                         <value>Chinese</value>
-                        <a:documentation>Chinese language setting.</a:documentation>
+                        <a:documentation>Chinese (simplified characters)</a:documentation>
+                        <value>Chinese (Traditional)</value>
+                        <a:documentation>Chinese (traditional characters)</a:documentation>
                         <value>Croatian</value>
                         <a:documentation>Croatian</a:documentation>
                         <value>Czech</value>
@@ -4858,8 +4872,12 @@
                         <a:documentation>Irish</a:documentation>
                         <value>Italian</value>
                         <a:documentation>Italian</a:documentation>
+                        <value>Japanese</value>
+                        <a:documentation>Japanese</a:documentation>
                         <value>Kannada</value>
                         <a:documentation>Kannada</a:documentation>
+                        <value>Korean</value>
+                        <a:documentation>Korean</a:documentation>
                         <value>Kurmanji</value>
                         <a:documentation>Kurmanji</a:documentation>
                         <value>Latvian</value>
@@ -6499,7 +6517,9 @@
                         <value>Catalan</value>
                         <a:documentation>Catalan</a:documentation>
                         <value>Chinese</value>
-                        <a:documentation>Chinese language setting.</a:documentation>
+                        <a:documentation>Chinese (simplified characters)</a:documentation>
+                        <value>Chinese (Traditional)</value>
+                        <a:documentation>Chinese (traditional characters)</a:documentation>
                         <value>Croatian</value>
                         <a:documentation>Croatian</a:documentation>
                         <value>Czech</value>
@@ -6538,8 +6558,12 @@
                         <a:documentation>Irish</a:documentation>
                         <value>Italian</value>
                         <a:documentation>Italian</a:documentation>
+                        <value>Japanese</value>
+                        <a:documentation>Japanese</a:documentation>
                         <value>Kannada</value>
                         <a:documentation>Kannada</a:documentation>
+                        <value>Korean</value>
+                        <a:documentation>Korean</a:documentation>
                         <value>Kurmanji</value>
                         <a:documentation>Kurmanji</a:documentation>
                         <value>Latvian</value>
@@ -7470,7 +7494,9 @@
                         <value>Catalan</value>
                         <a:documentation>Catalan</a:documentation>
                         <value>Chinese</value>
-                        <a:documentation>Chinese language setting.</a:documentation>
+                        <a:documentation>Chinese (simplified characters)</a:documentation>
+                        <value>Chinese (Traditional)</value>
+                        <a:documentation>Chinese (traditional characters)</a:documentation>
                         <value>Croatian</value>
                         <a:documentation>Croatian</a:documentation>
                         <value>Czech</value>
@@ -7509,8 +7535,12 @@
                         <a:documentation>Irish</a:documentation>
                         <value>Italian</value>
                         <a:documentation>Italian</a:documentation>
+                        <value>Japanese</value>
+                        <a:documentation>Japanese</a:documentation>
                         <value>Kannada</value>
                         <a:documentation>Kannada</a:documentation>
+                        <value>Korean</value>
+                        <a:documentation>Korean</a:documentation>
                         <value>Kurmanji</value>
                         <a:documentation>Kurmanji</a:documentation>
                         <value>Latvian</value>

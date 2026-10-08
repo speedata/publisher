@@ -1081,6 +1081,7 @@ function Par:format(width_sp, options, data)
         then
             nodelist = nodelist.next
         end
+        publisher.nodes.insert_cjk_breaks(nodelist, tf.alignment == "justified")
         publisher.fonts.pre_linebreak(nodelist)
 
         -- both are set only for ul/ol lists

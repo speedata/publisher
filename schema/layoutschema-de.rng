@@ -2537,7 +2537,9 @@
                         <value>Catalan</value>
                         <a:documentation>Katalanisch</a:documentation>
                         <value>Chinese</value>
-                        <a:documentation>Auf chinsische Sprache umschalten.</a:documentation>
+                        <a:documentation>Chinesisch (Kurzzeichen)</a:documentation>
+                        <value>Chinese (Traditional)</value>
+                        <a:documentation>Chinesisch (Langzeichen)</a:documentation>
                         <value>Croatian</value>
                         <a:documentation>Kroatisch</a:documentation>
                         <value>Czech</value>
@@ -2576,8 +2578,12 @@
                         <a:documentation>Irisch</a:documentation>
                         <value>Italian</value>
                         <a:documentation>Italienisch</a:documentation>
+                        <value>Japanese</value>
+                        <a:documentation>Japanisch</a:documentation>
                         <value>Kannada</value>
                         <a:documentation>Kanaresisch</a:documentation>
+                        <value>Korean</value>
+                        <a:documentation>Koreanisch</a:documentation>
                         <value>Kurmanji</value>
                         <a:documentation>Kurmandschi</a:documentation>
                         <value>Latvian</value>
@@ -4124,7 +4130,9 @@
                   <value>Catalan</value>
                   <a:documentation>Katalanisch</a:documentation>
                   <value>Chinese</value>
-                  <a:documentation>Auf chinsische Sprache umschalten.</a:documentation>
+                  <a:documentation>Chinesisch (Kurzzeichen)</a:documentation>
+                  <value>Chinese (Traditional)</value>
+                  <a:documentation>Chinesisch (Langzeichen)</a:documentation>
                   <value>Croatian</value>
                   <a:documentation>Kroatisch</a:documentation>
                   <value>Czech</value>
@@ -4163,8 +4171,12 @@
                   <a:documentation>Irisch</a:documentation>
                   <value>Italian</value>
                   <a:documentation>Italienisch</a:documentation>
+                  <value>Japanese</value>
+                  <a:documentation>Japanisch</a:documentation>
                   <value>Kannada</value>
                   <a:documentation>Kanaresisch</a:documentation>
+                  <value>Korean</value>
+                  <a:documentation>Koreanisch</a:documentation>
                   <value>Kurmanji</value>
                   <a:documentation>Kurmandschi</a:documentation>
                   <value>Latvian</value>
@@ -4819,7 +4831,9 @@
                         <value>Catalan</value>
                         <a:documentation>Katalanisch</a:documentation>
                         <value>Chinese</value>
-                        <a:documentation>Auf chinsische Sprache umschalten.</a:documentation>
+                        <a:documentation>Chinesisch (Kurzzeichen)</a:documentation>
+                        <value>Chinese (Traditional)</value>
+                        <a:documentation>Chinesisch (Langzeichen)</a:documentation>
                         <value>Croatian</value>
                         <a:documentation>Kroatisch</a:documentation>
                         <value>Czech</value>
@@ -4858,8 +4872,12 @@
                         <a:documentation>Irisch</a:documentation>
                         <value>Italian</value>
                         <a:documentation>Italienisch</a:documentation>
+                        <value>Japanese</value>
+                        <a:documentation>Japanisch</a:documentation>
                         <value>Kannada</value>
                         <a:documentation>Kanaresisch</a:documentation>
+                        <value>Korean</value>
+                        <a:documentation>Koreanisch</a:documentation>
                         <value>Kurmanji</value>
                         <a:documentation>Kurmandschi</a:documentation>
                         <value>Latvian</value>
@@ -6499,7 +6517,9 @@
                         <value>Catalan</value>
                         <a:documentation>Katalanisch</a:documentation>
                         <value>Chinese</value>
-                        <a:documentation>Auf chinsische Sprache umschalten.</a:documentation>
+                        <a:documentation>Chinesisch (Kurzzeichen)</a:documentation>
+                        <value>Chinese (Traditional)</value>
+                        <a:documentation>Chinesisch (Langzeichen)</a:documentation>
                         <value>Croatian</value>
                         <a:documentation>Kroatisch</a:documentation>
                         <value>Czech</value>
@@ -6538,8 +6558,12 @@
                         <a:documentation>Irisch</a:documentation>
                         <value>Italian</value>
                         <a:documentation>Italienisch</a:documentation>
+                        <value>Japanese</value>
+                        <a:documentation>Japanisch</a:documentation>
                         <value>Kannada</value>
                         <a:documentation>Kanaresisch</a:documentation>
+                        <value>Korean</value>
+                        <a:documentation>Koreanisch</a:documentation>
                         <value>Kurmanji</value>
                         <a:documentation>Kurmandschi</a:documentation>
                         <value>Latvian</value>
@@ -7470,7 +7494,9 @@
                         <value>Catalan</value>
                         <a:documentation>Katalanisch</a:documentation>
                         <value>Chinese</value>
-                        <a:documentation>Auf chinsische Sprache umschalten.</a:documentation>
+                        <a:documentation>Chinesisch (Kurzzeichen)</a:documentation>
+                        <value>Chinese (Traditional)</value>
+                        <a:documentation>Chinesisch (Langzeichen)</a:documentation>
                         <value>Croatian</value>
                         <a:documentation>Kroatisch</a:documentation>
                         <value>Czech</value>
@@ -7509,8 +7535,12 @@
                         <a:documentation>Irisch</a:documentation>
                         <value>Italian</value>
                         <a:documentation>Italienisch</a:documentation>
+                        <value>Japanese</value>
+                        <a:documentation>Japanisch</a:documentation>
                         <value>Kannada</value>
                         <a:documentation>Kanaresisch</a:documentation>
+                        <value>Korean</value>
+                        <a:documentation>Koreanisch</a:documentation>
                         <value>Kurmanji</value>
                         <a:documentation>Kurmandschi</a:documentation>
                         <value>Latvian</value>

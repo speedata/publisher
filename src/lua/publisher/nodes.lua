@@ -1015,9 +1015,7 @@ function M.hbglyphlist(arguments)
     local newlines_at = arguments.newlines_at
     local fontfamily = parameter.fontfamily
     local direction = arguments.direction
-    local thislang = arguments.thislang
     local fontnumber = arguments.fontnumber
-    local is_cjk = arguments.is_cjk
     local decoration_active = parameter.textdecorationline ~= nil
     local background_active = parameter.backgroundcolor ~= nil
 
@@ -1269,6 +1267,12 @@ function M.hbglyphlist(arguments)
             and parameter.tab ~= "hspace"
             and not parameter.tabstops
         )
+        -- A font may replace the space by a glyph of its own for a language
+        -- (Noto Sans CJK KR with locl for Korean), so the original
+        -- character counts as well.
+        if cpcluster == 32 then
+            uc = 32
+        end
         -- skip double space
         if
             i > 1
@@ -1470,34 +1474,6 @@ function M.hbglyphlist(arguments)
                 lastitemwasglyph = true
             end
 
-            -- CJK
-            if is_cjk and i < #glyphs and uc > 12032 then
-                -- don't break within non-cjk words
-                if publisher.prohibited_at_end[thislang][unicode.utf8.char(uc)] then
-                    -- ignore
-                else
-                    -- add breaking point between this glyph and next glyph unless prohibited
-                    if i < #glyphs then
-                        local nextchar = glyphs[i + 1].codepoint
-                        local nextuc = thistbl.backmap[nextchar] or nextchar
-                        if not publisher.prohibited_at_beginning[thislang][unicode.utf8.char(nextuc)] then
-                            local pen = node.new(publisher.penalty_node)
-                            pen.penalty = 0
-                            if parameter.textformat.alignment == "justified" then
-                                local g = set_glue(nil, { stretch = 2 ^ 16, stretch_order = 0 })
-                                list, cur = node.insert_after(list, cur, g)
-                            end
-                            list, cur = node.insert_after(list, cur, pen)
-                        end
-                    end
-                end
-            end
-            -- simplified chinese
-            -- characters that must not appear at the beginning of a line
-            -- !%),.:;?]}¢°·'""†‡›℃∶、。〃〆〕〗〞﹚﹜！＂％＇），．：；？！］｝～
-            -- characters that must not appear at the end of a line
-            -- $(£¥·'"〈《「『【〔〖〝﹙﹛＄（．［｛￡￥
-
             -- glyph ids inserted by sd:symbol()
             local thischar = thistbl.characters[uc]
             if uc > publisher.puastart and thisglyph.codepoint == 0 and thischar then
@@ -1667,8 +1643,20 @@ function M.mknodes(str, parameter, _origin)
         if thislang == "--" then
             thislang = nil
             script = nil
-        elseif thislang == "zh" then
-            script = "Hans"
+        elseif thislang then
+            -- Fix the script for CJK languages, otherwise HarfBuzz takes it
+            -- from the first character (Latin in "XML数据"). The OpenType
+            -- language tag selects the regional glyph forms.
+            local langcode, region = string.match(thislang, "^(%a+)[_-]?(%a*)")
+            if langcode == "zh" then
+                if region == "tw" or region == "hk" or region == "mo" or region == "hant" then
+                    script = "Hant"
+                else
+                    script = "Hans"
+                end
+            elseif langcode == "ja" then
+                script = "Hani"
+            end
         end
 
         -- U+2060 WORD JOINER is a default ignorable and gets removed by
@@ -1700,17 +1688,6 @@ function M.mknodes(str, parameter, _origin)
         ---@cast direction string?
         -- shape returns the guessed script and direction from the buffer
         script, direction = publisher.shape(tbl, buf, { language = thislang, script = script, direction = direction })
-        local is_cjk = false
-        if script == "Hans" or script == "Hira" or script == "Hant" or script == "Hani" then
-            is_cjk = true
-            -- script can be guessed from buffer and thislang could be empty, so
-            -- lang must be set again.
-            thislang = "zh"
-        elseif script == "Kana" then
-            is_cjk = true
-            thislang = "ja"
-        end
-
         local glyphs = buf:get_glyphs()
         if #glyphs == 0 then
             goto nextsegment
@@ -1724,9 +1701,7 @@ function M.mknodes(str, parameter, _origin)
             newlines_at = newlines_at,
             script = script,
             direction = direction or maindirection,
-            thislang = thislang,
             fontnumber = fontnumber,
-            is_cjk = is_cjk,
         })
         direction = direction or 0
         thissegment = M.setsegmentdir(thissegment, direction, maindirection)
@@ -2215,6 +2190,114 @@ local function check_if_a_line_exeeds(nodelist, wd)
         head = head.next
     end
     return false
+end
+
+-- Characters that allow a line break before and after them, roughly the
+-- UAX #14 classes ID and CJ: Han, kana, CJK symbols and fullwidth forms.
+-- Hangul is not included, Korean text breaks at spaces.
+local cjk_ranges = {
+    { 0x2E80, 0x2FFF }, -- CJK and Kangxi radicals, ideographic description
+    { 0x3000, 0x30FF }, -- CJK symbols and punctuation, hiragana, katakana
+    { 0x3100, 0x312F }, -- bopomofo
+    { 0x3190, 0x31FF }, -- kanbun, bopomofo extended, strokes, small katakana
+    { 0x3200, 0x4DBF }, -- enclosed CJK, CJK compatibility, extension A
+    { 0x4E00, 0x9FFF }, -- CJK unified ideographs
+    { 0xF900, 0xFAFF }, -- CJK compatibility ideographs
+    { 0xFE30, 0xFE4F }, -- CJK compatibility forms
+    { 0xFF00, 0xFFEF }, -- halfwidth and fullwidth forms
+    { 0x1B000, 0x1B16F }, -- kana supplement and extensions
+    { 0x20000, 0x3FFFF }, -- extension B and later
+}
+
+---@param cp integer
+---@return boolean
+local function is_cjk_char(cp)
+    if cp < 0x2E80 then
+        return false
+    end
+    for i = 1, #cjk_ranges do
+        local r = cjk_ranges[i]
+        if cp < r[1] then
+            return false
+        end
+        if cp <= r[2] then
+            return true
+        end
+    end
+    return false
+end
+
+---@param str string
+---@return table<integer, boolean>
+local function charset(str)
+    local set = {}
+    for _, c in utf8.codes(str) do
+        set[c] = true
+    end
+    return set
+end
+
+-- Line breaking rules for Chinese and Japanese (clreq, jlreq, UAX #14).
+-- Closing brackets and punctuation, small kana, the prolonged sound mark and
+-- iteration marks must not start a line.
+local cjk_not_at_start = charset(
+    "!%),.:;?]}¢°·'\"†‡›»’”‰′″℃∶‼⁇⁈⁉‧…‥⋯‐–〜～"
+        .. "、。〃〆々〻〉》」』】〕〗〙〛〞〟"
+        .. "ぁぃぅぇぉっゃゅょゎゕゖゝゞ゠ァィゥェォッャュョヮヵヶ・ーヽヾㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ"
+        .. "！％），．：；？］｝｠｡｣､･ｧｨｩｪｫｬｭｮｯｰﾞﾟ﹐﹑﹒﹔﹕﹖﹗﹚﹜﹞￠"
+)
+-- Opening brackets and quotes and currency signs must not end a line.
+local cjk_not_at_end =
+    charset("$(£¥·'\"[{‘“«‹〈《「『【〔〖〘〚〝（［｛｟｢﹙﹛﹝＄￡￥")
+-- Two of these in a row (…… and ——) must not be split.
+local cjk_inseparable = charset("—―…‥⋯")
+
+-- Inserts the line break opportunities for Chinese and Japanese text into
+-- the paragraph `head`: between two glyphs where at least one is a CJK
+-- character, unless the rules above forbid it. This works across spans, so
+-- it has to run on the whole paragraph. In justified text the break is a
+-- stretchable glue so that the extra space is distributed between the
+-- characters; where a break is forbidden, a penalty protects the glue.
+---@param head Node Paragraph node list.
+---@param justified boolean
+function M.insert_cjk_breaks(head, justified)
+    local glyph_id = publisher.glyph_node
+    local whatsit_id = publisher.whatsit_node
+    local rule_id = publisher.rule_node
+    local cur = head
+    while cur do
+        local nxt = cur.next
+        if cur.id == glyph_id then
+            -- skip invisible nodes between two spans (whatsits, struts)
+            while nxt and (nxt.id == whatsit_id or (nxt.id == rule_id and nxt.width == 0)) do
+                nxt = nxt.next
+            end
+            if nxt and nxt.id == glyph_id and nxt.width ~= 0 then
+                local a, b = cur.char, nxt.char
+                if is_cjk_char(a) or is_cjk_char(b) then
+                    local allowed = not (cjk_not_at_end[a] or cjk_not_at_start[b] or (a == b and cjk_inseparable[a]))
+                    if justified then
+                        local after = cur
+                        if not allowed then
+                            local p = node.new(publisher.penalty_node)
+                            p.penalty = 10000
+                            head, after = node.insert_after(head, after, p)
+                        end
+                        local g = set_glue(nil, { stretch = 2 ^ 16 })
+                        -- same attributes as the glyph, so that underline and
+                        -- background color have no gaps
+                        g.attr = cur.attr
+                        head = node.insert_after(head, after, g)
+                    elseif allowed then
+                        local p = node.new(publisher.penalty_node)
+                        p.penalty = 0
+                        head = node.insert_after(head, cur, p)
+                    end
+                end
+            end
+        end
+        cur = nxt
+    end
 end
 
 -- Performs Knuth-Plass line breaking on the paragraph `nodelist` to fit

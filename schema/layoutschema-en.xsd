@@ -2113,7 +2113,16 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Chinese">
                   <xs:annotation>
-                    <xs:documentation>Chinese language setting.</xs:documentation>
+                    <xs:documentation>Chinese (simplified characters)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Chinese (Traditional)">
+                  <xs:annotation>
+                    <xs:documentation>Chinese (traditional characters)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -2291,9 +2300,27 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Japanese">
+                  <xs:annotation>
+                    <xs:documentation>Japanese</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Kannada">
                   <xs:annotation>
                     <xs:documentation>Kannada</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Korean">
+                  <xs:annotation>
+                    <xs:documentation>Korean</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -3989,7 +4016,16 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Chinese">
                   <xs:annotation>
-                    <xs:documentation>Chinese language setting.</xs:documentation>
+                    <xs:documentation>Chinese (simplified characters)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Chinese (Traditional)">
+                  <xs:annotation>
+                    <xs:documentation>Chinese (traditional characters)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -4167,9 +4203,27 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Japanese">
+                  <xs:annotation>
+                    <xs:documentation>Japanese</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Kannada">
                   <xs:annotation>
                     <xs:documentation>Kannada</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Korean">
+                  <xs:annotation>
+                    <xs:documentation>Korean</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -4983,7 +5037,16 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Chinese">
                   <xs:annotation>
-                    <xs:documentation>Chinese language setting.</xs:documentation>
+                    <xs:documentation>Chinese (simplified characters)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Chinese (Traditional)">
+                  <xs:annotation>
+                    <xs:documentation>Chinese (traditional characters)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -5161,9 +5224,27 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Japanese">
+                  <xs:annotation>
+                    <xs:documentation>Japanese</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Kannada">
                   <xs:annotation>
                     <xs:documentation>Kannada</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Korean">
+                  <xs:annotation>
+                    <xs:documentation>Korean</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -7103,7 +7184,16 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Chinese">
                   <xs:annotation>
-                    <xs:documentation>Chinese language setting.</xs:documentation>
+                    <xs:documentation>Chinese (simplified characters)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Chinese (Traditional)">
+                  <xs:annotation>
+                    <xs:documentation>Chinese (traditional characters)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -7281,9 +7371,27 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Japanese">
+                  <xs:annotation>
+                    <xs:documentation>Japanese</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Kannada">
                   <xs:annotation>
                     <xs:documentation>Kannada</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Korean">
+                  <xs:annotation>
+                    <xs:documentation>Korean</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -8714,7 +8822,16 @@
               <xs:restriction base="xs:token">
                 <xs:enumeration value="Chinese">
                   <xs:annotation>
-                    <xs:documentation>Chinese language setting.</xs:documentation>
+                    <xs:documentation>Chinese (simplified characters)</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Chinese (Traditional)">
+                  <xs:annotation>
+                    <xs:documentation>Chinese (traditional characters)</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
@@ -8892,9 +9009,27 @@
             </xs:simpleType>
             <xs:simpleType>
               <xs:restriction base="xs:token">
+                <xs:enumeration value="Japanese">
+                  <xs:annotation>
+                    <xs:documentation>Japanese</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
                 <xs:enumeration value="Kannada">
                   <xs:annotation>
                     <xs:documentation>Kannada</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="Korean">
+                  <xs:annotation>
+                    <xs:documentation>Korean</xs:documentation>
                   </xs:annotation>
                 </xs:enumeration>
               </xs:restriction>
