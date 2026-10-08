@@ -164,7 +164,21 @@ end
 ---@param options table Per-call style overrides.
 ---@return Node head
 local function mktextnode(self, text, options)
-    local nodes, newdir = publisher.nodes.mknodes(tostring(text), options, "par/mktextnode")
+    text = tostring(text)
+    -- Find the text in the paragraph text that the bidi levels were computed
+    -- for, behind the previous part. Parts that are not found (changed text)
+    -- get their own bidi analysis.
+    local bidi_offset
+    local bidi_par = options.bidi_par
+    if bidi_par and text ~= "" then
+        self.bidi_cursor = self.bidi_cursor or {}
+        local first = string.find(bidi_par.text, text, self.bidi_cursor[bidi_par] or 1, true)
+        if first then
+            bidi_offset = first
+            self.bidi_cursor[bidi_par] = first + #text
+        end
+    end
+    local nodes, newdir = publisher.nodes.mknodes(text, options, "par/mktextnode", bidi_offset)
     if options.fontoutlinewidth and options.fontoutlinewidth > 0 then
         local pw = node.new("whatsit", "pdf_literal")
         pw.data = string.format(" 1 Tr %g w ", sp_to_bp(options.fontoutlinewidth))
@@ -644,6 +658,7 @@ end
 ---@param data? table Data XML context (required for HTML contents).
 ---@return nil
 function Par:mknodelist(options, data)
+    self.bidi_cursor = nil
     flatten(self, self, options, data)
     local nodelist
     local objects = {}
@@ -1081,6 +1096,7 @@ function Par:format(width_sp, options, data)
         then
             nodelist = nodelist.next
         end
+        nodelist = publisher.nodes.join_dir_groups(nodelist)
         publisher.nodes.insert_cjk_breaks(nodelist, tf.alignment == "justified")
         publisher.fonts.pre_linebreak(nodelist)
 

@@ -1,0 +1,35 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat width="12cm" height="6cm" />
+    <SetGrid width="5mm" height="5mm" />
+    <LoadFontfile name="ar" filename="amiri-subset.ttf" />
+    <DefineFontfamily name="ar" fontsize="11" leading="18"><Regular fontface="ar" /></DefineFontfamily>
+
+    <Record element="data">
+        <!-- direction="rtl" without bidi: Latin and digits are not reversed -->
+        <PlaceObject column="1" row="1">
+            <Textblock width="10" fontfamily="ar">
+                <Paragraph direction="rtl"><Value>السعر 25.50 EUR للقطعة (الحد الأدنى 3 قطع).</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <!-- no attributes: the paragraph is right-to-left, last line on the right -->
+        <PlaceObject column="12" row="1">
+            <Textblock width="10" fontfamily="ar">
+                <Paragraph><Value>يستخدم الناشر لإنشاء كتالوجات المنتجات وقوائم الأسعار.</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <!-- left-to-right paragraph: the number stays inside the Arabic run -->
+        <PlaceObject column="1" row="6">
+            <Textblock width="21" fontfamily="ar">
+                <Paragraph><Value>The title </Value><Value>الكتاب المقدس 25</Value><Value> is printed.</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <!-- language selects the Urdu digit forms -->
+        <PlaceObject column="1" row="8">
+            <Textblock width="10" fontfamily="ar">
+                <Paragraph language="Persian"><Value>فارسی ۴۵۶۷</Value></Paragraph>
+                <Paragraph language="Urdu"><Value>اردو ۴۵۶۷</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>

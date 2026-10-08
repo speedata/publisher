@@ -181,22 +181,27 @@ func calculateOrdering(levels []level, runes []rune) Ordering {
 	var curDir Direction
 
 	prevDir := Neutral
+	prevLevel := level(-1)
 	prevI := 0
 
 	o := Ordering{}
 	// lvl = 0,2,4,...: left to right
 	// lvl = 1,3,5,...: right to left
+	// A new run starts at every level change, so that nested runs (digits
+	// in right-to-left text inside a left-to-right paragraph) stay apart.
 	for i, lvl := range levels {
 		if lvl%2 == 0 {
 			curDir = LeftToRight
 		} else {
 			curDir = RightToLeft
 		}
-		if curDir != prevDir {
+		if lvl != prevLevel {
+			prevLevel = lvl
 			if i > 0 {
 				o.runes = append(o.runes, runes[prevI:i])
 				o.directions = append(o.directions, prevDir)
 				o.startpos = append(o.startpos, prevI)
+				o.levels = append(o.levels, int(levels[prevI]))
 			}
 			prevI = i
 			prevDir = curDir
@@ -205,6 +210,11 @@ func calculateOrdering(levels []level, runes []rune) Ordering {
 	o.runes = append(o.runes, runes[prevI:])
 	o.directions = append(o.directions, prevDir)
 	o.startpos = append(o.startpos, prevI)
+	if len(levels) > 0 {
+		o.levels = append(o.levels, int(levels[prevI]))
+	} else {
+		o.levels = append(o.levels, 0)
+	}
 	return o
 }
 
@@ -255,6 +265,7 @@ type Ordering struct {
 	runes      [][]rune
 	directions []Direction
 	startpos   []int
+	levels     []int
 }
 
 // Direction reports the directionality of the runs.
@@ -276,6 +287,9 @@ func (o *Ordering) Run(i int) Run {
 		direction: o.directions[i],
 		startpos:  o.startpos[i],
 	}
+	if i < len(o.levels) {
+		r.level = o.levels[i]
+	}
 	return r
 }
 
@@ -291,6 +305,7 @@ type Run struct {
 	runes     []rune
 	direction Direction
 	startpos  int
+	level     int
 }
 
 // String returns the text of the run in its original order.
@@ -315,6 +330,13 @@ func (r *Run) Direction() Direction {
 
 // Pos returns the position of the Run within the text passed to SetBytes or SetString of the
 // originating Paragraph value.
+// Level returns the embedding level of the run (UAX #9): even levels are
+// left-to-right, odd levels right-to-left. A run with a higher level is
+// nested inside the runs with lower levels around it.
+func (r *Run) Level() int {
+	return r.level
+}
+
 func (r *Run) Pos() (start, end int) {
 	return r.startpos, r.startpos + len(r.runes) - 1
 }

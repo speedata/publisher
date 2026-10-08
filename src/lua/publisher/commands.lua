@@ -5127,6 +5127,44 @@ function commands.paragraph(layoutxml, dataxml, textblockoptions)
         end
     end
 
+    -- Right-to-left text needs the bidi algorithm, otherwise Latin words and
+    -- digits in it come out reversed. Unless bidi="no" is given, it is
+    -- switched on for every paragraph with right-to-left characters. The
+    -- paragraph direction then follows the first strong character of the
+    -- whole paragraph, so that all its parts use the same direction.
+    if bidi ~= false then
+        local buf = {}
+        local seen = {}
+        local function collect(contents)
+            local t = type(contents)
+            if t == "string" then
+                buf[#buf + 1] = contents
+            elseif t == "number" or t == "boolean" then
+                buf[#buf + 1] = tostring(contents)
+            elseif t == "table" and not seen[contents] and not node.is_node(contents) then
+                seen[contents] = true
+                if contents.contents ~= nil then
+                    collect(contents.contents)
+                end
+                for j = 1, #contents do
+                    collect(contents[j])
+                end
+            end
+        end
+        for i = 1, #tab do
+            collect(publisher.xml_helpers.element_contents(tab[i]))
+        end
+        local text = table.concat(buf)
+        if bidi or direction == "rtl" or publisher.nodes.has_rtl(text) then
+            params.bidi = true
+            if not direction then
+                local ok, dir = pcall(publisher.nodes.first_strong_direction, text)
+                params.direction = ok and dir or nil
+            end
+            params.bidi_par = publisher.nodes.bidi_paragraph(text, params.direction)
+        end
+    end
+
     for i = 1, #tab do
         local thischild = tab[i]
         local eltname = publisher.xml_helpers.elementname(thischild)

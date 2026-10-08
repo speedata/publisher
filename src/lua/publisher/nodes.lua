@@ -1561,9 +1561,10 @@ end
 ---@param str string Text segment.
 ---@param parameter? table Style/font parameters.
 ---@param _origin? string Origin tag (debugging).
+---@param bidi_offset? integer Byte position of `str` in the paragraph text (`parameter.bidi_par`).
 ---@return Node head Head of the glyph node list.
 ---@return string? maindirection Paragraph direction (`"ltr"`/`"rtl"`) when known.
-function M.mknodes(str, parameter, _origin)
+function M.mknodes(str, parameter, _origin, bidi_offset)
     parameter = parameter or {}
     -- if it's an empty string, we make a zero-width rule
     if not str or string.len(str) == 0 then
@@ -1600,7 +1601,11 @@ function M.mknodes(str, parameter, _origin)
         elseif parameter.direction == "rtl" then
             dir = 2
         end
-        segments = assert(splib.segmentize_text(str, dir))
+        if parameter.bidi_par and bidi_offset then
+            segments = M.bidi_slice(parameter.bidi_par, bidi_offset, bidi_offset + #str - 1)
+        else
+            segments = assert(splib.segmentize_text(str, dir))
+        end
         if segments[1][1] == 0 then
             maindirection = "ltr"
         else
@@ -1628,6 +1633,25 @@ function M.mknodes(str, parameter, _origin)
     end
     maindirection = parameter.direction or maindirection
     local nodelistsegments
+
+    -- With bidi, every run carries its embedding level (UAX #9). A run with
+    -- a higher level is nested in dir nodes inside the lower ones, so that
+    -- digits in right-to-left text stay with that text in a left-to-right
+    -- paragraph. curlevel is the level of the innermost open dir node.
+    local paralevel = maindirection == "rtl" and 1 or 0
+    local curlevel = paralevel
+    ---@param lvl integer
+    ---@param sign "+"|"-"
+    ---@param ref Node node to take the properties and the font family from
+    ---@return Node
+    local function new_dirnode(lvl, sign, ref)
+        local dirnode = node.new(publisher.dir_node)
+        dirnode.dir = sign .. (lvl % 2 == 0 and "TLT" or "TRT")
+        node.setproperty(dirnode, node.getproperty(ref))
+        local ff = publisher.attribute_helpers.get_attribute(ref, "fontfamily")
+        publisher.attribute_helpers.set_attribute(dirnode, "fontfamily", ff)
+        return dirnode
+    end
 
     for i = 1, #segments do
         str = segments[i][2]
@@ -1704,7 +1728,26 @@ function M.mknodes(str, parameter, _origin)
             fontnumber = fontnumber,
         })
         direction = direction or 0
-        thissegment = M.setsegmentdir(thissegment, direction, maindirection)
+        if segments[i][3] then
+            local level = segments[i][3]
+            if nodelistsegments then
+                local tail = node.tail(nodelistsegments)
+                while curlevel > level do
+                    nodelistsegments, tail = node.insert_after(nodelistsegments, tail, new_dirnode(curlevel, "-", tail))
+                    curlevel = curlevel - 1
+                end
+            end
+            local open = {}
+            while curlevel < level do
+                curlevel = curlevel + 1
+                open[#open + 1] = new_dirnode(curlevel, "+", thissegment)
+            end
+            for j = #open, 1, -1 do
+                thissegment = node.insert_before(thissegment, thissegment, open[j])
+            end
+        else
+            thissegment = M.setsegmentdir(thissegment, direction, maindirection)
+        end
 
         if nodelistsegments then
             local tail = node.tail(nodelistsegments)
@@ -1715,6 +1758,13 @@ function M.mknodes(str, parameter, _origin)
         end
         ::nextsegment::
     end
+    if nodelistsegments then
+        local tail = node.tail(nodelistsegments)
+        while curlevel > paralevel do
+            nodelistsegments, tail = node.insert_after(nodelistsegments, tail, new_dirnode(curlevel, "-", tail))
+            curlevel = curlevel - 1
+        end
+    end
     if maindirection then
         publisher.attribute_helpers.setprop(nodelistsegments, "pardir", maindirection)
     end
@@ -1723,6 +1773,193 @@ function M.mknodes(str, parameter, _origin)
         return strut, parameter.direction
     end
     return nodelistsegments, maindirection
+end
+
+-- Runs the bidi algorithm on the text of a whole paragraph. The result is
+-- used by mknodes for every text part of the paragraph, so that the
+-- neutral characters at the borders of the parts get the right level and
+-- runs that span several parts end up in one group.
+---@param text string Text of the whole paragraph.
+---@param direction? string Paragraph direction ("ltr", "rtl" or nil).
+---@return table? bidi_par { text, runs = { {start, stop, dir, level}, ... } }
+function M.bidi_paragraph(text, direction)
+    if text == "" then
+        return nil
+    end
+    local dir = 0
+    if direction == "ltr" then
+        dir = 1
+    elseif direction == "rtl" then
+        dir = 2
+    end
+    local paralevel = direction == "rtl" and 1 or 0
+    local runs = {}
+    local pos = 1
+    -- A newline (<Br/>) is a paragraph separator for the bidi algorithm, and
+    -- the Go implementation only handles one paragraph. So every line is
+    -- analyzed on its own, with the same base direction.
+    while pos <= #text do
+        local nl = string.find(text, "\n", pos, true)
+        local stop = nl and nl - 1 or #text
+        if stop >= pos then
+            local ok, segments = pcall(splib.segmentize_text, string.sub(text, pos, stop), dir)
+            if not ok or type(segments) ~= "table" or not segments[1] then
+                return nil
+            end
+            for i = 1, #segments do
+                local seg = segments[i]
+                local len = #seg[2]
+                runs[#runs + 1] = { start = pos, stop = pos + len - 1, dir = seg[1], level = seg[3] }
+                pos = pos + len
+            end
+            if pos ~= stop + 1 then
+                return nil
+            end
+        end
+        if nl then
+            runs[#runs + 1] = { start = nl, stop = nl, dir = paralevel, level = paralevel }
+            pos = nl + 1
+        end
+    end
+    return { text = text, runs = runs }
+end
+
+-- Returns the bidi segments ({ dir, text, level }) of the part of the
+-- paragraph text from byte `first` to byte `last`.
+---@param bidi_par table Result of bidi_paragraph.
+---@param first integer
+---@param last integer
+---@return table segments
+function M.bidi_slice(bidi_par, first, last)
+    local segments = {}
+    local runs = bidi_par.runs
+    for i = 1, #runs do
+        local run = runs[i]
+        if run.stop >= first and run.start <= last then
+            local a = math.max(run.start, first)
+            local b = math.min(run.stop, last)
+            segments[#segments + 1] = { run.dir, string.sub(bidi_par.text, a, b), run.level }
+        end
+    end
+    return segments
+end
+
+-- Joins neighboring dir groups of the same direction: a dir node that closes
+-- a group, followed by one that opens a group of the same direction, is
+-- removed together with it. mknodes closes all groups at the end of every
+-- text part, this restores runs that span several parts.
+---@param head Node Paragraph node list.
+---@return Node head
+function M.join_dir_groups(head)
+    local dir_id = publisher.dir_node
+    local whatsit_id = publisher.whatsit_node
+    local rule_id = publisher.rule_node
+    local changed = true
+    while changed do
+        changed = false
+        ---@type Node?
+        local cur = head
+        while cur do
+            local nxt = cur.next
+            if cur.id == dir_id and string.sub(cur.dir, 1, 1) == "-" then
+                local other = nxt
+                while other and (other.id == whatsit_id or (other.id == rule_id and other.width == 0)) do
+                    other = other.next
+                end
+                if other and other.id == dir_id and other.dir == "+" .. string.sub(cur.dir, 2) then
+                    nxt = other.next
+                    -- neither is the head: a closing dir node always
+                    -- follows its opening one
+                    node.remove(head, cur)
+                    node.free(cur)
+                    node.remove(head, other)
+                    node.free(other)
+                    changed = true
+                end
+            end
+            cur = nxt
+        end
+    end
+    return head
+end
+
+-- Returns true if `str` probably contains right-to-left characters (Hebrew,
+-- Arabic, Syriac, Thaana, NKo and their presentation forms). A cheap byte
+-- test; false positives (Armenian, Latin ligatures) only cost a bidi run.
+---@param str string
+---@return boolean
+function M.has_rtl(str)
+    return string.find(str, "[\214-\223]") ~= nil -- U+0580 to U+07FF
+        or string.find(str, "\224[\160-\163]") ~= nil -- U+0800 to U+08FF
+        or string.find(str, "\239[\172-\187]") ~= nil -- U+FB00 to U+FEFF
+        or string.find(str, "\240[\144\158]") ~= nil -- U+10000 to U+10FFF, U+1E000 to U+1EFFF
+end
+
+-- Code point ranges that are not strong characters although they are in a
+-- right-to-left block: Hebrew points, Arabic marks, digits and separators.
+local rtl_weak_ranges = {
+    { 0x0591, 0x05C7 },
+    { 0x0600, 0x0605 },
+    { 0x060C, 0x060C },
+    { 0x0610, 0x061A },
+    { 0x064B, 0x066C },
+    { 0x0670, 0x0670 },
+    { 0x06D6, 0x06ED },
+    { 0x06F0, 0x06F9 },
+}
+
+---@param cp integer
+---@return "ltr"|"rtl"|nil
+local function strong_direction(cp)
+    if cp < 0x41 then
+        return nil
+    end
+    if cp <= 0x5A or (cp >= 0x61 and cp <= 0x7A) then
+        return "ltr"
+    end
+    if
+        (cp >= 0x0590 and cp <= 0x08FF)
+        or (cp >= 0xFB1D and cp <= 0xFDFF)
+        or (cp >= 0xFE70 and cp <= 0xFEFE)
+        or (cp >= 0x10800 and cp <= 0x10FFF)
+        or (cp >= 0x1E800 and cp <= 0x1EFFF)
+    then
+        for i = 1, #rtl_weak_ranges do
+            local r = rtl_weak_ranges[i]
+            if cp >= r[1] and cp <= r[2] then
+                return nil
+            end
+        end
+        return "rtl"
+    end
+    -- letters of other scripts; skip punctuation, symbols and marks
+    if
+        cp >= 0xC0
+        and cp ~= 0xD7
+        and cp ~= 0xF7
+        and not (cp >= 0x0300 and cp <= 0x036F)
+        and not (cp >= 0x2000 and cp <= 0x2BFF)
+        and not (cp >= 0x3000 and cp <= 0x303F)
+        and not (cp >= 0xFE00 and cp <= 0xFE6F)
+        and not (cp >= 0xFF00 and cp <= 0xFF20)
+    then
+        return "ltr"
+    end
+    return nil
+end
+
+-- Returns the paragraph direction of `str` from its first strong character
+-- (UAX #9, rule P2), or nil if there is none.
+---@param str string
+---@return "ltr"|"rtl"|nil
+function M.first_strong_direction(str)
+    for _, cp in utf8.codes(str) do
+        local dir = strong_direction(cp)
+        if dir then
+            return dir
+        end
+    end
+    return nil
 end
 
 -- Wraps `nodelist` in `dir` whatsits so it is treated as a bidi segment

@@ -2526,6 +2526,8 @@
                         </data>
                         <value>Ancient Greek</value>
                         <a:documentation>Altgriechisch</a:documentation>
+                        <value>Arabic</value>
+                        <a:documentation>Arabisch</a:documentation>
                         <value>Armenian</value>
                         <a:documentation>Armenisch</a:documentation>
                         <value>Bahasa Indonesia</value>
@@ -2568,6 +2570,8 @@
                         <a:documentation>Neugriechisch</a:documentation>
                         <value>Gujarati</value>
                         <a:documentation>Gujarati</a:documentation>
+                        <value>Hebrew</value>
+                        <a:documentation>Hebräisch</a:documentation>
                         <value>Hungarian</value>
                         <a:documentation>Ungarisch</a:documentation>
                         <value>Hindi</value>
@@ -2598,6 +2602,8 @@
                         <a:documentation>Norwegisch (Nynorsk).</a:documentation>
                         <value>Other</value>
                         <a:documentation>Auf keine der anderen Sprachen umschalten. Hilfreich bei Darstellungsproblemen.</a:documentation>
+                        <value>Persian</value>
+                        <a:documentation>Persisch</a:documentation>
                         <value>Polish</value>
                         <a:documentation>Polnisch</a:documentation>
                         <value>Portuguese</value>
@@ -2624,6 +2630,8 @@
                         <a:documentation>Türkisch</a:documentation>
                         <value>Ukrainian</value>
                         <a:documentation>Ukrainisch</a:documentation>
+                        <value>Urdu</value>
+                        <a:documentation>Urdu</a:documentation>
                         <value>Welsh</value>
                         <a:documentation>Walisisch</a:documentation>
                      </choice>
@@ -4119,6 +4127,8 @@
                   </data>
                   <value>Ancient Greek</value>
                   <a:documentation>Altgriechisch</a:documentation>
+                  <value>Arabic</value>
+                  <a:documentation>Arabisch</a:documentation>
                   <value>Armenian</value>
                   <a:documentation>Armenisch</a:documentation>
                   <value>Bahasa Indonesia</value>
@@ -4161,6 +4171,8 @@
                   <a:documentation>Neugriechisch</a:documentation>
                   <value>Gujarati</value>
                   <a:documentation>Gujarati</a:documentation>
+                  <value>Hebrew</value>
+                  <a:documentation>Hebräisch</a:documentation>
                   <value>Hungarian</value>
                   <a:documentation>Ungarisch</a:documentation>
                   <value>Hindi</value>
@@ -4191,6 +4203,8 @@
                   <a:documentation>Norwegisch (Nynorsk).</a:documentation>
                   <value>Other</value>
                   <a:documentation>Auf keine der anderen Sprachen umschalten. Hilfreich bei Darstellungsproblemen.</a:documentation>
+                  <value>Persian</value>
+                  <a:documentation>Persisch</a:documentation>
                   <value>Polish</value>
                   <a:documentation>Polnisch</a:documentation>
                   <value>Portuguese</value>
@@ -4217,6 +4231,8 @@
                   <a:documentation>Türkisch</a:documentation>
                   <value>Ukrainian</value>
                   <a:documentation>Ukrainisch</a:documentation>
+                  <value>Urdu</value>
+                  <a:documentation>Urdu</a:documentation>
                   <value>Welsh</value>
                   <a:documentation>Walisisch</a:documentation>
                </choice>
@@ -4735,12 +4751,12 @@
                </optional>
                <optional>
                   <attribute name="bidi">
-                     <a:documentation>Analysiere die Richtung des Textes. Hilfreich für gemsichten links-nach-rechts und rechts-nach-links Text.</a:documentation>
+                     <a:documentation>Analysiere die Richtung des Textes (Unicode-Bidi-Algorithmus). Nötig für gemischten links- und rechtsläufigen Text, zum Beispiel lateinische Wörter und Ziffern in arabischem oder hebräischem Text. Ohne dieses Attribut wird die Analyse automatisch für Absätze eingeschaltet, die rechtsläufige Zeichen enthalten oder direction=&#34;rtl&#34; haben. Ist keine direction angegeben, richtet sich die Richtung des Absatzes dann nach seinem ersten Buchstaben.</a:documentation>
                      <choice>
                         <value>yes</value>
                         <a:documentation>Analysiere den Text.</a:documentation>
                         <value>no</value>
-                        <a:documentation>Unterschiedliche Textrichtungen nicht beachten (Voreinstellung).</a:documentation>
+                        <a:documentation>Den Text nicht analysieren, auch nicht bei rechtsläufigem Text.</a:documentation>
                         <data type="string">
                            <param name="pattern">\{.+\}</param>
                         </data>
@@ -4820,6 +4836,8 @@
                         </data>
                         <value>Ancient Greek</value>
                         <a:documentation>Altgriechisch</a:documentation>
+                        <value>Arabic</value>
+                        <a:documentation>Arabisch</a:documentation>
                         <value>Armenian</value>
                         <a:documentation>Armenisch</a:documentation>
                         <value>Bahasa Indonesia</value>
@@ -4862,6 +4880,8 @@
                         <a:documentation>Neugriechisch</a:documentation>
                         <value>Gujarati</value>
                         <a:documentation>Gujarati</a:documentation>
+                        <value>Hebrew</value>
+                        <a:documentation>Hebräisch</a:documentation>
                         <value>Hungarian</value>
                         <a:documentation>Ungarisch</a:documentation>
                         <value>Hindi</value>
@@ -4892,6 +4912,8 @@
                         <a:documentation>Norwegisch (Nynorsk).</a:documentation>
                         <value>Other</value>
                         <a:documentation>Auf keine der anderen Sprachen umschalten. Hilfreich bei Darstellungsproblemen.</a:documentation>
+                        <value>Persian</value>
+                        <a:documentation>Persisch</a:documentation>
                         <value>Polish</value>
                         <a:documentation>Polnisch</a:documentation>
                         <value>Portuguese</value>
@@ -4918,6 +4940,8 @@
                         <a:documentation>Türkisch</a:documentation>
                         <value>Ukrainian</value>
                         <a:documentation>Ukrainisch</a:documentation>
+                        <value>Urdu</value>
+                        <a:documentation>Urdu</a:documentation>
                         <value>Welsh</value>
                         <a:documentation>Walisisch</a:documentation>
                      </choice>
@@ -6506,6 +6530,8 @@
                         </data>
                         <value>Ancient Greek</value>
                         <a:documentation>Altgriechisch</a:documentation>
+                        <value>Arabic</value>
+                        <a:documentation>Arabisch</a:documentation>
                         <value>Armenian</value>
                         <a:documentation>Armenisch</a:documentation>
                         <value>Bahasa Indonesia</value>
@@ -6548,6 +6574,8 @@
                         <a:documentation>Neugriechisch</a:documentation>
                         <value>Gujarati</value>
                         <a:documentation>Gujarati</a:documentation>
+                        <value>Hebrew</value>
+                        <a:documentation>Hebräisch</a:documentation>
                         <value>Hungarian</value>
                         <a:documentation>Ungarisch</a:documentation>
                         <value>Hindi</value>
@@ -6578,6 +6606,8 @@
                         <a:documentation>Norwegisch (Nynorsk).</a:documentation>
                         <value>Other</value>
                         <a:documentation>Auf keine der anderen Sprachen umschalten. Hilfreich bei Darstellungsproblemen.</a:documentation>
+                        <value>Persian</value>
+                        <a:documentation>Persisch</a:documentation>
                         <value>Polish</value>
                         <a:documentation>Polnisch</a:documentation>
                         <value>Portuguese</value>
@@ -6604,6 +6634,8 @@
                         <a:documentation>Türkisch</a:documentation>
                         <value>Ukrainian</value>
                         <a:documentation>Ukrainisch</a:documentation>
+                        <value>Urdu</value>
+                        <a:documentation>Urdu</a:documentation>
                         <value>Welsh</value>
                         <a:documentation>Walisisch</a:documentation>
                      </choice>
@@ -7483,6 +7515,8 @@
                         </data>
                         <value>Ancient Greek</value>
                         <a:documentation>Altgriechisch</a:documentation>
+                        <value>Arabic</value>
+                        <a:documentation>Arabisch</a:documentation>
                         <value>Armenian</value>
                         <a:documentation>Armenisch</a:documentation>
                         <value>Bahasa Indonesia</value>
@@ -7525,6 +7559,8 @@
                         <a:documentation>Neugriechisch</a:documentation>
                         <value>Gujarati</value>
                         <a:documentation>Gujarati</a:documentation>
+                        <value>Hebrew</value>
+                        <a:documentation>Hebräisch</a:documentation>
                         <value>Hungarian</value>
                         <a:documentation>Ungarisch</a:documentation>
                         <value>Hindi</value>
@@ -7555,6 +7591,8 @@
                         <a:documentation>Norwegisch (Nynorsk).</a:documentation>
                         <value>Other</value>
                         <a:documentation>Auf keine der anderen Sprachen umschalten. Hilfreich bei Darstellungsproblemen.</a:documentation>
+                        <value>Persian</value>
+                        <a:documentation>Persisch</a:documentation>
                         <value>Polish</value>
                         <a:documentation>Polnisch</a:documentation>
                         <value>Portuguese</value>
@@ -7581,6 +7619,8 @@
                         <a:documentation>Türkisch</a:documentation>
                         <value>Ukrainian</value>
                         <a:documentation>Ukrainisch</a:documentation>
+                        <value>Urdu</value>
+                        <a:documentation>Urdu</a:documentation>
                         <value>Welsh</value>
                         <a:documentation>Walisisch</a:documentation>
                      </choice>

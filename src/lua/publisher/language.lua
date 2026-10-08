@@ -24,6 +24,7 @@ local M = {}
 ---@type table<string, string>
 local language_mapping = {
     ["Ancient Greek"] = "grc",
+    ["Arabic"] = "ar",
     ["Armenian"] = "hy",
     ["Bahasa Indonesia"] = "id",
     ["Basque"] = "eu",
@@ -45,6 +46,7 @@ local language_mapping = {
     ["Galician"] = "gl",
     ["German"] = "de",
     ["Greek"] = "el",
+    ["Hebrew"] = "he",
     ["Gujarati"] = "gu",
     ["Hindi"] = "hi",
     ["Hungarian"] = "hu",
@@ -61,6 +63,7 @@ local language_mapping = {
     ["Norwegian Bokmål"] = "nb",
     ["Norwegian Nynorsk"] = "nn",
     ["Other"] = "--",
+    ["Persian"] = "fa",
     ["Polish"] = "pl",
     ["Portuguese"] = "pt",
     ["Romanian"] = "ro",
@@ -74,6 +77,7 @@ local language_mapping = {
     ["Swedish"] = "sv",
     ["Turkish"] = "tr",
     ["Ukrainian"] = "uk",
+    ["Urdu"] = "ur",
     ["Welsh"] = "cy",
 }
 
@@ -129,6 +133,10 @@ local language_filename = {
     ["sv"] = "sv",
     ["tr"] = "tr",
     ["uk"] = "uk",
+    ["ar"] = "",
+    ["fa"] = "",
+    ["he"] = "",
+    ["ur"] = "",
     ["zh"] = "",
     ["--"] = "",
 }

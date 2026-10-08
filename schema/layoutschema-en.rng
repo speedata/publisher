@@ -2526,6 +2526,8 @@
                         </data>
                         <value>Ancient Greek</value>
                         <a:documentation>Ancient Greek</a:documentation>
+                        <value>Arabic</value>
+                        <a:documentation>Arabic</a:documentation>
                         <value>Armenian</value>
                         <a:documentation>Armenian</a:documentation>
                         <value>Bahasa Indonesia</value>
@@ -2568,6 +2570,8 @@
                         <a:documentation>Monotonic Greek</a:documentation>
                         <value>Gujarati</value>
                         <a:documentation>Gujarati</a:documentation>
+                        <value>Hebrew</value>
+                        <a:documentation>Hebrew</a:documentation>
                         <value>Hungarian</value>
                         <a:documentation>Hungarian</a:documentation>
                         <value>Hindi</value>
@@ -2598,6 +2602,8 @@
                         <a:documentation>Norwegian Nynorsk</a:documentation>
                         <value>Other</value>
                         <a:documentation>Don&#39;t any of these languages. Useful if a text does not render correctly.</a:documentation>
+                        <value>Persian</value>
+                        <a:documentation>Persian</a:documentation>
                         <value>Polish</value>
                         <a:documentation>Polish</a:documentation>
                         <value>Portuguese</value>
@@ -2624,6 +2630,8 @@
                         <a:documentation>Turkish</a:documentation>
                         <value>Ukrainian</value>
                         <a:documentation>Ukrainian</a:documentation>
+                        <value>Urdu</value>
+                        <a:documentation>Urdu</a:documentation>
                         <value>Welsh</value>
                         <a:documentation>Welsh</a:documentation>
                      </choice>
@@ -4119,6 +4127,8 @@
                   </data>
                   <value>Ancient Greek</value>
                   <a:documentation>Ancient Greek</a:documentation>
+                  <value>Arabic</value>
+                  <a:documentation>Arabic</a:documentation>
                   <value>Armenian</value>
                   <a:documentation>Armenian</a:documentation>
                   <value>Bahasa Indonesia</value>
@@ -4161,6 +4171,8 @@
                   <a:documentation>Monotonic Greek</a:documentation>
                   <value>Gujarati</value>
                   <a:documentation>Gujarati</a:documentation>
+                  <value>Hebrew</value>
+                  <a:documentation>Hebrew</a:documentation>
                   <value>Hungarian</value>
                   <a:documentation>Hungarian</a:documentation>
                   <value>Hindi</value>
@@ -4191,6 +4203,8 @@
                   <a:documentation>Norwegian Nynorsk</a:documentation>
                   <value>Other</value>
                   <a:documentation>Don&#39;t any of these languages. Useful if a text does not render correctly.</a:documentation>
+                  <value>Persian</value>
+                  <a:documentation>Persian</a:documentation>
                   <value>Polish</value>
                   <a:documentation>Polish</a:documentation>
                   <value>Portuguese</value>
@@ -4217,6 +4231,8 @@
                   <a:documentation>Turkish</a:documentation>
                   <value>Ukrainian</value>
                   <a:documentation>Ukrainian</a:documentation>
+                  <value>Urdu</value>
+                  <a:documentation>Urdu</a:documentation>
                   <value>Welsh</value>
                   <a:documentation>Welsh</a:documentation>
                </choice>
@@ -4735,12 +4751,12 @@
                </optional>
                <optional>
                   <attribute name="bidi">
-                     <a:documentation>Analyze direction of the text. Useful for mixing left-to-right and right-to-left text.</a:documentation>
+                     <a:documentation>Analyze the direction of the text (Unicode bidi algorithm). Needed for mixing left-to-right and right-to-left text, for example Latin words and digits in Arabic or Hebrew text. Without this attribute, the analysis is switched on automatically for paragraphs that contain right-to-left characters or have direction=&#34;rtl&#34;. If no direction is given, the direction of the paragraph then follows its first letter.</a:documentation>
                      <choice>
                         <value>yes</value>
-                        <a:documentation>Analyze text.</a:documentation>
+                        <a:documentation>Analyze the text.</a:documentation>
                         <value>no</value>
-                        <a:documentation>Don&#39;t handle mixed directions (default).</a:documentation>
+                        <a:documentation>Don&#39;t analyze the text, also not for right-to-left text.</a:documentation>
                         <data type="string">
                            <param name="pattern">\{.+\}</param>
                         </data>
@@ -4820,6 +4836,8 @@
                         </data>
                         <value>Ancient Greek</value>
                         <a:documentation>Ancient Greek</a:documentation>
+                        <value>Arabic</value>
+                        <a:documentation>Arabic</a:documentation>
                         <value>Armenian</value>
                         <a:documentation>Armenian</a:documentation>
                         <value>Bahasa Indonesia</value>
@@ -4862,6 +4880,8 @@
                         <a:documentation>Monotonic Greek</a:documentation>
                         <value>Gujarati</value>
                         <a:documentation>Gujarati</a:documentation>
+                        <value>Hebrew</value>
+                        <a:documentation>Hebrew</a:documentation>
                         <value>Hungarian</value>
                         <a:documentation>Hungarian</a:documentation>
                         <value>Hindi</value>
@@ -4892,6 +4912,8 @@
                         <a:documentation>Norwegian Nynorsk</a:documentation>
                         <value>Other</value>
                         <a:documentation>Don&#39;t any of these languages. Useful if a text does not render correctly.</a:documentation>
+                        <value>Persian</value>
+                        <a:documentation>Persian</a:documentation>
                         <value>Polish</value>
                         <a:documentation>Polish</a:documentation>
                         <value>Portuguese</value>
@@ -4918,6 +4940,8 @@
                         <a:documentation>Turkish</a:documentation>
                         <value>Ukrainian</value>
                         <a:documentation>Ukrainian</a:documentation>
+                        <value>Urdu</value>
+                        <a:documentation>Urdu</a:documentation>
                         <value>Welsh</value>
                         <a:documentation>Welsh</a:documentation>
                      </choice>
@@ -6506,6 +6530,8 @@
                         </data>
                         <value>Ancient Greek</value>
                         <a:documentation>Ancient Greek</a:documentation>
+                        <value>Arabic</value>
+                        <a:documentation>Arabic</a:documentation>
                         <value>Armenian</value>
                         <a:documentation>Armenian</a:documentation>
                         <value>Bahasa Indonesia</value>
@@ -6548,6 +6574,8 @@
                         <a:documentation>Monotonic Greek</a:documentation>
                         <value>Gujarati</value>
                         <a:documentation>Gujarati</a:documentation>
+                        <value>Hebrew</value>
+                        <a:documentation>Hebrew</a:documentation>
                         <value>Hungarian</value>
                         <a:documentation>Hungarian</a:documentation>
                         <value>Hindi</value>
@@ -6578,6 +6606,8 @@
                         <a:documentation>Norwegian Nynorsk</a:documentation>
                         <value>Other</value>
                         <a:documentation>Don&#39;t any of these languages. Useful if a text does not render correctly.</a:documentation>
+                        <value>Persian</value>
+                        <a:documentation>Persian</a:documentation>
                         <value>Polish</value>
                         <a:documentation>Polish</a:documentation>
                         <value>Portuguese</value>
@@ -6604,6 +6634,8 @@
                         <a:documentation>Turkish</a:documentation>
                         <value>Ukrainian</value>
                         <a:documentation>Ukrainian</a:documentation>
+                        <value>Urdu</value>
+                        <a:documentation>Urdu</a:documentation>
                         <value>Welsh</value>
                         <a:documentation>Welsh</a:documentation>
                      </choice>
@@ -7483,6 +7515,8 @@
                         </data>
                         <value>Ancient Greek</value>
                         <a:documentation>Ancient Greek</a:documentation>
+                        <value>Arabic</value>
+                        <a:documentation>Arabic</a:documentation>
                         <value>Armenian</value>
                         <a:documentation>Armenian</a:documentation>
                         <value>Bahasa Indonesia</value>
@@ -7525,6 +7559,8 @@
                         <a:documentation>Monotonic Greek</a:documentation>
                         <value>Gujarati</value>
                         <a:documentation>Gujarati</a:documentation>
+                        <value>Hebrew</value>
+                        <a:documentation>Hebrew</a:documentation>
                         <value>Hungarian</value>
                         <a:documentation>Hungarian</a:documentation>
                         <value>Hindi</value>
@@ -7555,6 +7591,8 @@
                         <a:documentation>Norwegian Nynorsk</a:documentation>
                         <value>Other</value>
                         <a:documentation>Don&#39;t any of these languages. Useful if a text does not render correctly.</a:documentation>
+                        <value>Persian</value>
+                        <a:documentation>Persian</a:documentation>
                         <value>Polish</value>
                         <a:documentation>Polish</a:documentation>
                         <value>Portuguese</value>
@@ -7581,6 +7619,8 @@
                         <a:documentation>Turkish</a:documentation>
                         <value>Ukrainian</value>
                         <a:documentation>Ukrainian</a:documentation>
+                        <value>Urdu</value>
+                        <a:documentation>Urdu</a:documentation>
                         <value>Welsh</value>
                         <a:documentation>Welsh</a:documentation>
                      </choice>

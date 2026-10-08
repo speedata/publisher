@@ -606,8 +606,9 @@ func sdSegmentizeText(L *C.lua_State) int {
 
 		nr := ordering.NumRuns()
 		l.createTable(nr, 0)
+		// every run is { direction (0 = ltr, 1 = rtl), text, embedding level }
 		for i := 0; i < nr; i++ {
-			l.createTable(2, 0)
+			l.createTable(3, 0)
 			r := ordering.Run(i)
 			switch r.Direction() {
 			case bidi.LeftToRight:
@@ -618,6 +619,8 @@ func sdSegmentizeText(L *C.lua_State) int {
 			l.rawSetI(-2, 1)
 			l.pushString(r.String())
 			l.rawSetI(-2, 2)
+			l.pushInt(r.Level())
+			l.rawSetI(-2, 3)
 			l.rawSetI(-2, i+1)
 		}
 
