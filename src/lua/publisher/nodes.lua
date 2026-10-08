@@ -1221,7 +1221,8 @@ function M.hbglyphlist(arguments)
                 nextglyph = prevglyph
             end
             for bytepos = lo + 1, hi - 1 do
-                if cluster[bytepos] == 8203 then
+                local removed = cluster[bytepos]
+                if removed == 8203 then
                     -- A combining mark has no advance after shaping. A break
                     -- before it would leave the mark alone at the beginning
                     -- of the line, so such a ZWSP is ignored.
@@ -1230,6 +1231,23 @@ function M.hbglyphlist(arguments)
                         p.penalty = -10
                         list, cur = node.insert_after(list, cur, p)
                     end
+                    break
+                elseif removed == 173 then
+                    -- U+00AD SOFT HYPHEN (also a default ignorable) allows a
+                    -- break with a hyphen at the end of the line.
+                    local hyphenchar = 45
+                    if parameter.textformat and parameter.textformat.hyphenchar then
+                        hyphenchar = utf8.codepoint(parameter.textformat.hyphenchar)
+                    end
+                    local hyphen = node.new(publisher.glyph_node)
+                    hyphen.font = fontnumber
+                    hyphen.char = hyphenchar
+                    node_set_attribute(hyphen, att_fontfamily, fontfamily)
+                    apply_styles(hyphen)
+                    local disc = node.new(publisher.disc_node)
+                    disc.pre = hyphen
+                    apply_styles(disc)
+                    list, cur = node.insert_after(list, cur, disc)
                     break
                 end
             end

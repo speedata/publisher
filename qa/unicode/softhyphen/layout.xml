@@ -1,0 +1,28 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat width="10cm" height="4cm" />
+    <!-- no hyphenation patterns, so only the soft hyphens can break -->
+    <Options mainlanguage="Other" />
+    <DefineTextformat name="dot" alignment="leftaligned" hyphenchar="•" />
+
+    <Record element="data">
+        <!-- U+00AD SOFT HYPHEN: break with a hyphen -->
+        <PlaceObject column="1" row="1">
+            <Textblock width="2.2cm" textformat="left">
+                <Paragraph><Value>Xqzwv&#xAD;rtplk&#xAD;mnbvc</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <!-- no break: the soft hyphen is invisible -->
+        <PlaceObject column="4" row="1">
+            <Textblock width="4cm" textformat="left">
+                <Paragraph><Value>Xqzwv&#xAD;rtplk&#xAD;mnbvc</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <!-- the hyphen character of the text format -->
+        <PlaceObject column="1" row="3">
+            <Textblock width="2.2cm" textformat="dot">
+                <Paragraph><Value>Xqzwv&#xAD;rtplk&#xAD;mnbvc</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
