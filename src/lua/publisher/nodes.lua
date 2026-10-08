@@ -1202,10 +1202,41 @@ function M.hbglyphlist(arguments)
         end
     end
 
+    -- previous glyph and its cluster (byte offset), nil after fallback entries
+    local prevglyph, prevcluster
     for i = 1, #glyphs do
         local thisfontnumber = fontnumber
         local thisglyph = glyphs[i]
         local cp = thisglyph.codepoint
+        -- U+200B ZERO WIDTH SPACE is a default ignorable and gets removed by
+        -- HarfBuzz (FLAG_REMOVE_DEFAULT_IGNORABLES), so it leaves only a gap
+        -- in the cluster offsets of the surrounding glyphs. A ZWSP in that
+        -- gap allows a line break.
+        local glyphcluster = thisglyph.cluster
+        if glyphcluster and prevcluster then
+            local lo, hi = prevcluster, glyphcluster
+            -- the glyph that follows the gap in logical order (rtl text
+            -- has decreasing clusters)
+            local nextglyph = thisglyph
+            if lo > hi then
+                lo, hi = hi, lo
+                nextglyph = prevglyph
+            end
+            for bytepos = lo + 1, hi - 1 do
+                if cluster[bytepos] == 8203 then
+                    -- A combining mark has no advance after shaping. A break
+                    -- before it would leave the mark alone at the beginning
+                    -- of the line, so such a ZWSP is ignored.
+                    if nextglyph.x_advance ~= 0 then
+                        local p = node.new(publisher.penalty_node)
+                        p.penalty = -10
+                        list, cur = node.insert_after(list, cur, p)
+                    end
+                    break
+                end
+            end
+        end
+        prevglyph, prevcluster = thisglyph, glyphcluster
         -- HarfBuzz emits a sentinel codepoint 0xFFFF with x_advance = 0 for
         -- glyphs that have been removed during complex shaping (e.g. Khmer
         -- reordering). These are invisible and have no entry in the font's
@@ -1300,7 +1331,7 @@ function M.hbglyphlist(arguments)
                 n.subtype = 1
                 list, cur = node.insert_after(list, cur, n)
             elseif thisclustervalue == 8203 then
-                -- U+200B ZERO WIDTH SPACE
+                -- U+200B ZERO WIDTH SPACE (when HarfBuzz keeps it as a space glyph)
                 local p = node.new(publisher.penalty_node)
                 p.penalty = -10
                 list, cur = node.insert_after(list, cur, p)

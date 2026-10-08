@@ -1,0 +1,24 @@
+<Layout xmlns="urn:speedata.de:2009/publisher/en"
+    xmlns:sd="urn:speedata:2009/publisher/functions/en">
+    <Pageformat width="6cm" height="6cm" />
+    <LoadFontfile name="thai" filename="notoserifthai_semicondensed.ttf" />
+    <DefineFontfamily name="thai" fontsize="10" leading="16">
+        <Regular fontface="thai" />
+    </DefineFontfamily>
+
+    <Record element="data">
+        <!-- U+200B ZERO WIDTH SPACE allows a line break without a hyphen -->
+        <PlaceObject column="1" row="1">
+            <Textblock width="2.5cm">
+                <Paragraph><Value>Donau&#8203;dampf&#8203;schiff&#8203;fahrts&#8203;gesellschafts&#8203;kapitän</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+        <!-- A ZWSP before a combining mark (here between ล and the tone
+             mark ่) is ignored, the line must not start with the mark. -->
+        <PlaceObject column="1" row="4">
+            <Textblock width="1cm" fontfamily="thai">
+                <Paragraph textformat="left"><Value>เจ้า&#8203;กล&#8203;่าว</Value></Paragraph>
+            </Textblock>
+        </PlaceObject>
+    </Record>
+</Layout>
